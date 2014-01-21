@@ -171,3 +171,136 @@ class TestGroupedbyThreeFormatter(FunctionalTestCase):
 
         self.assertEquals(
             'OG 573.2-4.6.2-27', self.formatter.complete_number(numbers))
+
+
+class TestDottedFormatSorter(TestDottedFormatter):
+    def test_orders_first_level_refnums_correctly(self):
+        expected = ['OG 1.9.9 / 9.9.9',
+                    'OG 3.9.9 / 9.9.9',
+                    'OG 11.9.9 / 9.9.9',]
+
+        unordered = ['OG 3.9.9 / 9.9.9',
+                     'OG 1.9.9 / 9.9.9',
+                     'OG 11.9.9 / 9.9.9',]
+
+        actual = sorted(unordered, key=self.formatter.sorter)
+        self.assertEquals(expected, actual)
+
+    def test_orders_second_level_refnums_correctly(self):
+        expected = ['OG 9.1.9 / 9.9.9',
+                    'OG 9.3.9 / 9.9.9',
+                    'OG 9.11.9 / 9.9.9',]
+
+        unordered = ['OG 9.3.9 / 9.9.9',
+                     'OG 9.11.9 / 9.9.9',
+                     'OG 9.1.9 / 9.9.9',]
+
+        actual = sorted(unordered, key=self.formatter.sorter)
+        self.assertEquals(expected, actual)
+
+    def test_orders_main_dossiers_correctly(self):
+        expected = ['OG 9.9.9.9 / 1.9',
+                    'OG 9.9.9.9 / 3.9',
+                    'OG 9.9.9.9 / 11.9',]
+
+        unordered = ['OG 9.9.9.9 / 11.9',
+                     'OG 9.9.9.9 / 3.9',
+                     'OG 9.9.9.9 / 1.9',]
+
+        actual = sorted(unordered, key=self.formatter.sorter)
+        self.assertEquals(expected, actual)
+
+
+    def test_orders_subdossiers_correctly(self):
+        expected = ['OG 9.9.9.9 / 9.1',
+                    'OG 9.9.9.9 / 9.3',
+                    'OG 9.9.9.9 / 9.11',]
+
+        unordered = ['OG 9.9.9.9 / 9.11',
+                     'OG 9.9.9.9 / 9.3',
+                     'OG 9.9.9.9 / 9.1',]
+
+        actual = sorted(unordered, key=self.formatter.sorter)
+        self.assertEquals(expected, actual)
+
+
+    def test_orders_documents_correctly(self):
+        expected = ['OG 9.9.9.9 / 9.9.9 / 1',
+                    'OG 9.9.9.9 / 9.9.9 / 3',
+                    'OG 9.9.9.9 / 9.9.9 / 11',]
+
+        unordered = ['OG 9.9.9.9 / 9.9.9 / 11',
+                     'OG 9.9.9.9 / 9.9.9 / 3',
+                     'OG 9.9.9.9 / 9.9.9 / 1',]
+
+        actual = sorted(unordered, key=self.formatter.sorter)
+        self.assertEquals(expected, actual)
+
+
+class TestGroupedbyThreeFormatSorter(TestGroupedbyThreeFormatter):
+
+    def test_orders_first_level_refnums_correctly(self):
+        expected = ['OG 01.0-9.9.9-99',
+                    'OG 010.0-9.9.9-99',
+                    'OG 011.0-9.9.9-99',
+                    'OG 02.0-9.9.9-99',
+                    'OG 020.0-9.9.9-99',
+                    'OG 021.0-9.9.9-99',]
+
+        unordered = ['OG 021.0-9.9.9-99',
+                     'OG 010.0-9.9.9-99',
+                     'OG 020.0-9.9.9-99',
+                     'OG 011.0-9.9.9-99',
+                     'OG 02.0-9.9.9-99',
+                     'OG 01.0-9.9.9-99',]
+
+        actual = sorted(unordered, key=self.formatter.sorter)
+        self.assertEquals(expected, actual)
+
+    def test_orders_second_level_refnums_correctly(self):
+        expected = ['OG 021.1-9.9.9-99',
+                    'OG 021.11-9.9.9-99',
+                    'OG 021.111-9.9.9-99',]
+
+        unordered = ['OG 021.11-9.9.9-99',
+                     'OG 021.1-9.9.9-99',
+                     'OG 021.111-9.9.9-99',]
+
+        actual = sorted(unordered, key=self.formatter.sorter)
+        self.assertEquals(expected, actual)
+
+    def test_orders_main_dossiers_correctly(self):
+        expected = ['OG 99.9-1.1-99',
+                    'OG 99.9-3.1-99',
+                    'OG 99.9-11.1-99',]
+
+        unordered = ['OG 99.9-3.1-99',
+                     'OG 99.9-1.1-99',
+                     'OG 99.9-11.1-99',]
+
+        actual = sorted(unordered, key=self.formatter.sorter)
+        self.assertEquals(expected, actual)
+
+    def test_orders_subdossiers_correctly(self):
+        expected = ['OG 99.9-9.1-99',
+                    'OG 99.9-9.3-99',
+                    'OG 99.9-9.11-99',]
+
+        unordered = ['OG 99.9-9.3-99',
+                     'OG 99.9-9.1-99',
+                     'OG 99.9-9.11-99',]
+
+        actual = sorted(unordered, key=self.formatter.sorter)
+        self.assertEquals(expected, actual)
+
+    def test_orders_documents_correctly(self):
+        expected = ['OG 99.9-9.9.9-1',
+                    'OG 99.9-9.9.9-3',
+                    'OG 99.9-9.9.9-11',]
+
+        unordered = ['OG 99.9-9.9.9-3',
+                     'OG 99.9-9.9.9-1',
+                     'OG 99.9-9.9.9-11',]
+
+        actual = sorted(unordered, key=self.formatter.sorter)
+        self.assertEquals(expected, actual)

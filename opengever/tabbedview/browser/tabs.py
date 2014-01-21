@@ -4,6 +4,7 @@ from ftw.tabbedview.interfaces import ITabbedView
 from ftw.table import helper
 from ftw.table.catalog_source import CatalogTableSource
 from opengever.base.browser.helper import client_title_helper
+from opengever.base.interfaces import IReferenceNumberFormatter
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview import _
 from opengever.tabbedview.browser.listing import CatalogListingView
@@ -23,8 +24,9 @@ from opengever.task.helper import task_type_helper
 from plone.dexterity.interfaces import IDexterityContainer
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.component import getUtility, adapts
-from zope.interface import Interface
+from zope.component import queryAdapter
 from zope.interface import implements
+from zope.interface import Interface
 import re
 
 
@@ -49,7 +51,7 @@ class OpengeverTab(object):
         if getattr(self, '_custom_sort_method', None) is not None:
             results = self._custom_sort_method(results, sort_on, sort_reverse)
 
-        elif sort_on == 'reference' or sort_on == 'sequence_number':
+        elif sort_on == 'sequence_number':
             splitter = re.compile('[/\., ]')
 
             def _sortable_data(brain):
@@ -74,6 +76,13 @@ class OpengeverTab(object):
             results = list(results)
             results.sort(
                 lambda a, b: cmp(_sortable_data(a), _sortable_data(b)))
+            if sort_reverse:
+                results.reverse()
+
+        elif sort_on == 'reference':
+            formatter = queryAdapter(IReferenceNumberFormatter, name='grouped_by_three')
+            results = list(results)
+            results.sort(key=formatter.sorter)
             if sort_reverse:
                 results.reverse()
 

@@ -2,6 +2,7 @@ from five import grok
 from itertools import izip_longest
 from opengever.base.interfaces import IReferenceNumberFormatter
 from zope.interface import Interface
+import re
 
 
 class DottedReferenceFormatter(grok.Adapter):
@@ -60,6 +61,30 @@ class DottedReferenceFormatter(grok.Adapter):
         """
         return u'.'.join(numbers.get('document', []))
 
+    def sorter(self, brain_or_value):
+        """ Converts the "reference" into a tuple containing integers,
+        which are converted well. Sorting "10" and "2" as strings
+        results in wrong order.
+        """
+        if not isinstance(brain_or_value, basestring):
+            value = brain_or_value.reference
+        else:
+            value = brain_or_value
+
+        splitter = re.compile('[/\., ]')
+        if not isinstance(value, str) and not isinstance(
+            value, unicode):
+            return value
+        parts = []
+        for part in splitter.split(value):
+            part = part.strip()
+            try:
+                part = int(part)
+            except ValueError:
+                pass
+            parts.append(part)
+        return parts
+
 
 class GroupedByThreeReferenceFormatter(DottedReferenceFormatter):
     """Referencenumber formatter, which groups three parts together
@@ -86,3 +111,33 @@ class GroupedByThreeReferenceFormatter(DottedReferenceFormatter):
     def grouper(self, iterable, n, fillvalue=u''):
         args = [iter(iterable)] * n
         return list(izip_longest(fillvalue=fillvalue, *args))
+
+    def sorter(self, brain_or_value):
+        if not isinstance(brain_or_value, basestring):
+            # It's a brain
+            value = brain_or_value.reference
+        else:
+            # It's already a string value
+            value = brain_or_value
+
+        clientid_repository_separator = u' '
+
+        # '010.123.43-1.1-7'  -->  '010.123.43', '1.1-7'
+        clientid, remainder = value.split(clientid_repository_separator, 1)
+        refnums_part, remainder = remainder.split(self.repository_dossier_seperator, 1)
+
+        # Return a tuple with the different parts separated.
+        # Cast document and (sub)dossier parts to integers to achieve proper
+        # sorting, but keep the refnum part as a string because it is already
+        # zero-padded and sorting it numerically would yield wrong results.
+
+        if remainder.count(self.dossier_document_seperator) > 0:
+            # Document Reference Number
+            dossier_part, document_part = remainder.split(self.dossier_document_seperator, 1)
+            subdossier_parts = [int(d) for d in dossier_part.split('.')]
+            return (refnums_part, tuple(subdossier_parts), int(document_part))
+        else:
+            # Dossier Reference Number
+            dossier_part = remainder
+            subdossier_parts = [int(d) for d in dossier_part.split('.')]
+            return (refnums_part, tuple(subdossier_parts))
