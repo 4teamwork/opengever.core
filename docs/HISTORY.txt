@@ -4,6 +4,10 @@ Changelog
 3.2.1 (unreleased)
 ------------------
 
+- Implement custom sort functions for both 'dotted' and 'grouped_by_three'
+  reference formatters.
+  [lgraf]
+
 - Add requirement for a custom sort function to IReferenceFormatter interface
   [lgraf]
 
