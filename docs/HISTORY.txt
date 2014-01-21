@@ -4,6 +4,9 @@ Changelog
 3.2.1 (unreleased)
 ------------------
 
+- Add requirement for a custom sort function to IReferenceFormatter interface
+  [lgraf]
+
 - Remove 4teamwork-ldap/ldap_plugin.xml from .gitignore and check it in
   (with placeholder credentials).
   [lgraf]

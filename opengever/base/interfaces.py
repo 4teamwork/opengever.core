@@ -121,6 +121,11 @@ class IReferenceNumberFormatter(Interface):
         for the given numbers dict.
         """
 
+    def sorter(brain_or_value):
+        """Sort-key function that knows how to sort complete reference
+        numbers produced by this formatter.
+        """
+
 
 class ReferenceFormatterVocabulary(grok.GlobalUtility):
     """ Vocabulary of all users with a valid login.
