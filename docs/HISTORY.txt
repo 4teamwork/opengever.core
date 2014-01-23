@@ -1,7 +1,7 @@
 Changelog
 =========
 
-3.2.1 (unreleased)
+3.2.1 (2014-01-23)
 ------------------
 
 - Implement custom sort functions for both 'dotted' and 'grouped_by_three'
