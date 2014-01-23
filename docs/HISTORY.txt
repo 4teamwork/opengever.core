@@ -18,6 +18,9 @@ Changelog
 - Configure LDAP credentials from JSON file.
   [lgraf]
 
+- Fix raising of exceptions and logging in msg2mime transform.
+  [lgraf]
+
 3.2 (2013-12-15)
 ----------------
 

@@ -42,5 +42,6 @@ class Msg2MimeTransform(object):
             return stdout
         # If program terminated with error, raise exception
         else:
-            raise IOError(), 'Program terminated with error code %s\n%s' % (
+            msg = 'Program terminated with error code %s\n%s' % (
                 process.returncode, stderr)
+            raise IOError(msg)
