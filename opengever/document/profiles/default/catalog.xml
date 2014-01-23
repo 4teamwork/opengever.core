@@ -5,5 +5,4 @@
   <column value="receipt_date" />
   <column value="delivery_date" />
   <column value="checked_out" />
-  <column value="related_items" />
 </object>

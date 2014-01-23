@@ -8,6 +8,10 @@ Changelog
   Backport of 2d862bd.
   [lgraf]
 
+- Fixed load order issue when setting tagged values to omit the changeNote
+  field from the IVersionable behavior.
+  [lgraf]
+
 
 3.1.2 (2013-12-02)
 ------------------
@@ -21,6 +25,9 @@ Changelog
 - Inbox overview: Only list current part of a predecessor/successor couple.
   [phgross]
 
+
+- Removed related_items index and RelatedTasks tab.
+  [lknoepfel]
 
 3.1.1 (2013-10-23)
 ------------------
