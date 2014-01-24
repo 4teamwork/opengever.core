@@ -11,3 +11,8 @@ OPEN_TASK_STATES = [
         'forwarding-state-open',
         'forwarding-state-refused',
     ]
+
+CLOSED_TASK_STATES = [
+        'task-state-cancelled',
+        'task-state-tested-and-closed',
+    ]
