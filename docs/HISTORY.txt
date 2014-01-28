@@ -4,6 +4,9 @@ Changelog
 3.2.2 (unreleased)
 ------------------
 
+- Remove remaining traces of `related_items` index.
+  [lgraf]
+
 - Dossier resolving: Fixed `its_all_closed` check, for nested subtasks.
   [phgross]
 
