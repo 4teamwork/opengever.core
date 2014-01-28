@@ -37,7 +37,6 @@ def add_catalog_indexes(context, logger=None):
         ('checked_out', 'FieldIndex', {}),
         ('document_date', 'DateIndex', {}),
         ('receipt_date', 'DateIndex', {}),
-        ('related_items', 'KeywordIndex', {}),
         ('sortable_author', 'FieldIndex', {}),
         )
     indexables = []

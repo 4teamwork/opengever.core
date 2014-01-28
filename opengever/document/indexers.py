@@ -1,4 +1,4 @@
-from Acquisition import aq_inner, aq_base
+from Acquisition import aq_inner
 from collective import dexteritytextindexer
 from five import grok
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
@@ -8,37 +8,13 @@ from opengever.document.interfaces import IDocumentIndexer
 from opengever.tabbedview.helper import readable_ogds_author
 from plone.indexer import indexer
 from Products.CMFCore.utils import getToolByName
-from zc.relation.interfaces import ICatalog
 from ZODB.POSException import ConflictError
-from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility, queryMultiAdapter, getAdapter
 from zope.interface import Interface
 import logging
 
 
 logger = logging.getLogger('opengever.document')
-
-
-@indexer(IDocumentSchema)
-def related_items(obj):
-    catalog = getUtility(ICatalog)
-    intids = getUtility(IIntIds)
-
-    try:
-        obj_id = intids.getId(aq_base(obj))
-    # In some cases we might not have an intid yet.
-    except KeyError:
-        return None
-
-    results = []
-    relations = catalog.findRelations(
-        {'to_id': obj_id, 'from_attribute': 'relatedItems'})
-    for rel in relations:
-        results.append(rel.from_id)
-    return results
-
-
-grok.global_adapter(related_items, name='related_items')
 
 
 class DefaultDocumentIndexer(grok.Adapter):
