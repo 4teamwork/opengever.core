@@ -4,6 +4,10 @@ Changelog
 3.1.3 (unreleased)
 ------------------
 
+- Remove remaining traces of `related_items` index.
+  Backport of 9d1064d.
+  [lgraf]
+
 - Dossier resolving: Fixed `its_all_closed` check, for nested subtasks.
   [phgross]
 
