@@ -4,6 +4,9 @@ Changelog
 3.2.2 (unreleased)
 ------------------
 
+- Remove obsolete dependency on transmogrify.sqlinserter.
+  [lgraf]
+
 - Remove remaining traces of `related_items` index.
   [lgraf]
 
