@@ -222,9 +222,6 @@ msgstr ""
 msgid "description"
 msgstr ""
 
-msgid "document_with_docucomposer"
-msgstr ""
-
 msgid "documents"
 msgstr ""
 

@@ -221,9 +221,6 @@ msgstr "Dokument aus Vorlage erstellen"
 msgid "description"
 msgstr "Beschreibung"
 
-msgid "document_with_docucomposer"
-msgstr "Dokument mit Docucomposer"
-
 msgid "documents"
 msgstr "Dokumente"
 
