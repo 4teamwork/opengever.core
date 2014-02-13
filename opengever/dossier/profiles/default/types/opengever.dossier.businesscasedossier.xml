@@ -78,17 +78,6 @@
         <permission value="Modify portal content"/>
     </action>
 
-    <action action_id="document_with_docucomposer"
-            visible="True"
-            title="Document with docucomposer"
-            category="folder_factories"
-            url_expr="string:${object_url}/docucomposer-wizard"
-            icon_expr=""
-            condition_expr=""
-            i18n:domain="opengever.dossier">
-        <permission value="Add portal content"/>
-    </action>
-
     <action action_id="document_with_template"
             visible="True"
             title="document_with_template"

@@ -11,8 +11,6 @@ def order_factories(context, factories):
     """
 
     factories_order = ['Document',
-                       'Document with docucomposer',
-                       'Document with docugate',
                        'document_with_template',
                        'Task',
                        'Add task from template',

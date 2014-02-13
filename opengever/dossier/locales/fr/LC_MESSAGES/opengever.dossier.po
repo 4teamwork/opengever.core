@@ -205,9 +205,6 @@ msgstr "Créer un document à partir d'un modèle"
 msgid "description"
 msgstr "Description"
 
-msgid "document_with_docucomposer"
-msgstr "Document avec DocuComposer"
-
 msgid "documents"
 msgstr "Documents"
 

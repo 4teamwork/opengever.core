@@ -32,4 +32,14 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <!-- 2601 -> 2602 -->
+    <genericsetup:upgradeStep
+        title="Remove DocuComposer actions"
+        description=""
+        source="2601"
+        destination="2602"
+        handler="opengever.dossier.upgrades.to2602.RemoveDocuComposerActions"
+        profile="opengever.dossier:default"
+        />
+
 </configure>

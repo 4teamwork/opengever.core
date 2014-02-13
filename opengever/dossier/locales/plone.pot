@@ -17,9 +17,6 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: plone\n"
 
-msgid "Document with docucomposer"
-msgstr ""
-
 msgid "Add Participant"
 msgstr ""
 
