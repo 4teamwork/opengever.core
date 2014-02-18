@@ -1,7 +1,7 @@
 Changelog
 =========
 
-3.1.4 (unreleased)
+3.1.4 (2014-02-18)
 ------------------
 
 - Removed DocuComposer actions from opengever.dossier:default profile.
