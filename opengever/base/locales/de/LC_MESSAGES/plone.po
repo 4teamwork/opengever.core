@@ -33,3 +33,250 @@ msgstr "alphabetisch"
 msgid "date (newest first)"
 msgstr "Änderungsdatum (absteigend)"
 
+msgid "Cancel Checkout"
+msgstr "Widerrufen"
+
+msgid "Checkin"
+msgstr "Einchecken"
+
+msgid "Checkout"
+msgstr "Auschecken"
+
+msgid "Checkout and edit"
+msgstr "Auschecken / Bearbeiten"
+
+msgid "Document state changed to document-state-checked_out"
+msgstr "Dokumentstatus verändert: Ausgecheckt"
+
+msgid "Document state changed to document-state-draft"
+msgstr "Dokumentstatus verändert: Entwurf"
+
+msgid "Document state changed to document-state-pending"
+msgstr "Dokumentstatus verändert: Hängig"
+
+msgid "Document state changed to document-state-reject"
+msgstr "Dokument status verändert: Zurückweisen"
+
+msgid "Document state changed to document-state-working_copy"
+msgstr "Dokumentstatus verändert: Arbeitskopie"
+
+msgid "Edit metadata"
+msgstr "Metadaten bearbeiten"
+
+msgid "button_download"
+msgstr "herunterladen"
+
+msgid "document-state-checked_out"
+msgstr "Ausgecheckt"
+
+msgid "document-state-draft"
+msgstr "nicht definiert"
+
+msgid "document-state-pending"
+msgstr "Hängig"
+
+msgid "document-state-working_copy"
+msgstr "Arbeitskopie"
+
+msgid "document-transition-cancel_checkout"
+msgstr "Zurücksetzen"
+
+msgid "document-transition-check_in"
+msgstr "Einchecken"
+
+msgid "document-transition-check_out"
+msgstr "Auschecken"
+
+msgid "document-transition-reject"
+msgstr "Zurückweisen"
+
+msgid "label_reset"
+msgstr "zurücksetzen"
+
+msgid "Add Participant"
+msgstr "Beteiligung hinzufügen"
+
+msgid "Dossier state changed to dossier-state-active"
+msgstr "Status des Dossiers geändert zu In Bearbeitung"
+
+msgid "Dossier state changed to dossier-state-archived"
+msgstr "Status des Dossiers geändert zu Archiviert"
+
+msgid "Dossier state changed to dossier-state-inactive"
+msgstr "Status des Dossiers geändert zu Storniert"
+
+msgid "Dossier state changed to dossier-state-resolved"
+msgstr "Status des Dossiers geändert zu Abgeschlossen"
+
+msgid "Give Filing Number"
+msgstr "Ablagenummer vergeben"
+
+msgid "document_with_template"
+msgstr "Dokument aus Vorlage"
+
+msgid "dossier-state-active"
+msgstr "In Bearbeitung"
+
+msgid "dossier-state-archived"
+msgstr "Archiviert"
+
+msgid "dossier-state-inactive"
+msgstr "Storniert"
+
+msgid "dossier-state-resolved"
+msgstr "Abgeschlossen"
+
+msgid "dossier-transition-activate"
+msgstr "Aktivieren"
+
+msgid "dossier-transition-archive"
+msgstr "Archivieren"
+
+msgid "dossier-transition-deactivate"
+msgstr "Stornieren"
+
+msgid "dossier-transition-reactivate"
+msgstr "Wieder öffnen"
+
+msgid "dossier-transition-resolve"
+msgstr "Abschliessen"
+
+msgid "forwarding-state-closed"
+msgstr "Abgeschlossen"
+
+msgid "forwarding-state-open"
+msgstr "Offen"
+
+msgid "forwarding-state-refused"
+msgstr "Abgelehnt"
+
+msgid "forwarding-transition-accept"
+msgstr "Akzeptieren"
+
+msgid "forwarding-transition-assign-to-dossier"
+msgstr "Einem Dossier zuweisen"
+
+msgid "forwarding-transition-close"
+msgstr "Abschliessen"
+
+msgid "forwarding-transition-reassign"
+msgstr "Weiterleiten"
+
+msgid "forwarding-transition-refuse"
+msgstr "Ablehnen"
+
+msgid "forwarding-transition-reassign-refused"
+msgstr "Weiterleiten"
+
+msgid "inbox-state-default"
+msgstr "Offen"
+msgid "Open tasks report"
+msgstr "Pendenzenliste"
+
+msgid "repositoryfolder-state-active"
+msgstr "aktiv"
+
+msgid "repositoryfolder-state-inactive"
+msgstr "inaktiv"
+
+msgid "repositoryfolder-transition-activate"
+msgstr "aktivieren"
+
+msgid "repositoryfolder-transition-inactivate"
+msgstr "deaktivieren"
+
+msgid "label_actions_menu"
+msgstr "Weitere Aktionen"
+
+msgid "save attachments"
+msgstr "Anhänge speichern"
+
+msgid "Add response"
+msgstr "Antwort"
+
+msgid "Attach remote document"
+msgstr "Kopie Dokument aus eigenem Mandant"
+
+msgid "Create successor task"
+msgstr "Folgeaufgabe erstellen"
+
+msgid "Delegate task"
+msgstr "Delegieren"
+
+msgid "Modify deadline"
+msgstr "Frist ändern"
+
+msgid "task-state-cancelled"
+msgstr "Storniert"
+
+msgid "task-state-in-progress"
+msgstr "In Arbeit"
+
+msgid "task-state-new-successor"
+msgstr "Folgeaufgabe wird erstellt"
+
+msgid "task-state-open"
+msgstr "Offen"
+
+msgid "task-state-rejected"
+msgstr "Abgelehnt"
+
+msgid "task-state-resolved"
+msgstr "Erledigt"
+
+msgid "task-state-tested-and-closed"
+msgstr "Abgeschlossen"
+
+msgid "task-transition-cancelled-open"
+msgstr "Wieder eröffnen"
+
+msgid "task-transition-in-progress-resolved"
+msgstr "Erledigen"
+
+msgid "task-transition-in-progress-tested-and-closed"
+msgstr "Abschliessen"
+
+msgid "task-transition-open-cancelled"
+msgstr "Stornieren"
+
+msgid "task-transition-open-in-progress"
+msgstr "Akzeptieren"
+
+msgid "task-transition-open-rejected"
+msgstr "Ablehnen"
+
+msgid "task-transition-open-resolved"
+msgstr "Erledigen"
+
+msgid "task-transition-open-tested-and-closed"
+msgstr "Abschliessen"
+
+msgid "task-transition-reassign"
+msgstr "Neu zuweisen"
+
+msgid "task-transition-rejected-open"
+msgstr "Wieder eröffnen"
+
+msgid "task-transition-resolved-in-progress"
+msgstr "Überarbeiten"
+
+msgid "task-transition-resolved-tested-and-closed"
+msgstr "Abschliessen"
+
+msgid "Add task from template"
+msgstr "Standardablauf auslösen"
+
+msgid "tasktemplate-state-active"
+msgstr "Aktiv"
+
+msgid "tasktemplatefolder-state-activ"
+msgstr "Aktiv"
+
+msgid "tasktemplatefolder-state-inactiv"
+msgstr "Inaktiv"
+
+msgid "tasktemplatefolder-transition-activ-inactiv"
+msgstr "Deaktivieren"
+
+msgid "tasktemplatefolder-transition-inactiv-activ"
+msgstr "Aktivieren"
