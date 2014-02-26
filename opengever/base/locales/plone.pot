@@ -35,3 +35,258 @@ msgstr ""
 #: plone.app.search/plone/app/search/browser.py:119
 msgid "date (newest first)"
 msgstr ""
+
+msgid "Checkout"
+msgstr ""
+
+msgid "Checkout and edit"
+msgstr ""
+
+msgid "Cancel Checkout"
+msgstr ""
+
+msgid "Checkin"
+msgstr ""
+
+msgid "document-state-working_copy"
+msgstr ""
+
+msgid "document-state-pending"
+msgstr ""
+
+msgid "document-state-draft"
+msgstr ""
+
+msgid "document-state-checked_out"
+msgstr ""
+
+msgid "document-transition-reject"
+msgstr ""
+
+msgid "document-transition-check_out"
+msgstr ""
+
+msgid "document-transition-check_in"
+msgstr ""
+
+msgid "document-transition-cancel_checkout"
+msgstr ""
+
+msgid "button_download"
+msgstr ""
+
+msgid "label_reset"
+msgstr ""
+
+msgid "Document state changed to document-state-working_copy"
+msgstr ""
+
+msgid "Document state changed to document-state-pending"
+msgstr ""
+
+msgid "Document state changed to document-state-draft"
+msgstr ""
+
+msgid "Document state changed to document-state-checked_out"
+msgstr ""
+
+msgid "Document state changed to document-state-reject"
+msgstr ""
+
+msgid "Edit metadata"
+msgstr ""
+
+msgid "Add Participant"
+msgstr ""
+
+msgid "document_with_template"
+msgstr ""
+
+msgid "Dossier state changed to dossier-state-active"
+msgstr ""
+
+msgid "Dossier state changed to dossier-state-archived"
+msgstr ""
+
+msgid "Dossier state changed to dossier-state-inactive"
+msgstr ""
+
+msgid "Dossier state changed to dossier-state-resolved"
+msgstr ""
+
+msgid "dossier-state-active"
+msgstr ""
+
+msgid "dossier-state-inactive"
+msgstr ""
+
+msgid "dossier-state-resolved"
+msgstr ""
+
+msgid "dossier-state-archived"
+msgstr ""
+
+msgid "dossier-transition-activate"
+msgstr ""
+
+msgid "dossier-transition-deactivate"
+msgstr ""
+
+msgid "dossier-transition-reactivate"
+msgstr ""
+
+msgid "dossier-transition-archive"
+msgstr ""
+
+msgid "dossier-transition-resolve"
+msgstr ""
+
+msgid "Give Filing Number"
+msgstr ""
+
+msgid "forwarding-state-closed"
+msgstr ""
+
+msgid "forwarding-state-open"
+msgstr ""
+
+msgid "forwarding-state-refused"
+msgstr ""
+
+msgid "forwarding-transition-accept"
+msgstr ""
+
+msgid "forwarding-transition-assign-to-dossier"
+msgstr ""
+
+msgid "forwarding-transition-close"
+msgstr ""
+
+msgid "forwarding-transition-refuse"
+msgstr ""
+
+msgid "forwarding-transition-reassign"
+msgstr ""
+
+msgid "forwarding-transition-reassign-refused"
+msgstr ""
+
+msgid "inbox-state-default"
+msgstr ""
+
+msgid "dossier-transition-deactivate"
+msgstr ""
+
+msgid "dossier-transition-resolve"
+msgstr ""
+
+msgid "Open tasks report"
+msgstr ""
+
+msgid "repositoryfolder-state-active"
+msgstr ""
+
+msgid "repositoryfolder-state-inactive"
+msgstr ""
+
+msgid "repositoryfolder-transition-activate"
+msgstr ""
+
+msgid "repositoryfolder-transition-inactivate"
+msgstr ""
+
+msgid "label_actions_menu"
+msgstr ""
+
+msgid "save attachments"
+msgstr ""
+
+msgid "Delegate task"
+msgstr ""
+
+msgid "Create successor task"
+msgstr ""
+
+msgid "Add response"
+msgstr ""
+
+msgid "Attach remote document"
+msgstr ""
+
+msgid "Modify deadline"
+msgstr ""
+
+msgid "task-transition-cancelled-open"
+msgstr ""
+
+
+msgid "task-transition-in-progress-resolved"
+msgstr ""
+
+
+msgid "task-transition-open-cancelled"
+msgstr ""
+
+
+msgid "task-transition-open-in-progress"
+msgstr ""
+
+
+msgid "task-transition-open-rejected"
+msgstr ""
+
+
+msgid "task-transition-open-resolved"
+msgstr ""
+
+
+msgid "task-transition-open-tested-and-closed"
+msgstr ""
+
+
+msgid "task-transition-reassign"
+msgstr ""
+
+
+msgid "task-transition-rejected-open"
+msgstr ""
+
+
+msgid "task-transition-resolved-tested-and-closed"
+msgstr ""
+
+
+msgid "task-state-cancelled"
+msgstr ""
+
+
+msgid "task-state-in-progress"
+msgstr ""
+
+
+msgid "task-state-new-successor"
+msgstr ""
+
+
+msgid "task-state-open"
+msgstr ""
+
+
+msgid "task-state-rejected"
+msgstr ""
+
+
+msgid "task-state-resolved"
+msgstr ""
+
+
+msgid "task-state-tested-and-closed"
+msgstr ""
+
+
+msgid "task-transition-in-progress-tested-and-closed"
+msgstr ""
+
+msgid "task-transition-resolved-in-progress"
+msgstr ""
+
