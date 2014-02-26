@@ -1,6 +1,3 @@
-# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
-# SOME DESCRIPTIVE TITLE.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -24,4 +21,182 @@ msgid "alltasks"
 msgstr ""
 
 msgid "allissuedtasks"
+msgstr ""
+
+msgid "local"
+msgstr ""
+
+msgid "additional_contact"
+msgstr ""
+
+msgid "important_contact"
+msgstr ""
+
+msgid "sharing"
+msgstr ""
+
+msgid "users"
+msgstr ""
+
+msgid "ogds-cp-clients"
+msgstr ""
+
+msgid "ogds-cp-alltasks"
+msgstr ""
+
+msgid "myissuedtasks"
+msgstr ""
+
+msgid "assigned_inbox_tasks"
+msgstr ""
+
+msgid "issued_inbox_tasks"
+msgstr ""
+
+msgid "tracker_overview"
+msgstr ""
+
+msgid "open_issues"
+msgstr ""
+
+msgid "all_issues"
+msgstr ""
+
+msgid "my_issues"
+msgstr ""
+
+msgid "issued_issues"
+msgstr ""
+
+msgid "tracker_info"
+msgstr ""
+
+msgid "overview"
+msgstr ""
+
+msgid "dossiers"
+msgstr ""
+
+msgid "documents"
+msgstr ""
+
+msgid "events"
+msgstr ""
+
+msgid "tickets"
+msgstr ""
+
+msgid "info"
+msgstr ""
+
+msgid "folders"
+msgstr ""
+
+msgid "changes"
+msgstr ""
+
+msgid "reports"
+msgstr ""
+
+msgid "all_entries"
+msgstr ""
+
+msgid "archive"
+msgstr ""
+
+msgid "accounting_overview"
+msgstr ""
+
+msgid "generally"
+msgstr ""
+
+msgid "label_account"
+msgstr ""
+
+msgid "billable"
+msgstr ""
+
+msgid "getResponsible"
+msgstr ""
+
+msgid "getResponsibleManager"
+msgstr ""
+
+msgid "process"
+msgstr ""
+
+msgid "getEstimatedHours"
+msgstr ""
+
+msgid "getEffectiveHours"
+msgstr ""
+
+msgid "Month"
+msgstr ""
+
+msgid "getAccount"
+msgstr ""
+
+msgid "By State"
+msgstr ""
+
+msgid "By Area"
+msgstr ""
+
+msgid "By Severity"
+msgstr ""
+
+msgid "By Responsible Manager"
+msgstr ""
+
+msgid "By Target Release"
+msgstr ""
+
+msgid "getHours"
+msgstr ""
+
+msgid "getBillable"
+msgstr ""
+
+msgid "participants"
+msgstr ""
+
+msgid "subdossiers"
+msgstr ""
+
+msgid "tasks"
+msgstr ""
+
+msgid "journal"
+msgstr ""
+
+msgid "trash"
+msgstr ""
+
+msgid "mydossiers"
+msgstr ""
+
+msgid "mydocuments"
+msgstr ""
+
+msgid "mytasks"
+msgstr ""
+
+msgid "assignedtasks"
+msgstr ""
+
+msgid "contacts"
+msgstr ""
+
+
+msgid "related_documents"
+msgstr ""
+
+msgid "relateddocuments"
+msgstr ""
+
+msgid "tasktemplates"
+msgstr ""
+
+msgid "tasktemplatefolders"
 msgstr ""
