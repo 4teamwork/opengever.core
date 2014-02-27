@@ -334,9 +334,9 @@ class TestMainDossier(FunctionalTestCase):
             d2_1_view()
 
             # This is a subdossier, so in responsible
-            # we must have the responsible of the parent
+            # we must still have the logged in user as responsible
             self.assertEquals(
-                [IDossier(d2).responsible],
+                [self.get_logged_in_user()],
                 d2_1_view.request.get(
                     'form.widgets.IDossier.responsible', None))
 
