@@ -206,11 +206,7 @@ class AddForm(dexterity.AddForm):
         responsible in the case of a subdossier.
         """
         responsible = getSecurityManager().getUser().getId()
-        if IDossierMarker.providedBy(self.context):
-            # If adding a subdossier, use parent's responsible
-            parent_dossier = IDossier(self.context)
-            if parent_dossier:
-                responsible = parent_dossier.responsible
+
         if not self.request.get('form.widgets.IDossier.responsible', None):
             self.request.set('form.widgets.IDossier.responsible',
                              [responsible])
