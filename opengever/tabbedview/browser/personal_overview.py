@@ -1,4 +1,4 @@
-from Products.CMFPlone.utils import getToolByName
+from AccessControl import Unauthorized
 from five import grok
 from ftw.tabbedview.browser.tabbed import TabbedView
 from opengever.globalindex.interfaces import ITaskQuery
@@ -6,6 +6,7 @@ from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
 from opengever.tabbedview.browser.tabs import Documents, Dossiers, Tasks
 from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
+from Products.CMFPlone.utils import getToolByName
 from zope.component import getUtility
 from zope.interface import Interface
 import AccessControl
@@ -51,8 +52,7 @@ class PersonalOverview(TabbedView):
         """
         user = AccessControl.getSecurityManager().getUser()
         if user == AccessControl.SecurityManagement.SpecialUsers.nobody:
-            login = self.context.portal_url() + '/login'
-            return self.request.RESPONSE.redirect(login)
+            raise Unauthorized
 
         if not self.user_is_allowed_to_view():
             catalog = getToolByName(self.context, 'portal_catalog')

@@ -4,6 +4,11 @@ Changelog
 3.2.2 (unreleased)
 ------------------
 
+- Personal Overview: Raise Unauthorized for unauthenticated users instead of
+  hardcoded redirect to login form.
+  This is required for Single-Sign-On with SPNEGO plugin to work.
+  [lgraf] 
+
 - Use always logged in user as responsible of a subdossier.
   [lknoepfel]
 
