@@ -14,8 +14,8 @@
         title="opengever.repository: Add repositoryroot"
         />
 
-	<permission
-		id="opengever.repository.UnlockReferencePrefix"
-		title="opengever.repository: Unlock Reference Prefix"
-		/>
+    <permission
+        id="opengever.repository.UnlockReferencePrefix"
+        title="opengever.repository: Unlock Reference Prefix"
+        />
 </configure>
