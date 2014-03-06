@@ -78,13 +78,22 @@ class TestReferenceNumberAdapter(FunctionalTestCase):
             'OG 2.4.7 / 8.2',
             IReferenceNumber(self.subdossier).get_number())
 
-    def test_use_formatter_configured_in_registry(self):
+    def test_use_grouped_by_three_formatter(self):
         registry = getUtility(IRegistry)
         proxy = registry.forInterface(IReferenceNumberSettings)
         proxy.formatter = 'grouped_by_three'
 
         self.assertEquals(
             'OG 247-8.2',
+            IReferenceNumber(self.subdossier).get_number())
+
+    def test_use_no_client_id_dotted_formatter(self):
+        registry = getUtility(IRegistry)
+        proxy = registry.forInterface(IReferenceNumberSettings)
+        proxy.formatter = 'no_client_id_dotted'
+
+        self.assertEquals(
+            '2.4.7 / 8.2',
             IReferenceNumber(self.subdossier).get_number())
 
 

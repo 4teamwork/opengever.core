@@ -141,3 +141,30 @@ class GroupedByThreeReferenceFormatter(DottedReferenceFormatter):
             dossier_part = remainder
             subdossier_parts = [int(d) for d in dossier_part.split('.')]
             return (refnums_part, tuple(subdossier_parts))
+
+
+class NoClientIdDottedReferenceFormatter(DottedReferenceFormatter):
+    grok.name('no_client_id_dotted')
+
+    def complete_number(self, numbers):
+            """DottedReferenceFormatter which omits client id.
+            """
+
+            reference_number = u''
+
+            if self.repository_number(numbers):
+                reference_number = self.repository_number(numbers)
+
+            if self.dossier_number(numbers):
+                reference_number = u'%s%s%s' % (
+                    reference_number,
+                    self.repository_dossier_seperator,
+                    self.dossier_number(numbers))
+
+            if self.document_number(numbers):
+                reference_number = u'%s%s%s' % (
+                    reference_number,
+                    self.dossier_document_seperator,
+                    self.document_number(numbers))
+
+            return reference_number.encode('utf-8')
