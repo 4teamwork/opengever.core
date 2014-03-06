@@ -4,6 +4,9 @@ Changelog
 3.2.2 (unreleased)
 ------------------
 
+- Fixed missing role and available expression in reference prefix manager.
+  [lknoepfel]
+
 - Added NoClientIdDotted reference number formatter.
   [lknoepfel]
 

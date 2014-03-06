@@ -3,9 +3,7 @@
     xmlns:i18n="http://xml.zope.org/namespaces/i18n">
     <object name="object_buttons" meta_type="CMF Action Category">
         <object name="prefix_manager" meta_type="CMF Action" i18n:domain="opengever.repository" purge="false">
-            <property name="available_expr">python:
-              context.restrictedTraverse('@@plone_interface_info').provides('opengever.repository.repositoryroot.IRepositoryRoot') or
-              context.restrictedTraverse('@@plone_interface_info').provides('opengever.repository.interfaces.IRepositoryFolder')</property>
+            <property name="available_expr">python:context.restrictedTraverse('@@plone_interface_info').provides('opengever.repository.repositoryroot.IRepositoryRoot') or context.restrictedTraverse('@@plone_interface_info').provides('opengever.repository.interfaces.IRepositoryFolder')</property>
         </object>
     </object>
 </object>
