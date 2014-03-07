@@ -4,6 +4,10 @@ Changelog
 3.2.2 (unreleased)
 ------------------
 
+- Don't hard code reference formatter in tabbed view custom sorter. Look it up
+  from IReferenceNumberSettings instead.
+  [lgraf]
+
 - Fixed missing role and available expression in reference prefix manager.
   [lknoepfel]
 
