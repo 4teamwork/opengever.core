@@ -1,7 +1,7 @@
 Changelog
 =========
 
-3.2.2 (unreleased)
+3.2.2 (2014-03-11)
 ------------------
 
 - Fixed missing role and available expression in reference prefix manager.
