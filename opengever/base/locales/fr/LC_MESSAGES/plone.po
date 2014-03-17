@@ -9,29 +9,19 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: DOMAIN\n"
 
-msgid "Overview"
-msgstr "Sommaire"
+msgid "Add Participant"
+msgstr "Participant"
 
-#: plone.app.search/plone/app/search/search.pt:59
-msgid "Search results"
-msgstr "Résultat de la recherche"
+msgid "Add response"
+msgstr "Réponse"
 
-#: plone.app.search/plone/app/search/search.pt:68
-msgid "Search results for ${term}"
-msgstr "Résultat de la recherche pour"
+msgid "Add task from template"
+msgstr "Ajouter une tâche à partir du modèle"
 
-#: plone.app.search/plone/app/search/browser.py:121
-msgid "alphabetically"
-msgstr "Alphabétique"
-
-#: plone.app.search/plone/app/search/browser.py:119
-msgid "date (newest first)"
-msgstr "Changement de date (descendant)"
+msgid "Attach remote document"
+msgstr "Copie d'un document de votre service"
 
 msgid "Cancel Checkout"
 msgstr "Annuler"
@@ -44,6 +34,12 @@ msgstr "Checkout"
 
 msgid "Checkout and edit"
 msgstr "Checkout et modifier"
+
+msgid "Create successor task"
+msgstr "Créer tâche suivante"
+
+msgid "Delegate task"
+msgstr "Déléguer"
 
 msgid "Document state changed to document-state-checked_out"
 msgstr "Etat du document modifié : checkout"
@@ -60,11 +56,51 @@ msgstr "Etat du document modifié : rejeté"
 msgid "Document state changed to document-state-working_copy"
 msgstr "Etat du document modifié : copie de travail"
 
+msgid "Dossier state changed to dossier-state-active"
+msgstr "Etat du dossier modifié : En modification"
+
+msgid "Dossier state changed to dossier-state-archived"
+msgstr "Etat du dossier modifié : Archivé"
+
+msgid "Dossier state changed to dossier-state-inactive"
+msgstr "Etat du dossier modifié : Annulé"
+
+msgid "Dossier state changed to dossier-state-resolved"
+msgstr "Etat du dossier modifié : Fermé"
+
 msgid "Edit metadata"
 msgstr "Modifier les méta-données"
 
+msgid "Give Filing Number"
+msgstr "Attribuer un numéro d'inventaire"
+
+msgid "Modify deadline"
+msgstr "Changer le délai"
+
+msgid "Open tasks report"
+msgstr "Liste des affaires en suspens"
+
+msgid "Overview"
+msgstr "Sommaire"
+
+#: plone.app.search/plone/app/search/search.pt:59
+msgid "Search results"
+msgstr "Résultat de la recherche"
+
+#: plone.app.search/plone/app/search/search.pt:68
+msgid "Search results for ${term}"
+msgstr "Résultat de la recherche pour"
+
+#: plone.app.search/plone/app/search/browser.py:121
+msgid "alphabetically"
+msgstr "Alphabétique"
+
 msgid "button_download"
 msgstr "Télécharger"
+
+#: plone.app.search/plone/app/search/browser.py:119
+msgid "date (newest first)"
+msgstr "Changement de date (descendant)"
 
 msgid "document-state-checked_out"
 msgstr "Checkout"
@@ -89,27 +125,6 @@ msgstr "Checkout"
 
 msgid "document-transition-reject"
 msgstr "Remettre"
-
-msgid "label_reset"
-msgstr "Remettre"
-
-msgid "Add Participant"
-msgstr "Participant"
-
-msgid "Dossier state changed to dossier-state-active"
-msgstr "Etat du dossier modifié : En modification"
-
-msgid "Dossier state changed to dossier-state-archived"
-msgstr "Etat du dossier modifié : Archivé"
-
-msgid "Dossier state changed to dossier-state-inactive"
-msgstr "Etat du dossier modifié : Annulé"
-
-msgid "Dossier state changed to dossier-state-resolved"
-msgstr "Etat du dossier modifié : Fermé"
-
-msgid "Give Filing Number"
-msgstr "Attribuer un numéro d'inventaire"
 
 msgid "document_with_template"
 msgstr "Document à partir du modèle"
@@ -144,11 +159,11 @@ msgstr "Fermer"
 msgid "forwarding-state-closed"
 msgstr "Fermé"
 
-msgid "forwarding-state-refused"
-msgstr "Refusé"
-
 msgid "forwarding-state-open"
 msgstr "Ouvert"
+
+msgid "forwarding-state-refused"
+msgstr "Refusé"
 
 msgid "forwarding-transition-accept"
 msgstr "Accepter"
@@ -162,19 +177,20 @@ msgstr "Fermer"
 msgid "forwarding-transition-reassign"
 msgstr "Attribuer"
 
-msgid "forwarding-transition-refuse"
-msgstr "Refuser"
-
 msgid "forwarding-transition-reassign-refused"
 msgstr "Attribuer"
 
+msgid "forwarding-transition-refuse"
+msgstr "Refuser"
+
 msgid "inbox-state-default"
 msgstr "Ouvert"
-msgid "Open tasks report"
-msgstr "Liste des affaires en suspens"
 
 msgid "label_actions_menu"
 msgstr "Actions supplémentaires"
+
+msgid "label_reset"
+msgstr "Remettre"
 
 msgid "repositoryfolder-state-active"
 msgstr "Actif"
@@ -190,22 +206,6 @@ msgstr "Desactiver"
 
 msgid "save attachments"
 msgstr "Sauvegarder les fichiers attachés"
-
-
-msgid "Add response"
-msgstr "Réponse"
-
-msgid "Attach remote document"
-msgstr "Copie d'un document de votre service"
-
-msgid "Create successor task"
-msgstr "Créer tâche suivante"
-
-msgid "Delegate task"
-msgstr "Déléguer"
-
-msgid "Modify deadline"
-msgstr "Changer le délai"
 
 msgid "task-state-cancelled"
 msgstr "Annulé"
@@ -263,9 +263,6 @@ msgstr "Réviser"
 
 msgid "task-transition-resolved-tested-and-closed"
 msgstr "Fermer"
-
-msgid "Add task from template"
-msgstr "Ajouter une tâche à partir du modèle"
 
 msgid "tasktemplate-state-active"
 msgstr "Actif"

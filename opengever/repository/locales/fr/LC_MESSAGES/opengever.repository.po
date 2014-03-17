@@ -9,19 +9,16 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: DOMAIN\n"
 
 #: ./opengever/repository/browser/referenceprefix_manager_templates/referenceprefixmanager.pt:43
 msgid "In use"
-msgstr ""
+msgstr "Est utilisé"
 
 #: ./opengever/repository/profiles/default/actions.xml
 #: ./opengever/repository/upgrades/profiles/2601/actions.xml
 msgid "Prefix Manager"
-msgstr ""
+msgstr "Gestionnaire de préfixes de référence"
 
 #: ./opengever/repository/profiles/default/types/opengever.repository.repositoryfolder.xml
 msgid "RepositoryFolder"
@@ -38,17 +35,17 @@ msgstr "Titre"
 #: ./opengever/repository/profiles/default/actions.xml
 #: ./opengever/repository/upgrades/profiles/2601/actions.xml
 msgid "Unlock unused repository prefixes."
-msgstr ""
+msgstr "Déblocage de préfixes de référence inutilisés"
 
 #. Default: "Active"
 #: ./opengever/repository/browser/referenceprefix_manager_templates/referenceprefixmanager.pt:25
 msgid "active"
-msgstr ""
+msgstr "Actif"
 
 #. Default: "No nested repositorys available."
 #: ./opengever/repository/browser/referenceprefix_manager_templates/referenceprefixmanager.pt:31
 msgid "empty_repository"
-msgstr ""
+msgstr "Pas de numéros de classement disponible dans cette subdivison."
 
 #. Default: "A Sibling with the same reference number is existing"
 #: ./opengever/repository/behaviors/referenceprefix.py:66
@@ -156,22 +153,22 @@ msgstr "Etat"
 #. Default: "Name"
 #: ./opengever/repository/browser/referenceprefix_manager_templates/referenceprefixmanager.pt:24
 msgid "name"
-msgstr ""
+msgstr "Nom"
 
 #. Default: "Position"
 #: ./opengever/repository/browser/referenceprefix_manager_templates/referenceprefixmanager.pt:23
 msgid "position"
-msgstr ""
+msgstr "Position"
 
 #. Default: "Reference Prefix Manager"
 #: ./opengever/repository/browser/referenceprefix_manager_templates/referenceprefixmanager.pt:15
 msgid "prefman_title"
-msgstr ""
+msgstr "Gestionnaire de préfixes de référence"
 
 #. Default: "Reference prefix has been unlocked."
 #: ./opengever/repository/browser/referenceprefix_manager.py:19
 msgid "statmsg_prefix_unlocked"
-msgstr ""
+msgstr "Le préfixe de référence à été débloqué"
 
 #. Default: "Documents:"
 #: ./opengever/repository/browser/overview_templates/repositoryrootoverview.pt:16
@@ -191,5 +188,6 @@ msgstr "Tâches"
 #. Default: "Unlock"
 #: ./opengever/repository/browser/referenceprefix_manager_templates/referenceprefixmanager.pt:26
 msgid "unlock"
-msgstr ""
+msgstr "Libérer"
+
 
