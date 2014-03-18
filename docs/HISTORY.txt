@@ -4,7 +4,8 @@ Changelog
 3.2.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- ldap_util: Make check for user object classes case-insensitive.
+  [lgraf]
 
 
 3.2.2 (2014-03-11)

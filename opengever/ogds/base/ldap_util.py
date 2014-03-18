@@ -344,7 +344,8 @@ class LDAPSearch(grok.Adapter):
         is_user = False
         obj_classes = attrs['objectClass']
         for obj_class in obj_classes:
-            if obj_class in self.context._user_objclasses:
+            if obj_class.lower() in [uc.lower() for uc in
+                    self.context._user_objclasses]:
                 is_user = True
                 break
 
