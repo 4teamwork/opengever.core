@@ -9,10 +9,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: DOMAIN\n"
 
 #: ./opengever/dossier/move_items.py:132
 msgid "${copied_items} Elements were moved successfully"
@@ -107,15 +104,15 @@ msgstr "Modèles"
 
 #: ./opengever/dossier/deactivate.py:26
 msgid "The Dossier can't be deactivated, the subdossier ${dossier} is already resolved"
-msgstr ""
+msgstr "Impossible d'annuler le dossier, parce que le sous-dossier ${dossier} est déja fermé. Le sous-dossier doit d'abord être réouvert."
 
 #: ./opengever/dossier/deactivate.py:68
 msgid "The Dossier has been activated"
-msgstr ""
+msgstr "Le dossier a été activé."
 
 #: ./opengever/dossier/deactivate.py:44
 msgid "The Dossier has been deactivated"
-msgstr ""
+msgstr "Le dossier a été annulé."
 
 #: ./opengever/dossier/archive.py:267
 msgid "The Dossier has been resolved"
@@ -277,7 +274,7 @@ msgstr "Attribuer un numéro d'inventaire"
 #. Default: "Filing Number"
 #: ./opengever/dossier/filing/tabs.py:10
 msgid "filing_number"
-msgstr ""
+msgstr "Numéro d'inventaire"
 
 #. Default: "filing prefix"
 #: ./opengever/dossier/archive.py:133
@@ -656,3 +653,5 @@ msgstr "Aucun envoi possible de documents à un autre service. Vous êtes unique
 #: ./opengever/dossier/behaviors/participation.py:194
 msgid "warning_no_participants_selected"
 msgstr "Vous n'avez sélectionné aucune participation"
+
+

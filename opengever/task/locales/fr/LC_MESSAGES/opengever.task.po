@@ -9,10 +9,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: DOMAIN\n"
 
 #: ./opengever/task/browser/close.py:251
 msgid "${num} documents were copied."
@@ -621,6 +618,11 @@ msgstr "Mandataire"
 msgid "label_return_to_issue"
 msgstr "Retour à la tâche"
 
+#. Default: "Sequence Number"
+#: ./opengever/task/viewlets/byline.py:55
+msgid "label_sequence_number"
+msgstr "Numéro courant"
+
 #. Default: "Document"
 #: ./opengever/task/browser/attachdocument.py:235
 msgid "label_source_document"
@@ -853,3 +855,5 @@ msgstr "Document copié de la tâche (tâche achevée)"
 #: ./opengever/task/browser/accept/utils.py:52
 msgid "yearfolder_title"
 msgstr "Fermé"
+
+

@@ -4,6 +4,9 @@ Changelog
 3.2.3 (unreleased)
 ------------------
 
+- Added french translation by I. Anthenien.
+  [lknoepfel]
+
 - ldap_util: Make check for user object classes case-insensitive.
   [lgraf]
 

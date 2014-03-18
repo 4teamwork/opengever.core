@@ -9,10 +9,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: DOMAIN\n"
 
 #: ./opengever/inbox/profiles/default/actions.xml
 msgid "Forward"
@@ -33,7 +30,7 @@ msgstr "Classeur pour l'année"
 #. Default: "Close"
 #: ./opengever/inbox/browser/close.py:37
 msgid "close"
-msgstr ""
+msgstr "Fermer"
 
 #. Default: "Error: Please select at least one document to forward"
 #: ./opengever/inbox/forwarding.py:103
@@ -56,7 +53,7 @@ msgstr "Choix de la personne responsable ou la boîte de réception du client me
 #. Default: "Assigned tasks"
 #: ./opengever/inbox/browser/overview.py:24
 msgid "label_assigned_inbox_tasks"
-msgstr ""
+msgstr "Tâches reçues"
 
 #. Default: "Inbox Group"
 #: ./opengever/inbox/inbox.py:22
@@ -66,17 +63,17 @@ msgstr "Boîte de réception Groupe"
 #. Default: "Issued tasks"
 #: ./opengever/inbox/browser/overview.py:28
 msgid "label_issued_inbox_tasks"
-msgstr ""
+msgstr "Tâches attribuées"
 
 #. Default: "Refuse"
 #: ./opengever/inbox/browser/refuse.py:29
 msgid "label_refuse"
-msgstr ""
+msgstr "Refuser"
 
 #. Default: "Refuse Forwarding"
 #: ./opengever/inbox/browser/refuse.py:26
 msgid "label_refuse_forwarding"
-msgstr ""
+msgstr "Refuser le transfert"
 
 #. Default: "Responsible"
 #: ./opengever/inbox/forwarding.py:50
@@ -86,9 +83,11 @@ msgstr "Mandataire"
 #. Default: "Assign Forwarding"
 #: ./opengever/inbox/browser/assign.py:34
 msgid "title_assign_forwarding"
-msgstr ""
+msgstr "Envoyer le transfert"
 
 #. Default: "Close orwarding"
 #: ./opengever/inbox/browser/close.py:35
 msgid "title_close_forwarding"
-msgstr ""
+msgstr "Fermer le transfert"
+
+

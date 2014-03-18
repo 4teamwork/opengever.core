@@ -9,37 +9,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: DOMAIN\n"
-
-msgid "allissuedtasks"
-msgstr "Toutes les tâches attribuées"
-
-msgid "alltasks"
-msgstr "Toutes les tâches"
-
-msgid "issuedtasks"
-msgstr "Mes tâches attribuées"
-
-msgid "additional_contact"
-msgstr "Détails"
-
-msgid "important_contact"
-msgstr "Sommaire"
-
-msgid "local"
-msgstr "Local"
-
-msgid "sharing"
-msgstr "Info"
-
-msgid "assigned_inbox_tasks"
-msgstr ""
-
-msgid "issued_inbox_tasks"
-msgstr ""
 
 msgid "By Area"
 msgstr "Domaine"
@@ -62,17 +32,29 @@ msgstr "Mois"
 msgid "accounting_overview"
 msgstr "Sommaire"
 
+msgid "additional_contact"
+msgstr "Détails"
+
 msgid "all_entries"
 msgstr "Toutes les entrées"
 
 msgid "all_issues"
 msgstr "Tous les tickets"
 
+msgid "allissuedtasks"
+msgstr "Toutes les tâches attribuées"
+
+msgid "alltasks"
+msgstr "Toutes les tâches"
+
 msgid "archive"
 msgstr "Archives"
 
 msgid "assigned_forwardings"
 msgstr "Réception"
+
+msgid "assigned_inbox_tasks"
+msgstr "Tâches reçues"
 
 msgid "assigned_tasks"
 msgstr "Tâches d'un autre client"
@@ -85,6 +67,9 @@ msgstr "Heures à facturer"
 
 msgid "changes"
 msgstr "Dernières modifications"
+
+msgid "closed-forwardings"
+msgstr "Tâches achevées"
 
 msgid "contacts"
 msgstr "Contacts"
@@ -128,17 +113,29 @@ msgstr "Responsabilité"
 msgid "given_tasks"
 msgstr "Acheminement / Tâches attribuées"
 
+msgid "important_contact"
+msgstr "Sommaire"
+
 msgid "info"
 msgstr "Information"
 
+msgid "issued_inbox_tasks"
+msgstr "Tâches attribuées"
+
 msgid "issued_issues"
 msgstr "Mes charges"
+
+msgid "issuedtasks"
+msgstr "Mes tâches attribuées"
 
 msgid "journal"
 msgstr "Historique"
 
 msgid "label_account"
 msgstr "Centre de coûts"
+
+msgid "local"
+msgstr "Local"
 
 msgid "my_issues"
 msgstr "Mes tickets"
@@ -173,14 +170,29 @@ msgstr "Participants"
 msgid "process"
 msgstr "Avancement"
 
+msgid "related_documents"
+msgstr "Documents liés"
+
+msgid "relateddocuments"
+msgstr "Documents"
+
 msgid "reports"
 msgstr "Rapports de travail"
+
+msgid "sharing"
+msgstr "Info"
 
 msgid "subdossiers"
 msgstr "Sous-dossiers"
 
 msgid "tasks"
 msgstr "Tâches"
+
+msgid "tasktemplatefolders"
+msgstr "Déroulements standards"
+
+msgid "tasktemplates"
+msgstr "Modèles de tâches"
 
 msgid "tickets"
 msgstr "Tickets"
@@ -197,14 +209,4 @@ msgstr "Corbeille"
 msgid "users"
 msgstr "OGDS"
 
-msgid "related_documents"
-msgstr "Documents liés"
 
-msgid "relateddocuments"
-msgstr "Documents"
-
-msgid "tasktemplatefolders"
-msgstr "Déroulements standards"
-
-msgid "tasktemplates"
-msgstr "Modèles de tâches"

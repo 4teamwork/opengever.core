@@ -10,7 +10,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: DOMAIN\n"
 
 #: ./opengever/tabbedview/browser/selection_dossier.pt:15
 msgid "Active"
@@ -194,6 +193,11 @@ msgstr "Auteur"
 
 msgid "document_date"
 msgstr "Date du document"
+
+#. Default: "Sequence Number"
+#: ./opengever/tabbedview/browser/tabs.py:169
+msgid "document_sequence_number"
+msgstr "Numéro courant"
 
 msgid "documents"
 msgstr "Documents "
@@ -430,6 +434,11 @@ msgstr "Sous-dossiers"
 msgid "tab_matches"
 msgstr "Résultat(s) : ${amount}"
 
+#. Default: "Sequence Number"
+#: ./opengever/tabbedview/browser/tabs.py:414
+msgid "task_sequence_number"
+msgstr "Numéro courant"
+
 msgid "tasks"
 msgstr "Tâches"
 
@@ -441,3 +450,5 @@ msgstr "Titre"
 
 msgid "trash"
 msgstr "Corbeille"
+
+
