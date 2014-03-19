@@ -23,4 +23,23 @@
         profile="opengever.mail:default"
         />
 
+    <genericsetup:registerProfile
+        name="2103"
+        title="Upgrade to ftw.mail 2.0."
+        description="Disable unwanted viewlet."
+        directory="profiles/2103"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+    <!-- 2102 -> 2103 -->
+    <genericsetup:upgradeStep
+        title="Upgrade to ftw.mail 2.0."
+        description=""
+        source="2102"
+        destination="2103"
+        handler="opengever.mail.upgrades.to2103.DisableViewlet"
+        profile="opengever.mail:default"
+        />
+
 </configure>

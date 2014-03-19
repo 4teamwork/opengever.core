@@ -4,6 +4,9 @@ Changelog
 3.2.3 (unreleased)
 ------------------
 
+- Upgrade to ftw.mail 2.0
+  [lknoepfel]
+
 - Added french translation by I. Anthenien.
   [lknoepfel]
 
