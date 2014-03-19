@@ -56,4 +56,9 @@
         description=""
         handler="opengever.mail.setuphandler.import_various" />
 
+    <adapter
+        for="opengever.base.interfaces.IOpengeverBaseLayer"
+        factory=".intidemailaddress.IntIdEmailAddress"
+        />
+
 </configure>
