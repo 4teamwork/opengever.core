@@ -1,7 +1,7 @@
 from ftw.upgrade import UpgradeStep
 
 
-class RevokeAddMailPermission(UpgradeStep):
+class DisableViewlet(UpgradeStep):
 
     def __call__(self):
         self.setup_install_profile(
