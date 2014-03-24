@@ -1,7 +1,7 @@
 """Defines a customized byline for inbox"""
-from plone.app.layout.viewlets import content
-from opengever.mail.behaviors import IMailInAddressMarker, IMailInAddress
+from ftw.mail.interfaces import IEmailAddress
 from opengever.base.browser.helper import get_css_class
+from plone.app.layout.viewlets import content
 
 
 class InboxByline(content.DocumentBylineViewlet):
@@ -15,5 +15,6 @@ class InboxByline(content.DocumentBylineViewlet):
 
     def email(self):
         """Gets Email and display it in Byline"""
-        if IMailInAddressMarker.providedBy(self.context):
-            return IMailInAddress(self.context).get_email_address()
+        mail_address = IEmailAddress(self.request
+            ).get_email_for_object(self.context)
+        return mail_address

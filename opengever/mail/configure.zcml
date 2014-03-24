@@ -18,6 +18,12 @@
     <!-- Register locales translations -->
     <i18n:registerTranslations directory="locales" />
 
+    <!-- IntId e-mail address resolver -->
+    <adapter
+        for="opengever.base.interfaces.IOpengeverBaseLayer"
+        factory=".emailaddress.IntIdEmailAddress"
+        />
+
     <plone:behavior
           title="ISendableDocsContainer behavior"
           description="generates an email adress for a dossier"

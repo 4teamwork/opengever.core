@@ -1,8 +1,8 @@
+from ftw.mail.interfaces import IEmailAddress
 from opengever.base.viewlets.byline import BylineBase
 from opengever.dossier import _
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossier
-from opengever.mail.behaviors import IMailInAddressMarker, IMailInAddress
 from opengever.ogds.base.interfaces import IContactInformation
 from zope.component import getUtility
 
@@ -23,14 +23,14 @@ class BusinessCaseByline(BylineBase):
         dossier = IDossier(self.context)
         return self.to_localized_time(dossier.end)
 
-    def email(self):
+    def mailto_link(self):
         """Displays email-address if the IMailInAddressMarker behavior
          is provided and the dossier is Active"""
 
-        if IMailInAddressMarker.providedBy(self.context):
-            if self.get_current_state() in DOSSIER_STATES_OPEN:
-                address = IMailInAddress(self.context).get_email_address()
-                return '<a href="mailto:%s">%s</a>' % (address, address)
+        if self.get_current_state() in DOSSIER_STATES_OPEN:
+            address = IEmailAddress(self.request
+                ).get_email_for_object(self.context)
+            return '<a href="mailto:%s">%s</a>' % (address, address)
 
     def get_items(self):
         return [
@@ -74,7 +74,7 @@ class BusinessCaseByline(BylineBase):
             {
                 'class': 'email',
                 'label': _('label_email_address', default='E-Mail'),
-                'content': self.email(),
+                'content': self.mailto_link(),
                 'replace': True
             }
         ]
