@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <object>
 
-  <hidden manager="plone.belowcontenttitle" skinname="iZug Base Theme">
+  <hidden manager="plone.belowcontenttitle" skinname="*">
       <viewlet name="ftw.mail.mail-in"/>
   </hidden>
 
