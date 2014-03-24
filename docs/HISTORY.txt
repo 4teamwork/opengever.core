@@ -11,6 +11,9 @@ Changelog
 3.2.3 (2014-04-01)
 ------------------
 
+- Removed IMailInAddress behavior. Not needed any more with ftw.mail 2.0.
+  [lgraf]
+
 - Replaced hardcoded workflow names with constants.
   [lknoepfel]
 
@@ -22,6 +25,9 @@ Changelog
 
 - ldap_util: Make check for user object classes case-insensitive.
   [lgraf]
+
+- Added french translation by I. Anthenien.
+  [lknoepfel]
 
 
 3.2.2 (2014-03-11)

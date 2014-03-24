@@ -19,14 +19,6 @@
     <i18n:registerTranslations directory="locales" />
 
     <plone:behavior
-          title="IMailInAddress"
-          description="generates an email adress for a dossier"
-          provides=".behaviors.IMailInAddress"
-          factory=".behaviors.MailInAddress"
-          marker=".behaviors.IMailInAddressMarker"
-          />
-
-    <plone:behavior
           title="ISendableDocsContainer behavior"
           description="generates an email adress for a dossier"
           provides=".behaviors.ISendableDocsContainer"

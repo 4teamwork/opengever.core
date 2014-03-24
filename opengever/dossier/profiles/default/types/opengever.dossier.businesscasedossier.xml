@@ -34,7 +34,6 @@
         <element value="opengever.dossier.behaviors.participation.IParticipationAware" />
         <element value="opengever.base.behaviors.classification.IClassification" />
         <element value="opengever.base.behaviors.lifecycle.ILifeCycle" />
-        <element value="opengever.mail.behaviors.IMailInAddress" />
         <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
         <element value="opengever.trash.trash.ITrashable" />
         <element value="opengever.dossier.behaviors.dossiernamefromtitle.IDossierNameFromTitle" />

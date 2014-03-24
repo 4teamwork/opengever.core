@@ -32,4 +32,23 @@
         profile="opengever.inbox:default"
         />
 
+    <!-- 2602 -> 2603 -->
+    <genericsetup:upgradeStep
+        title="Remove MailIn behavior and behavior marker interface"
+        description=""
+        source="2602"
+        destination="2603"
+        handler="opengever.inbox.upgrades.to2603.RemoveMailInBehavior"
+        profile="opengever.inbox:default"
+        />
+
+    <genericsetup:registerProfile
+        name="2603"
+        title="opengever.inbox: upgrade profile 2603"
+        description=""
+        directory="profiles/2603"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
 </configure>
