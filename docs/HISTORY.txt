@@ -11,6 +11,11 @@ Changelog
 3.2.3 (2014-04-01)
 ------------------
 
+- Removed og.mail IMailSettings registry interface (now done in ftw.mail).
+  Added upgrade step to migrate settings to ftw.mail's IMailSettings and
+  remove old og.mail IMailSettings.
+  [lgraf]
+
 - Provide an IntIdResolver adpater to generate Dossier Mail-In addresses
   based on IntIds, and use it instead of the old implementation.
   [lgraf]

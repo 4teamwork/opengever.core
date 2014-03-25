@@ -3,14 +3,6 @@ from zope.interface import Interface, Attribute
 from zope.component.interfaces import IObjectEvent
 
 
-class IMailSettings(Interface):
-    mail_domain = schema.TextLine(
-        title=u"Mail domain",
-        description=u'Enter the mail domain which will be used \
-            for sending mails into this site.',
-        default=u'opengever.4teamwork.ch')
-
-
 class ISendDocumentConf(Interface):
     max_size = schema.Int(
         title=u'max_size',

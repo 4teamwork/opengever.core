@@ -23,4 +23,14 @@
         profile="opengever.mail:default"
         />
 
+    <!-- 2101 -> 2103 -->
+    <genericsetup:upgradeStep
+        title="Migrate mail_domain registry setting from og.mail to ftw.mail"
+        description=""
+        source="2102"
+        destination="2103"
+        handler="opengever.mail.upgrades.to2103.MigrateMailDomainRegistrySetting"
+        profile="opengever.mail:default"
+        />
+
 </configure>
