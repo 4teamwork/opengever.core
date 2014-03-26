@@ -35,7 +35,10 @@ class IMoveItemsSchema(Interface):
                    'opengever.repository.repositoryfolder.' +
                        'IRepositoryFolderSchema',
                    'opengever.dossier.behaviors.dossier.IDossierMarker',
-                   ]
+                   ],
+                 'review_state': ['dossier-state-active',
+                                  'repositoryfolder-state-active',
+                                  'repositoryroot-state-active']
                 }
             ),
         required=True,

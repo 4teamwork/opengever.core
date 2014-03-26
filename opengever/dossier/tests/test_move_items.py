@@ -1,5 +1,9 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from Products.CMFCore.utils import getToolByName
+from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
+from plone.uuid.interfaces import IUUID
 from opengever.testing import FunctionalTestCase
 
 
@@ -9,7 +13,6 @@ class TestMoveItems(FunctionalTestCase):
         super(TestMoveItems, self).setUp()
         self.grant('Contributor')
         self.request = self.layer['request']
-
         self.source_repo = create(Builder("repository"))
         self.source_dossier = create(Builder("dossier")
                                      .within(self.source_repo))
@@ -63,6 +66,47 @@ class TestMoveItems(FunctionalTestCase):
         self.assert_contains(self.source_dossier, [])
         self.assert_contains(target_dossier,
                              ['Dossier \xc2\xb6c1', 'a Task', 'a Dossier'])
+
+    def test_closed_items_hidden_in_destination_widget(self):
+        setRoles(self.portal, TEST_USER_ID, ['Reviewer', 'Manager'])
+        target_repo = create(Builder("repository"))
+
+        target_dossier = create(Builder("dossier")
+                                .within(target_repo)
+                                .in_state('dossier-state-resolved'))
+
+        self.request['paths'] = '/'.join(self.source_dossier.getPhysicalPath())
+
+        uids = self.get_uids_from_tree_widget()
+
+        self.assertEquals([IUUID(self.source_dossier),
+                           IUUID(self.source_repo),
+                           IUUID(target_repo)],
+                          uids,
+                          "Closed dossier found as target in move items")
+
+    def test_open_items_appear_in_destination_widget(self):
+        target_repo = create(Builder("repository"))
+
+        target_dossier = create(Builder("dossier").within(target_repo))
+        self.request['paths'] = '/'.join(self.source_dossier.getPhysicalPath())
+
+        uids = self.get_uids_from_tree_widget()
+
+        self.assertIn(IUUID(target_dossier),
+                      uids,
+                      "Active dossier not found as target in move items")
+
+    def get_uids_from_tree_widget(self):
+        view = self.source_repo.restrictedTraverse('move_items')
+        form = view.form(self.source_repo, self.request)
+        form.updateWidgets()
+
+        catalog = getToolByName(self.portal, 'portal_catalog')
+        widget = form.widgets['destination_folder']
+        query_result = catalog(widget.bound_source.navigation_tree_query)
+
+        return [item.UID for item in query_result]
 
     def move_items(self, items, source=None, target=None):
         paths = u";;".join(["/".join(i.getPhysicalPath()) for i in items])
