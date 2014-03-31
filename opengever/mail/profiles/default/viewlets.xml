@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<object>
+
+<!-- skinname="*" is buggy and only seems to work sometimes, but not reliably,
+     so we explicitely hide the viewlet for all the skins -->
+
+  <hidden manager="plone.belowcontenttitle" skinname="Plone Classic Theme">
+   <viewlet name="ftw.mail.mail-in"/>
+  </hidden>
+
+  <hidden manager="plone.belowcontenttitle" skinname="Sunburst Theme">
+   <viewlet name="ftw.mail.mail-in"/>
+  </hidden>
+
+  <hidden manager="plone.belowcontenttitle" skinname="iZug Base Theme">
+   <viewlet name="ftw.mail.mail-in"/>
+  </hidden>
+
+</object>
+

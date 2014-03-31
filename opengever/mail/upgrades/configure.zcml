@@ -33,4 +33,23 @@
         profile="opengever.mail:default"
         />
 
+    <!-- 2103 -> 2104 -->
+    <genericsetup:upgradeStep
+        title="Hide ftw.mail Mail-In viewlet"
+        description=""
+        source="2103"
+        destination="2104"
+        handler="opengever.mail.upgrades.to2104.HideFtwMailMailInViewlet"
+        profile="opengever.mail:default"
+        />
+
+    <genericsetup:registerProfile
+        name="2104"
+        title="opengever.mail: upgrade profile 2104"
+        description=""
+        directory="profiles/2104"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
 </configure>

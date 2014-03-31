@@ -11,6 +11,10 @@ Changelog
 3.2.3 (2014-04-01)
 ------------------
 
+- Hide standard ftw.mail mail-in viewlet (we display the mail address in
+  the byline).
+  [lgraf]
+
 - Removed og.mail IMailSettings registry interface (now done in ftw.mail).
   Added upgrade step to migrate settings to ftw.mail's IMailSettings and
   remove old og.mail IMailSettings.
