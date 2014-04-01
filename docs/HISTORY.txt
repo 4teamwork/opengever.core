@@ -1,7 +1,7 @@
 Changelog
 =========
 
-3.2.3 (unreleased)
+3.2.3 (2014-04-01)
 ------------------
 
 - Added french translation by I. Anthenien.
