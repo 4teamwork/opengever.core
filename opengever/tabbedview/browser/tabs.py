@@ -5,6 +5,7 @@ from ftw.table import helper
 from ftw.table.catalog_source import CatalogTableSource
 from opengever.base.browser.helper import client_title_helper
 from opengever.base.interfaces import IReferenceNumberFormatter
+from opengever.base.interfaces import IReferenceNumberSettings
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview import _
 from opengever.tabbedview.browser.listing import CatalogListingView
@@ -22,6 +23,7 @@ from opengever.tabbedview.utils import get_translated_transitions
 from opengever.tabbedview.utils import get_translated_types
 from opengever.task.helper import task_type_helper
 from plone.dexterity.interfaces import IDexterityContainer
+from plone.registry.interfaces import IRegistry
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.component import getUtility, adapts
 from zope.component import queryAdapter
@@ -80,7 +82,11 @@ class OpengeverTab(object):
                 results.reverse()
 
         elif sort_on == 'reference':
-            formatter = queryAdapter(IReferenceNumberFormatter, name='grouped_by_three')
+            # Get active reference formatter
+            registry = getUtility(IRegistry)
+            proxy = registry.forInterface(IReferenceNumberSettings)
+            formatter = queryAdapter(IReferenceNumberFormatter, name=proxy.formatter)
+
             results = list(results)
             results.sort(key=formatter.sorter)
             if sort_reverse:
