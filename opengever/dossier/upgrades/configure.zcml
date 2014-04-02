@@ -43,4 +43,22 @@
         profile="opengever.dossier:filing"
         />
 
+    <genericsetup:registerProfile
+        name="2602"
+        title="Upgrade to ftw.mail 2.0."
+        description="Updated ftw.mail permissions."
+        directory="profiles/2602"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+    <!-- 2601 -> 2602 -->
+    <genericsetup:upgradeStep
+        title="Update workflow for ftw.mail"
+        description=""
+        source="2601"
+        destination="2602"
+        handler="opengever.dossier.upgrades.to2602.UpdateFtwMail"
+        profile="opengever.dossier:default"
+        />
 </configure>

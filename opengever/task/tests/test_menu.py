@@ -60,5 +60,4 @@ class TestFactoryMenu(FunctionalTestCase):
         items = self.menu.getMenuItems(context, self.portal.REQUEST)
         filtered_items = [item.get('id') for item in items]
 
-        self.assertEquals(set([removed_item,]),
-                          set(all_items)-set(filtered_items))
+        self.assertNotIn(removed_item, filtered_items)
