@@ -31,7 +31,7 @@ class TestReporter(MockTestCase):
             self.expect(brain.start).result(
                 datetime(2012, 2, 25) + timedelta(i))
             self.expect(brain.responsible).result('Test user %i' % (i))
-            self.expect(brain.review_state).result('dossier-state-activ')
+            self.expect(brain.review_state).result('dossier-state-active')
             brains.append(brain)
 
         self.replay()
