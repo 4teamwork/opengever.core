@@ -22,13 +22,12 @@ class OpenDossiersAsJSONView(grok.View):
         for brain in brains:
             path = brain.getPath()[len(portal_path) + 1:]
             data.append({
-                    'path': path,
-                    'url': str(brain.getURL()),
-                    'title': str(safe_unicode(
-                            brain.Title).encode('utf8')),
-                    'review_state': str(brain.review_state),
-                    'reference_number': str(brain.reference),
-                    })
+                'path': path,
+                'url': str(brain.getURL()),
+                'title': str(safe_unicode(brain.Title).encode('utf8')),
+                'review_state': str(brain.review_state),
+                'reference_number': str(brain.reference),
+                })
 
         # Set correct content type for JSON response
         self.request.response.setHeader("Content-type", "application/json")

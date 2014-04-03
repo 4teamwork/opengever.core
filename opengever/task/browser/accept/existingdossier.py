@@ -46,7 +46,7 @@ class IChooseDossierSchema(Schema):
                 'object_provides': [
                     'opengever.repository.repositoryroot.IRepositoryRoot',
                     'opengever.repository.repositoryfolder.'
-                        'IRepositoryFolderSchema',
+                    'IRepositoryFolderSchema',
                     'opengever.dossier.behaviors.dossier.IDossierMarker',
                     ],
                 'review_state': ['repositoryroot-state-active',

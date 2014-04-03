@@ -41,7 +41,7 @@ class DossierResolveView(grok.View):
             for title in invalid_dates:
                 ptool.addPortalMessage(
                     _("The dossier ${dossier} has a invalid end_date",
-                    mapping=dict(dossier=title,)),
+                      mapping=dict(dossier=title,)),
                     type="error")
 
             return self.request.RESPONSE.redirect(
@@ -53,10 +53,12 @@ class DossierResolveView(grok.View):
             resolver.resolve()
             if self.context.is_subdossier():
                 ptool.addPortalMessage(
-                    _('The subdossier has been succesfully resolved'), type='info')
+                    _('The subdossier has been succesfully resolved'),
+                    type='info')
             else:
                 ptool.addPortalMessage(
-                    _('The dossier has been succesfully resolved'), type='info')
+                    _('The dossier has been succesfully resolved'),
+                    type='info')
 
             self.request.RESPONSE.redirect(self.context.absolute_url())
 
@@ -75,7 +77,7 @@ class DossierReactivateView(grok.View):
         if resolver.is_reactivate_possible():
             resolver.reactivate()
             ptool.addPortalMessage(_('Dossiers successfully reactivated.'),
-                type="info")
+                                   type="info")
             self.request.RESPONSE.redirect(self.context.absolute_url())
         else:
             ptool.addPortalMessage(
@@ -174,8 +176,8 @@ class Resolver(object):
             self._recursive_resolve(
                 subdossier.getObject(), end_date, recursive=True)
 
-        if self.wft.getInfoFor(
-            dossier, 'review_state') == 'dossier-state-active':
+        if self.wft.getInfoFor(dossier,
+                               'review_state') == 'dossier-state-active':
             self.wft.doActionFor(dossier, 'dossier-transition-resolve')
 
 
@@ -192,8 +194,8 @@ class Reactivator(object):
         for subdossier in dossier.get_subdossiers():
             self._recursive_reactivate(subdossier.getObject())
 
-        if self.wft.getInfoFor(
-            dossier, 'review_state') == 'dossier-state-resolved':
+        if self.wft.getInfoFor(dossier,
+                               'review_state') == 'dossier-state-resolved':
 
             self.wft.doActionFor(dossier, 'dossier-transition-reactivate')
 

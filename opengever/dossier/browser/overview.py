@@ -23,7 +23,7 @@ class DossierOverview(grok.View, OpengeverTab):
         return self.context.portal_catalog(
             portal_type=types,
             path=dict(depth=depth,
-                query='/'.join(self.context.getPhysicalPath())),
+                      query='/'.join(self.context.getPhysicalPath())),
             sort_on='modified',
             sort_order='reverse')
 
@@ -59,13 +59,13 @@ class DossierOverview(grok.View, OpengeverTab):
         documents = self.catalog(
             ['opengever.document.document', 'ftw.mail.mail', ])[:10]
         document_list = [{
-                'Title': document.Title,
-                'getURL': document.getURL,
-                'alt': document.document_date and
-                document.document_date.strftime('%d.%m.%Y') or '',
-                'css_class': get_css_class(document),
-                'portal_type': document.portal_type,
-                } for document in documents]
+            'Title': document.Title,
+            'getURL': document.getURL,
+            'alt': document.document_date and
+            document.document_date.strftime('%d.%m.%Y') or '',
+            'css_class': get_css_class(document),
+            'portal_type': document.portal_type,
+            } for document in documents]
 
         return document_list
 
@@ -92,7 +92,7 @@ class DossierOverview(grok.View, OpengeverTab):
         return [{
             'Title': info.describe(xx.contact),
             'getURL': info.get_profile_url(xx.contact),
-            'css_class':'function-user',
+            'css_class': 'function-user',
             }
             for xx in results]
 

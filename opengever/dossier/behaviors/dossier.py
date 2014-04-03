@@ -107,7 +107,7 @@ class IDossier(form.Schema):
         source=wrap_vocabulary(
             'opengever.dossier.type_prefixes',
             visible_terms_from_registry="opengever.dossier"
-                '.interfaces.IDossierContainerTypes.type_prefixes'),
+            '.interfaces.IDossierContainerTypes.type_prefixes'),
         required=False,
         )
 
@@ -127,7 +127,7 @@ class IDossier(form.Schema):
         source=wrap_vocabulary(
             'opengever.dossier.container_types',
             visible_terms_from_registry="opengever.dossier"
-                '.interfaces.IDossierContainerTypes.container_types'),
+            '.interfaces.IDossierContainerTypes.container_types'),
         required=False,
         )
 
@@ -151,12 +151,12 @@ class IDossier(form.Schema):
             title=u"Related",
             source=RepositoryPathSourceBinder(
                 object_provides='opengever.dossier.behaviors.dossier.'
-                    'IDossierMarker',
+                'IDossierMarker',
                 navigation_tree_query={
                     'object_provides': [
                         'opengever.repository.repositoryroot.IRepositoryRoot',
                         'opengever.repository.repositoryfolder.'
-                            'IRepositoryFolderSchema',
+                        'IRepositoryFolderSchema',
                         'opengever.dossier.behaviors.dossier.IDossierMarker',
                         ]
                     }),
@@ -167,7 +167,7 @@ class IDossier(form.Schema):
     form.mode(former_reference_number='display')
     former_reference_number = schema.TextLine(
         title=_(u'label_former_reference_number',
-                  default=u'Reference Number'),
+                default=u'Reference Number'),
         description=_(u'help_former_reference_number', default=u''),
         required=False,
         )
