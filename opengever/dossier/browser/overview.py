@@ -2,6 +2,7 @@ from Products.ZCatalog.interfaces import ICatalogBrain
 from five import grok
 from opengever.base.browser.helper import get_css_class
 from opengever.dossier import _ as _dossier
+from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.globalindex.utils import indexed_task_link_helper
@@ -50,7 +51,7 @@ class DossierOverview(grok.View, OpengeverTab):
     def subdossiers(self):
         return self.context.get_subdossiers(
             sort_on='modified', sort_order='reverse',
-            review_state='dossier-state-active')[:5]
+            review_state=DOSSIER_STATES_OPEN)[:5]
 
     def tasks(self):
         return self.catalog(['opengever.task.task', ])[:5]

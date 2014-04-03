@@ -6,6 +6,7 @@ from ftw.table.catalog_source import CatalogTableSource
 from opengever.base.browser.helper import client_title_helper
 from opengever.base.interfaces import IReferenceNumberFormatter
 from opengever.base.interfaces import IReferenceNumberSettings
+from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview import _
 from opengever.tabbedview.browser.listing import CatalogListingView
@@ -293,9 +294,8 @@ class Dossiers(BaseDossiersTab):
 
     template = ViewPageTemplateFile("generic_dossier.pt")
 
-    open_states = [
-        'dossier-state-active',
-        ]
+    open_states = DOSSIER_STATES_OPEN
+
     state_filter_name = 'dossier_state_filter'
 
 

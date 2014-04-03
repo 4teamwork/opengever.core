@@ -1,6 +1,7 @@
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from Products.CMFPlone.utils import safe_unicode
 from five import grok
+from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossierMarker
 import json
 
@@ -14,7 +15,7 @@ class OpenDossiersAsJSONView(grok.View):
         data = []
         brains = self.context.portal_catalog(
             object_provides=IDossierMarker.__identifier__,
-            review_state='dossier-state-active',
+            review_state=DOSSIER_STATES_OPEN,
             )
 
         portal_path = '/'.join(self.context.getPhysicalPath())

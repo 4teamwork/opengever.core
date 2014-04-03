@@ -1,5 +1,6 @@
 from opengever.base.viewlets.byline import BylineBase
 from opengever.dossier import _
+from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.mail.behaviors import IMailInAddressMarker, IMailInAddress
 from opengever.ogds.base.interfaces import IContactInformation
@@ -27,7 +28,7 @@ class BusinessCaseByline(BylineBase):
          is provided and the dossier is Active"""
 
         if IMailInAddressMarker.providedBy(self.context):
-            if self.get_current_state() == 'dossier-state-active':
+            if self.get_current_state() in DOSSIER_STATES_OPEN:
                 address = IMailInAddress(self.context).get_email_address()
                 return '<a href="mailto:%s">%s</a>' % (address, address)
 

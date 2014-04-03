@@ -15,6 +15,17 @@ from plone.registry.interfaces import IRegistry
 from zope.component import queryMultiAdapter, queryUtility
 
 
+DOSSIER_STATES_OPEN = [
+    'dossier-state-active'
+]
+
+DOSSIER_STATES_CLOSED = [
+    'dossier-state-archived',
+    'dossier-state-inactive',
+    'dossier-state-resolved'
+]
+
+
 class DossierContainer(Container):
 
     def allowedContentTypes(self, *args, **kwargs):

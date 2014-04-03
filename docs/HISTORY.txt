@@ -10,6 +10,9 @@ Changelog
 3.2.3 (2014-04-01)
 ------------------
 
+- Replaced hardcoded workflow names with constants.
+  [lknoepfel]
+
 - Updated move destination widget to hide closed dossiers.
   [lknoepfel]
 

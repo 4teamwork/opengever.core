@@ -10,6 +10,7 @@ from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.source import RepositoryPathSourceBinder
+from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.globalindex.interfaces import ITaskQuery
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
@@ -157,8 +158,8 @@ class IChooseDossierSchema(Schema):
 
         source=RepositoryPathSourceBinder(
             object_provides='opengever.dossier.behaviors.dossier.'
-                'IDossierMarker',
-            review_state='dossier-state-active',
+            'IDossierMarker',
+            review_state=DOSSIER_STATES_OPEN,
             navigation_tree_query={
                 'object_provides': [
                     'opengever.repository.repositoryroot.IRepositoryRoot',
@@ -167,8 +168,8 @@ class IChooseDossierSchema(Schema):
                     'opengever.dossier.behaviors.dossier.IDossierMarker',
                     ],
                 'review_state': ['repositoryroot-state-active',
-                                 'repositoryfolder-state-active',
-                                 'dossier-state-active'],
+                                 'repositoryfolder-state-active'] +
+                                 DOSSIER_STATES_OPEN,
                 }))
 
 

@@ -1,6 +1,7 @@
 from Products.CMFCore.utils import getToolByName
 from five import grok
 from opengever.dossier import _
+from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.filing import IFilingNumberMarker
@@ -137,8 +138,8 @@ class DossierResolver(grok.Adapter):
         parent = self.context.get_parent_dossier()
         if parent:
             wft = getToolByName(self.context, 'portal_workflow')
-            if wft.getInfoFor(
-                parent, 'review_state') != 'dossier-state-active':
+            if wft.getInfoFor(parent,
+                              'review_state') not in DOSSIER_STATES_OPEN:
                 return False
         return True
 
@@ -177,7 +178,7 @@ class Resolver(object):
                 subdossier.getObject(), end_date, recursive=True)
 
         if self.wft.getInfoFor(dossier,
-                               'review_state') == 'dossier-state-active':
+                               'review_state') in DOSSIER_STATES_OPEN:
             self.wft.doActionFor(dossier, 'dossier-transition-resolve')
 
 

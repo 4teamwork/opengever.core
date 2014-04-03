@@ -6,6 +6,7 @@ from five import grok
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.document.document import IDocumentSchema
 from opengever.dossier import _
+from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from plone.dexterity.interfaces import IDexterityContainer
 from plone.z3cform import layout
@@ -36,9 +37,9 @@ class IMoveItemsSchema(Interface):
                     'IRepositoryFolderSchema',
                     'opengever.dossier.behaviors.dossier.IDossierMarker',
                 ],
-                'review_state': ['dossier-state-active',
-                                 'repositoryfolder-state-active',
-                                 'repositoryroot-state-active']
+                'review_state': DOSSIER_STATES_OPEN + [
+                    'repositoryfolder-state-active',
+                    'repositoryroot-state-active']
                 }
             ),
         required=True,

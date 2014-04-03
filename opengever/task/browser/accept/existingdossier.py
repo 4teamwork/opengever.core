@@ -9,6 +9,7 @@ from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.source import RepositoryPathSourceBinder
+from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.task import _
 from opengever.task.browser.accept.main import AcceptWizardFormMixin
 from opengever.task.browser.accept.utils import accept_task_with_successor
@@ -40,8 +41,8 @@ class IChooseDossierSchema(Schema):
 
         source=RepositoryPathSourceBinder(
             object_provides='opengever.dossier.behaviors.dossier.'
-                'IDossierMarker',
-            review_state='dossier-state-active',
+            'IDossierMarker',
+            review_state=DOSSIER_STATES_OPEN,
             navigation_tree_query={
                 'object_provides': [
                     'opengever.repository.repositoryroot.IRepositoryRoot',
@@ -50,8 +51,8 @@ class IChooseDossierSchema(Schema):
                     'opengever.dossier.behaviors.dossier.IDossierMarker',
                     ],
                 'review_state': ['repositoryroot-state-active',
-                                 'repositoryfolder-state-active',
-                                 'dossier-state-active'],
+                                 'repositoryfolder-state-active'] +
+                                 DOSSIER_STATES_OPEN,
                 }))
 
 
