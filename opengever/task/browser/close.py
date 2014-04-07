@@ -10,6 +10,7 @@ from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.source import RepositoryPathSourceBinder
+from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.globalindex.interfaces import ITaskQuery
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
@@ -112,8 +113,8 @@ class SelectDocumentsStepForm(CloseTaskWizardStepFormMixin, Form):
 
             if len(data['documents']) == 0:
                 url = '/'.join((
-                        self.context.absolute_url(),
-                        '@@close-task-wizard_close?oguid=%s' % oguid))
+                    self.context.absolute_url(),
+                    '@@close-task-wizard_close?oguid=%s' % oguid))
                 return self.request.RESPONSE.redirect(url)
 
             else:
@@ -123,9 +124,8 @@ class SelectDocumentsStepForm(CloseTaskWizardStepFormMixin, Form):
                 dm.push_to_remote_client(dmkey, client.client_id)
 
                 url = '/'.join((
-                        client.public_url,
-                        '@@close-task-wizard_choose-dossier?oguid=%s' % (
-                            oguid)))
+                    client.public_url,
+                    '@@close-task-wizard_choose-dossier?oguid=%s' % (oguid)))
                 return self.request.RESPONSE.redirect(url)
 
     @buttonAndHandler(_(u'button_cancel', default=u'Cancel'),
@@ -158,18 +158,18 @@ class IChooseDossierSchema(Schema):
 
         source=RepositoryPathSourceBinder(
             object_provides='opengever.dossier.behaviors.dossier.'
-                'IDossierMarker',
-            review_state='dossier-state-active',
+            'IDossierMarker',
+            review_state=DOSSIER_STATES_OPEN,
             navigation_tree_query={
                 'object_provides': [
                     'opengever.repository.repositoryroot.IRepositoryRoot',
                     'opengever.repository.repositoryfolder.'
-                        'IRepositoryFolderSchema',
+                    'IRepositoryFolderSchema',
                     'opengever.dossier.behaviors.dossier.IDossierMarker',
                     ],
                 'review_state': ['repositoryroot-state-active',
-                                 'repositoryfolder-state-active',
-                                 'dossier-state-active'],
+                                 'repositoryfolder-state-active'] +
+                                 DOSSIER_STATES_OPEN,
                 }))
 
 
@@ -224,9 +224,9 @@ class ChooseDossierStepForm(CloseTaskWizardStepFormMixin, Form):
                     data['dossier'].absolute_url())}
 
             url = '/'.join((
-                    client.public_url,
-                    '@@close-task-wizard_close?%s' % urllib.urlencode(
-                        redirect_data)))
+                client.public_url,
+                '@@close-task-wizard_close?%s' % urllib.urlencode(
+                    redirect_data)))
             return self.request.RESPONSE.redirect(url)
 
     @buttonAndHandler(_(u'button_cancel', default=u'Cancel'),

@@ -10,6 +10,12 @@ Changelog
 3.2.3 (2014-04-01)
 ------------------
 
+- Replaced hardcoded workflow names with constants.
+  [lknoepfel]
+
+- Updated move destination widget to hide closed dossiers.
+  [lknoepfel]
+
 - Added french translation by I. Anthenien.
   [lknoepfel]
 
@@ -33,7 +39,7 @@ Changelog
 - Personal Overview: Raise Unauthorized for unauthenticated users instead of
   hardcoded redirect to login form.
   This is required for Single-Sign-On with SPNEGO plugin to work.
-  [lgraf] 
+  [lgraf]
 
 - Use always logged in user as responsible of a subdossier.
   [lknoepfel]

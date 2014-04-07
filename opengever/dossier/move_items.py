@@ -6,6 +6,7 @@ from five import grok
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.document.document import IDocumentSchema
 from opengever.dossier import _
+from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from plone.dexterity.interfaces import IDexterityContainer
 from plone.z3cform import layout
@@ -31,11 +32,14 @@ class IMoveItemsSchema(Interface):
                 'IRepositoryFolderSchema'],
             navigation_tree_query={
                 'object_provides': [
-                   'opengever.repository.repositoryroot.IRepositoryRoot',
-                   'opengever.repository.repositoryfolder.' +
-                       'IRepositoryFolderSchema',
-                   'opengever.dossier.behaviors.dossier.IDossierMarker',
-                   ]
+                    'opengever.repository.repositoryroot.IRepositoryRoot',
+                    'opengever.repository.repositoryfolder.' +
+                    'IRepositoryFolderSchema',
+                    'opengever.dossier.behaviors.dossier.IDossierMarker',
+                ],
+                'review_state': DOSSIER_STATES_OPEN + [
+                    'repositoryfolder-state-active',
+                    'repositoryroot-state-active']
                 }
             ),
         required=True,
@@ -73,12 +77,12 @@ class MoveItemsForm(form.Form):
 
                 # Get source object
                 src_object = self.context.unrestrictedTraverse(
-                        path.encode('utf-8'))
+                    path.encode('utf-8'))
 
                 # Get parent object
                 source_container = aq_parent(aq_inner(
-                        self.context.unrestrictedTraverse(
-                            path.encode('utf-8'))))
+                    self.context.unrestrictedTraverse(
+                        path.encode('utf-8'))))
 
                 src_name = src_object.title
                 src_id = src_object.id
@@ -215,8 +219,8 @@ class DestinationValidator(validator.SimpleFieldValidator):
             raise NotInContentTypes(
                 _(u"error_NotInContentTypes ${failed_objects}",
                   default=u"It isn't allowed to add such items there: "
-                           "${failed_objects}", mapping=dict(
-                           failed_objects=', '.join(failed_objects))))
+                          "${failed_objects}", mapping=dict(
+                              failed_objects=', '.join(failed_objects))))
 
 validator.WidgetValidatorDiscriminators(
     DestinationValidator, field=IMoveItemsSchema['destination_folder'])

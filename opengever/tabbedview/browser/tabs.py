@@ -6,6 +6,7 @@ from ftw.table.catalog_source import CatalogTableSource
 from opengever.base.browser.helper import client_title_helper
 from opengever.base.interfaces import IReferenceNumberFormatter
 from opengever.base.interfaces import IReferenceNumberSettings
+from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview import _
 from opengever.tabbedview.browser.listing import CatalogListingView
@@ -85,8 +86,8 @@ class OpengeverTab(object):
             # Get active reference formatter
             registry = getUtility(IRegistry)
             proxy = registry.forInterface(IReferenceNumberSettings)
-            formatter = queryAdapter(IReferenceNumberFormatter, name=proxy.formatter)
-
+            formatter = queryAdapter(IReferenceNumberFormatter,
+                                     name=proxy.formatter)
             results = list(results)
             results.sort(key=formatter.sorter)
             if sort_reverse:
@@ -181,7 +182,8 @@ class Documents(OpengeverCatalogListingTab):
          'width': 30},
 
         {'column': 'sequence_number',
-         'column_title': _(u'document_sequence_number', default=u'Sequence Number'),
+         'column_title': _(u'document_sequence_number',
+                           default=u'Sequence Number'),
          'sort_index': 'sequence_number'},
 
         {'column': 'Title',
@@ -256,7 +258,7 @@ class BaseDossiersTab(OpengeverCatalogListingTab):
 
         {'column': 'responsible',
          'column_title': _(u'label_dossier_responsible',
-                          default=u"Responsible"),
+                           default=u"Responsible"),
          'transform': readable_ogds_author},
 
         {'column': 'start',
@@ -292,9 +294,8 @@ class Dossiers(BaseDossiersTab):
 
     template = ViewPageTemplateFile("generic_dossier.pt")
 
-    open_states = [
-        'dossier-state-active',
-        ]
+    open_states = DOSSIER_STATES_OPEN
+
     state_filter_name = 'dossier_state_filter'
 
 
@@ -365,12 +366,12 @@ class Tasks(OpengeverCatalogListingTab):
     selection = ViewPageTemplateFile("selection_tasks.pt")
 
     open_states = [
-            'task-state-open',
-            'task-state-in-progress',
-            'task-state-resolved',
-            'task-state-rejected',
-            'forwarding-state-open',
-            'forwarding-state-refused',
+        'task-state-open',
+        'task-state-in-progress',
+        'task-state-resolved',
+        'task-state-rejected',
+        'forwarding-state-open',
+        'forwarding-state-refused',
         ]
 
     state_filter_name = 'task_state_filter'

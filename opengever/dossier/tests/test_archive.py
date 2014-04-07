@@ -256,19 +256,19 @@ class TestArchiving(MockTestCase):
         dossier1 = self.stub_dossier()
         self.expect(dossier1.filing_no).result(None)
         self.expect(wft.getInfoFor(dossier1, 'review_state', None)).result(
-            'dossier-state-activ')
+            'dossier-state-active')
 
         #dossier not resolved yet with a not valid filing no
         dossier2 = self.stub_dossier()
         self.expect(dossier2.filing_no).result('FAKE_NUMBER')
         self.expect(wft.getInfoFor(dossier2, 'review_state', None)).result(
-            'dossier-state-activ')
+            'dossier-state-active')
 
         #dossier not resolved yet with a valid filing no
         dossier3 = self.stub_dossier()
         self.expect(dossier3.filing_no).result('TEST A-Amt-2011-2')
         self.expect(wft.getInfoFor(dossier3, 'review_state', None)).result(
-            'dossier-state-activ')
+            'dossier-state-active')
 
         # dossier allready rsolved no filing
         dossier4 = self.stub_dossier()

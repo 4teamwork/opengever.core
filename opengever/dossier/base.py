@@ -15,6 +15,17 @@ from plone.registry.interfaces import IRegistry
 from zope.component import queryMultiAdapter, queryUtility
 
 
+DOSSIER_STATES_OPEN = [
+    'dossier-state-active'
+]
+
+DOSSIER_STATES_CLOSED = [
+    'dossier-state-archived',
+    'dossier-state-inactive',
+    'dossier-state-resolved'
+]
+
+
 class DossierContainer(Container):
 
     def allowedContentTypes(self, *args, **kwargs):
@@ -33,12 +44,12 @@ class DossierContainer(Container):
         def filter_type(fti):
             # first we try the more specific one ...
             decider = queryMultiAdapter((self.REQUEST, self, fti),
-                                    IConstrainTypeDecider,
-                                    name=fti.portal_type)
+                                        IConstrainTypeDecider,
+                                        name=fti.portal_type)
             if not decider:
                 # .. then we try the more general one
                 decider = queryMultiAdapter((self.REQUEST, self, fti),
-                                        IConstrainTypeDecider)
+                                            IConstrainTypeDecider)
             if decider:
                 return decider.addable(depth)
             # if we don't have an adapter, we just allow it
@@ -95,16 +106,16 @@ class DossierContainer(Container):
 
         """
         subdossiers = self.getFolderContents({
-                'object_provides':
-                    'opengever.dossier.behaviors.dossier.IDossierMarker'})
+            'object_provides':
+            'opengever.dossier.behaviors.dossier.IDossierMarker'})
 
         active_dossiers = [d for d in subdossiers
-                            if not d.review_state == 'dossier-state-inactive']
+                           if not d.review_state == 'dossier-state-inactive']
 
         if len(active_dossiers) > 0:
             results = self.getFolderContents({
-                    'portal_type': ['opengever.task.task',
-                                    'opengever.document.document']})
+                'portal_type': ['opengever.task.task',
+                                'opengever.document.document']})
 
             if len(results) > 0:
                 return False
@@ -163,13 +174,13 @@ class DossierContainer(Container):
 
         catalog = getToolByName(self, 'portal_catalog')
         subdossiers = catalog({
-                'path': '/'.join(self.getPhysicalPath()),
-                'object_provides': [
-                    'opengever.dossier.behaviors.dossier.IDossierMarker', ],
-                'review_state': [
-                    'dossier-state-active',
-                    'dossier-state-resolved', ],
-                })
+            'path': '/'.join(self.getPhysicalPath()),
+            'object_provides': [
+                'opengever.dossier.behaviors.dossier.IDossierMarker', ],
+            'review_state': [
+                'dossier-state-active',
+                'dossier-state-resolved', ],
+            })
 
         end_dates = []
         # main dossier
@@ -189,7 +200,7 @@ class DossierContainer(Container):
 
             docs = subdossier.getObject().getFolderContents(
                 {'object_provides': [
-                        'opengever.document.behaviors.IBaseDocument', ],
+                    'opengever.document.behaviors.IBaseDocument', ],
                  })
 
             for doc in docs:

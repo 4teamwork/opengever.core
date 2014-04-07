@@ -20,7 +20,7 @@ class ClientCommunicator(grok.GlobalUtility):
         'url' : 'http://nohost/other-client/op1/op2/dossier1',
         'path' : 'op1/op2/dossier1',
         'title' : 'Dossier 1',
-        'workflow_state' : 'dossier-state-active',
+        'workflow_state' : DOSSIER_STATES_OPEN,
         'reference_number' : 'OG 1.2 / 1',
         }
         ]
