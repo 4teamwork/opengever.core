@@ -175,18 +175,6 @@ class TestEmailGetter(FunctionalTestCase):
         self.assertEquals(u'hugo@boss.local',
                           self.info.get_email(self.info.get_user('hugo.boss')))
 
-    def test_get_email2_for_a_user_return_his_second_email(self):
-        create_ogds_user('hugo.boss', **{'firstname': 'Hugo',
-                                'lastname': 'Boss',
-                                'email': 'hugo@boss.local',
-                                'email2': 'hugo@private.ch'})
-
-        self.assertEquals(u'hugo@private.ch',
-                          self.info.get_email2('hugo.boss'))
-
-        self.assertEquals(u'hugo@private.ch',
-                          self.info.get_email2(self.info.get_user('hugo.boss')))
-
     def test_get_email_for_a_contact_return_his_email(self):
         create(Builder('contact')
                .having(**{'firstname': u'Lara',
@@ -200,22 +188,9 @@ class TestEmailGetter(FunctionalTestCase):
             'lara.croft@test.ch',
             self.info.get_email(self.info.get_contact('contact:croft-lara')))
 
-    def test_get_email2_for_a_contact_return_his_second_email(self):
-        create(Builder('contact')
-               .having(**{'firstname': u'Lara',
-                          'lastname': u'Croft',
-                          'email': u'lara.croft@test.ch',
-                          'email2': u'tombraider_lara@test2.ch'}))
-
-        self.assertEquals('tombraider_lara@test2.ch',
-                          self.info.get_email2(u'contact:croft-lara'))
-
     def test_get_email_for_a_inbox_return_none(self):
         self.assertEquals(
             None, self.info.get_email(u'inbox:client1'))
-
-        self.assertEquals(
-            None, self.info.get_email2(u'inbox:client1'))
 
 
 class TestGroupHelpers(FunctionalTestCase):

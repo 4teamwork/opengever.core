@@ -536,36 +536,6 @@ class ContactInformation(grok.GlobalUtility):
             raise ValueError('Unknown principal type: %s' %
                              str(principal))
 
-    def get_email2(self, principal):
-        """Returns the second email address of a `principal`.
-        """
-
-        # inbox does not have a email
-        if isinstance(principal, types.StringTypes) and \
-                self.is_inbox(principal):
-            return None
-
-        # principal may be a contact brain
-        elif ICatalogBrain.providedBy(principal) and \
-                brain_is_contact(principal):
-            return principal.email2
-
-        # principal may be a user object
-        elif IUser.providedBy(principal) or isinstance(principal, UserDict):
-            return principal.email2
-
-        # principal may ba a string contact principal
-        elif self.is_contact(principal):
-            return self.get_contact(principal).email2
-
-        # principal may be a string user principal
-        elif self.is_user(principal):
-            return self.get_user(principal).email2
-
-        else:
-            raise ValueError('Unknown principal type: %s' %
-                             str(principal))
-
     @ram.cache(ogds_principal_cachekey)
     def get_profile_url(self, principal):
         """Returns the profile url of this `principal`.
