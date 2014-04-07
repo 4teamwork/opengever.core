@@ -168,10 +168,6 @@ class ContactInformation(grok.GlobalUtility):
         if not self.is_user(principal):
             raise ValueError('principal %s is not a user' % str(principal))
 
-        # if isinstance(principal, unicode):
-        #     # Encode before using in an SQLAlchemy query
-        #     principal = principal.encode('utf-8')
-
         users = self._users_query().filter_by(userid=principal).all()
         if len(users) == 0:
             return None
