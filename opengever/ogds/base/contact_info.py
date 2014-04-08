@@ -147,36 +147,26 @@ class ContactInformation(grok.GlobalUtility):
 
         if groupid:
             session = create_session()
-            groups = session.query(Group).filter(
-                Group.groupid == groupid).all()
-            if len(groups) > 0:
-                return groups[0].users
+            group = session.query(Group).get(groupid)
+            if group:
+                return group.users
         return []
 
     def list_user_groups(self, userid):
         if userid:
             session = create_session()
-            groups = session.query(User).filter(
-                User.userid == userid).first().groups
-
+            groups = session.query(User).get(userid).groups
             return groups
         return []
 
-    def get_user(self, principal):
+    def get_user(self, userid):
         """Returns the user with the userid `principal`.
         """
 
-        if not self.is_user(principal):
-            raise ValueError('principal %s is not a user' % str(principal))
+        if not self.is_user(userid):
+            raise ValueError('principal %s is not a userid' % str(userid))
 
-        users = self._users_query().filter_by(userid=principal).all()
-        if len(users) == 0:
-            return None
-        elif len(users) > 1:
-            raise ValueError('Found %i users with principal, %s ' % (
-                    len(users), principal) + 'expected only one')
-        else:
-            return users[0]
+        return self._users_query().get(userid)
 
     def is_user_in_inbox_group(self, userid=None, client_id=None):
         if not client_id:

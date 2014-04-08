@@ -138,7 +138,7 @@ class TestUserHelpers(FunctionalTestCase):
         with self.assertRaises(ValueError) as cm:
             self.info.get_user('inbox:client1')
         self.assertEquals(
-            'principal inbox:client1 is not a user',
+            'principal inbox:client1 is not a userid',
             str(cm.exception))
 
     def test_getting_profile_url_returns_user_detail_view_url(self):
