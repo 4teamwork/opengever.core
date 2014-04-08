@@ -10,6 +10,7 @@ from opengever.ogds.base.utils import create_session
 from opengever.ogds.base.utils import get_current_client
 from opengever.ogds.models.client import Client
 from opengever.ogds.models.group import Group
+from opengever.ogds.models.group import groups_users
 from opengever.ogds.models.user import User
 from plone.memoize import ram
 from zope.app.component.hooks import getSite
@@ -177,17 +178,18 @@ class ContactInformation(grok.GlobalUtility):
                 getSite(), 'portal_membership').getAuthenticatedMember()
             userid = member.getId()
 
-        if self.get_client_by_id(client_id) and self.get_user(userid) in \
-                self.get_client_by_id(client_id).inbox_group.users:
-            return True
-
-        return False
+        client = self.get_client_by_id(client_id)
+        if client:
+            return self.is_group_member(client.inbox_group_id, userid)
+        else:
+            return False
 
     def is_group_member(self, groupid, userid):
-        for user in self.list_group_users(groupid):
-            if user.userid == userid:
-                return True
-        return False
+        in_group = create_session().query(Group.groupid).join(groups_users).filter(
+            Group.groupid == groupid,
+            groups_users.columns.userid == userid).first()
+
+        return in_group != None
 
     # CONTACTS
     def is_contact(self, principal):
