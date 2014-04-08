@@ -1,12 +1,15 @@
 from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.mail.interfaces import IMailSettings
 from opengever.base.tests.byline_base_test import TestBylineBase
 from opengever.dossier.filing.testing import activate_filing_number
 from opengever.dossier.filing.testing import inactivate_filing_number
 from opengever.testing import create_ogds_user
+from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
+import transaction
 
 
 class TestDossierByline(TestBylineBase):
@@ -24,6 +27,11 @@ class TestDossierByline(TestBylineBase):
                        responsible='hugo.boss',
                        start=date(2013, 11, 6),
                        end=date(2013, 11, 7)))
+
+        registry = getUtility(IRegistry)
+        mail_settings = registry.forInterface(IMailSettings)
+        mail_settings.mail_domain = u'opengever.4teamwork.ch'
+        transaction.commit()
 
         self.browser.open(self.dossier.absolute_url())
 

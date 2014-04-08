@@ -5,7 +5,6 @@ from opengever.testing import FunctionalTestCase
 from opengever.testing import create_client
 from opengever.testing import set_current_client_id
 from plone.app.testing import TEST_USER_ID
-from zope.component import getMultiAdapter
 
 
 class TestFactoryMenu(FunctionalTestCase):
@@ -48,17 +47,6 @@ class TestFactoryMenu(FunctionalTestCase):
                               issuer=TEST_USER_ID,
                               responsible=TEST_USER_ID))
 
-        self.assert_removed_menu_item('ftw.mail.mail', context=task)
-
-    def assert_removed_menu_item(self, removed_item, context):
-        factories_view = getMultiAdapter(
-            (context, self.portal.REQUEST), name='folder_factories')
-        factories_view.addable_types(include=None)
-        all_items = [item.get('id') for item
-                     in factories_view.addable_types(include=None)]
-
-        items = self.menu.getMenuItems(context, self.portal.REQUEST)
-        filtered_items = [item.get('id') for item in items]
-
-        self.assertEquals(set([removed_item,]),
-                          set(all_items)-set(filtered_items))
+        factory_items = [item['id'] for item in
+            self.menu.getMenuItems(task, self.portal.REQUEST)]
+        self.assertNotIn('ftw.mail.mail', factory_items)
