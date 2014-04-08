@@ -417,7 +417,7 @@ class EmailContactsAndUsersVocabularyFactory(grok.GlobalUtility):
                 userid = contact_or_user.userid
             else:
                 userid = contact_or_user.getId
-            email = info.get_email(contact_or_user)
+            email = contact_or_user.email
             if email:
                 if not active:
                     self.hidden_terms.append(email)

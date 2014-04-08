@@ -43,6 +43,7 @@ class TestSendDocument(FunctionalTestCase):
 
         create_client('plone')
         set_current_client_id(self.portal, clientid=u'plone')
+        create_ogds_user(TEST_USER_ID)
         Mailing(self.portal).set_up()
 
     def test_dossier_is_sendable(self):
@@ -77,9 +78,6 @@ class TestSendDocument(FunctionalTestCase):
                             or enter a extern mail-addres')
 
     def test_send_documents(self):
-        create_ogds_user(
-            TEST_USER_ID, firstname="Hugo", lastname="Boss", email="hugo@boss.ch")
-
         dossier = create(Builder("dossier"))
         documents = [create(Builder("document").within(dossier).with_dummy_content()), ]
         mail = self.send_documents(dossier, documents)
