@@ -339,15 +339,15 @@ class AdvancedSearchForm(directives_form.Form):
         contact_info = getUtility(IContactInformation)
         type_field = self.widgets.get('object_provides').field
 
-        if len(contact_info.get_clients()) > 1:
+        if contact_info.is_one_client_setup():
+            type_field.description = _(
+                'help_portal_type',
+                default='Select the contenttype to be searched for.')
+        else:
             type_field.description = _(
                 'help_portal_type_multiclient_setup',
                 default='Select the contenttype to be searched for.'
                 'It searches only items from the current client.')
-        else:
-            type_field.description = _(
-                'help_portal_type',
-                default='Select the contenttype to be searched for.')
 
     @button.buttonAndHandler(_(u'button_search', default=u'Search'))
     def search(self, action):
