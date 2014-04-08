@@ -4,6 +4,7 @@ from opengever.ogds.base.interfaces import IClientConfiguration
 from plone.registry.interfaces import IRegistry
 from mocker import ANY
 from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.models.group import Group
 from opengever.task.browser.transitioncontroller import \
     ITaskTransitionController, TaskTransitionController
 from opengever.task.interfaces import ISuccessorTaskController
@@ -15,7 +16,6 @@ from zope.interface import alsoProvides
 from zope.component import getSiteManager
 from zope.interface.verify import verifyClass
 import os.path
-
 
 class TestTaskTransitionController(MockTestCase):
 
@@ -135,12 +135,12 @@ class TestTaskTransitionController(MockTestCase):
 
             # check6 (issuer is a inbox, user is in the inbox group)
             self.expect(contact_info.is_inbox('inbox:client1')).result(True)
-            self.expect(contact_info.get_group_of_inbox(ANY)).result('og_inbox_group')
+            self.expect(contact_info.get_group_of_inbox(ANY)).result(Group('og_inbox_group'))
             self.expect(contact_info.is_group_member('og_inbox_group', ANY)).result(True)
 
             # check7 (issuer is a inbox, user is in the inbox group)
             self.expect(contact_info.is_inbox('inbox:client1')).result(True)
-            self.expect(contact_info.get_group_of_inbox(ANY)).result('og_inbox_group')
+            self.expect(contact_info.get_group_of_inbox(ANY)).result(Group('og_inbox_group'))
             self.expect(contact_info.is_group_member('og_inbox_group', ANY)).result(False)
 
         self.replay()

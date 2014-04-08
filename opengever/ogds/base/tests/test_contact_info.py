@@ -205,6 +205,12 @@ class TestGroupHelpers(FunctionalTestCase):
         self.assertTrue(self.info.is_user_in_inbox_group(
             userid='jamie.lannister', client_id='client2'))
 
+    def test_get_group_of_inbox_returns_group(self):
+        create_client(clientid='client1', inbox_group='client1_inbox_users')
+
+        self.assertEquals('client1_inbox_users',
+                          self.info.get_group_of_inbox("inbox:client1").groupid)
+
 
 class TestContactInfoOGDSUserDescription(FunctionalTestCase):
 

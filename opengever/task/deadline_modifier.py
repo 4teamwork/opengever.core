@@ -48,7 +48,7 @@ class DeadlineModifier(grok.Adapter):
             return bool(member.id == self.context.issuer)
         else:
             return info.is_group_member(
-                info.get_group_of_inbox(self.context.issuer),
+                info.get_group_of_inbox(self.context.issuer).groupid,
                 member.id)
 
     def _is_administrator(self, member):
