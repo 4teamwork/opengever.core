@@ -544,8 +544,7 @@ class ContactInformation(grok.GlobalUtility):
             sort_dict[userid] = u'%s %s' % (lastname, firstname)
 
         #includes every client inbox
-        clients = self._clients_query()
-        active_clients = clients.filter_by(enabled=True)
+        active_clients = self._clients_query().filter_by(enabled=True)
         for client in active_clients:
             principal = u'inbox:%s' % client.client_id
             sort_dict[principal] = translate(self.describe(principal))
