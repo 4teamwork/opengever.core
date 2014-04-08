@@ -275,7 +275,7 @@ class ContactInformation(grok.GlobalUtility):
         if client is None:
             raise ValueError('Client not found for: %s' % principal)
 
-        return client.inbox_group.groupid
+        return client.inbox_group
 
     # CLIENTS
     def get_clients(self):
