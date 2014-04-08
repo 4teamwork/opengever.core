@@ -187,9 +187,9 @@ class ContactInformation(grok.GlobalUtility):
     def is_group_member(self, groupid, userid):
         in_group = create_session().query(Group.groupid).join(groups_users).filter(
             Group.groupid == groupid,
-            groups_users.columns.userid == userid).first()
+            groups_users.columns.userid == userid).count()
 
-        return in_group != None
+        return in_group > 0
 
     # CONTACTS
     def is_contact(self, principal):
