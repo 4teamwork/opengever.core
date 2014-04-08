@@ -265,20 +265,12 @@ class ContactInformation(grok.GlobalUtility):
     def get_client_of_inbox(self, principal):
         """Returns the client object of the `principal`.
         """
-
         if not self.is_inbox(principal):
             raise ValueError('Principal %s is not a inbox' % (str(principal)))
 
         client_id = principal.split(':', 1)[1]
 
-        clients = self._clients_query().filter_by(client_id=client_id).all()
-        if len(clients) == 0:
-            return None
-        elif len(clients) > 1:
-            raise ValueError('Found %i clients with client_id, %s ' % (
-                    len(clients), client_id) + 'expected only one')
-        else:
-            return clients[0]
+        return self._clients_query().get(client_id)
 
     @ram.cache(ogds_principal_cachekey)
     def get_group_of_inbox(self, principal):
