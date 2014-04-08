@@ -157,7 +157,8 @@ class ContactInformation(grok.GlobalUtility):
         if userid:
             session = create_session()
             groups = session.query(User).filter(
-                User.userid == userid).first().group_users
+                User.userid == userid).first().groups
+
             return groups
         return []
 
