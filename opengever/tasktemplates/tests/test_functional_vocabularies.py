@@ -30,35 +30,6 @@ class TestFunctionalVocabularies(MockTestCase):
 
         self.check_generator(generator, users)
 
-    def test_IssuerVocabularyFactory(self):
-        """ Test for IssuerVoca
-        """
-        # Context
-        mock_context = self.mocker.mock()
-
-        # Register Contact Information Utility
-        self.register_contact_info_utility()
-
-        # Register Sync Stamp Utility
-        self.register_sync_stamp_utility()
-
-        # Expected users
-        users = ['Responsible',
-                'Current user',
-                'Contactinfo',
-                'Client 1']
-
-        # Patching context var from IssuerVocabFactory-Object
-        VocabFactory = self.mocker.patch(
-            IssuerVocabularyFactory())
-        self.expect(VocabFactory.context).result(mock_context).count(0, None)
-
-        self.replay()
-
-        generator = VocabFactory.key_value_provider()
-
-        self.check_generator(generator, users)
-
     def test_ResponsibleClientVocabularyFactory(self):
         """ Test for ResponsibleClientVoca
         """
@@ -179,9 +150,6 @@ class TestFunctionalVocabularies(MockTestCase):
 
         # IContactInformationUtility
         mock_contact_info = self.mocker.mock()
-        self.expect(
-            mock_contact_info.list_users()).result(
-                [mock_contact1]).count(0, None)
         self.expect(
             mock_contact_info.describe(ANY)).result(
                 'Contactinfo').count(0, None)

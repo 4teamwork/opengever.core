@@ -73,14 +73,6 @@ def ogds_class_language_cachekey(method, self):
         getUtility(ISyncStamp).get_sync_stamp())
 
 
-class UserDict(object):
-    """A dictionary representing a user.
-    """
-
-    def __init__(self, **kw):
-        self.__dict__.update(kw)
-
-
 class ContactInformation(grok.GlobalUtility):
     """The principal information utility provides useful functions for
     building vocabularies with users, contacts, in-boxes groups and
@@ -113,15 +105,6 @@ class ContactInformation(grok.GlobalUtility):
         """
 
         return principal and ':' not in principal
-
-    @ram.cache(ogds_class_cachekey)
-    def list_users(self):
-        """A list of dicts.
-        """
-        session = create_session()
-        userdata_keys = User.__table__.columns.keys()
-        result = session.execute(User.__table__.select())
-        return [UserDict(**dict(zip(userdata_keys, row))) for row in result]
 
     def list_inactive_users(self):
         session = create_session()
@@ -390,7 +373,7 @@ class ContactInformation(grok.GlobalUtility):
             principal = contact.contactid
 
         # user object
-        elif IUser.providedBy(principal) or isinstance(principal, UserDict):
+        elif IUser.providedBy(principal):
             user = principal
             principal = user.userid
 

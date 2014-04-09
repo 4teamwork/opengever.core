@@ -74,12 +74,10 @@ class UsersVocabularyFactory(grok.GlobalUtility):
         # Reset hidden_terms every time cache key changed
         self.hidden_terms = []
 
-        info = getUtility(IContactInformation)
-        for user in info.list_users():
+        for user in ogds_service().all_users():
             if not user.active:
                 self.hidden_terms.append(user.userid)
-            yield (user.userid,
-                   info.describe(user))
+            yield (user.userid, user.label())
 
 
 class UsersAndInboxesVocabularyFactory(grok.GlobalUtility):
@@ -334,11 +332,13 @@ class ContactsAndUsersVocabularyFactory(grok.GlobalUtility):
 
         info = getUtility(IContactInformation)
         items, hidden_terms = self._get_users()
+        # copy lists to prevent cache modification
         items = items[:]
         self.hidden_terms = hidden_terms[:]
         for contact in info.list_contacts():
             items.append((contact.contactid,
                           info.describe(contact)))
+
         return items
 
     @ram.cache(voc_cachekey)
@@ -347,17 +347,10 @@ class ContactsAndUsersVocabularyFactory(grok.GlobalUtility):
         items = []
         hidden_terms = []
 
-        for user in info.list_users():
+        for user in ogds_service().all_users():
             if not user.active:
                 hidden_terms.append(user.userid)
-            items.append((user.userid,
-                          info.describe(user)))
-
-        # add the inactive users to the vocabulary and marked as hidden terms
-        for user in info.list_inactive_users():
-            if user.userid not in self.hidden_terms:
-                self.hidden_terms.append(user.userid)
-                items.append((user.userid, info.describe(user)))
+            items.append((user.userid, user.label()))
 
         # add also the client inboxes
         for client in info.get_clients():
@@ -408,7 +401,7 @@ class EmailContactsAndUsersVocabularyFactory(grok.GlobalUtility):
         self.hidden_terms = []
 
         info = getUtility(IContactInformation)
-        ids = [(user, user.active) for user in info.list_users()]
+        ids = [(user, user.active) for user in ogds_service().all_users()]
         ids.extend([(contact, True) for contact
                     in info.list_contacts()])
 
