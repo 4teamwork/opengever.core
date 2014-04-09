@@ -100,15 +100,6 @@ class TestUsersAndInboxesVocabulary(FunctionalTestCase):
         self.client1 = create_client(clientid="client1", title="Client 1")
         self.client2 = create_client(clientid="client2", title="Client 2")
 
-    def test_label_for_inboxes_contains_client_title_prefixed_with_inbox(self):
-        set_current_client_id(self.portal)
-
-        self.portal.REQUEST.set('client', 'client2')
-
-        self.assertTerms(
-            [('inbox:client2', 'Inbox: Client 2')],
-            self.vocabulary_factory(self.portal))
-
     def test_contains_all_active_users_and_inboxes_assigned_to_the_given_client(self):
         create_ogds_user('hugo.boss', firstname='Hugo',
                          lastname='Boss', assigned_client=[self.client1, ])
@@ -119,13 +110,32 @@ class TestUsersAndInboxesVocabulary(FunctionalTestCase):
 
         self.portal.REQUEST.set('client', 'client2')
 
-        self.assertTermKeys(
-            ['jamie.lannister', 'peter.muster', 'inbox:client2', ],
-            self.vocabulary_factory(self.portal))
+        vocabulary = self.vocabulary_factory(self.portal)
+        self.assertTerms(
+            [('jamie.lannister', 'Lannister Jamie (jamie.lannister)'),
+             ('peter.muster', 'Muster Peter (peter.muster)'),
+             ('inbox:client2', 'Inbox: Client 2')],
+            vocabulary)
+
+    def test_hide_all_disabled_users(self):
+        create_ogds_user('hugo.boss', active=False, firstname='Hugo',
+                         lastname='Boss', assigned_client=[self.client1, ])
+        create_ogds_user('peter.muster', active=False, firstname='Peter',
+                         lastname='Muster', assigned_client=[self.client2])
+
+        self.portal.REQUEST.set('client', 'client2')
+        vocabulary = self.vocabulary_factory(self.portal)
+        self.assertTerms([('inbox:client2', 'Inbox: Client 2')], vocabulary)
+        self.assertEquals(['hugo.boss', 'peter.muster'], vocabulary.hidden_terms)
+        self.assertEquals('Muster Peter (peter.muster)',
+                          vocabulary.getTerm('peter.muster').title)
+        self.assertEquals('Boss Hugo (hugo.boss)',
+                          vocabulary.getTerm('hugo.boss').title)
 
     def test_use_clientid_from_responsible_client_widget(self):
         self.portal.REQUEST.set('form.widgets.responsible_client', 'client2')
 
+        vocabulary = self.vocabulary_factory(self.portal)
         self.assertTermKeys(['inbox:client2'], self.vocabulary_factory(self.portal))
 
     def test_use_clientid_from_responsible_client_of_actual_context(self):
