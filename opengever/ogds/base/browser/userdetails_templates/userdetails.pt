@@ -14,7 +14,7 @@
                                   groups data/groups">
 
         <div tal:replace="structure provider:plone.abovecontenttitle" />
-        <h1 class="documentFirstHeading" tal:content="data/fullname"/>
+        <h1 class="documentFirstHeading" tal:content="user/label"/>
         <!--         <div tal:replace="structure provider:plone.belowcontenttitle" /> -->
 
         <div tal:replace="structure provider:plone.abovecontentbody" />
@@ -26,7 +26,7 @@
         <table class="vertical listing">
           <tr>
             <th i18n:translate="label_fullname">Name:</th>
-            <td tal:content="data/fullname"></td>
+            <td tal:content="user/label"></td>
           </tr>
 
           <tr>
@@ -115,7 +115,7 @@
           <tr tal:condition="python:len(groups) > 0">
               <th i18n:translate="label_groups">Groups:</th>
               <td>
-                  <ul>
+                  <ul class="groups">
                       <li tal:repeat="group groups">
                         <a class="contenttype-opengever-contact-contactfolder link-overlay" tal:attributes="href string:list_groupmembers?group=${group/groupid}" tal:content="python: group.title or group.groupid"></a>
                       </li>

@@ -1,10 +1,11 @@
-from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.interfaces import IPloneSiteRoot
 from StringIO import StringIO
 from opengever.ogds.base.exceptions import ClientNotFound
 from opengever.ogds.base.interfaces import IClientConfiguration
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.models.client import Client
+from opengever.ogds.models.service import OGDSService
 from plone.memoize import ram
 from plone.registry.interfaces import IRegistry
 from z3c.saconfig import named_scoped_session
@@ -31,6 +32,10 @@ def create_session():
     """Returns a new sql session bound to the defined named scope.
     """
     return Session()
+
+
+def ogds_service():
+    return OGDSService(create_session())
 
 
 def get_current_client():

@@ -1,6 +1,7 @@
 from five import grok
-from opengever.ogds.base.interfaces import IContactInformation
-from zope.component import getUtility
+from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.exceptions import RecordNotFound
+from zExceptions import NotFound
 from zope.interface import Interface
 from zope.publisher.interfaces import IPublishTraverse
 
@@ -17,14 +18,13 @@ class UserDetails(grok.View):
     def get_userdata(self):
         """Returns a dict of information about a specific user
         """
-        info = getUtility(IContactInformation)
-        user = info.get_user(self.userid)
-        groups = info.list_user_groups(self.userid)
+        try:
+            user = ogds_service().find_user(self.userid)
+        except RecordNotFound:
+            raise NotFound
 
         return {'user': user,
-                'userid': self.userid,
-                'fullname': info.describe(self.userid),
-                'groups': groups}
+                'groups': user.groups}
 
     def publishTraverse(self, request, name):
         """The name is the userid of the user who should be displayed.
