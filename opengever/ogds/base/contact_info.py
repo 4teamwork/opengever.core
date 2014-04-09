@@ -106,11 +106,6 @@ class ContactInformation(grok.GlobalUtility):
 
         return principal and ':' not in principal
 
-    def list_inactive_users(self):
-        session = create_session()
-        users = session.query(User).filter_by(active=False)
-        return users
-
     def list_assigned_users(self, client_id=None):
         """Lists all users assigned to a client.
         """
