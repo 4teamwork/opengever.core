@@ -241,8 +241,8 @@ class ContactInformation(grok.GlobalUtility):
         return self._clients_query().get(client_id)
 
     @ram.cache(ogds_principal_cachekey)
-    def get_group_of_inbox(self, principal):
-        """Returns the group principal of the inbox `principal`.
+    def get_groupid_of_inbox(self, principal):
+        """Returns the groupid of the inbox `principal`.
         """
 
         client = self.get_client_of_inbox(principal)
@@ -250,7 +250,7 @@ class ContactInformation(grok.GlobalUtility):
         if client is None:
             raise ValueError('Client not found for: %s' % principal)
 
-        return client.inbox_group
+        return client.inbox_group.groupid
 
     # CLIENTS
     def get_clients(self):
