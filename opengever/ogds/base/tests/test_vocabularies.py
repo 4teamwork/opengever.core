@@ -68,38 +68,26 @@ class TestUsersVocabulary(FunctionalTestCase):
         self.vocabulary_factory = getUtility(
             IVocabularyFactory, name='opengever.ogds.base.UsersVocabulary')
 
-    def test_label_contains_fullname_and_principal_in_parentheses(self):
-        create_ogds_user('hugo.boss', firstname='Hugo', lastname='Boss')
-
-        self.assertTerms(
-            [('hugo.boss', 'Boss Hugo (hugo.boss)'), ],
-            self.vocabulary_factory(self.portal))
-
     def test_include_all_active_users(self):
         create_ogds_user('hugo.boss', firstname='Hugo', lastname='Boss')
         create_ogds_user('peter.muster', firstname='Peter', lastname='Muster')
         create_ogds_user('jamie.lannister', firstname='Jamie', lastname='Lannister')
 
-        self.assertTermKeys(
-            ['hugo.boss', 'peter.muster', 'jamie.lannister'],
-            self.vocabulary_factory(self.portal))
+        vocabulary = self.vocabulary_factory(self.portal)
+        self.assertTerms(
+            [('hugo.boss', 'Boss Hugo (hugo.boss)'),
+             ('peter.muster', 'Muster Peter (peter.muster)'),
+             ('jamie.lannister', 'Lannister Jamie (jamie.lannister)')],
+            vocabulary)
 
-    def test_exclude_inactive_users(self):
-        create_ogds_user('robin.hood', firstname='Robin',
-                         lastname='Hood', active=False)
+    def test_hide_inactive_users(self):
+        create_ogds_user('robin.hood', active=False)
 
         vocabulary = self.vocabulary_factory(self.portal)
-        self.assertNotInTerms('robin.hood', [t.value for t in vocabulary])
-
-    def test_inactive_users_are_still_accessible_by_get_term(self):
-        create_ogds_user('robin.hood', firstname='Robin',
-                 lastname='Hood', active=False)
-
-        vocabulary = self.vocabulary_factory(self.portal)
-
-        self.assertEquals(
-            u'Hood Robin (robin.hood)', vocabulary.getTerm('robin.hood').title)
-
+        self.assertTerms([], vocabulary)
+        self.assertEquals(['robin.hood'], vocabulary.hidden_terms)
+        self.assertEquals('Boss Hugo (robin.hood)',
+                          vocabulary.getTerm('robin.hood').title)
 
 class TestUsersAndInboxesVocabulary(FunctionalTestCase):
 
@@ -232,11 +220,13 @@ class TestAssignedUsersVocabulary(FunctionalTestCase):
         set_current_client_id(self.portal)
 
         create_ogds_user('robin.hood', assigned_client=[client1, ], active=False)
-        create_ogds_user('hans.peter', active=False)
+        create_ogds_user('hans.peter', firstname="Hans", lastname="Peter", active=False)
 
         vocabulary = self.vocabulary_factory(self.portal)
 
         self.assertEquals([u'robin.hood', u'hans.peter'], vocabulary.hidden_terms)
+        self.assertEquals('Peter Hans (hans.peter)',
+                          vocabulary.getTerm('hans.peter').title)
 
 
 class TestContactsAndUsersVocabulary(FunctionalTestCase):
@@ -248,30 +238,11 @@ class TestContactsAndUsersVocabulary(FunctionalTestCase):
             IVocabularyFactory,
             name='opengever.ogds.base.ContactsAndUsersVocabulary')
 
-    def test_contains_all_users_from_every_client(self):
+    def test_contains_all_users_inboxes_and_contacts(self):
         client1 = create_client(clientid="client1")
         client2 = create_client(clientid="client2")
         create_ogds_user('hugo.boss', assigned_client=[client1, ])
         create_ogds_user('robin.hood', assigned_client=[client2, ])
-
-        vocabulary = self.vocabulary_factory(self.portal)
-
-        self.assertInTerms('hugo.boss', vocabulary)
-        self.assertInTerms('robin.hood', vocabulary)
-
-    def test_contains_inboxes_from_every_active_client(self):
-        create_client(clientid="client1")
-        create_client(clientid="client2")
-        create_client(clientid="client3", enabled=False)
-
-        vocabulary = self.vocabulary_factory(self.portal)
-
-        self.assertInTerms('inbox:client1', vocabulary)
-        self.assertInTerms('inbox:client2', vocabulary)
-        self.assertNotInTerms('inbox:client3', vocabulary)
-
-    def test_contains_all_local_contacts(self):
-        create_client(clientid="client1")
         create(Builder('contact')
                .having(firstname=u'Lara', lastname=u'Croft',
                        email=u'lara.croft@test.ch'))
@@ -281,8 +252,23 @@ class TestContactsAndUsersVocabulary(FunctionalTestCase):
 
         vocabulary = self.vocabulary_factory(self.portal)
 
-        self.assertInTerms('contact:croft-lara', vocabulary)
-        self.assertInTerms('contact:man-super', vocabulary)
+        self.assertTerms([('hugo.boss', u'Boss Hugo (hugo.boss)'),
+                          ('robin.hood', u'Boss Hugo (robin.hood)'),
+                          (u'inbox:client1', u'Inbox: Client1'),
+                          (u'inbox:client2', u'Inbox: Client2'),
+                          ('contact:croft-lara', u'Croft Lara (lara.croft@test.ch)'),
+                          ('contact:man-super', u'M\xe4n Super (superman@test.ch)')], vocabulary)
+        self.assertEquals([], vocabulary.hidden_terms)
+
+    def test_hide_disabled_users(self):
+        client1 = create_client(clientid="client1")
+        create_ogds_user('hugo.boss', assigned_client=[client1, ], active = False)
+        vocabulary = self.vocabulary_factory(self.portal)
+        self.assertTerms([('inbox:client1', 'Inbox: Client1')], vocabulary)
+        self.assertEquals(['hugo.boss'], vocabulary.hidden_terms)
+        self.assertEquals('Boss Hugo (hugo.boss)',
+                          vocabulary.getTerm('hugo.boss').title)
+
 
 
 class TestEmailContactsAndUsersVocabularyFactory(FunctionalTestCase):

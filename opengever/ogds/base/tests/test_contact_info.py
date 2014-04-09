@@ -117,15 +117,6 @@ class TestUserHelpers(FunctionalTestCase):
         super(TestUserHelpers, self).setUp()
         self.info = getUtility(IContactInformation)
 
-    def test_list_user_returns_all_users_ogds_objects(self):
-        create_ogds_user('hugo.boss')
-        create_ogds_user('peter.muster')
-        create_ogds_user('jamie.lannister')
-
-        self.assertEquals(
-            [u'hugo.boss', u'peter.muster', u'jamie.lannister'],
-            [u.userid for u in self.info.list_users()])
-
     def test_getting_profile_url_returns_user_detail_view_url(self):
         create_ogds_user('hugo.boss')
 
