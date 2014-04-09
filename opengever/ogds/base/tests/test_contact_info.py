@@ -185,7 +185,7 @@ class TestGroupHelpers(FunctionalTestCase):
         create_client(clientid='client1', inbox_group='client1_inbox_users')
 
         self.assertEquals('client1_inbox_users',
-                          self.info.get_group_of_inbox("inbox:client1").groupid)
+                          self.info.get_groupid_of_inbox("inbox:client1"))
 
 
 class TestContactInfoOGDSUserDescription(FunctionalTestCase):
