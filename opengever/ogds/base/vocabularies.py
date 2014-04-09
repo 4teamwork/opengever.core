@@ -4,7 +4,9 @@ from five import grok
 from opengever.ogds.base.interfaces import IClientCommunicator
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.interfaces import ISyncStamp
+from opengever.ogds.base.utils import get_client_id
 from opengever.ogds.base.utils import get_current_client
+from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.base.vocabulary import ContactsVocabulary
 from plone.memoize import ram
 from zope.app.component.hooks import getSite, setSite
@@ -12,7 +14,6 @@ from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.schema.interfaces import IVocabularyFactory
 import AccessControl
-from opengever.ogds.base.utils import get_client_id
 
 
 def voc_cachekey(method, self):

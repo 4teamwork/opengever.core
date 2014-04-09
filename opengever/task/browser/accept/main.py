@@ -115,19 +115,19 @@ class MethodValidator(SimpleFieldValidator):
         # The user should not be able to create a dossier or use on existing
         # dossier on a remote client if he does not participate in this
         # client.
+
         if value != u'participate':
             mtool = getToolByName(self.context, 'portal_membership')
-            userid = mtool.getAuthenticatedMember().getId()
 
             info = getUtility(IContactInformation)
-            client = info.get_client_by_id(self.context.responsible_client)
-            user = info.get_user(userid)
+            userid = mtool.getAuthenticatedMember().getId()
+            clientid = self.context.responsible_client
 
-            if user not in client.users_group.users:
+            if not info.is_client_assigned(userid, clientid):
                 msg = _(u'You are not assigned to the responsible client '
                         u'(${client}). You can only process the task in the '
                         u'issuers dossier.',
-                        mapping={'client': client.title})
+                        mapping={'client': clientid})
                 raise Invalid(msg)
 
 WidgetValidatorDiscriminators(MethodValidator,

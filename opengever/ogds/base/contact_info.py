@@ -8,6 +8,7 @@ from opengever.ogds.base.interfaces import ISyncStamp
 from opengever.ogds.base.utils import brain_is_contact, get_client_id
 from opengever.ogds.base.utils import create_session
 from opengever.ogds.base.utils import get_current_client
+from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models.client import Client
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.group import groups_users
@@ -159,15 +160,6 @@ class ContactInformation(grok.GlobalUtility):
             groups = session.query(User).get(userid).groups
             return groups
         return []
-
-    def get_user(self, userid):
-        """Returns the user with the userid `principal`.
-        """
-
-        if not self.is_user(userid):
-            raise ValueError('principal %s is not a userid' % str(userid))
-
-        return self._users_query().get(userid)
 
     def is_user_in_inbox_group(self, userid=None, client_id=None):
         if not client_id:
@@ -390,7 +382,7 @@ class ContactInformation(grok.GlobalUtility):
 
         # string user
         elif is_string and self.is_user(principal):
-            user = self.get_user(principal)
+            user = ogds_service().fetch_user(principal)
 
         # contact brain
         elif brain and brain_is_contact(brain):
@@ -498,7 +490,7 @@ class ContactInformation(grok.GlobalUtility):
 
         elif self.is_user(principal):
             portal = getSite()
-            user = self.get_user(principal)
+            user = ogds_service().fetch_user(principal)
             if user:
                 return '/'.join((portal.portal_url(), '@@user-details',
                                  user.userid))
