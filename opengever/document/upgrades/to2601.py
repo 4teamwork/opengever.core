@@ -1,6 +1,7 @@
 from ftw.upgrade import ProgressLogger
 from ftw.upgrade import UpgradeStep
 from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.utils import ogds_service
 from zope.component import getUtility
 
 
@@ -9,7 +10,7 @@ class ResolveDocumentAuthor(UpgradeStep):
 
     def __call__(self):
         self.info = getUtility(IContactInformation)
-        self.user_ids = [user.userid for user in self.info.list_users()]
+        self.user_ids = [user.userid for user in ogds_service().all_users()]
 
         catalog = self.getToolByName('portal_catalog')
         brains = catalog.unrestrictedSearchResults(
@@ -26,9 +27,7 @@ class ResolveDocumentAuthor(UpgradeStep):
 
         if document_author and document_author.lower() in lower_ids:
             document = brain.getObject()
-            document.document_author = self.info.describe(
-                document_author,
-                with_principal=False,
-                with_email=False)
+            author = ogds_service().find_user(document_author)
+            document.document_author = author.label()
 
             document.reindexObject(idxs=['sortable_author'])
