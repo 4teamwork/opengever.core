@@ -369,13 +369,6 @@ class ContactInformation(grok.GlobalUtility):
 
         return self._is_client_assigned(userid, client_id)
 
-    def is_one_client_setup(self):
-        """Return True if only one client is available"""
-
-        clients = self.get_clients()
-
-        return len(clients) == 1
-
     # general principal methods
     def describe(self, principal, with_email=False, with_email2=False,
                  with_principal=True):

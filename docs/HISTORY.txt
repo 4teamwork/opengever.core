@@ -4,8 +4,8 @@ Changelog
 3.2.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Hiding client id at task in one client setup.
+  [lknoepfel]
 
 3.2.3 (2014-04-01)
 ------------------

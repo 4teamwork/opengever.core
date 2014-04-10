@@ -4,6 +4,7 @@ from ftw.builder import create
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
 from opengever.ogds.base.utils import get_current_client
+from opengever.ogds.base.utils import is_one_client_setup
 from opengever.testing import FunctionalTestCase
 from opengever.testing import create_client
 from opengever.testing import create_ogds_user
@@ -101,14 +102,14 @@ class TestOneClientSetupHelper(FunctionalTestCase):
         create_client(clientid='client')
         set_current_client_id(self.portal, clientid='client')
 
-        self.assertTrue(self.info.is_one_client_setup())
+        self.assertTrue(is_one_client_setup())
 
     def test_a_setup_with_multiple_clients_is_not_a_one_client_setup(self):
         create_client(clientid='client')
         create_client(clientid='client2')
         set_current_client_id(self.portal, clientid='client')
 
-        self.assertFalse(self.info.is_one_client_setup())
+        self.assertFalse(is_one_client_setup())
 
 
 class TestUserHelpers(FunctionalTestCase):
