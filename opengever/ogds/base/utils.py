@@ -73,6 +73,15 @@ def get_client_id():
     return proxy.client_id
 
 
+def is_one_client_setup():
+    """Return True if only one client is available"""
+
+    info = getUtility(IContactInformation)
+    clients = info.get_clients()
+
+    return len(clients) == 1
+
+
 def client_public_url_cachekey(method):
     """chackekey for the get_client_public_url, wich is unique for every plone
     site. So a setup with multiple opengever sites on one plone instance is

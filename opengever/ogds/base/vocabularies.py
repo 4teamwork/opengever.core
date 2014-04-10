@@ -5,6 +5,7 @@ from opengever.ogds.base.interfaces import IClientCommunicator
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.interfaces import ISyncStamp
 from opengever.ogds.base.utils import get_current_client
+from opengever.ogds.base.utils import is_one_client_setup
 from opengever.ogds.base.vocabulary import ContactsVocabulary
 from plone.memoize import ram
 from zope.app.component.hooks import getSite, setSite
@@ -180,7 +181,7 @@ class AllUsersAndInboxesVocabularyFactory(grok.GlobalUtility):
             for user in info.list_assigned_users(client_id=client_id):
                 value = u'%s:%s' % (client_id, user.userid)
                 # prepend client if there are multiple clients
-                if info.is_one_client_setup():
+                if is_one_client_setup():
                     label = u'%s' % (info.describe(user))
                 else:
                     label = u'%s: %s' % (
