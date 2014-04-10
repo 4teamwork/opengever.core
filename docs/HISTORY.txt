@@ -4,6 +4,9 @@ Changelog
 3.2.4 (unreleased)
 ------------------
 
+- Replaced ext-js function 'remove' with pure js version in advancedsearch.
+  [lknoepfel]
+
 - Fixed backref name of the groups_user join table.
   [phgross]
 
