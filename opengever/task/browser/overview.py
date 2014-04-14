@@ -155,14 +155,15 @@ class Overview(DisplayForm, OpengeverTab):
             info = getUtility(IContactInformation)
             task = ITask(self.context)
 
+            if info.is_one_client_setup():
+                return info.render_link(task.issuer)
+
             client_id = get_client_id()
             predecessors = self.get_predecessor_task()
 
             if predecessors and \
                 predecessors[0].task_type != 'forwarding_task_type':
                 client_id = predecessors[0].client_id
-            else:
-                client_id = get_client_id()
 
             client = client_title_helper(task, client_id)
 
@@ -200,6 +201,7 @@ class Overview(DisplayForm, OpengeverTab):
             },
             {
                 'label': _(u"label_issuer", default=u"Issuer"),
+                'css_class': "issuer",
                 'value': _get_issuer(),
             },
             {
