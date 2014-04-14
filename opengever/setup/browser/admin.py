@@ -1,5 +1,5 @@
 from datetime import datetime
-from opengever.mail.interfaces import IMailSettings
+from ftw.mail.interfaces import IMailSettings
 from opengever.ogds.base.interfaces import IClientConfiguration
 from opengever.ogds.base.ldap_import import sync_ldap
 from opengever.ogds.base.utils import create_session

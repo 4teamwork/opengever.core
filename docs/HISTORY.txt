@@ -11,6 +11,22 @@ Changelog
 3.2.3 (2014-04-01)
 ------------------
 
+- Hide standard ftw.mail mail-in viewlet (we display the mail address in
+  the byline).
+  [lgraf]
+
+- Removed og.mail IMailSettings registry interface (now done in ftw.mail).
+  Added upgrade step to migrate settings to ftw.mail's IMailSettings and
+  remove old og.mail IMailSettings.
+  [lgraf]
+
+- Provide an IntIdResolver adpater to generate Dossier Mail-In addresses
+  based on IntIds, and use it instead of the old implementation.
+  [lgraf]
+
+- Removed IMailInAddress behavior. Not needed any more with ftw.mail 2.0.
+  [lgraf]
+
 - Replaced hardcoded workflow names with constants.
   [lknoepfel]
 
@@ -22,6 +38,9 @@ Changelog
 
 - ldap_util: Make check for user object classes case-insensitive.
   [lgraf]
+
+- Added french translation by I. Anthenien.
+  [lknoepfel]
 
 
 3.2.2 (2014-03-11)

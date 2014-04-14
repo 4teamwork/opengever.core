@@ -1,18 +1,18 @@
 from Acquisition import aq_inner, aq_parent
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
-from Products.CMFPlone.utils import getToolByName
-from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from ftw.mail.mail import IMail
 from ftw.mail.utils import get_attachments
 from ftw.mail.utils import get_filename
 from ftw.mail.utils import remove_attachments
 from ftw.table.interfaces import ITableGenerator
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.mail import _
-from opengever.mail.behaviors import IMailInAddressMarker
 from plone.dexterity.utils import createContentInContainer
 from plone.dexterity.utils import iterSchemata
 from plone.i18n.normalizer.interfaces import IIDNormalizer
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from Products.CMFPlone.utils import getToolByName
+from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.interfaces import IValue
 from z3c.relationfield.relation import RelationValue
 from zope.app.component.hooks import getSite
@@ -22,6 +22,7 @@ from zope.intid.interfaces import IIntIds
 from zope.schema import getFieldsInOrder
 import os.path
 import re
+
 
 from plone.namedfile.interfaces import HAVE_BLOBS
 if HAVE_BLOBS:
@@ -274,7 +275,7 @@ class ExtractAttachments(grok.View):
         """
 
         obj = self.context
-        while not IMailInAddressMarker.providedBy(obj):
+        while not IDossierMarker.providedBy(obj):
             obj = aq_parent(aq_inner(obj))
 
             if IPloneSiteRoot.providedBy(obj):

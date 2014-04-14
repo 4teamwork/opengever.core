@@ -4,10 +4,10 @@ from collective.elephantvocabulary import wrap_vocabulary
 from datetime import date
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
+from ftw.mail.interfaces import IEmailAddress
 from opengever.document import _
 from opengever.document.interfaces import IDocumentSettings
 from opengever.dossier.behaviors.dossier import IDossierMarker
-from opengever.mail.behaviors import IMailInAddress
 from plone.dexterity.content import Item
 from plone.directives import form
 from plone.namedfile.field import NamedBlobFile
@@ -205,11 +205,12 @@ class UploadValidator(validator.SimpleFieldValidator):
             basename, extension = os.path.splitext(value.filename)
             if extension.lower() in MAIL_EXTENSIONS:
                 if IDossierMarker.providedBy(self.context):
-                    mail_address = IMailInAddress(
-                        self.context).get_email_address()
+                    mail_address = IEmailAddress(self.request
+                        ).get_email_for_object(self.context)
                 else:
                     parent = aq_parent(aq_inner(self.context))
-                    mail_address = IMailInAddress(parent).get_email_address()
+                    mail_address = IEmailAddress(self.request
+                        ).get_email_for_object(parent)
 
                 raise Invalid(
                     _(u'error_mail_upload',
