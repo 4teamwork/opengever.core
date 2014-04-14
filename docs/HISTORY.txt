@@ -7,6 +7,9 @@ Changelog
 - Fixed backref name of the groups_user join table.
   [phgross]
 
+- Task overview: Hide client prefix in issuer value for a one client setup.
+  [phgross]
+
 
 3.2.3 (2014-04-01)
 ------------------
