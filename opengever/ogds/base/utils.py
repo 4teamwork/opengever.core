@@ -40,11 +40,13 @@ def get_current_client():
     session = create_session()
     client_id = get_client_id()
 
-    clients = session.query(Client).filter_by(client_id=client_id).all()
-    if len(clients) == 0:
+    if not client_id:
+        raise ValueError('No client configured')
+
+    client = session.query(Client).get(client_id)
+    if not client:
         raise ValueError('Current client not found')
-    else:
-        return clients[0]
+    return client
 
 
 def client_id_cachekey(method):

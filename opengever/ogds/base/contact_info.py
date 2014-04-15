@@ -10,6 +10,7 @@ from opengever.ogds.base.utils import create_session
 from opengever.ogds.base.utils import get_current_client
 from opengever.ogds.models.client import Client
 from opengever.ogds.models.group import Group
+from opengever.ogds.models.group import groups_users
 from opengever.ogds.models.user import User
 from plone.memoize import ram
 from zope.app.component.hooks import getSite
@@ -123,7 +124,7 @@ class ContactInformation(grok.GlobalUtility):
 
     def list_inactive_users(self):
         session = create_session()
-        users = session.query(User).filter(User.active == False)
+        users = session.query(User).filter_by(active=False)
         return users
 
     def list_assigned_users(self, client_id=None):
@@ -147,36 +148,26 @@ class ContactInformation(grok.GlobalUtility):
 
         if groupid:
             session = create_session()
-            groups = session.query(Group).filter(
-                Group.groupid == groupid).all()
-            if len(groups) > 0:
-                return groups[0].users
+            group = session.query(Group).get(groupid)
+            if group:
+                return group.users
         return []
 
     def list_user_groups(self, userid):
         if userid:
             session = create_session()
-            groups = session.query(User).filter(
-                User.userid == userid).first().groups
-
+            groups = session.query(User).get(userid).groups
             return groups
         return []
 
-    def get_user(self, principal):
+    def get_user(self, userid):
         """Returns the user with the userid `principal`.
         """
 
-        if not self.is_user(principal):
-            raise ValueError('principal %s is not a user' % str(principal))
+        if not self.is_user(userid):
+            raise ValueError('principal %s is not a userid' % str(userid))
 
-        users = self._users_query().filter_by(userid=principal).all()
-        if len(users) == 0:
-            return None
-        elif len(users) > 1:
-            raise ValueError('Found %i users with principal, %s ' % (
-                    len(users), principal) + 'expected only one')
-        else:
-            return users[0]
+        return self._users_query().get(userid)
 
     def is_user_in_inbox_group(self, userid=None, client_id=None):
         if not client_id:
@@ -187,17 +178,18 @@ class ContactInformation(grok.GlobalUtility):
                 getSite(), 'portal_membership').getAuthenticatedMember()
             userid = member.getId()
 
-        if self.get_client_by_id(client_id) and self.get_user(userid) in \
-                self.get_client_by_id(client_id).inbox_group.users:
-            return True
-
-        return False
+        client = self.get_client_by_id(client_id)
+        if client:
+            return self.is_group_member(client.inbox_group_id, userid)
+        else:
+            return False
 
     def is_group_member(self, groupid, userid):
-        for user in self.list_group_users(groupid):
-            if user.userid == userid:
-                return True
-        return False
+        in_group = create_session().query(Group.groupid).join(groups_users).filter(
+            Group.groupid == groupid,
+            groups_users.columns.userid == userid).count()
+
+        return in_group > 0
 
     # CONTACTS
     def is_contact(self, principal):
@@ -266,20 +258,12 @@ class ContactInformation(grok.GlobalUtility):
     def get_client_of_inbox(self, principal):
         """Returns the client object of the `principal`.
         """
-
         if not self.is_inbox(principal):
             raise ValueError('Principal %s is not a inbox' % (str(principal)))
 
         client_id = principal.split(':', 1)[1]
 
-        clients = self._clients_query().filter_by(client_id=client_id).all()
-        if len(clients) == 0:
-            return None
-        elif len(clients) > 1:
-            raise ValueError('Found %i clients with client_id, %s ' % (
-                    len(clients), client_id) + 'expected only one')
-        else:
-            return clients[0]
+        return self._clients_query().get(client_id)
 
     @ram.cache(ogds_principal_cachekey)
     def get_group_of_inbox(self, principal):
@@ -291,7 +275,7 @@ class ContactInformation(grok.GlobalUtility):
         if client is None:
             raise ValueError('Client not found for: %s' % principal)
 
-        return client.inbox_group.groupid
+        return client.inbox_group
 
     # CLIENTS
     def get_clients(self):
@@ -310,21 +294,9 @@ class ContactInformation(grok.GlobalUtility):
     def get_client_by_id(self, client_id):
         """Returns a client identified by `client_id`.
         """
-        clients = self._clients_query().filter_by(client_id=client_id,
-                                                  enabled=True).all()
-        # Depending on the collation, filter_by matches are
-        # case-insensitive, which can potentially lead to
-        # several clients being returned with their client_id
-        # only differing in case.
-        # In that case we only return the exact match, if there
-        # is one, and log the incident.
-        exact_matches = [c for c in clients if c.client_id == client_id]
-
-        if len(clients) > 1:
-            logger.warn('Found %i clients with client_id %s, ' % (
-                    len(clients), client_id) + 'expected only one')
-
-        return exact_matches and exact_matches[0] or None
+        client = self._clients_query().filter_by(enabled=True,
+                                                 client_id=client_id).first()
+        return client
 
     def get_assigned_clients(self, userid=None):
         """Returns all assigned clients (home clients).
@@ -505,67 +477,6 @@ class ContactInformation(grok.GlobalUtility):
         else:
             raise ValueError('Unknown principal type: %s' % str(principal))
 
-    def get_email(self, principal):
-        """Returns the email address of a `principal`.
-        """
-        # inbox does not have a email
-        if isinstance(principal, types.StringTypes) and \
-                self.is_inbox(principal):
-            return None
-
-        # principal may be a contact brain
-        elif ICatalogBrain.providedBy(principal) and \
-                brain_is_contact(principal):
-            return principal.email
-
-        # principal may be a user object
-        elif IUser.providedBy(principal) or isinstance(principal, UserDict):
-            return principal.email
-
-        # principal may ba a string contact principal
-        elif self.is_contact(principal):
-            return self.get_contact(principal).email
-
-        # principal may be a string user principal
-        elif self.is_user(principal):
-            if not self.get_user(principal):
-                return None
-            return self.get_user(principal).email
-
-        else:
-            raise ValueError('Unknown principal type: %s' %
-                             str(principal))
-
-    def get_email2(self, principal):
-        """Returns the second email address of a `principal`.
-        """
-
-        # inbox does not have a email
-        if isinstance(principal, types.StringTypes) and \
-                self.is_inbox(principal):
-            return None
-
-        # principal may be a contact brain
-        elif ICatalogBrain.providedBy(principal) and \
-                brain_is_contact(principal):
-            return principal.email2
-
-        # principal may be a user object
-        elif IUser.providedBy(principal) or isinstance(principal, UserDict):
-            return principal.email2
-
-        # principal may ba a string contact principal
-        elif self.is_contact(principal):
-            return self.get_contact(principal).email2
-
-        # principal may be a string user principal
-        elif self.is_user(principal):
-            return self.get_user(principal).email2
-
-        else:
-            raise ValueError('Unknown principal type: %s' %
-                             str(principal))
-
     @ram.cache(ogds_principal_cachekey)
     def get_profile_url(self, principal):
         """Returns the profile url of this `principal`.
@@ -633,8 +544,7 @@ class ContactInformation(grok.GlobalUtility):
             sort_dict[userid] = u'%s %s' % (lastname, firstname)
 
         #includes every client inbox
-        clients = self._clients_query()
-        active_clients = clients.filter_by(enabled=True)
+        active_clients = self._clients_query().filter_by(enabled=True)
         for client in active_clients:
             principal = u'inbox:%s' % client.client_id
             sort_dict[principal] = translate(self.describe(principal))

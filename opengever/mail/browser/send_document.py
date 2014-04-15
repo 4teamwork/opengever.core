@@ -184,7 +184,7 @@ class SendDocumentForm(form.Form):
                 only_links=data.get('documents_as_links'))
 
             msg['Subject'] = Header(data.get('subject'), CHARSET)
-            sender_address = contact_info.get_email(userid)
+            sender_address = contact_info.get_user(userid).email
             if not sender_address:
                 portal = self.context.portal_url.getPortalObject()
                 sender_address = portal.email_from_address

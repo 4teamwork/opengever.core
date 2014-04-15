@@ -138,7 +138,7 @@ class TestUserHelpers(FunctionalTestCase):
         with self.assertRaises(ValueError) as cm:
             self.info.get_user('inbox:client1')
         self.assertEquals(
-            'principal inbox:client1 is not a user',
+            'principal inbox:client1 is not a userid',
             str(cm.exception))
 
     def test_getting_profile_url_returns_user_detail_view_url(self):
@@ -156,66 +156,6 @@ class TestUserHelpers(FunctionalTestCase):
         self.assertEquals(
             u'<a href="http://nohost/plone/@@user-details/hugo.boss">Boss Hugo (hugo.boss)</a>',
             self.info.render_link('hugo.boss'))
-
-
-class TestEmailGetter(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestEmailGetter, self).setUp()
-        self.info = getUtility(IContactInformation)
-
-    def test_get_email_for_a_user_return_his_first_email(self):
-        create_ogds_user('hugo.boss', **{'firstname': 'Hugo',
-                                        'lastname': 'Boss',
-                                        'email': 'hugo@boss.local',
-                                        'email2': 'hugo@private.ch'})
-
-        self.assertEquals(u'hugo@boss.local',
-                          self.info.get_email('hugo.boss'))
-        self.assertEquals(u'hugo@boss.local',
-                          self.info.get_email(self.info.get_user('hugo.boss')))
-
-    def test_get_email2_for_a_user_return_his_second_email(self):
-        create_ogds_user('hugo.boss', **{'firstname': 'Hugo',
-                                'lastname': 'Boss',
-                                'email': 'hugo@boss.local',
-                                'email2': 'hugo@private.ch'})
-
-        self.assertEquals(u'hugo@private.ch',
-                          self.info.get_email2('hugo.boss'))
-
-        self.assertEquals(u'hugo@private.ch',
-                          self.info.get_email2(self.info.get_user('hugo.boss')))
-
-    def test_get_email_for_a_contact_return_his_email(self):
-        create(Builder('contact')
-               .having(**{'firstname': u'Lara',
-                          'lastname': u'Croft',
-                          'email': u'lara.croft@test.ch',
-                          'email2': u'tombraider_lara@test2.ch'}))
-
-        self.assertEquals('lara.croft@test.ch',
-                  self.info.get_email(u'contact:croft-lara'))
-        self.assertEquals(
-            'lara.croft@test.ch',
-            self.info.get_email(self.info.get_contact('contact:croft-lara')))
-
-    def test_get_email2_for_a_contact_return_his_second_email(self):
-        create(Builder('contact')
-               .having(**{'firstname': u'Lara',
-                          'lastname': u'Croft',
-                          'email': u'lara.croft@test.ch',
-                          'email2': u'tombraider_lara@test2.ch'}))
-
-        self.assertEquals('tombraider_lara@test2.ch',
-                          self.info.get_email2(u'contact:croft-lara'))
-
-    def test_get_email_for_a_inbox_return_none(self):
-        self.assertEquals(
-            None, self.info.get_email(u'inbox:client1'))
-
-        self.assertEquals(
-            None, self.info.get_email2(u'inbox:client1'))
 
 
 class TestGroupHelpers(FunctionalTestCase):
@@ -264,6 +204,12 @@ class TestGroupHelpers(FunctionalTestCase):
             userid='jamie.lannister', client_id='client1'))
         self.assertTrue(self.info.is_user_in_inbox_group(
             userid='jamie.lannister', client_id='client2'))
+
+    def test_get_group_of_inbox_returns_group(self):
+        create_client(clientid='client1', inbox_group='client1_inbox_users')
+
+        self.assertEquals('client1_inbox_users',
+                          self.info.get_group_of_inbox("inbox:client1").groupid)
 
 
 class TestContactInfoOGDSUserDescription(FunctionalTestCase):

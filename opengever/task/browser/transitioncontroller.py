@@ -424,7 +424,7 @@ class TaskTransitionController(BrowserView):
         else:
             inbox_group = info.get_group_of_inbox(self.context.issuer)
             return info.is_group_member(
-                inbox_group,
+                inbox_group.groupid,
                 getMultiAdapter((self.context, self.request),
                                 name='plone_portal_state').member().id
                 )
