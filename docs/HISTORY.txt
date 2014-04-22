@@ -4,6 +4,9 @@ Changelog
 3.2.4 (unreleased)
 ------------------
 
+- Moved create repository script from opengever.zug package.
+  [lknoepfel]
+
 - Replaced ext-js function 'remove' with pure js version in advancedsearch.
   [lknoepfel]
 
