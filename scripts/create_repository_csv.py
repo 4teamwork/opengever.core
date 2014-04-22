@@ -3,7 +3,7 @@
 transmogrifier config) from an Excel .xlsx file.
 
 Usage:
-bin/zopepy scripts/create_repository_csv.py src/opengever.zug.foobar/ foo-bar
+bin/zopepy scripts/create_repository_csv.py foo/bar/config.xlsx foo-bar
 """
 from os.path import basename
 import csv
@@ -139,27 +139,20 @@ def clean_repository_table(table, client_id):
 
 def main():
     if len(sys.argv) < 3:
-        raise Exception('Please supply path to zug package (opengever.zug/opengever/zug/foobar) and client id (foo-bar).')
-    policy_path = sys.argv[1] # opengever.zug/opengever/zug/foobar
+        raise Exception('Please supply path to config (foo/bar/foobar/config.xlsx) and client id (foo-bar).')
+    config_path = sys.argv[1] # foo/bar/config.xlsx
     client_id = sys.argv[2] # foo-bar
 
-    # Strip trailing slash in order for basename to work as expected
-    policy_path = policy_path.rstrip('/')    # src/opengever/zug/foobar
-    bn = basename(policy_path)               # foobar
-    path = os.path.join(policy_path, 'data')
-    xlsx_path = os.path.join(path, 'config.xlsx')
+    xlsx_path = os.path.join(config_path)
 
     if not os.path.exists(xlsx_path):
-        raise Exception('Could not find config.xlsx at %s.' % xlsx_path)
-
-    dotted_name = ".".join(["opengever", "zug", bn]) # opengever.zug.foobar
-    policy_module = importlib.import_module(dotted_name)
+        raise Exception('Could not find config at %s.' % xlsx_path)
 
     tables = xlrd_xls2array(xlsx_path)
     repository_table = tables[1] # use 'Ordnungssystem' table
     repository_table = clean_repository_table(repository_table, client_id)
 
-    outdir = os.path.split(xlsx_path)[0]
+    outdir = os.path.dirname(xlsx_path)
     dump_csv(repository_table['sheet_data'], outdir, 'repository.csv')
     print "Wrote repository.csv to %s" % outdir
 
