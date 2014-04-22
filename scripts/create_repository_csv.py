@@ -2,7 +2,8 @@
 """Script to create a repository.csv (as needed by the repositors.cfg
 transmogrifier config) from an Excel .xlsx file.
 
-Usage: bin/zopepy scripts/create_repository_csv.py src/opengever.zug.foobar/ foo-bar 
+Usage:
+bin/zopepy scripts/create_repository_csv.py src/opengever.zug.foobar/ foo-bar
 """
 from os.path import basename
 import csv
@@ -12,26 +13,27 @@ import sys
 import xlrd
 
 
-PRIVACY_LAYER_MAPPING = {u"Enthält schützenswerte Personendaten": 'privacy_layer_yes',
+PRIVACY_LAYER_MAPPING = {u"Enthält schützenswerte Personendaten":
+                         'privacy_layer_yes',
                          u"Keine Datenschutzstufe": 'privacy_layer_no',
-}
+                         }
 
 CLASSIFICATION_MAPPING = {u"Nicht klassifiziert": 'unprotected',
-                         u"Vertraulich": 'confidential',
-                         u'Geheim':'classified'
-}
+                          u"Vertraulich": 'confidential',
+                          u'Geheim': 'classified'
+                          }
 
 PUBLIC_TRIAL_MAPPING = {u"Noch nicht geprüft": 'unchecked',
-                         u"Öffentlich": 'public',
-                         u'Nicht öffentlich':'private'
-}
+                        u"Öffentlich": 'public',
+                        u'Nicht öffentlich': 'private'
+                        }
 
 ARCHIVAL_VALUE_MAPPING = {u'Noch nicht geprüft': u'unchecked',
                           u'Anbieten': u'prompt',
                           u'Archivwürdig': u'archival worthy',
                           u'Nicht archivwürdig': u'not archival worthy',
                           u'Sampling': u'archival worthy with sampling',
-}
+                          }
 
 
 # Some of the following parts are based on
@@ -50,7 +52,8 @@ def xlrd_xls2array(infilename):
         raw_sheet = book.sheet_by_name(sheet_name)
         data      = []
         for row in range(raw_sheet.nrows):
-            (types, values) = (raw_sheet.row_types(row), raw_sheet.row_values(row))
+            (types, values) = (raw_sheet.row_types(row),
+                               raw_sheet.row_values(row))
             data.append(map(formatter, zip(types, values)))
         sheets.append({ 'sheet_name': sheet_name, 'sheet_data': data })
     return sheets
@@ -163,5 +166,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
