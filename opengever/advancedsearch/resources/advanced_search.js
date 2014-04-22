@@ -15,7 +15,7 @@ $(function(){
   $('input[name=form.widgets.object_provides:list]').change(function(){
     var types = ['opengever-dossier-behaviors-dossier-IDossierMarker', 'opengever-task-task-ITask', 'opengever-document-behaviors-IBaseDocument'];
     selected = $('input[name=form.widgets.object_provides:list]:checked').attr('value').replace(/\./g, '-');
-    types.remove(selected);
+    types.splice(types.indexOf(selected),1)
 
     // show current
     $('.'+selected).each(function(){
