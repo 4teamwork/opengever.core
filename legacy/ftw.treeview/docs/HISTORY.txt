@@ -1,0 +1,36 @@
+Changelog
+=========
+
+1.0.4 (unreleased)
+------------------
+
+- Nothing changed yet.
+
+
+1.0.3 (2014-02-17)
+------------------
+
+- Moved package to GitHub.
+  [lknoepfel]
+
+
+1.0.2 (2012-11-28)
+------------------
+
+- Adjust javscripts: Use $ instead of deprecated jq.
+  [phgross]
+
+
+1.0.1 (2012-02-24)
+------------------
+
+- Add support for titles in alternative languages. Just add metadata to the
+  catalog with name "title_{preferred language code}".
+  [jone]
+
+
+1.0 (2011-11-17)
+----------------
+
+- final release
+

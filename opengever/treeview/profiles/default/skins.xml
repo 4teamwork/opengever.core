@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<object name="portal_skins" allow_any="False" cookie_persistence="False">
+
+ <object name="ftw_treeview"
+    meta_type="Filesystem Directory View"
+    directory="ftw.treeview:skins/ftw_treeview"/>
+
+ <skin-path name="*">
+  <layer name="ftw_treeview"
+     insert-after="custom"/>
+ </skin-path>
+
+</object>
