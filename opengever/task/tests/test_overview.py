@@ -50,7 +50,7 @@ class TestTaskOverview(FunctionalTestCase):
     def test_issuer_is_prefixed_by_predecessor_client_title_on_a_forwarding_successor(self):
         client2 = create_client(clientid="client2")
 
-        forwarding = create(Builder('forwarding').(issuer=TEST_USER_ID))
+        forwarding = create(Builder('forwarding').having(issuer=TEST_USER_ID))
         successor = create(Builder('task')
                            .having(issuer=TEST_USER_ID)
                            .successor_from(forwarding))
