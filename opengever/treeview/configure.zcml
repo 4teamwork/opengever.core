@@ -1,23 +1,21 @@
-<configure 
-    xmlns="http://namespaces.zope.org/zope"     
-    xmlns:browser="http://namespaces.zope.org/browser" 
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:five="http://namespaces.zope.org/five"
     xmlns:cmf="http://namespaces.zope.org/cmf"
-    xmlns:genericsetup="http://namespaces.zope.org/genericsetup" 
-    i18n_domain="ftw.treeview">
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="opengever.treeview">
 
-  <five:registerPackage package="." />
-
-  <genericsetup:registerProfile 
-      name="default" 
-      title="ftw.treeview"
-      directory="profiles/default" 
+  <genericsetup:registerProfile
+      name="default"
+      title="opengever.treeview"
+      directory="profiles/default"
       description="JQuery Treeview Plugin"
-      provides="Products.GenericSetup.interfaces.EXTENSION" 
+      provides="Products.GenericSetup.interfaces.EXTENSION"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot" />
 
 
-  <cmf:registerDirectory name="ftw_treeview"/>
+  <cmf:registerDirectory name="opengever_treeview"/>
 
    <browser:page
         for="*"
