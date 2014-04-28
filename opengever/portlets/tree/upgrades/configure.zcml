@@ -1,0 +1,13 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:upgrade-step="http://namespaces.zope.org/ftw.upgrade">
+
+    <upgrade-step:importProfile
+        title="Remove ftw.treeview dependency."
+        profile="opengever.portlets.tree:default"
+        source="1"
+        destination="2601"
+        directory="profiles/2601"
+        />
+
+</configure>

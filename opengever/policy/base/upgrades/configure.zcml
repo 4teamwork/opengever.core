@@ -1,5 +1,6 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
+    xmlns:upgrade-step="http://namespaces.zope.org/ftw.upgrade"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
 
 	<genericsetup:upgradeStep
@@ -19,5 +20,13 @@
 	    for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
 	    provides="Products.GenericSetup.interfaces.EXTENSION"
 	    />
-	
+
+    <upgrade-step:importProfile
+        title="Added opengever.treeview."
+        profile="opengever.policy.base:default"
+        source="3100"
+        destination="3101"
+        directory="profiles/3101"
+        />
+
 </configure>
