@@ -21,12 +21,13 @@
 	    provides="Products.GenericSetup.interfaces.EXTENSION"
 	    />
 
-    <upgrade-step:importProfile
+    <genericsetup:upgradeStep
         title="Added opengever.treeview."
-        profile="opengever.policy.base:default"
+        description=""
         source="3100"
         destination="3101"
-        directory="profiles/3101"
+        handler="opengever.policy.base.upgrades.to3101.AddTreeview"
+        profile="opengever.policy.base:default"
         />
 
 </configure>
