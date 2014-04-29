@@ -1,0 +1,50 @@
+<tal:master define="level options/level|python:0;
+                    children options/children | nothing;
+                    bottomLevel options/bottomLevel | nothing;
+                    language options/language | nothing;
+                    title_attr string:title_${language}"
+            i18n:domain="plone">
+
+<metal:main define-macro="nav_main">
+<tal:navitem repeat="node children">
+<li tal:define="show_children   node/show_children;
+                children        node/children;
+                item_url        node/allowedUrl;
+                item_icon       node/item_icon;
+                is_current      node/currentItem;
+                is_in_path      node/currentParent;
+                is_folderish    node/item/is_folderish;
+                UID             node/item/UID;
+                li_class        python:is_current and ' navTreeCurrentNode' or '';
+                li_extr_class   python:is_in_path and ' navTreeItemInPath' or '';
+                li_folder_class python:show_children and ' navTreeFolderish' or '';
+                item_class string:state-${node/normalized_review_state};
+                item_class python:is_current and item_class + ' navTreeCurrentItem' or item_class;
+                title           node/Title;
+                title        python: getattr(node['item'], title_attr, title);"
+    tal:attributes="class string:navTreeItem visualNoMarker${li_class}${li_extr_class}${li_folder_class}"
+    tal:condition="python:bottomLevel &lt;= 0 or level &lt;= bottomLevel">
+
+    <span class="noChildren"
+          tal:condition="not:show_children">
+     &nbsp;</span>
+     <span class="folder">
+        <a tal:condition="item_url"
+           tal:attributes="href python:item_url;
+                           title node/Description;
+                           class string:$item_class${li_class}${li_extr_class}${li_folder_class}"
+           tal:content="title">
+        </a>
+        <span tal:condition="not: item_url"
+              tal:attributes="class string:$item_class${li_class}${li_extr_class}${li_folder_class}"
+              tal:content="title"/>
+    </span>
+
+    <ul tal:attributes="class python:'navTree navTreeLevel'+str(level)"
+        tal:condition="python: len(children) > 0 and show_children">
+        <span tal:replace="structure python:view.recurse(children=children, level=level+1, bottomLevel=bottomLevel, language=language)" />
+    </ul>
+</li>
+</tal:navitem>
+</metal:main>
+</tal:master>

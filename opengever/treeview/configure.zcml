@@ -1,0 +1,28 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:cmf="http://namespaces.zope.org/cmf"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="opengever.treeview">
+
+  <genericsetup:registerProfile
+      name="default"
+      title="opengever.treeview"
+      directory="profiles/default"
+      description="JQuery Treeview Plugin"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot" />
+
+
+  <cmf:registerDirectory name="opengever_treeview"/>
+
+   <browser:page
+        for="*"
+        name="tree"
+        class=".view.TreeView"
+        allowed_attributes="render"
+        permission="zope.Public"
+        />
+
+</configure>

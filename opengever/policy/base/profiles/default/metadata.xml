@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <metadata>
-  <version>3100</version>
+  <version>3101</version>
   <dependencies>
     <dependency>profile-opengever.globalindex:default</dependency>
     <dependency>profile-opengever.base:default</dependency>
@@ -15,6 +15,7 @@
     <dependency>profile-opengever.tasktemplates:default</dependency>
     <dependency>profile-opengever.portlets.tree:default</dependency>
     <dependency>profile-opengever.trash:default</dependency>
+    <dependency>profile-opengever.treeview:default</dependency>
     <dependency>profile-opengever.ogds.base:default</dependency>
     <dependency>profile-opengever.contact:default</dependency>
     <dependency>profile-opengever.advancedsearch:default</dependency>
