@@ -4,6 +4,9 @@ Changelog
 3.2.4 (unreleased)
 ------------------
 
+- Implemented cache invalidation for TreeView portlet cache.
+  [lgraf]
+
 - Update og.mail tests according to changes in ftw.mail.
   (See https://github.com/4teamwork/ftw.mail/pull/17)
 
