@@ -30,13 +30,14 @@ class TestMailIndexers(MockTestCase):
             u'"Hugo Boss" <hugo.boss@boss.com>')
         self.replay()
 
+        # ftw.mail removes quotes around name in 'From:'
         self.assertEqual(
             document_author(mail)(),
-            '"Hugo Boss" &lt;hugo.boss@boss.com&gt;')
+            'Hugo Boss &lt;hugo.boss@boss.com&gt;')
 
         self.assertEqual(
             sortable_author(mail)(),
-            '"Hugo Boss" &lt;hugo.boss@boss.com&gt;')
+            'Hugo Boss &lt;hugo.boss@boss.com&gt;')
 
     def test_author_indexes_with_bad_from_header(self):
         mail = self.stub()
