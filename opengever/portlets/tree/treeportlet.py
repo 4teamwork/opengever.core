@@ -1,16 +1,13 @@
-from zope.interface import implements
-from zope import schema
-
-from plone.portlets.interfaces import IPortletDataProvider
-from plone.app.portlets.portlets import base
-
-from zope.formlib import form
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-
-from Products.CMFCore.utils import getToolByName
-
-from Acquisition import aq_inner
 from AccessControl.unauthorized import Unauthorized
+from Acquisition import aq_inner
+from Products.CMFCore.utils import getToolByName
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from plone.app.portlets.portlets import base
+from plone.portlets.interfaces import IPortletDataProvider
+from zope import schema
+from zope.formlib import form
+from zope.interface import implements
+
 
 class ITreePortlet(IPortletDataProvider):
     """A portlet
@@ -58,6 +55,7 @@ class Assignment(base.Assignment):
         """
         return "Tree portlet"
 
+
 class Renderer(base.Renderer):
     """Portlet renderer.
 
@@ -67,14 +65,13 @@ class Renderer(base.Renderer):
     """
 
     render = ViewPageTemplateFile('treeportlet.pt')
-    
+
     def header(self):
         current = aq_inner(self.context)
         # Don't travsere to top-level application obj if TreePortlet
         # was added to the Plone Site Root
         if self.root_path() != None:
             portal_url = getToolByName(self.context, 'portal_url')
-            
             current = portal_url.getPortalObject().restrictedTraverse(self.root_path().encode('utf-8'))
             return aq_inner(current).Title()
         elif current.Type() != 'Plone Site':
@@ -84,8 +81,8 @@ class Renderer(base.Renderer):
         return aq_inner(self.context).Title()
 
     def root_path(self):
-        return getattr(self.data,'root_path', None)
-        
+        return getattr(self.data, 'root_path', None)
+
     @property
     def available(self):
         if self.root_path() != None:

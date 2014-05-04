@@ -8,14 +8,14 @@
     </dt>
 
     <dd class="portletItem odd">
-        <ul class="filetree">
-            <div tal:content="structure python: here.unrestrictedTraverse('tree').render(view.root_path())" /> 
+        <ul class="filetree" tal:attributes="data-root_path view/root_path">
+          <img src="spinner.gif" class="spinner"/>
         </ul>
     </dd>
 
-    <!--<dd class="portletFooter">
-        <span class="portletBottomLeft"></span>
-        <span class="portletBottomRight"></span>
-    </dd> -->
+    <dd class="portletFooter">
+      <span class="portletBottomLeft"></span>
+      <span class="portletBottomRight"></span>
+    </dd>
 
 </dl>
