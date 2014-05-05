@@ -10,4 +10,12 @@
        permission="zope2.View"
        />
 
+    <browser:page
+        for="ftw.mail.mail.IMail"
+        name="view"
+        class=".mail.View"
+        permission="zope2.View"
+        layer="opengever.base.interfaces.IOpengeverBaseLayer"
+        />
+
 </configure>
