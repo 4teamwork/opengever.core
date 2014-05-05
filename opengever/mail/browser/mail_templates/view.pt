@@ -60,8 +60,8 @@
             <div class="mailAttachment">
                 <a href=""
                    tal:define="position python:item['position']"
-                   tal:attributes="href string:${here/absolute_url}/get_attachment?position=${position}">
-                    <span tal:attributes="class python:item['icon']"></span>
+                   tal:attributes="href string:${here/absolute_url}/get_attachment?position=${position};
+                                   class item/class">
                     <span tal:content="python:item['filename']">filename</span></a>
                     <span tal:content="python:item['type-name']">ContentType</span>
                     <span tal:content="python:context.getObjSize(size=item['size'])">0Kb</span>
