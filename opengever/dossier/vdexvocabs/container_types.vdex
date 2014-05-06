@@ -9,7 +9,7 @@
             <langstring language="en">Folder</langstring>
             <langstring language="de-ch">Ordner</langstring>
             <langstring language="de">Ordner</langstring>
-
+            <langstring language="fr">Classeur</langstring>
         </caption>
     </term>
     <term>
@@ -18,7 +18,7 @@
             <langstring language="en">Box</langstring>
             <langstring language="de-ch">Schachtel</langstring>
             <langstring language="de">Schachtel</langstring>
-
+            <langstring language="fr">Boîte</langstring>
         </caption>
     </term>
     <term>
@@ -27,7 +27,7 @@
             <langstring language="en">Dossier</langstring>
             <langstring language="de-ch">Dossier</langstring>
             <langstring language="de">Dossier</langstring>
-
+            <langstring language="fr">Dossier</langstring>
         </caption>
     </term>
 </vdex>

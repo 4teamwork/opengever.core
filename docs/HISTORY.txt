@@ -4,6 +4,10 @@ Changelog
 3.2.4 (unreleased)
 ------------------
 
+- Added missing french (and german) translations.
+  Fixed i18n domain and translated vdex.
+  [lknoepfel]
+
 - Mail view: use sprite icons in the attachments list.
   [phgross]
 
