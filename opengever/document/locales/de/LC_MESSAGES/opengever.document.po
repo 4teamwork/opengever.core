@@ -110,7 +110,7 @@ msgstr "Sie haben keine Dokumente ausgewählt."
 #. Default: "You have not checked in documents. Do you realy want to logout?"
 #: ./opengever/document/browser/logout_overlay_templates/logout_overlay.pt:3
 msgid "alert_not_checked_in_documents"
-msgstr "Sie haben noch ausgecheckte Dokumente. Wollen sie Gever wirklich verlassen?"
+msgstr "Sie haben noch ausgecheckte Dokumente. Wollen Sie OneGov GEVER wirklich verlassen?"
 
 #. Default: "Cancel"
 #: ./opengever/document/checkout/checkin.py:83
