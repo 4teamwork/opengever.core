@@ -64,6 +64,7 @@ for char in ('?', '-', '+', '*', multispace):
     q = q.replace(char, ' ')
 r = q.split()
 r = " AND ".join(r)
+searchurlparameter = url_quote_plus(quote_bad_chars(r))
 r = quote_bad_chars(r) + '*'
 searchterms = url_quote_plus(r)
 
@@ -112,7 +113,7 @@ if not results:
     write('''<div id="LSNothingFound">%s</div>''' % ts.translate(label_no_results_found, context=REQUEST))
     write('''<div class="LSRow">''')
     write('<a href="%s" style="font-weight:normal">%s</a>' %
-         (portal_url + '/advanced_search',
+         (portal_url + '/advanced_search?SearchableText=%s' % searchurlparameter,
           ts.translate(label_advanced_search, context=REQUEST)))
     write('''</div>''')
     write('''</div>''')
@@ -154,7 +155,7 @@ else:
 
     write('''<li class="LSRow">''')
     write('<a href="%s" style="font-weight:normal">%s</a>' %
-         (portal_url + '/advanced_search',
+         (portal_url + '/advanced_search?SearchableText=%s' % searchurlparameter,
           ts.translate(label_advanced_search, context=REQUEST)))
     write('''</li>''')
 

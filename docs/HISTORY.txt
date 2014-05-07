@@ -4,6 +4,9 @@ Changelog
 3.2.4 (unreleased)
 ------------------
 
+- Passing search string from live search to advanced search.
+  [lknoepfel]
+
 - Setup: Activate navigation portlet on the templatedossier.
   [phgross]
 
