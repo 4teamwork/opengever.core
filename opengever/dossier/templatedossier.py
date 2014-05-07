@@ -217,6 +217,8 @@ def drop_columns(columns):
 class TemplateDossierDocuments(Documents):
     grok.context(ITemplateDossier)
 
+    depth = 1
+
     @property
     def columns(self):
         return drop_columns(
@@ -240,6 +242,8 @@ class TemplateDossierDocuments(Documents):
 
 class TemplateDossierTrash(Trash):
     grok.context(ITemplateDossier)
+
+    depth = 1
 
     @property
     def columns(self):

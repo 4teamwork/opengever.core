@@ -1,8 +1,11 @@
 from Testing.makerequest import makerequest
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.dossier.templatedossier import ITemplateDossier
 from opengever.dossier.templatedossier import REMOVED_COLUMNS
 from opengever.testing import FunctionalTestCase
 from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
+from opengever.testing import obj2brain
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.utils import createContentInContainer
 from zope.app.component.hooks import setSite
@@ -98,3 +101,31 @@ class TestTemplateDossierListings(FunctionalTestCase):
         self.assertEquals(['trashed', 'copy_items', 'zip_selected'],
                           view.enabled_actions)
 
+    def test_document_tab_lists_only_documents_directly_beneath(self):
+        subdossier = create(Builder('templatedossier')
+                            .within(self.templatedossier))
+        document_a = create(Builder('document').within(self.templatedossier))
+        document_b = create(Builder('document')
+                            .within(subdossier))
+
+        view = self.templatedossier.unrestrictedTraverse(DOCUMENT_TAB)
+        view.update()
+
+        self.assertEquals([document_a],
+                          [brain.getObject() for brain in view.contents])
+
+    def test_trash_tab_lists_only_documents_directly_beneath(self):
+        subdossier = create(Builder('templatedossier')
+                            .within(self.templatedossier))
+        document_a = create(Builder('document')
+                            .trashed()
+                            .within(self.templatedossier))
+        document_b = create(Builder('document')
+                            .trashed()
+                            .within(subdossier))
+
+        view = self.templatedossier.unrestrictedTraverse(TRASH_TAB)
+        view.update()
+
+        self.assertEquals(document_a,
+                          [brain.getObject() for brain in view.contents])

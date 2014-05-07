@@ -4,6 +4,9 @@ Changelog
 3.2.4 (unreleased)
 ------------------
 
+- Limit query depth in templatedossier listings(documents, trash).
+  [phgross]
+
 - Treeportlet: Implement deferred tree rendering.
   [phgross]
 
