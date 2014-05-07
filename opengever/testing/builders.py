@@ -3,6 +3,7 @@ from ftw.builder import builder_registry
 from ftw.builder.dexterity import DexterityBuilder
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.task.interfaces import ISuccessorTaskController
+from opengever.trash.trash import ITrashable
 from plone.namedfile.file import NamedBlobFile
 from z3c.relationfield.relation import RelationValue
 from zope.annotation.interfaces import IAnnotations
@@ -34,6 +35,7 @@ builder_registry.register('inbox', InboxBuilder)
 class DocumentBuilder(DexterityBuilder):
     portal_type = 'opengever.document.document'
     checked_out = None
+    _trashed = False
 
     def with_dummy_content(self):
         self.attach_file_containing("Test data")
@@ -43,9 +45,17 @@ class DocumentBuilder(DexterityBuilder):
         self.checked_out = userid
         return self
 
+    def trashed(self):
+        self._trashed = True
+        return self
+
     def after_create(self, obj):
         if self.checked_out:
             IAnnotations(obj)[CHECKIN_CHECKOUT_ANNOTATIONS_KEY] = self.checked_out
+
+        if self._trashed:
+            trasher = ITrashable(obj)
+            trasher.trash()
 
         super(DocumentBuilder, self).after_create(obj)
 

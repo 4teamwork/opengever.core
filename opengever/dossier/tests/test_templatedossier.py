@@ -60,18 +60,41 @@ class TestTemplateDossierIntegration(FunctionalTestCase):
         self.failUnless(view())
         self.assertTrue('empty document template', view.templates())
 
-        # test_tabbedview_columns
-        view = templates.unrestrictedTraverse('tabbedview_view-documents')
-        for column in view.columns:
-            if isinstance(column, dict):
-                self.assertTrue(column.get('id') not in REMOVED_COLUMNS)
 
-        # test removed actions
+DOCUMENT_TAB = 'tabbedview_view-documents'
+TRASH_TAB = 'tabbedview_view-trash'
+
+
+class TestTemplateDossierListings(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestTemplateDossierListings, self).setUp()
+        self.grant('Manager')
+
+        self.templatedossier = create(Builder('templatedossier'))
+        self.dossier = create(Builder('dossier'))
+
+    def test_receipt_delivery_and_subdossier_column_are_hidden_in_document_tab(self):
+        view = self.templatedossier.unrestrictedTraverse(DOCUMENT_TAB)
+        view.update()
+        columns = [col.get('column') for col in view.columns]
+
         self.assertEquals(
-            ['trashed', 'copy_items', 'zip_selected'],
-            view.enabled_actions)
+            ['', 'sequence_number', 'Title',
+             'document_author', 'document_date', 'checked_out'],
+            columns)
 
-        view = templates.unrestrictedTraverse('tabbedview_view-trash')
-        for column in view.columns:
-            if isinstance(column, dict):
-                self.assertTrue(column.get('id') not in REMOVED_COLUMNS)
+    def test_receipt_delivery_and_subdossier_column_are_hidden_in_trash_tab(self):
+        view = self.templatedossier.unrestrictedTraverse(TRASH_TAB)
+        view.update()
+        columns = [col.get('column') for col in view.columns]
+
+        self.assertEquals(
+            ['', 'sequence_number', 'Title', 'document_author', 'document_date'],
+            columns)
+
+    def test_enabled_actions_are_limited_in_document_tab(self):
+        view = self.templatedossier.unrestrictedTraverse(DOCUMENT_TAB)
+        self.assertEquals(['trashed', 'copy_items', 'zip_selected'],
+                          view.enabled_actions)
+
