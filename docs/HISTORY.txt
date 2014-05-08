@@ -5,6 +5,7 @@ Changelog
 ------------------
 
 - Passing search string from live search to advanced search.
+  Using SearchableText from the url as default value in advanced search.
   [lknoepfel]
 
 - Setup: Activate navigation portlet on the templatedossier.
