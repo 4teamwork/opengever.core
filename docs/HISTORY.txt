@@ -4,6 +4,9 @@ Changelog
 3.2.4 (unreleased)
 ------------------
 
+- Treeportlet: Implement deferred tree rendering.
+  [phgross]
+
 - Fixed German translation in logout overlay.
   [pha]
 
