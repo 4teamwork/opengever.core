@@ -158,7 +158,7 @@ class TemplateDocumentFormView(grok.View):
         catalog = getToolByName(self.context, 'portal_catalog')
         templates = catalog(
             path=dict(
-                depth=1, query=self.templatedossier),
+                depth=-1, query=self.templatedossier),
             portal_type="opengever.document.document")
         generator = getUtility(ITableGenerator, 'ftw.tablegenerator')
 

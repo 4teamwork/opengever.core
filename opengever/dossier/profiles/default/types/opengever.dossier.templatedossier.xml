@@ -12,6 +12,7 @@
     <property name="allowed_content_types">
         <element value="opengever.document.document" />
         <element value="opengever.tasktemplates.tasktemplatefolder" />
+        <element value="opengever.dossier.templatedossier" />
     </property>
 
     <!-- schema interface -->

@@ -4,6 +4,9 @@ Changelog
 3.2.4 (unreleased)
 ------------------
 
+- Allow nested Templatedossiers.
+  [phgross]
+
 - Limit query depth in templatedossier listings(documents, trash).
   [phgross]
 
