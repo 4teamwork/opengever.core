@@ -4,6 +4,9 @@ Changelog
 3.2.4 (unreleased)
 ------------------
 
+- Setup: Activate navigation portlet on the templatedossier.
+  [phgross]
+
 - Allow nested Templatedossiers.
   [phgross]
 
