@@ -206,7 +206,7 @@ class DossierDetailsLaTeXView(grok.MultiAdapter, MakoLaTeXView):
 
             obj = aq_parent(aq_inner(obj))
 
-        return ' / '.join(self.convert_list(titles))
+        return ' / '.join(titles)
 
     def get_participants(self):
         dossier = IDossier(self.context)

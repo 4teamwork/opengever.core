@@ -60,7 +60,7 @@ class TestDossierDetailsDossierMetadata(FunctionalTestCase):
                          lastname=u'User')
         set_current_client_id(self.portal)
 
-    def dossierdetails_view(self, dossier):
+    def get_dossierdetails_view(self, dossier):
         provide_request_layer(dossier.REQUEST, IDossierDetailsLayer)
         layout = DefaultLayout(dossier, dossier.REQUEST, PDFBuilder())
         return getMultiAdapter(
@@ -70,7 +70,39 @@ class TestDossierDetailsDossierMetadata(FunctionalTestCase):
         dossier = create(Builder('dossier')
                  .having(responsible=TEST_USER_ID))
 
-        dossierdetails = self.dossierdetails_view(dossier)
+        dossierdetails = self.get_dossierdetails_view(dossier)
         self.assertEquals(
             'Client1 / User t\xc3\xa4st (test_user_1_)'.decode('utf-8'),
             dossierdetails.get_responsible())
+
+    def test_repository_path_is_a_reverted_path_seperated_with_slahes(self):
+        repositoryroot = create(Builder('repository_root')
+                                .titled(u'Repository'))
+        repository_1 = create(Builder('repository')
+                              .titled(u'Repository Folder')
+                              .within(repositoryroot))
+        repository_1_1 = create(Builder('repository')
+                                .titled(u'Sub Repository Folder')
+                                .within(repository_1))
+        dossier = create(Builder('dossier').within(repository_1_1))
+
+
+        dossierdetails = self.get_dossierdetails_view(dossier)
+
+        self.assertEquals(
+            u'1.1. Sub Repository Folder / 1. Repository Folder',
+            dossierdetails.get_repository_path())
+
+    def test_repository_path_do_not_escape_special_latex_characters(self):
+        """The escaping is done by the `get_dossier_metadata` method
+        and shouldn't be done twice."""
+
+        repofolder = create(Builder('repository')
+                              .titled(u'Foo & Bar'))
+
+        dossier = create(Builder('dossier').within(repofolder))
+        dossierdetails = self.get_dossierdetails_view(dossier)
+
+        self.assertEquals(
+            '1. Foo & Bar',
+            dossierdetails.get_repository_path())
