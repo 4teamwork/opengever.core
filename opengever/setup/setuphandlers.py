@@ -154,6 +154,25 @@ def assign_portlets(context):
         (inbox, manager), ILocalPortletAssignmentManager)
     assignable.setBlacklistStatus(CONTEXT_CATEGORY, True)
 
+    # Add a new navigation portlet at template dossier /vorlagen
+    templatedossier = context.restrictedTraverse('vorlagen')
+    manager = getUtility(
+        IPortletManager, name=u'plone.leftcolumn', context=templatedossier)
+    mapping = getMultiAdapter((templatedossier, manager),
+                              IPortletAssignmentMapping)
+    if 'navigation' not in mapping.keys():
+        mapping['navigation'] = navigation.Assignment(
+            root=None,
+            currentFolderOnly=False,
+            includeTop=False,
+            topLevel=0,
+            bottomLevel=0)
+
+    # Block inherited context portlets on /vorlagen
+    assignable = getMultiAdapter(
+        (templatedossier, manager), ILocalPortletAssignmentManager)
+    assignable.setBlacklistStatus(CONTEXT_CATEGORY, True)
+
 
 def import_various(setup):
     if setup.readDataFile('opengever.setup.txt') is None:

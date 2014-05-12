@@ -5,7 +5,7 @@ from ftw.table import helper
 from ftw.table.interfaces import ITableGenerator
 from opengever.base.interfaces import IRedirector
 from opengever.dossier import _
-from opengever.tabbedview.browser.tabs import Documents, Trash
+from opengever.dossier.templatedossier.interfaces import ITemplateUtility
 from opengever.tabbedview.helper import linked
 from plone.dexterity.utils import createContentInContainer
 from plone.dexterity.utils import iterSchemata
@@ -19,16 +19,7 @@ from zope.lifecycleevent import ObjectModifiedEvent
 from zope.schema import getFieldsInOrder
 
 
-REMOVED_COLUMNS = ['receipt_date', 'delivery_date', 'containing_subdossier']
 NO_DEFAULT_VALUE_FIELDS = ['title', 'file']
-
-
-class ITemplateDossier(Interface):
-    pass
-
-
-class ITemplateUtility(Interface):
-    pass
 
 
 class TemplateDocumentFormView(grok.View):
@@ -40,18 +31,18 @@ class TemplateDocumentFormView(grok.View):
     grok.require('zope2.View')
     grok.name('document_with_template')
     grok.template('template_form')
+
     label = _('create_document_with_template',
-        default="create document with template")
+              default="create document with template")
 
     def __call__(self):
-
         self.errors = {}
         self.title = ''
         self.edit = False
 
         if self.request.get('form.buttons.save'):
 
-            #inialize attributes with the values from the request.
+            # inialize attributes with the values from the request.
             path = None
             if self.request.get('paths'):
                 path = self.request.get('paths')[0]
@@ -59,7 +50,7 @@ class TemplateDocumentFormView(grok.View):
             self.edit = self.request.get('form.widgets.edit_form') == ['on']
 
             if path and self.title:
-                #create document
+                # create document
                 newdoc = self.create_document(path)
 
                 # check if the direct-edit-mode is selected
@@ -70,7 +61,7 @@ class TemplateDocumentFormView(grok.View):
                         newdoc.absolute_url())
 
                 return self.request.RESPONSE.redirect(
-                        self.context.absolute_url() + '#documents')
+                    self.context.absolute_url() + '#documents')
 
             else:
                 if path is None:
@@ -126,18 +117,15 @@ class TemplateDocumentFormView(grok.View):
                     return field._type
 
     def _set_defaults(self, obj):
-        # set default values for all fields
+        """Set default values for all fields including behavior fields"""
 
         for schemata in iterSchemata(obj):
             for name, field in getFieldsInOrder(schemata):
                 if name not in NO_DEFAULT_VALUE_FIELDS:
-                    default = queryMultiAdapter((
-                            obj,
-                            obj.REQUEST,
-                            None,
-                            field,
-                            None,
-                            ), IValue, name='default')
+                    default = queryMultiAdapter(
+                        (obj, obj.REQUEST, None, field, None),
+                        IValue, name='default')
+
                     if default is not None:
                         default = default.get()
                     if default is None:
@@ -151,7 +139,8 @@ class TemplateDocumentFormView(grok.View):
                     field.set(field.interface(obj), value)
 
     def render_form(self):
-        # get the templatedocuments and show the form template
+        """Get the templatedocuments and show the template form"""
+
         templateUtil = getUtility(
             ITemplateUtility, 'opengever.templatedossier')
         self.templatedossier = templateUtil.templateFolder(self.context)
@@ -169,7 +158,7 @@ class TemplateDocumentFormView(grok.View):
         catalog = getToolByName(self.context, 'portal_catalog')
         templates = catalog(
             path=dict(
-                depth=1, query=self.templatedossier),
+                depth=-1, query=self.templatedossier),
             portal_type="opengever.document.document")
         generator = getUtility(ITableGenerator, 'ftw.tablegenerator')
 
@@ -188,60 +177,3 @@ class TemplateDocumentFormView(grok.View):
              'transform': helper.readable_date}
             )
         return generator.generate(templates, columns)
-
-
-class TemplateFolder(grok.GlobalUtility):
-    grok.provides(ITemplateUtility)
-    grok.name('opengever.templatedossier')
-
-    def templateFolder(self, context):
-        catalog = getToolByName(context, 'portal_catalog')
-        result = catalog(portal_type="opengever.dossier.templatedossier")
-        if result:
-            return result[0].getPath()
-        return None
-
-
-def drop_columns(columns):
-
-    cleaned_columns = []
-
-    for col in columns:
-        if isinstance(col, dict):
-            if col.get('column') in REMOVED_COLUMNS:
-                continue
-        cleaned_columns.append(col)
-    return cleaned_columns
-
-
-class TemplateDossierDocuments(Documents):
-    grok.context(ITemplateDossier)
-
-    @property
-    def columns(self):
-        return drop_columns(
-            super(TemplateDossierDocuments, self).columns)
-
-    @property
-    def enabled_actions(self):
-        return filter(
-            lambda x: x not in self.disabled_actions,
-            super(TemplateDossierDocuments, self).enabled_actions)
-
-    disabled_actions = [
-        'send_as_email',
-        'checkout',
-        'checkin',
-        'cancel',
-        'move_items',
-        'create_task',
-    ]
-
-
-class TemplateDossierTrash(Trash):
-    grok.context(ITemplateDossier)
-
-    @property
-    def columns(self):
-        return drop_columns(
-            super(TemplateDossierTrash, self).columns)

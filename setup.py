@@ -9,6 +9,7 @@ tests_require = [
     'ftw.journal',
     'ftw.tabbedview',
     'ftw.table',
+    'ftw.testbrowser',
     'ftw.testing',
     'lxml',
     'plone.app.dexterity',

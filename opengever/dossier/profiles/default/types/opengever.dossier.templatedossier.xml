@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<object name="opengever.dossier.projectdossier" meta_type="Dexterity FTI"
+<object name="opengever.dossier.templatedossier" meta_type="Dexterity FTI"
         i18n:domain="opengever.dossier" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
 
     <!-- Basic metadata -->
@@ -12,6 +12,7 @@
     <property name="allowed_content_types">
         <element value="opengever.document.document" />
         <element value="opengever.tasktemplates.tasktemplatefolder" />
+        <element value="opengever.dossier.templatedossier" />
     </property>
 
     <!-- schema interface -->
@@ -31,7 +32,6 @@
         <element value="opengever.dossier.behaviors.dossier.IDossier" />
         <element value="plone.app.content.interfaces.INameFromTitle" />
         <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
-        <element value="opengever.mail.behaviors.IMailInAddress" />
         <element value="plone.app.lockingbehavior.behaviors.ILocking" />
         <element value="opengever.trash.trash.ITrashable" />
     </property>
