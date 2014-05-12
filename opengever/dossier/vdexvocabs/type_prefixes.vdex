@@ -9,7 +9,7 @@
             <langstring language="en">Department</langstring>
             <langstring language="de-ch">Amt</langstring>
             <langstring language="de">Amt</langstring>
-
+            <langstring language="fr">Service</langstring>
         </caption>
     </term>
     <term>
@@ -18,7 +18,7 @@
             <langstring language="en">Directorate</langstring>
             <langstring language="de-ch">Direktion</langstring>
             <langstring language="de">Direktion</langstring>
-
+            <langstring language="fr">Direction</langstring>
         </caption>
     </term>
     <term>
@@ -27,7 +27,7 @@
             <langstring language="en">Personal</langstring>
             <langstring language="de-ch">Personal</langstring>
             <langstring language="de">Personal</langstring>
-
+            <langstring language="fr">Personnel</langstring>
         </caption>
     </term>
     <term>
@@ -36,7 +36,7 @@
             <langstring language="en">Administration</langstring>
             <langstring language="de-ch">Leitung</langstring>
             <langstring language="de">Leitung</langstring>
-
+            <langstring language="fr">Administration</langstring>
         </caption>
     </term>
     <term>
@@ -45,7 +45,7 @@
             <langstring language="en">Government</langstring>
             <langstring language="de-ch">Regierungsrat</langstring>
             <langstring language="de">Regierungsrat</langstring>
-
+            <langstring language="fr">Gouvernement</langstring>
         </caption>
     </term>
 </vdex>

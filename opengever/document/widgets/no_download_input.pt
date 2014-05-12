@@ -1,5 +1,5 @@
 <span
-    i18n:domain="plone.formwidget.namedfile"
+    i18n:domain="opengever.document"
     tal:attributes="id view/id;
                     class view/klass;
                     style view/style;
