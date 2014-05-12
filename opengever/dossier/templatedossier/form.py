@@ -46,7 +46,7 @@ class TemplateDocumentFormView(grok.View):
             path = None
             if self.request.get('paths'):
                 path = self.request.get('paths')[0]
-            self.title = self.request.get('title', '').decode('utf8')
+            self.title = self.request.get('form.title', '').decode('utf8')
             self.edit = self.request.get('form.widgets.edit_form') == ['on']
 
             if path and self.title:

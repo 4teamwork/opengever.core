@@ -16,7 +16,7 @@
 
   <form i18n:domain="opengever.dossier" action="./document_with_template" method="POST" tal:attributes="is_first python: request.get('form.buttons.save')">
      <div class="row horizontal">
-      <div class="" tal:attributes="class python: view.errors.get('paths', None) and 'error' or ''">
+      <div class="" tal:attributes="class python: view.errors.get('paths', None) and 'error field' or 'field'">
         <label for="form-widgets-template" class="horizontal">
           <span i18n:translate="label_template">Template</span>
         </label>
@@ -25,17 +25,17 @@
       </div>
     </div>
       <div class="row">
-        <div class="" tal:attributes="class python: view.errors.get('title', None) and 'error' or ''">
+        <div tal:attributes="class python: view.errors.get('title', None) and 'error field' or 'field'">
             <label for="form-widgets-title" class="">
                 <span i18n:translate="label_title">title</span>
             </label>
             <span title="Erforderlich" class="fieldRequired" i18n:translate="required">required</span>
             <div>
-                <input type="text" name="title" id="form-widgets-title" tal:attributes="value   view/title" />
+                <input type="text" name="form.title" id="form-widgets-title" tal:attributes="value   view/title" />
             </div>
         </div>
     </div>
-    <div id="formfield-form-widgets-edit_form" class="">
+    <div id="formfield-form-widgets-edit_form" class="field">
         <div class="">
         <span class="">
         <tal:cond tal:condition="view/edit">
