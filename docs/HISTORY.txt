@@ -4,6 +4,10 @@ Changelog
 3.2.4 (unreleased)
 ------------------
 
+- Added handling for missing document_type in document view.
+  This field is hidden on a customer installation.
+  [lknoepfel]
+
 - Dossierdetails PDF: Fixed doubled encoded repository_path.
   [phgross]
 

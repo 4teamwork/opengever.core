@@ -14,7 +14,7 @@
 			<th i18n:translate="label_document_date">Document Date</th>
 			<td tal:content="structure view/w/document_date/render"/>
 		</tr>
-		<tr tal:condition="python: view.w['document_type'].value">
+		<tr tal:condition="python: 'document_type' in view.w and view.w['document_type'].value">
 			<th i18n:translate="label_document_type">Document Type</th>
 			<td tal:content="structure view/w/document_type/render"/>
 		</tr>
