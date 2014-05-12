@@ -325,7 +325,9 @@ class AdvancedSearchForm(directives_form.Form):
             self.fields.get(
                 field).widgetFactory[INPUT_MODE] = DatePickerFieldWidget
 
-        super(AdvancedSearchForm, self).updateWidgets()
+        searchableText = self.widgets["searchableText"]
+        searchableText.value = self.request.get('SearchableText')
+
         for k, v in self.field_mapping().items():
             for name in v:
                 if self.widgets.get(name, None):
