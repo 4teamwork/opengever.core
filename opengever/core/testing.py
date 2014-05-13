@@ -1,3 +1,4 @@
+from Testing.ZopeTestCase.utils import setupCoreSessions
 from collective.transmogrifier import transmogrifier
 from ftw.builder.testing import BUILDER_LAYER
 from ftw.builder.testing import functional_session_factory
@@ -94,6 +95,8 @@ class OpengeverFixture(PloneSandboxLayer):
             context=configurationContext)
 
         z2.installProduct(app, 'plone.app.versioningbehavior')
+
+        setupCoreSessions(app)
 
     def setUpPloneSite(self, portal):
         self.installOpengeverProfiles(portal)
