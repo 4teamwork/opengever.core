@@ -8,6 +8,7 @@
            package="opengever.ogds.base">
 
     <include package=".sections" />
+    <include package=".viewlets" />
     <include package=".upgrades" />
 
     <grok:grok package="." />
