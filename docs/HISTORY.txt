@@ -4,6 +4,9 @@ Changelog
 3.2.4 (unreleased)
 ------------------
 
+- Changed source for repository import: from csv to xls.
+  [lknoepfel]
+
 - Byline: Removed icon from byline.
   [Julian Infanger]
 

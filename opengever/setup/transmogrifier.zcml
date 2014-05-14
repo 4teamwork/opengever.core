@@ -45,6 +45,11 @@
       />
 
   <utility
+      component=".sections.xlssource.XlsSource"
+      name="opengever.setup.xlssource"
+      />
+
+  <utility
       component=".sections.rolessource.JSONRolesSourceSection"
       name="opengever.setup.rolessource.jsonrolessourcesection"
       />
