@@ -170,14 +170,14 @@ class TemplateDocumentFormView(grok.View):
     def templates(self):
         """List the available template documents the user can choose from.
         """
-        generator = getUtility(ITableGenerator, 'ftw.tablegenerator')
+
         catalog = getToolByName(self.context, 'portal_catalog')
         templates = catalog(
             path=dict(
                 depth=-1, query=self.templatedossier),
             portal_type="opengever.document.document")
-        generator = getUtility(ITableGenerator, 'ftw.tablegenerator')
 
+        generator = getUtility(ITableGenerator, 'ftw.tablegenerator')
         columns = (
             (''),
             ('', helper.path_radiobutton),
