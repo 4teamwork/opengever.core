@@ -1,5 +1,3 @@
-from Products.CMFCore.utils import getToolByName
-from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from ftw.table import helper
 from ftw.table.interfaces import ITableGenerator
@@ -10,6 +8,8 @@ from opengever.tabbedview.helper import linked
 from plone.dexterity.utils import createContentInContainer
 from plone.dexterity.utils import iterSchemata
 from plone.rfc822.interfaces import IPrimaryField
+from Products.CMFCore.utils import getToolByName
+from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.interfaces import IValue
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
