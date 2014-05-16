@@ -74,12 +74,3 @@ class PrimaryRepositoryRoot(grok.View):
         brains.sort(sorter)
 
         return brains[-1]
-
-
-class Byline(grok.Viewlet):
-    grok.viewletmanager(IBelowContentTitle)
-    grok.context(IRepositoryRoot)
-    grok.name("plone.belowcontenttitle.documentbyline")
-
-    def get_css_class(self):
-        return get_css_class(self.context)

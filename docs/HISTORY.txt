@@ -4,6 +4,9 @@ Changelog
 3.2.4 (unreleased)
 ------------------
 
+- Byline: Removed icon from byline.
+  [Julian Infanger]
+
 - Fixed interface in dossiers ConstrainTypeDecider.
   [phgross]
 

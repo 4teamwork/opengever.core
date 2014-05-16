@@ -22,11 +22,6 @@ class TestRepositoryfolderByline(TestBylineBase):
 
         self.browser.open(self.repo.absolute_url())
 
-    def test_dossier_byline_icon_display(self):
-        icon = self.get_byline_element_by_class('byline-icon')
-        self.assertEquals('byline-icon contenttype-opengever-repository-repositoryfolder',
-                          icon.target.get('class'))
-
     def test_repository_byline_privacy_layer_display(self):
         privacy_layer = self.get_byline_value_by_label('Privacy layer:')
 
