@@ -87,7 +87,6 @@ class TemplateDocumentFormView(grok.View):
 
         # Add redirect to the zem-file download,
         # in order to start editing with external editor.
-
         redirector = IRedirector(self.request)
         redirector.redirect(
             '%s/external_edit' % new_doc.absolute_url(),
@@ -157,17 +156,16 @@ class TemplateDocumentFormView(grok.View):
         template" form
         """
 
-        templateUtil = getUtility(
+        template_util = getUtility(
             ITemplateUtility, 'opengever.templatedossier')
-        self.templatedossier = templateUtil.templateFolder(self.context)
+        self.templatedossier = template_util.templateFolder(self.context)
         if self.templatedossier is None:
             status = IStatusMessage(self.request)
             status.addStatusMessage(
                 _("Not found the templatedossier"), type="error")
             return self.context.request.RESPONSE.redirect(
                 self.context.absolute_url())
-        return super(
-            TemplateDocumentFormView, self).__call__()
+        return super(TemplateDocumentFormView, self).__call__()
 
     def templates(self):
         """List the available template documents the user can choose from.
