@@ -41,31 +41,32 @@ class TemplateDocumentFormView(grok.View):
     def __call__(self):
         self.errors = {}
         self.title = ''
-        self.edit = False
+        self.edit_after_creation = False
 
         if self.request.get('form.buttons.save'):
 
             # Extract required parameters from the request
-            path = None
+            template_path = None
             if self.request.get('paths'):
-                path = self.request.get('paths')[0]
+                template_path = self.request.get('paths')[0]
             self.title = self.request.get('form.title', '').decode('utf8')
-            self.edit = self.request.get('form.widgets.edit_form') == ['on']
+            self.edit_after_creation = self.request.get(
+                'form.widgets.edit_form') == ['on']
 
-            if path and self.title:
-                newdoc = self.create_document(path)
+            if template_path and self.title:
+                new_doc = self.create_document(template_path)
 
-                if self.edit:
-                    self.activate_external_editing(newdoc)
+                if self.edit_after_creation:
+                    self.activate_external_editing(new_doc)
 
                     return self.request.RESPONSE.redirect(
-                        newdoc.absolute_url())
+                        new_doc.absolute_url())
 
                 return self.request.RESPONSE.redirect(
                     self.context.absolute_url() + '#documents')
 
             else:
-                if path is None:
+                if template_path is None:
                     self.errors['paths'] = True
                 if not self.title:
                     self.errors['title'] = True
@@ -75,26 +76,25 @@ class TemplateDocumentFormView(grok.View):
 
         return self.render_form()
 
-    def activate_external_editing(self, newdoc):
+    def activate_external_editing(self, new_doc):
         """Check out the given document, and add the external_editor URL
         to redirector queue.
         """
 
         # Check out the new document
-        manager = self.context.restrictedTraverse(
-            'checkout_documents')
-        manager.checkout(newdoc)
+        manager = self.context.restrictedTraverse('checkout_documents')
+        manager.checkout(new_doc)
 
         # Add redirect to the zem-file download,
         # in order to start editing with external editor.
 
         redirector = IRedirector(self.request)
         redirector.redirect(
-            '%s/external_edit' % newdoc.absolute_url(),
+            '%s/external_edit' % new_doc.absolute_url(),
             target='_self',
             timeout=1000)
 
-    def create_document(self, path):
+    def create_document(self, template_path):
         """Create a new document based on a template:
 
         - Create a new opengever.document.document object
@@ -102,11 +102,11 @@ class TemplateDocumentFormView(grok.View):
         - Update its fields with default values
         """
 
-        doc = self.context.restrictedTraverse(path)
-        _type = self._get_primary_field_type(doc)
+        template_doc = self.context.restrictedTraverse(template_path)
+        _type = self._get_primary_field_type(template_doc)
 
-        new_file = _type(data=doc.file.data,
-                         filename=doc.file.filename)
+        new_file = _type(data=template_doc.file.data,
+                         filename=template_doc.file.filename)
 
         new_doc = createContentInContainer(
             self.context, 'opengever.document.document',

@@ -38,17 +38,17 @@
     <div id="formfield-form-widgets-edit_form" class="field">
         <div class="">
         <span class="">
-        <tal:cond tal:condition="view/edit">
+        <tal:cond tal:condition="view/edit_after_creation">
           <input type="checkbox" class="" name="form.widgets.edit_form:list" id="form-widgets-edit_form-0" originalvalue="selected" />
         </tal:cond>
-        <tal:cond tal:condition="not: view/edit">
+        <tal:cond tal:condition="not: view/edit_after_creation">
           <input type="checkbox" class="" name="form.widgets.edit_form:list" id="form-widgets-edit_form-0" originalvalue="selected" checked="checked" />
         </tal:cond>
         <label for="form-widgets-edit_form-0">
         <span class="" i18n:translate="label_edit_after_creation">Edit after creation</span>
         </label>
         </span>
-        <input type="hidden" value="1" name="form.widgets.edit_form-empty-marker" originalvalue="1" tal:attributes="value view/edit"/>
+        <input type="hidden" value="1" name="form.widgets.edit_form-empty-marker" originalvalue="1" tal:attributes="value view/edit_after_creation"/>
         </div>
     </div>
 
