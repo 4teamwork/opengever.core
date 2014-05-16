@@ -23,8 +23,11 @@ NO_DEFAULT_VALUE_FIELDS = ['title', 'file']
 
 
 class TemplateDocumentFormView(grok.View):
-    """ Show the "Document with Tempalte"-Form
-        A Form wich show all static templates.
+    """Show the "Document from template" form.
+
+    This form lists available document templates from template dossiers,
+    allows the user to select one and creates a new document by copying the
+    template.
     """
 
     grok.context(Interface)
@@ -42,7 +45,7 @@ class TemplateDocumentFormView(grok.View):
 
         if self.request.get('form.buttons.save'):
 
-            # inialize attributes with the values from the request.
+            # Extract required parameters from the request
             path = None
             if self.request.get('paths'):
                 path = self.request.get('paths')[0]
@@ -50,10 +53,8 @@ class TemplateDocumentFormView(grok.View):
             self.edit = self.request.get('form.widgets.edit_form') == ['on']
 
             if path and self.title:
-                # create document
                 newdoc = self.create_document(path)
 
-                # check if the direct-edit-mode is selected
                 if self.edit:
                     self.activate_external_editing(newdoc)
 
@@ -75,16 +76,17 @@ class TemplateDocumentFormView(grok.View):
         return self.render_form()
 
     def activate_external_editing(self, newdoc):
-        """Checkout the given document, and add the external_editor url
-        to redirector cue"""
+        """Check out the given document, and add the external_editor URL
+        to redirector queue.
+        """
 
-        # checkout the document
+        # Check out the new document
         manager = self.context.restrictedTraverse(
             'checkout_documents')
         manager.checkout(newdoc)
 
         # Add redirect to the zem-file download,
-        # for starting external editing with external editor.
+        # in order to start editing with external editor.
 
         redirector = IRedirector(self.request)
         redirector.redirect(
@@ -93,6 +95,13 @@ class TemplateDocumentFormView(grok.View):
             timeout=1000)
 
     def create_document(self, path):
+        """Create a new document based on a template:
+
+        - Create a new opengever.document.document object
+        - Store a copy of the template in its primary file field
+        - Update its fields with default values
+        """
+
         doc = self.context.restrictedTraverse(path)
         _type = self._get_primary_field_type(doc)
 
@@ -104,12 +113,17 @@ class TemplateDocumentFormView(grok.View):
             title=self.title, file=new_file)
 
         self._set_defaults(new_doc)
-        # notify necassary standard events
+
+        # Notify necessary standard event handlers
         notify(ObjectModifiedEvent(new_doc))
 
         return new_doc
 
     def _get_primary_field_type(self, obj):
+        """Determine the type of an objects primary field (e.g. NamedBlobFile)
+        so we can use it as a factory when setting the new document's primary
+        field.
+        """
 
         for schemata in iterSchemata(obj):
             for name, field in getFieldsInOrder(schemata):
@@ -117,7 +131,7 @@ class TemplateDocumentFormView(grok.View):
                     return field._type
 
     def _set_defaults(self, obj):
-        """Set default values for all fields including behavior fields"""
+        """Set default values for all fields including behavior fields."""
 
         for schemata in iterSchemata(obj):
             for name, field in getFieldsInOrder(schemata):
@@ -139,7 +153,9 @@ class TemplateDocumentFormView(grok.View):
                     field.set(field.interface(obj), value)
 
     def render_form(self):
-        """Get the templatedocuments and show the template form"""
+        """Get the list of template documents and render the "document from
+        template" form
+        """
 
         templateUtil = getUtility(
             ITemplateUtility, 'opengever.templatedossier')
@@ -154,6 +170,8 @@ class TemplateDocumentFormView(grok.View):
             TemplateDocumentFormView, self).__call__()
 
     def templates(self):
+        """List the available template documents the user can choose from.
+        """
         generator = getUtility(ITableGenerator, 'ftw.tablegenerator')
         catalog = getToolByName(self.context, 'portal_catalog')
         templates = catalog(
