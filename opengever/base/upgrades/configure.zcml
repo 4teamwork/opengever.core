@@ -1,7 +1,10 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:upgrade-step="http://namespaces.zope.org/ftw.upgrade"
     i18n_domain="ftw.tabbedview">
+
+  <include package="ftw.upgrade" file="meta.zcml" />
 
     <!-- 2 -> 2500 -->
     <genericsetup:upgradeStep
@@ -117,5 +120,15 @@
         for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
+
+    <!-- 2605 -> 2606 -->
+    <upgrade-step:importProfile
+        title="Add opengever base css file"
+        profile="opengever.base:default"
+        source="2605"
+        destination="2606"
+        directory="profiles/2606"
+        />
+
 
 </configure>

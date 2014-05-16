@@ -1,0 +1,16 @@
+/* @group tree portlet */
+
+dl.portlet.portletTreePortlet {
+  overflow: hidden;
+  height: 300px;
+}
+dl.portlet.portletTreePortlet dd.portletFooter {
+  display: none;
+}
+dl.portlet.portletTreePortlet dd.portletItem {
+  width:100%;
+  height:100%;
+  overflow-y:scroll;
+}
+
+/* @end */
