@@ -4,6 +4,9 @@ Changelog
 3.2.4 (unreleased)
 ------------------
 
+- Updated ftw.zipexport registry entry to multi-value field.
+  [lknoepfel]
+
 - Added handling for missing document_type in document view.
   This field is hidden on a customer installation.
   [lknoepfel]
