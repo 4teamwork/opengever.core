@@ -56,6 +56,7 @@ with these contents:
       "ldap":{
         "user":"<bind_dn>",
         "password":"<bind_pw>"
+      }    
     }
 
 
