@@ -1,29 +1,15 @@
 from five import grok
 from ftw.table import helper
 from ftw.table.interfaces import ITableGenerator
-from ooxml_docprops.properties import update_properties
 from opengever.base.interfaces import IRedirector
 from opengever.dossier import _
-from opengever.dossier.interfaces import IDocProperties
 from opengever.dossier.templatedossier.interfaces import ITemplateUtility
+from opengever.dossier.templatedossier.create import DocumentFromTemplate
 from opengever.tabbedview.helper import linked
-from plone.dexterity.utils import createContentInContainer
-from plone.dexterity.utils import iterSchemata
-from plone.rfc822.interfaces import IPrimaryField
 from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
-from tempfile import NamedTemporaryFile
-from z3c.form.interfaces import IValue
-from zope.component import getMultiAdapter
 from zope.component import getUtility
-from zope.component import queryMultiAdapter
-from zope.event import notify
 from zope.interface import Interface
-from zope.lifecycleevent import ObjectModifiedEvent
-from zope.schema import getFieldsInOrder
-
-
-NO_DEFAULT_VALUE_FIELDS = ['title', 'file']
 
 
 class TemplateDocumentFormView(grok.View):
@@ -106,78 +92,10 @@ class TemplateDocumentFormView(grok.View):
         """
 
         template_doc = self.context.restrictedTraverse(template_path)
-
-        # TODO: Factor out docproperty-setting code into it's own method
         # TODO: Add registry option to globally disable docproperty code
-        # TODO: Check if the template's filetype is supported. Currently,
-        #       ooxml_docprops only supports *.docx
 
-        # Copy the file data of the template to a temporary file
-        template_data = template_doc.file.data
-        with NamedTemporaryFile(delete=False) as tmpfile:
-            tmpfile_path = tmpfile.name
-            tmpfile.write(template_data)
-
-        # Get properties for the new document based on the dossier
-        dossier = self.context
-        properties_adapter = getMultiAdapter(
-            (dossier, self.request), IDocProperties)
-        properties = properties_adapter.get_properties()
-
-        # Set the DocProperties by modifying the temporary file
-        update_properties(tmpfile_path, properties)
-
-        # Create a new NamedBlobFile from the updated temporary file's data
-        populated_template_data = open(tmpfile_path).read()
-        _type = self._get_primary_field_type(template_doc)
-        new_file = _type(data=populated_template_data,
-                         filename=template_doc.file.filename)
-
-        # TODO: Remove temporary file
-
-        new_doc = createContentInContainer(
-            self.context, 'opengever.document.document',
-            title=self.title, file=new_file)
-
-        self._set_defaults(new_doc)
-
-        # Notify necessary standard event handlers
-        notify(ObjectModifiedEvent(new_doc))
-
-        return new_doc
-
-    def _get_primary_field_type(self, obj):
-        """Determine the type of an objects primary field (e.g. NamedBlobFile)
-        so we can use it as a factory when setting the new document's primary
-        field.
-        """
-
-        for schemata in iterSchemata(obj):
-            for name, field in getFieldsInOrder(schemata):
-                if IPrimaryField.providedBy(field):
-                    return field._type
-
-    def _set_defaults(self, obj):
-        """Set default values for all fields including behavior fields."""
-
-        for schemata in iterSchemata(obj):
-            for name, field in getFieldsInOrder(schemata):
-                if name not in NO_DEFAULT_VALUE_FIELDS:
-                    default = queryMultiAdapter(
-                        (obj, obj.REQUEST, None, field, None),
-                        IValue, name='default')
-
-                    if default is not None:
-                        default = default.get()
-                    if default is None:
-                        default = getattr(field, 'default', None)
-                    if default is None:
-                        try:
-                            default = field.missing_value
-                        except AttributeError:
-                            pass
-                    value = default
-                    field.set(field.interface(obj), value)
+        return DocumentFromTemplate(template_doc).create_in(self.context,
+                                                            self.title)
 
     def render_form(self):
         """Get the list of template documents and render the "document from
