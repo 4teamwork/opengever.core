@@ -1,6 +1,5 @@
 from Acquisition import aq_inner, aq_parent
 from Products.CMFCore.utils import getToolByName
-from Products.CMFDefault.interfaces import ICMFDefaultSkin
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from datetime import datetime
 from five import grok
@@ -13,6 +12,7 @@ from plone.dexterity.content import Container
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.registry.interfaces import IRegistry
 from zope.component import queryMultiAdapter, queryUtility
+from zope.interface import Interface
 
 
 DOSSIER_STATES_OPEN = [
@@ -219,7 +219,7 @@ class DossierContainer(Container):
 
 class DefaultConstrainTypeDecider(grok.MultiAdapter):
     grok.provides(IConstrainTypeDecider)
-    grok.adapts(ICMFDefaultSkin, IDossierMarker, IDexterityFTI)
+    grok.adapts(Interface, IDossierMarker, IDexterityFTI)
     grok.name('')
 
     CONSTRAIN_CONFIGURATION = {
