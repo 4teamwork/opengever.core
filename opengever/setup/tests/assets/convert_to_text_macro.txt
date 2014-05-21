@@ -1,0 +1,10 @@
+This forces data type string on fields A7:AX.
+Pasted here because i don't trust excel to correctly store the macro.
+
+Dim i As Integer
+
+For i = 7 To 10000
+    If Cells(i,1).Value <> "" Then
+        Cells(i,1).Value = "'" & Cells(i,1).Value
+    End If
+Next i
