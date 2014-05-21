@@ -1,10 +1,12 @@
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.testing import builders
 from opengever.testing.browser import OGBrowser
+from plone.app.testing import login
+from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
 from plone.app.testing import TEST_USER_PASSWORD
-from plone.app.testing import setRoles
+from Products.CMFCore.utils import getToolByName
 import transaction
 import unittest2
 
@@ -21,13 +23,22 @@ class FunctionalTestCase(TestCase):
         super(FunctionalTestCase, self).setUp()
         self.portal = self.layer['portal']
         self.app = self.layer['app']
-
+        self.membership_tool = getToolByName(self.portal, 'portal_membership')
         if self.use_browser:
             self.browser = self._setup_browser()
+
+    def setup_fullname(self, user_id=TEST_USER_ID, fullname=None):
+        member = self.membership_tool.getMemberById(user_id)
+        member.setProperties(fullname=fullname)
+        transaction.commit()
 
     def grant(self, *roles):
         setRoles(self.portal, TEST_USER_ID, list(roles))
         transaction.commit()
+
+    def login(self, user_id=TEST_USER_NAME):
+        login(self.portal, user_id)
+        return self.membership_tool.getAuthenticatedMember()
 
     def prepareSession(self):
         self.request = self.app.REQUEST
