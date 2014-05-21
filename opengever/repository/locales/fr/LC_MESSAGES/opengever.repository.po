@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-10-07 12:09+0000\n"
+"POT-Creation-Date: 2014-05-21 13:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -9,9 +9,12 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
 
-#: ./opengever/repository/browser/referenceprefix_manager_templates/referenceprefixmanager.pt:43
+#: ./opengever/repository/browser/referenceprefix_manager_templates/referenceprefixmanager.pt:40
 msgid "In use"
 msgstr "Est utilisé"
 
@@ -28,7 +31,7 @@ msgstr "Numéro de classement"
 msgid "RepositoryRoot"
 msgstr "Système de classement"
 
-#: ./opengever/repository/repositoryfolder.py:44
+#: ./opengever/repository/repositoryfolder.py:38
 msgid "Title"
 msgstr "Titre"
 
@@ -37,13 +40,8 @@ msgstr "Titre"
 msgid "Unlock unused repository prefixes."
 msgstr "Déblocage de préfixes de référence inutilisés"
 
-#. Default: "Active"
-#: ./opengever/repository/browser/referenceprefix_manager_templates/referenceprefixmanager.pt:25
-msgid "active"
-msgstr "Actif"
-
 #. Default: "No nested repositorys available."
-#: ./opengever/repository/browser/referenceprefix_manager_templates/referenceprefixmanager.pt:31
+#: ./opengever/repository/browser/referenceprefix_manager_templates/referenceprefixmanager.pt:29
 msgid "empty_repository"
 msgstr "Pas de numéros de classement disponible dans cette subdivison."
 
@@ -54,25 +52,26 @@ msgstr "A ce niveau du classement ce numéro de référence existe déjà."
 
 #. Default: "Common"
 #: ./opengever/repository/behaviors/referenceprefix.py:21
-#: ./opengever/repository/repositoryfolder.py:29
+#: ./opengever/repository/behaviors/responsibleorg.py:11
+#: ./opengever/repository/repositoryfolder.py:23
 msgid "fieldset_common"
 msgstr "En général"
 
 #. Default: "Select all additional dossier types which should be addable in this repository folder."
-#: ./opengever/repository/repositoryfolder.py:91
+#: ./opengever/repository/repositoryfolder.py:85
 msgid "help_addable_dossier_types"
 msgstr "Sélectionnez les types de dossiers à ajouter pour cette position du classeur"
 
 #. Default: "A short summary of the content."
-#: ./opengever/repository/repositoryfolder.py:50
+#: ./opengever/repository/repositoryfolder.py:44
 msgid "help_description"
 msgstr "Brève description du contenu."
 
-#: ./opengever/repository/repositoryfolder.py:84
+#: ./opengever/repository/repositoryfolder.py:78
 msgid "help_former_reference"
 msgstr ""
 
-#: ./opengever/repository/repositoryfolder.py:70
+#: ./opengever/repository/repositoryfolder.py:64
 msgid "help_location"
 msgstr ""
 
@@ -80,16 +79,16 @@ msgstr ""
 msgid "help_reference_number_prefix"
 msgstr ""
 
-#: ./opengever/repository/repositoryfolder.py:78
+#: ./opengever/repository/repositoryfolder.py:72
 msgid "help_referenced_activity"
 msgstr ""
 
-#: ./opengever/repository/repositoryfolder.py:58
+#: ./opengever/repository/repositoryfolder.py:52
 #: ./opengever/repository/repositoryroot.py:19
 msgid "help_valid_from"
 msgstr ""
 
-#: ./opengever/repository/repositoryfolder.py:64
+#: ./opengever/repository/repositoryfolder.py:58
 #: ./opengever/repository/repositoryroot.py:25
 msgid "help_valid_until"
 msgstr ""
@@ -99,22 +98,22 @@ msgid "help_version"
 msgstr ""
 
 #. Default: "Addable dossier types"
-#: ./opengever/repository/repositoryfolder.py:89
+#: ./opengever/repository/repositoryfolder.py:83
 msgid "label_addable_dossier_types"
 msgstr "Types de dossiers à ajouter"
 
 #. Default: "Description"
-#: ./opengever/repository/repositoryfolder.py:49
+#: ./opengever/repository/repositoryfolder.py:43
 msgid "label_description"
 msgstr "Description"
 
 #. Default: "Former reference"
-#: ./opengever/repository/repositoryfolder.py:83
+#: ./opengever/repository/repositoryfolder.py:77
 msgid "label_former_reference"
 msgstr "Ancien numéro de référence"
 
 #. Default: "Location"
-#: ./opengever/repository/repositoryfolder.py:69
+#: ./opengever/repository/repositoryfolder.py:63
 msgid "label_location"
 msgstr "Site"
 
@@ -124,18 +123,18 @@ msgid "label_reference_number_prefix"
 msgstr "Préfixe référence"
 
 #. Default: "Referenced activity"
-#: ./opengever/repository/repositoryfolder.py:75
+#: ./opengever/repository/repositoryfolder.py:69
 msgid "label_referenced_activity"
 msgstr "Performance"
 
 #. Default: "Valid from"
-#: ./opengever/repository/repositoryfolder.py:57
+#: ./opengever/repository/repositoryfolder.py:51
 #: ./opengever/repository/repositoryroot.py:18
 msgid "label_valid_from"
 msgstr "Valable de :"
 
 #. Default: "Valid until"
-#: ./opengever/repository/repositoryfolder.py:63
+#: ./opengever/repository/repositoryfolder.py:57
 #: ./opengever/repository/repositoryroot.py:24
 msgid "label_valid_until"
 msgstr "Valable jusqu'à :"
@@ -145,8 +144,8 @@ msgstr "Valable jusqu'à :"
 msgid "label_version"
 msgstr "Version"
 
-#. Default: "State:"
-#: ./opengever/repository/repositoryfolder_templates/byline.pt:11
+#. Default: "State"
+#: ./opengever/repository/viewlets/byline.py:22
 msgid "label_workflow_state"
 msgstr "Etat"
 
@@ -165,8 +164,13 @@ msgstr "Position"
 msgid "prefman_title"
 msgstr "Gestionnaire de préfixes de référence"
 
+#. Default: "Responsible organisation unit"
+#: ./opengever/repository/behaviors/responsibleorg.py:16
+msgid "responsible_org_unit"
+msgstr ""
+
 #. Default: "Reference prefix has been unlocked."
-#: ./opengever/repository/browser/referenceprefix_manager.py:19
+#: ./opengever/repository/browser/referenceprefix_manager.py:25
 msgid "statmsg_prefix_unlocked"
 msgstr "Le préfixe de référence à été débloqué"
 
@@ -186,8 +190,6 @@ msgid "th_task"
 msgstr "Tâches"
 
 #. Default: "Unlock"
-#: ./opengever/repository/browser/referenceprefix_manager_templates/referenceprefixmanager.pt:26
+#: ./opengever/repository/browser/referenceprefix_manager_templates/referenceprefixmanager.pt:25
 msgid "unlock"
 msgstr "Libérer"
-
-

@@ -37,4 +37,5 @@
 	    for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
 	    provides="Products.GenericSetup.interfaces.EXTENSION"
 	    />
+
 </configure>

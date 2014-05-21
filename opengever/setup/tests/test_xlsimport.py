@@ -27,11 +27,13 @@ class TextXLSImport(TestCase):
                           self.source[2]['_type'])
 
     def test_empty_key_is_skipped(self):
-        self.assertEquals(
+
+        self.assertEquals(sorted(
             [u'valid_until',
              u'reference_number',
              '_type',
              u'valid_from',
+             u'responsible_org_unit',
              u'description',
              u'classification',
              u'privacy_layer',
@@ -48,8 +50,8 @@ class TextXLSImport(TestCase):
              u'add_dossiers_access',
              u'block_inheritance',
              u'archival_value',
-             u'effective_title'],
-            self.source[1].keys()
+             u'effective_title']),
+            sorted(self.source[1].keys())
         )
 
     def test_empty_values_for_inheriting_fields_are_skipped(self):
@@ -92,3 +94,7 @@ class TextXLSImport(TestCase):
                           'Ordnungssystem')
         self.assertEquals(self.source[1]['effective_title'],
                           u'F\xfchrung')
+
+    def test_responsible_org_unit_is_imported(self):
+        self.assertEquals('EinAmt',
+                          self.source[1]['responsible_org_unit'])
