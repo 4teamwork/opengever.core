@@ -76,7 +76,7 @@ class XlsSource(object):
                     continue
 
                 if key == 'reference_number' and not isinstance(cell, basestring):
-                    raise Exception("Reference number has to be string: %s", cell)
+                    raise Exception("Reference number has to be string: %s" % cell)
 
                 if key in ('valid_from', 'valid_until') and cell in ('', u''):
                     cell = None
@@ -86,13 +86,13 @@ class XlsSource(object):
                     cell = [t for t in cell if not t == '']
 
                 if key == 'archival_value':
-                    cell = ARCHIVAL_VALUE_MAPPING.get(cell, None)
+                    cell = ARCHIVAL_VALUE_MAPPING.get(cell, cell)
                 if key == 'classification':
-                    cell = CLASSIFICATION_MAPPING.get(cell, None)
+                    cell = CLASSIFICATION_MAPPING.get(cell, cell)
                 if key == 'privacy_layer':
-                    cell = PRIVACY_LAYER_MAPPING.get(cell, None)
+                    cell = PRIVACY_LAYER_MAPPING.get(cell, cell)
                 if key == 'public_trial':
-                    cell = PUBLIC_TRIAL_MAPPING.get(cell, None)
+                    cell = PUBLIC_TRIAL_MAPPING.get(cell, cell)
 
                 data[key] = cell
 
