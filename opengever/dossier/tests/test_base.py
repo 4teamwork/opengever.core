@@ -59,6 +59,17 @@ class TestDossierContainerFunctional(FunctionalTestCase):
         self.assertTrue(subdossier.is_subdossier())
 
 
+    def test_maximum_dossier_level_is_2_by_default(self):
+        dossier = create(Builder('dossier'))
+        subdossier = create(Builder('dossier').within(dossier))
+
+        self.assertIn('opengever.dossier.businesscasedossier',
+                      [fti.id for fti in dossier.allowedContentTypes()])
+
+        self.assertNotIn('opengever.dossier.businesscasedossier',
+                      [fti.id for fti in subdossier.allowedContentTypes()])
+
+
 class TestDossierChecks(FunctionalTestCase):
 
     def test_its_all_closed_if_no_task_exists(self):
