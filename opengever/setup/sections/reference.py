@@ -54,6 +54,8 @@ class PathFromReferenceNumberSection(object):
                 continue
 
             refnum = item['reference_number']
+            refnum = self.get_reference_number(refnum)
+
             if len(refnum.split('.')) == 1:
                 # Top level repository folder
                 path = "/%s/%s" % (self.repo_root_id,
@@ -77,9 +79,16 @@ class PathFromReferenceNumberSection(object):
             item['reference_number_prefix'] = refnum_prefix
             yield item
 
+    def get_reference_number(self, refnum):
+        cl_refnum = refnum.replace('.', '')
+        return '.'.join(cl_refnum)
+
     def normalize(self, item, max_length):
         title = item['effective_title']
-        title = title.decode('utf-8')
+
+        if not isinstance(title, unicode):
+            title = title.decode('utf-8')
+
         # Use URLNormalizer to get locale-dependent transcriptions,
         # and IDNormalizer to get lowercased, ID-safe values.
         normalized_id = self.normalizer.normalize(title, max_length=max_length)
