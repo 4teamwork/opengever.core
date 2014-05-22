@@ -10,7 +10,27 @@ $(function() {
         persist: "cookie",
         cookieId: "opengever-treeview"
       });
+      resize_treeportlet_height();
+      scroll_to_selected_item(filetree);
     });
+
+    $(window).resize(function() {
+      resize_treeportlet_height();
+    });
+
   }
 
 });
+
+function resize_treeportlet_height() {
+  $('dl.portlet.portletTreePortlet').css(
+    'height',
+    $(window).height() - $('dl.portlet.portletTreePortlet').offset().top +'px')
+}
+
+function scroll_to_selected_item(tree) {
+  var position = tree.find('a.selected').position();
+  if (position) {
+    $('.portletTreePortlet dd.portletItem').scrollTop(position.top - 60);
+  }
+}
