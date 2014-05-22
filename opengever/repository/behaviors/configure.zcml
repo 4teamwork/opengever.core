@@ -13,4 +13,12 @@
       marker=".referenceprefix.IReferenceNumberPrefixMarker"
       />
 
+  <plone:behavior
+      title="ResponsibleOrgUnit"
+      description="OpenGever ResponsibleOrgUnit Behavior"
+      provides=".responsibleorg.IResponsibleOrgUnit"
+      factory="plone.behavior.AnnotationStorage"
+      for="plone.dexterity.interfaces.IDexterityContent"
+      />
+
 </configure>

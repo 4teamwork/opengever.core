@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2013-10-07 12:09+0000\n"
+"POT-Creation-Date: 2014-05-21 13:27+0000\n"
 "PO-Revision-Date: 2011-01-27 19:24+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Domain: opengever.repository\n"
 "X-Is-Fallback-For: de-at de-li de-lu de-ch de-de\n"
 
-#: ./opengever/repository/browser/referenceprefix_manager_templates/referenceprefixmanager.pt:43
+#: ./opengever/repository/browser/referenceprefix_manager_templates/referenceprefixmanager.pt:40
 msgid "In use"
 msgstr "Wird verwendet"
 
@@ -35,7 +35,7 @@ msgstr "Ordnungsposition"
 msgid "RepositoryRoot"
 msgstr "Ordnungssystem"
 
-#: ./opengever/repository/repositoryfolder.py:44
+#: ./opengever/repository/repositoryfolder.py:38
 msgid "Title"
 msgstr "Titel"
 
@@ -44,13 +44,8 @@ msgstr "Titel"
 msgid "Unlock unused repository prefixes."
 msgstr "Freigabe von ungebrauchten Aktenzeichen Prefixen."
 
-#. Default: "Active"
-#: ./opengever/repository/browser/referenceprefix_manager_templates/referenceprefixmanager.pt:25
-msgid "active"
-msgstr "Aktiv"
-
 #. Default: "No nested repositorys available."
-#: ./opengever/repository/browser/referenceprefix_manager_templates/referenceprefixmanager.pt:31
+#: ./opengever/repository/browser/referenceprefix_manager_templates/referenceprefixmanager.pt:29
 msgid "empty_repository"
 msgstr "Keine untergeordnete Ordnungspositionen verfügbar."
 
@@ -61,25 +56,26 @@ msgstr "Eine Ordnungsposition mit diesem Aktenzeichen existiert bereits auf glei
 
 #. Default: "Common"
 #: ./opengever/repository/behaviors/referenceprefix.py:21
-#: ./opengever/repository/repositoryfolder.py:29
+#: ./opengever/repository/behaviors/responsibleorg.py:11
+#: ./opengever/repository/repositoryfolder.py:23
 msgid "fieldset_common"
 msgstr "Allgemein"
 
 #. Default: "Select all additional dossier types which should be addable in this repository folder."
-#: ./opengever/repository/repositoryfolder.py:91
+#: ./opengever/repository/repositoryfolder.py:85
 msgid "help_addable_dossier_types"
 msgstr "Wählen Sie die Spezialdossiers aus, die in dieser Ordnungsposition erlaubt sind."
 
 #. Default: "A short summary of the content."
-#: ./opengever/repository/repositoryfolder.py:50
+#: ./opengever/repository/repositoryfolder.py:44
 msgid "help_description"
 msgstr "Eine kurze Beschreibung des Inhalts."
 
-#: ./opengever/repository/repositoryfolder.py:84
+#: ./opengever/repository/repositoryfolder.py:78
 msgid "help_former_reference"
 msgstr ""
 
-#: ./opengever/repository/repositoryfolder.py:70
+#: ./opengever/repository/repositoryfolder.py:64
 msgid "help_location"
 msgstr ""
 
@@ -87,16 +83,16 @@ msgstr ""
 msgid "help_reference_number_prefix"
 msgstr ""
 
-#: ./opengever/repository/repositoryfolder.py:78
+#: ./opengever/repository/repositoryfolder.py:72
 msgid "help_referenced_activity"
 msgstr ""
 
-#: ./opengever/repository/repositoryfolder.py:58
+#: ./opengever/repository/repositoryfolder.py:52
 #: ./opengever/repository/repositoryroot.py:19
 msgid "help_valid_from"
 msgstr ""
 
-#: ./opengever/repository/repositoryfolder.py:64
+#: ./opengever/repository/repositoryfolder.py:58
 #: ./opengever/repository/repositoryroot.py:25
 msgid "help_valid_until"
 msgstr ""
@@ -106,22 +102,22 @@ msgid "help_version"
 msgstr ""
 
 #. Default: "Addable dossier types"
-#: ./opengever/repository/repositoryfolder.py:89
+#: ./opengever/repository/repositoryfolder.py:83
 msgid "label_addable_dossier_types"
 msgstr "Erlaubte Spezialdossiers"
 
 #. Default: "Description"
-#: ./opengever/repository/repositoryfolder.py:49
+#: ./opengever/repository/repositoryfolder.py:43
 msgid "label_description"
 msgstr "Beschreibung"
 
 #. Default: "Former reference"
-#: ./opengever/repository/repositoryfolder.py:83
+#: ./opengever/repository/repositoryfolder.py:77
 msgid "label_former_reference"
 msgstr "Früheres Zeichen"
 
 #. Default: "Location"
-#: ./opengever/repository/repositoryfolder.py:69
+#: ./opengever/repository/repositoryfolder.py:63
 msgid "label_location"
 msgstr "Standort"
 
@@ -131,18 +127,18 @@ msgid "label_reference_number_prefix"
 msgstr "Präfix des Aktenzeichens"
 
 #. Default: "Referenced activity"
-#: ./opengever/repository/repositoryfolder.py:75
+#: ./opengever/repository/repositoryfolder.py:69
 msgid "label_referenced_activity"
 msgstr "Leistung"
 
 #. Default: "Valid from"
-#: ./opengever/repository/repositoryfolder.py:57
+#: ./opengever/repository/repositoryfolder.py:51
 #: ./opengever/repository/repositoryroot.py:18
 msgid "label_valid_from"
 msgstr "Gültig ab"
 
 #. Default: "Valid until"
-#: ./opengever/repository/repositoryfolder.py:63
+#: ./opengever/repository/repositoryfolder.py:57
 #: ./opengever/repository/repositoryroot.py:24
 msgid "label_valid_until"
 msgstr "Gültig bis"
@@ -152,8 +148,8 @@ msgstr "Gültig bis"
 msgid "label_version"
 msgstr "Version"
 
-#. Default: "State:"
-#: ./opengever/repository/repositoryfolder_templates/byline.pt:11
+#. Default: "State"
+#: ./opengever/repository/viewlets/byline.py:22
 msgid "label_workflow_state"
 msgstr "Status"
 
@@ -172,8 +168,13 @@ msgstr "Position"
 msgid "prefman_title"
 msgstr "Aktenzeichen Präfix Manager"
 
+#. Default: "Responsible organisation unit"
+#: ./opengever/repository/behaviors/responsibleorg.py:16
+msgid "responsible_org_unit"
+msgstr "Federführendes Amt"
+
 #. Default: "Reference prefix has been unlocked."
-#: ./opengever/repository/browser/referenceprefix_manager.py:19
+#: ./opengever/repository/browser/referenceprefix_manager.py:25
 msgid "statmsg_prefix_unlocked"
 msgstr "Aktenzeichen Präfix wurde freigegeben."
 
@@ -193,7 +194,6 @@ msgid "th_task"
 msgstr "Aufgaben"
 
 #. Default: "Unlock"
-#: ./opengever/repository/browser/referenceprefix_manager_templates/referenceprefixmanager.pt:26
+#: ./opengever/repository/browser/referenceprefix_manager_templates/referenceprefixmanager.pt:25
 msgid "unlock"
 msgstr "Freigeben"
-

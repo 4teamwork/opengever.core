@@ -4,6 +4,9 @@ Changelog
 3.2.4 (unreleased)
 ------------------
 
+- Added responsible org field on repositoryfolder.
+  [lknoepfel]
+
 - Treeportlet: Enable scrolling in the portlet and scroll down to selected item.
   [Julian Infanger]
 
