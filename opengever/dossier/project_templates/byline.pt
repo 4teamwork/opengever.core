@@ -2,10 +2,6 @@
      id="plone-document-byline"
      i18n:domain="opengever.dossier"
      tal:condition="viewlet/show">
-  <span id="lock-icon" class="function-lock"
-        tal:define="lock_icon viewlet/locked_icon"
-        tal:condition="lock_icon">
-  </span>
 
   <tal:name tal:condition="viewlet/responsible">
     <span class="documentAuthor"

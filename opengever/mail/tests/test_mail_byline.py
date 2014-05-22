@@ -1,4 +1,3 @@
-from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.tests.byline_base_test import TestBylineBase
@@ -21,11 +20,6 @@ class TestMailByline(TestBylineBase):
 
         self.mail = create(Builder('mail'))
         self.browser.open(self.mail.absolute_url())
-
-    def test_dossier_byline_icon_display(self):
-        icon = self.get_byline_element_by_class('byline-icon')
-        self.assertEquals('byline-icon contenttype-ftw-mail-mail',
-                          icon.target.get('class'))
 
     def test_dossier_byline_sequence_number_display(self):
         seq_number = self.get_byline_value_by_label('Sequence Number:')

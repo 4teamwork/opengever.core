@@ -36,3 +36,8 @@ class RepositoryByline(BylineBase):
              'replace': False},
 
         ]
+
+
+class RepositoryRootByline(BylineBase):
+    def get_items(self):
+        return []
