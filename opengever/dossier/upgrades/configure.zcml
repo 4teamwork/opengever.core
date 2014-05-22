@@ -2,7 +2,10 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:upgrade-step="http://namespaces.zope.org/ftw.upgrade"
     i18n_domain="opengever.dossier">
+
+    <include package="ftw.upgrade" file="meta.zcml" />
 
     <!-- 1 -> 2301 -->
     <genericsetup:upgradeStep
@@ -51,6 +54,15 @@
         destination="2602"
         handler="opengever.dossier.upgrades.to2602.RemoveMailInBehavior"
         profile="opengever.dossier:default"
+        />
+
+    <!-- 2602 -> 2603 -->
+    <upgrade-step:importProfile
+        title="Create ITemplateDossierProperties registry entry"
+        profile="opengever.dossier:default"
+        source="2602"
+        destination="2603"
+        directory="profiles/2603"
         />
 
 </configure>

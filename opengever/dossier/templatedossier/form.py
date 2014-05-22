@@ -3,9 +3,11 @@ from ftw.table import helper
 from ftw.table.interfaces import ITableGenerator
 from opengever.base.interfaces import IRedirector
 from opengever.dossier import _
-from opengever.dossier.templatedossier.interfaces import ITemplateUtility
+from opengever.dossier.interfaces import ITemplateDossierProperties
 from opengever.dossier.templatedossier.create import DocumentFromTemplate
+from opengever.dossier.templatedossier.interfaces import ITemplateUtility
 from opengever.tabbedview.helper import linked
+from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
 from zope.component import getUtility
@@ -94,8 +96,14 @@ class TemplateDocumentFormView(grok.View):
         template_doc = self.context.restrictedTraverse(template_path)
         # TODO: Add registry option to globally disable docproperty code
 
-        return DocumentFromTemplate(template_doc).create_in(self.context,
-                                                            self.title)
+        registry = getUtility(IRegistry)
+        props = registry.forInterface(ITemplateDossierProperties)
+
+        return DocumentFromTemplate(template_doc).create_in(
+            self.context,
+            self.title,
+            with_properties=props.create_doc_properties
+        )
 
     def render_form(self):
         """Get the list of template documents and render the "document from

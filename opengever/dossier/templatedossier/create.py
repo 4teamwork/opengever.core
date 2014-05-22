@@ -17,6 +17,24 @@ import os
 NO_DEFAULT_VALUE_FIELDS = ['title', 'file']
 
 
+class TemporaryDocFile(object):
+
+    def __init__(self, file_):
+        self.file = file_
+        self.path = None
+
+    def __enter__(self):
+        template_data = self.file.data
+
+        with NamedTemporaryFile(delete=False) as tmpfile:
+            self.path = tmpfile.name
+            tmpfile.write(template_data)
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        os.remove(self.path)
+
+
 class DocumentFromTemplate(object):
     """Create a new document from templates.
 
@@ -25,8 +43,9 @@ class DocumentFromTemplate(object):
         self.template_doc = template_doc
         self.file = template_doc.file
 
-    def create_in(self, context, title):
-        if is_supported_mimetype(self.template_doc.file.contentType):
+    def create_in(self, context, title, with_properties=False):
+        if (with_properties and
+                is_supported_mimetype(self.template_doc.file.contentType)):
             data = self._copy_doc_properties_from_template(context)
         else:
             data = self.file.data
@@ -46,24 +65,20 @@ class DocumentFromTemplate(object):
 
     def _copy_doc_properties_from_template(self, dossier):
         # Copy the file data of the template to a temporary file
-        template_data = self.template_doc.file.data
 
-        with NamedTemporaryFile(delete=False) as tmpfile:
-            tmpfile_path = tmpfile.name
-            tmpfile.write(template_data)
+        with TemporaryDocFile(self.template_doc.file) as tmpfile:
 
-        # Get properties for the new document based on the dossier
-        properties_adapter = getMultiAdapter(
-            (dossier, dossier.REQUEST), IDocProperties)
-        properties = properties_adapter.get_properties()
+            # Get properties for the new document based on the dossier
+            properties_adapter = getMultiAdapter(
+                (dossier, dossier.REQUEST), IDocProperties)
+            properties = properties_adapter.get_properties()
 
-        # Set the DocProperties by modifying the temporary file
-        update_properties(tmpfile_path, properties)
+            # Set the DocProperties by modifying the temporary file
+            update_properties(tmpfile.path, properties)
 
-        # Create a new NamedBlobFile from the updated temporary file's data
-        with open(tmpfile_path) as processed_tmpfile:
-            populated_template_data = processed_tmpfile.read()
-        os.remove(tmpfile_path)
+            # Create a new NamedBlobFile from the updated temporary file's data
+            with open(tmpfile.path) as processed_tmpfile:
+                populated_template_data = processed_tmpfile.read()
 
         return populated_template_data
 

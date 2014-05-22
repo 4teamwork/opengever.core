@@ -71,6 +71,18 @@ class IDossierParticipants(Interface):
     )
 
 
+class ITemplateDossierProperties(Interface):
+    """ Document properties configuration.
+    """
+
+    create_doc_properties = schema.Bool(
+        title=u'Enable creation of document properties',
+        description=u'Select whether document properties should be created\
+            when a word document is created from a document template.',
+        default=False,
+    )
+
+
 class IParticipationCreated(IObjectEvent):
     """Interface for participation created event.
     """
