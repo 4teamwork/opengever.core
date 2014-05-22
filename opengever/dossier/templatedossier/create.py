@@ -1,5 +1,5 @@
 from ooxml_docprops import is_supported_mimetype
-from ooxml_docprops.properties import update_properties
+from ooxml_docprops import update_properties
 from opengever.dossier.interfaces import IDocProperties
 from plone.dexterity.utils import createContentInContainer
 from plone.dexterity.utils import iterSchemata
@@ -48,20 +48,20 @@ class DocumentFromTemplate(object):
         # Copy the file data of the template to a temporary file
         template_data = self.template_doc.file.data
 
-        tmpfile = NamedTemporaryFile(delete=False)
-        tmpfile_path = tmpfile.name
-        tmpfile.write(template_data)
+        with NamedTemporaryFile(delete=False) as tmpfile:
+            tmpfile_path = tmpfile.name
+            tmpfile.write(template_data)
 
         # Get properties for the new document based on the dossier
         properties_adapter = getMultiAdapter(
-            (dossier, self.request), IDocProperties)
+            (dossier, dossier.REQUEST), IDocProperties)
         properties = properties_adapter.get_properties()
 
         # Set the DocProperties by modifying the temporary file
         update_properties(tmpfile_path, properties)
 
         # Create a new NamedBlobFile from the updated temporary file's data
-        with open(tmpfile_path).read() as processed_tmpfile:
+        with open(tmpfile_path) as processed_tmpfile:
             populated_template_data = processed_tmpfile.read()
         os.remove(tmpfile_path)
 
