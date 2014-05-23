@@ -4,7 +4,6 @@ from ftw.testbrowser import browsing
 from opengever.testing import FunctionalTestCase
 from opengever.testing import create_client
 from opengever.testing import create_ogds_user
-from opengever.testing import select_current_org_unit
 from plone.app.testing import TEST_USER_ID
 
 
