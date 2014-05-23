@@ -9,7 +9,7 @@
       </a>
       <div class="visualClear"><!-- --></div>
     </dt>
-    <dd class="orgunitMenuContent">
+    <dd class="actionMenuContent orgunitMenuContent" >
       <ul>
         <li tal:repeat="unit view/get_units">
           <a href="" tal:attributes="href string:${unit/public_url}/change_org_unit?unit_id=${unit/id}" tal:content="unit/label">
