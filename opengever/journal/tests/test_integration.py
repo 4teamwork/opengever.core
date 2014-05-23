@@ -10,7 +10,6 @@ from opengever.dossier.behaviors.participation import Participation
 from opengever.dossier.events import ParticipationCreated, ParticipationRemoved
 from opengever.journal.tests.utils import get_journal_length, get_journal_entry
 from opengever.mail.events import DocumentSent
-from opengever.ogds.base.interfaces import IClientConfiguration
 from opengever.sharing.events import LocalRolesAcquisitionActivated
 from opengever.sharing.events import LocalRolesAcquisitionBlocked
 from opengever.sharing.events import LocalRolesModified
@@ -19,7 +18,6 @@ from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.utils import createContentInContainer
-from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.WorkflowCore import ActionSucceededEvent
 from zope.component import getUtility
@@ -209,9 +207,6 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         portal = self.layer['portal']
         comment = 'my comment'
 
-        registry = getUtility(IRegistry)
-        proxy = registry.forInterface(IClientConfiguration)
-        proxy.client_id = u'Test'
         dossier = createContentInContainer(
             portal, 'opengever.dossier.businesscasedossier', 'd1')
 
@@ -586,12 +581,16 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
     def check_document_sent(self, obj, doc):
         id_util = getUtility(IIntIds)
         intid = id_util.queryId(doc)
+
+        # Testing on __dummy_unit_id__ from
+        # `opengever.ogds.base.ou_selector.NullOrg`') is just a temporary
+        # solution and will be adjusted when reworking the oguid functionality.
         self.check_annotation(
             obj,
             action_type='Document Sent',
             action_title=u'Document sent by Mail: test mail',
             actor=TEST_USER_ID,
-            comment='Attachments: <span><a href="./@@resolve_oguid?oguid=Test:'+str(
+            comment='Attachments: <span><a href="./@@resolve_oguid?oguid=__dummy_unit_id__:'+str(
                 intid)+'">'+ doc.Title()+
             '</a></span> | Receivers: test@test.ch | Message: Mymessage', )
 

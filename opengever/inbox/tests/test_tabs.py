@@ -1,8 +1,8 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.testing import FunctionalTestCase
+from opengever.testing import create_and_select_current_org_unit
 from opengever.testing import create_client
-from opengever.testing import set_current_client_id
 from opengever.testing import task2sqltask
 
 
@@ -33,8 +33,7 @@ class TestAssignedInboxTaskTab(FunctionalTestCase):
 
     def setUp(self):
         super(TestAssignedInboxTaskTab, self).setUp()
-        create_client()
-        set_current_client_id(self.portal)
+        create_and_select_current_org_unit('client1')
 
         self.inbox = create(Builder('inbox').titled(u'Testinbox'))
 
@@ -76,8 +75,7 @@ class TestIssuedInboxTaskTab(FunctionalTestCase):
 
     def setUp(self):
         super(TestIssuedInboxTaskTab, self).setUp()
-        create_client()
-        set_current_client_id(self.portal)
+        create_and_select_current_org_unit('client1')
 
         self.inbox = create(Builder('inbox').titled(u'Testinbox'))
 

@@ -1,7 +1,7 @@
 from opengever.testing import FunctionalTestCase
 from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
+from opengever.testing import create_and_select_current_org_unit
 from opengever.testing import create_client
-from opengever.testing import set_current_client_id
 from plone.dexterity.utils import createContentInContainer
 import transaction
 
@@ -14,8 +14,7 @@ class TestForwarding(FunctionalTestCase):
         super(TestForwarding, self).setUp()
         self.grant('Owner','Editor','Contributor')
 
-        create_client('plone')
-        set_current_client_id(self.portal, 'plone')
+        create_and_select_current_org_unit(unit_id='plone')
 
     def test_forwarding(self):
         # create inbox and some documents for tests

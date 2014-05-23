@@ -4,10 +4,9 @@ from ftw.builder import create
 from lxml.cssselect import CSSSelector
 from opengever.latex.listing import ILaTexListing
 from opengever.testing import FunctionalTestCase
-from opengever.testing import create_client
+from opengever.testing import create_and_select_current_org_unit
 from opengever.testing import create_ogds_user
 from opengever.testing import obj2brain
-from opengever.testing import set_current_client_id
 from zope.component import getMultiAdapter
 import lxml
 
@@ -17,8 +16,7 @@ class TestDossierListing(FunctionalTestCase):
     def setUp(self):
         super(TestDossierListing, self).setUp()
 
-        create_client()
-        set_current_client_id(self.portal)
+        create_and_select_current_org_unit('client1')
         create_ogds_user('hugo.boss')
 
         self.repo = create(Builder('repository').titled('Repository XY'))
@@ -115,8 +113,7 @@ class TestSubDossierListing(FunctionalTestCase):
     def setUp(self):
         super(TestSubDossierListing, self).setUp()
 
-        create_client()
-        set_current_client_id(self.portal)
+        create_and_select_current_org_unit('client1')
         create_ogds_user('hugo.boss')
 
         self.repo = create(Builder('repository').titled('Repository XY'))
@@ -163,8 +160,7 @@ class TestDocumentListing(FunctionalTestCase):
     def setUp(self):
         super(TestDocumentListing, self).setUp()
 
-        create_client()
-        set_current_client_id(self.portal)
+        create_and_select_current_org_unit('client1')
 
         self.document = create(Builder('document')
                                .having(title=u'Document A',
@@ -197,8 +193,7 @@ class TestTaskLisitings(FunctionalTestCase):
     def setUp(self):
         super(TestTaskLisitings, self).setUp()
 
-        create_client()
-        set_current_client_id(self.portal)
+        create_and_select_current_org_unit('client1')
         create_ogds_user('hugo.boss')
 
         self.task = create(Builder('task')

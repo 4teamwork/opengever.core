@@ -4,6 +4,7 @@ from mocker import Mocker, Expect
 from opengever.base.browser.resolveoguid import ResolveOGUIDView
 from opengever.ogds.base.interfaces import IClientConfiguration
 from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.utils import AnonymousOrgUnitSelector
 from plone.mocktestcase import MockTestCase
 from plone.registry.interfaces import IRegistry
 from unittest2 import TestCase
@@ -29,12 +30,10 @@ class TestResolveOGUIDView(MockTestCase, TestCase):
         alsoProvides(siteroot, IPloneSiteRoot)
         setSite(siteroot)
 
-        registry = self.testcase_mocker.mock()
-        self.mock_utility(registry, IRegistry)
+        ou_selector = self.testcase_mocker.replace(
+            'opengever.ogds.base.utils.get_ou_selector')
 
-        proxy = self.create_dummy(client_id='client1')
-        expect(registry.forInterface(IClientConfiguration)).result(
-            proxy).count(0, None)
+        self.expect(ou_selector()).result(AnonymousOrgUnitSelector())
 
         self.testcase_mocker.replay()
 

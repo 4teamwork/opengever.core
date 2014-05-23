@@ -5,6 +5,7 @@ from opengever.task.adapters import IResponseContainer
 from opengever.task.response import Response
 from opengever.task.task import ITask
 from opengever.testing import FunctionalTestCase
+from opengever.testing import create_and_select_current_org_unit
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.utils import createContent, addContentToContainer
 from z3c.relationfield.relation import RelationValue
@@ -17,15 +18,6 @@ from zope.lifecycleevent import ObjectCreatedEvent, ObjectAddedEvent
 import unittest2 as unittest
 
 
-def create_task(parent, **kwargs):
-    createContent('opengever.task.task')
-    task = createContent('opengever.task.task', **kwargs)
-    notify(ObjectCreatedEvent(task))
-    task = addContentToContainer(parent, task, checkConstraints=False)
-    notify(ObjectAddedEvent(task))
-    return task
-
-
 class TestTaskIntegration(FunctionalTestCase):
 
     def setUp(self):
@@ -33,7 +25,7 @@ class TestTaskIntegration(FunctionalTestCase):
         self.portal.portal_types['opengever.task.task'].global_allow = True
 
     def test_adding(self):
-        t1 = create_task(self.portal, title='Task 1')
+        t1 = create(Builder('task').titled('Task 1'))
         self.failUnless(ITask.providedBy(t1))
 
     def test_fti(self):
@@ -52,11 +44,15 @@ class TestTaskIntegration(FunctionalTestCase):
         self.failUnless(ITask.providedBy(new_object))
 
     def test_view(self):
-        t1 = create_task(self.portal, title='Task 1')
+        t1 = create(Builder('task').titled('Task 1'))
         view = t1.restrictedTraverse('@@tabbedview_view-overview')
-        self.failUnless(len(view.get_sub_tasks()) == 0)
-        t2 = create_task(t1, title='Task 2')
-        self.failUnless(view.get_sub_tasks()[0] == t2)
+        self.assertEquals([], view.get_sub_tasks())
+
+        t2 = create(Builder('task')
+                    .within(t1)
+                    .titled('Task 2'))
+
+        self.assertEquals([t2], view.get_sub_tasks())
 
     def test_relateddocuments(self):
         self.grant('Manager')
@@ -64,8 +60,11 @@ class TestTaskIntegration(FunctionalTestCase):
         doc3 = create(Builder("document").titled("a-testthree"))
         intids = getUtility(IIntIds)
         o_iid = intids.getId(doc3)
-        t1 = create_task(
-            self.portal, title='Task 1', relatedItems=[RelationValue(o_iid)])
+
+        t1 = create(Builder('task')
+                    .titled('Task 1')
+                    .having(relatedItems=[RelationValue(o_iid)]))
+
         doc1 = create(Builder("document").within(t1).titled("btestone"))
         doc2 = create(Builder("document").within(t1).titled("ctesttwo"))
         view = t1.restrictedTraverse('tabbedview_view-relateddocuments')
@@ -81,14 +80,14 @@ class TestTaskIntegration(FunctionalTestCase):
         self.failUnless(view())
 
     def test_addresponse(self):
-        t1 = create_task(self.portal, title='Task 1')
+        t1 = create(Builder('task').titled('Task 1'))
         res = Response("")
         container = IResponseContainer(t1)
         container.add(res)
         self.failUnless(res in container)
 
     def test_task_type_category(self):
-        t1 = create_task(self.portal, title='Task 1')
+        t1 = create(Builder('task').titled('Task 1'))
         t1.task_type = u'information'
         self.assertEquals(
             u'unidirectional_by_reference', t1.task_type_category)
@@ -97,10 +96,14 @@ class TestTaskIntegration(FunctionalTestCase):
             u'bidirectional_by_reference', t1.task_type_category)
 
     def test_task_date_subscriber(self):
-        t1 = create_task(self.portal, title='Task 1')
+        create_and_select_current_org_unit()
+
         member = self.portal.restrictedTraverse('plone_portal_state').member()
-        t1.responsible = str(member)
-        t1.issuer = str(member)
+        t1 = create(Builder('task')
+                    .titled('Task 1')
+                    .having(responsible=member.getId(),
+                            issuer=member.getId()))
+
         wft = t1.portal_workflow
 
         self.failUnless(t1.expectedStartOfWork == None)
@@ -114,36 +117,39 @@ class TestTaskIntegration(FunctionalTestCase):
         wft.doActionFor(t1, 'task-transition-resolved-in-progress')
         self.failUnless(t1.date_of_completion == None)
 
-        t2 = create_task(self.portal, title='Task 2')
-        t2.issuer = str(member)
+        t2 = create(Builder('task')
+                    .titled('Task 2')
+                    .having(issuer=member.getId()))
+
         self.failUnless(t2.date_of_completion == None)
         wft.doActionFor(t2, 'task-transition-open-tested-and-closed')
         self.failUnless(t2.date_of_completion.date() == datetime.now().date())
 
-    def test_subtask_response(self):
-        """When a subtask is added it should automaticly
-        add a response on maintask"""
-
+    def test_adding_a_subtask_add_response_on_main_task(self):
         intids = getUtility(IIntIds)
-        maintask = create_task(self.portal, title='maintask')
-        subtask = create_task(maintask, title='subtask')
+        maintask = create(Builder('task').titled('maintask'))
+        subtask = create(Builder('task')
+                         .within(maintask)
+                         .titled('maintask'))
+
         responses = IResponseContainer(maintask)
         self.assertEquals(
             responses[-1].added_object.to_id, intids.getId(subtask))
-        self.assertEquals(len(responses), 2)
+
+    def test_adding_a_subtask_via_remote_request_does_not_add_response_to_main_task(self):
+        maintask = create(Builder('task').titled('maintask'))
 
         # all different remote requests should not
         # generate an response
         maintask.REQUEST.environ['X_OGDS_AC'] = 'hugo.boss'
-        create_task(maintask, title='subtask')
-        self.assertEquals(len(IResponseContainer(maintask)), 2)
+        create(Builder('task').within(maintask).titled('subtask'))
+        self.assertEquals(len(IResponseContainer(maintask)), 0)
 
         maintask.REQUEST.environ['X_OGDS_AC'] = None
         maintask.REQUEST.environ['X_OGDS_CID'] = 'client_a'
-        create_task(maintask, title='subtask')
-        self.assertEquals(len(IResponseContainer(maintask)), 2)
+        create(Builder('task').within(maintask).titled('subtask'))
+        self.assertEquals(len(IResponseContainer(maintask)), 0)
 
         maintask.REQUEST.environ['X_OGDS_CID'] = None
         maintask.REQUEST.set('X-CREATING-SUCCESSOR', True)
-        create_task(maintask, title='subtask')
-        self.assertEquals(len(IResponseContainer(maintask)), 2)
+        create(Builder('task').within(maintask).titled('subtask'))
