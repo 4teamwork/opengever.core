@@ -5,7 +5,7 @@ from opengever.dossier.filing.testing import inactivate_filing_number
 from opengever.testing import FunctionalTestCase
 from opengever.testing import create_client
 from opengever.testing import create_ogds_user
-from opengever.testing import set_current_client_id
+from opengever.testing import create_and_select_current_org_unit
 from plone.app.testing import TEST_USER_ID
 import transaction
 
@@ -17,9 +17,7 @@ class TestSearchForm(FunctionalTestCase):
     def setUp(self):
         super(TestSearchForm, self).setUp()
 
-        create_client()
-        set_current_client_id(self.portal)
-        transaction.commit()
+        create_and_select_current_org_unit()
 
     def test_filing_number_fields_is_hidden_in_site_without_filing_number_support(self):
         self.browser.open('http://nohost/plone/advanced_search')
@@ -33,13 +31,10 @@ class TestSearchFormWithFilingNumberSupport(FunctionalTestCase):
     use_browser = True
 
     def setUp(self):
-
         super(TestSearchFormWithFilingNumberSupport, self).setUp()
         activate_filing_number(self.portal)
 
-        create_client()
-        set_current_client_id(self.portal)
-        transaction.commit()
+        create_and_select_current_org_unit()
 
     def tearDown(self):
         super(TestSearchFormWithFilingNumberSupport, self).tearDown()
@@ -55,11 +50,12 @@ class TestSearchFormWithFilingNumberSupport(FunctionalTestCase):
 class TestSearchFormObjectProvidesDescription(FunctionalTestCase):
     use_browser = True
 
+    def setUp(self):
+        super(TestSearchFormObjectProvidesDescription, self).setUp()
+        create_and_select_current_org_unit()
+
     def test_contains_special_info_in_a_multi_client_setup(self):
-        create_client()
         create_client(clientid="client2")
-        set_current_client_id(self.portal)
-        transaction.commit()
 
         self.browser.open('%s/advanced_search' % self.portal.absolute_url())
 
@@ -71,11 +67,6 @@ class TestSearchFormObjectProvidesDescription(FunctionalTestCase):
             formhelp.plain_text())
 
     def test_not_contains_client_info_in_a_single_client_setup(self):
-        create_client()
-        set_current_client_id(self.portal)
-        create_ogds_user(TEST_USER_ID)
-        transaction.commit()
-
         self.browser.open('%s/advanced_search' % self.portal.absolute_url())
 
         formhelp = self.browser.css(
@@ -91,9 +82,7 @@ class TestSearchWithContent(FunctionalTestCase):
     def setUp(self):
         super(TestSearchWithContent, self).setUp()
 
-        create_client()
-        set_current_client_id(self.layer['portal'])
-        create_ogds_user(TEST_USER_ID)
+        create_and_select_current_org_unit()
 
         self.dossier1 = create(Builder("dossier").titled(u"Dossier1"))
         self.dossier2 = create(Builder("dossier").titled(u"Dossier2"))
@@ -160,9 +149,7 @@ class TestSearchWithoutContent(FunctionalTestCase):
 
         activate_filing_number(self.portal)
 
-        create_client()
-        set_current_client_id(self.layer['portal'])
-        create_ogds_user(TEST_USER_ID)
+        create_and_select_current_org_unit()
 
         self.dossier1 = create(Builder("dossier"))
 

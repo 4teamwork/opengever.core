@@ -17,4 +17,6 @@ else:
     from opengever.testing.sql import create_ogds_user
     from opengever.testing.sql import assign_user_to_client
     from opengever.testing.sql import set_current_client_id
+    from opengever.testing.sql import select_current_org_unit
+    from opengever.testing.sql import create_and_select_current_org_unit
     from opengever.testing.test_case import FunctionalTestCase

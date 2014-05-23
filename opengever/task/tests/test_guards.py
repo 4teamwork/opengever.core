@@ -16,6 +16,7 @@ from zope.component import getSiteManager
 from zope.interface.verify import verifyClass
 import os.path
 
+
 class TestTaskTransitionController(MockTestCase):
 
     def setUp(self):

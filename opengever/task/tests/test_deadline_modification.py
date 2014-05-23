@@ -5,9 +5,10 @@ from opengever.task.adapters import IResponseContainer
 from opengever.task.interfaces import IDeadlineModifier
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.testing import FunctionalTestCase
+from opengever.testing import create_and_select_current_org_unit
 from opengever.testing import create_client
 from opengever.testing import create_ogds_user
-from opengever.testing import set_current_client_id
+from opengever.testing import select_current_org_unit
 from plone.app.testing import TEST_USER_ID
 from zExceptions import Unauthorized
 from zope.component import getUtility
@@ -54,8 +55,7 @@ class TestDeadlineModificationForm(FunctionalTestCase):
         self.assertPageContains('The given deadline, is the current one.')
 
     def test_deadline_is_updated_also_in_globalindex(self):
-        create_client()
-        set_current_client_id(self.portal)
+        create_and_select_current_org_unit('client1')
         task = create(Builder('task')
                       .having(issuer=TEST_USER_ID, deadline=datetime.date(2013, 1, 1)))
 
@@ -85,9 +85,7 @@ class TestDeadlineModificationForm(FunctionalTestCase):
             response.changes)
 
     def test_successor_is_also_updated_when_modify_predecessors_deadline(self):
-        create_client()
-        set_current_client_id(self.portal)
-
+        create_and_select_current_org_unit()
         predecessor = create(Builder('task')
                              .having(issuer=TEST_USER_ID,
                                      deadline=datetime.date(2013, 1, 1)))
@@ -113,8 +111,7 @@ class TestDeadlineModifierController(FunctionalTestCase):
             task.restrictedTraverse('is_deadline_modification_allowed')())
 
     def test_modify_is_allowed_for_issuer_on_a_in_progress_task(self):
-        create_client()
-        set_current_client_id(self.portal)
+        create_and_select_current_org_unit()
 
         task = create(Builder('task')
                       .having(issuer=TEST_USER_ID, responsible=TEST_USER_ID)
@@ -124,9 +121,12 @@ class TestDeadlineModifierController(FunctionalTestCase):
             task.restrictedTraverse('is_deadline_modification_allowed')())
 
     def test_modify_is_allowed_for_a_inbox_group_user_when_inbox_is_issuer(self):
-        create_client(clientid='client1')
-        create_ogds_user(TEST_USER_ID, groups=('client1_inbox_users', ))
-        set_current_client_id(self.portal)
+
+        client1 = create_client(clientid='client1')
+        create_ogds_user(TEST_USER_ID, assigned_client=[client1],
+                         groups=('client1_inbox_users', ))
+        select_current_org_unit('client1')
+
         task = create(Builder('task')
                       .having(issuer='inbox:client1', responsible=TEST_USER_ID)
                       .in_progress())

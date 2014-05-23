@@ -9,7 +9,7 @@ from opengever.testing import FunctionalTestCase
 from opengever.testing import create_client
 from opengever.testing import create_ogds_user
 from opengever.testing import create_plone_user
-from opengever.testing import set_current_client_id
+from opengever.testing import select_current_org_unit
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
 from plone.app.testing import login
@@ -29,8 +29,6 @@ class TestResponse(FunctionalTestCase):
                       inbox_group='og_mandant1_inbox', session=session)
         create_client('client2', group='og_mandant2_users',
                       inbox_group='og_mandant2_inbox', session=session)
-        set_current_client_id(self.portal, 'plone')
-
         create_ogds_user(TEST_USER_ID,
                          groups=('og_mandant1_users',
                                  'og_mandant1_inbox',
@@ -38,6 +36,8 @@ class TestResponse(FunctionalTestCase):
                          firstname='Test',
                          lastname='User',
                          session=session)
+
+        select_current_org_unit('plone')
 
         create_plone_user(self.portal, 'testuser2')
         create_ogds_user('testuser2',
@@ -109,7 +109,7 @@ class TestResponse(FunctionalTestCase):
             'Added successor task',
             self.browser.css('div.response-info div span.label')[0].plain_text())
 
-        successor_info = """<span class="issueChange"><span class="wf-task-state-open"><a href="http://nohost/plone/dossier-1/task-2" title="[Plone] > dossier-1 > Test task 1"><span class="rollover-breadcrumb icon-task-remote-task">Test task 1</span></a>  <span class="discreet">(Client2 / <a href="http://nohost/plone/@@user-details/testuser2">User 2 Test (testuser2)</a>)</span></span></span>"""
+        successor_info = """<span class="issueChange"><span class="wf-task-state-open"><a href="http://nohost/plone/dossier-1/task-2" target="_blank" title="[Plone] > dossier-1 > Test task 1"><span class="rollover-breadcrumb icon-task-remote-task">Test task 1</span></a>  <span class="discreet">(Client2 / <a href="http://nohost/plone/@@user-details/testuser2">User 2 Test (testuser2)</a>)</span></span></span>"""
 
         self.assertTrue(successor_info in self.browser.contents)
 

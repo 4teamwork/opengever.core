@@ -4,13 +4,12 @@ from Products.CMFCore.utils import getToolByName
 from ftw.contentmenu.menu import FactoriesMenu
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.dossier.behaviors.dossier import IDossier
-from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.mail.behaviors import ISendableDocsContainer
 from opengever.testing import FunctionalTestCase
+from opengever.testing import create_and_select_current_org_unit
 from opengever.testing import create_client
 from opengever.testing import create_ogds_user
 from opengever.testing import create_plone_user
-from opengever.testing import set_current_client_id
 from plone.app.testing import SITE_OWNER_NAME, login, logout
 from plone.app.testing import TEST_USER_NAME
 from plone.dexterity.utils import createContentInContainer
@@ -200,11 +199,10 @@ class TestMainDossier(FunctionalTestCase):
         super(TestMainDossier, self).setUp()
         self.grant('Contributor')
 
-        create_client()
-        set_current_client_id(self.portal)
+        orgunit = create_and_select_current_org_unit()
 
         create_plone_user(self.portal, SITE_OWNER_NAME)
-        create_ogds_user(SITE_OWNER_NAME)
+        create_ogds_user(SITE_OWNER_NAME, assigned_client=[orgunit._client])
 
         self.request = self.layer['request']
 
