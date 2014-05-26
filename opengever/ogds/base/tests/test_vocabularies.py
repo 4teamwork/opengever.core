@@ -101,7 +101,7 @@ class TestUsersAndInboxesVocabulary(FunctionalTestCase):
         self.client1 = create_client(clientid="client1", title="Client 1")
         self.client2 = create_client(clientid="client2", title="Client 2")
 
-    def test_contains_all_active_users_and_inboxes_assigned_to_the_given_client(self):
+    def test_contains_all_active_users_and_inboxes_assigned_to_the_given_orgunit(self):
         create_ogds_user('hugo.boss', firstname='Hugo',
                          lastname='Boss', assigned_client=[self.client1, ])
         create_ogds_user('jamie.lannister', firstname='Jamie',
@@ -137,7 +137,7 @@ class TestUsersAndInboxesVocabulary(FunctionalTestCase):
         self.portal.REQUEST.set('form.widgets.responsible_client', 'client2')
 
         vocabulary = self.vocabulary_factory(self.portal)
-        self.assertTermKeys(['inbox:client2'], self.vocabulary_factory(self.portal))
+        self.assertTermKeys(['inbox:client2'], vocabulary)
 
     def test_use_clientid_from_responsible_client_of_actual_context(self):
         self.portal.responsible_client = 'client2'
@@ -211,7 +211,7 @@ class TestAssignedUsersVocabulary(FunctionalTestCase):
             IVocabularyFactory,
             name='opengever.ogds.base.AssignedUsersVocabulary')
 
-    def test_contains_only_users_assigned_to_current_client(self):
+    def test_contains_only_users_assigned_to_current_orgunit(self):
         client1 = create_client(clientid="client1", title="Client 1")
         client2 = create_client(clientid="client2", title="Client 2")
 
@@ -379,6 +379,43 @@ class TestAssignedClientsVocabularies(FunctionalTestCase):
             name='opengever.ogds.base.OtherAssignedClientsVocabulary')
 
         self.assertTermKeys(['client3'], voca_factory(self.portal))
+
+
+class TestInboxesVocabularyFactory(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestInboxesVocabularyFactory, self).setUp()
+
+        unit_a = create_client('unit_a')
+        unit_b = create_client('unit_b')
+        create_ogds_user(TEST_USER_ID, assigned_client=[unit_a, unit_b],
+                         firstname="Test", lastname="User")
+        create_ogds_user('hugo.boss', assigned_client=[unit_b])
+        create_ogds_user('robin.hood', assigned_client=[],
+                         firstname="Robin", lastname="Hood", active=False)
+
+        select_current_org_unit('unit_a')
+
+        self.vocabulary_factory = getUtility(
+            IVocabularyFactory,
+            name='opengever.ogds.base.InboxesVocabulary')
+
+    def test_contains_only_inbox_when_not_current_ou_is_selected(self):
+        self.portal.REQUEST['client'] = 'unit_b'
+        self.assertTermKeys(['inbox:unit_b'],
+                            self.vocabulary_factory(self.portal))
+
+    def test_contains_inbox_and_assigned_users_when_current_ou_is_selected(self):
+        self.portal.REQUEST['client'] = 'unit_a'
+
+        self.assertTermKeys(['inbox:unit_a', TEST_USER_ID],
+                            self.vocabulary_factory(self.portal))
+
+    def test_hidden_terms_contains_all_inactive_users(self):
+        self.portal.REQUEST['client'] = 'unit_a'
+
+        vocabulary = self.vocabulary_factory(self.portal)
+        self.assertEquals([u'robin.hood'], vocabulary.hidden_terms)
 
 
 class TestOGDSVocabularies(FunctionalTestCase):
