@@ -73,6 +73,7 @@
 
 \thispagestyle{myheadings}
 
+<%block name="logo">
 %% -- LOGO --
 % if show_logo:
 \begin{textblock}{60mm\TPHorizModule} (17mm\TPHorizModule,
@@ -80,6 +81,7 @@
   \includegraphics[height=40mm]{logo.pdf}
 \end{textblock}
 % endif
+</%block>
 
 <%block name="boxes">
 <%include file="boxes.tex" />
