@@ -1,7 +1,7 @@
 Changelog
 =========
 
-3.2.4 (unreleased)
+3.2.5 (unreleased)
 ------------------
 
 - Added responsible org field on repositoryfolder.
@@ -32,10 +32,6 @@ Changelog
 - Dossierdetails PDF: Fixed UnicodeEncodeError in responsible getter.
   [phgross]
 
-- Added missing french (and german) translations.
-  Fixed i18n domain and translated vdex.
-  [lknoepfel]
-
 - Passing search string from live search to advanced search.
   Using SearchableText from the url as default value in advanced search.
   [lknoepfel]
@@ -57,6 +53,13 @@ Changelog
 
 - Fixed German translation in logout overlay.
   [pha]
+
+3.2.4 (2014-05-26)
+------------------
+
+- Added missing french (and german) translations.
+  Fixed i18n domain and translated vdex.
+  [lknoepfel]
 
 - Mail view: use sprite icons in the attachments list.
   [phgross]
