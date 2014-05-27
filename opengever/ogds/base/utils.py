@@ -2,6 +2,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from StringIO import StringIO
 from opengever.ogds.base.exceptions import ClientNotFound
+from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.interfaces import IClientConfiguration
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.ou_selector import AnonymousOrgUnitSelector
@@ -95,6 +96,13 @@ def client_id_cachekey(method):
 
 def get_current_org_unit():
     return get_ou_selector().get_current_unit()
+
+
+def get_current_admin_unit(self):
+    registry = getUtility(IRegistry)
+    proxy = registry.forInterface(IAdminUnitConfiguration)
+    return ogds_service().fetch_admin_unit(proxy.current_unit_id)
+
 
 # @ram.cache(client_id_cachekey)
 def get_client_id():

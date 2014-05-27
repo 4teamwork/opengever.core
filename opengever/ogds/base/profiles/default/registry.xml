@@ -1,3 +1,4 @@
 <registry>
     <records interface="opengever.ogds.base.interfaces.IClientConfiguration" />
+    <records interface="opengever.ogds.base.interfaces.IAdminUnitConfiguration" />
 </registry>

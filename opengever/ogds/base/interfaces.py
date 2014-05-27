@@ -133,6 +133,15 @@ class IClientConfiguration(Interface):
         to identify this client.', )
 
 
+class IAdminUnitConfiguration(Interface):
+
+    current_unit_id = schema.TextLine(
+        title=u'Id of the current Administrative Unit',
+        description=u'The id of this administrative unit. It will be \
+        mapped to the corresponding adminstrative unit configuration \
+        in the OGDS (Opengever Global Directory Service).', )
+
+
 class IContactInformation(Interface):
     """Contact information utility interface.
     """
