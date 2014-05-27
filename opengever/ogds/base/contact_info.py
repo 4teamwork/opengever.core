@@ -106,22 +106,6 @@ class ContactInformation(grok.GlobalUtility):
 
         return principal and ':' not in principal
 
-    def list_assigned_users(self, client_id=None):
-        """Lists all users assigned to a client.
-        """
-        if not client_id:
-            client_id = get_client_id()
-
-        if not client_id:
-            logger.warn("can't list assigned users, without a client_id")
-            return []
-
-        session = create_session()
-        users = session.query(Group).join(Client.users_group).filter(
-            Client.client_id == client_id).first().users
-
-        return users
-
     def list_group_users(self, groupid):
         """Return all users of a group"""
 
