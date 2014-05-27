@@ -53,20 +53,6 @@ class TestClientHelpers(FunctionalTestCase):
     def test_get_client_by_id_for_not_existing_client_returns_none(self):
         self.assertEquals(None, self.info.get_client_by_id('unknown client'))
 
-    def test_list_assigned_users_returns_all_ogds_user_objects(self):
-        hugo_boss = create_ogds_user('hugo.boss', groups=('client1_users', ))
-        peter_muster = create_ogds_user('hugo.boss', groups=('client2_users', ))
-        jamie_lannister = create_ogds_user(
-            'jamie.lannister', groups=('client1_users', 'client2_users'))
-
-        self.assertEquals(
-            [TEST_USER_ID, hugo_boss.userid, jamie_lannister.userid],
-            [user.userid for user in self.info.list_assigned_users()])
-
-        self.assertEquals(
-            [peter_muster.userid, jamie_lannister.userid],
-            [user.userid for user in self.info.list_assigned_users(client_id='client2')])
-
     def test_user_is_assigned_to_client_if_he_is_in_the_client_users_group(self):
         create_ogds_user('hugo.boss', groups=('client1_users', ))
 
