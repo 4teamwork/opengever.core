@@ -1,5 +1,3 @@
-from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone import PloneMessageFactory as PMF
 from datetime import date
 from datetime import timedelta
 from five import grok
@@ -8,10 +6,12 @@ from opengever.advancedsearch import _
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
+from opengever.ogds.base.utils import ogds_service
 from opengever.task.util import getTaskTypeVocabulary
 from plone.directives import form as directives_form
-from z3c.form import button
-from z3c.form.field import Fields
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone import PloneMessageFactory as PMF
+from z3c.form import button, field
 from z3c.form.browser import radio, checkbox
 from z3c.form.interfaces import INPUT_MODE
 from zope import schema
@@ -271,30 +271,42 @@ class AdvancedSearchForm(directives_form.Form):
     grok.name('advanced_search')
     grok.require('zope2.View')
 
-    ignoreContext = True
     label = _('advanced_search', default='advanced search')
 
-    schemas = (IAdvancedSearch,)
+    fields = field.Fields(IAdvancedSearch)
 
-    def get_fields(self):
-        if getattr(self, '_fields', None) is not None:
-            return self._fields
+    ignoreContext = True
 
-        fields = Fields(*self.schemas)
+    def field_mapping(self):
+        return FIELD_MAPPING
 
-        fields['responsible'].widgetFactory[INPUT_MODE] \
+    def render(self):
+        """Overwritting the render method to disable the UnloadProtection.
+        Becuase overwrite and copy the whole template makes no sense.
+        Unfortunately it's not configurable in the plone.app.z3c form itself.
+        """
+
+        html = super(AdvancedSearchForm, self).render()
+        html = html.replace('enableUnloadProtection', '')
+        return html
+
+    def updateWidgets(self):
+        super(AdvancedSearchForm, self).updateWidgets()
+
+        self.fields['responsible'].widgetFactory[INPUT_MODE] \
             = AutocompleteFieldWidget
-        fields['checked_out'].widgetFactory[INPUT_MODE] \
+        self.fields['checked_out'].widgetFactory[INPUT_MODE] \
             = AutocompleteFieldWidget
-        fields['issuer'].widgetFactory[INPUT_MODE] \
+        self.fields['issuer'].widgetFactory[INPUT_MODE] \
             = AutocompleteFieldWidget
-        fields['object_provides'].widgetFactory[INPUT_MODE] \
+        self.fields['object_provides'].widgetFactory[INPUT_MODE] \
             = radio.RadioFieldWidget
-        fields['dossier_review_state'].widgetFactory[INPUT_MODE] \
+        self.fields['dossier_review_state'].widgetFactory[INPUT_MODE] \
             = checkbox.CheckBoxFieldWidget
-        fields['task_review_state'].widgetFactory[INPUT_MODE] \
+        self.fields['task_review_state'].widgetFactory[INPUT_MODE] \
             = checkbox.CheckBoxFieldWidget
 
+        self.context.REQUEST.set('client', get_client_id())
         date_fields = [
             'start_1',
             'start_2',
@@ -311,40 +323,9 @@ class AdvancedSearchForm(directives_form.Form):
         ]
 
         for field in date_fields:
-            fields.get(
+            self.fields.get(
                 field).widgetFactory[INPUT_MODE] = DatePickerFieldWidget
 
-        self._fields = fields
-        self.move_fields()
-        return self._fields
-
-    def set_fields(self, fields):
-        self._fields = fields
-
-    def move_fields(self):
-        pass
-
-    fields = property(get_fields, set_fields)
-
-    def field_mapping(self):
-        return FIELD_MAPPING
-
-    def render(self):
-        """Overwritting the render method to disable the UnloadProtection.
-        Becuase overwrite and copy the whole template makes no sense.
-        Unfortunately it's not configurable in the plone.app.z3c form itself.
-        """
-
-        self.request.set('disable_border', 1)
-
-        html = super(AdvancedSearchForm, self).render()
-        html = html.replace('enableUnloadProtection', '')
-        return html
-
-    def updateWidgets(self):
-        super(AdvancedSearchForm, self).updateWidgets()
-
-        self.context.REQUEST.set('client', get_client_id())
         searchableText = self.widgets["searchableText"]
         searchableText.value = self.request.get('SearchableText')
 
@@ -358,18 +339,18 @@ class AdvancedSearchForm(directives_form.Form):
     def set_object_provides_field_description(self):
         # set special description for object_provides field,
         # if the current setup is a multiclient_setup
-        contact_info = getUtility(IContactInformation)
         type_field = self.widgets.get('object_provides').field
+        service = ogds_service()
 
-        if contact_info.is_one_client_setup():
-            type_field.description = _(
-                'help_portal_type',
-                default='Select the contenttype to be searched for.')
-        else:
+        if service.has_multiple_admin_units():
             type_field.description = _(
                 'help_portal_type_multiclient_setup',
                 default='Select the contenttype to be searched for.'
                 'It searches only items from the current client.')
+        else:
+            type_field.description = _(
+                'help_portal_type',
+                default='Select the contenttype to be searched for.')
 
     @button.buttonAndHandler(_(u'button_search', default=u'Search'))
     def search(self, action):
