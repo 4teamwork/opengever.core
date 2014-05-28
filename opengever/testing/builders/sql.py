@@ -9,13 +9,18 @@ import transaction
 
 
 class SqlObjectBuilder(object):
-
+    id_argument_name = None
     mapped_class = None
 
     def __init__(self, session):
         self.session = session
         self.db_session = create_session()
         self.arguments = {}
+
+    # XXX create this method for every builder
+    def id(self, identifier):
+        self.arguments[self.id_argument_name] = identifier
+        return self
 
     def create(self, **kwargs):
         self.before_create()
@@ -46,6 +51,7 @@ class SqlObjectBuilder(object):
 class AdminUnitBuilder(SqlObjectBuilder):
 
     mapped_class = AdminUnit
+    id_argument_name = 'unit_id'
 
     def __init__(self, session):
         super(AdminUnitBuilder, self).__init__(session)
@@ -72,6 +78,15 @@ builder_registry.register('admin_unit', AdminUnitBuilder)
 class OrgUnitBuilder(SqlObjectBuilder):
 
     mapped_class = Client
+    id_argument_name = 'client_id'
+
+    def __init__(self, session):
+        super(OrgUnitBuilder, self).__init__(session)
+        self.arguments['client_id'] = 'rr'
+
+    def _create_mapped_class(self):
+        return self.mapped_class(self.arguments.pop(self.id_argument_name),
+                                 **self.arguments)
 
     def create(self, **kwargs):
         instance = super(OrgUnitBuilder, self).create(**kwargs)
@@ -83,6 +98,7 @@ builder_registry.register('org_unit', OrgUnitBuilder)
 class UserBuilder(SqlObjectBuilder):
 
     mapped_class = User
+    id_argument_name = 'userid'
 
     def __init__(self, session):
         super(UserBuilder, self).__init__(session)
@@ -94,7 +110,7 @@ class UserBuilder(SqlObjectBuilder):
         return self
 
     def _create_mapped_class(self):
-        obj = self.mapped_class(self.arguments.pop('userid'),
+        obj = self.mapped_class(self.arguments.pop(self.id_argument_name),
                                 **self.arguments)
         if self.groups:
             obj.groups.extend(self.groups)
@@ -106,13 +122,14 @@ builder_registry.register('ogds_user', UserBuilder)
 class GroupBuilder(SqlObjectBuilder):
 
     mapped_class = Group
+    id_argument_name = 'groupid'
 
     def __init__(self, session):
         super(GroupBuilder, self).__init__(session)
         self.arguments['groupid'] = 'testgroup'
 
     def _create_mapped_class(self):
-        return self.mapped_class(self.arguments.pop('groupid'),
+        return self.mapped_class(self.arguments.pop(self.id_argument_name),
                                  **self.arguments)
 
 
