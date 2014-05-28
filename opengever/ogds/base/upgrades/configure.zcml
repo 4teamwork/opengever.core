@@ -1,7 +1,10 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:upgrade-step="http://namespaces.zope.org/ftw.upgrade"
     i18n_domain="opengever.ogds.base">
+
+    <include package="ftw.upgrade" file="meta.zcml" />
 
     <!-- 1-> 3101 -->
     <genericsetup:upgradeStep
@@ -12,5 +15,32 @@
         handler="opengever.ogds.base.upgrades.to3101.IncreaseUserAndGroupIDColumnLengths"
         profile="opengever.ogds.base:default"
         />
+
+    <!-- 1-> 3301 -->
+    <genericsetup:upgradeStep
+        title="Create AdminUnit table and migrate data."
+        description=""
+        source="1"
+        destination="3301"
+        handler="opengever.ogds.base.upgrades.to3301.CreateAdminUnitTable"
+        profile="opengever.ogds.base:default"
+        />
+
+    <!-- 3301-> 3302 -->
+    <genericsetup:upgradeStep
+        title="Create AdminUnit registry configuration."
+        description=""
+        source="3301"
+        destination="3302"
+        handler="opengever.ogds.base.upgrades.to3302.CreateAdminUnitRegistry"
+        profile="opengever.ogds.base:default"
+        />
+
+    <genericsetup:registerProfile
+          name="3302"
+          title="opengever.ogds.base: upgrade profile 3302"
+          directory="profiles/3302"
+          provides="Products.GenericSetup.interfaces.EXTENSION"
+          />
 
 </configure>

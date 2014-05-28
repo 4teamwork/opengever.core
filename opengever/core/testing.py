@@ -1,3 +1,4 @@
+from Testing.ZopeTestCase.utils import setupCoreSessions
 from collective.transmogrifier import transmogrifier
 from ftw.builder.testing import BUILDER_LAYER
 from ftw.builder.testing import functional_session_factory
@@ -94,6 +95,13 @@ class OpengeverFixture(PloneSandboxLayer):
             context=configurationContext)
 
         z2.installProduct(app, 'plone.app.versioningbehavior')
+
+        setupCoreSessions(app)
+
+        # Set max subobject limit to 0 -> unlimited
+        # In tests this is set to 100 by default
+        transient_object_container = app.temp_folder.session_data
+        transient_object_container.setSubobjectLimit(0)
 
     def setUpPloneSite(self, portal):
         self.installOpengeverProfiles(portal)

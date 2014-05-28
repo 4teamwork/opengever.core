@@ -3,9 +3,9 @@ from ftw.builder import create
 from opengever.globalindex.handlers.task import index_task
 from opengever.testing import FunctionalTestCase
 from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
+from opengever.testing import create_and_select_current_org_unit
 from opengever.testing import create_client
 from opengever.testing import create_ogds_user
-from opengever.testing import obj2brain
 from opengever.testing import set_current_client_id
 from opengever.testing.helpers import task2sqltask
 from plone.app.testing.interfaces import TEST_USER_NAME
@@ -52,11 +52,8 @@ class TestInboxOverviewAssignedInboxTasks(TestInboxOverviewDocumentBox):
     def setUp(self):
         super(TestInboxOverviewAssignedInboxTasks, self).setUp()
 
-        create_client('client1')
+        create_and_select_current_org_unit('client1')
         create_client('client2')
-        set_current_client_id(self.portal, 'client1')
-
-        create_ogds_user(TEST_USER_NAME)
 
     def test_list_tasks_and_forwardings_assigned_to_current_inbox_group(self):
         task = create(Builder('task').having(responsible='inbox:client1'))
@@ -106,11 +103,8 @@ class TestInboxOverviewIssuedInboxTasks(TestInboxOverviewDocumentBox):
     def setUp(self):
         super(TestInboxOverviewIssuedInboxTasks, self).setUp()
 
-        create_client('client1')
+        create_and_select_current_org_unit('client1')
         create_client('client2')
-        set_current_client_id(self.portal, 'client1')
-
-        create_ogds_user(TEST_USER_NAME)
 
     def test_list_tasks_and_forwardings_issued_by_current_inbox_group(self):
         task = create(Builder('task')

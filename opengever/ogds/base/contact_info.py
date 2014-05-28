@@ -8,6 +8,7 @@ from opengever.ogds.base.interfaces import ISyncStamp
 from opengever.ogds.base.utils import brain_is_contact, get_client_id
 from opengever.ogds.base.utils import create_session
 from opengever.ogds.base.utils import get_current_client
+from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models.client import Client
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.group import groups_users
@@ -72,14 +73,6 @@ def ogds_class_language_cachekey(method, self):
         getUtility(ISyncStamp).get_sync_stamp())
 
 
-class UserDict(object):
-    """A dictionary representing a user.
-    """
-
-    def __init__(self, **kw):
-        self.__dict__.update(kw)
-
-
 class ContactInformation(grok.GlobalUtility):
     """The principal information utility provides useful functions for
     building vocabularies with users, contacts, in-boxes groups and
@@ -113,36 +106,6 @@ class ContactInformation(grok.GlobalUtility):
 
         return principal and ':' not in principal
 
-    @ram.cache(ogds_class_cachekey)
-    def list_users(self):
-        """A list of dicts.
-        """
-        session = create_session()
-        userdata_keys = User.__table__.columns.keys()
-        result = session.execute(User.__table__.select())
-        return [UserDict(**dict(zip(userdata_keys, row))) for row in result]
-
-    def list_inactive_users(self):
-        session = create_session()
-        users = session.query(User).filter_by(active=False)
-        return users
-
-    def list_assigned_users(self, client_id=None):
-        """Lists all users assigned to a client.
-        """
-        if not client_id:
-            client_id = get_client_id()
-
-        if not client_id:
-            logger.warn("can't list assigned users, without a client_id")
-            return []
-
-        session = create_session()
-        users = session.query(Group).join(Client.users_group).filter(
-            Client.client_id == client_id).first().users
-
-        return users
-
     def list_group_users(self, groupid):
         """Return all users of a group"""
 
@@ -159,15 +122,6 @@ class ContactInformation(grok.GlobalUtility):
             groups = session.query(User).get(userid).groups
             return groups
         return []
-
-    def get_user(self, userid):
-        """Returns the user with the userid `principal`.
-        """
-
-        if not self.is_user(userid):
-            raise ValueError('principal %s is not a userid' % str(userid))
-
-        return self._users_query().get(userid)
 
     def is_user_in_inbox_group(self, userid=None, client_id=None):
         if not client_id:
@@ -266,8 +220,8 @@ class ContactInformation(grok.GlobalUtility):
         return self._clients_query().get(client_id)
 
     @ram.cache(ogds_principal_cachekey)
-    def get_group_of_inbox(self, principal):
-        """Returns the group principal of the inbox `principal`.
+    def get_groupid_of_inbox(self, principal):
+        """Returns the groupid of the inbox `principal`.
         """
 
         client = self.get_client_of_inbox(principal)
@@ -275,7 +229,7 @@ class ContactInformation(grok.GlobalUtility):
         if client is None:
             raise ValueError('Client not found for: %s' % principal)
 
-        return client.inbox_group
+        return client.inbox_group.groupid
 
     # CLIENTS
     def get_clients(self):
@@ -390,7 +344,7 @@ class ContactInformation(grok.GlobalUtility):
 
         # string user
         elif is_string and self.is_user(principal):
-            user = self.get_user(principal)
+            user = ogds_service().fetch_user(principal)
 
         # contact brain
         elif brain and brain_is_contact(brain):
@@ -398,7 +352,7 @@ class ContactInformation(grok.GlobalUtility):
             principal = contact.contactid
 
         # user object
-        elif IUser.providedBy(principal) or isinstance(principal, UserDict):
+        elif IUser.providedBy(principal):
             user = principal
             principal = user.userid
 
@@ -498,7 +452,7 @@ class ContactInformation(grok.GlobalUtility):
 
         elif self.is_user(principal):
             portal = getSite()
-            user = self.get_user(principal)
+            user = ogds_service().fetch_user(principal)
             if user:
                 return '/'.join((portal.portal_url(), '@@user-details',
                                  user.userid))

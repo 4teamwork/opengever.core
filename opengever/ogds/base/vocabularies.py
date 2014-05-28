@@ -4,7 +4,10 @@ from five import grok
 from opengever.ogds.base.interfaces import IClientCommunicator
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.interfaces import ISyncStamp
+from opengever.ogds.base.utils import get_client_id
 from opengever.ogds.base.utils import get_current_client
+from opengever.ogds.base.utils import get_current_org_unit
+from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.base.vocabulary import ContactsVocabulary
 from plone.memoize import ram
 from zope.app.component.hooks import getSite, setSite
@@ -12,7 +15,6 @@ from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.schema.interfaces import IVocabularyFactory
 import AccessControl
-from opengever.ogds.base.utils import get_client_id
 
 
 def voc_cachekey(method, self):
@@ -73,12 +75,10 @@ class UsersVocabularyFactory(grok.GlobalUtility):
         # Reset hidden_terms every time cache key changed
         self.hidden_terms = []
 
-        info = getUtility(IContactInformation)
-        for user in info.list_users():
+        for user in ogds_service().all_users():
             if not user.active:
                 self.hidden_terms.append(user.userid)
-            yield (user.userid,
-                   info.describe(user))
+            yield (user.userid, user.label())
 
 
 class UsersAndInboxesVocabularyFactory(grok.GlobalUtility):
@@ -105,26 +105,24 @@ class UsersAndInboxesVocabularyFactory(grok.GlobalUtility):
     def key_value_provider(self):
         # Reset hidden_terms every time cache key changed
         self.hidden_terms = []
-
-        client_id = self.get_client()
         info = getUtility(IContactInformation)
-        if client_id:
-            # all users
-            for user in info.list_assigned_users(client_id=client_id):
-                if not user.active:
-                    self.hidden_terms.append(user.userid)
-                yield (user.userid,
-                       info.describe(user))
+
+        client_id = self.get_client() or ''
+        unit = ogds_service().fetch_org_unit(client_id)
+        if unit:
+            for user in unit.assigned_users():
+                yield (user.userid, user.label())
+
             # client inbox
             principal = u'inbox:%s' % client_id
             yield (principal, info.describe(principal))
 
             # add the inactive users to the vocabulary
             # and mark them as hidden terms
-            for user in info.list_inactive_users():
+            for user in ogds_service().inactive_users():
                 if user.userid not in self.hidden_terms:
                     self.hidden_terms.append(user.userid)
-                    yield (user.userid, info.describe(user))
+                    yield (user.userid, user.label())
 
     def get_client(self):
         """Tries to get the client from the request. If no client is found None
@@ -173,19 +171,15 @@ class AllUsersAndInboxesVocabularyFactory(grok.GlobalUtility):
 
         info = getUtility(IContactInformation)
 
-        for client in info.get_clients():
-            client_id = client.client_id
-
+        for unit in ogds_service().all_org_units():
             # all users
-            for user in info.list_assigned_users(client_id=client_id):
-                value = u'%s:%s' % (client_id, user.userid)
+            for user in unit.assigned_users():
+                value = u'%s:%s' % (unit.id(), user.userid)
                 # prepend client if there are multiple clients
                 if info.is_one_client_setup():
-                    label = u'%s' % (info.describe(user))
+                    label = u'%s' % (user.label())
                 else:
-                    label = u'%s: %s' % (
-                        client.title,
-                        info.describe(user))
+                    label = u'%s: %s' % (unit.label(), user.label())
 
                 if not user.active:
                     self.hidden_terms.append(value)
@@ -194,14 +188,14 @@ class AllUsersAndInboxesVocabularyFactory(grok.GlobalUtility):
 
             # add the inactive users to the vocabulary
             # and mark them as hidden terms
-            for user in info.list_inactive_users():
+            for user in ogds_service().inactive_users():
                 if user.userid not in self.hidden_terms:
                     self.hidden_terms.append(user.userid)
-                    yield (user.userid, info.describe(user))
+                    yield (user.userid, user.label())
 
             # client inbox
-            principal = u'inbox:%s' % client_id
-            value = u'%s:%s' % (client_id, principal)
+            principal = u'inbox:%s' % unit.id()
+            value = u'%s:%s' % (unit.id(), principal)
             label = info.describe(principal)
             yield (value, label)
 
@@ -230,24 +224,24 @@ class InboxesVocabularyFactory(UsersAndInboxesVocabularyFactory):
         # Reset hidden_terms every time cache key changed
         self.hidden_terms = []
 
-        client_id = self.get_client()
         info = getUtility(IContactInformation)
-        if client_id and info.get_client_by_id(client_id):
+
+        selected_unit = ogds_service().fetch_org_unit(self.get_client())
+        if selected_unit:
             # check if it the current client is selected then add all users
-            if get_current_client().client_id == client_id:
-                for user in info.list_assigned_users(client_id=client_id):
+            if selected_unit.id() == get_current_org_unit().id():
+                for user in selected_unit.assigned_users():
                     if not user.active:
                         self.hidden_terms.append(user.userid)
-                    yield (user.userid,
-                           info.describe(user))
+                    yield (user.userid, user.label())
 
             # add all inactive users to the hidden terms
-            for user in info.list_inactive_users():
+            for user in ogds_service().inactive_users():
                 if user.userid not in self.hidden_terms:
                     self.hidden_terms.append(user.userid)
 
             # client inbox
-            principal = u'inbox:%s' % client_id
+            principal = u'inbox:%s' % selected_unit.id()
             yield (principal, info.describe(principal))
 
 
@@ -275,19 +269,17 @@ class AssignedUsersVocabularyFactory(grok.GlobalUtility):
         # Reset hidden_terms every time cache key changed
         self.hidden_terms = []
 
-        info = getUtility(IContactInformation)
-
-        for user in info.list_assigned_users():
+        unit = get_current_org_unit()
+        for user in unit.assigned_users():
             if not user.active:
                 self.hidden_terms.append(user.userid)
-            yield (user.userid,
-                   info.describe(user))
+            yield (user.userid, user.label())
 
         # add the inactive users to the vocabulary and marked as hidden terms
-        for user in info.list_inactive_users():
+        for user in ogds_service().inactive_users():
             if user.userid not in self.hidden_terms:
                 self.hidden_terms.append(user.userid)
-                yield (user.userid, info.describe(user))
+                yield (user.userid, user.label())
 
 
 class ContactsVocabularyFactory(grok.GlobalUtility):
@@ -333,11 +325,13 @@ class ContactsAndUsersVocabularyFactory(grok.GlobalUtility):
 
         info = getUtility(IContactInformation)
         items, hidden_terms = self._get_users()
+        # copy lists to prevent cache modification
         items = items[:]
         self.hidden_terms = hidden_terms[:]
         for contact in info.list_contacts():
             items.append((contact.contactid,
                           info.describe(contact)))
+
         return items
 
     @ram.cache(voc_cachekey)
@@ -346,17 +340,10 @@ class ContactsAndUsersVocabularyFactory(grok.GlobalUtility):
         items = []
         hidden_terms = []
 
-        for user in info.list_users():
+        for user in ogds_service().all_users():
             if not user.active:
                 hidden_terms.append(user.userid)
-            items.append((user.userid,
-                          info.describe(user)))
-
-        # add the inactive users to the vocabulary and marked as hidden terms
-        for user in info.list_inactive_users():
-            if user.userid not in self.hidden_terms:
-                self.hidden_terms.append(user.userid)
-                items.append((user.userid, info.describe(user)))
+            items.append((user.userid, user.label()))
 
         # add also the client inboxes
         for client in info.get_clients():
@@ -407,7 +394,7 @@ class EmailContactsAndUsersVocabularyFactory(grok.GlobalUtility):
         self.hidden_terms = []
 
         info = getUtility(IContactInformation)
-        ids = [(user, user.active) for user in info.list_users()]
+        ids = [(user, user.active) for user in ogds_service().all_users()]
         ids.extend([(contact, True) for contact
                     in info.list_contacts()])
 

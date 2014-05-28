@@ -9,9 +9,10 @@ from opengever.ogds.base.interfaces import ITransporter
 from opengever.ogds.base.transport import REQUEST_KEY
 from opengever.task.adapters import IResponseContainer
 from opengever.testing import FunctionalTestCase
+from opengever.testing import create_and_select_current_org_unit
 from opengever.testing import create_client
 from opengever.testing import create_ogds_user
-from opengever.testing import set_current_client_id
+from opengever.testing import select_current_org_unit
 from opengever.testing.helpers import obj2brain
 from opengever.testing.helpers import task2sqltask
 from plone.app.testing import TEST_USER_ID
@@ -24,10 +25,11 @@ class TestRefusingForwardings(FunctionalTestCase):
 
     def setUp(self):
         super(TestRefusingForwardings, self).setUp()
-        create_client()
+        client1 = create_client()
         create_client(clientid='client2')
-        create_ogds_user(TEST_USER_ID, groups=['client2_inbox_users', ])
-        set_current_client_id(self.portal)
+        create_ogds_user(TEST_USER_ID, assigned_client=[client1],
+                         groups=['client2_inbox_users', ])
+        select_current_org_unit()
 
         self.forwarding = create(Builder('forwarding')
                             .having(
@@ -76,9 +78,8 @@ class TestRefuseForwardingStoring(FunctionalTestCase):
 
     def setUp(self):
         super(TestRefuseForwardingStoring, self).setUp()
-        create_client()
+        create_and_select_current_org_unit()
         create_client(clientid='client2')
-        set_current_client_id(self.portal)
 
         self.inbox = create(Builder('inbox'))
         self.forwarding = create(Builder('forwarding')

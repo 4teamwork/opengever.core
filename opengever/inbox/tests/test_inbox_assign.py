@@ -5,7 +5,7 @@ from opengever.task.adapters import IResponseContainer
 from opengever.testing import FunctionalTestCase
 from opengever.testing import create_client
 from opengever.testing import create_ogds_user
-from opengever.testing import set_current_client_id
+from opengever.testing import select_current_org_unit
 from opengever.testing import task2sqltask
 from plone.app.testing import TEST_USER_ID
 
@@ -17,10 +17,12 @@ class TestAssingForwarding(FunctionalTestCase):
     def setUp(self):
         super(TestAssingForwarding, self).setUp()
 
-        create_client()
+        client1 = create_client()
         create_client(clientid='client2')
-        create_ogds_user(TEST_USER_ID, groups=['client1_inbox_users', ])
-        set_current_client_id(self.portal)
+        create_ogds_user(TEST_USER_ID, assigned_client=[client1],
+                         groups=['client1_inbox_users', ])
+
+        select_current_org_unit('client1')
 
         self.forwarding = create(
             Builder('forwarding')

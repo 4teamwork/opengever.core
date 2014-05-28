@@ -1,12 +1,16 @@
-from Products.CMFPlone.interfaces import IPloneSiteRoot
-from Products.CMFCore.utils import getToolByName
-from StringIO import StringIO
 from opengever.ogds.base.exceptions import ClientNotFound
-from opengever.ogds.base.interfaces import IClientConfiguration
+from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.ou_selector import AnonymousOrgUnitSelector
+from opengever.ogds.base.ou_selector import NoAssignedUnitsOrgUnitSelector
+from opengever.ogds.base.ou_selector import OrgUnitSelector
 from opengever.ogds.models.client import Client
+from opengever.ogds.models.service import OGDSService
 from plone.memoize import ram
 from plone.registry.interfaces import IRegistry
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.interfaces import IPloneSiteRoot
+from StringIO import StringIO
 from z3c.saconfig import named_scoped_session
 from zope.app.component.hooks import getSite, setSite
 from zope.component import getUtility
@@ -33,6 +37,10 @@ def create_session():
     return Session()
 
 
+def ogds_service():
+    return OGDSService(create_session())
+
+
 def get_current_client():
     """Returns the current client.
     """
@@ -49,11 +57,31 @@ def get_current_client():
     return client
 
 
+def get_ou_selector():
+    site = getSite()
+    sdm = site.session_data_manager
+    storage = sdm.getSessionData(create=True)
+    mtool = getToolByName(site, 'portal_membership')
+    member = mtool.getAuthenticatedMember()
+
+    if mtool.isAnonymousUser():
+        return AnonymousOrgUnitSelector()
+
+    if member.has_role('Manager'):
+        units = ogds_service().all_org_units()
+    else:
+        units = ogds_service().assigned_org_units(member.getId())
+
+    if not units:
+        return NoAssignedUnitsOrgUnitSelector()
+
+    return OrgUnitSelector(storage, units)
+
+
 def client_id_cachekey(method):
     """chackekey for the get_client_id, wich is unique for every plone site.
     So a setup with multiple opengever sites on one plone instance is possible.
     """
-
     context = getSite()
 
     if not IPloneSiteRoot.providedBy(context):
@@ -65,14 +93,25 @@ def client_id_cachekey(method):
     return 'get_client_id:%s' % (context.id)
 
 
-@ram.cache(client_id_cachekey)
+def get_current_org_unit():
+    return get_ou_selector().get_current_unit()
+
+
+def get_current_admin_unit():
+    registry = getUtility(IRegistry)
+    proxy = registry.forInterface(IAdminUnitConfiguration)
+    return ogds_service().fetch_admin_unit(proxy.current_unit_id)
+
+
+# @ram.cache(client_id_cachekey)
 def get_client_id():
     """Returns the client_id of the current client.
     """
+    return get_ou_selector().get_current_unit().id()
 
-    registry = getUtility(IRegistry)
-    proxy = registry.forInterface(IClientConfiguration)
-    return proxy.client_id
+    # registry = getUtility(IRegistry)
+    # proxy = registry.forInterface(IClientConfiguration)
+    # return proxy.client_id
 
 
 def client_public_url_cachekey(method):

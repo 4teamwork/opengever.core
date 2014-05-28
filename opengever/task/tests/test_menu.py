@@ -2,8 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.contentmenu.menu import FactoriesMenu
 from opengever.testing import FunctionalTestCase
-from opengever.testing import create_client
-from opengever.testing import set_current_client_id
+from opengever.testing import create_and_select_current_org_unit
 from plone.app.testing import TEST_USER_ID
 
 
@@ -13,8 +12,7 @@ class TestFactoryMenu(FunctionalTestCase):
         super(TestFactoryMenu, self).setUp()
         self.menu = FactoriesMenu(self.portal)
 
-        create_client()
-        set_current_client_id(self.portal)
+        create_and_select_current_org_unit()
 
     def test_task_menu_item_is_titled_task_in_a_dossier(self):
         dossier = create(Builder('dossier'))

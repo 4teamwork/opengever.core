@@ -3,7 +3,6 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.testing import FunctionalTestCase
-from opengever.testing import create_client
 from opengever.testing import set_current_client_id
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
@@ -13,7 +12,6 @@ class TestSuccessorTaskController(FunctionalTestCase):
 
     def setUp(self):
         super(TestSuccessorTaskController, self).setUp()
-        create_client(clientid='client1')
         set_current_client_id(self.portal)
 
     def test_oguid_is_client_id_and_task_id_separated_by_a_colon(self):

@@ -1,23 +1,48 @@
-from opengever.ogds.base.interfaces import IClientConfiguration
 from opengever.ogds.base.interfaces import ISyncStamp
 from opengever.ogds.base.ldap_import.import_stamp import update_sync_stamp
 from opengever.ogds.base.setuphandlers import _create_example_client
 from opengever.ogds.base.utils import create_session
+from opengever.ogds.base.utils import get_ou_selector
+from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.user import User
-from plone.registry.interfaces import IRegistry
+from plone.app.testing import TEST_USER_ID
 from sqlalchemy.orm.exc import NoResultFound
 from zope.component import getUtility
 from zope.component.hooks import getSite
+import warnings
+
+
+def select_current_org_unit(unit_id='client1'):
+    get_ou_selector().set_current_unit(unit_id)
+
+
+def create_and_select_current_org_unit(unit_id='unit_a'):
+    client = create_client(unit_id)
+    create_ogds_user(TEST_USER_ID, assigned_client=[client],
+                     firstname="Test", lastname="User")
+    get_ou_selector().set_current_unit(unit_id)
+    return get_ou_selector().get_current_unit()
 
 
 def set_current_client_id(portal, clientid=u'client1'):
-    if isinstance(clientid, str):
-        clientid = clientid.decode('utf-8')
+    """
+    Creates a link between the current user (TEST_USER_ID)
+    and the passed clientid (unit_id).
 
-    registry = getUtility(IRegistry, context=portal)
-    client = registry.forInterface(IClientConfiguration)
-    client.client_id = clientid
+    This function is deprecated and should be replaced with
+    select_current_org_unit or create_and_select_current_org_unit
+    """
+    warnings.warn("This function is deprecated. Use select_current_org_unit instead.",
+                  DeprecationWarning, stacklevel=2)
+
+    unit_id = clientid
+    client = ogds_service().fetch_client(unit_id)
+    if not client:
+        client = create_client(unit_id)
+        create_ogds_user(TEST_USER_ID, assigned_client=[client],
+                         firstname="Test", lastname="User")
+    get_ou_selector().set_current_unit(unit_id)
 
 
 def create_client(clientid='client1', session=None, **properties):
@@ -68,10 +93,12 @@ def create_ogds_user(userid, session=None,
 
     return user
 
+
 def assign_user_to_client(user, client, session=None):
     session = session or create_session()
     client.users_group.users.append(user)
     session.add(client.users_group)
+
 
 def reset_ogds_sync_stamp(portal):
     timestamp = update_sync_stamp(portal)

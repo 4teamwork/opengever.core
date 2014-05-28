@@ -1,0 +1,12 @@
+<configure
+     xmlns="http://namespaces.zope.org/zope"
+     xmlns:browser="http://namespaces.zope.org/browser">
+
+     <browser:viewlet
+         name="opengever.ogds.base.ouselector"
+         manager="plone.app.layout.viewlets.interfaces.IPortalHeader"
+         class=".ou_selector_viewlet.OrgUnitSelectorViewlet"
+         permission="zope2.View"
+         />
+
+ </configure>

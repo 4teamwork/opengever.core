@@ -2,7 +2,8 @@ from opengever.globalindex.interfaces import ITaskQuery
 from opengever.ogds.base.utils import get_client_id
 from opengever.task.interfaces import ITaskDocumentsTransporter
 from opengever.task.task import ITask
-from opengever.testing import OPENGEVER_INTEGRATION_TESTING
+from opengever.testing import FunctionalTestCase
+from opengever.testing import create_and_select_current_org_unit
 from opengever.testing import create_client
 from opengever.testing import set_current_client_id
 from plone.app.testing import TEST_USER_ID
@@ -38,17 +39,12 @@ def set_defaults(obj):
     return obj
 
 
-class TestTransporter(unittest.TestCase):
-
-    layer = OPENGEVER_INTEGRATION_TESTING
+class TestTransporter(FunctionalTestCase):
 
     def setUp(self):
-        self.app = self.layer['app']
-        self.portal = self.layer['portal']
+        super(TestTransporter, self).setUp()
 
-        create_client()
-        set_current_client_id(self.portal)
-
+        create_and_select_current_org_unit()
 
     def _create_task(self, context, with_docs=False, return_docs=False):
 

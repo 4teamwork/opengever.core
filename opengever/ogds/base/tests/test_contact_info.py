@@ -5,10 +5,11 @@ from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
 from opengever.ogds.base.utils import get_current_client
 from opengever.testing import FunctionalTestCase
+from opengever.testing import create_and_select_current_org_unit
 from opengever.testing import create_client
 from opengever.testing import create_ogds_user
 from opengever.testing import obj2brain
-from opengever.testing import set_current_client_id
+from opengever.testing import select_current_org_unit
 from plone.app.testing import TEST_USER_ID
 from zope.component import getUtility
 
@@ -17,15 +18,13 @@ class TestClientUtils(FunctionalTestCase):
 
     def setUp(self):
         super(TestClientUtils, self).setUp()
-
-        self.test_client = create_client(clientid='test_client')
-        set_current_client_id(self.portal, clientid='test_client')
+        self.test_ou = create_and_select_current_org_unit('test_client')
 
     def test_get_client_id_returns_current_client_id(self):
         self.assertEquals(u'test_client', get_client_id())
 
     def test_get_current_client_returns_current_client_object(self):
-        self.assertEquals(self.test_client, get_current_client())
+        self.assertEquals(self.test_ou._client, get_current_client())
 
 
 class TestClientHelpers(FunctionalTestCase):
@@ -37,15 +36,13 @@ class TestClientHelpers(FunctionalTestCase):
         self.client1 = create_client(clientid='client1')
         self.client2 = create_client(clientid='client2')
         create_client(clientid='client3', enabled=False)
-        set_current_client_id(self.portal, clientid='client1')
+
+        create_ogds_user(TEST_USER_ID, assigned_client=[self.client1],
+                 firstname="Test", lastname="User")
+        select_current_org_unit('client1')
 
     def test_get_clients_returns_all_enabled_clients(self):
         self.assertEquals([self.client1, self.client2], self.info.get_clients())
-
-    def test_get_clients_returns_empty_list_when_current_client_is_not_enabled(self):
-        set_current_client_id(self.portal, clientid='client3')
-
-        self.assertEquals([], self.info.get_clients())
 
     def test_get_client_by_id_for_exsiting_client_returns_client(self):
         self.assertEquals(self.client1, self.info.get_client_by_id('client1'))
@@ -55,20 +52,6 @@ class TestClientHelpers(FunctionalTestCase):
 
     def test_get_client_by_id_for_not_existing_client_returns_none(self):
         self.assertEquals(None, self.info.get_client_by_id('unknown client'))
-
-    def test_list_assigned_users_returns_all_ogds_user_objects(self):
-        hugo_boss = create_ogds_user('hugo.boss', groups=('client1_users', ))
-        peter_muster = create_ogds_user('hugo.boss', groups=('client2_users', ))
-        jamie_lannister = create_ogds_user(
-            'jamie.lannister', groups=('client1_users', 'client2_users'))
-
-        self.assertEquals(
-            [hugo_boss.userid, jamie_lannister.userid],
-            [user.userid for user in self.info.list_assigned_users()])
-
-        self.assertEquals(
-            [peter_muster.userid, jamie_lannister.userid],
-            [user.userid for user in self.info.list_assigned_users(client_id='client2')])
 
     def test_user_is_assigned_to_client_if_he_is_in_the_client_users_group(self):
         create_ogds_user('hugo.boss', groups=('client1_users', ))
@@ -98,15 +81,13 @@ class TestOneClientSetupHelper(FunctionalTestCase):
         self.info = getUtility(IContactInformation)
 
     def test_is_one_client_setup(self):
-        create_client(clientid='client')
-        set_current_client_id(self.portal, clientid='client')
+        create_and_select_current_org_unit('client')
 
         self.assertTrue(self.info.is_one_client_setup())
 
     def test_a_setup_with_multiple_clients_is_not_a_one_client_setup(self):
-        create_client(clientid='client')
+        create_and_select_current_org_unit('client')
         create_client(clientid='client2')
-        set_current_client_id(self.portal, clientid='client')
 
         self.assertFalse(self.info.is_one_client_setup())
 
@@ -116,30 +97,6 @@ class TestUserHelpers(FunctionalTestCase):
     def setUp(self):
         super(TestUserHelpers, self).setUp()
         self.info = getUtility(IContactInformation)
-
-    def test_list_user_returns_all_users_ogds_objects(self):
-        create_ogds_user('hugo.boss')
-        create_ogds_user('peter.muster')
-        create_ogds_user('jamie.lannister')
-
-        self.assertEquals(
-            [u'hugo.boss', u'peter.muster', u'jamie.lannister'],
-            [u.userid for u in self.info.list_users()])
-
-    def test_get_user_returns_sql_user_obj_when_he_exists(self):
-        hugo_boss = create_ogds_user('hugo.boss')
-
-        self.assertEquals(hugo_boss.userid, self.info.get_user('hugo.boss').userid)
-
-    def test_get_user_returns_none_when_the_user_dont_exists(self):
-        self.assertEquals(None, self.info.get_user('someone.unknown'))
-
-    def test_get_user_raise_if_the_user_is_a_inbox(self):
-        with self.assertRaises(ValueError) as cm:
-            self.info.get_user('inbox:client1')
-        self.assertEquals(
-            'principal inbox:client1 is not a userid',
-            str(cm.exception))
 
     def test_getting_profile_url_returns_user_detail_view_url(self):
         create_ogds_user('hugo.boss')
@@ -166,16 +123,19 @@ class TestGroupHelpers(FunctionalTestCase):
 
         self.client1 = create_client(clientid='client1')
         self.client2 = create_client(clientid='client2')
-        set_current_client_id(self.portal)
+        create_ogds_user(TEST_USER_ID, assigned_client=[self.client1],
+                         firstname="Test", lastname="User")
+        select_current_org_unit('client1')
+
 
     def test_list_group_users_returns_all_users_assigned_to_this_group(self):
         jamie_lannister = create_ogds_user(
             'jamie.lannister', groups=('client1_users', 'client2_users'))
-        peter_muster = create_ogds_user('peter.muster', groups=('client1_users', ))
+        peter_muster = create_ogds_user('peter.muster', groups=('client2_users', ))
 
         self.assertEquals(
             [jamie_lannister.userid, peter_muster.userid],
-            [user.userid for user in self.info.list_group_users('client1_users')])
+            [user.userid for user in self.info.list_group_users('client2_users')])
 
         self.assertEquals([],
                           list(self.info.list_group_users('not_existing_groupid')))
@@ -209,7 +169,7 @@ class TestGroupHelpers(FunctionalTestCase):
         create_client(clientid='client1', inbox_group='client1_inbox_users')
 
         self.assertEquals('client1_inbox_users',
-                          self.info.get_group_of_inbox("inbox:client1").groupid)
+                          self.info.get_groupid_of_inbox("inbox:client1"))
 
 
 class TestContactInfoOGDSUserDescription(FunctionalTestCase):
@@ -229,7 +189,7 @@ class TestContactInfoOGDSUserDescription(FunctionalTestCase):
                           self.info.describe('hugo.boss'))
 
         self.assertEquals(u'Boss Hugo (hugo.boss)',
-                          self.info.describe(self.info.get_user('hugo.boss')))
+                          self.info.describe(self.hugo_boss))
 
     def test_with_email_options_contains_fullname_and_userid_and_email_in_parentheses(self):
         self.assertEquals(

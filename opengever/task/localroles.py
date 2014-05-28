@@ -39,7 +39,7 @@ class LocalRolesSetter(object):
             info = getUtility(IContactInformation)
 
             if info.is_inbox(value):
-                self._responsible = info.get_group_of_inbox(value).groupid
+                self._responsible = info.get_groupid_of_inbox(value)
             else:
                 self._responsible = value
 
