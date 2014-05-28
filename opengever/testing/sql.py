@@ -93,10 +93,12 @@ def create_ogds_user(userid, session=None,
 
     return user
 
+
 def assign_user_to_client(user, client, session=None):
     session = session or create_session()
     client.users_group.users.append(user)
     session.add(client.users_group)
+
 
 def reset_ogds_sync_stamp(portal):
     timestamp = update_sync_stamp(portal)

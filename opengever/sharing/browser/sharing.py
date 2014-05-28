@@ -2,9 +2,7 @@ from AccessControl.SecurityManagement import getSecurityManager
 from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import setSecurityManager
 from Acquisition import aq_base
-from Products.CMFCore.utils import getToolByName
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.sharing import _
 from opengever.sharing.behaviors import IDossier, IStandard
 from opengever.sharing.events import LocalRolesAcquisitionActivated
@@ -15,6 +13,8 @@ from plone.app.workflow.browser.sharing import SharingView
 from plone.app.workflow.interfaces import ISharingPageRole
 from plone.memoize.instance import memoize
 from plone.registry.interfaces import IRegistry
+from Products.CMFCore.utils import getToolByName
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.component import getUtilitiesFor
 from zope.component import getUtility
 from zope.event import notify
@@ -179,9 +179,7 @@ class OpengeverSharingView(SharingView):
                                   id_key):
         """A mapper for the original method, to constraint the users
         list to only the users which are assigned to the current client"""
-
-        all_principals = SharingView._principal_search_results(
-            self,
+        all_principals = super(OpengeverSharingView, self)._principal_search_results(
             search_for_principal,
             get_principal_by_id,
             get_principal_title,
@@ -191,13 +189,13 @@ class OpengeverSharingView(SharingView):
         if len(all_principals) == 0:
             return all_principals
 
-        info = getUtility(IContactInformation)
-        assigned_users = [user.userid for user in info.list_assigned_users()]
-        results = []
+        admin_unit = get_current_admin_unit()
+        assigned_users = set(user.userid for user in admin_unit.assigned_users())
 
         registry = getUtility(IRegistry)
-        reg_proxy = registry.forInterface(ISharingConfiguration)
+        sharing_config = registry.forInterface(ISharingConfiguration)
 
+        results = []
         for principal in all_principals:
             # users
             if principal.get('type') == 'user':
@@ -205,8 +203,8 @@ class OpengeverSharingView(SharingView):
                     results.append(principal)
 
             # groups
-            elif re.search(reg_proxy.black_list_prefix, principal.get('id')):
-                if re.search(reg_proxy.white_list_prefix, principal.get('id')):
+            elif re.search(sharing_config.black_list_prefix, principal.get('id')):
+                if re.search(sharing_config.white_list_prefix, principal.get('id')):
                     results.append(principal)
             else:
                 results.append(principal)

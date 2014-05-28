@@ -1,11 +1,17 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.sharing.browser.sharing import OpengeverSharingView
 from opengever.sharing.interfaces import ILocalRolesAcquisitionActivated
 from opengever.sharing.interfaces import ILocalRolesAcquisitionBlocked
 from opengever.sharing.interfaces import ILocalRolesModified
 from opengever.testing import FunctionalTestCase
-from plone.app.testing import setRoles, TEST_USER_ID
+from opengever.testing.sql import select_current_org_unit
+from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import TEST_USER_NAME
+from plone.registry.interfaces import IRegistry
+from zope.component import getUtility
 from zope.component import provideHandler
 
 
@@ -52,7 +58,6 @@ class TestOpengeverSharingIntegration(FunctionalTestCase):
         setRoles(
             self.portal, TEST_USER_ID, ['Manager', 'Contributor', 'Editor'])
 
-
     def test_available_roles(self):
         """ Test available roles if we are reader and owner on a context
         providing IDossier of sharing
@@ -93,7 +98,6 @@ class TestOpengeverSharingIntegration(FunctionalTestCase):
             u'Publisher',
             u'Administrator', ]
         self._check_roles(expect, self.view_dossier.roles(check_permission=False))
-
 
     def test_update_inherit(self):
         """ tests update inherit method
@@ -178,6 +182,35 @@ class TestOpengeverSharingIntegration(FunctionalTestCase):
         self.assertTrue(
             last_event.new_local_roles == (('test_user_1_', ('Owner',)),))
 
+    def test_sharing_view_only_returns_users_from_current_admin_unit(self):
+        registry = getUtility(IRegistry)
+        admin_unit = registry.forInterface(IAdminUnitConfiguration)
+        admin_unit.current_unit_id = u'testunit'
+
+        # create other group, from different admin unit
+        other_group = create(Builder('ogds_group')
+                             .having(groupid='other_unit'))
+        other_user = create(Builder('ogds_user')
+                            .having(userid='peter')
+                            .in_group(other_group))
+        org_unit = create(Builder('org_unit').having(client_id=u'otherunit',
+                                                     users_group=other_group))
+        admin_unit = create(Builder('admin_unit').wrapping_org_unit(org_unit))
+
+        # create "current" admin unit
+        group = create(Builder('ogds_group'))
+        user = create(Builder('ogds_user').having(userid=TEST_USER_ID).in_group(group))
+        org_unit = create(Builder('org_unit').having(client_id=u'testunit',
+                                                     users_group=group))
+        admin_unit = create(Builder('admin_unit').wrapping_org_unit(org_unit))
+        select_current_org_unit(u'testunit')
+
+        self.portal.REQUEST.form['search_term'] = TEST_USER_NAME
+        results = self.view_dossier.user_search_results()
+        self.assertEqual(1, len(results))
+        self.assertEqual(TEST_USER_ID, results[0]['id'])
+
+
 class TestOpengeverSharingWithBrowser(FunctionalTestCase):
     use_browser = True
 
@@ -185,7 +218,6 @@ class TestOpengeverSharingWithBrowser(FunctionalTestCase):
         super(TestOpengeverSharingWithBrowser, self).setUp()
         self.grant('Manager')
         self.dossier = create(Builder("dossier"))
-
 
     def test_sharing_views(self):
         """ Test Integration of opengever.sharing
@@ -196,3 +228,4 @@ class TestOpengeverSharingWithBrowser(FunctionalTestCase):
         self.browser.open('%s/@@sharing' % self.dossier.absolute_url())
         self.browser.open(
             '%s/@@tabbedview_view-sharing' % self.dossier.absolute_url())
+
