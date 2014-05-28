@@ -12,11 +12,11 @@ class TestOrgUnitSelectorViewlet(FunctionalTestCase):
 
     def setUp(self):
         super(TestOrgUnitSelectorViewlet, self).setUp()
-        self.client1 = create_client('client1', title='Client 1')
-        self.client2 = create_client('client2', title='Client 2')
-        self.client3 = create_client('client3', title='Client 3')
         self.client4 = create_client('client4', title='Client 4',
                                      public_url='http://nohost/plone')
+        self.client3 = create_client('client3', title='Client 3')
+        self.client1 = create_client('client1', title='Client 1')
+        self.client2 = create_client('client2', title='Client 2')
 
         create_ogds_user(
             TEST_USER_ID,
@@ -25,7 +25,15 @@ class TestOrgUnitSelectorViewlet(FunctionalTestCase):
         self.repo_root = create(Builder('repository_root'))
 
     @browsing
-    def test_current_unit_is_marked_as_active(self, browser):
+    def test_units_are_sorted_alphabetically(self, browser):
+        browser.login().open(self.repo_root)
+        units = browser.css('.orgunitMenuContent li')
+
+        self.assertEquals(
+            ['Client 3', 'Client 4'], units.text)
+
+    @browsing
+    def test_first_unit_is_marked_as_active_per_default(self, browser):
         browser.login().open(self.repo_root)
 
         active_unit = browser.css('.orgunitMenu dt a')
@@ -41,7 +49,7 @@ class TestOrgUnitSelectorViewlet(FunctionalTestCase):
             ['Client 3', 'Client 4'], units.text)
 
     @browsing
-    def test_select_a_unit_change_active_unit(self, browser):
+    def test_selecting_a_unit_changes_active_unit(self, browser):
         browser.login().open(self.repo_root)
 
         browser.css('.orgunitMenuContent a')[1].click()
