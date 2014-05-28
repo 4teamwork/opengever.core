@@ -1,5 +1,7 @@
 <registry>
     <records interface="ftw.zipexport.interfaces.IZipExportSettings">
-        <value key="enabled_dotted_name">opengever.dossier.behaviors.dossier.IDossierMarker</value>
+        <value key="enabled_dotted_names">
+            <element>opengever.dossier.behaviors.dossier.IDossierMarker</element>
+        </value>
     </records>
 </registry>
