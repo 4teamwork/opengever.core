@@ -422,12 +422,12 @@ class EmailContactsAndUsersVocabularyFactory(grok.GlobalUtility):
         return user_data
 
 
-class ClientsVocabularyFactory(grok.GlobalUtility):
+class OrgUnitsVocabularyFactory(grok.GlobalUtility):
     """Vocabulary of all enabled clients (including the current one).
     """
 
     grok.provides(IVocabularyFactory)
-    grok.name('opengever.ogds.base.ClientsVocabulary')
+    grok.name('opengever.ogds.base.OrgUnitsVocabularyFactory')
 
     def __call__(self, context):
         self.context = context
@@ -436,17 +436,9 @@ class ClientsVocabularyFactory(grok.GlobalUtility):
         return vocab
 
     def key_value_provider(self):
-        """yield the items
-
-        key = client id
-        value = client title
-        """
-
-        info = getUtility(IContactInformation)
-
-        for client in info.get_clients():
-            yield (client.client_id,
-                   client.title)
+        service = ogds_service()
+        for unit in ogds_service().all_org_units():
+            yield (unit.id(), unit.label())
 
 
 class AssignedClientsVocabularyFactory(grok.GlobalUtility):

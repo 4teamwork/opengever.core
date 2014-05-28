@@ -37,7 +37,7 @@ class IAssignSchema(form.Schema):
                 default=u'Responsible Client'),
         description=_(u'help_responsible_client',
                       default=u''),
-        vocabulary='opengever.ogds.base.ClientsVocabulary',
+        vocabulary='opengever.ogds.base.OrgUnitsVocabularyFactory',
         required=True)
 
     responsible = schema.Choice(
