@@ -1,9 +1,5 @@
-from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.interfaces import IPloneSiteRoot
-from StringIO import StringIO
 from opengever.ogds.base.exceptions import ClientNotFound
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
-from opengever.ogds.base.interfaces import IClientConfiguration
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.ou_selector import AnonymousOrgUnitSelector
 from opengever.ogds.base.ou_selector import NoAssignedUnitsOrgUnitSelector
@@ -12,6 +8,9 @@ from opengever.ogds.models.client import Client
 from opengever.ogds.models.service import OGDSService
 from plone.memoize import ram
 from plone.registry.interfaces import IRegistry
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.interfaces import IPloneSiteRoot
+from StringIO import StringIO
 from z3c.saconfig import named_scoped_session
 from zope.app.component.hooks import getSite, setSite
 from zope.component import getUtility
@@ -98,7 +97,7 @@ def get_current_org_unit():
     return get_ou_selector().get_current_unit()
 
 
-def get_current_admin_unit(self):
+def get_current_admin_unit():
     registry = getUtility(IRegistry)
     proxy = registry.forInterface(IAdminUnitConfiguration)
     return ogds_service().fetch_admin_unit(proxy.current_unit_id)

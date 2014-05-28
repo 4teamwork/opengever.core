@@ -52,7 +52,7 @@ class AdminUnitBuilder(SqlObjectBuilder):
         self.arguments['unit_id'] = 'foo'
         self.org_unit = None
 
-    def wrapping_org_units(self, org_unit):
+    def wrapping_org_unit(self, org_unit):
         self.org_unit = org_unit
         self.arguments.update(dict(
             unit_id=org_unit.id(),
