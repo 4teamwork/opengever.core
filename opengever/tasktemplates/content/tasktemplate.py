@@ -58,7 +58,7 @@ class ITaskTemplate(form.Schema):
                 default=u'Responsible Client'),
         description=_(u'help_responsible_client',
                       default=u''),
-        vocabulary='opengever.tasktemplates.ResponsibleClientVocabulary',
+        vocabulary='opengever.tasktemplates.ResponsibleOrgUnitVocabulary',
         required=True)
 
     form.widget(responsible=AutocompleteFieldWidget)
