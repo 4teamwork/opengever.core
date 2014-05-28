@@ -61,13 +61,14 @@ def get_ou_selector():
     site = getSite()
     sdm = site.session_data_manager
     storage = sdm.getSessionData(create=True)
-
     mtool = getToolByName(site, 'portal_membership')
     member = mtool.getAuthenticatedMember()
+
+    if mtool.isAnonymousUser():
+        return AnonymousOrgUnitSelector()
+
     if member.has_role('Manager'):
         units = ogds_service().all_org_units()
-    elif mtool.isAnonymousUser():
-        return AnonymousOrgUnitSelector()
     else:
         units = ogds_service().assigned_org_units(member.getId())
 

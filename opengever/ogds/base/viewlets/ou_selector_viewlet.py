@@ -7,7 +7,12 @@ from zope.interface import Interface
 
 class OrgUnitSelectorViewlet(common.ViewletBase):
     index = ViewPageTemplateFile('ou_selector_viewlet.pt')
-    current_unit = None
+
+    def __init__(self, context, request, view, manager=None):
+        super(OrgUnitSelectorViewlet, self).__init__(
+            context, request, view, manager)
+
+        self.current_unit = None
 
     def get_active_unit(self):
         if not self.current_unit:
@@ -23,7 +28,6 @@ class ChangeOrgUnitView(grok.View):
     grok.context(Interface)
 
     def render(self):
-
         unit_id = self.request.get('unit_id')
 
         if unit_id:
