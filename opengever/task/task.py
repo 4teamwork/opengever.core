@@ -6,6 +6,7 @@ from opengever.base.source import DossierPathSourceBinder
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
+from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import _
 from opengever.task import util
 from opengever.task.validators import NoCheckedoutDocsValidator
@@ -224,7 +225,7 @@ def deadlineDefaultValue(data):
 
 @form.default_value(field=ITask['responsible_client'])
 def responsible_client_default_value(data):
-    return get_client_id()
+    return get_current_org_unit().id()
 
 
 # XXX
