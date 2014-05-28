@@ -49,10 +49,11 @@ class TestSearchFormObjectProvidesDescription(FunctionalTestCase):
 
     def setUp(self):
         super(TestSearchFormObjectProvidesDescription, self).setUp()
-        create_and_select_current_org_unit()
+        org_unit = create_and_select_current_org_unit()
+        create(Builder('admin_unit').wrapping_org_unit(org_unit))
 
     def test_contains_special_info_in_a_multi_client_setup(self):
-        create_client(clientid="client2")
+        create(Builder('admin_unit'))
 
         self.browser.open('%s/advanced_search' % self.portal.absolute_url())
 
@@ -63,16 +64,14 @@ class TestSearchFormObjectProvidesDescription(FunctionalTestCase):
             'It searches only items from the current client.',
             formhelp.plain_text())
 
-    # disable this test temporarily
-    # because of the client concept rework.
-    # def test_not_contains_client_info_in_a_single_client_setup(self):
-    #     self.browser.open('%s/advanced_search' % self.portal.absolute_url())
+    def test_not_contains_client_info_in_a_single_client_setup(self):
+        self.browser.open('%s/advanced_search' % self.portal.absolute_url())
 
-    #     formhelp = self.browser.css(
-    #         '#formfield-form-widgets-object_provides span.formHelp')[0]
-    #     self.assertEquals(
-    #         'Select the contenttype to be searched for.',
-    #         formhelp.plain_text())
+        formhelp = self.browser.css(
+            '#formfield-form-widgets-object_provides span.formHelp')[0]
+        self.assertEquals(
+            'Select the contenttype to be searched for.',
+            formhelp.plain_text())
 
 
 class TestSearchWithContent(FunctionalTestCase):

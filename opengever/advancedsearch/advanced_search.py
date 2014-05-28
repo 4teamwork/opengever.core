@@ -1,5 +1,3 @@
-from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone import PloneMessageFactory as PMF
 from datetime import date
 from datetime import timedelta
 from five import grok
@@ -8,8 +6,11 @@ from opengever.advancedsearch import _
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
+from opengever.ogds.base.utils import ogds_service
 from opengever.task.util import getTaskTypeVocabulary
 from plone.directives import form as directives_form
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone import PloneMessageFactory as PMF
 from z3c.form import button, field
 from z3c.form.browser import radio, checkbox
 from z3c.form.interfaces import INPUT_MODE
@@ -338,18 +339,18 @@ class AdvancedSearchForm(directives_form.Form):
     def set_object_provides_field_description(self):
         # set special description for object_provides field,
         # if the current setup is a multiclient_setup
-        contact_info = getUtility(IContactInformation)
         type_field = self.widgets.get('object_provides').field
+        service = ogds_service()
 
-        if contact_info.is_one_client_setup():
-            type_field.description = _(
-                'help_portal_type',
-                default='Select the contenttype to be searched for.')
-        else:
+        if service.has_multiple_admin_units():
             type_field.description = _(
                 'help_portal_type_multiclient_setup',
                 default='Select the contenttype to be searched for.'
                 'It searches only items from the current client.')
+        else:
+            type_field.description = _(
+                'help_portal_type',
+                default='Select the contenttype to be searched for.')
 
     @button.buttonAndHandler(_(u'button_search', default=u'Search'))
     def search(self, action):
