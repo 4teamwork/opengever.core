@@ -6,8 +6,9 @@ from zope.interface import alsoProvides
 
 
 class IRelatedDocuments(form.Schema):
-    """The relatedDocument behvavior is a opengever.document
-    specific relateditems behavior. Only allows opengever.documents
+    """The 'Related documents' behvavior is an opengever.document
+    specific 'Related items' behavior. Only allows references to
+    opengever.documents.
     """
 
     relatedItems = RelationList(
