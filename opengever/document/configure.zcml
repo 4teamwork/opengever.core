@@ -36,7 +36,7 @@
     <!-- Register locales translations -->
     <i18n:registerTranslations directory="locales" />
 
-    <!-- Related doucments (marker) -->
+    <!-- Related documents (marker) -->
     <plone:behavior
         title="Related documents"
         description="Adds the ability to assign related documents"
@@ -45,7 +45,7 @@
         for="opengever.document.document.IDocumentSchema"
         />
 
-    <!-- name from title beahvior -->
+    <!-- name from title behavior -->
     <plone:behavior
         title="document name from title"
         description=""
@@ -54,7 +54,7 @@
         for="opengever.document.document.IDocumentSchema"
         />
 
-    <!-- BaseDocument beahvior -->
+    <!-- BaseDocument behavior -->
     <plone:behavior
         title="BaseDocument Behavior"
         description="Marker interface for document like objects"

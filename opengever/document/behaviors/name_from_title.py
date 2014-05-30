@@ -10,9 +10,9 @@ class IDocumentNameFromTitle(INameFromTitle):
 
 
 class DocumentNameFromTitle(object):
-    """Speical name from title behavior for letting the normalizing name
-    chooser choose the ID like want it to be.
-    The of a document should be in the format: "document-{sequence number}"
+    """Customized name from title behavior for using the normalizing name
+    chooser to select a document ID according to our specifications.
+    The ID of a document will be in the format: "document-{sequence number}"
     """
 
     implements(IDocumentNameFromTitle)
