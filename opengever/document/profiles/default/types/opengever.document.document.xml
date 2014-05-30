@@ -25,9 +25,9 @@
     <element value="opengever.base.behaviors.creator.ICreator" />
     <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
     <element value="opengever.base.behaviors.classification.IClassification" />
-    <element value="opengever.document.behaviors.IRelatedDocuments" />
+    <element value="opengever.document.behaviors.related_docs.IRelatedDocuments" />
     <element value="plone.app.versioningbehavior.behaviors.IVersionable" />
-    <element value="opengever.document.behaviors.IDocumentNameFromTitle" />
+    <element value="opengever.document.behaviors.name_from_title.IDocumentNameFromTitle" />
     <element value="opengever.trash.trash.ITrashable" />
     <element value="opengever.base.behaviors.sequence.ISequenceNumberBehavior" />
     <element value="plone.app.lockingbehavior.behaviors.ILocking" />
