@@ -4,6 +4,9 @@ Changelog
 3.2.5 (unreleased)
 ------------------
 
+- Document: Refactor behaviors to be a package with separate modules.
+  [lgraf]
+
 - Fixed zipexport-enable upgrade step to match the new registry entry.
   With ftw.zipexport 1.2.0 the registry name changes which brakes our upgrade step.
   [lknoepfel]

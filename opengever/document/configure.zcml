@@ -40,7 +40,7 @@
     <plone:behavior
         title="Related documents"
         description="Adds the ability to assign related documents"
-        provides=".behaviors.IRelatedDocuments"
+        provides=".behaviors.related_docs.IRelatedDocuments"
         factory="plone.behavior.AnnotationStorage"
         for="opengever.document.document.IDocumentSchema"
         />
@@ -49,8 +49,8 @@
     <plone:behavior
         title="document name from title"
         description=""
-        provides="opengever.document.behaviors.IDocumentNameFromTitle"
-        factory=".behaviors.DocumentNameFromTitle"
+        provides="opengever.document.behaviors.name_from_title.IDocumentNameFromTitle"
+        factory=".behaviors.name_from_title.DocumentNameFromTitle"
         for="opengever.document.document.IDocumentSchema"
         />
 
