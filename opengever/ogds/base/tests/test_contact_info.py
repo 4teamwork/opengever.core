@@ -117,30 +117,6 @@ class TestUserHelpers(FunctionalTestCase):
         super(TestUserHelpers, self).setUp()
         self.info = getUtility(IContactInformation)
 
-    def test_list_user_returns_all_users_ogds_objects(self):
-        create_ogds_user('hugo.boss')
-        create_ogds_user('peter.muster')
-        create_ogds_user('jamie.lannister')
-
-        self.assertEquals(
-            [u'hugo.boss', u'peter.muster', u'jamie.lannister'],
-            [u.userid for u in self.info.list_users()])
-
-    def test_get_user_returns_sql_user_obj_when_he_exists(self):
-        hugo_boss = create_ogds_user('hugo.boss')
-
-        self.assertEquals(hugo_boss.userid, self.info.get_user('hugo.boss').userid)
-
-    def test_get_user_returns_none_when_the_user_dont_exists(self):
-        self.assertEquals(None, self.info.get_user('someone.unknown'))
-
-    def test_get_user_raise_if_the_user_is_a_inbox(self):
-        with self.assertRaises(ValueError) as cm:
-            self.info.get_user('inbox:client1')
-        self.assertEquals(
-            'principal inbox:client1 is not a userid',
-            str(cm.exception))
-
     def test_getting_profile_url_returns_user_detail_view_url(self):
         create_ogds_user('hugo.boss')
 
@@ -209,7 +185,7 @@ class TestGroupHelpers(FunctionalTestCase):
         create_client(clientid='client1', inbox_group='client1_inbox_users')
 
         self.assertEquals('client1_inbox_users',
-                          self.info.get_group_of_inbox("inbox:client1").groupid)
+                          self.info.get_groupid_of_inbox("inbox:client1"))
 
 
 class TestContactInfoOGDSUserDescription(FunctionalTestCase):
@@ -229,7 +205,7 @@ class TestContactInfoOGDSUserDescription(FunctionalTestCase):
                           self.info.describe('hugo.boss'))
 
         self.assertEquals(u'Boss Hugo (hugo.boss)',
-                          self.info.describe(self.info.get_user('hugo.boss')))
+                          self.info.describe(self.hugo_boss))
 
     def test_with_email_options_contains_fullname_and_userid_and_email_in_parentheses(self):
         self.assertEquals(

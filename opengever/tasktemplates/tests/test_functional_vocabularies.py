@@ -30,35 +30,6 @@ class TestFunctionalVocabularies(MockTestCase):
 
         self.check_generator(generator, users)
 
-    def test_IssuerVocabularyFactory(self):
-        """ Test for IssuerVoca
-        """
-        # Context
-        mock_context = self.mocker.mock()
-
-        # Register Contact Information Utility
-        self.register_contact_info_utility()
-
-        # Register Sync Stamp Utility
-        self.register_sync_stamp_utility()
-
-        # Expected users
-        users = ['Responsible',
-                'Current user',
-                'Contactinfo',
-                'Client 1']
-
-        # Patching context var from IssuerVocabFactory-Object
-        VocabFactory = self.mocker.patch(
-            IssuerVocabularyFactory())
-        self.expect(VocabFactory.context).result(mock_context).count(0, None)
-
-        self.replay()
-
-        generator = VocabFactory.key_value_provider()
-
-        self.check_generator(generator, users)
-
     def test_ResponsibleClientVocabularyFactory(self):
         """ Test for ResponsibleClientVoca
         """
@@ -94,17 +65,6 @@ class TestFunctionalVocabularies(MockTestCase):
                  'zopemaster']
 
         self.base_ResponsibleVocabularyFactory(users, 'interactive_users')
-
-    def test_ResponsibleVocabularyFactory_2(self):
-        """ Test with no clients
-        """
-
-        # Expected entries
-        users = ['zopemaster',
-                 'Contactinfo',
-                 'Contactinfo']
-
-        self.base_ResponsibleVocabularyFactory(users, 'bambi')
 
     def base_ResponsibleVocabularyFactory(self, users, get_client):
         """ Basetestmethod to test the responsiblevoca
@@ -167,10 +127,11 @@ class TestFunctionalVocabularies(MockTestCase):
         """ Register the IContactInformation utility
         """
 
-        # Contact 1
-        mock_contact1 = self.mocker.mock()
-        self.expect(mock_contact1.active).result(True).count(0, None)
-        self.expect(mock_contact1.userid).result('contact1').count(0, None)
+        # User 1
+        mock_user1 = self.mocker.mock()
+        self.expect(mock_user1.active).result(True).count(0, None)
+        self.expect(mock_user1.userid).result('user1').count(0, None)
+        self.expect(mock_user1.label()).result('Contactinfo').count(0, None)
 
         # Client 1
         mock_client1 = self.mocker.mock()
@@ -179,9 +140,6 @@ class TestFunctionalVocabularies(MockTestCase):
 
         # IContactInformationUtility
         mock_contact_info = self.mocker.mock()
-        self.expect(
-            mock_contact_info.list_users()).result(
-                [mock_contact1]).count(0, None)
         self.expect(
             mock_contact_info.describe(ANY)).result(
                 'Contactinfo').count(0, None)
@@ -192,8 +150,5 @@ class TestFunctionalVocabularies(MockTestCase):
             mock_contact_info.list_contacts()).result([]).count(0, None)
         self.expect(
             mock_contact_info.list_assigned_users(
-                client_id=ANY)).result([mock_contact1]).count(0, None)
-        self.expect(
-            mock_contact_info.list_inactive_users()).result([]).count(0, None)
-
+                client_id=ANY)).result([mock_user1]).count(0, None)
         self.mock_utility(mock_contact_info, IContactInformation, name=u"")
