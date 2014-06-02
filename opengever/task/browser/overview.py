@@ -1,11 +1,14 @@
-from Acquisition import aq_parent, aq_inner
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from five import grok
-from opengever.ogds.base.utils import get_client_id
 from opengever.base.browser.helper import client_title_helper
 from opengever.base.browser.helper import get_css_class
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.utils import get_client_id
+from opengever.ogds.base.utils import ogds_service
 from opengever.tabbedview.browser.tabs import OpengeverTab
+from opengever.tabbedview.helper import _breadcrumbs_from_item
 from opengever.task import _
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
@@ -15,10 +18,10 @@ from z3c.form.field import Field
 from z3c.form.interfaces import DISPLAY_MODE, IFieldWidget
 from z3c.form.interfaces import IContextAware, IField
 from zope.component import getUtility, getMultiAdapter
+from zope.component import queryAdapter
+from zope.component import queryUtility
 from zope.i18n import translate
 from zope.interface import alsoProvides
-from opengever.tabbedview.helper import _breadcrumbs_from_item
-from zope.component import queryUtility, queryAdapter
 
 
 def get_field_widget(obj, field):
@@ -155,7 +158,7 @@ class Overview(DisplayForm, OpengeverTab):
             info = getUtility(IContactInformation)
             task = ITask(self.context)
 
-            if info.is_one_client_setup():
+            if not ogds_service().has_multiple_org_units():
                 return info.render_link(task.issuer)
 
             client_id = get_client_id()

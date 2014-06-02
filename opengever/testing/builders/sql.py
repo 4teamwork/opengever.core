@@ -3,6 +3,7 @@ from ftw.builder import builder_registry
 from ftw.builder import create
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.utils import create_session
+from opengever.ogds.base.utils import get_ou_selector
 from opengever.ogds.models.admin_unit import AdminUnit
 from opengever.ogds.models.client import Client
 from opengever.ogds.models.group import Group
@@ -65,7 +66,7 @@ class AdminUnitBuilder(SqlObjectBuilder):
 
     def __init__(self, session):
         super(AdminUnitBuilder, self).__init__(session)
-        self.arguments['unit_id'] = 'foo'
+        self.arguments['unit_id'] = u'foo'
         self.org_unit = None
         self._as_current_admin_unit = False
 
@@ -106,19 +107,27 @@ class OrgUnitBuilder(SqlObjectBuilder):
     def __init__(self, session):
         super(OrgUnitBuilder, self).__init__(session)
         self.arguments['client_id'] = u'rr'
+        self._as_current_org_unit = False
 
     def _create_mapped_class(self):
         return self.mapped_class(self.arguments.pop(self.id_argument_name),
                                  **self.arguments)
 
     def after_create(self, obj):
-        return OrgUnit(obj)
+        org_unit = OrgUnit(obj)
+        if self._as_current_org_unit:
+            get_ou_selector().set_current_unit(org_unit.id())
+        return org_unit
 
     def assign_users(self, *users):
         group = create(Builder('ogds_group')
                        .having(groupid=self.arguments.get(self.id_argument_name),
                                users=list(users)))
         self.arguments['users_group'] = group
+        return self
+
+    def as_current_org_unit(self):
+        self._as_current_org_unit = True
         return self
 
 

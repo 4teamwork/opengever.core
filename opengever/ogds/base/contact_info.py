@@ -1,6 +1,3 @@
-from Products.CMFCore.utils import getToolByName
-from Products.ZCatalog.ZCatalog import ZCatalog
-from Products.ZCatalog.interfaces import ICatalogBrain
 from five import grok
 from opengever.ogds.base import _
 from opengever.ogds.base.interfaces import IContactInformation, IUser
@@ -14,12 +11,16 @@ from opengever.ogds.models.group import Group
 from opengever.ogds.models.group import groups_users
 from opengever.ogds.models.user import User
 from plone.memoize import ram
+from Products.CMFCore.utils import getToolByName
+from Products.ZCatalog.interfaces import ICatalogBrain
+from Products.ZCatalog.ZCatalog import ZCatalog
 from zope.app.component.hooks import getSite
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 import logging
 import types
+import warnings
 
 
 logger = logging.getLogger('opengever.ogds.base')
@@ -239,6 +240,11 @@ class ContactInformation(grok.GlobalUtility):
         # If the current client is not enabled, we should not be able to
         # assign something to another client or interact in any way with
         # another client. This client is completely isolated.
+        warnings.warn(
+            "This function is deprecated. Use ogds_service()"
+            ".get_current_clients()/get_current_org_units() instead.",
+            DeprecationWarning)
+
         if not get_current_client().enabled:
             return []
 
