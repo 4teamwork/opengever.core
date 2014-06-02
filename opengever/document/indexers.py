@@ -150,3 +150,14 @@ def sortable_author(obj):
         return readable_author
     return ''
 grok.global_adapter(sortable_author, name='sortable_author')
+
+
+@indexer(IDocumentSchema)
+def public_trial(obj):
+    """Index to allow users to sort on public_trial."""
+    public_trial = obj.public_trial
+    if public_trial:
+        return public_trial
+
+    return ''
+grok.global_adapter(public_trial, name='public_trial')
