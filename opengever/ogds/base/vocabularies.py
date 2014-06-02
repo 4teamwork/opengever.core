@@ -171,12 +171,15 @@ class AllUsersAndInboxesVocabularyFactory(grok.GlobalUtility):
 
         info = getUtility(IContactInformation)
 
+        all_org_units = ogds_service().all_org_units()
+        mulitple_org_units = len(all_org_units) > 1
+
         for unit in ogds_service().all_org_units():
             # all users
             for user in unit.assigned_users():
                 value = u'%s:%s' % (unit.id(), user.userid)
-                # prepend client if there are multiple clients
-                if info.is_one_client_setup():
+                # prepend orgunit if there are multiple orgunits
+                if not mulitple_org_units:
                     label = u'%s' % (user.label())
                 else:
                     label = u'%s: %s' % (unit.label(), user.label())
