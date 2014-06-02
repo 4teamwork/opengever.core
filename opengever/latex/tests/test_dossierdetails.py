@@ -10,9 +10,7 @@ from opengever.latex.dossierdetails import IDossierDetailsLayer
 from opengever.latex.layouts.default import DefaultLayout
 from opengever.latex.testing import LATEX_ZCML_LAYER
 from opengever.testing import FunctionalTestCase
-from opengever.testing import create_client
-from opengever.testing import create_ogds_user
-from opengever.testing import set_current_client_id
+from opengever.testing import select_current_org_unit
 from plone.app.testing import TEST_USER_ID
 from zope.component import getMultiAdapter
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
@@ -53,12 +51,17 @@ class TestDossierDetailsDossierMetadata(FunctionalTestCase):
 
     def setUp(self):
         super(TestDossierDetailsDossierMetadata, self).setUp()
+        self.user = create(Builder('ogds_user')
+                           .having(firstname='t\xc3\xa4st'.decode('utf-8'),
+                                   lastname=u'User'))
+        self.org_unit = create(Builder('org_unit')
+                               .having(title=u'Regierungsrat')
+                               .assign_users(self.user))
+        self.admin_unit = create(Builder('admin_unit')
+                                 .as_current_admin_unit()
+                                 .wrapping_org_unit(self.org_unit))
 
-        client1 = create_client()
-        create_ogds_user(TEST_USER_ID, assigned_client=[client1],
-                         firstname='t\xc3\xa4st'.decode('utf-8'),
-                         lastname=u'User')
-        set_current_client_id(self.portal)
+        select_current_org_unit(self.org_unit.id())
 
     def get_dossierdetails_view(self, dossier):
         provide_request_layer(dossier.REQUEST, IDossierDetailsLayer)
@@ -66,14 +69,14 @@ class TestDossierDetailsDossierMetadata(FunctionalTestCase):
         return getMultiAdapter(
             (dossier, dossier.REQUEST, layout), ILaTeXView)
 
-    def test_responsible_contains_client_and_userid_splited_with_a_slash(self):
+    def test_responsible_contains_client_and_userid_separated_by_a_slash(self):
         dossier = create(Builder('dossier')
-                 .having(responsible=TEST_USER_ID))
+                         .having(responsible=TEST_USER_ID))
 
         dossierdetails = self.get_dossierdetails_view(dossier)
         self.assertEquals(
-            'Client1 / User t\xc3\xa4st (test_user_1_)'.decode('utf-8'),
-            dossierdetails.get_responsible())
+            'Regierungsrat / User t\xc3\xa4st (test_user_1_)',
+            dossierdetails.get_responsible().encode('utf-8'))
 
     def test_repository_path_is_a_reverted_path_seperated_with_slahes(self):
         repositoryroot = create(Builder('repository_root')
@@ -85,7 +88,6 @@ class TestDossierDetailsDossierMetadata(FunctionalTestCase):
                                 .titled(u'Sub Repository Folder')
                                 .within(repository_1))
         dossier = create(Builder('dossier').within(repository_1_1))
-
 
         dossierdetails = self.get_dossierdetails_view(dossier)
 
