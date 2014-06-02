@@ -115,31 +115,6 @@ def get_client_id():
     # return proxy.client_id
 
 
-def client_public_url_cachekey(method):
-    """chackekey for the get_client_public_url, wich is unique for every plone
-    site. So a setup with multiple opengever sites on one plone instance is
-    possible.
-    """
-
-    context = getSite()
-
-    if not IPloneSiteRoot.providedBy(context):
-        for obj in context.aq_chain:
-            if IPloneSiteRoot.providedBy(obj):
-                context = obj
-                break
-
-    return 'get_client_public_url:%s' % (context.id)
-
-
-@ram.cache(client_public_url_cachekey)
-def get_client_public_url():
-    """Returns the public_url of the current client.
-    """
-
-    return get_current_client().public_url
-
-
 def remote_json_request(target_client_id, viewname, path='',
                         data={}, headers={}):
     """ Sends a request to a json-action on a remote zope instance,
