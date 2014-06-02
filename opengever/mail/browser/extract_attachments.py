@@ -216,7 +216,7 @@ class ExtractAttachments(grok.View):
             iid = intids.getId(self.context)
 
             # prevent circular dependencies
-            from opengever.document.behaviors import IRelatedDocuments
+            from opengever.document.behaviors.related_docs import IRelatedDocuments
             IRelatedDocuments(doc).relatedItems = [RelationValue(iid)]
 
             msg = _(u'info_extracted_document',

@@ -51,4 +51,23 @@
         profile="opengever.document:default"
         />
 
+    <!-- 2602 -> 2701 -->
+    <genericsetup:upgradeStep
+        title="Rename behavior names for og.document.document FTI"
+        description=""
+        source="2602"
+        destination="2701"
+        handler="opengever.document.upgrades.to2701.RenameDocumentBehaviors"
+        profile="opengever.document:default"
+        />
+
+    <genericsetup:registerProfile
+        name="2701"
+        title="opengever.document: upgrade profile 2701"
+        description=""
+        directory="profiles/2701"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
 </configure>
