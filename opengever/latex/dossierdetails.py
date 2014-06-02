@@ -1,6 +1,5 @@
-from Acquisition import aq_inner, aq_parent
-from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from five import grok
 from ftw.mail.mail import IMail
 from ftw.pdfgenerator.browser.views import ExportPDFView
@@ -19,11 +18,11 @@ from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.browser.participants import role_list_helper
 from opengever.latex import _
 from opengever.latex.listing import ILaTexListing
-from opengever.ogds.base.utils import IContactInformation
-from opengever.ogds.base.utils import get_current_client
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.tabbedview.helper import readable_ogds_author
 from opengever.task.task import ITask
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.i18n import translate
@@ -184,11 +183,7 @@ class DossierDetailsLaTeXView(grok.MultiAdapter, MakoLaTeXView):
             self.context, IDossier(self.context).end)
 
     def get_responsible(self):
-        info = getUtility(IContactInformation)
-
-        return u'{} / {}'.format(
-            get_current_client().title,
-            info.describe(IDossier(self.context).responsible))
+        return self.context.get_responsible_label()
 
     def get_repository_path(self):
         """Returns a reverted, path-like list of parental repository folder
