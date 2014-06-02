@@ -1,6 +1,7 @@
 from Acquisition import aq_parent
 from five import grok
 from opengever.base.interfaces import IReferenceNumber
+from opengever.base.interfaces import ISequenceNumber
 from opengever.document.document import IDocumentSchema
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.interfaces import IDocProperties
@@ -8,8 +9,30 @@ from opengever.dossier.interfaces import IDocPropertyProvider
 from Products.CMFCore.interfaces import IMemberData
 from Products.CMFCore.utils import getToolByName
 from zope.component import getAdapter
+from zope.component import getUtility
 from zope.component import queryAdapter
 from zope.publisher.interfaces.browser import IBrowserRequest
+
+
+class DefaultDocumentDocPropertyProvider(grok.Adapter):
+    """
+    """
+    grok.context(IDocumentSchema)
+    grok.provides(IDocPropertyProvider)
+
+    def get_reference_number(self):
+        ref_num = getAdapter(self.context, IReferenceNumber).get_number()
+        return ref_num
+
+    def get_sequence_number(self):
+        return str(getUtility(ISequenceNumber).get_number(self.context))
+
+    def get_properties(self):
+        reference_number = self.get_reference_number()
+        sequence_number = self.get_sequence_number()
+        properties = {'Document.ReferenceNumber': reference_number,
+                      'Document.SequenceNumber': sequence_number}
+        return properties
 
 
 class DefaultDossierDocPropertyProvider(grok.Adapter):

@@ -29,6 +29,8 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
         ('User.FullName', 'Peter',),
         ('Dossier.ReferenceNumber', 'OG / 2'),
         ('Dossier.Title', 'My Dossier'),
+        ('Document.ReferenceNumber', 'OG / 2 / 4'),
+        ('Document.SequenceNumber', '4'),
     ]
 
     def setUp(self):

@@ -20,6 +20,11 @@ class TestDocProperties(FunctionalTestCase):
         'Dossier.ReferenceNumber': 'OG / 1',
         'Dossier.Title': 'My dossier',
     }
+    expected_document_properties = {
+        'Document.ReferenceNumber': 'OG / 1 / 1',
+        'Document.SequenceNumber': '1',
+    }
+
 
     def setUp(self):
         super(TestDocProperties, self).setUp()
@@ -35,7 +40,8 @@ class TestDocProperties(FunctionalTestCase):
         properties = docprops.get_properties()
         self.assertEqual(
             dict(self.expected_user_properties.items() +
-                 self.expected_dossier_properties.items()),
+                 self.expected_dossier_properties.items() +
+                 self.expected_document_properties.items()),
             properties
         )
 
