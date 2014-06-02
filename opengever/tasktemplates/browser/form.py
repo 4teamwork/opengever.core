@@ -1,22 +1,25 @@
 from AccessControl import Unauthorized
-from Acquisition import aq_inner, aq_parent
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
-from Products.CMFPlone.utils import getToolByName
-from Products.Five.browser import BrowserView
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from Products.statusmessages.interfaces import IStatusMessage
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from datetime import datetime, timedelta, date
 from ftw.table import helper
 from ftw.table.interfaces import ITableGenerator
 from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
 from opengever.ogds.base.interfaces import IContactInformation
-from opengever.ogds.base.utils import get_current_client, get_client_id
+from opengever.ogds.base.utils import get_client_id
+from opengever.ogds.base.utils import get_current_org_unit
+from opengever.ogds.base.utils import ogds_service
 from opengever.tasktemplates import _
-from opengever.tasktemplates.content.tasktemplate import \
-    MAIN_TASK_DEADLINE_DELTA
+from opengever.tasktemplates.content.tasktemplate import MAIN_TASK_DEADLINE_DELTA
 from opengever.tasktemplates.interfaces import IFromTasktemplateGenerated
 from plone.dexterity.utils import createContent, addContentToContainer
-from zope.component import queryUtility, getUtility
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from Products.CMFPlone.utils import getToolByName
+from Products.Five.browser import BrowserView
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from Products.statusmessages.interfaces import IStatusMessage
+from zope.component import getUtility
+from zope.component import queryUtility
 from zope.event import notify
 from zope.interface import alsoProvides
 from zope.lifecycleevent import ObjectCreatedEvent
@@ -229,6 +232,7 @@ class AddForm(BrowserView):
         notify(ObjectCreatedEvent(main_task))
         main_task = addContentToContainer(
             self.context, main_task, checkConstraints=True)
+        ogdsservice = ogds_service()
 
         # set marker Interfaces
         alsoProvides(main_task, IFromTasktemplateGenerated)
@@ -252,16 +256,15 @@ class AddForm(BrowserView):
                 )
 
             if template.responsible_client == 'interactive_users':
-                info = getUtility(IContactInformation)
-                responsible_assigned_clients = tuple(
-                    info.get_assigned_clients(data['responsible']))
-                current_client = get_current_client()
-                if not responsible_assigned_clients or \
-                        current_client in responsible_assigned_clients:
-                    data['responsible_client'] = current_client.client_id
+                responsible_assigned_org_units = ogdsservice.assigned_org_units(
+                    data['responsible'])
+                current_org_unit = get_current_org_unit()
+                if not responsible_assigned_org_units or \
+                        current_org_unit in responsible_assigned_org_units:
+                    data['responsible_client'] = current_org_unit.id()
                 else:
                     data['responsible_client'] = \
-                        responsible_assigned_clients[0].client_id
+                        responsible_assigned_org_units[0].id()
             else:
                 data['responsible_client'] = template.responsible_client
 
