@@ -1,3 +1,0 @@
-<div id="client_title">
-  <span class="title" tal:content="string:GEVER &mdash; ${viewlet/get_title}" />
-</div>
