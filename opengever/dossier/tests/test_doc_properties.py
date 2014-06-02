@@ -16,7 +16,7 @@ class TestDocProperties(FunctionalTestCase):
         'User.ID': TEST_USER_ID,
         'User.FullName': 'Peter',
     }
-    expected_document_properties = {
+    expected_dossier_properties = {
         'Dossier.ReferenceNumber': 'OG / 1',
         'Dossier.Title': 'My dossier',
     }
@@ -26,21 +26,22 @@ class TestDocProperties(FunctionalTestCase):
         self.grant('Manager')
         self.setup_fullname(fullname='Peter')
         self.dossier = create(Builder('dossier').titled(u'My dossier'))
+        self.document = create(Builder('document').within(self.dossier))
         self.member = self.login()
 
     def test_default_doc_properties_adapter(self):
         docprops = getMultiAdapter(
-            (self.dossier, self.portal.REQUEST), IDocProperties)
+            (self.document, self.portal.REQUEST), IDocProperties)
         properties = docprops.get_properties()
         self.assertEqual(
             dict(self.expected_user_properties.items() +
-                 self.expected_document_properties.items()),
+                 self.expected_dossier_properties.items()),
             properties
         )
 
     def test_default_dossier_doc_properties_provider(self):
         dossier_adapter = getAdapter(self.dossier, IDocPropertyProvider)
-        self.assertEqual(self.expected_document_properties,
+        self.assertEqual(self.expected_dossier_properties,
                          dossier_adapter.get_properties())
 
     def test_default_member_doc_properties_provider(self):

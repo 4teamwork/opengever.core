@@ -1,5 +1,7 @@
+from Acquisition import aq_parent
 from five import grok
 from opengever.base.interfaces import IReferenceNumber
+from opengever.document.document import IDocumentSchema
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.interfaces import IDocProperties
 from opengever.dossier.interfaces import IDocPropertyProvider
@@ -52,10 +54,11 @@ class DefaultMemberDocPropertyProvider(grok.Adapter):
 
 
 class DefaultDocProperties(grok.MultiAdapter):
-    grok.adapts(IDossierMarker, IBrowserRequest)
+    grok.adapts(IDocumentSchema, IBrowserRequest)
     grok.implements(IDocProperties)
 
     def __init__(self, context, request):
+        # Context is the newly created document
         self.context = context
         self.request = request
 
@@ -74,14 +77,15 @@ class DefaultDocProperties(grok.MultiAdapter):
         return member
 
     def get_properties(self):
-        dossier = self.context
+        document = self.context
+        dossier = aq_parent(document)
         repofolder = self.get_repofolder(dossier)
         repo = self.get_repo(dossier)
         site = self.get_site(dossier)
         member = self.get_member(self.request)
 
         properties = {}
-        for obj in [dossier, repofolder, repo, site, member]:
+        for obj in [document, dossier, repofolder, repo, site, member]:
             property_provider = queryAdapter(obj, IDocPropertyProvider)
             obj_properties = {}
             if property_provider is not None:

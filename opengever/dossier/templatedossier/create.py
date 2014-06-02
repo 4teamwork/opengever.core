@@ -44,11 +44,7 @@ class DocumentFromTemplate(object):
         self.file = template_doc.file
 
     def create_in(self, context, title, with_properties=False):
-        if (with_properties and
-                is_supported_mimetype(self.template_doc.file.contentType)):
-            data = self._copy_doc_properties_from_template(context)
-        else:
-            data = self.file.data
+        data = self.file.data
 
         _type = self._get_primary_field_type(self.template_doc)
         new_file = _type(data=data, filename=self.file.filename)
@@ -59,18 +55,21 @@ class DocumentFromTemplate(object):
 
         self._set_defaults(new_doc)
 
+        if (with_properties and
+                is_supported_mimetype(self.template_doc.file.contentType)):
+            new_doc.file.data = self._copy_doc_properties_from_template(new_doc)
+
         # Notify necessary standard event handlers
         notify(ObjectModifiedEvent(new_doc))
         return new_doc
 
-    def _copy_doc_properties_from_template(self, dossier):
+    def _copy_doc_properties_from_template(self, new_doc):
         # Copy the file data of the template to a temporary file
-
         with TemporaryDocFile(self.template_doc.file) as tmpfile:
 
             # Get properties for the new document based on the dossier
             properties_adapter = getMultiAdapter(
-                (dossier, dossier.REQUEST), IDocProperties)
+                (new_doc, new_doc.REQUEST), IDocProperties)
             properties = properties_adapter.get_properties()
 
             # Set the DocProperties by modifying the temporary file
