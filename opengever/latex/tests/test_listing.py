@@ -4,8 +4,6 @@ from ftw.builder import create
 from lxml.cssselect import CSSSelector
 from opengever.latex.listing import ILaTexListing
 from opengever.testing import FunctionalTestCase
-from opengever.testing import create_and_select_current_org_unit
-from opengever.testing import create_ogds_user
 from opengever.testing import obj2brain
 from zope.component import getMultiAdapter
 import lxml
@@ -16,14 +14,18 @@ class TestDossierListing(FunctionalTestCase):
     def setUp(self):
         super(TestDossierListing, self).setUp()
 
-        create_and_select_current_org_unit('client1')
-        create_ogds_user('hugo.boss')
+        self.user, self.org_unit, self.admin_unit, self.hugo = create(
+            Builder('fixture')
+            .with_user()
+            .with_org_unit()
+            .with_admin_unit()
+            .with_hugo_boss())
 
         self.repo = create(Builder('repository').titled('Repository XY'))
         self.dossier = create(Builder('dossier')
                           .within(self.repo)
                           .having(title=u'Dossier A',
-                                  responsible="hugo.boss",
+                                  responsible=self.hugo.userid,
                                   start=date(2013, 11, 1),
                                   end=date(2013, 12, 31))
                           .in_state('dossier-state-resolved'))
@@ -31,7 +33,7 @@ class TestDossierListing(FunctionalTestCase):
                                  .within(self.dossier)
                           .having(title=u'Dossier B',
                                   start=date(2013, 11, 1),
-                                  responsible="hugo.boss"))
+                                  responsible=self.hugo.userid))
 
         self.listing = getMultiAdapter(
             (self.repo, self.repo.REQUEST, self),
@@ -113,14 +115,18 @@ class TestSubDossierListing(FunctionalTestCase):
     def setUp(self):
         super(TestSubDossierListing, self).setUp()
 
-        create_and_select_current_org_unit('client1')
-        create_ogds_user('hugo.boss')
+        self.user, self.org_unit, self.admin_unit, self.hugo = create(
+            Builder('fixture')
+            .with_user()
+            .with_org_unit()
+            .with_admin_unit()
+            .with_hugo_boss())
 
         self.repo = create(Builder('repository').titled('Repository XY'))
         self.dossier = create(Builder('dossier')
                           .within(self.repo)
                           .having(title=u'Dossier A',
-                                  responsible="hugo.boss",
+                                  responsible=self.hugo.userid,
                                   start=date(2013, 11, 1),
                                   end=date(2013, 12, 31))
                           .in_state('dossier-state-resolved'))
@@ -159,9 +165,11 @@ class TestDocumentListing(FunctionalTestCase):
 
     def setUp(self):
         super(TestDocumentListing, self).setUp()
+        #create_and_select_current_org_unit('client1')
 
-        create_and_select_current_org_unit('client1')
-
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_user().with_org_unit().with_admin_unit()
+        )
         self.document = create(Builder('document')
                                .having(title=u'Document A',
                                        document_date=date(2013, 11, 4),
@@ -188,21 +196,25 @@ class TestDocumentListing(FunctionalTestCase):
             [value.text_content().strip() for value in rows[0].xpath(CSSSelector('td').path)])
 
 
-class TestTaskLisitings(FunctionalTestCase):
+class TestTaskListings(FunctionalTestCase):
 
     def setUp(self):
-        super(TestTaskLisitings, self).setUp()
+        super(TestTaskListings, self).setUp()
 
-        create_and_select_current_org_unit('client1')
-        create_ogds_user('hugo.boss')
+        self.user, self.org_unit, self.admin_unit, self.hugo = create(
+            Builder('fixture')
+            .with_user()
+            .with_org_unit()
+            .with_admin_unit()
+            .with_hugo_boss())
 
         self.task = create(Builder('task')
                            .having(
                                title='Task A',
                                task_type='approval',
-                               responsible='hugo.boss',
-                               responsible_client='client1',
-                               issuer='hugo.boss',
+                               responsible=self.hugo.userid,
+                               responsible_client=self.org_unit.id(),
+                               issuer=self.hugo.userid,
                                deadline=date(2013, 11, 6))
                            .in_state('task-state-in-progress'))
 
