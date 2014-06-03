@@ -38,7 +38,7 @@ def _get_task_css_class(task):
     if isinstance(type(task), DeclarativeMeta):
         # globalindex
         predecessor_client = (task.predecessor and task.predecessor.client_id)
-        client_id = task.client_id
+        admin_unit_id = task.admin_unit_id
         assigned_client = task.assigned_client
 
         is_subtask = task.is_subtask
