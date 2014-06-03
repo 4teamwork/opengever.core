@@ -51,4 +51,23 @@
         profile="opengever.document:default"
         />
 
+    <!-- 2602 -> 2603 -->
+    <genericsetup:upgradeStep
+        title="Add public_trial index and metadata"
+        description=""
+        source="2602"
+        destination="2603"
+        handler="opengever.document.upgrades.to2603.AddPublicTrial"
+        profile="opengever.document:default"
+        />
+
+    <genericsetup:registerProfile
+        name="2603"
+        title="opengever.document: upgrade profile 2603"
+        description=""
+        directory="profiles/2603"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
 </configure>
