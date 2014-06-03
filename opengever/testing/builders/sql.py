@@ -1,6 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import builder_registry
 from ftw.builder import create
+from opengever.globalindex.model.task import Task
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.utils import create_session
 from opengever.ogds.base.utils import get_ou_selector
@@ -24,7 +25,6 @@ class SqlObjectBuilder(object):
         self.db_session = create_session()
         self.arguments = {}
 
-    # XXX create this method for every builder
     def id(self, identifier):
         self.arguments[self.id_argument_name] = identifier
         return self
@@ -32,6 +32,7 @@ class SqlObjectBuilder(object):
     def create(self, **kwargs):
         self.before_create()
         obj = self.create_object(**kwargs)
+        self.add_object_to_session(obj)
         obj = self.after_create(obj)
         self.commit()
         return obj
@@ -46,16 +47,14 @@ class SqlObjectBuilder(object):
         if self.session.auto_commit:
             transaction.commit()
 
+    def add_object_to_session(self, obj):
+        self.db_session.add(obj)
+
     def having(self, **kwargs):
         self.arguments.update(kwargs)
         return self
 
     def create_object(self):
-        obj = self._create_mapped_class()
-        self.db_session.add(obj)
-        return obj
-
-    def _create_mapped_class(self):
         return self.mapped_class(**self.arguments)
 
 
@@ -78,8 +77,7 @@ class AdminUnitBuilder(SqlObjectBuilder):
         ))
         return self
 
-    def create_object(self):
-        obj = super(AdminUnitBuilder, self).create_object()
+    def after_create(self, obj):
         if self.org_unit:
             self.org_unit.assign_to_admin_unit(obj)
         return obj
@@ -108,10 +106,6 @@ class OrgUnitBuilder(SqlObjectBuilder):
         super(OrgUnitBuilder, self).__init__(session)
         self.arguments['client_id'] = u'rr'
         self._as_current_org_unit = False
-
-    def _create_mapped_class(self):
-        return self.mapped_class(self.arguments.pop(self.id_argument_name),
-                                 **self.arguments)
 
     def after_create(self, obj):
         org_unit = OrgUnit(obj)
@@ -148,9 +142,8 @@ class UserBuilder(SqlObjectBuilder):
         self.groups.append(group)
         return self
 
-    def _create_mapped_class(self):
-        obj = self.mapped_class(self.arguments.pop(self.id_argument_name),
-                                **self.arguments)
+    def create_object(self):
+        obj = super(UserBuilder, self).create_object()
         if self.groups:
             obj.groups.extend(self.groups)
         return obj
@@ -167,9 +160,5 @@ class GroupBuilder(SqlObjectBuilder):
         super(GroupBuilder, self).__init__(session)
         self.arguments['groupid'] = 'testgroup'
 
-    def _create_mapped_class(self):
-        return self.mapped_class(self.arguments.pop(self.id_argument_name),
-                                 **self.arguments)
-
-
 builder_registry.register('ogds_group', GroupBuilder)
+
