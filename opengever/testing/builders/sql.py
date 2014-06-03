@@ -162,3 +162,10 @@ class GroupBuilder(SqlObjectBuilder):
 
 builder_registry.register('ogds_group', GroupBuilder)
 
+
+class TaskBuilder(SqlObjectBuilder):
+
+    mapped_class = Task
+    id_argument_name = 'task_id'
+
+builder_registry.register('globalindex_task', GroupBuilder)
