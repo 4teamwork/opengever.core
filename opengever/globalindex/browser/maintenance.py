@@ -1,7 +1,7 @@
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
 from opengever.globalindex import Session
-from opengever.globalindex.handlers.task import index_task
+from opengever.globalindex.handlers.task import sync_task
 from opengever.globalindex.interfaces import IGlobalindexMaintenanceView
 from opengever.globalindex.interfaces import ITaskQuery
 from opengever.globalindex.model.task import Task
@@ -119,7 +119,7 @@ class GlobalindexMaintenanceView(BrowserView):
         for task in tasks:
             obj = task.getObject()
             int_id = intids.getId(obj)
-            index_task(obj, None)
+            sync_task(obj, None)
             if int_id in indexed_tasks:
                 indexed_tasks.remove(int_id)
             log('Obj %s updated in the globalindex.\n' % (obj))

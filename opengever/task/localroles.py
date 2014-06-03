@@ -1,6 +1,7 @@
-from Acquisition import aq_inner, aq_parent
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from five.grok import subscribe
-from opengever.globalindex.handlers.task import index_task
+from opengever.globalindex.handlers.task import sync_task
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.task.task import ITask
 from zope.app.container.interfaces import IObjectAddedEvent
@@ -85,7 +86,7 @@ class LocalRolesSetter(object):
         already with an earlier event handler - but we have just changed
         the roles which are indexed too (allowed users).
         """
-        index_task(self.task, self.event)
+        sync_task(self.task, self.event)
 
     def set_roles_on_distinct_parent(self):
         """Set local roles on the next parent which has a different
