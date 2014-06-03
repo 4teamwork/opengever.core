@@ -1,5 +1,5 @@
 from opengever.globalindex import Session
-from opengever.globalindex.handlers.task import index_task
+from opengever.globalindex.handlers.task import sync_task
 from opengever.globalindex.query import TaskQuery
 from opengever.task import _
 from Products.CMFCore.utils import getToolByName
@@ -40,7 +40,7 @@ class ClearAndRebuildTasks(BrowserView):
 
         # Re-Index tasks
         for obj in objs_to_reindex:
-            index_task(obj.getObject(), None)
+            sync_task(obj.getObject(), None)
 
         ptool.addPortalMessage(
             _("Global task index has been cleared (${cleared}) and rebuilt (${rebuilt})",
@@ -48,7 +48,7 @@ class ClearAndRebuildTasks(BrowserView):
                              'rebuilt': len(objs_to_reindex)}),
               type="info")
 
-        return self.context.REQUEST.RESPONSE.redirect(self.context.absolute_url() 
+        return self.context.REQUEST.RESPONSE.redirect(self.context.absolute_url()
                                         + '/@@ogds-controlpanel#ogds-cp-alltasks')
 
-                                        
+

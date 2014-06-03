@@ -1,6 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from opengever.globalindex.handlers.task import index_task
+from opengever.globalindex.handlers.task import sync_task
 from opengever.testing import FunctionalTestCase
 from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.testing import create_and_select_current_org_unit
@@ -92,7 +92,7 @@ class TestInboxOverviewAssignedInboxTasks(TestInboxOverviewDocumentBox):
         closed = create(Builder('forwarding')
                         .having(responsible='inbox:client1')
                         .in_state('forwarding-state-closed'))
-        index_task(closed, None)
+        sync_task(closed, None)
 
         self.assertEquals(
             [task2sqltask(active)], self.view.assigned_tasks())
