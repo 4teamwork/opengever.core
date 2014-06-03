@@ -33,4 +33,14 @@
         profile="opengever.globalindex:default"
         />
 
+    <!-- 2602 -> 2700 -->
+    <genericsetup:upgradeStep
+        title="Migrate DB schema for Task, add org_unit related info."
+        description=""
+        source="2602"
+        destination="2700"
+        handler="opengever.globalindex.upgrades.to2700.MigrateTaskTable"
+        profile="opengever.globalindex:default"
+        />
+
 </configure>
