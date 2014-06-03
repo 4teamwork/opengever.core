@@ -11,11 +11,12 @@ from opengever.globalindex.model import Base
 class Task(Base):
     """docstring for Task"""
     __tablename__ = 'tasks'
-    __table_args__ = (UniqueConstraint('client_id', 'int_id'), {})
+    __table_args__ = (UniqueConstraint('admin_unit_id', 'int_id'), {})
 
     task_id = Column("id", Integer, Sequence("task_id_seq"), primary_key=True)
-    client_id = Column(String(20), index=True)
-    int_id = Column(Integer, index=True)
+    admin_unit_id = Column(String(30), index=True, nullable=False)
+
+    int_id = Column(Integer, index=True, nullable=False)
 
     title = Column(String(256))
     breadcrumb_title = Column(String(512))
@@ -39,23 +40,26 @@ class Task(Base):
     deadline = Column(Date)
     completed = Column(Date)
 
-    assigned_client = Column(String(20), index=True)
+    issuing_org_unit = Column(String(30), index=True, nullable=False)
+    assigned_org_unit = Column(String(30), index=True, nullable=False)
 
     predecessor_id = Column(Integer, ForeignKey('tasks.id'))
-    successors = relationship("Task", backref=backref('predecessor',
-                                                      remote_side=task_id),
-                                      cascade="delete")
+    successors = relationship(
+        "Task",
+        backref=backref('predecessor', remote_side=task_id),
+        cascade="delete")
 
     _principals = relation('TaskPrincipal', backref='task',
-                     cascade='all, delete-orphan')
+                           cascade='all, delete-orphan')
     principals = association_proxy('_principals', 'principal')
 
-    def __init__(self, int_id, client_id):
-        self.client_id = client_id
+    def __init__(self, int_id, admin_unit_id, **kwargs):
+        super(Task, self).__init__(**kwargs)
+        self.admin_unit_id = admin_unit_id
         self.int_id = int_id
 
     def __repr__(self):
-        return "<Task %s@%s>" % (self.int_id, self.client_id)
+        return "<Task %s@%s>" % (self.int_id, self.admin_unit_id)
 
     @property
     def id(self):
