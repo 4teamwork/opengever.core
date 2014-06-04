@@ -4,6 +4,7 @@ from ftw.tabbedview.browser.tabbed import TabbedView
 from opengever.globalindex.interfaces import ITaskQuery
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.tabbedview.browser.tabs import Documents, Dossiers, Tasks
 from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
 from Products.CMFPlone.utils import getToolByName
@@ -190,7 +191,7 @@ class MyTasks(GlobalTaskListingTab):
                                                             self.sort_order)
 
         # .. and assigned to the current client
-        query = query.filter_by(assigned_client=get_client_id())
+        query = query.filter_by(admin_unit_id=get_current_admin_unit().id())
         return query
 
 

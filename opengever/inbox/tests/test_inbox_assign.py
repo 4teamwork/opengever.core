@@ -31,7 +31,7 @@ class TestAssingForwarding(FunctionalTestCase):
         self.browser.open(self.forwarding.absolute_url())
         self.browser.getLink('forwarding-transition-reassign-refused').click()
 
-        self.assertEquals(
+        self.assertItemsEqual(
             ['client1', 'client2'],
             self.browser.control('Responsible Client').options)
 

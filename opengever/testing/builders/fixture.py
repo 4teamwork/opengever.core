@@ -34,10 +34,6 @@ class FixtureBuilder(object):
         self._user_args.update(kwargs)
         return self
 
-    def with_hugo_boss(self):
-        self._with_hugo_boss = True
-        return self
-
     def with_org_unit(self, **kwargs):
         self._with_org_unit = True
         self._org_unit_args.update(kwargs)
@@ -45,6 +41,16 @@ class FixtureBuilder(object):
 
     def with_admin_unit(self):
         self._with_admin_unit = True
+        return self
+
+    def with_all_unit_setup(self):
+        self.with_user()
+        self.with_org_unit()
+        self.with_admin_unit()
+        return self
+
+    def with_hugo_boss(self):
+        self._with_hugo_boss = True
         return self
 
     def create(self):
