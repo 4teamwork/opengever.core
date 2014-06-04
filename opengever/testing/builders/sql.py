@@ -113,11 +113,22 @@ class OrgUnitBuilder(SqlObjectBuilder):
             get_ou_selector().set_current_unit(org_unit.id())
         return org_unit
 
-    def assign_users(self, *users):
-        group = create(Builder('ogds_group')
-                       .having(groupid=self.arguments.get(self.id_argument_name),
-                               users=list(users)))
-        self.arguments['users_group'] = group
+    def assign_users(self, users, create_group=True, create_inbox=True):
+        client_id = self.arguments.get(self.id_argument_name)
+        users_group_id = "{}_users".format(client_id)
+        users_inbox_id = "{}_inbox_users".format(client_id)
+
+        if create_group:
+            users_group = create(Builder('ogds_group')
+                                 .having(groupid=users_group_id,
+                                         users=list(users)))
+            self.arguments['users_group'] = users_group
+
+        if create_inbox:
+            inbox_group = create(Builder('ogds_group')
+                                 .having(groupid=users_inbox_id,
+                                         users=list(users)))
+            self.arguments['inbox_group'] = inbox_group
         return self
 
     def as_current_org_unit(self):
