@@ -23,24 +23,26 @@ class TestRefusingForwardings(FunctionalTestCase):
 
         user = create(Builder('ogds_user'))
 
-        client1 = create(Builder('org_unit')
-                         .having(client_id=u'client1')
-                         .assign_users([user], create_inbox=False)
-                         .as_current_org_unit())
+        self.client1 = create(Builder('org_unit')
+                              .having(client_id=u'client1')
+                              .with_default_groups()
+                              .assign_users([user], to_inbox=False)
+                              .as_current_org_unit())
 
-        client2 = create(Builder('org_unit')
-                         .having(client_id=u'client2')
-                         .assign_users([user], create_group=False))
+        self.client2 = create(Builder('org_unit')
+                              .having(client_id=u'client2')
+                              .with_default_groups()
+                              .assign_users([user], to_users=False))
 
-        admin_unit = create(Builder('admin_unit')
-                            .wrapping_org_unit(client1)
-                            .as_current_admin_unit())
+        self.admin_unit = create(Builder('admin_unit')
+                                 .wrapping_org_unit(self.client1)
+                                 .as_current_admin_unit())
 
         self.forwarding = create(Builder('forwarding')
-                            .having(
-                                title=u'Test forwarding',
-                                responsible_client=u'client2',
-                                responsible=u'inbox:client2'))
+                                 .having(
+                                     title=u'Test forwarding',
+                                     responsible_client=u'client2',
+                                     responsible=u'inbox:client2'))
 
         # TODO: mock remote_request instead of patching
         # the store_copy_in_remote_yearfolder and test this functionality
@@ -89,6 +91,7 @@ class TestRefuseForwardingStoring(FunctionalTestCase):
             .with_org_unit()
             .with_admin_unit())
         create(Builder('org_unit').having(client_id='client2')
+                                  .with_default_groups()
                                   .assign_users([self.user]))
 
         self.inbox = create(Builder('inbox'))

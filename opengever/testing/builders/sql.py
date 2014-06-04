@@ -106,6 +106,13 @@ class OrgUnitBuilder(SqlObjectBuilder):
         super(OrgUnitBuilder, self).__init__(session)
         self.arguments['client_id'] = u'rr'
         self._as_current_org_unit = False
+        self._with_inbox_group = False
+        self._with_users_group = False
+        self._inbox_users = set()
+        self._group_users = set()
+
+    def before_create(self):
+        self._assemble_groups()
 
     def after_create(self, obj):
         org_unit = OrgUnit(obj)
@@ -113,23 +120,43 @@ class OrgUnitBuilder(SqlObjectBuilder):
             get_ou_selector().set_current_unit(org_unit.id())
         return org_unit
 
-    def assign_users(self, users, create_group=True, create_inbox=True):
+    def with_default_groups(self):
+        self.with_inbox_group()
+        self.with_users_group()
+        return self
+
+    def with_inbox_group(self):
+        self._with_inbox_group = True
+        return self
+
+    def with_users_group(self):
+        self._with_users_group = True
+        return self
+
+    def assign_users(self, users, to_users=True, to_inbox=True):
+        if to_users:
+            self._group_users.update(users)
+
+        if to_inbox:
+            self._inbox_users.update(users)
+        return self
+
+    def _assemble_groups(self):
         client_id = self.arguments.get(self.id_argument_name)
         users_group_id = "{}_users".format(client_id)
         users_inbox_id = "{}_inbox_users".format(client_id)
 
-        if create_group:
+        if self._with_users_group:
             users_group = create(Builder('ogds_group')
                                  .having(groupid=users_group_id,
-                                         users=list(users)))
+                                         users=list(self._group_users)))
             self.arguments['users_group'] = users_group
 
-        if create_inbox:
+        if self._with_inbox_group:
             inbox_group = create(Builder('ogds_group')
                                  .having(groupid=users_inbox_id,
-                                         users=list(users)))
+                                         users=list(self._inbox_users)))
             self.arguments['inbox_group'] = inbox_group
-        return self
 
     def as_current_org_unit(self):
         self._as_current_org_unit = True
