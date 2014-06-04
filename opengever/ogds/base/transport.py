@@ -26,6 +26,7 @@ import json
 
 
 BASEDATA_KEY = 'basedata'
+FIELDDATA_KEY = 'field-data'
 REQUEST_KEY = 'object_data'
 
 ORIGINAL_INTID_ANNOTATION_KEY = 'transporter_original-intid'
@@ -99,9 +100,17 @@ class Transporter(grok.GlobalUtility):
         """ Creates the object with the data
         """
         portal_type = data[BASEDATA_KEY]['portal_type']
+
+        # XXX double check, can we remove IDataCollector and just use the data
+        # passed to this method instead?
+        creation_data = {}
+        creation_data.update(data[BASEDATA_KEY])
+        for field_data_by_interface in data.get(FIELDDATA_KEY, {}).values():
+            creation_data.update(field_data_by_interface)
+
         # base data
         creator = self._get_object_creator(portal_type)
-        obj = creator.create(container, data[BASEDATA_KEY])
+        obj = creator.create(container, creation_data)
         # insert data from collectors
         collectors = getAdapters((obj,), IDataCollector)
         for name, collector in collectors:
@@ -190,13 +199,14 @@ class DexterityObjectCreator(grok.Adapter):
 
     def create(self, container, data):
 
-        title = data['title']
+        title = data.pop('title')
         if not isinstance(title, unicode):
             title = title.decode('utf-8')
+        portal_type = data.pop('portal_type')
 
-        obj = createContent(data['portal_type'],
-                            id=title,
-                            title=title)
+        obj = createContent(portal_type,
+                            title=title,
+                            **data)
         notify(ObjectCreatedEvent(obj))
         obj = addContentToContainer(container,
                                     obj,
