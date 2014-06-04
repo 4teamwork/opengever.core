@@ -103,12 +103,12 @@ class Task(Base):
         self.predecessor = self.query_predecessor(
             *plone_task.get_predecessor_ids())
 
-    def query_predecessor(self, pred_client_id, pred_init_id):
-        if not (pred_client_id or pred_init_id):
+    def query_predecessor(self, admin_unit_id, pred_init_id):
+        if not (admin_unit_id or pred_init_id):
             return None
 
         return Session.query(Task).filter_by(
-            client_id=pred_client_id, int_id=pred_init_id).first()
+            admin_unit_id=admin_unit_id, int_id=pred_init_id).first()
 
 
 class TaskPrincipal(Base):

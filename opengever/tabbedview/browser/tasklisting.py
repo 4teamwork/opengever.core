@@ -5,7 +5,7 @@ from ftw.table.interfaces import ITableSource, ITableSourceConfig
 from opengever.base.browser.helper import client_title_helper
 from opengever.globalindex.model.task import Task
 from opengever.globalindex.utils import indexed_task_link_helper
-from opengever.ogds.base.utils import get_client_id
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.tabbedview import _
 from opengever.tabbedview.browser.listing import ListingView
 from opengever.tabbedview.browser.sqltablelisting import SqlTableSource
@@ -147,7 +147,7 @@ class GlobalTaskTableSource(SqlTableSource):
         query = query.filter(
             or_(
                 and_(Task.predecessor == None, Task.successors == None),
-                Task.client_id == get_client_id()))
+                Task.admin_unit_id == get_current_admin_unit().id()))
 
         # ordering
         query = self.extend_query_with_ordering(query)
