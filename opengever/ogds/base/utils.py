@@ -12,7 +12,8 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from StringIO import StringIO
 from z3c.saconfig import named_scoped_session
-from zope.app.component.hooks import getSite, setSite
+from zope.app.component.hooks import getSite
+from zope.app.component.hooks import setSite
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 import json
@@ -112,31 +113,6 @@ def get_client_id():
     # registry = getUtility(IRegistry)
     # proxy = registry.forInterface(IClientConfiguration)
     # return proxy.client_id
-
-
-def client_public_url_cachekey(method):
-    """chackekey for the get_client_public_url, wich is unique for every plone
-    site. So a setup with multiple opengever sites on one plone instance is
-    possible.
-    """
-
-    context = getSite()
-
-    if not IPloneSiteRoot.providedBy(context):
-        for obj in context.aq_chain:
-            if IPloneSiteRoot.providedBy(obj):
-                context = obj
-                break
-
-    return 'get_client_public_url:%s' % (context.id)
-
-
-@ram.cache(client_public_url_cachekey)
-def get_client_public_url():
-    """Returns the public_url of the current client.
-    """
-
-    return get_current_client().public_url
 
 
 def remote_json_request(target_client_id, viewname, path='',

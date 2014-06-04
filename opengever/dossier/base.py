@@ -1,17 +1,21 @@
-from Acquisition import aq_inner, aq_parent
-from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from datetime import datetime
 from five import grok
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.interfaces import IConstrainTypeDecider
 from opengever.dossier.interfaces import IDossierContainerTypes
+from opengever.ogds.base.utils import get_current_admin_unit
+from opengever.ogds.base.utils import ogds_service
 from opengever.task import OPEN_TASK_STATES
 from plone.dexterity.content import Container
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.registry.interfaces import IRegistry
-from zope.component import queryMultiAdapter, queryUtility
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from zope.component import queryMultiAdapter
+from zope.component import queryUtility
 from zope.interface import Interface
 
 
@@ -215,6 +219,13 @@ class DossierContainer(Container):
             end_dates.sort()
             return max(end_dates)
         return None
+
+    def get_responsible_label(self):
+        user = ogds_service().fetch_user(IDossier(self).responsible)
+        return u'{} / {}'.format(
+            get_current_admin_unit().title,
+            user.label()
+        )
 
 
 class DefaultConstrainTypeDecider(grok.MultiAdapter):

@@ -4,8 +4,9 @@ from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.base.source import DossierPathSourceBinder
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
-from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
+from opengever.ogds.base.utils import get_current_org_unit
+from opengever.ogds.base.utils import ogds_service
 from opengever.task import _
 from opengever.task import util
 from opengever.task.validators import NoCheckedoutDocsValidator
@@ -86,7 +87,7 @@ class ITask(form.Schema):
                 default=u'Responsible Client'),
         description=_(u'help_responsible_client',
                       default=u''),
-        vocabulary='opengever.ogds.base.ClientsVocabulary',
+        vocabulary='opengever.ogds.base.OrgUnitsVocabularyFactory',
         required=True)
 
     form.widget(responsible=AutocompleteFieldWidget)
@@ -224,7 +225,7 @@ def deadlineDefaultValue(data):
 
 @form.default_value(field=ITask['responsible_client'])
 def responsible_client_default_value(data):
-    return get_client_id()
+    return get_current_org_unit().id()
 
 
 # XXX
@@ -249,9 +250,8 @@ class AddForm(dexterity.AddForm):
         super(AddForm, self).update()
 
         # omit the responsible_client field and adjust the field description
-        # of the responsible field if there is only one client configured.
-        info = getUtility(IContactInformation)
-        if len(info.get_clients()) <= 1:
+        # of the responsible field if there is only one orgunit configured.
+        if not ogds_service().has_multiple_org_units():
             self.groups[0].widgets['responsible_client'].mode = HIDDEN_MODE
             self.groups[0].widgets['responsible'].field.description = _(
                 u"help_responsible_single_client_setup", default=u"")
@@ -267,8 +267,7 @@ class EditForm(dexterity.EditForm):
 
         # omit the responsible_client field and adjust the field description
         # of the responsible field if there is only one client configured.
-        info = getUtility(IContactInformation)
-        if len(info.get_clients()) <= 1:
+        if not ogds_service().has_multiple_org_units():
             self.groups[0].widgets['responsible_client'].mode = HIDDEN_MODE
             self.groups[0].widgets['responsible'].field.description = _(
                 u"help_responsible_single_client_setup", default=u"")

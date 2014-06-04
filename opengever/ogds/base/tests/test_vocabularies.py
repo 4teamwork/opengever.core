@@ -418,6 +418,29 @@ class TestInboxesVocabularyFactory(FunctionalTestCase):
         self.assertEquals([u'robin.hood'], vocabulary.hidden_terms)
 
 
+class TestOrgUnitsVocabularyFactory(FunctionalTestCase):
+
+    def test_contains_all_org_units(self):
+        create(Builder('org_unit').id('rr')
+               .having(title="Regierungsrat"))
+        create(Builder('org_unit').id('arch')
+               .having(title="Staatsarchiv"))
+        create(Builder('org_unit').id('afi')
+               .having(title="Informatikamt"))
+
+        voca_factory = getUtility(IVocabularyFactory,
+                          name='opengever.ogds.base.OrgUnitsVocabularyFactory')
+
+        self.assertTermKeys(
+            ['rr', 'arch', 'afi'], voca_factory(self.portal))
+
+        self.assertTerms(
+            [(u'afi', u'Informatikamt'),
+             (u'rr', u'Regierungsrat'),
+             (u'arch', u'Staatsarchiv')],
+            voca_factory(self.portal))
+
+
 class TestOGDSVocabularies(FunctionalTestCase):
 
     def test_contact_vocabulary(self):
@@ -437,17 +460,6 @@ class TestOGDSVocabularies(FunctionalTestCase):
             ['contact:croft-lara', 'contact:man-super'],
             voca_factory(self.portal))
 
-    def test_client_vocabulary_contains_all_active_clients(self):
-        create_and_select_current_org_unit('client1')
-        create_client(clientid='client2')
-        create_client(clientid='client3', enabled=False)
-
-
-        voca_factory = getUtility(IVocabularyFactory,
-                          name='opengever.ogds.base.ClientsVocabulary')
-
-        self.assertTermKeys(
-            ['client1', 'client2'], voca_factory(self.portal))
 
     def test_home_dossier_vocabulary_contains_all_open_dossier_from_your_home_client(self):
 

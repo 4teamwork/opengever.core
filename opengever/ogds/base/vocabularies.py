@@ -171,15 +171,18 @@ class AllUsersAndInboxesVocabularyFactory(grok.GlobalUtility):
 
         info = getUtility(IContactInformation)
 
-        for unit in ogds_service().all_org_units():
+        all_org_units = ogds_service().all_org_units()
+        has_multiple_org_units = len(all_org_units) > 1
+
+        for unit in all_org_units:
             # all users
             for user in unit.assigned_users():
                 value = u'%s:%s' % (unit.id(), user.userid)
-                # prepend client if there are multiple clients
-                if info.is_one_client_setup():
-                    label = u'%s' % (user.label())
-                else:
+                # prepend orgunit if there are multiple orgunits
+                if has_multiple_org_units:
                     label = u'%s: %s' % (unit.label(), user.label())
+                else:
+                    label = u'%s' % (user.label())
 
                 if not user.active:
                     self.hidden_terms.append(value)
@@ -422,12 +425,12 @@ class EmailContactsAndUsersVocabularyFactory(grok.GlobalUtility):
         return user_data
 
 
-class ClientsVocabularyFactory(grok.GlobalUtility):
+class OrgUnitsVocabularyFactory(grok.GlobalUtility):
     """Vocabulary of all enabled clients (including the current one).
     """
 
     grok.provides(IVocabularyFactory)
-    grok.name('opengever.ogds.base.ClientsVocabulary')
+    grok.name('opengever.ogds.base.OrgUnitsVocabularyFactory')
 
     def __call__(self, context):
         self.context = context
@@ -436,17 +439,9 @@ class ClientsVocabularyFactory(grok.GlobalUtility):
         return vocab
 
     def key_value_provider(self):
-        """yield the items
-
-        key = client id
-        value = client title
-        """
-
-        info = getUtility(IContactInformation)
-
-        for client in info.get_clients():
-            yield (client.client_id,
-                   client.title)
+        service = ogds_service()
+        for unit in ogds_service().all_org_units():
+            yield (unit.id(), unit.label())
 
 
 class AssignedClientsVocabularyFactory(grok.GlobalUtility):

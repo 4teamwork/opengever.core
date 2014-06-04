@@ -1,4 +1,3 @@
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from five import grok
 from ftw.table import helper
 from opengever.latex import _
@@ -6,8 +5,9 @@ from opengever.latex.utils import get_issuer_of_task
 from opengever.latex.utils import get_responsible_of_task
 from opengever.latex.utils import workflow_state
 from opengever.ogds.base.interfaces import IContactInformation
-from opengever.ogds.base.utils import get_current_client
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.task.helper import task_type_helper
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.component import getUtility
 from zope.interface import Interface
 
@@ -41,7 +41,7 @@ class DossiersLaTeXListing(grok.MultiAdapter):
         self.request = request
         self.latex_view = latex_view
 
-        self.client = get_current_client()
+        self.admin_unit = get_current_admin_unit()
         self.info = getUtility(IContactInformation)
 
     def get_widths(self):
@@ -70,7 +70,7 @@ class DossiersLaTeXListing(grok.MultiAdapter):
 
     def get_responsible(self, brain):
         return '%s / %s' % (
-            self.client.title,
+            self.admin_unit.title,
             self.info.describe(brain.responsible))
 
     def get_repository_title(self, brain):

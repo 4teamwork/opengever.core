@@ -1,6 +1,6 @@
 from five import grok
 from zope.globalrequest import getRequest
-from opengever.ogds.base.vocabularies import ClientsVocabularyFactory
+from opengever.ogds.base.vocabularies import OrgUnitsVocabularyFactory
 from opengever.ogds.base.vocabularies import ContactsAndUsersVocabularyFactory
 from opengever.ogds.base.vocabularies import UsersAndInboxesVocabularyFactory
 from opengever.tasktemplates import _
@@ -35,21 +35,21 @@ class IssuerVocabularyFactory(ContactsAndUsersVocabularyFactory):
             yield e
 
 
-class ResponsibleClientVocabularyFactory(ClientsVocabularyFactory):
-    """Vocabulary of all clients extend by the "interactive users"
-    client.
+class ResponsibleOrgUnitVocabularyFactory(OrgUnitsVocabularyFactory):
+    """Vocabulary of all orgunits extend by the "interactive users"
+    unit.
     """
 
     grok.provides(IVocabularyFactory)
-    grok.name('opengever.tasktemplates.ResponsibleClientVocabulary')
+    grok.name('opengever.tasktemplates.ResponsibleOrgUnitVocabulary')
 
     def key_value_provider(self):
         yield ('interactive_users',
                translate(_(u'client_interactive_users',
                            default=u'Interactive users'),
                          context=getRequest()))
-        for e in ClientsVocabularyFactory.key_value_provider(self):
-            yield e
+        for item in super(ResponsibleOrgUnitVocabularyFactory, self).key_value_provider():
+            yield item
 
 
 class ResponsibleVocabularyFactory(UsersAndInboxesVocabularyFactory):
