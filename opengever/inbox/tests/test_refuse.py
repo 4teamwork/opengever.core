@@ -1,4 +1,3 @@
-from Products.CMFCore.utils import getToolByName
 from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
@@ -9,13 +8,9 @@ from opengever.ogds.base.interfaces import ITransporter
 from opengever.ogds.base.transport import REQUEST_KEY
 from opengever.task.adapters import IResponseContainer
 from opengever.testing import FunctionalTestCase
-from opengever.testing import create_and_select_current_org_unit
-from opengever.testing import create_client
-from opengever.testing import create_ogds_user
-from opengever.testing import select_current_org_unit
 from opengever.testing.helpers import obj2brain
 from opengever.testing.helpers import task2sqltask
-from plone.app.testing import TEST_USER_ID
+from Products.CMFCore.utils import getToolByName
 from zope.component import getUtility
 import json
 
@@ -25,11 +20,21 @@ class TestRefusingForwardings(FunctionalTestCase):
 
     def setUp(self):
         super(TestRefusingForwardings, self).setUp()
-        client1 = create_client()
-        create_client(clientid='client2')
-        create_ogds_user(TEST_USER_ID, assigned_client=[client1],
-                         groups=['client2_inbox_users', ])
-        select_current_org_unit()
+
+        user = create(Builder('ogds_user'))
+
+        client1 = create(Builder('org_unit')
+                         .having(client_id=u'client1')
+                         .assign_users([user], create_inbox=False)
+                         .as_current_org_unit())
+
+        client2 = create(Builder('org_unit')
+                         .having(client_id=u'client2')
+                         .assign_users([user], create_group=False))
+
+        admin_unit = create(Builder('admin_unit')
+                            .wrapping_org_unit(client1)
+                            .as_current_admin_unit())
 
         self.forwarding = create(Builder('forwarding')
                             .having(
@@ -78,8 +83,13 @@ class TestRefuseForwardingStoring(FunctionalTestCase):
 
     def setUp(self):
         super(TestRefuseForwardingStoring, self).setUp()
-        create_and_select_current_org_unit()
-        create_client(clientid='client2')
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture')
+            .with_user()
+            .with_org_unit()
+            .with_admin_unit())
+        create(Builder('org_unit').having(client_id='client2')
+                                  .assign_users([self.user]))
 
         self.inbox = create(Builder('inbox'))
         self.forwarding = create(Builder('forwarding')

@@ -70,7 +70,7 @@ class FixtureBuilder(object):
             .having(**self._org_unit_args)
             .as_current_org_unit())
         if user:
-            builder = builder.assign_users(user)
+            builder = builder.assign_users([user])
         return create(builder)
 
     def _create_admin_unit(self, org_unit):

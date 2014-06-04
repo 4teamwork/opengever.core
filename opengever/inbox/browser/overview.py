@@ -1,4 +1,3 @@
-from Products.CMFCore.utils import getToolByName
 from five import grok
 from opengever.base.browser.helper import get_css_class
 from opengever.dossier.browser.overview import DossierOverview
@@ -7,9 +6,11 @@ from opengever.globalindex.model.task import Task
 from opengever.inbox import _
 from opengever.inbox.browser.tabs import get_current_inbox_principal
 from opengever.inbox.inbox import IInbox
-from opengever.ogds.base.utils import get_client_id
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.task import OPEN_TASK_STATES
-from sqlalchemy import and_, or_
+from Products.CMFCore.utils import getToolByName
+from sqlalchemy import and_
+from sqlalchemy import or_
 from zope.component import getUtility
 
 
@@ -50,7 +51,7 @@ class InboxOverview(DossierOverview):
         query = query.filter(
             or_(
                 and_(Task.predecessor == None, Task.successors == None),
-                Task.client_id == get_client_id()))
+                Task.admin_unit_id == get_current_admin_unit().id()))
 
         return query.all()[:5]
 

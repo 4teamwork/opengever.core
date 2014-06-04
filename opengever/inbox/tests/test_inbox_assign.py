@@ -1,13 +1,9 @@
-from Products.CMFCore.utils import getToolByName
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.task.adapters import IResponseContainer
 from opengever.testing import FunctionalTestCase
-from opengever.testing import create_client
-from opengever.testing import create_ogds_user
-from opengever.testing import select_current_org_unit
 from opengever.testing import task2sqltask
-from plone.app.testing import TEST_USER_ID
+from Products.CMFCore.utils import getToolByName
 
 
 class TestAssingForwarding(FunctionalTestCase):
@@ -17,12 +13,12 @@ class TestAssingForwarding(FunctionalTestCase):
     def setUp(self):
         super(TestAssingForwarding, self).setUp()
 
-        client1 = create_client()
-        create_client(clientid='client2')
-        create_ogds_user(TEST_USER_ID, assigned_client=[client1],
-                         groups=['client1_inbox_users', ])
-
-        select_current_org_unit('client1')
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture')
+            .with_user()
+            .with_org_unit()
+            .with_admin_unit())
+        create(Builder('org_unit').having(client_id='client2'))
 
         self.forwarding = create(
             Builder('forwarding')

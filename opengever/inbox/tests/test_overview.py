@@ -2,21 +2,21 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.globalindex.handlers.task import sync_task
 from opengever.testing import FunctionalTestCase
-from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
-from opengever.testing import create_and_select_current_org_unit
-from opengever.testing import create_client
-from opengever.testing import create_ogds_user
-from opengever.testing import set_current_client_id
 from opengever.testing.helpers import task2sqltask
-from plone.app.testing.interfaces import TEST_USER_NAME
 
 
 class TestInboxOverviewDocumentBox(FunctionalTestCase):
-    layer = OPENGEVER_FUNCTIONAL_TESTING
 
     def setUp(self):
         super(TestInboxOverviewDocumentBox, self).setUp()
         self.grant('Owner', 'Editor', 'Contributor')
+
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture')
+            .with_user()
+            .with_org_unit()
+            .with_admin_unit())
+        create(Builder('org_unit').having(client_id='client2'))
 
         self.inbox = create(Builder('inbox').titled(u'eingangskorb'))
         self.view = self.inbox.restrictedTraverse('tabbedview_view-overview')
@@ -48,12 +48,6 @@ class TestInboxOverviewDocumentBox(FunctionalTestCase):
 
 
 class TestInboxOverviewAssignedInboxTasks(TestInboxOverviewDocumentBox):
-
-    def setUp(self):
-        super(TestInboxOverviewAssignedInboxTasks, self).setUp()
-
-        create_and_select_current_org_unit('client1')
-        create_client('client2')
 
     def test_list_tasks_and_forwardings_assigned_to_current_inbox_group(self):
         task = create(Builder('task').having(responsible='inbox:client1'))
@@ -99,12 +93,6 @@ class TestInboxOverviewAssignedInboxTasks(TestInboxOverviewDocumentBox):
 
 
 class TestInboxOverviewIssuedInboxTasks(TestInboxOverviewDocumentBox):
-
-    def setUp(self):
-        super(TestInboxOverviewIssuedInboxTasks, self).setUp()
-
-        create_and_select_current_org_unit('client1')
-        create_client('client2')
 
     def test_list_tasks_and_forwardings_issued_by_current_inbox_group(self):
         task = create(Builder('task')
