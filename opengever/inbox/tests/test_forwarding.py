@@ -17,7 +17,7 @@ class TestForwarding(FunctionalTestCase):
         self.user, self.org_unit, self.admin_unit = create(
             Builder('fixture')
             .with_user()
-            .with_org_unit(client_id='plone')
+            .with_org_unit(client_id=u'plone')
             .with_admin_unit())
 
     def test_forwarding(self):
