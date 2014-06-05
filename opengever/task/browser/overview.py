@@ -158,6 +158,8 @@ class Overview(DisplayForm, OpengeverTab):
             info = getUtility(IContactInformation)
             task = ITask(self.context)
 
+            issuer = self.context.get_issuer_label()
+
             if not ogds_service().has_multiple_org_units():
                 return info.render_link(task.issuer)
 
