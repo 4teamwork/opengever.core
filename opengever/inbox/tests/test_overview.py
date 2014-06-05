@@ -11,9 +11,14 @@ class TestInboxOverviewDocumentBox(FunctionalTestCase):
         super(TestInboxOverviewDocumentBox, self).setUp()
         self.grant('Owner', 'Editor', 'Contributor')
 
-        self.user, self.org_unit, self.admin_unit = create(
+        self.user1, self.org_unit1, self.admin_unit1 = create(
             Builder('fixture').with_all_unit_setup())
-        create(Builder('org_unit').having(client_id='client2'))
+
+        self.user2, self.org_unit2, self.admin_unit2 = create(
+            Builder('fixture')
+            .with_user(userid='hans.muster')
+            .with_org_unit(client_id=u'client2')
+            .with_admin_unit())
 
         self.inbox = create(Builder('inbox').titled(u'eingangskorb'))
         self.view = self.inbox.restrictedTraverse('tabbedview_view-overview')
@@ -65,21 +70,19 @@ class TestInboxOverviewAssignedInboxTasks(TestInboxOverviewDocumentBox):
 
     def test_lists_only_the_local_one_when_having_predecessor_successor_couples(self):
         predecessor = create(Builder('forwarding')
-                             .having(responsible='inbox:client1',
-                                     assigned_client='client1'))
+                             .having(responsible='inbox:client2',
+                                     assigned_client='client2'))
         successor = create(Builder('forwarding')
                            .having(responsible='inbox:client1',
                                    assigned_client='client1')
                            .successor_from(predecessor))
-
-        task2sqltask(predecessor).client_id = 'client2'
 
         self.assertEquals(
             [task2sqltask(successor)], self.view.assigned_tasks())
 
     def test_list_only_active_tasks(self):
         active = create(Builder('forwarding')
-                      .having(responsible='inbox:client1'))
+                        .having(responsible='inbox:client1'))
         closed = create(Builder('forwarding')
                         .having(responsible='inbox:client1')
                         .in_state('forwarding-state-closed'))
