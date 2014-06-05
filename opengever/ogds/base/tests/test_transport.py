@@ -18,9 +18,9 @@ class TestTransporter(FunctionalTestCase):
         super(TestTransporter, self).setUp()
         self.request = self.portal.REQUEST
         self.grant('Manager')
-        create_client()
-        set_current_client_id(self.portal)
 
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_all_unit_setup())
 
     def test_transport_from_copies_the_object_inclusive_metadata_and_dublin_core_data(self):
         dossier = create(Builder("dossier").titled(u"Dossier"))
