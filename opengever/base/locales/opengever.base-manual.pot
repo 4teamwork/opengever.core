@@ -62,6 +62,10 @@ msgstr ""
 msgid "unchecked"
 msgstr ""
 
+#: opengever/repository/classification.py
+msgid "limited-public"
+msgstr ""
+
 #. Default ""
 #: opengever/repository/classification.py
 msgid "prompt"
@@ -81,4 +85,3 @@ msgstr ""
 #: opengever/repository/classification.py
 msgid "archival worthy with sampling"
 msgstr ""
-

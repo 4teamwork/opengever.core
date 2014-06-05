@@ -288,6 +288,11 @@ msgstr "Enthält schützenswerte Personendaten"
 msgid "private"
 msgstr "Nicht öffentlich"
 
+#. Default: "limited-public"
+#: opengever/repository/classification.py
+msgid "limited-public"
+msgstr "Eingeschränkt öffentlich"
+
 #. Default ""
 #: opengever/repository/classification.py
 msgid "prompt"
