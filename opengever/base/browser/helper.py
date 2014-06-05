@@ -39,7 +39,7 @@ def _get_task_css_class(task):
         # globalindex
         predecessor_client = (task.predecessor and task.predecessor.client_id)
         admin_unit_id = task.admin_unit_id
-        assigned_client = task.assigned_client
+        assigned_client = task.assigned_org_unit
 
         is_subtask = task.is_subtask
         is_forwarding = task.task_type == 'forwarding_task_type'

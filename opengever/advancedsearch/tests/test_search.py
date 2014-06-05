@@ -80,7 +80,8 @@ class TestSearchWithContent(FunctionalTestCase):
     def setUp(self):
         super(TestSearchWithContent, self).setUp()
 
-        create_and_select_current_org_unit()
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_all_unit_setup())
 
         self.dossier1 = create(Builder("dossier").titled(u"Dossier1"))
         self.dossier2 = create(Builder("dossier").titled(u"Dossier2"))

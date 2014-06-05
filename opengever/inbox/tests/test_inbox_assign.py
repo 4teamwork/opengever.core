@@ -14,10 +14,7 @@ class TestAssingForwarding(FunctionalTestCase):
         super(TestAssingForwarding, self).setUp()
 
         self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture')
-            .with_user()
-            .with_org_unit()
-            .with_admin_unit())
+            Builder('fixture').with_all_unit_setup())
         create(Builder('org_unit').having(client_id='client2'))
 
         self.forwarding = create(

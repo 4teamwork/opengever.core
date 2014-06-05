@@ -33,10 +33,7 @@ class TestAssignedInboxTaskTab(FunctionalTestCase):
     def setUp(self):
         super(TestAssignedInboxTaskTab, self).setUp()
         self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture')
-            .with_user()
-            .with_org_unit()
-            .with_admin_unit())
+            Builder('fixture').with_all_unit_setup())
 
         self.inbox = create(Builder('inbox').titled(u'Testinbox'))
 
@@ -79,10 +76,7 @@ class TestIssuedInboxTaskTab(FunctionalTestCase):
     def setUp(self):
         super(TestIssuedInboxTaskTab, self).setUp()
         self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture')
-            .with_user()
-            .with_org_unit()
-            .with_admin_unit())
+            Builder('fixture').with_all_unit_setup())
 
         self.inbox = create(Builder('inbox').titled(u'Testinbox'))
 
