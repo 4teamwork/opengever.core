@@ -9,8 +9,10 @@ from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.source import DossierPathSourceBinder
+from opengever.globalindex.interfaces import ITaskQuery
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.ogds.base.utils import get_client_id
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.task import _
@@ -34,7 +36,6 @@ from zope.component import getUtility
 from zope.component import provideAdapter
 from zope.interface import implements
 from zope.schema.vocabulary import getVocabularyRegistry
-
 
 _marker = object()
 
@@ -232,6 +233,11 @@ class Task(Container):
     @property
     def safe_title(self):
         return safe_unicode(self.title)
+
+    def get_sql_object(self):
+        query = getUtility(ITaskQuery)
+        return query.get_task(
+            getUtility(IIntIds).getId(self), get_current_admin_unit().id())
 
     def get_breadcrumb_title(self, max_length):
         # Generate and store the breadcrumb tooltip

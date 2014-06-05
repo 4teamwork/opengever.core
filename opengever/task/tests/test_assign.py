@@ -2,9 +2,6 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.task.adapters import IResponseContainer
 from opengever.testing import FunctionalTestCase
-from opengever.testing import create_client
-from opengever.testing import create_ogds_user
-from opengever.testing import select_current_org_unit
 from opengever.testing import task2sqltask
 from plone.app.testing import TEST_USER_ID
 
@@ -15,17 +12,15 @@ class TestAssignTask(FunctionalTestCase):
 
     def setUp(self):
         super(TestAssignTask, self).setUp()
-        client1 = create_client()
-        create_ogds_user('james.bond',
-                         firstname='James',
-                         lastname='Bond',
-                         assigned_client=[client1, ])
-        create_ogds_user(TEST_USER_ID,
-                         firstname='Test',
-                         lastname='User',
-                         assigned_client=[client1, ])
 
-        select_current_org_unit('client1')
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_all_unit_setup())
+
+        self.james = create(Builder('ogds_user')
+                            .in_group(self.org_unit.users_group())
+                            .having(userid='james.bond',
+                                    firstname='James',
+                                    lastname='Bond'))
 
         self.task = create(Builder('task')
                            .having(responsible_client='client1',

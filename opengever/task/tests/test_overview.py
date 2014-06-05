@@ -1,59 +1,58 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
 from opengever.testing import FunctionalTestCase
-from opengever.testing import create_and_select_current_org_unit
-from opengever.testing import create_client
 from plone.app.testing import TEST_USER_ID
 
 
 class TestTaskOverview(FunctionalTestCase):
 
-    use_browser = True
-
     def setUp(self):
         super(TestTaskOverview, self).setUp()
-        create_and_select_current_org_unit("client1")
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_all_unit_setup())
 
-    def test_issuer_is_linked_to_issuers_details_view(self):
+    @browsing
+    def test_issuer_is_linked_to_issuers_details_view(self, browser):
         task = create(Builder("task").having(issuer=TEST_USER_ID))
-        self.browser.open(
-            '%s/tabbedview_view-overview' % task.absolute_url())
 
-        link = self.browser.locate('.issuer a')
+        browser.login().open(task, view='tabbedview_view-overview')
+
         self.assertEquals(
             'http://nohost/plone/@@user-details/test_user_1_',
-            link.target.get('href'))
+            browser.css('.issuer a').first.get('href'))
 
-    def test_issuer_is_labeld_by_user_description(self):
-        task = create(Builder("task").having(issuer=TEST_USER_ID))
-        self.browser.open(
-            '%s/tabbedview_view-overview' % task.absolute_url())
-
-        link = self.browser.locate('.issuer a')
-        self.assertEquals(
-            'User Test (test_user_1_)', link.plain_text())
-
-    def test_issuer_is_prefixed_by_current_client_title_and_slash_on_a_multiclient_setup(self):
-        create_client(clientid="client2")
+    @browsing
+    def test_issuer_is_labeld_by_user_description(self, browser):
         task = create(Builder("task").having(issuer=TEST_USER_ID))
 
-        self.browser.open(
-            '%s/tabbedview_view-overview' % task.absolute_url())
+        browser.login().open(task, view='tabbedview_view-overview')
 
-        td = self.browser.locate('.issuer')
         self.assertEquals(
-            'Client1 / User Test (test_user_1_)', td.plain_text())
+            self.user.label(), browser.css('.issuer a').first.text)
 
-    def test_issuer_is_prefixed_by_predecessor_client_title_on_a_forwarding_successor(self):
-        create_client(clientid="client2")
+    @browsing
+    def test_issuer_is_prefixed_by_current_org_unit_on_a_multiclient_setup(self, browser):
+        create(Builder('org_unit').id('client2'))
+        task = create(Builder("task").having(issuer=TEST_USER_ID))
 
+        browser.login().open(task, view='tabbedview_view-overview')
+
+        self.assertEquals(
+            'Client1 / User Test (test_user_1_)',
+            browser.css('.issuer').first.text)
+
+    @browsing
+    def test_issuer_is_prefixed_by_predecessor_org_unit_on_a_forwarding_successor(self, browser):
+        create(Builder('org_unit').id('client2'))
         forwarding = create(Builder('forwarding').having(issuer=TEST_USER_ID))
         successor = create(Builder('task')
-                           .having(issuer=TEST_USER_ID)
+                           .having(issuer=TEST_USER_ID,
+                                   responsible_client='client2')
                            .successor_from(forwarding))
-        self.browser.open(
-            '%s/tabbedview_view-overview' % successor.absolute_url())
 
-        link = self.browser.locate('.issuer')
+        browser.login().open(successor, view='tabbedview_view-overview')
+
         self.assertEquals(
-            'Client1 / User Test (test_user_1_)', link.plain_text())
+            'Client2 / User Test (test_user_1_)',
+            browser.css('.issuer').first.text)
