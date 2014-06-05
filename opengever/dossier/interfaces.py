@@ -71,6 +71,18 @@ class IDossierParticipants(Interface):
     )
 
 
+class ITemplateDossierProperties(Interface):
+    """ Document properties configuration.
+    """
+
+    create_doc_properties = schema.Bool(
+        title=u'Enable creation of document properties',
+        description=u'Select whether document properties should be created\
+            when a word document is created from a document template.',
+        default=False,
+    )
+
+
 class IParticipationCreated(IObjectEvent):
     """Interface for participation created event.
     """
@@ -142,4 +154,21 @@ class IDossierArchiver(Interface):
     def update_prefix(prefix):
         """Update the filing prefix on the dossier and
         recursively on all subdossiers.
+        """
+
+
+class IDocProperties(Interface):
+    """Adapts IDossierMarker.
+    """
+
+    def get_properties():
+        """Return a dictionary of DocProperties for the adapted dossier.
+        """
+
+
+class IDocPropertyProvider(Interface):
+    """May adapt any object that can be a provider for DocProperties.
+    """
+    def get_properties():
+        """Return a dictionary of DocProperties for the adapted object.
         """

@@ -1,27 +1,21 @@
-from Testing.makerequest import makerequest
 from datetime import datetime, date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
-from ftw.testbrowser.pages import dexterity
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages import plone
-from opengever.dossier.templatedossier.interfaces import ITemplateDossier
+from ooxml_docprops import read_properties
+from opengever.dossier.interfaces import ITemplateDossierProperties
+from opengever.dossier.templatedossier.create import TemporaryDocFile
 from opengever.dossier.templatedossier.interfaces import ITemplateUtility
-from opengever.testing import FunctionalTestCase
-from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.testing import create_client
 from opengever.testing import create_ogds_user
-from opengever.testing import obj2brain
+from opengever.testing import FunctionalTestCase
+from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.testing import set_current_client_id
 from plone.app.testing import TEST_USER_ID
-from plone.dexterity.interfaces import IDexterityFTI
-from plone.dexterity.utils import createContentInContainer
-from zope.app.component.hooks import setSite
-from zope.component import createObject
+from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
-from zope.component import queryUtility
-import transaction
 
 
 class TestDocumentWithTemplateForm(FunctionalTestCase):
@@ -30,9 +24,23 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
 
     use_browser = True
 
+    expected_doc_properties = [
+        ('User.ID', TEST_USER_ID,),
+        ('User.FullName', 'Peter',),
+        ('Dossier.ReferenceNumber', 'OG / 2'),
+        ('Dossier.Title', 'My Dossier'),
+        ('Document.ReferenceNumber', 'OG / 2 / 4'),
+        ('Document.SequenceNumber', '4'),
+    ]
+
     def setUp(self):
         super(TestDocumentWithTemplateForm, self).setUp()
         self.grant('Manager')
+        self.setup_fullname(fullname='Peter')
+
+        registry = getUtility(IRegistry)
+        self.props = registry.forInterface(ITemplateDossierProperties)
+        self.props.create_doc_properties = True
 
         self.modification_date = datetime(2012, 12, 28)
 
@@ -46,7 +54,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
                                  .within(self.templatedossier)
                                  .with_dummy_content()
                                  .with_modification_date(self.modification_date))
-        self.dossier = create(Builder('dossier'))
+        self.dossier = create(Builder('dossier').titled(u'My Dossier'))
 
         self.template_b_path = '/'.join(self.template_b.getPhysicalPath())
 
@@ -146,6 +154,62 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
         self.assertEquals(self.template_b.file.data, document.file.data)
         self.assertNotEquals(self.template_b.file, document.file)
 
+    @browsing
+    def test_docx_template_is_created_from_template_with_doc_properties(self, browser):
+        template_word = create(Builder('document')
+                               .titled('Word Docx template')
+                               .within(self.templatedossier)
+                               .with_asset_file('with_custom_properties.docx'))
+        template_path = '/'.join(template_word.getPhysicalPath())
+
+        browser.login().open(self.dossier, view='document_with_template')
+        browser.fill({'paths:list': template_path,
+                      'title': 'Test Docx'}).save()
+
+        document = self.dossier.listFolderContents()[0]
+        self.assertEquals(u'test-docx.docx', document.file.filename)
+        with TemporaryDocFile(document.file) as tmpfile:
+            properties = read_properties(tmpfile.path)
+            self.assertItemsEqual(
+                self.expected_doc_properties + [('Test', 'Peter')],
+                properties)
+
+    @browsing
+    def test_docx_template_is_created_from_template_without_doc_properties(self, browser):
+        template_word = create(Builder('document')
+                               .titled('Word Docx template')
+                               .within(self.templatedossier)
+                               .with_asset_file('without_custom_properties.docx'))
+        template_path = '/'.join(template_word.getPhysicalPath())
+
+        browser.login().open(self.dossier, view='document_with_template')
+        browser.fill({'paths:list': template_path,
+                      'title': 'Test Docx'}).save()
+
+        document = self.dossier.listFolderContents()[0]
+        self.assertEquals(u'test-docx.docx', document.file.filename)
+        with TemporaryDocFile(document.file) as tmpfile:
+            properties = read_properties(tmpfile.path)
+            self.assertItemsEqual(self.expected_doc_properties, properties)
+
+    @browsing
+    def test_doc_properties_are_not_created_when_disabled(self, browser):
+        self.props.create_doc_properties = False
+        template_word = create(Builder('document')
+                               .titled('Word Docx template')
+                               .within(self.templatedossier)
+                               .with_asset_file('without_custom_properties.docx'))
+        template_path = '/'.join(template_word.getPhysicalPath())
+
+        browser.login().open(self.dossier, view='document_with_template')
+        browser.fill({'paths:list': template_path,
+                      'title': 'Test Docx'}).save()
+
+        document = self.dossier.listFolderContents()[0]
+        self.assertEquals(u'test-docx.docx', document.file.filename)
+        with TemporaryDocFile(document.file) as tmpfile:
+            self.assertItemsEqual([], read_properties(tmpfile.path))
+
     # the session data manager storage is not easy availabe in the test
     #
     # @browsing
@@ -153,6 +217,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
     #     browser.login().open(self.dossier, view='document_with_template')
     #     browser.fill({'paths:list': self.template_b_path,
     #                   'title': 'Test Document'}).save()
+
 
 class TestTemplateDossier(FunctionalTestCase):
 

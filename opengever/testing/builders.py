@@ -1,10 +1,11 @@
-from Products.CMFCore.utils import getToolByName
 from ftw.builder import builder_registry
 from ftw.builder.dexterity import DexterityBuilder
+from opengever.testing import assets
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.trash.trash import ITrashable
 from plone.namedfile.file import NamedBlobFile
+from Products.CMFCore.utils import getToolByName
 from z3c.relationfield.relation import RelationValue
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
@@ -39,6 +40,10 @@ class DocumentBuilder(DexterityBuilder):
 
     def with_dummy_content(self):
         self.attach_file_containing("Test data")
+        return self
+
+    def with_asset_file(self, filename):
+        self.attach_file_containing(assets.load(filename), unicode(filename))
         return self
 
     def checked_out_by(self, userid):

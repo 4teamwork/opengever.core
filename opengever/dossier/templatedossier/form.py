@@ -3,23 +3,15 @@ from ftw.table import helper
 from ftw.table.interfaces import ITableGenerator
 from opengever.base.interfaces import IRedirector
 from opengever.dossier import _
+from opengever.dossier.interfaces import ITemplateDossierProperties
+from opengever.dossier.templatedossier.create import DocumentFromTemplate
 from opengever.dossier.templatedossier.interfaces import ITemplateUtility
 from opengever.tabbedview.helper import linked
-from plone.dexterity.utils import createContentInContainer
-from plone.dexterity.utils import iterSchemata
-from plone.rfc822.interfaces import IPrimaryField
+from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
-from z3c.form.interfaces import IValue
 from zope.component import getUtility
-from zope.component import queryMultiAdapter
-from zope.event import notify
 from zope.interface import Interface
-from zope.lifecycleevent import ObjectModifiedEvent
-from zope.schema import getFieldsInOrder
-
-
-NO_DEFAULT_VALUE_FIELDS = ['title', 'file']
 
 
 class TemplateDocumentFormView(grok.View):
@@ -102,54 +94,16 @@ class TemplateDocumentFormView(grok.View):
         """
 
         template_doc = self.context.restrictedTraverse(template_path)
-        _type = self._get_primary_field_type(template_doc)
+        # TODO: Add registry option to globally disable docproperty code
 
-        new_file = _type(data=template_doc.file.data,
-                         filename=template_doc.file.filename)
+        registry = getUtility(IRegistry)
+        props = registry.forInterface(ITemplateDossierProperties)
 
-        new_doc = createContentInContainer(
-            self.context, 'opengever.document.document',
-            title=self.title, file=new_file)
-
-        self._set_defaults(new_doc)
-
-        # Notify necessary standard event handlers
-        notify(ObjectModifiedEvent(new_doc))
-
-        return new_doc
-
-    def _get_primary_field_type(self, obj):
-        """Determine the type of an objects primary field (e.g. NamedBlobFile)
-        so we can use it as a factory when setting the new document's primary
-        field.
-        """
-
-        for schemata in iterSchemata(obj):
-            for name, field in getFieldsInOrder(schemata):
-                if IPrimaryField.providedBy(field):
-                    return field._type
-
-    def _set_defaults(self, obj):
-        """Set default values for all fields including behavior fields."""
-
-        for schemata in iterSchemata(obj):
-            for name, field in getFieldsInOrder(schemata):
-                if name not in NO_DEFAULT_VALUE_FIELDS:
-                    default = queryMultiAdapter(
-                        (obj, obj.REQUEST, None, field, None),
-                        IValue, name='default')
-
-                    if default is not None:
-                        default = default.get()
-                    if default is None:
-                        default = getattr(field, 'default', None)
-                    if default is None:
-                        try:
-                            default = field.missing_value
-                        except AttributeError:
-                            pass
-                    value = default
-                    field.set(field.interface(obj), value)
+        return DocumentFromTemplate(template_doc).create_in(
+            self.context,
+            self.title,
+            with_properties=props.create_doc_properties
+        )
 
     def render_form(self):
         """Get the list of template documents and render the "document from
