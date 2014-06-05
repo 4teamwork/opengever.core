@@ -72,3 +72,6 @@ class TestGlobalindexTask(TestCase):
             str(cm.exception))
 
         transaction.abort()
+
+    def test_get_issuer_label(self):
+        task = self._create_task()
