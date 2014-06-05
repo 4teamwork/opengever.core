@@ -17,10 +17,8 @@ class TestTaskSQLSyncer(FunctionalTestCase):
 
     def setUp(self):
         super(TestTaskSQLSyncer, self).setUp()
-        self.user, self.org_unit, self.admin_unit, = create(Builder('fixture')
-            .with_user()
-            .with_org_unit()
-            .with_admin_unit())
+        self.user, self.org_unit, self.admin_unit, = create(
+            Builder('fixture').with_all_unit_setup())
         self.query = getUtility(ITaskQuery)
 
         self.dossier = create(Builder('dossier')

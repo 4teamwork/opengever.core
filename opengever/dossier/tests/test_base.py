@@ -12,6 +12,12 @@ class TestDossierContainerFunctional(FunctionalTestCase):
     New tests will be added to this case.
     """
 
+    def setUp(self):
+        super(TestDossierContainerFunctional, self).setUp()
+
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_all_unit_setup())
+
     def test_is_all_supplied_without_any_subdossiers(self):
         dossier = create(Builder("dossier"))
         create(Builder("document").within(dossier))
@@ -71,6 +77,12 @@ class TestDossierContainerFunctional(FunctionalTestCase):
 
 
 class TestDossierChecks(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestDossierChecks, self).setUp()
+
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_all_unit_setup())
 
     def test_its_all_closed_if_no_task_exists(self):
         dossier = create(Builder("dossier"))
