@@ -2,9 +2,6 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.testing import FunctionalTestCase
 from opengever.testing import create_client
-from opengever.testing import create_ogds_user
-from opengever.testing import select_current_org_unit
-from plone.app.testing import TEST_USER_ID
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
 
@@ -14,10 +11,8 @@ class TestLocalRolesSetter(FunctionalTestCase):
     def setUp(self):
         super(TestLocalRolesSetter, self).setUp()
 
-        client1 = create_client(clientid="client1", inbox_group='client1_inbox_users')
-        create_ogds_user(TEST_USER_ID, assigned_client=[client1],
-                         firstname="Test", lastname="User")
-        select_current_org_unit('client1')
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_all_unit_setup())
 
     def test_responsible_has_local_editor_role_on_task_when_is_added(self):
         task = create(Builder('task').having(responsible='hugo.boss'))

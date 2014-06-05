@@ -1,10 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.testing import FunctionalTestCase
-from opengever.testing import assign_user_to_client
-from opengever.testing import create_client
-from opengever.testing import create_ogds_user
-from opengever.testing import set_current_client_id
 from plone.app.testing import TEST_USER_ID
 
 
@@ -15,10 +11,8 @@ class TestTaskRedirector(FunctionalTestCase):
     def setUp(self):
         super(TestTaskRedirector, self).setUp()
 
-        client = create_client()
-        user = create_ogds_user(TEST_USER_ID)
-        assign_user_to_client(user, client)
-        set_current_client_id(self.portal)
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_all_unit_setup())
 
         self.dossier = create(Builder('dossier'))
 

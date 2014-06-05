@@ -5,10 +5,6 @@ from opengever.task.adapters import IResponseContainer
 from opengever.task.interfaces import IDeadlineModifier
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.testing import FunctionalTestCase
-from opengever.testing import create_and_select_current_org_unit
-from opengever.testing import create_client
-from opengever.testing import create_ogds_user
-from opengever.testing import select_current_org_unit
 from plone.app.testing import TEST_USER_ID
 from zExceptions import Unauthorized
 from zope.component import getUtility
@@ -19,6 +15,11 @@ import datetime
 class TestDeadlineModificationForm(FunctionalTestCase):
 
     use_browser = True
+
+    def setUp(self):
+        super(TestDeadlineModificationForm, self).setUp()
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_all_unit_setup())
 
     def _change_deadline(self, task, new_deadline, text=u''):
         self.browser.open('%s/modify_deadline' % task.absolute_url())
@@ -55,7 +56,6 @@ class TestDeadlineModificationForm(FunctionalTestCase):
         self.assertPageContains('The given deadline, is the current one.')
 
     def test_deadline_is_updated_also_in_globalindex(self):
-        create_and_select_current_org_unit('client1')
         task = create(Builder('task')
                       .having(issuer=TEST_USER_ID, deadline=datetime.date(2013, 1, 1)))
 
@@ -85,7 +85,6 @@ class TestDeadlineModificationForm(FunctionalTestCase):
             response.changes)
 
     def test_successor_is_also_updated_when_modify_predecessors_deadline(self):
-        create_and_select_current_org_unit()
         predecessor = create(Builder('task')
                              .having(issuer=TEST_USER_ID,
                                      deadline=datetime.date(2013, 1, 1)))
@@ -104,6 +103,11 @@ class TestDeadlineModificationForm(FunctionalTestCase):
 
 class TestDeadlineModifierController(FunctionalTestCase):
 
+    def setUp(self):
+        super(TestDeadlineModifierController, self).setUp()
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_all_unit_setup())
+
     def test_modify_is_allowed_for_issuer_on_a_open_task(self):
         task = create(Builder('task').having(issuer=TEST_USER_ID))
 
@@ -111,8 +115,6 @@ class TestDeadlineModifierController(FunctionalTestCase):
             task.restrictedTraverse('is_deadline_modification_allowed')())
 
     def test_modify_is_allowed_for_issuer_on_a_in_progress_task(self):
-        create_and_select_current_org_unit()
-
         task = create(Builder('task')
                       .having(issuer=TEST_USER_ID, responsible=TEST_USER_ID)
                       .in_progress())
@@ -121,12 +123,6 @@ class TestDeadlineModifierController(FunctionalTestCase):
             task.restrictedTraverse('is_deadline_modification_allowed')())
 
     def test_modify_is_allowed_for_a_inbox_group_user_when_inbox_is_issuer(self):
-
-        client1 = create_client(clientid='client1')
-        create_ogds_user(TEST_USER_ID, assigned_client=[client1],
-                         groups=('client1_inbox_users', ))
-        select_current_org_unit('client1')
-
         task = create(Builder('task')
                       .having(issuer='inbox:client1', responsible=TEST_USER_ID)
                       .in_progress())
@@ -156,6 +152,11 @@ class TestDeadlineModifierController(FunctionalTestCase):
 class RemoteDeadlineModifier(FunctionalTestCase):
 
     use_browser = True
+
+    def setUp(self):
+        super(RemoteDeadlineModifier, self).setUp()
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_all_unit_setup())
 
     def test_updating_deadline_of_the_task(self):
         task = create(Builder('task')
@@ -200,6 +201,11 @@ class RemoteDeadlineModifier(FunctionalTestCase):
 
 
 class TestDeadlineModifier(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestDeadlineModifier, self).setUp()
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_all_unit_setup())
 
     def test_raise_unauthorized_when_mofication_is_not_allowed(self):
         task = create(Builder('task')

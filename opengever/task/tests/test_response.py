@@ -18,6 +18,7 @@ import urllib
 
 
 class TestResponse(FunctionalTestCase):
+
     use_browser=True
 
     def setUp(self):

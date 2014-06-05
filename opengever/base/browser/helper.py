@@ -5,7 +5,7 @@ from plone.i18n.normalizer.interfaces import IIDNormalizer
 from sqlalchemy.ext.declarative import DeclarativeMeta
 from zope.component import getUtility
 
-
+# XXX remove me
 def client_title_helper(item, value):
     """Returns the client title out of the client id (`value`).
     """
