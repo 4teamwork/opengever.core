@@ -36,6 +36,14 @@
     <!-- Register locales translations -->
     <i18n:registerTranslations directory="locales" />
 
+    <!-- Document Metadata behavior -->
+    <plone:behavior
+        title="Document Metadata"
+        description="Common metadata for GEVER documents"
+        provides=".behaviors.metadata.IDocumentMetadata"
+        for="*"
+        />
+
     <!-- Related documents (marker) -->
     <plone:behavior
         title="Related documents"

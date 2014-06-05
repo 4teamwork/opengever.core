@@ -1,3 +1,5 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testing import MockTestCase
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.indexers import DefaultDocumentIndexer
@@ -50,11 +52,10 @@ class TestDocumentIndexers(FunctionalTestCase):
             index_data_for(doc1).get('sortable_author'), u'H\xfcgo B\xf6ss')
 
     def test_date_indexers(self):
-        doc1 = createContentInContainer(
-            self.portal, 'opengever.document.document',
+        doc1 = create(Builder('document').having(
             title=u"Doc One",
             document_date=datetime.date(2011,1,1),
-            receipt_date=datetime.date(2011, 2, 1))
+            receipt_date=datetime.date(2011, 2, 1)))
 
         # document_date
         self.assertEquals(

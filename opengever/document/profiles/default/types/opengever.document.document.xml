@@ -32,6 +32,7 @@
     <element value="opengever.base.behaviors.sequence.ISequenceNumberBehavior" />
     <element value="plone.app.lockingbehavior.behaviors.ILocking" />
     <element value="opengever.document.behaviors.IBaseDocument" />
+    <element value="opengever.document.behaviors.metadata.IDocumentMetadata" />
   </property>
 
   <!-- View information -->

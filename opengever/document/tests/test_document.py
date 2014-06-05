@@ -1,14 +1,14 @@
-from Products.CMFCore.utils import getToolByName
 from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.document.behaviors import IBaseDocument
+from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.document import IDocumentSchema
 from opengever.document.document import UploadValidator
 from opengever.document.interfaces import IDocumentSettings
-from opengever.testing import FunctionalTestCase
 from opengever.testing import create_ogds_user
+from opengever.testing import FunctionalTestCase
 from opengever.testing.helpers import obj2brain
 from plone.dexterity.fti import DexterityFTI
 from plone.dexterity.fti import register
@@ -16,6 +16,7 @@ from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.utils import createContentInContainer
 from plone.namedfile.file import NamedBlobFile
 from plone.registry.interfaces import IRegistry
+from Products.CMFCore.utils import getToolByName
 from z3c.form import interfaces
 from z3c.form.interfaces import IValue
 from zope.component import createObject
@@ -76,12 +77,6 @@ class TestDocument(FunctionalTestCase):
     def test_document_without_file_is_not_digitally_available(self):
         document_without_file = create(Builder("document"))
         self.assertFalse(document_without_file.digitally_available)
-
-    def test_document_without_digital_file_must_be_preserved_in_paper(self):
-        document = create(Builder("document").having(preserved_as_paper=False))
-        with self.assertRaises(Invalid) as cm:
-            IDocumentSchema.validateInvariants(document)
-        self.assertEquals("error_title_or_file_required", str(cm.exception))
 
     # TODO: split this and assert something useful ;)
     def test_views(self):
@@ -149,6 +144,9 @@ class TestDocumentDefaultValues(FunctionalTestCase):
 
     def default_value_for(self, field_name):
         field = getFields(IDocumentSchema).get(field_name)
+        # If not found in base IDocumentSchema, look in IDocumentMetadata
+        if not field:
+            field = getFields(IDocumentMetadata).get(field_name)
         document = createContentInContainer(self.portal,
                                             'opengever.document.document')
         default = queryMultiAdapter(

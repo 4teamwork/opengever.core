@@ -1,5 +1,6 @@
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.document import _
+from plone.autoform import directives as form_directives
 from plone.directives import form
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zope.interface import alsoProvides
@@ -11,6 +12,7 @@ class IRelatedDocuments(form.Schema):
     opengever.documents.
     """
 
+    form_directives.order_after(relatedItems='IDocumentMetadata.preserved_as_paper')
     relatedItems = RelationList(
         title=_(u'label_related_documents', default=u'Related Documents'),
         default=[],

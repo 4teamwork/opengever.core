@@ -19,21 +19,28 @@ import unittest2 as unittest
 def set_defaults(obj):
     for schemata in iterSchemata(obj):
         for name, field in getFieldsInOrder(schemata):
-            if not field.get(field.interface(obj)):
-                default = queryMultiAdapter(
-                    (obj, obj.REQUEST, None, field, None),
-                    IValue,
-                    name='default')
-                if default is not None:
-                    default = default.get()
-                if default is None:
-                    default = getattr(field, 'default', None)
-                if default is None:
-                    try:
-                        default = field.missing_value
-                    except AttributeError:
-                        pass
-                field.set(field.interface(obj), default)
+            try:
+                value = field.get(field.interface(obj))
+                if value:
+                    # field is present with a truthy value, nothing to do
+                    continue
+            except AttributeError:
+                # Field not present, set default
+                pass
+            default = queryMultiAdapter(
+                (obj, obj.REQUEST, None, field, None),
+                IValue,
+                name='default')
+            if default is not None:
+                default = default.get()
+            if default is None:
+                default = getattr(field, 'default', None)
+            if default is None:
+                try:
+                    default = field.missing_value
+                except AttributeError:
+                    pass
+            field.set(field.interface(obj), default)
 
     return obj
 
