@@ -4,18 +4,17 @@ from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.advancedsearch import _
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
-from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
 from opengever.ogds.base.utils import ogds_service
 from opengever.task.util import getTaskTypeVocabulary
 from plone.directives import form as directives_form
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import PloneMessageFactory as PMF
-from z3c.form import button, field
+from z3c.form import button
+from z3c.form import field as z3c_field
 from z3c.form.browser import radio, checkbox
 from z3c.form.interfaces import INPUT_MODE
 from zope import schema
-from zope.component import getUtility
 from zope.interface import Interface
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
@@ -273,7 +272,7 @@ class AdvancedSearchForm(directives_form.Form):
 
     label = _('advanced_search', default='advanced search')
 
-    fields = field.Fields(IAdvancedSearch)
+    fields = z3c_field.Fields(IAdvancedSearch)
 
     ignoreContext = True
 
