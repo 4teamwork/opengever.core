@@ -3,7 +3,6 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.testing import FunctionalTestCase
-from opengever.testing import set_current_client_id
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 
@@ -12,9 +11,14 @@ class TestSuccessorTaskController(FunctionalTestCase):
 
     def setUp(self):
         super(TestSuccessorTaskController, self).setUp()
-        set_current_client_id(self.portal)
 
-    def test_oguid_is_client_id_and_task_id_separated_by_a_colon(self):
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture')
+            .with_user()
+            .with_org_unit()
+            .with_admin_unit(public_url='http://plone'))
+
+    def test_oguid_is_admin_unit_id_and_task_id_separated_by_a_colon(self):
         intids = getUtility(IIntIds)
 
         task1 = create(Builder('task'))
@@ -40,7 +44,7 @@ class TestSuccessorTaskController(FunctionalTestCase):
                 '/'.join(url_tool.getRelativeContentPath(task)),
                 'client1'))
 
-    def test_oguid_by_path_returns_none_for_invalid_clientid(self):
+    def test_oguid_by_path_returns_none_for_invalid_admin_unit_id(self):
         task = create(Builder('task'))
 
         controller = ISuccessorTaskController(task)
