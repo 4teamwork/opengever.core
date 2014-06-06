@@ -169,6 +169,8 @@ class Overview(DisplayForm, OpengeverTab):
                 predecessors[0].task_type != 'forwarding_task_type':
                 issuing_org_unit = predecessors[0].issuing_org_unit
 
+            issuing_org_unit = ogds_service().fetch_org_unit(issuing_org_unit)
+
             return issuing_org_unit.label() + ' / ' + info.render_link(task.issuer)
 
         def _get_task_widget_value(attr):
@@ -356,8 +358,9 @@ class Overview(DisplayForm, OpengeverTab):
         breadcrumb_titles = "[%s] > %s" % (admin_unit.title, item.breadcrumb_title)
 
         # Client and user info
+        assigned_org_unit = ogds_service().fetch_org_unit(item.assigned_org_unit)
         info_html = ' <span class="discreet">(%s / %s)</span>' % (
-            client_title_helper(item, item.assigned_client),
+            assigned_org_unit.label(),
             info.render_link(item.responsible),
         )
 
