@@ -85,7 +85,7 @@ class DeadlineModifier(grok.Adapter):
         for successor in sct.get_successors():
 
             response = remote_request(
-                successor.client_id,
+                successor.admin_unit_id,
                 '@@remote_deadline_modifier',
                 successor.physical_path,
                 data={
