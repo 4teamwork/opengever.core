@@ -1,10 +1,11 @@
 from Products.CMFCore.utils import getToolByName
 from datetime import datetime, timedelta
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.tasktemplates.interfaces import IFromTasktemplateGenerated
 from opengever.testing import FunctionalTestCase
 from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
-from opengever.testing import create_and_select_current_org_unit
 from plone.app.testing import SITE_OWNER_NAME
 from plone.dexterity.utils import createContent, addContentToContainer
 from zope.event import notify
@@ -34,7 +35,9 @@ class TestTaskTemplates(FunctionalTestCase):
         catalog = getToolByName(portal, 'portal_catalog')
         mtool = getToolByName(portal, 'portal_membership')
 
-        create_and_select_current_org_unit('plone')
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_all_unit_setup())
+
         self.grant('Manager')
 
         # Folders and templates

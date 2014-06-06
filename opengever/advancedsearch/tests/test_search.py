@@ -4,7 +4,6 @@ from opengever.dossier.filing.testing import activate_filing_number
 from opengever.dossier.filing.testing import inactivate_filing_number
 from opengever.testing import FunctionalTestCase
 from opengever.testing import create_and_select_current_org_unit
-from opengever.testing import create_client
 
 
 class TestSearchForm(FunctionalTestCase):
