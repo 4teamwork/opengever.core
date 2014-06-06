@@ -10,15 +10,18 @@ class TestCssClassHelpers(MockTestCase):
     def setUp(self):
         super(TestCssClassHelpers, self).setUp()
 
-        self.ori_get_client_id = utils.get_client_id
-        get_client_id = self.mocker.replace(
-            'opengever.ogds.base.utils.get_client_id', count=False)
-        self.expect(get_client_id()).result('client1')
+        self.ori_get_current_admin_unit = utils.get_current_admin_unit
+        get_current_admin_unit = self.mocker.replace(
+            'opengever.ogds.base.utils.get_current_admin_unit', count=False)
+
+        admin_unit = self.stub()
+        self.expect(get_current_admin_unit()).result(admin_unit)
+        self.expect(admin_unit.id()).result('client1')
 
         self.mock_utility(idnormalizer, IIDNormalizer)
 
     def tearDown(self):
-        utils.get_client_id = self.ori_get_client_id
+        utils.get_current_admin_unit = self.ori_get_current_admin_unit
 
     def test_obj(self):
         obj = self.stub()
@@ -107,7 +110,7 @@ class TestCssClassHelpers(MockTestCase):
 
     def test_task_globalindex(self):
         obj = GlobalindexTask(1231, 'client1')
-        obj.assigned_client = 'client1'
+        obj.assigned_org_unit = 'client1'
         obj.is_subtask = False
         self.replay()
 
@@ -145,7 +148,7 @@ class TestCssClassHelpers(MockTestCase):
 
     def test_subtask_globalindex(self):
         obj = GlobalindexTask(1231, 'client1')
-        obj.assigned_client = 'client1'
+        obj.assigned_org_unit = 'client1'
         obj.is_subtask = True
         self.replay()
 
@@ -183,7 +186,7 @@ class TestCssClassHelpers(MockTestCase):
 
     def test_remote_task_globalindex(self):
         obj = GlobalindexTask(1231, 'client1')
-        obj.assigned_client = 'client2'
+        obj.assigned_org_unit = 'client2'
         obj.is_subtask = False
         self.replay()
 
@@ -216,39 +219,35 @@ class TestCssClassHelpers(MockTestCase):
 
         self.replay()
 
-        self.assertEquals(get_css_class(obj),
-                          'icon-task-remote-task')
+        self.assertEquals('icon-task-remote-task', get_css_class(obj))
 
     def test_remote_successor_task_globalindex(self):
         obj = GlobalindexTask(1231, 'client1')
-        obj.assigned_client = 'client1'
+        obj.assigned_org_unit = 'client1'
         obj.predecessor = GlobalindexTask(11111, 'client2')
         obj.is_subtask = False
         self.replay()
 
-        self.assertEquals(get_css_class(obj),
-                          'icon-task-remote-task')
+        self.assertEquals('icon-task-remote-task', get_css_class(obj))
 
     def test_remote_subtask_globalindex__issuer(self):
         # Tests task which is both, remote and subtask, from the
         # perspective of the issuer (on issuers client).
         obj = GlobalindexTask(1231, 'client1')
-        obj.assigned_client = 'client2'
+        obj.assigned_org_unit = 'client2'
         obj.is_subtask = True
         # current-client: client1
         self.replay()
 
-        self.assertEquals(get_css_class(obj),
-                          'icon-task-subtask')
+        self.assertEquals('icon-task-subtask', get_css_class(obj), )
 
     def test_remote_subtask_globalindex__responsible(self):
         # Tests task which is both, remote and subtask, from the
         # perspective of the responsible (on responsible's client).
         obj = GlobalindexTask(1231, 'client2')
-        obj.assigned_client = 'client1'
+        obj.assigned_org_unit = 'client1'
         obj.is_subtask = True
         # current-client: client1
         self.replay()
 
-        self.assertEquals(get_css_class(obj),
-                          'icon-task-remote-task')
+        self.assertEquals('icon-task-remote-task', get_css_class(obj))
