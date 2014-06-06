@@ -15,7 +15,10 @@ class TestAssingForwarding(FunctionalTestCase):
 
         self.user, self.org_unit, self.admin_unit = create(
             Builder('fixture').with_all_unit_setup())
-        create(Builder('org_unit').having(client_id='client2'))
+
+        create(Builder('org_unit')
+               .with_default_groups()
+               .having(client_id='client2', title='Client2'))
 
         self.forwarding = create(
             Builder('forwarding')
@@ -37,7 +40,7 @@ class TestAssingForwarding(FunctionalTestCase):
 
         self.assertEquals('client2', self.forwarding.responsible_client)
         self.assertEquals('client2',
-                          task2sqltask(self.forwarding).assigned_client)
+                          task2sqltask(self.forwarding).assigned_org_unit)
 
         self.assertEquals('inbox:client2', self.forwarding.responsible)
         self.assertEquals('inbox:client2',

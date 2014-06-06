@@ -36,7 +36,8 @@ class TestTaskRedirector(FunctionalTestCase):
         self.browser.assert_url('%s#overview' % task.absolute_url())
 
     def create_task(self, container, title, task_type='For direct execution',
-                    responsible_name='Boss', responsible_id=TEST_USER_ID):
+                    responsible_name='Test', responsible_id=TEST_USER_ID):
+
         self.browser.open(
             '%s/++add++opengever.task.task' % container.absolute_url())
 

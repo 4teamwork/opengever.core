@@ -86,6 +86,15 @@ class AdminUnitBuilder(SqlObjectBuilder):
         self._as_current_admin_unit = True
         return self
 
+    def assign_org_units(self, units):
+        clients = [u._client for u in units]
+        for client in clients:
+            # XXX could be solved better
+            self.add_object_to_session(client)
+        self.arguments['org_units'] = clients
+
+        return self
+
     def after_create(self, obj):
         if self._as_current_admin_unit:
             registry = getUtility(IRegistry)

@@ -14,11 +14,29 @@ class TestAutoCompleteWidget(FunctionalTestCase):
         self.widget = AutocompleteFieldWidget(
             ITask['issuer'], self.portal.REQUEST)
 
-        self.user, self.org_unit, self.admin_unit, self.hugo = create(
-            Builder('fixture').with_all_unit_setup().with_hugo_boss())
-        create(Builder('ogds_user')
-               .in_group(self.org_unit.users_group())
-               .having(userid='franz.michel'))
+        testuser = create(Builder('ogds_user')
+                          .having(userid=TEST_USER_ID,
+                                  firstname='Test',
+                                  lastname='User'))
+
+        hugo = create(Builder('ogds_user')
+                      .having(userid='hugo.boss',
+                              firstname='Hugo',
+                              lastname='Boss'))
+
+        franz = create(Builder('ogds_user')
+                       .having(userid='franz.michel',
+                               firstname='Franz',
+                               lastname='Michel'))
+
+        org_unit = create(Builder('org_unit')
+                          .id(u'client1')
+                          .as_current_org_unit()
+                          .assign_users([testuser, hugo, franz]))
+
+        create(Builder('admin_unit')
+               .as_current_admin_unit()
+               .wrapping_org_unit(org_unit))
 
     def test_initally_no_hidden_terms_are_set(self):
         task = create(Builder('task'))

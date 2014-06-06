@@ -6,10 +6,9 @@ from opengever.sharing.interfaces import ILocalRolesAcquisitionActivated
 from opengever.sharing.interfaces import ILocalRolesAcquisitionBlocked
 from opengever.sharing.interfaces import ILocalRolesModified
 from opengever.testing import FunctionalTestCase
-from opengever.testing.sql import select_current_org_unit
-from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
+from plone.app.testing import setRoles
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 from zope.component import provideHandler
@@ -188,22 +187,32 @@ class TestOpengeverSharingIntegration(FunctionalTestCase):
         admin_unit.current_unit_id = u'testunit'
 
         # create other group, from different admin unit
-        other_group = create(Builder('ogds_group')
-                             .having(groupid='other_unit'))
-        other_user = create(Builder('ogds_user')
-                            .having(userid='peter')
-                            .in_group(other_group))
-        org_unit = create(Builder('org_unit').having(client_id=u'otherunit',
-                                                     users_group=other_group))
-        admin_unit = create(Builder('admin_unit').wrapping_org_unit(org_unit))
+        test_peter = create(Builder('ogds_user')
+                            .having(userid='test.peter',
+                                    firstname='User',
+                                    lastname='Test'))
+
+        other_ou = create(Builder('org_unit')
+                          .having(client_id=u'otherunit')
+                          .assign_users([test_peter]))
+
+        create(Builder('admin_unit').wrapping_org_unit(other_ou))
 
         # create "current" admin unit
-        group = create(Builder('ogds_group'))
-        user = create(Builder('ogds_user').having(userid=TEST_USER_ID).in_group(group))
-        org_unit = create(Builder('org_unit').having(client_id=u'testunit',
-                                                     users_group=group))
-        admin_unit = create(Builder('admin_unit').wrapping_org_unit(org_unit))
-        select_current_org_unit(u'testunit')
+        test_user = create(Builder('ogds_user')
+                           .having(userid=TEST_USER_ID,
+                                   firstname='User',
+                                   lastname='Test'))
+
+        current_orgunit = create(Builder('org_unit')
+                                 .id(u'testunit')
+                                 .as_current_org_unit()
+                                 .assign_users([test_user]))
+
+        admin_unit = create(Builder('admin_unit')
+                            .as_current_admin_unit()
+                            .assign_org_units([current_orgunit])
+                            .wrapping_org_unit(current_orgunit))
 
         self.portal.REQUEST.form['search_term'] = TEST_USER_NAME
         results = self.view_dossier.user_search_results()
@@ -228,4 +237,3 @@ class TestOpengeverSharingWithBrowser(FunctionalTestCase):
         self.browser.open('%s/@@sharing' % self.dossier.absolute_url())
         self.browser.open(
             '%s/@@tabbedview_view-sharing' % self.dossier.absolute_url())
-

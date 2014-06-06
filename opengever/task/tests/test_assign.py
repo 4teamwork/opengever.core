@@ -17,7 +17,7 @@ class TestAssignTask(FunctionalTestCase):
             Builder('fixture').with_all_unit_setup())
 
         self.james = create(Builder('ogds_user')
-                            .in_group(self.org_unit.users_group())
+                            .in_group(self.org_unit._client.users_group)
                             .having(userid='james.bond',
                                     firstname='James',
                                     lastname='Bond'))

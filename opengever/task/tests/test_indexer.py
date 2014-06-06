@@ -18,10 +18,16 @@ class TestTaskIndexers(FunctionalTestCase):
         self.user, self.org_unit, self.admin_unit = create(
             Builder('fixture').with_all_unit_setup())
 
+        create(Builder('org_unit')
+               .with_default_groups()
+               .having(client_id='client2', title='Client2'))
+
         self.grant('Contributor', 'Editor', 'Manager')
         login(self.portal, TEST_USER_NAME)
 
-        self.task = create(Builder("task").titled("Test task 1"))
+        self.task = create(Builder("task")
+                           .titled("Test task 1"))
+
         self.subtask = create(Builder("task").within(self.task).titled("Test task 1"))
         self.doc1 = create(Builder("document").titled(u"Doc One"))
         self.doc2 = create(Builder("document").titled(u"Doc Two"))
@@ -40,14 +46,14 @@ class TestTaskIndexers(FunctionalTestCase):
 
     def test_assigned_client(self):
         self.assertEquals(
-            obj2brain(self.task).assigned_client, '')
+            obj2brain(self.task).assigned_client, 'client1')
 
         self.task.responsible = 'hugo.boss'
-        self.task.responsible_client = 'client_xy'
+        self.task.responsible_client = 'client2'
         self.task.reindexObject()
 
         self.assertEquals(
-            obj2brain(self.task).assigned_client, 'client_xy')
+            obj2brain(self.task).assigned_client, 'client2')
 
     def test_is_subtask(self):
         self.assertFalse(obj2brain(self.task).is_subtask)
