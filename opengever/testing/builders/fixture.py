@@ -28,6 +28,7 @@ class FixtureBuilder(object):
             'title': u'Client1',
             'client_id': u'client1',
         }
+        self._admin_unit_args = {}
 
     def with_user(self, **kwargs):
         self._with_user = True
@@ -39,8 +40,9 @@ class FixtureBuilder(object):
         self._org_unit_args.update(kwargs)
         return self
 
-    def with_admin_unit(self):
+    def with_admin_unit(self, **kwargs):
         self._with_admin_unit = True
+        self._admin_unit_args.update(kwargs)
         return self
 
     def with_all_unit_setup(self):
@@ -83,7 +85,9 @@ class FixtureBuilder(object):
         if not self._with_admin_unit:
             return None
 
-        builder = Builder('admin_unit').as_current_admin_unit()
+        builder = Builder('admin_unit').having(
+            **self._admin_unit_args).as_current_admin_unit()
+
         if org_unit:
             builder = builder.wrapping_org_unit(org_unit)
         return create(builder)
