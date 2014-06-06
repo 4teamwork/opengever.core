@@ -33,7 +33,7 @@ class IResponseTransporter(Interface):
 
 class ResponseTransporter(grok.Adapter):
     """Adadpter for sending responses of the adapted task to
-    a remote task on a remote client.
+    a remote task on a remote admin unit.
     """
 
     grok.context(ITask)
@@ -43,12 +43,12 @@ class ResponseTransporter(grok.Adapter):
     def send_responses(self, target_cid, remote_task_url,
                        intids_mapping=None):
         """ Sends all responses of task self.context to task on
-        a remote client.
-        `target_cid`: client_id of a target client
+        a remote admin unit.
+        `target_cid`: id of a target admin unit
         `remote_task_url`: url to a task on `target_cid` relative
         to its site root.
         `intids_mapping`: replace intids of RelationValues according
-        to this mapping. This fixes the intids on remote clients.
+        to this mapping. This fixes the intids on remote admin unit.
         RelationValues not listed in this mapping will not be sent.
         """
 
@@ -61,11 +61,11 @@ class ResponseTransporter(grok.Adapter):
 
     def get_responses(self, target_cid, remote_task_path, intids_mapping):
         """Retrieves all responses from the task with path `remote_task_path`
-        on the client `client` and adds them to the current context (target
+        on the admin_unit `target_cid` and adds them to the current context (target
         task).
 
         Provide a an `intids_mapping` (dict), mapping the original intids of
-        related objects to the new intids of the copies on this client. This
+        related objects to the new intids of the copies on this admin_unit. This
         is necessary for fixing the relations.
         """
 
@@ -223,7 +223,7 @@ class ReceiveResponses(grok.View):
         current_data = json.loads(transporter.extract_responses())
         if current_data == data:
             # In case of a conflict error while committing on the
-            # source client this view is called twice or more. If the
+            # source admin_unit this view is called twice or more. If the
             # current_data and data maches, it is not the first
             # request and we are in conflict resolution. Thus for not
             # duplicating responses we abort with "OK" (since we have
@@ -259,7 +259,7 @@ class TaskDocumentsTransporter(grok.GlobalUtility):
     def copy_documents_from_remote_task(self, task, target, documents=None):
         transporter = getUtility(ITransporter)
         data = remote_json_request(
-            task.client_id,
+            task.admin_unit_id,
             '@@task-documents-extract',
             path=task.physical_path,
             data={'documents': json.dumps(documents)})
