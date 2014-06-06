@@ -113,10 +113,10 @@ def accept_forwarding_with_successor(
     if dossier:
         yearfolder = _get_yearfolder(inbox, )
         successor_forwarding = transporter.transport_from(
-            yearfolder, predecessor.client_id, predecessor.physical_path)
+            yearfolder, predecessor.admin_unit_id, predecessor.physical_path)
     else:
         successor_forwarding = transporter.transport_from(
-            inbox, predecessor.client_id, predecessor.physical_path)
+            inbox, predecessor.admin_unit_id, predecessor.physical_path)
 
     # Replace the issuer with the current inbox
     successor_forwarding.issuer = u'inbox:%s' % get_client_id()
@@ -138,7 +138,7 @@ def accept_forwarding_with_successor(
 
     # copy the responses
     response_transporter = IResponseTransporter(successor_forwarding)
-    response_transporter.get_responses(predecessor.client_id,
+    response_transporter.get_responses(predecessor.admin_unit_id,
                                        predecessor.physical_path,
                                        intids_mapping=intids_mapping)
 
@@ -279,7 +279,7 @@ def accept_task_with_successor(dossier, predecessor_oguid, response_text):
 
     # copy the responses
     response_transporter = IResponseTransporter(successor)
-    response_transporter.get_responses(predecessor.client_id,
+    response_transporter.get_responses(predecessor.admin_unit_id,
                                        predecessor.physical_path,
                                        intids_mapping=intids_mapping)
 
