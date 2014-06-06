@@ -135,9 +135,11 @@ class OrgUnitBuilder(SqlObjectBuilder):
 
     def assign_users(self, users, to_users=True, to_inbox=True):
         if to_users:
+            self.with_users_group()
             self._group_users.update(users)
 
         if to_inbox:
+            self.with_inbox_group()
             self._inbox_users.update(users)
         return self
 
