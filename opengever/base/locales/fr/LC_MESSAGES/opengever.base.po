@@ -289,6 +289,11 @@ msgstr "Proposer"
 msgid "public"
 msgstr "Public"
 
+#. Default: "limited-public"
+#: opengever/repository/classification.py
+msgid "limited-public"
+msgstr ""
+
 #. Default: "Did you not find what you were looking for? Try the ${advanced_search} to refine your search."
 #: ./opengever/base/browser/search.pt:60
 msgid "search_results_advanced"
@@ -308,5 +313,3 @@ msgstr "Non contrôlé"
 #: opengever/repository/classification.py
 msgid "unprotected"
 msgstr "Non classé"
-
-

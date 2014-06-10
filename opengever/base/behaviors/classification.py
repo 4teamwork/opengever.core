@@ -107,10 +107,12 @@ form.default_value(field=IClassification['classification'])(
 PUBLIC_TRIAL_UNCHECKED = u'unchecked'
 PUBLIC_TRIAL_PUBLIC = u'public'
 PUBLIC_TRIAL_PRIVATE = u'private'
+PUBLIC_TRIAL_LIMITED_PUBLIC = u'limited-public'
 PUBLIC_TRIAL_OPTIONS = (
     (1, PUBLIC_TRIAL_UNCHECKED),
     (2, PUBLIC_TRIAL_PUBLIC),
-    (3, PUBLIC_TRIAL_PRIVATE),
+    (3, PUBLIC_TRIAL_LIMITED_PUBLIC),
+    (4, PUBLIC_TRIAL_PRIVATE),
     )
 
 

@@ -4,6 +4,12 @@ Changelog
 3.3.1 (unreleased)
 ------------------
 
+- Enforce correct order in inbox-task-tab tests.
+  [lknoepfel]
+
+- Added limited-public option for public trial.
+  [lknoepfel]
+
 - Refactored some hard to change test data.
   [lgraf]
 
