@@ -2,6 +2,7 @@ from DateTime import DateTime
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.testing import FunctionalTestCase
+from ftw.testbrowser import browsing
 
 
 class TestOverview(FunctionalTestCase):
@@ -10,30 +11,34 @@ class TestOverview(FunctionalTestCase):
 
     def setUp(self):
         super(TestOverview, self).setUp()
-        self.dossier = create(Builder('dossier').titled(u'Testdossier'))
 
-    def assert_subdossier_box(self, expected):
-        subdossiers = self.browser.css(
-            '#subdossiersBox a.contenttype-opengever-dossier-businesscasedossier')
+        self.user, self.org_unit, self.admin_unit, self.hugo = create(
+            Builder('fixture').with_all_unit_setup().with_hugo_boss())
 
-        self.assertEquals(
-            expected, [aa.plain_text() for aa in subdossiers],
-            'the subdossierbox does not contain the expected subdossiers')
+        self.dossier = create(Builder('dossier')
+                              .titled(u'Testdossier')
+                              .having(description=u'Hie hesch e beschribig',
+                                      responsible='hugo.boss'))
 
-    def test_subdossier_box_items_are_limited_to_five_sort_by_modified(self):
-        for i in range(6):
+    @browsing
+    def test_subdossier_box_items_are_limited_to_five_sort_by_modified(self, browser):
+        for i in range(1, 6):
             create(Builder('dossier')
                    .within(self.dossier)
-                   .with_modification_date(DateTime()+i)
+                   .with_modification_date(DateTime(2012, 3, 7) + i)
                    .titled(u'Dossier %s' % i))
+        create(Builder('dossier')
+               .within(self.dossier)
+               .with_modification_date(DateTime(2010, 1, 1))
+               .titled(u'Dossier 6'))
 
-        self.browser.open(
-            '%s/tabbedview_view-overview' % self.dossier.absolute_url())
+        browser.login().open(self.dossier, view='tabbedview_view-overview')
+        self.assertSequenceEqual(
+            ['Dossier 5', 'Dossier 4', 'Dossier 3', 'Dossier 2', 'Dossier 1'],
+            browser.css('#subdossiersBox li:not(.moreLink) a').text)
 
-        self.assert_subdossier_box(
-            ['Dossier 5', 'Dossier 4', 'Dossier 3', 'Dossier 2', 'Dossier 1'])
-
-    def test_subdossier_box_only_list_open_dossiers(self):
+    @browsing
+    def test_subdossier_box_only_list_open_dossiers(self, browser):
         create(Builder('dossier').within(self.dossier)
                .titled(u'Dossier Open')
                .in_state('dossier-state-active'))
@@ -46,7 +51,74 @@ class TestOverview(FunctionalTestCase):
                .titled(u'Dossier Resolved')
                .in_state('dossier-state-resolved'))
 
-        self.browser.open(
-            '%s/tabbedview_view-overview' % self.dossier.absolute_url())
+        browser.login().open(self.dossier, view='tabbedview_view-overview')
+        self.assertItemsEqual(
+            ['Dossier Open'],
+            browser.css('#subdossiersBox li:not(.moreLink) a').text)
 
-        self.assert_subdossier_box(['Dossier Open'])
+    @browsing
+    def test_main_dossier_displays_subdossier_box_but_subdossier_does_not(self, browser):
+        subdossier = create(Builder('dossier')
+                            .within(self.dossier)
+                            .titled(u'Subdossier'))
+
+        browser.login().open(self.dossier, view='tabbedview_view-overview')
+        box_titles = browser.css('div.box h2').text
+        self.assertItemsEqual(['subdossiers', 'participants', 'newest_tasks',
+                               'newest_documents', 'description'],
+                              box_titles)
+
+        browser.open(subdossier, view='tabbedview_view-overview')
+        box_titles = browser.css('div.box h2').text
+        self.assertItemsEqual(['participants', 'newest_tasks',
+                               'newest_documents', 'description'],
+                              box_titles)
+
+    @browsing
+    def test_description_box_is_displayed(self, browser):
+        browser.login().open(self.dossier, view='tabbedview_view-overview')
+        self.assertEqual(u'Hie hesch e beschribig',
+                         browser.css('#descriptionBox span').first.text)
+
+    @browsing
+    def test_task_box_items_are_limited_to_five_and_sorted_by_modified(self, browser):
+        for i in range(1, 6):
+            create(Builder('task')
+                   .within(self.dossier)
+                    .with_modification_date(DateTime(2010, 1, 1) + i)
+                   .titled(u'Task %s' % i))
+        create(Builder('task')
+               .within(self.dossier)
+                .with_modification_date(DateTime(2009, 12, 1))
+               .titled(u'Task 6'))
+
+        browser.login().open(self.dossier, view='tabbedview_view-overview')
+        self.assertSequenceEqual(
+            browser.css('#newest_tasksBox li:not(.moreLink) a').text,
+            ['Task 5', 'Task 4', 'Task 3', 'Task 2', 'Task 1'])
+
+    @browsing
+    def test_participant_labels_are_displayed(self, browser):
+        browser.login().open(self.dossier, view='tabbedview_view-overview')
+        self.assertEqual(
+            [self.hugo.label()],
+            browser.css('#participantsBox li:not(.moreLink) a').text)
+
+    @browsing
+    def test_document_box_items_are_limited_to_ten_and_sorted_by_modified(self, browser):
+        for i in range(1, 11):
+            create(Builder('document')
+                   .within(self.dossier)
+                   .with_modification_date(DateTime(2010, 1, 1) + i)
+                   .titled(u'Document %s' % i))
+        create(Builder('document')
+               .within(self.dossier)
+               .with_modification_date(DateTime(2009, 12, 8))
+               .titled(u'Document 11'))
+
+        browser.login().open(self.dossier, view='tabbedview_view-overview')
+        self.assertSequenceEqual(
+            browser.css('#newest_documentsBox li:not(.moreLink) a').text,
+            ['Document 10', 'Document 9', 'Document 8', 'Document 7',
+             'Document 6', 'Document 5', 'Document 4', 'Document 3',
+             'Document 2', 'Document 1'])

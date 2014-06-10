@@ -1,22 +1,24 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from opengever.globalindex.handlers.task import index_task
+from opengever.globalindex.handlers.task import sync_task
 from opengever.testing import FunctionalTestCase
-from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
-from opengever.testing import create_and_select_current_org_unit
-from opengever.testing import create_client
-from opengever.testing import create_ogds_user
-from opengever.testing import set_current_client_id
 from opengever.testing.helpers import task2sqltask
-from plone.app.testing.interfaces import TEST_USER_NAME
 
 
 class TestInboxOverviewDocumentBox(FunctionalTestCase):
-    layer = OPENGEVER_FUNCTIONAL_TESTING
 
     def setUp(self):
         super(TestInboxOverviewDocumentBox, self).setUp()
         self.grant('Owner', 'Editor', 'Contributor')
+
+        self.user1, self.org_unit1, self.admin_unit1 = create(
+            Builder('fixture').with_all_unit_setup())
+
+        self.user2, self.org_unit2, self.admin_unit2 = create(
+            Builder('fixture')
+            .with_user(userid='hans.muster')
+            .with_org_unit(client_id=u'client2')
+            .with_admin_unit())
 
         self.inbox = create(Builder('inbox').titled(u'eingangskorb'))
         self.view = self.inbox.restrictedTraverse('tabbedview_view-overview')
@@ -49,12 +51,6 @@ class TestInboxOverviewDocumentBox(FunctionalTestCase):
 
 class TestInboxOverviewAssignedInboxTasks(TestInboxOverviewDocumentBox):
 
-    def setUp(self):
-        super(TestInboxOverviewAssignedInboxTasks, self).setUp()
-
-        create_and_select_current_org_unit('client1')
-        create_client('client2')
-
     def test_list_tasks_and_forwardings_assigned_to_current_inbox_group(self):
         task = create(Builder('task').having(responsible='inbox:client1'))
         forwarding = create(Builder('forwarding')
@@ -74,37 +70,29 @@ class TestInboxOverviewAssignedInboxTasks(TestInboxOverviewDocumentBox):
 
     def test_lists_only_the_local_one_when_having_predecessor_successor_couples(self):
         predecessor = create(Builder('forwarding')
-                             .having(responsible='inbox:client1',
-                                     assigned_client='client1'))
+                             .having(responsible='inbox:client2',
+                                     assigned_client='client2'))
         successor = create(Builder('forwarding')
                            .having(responsible='inbox:client1',
                                    assigned_client='client1')
                            .successor_from(predecessor))
-
-        task2sqltask(predecessor).client_id = 'client2'
 
         self.assertEquals(
             [task2sqltask(successor)], self.view.assigned_tasks())
 
     def test_list_only_active_tasks(self):
         active = create(Builder('forwarding')
-                      .having(responsible='inbox:client1'))
+                        .having(responsible='inbox:client1'))
         closed = create(Builder('forwarding')
                         .having(responsible='inbox:client1')
                         .in_state('forwarding-state-closed'))
-        index_task(closed, None)
+        sync_task(closed, None)
 
         self.assertEquals(
             [task2sqltask(active)], self.view.assigned_tasks())
 
 
 class TestInboxOverviewIssuedInboxTasks(TestInboxOverviewDocumentBox):
-
-    def setUp(self):
-        super(TestInboxOverviewIssuedInboxTasks, self).setUp()
-
-        create_and_select_current_org_unit('client1')
-        create_client('client2')
 
     def test_list_tasks_and_forwardings_issued_by_current_inbox_group(self):
         task = create(Builder('task')

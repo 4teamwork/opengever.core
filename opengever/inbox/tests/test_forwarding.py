@@ -1,7 +1,7 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.testing import FunctionalTestCase
 from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
-from opengever.testing import create_and_select_current_org_unit
-from opengever.testing import create_client
 from plone.dexterity.utils import createContentInContainer
 import transaction
 
@@ -12,9 +12,13 @@ class TestForwarding(FunctionalTestCase):
 
     def setUp(self):
         super(TestForwarding, self).setUp()
-        self.grant('Owner','Editor','Contributor')
+        self.grant('Owner', 'Editor', 'Contributor')
 
-        create_and_select_current_org_unit(unit_id='plone')
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture')
+            .with_user()
+            .with_org_unit(client_id=u'plone')
+            .with_admin_unit())
 
     def test_forwarding(self):
         # create inbox and some documents for tests

@@ -28,14 +28,11 @@ class FixtureBuilder(object):
             'title': u'Client1',
             'client_id': u'client1',
         }
+        self._admin_unit_args = {}
 
     def with_user(self, **kwargs):
         self._with_user = True
         self._user_args.update(kwargs)
-        return self
-
-    def with_hugo_boss(self):
-        self._with_hugo_boss = True
         return self
 
     def with_org_unit(self, **kwargs):
@@ -43,8 +40,19 @@ class FixtureBuilder(object):
         self._org_unit_args.update(kwargs)
         return self
 
-    def with_admin_unit(self):
+    def with_admin_unit(self, **kwargs):
         self._with_admin_unit = True
+        self._admin_unit_args.update(kwargs)
+        return self
+
+    def with_all_unit_setup(self):
+        self.with_user()
+        self.with_org_unit()
+        self.with_admin_unit()
+        return self
+
+    def with_hugo_boss(self):
+        self._with_hugo_boss = True
         return self
 
     def create(self):
@@ -67,17 +75,19 @@ class FixtureBuilder(object):
             return None
 
         builder = (Builder('org_unit')
-            .having(**self._org_unit_args)
-            .as_current_org_unit())
+                   .having(**self._org_unit_args)
+                   .as_current_org_unit())
         if user:
-            builder = builder.assign_users(user)
+            builder = builder.with_default_groups().assign_users([user])
         return create(builder)
 
     def _create_admin_unit(self, org_unit):
         if not self._with_admin_unit:
             return None
 
-        builder = Builder('admin_unit').as_current_admin_unit()
+        builder = Builder('admin_unit').having(
+            **self._admin_unit_args).as_current_admin_unit()
+
         if org_unit:
             builder = builder.wrapping_org_unit(org_unit)
         return create(builder)

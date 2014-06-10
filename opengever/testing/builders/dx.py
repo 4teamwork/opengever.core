@@ -4,6 +4,7 @@ from ftw.builder.dexterity import DexterityBuilder
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.trash.trash import ITrashable
+from plone.app.testing import TEST_USER_ID
 from plone.namedfile.file import NamedBlobFile
 from z3c.relationfield.relation import RelationValue
 from zope.annotation.interfaces import IAnnotations
@@ -78,6 +79,10 @@ class TaskBuilder(DexterityBuilder):
         super(TaskBuilder, self).__init__(session)
         self.transitions = []
         self.predecessor = None
+        self.arguments = {
+            'responsible_client': 'client1',
+            'responsible': TEST_USER_ID,
+            'issuer': TEST_USER_ID}
 
     def in_progress(self):
         self.transitions.append('task-transition-open-in-progress')

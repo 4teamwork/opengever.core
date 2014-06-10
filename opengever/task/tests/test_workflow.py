@@ -2,7 +2,6 @@ from Products.CMFCore.utils import getToolByName
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.testing import FunctionalTestCase
-from opengever.testing import create_and_select_current_org_unit
 from plone.app.testing import TEST_USER_ID
 from zExceptions import Unauthorized
 import transaction
@@ -16,7 +15,8 @@ class TestTaskWorkflow(FunctionalTestCase):
         super(TestTaskWorkflow, self).setUp()
         self.wf_tool = getToolByName(self.portal, 'portal_workflow')
 
-        create_and_select_current_org_unit()
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_all_unit_setup())
 
     def test_document_in_a_closed_tasks_are_still_editable(self):
         self.grant('Editor')

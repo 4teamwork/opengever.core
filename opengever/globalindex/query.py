@@ -12,39 +12,34 @@ class TaskQuery(object):
     """
     implements(ITaskQuery)
 
-    def get_task(self, int_id, client_id):
+    def get_task(self, int_id, admin_unit_id):
         """Returns the task identified by the given int_id and client_id.
         """
         try:
-            task = Session().query(Task).filter(
-                Task.client_id == client_id).filter(
-                Task.int_id == int_id).one()
+            return Session().query(Task).filter_by(
+                admin_unit_id=admin_unit_id, int_id=int_id).one()
         except NoResultFound:
-            task = None
-        return task
+            return None
 
-    def get_task_by_path(self, path, client_id):
+    def get_task_by_path(self, path, admin_unit_id):
         """Returns a task on the specified client identified by its physical
         path (which is relative to the site root!).
         """
         try:
-            task = Session().query(Task).filter(
-                Task.client_id == client_id).filter(
-                Task.physical_path == path).one()
+            return Session().query(Task).filter_by(
+                admin_unit_id=admin_unit_id, physical_path=path).one()
         except NoResultFound:
             return None
-        else:
-            return task
 
     def get_task_by_oguid(self, oguid):
         """Return a task identified by its OGUID, which is
-        [client_id]:[int_id]
+        [admin_unit_id]:[int_id]
         """
-        client_id, int_id = oguid.split(':')
+        admin_unit_id, int_id = oguid.split(':')
         try:
             task = Session().query(Task).filter(
-                Task.client_id == client_id).filter(
-                Task.int_id == int_id).one()
+                Task.admin_unit_id == admin_unit_id).filter(
+                    Task.int_id == int_id).one()
         except NoResultFound:
             return None
         else:

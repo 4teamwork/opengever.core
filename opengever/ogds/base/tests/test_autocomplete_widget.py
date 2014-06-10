@@ -3,10 +3,8 @@ from ftw.builder import create
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.task.task import ITask
 from opengever.testing import FunctionalTestCase
-from opengever.testing import create_client
-from opengever.testing import create_ogds_user
-from opengever.testing import select_current_org_unit
 from plone.app.testing import TEST_USER_ID
+
 
 class TestAutoCompleteWidget(FunctionalTestCase):
 
@@ -16,13 +14,29 @@ class TestAutoCompleteWidget(FunctionalTestCase):
         self.widget = AutocompleteFieldWidget(
             ITask['issuer'], self.portal.REQUEST)
 
-        client = create_client(clientid='client1')
-        create_ogds_user('hugo.boss')
-        create_ogds_user('franz.michel')
-        create_ogds_user(TEST_USER_ID, assigned_client=[client],
-                         firstname="Test", lastname="User")
+        testuser = create(Builder('ogds_user')
+                          .having(userid=TEST_USER_ID,
+                                  firstname='Test',
+                                  lastname='User'))
 
-        select_current_org_unit()
+        hugo = create(Builder('ogds_user')
+                      .having(userid='hugo.boss',
+                              firstname='Hugo',
+                              lastname='Boss'))
+
+        franz = create(Builder('ogds_user')
+                       .having(userid='franz.michel',
+                               firstname='Franz',
+                               lastname='Michel'))
+
+        org_unit = create(Builder('org_unit')
+                          .id(u'client1')
+                          .as_current_org_unit()
+                          .assign_users([testuser, hugo, franz]))
+
+        create(Builder('admin_unit')
+               .as_current_admin_unit()
+               .wrapping_org_unit(org_unit))
 
     def test_initally_no_hidden_terms_are_set(self):
         task = create(Builder('task'))
@@ -30,7 +44,7 @@ class TestAutoCompleteWidget(FunctionalTestCase):
         self.widget.context = task
         source = self.widget.bound_source
 
-        self.assertEquals(
+        self.assertItemsEqual(
             [u'hugo.boss', u'franz.michel', TEST_USER_ID, u'inbox:client1'],
             [i.value for i in source])
 
@@ -41,7 +55,7 @@ class TestAutoCompleteWidget(FunctionalTestCase):
 
         self.widget.context = task
 
-        self.assertEquals(
+        self.assertItemsEqual(
             [u'hugo.boss', u'franz.michel', TEST_USER_ID, u'inbox:client1'],
             [i.value for i in self.widget.bound_source])
 

@@ -1,27 +1,17 @@
-from Testing.makerequest import makerequest
 from datetime import datetime, date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
-from ftw.testbrowser.pages import dexterity
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages import plone
-from opengever.dossier.templatedossier.interfaces import ITemplateDossier
 from opengever.dossier.templatedossier.interfaces import ITemplateUtility
 from opengever.testing import FunctionalTestCase
 from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.testing import create_client
 from opengever.testing import create_ogds_user
-from opengever.testing import obj2brain
 from opengever.testing import set_current_client_id
 from plone.app.testing import TEST_USER_ID
-from plone.dexterity.interfaces import IDexterityFTI
-from plone.dexterity.utils import createContentInContainer
-from zope.app.component.hooks import setSite
-from zope.component import createObject
 from zope.component import getUtility
-from zope.component import queryUtility
-import transaction
 
 
 class TestDocumentWithTemplateForm(FunctionalTestCase):

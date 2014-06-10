@@ -116,11 +116,7 @@ class TestSubDossierListing(FunctionalTestCase):
         super(TestSubDossierListing, self).setUp()
 
         self.user, self.org_unit, self.admin_unit, self.hugo = create(
-            Builder('fixture')
-            .with_user()
-            .with_org_unit()
-            .with_admin_unit()
-            .with_hugo_boss())
+            Builder('fixture').with_all_unit_setup().with_hugo_boss())
 
         self.repo = create(Builder('repository').titled('Repository XY'))
         self.dossier = create(Builder('dossier')
@@ -202,11 +198,7 @@ class TestTaskListings(FunctionalTestCase):
         super(TestTaskListings, self).setUp()
 
         self.user, self.org_unit, self.admin_unit, self.hugo = create(
-            Builder('fixture')
-            .with_user()
-            .with_org_unit()
-            .with_admin_unit()
-            .with_hugo_boss())
+            Builder('fixture').with_all_unit_setup().with_hugo_boss())
 
         self.task = create(Builder('task')
                            .having(

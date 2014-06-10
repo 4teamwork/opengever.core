@@ -13,6 +13,10 @@ class TestMoveItems(FunctionalTestCase):
         super(TestMoveItems, self).setUp()
         self.grant('Contributor')
         self.request = self.layer['request']
+
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_all_unit_setup())
+
         self.source_repo = create(Builder("repository"))
         self.source_dossier = create(Builder("dossier")
                                      .within(self.source_repo))

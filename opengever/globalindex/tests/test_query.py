@@ -16,17 +16,17 @@ class TestTaskQuery(TestCase):
         provideUtility(TaskQuery())
         self.query = getUtility(ITaskQuery)
 
-    def test_get_task_with_existing_intid_clientid_pair(self):
-        self.add_task(1, 'client1')
-        self.add_task(2, 'client1')
-        task3 = self.add_task(3, 'client2')
+    def test_get_task_with_existing_intid_admin_unit_id_pair(self):
+        self.add_task(1, 'admin1')
+        self.add_task(2, 'admin1')
+        task3 = self.add_task(3, 'admin2')
 
-        self.assertEquals(task3, self.query.get_task(3, 'client2'))
+        self.assertEquals(task3, self.query.get_task(3, 'admin2'))
 
-    def test_get_task_with_non_existing_intid_clientid_pair(self):
-        self.add_task(1, 'client1')
+    def test_get_task_with_non_existing_intid_admin_unit_id_pair(self):
+        self.add_task(1, 'admin1')
 
-        self.assertEquals(None, self.query.get_task(1, 'client2'))
+        self.assertEquals(None, self.query.get_task(1, 'admin2'))
 
     def test_query_by_existing_responsible(self):
         task1 = self.add_task(1, responsible='hugo.boss')
@@ -46,8 +46,8 @@ class TestTaskQuery(TestCase):
 
     def test_query_by_issuer(self):
         self.add_task(1, issuer='hugo.boss')
-        task2 = self.add_task(2, 'client1', issuer='james.bond')
-        task3 = self.add_task(3, 'client1', issuer='james.bond')
+        task2 = self.add_task(2, 'admin1', issuer='james.bond')
+        task3 = self.add_task(3, 'admin1', issuer='james.bond')
 
         self.assertEquals(
             [task2, task3], self.query.get_tasks_for_issuer('james.bond'))
@@ -55,18 +55,18 @@ class TestTaskQuery(TestCase):
 
     def test_query_py_path(self):
         task1 = self.add_task(
-            1, clientid='client1', physical_path='test/task-1/')
+            1, admin_unit_id='admin1', physical_path='test/task-1/')
         self.add_task(
-            2, clientid='client2', physical_path='test/task-1/')
+            2, admin_unit_id='admin2', physical_path='test/task-1/')
         self.add_task(
-            3, clientid='client2', physical_path='test/task-20/')
+            3, admin_unit_id='admin2', physical_path='test/task-20/')
 
         self.assertEquals(
-            task1, self.query.get_task_by_path('test/task-1/', 'client1'))
+            task1, self.query.get_task_by_path('test/task-1/', 'admin1'))
         self.assertEquals(
-            None, self.query.get_task_by_path('test/task-20/', 'client1'))
+            None, self.query.get_task_by_path('test/task-20/', 'admin1'))
         self.assertEquals(
-            None, self.query.get_task_by_path('not-existing/task-3/', 'client1'))
+            None, self.query.get_task_by_path('not-existing/task-3/', 'admin1'))
 
     def test_query_by_paths(self):
         task1 = self.add_task(1, physical_path='test/task-1/')
@@ -84,14 +84,13 @@ class TestTaskQuery(TestCase):
                 ['not-existing/task-1/', 'test/task-5/', 'test/task-20/'])
         )
 
-    def add_task(self, intid, clientid='client1', **kwargs):
-        task = Task(intid, clientid)
-        if kwargs.get('responsible'):
-            task.responsible = kwargs.get('responsible')
-        if kwargs.get('issuer'):
-            task.issuer = kwargs.get('issuer')
-        if kwargs.get('physical_path'):
-            task.physical_path = kwargs.get('physical_path')
-
+    def add_task(self, intid, admin_unit_id='admin1',
+                 issuing_org_unit_id='org1',
+                 assigned_org_unit_id='org2',
+                 **kwargs):
+        task = Task(intid, admin_unit_id,
+                    issuing_org_unit=issuing_org_unit_id,
+                    assigned_org_unit=assigned_org_unit_id,
+                    **kwargs)
         self.layer.session.add(task)
         return task

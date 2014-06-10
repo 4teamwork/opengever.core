@@ -1,6 +1,6 @@
-from Products.CMFCore.utils import getToolByName
 from opengever.globalindex.interfaces import ITaskQuery
-from opengever.ogds.base.utils import get_client_id
+from opengever.ogds.base.utils import get_current_admin_unit
+from Products.CMFCore.utils import getToolByName
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 
@@ -30,4 +30,4 @@ def index_data_for(obj):
 def task2sqltask(obj):
     query = getUtility(ITaskQuery)
     return query.get_task(
-        getUtility(IIntIds).getId(obj), get_client_id())
+        getUtility(IIntIds).getId(obj), get_current_admin_unit().id())

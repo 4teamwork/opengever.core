@@ -7,15 +7,11 @@ from opengever.task.task import ITask
 from opengever.testing import FunctionalTestCase
 from opengever.testing import create_and_select_current_org_unit
 from plone.dexterity.interfaces import IDexterityFTI
-from plone.dexterity.utils import createContent, addContentToContainer
 from z3c.relationfield.relation import RelationValue
 from zope.component import createObject
 from zope.component import getUtility
 from zope.component import queryUtility
-from zope.event import notify
 from zope.intid.interfaces import IIntIds
-from zope.lifecycleevent import ObjectCreatedEvent, ObjectAddedEvent
-import unittest2 as unittest
 
 
 class TestTaskIntegration(FunctionalTestCase):
@@ -23,6 +19,8 @@ class TestTaskIntegration(FunctionalTestCase):
     def setUp(self):
         super(TestTaskIntegration, self).setUp()
         self.portal.portal_types['opengever.task.task'].global_allow = True
+
+        create(Builder('fixture').with_all_unit_setup())
 
     def test_adding(self):
         t1 = create(Builder('task').titled('Task 1'))

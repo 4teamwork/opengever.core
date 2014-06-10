@@ -1,11 +1,10 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.globalindex.interfaces import ITaskQuery
 from opengever.ogds.base.utils import get_client_id
 from opengever.task.interfaces import ITaskDocumentsTransporter
 from opengever.task.task import ITask
 from opengever.testing import FunctionalTestCase
-from opengever.testing import create_and_select_current_org_unit
-from opengever.testing import create_client
-from opengever.testing import set_current_client_id
 from plone.app.testing import TEST_USER_ID
 from plone.dexterity.utils import createContentInContainer
 from plone.dexterity.utils import iterSchemata
@@ -14,7 +13,6 @@ from z3c.relationfield.relation import RelationValue
 from zope.component import getUtility, queryMultiAdapter
 from zope.intid.interfaces import IIntIds
 from zope.schema import getFieldsInOrder
-import unittest2 as unittest
 
 
 def set_defaults(obj):
@@ -44,17 +42,13 @@ class TestTransporter(FunctionalTestCase):
     def setUp(self):
         super(TestTransporter, self).setUp()
 
-        create_and_select_current_org_unit()
+        create(Builder('fixture').with_all_unit_setup())
 
     def _create_task(self, context, with_docs=False, return_docs=False):
 
         # task
-        task = createContentInContainer(
-            context,
-            'opengever.task.task',
-            title="Task1", task_type='correction',
-            checkConstraints=False)
-        task.responsible = TEST_USER_ID
+        task = create(Builder('task').having(title='Task1',
+                                             task_type='correction'))
 
         if not with_docs:
             return task

@@ -2,9 +2,6 @@ from DateTime.DateTime import DateTime
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.tests.byline_base_test import TestBylineBase
-from opengever.testing import create_and_select_current_org_unit
-from opengever.testing import create_client
-from opengever.testing import create_ogds_user
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 import transaction
@@ -14,11 +11,11 @@ class TestTaskByline(TestBylineBase):
 
     def setUp(self):
         super(TestTaskByline, self).setUp()
-
         self.intids = getUtility(IIntIds)
 
-        orgunit = create_and_select_current_org_unit()
-        create_ogds_user('hugo.boss', assigned_client=[orgunit._client])
+        create(Builder('fixture')
+               .with_all_unit_setup()
+               .with_hugo_boss())
 
         self.task = create(Builder('task')
                .in_state('task-state-open')
