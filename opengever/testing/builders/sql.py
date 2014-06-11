@@ -78,11 +78,6 @@ class AdminUnitBuilder(SqlObjectBuilder):
         self.assign_org_units([self.org_unit])
         return self
 
-    def after_create(self, obj):
-        if self.org_unit:
-            self.org_unit.assign_to_admin_unit(obj)
-        return obj
-
     def as_current_admin_unit(self):
         self._as_current_admin_unit = True
         return self
@@ -92,11 +87,14 @@ class AdminUnitBuilder(SqlObjectBuilder):
         for client in clients:
             # XXX could be solved better
             self.add_object_to_session(client)
-        self.arguments['org_units'] = clients
+        self.arguments['clients'] = clients
 
         return self
 
     def after_create(self, obj):
+        if self.org_unit:
+            self.org_unit.assign_to_admin_unit(obj)
+
         if self._as_current_admin_unit:
             registry = getUtility(IRegistry)
             proxy = registry.forInterface(IAdminUnitConfiguration)
