@@ -1,34 +1,179 @@
+from opengever.ogds.base import _
+from opengever.ogds.base.browser.userdetails import UserDetails
+from opengever.ogds.base.utils import ogds_service
+from Products.CMFCore.utils import getToolByName
+from zope.app.component.hooks import getSite
+from zope.globalrequest import getRequest
+from zope.i18n import translate
+
+
 class Actor(object):
+
+    def __init__(self, identifier):
+        self.identifier = identifier
 
     @classmethod
     def lookup(cls, identifier):
         return ActorLookup(identifier).lookup()
 
+    def get_profile_url(self):
+        raise NotImplementedError()
+
+    def get_label(self):
+        raise NotImplementedError()
+
+    def get_link(self):
+        url = self.get_profile_url()
+        label = self.get_label()
+
+        if not url:
+            return label
+
+        return '<a href="{}">{}</a>'.format(url, label)
+
 
 class InboxActor(Actor):
-    pass
+
+    def __init__(self, identifier, org_unit=None):
+        super(InboxActor, self).__init__(identifier)
+        self._org_unit = org_unit
+
+    def get_profile_url(self):
+        return None
+
+    def get_label(self):
+        org_unit = self.load_org_unit()
+        # we need to instantly translate, because otherwise
+        # stuff like the autocomplete widget will not work
+        # properly.
+        label = _(u'inbox_label',
+                  default=u'Inbox: ${client}',
+                  mapping=dict(client=org_unit.label()))
+
+        return translate(label, context=getRequest())
+
+    def load_org_unit(self):
+        if not self._org_unit:
+            org_unit_id = self.identifier.split(':', 1)[1]
+            self._org_unit = ogds_service().fetch_org_unit(org_unit_id)
+        return self._org_unit
 
 
 class ContactActor(Actor):
-    pass
+
+    def __init__(self, identifier):
+        super(ContactActor, self).__init__(identifier)
+        self._contact = None
+
+    def load(self):
+        if not self._contact:
+            catalog = getToolByName(getSite(), 'portal_catalog')
+            query = {'portal_type': 'opengever.contact.contact',
+                     'contactid': self.identifier}
+
+            contacts = catalog.searchResults(**query)
+
+            if len(contacts) == 0:
+                return None
+            else:
+                self._contact = contacts[0]
+        return self._contact
+
+    def get_label(self, with_principal=True):
+        contact = self.load()
+        if not contact:
+            return self.identifier
+
+        elif contact.lastname and contact.firstname:
+            name = ' '.join((contact.lastname, contact.firstname))
+        elif contact.lastname:
+            name = contact.lastname
+        elif contact.firstname:
+            name = contact.firstname
+
+        elif 'userid' in contact:
+            name = contact.userid
+        else:
+            name = contact.id
+
+        if with_principal and contact.email:
+            return '{} ({})'.format(name, contact.email)
+        else:
+            return name
+
+    def get_profile_url(self):
+        contact = self.load()
+        if contact:
+            return contact.getURL()
+        else:
+            return None
 
 
 class UserActor(Actor):
-    pass
+
+    def __init__(self, identifier):
+        super(UserActor, self).__init__(identifier)
+        self._user = None
+
+    def load(self):
+        if not self._user:
+            self._user = ogds_service().fetch_user(self.identifier)
+        return self._user
+
+    def get_profile_url(self):
+        portal = getSite()
+        user = self.load()
+        if user:
+            return UserDetails.url_for(user.userid)
+        else:
+            # fallback with acl_users folder
+            portal_membership = getToolByName(portal, 'portal_membership')
+            member = portal_membership.getMemberById(self.identifier)
+            if member:
+                return member.getHomeUrl()
+        return None
+
+    def get_label(self, with_principal=True):
+        user = self.load()
+
+        if user.lastname and user.firstname:
+            name = ' '.join((user.lastname, user.firstname))
+        elif user.lastname:
+            name = user.lastname
+        elif user.firstname:
+            name = user.firstname
+        else:
+            name = user.userid
+
+        infos = []
+        if with_principal:
+            infos.append(user.userid)
+
+        if infos:
+            return '{} ({})'.format(name, ', '.join(infos))
+        else:
+            return name
 
 
 class ActorLookup(object):
+    """Given a string-identifier lookup an actor.
 
+    Results are
+     - an InboxActor if the identifier starts with "inbox:"
+     - a ContactActor if the identifier starts with "contact:"
+     - an UserActor otherwise
+
+    """
     def __init__(self, identifier):
         self.identifier = identifier
 
     def is_inbox(self):
         return self.identifier.startswith('inbox:')
 
-    def is_contact(self, principal):
+    def is_contact(self):
         return self.identifier.startswith('contact:')
 
-    def is_user(self, principal):
+    def is_user(self):
         return ':' not in self.identifier
 
     def lookup(self):
@@ -42,25 +187,3 @@ class ActorLookup(object):
             return ContactActor(self.identifier)
 
         return UserActor(self.identifier)
-
-        elif self.is_contact(principal):
-            contact = self.get_contact(principal, check_permissions=True)
-            if contact:
-                return contact.getURL()
-            else:
-                return None
-
-        elif self.is_user(principal):
-            portal = getSite()
-            user = ogds_service().fetch_user(principal)
-            if user:
-                return '/'.join((portal.portal_url(), '@@user-details',
-                                 user.userid))
-            else:
-                # fallback with acl_users folder
-                portal_membership = getToolByName(portal, 'portal_membership')
-                member = portal_membership.getMemberById(principal)
-                if member:
-                    return portal_membership.getMemberById(
-                        principal).getHomeUrl()
-            return None
