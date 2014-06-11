@@ -132,10 +132,10 @@ class Task(Base):
         self.modified = plone_task.modified().asdatetime().replace(tzinfo=None)
         self.task_type = plone_task.task_type
         self.is_subtask = plone_task.get_is_subtask()
-        self.sequence_number = plone_task.get_sequence_number()
+        self.sequence_number = str(plone_task.get_sequence_number())
         self.reference_number = plone_task.get_reference_number()
         self.containing_dossier = plone_task.get_containing_dossier()
-        self.dossier_sequence_number = plone_task.get_dossier_sequence_number()
+        self.dossier_sequence_number = str(plone_task.get_dossier_sequence_number())
         self.assigned_org_unit = plone_task.responsible_client
         self.principals = plone_task.get_principals()
         self.predecessor = self.query_predecessor(
