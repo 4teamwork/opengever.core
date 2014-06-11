@@ -1,11 +1,7 @@
 from Missing import Value as MissingValue
-from Products.CMFCore.interfaces._tools import IMemberData
-from Products.PluggableAuthService.interfaces.authservice import \
-    IPropertiedUser
+from opengever.ogds.base.actor import Actor
 from StringIO import StringIO
-from opengever.ogds.base.interfaces import IContactInformation
 from xlwt import Workbook, XFStyle
-from zope.component import getUtility
 from zope.i18n import translate
 
 
@@ -20,19 +16,7 @@ def readable_author(author):
     """Helper method which returns the author description,
     instead of the userid"""
 
-    if not isinstance(author, unicode):
-        if author is not None:
-            author = author.decode('utf-8')
-        else:
-            return author
-    if IPropertiedUser.providedBy(author) or IMemberData.providedBy(author):
-        author = author.getId()
-    info = getUtility(IContactInformation)
-    if info.is_user(author) or info.is_contact(author) \
-                                or info.is_inbox(author):
-        return info.describe(author)
-    else:
-        return author
+    return Actor.lookup(author).get_label()
 
 
 class StringTranslater(object):
