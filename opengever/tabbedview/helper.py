@@ -59,13 +59,13 @@ def readable_ogds_author(item, author):
         else:
             # Brain
             author = item.document_author
+
     if not isinstance(author, unicode):
         if author is not None:
             author = author.decode('utf-8')
         else:
             author = ''
-    if IPropertiedUser.providedBy(author) or IMemberData.providedBy(author):
-        author = author.getId()
+
     info = getUtility(IContactInformation)
     if info.is_user(author) or info.is_contact(
             author) or info.is_inbox(author):
@@ -81,8 +81,7 @@ def readable_ogds_user(item, user):
             user = user.decode('utf-8')
         else:
             user = ''
-    if IPropertiedUser.providedBy(user) or IMemberData.providedBy(user):
-        user = user.getId()
+
     info = getUtility(IContactInformation)
     if info.is_user(user) or info.is_contact(user) or info.is_inbox(user):
         return info.describe(user)

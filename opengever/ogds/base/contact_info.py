@@ -1,9 +1,12 @@
 from five import grok
 from opengever.ogds.base import _
-from opengever.ogds.base.interfaces import IContactInformation, IUser
+from opengever.ogds.base.actor import Actor
+from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.interfaces import ISyncStamp
-from opengever.ogds.base.utils import brain_is_contact, get_client_id
+from opengever.ogds.base.interfaces import IUser
+from opengever.ogds.base.utils import brain_is_contact
 from opengever.ogds.base.utils import create_session
+from opengever.ogds.base.utils import get_client_id
 from opengever.ogds.base.utils import get_current_client
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models.client import Client

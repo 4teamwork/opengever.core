@@ -75,8 +75,8 @@ class SearchableTextExtender(grok.Adapter):
 
         #responsible
         info = getUtility(IContactInformation)
-        dossier = ITask(self.context)
-        searchable.append(info.describe(dossier.responsible).encode(
+        task = ITask(self.context)
+        searchable.append(info.describe(task.responsible).encode(
                 'utf-8'))
 
         return ' '.join(searchable)
