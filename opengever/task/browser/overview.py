@@ -155,25 +155,7 @@ class Overview(DisplayForm, OpengeverTab):
             return dossier.Title()
 
         def _get_issuer():
-            info = getUtility(IContactInformation)
-            task = ITask(self.context)
-
-            issuer = self.context.get_issuer_label()
-
-            if not ogds_service().has_multiple_org_units():
-                return info.render_link(task.issuer)
-
-            sql_task = self.context.get_sql_object()
-            issuing_org_unit = sql_task.issuing_org_unit
-            predecessors = self.get_predecessor_task()
-
-            if predecessors and \
-                predecessors[0].task_type != 'forwarding_task_type':
-                issuing_org_unit = predecessors[0].issuing_org_unit
-
-            issuing_org_unit = ogds_service().fetch_org_unit(issuing_org_unit)
-
-            return issuing_org_unit.label() + ' / ' + info.render_link(task.issuer)
+            return self.context.get_issuer_label()
 
         def _get_task_widget_value(attr):
             field = ITask.get(attr)
