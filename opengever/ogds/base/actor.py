@@ -19,7 +19,7 @@ class Actor(object):
     def get_profile_url(self):
         raise NotImplementedError()
 
-    def get_label(self):
+    def get_label(self, with_principal=True):
         raise NotImplementedError()
 
     def get_link(self):
@@ -61,9 +61,9 @@ class InboxActor(Actor):
 
 class ContactActor(Actor):
 
-    def __init__(self, identifier):
+    def __init__(self, identifier, contact=None):
         super(ContactActor, self).__init__(identifier)
-        self._contact = None
+        self._contact = contact
 
     def load(self):
         if not self._contact:
@@ -84,15 +84,9 @@ class ContactActor(Actor):
         if not contact:
             return self.identifier
 
-        elif contact.lastname and contact.firstname:
-            name = ' '.join((contact.lastname, contact.firstname))
-        elif contact.lastname:
-            name = contact.lastname
-        elif contact.firstname:
-            name = contact.firstname
-
-        elif 'userid' in contact:
-            name = contact.userid
+        if contact.lastname or contact.firstname:
+            name = ' '.join(name for name in
+                           (contact.lastname, contact.firstname) if name)
         else:
             name = contact.id
 
@@ -111,9 +105,9 @@ class ContactActor(Actor):
 
 class UserActor(Actor):
 
-    def __init__(self, identifier):
+    def __init__(self, identifier, user=None):
         super(UserActor, self).__init__(identifier)
-        self._user = None
+        self._user = user
 
     def load(self):
         if not self._user:
@@ -136,21 +130,14 @@ class UserActor(Actor):
     def get_label(self, with_principal=True):
         user = self.load()
 
-        if user.lastname and user.firstname:
-            name = ' '.join((user.lastname, user.firstname))
-        elif user.lastname:
-            name = user.lastname
-        elif user.firstname:
-            name = user.firstname
+        if user.lastname or user.firstname:
+            name = ' '.join(name for name in
+                           (user.lastname, user.firstname) if name)
         else:
             name = user.userid
 
-        infos = []
         if with_principal:
-            infos.append(user.userid)
-
-        if infos:
-            return '{} ({})'.format(name, ', '.join(infos))
+            return u'{} ({})'.format(name, user.userid)
         else:
             return name
 
