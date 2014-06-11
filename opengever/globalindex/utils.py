@@ -1,12 +1,10 @@
 from opengever.base.browser.helper import get_css_class
 from opengever.globalindex.interfaces import ITaskQuery
-from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from Products.CMFPlone.utils import getToolByName
 from zope.app.component.hooks import getSite
 from zope.component import getUtility
-from zope.component import queryUtility
 
 
 def indexed_task_link(item, display_client=False):
@@ -21,10 +19,8 @@ def indexed_task_link(item, display_client=False):
     service = ogds_service()
 
     # get the contact information utlity and the client
-    info = queryUtility(IContactInformation)
-    if info:
-        admin_unit = service.fetch_admin_unit(item.admin_unit_id)
-    if not info or not admin_unit:
+    admin_unit = service.fetch_admin_unit(item.admin_unit_id)
+    if not admin_unit:
         return '<span class="%s">%s</span>' % (css_class, item.title)
 
     # has the user access to the target task?
