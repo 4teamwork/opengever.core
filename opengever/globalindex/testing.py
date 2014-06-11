@@ -1,15 +1,16 @@
+from ftw.builder.testing import BuilderLayer
 from opengever.core.testing import setup_sql_tables
 from opengever.core.testing import truncate_sql_tables
 from opengever.ogds.base.utils import create_session
-from plone.testing import Layer
 from z3c.saconfig import EngineFactory
 from z3c.saconfig import GloballyScopedSession
 from z3c.saconfig.interfaces import IEngineFactory
 from z3c.saconfig.interfaces import IScopedSession
 from zope.component import provideUtility
+import transaction
 
 
-class MemoryDBLayer(Layer):
+class MemoryDBLayer(BuilderLayer):
     """A Layer which only set up a test sqlite db in to the memory
     """
 
@@ -29,5 +30,6 @@ class MemoryDBLayer(Layer):
 
     def testTearDown(test):
         truncate_sql_tables()
+        transaction.abort()
 
 MEMORY_DB_LAYER = MemoryDBLayer()

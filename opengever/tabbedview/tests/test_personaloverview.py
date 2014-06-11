@@ -1,85 +1,70 @@
-from ftw.testing import MockTestCase
-from opengever.ogds.base.interfaces import IContactInformation
+from ftw.builder import Builder
+from ftw.builder import create
+from ftw.testbrowser import browsing
 from opengever.tabbedview.browser.personal_overview import PersonalOverview
+from opengever.tabbedview.browser.tabs import OpengeverTab
+from opengever.testing import FunctionalTestCase
+from opengever.testing import task2sqltask
+from plone.app.testing import TEST_USER_ID
 
 
-class TestPersonalOverview(MockTestCase):
+class TestGlobalTaskListings(FunctionalTestCase):
 
-    def test_user_is_allowed_to_view(self):
-        context = self.stub()
-        request = self.stub()
+    def setUp(self):
+        super(TestGlobalTaskListings, self).setUp()
 
-        info = self.stub()
-        self.mock_utility(info, IContactInformation, name=u"")
+        self.user, self.org_unit, self.admin_unit, self.hugo = create(
+            Builder('fixture')
+            .with_all_unit_setup()
+            .with_hugo_boss())
 
-        membership = self.stub()
-        member = self.stub()
-        self.mock_tool(membership, 'portal_membership')
-        self.expect(membership.getAuthenticatedMember()).result(member)
+        self.task1 = create(Builder('task')
+                            .having(responsible_client='client1',
+                                    responsible=TEST_USER_ID,
+                                    issuer=TEST_USER_ID))
+        self.task2 = create(Builder('task')
+                            .having(responsible_client='client1',
+                                    responsible='hugo.boss',
+                                    issuer=TEST_USER_ID))
+        self.task3 = create(Builder('task')
+                            .having(responsible_client='client1',
+                                    responsible=TEST_USER_ID,
+                                    issuer='hugo.boss'))
 
-        with self.mocker.order():
-            self.expect(info.is_client_assigned()).result(True)
+    def test_my_tasks(self):
+        view = self.portal.unrestrictedTraverse(
+            'tabbedview_view-mytasks')
+        view.update()
 
-            self.expect(info.is_client_assigned()).result(False)
-            self.expect(member.has_role('Administrator')).result(True)
-
-            self.expect(info.is_client_assigned()).result(False)
-            self.expect(member.has_role('Administrator')).result(False)
-            self.expect(member.has_role('Manager')).result(True)
-
-            self.expect(info.is_client_assigned()).result(False)
-            self.expect(member.has_role('Administrator')).result(False)
-            self.expect(member.has_role('Manager')).result(False)
-
-        self.replay()
-
-        view = PersonalOverview(context, request)
-
-        self.assertTrue(view.user_is_allowed_to_view())
-        self.assertTrue(view.user_is_allowed_to_view())
-        self.assertTrue(view.user_is_allowed_to_view())
-        self.assertFalse(view.user_is_allowed_to_view())
-
-
-    def test_get_tabs(self):
-        context = self.stub()
-        request = self.stub()
-
-        info = self.stub()
-        self.mock_utility(info, IContactInformation, name=u"")
-
-        membership = self.stub()
-        member = self.stub()
-        self.mock_tool(membership, 'portal_membership')
-        self.expect(membership.getAuthenticatedMember()).result(member)
-
-        with self.mocker.order():
-            self.expect(info.is_user_in_inbox_group()).result(True)
-
-            self.expect(info.is_user_in_inbox_group()).result(False)
-            self.expect(member.has_role('Administrator')).result(True)
-
-            self.expect(info.is_user_in_inbox_group()).result(False)
-            self.expect(member.has_role('Administrator')).result(False)
-            self.expect(member.has_role('Manager')).result(False)
-
-        self.replay()
-
-        view = PersonalOverview(context, request)
-
-        tabs = view.get_tabs()
         self.assertEquals(
-            ['mydossiers', 'mydocuments', 'mytasks', 'myissuedtasks',
-             'alltasks', 'allissuedtasks'],
-            [tab.get('id') for tab in tabs])
+            [task2sqltask(self.task1), task2sqltask(self.task3)],
+            view.contents)
 
-        tabs = view.get_tabs()
-        self.assertEquals(
-            ['mydossiers', 'mydocuments', 'mytasks', 'myissuedtasks',
-             'alltasks', 'allissuedtasks'],
-            [tab.get('id') for tab in tabs])
+    def test_my_issued_tasks(self):
+        view = self.portal.unrestrictedTraverse(
+            'tabbedview_view-myissuedtasks')
+        view.update()
 
-        tabs = view.get_tabs()
         self.assertEquals(
-            ['mydossiers', 'mydocuments', 'mytasks', 'myissuedtasks'],
-            [tab.get('id') for tab in tabs])
+            [task2sqltask(self.task1), task2sqltask(self.task2)],
+            view.contents)
+
+    def test_all_tasks(self):
+        view = self.portal.unrestrictedTraverse(
+            'tabbedview_view-alltasks')
+        view.update()
+
+        expected = [self.task1, self.task2, self.task3]
+        self.assertEquals(
+            [task2sqltask(task) for task in expected],
+            view.contents)
+
+    def test_all_issued_tasks(self):
+        view = self.portal.unrestrictedTraverse(
+            'tabbedview_view-allissuedtasks')
+        view.update()
+
+        expected = [self.task1, self.task2, self.task3]
+        self.assertEquals(
+            [task2sqltask(task) for task in expected],
+            view.contents)
