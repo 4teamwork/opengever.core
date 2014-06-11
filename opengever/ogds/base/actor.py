@@ -32,6 +32,18 @@ class Actor(object):
         return '<a href="{}">{}</a>'.format(url, label)
 
 
+class NullActor(object):
+
+    def get_profile_url(self):
+        return None
+
+    def get_label(self, with_principal=True):
+        return None
+
+    def get_link(self):
+        return None
+
+
 class InboxActor(Actor):
 
     def __init__(self, identifier, org_unit=None):
@@ -165,7 +177,7 @@ class ActorLookup(object):
 
     def lookup(self):
         if not self.identifier:
-            return None
+            return NullActor()
 
         elif self.is_inbox():
             return InboxActor(self.identifier)
