@@ -8,6 +8,7 @@ from sqlalchemy import ForeignKey, UniqueConstraint
 from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy.orm import Query
 from sqlalchemy.orm import backref
 from sqlalchemy.orm import relation
 from sqlalchemy.orm import relationship
@@ -15,8 +16,45 @@ from sqlalchemy.schema import Sequence
 from sqlalchemy.sql import functions
 
 
+class TaskQuery(Query):
+    """TaskQuery Object.
+    """
+
+    def users_tasks(self, userid):
+        """Returns query which List all tasks where the given user,
+        his userid, is responsible. It queries all admin units.
+        """
+        return self.filter(Task.responsible == userid)
+
+    def users_issued_tasks(self, userid):
+        """Returns query which list all tasks where the given user
+        is the issuer. It queries all admin units.
+        """
+        return self.filter(Task.issuer == userid)
+
+    def all_admin_unit_tasks(self, admin_unit):
+        """Returns query which list all tasks where the assigned_org_unit
+        is part of the current_admin_unit.
+        """
+        unit_ids = [unit.id() for unit in admin_unit.org_units]
+        return self.filter(Task.assigned_org_unit.in_(unit_ids))
+
+    def all_issued_tasks(self, admin_unit):
+        """List all tasks from the current_admin_unit.
+        """
+        return self.filter(Task.admin_unit_id == admin_unit.id())
+
+    def tasks_by_id(self, int_ids, admin_unit):
+        """
+        """
+        query = self.filter(Task.admin_unit_id == admin_unit.id())
+        return query.filter(Task.int_id.in_(int_ids))
+
+
 class Task(Base):
     """docstring for Task"""
+
+    query_cls = TaskQuery
 
     MAX_TITLE_LENGTH = 256
     MAX_BREADCRUMB_LENGTH = 512

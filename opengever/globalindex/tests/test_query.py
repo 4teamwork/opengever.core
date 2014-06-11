@@ -1,96 +1,103 @@
-from opengever.globalindex.interfaces import ITaskQuery
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.globalindex.model.task import Task
-from opengever.globalindex.query import TaskQuery
 from opengever.globalindex.testing import MEMORY_DB_LAYER
+from opengever.ogds.models.admin_unit import AdminUnit
 from unittest2 import TestCase
-from zope.component import getUtility
-from zope.component import provideUtility
 
 
-class TestTaskQuery(TestCase):
+class TestTaskQueries(TestCase):
 
     layer = MEMORY_DB_LAYER
 
     def setUp(self):
-        super(TestTaskQuery, self).setUp()
-        provideUtility(TaskQuery())
-        self.query = getUtility(ITaskQuery)
+        super(TestTaskQueries, self).setUp()
 
-    def test_get_task_with_existing_intid_admin_unit_id_pair(self):
-        self.add_task(1, 'admin1')
-        self.add_task(2, 'admin1')
-        task3 = self.add_task(3, 'admin2')
+        self.session = self.layer.session
 
-        self.assertEquals(task3, self.query.get_task(3, 'admin2'))
+        rr = create(Builder('org_unit').id('rr'))
+        bd = create(Builder('org_unit').id('bd'))
+        afi = create(Builder('org_unit').id('afi'))
 
-    def test_get_task_with_non_existing_intid_admin_unit_id_pair(self):
-        self.add_task(1, 'admin1')
+        self.admin_unit_a = create(Builder('admin_unit')
+                                   .id('unita')
+                                   .assign_org_units([rr, bd]))
+        self.admin_unit_b = create(Builder('admin_unit')
+                                   .id('unitb')
+                                   .assign_org_units([afi]))
 
-        self.assertEquals(None, self.query.get_task(1, 'admin2'))
+    def task(self, intid, current_admin_unit, **kw):
+        arguments = {'issuing_org_unit': 'rr',
+                     'assigned_org_unit': 'bd'}
+        arguments.update(kw)
 
-    def test_query_by_existing_responsible(self):
-        task1 = self.add_task(1, responsible='hugo.boss')
-        task2 = self.add_task(2, responsible='james.bond')
-        task3 = self.add_task(3, responsible='hugo.boss')
-
-        self.assertEquals([task1, task3],
-            self.query.get_tasks_for_responsible('hugo.boss'))
-        self.assertEquals([task2],
-            self.query.get_tasks_for_responsible('james.bond'))
-
-    def test_query_by_not_existing_responsible(self):
-        self.add_task(1, responsible='hugo.boss')
-
-        self.assertEquals([],
-            self.query.get_tasks_for_responsible('eduard'))
-
-    def test_query_by_issuer(self):
-        self.add_task(1, issuer='hugo.boss')
-        task2 = self.add_task(2, 'admin1', issuer='james.bond')
-        task3 = self.add_task(3, 'admin1', issuer='james.bond')
-
-        self.assertEquals(
-            [task2, task3], self.query.get_tasks_for_issuer('james.bond'))
-        self.assertEquals([], self.query.get_tasks_for_issuer('eduard'))
-
-    def test_query_py_path(self):
-        task1 = self.add_task(
-            1, admin_unit_id='admin1', physical_path='test/task-1/')
-        self.add_task(
-            2, admin_unit_id='admin2', physical_path='test/task-1/')
-        self.add_task(
-            3, admin_unit_id='admin2', physical_path='test/task-20/')
-
-        self.assertEquals(
-            task1, self.query.get_task_by_path('test/task-1/', 'admin1'))
-        self.assertEquals(
-            None, self.query.get_task_by_path('test/task-20/', 'admin1'))
-        self.assertEquals(
-            None, self.query.get_task_by_path('not-existing/task-3/', 'admin1'))
-
-    def test_query_by_paths(self):
-        task1 = self.add_task(1, physical_path='test/task-1/')
-        task2 = self.add_task(2, physical_path='test/task-5/')
-        task3 = self.add_task(3, physical_path='test/task-20/')
-
-        self.assertEquals(
-            [task1, task2, task3],
-            self.query.get_tasks_by_paths(
-                ['test/task-1/', 'test/task-5/', 'test/task-20/'])
-        )
-        self.assertEquals(
-            [task2, task3],
-            self.query.get_tasks_by_paths(
-                ['not-existing/task-1/', 'test/task-5/', 'test/task-20/'])
-        )
-
-    def add_task(self, intid, admin_unit_id='admin1',
-                 issuing_org_unit_id='org1',
-                 assigned_org_unit_id='org2',
-                 **kwargs):
-        task = Task(intid, admin_unit_id,
-                    issuing_org_unit=issuing_org_unit_id,
-                    assigned_org_unit=assigned_org_unit_id,
-                    **kwargs)
-        self.layer.session.add(task)
+        task = Task(intid, current_admin_unit, **arguments)
+        self.session.add(task)
         return task
+
+    def test_users_tasks_lists_only_tasks_assigned_to_current_user(self):
+        task1 = self.task(1, 'rr', responsible='hugo.boss')
+        task2 = self.task(2, 'bd', responsible='tommy.hilfiger')
+        task3 = self.task(3, 'sb', responsible='hugo.boss')
+
+        self.assertSequenceEqual(
+            [task1, task3],
+            Task.query.users_tasks('hugo.boss').all())
+
+        self.assertSequenceEqual(
+            [task2],
+            Task.query.users_tasks('tommy.hilfiger').all())
+
+    def test_issued_task_lists_only_task_issued_by_the_current_user(self):
+        task1 = self.task(1, 'rr', issuer='hugo.boss')
+        task2 = self.task(2, 'bd', issuer='tommy.hilfiger')
+        task3 = self.task(3, 'sb', issuer='hugo.boss')
+
+        self.assertSequenceEqual(
+            [task1, task3],
+            Task.query.users_issued_tasks('hugo.boss').all())
+
+        self.assertSequenceEqual(
+            [task2],
+            Task.query.users_issued_tasks('tommy.hilfiger').all())
+
+    def test_task_by_id_returns_tasks_wich_match_the_given_intid_and_adminunit(self):
+        task1 = self.task(1, 'unita')
+        task2 = self.task(2, 'unita')
+        task3 = self.task(3, 'unitb')
+        task4 = self.task(3, 'unita')
+
+        self.assertSequenceEqual(
+            [task1, task2, task4],
+            Task.query.tasks_by_id([1, 2, 3], self.admin_unit_a).all())
+
+        self.assertSequenceEqual(
+            [task3],
+            Task.query.tasks_by_id([1, 2, 3], self.admin_unit_b).all())
+
+    def test_all_admin_unit_tasks_list_tasks_assigned_to_a_current_admin_units_org_unit(self):
+        task1 = self.task(1, 'unita', assigned_org_unit='rr')
+        task2 = self.task(2, 'unitb', assigned_org_unit='afi')
+        task3 = self.task(3, 'unita', assigned_org_unit='bd')
+
+        self.assertItemsEqual(
+            [task1, task3],
+            Task.query.all_admin_unit_tasks(self.admin_unit_a).all())
+
+        self.assertItemsEqual(
+            [task2],
+            Task.query.all_admin_unit_tasks(self.admin_unit_b).all())
+
+    def test_all_issued_tasks_lists_all_tasks_created_on_given_admin_unit(self):
+        task1 = self.task(1, 'unita', assigned_org_unit='rr')
+        task2 = self.task(2, 'unitb', assigned_org_unit='afi')
+        task3 = self.task(3, 'unita', assigned_org_unit='bd')
+        task4 = self.task(4, 'unita', assigned_org_unit='afi')
+
+        self.assertItemsEqual(
+            [task1, task3, task4],
+            Task.query.all_issued_tasks(self.admin_unit_a).all())
+
+        self.assertItemsEqual(
+            [task2],
+            Task.query.all_issued_tasks(self.admin_unit_b).all())
