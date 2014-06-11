@@ -1,13 +1,12 @@
 from AccessControl import Unauthorized
+from Products.CMFPlone.utils import getToolByName
 from five import grok
 from ftw.tabbedview.browser.tabbed import TabbedView
-from opengever.globalindex.interfaces import ITaskQuery
+from opengever.globalindex.model.task import Task
 from opengever.ogds.base.interfaces import IContactInformation
-from opengever.ogds.base.utils import get_client_id
 from opengever.ogds.base.utils import get_current_admin_unit
-from opengever.tabbedview.browser.tabs import Documents, Dossiers, Tasks
+from opengever.tabbedview.browser.tabs import Documents, Dossiers
 from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
-from Products.CMFPlone.utils import getToolByName
 from zope.component import getUtility
 from zope.interface import Interface
 import AccessControl
@@ -74,7 +73,7 @@ class PersonalOverview(TabbedView):
         m_tool = getToolByName(self.context, 'portal_membership')
         member = m_tool.getAuthenticatedMember()
         if member:
-            if  member.has_role('Administrator') \
+            if member.has_role('Administrator') \
                     or member.has_role('Manager'):
                 return True
         return False
@@ -161,8 +160,8 @@ class MyDocuments(Documents):
 
 
 class MyTasks(GlobalTaskListingTab):
-    """A listing view,
-    wich show all task where the actual user is the responsible.
+    """A listing view, which lists all tasks where the given
+    user is responsible. It queries all admin units.
 
     This listing is based on opengever.globalindex (sqlalchemy) and respects
     the basic features of tabbedview such as searching and batching.
@@ -182,28 +181,16 @@ class MyTasks(GlobalTaskListingTab):
         ]
 
     def get_base_query(self):
-        """Returns the base search query (sqlalchemy)i
-        """
-
         portal_state = self.context.unrestrictedTraverse(
             '@@plone_portal_state')
         userid = portal_state.member().getId()
 
-        query_util = getUtility(ITaskQuery)
-
-        # show all tasks assigned to this user ..
-        query = query_util._get_tasks_for_responsible_query(userid,
-                                                            self.sort_on,
-                                                            self.sort_order)
-
-        # .. and assigned to the current client
-        query = query.filter_by(admin_unit_id=get_current_admin_unit().id())
-        return query
+        return Task.query.users_tasks(userid)
 
 
-class IssuedTasks(Tasks):
-    """List all tasks where I'm the issuer and which are physically stored on
-    the current client.
+class IssuedTasks(GlobalTaskListingTab):
+    """A ListingView list all tasks where the given user is the issuer.
+    Queries all admin units.
     """
 
     grok.name('tabbedview_view-myissuedtasks')
@@ -217,12 +204,15 @@ class IssuedTasks(Tasks):
 
     major_actions = ['pdf_taskslisting']
 
-    search_options = {'issuer': authenticated_member, }
+    def get_base_query(self):
+        portal_state = self.context.unrestrictedTraverse(
+            '@@plone_portal_state')
+        userid = portal_state.member().getId()
 
-    columns = remove_subdossier_column(Tasks.columns)
+        return Task.query.users_issued_tasks(userid)
 
 
-class AllTasks(MyTasks):
+class AllTasks(GlobalTaskListingTab):
     """Lists all tasks assigned to this clients.
     Bases on MyTasks
     """
@@ -239,15 +229,10 @@ class AllTasks(MyTasks):
     major_actions = ['pdf_taskslisting']
 
     def get_base_query(self):
-        """Returns the base search query (sqlalchemy)
-        """
-
-        query_util = getUtility(ITaskQuery)
-        return query_util._get_tasks_for_assigned_client_query(
-            get_client_id(), self.sort_on, self.sort_order)
+        return Task.query.all_admin_unit_tasks(get_current_admin_unit())
 
 
-class AllIssuedTasks(Tasks):
+class AllIssuedTasks(GlobalTaskListingTab):
     """List all tasks which are stored physically on this client.
     """
 
@@ -262,4 +247,5 @@ class AllIssuedTasks(Tasks):
 
     major_actions = ['pdf_taskslisting']
 
-    columns = remove_subdossier_column(Tasks.columns)
+    def get_base_query(self):
+        return Task.query.all_issued_tasks(get_current_admin_unit())
