@@ -25,6 +25,7 @@ class MigrateTaskTable(UpgradeStep):
         self.alter_columns()
         self.create_issuing_orgunit_column()
         self.add_unique_constraint()
+        self.migrate_issuing_orgunit_data()
 
     def drop_unique_constraint(self):
         if self._has_index('client_id', 'tasks'):
@@ -73,3 +74,32 @@ class MigrateTaskTable(UpgradeStep):
             'tasks',
             Column('issuing_org_unit', String(30), index=True, nullable=False)
         )
+
+    def _lookup_predecessor_admin_unit(self, task_table, row):
+        while row.predecessor_id:
+            row = self.connection.execute(
+                task_table.select().where(
+                    task_table.c.id == row.predecessor_id)
+                ).fetchone()
+        return row.admin_unit_id
+
+    def migrate_issuing_orgunit_data(self):
+        self.metadata.clear()
+        self.metadata.reflect()
+
+        task_table = self.metadata.tables.get('tasks')
+        tasks = self.connection.execute(task_table.select()).fetchall()
+        for row in tasks:
+            if row.predecessor_id:
+                issuing_org_unit = self._lookup_predecessor_admin_unit(
+                    task_table, row)
+            else:
+                issuing_org_unit = row.admin_unit_id
+            self._execute(
+                task_table.update()
+                .values(issuing_org_unit=issuing_org_unit)
+                .where(task_table.c.id == row.id)
+            )
+
+    def _execute(self, statement):
+        return self.connection.execute(statement)
