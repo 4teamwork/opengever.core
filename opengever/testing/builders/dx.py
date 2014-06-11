@@ -178,3 +178,10 @@ class RepositoryRootBuilder(DexterityBuilder):
 
 
 builder_registry.register('repository_root', RepositoryRootBuilder)
+
+
+class YearFolderbuilder(DexterityBuilder):
+    portal_type = 'opengever.inbox.yearfolder'
+
+
+builder_registry.register('yearfolder', YearFolderbuilder)
