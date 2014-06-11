@@ -506,11 +506,10 @@ class ContactInformation(grok.GlobalUtility):
         for userid, lastname, firstname in ids:
             sort_dict[userid] = u'%s %s' % (lastname, firstname)
 
-        #includes every client inbox
-        active_clients = self._clients_query().filter_by(enabled=True)
-        for client in active_clients:
-            principal = u'inbox:%s' % client.client_id
-            sort_dict[principal] = translate(self.describe(principal))
+        #includes every org-unit-inbox
+        for unit in ogds_service().all_org_units(enabled=True):
+            inbox_id = unit.inbox().id()
+            sort_dict[inbox_id] = Actor.lookup(inbox_id).get_label()
         return sort_dict
 
     def get_user_contact_sort_dict(self):
