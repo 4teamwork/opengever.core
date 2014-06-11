@@ -75,6 +75,7 @@ class AdminUnitBuilder(SqlObjectBuilder):
             unit_id=org_unit.id(),
             title=org_unit.label(),
         ))
+        self.assign_org_units([self.org_unit])
         return self
 
     def after_create(self, obj):
