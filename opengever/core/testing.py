@@ -1,4 +1,3 @@
-from Testing.ZopeTestCase.utils import setupCoreSessions
 from collective.transmogrifier import transmogrifier
 from ftw.builder.testing import BUILDER_LAYER
 from ftw.builder.testing import functional_session_factory
@@ -8,17 +7,25 @@ from opengever.globalindex import model
 from opengever.ogds.base.setuphandlers import create_sql_tables
 from opengever.ogds.base.utils import create_session
 from opengever.ogds.models import BASE
+from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import IntegrationTesting
 from plone.app.testing import PLONE_FIXTURE
 from plone.app.testing import PloneSandboxLayer
-from plone.app.testing import TEST_USER_ID
-from plone.app.testing import applyProfile
 from plone.app.testing import ploneSite
 from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
+from plone.testing import Layer
 from plone.testing import z2
+from Testing.ZopeTestCase.utils import setupCoreSessions
+from z3c.saconfig import EngineFactory
+from z3c.saconfig import GloballyScopedSession
+from z3c.saconfig.interfaces import IEngineFactory
+from z3c.saconfig.interfaces import IScopedSession
+from zope.component import provideUtility
 from zope.configuration import xmlconfig
 from zope.sqlalchemy import datamanager
+import transaction
 
 
 def clear_transmogrifier_registry():
@@ -145,6 +152,34 @@ class OpengeverFixture(PloneSandboxLayer):
         portal['Members'].invokeFactory('Folder', TEST_USER_ID)
         setRoles(portal, TEST_USER_ID, ['Member'])
 
+
+class MemoryDBLayer(Layer):
+    """A Layer which only set up a test sqlite db in to the memory
+    """
+
+    layer = BUILDER_LAYER
+
+    def testSetUp(self):
+        super(MemoryDBLayer, self).testSetUp()
+
+        engine_factory = EngineFactory('sqlite:///:memory:')
+        provideUtility(
+            engine_factory, provides=IEngineFactory, name=u'opengever_db')
+
+        scoped_session = GloballyScopedSession(engine=u'opengever_db')
+        provideUtility(
+            scoped_session, provides=IScopedSession, name=u'opengever')
+
+        setup_sql_tables()
+        self.session = create_session()
+
+    def testTearDown(test):
+        truncate_sql_tables()
+        transaction.abort()
+
+
+MEMORY_DB_LAYER = MemoryDBLayer(
+    bases=(BUILDER_LAYER,), name='opengever:core:memory_db')
 
 OPENGEVER_FIXTURE = OpengeverFixture()
 
