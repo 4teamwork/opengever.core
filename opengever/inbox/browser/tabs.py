@@ -3,8 +3,11 @@ from opengever.globalindex.interfaces import ITaskQuery
 from opengever.inbox.inbox import IInbox
 from opengever.inbox.yearfolder import IYearFolder
 from opengever.ogds.base.utils import get_client_id
+from opengever.tabbedview.browser.tabs import Documents
+from opengever.tabbedview.browser.tabs import Trash
 from opengever.tabbedview.browser.tabs import Tasks
 from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
+from opengever.tabbedview.helper import external_edit_link
 from zope.component import getUtility
 
 
@@ -77,3 +80,80 @@ class ClosedForwardings(Tasks):
     types = ['opengever.inbox.forwarding', ]
     enabled_actions = []
     major_actions = []
+
+
+class InboxDocuments(Documents):
+    """Lists all Forwardings in this container
+    """
+    grok.context(IInbox)
+
+    # do not list documents in forwardings
+    depth = 1
+
+    @property
+    def columns(self):
+        """Remove default columns `containing_subdossier`, `checked_out`
+        and `external_edit`.
+        """
+        remove_columns = ['containing_subdossier', 'checked_out']
+        columns = []
+
+        for col in super(InboxDocuments, self).columns:
+            if isinstance(col, dict) and \
+                    col.get('column') in remove_columns:
+                pass
+            elif isinstance(col, tuple) and col[1] == external_edit_link:
+                pass
+            else:
+                columns.append(col)
+
+        return columns
+
+    @property
+    def enabled_actions(self):
+        """Defines the enabled Actions"""
+        actions = super(InboxDocuments, self).enabled_actions
+        actions = [action for action in actions
+                   if action not in (
+                    'create_task',
+                    'copy_documents_to_remote_client',
+                    'move_items',)]
+
+        actions += ['create_forwarding']
+        return actions
+
+    @property
+    def major_actions(self):
+        """Defines wich actions are major Actions"""
+        actions = super(InboxDocuments, self).major_actions
+        actions = [action for action in actions
+                   if action not in ('create_task',)]
+        actions += ['create_forwarding']
+        return actions
+
+
+class InboxTrash(Trash):
+    """Special Trash view,
+    some columns from the standard Trash view are disabled"""
+
+    grok.context(IInbox)
+
+    @property
+    def columns(self):
+        """Remove default columns `containing_subdossier`, `checked_out`
+        and `external_edit`.
+        """
+
+        remove_columns = ['containing_subdossier', 'checked_out']
+        columns = []
+        for col in super(InboxTrash, self).columns:
+            if isinstance(col, dict) and \
+                    col.get('column') in remove_columns:
+                pass
+            elif isinstance(col, tuple) and \
+                    col[1] == external_edit_link:
+                pass
+            else:
+                columns.append(col)
+
+        return columns
