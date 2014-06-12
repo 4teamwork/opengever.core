@@ -146,10 +146,17 @@ class InboxDocuments(Documents):
 
 
 class InboxTrash(Trash):
-    """Special Trash view,
-    some columns from the standard Trash view are disabled"""
+    """Inboxs trash view: shows only trashed document which are marked
+    with the current org unit.
+
+    Columns: the default columns `containing_subdossier` and `checked_out`
+    are removed."""
 
     grok.context(IInbox)
+
+    search_options = {
+        'trashed': True,
+        'client_id': _get_current_org_unit_id}
 
     @property
     def columns(self):
