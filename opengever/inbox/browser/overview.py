@@ -11,6 +11,7 @@ from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import OPEN_TASK_STATES
 from Products.CMFCore.utils import getToolByName
 from sqlalchemy import and_
+from sqlalchemy import desc
 from sqlalchemy import or_
 from zope.component import getUtility
 
@@ -37,33 +38,26 @@ class InboxOverview(DossierOverview):
         return items
 
     def assigned_tasks(self):
+        """Returns the 5 last modified open task which are assigned
+        to the current org unit's inbox.
         """
-        Get tasks that have been created on a different client and
-        are assigned to this client's inbox.
-        """
-        query_util = getUtility(ITaskQuery)
-        query = query_util._get_tasks_for_responsible_query(
-            get_current_inbox_principal(self.context))
-
+        current_inbox_id = get_current_org_unit().inbox().id()
+        query = Task.query.users_tasks(current_inbox_id)
         query = query.filter(Task.review_state.in_(OPEN_TASK_STATES))
+        query = query.order_by(desc(Task.modified))
 
-        # If a task has a successor task, it should only list one of them,
-        # the one which is physically one the current client.
-        query = query.filter(
-            or_(
-                and_(Task.predecessor == None, Task.successors == None),
-                Task.admin_unit_id == get_current_admin_unit().id()))
-
-        return query.all()[:5]
+        return query.limit(5).all()
 
     def issued_tasks(self):
-        types = ['opengever.task.task', 'opengever.inbox.forwarding']
-        catalog = getToolByName(self.context, 'portal_catalog')
-        results = catalog(portal_type=types,
-                          issuer=get_current_inbox_principal(self.context),
-                          review_state=OPEN_TASK_STATES)
+        """Returns the 5 last modified open task which are issued
+        by the current org unit's inbox.
+        """
+        current_inbox_id = get_current_org_unit().inbox().id()
+        query = Task.query.users_issued_tasks(current_inbox_id)
+        query = query.filter(Task.review_state.in_(OPEN_TASK_STATES))
+        query = query.order_by(desc(Task.modified))
 
-        return results[:5]
+        return query.limit(5).all()
 
     def documents(self):
         """
