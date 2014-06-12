@@ -62,7 +62,7 @@ class TaskListingLaTeXView(grok.MultiAdapter, MakoLaTeXView):
 
         return rows
 
-    def get_row_for_item(self, item):
+    def get_data_for_item(self, item):
         client = self.info.get_client_by_id(item.client_id).title
         task_type = task_type_helper(item, item.task_type)
         sequence_number = unicode(item.sequence_number).encode('utf-8')
@@ -88,7 +88,7 @@ class TaskListingLaTeXView(grok.MultiAdapter, MakoLaTeXView):
 
         review_state = workflow_state(item, item.review_state)
 
-        data = [
+        return [
             client,
             sequence_number,
             title,
@@ -101,7 +101,8 @@ class TaskListingLaTeXView(grok.MultiAdapter, MakoLaTeXView):
             review_state,
             ]
 
-        return self.convert_list_to_row(data)
+    def get_row_for_item(self, item):
+        return self.convert_list_to_row(self.get_data_for_item(item))
 
     def convert_list_to_row(self, row):
         return ' & '.join([self.convert_plain(cell) for cell in row])
