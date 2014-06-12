@@ -53,7 +53,7 @@ class NullActor(object):
         return None
 
     def get_label(self, with_principal=True):
-        return None
+        return ''
 
     def get_link(self):
         return None
