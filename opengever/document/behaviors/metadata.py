@@ -1,6 +1,7 @@
 from collective import dexteritytextindexer
 from collective.elephantvocabulary import wrap_vocabulary
 from datetime import date
+from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.document import _
 from opengever.document.interfaces import IDocumentSettings
@@ -8,10 +9,12 @@ from plone.directives import form
 from plone.namedfile.field import NamedBlobFile
 from plone.registry.interfaces import IRegistry
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
+from z3c.form import validator
 from z3c.form.browser import checkbox
 from zope import schema
 from zope.component import getUtility
 from zope.interface import alsoProvides
+from zope.interface import Invalid
 
 
 class IDocumentMetadata(form.Schema):
@@ -142,6 +145,45 @@ class IDocumentMetadata(form.Schema):
 
 
 alsoProvides(IDocumentMetadata, form.IFormFieldProvider)
+
+
+class FileOrPaperValidator(validator.SimpleFieldValidator):
+
+    def validate(self, value):
+        """The document must either have a digital file or be preserved
+        in paper form.
+
+        XXX: This validator is a hack, since it validates field values across
+        schemata using request.form instead of `value`.
+        """
+        # Bail if not called during a regular add form
+        if self.request.form == {}:
+            return
+
+        if not (self.has_file() or self.is_preserved_as_paper()):
+            raise Invalid(
+                _(u'error_file_and_preserved_as_paper',
+                default=u"You don't select a file and document is also not "
+                         "preserved in paper_form, please correct it."))
+
+    def is_preserved_as_paper(self):
+        PAPER_KEY = 'form.widgets.IDocumentMetadata.preserved_as_paper'
+        return self.request.form.get(PAPER_KEY) == [u'selected']
+
+    def has_file(self):
+        FILE_KEY = 'form.widgets.file'
+        FILE_ACTION_KEY = '%s.action' % FILE_KEY
+        file_added = bool(self.request.form.get(FILE_KEY))
+        file_not_changed = self.request.form.get(FILE_ACTION_KEY)
+        return file_added or file_not_changed
+
+
+validator.WidgetValidatorDiscriminators(
+    FileOrPaperValidator,
+    field=IDocumentMetadata['preserved_as_paper'],
+    )
+
+grok.global_adapter(FileOrPaperValidator)
 
 
 # Default values
