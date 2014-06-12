@@ -3,6 +3,7 @@ from ftw.builder import create
 from opengever.testing import create_client
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
+from opengever.testing import select_current_org_unit
 from opengever.testing import task2sqltask
 
 
@@ -69,35 +70,46 @@ class TestInboxTabs(FunctionalTestCase):
                           [brain.getObject() for brain in view.contents])
 
 
-class TestAssignedInboxTaskTab(FunctionalTestCase):
+class TestInboxTaskTabs(FunctionalTestCase):
+
+    viewname = ''
 
     def setUp(self):
-        super(TestAssignedInboxTaskTab, self).setUp()
+        super(TestInboxTaskTabs, self).setUp()
         self.user, self.org_unit, self.admin_unit = create(
             Builder('fixture').with_all_unit_setup())
 
+        self.org_unit_2 = create(Builder('org_unit')
+                                 .assign_users([self.user])
+                                 .id('client2'))
+
         self.inbox = create(Builder('inbox').titled(u'Testinbox'))
 
-    def assert_listing_results(self, viewname, results, ):
-        view = self.inbox.restrictedTraverse('tabbedview_view-%s' % (viewname))
+    def assert_listing_results(self, results):
+        view = self.inbox.restrictedTraverse(
+            'tabbedview_view-{}'.format(self.viewname))
         view.update()
 
         self.assertEquals([task2sqltask(obj) for obj in results],
                           view.contents)
 
-    def test_lists_only_tasks_assigned_to_current_inbox_group(self):
-        create_client(clientid='client2')
-        assigned_to_inbox_client1 = create(Builder('forwarding')
-                            .within(self.inbox)
-                            .having(responsible='inbox:client1'))
 
-        create(Builder('forwarding')
-                    .within(self.inbox)
-                    .having(responsible='inbox:client2'))
+class TestAssignedInboxTaskTab(TestInboxTaskTabs):
 
-        self.assert_listing_results(
-            'assigned_inbox_tasks',
-            [assigned_to_inbox_client1, ])
+    viewname = 'assigned_inbox_tasks'
+
+    def test_lists_only_tasks_assigned_to_the_current_org_units_inbox(self):
+        forwarding_1 = create(Builder('forwarding')
+                              .within(self.inbox)
+                              .having(responsible='inbox:client1'))
+        forwarding_2 = create(Builder('forwarding')
+                              .within(self.inbox)
+                              .having(responsible='inbox:client2'))
+
+        self.assert_listing_results([forwarding_1])
+
+        select_current_org_unit('client2')
+        self.assert_listing_results([forwarding_2])
 
     def test_list_tasks_and_forwardings(self):
         task = create(Builder('task')
@@ -108,26 +120,12 @@ class TestAssignedInboxTaskTab(FunctionalTestCase):
                             .within(self.inbox)
                             .having(responsible='inbox:client1'))
 
-        self.assert_listing_results(
-            'assigned_inbox_tasks', [task, forwarding])
+        self.assert_listing_results([task, forwarding])
 
 
-class TestIssuedInboxTaskTab(FunctionalTestCase):
+class TestIssuedInboxTaskTab(TestInboxTaskTabs):
 
-    def setUp(self):
-        super(TestIssuedInboxTaskTab, self).setUp()
-        self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture').with_all_unit_setup())
-
-        self.inbox = create(Builder('inbox').titled(u'Testinbox'))
-
-    def assert_listing_results(self, viewname, results, ):
-        view = self.inbox.restrictedTraverse(
-            'tabbedview_view-%s' % (viewname))
-        view.update()
-
-        self.assertEquals(results,
-                          [brain.getObject() for brain in view.contents])
+    viewname = 'issued_inbox_tasks'
 
     def test_list_tasks_and_forwardings(self):
         task = create(Builder('task')
@@ -138,21 +136,21 @@ class TestIssuedInboxTaskTab(FunctionalTestCase):
                             .within(self.inbox)
                             .having(issuer='inbox:client1'))
 
-        self.assert_listing_results(
-            'issued_inbox_tasks',
-            [task, forwarding])
+        self.assert_listing_results([task, forwarding])
 
-    def test_list_only_task_with_current_inbox_as_issuer(self):
-        issued_by_inbox1 = create(Builder('task')
+    def test_list_only_task_with_current_org_units_inbox_as_a_issuer(self):
+        task1 = create(Builder('task')
                       .within(self.inbox)
                       .having(issuer='inbox:client1'))
 
-        create(Builder('forwarding')
-                            .within(self.inbox)
-                            .having(issuer='inbox:client2'))
+        task2 = create(Builder('task')
+                      .within(self.inbox)
+                      .having(issuer='inbox:client2'))
 
-        self.assert_listing_results(
-            'issued_inbox_tasks', [issued_by_inbox1, ])
+        self.assert_listing_results([task1])
+
+        select_current_org_unit('client2')
+        self.assert_listing_results([task2])
 
     def test_list_also_tasks_outside_of_the_inbox(self):
         task_inside = create(Builder('task')
@@ -162,5 +160,4 @@ class TestIssuedInboxTaskTab(FunctionalTestCase):
         task_outside = create(Builder('task')
               .having(issuer='inbox:client1'))
 
-        self.assert_listing_results(
-            'issued_inbox_tasks', [task_inside, task_outside])
+        self.assert_listing_results([task_inside, task_outside])
