@@ -6,6 +6,7 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.interfaces import IConstrainTypeDecider
 from opengever.dossier.interfaces import IDossierContainerTypes
+from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.task import OPEN_TASK_STATES
@@ -220,12 +221,8 @@ class DossierContainer(Container):
             return max(end_dates)
         return None
 
-    def get_responsible_label(self):
-        user = ogds_service().fetch_user(IDossier(self).responsible)
-        return u'{} / {}'.format(
-            get_current_admin_unit().title,
-            user.label()
-        )
+    def get_responsible_actor(self):
+        return Actor.user(IDossier(self).responsible)
 
 
 class DefaultConstrainTypeDecider(grok.MultiAdapter):

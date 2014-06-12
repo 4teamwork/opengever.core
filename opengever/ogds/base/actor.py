@@ -15,6 +15,7 @@ The lookup results are
 """
 from opengever.ogds.base import _
 from opengever.ogds.base.browser.userdetails import UserDetails
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from Products.CMFCore.utils import getToolByName
 from zope.app.component.hooks import getSite
@@ -31,11 +32,36 @@ class Actor(object):
     def lookup(cls, identifier):
         return ActorLookup(identifier).lookup()
 
+    @classmethod
+    def user(cls, identifier):
+        if not identifier:
+            return NullActor()
+        assert ActorLookup(identifier).is_user()
+        return UserActor(identifier)
+
+    @classmethod
+    def inbox(cls, identifier):
+        if not identifier:
+            return NullActor()
+        assert ActorLookup(identifier).is_inbox()
+        return InboxActor(identifier)
+
+    @classmethod
+    def contact(cls, identifier):
+        if not identifier:
+            return NullActor()
+        assert ActorLookup(identifier).is_contact()
+        return ContactActor(identifier)
+
     def get_profile_url(self):
         raise NotImplementedError()
 
     def get_label(self, with_principal=True):
         raise NotImplementedError()
+
+    def get_label_with_admin_unit(self):
+        admin_unit = get_current_admin_unit()
+        return admin_unit.prefix_label(self.get_label())
 
     def get_link(self):
         url = self.get_profile_url()
