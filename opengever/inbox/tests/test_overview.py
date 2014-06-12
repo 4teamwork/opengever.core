@@ -4,6 +4,7 @@ from opengever.globalindex.handlers.task import sync_task
 from opengever.testing import FunctionalTestCase
 from opengever.testing.helpers import task2sqltask
 
+
 class TestBaseInboxOverview(FunctionalTestCase):
 
     def setUp(self):
@@ -21,6 +22,7 @@ class TestBaseInboxOverview(FunctionalTestCase):
 
         self.inbox = create(Builder('inbox').titled(u'eingangskorb'))
         self.view = self.inbox.restrictedTraverse('tabbedview_view-overview')
+
 
 class TestInboxOverviewDocumentBox(TestBaseInboxOverview):
 
@@ -44,6 +46,21 @@ class TestInboxOverviewDocumentBox(TestBaseInboxOverview):
                .within(forwarding))
 
         self.assert_documents([inbox_document, ], self.view.documents())
+
+    def test_documents_box_list_only_documents_marked_with_the_current_admin_unit(self):
+        create(Builder('document')
+               .titled('OrgUnit 1 doc')
+               .within(self.inbox))
+
+        create(Builder('org_unit')
+               .id('client3')
+               .assign_users([self.user1])
+               .as_current_org_unit())
+        org_unit_3_document = create(Builder('document')
+                                     .titled('OrgUnit 3 doc')
+                                     .within(self.inbox))
+
+        self.assert_documents([org_unit_3_document, ], self.view.documents())
 
     def test_document_box_is_limited_to_ten_documents(self):
         for i in range(15):
