@@ -1,4 +1,3 @@
-from Products.ZCatalog.interfaces import ICatalogBrain
 from five import grok
 from opengever.base.browser.helper import get_css_class
 from opengever.dossier import _ as _dossier
@@ -6,9 +5,9 @@ from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.globalindex.utils import indexed_task_link_helper
-from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.actor import Actor
 from opengever.tabbedview.browser.tabs import OpengeverTab
-from zope.component import getUtility
+from Products.ZCatalog.interfaces import ICatalogBrain
 
 
 class DossierOverview(grok.View, OpengeverTab):
@@ -71,7 +70,6 @@ class DossierOverview(grok.View, OpengeverTab):
         return document_list
 
     def sharing(self):
-
         # get the participants
         phandler = IParticipationAware(self.context)
         results = list(phandler.get_participations())
@@ -88,14 +86,15 @@ class DossierOverview(grok.View, OpengeverTab):
         responsible.contact = dossier_adpt.responsible
         results.append(responsible)
 
-        info = getUtility(IContactInformation)
-
-        return [{
-            'Title': info.describe(xx.contact),
-            'getURL': info.get_profile_url(xx.contact),
-            'css_class': 'function-user',
-            }
-            for xx in results]
+        users = []
+        for dossier in results:
+            actor = Actor.lookup(dossier.contact)
+            users.append({
+                'Title': actor.get_label(),
+                'getURL': actor.get_profile_url(),
+                'css_class': 'function-user',
+            })
+        return users
 
     def description(self):
         return self.context.description
