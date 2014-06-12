@@ -13,7 +13,7 @@ class TestActorLookup(FunctionalTestCase):
     def test_null_actor(self):
         actor = Actor.lookup(None)
 
-        self.assertIsNone(actor.get_label())
+        self.assertEqual('', actor.get_label())
         self.assertIsNone(actor.get_profile_url())
         self.assertIsNone(actor.get_link())
 
