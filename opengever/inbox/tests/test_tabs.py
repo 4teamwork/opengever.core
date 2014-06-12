@@ -22,6 +22,23 @@ class TestInboxTabs(FunctionalTestCase):
         self.assertNotIn('containing_subdossier', columns)
         self.assertNotIn('checked_out', columns)
 
+    def test_trash_lists_only_documents_from_the_current_admin_unit(self):
+        document_1 =  create(Builder('document').titled('Doc 1')
+                             .trashed().within(self.inbox))
+
+        create(Builder('org_unit').id('additional')
+               .assign_users([self.user]).as_current_org_unit())
+
+        document_2 = create(Builder('document').titled('Doc 2')
+                            .trashed().within(self.inbox))
+
+        view = self.inbox.restrictedTraverse('tabbedview_view-trash')
+        view.update()
+
+        self.assertEquals([document_2],
+                          [brain.getObject() for brain in view.contents])
+
+
     def test_document_listings_does_not_contain_subdossier_and_checked_out_column(self):
         document_view = self.inbox.restrictedTraverse('tabbedview_view-documents')
 
