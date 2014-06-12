@@ -231,6 +231,17 @@ class Task(Container):
         return get_client_id()
 
     @property
+    def int_id(self):
+        return getUtility(IIntIds).getId(self)
+
+    def get_issuer_label(self):
+        return self.get_sql_object().get_issuer_label()
+
+    def get_sql_object(self):
+        query = getUtility(ITaskQuery)
+        return query.get_task(self.int_id, get_current_admin_unit().id())
+
+    @property
     def safe_title(self):
         return safe_unicode(self.title)
 

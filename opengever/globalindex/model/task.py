@@ -1,5 +1,7 @@
 from opengever.globalindex import Session
 from opengever.globalindex.model import Base
+from opengever.ogds.base.actor import Actor
+from opengever.ogds.base.utils import ogds_service
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import Date
@@ -147,6 +149,11 @@ class Task(Base):
 
         return Session.query(Task).filter_by(
             admin_unit_id=admin_unit_id, int_id=pred_init_id).first()
+
+    def get_issuer_label(self):
+        actor = Actor.lookup(self.issuer)
+        org_unit = ogds_service().fetch_org_unit(self.issuing_org_unit)
+        return org_unit.prefix_label(actor.get_link())
 
 
 class TaskPrincipal(Base):

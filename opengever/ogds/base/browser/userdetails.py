@@ -2,6 +2,7 @@ from five import grok
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models.exceptions import RecordNotFound
 from zExceptions import NotFound
+from zope.app.component.hooks import getSite
 from zope.interface import Interface
 from zope.publisher.interfaces import IPublishTraverse
 
@@ -14,6 +15,12 @@ class UserDetails(grok.View):
     grok.context(Interface)
     grok.require('zope2.View')
     grok.implements(IPublishTraverse)
+
+    @classmethod
+    def url_for(self, userid):
+        portal = getSite()
+        return '/'.join((portal.portal_url(), '@@user-details',
+                         userid))
 
     def get_userdata(self):
         """Returns a dict of information about a specific user
