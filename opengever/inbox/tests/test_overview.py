@@ -4,11 +4,10 @@ from opengever.globalindex.handlers.task import sync_task
 from opengever.testing import FunctionalTestCase
 from opengever.testing.helpers import task2sqltask
 
-
-class TestInboxOverviewDocumentBox(FunctionalTestCase):
+class TestBaseInboxOverview(FunctionalTestCase):
 
     def setUp(self):
-        super(TestInboxOverviewDocumentBox, self).setUp()
+        super(TestBaseInboxOverview, self).setUp()
         self.grant('Owner', 'Editor', 'Contributor')
 
         self.user1, self.org_unit1, self.admin_unit1 = create(
@@ -23,16 +22,26 @@ class TestInboxOverviewDocumentBox(FunctionalTestCase):
         self.inbox = create(Builder('inbox').titled(u'eingangskorb'))
         self.view = self.inbox.restrictedTraverse('tabbedview_view-overview')
 
+class TestInboxOverviewDocumentBox(TestBaseInboxOverview):
+
     def test_documents_box_list_documents_form_the_inbox(self):
-        inbox_document = create(Builder('document').within(self.inbox))
-        create(Builder('document').within(self.portal))
+        inbox_document = create(Builder('document')
+                                .titled('inbox document')
+                                .within(self.inbox))
+        create(Builder('document')
+               .titled('portal document')
+               .within(self.portal))
 
         self.assert_documents([inbox_document, ], self.view.documents())
 
     def test_documents_box_list_only_documents_directly_inside_the_inbox(self):
-        inbox_document = create(Builder('document').within(self.inbox))
+        inbox_document = create(Builder('document')
+                                .titled('inbox document')
+                                .within(self.inbox))
         forwarding = create(Builder('forwarding').within(self.inbox))
-        create(Builder('document').within(forwarding))
+        create(Builder('document')
+               .titled('forwarding document')
+               .within(forwarding))
 
         self.assert_documents([inbox_document, ], self.view.documents())
 
@@ -43,13 +52,12 @@ class TestInboxOverviewDocumentBox(FunctionalTestCase):
         self.assertEquals(10, len(self.view.documents()))
 
     def assert_documents(self, expected, value):
-
         self.assertEquals(
             [obj.Title() for obj in expected],
             [item.get('Title') for item in value])
 
 
-class TestInboxOverviewAssignedInboxTasks(TestInboxOverviewDocumentBox):
+class TestInboxOverviewAssignedInboxTasks(TestBaseInboxOverview):
 
     def test_list_tasks_and_forwardings_assigned_to_current_inbox_group(self):
         task = create(Builder('task').having(responsible='inbox:client1'))
@@ -92,7 +100,7 @@ class TestInboxOverviewAssignedInboxTasks(TestInboxOverviewDocumentBox):
             [task2sqltask(active)], self.view.assigned_tasks())
 
 
-class TestInboxOverviewIssuedInboxTasks(TestInboxOverviewDocumentBox):
+class TestInboxOverviewIssuedInboxTasks(TestBaseInboxOverview):
 
     def test_list_tasks_and_forwardings_issued_by_current_inbox_group(self):
         task = create(Builder('task')
