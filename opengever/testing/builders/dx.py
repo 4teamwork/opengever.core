@@ -1,11 +1,12 @@
-from Products.CMFCore.utils import getToolByName
 from ftw.builder import builder_registry
 from ftw.builder.dexterity import DexterityBuilder
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
+from opengever.globalindex.handlers.task import sync_task
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.trash.trash import ITrashable
 from plone.app.testing import TEST_USER_ID
 from plone.namedfile.file import NamedBlobFile
+from Products.CMFCore.utils import getToolByName
 from z3c.relationfield.relation import RelationValue
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
@@ -115,6 +116,14 @@ class TaskBuilder(DexterityBuilder):
         oguid = ISuccessorTaskController(predecessor).get_oguid()
         self.arguments['predecessor'] = oguid
         return self
+
+    def change_workflow_state(self, obj):
+        super(TaskBuilder, self).change_workflow_state(obj)
+        sync_task(obj, None)
+
+    def set_modification_date(self, obj):
+        super(TaskBuilder, self).set_modification_date(obj)
+        sync_task(obj, None)
 
 builder_registry.register('task', TaskBuilder)
 
