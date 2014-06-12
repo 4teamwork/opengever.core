@@ -1,3 +1,18 @@
+"""
+Given a string-identifier lookup an actor.
+
+#XXX TODO: describe where we use actors.
+
+Usage:
+>> Actor.lookup('my-identifier')
+
+The lookup results are
+ - an InboxActor if the identifier starts with "inbox:"
+ - a ContactActor if the identifier starts with "contact:"
+ - an UserActor for any other string not containing a colon
+ - A null-implementation if the identifier is None
+
+"""
 from opengever.ogds.base import _
 from opengever.ogds.base.browser.userdetails import UserDetails
 from opengever.ogds.base.utils import ogds_service
@@ -155,14 +170,6 @@ class UserActor(Actor):
 
 
 class ActorLookup(object):
-    """Given a string-identifier lookup an actor.
-
-    Results are
-     - an InboxActor if the identifier starts with "inbox:"
-     - a ContactActor if the identifier starts with "contact:"
-     - an UserActor otherwise
-
-    """
     def __init__(self, identifier):
         self.identifier = identifier
 
