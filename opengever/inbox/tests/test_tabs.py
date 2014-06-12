@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.testing import create_client
 from opengever.testing import FunctionalTestCase
+from opengever.testing import obj2brain
 from opengever.testing import task2sqltask
 
 
@@ -10,6 +11,9 @@ class TestInboxTabs(FunctionalTestCase):
     def setUp(self):
         super(TestInboxTabs, self).setUp()
         self.inbox = create(Builder('inbox').titled(u'Testinbox'))
+
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_all_unit_setup())
 
     def test_trash_listing_does_not_contain_subdossier_and_checked_out_column(self):
         trash = self.inbox.restrictedTraverse('tabbedview_view-trash')
@@ -26,6 +30,26 @@ class TestInboxTabs(FunctionalTestCase):
 
         self.assertNotIn('containing_subdossier', columns)
         self.assertNotIn('checked_out', columns)
+
+    def test_documents_listing_only_show_documents_from_the_current_admin_unit(self):
+        document_1 =  create(Builder('document')
+                             .titled('Doc 1')
+                             .within(self.inbox))
+
+        create(Builder('org_unit')
+               .id('additional')
+               .assign_users([self.user])
+               .as_current_org_unit())
+
+        document_2 = create(Builder('document')
+                                     .titled('Doc 2')
+                                     .within(self.inbox))
+
+        view = self.inbox.restrictedTraverse('tabbedview_view-documents')
+        view.update()
+
+        self.assertEquals([document_2],
+                          [brain.getObject() for brain in view.contents])
 
 
 class TestAssignedInboxTaskTab(FunctionalTestCase):
