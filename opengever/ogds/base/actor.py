@@ -59,9 +59,10 @@ class Actor(object):
     def get_label(self, with_principal=True):
         raise NotImplementedError()
 
-    def get_label_with_admin_unit(self):
+    def get_label_with_admin_unit(self, with_principal=True):
         admin_unit = get_current_admin_unit()
-        return admin_unit.prefix_label(self.get_label())
+        return admin_unit.prefix_label(
+            self.get_label(with_principal=with_principal))
 
     def get_link(self):
         url = self.get_profile_url()

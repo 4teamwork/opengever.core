@@ -183,7 +183,7 @@ class DossierDetailsLaTeXView(grok.MultiAdapter, MakoLaTeXView):
             self.context, IDossier(self.context).end)
 
     def get_responsible(self):
-        return self.context.get_responsible_label()
+        return self.context.get_responsible_actor().get_label_with_admin_unit()
 
     def get_repository_path(self):
         """Returns a reverted, path-like list of parental repository folder

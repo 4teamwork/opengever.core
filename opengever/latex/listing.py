@@ -4,6 +4,7 @@ from opengever.latex import _
 from opengever.latex.utils import get_issuer_of_task
 from opengever.latex.utils import get_responsible_of_task
 from opengever.latex.utils import workflow_state
+from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.task.helper import task_type_helper
@@ -69,9 +70,7 @@ class DossiersLaTeXListing(grok.MultiAdapter):
         return data
 
     def get_responsible(self, brain):
-        return '%s / %s' % (
-            self.admin_unit.title,
-            self.info.describe(brain.responsible))
+        return Actor.lookup(brain.responsible).get_label_with_admin_unit()
 
     def get_repository_title(self, brain):
         """Returns the title of the first parental repository folder.

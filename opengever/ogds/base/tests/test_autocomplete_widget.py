@@ -8,11 +8,14 @@ from plone.app.testing import TEST_USER_ID
 
 class TestAutoCompleteWidget(FunctionalTestCase):
 
+    def _init_widget(self):
+        return AutocompleteFieldWidget(
+            ITask['issuer'], self.portal.REQUEST)
+
     def setUp(self):
         super(TestAutoCompleteWidget, self).setUp()
         self.grant('Member', 'Manager')
-        self.widget = AutocompleteFieldWidget(
-            ITask['issuer'], self.portal.REQUEST)
+        self.widget = self._init_widget()
 
         testuser = create(Builder('ogds_user')
                           .having(userid=TEST_USER_ID,
@@ -37,6 +40,13 @@ class TestAutoCompleteWidget(FunctionalTestCase):
         create(Builder('admin_unit')
                .as_current_admin_unit()
                .wrapping_org_unit(org_unit))
+
+    def test_new_term_for_unkown_user_is_added_to_hidden_terms_vocabylary(self):
+        task = create(Builder('task').having(issuer='hans.peter'))
+        self.widget.context = task
+        source = self.widget.bound_source
+
+        self.assertSequenceEqual(['hans.peter'], source.hidden_terms)
 
     def test_initally_no_hidden_terms_are_set(self):
         task = create(Builder('task'))
