@@ -11,4 +11,12 @@
           allowed_interface="opengever.task.browser.transitioncontroller.ITaskTransitionController"
           />
 
+    <browser:page
+        name="tabbed_view"
+        for="opengever.inbox.inbox.IInbox"
+        class=".tabbed.InboxTabbedView"
+        permission="zope2.View"
+        allowed_attributes="listing select_all reorder setgridstate set_default_tab"
+        />
+
 </configure>

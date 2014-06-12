@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
 from opengever.testing import create_client
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
@@ -7,14 +8,31 @@ from opengever.testing import select_current_org_unit
 from opengever.testing import task2sqltask
 
 
-class TestInboxTabs(FunctionalTestCase):
+class TestInboxTabbedview(FunctionalTestCase):
 
     def setUp(self):
-        super(TestInboxTabs, self).setUp()
+        super(TestInboxTabbedview, self).setUp()
         self.inbox = create(Builder('inbox').titled(u'Testinbox'))
 
         self.user, self.org_unit, self.admin_unit = create(
             Builder('fixture').with_all_unit_setup())
+
+    @browsing
+    def test_title_is_inbox_title_suffixed_with_current_orgunit_label(self, browser):
+        create(Builder('org_unit')
+               .id('client2')
+               .having(title='Client 2')
+               .assign_users([self.user]))
+
+        browser.login().open(self.inbox)
+        self.assertEquals('Testinbox: Client1',
+                          browser.css('h1.documentFirstHeading').first.text)
+
+
+        browser.open(self.inbox, view='change_org_unit?unit_id=client2')
+        browser.login().open(self.inbox)
+        self.assertEquals('Testinbox: Client 2',
+                          browser.css('h1.documentFirstHeading').first.text)
 
     def test_trash_listing_does_not_contain_subdossier_and_checked_out_column(self):
         trash = self.inbox.restrictedTraverse('tabbedview_view-trash')
