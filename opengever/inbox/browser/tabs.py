@@ -3,9 +3,10 @@ from opengever.globalindex.interfaces import ITaskQuery
 from opengever.inbox.inbox import IInbox
 from opengever.inbox.yearfolder import IYearFolder
 from opengever.ogds.base.utils import get_client_id
+from opengever.ogds.base.utils import get_current_org_unit
 from opengever.tabbedview.browser.tabs import Documents
-from opengever.tabbedview.browser.tabs import Trash
 from opengever.tabbedview.browser.tabs import Tasks
+from opengever.tabbedview.browser.tabs import Trash
 from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
 from opengever.tabbedview.helper import external_edit_link
 from zope.component import getUtility
@@ -82,13 +83,25 @@ class ClosedForwardings(Tasks):
     major_actions = []
 
 
-class InboxDocuments(Documents):
-    """Lists all Forwardings in this container
+def _get_current_org_unit_id(context):
+    """Used as wrapper for the document search_option.
+    Because `ftw.tabbedview.ListingView._search_options`
+    pass the context to callable search_options.
     """
+    return get_current_org_unit().id()
+
+
+class InboxDocuments(Documents):
+    """Lists documents directly inside the inbox, which are marked
+    with the current org unit.
+    """
+
     grok.context(IInbox)
 
     # do not list documents in forwardings
     depth = 1
+
+    search_options = {'client_id': _get_current_org_unit_id}
 
     @property
     def columns(self):
