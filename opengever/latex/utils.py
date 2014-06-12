@@ -44,10 +44,10 @@ def get_issuer_of_task(task, with_client=True, with_principal=False):
 
     elif task.predecessor:
         # task is a globalindex object -> predecessor is a globalindex obj too
-        issuer_client_id = task.predecessor.client_id
+        issuer_client_id = task.predecessor.issuing_org_unit
 
     else:
-        issuer_client_id = task.client_id
+        issuer_client_id = task.issuing_org_unit
 
     issuer_client_title = info.get_client_by_id(issuer_client_id).title
 

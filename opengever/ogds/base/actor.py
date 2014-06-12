@@ -165,35 +165,62 @@ class UserActor(Actor):
 
     def load(self):
         if not self._user:
-            self._user = ogds_service().fetch_user(self.identifier)
+            user = ogds_service().fetch_user(self.identifier)
+            if user:
+                self._user = _OGDSUser(user)
+            else:
+                portal = getSite()
+                portal_membership = getToolByName(portal, 'portal_membership')
+                member = portal_membership.getMemberById(self.identifier)
+                if member:
+                    self._user = _PloneUser(member)
+
         return self._user
 
     def get_profile_url(self):
-        portal = getSite()
         user = self.load()
         if user:
-            return UserDetails.url_for(user.userid)
-        else:
-            # fallback with acl_users folder
-            portal_membership = getToolByName(portal, 'portal_membership')
-            member = portal_membership.getMemberById(self.identifier)
-            if member:
-                return member.getHomeUrl()
+            return self.user.get_profile_url()
         return None
 
     def get_label(self, with_principal=True):
         user = self.load()
+        if user:
+            return self.user.get_label()
+        return None
 
-        if user.lastname or user.firstname:
+
+class _PloneUser(object):
+
+    def __init__(self, plone_user):
+        self.user = plone_user
+
+    def get_label(self, with_principal=True):
+        if self.user.lastname or self.user.firstname:
             name = ' '.join(name for name in
-                           (user.lastname, user.firstname) if name)
+                           (self.user.lastname, self.user.firstname) if name)
         else:
-            name = user.userid
+            name = self.user.userid
 
         if with_principal:
-            return u'{} ({})'.format(name, user.userid)
+            return u'{} ({})'.format(name, self.user.userid)
         else:
             return name
+
+    def get_profile_url(self):
+        return self.user.getHomeUrl()
+
+
+class _OGDSUser(object):
+
+    def __init__(self, ogds_user):
+        self.ogds_user = ogds_user
+
+    def get_label(self, with_principal=True):
+        return self.ogds_user.label(with_principal=with_principal)
+
+    def get_profile_url(self):
+        return UserDetails.url_for(self.ogds_user.userid)
 
 
 class ActorLookup(object):

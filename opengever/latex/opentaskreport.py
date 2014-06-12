@@ -9,9 +9,10 @@ from opengever.globalindex import Session
 from opengever.globalindex.model.task import Task
 from opengever.latex.interfaces import ILandscapeLayer
 from opengever.latex.utils import get_issuer_of_task
+from opengever.latex.utils import workflow_state
+from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id, get_current_client
-from opengever.latex.utils import workflow_state
 from opengever.task.helper import task_type_helper
 from sqlalchemy import and_, or_
 from sqlalchemy.sql.expression import asc
@@ -77,7 +78,7 @@ class OpenTaskReportLaTeXView(grok.MultiAdapter, MakoLaTeXView):
         query = query.filter(
             or_(
                 and_(Task.predecessor == None, Task.successors == None),
-                Task.client_id == get_client_id()))
+                Task.assigned_org_unit == get_client_id()))
 
         return query
 
@@ -93,7 +94,7 @@ class OpenTaskReportLaTeXView(grok.MultiAdapter, MakoLaTeXView):
 
         incoming_query = Session().query(Task)
         incoming_query = incoming_query.filter(
-            Task.assigned_client == clientid)
+            Task.assigned_org_unit == clientid)
         incoming_query = self._extend_task_query(incoming_query)
 
         incoming = []
@@ -103,7 +104,7 @@ class OpenTaskReportLaTeXView(grok.MultiAdapter, MakoLaTeXView):
                     display_issuer_client=True))
 
         outgoing_query = Session().query(Task)
-        outgoing_query = outgoing_query.filter(Task.client_id == clientid)
+        outgoing_query = outgoing_query.filter(Task.issuing_org_unit == clientid)
         outgoing_query = self._extend_task_query(outgoing_query)
 
         outgoing = []
@@ -116,6 +117,14 @@ class OpenTaskReportLaTeXView(grok.MultiAdapter, MakoLaTeXView):
 
     def get_row_for_item(self, item, display_issuer_client=False,
                          display_responsible_client=False):
+        return self.convert_list_to_row(
+            self.get_data_for_item(
+                item,
+                display_issuer_client=display_issuer_client,
+                display_responsible_client=display_responsible_client))
+
+    def get_data_for_item(self, item, display_issuer_client=False,
+                          display_responsible_client=False):
         task_type = task_type_helper(item, item.task_type)
         sequence_number = unicode(item.sequence_number).encode('utf-8')
         deadline = helper.readable_date(item, item.deadline)
@@ -127,8 +136,8 @@ class OpenTaskReportLaTeXView(grok.MultiAdapter, MakoLaTeXView):
                                     with_client=display_issuer_client,
                                     with_principal=False)
 
-        responsible = self.info.describe(item.responsible,
-                                         with_principal=False)
+        actor = Actor.lookup(item.responsible)
+        responsible = actor.get_label(with_principal=False)
 
         if display_responsible_client:
             responsible_client = self.info.get_client_by_id(
@@ -145,7 +154,7 @@ class OpenTaskReportLaTeXView(grok.MultiAdapter, MakoLaTeXView):
 
         review_state = workflow_state(item, item.review_state)
 
-        data = [
+        return [
             sequence_number,
             title,
             task_type,
@@ -156,8 +165,6 @@ class OpenTaskReportLaTeXView(grok.MultiAdapter, MakoLaTeXView):
             deadline,
             review_state,
             ]
-
-        return self.convert_list_to_row(data)
 
     def convert_list_to_row(self, row):
         return ' & '.join([self.convert_plain(cell) for cell in row])
