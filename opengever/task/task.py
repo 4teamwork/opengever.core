@@ -10,6 +10,7 @@ from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.source import DossierPathSourceBinder
 from opengever.globalindex.interfaces import ITaskQuery
+from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.ogds.base.utils import get_client_id
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -36,6 +37,7 @@ from zope.component import getUtility
 from zope.component import provideAdapter
 from zope.interface import implements
 from zope.schema.vocabulary import getVocabularyRegistry
+
 
 _marker = object()
 
@@ -345,6 +347,9 @@ class Task(Container):
                     principals.append(safe_unicode(principal))
                     break
         return principals
+
+    def get_responsible_actor(self):
+        return Actor.lookup(self.responsible)
 
 
 @form.default_value(field=ITask['deadline'])
