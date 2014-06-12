@@ -1,3 +1,4 @@
+from DateTime import DateTime
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.globalindex.handlers.task import sync_task
@@ -77,8 +78,11 @@ class TestInboxOverviewDocumentBox(TestBaseInboxOverview):
 class TestInboxOverviewAssignedInboxTasks(TestBaseInboxOverview):
 
     def test_list_tasks_and_forwardings_assigned_to_current_inbox_group(self):
-        task = create(Builder('task').having(responsible='inbox:client1'))
+        task = create(Builder('task')
+                      .with_modification_date(DateTime(2014, 1, 1))
+                      .having(responsible='inbox:client1'))
         forwarding = create(Builder('forwarding')
+                            .with_modification_date(DateTime(2014, 1, 2))
                             .having(responsible='inbox:client1'))
         create(Builder('forwarding').having(responsible='inbox:client2'))
 
@@ -114,23 +118,43 @@ class TestInboxOverviewAssignedInboxTasks(TestBaseInboxOverview):
         sync_task(closed, None)
 
         self.assertEquals(
-            [task2sqltask(active)], self.view.assigned_tasks())
+            [task2sqltask(active)],
+            self.view.assigned_tasks())
+
+    def test_is_sorted_on_modification_date_last_modified_first(self):
+        task1 = create(Builder('task')
+                       .with_modification_date(DateTime(2014, 1, 2))
+                       .having(responsible='inbox:client1'))
+
+        task2 = create(Builder('task')
+                       .with_modification_date(DateTime(2014, 1, 1))
+                       .having(responsible='inbox:client1'))
+
+        task3 = create(Builder('task')
+                      .with_modification_date(DateTime(2014, 1, 3))
+                      .having(responsible='inbox:client1'))
+
+        self.assertEquals(
+            [task2sqltask(task) for task in [task3, task1, task2]],
+            self.view.assigned_tasks())
 
 
 class TestInboxOverviewIssuedInboxTasks(TestBaseInboxOverview):
 
     def test_list_tasks_and_forwardings_issued_by_current_inbox_group(self):
         task = create(Builder('task')
+                      .with_modification_date(DateTime(2014, 1, 1))
                       .within(self.inbox)
                       .having(issuer='inbox:client1'))
         forwarding = create(Builder('forwarding')
+                            .with_modification_date(DateTime(2014, 2, 1))
                             .within(self.inbox)
                             .having(issuer='inbox:client1'))
         create(Builder('forwarding').having(issuer='inbox:client2'))
 
         self.assertEquals(
-            [task, forwarding],
-            [brain.getObject() for brain in self.view.issued_tasks()])
+            [task2sqltask(forwarding), task2sqltask(task)],
+            self.view.issued_tasks())
 
     def test_is_limited_to_five_entries(self):
         for i in range(10):
@@ -145,10 +169,28 @@ class TestInboxOverviewIssuedInboxTasks(TestBaseInboxOverview):
                         .within(self.inbox)
                         .having(issuer='inbox:client1'))
 
-        closed = create(Builder('forwarding')
-                        .within(self.inbox)
-                        .having(issuer='inbox:client1')
-                        .in_state('forwarding-state-closed'))
+        create(Builder('forwarding')
+               .within(self.inbox)
+               .having(issuer='inbox:client1')
+               .in_state('forwarding-state-closed'))
+
         self.assertEquals(
-            [active, ],
-            [brain.getObject() for brain in self.view.issued_tasks()])
+            [task2sqltask(active)],
+            self.view.issued_tasks())
+
+    def test_is_sorted_by_modfied(self):
+        task1 = create(Builder('task')
+                       .with_modification_date(DateTime(2014, 1, 2))
+                       .having(issuer='inbox:client1'))
+
+        task2 = create(Builder('task')
+                       .with_modification_date(DateTime(2014, 1, 1))
+                       .having(issuer='inbox:client1'))
+
+        task3 = create(Builder('task')
+                      .with_modification_date(DateTime(2014, 1, 3))
+                      .having(issuer='inbox:client1'))
+
+        self.assertEquals(
+            [task2sqltask(task) for task in [task3, task1, task2]],
+            self.view.issued_tasks())
