@@ -4,6 +4,7 @@ from five import grok
 from opengever.base.browser.helper import client_title_helper
 from opengever.base.browser.helper import get_css_class
 from opengever.globalindex.model.task import Task
+from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
@@ -252,22 +253,12 @@ class Overview(DisplayForm, OpengeverTab):
         if not ITask.providedBy(item):
             return ''
 
-        info = getUtility(IContactInformation)
+        # XXX should be moved to a task method `responsible_link`
+        actor = Actor.lookup(item.responsible)
+        assigned_org_unit = ogds_service().fetch_org_unit(
+            item.responsible_client)
 
-        if not item.responsible_client or len(info.get_clients()) <= 1:
-            # No responsible client is set yet or we have a single client
-            # setup.
-            return info.describe(item.responsible)
-
-        # Client
-        client = client_title_helper(item, item.responsible_client)
-
-        taskinfo = "%s / %s" % (
-            client,
-            info.render_link(item.responsible),
-        )
-
-        return taskinfo.encode('utf-8')
+        return assigned_org_unit.prefix_label(actor.get_label()).encode('utf-8')
 
     def render_task(self, item):
         """ Render the taskobject
@@ -343,10 +334,9 @@ class Overview(DisplayForm, OpengeverTab):
 
         # Client and user info
         assigned_org_unit = ogds_service().fetch_org_unit(item.assigned_org_unit)
-        info_html = ' <span class="discreet">(%s / %s)</span>' % (
-            assigned_org_unit.label(),
-            info.render_link(item.responsible),
-        )
+        info_html = ' <span class="discreet">({})</span>'.filter(
+            assigned_org_unit.prefix_label(
+                Actor.lookup(item.responsible).get_label()))
 
         # Link to the task object
         task_html = '<span class="%s">%s</span>' % \
