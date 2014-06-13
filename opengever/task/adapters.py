@@ -1,6 +1,7 @@
 from AccessControl import getSecurityManager
 from DateTime import DateTime
 from five import grok
+from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.task.task import ITask
 from persistent import Persistent
@@ -12,8 +13,8 @@ from zope.app.container.interfaces import UnaddableError
 from zope.component import getUtility
 from zope.event import notify
 from zope.interface import Attribute
-from zope.interface import Interface
 from zope.interface import implements
+from zope.interface import Interface
 
 
 class IResponseContainer(Interface):
@@ -125,7 +126,7 @@ class Response(Persistent):
         self.changes = PersistentList()
         sm = getSecurityManager()
         user = sm.getUser()
-        self.creator = user.getId() or '(anonymous)'
+        self.creator = user.getId()
         self.date = DateTime()
         self.type = 'additional'
         self.mimetype = ''
@@ -146,9 +147,7 @@ class Response(Persistent):
         self.changes.append(delta)
 
     def creator_link(self):
-        info = getUtility(IContactInformation)
-        return info.render_link(self.creator)
-
+        return Actor.lookup(self.creator).get_link()
 
 class EmptyExporter(object):
 
