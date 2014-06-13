@@ -1,14 +1,16 @@
 from AccessControl.SecurityManagement import getSecurityManager
 from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import setSecurityManager
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testing import MockTestCase
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import create_ogds_user
+from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID, TEST_USER_NAME
 from plone.app.testing import TEST_USER_PASSWORD, login
-from plone.app.testing import setRoles
 from plone.locking.interfaces import IRefreshableLockable
 from plone.namedfile.file import NamedBlobFile
 from plone.testing.z2 import Browser
@@ -34,10 +36,13 @@ class TestDocumentOverview(MockTestCase):
         self.portal = self.layer['portal']
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
 
-        create_ogds_user(TEST_USER_ID)
+        self.user, self.hugo = create(Builder('fixture')
+                                      .with_user(firstname='Test',
+                                                 lastname='User')
+                                      .with_hugo_boss())
 
         # Create a second user to test locking and checkout
-        self.portal.acl_users.userFolderAddUser('other_user', 'secret', ['Member'], [])
+        self.portal.acl_users.userFolderAddUser('hugo.boss', 'secret', ['Member'], [])
 
         self.browser = Browser(self.layer['app'])
         self.browser.handleErrors = False
@@ -95,7 +100,7 @@ class TestDocumentOverview(MockTestCase):
 
         # creator link
         creator_link = """<th>creator</th>
-			<td><a href="http://nohost/plone/@@user-details/test_user_1_">Boss Hugo (test_user_1_)</a></td>"""
+			<td><a href="http://nohost/plone/@@user-details/test_user_1_">User Test (test_user_1_)</a></td>"""
         self.assertTrue(creator_link in self.browser.contents)
 
         # copy link
@@ -112,7 +117,7 @@ class TestDocumentOverview(MockTestCase):
             '%s/tabbedview_view-overview' % self.document2.absolute_url())
 
         checked_out_info = """<th>Checked out</th>
-			<td><a href="http://nohost/plone/@@user-details/test_user_1_">Boss Hugo (test_user_1_)</a></td>"""
+			<td><a href="http://nohost/plone/@@user-details/test_user_1_">User Test (test_user_1_)</a></td>"""
         self.assertTrue(checked_out_info in self.browser.contents)
 
         edit_link = """<a class="function-edit" href="http://nohost/plone/document-2/editing_document">
@@ -146,12 +151,12 @@ class TestDocumentOverview(MockTestCase):
         """
         old_sm = getSecurityManager()
 
-        # Change security context to 'other_user' to lock the document
-        user = self.portal.acl_users.getUser('other_user')
+        # Change security context to 'hugo.boss' to lock the document
+        user = self.portal.acl_users.getUser('hugo.boss')
         user = user.__of__(self.portal.acl_users)
         newSecurityManager(self.portal, user)
 
-        # Let user 'other_user' lock the document
+        # Let user 'hugo.boss' lock the document
         lockable = IRefreshableLockable(self.document4)
         lockable.lock()
 
