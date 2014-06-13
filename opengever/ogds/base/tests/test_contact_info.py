@@ -105,15 +105,6 @@ class TestUserHelpers(FunctionalTestCase):
             u'http://nohost/plone/@@user-details/hugo.boss',
             self.info.get_profile_url('hugo.boss'))
 
-    def test_render_link_returns_user_details_link(self):
-        create_ogds_user('hugo.boss',
-                 **{'firstname': 'Hugo',
-                    'lastname': 'Boss', })
-
-        self.assertEquals(
-            u'<a href="http://nohost/plone/@@user-details/hugo.boss">Boss Hugo (hugo.boss)</a>',
-            self.info.render_link('hugo.boss'))
-
 
 class TestGroupHelpers(FunctionalTestCase):
 

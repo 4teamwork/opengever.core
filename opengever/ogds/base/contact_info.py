@@ -463,22 +463,6 @@ class ContactInformation(grok.GlobalUtility):
                         principal).getHomeUrl()
             return None
 
-    @ram.cache(ogds_principal_cachekey)
-    def render_link(self, principal):
-        """Render a link to the `principal`
-        """
-
-        if not principal or principal == '':
-            return None
-
-        url = self.get_profile_url(principal)
-        if not url:
-            return self.describe(principal)
-
-        return '<a href="%s">%s</a>' % (
-            url,
-            self.describe(principal))
-
     @ram.cache(ogds_class_language_cachekey)
     def get_user_sort_dict(self):
         """Returns a dict presenting userid and the fullname,
