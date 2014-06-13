@@ -64,7 +64,7 @@ class DossierCoverLaTeXView(grok.MultiAdapter, MakoLaTeXView):
         return getAdapter(self.context, IReferenceNumber).get_number()
 
     def get_responsible(self):
-        return self.context.get_responsible_actor().get_label()
+        return self.context.responsible_label
 
     def get_client_title(self):
         registry = getUtility(IRegistry)

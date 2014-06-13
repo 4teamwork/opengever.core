@@ -5,7 +5,6 @@ from five import grok
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
-from opengever.ogds.base.actor import Actor
 from plone.dexterity.interfaces import IDexterityContent
 from plone.indexer import indexer
 from Products.CMFCore.interfaces import ISiteRoot
@@ -117,7 +116,7 @@ class SearchableTextExtender(grok.Adapter):
         searchable.append(str(seqNumb.get_number(self.context)))
         # responsible
         searchable.append(
-            self.context.get_responsible_actor().get_label().encode('utf-8'))
+            self.context.responsible_label.encode('utf-8'))
 
         dossier = IDossier(self.context)
         # filling_no
