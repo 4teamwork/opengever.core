@@ -1,3 +1,5 @@
+from opengever.ogds.base.actor import _OGDSUser
+from opengever.ogds.base.actor import _PloneUser
 from opengever.ogds.base.actor import ContactActor
 from opengever.ogds.base.actor import InboxActor
 from opengever.ogds.base.actor import UserActor
@@ -53,7 +55,7 @@ class TestContactLabel(TestCase):
                          self.actor.get_label(with_principal=False))
 
 
-class TestUserLabel(TestCase):
+class TestPloneUserLabel(TestCase):
 
     class MockUser(object):
         def __init__(self):
@@ -63,7 +65,8 @@ class TestUserLabel(TestCase):
 
     def setUp(self):
         self.user = self.MockUser()
-        self.actor = UserActor('hp.meier', user=self.user)
+        self.ogds_user = _PloneUser(self.user)
+        self.actor = UserActor('hp.meier', user=self.ogds_user)
 
     def test_user_label_firstname_and_lastname(self):
         self.user.firstname = 'Hanspeter'
@@ -97,7 +100,9 @@ class TestUserLabel(TestCase):
         self.user.lastname = 'Meier'
         self.user.userid = 'hp.meier'
 
-        self.assertEqual('Meier Hanspeter (hp.meier)', self.actor.get_label())
+        self.assertEqual('Meier Hanspeter (hp.meier)',
+                         self.actor.get_label())
+
         self.assertEqual('Meier Hanspeter',
                          self.actor.get_label(with_principal=False))
 

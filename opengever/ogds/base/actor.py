@@ -180,13 +180,13 @@ class UserActor(Actor):
     def get_profile_url(self):
         user = self.load()
         if user:
-            return self.user.get_profile_url()
+            return user.get_profile_url()
         return None
 
     def get_label(self, with_principal=True):
         user = self.load()
         if user:
-            return self.user.get_label()
+            return user.get_label(with_principal)
         return None
 
 
