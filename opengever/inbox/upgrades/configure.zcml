@@ -51,4 +51,14 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <!-- 2603 -> 2700 -->
+    <genericsetup:upgradeStep
+        title="Reindex client_id of all inbox documents."
+        description=""
+        source="2603"
+        destination="2700"
+        handler="opengever.inbox.upgrades.to2700.ReindexInboxDocuments"
+        profile="opengever.inbox:default"
+        />
+
 </configure>

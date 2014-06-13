@@ -1,3 +1,4 @@
+from DateTime import DateTime
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.globalindex.handlers.task import sync_task
@@ -5,10 +6,10 @@ from opengever.testing import FunctionalTestCase
 from opengever.testing.helpers import task2sqltask
 
 
-class TestInboxOverviewDocumentBox(FunctionalTestCase):
+class TestBaseInboxOverview(FunctionalTestCase):
 
     def setUp(self):
-        super(TestInboxOverviewDocumentBox, self).setUp()
+        super(TestBaseInboxOverview, self).setUp()
         self.grant('Owner', 'Editor', 'Contributor')
 
         self.user1, self.org_unit1, self.admin_unit1 = create(
@@ -23,18 +24,44 @@ class TestInboxOverviewDocumentBox(FunctionalTestCase):
         self.inbox = create(Builder('inbox').titled(u'eingangskorb'))
         self.view = self.inbox.restrictedTraverse('tabbedview_view-overview')
 
+
+class TestInboxOverviewDocumentBox(TestBaseInboxOverview):
+
     def test_documents_box_list_documents_form_the_inbox(self):
-        inbox_document = create(Builder('document').within(self.inbox))
-        create(Builder('document').within(self.portal))
+        inbox_document = create(Builder('document')
+                                .titled('inbox document')
+                                .within(self.inbox))
+        create(Builder('document')
+               .titled('portal document')
+               .within(self.portal))
 
         self.assert_documents([inbox_document, ], self.view.documents())
 
     def test_documents_box_list_only_documents_directly_inside_the_inbox(self):
-        inbox_document = create(Builder('document').within(self.inbox))
+        inbox_document = create(Builder('document')
+                                .titled('inbox document')
+                                .within(self.inbox))
         forwarding = create(Builder('forwarding').within(self.inbox))
-        create(Builder('document').within(forwarding))
+        create(Builder('document')
+               .titled('forwarding document')
+               .within(forwarding))
 
         self.assert_documents([inbox_document, ], self.view.documents())
+
+    def test_documents_box_list_only_documents_marked_with_the_current_admin_unit(self):
+        create(Builder('document')
+               .titled('OrgUnit 1 doc')
+               .within(self.inbox))
+
+        create(Builder('org_unit')
+               .id('client3')
+               .assign_users([self.user1])
+               .as_current_org_unit())
+        org_unit_3_document = create(Builder('document')
+                                     .titled('OrgUnit 3 doc')
+                                     .within(self.inbox))
+
+        self.assert_documents([org_unit_3_document, ], self.view.documents())
 
     def test_document_box_is_limited_to_ten_documents(self):
         for i in range(15):
@@ -43,17 +70,19 @@ class TestInboxOverviewDocumentBox(FunctionalTestCase):
         self.assertEquals(10, len(self.view.documents()))
 
     def assert_documents(self, expected, value):
-
         self.assertEquals(
             [obj.Title() for obj in expected],
             [item.get('Title') for item in value])
 
 
-class TestInboxOverviewAssignedInboxTasks(TestInboxOverviewDocumentBox):
+class TestInboxOverviewAssignedInboxTasks(TestBaseInboxOverview):
 
     def test_list_tasks_and_forwardings_assigned_to_current_inbox_group(self):
-        task = create(Builder('task').having(responsible='inbox:client1'))
+        task = create(Builder('task')
+                      .with_modification_date(DateTime(2014, 1, 1))
+                      .having(responsible='inbox:client1'))
         forwarding = create(Builder('forwarding')
+                            .with_modification_date(DateTime(2014, 1, 2))
                             .having(responsible='inbox:client1'))
         create(Builder('forwarding').having(responsible='inbox:client2'))
 
@@ -89,23 +118,43 @@ class TestInboxOverviewAssignedInboxTasks(TestInboxOverviewDocumentBox):
         sync_task(closed, None)
 
         self.assertEquals(
-            [task2sqltask(active)], self.view.assigned_tasks())
+            [task2sqltask(active)],
+            self.view.assigned_tasks())
+
+    def test_is_sorted_on_modification_date_last_modified_first(self):
+        task1 = create(Builder('task')
+                       .with_modification_date(DateTime(2014, 1, 2))
+                       .having(responsible='inbox:client1'))
+
+        task2 = create(Builder('task')
+                       .with_modification_date(DateTime(2014, 1, 1))
+                       .having(responsible='inbox:client1'))
+
+        task3 = create(Builder('task')
+                      .with_modification_date(DateTime(2014, 1, 3))
+                      .having(responsible='inbox:client1'))
+
+        self.assertEquals(
+            [task2sqltask(task) for task in [task3, task1, task2]],
+            self.view.assigned_tasks())
 
 
-class TestInboxOverviewIssuedInboxTasks(TestInboxOverviewDocumentBox):
+class TestInboxOverviewIssuedInboxTasks(TestBaseInboxOverview):
 
     def test_list_tasks_and_forwardings_issued_by_current_inbox_group(self):
         task = create(Builder('task')
+                      .with_modification_date(DateTime(2014, 1, 1))
                       .within(self.inbox)
                       .having(issuer='inbox:client1'))
         forwarding = create(Builder('forwarding')
+                            .with_modification_date(DateTime(2014, 2, 1))
                             .within(self.inbox)
                             .having(issuer='inbox:client1'))
         create(Builder('forwarding').having(issuer='inbox:client2'))
 
         self.assertEquals(
-            [task, forwarding],
-            [brain.getObject() for brain in self.view.issued_tasks()])
+            [task2sqltask(forwarding), task2sqltask(task)],
+            self.view.issued_tasks())
 
     def test_is_limited_to_five_entries(self):
         for i in range(10):
@@ -120,10 +169,28 @@ class TestInboxOverviewIssuedInboxTasks(TestInboxOverviewDocumentBox):
                         .within(self.inbox)
                         .having(issuer='inbox:client1'))
 
-        closed = create(Builder('forwarding')
-                        .within(self.inbox)
-                        .having(issuer='inbox:client1')
-                        .in_state('forwarding-state-closed'))
+        create(Builder('forwarding')
+               .within(self.inbox)
+               .having(issuer='inbox:client1')
+               .in_state('forwarding-state-closed'))
+
         self.assertEquals(
-            [active, ],
-            [brain.getObject() for brain in self.view.issued_tasks()])
+            [task2sqltask(active)],
+            self.view.issued_tasks())
+
+    def test_is_sorted_by_modfied(self):
+        task1 = create(Builder('task')
+                       .with_modification_date(DateTime(2014, 1, 2))
+                       .having(issuer='inbox:client1'))
+
+        task2 = create(Builder('task')
+                       .with_modification_date(DateTime(2014, 1, 1))
+                       .having(issuer='inbox:client1'))
+
+        task3 = create(Builder('task')
+                      .with_modification_date(DateTime(2014, 1, 3))
+                      .having(issuer='inbox:client1'))
+
+        self.assertEquals(
+            [task2sqltask(task) for task in [task3, task1, task2]],
+            self.view.issued_tasks())
