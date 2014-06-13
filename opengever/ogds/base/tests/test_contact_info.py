@@ -312,16 +312,6 @@ class TestContactInfoAdditionals(FunctionalTestCase):
              'contact:bond-james'],
             [contact.contactid for contact in self.info.list_contacts()])
 
-    def test_list_inboxes_returns_a_generator_with_principal_and_description_pairs(self):
-        create_client(clientid='client1')
-        create_client(clientid='client2')
-        create_client(clientid='client3', enabled=False)
-
-        self.assertEquals(
-            ((u'inbox:client1', u'Inbox: Client1'),
-             (u'inbox:client2', u'Inbox: Client2')),
-            tuple(self.info.list_inboxes()))
-
     def test_describing_inboxes(self):
         create_client(clientid='client1', title='Client 1')
 
