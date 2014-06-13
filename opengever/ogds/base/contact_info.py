@@ -202,17 +202,6 @@ class ContactInformation(grok.GlobalUtility):
 
         return principal and principal.startswith('inbox:')
 
-    def list_inboxes(self):
-        """Returns a set of inboxes of all enabled clients.
-        """
-
-        clients = self._clients_query()
-        active_clients = clients.filter_by(enabled=True)
-        for client in active_clients:
-            principal = u'inbox:%s' % client.client_id
-            yield (principal,
-                   self.describe(principal))
-
     def get_client_of_inbox(self, principal):
         """Returns the client object of the `principal`.
         """
