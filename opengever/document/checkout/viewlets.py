@@ -1,14 +1,16 @@
 from five import grok
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
-from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.actor import Actor
 from plone.app.layout.globals.interfaces import IViewView
 from plone.app.layout.viewlets.interfaces import IAboveContent
-from zope.component import getUtility
 from zope.component import queryMultiAdapter
 
 
 class CheckedOutViewlet(grok.Viewlet):
+    """A viewlet which shows a statusmessage like message:
+    `This item is being checked out by User XY` when a document
+    is checked out."""
 
     grok.viewletmanager(IAboveContent)
     grok.context(IDocumentSchema)
@@ -25,6 +27,4 @@ class CheckedOutViewlet(grok.Viewlet):
         else:
             self.available = True
 
-            info = getUtility(IContactInformation)
-            owner_id = manager.checked_out()
-            self.checkout_owner = info.render_link(owner_id)
+            self.checkout_by_link = Actor.user(manager.checked_out()).get_link()
