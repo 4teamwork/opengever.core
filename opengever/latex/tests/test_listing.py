@@ -200,6 +200,8 @@ class TestTaskListings(FunctionalTestCase):
         self.user, self.org_unit, self.admin_unit, self.hugo = create(
             Builder('fixture').with_all_unit_setup().with_hugo_boss())
 
+        self.org_unit_2 = create(Builder('org_unit').id('client2'))
+
         self.task = create(Builder('task')
                            .having(
                                title='Task A',
@@ -215,7 +217,8 @@ class TestTaskListings(FunctionalTestCase):
             ILaTexListing, name='tasks')
 
     def test_labels_are_translated_and_show_as_table_headers(self):
-        self.listing.brains = [obj2brain(self.task), obj2brain(self.task)]
+        self.listing.brains = [self.task.get_sql_object(),
+                               self.task.get_sql_object()]
 
         table = lxml.html.fromstring(self.listing.template())
         cols = table.xpath(CSSSelector('thead th').path)
@@ -224,8 +227,8 @@ class TestTaskListings(FunctionalTestCase):
             ['No.', 'Task type', 'Issuer', 'Responsible', 'State', 'Title', 'Deadline'],
             [col.text_content().strip() for col in cols])
 
-    def test_drop_reference_and_sequence_number_from_default_dossier_listings(self):
-        self.listing.brains = [obj2brain(self.task)]
+    def test_drop_reference_and_sequence_number_from_default_task_listings(self):
+        self.listing.brains = [self.task.get_sql_object()]
 
         table = lxml.html.fromstring(self.listing.template())
         rows = table.xpath(CSSSelector('tbody tr').path)

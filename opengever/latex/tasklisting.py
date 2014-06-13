@@ -1,4 +1,3 @@
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from five import grok
 from ftw.pdfgenerator.browser.views import ExportPDFView
 from ftw.pdfgenerator.interfaces import ILaTeXLayout
@@ -6,12 +5,14 @@ from ftw.pdfgenerator.interfaces import ILaTeXView
 from ftw.pdfgenerator.utils import provide_request_layer
 from ftw.pdfgenerator.view import MakoLaTeXView
 from ftw.table import helper
+from opengever.globalindex.utils import get_selected_items
 from opengever.latex.interfaces import ILandscapeLayer
 from opengever.latex.utils import get_issuer_of_task
-from opengever.globalindex.utils import get_selected_items
-from opengever.ogds.base.interfaces import IContactInformation
 from opengever.latex.utils import workflow_state
+from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.utils import ogds_service
 from opengever.task.helper import task_type_helper
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.component import getUtility
 from zope.interface import Interface
 
@@ -71,14 +72,12 @@ class TaskListingLaTeXView(grok.MultiAdapter, MakoLaTeXView):
         title = unicode(getattr(item, 'Title',
                             getattr(item, 'title', ''))).encode('utf-8')
 
-        issuer = get_issuer_of_task(item, with_client=True,
-                                    with_principal=False)
+        issuer = get_issuer_of_task(item, with_client=True, with_principal=False)
 
-        responsible_client = self.info.get_client_by_id(
-            item.assigned_client).title
-        responsible = '%s / %s' % (
-            responsible_client,
-            self.info.describe(item.responsible, with_principal=False))
+        responsible_org_unit = ogds_service().fetch_org_unit(item.assigned_client)
+        responsible = Actor.lookup(item.responsible)
+        responsible_label = responsible_org_unit.prefix_label(
+            responsible.get_label(with_principal=False))
 
         dossier_title = item.containing_dossier or ''
 
@@ -96,7 +95,7 @@ class TaskListingLaTeXView(grok.MultiAdapter, MakoLaTeXView):
             dossier_title,
             reference,
             issuer,
-            responsible,
+            responsible_label,
             deadline,
             review_state,
             ]

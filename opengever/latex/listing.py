@@ -234,37 +234,37 @@ class TasksLaTeXListing(DossiersLaTeXListing):
             {'id': 'sequence_number',
              'label': _('short_label_sequence_number', default='No.'),
              'width': '3%',
-             'getter': lambda brain: brain.sequence_number},
+             'getter': lambda item: item.sequence_number},
 
             {'id': 'task_type',
              'label': _('label_task_type', default='Task type'),
              'width': '20%',
-             'getter': lambda brain: task_type_helper(brain, brain.task_type)},
+             'getter': lambda item: task_type_helper(item, item.task_type)},
 
             {'id': 'issuer',
              'label': _('label_issuer', default='Issuer'),
              'width': '15%',
-             'getter': lambda brain: get_issuer_of_task(
-                 brain, with_client=True, with_principal=False)},
+             'getter': lambda item: get_issuer_of_task(
+                 item, with_client=True, with_principal=False)},
 
             {'id': 'responsible',
              'label': _('label_task_responsible', default='Responsible'),
              'width': '15%',
-             'getter': lambda brain: get_responsible_of_task(brain)},
+             'getter': lambda item: get_responsible_of_task(item)},
 
             {'id': 'review_state',
              'label': _('label_review_state', default='State'),
              'width': '7%',
-             'getter': lambda brain: workflow_state(
-                 brain, brain.review_state)},
+             'getter': lambda item: workflow_state(
+                 item, item.review_state)},
 
             {'id': 'title',
              'label': _('label_title', default='Title'),
              'width': '25%',
-             'getter': lambda brain: brain.Title},
+             'getter': lambda item: item.title},
 
             {'id': 'deadline',
              'label': _('label_deadline', default='Deadline'),
              'width': '15%',
-             'getter': lambda brain: helper.readable_date(
-                 brain, brain.deadline)}]
+             'getter': lambda item: helper.readable_date(
+                 item, item.deadline)}]
