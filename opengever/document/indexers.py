@@ -5,6 +5,7 @@ from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.interfaces import IDocumentIndexer
+from opengever.ogds.base.actor import Actor
 from opengever.tabbedview.helper import readable_ogds_author
 from plone.indexer import indexer
 from Products.CMFCore.utils import getToolByName
@@ -146,6 +147,6 @@ def sortable_author(obj):
     """Index to allow users to sort on document_author."""
     author = obj.document_author
     if author:
-        return readable_ogds_author(obj, author)
+        return Actor.user(author).get_label()
     return ''
 grok.global_adapter(sortable_author, name='sortable_author')
