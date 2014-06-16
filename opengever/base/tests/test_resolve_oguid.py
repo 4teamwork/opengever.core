@@ -1,81 +1,54 @@
-from AccessControl.SecurityManagement import SpecialUsers
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
-from mocker import Mocker, Expect
+from ftw.builder import Builder
+from ftw.builder import create
+from ftw.testbrowser import browsing
+from ftw.testbrowser.core import LIB_REQUESTS
 from opengever.base.browser.resolveoguid import ResolveOGUIDView
-from opengever.ogds.base.interfaces import IClientConfiguration
-from opengever.ogds.base.interfaces import IContactInformation
-from opengever.ogds.base.utils import AnonymousOrgUnitSelector
-from plone.mocktestcase import MockTestCase
-from plone.registry.interfaces import IRegistry
-from unittest2 import TestCase
+from opengever.testing import FunctionalTestCase
+from plone.app.testing import logout
 from zExceptions import Unauthorized
-from zope.app.component.hooks import setSite
-from zope.component import getGlobalSiteManager
-from zope.interface import alsoProvides
+from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 
 
-# disable this test temporarily
-# because of the client concept rework.
-class TestResolveOGUIDView(MockTestCase, TestCase):
+class TestResolveOGUIDView(FunctionalTestCase):
 
-    def test_fake(self):
-        pass
+    def setUp(self):
+        super(TestResolveOGUIDView, self).setUp()
 
-#     def setUp(self):
-#         super(TestResolveOGUIDView, self).setUp()
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_user().with_org_unit().with_admin_unit(
+                public_url=self.portal.absolute_url(),
+                unit_id='client1'
+                ))
+        self.task = create(Builder('task'))
+        self.task_id = getUtility(IIntIds).getId(self.task)
 
-#         self.testcase_mocker = Mocker()
-#         expect = Expect(self.testcase_mocker)
+    @browsing
+    def test_check_permissions_fails_with_nobody(self, browser):
+        logout()
+        url = ResolveOGUIDView.url_for('client1:{}'.format(self.task_id),
+                                       self.admin_unit)
+        with self.assertRaises(Unauthorized):
+            browser.open(url)
 
-#         sm = getGlobalSiteManager()
-#         siteroot = self.create_dummy(
-#             id='siteroot',
-#             getSiteManager=lambda: sm)
-#         alsoProvides(siteroot, IPloneSiteRoot)
-#         setSite(siteroot)
+    @browsing
+    def test_redirect_if_correct_client(self, browser):
+        url = ResolveOGUIDView.url_for('client1:{}'.format(self.task_id),
+                                       self.admin_unit)
+        browser.login().open(url)
+        self.assertEqual(self.task.absolute_url(), browser.url)
 
-#         ou_selector = self.testcase_mocker.replace(
-#             'opengever.ogds.base.utils.get_ou_selector')
-
-#         self.expect(ou_selector()).result(AnonymousOrgUnitSelector())
-
-#         self.testcase_mocker.replay()
-
-#     def tearDown(self):
-#         setSite(None)
-
-#         self.testcase_mocker.restore()
-#         self.testcase_mocker.verify()
-
-#     def test_check_permissions_fails_with_nobody(self):
-#         mtool = self.mocker.mock()
-#         self.expect(mtool.getAuthenticatedMember()).result(
-#             SpecialUsers.nobody)
-#         self.mock_tool(mtool, 'portal_membership')
-
-#         self.replay()
-
-#         view = ResolveOGUIDView(object(), object())
-
-#         with TestCase.assertRaises(self, Unauthorized):
-#             view._check_permissions(object())
-
-
-#     def test_check_permission_fails_without_view_permission(self):
-#         obj = self.mocker.mock()
-
-#         mtool = self.mocker.mock()
-#         self.expect(mtool.getAuthenticatedMember().checkPermission(
-#                 'View', obj)).result(False)
-#         self.mock_tool(mtool, 'portal_membership')
-
-#         self.replay()
-
-#         view = ResolveOGUIDView(object(), object())
-
-#         with TestCase.assertRaises(self, Unauthorized):
-#             view._check_permissions(obj)
+    #XXX can't test this now. damnit.
+    # @browsing
+    # def test_redirect_to_other_client(self, browser):
+    #     foo_unit = create(Builder('admin_unit').id('foo')
+    #                       .having(public_url='http://example.com'))
+    #     url = ResolveOGUIDView.url_for('foo:123')
+    #     try:
+    #         browser.open(url, library=LIB_REQUESTS)
+    #     except Exception as e:
+    #         import pudb; pudb.set_trace()
+    #     import pudb; pudb.set_trace()
 
 #     def test_redirect_to_other_client(self):
 #         oguid = 'client2:5'
@@ -95,29 +68,3 @@ class TestResolveOGUIDView(MockTestCase, TestCase):
 
 #         view = ResolveOGUIDView(object(), request)
 #         self.assertEqual(view.render(), 'REDIRECT')
-
-#     def test_redirect_if_correct_client(self):
-#         absolute_url = 'http://anyhost/client1/somedossier'
-#         obj = self.mocker.mock()
-#         self.expect(obj.absolute_url()).result(absolute_url)
-
-#         context = object()
-
-#         request = self.mocker.mock()
-#         self.expect(request.get('oguid')).result('client1:444')
-#         self.expect(request.RESPONSE.redirect(absolute_url)).result(
-#             'redirected')
-
-#         intids = self.mocker.mock()
-#         self.expect(intids.getObject(444)).result(obj)
-#         self.mock_utility(intids, IIntIds)
-
-#         mtool = self.mocker.mock()
-#         self.expect(mtool.getAuthenticatedMember().checkPermission(
-#                 'View', obj)).result(True)
-#         self.mock_tool(mtool, 'portal_membership')
-
-#         self.replay()
-
-#         view = ResolveOGUIDView(context, request)
-#         self.assertEqual(view.render(), 'redirected')
