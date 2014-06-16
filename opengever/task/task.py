@@ -239,6 +239,9 @@ class Task(Container):
     def get_issuer_label(self):
         return self.get_sql_object().get_issuer_label()
 
+    def get_responsible_actor(self):
+        return Actor.lookup(self.responsible)
+
     def get_sql_object(self):
         query = getUtility(ITaskQuery)
         return query.get_task(self.int_id, get_current_admin_unit().id())
@@ -246,11 +249,6 @@ class Task(Container):
     @property
     def safe_title(self):
         return safe_unicode(self.title)
-
-    def get_sql_object(self):
-        query = getUtility(ITaskQuery)
-        return query.get_task(
-            getUtility(IIntIds).getId(self), get_current_admin_unit().id())
 
     def get_breadcrumb_title(self, max_length):
         # Generate and store the breadcrumb tooltip
@@ -347,9 +345,6 @@ class Task(Container):
                     principals.append(safe_unicode(principal))
                     break
         return principals
-
-    def get_responsible_actor(self):
-        return Actor.lookup(self.responsible)
 
 
 @form.default_value(field=ITask['deadline'])
