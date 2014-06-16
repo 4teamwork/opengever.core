@@ -16,6 +16,7 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.browser.participants import role_list_helper
+from opengever.globalindex.model.task import Task
 from opengever.latex import _
 from opengever.latex.listing import ILaTexListing
 from opengever.repository.interfaces import IRepositoryFolder
@@ -183,7 +184,7 @@ class DossierDetailsLaTeXView(grok.MultiAdapter, MakoLaTeXView):
             self.context, IDossier(self.context).end)
 
     def get_responsible(self):
-        return self.context.get_responsible_label()
+        return self.context.get_responsible_actor().get_label_with_admin_unit()
 
     def get_repository_path(self):
         """Returns a reverted, path-like list of parental repository folder
@@ -243,7 +244,10 @@ class DossierDetailsLaTeXView(grok.MultiAdapter, MakoLaTeXView):
             'path': '/'.join(self.context.getPhysicalPath()),
             'object_provides': [ITask.__identifier__, ]}
 
-        return catalog(query)
+        # XXX it should be possible to queries the glboalindex directly
+        brains = catalog(query)
+
+        return [brain.getObject().get_sql_object() for brain in brains]
 
     def get_documents(self):
         sort_on, sort_order = self.get_sorting('documents')

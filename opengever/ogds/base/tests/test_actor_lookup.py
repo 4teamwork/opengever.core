@@ -10,6 +10,13 @@ class TestActorLookup(FunctionalTestCase):
         super(TestActorLookup, self).setUp()
         self.grant('Reader', 'Contributor')
 
+    def test_null_actor(self):
+        actor = Actor.lookup('not-existing')
+
+        self.assertEqual('not-existing', actor.get_label())
+        self.assertIsNone(actor.get_profile_url())
+        self.assertEqual('not-existing', actor.get_link())
+
     def test_inbox_actor_lookup(self):
         create(Builder('org_unit').id('foobar').having(title='Huhu'))
         actor = Actor.lookup('inbox:foobar')

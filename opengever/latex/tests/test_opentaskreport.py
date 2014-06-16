@@ -1,12 +1,21 @@
+from ftw.builder import Builder
+from ftw.builder import create
+from ftw.pdfgenerator.builder import Builder as PDFBuilder
 from ftw.pdfgenerator.interfaces import ILaTeXLayout
 from ftw.pdfgenerator.interfaces import ILaTeXView
+from ftw.pdfgenerator.utils import provide_request_layer
 from ftw.testing import MockTestCase
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.latex import opentaskreport
+from opengever.latex.layouts.default import DefaultLayout
+from opengever.latex.opentaskreport import IOpenTaskReportLayer
 from opengever.latex.testing import LATEX_ZCML_LAYER
 from opengever.ogds.base import utils
+from opengever.ogds.base.interfaces import IContactInformation
+from opengever.testing import FunctionalTestCase
 from zope.component import adaptedBy
 from zope.component import getMultiAdapter
+from zope.component import getUtility
 from zope.interface.verify import verifyClass
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 
@@ -80,3 +89,37 @@ class TestOpenTaskReportLaTeXView(MockTestCase):
             opentaskreport.OpenTaskReportLaTeXView)
 
         self.assertEqual(request_iface, opentaskreport.IOpenTaskReportLayer)
+
+
+class TestOpenTaskReportHelperMethods(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestOpenTaskReportHelperMethods, self).setUp()
+
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_all_unit_setup())
+        self.task = create(Builder("task").having(task_type='comment',
+                                                  issuer='peter.peter',
+                                                  responsible='hans.meier'))
+
+        self.hans = create(Builder('ogds_user')
+                           .having(userid='hans.meier',
+                                   firstname='Hans',
+                                   lastname='Meier'))
+        self.peter = create(Builder('ogds_user')
+                            .having(userid='peter.peter',
+                                    firstname='Peter',
+                                    lastname='Peter'))
+
+        provide_request_layer(self.task.REQUEST, IOpenTaskReportLayer)
+        layout = DefaultLayout(self.task, self.task.REQUEST, PDFBuilder())
+        self.opentaskreport = getMultiAdapter(
+            (self.task, self.task.REQUEST, layout), ILaTeXView)
+        # hack, this is set when calling `get_render_arguments`, XXX remove
+        self.opentaskreport.info = getUtility(IContactInformation)
+
+    def test_actor_labels_are_visible_in_task_listing(self):
+        row = self.opentaskreport.get_data_for_item(self.task.get_sql_object())
+        self.assertIn(self.peter.label(with_principal=False), row)
+        self.assertIn(self.hans.label(with_principal=False), row)
+

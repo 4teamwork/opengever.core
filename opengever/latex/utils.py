@@ -1,6 +1,7 @@
+from opengever.ogds.base.actor import Actor
+from opengever.ogds.base.utils import ogds_service
+from opengever.task.task import ITask
 from Products.CMFCore.utils import getToolByName
-from opengever.ogds.base.interfaces import IContactInformation
-from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 import types
@@ -23,35 +24,28 @@ def get_selected_items_from_catalog(context, request):
 
 
 def get_responsible_of_task(task):
-    info = getUtility(IContactInformation)
+    actor = Actor.lookup(task.responsible)
+    org_unit = ogds_service().fetch_org_unit(task.assigned_org_unit)
+    return org_unit.prefix_label(
+        actor.get_label(with_principal=False))
 
-    return '{} / {}'.format(
-        info.get_client_by_id(task.assigned_client).title,
-        info.describe(task.responsible, with_principal=False))
 
-
+# XXX rework this helper, hopefully id should not be necessary anymore
 def get_issuer_of_task(task, with_client=True, with_principal=False):
-    info = getUtility(IContactInformation)
 
-    issuer = info.describe(task.issuer, with_principal=with_principal)
+    issuer = Actor.lookup(task.issuer)
 
     if not with_client:
-        return issuer
+        return issuer.get_label(with_principal=with_principal)
 
-    if task.predecessor and isinstance(task.predecessor, types.StringTypes):
-        # task is a brain or a task object -> predecessor is the oguid
-        issuer_client_id = task.predecessor.split(':')[0]
-
-    elif task.predecessor:
-        # task is a globalindex object -> predecessor is a globalindex obj too
-        issuer_client_id = task.predecessor.client_id
-
+    if task.predecessor:
+        issuing_unit_id = task.predecessor.issuing_org_unit
     else:
-        issuer_client_id = task.client_id
+        issuing_unit_id = task.issuing_org_unit
 
-    issuer_client_title = info.get_client_by_id(issuer_client_id).title
-
-    return '%s / %s' % (issuer_client_title, issuer)
+    org_unit = ogds_service().fetch_org_unit(issuing_unit_id)
+    return org_unit.prefix_label(
+        issuer.get_label(with_principal=with_principal))
 
 
 def workflow_state(item, value):

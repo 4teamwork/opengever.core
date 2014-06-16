@@ -1,14 +1,14 @@
-from Products.CMFCore.interfaces._tools import IMemberData
-from Products.CMFPlone import PloneMessageFactory as pmf
-from Products.PluggableAuthService.interfaces.authservice import \
-    IPropertiedUser
 from datetime import date as dt
 from ftw.mail.utils import get_header
 from opengever.base import _ as base_mf
 from opengever.base.browser.helper import get_css_class
+from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.interfaces import IContactInformation
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize import ram
+from Products.CMFCore.interfaces._tools import IMemberData
+from Products.CMFPlone import PloneMessageFactory as pmf
+from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
 from zope.app.component.hooks import getSite
 from zope.component import getMultiAdapter
 from zope.component import getUtility
@@ -91,16 +91,7 @@ def readable_ogds_user(item, user):
 
 @ram.cache(author_cache_key)
 def linked_ogds_author(item, author):
-    if author:
-        if isinstance(author, str):
-            author = author.decode('utf-8')
-        info = getUtility(IContactInformation)
-        if info.is_user(author) or info.is_contact(
-            author) or info.is_inbox(author):
-            return info.render_link(author)
-        else:
-            return author
-    return ''
+    return Actor.lookup(author).get_link()
 
 
 def _breadcrumbs_from_item(item):

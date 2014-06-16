@@ -1,6 +1,6 @@
 from opengever.base.interfaces import ISequenceNumber, IBaseClientID
 from opengever.base.viewlets.byline import BylineBase
-from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.actor import Actor
 from opengever.task import _
 from opengever.task.task import ITask
 from plone.registry.interfaces import IRegistry
@@ -10,9 +10,8 @@ from zope.component import getUtility
 class TaskByline(BylineBase):
 
     def responsible_link(self):
-        info = getUtility(IContactInformation)
-        task = ITask(self.context)
-        return info.render_link(task.responsible)
+        return Actor.lookup(
+            ITask(self.context).responsible).get_link()
 
     def sequence_number(self):
         sequence = getUtility(ISequenceNumber)

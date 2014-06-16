@@ -1,5 +1,5 @@
 from opengever.globalindex.model.task import Task
-from opengever.globalindex.testing import MEMORY_DB_LAYER
+from opengever.testing import MEMORY_DB_LAYER
 from sqlalchemy.exc import IntegrityError
 from unittest2 import TestCase
 import transaction

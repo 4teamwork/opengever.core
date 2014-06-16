@@ -4,6 +4,7 @@ from opengever.latex import _
 from opengever.latex.utils import get_issuer_of_task
 from opengever.latex.utils import get_responsible_of_task
 from opengever.latex.utils import workflow_state
+from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.task.helper import task_type_helper
@@ -69,9 +70,7 @@ class DossiersLaTeXListing(grok.MultiAdapter):
         return data
 
     def get_responsible(self, brain):
-        return '%s / %s' % (
-            self.admin_unit.title,
-            self.info.describe(brain.responsible))
+        return Actor.lookup(brain.responsible).get_label_with_admin_unit()
 
     def get_repository_title(self, brain):
         """Returns the title of the first parental repository folder.
@@ -235,37 +234,37 @@ class TasksLaTeXListing(DossiersLaTeXListing):
             {'id': 'sequence_number',
              'label': _('short_label_sequence_number', default='No.'),
              'width': '3%',
-             'getter': lambda brain: brain.sequence_number},
+             'getter': lambda item: item.sequence_number},
 
             {'id': 'task_type',
              'label': _('label_task_type', default='Task type'),
              'width': '20%',
-             'getter': lambda brain: task_type_helper(brain, brain.task_type)},
+             'getter': lambda item: task_type_helper(item, item.task_type)},
 
             {'id': 'issuer',
              'label': _('label_issuer', default='Issuer'),
              'width': '15%',
-             'getter': lambda brain: get_issuer_of_task(
-                 brain, with_client=True, with_principal=False)},
+             'getter': lambda item: get_issuer_of_task(
+                 item, with_client=True, with_principal=False)},
 
             {'id': 'responsible',
              'label': _('label_task_responsible', default='Responsible'),
              'width': '15%',
-             'getter': lambda brain: get_responsible_of_task(brain)},
+             'getter': lambda item: get_responsible_of_task(item)},
 
             {'id': 'review_state',
              'label': _('label_review_state', default='State'),
              'width': '7%',
-             'getter': lambda brain: workflow_state(
-                 brain, brain.review_state)},
+             'getter': lambda item: workflow_state(
+                 item, item.review_state)},
 
             {'id': 'title',
              'label': _('label_title', default='Title'),
              'width': '25%',
-             'getter': lambda brain: brain.Title},
+             'getter': lambda item: item.title},
 
             {'id': 'deadline',
              'label': _('label_deadline', default='Deadline'),
              'width': '15%',
-             'getter': lambda brain: helper.readable_date(
-                 brain, brain.deadline)}]
+             'getter': lambda item: helper.readable_date(
+                 item, item.deadline)}]

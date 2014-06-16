@@ -39,6 +39,11 @@ class TestDossierByline(TestBylineBase):
         responsible = self.get_byline_value_by_label('by:')
         self.assertEquals('Boss Hugo (hugo.boss)', responsible.text_content())
 
+    def test_dossier_byline_responsible_is_linked_to_user_details(self):
+        responsible = self.get_byline_value_by_label('by:')
+        self.assertEqual('http://nohost/plone/@@user-details/hugo.boss',
+                          responsible.get('href'))
+
     def test_dossier_byline_state_display(self):
         state = self.get_byline_value_by_label('State:')
         self.assertEquals('dossier-state-active', state.text_content())
