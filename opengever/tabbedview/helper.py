@@ -66,27 +66,18 @@ def readable_ogds_author(item, author):
         else:
             author = ''
 
-    info = getUtility(IContactInformation)
-    if info.is_user(author) or info.is_contact(
-            author) or info.is_inbox(author):
-        return info.describe(author)
-    else:
-        return author
+    return Actor.lookup(author).get_label()
 
 
 @ram.cache(author_cache_key)
-def readable_ogds_user(item, user):
-    if not isinstance(user, unicode):
-        if user is not None:
-            user = user.decode('utf-8')
+def readable_ogds_user(item, userid):
+    if not isinstance(userid, unicode):
+        if userid is not None:
+            userid = userid.decode('utf-8')
         else:
-            user = ''
+            userid = ''
 
-    info = getUtility(IContactInformation)
-    if info.is_user(user) or info.is_contact(user) or info.is_inbox(user):
-        return info.describe(user)
-    else:
-        return user
+    return Actor.user(userid).get_label()
 
 
 @ram.cache(author_cache_key)
