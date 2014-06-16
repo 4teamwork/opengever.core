@@ -2,6 +2,7 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:upgrade-step="http://namespaces.zope.org/ftw.upgrade"
     i18n_domain="opengever.dossier">
 
     <!-- 1 -> 2301 -->
@@ -51,6 +52,16 @@
         destination="2602"
         handler="opengever.dossier.upgrades.to2602.RemoveMailInBehavior"
         profile="opengever.dossier:default"
+        />
+
+
+    <!-- 2602 -> 2700 -->
+    <upgrade-step:importProfile
+        title="Remove copy_documents_to_remote_client action"
+        profile="opengever.dossier:default"
+        source="2602"
+        destination="2700"
+        directory="profiles/2700"
         />
 
 </configure>

@@ -107,7 +107,6 @@ class InboxDocuments(Documents):
         actions = [action for action in actions
                    if action not in (
                     'create_task',
-                    'copy_documents_to_remote_client',
                     'move_items',)]
 
         actions += ['create_forwarding']
