@@ -161,9 +161,9 @@ class TestAllUsersAndInboxesVocabulary(FunctionalTestCase):
         select_current_org_unit('client1')
 
         self.assertTerms(
-            [('client1:test_user_1_', 'Client 1: Boss Hugo (test_user_1_)'),
-            ('client1:inbox:client1', 'Inbox: Client 1'),
-            ('client2:inbox:client2', 'Inbox: Client 2')],
+            [(u'client1:test_user_1_', u'Client 1 / Boss Hugo (test_user_1_)'),
+            (u'client1:inbox:client1', u'Inbox: Client 1'),
+            (u'client2:inbox:client2', u'Inbox: Client 2')],
             self.vocabulary_factory(self.portal))
 
     def test_client_prefix_of_title_is_omitted_in_one_client_setup(self):
@@ -173,8 +173,8 @@ class TestAllUsersAndInboxesVocabulary(FunctionalTestCase):
         select_current_org_unit('client1')
 
         self.assertTerms(
-            [('client1:test_user_1_', 'Boss Hugo (test_user_1_)'),
-             ('client1:inbox:client1', 'Inbox: Client 1')],
+            [(u'client1:test_user_1_', u'Boss Hugo (test_user_1_)'),
+             (u'client1:inbox:client1', u'Inbox: Client 1')],
             self.vocabulary_factory(self.portal))
 
     def test_include_multiple_terms_for_users_assigned_to_multiple_clients(self):
@@ -186,8 +186,8 @@ class TestAllUsersAndInboxesVocabulary(FunctionalTestCase):
 
         vocabulary = self.vocabulary_factory(self.portal)
 
-        self.assertInTerms('client1:test_user_1_', vocabulary)
-        self.assertInTerms('client2:test_user_1_', vocabulary)
+        self.assertInTerms(u'client1:test_user_1_', vocabulary)
+        self.assertInTerms(u'client2:test_user_1_', vocabulary)
 
     def test_exclude_inactive_clients_inboxes(self):
         client1 = create_client(clientid="client1", title="Client 1")
@@ -198,8 +198,8 @@ class TestAllUsersAndInboxesVocabulary(FunctionalTestCase):
 
         vocabulary = self.vocabulary_factory(self.portal)
 
-        self.assertNotInTerms('client2:inbox', vocabulary)
-        self.assertInTerms('client1:inbox:client1', vocabulary)
+        self.assertNotInTerms(u'client2:inbox', vocabulary)
+        self.assertInTerms(u'client1:inbox:client1', vocabulary)
 
 
 class TestAssignedUsersVocabulary(FunctionalTestCase):
@@ -402,8 +402,10 @@ class TestInboxesVocabularyFactory(FunctionalTestCase):
 
     def test_contains_only_inbox_when_not_current_ou_is_selected(self):
         self.portal.REQUEST['client'] = 'unit_b'
-        self.assertTermKeys(['inbox:unit_b'],
-                            self.vocabulary_factory(self.portal))
+
+        self.assertTerms(
+            [('inbox:unit_b', u'Inbox: Unit_b')],
+            self.vocabulary_factory(self.portal))
 
     def test_contains_inbox_and_assigned_users_when_current_ou_is_selected(self):
         self.portal.REQUEST['client'] = 'unit_a'
@@ -456,10 +458,10 @@ class TestOGDSVocabularies(FunctionalTestCase):
         voca_factory = getUtility(IVocabularyFactory,
                                name='opengever.ogds.base.ContactsVocabulary')
 
-        self.assertTermKeys(
-            ['contact:croft-lara', 'contact:man-super'],
+        self.assertTerms(
+            [('contact:croft-lara', u'Croft Lara (lara.croft@test.ch)'),
+             ('contact:man-super', u'M\xe4n Super (superman@test.ch)')],
             voca_factory(self.portal))
-
 
     def test_home_dossier_vocabulary_contains_all_open_dossier_from_your_home_client(self):
 

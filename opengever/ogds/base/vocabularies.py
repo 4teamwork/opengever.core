@@ -1,6 +1,6 @@
-from Products.CMFCore.utils import getToolByName
 from collective.elephantvocabulary import wrap_vocabulary
 from five import grok
+from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.interfaces import IClientCommunicator
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.interfaces import ISyncStamp
@@ -10,6 +10,7 @@ from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.base.vocabulary import ContactsVocabulary
 from plone.memoize import ram
+from Products.CMFCore.utils import getToolByName
 from zope.app.component.hooks import getSite, setSite
 from zope.component import getUtility
 from zope.globalrequest import getRequest
@@ -105,7 +106,6 @@ class UsersAndInboxesVocabularyFactory(grok.GlobalUtility):
     def key_value_provider(self):
         # Reset hidden_terms every time cache key changed
         self.hidden_terms = []
-        info = getUtility(IContactInformation)
 
         client_id = self.get_client() or ''
         unit = ogds_service().fetch_org_unit(client_id)
@@ -114,8 +114,8 @@ class UsersAndInboxesVocabularyFactory(grok.GlobalUtility):
                 yield (user.userid, user.label())
 
             # client inbox
-            principal = u'inbox:%s' % client_id
-            yield (principal, info.describe(principal))
+            yield (unit.inbox().id(),
+                   Actor.inbox(unit.inbox().id(), unit).get_label())
 
             # add the inactive users to the vocabulary
             # and mark them as hidden terms
@@ -169,25 +169,10 @@ class AllUsersAndInboxesVocabularyFactory(grok.GlobalUtility):
         # Reset hidden_terms every time cache key changed
         self.hidden_terms = []
 
-        info = getUtility(IContactInformation)
-
-        all_org_units = ogds_service().all_org_units()
-        has_multiple_org_units = len(all_org_units) > 1
-
-        for unit in all_org_units:
-            # all users
+        for unit in ogds_service().all_org_units():
             for user in unit.assigned_users():
-                value = u'%s:%s' % (unit.id(), user.userid)
-                # prepend orgunit if there are multiple orgunits
-                if has_multiple_org_units:
-                    label = u'%s: %s' % (unit.label(), user.label())
-                else:
-                    label = u'%s' % (user.label())
-
-                if not user.active:
-                    self.hidden_terms.append(value)
-
-                yield (value, label)
+                yield (u'{}:{}'.format(unit.id(), user.userid),
+                       unit.prefix_label(user.label()))
 
             # add the inactive users to the vocabulary
             # and mark them as hidden terms
@@ -197,10 +182,9 @@ class AllUsersAndInboxesVocabularyFactory(grok.GlobalUtility):
                     yield (user.userid, user.label())
 
             # client inbox
-            principal = u'inbox:%s' % unit.id()
-            value = u'%s:%s' % (unit.id(), principal)
-            label = info.describe(principal)
-            yield (value, label)
+            inbox_actor = Actor.inbox(unit.inbox().id(), unit)
+            yield (u'{}:{}'.format(unit.id(), unit.inbox().id()),
+                   inbox_actor.get_label())
 
 
 class InboxesVocabularyFactory(UsersAndInboxesVocabularyFactory):
@@ -244,8 +228,9 @@ class InboxesVocabularyFactory(UsersAndInboxesVocabularyFactory):
                     self.hidden_terms.append(user.userid)
 
             # client inbox
-            principal = u'inbox:%s' % selected_unit.id()
-            yield (principal, info.describe(principal))
+            inbox_actor = Actor.inbox(selected_unit.inbox().id(),
+                                      org_unit=selected_unit)
+            yield (selected_unit.inbox().id(), inbox_actor.get_label())
 
 
 class AssignedUsersVocabularyFactory(grok.GlobalUtility):
@@ -300,11 +285,11 @@ class ContactsVocabularyFactory(grok.GlobalUtility):
         info = getUtility(IContactInformation)
         for contact in info.list_contacts():
             yield (contact.contactid,
-                   info.describe(contact))
+                   Actor.contact(contact.contactid,
+                                 contact=contact).get_label())
 
 # TODO: should be renamed to something like
 # ContactsUsersAndInboxesVocabularyFactory
-
 class ContactsAndUsersVocabularyFactory(grok.GlobalUtility):
     """Vocabulary of contacts, users and the inbox of each client.
     """
@@ -332,8 +317,8 @@ class ContactsAndUsersVocabularyFactory(grok.GlobalUtility):
         items = items[:]
         self.hidden_terms = hidden_terms[:]
         for contact in info.list_contacts():
-            items.append((contact.contactid,
-                          info.describe(contact)))
+            actor = Actor.contact(contact.contactid, contact=contact)
+            items.append((contact.contactid, actor.get_label()))
 
         return items
 
@@ -343,15 +328,17 @@ class ContactsAndUsersVocabularyFactory(grok.GlobalUtility):
         items = []
         hidden_terms = []
 
+        # users
         for user in ogds_service().all_users():
             if not user.active:
                 hidden_terms.append(user.userid)
             items.append((user.userid, user.label()))
 
-        # add also the client inboxes
-        for client in info.get_clients():
-            principal = u'inbox:%s' % client.client_id
-            items.append((principal, info.describe(principal)))
+        # inboxes
+        for unit in ogds_service().all_org_units():
+            items.append((
+                unit.inbox().id(),
+                Actor.inbox(unit.inbox().id(), unit).get_label()))
 
         return (items, hidden_terms)
 
@@ -376,52 +363,49 @@ class EmailContactsAndUsersVocabularyFactory(grok.GlobalUtility):
 
     def key_value_provider(self):
         """yield the items
-
-        key = mail-address
+        key = mail-address:id eg. hugo@boss.ch:hugo.boss
         value = Fullname [address], eg. Hugo Boss [hugo@boss.ch]
         """
 
         for item in self._user_data():
             yield item
 
-    # We use the default ram cache because it automatically expires after
-    # 1 day. This could be customized by providing our own ICacheChooser.
     @ram.cache(voc_cachekey)
     def _user_data(self):
         """Create a list containing all user data which can be memoized.
-
-        key = mail-address
-        value = Fullname [address], eg. Hugo Boss [hugo@boss.ch]
+        key = mail-address:id eg. hugo@boss.ch:hugo.boss
+        value for users = Fullname (userid, address), eg. Hugo Boss (hugo.boss, hugo@boss.ch)
+        value for contacts Fullname (id, address), eg. James Bond (007@bond.ch)
         """
-        # Reset hidden_terms every time cache key changed
-        self.hidden_terms = []
-
-        info = getUtility(IContactInformation)
-        ids = [(user, user.active) for user in ogds_service().all_users()]
-        ids.extend([(contact, True) for contact
-                    in info.list_contacts()])
-
         user_data = []
-        for contact_or_user, active in ids:
-            if hasattr(contact_or_user, 'userid'):
-                userid = contact_or_user.userid
-            else:
-                userid = contact_or_user.getId
-            email = contact_or_user.email
-            if email:
-                if not active:
-                    self.hidden_terms.append(email)
-                user_data.append(
-                    ('%s:%s' % (email, userid),
-                     info.describe(contact_or_user, with_email=True)))
 
-            email2 = contact_or_user.email2
-            if email2:
-                if not active:
-                    self.hidden_terms.append(email2)
-                user_data.append(('%s:%s' % (email2, userid),
-                                  info.describe(contact_or_user,
-                                                with_email2=True)))
+        # users
+        for user in ogds_service().all_users():
+            if user.email:
+                key = '{}:{}'.format(user.email, user.userid)
+                value = '{} ({}, {})'.format(user.fullname(),
+                                             user.userid, user.email)
+                user_data.append((key, value))
+
+            if user.email2:
+                key = '{}:{}'.format(user.email2, user.userid)
+                value = '{} ({}, {})'.format(user.fullname(),
+                                             user.userid, user.email2)
+                user_data.append((key, value))
+
+        # contacts
+        info = getUtility(IContactInformation)
+        for contact in info.list_contacts():
+            if contact.email:
+                user_data.append(
+                    ('{}:{}'.format(contact.email, contact.id),
+                     '{} ({})'.format(contact.Title, contact.email)))
+
+            if contact.email2:
+                user_data.append(
+                    ('{}:{}'.format(contact.email2, contact.id),
+                     '{} ({})'.format(contact.Title, contact.email2)))
+
         return user_data
 
 
