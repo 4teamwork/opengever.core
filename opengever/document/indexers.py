@@ -146,7 +146,6 @@ def sortable_author(obj):
     """Index to allow users to sort on document_author."""
     author = obj.document_author
     if author:
-        readable_author = readable_ogds_author(obj, author)
-        return readable_author
+        return readable_ogds_author(obj, author)
     return ''
 grok.global_adapter(sortable_author, name='sortable_author')
