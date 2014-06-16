@@ -40,18 +40,18 @@ class Actor(object):
         return UserActor(identifier)
 
     @classmethod
-    def inbox(cls, identifier):
+    def inbox(cls, identifier, org_unit=None):
         if not identifier:
             return NullActor()
         assert ActorLookup(identifier).is_inbox()
-        return InboxActor(identifier)
+        return InboxActor(identifier, org_unit)
 
     @classmethod
-    def contact(cls, identifier):
+    def contact(cls, identifier, contact=None):
         if not identifier:
             return NullActor()
         assert ActorLookup(identifier).is_contact()
-        return ContactActor(identifier)
+        return ContactActor(identifier, contact=contact)
 
     def get_profile_url(self):
         raise NotImplementedError()
@@ -145,7 +145,7 @@ class ContactActor(Actor):
             name = contact.id
 
         if with_principal and contact.email:
-            return '{} ({})'.format(name, contact.email)
+            return u'{} ({})'.format(name, contact.email)
         else:
             return name
 
