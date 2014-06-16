@@ -1,5 +1,3 @@
-from Products.CMFCore.utils import getToolByName
-from Products.statusmessages.interfaces import IStatusMessage
 from email import Encoders
 from email.Header import Header
 from email.MIMEBase import MIMEBase
@@ -15,7 +13,7 @@ from opengever.mail.events import DocumentSent
 from opengever.mail.interfaces import ISendDocumentConf
 from opengever.mail.validators import AddressValidator
 from opengever.mail.validators import DocumentSizeValidator
-from opengever.ogds.base.utils import get_current_client
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.tabbedview.utils import get_containg_document_tab_url
 from plone.directives.form import default_value
@@ -23,6 +21,8 @@ from plone.formwidget.autocomplete import AutocompleteMultiFieldWidget
 from plone.registry.interfaces import IRegistry
 from plone.z3cform import layout
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
+from Products.CMFCore.utils import getToolByName
+from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form import form, button, field, validator
 from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget
 from z3c.form.interfaces import INPUT_MODE
@@ -246,10 +246,9 @@ class SendDocumentForm(form.Form):
                 obj_file = obj.file
 
             if only_links or not obj_file:
-
-                # rewrite the url with clients public url
+                # rewrite the url with current adminunit's public url
                 url = '%s/%s' % (
-                    get_current_client().public_url,
+                    get_current_admin_unit().public_url,
                     '/'.join(obj.getPhysicalPath()[2:]))
 
                 docs_links = '%s\r\n - %s (%s)' % (
