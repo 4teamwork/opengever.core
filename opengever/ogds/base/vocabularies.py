@@ -5,7 +5,6 @@ from opengever.ogds.base.interfaces import IClientCommunicator
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.interfaces import ISyncStamp
 from opengever.ogds.base.utils import get_client_id
-from opengever.ogds.base.utils import get_current_client
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.base.vocabulary import ContactsVocabulary
@@ -478,12 +477,11 @@ class OtherAssignedClientsVocabularyFactory(grok.GlobalUtility):
         """
 
         info = getUtility(IContactInformation)
-        current_client_id = get_current_client().client_id
+        current_client_id = get_current_org_unit().id()
 
         for client in info.get_assigned_clients():
             if current_client_id != client.client_id:
-                yield (client.client_id,
-                       client.title)
+                yield (client.client_id, client.title)
 
 
 class HomeDossiersVocabularyFactory(grok.GlobalUtility):
