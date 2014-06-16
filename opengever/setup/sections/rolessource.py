@@ -1,7 +1,7 @@
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.utils import resolvePackageReferenceOrFile
-from opengever.ogds.base.utils import get_current_client
+from opengever.ogds.base.utils import get_current_org_unit
 from zope.interface import classProvides, implements
 import json
 
@@ -16,12 +16,12 @@ class JSONRolesSourceSection(object):
 
     def __init__(self, transmogrifier, name, options, previous):
         self.previous = previous
-        client = get_current_client()
+        org_unit = get_current_org_unit()
 
         replace_map = {
-            'users_group': client.users_group.groupid,
-            'inbox_group': client.inbox_group.groupid,
-            'client_id': client.client_id,
+            'users_group': org_unit.users_group.groupid,
+            'inbox_group': org_unit.inbox_group.groupid,
+            'client_id': org_unit.id(),
             }
 
         repository_root = transmogrifier.context.REQUEST.get(

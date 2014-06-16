@@ -42,22 +42,6 @@ def ogds_service():
     return OGDSService(create_session())
 
 
-def get_current_client():
-    """Returns the current client.
-    """
-
-    session = create_session()
-    client_id = get_client_id()
-
-    if not client_id:
-        raise ValueError('No client configured')
-
-    client = session.query(Client).get(client_id)
-    if not client:
-        raise ValueError('Current client not found')
-    return client
-
-
 def get_ou_selector():
     site = getSite()
     sdm = site.session_data_manager
