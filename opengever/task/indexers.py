@@ -56,7 +56,9 @@ grok.global_adapter(is_subtask, name='is_subtask')
 
 
 class SearchableTextExtender(grok.Adapter):
-    """ Task specific SearchableText Extender"""
+    """ Task specific SearchableText Extender:
+    Adds sequence number and responsible label to the default
+    searchabletext."""
 
     grok.context(ITask)
     grok.name('ITask')
@@ -67,16 +69,11 @@ class SearchableTextExtender(grok.Adapter):
 
     def __call__(self):
         searchable = []
-        # append some other attributes to the searchableText index
 
-        # sequence_number
         seqNumb = getUtility(ISequenceNumber)
         searchable.append(str(seqNumb.get_number(self.context)))
 
-        #responsible
-        info = getUtility(IContactInformation)
-        task = ITask(self.context)
-        searchable.append(info.describe(task.responsible).encode(
-                'utf-8'))
+        searchable.append(
+            self.context.get_responsible_actor().get_label().encode('utf-8'))
 
         return ' '.join(searchable)
