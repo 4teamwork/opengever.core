@@ -1,9 +1,9 @@
-from opengever.ogds.base.actor import _OGDSUser
-from opengever.ogds.base.actor import _PloneUser
+from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.actor import ContactActor
 from opengever.ogds.base.actor import InboxActor
-from opengever.ogds.base.actor import UserActor
+from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
 from unittest import TestCase
+from zope.interface import directlyProvides
 
 
 class TestContactLabel(TestCase):
@@ -65,8 +65,9 @@ class TestPloneUserLabel(TestCase):
 
     def setUp(self):
         self.user = self.MockUser()
-        self.ogds_user = _PloneUser(self.user)
-        self.actor = UserActor('hp.meier', user=self.ogds_user)
+        directlyProvides(self.user, IPropertiedUser)
+
+        self.actor = Actor.user('hp.meier', user=self.user)
 
     def test_user_label_firstname_and_lastname(self):
         self.user.firstname = 'Hanspeter'

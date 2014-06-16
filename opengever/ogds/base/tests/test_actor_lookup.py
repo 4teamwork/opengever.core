@@ -11,11 +11,11 @@ class TestActorLookup(FunctionalTestCase):
         self.grant('Reader', 'Contributor')
 
     def test_null_actor(self):
-        actor = Actor.lookup(None)
+        actor = Actor.lookup('not-existing')
 
-        self.assertEqual('', actor.get_label())
+        self.assertEqual('not-existing', actor.get_label())
         self.assertIsNone(actor.get_profile_url())
-        self.assertIsNone(actor.get_link())
+        self.assertEqual('not-existing', actor.get_link())
 
     def test_inbox_actor_lookup(self):
         create(Builder('org_unit').id('foobar').having(title='Huhu'))
