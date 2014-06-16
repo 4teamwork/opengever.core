@@ -19,12 +19,13 @@ class TestDefaultLayout(MockTestCase):
     def setUp(self):
         super(TestDefaultLayout, self).setUp()
 
-        client = self.create_dummy(title='CLIENT ONE',
-                                   clientid='client1')
-        self._ori_get_current_client = utils.get_current_client
-        get_current_client = self.mocker.replace(
-            'opengever.ogds.base.utils.get_current_client')
-        self.expect(get_current_client()).result(client).count(0, None)
+        orgunit = self.stub()
+        self.expect(orgunit.label()).result('CLIENT ONE')
+
+        self._ori_get_current_org_unit = utils.get_current_org_unit
+        get_current_org_unit = self.mocker.replace(
+            'opengever.ogds.base.utils.get_current_org_unit')
+        self.expect(get_current_org_unit()).result(orgunit).count(0, None)
 
         registry_mock = self.stub()
         self.expect(
@@ -39,7 +40,7 @@ class TestDefaultLayout(MockTestCase):
 
     def tearDown(self):
         super(TestDefaultLayout, self).tearDown()
-        utils.get_current_client = self._ori_get_current_client
+        utils.get_current_org_unit = self._ori_get_current_org_unit
 
     def test_configuration(self):
         context = self.create_dummy()
