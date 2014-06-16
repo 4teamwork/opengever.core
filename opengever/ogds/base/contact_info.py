@@ -7,7 +7,6 @@ from opengever.ogds.base.interfaces import IUser
 from opengever.ogds.base.utils import brain_is_contact
 from opengever.ogds.base.utils import create_session
 from opengever.ogds.base.utils import get_client_id
-from opengever.ogds.base.utils import get_current_client
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models.client import Client
 from opengever.ogds.models.group import Group
@@ -234,11 +233,8 @@ class ContactInformation(grok.GlobalUtility):
         # another client. This client is completely isolated.
         warnings.warn(
             "This function is deprecated. Use ogds_service()"
-            ".get_current_clients()/get_current_org_units() instead.",
+            ".get_current_admin_unit()/get_current_org_unit() instead.",
             DeprecationWarning)
-
-        if not get_current_client().enabled:
-            return []
 
         return self._clients_query().filter_by(enabled=True).order_by(
             Client.title).all()
