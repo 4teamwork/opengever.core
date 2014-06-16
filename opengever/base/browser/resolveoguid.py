@@ -1,12 +1,13 @@
 from AccessControl.SecurityManagement import SpecialUsers
-from Products.CMFCore.utils import getToolByName
 from five import grok
-from opengever.ogds.base.interfaces import IContactInformation
-from opengever.ogds.base.utils import get_client_id
+from opengever.globalindex.oguid import Oguid
+from opengever.ogds.base.utils import get_current_admin_unit
+from opengever.ogds.base.utils import ogds_service
+from Products.CMFCore.utils import getToolByName
 from zExceptions import Unauthorized
 from zope.component import getUtility
-from zope.intid.interfaces import IIntIds
 from zope.interface import Interface
+from zope.intid.interfaces import IIntIds
 
 
 class ResolveOGUIDView(grok.View):
@@ -15,20 +16,26 @@ class ResolveOGUIDView(grok.View):
     grok.context(Interface)
     grok.require('zope2.View')
 
+    @classmethod
+    def url_for(cls, oguid, admin_unit=None):
+        if not admin_unit:
+            admin_unit = get_current_admin_unit()
+        return "{}/@@{}?oguid={}".format(admin_unit.public_url,
+                                         cls.__view_name__,
+                                         oguid)
+
+    def _is_on_different_admin_unit(self, admin_unit_id):
+        return admin_unit_id != get_current_admin_unit().id()
+
     def render(self):
-        oguid = self.request.get('oguid')
-        clientid, iid = oguid.split(':')
+        oguid = Oguid(id=self.request.get('oguid'))
 
-        if clientid != get_client_id():
-            # wrong client. redirect to right one.
-            info = getUtility(IContactInformation)
-            client = info.get_client_by_id(clientid)
-
-            url = '%s/@@resolve_oguid?oguid=%s' % (client.public_url, oguid)
+        if self._is_on_different_admin_unit(oguid.admin_unit_id):
+            admin_unit = ogds_service().fetch_admin_unit(oguid.admin_unit_id)
+            url = self.url_for(oguid, admin_unit)
             return self.request.RESPONSE.redirect(url)
 
-        obj = self._get_object(int(iid))
-
+        obj = self._get_object(oguid.intid)
         return self.request.RESPONSE.redirect(obj.absolute_url())
 
     def _get_object(self, iid):
