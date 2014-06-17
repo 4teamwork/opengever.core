@@ -16,6 +16,23 @@ class TestTaskQuery(TestCase):
         provideUtility(TaskQuery())
         self.query = getUtility(ITaskQuery)
 
+    def test_task_by_oguid_returns_correct_task_with_oguid_instance_param(self):
+        task = self.add_task(1, 'unita')
+        self.add_task(2, 'blah')
+        self.add_task(1, 'blah')
+
+        self.assertEqual(task, self.query.get_task_by_oguid(task.oguid))
+
+    def test_task_by_oguid_returns_correct_task_with_string_param(self):
+        task = self.add_task(1, 'unita')
+        self.add_task(2, 'blah')
+        self.add_task(1, 'blah')
+
+        self.assertEqual(task, self.query.get_task_by_oguid('unita:1'))
+
+    def test_task_by_oguid_returns_non_for_unknown_oguids(self):
+        self.assertIsNone(self.query.get_task_by_oguid('theanswer:42'))
+
     def test_get_task_with_existing_intid_admin_unit_id_pair(self):
         self.add_task(1, 'admin1')
         self.add_task(2, 'admin1')
