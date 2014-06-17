@@ -10,29 +10,29 @@
 			<th i18n:translate="label_document">document</th>
 			<td tal:content="context/title"/>
     </tr>
-		<tr tal:condition="python: view.w['document_date'].value != ('', '', '')">
+		<tr tal:condition="python: view.w['IDocumentMetadata.document_date'].value != ('', '', '')">
 			<th i18n:translate="label_document_date">Document Date</th>
-			<td tal:content="structure view/w/document_date/render"/>
+			<td tal:content="structure view/w/IDocumentMetadata.document_date/render"/>
 		</tr>
-		<tr tal:condition="python: 'document_type' in view.w and view.w['document_type'].value">
+		<tr tal:condition="python: 'IDocumentMetadata.document_type' in view.w and view.w['IDocumentMetadata.document_type'].value">
 			<th i18n:translate="label_document_type">Document Type</th>
-			<td tal:content="structure view/w/document_type/render"/>
+			<td tal:content="structure view/w/IDocumentMetadata.document_type/render"/>
 		</tr>
-		<tr tal:condition="python: view.w['document_author'].value">
+		<tr tal:condition="python: view.w['IDocumentMetadata.document_author'].value">
 			<th i18n:translate="label_author">Author</th>
-			<td tal:content="structure view/w/document_author/render"/>
+			<td tal:content="structure view/w/IDocumentMetadata.document_author/render"/>
 		</tr>
 		<tr tal:condition="python: view.creator_link()">
 			<th i18n:translate="label_creator">creator</th>
 			<td tal:content="structure view/creator_link"/>
 		</tr>
-		<tr tal:condition="python: view.w['description'].value">
+		<tr tal:condition="python: view.w['IDocumentMetadata.description'].value">
 			<th i18n:translate="label_description">Description</th>
-			<td tal:content="structure view/w/description/render"/>
+			<td tal:content="structure view/w/IDocumentMetadata.description/render"/>
 		</tr>
-		<tr tal:condition="python: view.w['foreign_reference'].value">
+		<tr tal:condition="python: view.w['IDocumentMetadata.foreign_reference'].value">
 			<th i18n:translate="label_foreign_reference">Foreign Reference</th>
-			<td tal:content="structure view/w/foreign_reference/render"/>
+			<td tal:content="structure view/w/IDocumentMetadata.foreign_reference/render"/>
 		</tr>
 		<tr tal:condition="python: view.checked_out_link()">
 			<th i18n:translate="label_checked_out">Checked out</th>
@@ -111,13 +111,13 @@
 			<td tal:condition="context/preserved_as_paper" i18n:translate="label_yes">yes</td>
 			<td tal:condition="not:context/preserved_as_paper" i18n:translate="label_no">no</td>
 		</tr>
-		<tr tal:condition="python: view.w['receipt_date'].value != ('', '', '')">
+		<tr tal:condition="python: view.w['IDocumentMetadata.receipt_date'].value != ('', '', '')">
 			<th i18n:translate="label_receipt_date">Date of receipt</th>
-			<td tal:content="structure view/w/receipt_date/render"/>
+			<td tal:content="structure view/w/IDocumentMetadata.receipt_date/render"/>
 		</tr>
-		<tr tal:condition="python: view.w['delivery_date'].value != ('', '', '') ">
+		<tr tal:condition="python: view.w['IDocumentMetadata.delivery_date'].value != ('', '', '') ">
 			<th i18n:translate="label_delivery_date">Date of delivery</th>
-			<td tal:content="structure view/w/delivery_date/render"/>
+			<td tal:content="structure view/w/IDocumentMetadata.delivery_date/render"/>
 		</tr>
 		<tr tal:condition="python: view.w['IRelatedDocuments.relatedItems'].value">
 			<th i18n:translate="referenced_documents">referenced documents</th>

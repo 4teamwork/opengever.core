@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<object name="opengever.document.document" meta_type="Dexterity FTI"
+        i18n:domain="opengever.document" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+  <property name="behaviors" purge="False">
+    <element value="opengever.document.behaviors.related_docs.IRelatedDocuments"/>
+    <element value="opengever.document.behaviors.IRelatedDocuments" remove="True"/>
+
+    <element value="opengever.document.behaviors.name_from_title.IDocumentNameFromTitle"/>
+    <element value="opengever.document.behaviors.IDocumentNameFromTitle" remove="True"/>
+  </property>
+
+</object>

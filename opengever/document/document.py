@@ -1,24 +1,17 @@
 from Acquisition import aq_inner, aq_parent
 from collective import dexteritytextindexer
-from collective.elephantvocabulary import wrap_vocabulary
-from datetime import date
 from five import grok
-from ftw.datepicker.widget import DatePickerFieldWidget
 from ftw.mail.interfaces import IEmailAddress
 from opengever.document import _
-from opengever.document.interfaces import IDocumentSettings
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from plone.autoform import directives as form_directives
 from plone.dexterity.content import Item
 from plone.directives import form
 from plone.namedfile.field import NamedBlobFile
-from plone.registry.interfaces import IRegistry
-from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 from Products.CMFCore.utils import getToolByName
 from Products.MimetypesRegistry.common import MimeTypeException
 from z3c.form import validator
-from z3c.form.browser import checkbox
 from zope import schema
-from zope.component import getUtility
 from zope.interface import Invalid
 from zope.interface import invariant
 import logging
@@ -44,137 +37,24 @@ class IDocumentSchema(form.Schema):
         label=_(u'fieldset_common', u'Common'),
         fields=[
             u'title',
-            u'description',
-            u'keywords',
-            u'foreign_reference',
-            u'document_date',
-            u'receipt_date',
-            u'delivery_date',
-            u'document_type',
-            u'document_author',
             u'file',
-            u'digitally_available',
-            u'preserved_as_paper',
-            u'archival_file',
-            u'thumbnail',
             ],
         )
 
     dexteritytextindexer.searchable('title')
+    form_directives.order_before(title='IDocumentMetadata.description')
     title = schema.TextLine(
         title=_(u'label_title', default=u'Title'),
         required=False)
 
-    dexteritytextindexer.searchable('description')
-    description = schema.Text(
-        title=_(u'label_description', default=u'Description'),
-        description=_(u'help_description', default=u''),
-        required=False,
-        )
-
-    dexteritytextindexer.searchable('keywords')
-    keywords = schema.Tuple(
-        title=_(u'label_keywords', default=u'Keywords'),
-        description=_(u'help_keywords', default=u''),
-        value_type=schema.TextLine(),
-        required=False,
-        missing_value=(),
-        )
-    form.widget(keywords=TextLinesFieldWidget)
-
-    foreign_reference = schema.TextLine(
-        title=_(u'label_foreign_reference', default='Foreign Reference'),
-        description=_('help_foreign_reference', default=''),
-        required=False,
-        )
-
-    document_date = schema.Date(
-        title=_(u'label_document_date', default='Document Date'),
-        description=_(u'help_document_date', default=''),
-        required=False,
-        )
-
-    #workaround because ftw.datepicker wasn't working
-    form.widget(document_date=DatePickerFieldWidget)
-
-    document_type = schema.Choice(
-        title=_(u'label_document_type', default='Document Type'),
-        description=_(u'help_document_type', default=''),
-        source=wrap_vocabulary('opengever.document.document_types',
-                    visible_terms_from_registry='opengever.document' +
-                            '.interfaces.IDocumentType.document_types'),
-        required=False,
-        )
-
-    dexteritytextindexer.searchable('document_author')
-    document_author = schema.TextLine(
-        title=_(u'label_author', default='Author'),
-        description=_(u'help_author',
-                      default="Surname firstname or a userid"
-                      "(would be automatically resolved to fullname)"),
-        required=False,
-        )
-
-#    dexteritytextindexer.searchable('file')
     form.primary('file')
+    form_directives.order_after(file='IDocumentMetadata.document_author')
     file = NamedBlobFile(
         title=_(u'label_file', default='File'),
         description=_(u'help_file', default=''),
         required=False,
         )
 
-    form.mode(digitally_available='hidden')
-    digitally_available = schema.Bool(
-        title=_(u'label_digitally_available', default='Digital Available'),
-        description=_(u'help_digitally_available',
-            default='Is the Document Digital Availabe'),
-        required=False,
-        )
-
-    form.widget(preserved_as_paper=checkbox.SingleCheckBoxFieldWidget)
-    preserved_as_paper = schema.Bool(
-        title=_(u'label_preserved_as_paper', default='Preserved as paper'),
-        description=_(u'help_preserved_as_paper', default=''),
-        required=False,
-        default=True,
-        )
-
-    form.omitted('archival_file')
-    archival_file = NamedBlobFile(
-        title=_(u'label_archival_file', default='Archival File'),
-        description=_(u'help_archival_file', default=''),
-        required=False,
-        )
-
-    form.omitted('thumbnail')
-    thumbnail = NamedBlobFile(
-        title=_(u'label_thumbnail', default='Thumbnail'),
-        description=_(u'help_thumbnail', default=''),
-        required=False,
-        )
-
-    form.omitted('preview')
-    preview = NamedBlobFile(
-        title=_(u'label_preview', default='Preview'),
-        description=_(u'help_preview', default=''),
-        required=False,
-        )
-
-    receipt_date = schema.Date(
-        title=_(u'label_receipt_date', default='Date of receipt'),
-        description=_(u'help_receipt_date', default=''),
-        required=False,
-        )
-    #workaround because ftw.datepicker wasn't working
-    form.widget(receipt_date=DatePickerFieldWidget)
-
-    delivery_date = schema.Date(
-        title=_(u'label_delivery_date', default='Date of delivery'),
-        description=_(u'help_delivery_date', default=''),
-        required=False,
-        )
-    #workaround because ftw.datepicker wasn't working
-    form.widget(delivery_date=DatePickerFieldWidget)
 
     @invariant
     def title_or_file_required(data):
@@ -182,17 +62,6 @@ class IDocumentSchema(form.Schema):
             raise Invalid(_(u'error_title_or_file_required',
                             default=u'Either the title or the file is '
                             'required.'))
-
-    @invariant
-    def file_or_preserved_as_paper(data):
-        """ When no digital file exist, the document must be
-        preserved in paper.
-        """
-        if not data.file and not data.preserved_as_paper:
-            raise Invalid(
-                _(u'error_file_and_preserved_as_paper',
-                default=u"You don't select a file and document is also not \
-                preserved in paper_form, please correct it."))
 
 
 class UploadValidator(validator.SimpleFieldValidator):
@@ -228,23 +97,6 @@ validator.WidgetValidatorDiscriminators(
     )
 
 grok.global_adapter(UploadValidator)
-
-
-# Default values
-@form.default_value(field=IDocumentSchema['document_date'])
-def default_document_date(data):
-    """Set the actual date as default document_date"""
-    return date.today()
-
-
-@form.default_value(field=IDocumentSchema['preserved_as_paper'])
-def default_preserved_as_paper(data):
-    """Set the client specific default (configured in the registry)."""
-
-    registry = getUtility(IRegistry)
-    proxy = registry.forInterface(IDocumentSettings)
-
-    return proxy.preserved_as_paper_default
 
 
 class Document(Item):

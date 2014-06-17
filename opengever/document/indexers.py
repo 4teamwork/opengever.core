@@ -12,6 +12,7 @@ from ZODB.POSException import ConflictError
 from zope.component import getUtility, queryMultiAdapter, getAdapter
 from zope.interface import Interface
 import logging
+from opengever.document.behaviors.metadata import IDocumentMetadata
 
 
 logger = logging.getLogger('opengever.document')
@@ -141,7 +142,7 @@ def checked_out(obj):
 grok.global_adapter(checked_out, name='checked_out')
 
 
-@indexer(IDocumentSchema)
+@indexer(IDocumentMetadata)
 def sortable_author(obj):
     """Index to allow users to sort on document_author."""
     author = obj.document_author

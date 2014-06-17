@@ -13,6 +13,8 @@ Changelog
 - Refactored some hard to change test data.
   [lgraf]
 
+- Document: Refactor behaviors to be a package with separate modules.
+  [lgraf]
 
 3.3 (2014-06-05)
 ----------------
