@@ -40,37 +40,39 @@ class ResponseTransporter(grok.Adapter):
     grok.implements(IResponseTransporter)
     grok.require('zope2.View')
 
-    def send_responses(self, target_cid, remote_task_url,
+    def send_responses(self, target_admin_unit_id, remote_task_url,
                        intids_mapping=None):
-        """ Sends all responses of task self.context to task on
+        """Sends all responses of task self.context to task on
         a remote admin unit.
-        `target_cid`: id of a target admin unit
+
+        `target_admin_unit_id`: id of a target admin unit
         `remote_task_url`: url to a task on `target_cid` relative
         to its site root.
         `intids_mapping`: replace intids of RelationValues according
         to this mapping. This fixes the intids on remote admin unit.
         RelationValues not listed in this mapping will not be sent.
-        """
 
+        """
         jsondata = self.extract_responses(intids_mapping)
 
-        return remote_request(target_cid,
-                                   '@@task-responses-receive',
-                                   path=remote_task_url,
-                                   data=dict(responses=jsondata))
+        return remote_request(target_admin_unit_id,
+                              '@@task-responses-receive',
+                              path=remote_task_url,
+                              data=dict(responses=jsondata))
 
-    def get_responses(self, target_cid, remote_task_path, intids_mapping):
+    def get_responses(self, target_admin_unit_id, remote_task_path,
+                      intids_mapping):
         """Retrieves all responses from the task with path `remote_task_path`
-        on the admin_unit `target_cid` and adds them to the current context (target
-        task).
+        on the admin_unit `target_admin_unit_id` and adds them to the current
+        context (target task).
 
         Provide a an `intids_mapping` (dict), mapping the original intids of
-        related objects to the new intids of the copies on this admin_unit. This
-        is necessary for fixing the relations.
-        """
+        related objects to the new intids of the copies on this admin_unit.
+        This is necessary for fixing the relations.
 
+        """
         req_data = {'intids_mapping': json.dumps(intids_mapping)}
-        response = remote_request(target_cid,
+        response = remote_request(target_admin_unit_id,
                                   '@@task-responses-extract',
                                   path=remote_task_path,
                                   data=req_data)
