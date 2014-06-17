@@ -90,7 +90,7 @@ def add_simple_response(task, text='', field_changes=None, added_object=None,
     `task`: task context
     `text`: fulltext
     `added_object`: an object which was added to the task
-    `successor_oguid`: an OGUID to a (remote) object which was referened.
+    `successor_oguid`: an OGUID to a (remote) object which was referenced.
     """
 
     response = opengever.task.adapters.Response(text)
