@@ -176,11 +176,11 @@ class SelectRepositoryfolderStepView(FormWrapper, grok.View):
         grok.View.__init__(self, *args, **kwargs)
 
 
-class SelectiRepositoryfolderStepRedirector(grok.View):
-    """Remote clients redirect usually to the site root, but this step needs
-    to be called on the repository root.
+class SelectRepositoryfolderStepRedirector(grok.View):
+    """Remote orgunit redirects usually to the site root,
+    but this step needs to be called on the repository root.
 
-    The remote client does not know the URL to the repository root, so it
+    The remote orgunit does not know the URL to the repository root, so it
     redirects to the site root. This view just redirects to the repository
     root, passing the parameters on.
     """
