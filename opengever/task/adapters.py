@@ -2,7 +2,6 @@ from AccessControl import getSecurityManager
 from DateTime import DateTime
 from five import grok
 from opengever.ogds.base.actor import Actor
-from opengever.ogds.base.interfaces import IContactInformation
 from opengever.task.task import ITask
 from persistent import Persistent
 from persistent.list import PersistentList
@@ -10,7 +9,6 @@ from zope.annotation.interfaces import IAnnotations
 from zope.app.container.contained import ObjectAddedEvent
 from zope.app.container.contained import ObjectRemovedEvent
 from zope.app.container.interfaces import UnaddableError
-from zope.component import getUtility
 from zope.event import notify
 from zope.interface import Attribute
 from zope.interface import implements
