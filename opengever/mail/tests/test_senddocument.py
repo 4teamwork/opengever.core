@@ -5,9 +5,6 @@ from ftw.testing.mailing import Mailing
 from opengever.mail.behaviors import ISendableDocsContainer
 from opengever.mail.interfaces import IDocumentSent
 from opengever.testing import FunctionalTestCase
-from opengever.testing import create_client
-from opengever.testing import create_ogds_user
-from opengever.testing import set_current_client_id
 from plone.app.testing import TEST_USER_ID
 from zope.component import getUtility
 from zope.component import provideHandler
@@ -41,9 +38,11 @@ class TestSendDocument(FunctionalTestCase):
         super(TestSendDocument, self).setUp()
         self.grant('Member', 'Contributor', 'Manager')
 
-        create_client('plone')
-        set_current_client_id(self.portal, clientid=u'plone')
-        create_ogds_user(TEST_USER_ID)
+        create(Builder('fixture')
+               .with_user(firstname="Test", lastname="User")
+               .with_org_unit()
+               .with_admin_unit(public_url='http://nohost/plone'))
+
         Mailing(self.portal).set_up()
 
     def test_dossier_is_sendable(self):
@@ -85,7 +84,7 @@ class TestSendDocument(FunctionalTestCase):
         self.assertEquals(TEST_FORM_DATA.get('subject'), mail.get('Subject'),
                           'The subject of the created mail is not correct')
         self.assertEquals(
-            '"Boss Hugo \(test_user_1_\)" <hugo@boss.ch>',
+            '"User Test \(test_user_1_\)" <test@localhost>',
             mail.get('From'),
             'The sender of the mail is incorrect.')
         self.assertIn(

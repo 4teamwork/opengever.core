@@ -12,7 +12,8 @@ from opengever.latex.utils import get_issuer_of_task
 from opengever.latex.utils import workflow_state
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.interfaces import IContactInformation
-from opengever.ogds.base.utils import get_client_id, get_current_client
+from opengever.ogds.base.utils import get_client_id
+from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task.helper import task_type_helper
 from sqlalchemy import and_, or_
 from sqlalchemy.sql.expression import asc
@@ -59,7 +60,7 @@ class OpenTaskReportLaTeXView(grok.MultiAdapter, MakoLaTeXView):
         self.layout.use_package('longtable')
 
         args = self.get_task_rows()
-        args['client'] = get_current_client().title
+        args['client'] = get_current_org_unit().label
 
         return args
 

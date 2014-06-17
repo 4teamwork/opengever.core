@@ -3,7 +3,6 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
-from opengever.ogds.base.utils import get_current_client
 from opengever.testing import FunctionalTestCase
 from opengever.testing import create_and_select_current_org_unit
 from opengever.testing import create_client
@@ -22,9 +21,6 @@ class TestClientUtils(FunctionalTestCase):
 
     def test_get_client_id_returns_current_client_id(self):
         self.assertEquals(u'test_client', get_client_id())
-
-    def test_get_current_client_returns_current_client_object(self):
-        self.assertEquals(self.test_ou._client, get_current_client())
 
 
 class TestClientHelpers(FunctionalTestCase):
