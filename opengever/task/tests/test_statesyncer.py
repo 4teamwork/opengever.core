@@ -77,10 +77,10 @@ class TestWorkflowStateSyncer(MockTestCase):
 
         pred = self.providing_stub([ITask])
         self.expect(pred.task_type).result(u'other_task_type')
-        self.expect(pred.client_id).result(u'client1')
+        self.expect(pred.admin_unit_id).result(u'client1')
         self.expect(pred.physical_path).result(u'path1')
         succ1 = self.providing_stub([ITask])
-        self.expect(succ1.client_id).result(u'client2')
+        self.expect(succ1.admin_unit_id).result(u'client2')
         self.expect(succ1.physical_path).result(u'path2')
 
         stc = self.stub()
