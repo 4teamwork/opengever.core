@@ -31,5 +31,12 @@ class TestOguid(TestCase):
         self.assertEqual('bar:123', oguid.id)
 
     def test_oguid_string_representation(self):
-        oguid = Oguid(id='foo:123')
-        self.assertEqual('foo:123', str(oguid))
+        self.assertEqual('foo:123', str(Oguid(id='foo:123')))
+
+    def test_comparison(self):
+        self.assertEqual(Oguid('foo', 2), Oguid('foo', 2))
+        self.assertEqual('foo:2', Oguid('foo', 2))
+
+        self.assertNotEqual(None, Oguid('foo', 2))
+        self.assertNotEqual(Oguid('foo', 3), Oguid('foo', 2))
+        self.assertNotEqual(Oguid('bar', 2), Oguid('foo', 2))
