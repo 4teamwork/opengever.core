@@ -23,6 +23,8 @@ class Oguid(object):
         return (self.admin_unit_id, self.int_id,)
 
     def __eq__(self, other):
+        if isinstance(other, basestring):
+            return self.id == other
         return isinstance(other, Oguid) and \
             other.admin_unit_id == self.admin_unit_id and \
             other.int_id == self.int_id
