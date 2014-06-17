@@ -152,8 +152,8 @@ class ChooseDossierStepView(FormWrapper, grok.View):
 
 
 class ChooseDosserStepRedirecter(grok.View):
-    """Remote clients redirect usually to the site root, but this step needs
-    to be called on the repository root.
+    """Remote admin units redirects usually to the site root,
+    but this step needs to be called on the repository root.
 
     The remote client does not know the URL to the repository root, so it
     redirects to the site root. This view just redirects to the repository
