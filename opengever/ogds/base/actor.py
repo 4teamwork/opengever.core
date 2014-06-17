@@ -147,14 +147,12 @@ class PloneUserActor(Actor):
         self.user = user
 
     def get_label(self, with_principal=True):
-        if self.user.lastname or self.user.firstname:
-            name = ' '.join(name for name in
-                           (self.user.lastname, self.user.firstname) if name)
-        else:
-            name = self.user.userid
+        name = self.user.getProperty('fullname')
+        if not name:
+            name = self.user.getUserName()
 
         if with_principal:
-            return u'{} ({})'.format(name, self.user.userid)
+            return u'{} ({})'.format(name, self.identifier)
         else:
             return name
 
