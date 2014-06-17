@@ -9,7 +9,7 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.component import getUtility
 
 
-class TabbeMailView(TabbedView):
+class TabbedMailView(TabbedView):
 
     def get_tabs(self):
         return [

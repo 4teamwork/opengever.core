@@ -55,12 +55,12 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
-    <!-- 2104 -> 2105 -->
+    <!-- 2104 -> 2200 -->
     <upgrade-step:importProfile
         title="Add IAnnotationsJournalizable to ftw.mail.mail"
         profile="opengever.mail:default"
         source="2104"
-        destination="2105"
-        directory="profiles/2105"
+        destination="2200"
+        directory="profiles/2200"
         />
 </configure>

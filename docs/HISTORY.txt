@@ -10,6 +10,9 @@ Changelog
 - Test quickupload: Replace mock tests by functional tests.
   [mathias.leimgruber]
 
+- Implement tabbedview for ftw.mail.mail content (Preview / Journal / Info).
+  [mathias.leimgruber]
+
 - Enforce correct order in inbox-task-tab tests.
   [lknoepfel]
 
