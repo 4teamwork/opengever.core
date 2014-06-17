@@ -588,9 +588,6 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
                 "1"))
 
     def check_document_sent(self, obj, doc):
-        id_util = getUtility(IIntIds)
-        intid = id_util.queryId(doc)
-        oguid = '{}:{}'.format(get_current_admin_unit().id(), intid)
         # Testing on __dummy_unit_id__ from
         # `opengever.ogds.base.ou_selector.NullOrg`') is just a temporary
         # solution and will be adjusted when reworking the oguid functionality.
@@ -601,9 +598,9 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             actor=TEST_USER_ID,
             comment=(
                 'Attachments: <span>'
-                '<a href="./@@resolve_oguid?oguid={}">{}</a>'
+                '<a href="{}">{}</a>'
                 '</span> | Receivers: test@test.ch |'
-                ' Message: Mymessage'.format(oguid, doc.Title()))
+                ' Message: Mymessage'.format(doc.absolute_url(), doc.Title()))
             )
 
     def check_document_copy_downloaded(self, obj):

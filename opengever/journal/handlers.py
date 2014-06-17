@@ -15,7 +15,6 @@ from opengever.dossier.browser.participants import role_list_helper
 from opengever.dossier.interfaces import IParticipationCreated
 from opengever.dossier.interfaces import IParticipationRemoved
 from opengever.journal import _
-from opengever.journal.helper import documents_list_helper
 from opengever.mail.interfaces import IDocumentSent
 from opengever.repository.events import IRepositoryPrefixUnlocked
 from opengever.repository.repositoryfolder import IRepositoryFolderSchema
@@ -449,17 +448,27 @@ DOCUMENT_SENT = 'Document Sent'
 
 @grok.subscribe(IDexterityContent, IDocumentSent)
 def document_sent(context, event):
+    def make_document_event_list(context, items):
+        urlstring = ''
+        url_template = u'<span><a href="{}">{}{}</a></span>'
+        lastindex = len(items)-1
+        for i, item in enumerate(items):
+            comma = '' if lastindex == i else ', '
+            urlstring += url_template.format(item['url'], item['title'], comma)
+        return urlstring
+
     id_util = getUtility(IIntIds)
     objs = []
 
     for intid in event.intids:
         obj = id_util.getObject(intid)
+        url = obj.absolute_url()
         title = obj.Title().decode('utf-8')
         receiver = event.receiver
         message = event.message
         if isinstance(receiver, list):
             receiver = ', '.join(receiver)
-        objs.append({'intid': intid, 'title': title})
+        objs.append({'url': url, 'title': title})
 
     title = _(u'label_document_sent',
               default=u'Document sent by Mail: ${subject}',
@@ -470,7 +479,7 @@ def document_sent(context, event):
           default=u'Attachments: ${documents} | Receivers: ${receiver} |'
                     ' Message: ${message}',
           mapping={
-                'documents': documents_list_helper(context, objs),
+                'documents': make_document_event_list(context, objs),
                 'receiver': receiver.decode('utf-8'),
                 'message': message.decode('utf-8'),
                 }), context=context.REQUEST)
