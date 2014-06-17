@@ -182,6 +182,9 @@ msgstr "Rapports de travail"
 msgid "sharing"
 msgstr "Info"
 
+msgid "preview"
+msgstr "Aperçu"
+
 msgid "subdossiers"
 msgstr "Sous-dossiers"
 

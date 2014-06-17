@@ -1,7 +1,10 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:upgrade-step="http://namespaces.zope.org/ftw.upgrade"
     i18n_domain="opengever.mail">
+
+    <include package="ftw.upgrade" file="meta.zcml" />
 
     <!-- 2 -> 2100 -->
     <genericsetup:upgradeStep
@@ -52,4 +55,12 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <!-- 2104 -> 2105 -->
+    <upgrade-step:importProfile
+        title="Add IAnnotationsJournalizable to ftw.mail.mail"
+        profile="opengever.mail:default"
+        source="2104"
+        destination="2105"
+        directory="profiles/2105"
+        />
 </configure>
