@@ -35,6 +35,9 @@ msgstr "Übersicht"
 msgid "sharing"
 msgstr "Info"
 
+msgid "preview"
+msgstr "Vorschau"
+
 msgid "assigned_inbox_tasks"
 msgstr "Erhaltene Aufgaben"
 
