@@ -55,7 +55,7 @@ class WorkflowStateSyncer(grok.MultiAdapter):
         for task in tasks:
 
             response = utils.remote_request(
-                task.client_id,
+                task.admin_unit_id,
                 '@@sync-task-workflow-state-receive',
                 task.physical_path,
                 data={'transition': transition,
