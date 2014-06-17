@@ -49,10 +49,11 @@ class IWizardDataStorage(Interface):
         value -- The value to be set.
         """
 
-    def push_to_remote_client(key, client_id):
-        """Push the data set stored under `key` to the client `client_id`.
+    def push_to_remote_client(key, admin_unit_id):
+        """Push the data set stored under `key` to the admin unit
+        `admin_unit_id`.
 
         Arguments:
         key -- String key to identify the data set.
-        client_id -- Target client id.
+        admin_unit_id -- Target admin unit id.
         """
