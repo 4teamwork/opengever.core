@@ -10,24 +10,24 @@ class TestOguid(TestCase):
 
     def test_init_fails_with_too_many_parameters(self):
         with self.assertRaises(AssertionError):
-            Oguid(id='foo:123', admin_unit_id='mah', intid=3)
+            Oguid(id='foo:123', admin_unit_id='mah', int_id=3)
 
     def test_init_with_string_oguid(self):
         oguid = Oguid(id='foo:123')
         self.assertEqual('foo', oguid.admin_unit_id)
-        self.assertEqual(123, oguid.intid)
+        self.assertEqual(123, oguid.int_id)
         self.assertEqual('foo:123', oguid.id)
 
     def test_init_with_oguid(self):
-        oguid = Oguid(Oguid('foo:123'))
+        oguid = Oguid(id=Oguid(id='foo:123'))
         self.assertEqual('foo', oguid.admin_unit_id)
-        self.assertEqual(123, oguid.intid)
+        self.assertEqual(123, oguid.int_id)
         self.assertEqual('foo:123', oguid.id)
 
     def test_init_with_admin_unit_and_intid(self):
-        oguid = Oguid(admin_unit_id='bar', intid='123')
+        oguid = Oguid(admin_unit_id='bar', int_id='123')
         self.assertEqual('bar', oguid.admin_unit_id)
-        self.assertEqual(123, oguid.intid)
+        self.assertEqual(123, oguid.int_id)
         self.assertEqual('bar:123', oguid.id)
 
     def test_oguid_string_representation(self):

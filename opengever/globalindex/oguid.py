@@ -2,9 +2,9 @@ class Oguid(object):
 
     SEPARATOR = ':'
 
-    def __init__(self, id=None, admin_unit_id=None, intid=None):
+    def __init__(self, admin_unit_id=None, int_id=None, id=None):
         # poor mans XOR
-        assert bool(id) != bool(admin_unit_id and intid), \
+        assert bool(id) != bool(admin_unit_id and int_id), \
             'either `oguid` or both, `admin_unit_id` and `intid` must be '\
             'specified'
 
@@ -16,8 +16,19 @@ class Oguid(object):
                 self.id = id.id
         else:
             self._admin_unit_id = admin_unit_id
-            self._intid = int(intid)
-            self._id = self._join_oguid(admin_unit_id, intid)
+            self._int_id = int(int_id)
+            self._id = self._join_oguid(admin_unit_id, int_id)
+
+    def __composite_values__(self):
+        return (self.admin_unit_id, self.int_id,)
+
+    def __eq__(self, other):
+        return isinstance(other, Oguid) and \
+            other.admin_unit_id == self.admin_unit_id and \
+            other.int_id == self.int_id
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
 
     @property
     def id(self):
@@ -26,7 +37,7 @@ class Oguid(object):
     @id.setter
     def id(self, value):
         self._id = value
-        self._admin_unit_id, self._intid = self._split_oguid(value)
+        self._admin_unit_id, self._int_id = self._split_oguid(value)
 
     @property
     def admin_unit_id(self):
@@ -35,15 +46,15 @@ class Oguid(object):
     @admin_unit_id.setter
     def admin_unit_id(self, value):
         self._admin_unit_id = value
-        self._id = self._join_oguid(value, self._intid)
+        self._id = self._join_oguid(value, self._int_id)
 
     @property
-    def intid(self):
-        return self._intid
+    def int_id(self):
+        return self._int_id
 
-    @intid.setter
-    def intid(self, value):
-        self._intid = value
+    @int_id.setter
+    def int_id(self, value):
+        self._int_id = value
         self._id = self._join_oguid(self._admin_unit_id, value)
 
     def _split_oguid(self, oguid):
