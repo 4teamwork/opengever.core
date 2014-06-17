@@ -83,9 +83,9 @@ class TestSuccessorTaskController(FunctionalTestCase):
 
         task1_oguid = ISuccessorTaskController(task1).get_oguid()
 
-        task1_sql = ISuccessorTaskController(task1).get_indexed_data()
-        task2_sql = ISuccessorTaskController(task2).get_indexed_data()
-        task3_sql = ISuccessorTaskController(task3).get_indexed_data()
+        task1_sql = task1.get_sql_object()
+        task2_sql = task2.get_sql_object()
+        task3_sql = task3.get_sql_object()
 
         ISuccessorTaskController(task2).set_predecessor(task1_oguid)
         ISuccessorTaskController(task3).set_predecessor(task1_oguid)

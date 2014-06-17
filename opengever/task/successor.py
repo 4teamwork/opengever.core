@@ -41,9 +41,9 @@ class SuccessorTaskController(grok.Adapter):
         predecessor is as a sqlachemy object (indexed data).
         """
 
-        data = self.get_indexed_data()
-        if getattr(data, 'predecessor', None):
-            return data.predecessor
+        sqltask = self.task.get_sql_object()
+        if getattr(sqltask, 'predecessor', None):
+            return sqltask.predecessor
         else:
             return default
 
@@ -71,11 +71,11 @@ class SuccessorTaskController(grok.Adapter):
         """Returns all successors of the adapted context as solr flair objects.
         """
 
-        data = self.get_indexed_data()
-        if not data:
+        sqltask = self.task.get_sql_object()
+        if not sqltask:
             return None
         else:
-            return data.successors
+            return sqltask.successors
 
     def get_oguid_by_path(self, path, admin_unit_id):
         """Returns the oguid of another object identifed by admin_unit_id and path.
