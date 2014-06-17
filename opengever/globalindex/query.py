@@ -1,6 +1,7 @@
 from opengever.globalindex import Session
 from opengever.globalindex.interfaces import ITaskQuery
 from opengever.globalindex.model.task import Task
+from opengever.globalindex.oguid import Oguid
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.sql.expression import asc, desc
 from zope.deprecation import deprecated
@@ -35,15 +36,7 @@ class TaskQuery(object):
         """Return a task identified by its OGUID, which is
         [admin_unit_id]:[int_id]
         """
-        admin_unit_id, int_id = oguid.split(':')
-        try:
-            task = Session().query(Task).filter(
-                Task.admin_unit_id == admin_unit_id).filter(
-                    Task.int_id == int_id).one()
-        except NoResultFound:
-            return None
-        else:
-            return task
+        return Task.query.filter_by(oguid=Oguid(id=oguid)).first()
 
     def get_tasks(self, task_ids):
         """Returns a set of tasks whos task_ids are listed in `task_ids`.
