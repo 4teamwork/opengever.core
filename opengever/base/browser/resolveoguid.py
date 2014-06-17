@@ -35,7 +35,7 @@ class ResolveOGUIDView(grok.View):
             url = self.url_for(oguid, admin_unit)
             return self.request.RESPONSE.redirect(url)
 
-        obj = self._get_object(oguid.intid)
+        obj = self._get_object(oguid.int_id)
         return self.request.RESPONSE.redirect(obj.absolute_url())
 
     def _get_object(self, iid):
