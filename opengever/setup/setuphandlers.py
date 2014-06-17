@@ -78,6 +78,7 @@ def assign_roles(context, admin_file):
         prm.assignRoleToPrincipal('Member', admin_group.strip())
         prm.assignRoleToPrincipal('Editor', admin_group.strip())
         prm.assignRoleToPrincipal('Role Manager', admin_group.strip())
+        prm.assignRoleToPrincipal('Reviewer', admin_group.strip())
 
 
 def assign_tree_portlet(context, root_path, remove_nav=False,

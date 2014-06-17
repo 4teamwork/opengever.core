@@ -130,5 +130,13 @@
         directory="profiles/2606"
         />
 
+  <genericsetup:upgradeStep
+      title="Add reviewer role on admin groups"
+      description=""
+      source="2606"
+      destination="2607"
+      handler="opengever.base.upgrades.to2607.AddReviewerOnAdmin"
+      profile="opengever.base:default"
+      />
 
 </configure>

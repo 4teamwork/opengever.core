@@ -4,6 +4,10 @@ Changelog
 3.3.1 (unreleased)
 ------------------
 
+- Added reviewer role on admin groups.
+  This role ensures that admins can see the menu bar.
+  [lknoepfel]
+
 - Inbox: Removed icon from byline.
   [Julian Infanger]
 
