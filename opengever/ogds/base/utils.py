@@ -160,7 +160,7 @@ def remote_request(target_admin_unit_id, viewname, path='', data={}, headers={})
 
     site = getSite()
 
-    if get_current_admin_unit() == target_admin_unit_id:
+    if get_current_admin_unit().id() == target_admin_unit_id:
         # do not connect to the site itself but do a restrictedTraverse
         request = getRequest()
 

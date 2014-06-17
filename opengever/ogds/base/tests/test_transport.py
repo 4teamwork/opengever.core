@@ -3,8 +3,6 @@ from ftw.builder import create
 from opengever.base.behaviors.classification import IClassification
 from opengever.ogds.base.interfaces import ITransporter
 from opengever.testing import FunctionalTestCase
-from opengever.testing import create_client
-from opengever.testing import set_current_client_id
 from plone.app.testing import TEST_USER_ID
 from zope.component import getUtility
 
