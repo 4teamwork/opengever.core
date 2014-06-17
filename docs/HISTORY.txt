@@ -13,6 +13,9 @@ Changelog
 - Implement tabbedview for ftw.mail.mail content (Preview / Journal / Info).
   [mathias.leimgruber]
 
+- Added public_trial index and metadata field.
+  [lknoepfel]
+
 - Enforce correct order in inbox-task-tab tests.
   [lknoepfel]
 
