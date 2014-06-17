@@ -1,10 +1,11 @@
-from Products.CMFPlone.interfaces import IPloneSiteRoot
 from datetime import datetime
 from five import grok
 from ftw.dictstorage.interfaces import IDictStorage
 from ftw.dictstorage.interfaces import ISQLAlchemy
 from opengever.ogds.base.interfaces import IContactInformation, ISyncStamp
+from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.base.utils import remote_request
+from Products.CMFPlone.interfaces import IPloneSiteRoot
 from urllib2 import URLError
 from zope.annotation.interfaces import IAnnotations
 from zope.app.component.hooks import getSite
@@ -47,17 +48,16 @@ def set_remote_import_stamp(context):
     # fake the request, because the remote_request expects it
     setRequest(context.REQUEST)
 
-    info = getUtility(IContactInformation)
-    for client in info.get_clients():
+    for admin_unit in ogds_service().all_admin_units():
         try:
-            remote_request(client.client_id, '@@update_sync_stamp',
-                       data={REQUEST_SYNC_KEY: timestamp})
+            remote_request(admin_unit.id(), '@@update_sync_stamp',
+                           data={REQUEST_SYNC_KEY: timestamp})
             logger.info(
                 "Issued remote request to update sync_stamp on %s to %s" % (
-                    client.client_id, timestamp))
+                    admin_unit.id(), timestamp))
         except URLError, e:
             logger.warn("ERROR while trying to remotely update sync_stamp"
-                        "for %s: %s" % (client.client_id, e))
+                        "for %s: %s" % (admin_unit.id(), e))
 
 
 class SyncStampUtility(grok.GlobalUtility):
