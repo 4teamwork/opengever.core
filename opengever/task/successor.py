@@ -1,5 +1,6 @@
 from five import grok
 from opengever.globalindex.interfaces import ITaskQuery
+from opengever.globalindex.oguid import Oguid
 from opengever.ogds.base.utils import get_client_id
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
@@ -20,15 +21,9 @@ class SuccessorTaskController(grok.Adapter):
         self.task = task
 
     def get_oguid(self):
-        """Returns the oguid of the adapted task.
-        A gouid is the client id and the intid seperated by ":".
-        Example: "m1:2331"
-        """
+        """Returns the oguid of the adapted task."""
 
-        intids = getUtility(IIntIds)
-        iid = intids.getId(self.task)
-
-        return '%s:%s' % (get_client_id(), str(iid))
+        return self.task.oguid.id
 
     def get_indexed_data(self):
         """Returns the indexed data of the adapted task.
@@ -59,16 +54,16 @@ class SuccessorTaskController(grok.Adapter):
         Returns False if it failed.
         """
 
-        client_id, iid = oguid.split(':', 1)
+        oguid = Oguid(id=oguid)
 
         # do we have it in our indexes?
         query = getUtility(ITaskQuery)
-        predecessor = query.get_task(iid, client_id)
+        predecessor = query.get_task_by_oguid(oguid)
         if not predecessor:
             return False
 
         # set the predecessor in the task object
-        self.task.predecessor = oguid
+        self.task.predecessor = oguid.id
         modified(self.task)
         return True
 
@@ -89,5 +84,4 @@ class SuccessorTaskController(grok.Adapter):
         task = query.get_task_by_path(path, admin_unit_id)
         if not task:
             return None
-        else:
-            return '%s:%s' % (str(task.admin_unit_id), str(task.int_id))
+        return task.oguid.id
