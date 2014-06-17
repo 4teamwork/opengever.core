@@ -177,7 +177,7 @@ def accept_forwarding_with_successor(
                     'successor_oguid': successor_tc.get_oguid(),
                     'transition': 'forwarding-transition-accept'}
 
-    response = remote_request(predecessor.client_id,
+    response = remote_request(predecessor.admin_unit_id,
                               '@@store_forwarding_in_yearfolder',
                               path=predecessor.physical_path,
                               data=request_data)
@@ -290,7 +290,7 @@ def accept_task_with_successor(dossier, predecessor_oguid, response_text):
     request_data = {'text': response_text.encode('utf-8'),
                     'successor_oguid': successor_tc.get_oguid()}
 
-    response = remote_request(predecessor.client_id,
+    response = remote_request(predecessor.admin_unit_id,
                               '@@accept_task_workflow_transition',
                               path=predecessor.physical_path,
                               data=request_data)

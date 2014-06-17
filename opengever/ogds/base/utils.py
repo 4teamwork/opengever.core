@@ -1,6 +1,5 @@
 from opengever.ogds.base.exceptions import ClientNotFound
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
-from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.ou_selector import AnonymousOrgUnitSelector
 from opengever.ogds.base.ou_selector import NoAssignedUnitsOrgUnitSelector
 from opengever.ogds.base.ou_selector import OrgUnitSelector
@@ -99,19 +98,19 @@ def get_client_id():
     # return proxy.client_id
 
 
-def remote_json_request(target_client_id, viewname, path='',
+def remote_json_request(target_admin_unit_id, viewname, path='',
                         data={}, headers={}):
     """ Sends a request to a json-action on a remote zope instance,
     decodes the response with json and returns it.
 
-    :target_client_id: remote client id
+    :target_admin_unit_id: id of the target AdminUnit
     :viewname: name of the view to call on the target
     :path: context path relative to site root
     :data: dict of additional data to send
     :headers: dict of additional headers to send
     """
 
-    response = remote_request(target_client_id, viewname, path=path,
+    response = remote_request(target_admin_unit_id, viewname, path=path,
                               data=data, headers=headers)
     data = response.read()
     return json.loads(data)
@@ -139,7 +138,7 @@ def brain_is_contact(brain):
         return False
 
 
-def remote_request(target_client_id, viewname, path='', data={}, headers={}):
+def remote_request(target_admin_unit_id, viewname, path='', data={}, headers={}):
     """ Sends a request to another zope instance
     Returns a response stream
 
@@ -147,7 +146,7 @@ def remote_request(target_client_id, viewname, path='', data={}, headers={}):
     In the request there is a attribute '__cortex_ac' which is set to the
     username of the current user.
 
-    :target_client_id: remote client id
+    :target_admin_unit_id: id of the target AdminUnit
     :viewname: name of the view to call on the target
     :path: context path relative to site root
     :data: dict of additional data to send
@@ -161,7 +160,7 @@ def remote_request(target_client_id, viewname, path='', data={}, headers={}):
 
     site = getSite()
 
-    if get_client_id() == target_client_id:
+    if get_current_admin_unit() == target_admin_unit_id:
         # do not connect to the site itself but do a restrictedTraverse
         request = getRequest()
 
@@ -202,10 +201,9 @@ def remote_request(target_client_id, viewname, path='', data={}, headers={}):
         return StringIO(data)
 
     site = getSite()
-    info = getUtility(IContactInformation)
-    target = info.get_client_by_id(target_client_id)
+    target_unit = ogds_service().fetch_admin_unit(target_admin_unit_id)
 
-    if not target:
+    if not target_unit:
         raise ClientNotFound()
 
     headers = headers.copy()
@@ -224,9 +222,9 @@ def remote_request(target_client_id, viewname, path='', data={}, headers={}):
 
     viewname = viewname.startswith('@@') and viewname or '@@%s' % viewname
     if path:
-        url = os.path.join(target.site_url, path, viewname)
+        url = os.path.join(target_unit.site_url, path, viewname)
     else:
-        url = os.path.join(target.site_url, viewname)
+        url = os.path.join(target_unit.site_url, viewname)
 
     request = urllib2.Request(url,
                               urllib.urlencode(data),
