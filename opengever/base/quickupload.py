@@ -7,6 +7,7 @@ from plone.dexterity.utils import addContentToContainer
 from plone.dexterity.utils import createContent
 from plone.dexterity.utils import iterSchemata
 from plone.rfc822.interfaces import IPrimaryField
+from plone.rfc822.interfaces import IPrimaryFieldInfo
 from z3c.form.interfaces import IValue
 from zope.component import queryMultiAdapter
 from zope.event import notify
@@ -26,8 +27,12 @@ class OGQuickUploadCapableFileFactory(grok.Adapter):
     def __init__(self, context):
         self.context = aq_inner(context)
 
-    def __call__(
-        self, filename, title, description, content_type, data, portal_type):
+    def __call__(self,
+                 filename,
+                 title,
+                 description,
+                 content_type,
+                 data, portal_type):
 
         if filename.lower().endswith('msg'):
             # its a outlook msg file
@@ -62,12 +67,9 @@ class OGQuickUploadCapableFileFactory(grok.Adapter):
         if not isinstance(filename, unicode):
             filename = filename.decode('utf-8')
 
-        for schemata in iterSchemata(obj):
-            for name, field in getFieldsInOrder(schemata):
-                if IPrimaryField.providedBy(field):
-                    value = field._type(data=data, filename=filename)
-                    field.set(field.interface(obj), value)
-                    break
+        field = IPrimaryFieldInfo(obj).field
+        value = field._type(data=data, filename=filename)
+        field.set(field.interface(obj), value)
 
     def set_default_values(self, obj):
         # set default values for all fields
@@ -77,12 +79,12 @@ class OGQuickUploadCapableFileFactory(grok.Adapter):
                     continue
                 else:
                     default = queryMultiAdapter((
-                            obj,
-                            obj.REQUEST,
-                            None,
-                            field,
-                            None,
-                            ), IValue, name='default')
+                        obj,
+                        obj.REQUEST,
+                        None,
+                        field,
+                        None,
+                    ), IValue, name='default')
                     if default is not None:
                         default = default.get()
                     if default is None:
