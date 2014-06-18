@@ -1,12 +1,17 @@
 from collective.quickupload.interfaces import IQuickUploadFileFactory
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from ftw.testing import MockTestCase
 from grokcore.component.testing import grok, grok_component
+from opengever.journal.browser import JournalHistory
+from opengever.testing import FunctionalTestCase
 from plone.directives import form
 from plone.namedfile.field import NamedFile as nf_field
 from plone.namedfile.file import NamedFile
 from unittest2 import TestCase
 from zope import schema
+from zope.i18n import translate
 import zope.component.testing
 
 
@@ -151,3 +156,42 @@ class TestOGQuickupload(MockTestCase, TestCase):
         obj = result.get('success')
         self.assertEquals(obj.description, 'hanspeter')
         self.assertEquals(obj.file.data, u'Data data')
+
+
+class TestJournalEntriesWithQuickupload(FunctionalTestCase):
+
+    def test_expect_one_journal_entry_after_upload(self):
+        self.grant('Manager')
+
+        dossier = create(Builder('dossier'))
+        adapter = IQuickUploadFileFactory(dossier)
+
+        result = adapter(filename='document.txt',
+                         title='Title of document',
+                         description='',
+                         content_type='text/plain',
+                         data='text',
+                         portal_type='opengever.document.document')['success']
+        history = JournalHistory(result, result.REQUEST)
+
+        self.assertEquals(1,
+                          len(history.data()),
+                          'Expect exactly one journal entry after upload')
+
+    def test_filename_is_used_as_default_title_for_journal_entry(self):
+        self.grant('Manager')
+
+        dossier = create(Builder('dossier'))
+        adapter = IQuickUploadFileFactory(dossier)
+
+        result = adapter(filename='document.txt',
+                         title='',
+                         description='',
+                         content_type='text/plain',
+                         data='text',
+                         portal_type='opengever.document.document')['success']
+        history = JournalHistory(result, result.REQUEST)
+
+        self.assertEquals(u'Document added: document.txt',
+                          translate(history.data()[0]['action']['title']),
+                          'Expect the filename as title in the action title')
