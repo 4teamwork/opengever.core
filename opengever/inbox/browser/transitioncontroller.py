@@ -1,7 +1,8 @@
 """Contains a Controller wich checks the Transitions"""
 from opengever.ogds.base.interfaces import IContactInformation
-from opengever.task.browser.transitioncontroller import TaskTransitionController
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.task.browser.transitioncontroller import guard, action
+from opengever.task.browser.transitioncontroller import TaskTransitionController
 from zope.component import getUtility
 
 
@@ -14,14 +15,14 @@ class ForwardingTransitionController(TaskTransitionController):
     def is_accept_possible(self):
         """Check if the user is in the inbox group of the responsible client.
         """
-
-        if not self._is_multiclient_setup():
-            return False
-        elif (self._is_task_on_responsible_client() and
-              not self._is_succesor_forwarding_proccses()):
+        if (self._is_task_assigned_to_current_admin_unit()
+                and not self._is_successor_forwarding_process()):
             return False
         else:
             return self._is_inbox_group_user()
+
+    def _is_task_assigned_to_current_admin_unit(self):
+        return self.context.get_responsible_admin_unit() == get_current_admin_unit()
 
     @action('forwarding-transition-accept')
     def accept_action(self, transition):
@@ -37,7 +38,8 @@ class ForwardingTransitionController(TaskTransitionController):
     def is_assign_to_dossier_or_reassign_possible(self):
         """Check it the user is in the inbox group of the current client.
         """
-        return self._is_current_inbox_group_user()
+        return self._is_task_assigned_to_current_admin_unit() and \
+            self._is_current_inbox_group_user()
 
     @action('forwarding-transition-assign-to-dossier')
     def assign_to_dossier_action(self, transition):
@@ -87,10 +89,8 @@ class ForwardingTransitionController(TaskTransitionController):
         info = getUtility(IContactInformation)
         return info.is_user_in_inbox_group()
 
-    def _is_succesor_forwarding_proccses(self):
+    def _is_successor_forwarding_process(self):
         """Check if the request is directly from
         the forwarding successor handler."""
 
-        if self.request.get('X-CREATING-SUCCESSOR') == True:
-            return True
-        return False
+        return bool(self.request.get('X-CREATING-SUCCESSOR', False))
