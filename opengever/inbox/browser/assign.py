@@ -42,10 +42,9 @@ class AssignForwardingForm(AssignTaskForm):
         super(AssignForwardingForm, self).update()
 
     def update_task(self, **kwargs):
-        super(AssignForwardingForm, self).update_task(**kwargs)
         wf_tool = getToolByName(self.context, 'portal_workflow')
         wf_tool.doActionFor(self.context, kwargs.get('transition'))
-
+        super(AssignForwardingForm, self).update_task(**kwargs)
 
 class AssignForwardingView(layout.FormWrapper, grok.View):
     grok.context(IForwarding)

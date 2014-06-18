@@ -251,6 +251,9 @@ class Task(Container):
     def get_responsible_org_unit(self):
         return ogds_service().fetch_org_unit(self.responsible_client)
 
+    def get_responsible_admin_unit(self):
+        return self.get_responsible_org_unit().admin_unit
+
     def get_sql_object(self):
         query = getUtility(ITaskQuery)
         return query.get_task(self.int_id, get_current_admin_unit().id())
