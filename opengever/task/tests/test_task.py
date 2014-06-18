@@ -141,13 +141,14 @@ class TestTaskIntegration(FunctionalTestCase):
         # generate an response
         maintask.REQUEST.environ['X_OGDS_AC'] = 'hugo.boss'
         create(Builder('task').within(maintask).titled('subtask'))
-        self.assertEquals(len(IResponseContainer(maintask)), 0)
+        self.assertEquals(0, len(IResponseContainer(maintask)))
 
         maintask.REQUEST.environ['X_OGDS_AC'] = None
-        maintask.REQUEST.environ['X_OGDS_CID'] = 'client_a'
+        maintask.REQUEST.environ['X_OGDS_AUID'] = 'client1'
         create(Builder('task').within(maintask).titled('subtask'))
-        self.assertEquals(len(IResponseContainer(maintask)), 0)
+        self.assertEquals(0, len(IResponseContainer(maintask)))
 
-        maintask.REQUEST.environ['X_OGDS_CID'] = None
+        maintask.REQUEST.environ['X_OGDS_AUID'] = None
         maintask.REQUEST.set('X-CREATING-SUCCESSOR', True)
         create(Builder('task').within(maintask).titled('subtask'))
+        self.assertEquals(0, len(IResponseContainer(maintask)))
