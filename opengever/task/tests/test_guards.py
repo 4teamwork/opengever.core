@@ -117,20 +117,20 @@ class TestTaskTransitionController(MockTestCase):
             self.expect(contact_info.is_inbox('james.bond')).result(False)
             self.expect(plone_portal_state(ANY, ANY)).result(plone_portal_state)
             self.expect(plone_portal_state.member().id).result('hugo.boss')
-            self.expect(request.get_header('X-OGDS-CID', None)).result(False)
+            self.expect(request.get_header('X-OGDS-AUID', None)).result(False)
             self.expect(contact_info.is_user_in_inbox_group()).result(False)
 
             # check4 (not the issuer, not in the issuer group but an internal request)
             self.expect(contact_info.is_inbox('james.bond')).result(False)
             self.expect(plone_portal_state(ANY, ANY)).result(plone_portal_state)
             self.expect(plone_portal_state.member().id).result('hugo.boss')
-            self.expect(request.get_header('X-OGDS-CID', None)).result(True)
+            self.expect(request.get_header('X-OGDS-AUID', None)).result(True)
 
             # check5 (not the issuer but in the issuer group)
             self.expect(contact_info.is_inbox('james.bond')).result(False)
             self.expect(plone_portal_state(ANY, ANY)).result(plone_portal_state)
             self.expect(plone_portal_state.member().id).result('hugo.boss')
-            self.expect(request.get_header('X-OGDS-CID', None)).result(False)
+            self.expect(request.get_header('X-OGDS-AUID', None)).result(False)
             self.expect(contact_info.is_user_in_inbox_group()).result(True)
 
             # check6 (issuer is a inbox, user is in the inbox group)
@@ -204,8 +204,8 @@ class TestTaskTransitionController(MockTestCase):
             successor_task_controller, ISuccessorTaskController, [Interface])
 
         with self.mocker.order():
-            self.expect(mock_request.get_header('X-OGDS-CID', None)).result(None)
-            self.expect(mock_request.get_header('X-OGDS-CID', None)).result('TEST_CLIENT_ID')
+            self.expect(mock_request.get_header('X-OGDS-AUID', None)).result(None)
+            self.expect(mock_request.get_header('X-OGDS-AUID', None)).result('TEST_CLIENT_ID')
 
         self.replay()
         self.assertFalse(TaskTransitionController(task1, mock_request)._is_remote_request())

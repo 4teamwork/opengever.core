@@ -216,7 +216,7 @@ def remote_request(target_admin_unit_id, viewname, path='', data={}, headers={})
     if key not in headers.keys() and member:
         headers[key] = member.getId()
 
-    headers['X-OGDS-CID'] = get_client_id()
+    headers['X-OGDS-AUID'] = get_current_admin_unit().id()
     handler = urllib2.ProxyHandler({})
     opener = urllib2.build_opener(handler)
 

@@ -494,7 +494,7 @@ class TaskTransitionController(BrowserView):
         """checks if the current request cames from a remote client.
         For example a task over a mutliple clients."""
 
-        if self.request.get_header('X-OGDS-CID', None):
+        if self.request.get_header('X-OGDS-AUID', None):
             return True
         else:
             return False
