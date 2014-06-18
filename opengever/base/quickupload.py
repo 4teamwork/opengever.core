@@ -36,8 +36,9 @@ class OGQuickUploadCapableFileFactory(grok.Adapter):
             filename = filename.replace('msg', 'eml')
 
         portal_type = self.get_portal_type(filename)
-
-        obj = createContentInContainer(self.context, portal_type)
+        obj = createContentInContainer(self.context,
+                                       portal_type,
+                                       title=filename)
 
         named_file = self.create_file(filename, data, obj)
         self.set_default_values(obj, named_file)
