@@ -177,36 +177,34 @@ class ChooseMethodStepForm(AcceptWizardFormMixin, Form):
                 """only store the forwarding in the inbox and
                 create a successor forwrding"""
 
-                org_unit = self.context.get_responsible_org_unit()
+                admin_unit = self.context.get_responsible_admin_unit()
 
                 # push session data to target unit
-                dm.push_to_remote_client(dmkey, org_unit.id())
-
+                dm.push_to_remote_client(dmkey, admin_unit.id())
                 url = '%s/@@accept_store_in_inbox?oguid=%s' % (
-                    org_unit.public_url(),
-                    oguid)
+                    admin_unit.public_url, oguid)
+
                 return self.request.RESPONSE.redirect(url)
 
             elif method == 'existing_dossier':
-                org_unit = self.context.get_responsible_org_unit()
+                admin_unit = self.context.get_responsible_admin_unit()
 
                 # push session data to target unit
-                dm.push_to_remote_client(dmkey, org_unit.id())
+                dm.push_to_remote_client(dmkey, admin_unit.id())
 
                 url = '%s/@@accept_choose_dossier?oguid=%s' % (
-                    org_unit.public_url(),
-                    oguid)
+                    admin_unit.public_url, oguid)
                 return self.request.RESPONSE.redirect(url)
 
             elif method == 'new_dossier':
-                org_unit = self.context.get_responsible_org_unit()
+                admin_unit = self.context.get_responsible_admin_unit()
                 oguid = ISuccessorTaskController(self.context).get_oguid()
 
                 # push session data to target client
-                dm.push_to_remote_client(dmkey, org_unit.id())
+                dm.push_to_remote_client(dmkey, admin_unit.id())
 
                 url = '/'.join((
-                        org_unit.public_url(),
+                        admin_unit.public_url,
                         '@@accept_select_repositoryfolder?oguid=%s' % oguid))
                 return self.request.RESPONSE.redirect(url)
 
