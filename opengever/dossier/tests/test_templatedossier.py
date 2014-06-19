@@ -291,8 +291,8 @@ class TestTemplateDossierListings(FunctionalTestCase):
         columns = [col.get('column') for col in view.columns]
 
         self.assertEquals(
-            ['', 'sequence_number', 'Title',
-             'document_author', 'document_date', 'checked_out'],
+            ['', 'sequence_number', 'Title', 'document_author',
+             'document_date', 'checked_out', 'public_trial'],
             columns)
 
     def test_receipt_delivery_and_subdossier_column_are_hidden_in_trash_tab(self):
@@ -301,7 +301,8 @@ class TestTemplateDossierListings(FunctionalTestCase):
         columns = [col.get('column') for col in view.columns]
 
         self.assertEquals(
-            ['', 'sequence_number', 'Title', 'document_author', 'document_date'],
+            ['', 'sequence_number', 'Title',
+             'document_author', 'document_date', 'public_trial'],
             columns)
 
     def test_enabled_actions_are_limited_in_document_tab(self):

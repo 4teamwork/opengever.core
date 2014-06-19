@@ -2,6 +2,7 @@ from Acquisition import aq_inner
 from collective import dexteritytextindexer
 from five import grok
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
+from opengever.document.behaviors import IBaseDocument
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.interfaces import IDocumentIndexer
@@ -151,3 +152,13 @@ def sortable_author(obj):
         return readable_author
     return ''
 grok.global_adapter(sortable_author, name='sortable_author')
+
+
+@indexer(IBaseDocument)
+def public_trial(obj):
+    public_trial = obj.public_trial
+    if public_trial:
+        return public_trial
+
+    return ''
+grok.global_adapter(public_trial, name='public_trial')

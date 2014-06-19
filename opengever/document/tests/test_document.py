@@ -14,8 +14,9 @@ from opengever.document.document import UploadValidator
 from opengever.document.interfaces import IDocumentSettings
 from opengever.testing import create_ogds_user
 from opengever.testing import FunctionalTestCase
+from opengever.testing import index_data_for
+from opengever.testing import obj2brain
 from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
-from opengever.testing.helpers import obj2brain
 from plone.app.testing import TEST_USER_ID
 from plone.dexterity.fti import DexterityFTI
 from plone.dexterity.fti import register
@@ -427,3 +428,28 @@ class TestDocumentValidatorsInEditFormForCheckedOutDoc(FunctionalTestCase):
         browser.fill({'File': ('File data', 'file.txt', 'text/plain'),
                       'Preserved as paper': False}).save()
         assert_no_error_messages()
+
+
+class TestPublicTrial(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestPublicTrial, self).setUp()
+
+        self.grant('Reader', 'Contributor')
+
+        self.document = create(Builder('document')
+                               .having(public_trial='private'))
+
+    def test_public_trial_metadata_field_exists(self):
+        self.assertEquals('private',
+                          obj2brain(self.document).public_trial)
+
+    def test_public_trial_index_exists_and_is_used(self):
+        catalog = getToolByName(self.portal, 'portal_catalog')
+
+        # check if index exists
+        self.assertIn('public_trial', catalog.indexes())
+
+        # check if object got indexed
+        self.assertEquals('private',
+                          index_data_for(self.document).get('public_trial'))
