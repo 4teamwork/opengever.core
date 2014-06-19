@@ -1,21 +1,32 @@
 from Acquisition import aq_inner
-from Products.CMFCore.utils import getToolByName
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from ftw.mail import utils
 from ftw.mail.mail import View as ftwView
+from ftw.tabbedview.browser.tabbed import TabbedView
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize import instance
+from Products.CMFCore.utils import getToolByName
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.component import getUtility
 
 
-class View(ftwView):
+class TabbedMailView(TabbedView):
 
-    template = ViewPageTemplateFile('mail_templates/view.pt')
+    def get_tabs(self):
+        return [
+            {'id': 'preview', 'class': ''},
+            {'id': 'journal', 'class': ''},
+            {'id': 'sharing', 'class': ''},
+        ]
+
+
+class PreviewTab(ftwView):
+
+    template = ViewPageTemplateFile('mail_templates/previewtab.pt')
 
     def __call__(self):
         self.normalizer = getUtility(IIDNormalizer)
         self.mtr = getToolByName(self.context, 'mimetypes_registry')
-        return super(View, self).__call__()
+        return super(PreviewTab, self).__call__()
 
     def lookup_mimetype_registry(self, attachment):
         if attachment.get('content-type') == 'application/octet-stream':

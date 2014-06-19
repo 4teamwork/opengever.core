@@ -13,7 +13,15 @@
     <browser:page
         for="ftw.mail.mail.IMail"
         name="view"
-        class=".mail.View"
+        class=".mail.TabbedMailView"
+        permission="zope2.View"
+        layer="opengever.base.interfaces.IOpengeverBaseLayer"
+        />
+
+    <browser:page
+        for="ftw.mail.mail.IMail"
+        name="tabbedview_view-preview"
+        class=".mail.PreviewTab"
         permission="zope2.View"
         layer="opengever.base.interfaces.IOpengeverBaseLayer"
         />
