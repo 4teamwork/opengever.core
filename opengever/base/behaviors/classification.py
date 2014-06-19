@@ -13,6 +13,19 @@ from opengever.base import _
 from opengever.base.behaviors import utils
 
 
+# PUBLIC: Vocabulary and default value
+PUBLIC_TRIAL_UNCHECKED = u'unchecked'
+PUBLIC_TRIAL_PUBLIC = u'public'
+PUBLIC_TRIAL_PRIVATE = u'private'
+PUBLIC_TRIAL_LIMITED_PUBLIC = u'limited-public'
+PUBLIC_TRIAL_OPTIONS = (
+    PUBLIC_TRIAL_UNCHECKED,
+    PUBLIC_TRIAL_PUBLIC,
+    PUBLIC_TRIAL_LIMITED_PUBLIC,
+    PUBLIC_TRIAL_PRIVATE,
+    )
+
+
 class IClassification(form.Schema):
 
     form.fieldset(
@@ -46,6 +59,7 @@ class IClassification(form.Schema):
         description=_(u'help_public_trial', default=u''),
         source=u'classification_public_trial_vocabulary',
         required=True,
+        default=PUBLIC_TRIAL_UNCHECKED
         )
 
     public_trial_statement = schema.Text(
@@ -68,7 +82,6 @@ class IClassificationMarker(Interface):
 def validate_children(folder, event):
     aq_fields = [
         IClassification['classification'],
-        IClassification['public_trial'],
         IClassification['privacy_layer']]
 
     utils.overrides_child(folder, event, aq_fields, IClassificationMarker)
@@ -103,34 +116,12 @@ form.default_value(field=IClassification['classification'])(
     )
 
 
-# PUBLIC: Vocabulary and default value
-PUBLIC_TRIAL_UNCHECKED = u'unchecked'
-PUBLIC_TRIAL_PUBLIC = u'public'
-PUBLIC_TRIAL_PRIVATE = u'private'
-PUBLIC_TRIAL_LIMITED_PUBLIC = u'limited-public'
-PUBLIC_TRIAL_OPTIONS = (
-    (1, PUBLIC_TRIAL_UNCHECKED),
-    (2, PUBLIC_TRIAL_PUBLIC),
-    (3, PUBLIC_TRIAL_LIMITED_PUBLIC),
-    (4, PUBLIC_TRIAL_PRIVATE),
-    )
-
-
 grok.global_utility(
-    utils.create_restricted_vocabulary(
-        IClassification['public_trial'],
-        PUBLIC_TRIAL_OPTIONS,
+    utils.create_simple_vocabulary(
+        options=PUBLIC_TRIAL_OPTIONS,
         message_factory=_),
     provides=schema.interfaces.IVocabularyFactory,
     name=u'classification_public_trial_vocabulary')
-
-
-form.default_value(field=IClassification['public_trial'])(
-    utils.set_default_with_acquisition(
-        field=IClassification['public_trial'],
-        default=PUBLIC_TRIAL_UNCHECKED
-        )
-    )
 
 
 # PRIVACY_LAYER: Vocabulary and default value

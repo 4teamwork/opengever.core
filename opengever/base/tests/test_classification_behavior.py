@@ -1,8 +1,11 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.base.behaviors import classification
 from opengever.testing import FunctionalTestCase
 from plone.dexterity.fti import DexterityFTI
 from plone.dexterity.utils import createContentInContainer
 import transaction
+
 
 class TestClassificationBehavior(FunctionalTestCase):
     use_browser = True
@@ -56,4 +59,18 @@ class TestClassificationBehavior(FunctionalTestCase):
         class_cont = self.browser.getControl(name="form.widgets.IClassification.privacy_layer:list")
         self.assertNotIn(classification.PRIVACY_LAYER_NO, class_cont.options)
         class_cont = self.browser.getControl(name="form.widgets.IClassification.public_trial:list")
-        self.assertNotIn(classification.PUBLIC_TRIAL_PUBLIC, class_cont.options)
+
+    def test_public_trial_default_value_is_unchecked(self):
+        repo = create(Builder('repository').titled('New repo'))
+        self.assertEquals(classification.PUBLIC_TRIAL_UNCHECKED,
+                          repo.public_trial)
+
+    def test_public_trial_is_no_longer_restricted_on_subitems(self):
+        repo = create(Builder('repository')
+                      .titled('New repo')
+                      .having(
+                          public_trial=classification.PUBLIC_TRIAL_PRIVATE))
+        subrepo = create(Builder('repository').titled('New repo').within(repo))
+
+        self.assertEquals(classification.PUBLIC_TRIAL_UNCHECKED,
+                          subrepo.public_trial)
