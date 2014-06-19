@@ -42,11 +42,10 @@ class ForwardingRefuseForm(Form):
 
         data, errors = self.extractData()
         if not errors:
-
-            refusing_client = self.context.responsible_client
+            refusing_client = self.context.get_responsible_admin_unit()
             self.change_workflow_sate()
             self.add_response(data.get('text'))
-            copy_url = self.store_copy_in_remote_yearfolder(refusing_client)
+            copy_url = self.store_copy_in_remote_yearfolder(refusing_client.id())
             self.reset_responsible()
             notify(ObjectModifiedEvent(self.context))
 
@@ -73,13 +72,13 @@ class ForwardingRefuseForm(Form):
         wf_tool = getToolByName(self.context, 'portal_workflow')
         wf_tool.doActionFor(self.context, 'forwarding-transition-refuse')
 
-    def store_copy_in_remote_yearfolder(self, refusing_client_id):
+    def store_copy_in_remote_yearfolder(self, refusing_unit_id):
         transporter = getUtility(ITransporter)
         jsondata = json.dumps(transporter._extract_data(self.context))
         request_data = {REQUEST_KEY: jsondata, }
 
         response = remote_json_request(
-            refusing_client_id, '@@store_refused_forwarding',
+            refusing_unit_id, '@@store_refused_forwarding',
             data=request_data)
 
         if response.get('status') not in [
@@ -92,14 +91,14 @@ class ForwardingRefuseForm(Form):
             # transport responses
             response_transporter = IResponseTransporter(self.context)
             response_transporter.send_responses(
-                refusing_client_id, remote_task)
+                refusing_unit_id, remote_task)
 
             # transport documents
             for document in get_documents_of_task(self.context):
                 transporter.transport_to(
-                    document, refusing_client_id, remote_task)
+                    document, refusing_unit_id, remote_task)
 
-        return self.get_remote_task_url(refusing_client_id, remote_task)
+        return self.get_remote_task_url(refusing_unit_id, remote_task)
 
     def get_remote_task_url(self, refusing_client_id, remote_task):
         info = getUtility(IContactInformation)

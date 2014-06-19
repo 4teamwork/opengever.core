@@ -59,19 +59,19 @@ class WizardDataStorage(grok.GlobalUtility):
     def set(self, key, datakey, value):
         self.get_data(key)[datakey] = value
 
-    def push_to_remote_client(self, key, client_id):
+    def push_to_remote_client(self, key, admin_unit_id):
         data = dict(self.get_data(key))
         del data['__created']
 
         req_data = {'data-set': json.dumps(data),
                     'key': key}
-        response = remote_request(client_id,
+        response = remote_request(admin_unit_id,
                                   '@@receive-wizard-data-set',
                                   data=req_data)
 
         if response.read().strip() != 'OK':
-            raise Exception('Could not push session data to client %s' % (
-                    client_id))
+            raise Exception('Could not push session data to admin_unit %s' % (
+                            admin_unit_id))
 
 
 class ReceiveWizardDataSet(grok.View):

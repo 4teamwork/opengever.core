@@ -1,26 +1,28 @@
 from AccessControl import Unauthorized
-from Acquisition import aq_inner, aq_parent
-from Products.CMFCore.utils import getToolByName
+from Acquisition import aq_parent
+from Acquisition import aq_inner
 from datetime import datetime
 from five import grok
 from opengever.globalindex.interfaces import ITaskQuery
 from opengever.ogds.base.interfaces import ITransporter
-from opengever.ogds.base.utils import remote_request, get_client_id
+from opengever.ogds.base.utils import get_current_admin_unit
+from opengever.ogds.base.utils import get_current_org_unit
+from opengever.ogds.base.utils import remote_request
 from opengever.task import _
 from opengever.task.adapters import IResponseContainer
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.interfaces import ITaskDocumentsTransporter
 from opengever.task.task import ITask
 from opengever.task.transporter import IResponseTransporter
-from opengever.task.util import CustomInitialVersionMessage
 from opengever.task.util import change_task_workflow_state
+from opengever.task.util import CustomInitialVersionMessage
 from plone.dexterity.utils import createContentInContainer
+from Products.CMFCore.utils import getToolByName
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
 from zope.i18n import translate
 import AccessControl
 import transaction
-
 
 # TODO: The whole yearfolder functionality should be moved to opengever.inbox
 
@@ -30,7 +32,6 @@ ACCEPT_TASK_TRANSITION = 'task-transition-open-in-progress'
 def _get_yearfolder(inbox):
     """Returns the yearfolder for the current year (creates it if missing).
     """
-
     year = str(datetime.now().year)
     if inbox.get(year):
         return inbox.get(year)
@@ -119,7 +120,7 @@ def accept_forwarding_with_successor(
             inbox, predecessor.admin_unit_id, predecessor.physical_path)
 
     # Replace the issuer with the current inbox
-    successor_forwarding.issuer = u'inbox:%s' % get_client_id()
+    successor_forwarding.issuer = get_current_org_unit().inbox().id()
 
     # Set the "X-CREATING-SUCCESSOR" flag for preventing the event handler
     # from creating additional responses per added document.
@@ -163,7 +164,7 @@ def accept_forwarding_with_successor(
         # copy the responses
         response_transporter = IResponseTransporter(task)
         response_transporter.get_responses(
-            get_client_id(),
+            get_current_admin_unit().id(),
             '/'.join(successor_forwarding.getPhysicalPath()),
             intids_mapping=intids_mapping)
 
@@ -178,7 +179,7 @@ def accept_forwarding_with_successor(
                     'successor_oguid': successor_tc.get_oguid(),
                     'transition': 'forwarding-transition-accept'}
 
-    response = remote_request(predecessor.client_id,
+    response = remote_request(predecessor.admin_unit_id,
                               '@@store_forwarding_in_yearfolder',
                               path=predecessor.physical_path,
                               data=request_data)
@@ -230,7 +231,7 @@ def assign_forwarding_to_dossier(
     # copy the responses
     response_transporter = IResponseTransporter(task)
     response_transporter.get_responses(
-        get_client_id(),
+        get_current_admin_unit().id(),
         '/'.join(forwarding_obj.getPhysicalPath()),
         intids_mapping=intids_mapping)
 
@@ -261,7 +262,7 @@ def accept_task_with_successor(dossier, predecessor_oguid, response_text):
     # is necessary for beeing as transaction aware as possible.
     transporter = getUtility(ITransporter)
     successor = transporter.transport_from(
-        dossier, predecessor.client_id, predecessor.physical_path)
+        dossier, predecessor.admin_unit_id, predecessor.physical_path)
     successor_tc = ISuccessorTaskController(successor)
 
     # Set the "X-CREATING-SUCCESSOR" flag for preventing the event handler
@@ -291,7 +292,7 @@ def accept_task_with_successor(dossier, predecessor_oguid, response_text):
     request_data = {'text': response_text.encode('utf-8'),
                     'successor_oguid': successor_tc.get_oguid()}
 
-    response = remote_request(predecessor.client_id,
+    response = remote_request(predecessor.admin_unit_id,
                               '@@accept_task_workflow_transition',
                               path=predecessor.physical_path,
                               data=request_data)

@@ -230,14 +230,14 @@ class CompleteSuccessorTaskForm(Form):
 
         request_data = {'data': json.dumps(data)}
         response = remote_request(
-            predecessor.client_id,
+            predecessor.admin_unit_id,
             '@@complete_successor_task-receive_delivery',
             predecessor.physical_path,
             data=request_data)
 
         if response.read().strip() != 'OK':
             raise Exception('Delivering documents and updating task failed '
-                            'on remote client %s.' % predecessor.client_id)
+                            'on remote client %s.' % predecessor.admin_unit_id)
 
 
 class CompleteSuccessorTask(FormWrapper, grok.View):

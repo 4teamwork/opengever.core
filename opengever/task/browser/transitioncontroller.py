@@ -1,13 +1,16 @@
-from Products.CMFCore.utils import getToolByName
-from Products.Five import BrowserView
 from opengever.ogds.base.interfaces import IContactInformation
-from opengever.ogds.base.utils import get_client_id
+from opengever.ogds.base.utils import get_current_org_unit
+from opengever.ogds.base.utils import ogds_service
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.util import get_documents_of_task
+from Products.CMFCore.utils import getToolByName
+from Products.Five import BrowserView
 from zExceptions import NotFound
 from zope.component import getMultiAdapter
 from zope.component import getUtility
-from zope.interface import Interface, implements
+from zope.interface import implements
+from zope.interface import Interface
+
 
 TASK_CLOSED_STATES = ['task-state-tested-and-closed',
                       'task-state-rejected',
@@ -491,7 +494,7 @@ class TaskTransitionController(BrowserView):
         """checks if the current request cames from a remote client.
         For example a task over a mutliple clients."""
 
-        if self.request.get_header('X-OGDS-CID', None):
+        if self.request.get_header('X-OGDS-AUID', None):
             return True
         else:
             return False
@@ -504,14 +507,13 @@ class TaskTransitionController(BrowserView):
         return False
 
     def _is_multiclient_setup(self):
-        info = getUtility(IContactInformation)
-        return len(info.get_clients()) > 1
+        return ogds_service().has_multiple_admin_units()
 
     def _is_task_on_responsible_client(self):
         """Returns true if the current client is the responsible-client of
         the task.
         """
-        return get_client_id() == self.context.responsible_client
+        return get_current_org_unit().id() == self.context.responsible_client
 
     def _addresponse_form_url(self, transition):
         """Returns the redirect url to the addresponse, passing `transition`.

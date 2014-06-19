@@ -1,10 +1,7 @@
 """A wizard, activated when a uniref task is closed. The user can copy
 related documents to his own client with this wizard.
-"""
 
-from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
-from Products.statusmessages.interfaces import IStatusMessage
+"""
 from five import grok
 from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
@@ -12,17 +9,21 @@ from opengever.base.interfaces import IReferenceNumber
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.globalindex.interfaces import ITaskQuery
-from opengever.ogds.base.interfaces import IContactInformation
-from opengever.ogds.base.utils import get_client_id
+from opengever.globalindex.oguid import Oguid
+from opengever.ogds.base.utils import get_current_admin_unit
+from opengever.ogds.base.utils import ogds_service
 from opengever.task import _
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.interfaces import ITaskDocumentsTransporter
 from opengever.task.task import ITask
-from opengever.task.util import CustomInitialVersionMessage
 from opengever.task.util import change_task_workflow_state
+from opengever.task.util import CustomInitialVersionMessage
 from opengever.task.util import get_documents_of_task
 from plone.directives.form import Schema
 from plone.z3cform.layout import FormWrapper
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
@@ -118,13 +119,11 @@ class SelectDocumentsStepForm(CloseTaskWizardStepFormMixin, Form):
                 return self.request.RESPONSE.redirect(url)
 
             else:
-                info = getUtility(IContactInformation)
-                client = info.get_client_by_id(
-                    self.context.responsible_client)
-                dm.push_to_remote_client(dmkey, client.client_id)
+                admin_unit = self.context.get_responsible_admin_unit()
+                dm.push_to_remote_client(dmkey, admin_unit.id())
 
                 url = '/'.join((
-                    client.public_url,
+                    admin_unit.public_url,
                     '@@close-task-wizard_choose-dossier?oguid=%s' % (oguid)))
                 return self.request.RESPONSE.redirect(url)
 
@@ -206,14 +205,14 @@ class ChooseDossierStepForm(CloseTaskWizardStepFormMixin, Form):
 
         if not errors:
             query = getUtility(ITaskQuery)
-            info = getUtility(IContactInformation)
             dm = getUtility(IWizardDataStorage)
 
             oguid = self.request.get('oguid')
             dmkey = 'close:%s' % oguid
 
             task = query.get_task_by_oguid(oguid)
-            client = info.get_client_by_id(task.client_id)
+            source_admin_unit = ogds_service().fetch_admin_unit(
+                task.admin_unit_id)
 
             self.copy_documents(task, data['dossier'],
                                 dm.get(dmkey, 'documents'))
@@ -224,7 +223,7 @@ class ChooseDossierStepForm(CloseTaskWizardStepFormMixin, Form):
                     data['dossier'].absolute_url())}
 
             url = '/'.join((
-                client.public_url,
+                source_admin_unit.public_url,
                 '@@close-task-wizard_close?%s' % urllib.urlencode(
                     redirect_data)))
             return self.request.RESPONSE.redirect(url)
@@ -315,13 +314,12 @@ class CloseTaskView(grok.View):
     def get_task(self):
         intids = getUtility(IIntIds)
         membership = getToolByName(self.context, 'portal_membership')
-        oguid = self.request.get('oguid')
+        oguid = Oguid(id=self.request.get('oguid'))
 
-        clientid, iid = oguid.split(':')
-        if clientid != get_client_id():
+        if get_current_admin_unit().id() != oguid.admin_unit_id:
             raise NotFound
 
-        task = intids.getObject(int(iid))
+        task = intids.getObject(oguid.int_id)
         if not membership.checkPermission('Add portal content', task):
             raise NotFound
 

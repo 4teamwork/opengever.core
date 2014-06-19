@@ -382,14 +382,14 @@ class EmailContactsAndUsersVocabularyFactory(grok.GlobalUtility):
         for user in ogds_service().all_users():
             if user.email:
                 key = '{}:{}'.format(user.email, user.userid)
-                value = '{} ({}, {})'.format(user.fullname(),
-                                             user.userid, user.email)
+                value = u'{} ({}, {})'.format(user.fullname(),
+                                              user.userid, user.email)
                 user_data.append((key, value))
 
             if user.email2:
                 key = '{}:{}'.format(user.email2, user.userid)
-                value = '{} ({}, {})'.format(user.fullname(),
-                                             user.userid, user.email2)
+                value = u'{} ({}, {})'.format(user.fullname(),
+                                              user.userid, user.email2)
                 user_data.append((key, value))
 
         # contacts

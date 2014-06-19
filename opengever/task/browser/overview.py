@@ -334,7 +334,7 @@ class Overview(DisplayForm, OpengeverTab):
 
         # Client and user info
         assigned_org_unit = ogds_service().fetch_org_unit(item.assigned_org_unit)
-        info_html = ' <span class="discreet">({})</span>'.filter(
+        info_html = ' <span class="discreet">({})</span>'.format(
             assigned_org_unit.prefix_label(
                 Actor.lookup(item.responsible).get_label()))
 

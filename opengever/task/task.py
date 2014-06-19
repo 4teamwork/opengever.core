@@ -10,6 +10,7 @@ from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.source import DossierPathSourceBinder
 from opengever.globalindex.interfaces import ITaskQuery
+from opengever.globalindex.oguid import Oguid
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.ogds.base.utils import get_client_id
@@ -236,11 +237,22 @@ class Task(Container):
     def int_id(self):
         return getUtility(IIntIds).getId(self)
 
+    @property
+    def oguid(self):
+        return Oguid(admin_unit_id=get_current_admin_unit().id(),
+                     int_id=self.int_id)
+
     def get_issuer_label(self):
         return self.get_sql_object().get_issuer_label()
 
     def get_responsible_actor(self):
         return Actor.lookup(self.responsible)
+
+    def get_responsible_org_unit(self):
+        return ogds_service().fetch_org_unit(self.responsible_client)
+
+    def get_responsible_admin_unit(self):
+        return self.get_responsible_org_unit().admin_unit
 
     def get_sql_object(self):
         query = getUtility(ITaskQuery)

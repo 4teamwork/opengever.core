@@ -1,5 +1,6 @@
 from opengever.globalindex import Session
 from opengever.globalindex.model import Base
+from opengever.globalindex.oguid import Oguid
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import ogds_service
 from sqlalchemy import Boolean
@@ -10,8 +11,9 @@ from sqlalchemy import ForeignKey, UniqueConstraint
 from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy.ext.associationproxy import association_proxy
-from sqlalchemy.orm import Query
 from sqlalchemy.orm import backref
+from sqlalchemy.orm import composite
+from sqlalchemy.orm import Query
 from sqlalchemy.orm import relation
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
@@ -65,9 +67,11 @@ class Task(Base):
     __table_args__ = (UniqueConstraint('admin_unit_id', 'int_id'), {})
 
     task_id = Column("id", Integer, Sequence("task_id_seq"), primary_key=True)
-    admin_unit_id = Column(String(30), index=True, nullable=False)
 
+    admin_unit_id = Column(String(30), index=True, nullable=False)
     int_id = Column(Integer, index=True, nullable=False)
+
+    oguid = composite(Oguid, admin_unit_id, int_id)
 
     title = Column(String(MAX_TITLE_LENGTH))
     breadcrumb_title = Column(String(MAX_BREADCRUMB_LENGTH))

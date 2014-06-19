@@ -1,6 +1,5 @@
-from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.interfaces import IInternalOpengeverRequestLayer
-from zope.component import getUtility
+from opengever.ogds.base.utils import ogds_service
 from zope.interface import alsoProvides
 
 
@@ -9,15 +8,15 @@ def extract_user(self, request):
     creds = {}
     # get ac and remote_address
     login = request.get_header('X-OGDS-AC', None)
-    cid = request.get_header('X-OGDS-CID', None)
+    auid = request.get_header('X-OGDS-AUID', None)
     remote_address = ''
     try:
         remote_address = request.getClientAddr()
     except AttributeError:
         pass
     # verify
-    if login and remote_address and cid:
-        creds['cid'] = cid
+    if login and remote_address and auid:
+        creds['auid'] = auid
         creds['id'] = login
         creds['login'] = login
         creds['remote_address'] = remote_address
@@ -29,13 +28,12 @@ def extract_user(self, request):
 def authenticate_credentials(self, credentials):
     uid = credentials['id']
     login = credentials['login']
-    cid = credentials['cid'].strip()
+    auid = credentials['auid'].strip()
     ip = credentials['remote_address'].strip()
     # is the client_id and the ip combination valid?
-    info = getUtility(IContactInformation)
-    client = info.get_client_by_id(cid)
+    admin_unit = ogds_service().fetch_admin_unit(auid)
     #split client.ip_address because they could be a comme seperated list
-    if client and ip in client.ip_address.split(','):
+    if admin_unit and ip in admin_unit.ip_address.split(','):
         activate_request_layer(self.REQUEST, IInternalOpengeverRequestLayer)
         return uid, login
     return None
