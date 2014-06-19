@@ -1,5 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import factoriesmenu
 from opengever.base.behaviors import classification
 from opengever.testing import FunctionalTestCase
 from plone.dexterity.fti import DexterityFTI
@@ -18,47 +20,64 @@ class TestClassificationBehavior(FunctionalTestCase):
                            klass="plone.dexterity.content.Container",
                            global_allow=True,
                            filter_content_types=False)
-        fti.behaviors = ('opengever.base.behaviors.classification.IClassification',)
+        fti.behaviors = (
+            'opengever.base.behaviors.classification.IClassification',)
         self.portal.portal_types._setObject('ClassificationFTI', fti)
         fti.lookupSchema()
         transaction.commit()
 
-    def test_classification_behavior(self):
-        # We can see this type in the addable types at the root of the site:
-        self.browser.open("http://nohost/plone/folder_factories")
-        self.assertPageContains('ClassificationFTI')
+    @browsing
+    def test_classification_behavior(self, browser):
+        # Defaul view doesnt work for system users
+        browser.login().open(view='folder_contents')
+        self.assertIn('ClassificationFTI', factoriesmenu.addable_types())
+        factoriesmenu.add('ClassificationFTI')
 
-        self.browser.getControl("ClassificationFTI").click()
-        self.browser.getControl("Add").click()
-        self.browser.getControl(name="form.widgets.title").value = "My Object"
-        self.browser.getControl(name="form.widgets.IClassification.classification:list").value = [classification.CLASSIFICATION_CONFIDENTIAL]
-        self.browser.getControl(name="form.widgets.IClassification.privacy_layer:list").value = [classification.PRIVACY_LAYER_YES]
-        self.browser.getControl(name="form.widgets.IClassification.public_trial:list").value = [classification.PUBLIC_TRIAL_PRIVATE]
-        self.browser.getControl(name="form.widgets.IClassification.public_trial_statement").value = 'My Statement'
-        self.browser.getControl(name="form.buttons.save").click()
-        self.browser.assert_url('http://nohost/plone/classificationfti/view')
+        browser.fill({
+            'Title': u'My Object',
+            'Classification': classification.CLASSIFICATION_CONFIDENTIAL,
+            'Privacy layer': classification.PRIVACY_LAYER_YES,
+            'Public Trial': classification.PUBLIC_TRIAL_PRIVATE,
+            'Public trial statement': u'My statement'
+        }).submit()
+
+        self.assertEquals(
+            '{0}/classificationfti/view'.format(self.portal.absolute_url()),
+            browser.url)
 
         # Get the created object:
         obj = self.portal.get('classificationfti')
         self.assertNotEquals(None, obj)
-
-        # Check the values of the created object:
-        self.assertEquals(classification.CLASSIFICATION_CONFIDENTIAL, obj.classification)
+        self.assertEquals(classification.CLASSIFICATION_CONFIDENTIAL,
+                          obj.classification)
         self.assertEquals(classification.PRIVACY_LAYER_YES, obj.privacy_layer)
-        self.assertEquals(classification.PUBLIC_TRIAL_PRIVATE, obj.public_trial)
-        self.assertEquals('My Statement', obj.public_trial_statement)
+        self.assertEquals(classification.PUBLIC_TRIAL_PRIVATE,
+                          obj.public_trial)
+        self.assertEquals(u'My statement',
+                          obj.public_trial_statement)
 
         # Create a subitem:
-        createContentInContainer(obj, 'ClassificationFTI', title='testobject')
+        subobj = createContentInContainer(obj,
+                                          'ClassificationFTI',
+                                          title='testobject')
         transaction.commit()
 
-        self.browser.open('http://nohost/plone/classificationfti/classificationfti/edit')
-        class_cont = self.browser.getControl(name="form.widgets.IClassification.classification:list")
-        self.assertNotIn(classification.CLASSIFICATION_UNPROTECTED, class_cont.options)
-        self.assertIn(classification.CLASSIFICATION_CLASSIFIED, class_cont.options)
-        class_cont = self.browser.getControl(name="form.widgets.IClassification.privacy_layer:list")
-        self.assertNotIn(classification.PRIVACY_LAYER_NO, class_cont.options)
-        class_cont = self.browser.getControl(name="form.widgets.IClassification.public_trial:list")
+        browser.open(subobj, view='edit')
+        classification_options = browser.css(
+            '#form-widgets-IClassification-classification option').text
+        self.assertNotIn(classification.CLASSIFICATION_UNPROTECTED,
+                         classification_options)
+        self.assertIn(classification.CLASSIFICATION_CLASSIFIED,
+                      classification_options)
+
+        privacy_options = browser.css(
+            '#form-widgets-IClassification-privacy_layer option').text
+        self.assertNotIn(classification.PRIVACY_LAYER_NO, privacy_options)
+
+        public_trial_options = browser.css(
+            '#form-widgets-IClassification-public_trial option').text
+        self.assertEquals(classification.PUBLIC_TRIAL_OPTIONS,
+                          public_trial_options)
 
     def test_public_trial_default_value_is_unchecked(self):
         repo = create(Builder('repository').titled('New repo'))
