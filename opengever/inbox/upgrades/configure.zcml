@@ -1,7 +1,10 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:upgrade-step="http://namespaces.zope.org/ftw.upgrade"
     i18n_domain="opengever.inbox">
+
+    <include package="ftw.upgrade" file="meta.zcml" />
 
     <!-- 1 -> 2601 -->
     <genericsetup:upgradeStep
@@ -59,6 +62,15 @@
         destination="2700"
         handler="opengever.inbox.upgrades.to2700.ReindexInboxDocuments"
         profile="opengever.inbox:default"
+        />
+
+    <!-- 2700 -> 2701 -->
+    <upgrade-step:importProfile
+        title="Fix Forwarding immediate view."
+        profile="opengever.inbox:default"
+        source="2700"
+        destination="2701"
+        directory="profiles/2701"
         />
 
 </configure>

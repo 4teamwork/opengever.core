@@ -37,7 +37,7 @@
 
     <!-- View information -->
     <property name="default_view">tabbed_view</property>
-    <property name="immediate_view">../#given_tasks</property>
+    <property name="immediate_view">../#issued_inbox_tasks</property>
     <property name="default_view_fallback">False</property>
     <property name="view_methods">
         <element value="view"/>
