@@ -42,10 +42,10 @@ class ForwardingRefuseForm(Form):
 
         data, errors = self.extractData()
         if not errors:
-            refusing_client = self.context.get_responsible_org_unit()
+            refusing_client = self.context.get_responsible_admin_unit()
             self.change_workflow_sate()
             self.add_response(data.get('text'))
-            copy_url = self.store_copy_in_remote_yearfolder(refusing_client)
+            copy_url = self.store_copy_in_remote_yearfolder(refusing_client.id())
             self.reset_responsible()
             notify(ObjectModifiedEvent(self.context))
 
