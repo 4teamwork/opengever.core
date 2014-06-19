@@ -4,6 +4,12 @@ Changelog
 3.3.1 (unreleased)
 ------------------
 
+- Fix double journal entries using quickupload.
+  [mathias.leimgruber]
+
+- Test quickupload: Replace mock tests by functional tests.
+  [mathias.leimgruber]
+
 - Enforce correct order in inbox-task-tab tests.
   [lknoepfel]
 

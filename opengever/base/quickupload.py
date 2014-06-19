@@ -3,13 +3,14 @@ from collective.quickupload.interfaces import IQuickUploadFileFactory
 from five import grok
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base.transforms.msg2mime import Msg2MimeTransform
-from plone.dexterity.utils import createContentInContainer
+from plone.dexterity.utils import addContentToContainer
+from plone.dexterity.utils import createContent
 from plone.dexterity.utils import iterSchemata
 from plone.rfc822.interfaces import IPrimaryField
+from plone.rfc822.interfaces import IPrimaryFieldInfo
 from z3c.form.interfaces import IValue
 from zope.component import queryMultiAdapter
 from zope.event import notify
-from zope.lifecycleevent import ObjectAddedEvent
 from zope.lifecycleevent import ObjectCreatedEvent
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.schema import getFieldsInOrder
@@ -26,8 +27,12 @@ class OGQuickUploadCapableFileFactory(grok.Adapter):
     def __init__(self, context):
         self.context = aq_inner(context)
 
-    def __call__(
-        self, filename, title, description, content_type, data, portal_type):
+    def __call__(self,
+                 filename,
+                 title,
+                 description,
+                 content_type,
+                 data, portal_type):
 
         if filename.lower().endswith('msg'):
             # its a outlook msg file
@@ -36,16 +41,17 @@ class OGQuickUploadCapableFileFactory(grok.Adapter):
             filename = filename.replace('msg', 'eml')
 
         portal_type = self.get_portal_type(filename)
+        content = createContent(portal_type, title=filename)
 
-        obj = createContentInContainer(self.context, portal_type)
-
-        named_file = self.create_file(filename, data, obj)
-        self.set_default_values(obj, named_file)
+        self.set_primary_field_value(filename, data, content)
+        obj = addContentToContainer(self.context,
+                                    content,
+                                    checkConstraints=True)
+        self.set_default_values(obj)
 
         # initalize digitaly available
         notify(ObjectCreatedEvent(obj))
-        # start pdf conversion
-        notify(ObjectAddedEvent(obj))
+
         # rest of initialization
         notify(ObjectModifiedEvent(obj))
 
@@ -56,32 +62,29 @@ class OGQuickUploadCapableFileFactory(grok.Adapter):
 
         return result
 
-    def create_file(self, filename, data, obj):
+    def set_primary_field_value(self, filename, data, obj):
         # filename must be unicode
         if not isinstance(filename, unicode):
             filename = filename.decode('utf-8')
 
-        for schemata in iterSchemata(obj):
-            for name, field in getFieldsInOrder(schemata):
-                if IPrimaryField.providedBy(field):
-                    return field._type(
-                        data=data,
-                        filename=filename)
+        field = IPrimaryFieldInfo(obj).field
+        value = field._type(data=data, filename=filename)
+        field.set(field.interface(obj), value)
 
-    def set_default_values(self, obj, named_file):
+    def set_default_values(self, obj):
         # set default values for all fields
         for schemata in iterSchemata(obj):
             for name, field in getFieldsInOrder(schemata):
                 if IPrimaryField.providedBy(field):
-                    field.set(field.interface(obj), named_file)
+                    continue
                 else:
                     default = queryMultiAdapter((
-                            obj,
-                            obj.REQUEST,
-                            None,
-                            field,
-                            None,
-                            ), IValue, name='default')
+                        obj,
+                        obj.REQUEST,
+                        None,
+                        field,
+                        None,
+                    ), IValue, name='default')
                     if default is not None:
                         default = default.get()
                     if default is None:
