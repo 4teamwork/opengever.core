@@ -42,6 +42,28 @@ class PrimaryFieldInfo(object):
         return self.field.get(self.schema(self.context))
 
 
+def create_simple_vocabulary(options, message_factory):
+
+    class GenericSimpleVocabulary(object):
+
+        options = None
+        message_factory = None
+
+        def __call__(self, context):
+            terms = []
+            for item in self.options:
+                title = item
+                if self.message_factory:
+                    title = self.message_factory(item)
+                terms.append(
+                    zope.schema.vocabulary.SimpleTerm(item, title=title))
+            return zope.schema.vocabulary.SimpleVocabulary(terms)
+
+    GenericSimpleVocabulary.options = options
+    GenericSimpleVocabulary.message_factory = message_factory
+    return GenericSimpleVocabulary
+
+
 def create_restricted_vocabulary(field, options,
                                  message_factory=None,
                                  restricted=lambda x: True):
