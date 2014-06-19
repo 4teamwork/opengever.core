@@ -1,32 +1,18 @@
-from alembic.migration import MigrationContext
-from alembic.operations import Operations
-from ftw.upgrade import UpgradeStep
-from opengever.ogds.base.utils import create_session
+from opengever.core.upgrade import SchemaMigration
 from sqlalchemy import Boolean
 from sqlalchemy import Column
-from sqlalchemy import ForeignKey
-from sqlalchemy import MetaData
 from sqlalchemy import String
 
 
-class CreateAdminUnitTable(UpgradeStep):
+class CreateAdminUnitTable(SchemaMigration):
 
-    def __call__(self):
-        """Migrate ogds db. Adds the admin_units table
-        and according relationship-field."""
+    profileid = 'opengever.ogds.base'
+    upgradeid = 3301
 
-        session = create_session()
-        engine = session.bind
-        self.connection = engine.connect()
-        self.op = Operations(MigrationContext.configure(self.connection))
-        self.metadata = MetaData(engine, reflect=True)
-
+    def migrate(self):
         self.create_admin_units_table()
         self.create_admin_unit_id_column()
-
-        # update metadata with above changes
-        self.metadata.clear()
-        self.metadata.reflect()
+        self.refresh_medatata()
 
         self.migrate_data()
 
@@ -70,16 +56,13 @@ class CreateAdminUnitTable(UpgradeStep):
                                    "clients", "admin_units",
                                    ["admin_unit_id"], ["unit_id"])
 
-    def _execute(self, statement):
-        return self.connection.execute(statement)
-
     def migrate_data(self):
         admin_units_table = self.metadata.tables.get('admin_units')
         client_table = self.metadata.tables.get('clients')
 
         clients = self.connection.execute(client_table.select()).fetchall()
         for row in clients:
-            existing_clients = self._execute(
+            existing_clients = self.execute(
                 admin_units_table.select()
                 .where(admin_units_table.c.unit_id == row.client_id)
             ).fetchall()
@@ -95,10 +78,10 @@ class CreateAdminUnitTable(UpgradeStep):
                 site_url=row.site_url,
                 public_url=row.public_url,
             )
-            self._execute(
+            self.execute(
                 admin_units_table.insert().values(**admin_unit_data)
             )
-            self._execute(
+            self.execute(
                 client_table.update()
                 .values(admin_unit_id=row.client_id)
                 .where(client_table.c.client_id == row.client_id)
