@@ -76,7 +76,7 @@ class TestClassificationBehavior(FunctionalTestCase):
 
         public_trial_options = browser.css(
             '#form-widgets-IClassification-public_trial option').text
-        self.assertEquals(classification.PUBLIC_TRIAL_OPTIONS,
+        self.assertEquals(list(classification.PUBLIC_TRIAL_OPTIONS),
                           public_trial_options)
 
     def test_public_trial_default_value_is_unchecked(self):

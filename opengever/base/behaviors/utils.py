@@ -246,12 +246,12 @@ def overrides_child(folder, event, aq_fields, marker):
                 if schema_field.get(schema_field.interface(obj)) not in voc:
                     # obj, request, form, field, widget
                     default = getMultiAdapter((
-                            obj.aq_inner.aq_parent,
-                            obj.REQUEST,
-                            None,
-                            schema_field,
-                            None,
-                            ), IValue, name='default')
+                        obj.aq_inner.aq_parent,
+                        obj.REQUEST,
+                        None,
+                        schema_field,
+                        None,
+                    ), IValue, name='default')
                     if isinstance(default, ComputedValue):
                         default = default.get()
                     setattr(schema_field.interface(obj), field, default)

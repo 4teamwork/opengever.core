@@ -19,6 +19,10 @@ Changelog
 - Added public_trial index and metadata field.
   [lknoepfel]
 
+- Public trial is no longer a restricted vocab. It behaves like a regular one.
+  New default is "unchecked".
+  [mathias.leimgruber]
+
 - Enforce correct order in inbox-task-tab tests.
   [lknoepfel]
 
