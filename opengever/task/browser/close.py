@@ -10,7 +10,6 @@ from opengever.base.source import RepositoryPathSourceBinder
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.globalindex.interfaces import ITaskQuery
 from opengever.globalindex.oguid import Oguid
-from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.task import _
@@ -120,13 +119,11 @@ class SelectDocumentsStepForm(CloseTaskWizardStepFormMixin, Form):
                 return self.request.RESPONSE.redirect(url)
 
             else:
-                info = getUtility(IContactInformation)
-                client = info.get_client_by_id(
-                    self.context.responsible_client)
-                dm.push_to_remote_client(dmkey, client.client_id)
+                admin_unit = self.context.get_responsible_admin_unit()
+                dm.push_to_remote_client(dmkey, admin_unit.id())
 
                 url = '/'.join((
-                    client.public_url,
+                    admin_unit.public_url,
                     '@@close-task-wizard_choose-dossier?oguid=%s' % (oguid)))
                 return self.request.RESPONSE.redirect(url)
 
