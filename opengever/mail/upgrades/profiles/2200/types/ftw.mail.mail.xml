@@ -3,6 +3,7 @@
 
     <property name="behaviors" purge="False">
         <element value="plone.app.content.interfaces.INameFromTitle" remove="True"/>
+        <element value="opengever.document.behaviors.metadata.IDocumentMetadata" />
         <element value="ftw.journal.interfaces.IAnnotationsJournalizable" />
         <element value="opengever.document.behaviors.name_from_title.IDocumentNameFromTitle" />
     </property>
