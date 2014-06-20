@@ -1,18 +1,25 @@
 from collective import dexteritytextindexer
+from datetime import date
+from datetime import datetime
 from email.MIMEText import MIMEText
 from five import grok
 from ftw.mail import _ as ftw_mf
 from ftw.mail import utils
+from opengever.document.behaviors import metadata as ogmetadata
+from opengever.document.interfaces import IDocumentSettings
 from opengever.dossier import _
 from plone.app.dexterity.behaviors import metadata
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.content import Item
 from plone.directives import form, dexterity
+from plone.registry.interfaces import IRegistry
 from z3c.form.interfaces import DISPLAY_MODE
 from zope import schema
 from zope.app.component.hooks import getSite
+from zope.component import getUtility
 from zope.i18n import translate
 from zope.interface import Interface, alsoProvides
+from zope.lifecycleevent.interfaces import IObjectAddedEvent
 from zope.lifecycleevent.interfaces import IObjectCreatedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 import email
@@ -87,6 +94,22 @@ def initalize_title(mail, event):
 
         IOGMail(mail).title = value
         mail.title = value
+
+
+@grok.subscribe(IOGMailMarker, IObjectAddedEvent)
+def initalize_metadata(mail, event):
+    mail_metadata = ogmetadata.IDocumentMetadata(mail)
+
+    date_time = datetime.fromtimestamp(utils.get_date_header(mail.msg, 'Date'))
+    mail_metadata.document_date = date_time.date()
+
+    mail_metadata.receipt_date = date.today()
+
+    # mail_metadata.archive_file = mail.msg
+
+    registry = getUtility(IRegistry)
+    proxy = registry.forInterface(IDocumentSettings)
+    mail_metadata.preserved_as_paper = proxy.preserved_as_paper_default
 
 
 class OGMailEditForm(dexterity.EditForm):
