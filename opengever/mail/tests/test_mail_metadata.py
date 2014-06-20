@@ -4,8 +4,12 @@ from ftw.builder import create
 from ftw.mail import utils
 from opengever.document.behaviors import metadata
 from opengever.document.interfaces import IDocumentSettings
+from opengever.mail.mail import extract_email
+from opengever.mail.mail import get_author_by_email
 from opengever.testing import FunctionalTestCase
+from opengever.testing.sql import create_ogds_user
 from plone.registry.interfaces import IRegistry
+from unittest2 import TestCase
 from zope.component import getUtility
 import os
 
@@ -47,8 +51,67 @@ class TestMailMetadata(FunctionalTestCase):
         self.assertIsNone(mail_metadata.delivery_date,
                           'Delivery date has no value')
 
-        # XXX: mle: Does not make any sense to me.
-        # self.assertEquals(mail.message, mail_metadata.archival_file)
-
         self.assertEquals(self.get_preserved_as_papger_default(),
                           mail_metadata.preserved_as_paper)
+
+    def test_fill_mail_author_with_fullname_of_EXISTING_user(self):
+        properties = {'firstname': 'Friedrich ',
+                      'lastname': u'H\xf6lderlin',
+                      # 'lastname': u'H\xc3\xb6lderlin',
+                      'email': 'from@example.org'}
+        user = create_ogds_user('someuserid', **properties)
+
+        mail = create(Builder("mail").with_message(MAIL_DATA))
+        mail_metadata = metadata.IDocumentMetadata(mail)
+
+        self.assertEquals(
+            u'{0} {1}'.format(user.lastname, user.firstname),
+            get_author_by_email(mail))
+
+        self.assertEquals(
+            get_author_by_email(mail),
+            mail_metadata.document_author)
+
+    def test_fill_mail_author_with_FROM_data_if_user_does_not_exist(self):
+
+        mail = create(Builder("mail").with_message(MAIL_DATA))
+        mail_metadata = metadata.IDocumentMetadata(mail)
+
+        self.assertEquals(
+            utils.get_header(mail.msg, 'From'),
+            get_author_by_email(mail))
+
+        self.assertEquals(
+            get_author_by_email(mail),
+            mail_metadata.document_author)
+
+
+class TestEmailRegex(TestCase):
+
+    def test_email_format_1(self):
+        header_from = 'Hans Muster <hans@example.org>'
+        self.assertEquals('hans@example.org', extract_email(header_from))
+
+    def test_email_format_2(self):
+        header_from = '"Hans Muster" <hans@example.org>'
+        self.assertEquals('hans@example.org', extract_email(header_from))
+
+    def test_email_format_3(self):
+        header_from = 'Muster, Hans <hans@example.org>'
+        self.assertEquals('hans@example.org', extract_email(header_from))
+
+    def test_email_format_4(self):
+        header_from = '<hans@example.org>'
+        self.assertEquals('hans@example.org', extract_email(header_from))
+
+    def test_email_format_5(self):
+        header_from = 'hans@example.org'
+        self.assertEquals('hans@example.org', extract_email(header_from))
+
+    def test_email_format_6(self):
+        header_from = 'hAnS@Example.Org'
+        self.assertEquals('hans@example.org', extract_email(header_from))
+
+    def test_no_match(self):
+        header_from = 'example.org'
+        self.assertEquals('example.org', extract_email(header_from))

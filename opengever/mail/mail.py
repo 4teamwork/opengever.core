@@ -3,16 +3,19 @@ from datetime import date
 from datetime import datetime
 from email.MIMEText import MIMEText
 from five import grok
-from ftw.mail import _ as ftw_mf
 from ftw.mail import utils
+from ftw.mail import _ as ftw_mf
 from opengever.document.behaviors import metadata as ogmetadata
 from opengever.document.interfaces import IDocumentSettings
 from opengever.dossier import _
+from opengever.ogds.base.utils import create_session
+from opengever.ogds.models.user import User
 from plone.app.dexterity.behaviors import metadata
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.content import Item
 from plone.directives import form, dexterity
 from plone.registry.interfaces import IRegistry
+from sqlalchemy import func
 from z3c.form.interfaces import DISPLAY_MODE
 from zope import schema
 from zope.app.component.hooks import getSite
@@ -23,6 +26,7 @@ from zope.lifecycleevent.interfaces import IObjectAddedEvent
 from zope.lifecycleevent.interfaces import IObjectCreatedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 import email
+import re
 
 
 class IOGMailMarker(Interface):
@@ -37,7 +41,7 @@ class IOGMail(form.Schema):
     title = schema.TextLine(
         title=_(u'label_title', default=u'Title'),
         required=False,
-        )
+    )
 
 alsoProvides(IOGMail, IFormFieldProvider)
 
@@ -96,6 +100,38 @@ def initalize_title(mail, event):
         mail.title = value
 
 
+# XXX: The following two methods will be obselet if the ContactInformation
+# stuff is refactered or move this method to the right place, whereever it
+# belongs.
+
+EMAILPATTERN = re.compile(
+    ("([a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`"
+     "{|}~-]+)*(@|\sat\s)(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(\.|"
+     "\sdot\s))+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)"))
+
+
+def extract_email(header_from):
+    header_from = header_from.lower()
+    match = re.findall(EMAILPATTERN, header_from)
+    if len(match):
+        return match[0][0]
+    else:
+        return header_from
+
+
+def get_author_by_email(mail):
+    header_from = utils.get_header(mail.msg, 'From')
+    email = extract_email(header_from)
+
+    session = create_session()
+    principal = session.query(User).filter(
+        func.lower(User.email) == email).first()
+
+    if principal is None:
+        return header_from
+    return u'{0} {1}'.format(principal.lastname, principal.firstname)
+
+
 @grok.subscribe(IOGMailMarker, IObjectAddedEvent)
 def initalize_metadata(mail, event):
     mail_metadata = ogmetadata.IDocumentMetadata(mail)
@@ -105,11 +141,11 @@ def initalize_metadata(mail, event):
 
     mail_metadata.receipt_date = date.today()
 
-    # mail_metadata.archive_file = mail.msg
-
     registry = getUtility(IRegistry)
     proxy = registry.forInterface(IDocumentSettings)
     mail_metadata.preserved_as_paper = proxy.preserved_as_paper_default
+
+    mail_metadata.document_author = get_author_by_email(mail)
 
 
 class OGMailEditForm(dexterity.EditForm):
