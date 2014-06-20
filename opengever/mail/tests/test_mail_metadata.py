@@ -8,6 +8,7 @@ from opengever.mail.mail import extract_email
 from opengever.mail.mail import get_author_by_email
 from opengever.testing import FunctionalTestCase
 from opengever.testing.sql import create_ogds_user
+from plone.dexterity.interfaces import IDexterityFTI
 from plone.registry.interfaces import IRegistry
 from unittest2 import TestCase
 from zope.component import getUtility
@@ -84,6 +85,38 @@ class TestMailMetadata(FunctionalTestCase):
         self.assertEquals(
             get_author_by_email(mail),
             mail_metadata.document_author)
+
+    def test_metadata_initialization_upgrade_step(self):
+        fti = getUtility(IDexterityFTI, name=u'ftw.mail.mail')
+        behaviors = list(fti.behaviors)
+        behaviors.remove(
+            u'opengever.document.behaviors.metadata.IDocumentMetadata')
+        fti.behaviors = tuple(behaviors)
+        mail = create(Builder("mail").with_message(MAIL_DATA))
+
+        from opengever.mail.upgrades.to2200 import ActivateBehaviors
+        ActivateBehaviors(self.portal.portal_setup)
+
+        mail_metadata = metadata.IDocumentMetadata(mail)
+        # The description is initialized wihtout the behavior, so the default
+        # value is by another behavior with a description field.
+        self.assertEquals(u'',
+                          mail_metadata.description,
+                          'Description has no value')
+
+        self.assertEquals((), mail_metadata.keywords, 'Expect no keywords')
+
+        self.assertIsNone(mail_metadata.foreign_reference,
+                          'Foreign reference has no value')
+
+        self.assertEquals(self.get_header_date(mail).date(),
+                          mail_metadata.document_date)
+
+        self.assertIsNone(mail_metadata.delivery_date,
+                          'Delivery date has no value')
+
+        self.assertEquals(self.get_preserved_as_papger_default(),
+                          mail_metadata.preserved_as_paper)
 
 
 class TestEmailRegex(TestCase):

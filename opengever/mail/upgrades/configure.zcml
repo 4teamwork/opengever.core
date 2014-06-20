@@ -56,11 +56,22 @@
         />
 
     <!-- 2104 -> 2200 -->
-    <upgrade-step:importProfile
-        title="Add IAnnotationsJournalizable to ftw.mail.mail"
-        profile="opengever.mail:default"
+    <genericsetup:upgradeStep
+        title="Extend mail with several behaviors, so it can act like a document (incl. migration data to the metadata fields)"
+        description=""
         source="2104"
         destination="2200"
-        directory="profiles/2200"
+        handler="opengever.mail.upgrades.to2200.ActivateBehaviors"
+        profile="opengever.mail:default"
         />
+
+    <genericsetup:registerProfile
+        name="2200"
+        title="opengever.mail: upgrade profile 2200"
+        description=""
+        directory="profiles/2200"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
 </configure>
