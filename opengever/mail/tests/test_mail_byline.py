@@ -1,30 +1,40 @@
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.tests.byline_base_test import TestBylineBase
 from opengever.testing import create_ogds_user
-from zope.component import getUtility
-from zope.intid.interfaces import IIntIds
+from pkg_resources import resource_string
+
+
+MAIL_DATA = resource_string('opengever.mail.tests', 'mail.txt')
 
 
 class TestMailByline(TestBylineBase):
 
-    use_browser = True
-
     def setUp(self):
         super(TestMailByline, self).setUp()
-
         self.grant('Manager')
+        create_ogds_user('hugo.boss', email='from@example.org')
 
-        self.intids = getUtility(IIntIds)
-        create_ogds_user('hugo.boss')
-
-        self.mail = create(Builder('mail'))
+        self.mail = create(Builder('mail')
+                           .with_message(MAIL_DATA)
+                           .having(start=date(2013, 11, 6),
+                                   document_date=date(2013, 11, 5),
+                                   document_author='hugo.boss'))
         self.browser.open(self.mail.absolute_url())
 
-    def test_dossier_byline_sequence_number_display(self):
+    def test_document_byline_start_date(self):
+        start_date = self.get_byline_value_by_label('from:')
+        self.assertEquals('Jan 01, 1999', start_date.text_content())
+
+    def test_document_byline_sequence_number(self):
         seq_number = self.get_byline_value_by_label('Sequence Number:')
         self.assertEquals('1', seq_number.text_content())
 
-    def test_dossier_byline_reference_number_display(self):
+    def test_document_byline_reference_number(self):
         ref_number = self.get_byline_value_by_label('Reference Number:')
         self.assertEquals('OG / 1', ref_number.text_content())
+
+    def test_document_byline_document_author(self):
+        document_author = self.get_byline_value_by_label('by:')
+        self.assertEquals('Boss Hugo', document_author.text_content())

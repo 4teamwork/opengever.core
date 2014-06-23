@@ -4,6 +4,9 @@ Changelog
 3.3.1 (unreleased)
 ------------------
 
+- Use document byline also on mail.
+  [mathias.leimgruber]
+
 - OGQuickUploadCapableFileFactory: Set default values before adding content to container.
   (Prevents values set by handlers on ObjectAddedEvent to be overwritten again).
   [lgraf]
