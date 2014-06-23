@@ -2,7 +2,9 @@
 <object name="ftw.mail.mail" meta_type="Dexterity FTI">
 
     <property name="behaviors" purge="False">
+        <element value="plone.app.content.interfaces.INameFromTitle" remove="True"/>
         <element value="ftw.journal.interfaces.IAnnotationsJournalizable" />
+        <element value="opengever.document.behaviors.name_from_title.IDocumentNameFromTitle" />
     </property>
 
 </object>

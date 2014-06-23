@@ -4,6 +4,9 @@ Changelog
 3.3.1 (unreleased)
 ------------------
 
+- Use IDocumentNameFromTitle behavior from document also for mail.
+  [mathias.leimgruber]
+
 - Fix double journal entries using quickupload.
   [mathias.leimgruber]
 

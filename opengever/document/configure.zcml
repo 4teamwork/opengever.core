@@ -59,7 +59,7 @@
         description=""
         provides="opengever.document.behaviors.name_from_title.IDocumentNameFromTitle"
         factory=".behaviors.name_from_title.DocumentNameFromTitle"
-        for="opengever.document.document.IDocumentSchema"
+        for="opengever.document.behaviors.IBaseDocument"
         />
 
     <!-- BaseDocument behavior -->
