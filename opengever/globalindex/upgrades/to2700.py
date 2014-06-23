@@ -1,24 +1,13 @@
-from alembic.migration import MigrationContext
-from alembic.operations import Operations
-from ftw.upgrade import UpgradeStep
-from opengever.ogds.base.utils import create_session
+from opengever.core.upgrade import SchemaMigration
 from sqlalchemy import Column
 from sqlalchemy import Integer
-from sqlalchemy import MetaData
 from sqlalchemy import String
 
 
-class MigrateTaskTable(UpgradeStep):
-    def __call__(self):
-        self.setup_db()
-        self.migrate()
+class MigrateTaskTable(SchemaMigration):
 
-    def setup_db(self):
-        session = create_session()
-        engine = session.bind
-        self.connection = engine.connect()
-        self.op = Operations(MigrationContext.configure(self.connection))
-        self.metadata = MetaData(engine, reflect=True)
+    profileid = 'opengever.globalindex'
+    upgradeid = 2701
 
     def migrate(self):
         self.drop_unique_constraint()
@@ -95,11 +84,8 @@ class MigrateTaskTable(UpgradeStep):
                     task_table, row)
             else:
                 issuing_org_unit = row.admin_unit_id
-            self._execute(
+            self.execute(
                 task_table.update()
                 .values(issuing_org_unit=issuing_org_unit)
                 .where(task_table.c.id == row.id)
             )
-
-    def _execute(self, statement):
-        return self.connection.execute(statement)
