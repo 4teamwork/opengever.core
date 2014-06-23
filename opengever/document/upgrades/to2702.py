@@ -1,4 +1,3 @@
-from ftw.upgrade import ProgressLogger
 from ftw.upgrade import UpgradeStep
 from opengever.document.behaviors import IBaseDocument
 
@@ -9,7 +8,7 @@ class AddPublicTrialIndexAndMetadata(UpgradeStep):
     def __call__(self):
         # add metadata field
         self.setup_install_profile(
-            'profile-opengever.document.upgrades:2700')
+            'profile-opengever.document.upgrades:2702')
 
         # add index
         if not self.catalog_has_index('public_trial'):
