@@ -4,10 +4,13 @@ from opengever.dossier import _ as _dossier
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
 from opengever.dossier.behaviors.participation import IParticipationAware
+from opengever.globalindex.model.task import Task
 from opengever.globalindex.utils import indexed_task_link_helper
 from opengever.ogds.base.actor import Actor
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.tabbedview.browser.tabs import OpengeverTab
 from Products.ZCatalog.interfaces import ICatalogBrain
+from sqlalchemy import desc
 
 
 class DossierOverview(grok.View, OpengeverTab):
@@ -53,7 +56,9 @@ class DossierOverview(grok.View, OpengeverTab):
             review_state=DOSSIER_STATES_OPEN)[:5]
 
     def tasks(self):
-        return self.catalog(['opengever.task.task', ])[:5]
+        return Task.query.by_dossier(self.context)\
+            .by_admin_unit(get_current_admin_unit())\
+            .order_by(desc('modified')).limit(5).all()
 
     def documents(self):
         documents = self.catalog(

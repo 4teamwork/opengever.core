@@ -48,11 +48,17 @@ class TaskQuery(Query):
         """
         return self.filter(Task.admin_unit_id == admin_unit.id())
 
+    by_admin_unit = all_issued_tasks
+
     def tasks_by_id(self, int_ids, admin_unit):
         """
         """
         query = self.filter(Task.admin_unit_id == admin_unit.id())
         return query.filter(Task.int_id.in_(int_ids))
+
+    def by_dossier(self, dossier):
+        path = dossier.get_physical_path()
+        return self.filter(Task.physical_path.like(path + '%'))
 
 
 class Task(Base):
@@ -147,6 +153,7 @@ class Task(Base):
         self.predecessor = self.query_predecessor(
             *plone_task.get_predecessor_ids())
 
+    # XXX move me to task query
     def query_predecessor(self, admin_unit_id, pred_init_id):
         if not (admin_unit_id or pred_init_id):
             return None

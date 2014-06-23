@@ -27,8 +27,11 @@ class FixtureBuilder(object):
         self._org_unit_args = {
             'title': u'Client1',
             'client_id': u'client1',
+            'public_url': 'http://example.com',
         }
-        self._admin_unit_args = {}
+        self._admin_unit_args = {
+            'public_url': 'http://example.com',
+        }
 
     def with_user(self, **kwargs):
         self._with_user = True

@@ -101,7 +101,6 @@ class AdminUnitBuilder(SqlObjectBuilder):
             proxy.current_unit_id = self.arguments.get(self.id_argument_name)
         return obj
 
-
 builder_registry.register('admin_unit', AdminUnitBuilder)
 
 
@@ -172,7 +171,6 @@ class OrgUnitBuilder(SqlObjectBuilder):
         self._as_current_org_unit = True
         return self
 
-
 builder_registry.register('org_unit', OrgUnitBuilder)
 
 
@@ -216,4 +214,5 @@ class TaskBuilder(SqlObjectBuilder):
     mapped_class = Task
     id_argument_name = 'task_id'
 
-builder_registry.register('globalindex_task', GroupBuilder)
+
+builder_registry.register('globalindex_task', TaskBuilder)

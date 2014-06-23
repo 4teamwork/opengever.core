@@ -1,8 +1,9 @@
+from datetime import date
 from DateTime import DateTime
 from ftw.builder import Builder
 from ftw.builder import create
-from opengever.testing import FunctionalTestCase
 from ftw.testbrowser import browsing
+from opengever.testing import FunctionalTestCase
 
 
 class TestOverview(FunctionalTestCase):
@@ -96,6 +97,21 @@ class TestOverview(FunctionalTestCase):
         self.assertSequenceEqual(
             browser.css('#newest_tasksBox li:not(.moreLink) a').text,
             ['Task 5', 'Task 4', 'Task 3', 'Task 2', 'Task 1'])
+
+    @browsing
+    def test_task_box_items_are_filtered_by_admin_unit(self, browser):
+        create(Builder('globalindex_task').having(
+            int_id=12345, admin_unit_id='foo', issuing_org_unit='foo',
+            assigned_org_unit='bar', modified=date(2011, 1, 1)))
+        create(Builder('task')
+               .within(self.dossier)
+               .with_modification_date(DateTime(2009, 12, 1))
+               .titled(u'Task x'))
+
+        browser.login().open(self.dossier, view='tabbedview_view-overview')
+        self.assertSequenceEqual(
+            browser.css('#newest_tasksBox li:not(.moreLink) a').text,
+            ['Task x'])
 
     @browsing
     def test_participant_labels_are_displayed(self, browser):
