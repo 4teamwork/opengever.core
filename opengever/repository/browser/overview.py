@@ -1,7 +1,7 @@
-from Products.CMFCore.utils import getToolByName
 from five import grok
 from opengever.repository.repositoryroot import IRepositoryRoot
-from opengever.tabbedview.browser.tabs import OpengeverTab
+from opengever.tabbedview.browser.base import OpengeverTab
+from Products.CMFCore.utils import getToolByName
 
 
 class RepositoryRootOverview(grok.View, OpengeverTab):

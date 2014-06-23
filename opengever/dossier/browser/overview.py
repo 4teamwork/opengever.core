@@ -8,7 +8,7 @@ from opengever.globalindex.model.task import Task
 from opengever.globalindex.utils import indexed_task_link_helper
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
-from opengever.tabbedview.browser.tabs import OpengeverTab
+from opengever.tabbedview.browser.base import OpengeverTab
 from Products.ZCatalog.interfaces import ICatalogBrain
 from sqlalchemy import desc
 

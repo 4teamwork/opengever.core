@@ -8,7 +8,7 @@ from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
-from opengever.tabbedview.browser.tabs import OpengeverTab
+from opengever.tabbedview.browser.base import OpengeverTab
 from opengever.tabbedview.helper import _breadcrumbs_from_item
 from opengever.task import _
 from opengever.task.interfaces import ISuccessorTaskController
@@ -18,7 +18,7 @@ from Products.CMFCore.utils import getToolByName
 from z3c.form.field import Field
 from z3c.form.interfaces import DISPLAY_MODE, IFieldWidget
 from z3c.form.interfaces import IContextAware, IField
-from zope.component import getUtility, getMultiAdapter
+from zope.component import getMultiAdapter
 from zope.component import queryAdapter
 from zope.component import queryUtility
 from zope.i18n import translate
