@@ -4,7 +4,7 @@ from opengever.base.browser.helper import get_css_class
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.ogds.base.actor import Actor
-from opengever.tabbedview.browser.tabs import OpengeverTab
+from opengever.tabbedview.browser.base import OpengeverTab
 from plone.directives.dexterity import DisplayForm
 from zope.component import queryMultiAdapter
 
