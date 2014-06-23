@@ -29,7 +29,7 @@ class TestOrgUnitSelectorViewlet(FunctionalTestCase):
         units = browser.css('.orgunitMenuContent li')
 
         self.assertEquals(
-            ['Client 3', 'Client 4'], units.text)
+            ['Client 1', 'Client 3', 'Client 4'], units.text)
 
     @browsing
     def test_first_unit_is_marked_as_active_per_default(self, browser):
@@ -40,12 +40,26 @@ class TestOrgUnitSelectorViewlet(FunctionalTestCase):
             ['Client 1'], active_unit.text)
 
     @browsing
-    def test_list_all_assigned_units_except_current_one(self, browser):
+    def test_list_all_assigned_units(self, browser):
         browser.login().open(self.repo_root)
         units = browser.css('.orgunitMenuContent li')
 
         self.assertEquals(
-            ['Client 3', 'Client 4'], units.text)
+            ['Client 1', 'Client 3', 'Client 4'], units.text)
+
+    @browsing
+    def test_active_unit_is_not_linked(self, browser):
+        browser.login().open(self.repo_root)
+        units = browser.css('.orgunitMenuContent li span')
+
+        self.assertEquals(['Client 1'], units.text)
+
+    @browsing
+    def test_active_unit_has_class_active(self, browser):
+        browser.login().open(self.repo_root)
+        units = browser.css('.orgunitMenuContent li span.active')
+
+        self.assertEquals(['Client 1'], units.text)
 
     @browsing
     def test_selecting_a_unit_changes_active_unit(self, browser):

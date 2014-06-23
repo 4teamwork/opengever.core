@@ -39,19 +39,11 @@ class TestOrgUnitSelector(unittest2.TestCase):
         self.assertEquals(self.unit_a._client,
                           selector.get_current_unit()._client)
 
-    def test_available_units_are_all_except_the_defaul_one_when_current_is_not_set(self):
+    def test_available_units_are_all_units(self):
         selector = OrgUnitSelector({},
             [self.unit_a, self.unit_b, self.unit_c])
 
-        self.assertEquals([self.unit_b, self.unit_c],
-                          selector.available_units())
-
-    def test_available_units_are_all_units_except_the_current_one(self):
-        selector = OrgUnitSelector(
-            {CURRENT_ORG_UNIT_KEY: 'clientb'},
-            [self.unit_a, self.unit_b, self.unit_c])
-
-        self.assertEquals([self.unit_a, self.unit_c],
+        self.assertEquals([self.unit_a, self.unit_b, self.unit_c],
                           selector.available_units())
 
     def test_set_current_unit_updates_current_id(self):
@@ -64,12 +56,11 @@ class TestOrgUnitSelector(unittest2.TestCase):
         self.assertEquals(self.unit_a,
                           selector.get_current_unit())
 
-    def test_set_current_unit_updates_available_units(self):
+    def test_set_current_unit_updates_activ_unit(self):
         selector = OrgUnitSelector(
             {CURRENT_ORG_UNIT_KEY: 'clientb'},
             [self.unit_a, self.unit_b, self.unit_c])
 
         selector.set_current_unit('clienta')
 
-        self.assertEquals([self.unit_b, self.unit_c],
-                          selector.available_units())
+        self.assertEquals(self.unit_a, selector.get_current_unit())
