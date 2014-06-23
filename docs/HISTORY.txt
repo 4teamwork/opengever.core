@@ -4,6 +4,9 @@ Changelog
 3.3.1 (unreleased)
 ------------------
 
+- Implement document metadata behavor on mail (incl. Upgrade step and init event).
+  [mathias.leimgruber]
+
 - Refactored document overview.
   [lgraf]
 
@@ -14,6 +17,7 @@ Changelog
   This is required to support dynamic lookup of schema-level default values for
   fields in behaviors. It basically is a backport of this Dexterity 2.x fix:
   https://github.com/plone/plone.dexterity/commit/dd491480b869bbe21ee50ef413c263705af7b170
+  [lgraf]
 
 - Use IDocumentNameFromTitle behavior from document also for mail.
   [mathias.leimgruber]

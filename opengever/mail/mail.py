@@ -134,6 +134,9 @@ def get_author_by_email(mail):
 
 @grok.subscribe(IOGMailMarker, IObjectAddedEvent)
 def initialize_metadata(mail, event):
+    if not ogmetadata.IDocumentMetadata.providedBy(mail):
+        return
+
     mail_metadata = ogmetadata.IDocumentMetadata(mail)
 
     date_time = datetime.fromtimestamp(utils.get_date_header(mail.msg, 'Date'))

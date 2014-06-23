@@ -1,3 +1,4 @@
+from datetime import date
 from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
@@ -49,11 +50,28 @@ class TestMailMetadata(FunctionalTestCase):
         self.assertEquals(self.get_header_date(mail).date(),
                           mail_metadata.document_date)
 
+        self.assertEquals(date.today(), mail_metadata.receipt_date)
+
         self.assertIsNone(mail_metadata.delivery_date,
                           'Delivery date has no value')
 
+        self.assertIsNone(mail_metadata.document_type,
+                          'Document type has no value')
+
+        self.assertIsNone(mail_metadata.digitally_available,
+                          'Digitally available has no value')
+
         self.assertEquals(self.get_preserved_as_papger_default(),
                           mail_metadata.preserved_as_paper)
+
+        self.assertIsNone(mail_metadata.archival_file,
+                          'Archival file date has no value')
+
+        self.assertIsNone(mail_metadata.thumbnail,
+                          'Thumbnail has no value')
+
+        self.assertIsNone(mail_metadata.preview,
+                          'Preview has no value')
 
     def test_fill_mail_author_with_fullname_of_EXISTING_user(self):
         properties = {'firstname': 'Friedrich ',
@@ -91,12 +109,14 @@ class TestMailMetadata(FunctionalTestCase):
         behaviors = list(fti.behaviors)
         behaviors.remove(
             u'opengever.document.behaviors.metadata.IDocumentMetadata')
-        fti.behaviors = tuple(behaviors)
+        fti._updateProperty('behaviors', tuple(behaviors))
+
         mail = create(Builder("mail").with_message(MAIL_DATA))
 
         from opengever.mail.upgrades.to2200 import ActivateBehaviors
         ActivateBehaviors(self.portal.portal_setup)
 
+        assert metadata.IDocumentMetadata.providedBy(mail)
         mail_metadata = metadata.IDocumentMetadata(mail)
         # The description is initialized wihtout the behavior, so the default
         # value is by another behavior with a description field.
@@ -112,11 +132,47 @@ class TestMailMetadata(FunctionalTestCase):
         self.assertEquals(self.get_header_date(mail).date(),
                           mail_metadata.document_date)
 
+        self.assertEquals(mail.created().asdatetime(),
+                          mail_metadata.receipt_date)
+
         self.assertIsNone(mail_metadata.delivery_date,
                           'Delivery date has no value')
 
+        self.assertIsNone(mail_metadata.document_type,
+                          'Document type has no value')
+
+        self.assertIsNone(mail_metadata.digitally_available,
+                          'Digitally available has no value')
+
         self.assertEquals(self.get_preserved_as_papger_default(),
                           mail_metadata.preserved_as_paper)
+
+        self.assertIsNone(mail_metadata.archival_file,
+                          'Archive file has no value')
+
+        self.assertIsNone(mail_metadata.thumbnail,
+                          'Thumbnail has no value')
+
+        self.assertIsNone(mail_metadata.preview,
+                          'Preview has no value')
+
+    def test_mail_catalog_metadata(self):
+        mail = create(Builder("mail").with_message(MAIL_DATA))
+
+        brain = self.portal.portal_catalog(portal_type='ftw.mail.mail')[0]
+
+        self.assertEquals(mail.document_date,
+                          brain.document_date)
+
+        self.assertEquals(mail.document_author,
+                          brain.document_author)
+
+        self.assertEquals(mail.receipt_date,
+                          brain.receipt_date)
+
+        self.assertEquals('',
+                          brain.checked_out,
+                          'Checked out, should be empty')
 
 
 class TestEmailRegex(TestCase):
