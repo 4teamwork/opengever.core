@@ -125,7 +125,7 @@ class DossierDetailsLaTeXView(grok.MultiAdapter, MakoLaTeXView):
                 'label': _('label_start', default='Start'),
                 'getter': self.get_start_date},
             'end': {
-                'label': _('label_start', default='Start'),
+                'label': _('label_end', default='End'),
                 'getter': self.get_end_date},
             'participants': {
                 'label': _('label_participants', default='Participants'),

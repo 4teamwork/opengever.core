@@ -4,6 +4,9 @@ Changelog
 3.3.1 (unreleased)
 ------------------
 
+- Dossierdetails: Fixed label for the Dossier end.
+  [phgross]
+
 - Added reviewer role on admin groups.
   This role ensures that admins can see the menu bar.
   [lknoepfel]
