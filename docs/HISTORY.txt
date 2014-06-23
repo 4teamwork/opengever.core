@@ -167,12 +167,6 @@ Changelog
 - Remove obsolete dependency on transmogrify.sqlinserter.
   [lgraf]
 
-- Remove remaining traces of `related_items` index.
-  [lgraf]
-
-- Dossier resolving: Fixed `its_all_closed` check, for nested subtasks.
-  [phgross]
-
 
 3.2.1 (2014-01-23)
 ------------------
@@ -197,21 +191,11 @@ Changelog
 3.2 (2013-12-15)
 ----------------
 
-- Document tooltip helper: Fixed link for the icon.
-  [phgross]
-
-- Fixed load order issue when setting tagged values to omit the changeNote
-  field from the IVersionable behavior.
-  [lgraf]
-
 - Increase task_principals.principal column length to 255.
   [lgraf]
 
 - Logout overlay: use absolute url to redirect to the logout view.
   [phgross]
-
-- OGDS Updater: Gracefully skip users outside users_base referenced in groups.
-  [lgraf]
 
 - Add destructive class to logout button in logout overlay.
   [Julian Infanger]
@@ -222,16 +206,7 @@ Changelog
 - Adjusted seperator of the `grouped_by_three` formatter.
   [phgross]
 
-- Issued inbox task: fixed listing query, to search the complete client.
-  [phgross]
-
 - Corrected message after resolving a subdossier.
-  [phgross]
-
-- Inbox overview: List only active tasks and forwardings.
-  [phgross]
-
-- Inbox overview: Only list current part of a predecessor/successor couple.
   [phgross]
 
 - Override livesearch_reply.py to provide correct advanced search link.
@@ -278,9 +253,6 @@ Changelog
 - OGDS updater: Deactivate is_ldap_reachable check. It's unnecessary and broken.
   [lgraf]
 
-- OGDS updater: Deal with mutli-valued fields named the same as an OGDS column.
-  [lgraf]
-
 - Modify indexer for documents so that it queries for our own IDocumentIndexer adapter,
   allowing us to choose to index original documents or their preview PDF, depdending on
   opengever.pdfconverter being installed or not.
@@ -320,8 +292,52 @@ Changelog
 - Restricted reference prefix manager to repository and repositoryroot.
   [lknoepfel]
 
+
+3.1.4 (2014-02-18)
+------------------
+
+- Removed DocuComposer actions from opengever.dossier:default profile.
+  [lgraf]
+
+
+3.1.3 (2014-02-06)
+------------------
+
+- Remove remaining traces of `related_items` index.
+  Backport of 9d1064d.
+  [lgraf]
+
+- Dossier resolving: Fixed `its_all_closed` check, for nested subtasks.
+  [phgross]
+
+- Document tooltip helper: Fixed link for the icon.
+  [phgross]
+
+- Fixed load order issue when setting tagged values to omit the changeNote
+  field from the IVersionable behavior.
+  Backport of d8438c8.
+  [lgraf]
+
+- OGDS Updater: Gracefully skip users outside users_base referenced in groups.
+  Backport of 2d862bd.
+  [lgraf]
+
 - Removed related_items index and RelatedTasks tab.
   [lknoepfel]
+
+
+3.1.2 (2013-12-02)
+------------------
+
+- Issued inbox task: fixed listing query, to search the complete client.
+  [phgross]
+
+- Inbox overview: List only active tasks and forwardings.
+  [phgross]
+
+- Inbox overview: Only list current part of a predecessor/successor couple.
+  [phgross]
+
 
 3.1.1 (2013-10-23)
 ------------------
@@ -329,6 +345,7 @@ Changelog
 - Fixed CleanupReferencePrefixMapping upgradestep
   (works now for reference to no longer existing objects):
   [phgross]
+
 
 3.1 (2013-10-23)
 ----------------
