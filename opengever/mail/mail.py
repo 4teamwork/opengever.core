@@ -6,7 +6,6 @@ from five import grok
 from ftw.mail import utils
 from ftw.mail import _ as ftw_mf
 from opengever.document.behaviors import metadata as ogmetadata
-from opengever.document.interfaces import IDocumentSettings
 from opengever.dossier import _
 from opengever.ogds.base.utils import create_session
 from opengever.ogds.models.user import User
@@ -14,12 +13,10 @@ from plone.app.dexterity.behaviors import metadata
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.content import Item
 from plone.directives import form, dexterity
-from plone.registry.interfaces import IRegistry
 from sqlalchemy import func
 from z3c.form.interfaces import DISPLAY_MODE
 from zope import schema
 from zope.app.component.hooks import getSite
-from zope.component import getUtility
 from zope.i18n import translate
 from zope.interface import Interface, alsoProvides
 from zope.lifecycleevent.interfaces import IObjectAddedEvent
@@ -144,11 +141,10 @@ def initialize_metadata(mail, event):
 
     mail_metadata.receipt_date = date.today()
 
-    registry = getUtility(IRegistry)
-    proxy = registry.forInterface(IDocumentSettings)
-    mail_metadata.preserved_as_paper = proxy.preserved_as_paper_default
-
     mail_metadata.document_author = get_author_by_email(mail)
+    mail.reindexObject(idxs=['document_date',
+                             'document_author',
+                             'receipt_date'])
 
 
 class OGMailEditForm(dexterity.EditForm):

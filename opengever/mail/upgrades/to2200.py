@@ -26,21 +26,30 @@ class ActivateBehaviors(UpgradeStep):
         for mail in self.objects(query, 'Initialize metadata on mail'):
             initialize_metadata(mail, None)
             self.set_receipt_date_equals_creation_date(mail)
-            self.update_missing_field_values(mail)
+            self.set_default_values_for_missing_fields(mail)
 
     def set_receipt_date_equals_creation_date(self, mail):
         mail_metadata = IDocumentMetadata(mail)
-        mail_metadata.receipt_date = mail.created().asdatetime()
+        mail_metadata.receipt_date = mail.created().asdatetime().date()
 
-    def update_missing_field_values(self, mail):
-        missing_fields = ['keywords', 'foreign_reference', 'delivery_date',
-                          'document_type', 'digitally_available',
-                          'archival_file', 'thumbnail', 'preview']
+    def set_default_values_for_missing_fields(self, mail):
 
-        for fieldname in missing_fields:
+        fields = [
+            u'keywords',
+            u'foreign_reference',
+            u'document_type',
+            u'digitally_available',
+            u'preserved_as_paper',
+            u'archival_file',
+            u'delivery_date',
+            u'thumbnail',
+            u'preview',
+        ]
+
+        for fieldname in fields:
             field = IDocumentMetadata[fieldname]
             default_adapter = queryMultiAdapter(
-                (mail, mail.REQUEST, None, field, None),
+                (mail.aq_parent, mail.REQUEST, None, field, None),
                 IValue, name='default')
 
             default = None

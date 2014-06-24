@@ -50,7 +50,8 @@ class TestMailMetadata(FunctionalTestCase):
         self.assertEquals(self.get_header_date(mail).date(),
                           mail_metadata.document_date)
 
-        self.assertEquals(date.today(), mail_metadata.receipt_date)
+        self.assertEquals(date.today(),
+                          mail_metadata.receipt_date)
 
         self.assertIsNone(mail_metadata.delivery_date,
                           'Delivery date has no value')
@@ -74,9 +75,8 @@ class TestMailMetadata(FunctionalTestCase):
                           'Preview has no value')
 
     def test_fill_mail_author_with_fullname_of_EXISTING_user(self):
-        properties = {'firstname': 'Friedrich ',
+        properties = {'firstname': 'Friedrich',
                       'lastname': u'H\xf6lderlin',
-                      # 'lastname': u'H\xc3\xb6lderlin',
                       'email': 'from@example.org'}
         user = create_ogds_user('someuserid', **properties)
 
@@ -132,7 +132,7 @@ class TestMailMetadata(FunctionalTestCase):
         self.assertEquals(self.get_header_date(mail).date(),
                           mail_metadata.document_date)
 
-        self.assertEquals(mail.created().asdatetime(),
+        self.assertEquals(date.today(),
                           mail_metadata.receipt_date)
 
         self.assertIsNone(mail_metadata.delivery_date,
