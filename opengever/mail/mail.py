@@ -5,6 +5,8 @@ from email.MIMEText import MIMEText
 from five import grok
 from ftw.mail import utils
 from ftw.mail import _ as ftw_mf
+from ftw.mail.mail import IMail
+from opengever.base import _ as base_mf
 from opengever.document.behaviors import metadata as ogmetadata
 from opengever.dossier import _
 from opengever.ogds.base.utils import create_session
@@ -13,6 +15,8 @@ from plone.app.dexterity.behaviors import metadata
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.content import Item
 from plone.directives import form, dexterity
+from plone.supermodel.interfaces import FIELDSETS_KEY
+from plone.supermodel.model import Fieldset
 from sqlalchemy import func
 from z3c.form.interfaces import DISPLAY_MODE
 from zope import schema
@@ -26,6 +30,13 @@ import email
 import re
 
 
+IMail.setTaggedValue(FIELDSETS_KEY, [
+    Fieldset('common',
+             label=base_mf(u'fieldset_common', u'Common'),
+             fields=[u'title', u'message'])
+])
+
+
 class IOGMailMarker(Interface):
     """Marker Interface for opengever mails."""
 
@@ -34,6 +45,12 @@ class IOGMail(form.Schema):
     """Opengever specific behavior,
     which add a title Field to the form."""
 
+    form.fieldset(
+        u'common',
+        label=base_mf(u'fieldset_common', u'Common'),
+        fields=[u'title', u'message'])
+
+    form.order_before(title='message')
     dexteritytextindexer.searchable('title')
     title = schema.TextLine(
         title=_(u'label_title', default=u'Title'),
@@ -154,4 +171,4 @@ class OGMailEditForm(dexterity.EditForm):
     def updateWidgets(self):
         super(OGMailEditForm, self).updateWidgets()
 
-        self.widgets.get('message').mode = DISPLAY_MODE
+        self.groups[0].fields.get('message').mode = DISPLAY_MODE
