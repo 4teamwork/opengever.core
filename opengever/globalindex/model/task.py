@@ -159,6 +159,10 @@ class Task(Base):
         org_unit = ogds_service().fetch_org_unit(self.issuing_org_unit)
         return org_unit.prefix_label(actor.get_link())
 
+    @property
+    def is_forwarding(self):
+        return self.task_type == 'forwarding_task_type'
+
 
 class TaskPrincipal(Base):
     __tablename__ = 'task_principals'
