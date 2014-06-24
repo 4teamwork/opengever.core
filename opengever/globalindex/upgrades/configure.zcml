@@ -43,4 +43,24 @@
         profile="opengever.globalindex:default"
         />
 
+    <!-- 2700 -> 2701 -->
+    <genericsetup:upgradeStep
+        title="Migrate Task DB schema, add containing_subdossier column."
+        description=""
+        source="2700"
+        destination="2701"
+        handler="opengever.globalindex.upgrades.to2701.AddSubdossierColumn"
+        profile="opengever.globalindex:default"
+        />
+
+    <!-- 2701 -> 2702 -->
+    <genericsetup:upgradeStep
+        title="Migrate Task DB data, set containing_subdossier column."
+        description=""
+        source="2701"
+        destination="2702"
+        handler="opengever.globalindex.upgrades.to2702.MigrateSubdossierColumnData"
+        profile="opengever.globalindex:default"
+        />
+
 </configure>

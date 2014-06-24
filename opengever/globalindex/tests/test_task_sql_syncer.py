@@ -23,6 +23,9 @@ class TestTaskSQLSyncer(FunctionalTestCase):
 
         self.dossier = create(Builder('dossier')
                               .titled(u'dossier'))
+        self.subdossier = create(Builder('dossier')
+                                 .titled(u'subdossier')
+                                 .within(self.dossier))
         self.task = create(
             Builder('task')
             .having(title=u'Mach mau!',
@@ -31,7 +34,7 @@ class TestTaskSQLSyncer(FunctionalTestCase):
                     responsible_client=get_current_org_unit().id(),
                     responsible=self.user.userid,
                     deadline=date(2010, 1, 1))
-            .within(self.dossier)
+            .within(self.subdossier)
         )
 
     def test_sql_task_is_created_on_plone_object_creation(self):
@@ -43,18 +46,20 @@ class TestTaskSQLSyncer(FunctionalTestCase):
         self.assertEqual(u'Mach mau!', task.title)
         self.assertEqual(self.user.userid, task.issuer)
         self.assertEqual(self.user.userid, task.responsible)
-        self.assertEqual(u'dossier > Mach mau!', task.breadcrumb_title)
+        self.assertEqual(u'dossier > subdossier > Mach mau!',
+                         task.breadcrumb_title)
         self.assertEqual(u'task-state-open', task.review_state)
-        self.assertEqual(u'dossier-1/task-1', task.physical_path)
+        self.assertEqual(u'dossier-1/dossier-2/task-1', task.physical_path)
         self.assertIsNotNone(task.icon)
         self.assertEqual(task.deadline, date(2010, 1, 1))
         self.assertIsNotNone(task.modified)
         self.assertEqual('direct-execution', task.task_type)
         self.assertFalse(task.is_subtask)
         self.assertEqual('1', task.sequence_number)
-        self.assertEqual('OG / 1', task.reference_number)
+        self.assertEqual('OG / 1.1', task.reference_number)
         self.assertEqual('dossier', task.containing_dossier)
-        self.assertEqual('1', task.dossier_sequence_number)
+        self.assertEqual('subdossier', task.containing_subdossier)
+        self.assertEqual('2', task.dossier_sequence_number)
         self.assertSequenceEqual(['admin', TEST_USER_ID], task.principals)
         self.assertIsNone(task.predecessor)
 
@@ -67,7 +72,8 @@ class TestTaskSQLSyncer(FunctionalTestCase):
         task = Session.query(Task).one()
 
         self.assertEqual('asd', task.assigned_org_unit)
-        self.assertEqual(u'dossier > Gopf, iz mach mau', task.breadcrumb_title)
+        self.assertEqual(u'dossier > subdossier > Gopf, iz mach mau',
+                         task.breadcrumb_title)
         self.assertEqual(u'Gopf, iz mach mau', task.title)
 
         self.assertEqual(get_current_org_unit().id(), task.issuing_org_unit)
@@ -75,15 +81,16 @@ class TestTaskSQLSyncer(FunctionalTestCase):
         self.assertEqual(self.user.userid, task.issuer)
         self.assertEqual(self.user.userid, task.responsible)
         self.assertEqual(u'task-state-open', task.review_state)
-        self.assertEqual(u'dossier-1/task-1', task.physical_path)
+        self.assertEqual(u'dossier-1/dossier-2/task-1', task.physical_path)
         self.assertIsNotNone(task.icon)
         self.assertEqual(task.deadline, date(2010, 1, 1))
         self.assertIsNotNone(task.modified)
         self.assertEqual('direct-execution', task.task_type)
         self.assertFalse(task.is_subtask)
         self.assertEqual('1', task.sequence_number)
-        self.assertEqual('OG / 1', task.reference_number)
+        self.assertEqual('OG / 1.1', task.reference_number)
         self.assertEqual('dossier', task.containing_dossier)
-        self.assertEqual('1', task.dossier_sequence_number)
+        self.assertEqual('subdossier', task.containing_subdossier)
+        self.assertEqual('2', task.dossier_sequence_number)
         self.assertSequenceEqual(['admin', TEST_USER_ID], task.principals)
         self.assertIsNone(task.predecessor)
