@@ -13,9 +13,10 @@ class TestGlobalindexTask(TestCase):
         super(TestGlobalindexTask, self).setUp()
 
     def _create_task(self, int_id=1, admin_unit_id='m1',
-                     issuing_org_unit='org', assigned_org_unit='org'):
+                     issuing_org_unit='org', assigned_org_unit='org',
+                     task_type='direct-execution'):
         return Task(int_id, admin_unit_id, issuing_org_unit=issuing_org_unit,
-                    assigned_org_unit=assigned_org_unit)
+                    assigned_org_unit=assigned_org_unit, task_type=task_type)
 
     def test_task_representation(self):
         task1 = self._create_task()
@@ -72,3 +73,13 @@ class TestGlobalindexTask(TestCase):
             str(cm.exception))
 
         transaction.abort()
+
+    def test_is_forwarding(self):
+        forwarding = self._create_task(1, task_type='forwarding_task_type')
+        task = self._create_task(2, task_type='direct-execution')
+
+        self.layer.session.add(forwarding)
+        self.layer.session.add(task)
+
+        self.assertTrue(forwarding.is_forwarding)
+        self.assertFalse(task.is_forwarding)

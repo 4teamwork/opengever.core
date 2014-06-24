@@ -406,15 +406,16 @@ class DossierAddFormView(FormWrapper, grok.View):
         # The default value for the title of the new dossier should be the
         # title of the remote dossier, which contains the task which is
         # accepted with this wizard.
+        title_key = 'form.widgets.IOpenGeverBase.title'
+
         query = getUtility(ITaskQuery)
         task = query.get_task_by_oguid(oguid)
 
-        title_key = 'form.widgets.IOpenGeverBase.title'
-
-        if self.request.form.get(title_key, None) is None:
-            title = task.containing_dossier
-            if isinstance(title, str):
-                title = title.decode('utf-8')
-            self.request.set(title_key, title)
+        if not task.is_forwarding:
+            if self.request.form.get(title_key, None) is None:
+                title = task.containing_dossier
+                if isinstance(title, str):
+                    title = title.decode('utf-8')
+                self.request.set(title_key, title)
 
         return FormWrapper.__call__(self)
