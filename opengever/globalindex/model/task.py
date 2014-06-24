@@ -95,6 +95,7 @@ class Task(Base):
     sequence_number = Column(String(10), index=True)
     dossier_sequence_number = Column(String(10))
     containing_dossier = Column(String(512))
+    containing_subdossier = Column(String(512))
 
     created = Column(DateTime, default=functions.now())
     modified = Column(DateTime)
@@ -152,6 +153,7 @@ class Task(Base):
         self.principals = plone_task.get_principals()
         self.predecessor = self.query_predecessor(
             *plone_task.get_predecessor_ids())
+        self.containing_subdossier = plone_task.get_containing_subdossier()
 
     # XXX move me to task query
     def query_predecessor(self, admin_unit_id, pred_init_id):
