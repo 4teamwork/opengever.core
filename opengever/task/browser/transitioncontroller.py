@@ -218,7 +218,7 @@ class TaskTransitionController(BrowserView):
         if not self._is_multiclient_setup():
             return self._addresponse_form_url(transition)
 
-        elif self._is_task_on_responsible_client():
+        elif self._is_responsible_org_unit_part_of_current_admin_unit():
             return self._addresponse_form_url(transition)
 
         else:
@@ -297,7 +297,7 @@ class TaskTransitionController(BrowserView):
         if not self._is_multiclient_setup():
             return self._addresponse_form_url(transition)
 
-        elif self._is_task_on_responsible_client():
+        elif self._is_responsible_org_unit_part_of_current_admin_unit():
             return self._addresponse_form_url(transition)
 
         elif len(get_documents_of_task(
@@ -508,6 +508,13 @@ class TaskTransitionController(BrowserView):
 
     def _is_multiclient_setup(self):
         return ogds_service().has_multiple_admin_units()
+
+    def _is_responsible_org_unit_part_of_current_admin_unit(self):
+        """Returns true if the responsible org_unit is a
+        part of the current admin unit.
+        """
+        responsible_unit = self.context.responsible_org_unit()
+        return responsible_unit.admin_unit == current_admin_unit()
 
     def _is_task_on_responsible_client(self):
         """Returns true if the current client is the responsible-client of
