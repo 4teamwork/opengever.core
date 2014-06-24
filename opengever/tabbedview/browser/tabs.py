@@ -2,23 +2,21 @@ from five import grok
 from ftw.tabbedview.interfaces import ITabbedView
 from ftw.table import helper
 from ftw.table.catalog_source import CatalogTableSource
-from opengever.base.browser.helper import client_title_helper
 from opengever.dossier.base import DOSSIER_STATES_OPEN
+from opengever.dossier.interfaces import IDossierMarker
+from opengever.globalindex.model.task import Task
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.tabbedview import _
 from opengever.tabbedview.browser.base import OpengeverTab
 from opengever.tabbedview.browser.listing import CatalogListingView
 from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
-from opengever.tabbedview.helper import display_client_title_condition
 from opengever.tabbedview.helper import external_edit_link
 from opengever.tabbedview.helper import linked_document_with_tooltip
 from opengever.tabbedview.helper import linked_trashed_document_with_tooltip
-from opengever.tabbedview.helper import overdue_date_helper
-from opengever.tabbedview.helper import readable_date_set_invisibles
 from opengever.tabbedview.helper import readable_ogds_author, linked
 from opengever.tabbedview.helper import readable_ogds_user
 from opengever.tabbedview.helper import workflow_state
 from opengever.tabbedview.interfaces import IStateFilterTableSourceConfig
-from opengever.task.helper import task_type_helper
 from plone.dexterity.interfaces import IDexterityContainer
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.component import adapts
@@ -235,64 +233,13 @@ class StateFilterTableSource(grok.MultiAdapter, CatalogTableSource):
 
 class Tasks(GlobalTaskListingTab):
 
-    implements(IStateFilterTableSourceConfig)
-
     grok.name('tabbedview_view-tasks')
+    grok.context(IDossierMarker)
 
-    columns = (
-
-        {'column': '',
-         'column_title': '',
-         'transform': helper.path_checkbox,
-         'width': 30},
-
-        {'column': 'review_state',
-         'column_title': _(u'label_review_state', default=u'Review state'),
-         'transform': workflow_state},
-
-        {'column': 'Title',
-         'column_title': _(u'label_title', default=u'Title'),
-         'sort_index': 'sortable_title',
-         'transform': linked},
-
-        {'column': 'task_type',
-         'column_title': _(u'label_task_type', 'Task Type'),
-         'transform': task_type_helper},
-
-        {'column': 'deadline',
-         'column_title': _(u'label_deadline', 'Deadline'),
-         'transform': overdue_date_helper},
-
-        {'column': 'date_of_completion',
-         'column_title': _(u'label_date_of_completion', 'Date of Completion'),
-         'transform': readable_date_set_invisibles},
-
-        {'column': 'responsible',
-         'column_title': _(u'label_responsible_task', 'Responsible'),
-         'transform': readable_ogds_author},
-
-        {'column': 'issuer',
-         'column_title': _(u'label_issuer', 'Issuer'),
-         'transform': readable_ogds_author},
-
-        {'column': 'created',
-         'column_title': _(u'label_issued_date', 'issued at'),
-         'transform': helper.readable_date},
-
-        {'column': 'client_id',
-         'column_title': _('client_id', 'Client'),
-         'transform': client_title_helper,
-         'condition': display_client_title_condition},
-
-        {'column': 'containing_dossier',
-         'column_title': _('containing_dossier', 'Dossier'), },
-
-        {'column': 'sequence_number',
-         'column_title': _(u'task_sequence_number', "Sequence Number"), },
-
+    columns = GlobalTaskListingTab.columns + (
         {'column': 'containing_subdossier',
          'column_title': _('label_subdossier', default="Subdossier"), },
-        )
+    )
 
     enabled_actions = [
         'change_state',
@@ -305,6 +252,10 @@ class Tasks(GlobalTaskListingTab):
     major_actions = [
         'change_state',
     ]
+
+    def get_base_query(self):
+        return Task.query.by_dossier(self.context).by_admin_unit(
+            get_current_admin_unit())
 
 
 class Trash(Documents):
