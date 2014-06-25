@@ -4,6 +4,9 @@ Changelog
 3.3.1 (unreleased)
 ------------------
 
+- Added option so save a copy of an outgoing mail in a dossier.
+  [lknoepfel]
+
 - Dossierdetails: Fixed label for the Dossier end.
   [phgross]
 
