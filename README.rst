@@ -56,7 +56,7 @@ with these contents:
       "ldap":{
         "user":"<bind_dn>",
         "password":"<bind_pw>"
-      }    
+      }
     }
 
 
@@ -76,6 +76,24 @@ Alternatively it's also possible to only update a single subpackage, for example
 .. code::
 
     bin/i18n-build opengever.dossier
+
+Scripts
+-------
+Scripts are located in ``/scripts``.
+
+
+**Repository configuration:**
+
+`convert_csv_repository_to_xlsx.py <https://github.com/4teamwork/opengever.core/blob/master/scripts/convert_csv_repository_to_xlsx.py>`:
+Converts repository configuration from old format (repository.csv) to new format (xlsx).
+
+
+*You have to install openpyxl to run this script!*
+
+.. code::
+
+    bin/zopepy scripts/convert_csv_repository_to_xlsx.py <path to repository csv file> <path for new xlsx file>
+
 
 
 Tests

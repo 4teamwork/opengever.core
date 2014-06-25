@@ -4,6 +4,9 @@ Changelog
 3.3.1 (unreleased)
 ------------------
 
+- Added repository.csv to xlsx script.
+  [lknoepfel]
+
 - Changed format of examplecontent excel to xlsx.
   [lknoepfel]
 
