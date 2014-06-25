@@ -12,8 +12,7 @@ from zope.component import getUtility, queryMultiAdapter
 try:
     from opengever.pdfconverter.behaviors.preview import IPreviewMarker
     from opengever.pdfconverter.behaviors.preview import IPreview
-    from opengever.pdfconverter.behaviors.preview import \
-        CONVERSION_STATE_READY
+    from opengever.pdfconverter import CONVERSION_STATE_READY
 
     PDFCONVERTER_AVAILABLE = True
 except ImportError:
