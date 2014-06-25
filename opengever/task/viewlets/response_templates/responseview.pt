@@ -1,0 +1,37 @@
+<div class="response-adder box" i18n:domain="opengever.task">
+  <h3 class="historySeparator" i18n:translate="progress">Progress:</h3>
+  <tal:repeat tal:repeat="response_info viewlet/responses">
+
+    <tal:define tal:define="id response_info/id;
+                            response nocall:response_info/response">
+
+      <div class="answer" tal:attributes="class string:answer ${response/css_class}">
+
+        <div class="answerType">&nbsp;</div>
+        <div class="answerBody">
+          <div class="date" tal:content="python:here.toLocalizedTime(response.date, long_format=True)" />
+
+          <div class="manageActions">
+            <a href="#" class="edit"
+               tal:attributes="href response_info/edit_link" i18n:translate="">
+              Edit
+            </a>
+            <a href="#" class="delete"
+               tal:attributes="href response_info/delete_link" i18n:translate="">
+              Delete
+            </a>
+          </div>
+
+          <h3 tal:content="structure response/msg" i18n:translate="">
+            Response Header
+          </h3>
+
+          <div class="text" tal:content="response/text">hhh</div>
+
+        </div>
+      </div>
+      <div style="clear:both"><!-- --></div>
+    </tal:define>
+
+  </tal:repeat>
+</div>
