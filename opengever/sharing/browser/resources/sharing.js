@@ -5,7 +5,19 @@ $(function() {
             urlmatch:'$',
             urlreplace:''
         });
+        $('.link-overlay').live('click', function(event) {
+            if ($(this).hasClass('overlayed')) return;
+            event.preventDefault();
+            $(this).prepOverlay({
+                subtype:'ajax',
+                urlmatch:'$',
+                urlreplace:''
+            });
+            $(this).addClass('overlayed');
+            $(this).trigger('click');
+        });
     };
+
 
     /* initalize for sharing view */
     init();

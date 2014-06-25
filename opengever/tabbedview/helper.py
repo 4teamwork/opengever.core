@@ -1,7 +1,3 @@
-from Products.CMFCore.interfaces._tools import IMemberData
-from Products.CMFPlone import PloneMessageFactory as pmf
-from Products.PluggableAuthService.interfaces.authservice import \
-    IPropertiedUser
 from datetime import date as dt
 from ftw.mail.utils import get_header
 from opengever.base import _ as base_mf
@@ -9,6 +5,10 @@ from opengever.base.browser.helper import get_css_class
 from opengever.ogds.base.interfaces import IContactInformation
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize import ram
+from Products.CMFCore.interfaces._tools import IMemberData
+from Products.CMFPlone import PloneMessageFactory as pmf
+from Products.PluggableAuthService.interfaces.authservice import \
+    IPropertiedUser
 from zope.app.component.hooks import getSite
 from zope.component import getMultiAdapter
 from zope.component import getUtility
@@ -97,7 +97,7 @@ def linked_ogds_author(item, author):
             author = author.decode('utf-8')
         info = getUtility(IContactInformation)
         if info.is_user(author) or info.is_contact(
-            author) or info.is_inbox(author):
+                author) or info.is_inbox(author):
             return info.render_link(author)
         else:
             return author
@@ -201,6 +201,12 @@ def _linked_document_with_tooltip(item, value, trashed=False):
     data['edit_direct_label'] = translate(
         pmf(u'Checkout and edit'), context=item.REQUEST).encode('utf-8')
 
+    data['copy_download_link'] = '%s/file_download_confirmation' % (data['url'])
+    data['copy_download_label'] = translate(
+        u'label_download_copy',
+        domain='opengever.document',
+        context=item.REQUEST).encode('utf-8')
+
     # Construct CSS class
     data['css_class'] = get_css_class(item)
 
@@ -230,6 +236,11 @@ def _linked_document_with_tooltip(item, value, trashed=False):
         tooltip_links.append("""<a href='%(edit_direct_link)s'>
                     %(edit_direct_label)s
                 </a>""" % data)
+
+    if is_doc:
+        tooltip_links.append("""<a href='%(copy_download_link)s'
+            class='link-overlay'>%(copy_download_label)s
+            </a>""" % data)
 
     data['tooltip_links'] = """
                 """.join(tooltip_links)
