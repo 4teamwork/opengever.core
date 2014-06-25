@@ -6,6 +6,7 @@ from datetime import datetime
 from datetime import timedelta
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
+from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.source import DossierPathSourceBinder
@@ -208,7 +209,7 @@ def default_issuer(data):
 
 
 class Task(Container):
-    implements(ITask)
+    implements(ITask, ITabbedviewUploadable)
 
     def __init__(self, *args, **kwargs):
         super(Task, self).__init__(*args, **kwargs)
