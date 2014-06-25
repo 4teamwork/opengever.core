@@ -20,7 +20,7 @@ class OrgUnitSelector(object):
         self._storage[CURRENT_ORG_UNIT_KEY] = unitid
 
     def available_units(self):
-        return [unit for id, unit in self._units.items() if id != self.get_current_unit().id()]
+        return self._units.values()
 
     def _get_current_unit_id(self):
         if self._storage.has_key(CURRENT_ORG_UNIT_KEY):
