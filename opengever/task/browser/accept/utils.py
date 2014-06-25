@@ -219,6 +219,9 @@ def assign_forwarding_to_dossier(
         value = ITask.get(fieldname).get(forwarding_obj)
         fielddata[fieldname] = value
 
+    # Reset issuer to the current inbox
+    fielddata['issuer'] = get_current_org_unit().inbox().id()
+
     # lets create a new task - the successor task
     task = createContentInContainer(
         dossier, 'opengever.task.task', **fielddata)
