@@ -4,6 +4,9 @@ Changelog
 3.3.1 (unreleased)
 ------------------
 
+- Fixed import for opengever.pdfconverter.
+  [lknoepfel]
+
 - Dossierdetails: Fixed label for the Dossier end.
   [phgross]
 
