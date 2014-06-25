@@ -171,6 +171,11 @@ msgstr "Mitteilung"
 msgid "label_reference_number"
 msgstr "Aktenzeichen"
 
+#. Default: "Send documents only als links"
+#: ./opengever/mail/browser/send_document.py:106
+msgid "label_save_copy_in_dossier"
+msgstr "Kopie des versandten Mails im Dossier ablegen."
+
 #. Default: "see attachment"
 #: ./opengever/mail/browser/send_document.py:261
 msgid "label_see_attachment"

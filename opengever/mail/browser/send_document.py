@@ -7,6 +7,8 @@ from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 from email.Utils import formatdate
 from five import grok
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.mail.mail import IMail
 from opengever.base.source import DossierPathSourceBinder
 from opengever.mail import _
@@ -33,6 +35,7 @@ from zope.event import notify
 from zope.i18n import translate
 from zope.interface import Interface
 from zope.interface import invariant, Invalid
+import random
 
 CHARSET = 'utf-8'
 
@@ -99,6 +102,12 @@ class ISendDocumentSchema(Interface):
     documents_as_links = schema.Bool(
         title=_(u'label_documents_as_link',
                 default=u'Send documents only als links'),
+        required=True,
+        )
+
+    save_copy_in_dossier = schema.Bool(
+        title=_(u'label_save_copy_in_dossier',
+                default=u'Save a copy of the sent mail in the Dossier'),
         required=True,
         )
 
@@ -197,6 +206,17 @@ class SendDocumentForm(form.Form):
 
             header_to = Header(','.join(addresses), CHARSET)
             msg['To'] = header_to
+
+            if data.get('save_copy_in_dossier'):
+                # id = str(random.randint(0, 99999999)) #  temporary id
+                # self.context.invokeFactory("ftw.mail.mail", id)
+                # content = self.context[id]
+                # content.message = msg
+                mail = create(Builder("mail")
+                       .within(self.context)
+                       .titled(data.get('subject')))
+                import pdb; pdb.set_trace()
+
 
             # send it
             mh.send(msg, mfrom=mail_from, mto=','.join(addresses))

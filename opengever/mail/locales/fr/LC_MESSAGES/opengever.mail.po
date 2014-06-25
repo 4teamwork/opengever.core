@@ -168,6 +168,11 @@ msgstr "Message"
 msgid "label_reference_number"
 msgstr "Numéro de référence"
 
+#. Default: "Send documents only als links"
+#: ./opengever/mail/browser/send_document.py:106
+msgid "label_save_copy_in_dossier"
+msgstr "Copie des mails envoyés mis dans le dossier."
+
 #. Default: "see attachment"
 #: ./opengever/mail/browser/send_document.py:261
 msgid "label_see_attachment"
@@ -200,5 +205,3 @@ msgstr "Email"
 #: ./opengever/mail/browser/send_document.py:65
 msgid "receiver"
 msgstr "Destinataire"
-
-
