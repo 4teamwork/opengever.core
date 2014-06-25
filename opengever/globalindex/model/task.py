@@ -10,6 +10,7 @@ from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey, UniqueConstraint
 from sqlalchemy import Integer
 from sqlalchemy import String
+from sqlalchemy import Text
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import backref
 from sqlalchemy.orm import composite
@@ -80,6 +81,7 @@ class Task(Base):
     oguid = composite(Oguid, admin_unit_id, int_id)
 
     title = Column(String(MAX_TITLE_LENGTH))
+    text = Column(Text)
     breadcrumb_title = Column(String(MAX_BREADCRUMB_LENGTH))
     physical_path = Column(String(256))
     review_state = Column(String(50))
@@ -132,6 +134,7 @@ class Task(Base):
 
         """
         self.title = plone_task.safe_title
+        self.text = plone_task.text
         self.breadcrumb_title = plone_task.get_breadcrumb_title(
             self.MAX_BREADCRUMB_LENGTH)
         self.physical_path = plone_task.get_physical_path()

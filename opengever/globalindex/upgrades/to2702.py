@@ -7,10 +7,11 @@ class MigrateSubdossierColumnData(UpgradeStep):
         """This method is implemented in each upgrade step with the
         tasks the upgrade should perform.
         """
-        self.index_containing_subdossier()
+        self.index_new_task_columns()
 
-    def index_containing_subdossier(self):
+    def index_new_task_columns(self):
         for task in self.objects({'portal_type': 'opengever.task.task'},
                                   'Get tasks'):
             sqltask = task.get_sql_object()
             sqltask.containing_subdossier = task.get_containing_subdossier()
+            sqltask.text = task.text

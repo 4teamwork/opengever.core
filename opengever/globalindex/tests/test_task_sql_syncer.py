@@ -33,7 +33,8 @@ class TestTaskSQLSyncer(FunctionalTestCase):
                     task_type='direct-execution',
                     responsible_client=get_current_org_unit().id(),
                     responsible=self.user.userid,
-                    deadline=date(2010, 1, 1))
+                    deadline=date(2010, 1, 1),
+                    text='Lorem ipsum dolor sit amet, consectetur')
             .within(self.subdossier)
         )
 
@@ -60,6 +61,7 @@ class TestTaskSQLSyncer(FunctionalTestCase):
         self.assertEqual('dossier', task.containing_dossier)
         self.assertEqual('subdossier', task.containing_subdossier)
         self.assertEqual('2', task.dossier_sequence_number)
+        self.assertEqual('Lorem ipsum dolor sit amet, consectetur', task.text)
         self.assertSequenceEqual(['admin', TEST_USER_ID], task.principals)
         self.assertIsNone(task.predecessor)
 
@@ -92,5 +94,6 @@ class TestTaskSQLSyncer(FunctionalTestCase):
         self.assertEqual('dossier', task.containing_dossier)
         self.assertEqual('subdossier', task.containing_subdossier)
         self.assertEqual('2', task.dossier_sequence_number)
+        self.assertEqual('Lorem ipsum dolor sit amet, consectetur', task.text)
         self.assertSequenceEqual(['admin', TEST_USER_ID], task.principals)
         self.assertIsNone(task.predecessor)
