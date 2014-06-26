@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-08-21 05:54+0000\n"
-"PO-Revision-Date: 2013-08-28 16:21+0200\n"
+"POT-Creation-Date: 2014-06-25 16:08+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,6 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.inbox\n"
 
-
 #: ./opengever/inbox/profiles/default/actions.xml
 msgid "Forward"
 msgstr ""
@@ -27,6 +26,7 @@ msgid "Forwarding"
 msgstr ""
 
 #: ./opengever/inbox/profiles/default/types/opengever.inbox.inbox.xml
+#: ./opengever/inbox/upgrades/profiles/2603/types/opengever.inbox.inbox.xml
 msgid "Inbox"
 msgstr ""
 
@@ -40,54 +40,60 @@ msgid "close"
 msgstr ""
 
 #. Default: "Error: Please select at least one document to forward"
-#: ./opengever/inbox/forwarding.py:103
+#: ./opengever/inbox/forwarding.py:107
 msgid "error_no_document_selected"
 msgstr ""
 
 #. Default: "Common"
-#: ./opengever/inbox/inbox.py:17
+#: ./opengever/inbox/inbox.py:13
 msgid "fieldset_common"
 msgstr ""
 
-#: ./opengever/inbox/inbox.py:23
+#. Default: "Forwarding"
+#: ./opengever/inbox/forwarding.py:83
+msgid "forwarding_task_type"
+msgstr ""
+
+#: ./opengever/inbox/inbox.py:19
 msgid "help_inbox_group"
 msgstr ""
 
-#: ./opengever/inbox/forwarding.py:51
+#: ./opengever/inbox/forwarding.py:52
 msgid "help_responsible"
 msgstr ""
 
 #. Default: "Assigned tasks"
-#: ./opengever/inbox/browser/overview.py:24
+#: ./opengever/inbox/browser/overview.py:30
 msgid "label_assigned_inbox_tasks"
 msgstr ""
 
 #. Default: "Inbox Group"
-#: ./opengever/inbox/inbox.py:22
+#: ./opengever/inbox/inbox.py:18
 msgid "label_inbox_group"
 msgstr ""
 
 #. Default: "Issued tasks"
-#: ./opengever/inbox/browser/overview.py:28
+#: ./opengever/inbox/browser/overview.py:34
 msgid "label_issued_inbox_tasks"
 msgstr ""
 
 #. Default: "Refuse"
-#: ./opengever/inbox/browser/refuse.py:29
+#: ./opengever/inbox/browser/refuse.py:40
 msgid "label_refuse"
 msgstr ""
 
 #. Default: "Refuse Forwarding"
-#: ./opengever/inbox/browser/refuse.py:26
+#: ./opengever/inbox/browser/refuse.py:37
 msgid "label_refuse_forwarding"
 msgstr ""
 
 #. Default: "Responsible"
-#: ./opengever/inbox/forwarding.py:50
+#: ./opengever/inbox/forwarding.py:51
 msgid "label_responsible"
 msgstr ""
 
 #. Default: "Assign Forwarding"
+#: ./opengever/inbox/browser/assign.py:34
 msgid "title_assign_forwarding"
 msgstr ""
 
@@ -95,3 +101,4 @@ msgstr ""
 #: ./opengever/inbox/browser/close.py:35
 msgid "title_close_forwarding"
 msgstr ""
+

@@ -1,16 +1,19 @@
+from DateTime import DateTime as ZopeDateTime
 from opengever.globalindex import Session
 from opengever.globalindex.model import Base
 from opengever.globalindex.oguid import Oguid
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import ogds_service
+from plone import api
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import Date
 from sqlalchemy import DateTime
-from sqlalchemy import ForeignKey, UniqueConstraint
+from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy import Text
+from sqlalchemy import UniqueConstraint
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import backref
 from sqlalchemy.orm import composite
@@ -19,6 +22,7 @@ from sqlalchemy.orm import relation
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
 from sqlalchemy.sql import functions
+from zope.i18n import translate
 
 
 class TaskQuery(Query):
@@ -174,6 +178,29 @@ class Task(Base):
     @property
     def is_forwarding(self):
         return self.task_type == 'forwarding_task_type'
+
+    def get_responsible_label(self):
+        actor = Actor.lookup(self.responsible)
+        org_unit = ogds_service().fetch_org_unit(self.assigned_org_unit)
+        return org_unit.prefix_label(actor.get_link())
+
+    def get_state_label(self):
+        return "<span class=wf-{}>{}</span>".format(
+            self.review_state,
+            translate(self.review_state, domain='plone',
+                      context=api.portal.get().REQUEST),
+        )
+
+    def _date_to_zope_datetime(self, date):
+        if not date:
+            return None
+        return ZopeDateTime(date.year, date.month, date.day)
+
+    def get_deadline(self):
+        return self._date_to_zope_datetime(self.deadline)
+
+    def get_completed(self):
+        return self._date_to_zope_datetime(self.completed)
 
 
 class TaskPrincipal(Base):

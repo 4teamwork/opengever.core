@@ -1,7 +1,4 @@
-"""Contains the Code for forwarding content type    """
 from Acquisition import aq_inner, aq_parent
-from Products.CMFCore.interfaces import IActionSucceededEvent
-from Products.statusmessages.interfaces import IStatusMessage
 from datetime import datetime
 from five import grok
 from opengever.inbox import _
@@ -9,11 +6,15 @@ from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.ogds.base.utils import get_client_id
 from opengever.task import _ as task_mf
 from opengever.task.task import ITask, Task
+from plone import api
 from plone.directives import form
 from plone.directives.dexterity import AddForm
+from Products.CMFCore.interfaces import IActionSucceededEvent
+from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.interfaces import HIDDEN_MODE
 from zope import schema
 from zope.app.container.interfaces import IObjectAddedEvent
+from zope.i18n import translate
 from zope.interface import implements
 
 
@@ -78,6 +79,9 @@ class Forwarding(Task):
 
     task_type = property(get_static_task_type, set_static_task_type)
 
+    def get_task_type_label(self):
+        return _('forwarding_task_type', default=u'Forwarding')
+
 
 class ForwardingAddForm(AddForm):
     """Provide a custom add-form which adds the selected documents
@@ -104,7 +108,7 @@ class ForwardingAddForm(AddForm):
                   u'Error: Please select at least one document to forward'),
                 type='error')
             redir_url = self.request.get('orig_template',
-                        self.context.absolute_url())
+                                         self.context.absolute_url())
             self.request.RESPONSE.redirect(redir_url)
 
         if paths:

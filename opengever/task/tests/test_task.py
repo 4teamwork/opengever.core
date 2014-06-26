@@ -50,7 +50,7 @@ class TestTaskIntegration(FunctionalTestCase):
                     .within(t1)
                     .titled('Task 2'))
 
-        self.assertEquals([t2], view.get_sub_tasks())
+        self.assertEquals([t2.get_sql_object()], view.get_sub_tasks())
 
     def test_relateddocuments(self):
         self.grant('Manager')
