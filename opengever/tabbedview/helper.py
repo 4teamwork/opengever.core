@@ -287,6 +287,7 @@ def workflow_state(item, value):
         state, translate(value, domain='plone', context=request))
 
 
+#XXX replace with Task.get_deadline_label
 def overdue_date_helper(item, date):
     """Helper for setting CSS class `overdue` if an item's
     deadline is in the past.
@@ -305,18 +306,18 @@ def overdue_date_helper(item, date):
         if dt.fromordinal(date.toordinal()) < dt.today():
             overdue = True
     except ValueError:
-        return None
+        return u''
 
     if overdue and item and item.review_state in [
-        'task-state-cancelled',
-        'task-state-rejected',
-        'task-state-tested-and-closed',
-        'forwarding-state-closed']:
+            'task-state-cancelled',
+            'task-state-rejected',
+            'task-state-tested-and-closed',
+            'forwarding-state-closed']:
 
         overdue = False
 
-    class_attr = overdue and 'class="overdue"' or ''
-    return """<span %s>%s</span>""" % (class_attr, formatted_date)
+    class_attr = ' class="overdue"' if overdue else ''
+    return "<span{}>{}</span>".format(class_attr, formatted_date)
 
 
 def queue_view_helper(item, value):
