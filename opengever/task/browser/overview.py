@@ -3,9 +3,6 @@ from Acquisition import aq_parent
 from five import grok
 from opengever.base.browser.helper import get_css_class
 from opengever.globalindex.model.task import Task
-from opengever.ogds.base.actor import Actor
-from opengever.ogds.base.utils import get_current_admin_unit
-from opengever.ogds.base.utils import ogds_service
 from opengever.tabbedview.browser.base import OpengeverTab
 from opengever.task import _
 from opengever.task.task import ITask
@@ -163,68 +160,4 @@ class Overview(DisplayForm, OpengeverTab):
             item = item.get_sql_object()
         if not item:
             return None
-        return self._sqlalchemy_task_link(item)
-
-    def _sqlalchemy_task_link(self, item):
-        """Renders a indexed task item (globalindex sqlalchemy object) either
-        with a link to the effective task (if the user has access) or just with
-        the title.
-        We have two different types of a task. task-object providing the
-        ITask-interface is handled in the _object_task_link.
-        """
-
-        css_class = self.get_css_class(item)
-
-        admin_unit = ogds_service().fetch_admin_unit(item.admin_unit_id)
-        if not admin_unit:
-            return '<span class="%s">%s</span>' % (css_class, item.title)
-
-        # has the user access to the target task?
-        has_access = False
-        mtool = getToolByName(self.context, 'portal_membership')
-        member = mtool.getAuthenticatedMember()
-
-        if member:
-            principals = set(member.getGroups() + [member.getId()])
-            allowed_principals = set(item.principals)
-            has_access = len(principals & allowed_principals) > 0
-
-        # If the target is on a different client we need to make a popup
-        if item.admin_unit_id != get_current_admin_unit().id():
-            link_target = ' target="_blank"'
-            url = '%s/%s' % (admin_unit.public_url, item.physical_path)
-        else:
-            link_target = ''
-            url = admin_unit.public_url + '/' + item.physical_path
-
-        # create breadcrumbs including the (possibly remote) client title
-        breadcrumb_titles = "[%s] > %s" % (admin_unit.title, item.breadcrumb_title)
-
-        # Client and user info
-        assigned_org_unit = ogds_service().fetch_org_unit(item.assigned_org_unit)
-        info_html = ' <span class="discreet">({})</span>'.format(
-            assigned_org_unit.prefix_label(
-                Actor.lookup(item.responsible).get_label()))
-
-        # Link to the task object
-        task_html = '<span class="%s">%s</span>' % \
-                        (css_class, item.title)
-
-        # Render the full link if we have acccess
-        if has_access:
-            inner_html = '<a href="%s"%s title="%s">%s</a> %s' % (
-                url,
-                link_target,
-                breadcrumb_titles,
-                task_html,
-                info_html)
-        else:
-            inner_html = '%s %s' % (task_html, info_html)
-
-        # Add the task-state css and return it
-        return self._task_state_wrapper(item, inner_html)
-
-    def _task_state_wrapper(self, item, text):
-        """ Wrap a span-tag around the text with the status-css class
-        """
-        return '<span class="wf-%s">%s</span>' % (item.review_state, text)
+        return item.get_link(self.get_css_class(item))

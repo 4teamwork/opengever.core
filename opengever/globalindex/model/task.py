@@ -3,6 +3,7 @@ from opengever.globalindex import Session
 from opengever.globalindex.model import Base
 from opengever.globalindex.oguid import Oguid
 from opengever.ogds.base.actor import Actor
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.tabbedview.helper import overdue_date_helper
 from plone import api
@@ -109,6 +110,7 @@ class Task(Base):
     deadline = Column(Date)
     completed = Column(Date)
 
+    # XXX shit, this should be ...org_unit_ID
     issuing_org_unit = Column(String(30), index=True, nullable=False)
     assigned_org_unit = Column(String(30), index=True, nullable=False)
 
@@ -133,6 +135,9 @@ class Task(Base):
     @property
     def id(self):
         return self.task_id
+
+    def get_admin_unit(self):
+        return ogds_service().fetch_admin_unit(self.admin_unit_id)
 
     def sync_with(self, plone_task):
         """Sync this task instace with its corresponding plone taks.
@@ -171,6 +176,7 @@ class Task(Base):
         return Session.query(Task).filter_by(
             admin_unit_id=admin_unit_id, int_id=pred_init_id).first()
 
+    # XXX rename me, this should be get_issuer_link
     def get_issuer_label(self):
         actor = Actor.lookup(self.issuer)
         org_unit = ogds_service().fetch_org_unit(self.issuing_org_unit)
@@ -180,6 +186,7 @@ class Task(Base):
     def is_forwarding(self):
         return self.task_type == 'forwarding_task_type'
 
+    # XXX rename me, this should be get_responsible_link
     def get_responsible_label(self):
         actor = Actor.lookup(self.responsible)
         org_unit = ogds_service().fetch_org_unit(self.assigned_org_unit)
@@ -205,6 +212,59 @@ class Task(Base):
 
     def get_completed(self):
         return self._date_to_zope_datetime(self.completed)
+
+    def has_access(self, member):
+        if not member:
+            return False
+
+        principals = set(member.getGroups() + [member.getId()])
+        allowed_principals = set(self.principals)
+        return len(principals & allowed_principals) > 0
+
+    def get_link(self, css_class):
+        admin_unit = self.get_admin_unit()
+        if not admin_unit:
+            return u'<span class="{}">{}</span>'.format(css_class, self.title)
+
+        url = '/'.join((admin_unit.public_url, self.physical_path))
+        # If the target is on a different client we need to make a popup
+        if self.admin_unit_id != get_current_admin_unit().id():
+            link_target = u' target="_blank"'
+        else:
+            link_target = u''
+
+        # create breadcrumbs including the (possibly remote) client title
+        breadcrumb_titles = u"[{}] > {}".format(admin_unit.title,
+                                               self.breadcrumb_title)
+
+        # Client and user info
+        assigned_org_unit = ogds_service().fetch_org_unit(
+            self.assigned_org_unit)
+        info_html = u' <span class="discreet">({})</span>'.format(
+            assigned_org_unit.prefix_label(
+                Actor.lookup(self.responsible).get_label()))
+
+        # Link to the task object
+        task_html = u'<span class="{}">{}</span>'.format(css_class, self.title)
+
+        # Render the full link if we have acccess
+        if self.has_access(api.user.get_current()):
+            inner_html = u'<a href="{}"{} title="{}">{}</a> {}'.format(
+                url,
+                link_target,
+                breadcrumb_titles,
+                task_html,
+                info_html)
+        else:
+            inner_html = u'{} {}'.format(task_html, info_html)
+
+        # Add the task-state css and return it
+        return self._task_state_wrapper(inner_html)
+
+    def _task_state_wrapper(self, text):
+        """ Wrap a span-tag around the text with the status-css class
+        """
+        return u'<span class="wf-%s">%s</span>' % (self.review_state, text)
 
 
 class TaskPrincipal(Base):
