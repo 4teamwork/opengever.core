@@ -1,18 +1,19 @@
 from five import grok
-from opengever.tabbedview.browser.listing import ListingView
+from ftw.table import helper
 from ftw.table.basesource import BaseTableSource
 from ftw.table.interfaces import ITableSource, ITableSourceConfig
-from ftw.table import helper
 from opengever.globalindex.model.task import Task
-from opengever.ogds.models.client import Client
 from opengever.ogds.base.utils import create_session
+from opengever.ogds.models.client import Client
 from opengever.tabbedview import _
-from opengever.tabbedview.browser.tabs import OpengeverTab
+from opengever.tabbedview.browser.base import OpengeverTab
+from opengever.tabbedview.browser.listing import ListingView
 from sqlalchemy import or_
 from sqlalchemy.orm.query import Query
 from sqlalchemy.sql.expression import asc, desc
 from zope.app.pagetemplate import ViewPageTemplateFile
-from zope.interface import implements, Interface
+from zope.interface import implements
+from zope.interface import Interface
 
 
 def linked_url_helper(item, value):

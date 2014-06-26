@@ -7,9 +7,9 @@ from opengever.globalindex.model.task import Task
 from opengever.globalindex.utils import indexed_task_link_helper
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.tabbedview import _
+from opengever.tabbedview.browser.base import OpengeverTab
 from opengever.tabbedview.browser.listing import ListingView
 from opengever.tabbedview.browser.sqltablelisting import SqlTableSource
-from opengever.tabbedview.browser.tabs import OpengeverTab
 from opengever.tabbedview.helper import display_client_title_condition
 from opengever.tabbedview.helper import overdue_date_helper
 from opengever.tabbedview.helper import readable_date_set_invisibles
@@ -19,7 +19,8 @@ from opengever.tabbedview.helper import workflow_state
 from opengever.task.helper import task_type_helper
 from sqlalchemy import and_, or_
 from zope.app.pagetemplate import ViewPageTemplateFile
-from zope.interface import implements, Interface
+from zope.interface import implements
+from zope.interface import Interface
 
 
 class IGlobalTaskTableSourceConfig(ITableSourceConfig):

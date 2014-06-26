@@ -1,21 +1,21 @@
 from five import grok
-from opengever.tabbedview.browser.listing import ListingView
 from ftw.table.basesource import BaseTableSource
 from ftw.table.interfaces import ITableSourceConfig, ITableSource
 from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.behaviors.participation import IParticipationAwareMarker
-from opengever.tabbedview.browser.tabs import OpengeverTab
-from opengever.tabbedview.helper import readable_ogds_author
+from opengever.tabbedview.browser.base import OpengeverTab
+from opengever.tabbedview.browser.listing import ListingView
 from opengever.tabbedview.helper import linked_ogds_author
+from opengever.tabbedview.helper import readable_ogds_author
 from persistent.list import PersistentList
 from plone.memoize import ram
 from zope.app.component.hooks import getSite
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.globalrequest import getRequest
-from zope.i18nmessageid.message import Message
 from zope.i18n import translate
+from zope.i18nmessageid.message import Message
 from zope.interface import implements, Interface
 from zope.schema.vocabulary import getVocabularyRegistry
 import base64

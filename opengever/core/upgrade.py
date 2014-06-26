@@ -76,12 +76,12 @@ class SchemaMigration(UpgradeStep):
 
     def _current_version(self):
         versions_table = self.metadata.tables.get(TRACKING_TABLE_NAME)
-        current_version = self.execute(
+        current_version_row = self.execute(
             versions_table.select(
                 versions_table.c.upgradeid).where(
                 versions_table.c.profileid == self.profileid).distinct()
             ).fetchone()
-        return current_version or 0
+        return current_version_row.upgradeid or 0
 
     def _has_upgrades_to_install(self):
         return self._current_version() < self.upgradeid

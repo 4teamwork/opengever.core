@@ -315,6 +315,12 @@ class Task(Container):
         return getMultiAdapter(
             (self, catalog), IIndexer, name='containing_dossier')()
 
+    def get_containing_subdossier(self):
+        #get the containing_dossier value directly with the indexer
+        catalog = getToolByName(self, 'portal_catalog')
+        return getMultiAdapter(
+            (self, catalog), IIndexer, name='containing_subdossier')()
+
     def get_dossier_sequence_number(self):
         # the dossier_sequence_number index is required for generating lists
         # of tasks as PDFs (LaTeX) as defined by the customer.
@@ -358,6 +364,13 @@ class Task(Container):
                     principals.append(safe_unicode(principal))
                     break
         return principals
+
+    def get_task_type_label(self):
+        # XXX: vocabulary is a contextsourcebinder, we cannot move it to
+        # globalindex.Task for now.
+        vocabulary = util.getTaskTypeVocabulary(self)
+        term = vocabulary.getTerm(self.task_type)
+        return term.title
 
 
 @form.default_value(field=ITask['deadline'])

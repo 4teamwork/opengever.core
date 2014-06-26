@@ -3,14 +3,15 @@ from ftw.table.interfaces import ITableSource, ITableSourceConfig
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.models.user import User
 from opengever.tabbedview import _
+from opengever.tabbedview.browser.base import OpengeverTab
 from opengever.tabbedview.browser.listing import ListingView
 from opengever.tabbedview.browser.sqltablelisting import SqlTableSource
-from opengever.tabbedview.browser.tabs import OpengeverTab
 from opengever.tabbedview.helper import boolean_helper
 from opengever.tabbedview.helper import email_helper
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.component import getUtility
-from zope.interface import implements, Interface
+from zope.interface import implements
+from zope.interface import Interface
 
 
 def linked_value_helper(item, value):
