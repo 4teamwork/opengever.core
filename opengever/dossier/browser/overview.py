@@ -56,9 +56,8 @@ class DossierOverview(grok.View, OpengeverTab):
             review_state=DOSSIER_STATES_OPEN)[:5]
 
     def tasks(self):
-        return Task.query.by_dossier(self.context)\
-            .by_admin_unit(get_current_admin_unit())\
-            .order_by(desc('modified')).limit(5).all()
+        return Task.query.by_dossier(self.context, get_current_admin_unit())\
+                         .order_by(desc('modified')).limit(5).all()
 
     def documents(self):
         documents = self.catalog(
