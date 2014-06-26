@@ -3,7 +3,7 @@ from opengever.task.util import getTaskTypeVocabulary
 from plone.memoize import ram
 from zope.app.component.hooks import getSite
 
-
+#XXX remove me
 @ram.cache(lambda m, i, value: value)
 def task_type_helper(item, value):
     """Translate the task type with the vdex vocabulary, which provides
