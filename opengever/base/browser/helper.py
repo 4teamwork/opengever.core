@@ -94,6 +94,7 @@ def _get_task_css_class(task):
         return 'contenttype-opengever-task-task'
 
 
+# XXX object orient me!
 def get_css_class(item):
     """Returns the content-type icon css class for `item`.
 
