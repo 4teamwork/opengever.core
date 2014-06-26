@@ -4,6 +4,7 @@ from opengever.globalindex.model import Base
 from opengever.globalindex.oguid import Oguid
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import ogds_service
+from opengever.tabbedview.helper import overdue_date_helper
 from plone import api
 from sqlalchemy import Boolean
 from sqlalchemy import Column
@@ -190,6 +191,9 @@ class Task(Base):
             translate(self.review_state, domain='plone',
                       context=api.portal.get().REQUEST),
         )
+
+    def get_deadline_label(self):
+        return overdue_date_helper(self, self.deadline)
 
     def _date_to_zope_datetime(self, date):
         if not date:
