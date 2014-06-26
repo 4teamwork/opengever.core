@@ -91,7 +91,7 @@ class TestLocalRolesSetter(FunctionalTestCase):
             ('Contributor', ),
             dossier.get_local_roles_for_userid('james.bond'))
 
-    def test_inbox_group_of_the_responsible_client_has_the_same_localroles_like_the_responsible_in_a_multiclient_setup(self):
+    def test_inbox_group_of_the_responsible_client_has_the_same_localroles_as_the_responsible_in_a_multiclient_setup(self):
         create_client(clientid="additional")
 
         dossier = create(Builder('dossier'))
