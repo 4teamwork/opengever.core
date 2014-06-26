@@ -63,9 +63,10 @@ class TaskQuery(Query):
         query = self.filter(Task.admin_unit_id == admin_unit.id())
         return query.filter(Task.int_id.in_(int_ids))
 
-    def by_dossier(self, dossier):
+    def by_dossier(self, dossier, admin_unit):
         path = dossier.get_physical_path()
-        return self.filter(Task.physical_path.like(path + '%'))
+        return self.by_admin_unit(admin_unit)\
+                   .filter(Task.physical_path.like(path + '%'))
 
 
 class Task(Base):
