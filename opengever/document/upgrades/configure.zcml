@@ -71,21 +71,21 @@
         />
 
 
-    <!-- 2701 -> 2702 -->
+    <!-- 2702 -> 2703 -->
     <genericsetup:upgradeStep
         title="Add public_trial index and metadata"
         description=""
-        source="2701"
-        destination="2702"
-        handler="opengever.document.upgrades.to2702.AddPublicTrialIndexAndMetadata"
+        source="2702"
+        destination="2703"
+        handler="opengever.document.upgrades.to2703.AddPublicTrialIndexAndMetadata"
         profile="opengever.document:default"
         />
 
     <genericsetup:registerProfile
-        name="2702"
-        title="opengever.document: upgrade profile 2702"
+        name="2703"
+        title="opengever.document: upgrade profile 2703"
         description=""
-        directory="profiles/2702"
+        directory="profiles/2703"
         for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />

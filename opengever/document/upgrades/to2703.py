@@ -8,7 +8,7 @@ class AddPublicTrialIndexAndMetadata(UpgradeStep):
     def __call__(self):
         # add metadata field
         self.setup_install_profile(
-            'profile-opengever.document.upgrades:2702')
+            'profile-opengever.document.upgrades:2703')
 
         # add index
         if not self.catalog_has_index('public_trial'):
