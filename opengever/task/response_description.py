@@ -17,8 +17,9 @@ class ResponseDescription(object):
                 cls.registry[transition_id] = subcls
 
     @classmethod
-    def get(cls, response):
-        transition = response.transition
+    def get(cls, response=None, transition=None):
+        if response:
+            transition = response.transition
         if not transition:
             transition = 'transition-add-subtask'
 
