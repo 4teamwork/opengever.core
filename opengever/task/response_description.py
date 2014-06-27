@@ -58,7 +58,7 @@ ResponseDescription.add_description(Reactivate)
 
 class Reject(ResponseDescription):
     transition = 'task-transition-open-rejected'
-    css_class = 'reject'
+    css_class = 'refuse'
 
     def msg(self):
         return _('transition_label_reject', 'Rejected by ${user}',
@@ -71,7 +71,7 @@ class Resolve(ResponseDescription):
     transitions = ['task-transition-in-progress-resolved',
                    'task-transition-open-resolved']
 
-    css_class = 'resolve'
+    css_class = 'complete'
 
     def msg(self):
         return _('transition_label_resolve', 'Resolved by ${user}',
@@ -97,7 +97,7 @@ ResponseDescription.add_description(Close)
 
 class Cancel(ResponseDescription):
     transition = 'task-transition-open-cancelled'
-    css_class = 'cancel'
+    css_class = 'cancelled'
 
     def msg(self):
         return _('transition_label_cancel', 'Cancelled by ${user}',
