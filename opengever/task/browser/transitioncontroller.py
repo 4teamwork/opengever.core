@@ -1,4 +1,5 @@
 from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.task.interfaces import ISuccessorTaskController
@@ -513,8 +514,8 @@ class TaskTransitionController(BrowserView):
         """Returns true if the responsible org_unit is a
         part of the current admin unit.
         """
-        responsible_unit = self.context.responsible_org_unit()
-        return responsible_unit.admin_unit == current_admin_unit()
+        responsible_unit = self.context.get_responsible_org_unit()
+        return responsible_unit.admin_unit == get_current_admin_unit()
 
     def _is_task_on_responsible_client(self):
         """Returns true if the current client is the responsible-client of
