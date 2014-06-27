@@ -1,19 +1,25 @@
 from ftw.upgrade import UpgradeStep
-from opengever.document.behaviors import IBaseDocument
+from opengever.document.behaviors.metadata import IDocumentMetadata
+from opengever.document.document import IDocumentSchema
 
 
-class AddPublicTrialIndexAndMetadata(UpgradeStep):
-    """Adds public_trial index and metadata"""
+class AddMetadataBehaviorToDocumentFTI(UpgradeStep):
+    """Add the IDocumentMetadata behavior to the og.document.document FTI.
+    """
 
     def __call__(self):
-        # add metadata field
         self.setup_install_profile(
             'profile-opengever.document.upgrades:2702')
 
-        # add index
-        if not self.catalog_has_index('public_trial'):
-            self.catalog_add_index('public_trial', 'FieldIndex')
+        # XXX: Remove this check when merging upgrade-steps
+        query = {'portal_type': 'opengever.document.document'}
+        for doc in self.objects(query, 'Check document metadat  a'):
+            print "Checking object %s" % doc.absolute_url()
 
-        self.catalog_reindex_objects(
-            {'object_provides': IBaseDocument.__identifier__},
-            idxs=['public_trial'])
+            for name in IDocumentSchema.names():
+                print "Checking attribute '%s'" % name
+                getattr(doc, name)
+
+            for name in IDocumentMetadata.names():
+                print "Checking attribute '%s'" % name
+                getattr(doc, name)
