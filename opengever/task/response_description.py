@@ -1,3 +1,4 @@
+from opengever.base.browser.helper import get_css_class
 from opengever.ogds.base.actor import Actor
 from opengever.task import _
 
@@ -20,14 +21,22 @@ class ResponseDescription(object):
     def get(cls, response=None, transition=None):
         if response:
             transition = response.transition
+
         if not transition:
-            transition = 'transition-add-subtask'
+            docs, subtasks = response.get_added_objects()
+
+            if len(subtasks):
+                transition = 'transition-add-subtask'
+
+            elif len(docs):
+                transition = 'transition-add-document'
 
         description = cls.registry.get(transition)
 
         if not description:
             raise ValueError(
-                'No description configured for transition {}'.format(transition))
+                'No response description configured for'
+                'transition {}'.format(transition))
 
         return description(response)
 
@@ -42,7 +51,7 @@ class ResponseDescription(object):
         """Returns the default mapping for the translated msg.
         Contains only the attribute `user`, which shows the link to the creator
         """
-        return {'user':self.response.creator_link()}
+        return {'user': self.response.creator_link()}
 
 
 class Reactivate(ResponseDescription):
@@ -180,10 +189,12 @@ class AssignToDossier(ResponseDescription):
     css_class = 'assignDossier'
 
     def msg(self):
+
+        successor = self.response.get_succesor()
         return _('transition_label_assign_to_dossier',
-                 'Assigned to dossier by ${user} (successor=${successor}',
-                 mapping={'user':self.response.creator_link(),
-                          'successor': self.get_succesor().get_link()})
+                 'Assigned to dossier by ${user} successor=${successor}',
+                 mapping={'user': self.response.creator_link(),
+                          'successor': successor.get_link(get_css_class(successor))})
 
 ResponseDescription.add_description(AssignToDossier)
 
@@ -194,7 +205,29 @@ class SubTaskAdded(ResponseDescription):
     css_class = 'addSubtask'
 
     def msg(self):
-        return _('transition_add_subtask', 'Subtask added by ${user}',
-                 mapping=self._msg_mapping)
+        docs, subtasks = self.response.get_added_objects()
+
+        label = ' '.join(
+            [task.get_sql_object().get_link(get_css_class(task)) for task in subtasks])
+
+        return _('transition_add_subtask', 'Subtask ${task} added by ${user}',
+                 mapping={'user': self.response.creator_link(),
+                          'task': label})
 
 ResponseDescription.add_description(SubTaskAdded)
+
+
+class DocumentAdded(ResponseDescription):
+
+    transition = 'transition-add-document'
+    css_class = 'addDocument'
+
+    def msg(self):
+        docs, subtasks = self.response.get_added_objects()
+        label = ' '.join([doc.Title() for doc in docs])
+
+        return _('transition_add_document', 'Document ${doc} added by ${user}',
+                 mapping={'user': self.response.creator_link(),
+                          'doc': label})
+
+ResponseDescription.add_description(DocumentAdded)
