@@ -1,5 +1,7 @@
 <div class="response-adder box" i18n:domain="opengever.task">
+
   <h3 class="historySeparator" i18n:translate="progress">Progress:</h3>
+
   <tal:repeat tal:repeat="response_info viewlet/responses">
 
     <tal:define tal:define="id response_info/id;
@@ -32,6 +34,14 @@
       </div>
       <div style="clear:both"><!-- --></div>
     </tal:define>
-
   </tal:repeat>
+
+  <div class="answer created">
+    <div class="answerType">&nbsp;</div>
+    <div class="answerBody">
+      <div class="date" tal:content="viewlet/get_created_date" />
+      <h3 i18n:translate="" tal:content="structure viewlet/get_created_header" />
+    </div>
+  </div>
+
 </div>

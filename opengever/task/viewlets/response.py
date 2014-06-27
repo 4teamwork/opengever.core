@@ -8,6 +8,7 @@ from opengever.task.adapters import IResponseContainer
 from opengever.task.response import Base
 from opengever.task.task import ITask
 from Products.CMFCore.utils import getToolByName
+from zope.component import getMultiAdapter
 from zope.component import getUtility
 import datetime
 
@@ -53,6 +54,17 @@ class ResponseView(grok.Viewlet, Base):
     def delete_link(self, id):
         return '{}/@@task_response_delete?response_id={}'.format(
             self.context.absolute_url(), id)
+
+    def get_created_header(self):
+        return _('transition_label_created', 'Created by ${user}',
+                 mapping={
+                     'user': Actor.lookup(self.context.Creator()).get_link()})
+
+    def get_created_date(self):
+        adapter = getMultiAdapter((self.context, self.request), name="plone")
+
+        return adapter.toLocalizedTime(self.context.created(),
+                                       long_format=True)
 
     def get_css_class(self, item):
         """used for display icons in the view"""
