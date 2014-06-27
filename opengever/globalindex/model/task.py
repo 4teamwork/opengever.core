@@ -222,6 +222,8 @@ class Task(Base):
         allowed_principals = set(self.principals)
         return len(principals & allowed_principals) > 0
 
+    # XXX Todo: the css_class helper should moved to the task class itself,
+    # so that the css_class parameter is not necessary anymore.
     def get_link(self, css_class):
         admin_unit = self.get_admin_unit()
         if not admin_unit:
