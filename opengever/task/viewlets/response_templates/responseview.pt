@@ -1,4 +1,4 @@
-<div class="response-adder box" i18n:domain="opengever.task">
+<div class="response-adder box" id="task-responses" i18n:domain="opengever.task">
 
   <h3 class="historySeparator" i18n:translate="progress">Progress:</h3>
 
