@@ -7,20 +7,17 @@ from opengever.task import _
 from opengever.task.adapters import IResponseContainer
 from opengever.task.response import Base
 from opengever.task.task import ITask
+from opengever.task.viewlets.manager import BeneathTask
 from Products.CMFCore.utils import getToolByName
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 import datetime
 
 
-class BeneathTask(grok.ViewletManager):
-    grok.context(ITask)
-    grok.name('opengever.task.beneathTask')
-
-
 class ResponseView(grok.Viewlet, Base):
-    grok.context(ITask)
     grok.name("opengever.task.response.view")
+    grok.context(ITask)
+    grok.require('zope2.View')
     grok.viewletmanager(BeneathTask)
     grok.order(2)
 
