@@ -1,0 +1,21 @@
+<div class="actionButtons clearfix"
+     id="action-menu"
+     i18n:domain="plone">
+  <ul>
+      <tal:block repeat="subMenuItem viewlet/get_menu_items">
+        <li>
+          <a tal:condition="subMenuItem/url"
+             tal:attributes="href subMenuItem/url;
+                             title subMenuItem/title;
+                             id subMenuItem/id | nothing;
+                             class subMenuItem/response_description/css_class | nothing"
+             i18n:attributes="title">
+              <span tal:content="structure subMenuItem/title"
+                    i18n:translate=""
+                    class="subMenuTitle actionText">
+              </span>
+          </a>
+        </li>
+      </tal:block>
+  </ul>
+</div>

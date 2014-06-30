@@ -1,11 +1,7 @@
 from Acquisition import aq_inner
 from five import grok
-from opengever.base.browser.helper import get_css_class
 from opengever.base.browser.opengeverview import OpengeverView
 from opengever.base.source import DossierPathSourceBinder
-from opengever.globalindex.interfaces import ITaskQuery
-from opengever.ogds.base.actor import Actor
-from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview.helper import linked
 from opengever.task import _
 from opengever.task import util
@@ -282,81 +278,6 @@ class AddForm(form.AddForm, AutoExtensibleForm):
             self.widgets['relatedItems'].mode = HIDDEN_MODE
 
         self.widgets['transition'].mode = HIDDEN_MODE
-
-
-class BeneathTask(grok.ViewletManager):
-    grok.context(ITask)
-    grok.name('opengever.task.beneathTask')
-
-
-class ResponseView(grok.Viewlet, Base):
-    grok.context(ITask)
-    grok.name("opengever.task.response.view")
-    grok.viewletmanager(BeneathTask)
-    grok.order(1)
-
-    def __init__(self, context, request, view, manager):
-        grok.Viewlet.__init__(self, context, request, view, manager)
-        Base.__init__(self, context, request)
-
-    def get_css_class(self, item):
-        """used for display icons in the view"""
-        return get_css_class(item)
-
-    def get_added_objects(self, response):
-        # Some relations may not have an added_object attribute...
-        try:
-            response.added_object
-        except AttributeError:
-            return None
-
-        # .. and sometimes it may be empty.
-        if not response.added_object:
-            return None
-
-        # Support for multiple added objects was added, so added_object may
-        # be a list of relations, but could also be a relation directly.
-        if hasattr(response.added_object, '__iter__'):
-            relations = response.added_object
-        else:
-            relations = [response.added_object]
-
-        # Return the target objects, not the relations.
-        objects = []
-        for rel in relations:
-            objects.append(rel.to_object)
-        return objects
-
-    def get_added_successor(self, response):
-        try:
-            response.successor_oguid
-        except AttributeError:
-            return None
-        if response.successor_oguid:
-            query = getUtility(ITaskQuery)
-            return query.get_task_by_oguid(response.successor_oguid)
-        else:
-            return None
-
-    def convert_change_values(self, fieldname, value):
-        if fieldname == 'responsible_client':
-            info = getUtility(IContactInformation)
-            client = info.get_client_by_id(value)
-            if client:
-                return client.title
-            else:
-                return value
-
-        elif fieldname == 'responsible':
-            return Actor.lookup(value).get_link()
-
-        elif isinstance(value, datetime.date):
-            trans_service = getToolByName(
-                self.context, 'translation_service')
-            return trans_service.toLocalizedTime(
-                datetime.datetime(value.year, value.month, value.day))
-
-        return value
 
 
 class SingleAddFormView(layout.FormWrapper, grok.View):
