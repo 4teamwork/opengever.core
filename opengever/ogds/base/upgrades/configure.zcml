@@ -16,11 +16,11 @@
         profile="opengever.ogds.base:default"
         />
 
-    <!-- 1-> 3301 -->
+    <!-- 3101-> 3301 -->
     <genericsetup:upgradeStep
         title="Create AdminUnit table and migrate data."
         description=""
-        source="1"
+        source="3101"
         destination="3301"
         handler="opengever.ogds.base.upgrades.to3301.CreateAdminUnitTable"
         profile="opengever.ogds.base:default"
