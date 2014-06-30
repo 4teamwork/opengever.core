@@ -5,6 +5,7 @@ from opengever.ogds.base.utils import create_session
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import MetaData
+from sqlalchemy import select
 from sqlalchemy import String
 import logging
 
@@ -77,8 +78,7 @@ class SchemaMigration(UpgradeStep):
     def _current_version(self):
         versions_table = self.metadata.tables.get(TRACKING_TABLE_NAME)
         current_version_row = self.execute(
-            versions_table.select(
-                versions_table.c.upgradeid).where(
+            select([versions_table.c.upgradeid]).where(
                 versions_table.c.profileid == self.profileid).distinct()
             ).fetchone()
         return current_version_row.upgradeid or 0
