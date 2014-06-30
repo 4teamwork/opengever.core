@@ -22,7 +22,7 @@ class ResponseView(grok.Viewlet, Base):
     grok.context(ITask)
     grok.name("opengever.task.response.view")
     grok.viewletmanager(BeneathTask)
-    grok.order(1)
+    grok.order(2)
 
     def __init__(self, context, request, view, manager):
         grok.Viewlet.__init__(self, context, request, view, manager)
