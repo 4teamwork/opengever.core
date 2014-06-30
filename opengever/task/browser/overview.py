@@ -50,19 +50,6 @@ class Overview(DisplayForm, OpengeverTab):
 
         return document_list
 
-    #XXX remove me
-    def get_type(self, item):
-        """differ the object typ and return the type as string
-        """
-        if not item:
-            return None
-        elif isinstance(item, dict):
-            return 'dict'
-        elif isinstance(item, Task) or ITask.providedBy(item):
-            return 'task'
-        else:
-            return 'obj'
-
     def get_main_attributes(self):
         """ return a list of widgets,
         which should be displayed in the attributes box
@@ -155,9 +142,6 @@ class Overview(DisplayForm, OpengeverTab):
     def render_task(self, item):
         """ Render the taskobject."""
 
-        #XXX remove this ceck
-        if ITask.providedBy(item):
-            item = item.get_sql_object()
         if not item:
             return None
         return item.get_link(self.get_css_class(item))
