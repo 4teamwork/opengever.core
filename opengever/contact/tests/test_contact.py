@@ -1,6 +1,8 @@
-from Products.CMFCore.utils import getToolByName
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
+from Products.CMFCore.utils import getToolByName
 
 
 class TestContact(FunctionalTestCase):
@@ -8,6 +10,8 @@ class TestContact(FunctionalTestCase):
 
     def setUp(self):
         super(TestContact, self).setUp()
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_all_unit_setup())
         self.grant('Member', 'Contributor', 'Manager')
 
     def getSearchableText(self, obj):

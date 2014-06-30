@@ -17,7 +17,10 @@ class FixtureBuilder(object):
         self._with_admin_unit = False
         self._with_hugo_boss = False
 
-        self._user_args = {}
+        self._user_args = {
+            'firstname': u'User',
+            'lastname': u'Test',
+        }
         self._hugo_boss_args = {
             'firstname': u'Hugo',
             'lastname': u'Boss',
