@@ -1,7 +1,7 @@
 from five import grok
 from opengever.task.response_description import ResponseDescription
 from opengever.task.task import ITask
-from opengever.task.viewlets.response import BeneathTask
+from opengever.task.viewlets.manager import BeneathTask
 from plone import api
 
 
