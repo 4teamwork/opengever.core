@@ -26,10 +26,18 @@ class TestDocumentOverviewMissingFields(FunctionalTestCase):
         browser.login()
         browser.visit(self.document, view="tabbedview_view-overview")
         field_headers = browser.css('table tr th').text
-        self.assertEquals(['Document Date',
-                           'creator',
-                           'Digital Available',
-                           'Preserved as paper',
-                           'Date of receipt',
-                           'Date of delivery'],
-                          field_headers)
+        self.assertEquals(
+            ['Title',
+             'Document Date',
+             'Author',
+             'creator',
+             'Description',
+             'Foreign Reference',
+             'Checked out',
+             'File',
+             'Digital Available',
+             'Preserved as paper',
+             'Date of receipt',
+             'Date of delivery',
+             'Related Documents'],
+            field_headers)

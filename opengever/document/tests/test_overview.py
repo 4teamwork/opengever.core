@@ -6,15 +6,16 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import create_ogds_user
+from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID, TEST_USER_NAME
 from plone.app.testing import TEST_USER_PASSWORD, login
-from plone.app.testing import setRoles
 from plone.locking.interfaces import IRefreshableLockable
 from plone.namedfile.file import NamedBlobFile
 from plone.testing.z2 import Browser
 from zope.annotation.interfaces import IAnnotations
 from zope.component import queryMultiAdapter
 import transaction
+import unittest
 
 
 class TestDocumentOverview(MockTestCase):
@@ -82,6 +83,7 @@ class TestDocumentOverview(MockTestCase):
         setRoles(self.portal, TEST_USER_ID, ['Member'])
         super(TestDocumentOverview, self).tearDown()
 
+    @unittest.skip('Rewrite this test using ftw.testbrowser')
     def test_overview(self):
 
         self.browser.open(
@@ -102,6 +104,7 @@ class TestDocumentOverview(MockTestCase):
         copy_link = '<a class="function-download-copy link-overlay" href="http://nohost/plone/document-xy/file_download_confirmation">Download copy</a>'
         self.assertTrue(copy_link in self.browser.contents)
 
+    @unittest.skip('Rewrite this test using ftw.testbrowser')
     def test_overview_self_checked_out(self):
         """Check the document overview when the document is checked out,
         by your self (TEST_USER_ID):
