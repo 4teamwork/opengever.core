@@ -4,6 +4,9 @@ Changelog
 3.3.1 (unreleased)
 ------------------
 
+- Fixed outdated profile versions for og.base:default and og.examplecontent:default.
+  [lgraf]
+
 - Monkey patch DexterityContent.__getattr__.
   This is required to support dynamic lookup of schema-level default values for
   fields in behaviors. It basically is a backport of this Dexterity 2.x fix:
