@@ -1,12 +1,14 @@
 from AccessControl import Unauthorized
-from Products.CMFPlone.utils import getToolByName
 from five import grok
 from ftw.tabbedview.browser.tabbed import TabbedView
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_admin_unit
+from opengever.tabbedview import LOG
 from opengever.tabbedview.browser.tabs import Documents, Dossiers
 from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
+from Products.CMFPlone.utils import getToolByName
+from sqlalchemy.exc import OperationalError
 from zope.component import getUtility
 from zope.interface import Interface
 import AccessControl
@@ -93,14 +95,17 @@ class PersonalOverview(TabbedView):
         clients or an administrator and he therefore is allowed to view
         the PersonalOverview, False otherwise.
         """
+        try:
+            info = getUtility(IContactInformation)
 
-        info = getUtility(IContactInformation)
-
-        if info.is_client_assigned():
-            return True
-        elif self._is_user_admin():
-            return True
-        return False
+            if info.is_client_assigned():
+                return True
+            elif self._is_user_admin():
+                return True
+            return False
+        except OperationalError as e:
+            LOG.exception(e)
+            return False
 
 
 class MyDossiers(Dossiers):
