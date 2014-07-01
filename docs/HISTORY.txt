@@ -4,6 +4,9 @@ Changelog
 3.3.1 (unreleased)
 ------------------
 
+- Fixed outdated profile versions for og.base:default and og.examplecontent:default.
+  [lgraf]
+
 - Refactored some hard to change test data.
   [lgraf]
 
