@@ -70,9 +70,8 @@ class SearchableTextExtender(grok.Adapter):
     def __call__(self):
         searchable = []
 
-        seqNumb = getUtility(ISequenceNumber)
-        searchable.append(str(seqNumb.get_number(self.context)))
 
+        searchable.append(str(self.context.get_sequence_number()))
         searchable.append(
             self.context.get_responsible_actor().get_label().encode('utf-8'))
 
