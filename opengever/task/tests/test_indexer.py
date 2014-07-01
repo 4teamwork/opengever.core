@@ -26,9 +26,12 @@ class TestTaskIndexers(FunctionalTestCase):
         login(self.portal, TEST_USER_NAME)
 
         self.task = create(Builder("task")
-                           .titled("Test task 1"))
+                           .titled("Test task 1")
+                           .having(task_type='comment'))
 
-        self.subtask = create(Builder("task").within(self.task).titled("Test task 1"))
+        self.subtask = create(Builder("task").within(self.task)
+                                             .titled("Test task 1")
+                                             .having(task_type='comment'))
         self.doc1 = create(Builder("document").titled(u"Doc One"))
         self.doc2 = create(Builder("document").titled(u"Doc Two"))
 
@@ -63,6 +66,7 @@ class TestTaskIndexers(FunctionalTestCase):
     def test_searchable_text(self):
         self.task.title = u'Test Aufgabe'
         self.task.text = u'Lorem ipsum olor sit amet'
+        self.task.task_type = 'comment'
 
         create_ogds_user('hboss', firstname='Hugo', lastname='Boss')
         self.task.responsible = 'hboss'
@@ -72,4 +76,4 @@ class TestTaskIndexers(FunctionalTestCase):
         self.assertEquals(
             index_data_for(self.task).get('SearchableText'),
             ['test', 'aufgabe', 'lorem', 'ipsum', 'olor', 'sit',
-             'amet', '1', 'boss', 'hugo', 'hboss'])
+             'amet', 'to', 'comment', '1', 'boss', 'hugo', 'hboss'])
