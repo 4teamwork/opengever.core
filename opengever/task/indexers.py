@@ -2,12 +2,11 @@ from Acquisition import aq_inner, aq_parent
 from collective import dexteritytextindexer
 from datetime import datetime
 from five import grok
-from opengever.base.interfaces import ISequenceNumber
-from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
 from opengever.task.task import ITask
+from opengever.task.util import getTaskTypeTitleLookupVocabulary
+from plone import api
 from plone.indexer import indexer
-from zope.component import getUtility
 
 
 @indexer(ITask)
@@ -70,6 +69,12 @@ class SearchableTextExtender(grok.Adapter):
     def __call__(self):
         searchable = []
 
+        if self.context.task_type:
+            lang_tool = api.portal.get_tool('portal_languages')
+            for language in lang_tool.getSupportedLanguages():
+                vocab = getTaskTypeTitleLookupVocabulary(language)
+                term = vocab.getTerm(self.context.task_type).title
+                searchable.append(term)
 
         searchable.append(str(self.context.get_sequence_number()))
         searchable.append(
