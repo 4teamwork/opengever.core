@@ -3,12 +3,12 @@
      i18n:domain="plone">
   <ul>
       <tal:block repeat="subMenuItem viewlet/get_menu_items">
-        <li>
+        <li tal:define="css_class subMenuItem/response_description/css_class | nothing">
           <a tal:condition="subMenuItem/url"
              tal:attributes="href subMenuItem/url;
                              title subMenuItem/title;
                              id subMenuItem/id | nothing;
-                             class subMenuItem/response_description/css_class | nothing"
+                             class string: ${css_class} button"
              i18n:attributes="title">
               <span tal:content="structure subMenuItem/title"
                     i18n:translate=""
