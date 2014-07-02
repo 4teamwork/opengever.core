@@ -1,6 +1,9 @@
 from AccessControl.SecurityManagement import getSecurityManager
 from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import setSecurityManager
+from ftw.builder import Builder
+from ftw.builder import create
+from ftw.testbrowser import browsing
 from ftw.testing import MockTestCase
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
@@ -38,7 +41,8 @@ class TestDocumentOverview(MockTestCase):
         create_ogds_user(TEST_USER_ID)
 
         # Create a second user to test locking and checkout
-        self.portal.acl_users.userFolderAddUser('other_user', 'secret', ['Member'], [])
+        self.portal.acl_users.userFolderAddUser(
+            'other_user', 'secret', ['Member'], [])
 
         self.browser = Browser(self.layer['app'])
         self.browser.handleErrors = False
@@ -69,7 +73,8 @@ class TestDocumentOverview(MockTestCase):
             'opengever.document.document', 'document-3', title=u'document3')
         self.document3 = self.portal.get('document-3')
         self._set_default_values(self.document3)
-        IAnnotations(self.document3)[CHECKIN_CHECKOUT_ANNOTATIONS_KEY] = 'hugo.boss'
+        IAnnotations(self.document3)[
+            CHECKIN_CHECKOUT_ANNOTATIONS_KEY] = 'hugo.boss'
 
         # document4 (will later be locked by hugo.boss)
         self.portal.invokeFactory(
@@ -167,3 +172,29 @@ class TestDocumentOverview(MockTestCase):
 
         # Editing the document shouldn't be possible
         self.assertNotIn('editing_document', self.browser.contents)
+
+    @browsing
+    def test_classification_fields_are_shown(self, browser):
+
+        document = create(Builder('document'))
+        browser.login().visit(document, view='tabbedview_view-overview')
+
+        self.assertEquals(
+            'unprotected',
+            browser.css(
+                '#form-widgets-IClassification-classification').first.text)
+
+        self.assertEquals(
+            'privacy_layer_no',
+            browser.css(
+                '#form-widgets-IClassification-privacy_layer').first.text)
+
+        self.assertEquals(
+            'unchecked',
+            browser.css(
+                '#form-widgets-IClassification-public_trial').first.text)
+
+        self.assertEquals(
+            '',
+            browser.css(
+                '#form-widgets-IClassification-public_trial_statement').first.text)

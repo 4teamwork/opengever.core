@@ -4,6 +4,9 @@ Changelog
 3.3.1 (unreleased)
 ------------------
 
+- Show classification infos on document overview tab.
+  [mathias.leimgruber]
+
 - Add classification behavior to mail.
   [mathias.leimgruber]
 
