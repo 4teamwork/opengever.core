@@ -22,5 +22,6 @@
         <element value="opengever.document.behaviors.IBaseDocument" />
         <element value="opengever.mail.mail.IOGMail" />
         <element value="opengever.document.behaviors.name_from_title.IDocumentNameFromTitle" />
+        <element value="opengever.base.behaviors.classification.IClassification" />
     </property>
 </object>

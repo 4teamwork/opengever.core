@@ -4,6 +4,9 @@ Changelog
 3.3.1 (unreleased)
 ------------------
 
+- Add classification behavior to mail.
+  [mathias.leimgruber]
+
 - Refactored document overview.
   [lgraf]
 

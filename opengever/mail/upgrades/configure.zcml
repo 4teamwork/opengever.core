@@ -63,4 +63,15 @@
         destination="2200"
         directory="profiles/2200"
         />
+
+    <!-- 2200 -> 2201 -->
+    <genericsetup:upgradeStep
+        title="Add classification behavior"
+        description=""
+        source="2200"
+        destination="2201"
+        handler="opengever.mail.upgrades.to2201.AddClassifiactionBehavior"
+        profile="opengever.mail:default"
+        />
+
 </configure>
