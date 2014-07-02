@@ -4,7 +4,7 @@ from datetime import datetime
 from five import grok
 from opengever.ogds.base.utils import get_client_id
 from opengever.task.task import ITask
-from opengever.task.util import getTaskTypeTitleLookupVocabulary
+from opengever.task.util import get_task_type_title
 from plone import api
 from plone.indexer import indexer
 
@@ -69,11 +69,12 @@ class SearchableTextExtender(grok.Adapter):
     def __call__(self):
         searchable = []
 
-        if self.context.task_type:
-            lang_tool = api.portal.get_tool('portal_languages')
-            for language in lang_tool.getSupportedLanguages():
-                vocab = getTaskTypeTitleLookupVocabulary(language)
-                term = vocab.getTerm(self.context.task_type).title
+        lang_tool = api.portal.get_tool('portal_languages')
+        for language in lang_tool.getSupportedLanguages():
+            if '-' in language:
+                language = language.split('-')[0]
+            term = self.context.get_task_type_label(language=language)
+            if term:
                 searchable.append(term)
 
         searchable.append(str(self.context.get_sequence_number()))

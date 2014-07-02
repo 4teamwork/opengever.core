@@ -365,12 +365,17 @@ class Task(Container):
                     break
         return principals
 
-    def get_task_type_label(self):
+    def get_task_type_label(self, language=None):
         # XXX: vocabulary is a contextsourcebinder, we cannot move it to
         # globalindex.Task for now.
-        vocabulary = util.getTaskTypeVocabulary(self)
-        term = vocabulary.getTerm(self.task_type)
-        return term.title
+        if not self.task_type:
+            return ''
+        if language:
+            return util.get_task_type_title(self.task_type, language)
+        else:
+            vocabulary = util.getTaskTypeVocabulary(self)
+            term = vocabulary.getTerm(self.task_type)
+            return term.title
 
 
 @form.default_value(field=ITask['deadline'])
