@@ -46,7 +46,7 @@ class TestTaskOverview(FunctionalTestCase):
         browser.login().open(task, view='tabbedview_view-overview')
 
         self.assertEquals(
-            'Client1 / test_user_1_ (test_user_1_)',
+            'Client1 / Test User (test_user_1_)',
             browser.css('.issuer').first.text)
 
     @browsing
