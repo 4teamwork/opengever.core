@@ -11,7 +11,8 @@ class TestDocumentOverviewMissingFields(FunctionalTestCase):
     def setUp(self):
         omitted_values = []
         if OMITTED_KEY in IDocumentMetadata.getTaggedValueTags():
-            omitted_values.extend(IDocumentMetadata.getTaggedValue(OMITTED_KEY))
+            omitted_values.extend(
+                IDocumentMetadata.getTaggedValue(OMITTED_KEY))
         self.orig_omitted_values = list(omitted_values)
         omitted_values.append((Interface, 'document_type', 'true'))
         IDocumentMetadata.setTaggedValue(OMITTED_KEY, omitted_values)
@@ -39,5 +40,9 @@ class TestDocumentOverviewMissingFields(FunctionalTestCase):
              'Preserved as paper',
              'Date of receipt',
              'Date of delivery',
-             'Related Documents'],
+             'Related Documents',
+             'Classification',
+             'Privacy layer',
+             'Public Trial',
+             'Public trial statement'],
             field_headers)
