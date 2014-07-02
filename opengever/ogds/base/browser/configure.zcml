@@ -1,0 +1,20 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="ftw.mobilenavigation">
+
+  <browser:resourceDirectory
+      name="opengever.ogds.base"
+      directory="resources"
+      />
+
+      <browser:page
+          for="*"
+          name="orgunit_selector"
+          class=".orgunit_selector.OrgunitSelectorView"
+          attribute="has_available_units"
+          permission="zope.Public"
+          />
+
+</configure>
