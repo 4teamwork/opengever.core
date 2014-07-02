@@ -2,7 +2,7 @@
 
   <h5 class="hiddenStructure" i18n:translate="heading_client_selector">OrgUnit Selector</h5>
 
-  <dl class="orgunitMenu actionMenu deactivated" id="portal-orgunit-selector-menu">
+  <dl class="orgunitMenu actionMenu deactivated" id="portal-orgunit-selector-menu" tal:condition="active_unit">
     <dt class="orgunitMenuHeader actionMenuHeader">
       <a tal:attributes="href string:#" tal:content="active_unit/label">
         Org Unit ?

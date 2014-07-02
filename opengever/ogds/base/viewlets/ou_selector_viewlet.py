@@ -1,7 +1,9 @@
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from five import grok
+from opengever.ogds.base import LOG
 from opengever.ogds.base.utils import get_ou_selector
 from plone.app.layout.viewlets import common
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from sqlalchemy.exc import OperationalError
 from zope.interface import Interface
 
 
@@ -15,8 +17,11 @@ class OrgUnitSelectorViewlet(common.ViewletBase):
         self.current_unit = None
 
     def get_active_unit(self):
-        if not self.current_unit:
-            self.current_unit = get_ou_selector().get_current_unit()
+        try:
+            if not self.current_unit:
+                self.current_unit = get_ou_selector().get_current_unit()
+        except OperationalError as e:
+            LOG.exception(e)
         return self.current_unit
 
     def get_units(self):
