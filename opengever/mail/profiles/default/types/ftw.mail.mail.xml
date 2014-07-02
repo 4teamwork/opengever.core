@@ -15,6 +15,7 @@
     </action>
     <property name="behaviors" purge="False">
         <element value="ftw.journal.interfaces.IAnnotationsJournalizable" />
+        <element value="opengever.base.behaviors.classification.IClassification" />
         <element value="opengever.base.behaviors.sequence.ISequenceNumberBehavior" />
         <element value="opengever.document.behaviors.IBaseDocument" />
         <element value="opengever.document.behaviors.metadata.IDocumentMetadata" />
