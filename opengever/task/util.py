@@ -8,11 +8,11 @@ from z3c.relationfield import RelationValue
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
 from zope.event import notify
+from zope.i18n import translate
 from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.interfaces import IVocabularyFactory
-from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
 import AccessControl
 import opengever.task
@@ -86,20 +86,17 @@ def getTaskTypeVocabulary(context):
     return SimpleVocabulary(terms)
 
 
-def getTaskTypeTitleLookupVocabulary(language):
-    """Return a vocablary that can be used to lookup a term-title from its
-    value.
+def get_task_type_title(task_type, language):
+    """Return the task type translated in language.
 
     """
-    terms = []
-    for task_type in TASK_TYPES:
-        vocabulary_id = 'opengever.task.{}'.format(task_type)
+    for task_type_category in TASK_TYPES:
+        vocabulary_id = 'opengever.task.{}'.format(task_type_category)
         factory = getUtility(IVocabularyFactory, vocabulary_id)
         vdex_terms = factory.getTerms(language)
         for vdex_term in vdex_terms:
-            terms.append(SimpleTerm(vdex_term['key'],
-                                    title=vdex_term['value']))
-    return SimpleVocabulary(terms)
+            if vdex_term['key'] == task_type:
+                return vdex_term['value']
 
 
 def add_simple_response(task, text='', field_changes=None, added_object=None,
