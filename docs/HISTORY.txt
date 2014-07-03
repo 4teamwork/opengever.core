@@ -4,6 +4,9 @@ Changelog
 3.2.5 (unreleased)
 ------------------
 
+- Added viewlet to colorize special pages as dev, test, ...
+  [Julian Infanger]
+
 - Fixed zipexport-enable upgrade step to match the new registry entry.
   With ftw.zipexport 1.2.0 the registry name changes which brakes our upgrade step.
   [lknoepfel]

@@ -42,5 +42,13 @@
        class="opengever.base.viewlets.byline.PloneSiteByline"
        permission="zope2.View"
        />
+	   
+       <browser:viewlet
+           name="gever-colorization"
+           manager="plone.app.layout.viewlets.interfaces.IPortalTop"
+           template="colorization.pt"
+           class=".colorization.ColorizationViewlet"
+           permission="zope2.View"
+           />
 
 </configure>
