@@ -68,6 +68,11 @@ class ModifyDeadlineFormView(layout.FormWrapper, grok.View):
 
     form = ModifyDeadlineForm
 
+    @classmethod
+    def url_for(cls, context, transition):
+        return '{}/@@modify_deadline?transition={}'.format(
+            context.absolute_url(), transition)
+
     def __init__(self, *args, **kwargs):
         layout.FormWrapper.__init__(self, *args, **kwargs)
         grok.View.__init__(self, *args, **kwargs)
