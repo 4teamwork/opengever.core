@@ -6,7 +6,6 @@ from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.ogds.base.utils import get_client_id
 from opengever.task import _ as task_mf
 from opengever.task.task import ITask, Task
-from plone import api
 from plone.directives import form
 from plone.directives.dexterity import AddForm
 from Products.CMFCore.interfaces import IActionSucceededEvent
@@ -74,13 +73,18 @@ class Forwarding(Task):
 
     def set_static_task_type(self, value):
         """Marker set function"""
-        # do not file when trying to set the task type - but ignore
+        # do not fail when trying to set the task type - but ignore
         return
 
     task_type = property(get_static_task_type, set_static_task_type)
 
-    def get_task_type_label(self):
-        return _('forwarding_task_type', default=u'Forwarding')
+    def get_task_type_label(self, language=None):
+        label = _('forwarding_task_type', default=u'Forwarding')
+        if language:
+            return translate(label, context=self.REQUEST,
+                             domain='opengever.inbox',
+                             target_language=language)
+        return label
 
 
 class ForwardingAddForm(AddForm):
