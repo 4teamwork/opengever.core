@@ -1,0 +1,12 @@
+<html
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    tal:define="css view/css"
+    tal:omit-tag="python: True">
+
+  <style type="text/css" media="all"
+         tal:condition="css"
+         tal:content="css"
+         />
+
+</html>
