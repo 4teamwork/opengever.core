@@ -237,6 +237,9 @@ msgstr "Accomplir"
 msgid "task-transition-in-progress-tested-and-closed"
 msgstr "Fermer"
 
+msgid "task-transition-modify-deadline"
+msgstr "Changer le délai"
+
 msgid "task-transition-open-cancelled"
 msgstr "Annuler"
 

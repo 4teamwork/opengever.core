@@ -290,3 +290,6 @@ msgstr ""
 msgid "task-transition-resolved-in-progress"
 msgstr ""
 
+msgid "task-transition-modify-deadline"
+msgstr ""
+
