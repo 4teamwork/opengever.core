@@ -53,4 +53,21 @@
         directory="profiles/2602"
         />
 
+    <!-- 2602 -> 2603 -->
+    <genericsetup:upgradeStep
+        title="Update task workflow, allow Manager edit in all states"
+        description=""
+        source="2602"
+        destination="2603"
+        handler="opengever.task.upgrades.to2603.UpdateTaskWorkflow"
+        profile="opengever.task:default"
+        />
+
+    <genericsetup:registerProfile
+        name="2603"
+        title="opengever.task: upgrade profile 2603"
+        description=""
+        directory="profiles/2603"
+        />
+
 </configure>
