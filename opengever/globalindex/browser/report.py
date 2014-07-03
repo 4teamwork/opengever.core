@@ -10,10 +10,10 @@ from opengever.globalindex import _
 from opengever.globalindex.utils import get_selected_items
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.task.util import getTaskTypeVocabulary
-from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Products.statusmessages.interfaces import IStatusMessage
 from zope.app.component.hooks import getSite
 from zope.i18n import translate
+from zope.interface import Interface
 
 
 def task_type_helper(value):
@@ -37,7 +37,7 @@ class TaskReporter(grok.View):
     task and their important attributes from the globalindex.
     """
 
-    grok.context(IPloneSiteRoot)
+    grok.context(Interface)
     grok.name('task_report')
     grok.require('zope2.View')
 
