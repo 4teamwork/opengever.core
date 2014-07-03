@@ -135,7 +135,6 @@ class GlobalTaskTableSource(SqlTableSource):
         """Builds the query based on `get_base_query()` method of config.
         Returns the query object.
         """
-
         # initalize config
         self.config.update_config()
 

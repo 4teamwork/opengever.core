@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2012-02-22 10:55+0000\n"
+"POT-Creation-Date: 2014-07-03 08:38+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,6 +22,7 @@ msgid "Could not generate the report"
 msgstr ""
 
 #: ./opengever/globalindex/profiles/default/actions.xml
+#: ./opengever/globalindex/upgrades/profiles/2601/actions.xml
 msgid "Export selection"
 msgstr ""
 
@@ -30,17 +31,17 @@ msgid "Global task index has been cleared (${cleared}) and rebuilt (${rebuilt})"
 msgstr ""
 
 #. Default: "You have not selected any Items"
-#: ./opengever/globalindex/browser/report.py:45
+#: ./opengever/globalindex/browser/report.py:50
 msgid "error_no_items"
 msgstr ""
 
 #. Default: "Forwarding"
-#: ./opengever/globalindex/browser/report.py:22
+#: ./opengever/globalindex/browser/report.py:24
 msgid "forwarding_task_type"
 msgstr ""
 
 #: ./opengever/globalindex/browser/report.py:76
-msgid "label_client_id"
+msgid "label_admin_unit_id"
 msgstr ""
 
 #: ./opengever/globalindex/browser/report.py:67
@@ -76,7 +77,7 @@ msgid "label_task_type"
 msgstr ""
 
 #. Default: "Tasks"
-#: ./opengever/globalindex/browser/report.py:86
+#: ./opengever/globalindex/browser/report.py:85
 msgid "label_tasks"
 msgstr ""
 
