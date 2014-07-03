@@ -1,15 +1,17 @@
-from Products.CMFPlone.interfaces import IPloneSiteRoot
-from Products.statusmessages.interfaces import IStatusMessage
 from datetime import datetime
 from five import grok
-from opengever.base.reporter import StringTranslater, XLSReporter
-from opengever.base.reporter import format_datetime, get_date_style
-from opengever.base.reporter import readable_author
 from opengever.base.behaviors.utils import set_attachment_content_disposition
+from opengever.base.reporter import format_datetime
+from opengever.base.reporter import get_date_style
+from opengever.base.reporter import readable_author
+from opengever.base.reporter import StringTranslater
+from opengever.base.reporter import XLSReporter
 from opengever.globalindex import _
 from opengever.globalindex.utils import get_selected_items
-from opengever.ogds.base.utils import get_client_id
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.task.util import getTaskTypeVocabulary
+from Products.CMFPlone.interfaces import IPloneSiteRoot
+from Products.statusmessages.interfaces import IStatusMessage
 from zope.app.component.hooks import getSite
 from zope.i18n import translate
 
@@ -71,7 +73,7 @@ class TaskReporter(grok.View):
              'transform':readable_author},
             {'id':'task_type', 'title':_('label_task_type'),
              'transform':task_type_helper},
-            {'id':'client_id', 'title':_('label_client_id')},
+            {'id':'admin_unit_id', 'title':_('label_admin_unit_id')},
             {'id':'sequence_number', 'title':_('label_sequence_number')},
         ]
 
@@ -82,7 +84,8 @@ class TaskReporter(grok.View):
             sheet_title=translate(
                 _('label_tasks', default=u'Tasks'), context=self.request),
             footer='%s %s' % (
-                datetime.now().strftime('%d.%m.%Y %H:%M'), get_client_id())
+                datetime.now().strftime('%d.%m.%Y %H:%M'),
+                get_current_admin_unit().id())
             )
 
         data = reporter()
