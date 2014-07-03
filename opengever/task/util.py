@@ -8,7 +8,6 @@ from z3c.relationfield import RelationValue
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
 from zope.event import notify
-from zope.i18n import translate
 from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.schema.interfaces import IContextSourceBinder
@@ -20,10 +19,10 @@ import types
 
 
 CUSTOM_INITIAL_VERSION_MESSAGE = 'custom_inital_version_message'
-TASK_TYPES = ['unidirectional_by_reference',
-              'unidirectional_by_value',
-              'bidirectional_by_reference',
-              'bidirectional_by_value']
+TASK_TYPE_CATEGORIES = ['unidirectional_by_reference',
+                        'unidirectional_by_value',
+                        'bidirectional_by_reference',
+                        'bidirectional_by_value']
 
 
 class UsersVocabulary(SimpleVocabulary):
@@ -73,12 +72,12 @@ def create_sequence_number(obj, key='task_sequence_number'):
 @grok.provider(IContextSourceBinder)
 def getTaskTypeVocabulary(context):
     terms = []
-    for task_type in TASK_TYPES:
+    for category in TASK_TYPE_CATEGORIES:
         reg_key = 'opengever.task.interfaces.ITaskSettings.%s' % (
-            task_type)
+            category)
 
         for term in wrap_vocabulary(
-            'opengever.task.%s' % (task_type),
+            'opengever.task.%s' % (category),
             visible_terms_from_registry=reg_key)(context):
 
             terms.append(term)
@@ -90,8 +89,8 @@ def get_task_type_title(task_type, language):
     """Return the task type translated in language.
 
     """
-    for task_type_category in TASK_TYPES:
-        vocabulary_id = 'opengever.task.{}'.format(task_type_category)
+    for category in TASK_TYPE_CATEGORIES:
+        vocabulary_id = 'opengever.task.{}'.format(category)
         factory = getUtility(IVocabularyFactory, vocabulary_id)
         vdex_terms = factory.getTerms(language)
         for vdex_term in vdex_terms:
