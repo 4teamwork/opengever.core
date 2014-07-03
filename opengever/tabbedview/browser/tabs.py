@@ -246,7 +246,7 @@ class Tasks(GlobalTaskListingTab):
         'pdf_taskslisting',
         'move_items',
         'copy_items',
-        'export_dossiers',
+        'export_tasks',
     ]
 
     major_actions = [
