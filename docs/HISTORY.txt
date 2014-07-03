@@ -4,6 +4,10 @@ Changelog
 3.3.1 (unreleased)
 ------------------
 
+- OGQuickUploadCapableFileFactory: Set default values before adding content to container.
+  (Prevents values set by handlers on ObjectAddedEvent to be overwritten again).
+  [lgraf]
+
 - Implement document metadata behavor on mail (incl. Upgrade step and init event).
   [mathias.leimgruber]
 

@@ -1,3 +1,4 @@
+from Acquisition import aq_base
 from Acquisition import aq_inner
 from collective.quickupload.interfaces import IQuickUploadFileFactory
 from five import grok
@@ -43,14 +44,22 @@ class OGQuickUploadCapableFileFactory(grok.Adapter):
         portal_type = self.get_portal_type(filename)
         content = createContent(portal_type, title=filename)
 
+        # Temporarily acquisition wrap content to make adaptation work
+        content = content.__of__(self.context)
+
         self.set_primary_field_value(filename, data, content)
+        self.set_default_values(content, self.context)
+
+        # fire ObjectCreatedEvent (again) to trigger
+        # sync_title_and_filename_handler
+        notify(ObjectCreatedEvent(content))
+
+        # Remove temporary acquisition wrapper
+        content = aq_base(content)
+
         obj = addContentToContainer(self.context,
                                     content,
                                     checkConstraints=True)
-        self.set_default_values(obj)
-
-        # initalize digitaly available
-        notify(ObjectCreatedEvent(obj))
 
         # rest of initialization
         notify(ObjectModifiedEvent(obj))
@@ -71,16 +80,16 @@ class OGQuickUploadCapableFileFactory(grok.Adapter):
         value = field._type(data=data, filename=filename)
         field.set(field.interface(obj), value)
 
-    def set_default_values(self, obj):
+    def set_default_values(self, content, container):
         # set default values for all fields
-        for schemata in iterSchemata(obj):
-            for name, field in getFieldsInOrder(schemata):
+        for schema in iterSchemata(content):
+            for name, field in getFieldsInOrder(schema):
                 if IPrimaryField.providedBy(field):
                     continue
                 else:
                     default = queryMultiAdapter((
-                        obj,
-                        obj.REQUEST,
+                        container,
+                        container.REQUEST,
                         None,
                         field,
                         None,
@@ -95,7 +104,7 @@ class OGQuickUploadCapableFileFactory(grok.Adapter):
                         except AttributeError:
                             pass
                     value = default
-                    field.set(field.interface(obj), value)
+                    field.set(field.interface(content), value)
 
     def get_portal_type(self, filename):
         # check if its a mail object then create a ftw.mail

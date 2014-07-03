@@ -1,3 +1,4 @@
+from collective.quickupload.interfaces import IQuickUploadFileFactory
 from datetime import date
 from datetime import datetime
 from ftw.builder import Builder
@@ -121,6 +122,22 @@ class TestMailMetadataWithBuilder(FunctionalTestCase):
         self.assertEquals('',
                           brain.checked_out,
                           'Checked out, should be empty')
+
+
+class TestMailMetadataWithQuickupload(TestMailMetadataWithBuilder):
+
+    def create_mail(self):
+        dossier = create(Builder("dossier"))
+        factory = IQuickUploadFileFactory(dossier)
+
+        result = factory(filename='mail.eml',
+                         title='',  # ignored by adapter
+                         description='Description',  # ignored by adapter
+                         content_type='message/rfc822',
+                         data=MAIL_DATA,
+                         portal_type='ftw.mail.mail')
+        mail = result['success']
+        return mail
 
 
 class TestMailUpgradeStep(FunctionalTestCase):

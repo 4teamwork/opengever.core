@@ -60,7 +60,7 @@ class TestOGQuickupload(FunctionalTestCase):
                           len(history.data()),
                           'Expect exactly one journal entry after upload')
 
-    def test_filename_is_used_as_default_title_for_journal_entry(self):
+    def test_title_is_used_as_default_title_for_journal_entry(self):
         result = self.adapter(filename='document.txt',
                               title='',
                               description='',
@@ -70,6 +70,6 @@ class TestOGQuickupload(FunctionalTestCase):
         content = result['success']
         history = JournalHistory(content, content.REQUEST)
 
-        self.assertEquals(u'Document added: document.txt',
+        self.assertEquals(u'Document added: document',
                           translate(history.data()[0]['action']['title']),
-                          'Expect the filename as title in the action title')
+                          'Expected the document title in the action title')
