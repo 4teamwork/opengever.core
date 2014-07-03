@@ -4,10 +4,13 @@ from ftw.tabbedview.browser.tabbed import TabbedView
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_admin_unit
+from opengever.ogds.base.utils import ogds_service
+from opengever.tabbedview import _
 from opengever.tabbedview import LOG
 from opengever.tabbedview.browser.tabs import Documents, Dossiers
 from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
 from Products.CMFPlone.utils import getToolByName
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from sqlalchemy.exc import OperationalError
 from zope.component import getUtility
 from zope.interface import Interface
@@ -36,6 +39,8 @@ class PersonalOverview(TabbedView):
     where the actual user is the responsible.
     """
 
+    template = ViewPageTemplateFile("personal_overview.pt")
+
     default_tabs = [
         {'id': 'mydossiers', 'icon': None, 'url': '#', 'class': None},
         {'id': 'mydocuments', 'icon': None, 'url': '#', 'class': None},
@@ -61,9 +66,15 @@ class PersonalOverview(TabbedView):
             repos = catalog(portal_type='opengever.repository.repositoryroot')
             repo_url = repos[0].getURL()
             return self.request.RESPONSE.redirect(repo_url)
-
         else:
-            return super(PersonalOverview, self).__call__()
+            return self.template(self)
+
+    def personal_overview_title(self):
+        current_user = ogds_service().fetch_current_user()
+        return _('personal_overview_title',
+                 default='Personal Overview: ${user_name}',
+                 mapping=dict(
+                    user_name=current_user.label(with_principal=False)))
 
     def _is_user_admin(self):
         m_tool = getToolByName(self.context, 'portal_membership')
@@ -75,7 +86,6 @@ class PersonalOverview(TabbedView):
         return False
 
     def get_tabs(self):
-
         info = getUtility(IContactInformation)
 
         if info.is_user_in_inbox_group() or self._is_user_admin():

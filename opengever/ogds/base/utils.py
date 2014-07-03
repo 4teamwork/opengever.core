@@ -3,9 +3,8 @@ from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.ou_selector import AnonymousOrgUnitSelector
 from opengever.ogds.base.ou_selector import NoAssignedUnitsOrgUnitSelector
 from opengever.ogds.base.ou_selector import OrgUnitSelector
-from opengever.ogds.models.client import Client
 from opengever.ogds.models.service import OGDSService
-from plone.memoize import ram
+from plone import api
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces import IPloneSiteRoot
@@ -38,7 +37,14 @@ def create_session():
 
 
 def ogds_service():
-    return OGDSService(create_session())
+    return PloneOGDSService(create_session())
+
+
+class PloneOGDSService(OGDSService):
+    """Extends ogds-service with plone-specific helper methods."""
+
+    def fetch_current_user(self):
+        return self.fetch_user(api.user.get_current().getId())
 
 
 def get_ou_selector():

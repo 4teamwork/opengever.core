@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
 from opengever.testing import FunctionalTestCase
 from opengever.testing import task2sqltask
 from plone.app.testing import TEST_USER_ID
@@ -27,6 +28,12 @@ class TestGlobalTaskListings(FunctionalTestCase):
                             .having(responsible_client='client1',
                                     responsible=TEST_USER_ID,
                                     issuer='hugo.boss'))
+
+    @browsing
+    def test_personal_overview_displays_username_in_title(self, browser):
+        browser.login().open(view='personal_overview')
+        self.assertEquals(u'Personal Overview: Test User',
+                          browser.css('h1.documentFirstHeading').first.text)
 
     def test_my_tasks(self):
         view = self.portal.unrestrictedTraverse(

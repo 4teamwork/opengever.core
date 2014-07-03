@@ -23,7 +23,7 @@ class TestCheckedOutViewlet(FunctionalTestCase):
         message = browser.css('dl.checked_out_viewlet dd').first
         link = browser.css('dl.checked_out_viewlet a').first
 
-        self.assertEqual('This item is being checked out by test_user_1_ (test_user_1_).',
+        self.assertEqual('This item is being checked out by Test User (test_user_1_).',
                          message.text)
         self.assertEqual('http://nohost/plone/@@user-details/test_user_1_',
                          link.get('href'))
