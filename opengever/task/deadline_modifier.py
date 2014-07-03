@@ -1,4 +1,3 @@
-from Products.CMFCore.utils import getToolByName
 from five import grok
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import remote_request
@@ -6,6 +5,7 @@ from opengever.task.interfaces import IDeadlineModifier
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
+from Products.CMFCore.utils import getToolByName
 from zExceptions import Unauthorized
 from zope.component import getMultiAdapter
 from zope.component import getUtility

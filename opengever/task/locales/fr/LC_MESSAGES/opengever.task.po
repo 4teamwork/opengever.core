@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-06-27 08:23+0000\n"
+"POT-Creation-Date: 2014-07-03 14:13+0000\n"
 "PO-Revision-Date: 2012-08-21 15:18+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,41 +22,41 @@ msgstr "${num} document(s) a (ont) été copié(s)."
 msgid "${subtask_num} subtasks were create."
 msgstr "${subtask_num} sous-tâche(s) a (ont) été créé(es)."
 
-#: ./opengever/task/response.py:339
+#: ./opengever/task/response.py:340
 msgid "Changes saved to response id ${response_id}."
 msgstr "Modifications de la réponse ${response_id} ont été sauvegardées"
 
-#: ./opengever/task/viewlets/response_templates/responseview.pt:21
+#: ./opengever/task/viewlets/response_templates/responseview.pt:22
 msgid "Delete"
 msgstr "Effacer"
 
-#: ./opengever/task/viewlets/response_templates/responseview.pt:17
+#: ./opengever/task/viewlets/response_templates/responseview.pt:18
 msgid "Edit"
 msgstr "Modifier"
 
-#: ./opengever/task/response.py:242
+#: ./opengever/task/response.py:243
 #: ./opengever/task/statesyncer.py:146
 #: ./opengever/task/util.py:156
 msgid "Issue state"
 msgstr "Etat"
 
-#: ./opengever/task/response.py:367
+#: ./opengever/task/response.py:368
 msgid "No response selected for removal."
 msgstr "Aucune réponse séléctionnée pour l'effaçement"
 
-#: ./opengever/task/response.py:330
+#: ./opengever/task/response.py:331
 msgid "No response selected for saving."
 msgstr "Aucune réponse séléctionnée pour la sauvegarde"
 
-#: ./opengever/task/response.py:389
+#: ./opengever/task/response.py:390
 msgid "Removed response id ${response_id}."
 msgstr "Réponse ${response_id} effacée"
 
-#: ./opengever/task/response.py:382
+#: ./opengever/task/response.py:383
 msgid "Response id ${response_id} does not exist so it cannot be removed."
 msgstr "Réponse ${response_id} inexistante et ne peut être effacée"
 
-#: ./opengever/task/response.py:374
+#: ./opengever/task/response.py:375
 msgid "Response id ${response_id} is no integer so it cannot be removed."
 msgstr "Réponse ${response_id} n'est pas un chiffre et ne peut être effacé"
 
@@ -105,11 +105,11 @@ msgstr "La tâche a été accepté."
 msgid "The task has been copied to the selected dossier and accepted."
 msgstr "La tâche a été copiée et acceptée."
 
-#: ./opengever/task/response.py:361
+#: ./opengever/task/response.py:362
 msgid "You are not allowed to delete responses."
 msgstr "Vous n'étes pas l'autorisation d'effacer ces réponses"
 
-#: ./opengever/task/response.py:324
+#: ./opengever/task/response.py:325
 msgid "You are not allowed to edit responses."
 msgstr "Vous n'étes pas l'autorisation pour éditer ces réponses"
 
@@ -211,11 +211,11 @@ msgid "button_save"
 msgstr "Sauvegarder"
 
 #. Default: "Cancel"
-#: ./opengever/task/response.py:266
+#: ./opengever/task/response.py:267
 msgid "cancel"
 msgstr "Annuler"
 
-#: ./opengever/task/response.py:201
+#: ./opengever/task/response.py:202
 msgid "date_of_completion"
 msgstr "Date d'accomplissement"
 
@@ -319,7 +319,7 @@ msgstr "Le texte saisi ici apparaît dans la réponse qui clôture cette tâche.
 msgid "help_copy_documents"
 msgstr ""
 
-#: ./opengever/task/response.py:52
+#: ./opengever/task/response.py:53
 #: ./opengever/task/task.py:129
 msgid "help_date_of_completion"
 msgstr "Date d'achèvement de la tâche"
@@ -368,7 +368,7 @@ msgstr ""
 
 #: ./opengever/task/browser/assign.py:52
 #: ./opengever/task/browser/modify_deadline.py:29
-#: ./opengever/task/response.py:46
+#: ./opengever/task/response.py:47
 msgid "help_response"
 msgstr ""
 
@@ -416,7 +416,7 @@ msgstr "Nom de la tâche"
 
 #: ./opengever/task/browser/assign.py:30
 #: ./opengever/task/browser/complete.py:105
-#: ./opengever/task/response.py:39
+#: ./opengever/task/response.py:40
 msgid "help_transition"
 msgstr ""
 
@@ -494,15 +494,15 @@ msgid "label_created"
 msgstr "Créé le"
 
 #. Default: "Date of completion"
-#: ./opengever/task/browser/overview.py:113
-#: ./opengever/task/response.py:51
+#: ./opengever/task/browser/overview.py:100
+#: ./opengever/task/response.py:52
 #: ./opengever/task/task.py:128
 msgid "label_date_of_completion"
 msgstr "Date de réalisation"
 
 #. Default: "Deadline"
 #: ./opengever/task/browser/delegate/metadata.py:33
-#: ./opengever/task/browser/overview.py:100
+#: ./opengever/task/browser/overview.py:87
 #: ./opengever/task/task.py:121
 msgid "label_deadline"
 msgstr "A réaliser jusqu'au"
@@ -549,7 +549,7 @@ msgstr "Début du travail"
 
 #. Default: "Issuer"
 #: ./opengever/task/browser/delegate/metadata.py:27
-#: ./opengever/task/browser/overview.py:104
+#: ./opengever/task/browser/overview.py:91
 #: ./opengever/task/task.py:86
 msgid "label_issuer"
 msgstr "Mandant"
@@ -570,7 +570,7 @@ msgid "label_new_deadline"
 msgstr "Nouveau délai"
 
 #. Default: "Dossiertitle"
-#: ./opengever/task/browser/overview.py:84
+#: ./opengever/task/browser/overview.py:71
 msgid "label_parent_dossier_title"
 msgstr "Titre de la dossier"
 
@@ -586,7 +586,7 @@ msgstr "Tâche initiale"
 
 #. Default: "Related Items"
 #: ./opengever/task/browser/complete.py:216
-#: ./opengever/task/response.py:57
+#: ./opengever/task/response.py:58
 #: ./opengever/task/task.py:142
 msgid "label_related_items"
 msgstr "Renvois"
@@ -606,7 +606,7 @@ msgstr "Response"
 
 #. Default: "Responsible"
 #: ./opengever/task/browser/assign.py:44
-#: ./opengever/task/browser/overview.py:109
+#: ./opengever/task/browser/overview.py:96
 #: ./opengever/task/statesyncer.py:137
 msgid "label_responsible"
 msgstr "Mandataire"
@@ -647,19 +647,19 @@ msgid "label_target_client"
 msgstr "Client final"
 
 #. Default: "Tasktitle"
-#: ./opengever/task/browser/overview.py:80
+#: ./opengever/task/browser/overview.py:67
 msgid "label_task_title"
 msgstr "Titre de la tâche"
 
 #. Default: "Task Type"
-#: ./opengever/task/browser/overview.py:92
+#: ./opengever/task/browser/overview.py:79
 #: ./opengever/task/task.py:94
 msgid "label_task_type"
 msgstr "Type de mandat"
 
 #. Default: "Text"
 #: ./opengever/task/browser/delegate/metadata.py:38
-#: ./opengever/task/browser/overview.py:88
+#: ./opengever/task/browser/overview.py:75
 #: ./opengever/task/task.py:136
 msgid "label_text"
 msgstr "Description"
@@ -673,12 +673,12 @@ msgstr "Titre"
 #. Default: "Transition"
 #: ./opengever/task/browser/assign.py:29
 #: ./opengever/task/browser/complete.py:104
-#: ./opengever/task/response.py:38
+#: ./opengever/task/response.py:39
 msgid "label_transition"
 msgstr "Action"
 
 #. Default: "State"
-#: ./opengever/task/browser/overview.py:96
+#: ./opengever/task/browser/overview.py:83
 msgid "label_workflow_state"
 msgstr "Etat"
 
@@ -716,7 +716,7 @@ msgid "same_deadline_error"
 msgstr "Le délai saisi est celui qui court actuellement."
 
 #. Default: "Save"
-#: ./opengever/task/response.py:157
+#: ./opengever/task/response.py:158
 msgid "save"
 msgstr "Enregistrer"
 
@@ -805,12 +805,12 @@ msgid "title_modify_deadline"
 msgstr "Changer le délai"
 
 #. Default: "Document ${doc} added by ${user}"
-#: ./opengever/task/response_description.py:229
+#: ./opengever/task/response_description.py:242
 msgid "transition_add_document"
 msgstr ""
 
 #. Default: "Subtask ${task} added by ${user}"
-#: ./opengever/task/response_description.py:213
+#: ./opengever/task/response_description.py:226
 msgid "transition_add_subtask"
 msgstr ""
 
@@ -820,7 +820,7 @@ msgid "transition_label_accept"
 msgstr ""
 
 #. Default: "Assigned to dossier by ${user} successor=${successor}"
-#: ./opengever/task/response_description.py:194
+#: ./opengever/task/response_description.py:207
 msgid "transition_label_assign_to_dossier"
 msgstr ""
 
@@ -835,7 +835,7 @@ msgid "transition_label_close"
 msgstr ""
 
 #. Default: "Created by ${user}"
-#: ./opengever/task/viewlets/response.py:59
+#: ./opengever/task/viewlets/response.py:56
 msgid "transition_label_created"
 msgstr ""
 
@@ -843,6 +843,11 @@ msgstr ""
 #: ./opengever/task/response_description.py:47
 msgid "transition_label_default"
 msgstr ""
+
+#. Default: "Deadline modified ${user}"
+#: ./opengever/task/response_description.py:180
+msgid "transition_label_modify_deadline"
+msgstr "Changer le délai"
 
 #. Default: "Reactivate by ${user}"
 #: ./opengever/task/response_description.py:62
@@ -855,7 +860,7 @@ msgid "transition_label_reassign"
 msgstr ""
 
 #. Default: "Refused by ${user}"
-#: ./opengever/task/response_description.py:180
+#: ./opengever/task/response_description.py:193
 msgid "transition_label_refuse"
 msgstr ""
 

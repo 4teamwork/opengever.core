@@ -171,6 +171,19 @@ class Reassign(ResponseDescription):
 ResponseDescription.add_description(Reassign)
 
 
+class ModifyDeadline(ResponseDescription):
+
+    transition = 'task-transition-modify-deadline'
+    css_class = 'modifyDeadline'
+
+    def msg(self):
+        return _('transition_label_modify_deadline',
+                 'Deadline modified ${user}',
+                 mapping=self._msg_mapping)
+
+ResponseDescription.add_description(ModifyDeadline)
+
+
 class Refuse(ResponseDescription):
 
     transition = 'forwarding-transition-refuse'

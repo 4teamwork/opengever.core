@@ -2,6 +2,8 @@ from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
+from opengever.task.browser.modify_deadline import ModifyDeadlineFormView
+from opengever.task.interfaces import IDeadlineModifier
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.util import get_documents_of_task
 from Products.CMFCore.utils import getToolByName
@@ -121,6 +123,14 @@ class TaskTransitionController(BrowserView):
         return action_url_generator(self, transition)
 
     # ------------ workflow implementation --------------
+
+    @guard('task-transition-modify-deadline')
+    def modify_deadline_guard(self):
+        return IDeadlineModifier(self.context).is_modify_allowed()
+
+    @action('task-transition-modify-deadline')
+    def modify_deadline_action(self, transition):
+        return ModifyDeadlineFormView.url_for(self.context, transition)
 
     @guard('task-transition-cancelled-open')
     def cancelled_to_open_guard(self):
