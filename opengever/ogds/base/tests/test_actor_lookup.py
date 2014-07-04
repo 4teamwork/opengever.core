@@ -41,13 +41,18 @@ class TestActorLookup(FunctionalTestCase):
         self.assertIn(actor.get_profile_url(), link)
 
     def test_user_actor_ogds_user(self):
-        create(Builder('fixture').with_hugo_boss())
+        create(Builder('fixture'))
+        create(Builder('ogds_user')
+               .id('hugo.boss')
+               .having(firstname='H\xc3\xbcgo'.decode('utf-8'),
+                       lastname='Boss'))
+
         actor = Actor.lookup('hugo.boss')
 
-        self.assertEqual('Boss Hugo (hugo.boss)', actor.get_label())
+        self.assertEqual(u'Boss H\xfcgo (hugo.boss)', actor.get_label())
         self.assertTrue(
             actor.get_profile_url().endswith('@@user-details/hugo.boss'))
 
-        link = actor.get_link()
-        self.assertIn(actor.get_label(), link)
-        self.assertIn(actor.get_profile_url(), link)
+        self.assertEqual(
+            u'<a href="http://nohost/plone/@@user-details/hugo.boss">Boss H\xfcgo (hugo.boss)</a>',
+            actor.get_link())
