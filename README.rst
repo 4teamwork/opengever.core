@@ -158,3 +158,16 @@ Now you can use the ``self.browser`` instance:
 Have a look at the `opengever.testing.browser module
 <https://github.com/4teamwork/opengever.core/blob/master/opengever/testing/browser.py>`_
 to see the complete API.
+
+
+Testing Inbound Mail
+--------------------
+
+For easy testing of inbound mail (without actually going through an MTA) there's
+a script ``bin/test-inbound-mail`` that can be used to test creation of inbound
+mail:
+
+``cat testmail.eml | bin/test-inbound-mail``
+
+The script assumes you got an instance running on port ``${instance:http-address}``, a GEVER client called ``mandant1`` and an omelette with ``ftw.mail`` in it installed. It will then feed the mail from stdin to
+the ``ftw.mail`` inbound view, like Postfix would.
