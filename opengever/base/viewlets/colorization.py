@@ -18,5 +18,5 @@ class ColorizationViewlet(ViewletBase):
     def css(self):
         colorname = os.environ.get(ENVIRONMENT_KEY, None)
         if colorname is not None and colorname in COLORS:
-            return "body {border: 5px solid %s;}" % COLORS[colorname]
+            return "div.contentWrapper {border: 5px solid %s;}" % COLORS[colorname]
         return None
