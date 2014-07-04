@@ -80,7 +80,7 @@ class Actor(object):
         if not url:
             return label
 
-        return '<a href="{}">{}</a>'.format(url, label)
+        return u'<a href="{}">{}</a>'.format(url, label)
 
 
 class NullActor(object):
