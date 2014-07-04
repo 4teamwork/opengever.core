@@ -43,8 +43,8 @@ class TestAssignedInboxTaskTab(FunctionalTestCase):
         view = self.inbox.restrictedTraverse('tabbedview_view-%s' % (viewname))
         view.update()
 
-        self.assertEquals([task2sqltask(obj) for obj in results],
-                          view.contents)
+        self.assertEquals(set([task2sqltask(obj) for obj in results]),
+                          set(view.contents))
 
     def test_lists_only_tasks_assigned_to_current_inbox_group(self):
         create_client(clientid='client2')
@@ -89,8 +89,8 @@ class TestIssuedInboxTaskTab(FunctionalTestCase):
             'tabbedview_view-%s' % (viewname))
         view.update()
 
-        self.assertEquals(results,
-                          [brain.getObject() for brain in view.contents])
+        self.assertEquals(set(results),
+                          set([brain.getObject() for brain in view.contents]))
 
     def test_list_tasks_and_forwardings(self):
         task = create(Builder('task')
