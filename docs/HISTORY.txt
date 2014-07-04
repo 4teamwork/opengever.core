@@ -4,6 +4,9 @@ Changelog
 3.3.1 (unreleased)
 ------------------
 
+- File a copy of the mail in the dossier by default when sending documents from GEVER.
+  [lgraf]
+
 - Add overview tab for mail (Shows metadata).
   [mathias.leimgruber]
 
