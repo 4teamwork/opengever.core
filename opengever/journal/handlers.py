@@ -305,7 +305,7 @@ def document_added(context, event):
     title = _(
         u'label_document_added',
         default=u'Document added: ${title}',
-        mapping={'title': context.title_or_id(), })
+        mapping={'title': context.title, })
     # journal_entry for document:
     journal_entry_factory(context, DOCUMENT_ADDED_ACTION, title)
     # journal entry for parent (usually dossier)

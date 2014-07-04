@@ -22,7 +22,7 @@ class TestPreview(FunctionalTestCase):
 
         expect = [['From:', 'from@example.org'],
                   ['Subject:', u'Die B\xfcrgschaft'],
-                  ['Date:', 'Jan 01, 1970 01:00 AM'],
+                  ['Date:', 'Jan 01, 1999 01:00 AM'],
                   ['To:', u'Friedrich H\xf6lderlin <to@example.org>']]
         self.assertEquals(expect,
                           browser.css('.mailHeaders.listing').first.lists())
