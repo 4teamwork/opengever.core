@@ -56,7 +56,7 @@ class DeadlineModifier(grok.Adapter):
 
         return member.has_role('Administrator') or member.has_role('Manager')
 
-    def modify_deadline(self, new_deadline, text):
+    def modify_deadline(self, new_deadline, text, transition):
         """Handles the whole deadline mofication process:
         - Set the new deadline
         - Add response
@@ -66,21 +66,22 @@ class DeadlineModifier(grok.Adapter):
         if not self.is_modify_allowed():
             raise Unauthorized
 
-        self.update_deadline(new_deadline, text)
-        self.sync_deadline(new_deadline, text)
+        self.update_deadline(new_deadline, text, transition)
+        self.sync_deadline(new_deadline, text, transition)
 
-    def update_deadline(self, new_deadline, text):
+    def update_deadline(self, new_deadline, text, transition):
         add_simple_response(
             self.context, text=text,
             field_changes=(
                 (ITask['deadline'], new_deadline),
             ),
+            transition=transition
         )
 
         self.context.deadline = new_deadline
         notify(ObjectModifiedEvent(self.context))
 
-    def sync_deadline(self, new_deadline, text):
+    def sync_deadline(self, new_deadline, text, transition):
         sct = ISuccessorTaskController(self.context)
         for successor in sct.get_successors():
 
@@ -90,7 +91,8 @@ class DeadlineModifier(grok.Adapter):
                 successor.physical_path,
                 data={
                     'new_deadline': new_deadline.toordinal(),
-                    'text': text})
+                    'text': text,
+                    'transition': transition})
 
             if response.read().strip() != 'OK':
                 raise Exception(
