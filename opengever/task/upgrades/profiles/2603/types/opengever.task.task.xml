@@ -12,4 +12,9 @@
             category="object_buttons">
     </action>
 
+    <action action_id="delegate_task"
+            remove="True"
+            category="object_buttons">
+    </action>
+
 </object>
