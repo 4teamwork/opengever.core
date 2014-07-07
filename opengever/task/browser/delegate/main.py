@@ -1,17 +1,12 @@
-from five import grok
 from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.task import _
-from opengever.task.task import ITask
 
 
-class DelegateTask(grok.View):
-    grok.context(ITask)
-    grok.name('delegate_task')
-    grok.require('opengever.task.AddTask')
+class DelegateTask(object):
 
-    def render(self):
-        url = '%s/@@delegate_recipients' % self.context.absolute_url()
-        return self.request.RESPONSE.redirect(url)
+    @classmethod
+    def url_for(cls, context):
+        return '{}/@@delegate_recipients'.format(context.absolute_url())
 
 
 class DelegateWizardFormMixin(BaseWizardStepForm):

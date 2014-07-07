@@ -276,3 +276,23 @@ msgstr ""
 msgid "task-transition-modify-deadline"
 msgstr ""
 
+msgid "tasktemplate-state-active"
+msgstr ""
+
+msgid "tasktemplatefolder-state-activ"
+msgstr ""
+
+msgid "tasktemplatefolder-state-inactiv"
+msgstr ""
+
+msgid "tasktemplatefolder-transition-activ-inactiv"
+msgstr ""
+
+msgid "tasktemplatefolder-transition-inactiv-activ"
+msgstr ""
+
+msgid "Add task from template"
+msgstr ""
+
+msgid "task-transition-delegate"
+msgstr ""

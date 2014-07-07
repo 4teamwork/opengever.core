@@ -184,6 +184,20 @@ class ModifyDeadline(ResponseDescription):
 ResponseDescription.add_description(ModifyDeadline)
 
 
+class Delegate(ResponseDescription):
+    """At the moment no delegate responses are created but this "response" is
+    only used for its action css-class.
+
+    """
+    transition = 'task-transition-delegate'
+    css_class = 'delegate'
+
+    def msg(self):
+        return ''
+
+ResponseDescription.add_description(Delegate)
+
+
 class Refuse(ResponseDescription):
 
     transition = 'forwarding-transition-refuse'

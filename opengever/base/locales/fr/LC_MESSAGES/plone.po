@@ -231,6 +231,9 @@ msgstr "Fermé"
 msgid "task-transition-cancelled-open"
 msgstr "Rouvrir"
 
+msgid "task-transition-delegate"
+msgstr "Déléguer"
+
 msgid "task-transition-in-progress-resolved"
 msgstr "Accomplir"
 
