@@ -161,7 +161,7 @@ class IDeadlineModifier(Interface):
             - AND is issuer or is admin
             """
 
-    def modify_deadline(new_deadline, text):
+    def modify_deadline(new_deadline, text, transition):
         """Handles the whole deadline mofication process:
             - Set the new deadline
             - Add response
