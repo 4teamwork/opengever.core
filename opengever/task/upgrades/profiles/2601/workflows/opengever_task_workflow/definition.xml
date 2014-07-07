@@ -61,6 +61,7 @@
  <state state_id="task-state-in-progress" title="task-state-in-progress">
   <exit-transition transition_id="task-transition-in-progress-resolved"/>
   <exit-transition transition_id="task-transition-in-progress-tested-and-closed"/>
+  <exit-transition transition_id="task-transition-modify-deadline"/>
   <exit-transition transition_id="task-transition-reassign"/>
   <permission-map name="Access contents information" acquired="False">
    <permission-role>Editor</permission-role>
@@ -114,6 +115,7 @@
   </permission-map>
  </state>
  <state state_id="task-state-open" title="task-state-open">
+  <exit-transition transition_id="task-transition-modify-deadline"/>
   <exit-transition transition_id="task-transition-open-cancelled"/>
   <exit-transition transition_id="task-transition-open-in-progress"/>
   <exit-transition transition_id="task-transition-open-rejected"/>
@@ -328,6 +330,12 @@
    <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_transition_possible('task-transition-in-progress-tested-and-closed')</guard-expression>
   </guard>
  </transition>
+ <transition transition_id="task-transition-modify-deadline" title="task-transition-modify-deadline" new_state="" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/@@task_transition_controller?transition=task-transition-modify-deadline" category="workflow" icon="">task-transition-modify-deadline</action>
+  <guard>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_transition_possible('task-transition-modify-deadline')</guard-expression>
+  </guard>
+ </transition>
  <transition transition_id="task-transition-open-cancelled" title="task-transition-open-cancelled" new_state="task-state-cancelled" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/@@task_transition_controller?transition=task-transition-open-cancelled" category="workflow" icon="">task-transition-open-cancelled</action>
   <guard>
@@ -393,7 +401,7 @@
  <variable variable_id="action" for_catalog="False" for_status="True" update_always="True">
   <description>The last transition</description>
   <default>
-
+   
    <expression>transition/getId|nothing</expression>
   </default>
   <guard>
@@ -402,7 +410,7 @@
  <variable variable_id="actor" for_catalog="False" for_status="True" update_always="True">
   <description>The ID of the user who performed the last transition</description>
   <default>
-
+   
    <expression>user/getId</expression>
   </default>
   <guard>
@@ -411,7 +419,7 @@
  <variable variable_id="comments" for_catalog="False" for_status="True" update_always="True">
   <description>Comments about the last transition</description>
   <default>
-
+   
    <expression>python:state_change.kwargs.get('comment', '')</expression>
   </default>
   <guard>
@@ -420,7 +428,7 @@
  <variable variable_id="review_history" for_catalog="False" for_status="False" update_always="False">
   <description>Provides access to workflow history</description>
   <default>
-
+   
    <expression>state_change/getHistory</expression>
   </default>
   <guard>
@@ -430,7 +438,7 @@
  <variable variable_id="time" for_catalog="False" for_status="True" update_always="True">
   <description>Time of the last transition</description>
   <default>
-
+   
    <expression>state_change/getDateTime</expression>
   </default>
   <guard>
