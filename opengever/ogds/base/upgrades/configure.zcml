@@ -42,5 +42,14 @@
           directory="profiles/3302"
           provides="Products.GenericSetup.interfaces.EXTENSION"
           />
+		  
+  <upgrade-step:importProfile
+          title="Add mobile action for orgunit selector"
+          profile="opengever.ogds.base:default"
+          source="3302"
+          destination="3303"
+          directory="profiles/3303"
+          />
+		
 
 </configure>
