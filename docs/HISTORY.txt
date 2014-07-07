@@ -4,6 +4,12 @@ Changelog
 3.3.1 (unreleased)
 ------------------
 
+- Add overview tab for mail (Shows metadata).
+  [mathias.leimgruber]
+
+- Show classification infos on document overview tab.
+  [mathias.leimgruber]
+
 - Add classification behavior to mail.
   [mathias.leimgruber]
 

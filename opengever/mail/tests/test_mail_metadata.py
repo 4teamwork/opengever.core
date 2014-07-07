@@ -1,6 +1,5 @@
 from collective.quickupload.interfaces import IQuickUploadFileFactory
 from datetime import date
-from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.mail import utils
@@ -8,6 +7,7 @@ from opengever.document.behaviors import metadata
 from opengever.document.interfaces import IDocumentSettings
 from opengever.mail.mail import extract_email
 from opengever.mail.mail import get_author_by_email
+from opengever.mail.tests.utils import get_header_date
 from opengever.testing import FunctionalTestCase
 from opengever.testing.sql import create_ogds_user
 from pkg_resources import resource_string
@@ -18,10 +18,6 @@ from zope.component import getUtility
 
 
 MAIL_DATA = resource_string('opengever.mail.tests', 'mail.txt')
-
-
-def get_header_date(mail):
-    return datetime.fromtimestamp(utils.get_date_header(mail.msg, 'Date'))
 
 
 def get_preserved_as_paper_default():

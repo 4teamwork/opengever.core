@@ -124,6 +124,10 @@ class Overview(DisplayForm, OpengeverTab):
             FieldRow('IDocumentMetadata.receipt_date'),
             FieldRow('IDocumentMetadata.delivery_date'),
             FieldRow('IRelatedDocuments.relatedItems'),
+            FieldRow('IClassification.classification'),
+            FieldRow('IClassification.privacy_layer'),
+            FieldRow('IClassification.public_trial'),
+            FieldRow('IClassification.public_trial_statement'),
              ]
 
     def get_metadata_rows(self):
