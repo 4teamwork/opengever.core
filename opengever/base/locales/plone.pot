@@ -293,3 +293,6 @@ msgstr ""
 
 msgid "Add task from template"
 msgstr ""
+
+msgid "task-transition-delegate"
+msgstr ""

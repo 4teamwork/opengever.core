@@ -60,6 +60,7 @@
   </permission-map>
  </state>
  <state state_id="task-state-in-progress" title="task-state-in-progress">
+  <exit-transition transition_id="task-transition-delegate"/>
   <exit-transition transition_id="task-transition-in-progress-resolved"/>
   <exit-transition transition_id="task-transition-in-progress-tested-and-closed"/>
   <exit-transition transition_id="task-transition-modify-deadline"/>
@@ -327,6 +328,12 @@
    <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_transition_possible('task-transition-cancelled-open')</guard-expression>
   </guard>
  </transition>
+ <transition transition_id="task-transition-delegate" title="task-transition-delegate" new_state="" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/@@task_transition_controller?transition=task-transition-delegate" category="workflow" icon="">task-transition-delegate</action>
+  <guard>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_transition_possible('task-transition-delegate')</guard-expression>
+  </guard>
+ </transition>
  <transition transition_id="task-transition-in-progress-resolved" title="task-transition-in-progress-resolved" new_state="task-state-resolved" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/@@task_transition_controller?transition=task-transition-in-progress-resolved" category="workflow" icon="">task-transition-in-progress-resolved</action>
   <guard>
@@ -410,7 +417,7 @@
  <variable variable_id="action" for_catalog="False" for_status="True" update_always="True">
   <description>The last transition</description>
   <default>
-   
+
    <expression>transition/getId|nothing</expression>
   </default>
   <guard>
@@ -419,7 +426,7 @@
  <variable variable_id="actor" for_catalog="False" for_status="True" update_always="True">
   <description>The ID of the user who performed the last transition</description>
   <default>
-   
+
    <expression>user/getId</expression>
   </default>
   <guard>
@@ -428,7 +435,7 @@
  <variable variable_id="comments" for_catalog="False" for_status="True" update_always="True">
   <description>Comments about the last transition</description>
   <default>
-   
+
    <expression>python:state_change.kwargs.get('comment', '')</expression>
   </default>
   <guard>
@@ -437,7 +444,7 @@
  <variable variable_id="review_history" for_catalog="False" for_status="False" update_always="False">
   <description>Provides access to workflow history</description>
   <default>
-   
+
    <expression>state_change/getHistory</expression>
   </default>
   <guard>
@@ -447,7 +454,7 @@
  <variable variable_id="time" for_catalog="False" for_status="True" update_always="True">
   <description>Time of the last transition</description>
   <default>
-   
+
    <expression>state_change/getDateTime</expression>
   </default>
   <guard>

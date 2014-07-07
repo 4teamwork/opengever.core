@@ -234,6 +234,9 @@ msgstr "Abgeschlossen"
 msgid "task-transition-cancelled-open"
 msgstr "Wieder eröffnen"
 
+msgid "task-transition-delegate"
+msgstr "Delegieren"
+
 msgid "task-transition-in-progress-resolved"
 msgstr "Erledigen"
 
