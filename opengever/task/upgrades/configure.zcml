@@ -55,7 +55,7 @@
 
     <!-- 2602 -> 2603 -->
     <genericsetup:upgradeStep
-        title="Update task workflow, allow Manager edit in all states"
+        title="Update task workflow, allow Manager edit, add new transitions"
         description=""
         source="2602"
         destination="2603"
