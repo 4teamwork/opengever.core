@@ -70,7 +70,11 @@ class AssignTaskForm(Form):
 
     label = _(u'title_assign_task', u'Assign task')
 
-    @buttonAndHandler(_(u'button_assign', default=u'Assign'))
+    def updateActions(self):
+        super(AssignTaskForm, self).updateActions()
+        self.actions["save"].addClass("context")
+
+    @buttonAndHandler(_(u'button_assign', default=u'Assign'), name='save')
     def handle_assign(self, action):
         data, errors = self.extractData()
         if not errors:

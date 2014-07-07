@@ -49,7 +49,11 @@ class ModifyDeadlineForm(Form):
 
     label = _(u'title_modify_deadline', u'Modify deadline')
 
-    @buttonAndHandler(_(u'button_save', default=u'Save'))
+    def updateActions(self):
+        super(ModifyDeadlineForm, self).updateActions()
+        self.actions["save"].addClass("context")
+
+    @buttonAndHandler(_(u'button_save', default=u'Save'), name='save')
     def handle_save(self, action):
         data, errors = self.extractData()
         if not errors:
