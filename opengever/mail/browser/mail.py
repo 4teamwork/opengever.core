@@ -4,6 +4,8 @@ from ftw.mail import utils
 from ftw.mail.mail import IMail
 from ftw.mail.mail import View as ftwView
 from ftw.tabbedview.browser.tabbed import TabbedView
+from opengever.base import _ as ogbmf
+from opengever.document import _ as ogdmf
 from opengever.document.browser.overview import CustomRow
 from opengever.document.browser.overview import FieldRow
 from opengever.document.browser.overview import Overview
@@ -12,7 +14,7 @@ from plone.memoize import instance
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.component import getUtility
-from opengever.document import _ as ogdmf
+
 
 class TabbedMailView(TabbedView):
 
@@ -89,6 +91,8 @@ class OverviewTab(Overview):
             FieldRow('IRelatedDocuments.relatedItems'),
             FieldRow('IClassification.classification'),
             FieldRow('IClassification.privacy_layer'),
-            FieldRow('IClassification.public_trial'),
+            CustomRow(self.render_public_trial_with_edit_link,
+                      label=ogbmf('label_public_trial',
+                                  default='Public Trial')),
             FieldRow('IClassification.public_trial_statement'),
         ]

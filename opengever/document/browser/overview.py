@@ -1,16 +1,19 @@
 from AccessControl import getSecurityManager
 from five import grok
+from opengever.base import _ as ogbmf
+from opengever.base.browser import edit_public_trial
 from opengever.base.browser.helper import get_css_class
 from opengever.document import _
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.dossier.base import DOSSIER_STATES_CLOSED
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview.browser.tabs import OpengeverTab
 from plone.directives.dexterity import DisplayForm
+from Products.CMFCore.utils import getToolByName
 from z3c.form.browser.checkbox import SingleCheckBoxWidget
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.component import getUtility, queryMultiAdapter
-
 
 try:
     from opengever.pdfconverter.behaviors.preview import IPreviewMarker
@@ -126,9 +129,11 @@ class Overview(DisplayForm, OpengeverTab):
             FieldRow('IRelatedDocuments.relatedItems'),
             FieldRow('IClassification.classification'),
             FieldRow('IClassification.privacy_layer'),
-            FieldRow('IClassification.public_trial'),
+            CustomRow(self.render_public_trial_with_edit_link,
+                      label=ogbmf('label_public_trial',
+                                  default='Public Trial')),
             FieldRow('IClassification.public_trial_statement'),
-             ]
+        ]
 
     def get_metadata_rows(self):
         for row in self.get_metadata_config():
@@ -169,7 +174,7 @@ class Overview(DisplayForm, OpengeverTab):
     def is_pdf_download_available(self):
         if self.is_preview_supported():
             if IPreview(
-                self.context).conversion_state == CONVERSION_STATE_READY:
+                    self.context).conversion_state == CONVERSION_STATE_READY:
                 return True
         return False
 
@@ -196,3 +201,20 @@ class Overview(DisplayForm, OpengeverTab):
             if manager.checked_out() != getSecurityManager().getUser().getId():
                 return False
         return True
+
+    def render_public_trial_with_edit_link(self):
+        template = ViewPageTemplateFile('overview_templates/public_trial.pt')
+        return template(self)
+
+    def show_modfiy_public_trial_link(self):
+        try:
+            can_edit = edit_public_trial.can_access_public_trial_edit_form(
+                getSecurityManager().getUser(),
+                self.context)
+        except AssertionError:
+            return False
+
+        wftool = getToolByName(self.context, 'portal_workflow')
+        state = wftool.getInfoFor(self.context.aq_parent, 'review_state')
+
+        return can_edit and state in DOSSIER_STATES_CLOSED

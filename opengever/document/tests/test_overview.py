@@ -154,3 +154,29 @@ class TestDocumentOverview(FunctionalTestCase):
             '',
             browser.css(
                 '#form-widgets-IClassification-public_trial_statement').first.text)
+
+    @browsing
+    def test_modify_public_trial_link_NOT_shown_on_open_dossier(self, browser):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document')
+                          .within(dossier)
+                          .with_dummy_content())
+        browser.login().visit(document, view='tabbedview_view-overview')
+
+        self.assertFalse(
+            browser.css(
+                '#form-widgets-IClassification-public_trial-edit-link'),
+            'Public trial edit link should not be visible.')
+
+    @browsing
+    def test_modify_public_trial_is_visible_on_closed_dossier(self, browser):
+        dossier = create(Builder('dossier').in_state('dossier-state-resolved'))
+        document = create(Builder('document')
+                          .within(dossier)
+                          .with_dummy_content())
+        browser.login().visit(document, view='tabbedview_view-overview')
+
+        self.assertTrue(
+            browser.css(
+                '#form-widgets-IClassification-public_trial-edit-link'),
+            'Public trial edit link should be visible.')
