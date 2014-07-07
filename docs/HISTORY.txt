@@ -4,6 +4,9 @@ Changelog
 3.3.1 (unreleased)
 ------------------
 
+- Fixed widget definition for date fields in tasks edit form.
+  [phgross]
+
 - Added viewlet to colorize special pages as dev, test, ...
   [Julian Infanger]
 
