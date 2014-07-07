@@ -81,16 +81,6 @@
         <permission value="Add portal content"/>
     </action>
 
-    <action action_id="create_successor"
-            visible="False"
-            title="Create successor task"
-            category="object_buttons"
-            url_expr="string:${object_url}/@@create-successor-task"
-            condition_expr="python:object.responsible==member.id"
-            icon_expr="">
-        <permission value="View"/>
-    </action>
-
     <action action_id="delegate_task"
             visible="True"
             title="Delegate task"
