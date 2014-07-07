@@ -60,6 +60,9 @@ class ModifyDeadlineForm(Form):
 
             return self.request.RESPONSE.redirect(self.context.absolute_url())
 
+    @buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
+    def handle_cancel(self, action):
+        return self.request.RESPONSE.redirect('.')
 
 class ModifyDeadlineFormView(layout.FormWrapper, grok.View):
     grok.context(ITask)
