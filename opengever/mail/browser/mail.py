@@ -1,18 +1,24 @@
 from Acquisition import aq_inner
+from five import grok
 from ftw.mail import utils
+from ftw.mail.mail import IMail
 from ftw.mail.mail import View as ftwView
 from ftw.tabbedview.browser.tabbed import TabbedView
+from opengever.document.browser.overview import CustomRow
+from opengever.document.browser.overview import FieldRow
+from opengever.document.browser.overview import Overview
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize import instance
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.component import getUtility
-
+from opengever.document import _ as ogdmf
 
 class TabbedMailView(TabbedView):
 
     def get_tabs(self):
         return [
+            {'id': 'overview', 'class': ''},
             {'id': 'preview', 'class': ''},
             {'id': 'journal', 'class': ''},
             {'id': 'sharing', 'class': ''},
@@ -61,3 +67,28 @@ class PreviewTab(ftwView):
                 attachment['type-name'] = 'File'
 
         return attachments
+
+
+class OverviewTab(Overview):
+    grok.context(IMail)
+
+    def get_metadata_config(self):
+        return [
+            FieldRow('title'),
+            FieldRow('IDocumentMetadata.document_date'),
+            FieldRow('IDocumentMetadata.document_type'),
+            FieldRow('IDocumentMetadata.document_author'),
+            CustomRow(self.render_creator_link,
+                      label=ogdmf('label_creator', default='creator')),
+            FieldRow('IDocumentMetadata.description'),
+            FieldRow('IDocumentMetadata.foreign_reference'),
+            FieldRow('IDocumentMetadata.digitally_available'),
+            FieldRow('IDocumentMetadata.preserved_as_paper'),
+            FieldRow('IDocumentMetadata.receipt_date'),
+            FieldRow('IDocumentMetadata.delivery_date'),
+            FieldRow('IRelatedDocuments.relatedItems'),
+            FieldRow('IClassification.classification'),
+            FieldRow('IClassification.privacy_layer'),
+            FieldRow('IClassification.public_trial'),
+            FieldRow('IClassification.public_trial_statement'),
+        ]
