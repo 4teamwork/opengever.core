@@ -6,4 +6,10 @@
             remove="True"
             category="object_buttons">
     </action>
+
+    <action action_id="modify_deadline"
+            remove="True"
+            category="object_buttons">
+    </action>
+
 </object>
