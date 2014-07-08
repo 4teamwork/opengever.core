@@ -1,14 +1,16 @@
 from Acquisition import aq_inner, aq_parent
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from five import grok
+from opengever.base.behaviors.utils import hide_fields_from_behavior
 from opengever.base.interfaces import IReferenceNumber
 from opengever.repository import _
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.repository.interfaces import IRepositoryFolderRecords
 from plone.app.content.interfaces import INameFromTitle
 from plone.dexterity import content
+from plone.directives import dexterity
 from plone.directives import form
 from plone.registry.interfaces import IRegistry
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from zope import schema
 from zope.component import queryUtility
 from zope.interface import implements
@@ -175,6 +177,26 @@ class RepositoryFolder(content.Container):
         types = filter(_filterer, types)
 
         return types
+
+
+class AddForm(dexterity.AddForm):
+    grok.name('opengever.repository.repositoryfolder')
+
+    def updateFields(self):
+        super(AddForm, self).updateFields()
+        hide_fields_from_behavior(self,
+                                  ['IClassification.public_trial',
+                                   'IClassification.public_trial_statement'])
+
+
+class EditForm(dexterity.EditForm):
+    grok.context(IRepositoryFolder)
+
+    def updateFields(self):
+        super(EditForm, self).updateFields()
+        hide_fields_from_behavior(self,
+                                  ['IClassification.public_trial',
+                                   'IClassification.public_trial_statement'])
 
 
 class NameFromTitle(grok.Adapter):
