@@ -1,4 +1,3 @@
-from Products.CMFCore.utils import getToolByName
 from five import grok
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import remote_request
@@ -6,6 +5,8 @@ from opengever.task.interfaces import IDeadlineModifier
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
+from Products.CMFCore.utils import getToolByName
+from Products.CMFDiffTool.utils import safe_utf8
 from zExceptions import Unauthorized
 from zope.component import getMultiAdapter
 from zope.component import getUtility
@@ -90,7 +91,7 @@ class DeadlineModifier(grok.Adapter):
                 successor.physical_path,
                 data={
                     'new_deadline': new_deadline.toordinal(),
-                    'text': text})
+                    'text': safe_utf8(text)})
 
             if response.read().strip() != 'OK':
                 raise Exception(
