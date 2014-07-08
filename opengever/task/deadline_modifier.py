@@ -97,4 +97,4 @@ class DeadlineModifier(grok.Adapter):
             if response.read().strip() != 'OK':
                 raise Exception(
                     'Updating deadline on remote client %s. failed (%s)' % (
-                        successor.client_id, response.read()))
+                        successor.admin_unit_id, response.read()))
