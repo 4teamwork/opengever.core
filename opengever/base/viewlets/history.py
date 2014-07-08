@@ -1,3 +1,4 @@
+from opengever.ogds.base.actor import Actor
 from plone.app.layout.viewlets import content
 
 try:
@@ -14,6 +15,14 @@ class DocumentContentHistoryViewlet(content.ContentHistoryViewlet):
     If the content type provides the IPreview behavior, an additional link
     is displayed to retrieve the PDF preview for that version.
     """
+
+    def revisionHistory(self):
+        history = super(DocumentContentHistoryViewlet, self).revisionHistory()
+        for item in history:
+            actor_id = item.get('actorid')
+            actor = Actor.user(actor_id)
+            item['user_link'] = actor.get_link()
+        return history
 
     def previewSupported(self):
         if not PDFCONVERTER_AVAILABLE:
