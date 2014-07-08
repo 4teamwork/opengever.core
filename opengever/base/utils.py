@@ -1,4 +1,5 @@
 from Products.CMFCore.utils import getToolByName
+from plone import api
 
 
 def set_profile_version(portal, profile_id, version):
@@ -19,3 +20,10 @@ def set_profile_version(portal, profile_id, version):
     assert(ps.getLastVersionForProfile(profile_id) == (version, ))
     print "Set version for '%s' to '%s'." % (profile_id, version)
     return [version]
+
+
+def ok_response(request=None):
+    if request is None:
+        request =  api.portal.get().REQUEST
+    request.response.setHeader("Content-type", "text/plain")
+    return 'OK'
