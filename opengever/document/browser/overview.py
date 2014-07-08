@@ -1,4 +1,6 @@
 from AccessControl import getSecurityManager
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from five import grok
 from opengever.base import _ as ogbmf
 from opengever.base.browser import edit_public_trial
@@ -211,10 +213,11 @@ class Overview(DisplayForm, OpengeverTab):
             can_edit = edit_public_trial.can_access_public_trial_edit_form(
                 getSecurityManager().getUser(),
                 self.context)
-        except AssertionError:
+        except (AssertionError, ValueError):
             return False
 
         wftool = getToolByName(self.context, 'portal_workflow')
-        state = wftool.getInfoFor(self.context.aq_parent, 'review_state')
+        state = wftool.getInfoFor(aq_parent(aq_inner(self.context)),
+                                  'review_state')
 
         return can_edit and state in DOSSIER_STATES_CLOSED

@@ -1,12 +1,9 @@
-from Acquisition import aq_inner
-from Acquisition import aq_parent
 from opengever.base import _
 from opengever.base.behaviors.classification import IClassification
+from opengever.base.utils import find_parent_dossier
 from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.base import DOSSIER_STATES_OPEN
-from opengever.dossier.behaviors.dossier import IDossierMarker
 from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
 from z3c.form.form import Form
@@ -22,14 +19,7 @@ def can_access_public_trial_edit_form(user, content):
     assert IBaseDocument.providedBy(
         content), 'Content needs to provide IBaseDocument'
 
-    dossier = aq_parent(aq_inner(content))
-    while not IDossierMarker.providedBy(dossier):
-        dossier = aq_parent(aq_inner(dossier))
-        if IPloneSiteRoot.providedBy(dossier):
-            break
-
-    assert IDossierMarker.providedBy(
-        dossier), 'The parent needs to be a dossier'
+    dossier = find_parent_dossier(content)
 
     workflow_id = wftool.getChainForPortalType(dossier.portal_type)[0]
     user_roles = user.getRolesInContext(dossier)

@@ -26,7 +26,7 @@ class TestEditPublicTrialHelperFunction(FunctionalTestCase):
         self.assertTrue(self.can_edit(user, self.document))
 
         with self.assertRaises(AssertionError):
-            self.assertTrue(self.can_edit(user, self.document.aq_parent))
+            self.can_edit(user, self.document.aq_parent)
 
     def test_one_of_the_parents_needs_to_be_a_dossier(self):
         user = self.portal.portal_membership.getAuthenticatedMember()
@@ -53,7 +53,7 @@ class TestEditPublicTrialHelperFunction(FunctionalTestCase):
         subdossier = create(Builder('dossier').within(dossier))
 
         with self.assertRaises(AssertionError):
-            self.assertTrue(self.can_edit(user, subdossier))
+            self.can_edit(user, subdossier)
 
 
 class TestEditPublicTrialForm(FunctionalTestCase):
