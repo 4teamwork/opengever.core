@@ -1,12 +1,13 @@
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.mail.utils import get_attachments
 from ftw.testing.mailing import Mailing
 from opengever.mail.behaviors import ISendableDocsContainer
 from opengever.mail.interfaces import IDocumentSent
-from opengever.testing import FunctionalTestCase
 from opengever.testing import create_client
 from opengever.testing import create_ogds_user
+from opengever.testing import FunctionalTestCase
 from opengever.testing import set_current_client_id
 from plone.app.testing import TEST_USER_ID
 from zope.component import getUtility
@@ -153,6 +154,26 @@ f\xc3\xbcr Ernst Franz\r\n\r\nBesten Dank im Voraus"""
         self.assertEquals(
             intids.getObject(event.intids[0]),
             documents[0])
+
+    def test_sent_mail_gets_filed_in_dossier(self):
+        dossier = create(Builder("dossier"))
+        document = create(Builder("document").with_dummy_content())
+
+        self.send_documents(dossier, [document], file_copy_in_dossier=True)
+
+        self.assertIn('test-subject', dossier,
+                      "Sent mail should be archived in dossier")
+
+        filed_mail = dossier.restrictedTraverse('test-subject')
+        self.assertEquals(date.today(), filed_mail.delivery_date,
+                          "Filed mail should have a delivery date of today")
+
+        self.assertEquals(u'Test Subject', filed_mail.title,
+                          "Filed mail should have subject as title")
+
+        self.assertEquals(u'Boss Hugo', filed_mail.document_author,
+                          "Author of filed mail should be name of OGDS user")
+
 
     def send_documents(self, container, documents, **kwargs):
         documents = ['/'.join(doc.getPhysicalPath()) for doc in documents]
