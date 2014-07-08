@@ -25,15 +25,8 @@
           <tal:block repeat="item history">
             <tr tal:define="isVersion python:item['type']=='versioning';">
               <td tal:content="item/version_id|nothing" />
-              <td tal:define="actor item/actor;
-                              actor_name python:actor and actor.get('fullname','username') or item['actorid'];
-                              actor_home item/actor_home;">
-                <a href=""
-                   tal:condition="actor_home"
-                   tal:attributes="href actor_home"
-                   tal:content="actor_name"> runyaga </a>
-                <span tal:condition="not: actor_home"
-                      tal:replace="actor_name"/>
+              <td tal:define="link item/user_link | nothing;" class="actor">
+                <tal:userlink tal:condition="link" tal:replace="structure link"></tal:userlink>
               </td>
               <td tal:define="effective item/effective_date|nothing;
                               effectiveDate python:effective and context.toLocalizedTime(item['effective_date'],long_format=True)"
