@@ -4,6 +4,9 @@ Changelog
 3.3.1 (unreleased)
 ------------------
 
+- Removed unused yearfolder workflow.
+  [lknoepfel]
+
 - Fixed table display in add-tasktemplate form.
   [phgross]
 
