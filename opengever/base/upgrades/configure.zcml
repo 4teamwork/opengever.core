@@ -139,4 +139,12 @@
       profile="opengever.base:default"
       />
 
+  <upgrade-step:importProfile
+      title="Add gever placeholder in searchbox."
+      profile="opengever.base:default"
+      source="2607"
+      destination="2608"
+      directory="profiles/2608"
+      />
+
 </configure>
