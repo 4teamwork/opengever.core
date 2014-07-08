@@ -1,3 +1,4 @@
+from opengever.ogds.base.actor import Actor
 from plone.app.layout.viewlets import content
 
 try:
@@ -15,6 +16,14 @@ class DocumentContentHistoryViewlet(content.ContentHistoryViewlet):
     is displayed to retrieve the PDF preview for that version.
     """
 
+    def revisionHistory(self):
+        history = super(DocumentContentHistoryViewlet, self).revisionHistory()
+        for item in history:
+            actor_id = item.get('actorid')
+            actor = Actor.user(actor_id)
+            item['user_link'] = actor.get_link()
+        return history
+
     def previewSupported(self):
         if not PDFCONVERTER_AVAILABLE:
             # PDF Converter isn't available at all
@@ -29,5 +38,3 @@ class DocumentContentHistoryViewlet(content.ContentHistoryViewlet):
         if self.context.portal_type in ['opengever.document.document']:
             return True
         return False
-
-    update = content.ContentHistoryViewlet.update
