@@ -63,6 +63,9 @@ class TestResponeTransporter(MockTestCase):
             def getStatus(self):
                 return 200
 
+            def setHeader(self, foo, bar):
+                pass
+
         class DummyRequest(dict):
             def __init__(self):
                 self.response = DummyResponse()
