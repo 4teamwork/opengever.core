@@ -2,6 +2,7 @@ from Products.statusmessages.interfaces import IStatusMessage
 from datetime import date
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
+from opengever.base.utils import ok_response
 from opengever.task import _
 from opengever.task.interfaces import IDeadlineModifier
 from opengever.task.task import ITask
@@ -96,4 +97,4 @@ class RemoteDeadlineModifier(grok.View):
 
         IDeadlineModifier(self.context).update_deadline(new_deadline, text)
 
-        return 'OK'
+        return ok_response()

@@ -1,9 +1,11 @@
-from Acquisition import aq_inner, aq_parent
-from Products.CMFCore.utils import getToolByName
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from five import grok
+from opengever.base.utils import ok_response
 from opengever.task.interfaces import IYearfolderStorer
 from opengever.task.task import ITask
 from opengever.task.util import change_task_workflow_state
+from Products.CMFCore.utils import getToolByName
 from zExceptions import Unauthorized
 
 
@@ -14,10 +16,7 @@ class StoreForwardingInYearfolderView(grok.View):
 
     def render(self):
         if self.is_already_done():
-            # Set correct content type for text response
-            self.request.response.setHeader("Content-type", "text/plain")
-
-            return 'OK'
+            return ok_response()
 
         mtool = getToolByName(self.context, 'portal_membership')
         member = mtool.getAuthenticatedMember()
@@ -37,10 +36,7 @@ class StoreForwardingInYearfolderView(grok.View):
 
         IYearfolderStorer(self.context).store_in_yearfolder()
 
-        # Set correct content type for text response
-        self.request.response.setHeader("Content-type", "tex/plain")
-
-        return 'OK'
+        return ok_response()
 
     def is_already_done(self):
         """When the sender (caller of this view) has a conflict error, this
