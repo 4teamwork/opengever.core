@@ -177,9 +177,15 @@ class ModifyDeadline(ResponseDescription):
     css_class = 'modifyDeadline'
 
     def msg(self):
+        change = self.response.get_change('deadline')
+        new_deadline = change.get('after')
+        old_deadline = change.get('before')
         return _('transition_label_modify_deadline',
-                 'Deadline modified ${user}',
-                 mapping=self._msg_mapping)
+                 'Deadline modified from ${deadline_old} to ${deadline_new} '
+                 'by ${user}',
+                 mapping={'user': self.response.creator_link(),
+                          'deadline_old': old_deadline.strftime('%d.%m.%Y'),
+                          'deadline_new': new_deadline.strftime('%d.%m.%Y')})
 
 ResponseDescription.add_description(ModifyDeadline)
 

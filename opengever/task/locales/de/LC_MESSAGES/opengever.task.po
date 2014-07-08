@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2014-07-03 14:13+0000\n"
+"POT-Creation-Date: 2014-07-08 07:20+0000\n"
 "PO-Revision-Date: 2014-06-27 10:25+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -175,7 +175,7 @@ msgid "attachdocument_step_choose_dossier"
 msgstr "1. Dossier wählen"
 
 #. Default: "Assign"
-#: ./opengever/task/browser/assign.py:73
+#: ./opengever/task/browser/assign.py:77
 msgid "button_assign"
 msgstr "Zuweisen"
 
@@ -245,7 +245,7 @@ msgid "error_copying_related_documents_not_possible"
 msgstr "Es ist nicht möglich, die verknüpften Dokumente zu kopieren."
 
 #. Default: "No changes: same responsible selected"
-#: ./opengever/task/browser/assign.py:80
+#: ./opengever/task/browser/assign.py:84
 msgid "error_same_responsible"
 msgstr "Keine Änderung, da kein anderer Auftragnehmer ausgewählt wurde."
 
@@ -359,7 +359,7 @@ msgstr ""
 msgid "help_issuer"
 msgstr ""
 
-#: ./opengever/task/browser/modify_deadline.py:23
+#: ./opengever/task/browser/modify_deadline.py:33
 msgid "help_new_deadline"
 msgstr ""
 
@@ -368,7 +368,7 @@ msgid "help_predecessor"
 msgstr ""
 
 #: ./opengever/task/browser/assign.py:52
-#: ./opengever/task/browser/modify_deadline.py:29
+#: ./opengever/task/browser/modify_deadline.py:39
 #: ./opengever/task/response.py:47
 msgid "help_response"
 msgstr ""
@@ -417,7 +417,7 @@ msgstr "Der Name der Aufgabe"
 
 #: ./opengever/task/browser/assign.py:30
 #: ./opengever/task/browser/complete.py:105
-#: ./opengever/task/response.py:40
+#: ./opengever/task/browser/modify_deadline.py:25
 msgid "help_transition"
 msgstr ""
 
@@ -566,7 +566,7 @@ msgid "label_main_attributes"
 msgstr "Eigenschaften"
 
 #. Default: "New Deadline"
-#: ./opengever/task/browser/modify_deadline.py:22
+#: ./opengever/task/browser/modify_deadline.py:32
 msgid "label_new_deadline"
 msgstr "Neue Frist"
 
@@ -674,7 +674,7 @@ msgstr "Titel"
 #. Default: "Transition"
 #: ./opengever/task/browser/assign.py:29
 #: ./opengever/task/browser/complete.py:104
-#: ./opengever/task/response.py:39
+#: ./opengever/task/browser/modify_deadline.py:24
 msgid "label_transition"
 msgstr "Aktion"
 
@@ -689,7 +689,7 @@ msgid "label_workflow_state_byline"
 msgstr "Status"
 
 #. Default: "Deadline successfully changed."
-#: ./opengever/task/browser/modify_deadline.py:57
+#: ./opengever/task/browser/modify_deadline.py:72
 msgid "msg_deadline_change_successfull"
 msgstr "Frist wurde erfolgreich angepasst."
 
@@ -712,7 +712,7 @@ msgid "response_label_response"
 msgstr "Antwort"
 
 #. Default: "The given deadline, is the current one."
-#: ./opengever/task/browser/modify_deadline.py:50
+#: ./opengever/task/browser/modify_deadline.py:64
 msgid "same_deadline_error"
 msgstr "Die angegebene Frist ist die aktuelle."
 
@@ -786,7 +786,7 @@ msgid "title_copy_releated_documents"
 msgstr "Verknüpfte Dokumente kopieren"
 
 #. Default: "Delegate task"
-#: ./opengever/task/browser/delegate/main.py:28
+#: ./opengever/task/browser/delegate/main.py:23
 msgid "title_delegate_task"
 msgstr "Aufgabe delegieren"
 
@@ -801,17 +801,17 @@ msgid "title_error_no_response"
 msgstr "Fehler: keine Antworten zum editieren gefunden"
 
 #. Default: "Modify deadline"
-#: ./opengever/task/browser/modify_deadline.py:40
+#: ./opengever/task/browser/modify_deadline.py:50
 msgid "title_modify_deadline"
 msgstr "Frist ändern"
 
 #. Default: "Document ${doc} added by ${user}"
-#: ./opengever/task/response_description.py:242
+#: ./opengever/task/response_description.py:261
 msgid "transition_add_document"
 msgstr "Dokument ${doc} hinzugefügt durch ${user}"
 
 #. Default: "Subtask ${task} added by ${user}"
-#: ./opengever/task/response_description.py:226
+#: ./opengever/task/response_description.py:245
 msgid "transition_add_subtask"
 msgstr "Unteraufgabe ${task} hinzugefügt durch ${user}"
 
@@ -821,7 +821,7 @@ msgid "transition_label_accept"
 msgstr "Akzeptiert durch ${user}"
 
 #. Default: "Assigned to dossier by ${user} successor=${successor}"
-#: ./opengever/task/response_description.py:207
+#: ./opengever/task/response_description.py:226
 msgid "transition_label_assign_to_dossier"
 msgstr "Einem Dossier zugewiesen durch ${user} Nachfolgeaufgabe=${successor}"
 
@@ -845,10 +845,15 @@ msgstr "Erstellt durch ${user}"
 msgid "transition_label_default"
 msgstr "Antwort hinzugefügt"
 
-#. Default: "Deadline modified ${user}"
-#: ./opengever/task/response_description.py:180
+#. Default: "Delegated by ${user}"
+#: ./opengever/task/response_description.py:199
+msgid "transition_label_delegate"
+msgstr ""
+
+#. Default: "Deadline modified from ${deadline_old} to ${deadline_new} by ${user}"
+#: ./opengever/task/response_description.py:183
 msgid "transition_label_modify_deadline"
-msgstr "Frist ändern"
+msgstr "Frist geändert von ${deadline_old} zu ${deadline_new} durch ${user}"
 
 #. Default: "Reactivate by ${user}"
 #: ./opengever/task/response_description.py:62
@@ -861,7 +866,7 @@ msgid "transition_label_reassign"
 msgstr "Neu zugewiesen von ${responsible_old} an ${responsible_new} durch ${user}"
 
 #. Default: "Refused by ${user}"
-#: ./opengever/task/response_description.py:193
+#: ./opengever/task/response_description.py:212
 msgid "transition_label_refuse"
 msgstr "Abgelehnt durch ${user}"
 
