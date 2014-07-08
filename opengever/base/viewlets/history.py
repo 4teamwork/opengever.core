@@ -29,5 +29,3 @@ class DocumentContentHistoryViewlet(content.ContentHistoryViewlet):
         if self.context.portal_type in ['opengever.document.document']:
             return True
         return False
-
-    update = content.ContentHistoryViewlet.update
