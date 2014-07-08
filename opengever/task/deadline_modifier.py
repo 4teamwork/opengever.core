@@ -6,6 +6,7 @@ from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
 from Products.CMFCore.utils import getToolByName
+from Products.CMFDiffTool.utils import safe_utf8
 from zExceptions import Unauthorized
 from zope.component import getMultiAdapter
 from zope.component import getUtility
@@ -91,7 +92,7 @@ class DeadlineModifier(grok.Adapter):
                 successor.physical_path,
                 data={
                     'new_deadline': new_deadline.toordinal(),
-                    'text': text,
+                    'text': safe_utf8(text),
                     'transition': transition})
 
             if response.read().strip() != 'OK':
