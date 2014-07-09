@@ -1,7 +1,9 @@
 from opengever.ogds.base.ou_selector import CURRENT_ORG_UNIT_KEY
+from opengever.ogds.base.ou_selector import NullOrgUnit
 from opengever.ogds.base.ou_selector import OrgUnitSelector
 from opengever.ogds.models.client import Client
 from opengever.ogds.models.org_unit import OrgUnit
+import inspect
 import unittest2
 
 
@@ -64,3 +66,13 @@ class TestOrgUnitSelector(unittest2.TestCase):
         selector.set_current_unit('clienta')
 
         self.assertEquals(self.unit_a, selector.get_current_unit())
+
+    def test_null_org_unit_interface_implements_org_unit(self):
+        ignore = ['assign_to_admin_unit']
+        methods = inspect.getmembers(OrgUnit)
+        for name, method in methods:
+            if name.startswith('_') or name in ignore:
+                continue
+            if not hasattr(NullOrgUnit, name):
+                self.fail('Missing null-implementation: "NullOrgUnit.{}"'
+                          .format(name))
