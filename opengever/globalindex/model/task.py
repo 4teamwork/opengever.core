@@ -140,6 +140,9 @@ class Task(Base):
     def get_admin_unit(self):
         return ogds_service().fetch_admin_unit(self.admin_unit_id)
 
+    def get_issuing_org_unit(self):
+        return ogds_service().fetch_org_unit(self.issuing_org_unit)
+
     def sync_with(self, plone_task):
         """Sync this task instace with its corresponding plone taks.
 
