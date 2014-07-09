@@ -4,6 +4,9 @@ Changelog
 3.3.1 (unreleased)
 ------------------
 
+- Use existing styles for table in tasktemplate view.
+  [Julian Infanger]
+
 - Changed default placeholder for searchbox.
   [Julian Infanger]
 
