@@ -1,26 +1,8 @@
 from Acquisition import aq_inner, aq_parent
-from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_admin_unit
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from sqlalchemy.ext.declarative import DeclarativeMeta
 from zope.component import getUtility
-
-
-# XXX remove me
-def client_title_helper(item, value):
-    """Returns the client title out of the client id (`value`).
-    """
-    if not value:
-        return value
-
-    info = getUtility(IContactInformation)
-    client = info.get_client_by_id(value)
-
-    if client:
-        return client.title
-
-    else:
-        return value
 
 
 def _get_task_css_class(task):

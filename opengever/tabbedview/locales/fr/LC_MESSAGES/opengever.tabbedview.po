@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-06-30 11:49+0000\n"
+"POT-Creation-Date: 2014-07-09 07:26+0000\n"
 "PO-Revision-Date: 2013-03-27 11:23+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -84,11 +84,6 @@ msgstr "En traitement"
 msgid "checkout_and_edit"
 msgstr "Checkout et modifier"
 
-#. Default: "Client"
-#: ./opengever/tabbedview/browser/tasklisting.py:112
-msgid "column_client"
-msgstr "Client"
-
 #. Default: "Client ID"
 #: ./opengever/tabbedview/browser/clientslisting.py:63
 msgid "column_client_id"
@@ -134,6 +129,11 @@ msgstr "Adresse IP"
 msgid "column_issued_at"
 msgstr "Créé le"
 
+#. Default: "Organisational Unit"
+#: ./opengever/tabbedview/browser/tasklisting.py:112
+msgid "column_issuing_org_unit"
+msgstr "Unité d'organisation"
+
 #. Default: "Public URL"
 #: ./opengever/tabbedview/browser/clientslisting.py:79
 msgid "column_public_url"
@@ -145,7 +145,7 @@ msgid "column_review_state"
 msgstr "Etat"
 
 #. Default: "Sequence number"
-#: ./opengever/tabbedview/browser/tasklisting.py:117
+#: ./opengever/tabbedview/browser/tasklisting.py:118
 msgid "column_sequence_number"
 msgstr "Numéro courant"
 
@@ -354,7 +354,7 @@ msgid "participants"
 msgstr "Participants"
 
 #. Default: "Personal Overview: ${user_name}"
-#: ./opengever/tabbedview/browser/personal_overview.py:73
+#: ./opengever/tabbedview/browser/personal_overview.py:74
 msgid "personal_overview_title"
 msgstr ""
 
