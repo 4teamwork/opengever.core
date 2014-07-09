@@ -13,6 +13,8 @@ import csv
 import os
 import sys
 
+force_integer = ['retention_period', 'custody_period', 'block_inheritance']
+
 
 def main():
     if len(sys.argv) != 3:
@@ -52,11 +54,17 @@ def main():
 
         for row_nr, csvline in enumerate(csvreader, start=5):
             for col_nr, csvcell in enumerate(csvline):
+                if csvcell == '':
+                    continue
 
                 # resolve column number by header
                 if not csvkeys[col_nr] in column_mapping:
                     continue
                 final_col_nr = column_mapping[csvkeys[col_nr]]
+
+                # convert to int if neccecary
+                if csvkeys[col_nr] in force_integer:
+                    csvcell = int(csvcell)
 
                 # write data
                 wscell = worksheet.cell(row=row_nr+1,
