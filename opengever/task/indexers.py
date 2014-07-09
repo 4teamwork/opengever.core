@@ -75,7 +75,7 @@ class SearchableTextExtender(grok.Adapter):
                 language = language.split('-')[0]
             term = self.context.get_task_type_label(language=language)
             if term:
-                searchable.append(term)
+                searchable.append(term.encode('utf-8'))
 
         searchable.append(str(self.context.get_sequence_number()))
         searchable.append(
