@@ -68,7 +68,7 @@ class TestTaskIndexers(FunctionalTestCase):
         self.task.text = u'Lorem ipsum olor sit amet'
         self.task.task_type = 'comment'
 
-        create_ogds_user('hboss', firstname='Hugo', lastname='Boss')
+        create_ogds_user('hboss', firstname=u'Hugo', lastname=u'B\xf6ss')
         self.task.responsible = 'hboss'
 
         self.task.reindexObject()
@@ -76,4 +76,4 @@ class TestTaskIndexers(FunctionalTestCase):
         self.assertEquals(
             index_data_for(self.task).get('SearchableText'),
             ['test', 'aufgabe', 'lorem', 'ipsum', 'olor', 'sit',
-             'amet', 'to', 'comment', '1', 'boss', 'hugo', 'hboss'])
+             'amet', 'to', 'comment', '1', 'b\xc3\xb6ss', 'hugo', 'hboss'])
