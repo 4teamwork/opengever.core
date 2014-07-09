@@ -2,7 +2,6 @@ from five import grok
 from ftw.journal.interfaces import IJournalizable
 from ftw.table import helper
 from ftw.table.interfaces import ITableSource, ITableSourceConfig
-from opengever.base.browser.helper import client_title_helper
 from opengever.globalindex.model.task import Task
 from opengever.globalindex.utils import indexed_task_link_helper
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -10,7 +9,8 @@ from opengever.tabbedview import _
 from opengever.tabbedview.browser.base import OpengeverTab
 from opengever.tabbedview.browser.listing import ListingView
 from opengever.tabbedview.browser.sqltablelisting import SqlTableSource
-from opengever.tabbedview.helper import display_client_title_condition
+from opengever.tabbedview.helper import display_org_unit_title_condition
+from opengever.tabbedview.helper import org_unit_title_helper
 from opengever.tabbedview.helper import overdue_date_helper
 from opengever.tabbedview.helper import readable_date_set_invisibles
 from opengever.tabbedview.helper import readable_ogds_author
@@ -108,10 +108,11 @@ class GlobalTaskListingTab(grok.View, OpengeverTab,
         {'column': 'containing_dossier',
          'column_title': _('containing_dossier', 'Dossier'), },
 
-        {'column': 'client_id',
-         'column_title': _('column_client', default=u'Client'),
-         'transform': client_title_helper,
-         'condition': display_client_title_condition},
+        {'column': 'issuing_org_unit',
+         'column_title': _('column_issuing_org_unit',
+                           default=u'Organisational Unit'),
+         'transform': org_unit_title_helper,
+         'condition': display_org_unit_title_condition},
 
         {'column': 'sequence_number',
          'column_title': _(u'column_sequence_number',

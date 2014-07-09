@@ -3,7 +3,7 @@ from ftw.mail.utils import get_header
 from opengever.base import _ as base_mf
 from opengever.base.browser.helper import get_css_class
 from opengever.ogds.base.actor import Actor
-from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.utils import ogds_service
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize import ram
 from Products.CMFCore.interfaces._tools import IMemberData
@@ -24,6 +24,17 @@ except pkg_resources.DistributionNotFound:
     PDFCONVERTER_AVAILABLE = False
 else:
     PDFCONVERTER_AVAILABLE = True
+
+
+def org_unit_title_helper(item, value):
+    return item.get_issuing_org_unit().label()
+
+
+def display_org_unit_title_condition():
+    """A helper for hiding the org-unit title from a task listing if we
+    have a single org-unit setup (it would be the same all the time).
+    """
+    return ogds_service().has_multiple_org_units()
 
 
 def task_id_checkbox_helper(item, value):
@@ -355,17 +366,3 @@ def translated_string(domain='plone'):
         return translate(
             value, context=getRequest(), domain=domain)
     return _translate
-
-
-def display_client_title_condition():
-    """A helper for hiding the client title from a task listing if we
-    have a single client setup (it would be the same all the time).
-    """
-    info = getUtility(IContactInformation)
-    if len(info.get_clients()) <= 1:
-        # Single client setup - hide the client title column
-        return False
-
-    else:
-        # Multi client setup - display the client title column
-        return True
