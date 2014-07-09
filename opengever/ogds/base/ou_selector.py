@@ -62,3 +62,22 @@ class NullOrgUnit(object):
 
     def public_url(self):
         return '__dummy_public_url__'
+
+    def inbox_group(self):
+        return None
+
+    def assigned_users(self):
+        return []
+
+    def users_group(self):
+        return None
+
+    def inbox(self):
+        return None
+
+    def prefix_label(self, label):
+        return label
+
+    @property
+    def admin_unit(self):
+        return None
