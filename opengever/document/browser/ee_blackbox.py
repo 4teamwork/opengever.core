@@ -4,7 +4,7 @@ from opengever.document.document import IDocumentSchema
 import logging
 import os
 import errno
-
+from opengever.base.utils import ok_response
 
 logger = logging.getLogger('opengever.document')
 
@@ -52,4 +52,4 @@ class ExternalEditorBlackboxUploadView(grok.View):
         logger.info("Blackbox from EE session (status: %s) saved to %s" % (
                 ee_session_status, path))
 
-        return 'OK'
+        return ok_response()

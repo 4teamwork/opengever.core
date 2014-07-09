@@ -1,6 +1,7 @@
 from DateTime import DateTime
 from datetime import datetime
 from five import grok
+from opengever.base.utils import ok_response
 from opengever.ogds.base.interfaces import ITransporter
 from opengever.ogds.base.transport import ORIGINAL_INTID_ANNOTATION_KEY
 from opengever.ogds.base.utils import encode_after_json
@@ -20,8 +21,8 @@ from zope.component import getUtility
 from zope.event import notify
 from zope.interface import Interface
 from zope.interface.interface import Attribute
-from zope.lifecycleevent import ObjectAddedEvent
 from zope.lifecycleevent import modified
+from zope.lifecycleevent import ObjectAddedEvent
 import json
 
 
@@ -208,11 +209,11 @@ class ReceiveResponses(grok.View):
             # request and we are in conflict resolution. Thus for not
             # duplicating responses we abort with "OK" (since we have
             # already this exact task in a earlier request).
-            return 'OK'
+            return ok_response(self.request)
 
         transporter.create_responses(data)
 
-        return 'ok'
+        return ok_response(self.request)
 
 
 class ExtractResponses(grok.View):

@@ -3,13 +3,11 @@ the successor also completes the predecesser and the user can choose documents
 related to the successor task to deliver to issuer by attaching them to the
 predecessor task.
 """
-
 from Acquisition import aq_parent, aq_inner
-from Products.CMFCore.utils import getToolByName
-from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.interfaces import IReferenceNumber
+from opengever.base.utils import ok_response
 from opengever.globalindex.interfaces import ITaskQuery
 from opengever.ogds.base.interfaces import ITransporter
 from opengever.ogds.base.utils import encode_after_json
@@ -25,6 +23,8 @@ from opengever.task.validators import NoCheckedoutDocsValidator
 from persistent.list import PersistentList
 from plone.directives.form import Schema
 from plone.z3cform.layout import FormWrapper
+from Products.CMFCore.utils import getToolByName
+from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form import validator
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form.button import buttonAndHandler
@@ -273,9 +273,7 @@ class CompleteSuccessorTaskReceiveDelivery(grok.View):
         data = json.loads(data)
 
         if self.is_already_delivered(data):
-            # Set correct content type for text response
-            self.request.response.setHeader("Content-type", "tex/plain")
-            return 'OK'
+            return ok_response()
 
         mtool = getToolByName(self.context, 'portal_membership')
         member = mtool.getAuthenticatedMember()
@@ -320,9 +318,7 @@ class CompleteSuccessorTaskReceiveDelivery(grok.View):
             self.context, data['transition'], text=data['text'],
             added_object=documents)
 
-        # Set correct content type for text response
-        self.request.response.setHeader("Content-type", "tex/plain")
-        return 'OK'
+        return ok_response()
 
     def is_already_delivered(self, data):
         """When the sender has a conflict error but the reseiver already
