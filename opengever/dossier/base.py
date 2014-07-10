@@ -226,10 +226,6 @@ class DossierContainer(Container):
     def responsible_label(self):
         return self.get_responsible_actor().get_label()
 
-    def get_physical_path(self):
-        url_tool = self.unrestrictedTraverse('@@plone_tools').url()
-        return '/'.join(url_tool.getRelativeContentPath(self))
-
 
 class DefaultConstrainTypeDecider(grok.MultiAdapter):
     grok.provides(IConstrainTypeDecider)
