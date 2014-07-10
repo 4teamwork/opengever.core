@@ -1,0 +1,11 @@
+<tal:block i18n:domain="opengever.base">
+    <span id="form-widgets-IClassification-public_trial" i18n:translate="" tal:content="view/context/public_trial" />
+    <div class="editActions" tal:condition="view/show_modfiy_public_trial_link">
+        <a id="form-widgets-IClassification-public_trial-edit-link"
+           class="function-edit"
+           tal:attributes="href string:${view/context/absolute_url}/edit_public_trial"
+           i18n:translate="label_change_public_trial">
+            Change public trial information.
+        </a>
+    </div>
+</tal:block>

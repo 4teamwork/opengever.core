@@ -1,12 +1,13 @@
 from Acquisition import aq_inner, aq_parent
-from Products.CMFCore.interfaces import ISiteRoot
 from plone.app.dexterity.behaviors.metadata import MetadataBase
 from plone.dexterity.interfaces import IDexterityContent
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.namedfile.utils import get_contenttype
 from plone.rfc822.interfaces import IPrimaryField
 from plone.rfc822.interfaces import IPrimaryFieldInfo
+from Products.CMFCore.interfaces import ISiteRoot
 from urllib import quote
+from z3c.form.interfaces import HIDDEN_MODE
 from z3c.form.interfaces import IValue
 from z3c.form.value import ComputedValue
 from zope.component import adapts
@@ -286,3 +287,12 @@ def set_attachment_content_disposition(request, filename, file=None):
     else:
         request.response.setHeader(
             "Content-disposition", 'attachment; filename="%s"' % filename)
+
+
+def hide_fields_from_behavior(form, fieldnames):
+    """Hide fields defined in behaviors.
+    """
+    for group in form.groups:
+        for fieldname in fieldnames:
+            if fieldname in group.fields:
+                group.fields[fieldname].mode = HIDDEN_MODE

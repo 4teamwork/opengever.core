@@ -93,3 +93,42 @@ class TestClassificationBehavior(FunctionalTestCase):
 
         self.assertEquals(classification.PUBLIC_TRIAL_UNCHECKED,
                           subrepo.public_trial)
+
+    @browsing
+    def test_public_trial_is_hidden_on_dossier(self, browser):
+        selector = ('#formfield-form-widgets-IClassification-public_trial '
+                    '.hidden-widget')
+        selector2 = ('#formfield-form-widgets-IClassification-public_trial_'
+                     'statement .hidden-widget')
+
+        browser.login().visit(self.portal, view='folder_contents')
+        factoriesmenu.add('Business Case Dossier')
+        self.assertTrue(browser.css(selector), 'Public trial should be hidden')
+        self.assertTrue(browser.css(selector2),
+                        'Public trial statement should be hidden')
+
+        dossier = create(Builder('dossier'))
+        browser.visit(dossier, view='edit')
+        self.assertTrue(browser.css(selector), 'Public trial should be hidden')
+        self.assertTrue(browser.css(selector2),
+                        'Public trial statement should be hidden')
+
+    @browsing
+    def test_public_trial_is_hidden_on_repository(self, browser):
+        self.grant('Manager')
+        selector = ('#formfield-form-widgets-IClassification-public_trial '
+                    '.hidden-widget')
+        selector2 = ('#formfield-form-widgets-IClassification-public_trial_'
+                     'statement .hidden-widget')
+
+        browser.login().visit(self.portal, view='folder_contents')
+        factoriesmenu.add('RepositoryFolder')
+        self.assertTrue(browser.css(selector), 'Public trial should be hidden')
+        self.assertTrue(browser.css(selector2),
+                        'Public trial statement should be hidden')
+
+        repository = create(Builder('repository'))
+        browser.visit(repository, view='edit')
+        self.assertTrue(browser.css(selector), 'Public trial should be hidden')
+        self.assertTrue(browser.css(selector2),
+                        'Public trial statement should be hidden')

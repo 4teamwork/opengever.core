@@ -1,16 +1,14 @@
-from Acquisition import aq_inner, aq_parent
 from five import grok
 from ftw.mail.mail import IMail
 from ftw.mail.utils import get_attachments
 from ftw.mail.utils import get_filename
 from ftw.mail.utils import remove_attachments
 from ftw.table.interfaces import ITableGenerator
-from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.base.utils import find_parent_dossier
 from opengever.mail import _
 from plone.dexterity.utils import createContentInContainer
 from plone.dexterity.utils import iterSchemata
 from plone.i18n.normalizer.interfaces import IIDNormalizer
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from Products.CMFPlone.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.interfaces import IValue
@@ -22,7 +20,6 @@ from zope.intid.interfaces import IIntIds
 from zope.schema import getFieldsInOrder
 import os.path
 import re
-
 
 from plone.namedfile.interfaces import HAVE_BLOBS
 if HAVE_BLOBS:
@@ -160,14 +157,14 @@ class ExtractAttachments(grok.View):
 
                 self.extract_attachments(attachments, delete_action)
 
-                dossier = self.find_parent_dossier()
+                dossier = find_parent_dossier(self)
                 return self.request.RESPONSE.redirect(
                     os.path.join(dossier.absolute_url(), '#documents'))
 
         return grok.View.__call__(self)
 
     def extract_attachments(self, positions, delete_action):
-        dossier = self.find_parent_dossier()
+        dossier = find_parent_dossier(self)
 
         attachments_to_extract = filter(
             lambda att: att.get('position') in positions,
@@ -269,17 +266,3 @@ class ExtractAttachments(grok.View):
         return NamedFile(data=attachment.get_payload(decode=1),
                          contentType=attachment.get_content_type(),
                          filename=filename)
-
-    def find_parent_dossier(self):
-        """Returns the first parent dossier relative to the current context.
-        """
-
-        obj = self.context
-        while not IDossierMarker.providedBy(obj):
-            obj = aq_parent(aq_inner(obj))
-
-            if IPloneSiteRoot.providedBy(obj):
-                return ValueError('Site root reached while searching '
-                                  'parent dossier.')
-
-        return obj

@@ -6,6 +6,7 @@ from datetime import date
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
+from opengever.base.behaviors.utils import hide_fields_from_behavior
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.dossier import _
 from opengever.dossier.widget import referenceNumberWidgetFactory
@@ -21,7 +22,6 @@ from zope.component import getUtility
 from zope.interface import Interface, alsoProvides
 from zope.interface import invariant, Invalid
 import logging
-
 
 LOG = logging.getLogger('opengever.dossier')
 
@@ -45,8 +45,8 @@ class IDossier(form.Schema):
             u'comments',
             u'responsible',
             u'relatedDossier',
-            ],
-        )
+        ],
+    )
 
     dexteritytextindexer.searchable('keywords')
     keywords = schema.Tuple(
@@ -55,30 +55,30 @@ class IDossier(form.Schema):
         value_type=schema.TextLine(),
         required=False,
         missing_value=(),
-        )
+    )
     form.widget(keywords=TextLinesFieldWidget)
 
-    #workaround because ftw.datepicker wasn't working on the edit form
+    # workaround because ftw.datepicker wasn't working on the edit form
     form.widget(start=DatePickerFieldWidget)
     start = schema.Date(
         title=_(u'label_start', default=u'Opening Date'),
         description=_(u'help_start', default=u''),
         required=False,
-        )
+    )
 
-    #workaround because ftw.datepicker wasn't working on the edit form
+    # workaround because ftw.datepicker wasn't working on the edit form
     form.widget(end=DatePickerFieldWidget)
     end = schema.Date(
         title=_(u'label_end', default=u'Closing Date'),
         description=_(u'help_end', default=u''),
         required=False,
-        )
+    )
 
     comments = schema.Text(
         title=_(u'label_comments', default=u'Comments'),
         description=_(u'help_comments', default=u''),
         required=False,
-        )
+    )
 
     form.widget(responsible=AutocompleteFieldWidget)
     responsible = schema.Choice(
@@ -86,7 +86,7 @@ class IDossier(form.Schema):
         description=_(u"help_responsible", default=""),
         vocabulary=u'opengever.ogds.base.AssignedUsersVocabulary',
         required=True,
-        )
+    )
 
     form.fieldset(
         u'filing',
@@ -98,8 +98,8 @@ class IDossier(form.Schema):
             u'container_location',
             u'reference_number',
             u'former_reference_number',
-            ],
-        )
+        ],
+    )
 
     filing_prefix = schema.Choice(
         title=_(u'filing_prefix', default="filing prefix"),
@@ -109,7 +109,7 @@ class IDossier(form.Schema):
             visible_terms_from_registry="opengever.dossier"
             '.interfaces.IDossierContainerTypes.type_prefixes'),
         required=False,
-        )
+    )
 
     # needed for temporarily storing current reference number when
     # moving this dossier
@@ -119,7 +119,7 @@ class IDossier(form.Schema):
                 default="Temporary former reference number"),
         description=_(u'help_temporary_former_reference_number', default=u''),
         required=False,
-        )
+    )
 
     container_type = schema.Choice(
         title=_(u'label_container_type', default=u'Container Type'),
@@ -129,20 +129,20 @@ class IDossier(form.Schema):
             visible_terms_from_registry="opengever.dossier"
             '.interfaces.IDossierContainerTypes.container_types'),
         required=False,
-        )
+    )
 
     number_of_containers = schema.Int(
         title=_(u'label_number_of_containers',
                 default=u'Number of Containers'),
         description=_(u'help_number_of_containers', default=u''),
         required=False,
-        )
+    )
 
     container_location = schema.TextLine(
         title=_(u'label_container_location', default=u'Container Location'),
         description=_(u'help_container_location', default=u''),
         required=False,
-        )
+    )
 
     relatedDossier = RelationList(
         title=_(u'label_related_dossier', default=u'Related Dossier'),
@@ -158,11 +158,11 @@ class IDossier(form.Schema):
                         'opengever.repository.repositoryfolder.'
                         'IRepositoryFolderSchema',
                         'opengever.dossier.behaviors.dossier.IDossierMarker',
-                        ]
-                    }),
-            ),
+                    ]
+                }),
+        ),
         required=False,
-        )
+    )
 
     form.mode(former_reference_number='display')
     former_reference_number = schema.TextLine(
@@ -170,14 +170,14 @@ class IDossier(form.Schema):
                 default=u'Reference Number'),
         description=_(u'help_former_reference_number', default=u''),
         required=False,
-        )
+    )
 
     form.widget(reference_number=referenceNumberWidgetFactory)
     reference_number = schema.TextLine(
         title=_(u'label_reference_number', default=u'Reference Number'),
         description=_(u'help_reference_number ', default=u''),
         required=False,
-        )
+    )
 
     @invariant
     def validateStartEnd(data):
@@ -212,6 +212,12 @@ class AddForm(dexterity.AddForm):
                              [responsible])
         super(AddForm, self).update()
 
+    def updateFields(self):
+        super(AddForm, self).updateFields()
+        hide_fields_from_behavior(self,
+                                  ['IClassification.public_trial',
+                                   'IClassification.public_trial_statement'])
+
     @property
     def label(self):
         if IDossierMarker.providedBy(self.context):
@@ -226,6 +232,12 @@ class AddForm(dexterity.AddForm):
 class EditForm(dexterity.EditForm):
     """Standard Editform, provide just a special label for subdossiers"""
     grok.context(IDossierMarker)
+
+    def updateFields(self):
+        super(EditForm, self).updateFields()
+        hide_fields_from_behavior(self,
+                                  ['IClassification.public_trial',
+                                   'IClassification.public_trial_statement'])
 
     @property
     def label(self):

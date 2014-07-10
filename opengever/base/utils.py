@@ -1,4 +1,8 @@
+from Acquisition import aq_inner
+from Acquisition import aq_parent
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 
 
 def set_profile_version(portal, profile_id, version):
@@ -19,3 +23,18 @@ def set_profile_version(portal, profile_id, version):
     assert(ps.getLastVersionForProfile(profile_id) == (version, ))
     print "Set version for '%s' to '%s'." % (profile_id, version)
     return [version]
+
+
+def find_parent_dossier(content):
+    """Returns the first parent dossier relative to the current context.
+    """
+
+    if IPloneSiteRoot.providedBy(content):
+        raise ValueError('Site root passed as argument.')
+
+    while not IDossierMarker.providedBy(content):
+        content = aq_parent(aq_inner(content))
+        if IPloneSiteRoot.providedBy(content):
+            raise ValueError('Site root reached while searching '
+                             'parent dossier.')
+    return content
