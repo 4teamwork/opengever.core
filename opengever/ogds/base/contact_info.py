@@ -348,7 +348,7 @@ class ContactInformation(grok.GlobalUtility):
             sort_dict[userid] = u'%s %s' % (lastname, firstname)
 
         #includes every org-unit-inbox
-        for unit in ogds_service().all_org_units(enabled=True):
+        for unit in ogds_service().all_org_units():
             inbox_id = unit.inbox().id()
             sort_dict[inbox_id] = Actor.lookup(inbox_id).get_label()
         return sort_dict
