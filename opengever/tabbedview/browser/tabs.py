@@ -254,7 +254,7 @@ class Tasks(GlobalTaskListingTab):
     ]
 
     def get_base_query(self):
-        return Task.query.by_dossier(self.context, get_current_admin_unit())
+        return Task.query.by_container(self.context, get_current_admin_unit())
 
 
 class Trash(Documents):
