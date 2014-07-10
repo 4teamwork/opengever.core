@@ -3,6 +3,12 @@
         i18n:domain="plone" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
 
     <action action_id="pdf-open-task-report"
+            title="Open tasks report"
+            category="object"
+            remove="True">
+    </action>
+
+    <action action_id="pdf-open-task-report"
             visible="True"
             title="Open tasks report"
             category="object_buttons"
