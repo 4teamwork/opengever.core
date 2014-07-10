@@ -56,7 +56,7 @@ with these contents:
       "ldap":{
         "user":"<bind_dn>",
         "password":"<bind_pw>"
-      }    
+      }
     }
 
 
@@ -76,6 +76,24 @@ Alternatively it's also possible to only update a single subpackage, for example
 .. code::
 
     bin/i18n-build opengever.dossier
+
+Scripts
+-------
+Scripts are located in ``/scripts``.
+
+
+**Repository configuration:**
+
+`convert_csv_repository_to_xlsx.py <https://github.com/4teamwork/opengever.core/blob/master/scripts/convert_csv_repository_to_xlsx.py>`:
+Converts repository configuration from old format (repository.csv) to new format (xlsx).
+
+
+*You have to install openpyxl to run this script!*
+
+.. code::
+
+    bin/zopepy scripts/convert_csv_repository_to_xlsx.py <path to repository csv file> <path for new xlsx file>
+
 
 
 Tests
@@ -140,3 +158,16 @@ Now you can use the ``self.browser`` instance:
 Have a look at the `opengever.testing.browser module
 <https://github.com/4teamwork/opengever.core/blob/master/opengever/testing/browser.py>`_
 to see the complete API.
+
+
+Testing Inbound Mail
+--------------------
+
+For easy testing of inbound mail (without actually going through an MTA) there's
+a script ``bin/test-inbound-mail`` that can be used to test creation of inbound
+mail:
+
+``cat testmail.eml | bin/test-inbound-mail``
+
+The script assumes you got an instance running on port ``${instance:http-address}``, a GEVER client called ``mandant1`` and an omelette with ``ftw.mail`` in it installed. It will then feed the mail from stdin to
+the ``ftw.mail`` inbound view, like Postfix would.

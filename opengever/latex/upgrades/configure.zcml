@@ -1,7 +1,10 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:upgrade-step="http://namespaces.zope.org/ftw.upgrade"
     i18n_domain="opengever.latex">
+
+    <include package="ftw.upgrade" file="meta.zcml" />
 
     <!-- 1 -> 2601 -->
     <genericsetup:upgradeStep
@@ -20,6 +23,15 @@
         directory="profiles/2601"
         for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
         provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+    <!-- 2601 -> 2602 -->
+    <upgrade-step:importProfile
+        title="Move open tasks report action to actions menu"
+        profile="opengever.latex:default"
+        source="2601"
+        destination="2602"
+        directory="profiles/2602"
         />
 
 </configure>

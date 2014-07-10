@@ -1,9 +1,13 @@
-from Acquisition import aq_inner, aq_parent
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from opengever.base.interfaces import IReferenceNumberPrefix as PrefixAdapter
+from opengever.base.interfaces import IReferenceNumberSettings
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.i18n.normalizer.interfaces import IURLNormalizer
+from plone.registry.interfaces import IRegistry
+from zope.component import getUtility
 from zope.component import queryUtility
 from zope.interface import classProvides, implements
 import logging
@@ -38,6 +42,10 @@ class PathFromReferenceNumberSection(object):
         self.refnum_mapping = {}
         self.normalizer = queryUtility(IURLNormalizer, name="de")
         self.id_normalizer = queryUtility(IIDNormalizer)
+
+        registry = getUtility(IRegistry)
+        proxy = registry.forInterface(IReferenceNumberSettings)
+        self.reference_formatter = proxy.formatter
 
     def __iter__(self):
         self.logger.info("Building paths from reference numbers...")
@@ -80,8 +88,10 @@ class PathFromReferenceNumberSection(object):
             yield item
 
     def get_reference_number(self, refnum):
-        cl_refnum = refnum.replace('.', '')
-        return '.'.join(cl_refnum)
+        if self.reference_formatter == 'grouped_by_three':
+            cl_refnum = refnum.replace('.', '')
+            return '.'.join(cl_refnum)
+        return refnum
 
     def normalize(self, item, max_length):
         title = item['effective_title']

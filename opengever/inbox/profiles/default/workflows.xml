@@ -11,9 +11,10 @@
         <type type_id="opengever.inbox.forwarding">
             <bound-workflow workflow_id="opengever_forwarding_workflow"/>
         </type>
+
         <type type_id="opengever.inbox.yearfolder">
-            <bound-workflow workflow_id="opengever_yearfolder_workflow"/>
         </type>
+
     </bindings>
 
 </object>

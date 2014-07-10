@@ -16,7 +16,7 @@
 
         <div tal:replace="structure provider:plone.belowcontenttitle" />
 
-        <table class="listing task-listing">
+        <table class="listing task-listing vertical">
           <tal:rep tal:define="group python: view.groups[0]">
             <tr tal:repeat="widget group/widgets/values">
             <span tal:define="index repeat/widget/index"/>

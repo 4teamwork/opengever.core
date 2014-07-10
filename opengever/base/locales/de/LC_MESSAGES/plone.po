@@ -280,3 +280,7 @@ msgstr "Deaktivieren"
 
 msgid "tasktemplatefolder-transition-inactiv-activ"
 msgstr "Aktivieren"
+
+msgid "Search OneGov Gever"
+msgstr "OneGov GEVER durchsuchen"
+

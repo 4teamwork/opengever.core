@@ -61,6 +61,12 @@ class PersonalOverview(TabbedView):
             return self.request.RESPONSE.redirect(repo_url)
 
         else:
+            # hack: we have to enable the edit-menu to displays pdf-task-report
+            # checks in @@plone.showEditableBorder somehow fail to detect the
+            # pdf-open-task-report object_button action.
+            if self.context.restrictedTraverse(
+                    '@@pdf-open-task-report-allowed')():
+                self.request['enable_border'] = True
             return super(PersonalOverview, self).__call__()
 
     def _is_user_admin(self):
