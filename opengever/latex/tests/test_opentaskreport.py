@@ -4,6 +4,7 @@ from ftw.pdfgenerator.builder import Builder as PDFBuilder
 from ftw.pdfgenerator.interfaces import ILaTeXLayout
 from ftw.pdfgenerator.interfaces import ILaTeXView
 from ftw.pdfgenerator.utils import provide_request_layer
+from ftw.testbrowser import browsing
 from ftw.testing import MockTestCase
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.latex import opentaskreport
@@ -33,7 +34,7 @@ class TestOpenTaskReportPDFView(MockTestCase):
                                name='pdf-open-task-report')
 
         self.assertTrue(isinstance(
-                view, opentaskreport.OpenTaskReportPDFView))
+                        view, opentaskreport.OpenTaskReportPDFView))
 
     def test_render_adds_browser_layer(self):
         context = request = self.create_dummy()
@@ -48,7 +49,7 @@ class TestOpenTaskReportPDFView(MockTestCase):
 
         view.render()
         self.assertTrue(opentaskreport.IOpenTaskReportLayer.providedBy(
-                request))
+                        request))
 
 
 class TestOpenTaskReportLaTeXView(MockTestCase):
@@ -79,7 +80,7 @@ class TestOpenTaskReportLaTeXView(MockTestCase):
     def test_implements_interface(self):
         self.replay()
         self.assertTrue(ILaTeXView.implementedBy(
-                opentaskreport.OpenTaskReportLaTeXView))
+                        opentaskreport.OpenTaskReportLaTeXView))
 
         verifyClass(ILaTeXView, opentaskreport.OpenTaskReportLaTeXView)
 
@@ -91,10 +92,10 @@ class TestOpenTaskReportLaTeXView(MockTestCase):
         self.assertEqual(request_iface, opentaskreport.IOpenTaskReportLayer)
 
 
-class TestOpenTaskReportHelperMethods(FunctionalTestCase):
+class TestOpenTaskReport(FunctionalTestCase):
 
     def setUp(self):
-        super(TestOpenTaskReportHelperMethods, self).setUp()
+        super(TestOpenTaskReport, self).setUp()
 
         self.user, self.org_unit, self.admin_unit = create(
             Builder('fixture').with_all_unit_setup())
@@ -123,3 +124,6 @@ class TestOpenTaskReportHelperMethods(FunctionalTestCase):
         self.assertIn(self.peter.label(with_principal=False), row)
         self.assertIn(self.hans.label(with_principal=False), row)
 
+    @browsing
+    def test_smoke_open_task_report_view(self, browser):
+        browser.login().open(view='pdf-open-task-report')
