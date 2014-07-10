@@ -63,8 +63,10 @@ class TaskQuery(Query):
         query = self.filter(Task.admin_unit_id == admin_unit.id())
         return query.filter(Task.int_id.in_(int_ids))
 
-    def by_dossier(self, dossier, admin_unit):
-        path = dossier.get_physical_path()
+    def by_container(self, container, admin_unit):
+        url_tool = api.portal.get_tool(name='portal_url')
+        path = '/'.join(url_tool.getRelativeContentPath(container))
+
         return self.by_admin_unit(admin_unit)\
                    .filter(Task.physical_path.like(path + '%'))
 
