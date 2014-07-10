@@ -9,6 +9,7 @@ from opengever.tabbedview import _
 from opengever.tabbedview import LOG
 from opengever.tabbedview.browser.tabs import Documents, Dossiers
 from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
+from plone import api
 from Products.CMFPlone.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from sqlalchemy.exc import OperationalError
@@ -71,10 +72,14 @@ class PersonalOverview(TabbedView):
 
     def personal_overview_title(self):
         current_user = ogds_service().fetch_current_user()
+        if current_user:
+            user_name = current_user.label(with_principal=False)
+        else:
+            user_name = api.user.get_current().getUserName()
+
         return _('personal_overview_title',
                  default='Personal Overview: ${user_name}',
-                 mapping=dict(
-                    user_name=current_user.label(with_principal=False)))
+                 mapping=dict(user_name=user_name))
 
     def _is_user_admin(self):
         m_tool = getToolByName(self.context, 'portal_membership')
