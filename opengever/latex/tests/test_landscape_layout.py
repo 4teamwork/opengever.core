@@ -1,8 +1,7 @@
 from ftw.testing import MockTestCase
 from mocker import ANY
-from opengever.base.interfaces import IBaseClientID
-from opengever.latex.interfaces import ILaTeXSettings
 from opengever.latex.interfaces import ILandscapeLayer
+from opengever.latex.interfaces import ILaTeXSettings
 from opengever.latex.layouts.landscape import LandscapeLayout
 from opengever.latex.testing import LATEX_ZCML_LAYER
 from opengever.ogds.base import utils
@@ -29,6 +28,7 @@ class TestLandscapeLayout(MockTestCase):
         get_current_org_unit = self.mocker.replace(
             'opengever.ogds.base.utils.get_current_org_unit')
         self.expect(get_current_org_unit()).result(orgunit).count(0, None)
+        self.expect(orgunit.id()).result(FAKE_CLIENT_TITLE).count(0, None)
 
         self.portal_membership = self.stub()
         self.mock_tool(self.portal_membership, 'portal_membership')
@@ -36,8 +36,6 @@ class TestLandscapeLayout(MockTestCase):
         registry_mock = self.stub()
         self.expect(
             registry_mock.forInterface(ILaTeXSettings).location).result(FAKE_LOCATION)
-        self.expect(
-            registry_mock.forInterface(IBaseClientID).client_title).result(FAKE_CLIENT_TITLE)
 
         self.mock_utility(registry_mock, IRegistry)
 

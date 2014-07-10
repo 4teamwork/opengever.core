@@ -60,7 +60,7 @@ class OpenTaskReportLaTeXView(grok.MultiAdapter, MakoLaTeXView):
         self.layout.use_package('longtable')
 
         args = self.get_task_rows()
-        args['client'] = get_current_org_unit().label
+        args['client'] = get_current_org_unit().label()
 
         return args
 
@@ -101,8 +101,8 @@ class OpenTaskReportLaTeXView(grok.MultiAdapter, MakoLaTeXView):
         incoming = []
         for task in incoming_query.all():
             incoming.append(self.get_row_for_item(
-                    task,
-                    display_issuer_client=True))
+                            task,
+                            display_issuing_org_unit=True))
 
         outgoing_query = Session().query(Task)
         outgoing_query = outgoing_query.filter(Task.issuing_org_unit == clientid)
@@ -111,47 +111,45 @@ class OpenTaskReportLaTeXView(grok.MultiAdapter, MakoLaTeXView):
         outgoing = []
         for task in outgoing_query.all():
             outgoing.append(self.get_row_for_item(
-                    task, display_responsible_client=True))
+                task, display_assigned_org_unit=True))
 
         return {'incoming': incoming,
                 'outgoing': outgoing}
 
-    def get_row_for_item(self, item, display_issuer_client=False,
-                         display_responsible_client=False):
+    def get_row_for_item(self, item, display_issuing_org_unit=False,
+                         display_assigned_org_unit=False):
         return self.convert_list_to_row(
             self.get_data_for_item(
                 item,
-                display_issuer_client=display_issuer_client,
-                display_responsible_client=display_responsible_client))
+                display_issuing_org_unit=display_issuing_org_unit,
+                display_assigned_org_unit=display_assigned_org_unit))
 
-    def get_data_for_item(self, item, display_issuer_client=False,
-                          display_responsible_client=False):
+    def get_data_for_item(self, item,
+                          display_issuing_org_unit=False,
+                          display_assigned_org_unit=False):
         task_type = task_type_helper(item, item.task_type)
         sequence_number = unicode(item.sequence_number).encode('utf-8')
         deadline = helper.readable_date(item, item.deadline)
 
         title = unicode(getattr(item, 'Title',
-                            getattr(item, 'title', ''))).encode('utf-8')
+                        getattr(item, 'title', ''))).encode('utf-8')
 
         issuer = get_issuer_of_task(item,
-                                    with_client=display_issuer_client,
+                                    with_client=display_issuing_org_unit,
                                     with_principal=False)
 
         actor = Actor.lookup(item.responsible)
         responsible = actor.get_label(with_principal=False)
 
-        if display_responsible_client:
-            responsible_client = self.info.get_client_by_id(
-                item.assigned_client).title
-            responsible = '%s / %s' % (
-                responsible_client,
-                responsible)
+        if display_assigned_org_unit:
+            org_unit = item.get_assigned_org_unit()
+            responsible = org_unit.prefix_label(responsible)
 
         dossier_title = item.containing_dossier or ''
 
         reference = unicode(getattr(
-                item, 'reference',
-                getattr(item, 'reference_number', ''))).encode('utf-8')
+            item, 'reference',
+            getattr(item, 'reference_number', ''))).encode('utf-8')
 
         review_state = workflow_state(item, item.review_state)
 
