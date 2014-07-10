@@ -107,7 +107,7 @@ class InboxActor(Actor):
     def get_profile_url(self):
         return None
 
-    def get_label(self):
+    def get_label(self, with_principal=None):
         # we need to instantly translate, because otherwise
         # stuff like the autocomplete widget will not work
         # properly.
