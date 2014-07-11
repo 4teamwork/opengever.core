@@ -4,6 +4,9 @@ Changelog
 3.4 (unreleased)
 ----------------
 
+- Add an IClassificationSettings registry record.
+  [lgraf]
+
 - Allow public trial state to also be modified in closed dossier states.
   [mathias.leimgruber]
 
