@@ -4,9 +4,11 @@ from opengever.base.behaviors import utils
 from plone.app.dexterity.behaviors import metadata
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.directives import form
+from plone.registry.interfaces import IRegistry
 from zope import schema
 from zope.interface import alsoProvides, Interface
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
+from zope.component import getUtility
 
 
 # PUBLIC TRIAL: Vocabulary and default value
@@ -163,8 +165,12 @@ form.default_value(field=IClassification['privacy_layer'])(
 # DCFieldProperty stuff. thus we implement the default value this way.
 @form.default_value(field=IClassification['public_trial'])
 def default_public_trial(data):
-    """Set the actual date as default document_date"""
-    return PUBLIC_TRIAL_UNCHECKED
+    """Default value for `public_trial` field for new documents.
+    """
+    registry = getUtility(IRegistry)
+    settings = registry.forInterface(IClassificationSettings)
+    public_trial_default_value = settings.public_trial_default_value
+    return public_trial_default_value
 
 
 class Classification(metadata.MetadataBase):

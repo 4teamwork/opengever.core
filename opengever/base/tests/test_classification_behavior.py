@@ -3,9 +3,12 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from opengever.base.behaviors import classification
+from opengever.base.behaviors.classification import IClassificationSettings
 from opengever.testing import FunctionalTestCase
 from plone.dexterity.fti import DexterityFTI
 from plone.dexterity.utils import createContentInContainer
+from plone.registry.interfaces import IRegistry
+from zope.component import getUtility
 import transaction
 
 
@@ -79,10 +82,19 @@ class TestClassificationBehavior(FunctionalTestCase):
         self.assertEquals(list(classification.PUBLIC_TRIAL_OPTIONS),
                           public_trial_options)
 
-    def test_public_trial_default_value_is_unchecked(self):
+    def test_public_trial_fallback_default_value_is_unchecked(self):
         repo = create(Builder('repository').titled('New repo'))
         self.assertEquals(classification.PUBLIC_TRIAL_UNCHECKED,
                           repo.public_trial)
+
+    def test_public_trial_default_value_is_configurable(self):
+        registry = getUtility(IRegistry)
+        settings = registry.forInterface(IClassificationSettings)
+        expected = classification.PUBLIC_TRIAL_PRIVATE
+        settings.public_trial_default_value = expected
+
+        doc = create(Builder('document').titled('My document'))
+        self.assertEquals(expected, doc.public_trial)
 
     def test_public_trial_is_no_longer_restricted_on_subitems(self):
         repo = create(Builder('repository')

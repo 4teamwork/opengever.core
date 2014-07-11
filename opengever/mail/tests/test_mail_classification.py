@@ -2,11 +2,14 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.behaviors.classification import CLASSIFICATION_UNPROTECTED
 from opengever.base.behaviors.classification import IClassificationMarker
+from opengever.base.behaviors.classification import IClassificationSettings
 from opengever.base.behaviors.classification import PRIVACY_LAYER_NO
+from opengever.base.behaviors.classification import PUBLIC_TRIAL_PRIVATE
 from opengever.base.behaviors.classification import PUBLIC_TRIAL_UNCHECKED
 from opengever.testing import FunctionalTestCase
 from pkg_resources import resource_string
 from plone.dexterity.interfaces import IDexterityFTI
+from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 
 
@@ -30,6 +33,14 @@ class TestMailMetadata(FunctionalTestCase):
         # XXX: imho this should be a empty string, not None, since the field
         # has a default value (empty string)
         self.assertIsNone(mail.public_trial_statement)
+
+    def test_public_trial_default_is_configurable(self):
+        registry = getUtility(IRegistry)
+        settings = registry.forInterface(IClassificationSettings)
+        expected = PUBLIC_TRIAL_PRIVATE
+        settings.public_trial_default_value = expected
+        mail = create(Builder("mail").with_message(MAIL_DATA))
+        self.assertEquals(mail.public_trial, PUBLIC_TRIAL_PRIVATE)
 
     def test_classification_initialization_upgrade_step(self):
         fti = getUtility(IDexterityFTI, name=u'ftw.mail.mail')
