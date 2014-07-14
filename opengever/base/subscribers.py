@@ -28,7 +28,8 @@ def create_initial_version(obj, event):
 def prevent_deletion(obj, event):
     """Prevent deletion of objects by anyone except Managers
     """
-    membership = getMultiAdapter((obj, obj.REQUEST),
-                                        name=u"plone_tools").membership()
+    site = event.object
+    membership = getMultiAdapter((site, site.REQUEST),
+                                 name=u"plone_tools").membership()
     if not membership.checkPermission('Manage portal', obj):
         raise Unauthorized()
