@@ -4,6 +4,12 @@ Changelog
 3.4 (unreleased)
 ----------------
 
+- Make default value adapter for `public_trial` use the configurable default
+  value from IClassificationSettings registry record.
+
+- Add an IClassificationSettings registry record.
+  [lgraf]
+
 - Allow public trial state to also be modified in closed dossier states.
   [mathias.leimgruber]
 
