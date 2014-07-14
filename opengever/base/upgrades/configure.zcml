@@ -147,4 +147,23 @@
         directory="profiles/2608"
         />
 
+    <genericsetup:registerProfile
+        name="2609"
+        title="opengever.base: upgrade profile 2609"
+        description=""
+        directory="profiles/2609"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+    <genericsetup:upgradeStep
+        title="Initialize opengever.sharing. Add global prepOverlay initialization."
+        description=""
+        source="2608"
+        destination="2609"
+        handler="opengever.base.upgrades.to2609.InitializeSharingAndPrepOverlay"
+        profile="opengever.base:default"
+        />
+
+
 </configure>

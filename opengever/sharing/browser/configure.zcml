@@ -2,11 +2,6 @@
     xmlns:zope="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser">
 
-    <browser:resourceDirectory
-        name="opengever.sharing.resources"
-        directory="resources"
-        />
-
     <browser:page
         name="sharing"
         for="*"

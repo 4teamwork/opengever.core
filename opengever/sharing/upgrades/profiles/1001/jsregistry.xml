@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<!-- Called from opengever.base:2609 -->
+<object name="portal_javascripts" meta_type="JavaScripts Registry">
+    <javascript id="++resource++opengever.sharing.resources/sharing.js" remove="True" />
+</object>
