@@ -153,7 +153,7 @@ msgstr "Angabe, ob die Unterlagen gemäss Öffentlichkeitsgesetz besonders schü
 #. Default: "BegrÃ¼undung Schutzgrad"
 #: ./opengever/base/behaviors/classification.py:66
 msgid "help_public_trial_statement"
-msgstr "Argumente gegen die öffentliche Zugänglichkeit gemäss Öffentlichkeitsgesetz"
+msgstr "Datum Gesuch, Datum Entscheid, Verweis auf GEVER-Zugangsgeschäft"
 
 #: ./opengever/base/behaviors/lifecycle.py:42
 msgid "help_retention_period"
@@ -256,7 +256,7 @@ msgstr "Öffentlichkeitsstatus"
 #. Default: "Public trial statement"
 #: ./opengever/base/behaviors/classification.py:64
 msgid "label_public_trial_statement"
-msgstr "Begründung für die Aufhebung des Öffentlichkeitsstatus"
+msgstr "Bearbeitungsinformation"
 
 #. Default: "reset"
 #: ./opengever/base/viewlets/history.pt:58
