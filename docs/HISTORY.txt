@@ -4,6 +4,10 @@ Changelog
 3.4 (unreleased)
 ----------------
 
+- Fix issue with `prevent_deletion` subscriber not being able to acquire membership_tool
+  because of broken acquisition during Plone site deletion.
+  [lgraf]
+
 - Make default value adapter for `public_trial` use the configurable default
   value from IClassificationSettings registry record.
 
