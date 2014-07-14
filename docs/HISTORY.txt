@@ -4,6 +4,12 @@ Changelog
 3.3.1 (unreleased)
 ------------------
 
+- Initialized opengever.sharing version. Moved prepoverlay initialization to opengever.base.
+  [lknopfel]
+
+- Added download copy in tooltip.
+  [lknoepfel]
+
 - Display document mimetype icons in ContentTreeWidget.
   [phgross]
 
