@@ -4,6 +4,11 @@ Changelog
 3.4 (unreleased)
 ----------------
 
+- Reword German translations for public_trial_statement label and description:
+  New label: Bearbeitungsinformation
+  New description: Datum Gesuch, Datum Entscheid, Verweis auf GEVER-Zugangsgeschaeft
+  [lgraf]
+
 - Fix issue with `prevent_deletion` subscriber not being able to acquire membership_tool
   because of broken acquisition during Plone site deletion.
   [lgraf]
