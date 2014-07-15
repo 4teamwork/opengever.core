@@ -2,11 +2,6 @@
 <object name="portal_javascripts" meta_type="JavaScripts Registry">
 
     <javascript cacheable="True" compression="save" cookable="True" expression=""
-                enabled="True" id="++resource++opengever.base/prepoverlay.js" inline="False"
-                insert-after="++resource++plone.app.jquerytools.overlayhelpers.js"
-                />
-
-    <javascript cacheable="True" compression="save" cookable="True" expression=""
                 enabled="True" id="++resource++opengever.base/quickupload.js" inline="False"
                 insert-after="++resource++plone.app.jquery.js"
                 />
