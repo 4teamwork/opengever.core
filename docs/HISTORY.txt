@@ -4,6 +4,9 @@ Changelog
 3.3.1 (unreleased)
 ------------------
 
+- Renamed german version of move-items-button.
+  [lknoepfel]
+
 - Initialized opengever.sharing version. Moved prepoverlay initialization to opengever.base.
   [lknopfel]
 
