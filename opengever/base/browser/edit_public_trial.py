@@ -3,6 +3,7 @@ from opengever.base.behaviors.classification import IClassification
 from opengever.base.utils import find_parent_dossier
 from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.base import DOSSIER_STATES_OPEN
+from opengever.dossier.templatedossier.interfaces import ITemplateDossier
 from Products.CMFCore.utils import getToolByName
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
@@ -20,6 +21,10 @@ def can_access_public_trial_edit_form(user, content):
         content), 'Content needs to provide IBaseDocument'
 
     dossier = find_parent_dossier(content)
+
+    if ITemplateDossier.providedBy(dossier):
+        # Template dossiers don't have the IClassification behavior
+        return False
 
     workflow_id = wftool.getChainForPortalType(dossier.portal_type)[0]
     user_roles = user.getRolesInContext(dossier)
