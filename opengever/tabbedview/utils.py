@@ -44,10 +44,9 @@ def get_translated_public_trial_values(context, request):
     portal = getSite()
 
     values = {}
-    for key, term in PUBLIC_TRIAL_OPTIONS:
+    for term in PUBLIC_TRIAL_OPTIONS:
         values[term] = portal.translate(term, context=request,
                                         domain="opengever.base")
-
     return values
 
 
