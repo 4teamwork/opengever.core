@@ -4,6 +4,9 @@ Changelog
 3.3.1 (unreleased)
 ------------------
 
+- Fixed bug where quickupload didn't remove the active class.
+  [lknoepfel]
+
 - Renamed german version of move-items-button.
   [lknoepfel]
 
