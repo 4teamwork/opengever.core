@@ -4,6 +4,10 @@ Changelog
 3.4 (unreleased)
 ----------------
 
+- Journal: Listen on IBaseDocument instead of IDocumentSchema - mails are now also
+  considered documentish and should be treated equally.
+  [lgraf]
+
 - Don't show public trial edit form for template dossiers.
   [lgraf]
 

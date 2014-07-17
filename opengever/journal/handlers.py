@@ -2,9 +2,8 @@ from Acquisition import aq_inner, aq_parent
 from five import grok
 from ftw.journal.events.events import JournalEntryEvent
 from ftw.journal.interfaces import IJournalizable
-from ftw.mail.mail import IMail
 from OFS.interfaces import IObjectWillBeMovedEvent, IObjectWillBeAddedEvent
-from opengever.document.document import IDocumentSchema
+from opengever.document.behaviors import IBaseDocument
 from opengever.document.interfaces import IFileCopyDownloadedEvent
 from opengever.document.interfaces import IObjectCheckedInEvent
 from opengever.document.interfaces import IObjectCheckedOutEvent
@@ -297,7 +296,7 @@ def dossier_local_roles_modified(context, event):
 DOCUMENT_ADDED_ACTION = 'Document added'
 
 
-@grok.subscribe(IDocumentSchema, IObjectAddedEvent)
+@grok.subscribe(IBaseDocument, IObjectAddedEvent)
 def document_added(context, event):
     title = _(
         u'label_document_added',
@@ -314,7 +313,7 @@ def document_added(context, event):
 DOCUMENT_MODIIFED_ACTION = 'Document modified'
 
 
-@grok.subscribe(IDocumentSchema, IObjectModifiedEvent)
+@grok.subscribe(IBaseDocument, IObjectModifiedEvent)
 def document_modified(context, event):
     # we need to distinguish between "metadata modified"
     # and "file modified"
@@ -362,7 +361,7 @@ def document_modified(context, event):
 DOCUMENT_STATE_CHANGED = 'Document state changed'
 
 
-@grok.subscribe(IDocumentSchema, IActionSucceededEvent)
+@grok.subscribe(IBaseDocument, IActionSucceededEvent)
 def document_state_changed(context, event):
     skip_transactions = [
         'check_out',
@@ -379,7 +378,7 @@ def document_state_changed(context, event):
 DOCUMENT_CHECKED_OUT = 'Document checked out'
 
 
-@grok.subscribe(IDocumentSchema, IObjectCheckedOutEvent)
+@grok.subscribe(IBaseDocument, IObjectCheckedOutEvent)
 def document_checked_out(context, event):
     user_comment = event.comment
     title = _(u'label_document_checkout',
@@ -392,7 +391,7 @@ def document_checked_out(context, event):
 DOCUMENT_CHECKED_IN = 'Document checked in'
 
 
-@grok.subscribe(IDocumentSchema, IObjectCheckedInEvent)
+@grok.subscribe(IBaseDocument, IObjectCheckedInEvent)
 def document_checked_in(context, event):
     user_comment = event.comment
     title = _(u'label_document_checkin',
@@ -405,7 +404,7 @@ def document_checked_in(context, event):
 DOCUMENT_CHECKOUT_CANCEL = 'Canceled document checkout'
 
 
-@grok.subscribe(IDocumentSchema, IObjectCheckoutCanceledEvent)
+@grok.subscribe(IBaseDocument, IObjectCheckoutCanceledEvent)
 def document_checkout_canceled(context, event):
     title = _(u'label_document_checkout_cancel',
               default=u'Canceled document checkout')
@@ -415,7 +414,7 @@ def document_checkout_canceled(context, event):
 DOCUMENT_FILE_REVERTED = 'Reverted document file'
 
 
-@grok.subscribe(IDocumentSchema, IObjectRevertedToVersion)
+@grok.subscribe(IBaseDocument, IObjectRevertedToVersion)
 def document_file_reverted(context, event):
     try:
         create = event.create_version
@@ -434,7 +433,7 @@ def document_file_reverted(context, event):
 FILE_COPY_DOWNLOADED = 'File copy downloaded'
 
 
-@grok.subscribe(IDocumentSchema, IFileCopyDownloadedEvent)
+@grok.subscribe(IBaseDocument, IFileCopyDownloadedEvent)
 def file_copy_downloaded(context, event):
     title = _(u'label_file_copy_downloaded',
               default=u'Download copy')
@@ -589,22 +588,6 @@ def participation_removed(context, event):
 
     journal_entry_factory(context, PARTICIPANT_REMOVED, title)
 
-
-#------------------------ Mail -----------------------------------------
-
-MAIL_ADDED_EVENT = 'Mail added'
-
-
-@grok.subscribe(IMail, IObjectAddedEvent)
-def mail_added(context, event):
-    title = _(u'label_mail_added',
-              default=u'Mail added: ${title}',
-              mapping={'title': context.title_or_id()}
-              )
-
-    journal_entry_factory(context, MAIL_ADDED_EVENT, title)
-    journal_entry_factory(context.aq_inner.aq_parent, MAIL_ADDED_EVENT, title)
-    return
 
 #----------------------------Verschieben-----------------------------------
 

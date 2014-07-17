@@ -399,13 +399,19 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
                                contentType=u'message/rfc822',
                                filename=u'attachment.txt'))
 
-        # The journal of a mail is always on the parents dossier and not
-        # on the mail
+        # The journal of a mail is on the parent dossier as well as
+        # on the mail itself
         self.check_annotation(
             dossier,
-            action_type='Mail added',
-            action_title='Mail added: %s' % mail.title_or_id(),
-            check_entry=-2, )
+            action_type='Document added',
+            action_title='Document added: %s' % mail.title_or_id(),
+            check_entry=-2)
+
+        self.check_annotation(
+            mail,
+            action_type='Document added',
+            action_title='Document added: %s' % mail.title_or_id(),
+            check_entry=-1)
 
     def test_integration_object_events(self):
         """ Trigger every event of a objec at least one times
