@@ -1,9 +1,7 @@
-from opengever.base.behaviors.classification import PUBLIC_TRIAL_OPTIONS
 from opengever.base.utils import language_cache_key
 from opengever.task.util import getTaskTypeVocabulary
 from plone.memoize import ram
 from Products.CMFCore.utils import getToolByName
-from zope.app.component.hooks import getSite
 from zope.component import getAdapter
 from zope.i18n import translate
 
@@ -26,17 +24,6 @@ def get_translated_types(context, request):
     for key, terms in getTaskTypeVocabulary(context).by_value.items():
         values[key] = terms.title.lower()
 
-    return values
-
-
-@ram.cache(language_cache_key)
-def get_translated_public_trial_values(context, request):
-    portal = getSite()
-
-    values = {}
-    for term in PUBLIC_TRIAL_OPTIONS:
-        values[term] = portal.translate(term, context=request,
-                                        domain="opengever.base")
     return values
 
 

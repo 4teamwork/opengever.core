@@ -3,6 +3,7 @@ from ftw.dictstorage.interfaces import ISQLAlchemy
 from ftw.tabbedview.interfaces import ITabbedView
 from ftw.table import helper
 from ftw.table.catalog_source import CatalogTableSource
+from opengever.base.behaviors import classification
 from opengever.base.browser.helper import client_title_helper
 from opengever.base.interfaces import IReferenceNumberFormatter
 from opengever.base.interfaces import IReferenceNumberSettings
@@ -22,7 +23,6 @@ from opengever.tabbedview.helper import workflow_state
 from opengever.tabbedview.interfaces import IStateFilterTableSourceConfig
 from opengever.tabbedview.utils import get_translated_transitions
 from opengever.tabbedview.utils import get_translated_types
-from opengever.tabbedview.utils import get_translated_public_trial_values
 from opengever.task.helper import task_type_helper
 from plone.dexterity.interfaces import IDexterityContainer
 from plone.registry.interfaces import IRegistry
@@ -31,8 +31,8 @@ from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.component import getUtility, adapts
 from zope.component import queryAdapter
 from zope.globalrequest import getRequest
-from zope.interface import Interface
 from zope.interface import implements
+from zope.interface import Interface
 import re
 
 
@@ -149,7 +149,8 @@ class OpengeverTab(object):
 
         elif sort_on in 'public_trial':
 
-            values = get_translated_public_trial_values(self.context, self.request)
+            values = classification.translated_public_trial_terms(
+                self.context, self.request)
 
             def _public_trial_sorter(a, b):
                 return cmp(
