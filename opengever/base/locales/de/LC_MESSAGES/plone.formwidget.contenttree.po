@@ -1,0 +1,3 @@
+#. Default: "browse..."
+msgid "label_contenttree_browse"
+msgstr "Durchsuchen..."
