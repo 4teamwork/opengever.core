@@ -232,6 +232,11 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             document, Attributes(Interface, 'file', 'meta')))
         self.check_document_modified(document, dossier, 'file_meta')
 
+        # Modified-Event - public_trial changed
+        notify(ObjectModifiedEvent(
+            document, Attributes(Interface, 'IClassification.public_trial')))
+        self.check_document_modified(document, dossier, 'public_trial')
+
         # Get the workflow for the document to test the ActionSucceededEvent
         wftool = getToolByName(document, 'portal_workflow')
         workflow = wftool.get('simple_publication_workflow')
@@ -505,6 +510,23 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
                 parent,
                 action_type='Document modified',
                 action_title='Changed file and metadata of document %s' % (
+                    obj.title_or_id()), )
+
+        elif mode == 'public_trial':
+            self.check_annotation(
+                obj,
+                action_type='Document modified',
+                action_title='Changed metadata',
+                check_entry=-2)
+            self.check_annotation(
+                obj,
+                action_type='Public trial modified',
+                action_title=u'Public trial changed to "unchecked".',
+                check_entry=-1)
+            self.check_annotation(
+                parent,
+                action_type='Document modified',
+                action_title='Changed metadata of document %s' % (
                     obj.title_or_id()), )
 
     def check_document_actionsucceeded(self, obj):

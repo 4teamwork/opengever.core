@@ -25,6 +25,7 @@ from opengever.sharing.interfaces import ILocalRolesAcquisitionActivated
 from opengever.sharing.interfaces import ILocalRolesAcquisitionBlocked
 from opengever.sharing.interfaces import ILocalRolesModified
 from opengever.tabbedview.helper import readable_ogds_author
+from opengever.base.behaviors import classification
 from opengever.task.task import ITask
 from opengever.trash.trash import ITrashedEvent, IUntrashedEvent
 from persistent.dict import PersistentDict
@@ -311,6 +312,7 @@ def document_added(context, event):
 
 
 DOCUMENT_MODIIFED_ACTION = 'Document modified'
+PUBLIC_TRIAL_MODIFIED_ACTION = 'Public trial modified'
 
 
 @grok.subscribe(IBaseDocument, IObjectModifiedEvent)
@@ -319,10 +321,17 @@ def document_modified(context, event):
     # and "file modified"
     file_changed = False
     metadata_changed = False
+    public_trial_changed = False
+
     for desc in event.descriptions:
         for attr in desc.attributes:
             if attr == 'file':
                 file_changed = True
+            elif attr in ('IClassification.public_trial', 'public_trial'):
+                # Attribute name is different when changed through regular
+                # edit form vs. edit_public_trial form, so check for both
+                public_trial_changed = True
+                metadata_changed = True
             else:
                 metadata_changed = True
 
@@ -356,6 +365,18 @@ def document_modified(context, event):
                           title, visible=False)
     journal_entry_factory(context.aq_inner.aq_parent,
                           DOCUMENT_MODIIFED_ACTION, parent_title)
+
+    if public_trial_changed:
+        # Always create a separate journal entry if public_trial was changed
+        translated_terms = classification.translated_public_trial_terms(
+            context, context.REQUEST)
+        translated_public_trial = translated_terms[context.public_trial]
+        title = _(u'label_document_public_trial_modified',
+                  default=u'Public trial changed to "${public_trial}".',
+                  mapping=dict(public_trial=translated_public_trial))
+
+        journal_entry_factory(context, PUBLIC_TRIAL_MODIFIED_ACTION,
+                              title, visible=True)
 
 
 DOCUMENT_STATE_CHANGED = 'Document state changed'
