@@ -77,12 +77,11 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
 
         # Local roles Modified
         notify(
-            LocalRolesModified(repo, 'old roles',
-                (
-                ['catman', ['Owner']],
-                ['ratman', ['Owner', 'Reader']],
-                ['test_user', ['Reader', 'Publisher']],
-                )
+            LocalRolesModified(
+                repo, 'old roles',
+                (['catman', ['Owner']],
+                 ['ratman', ['Owner', 'Reader']],
+                 ['test_user', ['Reader', 'Publisher']])
             ))
 
         # CheckLocalRolesModified
@@ -91,15 +90,14 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             action_type='Local roles modified',
             action_title='Local roles modified at %s.' % (
                 repo.title_or_id()),
-            comment='ratman: sharing_dossier_reader; test_user: ' \
-                'sharing_dossier_reader, sharing_dossier_publisher')
+            comment='ratman: sharing_dossier_reader; test_user: '
+                    'sharing_dossier_reader, sharing_dossier_publisher')
 
     def test_integration_dossier_events(self):
         """ Trigger every event of a dossier at least one times
         and check the journalentries.
         """
         portal = self.layer['portal']
-
 
         # Add-Event
         dossier = createContentInContainer(
@@ -117,7 +115,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         self.check_annotation(dossier,
                               action_type='Dossier modified',
                               action_title='Dossier modified: %s' % (
-                                dossier.title_or_id()))
+                                  dossier.title_or_id()))
 
         # Get the workflow for the dossier to test the ActionSucceededEvent
         wftool = getToolByName(dossier, 'portal_workflow')
@@ -155,12 +153,11 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
 
         # Local roles Modified
         notify(
-            LocalRolesModified(dossier, 'old roles',
-                (
-                ['catman', ['Owner']],
-                ['ratman', ['Owner', 'Reader']],
-                ['test_user', ['Reader', 'Publisher']],
-                )
+            LocalRolesModified(
+                dossier, 'old roles',
+                (['catman', ['Owner']],
+                 ['ratman', ['Owner', 'Reader']],
+                 ['test_user', ['Reader', 'Publisher']])
             ))
 
         # CheckLocalRolesModified
@@ -168,8 +165,8 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             dossier,
             action_type='Local roles modified',
             action_title='Local roles modified.',
-            comment='ratman: sharing_dossier_reader; test_user: ' \
-                'sharing_dossier_reader, sharing_dossier_publisher')
+            comment='ratman: sharing_dossier_reader; test_user: '
+                    'sharing_dossier_reader, sharing_dossier_publisher')
 
     def test_integration_templatedossier_event(self):
 
@@ -180,12 +177,11 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
 
         # Local roles Modified
         notify(
-            LocalRolesModified(templatedossier, 'old roles',
-                (
-                ['catman', ['Owner']],
-                ['ratman', ['Owner', 'Reader']],
-                ['test_user', ['Reader', 'Editor']],
-                )
+            LocalRolesModified(
+                templatedossier, 'old roles',
+                (['catman', ['Owner']],
+                 ['ratman', ['Owner', 'Reader']],
+                 ['test_user', ['Reader', 'Editor']])
             ))
 
         # CheckLocalRolesModified
@@ -193,8 +189,8 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             templatedossier,
             action_type='Local roles modified',
             action_title='Local roles modified.',
-            comment='ratman: sharing_reader; test_user: ' \
-                'sharing_reader, sharing_editor')
+            comment='ratman: sharing_reader; test_user: '
+                    'sharing_reader, sharing_editor')
 
     def test_integration_document_events(self):
         """ Trigger every event of a document at least one times
@@ -284,7 +280,8 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         self.check_document_revertedtoversion(document)
 
         # Object Sent Document Event
-        notify(DocumentSent(dossier, TEST_USER_ID, 'test@test.ch', 'test mail', 'Mymessage', [document]))
+        notify(DocumentSent(dossier, TEST_USER_ID, 'test@test.ch',
+                            'test mail', 'Mymessage', [document]))
         self.check_document_sent(dossier, document)
 
         # Object downloaded file-copy Event
@@ -399,7 +396,8 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         mail = createContentInContainer(
             dossier, 'ftw.mail.mail',
             message=field_type(data=msgtxt,
-                contentType=u'message/rfc822', filename=u'attachment.txt'))
+                               contentType=u'message/rfc822',
+                               filename=u'attachment.txt'))
 
         # The journal of a mail is always on the parents dossier and not
         # on the mail
@@ -452,9 +450,9 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             dossier2,
             'newName', ))
         self.check_annotation(
-                dossier1,
-                action_type='Object cut',
-                action_title='Object cut: %s' % document.title_or_id(), )
+            dossier1,
+            action_type='Object cut',
+            action_title='Object cut: %s' % document.title_or_id())
 
         # Here we don't have a journal-entry
         length = get_journal_length(dossier1)
@@ -484,8 +482,8 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         self.assertEquals(
             action_title, translate(journal.get('action').get('title')))
 
-    def check_object_added(
-        self, obj, action_type='', action_title='', parent=None):
+    def check_object_added(self, obj, action_type='',
+                           action_title='', parent=None):
         """ Check the journal after adding a object
         """
         self.check_annotation(obj,
@@ -591,9 +589,9 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             action_type='Document Sent',
             action_title=u'Document sent by Mail: test mail',
             actor=TEST_USER_ID,
-            comment='Attachments: <span><a href="./@@resolve_oguid?oguid=Test:'+str(
-                intid)+'">'+ doc.Title()+
-            '</a></span> | Receivers: test@test.ch | Message: Mymessage', )
+            comment='Attachments: <span><a href="./@@resolve_oguid?oguid='
+                    'Test:{}">{}</a></span> | Receivers: test@test.ch | '
+                    'Message: Mymessage'.format(str(intid), doc.Title()))
 
     def check_document_copy_downloaded(self, obj):
         self.check_annotation(

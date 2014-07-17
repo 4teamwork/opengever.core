@@ -71,14 +71,11 @@ def journal_entry_factory(context, action, title,
     comment = propper_string(comment)
     entry = {
         'obj': context,
-        'action': PersistentDict({
-                'type': action,
-                'title': title,
-                'visible': visible,
-                }),
+        'action': PersistentDict({'type': action,
+                                  'title': title,
+                                  'visible': visible}),
         'actor': actor,
-        'comment': comment,
-        }
+        'comment': comment}
 
     notify(JournalEntryEvent(**entry))
 
@@ -136,9 +133,9 @@ LOCAL_ROLES_AQUISITION_BLOCKED = 'Local roles Aquisition Blocked'
 @grok.subscribe(IRepositoryFolderSchema, IRepositoryPrefixUnlocked)
 def repository_prefix_unlock(context, event):
     title = _(u'label_prefix_unlocked',
-            default=u'Unlocked prefix ${prefix} in ${repository}.',
-            mapping={'prefix': event.prefix,
-                     'repository': context.title_or_id()})
+              default=u'Unlocked prefix ${prefix} in ${repository}.',
+              mapping={'prefix': event.prefix,
+                       'repository': context.title_or_id()})
 
     journal_entry_factory(
         get_repository_root(context),
@@ -187,8 +184,8 @@ LOCAL_ROLES_MODIFIED = 'Local roles modified'
 def repositoryfolder_local_roles_modified(context, event):
 
     title = _(u'label_local_roles_modified_at',
-          default=u'Local roles modified at ${repository}.',
-          mapping={'repository': context.title_or_id(), })
+              default=u'Local roles modified at ${repository}.',
+              mapping={'repository': context.title_or_id(), })
 
     journal_entry_factory(
         get_repository_root(context),
@@ -468,12 +465,12 @@ def document_sent(context, event):
     comment = translate(
         _(u'label_document_sent_comment',
           default=u'Attachments: ${documents} | Receivers: ${receiver} |'
-                    ' Message: ${message}',
-          mapping={
-                'documents': documents_list_helper(context, objs),
-                'receiver': receiver.decode('utf-8'),
-                'message': message.decode('utf-8'),
-                }), context=context.REQUEST)
+                  ' Message: ${message}',
+          mapping={'documents': documents_list_helper(context, objs),
+                  'receiver': receiver.decode('utf-8'),
+                  'message': message.decode('utf-8')}
+          ),
+        context=context.REQUEST)
     journal_entry_factory(
         context, DOCUMENT_SENT, title, visible=True, comment=comment)
 
@@ -561,15 +558,17 @@ PARTICIPANT_ADDED = 'Participant added'
 
 @grok.subscribe(IDossierMarker, IParticipationCreated)
 def participation_created(context, event):
+    author = readable_ogds_author(event.participant,
+                                  event.participant.contact)
+    roles = role_list_helper(event.participant,
+                             event.participant.roles)
+
     title = _(u'label_participant_added',
               default=u'Participant added: ${contact} with '
               'roles ${roles}',
-              mapping={
-            'contact': readable_ogds_author(event.participant,
-                                             event.participant.contact),
-            'roles': role_list_helper(event.participant,
-                                       event.participant.roles),
-            })
+              mapping={'contact': author,
+                       'roles': roles}
+              )
 
     journal_entry_factory(context, PARTICIPANT_ADDED, title)
 
@@ -600,8 +599,8 @@ MAIL_ADDED_EVENT = 'Mail added'
 def mail_added(context, event):
     title = _(u'label_mail_added',
               default=u'Mail added: ${title}',
-              mapping={
-              'title': context.title_or_id()})
+              mapping={'title': context.title_or_id()}
+              )
 
     journal_entry_factory(context, MAIL_ADDED_EVENT, title)
     journal_entry_factory(context.aq_inner.aq_parent, MAIL_ADDED_EVENT, title)
@@ -621,9 +620,9 @@ def object_moved(context, event):
         return
 
     title = _(u'label_object_moved',
-                default=u'Object moved: ${title}',
-                mapping={
-                'title': context.title_or_id()})
+              default=u'Object moved: ${title}',
+              mapping={'title': context.title_or_id()}
+              )
 
     journal_entry_factory(
         context.aq_inner.aq_parent, OBJECT_MOVED_EVENT, title)
@@ -637,9 +636,9 @@ OBJECT_WILL_BE_MOVED_EVENT = 'Object cut'
 def object_will_be_moved(context, event):
     if not IObjectWillBeAddedEvent.providedBy(event):
         title = _(u'label_object_cut',
-                    default=u'Object cut: ${title}',
-                    mapping={
-                    'title': context.title_or_id()})
+                  default=u'Object cut: ${title}',
+                  mapping={'title': context.title_or_id()}
+                  )
 
         journal_entry_factory(
             context.aq_inner.aq_parent, OBJECT_WILL_BE_MOVED_EVENT, title)
