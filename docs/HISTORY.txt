@@ -4,6 +4,9 @@ Changelog
 3.4 (unreleased)
 ----------------
 
+- Don't show public trial edit form for template dossiers.
+  [lgraf]
+
 - Reword German translations for public_trial_statement label and description:
   New label: Bearbeitungsinformation
   New description: Datum Gesuch, Datum Entscheid, Verweis auf GEVER-Zugangsgeschaeft
