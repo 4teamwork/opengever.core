@@ -1,24 +1,14 @@
-from Products.CMFCore.utils import getToolByName
 from opengever.base.behaviors.classification import PUBLIC_TRIAL_OPTIONS
+from opengever.base.utils import language_cache_key
 from opengever.task.util import getTaskTypeVocabulary
 from plone.memoize import ram
+from Products.CMFCore.utils import getToolByName
 from zope.app.component.hooks import getSite
 from zope.component import getAdapter
-from zope.component import getMultiAdapter
 from zope.i18n import translate
 
 
-def translation_cache_key(mth, ctx, req):
-    """
-    Generates cache key used for functions with different output depending on
-    the current language.
-    """
-    portal_state = getMultiAdapter((ctx, req), name=u'plone_portal_state')
-    key = "%s.%s:%s" % (mth.__module__, mth.__name__, portal_state.language())
-    return key
-
-
-@ram.cache(translation_cache_key)
+@ram.cache(language_cache_key)
 def get_translated_transitions(context, request):
     """Return all translated transitions from every workflows"""
 
@@ -30,7 +20,7 @@ def get_translated_transitions(context, request):
     return states
 
 
-@ram.cache(translation_cache_key)
+@ram.cache(language_cache_key)
 def get_translated_types(context, request):
     values = {}
     for key, terms in getTaskTypeVocabulary(context).by_value.items():
@@ -39,7 +29,7 @@ def get_translated_types(context, request):
     return values
 
 
-@ram.cache(translation_cache_key)
+@ram.cache(language_cache_key)
 def get_translated_public_trial_values(context, request):
     portal = getSite()
 
