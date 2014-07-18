@@ -58,11 +58,4 @@
         directory="resources"
         />
 
-    <browser:page
-        for="opengever.document.behaviors.IBaseDocument"
-        name="edit_public_trial"
-        class=".edit_public_trial.EditPublicTrialForm"
-        permission="zope2.View"
-        />
-
 </configure>

@@ -3,6 +3,20 @@ from Acquisition import aq_parent
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from zope.component import getMultiAdapter
+
+
+def language_cache_key(method, context, request):
+    """
+    Generates cache key used for functions with different output depending on
+    the current language.
+    """
+    portal_state = getMultiAdapter((context, request),
+                                   name=u'plone_portal_state')
+    key = "%s.%s:%s" % (method.__module__,
+                        method.__name__,
+                        portal_state.language())
+    return key
 
 
 def set_profile_version(portal, profile_id, version):

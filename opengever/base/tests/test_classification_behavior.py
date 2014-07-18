@@ -4,11 +4,14 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from opengever.base.behaviors import classification
 from opengever.base.behaviors.classification import IClassificationSettings
+from opengever.journal.browser import JournalHistory
 from opengever.testing import FunctionalTestCase
+from plone.app.testing import TEST_USER_ID
 from plone.dexterity.fti import DexterityFTI
 from plone.dexterity.utils import createContentInContainer
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
+from zope.i18n import translate
 import transaction
 
 
@@ -144,3 +147,49 @@ class TestClassificationBehavior(FunctionalTestCase):
         self.assertTrue(browser.css(selector), 'Public trial should be hidden')
         self.assertTrue(browser.css(selector2),
                         'Public trial statement should be hidden')
+
+
+class TestChangesToPublicTrialAreJournalized(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestChangesToPublicTrialAreJournalized, self).setUp()
+        self.grant('Contributor')
+
+        self.dossier = create(Builder('dossier'))
+        self.document = create(Builder('document')
+                               .within(self.dossier)
+                               .with_dummy_content())
+
+    @browsing
+    def test_regular_edit_form_journalizes_changes(self, browser):
+        browser.login().open(self.document, view='edit')
+        browser.fill({'Public Trial': 'public'}).save()
+
+        journal = JournalHistory(self.document, self.document.REQUEST)
+        entry = journal.data()[-1]
+        translated_action_title = translate(entry['action']['title'],
+                                            context=self.layer['request'])
+
+        self.assertEqual('Public trial changed to "public".',
+                         translated_action_title)
+        self.assertEquals(TEST_USER_ID, entry['actor'])
+        self.assertDictContainsSubset({'type': 'Public trial modified',
+                                       'visible': True},
+                                      entry['action'])
+
+    @browsing
+    def test_public_trial_edit_form_journalizes_changes(self, browser):
+        browser.login().open(self.document, view='edit_public_trial')
+        browser.fill({'Public Trial': 'public'}).save()
+
+        journal = JournalHistory(self.document, self.document.REQUEST)
+        entry = journal.data()[-1]
+        translated_action_title = translate(entry['action']['title'],
+                                            context=self.layer['request'])
+
+        self.assertEqual('Public trial changed to "public".',
+                         translated_action_title)
+        self.assertEquals(TEST_USER_ID, entry['actor'])
+        self.assertDictContainsSubset({'type': 'Public trial modified',
+                                       'visible': True},
+                                      entry['action'])

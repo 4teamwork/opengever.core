@@ -1,14 +1,17 @@
 from five import grok
 from opengever.base import _
 from opengever.base.behaviors import utils
+from opengever.base.utils import language_cache_key
 from plone.app.dexterity.behaviors import metadata
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.directives import form
+from plone.memoize import ram
 from plone.registry.interfaces import IRegistry
 from zope import schema
+from zope.component import getUtility
+from zope.i18n import translate
 from zope.interface import alsoProvides, Interface
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
-from zope.component import getUtility
 
 
 # PUBLIC TRIAL: Vocabulary and default value
@@ -22,6 +25,15 @@ PUBLIC_TRIAL_OPTIONS = (
     PUBLIC_TRIAL_LIMITED_PUBLIC,
     PUBLIC_TRIAL_PRIVATE,
 )
+
+
+@ram.cache(language_cache_key)
+def translated_public_trial_terms(context, request):
+    values = {}
+    for term in PUBLIC_TRIAL_OPTIONS:
+        values[term] = translate(term, context=request,
+                                 domain="opengever.base")
+    return values
 
 
 class IClassification(form.Schema):

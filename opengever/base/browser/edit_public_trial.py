@@ -1,13 +1,13 @@
+from five import grok
 from opengever.base import _
 from opengever.base.behaviors.classification import IClassification
 from opengever.base.utils import find_parent_dossier
 from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.templatedossier.interfaces import ITemplateDossier
+from plone.directives import dexterity
 from Products.CMFCore.utils import getToolByName
-from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
-from z3c.form.form import Form
 from zExceptions import Unauthorized
 
 
@@ -45,11 +45,17 @@ def can_access_public_trial_edit_form(user, content):
     return has_role
 
 
-class EditPublicTrialForm(Form):
+class EditPublicTrialForm(dexterity.EditForm):
+    grok.context(IBaseDocument)
+    grok.require('zope2.View')
+    grok.name('edit_public_trial')
+
+    schema = None
+
+    fields = Fields(IClassification).select('public_trial')
 
     label = _(u'label_change_public_trial',
               default=u'Change public trial information.')
-    fields = Fields(IClassification).select('public_trial')
 
     def update(self):
         mtool = getToolByName(self.context, 'portal_membership')
@@ -58,22 +64,3 @@ class EditPublicTrialForm(Form):
             raise Unauthorized('You cannot access this resource.')
 
         super(EditPublicTrialForm, self).update()
-
-    @buttonAndHandler(_(u'button_save', default=u'Save'))
-    def handle_save(self, action):
-        data, errors = self.extractData()
-
-        if errors:
-            return
-
-        self.context.public_trial = data['public_trial']
-        self.context.reindexObject(idxs=['public_trial'])
-
-        return self.redirect()
-
-    @buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
-    def handle_cancel(self, action):
-        return self.redirect()
-
-    def redirect(self):
-        return self.request.RESPONSE.redirect(self.context.absolute_url())

@@ -96,5 +96,5 @@ class TestEditPublicTrialForm(FunctionalTestCase):
     @browsing
     def test_user_submit_cancel_button(self, browser):
         browser.login().visit(self.document, view='edit_public_trial')
-        browser.css('[name="form.buttons.button_cancel"]').first.click()
+        browser.find('Cancel').click()
         self.assertEquals(self.document.absolute_url(), browser.url)

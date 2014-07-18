@@ -2,9 +2,8 @@ from Acquisition import aq_inner, aq_parent
 from five import grok
 from ftw.journal.events.events import JournalEntryEvent
 from ftw.journal.interfaces import IJournalizable
-from ftw.mail.mail import IMail
 from OFS.interfaces import IObjectWillBeMovedEvent, IObjectWillBeAddedEvent
-from opengever.document.document import IDocumentSchema
+from opengever.document.behaviors import IBaseDocument
 from opengever.document.interfaces import IFileCopyDownloadedEvent
 from opengever.document.interfaces import IObjectCheckedInEvent
 from opengever.document.interfaces import IObjectCheckedOutEvent
@@ -26,6 +25,7 @@ from opengever.sharing.interfaces import ILocalRolesAcquisitionActivated
 from opengever.sharing.interfaces import ILocalRolesAcquisitionBlocked
 from opengever.sharing.interfaces import ILocalRolesModified
 from opengever.tabbedview.helper import readable_ogds_author
+from opengever.base.behaviors import classification
 from opengever.task.task import ITask
 from opengever.trash.trash import ITrashedEvent, IUntrashedEvent
 from persistent.dict import PersistentDict
@@ -71,14 +71,11 @@ def journal_entry_factory(context, action, title,
     comment = propper_string(comment)
     entry = {
         'obj': context,
-        'action': PersistentDict({
-                'type': action,
-                'title': title,
-                'visible': visible,
-                }),
+        'action': PersistentDict({'type': action,
+                                  'title': title,
+                                  'visible': visible}),
         'actor': actor,
-        'comment': comment,
-        }
+        'comment': comment}
 
     notify(JournalEntryEvent(**entry))
 
@@ -136,9 +133,9 @@ LOCAL_ROLES_AQUISITION_BLOCKED = 'Local roles Aquisition Blocked'
 @grok.subscribe(IRepositoryFolderSchema, IRepositoryPrefixUnlocked)
 def repository_prefix_unlock(context, event):
     title = _(u'label_prefix_unlocked',
-            default=u'Unlocked prefix ${prefix} in ${repository}.',
-            mapping={'prefix': event.prefix,
-                     'repository': context.title_or_id()})
+              default=u'Unlocked prefix ${prefix} in ${repository}.',
+              mapping={'prefix': event.prefix,
+                       'repository': context.title_or_id()})
 
     journal_entry_factory(
         get_repository_root(context),
@@ -187,8 +184,8 @@ LOCAL_ROLES_MODIFIED = 'Local roles modified'
 def repositoryfolder_local_roles_modified(context, event):
 
     title = _(u'label_local_roles_modified_at',
-          default=u'Local roles modified at ${repository}.',
-          mapping={'repository': context.title_or_id(), })
+              default=u'Local roles modified at ${repository}.',
+              mapping={'repository': context.title_or_id(), })
 
     journal_entry_factory(
         get_repository_root(context),
@@ -300,7 +297,7 @@ def dossier_local_roles_modified(context, event):
 DOCUMENT_ADDED_ACTION = 'Document added'
 
 
-@grok.subscribe(IDocumentSchema, IObjectAddedEvent)
+@grok.subscribe(IBaseDocument, IObjectAddedEvent)
 def document_added(context, event):
     title = _(
         u'label_document_added',
@@ -315,18 +312,26 @@ def document_added(context, event):
 
 
 DOCUMENT_MODIIFED_ACTION = 'Document modified'
+PUBLIC_TRIAL_MODIFIED_ACTION = 'Public trial modified'
 
 
-@grok.subscribe(IDocumentSchema, IObjectModifiedEvent)
+@grok.subscribe(IBaseDocument, IObjectModifiedEvent)
 def document_modified(context, event):
     # we need to distinguish between "metadata modified"
     # and "file modified"
     file_changed = False
     metadata_changed = False
+    public_trial_changed = False
+
     for desc in event.descriptions:
         for attr in desc.attributes:
             if attr == 'file':
                 file_changed = True
+            elif attr in ('IClassification.public_trial', 'public_trial'):
+                # Attribute name is different when changed through regular
+                # edit form vs. edit_public_trial form, so check for both
+                public_trial_changed = True
+                metadata_changed = True
             else:
                 metadata_changed = True
 
@@ -361,11 +366,23 @@ def document_modified(context, event):
     journal_entry_factory(context.aq_inner.aq_parent,
                           DOCUMENT_MODIIFED_ACTION, parent_title)
 
+    if public_trial_changed:
+        # Always create a separate journal entry if public_trial was changed
+        translated_terms = classification.translated_public_trial_terms(
+            context, context.REQUEST)
+        translated_public_trial = translated_terms[context.public_trial]
+        title = _(u'label_document_public_trial_modified',
+                  default=u'Public trial changed to "${public_trial}".',
+                  mapping=dict(public_trial=translated_public_trial))
+
+        journal_entry_factory(context, PUBLIC_TRIAL_MODIFIED_ACTION,
+                              title, visible=True)
+
 
 DOCUMENT_STATE_CHANGED = 'Document state changed'
 
 
-@grok.subscribe(IDocumentSchema, IActionSucceededEvent)
+@grok.subscribe(IBaseDocument, IActionSucceededEvent)
 def document_state_changed(context, event):
     skip_transactions = [
         'check_out',
@@ -382,7 +399,7 @@ def document_state_changed(context, event):
 DOCUMENT_CHECKED_OUT = 'Document checked out'
 
 
-@grok.subscribe(IDocumentSchema, IObjectCheckedOutEvent)
+@grok.subscribe(IBaseDocument, IObjectCheckedOutEvent)
 def document_checked_out(context, event):
     user_comment = event.comment
     title = _(u'label_document_checkout',
@@ -395,7 +412,7 @@ def document_checked_out(context, event):
 DOCUMENT_CHECKED_IN = 'Document checked in'
 
 
-@grok.subscribe(IDocumentSchema, IObjectCheckedInEvent)
+@grok.subscribe(IBaseDocument, IObjectCheckedInEvent)
 def document_checked_in(context, event):
     user_comment = event.comment
     title = _(u'label_document_checkin',
@@ -408,7 +425,7 @@ def document_checked_in(context, event):
 DOCUMENT_CHECKOUT_CANCEL = 'Canceled document checkout'
 
 
-@grok.subscribe(IDocumentSchema, IObjectCheckoutCanceledEvent)
+@grok.subscribe(IBaseDocument, IObjectCheckoutCanceledEvent)
 def document_checkout_canceled(context, event):
     title = _(u'label_document_checkout_cancel',
               default=u'Canceled document checkout')
@@ -418,7 +435,7 @@ def document_checkout_canceled(context, event):
 DOCUMENT_FILE_REVERTED = 'Reverted document file'
 
 
-@grok.subscribe(IDocumentSchema, IObjectRevertedToVersion)
+@grok.subscribe(IBaseDocument, IObjectRevertedToVersion)
 def document_file_reverted(context, event):
     try:
         create = event.create_version
@@ -437,7 +454,7 @@ def document_file_reverted(context, event):
 FILE_COPY_DOWNLOADED = 'File copy downloaded'
 
 
-@grok.subscribe(IDocumentSchema, IFileCopyDownloadedEvent)
+@grok.subscribe(IBaseDocument, IFileCopyDownloadedEvent)
 def file_copy_downloaded(context, event):
     title = _(u'label_file_copy_downloaded',
               default=u'Download copy')
@@ -468,12 +485,12 @@ def document_sent(context, event):
     comment = translate(
         _(u'label_document_sent_comment',
           default=u'Attachments: ${documents} | Receivers: ${receiver} |'
-                    ' Message: ${message}',
-          mapping={
-                'documents': documents_list_helper(context, objs),
-                'receiver': receiver.decode('utf-8'),
-                'message': message.decode('utf-8'),
-                }), context=context.REQUEST)
+                  ' Message: ${message}',
+          mapping={'documents': documents_list_helper(context, objs),
+                  'receiver': receiver.decode('utf-8'),
+                  'message': message.decode('utf-8')}
+          ),
+        context=context.REQUEST)
     journal_entry_factory(
         context, DOCUMENT_SENT, title, visible=True, comment=comment)
 
@@ -561,15 +578,17 @@ PARTICIPANT_ADDED = 'Participant added'
 
 @grok.subscribe(IDossierMarker, IParticipationCreated)
 def participation_created(context, event):
+    author = readable_ogds_author(event.participant,
+                                  event.participant.contact)
+    roles = role_list_helper(event.participant,
+                             event.participant.roles)
+
     title = _(u'label_participant_added',
               default=u'Participant added: ${contact} with '
               'roles ${roles}',
-              mapping={
-            'contact': readable_ogds_author(event.participant,
-                                             event.participant.contact),
-            'roles': role_list_helper(event.participant,
-                                       event.participant.roles),
-            })
+              mapping={'contact': author,
+                       'roles': roles}
+              )
 
     journal_entry_factory(context, PARTICIPANT_ADDED, title)
 
@@ -591,22 +610,6 @@ def participation_removed(context, event):
     journal_entry_factory(context, PARTICIPANT_REMOVED, title)
 
 
-#------------------------ Mail -----------------------------------------
-
-MAIL_ADDED_EVENT = 'Mail added'
-
-
-@grok.subscribe(IMail, IObjectAddedEvent)
-def mail_added(context, event):
-    title = _(u'label_mail_added',
-              default=u'Mail added: ${title}',
-              mapping={
-              'title': context.title_or_id()})
-
-    journal_entry_factory(context, MAIL_ADDED_EVENT, title)
-    journal_entry_factory(context.aq_inner.aq_parent, MAIL_ADDED_EVENT, title)
-    return
-
 #----------------------------Verschieben-----------------------------------
 
 OBJECT_MOVED_EVENT = 'Object moved'
@@ -621,9 +624,9 @@ def object_moved(context, event):
         return
 
     title = _(u'label_object_moved',
-                default=u'Object moved: ${title}',
-                mapping={
-                'title': context.title_or_id()})
+              default=u'Object moved: ${title}',
+              mapping={'title': context.title_or_id()}
+              )
 
     journal_entry_factory(
         context.aq_inner.aq_parent, OBJECT_MOVED_EVENT, title)
@@ -637,9 +640,9 @@ OBJECT_WILL_BE_MOVED_EVENT = 'Object cut'
 def object_will_be_moved(context, event):
     if not IObjectWillBeAddedEvent.providedBy(event):
         title = _(u'label_object_cut',
-                    default=u'Object cut: ${title}',
-                    mapping={
-                    'title': context.title_or_id()})
+                  default=u'Object cut: ${title}',
+                  mapping={'title': context.title_or_id()}
+                  )
 
         journal_entry_factory(
             context.aq_inner.aq_parent, OBJECT_WILL_BE_MOVED_EVENT, title)
