@@ -1,4 +1,6 @@
 from DateTime import DateTime
+from ftw.builder import Builder
+from ftw.builder import create
 from OFS.event import ObjectWillBeMovedEvent, ObjectWillBeAddedEvent
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.document.events import FileCopyDownloadedEvent
@@ -17,8 +19,6 @@ from opengever.sharing.events import LocalRolesModified
 from opengever.trash.trash import TrashedEvent, UntrashedEvent
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
-from plone.dexterity.interfaces import IDexterityFTI
-from plone.dexterity.utils import createContentInContainer
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.WorkflowCore import ActionSucceededEvent
@@ -29,7 +29,6 @@ from zope.interface import Interface
 from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import ObjectModifiedEvent, Attributes
 from zope.lifecycleevent import ObjectMovedEvent, ObjectAddedEvent
-from zope.schema import getFields
 import unittest2 as unittest
 
 
@@ -46,12 +45,8 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         """ Trigger every event of a repo at least one times
         and check the journalentries.
         """
-        portal = self.layer['portal']
-
-        repo_root = createContentInContainer(
-            portal, 'opengever.repository.repositoryroot', 'root')
-        repo = createContentInContainer(
-            repo_root, 'opengever.repository.repositoryfolder', 'r1')
+        repo_root = create(Builder('repository_root'))
+        repo = create(Builder('repository').within(repo_root))
 
         # Local roles Aquisition Blocked-Event
         notify(
@@ -97,11 +92,9 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         """ Trigger every event of a dossier at least one times
         and check the journalentries.
         """
-        portal = self.layer['portal']
 
         # Add-Event
-        dossier = createContentInContainer(
-            portal, 'opengever.dossier.businesscasedossier', 'd1')
+        dossier = create(Builder('dossier'))
 
         self.check_object_added(
             dossier,
@@ -169,11 +162,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
                     'sharing_dossier_reader, sharing_dossier_publisher')
 
     def test_integration_templatedossier_event(self):
-
-        portal = self.layer['portal']
-
-        templatedossier = createContentInContainer(
-            portal, 'opengever.dossier.templatedossier', 'templates')
+        templatedossier = create(Builder('templatedossier'))
 
         # Local roles Modified
         notify(
@@ -202,18 +191,18 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         document and one for the changed dossier. We just have to check the
         entry of the new document on the dossiers journal
         """
-        portal = self.layer['portal']
         comment = 'my comment'
 
         registry = getUtility(IRegistry)
         proxy = registry.forInterface(IClientConfiguration)
         proxy.client_id = u'Test'
-        dossier = createContentInContainer(
-            portal, 'opengever.dossier.businesscasedossier', 'd1')
+
+        dossier = create(Builder('dossier'))
 
         # Add-Event
-        document = createContentInContainer(
-            dossier, 'opengever.document.document', 'd1', title=u'Doc\xfcment')
+        document = create(Builder('document')
+                          .within(dossier)
+                          .titled(u'Doc\xfcment'))
 
         self.check_object_added(
             document,
@@ -292,14 +281,11 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         """ Trigger every event of a task at least one times
         and check the journalentries.
         """
-        portal = self.layer['portal']
 
-        dossier = createContentInContainer(
-            portal, 'opengever.dossier.businesscasedossier', 'd1')
+        dossier = create(Builder('dossier'))
 
         # Add-Event
-        task = createContentInContainer(
-            dossier, 'opengever.task.task', 'd1')
+        task = create(Builder('task').within(dossier))
 
         self.check_annotation(
             dossier,
@@ -317,14 +303,11 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
     def test_integration_trashed_events(self):
         """ Trigger every event of trashing objects
         """
-        portal = self.layer['portal']
 
-        dossier = createContentInContainer(
-            portal, 'opengever.dossier.businesscasedossier', 'd1')
+        dossier = create(Builder('dossier'))
 
         # Create object to put it in the trash
-        document = createContentInContainer(
-            dossier, 'opengever.document.document', 'd1')
+        document = create(Builder('document').within(dossier))
 
         # Trash-Event
         notify(TrashedEvent(document))
@@ -357,11 +340,10 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         """ Trigger every event of a participation at least one times
         and check the journalentries.
         """
-        portal = self.layer['portal']
+
         participant = Participation('ratman', ['held', 'manager'])
 
-        dossier = createContentInContainer(
-            portal, 'opengever.dossier.businesscasedossier', 'd1')
+        dossier = create(Builder('dossier'))
 
         # Participation-Created-Event
         notify(ParticipationCreated(dossier, participant))
@@ -383,21 +365,9 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         """ Trigger every event of a mail at least one times
         and check the journalentries.
         """
-        portal = self.layer['portal']
 
-        dossier = createContentInContainer(
-            portal, 'opengever.dossier.businesscasedossier', 'd1')
-
-        fti = getUtility(IDexterityFTI, name='ftw.mail.mail')
-        schema = fti.lookupSchema()
-        field_type = getFields(schema)['message']._type
-        msgtxt = 'Subject: mail-test\n'
-
-        mail = createContentInContainer(
-            dossier, 'ftw.mail.mail',
-            message=field_type(data=msgtxt,
-                               contentType=u'message/rfc822',
-                               filename=u'attachment.txt'))
+        dossier = create(Builder('dossier'))
+        mail = create(Builder('mail').with_dummy_message().within(dossier))
 
         # The journal of a mail is on the parent dossier as well as
         # on the mail itself
@@ -417,18 +387,16 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         """ Trigger every event of a objec at least one times
         and check the journalentries.
         """
-        portal = self.layer['portal']
 
-        dossier1 = createContentInContainer(
-            portal, 'opengever.dossier.businesscasedossier', 'd1')
-        dossier2 = createContentInContainer(
-            portal, 'opengever.dossier.businesscasedossier', 'd2')
+        dossier1 = create(Builder('dossier'))
+        dossier2 = create(Builder('dossier'))
 
-        document = createContentInContainer(
-            dossier1, 'opengever.document.document', 'doc1', title='Document')
-
-        document2 = createContentInContainer(
-            dossier2, 'opengever.document.document', 'doc2', title='Document2')
+        document = create(Builder('document')
+                          .within(dossier1)
+                          .titled(u'Document'))
+        document2 = create(Builder('document')
+                           .within(dossier2)
+                           .titled(u'Document'))
 
         notify(ObjectMovedEvent(
             document,
