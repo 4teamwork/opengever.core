@@ -57,6 +57,10 @@ class JournalTab(grok.View, OpengeverTab, ListingView):
     selection = ViewPageTemplateFile("no_selection_amount.pt")
 
     columns = (
+        {'column': 'time',
+         'column_title': _(u'label_time', default=u'Time'),
+         'transform': helper.readable_date_time},
+
         {'column': 'title',
          'column_title': _(u'label_title', 'Title'),
          'transform': title_helper},
@@ -64,10 +68,6 @@ class JournalTab(grok.View, OpengeverTab, ListingView):
         {'column': 'actor',
          'column_title': _(u'label_actor', default=u'Actor'),
          'transform': linked_ogds_author},
-
-        {'column': 'time',
-         'column_title': _(u'label_time', default=u'Time'),
-         'transform': helper.readable_date_time},
 
         {'column': 'comments',
          'column_title': _(u'label_comments', default=u'Comments'),
