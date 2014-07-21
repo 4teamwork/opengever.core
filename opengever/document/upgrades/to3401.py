@@ -14,7 +14,7 @@ class RenameDocumentBehaviors(UpgradeStep):
 
     def __call__(self):
         self.setup_install_profile(
-            'profile-opengever.document.upgrades:2701')
+            'profile-opengever.document.upgrades:3401')
         self._migrate_related_items_annotations()
 
     def _migrate_related_items_annotations(self):

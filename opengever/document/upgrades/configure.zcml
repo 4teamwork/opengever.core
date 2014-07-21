@@ -51,59 +51,59 @@
         profile="opengever.document:default"
         />
 
-    <!-- 2602 -> 2701 -->
+    <!-- 2602 -> 3401 -->
     <genericsetup:upgradeStep
         title="Rename behavior names for og.document.document FTI"
         description=""
         source="2602"
-        destination="2701"
-        handler="opengever.document.upgrades.to2701.RenameDocumentBehaviors"
+        destination="3401"
+        handler="opengever.document.upgrades.to3401.RenameDocumentBehaviors"
         profile="opengever.document:default"
         />
 
     <genericsetup:registerProfile
-        name="2701"
-        title="opengever.document: upgrade profile 2701"
+        name="3401"
+        title="opengever.document: upgrade profile 3401"
         description=""
-        directory="profiles/2701"
+        directory="profiles/3401"
         for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
-    <!-- 2701 -> 2702 -->
+    <!-- 3401 -> 3402 -->
     <genericsetup:upgradeStep
         title="Add IDocumentMetadata behavior to og.document FTI"
         description=""
-        source="2701"
-        destination="2702"
-        handler="opengever.document.upgrades.to2702.AddMetadataBehaviorToDocumentFTI"
+        source="3401"
+        destination="3402"
+        handler="opengever.document.upgrades.to3402.AddMetadataBehaviorToDocumentFTI"
         profile="opengever.document:default"
         />
 
     <genericsetup:registerProfile
-        name="2702"
-        title="opengever.document: upgrade profile 2702"
+        name="3402"
+        title="opengever.document: upgrade profile 3402"
         description=""
-        directory="profiles/2702"
+        directory="profiles/3402"
         for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
-    <!-- 2702 -> 2703 -->
+    <!-- 3402 -> 3403 -->
     <genericsetup:upgradeStep
         title="Add public_trial index and metadata"
         description=""
-        source="2702"
-        destination="2703"
-        handler="opengever.document.upgrades.to2703.AddPublicTrialIndexAndMetadata"
+        source="3402"
+        destination="3403"
+        handler="opengever.document.upgrades.to3403.AddPublicTrialIndexAndMetadata"
         profile="opengever.document:default"
         />
 
     <genericsetup:registerProfile
-        name="2703"
-        title="opengever.document: upgrade profile 2703"
+        name="3403"
+        title="opengever.document: upgrade profile 3403"
         description=""
-        directory="profiles/2703"
+        directory="profiles/3403"
         for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
