@@ -149,13 +149,13 @@
         directory="profiles/2608"
         />
 
-    <!-- 2608 -> 2609 -->
+    <!-- 2608 -> 3401 -->
     <upgrade-step:importProfile
         title="Add IClassificationSettings registry settings"
         profile="opengever.base:default"
         source="2608"
-        destination="2609"
-        directory="profiles/2609"
+        destination="3401"
+        directory="profiles/3401"
         />
 
 </configure>

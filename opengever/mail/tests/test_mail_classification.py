@@ -51,7 +51,7 @@ class TestMailMetadata(FunctionalTestCase):
 
         mail = create(Builder("mail").with_message(MAIL_DATA))
 
-        from opengever.mail.upgrades.to2201 import AddClassifiactionBehavior
+        from opengever.mail.upgrades.to3402 import AddClassifiactionBehavior
         AddClassifiactionBehavior(self.portal.portal_setup)
 
         assert IClassificationMarker.providedBy(mail)

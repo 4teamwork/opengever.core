@@ -147,7 +147,7 @@ class TestMailUpgradeStep(FunctionalTestCase):
 
         mail = create(Builder("mail").with_message(MAIL_DATA))
 
-        from opengever.mail.upgrades.to2200 import ActivateBehaviors
+        from opengever.mail.upgrades.to3401 import ActivateBehaviors
         ActivateBehaviors(self.portal.portal_setup)
 
         assert metadata.IDocumentMetadata.providedBy(mail)

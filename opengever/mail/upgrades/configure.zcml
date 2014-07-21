@@ -55,32 +55,32 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
-    <!-- 2104 -> 2200 -->
+    <!-- 2104 -> 3401 -->
     <genericsetup:upgradeStep
         title="Extend mail with several behaviors, so it can act like a document (incl. migration data to the metadata fields)"
         description=""
         source="2104"
-        destination="2200"
-        handler="opengever.mail.upgrades.to2200.ActivateBehaviors"
+        destination="3401"
+        handler="opengever.mail.upgrades.to3401.ActivateBehaviors"
         profile="opengever.mail:default"
         />
 
     <genericsetup:registerProfile
-        name="2200"
-        title="opengever.mail: upgrade profile 2200"
+        name="3401"
+        title="opengever.mail: upgrade profile 3401"
         description=""
-        directory="profiles/2200"
+        directory="profiles/3401"
         for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
-    <!-- 2200 -> 2201 -->
+    <!-- 3401 -> 3402 -->
     <genericsetup:upgradeStep
         title="Add classification behavior"
         description=""
-        source="2200"
-        destination="2201"
-        handler="opengever.mail.upgrades.to2201.AddClassifiactionBehavior"
+        source="3401"
+        destination="3402"
+        handler="opengever.mail.upgrades.to3402.AddClassifiactionBehavior"
         profile="opengever.mail:default"
         />
 

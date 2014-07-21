@@ -9,7 +9,7 @@ class AddMetadataBehaviorToDocumentFTI(UpgradeStep):
 
     def __call__(self):
         self.setup_install_profile(
-            'profile-opengever.document.upgrades:2702')
+            'profile-opengever.document.upgrades:3402')
 
         # XXX: Remove this check when merging upgrade-steps
         query = {'portal_type': 'opengever.document.document'}
