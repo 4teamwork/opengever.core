@@ -11,11 +11,6 @@ class RepositoryByline(BylineBase):
                          context=self.request,
                          domain='opengever.base')
 
-    def public_trial(self):
-        return translate(self.context.public_trial,
-                         context=self.request,
-                         domain='opengever.base')
-
     def get_items(self):
         return [
             {'class': 'review_state',
@@ -28,13 +23,6 @@ class RepositoryByline(BylineBase):
                                           default=u'Privacy layer'),
              'content': self.privacy_layer(),
              'replace': False},
-
-            {'class': 'public_trial',
-             'label': base_messagefactory(u'label_public_trial',
-                                          default=u'Public Trial'),
-             'content': self.public_trial(),
-             'replace': False},
-
         ]
 
 

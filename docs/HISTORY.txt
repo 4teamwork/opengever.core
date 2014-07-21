@@ -4,6 +4,9 @@ Changelog
 3.4 (unreleased)
 ----------------
 
+- Remove `public_trial` from repository byline.
+  [lgraf]
+
 - Journalize any changes to `public_trial` field.
   [lgraf]
 
