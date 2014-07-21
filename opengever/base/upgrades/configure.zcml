@@ -149,11 +149,37 @@
         directory="profiles/2608"
         />
 
-    <!-- 2608 -> 3401 -->
+    <genericsetup:registerProfile
+        name="2609"
+        title="opengever.base: upgrade profile 2609"
+        description=""
+        directory="profiles/2609"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+    <genericsetup:upgradeStep
+        title="Initialize opengever.sharing. Add global prepOverlay initialization."
+        description=""
+        source="2608"
+        destination="2609"
+        handler="opengever.base.upgrades.to2609.InitializeSharingAndPrepOverlay"
+        profile="opengever.base:default"
+        />
+
+    <upgrade-step:importProfile
+        title="Fix quickupload js bug where active class is not removed."
+        profile="opengever.base:default"
+        source="2609"
+        destination="2610"
+        directory="profiles/2610"
+        />
+
+    <!-- 2610 -> 3401 -->
     <upgrade-step:importProfile
         title="Add IClassificationSettings registry settings"
         profile="opengever.base:default"
-        source="2608"
+        source="2610"
         destination="3401"
         directory="profiles/3401"
         />

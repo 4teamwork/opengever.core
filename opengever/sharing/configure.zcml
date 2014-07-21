@@ -12,6 +12,7 @@
 
     <include package="plone.app.workflow" />
     <include package=".browser" />
+    <include package=".upgrades" />
 
     <grok:grok package="." />
 

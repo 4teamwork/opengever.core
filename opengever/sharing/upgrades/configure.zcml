@@ -1,0 +1,18 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:upgrade-step="http://namespaces.zope.org/ftw.upgrade"
+    i18n_domain="opengever.sharing">
+
+  <include package="ftw.upgrade" file="meta.zcml" />
+
+  <genericsetup:registerProfile
+      name="1001"
+      title="opengever.sharing: upgrade profile 1001"
+      description=""
+      directory="profiles/1001"
+      for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+</configure>

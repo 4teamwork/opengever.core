@@ -98,6 +98,18 @@ Changelog
 3.3.1 (unreleased)
 ------------------
 
+- Fixed bug where quickupload didn't remove the active class.
+  [lknoepfel]
+
+- Renamed german version of move-items-button.
+  [lknoepfel]
+
+- Initialized opengever.sharing version. Moved prepoverlay initialization to opengever.base.
+  [lknopfel]
+
+- Added download copy in tooltip.
+  [lknoepfel]
+
 - Display document mimetype icons in ContentTreeWidget.
   [phgross]
 
