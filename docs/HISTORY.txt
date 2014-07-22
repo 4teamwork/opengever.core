@@ -4,6 +4,9 @@ Changelog
 3.3.1 (unreleased)
 ------------------
 
+- Disable edit-bar for the advancedsearch form.
+  [phgross]
+
 - Dropped no longer used attach remote document action.
   [phgross]
 

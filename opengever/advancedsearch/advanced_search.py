@@ -285,6 +285,8 @@ class AdvancedSearchForm(directives_form.Form):
         Unfortunately it's not configurable in the plone.app.z3c form itself.
         """
 
+        self.request.set('disable_border', 1)
+
         html = super(AdvancedSearchForm, self).render()
         html = html.replace('enableUnloadProtection', '')
         return html
