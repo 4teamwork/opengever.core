@@ -4,6 +4,9 @@ Changelog
 3.3.1 (unreleased)
 ------------------
 
+- Dropped no longer used attach remote document action.
+  [phgross]
+
 - Moved time column in journal tab to the far left.
   [lknoepfel]
 
