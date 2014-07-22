@@ -6,13 +6,13 @@
     <span id="breadcrumbs-you-are-here" i18n:translate="you_are_here">You
 are here:</span>
     <span id="breadcrumbs-home">
-        <a i18n:translate="tabs_home"
-           tal:attributes="href view/navigation_root_url">Home</a>
+        <a tal:attributes="href view/navigation_root_url" tal:content="view/client_title">Home</a>
         <span tal:condition="breadcrumbs" class="breadcrumbSeparator">
             <tal:ltr condition="not: is_rtl">/</tal:ltr>
             <tal:rtl condition="is_rtl">\</tal:rtl>
         </span>
     </span>
+
     <span tal:repeat="crumb breadcrumbs"
           tal:attributes="dir python:is_rtl and 'rtl' or 'ltr';
                           id string:breadcrumbs-${repeat/crumb/number}">

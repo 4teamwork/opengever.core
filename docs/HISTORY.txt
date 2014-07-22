@@ -4,6 +4,9 @@ Changelog
 3.3.1 (unreleased)
 ------------------
 
+- Breadcrumb: Replace Home label with curent client label.
+  [phgross]
+
 - Disable edit-bar for the advancedsearch form.
   [phgross]
 
