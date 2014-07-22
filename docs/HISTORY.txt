@@ -4,6 +4,10 @@ Changelog
 3.4 (unreleased)
 ----------------
 
+- Customize plone.dexterity default view for all dexterity content in
+  order to be able to omit specific fields.
+  [lgraf]
+
 - Remove `public_trial` from repository byline.
   [lgraf]
 
