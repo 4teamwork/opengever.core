@@ -71,16 +71,6 @@
        <permission value="opengever.task: Edit task"/>
     </action>
 
-    <action action_id="attach_remote_document"
-            visible="True"
-            title="Attach remote document"
-            category="folder_factories"
-            url_expr="string:${object_url}/@@choose_source_dossier"
-            icon_expr=""
-            condition_expr="here/@@attach-document-allowed|nothing">
-        <permission value="Add portal content"/>
-    </action>
-
     <action action_id="create_successor"
             visible="False"
             title="Create successor task"
