@@ -17,4 +17,12 @@
         template="referenceprefix_manager_templates/referenceprefixmanager.pt"
         permission="opengever.repository.UnlockReferencePrefix" />
 
+    <browser:page
+        name="view"
+        for="opengever.repository.interfaces.IRepositoryFolder"
+        class=".default_view.RepositoryFolderDefaultView"
+        permission="zope2.View"
+        layer="opengever.base.interfaces.IOpengeverBaseLayer"
+        />
+
 </configure>

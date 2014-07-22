@@ -4,6 +4,10 @@ Changelog
 3.4 (unreleased)
 ----------------
 
+- Omit `public_trial` and `public_trial_statement` fields from dossier and
+  repository folder default views.
+  [lgraf]
+
 - Removed previously customized default view for business case dossiers. The
   default view is now customized for all folderish types.
   [lgraf]
