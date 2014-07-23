@@ -87,8 +87,11 @@ var livesearch = (function () {
 
       // Do nothing as long as we have less then two characters -
       // the search results makes no sense, and it's harder on the server.
+	  
+      // UPDATE for GEVER:
+      // Show serach results always (_show() instead of _hide())
       if ($inputnode.value.length < 2) {
-        _hide();
+        _show();
         return;
       }
 
