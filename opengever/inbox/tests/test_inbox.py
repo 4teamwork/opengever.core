@@ -1,52 +1,59 @@
-from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
-from opengever.inbox.inbox import IInbox
-from plone.app.testing import TEST_USER_ID
-from plone.app.testing import setRoles
-from plone.dexterity.interfaces import IDexterityFTI
-from zope.component import createObject
-from zope.component import queryUtility
-import unittest2 as unittest
+from ftw.builder import Builder
+from ftw.builder import create
+from ftw.testbrowser import browsing
+from opengever.testing import FunctionalTestCase
+from opengever.testing import select_current_org_unit
 
 
-class TestInboxIntegration(unittest.TestCase):
+class TestInbox(FunctionalTestCase):
 
-    layer = OPENGEVER_FUNCTIONAL_TESTING
+    def setUp(self):
+        super(TestInbox, self).setUp()
 
-    def test_adding(self):
-        portal = self.layer['portal']
-        setRoles(portal, TEST_USER_ID, ['Contributor'])
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_all_unit_setup())
 
-        portal.invokeFactory('opengever.inbox.inbox', 'inbox1')
-        i1 = portal['inbox1']
-        self.failUnless(IInbox.providedBy(i1))
+        self.org_unit2 = create(Builder('org_unit').id('client2'))
 
-    def test_fti(self):
-        fti = queryUtility(IDexterityFTI, name='opengever.inbox.inbox')
-        self.assertNotEquals(None, fti)
+    def test_get_current_inbox_returns_sub_inbox_assigned_to_current_org_unit(self):
+        inbox = create(Builder('inbox'))
+        create(Builder('inbox')
+               .within(inbox)
+               .having(responsible_org_unit='client2'))
+        sub1 = create(Builder('inbox')
+                      .within(inbox)
+                      .having(responsible_org_unit='client1'))
 
-    def test_schema(self):
-        fti = queryUtility(IDexterityFTI, name='opengever.inbox.inbox')
-        schema = fti.lookupSchema()
-        self.assertEquals(IInbox, schema)
+        self.assertEquals(sub1, inbox.get_current_inbox())
 
-    def test_factory(self):
-        fti = queryUtility(IDexterityFTI, name='opengever.inbox.inbox')
-        factory = fti.factory
-        new_object = createObject(factory)
-        self.failUnless(IInbox.providedBy(new_object))
+    def test_get_current_inbox_returns_object_itself_when_no_subinbox_is_found(self):
+        inbox = create(Builder('inbox'))
+        create(Builder('inbox')
+               .within(inbox)
+               .having(responsible_org_unit='client2'))
+        create(Builder('inbox')
+               .within(inbox)
+               .having(responsible_org_unit='client3'))
 
-    def test_view(self):
-        portal = self.layer['portal']
-        setRoles(portal, TEST_USER_ID, ['Contributor'])
+        self.assertEquals(inbox, inbox.get_current_inbox())
 
-        request = self.layer['request']
-        request.set('URL', portal.absolute_url() + '/@@folder_contents')
-        request.set('ACTUAL_URL', portal.absolute_url() + '/@@folder_contents')
-        portal.invokeFactory('opengever.inbox.inbox', 'inbox1')
-        i1 = portal['inbox1']
-        view = i1.restrictedTraverse('@@view')
-        self.failUnless(view())
+    def test_inbox_is_main_when_root_inbox_and_not_assigned_to_orgunit(self):
+        assigned_inbox = create(Builder('inbox')
+                                .having(responsible_org_unit='client1'))
+        sub_inbox = create(Builder('inbox').within(assigned_inbox))
+        main_inbox = create(Builder('inbox'))
 
+        self.assertFalse(assigned_inbox.is_main_inbox())
+        self.assertFalse(sub_inbox.is_main_inbox())
+        self.assertTrue(main_inbox.is_main_inbox())
 
-def test_suite():
-    return unittest.defaultTestLoader.loadTestsFromName(__name__)
+    def test_get_responsible_org_unit_fetch_configured_org_unit(self):
+        inbox = create(Builder('inbox').
+                       having(responsible_org_unit='client1'))
+
+        self.assertEqual(self.org_unit, inbox.get_responsible_org_unit())
+
+    def test_get_responsible_org_unit_returns_none_when_no_org_unit_is_configured(self):
+        inbox = create(Builder('inbox'))
+
+        self.assertEqual(None, inbox.get_responsible_org_unit())

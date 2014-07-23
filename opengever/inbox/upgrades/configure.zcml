@@ -82,4 +82,23 @@
         directory="profiles/4001"
         />
 
+    <!-- 2701 -> 2702 -->
+    <genericsetup:upgradeStep
+        title="Adjust inbox type (class, behaviors, allowed_content_types)."
+        description=""
+        source="2701"
+        destination="2702"
+        handler="opengever.inbox.upgrades.to2702.UpdateInboxTypeConfiguration"
+        profile="opengever.inbox:default"
+        />
+
+    <genericsetup:registerProfile
+        name="2702"
+        title="opengever.inbox: upgrade profile 2702"
+        description=""
+        directory="profiles/2702"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
 </configure>
