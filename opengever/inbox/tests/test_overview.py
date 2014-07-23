@@ -27,7 +27,7 @@ class TestBaseInboxOverview(FunctionalTestCase):
 
 class TestInboxOverviewDocumentBox(TestBaseInboxOverview):
 
-    def test_documents_box_list_documents_form_the_inbox(self):
+    def list_documents_from_the_inbox(self):
         inbox_document = create(Builder('document')
                                 .titled('inbox document')
                                 .within(self.inbox))
@@ -37,7 +37,7 @@ class TestInboxOverviewDocumentBox(TestBaseInboxOverview):
 
         self.assert_documents([inbox_document, ], self.view.documents())
 
-    def test_documents_box_list_only_documents_directly_inside_the_inbox(self):
+    def test_list_only_documents_directly_inside_the_current_inbox(self):
         inbox_document = create(Builder('document')
                                 .titled('inbox document')
                                 .within(self.inbox))
@@ -48,20 +48,24 @@ class TestInboxOverviewDocumentBox(TestBaseInboxOverview):
 
         self.assert_documents([inbox_document, ], self.view.documents())
 
-    def test_documents_box_list_only_documents_marked_with_the_current_admin_unit(self):
-        create(Builder('document')
-               .titled('OrgUnit 1 doc')
-               .within(self.inbox))
+    def test_list_only_documents_in_the_current_inbox(self):
+        sub_inbox_1 = create(Builder('inbox')
+                             .within(self.inbox)
+                             .having(responsible_org_unit='client1'))
 
-        create(Builder('org_unit')
-               .id('client3')
-               .assign_users([self.user1])
-               .as_current_org_unit())
-        org_unit_3_document = create(Builder('document')
-                                     .titled('OrgUnit 3 doc')
-                                     .within(self.inbox))
+        sub_inbox_2 = create(Builder('inbox')
+                             .within(self.inbox)
+                             .having(responsible_org_unit='client2'))
 
-        self.assert_documents([org_unit_3_document, ], self.view.documents())
+        doc1 = create(Builder('document')
+                       .titled('Doc 1').within(sub_inbox_1))
+        doc2 = create(Builder('document')
+                       .titled('Doc 2').within(sub_inbox_2))
+
+        sub_inbox_1_view = sub_inbox_1.restrictedTraverse(
+            'tabbedview_view-overview')
+
+        self.assert_documents([doc1, ], sub_inbox_1_view.documents())
 
     def test_document_box_is_limited_to_ten_documents(self):
         for i in range(15):

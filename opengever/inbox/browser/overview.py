@@ -1,19 +1,13 @@
 from five import grok
 from opengever.base.browser.helper import get_css_class
 from opengever.dossier.browser.overview import DossierOverview
-from opengever.globalindex.interfaces import ITaskQuery
 from opengever.globalindex.model.task import Task
 from opengever.inbox import _
-from opengever.inbox.browser.tabs import get_current_inbox_principal
 from opengever.inbox.inbox import IInbox
-from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import OPEN_TASK_STATES
-from Products.CMFCore.utils import getToolByName
-from sqlalchemy import and_
+from plone import api
 from sqlalchemy import desc
-from sqlalchemy import or_
-from zope.component import getUtility
 
 
 class InboxOverview(DossierOverview):
@@ -63,21 +57,17 @@ class InboxOverview(DossierOverview):
         """
         Get documents and mails that are directly contained in
         the inbox, but not in forwardings.
-
-        It only queries documents from the current_org_unit
-        (all inbox documents are marked with the containing org_unit
-        in the `client_id` metadata).
         """
 
-        catalog = self.context.portal_catalog
+        catalog = api.portal.get_tool(name='portal_catalog')
+
         query = {'isWorkingCopy': 0,
                  'path': {'depth': 1,
                           'query': '/'.join(self.context.getPhysicalPath())},
                  'portal_type': ['opengever.document.document',
-                                 'ftw.mail.mail'],
-                 'client_id': get_current_org_unit().id()}
-        documents = catalog(query)[:10]
+                                 'ftw.mail.mail']}
 
+        documents = catalog(query)[:10]
         document_list = [{
             'Title': document.Title,
             'getURL': document.getURL,
