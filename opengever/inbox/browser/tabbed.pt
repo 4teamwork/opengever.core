@@ -6,9 +6,4 @@
       metal:use-macro="context/@@tabbed_view/macros/master"
       i18n:domain="ftw.tabbedview">
 
-  <metal:title metal:fill-slot="content-title">
-    <h1 class="documentFirstHeading" tal:content="view/current_inbox_title">
-    </h1>
-  </metal:title>
-
 </html>
