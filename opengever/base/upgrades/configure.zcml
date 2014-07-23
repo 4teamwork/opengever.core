@@ -173,4 +173,12 @@
         directory="profiles/2610"
         />
 
+    <upgrade-step:importProfile
+        title="Enable GEVER livesearch.js"
+        profile="opengever.base:default"
+        source="2610"
+        destination="3300"
+        directory="profiles/3300"
+        />
+
 </configure>

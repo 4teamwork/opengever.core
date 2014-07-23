@@ -11,4 +11,10 @@
                 insert-after="++resource++plone.app.jquery.js"
                 />
 
+    <javascript id="++theme++plonetheme.teamraum/js/livesearch.js" enabled="false" />
+
+    <javascript cacheable="True" compression="safe" cookable="True" enabled="on"
+                expression="" id="++resource++opengever.base/livesearch.js"
+                inline="False"/>
+
 </object>

@@ -4,6 +4,10 @@ Changelog
 3.3.1 (unreleased)
 ------------------
 
+- Overwrite searchbox viewlet and javascript.
+  So there is always a advanced search link.
+  [Julian Infanger]
+
 - Breadcrumb: Replace Home label with curent client label.
   [phgross]
 
