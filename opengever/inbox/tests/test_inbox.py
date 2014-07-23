@@ -57,3 +57,36 @@ class TestInbox(FunctionalTestCase):
         inbox = create(Builder('inbox'))
 
         self.assertEqual(None, inbox.get_responsible_org_unit())
+
+
+class TestInboxView(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestInboxView, self).setUp()
+
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_all_unit_setup())
+
+        self.main_inbox = create(Builder('inbox')
+                                 .titled(u'Main Inbox'))
+
+    @browsing
+    def test_redirects_to_current_inbox_when_accessing_main_inbox(self, browser):
+        self.client1_inbox = create(Builder('inbox')
+                                    .titled(u'Client1 Inbox')
+                                    .within(self.main_inbox)
+                                    .having(responsible_org_unit='client1'))
+
+        browser.login().open(self.main_inbox)
+
+        self.assertEqual(self.client1_inbox.absolute_url(), browser.url)
+
+    @browsing
+    def test_stay_on_main_inbox_when_no_current_inbox_exists(self, browser):
+        self.client1_inbox = create(Builder('inbox')
+                            .titled(u'Client1 Inbox')
+                            .within(self.main_inbox)
+                            .having(responsible_org_unit='client2'))
+
+        browser.login().open(self.main_inbox)
+        self.assertEqual(self.main_inbox.absolute_url(), browser.url)
