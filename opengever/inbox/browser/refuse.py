@@ -1,5 +1,3 @@
-from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from five import grok
 from opengever.inbox import _
 from opengever.inbox.browser.schema import ISimpleResponseForm
@@ -11,11 +9,13 @@ from opengever.ogds.base.transport import REQUEST_KEY
 from opengever.ogds.base.utils import get_client_id
 from opengever.ogds.base.utils import remote_json_request
 from opengever.task import _ as task_mf
-from opengever.task.browser.accept.utils import _get_yearfolder
+from opengever.task.browser.accept.utils import get_current_yearfolder
 from opengever.task.transporter import IResponseTransporter
 from opengever.task.util import add_simple_response
 from opengever.task.util import get_documents_of_task
 from plone.z3cform import layout
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from z3c.form import button
 from z3c.form.field import Fields
 from z3c.form.form import Form
@@ -45,7 +45,8 @@ class ForwardingRefuseForm(Form):
             refusing_client = self.context.get_responsible_admin_unit()
             self.change_workflow_sate()
             self.add_response(data.get('text'))
-            copy_url = self.store_copy_in_remote_yearfolder(refusing_client.id())
+            copy_url = self.store_copy_in_remote_yearfolder(
+                refusing_client.id())
             self.reset_responsible()
             notify(ObjectModifiedEvent(self.context))
 
@@ -151,10 +152,7 @@ class StoreRefusedForwardingView(grok.View):
 
     def get_yearfolder(self):
         if not self.yearfolder:
-            catalog = getToolByName(self.context, 'portal_catalog')
-            inbox = catalog(portal_type='opengever.inbox.inbox')[0].getObject()
-            self.yearfolder = _get_yearfolder(inbox)
-
+            self.yearfolder = get_current_yearfolder(context=self.context)
         return self.yearfolder
 
     def get_newest_closed_forwarding(self):

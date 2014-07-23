@@ -1,6 +1,7 @@
-from Acquisition import aq_inner, aq_parent
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from five import grok
-from opengever.task.browser.accept.utils import _get_yearfolder
+from opengever.task.browser.accept.utils import get_current_yearfolder
 from opengever.task.interfaces import IYearfolderStorer
 from opengever.task.task import ITask
 import AccessControl
@@ -14,7 +15,7 @@ class YearfolderStorer(grok.Adapter):
         """Move the forwarding (adapted context) in the actual yearfolder."""
 
         inbox = aq_parent(aq_inner(self.context))
-        yearfolder = _get_yearfolder(inbox)
+        yearfolder = get_current_yearfolder(inbox=inbox)
 
         try:
             # change security context

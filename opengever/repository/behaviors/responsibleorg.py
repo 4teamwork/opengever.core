@@ -1,7 +1,7 @@
 from opengever.repository import _
 from plone.directives import form
 from zope import schema
-from zope.interface import Interface, alsoProvides
+from zope.interface import alsoProvides
 
 
 class IResponsibleOrgUnit(form.Schema):
