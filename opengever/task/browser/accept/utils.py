@@ -1,10 +1,10 @@
-from AccessControl import Unauthorized
 from Acquisition import aq_inner
 from Acquisition import aq_parent
-from datetime import datetime
 from five import grok
 from opengever.base.utils import ok_response
 from opengever.globalindex.interfaces import ITaskQuery
+from opengever.inbox.utils import get_current_inbox
+from opengever.inbox.yearfolder import get_current_yearfolder
 from opengever.ogds.base.interfaces import ITransporter
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
@@ -18,54 +18,15 @@ from opengever.task.transporter import IResponseTransporter
 from opengever.task.util import change_task_workflow_state
 from opengever.task.util import CustomInitialVersionMessage
 from plone.dexterity.utils import createContentInContainer
-from Products.CMFCore.utils import getToolByName
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
-from zope.i18n import translate
 import AccessControl
 import transaction
+
 
 # TODO: The whole yearfolder functionality should be moved to opengever.inbox
 
 ACCEPT_TASK_TRANSITION = 'task-transition-open-in-progress'
-
-
-def _get_yearfolder(inbox):
-    """Returns the yearfolder for the current year (creates it if missing).
-    """
-    year = str(datetime.now().year)
-    if inbox.get(year):
-        return inbox.get(year)
-    else:
-        return _create_yearfolder(inbox, year)
-
-
-def _create_yearfolder(inbox, year):
-    """creates the yearfolder for the given year"""
-
-    _sm = AccessControl.getSecurityManager()
-    AccessControl.SecurityManagement.newSecurityManager(
-        inbox.REQUEST,
-        AccessControl.SecurityManagement.SpecialUsers.system)
-    try:
-        # for creating the folder, we need to be a superuser since
-        # normal user should not be able to add year folders.
-        # --- help i18ndude ---
-        msg = _(u'yearfolder_title', default=u'Closed ${year}',
-                mapping=dict(year=str(year)))
-        # --- / help i18ndude ---
-        folder_title = translate(str(msg), msg.domain, msg.mapping,
-                                 context=inbox.REQUEST, default=msg.default)
-        folder = createContentInContainer(
-            inbox, 'opengever.inbox.yearfolder',
-            title=folder_title, id=year)
-    except:
-        AccessControl.SecurityManagement.setSecurityManager(_sm)
-        raise
-    else:
-        AccessControl.SecurityManagement.setSecurityManager(_sm)
-
-    return folder
 
 
 def _copy_documents_from_forwarding(from_obj, to_obj):
@@ -101,19 +62,11 @@ def accept_forwarding_with_successor(
     # the predessecor (the forwarding on the remote client)
     predecessor = getUtility(ITaskQuery).get_task_by_oguid(predecessor_oguid)
 
-    # get the inbox
-    cat = getToolByName(context, 'portal_catalog')
-    inboxes = cat(portal_type="opengever.inbox.inbox")
-
-    if len(inboxes) == 0:
-        raise Unauthorized()
-    else:
-        inbox = inboxes[0].getObject()
-
     # transport the remote forwarding to the inbox or actual yearfolder
     transporter = getUtility(ITransporter)
+    inbox = get_current_inbox(context)
     if dossier:
-        yearfolder = _get_yearfolder(inbox, )
+        yearfolder = get_current_yearfolder(inbox=inbox)
         successor_forwarding = transporter.transport_from(
             yearfolder, predecessor.admin_unit_id, predecessor.physical_path)
     else:
@@ -247,7 +200,7 @@ def assign_forwarding_to_dossier(
         successor_oguid=successor_tc_task.get_oguid())
 
     inbox = aq_parent(aq_inner(forwarding_obj))
-    yearfolder = _get_yearfolder(inbox)
+    yearfolder = get_current_yearfolder(inbox=inbox)
     clipboard = inbox.manage_cutObjects((forwarding_obj.getId(),))
     yearfolder.manage_pasteObjects(clipboard)
 
