@@ -21,15 +21,18 @@ class TestInboxTabbedview(FunctionalTestCase):
         self.assertNotIn('containing_subdossier', columns)
         self.assertNotIn('checked_out', columns)
 
-    def test_trash_lists_only_documents_from_the_current_admin_unit(self):
-        document_1 = create(Builder('document').titled('Doc 1')
-                            .trashed().within(self.inbox))
+    def test_trash_lists_only_documents_from_the_current_inbox(self):
+        second_inbox = create(Builder('inbox'))
 
-        create(Builder('org_unit').id('additional')
-               .assign_users([self.user]).as_current_org_unit())
+        document_1 = create(Builder('document')
+                            .within(second_inbox)
+                            .titled('Doc 1')
+                            .trashed())
 
-        document_2 = create(Builder('document').titled('Doc 2')
-                            .trashed().within(self.inbox))
+        document_2 = create(Builder('document')
+                            .within(self.inbox)
+                            .titled('Doc 2')
+                            .trashed())
 
         view = self.inbox.restrictedTraverse('tabbedview_view-trash')
         view.update()
@@ -47,19 +50,15 @@ class TestInboxTabbedview(FunctionalTestCase):
         self.assertNotIn('containing_subdossier', columns)
         self.assertNotIn('checked_out', columns)
 
-    def test_documents_listing_only_show_documents_from_the_current_admin_unit(self):
-        document_1 =  create(Builder('document')
-                             .titled('Doc 1')
-                             .within(self.inbox))
-
-        create(Builder('org_unit')
-               .id('additional')
-               .assign_users([self.user])
-               .as_current_org_unit())
+    def test_documents_listing_only_show_documents_from_the_current_inbox(self):
+        second_inbox = create(Builder('inbox'))
+        document_1 = create(Builder('document')
+                            .within(second_inbox)
+                            .titled('Doc 1'))
 
         document_2 = create(Builder('document')
-                                     .titled('Doc 2')
-                                     .within(self.inbox))
+                            .within(self.inbox)
+                            .titled('Doc 2'))
 
         view = self.inbox.restrictedTraverse('tabbedview_view-documents')
         view.update()

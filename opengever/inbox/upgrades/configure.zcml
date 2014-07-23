@@ -54,7 +54,6 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
-    <!-- 2603 -> 2700 -->
     <genericsetup:upgradeStep
         title="Reindex client_id of all inbox documents."
         description=""
