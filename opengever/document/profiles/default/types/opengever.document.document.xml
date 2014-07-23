@@ -103,16 +103,6 @@
   </action>
 
   <action
-        visible="True"
-        action_id="checkin_document"
-        title="Checkin"
-        url_expr="string:${object_url}/@@checkin_documents"
-        condition_expr="python:path('object/@@checkout_control').is_checkin_allowed()"
-        category="object">
-    <permission value="opengever.document: Checkin"/>
-  </action>
-
-  <action
         action_id="cancel_document_checkout"
         visible="True"
         title="Cancel Checkout"

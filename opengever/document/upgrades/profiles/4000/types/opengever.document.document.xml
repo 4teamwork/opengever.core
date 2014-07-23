@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<object name="opengever.document.document" meta_type="Dexterity FTI"
+        i18n:domain="opengever.document" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+  <action action_id="checkin_document" remove="True"></action>
+
+</object>

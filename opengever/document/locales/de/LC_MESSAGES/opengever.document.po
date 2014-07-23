@@ -437,3 +437,19 @@ msgstr "Referenzierte Dokumente"
 #: ./opengever/document/browser/download_templates/downloadconfirmation.pt:16
 msgid "warning_download_confirmation"
 msgstr "Bitte beachten Sie, dass in diesem Fall Änderungen an diesem Dokument NICHT in GEVER gespeichert werden."
+
+#: ./opengever/document/profiles/default/actions.xml
+msgid "with comment"
+msgstr "mit Kommentar"
+
+#: ./opengever/document/profiles/default/actions.xml
+msgid "without comment"
+msgstr "ohne Kommentar"
+
+#: ./opengever/document/profiles/default/actions.xml
+msgid "Checkin with comment"
+msgstr "Checkin mit Kommentar"
+
+#: ./opengever/document/profiles/default/actions.xml
+msgid "Checkin without comment"
+msgstr "Checkin ohne Kommentar"

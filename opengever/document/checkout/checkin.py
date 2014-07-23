@@ -11,6 +11,62 @@ from zope import schema
 from zope.component import getMultiAdapter
 from zope.interface import Interface
 from opengever.tabbedview.utils import get_containg_document_tab_url
+from Products.Five.browser import BrowserView
+
+
+class MultiCheckinController(object):
+    """ Proviedes checkin functionality
+    """
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def checkin(self, documents_paths, comment=None):
+        objects_str = [p.encode('utf-8') for p in documents_paths]
+        objects = [self.context.unrestrictedTraverse(p) for p in objects_str]
+
+        for obj in objects:
+            if IDocumentSchema.providedBy(obj):
+                manager = getMultiAdapter((obj, obj.REQUEST),
+                                          ICheckinCheckoutManager)
+
+                if not manager.is_checkin_allowed():
+                    msg = _(
+                        u'Could not check in document ${title}',
+                        mapping=dict(title=obj.Title().decode('utf-8')))
+                    IStatusMessage(self.request).addStatusMessage(
+                        msg, type='error')
+
+                else:
+                    manager.checkin(comment)
+                    msg = _(
+                        u'Checked in: ${title}',
+                        mapping=dict(title=obj.Title().decode('utf-8')))
+                    IStatusMessage(self.request).addStatusMessage(
+                        msg, type='info')
+
+            else:
+                title = obj.Title()
+                if not isinstance(title, unicode):
+                    title = title.decode('utf-8')
+                msg = _(
+                    u'Could not check in ${title}, it is not a document.',
+                    mapping=dict(title=title))
+                IStatusMessage(self.request).addStatusMessage(
+                    msg, type='error')
+
+def get_document_paths(context, request):
+    # from folder_contents / tabbed_view?
+    value = request.get('paths')
+    if value:
+        return value
+
+    # from the context?
+    if IDocumentSchema.providedBy(context):
+        return ['/'.join(context.getPhysicalPath())]
+
+    # nothing found..
+    raise NoItemsSelected
 
 
 class ICheckinCommentFormSchema(Interface):
@@ -44,41 +100,24 @@ class CheckinCommentForm(form.Form):
 
         data, errors = self.extractData()
 
-        if len(errors) == 0:
-            # check in each document
-            for obj in self.objects:
-                if IDocumentSchema.providedBy(obj):
-                    manager = getMultiAdapter((obj, obj.REQUEST),
-                                              ICheckinCheckoutManager)
+        checkin_controller = MultiCheckinController(self.context, self.request)
 
-                    if not manager.is_checkin_allowed():
-                        msg = _(
-                            u'Could not check in document ${title}',
-                            mapping=dict(title=obj.Title().decode('utf-8')))
-                        IStatusMessage(self.request).addStatusMessage(
-                            msg, type='error')
+        checkin_controller.checkin(self.get_document_paths(),
+                                   comment=data['comment'])
 
-                    else:
-                        manager.checkin(data['comment'])
-                        msg = _(
-                            u'Checked in: ${title}',
-                            mapping=dict(title=obj.Title().decode('utf-8')))
-                        IStatusMessage(self.request).addStatusMessage(
-                            msg, type='info')
+        # redirect to dossier
+        return self.request.RESPONSE.redirect(
+            get_containg_document_tab_url(self.context))
 
-                else:
-                    title = obj.Title()
-                    if not isinstance(title, unicode):
-                        title = title.decode('utf-8')
-                    msg = _(
-                        u'Could not check in ${title}, it is not a document.',
-                        mapping=dict(title=title))
-                    IStatusMessage(self.request).addStatusMessage(
-                        msg, type='error')
+    def get_document_paths(self):
+        # from the form?
+        field_name = self.prefix + self.widgets.prefix + 'paths'
+        value = self.request.get(field_name, False)
+        if value:
+            value = value.split(';;')
+            return value
 
-            # redirect to dossier
-            return self.request.RESPONSE.redirect(
-                get_containg_document_tab_url(self.context))
+        return get_document_paths(self.context, self.request)
 
     @button.buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
     def cancel(self, action):
@@ -90,48 +129,10 @@ class CheckinCommentForm(form.Form):
         # otherwise to the dossier or task
         return get_containg_document_tab_url(self.context)
 
-    @property
-    def objects(self):
-        """ Returns a list of the objects selected in folder contents or
-        tabbed view
-        """
-        catalog = self.context.portal_catalog
-
-        def lookup(path):
-            query = {
-                'path': {
-                    'query': path,
-                    'depth': 0,
-                    }
-                }
-            return catalog(query)[0].getObject()
-        return [lookup(p) for p in self.item_paths]
-
-    @property
-    def item_paths(self):
-        # from the form?
-        field_name = self.prefix + self.widgets.prefix + 'paths'
-        value = self.request.get(field_name, False)
-        if value:
-            value = value.split(';;')
-            return value
-
-        # from folder_contents / tabbed_view?
-        value = self.request.get('paths')
-        if value:
-            return value
-
-        # from the context?
-        if IDocumentSchema.providedBy(self.context):
-            return ['/'.join(self.context.getPhysicalPath())]
-
-        # nothing found..
-        raise NoItemsSelected
-
     def updateWidgets(self):
         super(CheckinCommentForm, self).updateWidgets()
         self.widgets['paths'].mode = HIDDEN_MODE
-        self.widgets['paths'].value = ';;'.join(self.item_paths)
+        self.widgets['paths'].value = ';;'.join(self.get_document_paths())
 
 
 class CheckinDocuments(layout.FormWrapper, grok.View):
@@ -159,3 +160,15 @@ class CheckinDocuments(layout.FormWrapper, grok.View):
                 msg, type='error')
 
             return get_containg_document_tab_url(self.context)
+
+class CheckinDocumentsWithoutComment(BrowserView):
+
+    def __call__(self):
+
+         checkin_controller = MultiCheckinController(self.context, self.request)
+         checkin_controller.checkin(
+            get_document_paths(self.context, self.request))
+
+         # redirect to dossier
+         return self.request.RESPONSE.redirect(
+             get_containg_document_tab_url(self.context))

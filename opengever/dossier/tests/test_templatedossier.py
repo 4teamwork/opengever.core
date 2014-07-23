@@ -308,7 +308,11 @@ class TestTemplateDossierListings(FunctionalTestCase):
 
     def test_enabled_actions_are_limited_in_document_tab(self):
         view = self.templatedossier.unrestrictedTraverse(DOCUMENT_TAB)
-        self.assertEquals(['trashed', 'copy_items', 'zip_selected'],
+        self.assertEquals(['checkin_with_comment',
+                           'checkin_without_comment',
+                           'trashed',
+                           'copy_items',
+                           'zip_selected'],
                           view.enabled_actions)
 
     def test_document_tab_lists_only_documents_directly_beneath(self):

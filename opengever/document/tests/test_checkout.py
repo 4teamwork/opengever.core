@@ -1,4 +1,6 @@
-from Products.CMFCore.utils import getToolByName
+from ftw.builder import Builder
+from ftw.builder import create
+from ftw.testbrowser import browsing
 from opengever.base.interfaces import IRedirector
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import FunctionalTestCase
@@ -7,6 +9,7 @@ from plone.app.testing import login, logout, setRoles, TEST_USER_NAME, TEST_USER
 from plone.dexterity.utils import createContentInContainer
 from plone.locking.interfaces import IRefreshableLockable
 from plone.namedfile.file import NamedBlobFile
+from Products.CMFCore.utils import getToolByName
 from zope.component import getMultiAdapter
 import datetime
 import transaction
@@ -110,12 +113,106 @@ class TestCheckinCheckoutManager(FunctionalTestCase):
     def test_bluk_checkout_ignores_non_documents(self):
         self.skipTest("Needs to be implemented")
 
-    def test_checkin(self):
-        self.skipTest("Needs to be implemented using a Browser")
-
     def get_manager(self, document):
         return getMultiAdapter(
             (document, self.portal.REQUEST), ICheckinCheckoutManager)
+
+
+class TestCheckinViews(FunctionalTestCase):
+    def setUp(self):
+        super(TestCheckinViews, self).setUp()
+
+        self.dossier = create(Builder("dossier"))
+        self.document = create(Builder("document")
+                          .checked_out_by(TEST_USER_ID)
+                          .within(self.dossier))
+
+    @browsing
+    def test_single_checkin_with_comment(self, browser):
+        browser.login().open(self.document)
+
+        # open checkin form
+        browser.css('#checkin_with_comment').first.click()
+
+        # fill and submit checkin form
+        browser.fill({'Journal Comment Describe, why you checkin the selected documents': 'Checkinerino'})
+        browser.css('#form-buttons-button_checkin').first.click()
+
+        manager = getMultiAdapter((self.document, self.portal.REQUEST), ICheckinCheckoutManager)
+        self.assertEquals(None, manager.checked_out())
+
+        # check last history entry to verify the checkin
+        repository_tool = getToolByName(self.document, 'portal_repository')
+        history = repository_tool.getHistory(self.document)
+        last_entry = repository_tool.retrieve(self.document, len(history)-1)
+        self.assertEquals('Checkinerino', last_entry.comment)
+
+    @browsing
+    def test_multi_checkin_from_tabbedview_with_comment(self, browser):
+        document2 = create(Builder("document")
+                          .checked_out_by(TEST_USER_ID)
+                          .within(self.dossier))
+
+        browser.login().open(
+            self.dossier,
+            data={'paths': [obj2brain(self.document).getPath(),
+                            obj2brain(document2).getPath()],
+                  'checkin_documents:method': 1})
+
+        # fill and submit checkin form
+        browser.fill({'Journal Comment Describe, why you checkin the selected documents': 'Checkini'})
+        browser.css('#form-buttons-button_checkin').first.click()
+
+        manager1 = getMultiAdapter((self.document, self.portal.REQUEST), ICheckinCheckoutManager)
+        self.assertEquals(None, manager1.checked_out())
+        manager2 = getMultiAdapter((document2, self.portal.REQUEST), ICheckinCheckoutManager)
+        self.assertEquals(None, manager2.checked_out())
+
+        # check last history entry to verify the checkin
+        repository_tool = getToolByName(document2, 'portal_repository')
+        history = repository_tool.getHistory(document2)
+        last_entry = repository_tool.retrieve(document2, len(history)-1)
+        self.assertEquals('Checkini', last_entry.comment)
+
+    @browsing
+    def test_single_checkin_without_comment(self, browser):
+        browser.login().open(self.document)
+
+        browser.css('#checkin_without_comment').first.click()
+
+        manager = getMultiAdapter((self.document, self.portal.REQUEST), ICheckinCheckoutManager)
+        self.assertEquals(None, manager.checked_out())
+
+        # check last history entry to verify the checkin
+        repository_tool = getToolByName(self.document, 'portal_repository')
+        history = repository_tool.getHistory(self.document)
+        last_entry = repository_tool.retrieve(self.document, len(history)-1)
+        self.assertEquals(None, last_entry.comment)
+
+    @browsing
+    def test_multi_checkin_from_tabbedview_without_comment(self, browser):
+        document2 = create(Builder("document")
+                          .checked_out_by(TEST_USER_ID)
+                          .within(self.dossier))
+
+        browser.login().open(
+            self.dossier,
+            data={'paths': [obj2brain(self.document).getPath(),
+                            obj2brain(document2).getPath()],
+                  'checkin_without_comment:method': 1})
+
+        manager1 = getMultiAdapter((self.document, self.portal.REQUEST), ICheckinCheckoutManager)
+        self.assertEquals(None, manager1.checked_out())
+        manager2 = getMultiAdapter((document2, self.portal.REQUEST), ICheckinCheckoutManager)
+        self.assertEquals(None, manager2.checked_out())
+
+        # check last history entry to verify the checkin
+        repository_tool = getToolByName(document2, 'portal_repository')
+        history = repository_tool.getHistory(document2)
+        last_entry = repository_tool.retrieve(document2, len(history)-1)
+        self.assertEquals(None, last_entry.comment)
+
+
 
 # TODO: rewrite this test-case to express intent
 class TestCheckinCheckoutManagerAPI(FunctionalTestCase):

@@ -321,6 +321,9 @@ Changelog
 3.3.1 (2014-07-28)
 ------------------
 
+- Added option to checkin documents without comment.
+  [lknoepfel]
+
 - Made logout overlay easier to customize.
   [phgross]
 

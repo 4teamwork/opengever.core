@@ -430,3 +430,18 @@ msgstr ""
 msgid "warning_download_confirmation"
 msgstr ""
 
+#: ./opengever/document/profiles/default/actions.xml
+msgid "with comment"
+msgstr ""
+
+#: ./opengever/document/profiles/default/actions.xml
+msgid "without comment"
+msgstr ""
+
+#: ./opengever/document/profiles/default/actions.xml
+msgid "Checkin with comment"
+msgstr ""
+
+#: ./opengever/document/profiles/default/actions.xml
+msgid "Checkin without comment"
+msgstr ""

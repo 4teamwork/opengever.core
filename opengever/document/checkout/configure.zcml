@@ -11,4 +11,11 @@
                             is_checkin_allowed
                             is_cancel_allowed"/>
 
+    <browser:page
+        name="checkin_without_comment"
+        for="zope.interface.Interface"
+        class=".checkin.CheckinDocumentsWithoutComment"
+        permission="zope2.View"
+        />
+
 </configure>

@@ -106,7 +106,8 @@ class Documents(OpengeverCatalogListingTab):
     enabled_actions = [
         'send_as_email',
         'checkout',
-        'checkin',
+        'checkin_with_comment',
+        'checkin_without_comment',
         'cancel',
         'create_task',
         'trashed',
