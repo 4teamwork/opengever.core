@@ -5,6 +5,14 @@ from plone.app.search.browser import Search, quote_chars, EVER
 from zope.component import getMultiAdapter
 
 
+FILTER_TYPES = [
+    'ftw.mail.mail',
+    'opengever.document.document',
+    'opengever.dossier.businesscasedossier',
+    'opengever.inbox.forwarding',
+    'opengever.task.task']
+
+
 class OpengeverSearch(Search):
     """Customizing the plone default Search View.
     """
@@ -16,6 +24,10 @@ class OpengeverSearch(Search):
         breadcrumbs = list(view.breadcrumbs())[:-1]
 
         return breadcrumbs
+
+    def types_list(self):
+        types = super(OpengeverSearch, self).types_list()
+        return list(set(FILTER_TYPES) & set(types))
 
     def filter_query(self, query):
         """The filter query of the standard search view (plone.app.search)

@@ -4,6 +4,9 @@ Changelog
 3.3.1 (unreleased)
 ------------------
 
+- Search type filter: limit types to main types.
+  [phgross]
+
 - Overwrite searchbox viewlet and javascript.
   So there is always a advanced search link.
   [Julian Infanger]
