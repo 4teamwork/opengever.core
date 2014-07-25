@@ -4,6 +4,9 @@ Changelog
 3.3.1 (unreleased)
 ------------------
 
+- Made logout overlay easier to customize.
+  [phgross]
+
 - AdvancedSearch: Fixed bug which renders the wrong widget for first request.
   [phgross]
 
