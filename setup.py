@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '3.2.5.dev0'
+version = '3.3'
 maintainer = 'Jonas Baumann'
 
 tests_require = [
@@ -84,6 +84,7 @@ setup(name='opengever.core',
         'ftw.treeview',
         'ftw.upgrade',
         'ftw.zipexport',
+        'ooxml_docprops',
         'opengever.ogds.models',
         'ordereddict',
         'plone.api',

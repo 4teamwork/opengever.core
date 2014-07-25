@@ -1,4 +1,5 @@
 <registry>
   <records interface="opengever.dossier.interfaces.IDossierContainerTypes" />
   <records interface="opengever.dossier.interfaces.IDossierParticipants" />
+  <records interface="opengever.dossier.interfaces.ITemplateDossierProperties" />
 </registry>

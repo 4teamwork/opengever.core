@@ -5,6 +5,8 @@
     xmlns:upgrade-step="http://namespaces.zope.org/ftw.upgrade"
     i18n_domain="opengever.dossier">
 
+    <include package="ftw.upgrade" file="meta.zcml" />
+
     <!-- 1 -> 2301 -->
     <genericsetup:upgradeStep
         title="Adjust transition url for deactivate/activate transitions"
@@ -54,14 +56,23 @@
         profile="opengever.dossier:default"
         />
 
+    <!-- 2602 -> 2603 -->
+    <upgrade-step:importProfile
+        title="Create ITemplateDossierProperties registry entry"
+        profile="opengever.dossier:default"
+        source="2602"
+        destination="2603"
+        directory="profiles/2603"
+        />
 
-    <!-- 2602 -> 2700 -->
+    <!-- 2603 -> 2700 -->
     <upgrade-step:importProfile
         title="Remove copy_documents_to_remote_client action"
         profile="opengever.dossier:default"
-        source="2602"
+        source="2603"
         destination="2700"
         directory="profiles/2700"
         />
+
 
 </configure>
