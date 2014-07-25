@@ -4,6 +4,9 @@ Changelog
 3.3.1 (unreleased)
 ------------------
 
+- AdvancedSearch: Fixed bug which renders the wrong widget for first request.
+  [phgross]
+
 - Search type filter: limit types to main types.
   [phgross]
 

@@ -19,25 +19,24 @@ class IFilingnumberSearchAddition(directives_form.Schema):
     )
 
 
-class AdvancedSearchForm(AdvancedSearchForm):
+class FilingAdvancedSearchForm(AdvancedSearchForm):
     grok.context(Interface)
     grok.name('advanced_search')
     grok.require('zope2.View')
     grok.layer(IFilingNumberActivatedLayer)
 
-    fields = field.Fields(IAdvancedSearch, IFilingnumberSearchAddition)
+    schemas = (IAdvancedSearch, IFilingnumberSearchAddition)
 
-    def update(self):
-        super(AdvancedSearchForm, self).update()
+    def move_fields(self):
         move(self, 'searchable_filing_no', before='responsible')
 
     def field_mapping(self):
         """Append searchable_filing_no to default field mappings"""
-        mapping = super(AdvancedSearchForm, self).field_mapping()
+        mapping = super(FilingAdvancedSearchForm, self).field_mapping()
         dossier_fields = mapping.get(
             'opengever-dossier-behaviors-dossier-IDossierMarker')
 
-        if not 'searchable_filing_no' in dossier_fields:
+        if 'searchable_filing_no' not in dossier_fields:
             dossier_fields.insert(
                 dossier_fields.index('responsible'), 'searchable_filing_no')
 
