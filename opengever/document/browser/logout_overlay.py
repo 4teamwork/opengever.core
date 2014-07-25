@@ -12,7 +12,11 @@ class LogoutOverlay(grok.View):
     grok.name('logout_overlay')
     grok.require('zope2.View')
     items = []
-    redirect_url = './logout'
+
+    @property
+    def redirect_url(self):
+        portal_url_tool = getToolByName(self.context, 'portal_url')
+        return '{}/logout'.format(portal_url_tool())
 
     def get_checkedout_documents(self):
         """ Return all documents checked out by the logged in user
@@ -25,9 +29,6 @@ class LogoutOverlay(grok.View):
         self.items = self.get_checkedout_documents()
 
     def render(self):
-        portal_url_tool = getToolByName(self.context, 'portal_url')
-        self.redirect_url = '{}/logout'.format(portal_url_tool())
-
         if not self.items:
             return "empty:%s" % self.redirect_url
 
