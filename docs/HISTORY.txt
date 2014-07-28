@@ -1,11 +1,17 @@
 Changelog
 =========
 
-3.3.3 (unreleased)
+4.x (unreleased)
 ------------------
 
 - Sort groupmembers by label for groupmembers list.
   [deiferni]
+
+- Disable statefilter for yearfolders closed forwardings listing.
+  [phgross]
+
+- Change ResponseDescription css class for the reactivate transition.
+  [phgross]
 
 
 3.3.2 (2014-08-08)
