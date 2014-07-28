@@ -84,4 +84,13 @@
         profile="opengever.mail:default"
         />
 
+    <!-- 3402 -> 3403 -->
+    <upgrade-step:importProfile
+        title="Register opengever.mail CSS"
+        profile="opengever.mail:default"
+        source="3402"
+        destination="3403"
+        directory="profiles/3403"
+        />
+
 </configure>

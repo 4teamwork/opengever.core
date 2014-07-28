@@ -1,0 +1,4 @@
+/* Hide duplicate mail title in mail preview tab */
+.portaltype-ftw-mail-mail #preview_overview .documentFirstHeading {
+    display: none;
+}

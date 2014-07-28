@@ -4,6 +4,9 @@ Changelog
 3.4 (unreleased)
 ----------------
 
+- Hide duplicate mail title in mail preview tab with CSS.
+  [lgraf]
+
 - Customized document default view in order to render `file`
   field in NO_DOWNLOAD_DISPLAY_MODE.
   [lgraf]
