@@ -67,6 +67,7 @@ class GlobalTaskListingTab(grok.View, OpengeverTab,
         ]
 
     state_filter_name = 'task_state_filter'
+    state_filter_available = True
 
     columns = (
 
@@ -159,15 +160,12 @@ class GlobalTaskTableSource(SqlTableSource):
                 query, self.config.filter_text)
 
         # reviewstate-filter
-        review_state_filter = self.request.get(
-            self.config.state_filter_name, None)
+        if self.config.state_filter_available:
+            review_state_filter = self.request.get(
+                self.config.state_filter_name, None)
 
-        if review_state_filter == 'false':
-            review_state_filter = False
-        else:
-            review_state_filter = True
-
-        query = self.extend_query_with_statefilter(query, review_state_filter)
+            if review_state_filter != 'false':
+                query = self.extend_query_with_statefilter(query)
 
         # batching
         if self.config.batching_enabled and not self.config.lazy:
@@ -175,12 +173,11 @@ class GlobalTaskTableSource(SqlTableSource):
 
         return query
 
-    def extend_query_with_statefilter(self, query, open_state):
+    def extend_query_with_statefilter(self, query):
         """When a state filter is active,
         we add a filter which select just the open tasks"""
 
-        if open_state:
-            query = query.filter(
-                Task.review_state.in_(self.config.open_states))
+        query = query.filter(
+            Task.review_state.in_(self.config.open_states))
 
         return query

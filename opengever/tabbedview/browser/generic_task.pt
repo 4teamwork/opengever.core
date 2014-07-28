@@ -51,7 +51,8 @@
                      review_state python: view.request.get(state_filter_name);
                      all_filter python: review_state == 'false'">
 
-      <span tal:attributes="id state_filter_name" class="state_filters">
+      <span tal:condition="view/state_filter_available"
+            tal:attributes="id state_filter_name" class="state_filters">
         <span i18n:translate="" >State</span>
         <a id="filter_all"
            tal:attributes="class python: all_filter and 'active'"

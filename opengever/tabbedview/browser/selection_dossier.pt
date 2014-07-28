@@ -11,9 +11,12 @@
     <span class="select_folder" style="display:none" i18n:translate="">
         All visible entries chosen <a href="#" i18n:translate="">Show all in this Folder</a>
     </span>
-    <span> | </span>
 
-    <span tal:attributes="id state_filter_name" class="state_filters">
+    <span tal:condition="view/state_filter_available"
+          tal:attributes="id state_filter_name" class="state_filters">
+
+      <span> | </span>
+
       <span i18n:translate="" i18n:domain="opengever.tabbedview">State</span>
 
       <a id="filter_all" tal:attributes="class python: all_filter and 'active'" href="javascript:void(0);" i18n:domain="opengever.tabbedview" i18n:translate="">All</a>

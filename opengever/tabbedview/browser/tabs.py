@@ -173,6 +173,7 @@ class Dossiers(BaseDossiersTab):
     open_states = DOSSIER_STATES_OPEN
 
     state_filter_name = 'dossier_state_filter'
+    state_filter_available = False
 
 
 class SubDossiers(BaseDossiersTab):
@@ -210,12 +211,13 @@ class StateFilterTableSource(grok.MultiAdapter, CatalogTableSource):
                 query, self.config.filter_text)
 
         # reviewstate-filter
-        review_state_filter = self.request.get(
-            self.config.state_filter_name, None)
+        if self.config.state_filter_available:
+            review_state_filter = self.request.get(
+                self.config.state_filter_name, None)
 
-        # when state_filter is not set to all, we just return the open states
-        if review_state_filter != 'false':
-            query = self.extend_query_with_statefilter(query)
+            # return the open states, when state_filter is not set to all
+            if review_state_filter != 'false':
+                query = self.extend_query_with_statefilter(query)
 
         # batching
         if self.config.batching_enabled and not self.config.lazy:
