@@ -4,6 +4,10 @@ Changelog
 3.4 (unreleased)
 ----------------
 
+- Customized document default view in order to render `file`
+  field in NO_DOWNLOAD_DISPLAY_MODE.
+  [lgraf]
+
 - Omit `public_trial` and `public_trial_statement` fields from dossier and
   repository folder default views.
   [lgraf]
