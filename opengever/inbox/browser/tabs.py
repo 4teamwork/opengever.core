@@ -46,7 +46,6 @@ class IssuedInboxTasks(GlobalTaskListingTab):
     grok.require('zope2.View')
     grok.context(IInbox)
 
-
     def get_base_query(self):
         """Returns the base search query (sqlalchemy),
         wich only select tasks assigned to the current inbox.
@@ -64,6 +63,7 @@ class ClosedForwardings(Tasks):
     types = ['opengever.inbox.forwarding', ]
     enabled_actions = []
     major_actions = []
+    state_filter_available = False
 
 
 class InboxDocuments(Documents):

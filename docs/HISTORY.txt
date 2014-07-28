@@ -7,12 +7,15 @@ Changelog
 - Sort groupmembers by label for groupmembers list.
   [deiferni]
 
-
-3.3 (2014-06-05)
-----------------
+- Disable statefilter for yearfolders closed forwardings listing.
+  [phgross]
 
 - Change ResponseDescription css class for the reactivate transition.
   [phgross]
+
+
+3.3 (2014-06-05)
+----------------
 
 - Added initial implementation for setting DocProperties when creating
   a document from template.
