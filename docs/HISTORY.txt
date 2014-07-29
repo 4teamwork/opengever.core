@@ -4,6 +4,22 @@ Changelog
 3.4 (unreleased)
 ----------------
 
+- Customized document default view in order to render `file`
+  field in NO_DOWNLOAD_DISPLAY_MODE.
+  [lgraf]
+
+- Omit `public_trial` and `public_trial_statement` fields from dossier and
+  repository folder default views.
+  [lgraf]
+
+- Removed previously customized default view for business case dossiers. The
+  default view is now customized for all folderish types.
+  [lgraf]
+
+- Customize plone.dexterity default view for all dexterity content in
+  order to be able to omit specific fields.
+  [lgraf]
+
 - Remove `public_trial` from repository byline.
   [lgraf]
 

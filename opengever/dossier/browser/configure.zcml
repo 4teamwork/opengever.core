@@ -1,0 +1,21 @@
+<configure
+      xmlns="http://namespaces.zope.org/zope"
+      xmlns:browser="http://namespaces.zope.org/browser"
+      i18n_domain="opengever.dossier">
+
+  <browser:page
+      for="*"
+      name="filingnumber_maintenance"
+      class=".filing_maintenance.FilingNumberMaintenance"
+      allowed_interface="opengever.dossier.interfaces.IFilingNumberMaintenance"
+      permission="cmf.ManagePortal" />
+
+  <browser:page
+      name="view"
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      class=".default_view.DossierDefaultView"
+      permission="zope2.View"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+</configure>
