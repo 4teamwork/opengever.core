@@ -6,6 +6,7 @@ from opengever.base import _ as ogbmf
 from opengever.base.browser import edit_public_trial
 from opengever.base.browser.helper import get_css_class
 from opengever.document import _
+from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.base import DOSSIER_STATES_CLOSED
@@ -219,3 +220,9 @@ class Overview(DisplayForm, OpengeverTab):
                                   'review_state')
 
         return can_edit and state in DOSSIER_STATES_CLOSED
+
+    def get_download_copy_tag(self):
+        dc_helper = DownloadConfirmationHelper(self.context, self.request)
+        return dc_helper.get_html_tag(
+            self.context.absolute_url(),
+            additional_classes=['function-download-copy'])

@@ -32,6 +32,7 @@
           <dd tal:content="view/msg_no_file_available">
           </dd>
         </dl>
+        <input id="disable_confirmation" name="disable_download_confirmation" type="checkbox" /><label for="disable_confirmation">Don't show this message again.</label>
       </div>
 
       <div class="formControls">

@@ -5,11 +5,81 @@
 <body>
     <table class="vertical listing">
 
-        <tr tal:repeat="row view/get_metadata_rows">
-            <th tal:content="row/label">Label</th>
-            <td tal:content="structure row/content">Content</td>
-        </tr>
-
-    </table>
+        <!-- icon, filename, size -->
+        <span  tal:attributes="class view/get_css_class"></span>
+        <span tal:define="filename view/w/file/filename">
+            <span class="filename" tal:content="filename">Filename</span>
+            <span class="discreet">
+              &mdash; <span tal:define="sizekb view/w/file/file_size" tal:replace="sizekb">100</span>
+              KB
+            </span>
+        </span>
+        <div class="downloadActions">
+          <tal:preview_support tal:condition="preview_supported">
+            <tal:cond tal:condition="pdf_download_available">
+              <a class="function-download-pdf" href="#"
+                 tal:attributes="href string:${context/absolute_url}/download_pdfpreview"
+                 i18n:translate="label_pdf_preview">
+                PDF Preview
+              </a>
+            </tal:cond>
+            <tal:cond tal:condition="not: pdf_download_available">
+              <span class="function-download-pdf-inactive discreet" i18n:translate="label_pdf_preview">
+                PDF Preview
+              </span>
+            </tal:cond>
+            &nbsp;|&nbsp;
+          </tal:preview_support>
+          <tal:cond tal:condition="checkout_and_edit_available">
+            <a class="function-edit" href="#" i18n:translate="label_checkout_and_edit"
+               tal:attributes="href string:${context/absolute_url}/editing_document">
+              Edit Document
+            </a>
+          </tal:cond>
+          <tal:cond tal:condition="not: checkout_and_edit_available">
+            <span class="function-edit-inactive discreet" i18n:translate="label_checkout_and_edit">
+              Edit Document
+            </span>
+          </tal:cond>
+          <tal:cond tal:condition="copy_download_available">
+            &nbsp;|&nbsp;
+            <span tal:replace="structure view/get_download_copy_tag"></span>
+          </tal:cond>
+          <tal:cond tal:condition="not: copy_download_available">
+            &nbsp;|&nbsp;
+            <span class="function-download-copy-inactive link-overlay discreet"
+                  i18n:translate="label_download_copy">Download copy</span>
+          </tal:cond>
+        </div>
+			</td>
+			<td span tal:condition="not:context/file">
+        <span tal:condition="not:exists" class="discreet" i18n:translate="no_file">
+            No file
+        </span>
+			</td>
+		</tr>
+		<tr>
+			<th i18n:translate="label_digitally_available">Digital Available</th>
+			<td tal:condition="context/digitally_available" i18n:translate="label_yes">yes</td>
+			<td tal:condition="not:context/digitally_available" i18n:translate="label_no">no</td>
+		</tr>
+		<tr>
+			<th i18n:translate="label_preserved_as_paper">Preserved as paper</th>
+			<td tal:condition="context/preserved_as_paper" i18n:translate="label_yes">yes</td>
+			<td tal:condition="not:context/preserved_as_paper" i18n:translate="label_no">no</td>
+		</tr>
+		<tr tal:condition="python: view.w['receipt_date'].value != ('', '', '')">
+			<th i18n:translate="label_receipt_date">Date of receipt</th>
+			<td tal:content="structure view/w/receipt_date/render"/>
+		</tr>
+		<tr tal:condition="python: view.w['delivery_date'].value != ('', '', '') ">
+			<th i18n:translate="label_delivery_date">Date of delivery</th>
+			<td tal:content="structure view/w/delivery_date/render"/>
+		</tr>
+		<tr tal:condition="python: view.w['IRelatedDocuments.relatedItems'].value">
+			<th i18n:translate="referenced_documents">referenced documents</th>
+			<td tal:content="structure view/w/IRelatedDocuments.relatedItems/render"/>
+		</tr>
+	</table>
 </body>
 </html>

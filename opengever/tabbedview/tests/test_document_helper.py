@@ -1,8 +1,13 @@
+from ftw.dictstorage.interfaces import IDictStorage
 from ftw.testing import MockTestCase
 from lxml import etree
+from mocker import ANY
+from opengever.base.dictstorage import DictStorageConfigurationContext
+from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.tabbedview.helper import linked_document_with_tooltip
 from opengever.tabbedview.helper import linked_trashed_document_with_tooltip
 from pyquery import PyQuery
+from zope.interface import Interface
 import cgi
 
 
@@ -53,6 +58,15 @@ class LinkTestCase(MockTestCase):
                     ).result('contenttype-opengever-document').count(0, None)
         self.expect(css_getter(self.mail_brain)
                     ).result('contenttype-ftw-mail').count(0, None)
+
+        mtool = self.stub()
+        self.expect(mtool.getAuthenticatedMember().getId()).result('test_id')
+        self.mock_tool(mtool, 'portal_membership')
+
+        dictstorage = self.stub()
+        self.expect(dictstorage.get(ANY)).result(None)
+        self.mock_adapter(dictstorage, IDictStorage, (Interface,))
+        self.expect(dictstorage(ANY)).result({}).count(0, None)
 
     def _get_tooltip_data(self, content):
         if not isinstance(content, PyQuery):

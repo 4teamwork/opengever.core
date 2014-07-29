@@ -179,6 +179,10 @@ Changelog
   - List all users in advanced-search when searching for dossiers.
     [deiferni]
 
+  - Added option to disable download confirmation.
+    [lknoepfel]
+
+
 3.4.1 (2014-09-03)
 ------------------
 

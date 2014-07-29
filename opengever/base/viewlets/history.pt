@@ -34,10 +34,7 @@
               <td tal:content="item/comments|nothing" />
               <tal:cond tal:condition="isVersion">
                 <td tal:condition="downloadLink">
-                  <a href="" class="standalone function-download-copy link-overlay" i18n:translate="button_file"
-                     tal:attributes="href string:${here/absolute_url}/file_download_confirmation?version_id=${item/version_id}">
-                    Download
-                  </a>
+                  <span tal:replace="structure python:view.get_download_copy_tag(item['version_id'])"></span>
                 </td>
                 <td tal:condition="not:downloadLink">
                   <a href="" class="standalone" i18n:translate="button_show"
