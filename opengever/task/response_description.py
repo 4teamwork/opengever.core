@@ -56,7 +56,7 @@ class ResponseDescription(object):
 
 class Reactivate(ResponseDescription):
     transition = 'task-transition-cancelled-open'
-    css_class = 'clearfix'
+    css_class = 'reactivate'
 
     def msg(self):
         return _('transition_label_reactivate', 'Reactivate by ${user}',
