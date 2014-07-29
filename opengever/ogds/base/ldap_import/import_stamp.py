@@ -1,17 +1,16 @@
 from datetime import datetime
 from five import grok
 from ftw.dictstorage.interfaces import IDictStorage
-from ftw.dictstorage.interfaces import ISQLAlchemy
+from opengever.base.dictstorage import DictStorageConfigurationContext
 from opengever.ogds.base.interfaces import ISyncStamp
+from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.base.utils import remote_request
-from plone import api
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from urllib2 import URLError
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
 from zope.globalrequest import setRequest
-from zope.interface import implements
 import logging
 
 
@@ -19,14 +18,6 @@ logger = logging.getLogger('opengever.ogds.base')
 
 DICTSTORAGE_SYNC_KEY = 'last_ldap_synchronisation'
 REQUEST_SYNC_KEY = 'last_ldap_synchronisation'
-
-
-class DictStorageConfigurationContext(object):
-    """Fake Object which provide the ISQLAlchemy Interface,
-    so it's possible to get the ftw.dictstorage sqlstorage.
-    """
-
-    implements(ISQLAlchemy)
 
 
 def update_sync_stamp(context):
