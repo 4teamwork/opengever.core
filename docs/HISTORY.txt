@@ -4,6 +4,9 @@ Changelog
 3.4 (unreleased)
 ----------------
 
+- Add plone.app.lockingbehavior to ftw.mail.mail FTI.
+  [lgraf]
+
 - Hide duplicate mail title in mail preview tab.
   [lgraf]
 

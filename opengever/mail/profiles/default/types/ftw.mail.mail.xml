@@ -24,5 +24,6 @@
         <element value="opengever.trash.trash.ITrashable" />
         <element value="plone.app.content.interfaces.INameFromTitle" remove="True" />
         <element value="plone.app.versioningbehavior.behaviors.IVersionable" />
+        <element value="plone.app.lockingbehavior.behaviors.ILocking" />
     </property>
 </object>
