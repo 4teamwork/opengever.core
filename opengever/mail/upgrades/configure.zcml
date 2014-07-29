@@ -102,4 +102,13 @@
         directory="profiles/3404"
         />
 
+    <!-- 3404 -> 3405 -->
+    <upgrade-step:importProfile
+        title="Add 'Edit Metadata' action for ftw.mail.mail FTI"
+        profile="opengever.mail:default"
+        source="3404"
+        destination="3405"
+        directory="profiles/3405"
+        />
+
 </configure>

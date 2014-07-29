@@ -14,6 +14,12 @@
         <permission value="View" />
     </action>
 
+    <action title="Edit metadata" action_id="edit" category="object"
+            condition_expr="not:object/@@plone_lock_info/is_locked_for_current_user|python:True"
+            url_expr="string:${object_url}/edit" visible="True">
+        <permission value="Modify portal content"/>
+    </action>
+
     <!-- Tab Actions -->
     <action title="overview" action_id="overview" category="tabbedview-tabs" condition_expr="" url_expr="string:#" visible="True"></action>
     <action title="preview" action_id="preview" category="tabbedview-tabs" condition_expr="" url_expr="string:#" visible="True"></action>

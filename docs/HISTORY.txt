@@ -4,6 +4,9 @@ Changelog
 3.4 (unreleased)
 ----------------
 
+- Add 'Edit Metadata' action to ftw.mail.mail FTI.
+  [lgraf]
+
 - Change mail tabbed view to register tabs with old-style FTI actions
   instead of custom TabbedView class.
   [lgraf]
