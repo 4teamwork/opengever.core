@@ -7,8 +7,6 @@
 <body tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime">
 
 
-        <h1 class="documentFirstHeading" tal:content="context/title" />
-
         <table class="mailHeaders listing vertical">
             <tr class="mailFrom"
                 tal:define="mailFrom python:view.get_header('From')"
