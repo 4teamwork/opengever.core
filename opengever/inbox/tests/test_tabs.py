@@ -24,10 +24,10 @@ class TestInboxTabbedview(FunctionalTestCase):
     def test_trash_lists_only_documents_from_the_current_inbox(self):
         second_inbox = create(Builder('inbox'))
 
-        document_1 = create(Builder('document')
-                            .within(second_inbox)
-                            .titled('Doc 1')
-                            .trashed())
+        create(Builder('document')
+               .within(second_inbox)
+               .titled('Doc 1')
+               .trashed())
 
         document_2 = create(Builder('document')
                             .within(self.inbox)
@@ -52,9 +52,9 @@ class TestInboxTabbedview(FunctionalTestCase):
 
     def test_documents_listing_only_show_documents_from_the_current_inbox(self):
         second_inbox = create(Builder('inbox'))
-        document_1 = create(Builder('document')
-                            .within(second_inbox)
-                            .titled('Doc 1'))
+        create(Builder('document')
+               .within(second_inbox)
+               .titled('Doc 1'))
 
         document_2 = create(Builder('document')
                             .within(self.inbox)
@@ -158,3 +158,28 @@ class TestIssuedInboxTaskTab(TestInboxTaskTabs):
               .having(issuer='inbox:client1'))
 
         self.assert_listing_results([task_inside, task_outside])
+
+
+class TestClosedForwardings(FunctionalTestCase):
+
+    viewname = 'closed-forwardings'
+
+    def setUp(self):
+        super(TestClosedForwardings, self).setUp()
+
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_all_unit_setup())
+
+        self.yearfolder = create(Builder('yearfolder'))
+        self.forwarding = create(Builder('forwarding')
+                                 .within(self.yearfolder)
+                                 .in_state('forwarding-state-closed'))
+
+    def test_state_filter_is_deactivated(self):
+        view = self.yearfolder.restrictedTraverse(
+            'tabbedview_view-{}'.format(self.viewname))
+        view.update()
+
+        self.assertFalse(view.state_filter_available)
+        self.assertEquals(
+            [self.forwarding.get_sql_object()], view.contents)
