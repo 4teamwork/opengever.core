@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<object name="ftw.mail.mail" meta_type="Dexterity FTI">
+
+    <action title="Edit metadata" action_id="edit" category="object"
+            condition_expr="not:object/@@plone_lock_info/is_locked_for_current_user|python:True"
+            url_expr="string:${object_url}/edit" visible="True">
+        <permission value="Modify portal content"/>
+    </action>
+
+</object>
+

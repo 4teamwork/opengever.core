@@ -4,6 +4,19 @@ Changelog
 3.4 (unreleased)
 ----------------
 
+- Override ftw.mail default view with our customized dexterity default view.
+  [lgraf]
+
+- Add 'Edit Metadata' action to ftw.mail.mail FTI.
+  [lgraf]
+
+- Change mail tabbed view to register tabs with old-style FTI actions
+  instead of custom TabbedView class.
+  [lgraf]
+
+- Add plone.app.lockingbehavior to ftw.mail.mail FTI.
+  [lgraf]
+
 - Hide duplicate mail title in mail preview tab.
   [lgraf]
 
