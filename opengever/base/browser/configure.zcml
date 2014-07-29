@@ -61,6 +61,13 @@
           />
     </configure>
 
+    <browser:page
+        for="*"
+        name="navigation.json"
+        class=".navigation.JSONNavigation"
+        permission="zope2.View"
+        />
+
     <browser:resourceDirectory
         name="opengever.base"
         directory="resources"

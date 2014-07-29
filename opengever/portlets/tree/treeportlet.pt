@@ -8,7 +8,9 @@
     </dt>
 
     <dd class="portletItem odd">
-        <ul class="filetree" tal:attributes="data-root_path view/root_path">
+        <ul class="filetree"
+            tal:attributes="data-root_path view/root_path;
+                            data-context_path view/context_path;">
           <img src="spinner.gif" class="spinner"/>
         </ul>
     </dd>

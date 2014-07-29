@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <metadata>
-  <version>1</version>
+  <version>1001</version>
   <dependencies>
     <dependency>profile-ftw.treeview:default</dependency>
-  </dependencies>   
+  </dependencies>
 </metadata>

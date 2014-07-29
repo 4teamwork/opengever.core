@@ -83,6 +83,9 @@ class Renderer(base.Renderer):
     def root_path(self):
         return getattr(self.data, 'root_path', None)
 
+    def context_path(self):
+        return '/'.join(self.context.getPhysicalPath())
+
     @property
     def available(self):
         if self.root_path() != None:

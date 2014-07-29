@@ -8,6 +8,8 @@
 
     <five:registerPackage package="." initialize=".initialize" />
 
+    <include package=".upgrades"/>
+
     <browser:resourceDirectory
         name="opengever.portlets.tree-resources"
         directory="resources" />

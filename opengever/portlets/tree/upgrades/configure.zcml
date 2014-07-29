@@ -1,0 +1,15 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:upgrade-step="http://namespaces.zope.org/ftw.upgrade">
+
+  <include package="ftw.upgrade" file="meta.zcml" />
+
+  <upgrade-step:importProfile
+      title="Register tree javascript"
+      profile="opengever.portlets.tree:default"
+      source="1"
+      destination="1001"
+      directory="profiles/1001"
+      />
+
+</configure>

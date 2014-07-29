@@ -1,0 +1,191 @@
+function make_tree(nodes, config) {
+  return new Tree(nodes, config);
+}
+
+function Tree(nodes, config) {
+  nodes = jQuery.extend(true, [], nodes);
+  var tree_root;
+  var tree = this;
+  configuration = $.extend(true, {
+    'render_condition': function(){ return true; },
+    'onclick': function(node, event){}
+  }, config);
+
+  this.render = function(selector) {
+    tree_root = $(selector);
+
+    $(this.nodes()).each(function() {
+      tree.render_node_into_container.apply(this, [tree_root]);
+    });
+  };
+
+  this.render_node = function() {
+    if(!this.link) {
+      tree.render_node.apply(this.parent);
+      tree.render_children.apply(this.parent, [true]);
+    }
+  };
+
+  this.render_node_into_container = function($container, force_render) {
+    if(!force_render && !configuration.render_condition.apply(this)) {
+      return;
+    }
+    var $list_item = $('<li/>');
+    if (this.nodes && this.nodes.length > 0) {
+      $list_item.append('<a href="#" class="toggleNav">&nbsp;</a>')
+    }
+    $container.append($list_item);
+    var $link = $('<a />').text(this.text).attr('href', this.path);
+    $list_item.append($link);
+
+    for(var key in this.data) {
+      $link.attr('data-'.concat(key), this.data[key]);
+    }
+
+    $link.click(function(event) {
+      configuration.onclick.apply(this, [$(this).data('tree-node'), event]);
+    });
+
+    $link.data('tree-node', this);
+    this['link'] = $link;
+    tree.render_children.apply(this);
+
+    if(this.parent) {
+      tree.expand(this.parent);
+    }
+  };
+
+  this.render_children = function(force_render) {
+    if (!this.nodes || this.nodes.length === 0) {
+      return;
+    }
+    var $sublist = this.link.parent('li').find('>ul');
+    if ($sublist.find('>li').length > 0) {
+      return;
+    }
+
+    if($sublist.length === 0) {
+      $sublist = $('<ul class="folded" />');
+      this['link'].parent('li:first').append($sublist);
+    }
+
+    $(this.nodes).each(function() {
+      if (!this['link']) {
+        tree.render_node_into_container.apply(this, [$sublist, force_render]);
+      }
+    });
+  };
+
+  this.nodes = function() {
+    return nodes;
+  };
+
+  this.expand = function(node) {
+    if(node.parent) {
+      this.expand(node.parent);
+    }
+    this.render_children.apply(node, [true]);
+    $(node.link).parent('li').find('>ul').removeClass('folded');
+    $(node.link).parent('li').find('>a.toggleNav').addClass('expanded');
+  };
+
+  this.collapse = function(node) {
+    $(node.link).parent('li').find('>ul').addClass('folded');
+    $(node.link).parent('li').find('>a.toggleNav').removeClass('expanded');
+  };
+
+  this.is_expanded = function(node) {
+    return !$(node.link).parent('li').find('>ul').hasClass('folded');
+  };
+
+  this.each = function(callback) {
+    function recurse(depth, parent) {
+      callback.apply(this, [depth, parent]);
+      var parent = this;
+      $(this.nodes).each(function() {recurse.apply(this, [depth + 1, parent]);});
+    }
+    $(this.nodes()).each(function() {recurse.apply(this, [0, null]);});
+  };
+
+  this.eachBy = function(condition, callback) {
+    this.each(function() {
+      for(var name in condition) {
+        if (this[name] != condition[name]) {
+          return;
+        }
+      }
+      return callback.apply(this);
+    });
+  };
+
+  this.findBy = function(condition) {
+    var node = null;
+    this.eachBy(condition, function() {
+      node = this;
+      return false;
+    });
+    return node;
+  };
+
+  this.selectCurrent = function(node) {
+    tree.render_node.apply(node);
+
+    tree_root.find('.current').map(function() {
+      $(this).removeClass('current');
+    });
+
+    node.link.addClass('current');
+    node.link.parent('li:first').addClass('current');
+  };
+
+  this.each(function(depth, parent) {
+    this.depth = depth;
+    this.parent = parent;
+  });
+}
+
+
+ExpandStore = function(cookie_name, identifier_key) {
+  function get() {
+    var cookie = $.cookie(cookie_name);
+    if (!cookie) {
+      return [];
+    }
+    return cookie.split(';');
+  }
+
+  function set(uids) {
+    $.cookie(cookie_name, uids.join(';'), {path: '/'});
+  }
+
+  function identifier(node) {
+    return node[identifier_key];
+  }
+
+  return {
+    is_expanded: function(node) {
+      if(!node) {
+        return false;
+      }
+      return get().indexOf(identifier(node)) !== -1;
+    },
+    expand: function(node) {
+      if (this.is_expanded(node)) {
+        return;
+      }
+
+      var expanded = get();
+      expanded.push(identifier(node));
+      set(expanded);
+    },
+    collapse: function(node) {
+      if (!this.is_expanded(node)) {
+        return;
+      }
+
+      var expanded = get();
+      expanded.remove(identifier(node));
+      set(expanded);
+    }
+  };
+};
