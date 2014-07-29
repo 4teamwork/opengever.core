@@ -20,9 +20,9 @@ class TestPreview(FunctionalTestCase):
         mail = create(Builder("mail").with_message(MAIL_DATA))
         browser.login().visit(mail, view='tabbedview_view-preview')
 
-        expect = [['From:', 'from@example.org'],
+        expect = [['From:', u'Freddy H\xf6lderlin <from@example.org>'],
                   ['Subject:', u'Die B\xfcrgschaft'],
                   ['Date:', 'Jan 01, 1999 01:00 AM'],
-                  ['To:', u'Friedrich H\xf6lderlin <to@example.org>']]
+                  ['To:', u'Christoph M\xf6rgeli <to@example.org>']]
         self.assertEquals(expect,
                           browser.css('.mailHeaders.listing').first.lists())

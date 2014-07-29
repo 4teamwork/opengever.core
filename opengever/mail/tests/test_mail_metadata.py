@@ -94,8 +94,9 @@ class TestMailMetadataWithBuilder(FunctionalTestCase):
 
     def test_fill_mail_author_with_FROM_data_if_user_does_not_exist(self):
         mail = self.create_mail()
+
         self.assertEquals(
-            utils.get_header(mail.msg, 'From'),
+            u'Freddy H\xf6lderlin <from@example.org>',
             get_author_by_email(mail))
 
         self.assertEquals(
