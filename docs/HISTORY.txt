@@ -4,6 +4,9 @@ Changelog
 3.4 (unreleased)
 ----------------
 
+- Fix UnicodeError in resolving mail author.
+  [lgraf]
+
 - Make FileOrPaperValidator consider mails properly (always digitally available).
   [lgraf]
 
