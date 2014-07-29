@@ -1,6 +1,13 @@
 Changelog
 =========
 
+3.x (unreleased)
+----------------
+
+- Sort groupmembers by label for groupmembers list.
+  [deiferni]
+
+
 3.3 (2014-06-05)
 ----------------
 
