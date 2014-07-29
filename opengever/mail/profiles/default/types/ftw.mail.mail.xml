@@ -13,6 +13,21 @@
             category="object_buttons">
         <permission value="View" />
     </action>
+
+    <!-- Tab Actions -->
+    <action title="overview" action_id="overview" category="tabbedview-tabs" condition_expr="" url_expr="string:#" visible="True"></action>
+    <action title="preview" action_id="preview" category="tabbedview-tabs" condition_expr="" url_expr="string:#" visible="True"></action>
+    <action title="journal" action_id="journal" category="tabbedview-tabs" condition_expr="" url_expr="string:#" visible="True"></action>
+    <action title="sharing" action_id="sharing" category="tabbedview-tabs" condition_expr="" url_expr="string:#" visible="True"></action>
+
+    <!-- View information -->
+    <property name="default_view">tabbed_view</property>
+    <property name="default_view_fallback">False</property>
+    <property name="view_methods">
+      <element value="view"/>
+      <element value="tabbed_view" />
+    </property>
+
     <property name="behaviors" purge="False">
         <element value="ftw.journal.interfaces.IAnnotationsJournalizable" />
         <element value="opengever.base.behaviors.classification.IClassification" />

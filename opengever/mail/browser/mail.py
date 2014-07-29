@@ -3,7 +3,6 @@ from five import grok
 from ftw.mail import utils
 from ftw.mail.mail import IMail
 from ftw.mail.mail import View as ftwView
-from ftw.tabbedview.browser.tabbed import TabbedView
 from opengever.base import _ as ogbmf
 from opengever.document import _ as ogdmf
 from opengever.document.browser.overview import CustomRow
@@ -14,17 +13,6 @@ from plone.memoize import instance
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.component import getUtility
-
-
-class TabbedMailView(TabbedView):
-
-    def get_tabs(self):
-        return [
-            {'id': 'overview', 'class': ''},
-            {'id': 'preview', 'class': ''},
-            {'id': 'journal', 'class': ''},
-            {'id': 'sharing', 'class': ''},
-        ]
 
 
 class PreviewTab(ftwView):

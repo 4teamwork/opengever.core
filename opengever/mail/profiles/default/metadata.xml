@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <metadata>
-  <version>3403</version>
+  <version>3404</version>
   <dependencies>
     <dependency>profile-ftw.mail:default</dependency>
   </dependencies>

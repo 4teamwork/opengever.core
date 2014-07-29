@@ -93,4 +93,13 @@
         directory="profiles/3403"
         />
 
+    <!-- 3403 -> 3404 -->
+    <upgrade-step:importProfile
+        title="Use FTI actions to define tabbedview tabs for mails."
+        profile="opengever.mail:default"
+        source="3403"
+        destination="3404"
+        directory="profiles/3404"
+        />
+
 </configure>
