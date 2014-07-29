@@ -4,6 +4,9 @@ Changelog
 3.3 (2014-06-05)
 ----------------
 
+- Change ResponseDescription css class for the reactivate transition.
+  [phgross]
+
 - Added initial implementation for setting DocProperties when creating
   a document from template.
   [lgraf]
