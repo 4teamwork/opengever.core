@@ -4,6 +4,9 @@ Changelog
 3.4 (unreleased)
 ----------------
 
+- Make FileOrPaperValidator consider mails properly (always digitally available).
+  [lgraf]
+
 - Override ftw.mail default view with our customized dexterity default view.
   [lgraf]
 

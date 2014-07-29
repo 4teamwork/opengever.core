@@ -1,9 +1,15 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.mail.mail import IMail
+from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
 from ftw.testing import MockTestCase
 from opengever.mail.interfaces import ISendDocumentConf
+from opengever.mail.validators import AddressValidator
 from opengever.mail.validators import DocumentSizeValidator
 from opengever.mail.validators import FilesTooLarge
-from opengever.mail.validators import AddressValidator
+from opengever.testing import FunctionalTestCase
+from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
 from plone.registry.interfaces import IRegistry
 from zope.interface import Invalid
 from zope.schema.interfaces import RequiredMissing
@@ -80,3 +86,38 @@ class TestValidators(MockTestCase):
 
         with self.assertRaises(Invalid):
             validator.validate(['hugo.dskljfch', 'James.Bond_007.ch'])
+
+
+class TestFileOrPaperValidatorInEditForm(FunctionalTestCase):
+
+    use_browser = True
+
+    layer = OPENGEVER_FUNCTIONAL_TESTING
+
+    def setUp(self):
+        super(TestFileOrPaperValidatorInEditForm, self).setUp()
+        self.grant('Manager')
+
+        self.dossier = create(Builder('dossier'))
+        self.mail = create(Builder('mail')
+                                   .within(self.dossier)
+                                   .with_dummy_message())
+
+    @browsing
+    def test_editing_and_saving_valid_mail_works(self, browser):
+        browser.login().open(self.mail, view='edit')
+        assert_no_error_messages()
+
+    @browsing
+    def test_mail_preserved_as_paper_is_valid(self, browser):
+        browser.login().open(self.mail, view='edit')
+        browser.fill({'Preserved as paper': True}).save()
+        self.assertTrue(self.mail.preserved_as_paper)
+        assert_no_error_messages()
+
+    @browsing
+    def test_mail_not_preserved_as_paper_is_valid(self, browser):
+        browser.login().open(self.mail, view='edit')
+        browser.fill({'Preserved as paper': False}).save()
+        self.assertFalse(self.mail.preserved_as_paper)
+        assert_no_error_messages()
