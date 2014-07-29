@@ -1,6 +1,7 @@
 from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
 from lxml.cssselect import CSSSelector
 from opengever.latex.listing import ILaTexListing
 from opengever.testing import FunctionalTestCase
@@ -242,3 +243,9 @@ class TestTaskListings(FunctionalTestCase):
              'Task A',
              '06.11.2013'],
             [value.text_content().strip() for value in rows[0].xpath(CSSSelector('td').path)])
+
+    @browsing
+    def test_task_listing(self, browser):
+        task_id = self.task.get_sql_object().id
+        browser.login().open(data={'pdf-tasks-listing:method': 1,
+                                   'task_ids:list': task_id})
