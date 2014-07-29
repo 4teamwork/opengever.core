@@ -14,7 +14,9 @@ class ListGroupMembers(BrowserView):
         if not self.group_id:
             return 'no group id'
 
-        for user in ogds_service().fetch_group(self.group_id).users:
-            self.members.append(
-                Actor.user(user.userid).get_link)
+        actors = [Actor.user(user.userid) for user in
+                  ogds_service().fetch_group(self.group_id).users]
+        actors.sort(key=lambda actor: actor.get_label())
+        self.members = [each.get_link() for each in actors]
+
         return self.template()
