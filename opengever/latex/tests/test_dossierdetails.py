@@ -14,6 +14,7 @@ from opengever.testing import select_current_org_unit
 from plone.app.testing import TEST_USER_ID
 from zope.component import getMultiAdapter
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
+from ftw.testbrowser import browsing
 
 
 class TestDossierDetailsPDFView(MockTestCase):
@@ -29,7 +30,7 @@ class TestDossierDetailsPDFView(MockTestCase):
                                name='pdf-dossier-details')
 
         self.assertTrue(isinstance(
-                view, dossierdetails.DossierDetailsPDFView))
+            view, dossierdetails.DossierDetailsPDFView))
 
     def test_render_adds_browser_layer(self):
         context = request = self.create_dummy()
@@ -44,13 +45,13 @@ class TestDossierDetailsPDFView(MockTestCase):
 
         view.render()
         self.assertTrue(dossierdetails.IDossierDetailsLayer.providedBy(
-                request))
+                        request))
 
 
-class TestDossierDetailsDossierMetadata(FunctionalTestCase):
+class TestDossierDetails(FunctionalTestCase):
 
     def setUp(self):
-        super(TestDossierDetailsDossierMetadata, self).setUp()
+        super(TestDossierDetails, self).setUp()
         self.user = create(Builder('ogds_user')
                            .having(firstname='t\xc3\xa4st'.decode('utf-8'),
                                    lastname=u'User'))
@@ -63,6 +64,26 @@ class TestDossierDetailsDossierMetadata(FunctionalTestCase):
                                  .wrapping_org_unit(self.org_unit))
 
         select_current_org_unit(self.org_unit.id())
+
+    @browsing
+    def test_dossierdetails_view(self, browser):
+        repositoryroot = create(Builder('repository_root')
+                                .titled(u'Repository'))
+        repository_1 = create(Builder('repository')
+                              .titled(u'Repository Folder')
+                              .within(repositoryroot))
+        repository_1_1 = create(Builder('repository')
+                                .titled(u'Sub Repository Folder')
+                                .within(repository_1))
+        dossier = create(Builder('dossier')
+                         .within(repository_1_1)
+                         .having(responsible=self.user.userid))
+        task = create(Builder('task')
+                      .within(dossier)
+                      .having(responsible=self.user.userid,
+                              responsible_client=self.org_unit.id()))
+
+        browser.login().visit(dossier, view='pdf-dossier-details')
 
     def get_dossierdetails_view(self, dossier):
         provide_request_layer(dossier.REQUEST, IDossierDetailsLayer)

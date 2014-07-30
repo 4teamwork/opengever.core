@@ -19,9 +19,9 @@ from opengever.dossier.browser.participants import role_list_helper
 from opengever.globalindex.model.task import Task
 from opengever.latex import _
 from opengever.latex.listing import ILaTexListing
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.tabbedview.helper import readable_ogds_author
-from opengever.task.task import ITask
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from zope.component import getMultiAdapter
@@ -238,16 +238,10 @@ class DossierDetailsLaTeXView(grok.MultiAdapter, MakoLaTeXView):
             sort_on=sort_on, sort_order=sort_order)
 
     def get_tasks(self):
-        sort_on, sort_order = self.get_sorting('documents')
-        catalog = getToolByName(self.context, 'portal_catalog')
-        query = {
-            'path': '/'.join(self.context.getPhysicalPath()),
-            'object_provides': [ITask.__identifier__, ]}
-
-        # XXX it should be possible to queries the glboalindex directly
-        brains = catalog(query)
-
-        return [brain.getObject().get_sql_object() for brain in brains]
+        return Task.query.by_container(self.context,
+                                       get_current_admin_unit())\
+                         .order_by(Task.sequence_number)\
+                         .all()
 
     def get_documents(self):
         sort_on, sort_order = self.get_sorting('documents')
