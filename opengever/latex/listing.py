@@ -1,4 +1,3 @@
-from five import grok
 from ftw.table import helper
 from opengever.latex import _
 from opengever.latex.utils import get_issuer_of_task
@@ -10,57 +9,52 @@ from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.task.helper import task_type_helper
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.component import getUtility
-from zope.interface import Interface
 
 
-class ILaTexListing(Interface):
-
-    def get_labels():
-        """"Returns a LaTEx string with the labels of the listing"""
-
-    def get_widths():
-        """"Returns a LaTEx string with the labels of the listing,
-        which are calculated."""
-
-    def get_rows():
-        """"Returns a LaTEx string with all the rows of the listing"""
-
-    def get_config():
-        """Returns the table configuration, a list of dicts for every row,
-        containing label, width, getter."""
-
-
-class DossiersLaTeXListing(grok.MultiAdapter):
-    grok.provides(ILaTexListing)
-    grok.adapts(Interface, Interface, Interface)
-    grok.name('dossiers')
+class LatexListing(object):
 
     template = ViewPageTemplateFile('templates/listing.pt')
 
-    def __init__(self, context, request, latex_view):
-        self.context = context
-        self.request = request
+    def __init__(self, latex_view, items):
         self.latex_view = latex_view
+        self.items = items
 
         self.admin_unit = get_current_admin_unit()
         self.info = getUtility(IContactInformation)
 
+        # required for template namespace only
+        self.request = latex_view.request
+        self.context = None
+
+    def get_config(self):
+        """Returns the table configuration, a list of dicts for every row,
+        containing label, width, getter."""
+
+        raise NotImplementedError()
+
+    def drop_column(self, config, column_id):
+        ids = [col.get('id') for col in config]
+        config.pop(ids.index(column_id))
+        return config
+
     def get_widths(self):
+        """"Returns a LaTEx string with the labels of the listing,
+        which are calculated."""
         return [row.get('width') for row in self.get_config()]
 
     def get_labels(self):
+        """"Returns a LaTEx string with the labels of the listing"""
         return [row.get('label') for row in self.get_config()]
 
-    def get_listing(self, brains):
-        self.brains = brains
+    def get_rows(self):
+        """"Returns a LaTEx string with all the rows of the listing"""
+        return [self.get_row_for_brain(item) for item in self.items]
 
-        if len(brains) == 0:
+    def get_listing(self):
+        if len(self.items) == 0:
             return None
         else:
             return self.latex_view.convert(self.template())
-
-    def get_rows(self):
-        return [self.get_row_for_brain(brain) for brain in self.brains]
 
     def get_row_for_brain(self, brain):
         data = []
@@ -95,6 +89,9 @@ class DossiersLaTeXListing(grok.MultiAdapter):
 
         # get the title of the repository folder from the breadcrumb_titles
         return brain.breadcrumb_titles[-distance]['Title']
+
+
+class DossiersLaTeXListing(LatexListing):
 
     def get_config(self):
         """Returns a list with dict per row including this row informations:
@@ -148,14 +145,6 @@ class DossiersLaTeXListing(grok.MultiAdapter):
 
 
 class SubDossiersLaTeXListing(DossiersLaTeXListing):
-    grok.provides(ILaTexListing)
-    grok.adapts(Interface, Interface, Interface)
-    grok.name('subdossiers')
-
-    def drop_column(self, config, column_id):
-        ids = [col.get('id') for col in config]
-        config.pop(ids.index(column_id))
-        return config
 
     def get_config(self):
         """Returns a list with dict per row including this row informations:
@@ -171,10 +160,7 @@ class SubDossiersLaTeXListing(DossiersLaTeXListing):
         return config
 
 
-class DocumentsLaTeXListing(DossiersLaTeXListing):
-    grok.provides(ILaTexListing)
-    grok.adapts(Interface, Interface, Interface)
-    grok.name('documents')
+class DocumentsLaTeXListing(LatexListing):
 
     def get_config(self):
         """Returns a list with dict per row including this row informations:
@@ -218,10 +204,7 @@ class DocumentsLaTeXListing(DossiersLaTeXListing):
              'getter': lambda brain: brain.document_author}]
 
 
-class TasksLaTeXListing(DossiersLaTeXListing):
-    grok.provides(ILaTexListing)
-    grok.adapts(Interface, Interface, Interface)
-    grok.name('tasks')
+class TasksLaTeXListing(LatexListing):
 
     def get_config(self):
         """Returns a list with dict per row including this row informations:
