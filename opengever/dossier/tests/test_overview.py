@@ -102,7 +102,8 @@ class TestOverview(FunctionalTestCase):
     def test_task_box_items_are_filtered_by_admin_unit(self, browser):
         create(Builder('globalindex_task').having(
             int_id=12345, admin_unit_id='foo', issuing_org_unit='foo',
-            assigned_org_unit='bar', modified=date(2011, 1, 1)))
+            sequence_number=4, assigned_org_unit='bar',
+            modified=date(2011, 1, 1)))
         create(Builder('task')
                .within(self.dossier)
                .with_modification_date(DateTime(2009, 12, 1))
