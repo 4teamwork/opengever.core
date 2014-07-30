@@ -25,11 +25,11 @@ class DefaultDocumentDocPropertyProvider(grok.Adapter):
         return ref_num
 
     def get_sequence_number(self):
-        return str(getUtility(ISequenceNumber).get_number(self.context))
+        return getUtility(ISequenceNumber).get_number(self.context)
 
     def get_properties(self):
         reference_number = self.get_reference_number()
-        sequence_number = self.get_sequence_number()
+        sequence_number = str(self.get_sequence_number())
         properties = {'Document.ReferenceNumber': reference_number,
                       'Document.SequenceNumber': sequence_number}
         return properties

@@ -34,5 +34,5 @@ class TestTaskReporter(FunctionalTestCase):
              u'Test User (test_user_1_)',
              u'To comment',
              u'client1',
-             u'1'],
+             1],
             sheet.row_values(1))

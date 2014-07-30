@@ -15,9 +15,11 @@ class TestGlobalindexTask(TestCase):
         super(TestGlobalindexTask, self).setUp()
 
     def _create_task(self, int_id=1, admin_unit_id='m1',
-                     issuing_org_unit='org', assigned_org_unit='org',
-                     task_type='direct-execution', **kwargs):
-        return Task(int_id, admin_unit_id, issuing_org_unit=issuing_org_unit,
+                     sequence_number=1, issuing_org_unit='org',
+                     assigned_org_unit='org', task_type='direct-execution',
+                     **kwargs):
+        return Task(int_id, admin_unit_id, sequence_number=sequence_number,
+                    issuing_org_unit=issuing_org_unit,
                     assigned_org_unit=assigned_org_unit, task_type=task_type,
                     **kwargs)
 

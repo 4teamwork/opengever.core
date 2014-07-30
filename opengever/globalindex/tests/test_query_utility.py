@@ -102,10 +102,12 @@ class TestTaskQuery(TestCase):
         )
 
     def add_task(self, intid, admin_unit_id='admin1',
+                 sequence_number=3,
                  issuing_org_unit_id='org1',
                  assigned_org_unit_id='org2',
                  **kwargs):
         task = Task(intid, admin_unit_id,
+                    sequence_number=sequence_number,
                     issuing_org_unit=issuing_org_unit_id,
                     assigned_org_unit=assigned_org_unit_id,
                     **kwargs)
