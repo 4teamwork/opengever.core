@@ -1,3 +1,4 @@
+from datetime import date
 from DateTime import DateTime as ZopeDateTime
 from opengever.globalindex import Session
 from opengever.globalindex.model import Base
@@ -6,7 +7,6 @@ from opengever.globalindex.oguid import Oguid
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
-from opengever.tabbedview.helper import overdue_date_helper
 from plone import api
 from sqlalchemy import Boolean
 from sqlalchemy import Column
@@ -34,6 +34,12 @@ class Task(Base):
 
     MAX_TITLE_LENGTH = 256
     MAX_BREADCRUMB_LENGTH = 512
+
+    OVERDUE_INDEPENDENT_STATES = ['task-state-cancelled',
+                                  'task-state-rejected',
+                                  'task-state-tested-and-closed',
+                                  'forwarding-state-closed']
+
 
     __tablename__ = 'tasks'
     __table_args__ = (UniqueConstraint('admin_unit_id', 'int_id'), {})
@@ -151,6 +157,13 @@ class Task(Base):
     def is_forwarding(self):
         return self.task_type == 'forwarding_task_type'
 
+    @property
+    def is_overdue(self):
+        if self.deadline < date.today():
+            if self.review_state not in Task.OVERDUE_INDEPENDENT_STATES:
+                return True
+        return False
+
     # XXX rename me, this should be get_responsible_link
     def get_responsible_label(self):
         actor = Actor.lookup(self.responsible)
@@ -161,11 +174,19 @@ class Task(Base):
         return "<span class=wf-{}>{}</span>".format(
             self.review_state,
             translate(self.review_state, domain='plone',
-                      context=api.portal.get().REQUEST),
-        )
+                      context=api.portal.get().REQUEST))
 
     def get_deadline_label(self):
-        return overdue_date_helper(self, self.deadline)
+        if not self.deadline:
+            return u''
+
+        if self.is_overdue:
+            label = '<span class="overdue">{}</span>'
+        else:
+            label = '<span>{}</span>'
+
+        return label.format(
+            self.deadline.strftime('%d.%m.%Y'))
 
     def _date_to_zope_datetime(self, date):
         if not date:
