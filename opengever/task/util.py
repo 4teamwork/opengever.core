@@ -61,14 +61,6 @@ def getTransitionVocab(context):
         return SimpleVocabulary(transitions)
 
 
-def create_sequence_number(obj, key='task_sequence_number'):
-    portal = obj.portal_url.getPortalObject()
-    portal_annotations = IAnnotations(portal)
-    sequence_number = int(portal_annotations.get(key, 0)) + 1
-    portal_annotations[key] = sequence_number
-    return sequence_number
-
-
 @grok.provider(IContextSourceBinder)
 def getTaskTypeVocabulary(context):
     terms = []
