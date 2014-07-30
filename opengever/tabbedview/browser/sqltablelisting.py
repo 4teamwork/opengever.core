@@ -1,8 +1,6 @@
 from five import grok
-from ftw.table import helper
 from ftw.table.basesource import BaseTableSource
 from ftw.table.interfaces import ITableSource, ITableSourceConfig
-from opengever.tabbedview import helper as oghelper
 from sqlalchemy import or_
 from sqlalchemy.orm.query import Query
 from sqlalchemy.sql.expression import asc, desc
@@ -16,6 +14,8 @@ class SqlTableSource(grok.MultiAdapter, BaseTableSource):
 
     grok.implements(ITableSource)
     grok.adapts(ITableSourceConfig, Interface)
+
+    searchable_columns = []
 
     def validate_base_query(self, query):
         """Validates and fixes the base query. Returns the query object.
@@ -53,36 +53,13 @@ class SqlTableSource(grok.MultiAdapter, BaseTableSource):
             if text.endswith('*'):
                 text = text[:-1]
 
-            # get the sqlalchemy model from config, used for a dynamic
-            # implementation of the textfiltering functionality
-            model = self.config.model
-
-            # first lets lookup what fields (= sql columns) we have
-            fields = []
-            for column in self.config.columns:
-                try:
-                    colname = column['column']
-                except TypeError:
-                    # its not dict
-                    continue
-
-                # do not support dates
-                if column.get('transform') in (
-                    helper.readable_date,
-                    oghelper.overdue_date_helper,
-                    oghelper.readable_date_set_invisibles,
-                    ):
-                    continue
-
-                field = getattr(model, colname, None)
-                if field:
-                    fields.append(field)
-
             # lets split up the search term into words, extend them with
             # the default wildcards and then search for every word
             # seperately
             for word in text.strip().split(' '):
                 term = '%%%s%%' % word
+
+                # XXX check if the following hack is still necessary
 
                 # Fixed Problems with the collation with the Oracle DB
                 # the case insensitive worked just every second time
@@ -90,8 +67,8 @@ class SqlTableSource(grok.MultiAdapter, BaseTableSource):
                 # Issue #759
                 query.session
 
-                query = query.filter(or_(*[field.like(term)
-                                           for field in fields]))
+                query = query.filter(
+                    or_(*[field.like(term) for field in self.searchable_columns]))
 
         return query
 
@@ -125,5 +102,5 @@ class SqlTableSource(grok.MultiAdapter, BaseTableSource):
     def search_results(self, query):
         """Executes the query and returns a tuple of `results`.
         """
-        #just return executed query everthing else is done
+        # just return executed query everthing else is done
         return query.all()

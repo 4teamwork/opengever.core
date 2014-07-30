@@ -133,6 +133,9 @@ class GlobalTaskTableSource(SqlTableSource):
     grok.implements(ITableSource)
     grok.adapts(IGlobalTaskTableSourceConfig, Interface)
 
+    searchable_columns = [Task.title, Task.text,
+                          Task.sequence_number, Task.responsible]
+
     def build_query(self):
         """Builds the query based on `get_base_query()` method of config.
         Returns the query object.
