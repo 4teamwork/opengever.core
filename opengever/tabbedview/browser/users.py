@@ -117,3 +117,7 @@ class UsersListingTableSource(SqlTableSource):
 
     grok.implements(ITableSource)
     grok.adapts(IUsersListingTableSourceConfig, Interface)
+
+    searchable_columns = [User.lastname, User.firstname, User.userid,
+                          User.email, User.phone_office, User.department,
+                          User.directorate]
