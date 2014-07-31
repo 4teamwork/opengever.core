@@ -69,7 +69,7 @@ class DossierCoverLaTeXView(grok.MultiAdapter, MakoLaTeXView):
     def get_client_title(self):
         registry = getUtility(IRegistry)
         proxy = registry.forInterface(IBaseClientID)
-        return proxy.client_title
+        return proxy.client_title or ''
 
     def get_repository_version(self):
         obj = self.context
