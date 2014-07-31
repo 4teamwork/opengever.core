@@ -1,3 +1,4 @@
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models.query import BaseQuery
 from plone import api
 
@@ -43,3 +44,8 @@ class TaskQuery(BaseQuery):
 
         return self.by_admin_unit(admin_unit)\
                    .filter(self._attribute('physical_path').like(path + '%'))
+
+    def by_brain(self, brain):
+        relative_content_path = '/'.join(brain.getPath().split('/')[2:])
+        return self.by_admin_unit(get_current_admin_unit())\
+                   .filter(self._attribute('physical_path')==relative_content_path).one()
