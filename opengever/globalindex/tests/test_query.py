@@ -1,7 +1,9 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.globalindex.model.task import Task
+from opengever.testing import FunctionalTestCase
 from opengever.testing import MEMORY_DB_LAYER
+from opengever.testing import obj2brain
 from unittest2 import TestCase
 
 
@@ -101,3 +103,67 @@ class TestTaskQueries(TestCase):
         self.assertItemsEqual(
             [task2],
             Task.query.all_issued_tasks(self.admin_unit_b).all())
+
+
+class TestFunctionalTaskQueries(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestFunctionalTaskQueries, self).setUp()
+
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_all_unit_setup())
+
+        self.dossier = create(Builder('dossier'))
+
+    def test_by_container_list_recursive_all_tasks_inside_the_given_container(self):
+        create(Builder('task').within(self.portal))
+        task1 = create(Builder('task').within(self.dossier))
+        subtask = create(Builder('task').within(task1))
+
+        self.assertItemsEqual(
+            [task1.get_sql_object(), subtask.get_sql_object()],
+            Task.query.by_container(self.dossier, self.admin_unit).all())
+
+    def test_by_container_queries_adminunit_dependent(self):
+        create(Builder('task').within(self.dossier))
+
+        additional_org_unit = create(Builder('org_unit')
+                                     .assign_users([self.user])
+                                     .id(u'additional')
+                                     .as_current_org_unit())
+
+        additional_admin_unit = create(Builder('admin_unit')
+                                       .id(u'additional')
+                                       .as_current_admin_unit()
+                                       .assign_org_units([additional_org_unit]))
+
+        task2 = create(Builder('task').within(self.dossier))
+
+        self.assertEquals(
+            [task2.get_sql_object()],
+            Task.query.by_container(self.dossier, additional_admin_unit).all())
+
+    def test_by_brain_returns_corresponding_sql_task(self):
+        task1 = create(Builder('task'))
+
+        self.assertEquals(
+            task1.get_sql_object(),
+            Task.query.by_brain(obj2brain(task1)))
+
+    def test_by_brain_queries_adminunit_dependent(self):
+        create(Builder('task'))
+
+        additional_org_unit = create(Builder('org_unit')
+                                     .assign_users([self.user])
+                                     .id(u'additional')
+                                     .as_current_org_unit())
+        additional_admin_unit = create(Builder('admin_unit')
+                                       .id(u'additional')
+                                       .as_current_admin_unit()
+                                       .assign_org_units([additional_org_unit]))
+
+        task = create(Builder('task'))
+
+        self.assertEquals(
+            task.get_sql_object(),
+            Task.query.by_brain(obj2brain(task)))
