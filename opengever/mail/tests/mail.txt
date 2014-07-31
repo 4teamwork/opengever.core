@@ -1,8 +1,8 @@
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf8"
 Content-Transfer-Encoding: base64
-To: =?utf-8?q?Friedrich_H=C3=B6lderlin?= <to@example.org>
-From: from@example.org
+To: =?utf-8?q?Christoph_M=C3=B6rgeli?= <to@example.org>
+From: =?utf-8?q?Freddy_H=C3=B6lderlin?= <from@example.org>
 Subject: =?utf-8?q?Die_B=C3=BCrgschaft?=
 Date: Thu, 01 Jan 1999 01:00:00 +0100
 Message-Id: <1>

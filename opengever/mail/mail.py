@@ -142,7 +142,7 @@ def get_author_by_email(mail):
         func.lower(User.email) == email).first()
 
     if principal is None:
-        return header_from
+        return header_from.decode('utf-8')
     return u'{0} {1}'.format(principal.lastname, principal.firstname)
 
 
