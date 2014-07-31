@@ -1,0 +1,69 @@
+<div id="portal-searchbox"
+     i18n:domain="plone"
+     tal:define="navigation_root_url view/navigation_root_url;
+                 search_input_id view/search_input_id;
+                 has_solr view/has_solr;">
+  <a tal:attributes="href string:${navigation_root_url}/@@search"
+     accesskey="5"
+     class="hiddenStructure">Suche</a>
+  <form name="searchform" id="searchGadget_form"
+        action="@@search"
+        tal:attributes="action string:${navigation_root_url}/@@search;
+                        id string:${search_input_id}_form;
+                        class python: has_solr and 'has-solr' or 'no-solr'">
+
+    <div class="LSBox">
+      <label class="hiddenStructure"
+             tal:attributes="for search_input_id"
+             i18n:translate="text_search">Search Site</label>
+
+      <input name="SearchableText"
+             type="text"
+             size="18"
+             value=""
+             title="Search Site"
+             accesskey="4"
+             i18n:attributes="title title_search_site"
+             tal:attributes="value request/form/SearchableText|nothing;
+                             id search_input_id;
+                             placeholder view/placeholder"
+             class="searchField inputLabel" /><input class="searchButton"
+                                                     type="submit"
+                                                     value="Search"
+                                                     i18n:attributes="value label_search;"
+                                                     />
+
+      <div class="LSResult" id="LSResult" style="display:none;">
+        <div class="searchSection">
+          <input id="searchbox_currentfolder_only"
+                 class="noborder"
+                 type="checkbox"
+                 name="path"
+                 tal:attributes="value view/folder_path"
+                 />
+          <label for="searchbox_currentfolder_only"
+                 i18n:translate="label_searchbox_currentfolder_only"
+                 style="cursor: pointer">
+            only in current section
+          </label>
+        </div>
+        <div class="LSShadow" id="LSShadow">
+
+		  <!-- GEVER custom: Show advancedsearch link if no results -->
+          <div class="LSRow">
+            <a tal:attributes="href string:${navigation_root_url}/advanced_search"
+               style="font-weight:normal"
+               i18n:domain="plone"
+               i18n:translate="label_advanced_search">Advanced Search&#8230;</a>
+          </div>
+		  <!-- END GEVER custom -->
+		  
+        </div>
+      </div>
+    </div>
+
+  <!-- hidden fields for collective.solr - needed for default facets -->
+  <div tal:condition="has_solr" tal:replace="structure view/hiddenfields" />
+
+  </form>
+</div>

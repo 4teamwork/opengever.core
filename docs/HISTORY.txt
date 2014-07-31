@@ -136,8 +136,33 @@ Changelog
   [lgraf]
 
 
-3.3.1 (unreleased)
+3.3.1 (2014-07-28)
 ------------------
+
+- Made logout overlay easier to customize.
+  [phgross]
+
+- AdvancedSearch: Fixed bug which renders the wrong widget for first request.
+  [phgross]
+
+- Search type filter: limit types to main types.
+  [phgross]
+
+- Overwrite searchbox viewlet and javascript.
+  So there is always a advanced search link.
+  [Julian Infanger]
+
+- Breadcrumb: Replace Home label with curent client label.
+  [phgross]
+
+- Disable edit-bar for the advancedsearch form.
+  [phgross]
+
+- Dropped no longer used attach remote document action.
+  [phgross]
+
+- Moved time column in journal tab to the far left.
+  [lknoepfel]
 
 - Fixed bug where quickupload didn't remove the active class.
   [lknoepfel]

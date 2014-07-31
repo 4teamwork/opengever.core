@@ -42,7 +42,7 @@
        class="opengever.base.viewlets.byline.PloneSiteByline"
        permission="zope2.View"
        />
-	   
+
        <browser:viewlet
            name="gever-colorization"
            manager="plone.app.layout.viewlets.interfaces.IPortalTop"
@@ -50,5 +50,14 @@
            class=".colorization.ColorizationViewlet"
            permission="zope2.View"
            />
+
+   <!-- searchbox viewlet -->
+   <browser:viewlet
+       name="plone.searchbox"
+       manager="plone.app.layout.viewlets.interfaces.IPortalHeader"
+       class=".searchbox.SearchBoxViewlet"
+       permission="zope2.View"
+       layer="opengever.base.interfaces.IOpengeverBaseLayer"
+       />
 
 </configure>

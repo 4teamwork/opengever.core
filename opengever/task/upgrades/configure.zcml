@@ -53,4 +53,14 @@
         directory="profiles/2602"
         />
 
+    <!-- 2602 -> 3300 -->
+    <genericsetup:upgradeStep
+        title="Remove attach_remote_document action"
+        description="Dropped no longer used tasktype action"
+        source="2602"
+        destination="3300"
+        handler="opengever.task.upgrades.to3300.RemoveAttachRemoteDocumentAction"
+        profile="opengever.task:default"
+        />
+
 </configure>

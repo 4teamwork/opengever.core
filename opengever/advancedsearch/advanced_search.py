@@ -10,7 +10,8 @@ from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
 from opengever.task.util import getTaskTypeVocabulary
 from plone.directives import form as directives_form
-from z3c.form import button, field
+from z3c.form import button
+from z3c.form.field import Fields
 from z3c.form.browser import radio, checkbox
 from z3c.form.interfaces import INPUT_MODE
 from zope import schema
@@ -122,7 +123,7 @@ class IAdvancedSearch(directives_form.Schema):
         required=True,
     )
 
-    ### Dossier
+    # Dossier
     start_1 = schema.Date(
         title=_('label_start', default='Start date'),
         description=_('label_from', default='From'),
@@ -174,7 +175,7 @@ class IAdvancedSearch(directives_form.Schema):
         required=False,
     )
 
-    ### Document
+    # Document
     receipt_date_1 = schema.Date(
         title=_('label_receipt_date', default='Receipt date'),
         description=_('label_from', default='From'),
@@ -228,7 +229,7 @@ class IAdvancedSearch(directives_form.Schema):
         required=False,
     )
 
-    ### Task
+    # Task
     directives_form.widget(issuer=AutocompleteFieldWidget)
     issuer = schema.Choice(
         title=_(u"label_issuer", default=u"Issuer"),
@@ -270,42 +271,30 @@ class AdvancedSearchForm(directives_form.Form):
     grok.name('advanced_search')
     grok.require('zope2.View')
 
+    ignoreContext = True
     label = _('advanced_search', default='advanced search')
 
-    fields = field.Fields(IAdvancedSearch)
+    schemas = (IAdvancedSearch,)
 
-    ignoreContext = True
+    def get_fields(self):
+        if getattr(self, '_fields', None) is not None:
+            return self._fields
 
-    def field_mapping(self):
-        return FIELD_MAPPING
+        fields = Fields(*self.schemas)
 
-    def render(self):
-        """Overwritting the render method to disable the UnloadProtection.
-        Becuase overwrite and copy the whole template makes no sense.
-        Unfortunately it's not configurable in the plone.app.z3c form itself.
-        """
-
-        html = super(AdvancedSearchForm, self).render()
-        html = html.replace('enableUnloadProtection', '')
-        return html
-
-    def updateWidgets(self):
-        super(AdvancedSearchForm, self).updateWidgets()
-
-        self.fields['responsible'].widgetFactory[INPUT_MODE] \
+        fields['responsible'].widgetFactory[INPUT_MODE] \
             = AutocompleteFieldWidget
-        self.fields['checked_out'].widgetFactory[INPUT_MODE] \
+        fields['checked_out'].widgetFactory[INPUT_MODE] \
             = AutocompleteFieldWidget
-        self.fields['issuer'].widgetFactory[INPUT_MODE] \
+        fields['issuer'].widgetFactory[INPUT_MODE] \
             = AutocompleteFieldWidget
-        self.fields['object_provides'].widgetFactory[INPUT_MODE] \
+        fields['object_provides'].widgetFactory[INPUT_MODE] \
             = radio.RadioFieldWidget
-        self.fields['dossier_review_state'].widgetFactory[INPUT_MODE] \
+        fields['dossier_review_state'].widgetFactory[INPUT_MODE] \
             = checkbox.CheckBoxFieldWidget
-        self.fields['task_review_state'].widgetFactory[INPUT_MODE] \
+        fields['task_review_state'].widgetFactory[INPUT_MODE] \
             = checkbox.CheckBoxFieldWidget
 
-        self.context.REQUEST.set('client', get_client_id())
         date_fields = [
             'start_1',
             'start_2',
@@ -322,9 +311,40 @@ class AdvancedSearchForm(directives_form.Form):
         ]
 
         for field in date_fields:
-            self.fields.get(
+            fields.get(
                 field).widgetFactory[INPUT_MODE] = DatePickerFieldWidget
 
+        self._fields = fields
+        self.move_fields()
+        return self._fields
+
+    def set_fields(self, fields):
+        self._fields = fields
+
+    def move_fields(self):
+        pass
+
+    fields = property(get_fields, set_fields)
+
+    def field_mapping(self):
+        return FIELD_MAPPING
+
+    def render(self):
+        """Overwritting the render method to disable the UnloadProtection.
+        Becuase overwrite and copy the whole template makes no sense.
+        Unfortunately it's not configurable in the plone.app.z3c form itself.
+        """
+
+        self.request.set('disable_border', 1)
+
+        html = super(AdvancedSearchForm, self).render()
+        html = html.replace('enableUnloadProtection', '')
+        return html
+
+    def updateWidgets(self):
+        super(AdvancedSearchForm, self).updateWidgets()
+
+        self.context.REQUEST.set('client', get_client_id())
         searchableText = self.widgets["searchableText"]
         searchableText.value = self.request.get('SearchableText')
 

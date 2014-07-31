@@ -175,11 +175,19 @@
         directory="profiles/2610"
         />
 
-    <!-- 2610 -> 3401 -->
+    <upgrade-step:importProfile
+        title="Enable GEVER livesearch.js"
+        profile="opengever.base:default"
+        source="2610"
+        destination="3300"
+        directory="profiles/3300"
+        />
+
+    <!-- 3300 -> 3401 -->
     <upgrade-step:importProfile
         title="Add IClassificationSettings registry settings"
         profile="opengever.base:default"
-        source="2610"
+        source="3300"
         destination="3401"
         directory="profiles/3401"
         />
