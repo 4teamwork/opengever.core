@@ -14,11 +14,24 @@ from zope.component import getUtility
 
 class Column(object):
 
-    def __init__(self, id, label, width, getter):
+    def __init__(self, id, label, width, getter=None):
         self.id = id
         self.label = label
         self.width = width
-        self.getter = getter
+
+        if getter is None:
+            getter = id
+
+        if isinstance(getter, basestring):
+            self.getter = lambda item: getattr(item, getter)
+        else:
+            self.getter = getter
+
+    def get_value(self, item):
+        value = self.getter(item)
+        if value is None:
+            value = u''
+        return value
 
 
 class LatexListing(object):
@@ -70,7 +83,7 @@ class LatexListing(object):
     def get_row_for_item(self, item):
         data = []
         for column in self.columns.values():
-            data.append(column.getter(item))
+            data.append(column.get_value(item))
 
         return data
 
@@ -108,13 +121,11 @@ class DossiersLaTeXListing(LatexListing):
         return [
             Column('reference',
                    _('label_reference_number', default='Reference number'),
-                   '10%',
-                   lambda brain: brain.reference),
+                   '10%'),
 
             Column('sequence_number',
                    _('short_label_sequence_number', default='No.'),
-                   '5%',
-                   lambda brain: brain.sequence_number),
+                   '5%'),
 
             Column('repository_title',
                    _('label_repository_title', default='Repositoryfolder'),
@@ -124,7 +135,7 @@ class DossiersLaTeXListing(LatexListing):
             Column('title',
                    _('label_title', default='Title'),
                    '25%',
-                   lambda brain: brain.Title),
+                   'Title'),
 
             Column('responsible',
                    _('label_responsible', default='Responsible'),
@@ -162,13 +173,12 @@ class DocumentsLaTeXListing(LatexListing):
         return [
             Column('sequence_number',
                    _('short_label_sequence_number', default='No.'),
-                   '6%',
-                   lambda brain: brain.sequence_number),
+                   '6%'),
 
             Column('title',
                    _('label_title', default='Title'),
                    '35%',
-                   lambda brain: brain.Title),
+                   'Title'),
 
             Column('document_date',
                    _('label_document_date', default='Document date'),
@@ -190,8 +200,7 @@ class DocumentsLaTeXListing(LatexListing):
 
             Column('document_author',
                    _('label_document_author', default='Document author'),
-                   '20%',
-                   lambda brain: brain.document_author)
+                   '20%')
             ]
 
 
@@ -201,8 +210,7 @@ class TasksLaTeXListing(LatexListing):
         return [
             Column('sequence_number',
                    _('short_label_sequence_number', default='No.'),
-                   '3%',
-                   lambda item: item.sequence_number),
+                   '3%'),
 
             Column('task_type',
                    _('label_task_type', default='Task type'),
@@ -218,7 +226,7 @@ class TasksLaTeXListing(LatexListing):
             Column('responsible',
                    _('label_task_responsible', default='Responsible'),
                    '15%',
-                    lambda item: get_responsible_of_task(item)),
+                   get_responsible_of_task),
 
             Column('review_state',
                    _('label_review_state', default='State'),
@@ -227,8 +235,7 @@ class TasksLaTeXListing(LatexListing):
 
             Column('title',
                    _('label_title', default='Title'),
-                   '25%',
-                   lambda item: item.title),
+                   '25%'),
 
             Column('deadline',
                    _('label_deadline', default='Deadline'),
