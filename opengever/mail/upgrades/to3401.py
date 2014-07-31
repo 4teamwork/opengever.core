@@ -15,10 +15,11 @@ class ActivateBehaviors(UpgradeStep):
         behaviors = list(fti.behaviors)
         if 'plone.app.content.interfaces.INameFromTitle' in behaviors:
             behaviors.remove('plone.app.content.interfaces.INameFromTitle')
-        behaviors.append(
-            u'ftw.journal.interfaces.IAnnotationsJournalizable')
-        behaviors.append(
-            u'opengever.document.behaviors.metadata.IDocumentMetadata')
+
+        behaviors.extend([
+            u'ftw.journal.interfaces.IAnnotationsJournalizable',
+            u'opengever.document.behaviors.metadata.IDocumentMetadata',
+            u'opengever.document.behaviors.name_from_title.IDocumentNameFromTitle'])
 
         fti._updateProperty('behaviors', tuple(behaviors))
 
