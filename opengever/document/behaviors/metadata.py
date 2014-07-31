@@ -3,6 +3,7 @@ from collective.elephantvocabulary import wrap_vocabulary
 from datetime import date
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
+from ftw.mail.mail import IMail
 from opengever.document import _
 from opengever.document.interfaces import IDocumentSettings
 from plone.directives import form
@@ -158,6 +159,10 @@ class FileOrPaperValidator(validator.SimpleFieldValidator):
         """
         # Bail if not called during a regular add form
         if self.request.form == {}:
+            return
+
+        # Mails are always available in digital form
+        if IMail.providedBy(self.context):
             return
 
         if not (self.has_file() or self.is_preserved_as_paper()):
