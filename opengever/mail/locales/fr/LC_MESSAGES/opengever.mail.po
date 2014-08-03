@@ -90,7 +90,7 @@ msgstr "Envoyer les documents comme Email"
 #. Default: "Select the attachments that should be saved. From every selected attachment a document in the parent dossier will be created."
 #: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:47
 msgid "help_attachments_to_save"
-msgstr "Sélectionner les annexes à extraire. De chaque annexe sélectionnée un document est créé  dans le dossier maître."
+msgstr "Sélectionner les annexes à extraire. De chaque annexe sélectionnée un document est créé dans le dossier maître."
 
 #. Default: "Select which attachments should be deleted."
 #: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:69

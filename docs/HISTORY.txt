@@ -4,6 +4,9 @@ Changelog
 3.4 (unreleased)
 ----------------
 
+- Journalize AttachmentsDeleted event.
+  [lgraf]
+
 - Added new mail event `AttachmentsDeleted`.
   [lgraf]
 

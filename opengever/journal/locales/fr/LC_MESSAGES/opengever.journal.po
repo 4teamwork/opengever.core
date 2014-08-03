@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-07-17 15:22+0000\n"
+"POT-Creation-Date: 2014-08-03 19:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,9 +20,14 @@ msgid "heading_journal"
 msgstr "Historique"
 
 #. Default: "Actor"
-#: ./opengever/journal/tab.py:65
+#: ./opengever/journal/tab.py:69
 msgid "label_actor"
 msgstr "Modifier le"
+
+#. Default: "Attachments deleted: ${titles}"
+#: ./opengever/journal/handlers.py:304
+msgid "label_attachments_deleted"
+msgstr ""
 
 #. Default: "Comments"
 #: ./opengever/journal/tab.py:73
@@ -30,172 +35,172 @@ msgid "label_comments"
 msgstr "Commentaire"
 
 #. Default: "Document added: ${title}"
-#: ./opengever/journal/handlers.py:302
+#: ./opengever/journal/handlers.py:319
 msgid "label_document_added"
 msgstr "Document ajouté: ${title}"
 
 #. Default: "Document checked in"
-#: ./opengever/journal/handlers.py:416
+#: ./opengever/journal/handlers.py:441
 msgid "label_document_checkin"
 msgstr "Document avec checkin"
 
 #. Default: "Document checked out"
-#: ./opengever/journal/handlers.py:403
+#: ./opengever/journal/handlers.py:428
 msgid "label_document_checkout"
 msgstr "Document avec checkout"
 
 #. Default: "Canceled document checkout"
-#: ./opengever/journal/handlers.py:428
+#: ./opengever/journal/handlers.py:453
 msgid "label_document_checkout_cancel"
 msgstr "Annuler les modification du fichier"
 
 #. Default: "Changed file and metadata"
-#: ./opengever/journal/handlers.py:341
+#: ./opengever/journal/handlers.py:366
 msgid "label_document_file_and_metadata_modified"
 msgstr "Fichier et méta-données modifiés"
 
 #. Default: "Changed file and metadata of document ${title}"
-#: ./opengever/journal/handlers.py:343
+#: ./opengever/journal/handlers.py:368
 msgid "label_document_file_and_metadata_modified__parent"
 msgstr "Fichier et méta-données du document «${title}» modifiés"
 
 #. Default: "Changed file"
-#: ./opengever/journal/handlers.py:349
+#: ./opengever/journal/handlers.py:374
 msgid "label_document_file_modified"
 msgstr "Fichier modifié"
 
 #. Default: "Changed file of document ${title}"
-#: ./opengever/journal/handlers.py:351
+#: ./opengever/journal/handlers.py:376
 msgid "label_document_file_modified__parent"
 msgstr "Fichier du document «${title}» modifié"
 
 #. Default: "Reverte document file to version ${version_id}"
-#: ./opengever/journal/handlers.py:446
+#: ./opengever/journal/handlers.py:471
 msgid "label_document_file_reverted"
 msgstr "Fichier du document remis à la version ${version_id}"
 
 #. Default: "Changed metadata"
-#: ./opengever/journal/handlers.py:356
+#: ./opengever/journal/handlers.py:381
 msgid "label_document_metadata_modified"
 msgstr "Méta-données modifiées"
 
 #. Default: "Changed metadata of document ${title}"
-#: ./opengever/journal/handlers.py:358
+#: ./opengever/journal/handlers.py:383
 msgid "label_document_metadata_modified__parent"
 msgstr "Méta-données du document ${title} modifiées"
 
 #. Default: "Public trial changed to \"${public_trial}\"."
-#: ./opengever/journal/handlers.py:372
+#: ./opengever/journal/handlers.py:397
 msgid "label_document_public_trial_modified"
 msgstr "Statut public modifié en «${public_trial}»"
 
 #. Default: "Document sent by Mail: ${subject}"
-#: ./opengever/journal/handlers.py:479
+#: ./opengever/journal/handlers.py:504
 msgid "label_document_sent"
 msgstr "Envoi de document par Email: ${subject}"
 
 #. Default: "Attachments: ${documents} | Receivers: ${receiver} | Message: ${message}"
-#: ./opengever/journal/handlers.py:484
+#: ./opengever/journal/handlers.py:509
 msgid "label_document_sent_comment"
 msgstr "Annexes:  ${documents} | Récepteur ${receiver} | Message ${message}"
 
 #. Default: "Dossier added: ${title}"
-#: ./opengever/journal/handlers.py:206
+#: ./opengever/journal/handlers.py:208
 msgid "label_dossier_added"
 msgstr "Dossier ajouté: ${title}"
 
 #. Default: "Dossier modified: ${title}"
-#: ./opengever/journal/handlers.py:219
+#: ./opengever/journal/handlers.py:221
 msgid "label_dossier_modified"
 msgstr "Dossier modifié: ${title}"
 
 #. Default: "Download copy"
-#: ./opengever/journal/handlers.py:457
+#: ./opengever/journal/handlers.py:482
 msgid "label_file_copy_downloaded"
 msgstr "Télécharger une copie"
 
 #. Default: "Local roles aquistion activated."
-#: ./opengever/journal/handlers.py:275
+#: ./opengever/journal/handlers.py:277
 msgid "label_local_roles_acquisition_activated"
 msgstr "Héritage des droits d'accès activé"
 
 #. Default: "Local roles aquistion activated at ${repository}."
-#: ./opengever/journal/handlers.py:168
+#: ./opengever/journal/handlers.py:170
 msgid "label_local_roles_acquisition_activated_at"
 msgstr "Héritage des droits d'accès activé pour  ${repository}."
 
 #. Default: "Local roles aquistion blocked."
-#: ./opengever/journal/handlers.py:260
+#: ./opengever/journal/handlers.py:262
 msgid "label_local_roles_acquisition_blocked"
 msgstr "Héritage des droits d'accès désactivé"
 
 #. Default: "Local roles aquistion blocked at ${repository}."
-#: ./opengever/journal/handlers.py:150
+#: ./opengever/journal/handlers.py:152
 msgid "label_local_roles_acquisition_blocked_at"
 msgstr "Héritage des droits d'accès désactivé pour  ${repository}."
 
 #. Default: "Local roles modified."
-#: ./opengever/journal/handlers.py:290
+#: ./opengever/journal/handlers.py:292
 msgid "label_local_roles_modified"
 msgstr "Rôles à l'intérne modifiés"
 
 #. Default: "Local roles modified at ${repository}."
-#: ./opengever/journal/handlers.py:186
+#: ./opengever/journal/handlers.py:188
 msgid "label_local_roles_modified_at"
 msgstr "Rôles à l'intérne pour ${repository} modifiés"
 
 #. Default: "Object cut: ${title}"
-#: ./opengever/journal/handlers.py:640
+#: ./opengever/journal/handlers.py:665
 msgid "label_object_cut"
 msgstr "Objet coupé : ${title}"
 
 #. Default: "Object moved: ${title}"
-#: ./opengever/journal/handlers.py:624
+#: ./opengever/journal/handlers.py:649
 msgid "label_object_moved"
 msgstr "Objet collé : ${title}"
 
 #. Default: "Participant added: ${contact} with roles ${roles}"
-#: ./opengever/journal/handlers.py:584
+#: ./opengever/journal/handlers.py:609
 msgid "label_participant_added"
 msgstr "Participation ajoutée pour ${contact} comme ${roles}"
 
 #. Default: "Participant removed: ${contact}"
-#: ./opengever/journal/handlers.py:599
+#: ./opengever/journal/handlers.py:624
 msgid "label_participant_removed"
 msgstr "Participation de ${contact} enlevée"
 
 #. Default: "Unlocked prefix ${prefix} in ${repository}."
-#: ./opengever/journal/handlers.py:135
+#: ./opengever/journal/handlers.py:137
 msgid "label_prefix_unlocked"
 msgstr "Référence ${prefix} dans ${repository} a été débloqué."
 
 #. Default: "Object restore: ${title}"
-#: ./opengever/journal/handlers.py:561
+#: ./opengever/journal/handlers.py:586
 msgid "label_restore"
 msgstr "Objet restauré : ${title}"
 
 #. Default: "Task added: ${title}"
-#: ./opengever/journal/handlers.py:503
+#: ./opengever/journal/handlers.py:528
 msgid "label_task_added"
 msgstr "Tâche ajoutée : ${title}"
 
 #. Default: "Task modified: ${title}"
-#: ./opengever/journal/handlers.py:520
+#: ./opengever/journal/handlers.py:545
 msgid "label_task_modified"
 msgstr "Tâche modifiée : ${title}"
 
 #. Default: "Time"
-#: ./opengever/journal/tab.py:69
+#: ./opengever/journal/tab.py:61
 msgid "label_time"
 msgstr "Date"
 
 #. Default: "Title"
-#: ./opengever/journal/tab.py:61
+#: ./opengever/journal/tab.py:65
 msgid "label_title"
 msgstr "Titre"
 
 #. Default: "Object moved to trash: ${title}"
-#: ./opengever/journal/handlers.py:543
+#: ./opengever/journal/handlers.py:568
 msgid "label_to_trash"
 msgstr "Objet effacé : ${title}"
 

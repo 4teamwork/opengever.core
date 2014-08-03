@@ -36,4 +36,6 @@ class AttachmentsDeleted(ObjectModifiedEvent):
     def __init__(self, object, attachments, *descriptions):
 
         super(AttachmentsDeleted, self).__init__(object, *descriptions)
+
+        # List of filenames (unicode) of attachments that have been deleted
         self.attachments = attachments

@@ -2,7 +2,9 @@ from Acquisition import aq_inner, aq_parent
 from five import grok
 from ftw.journal.events.events import JournalEntryEvent
 from ftw.journal.interfaces import IJournalizable
+from ftw.mail.mail import IMail
 from OFS.interfaces import IObjectWillBeMovedEvent, IObjectWillBeAddedEvent
+from opengever.base.behaviors import classification
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.interfaces import IFileCopyDownloadedEvent
 from opengever.document.interfaces import IObjectCheckedInEvent
@@ -15,6 +17,7 @@ from opengever.dossier.interfaces import IParticipationCreated
 from opengever.dossier.interfaces import IParticipationRemoved
 from opengever.journal import _
 from opengever.journal.helper import documents_list_helper
+from opengever.mail.interfaces import IAttachmentsDeletedEvent
 from opengever.mail.interfaces import IDocumentSent
 from opengever.repository.events import IRepositoryPrefixUnlocked
 from opengever.repository.repositoryfolder import IRepositoryFolderSchema
@@ -25,7 +28,6 @@ from opengever.sharing.interfaces import ILocalRolesAcquisitionActivated
 from opengever.sharing.interfaces import ILocalRolesAcquisitionBlocked
 from opengever.sharing.interfaces import ILocalRolesModified
 from opengever.tabbedview.helper import readable_ogds_author
-from opengever.base.behaviors import classification
 from opengever.task.task import ITask
 from opengever.trash.trash import ITrashedEvent, IUntrashedEvent
 from persistent.dict import PersistentDict
@@ -293,6 +295,21 @@ def dossier_local_roles_modified(context, event):
 
     return
 
+# ----------------------- MAIL -----------------------
+ATTACHMENTS_DELETED_ACTION = 'Attachments deleted'
+
+@grok.subscribe(IMail, IAttachmentsDeletedEvent)
+def attachments_deleted(context, event):
+    attachment_names = event.attachments
+    title = _(
+        u'label_attachments_deleted',
+        default=u'Attachments deleted: ${filenames}',
+        mapping={'filenames': ', '.join(attachment_names)})
+
+    journal_entry_factory(context, ATTACHMENTS_DELETED_ACTION, title)
+    return
+
+
 # ----------------------- DOCUMENT -----------------------
 DOCUMENT_ADDED_ACTION = 'Document added'
 
@@ -323,9 +340,15 @@ def document_modified(context, event):
     metadata_changed = False
     public_trial_changed = False
 
+
+    if IAttachmentsDeletedEvent.providedBy(event):
+        # AttachmentsDeleted is a special kind of ObjectModified event
+        # and is handled elsewhere - don't journalize it twice.
+        return
+
     for desc in event.descriptions:
         for attr in desc.attributes:
-            if attr == 'file':
+            if attr in ('file', 'message'):
                 file_changed = True
             elif attr in ('IClassification.public_trial', 'public_trial'):
                 # Attribute name is different when changed through regular
