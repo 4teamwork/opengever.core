@@ -19,8 +19,8 @@ msgid "Cancel"
 msgstr "Abbrechen"
 
 #: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:101
-msgid "Create documents"
-msgstr "Dokumente extrahieren"
+msgid "Save attachments"
+msgstr "Anhänge speichern"
 
 #: ./opengever/mail/browser/send_document.py:46
 msgid "No Mail Address"
@@ -111,10 +111,10 @@ msgstr "Live Search: Nachname/Vorname der internen Mitarbeiter oder Kontakte ein
 msgid "help_message"
 msgstr ""
 
-#. Default: "Select the attachments to extract."
+#. Default: "Select the attachments that should be saved. From every selected attachment a document in the parent dossier will be created."
 #: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:47
-msgid "help_select_attachments"
-msgstr "Wählen Sie die Anhänge aus, die extrahiert werden sollen. Aus jedem ausgewähltem Anhang wird ein Dokument im übergeordneten Dossier erzeugt."
+msgid "help_attachments_to_save"
+msgstr "Wählen Sie die Anhänge aus, die gespeichert werden sollen. Aus jedem ausgewähltem Anhang wird ein Dokument im übergeordneten Dossier erzeugt."
 
 #: ./opengever/mail/browser/send_document.py:75
 msgid "help_subject"
@@ -185,10 +185,10 @@ msgstr "Aktenzeichen"
 msgid "label_see_attachment"
 msgstr "siehe Anhänge"
 
-#. Default: "Attachments to extract"
+#. Default: "Attachments to save"
 #: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:42
-msgid "label_select_attachments"
-msgstr "Anhänge"
+msgid "label_attachments_to_save"
+msgstr "Zu speichernde Anhänge"
 
 #. Default: "Sequence Number"
 #: ./opengever/mail/browser/byline.py:20
