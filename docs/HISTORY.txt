@@ -4,6 +4,9 @@ Changelog
 3.4 (unreleased)
 ----------------
 
+- Added new mail event `AttachmentsDeleted`.
+  [lgraf]
+
 - Improved wording of German translations in extract attachments view.
   [lgraf]
 

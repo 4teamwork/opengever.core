@@ -1,8 +1,10 @@
+from opengever.mail.interfaces import IAttachmentsDeletedEvent
+from opengever.mail.interfaces import IDocumentSent
+from zope.component import getUtility
 from zope.component.interfaces import ObjectEvent
 from zope.interface import implements
-from opengever.mail.interfaces import IDocumentSent
 from zope.intid.interfaces import IIntIds
-from zope.component import getUtility
+from zope.lifecycleevent import ObjectModifiedEvent
 
 
 class DocumentSent(ObjectEvent):
@@ -23,3 +25,15 @@ class DocumentSent(ObjectEvent):
         for attachment in attachments:
             intids.append(id_util.queryId(attachment))
         self.intids = intids
+
+
+class AttachmentsDeleted(ObjectModifiedEvent):
+    """One or more attachments have been deleted from a ftw.mail.mail message.
+    """
+
+    implements(IAttachmentsDeletedEvent)
+
+    def __init__(self, object, attachments, *descriptions):
+
+        super(AttachmentsDeleted, self).__init__(object, *descriptions)
+        self.attachments = attachments
