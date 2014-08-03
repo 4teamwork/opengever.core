@@ -4,6 +4,9 @@ Changelog
 3.4 (unreleased)
 ----------------
 
+- Disable the editable border for the extract attachments view.
+  [lgraf]
+
 - Fix UnicodeError in resolving mail author.
   [lgraf]
 
