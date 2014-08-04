@@ -13,17 +13,21 @@ from zExceptions import Unauthorized
 
 def can_access_public_trial_edit_form(user, content):
     """Returns True if the user has 'Modify portal content' permission in any
-    open dossier state.
+    open dossier state. And the containing dossier is
+     - not a templatedossier
+     - not inactive
     """
-    wftool = getToolByName(content, 'portal_workflow')
 
     assert IBaseDocument.providedBy(
         content), 'Content needs to provide IBaseDocument'
 
+    wftool = getToolByName(content, 'portal_workflow')
     dossier = find_parent_dossier(content)
 
     if ITemplateDossier.providedBy(dossier):
-        # Template dossiers don't have the IClassification behavior
+        return False
+
+    if wftool.getInfoFor(dossier, 'review_state') == 'dossier-state-inactive':
         return False
 
     workflow_id = wftool.getChainForPortalType(dossier.portal_type)[0]

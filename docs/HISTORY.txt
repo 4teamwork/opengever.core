@@ -4,6 +4,9 @@ Changelog
 3.4 (unreleased)
 ----------------
 
+- Disable public_trial edit_form when parents dossier is inactive.
+  [phgross]
+
 - Journalize AttachmentsDeleted event.
   [lgraf]
 
@@ -143,7 +146,7 @@ Changelog
 
 - Added limited-public option for public trial.
   [lknoepfel]
-  
+
 - Document: Refactor behaviors to be a package with separate modules.
   [lgraf]
 
