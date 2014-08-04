@@ -129,6 +129,9 @@ class ExtractAttachments(grok.View):
         return generator.generate(items, columns, sortable=False)
 
     def __call__(self):
+        # Disable the editable border for extract attachments view
+        self.request.set('disable_border', 1)
+
         items = get_attachments(self.context.msg)
         if not len(items):
             msg = _(u'error_no_attachments_to_extract',
