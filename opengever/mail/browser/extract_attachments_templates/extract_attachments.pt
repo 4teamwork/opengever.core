@@ -39,14 +39,17 @@
 
 
             <div class="field">
-              <label i18n:translate="label_select_attachments"
+              <label i18n:translate="label_attachments_to_save"
                      class="horizontal">
-                Attachments to extract
+                Attachments to save
               </label>
 
-              <div class="formHelp" i18n:translate="help_select_attachments">
-                Select the attachments to extract.
+              <div class="formHelp" i18n:translate="help_attachments_to_save">
+                Select the attachments that should be saved. From every selected attachment
+                a document in the parent dossier will be created.
+
               </div>
+              <br />
               <p i18n:domain="opengever.tabbedview" >
                   <span i18n:translate="Choose:">Choose</span>: 
                   <a i18n:translate="all" href="#" id="all">All</a>
@@ -99,7 +102,7 @@
 
             <div class="formControls">
               <input type="submit" name="form.submitted"
-                     value="Create documents"
+                     value="Save attachments"
                      class="submit-widget button-field context"
                      i18n:attributes="value" />
 

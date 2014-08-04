@@ -19,7 +19,7 @@ msgid "Cancel"
 msgstr "Annuler"
 
 #: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:101
-msgid "Create documents"
+msgid "Save attachments"
 msgstr "Extraire documents"
 
 #: ./opengever/mail/browser/send_document.py:46
@@ -111,9 +111,9 @@ msgstr "Recherche en direct : Saisir nom et prénom des collaborateurs internes 
 msgid "help_message"
 msgstr ""
 
-#. Default: "Select the attachments to extract."
+#. Default: "Select the attachments that should be saved. From every selected attachment a document in the parent dossier will be created."
 #: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:47
-msgid "help_select_attachments"
+msgid "help_attachments_to_save"
 msgstr "Sélectionner les annexes à extraire. De chaque annexe sélectionnée un document est créé  dans le dossier maître."
 
 #: ./opengever/mail/browser/send_document.py:75
@@ -185,9 +185,9 @@ msgstr "Numéro de référence"
 msgid "label_see_attachment"
 msgstr "Voir  fichiers attachés"
 
-#. Default: "Attachments to extract"
+#. Default: "Attachments to save"
 #: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:42
-msgid "label_select_attachments"
+msgid "label_attachments_to_save"
 msgstr "Fichiers attachés"
 
 #. Default: "Sequence Number"

@@ -22,7 +22,7 @@ msgid "Cancel"
 msgstr ""
 
 #: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:101
-msgid "Create documents"
+msgid "Save attachments"
 msgstr ""
 
 #: ./opengever/mail/browser/send_document.py:46
@@ -114,9 +114,9 @@ msgstr ""
 msgid "help_message"
 msgstr ""
 
-#. Default: "Select the attachments to extract."
+#. Default: "Select the attachments that should be saved. From every selected attachment a document in the parent dossier will be created."
 #: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:47
-msgid "help_select_attachments"
+msgid "help_attachments_to_extract"
 msgstr ""
 
 #: ./opengever/mail/browser/send_document.py:75
@@ -188,9 +188,9 @@ msgstr ""
 msgid "label_see_attachment"
 msgstr ""
 
-#. Default: "Attachments to extract"
+#. Default: "Attachments to save"
 #: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:42
-msgid "label_select_attachments"
+msgid "label_attachments_to_save"
 msgstr ""
 
 #. Default: "Sequence Number"
