@@ -243,14 +243,14 @@ class TestOverviewFunctions(MockTestCase):
         directlyProvides(item_task, ITask)
         mock_item_task = self.mocker.proxy(item_task, spec=False, count=False)
         self.expect(mock_item_task.responsible_client).result('client_name')
-        self.expect(mock_item_task.responsible).result('user1')
+        self.expect(mock_item_task.responsible).result(u'\u00fcser1')
 
         # Task-Object wihout responsible client
         item_task_without = self.create_dummy()
         directlyProvides(item_task_without, ITask)
         mock_item_task_without = self.mocker.proxy(item_task_without, spec=False, count=False)
         self.expect(mock_item_task_without.responsible_client).result(None)
-        self.expect(mock_item_task_without.responsible).result('user2')
+        self.expect(mock_item_task_without.responsible).result(u'\u00fcser2')
 
         # Others
         item_obj = self.create_dummy()
@@ -271,6 +271,11 @@ class TestOverviewFunctions(MockTestCase):
         info_with = view.get_task_info(mock_item_task)
         info_without = view.get_task_info(mock_item_task_without)
 
+        # if info is unicode it tries to decode everything to unicode - which
+        # fails e.g. for the breadcumbs
+        self.assertTrue(isinstance(info_with, str))
+        self.assertTrue(isinstance(info_without, str))
+
         self.assertEqual(info_obj, '')
-        self.assertEqual(info_with, 'client_name / user1')
-        self.assertEqual(info_without, 'user2')
+        self.assertEqual(info_with, 'client_name / \xc3\xbcser1')
+        self.assertEqual(info_without, '\xc3\xbcser2')

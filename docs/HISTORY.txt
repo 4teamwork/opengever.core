@@ -6,6 +6,8 @@ Changelog
 
 - General fixes:
 
+  - Fixed unicode decode bug in task overview.
+    [lknoepfel]
   - OGQuickUploadCapableFileFactory: Set default values before adding content to container.
     (Prevents values set by handlers on ObjectAddedEvent to be overwritten again).
     [lgraf]

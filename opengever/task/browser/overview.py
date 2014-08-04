@@ -269,7 +269,7 @@ class Overview(DisplayForm, OpengeverTab):
         if not item.responsible_client or len(info.get_clients()) <= 1:
             # No responsible client is set yet or we have a single client
             # setup.
-            return info.describe(item.responsible)
+            return info.describe(item.responsible).encode('utf-8')
 
         # Client
         client = client_title_helper(item, item.responsible_client)
