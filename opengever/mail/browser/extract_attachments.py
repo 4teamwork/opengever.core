@@ -6,6 +6,8 @@ from ftw.mail.utils import remove_attachments
 from ftw.table.interfaces import ITableGenerator
 from opengever.base.utils import find_parent_dossier
 from opengever.mail import _
+from opengever.mail.events import AttachmentsDeleted
+from opengever.mail.interfaces import IAttachmentsDeletedEvent
 from plone.dexterity.utils import createContentInContainer
 from plone.dexterity.utils import iterSchemata
 from plone.i18n.normalizer.interfaces import IIDNormalizer
@@ -16,10 +18,13 @@ from z3c.relationfield.relation import RelationValue
 from zope.app.component.hooks import getSite
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
+from zope.event import notify
 from zope.intid.interfaces import IIntIds
+from zope.lifecycleevent import Attributes
 from zope.schema import getFieldsInOrder
 import os.path
 import re
+
 
 from plone.namedfile.interfaces import HAVE_BLOBS
 if HAVE_BLOBS:
@@ -235,6 +240,15 @@ class ExtractAttachments(grok.View):
                 # all
                 pos_to_delete = [int(att['position']) for att in
                                  get_attachments(self.context.msg)]
+
+            attachment_names = [
+                a.get('filename', '[no filename]').decode('utf-8')
+                for a in get_attachments(self.context.msg)
+                if a.get('position') in pos_to_delete]
+
+            # Flag the `message` attribute as having changed
+            desc = Attributes(IAttachmentsDeletedEvent, "message")
+            notify(AttachmentsDeleted(self.context, attachment_names, desc))
 
             # set the new message file
             msg = remove_attachments(self.context.msg, pos_to_delete)
