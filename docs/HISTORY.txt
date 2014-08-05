@@ -4,6 +4,9 @@ Changelog
 3.4 (unreleased)
 ----------------
 
+- Added public_trial_statement field to the public_trail edit form.
+  [phgross]
+
 - Disable public_trial edit_form when parents dossier is inactive.
   [phgross]
 

@@ -103,6 +103,14 @@ class TestEditPublicTrialForm(FunctionalTestCase):
         self.assertEquals('private', self.document.public_trial)
 
     @browsing
+    def test_user_CAN_modify_public_trial_statement(self, browser):
+        browser.login().visit(self.document, view='edit_public_trial')
+        browser.fill({'Public trial statement': 'Foo statement'}).submit()
+
+        self.assertEquals('Foo statement',
+                          self.document.public_trial_statement)
+
+    @browsing
     def test_user_submit_cancel_button(self, browser):
         browser.login().visit(self.document, view='edit_public_trial')
         browser.find('Cancel').click()
