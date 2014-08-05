@@ -56,7 +56,8 @@ class EditPublicTrialForm(dexterity.EditForm):
 
     schema = None
 
-    fields = Fields(IClassification).select('public_trial')
+    fields = Fields(IClassification).select(
+        'public_trial', 'public_trial_statement')
 
     label = _(u'label_change_public_trial',
               default=u'Change public trial information.')
