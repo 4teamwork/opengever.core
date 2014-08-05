@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-08-03 18:53+0000\n"
+"POT-Creation-Date: 2014-08-05 08:27+0000\n"
 "PO-Revision-Date: 2012-09-06 13:01+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -175,6 +175,11 @@ msgstr ""
 msgid "label_message"
 msgstr "Message"
 
+#. Default: "Original message"
+#: ./opengever/mail/browser/mail.py:77
+msgid "label_org_message"
+msgstr ""
+
 #. Default: "see attachment"
 #: ./opengever/mail/browser/send_document.py:279
 msgid "label_see_attachment"
@@ -193,6 +198,11 @@ msgstr "Titre"
 #: ./opengever/mail/browser/send_document.py:59
 msgid "mails"
 msgstr "Email"
+
+#. Default: "No message"
+#: ./opengever/mail/browser/mail_templates/file.pt:26
+msgid "no_message"
+msgstr ""
 
 #: ./opengever/mail/browser/send_document.py:70
 msgid "receiver"
