@@ -8,6 +8,7 @@ from opengever.document import _ as ogdmf
 from opengever.document.browser.overview import CustomRow
 from opengever.document.browser.overview import FieldRow
 from opengever.document.browser.overview import Overview
+from opengever.mail import _
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize import instance
 from Products.CMFCore.utils import getToolByName
@@ -72,6 +73,9 @@ class OverviewTab(Overview):
                       label=ogdmf('label_creator', default='creator')),
             FieldRow('IDocumentMetadata.description'),
             FieldRow('IDocumentMetadata.foreign_reference'),
+            CustomRow(self.render_file_widget,
+                      label=_('label_org_message',
+                              default='Original message')),
             FieldRow('IDocumentMetadata.digitally_available'),
             FieldRow('IDocumentMetadata.preserved_as_paper'),
             FieldRow('IDocumentMetadata.receipt_date'),
@@ -84,3 +88,7 @@ class OverviewTab(Overview):
                                   default='Public Trial')),
             FieldRow('IClassification.public_trial_statement'),
         ]
+
+    def render_file_widget(self):
+        template = ViewPageTemplateFile('mail_templates/file.pt')
+        return template(self)

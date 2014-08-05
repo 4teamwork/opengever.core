@@ -4,6 +4,9 @@ Changelog
 3.4 (unreleased)
 ----------------
 
+- Mail overview: display the original message including a download link.
+  [phgross]
+
 - Added public_trial_statement field to the public_trail edit form.
   [phgross]
 

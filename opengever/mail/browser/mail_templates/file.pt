@@ -1,0 +1,31 @@
+<tal:block xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+           i18n:domain="opengever.mail">
+
+  <tal:file tal:condition="context/message">
+    <!-- icon, filename, size -->
+    <span tal:attributes="class view/get_css_class"></span>
+    <span tal:define="filename view/w/message/filename">
+      <span class="filename" tal:content="filename">Filename</span>
+      <span class="discreet">
+        &mdash; <span tal:define="sizekb view/w/message/file_size" tal:replace="sizekb">100</span>
+        KB
+      </span>
+    </span>
+
+    <div class="downloadActions">
+      <a class="function-download-copy" href="#"
+         tal:attributes="href string:${context/absolute_url}/download"
+         i18n:domain="opengever.document"
+         i18n:translate="label_download_copy">
+        Download copy
+      </a>
+    </div>
+  </tal:file>
+
+  <tal:nofile tal:condition="not:context/message">
+    <span class="discreet" i18n:translate="no_message">
+      No message
+    </span>
+  </tal:nofile>
+
+</tal:block>
