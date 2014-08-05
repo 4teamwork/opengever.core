@@ -38,6 +38,15 @@ class TestEditPublicTrialHelperFunction(FunctionalTestCase):
 
         self.assertTrue(self.can_edit(user, document))
 
+    def test_user_CANNOT_edit_when_parent_dossier_is_inactive(self):
+        user = self.portal.portal_membership.getAuthenticatedMember()
+        dossier = create(Builder('dossier').in_state('dossier-state-inactive'))
+        document = create(Builder('document')
+                          .with_dummy_content()
+                          .within(dossier))
+
+        self.assertFalse(self.can_edit(user, document))
+
     def test_user_WITH_modify_permission_in_open_state_CAN_edit(self):
         user = self.portal.portal_membership.getAuthenticatedMember()
 
