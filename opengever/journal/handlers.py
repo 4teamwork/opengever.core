@@ -334,17 +334,19 @@ PUBLIC_TRIAL_MODIFIED_ACTION = 'Public trial modified'
 
 @grok.subscribe(IBaseDocument, IObjectModifiedEvent)
 def document_modified(context, event):
-    # we need to distinguish between "metadata modified"
-    # and "file modified"
-    file_changed = False
-    metadata_changed = False
-    public_trial_changed = False
-
 
     if IAttachmentsDeletedEvent.providedBy(event):
         # AttachmentsDeleted is a special kind of ObjectModified event
         # and is handled elsewhere - don't journalize it twice.
         return
+
+    # we need to distinguish between "metadata modified", "file modified",
+    # "file and metadata modified" and "public_trial modified"
+    file_changed = False
+    metadata_changed = False
+    public_trial_changed = False
+
+    parent = aq_parent(aq_inner(context))
 
     for desc in event.descriptions:
         for attr in desc.attributes:
@@ -354,21 +356,27 @@ def document_modified(context, event):
                 # Attribute name is different when changed through regular
                 # edit form vs. edit_public_trial form, so check for both
                 public_trial_changed = True
-                metadata_changed = True
             else:
                 metadata_changed = True
 
-    if not file_changed and not metadata_changed:
+    if context.REQUEST.get('form.widgets.file.action', u'nochange') == u'nochange':
+        file_changed = False
+
+    if not file_changed and not metadata_changed and not public_trial_changed:
         # the event shouldn't be fired in this case anyway..
         return
 
     if file_changed and metadata_changed:
         title = _(u'label_document_file_and_metadata_modified',
                   default=u'Changed file and metadata')
+
         parent_title = _(u'label_document_file_and_metadata_modified__parent',
                          default=u'Changed file and metadata of '
                          'document ${title}',
                          mapping=dict(title=context.title_or_id()))
+
+        journal_entry_factory(context, DOCUMENT_MODIIFED_ACTION, title)
+        journal_entry_factory(parent, DOCUMENT_MODIIFED_ACTION, parent_title)
 
     elif file_changed:
         title = _(u'label_document_file_modified',
@@ -377,6 +385,9 @@ def document_modified(context, event):
                          default=u'Changed file of document ${title}',
                          mapping=dict(title=context.title_or_id()))
 
+        journal_entry_factory(context, DOCUMENT_MODIIFED_ACTION, title)
+        journal_entry_factory(parent, DOCUMENT_MODIIFED_ACTION, parent_title)
+
     elif metadata_changed:
         title = _(u'label_document_metadata_modified',
                   default=u'Changed metadata')
@@ -384,13 +395,12 @@ def document_modified(context, event):
                          default=u'Changed metadata of document ${title}',
                          mapping=dict(title=context.title_or_id()))
 
-    journal_entry_factory(context, DOCUMENT_MODIIFED_ACTION,
-                          title, visible=False)
-    journal_entry_factory(context.aq_inner.aq_parent,
-                          DOCUMENT_MODIIFED_ACTION, parent_title)
+        journal_entry_factory(context, DOCUMENT_MODIIFED_ACTION, title)
+        journal_entry_factory(parent, DOCUMENT_MODIIFED_ACTION, parent_title)
 
+    # Always create a separate journal entry on document if public_trial was
+    # changed
     if public_trial_changed:
-        # Always create a separate journal entry if public_trial was changed
         translated_terms = classification.translated_public_trial_terms(
             context, context.REQUEST)
         translated_public_trial = translated_terms[context.public_trial]
@@ -398,8 +408,7 @@ def document_modified(context, event):
                   default=u'Public trial changed to "${public_trial}".',
                   mapping=dict(public_trial=translated_public_trial))
 
-        journal_entry_factory(context, PUBLIC_TRIAL_MODIFIED_ACTION,
-                              title, visible=True)
+        journal_entry_factory(context, PUBLIC_TRIAL_MODIFIED_ACTION, title)
 
 
 DOCUMENT_STATE_CHANGED = 'Document state changed'

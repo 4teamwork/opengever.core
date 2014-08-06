@@ -25,9 +25,8 @@ from Products.CMFCore.WorkflowCore import ActionSucceededEvent
 from zope.component import getUtility
 from zope.event import notify
 from zope.i18n import translate
-from zope.interface import Interface
 from zope.intid.interfaces import IIntIds
-from zope.lifecycleevent import ObjectModifiedEvent, Attributes
+from zope.lifecycleevent import ObjectModifiedEvent
 from zope.lifecycleevent import ObjectMovedEvent, ObjectAddedEvent
 import unittest2 as unittest
 
@@ -209,33 +208,6 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             'Document added',
             'Document added: %s' % document.title_or_id(),
             dossier)
-
-        # Modified-Event - nothing changed
-        length_document = get_journal_length(document)
-        length_dossier = get_journal_length(dossier)
-
-        notify(ObjectModifiedEvent(document))
-
-        self.assertTrue(length_document == get_journal_length(document))
-        self.assertTrue(length_dossier == get_journal_length(dossier))
-
-        # Modified-Event - file changed
-        notify(ObjectModifiedEvent(document, Attributes(Interface, 'file')))
-        self.check_document_modified(document, dossier, 'file')
-
-        # Modified-Event - meta changed
-        notify(ObjectModifiedEvent(document, Attributes(Interface, 'meta')))
-        self.check_document_modified(document, dossier, 'meta')
-
-        # Modified-Event - file and meta changed
-        notify(ObjectModifiedEvent(
-            document, Attributes(Interface, 'file', 'meta')))
-        self.check_document_modified(document, dossier, 'file_meta')
-
-        # Modified-Event - public_trial changed
-        notify(ObjectModifiedEvent(
-            document, Attributes(Interface, 'IClassification.public_trial')))
-        self.check_document_modified(document, dossier, 'public_trial')
 
         # Get the workflow for the document to test the ActionSucceededEvent
         wftool = getToolByName(document, 'portal_workflow')
