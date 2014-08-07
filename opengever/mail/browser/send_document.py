@@ -220,7 +220,7 @@ class SendDocumentForm(form.Form):
                 self.file_sent_mail_in_dossier(msg)
 
             # let the user know that the mail was sent
-            info = _(u'info_mails_sent', 'Mails sent')
+            info = _(u'info_mail_sent', 'E-mail has been sent.')
             notify(DocumentSent(
                     self.context, userid, header_to, data.get('subject'),
                     data.get('message'), data.get('documents')))
