@@ -120,10 +120,10 @@ msgstr ""
 msgid "info_extracted_document"
 msgstr "Dokument wurde erstellt: ${title}"
 
-#. Default: "Mails sent"
+#. Default: "E-mail has been sent."
 #: ./opengever/mail/browser/send_document.py:223
-msgid "info_mails_sent"
-msgstr "Mails wurden versendet."
+msgid "info_mail_sent"
+msgstr "E-Mail wurde versendet."
 
 #. Default: "Intern receiver"
 #: ./opengever/mail/browser/send_document.py:54

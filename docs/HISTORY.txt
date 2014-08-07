@@ -4,6 +4,9 @@ Changelog
 3.4 (unreleased)
 ----------------
 
+- Reword status message after sending documents by e-mail.
+  [lgraf]
+
 - Mail overview: display the original message including a download link.
   [phgross]
 
