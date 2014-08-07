@@ -1,5 +1,5 @@
 from DateTime import DateTime
-from datetime import datetime
+from datetime import datetime, date
 from ftw.testing import MockTestCase
 from grokcore.component.testing import grok
 from opengever.core.testing import ANNOTATION_LAYER
@@ -36,7 +36,7 @@ class TestResponeTransporter(MockTestCase):
         self.assertEquals(trans._decode(None), None)
         self.assertEquals(trans._decode([111, 'hans']), [111, 'hans'])
 
-        #string
+        # string
         self.assertEquals('hans', trans._decode(trans._encode('hans')))
         # unicode
         self.assertEquals(u'hans', trans._decode(trans._encode(u'hans')))
@@ -53,7 +53,7 @@ class TestResponeTransporter(MockTestCase):
         trans.intids_mapping = {'123': '321'}
         value = RelationValue('123')
         self.assertEquals(trans._decode(trans._encode(value)).to_id, '321')
-        #special type
+        # special type
         self.assertEquals(['special_type', 'special value'],
             trans._decode(['special_type', 'special value']))
 
@@ -86,6 +86,8 @@ class TestResponeTransporter(MockTestCase):
             'review_state', 'State', 'before-state', 'after-state')
         response.add_change(
             'responsible', 'Responsible', 'hugo.boss', 'james.bond')
+        response.add_change(
+            'deadline', 'Deadline', date(2014, 8, 5), date(2014, 7, 3))
 
         container = IResponseContainer(remote_task)
         container.add(response)
@@ -115,4 +117,8 @@ class TestResponeTransporter(MockTestCase):
                 {u'after': u'james.bond',
                  u'id': u'responsible',
                  u'name': u'Responsible',
-                 u'before': u'hugo.boss'}])
+                 u'before': u'hugo.boss'},
+                {u'after': date(2014, 7, 3),
+                 u'id': u'deadline',
+                 u'name': u'Deadline',
+                 u'before': date(2014, 8, 5)}])
