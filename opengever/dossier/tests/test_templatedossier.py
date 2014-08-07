@@ -120,7 +120,9 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
     def test_save_redirects_to_the_dossiers_document_tab(self, browser):
         browser.login().open(self.dossier, view='document_with_template')
         browser.fill({'paths:list': self.template_b_path,
-                      'title': 'Test Document'}).save()
+                      'title': 'Test Document',
+                      'Edit after creation':False}).save()
+
         self.assertEquals(self.dossier, browser.context)
         self.assertEquals(self.dossier.absolute_url() + '#documents',
                           browser.url)
