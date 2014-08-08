@@ -1,7 +1,7 @@
 Changelog
 =========
 
-3.3.2 (unreleased)
+3.3.2 (2014-08-08)
 ------------------
 
 - Fixed seralization error in responsetransporter, when changes containing date's.
