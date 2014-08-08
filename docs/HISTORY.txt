@@ -4,6 +4,9 @@ Changelog
 3.4 (unreleased)
 ----------------
 
+- Added upgradestep which add public_trial column to persistent grid-state.
+  [phgross]
+
 - Reword status message after sending documents by e-mail.
   [lgraf]
 

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <metadata>
-    <version>2202</version>
+    <version>3400</version>
     <dependencies>
         <dependency>profile-ftw.tabbedview:extjs</dependency>
         <dependency>profile-ftw.tabbedview:quickupload</dependency>
