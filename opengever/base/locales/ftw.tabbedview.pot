@@ -35,6 +35,9 @@ msgstr ""
 msgid "sharing"
 msgstr ""
 
+msgid "preview"
+msgstr ""
+
 msgid "users"
 msgstr ""
 

@@ -1,80 +1,34 @@
-from AccessControl.SecurityManagement import getSecurityManager
-from AccessControl.SecurityManagement import newSecurityManager
-from AccessControl.SecurityManagement import setSecurityManager
-from ftw.testing import MockTestCase
+from ftw.builder import Builder
+from ftw.builder import create
+from ftw.testbrowser import browsing
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import create_ogds_user
-from plone.app.testing import TEST_USER_ID, TEST_USER_NAME
-from plone.app.testing import TEST_USER_PASSWORD, login
+from opengever.testing import FunctionalTestCase
+from plone.app.testing import login
+from plone.app.testing import logout
 from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import TEST_USER_NAME
 from plone.locking.interfaces import IRefreshableLockable
-from plone.namedfile.file import NamedBlobFile
-from plone.testing.z2 import Browser
 from zope.annotation.interfaces import IAnnotations
 from zope.component import queryMultiAdapter
 import transaction
 
 
-class TestDocumentOverview(MockTestCase):
+class TestDocumentOverview(FunctionalTestCase):
 
     layer = OPENGEVER_FUNCTIONAL_TESTING
-
-    def _set_default_values(self, doc):
-        monk_file = NamedBlobFile('bla bla', filename=u'test.txt')
-        doc.description = u'Lorem ipsumldkfj\r\nsdflsdfio'
-        doc.file = monk_file
-        doc.keywords = ()
-        doc.digitally_available = True
-        doc.preserved_as_paper = True
 
     def setUp(self):
         super(TestDocumentOverview, self).setUp()
         self.portal = self.layer['portal']
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
+        login(self.portal, TEST_USER_NAME)
 
         create_ogds_user(TEST_USER_ID)
-
-        # Create a second user to test locking and checkout
-        self.portal.acl_users.userFolderAddUser('other_user', 'secret', ['Member'], [])
-
-        self.browser = Browser(self.layer['app'])
-        self.browser.handleErrors = False
-        self.browser.addHeader(
-            'Authorization',
-            'Basic %s:%s' % (TEST_USER_NAME, TEST_USER_PASSWORD))
-
-        # document 1
-        login(self.portal, TEST_USER_NAME)
-        self.portal.invokeFactory(
-            'opengever.document.document', 'document-xy', title=u'document')
-        self.document = self.portal.get('document-xy')
-
-        self._set_default_values(self.document)
-
-        # document2 (checked out by TEST_USER_ID)
-        self.portal.invokeFactory(
-            'opengever.document.document', 'document-2', title=u'document2')
-        self.document2 = self.portal.get('document-2')
-        self._set_default_values(self.document2)
-
-        manager = queryMultiAdapter(
-            (self.document2, self.portal.REQUEST), ICheckinCheckoutManager)
-        manager.checkout()
-
-        # document3 (checked out by hugo.boss)
-        self.portal.invokeFactory(
-            'opengever.document.document', 'document-3', title=u'document3')
-        self.document3 = self.portal.get('document-3')
-        self._set_default_values(self.document3)
-        IAnnotations(self.document3)[CHECKIN_CHECKOUT_ANNOTATIONS_KEY] = 'hugo.boss'
-
-        # document4 (will later be locked by hugo.boss)
-        self.portal.invokeFactory(
-            'opengever.document.document', 'document-4', title=u'document4')
-        self.document4 = self.portal.get('document-4')
-        self._set_default_values(self.document4)
+        self.document = create(Builder('document').with_dummy_content())
 
         transaction.commit()
 
@@ -82,85 +36,147 @@ class TestDocumentOverview(MockTestCase):
         setRoles(self.portal, TEST_USER_ID, ['Member'])
         super(TestDocumentOverview, self).tearDown()
 
-    def test_overview(self):
+    @browsing
+    def test_overview_has_edit_link(self, browser):
 
-        self.browser.open(
-            '%s/tabbedview_view-overview' % self.document.absolute_url())
+        browser.login().open(self.document, view='tabbedview_view-overview')
+        self.assertEquals('Edit Document',
+                          browser.css('a.function-edit').first.text)
+        self.assertEquals(
+            '{0}/editing_document'.format(
+                self.document.absolute_url()),
+            browser.css('a.function-edit').first.attrib['href'])
 
-        # edit link is available
-        edit_link = """<a class="function-edit" href="http://nohost/plone/document-xy/editing_document">
-              Edit Document
-            </a>"""
-        self.assertTrue(edit_link in self.browser.contents)
+    @browsing
+    def test_overview_has_creator_link(self, browser):
 
-        # creator link
-        creator_link = """<th>creator</th>
-			<td><a href="http://nohost/plone/@@user-details/test_user_1_">Boss Hugo (test_user_1_)</a></td>"""
-        self.assertTrue(creator_link in self.browser.contents)
+        browser.login().open(self.document, view='tabbedview_view-overview')
+        self.assertEquals('Boss Hugo (test_user_1_)',
+                          browser.css('td [href*="user-details"]').first.text)
+        self.assertEquals(
+            '{0}/@@user-details/test_user_1_'.format(
+                self.portal.absolute_url()),
+            browser.css('td [href*="user-details"]').first.attrib['href'])
 
-        # copy link
-        copy_link = '<a class="function-download-copy link-overlay" href="http://nohost/plone/document-xy/file_download_confirmation">Download copy</a>'
-        self.assertTrue(copy_link in self.browser.contents)
+    @browsing
+    def test_overview_has_copy_link(self, browser):
 
-    def test_overview_self_checked_out(self):
+        browser.login().open(self.document, view='tabbedview_view-overview')
+        self.assertEquals('Download copy',
+                          browser.css('a.function-download-copy').first.text)
+        self.assertEquals(
+            '{0}/file_download_confirmation'.format(
+                self.document.absolute_url()),
+            browser.css('a.function-download-copy').first.attrib['href'])
+
+    @browsing
+    def test_overview_self_checked_out(self, browser):
         """Check the document overview when the document is checked out,
         by your self (TEST_USER_ID):
          - checked out by information
          - edit link is still available"""
 
-        self.browser.open(
-            '%s/tabbedview_view-overview' % self.document2.absolute_url())
+        document = create(Builder('document').with_dummy_content())
+        manager = queryMultiAdapter(
+            (document, self.portal.REQUEST), ICheckinCheckoutManager)
+        manager.checkout()
 
-        checked_out_info = """<th>Checked out</th>
-			<td><a href="http://nohost/plone/@@user-details/test_user_1_">Boss Hugo (test_user_1_)</a></td>"""
-        self.assertTrue(checked_out_info in self.browser.contents)
+        browser.login().visit(document, view='tabbedview_view-overview')
 
-        edit_link = """<a class="function-edit" href="http://nohost/plone/document-2/editing_document">
-              Edit Document
-            </a>"""
-        self.assertTrue(edit_link in self.browser.contents)
+        self.assertEquals('Boss Hugo (test_user_1_)',
+                          browser.css('[href*="user-details"]').first.text)
+        self.assertEquals('Edit Document',
+                          browser.css('a.function-edit').first.text)
 
-        active_copy_download_link = """<a class="function-download-copy link-overlay" href="http://nohost/plone/document-2/file_download_confirmation">Download copy</a>"""
-        self.assertTrue(active_copy_download_link in self.browser.contents)
+        self.assertEquals('Download copy',
+                          browser.css('a.function-download-copy').first.text)
 
-    def test_over_other_checked_out(self):
+    @browsing
+    def test_inactive_links_if_document_is_checked_out(self, browser):
         """Check the document overview when the document is checked out,
         by another user:
          - checked out information
          - edit link is inactive"""
 
-        self.browser.open(
-            '%s/tabbedview_view-overview' % self.document3.absolute_url())
+        document = create(Builder('document').with_dummy_content())
+        IAnnotations(document)[
+            CHECKIN_CHECKOUT_ANNOTATIONS_KEY] = 'hugo.boss'
 
-        inactive_edit_link = """<span class="function-edit-inactive discreet">
-              Edit Document
-            </span>"""
-        self.assertTrue(inactive_edit_link in self.browser.contents)
-
-        inactive_copy_download_link = """<span class="function-download-copy-inactive link-overlay discreet">Download copy</span>"""
-        self.assertTrue(inactive_copy_download_link in self.browser.contents)
-
-    def test_checkout_when_locked(self):
-        """Test that it's not possible to check out the document if its locked
-        by another user.
-        """
-        old_sm = getSecurityManager()
-
-        # Change security context to 'other_user' to lock the document
-        user = self.portal.acl_users.getUser('other_user')
-        user = user.__of__(self.portal.acl_users)
-        newSecurityManager(self.portal, user)
-
-        # Let user 'other_user' lock the document
-        lockable = IRefreshableLockable(self.document4)
-        lockable.lock()
-
-        # Restore previous security context (test_user_1)
-        setSecurityManager(old_sm)
         transaction.commit()
 
-        self.browser.open(
-            '%s/tabbedview_view-overview' % self.document4.absolute_url())
+        browser.login().visit(document, view='tabbedview_view-overview')
 
-        # Editing the document shouldn't be possible
-        self.assertNotIn('editing_document', self.browser.contents)
+        self.assertEquals('Edit Document',
+                          browser.css('.function-edit-inactive').first.text)
+        self.assertEquals(
+            'Download copy',
+            browser.css('.function-download-copy-inactive').first.text)
+
+    @browsing
+    def test_checkout_not_possible_if_locked_by_another_user(self, browser):
+        second_user = create(Builder('user').with_roles('Member'))
+        document = create(Builder('document').with_dummy_content())
+
+        login(self.portal, second_user.getId())
+        lockable = IRefreshableLockable(document)
+        lockable.lock()
+
+        logout()
+        login(self.portal, TEST_USER_NAME)
+        transaction.commit()
+
+        browser.login().visit(document, view='tabbedview_view-overview')
+        self.assertFalse(browser.css('a.function-edit'),
+                         'There should be no edit link')
+
+    @browsing
+    def test_classification_fields_are_shown(self, browser):
+
+        document = create(Builder('document'))
+        browser.login().visit(document, view='tabbedview_view-overview')
+
+        self.assertEquals(
+            'unprotected',
+            browser.css(
+                '#form-widgets-IClassification-classification').first.text)
+
+        self.assertEquals(
+            'privacy_layer_no',
+            browser.css(
+                '#form-widgets-IClassification-privacy_layer').first.text)
+
+        self.assertEquals(
+            'unchecked',
+            browser.css(
+                '#form-widgets-IClassification-public_trial').first.text)
+
+        self.assertEquals(
+            '',
+            browser.css(
+                '#form-widgets-IClassification-public_trial_statement').first.text)
+
+    @browsing
+    def test_modify_public_trial_link_NOT_shown_on_open_dossier(self, browser):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document')
+                          .within(dossier)
+                          .with_dummy_content())
+        browser.login().visit(document, view='tabbedview_view-overview')
+
+        self.assertFalse(
+            browser.css(
+                '#form-widgets-IClassification-public_trial-edit-link'),
+            'Public trial edit link should not be visible.')
+
+    @browsing
+    def test_modify_public_trial_is_visible_on_closed_dossier(self, browser):
+        dossier = create(Builder('dossier').in_state('dossier-state-resolved'))
+        document = create(Builder('document')
+                          .within(dossier)
+                          .with_dummy_content())
+        browser.login().visit(document, view='tabbedview_view-overview')
+
+        self.assertTrue(
+            browser.css(
+                '#form-widgets-IClassification-public_trial-edit-link'),
+            'Public trial edit link should be visible.')

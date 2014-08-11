@@ -1,22 +1,14 @@
-from Products.CMFCore.utils import getToolByName
-from opengever.document.document import IDocumentSchema
 from opengever.base.viewlets.byline import BylineBase
 from opengever.document import _
 
 
 class DocumentByline(BylineBase):
 
+    def update(self):
+        super(DocumentByline, self).update()
+
     def document_date(self):
         return self.to_localized_time(self.context.document_date)
-
-    def responsible(self):
-        mt = getToolByName(self.context, 'portal_membership')
-        document = IDocumentSchema(self.context)
-        return mt.getMemberById(document.responsible)
-
-    def end(self):
-        document = IDocumentSchema(self.context)
-        return document.end
 
     def get_items(self):
         return [

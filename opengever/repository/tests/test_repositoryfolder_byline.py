@@ -24,9 +24,10 @@ class TestRepositoryfolderByline(TestBylineBase):
 
     def test_repository_byline_privacy_layer_display(self):
         privacy_layer = self.get_byline_value_by_label('Privacy layer:')
-
         self.assertEquals('privacy_layer_no', privacy_layer.text_content())
 
-    def test_repository_byline_public_trial_display(self):
+    def test_repository_byline_public_trial_is_not_present(self):
         public_trial = self.get_byline_value_by_label('Public Trial:')
-        self.assertEquals('unchecked', public_trial.text_content())
+        self.assertIsNone(
+            public_trial,
+            "Public trial must NOT be part of repository byline any more")

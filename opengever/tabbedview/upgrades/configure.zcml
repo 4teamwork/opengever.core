@@ -33,4 +33,14 @@
         profile="opengever.tabbedview:default"
         />
 
+    <!-- 2202 -> 3400 -->
+    <genericsetup:upgradeStep
+        title="Add public trial column to stored grid state's"
+        description=""
+        source="2202"
+        destination="3400"
+        handler="opengever.tabbedview.upgrades.to3400.AddPublicTrialColumn"
+        profile="opengever.tabbedview:default"
+        />
+
 </configure>

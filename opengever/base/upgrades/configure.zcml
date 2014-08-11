@@ -130,6 +130,7 @@
         directory="profiles/2606"
         />
 
+    <!-- 2606 -> 2607 -->
     <genericsetup:upgradeStep
         title="Add reviewer role on admin groups"
         description=""
@@ -139,6 +140,7 @@
         profile="opengever.base:default"
         />
 
+    <!-- 2607 -> 2608 -->
     <upgrade-step:importProfile
         title="Add gever placeholder in searchbox."
         profile="opengever.base:default"
@@ -179,6 +181,15 @@
         source="2610"
         destination="3300"
         directory="profiles/3300"
+        />
+
+    <!-- 3300 -> 3401 -->
+    <upgrade-step:importProfile
+        title="Add IClassificationSettings registry settings"
+        profile="opengever.base:default"
+        source="3300"
+        destination="3401"
+        directory="profiles/3401"
         />
 
 </configure>

@@ -1,13 +1,16 @@
-from Products.CMFCore.utils import getToolByName
 from datetime import date
+from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.mail.utils import get_attachments
 from opengever.document.interfaces import IDocumentSettings
 from opengever.testing import FunctionalTestCase
-from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
+from plone.app.testing import TEST_USER_ID
 from plone.dexterity.utils import createContentInContainer
 from plone.namedfile.file import NamedBlobFile
 from plone.registry.interfaces import IRegistry
+from Products.CMFCore.utils import getToolByName
+from zope.annotation import IAnnotations
 from zope.component import getUtility
+from zope.i18n import translate
 import transaction
 
 
@@ -123,6 +126,32 @@ class TestAttachmentExtraction(FunctionalTestCase):
             len(get_attachments(mail.msg)), 0,
             'The attachment deleting after extracting, \
             does not work correctly.')
+
+    def test_journal_entry_after_deleting_attachments(self):
+        mail = self.create_mail(MESSAGE_TEXT)
+
+        self.browser.open('%s/extract_attachments' % mail.absolute_url())
+        self.browser.getControl(name='attachments:list').value = [1]
+        self.browser.getControl(name='delete_action').value = ['all']
+        self.browser.getControl(name='form.submitted').click()
+
+        def get_journal(obj):
+            annotations = IAnnotations(mail)
+            return annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, {})
+
+        journal = get_journal(mail)
+        last_entry = journal[-1]
+
+        self.assertEquals(TEST_USER_ID, last_entry['actor'])
+
+        action = last_entry['action']
+        self.assertDictContainsSubset(
+            {'type': 'Attachments deleted',
+             'title': u'label_attachments_deleted'},
+             action)
+
+        self.assertEquals(u'Attachments deleted: B\xfccher.txt',
+                          translate(action['title']))
 
     def test_extract_attachment_without_docs(self):
         mail = self.create_mail(None)

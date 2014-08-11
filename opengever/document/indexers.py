@@ -2,6 +2,7 @@ from Acquisition import aq_inner
 from collective import dexteritytextindexer
 from five import grok
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
+from opengever.document.behaviors import IBaseDocument
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.interfaces import IDocumentIndexer
@@ -12,6 +13,7 @@ from ZODB.POSException import ConflictError
 from zope.component import getUtility, queryMultiAdapter, getAdapter
 from zope.interface import Interface
 import logging
+from opengever.document.behaviors.metadata import IDocumentMetadata
 
 
 logger = logging.getLogger('opengever.document')
@@ -141,7 +143,7 @@ def checked_out(obj):
 grok.global_adapter(checked_out, name='checked_out')
 
 
-@indexer(IDocumentSchema)
+@indexer(IDocumentMetadata)
 def sortable_author(obj):
     """Index to allow users to sort on document_author."""
     author = obj.document_author
@@ -150,3 +152,13 @@ def sortable_author(obj):
         return readable_author
     return ''
 grok.global_adapter(sortable_author, name='sortable_author')
+
+
+@indexer(IBaseDocument)
+def public_trial(obj):
+    public_trial = obj.public_trial
+    if public_trial:
+        return public_trial
+
+    return ''
+grok.global_adapter(public_trial, name='public_trial')

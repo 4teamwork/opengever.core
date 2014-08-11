@@ -34,7 +34,7 @@ class RestrictedAddableDossiersVocabularyFactory(grok.GlobalUtility):
 
         # find the dexterity FTIs using the IRestrictedDossier behavior
         restricted_types = filter(
-            lambda fti: getattr(fti, 'behaviors') and
+            lambda fti: getattr(fti, 'behaviors', []) and
                 self.marker_behavior in fti.behaviors, types)
 
         # create the terms

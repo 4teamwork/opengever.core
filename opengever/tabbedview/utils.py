@@ -1,11 +1,12 @@
-from Products.CMFCore.utils import getToolByName
+from opengever.base.utils import language_cache_key
 from opengever.task.util import getTaskTypeVocabulary
 from plone.memoize import ram
+from Products.CMFCore.utils import getToolByName
 from zope.component import getAdapter
 from zope.i18n import translate
 
 
-@ram.cache(lambda m, c, r: 'translated_transitions_cache_key')
+@ram.cache(language_cache_key)
 def get_translated_transitions(context, request):
     """Return all translated transitions from every workflows"""
 
@@ -17,7 +18,7 @@ def get_translated_transitions(context, request):
     return states
 
 
-@ram.cache(lambda m, c, r: 'translated_types_cache_key')
+@ram.cache(language_cache_key)
 def get_translated_types(context, request):
     values = {}
     for key, terms in getTaskTypeVocabulary(context).by_value.items():

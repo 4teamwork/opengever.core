@@ -3,6 +3,7 @@ from ftw.dictstorage.interfaces import ISQLAlchemy
 from ftw.tabbedview.interfaces import ITabbedView
 from ftw.table import helper
 from ftw.table.catalog_source import CatalogTableSource
+from opengever.base.behaviors import classification
 from opengever.base.browser.helper import client_title_helper
 from opengever.base.interfaces import IReferenceNumberFormatter
 from opengever.base.interfaces import IReferenceNumberSettings
@@ -25,9 +26,11 @@ from opengever.tabbedview.utils import get_translated_types
 from opengever.task.helper import task_type_helper
 from plone.dexterity.interfaces import IDexterityContainer
 from plone.registry.interfaces import IRegistry
+from zope.app.component.hooks import getSite
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.component import getUtility, adapts
 from zope.component import queryAdapter
+from zope.globalrequest import getRequest
 from zope.interface import implements
 from zope.interface import Interface
 import re
@@ -144,6 +147,21 @@ class OpengeverTab(object):
             results = list(results)
             results.sort(_type_sorter, reverse=sort_reverse)
 
+        elif sort_on in 'public_trial':
+
+            values = classification.translated_public_trial_terms(
+                self.context, self.request)
+
+            def _public_trial_sorter(a, b):
+                return cmp(
+                    values.get(
+                        getattr(a, sort_on, ''), getattr(a, sort_on, '')),
+                    values.get(getattr(b, sort_on, ''), getattr(b, sort_on, ''))
+                    )
+
+            results = list(results)
+            results.sort(_public_trial_sorter, reverse=sort_reverse)
+
         return results
 
 
@@ -164,6 +182,12 @@ class OpengeverCatalogListingTab(grok.View, OpengeverTab,
     __call__ = CatalogListingView.__call__
     update = CatalogListingView.update
     render = __call__
+
+
+def translate_public_trial_options(item, value):
+    portal = getSite()
+    request = getRequest()
+    return portal.translate(value, context=request, domain="opengever.base")
 
 
 class Documents(OpengeverCatalogListingTab):
@@ -214,6 +238,9 @@ class Documents(OpengeverCatalogListingTab):
         {'column': 'containing_subdossier',
          'column_title': _('label_subdossier', default="Subdossier"), },
 
+        {'column': 'public_trial',
+         'column_title': _('label_public_trial', default="Public Trial"),
+         'transform': translate_public_trial_options},
         )
 
     enabled_actions = [

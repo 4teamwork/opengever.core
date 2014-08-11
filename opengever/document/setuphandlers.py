@@ -38,6 +38,7 @@ def add_catalog_indexes(context, logger=None):
         ('document_date', 'DateIndex', {}),
         ('receipt_date', 'DateIndex', {}),
         ('sortable_author', 'FieldIndex', {}),
+        ('public_trial', 'FieldIndex', {}),
         )
     indexables = []
     for name, meta_type, args in wanted:

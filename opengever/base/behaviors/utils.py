@@ -1,12 +1,13 @@
 from Acquisition import aq_inner, aq_parent
-from Products.CMFCore.interfaces import ISiteRoot
 from plone.app.dexterity.behaviors.metadata import MetadataBase
 from plone.dexterity.interfaces import IDexterityContent
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.namedfile.utils import get_contenttype
 from plone.rfc822.interfaces import IPrimaryField
 from plone.rfc822.interfaces import IPrimaryFieldInfo
+from Products.CMFCore.interfaces import ISiteRoot
 from urllib import quote
+from z3c.form.interfaces import HIDDEN_MODE
 from z3c.form.interfaces import IValue
 from z3c.form.value import ComputedValue
 from zope.component import adapts
@@ -40,6 +41,28 @@ class PrimaryFieldInfo(object):
     @property
     def value(self):
         return self.field.get(self.schema(self.context))
+
+
+def create_simple_vocabulary(options, message_factory):
+
+    class GenericSimpleVocabulary(object):
+
+        options = None
+        message_factory = None
+
+        def __call__(self, context):
+            terms = []
+            for item in self.options:
+                title = item
+                if self.message_factory:
+                    title = self.message_factory(item)
+                terms.append(
+                    zope.schema.vocabulary.SimpleTerm(item, title=title))
+            return zope.schema.vocabulary.SimpleVocabulary(terms)
+
+    GenericSimpleVocabulary.options = options
+    GenericSimpleVocabulary.message_factory = message_factory
+    return GenericSimpleVocabulary
 
 
 def create_restricted_vocabulary(field, options,
@@ -224,12 +247,12 @@ def overrides_child(folder, event, aq_fields, marker):
                 if schema_field.get(schema_field.interface(obj)) not in voc:
                     # obj, request, form, field, widget
                     default = getMultiAdapter((
-                            obj.aq_inner.aq_parent,
-                            obj.REQUEST,
-                            None,
-                            schema_field,
-                            None,
-                            ), IValue, name='default')
+                        obj.aq_inner.aq_parent,
+                        obj.REQUEST,
+                        None,
+                        schema_field,
+                        None,
+                    ), IValue, name='default')
                     if isinstance(default, ComputedValue):
                         default = default.get()
                     setattr(schema_field.interface(obj), field, default)
@@ -264,3 +287,12 @@ def set_attachment_content_disposition(request, filename, file=None):
     else:
         request.response.setHeader(
             "Content-disposition", 'attachment; filename="%s"' % filename)
+
+
+def hide_fields_from_behavior(form, fieldnames):
+    """Hide fields defined in behaviors.
+    """
+    for group in form.groups:
+        for fieldname in fieldnames:
+            if fieldname in group.fields:
+                group.fields[fieldname].mode = HIDDEN_MODE

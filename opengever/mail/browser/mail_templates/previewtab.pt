@@ -3,19 +3,9 @@
       xmlns:metal="http://xml.zope.org/namespaces/metal"
       xmlns:i18n="http://xml.zope.org/namespaces/i18n"
       lang="en"
-      metal:use-macro="context/main_template/macros/master"
       i18n:domain="ftw.mail">
-<body>
+<body tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime">
 
-<metal:main fill-slot="main">
-    <tal:main-macro metal:define-macro="main"
-        tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime">
-
-        <div tal:replace="structure provider:plone.abovecontenttitle" />
-
-        <h1 class="documentFirstHeading" tal:content="context/title" />
-
-        <div tal:replace="structure provider:plone.belowcontenttitle" />
 
         <table class="mailHeaders listing vertical">
             <tr class="mailFrom"
@@ -68,11 +58,6 @@
             </div>
         </tal:items>
         </tal:attachments>
-
-        <div tal:replace="structure provider:plone.belowcontentbody" />
-
-    </tal:main-macro>
-</metal:main>
 
 </body>
 </html>
