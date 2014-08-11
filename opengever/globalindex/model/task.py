@@ -40,7 +40,6 @@ class Task(Base):
                                   'task-state-tested-and-closed',
                                   'forwarding-state-closed']
 
-
     __tablename__ = 'tasks'
     __table_args__ = (UniqueConstraint('admin_unit_id', 'int_id'), {})
 
@@ -241,14 +240,14 @@ class Task(Base):
         allowed_principals = set(self.principals)
         return len(principals & allowed_principals) > 0
 
-    # XXX Todo: the css_class helper should moved to the task class itself,
-    # so that the css_class parameter is not necessary anymore.
-    def get_link(self, css_class):
+    def get_link(self):
         admin_unit = self.get_admin_unit()
         if not admin_unit:
-            return u'<span class="{}">{}</span>'.format(css_class, self.title)
+            return u'<span class="{}">{}</span>'.format(
+                self.get_css_class(), self.title)
 
         url = '/'.join((admin_unit.public_url, self.physical_path))
+
         # If the target is on a different client we need to make a popup
         if self.admin_unit_id != get_current_admin_unit().id():
             link_target = u' target="_blank"'
@@ -267,7 +266,8 @@ class Task(Base):
                 Actor.lookup(self.responsible).get_label()))
 
         # Link to the task object
-        task_html = u'<span class="{}">{}</span>'.format(css_class, self.title)
+        task_html = u'<span class="{}">{}</span>'.format(
+            self.get_css_class(), self.title)
 
         # Render the full link if we have acccess
         if self.has_access(api.user.get_current()):

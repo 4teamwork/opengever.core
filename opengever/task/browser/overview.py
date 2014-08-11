@@ -144,4 +144,5 @@ class Overview(DisplayForm, OpengeverTab):
 
         if not item:
             return None
-        return item.get_link(self.get_css_class(item))
+
+        return item.get_link()
