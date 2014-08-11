@@ -4,163 +4,117 @@ Changelog
 3.4 (unreleased)
 ----------------
 
-- Added upgradestep which add public_trial column to persistent grid-state.
-  [phgross]
+- General fixes:
 
-- Reword status message after sending documents by e-mail.
-  [lgraf]
+  - OGQuickUploadCapableFileFactory: Set default values before adding content to container.
+    (Prevents values set by handlers on ObjectAddedEvent to be overwritten again).
+    [lgraf]
+  - Fix issue with `prevent_deletion` subscriber not being able to acquire membership_tool
+    because of broken acquisition during Plone site deletion.
+    [lgraf]
+  - Customize plone.dexterity default view for all dexterity content in
+    order to be able to omit specific fields, and remove previous customizations.
+    [lgraf]
 
-- Mail overview: display the original message including a download link.
-  [phgross]
 
-- Added public_trial_statement field to the public_trail edit form.
-  [phgross]
+- Changes to document metadata:
 
-- Disable public_trial edit_form when parents dossier is inactive.
-  [phgross]
+  - Document metadata: Refactor behaviors to be a package with separate modules.
+    [lgraf]
+  - Monkey patch DexterityContent.__getattr__.
+    This is required to support dynamic lookup of schema-level default values for
+    fields in behaviors. It basically is a backport of this Dexterity 2.x fix:
+    https://github.com/plone/plone.dexterity/commit/dd491480b869bbe21ee50ef413c263705af7b170
+    [lgraf]
+  - Refactored document overview.
+    [lgraf]
+  - Implement document metadata behavior for mail (incl. upgrade step and init event).
+    [mathias.leimgruber]
+  - Show classification infos on document overview tab.
+    [mathias.leimgruber]
+  - Customized document default view in order to render `file`
+    field in NO_DOWNLOAD_DISPLAY_MODE.
+    [lgraf]
 
-- Journalize AttachmentsDeleted event.
-  [lgraf]
 
-- Added new mail event `AttachmentsDeleted`.
-  [lgraf]
+- Changes to journaling:
 
-- Improved wording of German translations in extract attachments view.
-  [lgraf]
+  - Fix double journal entries using quickupload.
+    [mathias.leimgruber]
+  - Journalize any changes to `public_trial` field.
+    [lgraf]
+  - Journal: Listen on IBaseDocument instead of IDocumentSchema - mails are now also
+    considered documentish and should be treated equally.
+    [lgraf]
+  - Journalize AttachmentsDeleted event.
+    [lgraf]
 
-- Disable the editable border for the extract attachments view.
-  [lgraf]
 
-- Fix UnicodeError in resolving mail author.
-  [lgraf]
+- Changes related to mail content type:
 
-- Make FileOrPaperValidator consider mails properly (always digitally available).
-  [lgraf]
+  - Implement tabbedview for ftw.mail.mail content (Preview / Journal / Info).
+    [mathias.leimgruber]
+  - Use IDocumentNameFromTitle behavior from document also for mail.
+    [mathias.leimgruber]
+  - Use document byline also on mail.
+    [mathias.leimgruber]
+  - Add classification behavior to mail.
+    [mathias.leimgruber]
+  - Add overview tab for mail (shows some basic metadata).
+    [mathias.leimgruber]
+  - File a copy of the mail in the dossier by default when sending documents from GEVER.
+    [lgraf]
+  - Hide duplicate mail title in mail preview tab.
+    [lgraf]
+  - Add plone.app.lockingbehavior to ftw.mail.mail FTI.
+    [lgraf]
+  - Add 'Edit Metadata' action to ftw.mail.mail FTI.
+    [lgraf]
+  - Override ftw.mail default view with our customized dexterity default view.
+    [lgraf]
+  - Make FileOrPaperValidator consider mails properly (always digitally available).
+    [lgraf]
+  - Disable the editable border for the extract attachments view.
+    [lgraf]
+  - Improved wording of German translations in extract attachments view.
+    [lgraf]
+  - Added new mail event `AttachmentsDeleted`.
+    [lgraf]
+  - Mail overview: display the original message including a download link.
+    [phgross]
+  - Reword status message after sending documents by e-mail.
+    [lgraf]
 
-- Override ftw.mail default view with our customized dexterity default view.
-  [lgraf]
 
-- Add 'Edit Metadata' action to ftw.mail.mail FTI.
-  [lgraf]
+- Changes related to public_trial field:
 
-- Change mail tabbed view to register tabs with old-style FTI actions
-  instead of custom TabbedView class.
-  [lgraf]
-
-- Add plone.app.lockingbehavior to ftw.mail.mail FTI.
-  [lgraf]
-
-- Hide duplicate mail title in mail preview tab.
-  [lgraf]
-
-- Customized document default view in order to render `file`
-  field in NO_DOWNLOAD_DISPLAY_MODE.
-  [lgraf]
-
-- Omit `public_trial` and `public_trial_statement` fields from dossier and
-  repository folder default views.
-  [lgraf]
-
-- Removed previously customized default view for business case dossiers. The
-  default view is now customized for all folderish types.
-  [lgraf]
-
-- Customize plone.dexterity default view for all dexterity content in
-  order to be able to omit specific fields.
-  [lgraf]
-
-- Remove `public_trial` from repository byline.
-  [lgraf]
-
-- Journalize any changes to `public_trial` field.
-  [lgraf]
-
-- Journal: Listen on IBaseDocument instead of IDocumentSchema - mails are now also
-  considered documentish and should be treated equally.
-  [lgraf]
-
-- Don't show public trial edit form for template dossiers.
-  [lgraf]
-
-- Reword German translations for public_trial_statement label and description:
-  New label: Bearbeitungsinformation
-  New description: Datum Gesuch, Datum Entscheid, Verweis auf GEVER-Zugangsgeschaeft
-  [lgraf]
-
-- Fix issue with `prevent_deletion` subscriber not being able to acquire membership_tool
-  because of broken acquisition during Plone site deletion.
-  [lgraf]
-
-- Make default value adapter for `public_trial` use the configurable default
-  value from IClassificationSettings registry record.
-
-- Add an IClassificationSettings registry record.
-  [lgraf]
-
-- Allow public trial state to also be modified in closed dossier states.
-  [mathias.leimgruber]
-
-- File a copy of the mail in the dossier by default when sending documents from GEVER.
-  [lgraf]
-
-- Add overview tab for mail (Shows metadata).
-  [mathias.leimgruber]
-
-- Show classification infos on document overview tab.
-  [mathias.leimgruber]
-
-- Add classification behavior to mail.
-  [mathias.leimgruber]
-
-- Use document byline also on mail.
-  [mathias.leimgruber]
-
-- OGQuickUploadCapableFileFactory: Set default values before adding content to container.
-  (Prevents values set by handlers on ObjectAddedEvent to be overwritten again).
-  [lgraf]
-
-- Implement document metadata behavor on mail (incl. Upgrade step and init event).
-  [mathias.leimgruber]
-
-- Refactored document overview.
-  [lgraf]
-
-- Monkey patch DexterityContent.__getattr__.
-  This is required to support dynamic lookup of schema-level default values for
-  fields in behaviors. It basically is a backport of this Dexterity 2.x fix:
-  https://github.com/plone/plone.dexterity/commit/dd491480b869bbe21ee50ef413c263705af7b170
-  [lgraf]
-
-- Use IDocumentNameFromTitle behavior from document also for mail.
-  [mathias.leimgruber]
-
-- Fix double journal entries using quickupload.
-  [mathias.leimgruber]
-
-- Test quickupload: Replace mock tests by functional tests.
-  [mathias.leimgruber]
-
-- Implement tabbedview for ftw.mail.mail content (Preview / Journal / Info).
-  [mathias.leimgruber]
-
-- Added public-trial-column to document tab.
-  [lknoepfel]
-
-- Added public_trial index and metadata field.
-  [lknoepfel]
-
-- Public trial is no longer a restricted vocab. It behaves like a regular one.
-  New default is "unchecked".
-  [mathias.leimgruber]
-
-- Enforce correct order in inbox-task-tab tests.
-  [lknoepfel]
-
-- Added limited-public option for public trial.
-  [lknoepfel]
-
-- Document: Refactor behaviors to be a package with separate modules.
-  [lgraf]
+  - Added limited-public option for public_trial field.
+    [lknoepfel]
+  - Vocabulary for public_trial is no longer a restricted vocab. It behaves like a regular one.
+    [mathias.leimgruber]
+  - Added public_trial index and metadata field.
+    [lknoepfel]
+  - Added public_trial column to document tab.
+    [lknoepfel, phgross]
+  - Allow public trial state to also be modified in closed dossier states.
+    [mathias.leimgruber]
+  - Add an IClassificationSettings registry record with `public_trial_default_value`.
+    [lgraf]
+  - Make default value adapter for `public_trial` use the configurable default
+    value from IClassificationSettings registry record.
+  - Reword German translations for public_trial_statement label and description.
+    [lgraf]
+  - Don't show public trial edit form for template dossiers.
+    [lgraf]
+  - Remove `public_trial` field from repository byline.
+    [lgraf]
+  - Omit `public_trial` and `public_trial_statement` fields from dossier and
+    repository folder default views.
+    [lgraf]
+  - Disable public_trial edit_form when parents dossier is inactive.
+    [phgross]
+  - Added public_trial_statement field to the public_trial edit form.
+    [phgross]
 
 
 3.3.2 (2014-08-08)
