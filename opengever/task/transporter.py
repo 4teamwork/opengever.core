@@ -1,4 +1,3 @@
-from datetime import date
 from DateTime import DateTime
 from datetime import datetime
 from five import grok
@@ -14,7 +13,6 @@ from opengever.task.interfaces import ITaskDocumentsTransporter
 from opengever.task.response import Response
 from opengever.task.task import ITask
 from opengever.task.util import get_documents_of_task
-from persistent.dict import PersistentDict
 from persistent.list import PersistentList
 from z3c.relationfield import RelationValue
 from zope.annotation.interfaces import IAnnotations
@@ -80,7 +78,7 @@ class ResponseTransporter(grok.Adapter):
         try:
             data = json.loads(response.read())
         except ValueError:
-            # is a internal request
+            #is a internal request
             data = response.read()
 
         self.create_responses(data)
@@ -139,23 +137,12 @@ class ResponseTransporter(grok.Adapter):
         if isinstance(value, datetime):
             return [u'datetime', str(value)]
 
-        if isinstance(value, date):
-            return [u'date', str(value)]
-
         if isinstance(value, DateTime):
             return [u'DateTime', str(value)]
 
         if isinstance(value, (PersistentList, list)):
             return [u'list',
                     [self._encode(item) for item in value]]
-
-        if isinstance(value, (PersistentDict, dict)):
-            encoded_dict = {}
-
-            for key, value in value.items():
-                encoded_dict[key] = self._encode(value)
-
-            return [u'dict', encoded_dict]
 
         if isinstance(value, RelationValue):
             if value.to_id in self.intids_mapping:
@@ -188,9 +175,6 @@ class ResponseTransporter(grok.Adapter):
         if type_ == 'datetime':
             return DateTime(val).asdatetime()
 
-        if type_ == 'date':
-            return DateTime(val).asdatetime().date()
-
         if type_ == 'DateTime':
             return DateTime(val)
 
@@ -199,12 +183,6 @@ class ResponseTransporter(grok.Adapter):
 
         if type_ == 'list':
             return [self._decode(item) for item in val]
-
-        if type_ == 'dict':
-            decoded_dict = {}
-            for key, value in val.items():
-                decoded_dict[key] = self._decode(value)
-            return decoded_dict
 
         return val
 
