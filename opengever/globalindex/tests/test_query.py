@@ -1,7 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.globalindex.model.task import Task
-from opengever.ogds.models.admin_unit import AdminUnit
 from opengever.testing import MEMORY_DB_LAYER
 from unittest2 import TestCase
 
