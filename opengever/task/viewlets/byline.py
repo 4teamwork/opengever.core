@@ -9,6 +9,9 @@ from zope.component import getUtility
 
 class TaskByline(BylineBase):
 
+    def get_css_class(self):
+        return self.context.get_sql_object().get_css_class()
+
     def responsible_link(self):
         return Actor.lookup(
             ITask(self.context).responsible).get_link()
