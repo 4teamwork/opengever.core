@@ -4,7 +4,7 @@ from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.advancedsearch import _
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
-from opengever.ogds.base.utils import get_client_id
+from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.task.util import getTaskTypeVocabulary
 from plone.directives import form as directives_form
@@ -305,7 +305,7 @@ class AdvancedSearchForm(directives_form.Form):
         self.fields['task_review_state'].widgetFactory[INPUT_MODE] \
             = checkbox.CheckBoxFieldWidget
 
-        self.context.REQUEST.set('client', get_client_id())
+        self.context.REQUEST.set('client', get_current_org_unit().id())
         date_fields = [
             'start_1',
             'start_2',
