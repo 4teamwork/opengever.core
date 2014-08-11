@@ -1,6 +1,7 @@
 from DateTime import DateTime as ZopeDateTime
 from opengever.globalindex import Session
 from opengever.globalindex.model import Base
+from opengever.globalindex.model.query import TaskQuery
 from opengever.globalindex.oguid import Oguid
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -19,56 +20,11 @@ from sqlalchemy import UniqueConstraint
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import backref
 from sqlalchemy.orm import composite
-from sqlalchemy.orm import Query
 from sqlalchemy.orm import relation
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
 from sqlalchemy.sql import functions
 from zope.i18n import translate
-
-
-class TaskQuery(Query):
-    """TaskQuery Object.
-    """
-
-    def users_tasks(self, userid):
-        """Returns query which List all tasks where the given user,
-        his userid, is responsible. It queries all admin units.
-        """
-        return self.filter(Task.responsible == userid)
-
-    def users_issued_tasks(self, userid):
-        """Returns query which list all tasks where the given user
-        is the issuer. It queries all admin units.
-        """
-        return self.filter(Task.issuer == userid)
-
-    def all_admin_unit_tasks(self, admin_unit):
-        """Returns query which list all tasks where the assigned_org_unit
-        is part of the current_admin_unit.
-        """
-        unit_ids = [unit.id() for unit in admin_unit.org_units]
-        return self.filter(Task.assigned_org_unit.in_(unit_ids))
-
-    def all_issued_tasks(self, admin_unit):
-        """List all tasks from the current_admin_unit.
-        """
-        return self.filter(Task.admin_unit_id == admin_unit.id())
-
-    by_admin_unit = all_issued_tasks
-
-    def tasks_by_id(self, int_ids, admin_unit):
-        """
-        """
-        query = self.filter(Task.admin_unit_id == admin_unit.id())
-        return query.filter(Task.int_id.in_(int_ids))
-
-    def by_container(self, container, admin_unit):
-        url_tool = api.portal.get_tool(name='portal_url')
-        path = '/'.join(url_tool.getRelativeContentPath(container))
-
-        return self.by_admin_unit(admin_unit)\
-                   .filter(Task.physical_path.like(path + '%'))
 
 
 class Task(Base):
