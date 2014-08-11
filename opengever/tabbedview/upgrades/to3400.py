@@ -3,7 +3,10 @@ from ftw.upgrade import UpgradeStep
 from opengever.ogds.base.utils import create_session
 from sqlalchemy import or_
 import json
+import logging
 
+
+log = logging.getLogger('opengever.tabbedview')
 
 PUBLIC_TRIAL_COL_CONFIG = {u'width': 110,
                            u'sortable': True,
@@ -22,6 +25,12 @@ class AddPublicTrialColumn(UpgradeStep):
                 DictStorageModel.key.contains('tabbedview_view-mydocuments')))
 
         for record in query.all():
+            # Deal with broken DictStorage entries (NULL)
+            if record.value is None:
+                log.warn("DictStorage record with key '%s' has "
+                         "NULL value - skipping record!" % record.key)
+                continue
+
             data = json.loads(record.value.encode('utf-8'))
             columns = data.get('columns')
             if PUBLIC_TRIAL_COL_ID not in [col.get('id') for col in columns]:
