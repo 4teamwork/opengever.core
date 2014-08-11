@@ -196,6 +196,40 @@ class Task(Base):
     def get_deadline(self):
         return self._date_to_zope_datetime(self.deadline)
 
+    @property
+    def is_remote_task(self):
+        """Returns true for tasks, where issuing and responsible
+        admin_unit are not equal"""
+
+        return self.get_assigned_org_unit().admin_unit != self.get_admin_unit()
+
+    def get_css_class(self):
+        """Returns css_class for the special task icons:
+         - Forwarding
+         - Regular Task
+         - Subtask
+         - Remotetask
+        """
+
+        if self.is_forwarding:
+            css_class = 'contenttype-opengever-inbox-forwarding'
+
+        elif self.is_subtask and self.is_remote_task:
+            if self.admin_unit_id == get_current_admin_unit().id():
+                css_class = 'icon-task-subtask'
+            else:
+                css_class = 'icon-task-remote-task'
+
+        elif self.is_subtask:
+            css_class = 'icon-task-subtask'
+
+        elif self.is_remote_task:
+            css_class = 'icon-task-remote-task'
+        else:
+            css_class = 'contenttype-opengever-task-task'
+
+        return css_class
+
     def get_completed(self):
         return self._date_to_zope_datetime(self.completed)
 
