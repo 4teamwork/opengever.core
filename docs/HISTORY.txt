@@ -163,6 +163,13 @@ Changelog
   [lgraf]
 
 
+3.3.2 (2014-08-08)
+------------------
+
+- Fixed seralization error in responsetransporter, when changes containing date's.
+  [phgross]
+
+
 3.3.1 (2014-07-28)
 ------------------
 
