@@ -1,4 +1,3 @@
-from opengever.base.browser.helper import get_css_class
 from opengever.ogds.base.actor import Actor
 from opengever.task import _
 
@@ -227,7 +226,7 @@ class AssignToDossier(ResponseDescription):
         return _('transition_label_assign_to_dossier',
                  'Assigned to dossier by ${user} successor=${successor}',
                  mapping={'user': self.response.creator_link(),
-                          'successor': successor.get_link(get_css_class(successor))})
+                          'successor': successor.get_link()})
 
 ResponseDescription.add_description(AssignToDossier)
 
@@ -241,7 +240,7 @@ class SubTaskAdded(ResponseDescription):
         docs, subtasks = self.response.get_added_objects()
 
         label = ' '.join(
-            [task.get_sql_object().get_link(get_css_class(task)) for task in subtasks])
+            [task.get_sql_object().get_link() for task in subtasks])
 
         return _('transition_add_subtask', 'Subtask ${task} added by ${user}',
                  mapping={'user': self.response.creator_link(),
