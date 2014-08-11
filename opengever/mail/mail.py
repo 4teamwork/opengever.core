@@ -33,7 +33,7 @@ import re
 IMail.setTaggedValue(FIELDSETS_KEY, [
     Fieldset('common',
              label=base_mf(u'fieldset_common', u'Common'),
-             fields=[u'title', u'message'])
+             fields=[u'message'])
 ])
 
 
@@ -48,7 +48,7 @@ class IOGMail(form.Schema):
     form.fieldset(
         u'common',
         label=base_mf(u'fieldset_common', u'Common'),
-        fields=[u'title', u'message'])
+        fields=[u'title'])
 
     form.order_before(title='message')
     dexteritytextindexer.searchable('title')
