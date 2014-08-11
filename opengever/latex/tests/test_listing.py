@@ -1,11 +1,14 @@
 from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
 from lxml.cssselect import CSSSelector
-from opengever.latex.listing import ILaTexListing
+from opengever.latex.listing import DocumentsLaTeXListing
+from opengever.latex.listing import DossiersLaTeXListing
+from opengever.latex.listing import SubDossiersLaTeXListing
+from opengever.latex.listing import TasksLaTeXListing
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
-from zope.component import getMultiAdapter
 import lxml
 
 
@@ -35,33 +38,31 @@ class TestDossierListing(FunctionalTestCase):
                                   start=date(2013, 11, 1),
                                   responsible=self.hugo.userid))
 
-        self.listing = getMultiAdapter(
-            (self.repo, self.repo.REQUEST, self),
-            ILaTexListing, name='dossiers')
+    def get_listing(self, items=[]):
+        return DossiersLaTeXListing(self, items)
 
     def test_get_responsible_returns_client_title_and_user_description(self):
 
-        responsible = self.listing.get_responsible(
+        responsible = self.get_listing().get_responsible(
             obj2brain(self.dossier))
 
         self.assertEquals(u'Client1 / Boss Hugo (hugo.boss)', responsible)
 
     def test_get_repository_title_returns_the_title_of_the_first_parental_repository_folder(self):
+        listing = self.get_listing()
+        self.assertEquals(
+            '1. Repository XY',
+            listing.get_repository_title(obj2brain(self.dossier)))
 
         self.assertEquals(
             '1. Repository XY',
-            self.listing.get_repository_title(obj2brain(self.dossier)))
-
-        self.assertEquals(
-            '1. Repository XY',
-            self.listing.get_repository_title(
-                obj2brain(self.subdossier)))
+            listing.get_repository_title(obj2brain(self.subdossier)))
 
     def test_configured_width_is_set_in_the_colgroup(self):
-        self.listing.brains = [obj2brain(self.dossier),
-                               obj2brain(self.subdossier)]
+        listing = self.get_listing([obj2brain(self.dossier),
+                                    obj2brain(self.subdossier)])
 
-        table = lxml.html.fromstring(self.listing.template())
+        table = lxml.html.fromstring(listing.template())
         cols = table.xpath(CSSSelector('col').path)
 
         self.assertEquals(
@@ -69,10 +70,10 @@ class TestDossierListing(FunctionalTestCase):
             [col.get('width') for col in cols])
 
     def test_labels_are_translated_and_show_as_table_headers(self):
-        self.listing.brains = [obj2brain(self.dossier),
-                               obj2brain(self.subdossier)]
+        listing = self.get_listing([obj2brain(self.dossier),
+                                    obj2brain(self.subdossier)])
 
-        table = lxml.html.fromstring(self.listing.template())
+        table = lxml.html.fromstring(listing.template())
         cols = table.xpath(CSSSelector('thead th').path)
 
         self.assertEquals(
@@ -81,10 +82,10 @@ class TestDossierListing(FunctionalTestCase):
             [col.text_content().strip() for col in cols])
 
     def test_full_values_rendering(self):
-        self.listing.brains = [obj2brain(self.dossier),
-                               obj2brain(self.subdossier)]
+        listing = self.get_listing([obj2brain(self.dossier),
+                                    obj2brain(self.subdossier)])
 
-        table = lxml.html.fromstring(self.listing.template())
+        table = lxml.html.fromstring(listing.template())
         rows = table.xpath(CSSSelector('tbody tr').path)
 
         self.assertEquals(
@@ -127,14 +128,13 @@ class TestSubDossierListing(FunctionalTestCase):
                                   end=date(2013, 12, 31))
                           .in_state('dossier-state-resolved'))
 
-        self.listing = getMultiAdapter(
-            (self.repo, self.repo.REQUEST, self),
-            ILaTexListing, name='subdossiers')
+    def get_listing(self, items=[]):
+        return SubDossiersLaTeXListing(self, items)
 
     def test_labels_are_translated_and_show_as_table_headers(self):
-        self.listing.brains = [obj2brain(self.dossier)]
+        listing = self.get_listing([obj2brain(self.dossier)])
 
-        table = lxml.html.fromstring(self.listing.template())
+        table = lxml.html.fromstring(listing.template())
         cols = table.xpath(CSSSelector('thead th').path)
 
         self.assertEquals(
@@ -142,9 +142,9 @@ class TestSubDossierListing(FunctionalTestCase):
             [col.text_content().strip() for col in cols])
 
     def test_drop_reference_from_default_dossier_listings(self):
-        self.listing.brains = [obj2brain(self.dossier)]
+        listing = self.get_listing([obj2brain(self.dossier)])
 
-        table = lxml.html.fromstring(self.listing.template())
+        table = lxml.html.fromstring(listing.template())
         rows = table.xpath(CSSSelector('tbody tr').path)
 
         self.assertEquals(
@@ -172,14 +172,13 @@ class TestDocumentListing(FunctionalTestCase):
                                        receipt_date=date(2013, 11, 6),
                                        document_author='Hugo Boss'))
 
-        self.listing = getMultiAdapter(
-            (self.document, self.document.REQUEST, self),
-            ILaTexListing, name='documents')
+    def get_listing(self, items=[]):
+        return DocumentsLaTeXListing(self, items)
 
     def test_drop_reference_and_sequence_number_from_default_dossier_listings(self):
-        self.listing.brains = [obj2brain(self.document)]
+        listing = self.get_listing([obj2brain(self.document)])
 
-        table = lxml.html.fromstring(self.listing.template())
+        table = lxml.html.fromstring(listing.template())
         rows = table.xpath(CSSSelector('tbody tr').path)
 
         self.assertEquals(
@@ -212,15 +211,14 @@ class TestTaskListings(FunctionalTestCase):
                                deadline=date(2013, 11, 6))
                            .in_state('task-state-in-progress'))
 
-        self.listing = getMultiAdapter(
-            (self.task, self.task.REQUEST, self),
-            ILaTexListing, name='tasks')
+    def get_listing(self, items=[]):
+        return TasksLaTeXListing(self, items)
 
     def test_labels_are_translated_and_show_as_table_headers(self):
-        self.listing.brains = [self.task.get_sql_object(),
-                               self.task.get_sql_object()]
+        listing = self.get_listing([self.task.get_sql_object(),
+                                    self.task.get_sql_object()])
 
-        table = lxml.html.fromstring(self.listing.template())
+        table = lxml.html.fromstring(listing.template())
         cols = table.xpath(CSSSelector('thead th').path)
 
         self.assertEquals(
@@ -228,9 +226,9 @@ class TestTaskListings(FunctionalTestCase):
             [col.text_content().strip() for col in cols])
 
     def test_drop_reference_and_sequence_number_from_default_task_listings(self):
-        self.listing.brains = [self.task.get_sql_object()]
+        listing = self.get_listing([self.task.get_sql_object()])
 
-        table = lxml.html.fromstring(self.listing.template())
+        table = lxml.html.fromstring(listing.template())
         rows = table.xpath(CSSSelector('tbody tr').path)
 
         self.assertEquals(
@@ -242,3 +240,9 @@ class TestTaskListings(FunctionalTestCase):
              'Task A',
              '06.11.2013'],
             [value.text_content().strip() for value in rows[0].xpath(CSSSelector('td').path)])
+
+    @browsing
+    def test_task_listing(self, browser):
+        task_id = self.task.get_sql_object().id
+        browser.login().open(data={'pdf-tasks-listing:method': 1,
+                                   'task_ids:list': task_id})

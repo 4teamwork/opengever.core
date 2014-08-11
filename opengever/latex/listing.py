@@ -1,4 +1,4 @@
-from five import grok
+from collections import OrderedDict
 from ftw.table import helper
 from opengever.latex import _
 from opengever.latex.utils import get_issuer_of_task
@@ -10,62 +10,80 @@ from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.task.helper import task_type_helper
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.component import getUtility
-from zope.interface import Interface
 
 
-class ILaTexListing(Interface):
+class Column(object):
 
-    def get_labels():
-        """"Returns a LaTEx string with the labels of the listing"""
+    def __init__(self, id, label, width, getter=None):
+        self.id = id
+        self.label = label
+        self.width = width
 
-    def get_widths():
-        """"Returns a LaTEx string with the labels of the listing,
-        which are calculated."""
+        if getter is None:
+            getter = id
 
-    def get_rows():
-        """"Returns a LaTEx string with all the rows of the listing"""
+        if isinstance(getter, basestring):
+            self.getter = lambda item: getattr(item, getter)
+        else:
+            self.getter = getter
 
-    def get_config():
-        """Returns the table configuration, a list of dicts for every row,
-        containing label, width, getter."""
+    def get_value(self, item):
+        value = self.getter(item)
+        if value is None:
+            value = u''
+        return value
 
 
-class DossiersLaTeXListing(grok.MultiAdapter):
-    grok.provides(ILaTexListing)
-    grok.adapts(Interface, Interface, Interface)
-    grok.name('dossiers')
+class LatexListing(object):
 
     template = ViewPageTemplateFile('templates/listing.pt')
 
-    def __init__(self, context, request, latex_view):
-        self.context = context
-        self.request = request
+    def __init__(self, latex_view, items):
         self.latex_view = latex_view
+        self.items = items
 
         self.admin_unit = get_current_admin_unit()
         self.info = getUtility(IContactInformation)
 
+        self.columns = self.update_column_dict(
+            OrderedDict((each.id, each) for each in self.get_columns())
+        )
+
+        # required for template namespace only
+        self.request = latex_view.request
+        self.context = None
+
+    def get_columns(self):
+        """Returns the table configuration, a list of column configs.
+        """
+        raise NotImplementedError()
+
+    def update_column_dict(self, columns):
+        return columns
+
     def get_widths(self):
-        return [row.get('width') for row in self.get_config()]
+        """"Returns a LaTEx string with the labels of the listing,
+        which are calculated."""
+        return [col.width for col in self.columns.values()]
 
     def get_labels(self):
-        return [row.get('label') for row in self.get_config()]
+        """"Returns a LaTEx string with the labels of the listing"""
+        return [col.label for col in self.columns.values()]
 
-    def get_listing(self, brains):
-        self.brains = brains
+    def get_rows(self):
+        """"Returns a LaTEx string with all the rows of the listing"""
+        return [self.get_row_for_item(item) for item in self.items]
 
-        if len(brains) == 0:
+    def get_listing(self):
+        if len(self.items) == 0:
             return None
         else:
             return self.latex_view.convert(self.template())
 
-    def get_rows(self):
-        return [self.get_row_for_brain(brain) for brain in self.brains]
-
-    def get_row_for_brain(self, brain):
+    def get_row_for_item(self, item):
         data = []
-        for row in self.get_config():
-            data.append(row.get('getter')(brain))
+        for column in self.columns.values():
+            data.append(column.get_value(item))
 
         return data
 
@@ -96,175 +114,131 @@ class DossiersLaTeXListing(grok.MultiAdapter):
         # get the title of the repository folder from the breadcrumb_titles
         return brain.breadcrumb_titles[-distance]['Title']
 
-    def get_config(self):
-        """Returns a list with dict per row including this row informations:
-        - label
-        - value_getter
-        - width
-        """
 
+class DossiersLaTeXListing(LatexListing):
+
+    def get_columns(self):
         return [
-            {'id': 'reference',
-             'label': _('label_reference_number', default='Reference number'),
-             'width': '10%',
-             'getter': lambda brain: brain.reference},
+            Column('reference',
+                   _('label_reference_number', default='Reference number'),
+                   '10%'),
 
-            {'id': 'sequence_number',
-             'label': _('short_label_sequence_number', default='No.'),
-             'width': '5%',
-             'getter': lambda brain: brain.sequence_number},
+            Column('sequence_number',
+                   _('short_label_sequence_number', default='No.'),
+                   '5%'),
 
-            {'id': 'repository_title',
-             'label': _('label_repository_title', default='Repositoryfolder'),
-             'width': '20%',
-             'getter': self.get_repository_title},
+            Column('repository_title',
+                   _('label_repository_title', default='Repositoryfolder'),
+                   '20%',
+                   self.get_repository_title),
 
-            {'id': 'title',
-             'label': _('label_title', default='Title'),
-             'width': '25%',
-             'getter': lambda brain: brain.Title},
+            Column('title',
+                   _('label_title', default='Title'),
+                   '25%',
+                   'Title'),
 
-            {'id': 'responsible',
-             'label': _('label_responsible', default='Responsible'),
-             'width': '20%',
-             'getter': self.get_responsible},
+            Column('responsible',
+                   _('label_responsible', default='Responsible'),
+                   '20%',
+                   self.get_responsible),
 
-            {'id': 'review_state',
-             'label': _('label_review_state', default='State'),
-             'width': '10%',
-             'getter': lambda brain: workflow_state(
-                 brain, brain.review_state)},
+            Column('review_state',
+                   _('label_review_state', default='State'),
+                   '10%',
+                    lambda brain: workflow_state(brain, brain.review_state)),
 
-            {'id': 'start',
-             'label': _('label_start', default='Start'),
-             'width': '5%',
-             'getter': lambda brain: helper.readable_date(
-                 brain, brain.start)},
+            Column('start',
+                   _('label_start', default='Start'),
+                   '5%',
+                    lambda brain: helper.readable_date(brain, brain.start)),
 
-            {'id': 'end',
-             'label': _('label_end', default='End'),
-             'width': '5%',
-             'getter': lambda brain: helper.readable_date(brain, brain.end)}]
+            Column('end',
+                   _('label_end', default='End'),
+                   '5%',
+                   lambda brain: helper.readable_date(brain, brain.end))
+            ]
 
 
 class SubDossiersLaTeXListing(DossiersLaTeXListing):
-    grok.provides(ILaTexListing)
-    grok.adapts(Interface, Interface, Interface)
-    grok.name('subdossiers')
 
-    def drop_column(self, config, column_id):
-        ids = [col.get('id') for col in config]
-        config.pop(ids.index(column_id))
-        return config
-
-    def get_config(self):
-        """Returns a list with dict per row including this row informations:
-        - label
-        - value_getter
-        - width
-        """
-        config = super(SubDossiersLaTeXListing, self).get_config()
-
-        config = self.drop_column(config, 'reference')
-        config = self.drop_column(config, 'repository_title')
-
-        return config
+    def update_column_dict(self, columns):
+        del columns['reference']
+        del columns['repository_title']
+        return columns
 
 
-class DocumentsLaTeXListing(DossiersLaTeXListing):
-    grok.provides(ILaTexListing)
-    grok.adapts(Interface, Interface, Interface)
-    grok.name('documents')
+class DocumentsLaTeXListing(LatexListing):
 
-    def get_config(self):
-        """Returns a list with dict per row including this row informations:
-        - label
-        - value_getter
-        - width
-        """
-
+    def get_columns(self):
         return [
-            {'id': 'sequence_number',
-             'label': _('short_label_sequence_number', default='No.'),
-             'width': '6%',
-             'getter': lambda brain: brain.sequence_number},
+            Column('sequence_number',
+                   _('short_label_sequence_number', default='No.'),
+                   '6%'),
 
-            {'id': 'title',
-             'label': _('label_title', default='Title'),
-             'width': '35%',
-             'getter': lambda brain: brain.Title},
+            Column('title',
+                   _('label_title', default='Title'),
+                   '35%',
+                   'Title'),
 
-            {'id': 'document_date',
-             'label': _('label_document_date', default='Document date'),
-             'width': '13%',
-             'getter': lambda brain: helper.readable_date(
-                 brain, brain.document_date)},
+            Column('document_date',
+                   _('label_document_date', default='Document date'),
+                   '13%',
+                    lambda brain:
+                        helper.readable_date(brain, brain.document_date)),
 
-            {'id': 'receipt_date',
-             'label': _('label_receipt_date', default='Receipt date'),
-             'width': '13%',
-             'getter': lambda brain: helper.readable_date(
-                 brain, brain.receipt_date)},
+            Column('receipt_date',
+                   _('label_receipt_date', default='Receipt date'),
+                   '13%',
+                   lambda brain:
+                        helper.readable_date(brain, brain.receipt_date)),
 
-            {'id': 'delivery_date',
-             'label': _('label_delivery_date', default='Delivery date'),
-             'width': '13%',
-             'getter': lambda brain: helper.readable_date(
-                 brain, brain.delivery_date)},
+            Column('delivery_date',
+                   _('label_delivery_date', default='Delivery date'),
+                   '13%',
+                   lambda brain:
+                        helper.readable_date(brain, brain.delivery_date)),
 
-            {'id': 'document_author',
-             'label': _('label_document_author', default='Document author'),
-             'width': '20%',
-             'getter': lambda brain: brain.document_author}]
+            Column('document_author',
+                   _('label_document_author', default='Document author'),
+                   '20%')
+            ]
 
 
-class TasksLaTeXListing(DossiersLaTeXListing):
-    grok.provides(ILaTexListing)
-    grok.adapts(Interface, Interface, Interface)
-    grok.name('tasks')
+class TasksLaTeXListing(LatexListing):
 
-    def get_config(self):
-        """Returns a list with dict per row including this row informations:
-        - label
-        - value_getter
-        - width
-        """
-
+    def get_columns(self):
         return [
-            {'id': 'sequence_number',
-             'label': _('short_label_sequence_number', default='No.'),
-             'width': '3%',
-             'getter': lambda item: item.sequence_number},
+            Column('sequence_number',
+                   _('short_label_sequence_number', default='No.'),
+                   '3%'),
 
-            {'id': 'task_type',
-             'label': _('label_task_type', default='Task type'),
-             'width': '20%',
-             'getter': lambda item: task_type_helper(item, item.task_type)},
+            Column('task_type',
+                   _('label_task_type', default='Task type'),
+                   '20%',
+                   lambda item: task_type_helper(item, item.task_type)),
 
-            {'id': 'issuer',
-             'label': _('label_issuer', default='Issuer'),
-             'width': '15%',
-             'getter': lambda item: get_issuer_of_task(
-                 item, with_client=True, with_principal=False)},
+            Column('issuer',
+                   _('label_issuer', default='Issuer'),
+                   '15%',
+                   lambda item: get_issuer_of_task(item, with_client=True,
+                                                   with_principal=False)),
 
-            {'id': 'responsible',
-             'label': _('label_task_responsible', default='Responsible'),
-             'width': '15%',
-             'getter': lambda item: get_responsible_of_task(item)},
+            Column('responsible',
+                   _('label_task_responsible', default='Responsible'),
+                   '15%',
+                   get_responsible_of_task),
 
-            {'id': 'review_state',
-             'label': _('label_review_state', default='State'),
-             'width': '7%',
-             'getter': lambda item: workflow_state(
-                 item, item.review_state)},
+            Column('review_state',
+                   _('label_review_state', default='State'),
+                   '7%',
+                    lambda item: workflow_state(item, item.review_state)),
 
-            {'id': 'title',
-             'label': _('label_title', default='Title'),
-             'width': '25%',
-             'getter': lambda item: item.title},
+            Column('title',
+                   _('label_title', default='Title'),
+                   '25%'),
 
-            {'id': 'deadline',
-             'label': _('label_deadline', default='Deadline'),
-             'width': '15%',
-             'getter': lambda item: helper.readable_date(
-                 item, item.deadline)}]
+            Column('deadline',
+                   _('label_deadline', default='Deadline'),
+                   '15%',
+                   lambda item: helper.readable_date(item, item.deadline))
+            ]

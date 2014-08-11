@@ -26,12 +26,13 @@ class TestTaskQueries(TestCase):
                                    .id('unitb')
                                    .assign_org_units([afi]))
 
-    def task(self, intid, current_admin_unit, **kw):
+    def task(self, intid, current_admin_unit, sequence_number=1, **kw):
         arguments = {'issuing_org_unit': 'rr',
                      'assigned_org_unit': 'bd'}
         arguments.update(kw)
 
-        task = Task(intid, current_admin_unit, **arguments)
+        task = Task(intid, current_admin_unit, sequence_number=sequence_number,
+                    **arguments)
         self.session.add(task)
         return task
 

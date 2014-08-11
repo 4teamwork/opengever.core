@@ -23,6 +23,7 @@ class FunctionalTestCase(TestCase):
         super(FunctionalTestCase, self).setUp()
         self.portal = self.layer['portal']
         self.app = self.layer['app']
+        self.request = self.app.REQUEST
         self.membership_tool = getToolByName(self.portal, 'portal_membership')
         if self.use_browser:
             self.browser = self._setup_browser()
@@ -41,7 +42,6 @@ class FunctionalTestCase(TestCase):
         return self.membership_tool.getAuthenticatedMember()
 
     def prepareSession(self):
-        self.request = self.app.REQUEST
         if 'SESSION' not in self.request.keys():
             self.request.SESSION = {}
 

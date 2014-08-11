@@ -341,11 +341,11 @@ class Task(Container):
                 if brains[0].sequence_number:
                     return brains[0].sequence_number
                 else:
-                    return ''
+                    return None
             else:
                 path = path[:-1]
 
-        return ''
+        return None
 
     def get_predecessor_ids(self):
         if self.predecessor:

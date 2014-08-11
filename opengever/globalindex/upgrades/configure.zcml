@@ -63,4 +63,14 @@
         profile="opengever.globalindex:default"
         />
 
+    <!-- 2702 -> 2703 -->
+    <genericsetup:upgradeStep
+        title="Migrate Task DB schema, alter sequence number column data type to Int."
+        description=""
+        source="2702"
+        destination="2703"
+        handler="opengever.globalindex.upgrades.to2703.AlterSequenceNumberType"
+        profile="opengever.globalindex:default"
+        />
+
 </configure>
