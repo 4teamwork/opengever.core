@@ -24,7 +24,7 @@ class AddPublicTrialColumn(UpgradeStep):
             or_(DictStorageModel.key.contains('tabbedview_view-documents'),
                 DictStorageModel.key.contains('tabbedview_view-mydocuments')))
 
-        for record in query.all():
+        for record in query:
             # Deal with broken DictStorage entries (NULL)
             if record.value is None:
                 log.warn("DictStorage record with key '%s' has "
