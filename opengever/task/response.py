@@ -1,34 +1,42 @@
 from Acquisition import aq_inner
 from five import grok
-from opengever.base.browser.opengeverview import OpengeverView
 from opengever.base.source import DossierPathSourceBinder
+from opengever.ogds.base.utils import get_current_org_unit
+from opengever.ogds.base.utils import ogds_service
 from opengever.tabbedview.helper import linked
 from opengever.task import _
 from opengever.task import util
-from opengever.task.adapters import IResponseContainer, Response
+from opengever.task.adapters import IResponseContainer
+from opengever.task.adapters import Response
 from opengever.task.interfaces import IResponseAdder
 from opengever.task.interfaces import IWorkflowStateSyncer
 from opengever.task.permissions import DEFAULT_ISSUE_MIME_TYPE
 from opengever.task.task import ITask
+from plone import api
 from plone.autoform.form import AutoExtensibleForm
 from plone.memoize.view import memoize
 from plone.z3cform import layout
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
-from z3c.form import form, field, button
+from z3c.form import button
+from z3c.form import field
+from z3c.form import form
 from z3c.form.browser import radio
 from z3c.form.interfaces import HIDDEN_MODE
 from z3c.relationfield.relation import RelationValue
-from z3c.relationfield.schema import RelationChoice, RelationList
+from z3c.relationfield.schema import RelationChoice
+from z3c.relationfield.schema import RelationList
 from zope import schema
 from zope.cachedescriptors.property import Lazy
-from zope.component import getUtility, getMultiAdapter
+from zope.component import getMultiAdapter
+from zope.component import getUtility
 from zope.event import notify
 from zope.i18n import translate
 from zope.interface import Interface
 from zope.intid.interfaces import IIntIds
-from zope.lifecycleevent import modified, ObjectModifiedEvent
+from zope.lifecycleevent import modified
+from zope.lifecycleevent import ObjectModifiedEvent
 import datetime
 import os
 
@@ -273,11 +281,15 @@ class AddForm(form.AddForm, AutoExtensibleForm):
         form.AddForm.updateWidgets(self)
         if self.context.portal_type == 'opengever.inbox.forwarding':
             self.widgets['relatedItems'].mode = HIDDEN_MODE
-        ogview = OpengeverView({}, {})
-        if not ogview.is_user_assigned_to_client():
+        if not self.is_user_assigned_to_current_org_unit():
             self.widgets['relatedItems'].mode = HIDDEN_MODE
 
         self.widgets['transition'].mode = HIDDEN_MODE
+
+    def is_user_assigned_to_current_org_unit(self):
+        member = api.user.get_current()
+        units = ogds_service().assigned_org_units(member.getId())
+        return get_current_org_unit() in units
 
 
 class SingleAddFormView(layout.FormWrapper, grok.View):
