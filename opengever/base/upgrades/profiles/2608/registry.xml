@@ -1,0 +1,4 @@
+<registry>
+    <record name="opengever.base.interfaces.IBaseClientID.client_title" delete="True" remove="True" />
+    <record name="opengever.base.interfaces.IBaseClientID.client_id" delete="True" remove="True" />
+</registry>

@@ -1,7 +1,10 @@
 from ftw.upgrade import UpgradeStep
-from opengever.base.interfaces import IBaseClientID
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
+
+
+TITLE_FIELD = 'opengever.base.interfaces.IBaseClientID.client_title'
+ID_FIELD = 'opengever.base.interfaces.IBaseClientID.client_id'
 
 
 class InitalizeClientTitleRegistryEntry(UpgradeStep):
@@ -15,9 +18,7 @@ class InitalizeClientTitleRegistryEntry(UpgradeStep):
     def initialize(self):
         """For exisiting clients we will use the client_id as client_title
         as default."""
-
         registry = getUtility(IRegistry)
-        proxy = registry.forInterface(IBaseClientID)
 
-        if not proxy.client_title:
-            proxy.client_title = proxy.client_id
+        if not registry.get(TITLE_FIELD, None):
+            registry[TITLE_FIELD] = registry.get(ID_FIELD)
