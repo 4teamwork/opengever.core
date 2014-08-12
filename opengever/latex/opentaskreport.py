@@ -12,10 +12,10 @@ from opengever.latex.utils import get_issuer_of_task
 from opengever.latex.utils import workflow_state
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.interfaces import IContactInformation
-from opengever.ogds.base.utils import get_client_id
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task.helper import task_type_helper
-from sqlalchemy import and_, or_
+from sqlalchemy import and_
+from sqlalchemy import or_
 from sqlalchemy.sql.expression import asc
 from zope.component import getUtility
 from zope.interface import Interface
@@ -79,7 +79,7 @@ class OpenTaskReportLaTeXView(grok.MultiAdapter, MakoLaTeXView):
         query = query.filter(
             or_(
                 and_(Task.predecessor == None, Task.successors == None),
-                Task.assigned_org_unit == get_client_id()))
+                Task.assigned_org_unit == get_current_org_unit().id()))
 
         return query
 
@@ -91,11 +91,11 @@ class OpenTaskReportLaTeXView(grok.MultiAdapter, MakoLaTeXView):
         outgoing -- open tasks assigned to another client
         """
 
-        clientid = get_client_id()
+        org_unit_id = get_current_org_unit().id()
 
         incoming_query = Session().query(Task)
         incoming_query = incoming_query.filter(
-            Task.assigned_org_unit == clientid)
+            Task.assigned_org_unit == org_unit_id)
         incoming_query = self._extend_task_query(incoming_query)
 
         incoming = []
@@ -105,7 +105,8 @@ class OpenTaskReportLaTeXView(grok.MultiAdapter, MakoLaTeXView):
                             display_issuing_org_unit=True))
 
         outgoing_query = Session().query(Task)
-        outgoing_query = outgoing_query.filter(Task.issuing_org_unit == clientid)
+        outgoing_query = outgoing_query.filter(
+            Task.issuing_org_unit == org_unit_id)
         outgoing_query = self._extend_task_query(outgoing_query)
 
         outgoing = []
