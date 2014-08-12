@@ -3,7 +3,6 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.globalindex.handlers.task import sync_task
 from opengever.testing import FunctionalTestCase
-from opengever.testing.helpers import task2sqltask
 
 
 class TestBaseInboxOverview(FunctionalTestCase):
@@ -88,7 +87,7 @@ class TestInboxOverviewAssignedInboxTasks(TestBaseInboxOverview):
         create(Builder('forwarding').having(responsible='inbox:client2'))
 
         self.assertEquals(
-            [task2sqltask(forwarding), task2sqltask(task)],
+            [forwarding.get_sql_object(), task.get_sql_object()],
             self.view.assigned_tasks())
 
     def test_is_limited_to_five_entries(self):
@@ -108,7 +107,7 @@ class TestInboxOverviewAssignedInboxTasks(TestBaseInboxOverview):
                            .successor_from(predecessor))
 
         self.assertEquals(
-            [task2sqltask(successor)], self.view.assigned_tasks())
+            [successor.get_sql_object()], self.view.assigned_tasks())
 
     def test_list_only_active_tasks(self):
         active = create(Builder('forwarding')
@@ -119,7 +118,7 @@ class TestInboxOverviewAssignedInboxTasks(TestBaseInboxOverview):
         sync_task(closed, None)
 
         self.assertEquals(
-            [task2sqltask(active)],
+            [active.get_sql_object()],
             self.view.assigned_tasks())
 
     def test_is_sorted_on_modification_date_last_modified_first(self):
@@ -136,7 +135,7 @@ class TestInboxOverviewAssignedInboxTasks(TestBaseInboxOverview):
                       .having(responsible='inbox:client1'))
 
         self.assertEquals(
-            [task2sqltask(task) for task in [task3, task1, task2]],
+            [task.get_sql_object() for task in [task3, task1, task2]],
             self.view.assigned_tasks())
 
 
@@ -154,7 +153,7 @@ class TestInboxOverviewIssuedInboxTasks(TestBaseInboxOverview):
         create(Builder('forwarding').having(issuer='inbox:client2'))
 
         self.assertEquals(
-            [task2sqltask(forwarding), task2sqltask(task)],
+            [forwarding.get_sql_object(), task.get_sql_object()],
             self.view.issued_tasks())
 
     def test_is_limited_to_five_entries(self):
@@ -176,7 +175,7 @@ class TestInboxOverviewIssuedInboxTasks(TestBaseInboxOverview):
                .in_state('forwarding-state-closed'))
 
         self.assertEquals(
-            [task2sqltask(active)],
+            [active.get_sql_object()],
             self.view.issued_tasks())
 
     def test_is_sorted_by_modfied(self):
@@ -193,5 +192,5 @@ class TestInboxOverviewIssuedInboxTasks(TestBaseInboxOverview):
                       .having(issuer='inbox:client1'))
 
         self.assertEquals(
-            [task2sqltask(task) for task in [task3, task1, task2]],
+            [task.get_sql_object() for task in [task3, task1, task2]],
             self.view.issued_tasks())

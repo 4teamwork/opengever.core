@@ -2,7 +2,6 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.testing import FunctionalTestCase
-from opengever.testing import task2sqltask
 from plone.app.testing import TEST_USER_ID
 
 
@@ -38,7 +37,7 @@ class TestGlobalTaskListings(FunctionalTestCase):
         view.update()
 
         self.assertEquals(
-            [task2sqltask(self.task1), task2sqltask(self.task3)],
+            [self.task1.get_sql_object(), self.task3.get_sql_object()],
             view.contents)
 
     def test_my_issued_tasks(self):
@@ -47,7 +46,7 @@ class TestGlobalTaskListings(FunctionalTestCase):
         view.update()
 
         self.assertEquals(
-            [task2sqltask(self.task1), task2sqltask(self.task2)],
+            [self.task1.get_sql_object(), self.task2.get_sql_object()],
             view.contents)
 
     def test_all_tasks(self):
@@ -57,7 +56,7 @@ class TestGlobalTaskListings(FunctionalTestCase):
 
         expected = [self.task1, self.task2, self.task3]
         self.assertEquals(
-            [task2sqltask(task) for task in expected],
+            [task.get_sql_object() for task in expected],
             view.contents)
 
     def test_all_issued_tasks(self):
@@ -67,5 +66,5 @@ class TestGlobalTaskListings(FunctionalTestCase):
 
         expected = [self.task1, self.task2, self.task3]
         self.assertEquals(
-            [task2sqltask(task) for task in expected],
+            [task.get_sql_object() for task in expected],
             view.contents)

@@ -2,7 +2,6 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.task.adapters import IResponseContainer
 from opengever.testing import FunctionalTestCase
-from opengever.testing import task2sqltask
 from Products.CMFCore.utils import getToolByName
 
 
@@ -37,11 +36,11 @@ class TestAssingForwarding(FunctionalTestCase):
 
         self.assertEquals('client2', self.forwarding.responsible_client)
         self.assertEquals('client2',
-                          task2sqltask(self.forwarding).assigned_org_unit)
+                          self.forwarding.get_sql_object().assigned_org_unit)
 
         self.assertEquals('inbox:client2', self.forwarding.responsible)
         self.assertEquals('inbox:client2',
-                          task2sqltask(self.forwarding).responsible)
+                          self.forwarding.get_sql_object().responsible)
 
     def test_assign_sets_forwarding_in_open_state(self):
         self.assign_forwarding('client2', 'Fake Response')
@@ -51,7 +50,7 @@ class TestAssingForwarding(FunctionalTestCase):
                           wf_tool.getInfoFor(self.forwarding, 'review_state'))
 
         self.assertEquals('forwarding-state-open',
-                          task2sqltask(self.forwarding).review_state)
+                          self.forwarding.get_sql_object().review_state)
 
     def test_assign_add_corresonding_response(self):
         self.assign_forwarding('client2', 'Fake Response')
