@@ -293,7 +293,7 @@ class Archiver(grok.Adapter):
     def _recursive_update_prefix(self, dossier, prefix):
         IDossier(dossier).filing_prefix = prefix
         dossier.reindexObject(idxs=['filing_no', 'searchable_filing_no'])
-        for subdossier in dossier.get_subdossiers():
+        for subdossier in dossier.get_subdossiers(depth=1):
             self._recursive_update_prefix(subdossier.getObject(), prefix)
 
     def archive(self, prefix, year, number=None):
@@ -311,7 +311,8 @@ class Archiver(grok.Adapter):
         IDossier(self.context).filing_prefix = prefix
         dossier.reindexObject(idxs=['filing_no', 'searchable_filing_no'])
 
-        for i, subdossier in enumerate(dossier.get_subdossiers(), start=1):
+        for i, subdossier in enumerate(dossier.get_subdossiers(depth=1),
+                                       start=1):
             self._recursive_archive(
                 subdossier.getObject(), '%s.%i' % (number, i), prefix)
 
