@@ -17,6 +17,7 @@ def select_current_org_unit(unit_id='client1'):
     get_ou_selector().set_current_unit(unit_id)
 
 
+# XXX remove me in favour of Builder('fixture')
 def create_and_select_current_org_unit(unit_id='unit_a'):
     client = create_client(unit_id)
     create_ogds_user(TEST_USER_ID, assigned_client=[client],

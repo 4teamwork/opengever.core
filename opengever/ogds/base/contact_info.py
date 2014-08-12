@@ -1,12 +1,9 @@
 from five import grok
-from opengever.ogds.base import _
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.interfaces import ISyncStamp
-from opengever.ogds.base.interfaces import IUser
-from opengever.ogds.base.utils import brain_is_contact
 from opengever.ogds.base.utils import create_session
-from opengever.ogds.base.utils import get_client_id
+from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models.client import Client
 from opengever.ogds.models.group import Group
@@ -14,14 +11,10 @@ from opengever.ogds.models.group import groups_users
 from opengever.ogds.models.user import User
 from plone.memoize import ram
 from Products.CMFCore.utils import getToolByName
-from Products.ZCatalog.interfaces import ICatalogBrain
 from Products.ZCatalog.ZCatalog import ZCatalog
 from zope.app.component.hooks import getSite
 from zope.component import getUtility
-from zope.globalrequest import getRequest
-from zope.i18n import translate
 import logging
-import types
 import warnings
 
 
@@ -128,7 +121,7 @@ class ContactInformation(grok.GlobalUtility):
 
     def is_user_in_inbox_group(self, userid=None, client_id=None):
         if not client_id:
-            client_id = get_client_id()
+            client_id = get_current_org_unit().id()
 
         if not userid:
             member = getToolByName(
@@ -281,7 +274,7 @@ class ContactInformation(grok.GlobalUtility):
         of the specified client"""
 
         if not client_id:
-            client_id = get_client_id()
+            client_id = get_current_org_unit().id()
 
         if not userid:
             member = getToolByName(

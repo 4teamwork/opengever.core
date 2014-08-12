@@ -14,7 +14,8 @@ class TestSearchForm(FunctionalTestCase):
     def setUp(self):
         super(TestSearchForm, self).setUp()
 
-        create_and_select_current_org_unit()
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_all_unit_setup())
 
     def test_filing_number_fields_is_hidden_in_site_without_filing_number_support(self):
         self.browser.open('http://nohost/plone/advanced_search')
@@ -45,8 +46,8 @@ class TestSearchFormObjectProvidesDescription(FunctionalTestCase):
 
     def setUp(self):
         super(TestSearchFormObjectProvidesDescription, self).setUp()
-        org_unit = create_and_select_current_org_unit()
-        create(Builder('admin_unit').wrapping_org_unit(org_unit))
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_all_unit_setup())
 
     def test_contains_special_info_in_a_multi_client_setup(self):
         create(Builder('admin_unit'))
@@ -144,8 +145,8 @@ class TestSearchWithoutContent(FunctionalTestCase):
 
         activate_filing_number(self.portal)
 
-        create_and_select_current_org_unit()
-
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_all_unit_setup())
         self.dossier1 = create(Builder("dossier"))
 
     def tearDown(self):
