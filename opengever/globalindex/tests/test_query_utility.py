@@ -16,22 +16,6 @@ class TestTaskQuery(TestCase):
         provideUtility(TaskQuery())
         self.query = getUtility(ITaskQuery)
 
-    def test_query_by_existing_responsible(self):
-        task1 = self.add_task(1, responsible='hugo.boss')
-        task2 = self.add_task(2, responsible='james.bond')
-        task3 = self.add_task(3, responsible='hugo.boss')
-
-        self.assertEquals([task1, task3],
-            self.query.get_tasks_for_responsible('hugo.boss'))
-        self.assertEquals([task2],
-            self.query.get_tasks_for_responsible('james.bond'))
-
-    def test_query_by_not_existing_responsible(self):
-        self.add_task(1, responsible='hugo.boss')
-
-        self.assertEquals([],
-            self.query.get_tasks_for_responsible('eduard'))
-
     def test_query_by_issuer(self):
         self.add_task(1, issuer='hugo.boss')
         task2 = self.add_task(2, 'admin1', issuer='james.bond')

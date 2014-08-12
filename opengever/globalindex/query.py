@@ -18,29 +18,6 @@ class TaskQuery(object):
         return Session().query(Task).filter(
             Task.physical_path.in_(task_paths)).all()
 
-    def _get_tasks_for_responsible_query(
-        self, responsible, sort_on='modified', sort_order='reverse'):
-
-        """Returns a sqlalchemy query of all tasks assigned to the given
-        responsible.
-        """
-
-        sort_on = getattr(Task, sort_on)
-        if sort_order == 'reverse':
-            return Session().query(Task).filter(Task.responsible == responsible
-                                                ).order_by(desc(sort_on))
-        else:
-            return Session().query(Task).filter(Task.responsible == responsible
-                                                ).order_by(asc(sort_on))
-
-    def get_tasks_for_responsible(self, responsible, sort_on='modified',
-                                  sort_order='reverse'):
-        """Returns all tasks assigned to the given responsible.
-        """
-
-        return self._get_tasks_for_responsible_query(
-            responsible, sort_on=sort_on, sort_order=sort_order).all()
-
     def _get_tasks_for_issuer_query(self, issuer, sort_on='modified',
                                     sort_order='reverse'):
         """Returns a sqlachemy query of all tasks issued by the given issuer.
