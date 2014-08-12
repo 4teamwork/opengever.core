@@ -5,8 +5,6 @@ from datetime import datetime, timedelta, date
 from ftw.table import helper
 from ftw.table.interfaces import ITableGenerator
 from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
-from opengever.ogds.base.interfaces import IContactInformation
-from opengever.ogds.base.utils import get_client_id
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.tasktemplates import _
@@ -18,7 +16,6 @@ from Products.CMFPlone.utils import getToolByName
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.statusmessages.interfaces import IStatusMessage
-from zope.component import getUtility
 from zope.component import queryUtility
 from zope.event import notify
 from zope.interface import alsoProvides
@@ -222,7 +219,7 @@ class AddForm(BrowserView):
             title=templatefolder.title,
             issuer=self.replace_interactive_user('current_user'),
             responsible=self.replace_interactive_user('current_user'),
-            responsible_client=get_client_id(),
+            responsible_client=get_current_org_unit().id(),
             task_type='direct-execution',
             deadline=date.today() +
             timedelta(highest_deadline + MAIN_TASK_DEADLINE_DELTA),
