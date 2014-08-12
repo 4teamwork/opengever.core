@@ -1,5 +1,4 @@
 from ftw.upgrade import UpgradeStep
-from opengever.document.behaviors import IBaseDocument
 
 
 class AddPublicTrialIndexAndMetadata(UpgradeStep):
@@ -14,6 +13,5 @@ class AddPublicTrialIndexAndMetadata(UpgradeStep):
         if not self.catalog_has_index('public_trial'):
             self.catalog_add_index('public_trial', 'FieldIndex')
 
-        self.catalog_reindex_objects(
-            {'object_provides': IBaseDocument.__identifier__},
-            idxs=['public_trial'])
+        # Indexes and catalog metadata for these objects will be rebuilt in
+        # upgrade step opengever.policy.base.upgrades:3400

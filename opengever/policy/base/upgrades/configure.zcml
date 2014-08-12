@@ -19,5 +19,14 @@
 	    for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
 	    provides="Products.GenericSetup.interfaces.EXTENSION"
 	    />
-	
+
+    <genericsetup:upgradeStep
+        title="Rebuild indexes and metadata for documentish objects"
+        description=""
+        source="3100"
+        destination="3400"
+        handler="opengever.policy.base.upgrades.to3400.RebuildIndexesForDocumentishObjects"
+        profile="opengever.policy.base:default"
+         />
+
 </configure>
