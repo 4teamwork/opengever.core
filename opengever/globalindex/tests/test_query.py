@@ -63,7 +63,7 @@ class TestTaskQueries(TestCase):
             [task2],
             Task.query.users_issued_tasks('tommy.hilfiger').all())
 
-    def test_task_by_id_returns_tasks_wich_match_the_given_intid_and_adminunit(self):
+    def test_task_by_ids_returns_tasks_wich_match_the_given_intid_and_adminunit(self):
         task1 = self.task(1, 'unita')
         task2 = self.task(2, 'unita')
         task3 = self.task(3, 'unitb')
@@ -71,11 +71,11 @@ class TestTaskQueries(TestCase):
 
         self.assertSequenceEqual(
             [task1, task2, task4],
-            Task.query.tasks_by_id([1, 2, 3], self.admin_unit_a).all())
+            Task.query.tasks_by_ids([1, 2, 3], self.admin_unit_a).all())
 
         self.assertSequenceEqual(
             [task3],
-            Task.query.tasks_by_id([1, 2, 3], self.admin_unit_b).all())
+            Task.query.tasks_by_ids([1, 2, 3], self.admin_unit_b).all())
 
     def test_all_admin_unit_tasks_list_tasks_assigned_to_a_current_admin_units_org_unit(self):
         task1 = self.task(1, 'unita', assigned_org_unit='rr')
