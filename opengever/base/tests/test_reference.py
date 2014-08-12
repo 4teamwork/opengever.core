@@ -1,6 +1,5 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from opengever.base.interfaces import IBaseClientID
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import IReferenceNumberFormatter
 from opengever.base.interfaces import IReferenceNumberPrefix
@@ -14,12 +13,12 @@ from zope.component import queryAdapter
 class TestLocalReferenceNumber(FunctionalTestCase):
 
     def test_plone_site_returns_client_id(self):
-        registry = getUtility(IRegistry)
-        proxy = registry.forInterface(IBaseClientID)
-        proxy.client_id = u'FAKE CLIENT'
+        create(Builder('admin_unit')
+               .having(unit_id='FAKE')
+               .as_current_admin_unit())
 
         self.assertEquals(
-            u'FAKE CLIENT', IReferenceNumber(self.portal).get_local_number())
+            u'FAKE', IReferenceNumber(self.portal).get_local_number())
 
     def test_repository_root_returns_empty_string(self):
         root = create(Builder('repository_root'))

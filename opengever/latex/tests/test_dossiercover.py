@@ -6,17 +6,15 @@ from ftw.pdfgenerator.interfaces import ILaTeXView
 from ftw.pdfgenerator.utils import provide_request_layer
 from ftw.testbrowser import browsing
 from ftw.testing import MockTestCase
-from opengever.base.interfaces import IBaseClientID
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.latex.dossiercover import DossierCoverPDFView
 from opengever.latex.dossiercover import IDossierCoverLayer
 from opengever.latex.layouts.default import DefaultLayout
 from opengever.latex.testing import LATEX_ZCML_LAYER
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.testing import create_ogds_user
 from opengever.testing import FunctionalTestCase
-from plone.registry.interfaces import IRegistry
 from zope.component import getMultiAdapter
-from zope.component import getUtility
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 
 
@@ -25,13 +23,14 @@ class TestDossierCoverRenderArguments(FunctionalTestCase):
     def setUp(self):
         super(TestDossierCoverRenderArguments, self).setUp()
 
-        registry = getUtility(IRegistry)
-        self.client_id = registry.forInterface(IBaseClientID)
-        self.client_id.client_title = u'Department of forest & hunt'
+        create(Builder('admin_unit')
+               .having(unit_id=u'OG', title=u'Department of forest & hunt')
+               .as_current_admin_unit())
 
         self.user = create_ogds_user('hugo.boss')
-        self.repository = create(Builder('repository_root')
-                            .having(version='Repository 2013 & 2014'))
+        self.repository = create(
+            Builder('repository_root')
+            .having(version='Repository 2013 & 2014'))
         repofolder = create(Builder('repository').within(self.repository))
         dossier = create(Builder('dossier')
                          .having(title=u'Foo & bar',
@@ -59,7 +58,7 @@ class TestDossierCoverRenderArguments(FunctionalTestCase):
                           arguments.get('clienttitle'))
 
     def test_empty_client_title(self):
-        self.client_id.client_title = None
+        get_current_admin_unit().title = None
 
         arguments = self.dossiercover.get_render_arguments()
         self.assertEquals('', arguments.get('clienttitle'))

@@ -2,7 +2,6 @@ from five import grok
 from ftw.pdfgenerator.interfaces import IBuilder
 from ftw.pdfgenerator.interfaces import ILaTeXLayout
 from ftw.pdfgenerator.layout.customizable import CustomizableLayout
-from opengever.base.interfaces import IBaseClientID
 from opengever.latex.interfaces import ILaTeXSettings
 from opengever.ogds.base.utils import get_current_org_unit
 from plone.registry.interfaces import IRegistry
