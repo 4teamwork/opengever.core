@@ -1,5 +1,6 @@
 from opengever.base.browser.helper import get_css_class
 from opengever.globalindex.interfaces import ITaskQuery
+from opengever.globalindex.model.task import Task
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from Products.CMFPlone.utils import getToolByName
@@ -100,7 +101,7 @@ def get_selected_items(context, request):
         attr = 'physical_path'
 
     elif ids:
-        tasks = query.get_tasks(ids)
+        tasks = Task.query.by_ids(ids)
         keys = ids
         attr = 'task_id'
 

@@ -12,11 +12,6 @@ class TaskQuery(object):
     """
     implements(ITaskQuery)
 
-    def get_tasks(self, task_ids):
-        """Returns a set of tasks whos task_ids are listed in `task_ids`.
-        """
-        return Session().query(Task).filter(Task.task_id.in_(task_ids)).all()
-
     def get_tasks_by_paths(self, task_paths):
         """Returns a set of tasks whos pahts are listed in `paths`.
         """

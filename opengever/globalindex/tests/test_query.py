@@ -103,6 +103,14 @@ class TestTaskQueries(TestCase):
 
         self.assertEquals(None, Task.query.by_path('test/task-1/', 'unita'))
 
+    def test_by_ids_returns_tasks_wich_match_the_given_id(self):
+        task1 = self.task(1, 'unita', task_id=55)
+        task2 = self.task(2, 'unita', task_id=56)
+        task3 = self.task(3, 'unita', task_id=58)
+
+        self.assertEquals([task1, task3],
+                          Task.query.by_ids([55, 58]))
+
     def test_task_by_ids_returns_tasks_wich_match_the_given_intid_and_adminunit(self):
         task1 = self.task(1, 'unita')
         task2 = self.task(2, 'unita')
