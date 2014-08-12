@@ -1,11 +1,9 @@
 from opengever.base.browser.helper import get_css_class
-from opengever.globalindex.interfaces import ITaskQuery
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from Products.CMFPlone.utils import getToolByName
 from zope.app.component.hooks import getSite
-from zope.component import getUtility
 
 
 def indexed_task_link(item, display_client=False):
@@ -81,26 +79,11 @@ def indexed_task_link_helper(item, value):
 
 
 def get_selected_items(context, request):
-    """Returns a set of SQLAlchemy objects,
-    equal if there is a "path:list" or a "task_id:list given in the request"
+    """Returns a set of SQLAlchemy objects, for "task_id:list given
+    in the request"
     """
-
-    paths = request.get('paths', None)
     ids = request.get('task_ids', [])
-    query = getUtility(ITaskQuery)
-
-    if paths:
-        relative_paths = []
-        for path in paths:
-            # cut the site id from the path
-            relative_paths.append(
-                '/'.join(path.split('/')[2:]))
-
-        tasks = query.get_tasks_by_paths(relative_paths)
-        keys = relative_paths
-        attr = 'physical_path'
-
-    elif ids:
+    if ids:
         tasks = Task.query.by_ids(ids)
         keys = ids
         attr = 'task_id'
