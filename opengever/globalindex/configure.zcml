@@ -28,7 +28,4 @@
     <include package=".handlers" />
     <include package=".upgrades" />
 
-    <utility factory=".query.TaskQuery" />
-
-
 </configure>
