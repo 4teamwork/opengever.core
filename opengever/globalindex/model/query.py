@@ -59,6 +59,11 @@ class TaskQuery(BaseQuery):
         return self.filter_by(
             admin_unit_id=admin_unit_id, physical_path=path).first()
 
+    def by_ids(self, task_ids):
+        """Returns a set of tasks whos task_ids are listed in `task_ids`.
+        """
+        return self.filter(self._attribute('task_id').in_(task_ids)).all()
+
     def by_container(self, container, admin_unit):
         url_tool = api.portal.get_tool(name='portal_url')
         path = '/'.join(url_tool.getRelativeContentPath(container))
