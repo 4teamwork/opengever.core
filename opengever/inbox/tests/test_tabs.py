@@ -2,7 +2,6 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.testing import FunctionalTestCase
 from opengever.testing import select_current_org_unit
-from opengever.testing import task2sqltask
 
 
 class TestInboxTabbedview(FunctionalTestCase):
@@ -87,7 +86,7 @@ class TestInboxTaskTabs(FunctionalTestCase):
             'tabbedview_view-{}'.format(self.viewname))
         view.update()
 
-        self.assertEquals([task2sqltask(obj) for obj in results],
+        self.assertEquals([obj.get_sql_object() for obj in results],
                           view.contents)
 
 
