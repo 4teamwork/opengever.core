@@ -207,6 +207,8 @@ class TestAssignedUsersVocabulary(FunctionalTestCase):
     def setUp(self):
         super(TestAssignedUsersVocabulary, self).setUp()
 
+        self.admin_unit = create(Builder('admin_unit').as_current_admin_unit())
+
         self.vocabulary_factory = getUtility(
             IVocabularyFactory,
             name='opengever.ogds.base.AssignedUsersVocabulary')

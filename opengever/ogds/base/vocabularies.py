@@ -4,13 +4,14 @@ from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.interfaces import IClientCommunicator
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.interfaces import ISyncStamp
-from opengever.ogds.base.utils import get_client_id
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.base.vocabulary import ContactsVocabulary
 from plone.memoize import ram
 from Products.CMFCore.utils import getToolByName
-from zope.app.component.hooks import getSite, setSite
+from zope.app.component.hooks import getSite
+from zope.app.component.hooks import setSite
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.schema.interfaces import IVocabularyFactory
@@ -21,15 +22,18 @@ def voc_cachekey(method, self):
     """A cache key for vocabularies which are implemented as grok utilities
        and which do not depend on other parameters."""
 
-    return '%s:%s' % (getattr(self, 'grokcore.component.directive.name'),
-                          getUtility(ISyncStamp).get_sync_stamp())
+    return '%s:%s' % (
+        getattr(self, 'grokcore.component.directive.name'),
+        getUtility(ISyncStamp).get_sync_stamp())
 
 
 def client_voc_cachekey(method, self):
     """A cache key depending on the vocabulary name and the current client id.
     """
-    return '%s:%s:%s' % (getattr(self, 'grokcore.component.directive.name'),
-                      get_client_id(), getUtility(ISyncStamp).get_sync_stamp())
+    return '%s:%s:%s' % (
+        getattr(self, 'grokcore.component.directive.name'),
+        get_current_admin_unit().id(),
+        getUtility(ISyncStamp).get_sync_stamp())
 
 
 def reqclient_voc_cachekey(method, self):

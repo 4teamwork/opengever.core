@@ -225,9 +225,8 @@ class TestTemplateDossier(FunctionalTestCase):
 
     def setUp(self):
         super(TestTemplateDossier, self).setUp()
-        client1 = create_client()
-        create_ogds_user(TEST_USER_ID, assigned_client=[client1])
-        set_current_client_id(self.portal)
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_all_unit_setup())
 
         self.grant('Manager')
 

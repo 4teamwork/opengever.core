@@ -1,20 +1,20 @@
 # -*- coding: utf-8 -*-
 from AccessControl import getSecurityManager
-from Products.CMFCore.utils import getToolByName
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.contentmenu.menu import FactoriesMenu
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.mail.behaviors import ISendableDocsContainer
-from opengever.testing import FunctionalTestCase
-from opengever.testing import create_and_select_current_org_unit
-from opengever.testing import create_client
 from opengever.testing import create_ogds_user
 from opengever.testing import create_plone_user
+from opengever.testing import FunctionalTestCase
 from plone.app.testing import SITE_OWNER_NAME, login, logout
 from plone.app.testing import TEST_USER_NAME
 from plone.dexterity.utils import createContentInContainer
 from plone.dexterity.utils import iterSchemata
 from plone.indexer.interfaces import IIndexableObject
+from Products.CMFCore.utils import getToolByName
 from zExceptions import Unauthorized
 from zope.component import getAdapter, getUtility
 from zope.component import queryMultiAdapter
@@ -22,8 +22,8 @@ from zope.interface import implements
 from zope.schema import getFieldsInOrder
 from zope.schema.interfaces import IChoice, IList, ITuple
 from zope.schema.interfaces import IVocabularyFactory
-from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 from zope.schema.vocabulary import getVocabularyRegistry
+from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 import transaction
 
 
@@ -199,10 +199,12 @@ class TestMainDossier(FunctionalTestCase):
         super(TestMainDossier, self).setUp()
         self.grant('Contributor')
 
-        orgunit = create_and_select_current_org_unit()
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_all_unit_setup())
 
         create_plone_user(self.portal, SITE_OWNER_NAME)
-        create_ogds_user(SITE_OWNER_NAME, assigned_client=[orgunit._client])
+        create_ogds_user(SITE_OWNER_NAME,
+                         assigned_client=[self.org_unit._client])
 
         self.request = self.layer['request']
 

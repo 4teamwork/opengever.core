@@ -81,9 +81,11 @@ def get_ou_selector():
     return OrgUnitSelector(storage, units)
 
 
-def client_id_cachekey(method):
-    """chackekey for the get_client_id, wich is unique for every plone site.
-    So a setup with multiple opengever sites on one plone instance is possible.
+def admin_unit_cachekey(method):
+    """chackekey for `get_current_admin_unit` wich is unique for every plone
+    site. This makes a setup with multiple opengever sites on one zope
+    possible.
+
     """
     context = getSite()
 
@@ -93,28 +95,18 @@ def client_id_cachekey(method):
                 context = obj
                 break
 
-    return 'get_client_id:%s' % (context.id)
+    return 'get_current_admin_unit:%s' % (context.id)
 
 
 def get_current_org_unit():
     return get_ou_selector().get_current_unit()
 
 
+# @ram.cache(admin_unit_cachekey)
 def get_current_admin_unit():
     registry = getUtility(IRegistry)
     proxy = registry.forInterface(IAdminUnitConfiguration)
     return ogds_service().fetch_admin_unit(proxy.current_unit_id)
-
-
-# @ram.cache(client_id_cachekey)
-def get_client_id():
-    """Returns the client_id of the current client.
-    """
-    return get_ou_selector().get_current_unit().id()
-
-    # registry = getUtility(IRegistry)
-    # proxy = registry.forInterface(IClientConfiguration)
-    # return proxy.client_id
 
 
 def remote_json_request(target_admin_unit_id, viewname, path='',
