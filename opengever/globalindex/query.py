@@ -13,15 +13,6 @@ class TaskQuery(object):
     """
     implements(ITaskQuery)
 
-    def get_task(self, int_id, admin_unit_id):
-        """Returns the task identified by the given int_id and client_id.
-        """
-        try:
-            return Session().query(Task).filter_by(
-                admin_unit_id=admin_unit_id, int_id=int_id).one()
-        except NoResultFound:
-            return None
-
     def get_task_by_path(self, path, admin_unit_id):
         """Returns a task on the specified client identified by its physical
         path (which is relative to the site root!).

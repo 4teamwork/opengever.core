@@ -10,7 +10,7 @@ from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.source import DossierPathSourceBinder
-from opengever.globalindex.interfaces import ITaskQuery
+from opengever.globalindex.model.task import Task as TaskModel
 from opengever.globalindex.oguid import Oguid
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
@@ -256,8 +256,8 @@ class Task(Container):
         return self.get_responsible_org_unit().admin_unit
 
     def get_sql_object(self):
-        query = getUtility(ITaskQuery)
-        return query.get_task(self.int_id, get_current_admin_unit().id())
+        return TaskModel.query.by_id(
+            self.int_id, get_current_admin_unit().id())
 
     @property
     def safe_title(self):

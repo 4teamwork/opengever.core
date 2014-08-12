@@ -63,6 +63,18 @@ class TestTaskQueries(TestCase):
             [task2],
             Task.query.users_issued_tasks('tommy.hilfiger').all())
 
+    def test_by_id_with_existing_pair(self):
+        self.task(1, 'rr')
+        task2 = self.task(2, 'rr')
+        self.task(2, 'bd')
+
+        self.assertEquals(task2, Task.query.by_id(2, 'rr'))
+
+    def test_by_id_with_NOT_existing_pair_returns_none(self):
+        self.task(1, 'rr')
+
+        self.assertEquals(None, Task.query.by_id(1, 'bd'))
+
     def test_task_by_ids_returns_tasks_wich_match_the_given_intid_and_adminunit(self):
         task1 = self.task(1, 'unita')
         task2 = self.task(2, 'unita')
