@@ -75,6 +75,17 @@ class TestTaskQueries(TestCase):
 
         self.assertEquals(None, Task.query.by_id(1, 'bd'))
 
+    def test_py_path(self):
+        task1 = self.task(1, 'unita', physical_path='test/task-1/')
+        self.task(2, 'unitb', physical_path='test/task-1/')
+
+        self.assertEquals(task1, Task.query.by_path('test/task-1/', 'unita'))
+
+    def test_py_path_returns_none_for_not_existing_task(self):
+        self.task(2, 'unitb', physical_path='test/task-1/')
+
+        self.assertEquals(None, Task.query.by_path('test/task-1/', 'unita'))
+
     def test_task_by_ids_returns_tasks_wich_match_the_given_intid_and_adminunit(self):
         task1 = self.task(1, 'unita')
         task2 = self.task(2, 'unita')
