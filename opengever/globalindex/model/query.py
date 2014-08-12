@@ -38,6 +38,13 @@ class TaskQuery(BaseQuery):
             self._attribute('admin_unit_id') == admin_unit.id())
         return query.filter(self._attribute('int_id').in_(int_ids))
 
+    def by_id(self, int_id, admin_unit_id):
+        """Returns the task identified by the given int_id and admin_unit_id.
+        Or None
+        """
+        return self.filter_by(
+            admin_unit_id=admin_unit_id, int_id=int_id).first()
+
     def by_container(self, container, admin_unit):
         url_tool = api.portal.get_tool(name='portal_url')
         path = '/'.join(url_tool.getRelativeContentPath(container))

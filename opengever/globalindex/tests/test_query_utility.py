@@ -33,18 +33,6 @@ class TestTaskQuery(TestCase):
     def test_task_by_oguid_returns_non_for_unknown_oguids(self):
         self.assertIsNone(self.query.get_task_by_oguid('theanswer:42'))
 
-    def test_get_task_with_existing_intid_admin_unit_id_pair(self):
-        self.add_task(1, 'admin1')
-        self.add_task(2, 'admin1')
-        task3 = self.add_task(3, 'admin2')
-
-        self.assertEquals(task3, self.query.get_task(3, 'admin2'))
-
-    def test_get_task_with_non_existing_intid_admin_unit_id_pair(self):
-        self.add_task(1, 'admin1')
-
-        self.assertEquals(None, self.query.get_task(1, 'admin2'))
-
     def test_query_by_existing_responsible(self):
         task1 = self.add_task(1, responsible='hugo.boss')
         task2 = self.add_task(2, responsible='james.bond')
