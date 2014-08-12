@@ -1,3 +1,4 @@
+from opengever.globalindex.oguid import Oguid
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models.query import BaseQuery
 from plone import api
@@ -44,6 +45,12 @@ class TaskQuery(BaseQuery):
         """
         return self.filter_by(
             admin_unit_id=admin_unit_id, int_id=int_id).first()
+
+    def by_oguid(self, oguid):
+        """Returns the task identified by the given int_id and admin_unit_id
+        or None
+        """
+        return self.filter_by(oguid=Oguid(id=oguid)).first()
 
     def by_path(self, path, admin_unit_id):
         """Returns a task on the specified client identified by its physical
