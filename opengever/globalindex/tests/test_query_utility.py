@@ -58,21 +58,6 @@ class TestTaskQuery(TestCase):
             [task2, task3], self.query.get_tasks_for_issuer('james.bond'))
         self.assertEquals([], self.query.get_tasks_for_issuer('eduard'))
 
-    def test_query_py_path(self):
-        task1 = self.add_task(
-            1, admin_unit_id='admin1', physical_path='test/task-1/')
-        self.add_task(
-            2, admin_unit_id='admin2', physical_path='test/task-1/')
-        self.add_task(
-            3, admin_unit_id='admin2', physical_path='test/task-20/')
-
-        self.assertEquals(
-            task1, self.query.get_task_by_path('test/task-1/', 'admin1'))
-        self.assertEquals(
-            None, self.query.get_task_by_path('test/task-20/', 'admin1'))
-        self.assertEquals(
-            None, self.query.get_task_by_path('not-existing/task-3/', 'admin1'))
-
     def test_query_by_paths(self):
         task1 = self.add_task(1, physical_path='test/task-1/')
         task2 = self.add_task(2, physical_path='test/task-5/')

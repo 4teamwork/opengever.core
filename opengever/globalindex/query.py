@@ -2,7 +2,6 @@ from opengever.globalindex import Session
 from opengever.globalindex.interfaces import ITaskQuery
 from opengever.globalindex.model.task import Task
 from opengever.globalindex.oguid import Oguid
-from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.sql.expression import asc, desc
 from zope.deprecation import deprecated
 from zope.interface import implements
@@ -12,16 +11,6 @@ class TaskQuery(object):
     """A global utility for querying opengever tasks.
     """
     implements(ITaskQuery)
-
-    def get_task_by_path(self, path, admin_unit_id):
-        """Returns a task on the specified client identified by its physical
-        path (which is relative to the site root!).
-        """
-        try:
-            return Session().query(Task).filter_by(
-                admin_unit_id=admin_unit_id, physical_path=path).one()
-        except NoResultFound:
-            return None
 
     def get_task_by_oguid(self, oguid):
         """Return a task identified by its OGUID, which is
