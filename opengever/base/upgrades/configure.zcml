@@ -130,7 +130,7 @@
         directory="profiles/2606"
         />
 
-    <genericsetup:upgradeStep
+    <upgrade-step:importProfile
         title="Add reviewer role on admin groups"
         description=""
         source="2606"
