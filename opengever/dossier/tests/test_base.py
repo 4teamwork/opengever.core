@@ -69,6 +69,24 @@ class TestDossierContainer(FunctionalTestCase):
         self.assertNotIn('opengever.dossier.businesscasedossier',
                          [fti.id for fti in subdossier.allowedContentTypes()])
 
+    def test_get_subdossiers_returns_subsubdossiers_as_well(self):
+        dossier = create(Builder('dossier'))
+        subdossier = create(Builder('dossier').within(dossier))
+        subsubdossier = create(Builder('dossier').within(subdossier))
+
+        self.assertSequenceEqual(
+            [subdossier, subsubdossier],
+            self.brains_to_objects(dossier.get_subdossiers()))
+
+    def test_get_subdossiers_depth(self):
+        dossier = create(Builder('dossier'))
+        subdossier = create(Builder('dossier').within(dossier))
+        subsubdossier = create(Builder('dossier').within(subdossier))
+
+        self.assertSequenceEqual(
+            [subdossier],
+            self.brains_to_objects(dossier.get_subdossiers(depth=1)))
+
 
 class TestDossierChecks(FunctionalTestCase):
 

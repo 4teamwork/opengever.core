@@ -76,10 +76,12 @@ class DossierContainer(Container):
             return True
 
     def get_subdossiers(self, sort_on='created',
-                        sort_order='ascending', review_state=None):
+                        sort_order='ascending',
+                        review_state=None,
+                        depth=-1):
 
         dossier_path = '/'.join(self.getPhysicalPath())
-        query = {'path': dict(query=dossier_path, depth=-1),
+        query = {'path': dict(query=dossier_path, depth=depth),
                  'sort_on': sort_on,
                  'sort_order': sort_order,
                  'object_provides': IDossierMarker.__identifier__}
