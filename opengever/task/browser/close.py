@@ -8,7 +8,7 @@ from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.dossier.base import DOSSIER_STATES_OPEN
-from opengever.globalindex.interfaces import ITaskQuery
+from opengever.globalindex.model.task import Task
 from opengever.globalindex.oguid import Oguid
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
@@ -204,13 +204,12 @@ class ChooseDossierStepForm(CloseTaskWizardStepFormMixin, Form):
         data, errors = self.extractData()
 
         if not errors:
-            query = getUtility(ITaskQuery)
             dm = getUtility(IWizardDataStorage)
 
             oguid = self.request.get('oguid')
             dmkey = 'close:%s' % oguid
 
-            task = query.get_task_by_oguid(oguid)
+            task = Task.query.by_oguid(oguid)
             source_admin_unit = ogds_service().fetch_admin_unit(
                 task.admin_unit_id)
 

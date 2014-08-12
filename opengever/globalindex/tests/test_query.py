@@ -73,7 +73,24 @@ class TestTaskQueries(TestCase):
     def test_by_id_with_NOT_existing_pair_returns_none(self):
         self.task(1, 'rr')
 
-        self.assertEquals(None, Task.query.by_id(1, 'bd'))
+        self.assertIsNone(None, Task.query.by_id(1, 'bd'))
+
+    def test_task_by_oguid_returns_correct_task_with_oguid_instance_param(self):
+        task = self.task(1, 'unita')
+        self.task(2, 'unita')
+        self.task(1, 'unitb')
+
+        self.assertEqual(task, Task.query.by_oguid(task.oguid))
+
+    def test_task_by_oguid_returns_correct_task_with_string_param(self):
+        task = self.task(1, 'unita')
+        self.task(2, 'unitb')
+        self.task(1, 'unitb')
+
+        self.assertEqual(task, Task.query.by_oguid('unita:1'))
+
+    def test_task_by_oguid_returns_non_for_unknown_oguids(self):
+        self.assertIsNone(Task.query.by_oguid('theanswer:42'))
 
     def test_py_path(self):
         task1 = self.task(1, 'unita', physical_path='test/task-1/')

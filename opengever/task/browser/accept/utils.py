@@ -2,7 +2,7 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from five import grok
 from opengever.base.utils import ok_response
-from opengever.globalindex.interfaces import ITaskQuery
+from opengever.globalindex.model.task import Task
 from opengever.inbox.utils import get_current_inbox
 from opengever.inbox.yearfolder import get_current_yearfolder
 from opengever.ogds.base.interfaces import ITransporter
@@ -60,7 +60,7 @@ def accept_forwarding_with_successor(
     context, predecessor_oguid, response_text, dossier=None):
 
     # the predessecor (the forwarding on the remote client)
-    predecessor = getUtility(ITaskQuery).get_task_by_oguid(predecessor_oguid)
+    predecessor = Task.query.by_oguid(predecessor_oguid)
 
     # transport the remote forwarding to the inbox or actual yearfolder
     transporter = getUtility(ITransporter)
@@ -162,7 +162,7 @@ def accept_forwarding_with_successor(
 def assign_forwarding_to_dossier(
     context, forwarding_oguid, dossier, response_text):
 
-    forwarding = getUtility(ITaskQuery).get_task_by_oguid(forwarding_oguid)
+    forwarding = Task.query.by_oguid(forwarding_oguid)
 
     forwarding_obj = context.unrestrictedTraverse(
         forwarding.physical_path.encode('utf-8'))
@@ -212,7 +212,7 @@ def assign_forwarding_to_dossier(
 
 def accept_task_with_successor(dossier, predecessor_oguid, response_text):
 
-    predecessor = getUtility(ITaskQuery).get_task_by_oguid(predecessor_oguid)
+    predecessor = Task.query.by_oguid(predecessor_oguid)
 
     # Transport the original task (predecessor) to this dossier. The new
     # response and task change is not yet done and will be done later. This

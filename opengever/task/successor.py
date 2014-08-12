@@ -1,9 +1,8 @@
 from five import grok
-from opengever.globalindex.interfaces import ITaskQuery
+from opengever.globalindex.model.task import Task
 from opengever.globalindex.oguid import Oguid
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
-from zope.component import getUtility
 from zope.lifecycleevent import modified
 
 
@@ -45,8 +44,7 @@ class SuccessorTaskController(grok.Adapter):
         oguid = Oguid(id=oguid)
 
         # do we have it in our indexes?
-        query = getUtility(ITaskQuery)
-        predecessor = query.get_task_by_oguid(oguid)
+        predecessor = Task.query.by_oguid(oguid)
         if not predecessor:
             return False
 

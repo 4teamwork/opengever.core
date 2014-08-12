@@ -12,12 +12,6 @@ class TaskQuery(object):
     """
     implements(ITaskQuery)
 
-    def get_task_by_oguid(self, oguid):
-        """Return a task identified by its OGUID, which is
-        [admin_unit_id]:[int_id]
-        """
-        return Task.query.filter_by(oguid=Oguid(id=oguid)).first()
-
     def get_tasks(self, task_ids):
         """Returns a set of tasks whos task_ids are listed in `task_ids`.
         """
