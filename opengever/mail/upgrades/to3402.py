@@ -18,6 +18,8 @@ class AddClassifiactionBehavior(UpgradeStep):
         query = {'portal_type': 'ftw.mail.mail'}
         for mail in self.objects(query, 'Initialize IClassification metadata on mail'):
             self.set_default_values(mail)
+        # Indexes and metadata for these objects will be rebuilt in
+        # upgrade step opengever.policy.base.upgrades:3400
 
     def set_default_values(self, mail):
         fields = [

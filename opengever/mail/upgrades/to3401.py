@@ -28,6 +28,8 @@ class ActivateBehaviors(UpgradeStep):
             initialize_metadata(mail, None)
             self.set_receipt_date_equals_creation_date(mail)
             self.set_default_values_for_missing_fields(mail)
+            # Indexes and metadata for these objects will be rebuilt in
+            # upgrade step opengever.policy.base.upgrades:3400
 
     def set_receipt_date_equals_creation_date(self, mail):
         mail_metadata = IDocumentMetadata(mail)
