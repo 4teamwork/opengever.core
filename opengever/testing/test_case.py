@@ -49,6 +49,9 @@ class FunctionalTestCase(TestCase):
         self.assertTrue(interface.providedBy(obj),
                         "%s should provide %s" % (obj, interface))
 
+    def brains_to_objects(self, brains):
+        return [each.getObject() for each in brains]
+
     """
     Vocabulary assert helpers
     """
