@@ -251,7 +251,7 @@ class Task(Container):
         return self.get_responsible_org_unit().admin_unit
 
     def get_sql_object(self):
-        return TaskModel.query.by_id(
+        return TaskModel.query.by_intid(
             self.int_id, get_current_admin_unit().id())
 
     @property
