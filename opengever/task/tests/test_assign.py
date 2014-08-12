@@ -2,7 +2,6 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.task.adapters import IResponseContainer
 from opengever.testing import FunctionalTestCase
-from opengever.testing import task2sqltask
 from plone.app.testing import TEST_USER_ID
 
 
@@ -48,7 +47,7 @@ class TestAssignTask(FunctionalTestCase):
 
         self.assertEquals('james.bond', self.task.responsible)
         self.assertEquals('james.bond',
-                          task2sqltask(self.task).responsible)
+                          self.task.get_sql_object().responsible)
 
     def test_adds_an_corresponding_response(self):
         self.assign_task('James', 'james.bond', 'Please make that for me.')

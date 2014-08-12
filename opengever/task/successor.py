@@ -1,11 +1,8 @@
 from five import grok
-from opengever.globalindex.interfaces import ITaskQuery
+from opengever.globalindex.model.task import Task
 from opengever.globalindex.oguid import Oguid
-from opengever.ogds.base.utils import get_client_id
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
-from zope.component import getUtility
-from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import modified
 
 
@@ -24,16 +21,6 @@ class SuccessorTaskController(grok.Adapter):
         """Returns the oguid of the adapted task."""
 
         return self.task.oguid.id
-
-    def get_indexed_data(self):
-        """Returns the indexed data of the adapted task.
-        """
-
-        intids = getUtility(IIntIds)
-        iid = intids.getId(self.task)
-
-        query = getUtility(ITaskQuery)
-        return query.get_task(iid, get_client_id())
 
     def get_predecessor(self, default=None):
         """Returns the predecessor of the adapted object or ``default`` if it
@@ -57,8 +44,7 @@ class SuccessorTaskController(grok.Adapter):
         oguid = Oguid(id=oguid)
 
         # do we have it in our indexes?
-        query = getUtility(ITaskQuery)
-        predecessor = query.get_task_by_oguid(oguid)
+        predecessor = Task.query.by_oguid(oguid)
         if not predecessor:
             return False
 
@@ -80,8 +66,7 @@ class SuccessorTaskController(grok.Adapter):
     def get_oguid_by_path(self, path, admin_unit_id):
         """Returns the oguid of another object identifed by admin_unit_id and path.
         """
-        query = getUtility(ITaskQuery)
-        task = query.get_task_by_path(path, admin_unit_id)
+        task = Task.query.by_path(path, admin_unit_id)
         if not task:
             return None
         return task.oguid.id

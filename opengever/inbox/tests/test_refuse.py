@@ -9,7 +9,6 @@ from opengever.ogds.base.transport import REQUEST_KEY
 from opengever.task.adapters import IResponseContainer
 from opengever.testing import FunctionalTestCase
 from opengever.testing.helpers import obj2brain
-from opengever.testing.helpers import task2sqltask
 from Products.CMFCore.utils import getToolByName
 from zope.component import getUtility
 import json
@@ -121,7 +120,7 @@ class TestRefuseForwardingStoring(FunctionalTestCase):
         self.assertEquals('forwarding-state-closed',
                           obj2brain(copy).review_state)
         self.assertEquals('forwarding-state-closed',
-                          task2sqltask(copy).review_state)
+                          copy.get_sql_object().review_state)
 
     def test_refusing_multiple_times_creates_only_one_forwarding(self):
         self.refuse_forwarding(self.forwarding)

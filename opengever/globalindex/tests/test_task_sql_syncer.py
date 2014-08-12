@@ -2,13 +2,11 @@ from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.globalindex import Session
-from opengever.globalindex.interfaces import ITaskQuery
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
-from zope.component import getUtility
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
 
@@ -19,7 +17,6 @@ class TestTaskSQLSyncer(FunctionalTestCase):
         super(TestTaskSQLSyncer, self).setUp()
         self.user, self.org_unit, self.admin_unit, = create(
             Builder('fixture').with_all_unit_setup())
-        self.query = getUtility(ITaskQuery)
 
         self.dossier = create(Builder('dossier')
                               .titled(u'dossier'))
