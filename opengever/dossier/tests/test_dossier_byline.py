@@ -90,7 +90,7 @@ class TestFilingBusinessCaseByline(TestBylineBase):
 
     def tearDown(self):
         inactivate_filing_number(self.portal)
-        super(TestFilingBusinessCaseByline, self).setUp()
+        super(TestFilingBusinessCaseByline, self).tearDown()
 
     def test_dossier_byline_filing_number_display(self):
         filing_number = self.get_byline_value_by_label('Filing Number:')
