@@ -13,5 +13,5 @@ class AddPublicTrialIndexAndMetadata(UpgradeStep):
         if not self.catalog_has_index('public_trial'):
             self.catalog_add_index('public_trial', 'FieldIndex')
 
-        # Indexes and metadata for these objects will be rebuilt in
+        # Indexes and catalog metadata for these objects will be rebuilt in
         # upgrade step opengever.policy.base.upgrades:3400

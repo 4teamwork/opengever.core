@@ -1,3 +1,5 @@
+from Acquisition import aq_base
+from Acquisition import aq_parent
 from ftw.upgrade import UpgradeStep
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.mail.mail import initialize_metadata
@@ -5,6 +7,7 @@ from plone.dexterity.interfaces import IDexterityFTI
 from z3c.form.interfaces import IValue
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
+import zope.schema
 
 
 class ActivateBehaviors(UpgradeStep):
@@ -28,7 +31,7 @@ class ActivateBehaviors(UpgradeStep):
             initialize_metadata(mail, None)
             self.set_receipt_date_equals_creation_date(mail)
             self.set_default_values_for_missing_fields(mail)
-            # Indexes and metadata for these objects will be rebuilt in
+            # Indexes and catalog metadata for these objects will be rebuilt in
             # upgrade step opengever.policy.base.upgrades:3400
 
     def set_receipt_date_equals_creation_date(self, mail):
@@ -51,8 +54,17 @@ class ActivateBehaviors(UpgradeStep):
 
         for fieldname in fields:
             field = IDocumentMetadata[fieldname]
+
+            # Don't overwrite existing values.
+            if hasattr(aq_base(mail), fieldname):
+                # Existing value - skip unless it's a broken tuple
+                if not (isinstance(field, zope.schema._field.Tuple) and
+                        getattr(mail, fieldname) is None):
+                    continue
+
+            field = IDocumentMetadata[fieldname]
             default_adapter = queryMultiAdapter(
-                (mail.aq_parent, mail.REQUEST, None, field, None),
+                (aq_parent(mail), mail.REQUEST, None, field, None),
                 IValue, name='default')
 
             default = None
@@ -60,8 +72,17 @@ class ActivateBehaviors(UpgradeStep):
                 default = default_adapter.get()
 
             if default is None:
+                default = field.default
+
+            if default is None:
                 try:
                     default = field.missing_value
                 except AttributeError:
                     pass
+
+            # default and missing_value are broken for
+            # zope.schema.Tuple - account for that
+            if isinstance(field, zope.schema._field.Tuple):
+                default = ()
+
             field.set(field.interface(mail), default)
