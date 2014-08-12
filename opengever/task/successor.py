@@ -1,11 +1,9 @@
 from five import grok
 from opengever.globalindex.interfaces import ITaskQuery
 from opengever.globalindex.oguid import Oguid
-from opengever.ogds.base.utils import get_client_id
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
 from zope.component import getUtility
-from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import modified
 
 
@@ -24,16 +22,6 @@ class SuccessorTaskController(grok.Adapter):
         """Returns the oguid of the adapted task."""
 
         return self.task.oguid.id
-
-    def get_indexed_data(self):
-        """Returns the indexed data of the adapted task.
-        """
-
-        intids = getUtility(IIntIds)
-        iid = intids.getId(self.task)
-
-        query = getUtility(ITaskQuery)
-        return query.get_task(iid, get_client_id())
 
     def get_predecessor(self, default=None):
         """Returns the predecessor of the adapted object or ``default`` if it

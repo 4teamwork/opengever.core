@@ -1,7 +1,6 @@
-from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
-from opengever.ogds.base.utils import get_client_id
+from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import _
 from opengever.task.interfaces import IWorkflowStateSyncer
 from opengever.task.task import ITask
@@ -9,6 +8,7 @@ from opengever.task.util import add_simple_response
 from opengever.task.util import getTransitionVocab
 from plone.directives import form
 from plone.z3cform import layout
+from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
 from z3c.form.form import Form
@@ -160,9 +160,9 @@ class RefuseForwardingView(grok.View):
 
     def render(self):
         # set responsible
-        self.context.responsible_client = get_client_id()
-        self.context.responsible = u'inbox:%s' % (
-            self.context.responsible_client)
+        org_unit = get_current_org_unit()
+        self.context.responsible_client = org_unit.id()
+        self.context.responsible = org_unit.inbox().id()
 
         # create a response in the task
         add_simple_response(

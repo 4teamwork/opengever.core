@@ -1,11 +1,10 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.globalindex.interfaces import ITaskQuery
-from opengever.ogds.base.utils import get_client_id
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.task.interfaces import ITaskDocumentsTransporter
 from opengever.task.task import ITask
 from opengever.testing import FunctionalTestCase
-from plone.app.testing import TEST_USER_ID
 from plone.dexterity.utils import createContentInContainer
 from plone.dexterity.utils import iterSchemata
 from z3c.form.interfaces import IValue
@@ -82,7 +81,7 @@ class TestTransporter(FunctionalTestCase):
         target = self._create_task(self.portal)
 
         sql_task = getUtility(ITaskQuery).get_task(
-            intids.getId(task), get_client_id())
+            intids.getId(task), get_current_admin_unit().id())
 
         doc_transporter = getUtility(ITaskDocumentsTransporter)
         doc_transporter.copy_documents_from_remote_task(
@@ -99,7 +98,7 @@ class TestTransporter(FunctionalTestCase):
             self.portal, with_docs=True, return_docs=True)
         target = self._create_task(self.portal)
         sql_task = getUtility(ITaskQuery).get_task(
-            intids.getId(task), get_client_id())
+            intids.getId(task), get_current_admin_unit().id())
 
         doc_transporter = getUtility(ITaskDocumentsTransporter)
         ids = [intids.getId(documents[0]), intids.getId(documents[3])]

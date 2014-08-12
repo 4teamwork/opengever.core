@@ -1,18 +1,17 @@
-from Products.CMFCore.utils import getToolByName
-from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.interfaces import ITransporter
-from opengever.ogds.base.utils import get_client_id
+from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.base.vocabulary import ContactsVocabulary
 from opengever.task import _
+from plone import api
 from plone.directives.form import Schema
 from plone.z3cform import layout
+from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
 from z3c.form.form import Form
 from zope import schema
-from zope.app.component.hooks import getSite
 from zope.component import getUtility
 from zope.interface import Interface
 from zope.schema.interfaces import IVocabularyFactory
@@ -37,18 +36,11 @@ class TargetClientsWithInboxVocabularyFactory(grok.GlobalUtility):
         key = client id
         value = client title
         """
-
-        info = getUtility(IContactInformation)
-        current_client_id = get_client_id()
-        mtool = getToolByName(getSite(), 'portal_membership')
-        member = mtool.getAuthenticatedMember()
-
-        for client in info.get_assigned_clients():
-            if current_client_id != client.client_id:
-                inbox_group = client.inbox_group
-                if inbox_group in member.getGroups():
-                    yield (client.client_id,
-                           client.title)
+        member = api.user.get_current()
+        for org_unit in ogds_service().assigned_org_units(omit_current=True):
+            inbox_group = org_unit.inbox_group()
+            if inbox_group in member.getGroups():
+                yield (org_unit.id(), org_unit.label())
 
 
 class ICopyRelatedDocumentsSchema(Schema):

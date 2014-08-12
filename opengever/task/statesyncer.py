@@ -66,8 +66,8 @@ class WorkflowStateSyncer(grok.MultiAdapter):
             response_data = response.read().strip()
             if response_data != 'OK':
                 raise Exception(
-                    'Could not change task on remote client %s (%s)' % (
-                        task.client_id,
+                    'Could not change task on remote admin unit %s (%s)' % (
+                        task.admin_unit_id,
                         task.physical_path))
 
         return tasks
