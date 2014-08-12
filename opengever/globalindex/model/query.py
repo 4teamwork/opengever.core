@@ -31,7 +31,7 @@ class TaskQuery(BaseQuery):
 
     by_admin_unit = all_issued_tasks
 
-    def tasks_by_id(self, int_ids, admin_unit):
+    def tasks_by_ids(self, int_ids, admin_unit):
         """
         """
         query = self.filter(
