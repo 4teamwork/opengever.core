@@ -130,5 +130,13 @@
         directory="profiles/2606"
         />
 
+    <!-- 2606 -> 2607, versioning fail, metadata was 2607 for some time but no upgrade step existed -->
+    <upgrade-step:importProfile
+        title="Sync metadata version/upgrade step version"
+        profile="opengever.base:default"
+        source="2606"
+        destination="2607"
+        directory="profiles/2607"
+        />
 
 </configure>
