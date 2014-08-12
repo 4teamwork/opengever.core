@@ -43,8 +43,21 @@ def ogds_service():
 class PloneOGDSService(OGDSService):
     """Extends ogds-service with plone-specific helper methods."""
 
+    def _get_current_user_id(self):
+        return api.user.get_current().getId()
+
     def fetch_current_user(self):
-        return self.fetch_user(api.user.get_current().getId())
+        return self.fetch_user(self._get_current_user_id())
+
+    def assigned_org_units(self, userid=None, omit_current=False):
+        if userid is None:
+            userid = self._get_current_user_id()
+        org_units = super(PloneOGDSService, self).assigned_org_units(userid)
+        if omit_current:
+            current_org_unit = get_current_org_unit()
+            org_units = [each for each in org_units
+                         if each != current_org_unit]
+        return org_units
 
 
 def get_ou_selector():

@@ -287,8 +287,7 @@ class AddForm(form.AddForm, AutoExtensibleForm):
         self.widgets['transition'].mode = HIDDEN_MODE
 
     def is_user_assigned_to_current_org_unit(self):
-        member = api.user.get_current()
-        units = ogds_service().assigned_org_units(member.getId())
+        units = ogds_service().assigned_org_units()
         return get_current_org_unit() in units
 
 
