@@ -1,3 +1,4 @@
+from datetime import date
 from DateTime import DateTime as ZopeDateTime
 from opengever.globalindex import Session
 from opengever.globalindex.model import Base
@@ -6,7 +7,6 @@ from opengever.globalindex.oguid import Oguid
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
-from opengever.tabbedview.helper import overdue_date_helper
 from plone import api
 from sqlalchemy import Boolean
 from sqlalchemy import Column
@@ -34,6 +34,11 @@ class Task(Base):
 
     MAX_TITLE_LENGTH = 256
     MAX_BREADCRUMB_LENGTH = 512
+
+    OVERDUE_INDEPENDENT_STATES = ['task-state-cancelled',
+                                  'task-state-rejected',
+                                  'task-state-tested-and-closed',
+                                  'forwarding-state-closed']
 
     __tablename__ = 'tasks'
     __table_args__ = (UniqueConstraint('admin_unit_id', 'int_id'), {})
@@ -151,6 +156,13 @@ class Task(Base):
     def is_forwarding(self):
         return self.task_type == 'forwarding_task_type'
 
+    @property
+    def is_overdue(self):
+        if self.deadline < date.today():
+            if self.review_state not in Task.OVERDUE_INDEPENDENT_STATES:
+                return True
+        return False
+
     # XXX rename me, this should be get_responsible_link
     def get_responsible_label(self):
         actor = Actor.lookup(self.responsible)
@@ -161,11 +173,19 @@ class Task(Base):
         return "<span class=wf-{}>{}</span>".format(
             self.review_state,
             translate(self.review_state, domain='plone',
-                      context=api.portal.get().REQUEST),
-        )
+                      context=api.portal.get().REQUEST))
 
     def get_deadline_label(self):
-        return overdue_date_helper(self, self.deadline)
+        if not self.deadline:
+            return u''
+
+        if self.is_overdue:
+            label = '<span class="overdue">{}</span>'
+        else:
+            label = '<span>{}</span>'
+
+        return label.format(
+            self.deadline.strftime('%d.%m.%Y'))
 
     def _date_to_zope_datetime(self, date):
         if not date:
@@ -174,6 +194,40 @@ class Task(Base):
 
     def get_deadline(self):
         return self._date_to_zope_datetime(self.deadline)
+
+    @property
+    def is_remote_task(self):
+        """Returns true for tasks, where issuing and responsible
+        admin_unit are not equal"""
+
+        return self.get_assigned_org_unit().admin_unit != self.get_admin_unit()
+
+    def get_css_class(self):
+        """Returns css_class for the special task icons:
+         - Forwarding
+         - Regular Task
+         - Subtask
+         - Remotetask
+        """
+
+        if self.is_forwarding:
+            css_class = 'contenttype-opengever-inbox-forwarding'
+
+        elif self.is_subtask and self.is_remote_task:
+            if self.admin_unit_id == get_current_admin_unit().id():
+                css_class = 'icon-task-subtask'
+            else:
+                css_class = 'icon-task-remote-task'
+
+        elif self.is_subtask:
+            css_class = 'icon-task-subtask'
+
+        elif self.is_remote_task:
+            css_class = 'icon-task-remote-task'
+        else:
+            css_class = 'contenttype-opengever-task-task'
+
+        return css_class
 
     def get_completed(self):
         return self._date_to_zope_datetime(self.completed)
@@ -186,14 +240,14 @@ class Task(Base):
         allowed_principals = set(self.principals)
         return len(principals & allowed_principals) > 0
 
-    # XXX Todo: the css_class helper should moved to the task class itself,
-    # so that the css_class parameter is not necessary anymore.
-    def get_link(self, css_class):
+    def get_link(self):
         admin_unit = self.get_admin_unit()
         if not admin_unit:
-            return u'<span class="{}">{}</span>'.format(css_class, self.title)
+            return u'<span class="{}">{}</span>'.format(
+                self.get_css_class(), self.title)
 
         url = '/'.join((admin_unit.public_url, self.physical_path))
+
         # If the target is on a different client we need to make a popup
         if self.admin_unit_id != get_current_admin_unit().id():
             link_target = u' target="_blank"'
@@ -212,7 +266,8 @@ class Task(Base):
                 Actor.lookup(self.responsible).get_label()))
 
         # Link to the task object
-        task_html = u'<span class="{}">{}</span>'.format(css_class, self.title)
+        task_html = u'<span class="{}">{}</span>'.format(
+            self.get_css_class(), self.title)
 
         # Render the full link if we have acccess
         if self.has_access(api.user.get_current()):

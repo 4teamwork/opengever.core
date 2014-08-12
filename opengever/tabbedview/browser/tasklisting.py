@@ -11,7 +11,6 @@ from opengever.tabbedview.browser.listing import ListingView
 from opengever.tabbedview.browser.sqltablelisting import SqlTableSource
 from opengever.tabbedview.helper import display_org_unit_title_condition
 from opengever.tabbedview.helper import org_unit_title_helper
-from opengever.tabbedview.helper import overdue_date_helper
 from opengever.tabbedview.helper import readable_date_set_invisibles
 from opengever.tabbedview.helper import readable_ogds_author
 from opengever.tabbedview.helper import task_id_checkbox_helper
@@ -87,7 +86,7 @@ class GlobalTaskListingTab(grok.View, OpengeverTab,
 
         {'column': 'deadline',
          'column_title': _(u'column_deadline', default=u'Deadline'),
-         'transform': overdue_date_helper},
+         'transform': lambda task, deadline: task.get_deadline_label()},
 
         {'column': 'completed',
          'column_title': _(u'column_date_of_completion',
@@ -132,6 +131,9 @@ class GlobalTaskTableSource(SqlTableSource):
 
     grok.implements(ITableSource)
     grok.adapts(IGlobalTaskTableSourceConfig, Interface)
+
+    searchable_columns = [Task.title, Task.text,
+                          Task.sequence_number, Task.responsible]
 
     def build_query(self):
         """Builds the query based on `get_base_query()` method of config.

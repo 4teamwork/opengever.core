@@ -1,4 +1,3 @@
-from datetime import date as dt
 from ftw.mail.utils import get_header
 from opengever.base import _ as base_mf
 from opengever.base.browser.helper import get_css_class
@@ -285,39 +284,6 @@ def workflow_state(item, value):
     request = getRequest()
     return """<span class="wf-%s">%s</span>""" % (
         state, translate(value, domain='plone', context=request))
-
-
-#XXX replace with Task.get_deadline_label
-def overdue_date_helper(item, date):
-    """Helper for setting CSS class `overdue` if an item's
-    deadline is in the past.
-
-    Partially based on ftw.table.helper.readable_date
-    """
-
-    if not date:
-        return u''
-
-    strftimestring = '%d.%m.%Y'
-
-    overdue = False
-    try:
-        formatted_date = date.strftime(strftimestring)
-        if dt.fromordinal(date.toordinal()) < dt.today():
-            overdue = True
-    except ValueError:
-        return u''
-
-    if overdue and item and item.review_state in [
-            'task-state-cancelled',
-            'task-state-rejected',
-            'task-state-tested-and-closed',
-            'forwarding-state-closed']:
-
-        overdue = False
-
-    class_attr = ' class="overdue"' if overdue else ''
-    return "<span{}>{}</span>".format(class_attr, formatted_date)
 
 
 def queue_view_helper(item, value):

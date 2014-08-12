@@ -1,5 +1,9 @@
 from datetime import date
+from datetime import date
 from datetime import timedelta
+from datetime import timedelta
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.globalindex.model.task import Task
 from opengever.testing import MEMORY_DB_LAYER
 from sqlalchemy.exc import IntegrityError
@@ -109,3 +113,45 @@ class TestGlobalindexTask(TestCase):
     def test_get_deadline_label_is_empty_when_no_deadline_is_set(self):
         task = self._create_task()
         self.assertEqual('', task.get_deadline_label())
+
+    def test_is_overdue_compare_deadline_with_today(self):
+        early = create(Builder('globalindex_task').having(
+            int_id=12345, admin_unit_id='foo',
+            deadline=date.today() + timedelta(days=10), review_state='task-state-open'))
+
+        overdue = create(Builder('globalindex_task').having(
+            int_id=12345, admin_unit_id='foo',
+            deadline=date.today() - timedelta(days=10), review_state='task-state-open'))
+
+        self.assertFalse(early.is_overdue)
+        self.assertTrue(overdue.is_overdue)
+
+    def test_is_overdue_respect_overdue_independent_states(self):
+        overdue = create(Builder('globalindex_task').having(
+            int_id=12345, admin_unit_id='foo',
+            deadline=date.today() - timedelta(days=10), review_state='task-state-tested-and-closed'))
+
+        self.assertFalse(overdue.is_overdue)
+
+    def test_deadline_label_returns_span_tag_with_formated_date(self):
+        task = create(Builder('globalindex_task').having(
+            int_id=12345, admin_unit_id='foo',
+            deadline=date(2512,10,25), review_state='task-state-open'))
+
+        self.assertEquals('<span>25.10.2512</span>', task.get_deadline_label())
+
+    def test_deadline_label_contains_overdue_css_class_for_overdued_tasks(self):
+        deadline = date.today() - timedelta(days=10)
+        overdue = create(Builder('globalindex_task').having(
+            int_id=12345, admin_unit_id='foo',
+            deadline=deadline, review_state='task-state-open'))
+
+        self.assertEquals(
+            '<span class="overdue">{}</span>'.format(deadline.strftime('%d.%m.%Y')),
+            overdue.get_deadline_label())
+
+    def test_deadline_returns_empty_string_for_tasks_without_a_deadline(self):
+        task = create(Builder('globalindex_task').having(
+            int_id=12345, admin_unit_id='foo', review_state='task-state-open'))
+
+        self.assertEquals('', task.get_deadline_label())
