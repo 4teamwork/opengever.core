@@ -3,17 +3,12 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import FunctionalTestCase
-from opengever.testing import OPENGEVER_INTEGRATION_TESTING
 from plone.app.testing import TEST_USER_ID
 
 
-class TestDossierContainerFunctional(FunctionalTestCase):
-    """This test-case should eventually replace TestDossierContainer.
-    New tests will be added to this case.
-    """
-
+class TestDossierContainer(FunctionalTestCase):
     def setUp(self):
-        super(TestDossierContainerFunctional, self).setUp()
+        super(TestDossierContainer, self).setUp()
 
         self.user, self.org_unit, self.admin_unit = create(
             Builder('fixture').with_all_unit_setup())
@@ -64,7 +59,6 @@ class TestDossierContainerFunctional(FunctionalTestCase):
         subdossier = create(Builder('dossier').within(dossier))
         self.assertTrue(subdossier.is_subdossier())
 
-
     def test_maximum_dossier_level_is_2_by_default(self):
         dossier = create(Builder('dossier'))
         subdossier = create(Builder('dossier').within(dossier))
@@ -73,7 +67,7 @@ class TestDossierContainerFunctional(FunctionalTestCase):
                       [fti.id for fti in dossier.allowedContentTypes()])
 
         self.assertNotIn('opengever.dossier.businesscasedossier',
-                      [fti.id for fti in subdossier.allowedContentTypes()])
+                         [fti.id for fti in subdossier.allowedContentTypes()])
 
 
 class TestDossierChecks(FunctionalTestCase):
