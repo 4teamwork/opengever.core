@@ -13,9 +13,6 @@ class TestStardEndValidator(FunctionalTestCase):
         super(TestStardEndValidator, self).setUp()
         self.grant('Manager')
 
-        self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture').with_all_unit_setup())
-
     def test_start_date_must_be_before_end_date(self):
         dossier = create(Builder('dossier')
                          .having(title=u'Testdossier',

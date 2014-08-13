@@ -22,6 +22,7 @@ class TestClientUtils(FunctionalTestCase):
 
 
 class TestClientHelpers(FunctionalTestCase):
+    use_default_fixture = False
 
     def setUp(self):
         super(TestClientHelpers, self).setUp()
@@ -69,6 +70,7 @@ class TestClientHelpers(FunctionalTestCase):
 
 
 class TestOneClientSetupHelper(FunctionalTestCase):
+    use_default_fixture = False
 
     def setUp(self):
         super(TestOneClientSetupHelper, self).setUp()
@@ -101,6 +103,7 @@ class TestUserHelpers(FunctionalTestCase):
 
 
 class TestGroupHelpers(FunctionalTestCase):
+    use_default_fixture = False
 
     def setUp(self):
         super(TestGroupHelpers, self).setUp()
@@ -158,9 +161,11 @@ class TestGroupHelpers(FunctionalTestCase):
 
 
 class TestContactInfoAdditionals(FunctionalTestCase):
+    use_default_fixture = False
 
     def setUp(self):
         super(TestContactInfoAdditionals, self).setUp()
+        create(Builder('fixture').with_admin_unit())
         self.info = getUtility(IContactInformation)
 
     def test_contacts_or_inboxes_is_not_a_user(self):

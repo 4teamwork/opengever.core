@@ -21,6 +21,9 @@ class TestDocumentDownloadView(MockTestCase):
     def setUp(self):
         super(TestDocumentDownloadView, self).setUp()
         self.portal = self.layer['portal']
+
+        create(Builder('fixture').with_admin_unit())
+
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
         session.current_session = session.factory()
         session.current_session.portal = self.portal

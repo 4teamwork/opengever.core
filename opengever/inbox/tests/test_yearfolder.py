@@ -10,8 +10,6 @@ class TestYearFolderGetter(FunctionalTestCase):
     def setUp(self):
         super(TestYearFolderGetter, self).setUp()
 
-        create(Builder('fixture').with_all_unit_setup())
-
         self.main_inbox = create(Builder('inbox'))
         self.client1_inbox = create(Builder('inbox')
                                     .within(self.main_inbox)

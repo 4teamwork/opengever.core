@@ -8,8 +8,6 @@ class TestActionmenuViewlet(FunctionalTestCase):
 
     def setUp(self):
         super(TestActionmenuViewlet, self).setUp()
-        self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture').with_all_unit_setup())
 
         self.dossier = create(Builder('dossier'))
         self.task = create(Builder('task').having(task_type='comment'))

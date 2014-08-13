@@ -35,9 +35,6 @@ class TestTaskTemplates(FunctionalTestCase):
         catalog = getToolByName(portal, 'portal_catalog')
         mtool = getToolByName(portal, 'portal_membership')
 
-        self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture').with_all_unit_setup())
-
         self.grant('Manager')
 
         # Folders and templates

@@ -9,6 +9,8 @@ from zope.intid.interfaces import IIntIds
 
 class TestSuccessorTaskController(FunctionalTestCase):
 
+    use_default_fixture = False
+
     def setUp(self):
         super(TestSuccessorTaskController, self).setUp()
 

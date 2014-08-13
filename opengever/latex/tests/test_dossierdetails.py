@@ -49,6 +49,7 @@ class TestDossierDetailsPDFView(MockTestCase):
 
 
 class TestDossierDetails(FunctionalTestCase):
+    use_default_fixture = False
 
     def setUp(self):
         super(TestDossierDetails, self).setUp()

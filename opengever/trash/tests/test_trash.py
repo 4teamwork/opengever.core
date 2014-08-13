@@ -1,18 +1,15 @@
-from opengever.core.testing import OPENGEVER_INTEGRATION_TESTING
+from opengever.testing import FunctionalTestCase
 from opengever.trash.trash import ITrashed
-from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
 from plone.dexterity.fti import DexterityFTI
 from plone.dexterity.utils import createContentInContainer
-import unittest2 as unittest
 
-class TestTrash(unittest.TestCase):
 
-    layer = OPENGEVER_INTEGRATION_TESTING
+class TestTrash(FunctionalTestCase):
 
     def setUp(self):
-        self.app = self.layer.get('app')
-        self.portal = self.layer.get('portal')
+        super(TestTrash, self).setUp()
         setRoles(self.portal, TEST_USER_ID, ['Member', 'Contributor', 'Manager'])
 
         fti = DexterityFTI('TrashTestFTI',

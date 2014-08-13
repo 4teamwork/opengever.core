@@ -4,9 +4,6 @@ from opengever.testing import FunctionalTestCase
 class TestBylineBase(FunctionalTestCase):
     use_browser = True
 
-    def setUp(self):
-        super(TestBylineBase, self).setUp()
-
     def get_byline_value_by_label(self, label):
         byline_elements = self.browser.css(".documentByLine li")
 

@@ -22,7 +22,7 @@ class TaskByline(BylineBase):
                               sequence.get_number(self.context))
 
     def get_base_client_id(self):
-        return get_current_admin_unit().id()
+        return get_current_admin_unit().label()
 
     def get_items(self):
         return [

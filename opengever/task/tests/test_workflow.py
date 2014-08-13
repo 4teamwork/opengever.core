@@ -15,9 +15,6 @@ class TestTaskWorkflow(FunctionalTestCase):
         super(TestTaskWorkflow, self).setUp()
         self.wf_tool = getToolByName(self.portal, 'portal_workflow')
 
-        self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture').with_all_unit_setup())
-
     def test_document_in_a_closed_tasks_are_still_editable(self):
         self.grant('Editor')
         task = create(Builder('task')

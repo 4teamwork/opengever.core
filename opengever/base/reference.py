@@ -63,7 +63,7 @@ class PlatformReferenceNumber(BasicReferenceNumber):
     ref_type = 'site'
 
     def get_local_number(self):
-        return get_current_admin_unit().id()
+        return get_current_admin_unit().label()
 
     def get_number(self):
         return self.get_local_number()

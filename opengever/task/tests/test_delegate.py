@@ -8,11 +8,6 @@ import datetime
 
 class TestDelegateTaskForm(FunctionalTestCase):
 
-    def setUp(self):
-        super(TestDelegateTaskForm, self).setUp()
-        self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture').with_all_unit_setup())
-
     @browsing
     def test_delegate(self, browser):
         task = create(Builder('task')

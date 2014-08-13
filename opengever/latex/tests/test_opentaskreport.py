@@ -86,8 +86,6 @@ class TestOpenTaskReport(FunctionalTestCase):
     def setUp(self):
         super(TestOpenTaskReport, self).setUp()
 
-        self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture').with_all_unit_setup())
         self.task = create(Builder("task").having(task_type='comment',
                                                   issuer='peter.peter',
                                                   responsible='hans.meier'))

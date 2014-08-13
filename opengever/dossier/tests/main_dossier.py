@@ -199,9 +199,6 @@ class TestMainDossier(FunctionalTestCase):
         super(TestMainDossier, self).setUp()
         self.grant('Contributor')
 
-        self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture').with_all_unit_setup())
-
         create_plone_user(self.portal, SITE_OWNER_NAME)
         create_ogds_user(SITE_OWNER_NAME,
                          assigned_client=[self.org_unit._client])

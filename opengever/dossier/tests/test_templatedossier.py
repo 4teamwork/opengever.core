@@ -1,4 +1,5 @@
-from datetime import datetime, date
+from datetime import date
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -8,11 +9,7 @@ from ooxml_docprops import read_properties
 from opengever.dossier.interfaces import ITemplateDossierProperties
 from opengever.dossier.templatedossier.create import TemporaryDocFile
 from opengever.dossier.templatedossier.interfaces import ITemplateUtility
-from opengever.testing import create_client
-from opengever.testing import create_ogds_user
 from opengever.testing import FunctionalTestCase
-from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
-from opengever.testing import set_current_client_id
 from plone.app.testing import TEST_USER_ID
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
@@ -20,16 +17,14 @@ from zope.component import getUtility
 
 class TestDocumentWithTemplateForm(FunctionalTestCase):
 
-    layer = OPENGEVER_FUNCTIONAL_TESTING
-
     use_browser = True
 
     expected_doc_properties = [
         ('User.ID', TEST_USER_ID,),
         ('User.FullName', 'Peter',),
-        ('Dossier.ReferenceNumber', 'OG / 2'),
+        ('Dossier.ReferenceNumber', 'Client1 / 2'),
         ('Dossier.Title', 'My Dossier'),
-        ('Document.ReferenceNumber', 'OG / 2 / 4'),
+        ('Document.ReferenceNumber', 'Client1 / 2 / 4'),
         ('Document.SequenceNumber', '4'),
     ]
 
@@ -212,21 +207,11 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
         with TemporaryDocFile(document.file) as tmpfile:
             self.assertItemsEqual([], read_properties(tmpfile.path))
 
-    # the session data manager storage is not easy availabe in the test
-    #
-    # @browsing
-    # def test_start_external_editing_by_default(self, browser):
-    #     browser.login().open(self.dossier, view='document_with_template')
-    #     browser.fill({'paths:list': self.template_b_path,
-    #                   'title': 'Test Document'}).save()
-
 
 class TestTemplateDossier(FunctionalTestCase):
 
     def setUp(self):
         super(TestTemplateDossier, self).setUp()
-        self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture').with_all_unit_setup())
 
         self.grant('Manager')
 

@@ -15,6 +15,7 @@ from zope.schema.interfaces import IVocabularyFactory
 
 
 class TestContactVocabulary(FunctionalTestCase):
+    use_default_fixture = False
 
     def key_value_provider(self):
         yield ('first-entry', 'First Entry')
@@ -63,6 +64,7 @@ class TestContactVocabulary(FunctionalTestCase):
 
 
 class TestUsersVocabulary(FunctionalTestCase):
+    use_default_fixture = False
 
     def setUp(self):
         super(TestUsersVocabulary, self).setUp()
@@ -91,6 +93,7 @@ class TestUsersVocabulary(FunctionalTestCase):
                           vocabulary.getTerm('robin.hood').title)
 
 class TestUsersAndInboxesVocabulary(FunctionalTestCase):
+    use_default_fixture = False
 
     def setUp(self):
         super(TestUsersAndInboxesVocabulary, self).setUp()
@@ -146,6 +149,7 @@ class TestUsersAndInboxesVocabulary(FunctionalTestCase):
 
 
 class TestAllUsersAndInboxesVocabulary(FunctionalTestCase):
+    use_default_fixture = False
 
     def setUp(self):
         super(TestAllUsersAndInboxesVocabulary, self).setUp()
@@ -203,6 +207,7 @@ class TestAllUsersAndInboxesVocabulary(FunctionalTestCase):
 
 
 class TestAssignedUsersVocabulary(FunctionalTestCase):
+    use_default_fixture = False
 
     def setUp(self):
         super(TestAssignedUsersVocabulary, self).setUp()
@@ -250,6 +255,7 @@ class TestAssignedUsersVocabulary(FunctionalTestCase):
 
 
 class TestContactsAndUsersVocabulary(FunctionalTestCase):
+    use_default_fixture = False
 
     def setUp(self):
         super(TestContactsAndUsersVocabulary, self).setUp()
@@ -257,6 +263,7 @@ class TestContactsAndUsersVocabulary(FunctionalTestCase):
             IVocabularyFactory,
             name='opengever.ogds.base.ContactsAndUsersVocabulary')
 
+        create(Builder('fixture').with_admin_unit())
         org_unit = create_and_select_current_org_unit('client1')
         self.client1 = org_unit._client
 
@@ -294,11 +301,13 @@ class TestContactsAndUsersVocabulary(FunctionalTestCase):
                           vocabulary.getTerm('hugo.boss').title)
 
 
-
 class TestEmailContactsAndUsersVocabularyFactory(FunctionalTestCase):
+    use_default_fixture = False
 
     def setUp(self):
         super(TestEmailContactsAndUsersVocabularyFactory, self).setUp()
+
+        create(Builder('fixture').with_admin_unit())
 
         self.vocabulary_factory = getUtility(
             IVocabularyFactory,
@@ -349,9 +358,7 @@ class TestEmailContactsAndUsersVocabularyFactory(FunctionalTestCase):
 
 
 class TestAssignedClientsVocabularies(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestAssignedClientsVocabularies, self).setUp()
+    use_default_fixture = False
 
     def test_contains_all_clients_assigned_to_the_current_client(self):
         client1 = create_client(clientid='client1')
@@ -384,6 +391,7 @@ class TestAssignedClientsVocabularies(FunctionalTestCase):
 
 
 class TestInboxesVocabularyFactory(FunctionalTestCase):
+    use_default_fixture = False
 
     def setUp(self):
         super(TestInboxesVocabularyFactory, self).setUp()
@@ -423,6 +431,7 @@ class TestInboxesVocabularyFactory(FunctionalTestCase):
 
 
 class TestOrgUnitsVocabularyFactory(FunctionalTestCase):
+    use_default_fixture = False
 
     def test_contains_all_org_units(self):
         create(Builder('org_unit').id('rr')

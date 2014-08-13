@@ -1,5 +1,7 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
-from opengever.testing import builders
+from opengever.testing import builders  # keep!
 from opengever.testing.browser import OGBrowser
 from plone.app.testing import login
 from plone.app.testing import setRoles
@@ -18,6 +20,7 @@ class TestCase(unittest2.TestCase):
 class FunctionalTestCase(TestCase):
     layer = OPENGEVER_FUNCTIONAL_TESTING
     use_browser = False
+    use_default_fixture = True
 
     def setUp(self):
         super(FunctionalTestCase, self).setUp()
@@ -27,6 +30,10 @@ class FunctionalTestCase(TestCase):
         self.membership_tool = getToolByName(self.portal, 'portal_membership')
         if self.use_browser:
             self.browser = self._setup_browser()
+
+        if self.use_default_fixture:
+            self.user, self.org_unit, self.admin_unit = create(
+                Builder('fixture').with_all_unit_setup())
 
     def setup_fullname(self, user_id=TEST_USER_ID, fullname=None):
         member = self.membership_tool.getMemberById(user_id)
