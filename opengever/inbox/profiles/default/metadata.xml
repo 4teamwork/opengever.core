@@ -1,5 +1,5 @@
 <metadata>
-    <version>2702</version>
+    <version>4001</version>
     <dependencies>
         <dependency>profile-opengever.base:default</dependency>
         <dependency>profile-opengever.tabbedview:default</dependency>

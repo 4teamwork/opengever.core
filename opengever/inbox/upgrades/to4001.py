@@ -6,7 +6,7 @@ class UpdateInboxTypeConfiguration(UpgradeStep):
 
     def __call__(self):
         self.setup_install_profile(
-            'profile-opengever.inbox.upgrades:2702')
+            'profile-opengever.inbox.upgrades:4001')
 
         self.migrate_inbox_class()
 
