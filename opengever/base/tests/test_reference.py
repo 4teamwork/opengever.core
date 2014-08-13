@@ -14,11 +14,11 @@ class TestLocalReferenceNumber(FunctionalTestCase):
 
     def test_plone_site_returns_client_id(self):
         create(Builder('admin_unit')
-               .having(unit_id='FAKE')
+               .having(unit_id=u'fake', title=u'Fake')
                .as_current_admin_unit())
 
         self.assertEquals(
-            u'FAKE', IReferenceNumber(self.portal).get_local_number())
+            u'Fake', IReferenceNumber(self.portal).get_local_number())
 
     def test_repository_root_returns_empty_string(self):
         root = create(Builder('repository_root'))
@@ -64,9 +64,8 @@ class TestReferenceNumberAdapter(FunctionalTestCase):
         IReferenceNumberPrefix(dossier).set_number(self.subdossier, number=u'2')
 
     def test_returns_full_number_for_the_context(self):
-
         self.assertEquals(
-            {'site': [u'OG', ],
+            {'site': [u'Client1', ],
              'repositoryroot': [''],
              'repository': [u'2', u'4', u'7'],
              'dossier': [u'8', u'2']},
@@ -74,7 +73,7 @@ class TestReferenceNumberAdapter(FunctionalTestCase):
 
     def test_use_dotted_as_default_formatter(self):
         self.assertEquals(
-            'OG 2.4.7 / 8.2',
+            'Client1 2.4.7 / 8.2',
             IReferenceNumber(self.subdossier).get_number())
 
     def test_use_grouped_by_three_formatter(self):
@@ -83,7 +82,7 @@ class TestReferenceNumberAdapter(FunctionalTestCase):
         proxy.formatter = 'grouped_by_three'
 
         self.assertEquals(
-            'OG 247-8.2',
+            'Client1 247-8.2',
             IReferenceNumber(self.subdossier).get_number())
 
     def test_use_no_client_id_dotted_formatter(self):
@@ -119,20 +118,20 @@ class TestDottedFormatter(FunctionalTestCase):
             self.formatter.dossier_number(numbers))
 
     def test_repository_part_is_separated_with_space(self):
-        numbers = {'site': ['OG', ],
+        numbers = {'site': ['Client1', ],
                    'repository': [u'5', u'7', u'3', u'2']}
 
         self.assertEquals(
-            'OG 5.7.3.2',
+            'Client1 5.7.3.2',
             self.formatter.complete_number(numbers))
 
     def test_dossier_part_is_separated_with_slash_and_spaces(self):
-        numbers = {'site': ['OG', ],
+        numbers = {'site': ['Client1', ],
                    'repository': [u'5', u'7', u'3', u'2'],
                    'dossier': [u'4', u'6', u'2']}
 
         self.assertEquals(
-            'OG 5.7.3.2 / 4.6.2',
+            'Client1 5.7.3.2 / 4.6.2',
             self.formatter.complete_number(numbers))
 
 

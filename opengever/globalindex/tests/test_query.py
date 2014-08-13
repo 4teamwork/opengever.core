@@ -110,9 +110,6 @@ class TestFunctionalTaskQueries(FunctionalTestCase):
     def setUp(self):
         super(TestFunctionalTaskQueries, self).setUp()
 
-        self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture').with_all_unit_setup())
-
         self.dossier = create(Builder('dossier'))
 
     def test_by_container_list_recursive_all_tasks_inside_the_given_container(self):
@@ -134,6 +131,7 @@ class TestFunctionalTaskQueries(FunctionalTestCase):
 
         additional_admin_unit = create(Builder('admin_unit')
                                        .id(u'additional')
+                                       .having(title='foo')
                                        .as_current_admin_unit()
                                        .assign_org_units([additional_org_unit]))
 
@@ -159,6 +157,7 @@ class TestFunctionalTaskQueries(FunctionalTestCase):
                                      .as_current_org_unit())
         additional_admin_unit = create(Builder('admin_unit')
                                        .id(u'additional')
+                                       .having(title='foo')
                                        .as_current_admin_unit()
                                        .assign_org_units([additional_org_unit]))
 

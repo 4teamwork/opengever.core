@@ -11,9 +11,6 @@ class TestFactoryMenu(FunctionalTestCase):
         super(TestFactoryMenu, self).setUp()
         self.menu = FactoriesMenu(self.portal)
 
-        self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture').with_all_unit_setup())
-
     def test_task_menu_item_is_titled_task_in_a_dossier(self):
         dossier = create(Builder('dossier'))
 

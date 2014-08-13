@@ -33,6 +33,8 @@ class FixtureBuilder(object):
             'public_url': 'http://example.com',
         }
         self._admin_unit_args = {
+            'title': u'Client1',
+            'unit_id': u'client1',
             'public_url': 'http://example.com',
         }
 
@@ -66,8 +68,14 @@ class FixtureBuilder(object):
         org_unit = self._create_org_unit(user)
         admin_unit = self._create_admin_unit(org_unit)
         hugo = self._create_hugo_boss()
-        return [each for each in (user, org_unit, admin_unit, hugo)
-                if each is not None]
+        items = [each for each in (user, org_unit, admin_unit, hugo)
+                 if each is not None]
+
+        # avoid trailing comma for tuple-unpacking
+        if len(items) == 1:
+            return items[0]
+        else:
+            return items
 
     def _create_user(self):
         if not self._with_user:

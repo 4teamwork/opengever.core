@@ -17,12 +17,7 @@ class TestDossierListing(FunctionalTestCase):
     def setUp(self):
         super(TestDossierListing, self).setUp()
 
-        self.user, self.org_unit, self.admin_unit, self.hugo = create(
-            Builder('fixture')
-            .with_user()
-            .with_org_unit()
-            .with_admin_unit()
-            .with_hugo_boss())
+        self.hugo = create(Builder('fixture').with_hugo_boss())
 
         self.repo = create(Builder('repository').titled('Repository XY'))
         self.dossier = create(Builder('dossier')
@@ -89,7 +84,7 @@ class TestDossierListing(FunctionalTestCase):
         rows = table.xpath(CSSSelector('tbody tr').path)
 
         self.assertEquals(
-            ['OG 1 / 1',
+            ['Client1 1 / 1',
              '1',
              '1. Repository XY',
              'Dossier A',
@@ -100,7 +95,7 @@ class TestDossierListing(FunctionalTestCase):
             [value.text_content().strip() for value in rows[0].xpath(CSSSelector('td').path)])
 
         self.assertEquals(
-            ['OG 1 / 1.1',
+            ['Client1 1 / 1.1',
              '2',
              '1. Repository XY',
              'Dossier B',
@@ -116,8 +111,7 @@ class TestSubDossierListing(FunctionalTestCase):
     def setUp(self):
         super(TestSubDossierListing, self).setUp()
 
-        self.user, self.org_unit, self.admin_unit, self.hugo = create(
-            Builder('fixture').with_all_unit_setup().with_hugo_boss())
+        self.hugo = create(Builder('fixture').with_hugo_boss())
 
         self.repo = create(Builder('repository').titled('Repository XY'))
         self.dossier = create(Builder('dossier')
@@ -161,11 +155,7 @@ class TestDocumentListing(FunctionalTestCase):
 
     def setUp(self):
         super(TestDocumentListing, self).setUp()
-        #create_and_select_current_org_unit('client1')
 
-        self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture').with_user().with_org_unit().with_admin_unit()
-        )
         self.document = create(Builder('document')
                                .having(title=u'Document A',
                                        document_date=date(2013, 11, 4),
@@ -196,8 +186,7 @@ class TestTaskListings(FunctionalTestCase):
     def setUp(self):
         super(TestTaskListings, self).setUp()
 
-        self.user, self.org_unit, self.admin_unit, self.hugo = create(
-            Builder('fixture').with_all_unit_setup().with_hugo_boss())
+        self.hugo = create(Builder('fixture').with_hugo_boss())
 
         self.org_unit_2 = create(Builder('org_unit').id('client2'))
 

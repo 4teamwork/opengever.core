@@ -10,8 +10,6 @@ class TestTaskReporter(FunctionalTestCase):
 
     def setUp(self):
         super(TestTaskReporter, self).setUp()
-        self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture').with_all_unit_setup())
         self.task = create(Builder('task')
                            .titled(u'Export Task')
                            .having(task_type='comment',

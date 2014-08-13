@@ -58,7 +58,7 @@ class TestDossierCoverRenderArguments(FunctionalTestCase):
                           arguments.get('clienttitle'))
 
     def test_empty_client_title(self):
-        get_current_admin_unit().title = None
+        get_current_admin_unit().title = ''
 
         arguments = self.dossiercover.get_render_arguments()
         self.assertEquals('', arguments.get('clienttitle'))
@@ -76,7 +76,7 @@ class TestDossierCoverRenderArguments(FunctionalTestCase):
 
     def test_contains_referencenr(self):
         arguments = self.dossiercover.get_render_arguments()
-        self.assertEquals(u'OG 1 / 1',
+        self.assertEquals(u'Department of forest \\& hunt 1 / 1',
                           arguments.get('referencenr'))
 
     def test_contains_converted_title(self):

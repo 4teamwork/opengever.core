@@ -38,11 +38,6 @@ def set_defaults(obj):
 
 class TestTransporter(FunctionalTestCase):
 
-    def setUp(self):
-        super(TestTransporter, self).setUp()
-
-        create(Builder('fixture').with_all_unit_setup())
-
     def _create_task(self, context, with_docs=False, return_docs=False):
 
         # task

@@ -27,14 +27,14 @@ class TestOpenDossiersJson(FunctionalTestCase):
                 u'path': u'testdossier-1',
                 u'review_state': u'dossier-state-active',
                 u'title': u'Testdossier 1',
-                u'reference_number': u'OG / 1'
+                u'reference_number': u'Client1 / 1'
             },
             {
                 u'url': u'http://nohost/plone/testdossier-2',
                 u'path': u'testdossier-2',
                 u'review_state': u'dossier-state-active',
                 u'title': u'Testdossier 2',
-                u'reference_number': u'OG / 2'
+                u'reference_number': u'Client1 / 2'
             }])
 
     def test_does_not_include_resolved_dossiers(self):

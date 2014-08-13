@@ -10,7 +10,7 @@ from zope.interface import Interface
 class TestDocumentOverviewMissingFields(FunctionalTestCase):
 
     def setUp(self):
-        create(Builder('ogds_user'))
+        super(TestDocumentOverviewMissingFields, self).setUp()
         omitted_values = IDocumentSchema.getTaggedValue(OMITTED_KEY)
         self.org_omitted_values = list(omitted_values)
         omitted_values.append((Interface, 'document_type', 'true'))

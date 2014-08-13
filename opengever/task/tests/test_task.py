@@ -20,8 +20,6 @@ class TestTaskIntegration(FunctionalTestCase):
         super(TestTaskIntegration, self).setUp()
         self.portal.portal_types['opengever.task.task'].global_allow = True
 
-        create(Builder('fixture').with_all_unit_setup())
-
     def test_adding(self):
         t1 = create(Builder('task').titled('Task 1'))
         self.failUnless(ITask.providedBy(t1))

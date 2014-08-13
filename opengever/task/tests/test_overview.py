@@ -8,6 +8,8 @@ from plone.app.testing import TEST_USER_ID
 
 class TestTaskOverview(FunctionalTestCase):
 
+    use_default_fixture = False
+
     def setUp(self):
         super(TestTaskOverview, self).setUp()
         self.user, self.org_unit, self.admin_unit = create(

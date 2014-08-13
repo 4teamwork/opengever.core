@@ -12,9 +12,6 @@ class TestBaseInboxOverview(FunctionalTestCase):
         super(TestBaseInboxOverview, self).setUp()
         self.grant('Owner', 'Editor', 'Contributor')
 
-        self.user1, self.org_unit1, self.admin_unit1 = create(
-            Builder('fixture').with_all_unit_setup())
-
         self.user2, self.org_unit2, self.admin_unit2 = create(
             Builder('fixture')
             .with_user(userid='hans.muster')

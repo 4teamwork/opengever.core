@@ -11,9 +11,6 @@ class TestInboxTabbedview(FunctionalTestCase):
         super(TestInboxTabbedview, self).setUp()
         self.inbox = create(Builder('inbox').titled(u'Testinbox'))
 
-        self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture').with_all_unit_setup())
-
     def test_trash_listing_does_not_contain_subdossier_and_checked_out_column(self):
         trash = self.inbox.restrictedTraverse('tabbedview_view-trash')
 
@@ -73,8 +70,6 @@ class TestInboxTaskTabs(FunctionalTestCase):
 
     def setUp(self):
         super(TestInboxTaskTabs, self).setUp()
-        self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture').with_all_unit_setup())
 
         self.org_unit_2 = create(Builder('org_unit')
                                  .assign_users([self.user])
@@ -166,9 +161,6 @@ class TestClosedForwardings(FunctionalTestCase):
 
     def setUp(self):
         super(TestClosedForwardings, self).setUp()
-
-        self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture').with_all_unit_setup())
 
         self.yearfolder = create(Builder('yearfolder'))
         self.forwarding = create(Builder('forwarding')

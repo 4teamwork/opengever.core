@@ -7,11 +7,6 @@ from plone.app.testing import TEST_USER_ID
 
 
 class TestDossierContainer(FunctionalTestCase):
-    def setUp(self):
-        super(TestDossierContainer, self).setUp()
-
-        self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture').with_all_unit_setup())
 
     def test_is_all_supplied_without_any_subdossiers(self):
         dossier = create(Builder("dossier"))
@@ -89,12 +84,6 @@ class TestDossierContainer(FunctionalTestCase):
 
 
 class TestDossierChecks(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestDossierChecks, self).setUp()
-
-        self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture').with_all_unit_setup())
 
     def test_its_all_closed_if_no_task_exists(self):
         dossier = create(Builder("dossier"))

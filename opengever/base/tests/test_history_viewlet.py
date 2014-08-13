@@ -10,7 +10,7 @@ class TestHistoryViewlet(FunctionalTestCase):
 
     def setUp(self):
         super(TestHistoryViewlet, self).setUp()
-        self.user, = create(Builder('fixture').with_user(
+        self.user = create(Builder('fixture').with_user(
             userid=TEST_USER_NAME))
         self.actor = Actor.user(self.user.userid)
 

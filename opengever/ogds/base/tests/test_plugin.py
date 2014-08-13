@@ -8,8 +8,7 @@ from ftw.builder import Builder
 
 class TestRemoteAuthenticationPlugin(FunctionalTestCase):
 
-    def setUp(self):
-        super(TestRemoteAuthenticationPlugin, self).setUp()
+    use_default_fixture = False
 
     def set_params_for_remote_request(self, userid='hugo.boss',
                                       clientid='client1', client_ip=None):

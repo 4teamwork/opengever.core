@@ -34,6 +34,7 @@ from zope.interface.verify import verifyClass
 
 
 class TestArchiver(FunctionalTestCase):
+    use_default_fixture = False
 
     def setUp(self):
         super(TestArchiver, self).setUp()

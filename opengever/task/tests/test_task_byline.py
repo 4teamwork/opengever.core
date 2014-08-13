@@ -13,9 +13,7 @@ class TestTaskByline(TestBylineBase):
         super(TestTaskByline, self).setUp()
         self.intids = getUtility(IIntIds)
 
-        create(Builder('fixture')
-               .with_all_unit_setup()
-               .with_hugo_boss())
+        create(Builder('fixture').with_hugo_boss())
 
         self.task = create(Builder('task')
                .in_state('task-state-open')
@@ -34,7 +32,7 @@ class TestTaskByline(TestBylineBase):
     def test_dossier_byline_responsible_is_linked_to_user_details(self):
         responsible = self.get_byline_value_by_label('by:')
         self.assertEqual('http://nohost/plone/@@user-details/hugo.boss',
-                          responsible.get('href'))
+                         responsible.get('href'))
 
     def test_task_byline_state_display(self):
         state = self.get_byline_value_by_label('State:')
@@ -50,4 +48,4 @@ class TestTaskByline(TestBylineBase):
 
     def test_dossier_byline_sequence_number_display(self):
         seq_number = self.get_byline_value_by_label('Sequence Number:')
-        self.assertEquals('OG 1', seq_number.text_content())
+        self.assertEquals('Client1 1', seq_number.text_content())
