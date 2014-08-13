@@ -56,20 +56,20 @@
         profile="opengever.dossier:default"
         />
 
-    <!-- 2602 -> 2700 -->
-    <upgrade-step:importProfile
-        title="Remove copy_documents_to_remote_client action"
-        profile="opengever.dossier:default"
-        source="2602"
-        destination="2700"
-        directory="profiles/2700"
-        />
-
-    <!-- 2700 -> 4000 -->
+    <!-- 2602 -> 2603 -->
     <upgrade-step:importProfile
         title="Create ITemplateDossierProperties registry entry"
         profile="opengever.dossier:default"
-        source="2700"
+        source="2602"
+        destination="2603"
+        directory="profiles/2603"
+        />
+
+    <!-- 2603 -> 4000 -->
+    <upgrade-step:importProfile
+        title="Remove copy_documents_to_remote_client action"
+        profile="opengever.dossier:default"
+        source="2603"
         destination="4000"
         directory="profiles/4000"
         />
