@@ -1,0 +1,463 @@
+<?xml version="1.0"?>
+<dc-workflow workflow_id="opengever_task_workflow" title="Workflow for opengever tasks" description="" state_variable="review_state" initial_state="task-state-open" manager_bypass="False">
+ <permission>Access contents information</permission>
+ <permission>Add portal content</permission>
+ <permission>List folder contents</permission>
+ <permission>Manage properties</permission>
+ <permission>Modify portal content</permission>
+ <permission>Review portal content</permission>
+ <permission>Sharing page: Delegate roles</permission>
+ <permission>View</permission>
+ <permission>opengever.document: Add document</permission>
+ <permission>opengever.task: Add task</permission>
+ <permission>opengever.task: Edit task</permission>
+ <state state_id="task-state-cancelled" title="task-state-cancelled">
+  <exit-transition transition_id="task-transition-cancelled-open"/>
+  <permission-map name="Access contents information" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="Add portal content" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="List folder contents" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="Manage properties" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="Modify portal content" acquired="True">
+  </permission-map>
+  <permission-map name="Review portal content" acquired="True">
+  </permission-map>
+  <permission-map name="Sharing page: Delegate roles" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="View" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="opengever.document: Add document" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="opengever.task: Add task" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.task: Edit task" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
+ </state>
+ <state state_id="task-state-in-progress" title="task-state-in-progress">
+  <exit-transition transition_id="task-transition-delegate"/>
+  <exit-transition transition_id="task-transition-in-progress-resolved"/>
+  <exit-transition transition_id="task-transition-in-progress-tested-and-closed"/>
+  <exit-transition transition_id="task-transition-modify-deadline"/>
+  <exit-transition transition_id="task-transition-reassign"/>
+  <permission-map name="Access contents information" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="Add portal content" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="List folder contents" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="Manage properties" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="Modify portal content" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="Review portal content" acquired="True">
+  </permission-map>
+  <permission-map name="Sharing page: Delegate roles" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="View" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="opengever.document: Add document" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="opengever.task: Add task" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="opengever.task: Edit task" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
+ </state>
+ <state state_id="task-state-open" title="task-state-open">
+  <exit-transition transition_id="task-transition-modify-deadline"/>
+  <exit-transition transition_id="task-transition-open-cancelled"/>
+  <exit-transition transition_id="task-transition-open-in-progress"/>
+  <exit-transition transition_id="task-transition-open-rejected"/>
+  <exit-transition transition_id="task-transition-open-resolved"/>
+  <exit-transition transition_id="task-transition-open-tested-and-closed"/>
+  <exit-transition transition_id="task-transition-reassign"/>
+  <permission-map name="Access contents information" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+  <permission-map name="Add portal content" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+  <permission-map name="List folder contents" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="Manage properties" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+  <permission-map name="Modify portal content" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+  <permission-map name="Review portal content" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+  <permission-map name="Sharing page: Delegate roles" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="View" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+  <permission-map name="opengever.document: Add document" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+  <permission-map name="opengever.task: Add task" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.task: Edit task" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+ </state>
+ <state state_id="task-state-rejected" title="task-state-rejected">
+  <exit-transition transition_id="task-transition-rejected-open"/>
+  <permission-map name="Access contents information" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="Add portal content" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="List folder contents" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="Manage properties" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="Modify portal content" acquired="True">
+  </permission-map>
+  <permission-map name="Review portal content" acquired="True">
+  </permission-map>
+  <permission-map name="Sharing page: Delegate roles" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="View" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="opengever.document: Add document" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="opengever.task: Add task" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.task: Edit task" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
+ </state>
+ <state state_id="task-state-resolved" title="task-state-resolved">
+  <exit-transition transition_id="task-transition-resolved-tested-and-closed"/>
+  <exit-transition transition_id="task-transition-resolved-in-progress"/>
+  <permission-map name="Access contents information" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="Add portal content" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="List folder contents" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="Manage properties" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="Modify portal content" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="Review portal content" acquired="True">
+  </permission-map>
+  <permission-map name="Sharing page: Delegate roles" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="View" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="opengever.document: Add document" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.task: Add task" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.task: Edit task" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
+ </state>
+ <state state_id="task-state-tested-and-closed" title="task-state-tested-and-closed">
+  <permission-map name="Access contents information" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="Add portal content" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="List folder contents" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="Manage properties" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="Modify portal content" acquired="True">
+  </permission-map>
+  <permission-map name="Review portal content" acquired="True">
+  </permission-map>
+  <permission-map name="Sharing page: Delegate roles" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="View" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="opengever.document: Add document" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.task: Add task" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.task: Edit task" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
+ </state>
+ <transition transition_id="task-transition-cancelled-open" title="task-transition-cancelled-open" new_state="task-state-open" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/@@task_transition_controller?transition=task-transition-cancelled-open" category="workflow" icon="">task-transition-cancelled-open</action>
+  <guard>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_transition_possible('task-transition-cancelled-open')</guard-expression>
+  </guard>
+ </transition>
+ <transition transition_id="task-transition-delegate" title="task-transition-delegate" new_state="" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/@@task_transition_controller?transition=task-transition-delegate" category="workflow" icon="">task-transition-delegate</action>
+  <guard>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_transition_possible('task-transition-delegate')</guard-expression>
+  </guard>
+ </transition>
+ <transition transition_id="task-transition-in-progress-resolved" title="task-transition-in-progress-resolved" new_state="task-state-resolved" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/@@task_transition_controller?transition=task-transition-in-progress-resolved" category="workflow" icon="">task-transition-in-progress-resolved</action>
+  <guard>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_transition_possible('task-transition-in-progress-resolved')</guard-expression>
+  </guard>
+ </transition>
+ <transition transition_id="task-transition-in-progress-tested-and-closed" title="task-transition-in-progress-tested-and-closed" new_state="task-state-tested-and-closed" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/@@task_transition_controller?transition=task-transition-in-progress-tested-and-closed" category="workflow" icon="">task-transition-in-progress-tested-and-closed</action>
+  <guard>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_transition_possible('task-transition-in-progress-tested-and-closed')</guard-expression>
+  </guard>
+ </transition>
+ <transition transition_id="task-transition-modify-deadline" title="task-transition-modify-deadline" new_state="" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/@@task_transition_controller?transition=task-transition-modify-deadline" category="workflow" icon="">task-transition-modify-deadline</action>
+  <guard>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_transition_possible('task-transition-modify-deadline')</guard-expression>
+  </guard>
+ </transition>
+ <transition transition_id="task-transition-open-cancelled" title="task-transition-open-cancelled" new_state="task-state-cancelled" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/@@task_transition_controller?transition=task-transition-open-cancelled" category="workflow" icon="">task-transition-open-cancelled</action>
+  <guard>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_transition_possible('task-transition-open-cancelled')</guard-expression>
+  </guard>
+ </transition>
+ <transition transition_id="task-transition-open-in-progress" title="task-transition-open-in-progress" new_state="task-state-in-progress" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/@@task_transition_controller?transition=task-transition-open-in-progress" category="workflow" icon="">task-transition-open-in-progress</action>
+  <guard>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_transition_possible('task-transition-open-in-progress')</guard-expression>
+  </guard>
+ </transition>
+ <transition transition_id="task-transition-open-rejected" title="task-transition-open-rejected" new_state="task-state-rejected" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/@@task_transition_controller?transition=task-transition-open-rejected" category="workflow" icon="">task-transition-open-rejected</action>
+  <guard>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_transition_possible('task-transition-open-rejected')</guard-expression>
+  </guard>
+ </transition>
+ <transition transition_id="task-transition-open-resolved" title="task-transition-open-resolved" new_state="task-state-resolved" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/@@task_transition_controller?transition=task-transition-open-resolved" category="workflow" icon="">task-transition-open-resolved</action>
+  <guard>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_transition_possible('task-transition-open-resolved')</guard-expression>
+  </guard>
+ </transition>
+ <transition transition_id="task-transition-open-tested-and-closed" title="task-transition-open-tested-and-closed" new_state="task-state-tested-and-closed" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/@@task_transition_controller?transition=task-transition-open-tested-and-closed" category="workflow" icon="">task-transition-open-tested-and-closed</action>
+  <guard>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_transition_possible('task-transition-open-tested-and-closed')</guard-expression>
+  </guard>
+ </transition>
+ <transition transition_id="task-transition-reassign" title="task-transition-reassign" new_state="" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/@@task_transition_controller?transition=task-transition-reassign" category="workflow" icon="">task-transition-reassign</action>
+  <guard>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_transition_possible('task-transition-reassign')</guard-expression>
+  </guard>
+ </transition>
+ <transition transition_id="task-transition-rejected-open" title="task-transition-rejected-open" new_state="task-state-open" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/@@task_transition_controller?transition=task-transition-rejected-open" category="workflow" icon="">task-transition-rejected-open</action>
+  <guard>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_transition_possible('task-transition-rejected-open')</guard-expression>
+  </guard>
+ </transition>
+ <transition transition_id="task-transition-resolved-in-progress" title="task-transition-resolved-in-progress" new_state="task-state-in-progress" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/@@task_transition_controller?transition=task-transition-resolved-in-progress" category="workflow" icon="">task-transition-resolved-in-progress</action>
+  <guard>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_transition_possible('task-transition-resolved-in-progress')</guard-expression>
+  </guard>
+ </transition>
+ <transition transition_id="task-transition-resolved-tested-and-closed" title="task-transition-resolved-tested-and-closed" new_state="task-state-tested-and-closed" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/@@task_transition_controller?transition=task-transition-resolved-tested-and-closed" category="workflow" icon="">task-transition-resolved-tested-and-closed</action>
+  <guard>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_transition_possible('task-transition-resolved-tested-and-closed')</guard-expression>
+  </guard>
+ </transition>
+ <worklist worklist_id="reviewer_queue" title="">
+  <description>Reviewer tasks</description>
+  <action url="%(portal_url)s/search?review_state=pending" category="global" icon="">Pending (%(count)d)</action>
+  <guard>
+   <guard-permission>Review portal content</guard-permission>
+  </guard>
+  <match name="review_state" values="pending"/>
+ </worklist>
+ <variable variable_id="action" for_catalog="False" for_status="True" update_always="True">
+  <description>The last transition</description>
+  <default>
+
+   <expression>transition/getId|nothing</expression>
+  </default>
+  <guard>
+  </guard>
+ </variable>
+ <variable variable_id="actor" for_catalog="False" for_status="True" update_always="True">
+  <description>The ID of the user who performed the last transition</description>
+  <default>
+
+   <expression>user/getId</expression>
+  </default>
+  <guard>
+  </guard>
+ </variable>
+ <variable variable_id="comments" for_catalog="False" for_status="True" update_always="True">
+  <description>Comments about the last transition</description>
+  <default>
+
+   <expression>python:state_change.kwargs.get('comment', '')</expression>
+  </default>
+  <guard>
+  </guard>
+ </variable>
+ <variable variable_id="review_history" for_catalog="False" for_status="False" update_always="False">
+  <description>Provides access to workflow history</description>
+  <default>
+
+   <expression>state_change/getHistory</expression>
+  </default>
+  <guard>
+   <guard-permission>View</guard-permission>
+  </guard>
+ </variable>
+ <variable variable_id="time" for_catalog="False" for_status="True" update_always="True">
+  <description>Time of the last transition</description>
+  <default>
+
+   <expression>state_change/getDateTime</expression>
+  </default>
+  <guard>
+  </guard>
+ </variable>
+</dc-workflow>
