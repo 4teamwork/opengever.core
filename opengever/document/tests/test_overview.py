@@ -7,7 +7,6 @@ from ftw.testing import MockTestCase
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.interfaces import ICheckinCheckoutManager
-from opengever.testing import create_ogds_user
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID, TEST_USER_NAME
 from plone.app.testing import TEST_USER_PASSWORD, login
@@ -36,6 +35,7 @@ class TestDocumentOverview(MockTestCase):
         self.portal = self.layer['portal']
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
 
+        create(Builder('fixture').with_admin_unit())
         self.user, self.hugo = create(Builder('fixture')
                                       .with_user(firstname='Test',
                                                  lastname='User')

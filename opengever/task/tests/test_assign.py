@@ -13,9 +13,6 @@ class TestAssignTask(FunctionalTestCase):
     def setUp(self):
         super(TestAssignTask, self).setUp()
 
-        self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture').with_all_unit_setup())
-
         self.james = create(Builder('ogds_user')
                             .in_group(self.org_unit.users_group())
                             .having(userid='james.bond',

@@ -3,7 +3,7 @@ from datetime import datetime
 from five import grok
 from opengever.inbox import _
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
-from opengever.ogds.base.utils import get_client_id
+from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import _ as task_mf
 from opengever.task.task import ITask, Task
 from plone.directives import form
@@ -121,14 +121,14 @@ class ForwardingAddForm(AddForm):
         # put default value for issuer into request
         if not self.request.get('form.widgets.issuer', None):
             self.request.set('form.widgets.issuer',
-                             u'inbox:%s' % get_client_id())
+                             get_current_org_unit().inbox().id())
 
         # put the default responsible into the request
         if not self.request.get('form.widgets.responsible_client', None):
-            client = get_client_id()
-            self.request.set('form.widgets.responsible_client', client)
+            org_unit = get_current_org_unit()
+            self.request.set('form.widgets.responsible_client', org_unit.id())
             self.request.set('form.widgets.responsible',
-                             [(u'inbox:%s' % client).encode('utf-8')])
+                             [org_unit.inbox().id()])
 
         AddForm.update(self)
 

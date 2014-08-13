@@ -1,13 +1,11 @@
-from Products.CMFCore.utils import getToolByName
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.ogds.base.interfaces import IContactInformation
-from opengever.ogds.base.utils import get_client_id
-from opengever.testing import FunctionalTestCase
+from opengever.ogds.base.utils import get_current_org_unit
 from opengever.testing import create_and_select_current_org_unit
 from opengever.testing import create_client
 from opengever.testing import create_ogds_user
-from opengever.testing import obj2brain
+from opengever.testing import FunctionalTestCase
 from opengever.testing import select_current_org_unit
 from plone.app.testing import TEST_USER_ID
 from zope.component import getUtility
@@ -19,11 +17,12 @@ class TestClientUtils(FunctionalTestCase):
         super(TestClientUtils, self).setUp()
         self.test_ou = create_and_select_current_org_unit('test_client')
 
-    def test_get_client_id_returns_current_client_id(self):
-        self.assertEquals(u'test_client', get_client_id())
+    def test_get_current_org_unit(self):
+        self.assertEquals(u'test_client', get_current_org_unit().id())
 
 
 class TestClientHelpers(FunctionalTestCase):
+    use_default_fixture = False
 
     def setUp(self):
         super(TestClientHelpers, self).setUp()
@@ -71,6 +70,7 @@ class TestClientHelpers(FunctionalTestCase):
 
 
 class TestOneClientSetupHelper(FunctionalTestCase):
+    use_default_fixture = False
 
     def setUp(self):
         super(TestOneClientSetupHelper, self).setUp()
@@ -103,6 +103,7 @@ class TestUserHelpers(FunctionalTestCase):
 
 
 class TestGroupHelpers(FunctionalTestCase):
+    use_default_fixture = False
 
     def setUp(self):
         super(TestGroupHelpers, self).setUp()
@@ -160,9 +161,11 @@ class TestGroupHelpers(FunctionalTestCase):
 
 
 class TestContactInfoAdditionals(FunctionalTestCase):
+    use_default_fixture = False
 
     def setUp(self):
         super(TestContactInfoAdditionals, self).setUp()
+        create(Builder('fixture').with_admin_unit())
         self.info = getUtility(IContactInformation)
 
     def test_contacts_or_inboxes_is_not_a_user(self):

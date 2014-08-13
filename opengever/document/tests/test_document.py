@@ -188,7 +188,7 @@ class TestDocumentNumbering(FunctionalTestCase):
         b1 = createContentInContainer(self.portal, 'SimpleDocument')
         d2 = createContentInContainer(self.portal, 'opengever.document.document')
 
-        self.assertEquals(['OG / 1', 'OG / 2', 'OG / 3'],
+        self.assertEquals(['Client1 / 1', 'Client1 / 2', 'Client1 / 3'],
                           [getAdapter(d1, IReferenceNumber).get_number(),
                            getAdapter(b1, IReferenceNumber).get_number(),
                            getAdapter(d2, IReferenceNumber).get_number()])

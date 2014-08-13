@@ -10,8 +10,6 @@ class TestContact(FunctionalTestCase):
 
     def setUp(self):
         super(TestContact, self).setUp()
-        self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture').with_all_unit_setup())
         self.grant('Member', 'Contributor', 'Manager')
 
     def getSearchableText(self, obj):

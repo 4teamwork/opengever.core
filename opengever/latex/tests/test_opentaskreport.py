@@ -11,7 +11,6 @@ from opengever.latex import opentaskreport
 from opengever.latex.layouts.default import DefaultLayout
 from opengever.latex.opentaskreport import IOpenTaskReportLayer
 from opengever.latex.testing import LATEX_ZCML_LAYER
-from opengever.ogds.base import utils
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.testing import FunctionalTestCase
 from zope.component import adaptedBy
@@ -56,16 +55,6 @@ class TestOpenTaskReportLaTeXView(MockTestCase):
 
     layer = LATEX_ZCML_LAYER
 
-    def setUp(self):
-        super(TestOpenTaskReportLaTeXView, self).setUp()
-        self.ori_get_client_id = utils.get_client_id
-        get_client_id = self.mocker.replace(
-            'opengever.ogds.base.utils.get_client_id', count=False)
-        self.expect(get_client_id()).result('client1')
-
-    def tearDown(self):
-        utils.get_client_id = self.ori_get_client_id
-
     def test_component_is_registered(self):
         context = self.create_dummy()
         request = self.providing_stub([opentaskreport.IOpenTaskReportLayer])
@@ -97,8 +86,6 @@ class TestOpenTaskReport(FunctionalTestCase):
     def setUp(self):
         super(TestOpenTaskReport, self).setUp()
 
-        self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture').with_all_unit_setup())
         self.task = create(Builder("task").having(task_type='comment',
                                                   issuer='peter.peter',
                                                   responsible='hans.meier'))

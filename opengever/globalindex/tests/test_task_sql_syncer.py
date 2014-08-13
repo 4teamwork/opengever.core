@@ -17,8 +17,6 @@ class TestTaskSQLSyncer(FunctionalTestCase):
 
     def setUp(self):
         super(TestTaskSQLSyncer, self).setUp()
-        self.user, self.org_unit, self.admin_unit, = create(
-            Builder('fixture').with_all_unit_setup())
         self.query = getUtility(ITaskQuery)
 
         self.dossier = create(Builder('dossier')
@@ -57,7 +55,7 @@ class TestTaskSQLSyncer(FunctionalTestCase):
         self.assertEqual('direct-execution', task.task_type)
         self.assertFalse(task.is_subtask)
         self.assertEqual(1, task.sequence_number)
-        self.assertEqual('OG / 1.1', task.reference_number)
+        self.assertEqual('Client1 / 1.1', task.reference_number)
         self.assertEqual('dossier', task.containing_dossier)
         self.assertEqual('subdossier', task.containing_subdossier)
         self.assertEqual(2, task.dossier_sequence_number)
@@ -90,7 +88,7 @@ class TestTaskSQLSyncer(FunctionalTestCase):
         self.assertEqual('direct-execution', task.task_type)
         self.assertFalse(task.is_subtask)
         self.assertEqual(1, task.sequence_number)
-        self.assertEqual('OG / 1.1', task.reference_number)
+        self.assertEqual('Client1 / 1.1', task.reference_number)
         self.assertEqual('dossier', task.containing_dossier)
         self.assertEqual('subdossier', task.containing_subdossier)
         self.assertEqual(2, task.dossier_sequence_number)

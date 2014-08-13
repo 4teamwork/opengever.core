@@ -17,11 +17,11 @@ class TestDocProperties(FunctionalTestCase):
         'User.FullName': 'Peter',
     }
     expected_dossier_properties = {
-        'Dossier.ReferenceNumber': 'OG / 1',
+        'Dossier.ReferenceNumber': 'Client1 / 1',
         'Dossier.Title': 'My dossier',
     }
     expected_document_properties = {
-        'Document.ReferenceNumber': 'OG / 1 / 1',
+        'Document.ReferenceNumber': 'Client1 / 1 / 1',
         'Document.SequenceNumber': '1',
     }
 

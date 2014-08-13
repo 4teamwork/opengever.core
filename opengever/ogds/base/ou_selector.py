@@ -49,7 +49,7 @@ class NoAssignedUnitsOrgUnitSelector(AnonymousOrgUnitSelector):
 
     def set_current_unit(self, unitid):
         raise RuntimeError(
-            "The current user is not assigned to any org untis.")
+            "The current user is not assigned to any org units.")
 
 
 class NullOrgUnit(object):

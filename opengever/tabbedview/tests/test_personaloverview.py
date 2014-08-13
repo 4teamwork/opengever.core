@@ -11,10 +11,7 @@ class TestGlobalTaskListings(FunctionalTestCase):
     def setUp(self):
         super(TestGlobalTaskListings, self).setUp()
 
-        self.user, self.org_unit, self.admin_unit, self.hugo = create(
-            Builder('fixture')
-            .with_all_unit_setup()
-            .with_hugo_boss())
+        self.hugo = create(Builder('fixture').with_hugo_boss())
 
         self.task1 = create(Builder('task')
                             .having(responsible_client='client1',

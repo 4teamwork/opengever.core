@@ -1,25 +1,22 @@
-from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
-import unittest2 as unittest
-from plone.dexterity.utils import createContentInContainer
 from opengever.base.source import RepositoryPathSourceBinder
-from plone.app.testing import TEST_USER_ID, setRoles
+from opengever.testing import FunctionalTestCase
+from plone.dexterity.utils import createContentInContainer
 
-class TestSourceBinder(unittest.TestCase):
 
-    layer = OPENGEVER_FUNCTIONAL_TESTING
+class TestSourceBinder(FunctionalTestCase):
 
     def setUp(self):
-        portal = self.layer['portal']
-        setRoles(portal, TEST_USER_ID, ['Reviewer', 'Manager'])
+        super(TestSourceBinder, self).setUp()
+        self.grant('Reviewer', 'Manager')
 
         # Repository 1
-        reporoot1 = createContentInContainer(portal, 'opengever.repository.repositoryroot', title="Ordnungssystem1")
+        reporoot1 = createContentInContainer(self.portal, 'opengever.repository.repositoryroot', title="Ordnungssystem1")
         createContentInContainer(reporoot1, 'opengever.repository.repositoryfolder', title="Ordnungsposition1")
         repofolder2 = createContentInContainer(reporoot1, 'opengever.repository.repositoryfolder', title="Ordnungsposition2")
         createContentInContainer(reporoot1, 'opengever.repository.repositoryfolder', title="Ordnungsposition3")
         self.repofolder2_1 = createContentInContainer(repofolder2, 'opengever.repository.repositoryfolder', title="Ordnungsposition2-1")
         # Repository 2
-        reporoot2 = createContentInContainer(portal, 'opengever.repository.repositoryroot', title="Ordnungssystem2")
+        reporoot2 = createContentInContainer(self.portal, 'opengever.repository.repositoryroot', title="Ordnungssystem2")
         createContentInContainer(reporoot2, 'opengever.repository.repositoryfolder', title="Ordnungsposition4")
         createContentInContainer(reporoot2, 'opengever.repository.repositoryfolder', title="Ordnungsposition5")
         createContentInContainer(reporoot2, 'opengever.repository.repositoryfolder', title="Ordnungsposition6")

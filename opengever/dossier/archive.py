@@ -1,19 +1,18 @@
-from Products.CMFCore.interfaces import ISiteRoot
-from Products.CMFCore.utils import getToolByName
-from Products.Transience.Transience import Increaser
 from collective.elephantvocabulary import wrap_vocabulary
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
-from opengever.base.interfaces import IBaseClientID
 from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.filing import IFilingNumber
 from opengever.dossier.interfaces import IDossierArchiver
 from opengever.dossier.interfaces import IDossierResolver
+from opengever.ogds.base.utils import get_current_admin_unit
 from persistent.dict import PersistentDict
 from plone.directives import form as directives_form
-from plone.registry.interfaces import IRegistry
+from Products.CMFCore.interfaces import ISiteRoot
+from Products.CMFCore.utils import getToolByName
+from Products.Transience.Transience import Increaser
 from z3c.form import button, field
 from z3c.form import validator
 from z3c.form.browser import radio
@@ -21,9 +20,11 @@ from z3c.form.interfaces import INPUT_MODE
 from zope import schema
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility, provideAdapter
-from zope.interface import invariant, Invalid
+from zope.interface import Invalid
+from zope.interface import invariant
 from zope.schema.interfaces import IContextSourceBinder
-from zope.schema.vocabulary import SimpleVocabulary, getVocabularyRegistry
+from zope.schema.vocabulary import getVocabularyRegistry
+from zope.schema.vocabulary import SimpleVocabulary
 import re
 
 
@@ -110,7 +111,7 @@ def get_filing_actions(context):
                     RESOLVE_WITH_NEW_NUMBER,
                     RESOLVE_WITH_NEW_NUMBER))
 
-        # allready archived
+        # already archived
         else:
             values.append(SimpleVocabulary.createTerm(
                     METHOD_RESOLVING_AND_FILING,
@@ -118,7 +119,7 @@ def get_filing_actions(context):
 
             values.append(SimpleVocabulary.createTerm(
                     METHOD_RESOLVING, ONLY_RESOLVE, ONLY_RESOLVE))
-    # allready resolved
+    # already resolved
     else:
         if not filing_no:
             values.append(SimpleVocabulary.createTerm(
@@ -293,7 +294,7 @@ class Archiver(grok.Adapter):
     def _recursive_update_prefix(self, dossier, prefix):
         IDossier(dossier).filing_prefix = prefix
         dossier.reindexObject(idxs=['filing_no', 'searchable_filing_no'])
-        for subdossier in dossier.get_subdossiers():
+        for subdossier in dossier.get_subdossiers(depth=1):
             self._recursive_update_prefix(subdossier.getObject(), prefix)
 
     def archive(self, prefix, year, number=None):
@@ -311,7 +312,8 @@ class Archiver(grok.Adapter):
         IDossier(self.context).filing_prefix = prefix
         dossier.reindexObject(idxs=['filing_no', 'searchable_filing_no'])
 
-        for i, subdossier in enumerate(dossier.get_subdossiers(), start=1):
+        for i, subdossier in enumerate(dossier.get_subdossiers(depth=1),
+                                       start=1):
             self._recursive_archive(
                 subdossier.getObject(), '%s.%i' % (number, i), prefix)
 
@@ -325,7 +327,7 @@ class Archiver(grok.Adapter):
         # key
         key = '%s-%s' % (prefix_title, year)
         # assemble filing_no
-        filing_no = '%s-%s-%s-%s' % (self._get_client_id(), prefix_title,
+        filing_no = '%s-%s-%s-%s' % (self._get_admin_unit_title(), prefix_title,
             year, self._get_sequence(key))
 
         return filing_no
@@ -341,7 +343,7 @@ class Archiver(grok.Adapter):
 
         elif IDossier(self.context).filing_prefix:
             value = '%s-%s-?' % (
-                self._get_client_id(),
+                self._get_admin_unit_title(),
                 self._get_term_title(
                     IDossier(self.context).filing_prefix,
                     'opengever.dossier.type_prefixes'),
@@ -380,9 +382,5 @@ class Archiver(grok.Adapter):
         mappping[key] = inc
         return str(inc())
 
-    def _get_client_id(self):
-        """"compute filing_client from the registry."""
-
-        registry = getUtility(IRegistry)
-        proxy = registry.forInterface(IBaseClientID)
-        return getattr(proxy, 'client_id')
+    def _get_admin_unit_title(self):
+        return get_current_admin_unit().title

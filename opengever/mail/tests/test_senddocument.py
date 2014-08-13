@@ -33,6 +33,7 @@ class MockEvent(object):
 
 class TestSendDocument(FunctionalTestCase):
     use_browser = True
+    use_default_fixture = False
 
     def setUp(self):
         super(TestSendDocument, self).setUp()

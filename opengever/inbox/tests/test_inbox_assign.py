@@ -13,9 +13,6 @@ class TestAssingForwarding(FunctionalTestCase):
     def setUp(self):
         super(TestAssingForwarding, self).setUp()
 
-        self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture').with_all_unit_setup())
-
         create(Builder('org_unit')
                .with_default_groups()
                .having(client_id='client2', title='Client2'))

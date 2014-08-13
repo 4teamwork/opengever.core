@@ -27,4 +27,4 @@ class TestMailByline(TestBylineBase):
 
     def test_dossier_byline_reference_number_display(self):
         ref_number = self.get_byline_value_by_label('Reference Number:')
-        self.assertEquals('OG / 1', ref_number.text_content())
+        self.assertEquals('Client1 / 1', ref_number.text_content())

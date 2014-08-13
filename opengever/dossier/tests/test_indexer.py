@@ -112,10 +112,10 @@ class TestFilingNumberIndexer(FunctionalTestCase):
         dossier = create(Builder("dossier")
                  .having(filing_prefix='directorate'))
 
-        self.assertEquals('OG-Directorate-?',
+        self.assertEquals('Client1-Directorate-?',
                           index_data_for(dossier).get('filing_no'))
 
-        self.assertEquals(['og', 'directorate'],
+        self.assertEquals(['client1', 'directorate'],
                           index_data_for(dossier).get('searchable_filing_no'))
 
     def test_returns_filing_number_for_dossiers_with_only_filing_prefix_information(self):

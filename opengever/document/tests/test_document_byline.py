@@ -16,7 +16,6 @@ class TestDocumentByline(TestBylineBase):
 
         create_ogds_user('hugo.boss')
 
-
         self.document = create(Builder('document')
                .having(start=date(2013, 11, 6),
                        document_date=date(2013, 11, 5)))
@@ -33,4 +32,4 @@ class TestDocumentByline(TestBylineBase):
 
     def test_document_byline_reference_number_display(self):
         ref_number = self.get_byline_value_by_label('Reference Number:')
-        self.assertEquals('OG / 1', ref_number.text_content())
+        self.assertEquals('Client1 / 1', ref_number.text_content())

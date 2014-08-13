@@ -8,6 +8,7 @@ from plone.app.testing import TEST_USER_ID
 
 
 class TestOrgUnitSelectorViewlet(FunctionalTestCase):
+    use_default_fixture = False
 
     def setUp(self):
         super(TestOrgUnitSelectorViewlet, self).setUp()

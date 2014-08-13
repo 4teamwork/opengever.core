@@ -6,7 +6,7 @@ from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.interfaces import ITransporter
 from opengever.ogds.base.transport import ORIGINAL_INTID_ANNOTATION_KEY
 from opengever.ogds.base.transport import REQUEST_KEY
-from opengever.ogds.base.utils import get_client_id
+from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import remote_json_request
 from opengever.task import _ as task_mf
 from opengever.task.browser.accept.utils import get_current_yearfolder
@@ -59,7 +59,7 @@ class ForwardingRefuseForm(Form):
     def reset_responsible(self):
         """Set responsible back to the issuer respectively current inbox."""
 
-        self.context.responsible_client = get_client_id()
+        self.context.responsible_client = get_current_org_unit().id()
         self.context.responsible = u'inbox:%s' % (
             self.context.responsible_client)
 

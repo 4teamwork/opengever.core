@@ -10,9 +10,7 @@ class TestMethodValidator(FunctionalTestCase):
 
     def setUp(self):
         super(TestMethodValidator, self).setUp()
-
-        self.user, self.org_unit, self.admin_unit, self.hugo = create(
-            Builder('fixture').with_all_unit_setup().with_hugo_boss())
+        self.hugo = create(Builder('fixture').with_hugo_boss())
 
     def test_pass_if_value_is_participate(self):
         task = create(Builder('task')

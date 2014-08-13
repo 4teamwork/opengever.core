@@ -2,16 +2,12 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.testing import FunctionalTestCase
-from opengever.testing import select_current_org_unit
 
 
 class TestInbox(FunctionalTestCase):
 
     def setUp(self):
         super(TestInbox, self).setUp()
-
-        self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture').with_all_unit_setup())
 
         self.org_unit2 = create(Builder('org_unit').id('client2'))
 
@@ -63,9 +59,6 @@ class TestInboxView(FunctionalTestCase):
 
     def setUp(self):
         super(TestInboxView, self).setUp()
-
-        self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture').with_all_unit_setup())
 
         self.main_inbox = create(Builder('inbox')
                                  .titled(u'Main Inbox'))
