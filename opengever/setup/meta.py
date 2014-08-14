@@ -1,8 +1,5 @@
 from opengever.setup.directives import client_directive
 from opengever.setup.directives import policy_directive
-from opengever.setup.interfaces import IClientConfigurationRegistry
-from opengever.setup.registry import ClientConfigurationRegistry
-from zope.component import queryUtility, provideUtility
 from zope.interface import Interface
 from zope.schema import Bool
 from zope.schema import TextLine
