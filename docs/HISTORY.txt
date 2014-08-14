@@ -84,7 +84,8 @@ Changelog
     [phgross]
   - Reword status message after sending documents by e-mail.
     [lgraf]
-
+  - Use the same customized download view we use for documents for mails as well.
+    [lgraf]
 
 - Changes related to public_trial field:
 

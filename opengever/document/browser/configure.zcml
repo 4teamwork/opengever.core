@@ -6,8 +6,8 @@
 
     <browser:page
         name="download"
-        for="opengever.document.document.IDocumentSchema"
-        class=".download.DocumentDownload"
+        for="opengever.document.behaviors.IBaseDocument"
+        class=".download.DocumentishDownload"
         permission="zope2.View"
         />
 
