@@ -7,7 +7,7 @@ from sqlalchemy import String
 class CreateAdminUnitTable(SchemaMigration):
 
     profileid = 'opengever.ogds.base'
-    upgradeid = 3301
+    upgradeid = 4000
 
     def migrate(self):
         self.create_admin_units_table()
