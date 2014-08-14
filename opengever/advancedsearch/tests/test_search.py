@@ -1,9 +1,10 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
 from opengever.dossier.filing.testing import activate_filing_number
 from opengever.dossier.filing.testing import inactivate_filing_number
-from opengever.testing import FunctionalTestCase
 from opengever.testing import create_and_select_current_org_unit
+from opengever.testing import FunctionalTestCase
 
 
 class TestSearchForm(FunctionalTestCase):
@@ -24,23 +25,19 @@ class TestSearchForm(FunctionalTestCase):
 
 class TestSearchFormWithFilingNumberSupport(FunctionalTestCase):
 
-    use_browser = True
-
     def setUp(self):
         super(TestSearchFormWithFilingNumberSupport, self).setUp()
+        create(Builder('fixture').with_all_unit_setup())
         activate_filing_number(self.portal)
-
-        create_and_select_current_org_unit()
 
     def tearDown(self):
         super(TestSearchFormWithFilingNumberSupport, self).tearDown()
-
         inactivate_filing_number(self.portal)
 
-    def test_filing_number_field_is_displayed_in_a_filing_number_supported_site(self):
-
-        self.browser.open('http://nohost/plone/advanced_search')
-        self.browser.fill({'Filing number': 'Test'})
+    @browsing
+    def test_filing_number_field_is_displayed_in_a_filing_number_supported_site(self, browser):
+        browser.login().open(view='advanced_search')
+        browser.fill({'Filing number': 'Test'})
 
 
 class TestSearchFormObjectProvidesDescription(FunctionalTestCase):

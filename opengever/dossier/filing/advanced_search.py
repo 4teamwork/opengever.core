@@ -5,7 +5,6 @@ from opengever.advancedsearch.advanced_search import IAdvancedSearch
 from opengever.dossier.filing.interfaces import IFilingNumberActivatedLayer
 from plone.directives import form as directives_form
 from plone.z3cform.fieldsets.utils import move
-from z3c.form import field
 from zope import schema
 from zope.interface import Interface
 
@@ -32,6 +31,7 @@ class FilingAdvancedSearchForm(AdvancedSearchForm):
 
     def field_mapping(self):
         """Append searchable_filing_no to default field mappings"""
+
         mapping = super(FilingAdvancedSearchForm, self).field_mapping()
         dossier_fields = mapping.get(
             'opengever-dossier-behaviors-dossier-IDossierMarker')

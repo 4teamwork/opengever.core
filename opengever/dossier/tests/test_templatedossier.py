@@ -4,13 +4,17 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages import plone
+from ooxml_docprops import read_properties
+from opengever.dossier.interfaces import ITemplateDossierProperties
+from opengever.dossier.templatedossier.create import TemporaryDocFile
 from opengever.dossier.templatedossier.interfaces import ITemplateUtility
-from opengever.testing import FunctionalTestCase
-from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.testing import create_client
 from opengever.testing import create_ogds_user
+from opengever.testing import FunctionalTestCase
+from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.testing import set_current_client_id
 from plone.app.testing import TEST_USER_ID
+from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 
 
@@ -207,14 +211,6 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
         self.assertEquals(u'test-docx.docx', document.file.filename)
         with TemporaryDocFile(document.file) as tmpfile:
             self.assertItemsEqual([], read_properties(tmpfile.path))
-
-    # the session data manager storage is not easy availabe in the test
-    #
-    # @browsing
-    # def test_start_external_editing_by_default(self, browser):
-    #     browser.login().open(self.dossier, view='document_with_template')
-    #     browser.fill({'paths:list': self.template_b_path,
-    #                   'title': 'Test Document'}).save()
 
 
 class TestTemplateDossier(FunctionalTestCase):

@@ -20,6 +20,7 @@ from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
 import datetime
 import urllib
+from z3c.form.field import Fields
 
 
 @grok.provider(IContextSourceBinder)
@@ -272,7 +273,7 @@ class AdvancedSearchForm(directives_form.Form):
 
     label = _('advanced_search', default='advanced search')
 
-    fields = z3c_field.Fields(IAdvancedSearch)
+    schemas = (IAdvancedSearch,)
 
     ignoreContext = True
 
@@ -289,23 +290,25 @@ class AdvancedSearchForm(directives_form.Form):
         html = html.replace('enableUnloadProtection', '')
         return html
 
-    def updateWidgets(self):
-        super(AdvancedSearchForm, self).updateWidgets()
+    def get_fields(self):
+        if getattr(self, '_fields', None) is not None:
+            return self._fields
 
-        self.fields['responsible'].widgetFactory[INPUT_MODE] \
+        fields = Fields(*self.schemas)
+
+        fields['responsible'].widgetFactory[INPUT_MODE] \
             = AutocompleteFieldWidget
-        self.fields['checked_out'].widgetFactory[INPUT_MODE] \
+        fields['checked_out'].widgetFactory[INPUT_MODE] \
             = AutocompleteFieldWidget
-        self.fields['issuer'].widgetFactory[INPUT_MODE] \
+        fields['issuer'].widgetFactory[INPUT_MODE] \
             = AutocompleteFieldWidget
-        self.fields['object_provides'].widgetFactory[INPUT_MODE] \
+        fields['object_provides'].widgetFactory[INPUT_MODE] \
             = radio.RadioFieldWidget
-        self.fields['dossier_review_state'].widgetFactory[INPUT_MODE] \
+        fields['dossier_review_state'].widgetFactory[INPUT_MODE] \
             = checkbox.CheckBoxFieldWidget
-        self.fields['task_review_state'].widgetFactory[INPUT_MODE] \
+        fields['task_review_state'].widgetFactory[INPUT_MODE] \
             = checkbox.CheckBoxFieldWidget
 
-        self.context.REQUEST.set('client', get_client_id())
         date_fields = [
             'start_1',
             'start_2',
@@ -322,9 +325,25 @@ class AdvancedSearchForm(directives_form.Form):
         ]
 
         for field in date_fields:
-            self.fields.get(
+            fields.get(
                 field).widgetFactory[INPUT_MODE] = DatePickerFieldWidget
 
+        self._fields = fields
+        self.move_fields()
+        return self._fields
+
+    def set_fields(self, fields):
+        self._fields = fields
+
+    def move_fields(self):
+        pass
+
+    fields = property(get_fields, set_fields)
+
+    def updateWidgets(self):
+        super(AdvancedSearchForm, self).updateWidgets()
+
+        self.context.REQUEST.set('client', get_client_id())
         searchableText = self.widgets["searchableText"]
         searchableText.value = self.request.get('SearchableText')
 
