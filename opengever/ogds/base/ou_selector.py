@@ -1,3 +1,6 @@
+from Products.CMFPlone import PloneMessageFactory as pmf
+
+
 CURRENT_ORG_UNIT_KEY = 'current_org_unit'
 
 
@@ -58,7 +61,7 @@ class NullOrgUnit(object):
         return '__dummy_unit_id__'
 
     def label(self):
-        return '__Dummy Unit__'
+        return pmf('tabs_home', default="Home")
 
     def public_url(self):
         return '__dummy_public_url__'

@@ -81,10 +81,11 @@ class FixtureBuilder(object):
             return None
 
         builder = (Builder('org_unit')
-                   .having(**self._org_unit_args)
-                   .as_current_org_unit())
+                   .having(**self._org_unit_args))
         if user:
-            builder = builder.with_default_groups().assign_users([user])
+            builder = (builder.as_current_org_unit()
+                              .with_default_groups()
+                              .assign_users([user]))
         return create(builder)
 
     def _create_admin_unit(self, org_unit):
