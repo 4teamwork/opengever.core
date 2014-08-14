@@ -8,7 +8,6 @@ class TestPathBar(FunctionalTestCase):
 
     def setUp(self):
         super(TestPathBar, self).setUp()
-        create(Builder('fixture').with_all_unit_setup())
 
         root = create(Builder('repository_root').titled(u'Repository'))
         repo = create(Builder('repository')

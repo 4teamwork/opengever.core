@@ -14,7 +14,6 @@ class TestDossier(FunctionalTestCase):
 
     def setUp(self):
         super(TestDossier, self).setUp()
-        create(Builder('fixture').with_all_unit_setup())
         self.dossier = self.create_test_dossier()
 
     def create_test_dossier(self):
