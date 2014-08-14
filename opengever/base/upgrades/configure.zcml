@@ -130,7 +130,8 @@
         directory="profiles/2606"
         />
 
-    <upgrade-step:importProfile
+    <!-- 2606 -> 2607 -->
+    <genericsetup:upgradeStep
         title="Add reviewer role on admin groups"
         description=""
         source="2606"
@@ -139,6 +140,7 @@
         profile="opengever.base:default"
         />
 
+    <!-- 2607 -> 2608 -->
     <upgrade-step:importProfile
         title="Add gever placeholder in searchbox."
         profile="opengever.base:default"
@@ -147,6 +149,7 @@
         directory="profiles/2608"
         />
 
+    <!-- 2608 -> 2609 -->
     <genericsetup:registerProfile
         name="2609"
         title="opengever.base: upgrade profile 2609"
@@ -165,6 +168,7 @@
         profile="opengever.base:default"
         />
 
+    <!-- 2609 -> 2610 -->
     <upgrade-step:importProfile
         title="Fix quickupload js bug where active class is not removed."
         profile="opengever.base:default"
@@ -181,12 +185,12 @@
         directory="profiles/3300"
         />
 
-    <!-- 2607 -> 2608 -->
+    <!-- 3300 -> 4000 -->
     <upgrade-step:importProfile
         title="Remove IBaseClientID from registry"
         profile="opengever.base:default"
-        source="2607"
-        destination="2608"
-        directory="profiles/2608"
+        source="3300"
+        destination="4000"
+        directory="profiles/4000"
         />
 </configure>
