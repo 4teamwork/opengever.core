@@ -100,6 +100,14 @@ class Task(Base):
     def id(self):
         return self.task_id
 
+    @property
+    def issuer_actor(self):
+        return Actor.lookup(self.issuer)
+
+    @property
+    def responsible_actor(self):
+        return Actor.lookup(self.responsible)
+
     def get_admin_unit(self):
         return ogds_service().fetch_admin_unit(self.admin_unit_id)
 
