@@ -109,7 +109,6 @@ class TestTaskControllerConditions(FunctionalTestCase):
         task_without_successor = create(Builder('task'))
         create(Builder('task').successor_from(task_with_successor))
 
-
         self.assertTrue(get_conditions(task_with_successor).has_successors)
         self.assertFalse(get_conditions(task_without_successor).has_successors)
 
