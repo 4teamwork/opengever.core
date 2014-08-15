@@ -2,6 +2,8 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.ogds.base.actor import Actor
 from opengever.testing import FunctionalTestCase
+from plone.app.testing import TEST_USER_ID
+import unittest
 
 
 class TestActorLookup(FunctionalTestCase):
@@ -56,3 +58,29 @@ class TestActorLookup(FunctionalTestCase):
         self.assertEqual(
             u'<a href="http://nohost/plone/@@user-details/hugo.boss">Boss H\xfcgo (hugo.boss)</a>',
             actor.get_link())
+
+
+class TestActorCorresponding(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestActorCorresponding, self).setUp()
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_all_unit_setup())
+        self.hugo = create(Builder('ogds_user')
+                           .id('hugo.boss')
+                           .having(firstname='H\xc3\xbcgo'.decode('utf-8'),
+                                   lastname='Boss'))
+
+    @unittest.skip('something went wrong with the sqlalchemy session')
+    def test_user_corresponds_to_current_user(self):
+        actor = Actor.lookup(TEST_USER_ID)
+
+        self.assertTrue(actor.corresponds_to(self.user))
+        self.assertFalse(actor.corresponds_to(self.hugo))
+
+    @unittest.skip('something went wrong with the sqlalchemy session')
+    def test_inbox_corresponds_to_all_inbox_assigned_users(self):
+        actor = Actor.lookup('inbox:client1')
+
+        self.assertTrue(actor.corresponds_to(self.user))
+        self.assertFalse(actor.corresponds_to(self.hugo))
