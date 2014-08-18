@@ -1,154 +1,77 @@
-from ftw.testing import MockTestCase
 from opengever.inbox.browser.transitioncontroller import ForwardingTransitionController
-from opengever.ogds.base.interfaces import IContactInformation
-from Products.CMFPlone.interfaces import IPloneSiteRoot
-from xml.dom.minidom import parse
-from zope.app.component.hooks import setSite
-from zope.component import getSiteManager
-from zope.interface import alsoProvides
-import os
-import unittest
+from opengever.task.tests.test_transitioncontroller import BaseTransitionGuardTests
+from opengever.task.tests.test_transitioncontroller import FakeConditions
+from opengever.task.tests.test_transitioncontroller import FakeTask
 
 
-class TestForwardingTransitionController(MockTestCase):
+class InboxBaseTransitionGuardTests(BaseTransitionGuardTests):
+    task_type_category = 'forwarding-task-type'
 
-    def setUp(self):
-        super(TestForwardingTransitionController, self).setUp()
-        # we need to have a site root for making the cachecky work.
-        root = self.create_dummy(getSiteManager=getSiteManager, id='root')
-        alsoProvides(root, IPloneSiteRoot)
-        setSite(root)
+    @property
+    def controller(self):
+        task = FakeTask(self.task_type_category)
+        return ForwardingTransitionController(task, None)
 
-    def test_transitions_in_defintion_use_controller(self):
-        import opengever.inbox
-        path = os.path.join(
-            os.path.dirname(os.path.abspath(opengever.inbox.__file__)),
-            'profiles', 'default', 'workflows',
-            'opengever_forwarding_workflow', 'definition.xml')
-        self.assertTrue(os.path.isfile(path), 'File not found: %s' % path)
 
-        doc = parse(path)
+class TestAcceptGuard(InboxBaseTransitionGuardTests):
 
-        for node in doc.getElementsByTagName('transition'):
-            transition = node.getAttribute('transition_id')
-            self.assertEqual(node.getAttribute('title'), transition)
+    transition = 'forwarding-transition-accept'
 
-            actions = node.getElementsByTagName('action')
-            self.assertEqual(len(actions), 1)
-            self.assertEqual(actions[0].firstChild.nodeValue, transition)
-            self.assertEqual(
-                actions[0].getAttribute('url'),
-                '%(content_url)s/@@forwarding_transition_controller?'
-                'transition=' + transition)
+    def test_is_available_for_responsible(self):
+        conditions = FakeConditions()
 
-            guard = node.getElementsByTagName('guard-expression')[0]
-            self.assertEqual(
-                guard.firstChild.nodeValue,
-                "python: here.restrictedTraverse('@@forwarding_transition_"
-                "controller').is_transition_possible('%s')" % transition)
+        self.assertFalse(self.controller._is_transition_possible(
+            self.transition, False, conditions))
 
-    @unittest.skip('skip: reimplement please.')
-    def test_is_successor_forwarding_process(self):
-        f1= self.mocker.mock()
-        mock_request = self.mocker.mock()
+        conditions.is_responsible = True
 
-        with self.mocker.order():
-            self.expect(mock_request.get('X-CREATING-SUCCESSOR')).result(None)
-            self.expect(mock_request.get('X-CREATING-SUCCESSOR')).result(False)
-            self.expect(mock_request.get('X-CREATING-SUCCESSOR')).result(True)
+        self.assertTrue(self.controller._is_transition_possible(
+            self.transition, False, conditions))
 
-        self.replay()
-        self.assertFalse(
-            ForwardingTransitionController(f1, mock_request)._is_successor_forwarding_process())
-        self.assertFalse(
-            ForwardingTransitionController(f1, mock_request)._is_successor_forwarding_process())
-        self.assertTrue(ForwardingTransitionController(f1, mock_request)._is_successor_forwarding_process())
+    def test_is_not_available_for_admin_unit_intern_forwardings(self):
+        conditions = FakeConditions(current_admin_unit_assigned=True)
 
-    def test_is_current_inbox_group_user(self):
-        f1 = self.stub()
-        mock_request = self.mocker.mock()
-        contact_info = self.mocker.mock()
-        self.mock_utility(contact_info, IContactInformation, name=u"")
+        self.assertFalse(self.controller._is_transition_possible(
+            self.transition, False, conditions))
 
-        with self.mocker.order():
-            self.expect(contact_info.is_user_in_inbox_group()).result(False)
-            self.expect(contact_info.is_user_in_inbox_group()).result(True)
+    def test_is_available_for_admin_unit_intern_forwardings_during_succesor_process(self):
+        conditions = FakeConditions(
+            current_admin_unit_assigned=True,
+            successor_process=True,
+            is_responsible=True)
 
-        self.replay()
-        self.assertFalse(
-            ForwardingTransitionController(f1, mock_request)._is_current_inbox_group_user())
-        self.assertTrue(
-            ForwardingTransitionController(f1, mock_request)._is_current_inbox_group_user())
+        self.assertTrue(self.controller._is_transition_possible(
+            self.transition, False, conditions))
 
-    @unittest.skip('skip: reimplement please.')
-    def test_is_assign_to_dossier_or_reassing_possible(self):
-        controller, mock, f1 = self._create_forwarding_controller()
-        with self.mocker.order():
-            self.expect(mock._is_current_inbox_group_user()).result(False)
-            self.expect(mock._is_current_inbox_group_user()).result(True)
 
-            self.expect(mock._is_current_inbox_group_user()).result(False)
-            self.expect(mock._is_current_inbox_group_user()).result(True)
+class TestRefuseGuard(TestAcceptGuard):
+    transition = 'forwarding-transition-refuse'
 
-            self.expect(mock._is_current_inbox_group_user()).result(False)
-            self.expect(mock._is_current_inbox_group_user()).result(True)
 
-            self.expect(mock._is_current_inbox_group_user()).result(False)
-            self.expect(mock._is_current_inbox_group_user()).result(True)
+class TestAssignToDossierGuard(InboxBaseTransitionGuardTests):
+    transition = 'forwarding-transition-refuse'
 
-        self.replay()
-        transitions = [
-            'forwarding-transition-assign-to-dossier',
-            'forwarding-transition-reassign',
-            'forwarding-transition-close',
-            'forwarding-transition-reassign-refused']
+    def is_only_available_for_responsible_of_admin_unit_intern_forwardings(self):
+        conditions = FakeConditions()
+        self.assertFalse(self.controller._is_transition_possible(
+            self.transition, False, conditions))
 
-        for transition in transitions:
-            self.assertFalse(controller.is_transition_possible(transition))
-            self.assertTrue(controller.is_transition_possible(transition))
+        conditions.is_responsible = True
+        self.assertFalse(self.controller._is_transition_possible(
+            self.transition, False, conditions))
 
-    @unittest.skip('skip: reimplement please.')
-    def test_is_accept_possible(self):
-        controller, mock, f1 = self._create_forwarding_controller()
-        with self.mocker.order():
-            self.expect(mock._is_multiclient_setup()).result(False)
+        conditions.is_assigned_to_current_admin_unit = True
+        self.assertTrue(self.controller._is_transition_possible(
+            self.transition, False, conditions))
 
-            self.expect(mock._is_multiclient_setup()).result(True)
-            self.expect(mock._is_task_on_responsible_client()).result(True)
-            self.expect(mock._is_successor_forwarding_process()).result(False)
 
-            self.expect(mock._is_multiclient_setup()).result(True)
-            self.expect(mock._is_task_on_responsible_client()).result(True)
-            self.expect(mock._is_successor_forwarding_process()).result(True)
-            self.expect(mock._is_inbox_group_user()).result(False)
+class TestReassignGuard(TestAssignToDossierGuard):
+    transition = 'forwarding-transition-reassign'
 
-            self.expect(mock._is_multiclient_setup()).result(True)
-            self.expect(mock._is_task_on_responsible_client()).result(False)
-            self.expect(mock._is_inbox_group_user()).result(False)
 
-            self.expect(mock._is_multiclient_setup()).result(True)
-            self.expect(mock._is_task_on_responsible_client()).result(False)
-            self.expect(mock._is_inbox_group_user()).result(True)
+class TestCloseGuard(TestAssignToDossierGuard):
+    transition = 'forwarding-transition-close'
 
-        self.replay()
-        transition = 'forwarding-transition-accept'
 
-        self.assertFalse(controller.is_transition_possible(transition))
-        self.assertFalse(controller.is_transition_possible(transition))
-        self.assertFalse(controller.is_transition_possible(transition))
-        self.assertFalse(controller.is_transition_possible(transition))
-        self.assertTrue(controller.is_transition_possible(transition))
-
-    def _create_forwarding_controller(self):
-        f1 = self.stub()
-        self.expect(f1.absolute_url()).result(
-            'http://nohost/plone/f1').count(0, None)
-        self.expect(f1.getPhysicalPath()).result(
-            ['', 'plone', 'f1']).count(0, None)
-
-        controller = ForwardingTransitionController(f1, {})
-        mock = self.mocker.patch(controller)
-
-        self.expect(mock._is_administrator()).result(False).count(0, None)
-
-        return controller, mock, f1
+class TestReassignRefuseGuard(TestAssignToDossierGuard):
+    transition = 'forwarding-transition-reassign-refused'

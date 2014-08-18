@@ -7,7 +7,8 @@ class FakeConditions(object):
     def __init__(self, is_issuer=False, is_responsible=False,
                  all_subtasks_finished=False, has_successors=False,
                  is_remote_request=False,
-                 issuing_agency=False, responsible_agency=False):
+                 issuing_agency=False, responsible_agency=False,
+                 successor_process=False, current_admin_unit_assigned=False):
 
         self.is_issuer = is_issuer
         self.is_responsible = is_responsible
@@ -17,6 +18,8 @@ class FakeConditions(object):
         self.is_remote_request = is_remote_request
         self.is_issuing_orgunit_agency_member = issuing_agency
         self.is_responsible_orgunit_agency_member = responsible_agency
+        self.is_assigned_to_current_admin_unit = current_admin_unit_assigned
+        self.is_successor_process = successor_process
 
 
 class FakeTask(object):
@@ -35,6 +38,7 @@ class BaseTransitionGuardTests(unittest2.TestCase):
     def controller(self):
         task = FakeTask(self.task_type_category)
         return TaskTransitionController(task, None)
+
 
 class TestCancelledOpenGuard(BaseTransitionGuardTests):
     transition = 'task-transition-cancelled-open'
@@ -246,6 +250,7 @@ class TestOpenRejected(BaseTransitionGuardTests):
         self.assertTrue(self.controller._is_transition_possible(
             self.transition, True, conditions))
 
+
 class TestOpenResolved(BaseTransitionGuardTests):
     transition = 'task-transition-open-resolved'
     task_type_category = 'bidirectional_by_value'
@@ -260,7 +265,6 @@ class TestOpenResolved(BaseTransitionGuardTests):
         self.task_type_category = 'unidirectional_by_value'
         self.assertFalse(self.controller._is_transition_possible(
             self.transition, False, conditions))
-
 
     def test_is_available_for_responsible(self):
         conditions = FakeConditions(is_responsible=True)
@@ -292,7 +296,8 @@ class TestOpenClosed(BaseTransitionGuardTests):
     def test_responsible_agency_for_unidirectional_by_reference_tasks(self):
         self.task_type_category = 'unidirectional_by_reference'
 
-        conditions = FakeConditions(is_responsible=False, responsible_agency=True)
+        conditions = FakeConditions(
+            is_responsible=False, responsible_agency=True)
 
         self.assertFalse(self.controller._is_transition_possible(
             self.transition, False, conditions))
@@ -324,6 +329,7 @@ class TestReassign(BaseTransitionGuardTests):
         self.assertTrue(self.controller._is_transition_possible(
             self.transition, True, conditions))
 
+
 class TestRejectedOpen(BaseTransitionGuardTests):
     transition = 'task-transition-rejected-open'
 
@@ -337,6 +343,7 @@ class TestRejectedOpen(BaseTransitionGuardTests):
 
         self.assertTrue(self.controller._is_transition_possible(
             self.transition, False, conditions))
+
 
 class TestResolvedClosed(BaseTransitionGuardTests):
     transition = 'task-transition-resolved-tested-and-closed'
@@ -353,7 +360,7 @@ class TestResolvedClosed(BaseTransitionGuardTests):
             self.transition, False, conditions))
 
     def test_issuing_agency(self):
-        conditions  = FakeConditions(is_issuer=False, issuing_agency=True)
+        conditions = FakeConditions(is_issuer=False, issuing_agency=True)
 
         self.assertFalse(self.controller._is_transition_possible(
             self.transition, False, conditions))
@@ -361,11 +368,12 @@ class TestResolvedClosed(BaseTransitionGuardTests):
         self.assertTrue(self.controller._is_transition_possible(
             self.transition, True, conditions))
 
+
 class ResolvedInProgress(BaseTransitionGuardTests):
     transition = 'task-transition-resolved-in-progress'
 
     def test_available_for_issuer(self):
-        conditions  = FakeConditions(is_issuer=True)
+        conditions = FakeConditions(is_issuer=True)
 
         self.assertTrue(self.controller._is_transition_possible(
             self.transition, False, conditions))

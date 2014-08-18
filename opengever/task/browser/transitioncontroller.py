@@ -673,8 +673,9 @@ class TaskTransitionController(BrowserView):
 
 class Conditions(object):
 
-    def __init__(self, task, current_user):
+    def __init__(self, task, request, current_user):
         self.task = task
+        self.request = request
         self.current_user = current_user
 
     @property
@@ -728,7 +729,20 @@ class Conditions(object):
         else:
             return False
 
+    @property
+    def is_assigned_to_current_admin_unit(self):
+        org_unit = self.task.get_assigned_org_unit()
+        return org_unit.admin_unit == get_current_admin_unit()
+
+    @property
+    def is_successor_process(self):
+        if self.request.get('X-CREATING-SUCCESSOR', False):
+            return True
+
+        return False
+
 
 def get_conditions(context):
     return Conditions(
-        context.get_sql_object(), ogds_service().fetch_current_user())
+        context.get_sql_object(), context.REQUEST,
+        ogds_service().fetch_current_user())
