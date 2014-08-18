@@ -1,8 +1,8 @@
 from setuptools import setup, find_packages
 import os
 
-version = '3.3.3.dev0'
-maintainer = 'Jonas Baumann'
+version = '4.0.0.dev0'
+maintainer = '4teamwork AG'
 
 tests_require = [
     'Products.CMFPlone',
@@ -43,10 +43,10 @@ setup(name='opengever.core',
         "Topic :: Software Development :: Libraries :: Python Modules",
         ],
       keywords='',
-      author='%s, 4teamwork GmbH' % maintainer,
+      author=maintainer,
       author_email='mailto:info@4teamwork.ch',
       maintainer=maintainer,
-      url='http://psc.4teamwork.ch/dist/opengever-core/',
+      url='http://github.com/4teamwork/opengever.core',
       license='GPL2',
       packages=find_packages(exclude=['ez_setup']),
       namespace_packages=['opengever', 'opengever.policy', 'opengever.ogds', 'opengever.portlets'],
