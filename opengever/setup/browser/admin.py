@@ -1,6 +1,5 @@
 from datetime import datetime
 from ftw.mail.interfaces import IMailSettings
-from opengever.ogds.base.interfaces import IClientConfiguration
 from opengever.ogds.base.ldap_import import sync_ldap
 from opengever.ogds.base.utils import create_session
 from opengever.ogds.models import BASE
@@ -257,13 +256,8 @@ class CreateOpengeverClient(BrowserView):
         if og_admin_user not in users_group.users:
             users_group.users.append(og_admin_user)
 
-        # set the client id in the registry
-        client_id = form['client_id'].decode('utf-8')
-        registry = getUtility(IRegistry)
-        proxy = registry.forInterface(IClientConfiguration)
-        proxy.client_id = form['client_id'].decode('utf-8')
-
         # set the mail domain in the registry
+        client_id = form['client_id'].decode('utf-8')
         registry = getUtility(IRegistry)
         proxy = registry.forInterface(IMailSettings)
         proxy.mail_domain = form['mail_domain'].decode('utf-8')
