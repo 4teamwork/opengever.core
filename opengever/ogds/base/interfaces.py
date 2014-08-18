@@ -122,17 +122,6 @@ class ILDAPSearch(Interface):
         """
 
 
-class IClientConfiguration(Interface):
-    """p.a.registry interface for configuring a client
-    """
-
-    client_id = schema.TextLine(
-        title=u'Client ID',
-        description=u'Enter the unique ID of this client. \
-        It will be used by OGDS (Opengever Global Directory Service) \
-        to identify this client.', )
-
-
 class IAdminUnitConfiguration(Interface):
 
     current_unit_id = schema.TextLine(

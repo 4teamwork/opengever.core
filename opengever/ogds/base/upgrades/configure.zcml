@@ -52,4 +52,13 @@
             directory="profiles/4002"
             />
 
+    <!-- 4002 -> 4003 -->
+    <upgrade-step:importProfile
+            title="Remove IClientConfiguration registry entry"
+            profile="opengever.ogds.base:default"
+            source="4002"
+            destination="4003"
+            directory="profiles/4003"
+            />
+
 </configure>
