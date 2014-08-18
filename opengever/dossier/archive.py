@@ -383,4 +383,4 @@ class Archiver(grok.Adapter):
         return str(inc())
 
     def _get_admin_unit_title(self):
-        return get_current_admin_unit().title
+        return get_current_admin_unit().label()
