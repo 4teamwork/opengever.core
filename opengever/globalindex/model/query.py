@@ -32,13 +32,6 @@ class TaskQuery(BaseQuery):
 
     by_admin_unit = all_issued_tasks
 
-    def tasks_by_ids(self, int_ids, admin_unit):
-        """
-        """
-        query = self.filter(
-            self._attribute('admin_unit_id') == admin_unit.id())
-        return query.filter(self._attribute('int_id').in_(int_ids))
-
     def by_intid(self, int_id, admin_unit_id):
         """Returns the task identified by the given int_id and admin_unit_id
         or None
