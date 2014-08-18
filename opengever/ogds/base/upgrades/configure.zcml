@@ -6,7 +6,7 @@
 
     <include package="ftw.upgrade" file="meta.zcml" />
 
-    <!-- 1-> 3101 -->
+    <!-- 1 -> 3101 -->
     <genericsetup:upgradeStep
         title="Increase UserID and GroupID column lengths"
         description=""
@@ -16,40 +16,40 @@
         profile="opengever.ogds.base:default"
         />
 
-    <!-- 3101-> 3301 -->
+    <!-- 3101 -> 4000 -->
     <genericsetup:upgradeStep
         title="Create AdminUnit table and migrate data."
         description=""
         source="3101"
-        destination="3301"
-        handler="opengever.ogds.base.upgrades.to3301.CreateAdminUnitTable"
+        destination="4000"
+        handler="opengever.ogds.base.upgrades.to4000.CreateAdminUnitTable"
         profile="opengever.ogds.base:default"
         />
 
-    <!-- 3301-> 3302 -->
+    <!-- 4000 -> 4001 -->
     <genericsetup:upgradeStep
         title="Create AdminUnit registry configuration."
         description=""
-        source="3301"
-        destination="3302"
-        handler="opengever.ogds.base.upgrades.to3302.CreateAdminUnitRegistry"
+        source="4000"
+        destination="4001"
+        handler="opengever.ogds.base.upgrades.to4001.CreateAdminUnitRegistry"
         profile="opengever.ogds.base:default"
         />
 
     <genericsetup:registerProfile
-          name="3302"
-          title="opengever.ogds.base: upgrade profile 3302"
-          directory="profiles/3302"
+          name="4001"
+          title="opengever.ogds.base: upgrade profile 4001"
+          directory="profiles/4001"
           provides="Products.GenericSetup.interfaces.EXTENSION"
           />
-		  
-  <upgrade-step:importProfile
-          title="Add mobile action for orgunit selector"
-          profile="opengever.ogds.base:default"
-          source="3302"
-          destination="3303"
-          directory="profiles/3303"
-          />
-		
+
+    <!-- 4001 -> 4002 -->
+    <upgrade-step:importProfile
+            title="Add mobile action for orgunit selector"
+            profile="opengever.ogds.base:default"
+            source="4001"
+            destination="4002"
+            directory="profiles/4002"
+            />
 
 </configure>

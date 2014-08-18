@@ -33,43 +33,43 @@
         profile="opengever.globalindex:default"
         />
 
-    <!-- 2602 -> 2700 -->
+    <!-- 2602 -> 4000 -->
     <genericsetup:upgradeStep
         title="Migrate DB schema for Task, add org_unit related info."
         description=""
         source="2602"
-        destination="2700"
-        handler="opengever.globalindex.upgrades.to2700.MigrateTaskTable"
+        destination="4000"
+        handler="opengever.globalindex.upgrades.to4000.MigrateTaskTable"
         profile="opengever.globalindex:default"
         />
 
-    <!-- 2700 -> 2701 -->
+    <!-- 4000 -> 4001 -->
     <genericsetup:upgradeStep
-        title="Migrate Task DB schema, add containing_subdossier adn text columns."
+        title="Migrate Task DB schema, add containing_subdossier and text columns."
         description=""
-        source="2700"
-        destination="2701"
-        handler="opengever.globalindex.upgrades.to2701.AddSubdossierColumn"
+        source="4000"
+        destination="4001"
+        handler="opengever.globalindex.upgrades.to4001.AddSubdossierColumn"
         profile="opengever.globalindex:default"
         />
 
-    <!-- 2701 -> 2702 -->
+    <!-- 4001 -> 4002 -->
     <genericsetup:upgradeStep
         title="Migrate Task DB data, set containing_subdossier and text columns."
         description=""
-        source="2701"
-        destination="2702"
-        handler="opengever.globalindex.upgrades.to2702.MigrateSubdossierColumnData"
+        source="4001"
+        destination="4002"
+        handler="opengever.globalindex.upgrades.to4002.MigrateSubdossierColumnData"
         profile="opengever.globalindex:default"
         />
 
-    <!-- 2702 -> 2703 -->
+    <!-- 4002 -> 4003 -->
     <genericsetup:upgradeStep
         title="Migrate Task DB schema, alter sequence number column data type to Int."
         description=""
-        source="2702"
-        destination="2703"
-        handler="opengever.globalindex.upgrades.to2703.AlterSequenceNumberType"
+        source="4002"
+        destination="4003"
+        handler="opengever.globalindex.upgrades.to4003.AlterSequenceNumberType"
         profile="opengever.globalindex:default"
         />
 

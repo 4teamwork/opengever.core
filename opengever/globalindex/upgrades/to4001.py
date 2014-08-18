@@ -7,7 +7,7 @@ from sqlalchemy import Text
 class AddSubdossierColumn(SchemaMigration):
 
     profileid = 'opengever.globalindex'
-    upgradeid = 2701
+    upgradeid = 4001
 
     def migrate(self):
         self.create_containing_subdossier_column()

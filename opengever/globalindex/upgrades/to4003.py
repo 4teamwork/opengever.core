@@ -6,7 +6,7 @@ from sqlalchemy import String
 class AlterSequenceNumberType(SchemaMigration):
 
     profileid = 'opengever.globalindex'
-    upgradeid = 2703
+    upgradeid = 4003
 
     def migrate(self):
         self.prepare_data()
@@ -27,7 +27,6 @@ class AlterSequenceNumberType(SchemaMigration):
                              nullable=False,
                              existing_nullable=True,
                              existing_autoincrement=False)
-
 
         self.op.alter_column('tasks', 'dossier_sequence_number',
                              type_=Integer,

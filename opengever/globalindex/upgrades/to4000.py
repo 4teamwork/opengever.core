@@ -7,7 +7,7 @@ from sqlalchemy import String
 class MigrateTaskTable(SchemaMigration):
 
     profileid = 'opengever.globalindex'
-    upgradeid = 2700
+    upgradeid = 4000
 
     def migrate(self):
         self.drop_unique_constraint()

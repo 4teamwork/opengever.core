@@ -12,7 +12,7 @@ class CreateAdminUnitRegistry(UpgradeStep):
         and according relationship-field."""
 
         self.setup_install_profile(
-            'profile-opengever.ogds.base.upgrades:3302')
+            'profile-opengever.ogds.base.upgrades:4001')
 
         registry = getUtility(IRegistry)
         client = registry.forInterface(IClientConfiguration)
