@@ -9,14 +9,6 @@
           permission="zope2.View"
           />
 
-    <browser:page
-          name="opengever_view"
-          for="*"
-          class=".opengeverview.OpengeverView"
-          permission="zope.Public"
-          allowed_interface=".opengeverview.IOpengeverView"
-          />
-
     <!-- Fix for bug mentioned in Issue #934 Fehler bei den Falldossiers 1 und 2 BD.ARP
          https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/934
          Remove as soon as this has been fixed in plone.app.z3cform / plone.z3cform

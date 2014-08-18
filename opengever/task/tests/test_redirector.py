@@ -11,9 +11,6 @@ class TestTaskRedirector(FunctionalTestCase):
     def setUp(self):
         super(TestTaskRedirector, self).setUp()
 
-        self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture').with_all_unit_setup())
-
         self.dossier = create(Builder('dossier'))
 
     def test_redirects_to_dossiers_task_tab_when_creating_a_maintask(self):

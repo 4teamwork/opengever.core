@@ -2,6 +2,6 @@
 <metadata>
   <version>3300</version>
   <dependencies>
-	    <dependency>profile-opengever.ogds.base:default</dependency>
+    <dependency>profile-opengever.ogds.base:default</dependency>
   </dependencies>
 </metadata>

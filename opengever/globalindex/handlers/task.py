@@ -19,6 +19,7 @@ class TaskSqlSyncer(object):
             self.admin_unit_id = get_current_admin_unit().id()
             self.current_org_unit_id = get_current_org_unit().id()
             self.sequence_number = self.obj.get_sequence_number()
+            self.assigned_org_unit = obj.responsible_client
             self.obj_id = self.get_object_id()
             self.task_query = Session.query(Task).filter_by(
                 admin_unit_id=self.admin_unit_id, int_id=self.obj_id)
@@ -47,6 +48,7 @@ class TaskSqlSyncer(object):
         if task is None:
             task = Task(self.obj_id, self.admin_unit_id,
                         issuing_org_unit=self.current_org_unit_id,
+                        assigned_org_unit=self.assigned_org_unit,
                         sequence_number=self.sequence_number)
             Session.add(task)
         return task

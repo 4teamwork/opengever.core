@@ -14,7 +14,6 @@ from opengever.globalindex.interfaces import ITaskQuery
 from opengever.globalindex.oguid import Oguid
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
-from opengever.ogds.base.utils import get_client_id
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
@@ -229,10 +228,6 @@ class Task(Container):
             if self.task_type in voc:
                 return category
         return None
-
-    @property
-    def client_id(self):
-        return get_client_id()
 
     @property
     def int_id(self):

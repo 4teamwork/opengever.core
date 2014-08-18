@@ -7,6 +7,7 @@ from plone.app.testing import TEST_USER_ID
 
 
 class TestAutoCompleteWidget(FunctionalTestCase):
+    use_default_fixture = False
 
     def _init_widget(self):
         return AutocompleteFieldWidget(

@@ -3,18 +3,12 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.dossier.filing.testing import activate_filing_number
 from opengever.dossier.filing.testing import inactivate_filing_number
-from opengever.testing import create_and_select_current_org_unit
 from opengever.testing import FunctionalTestCase
 
 
 class TestSearchForm(FunctionalTestCase):
 
     use_browser = True
-
-    def setUp(self):
-        super(TestSearchForm, self).setUp()
-
-        create_and_select_current_org_unit()
 
     def test_filing_number_fields_is_hidden_in_site_without_filing_number_support(self):
         self.browser.open('http://nohost/plone/advanced_search')
@@ -27,7 +21,6 @@ class TestSearchFormWithFilingNumberSupport(FunctionalTestCase):
 
     def setUp(self):
         super(TestSearchFormWithFilingNumberSupport, self).setUp()
-        create(Builder('fixture').with_all_unit_setup())
         activate_filing_number(self.portal)
 
     def tearDown(self):
@@ -42,11 +35,6 @@ class TestSearchFormWithFilingNumberSupport(FunctionalTestCase):
 
 class TestSearchFormObjectProvidesDescription(FunctionalTestCase):
     use_browser = True
-
-    def setUp(self):
-        super(TestSearchFormObjectProvidesDescription, self).setUp()
-        org_unit = create_and_select_current_org_unit()
-        create(Builder('admin_unit').wrapping_org_unit(org_unit))
 
     def test_contains_special_info_in_a_multi_client_setup(self):
         create(Builder('admin_unit'))
@@ -75,9 +63,6 @@ class TestSearchWithContent(FunctionalTestCase):
 
     def setUp(self):
         super(TestSearchWithContent, self).setUp()
-
-        self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture').with_all_unit_setup())
 
         self.dossier1 = create(Builder("dossier").titled(u"Dossier1"))
         self.dossier2 = create(Builder("dossier").titled(u"Dossier2"))
@@ -143,8 +128,6 @@ class TestSearchWithoutContent(FunctionalTestCase):
         super(TestSearchWithoutContent, self).setUp()
 
         activate_filing_number(self.portal)
-
-        create_and_select_current_org_unit()
 
         self.dossier1 = create(Builder("dossier"))
 

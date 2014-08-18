@@ -13,9 +13,7 @@ class TestOverview(FunctionalTestCase):
     def setUp(self):
         super(TestOverview, self).setUp()
 
-        self.user, self.org_unit, self.admin_unit, self.hugo = create(
-            Builder('fixture').with_all_unit_setup().with_hugo_boss())
-
+        self.hugo = create(Builder('fixture').with_hugo_boss())
         self.dossier = create(Builder('dossier')
                               .titled(u'Testdossier')
                               .having(description=u'Hie hesch e beschribig',

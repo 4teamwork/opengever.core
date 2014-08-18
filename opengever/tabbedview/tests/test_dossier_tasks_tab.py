@@ -9,8 +9,6 @@ class TestDossierTaskTabbedview(FunctionalTestCase):
     def setUp(self):
         super(TestDossierTaskTabbedview, self).setUp()
 
-        self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture').with_all_unit_setup())
         self.dossier = create(Builder('dossier'))
         self.dossier2 = create(Builder('dossier'))
         self.task = create(Builder('task').within(self.dossier))

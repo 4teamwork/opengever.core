@@ -16,13 +16,14 @@ from zope.component import provideHandler
 
 class TestOpengeverSharingIntegration(FunctionalTestCase):
     use_browser = True
+    use_default_fixture = False
 
     def setUp(self):
         """ Set up test environment
         """
         super(TestOpengeverSharingIntegration, self).setUp()
         self.grant('Manager')
-
+        create(Builder('fixture').with_admin_unit())
         self.repo = create(Builder("repository"))
         self.dossier = create(Builder("dossier").within(self.repo))
 

@@ -1,13 +1,15 @@
-from Acquisition import aq_parent, aq_inner
-from Products.CMFCore.interfaces import ISiteRoot
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from five import grok
-from opengever.base.interfaces import IBaseClientID
 from opengever.base.interfaces import IReferenceNumber
-from opengever.base.interfaces import IReferenceNumberSettings
 from opengever.base.interfaces import IReferenceNumberFormatter
+from opengever.base.interfaces import IReferenceNumberSettings
+from opengever.ogds.base.utils import get_current_admin_unit
 from plone.dexterity.interfaces import IDexterityContent
 from plone.registry.interfaces import IRegistry
-from zope.component import getUtility, queryAdapter
+from Products.CMFCore.interfaces import ISiteRoot
+from zope.component import getUtility
+from zope.component import queryAdapter
 
 
 class BasicReferenceNumber(grok.Adapter):
@@ -61,9 +63,7 @@ class PlatformReferenceNumber(BasicReferenceNumber):
     ref_type = 'site'
 
     def get_local_number(self):
-        registry = getUtility(IRegistry)
-        proxy = registry.forInterface(IBaseClientID)
-        return getattr(proxy, 'client_id')
+        return get_current_admin_unit().label()
 
     def get_number(self):
         return self.get_local_number()

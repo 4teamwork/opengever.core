@@ -10,16 +10,15 @@ class TestResolveOGUIDView(FunctionalTestCase):
     def setUp(self):
         super(TestResolveOGUIDView, self).setUp()
 
-        self.group = create(Builder('ogds_group').having(groupid='group'))
-        self.user1 = create(Builder('ogds_user')
-                            .in_group(self.group))
+        self.group = create(Builder('ogds_group')
+                            .having(groupid='group', users=[self.user]))
         self.user2 = create(Builder('ogds_user')
                             .in_group(self.group)
                             .having(userid='x.john.doe',
                                     lastname='Doe',
                                     firstname='John'))
 
-        self.actor1 = Actor.user(self.user1.userid)
+        self.actor1 = Actor.user(self.user.userid)
         self.actor2 = Actor.user(self.user2.userid)
 
     @browsing

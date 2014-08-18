@@ -17,11 +17,6 @@ class TestDeadlineModificationForm(FunctionalTestCase):
 
     use_browser = True
 
-    def setUp(self):
-        super(TestDeadlineModificationForm, self).setUp()
-        self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture').with_all_unit_setup())
-
     def _change_deadline(self, task, new_deadline, text=u''):
         url = ModifyDeadlineFormView.url_for(task,
             transition='task-transition-modify-deadline')
@@ -112,11 +107,6 @@ class TestDeadlineModificationForm(FunctionalTestCase):
 
 class TestDeadlineModifierController(FunctionalTestCase):
 
-    def setUp(self):
-        super(TestDeadlineModifierController, self).setUp()
-        self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture').with_all_unit_setup())
-
     def test_modify_is_allowed_for_issuer_on_a_open_task(self):
         task = create(Builder('task').having(issuer=TEST_USER_ID))
 
@@ -162,11 +152,6 @@ class RemoteDeadlineModifier(FunctionalTestCase):
 
     use_browser = True
 
-    def setUp(self):
-        super(RemoteDeadlineModifier, self).setUp()
-        self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture').with_all_unit_setup())
-
     def test_updating_deadline_of_the_task(self):
         task = create(Builder('task')
                       .having(issuer=TEST_USER_ID,
@@ -210,11 +195,6 @@ class RemoteDeadlineModifier(FunctionalTestCase):
 
 
 class TestDeadlineModifier(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestDeadlineModifier, self).setUp()
-        self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture').with_all_unit_setup())
 
     def test_raise_unauthorized_when_mofication_is_not_allowed(self):
         task = create(Builder('task')

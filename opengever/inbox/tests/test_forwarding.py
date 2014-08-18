@@ -9,6 +9,7 @@ import transaction
 class TestForwarding(FunctionalTestCase):
     layer = OPENGEVER_FUNCTIONAL_TESTING
     use_browser = True
+    use_default_fixture = False
 
     def setUp(self):
         super(TestForwarding, self).setUp()

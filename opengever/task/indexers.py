@@ -1,10 +1,9 @@
-from Acquisition import aq_inner, aq_parent
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from collective import dexteritytextindexer
 from datetime import datetime
 from five import grok
-from opengever.ogds.base.utils import get_client_id
 from opengever.task.task import ITask
-from opengever.task.util import get_task_type_title
 from plone import api
 from plone.indexer import indexer
 
@@ -30,12 +29,6 @@ def assigned_client(obj):
     else:
         return obj.responsible_client
 grok.global_adapter(assigned_client, name='assigned_client')
-
-
-@indexer(ITask)
-def client_id(obj):
-    return get_client_id()
-grok.global_adapter(client_id, name='client_id')
 
 
 @indexer(ITask)

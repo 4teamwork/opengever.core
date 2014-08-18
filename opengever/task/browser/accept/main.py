@@ -115,11 +115,9 @@ class MethodValidator(SimpleFieldValidator):
         super(MethodValidator, self).validate(value)
 
         if value != u'participate':
-            mtool = getToolByName(self.context, 'portal_membership')
-            userid = mtool.getAuthenticatedMember().getId()
             org_unit = self.context.get_responsible_org_unit()
 
-            if org_unit not in ogds_service().assigned_org_units(userid):
+            if org_unit not in ogds_service().assigned_org_units():
                 msg = _(u'You are not assigned to the responsible client '
                         u'(${client}). You can only process the task in the '
                         u'issuers dossier.',

@@ -43,8 +43,21 @@ def ogds_service():
 class PloneOGDSService(OGDSService):
     """Extends ogds-service with plone-specific helper methods."""
 
+    def _get_current_user_id(self):
+        return api.user.get_current().getId()
+
     def fetch_current_user(self):
-        return self.fetch_user(api.user.get_current().getId())
+        return self.fetch_user(self._get_current_user_id())
+
+    def assigned_org_units(self, userid=None, omit_current=False):
+        if userid is None:
+            userid = self._get_current_user_id()
+        org_units = super(PloneOGDSService, self).assigned_org_units(userid)
+        if omit_current:
+            current_org_unit = get_current_org_unit()
+            org_units = [each for each in org_units
+                         if each != current_org_unit]
+        return org_units
 
 
 def get_ou_selector():
@@ -68,9 +81,11 @@ def get_ou_selector():
     return OrgUnitSelector(storage, units)
 
 
-def client_id_cachekey(method):
-    """chackekey for the get_client_id, wich is unique for every plone site.
-    So a setup with multiple opengever sites on one plone instance is possible.
+def admin_unit_cachekey(method):
+    """chackekey for `get_current_admin_unit` wich is unique for every plone
+    site. This makes a setup with multiple opengever sites on one zope
+    possible.
+
     """
     context = getSite()
 
@@ -80,28 +95,18 @@ def client_id_cachekey(method):
                 context = obj
                 break
 
-    return 'get_client_id:%s' % (context.id)
+    return 'get_current_admin_unit:%s' % (context.id)
 
 
 def get_current_org_unit():
     return get_ou_selector().get_current_unit()
 
 
+# @ram.cache(admin_unit_cachekey)
 def get_current_admin_unit():
     registry = getUtility(IRegistry)
     proxy = registry.forInterface(IAdminUnitConfiguration)
     return ogds_service().fetch_admin_unit(proxy.current_unit_id)
-
-
-# @ram.cache(client_id_cachekey)
-def get_client_id():
-    """Returns the client_id of the current client.
-    """
-    return get_ou_selector().get_current_unit().id()
-
-    # registry = getUtility(IRegistry)
-    # proxy = registry.forInterface(IClientConfiguration)
-    # return proxy.client_id
 
 
 def remote_json_request(target_admin_unit_id, viewname, path='',

@@ -18,15 +18,12 @@ class TestDossierReporterWithFilingNumberSupport(FunctionalTestCase):
         super(TestDossierReporterWithFilingNumberSupport, self).setUp()
         activate_filing_number(self.portal)
 
-        self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture').with_all_unit_setup())
-
         self.dossier = create(Builder('dossier')
                               .titled(u'Export1 Dossier')
                               .having(start=DateTime(2012, 1, 1),
                                       end=DateTime(2012, 12, 1),
                                       responsible=TEST_USER_ID,
-                                      filing_no='OG-Leitung-2012-1')
+                                      filing_no='Client1-Leitung-2012-1')
                               .in_state('active'))
 
     def tearDown(self):
@@ -35,7 +32,6 @@ class TestDossierReporterWithFilingNumberSupport(FunctionalTestCase):
 
     @browsing
     def test_report_appends_filing_fields(self, browser):
-        pass
         browser.login().open(view='dossier_report',
                              data={'paths:list': [
                                    '/'.join(self.dossier.getPhysicalPath()),
@@ -50,9 +46,9 @@ class TestDossierReporterWithFilingNumberSupport(FunctionalTestCase):
              u'Leitung',
              2012.0,
              1.0,
-             u'OG-Leitung-2012-1',
+             u'Client1-Leitung-2012-1',
              u'active',
-             u'OG / 1'],
+             u'Client1 / 1'],
             sheet.row_values(1))
 
 
@@ -60,8 +56,6 @@ class TestDossierReporter(FunctionalTestCase):
 
     def setUp(self):
         super(TestDossierReporter, self).setUp()
-        self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture').with_all_unit_setup())
 
         self.dossier1 = create(Builder('dossier')
                                .titled(u'Export1 Dossier')
@@ -93,7 +87,7 @@ class TestDossierReporter(FunctionalTestCase):
              u'01.12.2012',
              u'Test User (test_user_1_)',
              u'active',
-             u'OG / 1'],
+             u'Client1 / 1'],
             sheet.row_values(1))
         self.assertSequenceEqual(
             [u'Foo Dossier',
@@ -101,35 +95,35 @@ class TestDossierReporter(FunctionalTestCase):
              u'01.12.2012',
              u'Test User (test_user_1_)',
              u'active',
-             u'OG / 2'],
+             u'Client1 / 2'],
             sheet.row_values(2))
 
     def test_filing_no_year(self):
         self.assertEquals(
-            filing_no_year('OG-Leitung-2012-1'), 2012)
+            filing_no_year('Client1-Leitung-2012-1'), 2012)
         self.assertEquals(
             filing_no_year('Leitung'), None)
         self.assertEquals(
-            filing_no_year('OG-Direktion-2011-555'), 2011)
+            filing_no_year('Client1-Direktion-2011-555'), 2011)
         self.assertEquals(
             filing_no_year(None), None)
 
     def test_filing_no_number(self):
         self.assertEquals(
-            filing_no_number('OG-Leitung-2012-1'), 1)
+            filing_no_number('Client1-Leitung-2012-1'), 1)
         self.assertEquals(
             filing_no_number('Leitung'), None)
         self.assertEquals(
-            filing_no_number('OG-Direktion-2011-555'), 555)
+            filing_no_number('Client1-Direktion-2011-555'), 555)
         self.assertEquals(
             filing_no_number(None), None)
 
     def test_filing_no_filing(self):
         self.assertEquals(
-            filing_no_filing('OG-Leitung-2012-1'), 'Leitung')
+            filing_no_filing('Client1-Leitung-2012-1'), 'Leitung')
         self.assertEquals(
             filing_no_filing('Leitung'), 'Leitung')
         self.assertEquals(
-            filing_no_filing('OG-Direktion-2011-555'), 'Direktion')
+            filing_no_filing('Client1-Direktion-2011-555'), 'Direktion')
         self.assertEquals(
             filing_no_filing(None), None)

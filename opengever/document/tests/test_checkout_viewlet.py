@@ -7,11 +7,6 @@ from plone.app.testing import TEST_USER_ID
 
 class TestCheckedOutViewlet(FunctionalTestCase):
 
-    def setUp(self):
-        super(TestCheckedOutViewlet, self).setUp()
-
-        create(Builder('fixture').with_all_unit_setup())
-
     @browsing
     def test_viewlet_show_msg_when_document_is_checked_out(self, browser):
         document = create(Builder('document')

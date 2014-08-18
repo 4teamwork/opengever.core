@@ -1,18 +1,16 @@
-from Products.CMFPlone.interfaces import IPloneSiteRoot
 from ftw.testing import MockTestCase
-from opengever.ogds.base.interfaces import IClientConfiguration
-from plone.registry.interfaces import IRegistry
 from mocker import ANY
 from opengever.ogds.base.interfaces import IContactInformation
-from opengever.task.browser.transitioncontroller import \
-    ITaskTransitionController, TaskTransitionController
+from opengever.task.browser.transitioncontroller import ITaskTransitionController
+from opengever.task.browser.transitioncontroller import TaskTransitionController
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
+from Products.CMFPlone.interfaces import IPloneSiteRoot
 from xml.dom.minidom import parse
-from zope.interface import Interface
 from zope.app.component.hooks import setSite
-from zope.interface import alsoProvides
 from zope.component import getSiteManager
+from zope.interface import alsoProvides
+from zope.interface import Interface
 from zope.interface.verify import verifyClass
 import os.path
 
@@ -21,8 +19,7 @@ class TestTaskTransitionController(MockTestCase):
 
     def setUp(self):
         super(TestTaskTransitionController, self).setUp()
-        # we need to have a site root for making the get_client_id cachecky
-        # work.
+        # we need to have a site root for making the cachecky work.
         root = self.create_dummy(getSiteManager=getSiteManager,
                                  id='root')
         alsoProvides(root, IPloneSiteRoot)

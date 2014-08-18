@@ -59,6 +59,7 @@ class TestContactLabel(TestCase):
 
 
 class TestUserLabel(FunctionalTestCase):
+    use_default_fixture = False
 
     def setUp(self):
         super(TestUserLabel, self).setUp()

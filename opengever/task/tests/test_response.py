@@ -14,8 +14,8 @@ import urllib
 
 
 class TestResponse(FunctionalTestCase):
-
-    use_browser=True
+    use_browser = True
+    use_default_fixture = False
 
     def setUp(self):
         super(TestResponse, self).setUp()
