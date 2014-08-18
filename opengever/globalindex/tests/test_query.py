@@ -63,19 +63,53 @@ class TestTaskQueries(TestCase):
             [task2],
             Task.query.users_issued_tasks('tommy.hilfiger').all())
 
-    def test_task_by_id_returns_tasks_wich_match_the_given_intid_and_adminunit(self):
-        task1 = self.task(1, 'unita')
-        task2 = self.task(2, 'unita')
-        task3 = self.task(3, 'unitb')
-        task4 = self.task(3, 'unita')
+    def test_by_intid_with_existing_pair(self):
+        self.task(1, 'rr')
+        task2 = self.task(2, 'rr')
+        self.task(2, 'bd')
 
-        self.assertSequenceEqual(
-            [task1, task2, task4],
-            Task.query.tasks_by_id([1, 2, 3], self.admin_unit_a).all())
+        self.assertEquals(task2, Task.query.by_intid(2, 'rr'))
 
-        self.assertSequenceEqual(
-            [task3],
-            Task.query.tasks_by_id([1, 2, 3], self.admin_unit_b).all())
+    def test_by_intid_with_NOT_existing_pair_returns_none(self):
+        self.task(1, 'rr')
+
+        self.assertIsNone(None, Task.query.by_intid(1, 'bd'))
+
+    def test_task_by_oguid_returns_correct_task_with_oguid_instance_param(self):
+        task = self.task(1, 'unita')
+        self.task(2, 'unita')
+        self.task(1, 'unitb')
+
+        self.assertEqual(task, Task.query.by_oguid(task.oguid))
+
+    def test_task_by_oguid_returns_correct_task_with_string_param(self):
+        task = self.task(1, 'unita')
+        self.task(2, 'unitb')
+        self.task(1, 'unitb')
+
+        self.assertEqual(task, Task.query.by_oguid('unita:1'))
+
+    def test_task_by_oguid_returns_non_for_unknown_oguids(self):
+        self.assertIsNone(Task.query.by_oguid('theanswer:42'))
+
+    def test_py_path(self):
+        task1 = self.task(1, 'unita', physical_path='test/task-1/')
+        self.task(2, 'unitb', physical_path='test/task-1/')
+
+        self.assertEquals(task1, Task.query.by_path('test/task-1/', 'unita'))
+
+    def test_py_path_returns_none_for_not_existing_task(self):
+        self.task(2, 'unitb', physical_path='test/task-1/')
+
+        self.assertEquals(None, Task.query.by_path('test/task-1/', 'unita'))
+
+    def test_by_ids_returns_tasks_wich_match_the_given_id(self):
+        task1 = self.task(1, 'unita', task_id=55)
+        task2 = self.task(2, 'unita', task_id=56)
+        task3 = self.task(3, 'unita', task_id=58)
+
+        self.assertEquals([task1, task3],
+                          Task.query.by_ids([55, 58]))
 
     def test_all_admin_unit_tasks_list_tasks_assigned_to_a_current_admin_units_org_unit(self):
         task1 = self.task(1, 'unita', assigned_org_unit='rr')

@@ -1,6 +1,5 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from opengever.globalindex.interfaces import ITaskQuery
 from opengever.task.adapters import IResponseContainer
 from opengever.task.browser.modify_deadline import ModifyDeadlineFormView
 from opengever.task.interfaces import IDeadlineModifier
@@ -8,8 +7,6 @@ from opengever.task.interfaces import ISuccessorTaskController
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 from zExceptions import Unauthorized
-from zope.component import getUtility
-from zope.intid.interfaces import IIntIds
 import datetime
 
 
@@ -64,11 +61,7 @@ class TestDeadlineModificationForm(FunctionalTestCase):
 
         self._change_deadline(task, datetime.date(2013, 10, 1), '')
 
-        query = getUtility(ITaskQuery)
-        intids = getUtility(IIntIds)
-
-        sql_task = query.get_task(intids.getId(task), 'client1')
-        self.assertEquals(sql_task.deadline, datetime.date(2013, 10, 1))
+        self.assertEquals(task.get_sql_object().deadline, datetime.date(2013, 10, 1))
 
     def test_according_response_is_created_when_modify_deadline(self):
         task = create(Builder('task')

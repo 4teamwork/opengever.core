@@ -1,4 +1,4 @@
-from opengever.globalindex.interfaces import ITaskQuery
+from opengever.globalindex.model.task import Task
 from opengever.ogds.base.utils import get_current_admin_unit
 from Products.CMFCore.utils import getToolByName
 from zope.component import getUtility
@@ -25,9 +25,3 @@ def obj2brain(obj):
 def index_data_for(obj):
     catalog = getToolByName(obj, 'portal_catalog')
     return catalog.getIndexDataForRID(obj2brain(obj).getRID())
-
-
-def task2sqltask(obj):
-    query = getUtility(ITaskQuery)
-    return query.get_task(
-        getUtility(IIntIds).getId(obj), get_current_admin_unit().id())

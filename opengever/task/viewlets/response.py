@@ -1,6 +1,6 @@
 from five import grok
 from opengever.base.browser.helper import get_css_class
-from opengever.globalindex.interfaces import ITaskQuery
+from opengever.globalindex.model.task import Task
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.task import _
@@ -97,8 +97,7 @@ class ResponseView(grok.Viewlet, Base):
         except AttributeError:
             return None
         if response.successor_oguid:
-            query = getUtility(ITaskQuery)
-            return query.get_task_by_oguid(response.successor_oguid)
+            return Task.query.by_oguid(response.successor_oguid)
         else:
             return None
 

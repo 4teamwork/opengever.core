@@ -3,24 +3,23 @@ the parts of the wizard where the user is able to instantly create a new
 dossier where the task is then filed.
 """
 
-from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
-from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.source import RepositoryPathSourceBinder
-from opengever.globalindex.interfaces import ITaskQuery
+from opengever.globalindex.model.task import Task
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.task import _
 from opengever.task.browser.accept.main import AcceptWizardFormMixin
-from opengever.task.browser.accept.utils import \
-    accept_forwarding_with_successor
+from opengever.task.browser.accept.utils import accept_forwarding_with_successor
 from opengever.task.browser.accept.utils import accept_task_with_successor
 from opengever.task.browser.accept.utils import assign_forwarding_to_dossier
 from plone.dexterity.i18n import MessageFactory as dexterityMF
 from plone.dexterity.i18n import MessageFactory as pd_mf
 from plone.directives.form import Schema
 from plone.z3cform.layout import FormWrapper
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
 from z3c.form.form import Form
@@ -34,7 +33,8 @@ from zope.i18nmessageid import MessageFactory
 from zope.interface import Interface
 from zope.interface import Invalid
 from zope.schema.interfaces import IContextSourceBinder
-from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
+from zope.schema.vocabulary import SimpleTerm
+from zope.schema.vocabulary import SimpleVocabulary
 import urllib
 
 
@@ -408,8 +408,7 @@ class DossierAddFormView(FormWrapper, grok.View):
         # accepted with this wizard.
         title_key = 'form.widgets.IOpenGeverBase.title'
 
-        query = getUtility(ITaskQuery)
-        task = query.get_task_by_oguid(oguid)
+        task = Task.query.by_oguid(oguid)
 
         if not task.is_forwarding:
             if self.request.form.get(title_key, None) is None:

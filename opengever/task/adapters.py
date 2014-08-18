@@ -1,7 +1,7 @@
 from AccessControl import getSecurityManager
 from DateTime import DateTime
 from five import grok
-from opengever.globalindex.interfaces import ITaskQuery
+from opengever.globalindex.model.task import Task
 from opengever.ogds.base.actor import Actor
 from opengever.task.response_description import ResponseDescription
 from opengever.task.task import ITask
@@ -11,7 +11,6 @@ from zope.annotation.interfaces import IAnnotations
 from zope.app.container.contained import ObjectAddedEvent
 from zope.app.container.contained import ObjectRemovedEvent
 from zope.app.container.interfaces import UnaddableError
-from zope.component import getUtility
 from zope.event import notify
 from zope.interface import Attribute
 from zope.interface import implements
@@ -165,8 +164,7 @@ class Response(Persistent):
             return None
 
         if self.successor_oguid:
-            query = getUtility(ITaskQuery)
-            return query.get_task_by_oguid(self.successor_oguid)
+            return Task.query.by_oguid(self.successor_oguid)
         else:
             return None
 
