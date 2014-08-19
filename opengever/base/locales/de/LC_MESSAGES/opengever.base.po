@@ -332,7 +332,7 @@ msgstr "erweiterte Suche"
 #. Default ""
 #: opengever/repository/classification.py
 msgid "unchecked"
-msgstr "Noch nicht geprüft"
+msgstr "Nicht geprüft"
 
 #. Default: "unprotected"
 #: opengever/repository/classification.py

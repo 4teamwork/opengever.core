@@ -16,12 +16,14 @@ CLASSIFICATION_MAPPING = {u"Nicht klassifiziert": 'unprotected',
                           u'Geheim': 'classified'
                           }
 
-PUBLIC_TRIAL_MAPPING = {u"Noch nicht geprüft": 'unchecked',
+PUBLIC_TRIAL_MAPPING = {u"Nicht geprüft": 'unchecked',
+                        u"Noch nicht geprüft": 'unchecked',
                         u"Öffentlich": 'public',
                         u'Nicht öffentlich': 'private'
                         }
 
-ARCHIVAL_VALUE_MAPPING = {u'Noch nicht geprüft': u'unchecked',
+ARCHIVAL_VALUE_MAPPING = {u'Nicht geprüft': u'unchecked',
+                          u"Noch nicht geprüft": u'unchecked',
                           u'Anbieten': u'prompt',
                           u'Archivwürdig': u'archival worthy',
                           u'Nicht archivwürdig': u'not archival worthy',
