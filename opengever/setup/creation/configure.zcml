@@ -15,4 +15,19 @@
         handler="opengever.setup.creation.setuphandler.unit_creation">
     </genericsetup:importStep>
 
+   <include package="ftw.inflator" />
+   <configure package="ftw.inflator.creation">
+     <genericsetup:importStep
+         name="ftw.inflator.content_creation"
+         title="ftw.inflator: content creation"
+         description="Generic content creation from content_creation/*.json files."
+         handler="ftw.inflator.creation.setuphandler.content_creation">
+       <depends name="opengever.setup.unit_creation"/>
+       <depends name="typeinfo"/>
+       <depends name="workflow"/>
+       <depends name="languagetool"
+                zcml:condition="installed plone.app.multilingual"/>
+     </genericsetup:importStep>
+   </configure>
+
 </configure>
