@@ -185,8 +185,8 @@ class TaskTransitionController(BrowserView):
         """
 
         if not conditions.is_responsible:
-            if (not include_agency or
-                not conditions.is_responsible_orgunit_agency_member):
+            if not include_agency or \
+               not conditions.is_responsible_orgunit_agency_member:
 
                 return False
 
@@ -235,8 +235,8 @@ class TaskTransitionController(BrowserView):
         """
 
         if not conditions.is_responsible:
-            if (not include_agency or
-                not conditions.is_responsible_orgunit_agency_member):
+            if not include_agency or \
+               not conditions.is_responsible_orgunit_agency_member:
 
                 return False
 
