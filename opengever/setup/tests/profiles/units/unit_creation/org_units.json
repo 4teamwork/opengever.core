@@ -1,6 +1,6 @@
 [
   {
-    "unit_id": "org",
+    "client_id": "org",
     "title": "My cool new org unit",
     "admin_unit_id": "admin"
   }

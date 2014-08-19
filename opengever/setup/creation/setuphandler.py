@@ -38,7 +38,9 @@ class UnitCreation(object):
                 os.path.join(self.path, ORG_UNIT_FILENAME))
 
     def create_admin_units(self, path):
-        AdminUnitCreator(path).run()
+        with open(path) as jsonfile:
+            AdminUnitCreator().run(jsonfile)
 
     def create_org_units(self, path):
-        OrgUnitCreator(path).run()
+        with open(path) as jsonfile:
+            OrgUnitCreator().run(jsonfile)

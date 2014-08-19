@@ -4,8 +4,6 @@ from opengever.setup.creation.unit import UnitCreator
 
 class AdminUnitCreator(UnitCreator):
 
-    def create_unit(self, item):
-        self.session.add(AdminUnit(
-            unit_id=item['unit_id'],
-            title=item['title'],
-            ))
+    item_name = 'AdminUnit'
+    item_class = AdminUnit
+    required_attributes = ('unit_id',)
