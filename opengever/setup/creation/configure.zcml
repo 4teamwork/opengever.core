@@ -1,0 +1,18 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:transmogrifier="http://namespaces.plone.org/transmogrifier"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    i18n_domain="opengever.setup">
+
+    <include package="collective.transmogrifier" file="meta.zcml" />
+
+    <genericsetup:importStep
+        name="opengever.setup.unit_creation"
+        title="opengever.setup: unit creation"
+        description="Create Admin-Units and/or Org-Units."
+        handler="opengever.setup.creation.setuphandler.unit_creation">
+    </genericsetup:importStep>
+
+</configure>
