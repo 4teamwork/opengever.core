@@ -37,6 +37,9 @@ Changelog
   - Customized document default view in order to render `file`
     field in NO_DOWNLOAD_DISPLAY_MODE.
     [lgraf]
+  - Changed German wording for value `unchecked` for both public_trial and archival_value:
+    "Noch nicht geprüft" -> "Nicht geprüft"
+    [lgraf]
 
 
 - Changes to journaling:
