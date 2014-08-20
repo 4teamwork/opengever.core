@@ -515,46 +515,6 @@ class TaskTransitionController(BrowserView):
 
         return functions
 
-    def _isissuer_2(self, include_inbox_group=False):
-        """Checks if the current user is the issuer of the
-        current task(current context)"""
-
-        info = getUtility(IContactInformation)
-
-        if not info.is_inbox(self.context.issuer):
-            member_id = getMultiAdapter((self.context, self.request),
-                name='plone_portal_state').member().id
-            if member_id == self.context.issuer:
-                return True
-            elif include_inbox_group and self._is_issuer_inbox_group_user():
-                return True
-            else:
-                return False
-
-        else:
-            inbox_groupid = info.get_groupid_of_inbox(self.context.issuer)
-            return info.is_group_member(
-                inbox_groupid,
-                getMultiAdapter((self.context, self.request),
-                                name='plone_portal_state').member().id
-                )
-
-    def _is_issuer(self):
-        actor = self.context.get_issuer_actor()
-        return actor.correspond_to(ogds_service().fetch_current_user())
-
-    def _is_issuing_inbox_member(self):
-        current_user = ogds_service().fetch_current_user()
-        inbox = self.context.get_issuing_org_unit().inbox()
-
-        return current_user in inbox.assigned_users()
-
-    def _is_issuer_or_inbox_group_user(self):
-        """Checks if the current user is the issuer of the
-        current task(current context) or a user of the current inbox group"""
-
-        return self._is_issuer_2(include_inbox_group=True)
-
     def _is_responsible(self):
         """Checks if the current user is the issuer of the
         current task(current context)"""
