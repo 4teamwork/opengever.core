@@ -1,7 +1,7 @@
 from Products.CMFCore.utils import getToolByName
 
-# The profile id of your package:
-PROFILE_ID = 'profile-opengever.base:default'
+
+DEFAULT_EXTEDIT_ACTION_IDENTIFIER = 'extedit'
 
 
 def remove_action_from_category(context, category, action_id):
@@ -18,14 +18,9 @@ def remove_action_from_category(context, category, action_id):
 def remove_standard_extedit_action(context):
     """Remove the ``extedit`` action (Products.CMFPlone) from document_actions.
     """
-    remove_action_from_category(context, 'document_actions', 'extedit')
+    remove_action_from_category(context, 'document_actions',
+                                DEFAULT_EXTEDIT_ACTION_IDENTIFIER)
 
 
-def import_various(context):
-    """Import step for configuration that is not handled in xml files.
-    """
-    if context.readDataFile('opengever.base_various.txt') is None:
-        return
-
-    site = context.getSite()
+def installed(site):
     remove_standard_extedit_action(site)
