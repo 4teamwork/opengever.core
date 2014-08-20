@@ -61,7 +61,7 @@ class TestOrgUnitCreator(BaseTestUnitCreator):
     @property
     def data_with_all_required_attrs(self):
         return {
-            'client_id': 'foo',
+            'unit_id': 'foo',
             'admin_unit_id': 'bar',
             'users_group_id': 'users',
             'inbox_group_id': 'users',
@@ -72,7 +72,7 @@ class TestOrgUnitCreator(BaseTestUnitCreator):
 
     def test_fails_when_client_id_is_not_specified(self):
         data = self.data_with_all_required_attrs
-        del data['client_id']
+        del data['unit_id']
         self.assertRaises(GeverSetupException, self.create_org_unit_for, data)
 
     def test_fails_when_admin_unit_id_is_not_specified(self):
@@ -107,7 +107,7 @@ class TestOrgUnitCreator(BaseTestUnitCreator):
         create(Builder('ogds_group').id('users'))
 
         attributes = {
-            "client_id": 'org',
+            "unit_id": 'org',
             "title": "My cool new org unit",
             "enabled": False,
             "ip_address": "1.2.3.4",
@@ -119,6 +119,9 @@ class TestOrgUnitCreator(BaseTestUnitCreator):
         }
         self.create_org_unit_for([attributes])
         client = self.service.fetch_org_unit('org')._client
+
+        attributes['client_id'] = attributes['unit_id']
+        del attributes['unit_id']
 
         for attribute, value in attributes.items():
             self.assertEqual(value, getattr(client, attribute),

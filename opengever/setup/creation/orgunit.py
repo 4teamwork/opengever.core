@@ -8,15 +8,16 @@ class OrgUnitCreator(UnitCreator):
 
     item_name = 'OrgUnit'
     item_class = Client
-    required_attributes = ('client_id',
+    required_attributes = ('unit_id',
                            'admin_unit_id',
                            'users_group_id',
                            'inbox_group_id')
+    key_mapping = {'unit_id': 'client_id'}
 
     def check_constraints(self, item):
         super(OrgUnitCreator, self).check_constraints(item)
 
-        org_unit_id = item['client_id']
+        org_unit_id = item['unit_id']
         admin_unit_id = item['admin_unit_id']
 
         self.check_admin_unit_id(admin_unit_id, org_unit_id)
