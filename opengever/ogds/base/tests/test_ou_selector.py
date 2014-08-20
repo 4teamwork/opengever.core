@@ -1,7 +1,6 @@
 from opengever.ogds.base.ou_selector import CURRENT_ORG_UNIT_KEY
 from opengever.ogds.base.ou_selector import NullOrgUnit
 from opengever.ogds.base.ou_selector import OrgUnitSelector
-from opengever.ogds.models.client import Client
 from opengever.ogds.models.org_unit import OrgUnit
 import inspect
 import unittest2
@@ -10,13 +9,9 @@ import unittest2
 class TestOrgUnitSelector(unittest2.TestCase):
 
     def setUp(self):
-        client_a = Client('clienta', title="Client A")
-        client_b = Client('clientb', title="Client B")
-        client_c = Client('clientc', title="Client C")
-
-        self.unit_a = OrgUnit(client_a)
-        self.unit_b = OrgUnit(client_b)
-        self.unit_c = OrgUnit(client_c)
+        self.unit_a = OrgUnit('clienta', title="Client A")
+        self.unit_b = OrgUnit('clientb', title="Client B")
+        self.unit_c = OrgUnit('clientc', title="Client C")
 
     def test_raise_value_error_when_callig_without_empty_unit_list(self):
         with self.assertRaises(ValueError) as cm:

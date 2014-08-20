@@ -58,7 +58,7 @@
       <implements interface="opengever.ogds.base.interfaces.IUser" />
   </class>
 
-  <class class="opengever.ogds.models.client.Client">
+  <class class="opengever.ogds.models.org_unit.OrgUnit">
       <implements interface="opengever.ogds.base.interfaces.IClient" />
   </class>
 

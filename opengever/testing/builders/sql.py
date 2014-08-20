@@ -6,7 +6,6 @@ from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.utils import create_session
 from opengever.ogds.base.utils import get_ou_selector
 from opengever.ogds.models.admin_unit import AdminUnit
-from opengever.ogds.models.client import Client
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.org_unit import OrgUnit
 from opengever.ogds.models.user import User
@@ -106,8 +105,8 @@ builder_registry.register('admin_unit', AdminUnitBuilder)
 
 class OrgUnitBuilder(SqlObjectBuilder):
 
-    mapped_class = Client
-    id_argument_name = 'client_id'
+    mapped_class = OrgUnit
+    id_argument_name = 'unit_id'
 
     def __init__(self, session):
         super(OrgUnitBuilder, self).__init__(session)
