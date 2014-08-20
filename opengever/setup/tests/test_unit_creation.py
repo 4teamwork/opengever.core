@@ -1,5 +1,6 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.ogds.base.utils import ogds_service
-from opengever.ogds.models.admin_unit import AdminUnit
 from opengever.setup.creation.adminunit import AdminUnitCreator
 from opengever.setup.creation.orgunit import OrgUnitCreator
 from opengever.setup.exception import GeverSetupException
@@ -57,48 +58,54 @@ class TestAdminUnitCreator(BaseTestUnitCreator):
 
 class TestOrgUnitCreator(BaseTestUnitCreator):
 
+    @property
+    def data_with_all_required_attrs(self):
+        return {
+            'client_id': 'foo',
+            'admin_unit_id': 'bar',
+            'users_group_id': 'users',
+            'inbox_group_id': 'users',
+        }
+
     def create_org_unit_for(self, data):
         OrgUnitCreator().run(self.as_file(data))
 
-    def test_client_id_required(self):
-        self.assertRaises(
-            GeverSetupException,
-            self.create_org_unit_for,
-            [
-                {
-                    "title": "My cool new admin unit",
-                    "admin_unit_id": "foo"
-                }
-            ],
-        )
+    def test_fails_when_client_id_is_not_specified(self):
+        data = self.data_with_all_required_attrs
+        del data['client_id']
+        self.assertRaises(GeverSetupException, self.create_org_unit_for, data)
 
-    def test_admin_unit_id_required(self):
-        self.assertRaises(
-            GeverSetupException,
-            self.create_org_unit_for,
-            [
-                {
-                    "client_id": "foo",
-                    "title": "My cool new admin unit"
-                }
-            ],
-        )
+    def test_fails_when_admin_unit_id_is_not_specified(self):
+        data = self.data_with_all_required_attrs
+        del data['admin_unit_id']
+        self.assertRaises(GeverSetupException, self.create_org_unit_for, data)
 
-    def test_admin_unit_required(self):
-        self.assertRaises(
-            GeverSetupException,
-            self.create_org_unit_for,
-            [
-                {
-                    "client_id": "foo",
-                    "title": "My cool new admin unit",
-                    "admin_unit_id": "foo"
-                }
-            ],
-        )
+    def test_fails_when_uses_group_id_is_not_specified(self):
+        data = self.data_with_all_required_attrs
+        del data['users_group_id']
+        self.assertRaises(GeverSetupException, self.create_org_unit_for, data)
+
+    def test_fails_when_inbox_group_id_is_not_specified(self):
+        data = self.data_with_all_required_attrs
+        del data['inbox_group_id']
+        self.assertRaises(GeverSetupException, self.create_org_unit_for, data)
+
+    def test_fails_when_admin_unit_does_not_exist(self):
+        create(Builder('ogds_group').id('users'))
+
+        data = self.data_with_all_required_attrs
+        self.assertRaises(GeverSetupException, self.create_org_unit_for, data)
+
+    def test_fails_when_group_does_not_exist(self):
+        create(Builder('admin_unit').id('bar'))
+
+        data = self.data_with_all_required_attrs
+        self.assertRaises(GeverSetupException, self.create_org_unit_for, data)
 
     def test_attributes_are_set(self):
-        self.session.add(AdminUnit(unit_id="admin"))
+        create(Builder('admin_unit').id('admin'))
+        create(Builder('ogds_group').id('users'))
+
         attributes = {
             "client_id": 'org',
             "title": "My cool new org unit",
@@ -106,7 +113,9 @@ class TestOrgUnitCreator(BaseTestUnitCreator):
             "ip_address": "1.2.3.4",
             "site_url": "http://example.com",
             "public_url": "http://example.com/public",
-            "admin_unit_id": "admin"
+            "admin_unit_id": "admin",
+            'users_group_id': 'users',
+            'inbox_group_id': 'users',
         }
         self.create_org_unit_for([attributes])
         client = self.service.fetch_org_unit('org')._client
@@ -114,4 +123,3 @@ class TestOrgUnitCreator(BaseTestUnitCreator):
         for attribute, value in attributes.items():
             self.assertEqual(value, getattr(client, attribute),
                              "invalid: '{}'".format(attribute))
-

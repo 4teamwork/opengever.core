@@ -8,13 +8,31 @@ class OrgUnitCreator(UnitCreator):
 
     item_name = 'OrgUnit'
     item_class = Client
-    required_attributes = ('client_id', 'admin_unit_id')
+    required_attributes = ('client_id',
+                           'admin_unit_id',
+                           'users_group_id',
+                           'inbox_group_id')
 
     def check_constraints(self, item):
         super(OrgUnitCreator, self).check_constraints(item)
 
+        org_unit_id = item['client_id']
         admin_unit_id = item['admin_unit_id']
+
+        self.check_admin_unit_id(admin_unit_id, org_unit_id)
+        self.check_group_id(item['users_group_id'], org_unit_id)
+        self.check_group_id(item['inbox_group_id'], org_unit_id)
+
+    def check_admin_unit_id(self, admin_unit_id, org_unit_id):
         admin_unit = ogds_service().fetch_admin_unit(admin_unit_id)
         if admin_unit is None:
             raise GeverSetupException(
-                "Missing Admin-Unit {}".format(admin_unit_id))
+                "Missing Admin-Unit '{}'' while creating Org-Unit '{}'".format(
+                    admin_unit_id, org_unit_id))
+
+    def check_group_id(self, groupid, org_unit_id):
+        group = ogds_service().fetch_group(groupid)
+        if group is None:
+            raise GeverSetupException(
+                "Missing Group '{}'' while creating Org-Unit '{}'".format(
+                    groupid, org_unit_id))
