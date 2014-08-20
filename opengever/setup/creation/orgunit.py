@@ -1,5 +1,5 @@
 from opengever.ogds.base.utils import ogds_service
-from opengever.ogds.models.client import Client
+from opengever.ogds.models.org_unit import OrgUnit
 from opengever.setup.creation.unit import UnitCreator
 from opengever.setup.exception import GeverSetupException
 
@@ -7,7 +7,7 @@ from opengever.setup.exception import GeverSetupException
 class OrgUnitCreator(UnitCreator):
 
     item_name = 'OrgUnit'
-    item_class = Client
+    item_class = OrgUnit
     required_attributes = ('unit_id',
                            'admin_unit_id',
                            'users_group_id',
