@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2013-11-27 15:55+0000\n"
+"POT-Creation-Date: 2014-08-20 15:00+0000\n"
 "PO-Revision-Date: 2013-04-03 10:08+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./opengever/dossier/move_items.py:132
+#: ./opengever/dossier/move_items.py:136
 msgid "${copied_items} Elements were moved successfully"
 msgstr "${copied_items} Elemente wurden erfolgreich verschoben"
 
@@ -26,7 +26,7 @@ msgstr "Geschäftsdossier hinzufügen"
 msgid "Add Participant"
 msgstr "Beteiligung hinzufügen"
 
-#: ./opengever/dossier/behaviors/dossier.py:222
+#: ./opengever/dossier/behaviors/dossier.py:224
 msgid "Add Subdossier"
 msgstr "Subdossier hinzufügen"
 
@@ -47,15 +47,15 @@ msgstr "Report konnte nicht generiert werden."
 msgid "Delete"
 msgstr "Beteiligung löschen"
 
-#: ./opengever/dossier/move_items.py:90
+#: ./opengever/dossier/move_items.py:94
 msgid "Document ${name} is connected to a Task.                    Please move the Task."
 msgstr "Dokument ${name} ist mit einer Aufgabe verbunden, bitte Aufgabe verschieben."
 
-#: ./opengever/dossier/resolve.py:77
+#: ./opengever/dossier/resolve.py:80
 msgid "Dossiers successfully reactivated."
 msgstr "Das Dossier wurde erfolgreich wieder eröffnet."
 
-#: ./opengever/dossier/behaviors/dossier.py:237
+#: ./opengever/dossier/behaviors/dossier.py:245
 msgid "Edit Subdossier"
 msgstr "Subdossier bearbeiten"
 
@@ -64,19 +64,19 @@ msgstr "Subdossier bearbeiten"
 msgid "Export selection"
 msgstr "Auswahl exportieren"
 
-#: ./opengever/dossier/move_items.py:138
+#: ./opengever/dossier/move_items.py:142
 msgid "Failed to copy following objects: ${failed_objects}"
 msgstr "Folgende Elemente konnten nicht verschoben werden: ${failed_objects}"
 
-#: ./opengever/dossier/move_items.py:144
+#: ./opengever/dossier/move_items.py:148
 msgid "Failed to copy following objects: ${failed_objects}                    . Locked via WebDAV"
 msgstr ""
 
-#: ./opengever/dossier/move_items.py:185
+#: ./opengever/dossier/move_items.py:189
 msgid "It isn't allowed to add such items there"
 msgstr "Sie dürfen dieses Objekt nicht an den Zielort verschieben"
 
-#: ./opengever/dossier/resolve.py:82
+#: ./opengever/dossier/resolve.py:85
 msgid "It isn't possible to reactivate a sub dossier."
 msgstr "Es ist nicht möglich das Subdossier wieder zu eröffnen, das Hauptdossier muss wieder eröffnet werden."
 
@@ -88,7 +88,7 @@ msgstr "Elemente verschieben"
 msgid "Not all required fields are filled"
 msgstr "Nicht alle benötigten Felder wurden ausgefüllt."
 
-#: ./opengever/dossier/templatedossier.py:161
+#: ./opengever/dossier/templatedossier/form.py:119
 msgid "Not found the templatedossier"
 msgstr "Es sind keine Vorlagen vorhanden."
 
@@ -125,11 +125,11 @@ msgstr "Das Dossier wurde storniert."
 msgid "The Dossier has been resolved"
 msgstr "Das Dossier wurde erfolgreich abgeschlossen"
 
-#: ./opengever/dossier/resolve.py:43
+#: ./opengever/dossier/resolve.py:44
 msgid "The dossier ${dossier} has a invalid end_date"
 msgstr "Das Dossier ${dossier} hat ein ungültiges Enddatum."
 
-#: ./opengever/dossier/resolve.py:59
+#: ./opengever/dossier/resolve.py:61
 msgid "The dossier has been succesfully resolved"
 msgstr "Das Dossier wurde erfolgreich abgeschlossen."
 
@@ -149,11 +149,11 @@ msgstr "Das angegeben Ablagejahr ist ungültig."
 msgid "The start date must be before the end date."
 msgstr "Das Beginn-Datum muss vor dem Ende-Datum liegen."
 
-#: ./opengever/dossier/behaviors/dossier.py:244
+#: ./opengever/dossier/behaviors/dossier.py:252
 msgid "The start or end date is invalid"
 msgstr "Das Beginn- oder Ende-Datum ist ungültig."
 
-#: ./opengever/dossier/resolve.py:56
+#: ./opengever/dossier/resolve.py:57
 msgid "The subdossier has been succesfully resolved"
 msgstr "Das Subdossier wurde erfolgreich abgeschlossen."
 
@@ -161,7 +161,7 @@ msgstr "Das Subdossier wurde erfolgreich abgeschlossen."
 msgid "When the Action give filing number is selected,                         all fields are required."
 msgstr "Für die Vergabe der Ablagenummer, werden alle Felder benötigt."
 
-#: ./opengever/dossier/move_items.py:168
+#: ./opengever/dossier/move_items.py:172
 msgid "You have not selected any items"
 msgstr "Sie haben kein Element ausgewählt"
 
@@ -196,7 +196,7 @@ msgid "button_copy"
 msgstr "Kopieren"
 
 #. Default: "Move"
-#: ./opengever/dossier/move_items.py:60
+#: ./opengever/dossier/move_items.py:64
 msgid "button_submit"
 msgstr "Verschieben"
 
@@ -221,7 +221,7 @@ msgid "copy_documents_step_choose_dossier"
 msgstr "2. Zieldossier auswählen"
 
 #. Default: "create document with template"
-#: ./opengever/dossier/templatedossier.py:43
+#: ./opengever/dossier/templatedossier/form.py:30
 msgid "create_document_with_template"
 msgstr "Dokument aus Vorlage erstellen"
 
@@ -232,7 +232,7 @@ msgid "documents"
 msgstr "Dokumente"
 
 #. Default: "It isn't allowed to add such items there: ${failed_objects}"
-#: ./opengever/dossier/move_items.py:216
+#: ./opengever/dossier/move_items.py:220
 msgid "error_NotInContentTypes ${failed_objects}"
 msgstr "Es wurden keine Objekte verschoben. Folgende Objekte dürfen nicht in den Zielordner eingefügt werden: ${failed_objects}"
 
@@ -300,7 +300,7 @@ msgid "heading_archive_form"
 msgstr "Dossier ablegen"
 
 #. Default: "Move Items"
-#: ./opengever/dossier/move_items.py:51
+#: ./opengever/dossier/move_items.py:55
 msgid "heading_move_items"
 msgstr "Elemente verschieben"
 
@@ -321,7 +321,7 @@ msgid "help_container_type"
 msgstr "Art des Behälters, in dem ein Dossier in Papierform abgelegt ist"
 
 #. Default: "Live Search: search the Plone Site"
-#: ./opengever/dossier/move_items.py:25
+#: ./opengever/dossier/move_items.py:26
 msgid "help_destination"
 msgstr "Live Search: Durchsuchen Sie diesen Mandanten"
 
@@ -399,7 +399,7 @@ msgid "label_add_participant"
 msgstr "Beteiligung hinzufügen"
 
 #. Default: "by ${author}"
-#: ./opengever/dossier/project_templates/byline.pt:14
+#: ./opengever/dossier/project_templates/byline.pt:10
 msgid "label_by_author"
 msgstr "Federführend: ${author}"
 
@@ -424,22 +424,22 @@ msgid "label_container_type"
 msgstr "Behältnis-Art"
 
 #. Default: "Creator"
-#: ./opengever/dossier/templatedossier.py:184
+#: ./opengever/dossier/templatedossier/form.py:143
 msgid "label_creator"
 msgstr "Erstellt von"
 
 #. Default: "Destination"
-#: ./opengever/dossier/move_items.py:24
+#: ./opengever/dossier/move_items.py:25
 msgid "label_destination"
 msgstr "Zielposition / Zieldossier"
 
 #. Default: "Edit after creation"
-#: ./opengever/dossier/templatedossier_templates/template_form.pt:48
+#: ./opengever/dossier/templatedossier/form_templates/template_form.pt:48
 msgid "label_edit_after_creation"
 msgstr "Nach dem Hinzufügen bearbeiten"
 
 #. Default: "E-Mail"
-#: ./opengever/dossier/viewlets/byline.py:75
+#: ./opengever/dossier/viewlets/byline.py:76
 msgid "label_email_address"
 msgstr "E-Mail"
 
@@ -450,9 +450,9 @@ msgstr "E-Mail"
 msgid "label_end"
 msgstr "Ende"
 
-#. Default: "to:"
-#: ./opengever/dossier/project_templates/byline.pt:42
-#: ./opengever/dossier/viewlets/byline.py:56
+#. Default: "to"
+#: ./opengever/dossier/project_templates/byline.pt:38
+#: ./opengever/dossier/viewlets/byline.py:57
 msgid "label_end_byline"
 msgstr "Ende"
 
@@ -477,7 +477,7 @@ msgid "label_keywords"
 msgstr "Schlagworte"
 
 #. Default: "Modified"
-#: ./opengever/dossier/templatedossier.py:187
+#: ./opengever/dossier/templatedossier/form.py:146
 msgid "label_modified"
 msgstr "Zuletzt Bearbeitet"
 
@@ -499,7 +499,7 @@ msgstr "Beteiligung"
 #. Default: "Reference Number"
 #: ./opengever/dossier/behaviors/dossier.py:177
 #: ./opengever/dossier/browser/report.py:50
-#: ./opengever/dossier/viewlets/byline.py:68
+#: ./opengever/dossier/viewlets/byline.py:69
 msgid "label_reference_number"
 msgstr "Aktenzeichen"
 
@@ -526,7 +526,7 @@ msgid "label_roles"
 msgstr "Rollen"
 
 #. Default: "Sequence Number"
-#: ./opengever/dossier/viewlets/byline.py:62
+#: ./opengever/dossier/viewlets/byline.py:63
 msgid "label_sequence_number"
 msgstr "Laufnummer"
 
@@ -541,9 +541,9 @@ msgstr "Ziel-Mandant"
 msgid "label_start"
 msgstr "Beginn"
 
-#. Default: "from:"
-#: ./opengever/dossier/project_templates/byline.pt:33
-#: ./opengever/dossier/viewlets/byline.py:50
+#. Default: "from"
+#: ./opengever/dossier/project_templates/byline.pt:29
+#: ./opengever/dossier/viewlets/byline.py:51
 msgid "label_start_byline"
 msgstr "Beginn"
 
@@ -553,20 +553,20 @@ msgid "label_target_dossier"
 msgstr "Ziel-Dossier"
 
 #. Default: "Template"
-#: ./opengever/dossier/templatedossier_templates/template_form.pt:21
+#: ./opengever/dossier/templatedossier/form_templates/template_form.pt:21
 msgid "label_template"
 msgstr "Vorlage"
 
 #. Default: "title"
 #: ./opengever/dossier/browser/report.py:33
-#: ./opengever/dossier/templatedossier.py:180
-#: ./opengever/dossier/templatedossier_templates/template_form.pt:30
+#: ./opengever/dossier/templatedossier/form.py:139
+#: ./opengever/dossier/templatedossier/form_templates/template_form.pt:30
 msgid "label_title"
 msgstr "Titel"
 
-#. Default: "State:"
-#: ./opengever/dossier/project_templates/byline.pt:26
-#: ./opengever/dossier/viewlets/byline.py:44
+#. Default: "State"
+#: ./opengever/dossier/project_templates/byline.pt:22
+#: ./opengever/dossier/viewlets/byline.py:45
 msgid "label_workflow_state"
 msgstr "Status"
 
@@ -580,15 +580,15 @@ msgstr "Neuste Aufgaben"
 msgid "no_content"
 msgstr "Keine Inhalte"
 
-#: ./opengever/dossier/resolve.py:10
+#: ./opengever/dossier/resolve.py:11
 msgid "not all documents and tasks are stored in a subdossier"
 msgstr "Es sind nicht alle Dokumente und Aufgaben in Subdossiers abgelegt."
 
-#: ./opengever/dossier/resolve.py:12
+#: ./opengever/dossier/resolve.py:13
 msgid "not all documents are checked in"
 msgstr "Es sind nicht alle Dokumente eingecheckt"
 
-#: ./opengever/dossier/resolve.py:13
+#: ./opengever/dossier/resolve.py:14
 msgid "not all task are closed"
 msgstr "Es sind nicht alle Aufgaben abgeschlossen"
 
@@ -599,7 +599,7 @@ msgstr "Nur abschliessen (keine Ablagenummer vergeben)"
 msgid "participants"
 msgstr "Beteiligte"
 
-#: ./opengever/dossier/templatedossier_templates/template_form.pt:23
+#: ./opengever/dossier/templatedossier/form_templates/template_form.pt:23
 msgid "required"
 msgstr "erforderlich"
 
@@ -637,12 +637,12 @@ msgstr "Aufgaben"
 msgid "temporary_former_reference_number"
 msgstr ""
 
-#: ./opengever/dossier/resolve.py:14
+#: ./opengever/dossier/resolve.py:15
 msgid "the dossier start date is missing."
 msgstr "Es wurde kein Beginn-Datum gesetzt."
 
 #. Default: "expired"
-#: ./opengever/dossier/project_templates/byline.pt:51
+#: ./opengever/dossier/project_templates/byline.pt:47
 msgid "time_expired"
 msgstr "abgelaufen"
 

@@ -1,6 +1,6 @@
 from five import grok
 from opengever.dossier.filing.interfaces import IFilingNumberActivatedLayer
-from opengever.tabbedview import _
+from opengever.dossier import _
 from opengever.tabbedview.browser.tabs import Dossiers
 from opengever.tabbedview.browser.tabs import SubDossiers
 
