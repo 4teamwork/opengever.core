@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<import-steps>
-  <import-step id="opengever.examplecontent.various"
-               version="20103009-01"
-               handler="opengever.examplecontent.setuphandlers.setupVarious"
-               title="Example content for OpenGever">
-    Import steps that start the whole transmogrify csv import.
-  </import-step>
-</import-steps>

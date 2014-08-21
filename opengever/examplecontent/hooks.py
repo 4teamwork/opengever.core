@@ -1,6 +1,7 @@
 from collective.transmogrifier.transmogrifier import Transmogrifier
 import transaction
 
+
 def start_import(context):
     transmogrifier = Transmogrifier(context)
 
@@ -13,8 +14,6 @@ def start_import(context):
     transmogrifier(u'opengever.examplecontent.contacts')
     transaction.commit()
 
-def setupVarious(setup):
-    if setup.readDataFile('opengever.examplecontent.txt') is None:
-        return
-    site = setup.getSite()
+
+def installed(site):
     start_import(site)
