@@ -4,17 +4,17 @@ from ftw.builder.testing import functional_session_factory
 from ftw.builder.testing import set_builder_session_factory
 from ftw.testing import ComponentRegistryLayer
 from opengever.globalindex import model
-from opengever.ogds.base.setuphandlers import create_sql_tables
+from opengever.ogds.base.setup import create_sql_tables
 from opengever.ogds.base.utils import create_session
 from opengever.ogds.models import BASE
+from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import IntegrationTesting
 from plone.app.testing import PLONE_FIXTURE
 from plone.app.testing import PloneSandboxLayer
-from plone.app.testing import TEST_USER_ID
-from plone.app.testing import applyProfile
 from plone.app.testing import ploneSite
 from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
 from plone.testing import z2
 from zope.configuration import xmlconfig
 from zope.sqlalchemy import datamanager
@@ -78,8 +78,8 @@ class OpengeverFixture(PloneSandboxLayer):
 
     def setUpZope(self, app, configurationContext):
         # do not install pas plugins (doesnt work in tests)
-        from opengever.ogds.base import setuphandlers
-        setuphandlers.setup_scriptable_plugin = lambda *a, **kw: None
+        from opengever.ogds.base import hooks
+        hooks._setup_scriptable_plugin = lambda *a, **kw: None
 
         xmlconfig.string(
             '<configure xmlns="http://namespaces.zope.org/zope">'
