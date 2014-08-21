@@ -8,28 +8,27 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     i18n_domain="opengever.dossier">
 
-    <!-- Grok the package to initialise schema interfaces and content classes -->
-    <grok:grok package="." />
+  <!-- Grok the package to initialise schema interfaces and content classes -->
+  <grok:grok package="." />
 
-    <!-- vdex vocabularies folder -->
-    <vdex:vocabulary directory="vdexvocabs" />
+  <!-- vdex vocabularies folder -->
+  <vdex:vocabulary directory="vdexvocabs" />
 
-    <include package=".viewlets" />
-    <include package=".upgrades" />
-    <include package=".filing" />
+  <include package=".viewlets" />
+  <include package=".upgrades" />
+  <include package=".filing" />
+  <include package=".browser" />
 
-    <include file="behaviors.zcml" />
-    <include file="profiles.zcml" />
+  <include file="behaviors.zcml" />
+  <include file="profiles.zcml" />
+  <include file="permissions.zcml" />
 
-    <i18n:registerTranslations directory="locales" />
+  <i18n:registerTranslations directory="locales" />
 
-	<adapter
-		factory=".move_items.DestinationValidator"
-	    provides="z3c.form.interfaces.IValidator"
-	    />
-    <!-- Include custom permissions -->
-    <include file="permissions.zcml" />
-
+  <adapter
+      factory=".move_items.DestinationValidator"
+      provides="z3c.form.interfaces.IValidator"
+      />
 
   <browser:page
       for="*"
@@ -37,6 +36,5 @@
       class=".filing_maintenance.FilingNumberMaintenance"
       allowed_interface="opengever.dossier.interfaces.IFilingNumberMaintenance"
       permission="cmf.ManagePortal" />
-
 
 </configure>
