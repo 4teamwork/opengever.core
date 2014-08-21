@@ -6,6 +6,8 @@ Changelog
 
 - General fixes:
 
+  - Fixed translation for filing_number column in dossier listings.
+    [phgross]
   - Fixed unicode decode bug in task overview.
     [lknoepfel]
   - OGQuickUploadCapableFileFactory: Set default values before adding content to container.
