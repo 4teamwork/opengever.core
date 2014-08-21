@@ -44,6 +44,8 @@ Changelog
   - Changed German wording for value `unchecked` for both public_trial and archival_value:
     "Noch nicht geprüft" -> "Nicht geprüft"
     [lgraf]
+  - Change german wording for descriptions of `public_trial` and `public_trial_statement`
+    [lgraf]
 
 
 - Changes to journaling:
