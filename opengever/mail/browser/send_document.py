@@ -285,7 +285,8 @@ class SendDocumentForm(form.Form):
             maintype, subtype = obj_file.contentType.split('/', 1)
             part = MIMEBase(maintype, subtype)
             part.set_payload(obj_file.data)
-            Encoders.encode_base64(part)
+            if mimetype != 'message/rfc822':
+                Encoders.encode_base64(part)
             part.add_header('Content-Disposition', 'attachment; filename="%s"'
                             % obj_file.filename)
             attachment_parts.append(part)
