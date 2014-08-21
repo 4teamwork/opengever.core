@@ -132,6 +132,11 @@ f\xc3\xbcr Ernst Franz\r\n\r\nBesten Dank im Voraus"""
         mail = self.send_documents(dossier, mails)
         self.assert_attachment(mail, 'testmail.eml', 'message/rfc822')
 
+        attachment = mail.get_payload()[1].get_payload()[0]
+        self.assertIn(
+            'foobar', attachment.get_payload(),
+            'Attached mails should not be base64 encoded')
+
     def test_send_document_event(self):
         intids = getUtility(IIntIds)
         dossier = create(Builder("dossier"))
