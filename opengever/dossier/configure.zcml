@@ -17,7 +17,6 @@
   <include package=".viewlets" />
   <include package=".upgrades" />
   <include package=".filing" />
-  <include package=".browser" />
 
   <include file="behaviors.zcml" />
   <include file="profiles.zcml" />

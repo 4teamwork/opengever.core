@@ -1,6 +1,7 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
-    xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:profilehook="http://namespaces.zope.org/profilehook">
 
   <include package="ftw.profilehook" />
 
@@ -13,12 +14,10 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
-  <genericsetup:importStep
-      name="opengever.dossier"
-      title="opengever.dossier catalog indexes"
-      description=""
-      handler="opengever.dossier.setuphandlers.import_various" />
-
+  <profilehook:hook
+      profile="opengever.dossier:default"
+      handler=".hooks.installed"
+      />
 
   <!-- filing profile -->
   <genericsetup:registerProfile
