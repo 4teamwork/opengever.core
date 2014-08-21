@@ -111,4 +111,14 @@
         directory="profiles/3405"
         />
 
+    <!-- 3405 -> 3406 -->
+    <genericsetup:upgradeStep
+        title="Create initial journal entry"
+        description=""
+        source="3405"
+        destination="3406"
+        handler="opengever.mail.upgrades.to3406.CreateInitialJournalEntry"
+        profile="opengever.mail:default"
+        />
+
 </configure>
