@@ -88,6 +88,9 @@ class NullActor(object):
     def __init__(self, identifier):
         self.identifier = identifier
 
+    def corresponds_to(self, user):
+        return False
+
     def get_profile_url(self):
         return None
 
@@ -107,6 +110,9 @@ class InboxActor(Actor):
     def get_profile_url(self):
         return None
 
+    def corresponds_to(self, user):
+        return user in self.org_unit.inbox().assigned_users()
+
     def get_label(self, with_principal=None):
         # we need to instantly translate, because otherwise
         # stuff like the autocomplete widget will not work
@@ -123,6 +129,9 @@ class ContactActor(Actor):
     def __init__(self, identifier, contact=None):
         super(ContactActor, self).__init__(identifier)
         self.contact = contact
+
+    def corresponds_to(self, user):
+        return False
 
     def get_label(self, with_principal=True):
         if self.contact.lastname or self.contact.firstname:
@@ -146,6 +155,9 @@ class PloneUserActor(Actor):
         super(PloneUserActor, self).__init__(identifier)
         self.user = user
 
+    def corresponds_to(self, user):
+        return False
+
     def get_label(self, with_principal=True):
         name = self.user.getProperty('fullname')
         if not name:
@@ -165,6 +177,9 @@ class OGDSUserActor(Actor):
     def __init__(self, identifier, user=None):
         super(OGDSUserActor, self).__init__(identifier)
         self.user = user
+
+    def corresponds_to(self, user):
+        return self.user == user
 
     def get_label(self, with_principal=True):
         return self.user.label(with_principal=with_principal)

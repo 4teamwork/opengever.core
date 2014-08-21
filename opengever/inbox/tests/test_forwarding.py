@@ -1,59 +1,52 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import statusmessages
+from ftw.testbrowser.pages.factoriesmenu import addable_types
 from opengever.testing import FunctionalTestCase
-from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
-from plone.dexterity.utils import createContentInContainer
-import transaction
 
 
 class TestForwarding(FunctionalTestCase):
-    layer = OPENGEVER_FUNCTIONAL_TESTING
-    use_browser = True
-    use_default_fixture = False
 
     def setUp(self):
         super(TestForwarding, self).setUp()
         self.grant('Owner', 'Editor', 'Contributor')
 
-        self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture')
-            .with_user()
-            .with_org_unit(client_id=u'plone')
-            .with_admin_unit())
+        self.inbox = create(Builder('inbox'))
 
-    def test_forwarding(self):
-        # create inbox and some documents for tests
-        inbox = createContentInContainer(self.portal, 'opengever.inbox.inbox', title=u'inbox')
-        doc1 = createContentInContainer(inbox, 'opengever.document.document',title=u'Document for a forwarding')
-        doc2 = createContentInContainer(inbox, 'opengever.document.document',title=u'second Document for a forwarding')
-        transaction.commit()
+    @browsing
+    def test_forwarding_is_not_addable_over_the_factory_menu(self, browser):
+        browser.login().open(self.inbox)
 
-        # test forwarding creation
-        # In Inboxes we should not be able to add forwardings using the factorymenu
-        self.browser.open(inbox.absolute_url())
-        self.assertPageContainsNot('/++add++opengever.inbox.forwarding')
-        # Creating a Forwarding without any documetn should not be possible
-        self.browser.open('%s/++add++opengever.inbox.forwarding' % inbox.absolute_url())
-        self.assertPageContains('Error: Please select at least one document to forward')
+        self.assertEqual(['Document', 'Inbox'], addable_types(browser))
 
-        # create a forwarding with two documents
-        data = 'paths:list=%s&paths:list=%s' % ('/'.join(doc1.getPhysicalPath()),'/'.join(doc2.getPhysicalPath()))
-        self.browser.open('%s/++add++opengever.inbox.forwarding' % inbox.absolute_url(), data=data)
+    @browsing
+    def test_at_least_one_document_references_is_required(self, browser):
+        browser.login().open(
+            self.inbox, view='++add++opengever.inbox.forwarding')
 
-        self.browser.getControl(name='form.widgets.title').value = 'Dossier Test'
+        messages = statusmessages.messages()
+        self.assertEqual(
+            ['Error: Please select at least one document to forward'],
+            messages.get('error'))
 
-        # check defaults
-        self.assertEquals(['inbox:plone'], self.browser.getControl(name='form.widgets.issuer:list').value)
+    @browsing
+    def test_creation_moves_document_in_to_the_forwarding(self, browser):
+        doc1 = create(Builder('document').within(self.inbox).titled(u'Doc 1'))
+        doc2 = create(Builder('document').within(self.inbox).titled(u'Doc 2'))
+        doc3 = create(Builder('document').within(self.inbox).titled(u'Doc 3'))
 
-        self.assertEquals(['inbox:plone'], self.browser.getControl(name='form.widgets.responsible:list').value)
+        data = {'paths': ['/'.join(doc.getPhysicalPath()) for doc in [doc1, doc3]]}
 
-        self.assertEquals(['plone'], self.browser.getControl(name='form.widgets.responsible_client:list').value)
+        browser.login().open(self.inbox, data,
+                             view='++add++opengever.inbox.forwarding')
 
-        # create forwarding and check if documents are corectly moved
-        self.browser.getControl(name="form.buttons.save").click()
-        forwarding = inbox.get('forwarding-1')
-        self.assertEqual(['forwarding-1'], inbox.objectIds())
-        self.assertEquals(['document-1', 'document-2'], forwarding.objectIds())
+        browser.fill({'Title': u'Test forwarding',
+                      'Responsible': 'inbox:client1'}).submit()
+        browser.css('#form-buttons-save').first.click()
 
-        # check view
-        self.browser.open(forwarding.absolute_url())
+        forwarding = self.inbox.get('forwarding-1')
+        self.assertEqual(['Item created'], statusmessages.messages().get('info'))
+        self.assertEqual([doc1, doc3], forwarding.listFolderContents())
+        self.assertEqual([doc2], self.inbox.listFolderContents(
+            {'portal_type': 'opengever.document.document'}))

@@ -5,6 +5,7 @@ from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.globalindex.model.task import Task
+from opengever.ogds.base.actor import InboxActor
 from opengever.testing import MEMORY_DB_LAYER
 from sqlalchemy.exc import IntegrityError
 from unittest2 import TestCase
@@ -155,3 +156,27 @@ class TestGlobalindexTask(TestCase):
             int_id=12345, admin_unit_id='foo', review_state='task-state-open'))
 
         self.assertEquals('', task.get_deadline_label())
+
+    def test_responsible_actor(self):
+        org_unit = create(Builder('org_unit').id('rr'))
+        task = create(Builder('globalindex_task').having(
+            int_id=12345, sequence_number=1,
+            issuing_org_unit='org', assigned_org_unit='org',
+            admin_unit_id='org', responsible='inbox:rr'))
+
+        responsible_actor = task.responsible_actor
+
+        self.assertTrue(isinstance(responsible_actor, InboxActor))
+        self.assertEqual(org_unit, responsible_actor.org_unit)
+
+    def test_issuer_actor(self):
+        org_unit = create(Builder('org_unit').id('rr'))
+        task = create(Builder('globalindex_task').having(
+            int_id=12345, sequence_number=1,
+            issuing_org_unit='org', assigned_org_unit='org',
+            admin_unit_id='org', issuer='inbox:rr'))
+
+        issuer_actor = task.issuer_actor
+
+        self.assertTrue(isinstance(issuer_actor, InboxActor))
+        self.assertEqual(org_unit, issuer_actor.org_unit)

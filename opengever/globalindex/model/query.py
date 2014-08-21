@@ -68,3 +68,11 @@ class TaskQuery(BaseQuery):
         relative_content_path = '/'.join(brain.getPath().split('/')[2:])
         return self.by_admin_unit(get_current_admin_unit())\
                    .filter(self._attribute('physical_path')==relative_content_path).one()
+
+    def subtasks_by_task(self, task):
+        """Queries all subtask of the given task sql object."""
+        query = self.filter(
+            self._attribute('admin_unit_id') == task.admin_unit_id)
+        query = query.filter(self._attribute('physical_path').startswith(
+            '{}/'.format(task.physical_path)))
+        return query

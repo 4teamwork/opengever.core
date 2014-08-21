@@ -1,7 +1,9 @@
+from opengever.globalindex.model.task import Task
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
+from opengever.task import FINISHED_TASK_STATES
 from opengever.task.browser.delegate.main import DelegateTask
 from opengever.task.browser.modify_deadline import ModifyDeadlineFormView
 from opengever.task.interfaces import IDeadlineModifier
@@ -14,11 +16,6 @@ from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.interface import implements
 from zope.interface import Interface
-
-
-TASK_CLOSED_STATES = ['task-state-tested-and-closed',
-                      'task-state-rejected',
-                      'task-state-cancelled']
 
 
 class ITaskTransitionController(Interface):
@@ -48,6 +45,20 @@ def guard(transition):
         func._guard_transitions.append(transition)
         return func
     return _guard_decorator
+
+
+def agency_guard(transition):
+    """Decorator for marking a function as agency-guard for
+    a specific `transition`.
+    """
+    def _agency_guard_decorator(func):
+        assert getattr(func, '_action_transitions', None) is None, \
+            '@action and @guard cannot be used for the same function.'
+        if getattr(func, '_guard_transitions', None) is None:
+            func._guard_transitions = []
+        func._guard_transitions.append(transition)
+        return func
+    return _agency_guard_decorator
 
 
 def action(transition):
@@ -92,22 +103,26 @@ class TaskTransitionController(BrowserView):
             url = self.get_transition_action(transition)
             return self.request.RESPONSE.redirect(url)
 
-    def is_transition_possible(self, transition):
-        """Returns `True` if the current user can execute the
-        `transition` on the current task.
-        """
-
-        # do not check the guards for adminstrators
-        if self._is_administrator():
-            return True
-
+    def _is_transition_possible(self, transition, include_agency, condition):
         guard = self._get_function_for_transition('guard', transition)
         # this is an unbound method
 
         if not guard:
             return None
 
-        return guard(self)
+        return guard(self, condition, include_agency)
+
+    def is_transition_possible(self, transition, include_agency=True):
+        """Returns `True` if the current user can execute the
+        `transition` on the current task.
+        """
+        # do not check the guards for adminstrators
+        if self._is_administrator():
+            return True
+
+        condition = get_conditions(self.context)
+        return self._is_transition_possible(
+            transition, include_agency, condition)
 
     def get_transition_action(self, transition):
         """Returns the action URL for executing the `transition`
@@ -126,7 +141,7 @@ class TaskTransitionController(BrowserView):
     # ------------ workflow implementation --------------
 
     @guard('task-transition-delegate')
-    def delegate_guard(self):
+    def delegate_guard(self, conditions, include_agency):
         return True
 
     @action('task-transition-delegate')
@@ -135,7 +150,7 @@ class TaskTransitionController(BrowserView):
         return DelegateTask.url_for(self.context)
 
     @guard('task-transition-modify-deadline')
-    def modify_deadline_guard(self):
+    def modify_deadline_guard(self, conditions, include_agency):
         return IDeadlineModifier(self.context).is_modify_allowed()
 
     @action('task-transition-modify-deadline')
@@ -143,29 +158,49 @@ class TaskTransitionController(BrowserView):
         return ModifyDeadlineFormView.url_for(self.context, transition)
 
     @guard('task-transition-cancelled-open')
-    def cancelled_to_open_guard(self):
+    def cancelled_to_open_guard(self, conditions, include_agency):
         """Checks if:
         - The current user is the issuer of the current task(context)"""
-        return self._is_issuer()
+
+        if include_agency:
+            return (conditions.is_issuer or
+                    conditions.is_issuing_orgunit_agency_member)
+
+        return conditions.is_issuer
 
     @action('task-transition-cancelled-open')
     def cancelled_to_open_action(self, transition):
         return self._addresponse_form_url(transition)
 
     @guard('task-transition-in-progress-resolved')
-    def progress_to_resolved_guard(self):
+    def progress_to_resolved_guard(self, conditions, include_agency):
         """Checks if:
-        - The responsible is the current user or a inbox_group user.
-        - All subtaskes are resolve, cancelled or closed.
+        - The current_user is the responsible.
+        - All subtaskes are in a finished state(resolve, cancelled or closed).
         - The task has no successors
+
+        Agency:
+         - The task can also be resolved when user is not the responsible
+        but in the responsible_org_unit's inbox group.
         """
-        return (self._is_responsible_or_inbox_group_user() and
-                self._is_substasks_closed() and
-                (not self._has_successors() or self._is_remote_request()))
+
+        if not conditions.is_responsible:
+            if not include_agency or \
+               not conditions.is_responsible_orgunit_agency_member:
+
+                return False
+
+        if not conditions.all_subtasks_finished:
+            return False
+
+        if conditions.has_successors and not conditions.is_remote_request:
+            return False
+
+        return True
 
     @guard('task-transition-in-progress-resolved')
     @task_type_category('unidirectional_by_value')
-    def unival_progress_to_resolved_guard(self):
+    def unival_progress_to_resolved_guard(self, conditions, include_agency):
         return False
 
     @action('task-transition-in-progress-resolved')
@@ -184,7 +219,7 @@ class TaskTransitionController(BrowserView):
             return self._addresponse_form_url(transition)
 
     @guard('task-transition-in-progress-tested-and-closed')
-    def progress_to_closed_guard(self):
+    def progress_to_closed_guard(self, conditions, include_agency):
         """This transition is by default not available. It is only available
         for unidirectional_by_value tasks.
         """
@@ -192,15 +227,26 @@ class TaskTransitionController(BrowserView):
 
     @guard('task-transition-in-progress-tested-and-closed')
     @task_type_category('unidirectional_by_value')
-    def unival_progress_to_closed_guard(self):
+    def unival_progress_to_closed_guard(self, conditions, include_agency):
         """Checks if:
         - The current user is the responsible or a member of the inbox group.
-        - All subtaskes are resolved, cancelled or closed.
+        - All subtaskes are rejected, cancelled or closed.
         - The task has no successors or is a remote request
         """
-        return (self._is_responsible_or_inbox_group_user() and
-                self._is_substasks_closed() and
-                (not self._has_successors() or self._is_remote_request()))
+
+        if not conditions.is_responsible:
+            if not include_agency or \
+               not conditions.is_responsible_orgunit_agency_member:
+
+                return False
+
+        if not conditions.all_subtasks_finished:
+            return False
+
+        if conditions.has_successors and not conditions.is_remote_request:
+            return False
+
+        return True
 
     @action('task-transition-in-progress-tested-and-closed')
     def progress_to_closed_action(self, transition):
@@ -218,21 +264,30 @@ class TaskTransitionController(BrowserView):
             return self._addresponse_form_url(transition)
 
     @guard('task-transition-open-cancelled')
-    def open_to_cancelled_guard(self):
+    def open_to_cancelled_guard(self, conditions, include_agency):
         """Checks if:
         - The current user is the issuer."""
-        return self._is_issuer()
+
+        if include_agency:
+            return (conditions.is_issuer or
+                    conditions.is_issuing_orgunit_agency_member)
+
+        return conditions.is_issuer
 
     @action('task-transition-open-cancelled')
     def open_to_cancelled_action(self, transition):
         return self._addresponse_form_url(transition)
 
     @guard('task-transition-open-in-progress')
-    def open_to_progress_guard(self):
+    def open_to_progress_guard(self, conditions, include_agency):
         """Checks if ...
         - The current user is the responsible or a member of the inbox group.
         """
-        return self._is_responsible_or_inbox_group_user()
+        if include_agency:
+            return (conditions.is_responsible or
+                    conditions.is_responsible_orgunit_agency_member)
+
+        return conditions.is_responsible
 
     @action('task-transition-open-in-progress')
     def open_to_progress_action(self, transition):
@@ -247,32 +302,42 @@ class TaskTransitionController(BrowserView):
 
     @guard('task-transition-open-in-progress')
     @task_type_category('unidirectional_by_reference')
-    def uniref_open_to_progress_guard(self):
+    def uniref_open_to_progress_guard(self, conditions, include_agency):
         return False
 
     @guard('task-transition-open-rejected')
-    def open_to_rejected_guard(self):
+    def open_to_rejected_guard(self, conditions, include_agency):
         """Checks if ...
         - The current user is the responsible or a member of the inbox group.
         """
-        return self._is_responsible_or_inbox_group_user()
+
+        if include_agency:
+            return (conditions.is_responsible or
+                    conditions.is_responsible_orgunit_agency_member)
+
+        return conditions.is_responsible
 
     @action('task-transition-open-rejected')
     def open_to_rejected_action(self, transition):
         return self._addresponse_form_url(transition)
 
     @guard('task-transition-open-resolved')
-    def open_to_resolved_guard(self):
+    def open_to_resolved_guard(self, conditions, include_agency):
         """Checks if:
         - The Task is is_bidirectional
         - The current user is the responsible or a member of the inbox group.
         """
-        return self._is_responsible_or_inbox_group_user()
+
+        if include_agency:
+            return (conditions.is_responsible or
+                    conditions.is_responsible_orgunit_agency_member)
+
+        return conditions.is_responsible
 
     @guard('task-transition-open-resolved')
     @task_type_category('unidirectional_by_reference')
     @task_type_category('unidirectional_by_value')
-    def uni_open_to_resolved_guard(self):
+    def uni_open_to_resolved_guard(self, conditions, include_agency):
         """Transition is not available for unidirectional tasks.
         """
         return False
@@ -293,11 +358,16 @@ class TaskTransitionController(BrowserView):
             return self._addresponse_form_url(transition)
 
     @guard('task-transition-open-tested-and-closed')
-    def open_to_closed_guard(self):
+    def open_to_closed_guard(self, conditions, include_agency):
         """Checks if:
         - The current user is the issuer
         """
-        return self._is_issuer_or_inbox_group_user()
+
+        if include_agency:
+            return (conditions.is_issuer or
+                    conditions.is_issuing_orgunit_agency_member)
+
+        return conditions.is_issuer
 
     @action('task-transition-open-tested-and-closed')
     def open_to_closed_action(self, transition):
@@ -305,12 +375,16 @@ class TaskTransitionController(BrowserView):
 
     @guard('task-transition-open-tested-and-closed')
     @task_type_category('unidirectional_by_reference')
-    def uniref_open_to_closed_guard(self):
+    def uniref_open_to_closed_guard(self, conditions, include_agency):
         """Checks if:
         - It's a unidirectional_byrefrence task
         - Current user is the responsible or a member of the inbox group.
         """
-        return self._is_responsible_or_inbox_group_user()
+        if include_agency:
+            return (conditions.is_responsible or
+                    conditions.is_responsible_orgunit_agency_member)
+
+        return conditions.is_responsible
 
     @action('task-transition-open-tested-and-closed')
     @task_type_category('unidirectional_by_reference')
@@ -330,7 +404,7 @@ class TaskTransitionController(BrowserView):
                 self.context.absolute_url())
 
     @guard('task-transition-reassign')
-    def reassign_guard(self):
+    def reassign_guard(self, conditions, include_agency):
         return True
 
     @action('task-transition-reassign')
@@ -340,32 +414,44 @@ class TaskTransitionController(BrowserView):
             transition)
 
     @guard('task-transition-rejected-open')
-    def rejected_to_open_guard(self):
+    def rejected_to_open_guard(self, conditions, include_agency):
         """Checks if:
         - The current user is the issuer of the task"""
-        return self._is_issuer()
+
+        return conditions.is_issuer
 
     @action('task-transition-rejected-open')
     def rejected_to_open_action(self, transition):
         return self._addresponse_form_url(transition)
 
     @guard('task-transition-resolved-tested-and-closed')
-    def resolved_to_closed_guard(self):
+    def resolved_to_closed_guard(self, conditions, include_agency):
         """Checks if:
         - The current user is the issuer of the task"""
-        return self._is_issuer_or_inbox_group_user()
+
+        if include_agency:
+            return (conditions.is_issuer
+                    or conditions.is_issuing_orgunit_agency_member)
+
+        return conditions.is_issuer
 
     @action('task-transition-resolved-tested-and-closed')
     def resolved_to_closed_action(self, transition):
         return self._addresponse_form_url(transition)
 
     @guard('task-transition-resolved-in-progress')
-    def resolved_to_progress_guard(self):
+    def resolved_to_progress_guard(self, conditions, include_agency):
         """Checks if:
         - The current user is the issuer of the task"""
-        return (
-            self._is_issuer() or
-            self._is_responsible_or_inbox_group_user())
+
+        if conditions.is_issuer:
+            return True
+
+        if include_agency:
+            return (conditions.is_responsible or
+                    conditions.is_responsible_orgunit_agency_member)
+
+        return conditions.is_responsible
 
     @action('task-transition-resolved-in-progress')
     def resolved_to_progress_action(self, transition):
@@ -428,36 +514,6 @@ class TaskTransitionController(BrowserView):
                 functions.append(obj)
 
         return functions
-
-    def _is_issuer(self, include_inbox_group=False):
-        """Checks if the current user is the issuer of the
-        current task(current context)"""
-
-        info = getUtility(IContactInformation)
-
-        if not info.is_inbox(self.context.issuer):
-            member_id = getMultiAdapter((self.context, self.request),
-                name='plone_portal_state').member().id
-            if member_id == self.context.issuer:
-                return True
-            elif include_inbox_group and self._is_issuer_inbox_group_user():
-                return True
-            else:
-                return False
-
-        else:
-            inbox_groupid = info.get_groupid_of_inbox(self.context.issuer)
-            return info.is_group_member(
-                inbox_groupid,
-                getMultiAdapter((self.context, self.request),
-                                name='plone_portal_state').member().id
-                )
-
-    def _is_issuer_or_inbox_group_user(self):
-        """Checks if the current user is the issuer of the
-        current task(current context) or a user of the current inbox group"""
-
-        return self._is_issuer(include_inbox_group=True)
 
     def _is_responsible(self):
         """Checks if the current user is the issuer of the
@@ -573,3 +629,80 @@ class TaskTransitionController(BrowserView):
             self.context, 'portal_membership').getAuthenticatedMember()
 
         return member.has_role('Administrator') or member.has_role('Manager')
+
+
+class Conditions(object):
+
+    def __init__(self, task, request, current_user):
+        self.task = task
+        self.request = request
+        self.current_user = current_user
+
+    @property
+    def is_issuer(self):
+        return self.task.issuer_actor.corresponds_to(self.current_user)
+
+    @property
+    def is_responsible(self):
+        return self.task.responsible_actor.corresponds_to(self.current_user)
+
+    @property
+    def is_issuing_orgunit_agency_member(self):
+        """Checks if the current user is member of the issuing
+        orgunit's inbox_group"""
+
+        inbox = self.task.get_issuing_org_unit().inbox()
+        return self.current_user in inbox.assigned_users()
+
+    @property
+    def is_responsible_orgunit_agency_member(self):
+        """Checks if the current user is member of the responsible
+        orgunit's inbox_group"""
+
+        inbox = self.task.get_assigned_org_unit().inbox()
+        return self.current_user in inbox.assigned_users()
+
+    @property
+    def all_subtasks_finished(self):
+        query = Task.query.subtasks_by_task(self.task)
+        query = query.filter(
+            ~Task.query._attribute('review_state').in_(FINISHED_TASK_STATES))
+
+        if query.count() > 0:
+            return False
+        return True
+
+    @property
+    def has_successors(self):
+        if self.task.successors:
+            return True
+
+        return False
+
+    @property
+    def is_remote_request(self):
+        """checks if the current request cames from a remote adminunit.
+        For example a multi-adminunit task."""
+
+        if self.request.get_header('X-OGDS-AUID', None):
+            return True
+        else:
+            return False
+
+    @property
+    def is_assigned_to_current_admin_unit(self):
+        org_unit = self.task.get_assigned_org_unit()
+        return org_unit.admin_unit == get_current_admin_unit()
+
+    @property
+    def is_successor_process(self):
+        if self.request.get('X-CREATING-SUCCESSOR', False):
+            return True
+
+        return False
+
+
+def get_conditions(context):
+    return Conditions(
+        context.get_sql_object(), context.REQUEST,
+        ogds_service().fetch_current_user())

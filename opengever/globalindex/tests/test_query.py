@@ -189,14 +189,33 @@ class TestFunctionalTaskQueries(FunctionalTestCase):
                                      .assign_users([self.user])
                                      .id(u'additional')
                                      .as_current_org_unit())
-        additional_admin_unit = create(Builder('admin_unit')
-                                       .id(u'additional')
-                                       .having(title='foo')
-                                       .as_current_admin_unit()
-                                       .assign_org_units([additional_org_unit]))
+
+        create(Builder('admin_unit')
+               .id(u'additional')
+               .as_current_admin_unit()
+               .assign_org_units([additional_org_unit]))
 
         task = create(Builder('task'))
 
         self.assertEquals(
             task.get_sql_object(),
             Task.query.by_brain(obj2brain(task)))
+
+    def test_subtasks_by_task_returns_all_subtask_excluding_the_given_one(self):
+        task1 = create(Builder('task'))
+        task2 = create(Builder('task'))
+
+        subtask1 = create(Builder('task').within(task1))
+        subtask3 = create(Builder('task').within(task1))
+        create(Builder('task').within(task2))
+
+        self.assertEqual(
+            [subtask1.get_sql_object(), subtask3.get_sql_object()],
+            Task.query.subtasks_by_task(task1.get_sql_object()).all())
+
+    def test_subtasks_by_task_returns_empty_list_when_no_subtask_exists(self):
+        task1 = create(Builder('task'))
+
+        self.assertEqual(
+            [],
+            Task.query.subtasks_by_task(task1.get_sql_object()).all())

@@ -12,14 +12,15 @@ class ForwardingTransitionController(TaskTransitionController):
 
     @guard('forwarding-transition-accept')
     @guard('forwarding-transition-refuse')
-    def is_accept_possible(self):
+    def is_accept_possible(self, conditions, include_agency):
         """Check if the user is in the inbox group of the responsible client.
         """
-        if (self._is_task_assigned_to_current_admin_unit()
-                and not self._is_successor_forwarding_process()):
+
+        if conditions.is_assigned_to_current_admin_unit and \
+           not conditions.is_successor_process:
             return False
-        else:
-            return self._is_inbox_group_user()
+
+        return conditions.is_responsible
 
     def _is_task_assigned_to_current_admin_unit(self):
         return self.context.get_responsible_admin_unit() == get_current_admin_unit()
@@ -35,11 +36,11 @@ class ForwardingTransitionController(TaskTransitionController):
     @guard('forwarding-transition-reassign')
     @guard('forwarding-transition-close')
     @guard('forwarding-transition-reassign-refused')
-    def is_assign_to_dossier_or_reassign_possible(self):
+    def is_assign_to_dossier_or_reassign_possible(self, conditions, include_agency):
         """Check it the user is in the inbox group of the current client.
         """
-        return self._is_task_assigned_to_current_admin_unit() and \
-            self._is_current_inbox_group_user()
+        return (conditions.is_assigned_to_current_admin_unit and
+                conditions.is_responsible)
 
     @action('forwarding-transition-assign-to-dossier')
     def assign_to_dossier_action(self, transition):
