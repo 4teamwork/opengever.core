@@ -1,7 +1,10 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:upgrade-step="http://namespaces.zope.org/ftw.upgrade"
     i18n_domain="ftw.tabbedview">
+
+    <include package="ftw.upgrade" file="meta.zcml" />
 
     <!-- 3 -> 2200 -->
     <genericsetup:upgradeStep
@@ -40,6 +43,16 @@
         source="2202"
         destination="3400"
         handler="opengever.tabbedview.upgrades.to3400.AddPublicTrialColumn"
+        profile="opengever.tabbedview:default"
+        />
+
+    <!-- 3400 -> 3401 -->
+    <genericsetup:upgradeStep
+        title="Remove old-style import step."
+        description=""
+        source="3400"
+        destination="3401"
+        handler="opengever.tabbedview.upgrades.to3401.RemoveImportStep"
         profile="opengever.tabbedview:default"
         />
 
