@@ -8,8 +8,6 @@
     i18n_domain="opengever.ogds.base"
     package="opengever.ogds.base">
 
-  <include package="ftw.profilehook" />
-
   <include package=".sections" />
   <include package=".upgrades" />
 

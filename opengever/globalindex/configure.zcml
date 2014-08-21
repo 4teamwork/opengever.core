@@ -6,8 +6,6 @@
     xmlns:profilehook="http://namespaces.zope.org/profilehook"
     i18n_domain="opengever.globalindex">
 
-  <include package="ftw.profilehook" />
-
   <include package=".handlers" />
   <include package=".browser" />
   <include package=".upgrades" />

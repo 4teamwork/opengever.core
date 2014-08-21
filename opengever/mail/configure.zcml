@@ -11,8 +11,6 @@
 
   <grok:grok package="." />
 
-  <include package="ftw.profilehook" />
-
   <include package=".browser" />
   <include package=".upgrades" />
 
