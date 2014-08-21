@@ -4,8 +4,6 @@
     xmlns:profilehook="http://namespaces.zope.org/profilehook"
     i18n_domain="opengever.trash">
 
-  <include package="ftw.profilehook" />
-
   <genericsetup:registerProfile
       name="default"
       title="opengever.trash"

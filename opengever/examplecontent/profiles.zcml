@@ -4,8 +4,6 @@
     xmlns:profilehook="http://namespaces.zope.org/profilehook"
     i18n_domain="opengever.examplecontent">
 
-  <include package="ftw.profilehook" />
-
   <genericsetup:registerProfile
       name="developer"
       title="opengever.examplecontent: Developer"

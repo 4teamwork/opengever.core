@@ -8,8 +8,6 @@
     xmlns:profilehook="http://namespaces.zope.org/profilehook"
     i18n_domain="opengever.contact">
 
-  <include package="ftw.profilehook" />
-
   <include file="permissions.zcml" />
 
   <grok:grok package="." />

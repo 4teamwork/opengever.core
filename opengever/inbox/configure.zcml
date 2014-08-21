@@ -12,8 +12,6 @@
 
   <i18n:registerTranslations directory="locales" />
 
-  <include package="ftw.profilehook" />
-
   <include package=".viewlets" />
   <include package=".behaviors" />
   <include package=".browser" />

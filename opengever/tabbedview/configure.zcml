@@ -10,8 +10,6 @@
     xmlns:profilehook="http://namespaces.zope.org/profilehook"
     i18n_domain="opengever.tabbedview">
 
-  <include package="ftw.profilehook" />
-
   <include package=".browser" />
   <include package=".upgrades" />
 
