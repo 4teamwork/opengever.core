@@ -8,6 +8,8 @@ Changelog
 
   - Fixed translation for filing_number column in dossier listings.
     [phgross]
+  - Also check for not supplied mails, when check if dossier could be resolved.
+    [phgross]
   - Fixed unicode decode bug in task overview.
     [lknoepfel]
   - OGQuickUploadCapableFileFactory: Set default values before adding content to container.

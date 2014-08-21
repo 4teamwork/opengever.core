@@ -3,7 +3,6 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import FunctionalTestCase
-from opengever.testing import OPENGEVER_INTEGRATION_TESTING
 from plone.app.testing import TEST_USER_ID
 
 
@@ -11,6 +10,10 @@ class TestDossierContainerFunctional(FunctionalTestCase):
     """This test-case should eventually replace TestDossierContainer.
     New tests will be added to this case.
     """
+
+    def setUp(self):
+        super(TestDossierContainerFunctional, self).setUp()
+        self.grant('Reader')
 
     def test_is_all_supplied_without_any_subdossiers(self):
         dossier = create(Builder("dossier"))
@@ -29,6 +32,14 @@ class TestDossierContainerFunctional(FunctionalTestCase):
         dossier = create(Builder("dossier"))
         create(Builder("dossier").within(dossier))
         create(Builder("task").within(dossier))
+
+        self.assertFalse(dossier.is_all_supplied())
+
+    def test_is_not_all_supplied_with_subdossier_and_mails(self):
+        dossier = create(Builder("dossier"))
+        create(Builder("dossier").within(dossier))
+        create(Builder("mail").within(dossier)
+               .with_dummy_message())
 
         self.assertFalse(dossier.is_all_supplied())
 
@@ -100,8 +111,8 @@ class TestDossierChecks(FunctionalTestCase):
 
     def test_its_not_all_closed_if_a_task_stays_in_an_active_state(self):
         dossier = create(Builder("dossier"))
-        task = create(Builder("task").within(dossier)
-                      .in_state('task-state-open'))
+        create(Builder("task").within(dossier)
+               .in_state('task-state-open'))
 
         self.assertFalse(dossier.is_all_closed())
 
@@ -196,9 +207,8 @@ class TestDateCalculations(FunctionalTestCase):
 
     def test_no_end_date_is_valid(self):
         dossier = create(Builder("dossier"))
-        subdossier = create(Builder("dossier")
-                            .within(dossier)
-                            .having(start=date(2012, 02, 24)))
+        create(Builder("dossier").within(dossier)
+               .having(start=date(2012, 02, 24)))
         self.assertTrue(dossier.has_valid_enddate())
 
     def test_end_date_afterward_the_latest_document_date_is_valid(self):
