@@ -112,13 +112,6 @@ class ContactInformation(grok.GlobalUtility):
                 return group.users
         return []
 
-    def list_user_groups(self, userid):
-        if userid:
-            session = create_session()
-            groups = session.query(User).get(userid).groups
-            return groups
-        return []
-
     def is_user_in_inbox_group(self, userid=None, client_id=None):
         if not client_id:
             client_id = get_current_org_unit().id()

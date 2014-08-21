@@ -128,13 +128,6 @@ class TestGroupHelpers(FunctionalTestCase):
         self.assertEquals([],
                           list(self.info.list_group_users('not_existing_groupid')))
 
-    def test_list_users_group_returns_a_list_of_all_group_ids_the_user_is_assigned(self):
-        create_ogds_user('hugo.boss', groups=('client1_users', 'client1_inbox_users'))
-
-        self.assertEquals(
-            ['client1_users', 'client1_inbox_users'],
-            [group.groupid for group in self.info.list_user_groups('hugo.boss')])
-
     def test_user_is_inbox_group_when_he_is_in_the_inbox_group_of_the_given_client(self):
         create_ogds_user('hugo.boss', groups=('client1_inbox_users', ))
         create_ogds_user('jamie.lannister',
