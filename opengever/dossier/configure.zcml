@@ -8,10 +8,8 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     i18n_domain="opengever.dossier">
 
-  <!-- Grok the package to initialise schema interfaces and content classes -->
   <grok:grok package="." />
 
-  <!-- vdex vocabularies folder -->
   <vdex:vocabulary directory="vdexvocabs" />
 
   <include package=".viewlets" />
@@ -19,6 +17,7 @@
   <include package=".filing" />
 
   <include file="behaviors.zcml" />
+  <include file="permissions.zcml" />
   <include file="profiles.zcml" />
   <include file="permissions.zcml" />
 
