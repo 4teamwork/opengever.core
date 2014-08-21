@@ -7,10 +7,8 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     i18n_domain="opengever.dossier">
 
-  <!-- Grok the package to initialise schema interfaces and content classes -->
   <grok:grok package="." />
 
-  <!-- vdex vocabularies folder -->
   <vdex:vocabulary directory="vdexvocabs" />
 
   <include package=".viewlets" />
@@ -19,6 +17,7 @@
   <include package=".browser" />
 
   <include file="behaviors.zcml" />
+  <include file="permissions.zcml" />
   <include file="profiles.zcml" />
 
   <i18n:registerTranslations directory="locales" />
@@ -27,8 +26,5 @@
       factory=".move_items.DestinationValidator"
       provides="z3c.form.interfaces.IValidator"
       />
-
-  <!-- Include custom permissions -->
-  <include file="permissions.zcml" />
 
 </configure>
