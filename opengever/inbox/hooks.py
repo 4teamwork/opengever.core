@@ -15,8 +15,8 @@ def order_actions(context):
     order given in ACTIONS_ORDER.
 
     """
-    pt = api.portal.get_tool('portal_types')
-    inbox_fti = pt['opengever.inbox.inbox']
+    types_tool = api.portal.get_tool('portal_types')
+    inbox_fti = types_tool['opengever.inbox.inbox']
 
     actions = inbox_fti._actions
 
