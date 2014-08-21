@@ -6,6 +6,8 @@ Changelog
 
 - General fixes:
 
+  - Use `ftw.profilehook` instead of setuphandlers.
+    [deiferni]
   - Fixed translation for filing_number column in dossier listings.
     [phgross]
   - Fixed unicode decode bug in task overview.
