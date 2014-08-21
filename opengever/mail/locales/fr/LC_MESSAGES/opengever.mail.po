@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-08-05 08:27+0000\n"
+"POT-Creation-Date: 2014-08-21 14:47+0000\n"
 "PO-Revision-Date: 2012-09-06 13:01+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,7 +26,7 @@ msgstr "Pas d'adresse Email"
 msgid "Save attachments"
 msgstr "Extraire documents"
 
-#: ./opengever/mail/browser/send_document.py:313
+#: ./opengever/mail/browser/send_document.py:314
 msgid "Sent mail filed as '${title}'."
 msgstr ""
 
@@ -168,6 +168,11 @@ msgstr "Envoyer seulement le lien du document"
 #. Default: "File a copy of the sent mail in dossier"
 #: ./opengever/mail/browser/send_document.py:111
 msgid "label_file_copy_in_dossier"
+msgstr ""
+
+#. Default: "Journal initialized"
+#: ./opengever/mail/upgrades/to3403.py:7
+msgid "label_journal_initialized"
 msgstr ""
 
 #. Default: "Message"

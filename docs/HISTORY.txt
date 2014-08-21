@@ -59,6 +59,8 @@ Changelog
     [lgraf]
   - Journalize AttachmentsDeleted event.
     [lgraf]
+  - Create initial journal entry for mails.
+    [lgraf]
 
 
 - Changes related to mail content type:
