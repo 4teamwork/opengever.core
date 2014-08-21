@@ -1,9 +1,6 @@
-from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
-from opengever.dossier.filing.testing import activate_filing_number
-from opengever.dossier.filing.testing import inactivate_filing_number
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_FILING_LAYER
 from opengever.testing import FunctionalTestCase
 from plone import api
-from plone.app.testing import PloneSandboxLayer
 
 
 class TestCatalog(FunctionalTestCase):
@@ -22,22 +19,9 @@ class TestCatalog(FunctionalTestCase):
         self.assertIn('containing_dossier', self.catalog.indexes())
 
 
-class FilingLayer(PloneSandboxLayer):
-
-    defaultBases = (OPENGEVER_FUNCTIONAL_TESTING,)
-
-    def setUpPloneSite(self, portal):
-        activate_filing_number(portal)
-
-    def tearDownPloneSite(self, portal):
-        inactivate_filing_number(portal)
-
-OPENGEVER_FILING_LAYER = FilingLayer()
-
-
 class TestFilingCatalog(FunctionalTestCase):
 
-    layer = OPENGEVER_FILING_LAYER
+    layer = OPENGEVER_FUNCTIONAL_FILING_LAYER
 
     def setUp(self):
         super(TestFilingCatalog, self).setUp()

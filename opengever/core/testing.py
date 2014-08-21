@@ -15,9 +15,13 @@ from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import ploneSite
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
+from plone.browserlayer.utils import unregister_layer
+from plone.dexterity.schema import SCHEMA_CACHE
 from plone.testing import z2
+from Products.CMFCore.utils import getToolByName
 from zope.configuration import xmlconfig
 from zope.sqlalchemy import datamanager
+import transaction
 
 
 def clear_transmogrifier_registry():
@@ -147,3 +151,32 @@ OPENGEVER_FUNCTIONAL_TESTING = FunctionalTesting(
     bases=(OPENGEVER_FIXTURE,
            set_builder_session_factory(functional_session_factory)),
     name="opengever.core:functional")
+
+
+def activate_filing_number(portal):
+    applyProfile(portal, 'opengever.dossier:filing')
+    transaction.commit()
+
+
+def inactivate_filing_number(portal):
+    unregister_layer('opengever.dossier.filing')
+
+    portal_types = getToolByName(portal, 'portal_types')
+    fti = portal_types.get('opengever.dossier.businesscasedossier')
+    fti.behaviors = [behavior for behavior in fti.behaviors
+                     if not behavior.endswith('IFilingNumber')]
+
+    SCHEMA_CACHE.invalidate('opengever.dossier.businesscasedossier')
+
+
+class FilingLayer(PloneSandboxLayer):
+
+    defaultBases = (OPENGEVER_FUNCTIONAL_TESTING,)
+
+    def setUpPloneSite(self, portal):
+        activate_filing_number(portal)
+
+    def tearDownPloneSite(self, portal):
+        inactivate_filing_number(portal)
+
+OPENGEVER_FUNCTIONAL_FILING_LAYER = FilingLayer()
