@@ -1,6 +1,6 @@
 from opengever.ogds.base.interfaces import ISyncStamp
 from opengever.ogds.base.ldap_import.import_stamp import update_sync_stamp
-from opengever.ogds.base.setuphandlers import _create_example_client
+from opengever.ogds.base.setup import create_example_client
 from opengever.ogds.base.utils import create_session
 from opengever.ogds.base.utils import get_ou_selector
 from opengever.ogds.base.utils import ogds_service
@@ -58,7 +58,7 @@ def create_client(clientid='client1', session=None, **properties):
 
     options = defaults.copy()
     options.update(properties)
-    return _create_example_client(session, clientid, options)
+    return create_example_client(session, clientid, options)
 
 
 def create_ogds_user(userid, session=None,
