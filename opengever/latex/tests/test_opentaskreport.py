@@ -12,7 +12,9 @@ from opengever.latex.layouts.default import DefaultLayout
 from opengever.latex.opentaskreport import IOpenTaskReportLayer
 from opengever.latex.testing import LATEX_ZCML_LAYER
 from opengever.ogds.base.interfaces import IContactInformation
+from opengever.testing import create_plone_user
 from opengever.testing import FunctionalTestCase
+from plone.app.testing import login
 from zope.component import adaptedBy
 from zope.component import getMultiAdapter
 from zope.component import getUtility
@@ -83,8 +85,14 @@ class TestOpenTaskReportLaTeXView(MockTestCase):
 
 class TestOpenTaskReport(FunctionalTestCase):
 
+    use_default_fixture = False
+
+
     def setUp(self):
         super(TestOpenTaskReport, self).setUp()
+
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_all_unit_setup())
 
         self.task = create(Builder("task").having(task_type='comment',
                                                   issuer='peter.peter',
@@ -93,7 +101,9 @@ class TestOpenTaskReport(FunctionalTestCase):
         self.hans = create(Builder('ogds_user')
                            .having(userid='hans.meier',
                                    firstname='Hans',
-                                   lastname='Meier'))
+                                   lastname='Meier')
+                           .assign_to_org_units([self.org_unit]))
+
         self.peter = create(Builder('ogds_user')
                             .having(userid='peter.peter',
                                     firstname='Peter',
@@ -114,3 +124,12 @@ class TestOpenTaskReport(FunctionalTestCase):
     @browsing
     def test_smoke_open_task_report_view(self, browser):
         browser.login().open(view='pdf-open-task-report')
+
+    def test_task_report_is_only_available_for_current_inbox_users(self):
+        self.assertTrue(
+            self.portal.unrestrictedTraverse('pdf-open-task-report-allowed')())
+
+        create_plone_user(self.portal, 'hans.meier')
+        login(self.portal, 'hans.meier')
+        self.assertFalse(
+            self.portal.unrestrictedTraverse('pdf-open-task-report-allowed')())
