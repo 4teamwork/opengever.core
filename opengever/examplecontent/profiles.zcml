@@ -1,7 +1,10 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:profilehook="http://namespaces.zope.org/profilehook"
     i18n_domain="opengever.examplecontent">
+
+  <include package="ftw.profilehook" />
 
   <genericsetup:registerProfile
       name="developer"
@@ -19,11 +22,9 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
-  <!-- Register the `various` import step -->
-  <genericsetup:importStep
-      name="opengever.examplecontent.various"
-      title="Example content for OpenGever"
-      description="Import steps that start the whole transmogrify csv import."
-      handler="opengever.examplecontent.setuphandlers.setupVarious" />
+  <profilehook:hook
+      profile="opengever.examplecontent:developer"
+      handler=".hooks.installed"
+      />
 
 </configure>
