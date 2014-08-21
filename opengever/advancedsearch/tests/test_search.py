@@ -1,8 +1,9 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.core.testing import activate_filing_number
 from ftw.testbrowser import browsing
-from opengever.dossier.filing.testing import activate_filing_number
-from opengever.dossier.filing.testing import inactivate_filing_number
+from opengever.core.testing import activate_filing_number
+from opengever.core.testing import inactivate_filing_number
 from opengever.testing import FunctionalTestCase
 
 

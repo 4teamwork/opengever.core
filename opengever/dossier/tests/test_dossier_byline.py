@@ -3,8 +3,8 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.mail.interfaces import IMailSettings
 from opengever.base.tests.byline_base_test import TestBylineBase
-from opengever.dossier.filing.testing import activate_filing_number
-from opengever.dossier.filing.testing import inactivate_filing_number
+from opengever.core.testing import activate_filing_number
+from opengever.core.testing import inactivate_filing_number
 from opengever.testing import create_ogds_user
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility

@@ -2,11 +2,11 @@ from DateTime import DateTime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.core.testing import activate_filing_number
+from opengever.core.testing import inactivate_filing_number
 from opengever.dossier.filing.report import filing_no_filing
 from opengever.dossier.filing.report import filing_no_number
 from opengever.dossier.filing.report import filing_no_year
-from opengever.dossier.filing.testing import activate_filing_number
-from opengever.dossier.filing.testing import inactivate_filing_number
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 import xlrd
