@@ -1,10 +1,10 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from opengever.dossier.filing.testing import activate_filing_number
-from opengever.dossier.filing.testing import inactivate_filing_number
-from opengever.testing import FunctionalTestCase
+from opengever.core.testing import activate_filing_number
+from opengever.core.testing import inactivate_filing_number
 from opengever.testing import create_client
 from opengever.testing import create_ogds_user
+from opengever.testing import FunctionalTestCase
 from opengever.testing import set_current_client_id
 from plone.app.testing import TEST_USER_ID
 import transaction

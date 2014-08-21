@@ -1,39 +1,44 @@
 <configure
-      xmlns="http://namespaces.zope.org/zope"
-      xmlns:five="http://namespaces.zope.org/five"
-      xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
-      xmlns:i18n="http://namespaces.zope.org/i18n"
-      xmlns:cmf="http://namespaces.zope.org/cmf"
-      xmlns:plone="http://namespaces.plone.org/plone"
-      xmlns:grok="http://namespaces.zope.org/grok"
-      xmlns:browser="http://namespaces.zope.org/browser"
-      i18n_domain="opengever.tabbedview">
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:cmf="http://namespaces.zope.org/cmf"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:grok="http://namespaces.zope.org/grok"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:profilehook="http://namespaces.zope.org/profilehook"
+    i18n_domain="opengever.tabbedview">
 
-      <i18n:registerTranslations directory="locales"/>
+  <include package=".browser" />
+  <include package=".upgrades" />
 
-    <grok:grok package="." />
-    <include package=".browser" />
-    <include package=".upgrades" />
+  <grok:grok package="." />
 
+  <i18n:registerTranslations directory="locales"/>
 
+  <!-- Classification Behavior -->
+  <plone:behavior
+        title="Tabbed View"
+        description="Adds a tabbed view to folderish content"
+        provides=".interfaces.ITabbedViewEnabled"
+        factory="plone.behavior.AnnotationStorage"
+        marker="ftw.tabbedview.interfaces.ITabbedView"
+        for="plone.dexterity.interfaces.IDexterityContent"
+        />
 
-    <!-- Classification Behavior -->
-    <plone:behavior
-          title="Tabbed View"
-          description="Adds a tabbed view to folderish content"
-          provides=".interfaces.ITabbedViewEnabled"
-          factory="plone.behavior.AnnotationStorage"
-          marker="ftw.tabbedview.interfaces.ITabbedView"
-          for="plone.dexterity.interfaces.IDexterityContent"
+  <!-- Register the installation GenericSetup extension profile -->
+  <genericsetup:registerProfile
+        name="default"
+        title="opengever.tabbedview"
+        directory="profiles/default"
+        description="opengever Tabbed View"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
           />
 
-    <!-- Register the installation GenericSetup extension profile -->
-    <genericsetup:registerProfile
-          name="default"
-          title="opengever.tabbedview"
-          directory="profiles/default"
-          description="opengever Tabbed View"
-          provides="Products.GenericSetup.interfaces.EXTENSION"
-          />
+  <profilehook:hook
+      profile="opengever.tabbedview:default"
+      handler=".hooks.installed"
+      />
 
 </configure>

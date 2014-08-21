@@ -3,8 +3,8 @@ from datetime import date
 from datetime import datetime
 from email.MIMEText import MIMEText
 from five import grok
-from ftw.mail import utils
 from ftw.mail import _ as ftw_mf
+from ftw.mail import utils
 from ftw.mail.mail import IMail
 from opengever.base import _ as base_mf
 from opengever.document.behaviors import metadata as ogmetadata

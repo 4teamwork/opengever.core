@@ -1,0 +1,3 @@
+INDEXES = (
+    ('trashed', 'FieldIndex'),
+)

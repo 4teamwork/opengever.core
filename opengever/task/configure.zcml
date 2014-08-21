@@ -9,23 +9,20 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     i18n_domain="opengever.task">
 
-    <!-- Include custom permissions -->
-    <include file="permissions.zcml" />
-
-    <!-- Grok the package to initialise schema interfaces and content classes -->
-    <grok:grok package="." />
-
-    <!-- vdex vocabularies folder -->
-    <vdex:vocabulary directory="vdexvocabs" />
-
     <include package=".browser" />
     <include package=".upgrades" />
     <include package=".viewlets" />
 
     <include file="profiles.zcml" />
+    <include file="permissions.zcml" />
+    <include file="behaviors.zcml" />
+
+    <grok:grok package="." />
+
+    <vdex:vocabulary directory="vdexvocabs" />
 
     <i18n:registerTranslations directory="locales" />
-    <include file="behaviors.zcml" />
+
     <browser:page
         name="task_response_delete"
         for="opengever.task.task.ITask"
