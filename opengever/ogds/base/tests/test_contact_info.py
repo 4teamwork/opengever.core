@@ -88,20 +88,6 @@ class TestOneClientSetupHelper(FunctionalTestCase):
         self.assertFalse(self.info.is_one_client_setup())
 
 
-class TestUserHelpers(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestUserHelpers, self).setUp()
-        self.info = getUtility(IContactInformation)
-
-    def test_getting_profile_url_returns_user_detail_view_url(self):
-        create_ogds_user('hugo.boss')
-
-        self.assertEquals(
-            u'http://nohost/plone/@@user-details/hugo.boss',
-            self.info.get_profile_url('hugo.boss'))
-
-
 class TestGroupHelpers(FunctionalTestCase):
     use_default_fixture = False
 

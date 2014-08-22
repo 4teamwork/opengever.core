@@ -251,40 +251,6 @@ class ContactInformation(grok.GlobalUtility):
 
         return len(clients) == 1
 
-    @ram.cache(ogds_principal_cachekey)
-    def get_profile_url(self, principal):
-        """Returns the profile url of this `principal`.
-        """
-        if isinstance(principal, User):
-            portal = getSite()
-            return '/'.join((portal.portal_url(), '@@user-details',
-                             principal.userid))
-
-        elif self.is_inbox(principal):
-            return None
-
-        elif self.is_contact(principal):
-            contact = self.get_contact(principal, check_permissions=True)
-            if contact:
-                return contact.getURL()
-            else:
-                return None
-
-        elif self.is_user(principal):
-            portal = getSite()
-            user = ogds_service().fetch_user(principal)
-            if user:
-                return '/'.join((portal.portal_url(), '@@user-details',
-                                 user.userid))
-            else:
-                # fallback with acl_users folder
-                portal_membership = getToolByName(portal, 'portal_membership')
-                member = portal_membership.getMemberById(principal)
-                if member:
-                    return portal_membership.getMemberById(
-                        principal).getHomeUrl()
-            return None
-
     @ram.cache(ogds_class_language_cachekey)
     def get_user_sort_dict(self):
         """Returns a dict presenting userid and the fullname,
