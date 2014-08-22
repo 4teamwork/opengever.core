@@ -1,16 +1,29 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.testing import create_plone_user
 from opengever.testing import FunctionalTestCase
+from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
+import transaction
 
 
 class TestGlobalTaskListings(FunctionalTestCase):
 
+    use_default_fixture = False
+
     def setUp(self):
         super(TestGlobalTaskListings, self).setUp()
 
-        self.hugo = create(Builder('fixture').with_hugo_boss())
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_all_unit_setup())
+
+        create_plone_user(self.portal, 'hugo.boss')
+        self.hugo = create(Builder('ogds_user')
+                           .having(userid='hugo.boss',
+                                   firstname='Hugo',
+                                   lastname='Boss')
+                           .assign_to_org_units([self.org_unit]))
 
         self.task1 = create(Builder('task')
                             .having(responsible_client='client1',
@@ -30,6 +43,35 @@ class TestGlobalTaskListings(FunctionalTestCase):
         browser.login().open(view='personal_overview')
         self.assertEquals(u'Personal Overview: Test User',
                           browser.css('h1.documentFirstHeading').first.text)
+
+    @browsing
+    def test_additional_tabs_are_shown_for_admins(self, browser):
+        setRoles(self.portal, 'hugo.boss', ['Administrator'])
+        transaction.commit()
+
+        browser.login(username='hugo.boss', password='demo09').open(
+            view='personal_overview')
+        self.assertEqual(
+            ['mydossiers', 'mydocuments', 'mytasks', 'myissuedtasks',
+             'alltasks', 'allissuedtasks'],
+            browser.css('li.formTab a').text)
+
+    @browsing
+    def test_additional_tabs_are_shown_for_inbox_users(self, browser):
+        browser.login().open(view='personal_overview')
+        self.assertEqual(
+            ['mydossiers', 'mydocuments', 'mytasks', 'myissuedtasks',
+             'alltasks', 'allissuedtasks'],
+            browser.css('li.formTab a').text)
+
+    @browsing
+    def test_additional_tabs_are_hidden_for_regular_users(self, browser):
+        setRoles(self.portal, 'hugo.boss', ['Reader'])
+        browser.login(username='hugo.boss', password='demo09').open(
+            view='personal_overview')
+        self.assertEqual(
+            ['mydossiers', 'mydocuments', 'mytasks', 'myissuedtasks'],
+            browser.css('li.formTab a').text)
 
     def test_my_tasks(self):
         view = self.portal.unrestrictedTraverse(

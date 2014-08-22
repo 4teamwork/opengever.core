@@ -115,24 +115,6 @@ class TestGroupHelpers(FunctionalTestCase):
                          firstname="Test", lastname="User")
         select_current_org_unit('client1')
 
-    def test_user_is_inbox_group_when_he_is_in_the_inbox_group_of_the_given_client(self):
-        create_ogds_user('hugo.boss', groups=('client1_inbox_users', ))
-        create_ogds_user('jamie.lannister',
-                         groups=('client1_inbox_users', 'client2_inbox_users'))
-
-        create_client(clientid='client1', inbox_group='client1_inbox_users')
-        create_client(clientid='client2', inbox_group='client2_inbox_users')
-
-        self.assertTrue(self.info.is_user_in_inbox_group(
-            userid='hugo.boss', client_id='client1'))
-        self.assertFalse(self.info.is_user_in_inbox_group(
-            userid='hugo.boss', client_id='client2'))
-
-        self.assertTrue(self.info.is_user_in_inbox_group(
-            userid='jamie.lannister', client_id='client1'))
-        self.assertTrue(self.info.is_user_in_inbox_group(
-            userid='jamie.lannister', client_id='client2'))
-
     def test_get_group_of_inbox_returns_group(self):
         create_client(clientid='client1', inbox_group='client1_inbox_users')
 

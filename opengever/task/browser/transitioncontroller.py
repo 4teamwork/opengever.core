@@ -521,12 +521,9 @@ class TaskTransitionController(BrowserView):
             name='plone_portal_state').member().id == self.context.responsible
 
     def _is_inbox_group_user(self):
-        """Checks with the help of the contact information utility
-        if the current user is in the inbox group"""
-
-        info = getUtility(IContactInformation)
-        return info.is_user_in_inbox_group(
-            client_id=self.context.responsible_client)
+        """Checks if the current user is assigned to the current inbox"""
+        inbox = get_current_org_unit().inbox()
+        return ogds_service().fetch_current_user() in inbox.assigned_users()
 
     def _is_issuer_inbox_group_user(self):
         """Checks with the helpt of the contact information utility

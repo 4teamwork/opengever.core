@@ -102,21 +102,6 @@ class ContactInformation(grok.GlobalUtility):
 
         return principal and ':' not in principal
 
-    def is_user_in_inbox_group(self, userid=None, client_id=None):
-        if not client_id:
-            client_id = get_current_org_unit().id()
-
-        if not userid:
-            member = getToolByName(
-                getSite(), 'portal_membership').getAuthenticatedMember()
-            userid = member.getId()
-
-        client = self.get_client_by_id(client_id)
-        if client:
-            return self.is_group_member(client.inbox_group_id, userid)
-        else:
-            return False
-
     def is_group_member(self, groupid, userid):
         in_group = create_session().query(Group.groupid).join(groups_users).filter(
             Group.groupid == groupid,
