@@ -540,28 +540,6 @@ class TaskTransitionController(BrowserView):
 
         return self._is_responsible() or self._is_inbox_group_user()
 
-    def _is_substasks_closed(self):
-        """Checks if all subtasks are done(resolve, cancelled or closed)"""
-
-        wft = self.context.portal_workflow
-        wf = wft.get(wft.getChainFor(self.context)[0])
-        states = [s for s in wf.states]
-
-        for state in TASK_CLOSED_STATES:
-            states.pop(states.index(state))
-
-        query = {
-            'path': {
-                'query': '/'.join(self.context.getPhysicalPath()),
-                'depth': -1},
-            'portal_type': 'opengever.task.task',
-            'review_state': states}
-
-        if len(self.context.getFolderContents(query)) > 1:
-            return False
-        else:
-            return True
-
     def _is_remote_request(self):
         """checks if the current request cames from a remote client.
         For example a task over a mutliple clients."""
