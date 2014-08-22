@@ -55,6 +55,11 @@ class ActivateBehaviors(UpgradeStep):
         for fieldname in fields:
             field = IDocumentMetadata[fieldname]
 
+            # `digitally_available` is always True for mails
+            if fieldname == u'digitally_available':
+                field.set(field.interface(mail), True)
+                continue
+
             # Don't overwrite existing values.
             if hasattr(aq_base(mail), fieldname):
                 # Existing value - skip unless it's a broken tuple
@@ -62,7 +67,6 @@ class ActivateBehaviors(UpgradeStep):
                         getattr(mail, fieldname) is None):
                     continue
 
-            field = IDocumentMetadata[fieldname]
             default_adapter = queryMultiAdapter(
                 (aq_parent(mail), mail.REQUEST, None, field, None),
                 IValue, name='default')

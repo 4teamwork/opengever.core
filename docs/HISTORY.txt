@@ -6,6 +6,10 @@ Changelog
 
 - General fixes:
 
+  - Fixed translation for filing_number column in dossier listings.
+    [phgross]
+  - Also check for not supplied mails, when check if dossier could be resolved.
+    [phgross]
   - Fixed unicode decode bug in task overview.
     [lknoepfel]
   - OGQuickUploadCapableFileFactory: Set default values before adding content to container.
@@ -37,6 +41,11 @@ Changelog
   - Customized document default view in order to render `file`
     field in NO_DOWNLOAD_DISPLAY_MODE.
     [lgraf]
+  - Changed German wording for value `unchecked` for both public_trial and archival_value:
+    "Noch nicht geprüft" -> "Nicht geprüft"
+    [lgraf]
+  - Change german wording for descriptions of `public_trial` and `public_trial_statement`
+    [lgraf]
 
 
 - Changes to journaling:
@@ -49,6 +58,8 @@ Changelog
     considered documentish and should be treated equally.
     [lgraf]
   - Journalize AttachmentsDeleted event.
+    [lgraf]
+  - Create initial journal entry for mails.
     [lgraf]
 
 
@@ -87,6 +98,10 @@ Changelog
   - Reword status message after sending documents by e-mail.
     [lgraf]
   - Use the same customized download view we use for documents for mails as well.
+    [lgraf]
+  - Don't encode attached mails when sending documents as email.
+    [lgraf]
+  - Always set `digitally_available` to `True` upon mail creation.
     [lgraf]
 
 - Changes related to public_trial field:
