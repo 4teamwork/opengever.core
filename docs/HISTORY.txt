@@ -101,6 +101,8 @@ Changelog
     [lgraf]
   - Don't encode attached mails when sending documents as email.
     [lgraf]
+  - Always set `digitally_available` to `True` upon mail creation.
+    [lgraf]
 
 - Changes related to public_trial field:
 
