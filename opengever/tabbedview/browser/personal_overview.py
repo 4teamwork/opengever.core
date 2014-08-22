@@ -2,7 +2,6 @@ from AccessControl import Unauthorized
 from five import grok
 from ftw.tabbedview.browser.tabbed import TabbedView
 from opengever.globalindex.model.task import Task
-from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
@@ -14,7 +13,6 @@ from plone import api
 from Products.CMFPlone.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from sqlalchemy.exc import OperationalError
-from zope.component import getUtility
 from zope.interface import Interface
 import AccessControl
 
@@ -111,16 +109,15 @@ class PersonalOverview(TabbedView):
         the PersonalOverview, False otherwise.
         """
         try:
-            info = getUtility(IContactInformation)
-
-            if info.is_client_assigned():
+            current_user = ogds_service().fetch_current_user()
+            if current_user in get_current_admin_unit().assigned_users():
                 return True
             elif self._is_user_admin():
                 return True
-            return False
         except OperationalError as e:
             LOG.exception(e)
-            return False
+
+        return False
 
 
 class MyDossiers(Dossiers):

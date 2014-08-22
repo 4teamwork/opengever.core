@@ -8,13 +8,12 @@ from plone.app.testing import TEST_USER_ID
 import transaction
 
 
-class TestGlobalTaskListings(FunctionalTestCase):
+class TestPersonalOverview(FunctionalTestCase):
 
     use_default_fixture = False
 
     def setUp(self):
-        super(TestGlobalTaskListings, self).setUp()
-
+        super(TestPersonalOverview, self).setUp()
         self.user, self.org_unit, self.admin_unit = create(
             Builder('fixture').with_all_unit_setup())
 
@@ -25,18 +24,25 @@ class TestGlobalTaskListings(FunctionalTestCase):
                                    lastname='Boss')
                            .assign_to_org_units([self.org_unit]))
 
-        self.task1 = create(Builder('task')
-                            .having(responsible_client='client1',
-                                    responsible=TEST_USER_ID,
-                                    issuer=TEST_USER_ID))
-        self.task2 = create(Builder('task')
-                            .having(responsible_client='client1',
-                                    responsible='hugo.boss',
-                                    issuer=TEST_USER_ID))
-        self.task3 = create(Builder('task')
-                            .having(responsible_client='client1',
-                                    responsible=TEST_USER_ID,
-                                    issuer='hugo.boss'))
+    @browsing
+    def test_redirects_to_repository_root_on_a_foreign_admin_unit(self, browser):
+        create_plone_user(self.portal, 'peter')
+        setRoles(self.portal, 'hugo.boss', ['Reader'])
+        transaction.commit()
+
+        additional = create(Builder('org_unit')
+                            .id('additional')
+                            .with_default_groups())
+
+        self.hugo = create(Builder('ogds_user')
+                           .having(userid='peter')
+                           .assign_to_org_units([additional]))
+
+        repo_root = create(Builder('repository_root'))
+
+        browser.login(username='peter', password='demo09').open(
+            view='personal_overview')
+        self.assertEqual(repo_root.absolute_url(), browser.url)
 
     @browsing
     def test_personal_overview_displays_username_in_title(self, browser):
@@ -72,6 +78,36 @@ class TestGlobalTaskListings(FunctionalTestCase):
         self.assertEqual(
             ['mydossiers', 'mydocuments', 'mytasks', 'myissuedtasks'],
             browser.css('li.formTab a').text)
+
+
+class TestGlobalTaskListings(FunctionalTestCase):
+
+    use_default_fixture = False
+
+    def setUp(self):
+        super(TestGlobalTaskListings, self).setUp()
+
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_all_unit_setup())
+
+        self.hugo = create(Builder('ogds_user')
+                           .having(userid='hugo.boss',
+                                   firstname='Hugo',
+                                   lastname='Boss')
+                           .assign_to_org_units([self.org_unit]))
+
+        self.task1 = create(Builder('task')
+                            .having(responsible_client='client1',
+                                    responsible=TEST_USER_ID,
+                                    issuer=TEST_USER_ID))
+        self.task2 = create(Builder('task')
+                            .having(responsible_client='client1',
+                                    responsible='hugo.boss',
+                                    issuer=TEST_USER_ID))
+        self.task3 = create(Builder('task')
+                            .having(responsible_client='client1',
+                                    responsible=TEST_USER_ID,
+                                    issuer='hugo.boss'))
 
     def test_my_tasks(self):
         view = self.portal.unrestrictedTraverse(
