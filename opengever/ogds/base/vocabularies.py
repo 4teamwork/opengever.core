@@ -447,16 +447,11 @@ class AssignedClientsVocabularyFactory(grok.GlobalUtility):
 
     def key_value_provider(self):
         """yield the items
-
-        key = client id
-        value = client title
+        key = orgunit id
+        value = orgunit label
         """
-
-        info = getUtility(IContactInformation)
-
-        for client in info.get_assigned_clients():
-            yield (client.client_id,
-                   client.title)
+        for org_unit in ogds_service().assigned_org_units():
+            yield (org_unit.id(), org_unit.label())
 
 
 class OtherAssignedClientsVocabularyFactory(grok.GlobalUtility):
@@ -474,18 +469,13 @@ class OtherAssignedClientsVocabularyFactory(grok.GlobalUtility):
         return vocab
 
     def key_value_provider(self):
-        """yield the items
-
-        key = client id
-        value = client title
+        """
+        key = org_unit id
+        value = org_unit title
         """
 
-        info = getUtility(IContactInformation)
-        current_client_id = get_current_org_unit().id()
-
-        for client in info.get_assigned_clients():
-            if current_client_id != client.client_id:
-                yield (client.client_id, client.title)
+        for org_unit in ogds_service().assigned_org_units(omit_current=True):
+            yield (org_unit.id(), org_unit.label())
 
 
 class DocumentInSelectedDossierVocabularyFactory(grok.GlobalUtility):

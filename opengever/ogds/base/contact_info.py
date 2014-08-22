@@ -199,23 +199,6 @@ class ContactInformation(grok.GlobalUtility):
                                                  client_id=client_id).first()
         return client
 
-    def get_assigned_clients(self, userid=None):
-        """Returns all assigned clients (home clients).
-        """
-
-        if not userid:
-            member = getToolByName(
-                getSite(), 'portal_membership').getAuthenticatedMember()
-            userid = member.getId()
-
-        session = create_session()
-
-        # select all clients with the user in the user group
-        clients = session.query(Client).join(Client.users_group).join(
-            Group.users).filter(User.userid == userid).all()
-
-        return clients
-
     @ram.cache(ogds_class_language_cachekey)
     def get_user_sort_dict(self):
         """Returns a dict presenting userid and the fullname,
