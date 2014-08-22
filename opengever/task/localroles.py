@@ -3,6 +3,7 @@ from Acquisition import aq_parent
 from five.grok import subscribe
 from opengever.globalindex.handlers.task import sync_task
 from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task.task import ITask
 from zope.app.container.interfaces import IObjectAddedEvent
 from zope.component import getUtility
@@ -60,9 +61,7 @@ class LocalRolesSetter(object):
         return self._inbox_group
 
     def is_inboxgroup_agency_active(self):
-        """The inbox group acengy is only activated in a multiclient setup."""
-        info = getUtility(IContactInformation)
-        return not info.is_one_client_setup()
+        return get_current_org_unit().is_inboxgroup_agency_active
 
     def _add_local_roles(self, context, principal, roles):
         """Adds local roles to the context.

@@ -69,25 +69,6 @@ class TestClientHelpers(FunctionalTestCase):
             self.info.get_assigned_clients(userid='jamie.lannister'))
 
 
-class TestOneClientSetupHelper(FunctionalTestCase):
-    use_default_fixture = False
-
-    def setUp(self):
-        super(TestOneClientSetupHelper, self).setUp()
-        self.info = getUtility(IContactInformation)
-
-    def test_is_one_client_setup(self):
-        create_and_select_current_org_unit('client')
-
-        self.assertTrue(self.info.is_one_client_setup())
-
-    def test_a_setup_with_multiple_clients_is_not_a_one_client_setup(self):
-        create_and_select_current_org_unit('client')
-        create_client(clientid='client2')
-
-        self.assertFalse(self.info.is_one_client_setup())
-
-
 class TestGroupHelpers(FunctionalTestCase):
     use_default_fixture = False
 

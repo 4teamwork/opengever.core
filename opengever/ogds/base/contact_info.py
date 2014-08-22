@@ -7,7 +7,6 @@ from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models.client import Client
 from opengever.ogds.models.group import Group
-from opengever.ogds.models.group import groups_users
 from opengever.ogds.models.user import User
 from plone.memoize import ram
 from Products.CMFCore.utils import getToolByName
@@ -243,13 +242,6 @@ class ContactInformation(grok.GlobalUtility):
             userid = member.getId()
 
         return self._is_client_assigned(userid, client_id)
-
-    def is_one_client_setup(self):
-        """Return True if only one client is available"""
-
-        clients = self.get_clients()
-
-        return len(clients) == 1
 
     @ram.cache(ogds_class_language_cachekey)
     def get_user_sort_dict(self):
