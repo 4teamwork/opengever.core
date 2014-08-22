@@ -1,5 +1,4 @@
 from five import grok
-from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.interfaces import ITransporter
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.base.vocabulary import ContactsVocabulary
@@ -33,8 +32,8 @@ class TargetClientsWithInboxVocabularyFactory(grok.GlobalUtility):
     def key_value_provider(self):
         """yield the items
 
-        key = client id
-        value = client title
+        key = orgunit id
+        value = orgunit title
         """
         member = api.user.get_current()
         for org_unit in ogds_service().assigned_org_units(omit_current=True):
@@ -76,13 +75,12 @@ class CopyRelatedDocumentsForm(Form):
                     default=u"It's not possible to copy related documents."))
         if not errors and data['copy_documents']:
             self.copy_documents(data['target_client'])
-            info = getUtility(IContactInformation)
-            client = info.get_client_by_id(data['target_client'])
+            org_unit = ogds_service().fetch_org_unit(data['target_client'])
             IStatusMessage(self.request).addStatusMessage(
                 _(u'info_copied_related_documents',
                   default=u'All related documents were copied to the inbox of '
-                  'the client ${client}.',
-                  mapping=dict(client=client.title)), type='info')
+                  'the client ${unit}.',
+                  mapping=dict(unit=org_unit.label())), type='info')
         if not errors:
             return self.request.RESPONSE.redirect(self.context.absolute_url())
 

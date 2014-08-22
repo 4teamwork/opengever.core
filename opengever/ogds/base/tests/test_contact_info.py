@@ -39,15 +39,6 @@ class TestClientHelpers(FunctionalTestCase):
     def test_get_clients_returns_all_enabled_clients(self):
         self.assertEquals([self.client1, self.client2], self.info.get_clients())
 
-    def test_get_client_by_id_for_exsiting_client_returns_client(self):
-        self.assertEquals(self.client1, self.info.get_client_by_id('client1'))
-
-    def test_get_client_by_id_for_disabled_client_returns_none(self):
-        self.assertEquals(None, self.info.get_client_by_id('unknown client'))
-
-    def test_get_client_by_id_for_not_existing_client_returns_none(self):
-        self.assertEquals(None, self.info.get_client_by_id('unknown client'))
-
 
 class TestGroupHelpers(FunctionalTestCase):
     use_default_fixture = False

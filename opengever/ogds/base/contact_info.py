@@ -192,13 +192,6 @@ class ContactInformation(grok.GlobalUtility):
         return self._clients_query().filter_by(enabled=True).order_by(
             Client.title).all()
 
-    def get_client_by_id(self, client_id):
-        """Returns a client identified by `client_id`.
-        """
-        client = self._clients_query().filter_by(enabled=True,
-                                                 client_id=client_id).first()
-        return client
-
     @ram.cache(ogds_class_language_cachekey)
     def get_user_sort_dict(self):
         """Returns a dict presenting userid and the fullname,

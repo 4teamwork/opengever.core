@@ -103,10 +103,9 @@ class ResponseView(grok.Viewlet, Base):
 
     def convert_change_values(self, fieldname, value):
         if fieldname == 'responsible_client':
-            info = getUtility(IContactInformation)
-            client = info.get_client_by_id(value)
-            if client:
-                return client.title
+            org_unit = ogds_service().fetch_org_unit(value)
+            if org_unit:
+                return org_unit.label()
             else:
                 return value
 

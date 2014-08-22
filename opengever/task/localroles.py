@@ -16,7 +16,7 @@ class LocalRolesSetter(object):
 
     def __init__(self, task):
         self.task = task
-        self._inbox_group = None
+        self._inbox_group_id = None
 
     def __call__(self, event):
         self.event = event
@@ -51,13 +51,9 @@ class LocalRolesSetter(object):
         return self._responsible
 
     @property
-    def inbox_group(self):
-        if self._inbox_group is None:
-            info = getUtility(IContactInformation)
-            client = info.get_client_by_id(self.task.responsible_client)
-            if client:
-                self._inbox_group = client.inbox_group_id
-
+    def inbox_group_id(self):
+        if self._inbox_group_id is None:
+            self._inbox_group = self.task.get_responsible_org_unit().inbox_group().groupid
         return self._inbox_group
 
     def is_inboxgroup_agency_active(self):
@@ -77,8 +73,8 @@ class LocalRolesSetter(object):
         """Set local roles on task
         """
         self._add_local_roles(self.task, self.responsible, ('Editor',))
-        if self.is_inboxgroup_agency_active() and self.inbox_group:
-            self._add_local_roles(self.task, self.inbox_group, ('Editor',))
+        if self.is_inboxgroup_agency_active() and self.inbox_group_id:
+            self._add_local_roles(self.task, self.inbox_group_id, ('Editor',))
 
     def globalindex_reindex_task(self):
         """We need to reindex the task in globalindex. This was done
@@ -96,8 +92,8 @@ class LocalRolesSetter(object):
         while context.Type() == self.task.Type():
             context = aq_parent(aq_inner(context))
         self._add_local_roles(context, self.responsible, ('Contributor', ))
-        if self.is_inboxgroup_agency_active() and self.inbox_group:
-            self._add_local_roles(context, self.inbox_group, ('Contributor', ))
+        if self.is_inboxgroup_agency_active() and self.inbox_group_id:
+            self._add_local_roles(context, self.inbox_group_id, ('Contributor', ))
 
     def set_roles_on_related_items(self):
         """Set local roles on related items (usually documents)
@@ -109,8 +105,8 @@ class LocalRolesSetter(object):
 
         for item in getattr(self.task, 'relatedItems', []):
             self._add_local_roles(item.to_object, self.responsible, roles)
-            if self.is_inboxgroup_agency_active() and self.inbox_group:
-                self._add_local_roles(item.to_object, self.inbox_group, roles)
+            if self.is_inboxgroup_agency_active() and self.inbox_group_id:
+                self._add_local_roles(item.to_object, self.inbox_group_id, roles)
 
 
 @subscribe(ITask, IObjectAddedEvent)
