@@ -12,6 +12,19 @@ from zope.component import getUtility
 import transaction
 
 
+def installed(site):
+    set_global_roles(site)
+    create_repository_root(site)
+    start_import(site)
+    settings(site)
+    assign_portlets(site)
+    disable_site_syndication(site)
+
+
+def set_global_roles(site):
+    assign_roles(site, ['og_administratoren'])
+
+
 def create_repository_root(context):
     repository_root = context.REQUEST.get('repository_root', None)
     if not repository_root:
@@ -61,16 +74,7 @@ def disable_site_syndication(context):
     ps.editProperties(isAllowed=False)
 
 
-def set_global_roles(setup):
-    admin_file = setup.readDataFile('administrator.txt')
-    if admin_file is None:
-        return
-    site = setup.getSite()
-    assign_roles(site, admin_file)
-
-
-def assign_roles(context, admin_file):
-    admin_groups = admin_file.split('\n')
+def assign_roles(context, admin_groups):
     prm = context.acl_users.portal_role_manager
 
     for admin_group in admin_groups:
@@ -173,14 +177,3 @@ def assign_portlets(context):
     assignable = getMultiAdapter(
         (templatedossier, manager), ILocalPortletAssignmentManager)
     assignable.setBlacklistStatus(CONTEXT_CATEGORY, True)
-
-
-def import_various(setup):
-    if setup.readDataFile('opengever.setup.txt') is None:
-        return
-    site = setup.getSite()
-    create_repository_root(site)
-    start_import(site)
-    settings(site)
-    assign_portlets(site)
-    disable_site_syndication(site)

@@ -1,9 +1,4 @@
-"""Contains setuphandlers"""
-from Products.CMFCore.utils import getToolByName
-
-
-# The profile id of your package:
-PROFILE_ID = 'profile-opengever.inbox:default'
+from plone import api
 
 
 ACTIONS_ORDER = ['overview',
@@ -16,12 +11,12 @@ ACTIONS_ORDER = ['overview',
 
 
 def order_actions(context):
-    """ Order the actions on the opengever.inbox.inbox FTI
-    according to the order given in ACTIONS_ORDER
-    """
+    """ Order the actions on the opengever.inbox.inbox FTI according to the
+    order given in ACTIONS_ORDER.
 
-    pt = getToolByName(context, 'portal_types')
-    inbox_fti = pt['opengever.inbox.inbox']
+    """
+    types_tool = api.portal.get_tool('portal_types')
+    inbox_fti = types_tool['opengever.inbox.inbox']
 
     actions = inbox_fti._actions
 
@@ -36,11 +31,5 @@ def order_actions(context):
     inbox_fti._actions = all_actions
 
 
-def import_various(context):
-    """Import step for configuration that is not handled in xml files.
-    """
-    if context.readDataFile('opengever.inbox_various.txt') is None:
-        return
-    #logger = context.getLogger('opengever.inbox')
-    site = context.getSite()
+def installed(site):
     order_actions(site)

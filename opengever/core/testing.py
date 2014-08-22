@@ -4,9 +4,10 @@ from ftw.builder.testing import functional_session_factory
 from ftw.builder.testing import set_builder_session_factory
 from ftw.testing import ComponentRegistryLayer
 from opengever.globalindex import model
-from opengever.ogds.base.setuphandlers import create_sql_tables
+from opengever.ogds.base.setup import create_sql_tables
 from opengever.ogds.base.utils import create_session
 from opengever.ogds.models import BASE
+from plone.app.testing import applyProfile
 from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import IntegrationTesting
@@ -15,8 +16,11 @@ from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import ploneSite
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
+from plone.browserlayer.utils import unregister_layer
+from plone.dexterity.schema import SCHEMA_CACHE
 from plone.testing import Layer
 from plone.testing import z2
+from Products.CMFCore.utils import getToolByName
 from Testing.ZopeTestCase.utils import setupCoreSessions
 from z3c.saconfig import EngineFactory
 from z3c.saconfig import GloballyScopedSession
@@ -86,8 +90,8 @@ class OpengeverFixture(PloneSandboxLayer):
 
     def setUpZope(self, app, configurationContext):
         # do not install pas plugins (doesnt work in tests)
-        from opengever.ogds.base import setuphandlers
-        setuphandlers.setup_scriptable_plugin = lambda *a, **kw: None
+        from opengever.ogds.base import hooks
+        hooks._setup_scriptable_plugin = lambda *a, **kw: None
 
         xmlconfig.string(
             '<configure xmlns="http://namespaces.zope.org/zope">'
@@ -190,3 +194,32 @@ OPENGEVER_FUNCTIONAL_TESTING = FunctionalTesting(
     bases=(OPENGEVER_FIXTURE,
            set_builder_session_factory(functional_session_factory)),
     name="opengever.core:functional")
+
+
+def activate_filing_number(portal):
+    applyProfile(portal, 'opengever.dossier:filing')
+    transaction.commit()
+
+
+def inactivate_filing_number(portal):
+    unregister_layer('opengever.dossier.filing')
+
+    portal_types = getToolByName(portal, 'portal_types')
+    fti = portal_types.get('opengever.dossier.businesscasedossier')
+    fti.behaviors = [behavior for behavior in fti.behaviors
+                     if not behavior.endswith('IFilingNumber')]
+
+    SCHEMA_CACHE.invalidate('opengever.dossier.businesscasedossier')
+
+
+class FilingLayer(PloneSandboxLayer):
+
+    defaultBases = (OPENGEVER_FUNCTIONAL_TESTING,)
+
+    def setUpPloneSite(self, portal):
+        activate_filing_number(portal)
+
+    def tearDownPloneSite(self, portal):
+        inactivate_filing_number(portal)
+
+OPENGEVER_FUNCTIONAL_FILING_LAYER = FilingLayer()

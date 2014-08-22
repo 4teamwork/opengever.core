@@ -1,34 +1,30 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:five="http://namespaces.zope.org/five"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:grok="http://namespaces.zope.org/grok"
     xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:plone="http://namespaces.plone.org/plone"
-    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:profilehook="http://namespaces.zope.org/profilehook"
     i18n_domain="opengever.contact">
 
-    <!-- Include custom permissions -->
-    <include file="permissions.zcml" />
+  <include file="permissions.zcml" />
 
-    <!-- Grok the package to initialise schema interfaces and content classes -->
-    <grok:grok package="." />
+  <grok:grok package="." />
 
-    <i18n:registerTranslations directory="locales" />
+  <i18n:registerTranslations directory="locales" />
 
-    <!-- Register an extension profile to make the product installable -->
-    <genericsetup:registerProfile
-        name="default"
-        title="opengever.contact"
-        description="Opengever contact installation"
-        directory="profiles/default"
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-        />
+  <genericsetup:registerProfile
+      name="default"
+      title="opengever.contact"
+      description="Opengever contact installation"
+      directory="profiles/default"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
 
-    <!-- Register the import step -->
-    <genericsetup:importStep
-        name="opengever.contact"
-        title="opengever.contact special import handlers"
-        description=""
-        handler="opengever.contact.setuphandlers.import_various" />
+  <profilehook:hook
+      profile="opengever.contact:default"
+      handler=".hooks.installed"
+      />
 
 </configure>

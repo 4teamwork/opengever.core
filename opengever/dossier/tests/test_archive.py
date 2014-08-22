@@ -3,7 +3,9 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testing import MockTestCase
 from grokcore.component.testing import grok
+from opengever.core.testing import activate_filing_number
 from opengever.core.testing import ANNOTATION_LAYER
+from opengever.core.testing import inactivate_filing_number
 from opengever.dossier.archive import Archiver
 from opengever.dossier.archive import default_end_date
 from opengever.dossier.archive import EnddateValidator
@@ -25,8 +27,6 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.filing import IFilingNumber
 from opengever.dossier.behaviors.filing import IFilingNumberMarker
-from opengever.dossier.filing.testing import activate_filing_number
-from opengever.dossier.filing.testing import inactivate_filing_number
 from opengever.dossier.interfaces import IDossierArchiver
 from opengever.testing import FunctionalTestCase
 from zope.interface import Invalid

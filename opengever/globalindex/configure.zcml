@@ -3,29 +3,27 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:grok="http://namespaces.zope.org/grok"
     xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:profilehook="http://namespaces.zope.org/profilehook"
     i18n_domain="opengever.globalindex">
 
-    <!-- Grok the package -->
-    <grok:grok package="." />
+  <include package=".handlers" />
+  <include package=".upgrades" />
 
-    <genericsetup:registerProfile
-        name="default"
-        title="opengever.globalindex"
-        directory="profiles/default"
-        description="Installs the opengever.globalindex package"
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-        />
+  <grok:grok package="." />
 
-    <genericsetup:importStep
-        name="opengever.globalindex : create sql tables"
-        title="Install and create opengever.globalindex tables"
-        description=""
-        handler="opengever.globalindex.setuphandlers.create_tables"
-        />
+  <i18n:registerTranslations directory="locales" />
 
-    <i18n:registerTranslations directory="locales" />
+  <genericsetup:registerProfile
+      name="default"
+      title="opengever.globalindex"
+      directory="profiles/default"
+      description="Installs the opengever.globalindex package"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
 
-    <include package=".handlers" />
-    <include package=".upgrades" />
+  <profilehook:hook
+      profile="opengever.globalindex:default"
+      handler=".hooks.installed"
+      />
 
 </configure>
