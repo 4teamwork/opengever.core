@@ -1,13 +1,18 @@
 Changelog
 =========
 
+3.5 (unreleased)
+----------------
+
+- Use `ftw.profilehook` instead of setuphandlers.
+  [deiferni]
+
+
 3.4 (unreleased)
 ----------------
 
 - General fixes:
 
-  - Use `ftw.profilehook` instead of setuphandlers.
-    [deiferni]
   - Fixed translation for filing_number column in dossier listings.
     [phgross]
   - Also check for not supplied mails, when check if dossier could be resolved.
