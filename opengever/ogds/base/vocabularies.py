@@ -488,67 +488,6 @@ class OtherAssignedClientsVocabularyFactory(grok.GlobalUtility):
                 yield (client.client_id, client.title)
 
 
-class HomeDossiersVocabularyFactory(grok.GlobalUtility):
-    """Vocabulary of all open dossiers on users home client.
-    Key is the path of dossier relative to its plone site on the remote client.
-    """
-
-    grok.provides(IVocabularyFactory)
-    grok.name('opengever.ogds.base.HomeDossiersVocabulary')
-
-    def __call__(self, context):
-        self.context = context
-        vocab = ContactsVocabulary.create_with_provider(
-            self.key_value_provider)
-        return vocab
-
-    def key_value_provider(self):
-        """yield home dossiers
-        key: relative path on home client
-        value: "%(reference_number): %(title)"
-        """
-
-        # if we are not logged in we are in the traversal and should not
-        # do anything...
-        user = AccessControl.getSecurityManager().getUser()
-        if user == AccessControl.SpecialUsers.nobody:
-            return
-
-        request = getRequest()
-
-        info = getUtility(IContactInformation)
-        comm = getUtility(IClientCommunicator)
-
-        client_id = request.get(
-            'client', request.get('form.widgets.client'))
-        if type(client_id) in (list, tuple, set):
-            client_id = client_id[0]
-        client = info.get_client_by_id(client_id)
-
-        if client and not info.is_client_assigned(client_id=client_id):
-            raise ValueError(
-                'Expected %s to be a assigned client of the current user.' %
-                    client_id)
-
-        elif client:
-            # kss validation overrides getSite() hook with a bad object
-            # but we need getSite to work properly, so we fix it.
-            site = getSite()
-            if site.__class__.__name__ == 'Z3CFormValidation':
-                fixed_site = getToolByName(self.context,
-                                           'portal_url').getPortalObject()
-                setSite(fixed_site)
-                dossiers = comm.get_open_dossiers(client.client_id)
-                setSite(site)
-            else:
-                dossiers = comm.get_open_dossiers(client.client_id)
-
-            for dossier in dossiers:
-                yield (dossier['path'],
-                       '%s: %s' % (dossier['reference_number'],
-                                   dossier['title']))
-
-
 class DocumentInSelectedDossierVocabularyFactory(grok.GlobalUtility):
     """ Provides a vocabulary containing all documents within the previously
     selected dossier. Expects the context to be a dict containing the path

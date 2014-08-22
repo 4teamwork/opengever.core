@@ -474,40 +474,6 @@ class TestOGDSVocabularies(FunctionalTestCase):
              ('contact:man-super', u'M\xe4n Super (superman@test.ch)')],
             voca_factory(self.portal))
 
-    def test_home_dossier_vocabulary_contains_all_open_dossier_from_your_home_client(self):
-
-        class ClientCommunicatorMockUtility(communication.ClientCommunicator):
-            implements(communication.IClientCommunicator)
-
-            def get_open_dossiers(self, target_client_id):
-                return [{'url': 'http://nohost/client2/op1/op2/dossier1',
-                         'path': 'op1/op2/dossier1',
-                         'title': 'Dossier 1',
-                         'workflow_state': 'dossier-state-active',
-                         'reference_number': 'OG 1.2 / 1'},
-                        {'url': 'http://nohost/client2/op1/op2/dossier2',
-                         'path': 'op1/op2/dossier2',
-                         'title': 'Dossier 2',
-                         'workflow_state': 'dossier-state-active',
-                         'reference_number': 'OG 1.2 / 2'}]
-
-        provideUtility(ClientCommunicatorMockUtility())
-
-        create_client(clientid="client1")
-        client2 = create_client(clientid="client2")
-        create_ogds_user(TEST_USER_ID, assigned_client=[client2])
-
-        self.portal.REQUEST.set('client', 'client2')
-
-        voca_factory = getUtility(
-            IVocabularyFactory,
-            name='opengever.ogds.base.HomeDossiersVocabulary')
-
-        self.assertTerms(
-            [('op1/op2/dossier1', 'OG 1.2 / 1: Dossier 1'),
-             ('op1/op2/dossier2', 'OG 1.2 / 2: Dossier 2')],
-            voca_factory(self.portal))
-
     def test_document_contains_all_documents_of_the_given_remote_dossier(self):
 
         class ClientCommunicatorMockUtility(communication.ClientCommunicator):
