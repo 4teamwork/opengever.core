@@ -216,33 +216,6 @@ class ContactInformation(grok.GlobalUtility):
 
         return clients
 
-    @ram.cache(ogds_user_client_cachekey)
-    def _is_client_assigned(self, userid, client_id):
-        session = create_session()
-
-        # check if the specified user is in the user_group of the specified
-        # client
-        if session.query(Client).join(Client.users_group).join(
-            Group.users).filter(User.userid == userid).filter(
-            Client.client_id == client_id).count() > 0:
-            return True
-
-        return False
-
-    def is_client_assigned(self, userid=None, client_id=None):
-        """Return True if the specified user is in the user_group
-        of the specified client"""
-
-        if not client_id:
-            client_id = get_current_org_unit().id()
-
-        if not userid:
-            member = getToolByName(
-                getSite(), 'portal_membership').getAuthenticatedMember()
-            userid = member.getId()
-
-        return self._is_client_assigned(userid, client_id)
-
     @ram.cache(ogds_class_language_cachekey)
     def get_user_sort_dict(self):
         """Returns a dict presenting userid and the fullname,

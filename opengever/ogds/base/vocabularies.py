@@ -511,16 +511,16 @@ class DocumentInSelectedDossierVocabularyFactory(grok.GlobalUtility):
         if user == AccessControl.SpecialUsers.nobody:
             return
 
-        info = getUtility(IContactInformation)
         comm = getUtility(IClientCommunicator)
 
         # get client
-        client_id = request.get(
-            'client', request.get('form.widgets.client'))
+        client_id = request.get('client', request.get('form.widgets.client'))
         if type(client_id) in (list, tuple, set):
             client_id = client_id[0]
 
-        if not info.is_client_assigned(client_id=client_id):
+        org_unit = ogds_service().fetch_org_unit(client_id)
+        current_user = ogds_service().fetch_current_user()
+        if current_user not in org_unit.assigned_users():
             raise ValueError(
                 'Expected %s to be a assigned client of the current user.' %
                 client_id)
