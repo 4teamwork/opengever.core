@@ -1,15 +1,14 @@
 from five import grok
-from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import remote_request
+from opengever.task.browser.transitioncontroller import get_conditions
 from opengever.task.interfaces import IDeadlineModifier
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
+from plone import api
 from Products.CMFCore.utils import getToolByName
 from Products.CMFDiffTool.utils import safe_utf8
 from zExceptions import Unauthorized
-from zope.component import getMultiAdapter
-from zope.component import getUtility
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
 
@@ -34,28 +33,23 @@ class DeadlineModifier(grok.Adapter):
         return False
 
     def _is_issuer_or_admin(self):
-        member = getMultiAdapter((self.context, self.context.REQUEST),
-                                    name='plone_portal_state').member()
+        conditions = get_conditions(self.context)
+        if conditions.is_issuer:
+            return True
+        elif self._is_administrator():
+            return True
 
-        return bool(self._is_issuer(member) or self._is_administrator(member))
+        return False
 
-    def _is_issuer(self, member):
-        """Checks if the current user is the issuer of the
-        current task(current context)"""
+    def _is_administrator(self):
+        """check if the user is a adminstrator or a manager"""
 
-        info = getUtility(IContactInformation)
+        current_user = api.user.get_current()
+        if current_user.has_role('Administrator') or \
+           current_user.has_role('Manager'):
+            return True
 
-        if not info.is_inbox(self.context.issuer):
-            return bool(member.id == self.context.issuer)
-        else:
-            return info.is_group_member(
-                info.get_groupid_of_inbox(self.context.issuer),
-                member.id)
-
-    def _is_administrator(self, member):
-        """check if the user is a adminstrator"""
-
-        return member.has_role('Administrator') or member.has_role('Manager')
+        return False
 
     def modify_deadline(self, new_deadline, text, transition):
         """Handles the whole deadline mofication process:
