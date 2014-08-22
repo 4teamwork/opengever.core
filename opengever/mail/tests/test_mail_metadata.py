@@ -2,7 +2,6 @@ from collective.quickupload.interfaces import IQuickUploadFileFactory
 from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
-from ftw.mail import utils
 from opengever.document.behaviors import metadata
 from opengever.document.interfaces import IDocumentSettings
 from opengever.mail.mail import extract_email
@@ -66,8 +65,8 @@ class TestMailMetadataWithBuilder(FunctionalTestCase):
         self.assertIsNone(mail.document_type,
                           'Document type should have no value')
 
-        self.assertIsNone(mail.digitally_available,
-                          'Digitally available should have no value')
+        self.assertTrue(mail.digitally_available,
+                        'Digitally available should be True')
 
         self.assertEquals(get_preserved_as_paper_default(),
                           mail.preserved_as_paper)
@@ -176,8 +175,8 @@ class TestMailUpgradeStep(FunctionalTestCase):
         self.assertIsNone(mail.document_type,
                           'Document type has no value')
 
-        self.assertIsNone(mail.digitally_available,
-                          'Digitally available has no value')
+        self.assertTrue(mail.digitally_available,
+                        'Digitally available should be True')
 
         self.assertEquals(get_preserved_as_paper_default(),
                           mail.preserved_as_paper)
