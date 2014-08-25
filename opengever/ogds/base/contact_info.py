@@ -90,12 +90,6 @@ class ContactInformation(grok.GlobalUtility):
 
     grok.provides(IContactInformation)
 
-    # USERS
-    def is_user(self, principal):
-        """Returns true, if `principal` is a userid.
-        """
-        return principal and ':' not in principal
-
     @ram.cache(ogds_class_language_cachekey)
     def get_user_sort_dict(self):
         """Returns a dict presenting userid and the fullname,

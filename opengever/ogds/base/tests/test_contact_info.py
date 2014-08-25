@@ -35,20 +35,3 @@ class TestClientHelpers(FunctionalTestCase):
         create_ogds_user(TEST_USER_ID, assigned_client=[self.client1],
                  firstname="Test", lastname="User")
         select_current_org_unit('client1')
-
-
-class TestContactInfoAdditionals(FunctionalTestCase):
-    use_default_fixture = False
-
-    def setUp(self):
-        super(TestContactInfoAdditionals, self).setUp()
-        create(Builder('fixture').with_admin_unit())
-        self.info = getUtility(IContactInformation)
-
-    def test_contacts_or_inboxes_is_not_a_user(self):
-        self.assertFalse(self.info.is_user(u'inbox:client1'))
-        self.assertFalse(self.info.is_user(u'contact:croft-lara'))
-
-    def test_all_possibly_valid_userids_are_a_user(self):
-        self.assertTrue(self.info.is_user('hugo.boss'))
-        self.assertTrue(self.info.is_user('peter.muster'))
