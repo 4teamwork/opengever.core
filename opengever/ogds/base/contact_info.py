@@ -154,16 +154,6 @@ class ContactInformation(grok.GlobalUtility):
 
         return principal and principal.startswith('inbox:')
 
-    def get_client_of_inbox(self, principal):
-        """Returns the client object of the `principal`.
-        """
-        if not self.is_inbox(principal):
-            raise ValueError('Principal %s is not a inbox' % (str(principal)))
-
-        client_id = principal.split(':', 1)[1]
-
-        return self._clients_query().get(client_id)
-
     @ram.cache(ogds_class_language_cachekey)
     def get_user_sort_dict(self):
         """Returns a dict presenting userid and the fullname,
