@@ -115,34 +115,6 @@ class ContactInformation(grok.GlobalUtility):
         brains = ZCatalog.searchResults(catalog, **query)
         return brains
 
-    def get_contact(self, principal, check_permissions=False):
-        """Returns the contact object of this principal.
-        """
-
-        if not self.is_contact(principal):
-            raise ValueError('Principal %s is not a contact' % str(principal))
-
-        catalog = getToolByName(getSite(), 'portal_catalog')
-        query = {'portal_type': 'opengever.contact.contact',
-                 'contactid': principal}
-
-        if not check_permissions:
-            # usually foreign users may not have access to the contacts,
-            # but we want to be able to print the name etc. in this case too.
-            # So we need to use ZCatalog for ignoring the allowedRolesAndUsers
-            # index.
-            contacts = ZCatalog.searchResults(catalog, **query)
-        else:
-            contacts = catalog.searchResults(**query)
-
-        if len(contacts) == 0:
-            return None
-        elif len(contacts) > 1:
-            raise ValueError('Found %i contacts with principal %s' % (
-                    len(contacts), principal))
-        else:
-            return contacts[0]
-
     @ram.cache(ogds_class_language_cachekey)
     def get_user_sort_dict(self):
         """Returns a dict presenting userid and the fullname,
