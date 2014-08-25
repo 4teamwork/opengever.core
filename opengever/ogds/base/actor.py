@@ -82,6 +82,9 @@ class Actor(object):
 
         return u'<a href="{}">{}</a>'.format(url, label)
 
+    def corresponds_to(self, user):
+        raise NotImplementedError()
+
 
 class NullActor(object):
 
