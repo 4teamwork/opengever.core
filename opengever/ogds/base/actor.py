@@ -85,6 +85,10 @@ class Actor(object):
     def corresponds_to(self, user):
         raise NotImplementedError()
 
+    @property
+    def permission_identifier(self):
+        raise NotImplementedError()
+
 
 class NullActor(object):
 
@@ -125,6 +129,10 @@ class InboxActor(Actor):
                   mapping=dict(client=self.org_unit.label()))
 
         return translate(label, context=getRequest())
+
+    @property
+    def permission_identifier(self):
+        return self.org_unit.inbox_group().groupid
 
 
 class ContactActor(Actor):
@@ -189,6 +197,10 @@ class OGDSUserActor(Actor):
 
     def get_profile_url(self):
         return UserDetails.url_for(self.user.userid)
+
+    @property
+    def permission_identifier(self):
+        return self.identifier
 
 
 class ActorLookup(object):

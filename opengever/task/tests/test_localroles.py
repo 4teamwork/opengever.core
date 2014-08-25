@@ -8,6 +8,11 @@ from zope.lifecycleevent import ObjectModifiedEvent
 
 class TestLocalRolesSetter(FunctionalTestCase):
 
+    def setUp(self):
+        super(TestLocalRolesSetter, self).setUp()
+        create(Builder('ogds_user').id('hugo.boss'))
+        create(Builder('ogds_user').id('james.bond'))
+
     def test_responsible_has_local_editor_role_on_task_when_is_added(self):
         task = create(Builder('task').having(responsible='hugo.boss'))
 

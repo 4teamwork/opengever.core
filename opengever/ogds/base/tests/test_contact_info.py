@@ -37,26 +37,6 @@ class TestClientHelpers(FunctionalTestCase):
         select_current_org_unit('client1')
 
 
-class TestGroupHelpers(FunctionalTestCase):
-    use_default_fixture = False
-
-    def setUp(self):
-        super(TestGroupHelpers, self).setUp()
-        self.info = getUtility(IContactInformation)
-
-        self.client1 = create_client(clientid='client1')
-        self.client2 = create_client(clientid='client2')
-        create_ogds_user(TEST_USER_ID, assigned_client=[self.client1],
-                         firstname="Test", lastname="User")
-        select_current_org_unit('client1')
-
-    def test_get_group_of_inbox_returns_group(self):
-        create_client(clientid='client1', inbox_group='client1_inbox_users')
-
-        self.assertEquals('client1_inbox_users',
-                          self.info.get_groupid_of_inbox("inbox:client1"))
-
-
 class TestContactInfoAdditionals(FunctionalTestCase):
     use_default_fixture = False
 

@@ -164,18 +164,6 @@ class ContactInformation(grok.GlobalUtility):
 
         return self._clients_query().get(client_id)
 
-    @ram.cache(ogds_principal_cachekey)
-    def get_groupid_of_inbox(self, principal):
-        """Returns the groupid of the inbox `principal`.
-        """
-
-        client = self.get_client_of_inbox(principal)
-
-        if client is None:
-            raise ValueError('Client not found for: %s' % principal)
-
-        return client.inbox_group.groupid
-
     @ram.cache(ogds_class_language_cachekey)
     def get_user_sort_dict(self):
         """Returns a dict presenting userid and the fullname,
