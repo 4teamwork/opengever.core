@@ -1,17 +1,14 @@
 from collective.elephantvocabulary import wrap_vocabulary
 from five import grok
+from opengever.contact.service import ContactService
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.interfaces import IClientCommunicator
-from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.interfaces import ISyncStamp
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.base.vocabulary import ContactsVocabulary
 from plone.memoize import ram
-from Products.CMFCore.utils import getToolByName
-from zope.app.component.hooks import getSite
-from zope.app.component.hooks import setSite
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.schema.interfaces import IVocabularyFactory
@@ -213,9 +210,6 @@ class InboxesVocabularyFactory(UsersAndInboxesVocabularyFactory):
     def key_value_provider(self):
         # Reset hidden_terms every time cache key changed
         self.hidden_terms = []
-
-        info = getUtility(IContactInformation)
-
         selected_unit = ogds_service().fetch_org_unit(self.get_client())
         if selected_unit:
             # check if it the current client is selected then add all users
@@ -285,8 +279,7 @@ class ContactsVocabularyFactory(grok.GlobalUtility):
         return ContactsVocabulary.create_with_provider(self.key_value_provider)
 
     def key_value_provider(self):
-        info = getUtility(IContactInformation)
-        for contact in info.list_contacts():
+        for contact in ContactService().all_contacts():
             yield (contact.contactid,
                    Actor.contact(contact.contactid,
                                  contact=contact).get_label())
@@ -314,12 +307,11 @@ class ContactsAndUsersVocabularyFactory(grok.GlobalUtility):
         # Reset hidden_terms every time cache key changed
         self.hidden_terms = []
 
-        info = getUtility(IContactInformation)
         items, hidden_terms = self._get_users()
         # copy lists to prevent cache modification
         items = items[:]
         self.hidden_terms = hidden_terms[:]
-        for contact in info.list_contacts():
+        for contact in ContactService().all_contacts():
             actor = Actor.contact(contact.contactid, contact=contact)
             items.append((contact.contactid, actor.get_label()))
 
@@ -327,7 +319,6 @@ class ContactsAndUsersVocabularyFactory(grok.GlobalUtility):
 
     @ram.cache(voc_cachekey)
     def _get_users(self):
-        info = getUtility(IContactInformation)
         items = []
         hidden_terms = []
 
@@ -397,8 +388,7 @@ class EmailContactsAndUsersVocabularyFactory(grok.GlobalUtility):
                 user_data.append((key, value))
 
         # contacts
-        info = getUtility(IContactInformation)
-        for contact in info.list_contacts():
+        for contact in ContactService().all_contacts():
             if contact.email:
                 user_data.append(
                     ('{}:{}'.format(contact.email, contact.id),
@@ -426,7 +416,6 @@ class OrgUnitsVocabularyFactory(grok.GlobalUtility):
         return vocab
 
     def key_value_provider(self):
-        service = ogds_service()
         for unit in ogds_service().all_org_units():
             yield (unit.id(), unit.label())
 

@@ -1,4 +1,5 @@
 from five import grok
+from opengever.contact.service import ContactService
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.interfaces import ISyncStamp
@@ -11,7 +12,6 @@ from Products.ZCatalog.ZCatalog import ZCatalog
 from zope.app.component.hooks import getSite
 from zope.component import getUtility
 import logging
-
 
 logger = logging.getLogger('opengever.ogds.base')
 
@@ -94,26 +94,7 @@ class ContactInformation(grok.GlobalUtility):
     def is_user(self, principal):
         """Returns true, if `principal` is a userid.
         """
-
         return principal and ':' not in principal
-
-    # CONTACTS
-    def is_contact(self, principal):
-        """Return true, if `principal` is a contact.
-        """
-
-        return principal and principal.startswith('contact:')
-
-    def list_contacts(self):
-        """Returns a catalog result set of contact brains.
-        """
-        catalog = getToolByName(getSite(), 'portal_catalog')
-        query = {'portal_type': 'opengever.contact.contact'}
-        # make catalog query without checking security (allowedRolesAndUsers)
-        # since the contacts are not visible for foreign users but should be
-        # in the vocabulary anyway...
-        brains = ZCatalog.searchResults(catalog, **query)
-        return brains
 
     @ram.cache(ogds_class_language_cachekey)
     def get_user_sort_dict(self):
@@ -139,10 +120,10 @@ class ContactInformation(grok.GlobalUtility):
 
     def get_user_contact_sort_dict(self):
         sort_dict = self.get_user_sort_dict()
-        for contact in self.list_contacts():
+        for contact in ContactService().all_contacts():
             sort_dict['contact:%s' % (contact.id)] = u'%s %s' % (
                 contact.lastname, contact.firstname)
-        return sort_dict
+            return sort_dict
 
     # internal methods
     def _users_query(self):

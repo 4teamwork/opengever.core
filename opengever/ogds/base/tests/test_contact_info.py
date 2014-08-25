@@ -52,32 +52,3 @@ class TestContactInfoAdditionals(FunctionalTestCase):
     def test_all_possibly_valid_userids_are_a_user(self):
         self.assertTrue(self.info.is_user('hugo.boss'))
         self.assertTrue(self.info.is_user('peter.muster'))
-
-    def test_only_prinicpal_prefixed_with_contact_and_colon_is_contact(self):
-        self.assertTrue(self.info.is_contact('contact:croft-lara'))
-        self.assertFalse(self.info.is_contact('croft-lara'))
-        self.assertFalse(self.info.is_contact('inbox:client1'))
-
-    def test_list_contacts_return_all_contact_brains(self):
-        create(Builder('contact')
-               .having(**{'firstname': u'Lara',
-                          'lastname': u'Croft',
-                          'email': u'lara.croft@test.ch'}))
-        create(Builder('contact')
-               .having(**{'firstname': u'Super',
-                          'lastname': u'M\xe4n',
-                          'email': 'superman@test.ch'}))
-        create(Builder('contact')
-               .having(**{'firstname': u'James',
-                          'lastname': u'Bond',
-                          'email': None}))
-
-        self.assertEquals(
-            ['croft-lara', 'man-super', 'bond-james'],
-            [brain.getId for brain in self.info.list_contacts()])
-
-        self.assertEquals(
-            ['contact:croft-lara',
-             'contact:man-super',
-             'contact:bond-james'],
-            [contact.contactid for contact in self.info.list_contacts()])
