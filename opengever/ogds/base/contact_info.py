@@ -3,10 +3,7 @@ from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.interfaces import ISyncStamp
 from opengever.ogds.base.utils import create_session
-from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
-from opengever.ogds.models.client import Client
-from opengever.ogds.models.group import Group
 from opengever.ogds.models.user import User
 from plone.memoize import ram
 from Products.CMFCore.utils import getToolByName
@@ -14,7 +11,6 @@ from Products.ZCatalog.ZCatalog import ZCatalog
 from zope.app.component.hooks import getSite
 from zope.component import getUtility
 import logging
-import warnings
 
 
 logger = logging.getLogger('opengever.ogds.base')
@@ -187,7 +183,3 @@ class ContactInformation(grok.GlobalUtility):
     def _users_query(self):
         session = create_session()
         return session.query(User)
-
-    def _clients_query(self):
-        session = create_session()
-        return session.query(Client)
