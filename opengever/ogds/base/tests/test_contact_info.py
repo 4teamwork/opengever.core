@@ -36,9 +36,6 @@ class TestClientHelpers(FunctionalTestCase):
                  firstname="Test", lastname="User")
         select_current_org_unit('client1')
 
-    def test_get_clients_returns_all_enabled_clients(self):
-        self.assertEquals([self.client1, self.client2], self.info.get_clients())
-
 
 class TestGroupHelpers(FunctionalTestCase):
     use_default_fixture = False

@@ -176,22 +176,6 @@ class ContactInformation(grok.GlobalUtility):
 
         return client.inbox_group.groupid
 
-    # CLIENTS
-    def get_clients(self):
-        """Returns a list of all enabled clients.
-        """
-
-        # If the current client is not enabled, we should not be able to
-        # assign something to another client or interact in any way with
-        # another client. This client is completely isolated.
-        warnings.warn(
-            "This function is deprecated. Use ogds_service()"
-            ".get_current_admin_unit()/get_current_org_unit() instead.",
-            DeprecationWarning)
-
-        return self._clients_query().filter_by(enabled=True).order_by(
-            Client.title).all()
-
     @ram.cache(ogds_class_language_cachekey)
     def get_user_sort_dict(self):
         """Returns a dict presenting userid and the fullname,
