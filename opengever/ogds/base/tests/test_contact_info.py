@@ -58,11 +58,6 @@ class TestContactInfoAdditionals(FunctionalTestCase):
         self.assertFalse(self.info.is_contact('croft-lara'))
         self.assertFalse(self.info.is_contact('inbox:client1'))
 
-    def test_only_prinicpal_prefixed_with_inbox_and_colon_is_a_inbox(self):
-        self.assertTrue(self.info.is_inbox('inbox:client1'))
-        self.assertFalse(self.info.is_inbox('contact:croft-lara'))
-        self.assertFalse(self.info.is_inbox('hugo.boss'))
-
     def test_list_contacts_return_all_contact_brains(self):
         create(Builder('contact')
                .having(**{'firstname': u'Lara',

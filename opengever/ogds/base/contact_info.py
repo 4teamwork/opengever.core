@@ -143,13 +143,6 @@ class ContactInformation(grok.GlobalUtility):
         else:
             return contacts[0]
 
-    # INBOXES
-    def is_inbox(self, principal):
-        """Returns true, if `principal` is a inbox.
-        """
-
-        return principal and principal.startswith('inbox:')
-
     @ram.cache(ogds_class_language_cachekey)
     def get_user_sort_dict(self):
         """Returns a dict presenting userid and the fullname,

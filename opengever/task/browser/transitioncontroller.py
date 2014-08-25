@@ -522,6 +522,7 @@ class TaskTransitionController(BrowserView):
 
     def _is_inbox_group_user(self):
         """Checks if the current user is assigned to the current inbox"""
+
         inbox = get_current_org_unit().inbox()
         return ogds_service().fetch_current_user() in inbox.assigned_users()
 
