@@ -1,16 +1,13 @@
-from opengever.contact.service import ContactService
+from opengever.contact import contact_service
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.interfaces import ISyncStamp
 from opengever.ogds.base.utils import create_session
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models.user import User
 from plone.memoize import ram
-from plone.memoize import ram
 from Products.CMFCore.utils import getToolByName
-from Products.ZCatalog.ZCatalog import ZCatalog
 from zope.app.component.hooks import getSite
 from zope.component import getUtility
-import logging
 
 
 def ogds_class_language_cachekey(method, self):
@@ -52,7 +49,7 @@ class SortHelpers(object):
 
     def get_user_contact_sort_dict(self):
         sort_dict = self.get_user_sort_dict()
-        for contact in ContactService().all_contacts():
+        for contact in contact_service().all_contact_brains():
             sort_dict['contact:%s' % (contact.id)] = u'%s %s' % (
                 contact.lastname, contact.firstname)
             return sort_dict

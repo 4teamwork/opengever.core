@@ -7,7 +7,7 @@ CONTACT_TYPE = 'opengever.contact.contact'
 
 class ContactService(object):
 
-    def all_contacts(self, ignore_security=True):
+    def all_contact_brains(self, ignore_security=True):
         """Returns a catalog result set of contact brains.
         """
         catalog = api.portal.get_tool('portal_catalog')

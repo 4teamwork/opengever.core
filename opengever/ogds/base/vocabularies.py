@@ -1,6 +1,6 @@
 from collective.elephantvocabulary import wrap_vocabulary
 from five import grok
-from opengever.contact.service import ContactService
+from opengever.contact import contact_service
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.interfaces import IClientCommunicator
 from opengever.ogds.base.interfaces import ISyncStamp
@@ -279,7 +279,7 @@ class ContactsVocabularyFactory(grok.GlobalUtility):
         return ContactsVocabulary.create_with_provider(self.key_value_provider)
 
     def key_value_provider(self):
-        for contact in ContactService().all_contacts():
+        for contact in contact_service().all_contact_brains():
             yield (contact.contactid,
                    Actor.contact(contact.contactid,
                                  contact=contact).get_label())
@@ -311,7 +311,7 @@ class ContactsAndUsersVocabularyFactory(grok.GlobalUtility):
         # copy lists to prevent cache modification
         items = items[:]
         self.hidden_terms = hidden_terms[:]
-        for contact in ContactService().all_contacts():
+        for contact in contact_service().all_contact_brains():
             actor = Actor.contact(contact.contactid, contact=contact)
             items.append((contact.contactid, actor.get_label()))
 
@@ -388,7 +388,7 @@ class EmailContactsAndUsersVocabularyFactory(grok.GlobalUtility):
                 user_data.append((key, value))
 
         # contacts
-        for contact in ContactService().all_contacts():
+        for contact in contact_service().all_contact_brains():
             if contact.email:
                 user_data.append(
                     ('{}:{}'.format(contact.email, contact.id),
