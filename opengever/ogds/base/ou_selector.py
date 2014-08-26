@@ -84,3 +84,7 @@ class NullOrgUnit(object):
     @property
     def admin_unit(self):
         return None
+
+    @property
+    def is_inboxgroup_agency_active(self):
+        return False
