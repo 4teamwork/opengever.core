@@ -8,11 +8,8 @@ class TestTaskCssClass(FunctionalTestCase):
     def setUp(self):
         super(TestTaskCssClass, self).setUp()
 
-        create(Builder('org_unit')
-               .having(client_id=u'additional'))
-
-        create(Builder('admin_unit')
-               .having(unit_id=u'additional'))
+        create(Builder('org_unit').id(u'additional'))
+        create(Builder('admin_unit').id(u'additional'))
 
     def test_forwarding_class(self):
         forwarding = create(Builder('globalindex_task')

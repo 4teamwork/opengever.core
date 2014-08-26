@@ -26,15 +26,12 @@ class TestOrgUnitSelector(unittest2.TestCase):
             {CURRENT_ORG_UNIT_KEY: 'clientb'},
             [self.unit_a, self.unit_b])
 
-        self.assertEquals(self.unit_b._client,
-                          selector.get_current_unit()._client)
+        self.assertEquals(self.unit_b, selector.get_current_unit())
 
     def test_get_current_unit_returns_fallback_unit_when_no_unit_is_storred(self):
-        selector = OrgUnitSelector({},
-                                   [self.unit_a, self.unit_b])
+        selector = OrgUnitSelector({}, [self.unit_a, self.unit_b])
 
-        self.assertEquals(self.unit_a._client,
-                          selector.get_current_unit()._client)
+        self.assertEquals(self.unit_a, selector.get_current_unit())
 
     def test_available_units_are_all_units(self):
         selector = OrgUnitSelector({},
@@ -64,10 +61,13 @@ class TestOrgUnitSelector(unittest2.TestCase):
 
     def test_null_org_unit_interface_implements_org_unit(self):
         ignore = ['assign_to_admin_unit']
-        methods = inspect.getmembers(OrgUnit)
-        for name, method in methods:
-            if name.startswith('_') or name in ignore:
-                continue
+        # cannot use `inspect.getmembers` since it triggers sqlalchemy magic
+        method_names = [name for name, func in OrgUnit.__dict__.items()
+                        if inspect.isfunction(func)
+                        and not name.startswith('_')
+                        and name not in ignore]
+
+        for method_name in method_names:
             if not hasattr(NullOrgUnit, name):
                 self.fail('Missing null-implementation: "NullOrgUnit.{}"'
                           .format(name))

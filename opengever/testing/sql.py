@@ -50,9 +50,6 @@ def create_client(clientid='client1', session=None, **properties):
     session = session or create_session()
 
     defaults = {'title': clientid.capitalize(),
-                'ip_address': '127.0.0.1',
-                'site_url': 'http://nohost/%s' % clientid,
-                'public_url': 'http://nohost/%s' % clientid,
                 'group': '%s_users' % clientid,
                 'inbox_group': '%s_inbox_users' % clientid}
 

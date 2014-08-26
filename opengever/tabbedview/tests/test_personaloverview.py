@@ -10,12 +10,8 @@ import transaction
 
 class TestPersonalOverview(FunctionalTestCase):
 
-    use_default_fixture = False
-
     def setUp(self):
         super(TestPersonalOverview, self).setUp()
-        self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture').with_all_unit_setup())
 
         create_plone_user(self.portal, 'hugo.boss')
         self.hugo = create(Builder('ogds_user')
@@ -23,6 +19,7 @@ class TestPersonalOverview(FunctionalTestCase):
                                    firstname='Hugo',
                                    lastname='Boss')
                            .assign_to_org_units([self.org_unit]))
+        transaction.commit()
 
     @browsing
     def test_redirects_to_repository_root_on_a_foreign_admin_unit(self, browser):
@@ -33,6 +30,9 @@ class TestPersonalOverview(FunctionalTestCase):
         additional = create(Builder('org_unit')
                             .id('additional')
                             .with_default_groups())
+        admin_unit = create(Builder('admin_unit')
+                            .id('additional')
+                            .assign_org_units([additional]))
 
         self.hugo = create(Builder('ogds_user')
                            .having(userid='peter')

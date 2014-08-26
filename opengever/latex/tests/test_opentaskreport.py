@@ -85,7 +85,6 @@ class TestOpenTaskReport(FunctionalTestCase):
 
     use_default_fixture = False
 
-
     def setUp(self):
         super(TestOpenTaskReport, self).setUp()
 

@@ -43,7 +43,7 @@ class LocalRolesSetter(object):
     @property
     def inbox_group_id(self):
         if self._inbox_group_id is None:
-            self._inbox_group = self.task.get_responsible_org_unit().inbox_group().groupid
+            self._inbox_group = self.task.get_responsible_org_unit().inbox_group.groupid
         return self._inbox_group
 
     def is_inboxgroup_agency_active(self):

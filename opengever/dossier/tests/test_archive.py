@@ -41,8 +41,7 @@ class TestArchiver(FunctionalTestCase):
         activate_filing_number(self.portal)
         self.user = create(Builder('ogds_user'))
         self.org_unit = create(
-            Builder('org_unit').having(title=u'Client1',
-                                       client_id=u'client1')
+            Builder('org_unit').id('client1').having(title=u'Client1')
                                .as_current_org_unit()
                                .with_default_groups()
                                .assign_users([self.user])

@@ -93,14 +93,14 @@ class ChooseMethodStepForm(AssignToDossierWizardFormMixin, Form):
 
             if method == 'existing_dossier':
                 url = '{}/@@accept_choose_dossier?oguid={}'.format(
-                    self.context.get_responsible_org_unit().public_url(),
+                    self.context.get_responsible_org_unit().admin_unit.public_url,
                     oguid)
                 return self.request.RESPONSE.redirect(url)
 
             elif method == 'new_dossier':
                 oguid = ISuccessorTaskController(self.context).get_oguid()
                 url = '{}/@@accept_select_repositoryfolder?oguid={}'.format(
-                    self.context.get_responsible_org_unit().public_url(),
+                    self.context.get_responsible_org_unit.admin_unit.public_url,
                     oguid)
                 return self.request.RESPONSE.redirect(url)
 

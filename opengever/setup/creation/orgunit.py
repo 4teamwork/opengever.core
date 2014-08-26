@@ -12,7 +12,6 @@ class OrgUnitCreator(UnitCreator):
                            'admin_unit_id',
                            'users_group_id',
                            'inbox_group_id')
-    key_mapping = {'unit_id': 'client_id'}
 
     def check_constraints(self, item):
         super(OrgUnitCreator, self).check_constraints(item)

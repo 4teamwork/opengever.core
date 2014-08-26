@@ -24,5 +24,5 @@ class TestUnitCreation(FunctionalTestCase):
         org_unit = ogds_service().fetch_org_unit('org')
         self.assertIsNotNone(org_unit)
         self.assertIsNotNone(org_unit.admin_unit)
-        self.assertIsNotNone(org_unit.users_group())
-        self.assertIsNotNone(org_unit.inbox_group())
+        self.assertIsNotNone(org_unit.users_group)
+        self.assertIsNotNone(org_unit.inbox_group)

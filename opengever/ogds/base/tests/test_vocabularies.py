@@ -264,14 +264,13 @@ class TestContactsAndUsersVocabulary(FunctionalTestCase):
             name='opengever.ogds.base.ContactsAndUsersVocabulary')
 
         create(Builder('fixture').with_admin_unit())
-        org_unit = create_and_select_current_org_unit('client1')
-        self.client1 = org_unit._client
+        self.org_unit = create_and_select_current_org_unit('client1')
 
     def test_contains_all_users_inboxes_and_contacts(self):
         client2 = create_client(clientid="client2")
 
-        create_ogds_user('hugo.boss', assigned_client=[self.client1, ])
-        create_ogds_user('robin.hood', assigned_client=[client2, ])
+        create_ogds_user('hugo.boss', assigned_client=[self.org_unit])
+        create_ogds_user('robin.hood', assigned_client=[client2])
         create(Builder('contact')
                .having(firstname=u'Lara', lastname=u'Croft',
                        email=u'lara.croft@test.ch'))
@@ -291,7 +290,7 @@ class TestContactsAndUsersVocabulary(FunctionalTestCase):
         self.assertEquals([], vocabulary.hidden_terms)
 
     def test_hide_disabled_users(self):
-        create_ogds_user('hugo.boss', assigned_client=[self.client1], active = False)
+        create_ogds_user('hugo.boss', assigned_client=[self.org_unit], active=False)
         vocabulary = self.vocabulary_factory(self.portal)
 
         self.assertTerms([('test_user_1_', u'User Test (test_user_1_)'),

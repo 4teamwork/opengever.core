@@ -4,6 +4,7 @@ from opengever.task.browser.transitioncontroller import Conditions
 from opengever.task.browser.transitioncontroller import get_conditions
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
+import transaction
 
 
 class TestTaskControllerConditions(FunctionalTestCase):
@@ -16,7 +17,8 @@ class TestTaskControllerConditions(FunctionalTestCase):
                                    firstname='Hugo',
                                    lastname='Boss',
                                    email='hugo@boss.ch')
-                           .in_group(self.org_unit.inbox_group()))
+                           .in_group(self.org_unit.users_group))
+        transaction.commit()
 
     def test_is_issuer(self):
         task1 = create(Builder('task').having(issuer=TEST_USER_ID))

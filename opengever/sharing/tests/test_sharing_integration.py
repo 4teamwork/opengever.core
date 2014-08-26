@@ -194,7 +194,7 @@ class TestOpengeverSharingIntegration(FunctionalTestCase):
                                     lastname='Test'))
 
         other_ou = create(Builder('org_unit')
-                          .having(client_id=u'otherunit')
+                          .id(u'otherunit')
                           .assign_users([test_peter]))
 
         create(Builder('admin_unit').wrapping_org_unit(other_ou))

@@ -73,7 +73,6 @@ class AdminUnitBuilder(SqlObjectBuilder):
             unit_id=org_unit.id(),
             title=org_unit.label(),
         ))
-        self.assign_org_units([self.org_unit])
         return self
 
     def as_current_admin_unit(self):
@@ -81,12 +80,7 @@ class AdminUnitBuilder(SqlObjectBuilder):
         return self
 
     def assign_org_units(self, units):
-        clients = [u._client for u in units]
-        for client in clients:
-            # XXX could be solved better
-            self.add_object_to_session(client)
-        self.arguments['clients'] = clients
-
+        self.arguments['org_units'] = units
         return self
 
     def after_create(self, obj):
@@ -109,7 +103,7 @@ class OrgUnitBuilder(SqlObjectBuilder):
 
     def __init__(self, session):
         super(OrgUnitBuilder, self).__init__(session)
-        self.arguments['client_id'] = u'rr'
+        self.arguments[self.id_argument_name] = u'rr'
         self._as_current_org_unit = False
         self._with_inbox_group = False
         self._with_users_group = False
@@ -120,10 +114,9 @@ class OrgUnitBuilder(SqlObjectBuilder):
         self._assemble_groups()
 
     def after_create(self, obj):
-        org_unit = OrgUnit(obj)
         if self._as_current_org_unit:
-            get_ou_selector().set_current_unit(org_unit.id())
-        return org_unit
+            get_ou_selector().set_current_unit(obj.id())
+        return obj
 
     def with_default_groups(self):
         self.with_inbox_group()
@@ -149,9 +142,9 @@ class OrgUnitBuilder(SqlObjectBuilder):
         return self
 
     def _assemble_groups(self):
-        client_id = self.arguments.get(self.id_argument_name)
-        users_group_id = "{}_users".format(client_id)
-        users_inbox_id = "{}_inbox_users".format(client_id)
+        unit_id = self.arguments.get(self.id_argument_name)
+        users_group_id = "{}_users".format(unit_id)
+        users_inbox_id = "{}_inbox_users".format(unit_id)
 
         if self._with_users_group:
             users_group = create(Builder('ogds_group')
@@ -188,7 +181,7 @@ class UserBuilder(SqlObjectBuilder):
 
     def assign_to_org_units(self, org_units):
         for org_unit in org_units:
-            self.groups.append(org_unit.users_group())
+            self.groups.append(org_unit.users_group)
         return self
 
     def create_object(self):

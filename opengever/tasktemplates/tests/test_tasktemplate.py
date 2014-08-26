@@ -76,7 +76,6 @@ class TestTaskTemplatesWithBrowser(FunctionalTestCase):
     def test_view(self):
         portal = self.layer['portal']
 
-        create_and_select_current_org_unit('plone')
         self.grant('Manager')
 
         # Folders and templates

@@ -1,6 +1,4 @@
 from datetime import datetime, timedelta
-from ftw.builder import Builder
-from ftw.builder import create
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.tasktemplates.interfaces import IFromTasktemplateGenerated
 from opengever.testing import FunctionalTestCase

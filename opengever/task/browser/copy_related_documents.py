@@ -37,7 +37,7 @@ class TargetClientsWithInboxVocabularyFactory(grok.GlobalUtility):
         """
         member = api.user.get_current()
         for org_unit in ogds_service().assigned_org_units(omit_current=True):
-            inbox_group = org_unit.inbox_group()
+            inbox_group = org_unit.inbox_group
             if inbox_group in member.getGroups():
                 yield (org_unit.id(), org_unit.label())
 

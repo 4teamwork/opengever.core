@@ -2,8 +2,6 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.testing import FunctionalTestCase
-from opengever.testing import create_client
-from opengever.testing import create_ogds_user
 from plone.app.testing import TEST_USER_ID
 
 
@@ -17,29 +15,26 @@ class TestOrgUnitSelectorViewlet(FunctionalTestCase):
 
         self.org_unit4 = create(Builder('org_unit')
                                 .id(u'client4')
-                                .having(title=u'Client 4',
-                                        public_url='http://nohost/plone')
+                                .having(title=u'Client 4',)
                                 .assign_users([test_user]))
         self.org_unit3 = create(Builder('org_unit')
                                 .id(u'client3')
-                                .having(title=u'Client 3',
-                                        public_url='http://nohost/plone')
+                                .having(title=u'Client 3')
                                 .assign_users([test_user]))
         self.org_unit1 = create(Builder('org_unit')
                                 .id(u'client1')
                                 .as_current_org_unit()
-                                .having(title=u'Client 1',
-                                        public_url='http://nohost/plone')
+                                .having(title=u'Client 1')
                                 .assign_users([test_user]))
-
         self.org_unit2 = create(Builder('org_unit')
                                 .id(u'client2')
-                                .having(title=u'Client 2',
-                                        public_url='http://nohost/plone'))
+                                .having(title=u'Client 2'))
 
         create(Builder('admin_unit')
                .as_current_admin_unit()
-               .wrapping_org_unit(self.org_unit1))
+               .having(public_url='http://nohost/plone')
+               .assign_org_units([self.org_unit4, self.org_unit3,
+                                  self.org_unit1, self.org_unit2]))
 
         self.repo_root = create(Builder('repository_root'))
 
@@ -84,7 +79,6 @@ class TestOrgUnitSelectorViewlet(FunctionalTestCase):
     @browsing
     def test_selecting_a_unit_changes_active_unit(self, browser):
         browser.login().open(self.repo_root)
-
         browser.css('.orgunitMenuContent a')[1].click()
 
         active_unit = browser.css('.orgunitMenu dt a')

@@ -24,13 +24,13 @@ class TestRefusingForwardings(FunctionalTestCase):
         user = create(Builder('ogds_user'))
 
         self.client1 = create(Builder('org_unit')
-                              .having(client_id=u'client1')
+                              .id(u'client1')
                               .with_default_groups()
                               .assign_users([user], to_inbox=False)
                               .as_current_org_unit())
 
         self.client2 = create(Builder('org_unit')
-                              .having(client_id=u'client2')
+                              .id(u'client2')
                               .with_default_groups()
                               .assign_users([user], to_users=False))
 
@@ -90,7 +90,7 @@ class TestRefuseForwardingStoring(FunctionalTestCase):
     def setUp(self):
         super(TestRefuseForwardingStoring, self).setUp()
 
-        create(Builder('org_unit').having(client_id='client2')
+        create(Builder('org_unit').id(u'client2')
                                   .with_default_groups()
                                   .assign_users([self.user]))
 

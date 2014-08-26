@@ -70,7 +70,7 @@ class TestOrgUnitCreator(BaseTestUnitCreator):
     def create_org_unit_for(self, data):
         OrgUnitCreator().run(self.as_file(data))
 
-    def test_fails_when_client_id_is_not_specified(self):
+    def test_fails_when_unit_id_is_not_specified(self):
         data = self.data_with_all_required_attrs
         del data['unit_id']
         self.assertRaises(GeverSetupException, self.create_org_unit_for, data)
@@ -110,19 +110,13 @@ class TestOrgUnitCreator(BaseTestUnitCreator):
             "unit_id": 'org',
             "title": "My cool new org unit",
             "enabled": False,
-            "ip_address": "1.2.3.4",
-            "site_url": "http://example.com",
-            "public_url": "http://example.com/public",
             "admin_unit_id": "admin",
             'users_group_id': 'users',
             'inbox_group_id': 'users',
         }
         self.create_org_unit_for([attributes])
-        client = self.service.fetch_org_unit('org')._client
-
-        attributes['client_id'] = attributes['unit_id']
-        del attributes['unit_id']
+        org_unit = self.service.fetch_org_unit('org')
 
         for attribute, value in attributes.items():
-            self.assertEqual(value, getattr(client, attribute),
+            self.assertEqual(value, getattr(org_unit, attribute),
                              "invalid: '{}'".format(attribute))

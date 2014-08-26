@@ -29,8 +29,7 @@ class FixtureBuilder(object):
         }
         self._org_unit_args = {
             'title': u'Client1',
-            'client_id': u'client1',
-            'public_url': 'http://example.com',
+            'unit_id': u'client1',
         }
         self._admin_unit_args = {
             'title': u'Client1',
