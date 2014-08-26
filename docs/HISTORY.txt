@@ -53,6 +53,8 @@ Changelog
     [lgraf]
   - Change german wording for descriptions of `public_trial` and `public_trial_statement`
     [lgraf]
+  - Added `regulations` and `directive` options to `document_type` vocabulary.
+    [lgraf]
 
 
 - Changes to journaling:

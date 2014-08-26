@@ -57,4 +57,22 @@
             <langstring language="fr">Contrat</langstring>
         </caption>
     </term>
+    <term>
+        <termIdentifier>directive</termIdentifier>
+        <caption>
+            <langstring language="en">Directive</langstring>
+            <langstring language="de-ch">Weisung</langstring>
+            <langstring language="de">Weisung</langstring>
+            <langstring language="fr">Directive</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>regulations</termIdentifier>
+        <caption>
+            <langstring language="en">Regulations</langstring>
+            <langstring language="de-ch">Reglement</langstring>
+            <langstring language="de">Reglement</langstring>
+            <langstring language="fr">Règlement</langstring>
+        </caption>
+    </term>
 </vdex>
