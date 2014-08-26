@@ -12,7 +12,6 @@ from opengever.ogds.models.user import User
 from plone.app.testing import TEST_USER_ID
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
-import transaction
 
 
 class SqlObjectBuilder(object):
@@ -33,7 +32,7 @@ class SqlObjectBuilder(object):
         obj = self.create_object(**kwargs)
         self.add_object_to_session(obj)
         obj = self.after_create(obj)
-        self.commit()
+        self.persist()
         return obj
 
     def before_create(self):
@@ -42,9 +41,9 @@ class SqlObjectBuilder(object):
     def after_create(self, obj):
         return obj
 
-    def commit(self):
+    def persist(self):
         if self.session.auto_commit:
-            transaction.commit()
+            self.db_session.flush()
 
     def add_object_to_session(self, obj):
         self.db_session.add(obj)
