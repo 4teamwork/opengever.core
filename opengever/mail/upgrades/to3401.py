@@ -38,6 +38,14 @@ class ActivateBehaviors(UpgradeStep):
         mail_metadata = IDocumentMetadata(mail)
         mail_metadata.receipt_date = mail.created().asdatetime().date()
 
+    def set_preserved_as_paper(self, mail):
+        field = IDocumentMetadata[u'preserved_as_paper']
+        default_adapter = queryMultiAdapter(
+            (aq_parent(mail), mail.REQUEST, None, field, None),
+            IValue, name='default')
+        value = default_adapter.get()
+        field.set(field.interface(mail), value)
+
     def set_default_values_for_missing_fields(self, mail):
 
         fields = [
@@ -54,6 +62,13 @@ class ActivateBehaviors(UpgradeStep):
 
         for fieldname in fields:
             field = IDocumentMetadata[fieldname]
+
+            if fieldname == u'preserved_as_paper':
+                # preserved_as_paper as acquired as a schema default value
+                # - we therefore directly set the value from the default
+                # value adapter to avoid picking up the schema default
+                self.set_preserved_as_paper(mail)
+                continue
 
             # `digitally_available` is always True for mails
             if fieldname == u'digitally_available':
