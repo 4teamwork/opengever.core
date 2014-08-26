@@ -1,7 +1,7 @@
 from five import grok
 from ftw.table.interfaces import ITableSource, ITableSourceConfig
 from opengever.ogds.base.actor import Actor
-from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.utils import create_session
 from opengever.ogds.models.user import User
 from opengever.tabbedview import _
 from opengever.tabbedview.browser.base import OpengeverTab
@@ -10,7 +10,6 @@ from opengever.tabbedview.browser.sqltablelisting import SqlTableSource
 from opengever.tabbedview.helper import boolean_helper
 from opengever.tabbedview.helper import email_helper
 from zope.app.pagetemplate import ViewPageTemplateFile
-from zope.component import getUtility
 from zope.interface import implements
 from zope.interface import Interface
 
@@ -102,8 +101,8 @@ class UsersListing(grok.View, OpengeverTab, ListingView):
     def get_base_query(self):
         """Returns the base search query (sqlalchemy)
         """
-        info = getUtility(IContactInformation)
-        return info._users_query()
+        session = create_session()
+        return session.query(User)
 
 
 class UsersListingTableSource(SqlTableSource):

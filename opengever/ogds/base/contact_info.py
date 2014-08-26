@@ -89,8 +89,3 @@ class ContactInformation(grok.GlobalUtility):
     """
 
     grok.provides(IContactInformation)
-
-    # internal methods
-    def _users_query(self):
-        session = create_session()
-        return session.query(User)
