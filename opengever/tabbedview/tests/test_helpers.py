@@ -1,6 +1,4 @@
 from ftw.testing import MockTestCase
-from opengever.ogds.base.interfaces import IContactInformation
-from opengever.tabbedview.helper import linked_ogds_author
 from opengever.tabbedview.helper import task_id_checkbox_helper
 
 

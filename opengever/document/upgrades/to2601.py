@@ -1,15 +1,12 @@
 from ftw.upgrade import ProgressLogger
 from ftw.upgrade import UpgradeStep
-from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import ogds_service
-from zope.component import getUtility
 
 
 class ResolveDocumentAuthor(UpgradeStep):
     """Resolve document_author for all documents"""
 
     def __call__(self):
-        self.info = getUtility(IContactInformation)
         self.user_ids = [user.userid for user in ogds_service().all_users()]
 
         catalog = self.getToolByName('portal_catalog')

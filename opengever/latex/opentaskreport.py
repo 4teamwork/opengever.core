@@ -11,14 +11,12 @@ from opengever.latex.interfaces import ILandscapeLayer
 from opengever.latex.utils import get_issuer_of_task
 from opengever.latex.utils import workflow_state
 from opengever.ogds.base.actor import Actor
-from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.task.helper import task_type_helper
 from sqlalchemy import and_
 from sqlalchemy import or_
 from sqlalchemy.sql.expression import asc
-from zope.component import getUtility
 from zope.interface import Interface
 
 
@@ -55,8 +53,6 @@ class OpenTaskReportLaTeXView(grok.MultiAdapter, MakoLaTeXView):
     template_name = 'opentaskreport.tex'
 
     def get_render_arguments(self):
-        self.info = getUtility(IContactInformation)
-
         self.layout.show_organisation = True
         self.layout.use_package('longtable')
 

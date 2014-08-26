@@ -11,13 +11,11 @@ from opengever.latex import opentaskreport
 from opengever.latex.layouts.default import DefaultLayout
 from opengever.latex.opentaskreport import IOpenTaskReportLayer
 from opengever.latex.testing import LATEX_ZCML_LAYER
-from opengever.ogds.base.interfaces import IContactInformation
 from opengever.testing import create_plone_user
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import login
 from zope.component import adaptedBy
 from zope.component import getMultiAdapter
-from zope.component import getUtility
 from zope.interface.verify import verifyClass
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 
@@ -113,8 +111,6 @@ class TestOpenTaskReport(FunctionalTestCase):
         layout = DefaultLayout(self.task, self.task.REQUEST, PDFBuilder())
         self.opentaskreport = getMultiAdapter(
             (self.task, self.task.REQUEST, layout), ILaTeXView)
-        # hack, this is set when calling `get_render_arguments`, XXX remove
-        self.opentaskreport.info = getUtility(IContactInformation)
 
     def test_actor_labels_are_visible_in_task_listing(self):
         row = self.opentaskreport.get_data_for_item(self.task.get_sql_object())

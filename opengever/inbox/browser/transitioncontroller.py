@@ -1,9 +1,7 @@
 """Contains a Controller wich checks the Transitions"""
-from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.task.browser.transitioncontroller import guard, action
 from opengever.task.browser.transitioncontroller import TaskTransitionController
-from zope.component import getUtility
 
 
 class ForwardingTransitionController(TaskTransitionController):

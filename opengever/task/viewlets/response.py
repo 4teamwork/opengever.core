@@ -2,7 +2,7 @@ from five import grok
 from opengever.base.browser.helper import get_css_class
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.actor import Actor
-from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.utils import ogds_service
 from opengever.task import _
 from opengever.task.adapters import IResponseContainer
 from opengever.task.response import Base
@@ -10,7 +10,6 @@ from opengever.task.task import ITask
 from opengever.task.viewlets.manager import BeneathTask
 from Products.CMFCore.utils import getToolByName
 from zope.component import getMultiAdapter
-from zope.component import getUtility
 import datetime
 
 

@@ -5,11 +5,9 @@ from opengever.latex.utils import get_issuer_of_task
 from opengever.latex.utils import get_responsible_of_task
 from opengever.latex.utils import workflow_state
 from opengever.ogds.base.actor import Actor
-from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.task.helper import task_type_helper
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from zope.component import getUtility
 
 
 class Column(object):
@@ -43,7 +41,6 @@ class LatexListing(object):
         self.items = items
 
         self.admin_unit = get_current_admin_unit()
-        self.info = getUtility(IContactInformation)
 
         self.columns = self.update_column_dict(
             OrderedDict((each.id, each) for each in self.get_columns())

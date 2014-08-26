@@ -1,12 +1,9 @@
-from Products.CMFDefault.MembershipTool import MembershipTool
 from mocker import ANY
-from opengever.ogds.base.interfaces import IContactInformation
 from opengever.sharing.behaviors import IDossier
 from opengever.sharing.browser.sharing import OpengeverSharingView
-from opengever.sharing.interfaces import ISharingConfiguration
 from plone.app.workflow.interfaces import ISharingPageRole
 from plone.mocktestcase import MockTestCase
-from plone.registry.interfaces import IRegistry
+from Products.CMFDefault.MembershipTool import MembershipTool
 from zope.interface import directlyProvides
 
 
@@ -188,4 +185,3 @@ class TestOpengeverSharing(MockTestCase):
         self.replay()
 
         return mock_sharing.role_settings()
-

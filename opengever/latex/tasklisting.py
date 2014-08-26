@@ -10,10 +10,8 @@ from opengever.latex.interfaces import ILandscapeLayer
 from opengever.latex.utils import get_issuer_of_task
 from opengever.latex.utils import workflow_state
 from opengever.ogds.base.actor import Actor
-from opengever.ogds.base.interfaces import IContactInformation
 from opengever.task.helper import task_type_helper
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from zope.component import getUtility
 from zope.interface import Interface
 
 
@@ -51,7 +49,6 @@ class TaskListingLaTeXView(grok.MultiAdapter, MakoLaTeXView):
 
     def get_render_arguments(self):
         self.layout.show_organisation = True
-        self.info = getUtility(IContactInformation)
 
         return {'rows': self.get_rows()}
 
