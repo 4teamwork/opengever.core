@@ -1,9 +1,7 @@
 """Contains a Controller wich checks the Transitions"""
-from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.task.browser.transitioncontroller import guard, action
 from opengever.task.browser.transitioncontroller import TaskTransitionController
-from zope.component import getUtility
 
 
 class ForwardingTransitionController(TaskTransitionController):
@@ -82,13 +80,6 @@ class ForwardingTransitionController(TaskTransitionController):
         closing mechanism (storing in a yearfolder).
         """
         return '%s/@@close-forwarding' % (self.context.absolute_url())
-
-    def _is_current_inbox_group_user(self):
-        """Checks with the help of the contact information utility
-        if the current user is in the inbox group of the current client"""
-
-        info = getUtility(IContactInformation)
-        return info.is_user_in_inbox_group()
 
     def _is_successor_forwarding_process(self):
         """Check if the request is directly from

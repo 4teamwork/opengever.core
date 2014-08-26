@@ -20,12 +20,16 @@ class TestActorLookup(FunctionalTestCase):
         self.assertEqual('not-existing', actor.get_link())
 
     def test_inbox_actor_lookup(self):
-        create(Builder('org_unit').id('foobar').having(title='Huhu'))
+        create(Builder('org_unit')
+               .id('foobar')
+               .having(title='Huhu')
+               .with_default_groups())
         actor = Actor.lookup('inbox:foobar')
 
         self.assertEqual('Inbox: Huhu', actor.get_label())
         self.assertIsNone(actor.get_profile_url())
         self.assertEqual('Inbox: Huhu', actor.get_link())
+        self.assertEqual(u'foobar_inbox_users', actor.permission_identifier)
 
     def test_contact_actor_lookup(self):
         contact = create(Builder('contact')
@@ -52,6 +56,7 @@ class TestActorLookup(FunctionalTestCase):
         actor = Actor.lookup('hugo.boss')
 
         self.assertEqual(u'Boss H\xfcgo (hugo.boss)', actor.get_label())
+        self.assertEqual('hugo.boss', actor.permission_identifier)
         self.assertTrue(
             actor.get_profile_url().endswith('@@user-details/hugo.boss'))
 

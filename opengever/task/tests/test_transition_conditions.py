@@ -109,7 +109,6 @@ class TestTaskControllerConditions(FunctionalTestCase):
         task_without_successor = create(Builder('task'))
         create(Builder('task').successor_from(task_with_successor))
 
-
         self.assertTrue(get_conditions(task_with_successor).has_successors)
         self.assertFalse(get_conditions(task_without_successor).has_successors)
 
@@ -133,8 +132,9 @@ class TestTaskControllerConditions(FunctionalTestCase):
 
     def test_is_assigned_to_current_admin_unit(self):
         org_unit = create(Builder('org_unit')
-                         .id('additional')
-                         .having(title='Additional'))
+                          .id('additional')
+                          .with_default_groups()
+                          .having(title='Additional'))
         create(Builder('admin_unit')
                .id('additional')
                .wrapping_org_unit(org_unit))
@@ -142,7 +142,9 @@ class TestTaskControllerConditions(FunctionalTestCase):
         task1 = create(Builder('forwarding')
                        .having(responsible_client='client1'))
         task2 = create(Builder('forwarding')
-                       .having(responsible_client='additional'))
+                       .having(responsible=TEST_USER_ID,
+                               issuer=TEST_USER_ID,
+                               responsible_client='additional'))
 
         self.assertTrue(get_conditions(task1).is_assigned_to_current_admin_unit)
         self.assertFalse(get_conditions(task2).is_assigned_to_current_admin_unit)

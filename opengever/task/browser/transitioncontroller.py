@@ -1,5 +1,4 @@
 from opengever.globalindex.model.task import Task
-from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
@@ -13,7 +12,6 @@ from Products.CMFCore.utils import getToolByName
 from Products.Five import BrowserView
 from zExceptions import NotFound
 from zope.component import getMultiAdapter
-from zope.component import getUtility
 from zope.interface import implements
 from zope.interface import Interface
 
@@ -187,7 +185,6 @@ class TaskTransitionController(BrowserView):
         if not conditions.is_responsible:
             if not include_agency or \
                not conditions.is_responsible_orgunit_agency_member:
-
                 return False
 
         if not conditions.all_subtasks_finished:
@@ -237,7 +234,6 @@ class TaskTransitionController(BrowserView):
         if not conditions.is_responsible:
             if not include_agency or \
                not conditions.is_responsible_orgunit_agency_member:
-
                 return False
 
         if not conditions.all_subtasks_finished:
@@ -523,49 +519,16 @@ class TaskTransitionController(BrowserView):
             name='plone_portal_state').member().id == self.context.responsible
 
     def _is_inbox_group_user(self):
-        """Checks with the help of the contact information utility
-        if the current user is in the inbox group"""
+        """Checks if the current user is assigned to the current inbox"""
 
-        info = getUtility(IContactInformation)
-        return info.is_user_in_inbox_group(
-            client_id=self.context.responsible_client)
-
-    def _is_issuer_inbox_group_user(self):
-        """Checks with the helpt of the contact information utility
-        if the current user is in the inbox group of the current client.
-        """
-        info = getUtility(IContactInformation)
-        if self._is_remote_request() or info.is_user_in_inbox_group():
-            return True
-        return False
+        inbox = get_current_org_unit().inbox()
+        return ogds_service().fetch_current_user() in inbox.assigned_users()
 
     def _is_responsible_or_inbox_group_user(self):
         """Checks if the current user is the responsible
         or in the inbox_group"""
 
         return self._is_responsible() or self._is_inbox_group_user()
-
-    def _is_substasks_closed(self):
-        """Checks if all subtasks are done(resolve, cancelled or closed)"""
-
-        wft = self.context.portal_workflow
-        wf = wft.get(wft.getChainFor(self.context)[0])
-        states = [s for s in wf.states]
-
-        for state in TASK_CLOSED_STATES:
-            states.pop(states.index(state))
-
-        query = {
-            'path': {
-                'query': '/'.join(self.context.getPhysicalPath()),
-                'depth': -1},
-            'portal_type': 'opengever.task.task',
-            'review_state': states}
-
-        if len(self.context.getFolderContents(query)) > 1:
-            return False
-        else:
-            return True
 
     def _is_remote_request(self):
         """checks if the current request cames from a remote client.

@@ -12,15 +12,34 @@ class TestOrgUnitSelectorViewlet(FunctionalTestCase):
 
     def setUp(self):
         super(TestOrgUnitSelectorViewlet, self).setUp()
-        self.client4 = create_client('client4', title='Client 4',
-                                     public_url='http://nohost/plone')
-        self.client3 = create_client('client3', title='Client 3')
-        self.client1 = create_client('client1', title='Client 1')
-        self.client2 = create_client('client2', title='Client 2')
 
-        create_ogds_user(
-            TEST_USER_ID,
-            assigned_client=[self.client1, self.client3, self.client4])
+        test_user = create(Builder('ogds_user').id(TEST_USER_ID))
+
+        self.org_unit4 = create(Builder('org_unit')
+                                .id(u'client4')
+                                .having(title=u'Client 4',
+                                        public_url='http://nohost/plone')
+                                .assign_users([test_user]))
+        self.org_unit3 = create(Builder('org_unit')
+                                .id(u'client3')
+                                .having(title=u'Client 3',
+                                        public_url='http://nohost/plone')
+                                .assign_users([test_user]))
+        self.org_unit1 = create(Builder('org_unit')
+                                .id(u'client1')
+                                .as_current_org_unit()
+                                .having(title=u'Client 1',
+                                        public_url='http://nohost/plone')
+                                .assign_users([test_user]))
+
+        self.org_unit2 = create(Builder('org_unit')
+                                .id(u'client2')
+                                .having(title=u'Client 2',
+                                        public_url='http://nohost/plone'))
+
+        create(Builder('admin_unit')
+               .as_current_admin_unit()
+               .wrapping_org_unit(self.org_unit1))
 
         self.repo_root = create(Builder('repository_root'))
 

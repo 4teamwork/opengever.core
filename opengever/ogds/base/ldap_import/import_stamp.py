@@ -2,7 +2,7 @@ from datetime import datetime
 from five import grok
 from ftw.dictstorage.interfaces import IDictStorage
 from ftw.dictstorage.interfaces import ISQLAlchemy
-from opengever.ogds.base.interfaces import IContactInformation, ISyncStamp
+from opengever.ogds.base.interfaces import ISyncStamp
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.base.utils import remote_request
 from Products.CMFPlone.interfaces import IPloneSiteRoot

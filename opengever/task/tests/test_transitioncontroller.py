@@ -295,7 +295,6 @@ class TestOpenClosed(BaseTransitionGuardTests):
 
     def test_responsible_agency_for_unidirectional_by_reference_tasks(self):
         self.task_type_category = 'unidirectional_by_reference'
-
         conditions = FakeConditions(
             is_responsible=False, responsible_agency=True)
 
@@ -374,7 +373,6 @@ class ResolvedInProgress(BaseTransitionGuardTests):
 
     def test_available_for_issuer(self):
         conditions = FakeConditions(is_issuer=True)
-
         self.assertTrue(self.controller._is_transition_possible(
             self.transition, False, conditions))
 

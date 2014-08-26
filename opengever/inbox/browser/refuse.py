@@ -2,11 +2,11 @@ from five import grok
 from opengever.inbox import _
 from opengever.inbox.browser.schema import ISimpleResponseForm
 from opengever.inbox.forwarding import IForwarding
-from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.interfaces import ITransporter
 from opengever.ogds.base.transport import ORIGINAL_INTID_ANNOTATION_KEY
 from opengever.ogds.base.transport import REQUEST_KEY
 from opengever.ogds.base.utils import get_current_org_unit
+from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.base.utils import remote_json_request
 from opengever.task import _ as task_mf
 from opengever.task.browser.accept.utils import get_current_yearfolder
@@ -102,10 +102,8 @@ class ForwardingRefuseForm(Form):
         return self.get_remote_task_url(refusing_unit_id, remote_task)
 
     def get_remote_task_url(self, refusing_client_id, remote_task):
-        info = getUtility(IContactInformation)
-        return '%s/%s' % (
-            info.get_client_by_id(refusing_client_id).public_url,
-            remote_task)
+        refusing_org_unit = ogds_service().fetch_org_unit(refusing_client_id)
+        return '%s/%s' % (refusing_org_unit.public_url, remote_task)
 
 
 class RefuseForwardingView(layout.FormWrapper, grok.View):

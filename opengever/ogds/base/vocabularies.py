@@ -1,17 +1,14 @@
 from collective.elephantvocabulary import wrap_vocabulary
 from five import grok
+from opengever.contact import contact_service
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.interfaces import IClientCommunicator
-from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.interfaces import ISyncStamp
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.base.vocabulary import ContactsVocabulary
 from plone.memoize import ram
-from Products.CMFCore.utils import getToolByName
-from zope.app.component.hooks import getSite
-from zope.app.component.hooks import setSite
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.schema.interfaces import IVocabularyFactory
@@ -213,9 +210,6 @@ class InboxesVocabularyFactory(UsersAndInboxesVocabularyFactory):
     def key_value_provider(self):
         # Reset hidden_terms every time cache key changed
         self.hidden_terms = []
-
-        info = getUtility(IContactInformation)
-
         selected_unit = ogds_service().fetch_org_unit(self.get_client())
         if selected_unit:
             # check if it the current client is selected then add all users
@@ -285,8 +279,7 @@ class ContactsVocabularyFactory(grok.GlobalUtility):
         return ContactsVocabulary.create_with_provider(self.key_value_provider)
 
     def key_value_provider(self):
-        info = getUtility(IContactInformation)
-        for contact in info.list_contacts():
+        for contact in contact_service().all_contact_brains():
             yield (contact.contactid,
                    Actor.contact(contact.contactid,
                                  contact=contact).get_label())
@@ -314,12 +307,11 @@ class ContactsAndUsersVocabularyFactory(grok.GlobalUtility):
         # Reset hidden_terms every time cache key changed
         self.hidden_terms = []
 
-        info = getUtility(IContactInformation)
         items, hidden_terms = self._get_users()
         # copy lists to prevent cache modification
         items = items[:]
         self.hidden_terms = hidden_terms[:]
-        for contact in info.list_contacts():
+        for contact in contact_service().all_contact_brains():
             actor = Actor.contact(contact.contactid, contact=contact)
             items.append((contact.contactid, actor.get_label()))
 
@@ -327,7 +319,6 @@ class ContactsAndUsersVocabularyFactory(grok.GlobalUtility):
 
     @ram.cache(voc_cachekey)
     def _get_users(self):
-        info = getUtility(IContactInformation)
         items = []
         hidden_terms = []
 
@@ -397,8 +388,7 @@ class EmailContactsAndUsersVocabularyFactory(grok.GlobalUtility):
                 user_data.append((key, value))
 
         # contacts
-        info = getUtility(IContactInformation)
-        for contact in info.list_contacts():
+        for contact in contact_service().all_contact_brains():
             if contact.email:
                 user_data.append(
                     ('{}:{}'.format(contact.email, contact.id),
@@ -426,7 +416,6 @@ class OrgUnitsVocabularyFactory(grok.GlobalUtility):
         return vocab
 
     def key_value_provider(self):
-        service = ogds_service()
         for unit in ogds_service().all_org_units():
             yield (unit.id(), unit.label())
 
@@ -447,16 +436,11 @@ class AssignedClientsVocabularyFactory(grok.GlobalUtility):
 
     def key_value_provider(self):
         """yield the items
-
-        key = client id
-        value = client title
+        key = orgunit id
+        value = orgunit label
         """
-
-        info = getUtility(IContactInformation)
-
-        for client in info.get_assigned_clients():
-            yield (client.client_id,
-                   client.title)
+        for org_unit in ogds_service().assigned_org_units():
+            yield (org_unit.id(), org_unit.label())
 
 
 class OtherAssignedClientsVocabularyFactory(grok.GlobalUtility):
@@ -474,79 +458,13 @@ class OtherAssignedClientsVocabularyFactory(grok.GlobalUtility):
         return vocab
 
     def key_value_provider(self):
-        """yield the items
-
-        key = client id
-        value = client title
+        """
+        key = org_unit id
+        value = org_unit title
         """
 
-        info = getUtility(IContactInformation)
-        current_client_id = get_current_org_unit().id()
-
-        for client in info.get_assigned_clients():
-            if current_client_id != client.client_id:
-                yield (client.client_id, client.title)
-
-
-class HomeDossiersVocabularyFactory(grok.GlobalUtility):
-    """Vocabulary of all open dossiers on users home client.
-    Key is the path of dossier relative to its plone site on the remote client.
-    """
-
-    grok.provides(IVocabularyFactory)
-    grok.name('opengever.ogds.base.HomeDossiersVocabulary')
-
-    def __call__(self, context):
-        self.context = context
-        vocab = ContactsVocabulary.create_with_provider(
-            self.key_value_provider)
-        return vocab
-
-    def key_value_provider(self):
-        """yield home dossiers
-        key: relative path on home client
-        value: "%(reference_number): %(title)"
-        """
-
-        # if we are not logged in we are in the traversal and should not
-        # do anything...
-        user = AccessControl.getSecurityManager().getUser()
-        if user == AccessControl.SpecialUsers.nobody:
-            return
-
-        request = getRequest()
-
-        info = getUtility(IContactInformation)
-        comm = getUtility(IClientCommunicator)
-
-        client_id = request.get(
-            'client', request.get('form.widgets.client'))
-        if type(client_id) in (list, tuple, set):
-            client_id = client_id[0]
-        client = info.get_client_by_id(client_id)
-
-        if client and not info.is_client_assigned(client_id=client_id):
-            raise ValueError(
-                'Expected %s to be a assigned client of the current user.' %
-                    client_id)
-
-        elif client:
-            # kss validation overrides getSite() hook with a bad object
-            # but we need getSite to work properly, so we fix it.
-            site = getSite()
-            if site.__class__.__name__ == 'Z3CFormValidation':
-                fixed_site = getToolByName(self.context,
-                                           'portal_url').getPortalObject()
-                setSite(fixed_site)
-                dossiers = comm.get_open_dossiers(client.client_id)
-                setSite(site)
-            else:
-                dossiers = comm.get_open_dossiers(client.client_id)
-
-            for dossier in dossiers:
-                yield (dossier['path'],
-                       '%s: %s' % (dossier['reference_number'],
-                                   dossier['title']))
+        for org_unit in ogds_service().assigned_org_units(omit_current=True):
+            yield (org_unit.id(), org_unit.label())
 
 
 class DocumentInSelectedDossierVocabularyFactory(grok.GlobalUtility):
@@ -572,16 +490,16 @@ class DocumentInSelectedDossierVocabularyFactory(grok.GlobalUtility):
         if user == AccessControl.SpecialUsers.nobody:
             return
 
-        info = getUtility(IContactInformation)
         comm = getUtility(IClientCommunicator)
 
         # get client
-        client_id = request.get(
-            'client', request.get('form.widgets.client'))
+        client_id = request.get('client', request.get('form.widgets.client'))
         if type(client_id) in (list, tuple, set):
             client_id = client_id[0]
 
-        if not info.is_client_assigned(client_id=client_id):
+        org_unit = ogds_service().fetch_org_unit(client_id)
+        current_user = ogds_service().fetch_current_user()
+        if current_user not in org_unit.assigned_users():
             raise ValueError(
                 'Expected %s to be a assigned client of the current user.' %
                 client_id)

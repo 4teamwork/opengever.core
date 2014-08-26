@@ -3,6 +3,7 @@ from ftw.builder import create
 from opengever.task.interfaces import ITaskDocumentsTransporter
 from opengever.task.task import ITask
 from opengever.testing import FunctionalTestCase
+from plone.app.testing import TEST_USER_ID
 from plone.dexterity.utils import createContentInContainer
 from plone.dexterity.utils import iterSchemata
 from z3c.form.interfaces import IValue
@@ -40,8 +41,11 @@ class TestTransporter(FunctionalTestCase):
     def _create_task(self, context, with_docs=False, return_docs=False):
 
         # task
-        task = create(Builder('task').having(title='Task1',
-                                             task_type='correction'))
+        task = create(Builder('task')
+                      .having(title='Task1',
+                              responsible=TEST_USER_ID,
+                              issuer=TEST_USER_ID,
+                              task_type='correction'))
 
         if not with_docs:
             return task

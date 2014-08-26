@@ -2,7 +2,7 @@ from five import grok
 from opengever.base.browser.helper import get_css_class
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.actor import Actor
-from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.utils import ogds_service
 from opengever.task import _
 from opengever.task.adapters import IResponseContainer
 from opengever.task.response import Base
@@ -10,7 +10,6 @@ from opengever.task.task import ITask
 from opengever.task.viewlets.manager import BeneathTask
 from Products.CMFCore.utils import getToolByName
 from zope.component import getMultiAdapter
-from zope.component import getUtility
 import datetime
 
 
@@ -103,10 +102,9 @@ class ResponseView(grok.Viewlet, Base):
 
     def convert_change_values(self, fieldname, value):
         if fieldname == 'responsible_client':
-            info = getUtility(IContactInformation)
-            client = info.get_client_by_id(value)
-            if client:
-                return client.title
+            org_unit = ogds_service().fetch_org_unit(value)
+            if org_unit:
+                return org_unit.label()
             else:
                 return value
 

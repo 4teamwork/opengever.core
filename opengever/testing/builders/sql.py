@@ -188,6 +188,11 @@ class UserBuilder(SqlObjectBuilder):
         self.groups.append(group)
         return self
 
+    def assign_to_org_units(self, org_units):
+        for org_unit in org_units:
+            self.groups.append(org_unit.users_group())
+        return self
+
     def create_object(self):
         obj = super(UserBuilder, self).create_object()
         if self.groups:

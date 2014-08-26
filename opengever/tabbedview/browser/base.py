@@ -1,7 +1,7 @@
 from ftw.dictstorage.interfaces import ISQLAlchemy
 from opengever.base.interfaces import IReferenceNumberFormatter
 from opengever.base.interfaces import IReferenceNumberSettings
-from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.sort_helpers import SortHelpers
 from opengever.tabbedview.utils import get_translated_transitions
 from opengever.tabbedview.utils import get_translated_types
 from plone.registry.interfaces import IRegistry
@@ -75,12 +75,11 @@ class OpengeverTab(object):
         # of the users, contacts and inboxes
         elif sort_on in (
             'responsible', 'Creator', 'checked_out', 'issuer', 'contact'):
-            info = getUtility(IContactInformation)
 
             if sort_on in ('issuer', 'contact'):
-                sort_dict = info.get_user_contact_sort_dict()
+                sort_dict = SortHelpers().get_user_contact_sort_dict()
             else:
-                sort_dict = info.get_user_sort_dict()
+                sort_dict = SortHelpers().get_user_sort_dict()
 
             def _sorter(a, b):
                 return cmp(

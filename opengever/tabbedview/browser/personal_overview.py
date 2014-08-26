@@ -2,8 +2,8 @@ from AccessControl import Unauthorized
 from five import grok
 from ftw.tabbedview.browser.tabbed import TabbedView
 from opengever.globalindex.model.task import Task
-from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_admin_unit
+from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.tabbedview import _
 from opengever.tabbedview import LOG
@@ -13,7 +13,6 @@ from plone import api
 from Products.CMFPlone.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from sqlalchemy.exc import OperationalError
-from zope.component import getUtility
 from zope.interface import Interface
 import AccessControl
 
@@ -91,13 +90,18 @@ class PersonalOverview(TabbedView):
         return False
 
     def get_tabs(self):
-        info = getUtility(IContactInformation)
-
-        if info.is_user_in_inbox_group() or self._is_user_admin():
-            # show admin tabs
+        if self.is_user_allowed_to_view_additional_tabs():
             return self.default_tabs + self.admin_tabs
         else:
             return self.default_tabs
+
+    def is_user_allowed_to_view_additional_tabs(self):
+        """The additional tabs Alltasks and AllIssuedTasks are only shown
+        to adminsitrators and users of the current inbox group."""
+
+        inbox = get_current_org_unit().inbox()
+        current_user = ogds_service().fetch_current_user()
+        return current_user in inbox.assigned_users() or self._is_user_admin()
 
     def user_is_allowed_to_view(self):
         """Returns True if the current client is one of the user's home
@@ -105,16 +109,15 @@ class PersonalOverview(TabbedView):
         the PersonalOverview, False otherwise.
         """
         try:
-            info = getUtility(IContactInformation)
-
-            if info.is_client_assigned():
+            current_user = ogds_service().fetch_current_user()
+            if current_user in get_current_admin_unit().assigned_users():
                 return True
             elif self._is_user_admin():
                 return True
-            return False
         except OperationalError as e:
             LOG.exception(e)
-            return False
+
+        return False
 
 
 class MyDossiers(Dossiers):
