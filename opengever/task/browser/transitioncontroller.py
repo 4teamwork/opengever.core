@@ -1,5 +1,4 @@
 from opengever.globalindex.model.task import Task
-from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
@@ -13,7 +12,6 @@ from Products.CMFCore.utils import getToolByName
 from Products.Five import BrowserView
 from zExceptions import NotFound
 from zope.component import getMultiAdapter
-from zope.component import getUtility
 from zope.interface import implements
 from zope.interface import Interface
 
@@ -525,15 +523,6 @@ class TaskTransitionController(BrowserView):
 
         inbox = get_current_org_unit().inbox()
         return ogds_service().fetch_current_user() in inbox.assigned_users()
-
-    def _is_issuer_inbox_group_user(self):
-        """Checks with the helpt of the contact information utility
-        if the current user is in the inbox group of the current client.
-        """
-        info = getUtility(IContactInformation)
-        if self._is_remote_request() or info.is_user_in_inbox_group():
-            return True
-        return False
 
     def _is_responsible_or_inbox_group_user(self):
         """Checks if the current user is the responsible
