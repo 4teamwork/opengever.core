@@ -1,4 +1,3 @@
-from Products.CMFCore.utils import getToolByName
 from datetime import datetime, timedelta
 from ftw.builder import Builder
 from ftw.builder import create
@@ -8,8 +7,10 @@ from opengever.testing import FunctionalTestCase
 from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
 from plone.app.testing import SITE_OWNER_NAME
 from plone.dexterity.utils import createContent, addContentToContainer
+from Products.CMFCore.utils import getToolByName
 from zope.event import notify
 from zope.lifecycleevent import ObjectCreatedEvent, ObjectAddedEvent
+import unittest
 
 
 def create_testobject(parent, ptype, **kwargs):
@@ -25,6 +26,8 @@ class TestTaskTemplates(FunctionalTestCase):
 
     layer = OPENGEVER_FUNCTIONAL_TESTING
 
+
+    @unittest.skip('Module is not used productive.')
     def test_integration(self):
         """ Tests the integration of tasktemplatefolder and
         tasktemplate
