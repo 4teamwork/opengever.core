@@ -90,35 +90,6 @@ class ContactInformation(grok.GlobalUtility):
 
     grok.provides(IContactInformation)
 
-    @ram.cache(ogds_class_language_cachekey)
-    def get_user_sort_dict(self):
-        """Returns a dict presenting userid and the fullname,
-        that allows correct sorting on the fullname.
-        Including also every client inbox.
-        """
-
-        session = create_session()
-        query = session.query(User.userid, User.lastname, User.firstname)
-        query = query.order_by(User.lastname, User.firstname)
-        ids = query.all()
-
-        sort_dict = {}
-        for userid, lastname, firstname in ids:
-            sort_dict[userid] = u'%s %s' % (lastname, firstname)
-
-        #includes every org-unit-inbox
-        for unit in ogds_service().all_org_units():
-            inbox_id = unit.inbox().id()
-            sort_dict[inbox_id] = Actor.lookup(inbox_id).get_label()
-        return sort_dict
-
-    def get_user_contact_sort_dict(self):
-        sort_dict = self.get_user_sort_dict()
-        for contact in ContactService().all_contacts():
-            sort_dict['contact:%s' % (contact.id)] = u'%s %s' % (
-                contact.lastname, contact.firstname)
-            return sort_dict
-
     # internal methods
     def _users_query(self):
         session = create_session()
