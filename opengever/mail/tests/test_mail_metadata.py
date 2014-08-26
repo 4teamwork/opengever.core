@@ -24,6 +24,12 @@ def get_preserved_as_paper_default():
     return registry.forInterface(IDocumentSettings).preserved_as_paper_default
 
 
+def set_preserved_as_paper_default(value):
+    registry = getUtility(IRegistry)
+    settings = registry.forInterface(IDocumentSettings)
+    settings.preserved_as_paper_default = value
+
+
 class TestMailMetadataWithBuilder(FunctionalTestCase):
 
     use_browser = True
@@ -144,6 +150,10 @@ class TestMailUpgradeStep(FunctionalTestCase):
         behaviors.remove(
             u'opengever.document.behaviors.metadata.IDocumentMetadata')
         fti._updateProperty('behaviors', tuple(behaviors))
+
+        # Set the registry default value for `preserved_as_paper` to
+        # something else than the schema default
+        set_preserved_as_paper_default(False)
 
         mail = create(Builder("mail").with_message(MAIL_DATA))
 
