@@ -131,11 +131,6 @@ class IAdminUnitConfiguration(Interface):
         in the OGDS (Opengever Global Directory Service).', )
 
 
-class IContactInformation(Interface):
-    """Contact information utility interface.
-    """
-
-
 class IClientCommunicator(Interface):
     """Utility interface for the client communicator.
     """
