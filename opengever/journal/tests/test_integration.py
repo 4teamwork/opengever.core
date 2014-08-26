@@ -306,6 +306,8 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         # Add-Event
         task = createContentInContainer(
             dossier, 'opengever.task.task', 'd1',
+            responsible=TEST_USER_ID,
+            issuer=TEST_USER_ID,
             responsible_client=get_current_admin_unit().id())
 
         self.check_annotation(

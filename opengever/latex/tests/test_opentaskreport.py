@@ -92,10 +92,6 @@ class TestOpenTaskReport(FunctionalTestCase):
         self.user, self.org_unit, self.admin_unit = create(
             Builder('fixture').with_all_unit_setup())
 
-        self.task = create(Builder("task").having(task_type='comment',
-                                                  issuer='peter.peter',
-                                                  responsible='hans.meier'))
-
         self.hans = create(Builder('ogds_user')
                            .having(userid='hans.meier',
                                    firstname='Hans',
@@ -106,6 +102,11 @@ class TestOpenTaskReport(FunctionalTestCase):
                             .having(userid='peter.peter',
                                     firstname='Peter',
                                     lastname='Peter'))
+
+        self.task = create(Builder("task")
+                           .having(task_type='comment',
+                                   issuer='peter.peter',
+                                   responsible='hans.meier'))
 
         provide_request_layer(self.task.REQUEST, IOpenTaskReportLayer)
         layout = DefaultLayout(self.task, self.task.REQUEST, PDFBuilder())
