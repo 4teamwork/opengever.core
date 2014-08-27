@@ -18,12 +18,13 @@ class TaskQuery(BaseQuery):
         """
         return self.filter(self._attribute('issuer') == userid)
 
-    def all_admin_unit_tasks(self, admin_unit):
-        """Returns query which list all tasks where the assigned_org_unit
-        is part of the current_admin_unit.
-        """
-        unit_ids = [unit.id() for unit in admin_unit.org_units]
-        return self.filter(self._attribute('assigned_org_unit').in_(unit_ids))
+    def by_assigned_org_unit(self, org_unit):
+        """Returns all tasks assigned to the given orgunit."""
+        return self.filter(self._attribute('assigned_org_unit') == org_unit.id())
+
+    def by_issuing_org_unit(self, org_unit):
+        """Returns all tasks issued by the given orgunit."""
+        return self.filter(self._attribute('issuing_org_unit') == org_unit.id())
 
     def all_issued_tasks(self, admin_unit):
         """List all tasks from the current_admin_unit.

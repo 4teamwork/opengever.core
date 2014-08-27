@@ -246,7 +246,7 @@ class AllTasks(GlobalTaskListingTab):
     major_actions = ['pdf_taskslisting']
 
     def get_base_query(self):
-        return Task.query.all_admin_unit_tasks(get_current_admin_unit())
+        return Task.query.by_assigned_org_unit(get_current_org_unit())
 
 
 class AllIssuedTasks(GlobalTaskListingTab):
@@ -265,4 +265,4 @@ class AllIssuedTasks(GlobalTaskListingTab):
     major_actions = ['pdf_taskslisting']
 
     def get_base_query(self):
-        return Task.query.all_issued_tasks(get_current_admin_unit())
+        return Task.query.by_issuing_org_unit(get_current_org_unit())
