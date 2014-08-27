@@ -1,28 +1,7 @@
 from zope import schema
 from zope.interface import Attribute
 from zope.interface import Interface
-
 import ldap
-
-
-class IUser(Interface):
-    """Marker interface for users.
-    """
-
-
-class IGroup(Interface):
-    """Marker interface for groups.
-    """
-
-
-class IClient(Interface):
-    """Marker interface for clients.
-    """
-
-
-class IGroup(Interface):
-    """Marker interface for groups.
-    """
 
 
 class IOGDSUpdater(Interface):
