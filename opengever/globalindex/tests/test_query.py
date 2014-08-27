@@ -131,19 +131,6 @@ class TestTaskQueries(TestCase):
         self.assertEquals([task2],
                           Task.query.by_issuing_org_unit(self.bd).all())
 
-    def test_all_admin_unit_tasks_list_tasks_assigned_to_a_current_admin_units_org_unit(self):
-        task1 = self.task(1, 'unita', assigned_org_unit='rr')
-        task2 = self.task(2, 'unitb', assigned_org_unit='afi')
-        task3 = self.task(3, 'unita', assigned_org_unit='bd')
-
-        self.assertItemsEqual(
-            [task1, task3],
-            Task.query.all_admin_unit_tasks(self.admin_unit_a).all())
-
-        self.assertItemsEqual(
-            [task2],
-            Task.query.all_admin_unit_tasks(self.admin_unit_b).all())
-
     def test_all_issued_tasks_lists_all_tasks_created_on_given_admin_unit(self):
         task1 = self.task(1, 'unita', assigned_org_unit='rr')
         task2 = self.task(2, 'unitb', assigned_org_unit='afi')
