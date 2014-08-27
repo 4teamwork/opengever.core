@@ -101,7 +101,7 @@ class TestGlobalTaskListings(FunctionalTestCase):
                                     responsible=TEST_USER_ID,
                                     issuer=TEST_USER_ID))
         self.task2 = create(Builder('task')
-                            .having(responsible_client='client1',
+                            .having(responsible_client='client2',
                                     responsible='hugo.boss',
                                     issuer=TEST_USER_ID))
         self.task3 = create(Builder('task')
@@ -132,7 +132,7 @@ class TestGlobalTaskListings(FunctionalTestCase):
             'tabbedview_view-alltasks')
         view.update()
 
-        expected = [self.task1, self.task2, self.task3]
+        expected = [self.task1, self.task3]
         self.assertEquals(
             [task.get_sql_object() for task in expected],
             view.contents)
