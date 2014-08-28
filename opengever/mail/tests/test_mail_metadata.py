@@ -176,7 +176,7 @@ class TestMailUpgradeStep(FunctionalTestCase):
         self.assertEquals(get_header_date(mail).date(),
                           mail.document_date)
 
-        self.assertEquals(date.today(),
+        self.assertEquals(None,
                           mail.receipt_date)
 
         self.assertIsNone(mail.delivery_date,
