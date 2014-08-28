@@ -29,7 +29,8 @@ class ActivateBehaviors(UpgradeStep):
         fti._updateProperty('behaviors', tuple(behaviors))
 
         query = {'portal_type': 'ftw.mail.mail'}
-        for mail in self.objects(query, 'Initialize metadata on mail'):
+        for mail in self.objects(query, 'Initialize metadata on mail',
+                                 savepoints=500):
             self.initialize_required_metadata(mail)
             self.set_default_values_for_missing_fields(mail)
             # Indexes and catalog metadata for these objects will be rebuilt in
