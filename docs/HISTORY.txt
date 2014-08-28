@@ -8,8 +8,8 @@ Changelog
   [deiferni]
 
 
-3.4 (unreleased)
-----------------
+3.4.0 (2014-08-28)
+------------------
 
 - General fixes:
 
