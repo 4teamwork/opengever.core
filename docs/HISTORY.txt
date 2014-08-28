@@ -1,8 +1,8 @@
 Changelog
 =========
 
-3.5 (unreleased)
-----------------
+3.4.1 (unreleased)
+------------------
 
 - Use `ftw.profilehook` instead of setuphandlers.
   [deiferni]
