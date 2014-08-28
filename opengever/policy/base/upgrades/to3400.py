@@ -23,4 +23,4 @@ class RebuildIndexesForDocumentishObjects(UpgradeStep):
         ]
         self.catalog_reindex_objects(
             {'object_provides': IBaseDocument.__identifier__},
-            idxs=idxs)
+            idxs=idxs, savepoints=500)
