@@ -1,8 +1,10 @@
 from Acquisition import aq_base
 from Acquisition import aq_parent
+from datetime import datetime
+from ftw.mail import utils
 from ftw.upgrade import UpgradeStep
 from opengever.document.behaviors.metadata import IDocumentMetadata
-from opengever.mail.mail import initialize_metadata
+from opengever.mail.mail import get_author_by_email
 from plone.dexterity.interfaces import IDexterityFTI
 from z3c.form.interfaces import IValue
 from zope.component import getUtility
@@ -27,16 +29,23 @@ class ActivateBehaviors(UpgradeStep):
         fti._updateProperty('behaviors', tuple(behaviors))
 
         query = {'portal_type': 'ftw.mail.mail'}
-        for mail in self.objects(query, 'Initialize metadata on mail'):
-            initialize_metadata(mail, None)
-            self.set_receipt_date_equals_creation_date(mail)
+        for mail in self.objects(query, 'Initialize metadata on mail',
+                                 savepoints=500):
+            self.initialize_required_metadata(mail)
             self.set_default_values_for_missing_fields(mail)
             # Indexes and catalog metadata for these objects will be rebuilt in
             # upgrade step opengever.policy.base.upgrades:3400
 
-    def set_receipt_date_equals_creation_date(self, mail):
+    def initialize_required_metadata(self, mail):
         mail_metadata = IDocumentMetadata(mail)
-        mail_metadata.receipt_date = mail.created().asdatetime().date()
+
+        date_time = datetime.fromtimestamp(
+            utils.get_date_header(mail.msg, 'Date'))
+        mail_metadata.document_date = date_time.date()
+
+        # Receipt date should be None for migrated mails
+        mail_metadata.receipt_date = None
+        mail_metadata.document_author = get_author_by_email(mail)
 
     def set_preserved_as_paper(self, mail):
         field = IDocumentMetadata[u'preserved_as_paper']

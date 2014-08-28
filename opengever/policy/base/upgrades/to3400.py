@@ -13,6 +13,8 @@ class RebuildIndexesForDocumentishObjects(UpgradeStep):
 
     def __call__(self):
         idxs = [
+            'document_date',
+            'document_author',
             'delivery_date',
             'receipt_date',
             'object_provides',
@@ -21,4 +23,4 @@ class RebuildIndexesForDocumentishObjects(UpgradeStep):
         ]
         self.catalog_reindex_objects(
             {'object_provides': IBaseDocument.__identifier__},
-            idxs=idxs)
+            idxs=idxs, savepoints=500)
