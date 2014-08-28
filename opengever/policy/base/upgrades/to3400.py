@@ -13,6 +13,8 @@ class RebuildIndexesForDocumentishObjects(UpgradeStep):
 
     def __call__(self):
         idxs = [
+            'document_date',
+            'document_author',
             'delivery_date',
             'receipt_date',
             'object_provides',
