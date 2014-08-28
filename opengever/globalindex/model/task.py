@@ -206,8 +206,9 @@ class Task(Base):
     @property
     def is_remote_task(self):
         """Returns true for tasks, where issuing and responsible
-        admin_unit are not equal"""
+        admin_unit (assign org unit's admin_unit) are not equal.__add__()
 
+        """
         return self.get_assigned_org_unit().admin_unit != self.get_admin_unit()
 
     def get_css_class(self):

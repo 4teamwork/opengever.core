@@ -38,7 +38,8 @@ class TestMethodValidator(FunctionalTestCase):
         validator.validate('existing_dossier')
 
     def test_raise_invalid_if_current_user_is_not_assigned_to_responsible_client(self):
-        create(Builder('org_unit').id('client2').with_default_groups())
+        create(Builder('org_unit').id('client2').with_default_groups()
+               .having(admin_unit=self.admin_unit))
         task = create(Builder('task')
                       .having(
                           issuer=TEST_USER_ID,

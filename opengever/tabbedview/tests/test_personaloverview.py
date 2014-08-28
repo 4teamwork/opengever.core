@@ -27,12 +27,12 @@ class TestPersonalOverview(FunctionalTestCase):
         setRoles(self.portal, 'hugo.boss', ['Reader'])
         transaction.commit()
 
+        admin_unit = create(Builder('admin_unit')
+                            .id('additional'))
         additional = create(Builder('org_unit')
                             .id('additional')
+                            .having(admin_unit=admin_unit)
                             .with_default_groups())
-        admin_unit = create(Builder('admin_unit')
-                            .id('additional')
-                            .assign_org_units([additional]))
 
         self.hugo = create(Builder('ogds_user')
                            .having(userid='peter')

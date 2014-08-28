@@ -41,7 +41,8 @@ class TestTaskOverview(FunctionalTestCase):
 
     @browsing
     def test_issuer_is_prefixed_by_current_org_unit_on_a_multiclient_setup(self, browser):
-        create(Builder('org_unit').id('client2'))
+        create(Builder('org_unit').id('client2')
+               .having(admin_unit=self.admin_unit))
         task = create(Builder("task").having(task_type='comment',
                                              issuer=TEST_USER_ID))
 

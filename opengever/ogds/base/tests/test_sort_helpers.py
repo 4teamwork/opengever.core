@@ -12,6 +12,7 @@ class TestUserSortDict(FunctionalTestCase):
 
         create(Builder('org_unit')
                .id('arch')
+               .having(admin_unit=self.admin_unit)
                .having(title=u'Landesarchiv'))
 
         self.hugo = create(Builder('ogds_user')

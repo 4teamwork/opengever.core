@@ -8,8 +8,9 @@ class TestTaskCssClass(FunctionalTestCase):
     def setUp(self):
         super(TestTaskCssClass, self).setUp()
 
-        create(Builder('org_unit').id(u'additional'))
-        create(Builder('admin_unit').id(u'additional'))
+        additional_admin_unit = create(Builder('admin_unit').id(u'additional'))
+        create(Builder('org_unit').id(u'additional')
+               .having(admin_unit=additional_admin_unit))
 
     def test_forwarding_class(self):
         forwarding = create(Builder('globalindex_task')
@@ -67,9 +68,8 @@ class TestTaskCssClass(FunctionalTestCase):
                              .having(int_id=123, sequence_number=123,
                                      is_subtask=True,
                                      admin_unit_id='additional',
-                                     issuing_org_unit='client1',
-                                     assigned_org_unit='additional'))
-
+                                     issuing_org_unit='additional',
+                                     assigned_org_unit='client1'))
         self.assertEqual('icon-task-remote-task', remote_task.get_css_class())
 
     def test_normal_task_classk(self):

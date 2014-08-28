@@ -16,16 +16,17 @@ class TestTaskQueries(TestCase):
 
         self.session = self.layer.session
 
-        self.rr = create(Builder('org_unit').id('rr'))
-        self.bd = create(Builder('org_unit').id('bd'))
-        self.afi = create(Builder('org_unit').id('afi'))
-
         self.admin_unit_a = create(Builder('admin_unit')
-                                   .id('unita')
-                                   .assign_org_units([self.rr, self.bd]))
+                                   .id('unita'))
         self.admin_unit_b = create(Builder('admin_unit')
-                                   .id('unitb')
-                                   .assign_org_units([self.afi]))
+                                   .id('unitb'))
+
+        self.rr = create(Builder('org_unit').id('rr')
+                         .having(admin_unit=self.admin_unit_a))
+        self.bd = create(Builder('org_unit').id('bd')
+                         .having(admin_unit=self.admin_unit_a))
+        self.afi = create(Builder('org_unit').id('afi')
+                          .having(admin_unit=self.admin_unit_b))
 
     def task(self, intid, current_admin_unit, sequence_number=1, **kw):
         arguments = {'issuing_org_unit': 'rr',
@@ -165,16 +166,16 @@ class TestFunctionalTaskQueries(FunctionalTestCase):
     def test_by_container_queries_adminunit_dependent(self):
         create(Builder('task').within(self.dossier))
 
-        additional_org_unit = create(Builder('org_unit')
-                                     .assign_users([self.user])
-                                     .id(u'additional')
-                                     .as_current_org_unit())
-
         additional_admin_unit = create(Builder('admin_unit')
                                        .id(u'additional')
                                        .having(title='foo')
-                                       .as_current_admin_unit()
-                                       .assign_org_units([additional_org_unit]))
+                                       .as_current_admin_unit())
+
+        additional_org_unit = create(Builder('org_unit')
+                                     .having(admin_unit=additional_admin_unit)
+                                     .assign_users([self.user])
+                                     .id(u'additional')
+                                     .as_current_org_unit())
 
         task2 = create(Builder('task').within(self.dossier))
 
@@ -192,15 +193,17 @@ class TestFunctionalTaskQueries(FunctionalTestCase):
     def test_by_brain_queries_adminunit_dependent(self):
         create(Builder('task'))
 
-        additional_org_unit = create(Builder('org_unit')
-                                     .assign_users([self.user])
-                                     .id(u'additional')
-                                     .as_current_org_unit())
+        additional_admin_unit = create(
+            Builder('admin_unit')
+            .id(u'additional')
+            .as_current_admin_unit())
 
-        create(Builder('admin_unit')
-               .id(u'additional')
-               .as_current_admin_unit()
-               .assign_org_units([additional_org_unit]))
+        additional_org_unit = create(
+            Builder('org_unit')
+            .having(admin_unit=additional_admin_unit)
+            .assign_users([self.user])
+            .id(u'additional')
+            .as_current_org_unit())
 
         task = create(Builder('task'))
 

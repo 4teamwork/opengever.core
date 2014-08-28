@@ -21,7 +21,8 @@ class TestActorLookup(FunctionalTestCase):
     def test_inbox_actor_lookup(self):
         create(Builder('org_unit')
                .id('foobar')
-               .having(title='Huhu')
+               .having(title='Huhu',
+                       admin_unit=self.admin_unit)
                .with_default_groups())
         actor = Actor.lookup('inbox:foobar')
 

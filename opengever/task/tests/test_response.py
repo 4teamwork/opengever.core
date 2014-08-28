@@ -29,21 +29,20 @@ class TestResponse(FunctionalTestCase):
                                      firstname='Test',
                                      lastname='User2'))
 
+        admin_unit = create(Builder('admin_unit')
+                            .as_current_admin_unit())
+
         unit1 = create(Builder('org_unit')
                        .assign_users([test_user_1])
                        .as_current_org_unit()
                        .id('plone')
-                       .having(title="Plone"))
+                       .having(title="Plone", admin_unit=admin_unit))
 
         unit2 = create(Builder('org_unit')
                        .id('client2')
-                       .having(title="Client 2")
+                       .having(title="Client 2", admin_unit=admin_unit)
                        .assign_users([test_user_2])
                        .assign_users([test_user_1], to_inbox=False))
-
-        create(Builder('admin_unit')
-               .as_current_admin_unit()
-               .assign_org_units([unit1, unit2]))
 
         # create_plone_user(self.portal, 'testuser2')
 

@@ -1,6 +1,6 @@
 from collective.transmogrifier import transmogrifier
+from ftw.builder import session
 from ftw.builder.testing import BUILDER_LAYER
-from ftw.builder.testing import functional_session_factory
 from ftw.builder.testing import set_builder_session_factory
 from ftw.testing import ComponentRegistryLayer
 from opengever.globalindex import model
@@ -162,19 +162,8 @@ class MemoryDBLayer(Layer):
     """A Layer which only set up a test sqlite db in to the memory
     """
 
-    layer = BUILDER_LAYER
-
     def testSetUp(self):
         super(MemoryDBLayer, self).testSetUp()
-
-        engine_factory = EngineFactory('sqlite:///:memory:')
-        provideUtility(
-            engine_factory, provides=IEngineFactory, name=u'opengever_db')
-
-        scoped_session = GloballyScopedSession(engine=u'opengever_db')
-        provideUtility(
-            scoped_session, provides=IScopedSession, name=u'opengever')
-
         setup_sql_tables()
         self.session = create_session()
 
@@ -183,13 +172,42 @@ class MemoryDBLayer(Layer):
         transaction.abort()
 
 
+def integration_session_factory():
+    sess = session.BuilderSession()
+    sess.session = create_session()
+    return sess
+
+
+def functional_session_factory():
+    sess = session.BuilderSession()
+    sess.auto_commit = True
+    sess.session = create_session()
+    return sess
+
+
+def memory_session_factory():
+    engine_factory = EngineFactory('sqlite:///:memory:')
+    provideUtility(
+        engine_factory, provides=IEngineFactory, name=u'opengever_db')
+
+    scoped_session = GloballyScopedSession(engine=u'opengever_db')
+    provideUtility(
+        scoped_session, provides=IScopedSession, name=u'opengever')
+
+    return functional_session_factory()
+
+
 MEMORY_DB_LAYER = MemoryDBLayer(
-    bases=(BUILDER_LAYER,), name='opengever:core:memory_db')
+    bases=(BUILDER_LAYER,
+           set_builder_session_factory(memory_session_factory)),
+    name='opengever:core:memory_db')
 
 OPENGEVER_FIXTURE = OpengeverFixture()
 
 OPENGEVER_INTEGRATION_TESTING = IntegrationTesting(
-    bases=(OPENGEVER_FIXTURE, ), name="opengever.core:integration")
+    bases=(OPENGEVER_FIXTURE,
+           set_builder_session_factory(integration_session_factory)),
+    name="opengever.core:integration")
 
 OPENGEVER_FUNCTIONAL_TESTING = FunctionalTesting(
     bases=(OPENGEVER_FIXTURE,

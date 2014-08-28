@@ -188,7 +188,8 @@ class TestTaskListings(FunctionalTestCase):
 
         self.hugo = create(Builder('fixture').with_hugo_boss())
 
-        self.org_unit_2 = create(Builder('org_unit').id('client2'))
+        self.org_unit_2 = create(Builder('org_unit').id('client2')
+                                 .having(admin_unit=self.admin_unit))
 
         self.task = create(Builder('task')
                            .having(

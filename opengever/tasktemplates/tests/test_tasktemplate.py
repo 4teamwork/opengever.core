@@ -1,7 +1,6 @@
 from Products.CMFCore.utils import getToolByName
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
 from opengever.testing import FunctionalTestCase
-from opengever.testing import create_and_select_current_org_unit
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.utils import createContent, addContentToContainer
 from zope.component import createObject

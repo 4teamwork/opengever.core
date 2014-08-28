@@ -133,13 +133,13 @@ class TestTaskControllerConditions(FunctionalTestCase):
         self.assertTrue(get_conditions(task).is_successor_process)
 
     def test_is_assigned_to_current_admin_unit(self):
+        admin_unit = create(Builder('admin_unit')
+                            .id('additional'))
         org_unit = create(Builder('org_unit')
                           .id('additional')
                           .with_default_groups()
-                          .having(title='Additional'))
-        create(Builder('admin_unit')
-               .id('additional')
-               .wrapping_org_unit(org_unit))
+                          .having(title='Additional',
+                                  admin_unit=admin_unit))
 
         task1 = create(Builder('forwarding')
                        .having(responsible_client='client1'))

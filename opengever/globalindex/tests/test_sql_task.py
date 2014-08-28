@@ -1,6 +1,4 @@
 from datetime import date
-from datetime import date
-from datetime import timedelta
 from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
@@ -15,9 +13,6 @@ import transaction
 class TestGlobalindexTask(TestCase):
 
     layer = MEMORY_DB_LAYER
-
-    def setUp(self):
-        super(TestGlobalindexTask, self).setUp()
 
     def _create_task(self, int_id=1, admin_unit_id='m1',
                      sequence_number=1, issuing_org_unit='org',
@@ -117,52 +112,46 @@ class TestGlobalindexTask(TestCase):
 
     def test_is_overdue_compare_deadline_with_today(self):
         early = create(Builder('globalindex_task').having(
-            int_id=12345, admin_unit_id='foo',
-            deadline=date.today() + timedelta(days=10), review_state='task-state-open'))
-
+            deadline=date.today() + timedelta(days=10)))
         overdue = create(Builder('globalindex_task').having(
-            int_id=12345, admin_unit_id='foo',
-            deadline=date.today() - timedelta(days=10), review_state='task-state-open'))
+            int_id=12346, deadline=date.today() - timedelta(days=10)))
 
         self.assertFalse(early.is_overdue)
         self.assertTrue(overdue.is_overdue)
 
     def test_is_overdue_respect_overdue_independent_states(self):
         overdue = create(Builder('globalindex_task').having(
-            int_id=12345, admin_unit_id='foo',
-            deadline=date.today() - timedelta(days=10), review_state='task-state-tested-and-closed'))
+            int_id=12345, deadline=date.today() - timedelta(days=10),
+            review_state='task-state-tested-and-closed'))
 
         self.assertFalse(overdue.is_overdue)
 
     def test_deadline_label_returns_span_tag_with_formated_date(self):
         task = create(Builder('globalindex_task').having(
-            int_id=12345, admin_unit_id='foo',
-            deadline=date(2512,10,25), review_state='task-state-open'))
+            int_id=12345, deadline=date(2512,10,25),
+            review_state='task-state-open'))
 
         self.assertEquals('<span>25.10.2512</span>', task.get_deadline_label())
 
     def test_deadline_label_contains_overdue_css_class_for_overdued_tasks(self):
         deadline = date.today() - timedelta(days=10)
-        overdue = create(Builder('globalindex_task').having(
-            int_id=12345, admin_unit_id='foo',
-            deadline=deadline, review_state='task-state-open'))
+        overdue = create(Builder('globalindex_task').having(deadline=deadline))
 
         self.assertEquals(
             '<span class="overdue">{}</span>'.format(deadline.strftime('%d.%m.%Y')),
             overdue.get_deadline_label())
 
     def test_deadline_returns_empty_string_for_tasks_without_a_deadline(self):
-        task = create(Builder('globalindex_task').having(
-            int_id=12345, admin_unit_id='foo', review_state='task-state-open'))
+        task = create(Builder('globalindex_task'))
 
         self.assertEquals('', task.get_deadline_label())
 
     def test_responsible_actor(self):
-        org_unit = create(Builder('org_unit').id('rr'))
-        task = create(Builder('globalindex_task').having(
-            int_id=12345, sequence_number=1,
-            issuing_org_unit='org', assigned_org_unit='org',
-            admin_unit_id='org', responsible='inbox:rr'))
+        admin_unit = create(Builder('admin_unit'))
+        org_unit = create(Builder('org_unit').id('rr')
+                          .having(admin_unit=admin_unit))
+        task = create(Builder('globalindex_task')
+                      .having(responsible='inbox:rr'))
 
         responsible_actor = task.responsible_actor
 
@@ -170,11 +159,10 @@ class TestGlobalindexTask(TestCase):
         self.assertEqual(org_unit, responsible_actor.org_unit)
 
     def test_issuer_actor(self):
-        org_unit = create(Builder('org_unit').id('rr'))
-        task = create(Builder('globalindex_task').having(
-            int_id=12345, sequence_number=1,
-            issuing_org_unit='org', assigned_org_unit='org',
-            admin_unit_id='org', issuer='inbox:rr'))
+        admin_unit = create(Builder('admin_unit'))
+        org_unit = create(Builder('org_unit').id('rr')
+                          .having(admin_unit=admin_unit))
+        task = create(Builder('globalindex_task').having(issuer='inbox:rr'))
 
         issuer_actor = task.issuer_actor
 

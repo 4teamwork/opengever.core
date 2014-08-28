@@ -56,13 +56,14 @@ class TestDossierDetails(FunctionalTestCase):
         self.user = create(Builder('ogds_user')
                            .having(firstname='t\xc3\xa4st'.decode('utf-8'),
                                    lastname=u'User'))
-        self.org_unit = create(Builder('org_unit')
-                               .having(title=u'Regierungsrat')
-                               .with_default_groups()
-                               .assign_users([self.user]))
         self.admin_unit = create(Builder('admin_unit')
                                  .as_current_admin_unit()
-                                 .wrapping_org_unit(self.org_unit))
+                                 .having(title=u'Regierungsrat'))
+        self.org_unit = create(Builder('org_unit')
+                               .having(title=u'Regierungsrat',
+                                       admin_unit=self.admin_unit)
+                               .with_default_groups()
+                               .assign_users([self.user]))
 
         select_current_org_unit(self.org_unit.id())
 
@@ -92,7 +93,7 @@ class TestDossierDetails(FunctionalTestCase):
         return getMultiAdapter(
             (dossier, dossier.REQUEST, layout), ILaTeXView)
 
-    def test_responsible_contains_client_and_userid_separated_by_a_slash(self):
+    def test_responsible_contains_admin_unit_and_userid(self):
         dossier = create(Builder('dossier')
                          .having(responsible=TEST_USER_ID))
 

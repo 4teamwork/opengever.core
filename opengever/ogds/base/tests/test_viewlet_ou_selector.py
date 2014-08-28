@@ -13,28 +13,30 @@ class TestOrgUnitSelectorViewlet(FunctionalTestCase):
 
         test_user = create(Builder('ogds_user').id(TEST_USER_ID))
 
+        self.admin_unit = create(Builder('admin_unit')
+                                 .as_current_admin_unit()
+                                 .having(public_url='http://nohost/plone'))
+
         self.org_unit4 = create(Builder('org_unit')
                                 .id(u'client4')
-                                .having(title=u'Client 4',)
+                                .having(title=u'Client 4',
+                                        admin_unit=self.admin_unit)
                                 .assign_users([test_user]))
         self.org_unit3 = create(Builder('org_unit')
                                 .id(u'client3')
-                                .having(title=u'Client 3')
+                                .having(title=u'Client 3',
+                                        admin_unit=self.admin_unit)
                                 .assign_users([test_user]))
         self.org_unit1 = create(Builder('org_unit')
                                 .id(u'client1')
                                 .as_current_org_unit()
-                                .having(title=u'Client 1')
+                                .having(title=u'Client 1',
+                                        admin_unit=self.admin_unit)
                                 .assign_users([test_user]))
         self.org_unit2 = create(Builder('org_unit')
                                 .id(u'client2')
-                                .having(title=u'Client 2'))
-
-        create(Builder('admin_unit')
-               .as_current_admin_unit()
-               .having(public_url='http://nohost/plone')
-               .assign_org_units([self.org_unit4, self.org_unit3,
-                                  self.org_unit1, self.org_unit2]))
+                                .having(title=u'Client 2',
+                                        admin_unit=self.admin_unit))
 
         self.repo_root = create(Builder('repository_root'))
 

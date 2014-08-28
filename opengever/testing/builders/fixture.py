@@ -64,8 +64,8 @@ class FixtureBuilder(object):
 
     def create(self):
         user = self._create_user()
-        org_unit = self._create_org_unit(user)
-        admin_unit = self._create_admin_unit(org_unit)
+        admin_unit = self._create_admin_unit()
+        org_unit = self._create_org_unit(user, admin_unit)
         hugo = self._create_hugo_boss()
         items = [each for each in (user, org_unit, admin_unit, hugo)
                  if each is not None]
@@ -83,27 +83,31 @@ class FixtureBuilder(object):
         return create(Builder('ogds_user')
                       .having(**self._user_args))
 
-    def _create_org_unit(self, user):
+    def _create_org_unit(self, user, admin_unit):
         if not self._with_org_unit:
             return None
 
+        if admin_unit:
+            self._org_unit_args['admin_unit'] = admin_unit
         builder = (Builder('org_unit')
-                   .having(**self._org_unit_args))
+                   .having(**self._org_unit_args)
+                   .with_default_groups())
         if user:
             builder = (builder.as_current_org_unit()
-                              .with_default_groups()
                               .assign_users([user]))
         return create(builder)
 
-    def _create_admin_unit(self, org_unit):
+    def _create_admin_unit(self):
         if not self._with_admin_unit:
             return None
 
         builder = Builder('admin_unit').having(
             **self._admin_unit_args).as_current_admin_unit()
 
-        if org_unit:
-            builder = builder.wrapping_org_unit(org_unit)
+        # wrapping org-unit
+        if self._with_org_unit:
+            builder = builder.having(unit_id=self._org_unit_args['unit_id'],
+                                     title=self._org_unit_args['title'])
         return create(builder)
 
     def _create_hugo_boss(self):
