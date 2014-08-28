@@ -9,7 +9,8 @@ class TestInbox(FunctionalTestCase):
     def setUp(self):
         super(TestInbox, self).setUp()
 
-        self.org_unit2 = create(Builder('org_unit').id('client2'))
+        self.org_unit2 = create(Builder('org_unit').id('client2')
+                                .having(admin_unit=self.admin_unit))
 
     def test_get_current_inbox_returns_sub_inbox_assigned_to_current_org_unit(self):
         inbox = create(Builder('inbox'))

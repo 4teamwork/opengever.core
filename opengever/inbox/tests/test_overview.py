@@ -14,7 +14,7 @@ class TestBaseInboxOverview(FunctionalTestCase):
         self.user2, self.org_unit2, self.admin_unit2 = create(
             Builder('fixture')
             .with_user(userid='hans.muster')
-            .with_org_unit(client_id=u'client2')
+            .with_org_unit(unit_id=u'client2')
             .with_admin_unit())
 
         self.inbox = create(Builder('inbox').titled(u'eingangskorb'))

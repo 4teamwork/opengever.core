@@ -132,7 +132,7 @@ class InboxActor(Actor):
 
     @property
     def permission_identifier(self):
-        return self.org_unit.inbox_group().groupid
+        return self.org_unit.inbox_group.groupid
 
 
 class ContactActor(Actor):

@@ -5,7 +5,6 @@ from opengever.task.adapters import IResponseContainer
 from opengever.task.response import Response
 from opengever.task.task import ITask
 from opengever.testing import FunctionalTestCase
-from opengever.testing import create_and_select_current_org_unit
 from plone.dexterity.interfaces import IDexterityFTI
 from z3c.relationfield.relation import RelationValue
 from zope.component import createObject
@@ -92,8 +91,6 @@ class TestTaskIntegration(FunctionalTestCase):
             u'bidirectional_by_reference', t1.task_type_category)
 
     def test_task_date_subscriber(self):
-        create_and_select_current_org_unit()
-
         member = self.portal.restrictedTraverse('plone_portal_state').member()
         t1 = create(Builder('task')
                     .titled('Task 1')

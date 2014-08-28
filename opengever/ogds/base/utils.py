@@ -47,7 +47,8 @@ class PloneOGDSService(OGDSService):
         return api.user.get_current().getId()
 
     def fetch_current_user(self):
-        return self.fetch_user(self._get_current_user_id())
+        userid = self._get_current_user_id()
+        return self.fetch_user(userid) if userid else None
 
     def assigned_org_units(self, userid=None, omit_current=False):
         if userid is None:

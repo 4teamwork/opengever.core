@@ -1,7 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.testing import FunctionalTestCase
-from opengever.testing import create_client
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
 
@@ -91,7 +90,8 @@ class TestLocalRolesSetter(FunctionalTestCase):
             dossier.get_local_roles_for_userid('james.bond'))
 
     def test_inbox_group_of_the_responsible_client_has_the_same_localroles_as_the_responsible_in_a_multiclient_setup(self):
-        create_client(clientid="additional")
+        create(Builder('org_unit').id("additional")
+               .having(admin_unit=self.admin_unit))
 
         dossier = create(Builder('dossier'))
         document = create(Builder('document'))

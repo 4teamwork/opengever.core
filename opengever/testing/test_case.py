@@ -34,6 +34,7 @@ class FunctionalTestCase(TestCase):
         if self.use_default_fixture:
             self.user, self.org_unit, self.admin_unit = create(
                 Builder('fixture').with_all_unit_setup())
+        transaction.commit()
 
     def setup_fullname(self, user_id=TEST_USER_ID, fullname=None):
         member = self.membership_tool.getMemberById(user_id)

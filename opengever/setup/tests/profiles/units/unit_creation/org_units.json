@@ -1,0 +1,9 @@
+[
+  {
+    "unit_id": "org",
+    "title": "My cool new org unit",
+    "admin_unit_id": "admin",
+    "users_group_id": "users",
+    "inbox_group_id": "users"
+  }
+]

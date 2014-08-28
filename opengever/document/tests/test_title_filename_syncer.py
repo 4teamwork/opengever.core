@@ -5,9 +5,6 @@ from opengever.testing import FunctionalTestCase
 
 class TestTitleFilenameSyncer(FunctionalTestCase):
 
-    def setUp(self):
-        super(TestTitleFilenameSyncer, self).setUp()
-
     def test_infer_title_from_filename(self):
         document = create(Builder("document")
                           .attach_file_containing(u"blup", name=u'T\xf6st.txt'))

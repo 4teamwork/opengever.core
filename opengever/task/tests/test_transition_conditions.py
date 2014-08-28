@@ -4,6 +4,7 @@ from opengever.task.browser.transitioncontroller import Conditions
 from opengever.task.browser.transitioncontroller import get_conditions
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
+import transaction
 
 
 class TestTaskControllerConditions(FunctionalTestCase):
@@ -16,7 +17,8 @@ class TestTaskControllerConditions(FunctionalTestCase):
                                    firstname='Hugo',
                                    lastname='Boss',
                                    email='hugo@boss.ch')
-                           .in_group(self.org_unit.inbox_group()))
+                           .in_group(self.org_unit.users_group))
+        transaction.commit()
 
     def test_is_issuer(self):
         task1 = create(Builder('task').having(issuer=TEST_USER_ID))
@@ -131,13 +133,13 @@ class TestTaskControllerConditions(FunctionalTestCase):
         self.assertTrue(get_conditions(task).is_successor_process)
 
     def test_is_assigned_to_current_admin_unit(self):
+        admin_unit = create(Builder('admin_unit')
+                            .id('additional'))
         org_unit = create(Builder('org_unit')
                           .id('additional')
                           .with_default_groups()
-                          .having(title='Additional'))
-        create(Builder('admin_unit')
-               .id('additional')
-               .wrapping_org_unit(org_unit))
+                          .having(title='Additional',
+                                  admin_unit=admin_unit))
 
         task1 = create(Builder('forwarding')
                        .having(responsible_client='client1'))

@@ -1,7 +1,6 @@
 from Products.CMFCore.utils import getToolByName
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
 from opengever.testing import FunctionalTestCase
-from opengever.testing import create_and_select_current_org_unit
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.utils import createContent, addContentToContainer
 from zope.component import createObject
@@ -76,7 +75,6 @@ class TestTaskTemplatesWithBrowser(FunctionalTestCase):
     def test_view(self):
         portal = self.layer['portal']
 
-        create_and_select_current_org_unit('plone')
         self.grant('Manager')
 
         # Folders and templates

@@ -4,7 +4,7 @@ from ftw.table.basesource import BaseTableSource
 from ftw.table.interfaces import ITableSource, ITableSourceConfig
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.utils import create_session
-from opengever.ogds.models.client import Client
+from opengever.ogds.models.org_unit import OrgUnit
 from opengever.tabbedview import _
 from opengever.tabbedview.browser.base import OpengeverTab
 from opengever.tabbedview.browser.listing import ListingView
@@ -96,7 +96,7 @@ class ClientsListing(grok.View, OpengeverTab, ListingView):
     def get_base_query(self):
         """Returns the base search query (sqlalchemy)
         """
-        return create_session().query(Client)
+        return create_session().query(OrgUnit)
 
 
 class ClientsTableSource(grok.MultiAdapter, BaseTableSource):

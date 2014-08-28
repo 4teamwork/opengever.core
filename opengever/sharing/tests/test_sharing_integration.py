@@ -183,37 +183,31 @@ class TestOpengeverSharingIntegration(FunctionalTestCase):
             last_event.new_local_roles == (('test_user_1_', ('Owner',)),))
 
     def test_sharing_view_only_returns_users_from_current_admin_unit(self):
-        registry = getUtility(IRegistry)
-        admin_unit = registry.forInterface(IAdminUnitConfiguration)
-        admin_unit.current_unit_id = u'testunit'
-
         # create other group, from different admin unit
+
+        other_admin_unit = create(Builder('admin_unit').id('other'))
         test_peter = create(Builder('ogds_user')
-                            .having(userid='test.peter',
-                                    firstname='User',
+                            .id('test.peter')
+                            .having(firstname='User',
                                     lastname='Test'))
-
         other_ou = create(Builder('org_unit')
-                          .having(client_id=u'otherunit')
+                          .id(u'otherunit')
+                          .having(admin_unit=other_admin_unit)
                           .assign_users([test_peter]))
-
-        create(Builder('admin_unit').wrapping_org_unit(other_ou))
 
         # create "current" admin unit
         test_user = create(Builder('ogds_user')
-                           .having(userid=TEST_USER_ID,
-                                   firstname='User',
-                                   lastname='Test'))
+                           .having(firstname='User', lastname='Test'))
+
+        admin_unit = create(Builder('admin_unit')
+                            .as_current_admin_unit())
 
         current_orgunit = create(Builder('org_unit')
                                  .id(u'testunit')
+                                 .having(admin_unit=admin_unit)
                                  .as_current_org_unit()
                                  .assign_users([test_user]))
 
-        admin_unit = create(Builder('admin_unit')
-                            .as_current_admin_unit()
-                            .assign_org_units([current_orgunit])
-                            .wrapping_org_unit(current_orgunit))
 
         self.portal.REQUEST.form['search_term'] = TEST_USER_NAME
         results = self.view_dossier.user_search_results()

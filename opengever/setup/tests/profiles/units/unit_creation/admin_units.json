@@ -1,0 +1,9 @@
+[
+  {
+    "unit_id": "admin",
+    "title": "My cool new admin unit",
+    "ip_address": "1.2.3.4",
+    "site_url": "http://example.com",
+    "public_url": "http://example.com/public"
+  }
+]

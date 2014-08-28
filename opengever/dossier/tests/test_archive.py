@@ -39,18 +39,19 @@ class TestArchiver(FunctionalTestCase):
     def setUp(self):
         super(TestArchiver, self).setUp()
         activate_filing_number(self.portal)
-        self.user = create(Builder('ogds_user'))
-        self.org_unit = create(
-            Builder('org_unit').having(title=u'Client1',
-                                       client_id=u'client1')
-                               .as_current_org_unit()
-                               .with_default_groups()
-                               .assign_users([self.user])
-        )
         self.admin_unit = create(
             Builder('admin_unit').having(title=u'SKA ARCH',
                                          unit_id=u'ska_arch')
                                  .as_current_admin_unit()
+        )
+        self.user = create(Builder('ogds_user'))
+        self.org_unit = create(
+            Builder('org_unit').id('client1')
+                               .having(title=u'Client1',
+                                       admin_unit=self.admin_unit)
+                               .as_current_org_unit()
+                               .with_default_groups()
+                               .assign_users([self.user])
         )
 
         self.dossier = create(Builder('dossier'))

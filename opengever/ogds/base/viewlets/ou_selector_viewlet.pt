@@ -12,10 +12,11 @@
     <dd class="actionMenuContent orgunitMenuContent" >
       <ul>
         <li tal:repeat="unit view/get_units">
-          <tal:define tal:define="is_active python:active_unit.id() == unit.id()">
+          <tal:define tal:define="is_active python:active_unit.id() == unit.id();
+                                  admin_unit_url unit/admin_unit/public_url;">
             <span tal:condition="is_active" tal:content="unit/label" class="active" />
             <a href="" tal:condition="not: is_active" tal:content="unit/label"
-               tal:attributes="href string:${unit/public_url}/change_org_unit?unit_id=${unit/id}">
+               tal:attributes="href string:${admin_unit_url}/change_org_unit?unit_id=${unit/id}">
               OrgUnit title
             </a>
           </tal:define>

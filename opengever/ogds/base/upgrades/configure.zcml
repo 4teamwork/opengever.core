@@ -61,4 +61,14 @@
             directory="profiles/4003"
             />
 
+    <!-- 4003 -> 4004 -->
+    <genericsetup:upgradeStep
+        title="Rename `clients` table to `org_units`."
+        description="Columns ip_address, site_url, public_url belong to AdminUnit."
+        source="4003"
+        destination="4004"
+        handler="opengever.ogds.base.upgrades.to4004.MigrateAdminUnitOrgUnitSchema"
+        profile="opengever.ogds.base:default"
+        />
+
 </configure>

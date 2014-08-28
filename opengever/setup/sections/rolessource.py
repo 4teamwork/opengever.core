@@ -19,8 +19,8 @@ class JSONRolesSourceSection(object):
         org_unit = get_current_org_unit()
 
         replace_map = {
-            'users_group': org_unit.users_group().groupid,
-            'inbox_group': org_unit.inbox_group().groupid,
+            'users_group': org_unit.users_group.groupid,
+            'inbox_group': org_unit.inbox_group.groupid,
             'client_id': org_unit.id(),
             }
 

@@ -17,7 +17,8 @@ class TestTaskIndexers(FunctionalTestCase):
 
         create(Builder('org_unit')
                .with_default_groups()
-               .having(client_id='client2', title='Client2'))
+               .id('client2')
+               .having(title='Client2', admin_unit=self.admin_unit))
 
         self.grant('Contributor', 'Editor', 'Manager')
         login(self.portal, TEST_USER_NAME)

@@ -71,6 +71,7 @@ class TestInboxTaskTabs(FunctionalTestCase):
         super(TestInboxTaskTabs, self).setUp()
 
         self.org_unit_2 = create(Builder('org_unit')
+                                 .having(admin_unit=self.admin_unit)
                                  .assign_users([self.user])
                                  .id('client2'))
 
