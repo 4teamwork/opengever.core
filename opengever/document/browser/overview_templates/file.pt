@@ -1,0 +1,67 @@
+<tal:block xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+           i18n:domain="opengever.document">
+
+    <tal:file tal:condition="context/file"
+              tal:define="preview_supported view/is_preview_supported;
+                          pdf_download_available view/is_pdf_download_available;
+                          checkout_and_edit_available view/is_checkout_and_edit_available;
+                          copy_download_available view/is_download_copy_available">
+
+        <!-- icon, filename, size -->
+        <span tal:attributes="class view/get_css_class"></span>
+        <span tal:define="filename view/w/file/filename">
+            <span class="filename" tal:content="filename">Filename</span>
+            <span class="discreet">
+              &mdash; <span tal:define="sizekb view/w/file/file_size" tal:replace="sizekb">100</span>
+              KB
+            </span>
+        </span>
+
+        <div class="downloadActions">
+          <tal:preview_support tal:condition="preview_supported">
+            <tal:cond tal:condition="pdf_download_available">
+              <a class="function-download-pdf" href="#"
+                 tal:attributes="href string:${context/absolute_url}/download_pdfpreview"
+                 i18n:translate="label_pdf_preview">
+                PDF Preview
+              </a>
+            </tal:cond>
+            <tal:cond tal:condition="not: pdf_download_available">
+              <span class="function-download-pdf-inactive discreet" i18n:translate="label_pdf_preview">
+                PDF Preview
+              </span>
+            </tal:cond>
+            &nbsp;|&nbsp;
+          </tal:preview_support>
+          <tal:cond tal:condition="checkout_and_edit_available">
+            <a class="function-edit" href="#" i18n:translate="label_checkout_and_edit"
+               tal:attributes="href string:${context/absolute_url}/editing_document">
+              Edit Document
+            </a>
+          </tal:cond>
+          <tal:cond tal:condition="not: checkout_and_edit_available">
+            <span class="function-edit-inactive discreet" i18n:translate="label_checkout_and_edit">
+              Edit Document
+            </span>
+          </tal:cond>
+          <tal:cond tal:condition="copy_download_available">
+            &nbsp;|&nbsp;
+            <a class="function-download-copy link-overlay"
+               tal:attributes="href string:${context/absolute_url}/file_download_confirmation"
+               href="#" i18n:translate="label_download_copy">Download copy</a>
+          </tal:cond>
+          <tal:cond tal:condition="not: copy_download_available">
+            &nbsp;|&nbsp;
+            <span class="function-download-copy-inactive link-overlay discreet"
+                  i18n:translate="label_download_copy">Download copy</span>
+          </tal:cond>
+        </div>
+    </tal:file>
+
+    <tal:nofile tal:condition="not:context/file">
+        <span class="discreet" i18n:translate="no_file">
+            No file
+        </span>
+    </tal:nofile>
+
+</tal:block>

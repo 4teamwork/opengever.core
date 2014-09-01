@@ -36,11 +36,11 @@ class TestDossierByline(TestBylineBase):
         self.browser.open(self.dossier.absolute_url())
 
     def test_dossier_byline_responsible_display(self):
-        responsible = self.get_byline_value_by_label('by:')
+        responsible = self.get_byline_value_by_label('Responsible:')
         self.assertEquals('Boss Hugo (hugo.boss)', responsible.text_content())
 
     def test_dossier_byline_responsible_is_linked_to_user_details(self):
-        responsible = self.get_byline_value_by_label('by:')
+        responsible = self.get_byline_value_by_label('Responsible:')
         self.assertEqual('http://nohost/plone/@@user-details/hugo.boss',
                           responsible.get('href'))
 

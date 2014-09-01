@@ -14,33 +14,6 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-msgid "allissuedtasks"
-msgstr "Alle erteilten Aufgaben"
-
-msgid "alltasks"
-msgstr "Alle Aufgaben"
-
-msgid "issuedtasks"
-msgstr "Meine erteilten Aufgaben"
-
-msgid "additional_contact"
-msgstr "Details"
-
-msgid "local"
-msgstr "Lokal"
-
-msgid "important_contact"
-msgstr "Übersicht"
-
-msgid "sharing"
-msgstr "Info"
-
-msgid "assigned_inbox_tasks"
-msgstr "Erhaltene Aufgaben"
-
-msgid "issued_inbox_tasks"
-msgstr "Erteilte Aufgaben"
-
 msgid "By Area"
 msgstr "Bereich"
 
@@ -62,14 +35,26 @@ msgstr "Monat"
 msgid "accounting_overview"
 msgstr "Übersicht"
 
+msgid "additional_contact"
+msgstr "Details"
+
 msgid "all_entries"
 msgstr "Alle Einträge"
 
 msgid "all_issues"
 msgstr "Alle Tickets"
 
+msgid "allissuedtasks"
+msgstr "Alle erteilten Aufgaben"
+
+msgid "alltasks"
+msgstr "Alle Aufgaben"
+
 msgid "archive"
 msgstr "Archiv"
+
+msgid "assigned_inbox_tasks"
+msgstr "Erhaltene Aufgaben"
 
 msgid "assignedtasks"
 msgstr "Zugewiesene Aufgaben"
@@ -119,17 +104,29 @@ msgstr "Vollmachten"
 msgid "getResponsibleManager"
 msgstr "Zuständigkeit"
 
+msgid "important_contact"
+msgstr "Übersicht"
+
 msgid "info"
 msgstr "Info"
 
+msgid "issued_inbox_tasks"
+msgstr "Erteilte Aufgaben"
+
 msgid "issued_issues"
 msgstr "Meine Aufträge"
+
+msgid "issuedtasks"
+msgstr "Meine erteilten Aufgaben"
 
 msgid "journal"
 msgstr "Journal"
 
 msgid "label_account"
 msgstr "Kostenstelle"
+
+msgid "local"
+msgstr "Lokal"
 
 msgid "my_issues"
 msgstr "Meine Tickets"
@@ -161,17 +158,35 @@ msgstr "Übersicht"
 msgid "participants"
 msgstr "Beteiligungen"
 
+msgid "preview"
+msgstr "Vorschau"
+
 msgid "process"
 msgstr "Fortschritt"
 
+msgid "related_documents"
+msgstr "Verwande Dokumente"
+
+msgid "relateddocuments"
+msgstr "Dokumente"
+
 msgid "reports"
 msgstr "Arbeitsrapporte"
+
+msgid "sharing"
+msgstr "Info"
 
 msgid "subdossiers"
 msgstr "Subdossiers"
 
 msgid "tasks"
 msgstr "Aufgaben"
+
+msgid "tasktemplatefolders"
+msgstr "Standardabläufe"
+
+msgid "tasktemplates"
+msgstr "Aufgabenvorlagen"
 
 msgid "tickets"
 msgstr "Tickets"
@@ -188,17 +203,3 @@ msgstr "Papierkorb"
 msgid "users"
 msgstr "OGDS"
 
-msgid "closed-forwardings"
-msgstr "Abgeschlossene Aufgaben"
-
-msgid "related_documents"
-msgstr "Verwande Dokumente"
-
-msgid "relateddocuments"
-msgstr "Dokumente"
-
-msgid "tasktemplates"
-msgstr "Aufgabenvorlagen"
-
-msgid "tasktemplatefolders"
-msgstr "Standardabläufe"

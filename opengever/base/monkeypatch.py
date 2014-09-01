@@ -118,3 +118,46 @@ sec.apply(Container)
 InitializeClass(Container)
 
 LOGGER.info('Monkey patched plone.dexterity.content.Container')
+
+# --------
+
+# Patch DexterityContent.__getattr__
+# This is required to support dynamic lookup of schema-level default
+# values for fields in behaviors. It's basically a backport
+# of this Dexterity 2.x fix:
+# https://github.com/plone/plone.dexterity/commit/dd491480b869bbe21ee50ef413c263705af7b170
+
+from copy import deepcopy
+
+def DexterityContent_getattr(self, name):
+    from plone.dexterity.schema import SCHEMA_CACHE
+
+    # optimization: sometimes we're asked for special attributes
+    # such as __conform__ that we can disregard (because we
+    # wouldn't be in here if the class had such an attribute
+    # defined).
+    if name.startswith('__'):
+        raise AttributeError(name)
+
+    # attribute was not found; try to look it up in the schema and return
+    # a default
+    schema = SCHEMA_CACHE.get(self.portal_type)
+    if schema is not None:
+        field = schema.get(name, None)
+        if field is not None:
+            return deepcopy(field.default)
+
+    # do the same for each subtype
+    for schema in SCHEMA_CACHE.subtypes(self.portal_type):
+        field = schema.get(name, None)
+        if field is not None:
+            return deepcopy(field.default)
+
+    raise AttributeError(name)
+
+from plone.dexterity.content import DexterityContent
+from plone.dexterity.content import Item
+DexterityContent.__getattr__ = DexterityContent_getattr
+Item.__getattr__ = DexterityContent_getattr
+
+LOGGER.info('Monkey patched plone.dexterity.content.DexterityContent')

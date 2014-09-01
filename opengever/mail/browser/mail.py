@@ -1,21 +1,29 @@
 from Acquisition import aq_inner
-from Products.CMFCore.utils import getToolByName
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from five import grok
 from ftw.mail import utils
+from ftw.mail.mail import IMail
 from ftw.mail.mail import View as ftwView
+from opengever.base import _ as ogbmf
+from opengever.document import _ as ogdmf
+from opengever.document.browser.overview import CustomRow
+from opengever.document.browser.overview import FieldRow
+from opengever.document.browser.overview import Overview
+from opengever.mail import _
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize import instance
+from Products.CMFCore.utils import getToolByName
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.component import getUtility
 
 
-class View(ftwView):
+class PreviewTab(ftwView):
 
-    template = ViewPageTemplateFile('mail_templates/view.pt')
+    template = ViewPageTemplateFile('mail_templates/previewtab.pt')
 
     def __call__(self):
         self.normalizer = getUtility(IIDNormalizer)
         self.mtr = getToolByName(self.context, 'mimetypes_registry')
-        return super(View, self).__call__()
+        return super(PreviewTab, self).__call__()
 
     def lookup_mimetype_registry(self, attachment):
         if attachment.get('content-type') == 'application/octet-stream':
@@ -50,3 +58,37 @@ class View(ftwView):
                 attachment['type-name'] = 'File'
 
         return attachments
+
+
+class OverviewTab(Overview):
+    grok.context(IMail)
+
+    def get_metadata_config(self):
+        return [
+            FieldRow('title'),
+            FieldRow('IDocumentMetadata.document_date'),
+            FieldRow('IDocumentMetadata.document_type'),
+            FieldRow('IDocumentMetadata.document_author'),
+            CustomRow(self.render_creator_link,
+                      label=ogdmf('label_creator', default='creator')),
+            FieldRow('IDocumentMetadata.description'),
+            FieldRow('IDocumentMetadata.foreign_reference'),
+            CustomRow(self.render_file_widget,
+                      label=_('label_org_message',
+                              default='Original message')),
+            FieldRow('IDocumentMetadata.digitally_available'),
+            FieldRow('IDocumentMetadata.preserved_as_paper'),
+            FieldRow('IDocumentMetadata.receipt_date'),
+            FieldRow('IDocumentMetadata.delivery_date'),
+            FieldRow('IRelatedDocuments.relatedItems'),
+            FieldRow('IClassification.classification'),
+            FieldRow('IClassification.privacy_layer'),
+            CustomRow(self.render_public_trial_with_edit_link,
+                      label=ogbmf('label_public_trial',
+                                  default='Public Trial')),
+            FieldRow('IClassification.public_trial_statement'),
+        ]
+
+    def render_file_widget(self):
+        template = ViewPageTemplateFile('mail_templates/file.pt')
+        return template(self)

@@ -51,4 +51,61 @@
         profile="opengever.document:default"
         />
 
+    <!-- 2602 -> 3401 -->
+    <genericsetup:upgradeStep
+        title="Rename behavior names for og.document.document FTI"
+        description=""
+        source="2602"
+        destination="3401"
+        handler="opengever.document.upgrades.to3401.RenameDocumentBehaviors"
+        profile="opengever.document:default"
+        />
+
+    <genericsetup:registerProfile
+        name="3401"
+        title="opengever.document: upgrade profile 3401"
+        description=""
+        directory="profiles/3401"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+    <!-- 3401 -> 3402 -->
+    <genericsetup:upgradeStep
+        title="Add IDocumentMetadata behavior to og.document FTI"
+        description=""
+        source="3401"
+        destination="3402"
+        handler="opengever.document.upgrades.to3402.AddMetadataBehaviorToDocumentFTI"
+        profile="opengever.document:default"
+        />
+
+    <genericsetup:registerProfile
+        name="3402"
+        title="opengever.document: upgrade profile 3402"
+        description=""
+        directory="profiles/3402"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+    <!-- 3402 -> 3403 -->
+    <genericsetup:upgradeStep
+        title="Add public_trial index and metadata"
+        description=""
+        source="3402"
+        destination="3403"
+        handler="opengever.document.upgrades.to3403.AddPublicTrialIndexAndMetadata"
+        profile="opengever.document:default"
+        />
+
+    <genericsetup:registerProfile
+        name="3403"
+        title="opengever.document: upgrade profile 3403"
+        description=""
+        directory="profiles/3403"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
 </configure>

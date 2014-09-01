@@ -1,6 +1,7 @@
 from zope import schema
-from zope.interface import Interface, Attribute
 from zope.component.interfaces import IObjectEvent
+from zope.interface import Interface, Attribute
+from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 
 class ISendDocumentConf(Interface):
@@ -25,3 +26,10 @@ class IDocumentSent(IObjectEvent):
     subject = Attribute("The Mailsubject")
     message = Attribute("The Message")
     attachments = Attribute("The Attachments")
+
+
+class IAttachmentsDeletedEvent(IObjectModifiedEvent):
+    """One or more attachments have been deleted from a ftw.mail.mail message.
+    """
+
+    attachments = Attribute("List of attachments that have been removed")

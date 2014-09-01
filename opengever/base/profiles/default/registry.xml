@@ -2,4 +2,5 @@
     <records interface="opengever.base.interfaces.IBaseCustodyPeriods" />
     <records interface="opengever.base.interfaces.IRetentionPeriodRegister" />
     <records interface="opengever.base.interfaces.IReferenceNumberSettings" />
+    <records interface="opengever.base.behaviors.classification.IClassificationSettings" />
 </registry>

@@ -1,7 +1,10 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:upgrade-step="http://namespaces.zope.org/ftw.upgrade"
     i18n_domain="opengever.mail">
+
+    <include package="ftw.upgrade" file="meta.zcml" />
 
     <!-- 2 -> 2100 -->
     <genericsetup:upgradeStep
@@ -50,6 +53,72 @@
         directory="profiles/2104"
         for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
         provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+    <!-- 2104 -> 3401 -->
+    <genericsetup:upgradeStep
+        title="Extend mail with several behaviors, so it can act like a document (incl. migration data to the metadata fields)"
+        description=""
+        source="2104"
+        destination="3401"
+        handler="opengever.mail.upgrades.to3401.ActivateBehaviors"
+        profile="opengever.mail:default"
+        />
+
+    <genericsetup:registerProfile
+        name="3401"
+        title="opengever.mail: upgrade profile 3401"
+        description=""
+        directory="profiles/3401"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+    <!-- 3401 -> 3402 -->
+    <genericsetup:upgradeStep
+        title="Add classification behavior"
+        description=""
+        source="3401"
+        destination="3402"
+        handler="opengever.mail.upgrades.to3402.AddClassifiactionBehavior"
+        profile="opengever.mail:default"
+        />
+
+    <!-- 3402 -> 3403 -->
+    <upgrade-step:importProfile
+        title="Add plone.app.lockingbehavior to ftw.mail.mail FTI."
+        profile="opengever.mail:default"
+        source="3402"
+        destination="3403"
+        directory="profiles/3403"
+        />
+
+    <!-- 3403 -> 3404 -->
+    <upgrade-step:importProfile
+        title="Use FTI actions to define tabbedview tabs for mails."
+        profile="opengever.mail:default"
+        source="3403"
+        destination="3404"
+        directory="profiles/3404"
+        />
+
+    <!-- 3404 -> 3405 -->
+    <upgrade-step:importProfile
+        title="Add 'Edit Metadata' action for ftw.mail.mail FTI"
+        profile="opengever.mail:default"
+        source="3404"
+        destination="3405"
+        directory="profiles/3405"
+        />
+
+    <!-- 3405 -> 3406 -->
+    <genericsetup:upgradeStep
+        title="Create initial journal entry"
+        description=""
+        source="3405"
+        destination="3406"
+        handler="opengever.mail.upgrades.to3406.CreateInitialJournalEntry"
+        profile="opengever.mail:default"
         />
 
 </configure>

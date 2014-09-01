@@ -4,7 +4,6 @@
     xmlns:grok="http://namespaces.zope.org/grok"
     xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:vdex="http://namespaces.zope.org/vdex"
-    xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     i18n_domain="opengever.dossier">
 
@@ -15,11 +14,11 @@
   <include package=".viewlets" />
   <include package=".upgrades" />
   <include package=".filing" />
+  <include package=".browser" />
 
   <include file="behaviors.zcml" />
   <include file="permissions.zcml" />
   <include file="profiles.zcml" />
-  <include file="permissions.zcml" />
 
   <i18n:registerTranslations directory="locales" />
 
@@ -27,12 +26,5 @@
       factory=".move_items.DestinationValidator"
       provides="z3c.form.interfaces.IValidator"
       />
-
-  <browser:page
-      for="*"
-      name="filingnumber_maintenance"
-      class=".filing_maintenance.FilingNumberMaintenance"
-      allowed_interface="opengever.dossier.interfaces.IFilingNumberMaintenance"
-      permission="cmf.ManagePortal" />
 
 </configure>

@@ -34,7 +34,7 @@ class BusinessCaseByline(BylineBase):
         return [
             {
                 'class': 'responsible',
-                'label': _('label_responsible', default='by'),
+                'label': _('label_responsible', default='Responsible'),
                 'content': self.responsible(),
                 'replace': True
             },

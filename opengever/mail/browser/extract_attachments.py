@@ -1,16 +1,16 @@
-from Acquisition import aq_inner, aq_parent
 from five import grok
 from ftw.mail.mail import IMail
 from ftw.mail.utils import get_attachments
 from ftw.mail.utils import get_filename
 from ftw.mail.utils import remove_attachments
 from ftw.table.interfaces import ITableGenerator
-from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.base.utils import find_parent_dossier
 from opengever.mail import _
+from opengever.mail.events import AttachmentsDeleted
+from opengever.mail.interfaces import IAttachmentsDeletedEvent
 from plone.dexterity.utils import createContentInContainer
 from plone.dexterity.utils import iterSchemata
 from plone.i18n.normalizer.interfaces import IIDNormalizer
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from Products.CMFPlone.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.interfaces import IValue
@@ -18,7 +18,9 @@ from z3c.relationfield.relation import RelationValue
 from zope.app.component.hooks import getSite
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
+from zope.event import notify
 from zope.intid.interfaces import IIntIds
+from zope.lifecycleevent import Attributes
 from zope.schema import getFieldsInOrder
 import os.path
 import re
@@ -132,6 +134,9 @@ class ExtractAttachments(grok.View):
         return generator.generate(items, columns, sortable=False)
 
     def __call__(self):
+        # Disable the editable border for extract attachments view
+        self.request.set('disable_border', 1)
+
         items = get_attachments(self.context.msg)
         if not len(items):
             msg = _(u'error_no_attachments_to_extract',
@@ -160,14 +165,14 @@ class ExtractAttachments(grok.View):
 
                 self.extract_attachments(attachments, delete_action)
 
-                dossier = self.find_parent_dossier()
+                dossier = find_parent_dossier(self)
                 return self.request.RESPONSE.redirect(
                     os.path.join(dossier.absolute_url(), '#documents'))
 
         return grok.View.__call__(self)
 
     def extract_attachments(self, positions, delete_action):
-        dossier = self.find_parent_dossier()
+        dossier = find_parent_dossier(self)
 
         attachments_to_extract = filter(
             lambda att: att.get('position') in positions,
@@ -216,7 +221,7 @@ class ExtractAttachments(grok.View):
             iid = intids.getId(self.context)
 
             # prevent circular dependencies
-            from opengever.document.behaviors import IRelatedDocuments
+            from opengever.document.behaviors.related_docs import IRelatedDocuments
             IRelatedDocuments(doc).relatedItems = [RelationValue(iid)]
 
             msg = _(u'info_extracted_document',
@@ -235,6 +240,15 @@ class ExtractAttachments(grok.View):
                 # all
                 pos_to_delete = [int(att['position']) for att in
                                  get_attachments(self.context.msg)]
+
+            attachment_names = [
+                a.get('filename', '[no filename]').decode('utf-8')
+                for a in get_attachments(self.context.msg)
+                if a.get('position') in pos_to_delete]
+
+            # Flag the `message` attribute as having changed
+            desc = Attributes(IAttachmentsDeletedEvent, "message")
+            notify(AttachmentsDeleted(self.context, attachment_names, desc))
 
             # set the new message file
             msg = remove_attachments(self.context.msg, pos_to_delete)
@@ -269,17 +283,3 @@ class ExtractAttachments(grok.View):
         return NamedFile(data=attachment.get_payload(decode=1),
                          contentType=attachment.get_content_type(),
                          filename=filename)
-
-    def find_parent_dossier(self):
-        """Returns the first parent dossier relative to the current context.
-        """
-
-        obj = self.context
-        while not IDossierMarker.providedBy(obj):
-            obj = aq_parent(aq_inner(obj))
-
-            if IPloneSiteRoot.providedBy(obj):
-                return ValueError('Site root reached while searching '
-                                  'parent dossier.')
-
-        return obj

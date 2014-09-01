@@ -17,6 +17,149 @@ Changelog
   [phgross]
 
 
+3.4.1 (unreleased)
+------------------
+
+- Use `ftw.profilehook` instead of setuphandlers.
+  [deiferni]
+
+
+3.4.0 (2014-08-28)
+------------------
+
+- General fixes:
+
+  - Fixed translation for filing_number column in dossier listings.
+    [phgross]
+  - Also check for not supplied mails, when check if dossier could be resolved.
+    [phgross]
+  - Fixed unicode decode bug in task overview.
+    [lknoepfel]
+  - OGQuickUploadCapableFileFactory: Set default values before adding content to container.
+    (Prevents values set by handlers on ObjectAddedEvent to be overwritten again).
+    [lgraf]
+  - Fix issue with `prevent_deletion` subscriber not being able to acquire membership_tool
+    because of broken acquisition during Plone site deletion.
+    [lgraf]
+  - Customize plone.dexterity default view for all dexterity content in
+    order to be able to omit specific fields, and remove previous customizations.
+    [lgraf]
+
+
+- Changes to document metadata:
+
+  - Document metadata: Refactor behaviors to be a package with separate modules.
+    [lgraf]
+  - Monkey patch DexterityContent.__getattr__.
+    This is required to support dynamic lookup of schema-level default values for
+    fields in behaviors. It basically is a backport of this Dexterity 2.x fix:
+    https://github.com/plone/plone.dexterity/commit/dd491480b869bbe21ee50ef413c263705af7b170
+    [lgraf]
+  - Refactored document overview.
+    [lgraf]
+  - Implement document metadata behavior for mail (incl. upgrade step and init event).
+    [mathias.leimgruber]
+  - Show classification infos on document overview tab.
+    [mathias.leimgruber]
+  - Customized document default view in order to render `file`
+    field in NO_DOWNLOAD_DISPLAY_MODE.
+    [lgraf]
+  - Changed German wording for value `unchecked` for both public_trial and archival_value:
+    "Noch nicht geprüft" -> "Nicht geprüft"
+    [lgraf]
+  - Change german wording for descriptions of `public_trial` and `public_trial_statement`
+    [lgraf]
+  - Added `regulations` and `directive` options to `document_type` vocabulary.
+    [lgraf]
+
+
+- Changes to journaling:
+
+  - Fix double journal entries using quickupload.
+    [mathias.leimgruber]
+  - Journalize any changes to `public_trial` field.
+    [lgraf]
+  - Journal: Listen on IBaseDocument instead of IDocumentSchema - mails are now also
+    considered documentish and should be treated equally.
+    [lgraf]
+  - Journalize AttachmentsDeleted event.
+    [lgraf]
+  - Create initial journal entry for mails.
+    [lgraf]
+
+
+- Changes related to mail content type:
+
+  - Implement tabbedview for ftw.mail.mail content (Preview / Journal / Info).
+    [mathias.leimgruber]
+  - Use IDocumentNameFromTitle behavior from document also for mail.
+    [mathias.leimgruber]
+  - Use document byline also on mail.
+    [mathias.leimgruber]
+  - Add classification behavior to mail.
+    [mathias.leimgruber]
+  - Add overview tab for mail (shows some basic metadata).
+    [mathias.leimgruber]
+  - File a copy of the mail in the dossier by default when sending documents from GEVER.
+    [lgraf]
+  - Hide duplicate mail title in mail preview tab.
+    [lgraf]
+  - Add plone.app.lockingbehavior to ftw.mail.mail FTI.
+    [lgraf]
+  - Add 'Edit Metadata' action to ftw.mail.mail FTI.
+    [lgraf]
+  - Override ftw.mail default view with our customized dexterity default view.
+    [lgraf]
+  - Make FileOrPaperValidator consider mails properly (always digitally available).
+    [lgraf]
+  - Disable the editable border for the extract attachments view.
+    [lgraf]
+  - Improved wording of German translations in extract attachments view.
+    [lgraf]
+  - Added new mail event `AttachmentsDeleted`.
+    [lgraf]
+  - Mail overview: display the original message including a download link.
+    [phgross]
+  - Reword status message after sending documents by e-mail.
+    [lgraf]
+  - Use the same customized download view we use for documents for mails as well.
+    [lgraf]
+  - Don't encode attached mails when sending documents as email.
+    [lgraf]
+  - Always set `digitally_available` to `True` upon mail creation.
+    [lgraf]
+
+- Changes related to public_trial field:
+
+  - Added limited-public option for public_trial field.
+    [lknoepfel]
+  - Vocabulary for public_trial is no longer a restricted vocab. It behaves like a regular one.
+    [mathias.leimgruber]
+  - Added public_trial index and metadata field.
+    [lknoepfel]
+  - Added public_trial column to document tab.
+    [lknoepfel, phgross]
+  - Allow public trial state to also be modified in closed dossier states.
+    [mathias.leimgruber]
+  - Add an IClassificationSettings registry record with `public_trial_default_value`.
+    [lgraf]
+  - Make default value adapter for `public_trial` use the configurable default
+    value from IClassificationSettings registry record.
+  - Reword German translations for public_trial_statement label and description.
+    [lgraf]
+  - Don't show public trial edit form for template dossiers.
+    [lgraf]
+  - Remove `public_trial` field from repository byline.
+    [lgraf]
+  - Omit `public_trial` and `public_trial_statement` fields from dossier and
+    repository folder default views.
+    [lgraf]
+  - Disable public_trial edit_form when parents dossier is inactive.
+    [phgross]
+  - Added public_trial_statement field to the public_trial edit form.
+    [phgross]
+
+
 3.3.2 (2014-08-08)
 ------------------
 
@@ -39,6 +182,9 @@ Changelog
 - Overwrite searchbox viewlet and javascript.
   So there is always a advanced search link.
   [Julian Infanger]
+
+- Breadcrumb: Replace Home label with curent client label.
+  [phgross]
 
 - Disable edit-bar for the advancedsearch form.
   [phgross]
@@ -108,15 +254,9 @@ Changelog
 3.3 (2014-06-05)
 ----------------
 
-- Change ResponseDescription css class for the reactivate transition.
-  [phgross]
-
 - Added initial implementation for setting DocProperties when creating
   a document from template.
   [lgraf]
-
-- Added mobile action and javascript for orgunit selector.
-  [Julian Infanger]
 
 - Fixed zipexport-enable upgrade step to match the new registry entry.
   With ftw.zipexport 1.2.0 the registry name changes which brakes our upgrade step.
@@ -263,12 +403,6 @@ Changelog
 - Remove obsolete dependency on transmogrify.sqlinserter.
   [lgraf]
 
-- Remove remaining traces of `related_items` index.
-  [lgraf]
-
-- Dossier resolving: Fixed `its_all_closed` check, for nested subtasks.
-  [phgross]
-
 
 3.2.1 (2014-01-23)
 ------------------
@@ -293,21 +427,11 @@ Changelog
 3.2 (2013-12-15)
 ----------------
 
-- Document tooltip helper: Fixed link for the icon.
-  [phgross]
-
-- Fixed load order issue when setting tagged values to omit the changeNote
-  field from the IVersionable behavior.
-  [lgraf]
-
 - Increase task_principals.principal column length to 255.
   [lgraf]
 
 - Logout overlay: use absolute url to redirect to the logout view.
   [phgross]
-
-- OGDS Updater: Gracefully skip users outside users_base referenced in groups.
-  [lgraf]
 
 - Add destructive class to logout button in logout overlay.
   [Julian Infanger]
@@ -318,16 +442,7 @@ Changelog
 - Adjusted seperator of the `grouped_by_three` formatter.
   [phgross]
 
-- Issued inbox task: fixed listing query, to search the complete client.
-  [phgross]
-
 - Corrected message after resolving a subdossier.
-  [phgross]
-
-- Inbox overview: List only active tasks and forwardings.
-  [phgross]
-
-- Inbox overview: Only list current part of a predecessor/successor couple.
   [phgross]
 
 - Override livesearch_reply.py to provide correct advanced search link.
@@ -372,9 +487,6 @@ Changelog
   [lgraf]
 
 - OGDS updater: Deactivate is_ldap_reachable check. It's unnecessary and broken.
-  [lgraf]
-
-- OGDS updater: Deal with mutli-valued fields named the same as an OGDS column.
   [lgraf]
 
 - Modify indexer for documents so that it queries for our own IDocumentIndexer adapter,

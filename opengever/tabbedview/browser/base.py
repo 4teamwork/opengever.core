@@ -2,6 +2,7 @@ from ftw.dictstorage.interfaces import ISQLAlchemy
 from opengever.base.interfaces import IReferenceNumberFormatter
 from opengever.base.interfaces import IReferenceNumberSettings
 from opengever.ogds.base.sort_helpers import SortHelpers
+from opengever.tabbedview.utils import get_translated_public_trial_values
 from opengever.tabbedview.utils import get_translated_transitions
 from opengever.tabbedview.utils import get_translated_types
 from plone.registry.interfaces import IRegistry
@@ -120,5 +121,19 @@ class OpengeverTab(object):
 
             results = list(results)
             results.sort(_type_sorter, reverse=sort_reverse)
+
+        elif sort_on in 'public_trial':
+
+            values = get_translated_public_trial_values(self.context, self.request)
+
+            def _public_trial_sorter(a, b):
+                return cmp(
+                    values.get(
+                        getattr(a, sort_on, ''), getattr(a, sort_on, '')),
+                    values.get(getattr(b, sort_on, ''), getattr(b, sort_on, ''))
+                    )
+
+            results = list(results)
+            results.sort(_public_trial_sorter, reverse=sort_reverse)
 
         return results

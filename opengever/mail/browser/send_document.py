@@ -5,6 +5,7 @@ from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 from email.Utils import formatdate
 from five import grok
+from ftw.mail.inbound import createMailInContainer
 from ftw.mail.mail import IMail
 from opengever.base.source import DossierPathSourceBinder
 from opengever.mail import _
@@ -26,13 +27,16 @@ from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form import form, button, field, validator
 from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget
 from z3c.form.interfaces import INPUT_MODE
-from z3c.relationfield.schema import RelationChoice, RelationList
+from z3c.relationfield.schema import RelationChoice
+from z3c.relationfield.schema import RelationList
 from zope import schema
 from zope.component import getUtility, provideAdapter
 from zope.event import notify
 from zope.i18n import translate
 from zope.interface import Interface
-from zope.interface import invariant, Invalid
+from zope.interface import Invalid
+from zope.interface import invariant
+from datetime import date
 
 
 CHARSET = 'utf-8'
@@ -102,6 +106,14 @@ class ISendDocumentSchema(Interface):
                 default=u'Send documents only als links'),
         required=True,
         )
+
+    file_copy_in_dossier = schema.Bool(
+        title=_(u'label_file_copy_in_dossier',
+                default=u'File a copy of the sent mail in dossier'),
+        required=True,
+        default=True,
+        )
+
 
     @invariant
     def validateHasEmail(self):
@@ -203,8 +215,12 @@ class SendDocumentForm(form.Form):
             # send it
             mh.send(msg, mfrom=mail_from, mto=','.join(addresses))
 
+            # Store a copy of the sent mail in dossier
+            if data.get('file_copy_in_dossier', False):
+                self.file_sent_mail_in_dossier(msg)
+
             # let the user know that the mail was sent
-            info = _(u'info_mails_sent', 'Mails sent')
+            info = _(u'info_mail_sent', 'E-mail has been sent.')
             notify(DocumentSent(
                     self.context, userid, header_to, data.get('subject'),
                     data.get('message'), data.get('documents')))
@@ -268,7 +284,8 @@ class SendDocumentForm(form.Form):
             maintype, subtype = obj_file.contentType.split('/', 1)
             part = MIMEBase(maintype, subtype)
             part.set_payload(obj_file.data)
-            Encoders.encode_base64(part)
+            if mimetype != 'message/rfc822':
+                Encoders.encode_base64(part)
             part.add_header('Content-Disposition', 'attachment; filename="%s"'
                             % obj_file.filename)
             attachment_parts.append(part)
@@ -287,6 +304,16 @@ class SendDocumentForm(form.Form):
             msg.attach(part)
 
         return msg
+
+    def file_sent_mail_in_dossier(self, msg):
+        dossier = self.context
+        mail = createMailInContainer(dossier, msg.as_string())
+        mail.delivery_date = date.today()
+        mail.reindexObject(idxs=['delivery_date'])
+        status_msg = _(
+            u"Sent mail filed as '${title}'.",
+            mapping={'title': mail.title_or_id()})
+        IStatusMessage(self.request).addStatusMessage(status_msg, type='info')
 
 
 class SendDocumentFormView(layout.FormWrapper, grok.View):

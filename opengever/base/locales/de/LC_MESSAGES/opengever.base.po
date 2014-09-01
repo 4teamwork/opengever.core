@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2013-11-21 09:02+0000\n"
+"POT-Creation-Date: 2014-09-01 15:22+0000\n"
 "PO-Revision-Date: 2013-11-25 09:25+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -48,17 +48,17 @@ msgid "archival worthy with sampling"
 msgstr "Sampling"
 
 #. Default: "Download"
-#: ./opengever/base/viewlets/history.pt:44
+#: ./opengever/base/viewlets/history.pt:37
 msgid "button_file"
 msgstr "Kopie herunterladen"
 
 #. Default: "PDF"
-#: ./opengever/base/viewlets/history.pt:54
+#: ./opengever/base/viewlets/history.pt:47
 msgid "button_pdf"
 msgstr "PDF Vorschau"
 
 #. Default: "Show"
-#: ./opengever/base/viewlets/history.pt:50
+#: ./opengever/base/viewlets/history.pt:43
 msgid "button_show"
 msgstr "Anzeigen"
 
@@ -83,7 +83,7 @@ msgid "error_not_copyable"
 msgstr "Der gewählte Inhalt kann nicht kopiert werden"
 
 #. Default: "Classification"
-#: ./opengever/base/behaviors/classification.py:20
+#: ./opengever/base/behaviors/classification.py:43
 msgid "fieldset_classification"
 msgstr "Sichtbarkeit"
 
@@ -107,7 +107,7 @@ msgid "help_archival_value_annotation"
 msgstr ""
 
 #. Default: ""
-#: ./opengever/base/behaviors/classification.py:31
+#: ./opengever/base/behaviors/classification.py:54
 msgid "help_classification"
 msgstr "Grad, in dem die Unterlagen vor unberechtigter Einsicht geschützt werden müssen"
 
@@ -132,18 +132,21 @@ msgid "help_description"
 msgstr ""
 
 #. Default: ""
-#: ./opengever/base/behaviors/classification.py:39
+#: ./opengever/base/behaviors/classification.py:61
 msgid "help_privacy_layer"
 msgstr "Markierung, die angibt, ob die Unterlagen besonders schützenswerte Personendaten oder Persönlichkeitsprofile gemäss Datenschutzrecht enthalten"
 
-#: ./opengever/base/behaviors/classification.py:46
+#: ./opengever/base/behaviors/classification.py:68
 msgid "help_public_trial"
-msgstr "Angabe, ob die Unterlagen gemäss Öffentlichkeitsgesetz besonders schützenswert sind oder nicht"
+msgstr "Angabe, ob die Unterlagen gemäss Öffentlichkeitsgesetz zugänglich sind oder nicht"
 
-#. Default: "BegrÃ¼undung Schutzgrad"
-#: ./opengever/base/behaviors/classification.py:54
+#: ./opengever/base/behaviors/classification.py:97
+msgid "help_public_trial_default_value"
+msgstr ""
+
+#: ./opengever/base/behaviors/classification.py:76
 msgid "help_public_trial_statement"
-msgstr "Argumente gegen die öffentliche Zugänglichkeit gemäss Öffentlichkeitsgesetz"
+msgstr "Datum Gesuch, Gesuchsteller, Datum Entscheid, Verweis auf GEVER-Gesuchdossier"
 
 #: ./opengever/base/behaviors/lifecycle.py:42
 msgid "help_retention_period"
@@ -168,8 +171,13 @@ msgstr "Archivwürdigkeit"
 msgid "label_archival_value_annotation"
 msgstr "Kommentar zur Archivwürdigkeit"
 
+#. Default: "Change public trial information."
+#: ./opengever/base/browser/edit_public_trial.py:62
+msgid "label_change_public_trial"
+msgstr "Öffentlichkeitsstatus ändern"
+
 #. Default: "Classification"
-#: ./opengever/base/behaviors/classification.py:30
+#: ./opengever/base/behaviors/classification.py:53
 msgid "label_classification"
 msgstr "Klassifikation"
 
@@ -229,22 +237,27 @@ msgid "label_last_modified"
 msgstr "Zuletzt verändert"
 
 #. Default: "Privacy layer"
-#: ./opengever/base/behaviors/classification.py:38
+#: ./opengever/base/behaviors/classification.py:60
 msgid "label_privacy_layer"
 msgstr "Datenschutzstufe"
 
 #. Default: "Public Trial"
-#: ./opengever/base/behaviors/classification.py:45
+#: ./opengever/base/behaviors/classification.py:67
 msgid "label_public_trial"
 msgstr "Öffentlichkeitsstatus"
 
+#. Default: "Public Trial default value"
+#: ./opengever/base/behaviors/classification.py:95
+msgid "label_public_trial_default_value"
+msgstr ""
+
 #. Default: "Public trial statement"
-#: ./opengever/base/behaviors/classification.py:52
+#: ./opengever/base/behaviors/classification.py:74
 msgid "label_public_trial_statement"
-msgstr "Begründung für die Aufhebung des Öffentlichkeitsstatus"
+msgstr "Bearbeitungsinformation"
 
 #. Default: "reset"
-#: ./opengever/base/viewlets/history.pt:58
+#: ./opengever/base/viewlets/history.pt:51
 msgid "label_reset"
 msgstr "Zurücksetzen"
 
@@ -267,6 +280,11 @@ msgstr "Titel"
 #: ./opengever/base/viewlets/history.pt:16
 msgid "label_version"
 msgstr "Version"
+
+#. Default: "limited-public"
+#: opengever/repository/classification.py
+msgid "limited-public"
+msgstr "Eingeschränkt öffentlich"
 
 #. Default ""
 #: opengever/repository/classification.py
@@ -312,9 +330,10 @@ msgstr "erweiterte Suche"
 #. Default ""
 #: opengever/repository/classification.py
 msgid "unchecked"
-msgstr "Noch nicht geprüft"
+msgstr "Nicht geprüft"
 
 #. Default: "unprotected"
 #: opengever/repository/classification.py
 msgid "unprotected"
 msgstr "Nicht klassifiziert"
+

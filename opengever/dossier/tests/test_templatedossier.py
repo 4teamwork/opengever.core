@@ -10,9 +10,11 @@ from opengever.dossier.interfaces import ITemplateDossierProperties
 from opengever.dossier.templatedossier.create import TemporaryDocFile
 from opengever.dossier.templatedossier.interfaces import ITemplateUtility
 from opengever.testing import FunctionalTestCase
+from opengever.testing.pages import sharing_tab_data
 from plone.app.testing import TEST_USER_ID
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
+import transaction
 
 
 class TestDocumentWithTemplateForm(FunctionalTestCase):
@@ -212,7 +214,6 @@ class TestTemplateDossier(FunctionalTestCase):
 
     def setUp(self):
         super(TestTemplateDossier, self).setUp()
-
         self.grant('Manager')
 
     @browsing
@@ -258,8 +259,11 @@ class TestTemplateFolderUtility(FunctionalTestCase):
             self.utility.templateFolder(self.portal))
 
 
+OVERVIEW_TAB = 'tabbedview_view-overview'
 DOCUMENT_TAB = 'tabbedview_view-documents'
 TRASH_TAB = 'tabbedview_view-trash'
+JOURNAL_TAB = 'tabbedview_view-journal'
+INFO_TAB = 'tabbedview_view-sharing'
 
 
 class TestTemplateDossierListings(FunctionalTestCase):
@@ -277,8 +281,8 @@ class TestTemplateDossierListings(FunctionalTestCase):
         columns = [col.get('column') for col in view.columns]
 
         self.assertEquals(
-            ['', 'sequence_number', 'Title',
-             'document_author', 'document_date', 'checked_out'],
+            ['', 'sequence_number', 'Title', 'document_author',
+             'document_date', 'checked_out', 'public_trial'],
             columns)
 
     def test_receipt_delivery_and_subdossier_column_are_hidden_in_trash_tab(self):
@@ -287,7 +291,8 @@ class TestTemplateDossierListings(FunctionalTestCase):
         columns = [col.get('column') for col in view.columns]
 
         self.assertEquals(
-            ['', 'sequence_number', 'Title', 'document_author', 'document_date'],
+            ['', 'sequence_number', 'Title',
+             'document_author', 'document_date', 'public_trial'],
             columns)
 
     def test_enabled_actions_are_limited_in_document_tab(self):
@@ -320,3 +325,46 @@ class TestTemplateDossierListings(FunctionalTestCase):
 
         self.assertEquals([document_a],
                           [brain.getObject() for brain in view.contents])
+
+
+class TestTemplateDocumentTabs(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestTemplateDocumentTabs, self).setUp()
+
+        self.templatedossier = create(Builder('templatedossier'))
+        self.template = create(Builder('document')
+                               .within(self.templatedossier)
+                               .titled('My Document'))
+        self.grant('Manager')
+
+    @browsing
+    def test_template_overview_tab(self, browser):
+        browser.login().open(self.template, view=OVERVIEW_TAB)
+        table = browser.css('table.listing').first
+        self.assertIn(['Title', 'My Document'], table.lists())
+
+    def test_template_journal_tab(self):
+        view = self.template.unrestrictedTraverse(JOURNAL_TAB)
+        view.update()
+        entry = view.contents[0]
+        self.assertDictContainsSubset({'type': 'Document added'},
+                                      entry['action'])
+        self.assertEquals(TEST_USER_ID, entry['actor'])
+
+    @browsing
+    def test_template_info_tab(self, browser):
+        browser.login()
+
+        browser.open(self.template, view=INFO_TAB)
+        self.assertEquals([['Logged-in users', False, False, False]],
+                          sharing_tab_data())
+
+        self.template.manage_setLocalRoles(TEST_USER_ID,
+                                           ["Reader", "Contributor", "Editor"])
+        transaction.commit()
+
+        browser.open(self.template, view=INFO_TAB)
+        self.assertEquals([['Logged-in users', False, False, False],
+                           [TEST_USER_ID, True, True, True]],
+                          sharing_tab_data())

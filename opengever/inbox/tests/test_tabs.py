@@ -1,3 +1,4 @@
+from DateTime import DateTime
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.testing import FunctionalTestCase
@@ -35,7 +36,6 @@ class TestInboxTabbedview(FunctionalTestCase):
 
         self.assertEquals([document_2],
                           [brain.getObject() for brain in view.contents])
-
 
     def test_document_listings_does_not_contain_subdossier_and_checked_out_column(self):
         document_view = self.inbox.restrictedTraverse('tabbedview_view-documents')
@@ -106,11 +106,13 @@ class TestAssignedInboxTaskTab(TestInboxTaskTabs):
     def test_list_tasks_and_forwardings(self):
         task = create(Builder('task')
                       .within(self.inbox)
-                      .having(responsible='inbox:client1'))
+                      .having(responsible='inbox:client1',
+                              modification_date=DateTime(2013, 6, 10)))
 
         forwarding = create(Builder('forwarding')
                             .within(self.inbox)
-                            .having(responsible='inbox:client1'))
+                            .having(responsible='inbox:client1',
+                                    modification_date=DateTime(2013, 6, 11)))
 
         self.assert_listing_results([task, forwarding])
 
@@ -147,10 +149,12 @@ class TestIssuedInboxTaskTab(TestInboxTaskTabs):
     def test_list_also_tasks_outside_of_the_inbox(self):
         task_inside = create(Builder('task')
               .within(self.inbox)
-              .having(issuer='inbox:client1'))
+              .having(issuer='inbox:client1',
+                      modification_date=DateTime(2013, 6, 10)))
 
         task_outside = create(Builder('task')
-              .having(issuer='inbox:client1'))
+              .having(issuer='inbox:client1',
+                      modification_date=DateTime(2013, 6, 11)))
 
         self.assert_listing_results([task_inside, task_outside])
 

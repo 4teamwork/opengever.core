@@ -20,6 +20,8 @@ from opengever.tabbedview.interfaces import IStateFilterTableSourceConfig
 from plone.dexterity.interfaces import IDexterityContainer
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.component import adapts
+from zope.component.hooks import getSite
+from zope.globalrequest import getRequest
 from zope.interface import implements
 from zope.interface import Interface
 
@@ -40,6 +42,12 @@ class OpengeverCatalogListingTab(grok.View, OpengeverTab, CatalogListingView):
     __call__ = CatalogListingView.__call__
     update = CatalogListingView.update
     render = __call__
+
+
+def translate_public_trial_options(item, value):
+    portal = getSite()
+    request = getRequest()
+    return portal.translate(value, context=request, domain="opengever.base")
 
 
 class Documents(OpengeverCatalogListingTab):
@@ -90,6 +98,9 @@ class Documents(OpengeverCatalogListingTab):
         {'column': 'containing_subdossier',
          'column_title': _('label_subdossier', default="Subdossier"), },
 
+        {'column': 'public_trial',
+         'column_title': _('label_public_trial', default="Public Trial"),
+         'transform': translate_public_trial_options},
         )
 
     enabled_actions = [

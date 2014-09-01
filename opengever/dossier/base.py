@@ -2,12 +2,14 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from datetime import datetime
 from five import grok
+from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.interfaces import IConstrainTypeDecider
 from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.ogds.base.actor import Actor
 from opengever.task import OPEN_TASK_STATES
+from opengever.task.task import ITask
 from plone.dexterity.content import Container
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.registry.interfaces import IRegistry
@@ -106,10 +108,10 @@ class DossierContainer(Container):
             return parent
 
     def is_all_supplied(self):
-        """Check if all tasks and all documents are supplied in a subdossier
-        provided there are any (active) subdossiers
-
+        """Check if all tasks and all documents(incl. mails) are supplied in
+        a subdossier provided there are any (active) subdossiers
         """
+
         subdossiers = self.getFolderContents({
             'object_provides':
             'opengever.dossier.behaviors.dossier.IDossierMarker'})
@@ -119,8 +121,8 @@ class DossierContainer(Container):
 
         if len(active_dossiers) > 0:
             results = self.getFolderContents({
-                'portal_type': ['opengever.task.task',
-                                'opengever.document.document']})
+                'object_provides': [ITask.__identifier__,
+                                    IBaseDocument.__identifier__]})
 
             if len(results) > 0:
                 return False

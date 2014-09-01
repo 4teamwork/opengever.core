@@ -16,7 +16,7 @@ import os.path
 @grok.subscribe(IDocumentSchema, IObjectAddedEvent)
 @grok.subscribe(IDocumentSchema, IObjectModifiedEvent)
 def resolve_document_author(document, event):
-    if document.document_author:
+    if getattr(document, 'document_author', None):
         user = ogds_service().fetch_user(document.document_author)
         if user:
             document.document_author = user.fullname()

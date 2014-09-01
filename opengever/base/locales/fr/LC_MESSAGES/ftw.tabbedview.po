@@ -9,7 +9,10 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
 
 msgid "By Area"
 msgstr "Domaine"
@@ -50,14 +53,8 @@ msgstr "Toutes les tâches"
 msgid "archive"
 msgstr "Archives"
 
-msgid "assigned_forwardings"
-msgstr "Réception"
-
 msgid "assigned_inbox_tasks"
 msgstr "Tâches reçues"
-
-msgid "assigned_tasks"
-msgstr "Tâches d'un autre client"
 
 msgid "assignedtasks"
 msgstr "Tâches attribuées"
@@ -67,9 +64,6 @@ msgstr "Heures à facturer"
 
 msgid "changes"
 msgstr "Dernières modifications"
-
-msgid "closed-forwardings"
-msgstr "Tâches achevées"
 
 msgid "contacts"
 msgstr "Contacts"
@@ -109,9 +103,6 @@ msgstr "Validation"
 
 msgid "getResponsibleManager"
 msgstr "Responsabilité"
-
-msgid "given_tasks"
-msgstr "Acheminement / Tâches attribuées"
 
 msgid "important_contact"
 msgstr "Sommaire"
@@ -167,6 +158,9 @@ msgstr "Sommaire"
 msgid "participants"
 msgstr "Participants"
 
+msgid "preview"
+msgstr "Aperçu"
+
 msgid "process"
 msgstr "Avancement"
 
@@ -208,5 +202,4 @@ msgstr "Corbeille"
 
 msgid "users"
 msgstr "OGDS"
-
 

@@ -11,7 +11,6 @@ tests_require = [
     'ftw.table',
     'ftw.testbrowser',
     'ftw.testing',
-    'ftw.testbrowser',
     'lxml',
     'plone.app.dexterity',
     'plone.app.testing',

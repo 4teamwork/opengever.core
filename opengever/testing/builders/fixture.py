@@ -58,8 +58,9 @@ class FixtureBuilder(object):
         self.with_admin_unit()
         return self
 
-    def with_hugo_boss(self):
+    def with_hugo_boss(self, **kwargs):
         self._with_hugo_boss = True
+        self._hugo_boss_args.update(kwargs)
         return self
 
     def create(self):

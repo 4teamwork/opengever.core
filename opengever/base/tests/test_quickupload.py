@@ -1,153 +1,75 @@
 from collective.quickupload.interfaces import IQuickUploadFileFactory
-from ftw.tabbedview.interfaces import ITabbedviewUploadable
-from ftw.testing import MockTestCase
-from grokcore.component.testing import grok, grok_component
-from plone.directives import form
-from plone.namedfile.field import NamedFile as nf_field
-from plone.namedfile.file import NamedFile
-from unittest2 import TestCase
-from zope import schema
-import zope.component.testing
+from ftw.builder import Builder
+from ftw.builder import create
+from opengever.journal.browser import JournalHistory
+from opengever.testing import FunctionalTestCase
+from zope.i18n import translate
 
 
-class ITest1(form.Schema):
-    title = schema.TextLine(
-        title=u'label_title',
-        required=False)
-
-    description = schema.Text(
-        title=u'description',
-        default=u'hanspeter',
-        required=False,
-        )
-
-
-class ITest2(form.Schema):
-    form.primary('file')
-    file = nf_field(
-        title=u'label_file',
-        required=False,
-        )
-
-
-class TestOGQuickupload(MockTestCase, TestCase):
+class TestOGQuickupload(FunctionalTestCase):
 
     def setUp(self):
         super(TestOGQuickupload, self).setUp()
-        grok('plone.directives.form.meta')
-        grok('opengever.base.quickupload')
-
-    def tearDown(self):
-        zope.component.testing.tearDown()
+        self.grant('Manager')
+        self.dossier = create(Builder('dossier'))
+        self.adapter = IQuickUploadFileFactory(self.dossier)
 
     def test_get_mimetype(self):
-        mock_context = self.providing_stub([ITabbedviewUploadable])
-        self.replay()
-        adapter = IQuickUploadFileFactory(mock_context)
-        self.assertEqual(adapter._get_mimetype('hanspeter.doc'),
-            'application/msword')
+        self.assertEqual('application/msword',
+                         self.adapter._get_mimetype('hanspeter.doc'))
 
-        self.assertEqual(adapter._get_mimetype('hanspeter.jpeg'),
-            'image/jpeg')
+        self.assertEqual('image/jpeg',
+                         self.adapter._get_mimetype('hanspeter.jpeg'))
 
     def test_get_portal_type(self):
-        mock_context = self.providing_stub([ITabbedviewUploadable])
-        self.replay()
-        adapter = IQuickUploadFileFactory(mock_context)
 
         self.assertEqual(
-            adapter.get_portal_type('image.jpeg'),
+            self.adapter.get_portal_type('image.jpeg'),
             'opengever.document.document')
         self.assertEqual(
-            adapter.get_portal_type('mail.eml'), 'ftw.mail.mail')
+            self.adapter.get_portal_type('mail.eml'), 'ftw.mail.mail')
         self.assertEqual(
-            adapter.get_portal_type('test.doc'),
+            self.adapter.get_portal_type('test.doc'),
             'opengever.document.document')
 
-    def test_set_default_value(self):
-        grok_component('ITest2', ITest2)
+    def test_set_default_values(self):
+        result = self.adapter(filename='document.txt',
+                              title='',  # ignored by adapter
+                              description='Description',  # ignored by adapter
+                              content_type='text/plain',
+                              data='text',
+                              portal_type='opengever.document.document')
+        content = result['success']
 
-        # mock stuf
-        mock_context = self.providing_stub([ITabbedviewUploadable, ])
-        named_file = NamedFile('bla bla', filename=u'test.txt')
+        self.assertEquals('document', content.Title())
+        self.assertEquals('text', content.file.data)
+        self.assertIsNone(content.description)
 
-        obj = self.providing_stub([ITest1, ITest2])
-        request = self.stub()
-        self.expect(obj.REQUEST).result(request)
+    def test_expect_one_journal_entry_after_upload(self):
 
-        iterSchemata = self.mocker.replace(
-            'plone.dexterity.utils.iterSchemata')
-        self.expect(iterSchemata(obj)).result([ITest1, ITest2])
+        result = self.adapter(filename='document.txt',
+                              title='Title of document',
+                              description='',
+                              content_type='text/plain',
+                              data='text',
+                              portal_type='opengever.document.document')
+        content = result['success']
+        history = JournalHistory(content, content.REQUEST)
 
-        self.replay()
+        self.assertEquals(1,
+                          len(history.data()),
+                          'Expect exactly one journal entry after upload')
 
-        # test if it's sets the default value and
-        # also if it add the created file to the primary field
-        adapter = IQuickUploadFileFactory(mock_context)
-        adapter.set_default_values(obj, named_file)
-        self.assertEquals(obj.description, 'hanspeter')
-        self.assertEquals(obj.file, named_file)
+    def test_title_is_used_as_default_title_for_journal_entry(self):
+        result = self.adapter(filename='document.txt',
+                              title='',
+                              description='',
+                              content_type='text/plain',
+                              data='text',
+                              portal_type='opengever.document.document')
+        content = result['success']
+        history = JournalHistory(content, content.REQUEST)
 
-    def test_create_file(self):
-        grok_component('ITest2', ITest2)
-
-        # mock stuf
-        mock_context = self.providing_stub([ITabbedviewUploadable, ])
-        named_file = NamedFile('bla bla', filename=u'test.txt')
-
-        obj = self.providing_stub([ITest1, ITest2])
-        request = self.stub()
-        self.expect(obj.REQUEST).result(request)
-
-        iterSchemata = self.mocker.replace(
-            'plone.dexterity.utils.iterSchemata')
-        self.expect(iterSchemata(obj)).result([ITest1, ITest2])
-
-        self.replay()
-
-        # test if it's sets the default value and
-        # also if it add the created file to the primary field
-        adapter = IQuickUploadFileFactory(mock_context)
-        named_file = adapter.create_file(
-            u'hugo.jpeg', u'data data', obj)
-
-        self.assertEquals(named_file.data, u'data data')
-
-    def test_complete_creation(self):
-        grok_component('ITest2', ITest2)
-
-        # mock stuf
-        mock_context = self.providing_stub([ITabbedviewUploadable, ])
-
-        obj = self.providing_stub([ITest1, ITest2])
-        request = self.stub()
-        self.expect(obj.REQUEST).result(request)
-        self.expect(obj.reindexObject()).result(None)
-        self.expect(obj.__parent__).result(mock_context)
-        self.expect(obj.__name__).result('test_context')
-
-        iterSchemata = self.mocker.replace(
-            'plone.dexterity.utils.iterSchemata')
-        self.expect(iterSchemata(obj)).result([ITest1, ITest2]).count(0, None)
-
-        createContentInContainer = self.mocker.replace(
-            'plone.dexterity.utils.createContentInContainer')
-        self.expect(createContentInContainer(
-                mock_context, 'opengever.document.document')).result(obj)
-
-        # filedata
-        filename = u'hugo.doc'
-        title = None
-        description = None
-        content_type = None
-        data = u'Data data'
-        portal_type = None
-
-        self.replay()
-
-        adapter = IQuickUploadFileFactory(mock_context)
-        result = adapter(filename, title, description,
-                         content_type, data, portal_type)
-        obj = result.get('success')
-        self.assertEquals(obj.description, 'hanspeter')
-        self.assertEquals(obj.file.data, u'Data data')
+        self.assertEquals(u'Document added: document',
+                          translate(history.data()[0]['action']['title']),
+                          'Expected the document title in the action title')

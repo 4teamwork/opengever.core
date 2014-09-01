@@ -8,9 +8,13 @@ from plone.namedfile.utils import stream_data
 from zope.event import notify
 
 
-class DocumentDownload(Download):
-    """Overriding the Namefile Download view,
-    for implement the special file handling
+class DocumentishDownload(Download):
+    """Overriding the Namefile Download view and implement some OpenGever
+    specific file handling:
+
+    - Deal with an unicode bug in plone.namedfile.utils.set_header
+    - Set Content-Disposition headers based on browser sniffing
+    - Fire our own `FileCopyDownloadedEvent`
     """
 
     def __call__(self):

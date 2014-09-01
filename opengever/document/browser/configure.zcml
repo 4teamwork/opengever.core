@@ -6,9 +6,17 @@
 
     <browser:page
         name="download"
-        for="opengever.document.document.IDocumentSchema"
-        class=".download.DocumentDownload"
+        for="opengever.document.behaviors.IBaseDocument"
+        class=".download.DocumentishDownload"
         permission="zope2.View"
+        />
+
+    <browser:page
+        name="view"
+        for="opengever.document.behaviors.IBaseDocument"
+        class=".default_view.DocumentDefaultView"
+        permission="zope2.View"
+        layer="opengever.base.interfaces.IOpengeverBaseLayer"
         />
 
 </configure>

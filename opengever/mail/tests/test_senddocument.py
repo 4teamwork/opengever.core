@@ -1,3 +1,4 @@
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.mail.utils import get_attachments
@@ -85,7 +86,7 @@ class TestSendDocument(FunctionalTestCase):
         self.assertEquals(TEST_FORM_DATA.get('subject'), mail.get('Subject'),
                           'The subject of the created mail is not correct')
         self.assertEquals(
-            '"User Test \(test_user_1_\)" <test@localhost>',
+            '"User Test \(test_user_1_\)" <test@example.org>',
             mail.get('From'),
             'The sender of the mail is incorrect.')
         self.assertIn(
@@ -131,6 +132,11 @@ f\xc3\xbcr Ernst Franz\r\n\r\nBesten Dank im Voraus"""
         mail = self.send_documents(dossier, mails)
         self.assert_attachment(mail, 'testmail.eml', 'message/rfc822')
 
+        attachment = mail.get_payload()[1].get_payload()[0]
+        self.assertIn(
+            'foobar', attachment.get_payload(),
+            'Attached mails should not be base64 encoded')
+
     def test_send_document_event(self):
         intids = getUtility(IIntIds)
         dossier = create(Builder("dossier"))
@@ -153,6 +159,25 @@ f\xc3\xbcr Ernst Franz\r\n\r\nBesten Dank im Voraus"""
         self.assertEquals(
             intids.getObject(event.intids[0]),
             documents[0])
+
+    def test_sent_mail_gets_filed_in_dossier(self):
+        dossier = create(Builder("dossier"))
+        document = create(Builder("document").with_dummy_content())
+
+        self.send_documents(dossier, [document], file_copy_in_dossier=True)
+
+        self.assertIn('test-subject', dossier,
+                      "Sent mail should be archived in dossier")
+
+        filed_mail = dossier.restrictedTraverse('test-subject')
+        self.assertEquals(date.today(), filed_mail.delivery_date,
+                          "Filed mail should have a delivery date of today")
+
+        self.assertEquals(u'Test Subject', filed_mail.title,
+                          "Filed mail should have subject as title")
+
+        self.assertEquals(u'User Test', filed_mail.document_author,
+                          "Author of filed mail should be name of OGDS user")
 
     def send_documents(self, container, documents, **kwargs):
         documents = ['/'.join(doc.getPhysicalPath()) for doc in documents]
