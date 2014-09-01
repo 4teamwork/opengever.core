@@ -12,7 +12,6 @@ class TestActionmenuViewlet(FunctionalTestCase):
 
         create(Builder('ogds_user').id('hugo.boss'))
 
-        self.dossier = create(Builder('dossier'))
         self.task = create(Builder('task')
                            .having(issuer='hugo.boss',
                                    responsible=TEST_USER_ID,
@@ -39,3 +38,14 @@ class TestActionmenuViewlet(FunctionalTestCase):
             ['task-transition-open-cancelled',
              'task-transition-open-tested-and-closed'],
             browser.css('dl.agency_buttons ul a').text)
+
+    @browsing
+    def test_agency_button_is_hidden_when_no_agency_actions_are_available(self, browser):
+        task = create(Builder('task')
+                           .having(issuer=TEST_USER_ID,
+                                   responsible=TEST_USER_ID,
+                                   task_type='comment'))
+
+        browser.login().open(task, view='tabbedview_view-overview')
+
+        self.assertEquals([], browser.css('dl.agency_buttons'))
