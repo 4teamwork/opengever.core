@@ -1,8 +1,8 @@
 from ftw.dictstorage.interfaces import ISQLAlchemy
+from opengever.base.behaviors.classification import translated_public_trial_terms
 from opengever.base.interfaces import IReferenceNumberFormatter
 from opengever.base.interfaces import IReferenceNumberSettings
 from opengever.ogds.base.sort_helpers import SortHelpers
-from opengever.tabbedview.utils import get_translated_public_trial_values
 from opengever.tabbedview.utils import get_translated_transitions
 from opengever.tabbedview.utils import get_translated_types
 from plone.registry.interfaces import IRegistry
@@ -124,7 +124,7 @@ class OpengeverTab(object):
 
         elif sort_on in 'public_trial':
 
-            values = get_translated_public_trial_values(self.context, self.request)
+            values = translated_public_trial_terms(self.context, self.request)
 
             def _public_trial_sorter(a, b):
                 return cmp(
