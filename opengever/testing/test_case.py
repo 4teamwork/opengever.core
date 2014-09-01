@@ -1,6 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
+from opengever.dossier.interfaces import ITemplateDossierProperties
 from opengever.testing import builders  # keep!
 from opengever.testing.browser import OGBrowser
 from plone.app.testing import login
@@ -8,7 +9,9 @@ from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
 from plone.app.testing import TEST_USER_PASSWORD
+from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
+from zope.component import getUtility
 import transaction
 import unittest2
 
@@ -40,6 +43,11 @@ class FunctionalTestCase(TestCase):
         member = self.membership_tool.getMemberById(user_id)
         member.setProperties(fullname=fullname)
         transaction.commit()
+
+    def set_docproperty_export_enabled(self, enabled=True):
+        registry = getUtility(IRegistry)
+        props = registry.forInterface(ITemplateDossierProperties)
+        props.create_doc_properties = enabled
 
     def grant(self, *roles):
         setRoles(self.portal, TEST_USER_ID, list(roles))
