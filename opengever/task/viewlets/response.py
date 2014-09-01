@@ -1,3 +1,4 @@
+from Acquisition import aq_inner
 from five import grok
 from opengever.base.browser.helper import get_css_class
 from opengever.globalindex.model.task import Task
@@ -43,9 +44,21 @@ class ResponseView(grok.Viewlet, Base):
 
         return responses
 
+    @property
+    def can_edit(self):
+        # TODO: this permission should renamed!!!
+        return self.memship.checkPermission('Poi: Edit response',
+                                            aq_inner(self.context))
+
     def edit_link(self, id):
         return '{}/@@task_response_edit?response_id={}'.format(
             self.context.absolute_url(), id)
+
+    @property
+    def can_delete(self):
+        # TODO: should be solved with a separate permission
+        return self.memship.checkPermission('Manage portal',
+                                            aq_inner(self.context))
 
     def delete_link(self, id):
         return '{}/@@task_response_delete?response_id={}'.format(
