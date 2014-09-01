@@ -4,6 +4,9 @@ Changelog
 4.x (unreleased)
 ------------------
 
+- Only show agency dropdown, when agency actions are available.
+  [phgross]
+
 - Sort groupmembers by label for groupmembers list.
   [deiferni]
 

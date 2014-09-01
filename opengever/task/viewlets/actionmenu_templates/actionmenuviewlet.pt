@@ -1,4 +1,5 @@
-<div class="actionButtons clearfix" id="action-menu" i18n:domain="plone">
+<div class="actionButtons clearfix" id="action-menu"
+     tal:define="agency_items viewlet/get_agency_items" i18n:domain="plone" >
   <ul class="regular_buttons">
       <tal:block repeat="subMenuItem viewlet/get_regular_items">
         <li tal:define="css_class subMenuItem/response_description/css_class | nothing">
@@ -17,11 +18,11 @@
       </tal:block>
   </ul>
 
-  <dl class="agency_buttons dropdown_button">
+  <dl class="agency_buttons dropdown_button" tal:condition="agency_items">
     <dt class="button" i18n:translate="label_agency">Agency</dt>
     <dd>
       <ul>
-        <tal:block repeat="subMenuItem viewlet/get_agency_items">
+        <tal:block repeat="subMenuItem agency_items">
           <li tal:define="css_class subMenuItem/response_description/css_class | nothing">
             <a tal:condition="subMenuItem/url"
                tal:attributes="href subMenuItem/url;
