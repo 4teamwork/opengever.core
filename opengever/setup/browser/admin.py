@@ -201,8 +201,8 @@ class CreateOpengeverClient(BrowserView):
         if form.get('configsql'):
             # register the client in the ogds
             # is the client already configured? -> delete it
-            clients = session.query(Client).filter_by(
-                client_id=form['client_id']).all()
+            clients = session.query(OrgUnit).filter_by(
+                unit_id=form['client_id']).all()
             if clients:
                 session.delete(clients[0])
 
