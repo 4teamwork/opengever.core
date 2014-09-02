@@ -4,6 +4,10 @@ Changelog
 3.4.1 (unreleased)
 ------------------
 
+- Mail preview tab: fixed bug in mimetype lookup for attachments with
+  a wrong mimetype.
+  [phgross]
+
 - Use `ftw.profilehook` instead of setuphandlers.
   [deiferni]
 
