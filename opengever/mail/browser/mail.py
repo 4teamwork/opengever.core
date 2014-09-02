@@ -31,7 +31,7 @@ class PreviewTab(ftwView):
         else:
             lookup = self.mtr.lookup(attachment['content-type'])
 
-        if isinstance(lookup, list) or isinstance(lookup, tuple):
+        if lookup and (isinstance(lookup, list) or isinstance(lookup, tuple)):
             lookup = lookup[0]
 
         return lookup
