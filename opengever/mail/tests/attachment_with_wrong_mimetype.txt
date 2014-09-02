@@ -1,0 +1,19 @@
+Mime-Version: 1.0
+Content-Type: multipart/mixed; boundary=908752978
+To: to@example.org
+From: from@example.org
+Subject: Attachment Test
+Date: Thu, 01 Jan 1970 01:00:00 +0100
+Message-Id: <1>
+
+
+--908752978
+Content-Disposition: attachment;
+	filename*=iso-8859-1''B%FCcher.txt
+Content-Type: image/notexisting;
+	name="=?iso-8859-1?Q?B=FCcher.txt?="
+Content-Transfer-Encoding: base64
+
+w6TDtsOcCg==
+
+--908752978--
