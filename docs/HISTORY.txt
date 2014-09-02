@@ -4,7 +4,9 @@ Changelog
 3.4.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Mail preview tab: fixed bug in mimetype lookup for attachments with
+  a wrong mimetype.
+  [phgross]
 
 
 3.4.0 (2014-08-28)
