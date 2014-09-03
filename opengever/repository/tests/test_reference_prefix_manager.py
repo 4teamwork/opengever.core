@@ -4,6 +4,7 @@ from ftw.testbrowser import browsing
 from opengever.base.adapters import ReferenceNumberPrefixAdpater
 from opengever.journal.tests.utils import get_journal_entry
 from opengever.testing import FunctionalTestCase
+from plone import api
 from zExceptions import Unauthorized
 from zope.i18n import translate
 import transaction
@@ -54,6 +55,19 @@ class TestReferencePrefixManager(FunctionalTestCase):
 
     def test_manager_throws_error_when_delete_request_for_used_prefix_occurs(self):
         self.assertRaises(Exception, self.reference_manager.free_number, (2))
+
+    @browsing
+    def test_manager_handles_deleted_repositories_correclty(self, browser):
+        api.content.delete(obj=self.repo2)
+        transaction.commit()
+
+        browser.login().open(self.repo, view='referenceprefix_manager')
+
+        table = browser.css('#reference_prefix_manager_table').first.lists()
+
+        self.assertEquals([['1', 'One', 'Unlock'],
+                           ['2', '-- Already removed object --', 'In use'],
+                           ['3', 'One', 'In use']], table)
 
     @browsing
     def test_manager_shows_default_message_when_no_repositorys_available(self, browser):

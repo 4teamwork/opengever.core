@@ -30,7 +30,7 @@
             </tr>
 			      <tr tal:repeat="posnumber view/prefix_mapping">
 				      <td tal:content="posnumber/prefix"></td>
-				      <td tal:content="posnumber/obj/effective_title"></td>
+				      <td tal:content="posnumber/title"></td>
               <td tal:condition="not: posnumber/active">
                 <a class="unlock button"
                    tal:attributes="href string:@@referenceprefix_manager?prefix=${posnumber/prefix}"

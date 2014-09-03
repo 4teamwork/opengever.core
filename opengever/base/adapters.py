@@ -1,12 +1,13 @@
 from Acquisition import aq_base
-from Products.CMFCore.interfaces._content import IFolderish
 from five import grok
+from opengever.base import _
 from opengever.base.behaviors.utils import split_string_by_numbers
 from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.base.interfaces import IReferenceNumberSettings
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from persistent.dict import PersistentDict
 from plone.registry.interfaces import IRegistry
+from Products.CMFCore.interfaces._content import IFolderish
 from zope.annotation.interfaces import IAnnotations
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
@@ -162,12 +163,23 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
         return prefix in self.get_reference_mapping()['reference_prefix'].values()
 
     def get_number_mapping(self):
-        merge = []
+        items = []
         intid_util = getUtility(IIntIds)
+
         for prefix, intid in self.get_child_mapping().iteritems():
-            merge.append({'prefix': prefix,
-                        'obj': intid_util.getObject(intid),
-                        'active': (self.get_prefix_mapping()[intid] == prefix)})
+            try:
+                title = intid_util.getObject(intid).effective_title
+            except KeyError:
+                # if a repositoryfolder is already removed the intid
+                # utility raises an KeyError. But the number should still
+                # be in the list, because it should be available to remove
+                # via the reference prefix manager.
+                title = _('label_already_removed',
+                          '-- Already removed object --')
+
+            items.append({'prefix': prefix,
+                          'title': title,
+                          'active': (self.get_prefix_mapping()[intid] == prefix)})
 
         def key_sorter(obj):
             key = obj['prefix']
@@ -175,7 +187,7 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
                 return int(key)
             return key
 
-        return sorted(merge, key=key_sorter)
+        return sorted(items, key=key_sorter)
 
     def free_number(self, prefix):
         if not isinstance(prefix, unicode):
