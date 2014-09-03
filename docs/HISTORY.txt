@@ -4,6 +4,12 @@ Changelog
 3.4.1 (unreleased)
 ------------------
 
+- Monkey patch ftw.mail.inbound.createMailInContainer because
+  `preserved_as_paper` has a schema level default, its default
+  value doesn't get set correctly, so we set explicitely after setting
+  the defaults.
+  [lgraf]
+
 - Mail preview tab: fixed bug in mimetype lookup for attachments with
   a wrong mimetype.
   [phgross]
