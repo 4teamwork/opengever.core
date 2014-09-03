@@ -1,7 +1,14 @@
 Changelog
 =========
 
-3.4.1 (unreleased)
+3.4.2 (unreleased)
+------------------
+
+- Use `ftw.profilehook` instead of setuphandlers.
+  [deiferni]
+
+
+3.4.1 (2014-09-03)
 ------------------
 
 - Monkey patch ftw.mail.inbound.createMailInContainer because
@@ -13,9 +20,6 @@ Changelog
 - Mail preview tab: fixed bug in mimetype lookup for attachments with
   a wrong mimetype.
   [phgross]
-
-- Use `ftw.profilehook` instead of setuphandlers.
-  [deiferni]
 
 
 3.4.0 (2014-08-28)
