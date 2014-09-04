@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-08-21 14:16+0000\n"
+"POT-Creation-Date: 2014-09-03 23:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -157,6 +157,11 @@ msgstr ""
 #. Default: "Actor"
 #: ./opengever/base/viewlets/history.pt:17
 msgid "label_actor"
+msgstr ""
+
+#. Default: "-- Already removed object --"
+#: ./opengever/base/adapters.py:177
+msgid "label_already_removed"
 msgstr ""
 
 #. Default: "Archival value"
