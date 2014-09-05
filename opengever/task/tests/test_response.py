@@ -22,7 +22,7 @@ class TestResponse(FunctionalTestCase):
         self.portal.portal_types['opengever.task.task'].global_allow = True
 
         test_user_1 = create(Builder('ogds_user')
-               .having(userid=TEST_USER_ID, firstname='Test', lastname='User'))
+                             .having(userid=TEST_USER_ID, firstname='Test', lastname='User'))
 
         test_user_2 = create(Builder('ogds_user')
                              .having(userid='testuser2',
@@ -32,17 +32,17 @@ class TestResponse(FunctionalTestCase):
         admin_unit = create(Builder('admin_unit')
                             .as_current_admin_unit())
 
-        unit1 = create(Builder('org_unit')
-                       .assign_users([test_user_1])
-                       .as_current_org_unit()
-                       .id('plone')
-                       .having(title="Plone", admin_unit=admin_unit))
+        create(Builder('org_unit')
+               .assign_users([test_user_1])
+               .as_current_org_unit()
+               .id('plone')
+               .having(title="Plone", admin_unit=admin_unit))
 
-        unit2 = create(Builder('org_unit')
-                       .id('client2')
-                       .having(title="Client 2", admin_unit=admin_unit)
-                       .assign_users([test_user_2])
-                       .assign_users([test_user_1], to_inbox=False))
+        create(Builder('org_unit')
+               .id('client2')
+               .having(title="Client 2", admin_unit=admin_unit)
+               .assign_users([test_user_2])
+               .assign_users([test_user_1], to_inbox=False))
 
         # create_plone_user(self.portal, 'testuser2')
 

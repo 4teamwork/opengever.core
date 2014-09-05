@@ -14,7 +14,6 @@ from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
 from plone.directives.form import Schema
 from plone.z3cform.layout import FormWrapper
-from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.browser.radio import RadioFieldWidget
 from z3c.form.button import buttonAndHandler

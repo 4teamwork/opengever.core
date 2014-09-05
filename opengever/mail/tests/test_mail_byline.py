@@ -2,7 +2,6 @@ from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.tests.byline_base_test import TestBylineBase
-from opengever.testing import create_ogds_user
 from pkg_resources import resource_string
 
 

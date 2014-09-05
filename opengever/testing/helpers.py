@@ -1,8 +1,4 @@
-from opengever.globalindex.model.task import Task
-from opengever.ogds.base.utils import get_current_admin_unit
 from Products.CMFCore.utils import getToolByName
-from zope.component import getUtility
-from zope.intid.interfaces import IIntIds
 
 
 def create_plone_user(portal, userid, password='demo09'):

@@ -63,9 +63,10 @@ class TestTaskOverview(FunctionalTestCase):
                               deadline=datetime(2010, 1, 1),
                               issuer=TEST_USER_ID,
                               responsible=TEST_USER_ID))
-        document = create(Builder('document')
-                          .titled(u'Some document')
-                          .within(task))
+        create(Builder('document')
+               .titled(u'Some document')
+               .within(task))
+
         browser.login().open(task, view='tabbedview_view-overview')
         self.assertSequenceEqual(
             [u'Some document'],
@@ -108,18 +109,18 @@ class TestTaskOverview(FunctionalTestCase):
                               deadline=datetime(2010, 1, 1),
                               issuer=TEST_USER_ID,
                               responsible=TEST_USER_ID))
-        sub1 = create(Builder("task")
-                      .within(task)
-                      .titled(u'Subtask 1')
-                      .having(task_type='report',
-                              issuer=TEST_USER_ID,
-                              responsible=TEST_USER_ID))
-        sub2 = create(Builder("task")
-                      .within(task)
-                      .titled(u'Subtask 2')
-                      .having(task_type='report',
-                                issuer=TEST_USER_ID,
-                              responsible=TEST_USER_ID))
+        create(Builder("task")
+               .within(task)
+               .titled(u'Subtask 1')
+               .having(task_type='report',
+                       issuer=TEST_USER_ID,
+                       responsible=TEST_USER_ID))
+        create(Builder("task")
+               .within(task)
+               .titled(u'Subtask 2')
+               .having(task_type='report',
+                       issuer=TEST_USER_ID,
+                       responsible=TEST_USER_ID))
 
         browser.login().open(task, view='tabbedview_view-overview')
         task_list = browser.css('#sub_taskBox div.task').text

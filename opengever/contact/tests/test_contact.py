@@ -1,5 +1,3 @@
-from ftw.builder import Builder
-from ftw.builder import create
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
 from Products.CMFCore.utils import getToolByName

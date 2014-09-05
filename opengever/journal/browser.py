@@ -19,12 +19,9 @@ class JournalHistory(BrowserView):
     def data(self):
         """
         """
-        context = self.context
-        history = []
-
 
         if IAnnotationsJournalizable.providedBy(self.context):
-            annotations = IAnnotations(context)
+            annotations = IAnnotations(self.context)
             return annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, [])
         elif IWorkflowHistoryJournalizable.providedBy(self.context):
             raise NotImplemented

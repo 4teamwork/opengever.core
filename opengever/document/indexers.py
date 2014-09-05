@@ -7,7 +7,6 @@ from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.interfaces import IDocumentIndexer
 from opengever.ogds.base.actor import Actor
-from opengever.tabbedview.helper import readable_ogds_author
 from plone.indexer import indexer
 from Products.CMFCore.utils import getToolByName
 from ZODB.POSException import ConflictError

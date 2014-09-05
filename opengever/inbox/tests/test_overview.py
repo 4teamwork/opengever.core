@@ -55,7 +55,7 @@ class TestInboxOverviewDocumentBox(TestBaseInboxOverview):
 
         doc1 = create(Builder('document')
                        .titled('Doc 1').within(sub_inbox_1))
-        doc2 = create(Builder('document')
+        create(Builder('document')
                        .titled('Doc 2').within(sub_inbox_2))
 
         sub_inbox_1_view = sub_inbox_1.restrictedTraverse(

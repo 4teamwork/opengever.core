@@ -1,16 +1,13 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.sharing.browser.sharing import OpengeverSharingView
 from opengever.sharing.interfaces import ILocalRolesAcquisitionActivated
 from opengever.sharing.interfaces import ILocalRolesAcquisitionBlocked
 from opengever.sharing.interfaces import ILocalRolesModified
 from opengever.testing import FunctionalTestCase
+from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
-from plone.app.testing import setRoles
-from plone.registry.interfaces import IRegistry
-from zope.component import getUtility
 from zope.component import provideHandler
 
 
@@ -190,10 +187,10 @@ class TestOpengeverSharingIntegration(FunctionalTestCase):
                             .id('test.peter')
                             .having(firstname='User',
                                     lastname='Test'))
-        other_ou = create(Builder('org_unit')
-                          .id(u'otherunit')
-                          .having(admin_unit=other_admin_unit)
-                          .assign_users([test_peter]))
+        create(Builder('org_unit')
+               .id(u'otherunit')
+               .having(admin_unit=other_admin_unit)
+               .assign_users([test_peter]))
 
         # create "current" admin unit
         test_user = create(Builder('ogds_user')
@@ -202,12 +199,11 @@ class TestOpengeverSharingIntegration(FunctionalTestCase):
         admin_unit = create(Builder('admin_unit')
                             .as_current_admin_unit())
 
-        current_orgunit = create(Builder('org_unit')
-                                 .id(u'testunit')
-                                 .having(admin_unit=admin_unit)
-                                 .as_current_org_unit()
-                                 .assign_users([test_user]))
-
+        create(Builder('org_unit')
+               .id(u'testunit')
+               .having(admin_unit=admin_unit)
+               .as_current_org_unit()
+               .assign_users([test_user]))
 
         self.portal.REQUEST.form['search_term'] = TEST_USER_NAME
         results = self.view_dossier.user_search_results()

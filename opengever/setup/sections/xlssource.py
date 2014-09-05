@@ -43,7 +43,6 @@ class XlsSource(object):
         for item in self.previous:
             yield item
 
-        client_id = self.options['client_id']
         filename = resolvePackageReferenceOrFile(self.options['filename'])
         tables = xlrd_xls2array(filename)
         repository_table = tables[0]

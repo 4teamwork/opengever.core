@@ -75,10 +75,10 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
 
         subtemplatedossier = create(Builder('templatedossier')
                                     .within(self.templatedossier))
-        template_c = create(Builder('document')
-                            .titled('Template C')
-                            .within(subtemplatedossier)
-                            .with_modification_date(self.modification_date))
+        create(Builder('document')
+               .titled('Template C')
+               .within(subtemplatedossier)
+               .with_modification_date(self.modification_date))
 
         browser.login().open(self.dossier, view='document_with_template')
 
@@ -251,8 +251,8 @@ class TestTemplateFolderUtility(FunctionalTestCase):
 
     def test_get_template_folder_returns_allways_root_templatefolder(self):
         templatedossier = create(Builder('templatedossier'))
-        sub_templatefolder = create(Builder('templatedossier')
-                                    .within(templatedossier))
+        create(Builder('templatedossier')
+               .within(templatedossier))
 
         self.assertEquals(
             '/'.join(templatedossier.getPhysicalPath()),

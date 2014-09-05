@@ -8,7 +8,6 @@ from opengever.ogds.base.setup import create_sql_tables
 from opengever.ogds.base.utils import create_session
 from opengever.ogds.models import BASE
 from plone.app.testing import applyProfile
-from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import IntegrationTesting
 from plone.app.testing import PLONE_FIXTURE
