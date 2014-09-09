@@ -98,6 +98,12 @@ class Renderer(base.Renderer):
                 return False
         return True
 
+    def navigation_url(self):
+        site = getToolByName(self.context, 'portal_url').getPortalObject()
+        root = site.restrictedTraverse(self.root_path())
+        view = root.restrictedTraverse('navigation.json')
+        return view.get_caching_url()
+
 
 class AddForm(base.AddForm):
     """Portlet add form.

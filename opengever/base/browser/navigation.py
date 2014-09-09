@@ -9,7 +9,21 @@ class JSONNavigation(TreeView):
     def __call__(self):
         RESPONSE = self.request.RESPONSE
         RESPONSE.setHeader('Content-Type', 'application/json')
+
+        if self.request.get('cache_key'):
+            # Only cache when there is a cache_key in the request.
+            # Representations may be cached by any cache.
+            # The cached representation is to be considered fresh for 1 year
+            # http://stackoverflow.com/a/3001556/880628
+            RESPONSE.setHeader('Cache-Control', 'private, max-age=31536000')
         return self.json()
+
+    def get_caching_url(self):
+        url = self.context.absolute_url() + '/navigation.json'
+        cache_key = self._navigation_cache_key()
+        if cache_key:
+            url = '{0}?cache_key={1}'.format(url, cache_key)
+        return url
 
     def json(self):
         current = context = aq_inner(self.context)
@@ -28,3 +42,20 @@ class JSONNavigation(TreeView):
                 'path': node['path'],
                 'uid': node['item'].UID,
                 'nodes': map(self.render_node, node['children'])}
+
+    def _navigation_cache_key(self):
+        cache_relevant = (
+            'opengever.repository.repositoryroot.IRepositoryRoot',
+            'opengever.repository.repositoryfolder.IRepositoryFolderSchema',
+            )
+
+        catalog = getToolByName(self.context, 'portal_catalog')
+        brains = catalog({'object_provides': cache_relevant,
+                          'path': '/'.join(self.context.getPhysicalPath()),
+                          'sort_on': 'modified',
+                          'sort_order': 'reverse',
+                          'sort_limit': 1})
+        if len(brains):
+            return str(brains[0].modified.millis())
+        else:
+            return None
