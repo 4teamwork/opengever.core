@@ -220,8 +220,22 @@ LocalStorageJSONCache = function(name) {
     return JSON.parse(localStorage.getItem(data_key));
   }
 
+  function handle_nocache(url) {
+    /** If we do a hard refresh, a nocache parameter is added
+        to the url so that we can detect it and clear our caches.
+    **/
+    if (url.indexOf('nocache=true') !== -1) {
+      localStorage.removeItem(url_key);
+      localStorage.removeItem(data_key);
+      return url.replace(/[?&]nocache=true/, '');
+    } else {
+      return url;
+    }
+  }
+
   return {
     'load': function(url, callback) {
+      url = handle_nocache(url);
       if (is_cached(url)) {
         callback(get(url));
       } else {

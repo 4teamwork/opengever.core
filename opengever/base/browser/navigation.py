@@ -50,9 +50,17 @@ class JSONNavigation(BrowserView):
 
     def get_caching_url(self):
         url = self.context.absolute_url() + '/navigation.json'
+        params = []
         cache_key = self._navigation_cache_key()
         if cache_key:
-            url = '{0}?cache_key={1}'.format(url, cache_key)
+            params.append('cache_key={0}'.format(cache_key))
+
+        if self.request.getHeader('Cache-Control') == 'no-cache':
+            params.append('nocache=true')
+
+        if params:
+            url = '{0}?{1}'.format(url, '&'.join(params))
+
         return url
 
     def json(self):
