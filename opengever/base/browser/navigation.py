@@ -1,3 +1,4 @@
+from pkg_resources import get_distribution
 from Products.CMFCore.utils import getToolByName
 from Products.Five import BrowserView
 import json
@@ -87,6 +88,8 @@ class JSONNavigation(BrowserView):
         catalog = getToolByName(self.context, 'portal_catalog')
         brains = catalog(query)
         if len(brains) > 0:
-            return str(brains[0].modified.millis())
+            last_modified = str(brains[0].modified.millis())
+            version = get_distribution('opengever.core').version
+            return '-'.join((version, last_modified))
         else:
             return None
