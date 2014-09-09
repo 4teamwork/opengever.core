@@ -10,25 +10,24 @@ $(function() {
   var root_path = filetree.data()['root_path'];
   var context_path = filetree.attr('data-context_path');
 
-  $.ajax({
-    dataType: 'json',
-    url: $('.portletTreePortlet').data('navigation-url'),
-    cache: true,
-    success: function(tree_data) {
-      $('dl.portletTreePortlet ul.filetree').html('');
-      navtree = make_tree(tree_data, {
-        render_condition: function() {
-          return this.depth === 0 || expand_store.is_expanded(this.parent);
-        },
-        onclick: function(node, event) {
-          expand_store.expand(node);
-        }
+  json_cache = new LocalStorageJSONCache('navigation');
+  json_cache.load(
+      $('.portletTreePortlet').data('navigation-url'),
+      function(tree_data) {
+        $('dl.portletTreePortlet ul.filetree').html('');
+        navtree = make_tree(tree_data, {
+          render_condition: function() {
+            return this.depth === 0 || expand_store.is_expanded(this.parent);
+          },
+          onclick: function(node, event) {
+            expand_store.expand(node);
+          }
+        });
+        navtree.render('dl.portletTreePortlet ul.filetree');
+        navtree.selectCurrent(find_parent_node_for_path(context_path));
+        resize_treeportlet_height();
+        scroll_to_selected_item(filetree);
       });
-      navtree.render('dl.portletTreePortlet ul.filetree');
-      navtree.selectCurrent(find_parent_node_for_path(context_path));
-      resize_treeportlet_height();
-      scroll_to_selected_item(filetree);
-    }});
 
   $('ul.filetree a.toggleNav').live('click', function(e){
     e.preventDefault();

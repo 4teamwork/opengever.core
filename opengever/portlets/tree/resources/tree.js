@@ -190,3 +190,47 @@ ExpandStore = function(cookie_name, identifier_key) {
     }
   };
 };
+
+
+LocalStorageJSONCache = function(name) {
+  /** The LocalStorageJSONCache stores JSON data from an AJAX request
+      in the browser's localStorage until it changes.
+      The URL **must** contain a cache key for invalidation as param,
+      otherwise we have an infinite cache!
+      **/
+
+  var url_key = 'og-' + name + '-url';
+  var data_key = 'og-' + name + '-data';
+
+  function is_cached(url) {
+    return Modernizr.localstorage && localStorage.getItem(url_key) == url;
+  }
+
+  function set(url, data) {
+    if (Modernizr.localstorage) {
+      localStorage.setItem(url_key, url);
+      localStorage.setItem(data_key, data);
+    }
+  }
+
+  function get(url) {
+    return JSON.parse(localStorage.getItem(data_key));
+  }
+
+  return {
+    'load': function(url, callback) {
+      if (is_cached(url)) {
+        callback(get(url));
+      } else {
+        $.ajax({
+          dataType: 'text',  // we want to store it in localStorage
+          url: url,
+          cache: true,
+          success: function(data) {
+            callback(JSON.parse(data));
+            set(url, data);
+          }
+        });
+      }
+    }};
+};
