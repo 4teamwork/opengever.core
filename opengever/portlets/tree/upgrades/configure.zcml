@@ -1,5 +1,6 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:upgrade-step="http://namespaces.zope.org/ftw.upgrade">
 
   <include package="ftw.upgrade" file="meta.zcml" />
@@ -10,6 +11,15 @@
       source="1"
       destination="1001"
       directory="profiles/1001"
+      />
+
+  <genericsetup:upgradeStep
+      title="Uninstall ftw.treeview."
+      description=""
+      source="1001"
+      destination="1002"
+      handler=".to1002.UninstallTreeview"
+      profile="opengever.portlets.tree:default"
       />
 
 </configure>
