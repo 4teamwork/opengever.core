@@ -14,12 +14,12 @@ class TestMakeTreeByPath(TestCase):
         expected = [
             {'path': '/one/two',
              'nodes': [
-                    {'path': '/one/two/copy-of-three',
-                     'nodes': []},
                     {'path': '/one/two/three',
                      'nodes': [
                             {'path': '/one/two/three/four',
-                             'nodes': []}]}]}]
+                             'nodes': []}]},
+                    {'path': '/one/two/copy-of-three',
+                     'nodes': []}]}]
 
         self.assert_json_equal(expected, make_tree_by_path(input))
 
