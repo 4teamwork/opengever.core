@@ -12,11 +12,12 @@ function Tree(nodes, config) {
   }, config);
 
   this.render = function(selector) {
+    var temporary_root = $('<ul/>');
     tree_root = $(selector);
-
     $(this.nodes()).each(function() {
-      tree.render_node_into_container.apply(this, [tree_root]);
+      tree.render_node_into_container.apply(this, [temporary_root]);
     });
+    temporary_root.find('>*').appendTo(tree_root);
   };
 
   this.render_node = function() {
