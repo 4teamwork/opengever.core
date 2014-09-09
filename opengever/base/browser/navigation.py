@@ -37,6 +37,7 @@ class JSONNavigation(BrowserView):
         response = self.request.response
         response.setHeader('Content-Type', 'application/json')
         response.setHeader('X-Theme-Disabled', 'True')
+        response.enableHTTPCompression(REQUEST=self.request)
 
         if self.request.get('cache_key'):
             # Only cache when there is a cache_key in the request.
