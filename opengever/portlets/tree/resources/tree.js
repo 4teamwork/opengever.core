@@ -32,7 +32,7 @@ function Tree(nodes, config) {
     }
     var $list_item = $('<li/>');
     if (this.nodes && this.nodes.length > 0) {
-      $list_item.append('<a href="#" class="toggleNav">&nbsp;</a>')
+      $list_item.append('<a href="#" class="toggleNav">&nbsp;</a>');
     }
     $container.append($list_item);
     var $link = $('<a />').text(this.text).attr('href', this.path);
@@ -101,7 +101,7 @@ function Tree(nodes, config) {
   this.each = function(callback) {
     function recurse(depth, parent) {
       callback.apply(this, [depth, parent]);
-      var parent = this;
+      parent = this;
       $(this.nodes).each(function() {recurse.apply(this, [depth + 1, parent]);});
     }
     $(this.nodes()).each(function() {recurse.apply(this, [0, null]);});
@@ -111,7 +111,7 @@ function Tree(nodes, config) {
     this.each(function() {
       for(var name in condition) {
         if (this[name] != condition[name]) {
-          return;
+          return null;
         }
       }
       return callback.apply(this);
