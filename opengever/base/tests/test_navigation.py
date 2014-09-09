@@ -3,6 +3,8 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.testing import FunctionalTestCase
+from plone.uuid.interfaces import IUUID
+import json
 
 
 class TestNavigation(FunctionalTestCase):
@@ -22,9 +24,25 @@ class TestNavigation(FunctionalTestCase):
     @browsing
     def test_json_is_valid(self, browser):
         root = create(Builder('repository_root'))
-        create(Builder('repository').within(root).titled('The Folder'))
+        folder = create(Builder('repository')
+                        .titled('The Folder')
+                        .within(root))
+        subfolder = create(Builder('repository')
+                           .titled('The Sub Folder')
+                           .within(folder))
+
         browser.login().visit(root, view='navigation.json')
-        self.assertEqual('0 The Folder', browser.json[0]['text'])
+        self.assert_json_equal(
+            [{"text": "1. The Folder",
+              "uid": IUUID(folder),
+              "path": '/'.join(folder.getPhysicalPath()),
+              "nodes": [{"text": "1.1. The Sub Folder",
+                         "nodes": [],
+                         "uid": IUUID(subfolder),
+                         "path": '/'.join(subfolder.getPhysicalPath()),
+                         }],
+              }],
+            browser.json)
 
     @browsing
     def test_caching_headers_are_only_set_with_cache_key(self, browser):
@@ -46,3 +64,10 @@ class TestNavigation(FunctionalTestCase):
         yield
         after = value_callback()
         self.assertNotEqual(before, after, msg)
+
+    def assert_json_equal(self, expected, got, msg=None):
+        pretty = {'sort_keys': True, 'indent': 4, 'separators': (',', ': ')}
+        expected_json = json.dumps(expected, **pretty)
+        got_json = json.dumps(got, **pretty)
+        self.maxDiff = None
+        self.assertMultiLineEqual(expected_json, got_json, msg)

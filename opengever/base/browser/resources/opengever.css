@@ -14,8 +14,8 @@ dl.portlet.portletTreePortlet dd.portletItem {
 }
 dl.portlet.portletTreePortlet li {
   margin: 0;
-  padding-top: 0;
-  padding-bottom: 0;
+  padding: 0;
+  padding-left: 16px;
 }
 #container dl.portlet ul.filetree li a,
 dl.portlet ul.filetree ul.navTree li a {
@@ -23,7 +23,7 @@ dl.portlet ul.filetree ul.navTree li a {
 }
 dl.portlet.portletTreePortlet .filetree a.current,
 dl.portlet.portletTreePortlet .filetree a.inPath:last-child {
-  background: #CCC;
+  background: #DDD;
 }
 
 dl.portlet ul.filetree ul.folded {

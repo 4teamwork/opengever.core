@@ -62,7 +62,7 @@
     </configure>
 
     <browser:page
-        for="*"
+        for="opengever.repository.repositoryroot.IRepositoryRoot"
         name="navigation.json"
         class=".navigation.JSONNavigation"
         permission="zope2.View"
