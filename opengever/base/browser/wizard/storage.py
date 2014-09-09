@@ -4,6 +4,7 @@ from datetime import datetime
 from datetime import timedelta
 from five import grok
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
+from opengever.base.utils import ok_response
 from opengever.ogds.base.utils import remote_request
 from persistent.dict import PersistentDict
 from zope.annotation.interfaces import IAnnotations
@@ -90,7 +91,4 @@ class ReceiveWizardDataSet(grok.View):
 
         getUtility(IWizardDataStorage).update(key, data)
 
-        # Set correct content type for text response
-        self.request.response.setHeader("Content-type", "tex/plain")
-
-        return 'OK'
+        return ok_response()

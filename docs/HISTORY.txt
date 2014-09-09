@@ -4,6 +4,9 @@ Changelog
 3.4.2 (unreleased)
 ------------------
 
+- Set content-type correctly for ok_response in remote views.
+  [phgross]
+
 - Make reference_prefix_manager deal properly with already deleted objects.
   [phgross]
 
