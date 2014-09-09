@@ -129,6 +129,9 @@ function Tree(nodes, config) {
   };
 
   this.selectCurrent = function(node) {
+    if (!node) {
+      return;
+    }
     tree.render_node.apply(node);
 
     tree_root.find('.current').map(function() {

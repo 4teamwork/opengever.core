@@ -67,7 +67,7 @@ $(function() {
   }
 
   function scroll_to_selected_item(tree) {
-    var position = tree.find('a.inPath:last').position();
+    var position = tree.find('a.current').position();
     if (position) {
       $('.portletTreePortlet dd.portletItem').scrollTop(position.top - 60);
     }
