@@ -3,6 +3,9 @@ from ftw.builder import create
 from ooxml_docprops import read_properties
 from opengever.dossier.docprops import DocPropertyWriter
 from opengever.dossier.docprops import TemporaryDocFile
+from opengever.journal.handlers import DOC_PROPERTIES_UPDATED
+from opengever.journal.tests.utils import get_journal_entry
+from opengever.journal.tests.utils import get_journal_length
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 
@@ -87,6 +90,10 @@ class TestDocPropertyWriter(FunctionalTestCase):
         with TemporaryDocFile(document.file) as tmpfile:
             properties = read_properties(tmpfile.path)
             self.assertItemsEqual(expected_doc_properties, properties)
+
+        self.assertEqual(1, get_journal_length(document))
+        entry = get_journal_entry(document)
+        self.assertNotEqual(entry['action']['type'], DOC_PROPERTIES_UPDATED)
 
     def test_properties_can_be_added_to_file_without_properties(self):
         document = create(

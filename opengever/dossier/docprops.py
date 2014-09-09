@@ -2,6 +2,7 @@ from Acquisition import aq_parent
 from five import grok
 from ooxml_docprops import is_supported_mimetype
 from ooxml_docprops.properties import OOXMLDocument
+from opengever import journal
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
 from opengever.document.document import IDocumentSchema
@@ -42,11 +43,24 @@ class TemporaryDocFile(object):
 class DocPropertyWriter(object):
 
     @classmethod
+    def is_export_enabled(cls):
+        registry = getUtility(IRegistry)
+        props = registry.forInterface(ITemplateDossierProperties)
+        return props.create_doc_properties
+
+    @classmethod
     def update_properties(cls, document):
-        cls(document).update_doc_properties(only_existing=True)
+        if not cls.is_export_enabled():
+            return
+
+        if cls(document).update_doc_properties(only_existing=True):
+            journal.handlers.doc_properties_updated(document)
 
     @classmethod
     def create_properties(cls, document):
+        if not cls.is_export_enabled():
+            return
+
         cls(document).update_doc_properties(only_existing=False)
 
     def __init__(self, document):
@@ -60,18 +74,19 @@ class DocPropertyWriter(object):
 
     def update_doc_properties(self, only_existing):
         if not self.is_export_enabled():
-            return
+            return False
         if not self.has_file():
-            return
+            return False
         if not self.is_supported_file():
-            return
+            return False
 
-        self.write_properties(only_existing, self.get_properties())
+        return self.write_properties(only_existing, self.get_properties())
 
     def write_properties(self, only_existing, properties):
         with TemporaryDocFile(self.document.file) as tmpfile:
+            changed = False
+
             with OOXMLDocument(tmpfile.path) as doc:
-                changed = False
                 if only_existing:
                     if doc.has_any_property(properties.keys()):
                         doc.update_properties(properties)
@@ -85,10 +100,7 @@ class DocPropertyWriter(object):
                     file_data = processed_tmpfile.read()
                 self.document.file.data = file_data
 
-    def is_export_enabled(self):
-        registry = getUtility(IRegistry)
-        props = registry.forInterface(ITemplateDossierProperties)
-        return props.create_doc_properties
+            return changed
 
     def has_file(self):
         return self.document.file is not None

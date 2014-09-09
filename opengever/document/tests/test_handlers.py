@@ -4,6 +4,8 @@ from ooxml_docprops import read_properties
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.docprops import DocPropertyWriter
 from opengever.dossier.docprops import TemporaryDocFile
+from opengever.journal.handlers import DOC_PROPERTIES_UPDATED
+from opengever.journal.tests.utils import get_journal_entry
 from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.app.testing import TEST_USER_ID
@@ -31,6 +33,13 @@ class TestHandlers(FunctionalTestCase):
     def tearDown(self):
         super(TestHandlers, self).tearDown()
         self.set_docproperty_export_enabled(False)
+
+    def assert_doc_properties_updated_journal_entry_generated(self, document):
+        entry = get_journal_entry(document)
+
+        self.assertEqual(DOC_PROPERTIES_UPDATED, entry['action']['type'])
+        self.assertEqual(TEST_USER_ID, entry['actor'])
+        self.assertEqual('', entry['comments'])
 
     def set_document_property_referencenumber(self):
         DocPropertyWriter(self.doc_with_gever_properties).write_properties(
@@ -80,6 +89,9 @@ class TestHandlers(FunctionalTestCase):
         with TemporaryDocFile(self.doc_with_gever_properties.file) as tmpfile:
             properties = read_properties(tmpfile.path)
             self.assertItemsEqual(expected_doc_properties, properties)
+        self.assert_doc_properties_updated_journal_entry_generated(
+            self.doc_with_gever_properties)
+
     def test_copying_documents_updates_doc_properties(self):
         api.content.copy(source=self.doc_with_gever_properties,
                          target=self.target_dossier)
@@ -98,6 +110,7 @@ class TestHandlers(FunctionalTestCase):
         with TemporaryDocFile(copied_doc.file) as tmpfile:
             properties = read_properties(tmpfile.path)
             self.assertItemsEqual(expected_doc_properties, properties)
+        self.assert_doc_properties_updated_journal_entry_generated(copied_doc)
 
     def test_moving_documents_updates_doc_properties(self):
         api.content.move(source=self.doc_with_gever_properties,
@@ -117,3 +130,4 @@ class TestHandlers(FunctionalTestCase):
         with TemporaryDocFile(moved_doc.file) as tmpfile:
             properties = read_properties(tmpfile.path)
             self.assertItemsEqual(expected_doc_properties, properties)
+        self.assert_doc_properties_updated_journal_entry_generated(moved_doc)
