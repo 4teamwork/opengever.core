@@ -5,7 +5,6 @@ the assign orwarding to a dossier process"""
 from five import grok
 from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
-from opengever.ogds.base.interfaces import IContactInformation
 from opengever.task import _
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
@@ -93,24 +92,16 @@ class ChooseMethodStepForm(AssignToDossierWizardFormMixin, Form):
             method = data.get('method')
 
             if method == 'existing_dossier':
-                info = getUtility(IContactInformation)
-                client = info.get_client_by_id(
-                    self.context.responsible_client)
-
-                url = '%s/@@accept_choose_dossier?oguid=%s' % (
-                    client.public_url,
+                url = '{}/@@accept_choose_dossier?oguid={}'.format(
+                    self.context.get_responsible_org_unit().admin_unit.public_url,
                     oguid)
                 return self.request.RESPONSE.redirect(url)
 
             elif method == 'new_dossier':
-                info = getUtility(IContactInformation)
-                client = info.get_client_by_id(
-                    self.context.responsible_client)
                 oguid = ISuccessorTaskController(self.context).get_oguid()
-
-                url = '/'.join((
-                        client.public_url,
-                        '@@accept_select_repositoryfolder?oguid=%s' % oguid))
+                url = '{}/@@accept_select_repositoryfolder?oguid={}'.format(
+                    self.context.get_responsible_org_unit.admin_unit.public_url,
+                    oguid)
                 return self.request.RESPONSE.redirect(url)
 
     @buttonAndHandler(_(u'button_cancel', default=u'Cancel'))

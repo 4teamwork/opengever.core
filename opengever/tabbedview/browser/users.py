@@ -1,32 +1,27 @@
 from five import grok
 from ftw.table.interfaces import ITableSource, ITableSourceConfig
-from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.actor import Actor
+from opengever.ogds.base.utils import create_session
 from opengever.ogds.models.user import User
 from opengever.tabbedview import _
+from opengever.tabbedview.browser.base import OpengeverTab
 from opengever.tabbedview.browser.listing import ListingView
 from opengever.tabbedview.browser.sqltablelisting import SqlTableSource
-from opengever.tabbedview.browser.tabs import OpengeverTab
 from opengever.tabbedview.helper import boolean_helper
 from opengever.tabbedview.helper import email_helper
 from zope.app.pagetemplate import ViewPageTemplateFile
-from zope.component import getUtility
-from zope.interface import implements, Interface
+from zope.interface import implements
+from zope.interface import Interface
 
 
-def linked_value_helper(item, value):
+def linked_user_helper(item, value):
     """Helper for linking the value with the user profile.
     """
-
-    if not value:
-        return ''
-
-    info = getUtility(IContactInformation)
-    url = info.get_profile_url(getattr(item, 'userid', None))
-
-    if url:
-        return '<a href="%s">%s</a>' % (url, value)
-    else:
+    userid = getattr(item, 'userid', None)
+    url = Actor.user(userid, user=item).get_profile_url()
+    if not url:
         return value
+    return u'<a href="{}">{}</a>'.format(url, value)
 
 
 class IUsersListingTableSourceConfig(ITableSourceConfig):
@@ -48,7 +43,7 @@ class UsersListing(grok.View, OpengeverTab, ListingView):
 
     sort_on = 'lastname'
     sort_order = ''
-    #lazy must be false otherwise there will be no correct batching
+    # lazy must be false otherwise there will be no correct batching
     lazy = False
 
     # the model attributes is used for a dynamic textfiltering functionality
@@ -62,17 +57,17 @@ class UsersListing(grok.View, OpengeverTab, ListingView):
         {'column': 'lastname',
          'column_title': _(u'label_userstab_lastname',
                            default=u'Lastname'),
-         'transform': linked_value_helper},
+         'transform': linked_user_helper},
 
         {'column': 'firstname',
          'column_title': _(u'label_userstab_firstname',
                            default=u'Firstname'),
-         'transform': linked_value_helper},
+         'transform': linked_user_helper},
 
         {'column': 'userid',
          'column_title': _(u'label_userstab_userid',
                            default=u'Userid'),
-         'transform': linked_value_helper},
+         'transform': linked_user_helper},
 
         {'column': 'email',
          'column_title': _(u'label_userstab_email',
@@ -106,8 +101,8 @@ class UsersListing(grok.View, OpengeverTab, ListingView):
     def get_base_query(self):
         """Returns the base search query (sqlalchemy)
         """
-        info = getUtility(IContactInformation)
-        return info._users_query()
+        session = create_session()
+        return session.query(User)
 
 
 class UsersListingTableSource(SqlTableSource):
@@ -116,3 +111,7 @@ class UsersListingTableSource(SqlTableSource):
 
     grok.implements(ITableSource)
     grok.adapts(IUsersListingTableSourceConfig, Interface)
+
+    searchable_columns = [User.lastname, User.firstname, User.userid,
+                          User.email, User.phone_office, User.department,
+                          User.directorate]

@@ -31,7 +31,7 @@ class TestOverview(FunctionalTestCase):
         expect = [['Document Date', date_format_helper(get_header_date(mail))],
                   ['Document Type', ''],
                   ['Author', get_author_by_email(mail)],
-                  ['creator', '(test_user_1_)'],
+                  ['creator', 'Test User (test_user_1_)'],
                   ['Description', ''],
                   ['Foreign Reference', ''],
                   ['Original message', u'testmail.eml \u2014 1 KB Download copy'],

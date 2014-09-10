@@ -1,28 +1,7 @@
 from zope import schema
 from zope.interface import Attribute
 from zope.interface import Interface
-
 import ldap
-
-
-class IUser(Interface):
-    """Marker interface for users.
-    """
-
-
-class IGroup(Interface):
-    """Marker interface for groups.
-    """
-
-
-class IClient(Interface):
-    """Marker interface for clients.
-    """
-
-
-class IGroup(Interface):
-    """Marker interface for groups.
-    """
 
 
 class IOGDSUpdater(Interface):
@@ -122,20 +101,13 @@ class ILDAPSearch(Interface):
         """
 
 
-class IClientConfiguration(Interface):
-    """p.a.registry interface for configuring a client
-    """
+class IAdminUnitConfiguration(Interface):
 
-    client_id = schema.TextLine(
-        title=u'Client ID',
-        description=u'Enter the unique ID of this client. \
-        It will be used by OGDS (Opengever Global Directory Service) \
-        to identify this client.', )
-
-
-class IContactInformation(Interface):
-    """Contact information utility interface.
-    """
+    current_unit_id = schema.TextLine(
+        title=u'Id of the current Administrative Unit',
+        description=u'The id of this administrative unit. It will be \
+        mapped to the corresponding adminstrative unit configuration \
+        in the OGDS (Opengever Global Directory Service).', )
 
 
 class IClientCommunicator(Interface):

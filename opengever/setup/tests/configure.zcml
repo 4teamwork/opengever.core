@@ -1,0 +1,19 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:inflator="http://namespaces.zope.org/inflator"
+    i18n_domain="opengever.core">
+
+    <include package="zope.i18n" file="meta.zcml" />
+    <include package="Products.GenericSetup" file="meta.zcml" />
+
+    <genericsetup:registerProfile
+        name="units"
+        title="opengever.setup.tests:units"
+        directory="profiles/units"
+        description=""
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+</configure>

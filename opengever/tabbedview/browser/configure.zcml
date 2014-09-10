@@ -36,5 +36,4 @@
           factory=".tooltip_source.OpengeverTabbedviewTooltipSource"
           name="opengever_tabbedview_source" />
 
-
 </configure>

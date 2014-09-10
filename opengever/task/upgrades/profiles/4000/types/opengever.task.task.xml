@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<object name="opengever.task.task"
+        xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+    <action action_id="create_successor"
+            remove="True"
+            category="object_buttons">
+    </action>
+
+    <action action_id="modify_deadline"
+            remove="True"
+            category="object_buttons">
+    </action>
+
+    <action action_id="delegate_task"
+            remove="True"
+            category="object_buttons">
+    </action>
+
+</object>

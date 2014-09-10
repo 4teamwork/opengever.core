@@ -1,6 +1,6 @@
-from Products.CMFCore.utils import getToolByName
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
+from Products.CMFCore.utils import getToolByName
 
 
 class TestContact(FunctionalTestCase):

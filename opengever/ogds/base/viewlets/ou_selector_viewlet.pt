@@ -1,0 +1,28 @@
+<div id="portal-orgunit-selector" i18n:domain="plone" tal:define="active_unit view/get_active_unit">
+
+  <h5 class="hiddenStructure" i18n:translate="heading_client_selector">OrgUnit Selector</h5>
+
+  <dl class="orgunitMenu actionMenu deactivated" id="portal-orgunit-selector-menu" tal:condition="active_unit">
+    <dt class="orgunitMenuHeader actionMenuHeader">
+      <a tal:attributes="href string:#" tal:content="active_unit/label">
+        Org Unit ?
+      </a>
+      <div class="visualClear"><!-- --></div>
+    </dt>
+    <dd class="actionMenuContent orgunitMenuContent" >
+      <ul>
+        <li tal:repeat="unit view/get_units">
+          <tal:define tal:define="is_active python:active_unit.id() == unit.id();
+                                  admin_unit_url unit/admin_unit/public_url;">
+            <span tal:condition="is_active" tal:content="unit/label" class="active" />
+            <a href="" tal:condition="not: is_active" tal:content="unit/label"
+               tal:attributes="href string:${admin_unit_url}/change_org_unit?unit_id=${unit/id}">
+              OrgUnit title
+            </a>
+          </tal:define>
+
+        </li>
+      </ul>
+    </dd>
+  </dl>
+</div>

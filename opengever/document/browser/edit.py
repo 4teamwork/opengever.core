@@ -1,15 +1,15 @@
-from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.interfaces import IPloneSiteRoot
-from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.base.interfaces import IRedirector
 from opengever.document import _
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.behaviors.dossier import IDossierMarker
-from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.actor import Actor
 from opengever.task.task import ITask
-from zope.component import getMultiAdapter, getUtility
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.interfaces import IPloneSiteRoot
+from Products.statusmessages.interfaces import IStatusMessage
+from zope.component import getMultiAdapter
 from zope.interface import Interface
 
 
@@ -110,9 +110,9 @@ class EditingDocument(grok.View):
                         get_redirect_url(self.context))
 
         elif manager.checked_out() is not None:
-            info = getUtility(IContactInformation)
             msg = _(u"The Document is allready checked out by: ${userid}",
-                    mapping={'userid': info.describe(manager.checked_out())})
+                    mapping={'userid':
+                             Actor.lookup(manager.checked_out()).get_label()})
             IStatusMessage(self.request).addStatusMessage(msg, type='error')
             return self.request.RESPONSE.redirect(
                 get_redirect_url(self.context))

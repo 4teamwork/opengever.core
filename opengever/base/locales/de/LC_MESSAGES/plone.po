@@ -14,24 +14,17 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-msgid "Overview"
-msgstr "Übersicht"
+msgid "Add Participant"
+msgstr "Beteiligung hinzufügen"
 
-#: plone.app.search/plone/app/search/search.pt:59
-msgid "Search results"
-msgstr "Suchresultate"
+msgid "Add response"
+msgstr "Antwort"
 
-#: plone.app.search/plone/app/search/search.pt:68
-msgid "Search results for ${term}"
-msgstr "Suchresultate für ${term}"
+msgid "Add task from template"
+msgstr "Standardablauf auslösen"
 
-#: plone.app.search/plone/app/search/browser.py:121
-msgid "alphabetically"
-msgstr "alphabetisch"
-
-#: plone.app.search/plone/app/search/browser.py:119
-msgid "date (newest first)"
-msgstr "Änderungsdatum (absteigend)"
+msgid "Attach remote document"
+msgstr "Kopie Dokument aus eigenem Mandant"
 
 msgid "Cancel Checkout"
 msgstr "Widerrufen"
@@ -44,6 +37,12 @@ msgstr "Auschecken"
 
 msgid "Checkout and edit"
 msgstr "Auschecken / Bearbeiten"
+
+msgid "Create successor task"
+msgstr "Folgeaufgabe erstellen"
+
+msgid "Delegate task"
+msgstr "Delegieren"
 
 msgid "Document state changed to document-state-checked_out"
 msgstr "Dokumentstatus verändert: Ausgecheckt"
@@ -60,11 +59,51 @@ msgstr "Dokument status verändert: Zurückweisen"
 msgid "Document state changed to document-state-working_copy"
 msgstr "Dokumentstatus verändert: Arbeitskopie"
 
+msgid "Dossier state changed to dossier-state-active"
+msgstr "Status des Dossiers geändert zu In Bearbeitung"
+
+msgid "Dossier state changed to dossier-state-archived"
+msgstr "Status des Dossiers geändert zu Archiviert"
+
+msgid "Dossier state changed to dossier-state-inactive"
+msgstr "Status des Dossiers geändert zu Storniert"
+
+msgid "Dossier state changed to dossier-state-resolved"
+msgstr "Status des Dossiers geändert zu Abgeschlossen"
+
 msgid "Edit metadata"
 msgstr "Metadaten bearbeiten"
 
+msgid "Give Filing Number"
+msgstr "Ablagenummer vergeben"
+
+msgid "Modify deadline"
+msgstr "Frist ändern"
+
+msgid "Open tasks report"
+msgstr "Pendenzenliste"
+
+msgid "Overview"
+msgstr "Übersicht"
+
+#: plone.app.search/plone/app/search/search.pt:59
+msgid "Search results"
+msgstr "Suchresultate"
+
+#: plone.app.search/plone/app/search/search.pt:68
+msgid "Search results for ${term}"
+msgstr "Suchresultate für ${term}"
+
+#: plone.app.search/plone/app/search/browser.py:121
+msgid "alphabetically"
+msgstr "alphabetisch"
+
 msgid "button_download"
 msgstr "herunterladen"
+
+#: plone.app.search/plone/app/search/browser.py:119
+msgid "date (newest first)"
+msgstr "Änderungsdatum (absteigend)"
 
 msgid "document-state-checked_out"
 msgstr "Ausgecheckt"
@@ -89,27 +128,6 @@ msgstr "Auschecken"
 
 msgid "document-transition-reject"
 msgstr "Zurückweisen"
-
-msgid "label_reset"
-msgstr "zurücksetzen"
-
-msgid "Add Participant"
-msgstr "Beteiligung hinzufügen"
-
-msgid "Dossier state changed to dossier-state-active"
-msgstr "Status des Dossiers geändert zu In Bearbeitung"
-
-msgid "Dossier state changed to dossier-state-archived"
-msgstr "Status des Dossiers geändert zu Archiviert"
-
-msgid "Dossier state changed to dossier-state-inactive"
-msgstr "Status des Dossiers geändert zu Storniert"
-
-msgid "Dossier state changed to dossier-state-resolved"
-msgstr "Status des Dossiers geändert zu Abgeschlossen"
-
-msgid "Give Filing Number"
-msgstr "Ablagenummer vergeben"
 
 msgid "document_with_template"
 msgstr "Dokument aus Vorlage"
@@ -162,16 +180,20 @@ msgstr "Abschliessen"
 msgid "forwarding-transition-reassign"
 msgstr "Weiterleiten"
 
-msgid "forwarding-transition-refuse"
-msgstr "Ablehnen"
-
 msgid "forwarding-transition-reassign-refused"
 msgstr "Weiterleiten"
 
+msgid "forwarding-transition-refuse"
+msgstr "Ablehnen"
+
 msgid "inbox-state-default"
 msgstr "Offen"
-msgid "Open tasks report"
-msgstr "Pendenzenliste"
+
+msgid "label_actions_menu"
+msgstr "Weitere Aktionen"
+
+msgid "label_reset"
+msgstr "zurücksetzen"
 
 msgid "repositoryfolder-state-active"
 msgstr "aktiv"
@@ -185,26 +207,8 @@ msgstr "aktivieren"
 msgid "repositoryfolder-transition-inactivate"
 msgstr "deaktivieren"
 
-msgid "label_actions_menu"
-msgstr "Weitere Aktionen"
-
 msgid "save attachments"
 msgstr "Anhänge speichern"
-
-msgid "Add response"
-msgstr "Antwort"
-
-msgid "Attach remote document"
-msgstr "Kopie Dokument aus eigenem Mandant"
-
-msgid "Create successor task"
-msgstr "Folgeaufgabe erstellen"
-
-msgid "Delegate task"
-msgstr "Delegieren"
-
-msgid "Modify deadline"
-msgstr "Frist ändern"
 
 msgid "task-state-cancelled"
 msgstr "Storniert"
@@ -230,11 +234,17 @@ msgstr "Abgeschlossen"
 msgid "task-transition-cancelled-open"
 msgstr "Wieder eröffnen"
 
+msgid "task-transition-delegate"
+msgstr "Delegieren"
+
 msgid "task-transition-in-progress-resolved"
 msgstr "Erledigen"
 
 msgid "task-transition-in-progress-tested-and-closed"
 msgstr "Abschliessen"
+
+msgid "task-transition-modify-deadline"
+msgstr "Frist ändern"
 
 msgid "task-transition-open-cancelled"
 msgstr "Stornieren"
@@ -263,9 +273,6 @@ msgstr "Überarbeiten"
 msgid "task-transition-resolved-tested-and-closed"
 msgstr "Abschliessen"
 
-msgid "Add task from template"
-msgstr "Standardablauf auslösen"
-
 msgid "tasktemplate-state-active"
 msgstr "Aktiv"
 
@@ -280,7 +287,4 @@ msgstr "Deaktivieren"
 
 msgid "tasktemplatefolder-transition-inactiv-activ"
 msgstr "Aktivieren"
-
-msgid "Search OneGov Gever"
-msgstr "OneGov GEVER durchsuchen"
 

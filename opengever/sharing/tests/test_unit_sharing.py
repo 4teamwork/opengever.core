@@ -1,12 +1,9 @@
-from Products.CMFDefault.MembershipTool import MembershipTool
 from mocker import ANY
-from opengever.ogds.base.interfaces import IContactInformation
 from opengever.sharing.behaviors import IDossier
 from opengever.sharing.browser.sharing import OpengeverSharingView
-from opengever.sharing.interfaces import ISharingConfiguration
 from plone.app.workflow.interfaces import ISharingPageRole
 from plone.mocktestcase import MockTestCase
-from plone.registry.interfaces import IRegistry
+from Products.CMFDefault.MembershipTool import MembershipTool
 from zope.interface import directlyProvides
 
 
@@ -138,62 +135,6 @@ class TestOpengeverSharing(MockTestCase):
         self.assertTrue(
             not 'AuthenticatedUsers' in [r.get('id') for r in results])
 
-    def test_principal_search_results(self):
-        # Context
-        context = self.create_dummy()
-        mock_context = self.mocker.proxy(context)
-
-        # Request
-        request = self.create_dummy()
-        mock_request = self.mocker.proxy(request)
-
-        # Sharing view
-        _principal_search_results = self.mocker.replace(
-            'plone.app.workflow.browser.sharing.SharingView._principal_search_results')
-
-        #contact info mock
-        utility_mock = self.mocker.mock()
-        self.mock_utility(utility_mock, IContactInformation)
-
-        #registry mock
-        registry_mock = self.mocker.mock()
-        self.mock_utility(registry_mock, IRegistry)
-        reg_proxy_mock = self.mocker.mock()
-        self.expect(
-            registry_mock.forInterface(ISharingConfiguration)).result(reg_proxy_mock)
-
-        self.expect(reg_proxy_mock.black_list_prefix).result(u'^og_').count(0, None)
-        self.expect(reg_proxy_mock.white_list_prefix).result(u'^og_ska-arch').count(0, None)
-
-        user1 = self.create_dummy(userid='sb2m1')
-        user2 = self.create_dummy(userid='sb1m1')
-
-        self.expect(utility_mock.list_assigned_users()).result([user1, user2])
-
-        self.expect(
-            _principal_search_results(ANY, ANY, ANY, ANY, ANY, ANY)).result(
-            [{'type': 'user', 'id': 'sb2m1', 'roles': {u'Publisher': False, u'Administrator': False, u'Editor': False, u'Reader': False, u'Contributor': False, u'Reviewer': False}, 'title': 'Sachbearbeiter2 Mandant1'},
-             {'type': 'user', 'id': 'sb1m1', 'roles': {u'Publisher': False, u'Administrator': False, u'Editor': False, u'Reader': False, u'Contributor': False, u'Reviewer': False}, 'title': 'Sachbearbeiter1 Mandant1'},
-             {'type': 'user', 'id': 'sb1m2', 'roles': {u'Publisher': False, u'Administrator': False, u'Editor': False, u'Reader': False, u'Contributor': False, u'Reviewer': False}, 'title': 'Leitung1 Mandant1'},
-             {'type': 'user', 'id': 'sb2m2', 'roles': {u'Publisher': False, u'Administrator': False, u'Editor': False, u'Reader': False, u'Contributor': False, u'Reviewer': False}, 'title': 'Sekretariat1 Mandant1'},
-             {'type': 'group', 'id': 'other_group', 'roles': {u'Publisher': False, u'Administrator': False, u'Editor': False, u'Reader': False, u'Contributor': False, u'Reviewer': False}, 'title': 'Administrator1 Mandant1'},
-             {'type': 'group', 'id': 'og_ska-arch_users', 'roles': {u'Publisher': False, u'Administrator': False, u'Editor': False, u'Reader': False, u'Contributor': False, u'Reviewer': False}, 'title': 'Users of SKA ARCH'},
-             {'type': 'group', 'id': 'og_bd-arp_users', 'roles': {u'Publisher': False, u'Administrator': False, u'Editor': False, u'Reader': False, u'Contributor': False, u'Reviewer': False}, 'title': 'Users of BD.ARP'},
-             {'type': 'group', 'id': 'og_bd-arp_og_ska-arch-users', 'roles': {u'Publisher': False, u'Administrator': False, u'Editor': False, u'Reader': False, u'Contributor': False, u'Reviewer': False}, 'title': 'Users of BD.ARP'},
-             ])
-
-        self.replay()
-
-        sharing = OpengeverSharingView(mock_context, mock_request)
-        principals = sharing._principal_search_results(
-            None, None, None, None, None)
-
-        # the wrapper shouldn't return the users wich aren't assigned to this client.
-        # and also the groups from other og cliens shouldn't be returned.
-        self.assertTrue(
-            [principal.get('id') for principal in principals],
-            ['sb2m1', 'sb1m1', 'other_group', 'og_ska-arch_users'])
-
     def base_role_settings(self, roles):
         """ Test role_settings method of OpengeverSharingView class
         """
@@ -244,4 +185,3 @@ class TestOpengeverSharing(MockTestCase):
         self.replay()
 
         return mock_sharing.role_settings()
-

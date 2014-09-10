@@ -8,7 +8,9 @@
     i18n_domain="opengever.ogds.base"
     package="opengever.ogds.base">
 
+  <include package=".browser" />
   <include package=".sections" />
+  <include package=".viewlets" />
   <include package=".upgrades" />
 
   <grok:grok package="." />
@@ -51,17 +53,5 @@
       profile="opengever.ogds.base:example"
       handler=".hooks.example_installed"
       />
-
-  <class class="opengever.ogds.models.user.User">
-      <implements interface="opengever.ogds.base.interfaces.IUser" />
-  </class>
-
-  <class class="opengever.ogds.models.client.Client">
-      <implements interface="opengever.ogds.base.interfaces.IClient" />
-  </class>
-
-  <class class="opengever.ogds.models.group.Group">
-      <implements interface="opengever.ogds.base.interfaces.IGroup" />
-  </class>
 
 </configure>

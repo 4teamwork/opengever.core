@@ -1,14 +1,17 @@
-from Products.CMFPlone.interfaces import IPloneSiteRoot
-from Products.CMFCore.utils import getToolByName
-from StringIO import StringIO
 from opengever.ogds.base.exceptions import ClientNotFound
-from opengever.ogds.base.interfaces import IClientConfiguration
-from opengever.ogds.base.interfaces import IContactInformation
-from opengever.ogds.models.client import Client
-from plone.memoize import ram
+from opengever.ogds.base.interfaces import IAdminUnitConfiguration
+from opengever.ogds.base.ou_selector import AnonymousOrgUnitSelector
+from opengever.ogds.base.ou_selector import NoAssignedUnitsOrgUnitSelector
+from opengever.ogds.base.ou_selector import OrgUnitSelector
+from opengever.ogds.models.service import OGDSService
+from plone import api
 from plone.registry.interfaces import IRegistry
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.interfaces import IPloneSiteRoot
+from StringIO import StringIO
 from z3c.saconfig import named_scoped_session
-from zope.app.component.hooks import getSite, setSite
+from zope.app.component.hooks import getSite
+from zope.app.component.hooks import setSite
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 import json
@@ -33,54 +36,58 @@ def create_session():
     return Session()
 
 
-def get_current_client():
-    """Returns the current client.
-    """
-
-    session = create_session()
-    client_id = get_client_id()
-
-    if not client_id:
-        raise ValueError('No client configured')
-
-    client = session.query(Client).get(client_id)
-    if not client:
-        raise ValueError('Current client not found')
-    return client
+def ogds_service():
+    return PloneOGDSService(create_session())
 
 
-def client_id_cachekey(method):
-    """chackekey for the get_client_id, wich is unique for every plone site.
-    So a setup with multiple opengever sites on one plone instance is possible.
-    """
+class PloneOGDSService(OGDSService):
+    """Extends ogds-service with plone-specific helper methods."""
 
-    context = getSite()
+    def _get_current_user_id(self):
+        return api.user.get_current().getId()
 
-    if not IPloneSiteRoot.providedBy(context):
-        for obj in context.aq_chain:
-            if IPloneSiteRoot.providedBy(obj):
-                context = obj
-                break
+    def fetch_current_user(self):
+        userid = self._get_current_user_id()
+        return self.fetch_user(userid) if userid else None
 
-    return 'get_client_id:%s' % (context.id)
-
-
-@ram.cache(client_id_cachekey)
-def get_client_id():
-    """Returns the client_id of the current client.
-    """
-
-    registry = getUtility(IRegistry)
-    proxy = registry.forInterface(IClientConfiguration)
-    return proxy.client_id
+    def assigned_org_units(self, userid=None, omit_current=False):
+        if userid is None:
+            userid = self._get_current_user_id()
+        org_units = super(PloneOGDSService, self).assigned_org_units(userid)
+        if omit_current:
+            current_org_unit = get_current_org_unit()
+            org_units = [each for each in org_units
+                         if each != current_org_unit]
+        return org_units
 
 
-def client_public_url_cachekey(method):
-    """chackekey for the get_client_public_url, wich is unique for every plone
-    site. So a setup with multiple opengever sites on one plone instance is
+def get_ou_selector():
+    site = getSite()
+    sdm = site.session_data_manager
+    storage = sdm.getSessionData(create=True)
+    mtool = getToolByName(site, 'portal_membership')
+    member = mtool.getAuthenticatedMember()
+
+    if mtool.isAnonymousUser():
+        return AnonymousOrgUnitSelector()
+
+    if member.has_role('Manager'):
+        units = ogds_service().all_org_units()
+    else:
+        units = ogds_service().assigned_org_units(member.getId())
+
+    if not units:
+        return NoAssignedUnitsOrgUnitSelector()
+
+    return OrgUnitSelector(storage, units)
+
+
+def admin_unit_cachekey(method):
+    """chackekey for `get_current_admin_unit` wich is unique for every plone
+    site. This makes a setup with multiple opengever sites on one zope
     possible.
-    """
 
+    """
     context = getSite()
 
     if not IPloneSiteRoot.providedBy(context):
@@ -89,30 +96,33 @@ def client_public_url_cachekey(method):
                 context = obj
                 break
 
-    return 'get_client_public_url:%s' % (context.id)
+    return 'get_current_admin_unit:%s' % (context.id)
 
 
-@ram.cache(client_public_url_cachekey)
-def get_client_public_url():
-    """Returns the public_url of the current client.
-    """
-
-    return get_current_client().public_url
+def get_current_org_unit():
+    return get_ou_selector().get_current_unit()
 
 
-def remote_json_request(target_client_id, viewname, path='',
+# @ram.cache(admin_unit_cachekey)
+def get_current_admin_unit():
+    registry = getUtility(IRegistry)
+    proxy = registry.forInterface(IAdminUnitConfiguration)
+    return ogds_service().fetch_admin_unit(proxy.current_unit_id)
+
+
+def remote_json_request(target_admin_unit_id, viewname, path='',
                         data={}, headers={}):
     """ Sends a request to a json-action on a remote zope instance,
     decodes the response with json and returns it.
 
-    :target_client_id: remote client id
+    :target_admin_unit_id: id of the target AdminUnit
     :viewname: name of the view to call on the target
     :path: context path relative to site root
     :data: dict of additional data to send
     :headers: dict of additional headers to send
     """
 
-    response = remote_request(target_client_id, viewname, path=path,
+    response = remote_request(target_admin_unit_id, viewname, path=path,
                               data=data, headers=headers)
     data = response.read()
     return json.loads(data)
@@ -140,7 +150,7 @@ def brain_is_contact(brain):
         return False
 
 
-def remote_request(target_client_id, viewname, path='', data={}, headers={}):
+def remote_request(target_admin_unit_id, viewname, path='', data={}, headers={}):
     """ Sends a request to another zope instance
     Returns a response stream
 
@@ -148,7 +158,7 @@ def remote_request(target_client_id, viewname, path='', data={}, headers={}):
     In the request there is a attribute '__cortex_ac' which is set to the
     username of the current user.
 
-    :target_client_id: remote client id
+    :target_admin_unit_id: id of the target AdminUnit
     :viewname: name of the view to call on the target
     :path: context path relative to site root
     :data: dict of additional data to send
@@ -162,7 +172,7 @@ def remote_request(target_client_id, viewname, path='', data={}, headers={}):
 
     site = getSite()
 
-    if get_client_id() == target_client_id:
+    if get_current_admin_unit().id() == target_admin_unit_id:
         # do not connect to the site itself but do a restrictedTraverse
         request = getRequest()
 
@@ -203,10 +213,9 @@ def remote_request(target_client_id, viewname, path='', data={}, headers={}):
         return StringIO(data)
 
     site = getSite()
-    info = getUtility(IContactInformation)
-    target = info.get_client_by_id(target_client_id)
+    target_unit = ogds_service().fetch_admin_unit(target_admin_unit_id)
 
-    if not target:
+    if not target_unit:
         raise ClientNotFound()
 
     headers = headers.copy()
@@ -219,15 +228,15 @@ def remote_request(target_client_id, viewname, path='', data={}, headers={}):
     if key not in headers.keys() and member:
         headers[key] = member.getId()
 
-    headers['X-OGDS-CID'] = get_client_id()
+    headers['X-OGDS-AUID'] = get_current_admin_unit().id()
     handler = urllib2.ProxyHandler({})
     opener = urllib2.build_opener(handler)
 
     viewname = viewname.startswith('@@') and viewname or '@@%s' % viewname
     if path:
-        url = os.path.join(target.site_url, path, viewname)
+        url = os.path.join(target_unit.site_url, path, viewname)
     else:
-        url = os.path.join(target.site_url, viewname)
+        url = os.path.join(target_unit.site_url, viewname)
 
     request = urllib2.Request(url,
                               urllib.urlencode(data),

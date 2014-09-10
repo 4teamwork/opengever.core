@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-08-21 14:47+0000\n"
+"POT-Creation-Date: 2014-09-01 15:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,7 +29,7 @@ msgstr ""
 msgid "Save attachments"
 msgstr ""
 
-#: ./opengever/mail/browser/send_document.py:314
+#: ./opengever/mail/browser/send_document.py:313
 msgid "Sent mail filed as '${title}'."
 msgstr ""
 
@@ -174,7 +174,7 @@ msgid "label_file_copy_in_dossier"
 msgstr ""
 
 #. Default: "Journal initialized"
-#: ./opengever/mail/upgrades/to3403.py:7
+#: ./opengever/mail/upgrades/to3406.py:7
 msgid "label_journal_initialized"
 msgstr ""
 
@@ -189,7 +189,7 @@ msgid "label_org_message"
 msgstr ""
 
 #. Default: "see attachment"
-#: ./opengever/mail/browser/send_document.py:279
+#: ./opengever/mail/browser/send_document.py:278
 msgid "label_see_attachment"
 msgstr ""
 

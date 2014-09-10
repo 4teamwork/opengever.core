@@ -9,13 +9,14 @@ from opengever.document import _
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.base import DOSSIER_STATES_CLOSED
-from opengever.ogds.base.interfaces import IContactInformation
-from opengever.tabbedview.browser.tabs import OpengeverTab
+from opengever.ogds.base.actor import Actor
+from opengever.tabbedview.browser.base import OpengeverTab
 from plone.directives.dexterity import DisplayForm
 from Products.CMFCore.utils import getToolByName
 from z3c.form.browser.checkbox import SingleCheckBoxWidget
 from zope.app.pagetemplate import ViewPageTemplateFile
-from zope.component import getUtility, queryMultiAdapter
+from zope.component import queryMultiAdapter
+
 
 try:
     from opengever.pdfconverter.behaviors.preview import IPreviewMarker
@@ -151,17 +152,14 @@ class Overview(DisplayForm, OpengeverTab):
         return template(self)
 
     def render_creator_link(self):
-        info = getUtility(IContactInformation)
-        return info.render_link(self.context.Creator())
+        return Actor.user(self.context.Creator()).get_link()
 
     def render_checked_out_link(self):
         manager = queryMultiAdapter(
             (self.context, self.request), ICheckinCheckoutManager)
 
         if manager.checked_out():
-            info = getUtility(IContactInformation)
-            return info.render_link(manager.checked_out())
-
+            return Actor.user(manager.checked_out()).get_link()
         return ''
 
     def get_css_class(self):

@@ -1,22 +1,40 @@
+from AccessControl.PermissionRole import rolesForPermissionOn
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from collective import dexteritytextindexer
-from datetime import datetime, timedelta
+from datetime import datetime
+from datetime import timedelta
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
+from ftw.tabbedview.interfaces import ITabbedviewUploadable
+from opengever.base.interfaces import IReferenceNumber
+from opengever.base.interfaces import ISequenceNumber
 from opengever.base.source import DossierPathSourceBinder
+from opengever.globalindex.model.task import Task as TaskModel
+from opengever.globalindex.oguid import Oguid
+from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
-from opengever.ogds.base.interfaces import IContactInformation
-from opengever.ogds.base.utils import get_client_id
+from opengever.ogds.base.utils import get_current_admin_unit
+from opengever.ogds.base.utils import get_current_org_unit
+from opengever.ogds.base.utils import ogds_service
 from opengever.task import _
 from opengever.task import util
 from opengever.task.validators import NoCheckedoutDocsValidator
 from plone.dexterity.content import Container
 from plone.directives import form, dexterity
+from plone.indexer.interfaces import IIndexer
+from Products.CMFCore.permissions import View
+from Products.CMFCore.utils import _mergedLocalRoles
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.utils import safe_unicode
 from z3c.form import validator
 from z3c.form.interfaces import HIDDEN_MODE
-from z3c.relationfield.schema import RelationChoice, RelationList
+from z3c.relationfield.schema import RelationChoice
+from z3c.relationfield.schema import RelationList
 from zope import schema
 from zope.app.intid.interfaces import IIntIds
-from zope.component import getUtility, getMultiAdapter
+from zope.component import getMultiAdapter
+from zope.component import getUtility
 from zope.component import provideAdapter
 from zope.interface import implements
 from zope.schema.vocabulary import getVocabularyRegistry
@@ -86,7 +104,7 @@ class ITask(form.Schema):
                 default=u'Responsible Client'),
         description=_(u'help_responsible_client',
                       default=u''),
-        vocabulary='opengever.ogds.base.ClientsVocabulary',
+        vocabulary='opengever.ogds.base.OrgUnitsVocabularyFactory',
         required=True)
 
     form.widget(responsible=AutocompleteFieldWidget)
@@ -190,7 +208,7 @@ def default_issuer(data):
 
 
 class Task(Container):
-    implements(ITask)
+    implements(ITask, ITabbedviewUploadable)
 
     def __init__(self, *args, **kwargs):
         super(Task, self).__init__(*args, **kwargs)
@@ -212,8 +230,147 @@ class Task(Container):
         return None
 
     @property
-    def client_id(self):
-        return get_client_id()
+    def int_id(self):
+        return getUtility(IIntIds).getId(self)
+
+    @property
+    def oguid(self):
+        return Oguid(admin_unit_id=get_current_admin_unit().id(),
+                     int_id=self.int_id)
+
+    def get_issuer_label(self):
+        return self.get_sql_object().get_issuer_label()
+
+    def get_responsible_actor(self):
+        return Actor.lookup(self.responsible)
+
+    def get_responsible_org_unit(self):
+        return ogds_service().fetch_org_unit(self.responsible_client)
+
+    def get_responsible_admin_unit(self):
+        return self.get_responsible_org_unit().admin_unit
+
+    def get_sql_object(self):
+        return TaskModel.query.by_intid(
+            self.int_id, get_current_admin_unit().id())
+
+    @property
+    def safe_title(self):
+        return safe_unicode(self.title)
+
+    def get_breadcrumb_title(self, max_length):
+        # Generate and store the breadcrumb tooltip
+        breadcrumb_titles = []
+        breadcrumbs_view = getMultiAdapter((self, self.REQUEST),
+                                           name='breadcrumbs_view')
+        for elem in breadcrumbs_view.breadcrumbs():
+            breadcrumb_titles.append(safe_unicode(elem.get('Title')))
+
+        # we prevent to raise database-error, if we have a too long string
+        # Shorten the breadcrumb_title to: mandant1 > repo1 > ...
+        join_value = ' > '
+        end_value = '...'
+
+        max_length -= len(end_value)
+
+        breadcrumb_title = breadcrumb_titles
+        actual_length = 0
+
+        for i, breadcrumb in enumerate(breadcrumb_titles):
+            add_length = len(breadcrumb) + len(join_value) + len(end_value)
+            if (actual_length + add_length) > max_length:
+                breadcrumb_title = breadcrumb_titles[:i]
+                breadcrumb_title.append(end_value)
+                break
+
+            actual_length += len(breadcrumb) + len(join_value)
+        return join_value.join(breadcrumb_title)
+
+    def get_review_state(self):
+        wftool = getToolByName(self, 'portal_workflow')
+        return wftool.getInfoFor(self, 'review_state')
+
+    def get_physical_path(self):
+        url_tool = self.unrestrictedTraverse('@@plone_tools').url()
+        return '/'.join(url_tool.getRelativeContentPath(self))
+
+    def get_is_subtask(self):
+        parent = aq_parent(aq_inner(self))
+        return parent.portal_type == 'opengever.task.task'
+
+    def get_sequence_number(self):
+        return getUtility(ISequenceNumber).get_number(self)
+
+    def get_reference_number(self):
+        return IReferenceNumber(self).get_number()
+
+    def get_containing_dossier(self):
+        #get the containing_dossier value directly with the indexer
+        catalog = getToolByName(self, 'portal_catalog')
+        return getMultiAdapter(
+            (self, catalog), IIndexer, name='containing_dossier')()
+
+    def get_containing_subdossier(self):
+        #get the containing_dossier value directly with the indexer
+        catalog = getToolByName(self, 'portal_catalog')
+        return getMultiAdapter(
+            (self, catalog), IIndexer, name='containing_subdossier')()
+
+    def get_dossier_sequence_number(self):
+        # the dossier_sequence_number index is required for generating lists
+        # of tasks as PDFs (LaTeX) as defined by the customer.
+        dossier_marker = 'opengever.dossier.behaviors.dossier.IDossierMarker'
+
+        path = self.getPhysicalPath()[:-1]
+
+        portal = getToolByName(self, 'portal_url').getPortalObject()
+        portal_path = '/'.join(portal.getPhysicalPath())
+        catalog = getToolByName(self, 'portal_catalog')
+
+        while path and '/'.join(path) != portal_path:
+            brains = catalog({'path': {'query': '/'.join(path),
+                                       'depth': 0},
+                              'object_provides': dossier_marker})
+
+            if len(brains):
+                if brains[0].sequence_number:
+                    return brains[0].sequence_number
+                else:
+                    return None
+            else:
+                path = path[:-1]
+
+        return None
+
+    def get_predecessor_ids(self):
+        if self.predecessor:
+            return self.predecessor.split(':', 1)
+        else:
+            return (None, None,)
+
+    def get_principals(self):
+        # index the principal which have View permission. This is according to the
+        # allowedRolesAndUsers index but it does not car of global roles.
+        allowed_roles = rolesForPermissionOn(View, self)
+        principals = []
+        for principal, roles in _mergedLocalRoles(self).items():
+            for role in roles:
+                if role in allowed_roles:
+                    principals.append(safe_unicode(principal))
+                    break
+        return principals
+
+    def get_task_type_label(self, language=None):
+        # XXX: vocabulary is a contextsourcebinder, we cannot move it to
+        # globalindex.Task for now.
+        if not self.task_type:
+            return ''
+        if language:
+            return util.get_task_type_title(self.task_type, language)
+        else:
+            vocabulary = util.getTaskTypeVocabulary(self)
+            term = vocabulary.getTerm(self.task_type)
+            return term.title
 
 
 @form.default_value(field=ITask['deadline'])
@@ -224,7 +381,7 @@ def deadlineDefaultValue(data):
 
 @form.default_value(field=ITask['responsible_client'])
 def responsible_client_default_value(data):
-    return get_client_id()
+    return get_current_org_unit().id()
 
 
 # XXX
@@ -249,9 +406,8 @@ class AddForm(dexterity.AddForm):
         super(AddForm, self).update()
 
         # omit the responsible_client field and adjust the field description
-        # of the responsible field if there is only one client configured.
-        info = getUtility(IContactInformation)
-        if len(info.get_clients()) <= 1:
+        # of the responsible field if there is only one orgunit configured.
+        if not ogds_service().has_multiple_org_units():
             self.groups[0].widgets['responsible_client'].mode = HIDDEN_MODE
             self.groups[0].widgets['responsible'].field.description = _(
                 u"help_responsible_single_client_setup", default=u"")
@@ -267,8 +423,7 @@ class EditForm(dexterity.EditForm):
 
         # omit the responsible_client field and adjust the field description
         # of the responsible field if there is only one client configured.
-        info = getUtility(IContactInformation)
-        if len(info.get_clients()) <= 1:
+        if not ogds_service().has_multiple_org_units():
             self.groups[0].widgets['responsible_client'].mode = HIDDEN_MODE
             self.groups[0].widgets['responsible'].field.description = _(
                 u"help_responsible_single_client_setup", default=u"")

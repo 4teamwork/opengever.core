@@ -1,19 +1,19 @@
-"""Contains the Code for forwarding content type    """
 from Acquisition import aq_inner, aq_parent
-from Products.CMFCore.interfaces import IActionSucceededEvent
-from Products.statusmessages.interfaces import IStatusMessage
 from datetime import datetime
 from five import grok
 from opengever.inbox import _
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
-from opengever.ogds.base.utils import get_client_id
+from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import _ as task_mf
 from opengever.task.task import ITask, Task
 from plone.directives import form
 from plone.directives.dexterity import AddForm
+from Products.CMFCore.interfaces import IActionSucceededEvent
+from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.interfaces import HIDDEN_MODE
 from zope import schema
 from zope.app.container.interfaces import IObjectAddedEvent
+from zope.i18n import translate
 from zope.interface import implements
 
 
@@ -73,10 +73,18 @@ class Forwarding(Task):
 
     def set_static_task_type(self, value):
         """Marker set function"""
-        # do not file when trying to set the task type - but ignore
+        # do not fail when trying to set the task type - but ignore
         return
 
     task_type = property(get_static_task_type, set_static_task_type)
+
+    def get_task_type_label(self, language=None):
+        label = _('forwarding_task_type', default=u'Forwarding')
+        if language:
+            return translate(label, context=self.REQUEST,
+                             domain='opengever.inbox',
+                             target_language=language)
+        return label
 
 
 class ForwardingAddForm(AddForm):
@@ -104,7 +112,7 @@ class ForwardingAddForm(AddForm):
                   u'Error: Please select at least one document to forward'),
                 type='error')
             redir_url = self.request.get('orig_template',
-                        self.context.absolute_url())
+                                         self.context.absolute_url())
             self.request.RESPONSE.redirect(redir_url)
 
         if paths:
@@ -113,14 +121,14 @@ class ForwardingAddForm(AddForm):
         # put default value for issuer into request
         if not self.request.get('form.widgets.issuer', None):
             self.request.set('form.widgets.issuer',
-                             u'inbox:%s' % get_client_id())
+                             get_current_org_unit().inbox().id())
 
         # put the default responsible into the request
         if not self.request.get('form.widgets.responsible_client', None):
-            client = get_client_id()
-            self.request.set('form.widgets.responsible_client', client)
+            org_unit = get_current_org_unit()
+            self.request.set('form.widgets.responsible_client', org_unit.id())
             self.request.set('form.widgets.responsible',
-                             [(u'inbox:%s' % client).encode('utf-8')])
+                             [org_unit.inbox().id()])
 
         AddForm.update(self)
 

@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<object name="opengever.inbox.forwarding">
+    <property name="immediate_view">../#issued_inbox_tasks</property>
+</object>

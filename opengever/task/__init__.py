@@ -16,3 +16,9 @@ CLOSED_TASK_STATES = [
         'task-state-cancelled',
         'task-state-tested-and-closed',
     ]
+
+FINISHED_TASK_STATES = [
+    'task-state-tested-and-closed',
+    'task-state-rejected',
+    'task-state-cancelled'
+]

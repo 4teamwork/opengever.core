@@ -3,12 +3,13 @@ the successor also completes the predecesser and the user can choose documents
 related to the successor task to deliver to issuer by attaching them to the
 predecessor task.
 """
-from Acquisition import aq_parent, aq_inner
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from five import grok
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.utils import ok_response
-from opengever.globalindex.interfaces import ITaskQuery
+from opengever.globalindex.model.task import Task
 from opengever.ogds.base.interfaces import ITransporter
 from opengever.ogds.base.utils import encode_after_json
 from opengever.ogds.base.utils import remote_request
@@ -173,8 +174,7 @@ class CompleteSuccessorTaskForm(Form):
         # add documents to the response
         response.added_object = PersistentList()
 
-        predecessor = getUtility(ITaskQuery).get_task_by_oguid(
-            self.context.predecessor)
+        predecessor = Task.query.by_oguid(self.context.predecessor)
 
         transporter = getUtility(ITransporter)
         intids = getUtility(IIntIds)
@@ -230,14 +230,14 @@ class CompleteSuccessorTaskForm(Form):
 
         request_data = {'data': json.dumps(data)}
         response = remote_request(
-            predecessor.client_id,
+            predecessor.admin_unit_id,
             '@@complete_successor_task-receive_delivery',
             predecessor.physical_path,
             data=request_data)
 
         if response.read().strip() != 'OK':
             raise Exception('Delivering documents and updating task failed '
-                            'on remote client %s.' % predecessor.client_id)
+                            'on remote client %s.' % predecessor.admin_unit_id)
 
 
 class CompleteSuccessorTask(FormWrapper, grok.View):

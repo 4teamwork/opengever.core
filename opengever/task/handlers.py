@@ -18,7 +18,7 @@ def create_subtask_response(context, event):
     # need to verify that the request was not called by another client.
     request = context.REQUEST
     if request.get_header('X-OGDS-AC', None) or \
-            request.get_header('X-OGDS-CID', None) or \
+            request.get_header('X-OGDS-AUID', None) or \
             request.get('X-CREATING-SUCCESSOR', None):
         return
 

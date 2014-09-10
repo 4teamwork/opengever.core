@@ -2,7 +2,6 @@ from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.tests.byline_base_test import TestBylineBase
-from opengever.testing import create_ogds_user
 from pkg_resources import resource_string
 
 
@@ -14,7 +13,8 @@ class TestMailByline(TestBylineBase):
     def setUp(self):
         super(TestMailByline, self).setUp()
         self.grant('Manager')
-        create_ogds_user('hugo.boss', email='from@example.org')
+
+        create(Builder('fixture').with_hugo_boss(email='from@example.org'))
 
         self.mail = create(Builder('mail')
                            .with_message(MAIL_DATA)
@@ -33,7 +33,7 @@ class TestMailByline(TestBylineBase):
 
     def test_document_byline_reference_number(self):
         ref_number = self.get_byline_value_by_label('Reference Number:')
-        self.assertEquals('OG / 1', ref_number.text_content())
+        self.assertEquals('Client1 / 1', ref_number.text_content())
 
     def test_document_byline_document_author(self):
         document_author = self.get_byline_value_by_label('by:')

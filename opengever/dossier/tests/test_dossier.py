@@ -1,14 +1,10 @@
-from Products.CMFCore.utils import getToolByName
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.contentmenu.menu import FactoriesMenu
 from opengever.mail.behaviors import ISendableDocsContainer
 from opengever.testing import FunctionalTestCase
-from opengever.testing import create_client
-from opengever.testing import create_ogds_user
 from opengever.testing import index_data_for
-from opengever.testing import set_current_client_id
-from plone.app.testing import TEST_USER_ID
+from Products.CMFCore.utils import getToolByName
 
 
 class TestDossier(FunctionalTestCase):
@@ -18,13 +14,7 @@ class TestDossier(FunctionalTestCase):
 
     def setUp(self):
         super(TestDossier, self).setUp()
-        self.setup_ogds()
         self.dossier = self.create_test_dossier()
-
-    def setup_ogds(self):
-        create_client()
-        create_ogds_user(TEST_USER_ID)
-        set_current_client_id(self.portal)
 
     def create_test_dossier(self):
         return create(Builder(self.builder_id))

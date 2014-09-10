@@ -149,6 +149,7 @@
         directory="profiles/2608"
         />
 
+    <!-- 2608 -> 2609 -->
     <genericsetup:registerProfile
         name="2609"
         title="opengever.base: upgrade profile 2609"
@@ -167,6 +168,7 @@
         profile="opengever.base:default"
         />
 
+    <!-- 2609 -> 2610 -->
     <upgrade-step:importProfile
         title="Fix quickupload js bug where active class is not removed."
         profile="opengever.base:default"
@@ -175,6 +177,7 @@
         directory="profiles/2610"
         />
 
+    <!-- 2610 -> 3300 -->
     <upgrade-step:importProfile
         title="Enable GEVER livesearch.js"
         profile="opengever.base:default"
@@ -190,6 +193,15 @@
         source="3300"
         destination="3401"
         directory="profiles/3401"
+        />
+
+    <!-- 3401 -> 4000 -->
+    <upgrade-step:importProfile
+        title="Remove IBaseClientID from registry"
+        profile="opengever.base:default"
+        source="3401"
+        destination="4000"
+        directory="profiles/4000"
         />
 
 </configure>

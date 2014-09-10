@@ -1,21 +1,21 @@
-from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from five import grok
 from opengever.inbox import _
 from opengever.inbox.browser.schema import ISimpleResponseForm
 from opengever.inbox.forwarding import IForwarding
-from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.interfaces import ITransporter
 from opengever.ogds.base.transport import ORIGINAL_INTID_ANNOTATION_KEY
 from opengever.ogds.base.transport import REQUEST_KEY
-from opengever.ogds.base.utils import get_client_id
+from opengever.ogds.base.utils import get_current_org_unit
+from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.base.utils import remote_json_request
 from opengever.task import _ as task_mf
-from opengever.task.browser.accept.utils import _get_yearfolder
+from opengever.task.browser.accept.utils import get_current_yearfolder
 from opengever.task.transporter import IResponseTransporter
 from opengever.task.util import add_simple_response
 from opengever.task.util import get_documents_of_task
 from plone.z3cform import layout
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from z3c.form import button
 from z3c.form.field import Fields
 from z3c.form.form import Form
@@ -42,11 +42,11 @@ class ForwardingRefuseForm(Form):
 
         data, errors = self.extractData()
         if not errors:
-
-            refusing_client = self.context.responsible_client
+            refusing_client = self.context.get_responsible_admin_unit()
             self.change_workflow_sate()
             self.add_response(data.get('text'))
-            copy_url = self.store_copy_in_remote_yearfolder(refusing_client)
+            copy_url = self.store_copy_in_remote_yearfolder(
+                refusing_client.id())
             self.reset_responsible()
             notify(ObjectModifiedEvent(self.context))
 
@@ -59,7 +59,7 @@ class ForwardingRefuseForm(Form):
     def reset_responsible(self):
         """Set responsible back to the issuer respectively current inbox."""
 
-        self.context.responsible_client = get_client_id()
+        self.context.responsible_client = get_current_org_unit().id()
         self.context.responsible = u'inbox:%s' % (
             self.context.responsible_client)
 
@@ -73,13 +73,13 @@ class ForwardingRefuseForm(Form):
         wf_tool = getToolByName(self.context, 'portal_workflow')
         wf_tool.doActionFor(self.context, 'forwarding-transition-refuse')
 
-    def store_copy_in_remote_yearfolder(self, refusing_client_id):
+    def store_copy_in_remote_yearfolder(self, refusing_unit_id):
         transporter = getUtility(ITransporter)
         jsondata = json.dumps(transporter._extract_data(self.context))
         request_data = {REQUEST_KEY: jsondata, }
 
         response = remote_json_request(
-            refusing_client_id, '@@store_refused_forwarding',
+            refusing_unit_id, '@@store_refused_forwarding',
             data=request_data)
 
         if response.get('status') not in [
@@ -92,20 +92,18 @@ class ForwardingRefuseForm(Form):
             # transport responses
             response_transporter = IResponseTransporter(self.context)
             response_transporter.send_responses(
-                refusing_client_id, remote_task)
+                refusing_unit_id, remote_task)
 
             # transport documents
             for document in get_documents_of_task(self.context):
                 transporter.transport_to(
-                    document, refusing_client_id, remote_task)
+                    document, refusing_unit_id, remote_task)
 
-        return self.get_remote_task_url(refusing_client_id, remote_task)
+        return self.get_remote_task_url(refusing_unit_id, remote_task)
 
     def get_remote_task_url(self, refusing_client_id, remote_task):
-        info = getUtility(IContactInformation)
-        return '%s/%s' % (
-            info.get_client_by_id(refusing_client_id).public_url,
-            remote_task)
+        refusing_org_unit = ogds_service().fetch_org_unit(refusing_client_id)
+        return '%s/%s' % (refusing_org_unit.public_url, remote_task)
 
 
 class RefuseForwardingView(layout.FormWrapper, grok.View):
@@ -152,10 +150,7 @@ class StoreRefusedForwardingView(grok.View):
 
     def get_yearfolder(self):
         if not self.yearfolder:
-            catalog = getToolByName(self.context, 'portal_catalog')
-            inbox = catalog(portal_type='opengever.inbox.inbox')[0].getObject()
-            self.yearfolder = _get_yearfolder(inbox)
-
+            self.yearfolder = get_current_yearfolder(context=self.context)
         return self.yearfolder
 
     def get_newest_closed_forwarding(self):

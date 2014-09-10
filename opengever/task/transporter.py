@@ -1,4 +1,3 @@
-from datetime import date
 from DateTime import DateTime
 from datetime import datetime
 from five import grok
@@ -14,7 +13,6 @@ from opengever.task.interfaces import ITaskDocumentsTransporter
 from opengever.task.response import Response
 from opengever.task.task import ITask
 from opengever.task.util import get_documents_of_task
-from persistent.dict import PersistentDict
 from persistent.list import PersistentList
 from z3c.relationfield import RelationValue
 from zope.annotation.interfaces import IAnnotations
@@ -34,51 +32,53 @@ class IResponseTransporter(Interface):
 
 class ResponseTransporter(grok.Adapter):
     """Adadpter for sending responses of the adapted task to
-    a remote task on a remote client.
+    a remote task on a remote admin unit.
     """
 
     grok.context(ITask)
     grok.implements(IResponseTransporter)
     grok.require('zope2.View')
 
-    def send_responses(self, target_cid, remote_task_url,
+    def send_responses(self, target_admin_unit_id, remote_task_url,
                        intids_mapping=None):
-        """ Sends all responses of task self.context to task on
-        a remote client.
-        `target_cid`: client_id of a target client
+        """Sends all responses of task self.context to task on
+        a remote admin unit.
+
+        `target_admin_unit_id`: id of a target admin unit
         `remote_task_url`: url to a task on `target_cid` relative
         to its site root.
         `intids_mapping`: replace intids of RelationValues according
-        to this mapping. This fixes the intids on remote clients.
+        to this mapping. This fixes the intids on remote admin unit.
         RelationValues not listed in this mapping will not be sent.
-        """
 
+        """
         jsondata = self.extract_responses(intids_mapping)
 
-        return remote_request(target_cid,
-                                   '@@task-responses-receive',
-                                   path=remote_task_url,
-                                   data=dict(responses=jsondata))
+        return remote_request(target_admin_unit_id,
+                              '@@task-responses-receive',
+                              path=remote_task_url,
+                              data=dict(responses=jsondata))
 
-    def get_responses(self, target_cid, remote_task_path, intids_mapping):
+    def get_responses(self, target_admin_unit_id, remote_task_path,
+                      intids_mapping):
         """Retrieves all responses from the task with path `remote_task_path`
-        on the client `client` and adds them to the current context (target
-        task).
+        on the admin_unit `target_admin_unit_id` and adds them to the current
+        context (target task).
 
         Provide a an `intids_mapping` (dict), mapping the original intids of
-        related objects to the new intids of the copies on this client. This
-        is necessary for fixing the relations.
-        """
+        related objects to the new intids of the copies on this admin_unit.
+        This is necessary for fixing the relations.
 
+        """
         req_data = {'intids_mapping': json.dumps(intids_mapping)}
-        response = remote_request(target_cid,
+        response = remote_request(target_admin_unit_id,
                                   '@@task-responses-extract',
                                   path=remote_task_path,
                                   data=req_data)
         try:
             data = json.loads(response.read())
         except ValueError:
-            # is a internal request
+            #is a internal request
             data = response.read()
 
         self.create_responses(data)
@@ -137,23 +137,12 @@ class ResponseTransporter(grok.Adapter):
         if isinstance(value, datetime):
             return [u'datetime', str(value)]
 
-        if isinstance(value, date):
-            return [u'date', str(value)]
-
         if isinstance(value, DateTime):
             return [u'DateTime', str(value)]
 
         if isinstance(value, (PersistentList, list)):
             return [u'list',
                     [self._encode(item) for item in value]]
-
-        if isinstance(value, (PersistentDict, dict)):
-            encoded_dict = {}
-
-            for key, value in value.items():
-                encoded_dict[key] = self._encode(value)
-
-            return [u'dict', encoded_dict]
 
         if isinstance(value, RelationValue):
             if value.to_id in self.intids_mapping:
@@ -186,9 +175,6 @@ class ResponseTransporter(grok.Adapter):
         if type_ == 'datetime':
             return DateTime(val).asdatetime()
 
-        if type_ == 'date':
-            return DateTime(val).asdatetime().date()
-
         if type_ == 'DateTime':
             return DateTime(val)
 
@@ -197,12 +183,6 @@ class ResponseTransporter(grok.Adapter):
 
         if type_ == 'list':
             return [self._decode(item) for item in val]
-
-        if type_ == 'dict':
-            decoded_dict = {}
-            for key, value in val.items():
-                decoded_dict[key] = self._decode(value)
-            return decoded_dict
 
         return val
 
@@ -224,7 +204,7 @@ class ReceiveResponses(grok.View):
         current_data = json.loads(transporter.extract_responses())
         if current_data == data:
             # In case of a conflict error while committing on the
-            # source client this view is called twice or more. If the
+            # source admin_unit this view is called twice or more. If the
             # current_data and data maches, it is not the first
             # request and we are in conflict resolution. Thus for not
             # duplicating responses we abort with "OK" (since we have
@@ -260,7 +240,7 @@ class TaskDocumentsTransporter(grok.GlobalUtility):
     def copy_documents_from_remote_task(self, task, target, documents=None):
         transporter = getUtility(ITransporter)
         data = remote_json_request(
-            task.client_id,
+            task.admin_unit_id,
             '@@task-documents-extract',
             path=task.physical_path,
             data={'documents': json.dumps(documents)})

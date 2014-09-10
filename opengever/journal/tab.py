@@ -1,22 +1,22 @@
+from BeautifulSoup import BeautifulSoup
 from copy import deepcopy
 from five import grok
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.journal.interfaces import IAnnotationsJournalizable
 from ftw.journal.interfaces import IJournalizable
 from ftw.journal.interfaces import IWorkflowHistoryJournalizable
-from opengever.tabbedview.browser.listing import ListingView
 from ftw.table import helper
 from ftw.table.basesource import BaseTableSource
 from ftw.table.interfaces import ITableSourceConfig, ITableSource
 from opengever.journal import _
-from opengever.tabbedview.browser.tabs import OpengeverTab
+from opengever.tabbedview.browser.base import OpengeverTab
+from opengever.tabbedview.browser.listing import ListingView
 from opengever.tabbedview.helper import linked_ogds_author
 from zope.annotation.interfaces import IAnnotations
 from zope.app.pagetemplate import ViewPageTemplateFile
-from zope.interface import implements, Interface
-from zope.i18n import translate
 from zope.globalrequest import getRequest
-from BeautifulSoup import BeautifulSoup
+from zope.i18n import translate
+from zope.interface import implements, Interface
 
 
 def tooltip_helper(item, value):

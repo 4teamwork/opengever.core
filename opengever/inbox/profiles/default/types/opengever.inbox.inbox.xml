@@ -14,13 +14,14 @@
         <element value="opengever.inbox.forwarding"/>
         <element value="ftw.mail.mail"/>
         <element value="opengever.inbox.yearfolder"/>
+        <element value="opengever.inbox.inbox"/>
     </property>
 
     <!-- schema interface -->
     <property name="schema">opengever.inbox.inbox.IInbox</property>
 
     <!-- class used for content items -->
-    <property name="klass">plone.dexterity.content.Container</property>
+    <property name="klass">opengever.inbox.inbox.Inbox</property>
 
     <!-- add permission -->
     <property name="add_permission">opengever.inbox.AddInbox</property>
@@ -33,6 +34,7 @@
         <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
         <element value="opengever.trash.trash.ITrashable" />
         <element value="opengever.mail.behaviors.ISendableDocsContainer" />
+        <element value="opengever.repository.behaviors.responsibleorg.IResponsibleOrgUnit" />
     </property>
 
     <!-- View information -->

@@ -1,85 +1,148 @@
-from ftw.testing import MockTestCase
-from opengever.ogds.base.interfaces import IContactInformation
-from opengever.tabbedview.browser.personal_overview import PersonalOverview
+from ftw.builder import Builder
+from ftw.builder import create
+from ftw.testbrowser import browsing
+from opengever.testing import create_plone_user
+from opengever.testing import FunctionalTestCase
+from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
+import transaction
 
 
-class TestPersonalOverview(MockTestCase):
+class TestPersonalOverview(FunctionalTestCase):
 
-    def test_user_is_allowed_to_view(self):
-        context = self.stub()
-        request = self.stub()
+    def setUp(self):
+        super(TestPersonalOverview, self).setUp()
 
-        info = self.stub()
-        self.mock_utility(info, IContactInformation, name=u"")
+        create_plone_user(self.portal, 'hugo.boss')
+        self.hugo = create(Builder('ogds_user')
+                           .having(userid='hugo.boss',
+                                   firstname='Hugo',
+                                   lastname='Boss')
+                           .assign_to_org_units([self.org_unit]))
+        transaction.commit()
 
-        membership = self.stub()
-        member = self.stub()
-        self.mock_tool(membership, 'portal_membership')
-        self.expect(membership.getAuthenticatedMember()).result(member)
+    @browsing
+    def test_redirects_to_repository_root_on_a_foreign_admin_unit(self, browser):
+        create_plone_user(self.portal, 'peter')
+        setRoles(self.portal, 'hugo.boss', ['Reader'])
+        transaction.commit()
 
-        with self.mocker.order():
-            self.expect(info.is_client_assigned()).result(True)
+        admin_unit = create(Builder('admin_unit')
+                            .id('additional'))
+        additional = create(Builder('org_unit')
+                            .id('additional')
+                            .having(admin_unit=admin_unit)
+                            .with_default_groups())
 
-            self.expect(info.is_client_assigned()).result(False)
-            self.expect(member.has_role('Administrator')).result(True)
+        self.hugo = create(Builder('ogds_user')
+                           .having(userid='peter')
+                           .assign_to_org_units([additional]))
 
-            self.expect(info.is_client_assigned()).result(False)
-            self.expect(member.has_role('Administrator')).result(False)
-            self.expect(member.has_role('Manager')).result(True)
+        repo_root = create(Builder('repository_root'))
 
-            self.expect(info.is_client_assigned()).result(False)
-            self.expect(member.has_role('Administrator')).result(False)
-            self.expect(member.has_role('Manager')).result(False)
+        browser.login(username='peter', password='demo09').open(
+            view='personal_overview')
+        self.assertEqual(repo_root.absolute_url(), browser.url)
 
-        self.replay()
+    @browsing
+    def test_personal_overview_displays_username_in_title(self, browser):
+        browser.login().open(view='personal_overview')
+        self.assertEquals(u'Personal Overview: Test User',
+                          browser.css('h1.documentFirstHeading').first.text)
 
-        view = PersonalOverview(context, request)
+    @browsing
+    def test_additional_tabs_are_shown_for_admins(self, browser):
+        setRoles(self.portal, 'hugo.boss', ['Administrator'])
+        transaction.commit()
 
-        self.assertTrue(view.user_is_allowed_to_view())
-        self.assertTrue(view.user_is_allowed_to_view())
-        self.assertTrue(view.user_is_allowed_to_view())
-        self.assertFalse(view.user_is_allowed_to_view())
-
-
-    def test_get_tabs(self):
-        context = self.stub()
-        request = self.stub()
-
-        info = self.stub()
-        self.mock_utility(info, IContactInformation, name=u"")
-
-        membership = self.stub()
-        member = self.stub()
-        self.mock_tool(membership, 'portal_membership')
-        self.expect(membership.getAuthenticatedMember()).result(member)
-
-        with self.mocker.order():
-            self.expect(info.is_user_in_inbox_group()).result(True)
-
-            self.expect(info.is_user_in_inbox_group()).result(False)
-            self.expect(member.has_role('Administrator')).result(True)
-
-            self.expect(info.is_user_in_inbox_group()).result(False)
-            self.expect(member.has_role('Administrator')).result(False)
-            self.expect(member.has_role('Manager')).result(False)
-
-        self.replay()
-
-        view = PersonalOverview(context, request)
-
-        tabs = view.get_tabs()
-        self.assertEquals(
+        browser.login(username='hugo.boss', password='demo09').open(
+            view='personal_overview')
+        self.assertEqual(
             ['mydossiers', 'mydocuments', 'mytasks', 'myissuedtasks',
              'alltasks', 'allissuedtasks'],
-            [tab.get('id') for tab in tabs])
+            browser.css('li.formTab a').text)
 
-        tabs = view.get_tabs()
-        self.assertEquals(
+    @browsing
+    def test_additional_tabs_are_shown_for_inbox_users(self, browser):
+        browser.login().open(view='personal_overview')
+        self.assertEqual(
             ['mydossiers', 'mydocuments', 'mytasks', 'myissuedtasks',
              'alltasks', 'allissuedtasks'],
-            [tab.get('id') for tab in tabs])
+            browser.css('li.formTab a').text)
 
-        tabs = view.get_tabs()
-        self.assertEquals(
+    @browsing
+    def test_additional_tabs_are_hidden_for_regular_users(self, browser):
+        setRoles(self.portal, 'hugo.boss', ['Reader'])
+        browser.login(username='hugo.boss', password='demo09').open(
+            view='personal_overview')
+        self.assertEqual(
             ['mydossiers', 'mydocuments', 'mytasks', 'myissuedtasks'],
-            [tab.get('id') for tab in tabs])
+            browser.css('li.formTab a').text)
+
+
+class TestGlobalTaskListings(FunctionalTestCase):
+
+    use_default_fixture = False
+
+    def setUp(self):
+        super(TestGlobalTaskListings, self).setUp()
+
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_all_unit_setup())
+
+        self.hugo = create(Builder('ogds_user')
+                           .having(userid='hugo.boss',
+                                   firstname='Hugo',
+                                   lastname='Boss')
+                           .assign_to_org_units([self.org_unit]))
+
+        self.task1 = create(Builder('task')
+                            .having(responsible_client='client1',
+                                    responsible=TEST_USER_ID,
+                                    issuer=TEST_USER_ID))
+        self.task2 = create(Builder('task')
+                            .having(responsible_client='client2',
+                                    responsible='hugo.boss',
+                                    issuer=TEST_USER_ID))
+        self.task3 = create(Builder('task')
+                            .having(responsible_client='client1',
+                                    responsible=TEST_USER_ID,
+                                    issuer='hugo.boss'))
+
+    def test_my_tasks(self):
+        view = self.portal.unrestrictedTraverse(
+            'tabbedview_view-mytasks')
+        view.update()
+
+        self.assertEquals(
+            [self.task1.get_sql_object(), self.task3.get_sql_object()],
+            view.contents)
+
+    def test_my_issued_tasks(self):
+        view = self.portal.unrestrictedTraverse(
+            'tabbedview_view-myissuedtasks')
+        view.update()
+
+        self.assertEquals(
+            [self.task1.get_sql_object(), self.task2.get_sql_object()],
+            view.contents)
+
+    def test_all_tasks(self):
+        view = self.portal.unrestrictedTraverse(
+            'tabbedview_view-alltasks')
+        view.update()
+
+        expected = [self.task1, self.task3]
+        self.assertEquals(
+            [task.get_sql_object() for task in expected],
+            view.contents)
+
+    def test_all_issued_tasks(self):
+        view = self.portal.unrestrictedTraverse(
+            'tabbedview_view-allissuedtasks')
+        view.update()
+
+        expected = [self.task1, self.task2, self.task3]
+        self.assertEquals(
+            [task.get_sql_object() for task in expected],
+            view.contents)

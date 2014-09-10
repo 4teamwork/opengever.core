@@ -3,20 +3,24 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.testing import FunctionalTestCase
-from opengever.testing import create_client
-from opengever.testing import set_current_client_id
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 
 
 class TestSuccessorTaskController(FunctionalTestCase):
 
+    use_default_fixture = False
+
     def setUp(self):
         super(TestSuccessorTaskController, self).setUp()
-        create_client(clientid='client1')
-        set_current_client_id(self.portal)
 
-    def test_oguid_is_client_id_and_task_id_separated_by_a_colon(self):
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture')
+            .with_user()
+            .with_org_unit()
+            .with_admin_unit(public_url='http://plone'))
+
+    def test_oguid_is_admin_unit_id_and_task_id_separated_by_a_colon(self):
         intids = getUtility(IIntIds)
 
         task1 = create(Builder('task'))
@@ -42,7 +46,7 @@ class TestSuccessorTaskController(FunctionalTestCase):
                 '/'.join(url_tool.getRelativeContentPath(task)),
                 'client1'))
 
-    def test_oguid_by_path_returns_none_for_invalid_clientid(self):
+    def test_oguid_by_path_returns_none_for_invalid_admin_unit_id(self):
         task = create(Builder('task'))
 
         controller = ISuccessorTaskController(task)
@@ -81,9 +85,9 @@ class TestSuccessorTaskController(FunctionalTestCase):
 
         task1_oguid = ISuccessorTaskController(task1).get_oguid()
 
-        task1_sql = ISuccessorTaskController(task1).get_indexed_data()
-        task2_sql = ISuccessorTaskController(task2).get_indexed_data()
-        task3_sql = ISuccessorTaskController(task3).get_indexed_data()
+        task1_sql = task1.get_sql_object()
+        task2_sql = task2.get_sql_object()
+        task3_sql = task3.get_sql_object()
 
         ISuccessorTaskController(task2).set_predecessor(task1_oguid)
         ISuccessorTaskController(task3).set_predecessor(task1_oguid)

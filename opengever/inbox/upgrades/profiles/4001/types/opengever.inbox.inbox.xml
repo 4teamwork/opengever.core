@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<object name="opengever.inbox.inbox" meta_type="Dexterity FTI">
+
+    <!-- Basic metadata -->
+    <property name="allowed_content_types" purge="False">
+        <element value="opengever.inbox.inbox"/>
+    </property>
+
+    <!-- class used for content items -->
+    <property name="klass">opengever.inbox.inbox.Inbox</property>
+
+    <!-- enabled behaviors -->
+    <property name="behaviors" purge="False">
+        <element value="opengever.repository.behaviors.responsibleorg.IResponsibleOrgUnit" />
+    </property>
+
+</object>

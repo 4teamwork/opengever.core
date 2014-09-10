@@ -1,15 +1,14 @@
-from Products.CMFCore.utils import getToolByName
 from datetime import datetime, timedelta
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.tasktemplates.interfaces import IFromTasktemplateGenerated
 from opengever.testing import FunctionalTestCase
 from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
-from opengever.testing import create_client
-from opengever.testing import set_current_client_id
 from plone.app.testing import SITE_OWNER_NAME
 from plone.dexterity.utils import createContent, addContentToContainer
+from Products.CMFCore.utils import getToolByName
 from zope.event import notify
 from zope.lifecycleevent import ObjectCreatedEvent, ObjectAddedEvent
+import unittest
 
 
 def create_testobject(parent, ptype, **kwargs):
@@ -25,6 +24,8 @@ class TestTaskTemplates(FunctionalTestCase):
 
     layer = OPENGEVER_FUNCTIONAL_TESTING
 
+
+    @unittest.skip('Module is not used productive.')
     def test_integration(self):
         """ Tests the integration of tasktemplatefolder and
         tasktemplate
@@ -35,8 +36,6 @@ class TestTaskTemplates(FunctionalTestCase):
         catalog = getToolByName(portal, 'portal_catalog')
         mtool = getToolByName(portal, 'portal_membership')
 
-        create_client('plone')
-        set_current_client_id(portal, 'plone')
         self.grant('Manager')
 
         # Folders and templates
@@ -56,7 +55,7 @@ class TestTaskTemplates(FunctionalTestCase):
             title='TaskTemplate 1',
             text='Test Text',
             preselected=True,
-            task_type='unidirectional_by_value',
+            task_type='comment',
             issuer='responsible',
             responsible_client='interactive_users',
             deadline=7,
@@ -68,7 +67,7 @@ class TestTaskTemplates(FunctionalTestCase):
             title='TaskTemplate 2',
             text='Test Text',
             preselected=False,
-            task_type='unidirectional_by_value',
+            task_type='comment',
             issuer='responsible',
             responsible_client='zopemaster',
             deadline=7,
@@ -80,7 +79,7 @@ class TestTaskTemplates(FunctionalTestCase):
             title='TaskTemplate 3',
             text='Test Text',
             preselected=False,
-            task_type='unidirectional_by_value',
+            task_type='comment',
             issuer='responsible',
             responsible_client='interactive_users',
             deadline=7,

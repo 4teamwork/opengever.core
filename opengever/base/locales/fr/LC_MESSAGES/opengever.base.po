@@ -1,6 +1,15 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2014-09-03 23:01+0000\n"
 "PO-Revision-Date: 2012-08-30 15:34+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -45,17 +54,17 @@ msgid "archival worthy with sampling"
 msgstr "Echantillon"
 
 #. Default: "Download"
-#: ./opengever/base/viewlets/history.pt:44
+#: ./opengever/base/viewlets/history.pt:37
 msgid "button_file"
 msgstr "Télécharger"
 
 #. Default: "PDF"
-#: ./opengever/base/viewlets/history.pt:54
+#: ./opengever/base/viewlets/history.pt:47
 msgid "button_pdf"
 msgstr "Aperçu pdf"
 
 #. Default: "Show"
-#: ./opengever/base/viewlets/history.pt:50
+#: ./opengever/base/viewlets/history.pt:43
 msgid "button_show"
 msgstr "Afficher"
 
@@ -257,7 +266,7 @@ msgid "label_public_trial_statement"
 msgstr "Jusitificaton pour le retrait du status public"
 
 #. Default: "reset"
-#: ./opengever/base/viewlets/history.pt:58
+#: ./opengever/base/viewlets/history.pt:51
 msgid "label_reset"
 msgstr "Remettre"
 
@@ -335,4 +344,3 @@ msgstr "Non contrôlé"
 #: opengever/repository/classification.py
 msgid "unprotected"
 msgstr "Non classé"
-

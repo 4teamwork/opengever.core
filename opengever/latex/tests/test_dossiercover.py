@@ -4,18 +4,17 @@ from ftw.builder import create
 from ftw.pdfgenerator.builder import Builder as PDFBuilder
 from ftw.pdfgenerator.interfaces import ILaTeXView
 from ftw.pdfgenerator.utils import provide_request_layer
+from ftw.testbrowser import browsing
 from ftw.testing import MockTestCase
-from opengever.base.interfaces import IBaseClientID
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.latex.dossiercover import DossierCoverPDFView
 from opengever.latex.dossiercover import IDossierCoverLayer
 from opengever.latex.layouts.default import DefaultLayout
 from opengever.latex.testing import LATEX_ZCML_LAYER
-from opengever.testing import FunctionalTestCase
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.testing import create_ogds_user
-from plone.registry.interfaces import IRegistry
+from opengever.testing import FunctionalTestCase
 from zope.component import getMultiAdapter
-from zope.component import getUtility
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 
 
@@ -24,14 +23,14 @@ class TestDossierCoverRenderArguments(FunctionalTestCase):
     def setUp(self):
         super(TestDossierCoverRenderArguments, self).setUp()
 
-        registry = getUtility(IRegistry)
-        proxy = registry.forInterface(IBaseClientID)
-        proxy.client_title = u'Department of forest & hunt'
+        create(Builder('admin_unit')
+               .having(unit_id=u'OG', title=u'Department of forest & hunt')
+               .as_current_admin_unit())
 
-        create_ogds_user('hugo.boss')
-
-        self.repository = create(Builder('repository_root')
-                            .having(version='Repository 2013 & 2014'))
+        self.user = create_ogds_user('hugo.boss')
+        self.repository = create(
+            Builder('repository_root')
+            .having(version='Repository 2013 & 2014'))
         repofolder = create(Builder('repository').within(self.repository))
         dossier = create(Builder('dossier')
                          .having(title=u'Foo & bar',
@@ -45,10 +44,24 @@ class TestDossierCoverRenderArguments(FunctionalTestCase):
         self.dossiercover = getMultiAdapter(
             (dossier, dossier.REQUEST, layout), ILaTeXView)
 
+    @browsing
+    def test_dossiercover_view(self, browser):
+        dossier = create(Builder('dossier')
+                         .within(self.repository)
+                         .having(responsible=self.user.userid))
+
+        browser.login().visit(dossier, view='dossier_cover_pdf')
+
     def test_contains_converted_configured_clienttitle(self):
         arguments = self.dossiercover.get_render_arguments()
         self.assertEquals('Department of forest \\& hunt',
                           arguments.get('clienttitle'))
+
+    def test_empty_client_title(self):
+        get_current_admin_unit().title = ''
+
+        arguments = self.dossiercover.get_render_arguments()
+        self.assertEquals('', arguments.get('clienttitle'))
 
     def test_contains_repository_version(self):
         arguments = self.dossiercover.get_render_arguments()
@@ -63,7 +76,7 @@ class TestDossierCoverRenderArguments(FunctionalTestCase):
 
     def test_contains_referencenr(self):
         arguments = self.dossiercover.get_render_arguments()
-        self.assertEquals(u'OG 1 / 1',
+        self.assertEquals(u'Department of forest \\& hunt 1 / 1',
                           arguments.get('referencenr'))
 
     def test_contains_converted_title(self):

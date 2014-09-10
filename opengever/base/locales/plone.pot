@@ -219,70 +219,53 @@ msgstr ""
 msgid "task-transition-cancelled-open"
 msgstr ""
 
-
 msgid "task-transition-in-progress-resolved"
 msgstr ""
-
 
 msgid "task-transition-open-cancelled"
 msgstr ""
 
-
 msgid "task-transition-open-in-progress"
 msgstr ""
-
 
 msgid "task-transition-open-rejected"
 msgstr ""
 
-
 msgid "task-transition-open-resolved"
 msgstr ""
-
 
 msgid "task-transition-open-tested-and-closed"
 msgstr ""
 
-
 msgid "task-transition-reassign"
 msgstr ""
-
 
 msgid "task-transition-rejected-open"
 msgstr ""
 
-
 msgid "task-transition-resolved-tested-and-closed"
 msgstr ""
-
 
 msgid "task-state-cancelled"
 msgstr ""
 
-
 msgid "task-state-in-progress"
 msgstr ""
-
 
 msgid "task-state-new-successor"
 msgstr ""
 
-
 msgid "task-state-open"
 msgstr ""
-
 
 msgid "task-state-rejected"
 msgstr ""
 
-
 msgid "task-state-resolved"
 msgstr ""
 
-
 msgid "task-state-tested-and-closed"
 msgstr ""
-
 
 msgid "task-transition-in-progress-tested-and-closed"
 msgstr ""
@@ -290,3 +273,26 @@ msgstr ""
 msgid "task-transition-resolved-in-progress"
 msgstr ""
 
+msgid "task-transition-modify-deadline"
+msgstr ""
+
+msgid "tasktemplate-state-active"
+msgstr ""
+
+msgid "tasktemplatefolder-state-activ"
+msgstr ""
+
+msgid "tasktemplatefolder-state-inactiv"
+msgstr ""
+
+msgid "tasktemplatefolder-transition-activ-inactiv"
+msgstr ""
+
+msgid "tasktemplatefolder-transition-inactiv-activ"
+msgstr ""
+
+msgid "Add task from template"
+msgstr ""
+
+msgid "task-transition-delegate"
+msgstr ""

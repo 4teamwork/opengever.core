@@ -13,6 +13,7 @@ class TestMoveItems(FunctionalTestCase):
         super(TestMoveItems, self).setUp()
         self.grant('Contributor')
         self.request = self.layer['request']
+
         self.source_repo = create(Builder("repository"))
         self.source_dossier = create(Builder("dossier")
                                      .within(self.source_repo))
@@ -71,9 +72,9 @@ class TestMoveItems(FunctionalTestCase):
         setRoles(self.portal, TEST_USER_ID, ['Reviewer', 'Manager'])
         target_repo = create(Builder("repository"))
 
-        target_dossier = create(Builder("dossier")
-                                .within(target_repo)
-                                .in_state('dossier-state-resolved'))
+        create(Builder("dossier")
+               .within(target_repo)
+               .in_state('dossier-state-resolved'))
 
         self.request['paths'] = '/'.join(self.source_dossier.getPhysicalPath())
 

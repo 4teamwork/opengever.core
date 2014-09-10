@@ -1,7 +1,8 @@
 from DateTime import DateTime
 from ftw.builder import Builder
 from ftw.builder import create
-from OFS.event import ObjectWillBeMovedEvent, ObjectWillBeAddedEvent
+from OFS.event import ObjectWillBeAddedEvent
+from OFS.event import ObjectWillBeMovedEvent
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.document.events import FileCopyDownloadedEvent
 from opengever.document.events import ObjectCheckedInEvent
@@ -10,24 +11,22 @@ from opengever.document.events import ObjectCheckoutCanceledEvent
 from opengever.document.events import ObjectRevertedToVersion
 from opengever.dossier.behaviors.participation import Participation
 from opengever.dossier.events import ParticipationCreated, ParticipationRemoved
-from opengever.journal.tests.utils import get_journal_length, get_journal_entry
+from opengever.journal.tests.utils import get_journal_entry
+from opengever.journal.tests.utils import get_journal_length
 from opengever.mail.events import DocumentSent
-from opengever.ogds.base.interfaces import IClientConfiguration
 from opengever.sharing.events import LocalRolesAcquisitionActivated
 from opengever.sharing.events import LocalRolesAcquisitionBlocked
 from opengever.sharing.events import LocalRolesModified
 from opengever.trash.trash import TrashedEvent, UntrashedEvent
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
-from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.WorkflowCore import ActionSucceededEvent
-from zope.component import getUtility
 from zope.event import notify
 from zope.i18n import translate
-from zope.intid.interfaces import IIntIds
+from zope.lifecycleevent import ObjectAddedEvent
 from zope.lifecycleevent import ObjectModifiedEvent
-from zope.lifecycleevent import ObjectMovedEvent, ObjectAddedEvent
+from zope.lifecycleevent import ObjectMovedEvent
 import unittest2 as unittest
 
 
@@ -38,6 +37,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
     def setUp(self):
         super(TestOpengeverJournalGeneral, self).setUp()
 
+        create(Builder('fixture').with_all_unit_setup())
         setRoles(self.layer['portal'], TEST_USER_ID, ['Manager'])
 
     def test_integration_repository_events(self):
@@ -191,10 +191,6 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         entry of the new document on the dossiers journal
         """
         comment = 'my comment'
-
-        registry = getUtility(IRegistry)
-        proxy = registry.forInterface(IClientConfiguration)
-        proxy.client_id = u'Test'
 
         dossier = create(Builder('dossier'))
 
@@ -550,16 +546,20 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
                 "1"))
 
     def check_document_sent(self, obj, doc):
-        id_util = getUtility(IIntIds)
-        intid = id_util.queryId(doc)
+        # Testing on __dummy_unit_id__ from
+        # `opengever.ogds.base.ou_selector.NullOrg`') is just a temporary
+        # solution and will be adjusted when reworking the oguid functionality.
         self.check_annotation(
             obj,
             action_type='Document Sent',
             action_title=u'Document sent by Mail: test mail',
             actor=TEST_USER_ID,
-            comment='Attachments: <span><a href="./@@resolve_oguid?oguid='
-                    'Test:{}">{}</a></span> | Receivers: test@test.ch | '
-                    'Message: Mymessage'.format(str(intid), doc.Title()))
+            comment=(
+                'Attachments: <span>'
+                '<a href="{}">{}</a>'
+                '</span> | Receivers: test@test.ch |'
+                ' Message: Mymessage'.format(doc.absolute_url(), doc.Title()))
+            )
 
     def check_document_copy_downloaded(self, obj):
         self.check_annotation(

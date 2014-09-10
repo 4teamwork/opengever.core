@@ -1,191 +1,127 @@
-from Products.CMFCore.interfaces import ISiteRoot
-from collective.vdexvocabulary.vocabulary import VdexVocabulary
 from datetime import date
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testing import MockTestCase
 from grokcore.component.testing import grok
-from mocker import ANY
-from opengever.base.interfaces import IBaseClientID
+from opengever.core.testing import activate_filing_number
 from opengever.core.testing import ANNOTATION_LAYER
+from opengever.core.testing import inactivate_filing_number
 from opengever.dossier.archive import Archiver
-from opengever.dossier.archive import EnddateValidator, MissingValue
-from opengever.dossier.archive import METHOD_RESOLVING_AND_FILING, METHOD_FILING
+from opengever.dossier.archive import default_end_date
+from opengever.dossier.archive import EnddateValidator
+from opengever.dossier.archive import filing_prefix_default_value
+from opengever.dossier.archive import filing_year_default_value
+from opengever.dossier.archive import get_filing_actions
+from opengever.dossier.archive import METHOD_FILING
+from opengever.dossier.archive import METHOD_RESOLVING
+from opengever.dossier.archive import METHOD_RESOLVING_AND_FILING
 from opengever.dossier.archive import METHOD_RESOLVING_EXISTING_FILING
-from opengever.dossier.archive import RESOLVE_AND_NUMBER, ONLY_RESOLVE
-from opengever.dossier.archive import RESOLVE_WITH_EXISTING_NUMBER, ONLY_NUMBER
-from opengever.dossier.archive import RESOLVE_WITH_NEW_NUMBER, METHOD_RESOLVING
-from opengever.dossier.archive import filing_year_default_value, default_end_date
-from opengever.dossier.archive import get_filing_actions, filing_prefix_default_value
+from opengever.dossier.archive import MissingValue
+from opengever.dossier.archive import ONLY_NUMBER
+from opengever.dossier.archive import ONLY_RESOLVE
+from opengever.dossier.archive import RESOLVE_AND_NUMBER
+from opengever.dossier.archive import RESOLVE_WITH_EXISTING_NUMBER
+from opengever.dossier.archive import RESOLVE_WITH_NEW_NUMBER
 from opengever.dossier.archive import valid_filing_year
-from opengever.dossier.behaviors.dossier import IDossier, IDossierMarker
-from opengever.dossier.behaviors.filing import IFilingNumberMarker
+from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.filing import IFilingNumber
+from opengever.dossier.behaviors.filing import IFilingNumberMarker
 from opengever.dossier.interfaces import IDossierArchiver
-from plone.registry.interfaces import IRegistry
-from zope.annotation.interfaces import IAttributeAnnotatable
-from zope.component import provideUtility
+from opengever.testing import FunctionalTestCase
 from zope.interface import Invalid
 from zope.interface.verify import verifyClass
-from zope.schema.vocabulary import VocabularyRegistryError
-from zope.schema.vocabulary import getVocabularyRegistry
-import opengever.dossier
-import os
 
 
-class TestArchiver(MockTestCase):
-
-    layer = ANNOTATION_LAYER
+class TestArchiver(FunctionalTestCase):
+    use_default_fixture = False
 
     def setUp(self):
         super(TestArchiver, self).setUp()
-        grok('opengever.dossier.archive')
-        grok('opengever.dossier.behaviors.filing')
+        activate_filing_number(self.portal)
+        self.admin_unit = create(
+            Builder('admin_unit').having(title=u'SKA ARCH',
+                                         unit_id=u'ska_arch')
+                                 .as_current_admin_unit()
+        )
+        self.user = create(Builder('ogds_user'))
+        self.org_unit = create(
+            Builder('org_unit').id('client1')
+                               .having(title=u'Client1',
+                                       admin_unit=self.admin_unit)
+                               .as_current_org_unit()
+                               .with_default_groups()
+                               .assign_users([self.user])
+        )
 
-        file_path = os.path.join(
-            os.path.dirname(opengever.dossier.__file__),
-            'vdexvocabs',
-            'type_prefixes.vdex')
+        self.dossier = create(Builder('dossier'))
+        self.sub1 = create(Builder('dossier').within(self.dossier))
+        self.sub2 = create(Builder('dossier').within(self.dossier))
+        self.subsub1 = create(Builder('dossier').within(self.sub1))
 
-        vocabulary_registry = getVocabularyRegistry()
-        try:
-            vocabulary_registry.get(None, 'opengever.dossier.type_prefixes')
-        except VocabularyRegistryError:
-            vocabulary_registry.register(
-                'opengever.dossier.type_prefixes', VdexVocabulary(file_path))
+        self.archiver = IDossierArchiver(self.dossier)
 
-        proxy = self.mocker.mock()
-        proxy.client_id
-        self.mocker.result('SKA ARCH')
-        self.mocker.count(0, None)
-
-        registry = self.mocker.mock()
-        provideUtility(provides=IRegistry, component=registry)
-        registry.forInterface(IBaseClientID)
-        self.mocker.result(proxy)
-        self.mocker.count(0, None)
-
-    def stub_dossier(self):
-        return self.providing_stub([IDossier,
-                                    IDossierMarker,
-                                    IFilingNumber,
-                                    IFilingNumberMarker])
+    def tearDown(self):
+        inactivate_filing_number(self.portal)
+        super(TestArchiver, self).tearDown()
 
     def test_number_generation(self):
-
-        siteroot = self.providing_stub([IAttributeAnnotatable])
-        self.mock_utility(siteroot, ISiteRoot)
-
-        dossier = self.providing_stub(
-            [IDossier, IDossierMarker])
-
-        self.replay()
-
-        archiver = IDossierArchiver(dossier)
+        self.assertEquals(
+            'SKA ARCH-Department-2011-1',
+            self.archiver.generate_number('department', '2011'))
 
         self.assertEquals(
-            archiver.generate_number('department', '2011'),
-            'SKA ARCH-Department-2011-1')
+            'SKA ARCH-Department-2011-2',
+            self.archiver.generate_number('department', '2011'))
 
         self.assertEquals(
-            archiver.generate_number('department', '2011'),
-            'SKA ARCH-Department-2011-2')
+            'SKA ARCH-Administration-2011-1',
+            self.archiver.generate_number('administration', '2011'))
 
         self.assertEquals(
-            archiver.generate_number('administration', '2011'),
-            'SKA ARCH-Administration-2011-1')
+            'SKA ARCH-Administration-2011-2',
+            self.archiver.generate_number('administration', '2011'))
 
         self.assertEquals(
-            archiver.generate_number('administration', '2011'),
-            'SKA ARCH-Administration-2011-2')
-
-        self.assertEquals(
-            archiver.generate_number('administration', '2012'),
-            'SKA ARCH-Administration-2012-1')
+            'SKA ARCH-Administration-2012-1',
+            self.archiver.generate_number('administration', '2012'))
 
     def test_archiving(self):
-        siteroot = self.providing_stub([IAttributeAnnotatable])
-        self.mock_utility(siteroot, ISiteRoot)
+        self.archiver.archive('administration', '2013')
 
-        dossier = self.stub_dossier()
-        sub1 = self.stub_dossier()
-        sub2 = self.stub_dossier()
-        subsub1 = self.stub_dossier()
-
-        objs = [dossier, sub1, sub2, subsub1]
-        self.expect(dossier.get_subdossiers()).result([sub1, sub2])
-        self.expect(sub1.get_subdossiers()).result([subsub1])
-        self.expect(subsub1.get_subdossiers()).result([])
-        self.expect(sub2.get_subdossiers()).result([])
-
-        for obj in objs:
-            self.expect(obj.reindexObject(idxs=ANY))
-            self.expect(obj.getObject()).result(obj)
-
-        self.replay()
-
-        archiver = IDossierArchiver(dossier)
-        archiver.archive('administration', '2013')
-
-        number = 'SKA ARCH-Administration-2013-1'
-        self.assertEquals(dossier.filing_no, number)
-        self.assertEquals(sub1.filing_no, 'SKA ARCH-Administration-2013-1.1')
-        self.assertEquals(sub2.filing_no, 'SKA ARCH-Administration-2013-1.2')
-        self.assertEquals(subsub1.filing_no, 'SKA ARCH-Administration-2013-1.1.1')
+        self.assertEquals('SKA ARCH-Administration-2013-1',
+                          IFilingNumber(self.dossier).filing_no)
+        self.assertEquals('SKA ARCH-Administration-2013-1.1',
+                          IFilingNumber(self.sub1).filing_no)
+        self.assertEquals('SKA ARCH-Administration-2013-1.2',
+                          IFilingNumber(self.sub2).filing_no)
+        self.assertEquals('SKA ARCH-Administration-2013-1.1.1',
+                          IFilingNumber(self.subsub1).filing_no)
 
     def test_archiving_with_existing_number(self):
-        siteroot = self.providing_stub([IAttributeAnnotatable])
-        self.mock_utility(siteroot, ISiteRoot)
-
-        dossier = self.stub_dossier()
-        sub1 = self.stub_dossier()
-        sub2 = self.stub_dossier()
-        subsub1 = self.stub_dossier()
-
-        objs = [dossier, sub1, sub2, subsub1]
-        self.expect(dossier.get_subdossiers()).result([sub1, sub2])
-        self.expect(sub1.get_subdossiers()).result([subsub1])
-        self.expect(subsub1.get_subdossiers()).result([])
-        self.expect(sub2.get_subdossiers()).result([])
-
-        for obj in objs:
-            self.expect(obj.getObject()).result(obj)
-            self.expect(obj.reindexObject(idxs=ANY))
-
-        self.replay()
-
-        archiver = IDossierArchiver(dossier)
         number = 'FAKE NUMBER'
-        archiver.archive('administration', '2013', number=number)
+        self.archiver.archive('administration', '2013', number=number)
 
-        self.assertEquals(dossier.filing_no, 'FAKE NUMBER')
-        self.assertEquals(sub1.filing_no, 'FAKE NUMBER.1')
-        self.assertEquals(sub2.filing_no, 'FAKE NUMBER.2')
-        self.assertEquals(subsub1.filing_no, 'FAKE NUMBER.1.1')
+        self.assertEquals('FAKE NUMBER',
+                          IFilingNumber(self.dossier).filing_no)
+        self.assertEquals('FAKE NUMBER.1',
+                          IFilingNumber(self.sub1).filing_no)
+        self.assertEquals('FAKE NUMBER.2',
+                          IFilingNumber(self.sub2).filing_no)
+        self.assertEquals('FAKE NUMBER.1.1',
+                          IFilingNumber(self.subsub1).filing_no)
 
     def test_update_prefix(self):
-        dossier = self.stub_dossier()
-        sub1 = self.stub_dossier()
-        sub2 = self.stub_dossier()
-        subsub1 = self.stub_dossier()
+        self.archiver.update_prefix('FAKE PREFIX')
 
-        objs = [dossier, sub1, sub2, subsub1]
-        self.expect(dossier.get_subdossiers()).result([sub1, sub2])
-        self.expect(sub1.get_subdossiers()).result([subsub1])
-        self.expect(subsub1.get_subdossiers()).result([])
-        self.expect(sub2.get_subdossiers()).result([])
-
-        for obj in objs:
-            self.expect(obj.getObject()).result(obj)
-            self.expect(obj.reindexObject(idxs=ANY))
-
-        self.replay()
-
-        archiver = IDossierArchiver(dossier)
-        archiver.update_prefix('FAKE PREFIX')
-
-        self.assertEquals(dossier.filing_prefix, 'FAKE PREFIX')
-        self.assertEquals(sub1.filing_prefix, 'FAKE PREFIX')
-        self.assertEquals(sub2.filing_prefix, 'FAKE PREFIX')
-        self.assertEquals(subsub1.filing_prefix, 'FAKE PREFIX')
+        self.assertEquals('FAKE PREFIX',
+                          IDossier(self.dossier).filing_prefix)
+        self.assertEquals('FAKE PREFIX',
+                          IDossier(self.sub1).filing_prefix)
+        self.assertEquals('FAKE PREFIX',
+                          IDossier(self.sub2).filing_prefix)
+        self.assertEquals('FAKE PREFIX',
+                          IDossier(self.subsub1).filing_prefix)
 
 
 class TestForm(MockTestCase):

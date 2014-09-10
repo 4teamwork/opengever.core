@@ -1,24 +1,151 @@
+
 Changelog
 =========
 
-3.4.2 (unreleased)
+4.x (unreleased)
 ------------------
 
-- Refactor tree portlet.
+- Changes to OGDS [phgross, deiferni]:
 
-    - Performance improvements.
-    - Use JavaScript tree API for building the tree.
+  - Replace `ContactInformation` utility with a service implemetation, available as `ogds_service`.
+  - Update to latest `opengever.ogds.models` version.
 
-  [jone]
 
-- Set content-type correctly for ok_response in remote views.
-  [phgross]
+- Replace Clients with OrgUnit/AdminUnit [phgross, deiferni]:
 
-- Make reference_prefix_manager deal properly with already deleted objects.
-  [phgross]
+  - Remove one-to-one relationships of `PloneSite` and `Client` by introducting `AdminUnit` and `OrgUnit`.
+  - An `AdminUnit` corresponds to one `PloneSite`.
+  - An `AdminUnit` has a one-to-many relationship to `OrgUnit`.
+  - Add utility functions to access the current `OrgUnit` and `AdminUnit`.
+  - Add org-unit selector to switch between the user`s assigned org-units.
+  - The oguid now consists of admin-unit-id and IntId.
+  - Above changes concern the following functionality:
 
-- Use `ftw.profilehook` instead of setuphandlers.
-  [deiferni]
+    - Sharing View
+    - OGDS-Vocabularies
+    - Default of task `responsible_client`
+    - Cross plone-site request authentication
+    - Cross plone-site wizards
+
+
+- Setup [phgross, deiferni]:
+
+  - Make sure that inflator content-creation runs after gever setup.
+  - Test that we correctly override ftw.inflator setuphandler configuration.
+  - Create admin units and org units from generic setup profile.
+
+
+- Inbox/Forwarding [phgross, deiferni]:
+
+  - Use globalindex as data-source for task-listings (Overview, AssignedTasks, IssuedTasks).
+  - Fix forwarding immediate view, use `issued_inbox_tasks` tab.
+  - Assign forwarding to dossier: reset issuer to current inbox.
+  - Accept task, edit in new dossier: Set default dossier title only for tasks but not for forwardings.
+  - Inbox now ontains multiple Inboxes, one for each `OrgUnit`:
+
+    - Allow nested inboxes.
+    - Map inboxes and Orgunits with `ResponsibleOrgUnit` behavior.
+    - Add redirecting to current subinbox.
+    - Allow multiple yearfolders per inbox, one for each `OrgUnit`.
+
+  - Disable statefilter for yearfolder's `ClosedForwardings` listing.
+  - Rework `InboxTransitionController` guards.
+
+
+- Tasks [phgross, deiferni]:
+
+  - Refactor syncing tasks from plone to globalindex.
+  - Use globalindex as data-source for task-listings (PersonalOverview).
+  - Globalindex:
+
+    - Introduce a specific query class for `Task`.
+    - Make some task fields required.
+    - Add containing_subdossier column.
+    - Migrate data for issuing_org_unit.
+    - Use integer sequence numbers.
+
+  - Refactored display of task responses:
+
+    - Include response descriptions.
+    - Add permission-check for edit and delete actions.
+    - Add response entry for task creation.
+
+  - Add action menu viewlet:
+
+    - Display transitions as buttons.
+    - Display agency actions in a separate dropdown.
+
+  - Drop old no longer used CopyDocumentsToRemoteClient functionality.
+  - Enable Drag'n'drop upload for tasks.
+  - Rework Task-Transition controller guards.
+  - Replace modify-deadline and delegate actions with a task transition.
+  - Display icon on task overview when task is overdue.
+  - Add task-type to searchable text.
+  - Improve Task-Form styling and Usability
+
+
+- Actor [phgross, deiferni]:
+
+  - Add Actor to handle entities collaborating with tasks.
+  - Actors can be one of the following:
+
+    - User (OGDS or Plone)
+    - Inbox
+    - Contact
+    - NullActor
+
+
+- Test Refactoring [phgross, deiferni]:
+
+  - Replace some mock-tests with functional tests.
+  - Add sql-builders.
+  - Add meta-builder for test-fixtures.
+  - Setup default fixture for all functional tests.
+
+
+- Migration [phgross, deiferni]:
+
+  - Add `SchemaMigration` base class for sql-database migrations.
+  - Add db-migration for recent changes to `opengever.ogds.models`.
+  - Add db-migration for changes to `opengever.globalindex`.
+
+
+- Additional Improvements:
+
+  - Replace latex listing adapters with basic classes.
+    [phgross, deiferni]
+  - Remove `ClientId` viewlet.
+    [phgross, deiferni]
+  - Remove `GlobalindexMaintenanceView` and `OpengeverView`.
+    [phgross, deiferni]
+  - Improve responsive design.
+    [phgross, deiferni]
+  - Display user-name in personal overview title.
+    [phgross, deiferni]
+  - Use correct content-type when returning 'OK' responses.
+    [phgross, deiferni]
+  - Sort groupmembers by label for groupmembers list.
+    [phgross, deiferni]
+  - Use ftw.profilehook instead of custom import steps.
+    [phgross, deiferni]
+  - Add contact-service for local contacts.
+    [phgross, deiferni]
+
+  - Refactor tree portlet.
+
+      - Performance improvements.
+      - Use JavaScript tree API for building the tree.
+
+    [jone]
+
+  - Set content-type correctly for ok_response in remote views.
+    [phgross]
+
+  - Make reference_prefix_manager deal properly with already deleted objects.
+    [phgross]
+
+  - Use `ftw.profilehook` instead of setuphandlers.
+    [deiferni]
 
 
 3.4.1 (2014-09-03)

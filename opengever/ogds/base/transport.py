@@ -3,30 +3,38 @@ from opengever.ogds.base.exceptions import TransportationError
 from opengever.ogds.base.interfaces import IDataCollector
 from opengever.ogds.base.interfaces import IObjectCreator
 from opengever.ogds.base.interfaces import ITransporter
-from opengever.ogds.base.utils import decode_for_json, encode_after_json
+from opengever.ogds.base.utils import decode_for_json
+from opengever.ogds.base.utils import encode_after_json
 from opengever.ogds.base.utils import remote_json_request
-from plone.dexterity.interfaces import IDexterityFTI, IDexterityContent
-from plone.dexterity.utils import createContent, addContentToContainer
+from plone.dexterity.interfaces import IDexterityContent
+from plone.dexterity.interfaces import IDexterityFTI
+from plone.dexterity.utils import addContentToContainer
+from plone.dexterity.utils import createContent
 from plone.dexterity.utils import iterSchemata
 from plone.namedfile.interfaces import INamedFileField
-from z3c.relationfield.interfaces import IRelation, IRelationChoice
+from z3c.relationfield.interfaces import IRelation
+from z3c.relationfield.interfaces import IRelationChoice
 from z3c.relationfield.interfaces import IRelationList
 from zope import schema
 from zope.annotation.interfaces import IAnnotations
 from zope.app.intid.interfaces import IIntIds
-from zope.component import getAdapters, queryAdapter, getAdapter
+from zope.component import getAdapter
+from zope.component import getAdapters
 from zope.component import getUtility
+from zope.component import queryAdapter
 from zope.event import notify
 from zope.interface import Interface
 from zope.lifecycleevent import ObjectCreatedEvent
 from zope.lifecycleevent import ObjectModifiedEvent
-import DateTime
 import base64
+import DateTime
 import json
 
 
 BASEDATA_KEY = 'basedata'
+FIELDDATA_KEY = 'field-data'
 REQUEST_KEY = 'object_data'
+REQUIRED_SCHEMA_KEYS = ('ITask', 'IForwarding',)
 
 ORIGINAL_INTID_ANNOTATION_KEY = 'transporter_original-intid'
 
@@ -99,9 +107,20 @@ class Transporter(grok.GlobalUtility):
         """ Creates the object with the data
         """
         portal_type = data[BASEDATA_KEY]['portal_type']
+
+        # XXX refactor, we can't use JSON data passed here as certain
+        # type-informations are dropped (e.g. tuples and lists)
+        # XXX double check, can we just use IDataCollector but before creating
+        # the actual object
+        creation_data = {}
+        creation_data.update(data[BASEDATA_KEY])
+        for key, values in data.get(FIELDDATA_KEY, {}).items():
+            if key in REQUIRED_SCHEMA_KEYS:
+                creation_data.update(values)
+
         # base data
         creator = self._get_object_creator(portal_type)
-        obj = creator.create(container, data[BASEDATA_KEY])
+        obj = creator.create(container, creation_data)
         # insert data from collectors
         collectors = getAdapters((obj,), IDataCollector)
         for name, collector in collectors:
@@ -190,13 +209,14 @@ class DexterityObjectCreator(grok.Adapter):
 
     def create(self, container, data):
 
-        title = data['title']
+        title = data.pop('title')
         if not isinstance(title, unicode):
             title = title.decode('utf-8')
+        portal_type = data.pop('portal_type')
 
-        obj = createContent(data['portal_type'],
-                            id=title,
-                            title=title)
+        obj = createContent(portal_type,
+                            title=title,
+                            **data)
         notify(ObjectCreatedEvent(obj))
         obj = addContentToContainer(container,
                                     obj,

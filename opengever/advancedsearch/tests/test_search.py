@@ -1,25 +1,15 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.core.testing import activate_filing_number
+from ftw.testbrowser import browsing
+from opengever.core.testing import activate_filing_number
 from opengever.core.testing import inactivate_filing_number
-from opengever.testing import create_client
-from opengever.testing import create_ogds_user
 from opengever.testing import FunctionalTestCase
-from opengever.testing import set_current_client_id
-from plone.app.testing import TEST_USER_ID
-import transaction
 
 
 class TestSearchForm(FunctionalTestCase):
 
     use_browser = True
-
-    def setUp(self):
-        super(TestSearchForm, self).setUp()
-
-        create_client()
-        set_current_client_id(self.portal)
-        transaction.commit()
 
     def test_filing_number_fields_is_hidden_in_site_without_filing_number_support(self):
         self.browser.open('http://nohost/plone/advanced_search')
@@ -30,36 +20,25 @@ class TestSearchForm(FunctionalTestCase):
 
 class TestSearchFormWithFilingNumberSupport(FunctionalTestCase):
 
-    use_browser = True
-
     def setUp(self):
-
         super(TestSearchFormWithFilingNumberSupport, self).setUp()
         activate_filing_number(self.portal)
 
-        create_client()
-        set_current_client_id(self.portal)
-        transaction.commit()
-
     def tearDown(self):
         super(TestSearchFormWithFilingNumberSupport, self).tearDown()
-
         inactivate_filing_number(self.portal)
 
-    def test_filing_number_field_is_displayed_in_a_filing_number_supported_site(self):
-
-        self.browser.open('http://nohost/plone/advanced_search')
-        self.browser.fill({'Filing number': 'Test'})
+    @browsing
+    def test_filing_number_field_is_displayed_in_a_filing_number_supported_site(self, browser):
+        browser.login().open(view='advanced_search')
+        browser.fill({'Filing number': 'Test'})
 
 
 class TestSearchFormObjectProvidesDescription(FunctionalTestCase):
     use_browser = True
 
     def test_contains_special_info_in_a_multi_client_setup(self):
-        create_client()
-        create_client(clientid="client2")
-        set_current_client_id(self.portal)
-        transaction.commit()
+        create(Builder('admin_unit'))
 
         self.browser.open('%s/advanced_search' % self.portal.absolute_url())
 
@@ -71,11 +50,6 @@ class TestSearchFormObjectProvidesDescription(FunctionalTestCase):
             formhelp.plain_text())
 
     def test_not_contains_client_info_in_a_single_client_setup(self):
-        create_client()
-        set_current_client_id(self.portal)
-        create_ogds_user(TEST_USER_ID)
-        transaction.commit()
-
         self.browser.open('%s/advanced_search' % self.portal.absolute_url())
 
         formhelp = self.browser.css(
@@ -90,10 +64,6 @@ class TestSearchWithContent(FunctionalTestCase):
 
     def setUp(self):
         super(TestSearchWithContent, self).setUp()
-
-        create_client()
-        set_current_client_id(self.layer['portal'])
-        create_ogds_user(TEST_USER_ID)
 
         self.dossier1 = create(Builder("dossier").titled(u"Dossier1"))
         self.dossier2 = create(Builder("dossier").titled(u"Dossier2"))
@@ -159,10 +129,6 @@ class TestSearchWithoutContent(FunctionalTestCase):
         super(TestSearchWithoutContent, self).setUp()
 
         activate_filing_number(self.portal)
-
-        create_client()
-        set_current_client_id(self.layer['portal'])
-        create_ogds_user(TEST_USER_ID)
 
         self.dossier1 = create(Builder("dossier"))
 

@@ -1,14 +1,16 @@
-from Acquisition import aq_inner, aq_parent
-from Products.CMFCore.interfaces import ISiteRoot
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from collective import dexteritytextindexer
 from five import grok
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
-from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
-from opengever.ogds.base.interfaces import IContactInformation
+from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from plone.dexterity.interfaces import IDexterityContent
 from plone.indexer import indexer
-from zope.component import getAdapter, getUtility
+from Products.CMFCore.interfaces import ISiteRoot
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from zope.component import getAdapter
+from zope.component import getUtility
 
 
 @indexer(IDossierMarker)
@@ -113,11 +115,10 @@ class SearchableTextExtender(grok.Adapter):
         seqNumb = getUtility(ISequenceNumber)
         searchable.append(str(seqNumb.get_number(self.context)))
         # responsible
-        info = getUtility(IContactInformation)
-        dossier = IDossier(self.context)
-        searchable.append(info.describe(dossier.responsible).encode(
-                'utf-8'))
+        searchable.append(
+            self.context.responsible_label.encode('utf-8'))
 
+        dossier = IDossier(self.context)
         # filling_no
         dossier = IDossierMarker(self.context)
         if getattr(dossier, 'filing_no', None):

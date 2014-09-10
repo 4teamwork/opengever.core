@@ -2,8 +2,6 @@ from Products.CMFCore.utils import getToolByName
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.testing import FunctionalTestCase
-from opengever.testing import create_client
-from opengever.testing import set_current_client_id
 from plone.app.testing import TEST_USER_ID
 from zExceptions import Unauthorized
 import transaction
@@ -16,9 +14,6 @@ class TestTaskWorkflow(FunctionalTestCase):
     def setUp(self):
         super(TestTaskWorkflow, self).setUp()
         self.wf_tool = getToolByName(self.portal, 'portal_workflow')
-
-        create_client()
-        set_current_client_id(self.portal)
 
     def test_document_in_a_closed_tasks_are_still_editable(self):
         self.grant('Editor')

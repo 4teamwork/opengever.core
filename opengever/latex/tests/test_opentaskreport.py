@@ -1,10 +1,19 @@
+from ftw.builder import Builder
+from ftw.builder import create
+from ftw.pdfgenerator.builder import Builder as PDFBuilder
 from ftw.pdfgenerator.interfaces import ILaTeXLayout
 from ftw.pdfgenerator.interfaces import ILaTeXView
+from ftw.pdfgenerator.utils import provide_request_layer
+from ftw.testbrowser import browsing
 from ftw.testing import MockTestCase
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.latex import opentaskreport
+from opengever.latex.layouts.default import DefaultLayout
+from opengever.latex.opentaskreport import IOpenTaskReportLayer
 from opengever.latex.testing import LATEX_ZCML_LAYER
-from opengever.ogds.base import utils
+from opengever.testing import create_plone_user
+from opengever.testing import FunctionalTestCase
+from plone.app.testing import login
 from zope.component import adaptedBy
 from zope.component import getMultiAdapter
 from zope.interface.verify import verifyClass
@@ -24,7 +33,7 @@ class TestOpenTaskReportPDFView(MockTestCase):
                                name='pdf-open-task-report')
 
         self.assertTrue(isinstance(
-                view, opentaskreport.OpenTaskReportPDFView))
+                        view, opentaskreport.OpenTaskReportPDFView))
 
     def test_render_adds_browser_layer(self):
         context = request = self.create_dummy()
@@ -39,22 +48,12 @@ class TestOpenTaskReportPDFView(MockTestCase):
 
         view.render()
         self.assertTrue(opentaskreport.IOpenTaskReportLayer.providedBy(
-                request))
+                        request))
 
 
 class TestOpenTaskReportLaTeXView(MockTestCase):
 
     layer = LATEX_ZCML_LAYER
-
-    def setUp(self):
-        super(TestOpenTaskReportLaTeXView, self).setUp()
-        self.ori_get_client_id = utils.get_client_id
-        get_client_id = self.mocker.replace(
-            'opengever.ogds.base.utils.get_client_id', count=False)
-        self.expect(get_client_id()).result('client1')
-
-    def tearDown(self):
-        utils.get_client_id = self.ori_get_client_id
 
     def test_component_is_registered(self):
         context = self.create_dummy()
@@ -70,7 +69,7 @@ class TestOpenTaskReportLaTeXView(MockTestCase):
     def test_implements_interface(self):
         self.replay()
         self.assertTrue(ILaTeXView.implementedBy(
-                opentaskreport.OpenTaskReportLaTeXView))
+                        opentaskreport.OpenTaskReportLaTeXView))
 
         verifyClass(ILaTeXView, opentaskreport.OpenTaskReportLaTeXView)
 
@@ -80,3 +79,53 @@ class TestOpenTaskReportLaTeXView(MockTestCase):
             opentaskreport.OpenTaskReportLaTeXView)
 
         self.assertEqual(request_iface, opentaskreport.IOpenTaskReportLayer)
+
+
+class TestOpenTaskReport(FunctionalTestCase):
+
+    use_default_fixture = False
+
+    def setUp(self):
+        super(TestOpenTaskReport, self).setUp()
+
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_all_unit_setup())
+
+        self.hans = create(Builder('ogds_user')
+                           .having(userid='hans.meier',
+                                   firstname='Hans',
+                                   lastname='Meier')
+                           .assign_to_org_units([self.org_unit]))
+
+        self.peter = create(Builder('ogds_user')
+                            .having(userid='peter.peter',
+                                    firstname='Peter',
+                                    lastname='Peter'))
+
+        self.task = create(Builder("task")
+                           .having(task_type='comment',
+                                   issuer='peter.peter',
+                                   responsible='hans.meier'))
+
+        provide_request_layer(self.task.REQUEST, IOpenTaskReportLayer)
+        layout = DefaultLayout(self.task, self.task.REQUEST, PDFBuilder())
+        self.opentaskreport = getMultiAdapter(
+            (self.task, self.task.REQUEST, layout), ILaTeXView)
+
+    def test_actor_labels_are_visible_in_task_listing(self):
+        row = self.opentaskreport.get_data_for_item(self.task.get_sql_object())
+        self.assertIn(self.peter.label(with_principal=False), row)
+        self.assertIn(self.hans.label(with_principal=False), row)
+
+    @browsing
+    def test_smoke_open_task_report_view(self, browser):
+        browser.login().open(view='pdf-open-task-report')
+
+    def test_task_report_is_only_available_for_current_inbox_users(self):
+        self.assertTrue(
+            self.portal.unrestrictedTraverse('pdf-open-task-report-allowed')())
+
+        create_plone_user(self.portal, 'hans.meier')
+        login(self.portal, 'hans.meier')
+        self.assertFalse(
+            self.portal.unrestrictedTraverse('pdf-open-task-report-allowed')())

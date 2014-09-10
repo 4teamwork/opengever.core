@@ -14,8 +14,8 @@ from opengever.mail.events import DocumentSent
 from opengever.mail.interfaces import ISendDocumentConf
 from opengever.mail.validators import AddressValidator
 from opengever.mail.validators import DocumentSizeValidator
-from opengever.ogds.base.interfaces import IContactInformation
-from opengever.ogds.base.utils import get_current_client
+from opengever.ogds.base.utils import get_current_admin_unit
+from opengever.ogds.base.utils import ogds_service
 from opengever.tabbedview.utils import get_containg_document_tab_url
 from plone.directives.form import default_value
 from plone.formwidget.autocomplete import AutocompleteMultiFieldWidget
@@ -179,7 +179,6 @@ class SendDocumentForm(form.Form):
 
         if len(errors) == 0:
             mh = getToolByName(self.context, 'MailHost')
-            contact_info = getUtility(IContactInformation)
             userid = self.context.portal_membership.getAuthenticatedMember()
             userid = userid.getId()
             intern_receiver = []
@@ -197,14 +196,15 @@ class SendDocumentForm(form.Form):
                 only_links=data.get('documents_as_links'))
 
             msg['Subject'] = Header(data.get('subject'), CHARSET)
-            user = contact_info.get_user(userid)
-            sender_address = getattr(user, 'email', None)
+
+            user = ogds_service().fetch_user(userid)
+            sender_address = user and user.email
             if not sender_address:
                 portal = self.context.portal_url.getPortalObject()
                 sender_address = portal.email_from_address
 
             mail_from = '%s <%s>' % (
-                    contact_info.describe(userid).encode(CHARSET),
+                    user.label().encode(CHARSET),
                     sender_address.encode(CHARSET))
 
             msg['From'] = Header(mail_from, CHARSET)
@@ -262,10 +262,9 @@ class SendDocumentForm(form.Form):
                 obj_file = obj.file
 
             if only_links or not obj_file:
-
-                # rewrite the url with clients public url
+                # rewrite the url with current adminunit's public url
                 url = '%s/%s' % (
-                    get_current_client().public_url,
+                    get_current_admin_unit().public_url,
                     '/'.join(obj.getPhysicalPath()[2:]))
 
                 docs_links = '%s\r\n - %s (%s)' % (

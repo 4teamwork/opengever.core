@@ -2,9 +2,6 @@ from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.testing import FunctionalTestCase
-from opengever.testing import create_client
-from opengever.testing import create_ogds_user
-from opengever.testing import set_current_client_id
 from plone.app.testing import TEST_USER_ID
 
 
@@ -15,10 +12,6 @@ class TestStardEndValidator(FunctionalTestCase):
     def setUp(self):
         super(TestStardEndValidator, self).setUp()
         self.grant('Manager')
-
-        client = create_client(clientid='Plone')
-        create_ogds_user(TEST_USER_ID, assigned_client=[client, ])
-        set_current_client_id(self.portal, clientid='Plone')
 
     def test_start_date_must_be_before_end_date(self):
         dossier = create(Builder('dossier')

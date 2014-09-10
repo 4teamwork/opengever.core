@@ -95,7 +95,7 @@ class TestDocumentIndexers(FunctionalTestCase):
 
         self.assertEquals(
             index_data_for(doc1).get('SearchableText'),
-            ['doc', 'one', 'foo', 'bar', 'hugo', 'boss', 'og', '1', '1'])
+            ['doc', 'one', 'foo', 'bar', 'hugo', 'boss', 'client1', '1', '1'])
 
     def test_full_text_indexing_with_plain_text(self):
         sample_file = NamedBlobFile('foobar barfoo', filename=u'test.txt')

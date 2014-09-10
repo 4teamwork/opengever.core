@@ -1,25 +1,19 @@
-import transaction
 from DateTime.DateTime import DateTime
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.tests.byline_base_test import TestBylineBase
-from opengever.testing import create_ogds_user
-from opengever.testing import create_client
-from opengever.testing import set_current_client_id
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
+import transaction
 
 
 class TestTaskByline(TestBylineBase):
 
     def setUp(self):
         super(TestTaskByline, self).setUp()
-
         self.intids = getUtility(IIntIds)
 
-        create_client()
-        set_current_client_id(self.portal)
-        create_ogds_user('hugo.boss')
+        create(Builder('fixture').with_hugo_boss())
 
         self.task = create(Builder('task')
                .in_state('task-state-open')
@@ -35,6 +29,11 @@ class TestTaskByline(TestBylineBase):
         responsible = self.get_byline_value_by_label('by:')
         self.assertEquals('Boss Hugo (hugo.boss)', responsible.text_content().strip())
 
+    def test_dossier_byline_responsible_is_linked_to_user_details(self):
+        responsible = self.get_byline_value_by_label('by:')
+        self.assertEqual('http://nohost/plone/@@user-details/hugo.boss',
+                         responsible.get('href'))
+
     def test_task_byline_state_display(self):
         state = self.get_byline_value_by_label('State:')
         self.assertEquals('task-state-open', state.text_content())
@@ -49,4 +48,4 @@ class TestTaskByline(TestBylineBase):
 
     def test_dossier_byline_sequence_number_display(self):
         seq_number = self.get_byline_value_by_label('Sequence Number:')
-        self.assertEquals('OG 1', seq_number.text_content())
+        self.assertEquals('Client1 1', seq_number.text_content())

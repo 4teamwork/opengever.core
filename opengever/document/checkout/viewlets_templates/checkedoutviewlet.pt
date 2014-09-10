@@ -1,5 +1,5 @@
 <dl tal:condition="viewlet/available"
-    class="portalMessage info"
+    class="portalMessage info checked_out_viewlet"
     i18n:domain="opengever.document">
 
     <dt i18n:translate="label_checked_out">Checked out</dt>
@@ -7,7 +7,7 @@
         <tal:block i18n:translate="message_checkout_info">
             This item is being checked out by
             <a i18n:name="creator"
-               tal:replace="structure viewlet/checkout_owner" />.
+               tal:replace="structure viewlet/checkout_by_link" />.
         </tal:block>
     </dd>
 </dl>

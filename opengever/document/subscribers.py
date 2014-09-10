@@ -1,7 +1,7 @@
 from five import grok
 from opengever.document import _
 from opengever.document.document import IDocumentSchema
-from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.utils import ogds_service
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from zope.component import getUtility
 from zope.globalrequest import getRequest
@@ -17,14 +17,10 @@ import os.path
 @grok.subscribe(IDocumentSchema, IObjectModifiedEvent)
 def resolve_document_author(document, event):
     if getattr(document, 'document_author', None):
-        info = getUtility(IContactInformation)
-        if info.is_user(document.document_author):
-            user = info.get_user(document.document_author)
-            if user:
-                document.document_author = info.describe(
-                    user, with_principal=False, with_email=False)
-
-                document.reindexObject(idxs=['sortable_author'])
+        user = ogds_service().fetch_user(document.document_author)
+        if user:
+            document.document_author = user.fullname()
+            document.reindexObject(idxs=['sortable_author'])
 
 
 @grok.subscribe(IDocumentSchema, IObjectCreatedEvent)

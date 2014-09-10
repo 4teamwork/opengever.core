@@ -1,7 +1,9 @@
 from AccessControl import getSecurityManager
 from DateTime import DateTime
 from five import grok
-from opengever.ogds.base.interfaces import IContactInformation
+from opengever.globalindex.model.task import Task
+from opengever.ogds.base.actor import Actor
+from opengever.task.response_description import ResponseDescription
 from opengever.task.task import ITask
 from persistent import Persistent
 from persistent.list import PersistentList
@@ -9,11 +11,10 @@ from zope.annotation.interfaces import IAnnotations
 from zope.app.container.contained import ObjectAddedEvent
 from zope.app.container.contained import ObjectRemovedEvent
 from zope.app.container.interfaces import UnaddableError
-from zope.component import getUtility
 from zope.event import notify
 from zope.interface import Attribute
-from zope.interface import Interface
 from zope.interface import implements
+from zope.interface import Interface
 
 
 class IResponseContainer(Interface):
@@ -125,7 +126,7 @@ class Response(Persistent):
         self.changes = PersistentList()
         sm = getSecurityManager()
         user = sm.getUser()
-        self.creator = user.getId() or '(anonymous)'
+        self.creator = user.getId()
         self.date = DateTime()
         self.type = 'additional'
         self.mimetype = ''
@@ -134,6 +135,7 @@ class Response(Persistent):
         self.added_object = None
         self.successor_oguid = None
         self.transition = None
+        self._description = None
 
     def add_change(self, id, name, before, after):
         """Add a new issue change.
@@ -146,8 +148,63 @@ class Response(Persistent):
         self.changes.append(delta)
 
     def creator_link(self):
-        info = getUtility(IContactInformation)
-        return info.render_link(self.creator)
+        return Actor.lookup(self.creator).get_link()
+
+    def css_class(self):
+        return self.get_description().css_class
+
+    def msg(self):
+        return self.get_description().msg()
+
+    def get_succesor(self):
+        self.successor_oguid
+        try:
+            self.successor_oguid
+        except AttributeError:
+            return None
+
+        if self.successor_oguid:
+            return Task.query.by_oguid(self.successor_oguid)
+        else:
+            return None
+
+    def get_description(self):
+        return ResponseDescription.get(self)
+
+    def get_change(self, field_name):
+        changes = [change for change in self.changes if change.get('id') == field_name]
+        if changes:
+            return changes[0]
+        return {}
+
+    def get_added_objects(self):
+        """ Returns two lists of docs, subtasks
+        """
+        try:
+            self.added_object
+        except AttributeError:
+            return [], []
+
+        # .. and sometimes it may be empty.
+        if not self.added_object:
+            return [], []
+
+        # Support for multiple added objects
+        if hasattr(self.added_object, '__iter__'):
+            relations = self.added_object
+        else:
+            relations = [self.added_object]
+
+        docs = []
+        subtasks = []
+        for rel in relations:
+            obj = rel.to_object
+            if ITask.providedBy(obj):
+                subtasks.append(obj)
+            else:
+                docs.append(obj)
+
+        return docs, subtasks
 
 
 class EmptyExporter(object):

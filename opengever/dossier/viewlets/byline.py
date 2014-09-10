@@ -3,8 +3,7 @@ from opengever.base.viewlets.byline import BylineBase
 from opengever.dossier import _
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossier
-from opengever.ogds.base.interfaces import IContactInformation
-from zope.component import getUtility
+from opengever.ogds.base.actor import Actor
 
 
 class BusinessCaseByline(BylineBase):
@@ -15,9 +14,8 @@ class BusinessCaseByline(BylineBase):
         return self.to_localized_time(dossier.start)
 
     def responsible(self):
-        info = getUtility(IContactInformation)
-        dossier = IDossier(self.context)
-        return info.render_link(dossier.responsible)
+        responsible = Actor.user(IDossier(self.context).responsible)
+        return responsible.get_link()
 
     def end(self):
         dossier = IDossier(self.context)

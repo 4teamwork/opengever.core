@@ -1,13 +1,8 @@
-from Products.CMFCore.utils import getToolByName
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.task.adapters import IResponseContainer
 from opengever.testing import FunctionalTestCase
-from opengever.testing import create_client
-from opengever.testing import create_ogds_user
-from opengever.testing import set_current_client_id
-from opengever.testing import task2sqltask
-from plone.app.testing import TEST_USER_ID
+from Products.CMFCore.utils import getToolByName
 
 
 class TestAssingForwarding(FunctionalTestCase):
@@ -17,10 +12,11 @@ class TestAssingForwarding(FunctionalTestCase):
     def setUp(self):
         super(TestAssingForwarding, self).setUp()
 
-        create_client()
-        create_client(clientid='client2')
-        create_ogds_user(TEST_USER_ID, groups=['client1_inbox_users', ])
-        set_current_client_id(self.portal)
+        create(Builder('org_unit')
+               .with_default_groups()
+               .id('client2')
+               .having(title='Client2',
+                       admin_unit=self.admin_unit))
 
         self.forwarding = create(
             Builder('forwarding')
@@ -33,7 +29,7 @@ class TestAssingForwarding(FunctionalTestCase):
         self.browser.open(self.forwarding.absolute_url())
         self.browser.getLink('forwarding-transition-reassign-refused').click()
 
-        self.assertEquals(
+        self.assertItemsEqual(
             ['client1', 'client2'],
             self.browser.control('Responsible Client').options)
 
@@ -42,11 +38,11 @@ class TestAssingForwarding(FunctionalTestCase):
 
         self.assertEquals('client2', self.forwarding.responsible_client)
         self.assertEquals('client2',
-                          task2sqltask(self.forwarding).assigned_client)
+                          self.forwarding.get_sql_object().assigned_org_unit)
 
         self.assertEquals('inbox:client2', self.forwarding.responsible)
         self.assertEquals('inbox:client2',
-                          task2sqltask(self.forwarding).responsible)
+                          self.forwarding.get_sql_object().responsible)
 
     def test_assign_sets_forwarding_in_open_state(self):
         self.assign_forwarding('client2', 'Fake Response')
@@ -56,7 +52,7 @@ class TestAssingForwarding(FunctionalTestCase):
                           wf_tool.getInfoFor(self.forwarding, 'review_state'))
 
         self.assertEquals('forwarding-state-open',
-                          task2sqltask(self.forwarding).review_state)
+                          self.forwarding.get_sql_object().review_state)
 
     def test_assign_add_corresonding_response(self):
         self.assign_forwarding('client2', 'Fake Response')

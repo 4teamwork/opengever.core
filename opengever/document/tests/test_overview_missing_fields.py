@@ -1,4 +1,5 @@
-from ftw.builder import create, Builder
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.testing import FunctionalTestCase
@@ -9,6 +10,7 @@ from zope.interface import Interface
 class TestDocumentOverviewMissingFields(FunctionalTestCase):
 
     def setUp(self):
+        super(TestDocumentOverviewMissingFields, self).setUp()
         omitted_values = []
         if OMITTED_KEY in IDocumentMetadata.getTaggedValueTags():
             omitted_values.extend(

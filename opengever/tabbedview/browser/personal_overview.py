@@ -1,13 +1,18 @@
 from AccessControl import Unauthorized
 from five import grok
 from ftw.tabbedview.browser.tabbed import TabbedView
-from opengever.globalindex.interfaces import ITaskQuery
-from opengever.ogds.base.interfaces import IContactInformation
-from opengever.ogds.base.utils import get_client_id
-from opengever.tabbedview.browser.tabs import Documents, Dossiers, Tasks
+from opengever.globalindex.model.task import Task
+from opengever.ogds.base.utils import get_current_admin_unit
+from opengever.ogds.base.utils import get_current_org_unit
+from opengever.ogds.base.utils import ogds_service
+from opengever.tabbedview import _
+from opengever.tabbedview import LOG
+from opengever.tabbedview.browser.tabs import Documents, Dossiers
 from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
+from plone import api
 from Products.CMFPlone.utils import getToolByName
-from zope.component import getUtility
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from sqlalchemy.exc import OperationalError
 from zope.interface import Interface
 import AccessControl
 
@@ -34,6 +39,8 @@ class PersonalOverview(TabbedView):
     where the actual user is the responsible.
     """
 
+    template = ViewPageTemplateFile("personal_overview.pt")
+
     default_tabs = [
         {'id': 'mydossiers', 'icon': None, 'url': '#', 'class': None},
         {'id': 'mydocuments', 'icon': None, 'url': '#', 'class': None},
@@ -59,47 +66,57 @@ class PersonalOverview(TabbedView):
             repos = catalog(portal_type='opengever.repository.repositoryroot')
             repo_url = repos[0].getURL()
             return self.request.RESPONSE.redirect(repo_url)
-
         else:
-            # hack: we have to enable the edit-menu to displays pdf-task-report
-            # checks in @@plone.showEditableBorder somehow fail to detect the
-            # pdf-open-task-report object_button action.
-            if self.context.restrictedTraverse(
-                    '@@pdf-open-task-report-allowed')():
-                self.request['enable_border'] = True
-            return super(PersonalOverview, self).__call__()
+            return self.template(self)
+
+    def personal_overview_title(self):
+        current_user = ogds_service().fetch_current_user()
+        if current_user:
+            user_name = current_user.label(with_principal=False)
+        else:
+            user_name = api.user.get_current().getUserName()
+
+        return _('personal_overview_title',
+                 default='Personal Overview: ${user_name}',
+                 mapping=dict(user_name=user_name))
 
     def _is_user_admin(self):
         m_tool = getToolByName(self.context, 'portal_membership')
         member = m_tool.getAuthenticatedMember()
         if member:
-            if  member.has_role('Administrator') \
+            if member.has_role('Administrator') \
                     or member.has_role('Manager'):
                 return True
         return False
 
     def get_tabs(self):
-
-        info = getUtility(IContactInformation)
-
-        if info.is_user_in_inbox_group() or self._is_user_admin():
-            # show admin tabs
+        if self.is_user_allowed_to_view_additional_tabs():
             return self.default_tabs + self.admin_tabs
         else:
             return self.default_tabs
+
+    def is_user_allowed_to_view_additional_tabs(self):
+        """The additional tabs Alltasks and AllIssuedTasks are only shown
+        to adminsitrators and users of the current inbox group."""
+
+        inbox = get_current_org_unit().inbox()
+        current_user = ogds_service().fetch_current_user()
+        return current_user in inbox.assigned_users() or self._is_user_admin()
 
     def user_is_allowed_to_view(self):
         """Returns True if the current client is one of the user's home
         clients or an administrator and he therefore is allowed to view
         the PersonalOverview, False otherwise.
         """
+        try:
+            current_user = ogds_service().fetch_current_user()
+            if current_user in get_current_admin_unit().assigned_users():
+                return True
+            elif self._is_user_admin():
+                return True
+        except OperationalError as e:
+            LOG.exception(e)
 
-        info = getUtility(IContactInformation)
-
-        if info.is_client_assigned():
-            return True
-        elif self._is_user_admin():
-            return True
         return False
 
 
@@ -160,8 +177,8 @@ class MyDocuments(Documents):
 
 
 class MyTasks(GlobalTaskListingTab):
-    """A listing view,
-    wich show all task where the actual user is the responsible.
+    """A listing view, which lists all tasks where the given
+    user is responsible. It queries all admin units.
 
     This listing is based on opengever.globalindex (sqlalchemy) and respects
     the basic features of tabbedview such as searching and batching.
@@ -181,28 +198,16 @@ class MyTasks(GlobalTaskListingTab):
         ]
 
     def get_base_query(self):
-        """Returns the base search query (sqlalchemy)i
-        """
-
         portal_state = self.context.unrestrictedTraverse(
             '@@plone_portal_state')
         userid = portal_state.member().getId()
 
-        query_util = getUtility(ITaskQuery)
-
-        # show all tasks assigned to this user ..
-        query = query_util._get_tasks_for_responsible_query(userid,
-                                                            self.sort_on,
-                                                            self.sort_order)
-
-        # .. and assigned to the current client
-        query = query.filter_by(assigned_client=get_client_id())
-        return query
+        return Task.query.users_tasks(userid)
 
 
-class IssuedTasks(Tasks):
-    """List all tasks where I'm the issuer and which are physically stored on
-    the current client.
+class IssuedTasks(GlobalTaskListingTab):
+    """A ListingView list all tasks where the given user is the issuer.
+    Queries all admin units.
     """
 
     grok.name('tabbedview_view-myissuedtasks')
@@ -216,12 +221,15 @@ class IssuedTasks(Tasks):
 
     major_actions = ['pdf_taskslisting']
 
-    search_options = {'issuer': authenticated_member, }
+    def get_base_query(self):
+        portal_state = self.context.unrestrictedTraverse(
+            '@@plone_portal_state')
+        userid = portal_state.member().getId()
 
-    columns = remove_subdossier_column(Tasks.columns)
+        return Task.query.users_issued_tasks(userid)
 
 
-class AllTasks(MyTasks):
+class AllTasks(GlobalTaskListingTab):
     """Lists all tasks assigned to this clients.
     Bases on MyTasks
     """
@@ -238,15 +246,10 @@ class AllTasks(MyTasks):
     major_actions = ['pdf_taskslisting']
 
     def get_base_query(self):
-        """Returns the base search query (sqlalchemy)
-        """
-
-        query_util = getUtility(ITaskQuery)
-        return query_util._get_tasks_for_assigned_client_query(
-            get_client_id(), self.sort_on, self.sort_order)
+        return Task.query.by_assigned_org_unit(get_current_org_unit())
 
 
-class AllIssuedTasks(Tasks):
+class AllIssuedTasks(GlobalTaskListingTab):
     """List all tasks which are stored physically on this client.
     """
 
@@ -261,4 +264,5 @@ class AllIssuedTasks(Tasks):
 
     major_actions = ['pdf_taskslisting']
 
-    columns = remove_subdossier_column(Tasks.columns)
+    def get_base_query(self):
+        return Task.query.by_issuing_org_unit(get_current_org_unit())

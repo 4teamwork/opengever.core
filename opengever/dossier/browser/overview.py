@@ -1,14 +1,16 @@
-from Products.ZCatalog.interfaces import ICatalogBrain
 from five import grok
 from opengever.base.browser.helper import get_css_class
 from opengever.dossier import _ as _dossier
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
 from opengever.dossier.behaviors.participation import IParticipationAware
+from opengever.globalindex.model.task import Task
 from opengever.globalindex.utils import indexed_task_link_helper
-from opengever.ogds.base.interfaces import IContactInformation
-from opengever.tabbedview.browser.tabs import OpengeverTab
-from zope.component import getUtility
+from opengever.ogds.base.actor import Actor
+from opengever.ogds.base.utils import get_current_admin_unit
+from opengever.tabbedview.browser.base import OpengeverTab
+from Products.ZCatalog.interfaces import ICatalogBrain
+from sqlalchemy import desc
 
 
 class DossierOverview(grok.View, OpengeverTab):
@@ -54,7 +56,8 @@ class DossierOverview(grok.View, OpengeverTab):
             review_state=DOSSIER_STATES_OPEN)[:5]
 
     def tasks(self):
-        return self.catalog(['opengever.task.task', ])[:5]
+        return Task.query.by_container(self.context, get_current_admin_unit())\
+                         .order_by(desc('modified')).limit(5).all()
 
     def documents(self):
         documents = self.catalog(
@@ -71,7 +74,6 @@ class DossierOverview(grok.View, OpengeverTab):
         return document_list
 
     def sharing(self):
-
         # get the participants
         phandler = IParticipationAware(self.context)
         results = list(phandler.get_participations())
@@ -88,14 +90,15 @@ class DossierOverview(grok.View, OpengeverTab):
         responsible.contact = dossier_adpt.responsible
         results.append(responsible)
 
-        info = getUtility(IContactInformation)
-
-        return [{
-            'Title': info.describe(xx.contact),
-            'getURL': info.get_profile_url(xx.contact),
-            'css_class': 'function-user',
-            }
-            for xx in results]
+        users = []
+        for dossier in results:
+            actor = Actor.lookup(dossier.contact)
+            users.append({
+                'Title': actor.get_label(),
+                'getURL': actor.get_profile_url(),
+                'css_class': 'function-user',
+            })
+        return users
 
     def description(self):
         return self.context.description

@@ -1,10 +1,8 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
-from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.interfaces import ICheckinCheckoutManager
-from opengever.testing import create_ogds_user
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import login
 from plone.app.testing import logout
@@ -19,15 +17,9 @@ import transaction
 
 class TestDocumentOverview(FunctionalTestCase):
 
-    layer = OPENGEVER_FUNCTIONAL_TESTING
-
     def setUp(self):
         super(TestDocumentOverview, self).setUp()
-        self.portal = self.layer['portal']
-        setRoles(self.portal, TEST_USER_ID, ['Manager'])
-        login(self.portal, TEST_USER_NAME)
-
-        create_ogds_user(TEST_USER_ID)
+        self.grant('Manager')
         self.document = create(Builder('document').with_dummy_content())
 
         transaction.commit()
@@ -51,7 +43,7 @@ class TestDocumentOverview(FunctionalTestCase):
     def test_overview_has_creator_link(self, browser):
 
         browser.login().open(self.document, view='tabbedview_view-overview')
-        self.assertEquals('Boss Hugo (test_user_1_)',
+        self.assertEquals('Test User (test_user_1_)',
                           browser.css('td [href*="user-details"]').first.text)
         self.assertEquals(
             '{0}/@@user-details/test_user_1_'.format(
@@ -83,7 +75,7 @@ class TestDocumentOverview(FunctionalTestCase):
 
         browser.login().visit(document, view='tabbedview_view-overview')
 
-        self.assertEquals('Boss Hugo (test_user_1_)',
+        self.assertEquals('Test User (test_user_1_)',
                           browser.css('[href*="user-details"]').first.text)
         self.assertEquals('Edit Document',
                           browser.css('a.function-edit').first.text)

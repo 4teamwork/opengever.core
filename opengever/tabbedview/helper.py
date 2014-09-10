@@ -1,14 +1,13 @@
-from datetime import date as dt
 from ftw.mail.utils import get_header
 from opengever.base import _ as base_mf
 from opengever.base.browser.helper import get_css_class
-from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.actor import Actor
+from opengever.ogds.base.utils import ogds_service
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize import ram
 from Products.CMFCore.interfaces._tools import IMemberData
 from Products.CMFPlone import PloneMessageFactory as pmf
-from Products.PluggableAuthService.interfaces.authservice import \
-    IPropertiedUser
+from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
 from zope.app.component.hooks import getSite
 from zope.component import getMultiAdapter
 from zope.component import getUtility
@@ -24,6 +23,17 @@ except pkg_resources.DistributionNotFound:
     PDFCONVERTER_AVAILABLE = False
 else:
     PDFCONVERTER_AVAILABLE = True
+
+
+def org_unit_title_helper(item, value):
+    return item.get_issuing_org_unit().label()
+
+
+def display_org_unit_title_condition():
+    """A helper for hiding the org-unit title from a task listing if we
+    have a single org-unit setup (it would be the same all the time).
+    """
+    return ogds_service().has_multiple_org_units()
 
 
 def task_id_checkbox_helper(item, value):
@@ -59,49 +69,30 @@ def readable_ogds_author(item, author):
         else:
             # Brain
             author = item.document_author
+
     if not isinstance(author, unicode):
         if author is not None:
             author = author.decode('utf-8')
         else:
             author = ''
-    if IPropertiedUser.providedBy(author) or IMemberData.providedBy(author):
-        author = author.getId()
-    info = getUtility(IContactInformation)
-    if info.is_user(author) or info.is_contact(
-            author) or info.is_inbox(author):
-        return info.describe(author)
-    else:
-        return author
+
+    return Actor.lookup(author).get_label()
 
 
 @ram.cache(author_cache_key)
-def readable_ogds_user(item, user):
-    if not isinstance(user, unicode):
-        if user is not None:
-            user = user.decode('utf-8')
+def readable_ogds_user(item, userid):
+    if not isinstance(userid, unicode):
+        if userid is not None:
+            userid = userid.decode('utf-8')
         else:
-            user = ''
-    if IPropertiedUser.providedBy(user) or IMemberData.providedBy(user):
-        user = user.getId()
-    info = getUtility(IContactInformation)
-    if info.is_user(user) or info.is_contact(user) or info.is_inbox(user):
-        return info.describe(user)
-    else:
-        return user
+            userid = ''
+
+    return Actor.user(userid).get_label()
 
 
 @ram.cache(author_cache_key)
 def linked_ogds_author(item, author):
-    if author:
-        if isinstance(author, str):
-            author = author.decode('utf-8')
-        info = getUtility(IContactInformation)
-        if info.is_user(author) or info.is_contact(
-                author) or info.is_inbox(author):
-            return info.render_link(author)
-        else:
-            return author
-    return ''
+    return Actor.lookup(author).get_link()
 
 
 def _breadcrumbs_from_item(item):
@@ -306,38 +297,6 @@ def workflow_state(item, value):
         state, translate(value, domain='plone', context=request))
 
 
-def overdue_date_helper(item, date):
-    """Helper for setting CSS class `overdue` if an item's
-    deadline is in the past.
-
-    Partially based on ftw.table.helper.readable_date
-    """
-
-    if not date:
-        return u''
-
-    strftimestring = '%d.%m.%Y'
-
-    overdue = False
-    try:
-        formatted_date = date.strftime(strftimestring)
-        if dt.fromordinal(date.toordinal()) < dt.today():
-            overdue = True
-    except ValueError:
-        return None
-
-    if overdue and item and item.review_state in [
-        'task-state-cancelled',
-        'task-state-rejected',
-        'task-state-tested-and-closed',
-        'forwarding-state-closed']:
-
-        overdue = False
-
-    class_attr = overdue and 'class="overdue"' or ''
-    return """<span %s>%s</span>""" % (class_attr, formatted_date)
-
-
 def queue_view_helper(item, value):
     site = getSite()
     return """<a href='%s/jobs_view?queue=%s'>%s</a>""" % (
@@ -373,17 +332,3 @@ def translated_string(domain='plone'):
         return translate(
             value, context=getRequest(), domain=domain)
     return _translate
-
-
-def display_client_title_condition():
-    """A helper for hiding the client title from a task listing if we
-    have a single client setup (it would be the same all the time).
-    """
-    info = getUtility(IContactInformation)
-    if len(info.get_clients()) <= 1:
-        # Single client setup - hide the client title column
-        return False
-
-    else:
-        # Multi client setup - display the client title column
-        return True

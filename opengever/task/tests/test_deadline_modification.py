@@ -1,17 +1,12 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from opengever.globalindex.interfaces import ITaskQuery
 from opengever.task.adapters import IResponseContainer
+from opengever.task.browser.modify_deadline import ModifyDeadlineFormView
 from opengever.task.interfaces import IDeadlineModifier
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.testing import FunctionalTestCase
-from opengever.testing import create_client
-from opengever.testing import create_ogds_user
-from opengever.testing import set_current_client_id
 from plone.app.testing import TEST_USER_ID
 from zExceptions import Unauthorized
-from zope.component import getUtility
-from zope.intid.interfaces import IIntIds
 import datetime
 
 
@@ -20,7 +15,9 @@ class TestDeadlineModificationForm(FunctionalTestCase):
     use_browser = True
 
     def _change_deadline(self, task, new_deadline, text=u''):
-        self.browser.open('%s/modify_deadline' % task.absolute_url())
+        url = ModifyDeadlineFormView.url_for(task,
+            transition='task-transition-modify-deadline')
+        self.browser.open(url)
         self.browser.fill({
             'New Deadline': new_deadline.strftime('%m/%d/%y'),
             'Response': text})
@@ -32,7 +29,9 @@ class TestDeadlineModificationForm(FunctionalTestCase):
 
         new_deadline = datetime.date(2013, 10, 1)
 
-        self.browser.open('%s/modify_deadline' % task.absolute_url())
+        url = ModifyDeadlineFormView.url_for(task,
+            transition='task-transition-modify-deadline')
+        self.browser.open(url)
         self.browser.fill({
             'New Deadline': new_deadline.strftime('%m/%d/%y'), })
         self.browser.click('Save')
@@ -45,31 +44,29 @@ class TestDeadlineModificationForm(FunctionalTestCase):
         task = create(Builder('task')
                       .having(issuer=TEST_USER_ID, deadline=current_deadline))
 
-        self.browser.open('%s/modify_deadline' % task.absolute_url())
+        url = ModifyDeadlineFormView.url_for(task,
+            transition='task-transition-modify-deadline')
+        self.browser.open(url)
         self.browser.fill({
             'New Deadline': current_deadline.strftime('%m/%d/%y'), })
         self.browser.click('Save')
 
-        self.browser.assert_url('%s/modify_deadline' % task.absolute_url())
+        self.browser.assert_url(
+            '{}/@@modify_deadline'.format(task.absolute_url()))
         self.assertPageContains('The given deadline, is the current one.')
 
     def test_deadline_is_updated_also_in_globalindex(self):
-        create_client()
-        set_current_client_id(self.portal)
         task = create(Builder('task')
                       .having(issuer=TEST_USER_ID, deadline=datetime.date(2013, 1, 1)))
 
         self._change_deadline(task, datetime.date(2013, 10, 1), '')
 
-        query = getUtility(ITaskQuery)
-        intids = getUtility(IIntIds)
-
-        sql_task = query.get_task(intids.getId(task), 'client1')
-        self.assertEquals(sql_task.deadline, datetime.date(2013, 10, 1))
+        self.assertEquals(task.get_sql_object().deadline, datetime.date(2013, 10, 1))
 
     def test_according_response_is_created_when_modify_deadline(self):
         task = create(Builder('task')
-                     .having(issuer=TEST_USER_ID, deadline=datetime.date(2013, 1, 1)))
+                      .having(issuer=TEST_USER_ID,
+                              deadline=datetime.date(2013, 1, 1)))
 
         self._change_deadline(task, datetime.date(2013, 10, 1), 'Lorem Ipsum')
         container = IResponseContainer(task)
@@ -85,9 +82,6 @@ class TestDeadlineModificationForm(FunctionalTestCase):
             response.changes)
 
     def test_successor_is_also_updated_when_modify_predecessors_deadline(self):
-        create_client()
-        set_current_client_id(self.portal)
-
         predecessor = create(Builder('task')
                              .having(issuer=TEST_USER_ID,
                                      deadline=datetime.date(2013, 1, 1)))
@@ -113,9 +107,6 @@ class TestDeadlineModifierController(FunctionalTestCase):
             task.restrictedTraverse('is_deadline_modification_allowed')())
 
     def test_modify_is_allowed_for_issuer_on_a_in_progress_task(self):
-        create_client()
-        set_current_client_id(self.portal)
-
         task = create(Builder('task')
                       .having(issuer=TEST_USER_ID, responsible=TEST_USER_ID)
                       .in_progress())
@@ -124,9 +115,6 @@ class TestDeadlineModifierController(FunctionalTestCase):
             task.restrictedTraverse('is_deadline_modification_allowed')())
 
     def test_modify_is_allowed_for_a_inbox_group_user_when_inbox_is_issuer(self):
-        create_client(clientid='client1')
-        create_ogds_user(TEST_USER_ID, groups=('client1_inbox_users', ))
-        set_current_client_id(self.portal)
         task = create(Builder('task')
                       .having(issuer='inbox:client1', responsible=TEST_USER_ID)
                       .in_progress())
@@ -208,4 +196,6 @@ class TestDeadlineModifier(FunctionalTestCase):
 
         with self.assertRaises(Unauthorized):
             IDeadlineModifier(task).modify_deadline(
-                datetime.date(2013, 10, 1), 'changed deadline')
+                datetime.date(2013, 10, 1),
+                'changed deadline',
+                'task-transition-modify-deadline')

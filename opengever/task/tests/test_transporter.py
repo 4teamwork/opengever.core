@@ -1,19 +1,17 @@
-from opengever.globalindex.interfaces import ITaskQuery
-from opengever.ogds.base.utils import get_client_id
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.task.interfaces import ITaskDocumentsTransporter
 from opengever.task.task import ITask
-from opengever.testing import OPENGEVER_INTEGRATION_TESTING
-from opengever.testing import create_client
-from opengever.testing import set_current_client_id
+from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 from plone.dexterity.utils import createContentInContainer
 from plone.dexterity.utils import iterSchemata
 from z3c.form.interfaces import IValue
 from z3c.relationfield.relation import RelationValue
-from zope.component import getUtility, queryMultiAdapter
+from zope.component import getUtility
+from zope.component import queryMultiAdapter
 from zope.intid.interfaces import IIntIds
 from zope.schema import getFieldsInOrder
-import unittest2 as unittest
 
 
 def set_defaults(obj):
@@ -45,27 +43,16 @@ def set_defaults(obj):
     return obj
 
 
-class TestTransporter(unittest.TestCase):
-
-    layer = OPENGEVER_INTEGRATION_TESTING
-
-    def setUp(self):
-        self.app = self.layer['app']
-        self.portal = self.layer['portal']
-
-        create_client()
-        set_current_client_id(self.portal)
-
+class TestTransporter(FunctionalTestCase):
 
     def _create_task(self, context, with_docs=False, return_docs=False):
 
         # task
-        task = createContentInContainer(
-            context,
-            'opengever.task.task',
-            title="Task1", task_type='correction',
-            checkConstraints=False)
-        task.responsible = TEST_USER_ID
+        task = create(Builder('task')
+                      .having(title='Task1',
+                              responsible=TEST_USER_ID,
+                              issuer=TEST_USER_ID,
+                              task_type='correction'))
 
         if not with_docs:
             return task
@@ -93,17 +80,12 @@ class TestTransporter(unittest.TestCase):
         return task
 
     def test_documents_task_transport(self):
-        intids = getUtility(IIntIds)
-
         task = self._create_task(self.portal, with_docs=True)
         target = self._create_task(self.portal)
 
-        sql_task = getUtility(ITaskQuery).get_task(
-            intids.getId(task), get_client_id())
-
         doc_transporter = getUtility(ITaskDocumentsTransporter)
         doc_transporter.copy_documents_from_remote_task(
-            sql_task, target)
+            task.get_sql_object(), target)
 
         self.assertEquals(
             [aa.Title for aa in target.getFolderContents()].sort(),
@@ -115,8 +97,7 @@ class TestTransporter(unittest.TestCase):
         task, documents = self._create_task(
             self.portal, with_docs=True, return_docs=True)
         target = self._create_task(self.portal)
-        sql_task = getUtility(ITaskQuery).get_task(
-            intids.getId(task), get_client_id())
+        sql_task = task.get_sql_object()
 
         doc_transporter = getUtility(ITaskDocumentsTransporter)
         ids = [intids.getId(documents[0]), intids.getId(documents[3])]

@@ -1,7 +1,7 @@
 <div class="member_overview" i18n:domain="opengever.base">
     <h1>
         <span i18n:translate="">Users of group:</span>
-        &quot;<span tal:content="view/group_name" />&quot;
+        &quot;<span tal:content="view/group_id" />&quot;
     </h1>
     <br />
     <ul class="member_listing" tal:condition="view/members">

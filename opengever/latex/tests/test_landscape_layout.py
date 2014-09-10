@@ -1,8 +1,7 @@
 from ftw.testing import MockTestCase
 from mocker import ANY
-from opengever.base.interfaces import IBaseClientID
-from opengever.latex.interfaces import ILaTeXSettings
 from opengever.latex.interfaces import ILandscapeLayer
+from opengever.latex.interfaces import ILaTeXSettings
 from opengever.latex.layouts.landscape import LandscapeLayout
 from opengever.latex.testing import LATEX_ZCML_LAYER
 from opengever.ogds.base import utils
@@ -22,12 +21,14 @@ class TestLandscapeLayout(MockTestCase):
         super(TestLandscapeLayout, self).setUp()
         self.context = self.stub()
 
-        client = self.create_dummy(title='CLIENT ONE',
-                                   clientid='client1')
-        self._ori_get_current_client = utils.get_current_client
-        get_current_client = self.mocker.replace(
-            'opengever.ogds.base.utils.get_current_client')
-        self.expect(get_current_client()).result(client).count(0, None)
+        orgunit = self.stub()
+        self.expect(orgunit.label()).result('CLIENT ONE')
+
+        self._ori_get_current_org_unit = utils.get_current_org_unit
+        get_current_org_unit = self.mocker.replace(
+            'opengever.ogds.base.utils.get_current_org_unit')
+        self.expect(get_current_org_unit()).result(orgunit).count(0, None)
+        self.expect(orgunit.id()).result(FAKE_CLIENT_TITLE).count(0, None)
 
         self.portal_membership = self.stub()
         self.mock_tool(self.portal_membership, 'portal_membership')
@@ -35,8 +36,6 @@ class TestLandscapeLayout(MockTestCase):
         registry_mock = self.stub()
         self.expect(
             registry_mock.forInterface(ILaTeXSettings).location).result(FAKE_LOCATION)
-        self.expect(
-            registry_mock.forInterface(IBaseClientID).client_title).result(FAKE_CLIENT_TITLE)
 
         self.mock_utility(registry_mock, IRegistry)
 
@@ -49,7 +48,7 @@ class TestLandscapeLayout(MockTestCase):
 
     def tearDown(self):
         super(TestLandscapeLayout, self).tearDown()
-        utils.get_current_client = self._ori_get_current_client
+        utils.get_current_org_unit = self._ori_get_current_org_unit
 
     def test_adapts_landscape_request_layer(self):
         self.replay()

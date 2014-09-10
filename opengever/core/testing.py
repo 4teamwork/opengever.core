@@ -1,6 +1,6 @@
 from collective.transmogrifier import transmogrifier
+from ftw.builder import session
 from ftw.builder.testing import BUILDER_LAYER
-from ftw.builder.testing import functional_session_factory
 from ftw.builder.testing import set_builder_session_factory
 from ftw.testing import ComponentRegistryLayer
 from opengever.globalindex import model
@@ -17,8 +17,15 @@ from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.browserlayer.utils import unregister_layer
 from plone.dexterity.schema import SCHEMA_CACHE
+from plone.testing import Layer
 from plone.testing import z2
 from Products.CMFCore.utils import getToolByName
+from Testing.ZopeTestCase.utils import setupCoreSessions
+from z3c.saconfig import EngineFactory
+from z3c.saconfig import GloballyScopedSession
+from z3c.saconfig.interfaces import IEngineFactory
+from z3c.saconfig.interfaces import IScopedSession
+from zope.component import provideUtility
 from zope.configuration import xmlconfig
 from zope.sqlalchemy import datamanager
 import transaction
@@ -93,11 +100,19 @@ class OpengeverFixture(PloneSandboxLayer):
             '  <includePluginsOverrides package="plone" />'
 
             '  <include package="opengever.ogds.base" file="tests.zcml" />'
+            '  <include package="opengever.setup.tests" />'
 
             '</configure>',
             context=configurationContext)
 
         z2.installProduct(app, 'plone.app.versioningbehavior')
+
+        setupCoreSessions(app)
+
+        # Set max subobject limit to 0 -> unlimited
+        # In tests this is set to 100 by default
+        transient_object_container = app.temp_folder.session_data
+        transient_object_container.setSubobjectLimit(0)
 
     def setUpPloneSite(self, portal):
         self.installOpengeverProfiles(portal)
@@ -142,10 +157,56 @@ class OpengeverFixture(PloneSandboxLayer):
         setRoles(portal, TEST_USER_ID, ['Member'])
 
 
+class MemoryDBLayer(Layer):
+    """A Layer which only set up a test sqlite db in to the memory
+    """
+
+    def testSetUp(self):
+        super(MemoryDBLayer, self).testSetUp()
+        setup_sql_tables()
+        self.session = create_session()
+
+    def testTearDown(test):
+        truncate_sql_tables()
+        transaction.abort()
+
+
+def integration_session_factory():
+    sess = session.BuilderSession()
+    sess.session = create_session()
+    return sess
+
+
+def functional_session_factory():
+    sess = session.BuilderSession()
+    sess.auto_commit = True
+    sess.session = create_session()
+    return sess
+
+
+def memory_session_factory():
+    engine_factory = EngineFactory('sqlite:///:memory:')
+    provideUtility(
+        engine_factory, provides=IEngineFactory, name=u'opengever_db')
+
+    scoped_session = GloballyScopedSession(engine=u'opengever_db')
+    provideUtility(
+        scoped_session, provides=IScopedSession, name=u'opengever')
+
+    return functional_session_factory()
+
+
+MEMORY_DB_LAYER = MemoryDBLayer(
+    bases=(BUILDER_LAYER,
+           set_builder_session_factory(memory_session_factory)),
+    name='opengever:core:memory_db')
+
 OPENGEVER_FIXTURE = OpengeverFixture()
 
 OPENGEVER_INTEGRATION_TESTING = IntegrationTesting(
-    bases=(OPENGEVER_FIXTURE, ), name="opengever.core:integration")
+    bases=(OPENGEVER_FIXTURE,
+           set_builder_session_factory(integration_session_factory)),
+    name="opengever.core:integration")
 
 OPENGEVER_FUNCTIONAL_TESTING = FunctionalTesting(
     bases=(OPENGEVER_FIXTURE,

@@ -1,18 +1,20 @@
-from opengever.base.interfaces import ISequenceNumber, IBaseClientID
+from opengever.base.interfaces import ISequenceNumber
 from opengever.base.viewlets.byline import BylineBase
-from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.actor import Actor
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.task import _
 from opengever.task.task import ITask
-from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 
 
 class TaskByline(BylineBase):
 
+    def get_css_class(self):
+        return self.context.get_sql_object().get_css_class()
+
     def responsible_link(self):
-        info = getUtility(IContactInformation)
-        task = ITask(self.context)
-        return info.render_link(task.responsible)
+        return Actor.lookup(
+            ITask(self.context).responsible).get_link()
 
     def sequence_number(self):
         sequence = getUtility(ISequenceNumber)
@@ -20,9 +22,7 @@ class TaskByline(BylineBase):
                               sequence.get_number(self.context))
 
     def get_base_client_id(self):
-        registry = getUtility(IRegistry)
-        proxy = registry.forInterface(IBaseClientID)
-        return getattr(proxy, 'client_id')
+        return get_current_admin_unit().label()
 
     def get_items(self):
         return [

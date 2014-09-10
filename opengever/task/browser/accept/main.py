@@ -4,18 +4,17 @@ deciding whether to use the wizard and it also contains the first wizard
 step, where the user has to choose the method of participation.
 """
 
-from Products.CMFCore.utils import getToolByName
-from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
-from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.utils import ogds_service
 from opengever.task import _
 from opengever.task.browser.accept.utils import accept_task_with_response
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
 from plone.directives.form import Schema
 from plone.z3cform.layout import FormWrapper
+from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.browser.radio import RadioFieldWidget
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
@@ -47,8 +46,7 @@ class AcceptWizardFormMixin(BaseWizardStepForm):
 
 @grok.provider(IContextSourceBinder)
 def method_vocabulary_factory(context):
-    info = getUtility(IContactInformation)
-    client = info.get_client_by_id(context.responsible_client)
+    org_unit = context.get_responsible_org_unit()
 
     # decision it's a forwarding or a task
     if context.task_type == 'forwarding_task_type':
@@ -57,19 +55,19 @@ def method_vocabulary_factory(context):
                     value=u'forwarding_participate',
                     title=_(u'accept_method_forwarding_participate',
                             default=u"... store in ${client}'s inbox.",
-                            mapping={'client': client.title})),
+                            mapping={'client': org_unit.label()})),
 
                 SimpleTerm(
                     value=u'existing_dossier',
                     title=_(u'accept_method_forwarding_existing_dossier',
                             default=u"... store in  ${client}'s inbox and process in an existing dossier on ${client}",
-                            mapping={'client': client.title})),
+                            mapping={'client': org_unit.label()})),
 
                 SimpleTerm(
                     value=u'new_dossier',
                     title=_(u'accept_method_forwarding_new_dossier',
                             default=u"... store in  ${client}'s inbox and process in a new dossier on ${client}",
-                            mapping={'client': client.title}))])
+                            mapping={'client': org_unit.label()}))])
 
     else:
         return SimpleVocabulary([
@@ -82,13 +80,13 @@ def method_vocabulary_factory(context):
                     value=u'existing_dossier',
                     title=_(u'accept_method_existing_dossier',
                             default=u'file in existing dossier in ${client}',
-                            mapping={'client': client.title})),
+                            mapping={'client': org_unit.label()})),
 
                 SimpleTerm(
                     value=u'new_dossier',
                     title=_(u'accept_method_new_dossier',
                             default=u'file in new dossier in ${client}',
-                            mapping={'client': client.title}))])
+                            mapping={'client': org_unit.label()}))])
 
 
 class IChooseMethodSchema(Schema):
@@ -108,26 +106,21 @@ class IChooseMethodSchema(Schema):
 
 
 class MethodValidator(SimpleFieldValidator):
+    """The user should not be able to create a dossier or use on existing
+    dossier on a remote orgunit if he does not participate in this unit.
+    """
 
     def validate(self, value):
         super(MethodValidator, self).validate(value)
 
-        # The user should not be able to create a dossier or use on existing
-        # dossier on a remote client if he does not participate in this
-        # client.
         if value != u'participate':
-            mtool = getToolByName(self.context, 'portal_membership')
-            userid = mtool.getAuthenticatedMember().getId()
+            org_unit = self.context.get_responsible_org_unit()
 
-            info = getUtility(IContactInformation)
-            client = info.get_client_by_id(self.context.responsible_client)
-            user = info.get_user(userid)
-
-            if user not in client.users_group.users:
+            if org_unit not in ogds_service().assigned_org_units():
                 msg = _(u'You are not assigned to the responsible client '
                         u'(${client}). You can only process the task in the '
                         u'issuers dossier.',
-                        mapping={'client': client.title})
+                        mapping={'client': org_unit.id()})
                 raise Invalid(msg)
 
 WidgetValidatorDiscriminators(MethodValidator,
@@ -181,42 +174,34 @@ class ChooseMethodStepForm(AcceptWizardFormMixin, Form):
                 """only store the forwarding in the inbox and
                 create a successor forwrding"""
 
-                info = getUtility(IContactInformation)
-                client = info.get_client_by_id(
-                    self.context.responsible_client)
+                admin_unit = self.context.get_responsible_admin_unit()
 
-                # push session data to target client
-                dm.push_to_remote_client(dmkey, client.client_id)
-
+                # push session data to target unit
+                dm.push_to_remote_client(dmkey, admin_unit.id())
                 url = '%s/@@accept_store_in_inbox?oguid=%s' % (
-                    client.public_url,
-                    oguid)
+                    admin_unit.public_url, oguid)
+
                 return self.request.RESPONSE.redirect(url)
 
             elif method == 'existing_dossier':
-                info = getUtility(IContactInformation)
-                client = info.get_client_by_id(
-                    self.context.responsible_client)
+                admin_unit = self.context.get_responsible_admin_unit()
 
-                # push session data to target client
-                dm.push_to_remote_client(dmkey, client.client_id)
+                # push session data to target unit
+                dm.push_to_remote_client(dmkey, admin_unit.id())
 
                 url = '%s/@@accept_choose_dossier?oguid=%s' % (
-                    client.public_url,
-                    oguid)
+                    admin_unit.public_url, oguid)
                 return self.request.RESPONSE.redirect(url)
 
             elif method == 'new_dossier':
-                info = getUtility(IContactInformation)
-                client = info.get_client_by_id(
-                    self.context.responsible_client)
+                admin_unit = self.context.get_responsible_admin_unit()
                 oguid = ISuccessorTaskController(self.context).get_oguid()
 
                 # push session data to target client
-                dm.push_to_remote_client(dmkey, client.client_id)
+                dm.push_to_remote_client(dmkey, admin_unit.id())
 
                 url = '/'.join((
-                        client.public_url,
+                        admin_unit.public_url,
                         '@@accept_select_repositoryfolder?oguid=%s' % oguid))
                 return self.request.RESPONSE.redirect(url)
 

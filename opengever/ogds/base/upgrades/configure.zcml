@@ -1,15 +1,73 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:upgrade-step="http://namespaces.zope.org/ftw.upgrade"
     i18n_domain="opengever.ogds.base">
 
-    <!-- 1-> 3101 -->
+    <include package="ftw.upgrade" file="meta.zcml" />
+
+    <!-- 1 -> 3101 -->
     <genericsetup:upgradeStep
         title="Increase UserID and GroupID column lengths"
         description=""
         source="1"
         destination="3101"
         handler="opengever.ogds.base.upgrades.to3101.IncreaseUserAndGroupIDColumnLengths"
+        profile="opengever.ogds.base:default"
+        />
+
+    <!-- 3101 -> 4000 -->
+    <genericsetup:upgradeStep
+        title="Create AdminUnit table and migrate data."
+        description=""
+        source="3101"
+        destination="4000"
+        handler="opengever.ogds.base.upgrades.to4000.CreateAdminUnitTable"
+        profile="opengever.ogds.base:default"
+        />
+
+    <!-- 4000 -> 4001 -->
+    <genericsetup:upgradeStep
+        title="Create AdminUnit registry configuration."
+        description=""
+        source="4000"
+        destination="4001"
+        handler="opengever.ogds.base.upgrades.to4001.CreateAdminUnitRegistry"
+        profile="opengever.ogds.base:default"
+        />
+
+    <genericsetup:registerProfile
+          name="4001"
+          title="opengever.ogds.base: upgrade profile 4001"
+          directory="profiles/4001"
+          provides="Products.GenericSetup.interfaces.EXTENSION"
+          />
+
+    <!-- 4001 -> 4002 -->
+    <upgrade-step:importProfile
+            title="Add mobile action for orgunit selector"
+            profile="opengever.ogds.base:default"
+            source="4001"
+            destination="4002"
+            directory="profiles/4002"
+            />
+
+    <!-- 4002 -> 4003 -->
+    <upgrade-step:importProfile
+            title="Remove IClientConfiguration registry entry"
+            profile="opengever.ogds.base:default"
+            source="4002"
+            destination="4003"
+            directory="profiles/4003"
+            />
+
+    <!-- 4003 -> 4004 -->
+    <genericsetup:upgradeStep
+        title="Rename `clients` table to `org_units`."
+        description="Columns ip_address, site_url, public_url belong to AdminUnit."
+        source="4003"
+        destination="4004"
+        handler="opengever.ogds.base.upgrades.to4004.MigrateAdminUnitOrgUnitSchema"
         profile="opengever.ogds.base:default"
         />
 

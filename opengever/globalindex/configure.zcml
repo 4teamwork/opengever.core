@@ -7,7 +7,6 @@
     i18n_domain="opengever.globalindex">
 
   <include package=".handlers" />
-  <include package=".browser" />
   <include package=".upgrades" />
 
   <grok:grok package="." />
@@ -26,7 +25,5 @@
       profile="opengever.globalindex:default"
       handler=".hooks.installed"
       />
-
-  <utility factory=".query.TaskQuery" />
 
 </configure>

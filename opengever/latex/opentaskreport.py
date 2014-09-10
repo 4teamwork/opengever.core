@@ -9,13 +9,14 @@ from opengever.globalindex import Session
 from opengever.globalindex.model.task import Task
 from opengever.latex.interfaces import ILandscapeLayer
 from opengever.latex.utils import get_issuer_of_task
-from opengever.ogds.base.interfaces import IContactInformation
-from opengever.ogds.base.utils import get_client_id, get_current_client
 from opengever.latex.utils import workflow_state
+from opengever.ogds.base.actor import Actor
+from opengever.ogds.base.utils import get_current_org_unit
+from opengever.ogds.base.utils import ogds_service
 from opengever.task.helper import task_type_helper
-from sqlalchemy import and_, or_
+from sqlalchemy import and_
+from sqlalchemy import or_
 from sqlalchemy.sql.expression import asc
-from zope.component import getUtility
 from zope.interface import Interface
 
 
@@ -52,13 +53,11 @@ class OpenTaskReportLaTeXView(grok.MultiAdapter, MakoLaTeXView):
     template_name = 'opentaskreport.tex'
 
     def get_render_arguments(self):
-        self.info = getUtility(IContactInformation)
-
         self.layout.show_organisation = True
         self.layout.use_package('longtable')
 
         args = self.get_task_rows()
-        args['client'] = get_current_client().title
+        args['client'] = get_current_org_unit().label()
 
         return args
 
@@ -77,7 +76,7 @@ class OpenTaskReportLaTeXView(grok.MultiAdapter, MakoLaTeXView):
         query = query.filter(
             or_(
                 and_(Task.predecessor == None, Task.successors == None),
-                Task.client_id == get_client_id()))
+                Task.assigned_org_unit == get_current_org_unit().id()))
 
         return query
 
@@ -89,63 +88,70 @@ class OpenTaskReportLaTeXView(grok.MultiAdapter, MakoLaTeXView):
         outgoing -- open tasks assigned to another client
         """
 
-        clientid = get_client_id()
+        org_unit_id = get_current_org_unit().id()
 
         incoming_query = Session().query(Task)
         incoming_query = incoming_query.filter(
-            Task.assigned_client == clientid)
+            Task.assigned_org_unit == org_unit_id)
         incoming_query = self._extend_task_query(incoming_query)
 
         incoming = []
         for task in incoming_query.all():
             incoming.append(self.get_row_for_item(
-                    task,
-                    display_issuer_client=True))
+                            task,
+                            display_issuing_org_unit=True))
 
         outgoing_query = Session().query(Task)
-        outgoing_query = outgoing_query.filter(Task.client_id == clientid)
+        outgoing_query = outgoing_query.filter(
+            Task.issuing_org_unit == org_unit_id)
         outgoing_query = self._extend_task_query(outgoing_query)
 
         outgoing = []
         for task in outgoing_query.all():
             outgoing.append(self.get_row_for_item(
-                    task, display_responsible_client=True))
+                task, display_assigned_org_unit=True))
 
         return {'incoming': incoming,
                 'outgoing': outgoing}
 
-    def get_row_for_item(self, item, display_issuer_client=False,
-                         display_responsible_client=False):
+    def get_row_for_item(self, item, display_issuing_org_unit=False,
+                         display_assigned_org_unit=False):
+        return self.convert_list_to_row(
+            self.get_data_for_item(
+                item,
+                display_issuing_org_unit=display_issuing_org_unit,
+                display_assigned_org_unit=display_assigned_org_unit))
+
+    def get_data_for_item(self, item,
+                          display_issuing_org_unit=False,
+                          display_assigned_org_unit=False):
         task_type = task_type_helper(item, item.task_type)
         sequence_number = unicode(item.sequence_number).encode('utf-8')
         deadline = helper.readable_date(item, item.deadline)
 
         title = unicode(getattr(item, 'Title',
-                            getattr(item, 'title', ''))).encode('utf-8')
+                        getattr(item, 'title', ''))).encode('utf-8')
 
         issuer = get_issuer_of_task(item,
-                                    with_client=display_issuer_client,
+                                    with_client=display_issuing_org_unit,
                                     with_principal=False)
 
-        responsible = self.info.describe(item.responsible,
-                                         with_principal=False)
+        actor = Actor.lookup(item.responsible)
+        responsible = actor.get_label(with_principal=False)
 
-        if display_responsible_client:
-            responsible_client = self.info.get_client_by_id(
-                item.assigned_client).title
-            responsible = '%s / %s' % (
-                responsible_client,
-                responsible)
+        if display_assigned_org_unit:
+            org_unit = item.get_assigned_org_unit()
+            responsible = org_unit.prefix_label(responsible)
 
         dossier_title = item.containing_dossier or ''
 
         reference = unicode(getattr(
-                item, 'reference',
-                getattr(item, 'reference_number', ''))).encode('utf-8')
+            item, 'reference',
+            getattr(item, 'reference_number', ''))).encode('utf-8')
 
         review_state = workflow_state(item, item.review_state)
 
-        data = [
+        return [
             sequence_number,
             title,
             task_type,
@@ -157,8 +163,6 @@ class OpenTaskReportLaTeXView(grok.MultiAdapter, MakoLaTeXView):
             review_state,
             ]
 
-        return self.convert_list_to_row(data)
-
     def convert_list_to_row(self, row):
         return ' & '.join([self.convert_plain(cell) for cell in row])
 
@@ -169,5 +173,5 @@ class OpenTaskReportPDFAllowed(grok.View):
     grok.require('zope2.View')
 
     def render(self):
-        info = getUtility(IContactInformation)
-        return info.is_user_in_inbox_group()
+        inbox = get_current_org_unit().inbox()
+        return ogds_service().fetch_current_user() in inbox.assigned_users()

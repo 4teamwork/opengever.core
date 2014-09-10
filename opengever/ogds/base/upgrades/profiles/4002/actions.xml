@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<object name="portal_actions" meta_type="Plone Actions Tool"
+        xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+  <object name="mobile_buttons" meta_type="CMF Action Category">
+    <object name="toggle_orgunitselector" meta_type="CMF Action"
+            i18n:domain="opengever.ogds.base">
+      <property name="title" i18n:translate="">Toggle orgunit selector</property>
+      <property name="description" i18n:translate=""></property>
+      <property name="url_expr">string:#</property>
+      <property name="icon_expr"></property>
+      <property name="available_expr">portal/orgunit_selector/has_available_units|nothing</property>
+      <property name="permissions">
+        <element value="View"/>
+      </property>
+      <property name="visible">True</property>
+    </object>
+  </object>
+
+</object>

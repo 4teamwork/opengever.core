@@ -39,6 +39,11 @@ class TestDossierByline(TestBylineBase):
         responsible = self.get_byline_value_by_label('Responsible:')
         self.assertEquals('Boss Hugo (hugo.boss)', responsible.text_content())
 
+    def test_dossier_byline_responsible_is_linked_to_user_details(self):
+        responsible = self.get_byline_value_by_label('Responsible:')
+        self.assertEqual('http://nohost/plone/@@user-details/hugo.boss',
+                          responsible.get('href'))
+
     def test_dossier_byline_state_display(self):
         state = self.get_byline_value_by_label('State:')
         self.assertEquals('dossier-state-active', state.text_content())
@@ -53,7 +58,7 @@ class TestDossierByline(TestBylineBase):
 
     def test_dossier_byline_reference_number_display(self):
         ref_number = self.get_byline_value_by_label('Reference Number:')
-        self.assertEquals('OG / 1', ref_number.text_content())
+        self.assertEquals('Client1 / 1', ref_number.text_content())
 
     def test_dossier_byline_email_display(self):
         dossier_id = self.intids.getId(self.dossier)
@@ -85,7 +90,7 @@ class TestFilingBusinessCaseByline(TestBylineBase):
 
     def tearDown(self):
         inactivate_filing_number(self.portal)
-        super(TestFilingBusinessCaseByline, self).setUp()
+        super(TestFilingBusinessCaseByline, self).tearDown()
 
     def test_dossier_byline_filing_number_display(self):
         filing_number = self.get_byline_value_by_label('Filing Number:')

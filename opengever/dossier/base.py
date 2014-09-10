@@ -1,4 +1,5 @@
-from Acquisition import aq_inner, aq_parent
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from datetime import datetime
 from five import grok
 from opengever.document.behaviors import IBaseDocument
@@ -6,6 +7,7 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.interfaces import IConstrainTypeDecider
 from opengever.dossier.interfaces import IDossierContainerTypes
+from opengever.ogds.base.actor import Actor
 from opengever.task import OPEN_TASK_STATES
 from opengever.task.task import ITask
 from plone.dexterity.content import Container
@@ -13,7 +15,8 @@ from plone.dexterity.interfaces import IDexterityFTI
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
-from zope.component import queryMultiAdapter, queryUtility
+from zope.component import queryMultiAdapter
+from zope.component import queryUtility
 from zope.interface import Interface
 
 
@@ -75,10 +78,12 @@ class DossierContainer(Container):
             return True
 
     def get_subdossiers(self, sort_on='created',
-                        sort_order='ascending', review_state=None):
+                        sort_order='ascending',
+                        review_state=None,
+                        depth=-1):
 
         dossier_path = '/'.join(self.getPhysicalPath())
-        query = {'path': dict(query=dossier_path, depth=-1),
+        query = {'path': dict(query=dossier_path, depth=depth),
                  'sort_on': sort_on,
                  'sort_order': sort_order,
                  'object_provides': IDossierMarker.__identifier__}
@@ -217,6 +222,13 @@ class DossierContainer(Container):
             end_dates.sort()
             return max(end_dates)
         return None
+
+    def get_responsible_actor(self):
+        return Actor.user(IDossier(self).responsible)
+
+    @property
+    def responsible_label(self):
+        return self.get_responsible_actor().get_label()
 
 
 class DefaultConstrainTypeDecider(grok.MultiAdapter):

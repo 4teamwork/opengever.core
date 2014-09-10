@@ -9,7 +9,10 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
 
 msgid "Add Participant"
 msgstr "Participant"
@@ -231,11 +234,17 @@ msgstr "Fermé"
 msgid "task-transition-cancelled-open"
 msgstr "Rouvrir"
 
+msgid "task-transition-delegate"
+msgstr "Déléguer"
+
 msgid "task-transition-in-progress-resolved"
 msgstr "Accomplir"
 
 msgid "task-transition-in-progress-tested-and-closed"
 msgstr "Fermer"
+
+msgid "task-transition-modify-deadline"
+msgstr "Changer le délai"
 
 msgid "task-transition-open-cancelled"
 msgstr "Annuler"
@@ -278,7 +287,4 @@ msgstr "Déactiver"
 
 msgid "tasktemplatefolder-transition-inactiv-activ"
 msgstr "Activer"
-
-msgid "Search OneGov Gever"
-msgstr "Parcourir OneGov Gever"
 

@@ -1,12 +1,8 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from opengever.testing import FunctionalTestCase
-from opengever.testing import create_client
-from opengever.testing import create_ogds_user
-from opengever.testing import set_current_client_id
-from opengever.testing import task2sqltask
-from plone.app.testing import TEST_USER_ID
 from opengever.task.adapters import IResponseContainer
+from opengever.testing import FunctionalTestCase
+from plone.app.testing import TEST_USER_ID
 
 
 class TestAssignTask(FunctionalTestCase):
@@ -15,17 +11,12 @@ class TestAssignTask(FunctionalTestCase):
 
     def setUp(self):
         super(TestAssignTask, self).setUp()
-        client1 = create_client()
-        set_current_client_id(self.portal)
 
-        create_ogds_user('james.bond',
-                         firstname='James',
-                         lastname='Bond',
-                         assigned_client=[client1, ])
-        create_ogds_user(TEST_USER_ID,
-                         firstname='Test',
-                         lastname='User',
-                         assigned_client=[client1, ])
+        self.james = create(Builder('ogds_user')
+                            .in_group(self.org_unit.users_group)
+                            .having(userid='james.bond',
+                                    firstname='James',
+                                    lastname='Bond'))
 
         self.task = create(Builder('task')
                            .having(responsible_client='client1',
@@ -53,7 +44,7 @@ class TestAssignTask(FunctionalTestCase):
 
         self.assertEquals('james.bond', self.task.responsible)
         self.assertEquals('james.bond',
-                          task2sqltask(self.task).responsible)
+                          self.task.get_sql_object().responsible)
 
     def test_adds_an_corresponding_response(self):
         self.assign_task('James', 'james.bond', 'Please make that for me.')

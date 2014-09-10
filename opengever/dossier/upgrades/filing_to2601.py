@@ -1,6 +1,8 @@
 from ftw.upgrade import ProgressLogger
 from ftw.upgrade import UpgradeStep
+from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.behaviors.filing import IFilingNumber
 
 
 class MigrateFilingNumbers(UpgradeStep):

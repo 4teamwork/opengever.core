@@ -59,8 +59,10 @@
   </permission-map>
  </state>
  <state state_id="task-state-in-progress" title="task-state-in-progress">
+  <exit-transition transition_id="task-transition-delegate"/>
   <exit-transition transition_id="task-transition-in-progress-resolved"/>
   <exit-transition transition_id="task-transition-in-progress-tested-and-closed"/>
+  <exit-transition transition_id="task-transition-modify-deadline"/>
   <exit-transition transition_id="task-transition-reassign"/>
   <permission-map name="Access contents information" acquired="False">
    <permission-role>Editor</permission-role>
@@ -114,6 +116,7 @@
   </permission-map>
  </state>
  <state state_id="task-state-open" title="task-state-open">
+  <exit-transition transition_id="task-transition-modify-deadline"/>
   <exit-transition transition_id="task-transition-open-cancelled"/>
   <exit-transition transition_id="task-transition-open-in-progress"/>
   <exit-transition transition_id="task-transition-open-rejected"/>
@@ -316,6 +319,12 @@
    <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_transition_possible('task-transition-cancelled-open')</guard-expression>
   </guard>
  </transition>
+ <transition transition_id="task-transition-delegate" title="task-transition-delegate" new_state="" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/@@task_transition_controller?transition=task-transition-delegate" category="workflow" icon="">task-transition-delegate</action>
+  <guard>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_transition_possible('task-transition-delegate')</guard-expression>
+  </guard>
+ </transition>
  <transition transition_id="task-transition-in-progress-resolved" title="task-transition-in-progress-resolved" new_state="task-state-resolved" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/@@task_transition_controller?transition=task-transition-in-progress-resolved" category="workflow" icon="">task-transition-in-progress-resolved</action>
   <guard>
@@ -326,6 +335,12 @@
   <action url="%(content_url)s/@@task_transition_controller?transition=task-transition-in-progress-tested-and-closed" category="workflow" icon="">task-transition-in-progress-tested-and-closed</action>
   <guard>
    <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_transition_possible('task-transition-in-progress-tested-and-closed')</guard-expression>
+  </guard>
+ </transition>
+ <transition transition_id="task-transition-modify-deadline" title="task-transition-modify-deadline" new_state="" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/@@task_transition_controller?transition=task-transition-modify-deadline" category="workflow" icon="">task-transition-modify-deadline</action>
+  <guard>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_transition_possible('task-transition-modify-deadline')</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-open-cancelled" title="task-transition-open-cancelled" new_state="task-state-cancelled" trigger="USER" before_script="" after_script="">

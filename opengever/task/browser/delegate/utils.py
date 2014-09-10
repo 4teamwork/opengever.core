@@ -1,4 +1,5 @@
-from plone.dexterity.utils import createContent, addContentToContainer
+from plone.dexterity.utils import addContentToContainer
+from plone.dexterity.utils import createContent
 from plone.dexterity.utils import iterSchemata
 from z3c.relationfield import RelationValue
 from zope import schema
@@ -53,7 +54,7 @@ def create_subtasks(task, responsibles, documents, data):
 def create_subtask(task, data):
     subtask = createContent('opengever.task.task',
                             id=data['title'],
-                            title=data['title'])
+                            **data)
     notify(ObjectCreatedEvent(subtask))
     subtask = addContentToContainer(task, subtask,
                                     checkConstraints=True)

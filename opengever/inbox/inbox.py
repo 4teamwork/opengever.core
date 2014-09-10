@@ -1,9 +1,11 @@
-"""Defines some Vies for Inbox"""
-from five import grok
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.inbox import _
-from opengever.tabbedview.browser.tabs import Documents, Trash
-from opengever.tabbedview.helper import external_edit_link
+from opengever.ogds.base.utils import get_current_org_unit
+from opengever.ogds.base.utils import ogds_service
+from opengever.repository.behaviors.responsibleorg import IResponsibleOrgUnit
+from plone.dexterity.content import Container
 from plone.directives import form
 from zope import schema
 
@@ -16,87 +18,50 @@ class IInbox(form.Schema, ITabbedviewUploadable):
         u'common',
         label=_(u'fieldset_common', default=u'Common'),
         fields=[u'inbox_group', ],
-        )
+    )
 
     inbox_group = schema.TextLine(
-         title=_(u'label_inbox_group', default=u'Inbox Group'),
-         description=_(u'help_inbox_group', default=u''),
-         required=False,
-         )
+        title=_(u'label_inbox_group', default=u'Inbox Group'),
+        description=_(u'help_inbox_group', default=u''),
+        required=False,
+    )
 
 
-class InboxDocuments(Documents):
-    """Lists all Forwardings in this container
-    """
-    grok.context(IInbox)
+class Inbox(Container):
 
-    # do not list documents in forwardings
-    depth = 1
+    def get_current_inbox(self):
+        """Returns the subinbox of the current orgUnit if exists,
+        otherwise the inbox itself."""
 
-    @property
-    def columns(self):
-        """Gets the columns wich wich will be displayed
+        sub_inboxes = self.listFolderContents(
+            contentFilter={'portal_type':'opengever.inbox.inbox'})
+
+        for inbox in sub_inboxes:
+            if inbox.get_responsible_org_unit() == get_current_org_unit():
+                return inbox
+
+        return self
+
+    def get_responsible_org_unit(self):
+        """Returns the OrgUnit object, which is configured in the
+        ResponsibleOrgUnit behavior field."""
+
+        org_unit_id = IResponsibleOrgUnit(self).responsible_org_unit
+        if org_unit_id:
+            return ogds_service().fetch_org_unit(org_unit_id)
+
+        return None
+
+    def is_main_inbox(self):
+        """A main inbox is a inbox container when:
+         - Is a root inbox
+         - Is not assigned to a org unit(responsible_org_unit)
         """
-        remove_columns = ['containing_subdossier', 'checked_out']
-        columns = []
+        if not IInbox.providedBy(aq_parent(aq_inner(self))):
+            return IResponsibleOrgUnit(self).responsible_org_unit == None
 
-        for col in super(InboxDocuments, self).columns:
-            if isinstance(col, dict) and \
-                    col.get('column') in remove_columns:
-                pass  # remove this column
-            # remove external_edit_link from the columns not used
-            elif isinstance(col, tuple) and col[1] == external_edit_link:
-                 # remove this colun
-                pass
-            else:
-                columns.append(col)
+        return False
 
-        return columns
-
-    @property
-    def enabled_actions(self):
-        """Defines the enabled Actions"""
-        actions = super(InboxDocuments, self).enabled_actions
-        actions = [action for action in actions
-                   if action not in (
-                    'create_task',
-                    'copy_documents_to_remote_client',
-                    'move_items',)]
-
-        actions += ['create_forwarding']
-        return actions
-
-    @property
-    def major_actions(self):
-        """Defines wich actions are major Actions"""
-        actions = super(InboxDocuments, self).major_actions
-        actions = [action for action in actions
-                   if action not in ('create_task',)]
-        actions += ['create_forwarding']
-        return actions
-
-
-class InboxTrash(Trash):
-    """Special Trash view,
-    some columns from the standard Trash view are disabled"""
-
-    grok.context(IInbox)
-
-    @property
-    def columns(self):
-        """Gets the columns wich wich will be displayed
-           remove some columns from the columns property
-        """
-        remove_columns = ['containing_subdossier', 'checked_out']
-        columns = []
-        for col in super(InboxTrash, self).columns:
-            if isinstance(col, dict) and \
-                    col.get('column') in remove_columns:
-                pass  # remove this column
-            elif isinstance(col, tuple) and \
-                    col[1] == external_edit_link:
-                pass  # remove external_edit colunmn
-            else:
-                columns.append(col)
-
-        return columns
+    def get_physical_path(self):
+        url_tool = self.unrestrictedTraverse('@@plone_tools').url()
+        return '/'.join(url_tool.getRelativeContentPath(self))

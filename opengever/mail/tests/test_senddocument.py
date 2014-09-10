@@ -5,10 +5,7 @@ from ftw.mail.utils import get_attachments
 from ftw.testing.mailing import Mailing
 from opengever.mail.behaviors import ISendableDocsContainer
 from opengever.mail.interfaces import IDocumentSent
-from opengever.testing import create_client
-from opengever.testing import create_ogds_user
 from opengever.testing import FunctionalTestCase
-from opengever.testing import set_current_client_id
 from plone.app.testing import TEST_USER_ID
 from zope.component import getUtility
 from zope.component import provideHandler
@@ -37,14 +34,17 @@ class MockEvent(object):
 
 class TestSendDocument(FunctionalTestCase):
     use_browser = True
+    use_default_fixture = False
 
     def setUp(self):
         super(TestSendDocument, self).setUp()
         self.grant('Member', 'Contributor', 'Manager')
 
-        create_client('plone')
-        set_current_client_id(self.portal, clientid=u'plone')
-        create_ogds_user(TEST_USER_ID)
+        create(Builder('fixture')
+               .with_user(firstname="Test", lastname="User")
+               .with_org_unit()
+               .with_admin_unit(public_url='http://nohost/plone'))
+
         Mailing(self.portal).set_up()
 
     def test_dossier_is_sendable(self):
@@ -86,7 +86,7 @@ class TestSendDocument(FunctionalTestCase):
         self.assertEquals(TEST_FORM_DATA.get('subject'), mail.get('Subject'),
                           'The subject of the created mail is not correct')
         self.assertEquals(
-            '"Boss Hugo \(test_user_1_\)" <hugo@boss.ch>',
+            '"User Test \(test_user_1_\)" <test@example.org>',
             mail.get('From'),
             'The sender of the mail is incorrect.')
         self.assertIn(
@@ -176,9 +176,8 @@ f\xc3\xbcr Ernst Franz\r\n\r\nBesten Dank im Voraus"""
         self.assertEquals(u'Test Subject', filed_mail.title,
                           "Filed mail should have subject as title")
 
-        self.assertEquals(u'Boss Hugo', filed_mail.document_author,
+        self.assertEquals(u'User Test', filed_mail.document_author,
                           "Author of filed mail should be name of OGDS user")
-
 
     def send_documents(self, container, documents, **kwargs):
         documents = ['/'.join(doc.getPhysicalPath()) for doc in documents]

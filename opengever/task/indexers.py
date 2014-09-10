@@ -1,13 +1,11 @@
-from Acquisition import aq_inner, aq_parent
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from collective import dexteritytextindexer
 from datetime import datetime
 from five import grok
-from opengever.base.interfaces import ISequenceNumber
-from opengever.ogds.base.interfaces import IContactInformation
-from opengever.ogds.base.utils import get_client_id
 from opengever.task.task import ITask
+from plone import api
 from plone.indexer import indexer
-from zope.component import getUtility
 
 
 @indexer(ITask)
@@ -34,12 +32,6 @@ grok.global_adapter(assigned_client, name='assigned_client')
 
 
 @indexer(ITask)
-def client_id(obj):
-    return get_client_id()
-grok.global_adapter(client_id, name='client_id')
-
-
-@indexer(ITask)
 def sequence_number(obj):
     """ Indexer for the sequence_number """
     return obj._sequence_number
@@ -56,7 +48,9 @@ grok.global_adapter(is_subtask, name='is_subtask')
 
 
 class SearchableTextExtender(grok.Adapter):
-    """ Task specific SearchableText Extender"""
+    """ Task specific SearchableText Extender:
+    Adds sequence number and responsible label to the default
+    searchabletext."""
 
     grok.context(ITask)
     grok.name('ITask')
@@ -67,16 +61,17 @@ class SearchableTextExtender(grok.Adapter):
 
     def __call__(self):
         searchable = []
-        # append some other attributes to the searchableText index
 
-        # sequence_number
-        seqNumb = getUtility(ISequenceNumber)
-        searchable.append(str(seqNumb.get_number(self.context)))
+        lang_tool = api.portal.get_tool('portal_languages')
+        for language in lang_tool.getSupportedLanguages():
+            if '-' in language:
+                language = language.split('-')[0]
+            term = self.context.get_task_type_label(language=language)
+            if term:
+                searchable.append(term.encode('utf-8'))
 
-        #responsible
-        info = getUtility(IContactInformation)
-        dossier = ITask(self.context)
-        searchable.append(info.describe(dossier.responsible).encode(
-                'utf-8'))
+        searchable.append(str(self.context.get_sequence_number()))
+        searchable.append(
+            self.context.get_responsible_actor().get_label().encode('utf-8'))
 
         return ' '.join(searchable)

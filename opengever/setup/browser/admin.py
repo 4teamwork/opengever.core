@@ -1,11 +1,12 @@
 from datetime import datetime
 from ftw.mail.interfaces import IMailSettings
-from opengever.ogds.base.interfaces import IClientConfiguration
+from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.ldap_import import sync_ldap
 from opengever.ogds.base.utils import create_session
 from opengever.ogds.models import BASE
-from opengever.ogds.models.client import Client
+from opengever.ogds.models.admin_unit import AdminUnit
 from opengever.ogds.models.group import Group
+from opengever.ogds.models.org_unit import OrgUnit
 from opengever.ogds.models.user import User
 from opengever.setup.interfaces import IClientConfigurationRegistry
 from opengever.setup.ldap_creds import configure_ldap_credentials
@@ -14,8 +15,8 @@ from opengever.setup.utils import get_ldap_configs
 from plone.app.controlpanel.language import ILanguageSelectionSchema
 from plone.registry.interfaces import IRegistry
 from Products.CMFPlone.browser.admin import AddPloneSite
-from Products.CMFPlone.factory import addPloneSite
 from Products.CMFPlone.factory import _DEFAULT_PROFILE
+from Products.CMFPlone.factory import addPloneSite
 from Products.CMFPlone.utils import getToolByName
 from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin
 from sqlalchemy.exc import NoReferencedTableError
@@ -200,8 +201,8 @@ class CreateOpengeverClient(BrowserView):
         if form.get('configsql'):
             # register the client in the ogds
             # is the client already configured? -> delete it
-            clients = session.query(Client).filter_by(
-                client_id=form['client_id']).all()
+            clients = session.query(OrgUnit).filter_by(
+                unit_id=form['client_id']).all()
             if clients:
                 session.delete(clients[0])
 
@@ -225,18 +226,30 @@ class CreateOpengeverClient(BrowserView):
 
             active = bool(form.get('active', False))
 
-            client = Client(form['client_id'],
-                            enabled=active,
-                            title=form['title'],
-                            ip_address=form['ip_address'],
-                            site_url=form['site_url'],
-                            public_url=form['public_url'],
-                            )
+            admin_unit = AdminUnit(
+                form['client_id'],
+                enabled=active,
+                title=form['title'],
+                ip_address=form['ip_address'],
+                site_url=form['site_url'],
+                public_url=form['public_url'],
+                )
+
+            registry = getUtility(IRegistry)
+            proxy = registry.forInterface(IAdminUnitConfiguration)
+            proxy.current_unit_id = form['client_id'].decode('utf-8')
+
+            client = OrgUnit(form['client_id'],
+                             enabled=active,
+                             title=form['title'],
+                             admin_unit=admin_unit)
 
             client.users_group = users_group
             client.inbox_group = inbox_group
 
+            session.add(admin_unit)
             session.add(client)
+
 
         # create the admin user in the ogds if he not exist
         # and add it to the specified user_group
@@ -244,7 +257,7 @@ class CreateOpengeverClient(BrowserView):
 
         if session.query(User).filter_by(userid=ADMIN_USER_ID).count() == 0:
             og_admin_user = User(ADMIN_USER_ID, firstname='OG',
-                        lastname='Administrator', active=True)
+                                 lastname='Administrator', active=True)
             session.add(og_admin_user)
         else:
             og_admin_user = session.query(User).filter_by(
@@ -257,13 +270,8 @@ class CreateOpengeverClient(BrowserView):
         if og_admin_user not in users_group.users:
             users_group.users.append(og_admin_user)
 
-        # set the client id in the registry
-        client_id = form['client_id'].decode('utf-8')
-        registry = getUtility(IRegistry)
-        proxy = registry.forInterface(IClientConfiguration)
-        proxy.client_id = form['client_id'].decode('utf-8')
-
         # set the mail domain in the registry
+        client_id = form['client_id'].decode('utf-8')
         registry = getUtility(IRegistry)
         proxy = registry.forInterface(IMailSettings)
         proxy.mail_domain = form['mail_domain'].decode('utf-8')

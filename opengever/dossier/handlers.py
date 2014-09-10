@@ -5,7 +5,7 @@ from five import grok
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
-from opengever.globalindex.handlers.task import index_task
+from opengever.globalindex.handlers.task import sync_task
 from zope.app.container.interfaces import IObjectAddedEvent
 from zope.app.container.interfaces import IObjectMovedEvent
 from zope.component import getAdapter
@@ -96,4 +96,4 @@ def reindex_containing_dossier(dossier, event):
 
                         if brain.portal_type in ['opengever.task.task',
                             'opengever.inbox.forwarding']:
-                            index_task(brain.getObject(), event)
+                            sync_task(brain.getObject(), event)

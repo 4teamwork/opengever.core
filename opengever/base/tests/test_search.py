@@ -9,7 +9,6 @@ class TestOpengeverSearch(FunctionalTestCase):
 
     def setUp(self):
         super(TestOpengeverSearch, self).setUp()
-
         alsoProvides(self.portal.REQUEST, IOpengeverBaseLayer)
 
     def test_types_filters_list_is_limited_to_main_types(self):

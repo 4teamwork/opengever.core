@@ -6,13 +6,10 @@ from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 
 
-class TestDossierContainerFunctional(FunctionalTestCase):
-    """This test-case should eventually replace TestDossierContainer.
-    New tests will be added to this case.
-    """
+class TestDossierContainer(FunctionalTestCase):
 
     def setUp(self):
-        super(TestDossierContainerFunctional, self).setUp()
+        super(TestDossierContainer, self).setUp()
         self.grant('Reader')
 
     def test_is_all_supplied_without_any_subdossiers(self):
@@ -69,7 +66,6 @@ class TestDossierContainerFunctional(FunctionalTestCase):
         subdossier = create(Builder('dossier').within(dossier))
         self.assertTrue(subdossier.is_subdossier())
 
-
     def test_maximum_dossier_level_is_2_by_default(self):
         dossier = create(Builder('dossier'))
         subdossier = create(Builder('dossier').within(dossier))
@@ -78,7 +74,25 @@ class TestDossierContainerFunctional(FunctionalTestCase):
                       [fti.id for fti in dossier.allowedContentTypes()])
 
         self.assertNotIn('opengever.dossier.businesscasedossier',
-                      [fti.id for fti in subdossier.allowedContentTypes()])
+                         [fti.id for fti in subdossier.allowedContentTypes()])
+
+    def test_get_subdossiers_returns_subsubdossiers_as_well(self):
+        dossier = create(Builder('dossier'))
+        subdossier = create(Builder('dossier').within(dossier))
+        subsubdossier = create(Builder('dossier').within(subdossier))
+
+        self.assertSequenceEqual(
+            [subdossier, subsubdossier],
+            self.brains_to_objects(dossier.get_subdossiers()))
+
+    def test_get_subdossiers_depth(self):
+        dossier = create(Builder('dossier'))
+        subdossier = create(Builder('dossier').within(dossier))
+        create(Builder('dossier').within(subdossier))
+
+        self.assertSequenceEqual(
+            [subdossier],
+            self.brains_to_objects(dossier.get_subdossiers(depth=1)))
 
 
 class TestDossierChecks(FunctionalTestCase):

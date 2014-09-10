@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<object name="portal_actions" meta_type="Plone Actions Tool"
+        xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+        i18n:domain="opengever.dossier">
+
+  <object name="folder_buttons" meta_type="CMF Action Category">
+    <object name="copy_documents_to_remote_client" remove="True">
+    </object>
+  </object>
+
+</object>

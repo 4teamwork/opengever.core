@@ -6,7 +6,7 @@
     <span id="breadcrumbs-you-are-here" i18n:translate="you_are_here">You
 are here:</span>
     <span id="breadcrumbs-home">
-        <a tal:attributes="href view/navigation_root_url" tal:content="view/client_title">Home</a>
+        <a tal:attributes="href view/navigation_root_url" tal:content="view/admin_unit_label">Home</a>
         <span tal:condition="breadcrumbs" class="breadcrumbSeparator">
             <tal:ltr condition="not: is_rtl">/</tal:ltr>
             <tal:rtl condition="is_rtl">\</tal:rtl>

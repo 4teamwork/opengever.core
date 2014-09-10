@@ -1,16 +1,16 @@
-from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone import PloneMessageFactory as PMF
 from collective.elephantvocabulary import wrap_vocabulary
 from five import grok
 from opengever.task import _
 from persistent.list import PersistentList
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone import PloneMessageFactory as PMF
 from z3c.relationfield import RelationValue
-from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
 from zope.event import notify
 from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.schema.interfaces import IContextSourceBinder
+from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary
 import AccessControl
 import opengever.task
@@ -18,6 +18,10 @@ import types
 
 
 CUSTOM_INITIAL_VERSION_MESSAGE = 'custom_inital_version_message'
+TASK_TYPE_CATEGORIES = ['unidirectional_by_reference',
+                        'unidirectional_by_value',
+                        'bidirectional_by_reference',
+                        'bidirectional_by_value']
 
 
 class UsersVocabulary(SimpleVocabulary):
@@ -56,32 +60,33 @@ def getTransitionVocab(context):
         return SimpleVocabulary(transitions)
 
 
-def create_sequence_number(obj, key='task_sequence_number'):
-    portal = obj.portal_url.getPortalObject()
-    portal_annotations = IAnnotations(portal)
-    sequence_number = int(portal_annotations.get(key, 0)) + 1
-    portal_annotations[key] = sequence_number
-    return sequence_number
-
-
 @grok.provider(IContextSourceBinder)
 def getTaskTypeVocabulary(context):
     terms = []
-    for task_type in ['unidirectional_by_reference',
-                      'unidirectional_by_value',
-                      'bidirectional_by_reference',
-                      'bidirectional_by_value']:
-
+    for category in TASK_TYPE_CATEGORIES:
         reg_key = 'opengever.task.interfaces.ITaskSettings.%s' % (
-            task_type)
+            category)
 
         for term in wrap_vocabulary(
-            'opengever.task.%s' % (task_type),
+            'opengever.task.%s' % (category),
             visible_terms_from_registry=reg_key)(context):
 
             terms.append(term)
 
     return SimpleVocabulary(terms)
+
+
+def get_task_type_title(task_type, language):
+    """Return the task type translated in language.
+
+    """
+    for category in TASK_TYPE_CATEGORIES:
+        vocabulary_id = 'opengever.task.{}'.format(category)
+        factory = getUtility(IVocabularyFactory, vocabulary_id)
+        vdex_terms = factory.getTerms(language)
+        for vdex_term in vdex_terms:
+            if vdex_term['key'] == task_type:
+                return vdex_term['value']
 
 
 def add_simple_response(task, text='', field_changes=None, added_object=None,
@@ -90,7 +95,7 @@ def add_simple_response(task, text='', field_changes=None, added_object=None,
     `task`: task context
     `text`: fulltext
     `added_object`: an object which was added to the task
-    `successor_oguid`: an OGUID to a (remote) object which was referened.
+    `successor_oguid`: an OGUID to a (remote) object which was referenced.
     """
 
     response = opengever.task.adapters.Response(text)

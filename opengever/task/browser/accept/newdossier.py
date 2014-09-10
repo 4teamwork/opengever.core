@@ -3,24 +3,23 @@ the parts of the wizard where the user is able to instantly create a new
 dossier where the task is then filed.
 """
 
-from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
-from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.source import RepositoryPathSourceBinder
-from opengever.globalindex.interfaces import ITaskQuery
+from opengever.globalindex.model.task import Task
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.task import _
 from opengever.task.browser.accept.main import AcceptWizardFormMixin
-from opengever.task.browser.accept.utils import \
-    accept_forwarding_with_successor
+from opengever.task.browser.accept.utils import accept_forwarding_with_successor
 from opengever.task.browser.accept.utils import accept_task_with_successor
 from opengever.task.browser.accept.utils import assign_forwarding_to_dossier
 from plone.dexterity.i18n import MessageFactory as dexterityMF
 from plone.dexterity.i18n import MessageFactory as pd_mf
 from plone.directives.form import Schema
 from plone.z3cform.layout import FormWrapper
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
 from z3c.form.form import Form
@@ -34,7 +33,8 @@ from zope.i18nmessageid import MessageFactory
 from zope.interface import Interface
 from zope.interface import Invalid
 from zope.schema.interfaces import IContextSourceBinder
-from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
+from zope.schema.vocabulary import SimpleTerm
+from zope.schema.vocabulary import SimpleVocabulary
 import urllib
 
 
@@ -176,11 +176,11 @@ class SelectRepositoryfolderStepView(FormWrapper, grok.View):
         grok.View.__init__(self, *args, **kwargs)
 
 
-class SelectiRepositoryfolderStepRedirector(grok.View):
-    """Remote clients redirect usually to the site root, but this step needs
-    to be called on the repository root.
+class SelectRepositoryfolderStepRedirector(grok.View):
+    """Remote orgunit redirects usually to the site root,
+    but this step needs to be called on the repository root.
 
-    The remote client does not know the URL to the repository root, so it
+    The remote orgunit does not know the URL to the repository root, so it
     redirects to the site root. This view just redirects to the repository
     root, passing the parameters on.
     """
@@ -406,15 +406,15 @@ class DossierAddFormView(FormWrapper, grok.View):
         # The default value for the title of the new dossier should be the
         # title of the remote dossier, which contains the task which is
         # accepted with this wizard.
-        query = getUtility(ITaskQuery)
-        task = query.get_task_by_oguid(oguid)
-
         title_key = 'form.widgets.IOpenGeverBase.title'
 
-        if self.request.form.get(title_key, None) is None:
-            title = task.containing_dossier
-            if isinstance(title, str):
-                title = title.decode('utf-8')
-            self.request.set(title_key, title)
+        task = Task.query.by_oguid(oguid)
+
+        if not task.is_forwarding:
+            if self.request.form.get(title_key, None) is None:
+                title = task.containing_dossier
+                if isinstance(title, str):
+                    title = title.decode('utf-8')
+                self.request.set(title_key, title)
 
         return FormWrapper.__call__(self)

@@ -1,17 +1,17 @@
-from Acquisition import aq_inner, aq_parent
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from five import grok
 from ftw.pdfgenerator.browser.views import ExportPDFView
 from ftw.pdfgenerator.interfaces import ILaTeXLayout
 from ftw.pdfgenerator.interfaces import ILaTeXView
 from ftw.pdfgenerator.utils import provide_request_layer
 from ftw.pdfgenerator.view import MakoLaTeXView
-from opengever.base.interfaces import IBaseClientID
 from opengever.base.interfaces import IReferenceNumber
-from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
-from opengever.ogds.base.interfaces import IContactInformation
+from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.repository.repositoryroot import IRepositoryRoot
-from plone.registry.interfaces import IRegistry
-from zope.component import getUtility, getAdapter
+from zope.component import getAdapter
 from zope.interface import Interface
 
 
@@ -63,14 +63,10 @@ class DossierCoverLaTeXView(grok.MultiAdapter, MakoLaTeXView):
         return getAdapter(self.context, IReferenceNumber).get_number()
 
     def get_responsible(self):
-        info = getUtility(IContactInformation)
-        value = IDossier(self.context).responsible
-        return info.describe(value)
+        return self.context.responsible_label
 
     def get_client_title(self):
-        registry = getUtility(IRegistry)
-        proxy = registry.forInterface(IBaseClientID)
-        return proxy.client_title
+        return get_current_admin_unit().label() or ''
 
     def get_repository_version(self):
         obj = self.context
