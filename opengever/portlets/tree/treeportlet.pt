@@ -1,4 +1,5 @@
 <dl class="portlet portletTreePortlet"
+    tal:attributes="data-navigation-url view/navigation_url"
     i18n:domain="opengever.portlets.tree">
 
     <dt class="portletHeader">
@@ -8,7 +9,9 @@
     </dt>
 
     <dd class="portletItem odd">
-        <ul class="filetree" tal:attributes="data-root_path view/root_path">
+        <ul class="filetree"
+            tal:attributes="data-root_path view/root_path;
+                            data-context_path view/context_path;">
           <img src="spinner.gif" class="spinner"/>
         </ul>
     </dd>
