@@ -95,12 +95,8 @@ dl.portlet.portletTreePortlet .filetree a.inPath:last-child {
 }
 
 dl.portlet.portletTreePortlet .portlet-tabs .add-to-favorites:before {
-  content: "*";
-  font-weight: bold;
-  font-size: 200%;
-  padding-top: 5px;
-  /* font-family: 'Glyphicons'; */
-  /* content: "\e035"; */
+  font-family: 'Glyphicons';
+  content: "\e050";
   display: block;
   float: right;
   width: 22px;
@@ -114,7 +110,7 @@ dl.portlet.portletTreePortlet .portlet-tabs a:hover .add-to-favorites:before {
 }
 
 dl.portlet.portletTreePortlet .portlet-tabs a .add-to-favorites.bookmarked:before {
-  color: #EEE;
+  color: #AAA;
 }
 dl.portlet.portletTreePortlet .portlet-tabs a:hover .add-to-favorites.bookmarked:before {
   color: #A13333;
