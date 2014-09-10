@@ -79,6 +79,7 @@ dl.portlet.portletTreePortlet .portlet-tabs {
   height:100%;
   overflow-y:scroll;
 }
+
 dl.portlet.portletTreePortlet li {
   margin: 0;
   padding: 0;
@@ -106,6 +107,7 @@ dl.portlet.portletTreePortlet .portlet-tabs .add-to-favorites:before {
   text-align: center;
   cursor: pointer;
   color: transparent;
+  padding-right: 7px;
 }
 dl.portlet.portletTreePortlet .portlet-tabs a:hover .add-to-favorites:before {
   color: #3387A1;

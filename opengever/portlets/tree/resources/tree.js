@@ -119,6 +119,24 @@ function Tree(nodes, config) {
     return !$(node.link).parent('li').find('>ul').hasClass('folded');
   };
 
+  this.dump_expanded_uids = function() {
+    var uids = [];
+    this.each(function() {
+      if(tree.is_expanded(this)) {
+        uids.push(this['uid']);
+      }
+    });
+    return uids;
+  };
+
+  this.load_expanded_uids = function(uids) {
+    $(uids).each(function(_, uid) {
+      tree.eachBy({'uid': uid}, function() {
+        tree.expand(this);
+      });
+    });
+  };
+
   this.arrow_clicked = function(event) {
     event.preventDefault();
     var arrow = $(this);
@@ -367,12 +385,14 @@ RepositoryFavorites = function(url, cache_param) {
     add: function(uuid) {
       $.post(url + '/add', {uuid: uuid}, function() {
         _data_cache.push(uuid);
+        $(self).trigger('favorites:changed');
       });
     },
 
     remove: function(uuid) {
       $.post(url + '/remove', {uuid: uuid}, function() {
         _data_cache.remove(uuid);
+        $(self).trigger('favorites:changed');
       });
     }
   };

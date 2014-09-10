@@ -40,22 +40,39 @@ $(function() {
         });
   });
 
-  portlet.find('#tree-favorites').bind('portlet-tab:open', function() {
-    var tree_node = $(this).find('>ul');
+  /* Favorites tree tab */
+  var favorites_tree;
+  function render_favorites_tree() {
+    var tree_node = portlet.find('#tree-favorites').find('>ul');
+    var expanded_uids = [];
+    if(favorites_tree) {
+      expanded_uids = favorites_tree.dump_expanded_uids();
+    }
+
     navigation_json.load(function(tree_data) {
       favorites_store.load(function(favorites) {
         var favorite_nodes = make_tree(tree_data).clone_by_uids(favorites);
-        var navtree = make_tree(favorite_nodes, {
+        favorites_tree = make_tree(favorite_nodes, {
           render_condition: function() {
             return this.depth === 0;
-          }
+          },
+          components: [favorites_store]
         });
         tree_node.html('');
-        navtree.render(tree_node);
-        navtree.selectCurrent(find_parent_node_for_path(
-            navtree, portlet.data('context-path')));
+        favorites_tree.render(tree_node);
+        favorites_tree.selectCurrent(find_parent_node_for_path(
+            favorites_tree, portlet.data('context-path')));
+        favorites_tree.load_expanded_uids(expanded_uids);
       });
     });
+  }
+
+  portlet.find('#tree-favorites').bind('portlet-tab:open', render_favorites_tree);
+
+  $(favorites_store).bind('favorites:changed', function() {
+    if(portlet.find('#tree-favorites').is(':visible')) {
+      render_favorites_tree();
+    }
   });
 
 
