@@ -10,6 +10,7 @@ from zope.component import getMultiAdapter
 from zope.interface import implements
 from zope.interface import Interface
 import json
+import md5
 
 
 ANNOTATION_KEY = 'og-treeportlet-favorites'
@@ -97,6 +98,11 @@ class RepositoryFavoritesView(BrowserView):
             if not isinstance(item, (str, unicode)):
                 raise ValueError('Invalid uuid: {0}; {1}'.format(item, uuids))
         self._storage().set(uuids)
+
+    def list_cache_param(self):
+        cache_key_data = ':'.join(self._storage().list())
+        cache_key = md5.new(cache_key_data).hexdigest()
+        return 'cache_key={0}'.format(cache_key)
 
     def _storage(self):
         username = getSecurityManager().getUser().getId()

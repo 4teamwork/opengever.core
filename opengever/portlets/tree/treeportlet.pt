@@ -1,5 +1,7 @@
 <dl class="portlet portletTreePortlet"
     tal:attributes="data-navigation-url view/navigation_url;
+                    data-favorites-url view/favorites_url;
+                    data-favorites-cache-param view/favorites_cache_param;
                     data-context-path view/context_path"
     i18n:domain="opengever.portlets.tree">
 

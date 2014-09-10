@@ -61,5 +61,12 @@ class TestRepositoryFavoritesView(FunctionalTestCase):
         browser.open(self.root, view='repository-favorites/list')
         self.assertEquals(['foo', 'baz'], browser.json)
 
+    def test_cache_invalidates(self):
+        view = self.root.restrictedTraverse('repository-favorites')
+        param = view.list_cache_param()
+        self.assertEqual(param, view.list_cache_param())
+        self.favorites_for(TEST_USER_ID).add('foo!')
+        self.assertNotEqual(param, view.list_cache_param())
+
     def favorites_for(self, username):
         return getMultiAdapter((self.root, username), IRepositoryFavorites)

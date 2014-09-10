@@ -104,6 +104,17 @@ class Renderer(base.Renderer):
         view = root.restrictedTraverse('navigation.json')
         return view.get_caching_url()
 
+    def favorites_url(self):
+        site = getToolByName(self.context, 'portal_url').getPortalObject()
+        root = site.restrictedTraverse(self.root_path())
+        return '/'.join((root.absolute_url(), 'repository-favorites'))
+
+    def favorites_cache_param(self):
+        site = getToolByName(self.context, 'portal_url').getPortalObject()
+        root = site.restrictedTraverse(self.root_path())
+        favorites_view = root.restrictedTraverse('repository-favorites')
+        return favorites_view.list_cache_param()
+
 
 class AddForm(base.AddForm):
     """Portlet add form.

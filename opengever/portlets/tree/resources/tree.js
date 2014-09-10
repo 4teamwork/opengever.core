@@ -6,6 +6,7 @@ function Tree(nodes, config) {
   nodes = jQuery.extend(true, [], nodes);
   var tree_root;
   var tree = this;
+  var internal_node_keys = ['parent', 'depth', 'link', 'nodes'];
   configuration = $.extend(true, {
     'render_condition': function(){ return true; },
     'onclick': function(node, event){},
@@ -26,6 +27,7 @@ function Tree(nodes, config) {
       tree.render_node_into_container.apply(this, [temporary_root]);
     });
     temporary_root.find('>*').appendTo(tree_root);
+    $(this).trigger('tree:rendered');
   };
 
   this.render_node = function() {
@@ -48,6 +50,7 @@ function Tree(nodes, config) {
     $container.append($list_item);
     var $link = $('<a />').text(this.text).attr('href', this.path);
     $list_item.append($link);
+    $(tree).trigger('tree:link-created', [this, $link]);
 
     for(var key in this.data) {
       $link.attr('data-'.concat(key), this.data[key]);
@@ -170,6 +173,28 @@ function Tree(nodes, config) {
 
     node.link.addClass('current');
     node.link.parent('li:first').addClass('current');
+  };
+
+  this.clone_node = function(node) {
+    if(!node){
+      return node;
+    }
+    var clone = {};
+    for (var key in node) {
+      if($.inArray(key, internal_node_keys) === -1) {
+        clone[key] = node[key];
+      }
+    }
+    clone['nodes'] = $(node['nodes']).map(function(index, child) {
+      return tree.clone_node(child);
+    });
+    return clone;
+  };
+
+  this.clone_by_uids = function(wanted_uids) {
+    return $(wanted_uids).map(function(_, uid) {
+      return tree.clone_node(tree.findBy({'uid': uid}));
+    }).toArray();
   };
 
   this.each(function(depth, parent) {
@@ -295,4 +320,61 @@ LocalStorageJSONCache = function(name, url) {
         });
       }
     }};
+};
+
+
+RepositoryFavorites = function(url, cache_param) {
+  var _data_cache;
+  var local_storage = new LocalStorageJSONCache(
+      'favorites', url + '/list?' + cache_param);
+
+  var self = {
+    listen: function(tree) {
+      $(tree).bind('tree:link-created', function(event, node, link) {
+        var favorite_link = $('<span class="add-to-favorites"><!-- --></span>').
+            prependTo(link).
+            data('uuid', node['uid']).
+            click(function(event) {
+              event.preventDefault();
+              if($(this).hasClass('bookmarked')) {
+                $(this).removeClass('bookmarked');
+                self.remove($(this).data('uuid'));
+              } else {
+                $(this).addClass('bookmarked');
+                self.add($(this).data('uuid'));
+              }
+            });
+
+        self.load(function(favorites) {
+          if($.inArray(node['uid'], favorites) > -1) {
+            favorite_link.addClass('bookmarked');
+          }
+        });
+      });
+    },
+
+    load: function(callback) {
+      if(_data_cache) {
+        callback(_data_cache);
+      } else {
+        local_storage.load(function(data) {
+          _data_cache = data;
+          callback(data);
+        });
+      }
+    },
+
+    add: function(uuid) {
+      $.post(url + '/add', {uuid: uuid}, function() {
+        _data_cache.push(uuid);
+      });
+    },
+
+    remove: function(uuid) {
+      $.post(url + '/remove', {uuid: uuid}, function() {
+        _data_cache.remove(uuid);
+      });
+    }
+  };
+  return self;
 };

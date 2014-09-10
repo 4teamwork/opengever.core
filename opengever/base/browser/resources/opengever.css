@@ -70,6 +70,7 @@ dl.portlet.portletTreePortlet .portlet-header-tabs li a.active {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
 }
 
+
 dl.portlet.portletTreePortlet dd.portletFooter {
   display: none;
 }
@@ -90,6 +91,31 @@ dl.portlet ul.filetree ul.navTree li a {
 dl.portlet.portletTreePortlet .filetree a.current,
 dl.portlet.portletTreePortlet .filetree a.inPath:last-child {
   background: #DDD;
+}
+
+dl.portlet.portletTreePortlet .portlet-tabs .add-to-favorites:before {
+  content: "*";
+  font-weight: bold;
+  font-size: 200%;
+  padding-top: 5px;
+  /* font-family: 'Glyphicons'; */
+  /* content: "\e035"; */
+  display: block;
+  float: right;
+  width: 22px;
+  text-align: center;
+  cursor: pointer;
+  color: transparent;
+}
+dl.portlet.portletTreePortlet .portlet-tabs a:hover .add-to-favorites:before {
+  color: #3387A1;
+}
+
+dl.portlet.portletTreePortlet .portlet-tabs a .add-to-favorites.bookmarked:before {
+  color: #EEE;
+}
+dl.portlet.portletTreePortlet .portlet-tabs a:hover .add-to-favorites.bookmarked:before {
+  color: #A13333;
 }
 
 dl.portlet ul.filetree ul.folded {
