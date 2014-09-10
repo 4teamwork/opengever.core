@@ -4,6 +4,13 @@ Changelog
 3.4.2 (unreleased)
 ------------------
 
+- Refactor tree portlet.
+
+    - Performance improvements.
+    - Use JavaScript tree API for building the tree.
+
+  [jone]
+
 - Set content-type correctly for ok_response in remote views.
   [phgross]
 
