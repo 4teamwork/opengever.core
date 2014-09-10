@@ -16,8 +16,12 @@ function Tree(nodes, config) {
   });
 
   this.render = function(selector) {
+    if(typeof(selector.jquery) === 'undefined') {
+      tree_root = $(selector);
+    } else {
+      tree_root = selector;
+    }
     var temporary_root = $('<ul/>');
-    tree_root = $(selector);
     $(this.nodes()).each(function() {
       tree.render_node_into_container.apply(this, [temporary_root]);
     });
@@ -230,15 +234,17 @@ ExpandStore = function(cookie_name, identifier_key) {
 };
 
 
-LocalStorageJSONCache = function(name) {
+LocalStorageJSONCache = function(name, url) {
   /** The LocalStorageJSONCache stores JSON data from an AJAX request
       in the browser's localStorage until it changes.
       The URL **must** contain a cache key for invalidation as param,
       otherwise we have an infinite cache!
       **/
+  url = handle_nocache(url);
 
   var url_key = 'og-' + name + '-url';
   var data_key = 'og-' + name + '-data';
+  var json_cache;
 
   function is_cached(url) {
     return Modernizr.localstorage && localStorage.getItem(url_key) == url;
@@ -249,10 +255,12 @@ LocalStorageJSONCache = function(name) {
       localStorage.setItem(url_key, url);
       localStorage.setItem(data_key, data);
     }
+    json_cache = JSON.parse(data);
   }
 
   function get(url) {
-    return JSON.parse(localStorage.getItem(data_key));
+    json_cache = JSON.parse(localStorage.getItem(data_key));
+    return json_cache;
   }
 
   function handle_nocache(url) {
@@ -269,9 +277,11 @@ LocalStorageJSONCache = function(name) {
   }
 
   return {
-    'load': function(url, callback) {
-      url = handle_nocache(url);
-      if (is_cached(url)) {
+    'load': function(callback) {
+      if (json_cache) {
+        callback(json_cache);
+      }
+      else if (is_cached(url)) {
         callback(get(url));
       } else {
         $.ajax({
@@ -279,8 +289,8 @@ LocalStorageJSONCache = function(name) {
           url: url,
           cache: true,
           success: function(data) {
-            callback(JSON.parse(data));
             set(url, data);
+            callback(get());
           }
         });
       }

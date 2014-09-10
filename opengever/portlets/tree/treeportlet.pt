@@ -1,24 +1,33 @@
 <dl class="portlet portletTreePortlet"
-    tal:attributes="data-navigation-url view/navigation_url"
+    tal:attributes="data-navigation-url view/navigation_url;
+                    data-context-path view/context_path"
     i18n:domain="opengever.portlets.tree">
 
     <dt class="portletHeader">
-        <span class="portletTopLeft"></span>
-        <tal:b content="view/header" />
-        <span class="portletTopRight"></span>
+        <ul class="portlet-header-tabs">
+            <li><a href="#tree-complete" tal:content="view/header" /></li>
+            <li><a href="#tree-favorites" i18n:translate="">Favorites</a></li>
+        </ul>
     </dt>
 
-    <dd class="portletItem odd">
-        <ul class="filetree"
-            tal:attributes="data-root_path view/root_path;
-                            data-context_path view/context_path;">
-          <img src="spinner.gif" class="spinner"/>
-        </ul>
+    <dd class="portletItem odd portlet-tabs">
+        <div id="tree-complete">
+            <ul class="filetree">
+                <img src="spinner.gif" class="spinner"/>
+            </ul>
+        </div>
+
+        <div id="tree-favorites">
+            <ul class="filetree">
+                <img src="spinner.gif" class="spinner"/>
+            </ul>
+        </div>
     </dd>
+    <div class="visualClear"><!-- --></div>
 
     <dd class="portletFooter">
-      <span class="portletBottomLeft"></span>
-      <span class="portletBottomRight"></span>
+        <span class="portletBottomLeft"></span>
+        <span class="portletBottomRight"></span>
     </dd>
 
 </dl>
