@@ -83,6 +83,9 @@ class Renderer(base.Renderer):
     def root_path(self):
         return getattr(self.data, 'root_path', None)
 
+    def context_path(self):
+        return '/'.join(self.context.getPhysicalPath())
+
     @property
     def available(self):
         if self.root_path() != None:
@@ -94,6 +97,12 @@ class Renderer(base.Renderer):
             except Unauthorized:
                 return False
         return True
+
+    def navigation_url(self):
+        site = getToolByName(self.context, 'portal_url').getPortalObject()
+        root = site.restrictedTraverse(self.root_path())
+        view = root.restrictedTraverse('navigation.json')
+        return view.get_caching_url()
 
 
 class AddForm(base.AddForm):

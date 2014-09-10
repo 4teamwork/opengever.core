@@ -26,3 +26,14 @@ class TestPreview(FunctionalTestCase):
                   ['To:', u'Christoph M\xf6rgeli <to@example.org>']]
         self.assertEquals(expect,
                           browser.css('.mailHeaders.listing').first.lists())
+
+    @browsing
+    def test_preview_tab_can_handle_attachment_with_wrong_mimetype(self, browser):
+        mail_data = resource_string('opengever.mail.tests',
+                                    'attachment_with_wrong_mimetype.txt')
+        mail = create(Builder('mail').with_message(mail_data))
+
+        browser.login().visit(mail, view='tabbedview_view-preview')
+
+        self.assertEquals([u'B\xfccher.txt'],
+                          browser.css('div.mailAttachment a').text)

@@ -12,5 +12,37 @@ dl.portlet.portletTreePortlet dd.portletItem {
   height:100%;
   overflow-y:scroll;
 }
+dl.portlet.portletTreePortlet li {
+  margin: 0;
+  padding: 0;
+  padding-left: 16px;
+}
+#container dl.portlet ul.filetree li a,
+dl.portlet ul.filetree ul.navTree li a {
+  padding: 0.25em;
+}
+dl.portlet.portletTreePortlet .filetree a.current,
+dl.portlet.portletTreePortlet .filetree a.inPath:last-child {
+  background: #DDD;
+}
+
+dl.portlet ul.filetree ul.folded {
+  display: none;
+}
+dl.portlet ul.filetree a.toggleNav {
+  z-index: 4;
+  display: block;
+  width: 1em;
+  height: 1em;
+  background: url(++resource++opengever.base/images/expand_navi.png) no-repeat center center;
+  float: left;
+  margin-left: -1.3em;
+}
+dl.portlet ul.filetree a.toggleNav.expanded {
+  background: url(++resource++opengever.base/images/collapse_navi.png) no-repeat center center;
+}
+#column-navigation dl.portlet ul.filetree a.toggleNav {
+  text-decoration: none;
+}
 
 /* @end */

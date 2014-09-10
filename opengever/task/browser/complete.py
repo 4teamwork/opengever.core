@@ -3,7 +3,6 @@ the successor also completes the predecesser and the user can choose documents
 related to the successor task to deliver to issuer by attaching them to the
 predecessor task.
 """
-
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from five import grok
