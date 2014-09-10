@@ -1,6 +1,5 @@
 from ftw.testing import MockTestCase
 from opengever.base.browser.helper import get_css_class
-from opengever.globalindex.model.task import Task as GlobalindexTask
 from opengever.ogds.base import utils
 from plone.i18n.normalizer import idnormalizer, IIDNormalizer
 

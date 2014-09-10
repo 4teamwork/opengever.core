@@ -106,7 +106,7 @@ class TestTaskQueries(TestCase):
 
     def test_by_ids_returns_tasks_wich_match_the_given_id(self):
         task1 = self.task(1, 'unita', task_id=55)
-        task2 = self.task(2, 'unita', task_id=56)
+        self.task(2, 'unita', task_id=56)
         task3 = self.task(3, 'unita', task_id=58)
 
         self.assertEquals([task1, task3],
@@ -171,11 +171,11 @@ class TestFunctionalTaskQueries(FunctionalTestCase):
                                        .having(title='foo')
                                        .as_current_admin_unit())
 
-        additional_org_unit = create(Builder('org_unit')
-                                     .having(admin_unit=additional_admin_unit)
-                                     .assign_users([self.user])
-                                     .id(u'additional')
-                                     .as_current_org_unit())
+        create(Builder('org_unit')
+               .having(admin_unit=additional_admin_unit)
+               .assign_users([self.user])
+               .id(u'additional')
+               .as_current_org_unit())
 
         task2 = create(Builder('task').within(self.dossier))
 
@@ -198,12 +198,11 @@ class TestFunctionalTaskQueries(FunctionalTestCase):
             .id(u'additional')
             .as_current_admin_unit())
 
-        additional_org_unit = create(
-            Builder('org_unit')
-            .having(admin_unit=additional_admin_unit)
-            .assign_users([self.user])
-            .id(u'additional')
-            .as_current_org_unit())
+        create(Builder('org_unit')
+               .having(admin_unit=additional_admin_unit)
+               .assign_users([self.user])
+               .id(u'additional')
+               .as_current_org_unit())
 
         task = create(Builder('task'))
 

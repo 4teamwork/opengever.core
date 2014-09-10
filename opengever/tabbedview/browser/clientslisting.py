@@ -164,8 +164,7 @@ class ClientsTableSource(grok.MultiAdapter, BaseTableSource):
             for word in text.strip().split(' '):
                 term = '%%%s%%' % word
 
-                query = query.filter(or_(*[field.like(term)
-                                           for field in fields]))
+                query = query.filter(or_(*[f.like(term) for f in fields]))
 
         return query
 

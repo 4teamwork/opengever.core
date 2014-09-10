@@ -496,7 +496,7 @@ class TestOGDSVocabularies(FunctionalTestCase):
     use_default_fixture = False
 
     def test_contact_vocabulary(self):
-        admin_unit = create(Builder('admin_unit').as_current_admin_unit())
+        create(Builder('admin_unit').as_current_admin_unit())
 
         create(Builder('contact')
                .having(**{'firstname': u'Lara',

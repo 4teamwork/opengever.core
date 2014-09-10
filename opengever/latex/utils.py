@@ -1,10 +1,8 @@
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import ogds_service
-from opengever.task.task import ITask
 from Products.CMFCore.utils import getToolByName
 from zope.globalrequest import getRequest
 from zope.i18n import translate
-import types
 
 
 def get_selected_items_from_catalog(context, request):

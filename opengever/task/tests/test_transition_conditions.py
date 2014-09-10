@@ -90,7 +90,7 @@ class TestTaskControllerConditions(FunctionalTestCase):
 
         self.assertTrue(get_conditions(task).all_subtasks_finished)
 
-    def test_all_subtasks_finished(self):
+    def test_all_subtasks_is_NOT_finished_when_cancelled_or_resolved(self):
         task = create(Builder('task').in_state('task-state-in-progress'))
         create(Builder('task')
                .within(task)
@@ -135,11 +135,11 @@ class TestTaskControllerConditions(FunctionalTestCase):
     def test_is_assigned_to_current_admin_unit(self):
         admin_unit = create(Builder('admin_unit')
                             .id('additional'))
-        org_unit = create(Builder('org_unit')
-                          .id('additional')
-                          .with_default_groups()
-                          .having(title='Additional',
-                                  admin_unit=admin_unit))
+        create(Builder('org_unit')
+               .id('additional')
+               .with_default_groups()
+               .having(title='Additional',
+                       admin_unit=admin_unit))
 
         task1 = create(Builder('forwarding')
                        .having(responsible_client='client1'))

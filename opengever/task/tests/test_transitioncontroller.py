@@ -148,7 +148,7 @@ class TestInProgressClosed(BaseTransitionGuardTests):
     task_type_category = 'unidirectional_by_value'
 
     def test_never_available_for_bidirectional_tasks(self):
-        task_type_category = 'directional_by_value'
+        self.task_type_category = 'directional_by_value'
         conditions = FakeConditions()
 
         self.assertFalse(self.controller._is_transition_possible(
@@ -213,6 +213,9 @@ class TestOpenInProgress(BaseTransitionGuardTests):
     def test_never_available_for_unidirectional_by_refernce_tasks(self):
         self.task_type_category = 'unidirectional_by_reference'
         conditions = FakeConditions(is_responsible=True)
+
+        self.assertFalse(self.controller._is_transition_possible(
+            self.transition, False, conditions))
 
     def test_is_available_for_responsible(self):
         conditions = FakeConditions(is_responsible=True)

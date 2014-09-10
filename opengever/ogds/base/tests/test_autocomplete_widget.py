@@ -35,11 +35,11 @@ class TestAutoCompleteWidget(FunctionalTestCase):
 
         admin_unit = create(Builder('admin_unit')
                             .as_current_admin_unit())
-        org_unit = create(Builder('org_unit')
-                          .id(u'client1')
-                          .having(admin_unit=admin_unit)
-                          .as_current_org_unit()
-                          .assign_users([testuser, hugo, franz]))
+        create(Builder('org_unit')
+               .id(u'client1')
+               .having(admin_unit=admin_unit)
+               .as_current_org_unit()
+               .assign_users([testuser, hugo, franz]))
 
     def test_new_term_for_unkown_user_is_added_to_hidden_terms_vocabylary(self):
         task = create(Builder('task').having(issuer='hans.peter'))

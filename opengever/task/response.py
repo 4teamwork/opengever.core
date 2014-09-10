@@ -12,7 +12,6 @@ from opengever.task.interfaces import IResponseAdder
 from opengever.task.interfaces import IWorkflowStateSyncer
 from opengever.task.permissions import DEFAULT_ISSUE_MIME_TYPE
 from opengever.task.task import ITask
-from plone import api
 from plone.autoform.form import AutoExtensibleForm
 from plone.memoize.view import memoize
 from plone.z3cform import layout

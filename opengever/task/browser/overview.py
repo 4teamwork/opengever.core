@@ -2,7 +2,6 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from five import grok
 from opengever.base.browser.helper import get_css_class
-from opengever.globalindex.model.task import Task
 from opengever.tabbedview.browser.base import OpengeverTab
 from opengever.task import _
 from opengever.task.task import ITask

@@ -80,10 +80,10 @@ class TestDossierDetails(FunctionalTestCase):
         dossier = create(Builder('dossier')
                          .within(repository_1_1)
                          .having(responsible=self.user.userid))
-        task = create(Builder('task')
-                      .within(dossier)
-                      .having(responsible=self.user.userid,
-                              responsible_client=self.org_unit.id()))
+        create(Builder('task')
+               .within(dossier)
+               .having(responsible=self.user.userid,
+                       responsible_client=self.org_unit.id()))
 
         browser.login().visit(dossier, view='pdf-dossier-details')
 

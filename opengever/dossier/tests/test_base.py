@@ -88,7 +88,7 @@ class TestDossierContainer(FunctionalTestCase):
     def test_get_subdossiers_depth(self):
         dossier = create(Builder('dossier'))
         subdossier = create(Builder('dossier').within(dossier))
-        subsubdossier = create(Builder('dossier').within(subdossier))
+        create(Builder('dossier').within(subdossier))
 
         self.assertSequenceEqual(
             [subdossier],

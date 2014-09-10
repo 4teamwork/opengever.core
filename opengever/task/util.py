@@ -5,7 +5,6 @@ from persistent.list import PersistentList
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import PloneMessageFactory as PMF
 from z3c.relationfield import RelationValue
-from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
 from zope.event import notify
 from zope.intid.interfaces import IIntIds
