@@ -17,8 +17,8 @@
       title="Uninstall ftw.treeview."
       description=""
       source="1001"
-      destination="1002"
-      handler=".to1002.UninstallTreeview"
+      destination="4000"
+      handler=".to4000.UninstallTreeview"
       profile="opengever.portlets.tree:default"
       />
 
