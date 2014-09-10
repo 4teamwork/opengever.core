@@ -27,7 +27,7 @@ function Tree(nodes, config) {
       tree.render_node_into_container.apply(this, [temporary_root]);
     });
     temporary_root.find('>*').appendTo(tree_root);
-    $(this).trigger('tree:rendered');
+    $(document).trigger('tree:rendered', [this]);
   };
 
   this.render_node = function() {

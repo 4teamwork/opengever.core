@@ -4,12 +4,19 @@ $(function() {
     return;
   }
 
+  $(document).bind('tree:rendered', function() {
+    resize_treeportlet_height();
+    scroll_to_selected_item(portlet.find('.portlet-tabs'));
+  });
+
+
   var navigation_json = new LocalStorageJSONCache(
       'navigation', portlet.data('navigation-url'));
   var favorites_store = new RepositoryFavorites(
       portlet.data('favorites-url'),
       portlet.data('favorites-cache-param'));
 
+  /* Complete tree tab */
   portlet.find('#tree-complete').bind('portlet-tab:open', function() {
     if ($(this).data('initialized')) {return;} $(this).data('initialized', 'true');
 
@@ -52,6 +59,7 @@ $(function() {
   });
 
 
+  /* Tabs configuration */
   portlet.find('.portlet-header-tabs').tabs(
       '.portlet-tabs > div', {
         current: 'active',
@@ -62,12 +70,8 @@ $(function() {
           $(this.getPanes()[index]).trigger('portlet-tab:open');
         }});
 
-  portlet.find('.portlet-tabs > div').bind('portlet-tab:loaded', function() {
-    resize_treeportlet_height();
-    scroll_to_selected_item(portlet.find('.portlet-tabs'));
-  });
 
-
+  /* Helpers */
 
   function find_parent_node_for_path(tree, path) {
     if (!path) {
@@ -82,10 +86,9 @@ $(function() {
   }
 
   function resize_treeportlet_height() {
-    $('dl.portlet.portletTreePortlet .portlet-tabs').css(
-        'height',
-        $(window).height() - $('dl.portlet.portletTreePortlet .portlet-tabs').
-          offset().top +'px');
+    var tabs = $('dl.portlet.portletTreePortlet .portlet-tabs');
+    var max = $(window).height() - tabs.offset().top - 20;
+    tabs.css('max-height', max);
   }
   $(window).resize(resize_treeportlet_height);
 
