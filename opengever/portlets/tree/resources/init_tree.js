@@ -21,28 +21,14 @@ $(function() {
           },
           onclick: function(node, event) {
             expand_store.expand(node);
-          }
+          },
+          components: [expand_store]
         });
         navtree.render('dl.portletTreePortlet ul.filetree');
         navtree.selectCurrent(find_parent_node_for_path(context_path));
         resize_treeportlet_height();
         scroll_to_selected_item(filetree);
       });
-
-  $('ul.filetree a.toggleNav').live('click', function(e){
-    e.preventDefault();
-    var arrow = $(this);
-    var link = arrow.siblings('a');
-    var node = link.data('tree-node');
-
-    if(navtree.is_expanded(node)) {
-      navtree.collapse(node);
-      expand_store.collapse(node);
-    } else {
-      navtree.expand(node);
-      expand_store.expand(node);
-    }
-  });
 
   $(window).resize(function() {
     resize_treeportlet_height();

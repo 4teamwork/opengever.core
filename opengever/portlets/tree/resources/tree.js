@@ -8,8 +8,12 @@ function Tree(nodes, config) {
   var tree = this;
   configuration = $.extend(true, {
     'render_condition': function(){ return true; },
-    'onclick': function(node, event){}
+    'onclick': function(node, event){},
+    'components': []
   }, config);
+  $(configuration['components']).each(function() {
+    this.listen(tree);
+  });
 
   this.render = function(selector) {
     var temporary_root = $('<ul/>');
@@ -33,7 +37,9 @@ function Tree(nodes, config) {
     }
     var $list_item = $('<li/>');
     if (this.nodes && this.nodes.length > 0) {
-      $list_item.append('<a href="#" class="toggleNav">&nbsp;</a>');
+      $('<a href="#" class="toggleNav">&nbsp;</a>').
+          appendTo($list_item).
+          click(tree.arrow_clicked);
     }
     $container.append($list_item);
     var $link = $('<a />').text(this.text).attr('href', this.path);
@@ -52,7 +58,7 @@ function Tree(nodes, config) {
     tree.render_children.apply(this);
 
     if(this.parent) {
-      tree.expand(this.parent);
+      tree.expand(this.parent, true);
     }
   };
 
@@ -81,22 +87,42 @@ function Tree(nodes, config) {
     return nodes;
   };
 
-  this.expand = function(node) {
+  this.expand = function(node, omit_event) {
+    if(this.is_expanded(node)) {
+      return;
+    }
     if(node.parent) {
-      this.expand(node.parent);
+      this.expand(node.parent, true);
     }
     this.render_children.apply(node, [true]);
     $(node.link).parent('li').find('>ul').removeClass('folded');
     $(node.link).parent('li').find('>a.toggleNav').addClass('expanded');
+    if(!omit_event) {
+      $(tree).trigger('tree:expanded', [node]);
+    }
   };
 
   this.collapse = function(node) {
     $(node.link).parent('li').find('>ul').addClass('folded');
     $(node.link).parent('li').find('>a.toggleNav').removeClass('expanded');
+    $(tree).trigger('tree:collapsed', [node]);
   };
 
   this.is_expanded = function(node) {
     return !$(node.link).parent('li').find('>ul').hasClass('folded');
+  };
+
+  this.arrow_clicked = function(event) {
+    event.preventDefault();
+    var arrow = $(this);
+    var link = arrow.siblings('a');
+    var node = link.data('tree-node');
+
+    if(tree.is_expanded(node)) {
+      tree.collapse(node);
+    } else {
+      tree.expand(node);
+    }
   };
 
   this.each = function(callback) {
@@ -166,7 +192,15 @@ ExpandStore = function(cookie_name, identifier_key) {
     return node[identifier_key];
   }
 
-  return {
+  var store = {
+    listen: function(tree) {
+      $(tree).bind('tree:expanded', function(event, node) {
+        store.expand(node);
+      });
+      $(tree).bind('tree:collapsed', function(event, node) {
+        store.collapse(node);
+      });
+    },
     is_expanded: function(node) {
       if(!node) {
         return false;
@@ -192,6 +226,7 @@ ExpandStore = function(cookie_name, identifier_key) {
       set(expanded);
     }
   };
+  return store;
 };
 
 
