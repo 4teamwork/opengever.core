@@ -12,6 +12,7 @@ from zope.component import getUtility
 from zope.component import queryMultiAdapter
 from zope.intid.interfaces import IIntIds
 from zope.schema import getFieldsInOrder
+import transaction
 
 
 def set_defaults(obj):
@@ -74,6 +75,11 @@ class TestTransporter(FunctionalTestCase):
         intids = getUtility(IIntIds)
         ITask(task).relatedItems = [
             RelationValue(intids.getId(documents[2]))]
+
+        # commit any pending transaction in order to avoid
+        # StorageTransactionError: Duplicate tpc_begin calls for same transaction
+        # See https://github.com/4teamwork/opengever.core/pull/556
+        transaction.commit()
 
         if return_docs:
             return task, documents
