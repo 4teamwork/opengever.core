@@ -12,16 +12,13 @@ class CreateAdminUnitTable(SchemaMigration):
     def migrate(self):
         self.create_admin_units_table()
         self.create_admin_unit_id_column()
-        self.refresh_medatata()
+        self.refresh_metadata()
 
         self.migrate_data()
 
         self.create_admin_unit_id_column_constraint()
 
     def create_admin_units_table(self):
-        if self.metadata.tables.get('admin_units') is not None:
-            return
-
         self.op.create_table(
             'admin_units',
             Column('unit_id', String(30), primary_key=True),
@@ -33,10 +30,6 @@ class CreateAdminUnitTable(SchemaMigration):
         )
 
     def create_admin_unit_id_column(self):
-        client_table = self.metadata.tables.get('clients')
-        if client_table.columns.get('admin_unit_id') is not None:
-            return
-
         self.op.add_column(
             'clients',
             Column('admin_unit_id', String(30))

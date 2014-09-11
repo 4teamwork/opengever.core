@@ -14,19 +14,11 @@ class AddSubdossierColumn(SchemaMigration):
         self.create_text_column()
 
     def create_containing_subdossier_column(self):
-        tasks_table = self.metadata.tables.get('tasks')
-        if tasks_table.columns.get('containing_subdossier') is not None:
-            return
-
         self.op.add_column(
             'tasks', Column('containing_subdossier', String(512))
         )
 
     def create_text_column(self):
-        tasks_table = self.metadata.tables.get('tasks')
-        if tasks_table.columns.get('text') is not None:
-            return
-
         self.op.add_column(
             'tasks', Column('text', Text())
         )
