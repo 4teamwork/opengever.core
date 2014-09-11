@@ -300,7 +300,7 @@ DOC_PROPERTIES_UPDATED = 'DocProperties updated'
 
 
 # We don't register an eventhandler but call this method directly from
-# oopengever.document.handlers
+# opengever.document.handlers
 def doc_properties_updated(context):
     journal_entry_factory(context, DOC_PROPERTIES_UPDATED,
                           title=_(u'label_doc_properties_updated',

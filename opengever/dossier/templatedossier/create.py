@@ -32,7 +32,7 @@ class DocumentFromTemplate(object):
 
         self._set_defaults(new_doc)
 
-        DocPropertyWriter.create_properties(new_doc)
+        DocPropertyWriter(new_doc).initialize()
 
         # Notify necessary standard event handlers
         notify(ObjectModifiedEvent(new_doc))

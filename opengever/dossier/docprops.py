@@ -42,35 +42,26 @@ class TemporaryDocFile(object):
 
 class DocPropertyWriter(object):
 
-    @classmethod
-    def is_export_enabled(cls):
-        registry = getUtility(IRegistry)
-        props = registry.forInterface(ITemplateDossierProperties)
-        return props.create_doc_properties
-
-    @classmethod
-    def update_properties(cls, document):
-        if not cls.is_export_enabled():
-            return
-
-        if cls(document).update_doc_properties(only_existing=True):
-            journal.handlers.doc_properties_updated(document)
-
-    @classmethod
-    def create_properties(cls, document):
-        if not cls.is_export_enabled():
-            return
-
-        cls(document).update_doc_properties(only_existing=False)
-
     def __init__(self, document):
         self.document = document
         self.request = self.document.REQUEST
+
+    def update(self):
+        if self.update_doc_properties(only_existing=True):
+            journal.handlers.doc_properties_updated(self.document)
+
+    def initialize(self):
+        self.update_doc_properties(only_existing=False)
 
     def get_properties(self):
         properties_adapter = getMultiAdapter(
             (self.document, self.request), IDocProperties)
         return properties_adapter.get_properties()
+
+    def is_export_enabled(self):
+        registry = getUtility(IRegistry)
+        props = registry.forInterface(ITemplateDossierProperties)
+        return props.create_doc_properties
 
     def update_doc_properties(self, only_existing):
         if not self.is_export_enabled():

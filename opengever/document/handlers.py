@@ -26,4 +26,4 @@ def update_moved_doc_properties(context, event):
 
 
 def _update_docproperties(document):
-    DocPropertyWriter.update_properties(document)
+    DocPropertyWriter(document).update()
