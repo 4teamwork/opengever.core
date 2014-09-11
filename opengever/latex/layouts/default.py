@@ -48,6 +48,9 @@ class DefaultLayout(CustomizableLayout, grok.MultiAdapter):
         self.use_package('array,supertabular')
         self.use_package('setspace')
 
+        if self.show_logo:
+            self.add_raw_template_file('gever_logo.jpeg')
+
     def get_render_arguments(self):
         owner = self.get_owner()
 
