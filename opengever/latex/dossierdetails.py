@@ -18,14 +18,13 @@ from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.browser.participants import role_list_helper
 from opengever.globalindex.model.task import Task
 from opengever.latex import _
-from opengever.latex.listing import DocumentsLaTeXListing
-from opengever.latex.listing import SubDossiersLaTeXListing
-from opengever.latex.listing import TasksLaTeXListing
+from opengever.latex.listing import ILaTexListing
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.tabbedview.helper import readable_ogds_author
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.i18n import translate
 from zope.interface import Interface
@@ -71,22 +70,25 @@ class DossierDetailsLaTeXView(grok.MultiAdapter, MakoLaTeXView):
         args['subdossierstitle'] = translate(
             _('label_subdossiers', default="Subdossiers"), context=self.request)
 
-        listing = SubDossiersLaTeXListing(self, self.get_subdossiers())
-        args['subdossiers'] = listing.get_listing()
+        listing = getMultiAdapter((self.context, self.request, self),
+                                  ILaTexListing, name='subdossiers')
+        args['subdossiers'] = listing.get_listing(self.get_subdossiers())
 
         # documents
         args['documentstitle'] = translate(
             _('label_documents', default="Documents"), context=self.request)
 
-        listing = DocumentsLaTeXListing(self, self.get_documents())
-        args['documents'] = listing.get_listing()
+        listing = getMultiAdapter((self.context, self.request, self),
+                                  ILaTexListing, name='documents')
+        args['documents'] = listing.get_listing(self.get_documents())
 
         # tasks
         args['taskstitle'] = translate(
             _('label_tasks', default="Tasks"), context=self.request)
 
-        listing = TasksLaTeXListing(self, self.get_tasks())
-        args['tasks'] = listing.get_listing()
+        listing = getMultiAdapter(
+            (self.context, self.request, self), ILaTexListing, name='tasks')
+        args['tasks'] = listing.get_listing(self.get_tasks())
 
         self.layout.use_package('pdflscape')
         self.layout.use_package('longtable')
