@@ -5,8 +5,9 @@ from ftw.pdfgenerator.interfaces import ILaTeXView
 from ftw.pdfgenerator.utils import provide_request_layer
 from ftw.pdfgenerator.view import MakoLaTeXView
 from opengever.latex.interfaces import ILandscapeLayer
-from opengever.latex.listing import DossiersLaTeXListing
+from opengever.latex.listing import ILaTexListing
 from opengever.latex.utils import get_selected_items_from_catalog
+from zope.component import getMultiAdapter
 from zope.interface import Interface
 
 
@@ -45,5 +46,7 @@ class DossierListingLaTeXView(grok.MultiAdapter, MakoLaTeXView):
         brains = [brain for brain in get_selected_items_from_catalog(
             self.context, self.request)]
 
-        dossier_listing = DossiersLaTeXListing(self, brains)
-        return {'listing': dossier_listing.get_listing()}
+        dossier_listing = getMultiAdapter((self.context, self.request, self),
+                                          ILaTexListing, name='dossiers')
+
+        return {'listing': dossier_listing.get_listing(brains)}

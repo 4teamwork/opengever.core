@@ -112,7 +112,7 @@ Changelog
 
 - Additional Improvements:
 
-  - Replace latex listing adapters with basic classes.
+  - Simplify LaTex listing adapters and include base-class.
     [phgross, deiferni]
   - Remove `ClientId` viewlet.
     [phgross, deiferni]

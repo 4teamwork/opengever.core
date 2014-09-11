@@ -1,4 +1,5 @@
 from collections import OrderedDict
+from five import grok
 from ftw.table import helper
 from opengever.latex import _
 from opengever.latex.utils import get_issuer_of_task
@@ -8,6 +9,7 @@ from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.task.helper import task_type_helper
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from zope.interface import Interface
 
 
 class Column(object):
@@ -29,16 +31,35 @@ class Column(object):
         value = self.getter(item)
         if value is None:
             value = u''
+
         return value
 
 
-class LatexListing(object):
+class ILaTexListing(Interface):
 
-    template = ViewPageTemplateFile('templates/listing.pt')
+    def get_labels():
+        """"Returns a LaTEx string with the labels of the listing"""
 
-    def __init__(self, latex_view, items):
+    def get_widths():
+        """"Returns a LaTEx string with the labels of the listing,
+        which are calculated."""
+
+    def get_rows():
+        """"Returns a LaTEx string with all the rows of the listing"""
+
+    def get_config():
+        """Returns the table configuration, a list of dicts for every row,
+        containing label, width, getter."""
+
+
+class LaTexListing(grok.MultiAdapter):
+    grok.provides(ILaTexListing)
+    grok.adapts(Interface, Interface, Interface)
+
+    def __init__(self, context, request, latex_view):
+        self.context = context
+        self.request = request
         self.latex_view = latex_view
-        self.items = items
 
         self.admin_unit = get_current_admin_unit()
 
@@ -46,9 +67,7 @@ class LatexListing(object):
             OrderedDict((each.id, each) for each in self.get_columns())
         )
 
-        # required for template namespace only
-        self.request = latex_view.request
-        self.context = None
+        self.items = []
 
     def get_columns(self):
         """Returns the table configuration, a list of column configs.
@@ -71,7 +90,9 @@ class LatexListing(object):
         """"Returns a LaTEx string with all the rows of the listing"""
         return [self.get_row_for_item(item) for item in self.items]
 
-    def get_listing(self):
+    def get_listing(self, items=[]):
+        self.items += items
+
         if len(self.items) == 0:
             return None
         else:
@@ -112,7 +133,15 @@ class LatexListing(object):
         return brain.breadcrumb_titles[-distance]['Title']
 
 
-class DossiersLaTeXListing(LatexListing):
+class DossiersLaTeXListing(LaTexListing):
+    grok.provides(ILaTexListing)
+    grok.adapts(Interface, Interface, Interface)
+    grok.name('dossiers')
+
+    template = ViewPageTemplateFile('templates/listing.pt')
+
+    def get_responsible(self, brain):
+        return Actor.lookup(brain.responsible).get_label_with_admin_unit()
 
     def get_columns(self):
         return [
@@ -142,21 +171,24 @@ class DossiersLaTeXListing(LatexListing):
             Column('review_state',
                    _('label_review_state', default='State'),
                    '10%',
-                    lambda brain: workflow_state(brain, brain.review_state)),
+                   lambda brain: workflow_state(brain, brain.review_state)),
 
             Column('start',
                    _('label_start', default='Start'),
                    '5%',
-                    lambda brain: helper.readable_date(brain, brain.start)),
+                   lambda brain: helper.readable_date(brain, brain.start)),
 
             Column('end',
                    _('label_end', default='End'),
                    '5%',
                    lambda brain: helper.readable_date(brain, brain.end))
-            ]
+        ]
 
 
 class SubDossiersLaTeXListing(DossiersLaTeXListing):
+    grok.provides(ILaTexListing)
+    grok.adapts(Interface, Interface, Interface)
+    grok.name('subdossiers')
 
     def update_column_dict(self, columns):
         del columns['reference']
@@ -164,7 +196,10 @@ class SubDossiersLaTeXListing(DossiersLaTeXListing):
         return columns
 
 
-class DocumentsLaTeXListing(LatexListing):
+class DocumentsLaTeXListing(DossiersLaTeXListing):
+    grok.provides(ILaTexListing)
+    grok.adapts(Interface, Interface, Interface)
+    grok.name('documents')
 
     def get_columns(self):
         return [
@@ -180,28 +215,28 @@ class DocumentsLaTeXListing(LatexListing):
             Column('document_date',
                    _('label_document_date', default='Document date'),
                    '13%',
-                    lambda brain:
-                        helper.readable_date(brain, brain.document_date)),
+                   lambda brain: helper.readable_date(brain, brain.document_date)),
 
             Column('receipt_date',
                    _('label_receipt_date', default='Receipt date'),
                    '13%',
-                   lambda brain:
-                        helper.readable_date(brain, brain.receipt_date)),
+                   lambda brain: helper.readable_date(brain, brain.receipt_date)),
 
             Column('delivery_date',
                    _('label_delivery_date', default='Delivery date'),
                    '13%',
-                   lambda brain:
-                        helper.readable_date(brain, brain.delivery_date)),
+                   lambda brain: helper.readable_date(brain, brain.delivery_date)),
 
             Column('document_author',
                    _('label_document_author', default='Document author'),
                    '20%')
-            ]
+        ]
 
 
-class TasksLaTeXListing(LatexListing):
+class TasksLaTeXListing(DossiersLaTeXListing):
+    grok.provides(ILaTexListing)
+    grok.adapts(Interface, Interface, Interface)
+    grok.name('tasks')
 
     def get_columns(self):
         return [
@@ -228,7 +263,7 @@ class TasksLaTeXListing(LatexListing):
             Column('review_state',
                    _('label_review_state', default='State'),
                    '7%',
-                    lambda item: workflow_state(item, item.review_state)),
+                   lambda item: workflow_state(item, item.review_state)),
 
             Column('title',
                    _('label_title', default='Title'),
@@ -238,4 +273,4 @@ class TasksLaTeXListing(LatexListing):
                    _('label_deadline', default='Deadline'),
                    '15%',
                    lambda item: helper.readable_date(item, item.deadline))
-            ]
+        ]
