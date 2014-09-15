@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.task.adapters import IResponseContainer
@@ -99,24 +99,25 @@ class TestTaskIntegration(FunctionalTestCase):
 
         wft = t1.portal_workflow
 
-        self.failUnless(t1.expectedStartOfWork == None)
+        self.failUnless(t1.expectedStartOfWork is None)
         wft.doActionFor(t1, 'task-transition-open-in-progress')
-        self.failUnless(t1.expectedStartOfWork.date() == datetime.now().date())
 
-        self.failUnless(t1.date_of_completion == None)
+        self.failUnless(t1.expectedStartOfWork == date.today())
+
+        self.failUnless(t1.date_of_completion is None)
         wft.doActionFor(t1, 'task-transition-in-progress-resolved')
-        self.failUnless(t1.date_of_completion.date() == datetime.now().date())
+        self.failUnless(t1.date_of_completion == date.today())
 
         wft.doActionFor(t1, 'task-transition-resolved-in-progress')
-        self.failUnless(t1.date_of_completion == None)
+        self.failUnless(t1.date_of_completion is None)
 
         t2 = create(Builder('task')
                     .titled('Task 2')
                     .having(issuer=member.getId()))
 
-        self.failUnless(t2.date_of_completion == None)
+        self.failUnless(t2.date_of_completion is None)
         wft.doActionFor(t2, 'task-transition-open-tested-and-closed')
-        self.failUnless(t2.date_of_completion.date() == datetime.now().date())
+        self.failUnless(t2.date_of_completion == date.today())
 
     def test_adding_a_subtask_add_response_on_main_task(self):
         intids = getUtility(IIntIds)

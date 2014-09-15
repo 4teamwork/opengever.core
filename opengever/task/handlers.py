@@ -1,6 +1,6 @@
 from Acquisition import aq_inner, aq_parent
 from Products.CMFCore.interfaces import IActionSucceededEvent
-from datetime import datetime
+from datetime import date
 from five import grok
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
@@ -41,8 +41,8 @@ def set_dates(task, event):
                             ]
 
     if event.action == 'task-transition-open-in-progress':
-        task.expectedStartOfWork = datetime.now()
+        task.expectedStartOfWork = date.today()
     elif event.action in resolved_transitions:
-        task.date_of_completion = datetime.now()
+        task.date_of_completion = date.today()
     if event.action == 'task-transition-resolved-in-progress':
         task.date_of_completion = None
