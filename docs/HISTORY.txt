@@ -146,6 +146,11 @@ Changelog
 
     [jone]
 
+  - Update DocProperties when documents are moved/pasted and checked-in/checked out.
+    Create a journal entry when modifying/initializing DocProperties.
+    [deiferni]
+
+
 
 3.4.1 (2014-09-03)
 ------------------
