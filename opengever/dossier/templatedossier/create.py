@@ -1,38 +1,15 @@
-from ooxml_docprops import is_supported_mimetype
-from ooxml_docprops import update_properties
-from opengever.dossier.interfaces import IDocProperties
+from opengever.dossier.docprops import DocPropertyWriter
 from plone.dexterity.utils import createContentInContainer
 from plone.dexterity.utils import iterSchemata
 from plone.rfc822.interfaces import IPrimaryField
-from tempfile import NamedTemporaryFile
 from z3c.form.interfaces import IValue
-from zope.component import getMultiAdapter
 from zope.component import queryMultiAdapter
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.schema import getFieldsInOrder
-import os
 
 
 NO_DEFAULT_VALUE_FIELDS = ['title', 'file']
-
-
-class TemporaryDocFile(object):
-
-    def __init__(self, file_):
-        self.file = file_
-        self.path = None
-
-    def __enter__(self):
-        template_data = self.file.data
-
-        with NamedTemporaryFile(delete=False) as tmpfile:
-            self.path = tmpfile.name
-            tmpfile.write(template_data)
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        os.remove(self.path)
 
 
 class DocumentFromTemplate(object):
@@ -55,31 +32,11 @@ class DocumentFromTemplate(object):
 
         self._set_defaults(new_doc)
 
-        if (with_properties and
-                is_supported_mimetype(self.template_doc.file.contentType)):
-            new_doc.file.data = self._copy_doc_properties_from_template(new_doc)
+        DocPropertyWriter(new_doc).initialize()
 
         # Notify necessary standard event handlers
         notify(ObjectModifiedEvent(new_doc))
         return new_doc
-
-    def _copy_doc_properties_from_template(self, new_doc):
-        # Copy the file data of the template to a temporary file
-        with TemporaryDocFile(self.template_doc.file) as tmpfile:
-
-            # Get properties for the new document based on the dossier
-            properties_adapter = getMultiAdapter(
-                (new_doc, new_doc.REQUEST), IDocProperties)
-            properties = properties_adapter.get_properties()
-
-            # Set the DocProperties by modifying the temporary file
-            update_properties(tmpfile.path, properties)
-
-            # Create a new NamedBlobFile from the updated temporary file's data
-            with open(tmpfile.path) as processed_tmpfile:
-                populated_template_data = processed_tmpfile.read()
-
-        return populated_template_data
 
     def _get_primary_field_type(self, obj):
         """Determine the type of an objects primary field (e.g. NamedBlobFile)

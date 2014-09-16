@@ -25,7 +25,6 @@ class TestDocProperties(FunctionalTestCase):
         'Document.SequenceNumber': '1',
     }
 
-
     def setUp(self):
         super(TestDocProperties, self).setUp()
         self.grant('Manager')

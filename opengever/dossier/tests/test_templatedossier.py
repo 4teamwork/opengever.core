@@ -6,9 +6,11 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages import plone
 from ooxml_docprops import read_properties
+from opengever.dossier.docprops import TemporaryDocFile
 from opengever.dossier.interfaces import ITemplateDossierProperties
-from opengever.dossier.templatedossier.create import TemporaryDocFile
 from opengever.dossier.templatedossier.interfaces import ITemplateUtility
+from opengever.journal.handlers import DOC_PROPERTIES_UPDATED
+from opengever.journal.tests.utils import get_journal_entry
 from opengever.testing import FunctionalTestCase
 from opengever.testing.pages import sharing_tab_data
 from plone.app.testing import TEST_USER_ID
@@ -54,6 +56,13 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
         self.dossier = create(Builder('dossier').titled(u'My Dossier'))
 
         self.template_b_path = '/'.join(self.template_b.getPhysicalPath())
+
+    def assert_doc_properties_updated_journal_entry_generated(self, document):
+        entry = get_journal_entry(document)
+
+        self.assertEqual(DOC_PROPERTIES_UPDATED, entry['action']['type'])
+        self.assertEqual(TEST_USER_ID, entry['actor'])
+        self.assertEqual('', entry['comments'])
 
     @browsing
     def test_form_list_all_templates(self, browser):
@@ -154,7 +163,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
         self.assertNotEquals(self.template_b.file, document.file)
 
     @browsing
-    def test_docx_template_is_created_from_template_with_doc_properties(self, browser):
+    def test_properties_are_added_when_created_from_template_with_doc_properties(self, browser):
         template_word = create(Builder('document')
                                .titled('Word Docx template')
                                .within(self.templatedossier)
@@ -172,9 +181,10 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
             self.assertItemsEqual(
                 self.expected_doc_properties + [('Test', 'Peter')],
                 properties)
+        self.assert_doc_properties_updated_journal_entry_generated(document)
 
     @browsing
-    def test_docx_template_is_created_from_template_without_doc_properties(self, browser):
+    def test_properties_are_added_when_created_from_template_without_doc_properties(self, browser):
         template_word = create(Builder('document')
                                .titled('Word Docx template')
                                .within(self.templatedossier)
@@ -190,6 +200,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
         with TemporaryDocFile(document.file) as tmpfile:
             properties = read_properties(tmpfile.path)
             self.assertItemsEqual(self.expected_doc_properties, properties)
+        self.assert_doc_properties_updated_journal_entry_generated(document)
 
     @browsing
     def test_doc_properties_are_not_created_when_disabled(self, browser):

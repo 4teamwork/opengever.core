@@ -1,17 +1,103 @@
 from Acquisition import aq_parent
 from five import grok
+from ooxml_docprops import is_supported_mimetype
+from ooxml_docprops.properties import OOXMLDocument
+from opengever import journal
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
 from opengever.document.document import IDocumentSchema
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.interfaces import IDocProperties
 from opengever.dossier.interfaces import IDocPropertyProvider
+from opengever.dossier.interfaces import ITemplateDossierProperties
+from plone.registry.interfaces import IRegistry
 from Products.CMFCore.interfaces import IMemberData
 from Products.CMFCore.utils import getToolByName
+from tempfile import NamedTemporaryFile
 from zope.component import getAdapter
+from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.component import queryAdapter
 from zope.publisher.interfaces.browser import IBrowserRequest
+import os
+
+
+class TemporaryDocFile(object):
+
+    def __init__(self, file_):
+        self.file = file_
+        self.path = None
+
+    def __enter__(self):
+        template_data = self.file.data
+
+        with NamedTemporaryFile(delete=False) as tmpfile:
+            self.path = tmpfile.name
+            tmpfile.write(template_data)
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        os.remove(self.path)
+
+
+class DocPropertyWriter(object):
+
+    def __init__(self, document):
+        self.document = document
+        self.request = self.document.REQUEST
+
+    def update(self):
+        if self.update_doc_properties(only_existing=True):
+            journal.handlers.doc_properties_updated(self.document)
+
+    def initialize(self):
+        self.update_doc_properties(only_existing=False)
+
+    def get_properties(self):
+        properties_adapter = getMultiAdapter(
+            (self.document, self.request), IDocProperties)
+        return properties_adapter.get_properties()
+
+    def is_export_enabled(self):
+        registry = getUtility(IRegistry)
+        props = registry.forInterface(ITemplateDossierProperties)
+        return props.create_doc_properties
+
+    def update_doc_properties(self, only_existing):
+        if not self.is_export_enabled():
+            return False
+        if not self.has_file():
+            return False
+        if not self.is_supported_file():
+            return False
+
+        return self.write_properties(only_existing, self.get_properties())
+
+    def write_properties(self, only_existing, properties):
+        with TemporaryDocFile(self.document.file) as tmpfile:
+            changed = False
+
+            with OOXMLDocument(tmpfile.path) as doc:
+                if only_existing:
+                    if doc.has_any_property(properties.keys()):
+                        doc.update_properties(properties)
+                        changed = True
+                else:
+                    doc.update_properties(properties)
+                    changed = True
+
+            if changed:
+                with open(tmpfile.path) as processed_tmpfile:
+                    file_data = processed_tmpfile.read()
+                self.document.file.data = file_data
+
+            return changed
+
+    def has_file(self):
+        return self.document.file is not None
+
+    def is_supported_file(self):
+        return is_supported_mimetype(self.document.file.contentType)
 
 
 class DefaultDocumentDocPropertyProvider(grok.Adapter):

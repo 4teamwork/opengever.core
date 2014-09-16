@@ -56,6 +56,7 @@ def propper_string(value):
         return value
     elif isinstance(value, unicode):
         return value.encode('utf8')
+
     else:
         return str(value)
 
@@ -293,6 +294,18 @@ def dossier_local_roles_modified(context, event):
         comment=role_mapping_to_str(context, event.new_local_roles))
 
     return
+
+
+DOC_PROPERTIES_UPDATED = 'DocProperties updated'
+
+
+# We don't register an eventhandler but call this method directly from
+# opengever.document.handlers
+def doc_properties_updated(context):
+    journal_entry_factory(context, DOC_PROPERTIES_UPDATED,
+                          title=_(u'label_doc_properties_updated',
+                                  default=u'DocProperties updated.'))
+
 
 # ----------------------- MAIL -----------------------
 ATTACHMENTS_DELETED_ACTION = 'Attachments deleted'
