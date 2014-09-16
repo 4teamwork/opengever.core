@@ -55,10 +55,6 @@ class MigrateTaskTable(SchemaMigration):
         return False
 
     def create_issuing_orgunit_column(self):
-        tasks_table = self.metadata.tables.get('tasks')
-        if tasks_table.columns.get('issuing_org_unit') is not None:
-            return
-
         self.op.add_column(
             'tasks',
             Column('issuing_org_unit', String(30), index=True, nullable=False)

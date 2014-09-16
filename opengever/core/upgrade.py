@@ -14,6 +14,90 @@ TRACKING_TABLE_NAME = 'opengever_upgrade_version'
 logger = logging.getLogger('opengever.upgrade')
 
 
+class IdempotentOperations(Operations):
+    """Make alembic.operations tolerant to the same migration instruction being
+    called multiple times.
+
+    This might happen when a DB-migration has been executed halfway but then
+    fails. Since MYSQL does not support transaction aware schema changes we
+    have to handle these partially executed migrations by ourself.
+
+    This class relies on an updated metadata, you have to do that manually
+    in your schema migrations by calling `SchemaMigration.refresh_metadata`.
+
+    """
+    def __init__(self, schema_migration, migration_context):
+        super(IdempotentOperations, self).__init__(migration_context)
+        self.schema_migration = schema_migration
+        self.metadata = self.schema_migration.metadata
+
+    def _get_table(self, table_name):
+        return self.metadata.tables.get(table_name)
+
+    def _get_column(self, table_name, column_name):
+        table = self._get_table(table_name)
+        if table is None:
+            return None
+        return table.columns.get(column_name)
+
+    def drop_column(self, table_name, column_name, **kw):
+        if self._get_column(table_name, column_name) is None:
+            logger.log(logging.INFO,
+                       "Skipping drop colum '{0}' of table '{1}', "
+                       "column does not exist"
+                       .format(column_name, table_name))
+            return
+
+        super(IdempotentOperations, self).drop_column(
+            table_name, column_name, **kw)
+
+    def add_column(self, table_name, column, schema=None):
+        column_name = column.name
+        if self._get_column(table_name, column_name) is not None:
+            logger.log(logging.INFO,
+                       "Skipping add colum '{0}' to table '{1}', "
+                       "column does already exist"
+                       .format(column_name, table_name))
+            return
+
+        super(IdempotentOperations, self).add_column(
+            table_name, column, schema)
+
+    def create_table(self, name, *columns, **kw):
+        if self._get_table(name) is not None:
+            logger.log(logging.INFO,
+                       "Skipping create table '{0}', table does already exist"
+                       .format(name))
+            return
+
+        super(IdempotentOperations, self).create_table(name, *columns, **kw)
+
+
+class DeactivatedFKConstraint(object):
+    """Temporarily removes an FK-constraint.
+
+    This is required when migrating a MySQL column that is part of a foreign
+    key relationship.
+
+    """
+    def __init__(self, operations, name, source, referent,
+                 source_cols, referent_cols):
+        self.op = operations
+        self.name = name
+        self.source = source
+        self.referent = referent
+        self.source_cols = source_cols
+        self.referent_cols = referent_cols
+
+    def __enter__(self):
+        self.op.drop_constraint(self.name, self.source, type='foreignkey')
+
+    def __exit__(self, exc_type, exc_value, exc_tb):
+        self.op.create_foreign_key(self.name, self.source, self.referent,
+                                   self.source_cols, self.referent_cols)
+        return False
+
+
 class SchemaMigration(UpgradeStep):
     """Baseclass for database-(schema) upgrade steps.
 
@@ -56,7 +140,7 @@ class SchemaMigration(UpgradeStep):
     def execute(self, statement):
         return self.connection.execute(statement)
 
-    def refresh_medatata(self):
+    def refresh_metadata(self):
         self.metadata.clear()
         self.metadata.reflect()
 
@@ -95,7 +179,7 @@ class SchemaMigration(UpgradeStep):
             Column('profileid', String(50), primary_key=True),
             Column('upgradeid', Integer, nullable=False),
         )
-        self.refresh_medatata()
+        self.refresh_metadata()
 
     def _insert_initial_version(self):
         versions_table = self.metadata.tables.get(TRACKING_TABLE_NAME)
@@ -121,5 +205,6 @@ class SchemaMigration(UpgradeStep):
         session = create_session()
         engine = session.bind
         self.connection = engine.connect()
-        self.op = Operations(MigrationContext.configure(self.connection))
+        self.migration_context = MigrationContext.configure(self.connection)
         self.metadata = MetaData(engine, reflect=True)
+        self.op = IdempotentOperations(self, self.migration_context)
