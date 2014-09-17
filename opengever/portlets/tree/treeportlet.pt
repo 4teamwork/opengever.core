@@ -3,6 +3,8 @@
                     data-favorites-url view/favorites_url;
                     data-favorites-cache-param view/favorites_cache_param;
                     data-context-path view/context_path"
+    i18n:attributes="data-i18n-add-to-favorites label_add_to_favorites;
+                     data-i18n-remove-from-favorites label_remove_from_favorites;"
     i18n:domain="opengever.portlets.tree">
 
     <dt class="portletHeader">

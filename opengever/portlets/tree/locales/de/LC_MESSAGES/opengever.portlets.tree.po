@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-09-10 13:54+0000\n"
+"POT-Creation-Date: 2014-09-17 10:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,6 +14,14 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./opengever/portlets/tree/treeportlet.pt:11
+#: ./opengever/portlets/tree/treeportlet.pt:13
 msgid "Favorites"
 msgstr "Favoriten"
+
+#: ./opengever/portlets/tree/treeportlet.pt:1
+msgid "label_add_to_favorites"
+msgstr "Als Favorit markieren"
+
+#: ./opengever/portlets/tree/treeportlet.pt:1
+msgid "label_remove_from_favorites"
+msgstr "Aus Favoriten entfernen"

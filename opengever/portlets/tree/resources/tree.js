@@ -346,6 +346,17 @@ RepositoryFavorites = function(url, cache_param) {
   var local_storage = new LocalStorageJSONCache(
       'favorites', url + '/list?' + cache_param);
 
+  var i18n_add = $('[data-i18n-add-to-favorites]').data('i18n-add-to-favorites') || '';
+  var i18n_remove = $('[data-i18n-remove-from-favorites]').data('i18n-remove-from-favorites') || '';
+
+  function annotate_link_title(favorite_link) {
+    if(favorite_link.hasClass('bookmarked')) {
+      favorite_link.attr('title', i18n_remove);
+    } else {
+      favorite_link.attr('title', i18n_add);
+    }
+  }
+
   var self = {
     listen: function(tree) {
       $(tree).bind('tree:link-created', function(event, node, link) {
@@ -361,12 +372,14 @@ RepositoryFavorites = function(url, cache_param) {
                 $(this).addClass('bookmarked');
                 self.add($(this).data('uuid'));
               }
+              annotate_link_title($(this));
             });
 
         self.load(function(favorites) {
           if($.inArray(node['uid'], favorites) > -1) {
             favorite_link.addClass('bookmarked');
           }
+          annotate_link_title(favorite_link);
         });
       });
     },
