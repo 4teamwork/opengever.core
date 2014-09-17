@@ -56,8 +56,7 @@ $(function() {
         favorites_tree = make_tree(favorite_nodes, {
           render_condition: function() {
             return this.depth === 0;
-          },
-          components: [favorites_store]
+          }
         });
         tree_node.html('');
         favorites_tree.render(tree_node);
