@@ -1,3 +1,4 @@
+from AccessControl import getSecurityManager
 from pkg_resources import get_distribution
 from Products.CMFCore.utils import getToolByName
 from Products.Five import BrowserView
@@ -99,6 +100,7 @@ class JSONNavigation(BrowserView):
         if len(brains) > 0:
             last_modified = str(brains[0].modified.millis())
             version = get_distribution('opengever.core').version
-            return '-'.join((version, last_modified))
+            username = getSecurityManager().getUser().getId()
+            return '-'.join((version, last_modified, username))
         else:
             return None

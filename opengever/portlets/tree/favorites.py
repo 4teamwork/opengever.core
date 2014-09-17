@@ -109,6 +109,8 @@ class RepositoryFavoritesView(BrowserView):
     def list_cache_param(self):
         cache_key_data = ':'.join(self._storage().list())
         cache_key = md5.new(cache_key_data).hexdigest()
+        username = getSecurityManager().getUser().getId()
+        cache_key = '-'.join((cache_key, username))
         param = 'cache_key={0}'.format(cache_key)
         if self.request.getHeader('Cache-Control') == 'no-cache':
             param += '&nocache=true'
