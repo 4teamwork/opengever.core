@@ -52,6 +52,7 @@ $(function() {
     navigation_json.load(function(tree_data) {
       favorites_store.load(function(favorites) {
         var favorite_nodes = make_tree(tree_data).clone_by_uids(favorites);
+        sort_by_text(favorite_nodes);
         favorites_tree = make_tree(favorite_nodes, {
           render_condition: function() {
             return this.depth === 0;
@@ -114,5 +115,23 @@ $(function() {
     if (position) {
       $('.portletTreePortlet dd.portletItem').scrollTop(position.top - 60);
     }
+  }
+
+  function sort_by_text(list_of_nodes) {
+    /* Sorts a list of nodes by text in-place. */
+    function compare_text(first, second) {
+      var a = first.text;
+      var b = second.text;
+      if (a < b) {
+        return -1;
+      }
+      else if (a > b) {
+        return 1;
+      }
+      else {
+        return 0;
+      }
+    }
+    list_of_nodes.sort(compare_text);
   }
 });
