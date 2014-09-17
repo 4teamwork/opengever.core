@@ -70,6 +70,13 @@ class RepositoryFavoritesView(BrowserView):
         response.setHeader('Content-Type', 'application/json')
         response.setHeader('X-Theme-Disabled', 'True')
         response.enableHTTPCompression(REQUEST=self.request)
+
+        if self.request.get('cache_key'):
+            # Only cache when there is a cache_key in the request.
+            # The cached representation is to be considered fresh for 1 year
+            # http://stackoverflow.com/a/3001556/880628
+            response.setHeader('Cache-Control', 'private, max-age=31536000')
+
         return json.dumps(self._storage().list())
 
     def add(self):
@@ -102,7 +109,10 @@ class RepositoryFavoritesView(BrowserView):
     def list_cache_param(self):
         cache_key_data = ':'.join(self._storage().list())
         cache_key = md5.new(cache_key_data).hexdigest()
-        return 'cache_key={0}'.format(cache_key)
+        param = 'cache_key={0}'.format(cache_key)
+        if self.request.getHeader('Cache-Control') == 'no-cache':
+            param += '&nocache=true'
+        return param
 
     def _storage(self):
         username = getSecurityManager().getUser().getId()
