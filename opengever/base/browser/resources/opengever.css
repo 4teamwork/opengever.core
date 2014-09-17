@@ -104,6 +104,7 @@ dl.portlet.portletTreePortlet .portlet-tabs a .add-to-favorites.bookmarked:befor
 }
 dl.portlet.portletTreePortlet .portlet-tabs a:hover .add-to-favorites.bookmarked:before {
   color: #A13333;
+  content: "\e049";
 }
 
 dl.portlet ul.filetree ul.folded {
