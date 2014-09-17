@@ -283,11 +283,10 @@ LocalStorageJSONCache = function(name, url) {
       The URL **must** contain a cache key for invalidation as param,
       otherwise we have an infinite cache!
       **/
-  url = handle_nocache(url);
-
   var url_key = 'og-' + name + '-url';
   var data_key = 'og-' + name + '-data';
   var json_cache;
+  url = handle_nocache(url);
 
   function is_cached(url) {
     return Modernizr.localstorage && localStorage.getItem(url_key) == url;
