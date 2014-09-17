@@ -77,11 +77,24 @@ $(function() {
 
 
   /* Tabs configuration */
+  var tabs_count = portlet.find('.portlet-header-tabs li').length;
+  var initial_tab_index = 0;
+  var current_tab_class = 'active';
+  if(tabs_count > 1) {
+    initial_tab_index = parseInt($.cookie('tree-portlet-tab-index'), 10) || 0;
+  }
+
+  if(tabs_count == 1) {
+    /* Change the current-tab-class so that we dont have the default
+       styling, which does not look nice with only one tab. */
+    current_tab_class = 'the-only-one';
+  }
+
   portlet.find('.portlet-header-tabs').tabs(
       '.portlet-tabs > div', {
-        current: 'active',
+        current: current_tab_class,
         tabs: 'li > a',
-        initialIndex: parseInt($.cookie('tree-portlet-tab-index'), 10) || 0,
+        initialIndex: initial_tab_index,
         onBeforeClick: function(event, index) {
           $.cookie('tree-portlet-tab-index', index.toString(), {path: '/'});
           $(this.getPanes()[index]).trigger('portlet-tab:open');

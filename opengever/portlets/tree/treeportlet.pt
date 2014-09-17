@@ -10,7 +10,9 @@
     <dt class="portletHeader">
         <ul class="portlet-header-tabs">
             <li><a href="#tree-complete" tal:content="view/header" /></li>
-            <li><a href="#tree-favorites" i18n:translate="">Favorites</a></li>
+            <li tal:condition="view/favorites_enabled">
+                <a href="#tree-favorites" i18n:translate="">Favorites</a>
+            </li>
         </ul>
     </dt>
 
@@ -21,7 +23,7 @@
             </ul>
         </div>
 
-        <div id="tree-favorites">
+        <div id="tree-favorites" tal:condition="view/favorites_enabled">
             <ul class="filetree">
                 <img src="spinner.gif" class="spinner"/>
             </ul>

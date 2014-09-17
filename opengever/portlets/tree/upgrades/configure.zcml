@@ -22,4 +22,12 @@
       profile="opengever.portlets.tree:default"
       />
 
+  <upgrade-step:importProfile
+      title="Register feature flag for favorites in tree portlet."
+      profile="opengever.portlets.tree:default"
+      source="4000"
+      destination="4001"
+      directory="profiles/4001"
+      />
+
 </configure>

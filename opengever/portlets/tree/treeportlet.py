@@ -1,10 +1,12 @@
 from AccessControl.unauthorized import Unauthorized
 from Acquisition import aq_inner
-from Products.CMFCore.utils import getToolByName
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from plone.app.portlets.portlets import base
 from plone.portlets.interfaces import IPortletDataProvider
+from plone.registry.interfaces import IRegistry
+from Products.CMFCore.utils import getToolByName
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope import schema
+from zope.component import getUtility
 from zope.formlib import form
 from zope.interface import implements
 
@@ -114,6 +116,10 @@ class Renderer(base.Renderer):
         root = site.restrictedTraverse(self.root_path())
         favorites_view = root.restrictedTraverse('repository-favorites')
         return favorites_view.list_cache_param()
+
+    def favorites_enabled(self):
+        registry = getUtility(IRegistry)
+        return registry.get('opengever.portlets.tree.enable_favorites')
 
 
 class AddForm(base.AddForm):
