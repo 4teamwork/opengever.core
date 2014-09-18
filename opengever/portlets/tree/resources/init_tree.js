@@ -6,7 +6,7 @@ $(function() {
 
   $(document).bind('tree:rendered', function() {
     resize_treeportlet_height();
-    scroll_to_selected_item(portlet.find('.portlet-tabs'));
+    scroll_to_selected_item(portlet.find('.portlet-tabs > .tab'));
   });
 
 
@@ -116,7 +116,7 @@ $(function() {
   }
 
   function resize_treeportlet_height() {
-    var tabs = $('dl.portlet.portletTreePortlet .portlet-tabs');
+    var tabs = $('dl.portlet.portletTreePortlet .portlet-tabs > .tab');
     var max = $(window).height() - tabs.offset().top - 20;
     tabs.css('max-height', max);
   }

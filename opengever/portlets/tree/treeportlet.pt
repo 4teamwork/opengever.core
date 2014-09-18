@@ -17,14 +17,14 @@
     </dt>
 
     <dd class="portletItem odd portlet-tabs">
-        <div id="tree-complete">
+        <div id="tree-complete" class="tab">
             <ul class="filetree">
                 <img src="spinner.gif" class="spinner"/>
             </ul>
         </div>
 
         <div id="tree-favorites" tal:condition="view/favorites_enabled">
-            <ul class="filetree">
+            <ul class="filetree" class="tab">
                 <img src="spinner.gif" class="spinner"/>
             </ul>
         </div>

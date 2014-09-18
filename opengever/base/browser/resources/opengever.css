@@ -7,7 +7,8 @@ dl.portlet.portletTreePortlet {
 
 dl.portlet.portletTreePortlet .portletHeader {
   padding: 0;
-  border-bottom: none;
+  border: none;
+  border-right: 1px solid #CCC;
 }
 
 dl.portlet.portletTreePortlet .portlet-header-tabs {
@@ -48,6 +49,9 @@ dl.portlet.portletTreePortlet .portlet-header-tabs li a {
   background-image: -o-linear-gradient(top, #f5f5f5, #e6e6e6);
   background-image: linear-gradient(top, #f5f5f5, #e6e6e6);
 }
+dl.portlet.portletTreePortlet .portlet-header-tabs li:last-child a {
+  border-right: none;
+}
 
 dl.portlet.portletTreePortlet .portlet-header-tabs li a.active,
 dl.portlet.portletTreePortlet .portlet-header-tabs li:hover a {
@@ -56,18 +60,17 @@ dl.portlet.portletTreePortlet .portlet-header-tabs li:hover a {
   border-bottom: 1px solid transparent;
 }
 
-dl.portlet.portletTreePortlet .portletItem {
-  border: 1px solid #ccc;
-  border-top: none;
-}
-
 dl.portlet.portletTreePortlet dd.portletFooter {
   display: none;
 }
 dl.portlet.portletTreePortlet .portlet-tabs {
-  width:100%;
-  height:100%;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+dl.portlet.portletTreePortlet .portlet-tabs > .tab {
   overflow-y:scroll;
+  height:100%;
+  width: 100%;
 }
 
 dl.portlet.portletTreePortlet li {
@@ -91,6 +94,7 @@ dl.portlet.portletTreePortlet .portlet-tabs .add-to-favorites:before {
   float: right;
   width: 22px;
   text-align: center;
+  text-decoration: none;
   cursor: pointer;
   color: transparent;
   padding-right: 7px;
