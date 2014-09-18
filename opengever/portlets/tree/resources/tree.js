@@ -361,7 +361,7 @@ RepositoryFavorites = function(url, cache_param) {
   var self = {
     listen: function(tree) {
       $(tree).bind('tree:link-created', function(event, node, link) {
-        var favorite_link = $('<span class="add-to-favorites"><!-- --></span>').
+        var favorite_link = $('<span class="favorite-icon"><!-- --></span>').
             prependTo(link).
             data('uuid', node['uid']).
             click(function(event) {

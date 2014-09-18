@@ -83,6 +83,7 @@ dl.portlet.portletTreePortlet .portlet-tabs > .tab {
   overflow-y:scroll;
   height:100%;
   width: 100%;
+  padding: 10px 0;
 }
 
 dl.portlet.portletTreePortlet li {
@@ -99,28 +100,54 @@ dl.portlet.portletTreePortlet .filetree a.inPath:last-child {
   background: #DDD;
 }
 
-dl.portlet.portletTreePortlet .portlet-tabs .add-to-favorites:before {
+dl.portlet.portletTreePortlet .no-favorites {
+  padding: 10px;
+}
+
+dl.portlet.portletTreePortlet .toggle-helptext {
+  float: right;
+  padding-right: 10px;
+}
+dl.portlet.portletTreePortlet .helptext {
+  padding: 0 10px;
+}
+dl.portlet.portletTreePortlet .helptext p {
+  padding-bottom: 10px;
+}
+
+dl.portlet.portletTreePortlet .favorite-icon:before {
   font-family: 'Glyphicons';
   content: "\e050";
-  display: block;
-  float: right;
   width: 22px;
+  color: #AAA;
   text-align: center;
-  text-decoration: none;
-  cursor: pointer;
-  color: transparent;
-  padding-right: 7px;
 }
-dl.portlet.portletTreePortlet .portlet-tabs a:hover .add-to-favorites:before {
+
+dl.portlet.portletTreePortlet .helptext .favorite-icon:before {
+  font-size: 80%;
+}
+
+dl.portlet.portletTreePortlet .add-to-favorites:before,
+dl.portlet.portletTreePortlet .filetree a:hover .favorite-icon:before {
   color: #3387A1;
 }
 
-dl.portlet.portletTreePortlet .portlet-tabs a .add-to-favorites.bookmarked:before {
-  color: #AAA;
-}
-dl.portlet.portletTreePortlet .portlet-tabs a:hover .add-to-favorites.bookmarked:before {
-  color: #A13333;
+dl.portlet.portletTreePortlet .remove-from-favorites:before,
+dl.portlet.portletTreePortlet .filetree a:hover .favorite-icon.bookmarked:before {
   content: "\e049";
+  color: #A13333;
+}
+
+dl.portlet.portletTreePortlet .filetree .favorite-icon:before {
+  display: block;
+  float: right;
+  text-decoration: none;
+  cursor: pointer;
+  color: transparent;
+}
+
+dl.portlet.portletTreePortlet .filetree .favorite-icon.bookmarked:before {
+  color: #AAA;
 }
 
 dl.portlet ul.filetree ul.folded {
@@ -141,5 +168,6 @@ dl.portlet ul.filetree a.toggleNav.expanded {
 #column-navigation dl.portlet ul.filetree a.toggleNav {
   text-decoration: none;
 }
+
 
 /* @end */

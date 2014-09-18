@@ -67,11 +67,25 @@ $(function() {
         favorites_tree.selectCurrent(find_parent_node_for_path(
             favorites_tree, portlet.data('context-path')));
         favorites_tree.load_expanded_uids(expanded_uids);
+
+        if(favorite_nodes.length === 0) {
+          portlet.find('#tree-favorites .no-favorites').show();
+          portlet.find('#tree-favorites .helptext').show();
+        } else {
+          portlet.find('#tree-favorites .no-favorites').hide();
+          portlet.find('#tree-favorites .helptext').hide();
+        }
+
       });
     });
   }
 
   portlet.find('#tree-favorites').bind('portlet-tab:open', render_favorites_tree);
+
+  portlet.find('#tree-favorites a.toggle-helptext').click(function(event) {
+    event.preventDefault();
+    portlet.find('#tree-favorites .helptext').toggle();
+  });
 
   $(favorites_store).bind('favorites:changed', function() {
     if(portlet.find('#tree-favorites').is(':visible')) {

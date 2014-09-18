@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-09-17 10:23+0000\n"
+"POT-Creation-Date: 2014-09-18 12:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.portlets.tree\n"
 
-#: ./opengever/portlets/tree/treeportlet.pt:13
+#: ./opengever/portlets/tree/treeportlet.pt:14
 msgid "Favorites"
 msgstr ""
 
@@ -25,7 +25,37 @@ msgstr ""
 msgid "label_add_to_favorites"
 msgstr ""
 
+#. Default: "Help"
+#: ./opengever/portlets/tree/treeportlet.pt:35
+msgid "label_help"
+msgstr ""
+
 #: ./opengever/portlets/tree/treeportlet.pt:1
 msgid "label_remove_from_favorites"
+msgstr ""
+
+#. Default: "No favorites set yet."
+#: ./opengever/portlets/tree/treeportlet.pt:27
+msgid "tree_favorites_empty"
+msgstr ""
+
+#. Default: "When hovering over a repository folder, the icon for marking folders as favorites (${icon}) appears at the right side. Clicking this icon adds the folder as favorite here."
+#: ./opengever/portlets/tree/treeportlet.pt:44
+msgid "tree_favorites_help_adding"
+msgstr ""
+
+#. Default: "Your favorite folders are marked with the favorites icon (${icon}) in the repository tree."
+#: ./opengever/portlets/tree/treeportlet.pt:52
+msgid "tree_favorites_help_marked"
+msgstr ""
+
+#. Default: "For removing a favorite, switch back to the repository tree tab and click on the icon for removing a favorite (${icon})."
+#: ./opengever/portlets/tree/treeportlet.pt:59
+msgid "tree_favorites_help_removing"
+msgstr ""
+
+#. Default: "Adding and removing of favorites is done in the repository tree tab."
+#: ./opengever/portlets/tree/treeportlet.pt:38
+msgid "tree_favorites_help_summary"
 msgstr ""
 
