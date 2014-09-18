@@ -2,6 +2,5 @@
     <version>4000</version>
     <dependencies>
         <dependency>profile-opengever.mail:default</dependency>
-        <dependency>profile-opengever.base:default</dependency>
     </dependencies>
 </metadata>
