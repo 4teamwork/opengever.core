@@ -12,8 +12,10 @@ function Tree(nodes, config) {
     'onclick': function(node, event){},
     'components': []
   }, config);
-  $(configuration['components']).each(function() {
-    this.listen(tree);
+  $(configuration['components']).each(function(_, component) {
+    if(component !== null) {
+      component.listen(tree);
+    }
   });
 
   this.render = function(selector) {

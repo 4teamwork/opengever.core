@@ -15,6 +15,10 @@ $(function() {
   var favorites_store = new RepositoryFavorites(
       portlet.data('favorites-url'),
       portlet.data('favorites-cache-param'));
+  if ($('#tree-favorites').length === 0) {
+    // Favorites are disabled.
+    favorites_store = null;
+  }
 
   /* Complete tree tab */
   portlet.find('#tree-complete').bind('portlet-tab:open', function() {
