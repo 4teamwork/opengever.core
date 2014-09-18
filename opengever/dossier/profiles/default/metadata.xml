@@ -1,6 +1,3 @@
 <metadata>
     <version>4000</version>
-    <dependencies>
-        <dependency>profile-opengever.mail:default</dependency>
-    </dependencies>
 </metadata>

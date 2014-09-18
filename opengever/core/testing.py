@@ -132,6 +132,7 @@ class OpengeverFixture(PloneSandboxLayer):
         applyProfile(portal, 'opengever.globalindex:default')
         applyProfile(portal, 'opengever.base:default')
         applyProfile(portal, 'opengever.document:default')
+        applyProfile(portal, 'opengever.mail:default')
         applyProfile(portal, 'opengever.dossier:default')
         applyProfile(portal, 'opengever.repository:default')
         applyProfile(portal, 'opengever.journal:default')
