@@ -2,6 +2,8 @@
 <metadata>
   <version>3400</version>
   <dependencies>
+    <dependency>profile-plone.app.dexterity:default</dependency>
+
     <dependency>profile-opengever.globalindex:default</dependency>
     <dependency>profile-opengever.base:default</dependency>
     <dependency>profile-collective.mtrsetup:default</dependency>
