@@ -9,12 +9,14 @@ dl.portlet.portletTreePortlet .portletHeader {
   padding: 0;
   border: none;
   border-right: 1px solid #CCC;
+  background-color: transparent;
 }
 
 dl.portlet.portletTreePortlet .portlet-header-tabs {
   display: table;
   list-style: none;
   width: 100%;
+  border-bottom: 1px solid #ccc;
 }
 
 dl.portlet.portletTreePortlet .portlet-header-tabs li {
@@ -23,7 +25,6 @@ dl.portlet.portletTreePortlet .portlet-header-tabs li {
   text-align: center;
   padding: 0;
   padding-left: 1px;
-  border-bottom: 1px solid #ccc;
 }
 dl.portlet.portletTreePortlet .portlet-header-tabs li:first-child {
   padding-left: 0;
