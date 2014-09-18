@@ -6,6 +6,7 @@
     <dependency>profile-plone.app.registry:default</dependency>
 
     <dependency>profile-opengever.globalindex:default</dependency>
+    <dependency>profile-opengever.ogds.base:default</dependency>
     <dependency>profile-opengever.base:default</dependency>
     <dependency>profile-collective.mtrsetup:default</dependency>
     <dependency>profile-opengever.document:default</dependency>
@@ -19,7 +20,6 @@
     <dependency>profile-opengever.inbox:default</dependency>
     <dependency>profile-opengever.tasktemplates:default</dependency>
     <dependency>profile-opengever.portlets.tree:default</dependency>
-    <dependency>profile-opengever.ogds.base:default</dependency>
     <dependency>profile-opengever.contact:default</dependency>
     <dependency>profile-opengever.advancedsearch:default</dependency>
     <dependency>profile-opengever.sharing:default</dependency>
