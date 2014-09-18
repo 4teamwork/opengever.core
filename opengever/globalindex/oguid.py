@@ -1,6 +1,17 @@
+from zope.component import getUtility
+from zope.intid.interfaces import IIntIds
+from opengever.ogds.base.utils import get_current_admin_unit
+
+
 class Oguid(object):
 
     SEPARATOR = ':'
+
+    @classmethod
+    def for_object(cls, context):
+        intids = getUtility(IIntIds)
+        int_id = intids.getId(context)
+        return cls(admin_unit_id=get_current_admin_unit().id(), int_id=int_id)
 
     def __init__(self, admin_unit_id=None, int_id=None, id=None):
         # poor mans XOR
