@@ -1,7 +1,3 @@
 <metadata>
     <version>4001</version>
-    <dependencies>
-        <dependency>profile-opengever.trash:default</dependency>
-        <dependency>profile-opengever.dossier:default</dependency>
-    </dependencies>
 </metadata>
