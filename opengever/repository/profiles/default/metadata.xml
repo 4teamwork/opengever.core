@@ -1,7 +1,6 @@
 <metadata>
     <version>2602</version>
     <dependencies>
-        <dependency>profile-plone.app.registry:default</dependency>
         <dependency>profile-opengever.base:default</dependency>
     </dependencies>
 </metadata>

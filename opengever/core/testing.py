@@ -128,6 +128,7 @@ class OpengeverFixture(PloneSandboxLayer):
         # changes some things such as the language which will result in
         # lots of failing tests.
         applyProfile(portal, 'plone.app.dexterity:default')
+        applyProfile(portal, 'plone.app.registry:default')
         applyProfile(portal, 'opengever.globalindex:default')
         applyProfile(portal, 'opengever.base:default')
         applyProfile(portal, 'opengever.document:default')

@@ -1,7 +1,6 @@
 <metadata>
     <version>3403</version>
     <dependencies>
-        <dependency>profile-plone.app.registry:default</dependency>
         <dependency>profile-plone.app.versioningbehavior:default</dependency>
     </dependencies>
 </metadata>
