@@ -14,8 +14,8 @@
     <dependency>profile-opengever.repository:default</dependency>
     <dependency>profile-opengever.journal:default</dependency>
     <dependency>profile-opengever.task:default</dependency>
-    <dependency>profile-opengever.inbox:default</dependency>
     <dependency>profile-opengever.tabbedview:default</dependency>
+    <dependency>profile-opengever.inbox:default</dependency>
     <dependency>profile-opengever.tasktemplates:default</dependency>
     <dependency>profile-opengever.portlets.tree:default</dependency>
     <dependency>profile-opengever.trash:default</dependency>
