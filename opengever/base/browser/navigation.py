@@ -92,7 +92,7 @@ class JSONNavigation(BrowserView):
         query['object_provides'] += (
             'opengever.repository.repositoryroot.IRepositoryRoot',
             )
-        query['sort_on'] = 'modified'
+        query['sort_on'] = 'modified_seconds'
         query['sort_order'] = 'reverse'
         query['sort_limit'] = 1
 
