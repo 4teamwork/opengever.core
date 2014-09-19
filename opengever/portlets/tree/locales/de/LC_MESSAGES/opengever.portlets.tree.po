@@ -1,0 +1,57 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2014-09-18 12:15+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+#: ./opengever/portlets/tree/treeportlet.pt:14
+msgid "Favorites"
+msgstr "Favoriten"
+
+#: ./opengever/portlets/tree/treeportlet.pt:1
+msgid "label_add_to_favorites"
+msgstr "Als Favorit markieren"
+
+#. Default: "Help"
+#: ./opengever/portlets/tree/treeportlet.pt:35
+msgid "label_help"
+msgstr "Hilfe"
+
+#: ./opengever/portlets/tree/treeportlet.pt:1
+msgid "label_remove_from_favorites"
+msgstr "Aus Favoriten entfernen"
+
+#. Default: "No favorites set yet."
+#: ./opengever/portlets/tree/treeportlet.pt:27
+msgid "tree_favorites_empty"
+msgstr "Es wurden noch keine Ordnungspositionen als Favorit markiert."
+
+#. Default: "When hovering over a repository folder, the icon for marking folders as favorites (${icon}) appears at the right side. Clicking this icon adds the folder as favorite here."
+#: ./opengever/portlets/tree/treeportlet.pt:44
+msgid "tree_favorites_help_adding"
+msgstr "Wird der Mauszeiger im Ordnungssystem über Ordnungspositionen bewegt, so erscheint auf der rechten Seite das Symbol zum Markieren von Favoriten (${icon}). Wird auf dieses Symbol geklickt so erscheint diese Ordnungsposition in hier im Reiter \"Favoriten\"."
+
+#. Default: "Your favorite folders are marked with the favorites icon (${icon}) in the repository tree."
+#: ./opengever/portlets/tree/treeportlet.pt:52
+msgid "tree_favorites_help_marked"
+msgstr "Die von Ihnen als Favorit markierte Ordnungspositionen werden im Ordnungssystem-Reiter mit einem entsprechenden Symbol (${icon}) markiert."
+
+#. Default: "For removing a favorite, switch back to the repository tree tab and click on the icon for removing a favorite (${icon})."
+#: ./opengever/portlets/tree/treeportlet.pt:59
+msgid "tree_favorites_help_removing"
+msgstr "Um ein Favorit zu entfernen, wechseln Sie zurück in den Reiter «Ordnungssystem» und klicken Sie auf das Symbol zum entfernen von Favoriten (${icon})."
+
+#. Default: "Adding and removing of favorites is done in the repository tree tab."
+#: ./opengever/portlets/tree/treeportlet.pt:38
+msgid "tree_favorites_help_summary"
+msgstr "Das Markieren und Entfernen von Favoriten geschieht über den Ordnungssystem-Reiter."

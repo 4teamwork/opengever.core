@@ -143,6 +143,7 @@ Changelog
 
       - Performance improvements.
       - Use JavaScript tree API for building the tree.
+      - Add repository favorites.
 
     [jone]
 

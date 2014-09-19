@@ -1,17 +1,92 @@
 /* @group tree portlet */
 
 dl.portlet.portletTreePortlet {
-  overflow: hidden;
-  height: 300px;
+  min-height: 100px;
+  border: none;
 }
+
+dl.portlet.portletTreePortlet .portletHeader {
+  padding: 0;
+  border: none;
+  border-right: 1px solid #CCC;
+  background-color: transparent;
+}
+
+dl.portlet.portletTreePortlet .portlet-header-tabs {
+  display: table;
+  list-style: none;
+  width: 100%;
+  border-bottom: 1px solid #ccc;
+}
+
+dl.portlet.portletTreePortlet .portlet-header-tabs li {
+  display: table-cell;
+  width: 50%;
+  text-align: center;
+  padding: 0;
+  padding-left: 1px;
+}
+dl.portlet.portletTreePortlet .portlet-header-tabs li:first-child {
+  padding-left: 0;
+}
+
+dl.portlet.portletTreePortlet .portlet-header-tabs li a {
+  display: block;
+  padding: 0.3333em 0.75em;
+  text-decoration: none;
+  border: 1px solid #ccc;
+  border-radius: 4px 4px 0 0;
+  -moz-border-radius: 4px 4px 0 0;
+  -webkit-border-radius: 4px 4px 0 0;
+  margin: 0;
+  margin-bottom: -1px;
+  color: #333;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+  background-color: #eee;
+  background-image: -moz-linear-gradient(top, #f5f5f5, #e6e6e6);
+  background-image: -ms-linear-gradient(top, #f5f5f5, #e6e6e6);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f5f5f5), to(#e6e6e6));
+  background-image: -webkit-linear-gradient(top, #f5f5f5, #e6e6e6);
+  background-image: -o-linear-gradient(top, #f5f5f5, #e6e6e6);
+  background-image: linear-gradient(top, #f5f5f5, #e6e6e6);
+}
+dl.portlet.portletTreePortlet .portlet-header-tabs li:last-child a {
+  border-right: none;
+}
+
+dl.portlet.portletTreePortlet .portlet-header-tabs li a.active,
+dl.portlet.portletTreePortlet .portlet-header-tabs li:hover a {
+  background: white;
+  border-bottom: 1px solid transparent;
+}
+
+dl.portlet.portletTreePortlet .portlet-header-tabs li a.the-only-one {
+  background-color: #eee;
+  background-image: -moz-linear-gradient(top, #f5f5f5, #e6e6e6);
+  background-image: -ms-linear-gradient(top, #f5f5f5, #e6e6e6);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f5f5f5), to(#e6e6e6));
+  background-image: -webkit-linear-gradient(top, #f5f5f5, #e6e6e6);
+  background-image: -o-linear-gradient(top, #f5f5f5, #e6e6e6);
+  background-image: linear-gradient(top, #f5f5f5, #e6e6e6);
+  border-bottom: 1px solid #ccc;
+  cursor: default;
+}
+
+
 dl.portlet.portletTreePortlet dd.portletFooter {
   display: none;
 }
-dl.portlet.portletTreePortlet dd.portletItem {
-  width:100%;
-  height:100%;
-  overflow-y:scroll;
+dl.portlet.portletTreePortlet .portlet-tabs {
+  border: 1px solid #ccc;
+  border-top: none;
 }
+dl.portlet.portletTreePortlet .portlet-tabs > .tab {
+  overflow-y:scroll;
+  height:100%;
+  width: 100%;
+  padding: 10px 0;
+}
+
 dl.portlet.portletTreePortlet li {
   margin: 0;
   padding: 0;
@@ -24,6 +99,56 @@ dl.portlet ul.filetree ul.navTree li a {
 dl.portlet.portletTreePortlet .filetree a.current,
 dl.portlet.portletTreePortlet .filetree a.inPath:last-child {
   background: #DDD;
+}
+
+dl.portlet.portletTreePortlet .no-favorites {
+  padding: 10px;
+}
+
+dl.portlet.portletTreePortlet .toggle-helptext {
+  float: right;
+  padding-right: 10px;
+}
+dl.portlet.portletTreePortlet .helptext {
+  padding: 0 10px;
+}
+dl.portlet.portletTreePortlet .helptext p {
+  padding-bottom: 10px;
+}
+
+dl.portlet.portletTreePortlet .favorite-icon:before {
+  font-family: 'Glyphicons';
+  content: "\e050";
+  width: 22px;
+  color: #AAA;
+  text-align: center;
+}
+
+dl.portlet.portletTreePortlet .helptext .favorite-icon:before {
+  font-size: 80%;
+}
+
+dl.portlet.portletTreePortlet .add-to-favorites:before,
+dl.portlet.portletTreePortlet .filetree a:hover .favorite-icon:before {
+  color: #3387A1;
+}
+
+dl.portlet.portletTreePortlet .remove-from-favorites:before,
+dl.portlet.portletTreePortlet .filetree a:hover .favorite-icon.bookmarked:before {
+  content: "\e049";
+  color: #A13333;
+}
+
+dl.portlet.portletTreePortlet .filetree .favorite-icon:before {
+  display: block;
+  float: right;
+  text-decoration: none;
+  cursor: pointer;
+  color: transparent;
+}
+
+dl.portlet.portletTreePortlet .filetree .favorite-icon.bookmarked:before {
+  color: #AAA;
 }
 
 dl.portlet ul.filetree ul.folded {
@@ -44,5 +169,6 @@ dl.portlet ul.filetree a.toggleNav.expanded {
 #column-navigation dl.portlet ul.filetree a.toggleNav {
   text-decoration: none;
 }
+
 
 /* @end */

@@ -1,0 +1,10 @@
+<registry>
+
+    <record name="opengever.portlets.tree.enable_favorites">
+        <field type="plone.registry.field.Bool">
+            <title>Enable favorites in tree portlet</title>
+        </field>
+        <value>false</value>
+    </record>
+
+</registry>

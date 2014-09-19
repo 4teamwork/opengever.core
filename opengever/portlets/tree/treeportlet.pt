@@ -1,24 +1,72 @@
 <dl class="portlet portletTreePortlet"
-    tal:attributes="data-navigation-url view/navigation_url"
+    tal:attributes="data-navigation-url view/navigation_url;
+                    data-favorites-url view/favorites_url;
+                    data-favorites-cache-param view/favorites_cache_param;
+                    data-context-path view/context_path"
+    i18n:attributes="data-i18n-add-to-favorites label_add_to_favorites;
+                     data-i18n-remove-from-favorites label_remove_from_favorites;"
     i18n:domain="opengever.portlets.tree">
 
     <dt class="portletHeader">
-        <span class="portletTopLeft"></span>
-        <tal:b content="view/header" />
-        <span class="portletTopRight"></span>
+        <ul class="portlet-header-tabs">
+            <li><a href="#tree-complete" tal:content="view/header" /></li>
+            <li tal:condition="view/favorites_enabled">
+                <a href="#tree-favorites" i18n:translate="">Favorites</a>
+            </li>
+        </ul>
     </dt>
 
-    <dd class="portletItem odd">
-        <ul class="filetree"
-            tal:attributes="data-root_path view/root_path;
-                            data-context_path view/context_path;">
-          <img src="spinner.gif" class="spinner"/>
-        </ul>
+    <dd class="portletItem odd portlet-tabs">
+        <div id="tree-complete" class="tab">
+            <ul class="filetree">
+                <img src="spinner.gif" class="spinner"/>
+            </ul>
+        </div>
+
+        <div id="tree-favorites" class="tab" tal:condition="view/favorites_enabled">
+            <div class="no-favorites" i18n:translate="tree_favorites_empty">
+                No favorites set yet.
+            </div>
+
+            <ul class="filetree">
+                <img src="spinner.gif" class="spinner"/>
+            </ul>
+
+            <a href="#" class="toggle-helptext" i18n:translate="label_help">Help</a>
+            <div class="visualClear"><!-- --></div>
+            <div class="helptext" style="display: none;">
+                <p i18n:translate="tree_favorites_help_summary">
+                    Adding and removing of favorites is done in the repository tree tab.
+                </p>
+
+                <p i18n:translate="tree_favorites_help_adding">
+                    When hovering over a repository folder, the icon for marking folders as favorites
+                    (<span i18n:name="icon" class="favorite-icon add-to-favorites"
+                    i18n:attributes="title label_add_to_favorites"><!-- --></span>)
+                    appears at the right side.
+                    Clicking this icon adds the folder as favorite here.
+                </p>
+
+                <p i18n:translate="tree_favorites_help_marked">
+                    Your favorite folders are marked with the favorites icon
+                    (<span i18n:name="icon" class="favorite-icon"><!-- --></span>)
+                    in the repository tree.
+                </p>
+
+                <p i18n:translate="tree_favorites_help_removing">
+                    For removing a favorite, switch back to the repository tree tab and click
+                    on the icon for removing a favorite
+                    (<span i18n:name="icon" class="favorite-icon remove-from-favorites"
+                    i18n:attributes="title label_remove_from_favorites"><!-- --></span>).
+                </p>
+            </div>
+        </div>
     </dd>
+    <div class="visualClear"><!-- --></div>
 
     <dd class="portletFooter">
-      <span class="portletBottomLeft"></span>
-      <span class="portletBottomRight"></span>
+        <span class="portletBottomLeft"></span>
+        <span class="portletBottomRight"></span>
     </dd>
 
 </dl>
