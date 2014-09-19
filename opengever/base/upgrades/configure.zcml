@@ -204,4 +204,13 @@
         directory="profiles/4000"
         />
 
+    <!-- 4000 -> 4001 -->
+    <genericsetup:upgradeStep
+        title="Add 'modified_seconds' index for tree portlet."
+        source="4000"
+        destination="4001"
+        handler="opengever.base.upgrades.to4001.AddModifiedSecondsIndex"
+        profile="opengever.base:default"
+        />
+
 </configure>
