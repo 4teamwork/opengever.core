@@ -1,5 +1,10 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.globalindex.oguid import Oguid
+from opengever.testing import FunctionalTestCase
 from unittest2 import TestCase
+from zope.component import getUtility
+from zope.intid.interfaces import IIntIds
 
 
 class TestOguid(TestCase):
@@ -40,3 +45,15 @@ class TestOguid(TestCase):
         self.assertNotEqual(None, Oguid('foo', 2))
         self.assertNotEqual(Oguid('foo', 3), Oguid('foo', 2))
         self.assertNotEqual(Oguid('bar', 2), Oguid('foo', 2))
+
+
+class TestOguidFunctional(FunctionalTestCase):
+
+    def test_oguid_for_object(self):
+        intids = getUtility(IIntIds)
+
+        obj = create(Builder('dossier'))
+        int_id = intids.getId(obj)
+        oguid = Oguid.for_object(obj)
+
+        self.assertEqual('client1:{}'.format(int_id), oguid)
