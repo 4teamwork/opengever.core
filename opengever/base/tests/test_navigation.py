@@ -26,17 +26,21 @@ class TestNavigation(FunctionalTestCase):
         root = create(Builder('repository_root'))
         folder = create(Builder('repository')
                         .titled('The Folder')
+                        .having(description='A primary folder')
                         .within(root))
         subfolder = create(Builder('repository')
                            .titled('The Sub Folder')
+                           .having(description='A secondary folder')
                            .within(folder))
 
         browser.login().visit(root, view='navigation.json')
         self.assert_json_equal(
             [{"text": "1. The Folder",
+              "description": "A primary folder",
               "uid": IUUID(folder),
               "path": '/'.join(folder.getPhysicalPath()),
               "nodes": [{"text": "1.1. The Sub Folder",
+                         "description": "A secondary folder",
                          "nodes": [],
                          "uid": IUUID(subfolder),
                          "path": '/'.join(subfolder.getPhysicalPath()),
