@@ -157,9 +157,19 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
         return False
 
     def is_prefix_used(self, prefix):
-        """ Checks if prefix is in use"""
+        """ Checks if prefix is in use. """
         if not isinstance(prefix, unicode):
             prefix = unicode(prefix)
+
+        intid_util = getUtility(IIntIds)
+        intid = self.get_child_mapping().get(prefix)
+
+        if intid_util.queryObject(intid) is None:
+            # Repositoryfolder is already removed, so the prefix is not in use.
+            # This special handling could be removed when repository deleting
+            # is implemented save (see OGIP 3).
+            return False
+
         return prefix in self.get_reference_mapping()['reference_prefix'].values()
 
     def get_number_mapping(self):
@@ -167,19 +177,21 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
         intid_util = getUtility(IIntIds)
 
         for prefix, intid in self.get_child_mapping().iteritems():
-            try:
+            obj = intid_util.queryObject(intid)
+
+            if obj:
                 title = intid_util.getObject(intid).effective_title
-            except KeyError:
+                active = (self.get_prefix_mapping()[intid] == prefix)
+            else:
                 # if a repositoryfolder is already removed the intid
                 # utility raises an KeyError. But the number should still
                 # be in the list, because it should be available to remove
                 # via the reference prefix manager.
+                active = False
                 title = _('label_already_removed',
                           '-- Already removed object --')
 
-            items.append({'prefix': prefix,
-                          'title': title,
-                          'active': (self.get_prefix_mapping()[intid] == prefix)})
+            items.append({'prefix': prefix, 'title': title, 'active': active})
 
         def key_sorter(obj):
             key = obj['prefix']

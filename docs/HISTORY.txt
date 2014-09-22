@@ -157,6 +157,9 @@ Changelog
   - Reactivate statefilter for Dossiers.
     [phgross]
 
+  - Make reference_prefix_manager deal properly with already deleted objects.
+    [phgross]
+
 
 3.4.1 (2014-09-03)
 ------------------

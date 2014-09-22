@@ -66,7 +66,20 @@ class TestReferencePrefixManager(FunctionalTestCase):
         table = browser.css('#reference_prefix_manager_table').first.lists()
 
         self.assertEquals([['1', 'One', 'Unlock'],
-                           ['2', '-- Already removed object --', 'In use'],
+                           ['2', '-- Already removed object --', 'Unlock'],
+                           ['3', 'One', 'In use']], table)
+
+    @browsing
+    def test_stored_mappings_from_deleted_repos_are_marked_as_free(self, browser):
+        api.content.delete(obj=self.repo2)
+        transaction.commit()
+
+        browser.login().open(self.repo, view='referenceprefix_manager')
+        browser.css('.unlock')[1].click()
+
+        table = browser.css('#reference_prefix_manager_table').first.lists()
+
+        self.assertEquals([['1', 'One', 'Unlock'],
                            ['3', 'One', 'In use']], table)
 
     @browsing
