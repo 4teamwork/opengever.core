@@ -165,7 +165,6 @@ def linked_trashed_document_with_tooltip(item, value):
 
 
 def _linked_document_with_tooltip(item, value, trashed=False):
-
     data = {}
 
     if isinstance(value, unicode):
@@ -236,20 +235,21 @@ def _linked_document_with_tooltip(item, value, trashed=False):
     data['tooltip_links'] = """
                 """.join(tooltip_links)
 
-    link = """<div class='linkWrapper'>
-    <a class='tabbedview-tooltip %(css_class)s' href='%(url)s'></a>
-    <a href='%(url)s'>%(value)s</a>
-    <div class='tabbedview-tooltip-data'>
-        <div class='tooltip-content'>
-            <div class='tooltip-header'>%(value)s</div>
-            <div class='tooltip-breadcrumb'>%(breadcrumbs)s</div>
-            <div class='tooltip-links'>
-                %(tooltip_links)s
+    link = """
+    <div class='linkWrapper'>
+        <a class='tabbedview-tooltip %(css_class)s' href='%(url)s'></a>
+        <a href='%(url)s'>%(value)s</a>
+        <div class='tabbedview-tooltip-data'>
+            <div class='tooltip-content'>
+                <div class='tooltip-header'>%(value)s</div>
+                <div class='tooltip-breadcrumb'>%(breadcrumbs)s</div>
+                <div class='tooltip-links'>
+                    %(tooltip_links)s
+                </div>
             </div>
+            <div class='bottomImage'></div>
         </div>
-        <div class='bottomImage'></div>
-    </div>
-</div>""" % data
+    </div>""" % data
 
     return link
 

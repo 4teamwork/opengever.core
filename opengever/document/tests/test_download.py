@@ -1,16 +1,17 @@
-from Products.CMFCore.utils import getToolByName
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.builder import session
+from ftw.testbrowser import browsing
 from ftw.testing import MockTestCase
 from mocker import ANY
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.document.interfaces import IFileCopyDownloadedEvent
 from opengever.testing import FunctionalTestCase
-from plone.app.testing import TEST_USER_ID, TEST_USER_NAME
 from plone.app.testing import login
 from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID, TEST_USER_NAME
 from plone.namedfile.file import NamedBlobFile
+from Products.CMFCore.utils import getToolByName
 import transaction
 
 
@@ -103,8 +104,17 @@ class TestDocumentDownloadConfirmation(FunctionalTestCase):
         repo_tool._recursiveSave(self.document, {},
                                  repo_tool._prepareSysMetadata('mock'),
                                  autoapply=repo_tool.autoapply)
-
         transaction.commit()
+
+    @browsing
+    def test_download_confirmation_for_empty_file(self, browser):
+        self.document.file = None
+        transaction.commit()
+
+        browser.login().open(self.document, view='file_download_confirmation')
+        self.assertIn(
+            u'The Document {0} has no File'.format(self.document.Title()),
+            browser.contents)
 
     def test_download_confirmation_view_for_download(self):
         self.browser.open(

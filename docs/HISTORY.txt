@@ -151,6 +151,9 @@ Changelog
     Create a journal entry when modifying/initializing DocProperties.
     [deiferni]
 
+  - Display a warning message in the download confirmation overlay when no file is available.
+    [deiferni]
+
   - Fix an issue with z3c.form inline validation.
     [deiferni]
 
