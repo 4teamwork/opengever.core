@@ -5,7 +5,11 @@ from opengever.base.interfaces import IRedirector
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
-from plone.app.testing import login, logout, setRoles, TEST_USER_NAME, TEST_USER_ID
+from plone.app.testing import login
+from plone.app.testing import logout
+from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import TEST_USER_NAME
 from plone.dexterity.utils import createContentInContainer
 from plone.locking.interfaces import IRefreshableLockable
 from plone.namedfile.file import NamedBlobFile
@@ -20,7 +24,7 @@ class TestCheckinCheckoutManager(FunctionalTestCase):
     def setUp(self):
         super(TestCheckinCheckoutManager, self).setUp()
         self.prepareSession()
-        self.grant('Manager','Editor','Contributor')
+        self.grant('Manager', 'Editor', 'Contributor')
 
     def test_reverting(self):
         """Test that reverting to a version creates a new NamedBlobFile instance
@@ -32,8 +36,9 @@ class TestCheckinCheckoutManager(FunctionalTestCase):
                                         'opengever.document.document',
                                         title=u'Some Doc',
                                         document_author=u'Hugo Boss',
-                                        document_date=datetime.date(2011,1,1),
-                                        file=NamedBlobFile('bla bla 0', filename=u'test.txt'))
+                                        document_date=datetime.date(2011, 1, 1),
+                                        file=NamedBlobFile('bla bla 0',
+                                                           filename=u'test.txt'))
         manager = self.get_manager(doc1)
 
         manager.checkout()
@@ -58,7 +63,7 @@ class TestCheckinCheckoutManager(FunctionalTestCase):
         doc1 = createContentInContainer(
             self.portal, 'opengever.document.document',
             title=u'Doc \xf6ne', document_author=u'Hugo Boss',
-            document_date=datetime.date(2011,1,1),
+            document_date=datetime.date(2011, 1, 1),
             file=NamedBlobFile('bla bla', filename=u'test.txt'))
 
         transaction.commit()
@@ -74,7 +79,7 @@ class TestCheckinCheckoutManager(FunctionalTestCase):
         doc1 = createContentInContainer(
             self.portal, 'opengever.document.document',
             title=u'Doc \xf6ne', document_author=u'Hugo Boss',
-            document_date=datetime.date(2011,1,1),
+            document_date=datetime.date(2011, 1, 1),
             file=NamedBlobFile('bla bla', filename=u'test.txt'))
 
         manager = self.get_manager(doc1)
@@ -91,12 +96,12 @@ class TestCheckinCheckoutManager(FunctionalTestCase):
         doc1 = createContentInContainer(
             self.portal, 'opengever.document.document',
             title=u'Document1', document_author=u'Hugo Boss',
-            document_date=datetime.date(2011,1,1),
+            document_date=datetime.date(2011, 1, 1),
             file=NamedBlobFile('bla bla', filename=u'test.txt'))
         doc2 = createContentInContainer(
             self.portal, 'opengever.document.document',
             title=u'Document2', document_author=u'Hugo Boss',
-            document_date=datetime.date(2011,1,1),
+            document_date=datetime.date(2011, 1, 1),
             file=NamedBlobFile('bla bla', filename=u'test.txt'))
 
         self.portal.REQUEST['paths'] = [
@@ -124,8 +129,8 @@ class TestCheckinViews(FunctionalTestCase):
 
         self.dossier = create(Builder("dossier"))
         self.document = create(Builder("document")
-                          .checked_out_by(TEST_USER_ID)
-                          .within(self.dossier))
+                               .checked_out_by(TEST_USER_ID)
+                               .within(self.dossier))
 
     @browsing
     def test_single_checkin_with_comment(self, browser):
@@ -138,7 +143,8 @@ class TestCheckinViews(FunctionalTestCase):
         browser.fill({'Journal Comment Describe, why you checkin the selected documents': 'Checkinerino'})
         browser.css('#form-buttons-button_checkin').first.click()
 
-        manager = getMultiAdapter((self.document, self.portal.REQUEST), ICheckinCheckoutManager)
+        manager = getMultiAdapter((self.document, self.portal.REQUEST),
+                                  ICheckinCheckoutManager)
         self.assertEquals(None, manager.checked_out())
 
         # check last history entry to verify the checkin
@@ -150,8 +156,8 @@ class TestCheckinViews(FunctionalTestCase):
     @browsing
     def test_multi_checkin_from_tabbedview_with_comment(self, browser):
         document2 = create(Builder("document")
-                          .checked_out_by(TEST_USER_ID)
-                          .within(self.dossier))
+                           .checked_out_by(TEST_USER_ID)
+                           .within(self.dossier))
 
         browser.login().open(
             self.dossier,
@@ -163,9 +169,11 @@ class TestCheckinViews(FunctionalTestCase):
         browser.fill({'Journal Comment Describe, why you checkin the selected documents': 'Checkini'})
         browser.css('#form-buttons-button_checkin').first.click()
 
-        manager1 = getMultiAdapter((self.document, self.portal.REQUEST), ICheckinCheckoutManager)
+        manager1 = getMultiAdapter((self.document, self.portal.REQUEST),
+                                   ICheckinCheckoutManager)
         self.assertEquals(None, manager1.checked_out())
-        manager2 = getMultiAdapter((document2, self.portal.REQUEST), ICheckinCheckoutManager)
+        manager2 = getMultiAdapter((document2, self.portal.REQUEST),
+                                   ICheckinCheckoutManager)
         self.assertEquals(None, manager2.checked_out())
 
         # check last history entry to verify the checkin
@@ -180,7 +188,8 @@ class TestCheckinViews(FunctionalTestCase):
 
         browser.css('#checkin_without_comment').first.click()
 
-        manager = getMultiAdapter((self.document, self.portal.REQUEST), ICheckinCheckoutManager)
+        manager = getMultiAdapter((self.document, self.portal.REQUEST),
+                                  ICheckinCheckoutManager)
         self.assertEquals(None, manager.checked_out())
 
         # check last history entry to verify the checkin
@@ -192,8 +201,8 @@ class TestCheckinViews(FunctionalTestCase):
     @browsing
     def test_multi_checkin_from_tabbedview_without_comment(self, browser):
         document2 = create(Builder("document")
-                          .checked_out_by(TEST_USER_ID)
-                          .within(self.dossier))
+                           .checked_out_by(TEST_USER_ID)
+                           .within(self.dossier))
 
         browser.login().open(
             self.dossier,
@@ -201,9 +210,11 @@ class TestCheckinViews(FunctionalTestCase):
                             obj2brain(document2).getPath()],
                   'checkin_without_comment:method': 1})
 
-        manager1 = getMultiAdapter((self.document, self.portal.REQUEST), ICheckinCheckoutManager)
+        manager1 = getMultiAdapter((self.document, self.portal.REQUEST),
+                                   ICheckinCheckoutManager)
         self.assertEquals(None, manager1.checked_out())
-        manager2 = getMultiAdapter((document2, self.portal.REQUEST), ICheckinCheckoutManager)
+        manager2 = getMultiAdapter((document2, self.portal.REQUEST),
+                                   ICheckinCheckoutManager)
         self.assertEquals(None, manager2.checked_out())
 
         # check last history entry to verify the checkin

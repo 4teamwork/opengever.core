@@ -90,8 +90,7 @@ class CheckoutDocuments(grok.View):
         """
 
         # check out the document
-        manager = getMultiAdapter((obj, self.request),
-                            ICheckinCheckoutManager)
+        manager = getMultiAdapter((obj, self.request), ICheckinCheckoutManager)
 
         # is checkout allowed for this document?
         if not manager.is_checkout_allowed():

@@ -1,17 +1,17 @@
-from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.document import _
 from opengever.document.document import IDocumentSchema
 from opengever.document.exceptions import NoItemsSelected
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.tabbedview.utils import get_containg_document_tab_url
 from plone.z3cform import layout
+from Products.Five.browser import BrowserView
+from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form import form, field, button
 from z3c.form.interfaces import HIDDEN_MODE
 from zope import schema
 from zope.component import getMultiAdapter
 from zope.interface import Interface
-from opengever.tabbedview.utils import get_containg_document_tab_url
-from Products.Five.browser import BrowserView
 
 
 class MultiCheckinController(object):
@@ -54,6 +54,7 @@ class MultiCheckinController(object):
                     mapping=dict(title=title))
                 IStatusMessage(self.request).addStatusMessage(
                     msg, type='error')
+
 
 def get_document_paths(context, request):
     # from folder_contents / tabbed_view?
@@ -161,14 +162,14 @@ class CheckinDocuments(layout.FormWrapper, grok.View):
 
             return get_containg_document_tab_url(self.context)
 
+
 class CheckinDocumentsWithoutComment(BrowserView):
 
     def __call__(self):
-
-         checkin_controller = MultiCheckinController(self.context, self.request)
-         checkin_controller.checkin(
+        checkin_controller = MultiCheckinController(self.context, self.request)
+        checkin_controller.checkin(
             get_document_paths(self.context, self.request))
 
-         # redirect to dossier
-         return self.request.RESPONSE.redirect(
-             get_containg_document_tab_url(self.context))
+        # redirect to dossier
+        return self.request.RESPONSE.redirect(
+            get_containg_document_tab_url(self.context))

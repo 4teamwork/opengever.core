@@ -3,16 +3,15 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="opengever.document">
 
-    <browser:menu
-        id="checkin_contentmenu"
-        title="The 'checkin' menu"
-        class=".menu.CheckinMenu"
-        />
+  <browser:menu
+      id="checkin_contentmenu"
+      title="The 'checkin' menu"
+      class=".menu.CheckinMenu"
+      />
 
-    <adapter for="* *"
-        name="checkin-menu"
-        factory=".menu.CheckinSubMenuItem"
-        provides="plone.app.contentmenu.interfaces.IContentMenuItem"
-        />
-
+  <adapter for="* *"
+      name="checkin-menu"
+      factory=".menu.CheckinSubMenuItem"
+      provides="plone.app.contentmenu.interfaces.IContentMenuItem"
+      />
 </configure>
