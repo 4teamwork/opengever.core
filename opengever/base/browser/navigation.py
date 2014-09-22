@@ -83,6 +83,7 @@ class JSONNavigation(BrowserView):
 
     def _brain_to_node(self, brain):
         return {'text': brain.Title,
+                'description': brain.Description,
                 'path': brain.getPath(),
                 'uid': brain.UID}
 
