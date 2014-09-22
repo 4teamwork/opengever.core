@@ -3,8 +3,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2014-08-21 14:16+0000\n"
-"PO-Revision-Date: 2013-11-25 09:25+0100\n"
+"POT-Creation-Date: 2014-09-03 23:01+0000\n"
+"PO-Revision-Date: 2014-09-04 01:03+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -160,6 +160,11 @@ msgstr ""
 #: ./opengever/base/viewlets/history.pt:17
 msgid "label_actor"
 msgstr "Geändert von"
+
+#. Default: "-- Already removed object --"
+#: ./opengever/base/adapters.py:177
+msgid "label_already_removed"
+msgstr "-- Bereits gelöscht --"
 
 #. Default: "Archival value"
 #: ./opengever/base/behaviors/lifecycle.py:57
@@ -336,4 +341,3 @@ msgstr "Nicht geprüft"
 #: opengever/repository/classification.py
 msgid "unprotected"
 msgstr "Nicht klassifiziert"
-

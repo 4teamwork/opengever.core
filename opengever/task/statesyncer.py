@@ -1,9 +1,8 @@
 """The state syncer syncs workflow states of related tasks (successors and
 predecessors).
 """
-
-from Products.CMFCore.utils import getToolByName
 from five import grok
+from opengever.base.utils import ok_response
 from opengever.ogds.base import utils
 from opengever.ogds.base.interfaces import IInternalOpengeverRequestLayer
 from opengever.task import _
@@ -12,6 +11,7 @@ from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.interfaces import IWorkflowStateSyncer
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
+from Products.CMFCore.utils import getToolByName
 from zExceptions import Forbidden
 from zope.event import notify
 from zope.interface import Interface
@@ -108,10 +108,7 @@ class SyncTaskWorkflowStateReceiveView(grok.View):
         responsible_client = self.request.get('responsible_client')
 
         if self.is_already_done(transition, text):
-            # Set correct content type for text response
-            self.request.response.setHeader("Content-type", "text/plain")
-
-            return 'OK'
+            return ok_response(self.request)
 
         wftool = getToolByName(self.context, 'portal_workflow')
 
@@ -146,10 +143,7 @@ class SyncTaskWorkflowStateReceiveView(grok.View):
         response.add_change('review_state', _(u'Issue state'),
                             before, after)
 
-        # Set correct content type for text response
-        self.request.response.setHeader("Content-type", "text/plain")
-
-        return 'OK'
+        return ok_response(self.request)
 
     def is_already_done(self, transition, text):
         """This method returns `True` if this exact request was already

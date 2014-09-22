@@ -1,8 +1,9 @@
 from AccessControl import Unauthorized
-from Acquisition import aq_inner, aq_parent
-from Products.CMFCore.utils import getToolByName
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from datetime import datetime
 from five import grok
+from opengever.base.utils import ok_response
 from opengever.globalindex.interfaces import ITaskQuery
 from opengever.ogds.base.interfaces import ITransporter
 from opengever.ogds.base.utils import remote_request, get_client_id
@@ -12,9 +13,10 @@ from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.interfaces import ITaskDocumentsTransporter
 from opengever.task.task import ITask
 from opengever.task.transporter import IResponseTransporter
-from opengever.task.util import CustomInitialVersionMessage
 from opengever.task.util import change_task_workflow_state
+from opengever.task.util import CustomInitialVersionMessage
 from plone.dexterity.utils import createContentInContainer
+from Products.CMFCore.utils import getToolByName
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
 from zope.i18n import translate
@@ -314,19 +316,15 @@ class AcceptTaskWorkflowTransitionView(grok.View):
     grok.require('cmf.AddPortalContent')
 
     def render(self):
-
-        # Set correct content type for text response
-        self.request.response.setHeader("Content-type", "tex/plain")
-
         if self.is_already_accepted():
-            return 'OK'
+            return ok_response()
 
         text = self.request.get('text')
         successor_oguid = self.request.get('successor_oguid')
 
         accept_task_with_response(self.context, text,
                                   successor_oguid=successor_oguid)
-        return 'OK'
+        return ok_response()
 
     def is_already_accepted(self):
         """When the sender has a conflict error but the reseiver already

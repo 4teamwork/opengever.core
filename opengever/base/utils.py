@@ -1,6 +1,7 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from plone import api
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from zope.component import getMultiAdapter
@@ -52,3 +53,10 @@ def find_parent_dossier(content):
             raise ValueError('Site root reached while searching '
                              'parent dossier.')
     return content
+
+
+def ok_response(request=None):
+    if request is None:
+        request =  api.portal.get().REQUEST
+    request.response.setHeader("Content-type", "text/plain")
+    return 'OK'

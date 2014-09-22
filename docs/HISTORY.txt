@@ -4,7 +4,14 @@ Changelog
 3.4.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Set content-type correctly for ok_response in inter-client functionalities.
+  [deiferni]
+
+- Make reference_prefix_manager deal properly with already deleted objects.
+  [phgross]
+
+- Use `ftw.profilehook` instead of setuphandlers.
+  [deiferni]
 
 
 3.4.1 (2014-09-03)
