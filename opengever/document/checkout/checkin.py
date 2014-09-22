@@ -3,7 +3,7 @@ from opengever.document import _
 from opengever.document.document import IDocumentSchema
 from opengever.document.exceptions import NoItemsSelected
 from opengever.document.interfaces import ICheckinCheckoutManager
-from opengever.tabbedview.utils import get_containg_document_tab_url
+from opengever.tabbedview.utils import get_containing_document_tab_url
 from plone.z3cform import layout
 from Products.Five.browser import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
@@ -108,7 +108,7 @@ class CheckinCommentForm(form.Form):
 
         # redirect to dossier
         return self.request.RESPONSE.redirect(
-            get_containg_document_tab_url(self.context))
+            get_containing_document_tab_url(self.context))
 
     def get_document_paths(self):
         # from the form?
@@ -128,7 +128,7 @@ class CheckinCommentForm(form.Form):
                 self.context.absolute_url())
 
         # otherwise to the dossier or task
-        return get_containg_document_tab_url(self.context)
+        return get_containing_document_tab_url(self.context)
 
     def updateWidgets(self):
         super(CheckinCommentForm, self).updateWidgets()
@@ -160,7 +160,7 @@ class CheckinDocuments(layout.FormWrapper, grok.View):
             IStatusMessage(self.request).addStatusMessage(
                 msg, type='error')
 
-            return get_containg_document_tab_url(self.context)
+            return get_containing_document_tab_url(self.context)
 
 
 class CheckinDocumentsWithoutComment(BrowserView):
@@ -172,4 +172,4 @@ class CheckinDocumentsWithoutComment(BrowserView):
 
         # redirect to dossier
         return self.request.RESPONSE.redirect(
-            get_containg_document_tab_url(self.context))
+            get_containing_document_tab_url(self.context))
