@@ -5,10 +5,10 @@ from ftw.dictstorage.interfaces import ISQLAlchemy
 from opengever.ogds.base.interfaces import ISyncStamp
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.base.utils import remote_request
+from plone import api
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from urllib2 import URLError
 from zope.annotation.interfaces import IAnnotations
-from zope.app.component.hooks import getSite
 from zope.component import getUtility
 from zope.globalrequest import setRequest
 from zope.interface import implements
@@ -71,17 +71,8 @@ class SyncStampUtility(grok.GlobalUtility):
     def get_context(self, context):
         """helper for get the context, even no context is given."""
 
-        if not context:
-            context = getSite()
-
-        # special handling for kks vailidationrequest
-        # the context ist set to the Z3CFormValidation object and can't be used
-        # so we get the PloneSiteRoot from the aq_chain
-        if not IPloneSiteRoot.providedBy(context):
-            for obj in context.aq_chain:
-                if IPloneSiteRoot.providedBy(obj):
-                    context = obj
-                    break
+        if not context or not IPloneSiteRoot.providedBy(context):
+            context = api.portal.get()
 
         return context
 

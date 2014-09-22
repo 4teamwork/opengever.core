@@ -62,7 +62,7 @@ class PloneOGDSService(OGDSService):
 
 
 def get_ou_selector():
-    site = getSite()
+    site = api.portal.get()
     sdm = site.session_data_manager
     storage = sdm.getSessionData(create=True)
     mtool = getToolByName(site, 'portal_membership')
