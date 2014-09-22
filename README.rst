@@ -99,7 +99,17 @@ Converts repository configuration from old format (repository.csv) to new format
 Tests
 -----
 
-Use ``bin/test`` to execute all the tests in this package.
+Use ``bin/mtest`` for running all test in multiple processes. Alternatively ``bin/test`` runs the tests in sequence.
+The multi process script distributes the packages (e.g. ``opengever.task``, ``opengever.base``, etc) into multiple processes,
+trying to balance the amount of test suites, so that it speeds up the test run.
+
+The ``bin/mtest`` script can be configured with environment variables:
+
+- ``MTEST_PROCESSORS`` - The amount of processors used in parallel. It should be no greater than the amount
+  of available CPU cores. Defaults to ``4``.
+- ``MTEST_NOCOLORS`` - Set this to a positive value (``true``) for disabling the colorization of the output.
+  The colorization is useful for the visual separation of the output of the various processes,
+  but it is not useful in a environment without color support.
 
 Builder API
 ~~~~~~~~~~~
