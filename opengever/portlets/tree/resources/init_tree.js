@@ -1,6 +1,6 @@
 $(function() {
   var portlet = $('.portlet.portletTreePortlet');
-  if(!portlet) {
+  if(portlet.length === 0) {
     return;
   }
 
