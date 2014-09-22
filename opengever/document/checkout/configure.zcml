@@ -18,4 +18,11 @@
         permission="zope2.View"
         />
 
+    <browser:page
+        name="checkin_without_comment"
+        for="opengever.document.document.IDocumentSchema"
+        class=".checkin.CheckinDocumentWithoutComment"
+        permission="zope2.View"
+        />
+
 </configure>

@@ -1,4 +1,5 @@
 from Acquisition import aq_inner
+from plone import api
 from plone.memoize.instance import memoize
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import utils
@@ -26,20 +27,17 @@ class CheckinMenu(BrowserMenu):
 
     def getMenuItems(self, context, request):
         """Return menu item entries in a TAL-friendly form."""
-        results = []
 
-        portal_state = getMultiAdapter((context, request),
-                                       name='plone_portal_state')
-
-        actions_tool = getToolByName(aq_inner(context), "portal_actions")
+        actions_tool = api.portal.get_tool('portal_actions')
         edit_actions = actions_tool.listActionInfos(
             object=aq_inner(context), categories=('object_checkin_menu',))
 
         if not edit_actions:
             return []
 
-        plone_utils = getToolByName(context, 'plone_utils')
-        portal_url = portal_state.portal_url()
+        results = []
+        plone_utils = api.portal.get_tool('plone_utils')
+        portal_url = api.portal.get().absolute_url()
 
         for action in edit_actions:
             if action['allowed']:
@@ -79,9 +77,6 @@ class CheckinSubMenuItem(BrowserSubMenuItem):
         self.context_state = getMultiAdapter((context, request),
                                              name='plone_context_state')
 
-    def getToolByName(self, tool):
-        return getToolByName(getSite(), tool)
-
     @property
     def action(self):
         folder = self.context
@@ -91,7 +86,7 @@ class CheckinSubMenuItem(BrowserSubMenuItem):
 
     @memoize
     def available(self):
-        actions_tool = self.getToolByName("portal_actions")
+        actions_tool = api.portal.get_tool('portal_actions')
         edit_actions = actions_tool.listActionInfos(
             object=aq_inner(self.context),
             categories=('object_checkin_menu', ),
