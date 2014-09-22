@@ -160,6 +160,9 @@ Changelog
   - Make reference_prefix_manager deal properly with already deleted objects.
     [phgross]
 
+  - Added option to checkin documents without comment.
+    [lknoepfel, deiferni]
+
 
 3.4.1 (2014-09-03)
 ------------------
@@ -320,9 +323,6 @@ Changelog
 
 3.3.1 (2014-07-28)
 ------------------
-
-- Added option to checkin documents without comment.
-  [lknoepfel]
 
 - Made logout overlay easier to customize.
   [phgross]
