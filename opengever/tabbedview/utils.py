@@ -27,7 +27,7 @@ def get_translated_types(context, request):
     return values
 
 
-def get_containg_document_tab_url(context):
+def get_containing_document_tab_url(context):
     """return the url to the `Documents` tab on containing object"""
 
     finder = getAdapter(context, name='parent-dossier-finder')

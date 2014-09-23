@@ -16,7 +16,7 @@ from opengever.mail.validators import AddressValidator
 from opengever.mail.validators import DocumentSizeValidator
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
-from opengever.tabbedview.utils import get_containg_document_tab_url
+from opengever.tabbedview.utils import get_containing_document_tab_url
 from plone.directives.form import default_value
 from plone.formwidget.autocomplete import AutocompleteMultiFieldWidget
 from plone.registry.interfaces import IRegistry
@@ -228,16 +228,16 @@ class SendDocumentForm(form.Form):
             IStatusMessage(self.request).addStatusMessage(info, type='info')
             # and redirect to default view / tab
             return self.request.RESPONSE.redirect(
-                get_containg_document_tab_url(data.get('documents')[0]))
+                get_containing_document_tab_url(data.get('documents')[0]))
 
     @button.buttonAndHandler(_('cancel_back', default=u'Cancel'))
     def cancel_button_handler(self, action):
         data, errors = self.extractData()
 
         if data.get('documents'):
-            url = get_containg_document_tab_url(data.get('documents')[0])
+            url = get_containing_document_tab_url(data.get('documents')[0])
         else:
-            url = get_containg_document_tab_url(self.context)
+            url = get_containing_document_tab_url(self.context)
 
         return self.request.RESPONSE.redirect(url)
 

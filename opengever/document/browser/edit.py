@@ -94,7 +94,7 @@ class EditingDocument(grok.View):
         userid = getToolByName(
             self.context, 'portal_membership').getAuthenticatedMember().getId()
 
-        if manager.checked_out() == userid:
+        if manager.get_checked_out_by() == userid:
             # check if the document is locked
             # otherwies only open with the ext. editor
             info = getMultiAdapter((self.context, self.request),
@@ -107,12 +107,12 @@ class EditingDocument(grok.View):
                         self.request).addStatusMessage(msg, type='error')
 
                 return self.request.RESPONSE.redirect(
-                        get_redirect_url(self.context))
+                    get_redirect_url(self.context))
 
-        elif manager.checked_out() is not None:
+        elif manager.get_checked_out_by() is not None:
             msg = _(u"The Document is allready checked out by: ${userid}",
                     mapping={'userid':
-                             Actor.lookup(manager.checked_out()).get_label()})
+                             Actor.lookup(manager.get_checked_out_by()).get_label()})
             IStatusMessage(self.request).addStatusMessage(msg, type='error')
             return self.request.RESPONSE.redirect(
                 get_redirect_url(self.context))

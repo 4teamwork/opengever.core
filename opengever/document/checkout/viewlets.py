@@ -22,9 +22,10 @@ class CheckedOutViewlet(grok.Viewlet):
                                     ICheckinCheckoutManager)
         if not manager:
             self.available = False
-        elif not manager.checked_out():
+        elif not manager.get_checked_out_by():
             self.available = False
         else:
             self.available = True
 
-            self.checkout_by_link = Actor.user(manager.checked_out()).get_link()
+            self.checkout_by_link = Actor.user(
+                manager.get_checked_out_by()).get_link()

@@ -4,53 +4,7 @@
   <object name="folder_buttons" meta_type="CMF Action Category">
     <property name="title"></property>
 
-    <object name="send_as_email" meta_type="CMF Action" i18n:domain="opengever.document">
-      <property name="title" i18n:translate="">Send as email</property>
-      <property name="description" i18n:translate=""></property>
-      <property name="url_expr">string:send_documents:method</property>
-      <property name="icon_expr"></property>
-      <property name="available_expr"></property>
-      <property name="permissions">
-        <element value="View"/>
-      </property>
-      <property name="visible">True</property>
-    </object>
-
-    <object name="checkout" meta_type="CMF Action" i18n:domain="opengever.document">
-      <property name="title" i18n:translate="">Checkout</property>
-      <property name="description" i18n:translate=""></property>
-      <property name="url_expr">string:checkout_documents:method</property>
-      <property name="icon_expr"></property>
-      <property name="available_expr"></property>
-      <property name="permissions">
-          <element value="opengever.document: Checkout"/>
-      </property>
-      <property name="visible">True</property>
-    </object>
-
-    <object name="create_task" meta_type="CMF Action" i18n:domain="opengever.document">
-        <property name="title" i18n:translate="">Create Task</property>
-        <property name="description" i18n:translate=""></property>
-        <property name="url_expr">string:++add++opengever.task.task:method</property>
-        <property name="icon_expr"></property>
-        <property name="available_expr"></property>
-        <property name="permissions">
-          <element value="opengever.task: Add task"/>
-        </property>
-        <property name="visible">True</property>
-    </object>
-
-    <object name="cancel" meta_type="CMF Action" i18n:domain="opengever.document">
-      <property name="title" i18n:translate="">Cancel</property>
-      <property name="description" i18n:translate=""></property>
-      <property name="url_expr">string:cancel_document_checkouts:method</property>
-      <property name="icon_expr"></property>
-      <property name="available_expr"></property>
-      <property name="permissions">
-        <element value="opengever.document: Cancel"/>
-      </property>
-      <property name="visible">True</property>
-    </object>
+    <object name="checkin" meta_type="CMF Action" remove="True"></object>
 
     <object name="checkin_with_comment" meta_type="CMF Action" i18n:domain="opengever.document">
       <property name="title" i18n:translate="">Checkin with comment</property>
@@ -76,8 +30,8 @@
       <property name="visible">True</property>
     </object>
 
-
   </object>
+
   <object name="object_checkin_menu" meta_type="CMF Action Category">
     <property name="title"></property>
 

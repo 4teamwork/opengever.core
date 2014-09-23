@@ -1,5 +1,5 @@
 <metadata>
-    <version>3403</version>
+    <version>4000</version>
     <dependencies>
         <dependency>profile-plone.app.versioningbehavior:default</dependency>
     </dependencies>

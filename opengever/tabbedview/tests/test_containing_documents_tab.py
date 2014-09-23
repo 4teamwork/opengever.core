@@ -1,6 +1,6 @@
 from ftw.testing import MockTestCase
 from mocker import ANY
-from opengever.tabbedview.utils import get_containg_document_tab_url
+from opengever.tabbedview.utils import get_containing_document_tab_url
 from zope.interface import Interface
 
 
@@ -32,7 +32,7 @@ class TestContainingDocumentsTabFunction(MockTestCase):
         self.mock_membership_tool(permission_granted=True)
         self.replay()
 
-        url = get_containg_document_tab_url(document)
+        url = get_containing_document_tab_url(document)
         self.assertEqual(url, '%s#documents' % dossier_url)
 
     def test_without_required_permission_function_returns_context_url(self):
@@ -43,5 +43,5 @@ class TestContainingDocumentsTabFunction(MockTestCase):
         self.mock_membership_tool(permission_granted=False)
         self.replay()
 
-        url = get_containg_document_tab_url(document)
+        url = get_containing_document_tab_url(document)
         self.assertEqual(url, document_url)

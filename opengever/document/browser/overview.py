@@ -158,8 +158,8 @@ class Overview(DisplayForm, OpengeverTab):
         manager = queryMultiAdapter(
             (self.context, self.request), ICheckinCheckoutManager)
 
-        if manager.checked_out():
-            return Actor.user(manager.checked_out()).get_link()
+        if manager.get_checked_out_by():
+            return Actor.user(manager.get_checked_out_by()).get_link()
         return ''
 
     def get_css_class(self):
@@ -182,8 +182,8 @@ class Overview(DisplayForm, OpengeverTab):
         manager = queryMultiAdapter(
             (self.context, self.request), ICheckinCheckoutManager)
 
-        if manager.checked_out():
-            if manager.checked_out() == \
+        if manager.get_checked_out_by():
+            if manager.get_checked_out_by() == \
                     getSecurityManager().getUser().getId():
                 return True
             else:
@@ -197,8 +197,8 @@ class Overview(DisplayForm, OpengeverTab):
 
         manager = queryMultiAdapter(
             (self.context, self.request), ICheckinCheckoutManager)
-        if manager.checked_out():
-            if manager.checked_out() != getSecurityManager().getUser().getId():
+        if manager.get_checked_out_by():
+            if manager.get_checked_out_by() != getSecurityManager().getUser().getId():
                 return False
         return True
 

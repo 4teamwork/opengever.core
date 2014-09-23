@@ -43,7 +43,7 @@ class ExternalEditingAllowed(grok.View):
         manager = queryMultiAdapter((self.context, self.request),
                                     ICheckinCheckoutManager)
 
-        if not manager or manager.checked_out() != current_user_id:
+        if not manager or manager.get_checked_out_by() != current_user_id:
             return False
 
         # Content may provide data to the external editor ?

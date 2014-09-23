@@ -426,3 +426,19 @@ msgstr "Documents de référence"
 #: ./opengever/document/browser/download_templates/downloadconfirmation.pt:16
 msgid "warning_download_confirmation"
 msgstr "Attention ! En ouvrant le document de cette manière, toutes les modifications apportées ne seront pas sauvegardées."
+
+#: ./opengever/document/profiles/default/actions.xml
+msgid "with comment"
+msgstr "avec commentaire"
+
+#: ./opengever/document/profiles/default/actions.xml
+msgid "without comment"
+msgstr "sans commentaire"
+
+#: ./opengever/document/profiles/default/actions.xml
+msgid "Checkin with comment"
+msgstr "Checkin avec commentaire"
+
+#: ./opengever/document/profiles/default/actions.xml
+msgid "Checkin without comment"
+msgstr "Checkin sans commentaire"

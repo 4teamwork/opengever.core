@@ -27,7 +27,7 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         self.context = context
         self.request = request
 
-    def checked_out(self):
+    def get_checked_out_by(self):
         """If the document is checked out, this method returns the userid
         of the user who has checked out the document, otherwise it
         returns `None`.
@@ -40,7 +40,7 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         """
 
         # is it already checked out?
-        if self.checked_out():
+        if self.get_checked_out_by():
             return False
 
         # does a user hold a lock?
@@ -86,7 +86,7 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         adapted document.
         """
         # is it checked out?
-        if not self.checked_out():
+        if not self.get_checked_out_by():
             return False
 
         # is it versionable?
@@ -109,7 +109,7 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         # a manager?
         is_manager = self.check_permission('Manage portal')
         current_user_id = getSecurityManager().getUser().getId()
-        if self.checked_out() == current_user_id or is_manager:
+        if self.get_checked_out_by() == current_user_id or is_manager:
             return True
         else:
             return False
@@ -143,7 +143,7 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         """
 
         # is the document checked out?
-        if not self.checked_out():
+        if not self.get_checked_out_by():
             return False
 
         # is it versionable?
@@ -158,7 +158,7 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         # a manager?
         is_manager = self.check_permission('Manage portal')
         current_user_id = getSecurityManager().getUser().getId()
-        if self.checked_out() == current_user_id or is_manager:
+        if self.get_checked_out_by() == current_user_id or is_manager:
             return True
         else:
             return False
