@@ -57,7 +57,7 @@ class ICheckinCheckoutManager(Interface):
     """Interface for the checkin / checkout manager.
     """
 
-    def checked_out():
+    def get_checked_out_by():
         """If the document is checked out, this method returns the userid
         of the user who has checked out the document, otherwise it
         returns `None`.

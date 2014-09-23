@@ -134,7 +134,7 @@ def checked_out(obj):
     if not manager:
         return ''
 
-    value = manager.checked_out()
+    value = manager.get_checked_out_by()
     if value:
         return value
 

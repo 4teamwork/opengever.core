@@ -31,7 +31,7 @@ class DocumentEditForm(DefaultEditForm):
 
             current_user_id = getSecurityManager().getUser().getId()
             if self.context.digitally_available:
-                if manager.checked_out() == current_user_id:
+                if manager.get_checked_out_by() == current_user_id:
                     file_field.mode = NO_DOWNLOAD_INPUT_MODE
                 else:
                     file_field.mode = NO_DOWNLOAD_DISPLAY_MODE

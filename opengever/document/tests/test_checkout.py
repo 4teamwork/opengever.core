@@ -73,7 +73,7 @@ class TestCheckinCheckoutManager(FunctionalTestCase):
         self.assertEquals('http://nohost/plone/document-1', view)
         self.assertEquals('http://nohost/plone/document-1/external_edit',
                           IRedirector(doc1.REQUEST).get_redirects()[0].get('url'))
-        self.assertEquals(TEST_USER_ID, self.get_manager(doc1).checked_out())
+        self.assertEquals(TEST_USER_ID, self.get_manager(doc1).get_checked_out_by())
 
     def test_cancel(self):
         doc1 = createContentInContainer(
@@ -90,7 +90,7 @@ class TestCheckinCheckoutManager(FunctionalTestCase):
         view = doc1.restrictedTraverse('cancel_document_checkouts')()
 
         self.assertEquals('http://nohost/plone/document-1', view)
-        self.assertEquals(None, manager.checked_out())
+        self.assertEquals(None, manager.get_checked_out_by())
 
     def test_bulk_checkout(self):
         doc1 = createContentInContainer(
@@ -112,8 +112,8 @@ class TestCheckinCheckoutManager(FunctionalTestCase):
             '@@checkout_documents').render()
         self.assertEquals('http://nohost/plone#documents', view)
 
-        self.assertEquals(TEST_USER_ID, self.get_manager(doc1).checked_out())
-        self.assertEquals(TEST_USER_ID, self.get_manager(doc2).checked_out())
+        self.assertEquals(TEST_USER_ID, self.get_manager(doc1).get_checked_out_by())
+        self.assertEquals(TEST_USER_ID, self.get_manager(doc2).get_checked_out_by())
 
     def test_bluk_checkout_ignores_non_documents(self):
         self.skipTest("Needs to be implemented")
@@ -145,7 +145,7 @@ class TestCheckinViews(FunctionalTestCase):
 
         manager = getMultiAdapter((self.document, self.portal.REQUEST),
                                   ICheckinCheckoutManager)
-        self.assertEquals(None, manager.checked_out())
+        self.assertEquals(None, manager.get_checked_out_by())
 
         # check last history entry to verify the checkin
         repository_tool = getToolByName(self.document, 'portal_repository')
@@ -171,10 +171,10 @@ class TestCheckinViews(FunctionalTestCase):
 
         manager1 = getMultiAdapter((self.document, self.portal.REQUEST),
                                    ICheckinCheckoutManager)
-        self.assertEquals(None, manager1.checked_out())
+        self.assertEquals(None, manager1.get_checked_out_by())
         manager2 = getMultiAdapter((document2, self.portal.REQUEST),
                                    ICheckinCheckoutManager)
-        self.assertEquals(None, manager2.checked_out())
+        self.assertEquals(None, manager2.get_checked_out_by())
 
         # check last history entry to verify the checkin
         repository_tool = getToolByName(document2, 'portal_repository')
@@ -190,7 +190,7 @@ class TestCheckinViews(FunctionalTestCase):
 
         manager = getMultiAdapter((self.document, self.portal.REQUEST),
                                   ICheckinCheckoutManager)
-        self.assertEquals(None, manager.checked_out())
+        self.assertEquals(None, manager.get_checked_out_by())
 
         # check last history entry to verify the checkin
         repository_tool = getToolByName(self.document, 'portal_repository')
@@ -212,10 +212,10 @@ class TestCheckinViews(FunctionalTestCase):
 
         manager1 = getMultiAdapter((self.document, self.portal.REQUEST),
                                    ICheckinCheckoutManager)
-        self.assertEquals(None, manager1.checked_out())
+        self.assertEquals(None, manager1.get_checked_out_by())
         manager2 = getMultiAdapter((document2, self.portal.REQUEST),
                                    ICheckinCheckoutManager)
-        self.assertEquals(None, manager2.checked_out())
+        self.assertEquals(None, manager2.get_checked_out_by())
 
         # check last history entry to verify the checkin
         repository_tool = getToolByName(document2, 'portal_repository')
@@ -251,11 +251,11 @@ class TestCheckinCheckoutManagerAPI(FunctionalTestCase):
         self.assertTrue(manager.is_checkout_allowed())
 
         # the annotations should be still empty
-        self.assertEquals(None, manager.checked_out())
+        self.assertIsNone(manager.get_checked_out_by())
 
         # checkout the document
         manager.checkout()
-        self.assertEquals('test_user_1_', manager.checked_out())
+        self.assertEquals('test_user_1_', manager.get_checked_out_by())
 
         # cancelling and checkin should be allowed for the 'test_user_1_'
         self.assertTrue(manager.is_checkin_allowed())
@@ -295,16 +295,16 @@ class TestCheckinCheckoutManagerAPI(FunctionalTestCase):
         transaction.commit()
 
         # document isn't checked out and the old object is in the history
-        self.assertEquals(None, manager.checked_out())
+        self.assertIsNone(manager.get_checked_out_by())
 
         self.assertEquals(u'doc-one.txt',
                           pr.retrieve(doc1, 0).object.file.filename)
         self.assertEquals(u'blubb.txt', doc1.file.filename)
 
         manager.checkout()
-        self.assertEquals('test_user_1_', manager.checked_out())
+        self.assertEquals('test_user_1_', manager.get_checked_out_by())
 
         manager.cancel()
         pr.getHistoryMetadata(doc1).retrieve(2)
 
-        self.assertEquals(None, manager.checked_out())
+        self.assertIsNone(manager.get_checked_out_by())
