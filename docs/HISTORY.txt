@@ -163,6 +163,9 @@ Changelog
   - Added option to checkin documents without comment.
     [lknoepfel, deiferni]
 
+  - Fix missing file in initial template versions.
+    [deiferni]
+
 
 3.4.1 (2014-09-03)
 ------------------
