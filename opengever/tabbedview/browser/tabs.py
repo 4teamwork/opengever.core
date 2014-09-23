@@ -184,7 +184,7 @@ class Dossiers(BaseDossiersTab):
     open_states = DOSSIER_STATES_OPEN
 
     state_filter_name = 'dossier_state_filter'
-    state_filter_available = False
+    state_filter_available = True
 
 
 class SubDossiers(BaseDossiersTab):

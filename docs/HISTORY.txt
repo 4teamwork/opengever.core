@@ -154,6 +154,9 @@ Changelog
   - Fix an issue with z3c.form inline validation.
     [deiferni]
 
+  - Reactivate statefilter for Dossiers.
+    [phgross]
+
 
 3.4.1 (2014-09-03)
 ------------------
