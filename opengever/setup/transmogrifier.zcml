@@ -79,4 +79,14 @@
       name="opengever.setup.blocklocalroles"
       />
 
+  <utility
+      component=".sections.versioning.DisabledInitialVersion"
+      name="opengever.setup.disabledinitialversion"
+      />
+
+  <utility
+      component=".sections.versioning.ManualInitialVersion"
+      name="opengever.setup.manualinitialversion"
+      />
+
 </configure>

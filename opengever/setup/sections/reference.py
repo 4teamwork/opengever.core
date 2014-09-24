@@ -86,6 +86,7 @@ class PathFromReferenceNumberSection(object):
             refnum_prefix = refnum.split('.')[-1]
             item['reference_number_prefix'] = refnum_prefix
             yield item
+        self.logger.info("...done!")
 
     def get_reference_number(self, refnum):
         if self.reference_formatter == 'grouped_by_three':

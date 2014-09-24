@@ -195,7 +195,7 @@ def get_documents_of_task(task, include_mails=False):
 
 class CustomInitialVersionMessage(object):
     """Context Manager for Cutom inital version message of a document.
-    see create_initial_version handler in opengever.document"""
+    see handle_document_added in opengever.document"""
 
     def __init__(self, message, request):
         self.message = message
