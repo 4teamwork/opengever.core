@@ -30,6 +30,15 @@ class AssignedInboxTasks(GlobalTaskListingTab):
     grok.require('zope2.View')
     grok.context(IInbox)
 
+    enabled_actions = [
+        'pdf_taskslisting',
+        'export_tasks',
+        ]
+
+    major_actions = [
+        'pdf_taskslisting',
+        ]
+
     def get_base_query(self):
         """Returns the base search query (sqlalchemy),
         wich only select tasks assigned to the current inbox.
@@ -45,6 +54,15 @@ class IssuedInboxTasks(GlobalTaskListingTab):
     grok.name('tabbedview_view-issued_inbox_tasks')
     grok.require('zope2.View')
     grok.context(IInbox)
+
+    enabled_actions = [
+        'pdf_taskslisting',
+        'export_tasks',
+        ]
+
+    major_actions = [
+        'pdf_taskslisting',
+        ]
 
     def get_base_query(self):
         """Returns the base search query (sqlalchemy),

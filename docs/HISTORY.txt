@@ -169,6 +169,9 @@ Changelog
   - Fix missing file in initial template versions.
     [deiferni]
 
+  - Also display `pdf-tasks-listing` and `task-report` actions for inbox task-listings.
+    [deiferni]
+
 
 3.4.1 (2014-09-03)
 ------------------
