@@ -188,7 +188,7 @@ class MyTasks(GlobalTaskListingTab):
     grok.require('zope2.View')
     grok.context(Interface)
 
-    enabled_actions = major_actions = [
+    enabled_actions = [
         'pdf_taskslisting',
         'export_tasks',
         ]
