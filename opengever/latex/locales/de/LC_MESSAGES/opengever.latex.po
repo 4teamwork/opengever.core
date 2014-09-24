@@ -112,7 +112,6 @@ msgstr "Beginn"
 
 #. Default: "Subdossier Title"
 #: ./opengever/latex/dossierdetails.py:119
-#, fuzzy
 msgid "label_subdossier_title"
 msgstr "Titel Subdossier"
 

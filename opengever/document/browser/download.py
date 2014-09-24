@@ -1,6 +1,7 @@
 from five import grok
 from opengever.base.behaviors.utils import set_attachment_content_disposition
 from opengever.base.viewlets.download import DownloadFileVersion
+from opengever.document import _
 from opengever.document.document import IDocumentSchema
 from opengever.document.events import FileCopyDownloadedEvent
 from plone.namedfile.browser import Download
@@ -47,6 +48,13 @@ class DownloadConfirmation(grok.View):
                 self.request.get('version_id'))
         else:
             return '%s/download' % (self.context.absolute_url())
+
+    def download_available(self):
+        return self.context.file is not None
+
+    def msg_no_file_available(self):
+        return _(u'The Document ${title} has no File',
+                 mapping={'title': self.context.Title().decode('utf-8')})
 
 
 class DocumentDownloadFileVersion(DownloadFileVersion):

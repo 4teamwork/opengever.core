@@ -93,7 +93,7 @@ class OpengeverTab(object):
             results = list(results)
             results.sort(_sorter, reverse=sort_reverse)
 
-        elif sort_on in ('review_state'):
+        elif sort_on == 'review_state':
             states = get_translated_transitions(self.context, self.request)
 
             def _state_sorter(a, b):
@@ -107,8 +107,7 @@ class OpengeverTab(object):
             results = list(results)
             results.sort(_state_sorter, reverse=sort_reverse)
 
-        elif sort_on in 'task_type':
-
+        elif sort_on == 'task_type':
             types = get_translated_types(self.context, self.request)
 
             def _type_sorter(a, b):
@@ -122,8 +121,7 @@ class OpengeverTab(object):
             results = list(results)
             results.sort(_type_sorter, reverse=sort_reverse)
 
-        elif sort_on in 'public_trial':
-
+        elif sort_on == 'public_trial':
             values = translated_public_trial_terms(self.context, self.request)
 
             def _public_trial_sorter(a, b):
