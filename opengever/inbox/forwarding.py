@@ -130,7 +130,7 @@ class ForwardingAddForm(AddForm):
             self.request.set('form.widgets.responsible',
                              [org_unit.inbox().id()])
 
-        AddForm.update(self)
+        super(ForwardingAddForm, self).update()
 
 
 @grok.subscribe(IForwarding, IObjectAddedEvent)
