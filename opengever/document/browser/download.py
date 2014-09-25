@@ -3,6 +3,7 @@ from opengever.base.behaviors.utils import set_attachment_content_disposition
 from opengever.base.viewlets.download import DownloadFileVersion
 from opengever.core import dictstorage
 from opengever.document import _
+from opengever.document.browser.edit import get_redirect_url
 from opengever.document.document import IDocumentSchema
 from opengever.document.events import FileCopyDownloadedEvent
 from plone import api
@@ -16,6 +17,7 @@ from zope.component import queryUtility
 from zope.event import notify
 from zope.globalrequest import getRequest
 from zope.i18n import translate
+from zope.publisher.interfaces import NotFound
 
 
 class DocumentishDownload(Download):
@@ -25,12 +27,22 @@ class DocumentishDownload(Download):
     - Deal with an unicode bug in plone.namedfile.utils.set_header
     - Set Content-Disposition headers based on browser sniffing
     - Fire our own `FileCopyDownloadedEvent`
+    - Redirect with notification when instead of raising 404 for missing files
     """
 
     def __call__(self):
         DownloadConfirmationHelper().process_request_form()
 
-        named_file = self._getFile()
+        try:
+            named_file = self._getFile()
+        except NotFound:
+            msg = _(
+                u'The Document ${title} has no File',
+                mapping={'title': self.context.Title().decode('utf-8')})
+            api.portal.show_message(msg, self.request, type='error')
+            return self.request.RESPONSE.redirect(
+                get_redirect_url(self.context))
+
         if not self.filename:
             self.filename = getattr(named_file, 'filename', self.fieldname)
 

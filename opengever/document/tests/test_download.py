@@ -143,3 +143,11 @@ class TestDocumentDownloadConfirmation(FunctionalTestCase):
             self.browser.url,
             '%s/download_file_version?version_id=1' % (
                 self.document.absolute_url()))
+
+    @browsing
+    def test_download_view_redirects_to_listing_for_missing_files(self, browser):
+        document = create(Builder('document').titled('No Document'))
+
+        browser.login().open(document, view='download')
+        self.assertEqual('Error The Document No Document has no File',
+                         browser.css('.portalMessage.error').first.text)

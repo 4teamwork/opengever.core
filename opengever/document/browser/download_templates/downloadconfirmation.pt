@@ -19,7 +19,7 @@
         </dd>
       </dl>
       <input id="disable_confirmation" name="disable_download_confirmation" type="checkbox" />
-      <label for="disable_confirmation">Don't show this message again.</label>
+      <label for="disable_confirmation" i18n:translate="">Don't show this message again.</label>
     </div>
     <div class="formControls">
       <input type="submit" class="context" value="label_download" i18n:attributes="value" />

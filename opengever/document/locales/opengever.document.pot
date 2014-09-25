@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-09-23 12:53+0000\n"
+"POT-Creation-Date: 2014-09-25 12:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -81,6 +81,10 @@ msgstr ""
 msgid "Document"
 msgstr ""
 
+#: ./opengever/document/browser/download_templates/downloadconfirmation.pt:22
+msgid "Don't show this message again."
+msgstr ""
+
 #: ./opengever/document/browser/logout_overlay_templates/logout_overlay.pt:18
 msgid "Logout"
 msgstr ""
@@ -94,7 +98,7 @@ msgstr ""
 msgid "Send as email"
 msgstr ""
 
-#: ./opengever/document/browser/download.py:56
+#: ./opengever/document/browser/download.py:39
 #: ./opengever/document/browser/edit.py:81
 msgid "The Document ${title} has no File"
 msgstr ""
@@ -263,12 +267,12 @@ msgstr ""
 msgid "label_by_author"
 msgstr ""
 
-#: ./opengever/document/browser/download_templates/downloadconfirmation.pt:24
+#: ./opengever/document/browser/download_templates/downloadconfirmation.pt:26
 msgid "label_cancel"
 msgstr ""
 
 #. Default: "Checked out"
-#: ./opengever/document/browser/overview.py:125
+#: ./opengever/document/browser/overview.py:124
 #: ./opengever/document/checkout/viewlets_templates/checkedoutviewlet.pt:5
 msgid "label_checked_out"
 msgstr ""
@@ -284,7 +288,7 @@ msgid "label_checkout_and_edit"
 msgstr ""
 
 #. Default: "creator"
-#: ./opengever/document/browser/overview.py:121
+#: ./opengever/document/browser/overview.py:120
 msgid "label_creator"
 msgstr ""
 
@@ -313,18 +317,19 @@ msgstr ""
 msgid "label_document_type"
 msgstr ""
 
-#: ./opengever/document/browser/download_templates/downloadconfirmation.pt:23
+#: ./opengever/document/browser/download_templates/downloadconfirmation.pt:25
 msgid "label_download"
 msgstr ""
 
 #. Default: "Download copy"
+#: ./opengever/document/browser/download.py:130
 #: ./opengever/document/browser/download_templates/downloadconfirmation.pt:4
-#: ./opengever/document/browser/overview_templates/file.pt:49
+#: ./opengever/document/browser/overview_templates/file.pt:53
 msgid "label_download_copy"
 msgstr ""
 
 #. Default: "File"
-#: ./opengever/document/browser/overview.py:127
+#: ./opengever/document/browser/overview.py:126
 #: ./opengever/document/document.py:53
 msgid "label_file"
 msgstr ""
@@ -340,11 +345,11 @@ msgid "label_keywords"
 msgstr ""
 
 #. Default: "no"
-#: ./opengever/document/browser/overview.py:84
+#: ./opengever/document/browser/overview.py:83
 msgid "label_no"
 msgstr ""
 
-#: ./opengever/document/browser/download_templates/downloadconfirmation.pt:38
+#: ./opengever/document/browser/download_templates/downloadconfirmation.pt:40
 msgid "label_ok"
 msgstr ""
 
@@ -399,7 +404,7 @@ msgid "label_title"
 msgstr ""
 
 #. Default: "yes"
-#: ./opengever/document/browser/overview.py:83
+#: ./opengever/document/browser/overview.py:82
 msgid "label_yes"
 msgstr ""
 
@@ -409,7 +414,7 @@ msgid "message_checkout_info"
 msgstr ""
 
 #. Default: "No file"
-#: ./opengever/document/browser/overview_templates/file.pt:62
+#: ./opengever/document/browser/overview_templates/file.pt:60
 msgid "no_file"
 msgstr ""
 
