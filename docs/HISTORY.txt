@@ -13,6 +13,9 @@ Changelog
 - Use `ftw.profilehook` instead of setuphandlers.
   [deiferni]
 
+  - Make reference_prefix_manager deal properly with already deleted objects.
+    [phgross]
+
 
 3.4.1 (2014-09-03)
 ------------------
