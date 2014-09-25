@@ -1,8 +1,7 @@
 from five import grok
-from ftw.dictstorage.interfaces import IDictStorage
 from opengever.base.behaviors.utils import set_attachment_content_disposition
-from opengever.base.dictstorage import DictStorageConfigurationContext
 from opengever.base.viewlets.download import DownloadFileVersion
+from opengever.core import dictstorage
 from opengever.document import _
 from opengever.document.document import IDocumentSchema
 from opengever.document.events import FileCopyDownloadedEvent
@@ -88,9 +87,8 @@ class DownloadConfirmationHelper(object):
     def is_active(self):
         """ Checks if the user has disabled download confirmation
         """
-        storage = IDictStorage(DictStorageConfigurationContext())
         key = self.get_key()
-        return storage.get(key) != 'False'
+        return dictstorage.get(key) != 'False'
 
     def invalidate_is_active(self):
         chooser = queryUtility(ICacheChooser)
@@ -99,15 +97,13 @@ class DownloadConfirmationHelper(object):
         cache.ramcache.invalidate(key)
 
     def deactivate(self):
-        storage = IDictStorage(DictStorageConfigurationContext())
         key = self.get_key()
-        storage.set(key, str(False))
+        dictstorage.set(key, str(False))
         self.invalidate_is_active()
 
     def activate(self):
-        storage = IDictStorage(DictStorageConfigurationContext())
         key = self.get_key()
-        storage.set(key, str(True))
+        dictstorage.set(key, str(True))
         self.invalidate_is_active()
 
     def get_html_tag(self, file_url, additional_classes=[], url_extension=''):

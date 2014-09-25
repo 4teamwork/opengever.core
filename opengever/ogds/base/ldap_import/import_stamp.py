@@ -1,7 +1,6 @@
 from datetime import datetime
 from five import grok
-from ftw.dictstorage.interfaces import IDictStorage
-from opengever.base.dictstorage import DictStorageConfigurationContext
+from opengever.core import dictstorage
 from opengever.ogds.base.interfaces import ISyncStamp
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.base.utils import remote_request
@@ -23,9 +22,8 @@ REQUEST_SYNC_KEY = 'last_ldap_synchronisation'
 def update_sync_stamp(context):
     """update the SYNC key with the actual timestamp in the dictstorage"""
 
-    storage = IDictStorage(DictStorageConfigurationContext())
     timestamp = datetime.now().isoformat()
-    storage.set(DICTSTORAGE_SYNC_KEY, timestamp)
+    dictstorage.set(DICTSTORAGE_SYNC_KEY, timestamp)
     logger.info("Updated sync_stamp in dictstorage"
                 " to current timestamp (%s)" % timestamp)
     return timestamp
