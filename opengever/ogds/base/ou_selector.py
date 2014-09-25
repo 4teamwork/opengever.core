@@ -76,7 +76,7 @@ class NullOrgUnit(object):
         return None
 
     def inbox(self):
-        return None
+        return NullInbox()
 
     def prefix_label(self, label):
         return label
@@ -88,3 +88,12 @@ class NullOrgUnit(object):
     @property
     def is_inboxgroup_agency_active(self):
         return False
+
+
+class NullInbox(object):
+
+    def id(self):
+        return '__dummy_inbox_id__'
+
+    def assigned_users(self):
+        return []
