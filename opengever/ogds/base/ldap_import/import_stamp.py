@@ -3,9 +3,9 @@ from five import grok
 from ftw.dictstorage.interfaces import IDictStorage
 from opengever.base.dictstorage import DictStorageConfigurationContext
 from opengever.ogds.base.interfaces import ISyncStamp
-from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.base.utils import remote_request
+from plone import api
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from urllib2 import URLError
 from zope.annotation.interfaces import IAnnotations

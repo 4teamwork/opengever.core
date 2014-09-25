@@ -2,8 +2,6 @@ from ftw.dictstorage.interfaces import IDictStorage
 from ftw.testing import MockTestCase
 from lxml import etree
 from mocker import ANY
-from opengever.base.dictstorage import DictStorageConfigurationContext
-from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.tabbedview.helper import linked_document_with_tooltip
 from opengever.tabbedview.helper import linked_trashed_document_with_tooltip
 from pyquery import PyQuery
@@ -52,6 +50,12 @@ class LinkTestCase(MockTestCase):
         self.request = self.stub_request()
         self.doc_brain = MockBrain(self.request, 'opengever.document.document')
         self.mail_brain = MockBrain(self.request, 'ftw.mail.mail')
+        self.user_mock = self.stub()
+
+        user_getter = self.mocker.replace('plone.api.user.get_current')
+        self.expect(user_getter()).result(self.user_mock).count(0, None)
+        self.expect(self.user_mock.getId()).result('foo')
+
         css_getter = self.mocker.replace(
             'opengever.base.browser.helper.get_css_class')
         self.expect(css_getter(self.doc_brain)

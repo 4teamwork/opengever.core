@@ -1,6 +1,6 @@
+from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.ogds.base.actor import Actor
 from plone.app.layout.viewlets import content
-from opengever.document.browser.download import DownloadConfirmationHelper
 
 try:
     from opengever.pdfconverter.behaviors.preview import IPreviewMarker
@@ -41,7 +41,7 @@ class DocumentContentHistoryViewlet(content.ContentHistoryViewlet):
         return False
 
     def get_download_copy_tag(self, version_id):
-        dc_helper = DownloadConfirmationHelper(self.context, self.request)
+        dc_helper = DownloadConfirmationHelper()
         return dc_helper.get_html_tag(
             self.context.absolute_url(),
             url_extension="?version_id=%s" % version_id,

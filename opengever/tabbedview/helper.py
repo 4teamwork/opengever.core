@@ -1,9 +1,9 @@
 from ftw.mail.utils import get_header
 from opengever.base import _ as base_mf
 from opengever.base.browser.helper import get_css_class
+from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import ogds_service
-from opengever.document.browser.download import DownloadConfirmationHelper
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize import ram
 from Products.CMFCore.interfaces._tools import IMemberData
@@ -16,7 +16,6 @@ from zope.globalrequest import getRequest
 from zope.i18n import translate
 import cgi
 import pkg_resources
-
 
 try:
     pkg_resources.get_distribution('opengever.pdfconverter')
@@ -223,7 +222,7 @@ def _linked_document_with_tooltip(item, value, trashed=False):
                 </a>""" % data)
 
     if is_doc:
-        dc_helper = DownloadConfirmationHelper(getSite(), getRequest())
+        dc_helper = DownloadConfirmationHelper()
         tooltip_links.append(
             dc_helper.get_html_tag(data['url']))
 

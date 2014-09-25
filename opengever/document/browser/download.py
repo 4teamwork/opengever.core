@@ -1,4 +1,3 @@
-from Products.CMFCore.utils import getToolByName
 from five import grok
 from ftw.dictstorage.interfaces import IDictStorage
 from opengever.base.behaviors.utils import set_attachment_content_disposition
@@ -7,15 +6,17 @@ from opengever.base.viewlets.download import DownloadFileVersion
 from opengever.document import _
 from opengever.document.document import IDocumentSchema
 from opengever.document.events import FileCopyDownloadedEvent
+from plone import api
 from plone.memoize import ram
-from plone.memoize.ram import global_cache
+from plone.memoize.interfaces import ICacheChooser
 from plone.namedfile.browser import Download
 from plone.namedfile.utils import stream_data
+from Products.CMFCore.utils import getToolByName
 from zope.app.component.hooks import getSite
-from zope.event import notify
-from zope.i18n import translate
 from zope.component import queryUtility
-from plone.memoize.interfaces import ICacheChooser
+from zope.event import notify
+from zope.globalrequest import getRequest
+from zope.i18n import translate
 
 
 class DocumentishDownload(Download):
@@ -28,9 +29,7 @@ class DocumentishDownload(Download):
     """
 
     def __call__(self):
-        if 'disable_download_confirmation' in self.request.form:
-            dc_helper = DownloadConfirmationHelper(self.context, self.request)
-            dc_helper.deactivate()
+        DownloadConfirmationHelper().process_request_form()
 
         named_file = self._getFile()
         if not self.filename:
@@ -76,15 +75,14 @@ def download_confirmation_user_cache_key(func, ctx):
 
 
 class DownloadConfirmationHelper(object):
-    def __init__(self, context, request):
-        self.context = context
-        self.request = request
 
-    def get_key(self):
+    def __init__(self):
+        self.request = getRequest()
+
+    def get_key(self, user=None):
         """ User specific key """
-        userid = getToolByName(
-            self.context, 'portal_membership').getAuthenticatedMember().getId()
-        return "download-confirmation-active-%s" % userid
+        user = user or api.user.get_current()
+        return "download-confirmation-active-%s" % user.getId()
 
     @ram.cache(download_confirmation_user_cache_key)
     def is_active(self):
@@ -92,7 +90,7 @@ class DownloadConfirmationHelper(object):
         """
         storage = IDictStorage(DictStorageConfigurationContext())
         key = self.get_key()
-        return storage.get(key) != "disabled"
+        return storage.get(key) != 'False'
 
     def invalidate_is_active(self):
         chooser = queryUtility(ICacheChooser)
@@ -103,27 +101,33 @@ class DownloadConfirmationHelper(object):
     def deactivate(self):
         storage = IDictStorage(DictStorageConfigurationContext())
         key = self.get_key()
-        storage.set(key, "disabled")
+        storage.set(key, str(False))
         self.invalidate_is_active()
 
     def activate(self):
         storage = IDictStorage(DictStorageConfigurationContext())
         key = self.get_key()
-        storage.set(key, None)
+        storage.set(key, str(True))
         self.invalidate_is_active()
 
     def get_html_tag(self, file_url, additional_classes=[], url_extension=''):
-        data = {}
         if self.is_active():
-            data['class'] = 'link-overlay %s' % ' '.join(additional_classes)
-            data['url'] = '%s/file_download_confirmation%s' % (file_url,
-                                                               url_extension)
+            clazz = 'link-overlay {0}'.format(' '.join(additional_classes))
+            url = '{0}/file_download_confirmation{1}'.format(
+                file_url, url_extension)
         else:
-            data['class'] = ' '.join(additional_classes)
-            data['url'] = '%s/download%s' % (file_url, url_extension)
-        data['label'] = translate(_(u'label_download_copy'),
-                                  context=self.request).encode('utf-8')
-        return '<a href="%(url)s" class="%(class)s">%(label)s</a>' % data
+            clazz = ' '.join(additional_classes)
+            url = '{0}/download{1}'.format(file_url, url_extension)
+        label = translate(_(u'label_download_copy',
+                          default='Download copy'),
+                          context=self.request).encode('utf-8')
+        return '<a href="{0}" class="{1}">{2}</a>'.format(url, clazz, label)
+
+    def process_request_form(self):
+        """Process a request containing the rendered form."""
+
+        if 'disable_download_confirmation' in self.request.form:
+            DownloadConfirmationHelper().deactivate()
 
 
 class DocumentDownloadFileVersion(DownloadFileVersion):
@@ -136,9 +140,7 @@ class DocumentDownloadFileVersion(DownloadFileVersion):
     grok.name('download_file_version')
 
     def render(self):
-        if 'disable_download_confirmation' in self.request.form:
-            dc_helper = DownloadConfirmationHelper(self.context, self.request)
-            dc_helper.deactivate()
+        DownloadConfirmationHelper().process_request_form()
 
         self._init_version_file()
         if self.version_file:

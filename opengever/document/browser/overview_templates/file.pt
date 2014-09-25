@@ -46,9 +46,7 @@
           </tal:cond>
           <tal:cond tal:condition="copy_download_available">
             &nbsp;|&nbsp;
-            <a class="function-download-copy link-overlay"
-               tal:attributes="href string:${context/absolute_url}/file_download_confirmation"
-               href="#" i18n:translate="label_download_copy">Download copy</a>
+            <span tal:replace="structure view/get_download_copy_tag"></span>
           </tal:cond>
           <tal:cond tal:condition="not: copy_download_available">
             &nbsp;|&nbsp;
