@@ -161,7 +161,7 @@ class IAdvancedSearch(directives_form.Schema):
     responsible = schema.Choice(
         title=_('label_reponsible', default='Responsible'),
         description=_('help_responsible', default=''),
-        vocabulary=u'opengever.ogds.base.AssignedUsersVocabulary',
+        vocabulary=u'opengever.ogds.base.AllUsersVocabulary',
         required=False,
     )
 

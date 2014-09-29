@@ -90,6 +90,28 @@ class TestUsersVocabulary(FunctionalTestCase):
                           vocabulary.getTerm('robin.hood').title)
 
 
+class TestAllUsersVocabulary(FunctionalTestCase):
+    use_default_fixture = False
+
+    def setUp(self):
+        super(TestAllUsersVocabulary, self).setUp()
+        self.vocabulary_factory = getUtility(
+            IVocabularyFactory, name='opengever.ogds.base.AllUsersVocabulary')
+
+    def test_show_active_and_inactive_users(self):
+        create_ogds_user('hugo.boss', firstname='Hugo', lastname='Boss')
+        create_ogds_user('peter.muster', firstname='Peter', lastname='Muster')
+        create_ogds_user('jamie.lannister', active=False,
+                         firstname='Jamie', lastname='Lannister')
+
+        vocabulary = self.vocabulary_factory(self.portal)
+        self.assertTerms(
+            [('hugo.boss', 'Boss Hugo (hugo.boss)'),
+             ('peter.muster', 'Muster Peter (peter.muster)'),
+             ('jamie.lannister', 'Lannister Jamie (jamie.lannister)')],
+            vocabulary)
+
+
 class TestUsersAndInboxesVocabulary(FunctionalTestCase):
 
     use_default_fixture = False
