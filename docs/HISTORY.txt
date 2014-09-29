@@ -173,6 +173,9 @@ Changelog
   - Also display `pdf-tasks-listing` and `task-report` actions for inbox task-listings.
     [deiferni]
 
+  - Fix an issue with autocompleting assignee/issuer while creating forwardings.
+    [deiferni]
+
 
 3.4.1 (2014-09-03)
 ------------------

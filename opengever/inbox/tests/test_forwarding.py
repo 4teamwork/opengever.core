@@ -50,3 +50,8 @@ class TestForwarding(FunctionalTestCase):
         self.assertEqual([doc1, doc3], forwarding.listFolderContents())
         self.assertEqual([doc2], self.inbox.listFolderContents(
             {'portal_type': 'opengever.document.document'}))
+
+    @browsing
+    def test_autocomplete_does_not_raise_notfound(self, browser):
+        browser.login().open(self.inbox,
+            view='++add++opengever.inbox.forwarding/++widget++issuer/@@autocomplete-search?term=sb')
