@@ -176,6 +176,8 @@ Changelog
   - Fix an issue with autocompleting assignee/issuer while creating forwardings.
     [deiferni]
 
+  - List all users in advanced-search when searching for dossiers.
+    [deiferni]
 
 3.4.1 (2014-09-03)
 ------------------

@@ -54,7 +54,7 @@ def generator_to_list(func):
 
 
 class UsersVocabularyFactory(grok.GlobalUtility):
-    """ Vocabulary of all users with a valid login.
+    """ Vocabulary of all active users.
     """
 
     grok.provides(IVocabularyFactory)
@@ -79,6 +79,24 @@ class UsersVocabularyFactory(grok.GlobalUtility):
         for user in ogds_service().all_users():
             if not user.active:
                 self.hidden_terms.append(user.userid)
+            yield (user.userid, user.label())
+
+
+class AllUsersVocabularyFactory(grok.GlobalUtility):
+    """ Vocabulary of all users.
+    """
+
+    grok.provides(IVocabularyFactory)
+    grok.name('opengever.ogds.base.AllUsersVocabulary')
+
+    def __call__(self, context):
+        self.context = context
+        return ContactsVocabulary.create_with_provider(self.key_value_provider)
+
+    @ram.cache(voc_cachekey)
+    @generator_to_list
+    def key_value_provider(self):
+        for user in ogds_service().all_users():
             yield (user.userid, user.label())
 
 
