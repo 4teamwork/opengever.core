@@ -45,4 +45,12 @@
         class=".response.Save"
         />
 
+    <browser:page
+        name="plone_layout"
+        for="opengever.task.task.ITask"
+        permission="zope.Public"
+        class=".layout.TaskLayoutPolicy"
+        allowed_interface="plone.app.layout.globals.interfaces.ILayoutPolicy"
+        />
+
 </configure>

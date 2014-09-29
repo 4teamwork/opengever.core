@@ -82,6 +82,7 @@ Changelog
   - Display icon on task overview when task is overdue.
   - Add task-type to searchable text.
   - Improve Task-Form styling and Usability
+  - Add specific icon and watermark-icons for subtasks.
 
 
 - Actor [phgross, deiferni]:
