@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2014-09-23 12:53+0000\n"
+"POT-Creation-Date: 2014-09-25 12:57+0000\n"
 "PO-Revision-Date: 2013-03-27 10:44+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -80,6 +80,10 @@ msgstr "Aufgabe erstellen"
 msgid "Document"
 msgstr "Dokument"
 
+#: ./opengever/document/browser/download_templates/downloadconfirmation.pt:22
+msgid "Don't show this message again."
+msgstr "Diese Meldung nicht mehr anzeigen."
+
 #: ./opengever/document/browser/logout_overlay_templates/logout_overlay.pt:18
 msgid "Logout"
 msgstr "GEVER verlassen"
@@ -94,7 +98,7 @@ msgstr "Datei des Dokuments auf Version ${version_id} zurückgesetzt."
 msgid "Send as email"
 msgstr "Als E-Mail versenden"
 
-#: ./opengever/document/browser/download.py:56
+#: ./opengever/document/browser/download.py:39
 #: ./opengever/document/browser/edit.py:81
 msgid "The Document ${title} has no File"
 msgstr "Das Dokument ${title} enthält keine Datei."
@@ -270,12 +274,12 @@ msgstr "Autor"
 msgid "label_by_author"
 msgstr "Autor"
 
-#: ./opengever/document/browser/download_templates/downloadconfirmation.pt:24
+#: ./opengever/document/browser/download_templates/downloadconfirmation.pt:26
 msgid "label_cancel"
 msgstr "Abbrechen"
 
 #. Default: "Checked out"
-#: ./opengever/document/browser/overview.py:125
+#: ./opengever/document/browser/overview.py:124
 #: ./opengever/document/checkout/viewlets_templates/checkedoutviewlet.pt:5
 msgid "label_checked_out"
 msgstr "Ausgecheckt"
@@ -291,7 +295,7 @@ msgid "label_checkout_and_edit"
 msgstr "Auschecken / Bearbeiten"
 
 #. Default: "creator"
-#: ./opengever/document/browser/overview.py:121
+#: ./opengever/document/browser/overview.py:120
 msgid "label_creator"
 msgstr "Ersteller"
 
@@ -320,18 +324,19 @@ msgstr "Dokumentdatum"
 msgid "label_document_type"
 msgstr "Dokumenttyp"
 
-#: ./opengever/document/browser/download_templates/downloadconfirmation.pt:23
+#: ./opengever/document/browser/download_templates/downloadconfirmation.pt:25
 msgid "label_download"
 msgstr "Herunterladen"
 
 #. Default: "Download copy"
+#: ./opengever/document/browser/download.py:130
 #: ./opengever/document/browser/download_templates/downloadconfirmation.pt:4
-#: ./opengever/document/browser/overview_templates/file.pt:49
+#: ./opengever/document/browser/overview_templates/file.pt:53
 msgid "label_download_copy"
 msgstr "Kopie herunterladen"
 
 #. Default: "File"
-#: ./opengever/document/browser/overview.py:127
+#: ./opengever/document/browser/overview.py:126
 #: ./opengever/document/document.py:53
 msgid "label_file"
 msgstr "Datei"
@@ -347,11 +352,11 @@ msgid "label_keywords"
 msgstr "Schlagworte"
 
 #. Default: "no"
-#: ./opengever/document/browser/overview.py:84
+#: ./opengever/document/browser/overview.py:83
 msgid "label_no"
 msgstr "Nein"
 
-#: ./opengever/document/browser/download_templates/downloadconfirmation.pt:38
+#: ./opengever/document/browser/download_templates/downloadconfirmation.pt:40
 msgid "label_ok"
 msgstr "OK"
 
@@ -406,7 +411,7 @@ msgid "label_title"
 msgstr "Titel"
 
 #. Default: "yes"
-#: ./opengever/document/browser/overview.py:83
+#: ./opengever/document/browser/overview.py:82
 msgid "label_yes"
 msgstr "Ja"
 
@@ -416,7 +421,7 @@ msgid "message_checkout_info"
 msgstr "Dieses Dokument wurde von ${creator} ausgecheckt."
 
 #. Default: "No file"
-#: ./opengever/document/browser/overview_templates/file.pt:62
+#: ./opengever/document/browser/overview_templates/file.pt:60
 msgid "no_file"
 msgstr "Keine Datei"
 

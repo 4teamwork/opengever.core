@@ -22,7 +22,7 @@ class TestCase(unittest2.TestCase):
 
 class FunctionalTestCase(TestCase):
     layer = OPENGEVER_FUNCTIONAL_TESTING
-    use_browser = False
+    use_browser = False  # deprecated flag, XXX remove me once unused
     use_default_fixture = True
 
     def setUp(self):

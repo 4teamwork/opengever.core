@@ -1,10 +1,9 @@
 from five import grok
-from ftw.dictstorage.interfaces import IDictStorage
+from opengever.core import dictstorage
+from opengever.ogds.base.interfaces import IOGDSUpdater
 from opengever.ogds.base.interfaces import ISyncStamp
-from opengever.ogds.base.ldap_import.import_stamp import DictStorageConfigurationContext
 from opengever.ogds.base.ldap_import.import_stamp import DICTSTORAGE_SYNC_KEY
 from opengever.ogds.base.ldap_import.import_stamp import set_remote_import_stamp
-from opengever.ogds.base.interfaces import IOGDSUpdater
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Products.statusmessages.interfaces import IStatusMessage
 from time import strftime
@@ -28,8 +27,7 @@ class LDAPControlPanel(grok.View):
         return getUtility(ISyncStamp).get_sync_stamp()
 
     def get_db_sync_stamp(self):
-        storage = IDictStorage(DictStorageConfigurationContext())
-        timestamp = storage.get(DICTSTORAGE_SYNC_KEY)
+        timestamp = dictstorage.get(DICTSTORAGE_SYNC_KEY)
         return timestamp
 
 

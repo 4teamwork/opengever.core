@@ -1,6 +1,7 @@
 from ftw.mail.utils import get_header
 from opengever.base import _ as base_mf
 from opengever.base.browser.helper import get_css_class
+from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import ogds_service
 from plone.i18n.normalizer.interfaces import IIDNormalizer
@@ -15,7 +16,6 @@ from zope.globalrequest import getRequest
 from zope.i18n import translate
 import cgi
 import pkg_resources
-
 
 try:
     pkg_resources.get_distribution('opengever.pdfconverter')
@@ -191,12 +191,6 @@ def _linked_document_with_tooltip(item, value, trashed=False):
     data['edit_direct_label'] = translate(
         pmf(u'Checkout and edit'), context=item.REQUEST).encode('utf-8')
 
-    data['copy_download_link'] = '%s/file_download_confirmation' % (data['url'])
-    data['copy_download_label'] = translate(
-        u'label_download_copy',
-        domain='opengever.document',
-        context=item.REQUEST).encode('utf-8')
-
     # Construct CSS class
     data['css_class'] = get_css_class(item)
 
@@ -228,9 +222,10 @@ def _linked_document_with_tooltip(item, value, trashed=False):
                 </a>""" % data)
 
     if is_doc:
-        tooltip_links.append("""<a href='%(copy_download_link)s'
-            class='link-overlay'>%(copy_download_label)s
-            </a>""" % data)
+        dc_helper = DownloadConfirmationHelper()
+        tooltip_links.append(
+            dc_helper.get_html_tag(data['url']))
+
 
     data['tooltip_links'] = """
                 """.join(tooltip_links)

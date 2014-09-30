@@ -6,6 +6,7 @@ from opengever.base import _ as ogbmf
 from opengever.base.browser import edit_public_trial
 from opengever.base.browser.helper import get_css_class
 from opengever.document import _
+from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.base import DOSSIER_STATES_CLOSED
@@ -17,12 +18,10 @@ from z3c.form.browser.checkbox import SingleCheckBoxWidget
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.component import queryMultiAdapter
 
-
 try:
     from opengever.pdfconverter.behaviors.preview import IPreviewMarker
     from opengever.pdfconverter.behaviors.preview import IPreview
-    from opengever.pdfconverter.behaviors.preview import \
-        CONVERSION_STATE_READY
+    from opengever.pdfconverter.behaviors.preview import CONVERSION_STATE_READY
 
     PDFCONVERTER_AVAILABLE = True
 except ImportError:
@@ -219,3 +218,9 @@ class Overview(DisplayForm, OpengeverTab):
                                   'review_state')
 
         return can_edit and state in DOSSIER_STATES_CLOSED
+
+    def get_download_copy_tag(self):
+        dc_helper = DownloadConfirmationHelper()
+        return dc_helper.get_html_tag(
+            self.context.absolute_url(),
+            additional_classes=['function-download-copy'])
