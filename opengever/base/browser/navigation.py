@@ -6,10 +6,10 @@ import json
 import os.path
 
 
-def make_tree_by_path(nodes):
+def make_tree_by_url(nodes):
     """Creates a nested tree of nodes from a flat list-like object of nodes.
-    Each node is expected to be a dict with a path-like string stored
-    under the key ``path``.
+    Each node is expected to be a dict with a url-like string stored
+    under the key ``url``.
     Each node will end up with a ``nodes`` key, containing a list
     of children nodes.
     The nodes are changed in place, be sure to make copies first when
@@ -19,13 +19,13 @@ def make_tree_by_path(nodes):
     for node in nodes:
         node['nodes'] = []
 
-    nodes_by_path = dict((node['path'], node) for node in nodes)
+    nodes_by_url = dict((node['url'], node) for node in nodes)
     root = []
 
     for node in nodes:
-        parent_path = os.path.dirname(node['path'])
-        if parent_path in nodes_by_path:
-            nodes_by_path[parent_path]['nodes'].append(node)
+        parent_url = os.path.dirname(node['url'])
+        if parent_url in nodes_by_url:
+            nodes_by_url[parent_url]['nodes'].append(node)
         else:
             root.append(node)
 
@@ -79,12 +79,12 @@ class JSONNavigation(BrowserView):
         catalog = getToolByName(self.context, 'portal_catalog')
         brains = catalog(self.query())
         nodes = map(self._brain_to_node, brains)
-        return make_tree_by_path(nodes)
+        return make_tree_by_url(nodes)
 
     def _brain_to_node(self, brain):
         return {'text': brain.Title,
                 'description': brain.Description,
-                'path': brain.getPath(),
+                'url': brain.getURL(),
                 'uid': brain.UID}
 
     def _navigation_cache_key(self):

@@ -51,7 +51,7 @@ function Tree(nodes, config) {
     }
     $container.append($list_item);
     var $link = $('<a />').text(this.text).
-        attr('href', this.path).
+        attr('href', this.url).
         attr('title', this.description);
     $list_item.append($link);
     $(tree).trigger('tree:link-created', [this, $link]);

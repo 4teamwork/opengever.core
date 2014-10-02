@@ -39,8 +39,8 @@ $(function() {
           });
           tree_node.html('');
           navtree.render(tree_node);
-          navtree.selectCurrent(find_parent_node_for_path(
-              navtree, portlet.data('context-path')));
+          navtree.selectCurrent(find_parent_node_for_url(
+              navtree, portlet.data('context-url')));
         });
   });
 
@@ -64,8 +64,8 @@ $(function() {
         });
         tree_node.html('');
         favorites_tree.render(tree_node);
-        favorites_tree.selectCurrent(find_parent_node_for_path(
-            favorites_tree, portlet.data('context-path')));
+        favorites_tree.selectCurrent(find_parent_node_for_url(
+            favorites_tree, portlet.data('context-url')));
         favorites_tree.load_expanded_uids(expanded_uids);
 
         if(favorite_nodes.length === 0) {
@@ -121,16 +121,16 @@ $(function() {
 
   /* Helpers */
 
-  function find_parent_node_for_path(tree, path) {
-    if (!path) {
+  function find_parent_node_for_url(tree, url) {
+    if (!url) {
       return null;
     }
 
-    var node = tree.findBy({'path': path});
+    var node = tree.findBy({'url': url});
     if (node) {
       return node;
     }
-    return find_parent_node_for_path(tree, path.slice(0, path.lastIndexOf('/')));
+    return find_parent_node_for_url(tree, url.slice(0, url.lastIndexOf('/')));
   }
 
   function resize_treeportlet_height() {
