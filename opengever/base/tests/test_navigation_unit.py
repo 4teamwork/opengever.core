@@ -1,27 +1,27 @@
-from opengever.base.browser.navigation import make_tree_by_path
+from opengever.base.browser.navigation import make_tree_by_url
 from unittest2 import TestCase
 import json
 
 
-class TestMakeTreeByPath(TestCase):
+class TestMakeTreeByUrl(TestCase):
 
     def test(self):
-        input = [{'path': '/one/two/three/four'},
-                 {'path': '/one/two'},
-                 {'path': '/one/two/three'},
-                 {'path': '/one/two/copy-of-three'}]
+        input = [{'url': '/one/two/three/four'},
+                 {'url': '/one/two'},
+                 {'url': '/one/two/three'},
+                 {'url': '/one/two/copy-of-three'}]
 
         expected = [
-            {'path': '/one/two',
+            {'url': '/one/two',
              'nodes': [
-                    {'path': '/one/two/three',
+                    {'url': '/one/two/three',
                      'nodes': [
-                            {'path': '/one/two/three/four',
+                            {'url': '/one/two/three/four',
                              'nodes': []}]},
-                    {'path': '/one/two/copy-of-three',
+                    {'url': '/one/two/copy-of-three',
                      'nodes': []}]}]
 
-        self.assert_json_equal(expected, make_tree_by_path(input))
+        self.assert_json_equal(expected, make_tree_by_url(input))
 
     def assert_json_equal(self, expected, got, msg=None):
 
