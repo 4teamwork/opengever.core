@@ -10,6 +10,8 @@ Changelog
   - Replace `ContactInformation` utility with a service implemetation, available as `ogds_service`.
   - Update to latest `opengever.ogds.models` version.
 
+  - Fixed encoding issues in the `EmailContactsAndUsersVocabularyFactory`.
+
 
 - Replace Clients with OrgUnit/AdminUnit [phgross, deiferni]:
 
