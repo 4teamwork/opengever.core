@@ -2,5 +2,6 @@
   <version>2501</version>
   <dependencies>
     <dependency>profile-plonetheme.teamraum:gever</dependency>
+    <dependency>profile-opengever.policy.base:mimetype</dependency>
   </dependencies>
 </metadata>
