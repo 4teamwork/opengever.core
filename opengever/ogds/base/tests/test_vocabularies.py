@@ -364,25 +364,27 @@ class TestEmailContactsAndUsersVocabularyFactory(FunctionalTestCase):
             name='opengever.ogds.base.EmailContactsAndUsersVocabulary')
 
     def test_terms_contains_fullname_and_principal_and_email_in_parentheses(self):
-        create_ogds_user('hugo.boss', firstname=u'Hugo',
+        create_ogds_user('hugo.boss', firstname=u'H\xfcgo',
                          lastname=u'Boss', email='hugo@boss.local')
         create(Builder('contact')
                .having(firstname=u'Elisabeth', lastname=u'K\xe4ppeli',
                        email= 'elisabeth.kaeppeli@test.ch'))
 
         self.assertTerms(
-            [('hugo@boss.local:hugo.boss',
-              'Boss Hugo (hugo.boss, hugo@boss.local)'),
-             ('elisabeth.kaeppeli@test.ch:kappeli-elisabeth',
+            [(u'hugo@boss.local:hugo.boss',
+              u'Boss H\xfcgo (hugo.boss, hugo@boss.local)'),
+             (u'elisabeth.kaeppeli@test.ch:kappeli-elisabeth',
               u'K\xe4ppeli Elisabeth (elisabeth.kaeppeli@test.ch)')],
             self.vocabulary_factory(self.portal))
 
     def test_contains_emails_for_all_users(self):
-        create_ogds_user('hugo.boss', firstname=u'Hugo', lastname=u'Boss', email='hugo@boss.local')
-        create_ogds_user('robin.hood', firstname=u'Robin', lastname=u'Hood', email='robin@hood.tld')
+        create_ogds_user('hugo.boss', firstname=u'H\xfcgo',
+                         lastname=u'Boss', email='hugo@boss.local')
+        create_ogds_user('robin.hood', firstname=u'Robin',
+                         lastname=u'Hood', email='robin@hood.tld')
 
         self.assertTermKeys(
-            ['hugo@boss.local:hugo.boss', u'robin@hood.tld:robin.hood'],
+            [u'hugo@boss.local:hugo.boss', u'robin@hood.tld:robin.hood'],
             self.vocabulary_factory(self.portal))
 
     def test_contains_emails_for_all_contacts(self):

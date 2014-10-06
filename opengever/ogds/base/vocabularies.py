@@ -394,13 +394,13 @@ class EmailContactsAndUsersVocabularyFactory(grok.GlobalUtility):
         # users
         for user in ogds_service().all_users():
             if user.email:
-                key = '{}:{}'.format(user.email, user.userid)
+                key = u'{}:{}'.format(user.email, user.userid)
                 value = u'{} ({}, {})'.format(user.fullname(),
                                               user.userid, user.email)
                 user_data.append((key, value))
 
             if user.email2:
-                key = '{}:{}'.format(user.email2, user.userid)
+                key = u'{}:{}'.format(user.email2, user.userid)
                 value = u'{} ({}, {})'.format(user.fullname(),
                                               user.userid, user.email2)
                 user_data.append((key, value))
@@ -409,13 +409,16 @@ class EmailContactsAndUsersVocabularyFactory(grok.GlobalUtility):
         for contact in contact_service().all_contact_brains():
             if contact.email:
                 user_data.append(
-                    ('{}:{}'.format(contact.email, contact.id),
-                     '{} ({})'.format(contact.Title, contact.email)))
+                    (u'{}:{}'.format(contact.email,
+                                     contact.id.decode('utf-8')),
+                     u'{} ({})'.format(contact.Title.decode('utf-8'),
+                                       contact.email)))
 
             if contact.email2:
                 user_data.append(
-                    ('{}:{}'.format(contact.email2, contact.id),
-                     '{} ({})'.format(contact.Title, contact.email2)))
+                    (u'{}:{}'.format(contact.email2, contact.id.decode('utf-8')),
+                     u'{} ({})'.format(contact.Title.decode('utf-8'),
+                                       contact.email2)))
 
         return user_data
 
