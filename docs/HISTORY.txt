@@ -28,6 +28,7 @@ Changelog
     - Default of task `responsible_client`
     - Cross plone-site request authentication
     - Cross plone-site wizards
+    - PloneSite referencenumberpart is the admin_unit's abbreviation.
 
 
 - Setup [phgross, deiferni]:

@@ -24,7 +24,9 @@ class TestDossierCoverRenderArguments(FunctionalTestCase):
         super(TestDossierCoverRenderArguments, self).setUp()
 
         create(Builder('admin_unit')
-               .having(unit_id=u'OG', title=u'Department of forest & hunt')
+               .having(unit_id=u'OG',
+                       title=u'Department of forest & hunt',
+                       abbreviation=u'DoFH')
                .as_current_admin_unit())
 
         self.user = create_ogds_user('hugo.boss')
@@ -76,8 +78,7 @@ class TestDossierCoverRenderArguments(FunctionalTestCase):
 
     def test_contains_referencenr(self):
         arguments = self.dossiercover.get_render_arguments()
-        self.assertEquals(u'Department of forest \\& hunt 1 / 1',
-                          arguments.get('referencenr'))
+        self.assertEquals(u'DoFH 1 / 1', arguments.get('referencenr'))
 
     def test_contains_converted_title(self):
         arguments = self.dossiercover.get_render_arguments()
