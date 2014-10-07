@@ -185,8 +185,11 @@ Changelog
     [lknoepfel]
 
   - Add separate profile with the gever specific mimetypes.
-    This fix the mimetype icons bug.
+    This fixes the mimetype icons bug.
     [phgross]
+
+  - Fix an issue while deactivating dossiers with already closed subdossiers.
+    [deiferni]
 
 
 3.4.1 (2014-09-03)
