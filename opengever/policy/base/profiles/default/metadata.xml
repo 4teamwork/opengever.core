@@ -29,5 +29,6 @@
     <dependency>profile-ftw.zipexport:default</dependency>
     <dependency>profile-plone.formwidget.autocomplete:default</dependency>
     <dependency>profile-plone.formwidget.contenttree:default</dependency>
+    <dependency>profile-opengever.policy.base:mimetype</dependency>
   </dependencies>
 </metadata>

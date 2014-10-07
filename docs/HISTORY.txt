@@ -184,6 +184,10 @@ Changelog
   - Added option to disable download confirmation.
     [lknoepfel]
 
+  - Add separate profile with the gever specific mimetypes.
+    This fix the mimetype icons bug.
+    [phgross]
+
 
 3.4.1 (2014-09-03)
 ------------------

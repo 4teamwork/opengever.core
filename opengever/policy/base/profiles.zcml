@@ -11,4 +11,13 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
     />
 
+    <genericsetup:registerProfile
+        name="mimetype"
+        title="opengever.policy.base.mimetypes"
+        directory="profiles/mimetype"
+        description="Separate profile which installs gever specific mimetypes."
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+    />
+
+
 </configure>
