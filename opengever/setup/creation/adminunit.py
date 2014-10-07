@@ -9,7 +9,8 @@ class AdminUnitCreator(UnitCreator):
 
     item_name = 'AdminUnit'
     item_class = AdminUnit
-    required_attributes = ('unit_id', 'ip_address', 'site_url', 'public_url')
+    required_attributes = ('unit_id', 'ip_address', 'site_url',
+                           'public_url', 'abbreviation')
 
     def create_unit(self, item):
         super(AdminUnitCreator, self).create_unit(item)

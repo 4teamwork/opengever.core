@@ -71,4 +71,14 @@
         profile="opengever.ogds.base:default"
         />
 
+    <!-- 4004 -> 4005 -->
+    <genericsetup:upgradeStep
+        title="Add abbreviation to admin_units table."
+        description="Add new column abbreviation to the admin_unit table."
+        source="4004"
+        destination="4005"
+        handler="opengever.ogds.base.upgrades.to4005.AddAbbreviationColumn"
+        profile="opengever.ogds.base:default"
+        />
+
 </configure>
