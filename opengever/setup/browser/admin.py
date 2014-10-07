@@ -230,10 +230,11 @@ class CreateOpengeverClient(BrowserView):
                 form['client_id'],
                 enabled=active,
                 title=form['title'],
+                abbreviation=form['title'],
                 ip_address=form['ip_address'],
                 site_url=form['site_url'],
                 public_url=form['public_url'],
-                )
+            )
 
             registry = getUtility(IRegistry)
             proxy = registry.forInterface(IAdminUnitConfiguration)

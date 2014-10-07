@@ -55,15 +55,17 @@ class BasicReferenceNumber(grok.Adapter):
 
 
 class PlatformReferenceNumber(BasicReferenceNumber):
-    """ Reference number generator for the plone site
+    """ Reference number generator for the plone site. The reference
+    number part of a PloneSite is the current_admin_unit's abbreviation.
     """
+
     grok.provides(IReferenceNumber)
     grok.context(ISiteRoot)
 
     ref_type = 'site'
 
     def get_local_number(self):
-        return get_current_admin_unit().label()
+        return get_current_admin_unit().abbreviation
 
     def get_number(self):
         return self.get_local_number()

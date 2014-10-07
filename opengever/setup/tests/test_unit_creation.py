@@ -70,7 +70,8 @@ class TestAdminUnitCreator(BaseTestUnitCreator):
             "enabled": False,
             "ip_address": "1.2.3.4",
             "site_url": "http://example.com",
-            "public_url": "http://example.com/public"
+            "public_url": "http://example.com/public",
+            "abbreviation": "adm"
         }
         self.create_admin_unit_for([attributes])
         admin_unit = self.service.fetch_admin_unit('admin')
