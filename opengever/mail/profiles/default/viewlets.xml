@@ -16,5 +16,9 @@
    <viewlet name="ftw.mail.mail-in"/>
   </hidden>
 
+  <hidden manager="plone.belowcontenttitle" skinname="Teamraum Theme">
+    <viewlet name="ftw.mail.mail-in"/>
+  </hidden>
+
 </object>
 
