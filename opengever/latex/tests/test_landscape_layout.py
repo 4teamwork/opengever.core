@@ -21,14 +21,12 @@ class TestLandscapeLayout(MockTestCase):
         super(TestLandscapeLayout, self).setUp()
         self.context = self.stub()
 
-        orgunit = self.stub()
-        self.expect(orgunit.label()).result('CLIENT ONE')
-
-        self._ori_get_current_org_unit = utils.get_current_org_unit
-        get_current_org_unit = self.mocker.replace(
-            'opengever.ogds.base.utils.get_current_org_unit')
-        self.expect(get_current_org_unit()).result(orgunit).count(0, None)
-        self.expect(orgunit.id()).result(FAKE_CLIENT_TITLE).count(0, None)
+        admin_unit = self.stub()
+        self._ori_get_current_admin_unit = utils.get_current_admin_unit
+        get_current_admin_unit = self.mocker.replace(
+            'opengever.ogds.base.utils.get_current_admin_unit')
+        self.expect(get_current_admin_unit()).result(admin_unit).count(0, None)
+        self.expect(admin_unit.label()).result(FAKE_CLIENT_TITLE).count(0, None)
 
         self.portal_membership = self.stub()
         self.mock_tool(self.portal_membership, 'portal_membership')
@@ -48,7 +46,7 @@ class TestLandscapeLayout(MockTestCase):
 
     def tearDown(self):
         super(TestLandscapeLayout, self).tearDown()
-        utils.get_current_org_unit = self._ori_get_current_org_unit
+        utils.get_current_admin_unit = self._ori_get_current_admin_unit
 
     def test_adapts_landscape_request_layer(self):
         self.replay()
