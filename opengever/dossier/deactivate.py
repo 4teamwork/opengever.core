@@ -7,8 +7,8 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 
 class DossierDeactivateView(grok.View):
     """ Recursively deactivate the dossier and his subdossiers.
-    If some subdossiers are allready resolved we return a status err msg.
-    If some subdossiers are allready deactivated we ignore them."""
+    If some subdossiers are already resolved we return a status err msg.
+    If some subdossiers are already deactivated we ignore them."""
 
     grok.context(IDossierMarker)
     grok.name('transition-deactivate')
@@ -24,8 +24,9 @@ class DossierDeactivateView(grok.View):
                     == 'dossier-state-resolved':
                 IStatusMessage(self.request).add(
                     _("The Dossier can't be deactivated, the subdossier "
-                     "${dossier} is already resolved",
-                    mapping=dict(dossier=subdossier.Title,)), type='error')
+                      "${dossier} is already resolved",
+                      mapping=dict(dossier=subdossier.Title.decode('utf-8'),)),
+                    type='error')
                 return self.request.RESPONSE.redirect(
                     self.context.absolute_url())
 
