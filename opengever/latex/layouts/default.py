@@ -3,7 +3,7 @@ from ftw.pdfgenerator.interfaces import IBuilder
 from ftw.pdfgenerator.interfaces import ILaTeXLayout
 from ftw.pdfgenerator.layout.customizable import CustomizableLayout
 from opengever.latex.interfaces import ILaTeXSettings
-from opengever.ogds.base.utils import get_current_org_unit
+from opengever.ogds.base.utils import get_current_admin_unit
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from zope.component import getUtility
@@ -60,15 +60,15 @@ class DefaultLayout(CustomizableLayout, grok.MultiAdapter):
 
         convert = self.get_converter().convert
         return {
-            'client_title': convert(self.get_client_title()),
+            'client_title': convert(self.get_current_admin_unit_label()),
             'member_phone': convert(owner_phone),
             'show_contact': self.show_contact,
             'show_logo': self.show_logo,
             'show_organisation': self.show_organisation,
             'location': convert(self.get_location())}
 
-    def get_client_title(self):
-        return get_current_org_unit().id()
+    def get_current_admin_unit_label(self):
+        return get_current_admin_unit().label()
 
     def get_location(self):
         registry = getUtility(IRegistry)

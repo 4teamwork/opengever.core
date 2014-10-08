@@ -40,7 +40,7 @@ class DossierCoverLaTeXView(grok.MultiAdapter, MakoLaTeXView):
 
     def get_render_arguments(self):
         args = {
-            'clienttitle': self.convert_plain(self.get_client_title()),
+            'clienttitle': self.convert_plain(self.get_current_admin_unit_label()),
             'repositoryversion': self.convert_plain(
                 self.get_repository_version()),
             'referencenr': self.convert_plain(self.get_referencenumber()),
@@ -65,7 +65,7 @@ class DossierCoverLaTeXView(grok.MultiAdapter, MakoLaTeXView):
     def get_responsible(self):
         return self.context.responsible_label
 
-    def get_client_title(self):
+    def get_current_admin_unit_label(self):
         return get_current_admin_unit().label() or ''
 
     def get_repository_version(self):
