@@ -85,8 +85,8 @@ class Renderer(base.Renderer):
     def root_path(self):
         return getattr(self.data, 'root_path', None)
 
-    def context_path(self):
-        return '/'.join(self.context.getPhysicalPath())
+    def context_url(self):
+        return self.context.absolute_url()
 
     @property
     def available(self):
