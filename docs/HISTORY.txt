@@ -196,6 +196,9 @@ Changelog
     Added temporary monkeypatch to ignore mimetypes sent by the browser.
     [phgross]
 
+  - Fix an unicode issue while syncing document filename and title.
+    [deiferni]
+
 
 3.4.1 (2014-09-03)
 ------------------
