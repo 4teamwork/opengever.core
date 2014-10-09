@@ -1,6 +1,7 @@
 from five import grok
 from ftw.table.basesource import BaseTableSource
-from ftw.table.interfaces import ITableSourceConfig, ITableSource
+from ftw.table.interfaces import ITableSource
+from ftw.table.interfaces import ITableSourceConfig
 from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.participation import IParticipationAware
@@ -16,7 +17,8 @@ from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.i18nmessageid.message import Message
-from zope.interface import implements, Interface
+from zope.interface import implements
+from zope.interface import Interface
 from zope.schema.vocabulary import getVocabularyRegistry
 import base64
 
@@ -140,6 +142,18 @@ class Participants(grok.View, OpengeverTab, ListingView):
     render = __call__
 
 
+class ParticipationResponsible(object):
+    """Temporary participant to also display the dossier-repsonsible in the
+    participants tab.
+
+    """
+    def __init__(self, contact, responsible):
+        self.locked = True
+        self.roles = responsible
+        self.role_list = responsible
+        self.contact = contact
+
+
 class ParticipantsTableSource(grok.MultiAdapter, BaseTableSource):
     """
     """
@@ -151,7 +165,6 @@ class ParticipantsTableSource(grok.MultiAdapter, BaseTableSource):
         """hacky: get the actual elements here because we are not
         able to use queries on annotations / lists ...
         """
-
         context = self.config.context
 
         phandler = IParticipationAware(context)
@@ -159,11 +172,9 @@ class ParticipantsTableSource(grok.MultiAdapter, BaseTableSource):
 
         dossier_adpt = IDossier(context)
         responsible_name = _(u'label_responsible', 'Responsible')
-        results.append({'contact': dossier_adpt.responsible,
-                        'roles': responsible_name,
-                        'role_list': responsible_name,
-                        'locked': True,  # not deletable
-                        })
+        results.append(ParticipationResponsible(
+            contact=dossier_adpt.responsible,
+            responsible=responsible_name))
 
         return results
 
@@ -186,13 +197,12 @@ class ParticipantsTableSource(grok.MultiAdapter, BaseTableSource):
             text = text[:-1]
 
         def _search_method(participation):
-            # roles
             if text.lower() in role_list_helper(
-                participation, participation.roles).lower():
+                    participation, participation.roles).lower():
                 return True
 
             if text.lower() in readable_ogds_author(
-                participation, participation.contact):
+                    participation, participation.contact).lower():
                 return True
 
             return False
