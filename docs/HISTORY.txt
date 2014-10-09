@@ -192,6 +192,9 @@ Changelog
   - Fix an issue while deactivating dossiers with already closed subdossiers.
     [deiferni]
 
+  - Use new plone.formwidget.namedfile which displays internationalized size for files.
+    [deiferni]
+
 
 3.4.1 (2014-09-03)
 ------------------
