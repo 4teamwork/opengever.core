@@ -10,10 +10,10 @@ from Products.LDAPMultiPlugins.interfaces import ILDAPMultiPlugin
 import logging
 
 
-NO_UID_MSG = "WARNING: User '%s' has no 'uid' attribute."
-NO_UID_AD_MSG = "WARNING: User '%s' has none of the attributes %s - skipping."
-USER_NOT_FOUND_LDAP = "WARNING: Referenced user %s not found in LDAP, ignoring!"
-USER_NOT_FOUND_SQL = "WARNING: Referenced user %s not found in SQL, ignoring!"
+NO_UID_MSG = "User '%s' has no 'uid' attribute."
+NO_UID_AD_MSG = "User '%s' has none of the attributes %s - skipping."
+USER_NOT_FOUND_LDAP = "Referenced user %s not found in LDAP, ignoring!"
+USER_NOT_FOUND_SQL = "Referenced user %s not found in SQL, ignoring!"
 
 AD_UID_KEYS = ['userid', 'sAMAccountName', 'windows_login_name']
 
@@ -71,8 +71,8 @@ class OGDSUpdater(grok.Adapter):
         """
         session = create_session()
 
-        # Set all SQL users inactive first - the ones still contained in the LDAP
-        # will be set active again below (in the same transaction).
+        # Set all SQL users inactive first - the ones still contained in the
+        # LDAP will be set active again below (in the same transaction).
         for user in session.query(User):
             user.active = 0
 
@@ -115,8 +115,9 @@ class OGDSUpdater(grok.Adapter):
                         continue
                     value = info.get(col.name)
 
-                    # We can't store sequences in SQL columns. So if we do get a multi-valued field
-                    # to be stored directly in OGDS, we treat it as a multi-line string and join it.
+                    # We can't store sequences in SQL columns. So if we do get
+                    # a multi-valued field to be stored directly in OGDS, we
+                    # treat it as a multi-line string and join it.
                     if isinstance(value, list) or isinstance(value, tuple):
                         value = ' '.join([str(v) for v in value])
 
@@ -141,7 +142,8 @@ class OGDSUpdater(grok.Adapter):
             for ldap_group in ldap_groups:
                 dn, info = ldap_group
 
-                # Group name is in the 'cn' attribute, which may be mapped to 'fullname'
+                # Group name is in the 'cn' attribute, which may be
+                # mapped to 'fullname'
                 if 'cn' in info:
                     groupid = info['cn']
                     if isinstance(groupid, list):
@@ -158,7 +160,8 @@ class OGDSUpdater(grok.Adapter):
                     session.add(group)
                 else:
                     # Get the existing group
-                    group = session.query(Group).filter_by(groupid=groupid).first()
+                    group = session.query(Group).filter_by(
+                        groupid=groupid).first()
 
                 # Iterate over all SQL columns and update their values
                 columns = Group.__table__.columns
