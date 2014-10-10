@@ -1,15 +1,15 @@
 from five import grok
+from logging import StreamHandler
 from opengever.core import dictstorage
-from opengever.ogds.base.interfaces import IOGDSUpdater
 from opengever.ogds.base.interfaces import ISyncStamp
 from opengever.ogds.base.sync.import_stamp import DICTSTORAGE_SYNC_KEY
 from opengever.ogds.base.sync.import_stamp import set_remote_import_stamp
+from opengever.ogds.base.sync.ogds_updater import LOG_FORMAT
+from opengever.ogds.base.sync.ogds_updater import sync_ogds
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Products.statusmessages.interfaces import IStatusMessage
-from time import strftime
 from zope.component import getUtility
-import time
-import transaction
+import logging
 
 
 class LDAPControlPanel(grok.View):
@@ -39,60 +39,44 @@ class LDAPSyncView(grok.View):
     grok.context(IPloneSiteRoot)
     grok.require('cmf.ManagePortal')
 
-    def mklog(self):
-        """Helper to prepend a time stamp to the output.
-        """
-        write = self.request.RESPONSE.write
+    def run_update(self, **kwargs):
+        # Set up logging to HTTPResponse
+        response = BytestringEnforcingResponseWrapper(self.request.RESPONSE)
+        logger = logging.getLogger('opengever.ogds.base')
+        response_handler = StreamHandler(stream=response)
+        response_handler.setFormatter(logging.Formatter(LOG_FORMAT))
+        logger.addHandler(response_handler)
 
-        def log(msg, timestamp=True):
-            if timestamp:
-                msg = '%s : %s \n' % (strftime('%Y/%m/%d-%H:%M:%S '), msg)
-            write(msg)
-        return log
-
-    def run_update(self):
-        raise NotImplemented
+        try:
+            sync_ogds(self.context, **kwargs)
+        finally:
+            # Make sure to remove response logging handler because handlers
+            # live for the duration of the Python process, but responses
+            # are short-lived
+            logger.removeHandler(response_handler)
 
     def render(self):
-        self.log = self.mklog()
-
-        # Run import and time it
-        now = time.clock()
-        self.run_update()
-        transaction.commit()
-        elapsed = time.clock() - now
-        self.log("Done in %.0f seconds." % elapsed)
-
-        # Update import time stamp and finally commit
-        self.log("Updating LDAP SYNC importstamp...")
-        set_remote_import_stamp(self.context)
-        self.log("Committing transaction...")
-        transaction.commit()
-        self.log('Done.')
+        raise NotImplementedError
 
 
 class UserSyncView(LDAPSyncView):
     """Browser view that starts an LDAP user import.
     """
 
-    grok.name('sync_user')
+    grok.name('sync_users')
 
-    def run_update(self):
-        self.log("Starting user import...")
-        updater = IOGDSUpdater(self.context)
-        updater.import_users()
+    def render(self):
+        self.run_update(groups=False)
 
 
 class GroupSyncView(LDAPSyncView):
     """Browser view that starts an LDAP group import.
     """
 
-    grok.name('sync_group')
+    grok.name('sync_groups')
 
-    def run_update(self):
-        self.log("Starting groups import...")
-        updater = IOGDSUpdater(self.context)
-        updater.import_groups()
+    def render(self):
+        self.run_update(users=False)
 
 
 class ResetStampView(grok.View):
@@ -113,3 +97,22 @@ class ResetStampView(grok.View):
             url = self.context.absolute_url()
 
         return self.context.REQUEST.RESPONSE.redirect(url)
+
+
+class BytestringEnforcingResponseWrapper(object):
+    """Because the Zope HTTPResponse.write() method does not accept unicode
+    (only byte strings) and raises a ValueError if unicode is passed in, we
+    need to wrap it to make sure to convert anything that gets logged from
+    somewhere is enforced to be an UTF-8 encoded bytestring.
+    """
+
+    def __init__(self, response):
+        self.response = response
+
+    def enforce_utf8(self, data):
+        if isinstance(data, unicode):
+            data = data.encode('utf-8')
+        return data
+
+    def write(self, data):
+        return self.response.write(self.enforce_utf8(data))

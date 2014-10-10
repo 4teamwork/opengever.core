@@ -1,13 +1,16 @@
+from App.config import getConfiguration
 from five import grok
 from ldap import NO_SUCH_OBJECT
 from opengever.ogds.base.interfaces import ILDAPSearch
 from opengever.ogds.base.interfaces import IOGDSUpdater
+from opengever.ogds.base.sync.import_stamp import set_remote_import_stamp
 from opengever.ogds.base.utils import create_session
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.user import User
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Products.LDAPMultiPlugins.interfaces import ILDAPMultiPlugin
 import logging
+import time
 
 
 NO_UID_MSG = "User '%s' has no 'uid' attribute."
@@ -17,8 +20,52 @@ USER_NOT_FOUND_SQL = "Referenced user %s not found in SQL, ignoring!"
 
 AD_UID_KEYS = ['userid', 'sAMAccountName', 'windows_login_name']
 
+LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 
 logger = logging.getLogger('opengever.ogds.base')
+
+
+def sync_ogds(plone, users=True, groups=True):
+    """Syncronize OGDS users and groups by importing users, groups and
+    group membership information from LDAP into the respective OGDS SQL tables.
+
+    If none of the `users` or `groups` keyword arguments are supplied, both
+    users and groups will be imported. If one is set to false, only the other
+    will be imported.
+
+    NOTE: This function does *not* commit the transaction. Depending on from
+    where you use it, you'll need to take care of that yourself, if necessary.
+    """
+
+    # Set up log handler for logging to ogds_log_file
+    config = getConfiguration()
+    ogds_conf = config.product_config.get('opengever.core', dict())
+    log_file = ogds_conf.get('ogds_log_file')
+
+    if log_file:
+        file_handler = logging.FileHandler(log_file)
+        file_handler.setFormatter(logging.Formatter(LOG_FORMAT))
+        logger.addHandler(file_handler)
+        logger.setLevel(logging.INFO)
+
+    updater = IOGDSUpdater(plone)
+    start = time.clock()
+
+    if users:
+        logger.info("Importing users...")
+        updater.import_users()
+
+    if groups:
+        logger.info("Importing groups...")
+        updater.import_groups()
+
+    elapsed = time.clock() - start
+    logger.info("Done in %.0f seconds." % elapsed)
+
+    logger.info("Updating LDAP SYNC importstamp...")
+    set_remote_import_stamp(plone)
+
+    logger.info("Synchronization Done.")
 
 
 class OGDSUpdater(grok.Adapter):

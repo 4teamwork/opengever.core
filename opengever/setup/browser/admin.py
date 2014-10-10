@@ -1,7 +1,7 @@
 from datetime import datetime
 from ftw.mail.interfaces import IMailSettings
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
-from opengever.ogds.base.sync import sync_ldap
+from opengever.ogds.base.sync.ogds_updater import sync_ogds
 from opengever.ogds.base.utils import create_session
 from opengever.ogds.models import BASE
 from opengever.ogds.models.admin_unit import AdminUnit
@@ -185,15 +185,8 @@ class CreateOpengeverClient(BrowserView):
 
         if form.get('first') and form.get('import_users'):
             print '===== SYNC LDAP ===='
-
-            class Object(object):
-                pass
-
             # Import LDAP users and groups
-            options = Object()
-            options.site_root = '/' + form['client_id']
-            options.update_syncstamp = False
-            sync_ldap.run_import(self.context, options)
+            sync_ogds(site)
 
         if form.get('configsql'):
             # register the client in the ogds

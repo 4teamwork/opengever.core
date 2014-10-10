@@ -25,8 +25,8 @@
             </thead>
             <tbody>
                 <tr>
-                    <td><a tal:attributes="href string:${portal_url}/@@sync_user" href="">Start import</a></td>
-                    <td><a tal:attributes="href string:${portal_url}/@@sync_group" href="">Start import</a></td>
+                    <td><a tal:attributes="href string:${portal_url}/@@sync_users" href="">Start import</a></td>
+                    <td><a tal:attributes="href string:${portal_url}/@@sync_groups" href="">Start import</a></td>
                 <tr>
             </tbody>
         </table>
