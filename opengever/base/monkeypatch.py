@@ -241,3 +241,46 @@ from ftw.mail import inbound
 inbound.createMailInContainer = createMailInContainer
 
 LOGGER.info('Monkey patched ftw.mail.inbound.createMailInContainer')
+
+
+# --------
+# Monkeypatch for plone.formwidget.namedfile.convert.NamedDataConverter
+
+# To include the fix https://github.com/plone/plone.formwidget.namedfile/pull/9
+# which involves in broken files, when uploading documents with firefox.
+
+# Monkeypath should be removed after updating opengever to plone 4.3.
+from plone.formwidget.namedfile.converter import NamedDataConverter
+from plone.namedfile.interfaces import INamed
+from plone.namedfile.utils import safe_basename
+
+
+def toFieldValue(self, value):
+    if value is None or value == '':
+        return self.field.missing_value
+
+    if INamed.providedBy(value):
+        return value
+    elif isinstance(value, FileUpload):
+
+        filename = safe_basename(value.filename)
+
+        if filename is not None and not isinstance(filename, unicode):
+            # Work-around for
+            # https://bugs.launchpad.net/zope2/+bug/499696
+            filename = filename.decode('utf-8')
+
+        value.seek(0)
+        data = value.read()
+        if data or filename:
+            return self.field._type(data=data, filename=filename)
+        else:
+            return self.field.missing_value
+
+    else:
+        return self.field._type(data=str(value))
+
+
+NamedDataConverter.toFieldValue = toFieldValue
+LOGGER.info('Monkey patched '
+            'plone.formwidget.namedfile.converter.NamedDataConverter.toFieldValue')
