@@ -192,6 +192,10 @@ Changelog
   - Fix an issue while deactivating dossiers with already closed subdossiers.
     [deiferni]
 
+  - Fix issue when uploading files with firefox over the Document AddForm.
+    Added temporary monkeypatch to ignore mimetypes sent by the browser.
+    [phgross]
+
 
 3.4.1 (2014-09-03)
 ------------------
