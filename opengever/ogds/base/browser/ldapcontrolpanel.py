@@ -2,8 +2,8 @@ from five import grok
 from opengever.core import dictstorage
 from opengever.ogds.base.interfaces import IOGDSUpdater
 from opengever.ogds.base.interfaces import ISyncStamp
-from opengever.ogds.base.ldap_import.import_stamp import DICTSTORAGE_SYNC_KEY
-from opengever.ogds.base.ldap_import.import_stamp import set_remote_import_stamp
+from opengever.ogds.base.sync.import_stamp import DICTSTORAGE_SYNC_KEY
+from opengever.ogds.base.sync.import_stamp import set_remote_import_stamp
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Products.statusmessages.interfaces import IStatusMessage
 from time import strftime
