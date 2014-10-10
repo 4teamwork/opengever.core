@@ -125,7 +125,7 @@ class OGDSUpdater(grok.Adapter):
 
                 # Set the user active
                 user.active = 1
-                logger.info("Imported user '%s'..." % userid)
+                logger.info("Imported user '%s'" % userid)
             session.flush()
 
     def import_groups(self):
@@ -178,6 +178,8 @@ class OGDSUpdater(grok.Adapter):
 
                 contained_users = []
                 group_members = ldap_util.get_group_members(info)
+
+                logger.info("Importing group '%s'..." % groupid)
                 for user_dn in group_members:
                     try:
                         ldap_user = ldap_util.entry_by_dn(user_dn)
@@ -210,8 +212,10 @@ class OGDSUpdater(grok.Adapter):
                             continue
 
                         contained_users.append(user)
-                        logger.info("Importing user '%s'..." % userid)
+                        logger.info("Importing user '%s' "
+                                    "into group '%s'..." % (userid, groupid))
                     except NO_SUCH_OBJECT:
                         logger.warn(USER_NOT_FOUND_LDAP % user_dn)
                 group.users = contained_users
                 session.flush()
+                logger.info("Done.")
