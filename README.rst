@@ -64,6 +64,37 @@ with these contents:
 respective user in our development LDAP tree.
 
 
+OGDS synchronization
+--------------------
+
+For quick lookups for user information and metadata (that isn't relevant for
+security), we keep a mirrored list of users, groups, and group memberships in
+SQL tables in the OGDS.
+
+Among other things, this list of users is used to determine what users are
+valid assignees for various objects: If a user was removed from the LDAP, he
+is still supposed to be a valid assignee for existing objects, but should not
+be suggested for selection for newly created objects.
+
+Therefore users that are already contained in the SQL tables but have
+disappeared from LDAP are not removed from SQL, but instead flagged as
+``inactive`` upon synchroniszation.
+
+There's several different ways to perform the OGDS synchronization:
+
+- It can be triggered manually from the ``@@ogds-controlpanel`` (or by directly
+  visiting the ``@@sync_users`` or ``@@sync_groups`` views)
+- It will automatically be done when setting up a new AdminUnit
+- It can be done from the shell by running the ``bin/instance sync_ogds``
+  zopectl command (the respective instance must not be running)
+- For deployments, a cron job that calls ``bin/instance0 sync_ogds`` should be
+  created that syncs OGDS as needed
+
+Since the OGDS is shared between AdminUnits in the same cluster, the
+synchronization will only have to be performed on one Zope instance per
+cluster.
+
+
 Updating translations
 ---------------------
 
