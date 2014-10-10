@@ -39,21 +39,25 @@ def set_digitally_available(doc, event):
 @grok.subscribe(IDocumentSchema, IObjectModifiedEvent)
 def sync_title_and_filename_handler(doc, event):
     """Syncs the document and the filename (#586):
-    o If there is no title but a file, use the filename (without extension) as
+
+    - If there is no title but a file, use the filename (without extension) as
     title.
-    o If there is a title and a file, use the normalized title as filename
+    - If there is a title and a file, use the normalized title as filename
+
     """
     normalizer = getUtility(IIDNormalizer)
-    if not doc.title and doc.file:
+    if not doc.file:
+        return
+
+    basename, ext = os.path.splitext(doc.file.filename)
+    if not doc.title:
         # use the filename without extension as title
-        basename, ext = os.path.splitext(doc.file.filename)
         doc.title = basename
-        doc.file.filename = ''.join(
+        doc.file.filename = u''.join(
             [normalizer.normalize(basename), ext])
-    elif doc.title and doc.file:
+    elif doc.title:
         # use the title as filename
-        basename, ext = os.path.splitext(doc.file.filename)
-        doc.file.filename = ''.join(
+        doc.file.filename = u''.join(
             [normalizer.normalize(doc.title), ext])
 
 
