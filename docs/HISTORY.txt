@@ -199,6 +199,9 @@ Changelog
   - Fix an unicode issue while syncing document filename and title.
     [deiferni]
 
+  - Fix an issue with filtering for dossier-participants.
+    [deiferni]
+
 
 3.4.1 (2014-09-03)
 ------------------
