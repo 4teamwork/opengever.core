@@ -28,10 +28,7 @@ import json
 import opengever.globalindex.model
 
 
-SQL_BASES = (
-    BASE,
-    opengever.globalindex.model.Base,
-    )
+SQL_BASES = (BASE, opengever.globalindex.model.Base)
 
 
 class SetupError(Exception):
@@ -43,7 +40,7 @@ class SetupError(Exception):
 EXTENSION_PROFILES = (
     'plonetheme.classic:default',
     'plonetheme.sunburst:default',
-    )
+)
 
 ADMIN_USER_ID = 'ogadmin'
 
@@ -134,11 +131,11 @@ class CreateOpengeverClient(BrowserView):
         config = client_registry.get_policy(policy_id)
 
         # drop sql tables
-        if form.get('first', False) and config.get('purge_sql', False):
+        if form.get('first') and config.get('purge_sql'):
             self.drop_sql_tables(session)
 
         ext_profiles = list(EXTENSION_PROFILES)
-        if config.get('base_profile', None):
+        if config.get('base_profile'):
             ext_profiles.append(config.get('base_profile'))
 
         # create plone site
@@ -150,11 +147,11 @@ class CreateOpengeverClient(BrowserView):
             extension_ids=ext_profiles,
             setup_content=False,
             default_language=config.get('language', 'de-ch'),
-            )
+        )
 
         # ldap
         stool = getToolByName(site, 'portal_setup')
-        if form.get('ldap', False):
+        if form.get('ldap'):
             stool = getToolByName(site, 'portal_setup')
             stool.runAllImportStepsFromProfile('profile-%s' % form.get('ldap'))
 
@@ -186,7 +183,7 @@ class CreateOpengeverClient(BrowserView):
             plugins.movePluginsUp(IPropertiesPlugin, ('ldap',))
             plugins.movePluginsUp(IPropertiesPlugin, ('ldap',))
 
-        if form.get('first', False) and form.get('import_users', False):
+        if form.get('first') and form.get('import_users'):
             print '===== SYNC LDAP ===='
 
             class Object(object):
@@ -224,7 +221,7 @@ class CreateOpengeverClient(BrowserView):
                 raise SetupError("Inbox group '%s' could not be found." %
                                  form['inbox_group'])
 
-            active = bool(form.get('active', False))
+            active = bool(form.get('active'))
 
             admin_unit = AdminUnit(
                 form['client_id'],
@@ -250,7 +247,6 @@ class CreateOpengeverClient(BrowserView):
 
             session.add(admin_unit)
             session.add(client)
-
 
         # create the admin user in the ogds if he not exist
         # and add it to the specified user_group
@@ -278,7 +274,7 @@ class CreateOpengeverClient(BrowserView):
         proxy.mail_domain = form['mail_domain'].decode('utf-8')
         mail_from_address = self.get_mail_from_address()
         site.manage_changeProperties({'email_from_address': mail_from_address,
-                                    'email_from_name': client_id})
+                                      'email_from_name': client_id})
 
         # set global Member role for the client users group
         site.acl_users.portal_role_manager.assignRoleToPrincipal(
@@ -295,7 +291,7 @@ class CreateOpengeverClient(BrowserView):
                 'Role Manager', form['rolemanager_group'])
 
         # provide the repository root for opengever.setup:default
-        repository_root = config.get('repository_root', None)
+        repository_root = config.get('repository_root')
         if repository_root:
             self.request.set('repository_root', repository_root)
 
