@@ -56,4 +56,14 @@
         profile="opengever.tabbedview:default"
         />
 
+    <!-- 3401 -> 4000 -->
+    <genericsetup:upgradeStep
+        title="Adjust sortable attr for path_checkbox column in dictstorage"
+        description=""
+        source="3401"
+        destination="4000"
+        handler="opengever.tabbedview.upgrades.to4000.ReindexDictStorage"
+        profile="opengever.tabbedview:default"
+        />
+
 </configure>

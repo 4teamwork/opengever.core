@@ -63,6 +63,7 @@ class Documents(OpengeverCatalogListingTab):
         {'column': '',
          'column_title': '',
          'transform': helper.path_checkbox,
+         'sortable': False,
          'width': 30},
 
         {'column': 'sequence_number',
@@ -130,6 +131,7 @@ class BaseDossiersTab(OpengeverCatalogListingTab):
         {'column': '',
          'column_title': '',
          'transform': helper.path_checkbox,
+         'sortable': False,
          'width': 30},
 
         {'column': 'reference',
