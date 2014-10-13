@@ -21,7 +21,6 @@ from zope.component import queryMultiAdapter
 try:
     from opengever.pdfconverter.behaviors.preview import IPreviewMarker
     from opengever.pdfconverter.behaviors.preview import IPreview
-    from opengever.pdfconverter.behaviors.preview import CONVERSION_STATE_READY
 
     PDFCONVERTER_AVAILABLE = True
 except ImportError:
@@ -172,9 +171,8 @@ class Overview(DisplayForm, OpengeverTab):
 
     def is_pdf_download_available(self):
         if self.is_preview_supported():
-            if IPreview(
-                    self.context).conversion_state == CONVERSION_STATE_READY:
-                return True
+            return IPreview(self.context).is_downloadable
+
         return False
 
     def is_checkout_and_edit_available(self):
