@@ -91,5 +91,13 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <!-- 4001 -> 4002 -->
+    <upgrade-step:importProfile
+        title="Fix guard-expressions in forwarding workflows."
+        profile="opengever.inbox:default"
+        source="4001"
+        destination="4002"
+        directory="profiles/4002"
+        />
 
 </configure>

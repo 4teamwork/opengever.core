@@ -4,7 +4,7 @@
       i18n_domain="opengever.inbox">
 
     <browser:page
-          name="forwarding_transition_controller"
+          name="task_transition_controller"
           for="opengever.inbox.forwarding.IForwarding"
           class=".transitioncontroller.ForwardingTransitionController"
           permission="zope.Public"
