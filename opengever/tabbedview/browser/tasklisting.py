@@ -69,8 +69,9 @@ class GlobalTaskListingTab(grok.View, OpengeverTab,
     state_filter_available = True
 
     columns = (
-
-        ('', task_id_checkbox_helper),
+        {'column': '',
+         'sortable': False,
+         'transform': task_id_checkbox_helper},
 
         {'column': 'review_state',
          'column_title': _(u'column_review_state', default=u'Review state'),

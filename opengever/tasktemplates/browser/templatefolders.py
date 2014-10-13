@@ -16,11 +16,13 @@ class TaskTemplateFoldersTab(OpengeverCatalogListingTab):
         {'column': '',
          'column_title': '',
          'transform': helper.draggable,
+         'sortable': False,
          'width': 30},
 
         {'column': '',
          'column_title': '',
          'transform': helper.path_checkbox,
+         'sortable': False,
          'width': 30},
 
         {'column': 'Title',
@@ -29,8 +31,8 @@ class TaskTemplateFoldersTab(OpengeverCatalogListingTab):
          'transform': linked},
         {'column': 'review_state',
          'column_title': _(u'label_review_state', default=u'Review state'),
-          'transform': translated_string()},
-        )
+         'transform': translated_string()},
+    )
 
     types = ['opengever.tasktemplates.tasktemplatefolder', ]
 
