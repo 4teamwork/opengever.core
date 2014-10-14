@@ -2,13 +2,13 @@ from __future__ import absolute_import
 from five import grok
 from ldap.controls import SimplePagedResultsControl
 from opengever.ogds.base.interfaces import ILDAPSearch
+from Products.LDAPMultiPlugins import ActiveDirectoryMultiPlugin
 from Products.LDAPUserFolder.interfaces import ILDAPUserFolder
 from Products.LDAPUserFolder.LDAPDelegate import filter_format
+from Products.LDAPUserFolder.utils import GROUP_MEMBER_MAP
 import ldap
 import logging
 import re
-from Products.LDAPUserFolder.utils import GROUP_MEMBER_MAP
-from Products.LDAPMultiPlugins import ActiveDirectoryMultiPlugin
 
 
 logger = logging.getLogger('opengever.ogds.base')
@@ -23,8 +23,11 @@ except AttributeError:
     PYTHON_LDAP_24 = False
 
 
-PAGED_RESULTS_CTL_OID = '1.2.840.113556.1.4.319'
+ALL_OPERATIONAL_ATTRS = '1.3.6.1.4.1.4203.1.5.1'
 KNOWN_MULTIVALUED_FIELDS = ['member', 'memberOf']
+SUBSCHEMA_ATTRS = ['attributeTypes', 'dITContentRules', 'dITStructureRules',
+                   'matchingRules', 'matchingRuleUse', 'nameForms',
+                   'objectClasses']
 
 
 class LDAPSearch(grok.Adapter):
@@ -41,6 +44,7 @@ class LDAPSearch(grok.Adapter):
         self.context = context
         self._multivaluedness = {}
         self._supported_controls = None
+        self._supported_features = None
         if isinstance(self.context.aq_parent, ActiveDirectoryMultiPlugin):
             self.is_ad = True
         self._cached_groups = None
@@ -57,6 +61,18 @@ class LDAPSearch(grok.Adapter):
         conn = ldap_uf._delegate.connect()
         return conn
 
+    def _get_root_dse(self, conn=None):
+        """Get the root DSE from the server.
+        Returns a (root_dse_dn, root_dse_entry) tuple.
+        """
+        if conn is None:
+            conn = self.connect()
+        root_dse = conn.search_s('',
+                                 ldap.SCOPE_BASE,
+                                 '(objectclass=*)',
+                                 ['*', '+'])[0]
+        return root_dse
+
     @property
     def supported_controls(self):
         """Memoized access to controls supported by server.
@@ -69,13 +85,27 @@ class LDAPSearch(grok.Adapter):
         """Get supported server controls from root DSE.
         """
         conn = self.connect()
-        root_dse = conn.search_s('',
-                                 ldap.SCOPE_BASE,
-                                 '(objectclass=*)',
-                                 ['*','+'])[0]
+        root_dse_dn, root_dse_entry = self._get_root_dse(conn)
 
-        supported_controls = root_dse[1]['supportedControl']
+        supported_controls = root_dse_entry['supportedControl']
         return supported_controls
+
+    @property
+    def supported_features(self):
+        """Memoized access to features supported by server.
+        """
+        if self._supported_features is None:
+            self._supported_features = self._get_supported_features()
+        return self._supported_features
+
+    def _get_supported_features(self):
+        """Get supported features from root DSE.
+        """
+        conn = self.connect()
+        root_dse_dn, root_dse_entry = self._get_root_dse(conn)
+
+        supported_features = root_dse_entry.get('supportedFeatures', [])
+        return supported_features
 
     def get_schema(self):
         """Return the LDAP schema of the server we're currently connected to
@@ -91,22 +121,24 @@ class LDAPSearch(grok.Adapter):
             conn = self.connect()
 
             # Try to get schema DN from Root DSE
-            root_dse = conn.search_s('',
-                                     ldap.SCOPE_BASE,
-                                     '(objectclass=*)',
-                                     ['*','+'])[0]
-
-            root_dn, root_entry = root_dse
+            root_dse_dn, root_dse_entry = self._get_root_dse(conn)
 
             try:
-                schema_dn = root_entry['subschemaSubentry'][0]
+                schema_dn = root_dse_entry['subschemaSubentry'][0]
             except KeyError:
                 schema_dn = 'cn=schema'
+
+            attr_list = ['*', '+']
+            if ALL_OPERATIONAL_ATTRS not in self.supported_features:
+                # Server does not support RFC 3673 (returning all operational
+                # attributes by using "+" in attribute list). We therefore
+                # need to specify all known subschema attributes explicitely
+                attr_list = SUBSCHEMA_ATTRS
 
             res = conn.search_s(schema_dn,
                                 ldap.SCOPE_BASE,
                                 '(objectclass=*)',
-                                ['*','+'])
+                                attr_list)
 
             if len(res) > 1:
                 logger.warn("More than one LDAP schema found!")
@@ -164,8 +196,8 @@ class LDAPSearch(grok.Adapter):
                 else:
                     cookie = pctrls[0].controlValue[1]
                     if cookie:
-                        # lc.controlValue seems to have been mutable at some point,
-                        # now it's a tuple.
+                        # lc.controlValue seems to have been mutable at some
+                        # point, now it's a tuple.
                         cv = list(lc.controlValue)
                         cv[1] = cookie
                         lc.controlValue = tuple(cv)
@@ -189,7 +221,7 @@ class LDAPSearch(grok.Adapter):
         if base_dn is None:
             base_dn = self.base_dn
 
-        if PAGED_RESULTS_CTL_OID in self.supported_controls:
+        if LDAP_CONTROL_PAGED_RESULTS in self.supported_controls:
             try:
                 results = self._paged_search(base_dn, scope, filter, attrs)
 
@@ -262,7 +294,6 @@ class LDAPSearch(grok.Adapter):
 
         return mapped_results
 
-
     def get_children(self, group_dn):
         children = []
 
@@ -280,7 +311,6 @@ class LDAPSearch(grok.Adapter):
                 grandchildren = self.get_children(grp_dn)
                 children.extend(grandchildren)
         return list(set(children))
-
 
     def get_group_members(self, group_info):
         if not self.is_ad:
@@ -333,8 +363,8 @@ class LDAPSearch(grok.Adapter):
         """Apply the schema mapping configured in the adapted LDAPUserFolder
         to an entry.
 
-        Expects a (dn, attrs) tuple and returns a copy of the tuple with keys in
-        `attrs` renamed according to the mapping.
+        Expects a (dn, attrs) tuple and returns a copy of the tuple with keys
+        in `attrs` renamed according to the mapping.
         """
         mapped_attrs = {}
         dn, attrs = entry
@@ -345,7 +375,7 @@ class LDAPSearch(grok.Adapter):
         obj_classes = attrs['objectClass']
         for obj_class in obj_classes:
             if obj_class.lower() in [uc.lower() for uc in
-                    self.context._user_objclasses]:
+                                     self.context._user_objclasses]:
                 is_user = True
                 break
 
@@ -422,7 +452,7 @@ class LDAPSearch(grok.Adapter):
         schema = self.get_schema()
         oc_tree = schema.tree(ldap.schema.ObjectClass)
         obj_classes = [schema.get_obj(ldap.schema.ObjectClass, oid) for
-            oid in oc_tree.keys()]
+                       oid in oc_tree.keys()]
         obj_classes = [oc for oc in obj_classes if oc is not None]
         return obj_classes
 
@@ -469,4 +499,3 @@ class LDAPSearch(grok.Adapter):
             return True
 
         return not type_.single_value
-
