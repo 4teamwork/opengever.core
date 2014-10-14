@@ -19,7 +19,7 @@
   </ul>
 
   <dl class="agency_buttons dropdown_button" tal:condition="agency_items">
-    <dt class="button" i18n:translate="label_agency">Agency</dt>
+    <dt class="button" i18n:domain="opengever.task" i18n:translate="label_agency">Agency</dt>
     <dd>
       <ul>
         <tal:block repeat="subMenuItem agency_items">
