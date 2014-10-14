@@ -23,7 +23,6 @@ except AttributeError:
     PYTHON_LDAP_24 = False
 
 
-PAGED_RESULTS_CTL_OID = '1.2.840.113556.1.4.319'
 KNOWN_MULTIVALUED_FIELDS = ['member', 'memberOf']
 
 
@@ -211,7 +210,7 @@ class LDAPSearch(grok.Adapter):
         if base_dn is None:
             base_dn = self.base_dn
 
-        if PAGED_RESULTS_CTL_OID in self.supported_controls:
+        if LDAP_CONTROL_PAGED_RESULTS in self.supported_controls:
             try:
                 results = self._paged_search(base_dn, scope, filter, attrs)
 
