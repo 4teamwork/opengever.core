@@ -41,6 +41,7 @@ class LDAPSearch(grok.Adapter):
         self.context = context
         self._multivaluedness = {}
         self._supported_controls = None
+        self._supported_features = None
         if isinstance(self.context.aq_parent, ActiveDirectoryMultiPlugin):
             self.is_ad = True
         self._cached_groups = None
@@ -85,6 +86,23 @@ class LDAPSearch(grok.Adapter):
 
         supported_controls = root_dse_entry['supportedControl']
         return supported_controls
+
+    @property
+    def supported_features(self):
+        """Memoized access to features supported by server.
+        """
+        if self._supported_features is None:
+            self._supported_features = self._get_supported_features()
+        return self._supported_features
+
+    def _get_supported_features(self):
+        """Get supported features from root DSE.
+        """
+        conn = self.connect()
+        root_dse_dn, root_dse_entry = self._get_root_dse(conn)
+
+        supported_features = root_dse_entry.get('supportedFeatures', [])
+        return supported_features
 
     def get_schema(self):
         """Return the LDAP schema of the server we're currently connected to
