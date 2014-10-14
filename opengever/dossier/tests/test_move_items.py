@@ -1,10 +1,11 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from Products.CMFCore.utils import getToolByName
+from ftw.testbrowser import browsing
+from opengever.testing import FunctionalTestCase
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.uuid.interfaces import IUUID
-from opengever.testing import FunctionalTestCase
+from Products.CMFCore.utils import getToolByName
 
 
 class TestMoveItems(FunctionalTestCase):
@@ -51,22 +52,20 @@ class TestMoveItems(FunctionalTestCase):
 
         doc1 = create(Builder("document")
                       .within(self.source_dossier).titled(u"Dossier \xb6c1"))
-        task1 = create(Builder("task")
-                       .within(self.source_dossier).titled("a Task"))
         subdossier1 = create(Builder("dossier")
                              .within(self.source_dossier).titled(u"a Dossier"))
 
         self.assert_contains(self.source_dossier,
-                             ['Dossier \xc2\xb6c1', 'a Task', 'a Dossier'])
+                             ['Dossier \xc2\xb6c1', 'a Dossier'])
         self.assert_contains(target_dossier, [])
 
-        self.move_items([doc1, task1, subdossier1],
+        self.move_items([doc1, subdossier1],
                         source=self.source_dossier,
                         target=target_dossier)
 
         self.assert_contains(self.source_dossier, [])
         self.assert_contains(target_dossier,
-                             ['Dossier \xc2\xb6c1', 'a Task', 'a Dossier'])
+                             ['Dossier \xc2\xb6c1', 'a Dossier'])
 
     def test_closed_items_hidden_in_destination_widget(self):
         setRoles(self.portal, TEST_USER_ID, ['Reviewer', 'Manager'])
@@ -97,6 +96,24 @@ class TestMoveItems(FunctionalTestCase):
         self.assertIn(IUUID(target_dossier),
                       uids,
                       "Active dossier not found as target in move items")
+
+    @browsing
+    def test_task_are_handled_correctly(self, browser):
+        dossier = create(Builder('dossier').titled(u'Maindossier'))
+        subdossier = create(Builder('dossier')
+                            .titled(u'Subdossier')
+                            .within(dossier))
+        task = create(Builder('task')
+                      .titled(u'Task')
+                      .within(dossier))
+
+        browser.login().open(dossier,
+                             {'task_ids':task.get_sql_object().task_id},
+                             view='move_items')
+        browser.fill({'Destination': subdossier})
+        browser.css('#form-buttons-button_submit').first.click()
+
+        self.assertEquals([task], subdossier.listFolderContents())
 
     def get_uids_from_tree_widget(self):
         view = self.source_repo.restrictedTraverse('move_items')
