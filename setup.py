@@ -134,6 +134,9 @@ setup(name='opengever.core',
       [z3c.autoinclude.plugin]
       target = plone
 
+      [zopectl.command]
+      sync_ogds = opengever.ogds.base:sync_ogds_zopectl_handler
+
       [opengever.setup]
       ldap = opengever.examplecontent
       policies = opengever.examplecontent

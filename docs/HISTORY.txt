@@ -118,7 +118,10 @@ Changelog
 
   - LDAP util: When querying for schema, deal with servers that don't support
     listing all operational attributes (RFC 3673).
-
+  - OGDS sync: Unify OGDS synchronization so there's a single function
+    that does the sync and that can be called from anywhere.
+  - OGDS sync: Add a `bin/instance sync_ogds` zopectl command that
+    can be used from a cron job.
 
 - Additional Improvements:
 

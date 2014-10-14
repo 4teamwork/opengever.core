@@ -1,24 +1,71 @@
+from App.config import getConfiguration
 from five import grok
 from ldap import NO_SUCH_OBJECT
 from opengever.ogds.base.interfaces import ILDAPSearch
 from opengever.ogds.base.interfaces import IOGDSUpdater
+from opengever.ogds.base.sync.import_stamp import set_remote_import_stamp
 from opengever.ogds.base.utils import create_session
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.user import User
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Products.LDAPMultiPlugins.interfaces import ILDAPMultiPlugin
 import logging
+import time
 
 
-NO_UID_MSG = "WARNING: User '%s' has no 'uid' attribute."
-NO_UID_AD_MSG = "WARNING: User '%s' has none of the attributes %s - skipping."
-USER_NOT_FOUND_LDAP = "WARNING: Referenced user %s not found in LDAP, ignoring!"
-USER_NOT_FOUND_SQL = "WARNING: Referenced user %s not found in SQL, ignoring!"
+NO_UID_MSG = "User '%s' has no 'uid' attribute."
+NO_UID_AD_MSG = "User '%s' has none of the attributes %s - skipping."
+USER_NOT_FOUND_LDAP = "Referenced user %s not found in LDAP, ignoring!"
+USER_NOT_FOUND_SQL = "Referenced user %s not found in SQL, ignoring!"
 
 AD_UID_KEYS = ['userid', 'sAMAccountName', 'windows_login_name']
 
+LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 
 logger = logging.getLogger('opengever.ogds.base')
+
+
+def sync_ogds(plone, users=True, groups=True):
+    """Syncronize OGDS users and groups by importing users, groups and
+    group membership information from LDAP into the respective OGDS SQL tables.
+
+    If none of the `users` or `groups` keyword arguments are supplied, both
+    users and groups will be imported. If one is set to false, only the other
+    will be imported.
+
+    NOTE: This function does *not* commit the transaction. Depending on from
+    where you use it, you'll need to take care of that yourself, if necessary.
+    """
+
+    # Set up log handler for logging to ogds_log_file
+    config = getConfiguration()
+    ogds_conf = config.product_config.get('opengever.core', dict())
+    log_file = ogds_conf.get('ogds_log_file')
+
+    if log_file:
+        file_handler = logging.FileHandler(log_file)
+        file_handler.setFormatter(logging.Formatter(LOG_FORMAT))
+        logger.addHandler(file_handler)
+        logger.setLevel(logging.INFO)
+
+    updater = IOGDSUpdater(plone)
+    start = time.clock()
+
+    if users:
+        logger.info("Importing users...")
+        updater.import_users()
+
+    if groups:
+        logger.info("Importing groups...")
+        updater.import_groups()
+
+    elapsed = time.clock() - start
+    logger.info("Done in %.0f seconds." % elapsed)
+
+    logger.info("Updating LDAP SYNC importstamp...")
+    set_remote_import_stamp(plone)
+
+    logger.info("Synchronization Done.")
 
 
 class OGDSUpdater(grok.Adapter):
@@ -71,8 +118,8 @@ class OGDSUpdater(grok.Adapter):
         """
         session = create_session()
 
-        # Set all SQL users inactive first - the ones still contained in the LDAP
-        # will be set active again below (in the same transaction).
+        # Set all SQL users inactive first - the ones still contained in the
+        # LDAP will be set active again below (in the same transaction).
         for user in session.query(User):
             user.active = 0
 
@@ -115,8 +162,9 @@ class OGDSUpdater(grok.Adapter):
                         continue
                     value = info.get(col.name)
 
-                    # We can't store sequences in SQL columns. So if we do get a multi-valued field
-                    # to be stored directly in OGDS, we treat it as a multi-line string and join it.
+                    # We can't store sequences in SQL columns. So if we do get
+                    # a multi-valued field to be stored directly in OGDS, we
+                    # treat it as a multi-line string and join it.
                     if isinstance(value, list) or isinstance(value, tuple):
                         value = ' '.join([str(v) for v in value])
 
@@ -124,7 +172,7 @@ class OGDSUpdater(grok.Adapter):
 
                 # Set the user active
                 user.active = 1
-                logger.info("Imported user '%s'..." % userid)
+                logger.info("Imported user '%s'" % userid)
             session.flush()
 
     def import_groups(self):
@@ -141,7 +189,8 @@ class OGDSUpdater(grok.Adapter):
             for ldap_group in ldap_groups:
                 dn, info = ldap_group
 
-                # Group name is in the 'cn' attribute, which may be mapped to 'fullname'
+                # Group name is in the 'cn' attribute, which may be
+                # mapped to 'fullname'
                 if 'cn' in info:
                     groupid = info['cn']
                     if isinstance(groupid, list):
@@ -158,7 +207,8 @@ class OGDSUpdater(grok.Adapter):
                     session.add(group)
                 else:
                     # Get the existing group
-                    group = session.query(Group).filter_by(groupid=groupid).first()
+                    group = session.query(Group).filter_by(
+                        groupid=groupid).first()
 
                 # Iterate over all SQL columns and update their values
                 columns = Group.__table__.columns
@@ -175,6 +225,8 @@ class OGDSUpdater(grok.Adapter):
 
                 contained_users = []
                 group_members = ldap_util.get_group_members(info)
+
+                logger.info("Importing group '%s'..." % groupid)
                 for user_dn in group_members:
                     try:
                         ldap_user = ldap_util.entry_by_dn(user_dn)
@@ -207,8 +259,10 @@ class OGDSUpdater(grok.Adapter):
                             continue
 
                         contained_users.append(user)
-                        logger.info("Importing user '%s'..." % userid)
+                        logger.info("Importing user '%s' "
+                                    "into group '%s'..." % (userid, groupid))
                     except NO_SUCH_OBJECT:
                         logger.warn(USER_NOT_FOUND_LDAP % user_dn)
                 group.users = contained_users
                 session.flush()
+                logger.info("Done.")

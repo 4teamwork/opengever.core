@@ -1,5 +1,5 @@
 from opengever.ogds.base.interfaces import ISyncStamp
-from opengever.ogds.base.ldap_import.import_stamp import update_sync_stamp
+from opengever.ogds.base.sync.import_stamp import update_sync_stamp
 from opengever.ogds.base.utils import create_session
 from opengever.ogds.base.utils import get_ou_selector
 from opengever.ogds.models.group import Group
