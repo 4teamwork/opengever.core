@@ -1,15 +1,16 @@
 from Acquisition import aq_inner, aq_parent
-from OFS.CopySupport import CopyError, ResourceLockedError
-from Products.CMFCore.utils import getToolByName
-from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
+from OFS.CopySupport import CopyError, ResourceLockedError
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.document.document import IDocumentSchema
 from opengever.dossier import _
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.globalindex.model.task import Task
 from plone.dexterity.interfaces import IDexterityContainer
 from plone.z3cform import layout
+from Products.CMFCore.utils import getToolByName
+from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form import form, field
 from z3c.form import validator
 from z3c.form.interfaces import HIDDEN_MODE
@@ -57,9 +58,18 @@ class MoveItemsForm(form.Form):
     def updateWidgets(self):
         super(MoveItemsForm, self).updateWidgets()
         self.widgets['request_paths'].mode = HIDDEN_MODE
-        value = self.request.get('paths')
-        if value:
-            self.widgets['request_paths'].value = ';;'.join(value)
+
+        paths = self.request.get('paths')
+        if paths:
+            self.widgets['request_paths'].value = ';;'.join(paths)
+
+        task_ids = self.request.get('task_ids')
+        if task_ids:
+            paths = []
+            for task in Task.query.by_ids(task_ids):
+                paths.append(task.physical_path)
+
+            self.widgets['request_paths'].value = ';;'.join(paths)
 
     @z3c.form.button.buttonAndHandler(_(u'button_submit',
                                         default=u'Move'))

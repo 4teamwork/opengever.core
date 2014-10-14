@@ -211,6 +211,9 @@ Changelog
   - Made checkbox column not sortable, to avoid CatalogError's.
     [phgross]
 
+  - Fixed move items functionality for moving tasks.
+    [phgross]
+
 
 3.4.1 (2014-09-03)
 ------------------
