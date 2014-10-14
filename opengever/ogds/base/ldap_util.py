@@ -57,6 +57,18 @@ class LDAPSearch(grok.Adapter):
         conn = ldap_uf._delegate.connect()
         return conn
 
+    def _get_root_dse(self, conn=None):
+        """Get the root DSE from the server.
+        Returns a (root_dse_dn, root_dse_entry) tuple.
+        """
+        if conn is None:
+            conn = self.connect()
+        root_dse = conn.search_s('',
+                                 ldap.SCOPE_BASE,
+                                 '(objectclass=*)',
+                                 ['*', '+'])[0]
+        return root_dse
+
     @property
     def supported_controls(self):
         """Memoized access to controls supported by server.
@@ -69,12 +81,9 @@ class LDAPSearch(grok.Adapter):
         """Get supported server controls from root DSE.
         """
         conn = self.connect()
-        root_dse = conn.search_s('',
-                                 ldap.SCOPE_BASE,
-                                 '(objectclass=*)',
-                                 ['*', '+'])[0]
+        root_dse_dn, root_dse_entry = self._get_root_dse(conn)
 
-        supported_controls = root_dse[1]['supportedControl']
+        supported_controls = root_dse_entry['supportedControl']
         return supported_controls
 
     def get_schema(self):
@@ -91,15 +100,10 @@ class LDAPSearch(grok.Adapter):
             conn = self.connect()
 
             # Try to get schema DN from Root DSE
-            root_dse = conn.search_s('',
-                                     ldap.SCOPE_BASE,
-                                     '(objectclass=*)',
-                                     ['*', '+'])[0]
-
-            root_dn, root_entry = root_dse
+            root_dse_dn, root_dse_entry = self._get_root_dse(conn)
 
             try:
-                schema_dn = root_entry['subschemaSubentry'][0]
+                schema_dn = root_dse_entry['subschemaSubentry'][0]
             except KeyError:
                 schema_dn = 'cn=schema'
 
