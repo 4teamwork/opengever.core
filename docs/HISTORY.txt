@@ -114,6 +114,12 @@ Changelog
   - Add db-migration for changes to `opengever.globalindex`.
 
 
+- OGDS synchronization [lgraf]:
+
+  - LDAP util: When querying for schema, deal with servers that don't support
+    listing all operational attributes (RFC 3673).
+
+
 - Additional Improvements:
 
   - Simplify LaTex listing adapters and include base-class.

@@ -23,7 +23,11 @@ except AttributeError:
     PYTHON_LDAP_24 = False
 
 
+ALL_OPERATIONAL_ATTRS = '1.3.6.1.4.1.4203.1.5.1'
 KNOWN_MULTIVALUED_FIELDS = ['member', 'memberOf']
+SUBSCHEMA_ATTRS = ['attributeTypes', 'dITContentRules', 'dITStructureRules',
+                   'matchingRules', 'matchingRuleUse', 'nameForms',
+                   'objectClasses']
 
 
 class LDAPSearch(grok.Adapter):
@@ -124,10 +128,17 @@ class LDAPSearch(grok.Adapter):
             except KeyError:
                 schema_dn = 'cn=schema'
 
+            attr_list = ['*', '+']
+            if ALL_OPERATIONAL_ATTRS not in self.supported_features:
+                # Server does not support RFC 3673 (returning all operational
+                # attributes by using "+" in attribute list). We therefore
+                # need to specify all known subschema attributes explicitely
+                attr_list = SUBSCHEMA_ATTRS
+
             res = conn.search_s(schema_dn,
                                 ldap.SCOPE_BASE,
                                 '(objectclass=*)',
-                                ['*', '+'])
+                                attr_list)
 
             if len(res) > 1:
                 logger.warn("More than one LDAP schema found!")
