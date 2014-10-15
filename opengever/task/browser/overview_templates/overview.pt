@@ -16,8 +16,15 @@
         <h2 i18n:translate="label_main_attributes">Main Atrributes</h2>
           <table class="vertical listing">
             <tr tal:repeat="item view/get_main_attributes">
-              <th tal:content="structure item/label" />
-              <td tal:attributes="class item/css_class|nothing" tal:content="structure item/value" />
+              <th tal:content="item/label" />
+
+              <td tal:condition="python: item.get('is_html', False)"
+                  tal:attributes="class item/css_class|nothing"
+                  tal:content="structure item/value" />
+
+              <td tal:condition="python: not item.get('is_html', False)"
+                  tal:attributes="class item/css_class|nothing"
+                  tal:content="item/value" />
             </tr>
           </table>
       </div>

@@ -81,19 +81,23 @@ class Overview(DisplayForm, OpengeverTab):
             {
                 'label': _('label_workflow_state'),
                 'value': task.get_state_label(),
+                'is_html': True,
             },
             {
                 'label': _(u"label_deadline", default=u"Deadline"),
                 'value': task.get_deadline_label(),
+                'is_html': True,
             },
             {
                 'label': _(u"label_issuer", default=u"Issuer"),
                 'css_class': "issuer",
                 'value': task.get_issuer_label(),
+                'is_html': True,
             },
             {
                 'label': _(u"label_responsible", default=u"Responsible"),
                 'value': task.get_responsible_label(),
+                'is_html': True,
             },
             {
                 'label': _(u"label_date_of_completion",
