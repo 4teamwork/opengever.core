@@ -8,6 +8,7 @@ from opengever.base.utils import find_parent_dossier
 from opengever.mail import _
 from opengever.mail.events import AttachmentsDeleted
 from opengever.mail.interfaces import IAttachmentsDeletedEvent
+from plone import api
 from plone.dexterity.utils import createContentInContainer
 from plone.dexterity.utils import iterSchemata
 from plone.i18n.normalizer.interfaces import IIDNormalizer
@@ -72,10 +73,14 @@ def downloadable_filename_helper(context):
     """
 
     def _helper(item, filename):
-        return '<a href="%s/get_attachment?position=%s">%s</a>' % (
+        link = '<a href="%s/get_attachment?position=%s">%s</a>' % (
             context.absolute_url(),
             item.get('position'),
             filename)
+
+        transformer = api.portal.get_tool('portal_transforms')
+        link = transformer.convertTo('text/x-html-safe', link).getData()
+        return link
 
     return _helper
 
