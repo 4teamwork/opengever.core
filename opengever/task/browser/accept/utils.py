@@ -1,5 +1,3 @@
-from Acquisition import aq_inner
-from Acquisition import aq_parent
 from five import grok
 from opengever.base.utils import ok_response
 from opengever.globalindex.model.task import Task
@@ -13,6 +11,7 @@ from opengever.task import _
 from opengever.task.adapters import IResponseContainer
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.interfaces import ITaskDocumentsTransporter
+from opengever.task.interfaces import IYearfolderStorer
 from opengever.task.task import ITask
 from opengever.task.transporter import IResponseTransporter
 from opengever.task.util import change_task_workflow_state
@@ -199,10 +198,7 @@ def assign_forwarding_to_dossier(
         text=response_text,
         successor_oguid=successor_tc_task.get_oguid())
 
-    inbox = aq_parent(aq_inner(forwarding_obj))
-    yearfolder = get_current_yearfolder(inbox=inbox)
-    clipboard = inbox.manage_cutObjects((forwarding_obj.getId(),))
-    yearfolder.manage_pasteObjects(clipboard)
+    IYearfolderStorer(forwarding_obj).store_in_yearfolder()
 
     # successor
     successor_tc_task.set_predecessor(forwarding_oguid)
