@@ -25,6 +25,7 @@ from opengever.ogds.base import _
 from opengever.ogds.base.browser.userdetails import UserDetails
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
+from plone import api
 from Products.CMFCore.interfaces._tools import IMemberData
 from Products.CMFCore.utils import getToolByName
 from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
@@ -80,7 +81,11 @@ class Actor(object):
         if not url:
             return label
 
-        return u'<a href="{}">{}</a>'.format(url, label)
+        link = u'<a href="{}">{}</a>'.format(url, label)
+
+        transformer = api.portal.get_tool('portal_transforms')
+        link = transformer.convertTo('text/x-html-safe', link).getData()
+        return link
 
     def corresponds_to(self, user):
         raise NotImplementedError()
