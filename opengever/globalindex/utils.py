@@ -2,6 +2,7 @@ from opengever.base.browser.helper import get_css_class
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
+from plone import api
 from Products.CMFPlone.utils import getToolByName
 from zope.app.component.hooks import getSite
 
@@ -16,11 +17,13 @@ def indexed_task_link(item, display_client=False):
 
     css_class = get_css_class(item)
     service = ogds_service()
+    transformer = api.portal.get_tool('portal_transforms')
+    title = transformer.convertTo('text/x-html-safe', item.title).getData()
 
     # get the contact information utlity and the client
     admin_unit = service.fetch_admin_unit(item.admin_unit_id)
     if not admin_unit:
-        return '<span class="%s">%s</span>' % (css_class, item.title)
+        return '<span class="%s">%s</span>' % (css_class, title)
 
     # has the user access to the target task?
     has_access = False
@@ -59,7 +62,7 @@ def indexed_task_link(item, display_client=False):
     # render the full link if he has acccess
     inner_html = ''.join(('<span class="rollover-breadcrumb %s" \
                                  title="%s">%s</span>' % \
-                    (css_class, breadcrumb_titles, item.title), client_html))
+                          (css_class, breadcrumb_titles, title), client_html))
     if has_access:
         return '<a href="%s"%s>%s</a>' % (
             url,

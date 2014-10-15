@@ -137,3 +137,19 @@ class TestOverview(FunctionalTestCase):
             ['Document 10', 'Document 9', 'Document 8', 'Document 7',
              'Document 6', 'Document 5', 'Document 4', 'Document 3',
              'Document 2', 'Document 1'])
+
+    @browsing
+    def test_task_link_is_safe_html_transformed(self, browser):
+        create(Builder('task')
+               .within(self.dossier)
+               .titled("Foo <script>alert('foo')</script>"))
+
+        browser.login().open(self.dossier, view='tabbedview_view-overview')
+
+        self.assertEquals(
+            [],
+            browser.css('span.contenttype-opengever-task-task script'))
+
+        self.assertEquals(
+            ['Foo'],
+            browser.css('span.contenttype-opengever-task-task').text)
