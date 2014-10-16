@@ -196,9 +196,9 @@ def remote_request(target_admin_unit_id, viewname, path='', data={}, headers={})
 
         site = getSite()
         if path:
-            view = site.restrictedTraverse(os.path.join(path, viewname))
+            view = site.unrestrictedTraverse(os.path.join(path, viewname))
         else:
-            view = site.restrictedTraverse(viewname)
+            view = site.unrestrictedTraverse(viewname)
         data = view()
 
         if old_site:
