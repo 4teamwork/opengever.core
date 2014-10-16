@@ -21,6 +21,7 @@ Changelog
   - Add utility functions to access the current `OrgUnit` and `AdminUnit`.
   - Add org-unit selector to switch between the user`s assigned org-units.
   - The oguid now consists of admin-unit-id and IntId.
+  - Admin_unit intern `remote_requests` uses now unrestricted traversing.
   - Above changes concern the following functionality:
 
     - Sharing View

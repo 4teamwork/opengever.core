@@ -1,4 +1,5 @@
 from Acquisition import aq_parent
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -72,6 +73,11 @@ class TestAssignForwardignToDossier(FunctionalTestCase):
 
         self.assertEquals('My new dossier', aq_parent(browser.context).title)
 
+        yearfolder = self.inbox.get(str(date.today().year))
+        self.assertEquals(
+            self.forwarding, yearfolder.get('forwarding-1'),
+            'The forwarding was not correctly moved in to the actual yearfolder')
+
     @browsing
     def test_assign_to_existing_dossier(self, browser):
         dossier = create(Builder('dossier').titled(u'Dossier A'))
@@ -108,3 +114,8 @@ class TestAssignForwardignToDossier(FunctionalTestCase):
                           'The forwarded document is not copied to task')
 
         self.assertEquals(dossier, aq_parent(browser.context))
+
+        yearfolder = self.inbox.get(str(date.today().year))
+        self.assertEquals(
+            self.forwarding, yearfolder.get('forwarding-1'),
+            'The forwarding was not correctly moved in to the actual yearfolder')
