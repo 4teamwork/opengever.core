@@ -49,9 +49,9 @@ class TestRefuseGuard(TestAcceptGuard):
 
 
 class TestAssignToDossierGuard(InboxBaseTransitionGuardTests):
-    transition = 'forwarding-transition-refuse'
+    transition = 'forwarding-transition-assign-to-dossier'
 
-    def is_only_available_for_responsible_of_admin_unit_intern_forwardings(self):
+    def test_is_only_available_for_responsible_of_admin_unit_intern_forwardings(self):
         conditions = FakeConditions()
         self.assertFalse(self.controller._is_transition_possible(
             self.transition, False, conditions))
@@ -63,6 +63,11 @@ class TestAssignToDossierGuard(InboxBaseTransitionGuardTests):
         conditions.is_assigned_to_current_admin_unit = True
         self.assertTrue(self.controller._is_transition_possible(
             self.transition, False, conditions))
+
+        conditions.is_responsible = False
+        conditions.is_responsible_orgunit_agency_member = True
+        self.assertTrue(self.controller._is_transition_possible(
+            self.transition, True, conditions))
 
 
 class TestReassignGuard(TestAssignToDossierGuard):
