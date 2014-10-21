@@ -218,6 +218,9 @@ Changelog
   - Fixed move items functionality for moving tasks.
     [phgross]
 
+  - Security fixes: avoid injecting javascript (XSS) using safe_html transforms.
+    [phgross]
+
 
 3.4.1 (2014-09-03)
 ------------------

@@ -64,6 +64,20 @@ class TestActorLookup(FunctionalTestCase):
             u'<a href="http://nohost/plone/@@user-details/hugo.boss">Boss H\xfcgo (hugo.boss)</a>',
             actor.get_link())
 
+    def test_get_link_returns_safe_html(self):
+        contact = create(Builder('contact')
+                         .having(firstname=u"Foo <b onmouseover=alert('Foo!')>click me!</b>",
+                                 lastname=u'Blahbla',
+                                 email='h@example.com')
+                         .in_state('published'))
+        actor = Actor.lookup('contact:{}'.format(contact.id))
+
+        self.assertEquals(
+            u'<a href="http://nohost/plone/blahbla-foo-b-onmouseover-alert-foo-click-me-b">'
+            'Blahbla Foo <b>click me!</b> (h@example.com)'
+            '</a>',
+            actor.get_link())
+
 
 class TestActorCorresponding(FunctionalTestCase):
 

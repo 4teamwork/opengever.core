@@ -290,7 +290,12 @@ class Task(Base):
             inner_html = u'{} {}'.format(task_html, info_html)
 
         # Add the task-state css and return it
-        return self._task_state_wrapper(inner_html)
+        link = self._task_state_wrapper(inner_html)
+
+        transformer = api.portal.get_tool('portal_transforms')
+        link = transformer.convertTo('text/x-html-safe', link).getData()
+
+        return link
 
     def _task_state_wrapper(self, text):
         """ Wrap a span-tag around the text with the status-css class

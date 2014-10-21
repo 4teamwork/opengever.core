@@ -42,7 +42,7 @@
 
         <div tal:replace="structure provider:plone.abovecontentbody" />
 
-        <div tal:replace="structure view/body">Body</div>
+        <div tal:replace="structure view/html_safe_body">Body</div>
 
         <tal:attachments condition="view/attachments">
         <h2 i18n:translate="">Attachments</h2>

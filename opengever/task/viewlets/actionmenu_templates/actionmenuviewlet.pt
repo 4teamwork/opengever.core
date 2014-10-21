@@ -9,7 +9,7 @@
                              id subMenuItem/id | nothing;
                              class string: ${css_class} button"
              i18n:attributes="title">
-              <span tal:content="structure subMenuItem/title"
+              <span tal:content="subMenuItem/title"
                     i18n:translate=""
                     class="subMenuTitle actionText">
               </span>
@@ -30,7 +30,7 @@
                                id subMenuItem/id | nothing;
                                class string: ${css_class}"
                i18n:attributes="title">
-              <span tal:content="structure subMenuItem/title"
+              <span tal:content="subMenuItem/title"
                     i18n:translate=""
                     class="subMenuTitle actionText">
               </span>

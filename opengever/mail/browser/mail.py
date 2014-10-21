@@ -9,6 +9,7 @@ from opengever.document.browser.overview import CustomRow
 from opengever.document.browser.overview import FieldRow
 from opengever.document.browser.overview import Overview
 from opengever.mail import _
+from plone import api
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize import instance
 from Products.CMFCore.utils import getToolByName
