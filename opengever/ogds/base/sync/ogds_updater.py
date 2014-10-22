@@ -121,7 +121,7 @@ class OGDSUpdater(grok.Adapter):
         # Set all SQL users inactive first - the ones still contained in the
         # LDAP will be set active again below (in the same transaction).
         for user in session.query(User):
-            user.active = 0
+            user.active = False
 
         for plugin in self._ldap_plugins():
             ldap_userfolder = plugin._getLDAPUserFolder()
@@ -171,7 +171,7 @@ class OGDSUpdater(grok.Adapter):
                     setattr(user, col.name, value)
 
                 # Set the user active
-                user.active = 1
+                user.active = True
                 logger.info("Imported user '%s'" % userid)
             session.flush()
 
