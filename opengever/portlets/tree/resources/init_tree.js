@@ -48,25 +48,24 @@ $(function() {
   var favorites_tree;
   function render_favorites_tree() {
     var tree_node = portlet.find('#tree-favorites').find('>ul');
-    var expanded_uids = [];
-    if(favorites_tree) {
-      expanded_uids = favorites_tree.dump_expanded_uids();
-    }
-
     navigation_json.load(function(tree_data) {
       favorites_store.load(function(favorites) {
+        var fav_expand_store = ExpandStore('expanded_fav_uids', 'uid');
         var favorite_nodes = make_tree(tree_data).clone_by_uids(favorites);
         sort_by_text(favorite_nodes);
         favorites_tree = make_tree(favorite_nodes, {
           render_condition: function() {
-            return this.depth === 0;
-          }
+            return this.depth === 0 || fav_expand_store.is_expanded(this.parent);
+          },
+          onclick: function(node, event) {
+            fav_expand_store.expand(node);
+          },
+          components: [fav_expand_store]
         });
         tree_node.html('');
         favorites_tree.render(tree_node);
         favorites_tree.selectCurrent(find_parent_node_for_url(
             favorites_tree, portlet.data('context-url')));
-        favorites_tree.load_expanded_uids(expanded_uids);
 
         if(favorite_nodes.length === 0) {
           portlet.find('#tree-favorites .no-favorites').show();

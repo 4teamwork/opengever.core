@@ -158,8 +158,9 @@ Changelog
       - Performance improvements.
       - Use JavaScript tree API for building the tree.
       - Add repository favorites.
+      - Add expand store for favorites.
 
-    [jone]
+    [jone, phgross]
 
   - Update DocProperties when documents are moved/pasted and checked-in/checked out.
     Create a journal entry when modifying/initializing DocProperties.
