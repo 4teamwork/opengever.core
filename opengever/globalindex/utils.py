@@ -1,84 +1,11 @@
-from opengever.base.browser.helper import get_css_class
 from opengever.globalindex.model.task import Task
-from opengever.ogds.base.utils import get_current_admin_unit
-from opengever.ogds.base.utils import ogds_service
-from plone import api
-from Products.CMFPlone.utils import getToolByName
-from zope.app.component.hooks import getSite
-
-
-def indexed_task_link(item, display_client=False):
-    """Renders a indexed task item (globalindex sqlalchemy object) either
-    with a link to the effective task (if the user has access) or just with
-    the title.
-    """
-
-    site = getSite()
-
-    css_class = get_css_class(item)
-    service = ogds_service()
-    transformer = api.portal.get_tool('portal_transforms')
-    title = transformer.convertTo('text/x-html-safe', item.title).getData()
-
-    # get the contact information utlity and the client
-    admin_unit = service.fetch_admin_unit(item.admin_unit_id)
-    if not admin_unit:
-        return '<span class="%s">%s</span>' % (css_class, title)
-
-    # has the user access to the target task?
-    has_access = False
-    mtool = getToolByName(site, 'portal_membership')
-    member = mtool.getAuthenticatedMember()
-
-    if member:
-        principals = set(member.getGroups() + [member.getId()])
-        allowed_principals = set(item.principals)
-
-        # Administrators always have access, but the global role 'Administrator'
-        # doesn't get indexed in task.principals in task indexer.
-        # TODO: Avoid hardcoding 'og_administratoren'
-        allowed_principals.add(u'og_administratoren')
-
-        has_access = len(principals & allowed_principals) > 0
-
-    # is the target on a different client? we need to make a popup if
-    # it is...
-    if item.admin_unit_id != get_current_admin_unit().id():
-        link_target = ' target="_blank"'
-        url = '%s/%s' % (admin_unit.public_url, item.physical_path)
-    else:
-        link_target = ''
-        url = admin_unit.public_url + '/' + item.physical_path
-
-    # embed the client
-    if display_client:
-        client_html = ' <span class="discreet">(%s)</span>' % admin_unit.title
-    else:
-        client_html = ''
-
-    # create breadcrumbs including the (possibly remote) client title
-    breadcrumb_titles = "[%s] > %s" % (admin_unit.title, item.breadcrumb_title)
-
-    # render the full link if he has acccess
-    inner_html = ''.join(('<span class="rollover-breadcrumb %s" \
-                                 title="%s">%s</span>' % \
-                          (css_class, breadcrumb_titles, title), client_html))
-    if has_access:
-        return '<a href="%s"%s>%s</a>' % (
-            url,
-            link_target,
-            inner_html)
-    else:
-        return inner_html
 
 
 def indexed_task_link_helper(item, value):
-    """Tabbedview helper for rendering a link to a indexed task.
-    The item has to be the Task sqlalchemy object.
-    See `render_indexed_task` method.
+    """Tabbedview helper wich call the task link generation without the workflow
+    state icon and the repsonsible info.
     """
-
-    return indexed_task_link(item)
+    return item.get_link(with_state_icon=False, with_responsible_info=False)
 
 
 def get_selected_items(context, request):
