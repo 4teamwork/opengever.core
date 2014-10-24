@@ -3,10 +3,13 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from lxml.cssselect import CSSSelector
+from opengever.base.interfaces import IReferenceNumberSettings
 from opengever.latex.listing import ILaTexListing
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
+from plone.registry.interfaces import IRegistry
 from zope.component import getMultiAdapter
+from zope.component import getUtility
 import lxml
 
 
@@ -17,9 +20,12 @@ class TestDossierListing(FunctionalTestCase):
 
         self.hugo = create(Builder('fixture').with_hugo_boss())
 
-        self.repo = create(Builder('repository').titled('Repository XY'))
+        self.repo = create(Builder('repository').titled('Main Repository '))
+        self.subrepo = create(Builder('repository')
+                              .within(self.repo)
+                              .titled('Repository XY'))
         self.dossier = create(Builder('dossier')
-                          .within(self.repo)
+                          .within(self.subrepo)
                           .having(title=u'Dossier A',
                                   responsible=self.hugo.userid,
                                   start=date(2013, 11, 1),
@@ -32,7 +38,7 @@ class TestDossierListing(FunctionalTestCase):
                                   responsible=self.hugo.userid))
 
         self.listing = getMultiAdapter(
-            (self.repo, self.repo.REQUEST, self),
+            (self.subrepo, self.subrepo.REQUEST, self),
             ILaTexListing, name='dossiers')
 
     def test_get_responsible_returns_client_title_and_user_description(self):
@@ -43,13 +49,12 @@ class TestDossierListing(FunctionalTestCase):
         self.assertEquals(u'Client1 / Boss Hugo (hugo.boss)', responsible)
 
     def test_get_repository_title_returns_the_title_of_the_first_parental_repository_folder(self):
-
         self.assertEquals(
-            '1. Repository XY',
+            '1.1. Repository XY',
             self.listing.get_repository_title(obj2brain(self.dossier)))
 
         self.assertEquals(
-            '1. Repository XY',
+            '1.1. Repository XY',
             self.listing.get_repository_title(
                 obj2brain(self.subdossier)))
 
@@ -84,9 +89,9 @@ class TestDossierListing(FunctionalTestCase):
         rows = table.xpath(CSSSelector('tbody tr').path)
 
         self.assertEquals(
-            ['Client1 1 / 1',
+            ['Client1 1.1 / 1',
              '1',
-             '1. Repository XY',
+             '1.1. Repository XY',
              'Dossier A',
              'Client1 / Boss Hugo (hugo.boss)',
              'dossier-state-resolved',
@@ -95,15 +100,50 @@ class TestDossierListing(FunctionalTestCase):
             [value.text_content().strip() for value in rows[0].xpath(CSSSelector('td').path)])
 
         self.assertEquals(
-            ['Client1 1 / 1.1',
+            ['Client1 1.1 / 1.1',
              '2',
-             '1. Repository XY',
+             '1.1. Repository XY',
              'Dossier B',
              'Client1 / Boss Hugo (hugo.boss)',
              'dossier-state-active',
              '01.11.2013',
              ''],
             [value.text_content().strip() for value in rows[1].xpath(CSSSelector('td').path)])
+
+
+class TestDossierListingWithGrouppedByThreeFormatter(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestDossierListingWithGrouppedByThreeFormatter, self).setUp()
+
+        registry = getUtility(IRegistry)
+        proxy = registry.forInterface(IReferenceNumberSettings)
+        proxy.formatter = 'grouped_by_three'
+
+        self.repo = create(Builder('repository').titled('Main Repository'))
+        self.subrepo = create(Builder('repository')
+                              .within(self.repo)
+                              .titled('Repository XY'))
+        self.dossier = create(Builder('dossier')
+                              .within(self.subrepo)
+                              .having(title=u'Dossier A'))
+        self.subdossier = create(Builder('dossier')
+                                 .within(self.dossier)
+                                 .having(title=u'Dossier B'))
+
+        self.listing = getMultiAdapter(
+            (self.subrepo, self.subrepo.REQUEST, self),
+            ILaTexListing, name='dossiers')
+
+    def test_get_repository_title_returns_the_title_of_the_first_parental_repository_folder(self):
+        self.assertEquals(
+            '11 Repository XY',
+            self.listing.get_repository_title(obj2brain(self.dossier)))
+
+        self.assertEquals(
+            '11 Repository XY',
+            self.listing.get_repository_title(
+                obj2brain(self.subdossier)))
 
 
 class TestSubDossierListing(FunctionalTestCase):
