@@ -1,6 +1,7 @@
 from collections import OrderedDict
 from five import grok
 from ftw.table import helper
+from opengever.base.interfaces import IReferenceNumber
 from opengever.latex import _
 from opengever.latex.utils import get_issuer_of_task
 from opengever.latex.utils import get_responsible_of_task
@@ -119,11 +120,14 @@ class LaTexListing(grok.MultiAdapter):
         # index. So we take the latter, altough it seems a little risky when
         # the reference number concept is changed.
 
-        if '/' not in brain.reference:
+        active_formatter = IReferenceNumber(self.context).get_active_formatter()
+        seperator = active_formatter.repository_dossier_seperator
+
+        if seperator not in brain.reference:
             return ''
 
         # get the last part of the reference number
-        dossier_ref_nr = brain.reference.split('/')[-1].strip()
+        dossier_ref_nr = brain.reference.split(seperator)[-1].strip()
 
         # multiple nested dossiers are seperated by a dot (.), so count the
         # dots

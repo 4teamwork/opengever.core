@@ -463,6 +463,9 @@ Changelog
 - Refactored some hard to change test data.
   [lgraf]
 
+- PDF Listings: Made repository_title getter reference formatter independent.
+  [phgross]
+
 
 3.3 (2014-06-05)
 ----------------
