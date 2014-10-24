@@ -172,9 +172,12 @@ class Task(Base):
         return False
 
     # XXX rename me, this should be get_responsible_link
-    def get_responsible_label(self):
+    def get_responsible_label(self, linked=True):
         actor = Actor.lookup(self.responsible)
         org_unit = ogds_service().fetch_org_unit(self.assigned_org_unit)
+        if not linked:
+            return org_unit.prefix_label(actor.get_label())
+
         return org_unit.prefix_label(actor.get_link())
 
     def get_state_label(self):
@@ -249,13 +252,19 @@ class Task(Base):
         allowed_principals = set(self.principals)
         return len(principals & allowed_principals) > 0
 
-    def get_link(self):
+    def get_link(self, with_state_icon=True, with_responsible_info=True):
         admin_unit = self.get_admin_unit()
         if not admin_unit:
             return u'<span class="{}">{}</span>'.format(
                 self.get_css_class(), self.title)
 
         url = '/'.join((admin_unit.public_url, self.physical_path))
+        breadcrumb_titles = u"[{}] > {}".format(
+            admin_unit.title, self.breadcrumb_title)
+        responsible_info = u' <span class="discreet">({})</span>'.format(
+            self.get_responsible_label(linked=False))
+        link_content = u'<span class="{}">{}</span>'.format(
+            self.get_css_class(), self.title)
 
         # If the target is on a different client we need to make a popup
         if self.admin_unit_id != get_current_admin_unit().id():
@@ -263,34 +272,21 @@ class Task(Base):
         else:
             link_target = u''
 
-        # create breadcrumbs including the (possibly remote) client title
-        breadcrumb_titles = u"[{}] > {}".format(admin_unit.title,
-                                               self.breadcrumb_title)
-
-        # Client and user info
-        assigned_org_unit = ogds_service().fetch_org_unit(
-            self.assigned_org_unit)
-        info_html = u' <span class="discreet">({})</span>'.format(
-            assigned_org_unit.prefix_label(
-                Actor.lookup(self.responsible).get_label()))
-
-        # Link to the task object
-        task_html = u'<span class="{}">{}</span>'.format(
-            self.get_css_class(), self.title)
-
         # Render the full link if we have acccess
         if self.has_access(api.user.get_current()):
-            inner_html = u'<a href="{}"{} title="{}">{}</a> {}'.format(
-                url,
-                link_target,
-                breadcrumb_titles,
-                task_html,
-                info_html)
+            link = u'<a href="{}"{} title="{}">{}</a>'.format(
+                url, link_target, breadcrumb_titles, link_content)
         else:
-            inner_html = u'{} {}'.format(task_html, info_html)
+            link = link_content
 
-        # Add the task-state css and return it
-        link = self._task_state_wrapper(inner_html)
+        if with_responsible_info:
+            link = '{} {}'.format(link, responsible_info)
+
+        # wrapped it into span tag
+        if with_state_icon:
+            link = self._task_state_wrapper(link)
+        else:
+            link = u'<span>%s</span>' % (link)
 
         transformer = api.portal.get_tool('portal_transforms')
         link = transformer.convertTo('text/x-html-safe', link).getData()

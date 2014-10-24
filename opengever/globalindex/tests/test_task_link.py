@@ -15,27 +15,25 @@ class TestTaskLinkGeneration(FunctionalTestCase):
         create(Builder('org_unit').id(u'additional')
                .having(admin_unit=additional_admin_unit))
 
-    def add_task_and_get_link(self, **kwargs):
+    def add_task(self, **kwargs):
         attr = {
-            'title':u'Do it!',
-            'physical_path':"qux/dossier-1/task-2",
-            'assigned_org_unit':'client1',
-            'issuing_org_unit':'client1',
-            'review_state':'task-state-tested-and-closed',
-            'responsible':TEST_USER_ID,
-            'admin_unit_id':'client1',
-            'breadcrumb_title':'0 Allgemeines > 01 SonstigesTestdossier 4tw > Testaufgabe',
-            'principals':[TEST_USER_ID, ]}
+            'title': u'Do it!',
+            'physical_path': "qux/dossier-1/task-2",
+            'assigned_org_unit': 'client1',
+            'issuing_org_unit': 'client1',
+            'review_state': 'task-state-tested-and-closed',
+            'responsible': TEST_USER_ID,
+            'admin_unit_id': 'client1',
+            'breadcrumb_title': '0 Allgemeines > 01 SonstigesTestdossier 4tw > Testaufgabe',
+            'principals': [TEST_USER_ID]}
         attr.update(**kwargs)
 
         task = create(Builder('globalindex_task').having(**attr))
-        return fromstring(task.get_link())
+        return task
 
-    def test_is_prefixed_with_state_icon_per_default(self):
-        link = self.add_task_and_get_link()
-        self.assertEqual(
-            'wf-task-state-tested-and-closed',
-            link.xpath(css_to_xpath('span'))[0].get('class'))
+    def add_task_and_get_link(self, **kwargs):
+        task = self.add_task(**kwargs)
+        return fromstring(task.get_link())
 
     def test_task_is_linked_when_user_has_access(self):
         link = self.add_task_and_get_link()
@@ -78,12 +76,30 @@ class TestTaskLinkGeneration(FunctionalTestCase):
         self.assertEquals('contenttype-opengever-task-task',
                           span_tag.get('class'))
 
+    def test_is_prefixed_with_state_icon_per_default(self):
+        link = self.add_task_and_get_link()
+        self.assertEqual(
+            'wf-task-state-tested-and-closed',
+            link.xpath(css_to_xpath('span'))[0].get('class'))
+
+    def test_state_prefixe_is_parametrable(self):
+        task = self.add_task()
+        link = fromstring(task.get_link(with_state_icon=False))
+        self.assertEqual(None, link.xpath(css_to_xpath('span'))[0].get('css'))
+
     def test_link_is_suffixed_with_responsible_info_by_default(self):
         link = self.add_task_and_get_link()
         suffix = link.xpath(css_to_xpath('span'))[2]
 
         self.assertEquals('(Client1 / Test User (test_user_1_))', suffix.text)
         self.assertEquals('discreet', suffix.get('class'))
+
+    def test_responsible_info_is_parametrable(self):
+        task = self.add_task()
+        link = fromstring(task.get_link(with_responsible_info=False))
+
+        self.assertEquals(
+            'Do it!', link.xpath(css_to_xpath('span'))[-1].text)
 
     def test_fallback_when_admin_unit_not_exists(self):
         link = self.add_task_and_get_link(admin_unit_id='not-existing')
@@ -100,3 +116,10 @@ class TestTaskLinkGeneration(FunctionalTestCase):
 
         self.assertEquals('_blank', link_tag.get('target'))
         self.assertEquals('icon-task-remote-task', span_tag.get('class'))
+
+    def test_link_is_xss_safe(self):
+        link = self.add_task_and_get_link(
+            title="Foo <b onmouseover=alert('Wufff!')>click me!</b>")
+
+        link_tag = link.xpath(css_to_xpath('a span'))[0]
+        self.assertEquals('Foo ', link_tag.text)
