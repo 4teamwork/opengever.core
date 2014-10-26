@@ -4,13 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2014-09-03 23:01+0000\n"
+"POT-Creation-Date: 2014-10-26 22:03+0000\n"
 "PO-Revision-Date: 2012-08-30 15:34+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,18 +47,13 @@ msgstr "Valeur archivistique"
 msgid "archival worthy with sampling"
 msgstr "Echantillon"
 
-#. Default: "Download"
-#: ./opengever/base/viewlets/history.pt:37
-msgid "button_file"
-msgstr "Télécharger"
-
 #. Default: "PDF"
-#: ./opengever/base/viewlets/history.pt:47
+#: ./opengever/base/viewlets/history.pt:44
 msgid "button_pdf"
 msgstr "Aperçu pdf"
 
 #. Default: "Show"
-#: ./opengever/base/viewlets/history.pt:43
+#: ./opengever/base/viewlets/history.pt:40
 msgid "button_show"
 msgstr "Afficher"
 
@@ -166,7 +155,7 @@ msgid "label_actor"
 msgstr "Modifier par"
 
 #. Default: "-- Already removed object --"
-#: ./opengever/base/adapters.py:177
+#: ./opengever/base/adapters.py:191
 msgid "label_already_removed"
 msgstr ""
 
@@ -266,7 +255,7 @@ msgid "label_public_trial_statement"
 msgstr "Jusitificaton pour le retrait du status public"
 
 #. Default: "reset"
-#: ./opengever/base/viewlets/history.pt:51
+#: ./opengever/base/viewlets/history.pt:48
 msgid "label_reset"
 msgstr "Remettre"
 
@@ -344,3 +333,4 @@ msgstr "Non contrôlé"
 #: opengever/repository/classification.py
 msgid "unprotected"
 msgstr "Non classé"
+
