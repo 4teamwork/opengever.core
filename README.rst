@@ -4,7 +4,8 @@ opengever.core
 Development installation
 ------------------------
 
-To get a basic development installation running follow the steps below:
+To get a basic development installation, make sure the dependencies listed
+below are satisfied and run the following steps:
 
 .. code::
 
@@ -14,10 +15,24 @@ To get a basic development installation running follow the steps below:
     $ python bootstrap.py
     $ bin/buildout
 
-External dependencies
-~~~~~~~~~~~~~~~~~~~~~
+Dependencies
+~~~~~~~~~~~~
 
-``opengever.core`` requires a SQL database to store some configuration. Before you can configure your first client you need to set up the database.
+Python 2.7
+^^^^^^^^^^
+
+``opengever.core`` requires at least Python 2.7, and using a 64-bit build of
+Python is highly recommended.
+
+SQL Database
+^^^^^^^^^^^^
+
+``opengever.core`` requires a SQL database to store some configuration.
+Before you can configure your first client you need to set up a database.
+
+Currently there are three SQL databases supported:
+
+- **MySQL**
 
 .. code::
 
@@ -25,6 +40,101 @@ External dependencies
     $ mysql -u root
     > CREATE DATABASE opengever;
     > GRANT ALL ON opengever.* TO opengever@localhost IDENTIFIED BY 'opengever';
+
+- **PostgreSQL**
+
+- **Oracle**
+
+OpenLDAP 2.x
+^^^^^^^^^^^^
+
+The Python `ldap <http://www.python-ldap.org/>`_ module requires the
+`OpenLDAP 2.x <http://www.openldap.org/>`_ client libraries.
+
+Java
+^^^^
+
+If fulltext indexing using `ftw.tika <https://github.com/4teamwork/ftw.tika>`_
+is enabled, Java is required in order to run `tika-server` (at least JRE 1.6
+is required for Tika).
+
+LaTeX
+^^^^^
+
+A LaTeX distribution and the ``pdflatex`` binary are required for generating
+dossier covers, dossier details and dossier listing PDFs as well as open task
+reports and task listing PDFs.
+
+For CentOS, the ``tetex-latex`` package contains the ``pdflatex`` binary. For
+local development on OS X we recommend the `MacTeX distribution <http://www.tug.org/mactex/>`_.
+
+Additionally, some LaTeX fonts are required. You need at least the Arial font
+for LaTeX. Our `internal SVN repo <https://svn.4teamwork.ch/repos/Vorlagen/trunk/latex-fonts/>`_
+contains a copy of fonts and installation instructions.
+
+HAProxy
+^^^^^^^
+
+For a production installation you need to configure *at least* two Zope
+instances per AdminUnit (in order to avoid deadlocks when remote-requests are
+executed during tasks across AdminUnits).
+
+To balance load between Zope instances we use `HAProxy <http://www.haproxy.org/>`_.
+The configuration is pretty standard:
+
+.. code::
+
+    frontend admin-unit-1
+        bind *:10001
+        default_backend admin-unit-1
+
+    backend admin-unit-1
+      appsession __ac len 32 timeout 1d
+      cookie serverid insert nocache indirect
+      balance roundrobin
+      option httpchk
+
+      server admin-unit-1-01 10.0.0.1:10101 cookie admin-unit-1-01 check inter 10s maxconn 5 rise 1
+      server admin-unit-1-02 10.0.0.1:10102 cookie admin-unit-1-02 check inter 10s maxconn 5 rise 1
+
+Apache
+^^^^^^
+
+In order to set up a reverse proxy that proxies requests to several HAProxy
+frontends we use `Apache <http://httpd.apache.org/>`_.
+
+Postfix
+^^^^^^^
+
+Mail-In as well as Mail-Out functionality requires an MTA - we recommend
+`Postfix <http://www.postfix.org/>`_. See `ftw.mail <https://github.com/4teamwork/ftw.mail/>`_'s
+README for details on how to configure Mail-In.
+
+Perl and ``Email::Outlook::Message`` module
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In order to convert Outlook ``*.msg`` messages to RFC822 ``*.eml`` when using
+Drag&Drop upload, we use the `msgconvert.pl <http://www.matijs.net/software/msgconv/>`_
+script. This script requires Perl and the ``Email::Outlook::Message`` module.
+
+So install Perl, ``perl-YAML`` and the following Perl modules:
+
+.. code::
+
+    Email::Outlook::Message
+    Email::LocalDelivery
+    Getopt::Long
+    Pod::Usage
+
+
+Celery, Erlang and RabbitMQ
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If `opengever.pdfconverter <https://github.com/4teamwork/opengever.pdfconverter/>`_
+is used, we require `Celery <http://www.celeryproject.org/>`_ and
+`RabbitMQ <http://www.rabbitmq.com/>`_. In order to install RabbitMQ, you
+first need to install `Erlang <http://www.erlang.org/>`_.
+
 
 
 LDAP credentials
