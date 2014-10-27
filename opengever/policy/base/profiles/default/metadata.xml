@@ -5,8 +5,8 @@
     <dependency>profile-plone.app.dexterity:default</dependency>
     <dependency>profile-plone.app.registry:default</dependency>
 
-    <dependency>profile-opengever.globalindex:default</dependency>
     <dependency>profile-opengever.ogds.base:default</dependency>
+    <dependency>profile-opengever.globalindex:default</dependency>
     <dependency>profile-opengever.base:default</dependency>
     <dependency>profile-collective.mtrsetup:default</dependency>
     <dependency>profile-opengever.document:default</dependency>
