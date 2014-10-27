@@ -81,4 +81,14 @@
         profile="opengever.ogds.base:default"
         />
 
+    <!-- 4005 -> 4006 -->
+    <genericsetup:upgradeStep
+        title="Increase lengths for userid and groupid columns."
+        description="Increase lengths for userid and groupid columns to 255"
+        source="4005"
+        destination="4006"
+        handler="opengever.ogds.base.upgrades.to4006.IncreaseColumnLength"
+        profile="opengever.ogds.base:default"
+        />
+
 </configure>

@@ -5,7 +5,8 @@ Changelog
 4.0.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Harmonize column lengths of groupid and userid columns.
+  [phgross]
 
 
 4.0.0 (2014-10-26)
