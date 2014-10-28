@@ -280,7 +280,7 @@ class Task(Base):
             link = link_content
 
         if with_responsible_info:
-            link = '{} {}'.format(link, responsible_info)
+            link = u'{} {}'.format(link, responsible_info)
 
         # wrapped it into span tag
         if with_state_icon:

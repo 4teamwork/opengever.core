@@ -123,3 +123,9 @@ class TestTaskLinkGeneration(FunctionalTestCase):
 
         link_tag = link.xpath(css_to_xpath('a span'))[0]
         self.assertEquals('Foo ', link_tag.text)
+
+    def test_handles_non_ascii_characters_correctly(self):
+        link = self.add_task_and_get_link(title=u'D\xfc it')
+        span_tag = link.xpath(css_to_xpath('a span'))[0]
+
+        self.assertEquals(u'D\xfc it', span_tag.text)
