@@ -1,0 +1,233 @@
+Return-Path: <James.Bond@test.ch>
+X-Original-To: 1333321297@ska-arch.opengever.test.ch
+Delivered-To: inbox-ska-arch@0000oglx03.test.ch
+Received: from 0000exch11.fake.test.ch (0000exch11.fake.test.ch [10.8.4.181])
+ by 0000oglx03.test.ch (Postfix) with ESMTP id 3B57716A675
+ for <1333321297@ska-arch.opengever.test.ch>;
+ Tue,  2 Sep 2014 16:37:17 +0200 (CEST)
+Received: from 0000EXMB15.fake.test.ch ([fe80::e8fc:ae8b:a026:e947]) by
+ 0000exch11.fake.test.ch ([fe80::4403:9f67:816b:7787%11]) with mapi id
+ 14.02.0387.000; Tue, 2 Sep 2014 16:37:16 +0200
+From: James Bond <James.Bond@test.ch>
+To: "'1333321297@ska-arch.opengever.test.ch'"
+ <1333321297@ska-arch.opengever.test.ch>
+Subject: 2013-04-Wartungsgrafiken-GEVER
+Thread-Topic: 2013-04-Wartungsgrafiken-GEVER
+Thread-Index: Ac/Gu2LN/kpfh6SoRyqyfJVSv8hE+g==
+Date: Tue, 2 Sep 2014 14:37:16 +0000
+Message-ID: <940E457DA2D4E149AB12547E2661BB585C13D8@0000exmb15.fake.test.ch>
+Accept-Language: de-CH, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: yes
+X-MS-TNEF-Correlator:
+x-originating-ip: [10.8.101.74]
+Content-Type: multipart/mixed;
+ boundary="_006_940E457DA2D4E149AB12547E2661BB585C13D80000exmb15fake_"
+MIME-Version: 1.0
+
+--_006_940E457DA2D4E149AB12547E2661BB585C13D80000exmb15fake_
+Content-Type: multipart/alternative;
+ boundary="_000_940E457DA2D4E149AB12547E2661BB585C13D80000exmb15fake_"
+
+--_000_940E457DA2D4E149AB12547E2661BB585C13D80000exmb15fake_
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+
+
+Von: Hugo Boss [mailto:damian.Boss@demo.ch]
+Gesendet: Freitag, 5. April 2013 08:28
+An: James Bond
+Betreff: Wartungsgrafiken
+
+
+__________________________________________________________________
+Hugo Boss
+DEMO Informatik AG
+Demostrasse 8
+CH-3012 Bern
+
+Tel.: +41-41-369 67 67
+
+http://www.demo.ch/
+mailto:damian.Boss@demo.ch
+
+Karte<http://map.search.ch/?firma=3Ddemo+informatik+ag>
+
+
+
+
+--_000_940E457DA2D4E149AB12547E2661BB585C13D80000exmb15fake_
+Content-Type: text/html; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
+osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
+xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
+//www.w3.org/TR/REC-html40">
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
+>
+<meta name=3D"Generator" content=3D"Microsoft Word 14 (filtered medium)">
+<style><!--
+/* Font Definitions */
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:Tahoma;
+	panose-1:2 11 6 4 3 5 4 4 2 4;}
+/* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";}
+a:link, span.MsoHyperlink
+	{mso-style-priority:99;
+	color:blue;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{mso-style-priority:99;
+	color:purple;
+	text-decoration:underline;}
+p.emailquote, li.emailquote, div.emailquote
+	{mso-style-name:emailquote;
+	mso-margin-top-alt:auto;
+	margin-right:0cm;
+	mso-margin-bottom-alt:auto;
+	margin-left:1.0pt;
+	border:none;
+	padding:0cm;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";}
+span.E-MailFormatvorlage18
+	{mso-style-type:personal-reply;
+	font-family:"Arial","sans-serif";
+	font-variant:normal !important;
+	color:windowtext;
+	text-transform:none;
+	font-weight:normal;
+	font-style:normal;
+	text-decoration:none none;
+	vertical-align:baseline;}
+.MsoChpDefault
+	{mso-style-type:export-only;
+	font-size:10.0pt;}
+@page WordSection1
+	{size:612.0pt 792.0pt;
+	margin:70.85pt 70.85pt 2.0cm 70.85pt;}
+div.WordSection1
+	{page:WordSection1;}
+--></style><!--[if gte mso 9]><xml>
+<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
+</xml><![endif]--><!--[if gte mso 9]><xml>
+<o:shapelayout v:ext=3D"edit">
+<o:idmap v:ext=3D"edit" data=3D"1" />
+</o:shapelayout></xml><![endif]-->
+</head>
+<body lang=3D"DE-CH" link=3D"blue" vlink=3D"purple">
+<div class=3D"WordSection1">
+<p class=3D"MsoNormal"><span style=3D"font-size:10.0pt;font-family:&quot;Ar=
+ial&quot;,&quot;sans-serif&quot;"><o:p>&nbsp;</o:p></span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:10.0pt;font-family:&quot;Ar=
+ial&quot;,&quot;sans-serif&quot;"><o:p>&nbsp;</o:p></span></p>
+<div>
+<div style=3D"border:none;border-top:solid #B5C4DF 1.0pt;padding:3.0pt 0cm =
+0cm 0cm">
+<p class=3D"MsoNormal"><b><span lang=3D"DE" style=3D"font-size:10.0pt;font-=
+family:&quot;Tahoma&quot;,&quot;sans-serif&quot;">Von:</span></b><span lang=
+=3D"DE" style=3D"font-size:10.0pt;font-family:&quot;Tahoma&quot;,&quot;sans=
+-serif&quot;"> Hugo Boss [mailto:damian.Boss@demo.ch]
+<br>
+<b>Gesendet:</b> Freitag, 5. April 2013 08:28<br>
+<b>An:</b> James Bond<br>
+<b>Betreff:</b> Wartungsgrafiken<o:p></o:p></span></p>
+</div>
+</div>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11.0pt;font-family:&quot;Ca=
+libri&quot;,&quot;sans-serif&quot;">&nbsp;</span><span style=3D"font-size:1=
+0.0pt;font-family:&quot;Arial&quot;,&quot;sans-serif&quot;"><o:p></o:p></sp=
+an></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:10.0pt;font-family:&quot;Ar=
+ial&quot;,&quot;sans-serif&quot;">_________________________________________=
+_________________________<o:p></o:p></span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:10.0pt;font-family:&quot;Ar=
+ial&quot;,&quot;sans-serif&quot;">Hugo Boss<o:p></o:p></span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:10.0pt;font-family:&quot;Ar=
+ial&quot;,&quot;sans-serif&quot;">DEMO Informatik AG<o:p></o:p></span><=
+/p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:10.0pt;font-family:&quot;Ar=
+ial&quot;,&quot;sans-serif&quot;">Demostrasse 8<o:p></o:p></span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:10.0pt;font-family:&quot;Ar=
+ial&quot;,&quot;sans-serif&quot;">CH-3012 Bern<o:p></o:p></span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:10.0pt;font-family:&quot;Ar=
+ial&quot;,&quot;sans-serif&quot;">&nbsp;<o:p></o:p></span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:10.0pt;font-family:&quot;Ar=
+ial&quot;,&quot;sans-serif&quot;">Tel.: &#43;41-41-369 67 67<o:p></o:p></sp=
+an></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:10.0pt;font-family:&quot;Ar=
+ial&quot;,&quot;sans-serif&quot;">&nbsp;<o:p></o:p></span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:10.0pt;font-family:&quot;Ar=
+ial&quot;,&quot;sans-serif&quot;"><a href=3D"http://www.demo.ch/">http:=
+//www.demo.ch/</a>&nbsp;&nbsp;
+<o:p></o:p></span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:10.0pt;font-family:&quot;Ar=
+ial&quot;,&quot;sans-serif&quot;"><a href=3D"mailto:damian.Boss@demo=
+.ch">mailto:damian.Boss@demo.ch</a><o:p></o:p></span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:10.0pt;font-family:&quot;Ar=
+ial&quot;,&quot;sans-serif&quot;">&nbsp;<o:p></o:p></span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11.0pt;font-family:&quot;Ca=
+libri&quot;,&quot;sans-serif&quot;"><a href=3D"http://map.search.ch/?firma=
+=3Ddemo&#43;informatik&#43;ag"><span style=3D"font-size:10.0pt;font-fam=
+ily:&quot;Arial&quot;,&quot;sans-serif&quot;">Karte</span></a></span><span =
+style=3D"font-size:10.0pt;font-family:&quot;Arial&quot;,&quot;sans-serif&qu=
+ot;"><o:p></o:p></span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11.0pt;font-family:&quot;Ca=
+libri&quot;,&quot;sans-serif&quot;">&nbsp;</span><span style=3D"font-size:1=
+0.0pt;font-family:&quot;Arial&quot;,&quot;sans-serif&quot;"><o:p></o:p></sp=
+an></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11.0pt;font-family:&quot;Ca=
+libri&quot;,&quot;sans-serif&quot;">&nbsp;</span><span style=3D"font-size:1=
+0.0pt;font-family:&quot;Arial&quot;,&quot;sans-serif&quot;"><o:p></o:p></sp=
+an></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11.0pt;font-family:&quot;Ca=
+libri&quot;,&quot;sans-serif&quot;">&nbsp;</span><span style=3D"font-size:1=
+0.0pt;font-family:&quot;Arial&quot;,&quot;sans-serif&quot;"><o:p></o:p></sp=
+an></p>
+</div>
+</div>
+</body>
+</html>

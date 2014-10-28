@@ -5,6 +5,9 @@ Changelog
 4.0.2 (unreleased)
 ------------------
 
+- Mail Download: Convert LF to CRLF, to avoid displaing problems in MS Outlook.
+  [phgross]
+
 - Fixed UnicodeEncodeError in task link generation.
   [phgross]
 
