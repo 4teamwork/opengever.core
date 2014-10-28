@@ -26,4 +26,11 @@
         layer="opengever.base.interfaces.IOpengeverBaseLayer"
         />
 
+    <browser:page
+        name="download"
+        for="ftw.mail.mail.IMail"
+        class=".download.MailDownload"
+        permission="zope2.View"
+        />
+
 </configure>

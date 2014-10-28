@@ -29,6 +29,10 @@ class DocumentishDownload(Download):
         set_attachment_content_disposition(self.request, self.filename,
                                            named_file)
         notify(FileCopyDownloadedEvent(self.context))
+
+        return self.stream_data(named_file)
+
+    def stream_data(self, named_file):
         return stream_data(named_file)
 
 
