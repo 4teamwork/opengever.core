@@ -41,6 +41,18 @@ class IDeploymentDirective(Interface):
         default=u'localhost',
         required=True)
 
+    mail_from_address = TextLine(
+        title=u'Mail from address',
+        description=u'E-Mail address used as Plone-Site sender address',
+        default=u'noreply@opengever.4teamwork.ch',
+        required=True)
+
+    is_default = Bool(
+        title=u'Is Default',
+        description=u'Whether this option should be pre-selected in setup.',
+        default=False,
+        required=True)
+
 
 def register_ldap(context, **kwargs):
     title = kwargs.get('title')

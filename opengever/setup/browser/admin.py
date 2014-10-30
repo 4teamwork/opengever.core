@@ -109,7 +109,7 @@ class CreateOpengeverClient(BrowserView):
         client_registry = getUtility(IDeploymentConfigurationRegistry)
         config = client_registry.get_deployment(policy_id)
 
-        is_development_setup = form['dev_mode']
+        is_development_setup = form.get('dev_mode', False)
         if is_development_setup:
             self.request['unit_creation_dev_mode'] = True
 
@@ -204,9 +204,9 @@ class CreateOpengeverClient(BrowserView):
         registry = getUtility(IRegistry)
         proxy = registry.forInterface(IMailSettings)
         proxy.mail_domain = config['mail_domain'].decode('utf-8')
-        mail_from_address = self.get_mail_from_address()
-        site.manage_changeProperties({'email_from_address': mail_from_address,
-                                      'email_from_name': client_id})
+        site.manage_changeProperties(
+            {'email_from_address': config['mail_from_address'],
+             'email_from_name': client_id})
 
         # set global Member role for the client users group
         # site.acl_users.portal_role_manager.assignRoleToPrincipal(
@@ -254,12 +254,3 @@ class CreateOpengeverClient(BrowserView):
                 getattr(base, 'metadata').drop_all(session.bind)
             except NoReferencedTableError:
                 pass
-
-    def get_mail_from_address(self):
-        email_from_address = 'noreply@opengever.4teamwork.ch'
-        for ep in get_entry_points('email_from_address'):
-            module = ep.load()
-            if getattr(module, 'EMAIL_FROM_ADDRESS', None):
-                email_from_address = getattr(module, 'EMAIL_FROM_ADDRESS')
-
-        return email_from_address
