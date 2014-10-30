@@ -1,12 +1,13 @@
 from opengever.setup.directives import deployment_directive
+from opengever.setup.directives import ldap_directive
 from zope.interface import Interface
 from zope.schema import Bool
 from zope.schema import TextLine
 
 
-def register_deployment(_context, **kwargs):
+def register_deployment(context, **kwargs):
     title = kwargs.get('title')
-    _context.action(title, deployment_directive, (title, ), kw=kwargs)
+    context.action(title, deployment_directive, (title, ), kw=kwargs)
 
 
 class IDeploymentDirective(Interface):
@@ -40,7 +41,26 @@ class IDeploymentDirective(Interface):
         default=u'localhost',
         required=True)
 
+
+def register_ldap(context, **kwargs):
+    title = kwargs.get('title')
+    context.action(title, ldap_directive, (title, ), kw=kwargs)
+
+
+class ILDAPDirective(Interface):
+
+    title = TextLine(
+        title=u'Plone Deployment title',
+        description=u'Displayed in deployment selection dropdown.',
+        required=True)
+
+    ldap_profile = TextLine(
+        title=u'Base Profile',
+        description=u'Profile id of LDAP configuration profile',
+        required=True)
+
     is_default = Bool(
         title=u'Is Default',
+        description=u'Whether this option should be pre-selected in setup.',
         default=False,
         required=True)

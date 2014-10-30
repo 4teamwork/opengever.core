@@ -5,15 +5,10 @@ from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.sync.ogds_updater import sync_ogds
 from opengever.ogds.base.utils import create_session
 from opengever.ogds.models import BASE
-from opengever.ogds.models.admin_unit import AdminUnit
-from opengever.ogds.models.group import Group
-from opengever.ogds.models.org_unit import OrgUnit
-from opengever.ogds.models.user import User
 from opengever.setup import DEVELOPMENT_USERS_GROUP
 from opengever.setup.interfaces import IDeploymentConfigurationRegistry
+from opengever.setup.interfaces import ILDAPConfigurationRegistry
 from opengever.setup.ldap_creds import configure_ldap_credentials
-from opengever.setup.utils import get_entry_points
-from opengever.setup.utils import get_ldap_configs
 from plone.app.controlpanel.language import ILanguageSelectionSchema
 from plone.registry.interfaces import IRegistry
 from Products.CMFPlone.browser.admin import AddPloneSite
@@ -65,10 +60,10 @@ class AddOpengeverClient(AddPloneSite):
         return base_url + '?x=' + str(datetime.now())
 
     def get_ldap_profiles(self):
-        """Returns a list of (name, profile) of ldap GS profiles. They are
-        registerd as entrypoints.
+        """Returns a list of (name, profile) of ldap GS profiles.
         """
-        return get_ldap_configs()
+        ldap_registry = getUtility(ILDAPConfigurationRegistry)
+        return ldap_registry.list_ldaps()
 
     def get_deployment_options(self):
         client_registry = getUtility(IDeploymentConfigurationRegistry)

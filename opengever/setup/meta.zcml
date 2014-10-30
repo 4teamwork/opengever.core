@@ -9,4 +9,11 @@
         handler=".meta.register_deployment"
         />
 
+    <meta:directive
+        namespace="http://namespaces.zope.org/opengever"
+        name="registerLDAP"
+        schema=".meta.ILDAPDirective"
+        handler=".meta.register_ldap"
+        />
+
 </configure>

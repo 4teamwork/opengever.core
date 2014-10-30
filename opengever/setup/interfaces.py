@@ -15,3 +15,16 @@ class IDeploymentConfigurationRegistry(Interface):
 
     def list_deployments():
         """Returns a list of deployment titles."""
+
+
+class ILDAPConfigurationRegistry(Interface):
+
+    def update_ldaps(id, ident, attr):
+        """Update or add a LDAP configuration in the registry."""
+
+    def get_ldap(ident):
+        """Returns the ldap configuration (a dict) for the given
+        identifier."""
+
+    def list_ldaps():
+        """Returns a list of ldap titles."""

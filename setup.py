@@ -137,10 +137,6 @@ setup(name='opengever.core',
       [zopectl.command]
       sync_ogds = opengever.ogds.base:sync_ogds_zopectl_handler
 
-      [opengever.setup]
-      ldap = opengever.examplecontent
-      policies = opengever.examplecontent
-
       [izug.basetheme]
       version = opengever.core
       """,
