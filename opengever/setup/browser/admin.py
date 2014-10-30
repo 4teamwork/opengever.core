@@ -1,3 +1,4 @@
+from AccessControl.interfaces import IRoleManager
 from datetime import datetime
 from ftw.mail.interfaces import IMailSettings
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
@@ -8,7 +9,8 @@ from opengever.ogds.models.admin_unit import AdminUnit
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.org_unit import OrgUnit
 from opengever.ogds.models.user import User
-from opengever.setup.interfaces import IClientConfigurationRegistry
+from opengever.setup import DEVELOPMENT_USERS_GROUP
+from opengever.setup.interfaces import IDeploymentConfigurationRegistry
 from opengever.setup.ldap_creds import configure_ldap_credentials
 from opengever.setup.utils import get_entry_points
 from opengever.setup.utils import get_ldap_configs
@@ -24,7 +26,6 @@ from zope.component import getAdapter
 from zope.component import getUtility
 from zope.publisher.browser import BrowserView
 import App.config
-import json
 import opengever.globalindex.model
 
 
@@ -52,22 +53,16 @@ class AddOpengeverClient(AddPloneSite):
     def __call__(self):
         return self.index()
 
+    def server_port(self):
+        return self.request.get('SERVER_PORT')
+
     def javascript_src_url(self):
         """returns the url to the javascript. This makes it possible to
         change the URL in debug mode.
         """
 
         base_url = '/++resource++addclient.js'
-        if 1:
-            return base_url + '?x=' + str(datetime.now())
-        else:
-            base_url
-
-    def server_port(self):
-        return self.request.get('SERVER_PORT')
-
-    def get_default_mail_domain(self):
-        return self.request.get('SERVER_NAME')
+        return base_url + '?x=' + str(datetime.now())
 
     def get_ldap_profiles(self):
         """Returns a list of (name, profile) of ldap GS profiles. They are
@@ -75,20 +70,9 @@ class AddOpengeverClient(AddPloneSite):
         """
         return get_ldap_configs()
 
-    def get_policy_options(self):
-        """Returns the options for selecting the policy.
-        """
-
-        client_registry = getUtility(IClientConfigurationRegistry)
-        return client_registry.list_policies()
-
-    def get_policy_defaults(self):
-        """Returns the policy defaults for use in javascript.
-        """
-
-        client_registry = getUtility(IClientConfigurationRegistry)
-        return 'var policy_configs = %s;' % json.dumps(
-            list(client_registry.get_policies()), indent=2)
+    def get_deployment_options(self):
+        client_registry = getUtility(IDeploymentConfigurationRegistry)
+        return client_registry.list_deployments()
 
     def get_ogds_config(self):
         """Returns the DSN URL for the OGDS DB connection currently being
@@ -127,29 +111,45 @@ class CreateOpengeverClient(BrowserView):
         session = create_session()
 
         policy_id = form['policy']
-        client_registry = getUtility(IClientConfigurationRegistry)
-        config = client_registry.get_policy(policy_id)
+        client_registry = getUtility(IDeploymentConfigurationRegistry)
+        config = client_registry.get_deployment(policy_id)
 
-        # drop sql tables
-        if form.get('first') and config.get('purge_sql'):
+        is_development_setup = form['dev_mode']
+        if is_development_setup:
+            self.request['unit_creation_dev_mode'] = True
+
+        self.prepare_sql(form, session)
+        site = self.setup_plone_site(config)
+
+        self.setup_ldap(site, form)
+        self.import_ldap_users(site, form)
+        self.configure_admin_unit(config)
+        self.install_policy_profile(site, config)
+        self.configure_plone_site(site, form, config)
+        self.install_additional_profiles(site, config)
+
+        if is_development_setup:
+            self.configure_development_options(site)
+
+    def prepare_sql(self, form, session):
+        if form.get('purge_sql'):
             self.drop_sql_tables(session)
 
+    def setup_plone_site(self, config):
         ext_profiles = list(EXTENSION_PROFILES)
-        if config.get('base_profile'):
-            ext_profiles.append(config.get('base_profile'))
+        ext_profiles.append(config['base_profile'])
 
-        # create plone site
-        site = addPloneSite(
+        return addPloneSite(
             self.context,
-            form['client_id'],
-            title=form['title'],
+            config['admin_unit_id'].encode('utf-8'),
+            title=config['title'],
             profile_id=_DEFAULT_PROFILE,
             extension_ids=ext_profiles,
             setup_content=False,
             default_language=config.get('language', 'de-ch'),
         )
 
-        # ldap
+    def setup_ldap(self, site, form):
         stool = getToolByName(site, 'portal_setup')
         if form.get('ldap'):
             stool = getToolByName(site, 'portal_setup')
@@ -183,128 +183,73 @@ class CreateOpengeverClient(BrowserView):
             plugins.movePluginsUp(IPropertiesPlugin, ('ldap',))
             plugins.movePluginsUp(IPropertiesPlugin, ('ldap',))
 
-        if form.get('first') and form.get('import_users'):
-            print '===== SYNC LDAP ===='
-            # Import LDAP users and groups
-            sync_ogds(site)
+    def import_ldap_users(self, site, form):
+        if not form.get('import_users'):
+            return
 
-        if form.get('configsql'):
-            # register the client in the ogds
-            # is the client already configured? -> delete it
-            clients = session.query(OrgUnit).filter_by(
-                unit_id=form['client_id']).all()
-            if clients:
-                session.delete(clients[0])
+        print '===== SYNC LDAP ===='
+        # Import LDAP users and groups
+        sync_ogds(site)
 
-            # groups must exist
-            users_groups = session.query(Group).filter_by(
-                groupid=form['group'])
-            inbox_groups = session.query(Group).filter_by(
-                groupid=form['inbox_group'])
+    def configure_admin_unit(self, config):
+        registry = getUtility(IRegistry)
+        proxy = registry.forInterface(IAdminUnitConfiguration)
+        proxy.current_unit_id = config['admin_unit_id'].decode('utf-8')
 
-            try:
-                users_group = users_groups[0]
-            except IndexError:
-                raise SetupError("User group '%s' could not be found." %
-                                 form['group'])
+    def install_policy_profile(self, site, config):
+        # import the defaul generic setup profiles if needed
+        policy_profile = config.get('policy_profile')
+        stool = getToolByName(site, 'portal_setup')
+        stool.runAllImportStepsFromProfile(
+            'profile-%s' % policy_profile)
 
-            try:
-                inbox_group = inbox_groups[0]
-            except IndexError:
-                raise SetupError("Inbox group '%s' could not be found." %
-                                 form['inbox_group'])
-
-            active = bool(form.get('active'))
-
-            admin_unit = AdminUnit(
-                form['client_id'],
-                enabled=active,
-                title=form['title'],
-                abbreviation=form['title'],
-                ip_address=form['ip_address'],
-                site_url=form['site_url'],
-                public_url=form['public_url'],
-            )
-
-            registry = getUtility(IRegistry)
-            proxy = registry.forInterface(IAdminUnitConfiguration)
-            proxy.current_unit_id = form['client_id'].decode('utf-8')
-
-            client = OrgUnit(form['client_id'],
-                             enabled=active,
-                             title=form['title'],
-                             admin_unit=admin_unit)
-
-            client.users_group = users_group
-            client.inbox_group = inbox_group
-
-            session.add(admin_unit)
-            session.add(client)
-
-        # create the admin user in the ogds if he not exist
-        # and add it to the specified user_group
-        # so we avoid a constraintError in the choice fields
-
-        if session.query(User).filter_by(userid=ADMIN_USER_ID).count() == 0:
-            og_admin_user = User(ADMIN_USER_ID, firstname='OG',
-                                 lastname='Administrator', active=True)
-            session.add(og_admin_user)
-        else:
-            og_admin_user = session.query(User).filter_by(
-                userid=ADMIN_USER_ID).first()
-            og_admin_user.active = True
-
-        users_group = session.query(Group).filter_by(
-            groupid=form['group']).first()
-
-        if og_admin_user not in users_group.users:
-            users_group.users.append(og_admin_user)
-
+    def configure_plone_site(self, site, form, config):
         # set the mail domain in the registry
-        client_id = form['client_id'].decode('utf-8')
+        client_id = config['title']  # XXX
         registry = getUtility(IRegistry)
         proxy = registry.forInterface(IMailSettings)
-        proxy.mail_domain = form['mail_domain'].decode('utf-8')
+        proxy.mail_domain = config['mail_domain'].decode('utf-8')
         mail_from_address = self.get_mail_from_address()
         site.manage_changeProperties({'email_from_address': mail_from_address,
                                       'email_from_name': client_id})
 
         # set global Member role for the client users group
-        site.acl_users.portal_role_manager.assignRoleToPrincipal(
-            'Member', form['group'])
+        # site.acl_users.portal_role_manager.assignRoleToPrincipal(
+        #     'Member', form['group'])
 
         # set global Member role for readers group
-        if form['reader_group']:
+        if form.get('reader_group'):
             site.acl_users.portal_role_manager.assignRoleToPrincipal(
                 'Member', form['reader_group'])
 
         # set Role Manager role for rolemanager group
-        if form['rolemanager_group']:
+        if form.get('rolemanager_group'):
             site.acl_users.portal_role_manager.assignRoleToPrincipal(
                 'Role Manager', form['rolemanager_group'])
 
-        # provide the repository root for opengever.setup:default
-        repository_root = config.get('repository_root')
-        if repository_root:
-            self.request.set('repository_root', repository_root)
-
-        # import the defaul generic setup profiles if needed
-        stool = getToolByName(site, 'portal_setup')
-        for profile in config.get('additional_profiles', ()):
-            stool.runAllImportStepsFromProfile('profile-%s' % profile)
-
         # set the site title
-        site.manage_changeProperties(title=form['title'])
+        site.manage_changeProperties(title=config['title'])
 
         # REALLY set the language - the plone4 addPloneSite is really
         # buggy with languages.
         langCP = getAdapter(site, ILanguageSelectionSchema)
         langCP.default_language = 'de-ch'
 
-        # the og_admin_user is not longer used so we set him to inactive
-        og_admin_user.active = False
+    def install_additional_profiles(self, site, config):
+        # import the defaul generic setup profiles if needed
+        additional_profiles = config.get('additional_profiles')
+        stool = getToolByName(site, 'portal_setup')
+        if additional_profiles:
+            for additional_profile in additional_profiles:
+                stool.runAllImportStepsFromProfile(
+                    'profile-%s' % additional_profile)
 
-        return 'ok'
+    def configure_development_options(self, site):
+        for obj in site.listFolderContents():
+            if IRoleManager.providedBy(obj):
+                obj.manage_addLocalRoles(
+                    DEVELOPMENT_USERS_GROUP,
+                    ["Contributor", "Editor", "Reader"])
 
     def drop_sql_tables(self, session):
         """Drops sql tables, usually when creating the first client

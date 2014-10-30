@@ -10,7 +10,7 @@
   <head>
     <meta http-equiv="content-type" content="text/html;charset=utf-8" />
 
-    <title i18n:translate="">Create a Opengever client</title>
+    <title i18n:translate="">Deploy OneGov GEVER</title>
 
     <link rel="stylesheet" type="text/css"
           href="/++resource++plone-admin-ui.css" />
@@ -19,43 +19,44 @@
             src="/++resource++opengever.setup-jquery.min.js">
     </script>
 
-    <script type="text/javascript" language="javascript"
-            tal:content="view/get_policy_defaults">
-    </script>
-
     <style type="text/css">
       #header {
-      background-color: #006FBA;
-      position: absolute;
-      top: 0px;
-      left: 0px;
-      width: 100%;
-      height: 60px;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 80px;
       }
 
       #logo {
-      width: 35em;
-      margin: 10px auto;
+        width: 35em;
+        margin: 10px auto;
+      }
+
+      #separator {
+        width: 99%;
+        margin: auto auto;
+        border-bottom: 5px solid #00616c;
       }
 
       h1 {
-      margin-top: 80px;
+        margin-top: 100px;
       }
 
       #default_client_config_scheme {
-      display: none;
+        display: none;
       }
 
       .client_config {
-      margin-bottom: 1em;
-      border-bottom: 1px dotted grey;
+        margin-bottom: 1em;
+        border-bottom: 1px dotted grey;
       }
 
       dt {
-      float: left;
-      width: 10em;
-      text-align: right;
-      padding-right: 1em;
+        float: left;
+        width: 10em;
+        text-align: right;
+        padding-right: 1em;
       }
 
       input[type=text] {
@@ -63,22 +64,34 @@
       }
 
       .complete {
-      display: none;
+        display: none;
       }
 
       .spinner {
-      position: relative;
-      top: -9em;
-      left: 15em;
+        position: relative;
+        top: -9em;
+        left: 15em;
       }
 
       .policy_warnings li {
-      color: red;
+        color: red;
       }
 
       .dbinfo {
           font-size: 130%;
           margin-top: 0;
+      }
+
+      fieldset.config {
+        width: 100%;
+      }
+
+      form {
+        width: 50em;
+      }
+
+      .backlink {
+        font-size: .9em;
       }
     </style>
 
@@ -95,18 +108,16 @@
 
     <div id="header">
       <div id="logo">
-        <img src="/++resource++opengever-logo.png" />
+        <img src="/++resource++onegovgever.jpeg" />
       </div>
+      <div id="separator"></div>
     </div>
 
-
-    <h1 i18n:translate="">Create an Opengever client</h1>
-
-    <a href="/manage_main">Manage</a>
+    <h1 i18n:translate="">Deploy OneGov GEVER</h1>
 
     <form action="#"
           method="post"
-          tal:attributes="action string:${context/absolute_url}/@@opengever-addclient"
+          tal:attributes="action string:${context/absolute_url}/@@opengever-create-client"
           tal:define="profiles view/profiles;
                       base_profiles profiles/base;
                       default_profile profiles/default;
@@ -117,59 +128,38 @@
         <legend i18n:translate="">Installation configuration</legend>
 
         <div class="field">
-          <label for="amount_of_clients" i18n:translate="">
-            Amount of clients
-          </label>
-
-
-          <div class="formHelp" i18n:translate="">
-            How many clients (=plone sites) do you want to install?
-          </div>
-
-          <input type="range" name="amount_of_clients" id="amount_of_clients"
-                 value="2" min="0" max="10" />
-          <span id="clients_display"></span>
-
-        </div>
-
-        <div class="field">
           <label for="policy" i18n:translate="">Policy profile</label>
-
           <div class="formHelp"></div>
-
           <select name="policy">
-            <option tal:repeat="item view/get_policy_options"
+            <option tal:repeat="item view/get_deployment_options"
                     tal:content="item"
                     tal:attributes="value item;
-                                    selected python:repeat['item'].index == 0 and 'selected' or ''">
+                                    selected python:'selected' if repeat['item'].index == 0 else ''">
             </option>
           </select>
-
-          <ul class="policy_warnings">
-          </ul>
-        </div>
-
-        <div>
-            <strong>OGDS database configuration</strong>
-            <pre class="dbinfo" tal:content="view/get_ogds_config"></pre>
-        </div>
-
-        <div>
-            <strong>ZODB database configuration</strong>
-            <pre class="dbinfo" tal:content="view/get_zodb_config"></pre>
         </div>
 
         <div class="field">
+          <div>
+              <strong>ZODB database configuration</strong>
+              <pre class="dbinfo" tal:content="view/get_zodb_config"></pre>
+          </div>
+
+          <div>
+              <strong>OGDS database configuration</strong>
+              <pre class="dbinfo" tal:content="view/get_ogds_config"></pre>
+          </div>
+        </div>
+
+        <div class="field" id="ldap_profile_selector">
           <label for="ldap" i18n:translate="">LDAP configuration profile</label>
-
           <div class="formHelp"></div>
-
           <select name="ldap">
             <option value="" i18n:translate="">- skip LDAP -</option>
             <option tal:repeat="item view/get_ldap_profiles"
                     tal:content="python:item[0]"
                     tal:attributes="value python:item[1];
-                                    selected python:repeat['item'].index == 0 and 'selected' or ''">
+                                    selected python:'selected' if repeat['item'].index == 0 else ''">
             </option>
           </select>
         </div>
@@ -178,91 +168,47 @@
           <label for="import_users" i18n:translate="">
             Import LDAP-users into OGDS
           </label>
-
           <div class="formHelp"></div>
-
           <input type="checkbox" name="import_users:boolean"
                  id="import_users" />
-
           <span i18n:translate="" class="import_users_label">
             Import users from LDAP into OGDS?
           </span>
         </div>
 
       </fieldset>
+      <fieldset class="config">
+        <legend i18n:translate="">Development options</legend>
 
-
-
-
-
-      <fieldset class="clients">
-        <legend i18n:translate="">Clients configuration</legend>
-
-        <input type="checkbox" name="use_subdomains" id="use_subdomains" />
-        <label for="use_subdomains">Use subdomains</label>
-
-        <div id="clients_config">
-          <strong> --- loading jQuery --- </strong>
+        <div class="field">
+          <label for="dev_mode" i18n:translate="">
+            Development mode
+          </label>
+          <div class="formHelp"></div>
+          <input type="checkbox" name="dev_mode:boolean"
+                 id="dev_mode" />
+          <span i18n:translate="" class="dev_mode_label">
+            Use "og_demo-ftw_users" group for OrgUnits and local role configuration
+          </span>
         </div>
 
-        <div id="default_client_config_scheme">
-          <div class="client_config">
-            <strong class="client_id"></strong>
-            <span class="info"></span><br />
-            <dl>
-              <dt>Active</dt>
-              <dd>
-                  <input type="checkbox" name="clients.active:boolean"
-                         value="1" />
-                  <span>Set client as 'active' in OGDS</span>
-              </dd>
-              <dt>Local Roles</dt>
-              <dd>
-                  <input type="checkbox" name="clients.local_roles:boolean"
-                         value="1" />
-                  <span>Set default local roles on repositoryroot </span>
-              </dd>
-              <dt>Client ID</dt>
-              <dd>
-                <input type="hidden" name="clients.index:records"
-                       value="-1" />
-                <input type="text" name="clients.client_id:records"
-                       value="mandant%(i)" />
-                <input type="button" class="update_client_id" value="Update"/>
-              </dd>
-              <dt>Title</dt>
-              <dd><input type="text" name="clients.title:records" /></dd>
-              <dt>SQL</dt>
-              <dd>
-                <input type="checkbox" name="clients.configsql:records"
-                       value="1" checked="checked"/>
-                <span>Configure client in SQL</span>
-              </dd>
-              <dt>IP address</dt>
-              <dd><input type="text" name="clients.ip_address:records" /></dd>
-              <dt>Internal site URL</dt>
-              <dd><input type="text" name="clients.site_url:records" /></dd>
-              <dt>Public site URL</dt>
-              <dd><input type="text" name="clients.public_url:records" /></dd>
-              <dt>Users group</dt>
-              <dd><input type="text" name="clients.group:records" /></dd>
-              <dt>Inbox users group</dt>
-              <dd><input type="text" name="clients.inbox_group:records" /></dd>
-              <dt>Reader users group</dt>
-              <dd><input type="text" name="clients.reader_group:records" /></dd>
-              <dt>Rolemanager group</dt>
-              <dd><input type="text" name="clients.rolemanager_group:records" /></dd>
-              <dt>Mail domain</dt>
-              <dd><input type="text" name="clients.mail_domain:records" /></dd>
-            </dl>
-          </div>
+        <div class="field">
+          <label for="purge_sql" i18n:translate="">
+            Purge SQL
+          </label>
+          <div class="formHelp"></div>
+          <input type="checkbox" name="purge_sql:boolean"
+                 id="purge_sql" />
+          <span i18n:translate="" class="purge_sql_label">
+            Purge SQL completely before setup
+          </span>
         </div>
 
       </fieldset>
 
+
       <fieldset class="complete">
         <div>Installation completed.</div>
-
         <input type="button" class="open_first_client"
                value="Open first client" />
       </fieldset>
@@ -272,8 +218,8 @@
         <input type="hidden" name="form.submitted:boolean" value="True" />
         <input type="submit" name="submit" value="Setup opengever"
                i18n:attributes="value;" />
+        <a class="backlink" href="/manage_main">back to Manage</a>
       </div>
-
     </form>
   </body>
 </html>
