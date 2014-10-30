@@ -10,6 +10,8 @@ ORG_UNIT_FILENAME = 'org_units.json'
 
 LOCAL_ROLE_CONFIGURATION_FOLDER_NAME = 'local_role_configuration'
 
+REPOSITORY_FILENAME = 'repository.xlsx'
+
 
 class BaseSetupHandler(object):
 
@@ -60,7 +62,37 @@ class UnitCreation(BaseSetupHandler):
             OrgUnitCreator().run(jsonfile)
 
 def opengever_content(setup):
+    repository(setup)
     local_role_configuration(setup)
+
+
+
+def repository(setup):
+    files = setup.listDirectory(setup._profile_path)
+    if REPOSITORY_FILENAME not in files:
+        return
+
+    Repository(setup).install_repository()
+
+
+class Repository(object):
+
+    file_name = REPOSITORY_FILENAME
+
+    def __init__(self, setup):
+        self.setup = setup
+        self.path = os.path.join(setup._profile_path,
+                                 self.file_name).encode('utf-8')
+        assert os.path.isfile(self.path)
+        request = api.portal.get().REQUEST
+
+        self.is_development_setup = request.get(
+            'unit_creation_dev_mode', False)
+
+    def install_repository(self):
+        transmogrifier = Transmogrifier(self.setup.getSite())
+        transmogrifier(u'opengever.setup.repository',
+                       xlssource=dict(filename=self.path))
 
 
 def local_role_configuration(setup):
