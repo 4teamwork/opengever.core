@@ -22,6 +22,7 @@ from zope.component import getUtility
 from zope.publisher.browser import BrowserView
 import App.config
 import opengever.globalindex.model
+import os
 
 
 SQL_BASES = (BASE, opengever.globalindex.model.Base)
@@ -38,14 +39,13 @@ EXTENSION_PROFILES = (
     'plonetheme.sunburst:default',
 )
 
-ADMIN_USER_ID = 'ogadmin'
-
 
 class AddOpengeverClient(AddPloneSite):
 
     default_extension_profiles = EXTENSION_PROFILES
 
     def __call__(self):
+        self.is_development_mode = os.environ.get('IS_DEVELOPMENT_MODE', False)
         return self.index()
 
     def server_port(self):

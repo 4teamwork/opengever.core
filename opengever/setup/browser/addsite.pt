@@ -93,6 +93,10 @@
       .backlink {
         font-size: .9em;
       }
+
+      body {
+        color: #32444a;
+      }
     </style>
 
     <script type="text/javascript" language="javascript"
@@ -170,7 +174,8 @@
           </label>
           <div class="formHelp"></div>
           <input type="checkbox" name="import_users:boolean"
-                 id="import_users" />
+                 id="import_users"
+                 tal:attributes="checked python:'checked' if view.is_development_mode else ''"/>
           <span i18n:translate="" class="import_users_label">
             Import users from LDAP into OGDS?
           </span>
@@ -186,7 +191,8 @@
           </label>
           <div class="formHelp"></div>
           <input type="checkbox" name="dev_mode:boolean"
-                 id="dev_mode" />
+                 id="dev_mode"
+                 tal:attributes="checked python:'checked' if view.is_development_mode else ''"/>
           <span i18n:translate="" class="dev_mode_label">
             Use "og_demo-ftw_users" group for OrgUnits and local role configuration
           </span>
@@ -198,7 +204,8 @@
           </label>
           <div class="formHelp"></div>
           <input type="checkbox" name="purge_sql:boolean"
-                 id="purge_sql" />
+                 id="purge_sql"
+                 tal:attributes="checked python:'checked' if view.is_development_mode else ''"/>
           <span i18n:translate="" class="purge_sql_label">
             Purge SQL completely before setup
           </span>
