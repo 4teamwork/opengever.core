@@ -19,13 +19,6 @@
       />
 
   <transmogrifier:registerConfig
-      name="opengever.setup.local_roles_with_repo"
-      title="opengever.setup: load local roles (with local roles on repositoryroot)"
-      description=""
-      configuration="cfgs/local_roles_with_repo.cfg"
-      />
-
-  <transmogrifier:registerConfig
       name="opengever.setup.templates"
       title="Opengever Setup Templates Import"
       description="Pipeline configuration for Opengever Setup import"

@@ -16,4 +16,12 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <genericsetup:registerProfile
+        name="localroles"
+        title="opengever.setup.tests:localroles"
+        directory="profiles/localroles"
+        description=""
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
 </configure>
