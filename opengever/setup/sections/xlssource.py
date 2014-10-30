@@ -79,8 +79,10 @@ class XlsSource(object):
                            ) and is_empty(cell):
                     continue
 
-                if key == 'reference_number' and not isinstance(cell, basestring):
-                    raise Exception("Reference number has to be string: %s" % cell)
+                if key == 'reference_number' and not isinstance(cell,
+                                                                basestring):
+                    raise Exception("Reference number"
+                                    " has to be string: %s" % cell)
 
                 if key in ('valid_from', 'valid_until') and is_empty(cell):
                     cell = None
@@ -168,20 +170,21 @@ def tupledate_to_isodate(tupledate):
     nonzero = lambda n: n != 0
     date = "%04d-%02d-%02d" % (y, m, d) if filter(nonzero,
                                                   (y, m, d)) else ''
-    time = "T%02d:%02d:%02d" % (hh, mm, ss) if filter(nonzero, (hh, mm, ss)) or not date else ''
+    time = "T%02d:%02d:%02d" % (hh, mm, ss) if filter(nonzero, (hh, mm, ss)) \
+        or not date else ''
     return date+time
 
 
 def format_excelval(book, type, value, wanttupledate):
     """ Clean up the incoming excel data """
-    ##  Data Type Codes:
-    ##  EMPTY   0
-    ##  TEXT    1 a Unicode string
-    ##  NUMBER  2 float
-    ##  DATE    3 float
-    ##  BOOLEAN 4 int; 1 means TRUE, 0 means FALSE
-    ##  ERROR   5
-    #returnrow = []
+    #  Data Type Codes:
+    #  EMPTY   0
+    #  TEXT    1 a Unicode string
+    #  NUMBER  2 float
+    #  DATE    3 float
+    #  BOOLEAN 4 int; 1 means TRUE, 0 means FALSE
+    #  ERROR   5
+    # returnrow = []
     if type == 2:  # TEXT
         if value == int(value):
             value = int(value)
