@@ -1,5 +1,6 @@
 from opengever.setup.directives import deployment_directive
 from zope.interface import Interface
+from zope.schema import Bool
 from zope.schema import TextLine
 
 
@@ -37,4 +38,9 @@ class IDeploymentDirective(Interface):
     mail_domain = TextLine(
         title=u'Mail domain',
         default=u'localhost',
+        required=True)
+
+    is_default = Bool(
+        title=u'Is Default',
+        default=False,
         required=True)

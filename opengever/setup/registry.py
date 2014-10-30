@@ -15,7 +15,13 @@ class DeploymentConfigurationRegistry(object):
             self.deployments[ident] = attr
 
     def list_deployments(self):
-        return self.deployments.keys()
+        results = []
+        for key, values in self.deployments.items():
+            if values['is_default']:
+                results.insert(0, key)
+            else:
+                results.append(key)
+        return results
 
     def get_deployment(self, ident):
         return self.deployments.get(ident)
