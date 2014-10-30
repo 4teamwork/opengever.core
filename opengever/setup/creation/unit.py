@@ -11,8 +11,9 @@ class UnitCreator(object):
     required_attributes = tuple()
     key_mapping = {}
 
-    def __init__(self):
+    def __init__(self, is_development=False):
         self.session = create_session()
+        self.is_development = is_development
 
     def get_json_data(self, jsonfile):
         data = json.loads(jsonfile.read())
@@ -22,9 +23,14 @@ class UnitCreator(object):
 
     def run(self, jsonfile):
         for item in self.get_json_data(jsonfile):
+            if self.is_development:
+                self.apply_development_config(item)
             self.check_constraints(item)
             self.apply_key_mapping(item)
             self.create_unit(item)
+
+    def apply_development_config(self, item):
+        pass
 
     def apply_key_mapping(self, item):
         for key, new_key in self.key_mapping.items():

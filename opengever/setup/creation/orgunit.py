@@ -1,5 +1,6 @@
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models.org_unit import OrgUnit
+from opengever.setup import DEVELOPMENT_USERS_GROUP
 from opengever.setup.creation.unit import UnitCreator
 from opengever.setup.exception import GeverSetupException
 
@@ -12,6 +13,10 @@ class OrgUnitCreator(UnitCreator):
                            'admin_unit_id',
                            'users_group_id',
                            'inbox_group_id')
+
+    def apply_development_config(self, item):
+        item['users_group_id'] = DEVELOPMENT_USERS_GROUP
+        item['inbox_group_id'] = DEVELOPMENT_USERS_GROUP
 
     def check_constraints(self, item):
         super(OrgUnitCreator, self).check_constraints(item)
