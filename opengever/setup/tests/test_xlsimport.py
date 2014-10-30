@@ -1,7 +1,9 @@
-from unittest2 import TestCase
+from opengever.setup.sections.xlssource import is_toplevel_repositoryfolder
+from opengever.setup.sections.xlssource import is_empty
 from opengever.setup.sections.xlssource import XlsSource
-import os.path
+from unittest2 import TestCase
 import opengever.setup.tests
+import os.path
 
 
 class TextXLSImport(TestCase):
@@ -98,3 +100,41 @@ class TextXLSImport(TestCase):
     def test_responsible_org_unit_is_imported(self):
         self.assertEquals('EinAmt',
                           self.source[1]['responsible_org_unit'])
+
+    def test_top_level_repofolder_check(self):
+        self.assertTrue(is_toplevel_repositoryfolder(self.source[1]))
+        self.assertTrue(is_toplevel_repositoryfolder(self.source[4]))
+        self.assertFalse(is_toplevel_repositoryfolder(self.source[0]))
+        self.assertFalse(is_toplevel_repositoryfolder(self.source[2]))
+
+    def test_global_defaults_are_applied(self):
+        default = self.source[4]
+
+        self.assertEquals('unprotected',
+                          default['classification'])
+        self.assertEquals('privacy_layer_no',
+                          default['privacy_layer'])
+        self.assertEquals('unchecked',
+                          default['public_trial'])
+        self.assertEquals(10,
+                          default['retention_period'])
+        self.assertEquals('unchecked',
+                          default['archival_value'])
+        self.assertEquals(30,
+                          default['custody_period'])
+        self.assertEquals('2010-10-01',
+                          default['valid_from'])
+        self.assertEquals('2030-10-30',
+                          default['valid_until'])
+
+        # and check that those are not applied on children
+        # remove the empty values for comparison
+        for key in self.source[5].keys():
+            if is_empty(self.source[5][key]):
+                del self.source[5][key]
+
+        self.assertEquals(sorted([u'reference_number',
+                                  '_type',
+                                  u'effective_title',
+                                  u'addable_dossier_types']),
+                          sorted(self.source[5].keys()))

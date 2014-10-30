@@ -5,6 +5,9 @@ Changelog
 4.0.2 (unreleased)
 ------------------
 
+- Fix default values import from repository.xls.
+  [lknoepfel]
+
 - Fixed UnicodeEncodeError in task link generation.
   [phgross]
 

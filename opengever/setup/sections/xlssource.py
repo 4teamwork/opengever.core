@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from zope.interface import classProvides, implements
-from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.interfaces import ISection
+from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.utils import resolvePackageReferenceOrFile
+from zope.interface import classProvides, implements
 import xlrd
 
 
@@ -53,18 +53,21 @@ class XlsSource(object):
         keys = sheet_data[0]
         del sheet_data[0]
 
+        reporoot = {}
+
         for rownum, row in enumerate(sheet_data):
             data = {}
             # repofolder or reporoot
             if rownum == 0:
                 data['_type'] = u'opengever.repository.repositoryroot'
+                reporoot = data
             else:
                 data['_type'] = u'opengever.repository.repositoryfolder'
 
             for colnum, cell in enumerate(row):
                 key = keys[colnum]
 
-                if key in (None, '', u''):
+                if is_empty(key):
                     continue
 
                 if key in ('classification',
@@ -73,13 +76,15 @@ class XlsSource(object):
                            'retention_period',
                            'custody_period',
                            'archival_value',
-                           ) and cell in (None, '', u''):
+                           ) and is_empty(cell):
                     continue
 
-                if key == 'reference_number' and not isinstance(cell, basestring):
-                    raise Exception("Reference number has to be string: %s" % cell)
+                if key == 'reference_number' and not isinstance(cell,
+                                                                basestring):
+                    raise Exception("Reference number"
+                                    " has to be string: %s" % cell)
 
-                if key in ('valid_from', 'valid_until') and cell in ('', u''):
+                if key in ('valid_from', 'valid_until') and is_empty(cell):
                     cell = None
 
                 if key == 'addable_dossier_types':
@@ -97,7 +102,32 @@ class XlsSource(object):
 
                 data[key] = cell
 
+            # set default values on top-level repofolders
+            if is_toplevel_repositoryfolder(data):
+                default_value_keys = ['classification',
+                                      'privacy_layer',
+                                      'public_trial',
+                                      'retention_period',
+                                      'archival_value',
+                                      'custody_period',
+                                      'valid_from',
+                                      'valid_until']
+
+                for key in default_value_keys:
+                    if (key not in data or is_empty(data[key])) and \
+                            key in reporoot and not is_empty(reporoot[key]):
+                        data[key] = reporoot[key]
+
             yield data
+
+
+def is_empty(val):
+    return val in (None, '', u'')
+
+
+def is_toplevel_repositoryfolder(obj):
+    return obj['_type'] == u'opengever.repository.repositoryfolder' and \
+        '.' not in obj['reference_number']
 
 
 # Some of the following parts are based on
@@ -140,20 +170,21 @@ def tupledate_to_isodate(tupledate):
     nonzero = lambda n: n != 0
     date = "%04d-%02d-%02d" % (y, m, d) if filter(nonzero,
                                                   (y, m, d)) else ''
-    time = "T%02d:%02d:%02d" % (hh, mm, ss) if filter(nonzero, (hh, mm, ss)) or not date else ''
+    time = "T%02d:%02d:%02d" % (hh, mm, ss) if filter(nonzero, (hh, mm, ss)) \
+        or not date else ''
     return date+time
 
 
 def format_excelval(book, type, value, wanttupledate):
     """ Clean up the incoming excel data """
-    ##  Data Type Codes:
-    ##  EMPTY   0
-    ##  TEXT    1 a Unicode string
-    ##  NUMBER  2 float
-    ##  DATE    3 float
-    ##  BOOLEAN 4 int; 1 means TRUE, 0 means FALSE
-    ##  ERROR   5
-    #returnrow = []
+    #  Data Type Codes:
+    #  EMPTY   0
+    #  TEXT    1 a Unicode string
+    #  NUMBER  2 float
+    #  DATE    3 float
+    #  BOOLEAN 4 int; 1 means TRUE, 0 means FALSE
+    #  ERROR   5
+    # returnrow = []
     if type == 2:  # TEXT
         if value == int(value):
             value = int(value)
