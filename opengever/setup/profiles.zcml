@@ -16,7 +16,33 @@
 
   <profilehook:hook
       profile="opengever.setup:default"
-      handler=".hooks.installed"
+      handler=".hooks.default_installed"
+      />
+
+  <genericsetup:registerProfile
+      name="default_content"
+      title="opengever.setup: default_content"
+      directory="profiles/default_content"
+      description="Setup default content."
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <profilehook:hook
+      profile="opengever.setup:default_content"
+      handler=".hooks.default_content_installed"
+      />
+
+  <genericsetup:registerProfile
+      name="repository_root"
+      title="opengever.setup: repository_root"
+      directory="profiles/repository_root"
+      description="Setup default repository root."
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <profilehook:hook
+      profile="opengever.setup:repository_root"
+      handler=".hooks.repository_root_installed"
       />
 
 </configure>

@@ -1,0 +1,12 @@
+[
+    {
+        "_path": "folder",
+        "_ac_local_roles": {
+            "somebody": [
+                "Contributor",
+                "Editor",
+                "Reader"
+            ]
+        }
+    }
+]
