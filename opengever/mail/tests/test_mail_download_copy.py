@@ -10,6 +10,7 @@ from zope.i18n import translate
 
 
 MAIL_DATA = resource_string('opengever.mail.tests', 'mail.txt')
+MAIL_DATA_LF = resource_string('opengever.mail.tests', 'mail_lf.txt')
 
 
 class TestMailDownloadCopy(FunctionalTestCase):
@@ -26,7 +27,7 @@ class TestMailDownloadCopy(FunctionalTestCase):
 
         self.assertDictContainsSubset({
             'status': '200 Ok',
-            'content-length': str(len(MAIL_DATA)),
+            'content-length': str(len(browser.contents)),
             'content-type': 'message/rfc822',
             'content-disposition': 'attachment; filename="testmail.eml"'},
             browser.headers)
@@ -54,3 +55,13 @@ class TestMailDownloadCopy(FunctionalTestCase):
 
         self.assertEquals(u'Download copy',
                           translate(action['title']))
+
+    @browsing
+    def test_mail_download_converts_lf_to_crlf(self, browser):
+        mail = create(Builder("mail").with_message(MAIL_DATA_LF))
+        browser.login().visit(mail, view='tabbedview_view-overview')
+        browser.find('Download copy').click()
+
+        self.assertTrue(
+            browser.contents.startswith('Return-Path: <James.Bond@test.ch>\r\n'),
+            'Lineendings are not converted correctly.')
