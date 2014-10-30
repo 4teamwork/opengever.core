@@ -1,6 +1,7 @@
 from collective.transmogrifier.transmogrifier import Transmogrifier
 from opengever.setup.creation.adminunit import AdminUnitCreator
 from opengever.setup.creation.orgunit import OrgUnitCreator
+from plone import api
 import os
 
 
@@ -9,6 +10,10 @@ ADMIN_UNIT_FILENAME = 'admin_units.json'
 ORG_UNIT_FILENAME = 'org_units.json'
 
 LOCAL_ROLE_CONFIGURATION_FOLDER_NAME = 'local_role_configuration'
+
+TEMPLATES_FOLDER_NAME = 'document_templates'
+
+DEVELOP_USERS_GROUP = 'og_demo-ftw_users'
 
 REPOSITORY_FILENAME = 'repository.xlsx'
 
@@ -55,16 +60,37 @@ class UnitCreation(BaseSetupHandler):
 
     def create_admin_units(self, path):
         with open(path) as jsonfile:
-            AdminUnitCreator().run(jsonfile)
+            AdminUnitCreator(
+                is_development=self.is_development_setup).run(jsonfile)
 
     def create_org_units(self, path):
         with open(path) as jsonfile:
-            OrgUnitCreator().run(jsonfile)
+            OrgUnitCreator(
+                is_development=self.is_development_setup).run(jsonfile)
+
 
 def opengever_content(setup):
+    templates(setup)
     repository(setup)
     local_role_configuration(setup)
 
+
+def templates(setup):
+    data = setup.isDirectory(TEMPLATES_FOLDER_NAME)
+    if not data:
+        return
+
+    Templates(setup).install_templates()
+
+
+class Templates(BaseSetupHandler):
+
+    folder_name = TEMPLATES_FOLDER_NAME
+
+    def install_templates(self):
+        transmogrifier = Transmogrifier(self.setup.getSite())
+        transmogrifier(u'opengever.setup.templates',
+                       jsonsource=dict(directory=self.path))
 
 
 def repository(setup):
