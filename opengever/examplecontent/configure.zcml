@@ -52,4 +52,9 @@
         admin_unit_id="demo"
         />
 
+    <opengever:registerLDAP
+        title="4teamwork LDAP"
+        ldap_profile="opengever.examplecontent:4teamwork-ldap"
+        />
+
 </configure>
