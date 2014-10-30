@@ -5,13 +5,6 @@
     i18n_domain="opengever.setup">
 
   <transmogrifier:registerConfig
-      name="opengever.setup.various"
-      title="opengever.setup: various default contents"
-      description=""
-      configuration="cfgs/various.cfg"
-      />
-
-  <transmogrifier:registerConfig
       name="opengever.setup.local_roles"
       title="opengever.setup: load local roles"
       description=""
@@ -33,23 +26,8 @@
       />
 
   <utility
-      component=".sections.file.NamedFileCreatorSection"
-      name="opengever.setup.filesection.namedfilecreator"
-      />
-
-  <utility
       component=".sections.xlssource.XlsSource"
       name="opengever.setup.xlssource"
-      />
-
-  <utility
-      component=".sections.rolessource.JSONRolesSourceSection"
-      name="opengever.setup.rolessource.jsonrolessourcesection"
-      />
-
-  <utility
-      component=".sections.caster.EmptystringCasterSection"
-      name="opengever.setup.emptystrincaster"
       />
 
   <utility
