@@ -100,4 +100,13 @@
         directory="profiles/4002"
         />
 
+    <!-- 4002 -> 4003 -->
+    <upgrade-step:importProfile
+        title="Add Inboxcontainer type"
+        profile="opengever.inbox:default"
+        source="4002"
+        destination="4003"
+        directory="profiles/4003"
+        />
+
 </configure>

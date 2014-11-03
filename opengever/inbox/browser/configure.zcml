@@ -12,11 +12,10 @@
           />
 
     <browser:page
-        name="tabbed_view"
-        for="opengever.inbox.inbox.IInbox"
-        class=".tabbed.InboxTabbedView"
+        name="view"
+        for="opengever.inbox.container.IInboxContainer"
+        class=".view.InboxContainerView"
         permission="zope2.View"
-        allowed_attributes="listing select_all reorder setgridstate set_default_tab"
         />
 
 </configure>

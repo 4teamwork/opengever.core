@@ -14,6 +14,9 @@
 
         <type type_id="opengever.inbox.yearfolder">
         </type>
+        <type type_id="opengever.inbox.container">
+            <bound-workflow workflow_id="opengever_inbox_workflow"/>
+        </type>
 
     </bindings>
 

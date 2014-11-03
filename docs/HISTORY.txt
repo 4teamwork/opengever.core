@@ -5,6 +5,9 @@ Changelog
 4.0.3 (unreleased)
 ------------------
 
+- Add new type Inbox Container.
+  [phgross]
+
 - Task byline: Use adminUnit abbreviation instead of label for sequence_number display.
   [phgross]
 

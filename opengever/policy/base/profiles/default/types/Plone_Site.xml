@@ -6,5 +6,6 @@
   <element value="opengever.dossier.templatedossier"/>
   <element value="opengever.repository.repositoryroot"/>
   <element value="opengever.inbox.inbox"/>
+  <element value="opengever.inbox.container"/>
  </property>
 </object>
