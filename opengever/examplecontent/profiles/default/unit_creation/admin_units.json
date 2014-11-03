@@ -1,0 +1,10 @@
+[
+  {
+    "unit_id": "admin1",
+    "title": "Admin Unit 1",
+    "ip_address": "127.0.0.1",
+    "site_url": "http://localhost:8080/admin1",
+    "public_url": "http://localhost:8080/admin1",
+    "abbreviation": "A1"
+  }
+]

@@ -8,48 +8,11 @@
     <include file="profiles.zcml" />
     <include package=".upgrades" />
 
-    <include package="collective.transmogrifier" file="meta.zcml" />
-    <include package="collective.transmogrifier" />
-    <include package="plone.app.transmogrifier" />
-
-    <transmogrifier:registerConfig
-        name="opengever.examplecontent.repository"
-        title="Opengever ExampleContent Repositorysystem Import"
-        description="Pipeline configuration for Opengever Examplecontent import"
-        configuration="cfgs/repository.cfg"
-        />
-
-    <transmogrifier:registerConfig
-        name="opengever.examplecontent.various"
-        title="Opengever ExampleContent various Import"
-        description="Pipeline configuration for Opengever Examplecontent import"
-        configuration="cfgs/various.cfg"
-        />
-
-    <transmogrifier:registerConfig
-        name="opengever.examplecontent.users"
-        title="Opengever ExampleContent Users Import"
-        description="Pipeline configuration for Opengever Examplecontent import"
-        configuration="cfgs/users.cfg"
-        />
-
-    <transmogrifier:registerConfig
-        name="opengever.examplecontent.contacts"
-        title="Opengever ExampleContent Contacts Import"
-        description="Pipeline configuration for Opengever Examplecontent import"
-        configuration="cfgs/contacts.cfg"
-        />
-
-    <!-- sections -->
-    <utility
-        component=".jsonsource.JSONSourceSection"
-        name="opengever.examplecontent.jsonsource.jsonsourcesection"
-        />
-
     <opengever:registerDeployment
         title="Development with examplecontent"
-        policy_profile="opengever.examplecontent:developer"
-        admin_unit_id="demo"
+        policy_profile="opengever.examplecontent:default"
+        additional_profiles="opengever.setup:repository_root,opengever.setup:default_content,opengever.examplecontent:init"
+        admin_unit_id="admin1"
         />
 
     <opengever:registerLDAP

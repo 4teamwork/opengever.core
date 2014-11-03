@@ -1,4 +1,0 @@
-_path,_type,salutation,firstname,lastname,email,phone_office,phone_mobile,company,function
-/kontakte/hanspeter-walter,opengever.contact.contact,Herr,Hanspeter,Walter,hwalter@walter.ch,063 331 38 33,079 667 52 87,Kanzlei Walter und Co.,Rechtsanwalt
-/kontakte/james-bond,opengever.contact.contact,Herr,James,Bond,james@bond.com,063 561 38 33,079 879 52 87,Geheimdienst,007
-/kontakte/josef-anton,opengever.contact.contact,Herr,Josef,Anton,josef-anton@bauerlagier.ch,026 331 38 33,079 667 88 87,Bauer lagier,Chef

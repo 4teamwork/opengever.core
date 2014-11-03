@@ -1,0 +1,32 @@
+[
+    {
+        "_path": "/vorlagen/template-1",
+        "_type": "opengever.document.document",
+        "title": "Leeres Word-Dokument",
+        "file:file": "templates/neu.doc"
+    },
+    {
+        "_path": "/vorlagen/template-2",
+        "_type": "opengever.document.document",
+        "title": "Leere Excel-Tabelle",
+        "file:file": "templates/neu.xls"
+    },
+    {
+        "_path": "/vorlagen/template-3",
+        "_type": "opengever.document.document",
+        "title": "Leere Powerpoint Präsentation",
+        "file:file": "templates/neu.ppt"
+    },
+    {
+        "_path": "/vorlagen/template-4",
+        "_type": "opengever.document.document",
+        "title": "Powerpoint Präsentation CD allgemein",
+        "file:file": "templates/allgemein.ppt"
+    },
+    {
+        "_path": "/vorlagen/template-5",
+        "_type": "opengever.document.document",
+        "title": "Powerpoint Präsentation CD technisch",
+        "file:file": "templates/technisch.ppt"
+    }
+]

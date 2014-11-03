@@ -1,0 +1,19 @@
+[
+  {
+    "_path": "/ordnungssystem/fuehrung/kommunikation-und-oeffentlichkeitsarbeit/dossier-1",
+    "_type": "opengever.dossier.businesscasedossier",
+    "title": "Hugo's Dossier",
+    "_children": [
+      {
+        "_id": "dossier-2",
+        "_type": "opengever.dossier.businesscasedossier",
+        "title": "Unterteilung in ein Subdossier"
+      },
+      {
+        "_id": "document-1",
+        "_type": "opengever.document.document",
+        "title": "Ein kleines Testdocument"
+      }
+    ]
+  }
+]

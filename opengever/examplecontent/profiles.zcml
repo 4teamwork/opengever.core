@@ -5,10 +5,18 @@
     i18n_domain="opengever.examplecontent">
 
   <genericsetup:registerProfile
-      name="developer"
-      title="opengever.examplecontent: Developer"
+      name="default"
+      title="opengever.examplecontent: Default"
       directory="profiles/default"
       description="create example content for developing "
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <genericsetup:registerProfile
+      name="init"
+      title="opengever.examplecontent: init"
+      directory="profiles/init"
+      description="initialize example content for developing "
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
@@ -18,11 +26,6 @@
       directory="profiles/4teamwork-ldap"
       description="4teamwork LDAP configuration"
       provides="Products.GenericSetup.interfaces.EXTENSION"
-      />
-
-  <profilehook:hook
-      profile="opengever.examplecontent:developer"
-      handler=".hooks.installed"
       />
 
 </configure>
