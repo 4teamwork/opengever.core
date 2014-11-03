@@ -203,3 +203,6 @@ msgstr ""
 
 msgid "tasktemplatefolders"
 msgstr ""
+
+msgid "closed-forwardings"
+msgstr ""

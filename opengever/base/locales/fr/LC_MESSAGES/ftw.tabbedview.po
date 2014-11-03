@@ -65,6 +65,9 @@ msgstr "Heures à facturer"
 msgid "changes"
 msgstr "Dernières modifications"
 
+msgid "closed-forwardings"
+msgstr "Transmissions fermé"
+
 msgid "contacts"
 msgstr "Contacts"
 
@@ -202,4 +205,3 @@ msgstr "Corbeille"
 
 msgid "users"
 msgstr "OGDS"
-
