@@ -53,6 +53,18 @@ class IDeploymentDirective(Interface):
         default=False,
         required=True)
 
+    reader_group = TextLine(
+        title=u'Reader group',
+        required=False)
+
+    rolemanager_group = TextLine(
+        title=u'Rolemanager group',
+        required=False)
+
+    administrator_group = TextLine(
+        title=u'Administrator group',
+        required=False)
+
 
 def register_ldap(context, **kwargs):
     title = kwargs.get('title')

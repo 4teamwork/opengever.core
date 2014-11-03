@@ -223,12 +223,26 @@ class CreateOpengeverClient(BrowserView):
                 'Role Manager', form['rolemanager_group'])
 
         # set the site title
-        site.manage_changeProperties(title=config['title'])
+        site.manage_changeProperties(title=site_title)
+
+        self.assign_group_to_role(site, config, 'reader_group', 'Member')
+        self.assign_group_to_role(site, config,
+                                  'rolemanager_group', 'Role Manager')
+        self.assign_group_to_role(site, config,
+                                  'administrator_group', 'Administrator')
 
         # REALLY set the language - the plone4 addPloneSite is really
         # buggy with languages.
         langCP = getAdapter(site, ILanguageSelectionSchema)
         langCP.default_language = 'de-ch'
+
+    def assign_group_to_role(self, site, config, group_name_key, role_name):
+        group_name = config.get(group_name_key)
+        if not group_name:
+            return
+
+        site.acl_users.portal_role_manager.assignRoleToPrincipal(
+            role_name, group_name)
 
     def install_additional_profiles(self, site, config):
         # import the defaul generic setup profiles if needed
