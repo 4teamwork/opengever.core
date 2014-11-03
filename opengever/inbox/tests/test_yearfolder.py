@@ -10,27 +10,27 @@ class TestYearFolderGetter(FunctionalTestCase):
     def setUp(self):
         super(TestYearFolderGetter, self).setUp()
 
-        self.main_inbox = create(Builder('inbox'))
+        self.inbox_container = create(Builder('inbox_container'))
         self.client1_inbox = create(Builder('inbox')
-                                    .within(self.main_inbox)
+                                    .within(self.inbox_container)
                                     .having(responsible_org_unit='client1'))
         self.client2_inbox = create(Builder('inbox')
-                                    .within(self.main_inbox)
+                                    .within(self.inbox_container)
                                     .having(responsible_org_unit='client2'))
 
         self.current_year = unicode(date.today().year)
 
     def test_returns_yearfolder_of_the_current_year(self):
         yearfolder = create(Builder('yearfolder')
-                            .within(self.main_inbox)
+                            .within(self.client1_inbox)
                             .having(id=self.current_year))
 
         self.assertEquals(self.current_year, yearfolder.getId())
         self.assertEquals(yearfolder,
-                          get_current_yearfolder(inbox=self.main_inbox))
+                          get_current_yearfolder(inbox=self.client1_inbox))
 
     def test_creates_yearfolder_of_the_current_year_when_not_exists(self):
-        yearfolder = get_current_yearfolder(inbox=self.main_inbox)
+        yearfolder = get_current_yearfolder(inbox=self.client1_inbox)
 
         self.assertEquals(self.current_year, yearfolder.getId())
         self.assertEquals('Closed {}'.format(self.current_year),
