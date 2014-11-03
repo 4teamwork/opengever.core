@@ -4,16 +4,16 @@
 
     <browser:page
           for="OFS.interfaces.IApplication"
-          name="opengever-addclient"
-          class=".admin.AddOpengeverClient"
+          name="gever-add-deployment"
+          class=".admin.AddDeployment"
           permission="zope2.ViewManagementScreens"
           template="addsite.pt"
           />
 
     <browser:page
           for="OFS.interfaces.IApplication"
-          name="opengever-create-client"
-          class=".admin.CreateOpengeverClient"
+          name="gever-create-deployment"
+          class=".admin.CreateDeployment"
           permission="zope2.ViewManagementScreens"
           />
 

@@ -43,15 +43,6 @@
         margin-top: 100px;
       }
 
-      #default_client_config_scheme {
-        display: none;
-      }
-
-      .client_config {
-        margin-bottom: 1em;
-        border-bottom: 1px dotted grey;
-      }
-
       dt {
         float: left;
         width: 10em;
@@ -100,10 +91,6 @@
     </style>
 
     <script type="text/javascript" language="javascript"
-            tal:content="string:var server_port = ${view/server_port};">
-    </script>
-
-    <script type="text/javascript" language="javascript"
             tal:attributes="src view/javascript_src_url">
     </script>
 
@@ -121,7 +108,7 @@
 
     <form action="#"
           method="post"
-          tal:attributes="action string:${context/absolute_url}/@@opengever-create-client"
+          tal:attributes="action string:${context/absolute_url}/@@gever-create-deployment"
           tal:define="profiles view/profiles;
                       base_profiles profiles/base;
                       default_profile profiles/default;
@@ -135,7 +122,7 @@
           <label for="policy" i18n:translate="">Policy profile</label>
           <div class="formHelp"></div>
           <select name="policy">
-            <option tal:repeat="item view/get_deployment_options"
+            <option tal:repeat="item view/get_deployment_profiles"
                     tal:content="item"
                     tal:attributes="value item;
                                     selected python:'selected' if repeat['item'].index == 0 else ''">
@@ -212,14 +199,6 @@
         </div>
 
       </fieldset>
-
-
-      <fieldset class="complete">
-        <div>Installation completed.</div>
-        <input type="button" class="open_first_client"
-               value="Open first client" />
-      </fieldset>
-
 
       <div class="formControls">
         <input type="hidden" name="form.submitted:boolean" value="True" />
