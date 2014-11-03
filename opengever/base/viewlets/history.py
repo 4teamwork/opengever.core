@@ -45,6 +45,7 @@ class DocumentContentHistoryViewlet(content.ContentHistoryViewlet):
         return dc_helper.get_html_tag(
             self.context.absolute_url(),
             url_extension="?version_id=%s" % version_id,
-            additional_classes=['standalone', 'function-download-copy'])
+            additional_classes=['standalone', 'function-download-copy'],
+            viewname='download_file_version')
 
     update = content.ContentHistoryViewlet.update

@@ -122,17 +122,18 @@ class DownloadConfirmationHelper(object):
         dictstorage.set(key, str(True))
         self.invalidate_is_active()
 
-    def get_html_tag(self, file_url, additional_classes=[], url_extension=''):
+    def get_html_tag(self, file_url, additional_classes=[], url_extension='',
+                     viewname='download'):
         if self.is_active():
+            viewname ='file_download_confirmation'
             clazz = 'link-overlay {0}'.format(' '.join(additional_classes))
-            url = '{0}/file_download_confirmation{1}'.format(
-                file_url, url_extension)
         else:
             clazz = ' '.join(additional_classes)
-            url = '{0}/download{1}'.format(file_url, url_extension)
-        label = translate(_(u'label_download_copy',
-                          default='Download copy'),
+
+        url = '{0}/{1}{2}'.format(file_url, viewname, url_extension)
+        label = translate(_(u'label_download_copy', default='Download copy'),
                           context=self.request).encode('utf-8')
+
         return '<a href="{0}" class="{1}">{2}</a>'.format(url, clazz, label)
 
     def process_request_form(self):
