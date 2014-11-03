@@ -4,16 +4,12 @@ from opengever.ogds.base.utils import ogds_service
 from opengever.setup.creation.adminunit import AdminUnitCreator
 from opengever.setup.creation.orgunit import OrgUnitCreator
 from opengever.setup.exception import GeverSetupException
-from opengever.testing import MEMORY_DB_LAYER
-from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
+from opengever.testing import FunctionalTestCase
 from StringIO import StringIO
-from unittest import TestCase
 import json
 
 
-class BaseTestUnitCreator(TestCase):
-
-    layer = MEMORY_DB_LAYER
+class BaseTestUnitCreator(FunctionalTestCase):
 
     def setUp(self):
         super(BaseTestUnitCreator, self).setUp()
@@ -24,8 +20,6 @@ class BaseTestUnitCreator(TestCase):
 
 
 class TestAdminUnitCreator(BaseTestUnitCreator):
-
-    layer = OPENGEVER_FUNCTIONAL_TESTING
 
     def create_admin_unit_for(self, data):
         AdminUnitCreator().run(self.as_file(data))
@@ -132,6 +126,16 @@ class TestOrgUnitCreator(BaseTestUnitCreator):
         data = self.data_with_all_required_attrs
         with self.assertRaises(GeverSetupException):
             self.create_org_unit_for(data)
+
+    def test_assignes_users_group_to_member_role(self):
+        create(Builder('admin_unit').id('bar'))
+        create(Builder('ogds_group').id('users'))
+
+        self.create_org_unit_for([self.data_with_all_required_attrs])
+        role_manager = self.portal.acl_users.portal_role_manager
+        assigned_principal_ids = [
+            each[0] for each in role_manager.listAssignedPrincipals('Member')]
+        self.assertIn('users', assigned_principal_ids)
 
     def test_attributes_are_set(self):
         create(Builder('admin_unit').id('admin'))
