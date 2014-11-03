@@ -7,7 +7,7 @@
           name="gever-add-deployment"
           class=".admin.AddDeployment"
           permission="zope2.ViewManagementScreens"
-          template="addsite.pt"
+          template="adddeployment.pt"
           />
 
     <browser:page
@@ -18,17 +18,22 @@
           />
 
     <browser:resource
-          file="onegovgever.jpeg"
+          file="resources/onegovgever.jpeg"
           name="onegovgever.jpeg"
           />
 
     <browser:resource
-          file="jquery.min.js"
+          file="resources/adddeployment.css"
+          name="adddeployment.css"
+          />
+
+    <browser:resource
+          file="resources/jquery.min.js"
           name="opengever.setup-jquery.min.js" />
 
     <browser:resource
-          file="addclient.js"
-          name="addclient.js"
+          file="resources/adddeployment.js"
+          name="adddeployment.js"
           />
 
 </configure>
