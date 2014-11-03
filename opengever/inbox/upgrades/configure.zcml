@@ -109,4 +109,14 @@
         directory="profiles/4003"
         />
 
+    <!-- 4003 -> 4004 -->
+    <genericsetup:upgradeStep
+        title="Convert MainInboxes to a Inboxcontainer"
+        description=""
+        source="4003"
+        destination="4004"
+        handler="opengever.inbox.upgrades.to4004.ConvertMainInboxes"
+        profile="opengever.inbox:default"
+        />
+
 </configure>
