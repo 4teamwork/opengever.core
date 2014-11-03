@@ -65,6 +65,9 @@ msgstr "verrechenb. Std."
 msgid "changes"
 msgstr "Letzte Änderungen"
 
+msgid "closed-forwardings"
+msgstr "Abgeschlossene Weiterleitungen"
+
 msgid "contacts"
 msgstr "Kontakte"
 
@@ -202,4 +205,3 @@ msgstr "Papierkorb"
 
 msgid "users"
 msgstr "OGDS"
-

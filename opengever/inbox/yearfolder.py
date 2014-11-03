@@ -1,6 +1,6 @@
 from datetime import datetime
+from opengever.inbox import _
 from opengever.inbox.utils import get_current_inbox
-from opengever.task import _
 from plone.dexterity.utils import createContentInContainer
 from plone.directives import form
 from zope.i18n import translate
