@@ -9,9 +9,17 @@ import transaction
 
 class TestTaskByline(TestBylineBase):
 
+    use_default_fixture = False
+
     def setUp(self):
         super(TestTaskByline, self).setUp()
         self.intids = getUtility(IIntIds)
+
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture')
+            .with_user()
+            .with_org_unit()
+            .with_admin_unit(abbreviation='c1'))
 
         create(Builder('fixture').with_hugo_boss())
 
@@ -46,6 +54,6 @@ class TestTaskByline(TestBylineBase):
         start_date = self.get_byline_value_by_label('last modified:')
         self.assertEquals('Aug 11, 2011 08:10 PM', start_date.text_content())
 
-    def test_dossier_byline_sequence_number_display(self):
+    def test_dossier_byline_sequence_number_display_is_prefixed_with_admin_unit_abbreviation(self):
         seq_number = self.get_byline_value_by_label('Sequence Number:')
-        self.assertEquals('Client1 1', seq_number.text_content())
+        self.assertEquals('c1 1', seq_number.text_content())
