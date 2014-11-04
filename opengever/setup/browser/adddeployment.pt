@@ -42,13 +42,13 @@
                       extension_profiles profiles/extensions;
                       advanced request/advanced|nothing;">
 
-      <h1 i18n:translate="">Deploy OneGov GEVER</h1>
+      <h1 i18n:translate="">Install OneGov GEVER</h1>
 
       <fieldset class="config">
         <legend i18n:translate="">Installation configuration</legend>
 
         <div class="field">
-          <label for="policy" i18n:translate="">Policy profile</label>
+          <label for="policy" i18n:translate="">Deployment profile</label>
           <div class="formHelp"></div>
           <select name="policy">
             <option tal:repeat="item view/get_deployment_profiles"
@@ -131,7 +131,7 @@
 
       <div class="formControls">
         <input type="hidden" name="form.submitted:boolean" value="True" />
-        <input type="submit" name="submit" value="Setup opengever"
+        <input type="submit" name="submit" value="Install OneGov GEVER"
                i18n:attributes="value;" />
         <a class="backlink" href="/manage_main">back to Manage</a>
       </div>

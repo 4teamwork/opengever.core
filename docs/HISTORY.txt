@@ -2,10 +2,16 @@
 Changelog
 =========
 
-4.0.4 (unreleased)
+4.1.0 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Rewrite gever setup.
+  - Introduce two zcml directives to configure deployments and ldap profiles.
+  - Simplify deloyment form, remove multi-client configuration options.
+  - Update branding, add onegovgever logo.
+  - Add custom setuphandlers for local roles, initial repository and document templates.
+  - Configure development options and add environment variable to enable them easily.
+  [deiferni]
 
 
 4.0.3 (2014-11-10)

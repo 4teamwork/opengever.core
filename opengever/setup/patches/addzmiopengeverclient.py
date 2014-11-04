@@ -7,8 +7,7 @@ ADD_PLONE_SITE_HTML = '''
         action="&dtml-URL1;/@@gever-add-deployment"
         style="text-align: right; margin-top:0.5em; margin-bottom:0em;"
         target="_top">
-    <input type="hidden" name="site_id" value="Plone" />
-    <input type="submit" value="Install Opengever" />
+    <input type="submit" value="Install OneGov GEVER" />
   </form>
 </dtml-if>
 

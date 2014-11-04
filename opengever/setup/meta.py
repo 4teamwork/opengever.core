@@ -74,13 +74,13 @@ def register_ldap(context, **kwargs):
 class ILDAPDirective(Interface):
 
     title = TextLine(
-        title=u'Plone Deployment title',
-        description=u'Displayed in deployment selection dropdown.',
+        title=u'LDAP Deployment title',
+        description=u'Displayed in LDAP selection dropdown.',
         required=True)
 
     ldap_profile = TextLine(
-        title=u'Base Profile',
-        description=u'Profile id of LDAP configuration profile',
+        title=u'LDAP Profile',
+        description=u'Profile id of the LDAP configuration profile',
         required=True)
 
     is_default = Bool(
