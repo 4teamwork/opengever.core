@@ -18,11 +18,8 @@ class TaskByline(BylineBase):
 
     def sequence_number(self):
         sequence = getUtility(ISequenceNumber)
-        return '{} {}'.format(self.get_base_client_id(),
-                              sequence.get_number(self.context))
-
-    def get_base_client_id(self):
-        return get_current_admin_unit().label()
+        return u'{} {}'.format(get_current_admin_unit().abbreviation,
+                               sequence.get_number(self.context))
 
     def get_items(self):
         return [
