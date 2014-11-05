@@ -4,6 +4,9 @@ Changelog
 3.4.2 (unreleased)
 ------------------
 
+- Mail Download: Convert LF to CRLF, to avoid displaing problems in MS Outlook.
+  [phgross]
+
 - Set content-type correctly for ok_response in inter-client functionalities.
   [deiferni]
 
@@ -12,9 +15,6 @@ Changelog
 
 - Use `ftw.profilehook` instead of setuphandlers.
   [deiferni]
-
-  - Make reference_prefix_manager deal properly with already deleted objects.
-    [phgross]
 
 
 3.4.1 (2014-09-03)
