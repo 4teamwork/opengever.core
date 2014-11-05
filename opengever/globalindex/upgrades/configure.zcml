@@ -1,8 +1,10 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:upgrade-step="http://namespaces.zope.org/ftw.upgrade"
     i18n_domain="opengever.globalindex">
 
+    <include package="ftw.upgrade" file="meta.zcml" />
 
     <!-- 1 -> 2601 -->
     <genericsetup:upgradeStep
@@ -71,6 +73,15 @@
         destination="4003"
         handler="opengever.globalindex.upgrades.to4003.AlterSequenceNumberType"
         profile="opengever.globalindex:default"
+        />
+
+    <!-- 4003 -> 4004 -->
+    <upgrade-step:importProfile
+        title="Remove clear_and_rebuild_tasks"
+        profile="opengever.globalindex:default"
+        source="4003"
+        destination="4004"
+        directory="profiles/4004"
         />
 
 </configure>
