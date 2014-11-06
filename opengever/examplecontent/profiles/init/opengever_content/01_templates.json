@@ -1,0 +1,20 @@
+[
+    {
+        "_path": "/vorlagen/template-1",
+        "_type": "opengever.document.document",
+        "title": "Leeres Word-Dokument",
+        "file:file": "templates/word.docx"
+    },
+    {
+        "_path": "/vorlagen/template-2",
+        "_type": "opengever.document.document",
+        "title": "Leere Excel-Tabelle",
+        "file:file": "templates/excel.xlsx"
+    },
+    {
+        "_path": "/vorlagen/template-3",
+        "_type": "opengever.document.document",
+        "title": "Leere Powerpoint Präsentation",
+        "file:file": "templates/powerpoint.pptx"
+    }
+]
