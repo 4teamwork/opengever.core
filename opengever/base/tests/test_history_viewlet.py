@@ -15,6 +15,10 @@ class TestHistoryViewlet(FunctionalTestCase):
             userid=TEST_USER_NAME))
         self.actor = Actor.user(self.user.userid)
 
+    def tearDown(self):
+        DownloadConfirmationHelper().activate()
+        super(TestHistoryViewlet, self).tearDown()
+
     @browsing
     def test_history_viewlet_shows_correct_user_links(self, browser):
         test_doc = create(Builder("document")
