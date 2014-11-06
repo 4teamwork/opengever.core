@@ -11,6 +11,7 @@ from zope.i18n import translate
 
 MAIL_DATA = resource_string('opengever.mail.tests', 'mail.txt')
 MAIL_DATA_LF = resource_string('opengever.mail.tests', 'mail_lf.txt')
+MAIL_DATA_CRLF = resource_string('opengever.mail.tests', 'mail_crlf.txt')
 
 
 class TestMailDownloadCopy(FunctionalTestCase):
@@ -64,4 +65,16 @@ class TestMailDownloadCopy(FunctionalTestCase):
 
         self.assertTrue(
             browser.contents.startswith('Return-Path: <James.Bond@test.ch>\r\n'),
+            'Lineendings are not converted correctly.')
+
+    @browsing
+    def test_mail_download_handles_crlf_correctly(self, browser):
+        """Mails with already CRLF, should not be converted or changed.
+        """
+        mail = create(Builder("mail").with_message(MAIL_DATA_CRLF))
+        browser.login().visit(mail, view='tabbedview_view-overview')
+        browser.find('Download copy').click()
+
+        self.assertTrue(
+            browser.contents.startswith('Return-Path: <James.Bond@example.org>\r\n'),
             'Lineendings are not converted correctly.')

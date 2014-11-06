@@ -19,7 +19,8 @@ class MailDownload(DocumentishDownload):
             for line in _file:
                 if not line.endswith('\r\n'):
                     line = '{}\r\n'.format(line[:-1])
-                    lines.append(line)
+
+                lines.append(line)
 
         return ''.join(lines)
 
