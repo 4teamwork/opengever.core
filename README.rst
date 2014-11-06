@@ -330,7 +330,7 @@ the ``ftw.mail`` inbound view, like Postfix would.
 Deployment
 ----------
 
-The following section describes some aspectes of deploying OneGov GEVER. If you need an example of a simple deployment profile have a look at the examplecontent profiles, see: https://github.com/4teamwork/opengever.core/tree/master/opengever/examplecontent.
+The following section describes some aspects of deploying OneGov GEVER. If you need an example of a simple deployment profile have a look at the examplecontent profiles, see: https://github.com/4teamwork/opengever.core/tree/master/opengever/examplecontent.
 
 
 Setup Wizard
@@ -394,7 +394,7 @@ See https://github.com/4teamwork/opengever.core/blob/master/opengever/setup/meta
 Content creation
 ~~~~~~~~~~~~~~~~
 
-Opengever defines four additional generic setup setuphandlers to create initial `AdminUnit` and `OrgUnit` OGDS entries, install document templates, configure local roles and create an initial repository. Of course ``ftw.inflator`` content creation is available as well, for details see https://github.com/4teamwork/ftw.inflator.
+Opengever defines four additional generic setup setuphandlers to create initial `AdminUnit` and `OrgUnit` OGDS entries, create initial  documents/document templates, configure local roles and create an initial repository. Of course ``ftw.inflator`` content creation is available as well, for details see https://github.com/4teamwork/ftw.inflator.
 
 
 Creating initial AdminUnit/OrgUnit
@@ -433,18 +433,18 @@ OrgUnit example:
   ]
 
 
-Creating document templates
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Creating GEVER specific content
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Document templates are created with a customized ``ftw.inflator`` pipeline since they need special handling to have correct initial file versions. Thus document templates should never be created with ``ftw.inflator`` but always with our customized pipeline.
+Documents and Document templates are created with a customized ``ftw.inflator`` pipeline since they need special handling to have correct initial file versions. Thus documents should never be created with ``ftw.inflator`` but always with our customized pipeline. Since the custom pipeline is based on ``ftw.inflator`` we suggest to create all gever-content with this new pipeline.
 
-To create document templates add a ``document_templates`` folder to your generic setup profile. All JSON files in this folder are then processed similar to ``ftw.inflator``.
+To create content add an ``opengever_content`` folder to your generic setup profile. All JSON files in this folder are then processed similar to ``ftw.inflator``. Note that this setuphandler is called after `ftw.inflator`.
 
 
 Configuring local roles
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-To decouple local role assignment from content creation opengever introduces a separate setuphandler to configure local roles. To configure local roles add a ``local_role_configuration`` folder to your generic setup profile. All JSON files in that folder are then processed.
+To decouple local role assignment from content creation opengever introduces a separate setuphandler to configure local roles. To configure local roles add a ``local_role_configuration`` folder to your generic setup profile. All JSON files in that folder are then processed. Note that this setuphandler is called after `ftw.inflator`.
 
 
 Example configuration:
@@ -468,5 +468,5 @@ Example configuration:
 Creating an initial repository
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Gever repositories are initialized from an excel file. To add initial repository setup add a file ``repository.xlsx`` to your generic setup profile. See https://github.com/4teamwork/opengever.core/blob/master/opengever/examplecontent/profiles/default/repository.xlsx for an example.
+Gever repositories are initialized from an excel file. To add initial repository setup add a file ``repository.xlsx`` to your generic setup profile. See https://github.com/4teamwork/opengever.core/blob/master/opengever/examplecontent/profiles/default/repository.xlsx for an example. Note that this setuphandler is called after `ftw.inflator`.
 

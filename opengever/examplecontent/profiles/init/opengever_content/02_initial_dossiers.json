@@ -1,0 +1,20 @@
+[
+  {
+    "_path": "/ordnungssystem/fuehrung/kommunikation-und-oeffentlichkeitsarbeit/dossier-1",
+    "_type": "opengever.dossier.businesscasedossier",
+    "title": "Jahresdossier 2014",
+    "_children": [
+      {
+        "_id": "dossier-2",
+        "_type": "opengever.dossier.businesscasedossier",
+        "title": "Unterteilung in ein Subdossier"
+      },
+      {
+        "_id": "document-1",
+        "_type": "opengever.document.document",
+        "title": "Jahresdokument",
+        "file:file": "files/subdossier.docx"
+      }
+    ]
+  }
+]

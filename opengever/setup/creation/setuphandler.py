@@ -11,7 +11,7 @@ ORG_UNIT_FILENAME = 'org_units.json'
 
 LOCAL_ROLE_CONFIGURATION_FOLDER_NAME = 'local_role_configuration'
 
-TEMPLATES_FOLDER_NAME = 'document_templates'
+GEVER_CONTENT_FOLDER_NAME = 'opengever_content'
 
 DEVELOP_USERS_GROUP = 'og_demo-ftw_users'
 
@@ -76,20 +76,20 @@ def opengever_content(setup):
 
 
 def templates(setup):
-    data = setup.isDirectory(TEMPLATES_FOLDER_NAME)
+    data = setup.isDirectory(GEVER_CONTENT_FOLDER_NAME)
     if not data:
         return
 
-    Templates(setup).install_templates()
+    GeverContent(setup).install_templates()
 
 
-class Templates(BaseSetupHandler):
+class GeverContent(BaseSetupHandler):
 
-    folder_name = TEMPLATES_FOLDER_NAME
+    folder_name = GEVER_CONTENT_FOLDER_NAME
 
     def install_templates(self):
         transmogrifier = Transmogrifier(self.setup.getSite())
-        transmogrifier(u'opengever.setup.templates',
+        transmogrifier(u'opengever.setup.content',
                        jsonsource=dict(directory=self.path))
 
 

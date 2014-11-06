@@ -12,10 +12,10 @@
       />
 
   <transmogrifier:registerConfig
-      name="opengever.setup.templates"
-      title="Opengever Setup Templates Import"
-      description="Pipeline configuration for Opengever Setup import"
-      configuration="cfgs/templates.cfg"
+      name="opengever.setup.content"
+      title="Opengever Setup Content Import"
+      description="Opengever setup pipeline, works with initial document versions."
+      configuration="cfgs/gever_content.cfg"
       />
 
   <transmogrifier:registerConfig
