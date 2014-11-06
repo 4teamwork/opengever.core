@@ -68,8 +68,7 @@ class AddDeployment(AddPloneSite):
         change the URL in debug mode.
 
         """
-        base_url = '/++resource++adddeployment.js'
-        return base_url + '?x=' + str(datetime.now())
+        return '/++resource++adddeployment.js?x={}'.format(datetime.now())
 
     def get_ldap_profiles(self):
         """Returns a list of (name, profile) of ldap GS profiles.
@@ -87,7 +86,7 @@ class AddDeployment(AddPloneSite):
         """
         session = create_session()
         engine = session.bind
-        return "%s" % engine.url
+        return engine.url
 
     def get_zodb_config(self):
         """Returns information about the ZODB configuration.
@@ -103,11 +102,11 @@ class AddDeployment(AddPloneSite):
             backend_type = adapter_cfg._matcher.type.name
             dsn = adapter_cfg.dsn
             user = adapter_cfg.user
-            db_info = "%s (%s): %s @%s" % (
+            db_info = "{} ({}): {} @{}".format(
                 section_type, backend_type, user, dsn)
         else:
             # blobstorage
-            db_info = "%s" % section_type
+            db_info = section_type
         return db_info
 
 
