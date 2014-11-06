@@ -5,6 +5,9 @@ Changelog
 4.0.3 (unreleased)
 ------------------
 
+- Fixed mail download for mails with already CRLF.
+  [phgross]
+
 - Add new type Inbox Container.
   [phgross]
 
