@@ -100,4 +100,23 @@
         directory="profiles/4002"
         />
 
+    <!-- 4002 -> 4003 -->
+    <upgrade-step:importProfile
+        title="Add Inboxcontainer type"
+        profile="opengever.inbox:default"
+        source="4002"
+        destination="4003"
+        directory="profiles/4003"
+        />
+
+    <!-- 4003 -> 4004 -->
+    <genericsetup:upgradeStep
+        title="Convert MainInboxes to a Inboxcontainer"
+        description=""
+        source="4003"
+        destination="4004"
+        handler="opengever.inbox.upgrades.to4004.ConvertMainInboxes"
+        profile="opengever.inbox:default"
+        />
+
 </configure>

@@ -2,4 +2,5 @@
     <object name="opengever.inbox.inbox" meta_type="Dexterity FTI" />
     <object name="opengever.inbox.forwarding" meta_type="Dexterity FTI" />
     <object name="opengever.inbox.yearfolder" meta_type="Dexterity FTI" />
+    <object name="opengever.inbox.container" meta_type="Dexterity FTI" />
 </object>

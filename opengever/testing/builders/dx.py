@@ -194,3 +194,10 @@ class YearFolderbuilder(DexterityBuilder):
 
 
 builder_registry.register('yearfolder', YearFolderbuilder)
+
+
+class InboxContainerBuilder(DexterityBuilder):
+    portal_type = 'opengever.inbox.container'
+
+
+builder_registry.register('inbox_container', InboxContainerBuilder)
