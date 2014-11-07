@@ -5,9 +5,12 @@ Changelog
 4.0.3 (unreleased)
 ------------------
 
-- Fixed mail download for mails with already CRLF.
+- Forwarding Transitioncontroller: Fixed assign_to_dossier check.
   [phgross]
 
+- Fixed mail download for mails with already CRLF.
+  [phgross]
+  
 - Add new type Inbox Container.
   [phgross]
 

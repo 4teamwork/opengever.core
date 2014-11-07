@@ -64,6 +64,9 @@ class TestAssignToDossierGuard(InboxBaseTransitionGuardTests):
         self.assertTrue(self.controller._is_transition_possible(
             self.transition, False, conditions))
 
+        self.assertTrue(self.controller._is_transition_possible(
+            self.transition, True, conditions))
+        
         conditions.is_responsible = False
         conditions.is_responsible_orgunit_agency_member = True
         self.assertTrue(self.controller._is_transition_possible(
