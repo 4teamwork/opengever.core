@@ -37,12 +37,15 @@ class ForwardingTransitionController(TaskTransitionController):
     def is_assign_to_dossier_or_reassign_possible(self, conditions, include_agency):
         """Check it the user is in the inbox group of the current client.
         """
-        if include_agency:
-            return (conditions.is_assigned_to_current_admin_unit and
-                    conditions.is_responsible_orgunit_agency_member)
 
-        return (conditions.is_assigned_to_current_admin_unit and
-                conditions.is_responsible)
+        if conditions.is_assigned_to_current_admin_unit:
+            if include_agency:
+                return (conditions.is_responsible or
+                        conditions.is_responsible_orgunit_agency_member)
+
+            return conditions.is_responsible
+
+        return False
 
     @action('forwarding-transition-assign-to-dossier')
     def assign_to_dossier_action(self, transition):
