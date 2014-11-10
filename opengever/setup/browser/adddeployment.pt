@@ -50,7 +50,7 @@
         <div class="field">
           <label for="policy" i18n:translate="">Deployment profile</label>
           <div class="formHelp"></div>
-          <select name="policy">
+          <select name="policy" autofocus="autofocus">
             <option tal:repeat="item view/get_deployment_profiles"
                     tal:content="item"
                     tal:attributes="value item;

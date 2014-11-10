@@ -129,7 +129,7 @@ class GeverDeployment(object):
         proxy.current_unit_id = self.config['admin_unit_id'].decode('utf-8')
 
     def install_policy_profile(self):
-        # import the defaul generic setup profiles if needed
+        # import the default generic setup profiles if needed
         policy_profile = self.config.get('policy_profile')
         stool = getToolByName(self.site, 'portal_setup')
         stool.runAllImportStepsFromProfile(

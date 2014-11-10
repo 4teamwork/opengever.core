@@ -1,8 +1,8 @@
 [
   {
-    "unit_id": "org1",
-    "title": "Org Unit 1",
-    "admin_unit_id": "admin1",
+    "unit_id": "stv",
+    "title": "Steuerverwaltung",
+    "admin_unit_id": "fd",
     "users_group_id": "og_demo-ftw_users",
     "inbox_group_id": "og_demo-ftw_users"
   }

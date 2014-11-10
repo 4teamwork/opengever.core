@@ -1,14 +1,14 @@
 [
     {
-        "_path": "/kontakte/hanspeter-walter",
+        "_path": "/kontakte/hanspeter-mueller",
         "_type": "opengever.contact.contact",
         "salutation": "Herr",
         "firstname": "Hanspeter",
-        "lastname": "walter",
+        "lastname": "Müller",
         "email": "hwalter@example.com",
         "phone_office": "063 331 38 33",
         "phone_mobile": "079 667 52 87",
-        "company": "Kanzlei Walter und Co.",
+        "company": "Kanzlei Müller und Co.",
         "function": "Rechtsanwalt"
     }, {
         "_path": "/kontakte/james-bond",
