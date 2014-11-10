@@ -4,11 +4,10 @@ ADD_PLONE_SITE_HTML = '''
 <dtml-if "_.len(this().getPhysicalPath()) == 1 or this().meta_type == 'Folder' and 'PloneSite' not in [o.__class__.__name__ for o in this().aq_chain]">
   <!-- Add opengever client site action-->
   <form method="get"
-        action="&dtml-URL1;/@@opengever-addclient"
+        action="&dtml-URL1;/@@gever-add-deployment"
         style="text-align: right; margin-top:0.5em; margin-bottom:0em;"
         target="_top">
-    <input type="hidden" name="site_id" value="Plone" />
-    <input type="submit" value="Install Opengever" />
+    <input type="submit" value="Install OneGov GEVER" />
   </form>
 </dtml-if>
 

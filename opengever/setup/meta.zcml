@@ -4,16 +4,16 @@
 
     <meta:directive
         namespace="http://namespaces.zope.org/opengever"
-        name="registerClient"
-        schema=".meta.IClientConfiguration"
-        handler=".meta.register_client"
+        name="registerDeployment"
+        schema=".meta.IDeploymentDirective"
+        handler=".meta.register_deployment"
         />
 
     <meta:directive
         namespace="http://namespaces.zope.org/opengever"
-        name="registerPolicy"
-        schema=".meta.IPolicyConfiguration"
-        handler=".meta.register_policy"
+        name="registerLDAP"
+        schema=".meta.ILDAPDirective"
+        handler=".meta.register_ldap"
         />
 
 </configure>

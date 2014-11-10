@@ -45,8 +45,9 @@ class ManualInitialVersion(object):
             pathkey = self.pathkey(*keys)[0]
             typekey = self.typekey(*keys)[0]
 
-            assert item[typekey] == 'opengever.document.document', \
-                'unexpected type, only documents are supported'
+            if item.get(typekey) != 'opengever.document.document':
+                yield item
+                continue
 
             path = item[pathkey]
             obj = self.context.unrestrictedTraverse(path.lstrip('/'), None)

@@ -1,6 +1,8 @@
 opengever.core
 ==============
 
+.. contents:: Table of Contents
+
 Development installation
 ------------------------
 
@@ -218,6 +220,7 @@ Alternatively it's also possible to only update a single subpackage, for example
 
     bin/i18n-build opengever.dossier
 
+
 Scripts
 -------
 Scripts are located in ``/scripts``.
@@ -322,3 +325,148 @@ mail:
 
 The script assumes you got an instance running on port ``${instance:http-address}``, a GEVER client called ``mandant1`` and an omelette with ``ftw.mail`` in it installed. It will then feed the mail from stdin to
 the ``ftw.mail`` inbound view, like Postfix would.
+
+
+Deployment
+----------
+
+The following section describes some aspects of deploying OneGov GEVER. If you need an example of a simple deployment profile have a look at the examplecontent profiles, see: https://github.com/4teamwork/opengever.core/tree/master/opengever/examplecontent.
+
+
+Setup Wizard
+~~~~~~~~~~~~
+
+The manage_main view of the Zope app contains an additional button "Install OneGov GEVER" to add a new deployment. It leads to the setup wizard where a deployment profile and an LDAP configuration profile can be selected.
+
+The setup wizard can be configured with the following environment variable:
+
+- ``IS_DEVELOPMENT_MODE`` - If set pre-selects the following options in the setup wizard: Import of LDAP users, Development Mode and Purge SQL. Currently these are all available options.
+
+
+Deployment Profiles
+^^^^^^^^^^^^^^^^^^^
+
+Deployment profiles can be selected in the setup wizard. They are used to link a Plone site with its corresponding ``AdminUnit`` and they usually include a policy profile, additional init profiles and further Plone-Site configuration options. Deployment profiles are configured in ZCML:
+
+.. code:: xml
+
+    <configure
+        xmlns="http://namespaces.zope.org/zope"
+        xmlns:opengever="http://namespaces.zope.org/opengever"
+        i18n_domain="my.package">
+
+        <opengever:registerDeployment
+            title="Development with examplecontent"
+            policy_profile="opengever.examplecontent:default"
+            additional_profiles="opengever.setup:repository_root,
+                                 opengever.setup:default_content,
+                                 opengever.examplecontent:init"
+            admin_unit_id="admin1"
+            />
+
+    </configure>
+
+See https://github.com/4teamwork/opengever.core/blob/master/opengever/setup/meta.py for a list of all possible options.
+
+
+LDAP Profiles
+^^^^^^^^^^^^^
+
+LDAP profiles can be selected in the setup wizard. They are used to install an LDAP configuration profile. LDAP profiles are configured in ZCML:
+
+.. code:: xml
+
+    <configure
+        xmlns="http://namespaces.zope.org/zope"
+        xmlns:opengever="http://namespaces.zope.org/opengever"
+        i18n_domain="my.package">
+
+        <opengever:registerLDAP
+            title="4teamwork LDAP"
+            ldap_profile="opengever.examplecontent:4teamwork-ldap"
+            />
+
+    </configure>
+
+See https://github.com/4teamwork/opengever.core/blob/master/opengever/setup/meta.py for a list of all possible options.
+
+
+Content creation
+~~~~~~~~~~~~~~~~
+
+Opengever defines four additional generic setup setuphandlers to create initial `AdminUnit` and `OrgUnit` OGDS entries, create initial  documents/document templates, configure local roles and create an initial repository. Of course ``ftw.inflator`` content creation is available as well, for details see https://github.com/4teamwork/ftw.inflator.
+
+
+Creating initial AdminUnit/OrgUnit
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Add a ``unit_creation`` folder to your generic setup profile. To that folder add the files ``admin_units.json`` and/or ``org_units.json``. The content is created when the generic setup profile is applied. Note also that this content is created before ``ftw.inflator`` content and before all the other custom gever content creation handlers.
+
+
+AdminUnit example:
+
+.. code:: json
+
+    [
+      {
+        "unit_id": "admin1",
+        "title": "Admin Unit 1",
+        "ip_address": "127.0.0.1",
+        "site_url": "http://localhost:8080/admin1",
+        "public_url": "http://localhost:8080/admin1",
+        "abbreviation": "A1"
+      }
+    ]
+
+OrgUnit example:
+
+.. code:: json
+
+  [
+    {
+      "unit_id": "org1",
+      "title": "Org Unit 1",
+      "admin_unit_id": "admin1",
+      "users_group_id": "og_demo-ftw_users",
+      "inbox_group_id": "og_demo-ftw_users"
+    }
+  ]
+
+
+Creating GEVER specific content
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Documents and Document templates are created with a customized ``ftw.inflator`` pipeline since they need special handling to have correct initial file versions. Thus documents should never be created with ``ftw.inflator`` but always with our customized pipeline. Since the custom pipeline is based on ``ftw.inflator`` we suggest to create all gever-content with this new pipeline.
+
+To create content add an ``opengever_content`` folder to your generic setup profile. All JSON files in this folder are then processed similar to ``ftw.inflator``. Note that this setuphandler is called after `ftw.inflator`.
+
+
+Configuring local roles
+^^^^^^^^^^^^^^^^^^^^^^^
+
+To decouple local role assignment from content creation opengever introduces a separate setuphandler to configure local roles. To configure local roles add a ``local_role_configuration`` folder to your generic setup profile. All JSON files in that folder are then processed. Note that this setuphandler is called after `ftw.inflator`.
+
+
+Example configuration:
+
+.. code:: json
+
+  [
+      {
+          "_path": "ordnungssystem",
+          "_ac_local_roles": {
+              "og_demo-ftw_users": [
+                  "Contributor",
+                  "Editor",
+                  "Reader"
+              ]
+          }
+      }
+  ]
+
+
+Creating an initial repository
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Gever repositories are initialized from an excel file. To add initial repository setup add a file ``repository.xlsx`` to your generic setup profile. See https://github.com/4teamwork/opengever.core/blob/master/opengever/examplecontent/profiles/default/repository.xlsx for an example. Note that this setuphandler is called after `ftw.inflator`.
+

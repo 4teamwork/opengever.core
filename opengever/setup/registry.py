@@ -1,57 +1,56 @@
-from opengever.setup.interfaces import IClientConfigurationRegistry
+from opengever.setup.interfaces import IDeploymentConfigurationRegistry
+from opengever.setup.interfaces import ILDAPConfigurationRegistry
 from zope.interface import implements
 
 
-class ClientConfigurationRegistry(object):
-    implements(IClientConfigurationRegistry)
+class BaseConfigurationRegistry(object):
+    """A configuration registry contains configuration dictionaries.
+    """
 
     def __init__(self):
-        self.clients = {}
-        self.policies = {}
+        self.configs = {}
 
-    def update_clients(self, id, attr):
-        if id in self.clients:
-            self.clients[id].update(attr)
+    def _update_entries(self, title, config_dict):
+        if title in self.configs:
+            self.configs[title].update(config_dict)
         else:
-            self.clients[id] = attr
+            self.configs[title] = config_dict
 
-    def update_policy(self, id, kwargs):
-        if id in self.policies:
-            self.policies[id].update(kwargs)
-        else:
-            self.policies[id] = kwargs
+    def _list_entries(self):
+        results = []
+        for key, values in self.configs.items():
+            if values['is_default']:
+                results.insert(0, key)
+            else:
+                results.append(key)
+        return results
 
-    def get_configuration(self, id):
-        return self.clients.get(id)
+    def _get_entry(self, title):
+        return self.configs.get(title)
 
-    def get_policy(self, id):
-        configuration = self.policies.get(id).copy()
-        configuration['clients'] = []
 
-        if configuration.get('multi_clients'):
-            return self.generate_multi_policies(configuration)
+class DeploymentConfigurationRegistry(BaseConfigurationRegistry):
+    implements(IDeploymentConfigurationRegistry)
 
-        for client_id in configuration.get('client_ids'):
-            configuration['clients'].append(self.get_configuration(client_id))
-        return configuration
+    def update_deployments(self, title, config_dict):
+        self._update_entries(title, config_dict)
 
-    def generate_multi_policies(self, configuration):
-        configuration['clients'] = []
-        client_id = configuration.get('client_ids')[0]
-        muster_configuration = self.get_configuration(client_id)
+    def list_deployments(self):
+        return self._list_entries()
 
-        for i in range(1, 11):
-            client = muster_configuration.copy()
-            for key, value in client.items():
-                if isinstance(value, unicode):
-                    client[key] = value.format(client_number=str(i))
-            configuration['clients'].append(client)
+    def get_deployment(self, title):
+        return self._get_entry(title)
 
-        return configuration
 
-    def get_policies(self):
-        for policy_id in self.policies.keys():
-            yield self.get_policy(policy_id)
+class LDAPConfigurationRegistry(BaseConfigurationRegistry):
+    implements(ILDAPConfigurationRegistry)
 
-    def list_policies(self):
-        return self.policies.keys()
+    def update_ldaps(self, title, config_dict):
+        self._update_entries(title, config_dict)
+
+    def list_ldaps(self):
+        for key in self._list_entries():
+            yield (key, self.get_ldap(key)['ldap_profile'])
+
+    def get_ldap(self, title):
+        return self._get_entry(title)

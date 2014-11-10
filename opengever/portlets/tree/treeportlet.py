@@ -74,7 +74,7 @@ class Renderer(base.Renderer):
         # was added to the Plone Site Root
         if self.root_path() != None:
             portal_url = getToolByName(self.context, 'portal_url')
-            current = portal_url.getPortalObject().restrictedTraverse(self.root_path().encode('utf-8'))
+            current = portal_url.getPortalObject().restrictedTraverse(self.root_path())
             return aq_inner(current).Title()
         elif current.Type() != 'Plone Site':
             return current.Title()
@@ -83,7 +83,10 @@ class Renderer(base.Renderer):
         return aq_inner(self.context).Title()
 
     def root_path(self):
-        return getattr(self.data, 'root_path', None)
+        root_path = getattr(self.data, 'root_path', None)
+        if root_path:
+            root_path = root_path.encode('utf-8')
+        return root_path
 
     def context_url(self):
         return self.context.absolute_url()

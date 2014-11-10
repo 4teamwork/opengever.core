@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '4.0.4.dev0'
+version = '4.1.0.dev0'
 maintainer = '4teamwork AG'
 
 tests_require = [
@@ -136,10 +136,6 @@ setup(name='opengever.core',
 
       [zopectl.command]
       sync_ogds = opengever.ogds.base:sync_ogds_zopectl_handler
-
-      [opengever.setup]
-      ldap = opengever.examplecontent
-      policies = opengever.examplecontent
 
       [izug.basetheme]
       version = opengever.core

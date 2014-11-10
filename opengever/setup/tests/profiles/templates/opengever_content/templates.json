@@ -1,0 +1,8 @@
+[
+    {
+        "_path": "/vorlagen/template-1",
+        "_type": "opengever.document.document",
+        "title": "Empty text file",
+        "file:file": "file.txt"
+    }
+]

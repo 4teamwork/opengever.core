@@ -1,0 +1,20 @@
+[
+    {
+        "_path": "eingangskorb",
+        "_type": "opengever.inbox.inbox",
+        "title": "Eingangskorb",
+        "inbox_group": "og_mandant1_eingangskorb"
+    },
+    {
+        "_path": "vorlagen",
+        "_type": "opengever.dossier.templatedossier",
+        "title": "Vorlagen",
+        "responsible": "ogadmin"
+    },
+    {
+        "_path": "kontakte",
+        "_type": "opengever.contact.contactfolder",
+        "title": "Kontakte",
+        "_transitions": "publish"
+    }
+]

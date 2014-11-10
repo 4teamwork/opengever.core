@@ -1,42 +1,34 @@
-from opengever.setup.interfaces import IClientConfigurationRegistry
-from opengever.setup.registry import ClientConfigurationRegistry
-from zope.component import queryUtility, provideUtility
+from opengever.setup.interfaces import IDeploymentConfigurationRegistry
+from opengever.setup.interfaces import ILDAPConfigurationRegistry
+from opengever.setup.registry import DeploymentConfigurationRegistry
+from opengever.setup.registry import LDAPConfigurationRegistry
+from zope.component import provideUtility
+from zope.component import queryUtility
 
 
-class ClientDirective(object):
-
-    def __call__(self, *args, **kwargs):
-        registry = queryUtility(IClientConfigurationRegistry)
-        if registry is None:
-            registry = ClientConfigurationRegistry()
-            provideUtility(registry)
-
-        registry.update_clients(args[0], kwargs)
-
-
-client_directive = ClientDirective()
-
-
-class PolicyDirective(object):
+class DeploymentDirective(object):
 
     def __call__(self, *args, **kwargs):
-        registry = queryUtility(IClientConfigurationRegistry)
+        registry = queryUtility(IDeploymentConfigurationRegistry)
         if registry is None:
-            registry = ClientConfigurationRegistry()
+            registry = DeploymentConfigurationRegistry()
             provideUtility(registry)
 
-        if kwargs.get('additional_profiles'):
-            kwargs['additional_profiles'] = self.get_stripped_list(
-                kwargs.get('additional_profiles'))
+        title = args[0]
+        registry.update_deployments(title, kwargs)
 
-        if kwargs.get('client_ids'):
-            kwargs['client_ids'] = self.get_stripped_list(
-                kwargs.get('client_ids'))
-
-        registry.update_policy(args[0], kwargs)
-
-    def get_stripped_list(self, value):
-        return [item.strip() for item in value.split(',')]
+deployment_directive = DeploymentDirective()
 
 
-policy_directive = PolicyDirective()
+class LDAPDirective(object):
+
+    def __call__(self, *args, **kwargs):
+        registry = queryUtility(ILDAPConfigurationRegistry)
+        if registry is None:
+            registry = LDAPConfigurationRegistry()
+            provideUtility(registry)
+
+        title = args[0]
+        registry.update_ldaps(title, kwargs)
+
+ldap_directive = LDAPDirective()

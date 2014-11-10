@@ -1,0 +1,36 @@
+[
+    {
+        "_path": "/kontakte/hanspeter-mueller",
+        "_type": "opengever.contact.contact",
+        "salutation": "Herr",
+        "firstname": "Hanspeter",
+        "lastname": "Müller",
+        "email": "hwalter@example.com",
+        "phone_office": "063 331 38 33",
+        "phone_mobile": "079 667 52 87",
+        "company": "Kanzlei Müller und Co.",
+        "function": "Rechtsanwalt"
+    }, {
+        "_path": "/kontakte/james-bond",
+        "_type": "opengever.contact.contact",
+        "salutation": "Herr",
+        "firstname": "James",
+        "lastname": "Bond",
+        "email": "james@example.com",
+        "phone_office": "063 331 38 33",
+        "phone_mobile": "079 667 52 87",
+        "company": "Geheimdienst",
+        "function": "007"
+    }, {
+        "_path": "/kontakte/josef-anton",
+        "_type": "opengever.contact.contact",
+        "salutation": "Herr",
+        "firstname": "Josef",
+        "lastname": "Anton",
+        "email": "josef-anton@example.com",
+        "phone_office": "063 331 38 33",
+        "phone_mobile": "079 667 52 87",
+        "company": "Bauer lagier",
+        "function": "Chef"
+    }
+]

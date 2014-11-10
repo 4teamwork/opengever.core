@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      i18n:domain="opengever.setup">
+
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+
+    <title i18n:translate="">Deploy OneGov GEVER</title>
+
+    <link rel="stylesheet" type="text/css" href="/++resource++plone-admin-ui.css" />
+    <link rel="stylesheet" type="text/css" href="/++resource++adddeployment.css" />
+
+    <script type="text/javascript" language="javascript"
+            src="/++resource++opengever.setup-jquery.min.js">
+    </script>
+
+    <script type="text/javascript" language="javascript"
+            tal:attributes="src view/javascript_src_url">
+    </script>
+
+  </head>
+  <body>
+
+    <div id="logo">
+      <img src="/++resource++onegovgever.jpeg" />
+    </div>
+    <div id="separator"></div>
+
+    <div id="container">
+    <form method="post"
+          id="deploy-form"
+          target="deploy-output"
+          tal:attributes="action string:${context/absolute_url}/@@gever-create-deployment"
+          tal:define="profiles view/profiles;
+                      base_profiles profiles/base;
+                      default_profile profiles/default;
+                      extension_profiles profiles/extensions;
+                      advanced request/advanced|nothing;">
+
+      <h1 i18n:translate="">Install OneGov GEVER</h1>
+
+      <fieldset class="config">
+        <legend i18n:translate="">Installation configuration</legend>
+
+        <div class="field">
+          <label for="policy" i18n:translate="">Deployment profile</label>
+          <div class="formHelp"></div>
+          <select name="policy" autofocus="autofocus">
+            <option tal:repeat="item view/get_deployment_profiles"
+                    tal:content="item"
+                    tal:attributes="value item;
+                                    selected python:'selected' if repeat['item'].index == 0 else ''">
+            </option>
+          </select>
+        </div>
+
+        <div class="field">
+          <div>
+              <strong>ZODB database configuration</strong>
+              <pre class="dbinfo" tal:content="view/get_zodb_config"></pre>
+          </div>
+
+          <div>
+              <strong>OGDS database configuration</strong>
+              <pre class="dbinfo" tal:content="view/get_ogds_config"></pre>
+          </div>
+        </div>
+
+        <div class="field" id="ldap_profile_selector">
+          <label for="ldap" i18n:translate="">LDAP configuration profile</label>
+          <div class="formHelp"></div>
+          <select name="ldap">
+            <option value="" i18n:translate="">- skip LDAP -</option>
+            <option tal:repeat="item view/get_ldap_profiles"
+                    tal:content="python:item[0]"
+                    tal:attributes="value python:item[1];
+                                    selected python:'selected' if repeat['item'].index == 0 else ''">
+            </option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="sync_ogds" i18n:translate="">
+            Import LDAP-users into OGDS
+          </label>
+          <div class="formHelp"></div>
+          <input type="checkbox" name="sync_ogds:boolean"
+                 id="sync_ogds"
+                 tal:attributes="checked python:'checked' if view.is_development_mode else ''"/>
+          <span i18n:translate="">
+            Import users from LDAP into OGDS?
+          </span>
+        </div>
+
+      </fieldset>
+      <fieldset class="config">
+        <legend i18n:translate="">Development options</legend>
+
+        <div class="field">
+          <label for="dev_mode" i18n:translate="">
+            Development mode
+          </label>
+          <div class="formHelp"></div>
+          <input type="checkbox" name="dev_mode:boolean"
+                 id="dev_mode"
+                 tal:attributes="checked python:'checked' if view.is_development_mode else ''"/>
+          <span i18n:translate="" class="dev_mode_label">
+            Use "og_demo-ftw_users" group for OrgUnits and local role configuration
+          </span>
+        </div>
+
+        <div class="field">
+          <label for="purge_sql" i18n:translate="">
+            Purge SQL
+          </label>
+          <div class="formHelp"></div>
+          <input type="checkbox" name="purge_sql:boolean"
+                 id="purge_sql"
+                 tal:attributes="checked python:'checked' if view.is_development_mode else ''"/>
+          <span i18n:translate="" class="purge_sql_label">
+            Purge SQL completely before setup
+          </span>
+        </div>
+
+      </fieldset>
+
+      <div class="formControls">
+        <input type="hidden" name="form.submitted:boolean" value="True" />
+        <input type="submit" name="submit" value="Install OneGov GEVER"
+               i18n:attributes="value;" />
+        <a class="backlink" href="/manage_main">back to Manage</a>
+      </div>
+    </form>
+    </div>
+
+    <div id="iframe-container">
+      <iframe name="deploy-output" id="deploy-output"></iframe>
+    </div>
+
+    <div id="setup-completed">
+        Setup successful!
+        <a href="#">open deployment ...</a>
+    </div>
+  </body>
+</html>

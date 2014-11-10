@@ -2,7 +2,7 @@
 <ldapplugins>
 
         <ldapplugin title="4teamwork LDAP" id="ldap" meta_type="Plone LDAP plugin" update="False">
-
+            <cache value="RAMCache"/>
             <interface value="IAuthenticationPlugin"/>
             <interface value="ICredentialsResetPlugin"/>
             <interface value="IGroupEnumerationPlugin"/>
