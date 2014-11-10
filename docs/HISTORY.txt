@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.0.3 (unreleased)
+4.0.3 (2014-11-10)
 ------------------
 
 - Dossier responsible field: use current admin unit's user, instead of only
