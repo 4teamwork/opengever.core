@@ -6,12 +6,20 @@ class IDeploymentConfigurationRegistry(Interface):
     registered configurations.
 
     """
-    def update_deployments(id, ident, attr):
-        """Update or add a deployment configuration in the registry."""
+    def update_deployments(id, title, config_dict):
+        """Update or add a deployment configuration in the registry.
 
-    def get_deployment(ident):
+        arguments:
+          title: a string which is used as key
+          config_dict: a dict containing deployment configuration options
+
+        """
+
+    def get_deployment(title):
         """Returns the deployment configuration (a dict) for the given
-        identifier."""
+        identifier.
+
+        """
 
     def list_deployments():
         """Returns a list of deployment titles."""
@@ -19,12 +27,20 @@ class IDeploymentConfigurationRegistry(Interface):
 
 class ILDAPConfigurationRegistry(Interface):
 
-    def update_ldaps(id, ident, attr):
-        """Update or add a LDAP configuration in the registry."""
+    def update_ldaps(id, title, config_dict):
+        """Update or add an LDAP configuration in the registry.
 
-    def get_ldap(ident):
+        arguments:
+          title: a string which is used as key
+          config_dict: a dict containing ldap configuration options
+
+        """
+
+    def get_ldap(title):
         """Returns the ldap configuration (a dict) for the given
-        identifier."""
+        identifier.
+
+        """
 
     def list_ldaps():
         """Returns a list of ldap titles."""

@@ -14,7 +14,8 @@ class DeploymentDirective(object):
             registry = DeploymentConfigurationRegistry()
             provideUtility(registry)
 
-        registry.update_deployments(args[0], kwargs)
+        title = args[0]
+        registry.update_deployments(title, kwargs)
 
 deployment_directive = DeploymentDirective()
 
@@ -26,6 +27,8 @@ class LDAPDirective(object):
         if registry is None:
             registry = LDAPConfigurationRegistry()
             provideUtility(registry)
-        registry.update_ldaps(args[0], kwargs)
+
+        title = args[0]
+        registry.update_ldaps(title, kwargs)
 
 ldap_directive = LDAPDirective()
