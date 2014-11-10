@@ -135,7 +135,7 @@ class CreateDeployment(BrowserView):
             is_development_setup=is_development_setup,
             has_purge_sql=self.form.get('purge_sql', False),
             ldap_profile=self.form.get('ldap', None),
-            has_ldap_user_import=self.form.get('import_users', False))
+            has_ogds_sync=self.form.get('sync_ogds', False))
         deployment.create()
         return deployment
 

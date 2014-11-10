@@ -85,14 +85,14 @@
         </div>
 
         <div class="field">
-          <label for="import_users" i18n:translate="">
+          <label for="sync_ogds" i18n:translate="">
             Import LDAP-users into OGDS
           </label>
           <div class="formHelp"></div>
-          <input type="checkbox" name="import_users:boolean"
-                 id="import_users"
+          <input type="checkbox" name="sync_ogds:boolean"
+                 id="sync_ogds"
                  tal:attributes="checked python:'checked' if view.is_development_mode else ''"/>
-          <span i18n:translate="" class="import_users_label">
+          <span i18n:translate="">
             Import users from LDAP into OGDS?
           </span>
         </div>

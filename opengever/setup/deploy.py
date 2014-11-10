@@ -33,21 +33,21 @@ class GeverDeployment(object):
                  is_development_setup=False,
                  has_purge_sql=False,
                  ldap_profile=None,
-                 has_ldap_user_import=False):
+                 has_ogds_sync=False):
         self.context = context
         self.config = config
         self.db_session = db_session
         self.is_development_setup = is_development_setup
         self.has_purge_sql = has_purge_sql
         self.ldap_profile = ldap_profile
-        self.has_ldap_user_import = has_ldap_user_import
+        self.has_ogds_sync = has_ogds_sync
 
     def create(self):
         self.prepare_sql()
         self.site = self.setup_plone_site()
 
         self.setup_ldap()
-        self.import_ldap_users()
+        self.sync_ogds()
         self.configure_admin_unit()
         self.install_policy_profile()
         self.configure_plone_site()
@@ -114,8 +114,8 @@ class GeverDeployment(object):
         plugins.movePluginsUp(IPropertiesPlugin, ('ldap',))
         plugins.movePluginsUp(IPropertiesPlugin, ('ldap',))
 
-    def import_ldap_users(self):
-        if not self.has_ldap_user_import:
+    def sync_ogds(self):
+        if not self.has_ogds_sync:
             return
 
         print '===== SYNC LDAP ===='
