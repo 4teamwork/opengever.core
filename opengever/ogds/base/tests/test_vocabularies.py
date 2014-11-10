@@ -233,9 +233,12 @@ class TestAssignedUsersVocabulary(FunctionalTestCase):
             IVocabularyFactory,
             name='opengever.ogds.base.AssignedUsersVocabulary')
 
-    def test_contains_only_users_assigned_to_current_orgunit(self):
+    def test_contains_only_users_assigned_to_current_admin_unit(self):
         user = create(Builder('ogds_user').having(firstname='Test',
                                                   lastname='User'))
+        additional = create(Builder('admin_unit')
+                            .id('additional')
+                            .having(title='additional'))
         org_unit = create(Builder('org_unit').id('client1')
                           .having(title=u"Client 1",
                                   admin_unit=self.admin_unit)
@@ -247,6 +250,11 @@ class TestAssignedUsersVocabulary(FunctionalTestCase):
                             .with_default_groups()
                             .assign_users([user])
                             .as_current_org_unit())
+        
+        org_unit_3 = create(Builder('org_unit')
+                            .id('client3')
+                            .having(title=u"Client 3", admin_unit=additional)
+                            .with_default_groups())
 
         create(Builder('ogds_user').id('hugo.boss')
                .having(firstname='Test', lastname='User')
@@ -260,8 +268,12 @@ class TestAssignedUsersVocabulary(FunctionalTestCase):
                .having(firstname='Jamie', lastname='Lannister')
                .assign_to_org_units([org_unit, org_unit_2]))
 
+        create(Builder('ogds_user').id('peter.meier')
+               .having(firstname='Peter', lastname='Meier')
+               .assign_to_org_units([org_unit_3]))
+
         self.assertTermKeys(
-            ['peter.muster', 'jamie.lannister', TEST_USER_ID],
+            ['hugo.boss', 'peter.muster', 'jamie.lannister', TEST_USER_ID],
             self.vocabulary_factory(self.portal))
 
     def test_hidden_terms_contains_all_inactive_users(self):

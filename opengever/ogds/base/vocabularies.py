@@ -249,7 +249,7 @@ class InboxesVocabularyFactory(UsersAndInboxesVocabularyFactory):
 
 
 class AssignedUsersVocabularyFactory(grok.GlobalUtility):
-    """Vocabulary of all users assigned to the current client.
+    """Vocabulary of all users assigned to the current admin unit.
     """
 
     grok.provides(IVocabularyFactory)
@@ -272,7 +272,7 @@ class AssignedUsersVocabularyFactory(grok.GlobalUtility):
         # Reset hidden_terms every time cache key changed
         self.hidden_terms = []
 
-        unit = get_current_org_unit()
+        unit = get_current_admin_unit()
         for user in unit.assigned_users():
             if not user.active:
                 self.hidden_terms.append(user.userid)
