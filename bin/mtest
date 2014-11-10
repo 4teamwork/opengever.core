@@ -18,6 +18,8 @@ import tempfile
 import time
 
 
+os.environ['PYTHONDONTWRITEBYTECODE'] = '1'
+
 PROCESSORS = int(os.environ.get('MTEST_PROCESSORS', '4'))
 
 if os.environ.get('TERM') == 'dumb' \
@@ -36,6 +38,7 @@ else:
 
 BUILDOUT_PATH = os.path.abspath(os.path.join(__file__, '..', '..'))
 OPENGEVER_PATH = os.path.join(BUILDOUT_PATH, 'opengever')
+
 
 def main():
     threads = []
