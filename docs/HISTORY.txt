@@ -5,6 +5,10 @@ Changelog
 4.0.3 (unreleased)
 ------------------
 
+- Dossier responsible field: use current admin unit's user, instead of only
+  current orgunit's one.
+  [phgross]
+
 - Forwarding Transitioncontroller: Fixed assign_to_dossier check.
   [phgross]
 
