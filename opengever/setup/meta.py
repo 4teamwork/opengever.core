@@ -1,5 +1,6 @@
 from opengever.setup.directives import deployment_directive
 from opengever.setup.directives import ldap_directive
+from zope.configuration.fields import Tokens
 from zope.interface import Interface
 from zope.schema import Bool
 from zope.schema import TextLine
@@ -26,10 +27,13 @@ class IDeploymentDirective(Interface):
         title=u'Policy Profile',
         required=True)
 
-    additional_profiles = TextLine(
+    additional_profiles = Tokens(
         title=u'Additional profiles',
-        description=u'Multiple values allowed (coma sperated)',
-        required=False)
+        description=u'Generic setup profile names (without profile- prefix)',
+        default=None,
+        required=True,
+        value_type=TextLine()
+    )
 
     admin_unit_id = TextLine(
         title=u'AdminUnit ID',

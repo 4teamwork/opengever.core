@@ -14,14 +14,7 @@ class DeploymentDirective(object):
             registry = DeploymentConfigurationRegistry()
             provideUtility(registry)
 
-        if kwargs.get('additional_profiles'):
-            kwargs['additional_profiles'] = self.get_stripped_list(
-                kwargs.get('additional_profiles'))
-
         registry.update_deployments(args[0], kwargs)
-
-    def get_stripped_list(self, value):
-        return [item.strip() for item in value.split(',')]
 
 deployment_directive = DeploymentDirective()
 
