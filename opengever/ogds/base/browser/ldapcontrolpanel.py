@@ -41,6 +41,8 @@ class LDAPSyncView(grok.View):
 
     def run_update(self, **kwargs):
         # Set up logging to HTTPResponse
+        self.request.RESPONSE.setHeader(
+            'Content-Type', 'text/plain; charset=utf-8')
         response = BytestringEnforcingResponseWrapper(self.request.RESPONSE)
         logger = logging.getLogger('opengever.ogds.base')
         response_handler = StreamHandler(stream=response)

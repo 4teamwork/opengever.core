@@ -5,6 +5,12 @@ Changelog
 4.1.0 (unreleased)
 ------------------
 
+- Set proper Content-Type header in responses from LDAP control panel views.
+  [lgraf]
+
+- Fix Unicode handling in OGDSUpdater.
+  [lgraf]
+
 - Rewrite gever setup.
   - Introduce two zcml directives to configure deployments and ldap profiles.
   - Simplify deloyment form, remove multi-client configuration options.
