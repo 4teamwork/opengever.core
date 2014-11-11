@@ -5,6 +5,9 @@ Changelog
 4.1.0 (unreleased)
 ------------------
 
+- Fix Unicode handling in OGDSUpdater.
+  [lgraf]
+
 - Rewrite gever setup.
   - Introduce two zcml directives to configure deployments and ldap profiles.
   - Simplify deloyment form, remove multi-client configuration options.
