@@ -1,0 +1,10 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    i18n_domain="opengever.base">
+
+    <permission
+        id="opengever.base.RemoveGEVERContent"
+        title="Remove GEVER content"
+        />
+
+</configure>

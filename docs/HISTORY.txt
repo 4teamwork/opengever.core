@@ -5,6 +5,9 @@ Changelog
 4.1.0 (unreleased)
 ------------------
 
+- Add new permission `Remove GEVER content`.
+  [phgross]
+
 - Disable docproperty updating in YearfolderStorer process.
   [phgross]
 

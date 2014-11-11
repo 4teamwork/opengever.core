@@ -23,6 +23,7 @@
   <include package=".viewlets" />
   <include package=".upgrades" />
   <include file="skins.zcml" />
+  <include file="permissions.zcml" />
 
   <grok:grok package="." />
 
