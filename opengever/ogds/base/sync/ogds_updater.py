@@ -257,8 +257,8 @@ class OGDSUpdater(grok.Adapter):
                                     break
                             if not uid_found:
                                 # No suitable UID found, skip this user
-                                logger.warn(NO_UID_AD_MSG % (AD_UID_KEYS,
-                                                             user_dn))
+                                logger.warn(NO_UID_AD_MSG % (user_dn,
+                                                             AD_UID_KEYS))
                                 continue
 
                         if isinstance(userid, list):
