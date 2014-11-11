@@ -182,7 +182,7 @@
 
   <transition transition_id="document-transition-remove" title="document-transition-remove" new_state="document-state-removed" trigger="USER" before_script="" after_script="">
     <description></description>
-    <action url="%(content_url)s/content_status_modify?workflow_action=document-transition-remove" category="workflow" icon="">document-transition-remove</action>
+    <action url="%(content_url)s/content_status_modify?workflow_action=document-transition-remove" category="" icon="">document-transition-remove</action>
     <guard>
       <guard-permission>Remove GEVER content</guard-permission>
     </guard>
