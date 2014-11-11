@@ -5,7 +5,11 @@ Changelog
 4.0.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Set proper Content-Type header in responses from LDAP control panel views.
+  [lgraf]
+
+- Fix Unicode handling in OGDSUpdater.
+  [lgraf]
 
 
 4.0.3 (2014-11-10)
