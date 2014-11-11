@@ -32,4 +32,12 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <genericsetup:registerProfile
+        name="repositories"
+        title="opengever.setup.tests:repositories"
+        directory="profiles/repositories"
+        description=""
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
 </configure>

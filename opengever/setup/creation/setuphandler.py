@@ -15,7 +15,7 @@ GEVER_CONTENT_FOLDER_NAME = 'opengever_content'
 
 DEVELOP_USERS_GROUP = 'og_demo-ftw_users'
 
-REPOSITORY_FILENAME = 'repository.xlsx'
+REPOSITORIES_FOLDER_NAME = 'opengever_repositories'
 
 
 class BaseSetupHandler(object):
@@ -70,8 +70,8 @@ class UnitCreation(BaseSetupHandler):
 
 
 def opengever_content(setup):
+    repositories(setup)
     templates(setup)
-    repository(setup)
     local_role_configuration(setup)
 
 
@@ -93,32 +93,22 @@ class GeverContent(BaseSetupHandler):
                        jsonsource=dict(directory=self.path))
 
 
-def repository(setup):
-    files = setup.listDirectory(setup._profile_path)
-    if REPOSITORY_FILENAME not in files:
+def repositories(setup):
+    data = setup.isDirectory(REPOSITORIES_FOLDER_NAME)
+    if not data:
         return
 
-    Repository(setup).install_repository()
+    Repositories(setup).install()
 
 
-class Repository(object):
+class Repositories(BaseSetupHandler):
 
-    file_name = REPOSITORY_FILENAME
+    folder_name = REPOSITORIES_FOLDER_NAME
 
-    def __init__(self, setup):
-        self.setup = setup
-        self.path = os.path.join(setup._profile_path,
-                                 self.file_name).encode('utf-8')
-        assert os.path.isfile(self.path)
-        request = api.portal.get().REQUEST
-
-        self.is_development_setup = request.get(
-            'unit_creation_dev_mode', False)
-
-    def install_repository(self):
+    def install(self):
         transmogrifier = Transmogrifier(self.setup.getSite())
         transmogrifier(u'opengever.setup.repository',
-                       xlssource=dict(filename=self.path))
+                       xlssource=dict(directory=self.path))
 
 
 def local_role_configuration(setup):

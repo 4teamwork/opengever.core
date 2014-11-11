@@ -9,12 +9,11 @@ class TextXLSImport(TestCase):
     def setUp(self):
         super(TextXLSImport, self).setUp()
 
-        xls_file = '/'.join(
-            [os.path.dirname(opengever.setup.tests.__file__),
-             'assets/testcontent.xls'])
+        xls_directory = os.path.join(
+            os.path.dirname(opengever.setup.tests.__file__), 'assets')
 
         self.source = list(XlsSource(
-            None, '', {'filename': xls_file, 'client_id': 'test'}, []))
+            None, '', {'directory': xls_directory, 'client_id': 'test'}, []))
 
     def test_first_type_is_reporoot(self):
         self.assertEquals(u'opengever.repository.repositoryroot',

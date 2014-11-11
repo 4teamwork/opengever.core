@@ -33,19 +33,6 @@
       />
 
   <genericsetup:registerProfile
-      name="repository_root"
-      title="opengever.setup: repository_root"
-      directory="profiles/repository_root"
-      description="Setup default repository root."
-      provides="Products.GenericSetup.interfaces.EXTENSION"
-      />
-
-  <profilehook:hook
-      profile="opengever.setup:repository_root"
-      handler=".hooks.repository_root_installed"
-      />
-
-  <genericsetup:registerProfile
       name="empty_templates"
       title="opengever.setup: empty_templates"
       directory="profiles/empty_templates"

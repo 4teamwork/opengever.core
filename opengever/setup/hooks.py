@@ -1,4 +1,3 @@
-from opengever.portlets.tree import treeportlet
 from plone.app.portlets.portlets import navigation
 from plone.portlets.constants import CONTEXT_CATEGORY
 from plone.portlets.interfaces import ILocalPortletAssignmentManager
@@ -21,12 +20,7 @@ def default_content_installed(site):
 
 
 def repository_root_installed(site):
-    assign_repo_root_portlets(site, 'ordnungssystem')
-
-
-def assign_repo_root_portlets(site, repo_root_id):
-    assign_tree_portlet(context=site, root_path=repo_root_id,
-                        remove_nav=True, block_inheritance=False)
+    pass
 
 
 def set_global_roles(site):
@@ -59,28 +53,6 @@ def assign_roles(context, admin_groups):
         prm.assignRoleToPrincipal('Editor', admin_group.strip())
         prm.assignRoleToPrincipal('Role Manager', admin_group.strip())
         prm.assignRoleToPrincipal('Reviewer', admin_group.strip())
-
-
-def assign_tree_portlet(context, root_path, remove_nav=False,
-                        block_inheritance=False):
-    # Assign tree portlet to given context
-    manager = getUtility(
-        IPortletManager, name=u'plone.leftcolumn', context=context)
-    mapping = getMultiAdapter((context, manager,), IPortletAssignmentMapping)
-    if 'opengever-portlets-tree-TreePortlet' not in mapping.keys():
-        mapping['opengever-portlets-tree-TreePortlet'] = \
-            treeportlet.Assignment(root_path=root_path)
-
-    if remove_nav:
-        # Remove unused navigation portlet
-        if 'navigation' in mapping.keys():
-            del mapping[u'navigation']
-
-    if block_inheritance:
-        # Block inherited context portlets
-        assignable = getMultiAdapter(
-            (context, manager), ILocalPortletAssignmentManager)
-        assignable.setBlacklistStatus(CONTEXT_CATEGORY, True)
 
 
 def assign_default_navigation_portlet(context, content_id):
