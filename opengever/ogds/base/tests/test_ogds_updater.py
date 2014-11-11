@@ -89,3 +89,34 @@ class TestOGDSUpdater(FunctionalTestCase):
         self.assertItemsEqual(
             [ogds.fetch_user('sk1m2'), ogds.fetch_user('sk2m2')],
             og_mandant2_users.users)
+
+    def test_imports_handle_unicode_values_properly(self):
+        klaus = create(Builder('ldapuser')
+                       .named('klaus.r\xc3\xbcegg')
+                       .having(firstname='Klaus',
+                               lastname='R\xc3\xbcegg',
+                               l=['M\xc3\xbcnsingen'],
+                               o=['M\xc3\xbcller & Co'],
+                               ou=['M\xc3\xbcnster'],
+                               street=['F\xc3\xa4hrstrasse 13']))
+
+        group = create(Builder('ldapgroup')
+                       .named('f\xc3\xbchrung')
+                       .with_members([klaus]))
+
+        FAKE_LDAP_USERFOLDER.users = [klaus]
+        FAKE_LDAP_USERFOLDER.groups = [group]
+
+        updater = IOGDSUpdater(self.portal)
+
+        updater.import_users()
+        updater.import_groups()
+
+        ogds_user = ogds_service().fetch_user(u'klaus.r\xfcegg')
+        self.assertEquals(u'klaus.r\xfcegg', ogds_user.userid)
+        self.assertEquals(u'Klaus', ogds_user.firstname)
+        self.assertEquals(u'R\xfcegg', ogds_user.lastname)
+        self.assertEquals(u'klaus.r\xfcegg@4teamwork.ch', ogds_user.email)
+
+        ogds_group = ogds_service().fetch_group(u'f\xfchrung')
+        self.assertEquals(u'f\xfchrung', ogds_group.groupid)

@@ -138,6 +138,7 @@ class OGDSUpdater(grok.Adapter):
                     continue
 
                 userid = info[uid_attr]
+                userid = userid.decode('utf-8')
 
                 # Skip users with uid longer than SQL 'userid' column
                 # FIXME: Increase size of SQL column to 64
@@ -167,6 +168,9 @@ class OGDSUpdater(grok.Adapter):
                     # treat it as a multi-line string and join it.
                     if isinstance(value, list) or isinstance(value, tuple):
                         value = ' '.join([str(v) for v in value])
+
+                    if isinstance(value, str):
+                        value = value.decode('utf-8')
 
                     setattr(user, col.name, value)
 
@@ -221,6 +225,9 @@ class OGDSUpdater(grok.Adapter):
                     if isinstance(value, list) or isinstance(value, tuple):
                         value = ' '.join([str(v) for v in value])
 
+                    if isinstance(value, str):
+                        value = value.decode('utf-8')
+
                     setattr(group, col.name, value)
 
                 contained_users = []
@@ -231,6 +238,10 @@ class OGDSUpdater(grok.Adapter):
                     try:
                         ldap_user = ldap_util.entry_by_dn(user_dn)
                         user_dn, user_info = ldap_user
+
+                        if isinstance(user_dn, str):
+                            user_dn = user_dn.decode('utf-8')
+
                         if not ldap_util.is_ad:
                             if not 'userid' in user_info:
                                 logger.warn(NO_UID_MSG % user_dn)
@@ -252,6 +263,9 @@ class OGDSUpdater(grok.Adapter):
 
                         if isinstance(userid, list):
                             userid = userid[0]
+
+                        if isinstance(userid, str):
+                            userid = userid.decode('utf-8')
 
                         user = self.get_sql_user(userid)
                         if user is None:

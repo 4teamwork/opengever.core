@@ -5,7 +5,8 @@ Changelog
 4.0.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix Unicode handling in OGDSUpdater.
+  [lgraf]
 
 
 4.0.3 (2014-11-10)
