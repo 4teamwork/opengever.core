@@ -5,6 +5,9 @@ Changelog
 4.1.0 (unreleased)
 ------------------
 
+- Added new document workflow state `document-state-removed`.
+  [phgross]
+
 - Add new permission `Remove GEVER content`.
   [phgross]
 

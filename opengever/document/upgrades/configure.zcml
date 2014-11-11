@@ -129,4 +129,23 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <!-- 4000 -> 4100 -->
+    <genericsetup:upgradeStep
+        title="Add removed workflow state."
+        description=""
+        source="4000"
+        destination="4100"
+        handler="opengever.document.upgrades.to4100.AddRemovedState"
+        profile="opengever.document:default"
+        />
+
+    <genericsetup:registerProfile
+        name="4100"
+        title="opengever.document: upgrade profile 4100"
+        description=""
+        directory="profiles/4100"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
 </configure>
