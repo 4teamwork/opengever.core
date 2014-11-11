@@ -57,19 +57,13 @@ msgstr ""
 msgid "document-state-draft"
 msgstr ""
 
-msgid "document-state-checked_out"
+msgid "document-state-removed"
 msgstr ""
 
-msgid "document-transition-reject"
+msgid "document-transition-remove"
 msgstr ""
 
-msgid "document-transition-check_out"
-msgstr ""
-
-msgid "document-transition-check_in"
-msgstr ""
-
-msgid "document-transition-cancel_checkout"
+msgid "document-transition-restore"
 msgstr ""
 
 msgid "button_download"

@@ -105,29 +105,23 @@ msgstr "herunterladen"
 msgid "date (newest first)"
 msgstr "Änderungsdatum (absteigend)"
 
-msgid "document-state-checked_out"
-msgstr "Ausgecheckt"
-
 msgid "document-state-draft"
 msgstr "nicht definiert"
 
 msgid "document-state-pending"
 msgstr "Hängig"
 
+msgid "document-state-removed"
+msgstr "Gelöscht"
+
 msgid "document-state-working_copy"
 msgstr "Arbeitskopie"
 
-msgid "document-transition-cancel_checkout"
-msgstr "Zurücksetzen"
+msgid "document-transition-remove"
+msgstr "Löschen"
 
-msgid "document-transition-check_in"
-msgstr "Einchecken"
-
-msgid "document-transition-check_out"
-msgstr "Auschecken"
-
-msgid "document-transition-reject"
-msgstr "Zurückweisen"
+msgid "document-transition-restore"
+msgstr "Wiederherstellen"
 
 msgid "document_with_template"
 msgstr "Dokument aus Vorlage"
@@ -287,4 +281,3 @@ msgstr "Deaktivieren"
 
 msgid "tasktemplatefolder-transition-inactiv-activ"
 msgstr "Aktivieren"
-
