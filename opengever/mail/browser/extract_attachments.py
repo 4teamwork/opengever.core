@@ -12,11 +12,9 @@ from plone import api
 from plone.dexterity.utils import createContentInContainer
 from plone.dexterity.utils import iterSchemata
 from plone.i18n.normalizer.interfaces import IIDNormalizer
-from Products.CMFPlone.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.interfaces import IValue
 from z3c.relationfield.relation import RelationValue
-from zope.app.component.hooks import getSite
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
 from zope.event import notify
@@ -48,24 +46,22 @@ def attachment_checkbox_helper(item, position):
 def content_type_helper(item, content_type):
     """Display the content type icon.
     """
-
-    site = getSite()
-    mtr = getToolByName(site, 'mimetypes_registry')
+    mtr = api.portal.get_tool(name='mimetypes_registry')
     normalize = getUtility(IIDNormalizer).normalize
 
+    css_class = 'icon-dokument_verweis'
     if content_type == 'application/octet-stream':
         lookup = mtr.globFilename(item.get('filename'))
     else:
         lookup = mtr.lookup(content_type)
 
     if lookup:
-        if isinstance(lookup, list) or isinstance(lookup, tuple):
-            lookup = lookup[0]
-        css = "mimetype-%s" % normalize(lookup.minor())
-    else:
-        css = "mimetype-plain"
+        # Strip '.gif' from end of icon name and remove leading 'icon_'
+        icon_filename = lookup[0].icon_path
+        filetype = os.path.splitext(icon_filename)[0].replace('icon_', '')
+        css_class = 'icon-{}'.format(normalize(filetype))
 
-    return '<span class=%s />' % css
+    return '<span class={} />'.format(css_class)
 
 
 def downloadable_filename_helper(context):
