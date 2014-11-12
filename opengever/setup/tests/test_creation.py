@@ -1,11 +1,8 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.utils import ogds_service
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import applyProfile
-from plone.registry.interfaces import IRegistry
-from zope.component import getUtility
 
 
 class TestUnitCreation(FunctionalTestCase):
@@ -29,8 +26,3 @@ class TestUnitCreation(FunctionalTestCase):
         self.assertIsNotNone(org_unit.admin_unit)
         self.assertIsNotNone(org_unit.users_group)
         self.assertIsNotNone(org_unit.inbox_group)
-
-    def test_is_configured_as_current_admin_unit(self):
-        registry = getUtility(IRegistry)
-        admin_unit = registry.forInterface(IAdminUnitConfiguration)
-        self.assertEqual('admin', admin_unit.current_unit_id)
