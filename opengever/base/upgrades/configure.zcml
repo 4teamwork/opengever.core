@@ -213,4 +213,13 @@
         profile="opengever.base:default"
         />
 
+    <!-- 4001 -> 4002 -->
+    <upgrade-step:importProfile
+        title="Adjust available expression for paste action"
+        profile="opengever.base:default"
+        source="4001"
+        destination="4002"
+        directory="profiles/4002"
+        />
+
 </configure>
