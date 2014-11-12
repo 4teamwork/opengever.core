@@ -1,13 +1,15 @@
 from datetime import date
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.mail.utils import get_attachments
+from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import statusmessages
 from opengever.document.interfaces import IDocumentSettings
 from opengever.testing import FunctionalTestCase
+from opengever.testing import obj2brain
 from plone.app.testing import TEST_USER_ID
-from plone.dexterity.utils import createContentInContainer
-from plone.namedfile.file import NamedBlobFile
 from plone.registry.interfaces import IRegistry
-from Products.CMFCore.utils import getToolByName
 from zope.annotation import IAnnotations
 from zope.component import getUtility
 from zope.i18n import translate
@@ -39,131 +41,118 @@ w6TDtsOcCg==
 
 class TestAttachmentExtraction(FunctionalTestCase):
 
-    use_browser = True
-
     def setUp(self):
         super(TestAttachmentExtraction, self).setUp()
 
-        self.grant('Owner','Editor','Contributor', 'Manager')
+        self.grant('Owner', 'Editor', 'Contributor', 'Manager')
 
-        self.dossier = createContentInContainer(
-            self.portal,
-            'opengever.dossier.businesscasedossier',
-            title=u'Dossier 1')
+        self.dossier = create(Builder('dossier'))
+        self.mail = create(Builder('mail')
+                           .within(self.dossier)
+                           .with_message(MESSAGE_TEXT))
 
-        transaction.commit()
+    @browsing
+    def test_without_selecting_attachments_shows_error_statusmessage(self, browser):
+        browser.login().open(self.mail, view='extract_attachments')
+        browser.forms.get('form').submit()
 
-    def create_mail(self, data):
-        msg = None
-        if data:
-            msg = NamedBlobFile(
-                data=data, contentType=u'message/rfc822',
-                filename=u'attachment.txt')
+        self.assertEquals(['You have not selected any attachments.'],
+                         statusmessages.messages().get('error'))
+        self.assertEquals(
+            'http://nohost/plone/dossier-1/document-1/extract_attachments',
+            browser.url)
 
-        mail = createContentInContainer(
-            self.dossier, 'ftw.mail.mail', message=msg)
+    @browsing
+    def test_shows_info_statusmessage_by_success(self, browser):
+        browser.login().open(self.mail, view='extract_attachments')
+        browser.fill({'attachments:list': ['1']}).submit()
 
-        transaction.commit()
-        return mail
+        self.assertEquals([u'Created document B\xfccher'],
+                         statusmessages.messages().get('info'))
+        self.assertEquals('http://nohost/plone/dossier-1/#documents',
+                         browser.url)
+    @browsing
+    def test_creates_document_in_parent_dossier(self, browser):
+        browser.login().open(self.mail, view='extract_attachments')
+        browser.fill({'attachments:list': ['1']}).submit()
 
-    def test_extract_attachment(self):
-        # adjust default value configuration
+        doc = self.dossier.listFolderContents(
+            {'portal_type': 'opengever.document.document'})[0]
+
+        self.assertEquals('B\xc3\xbccher', doc.Title())
+        self.assertEquals(doc.document_date, date.today())
+
+        self.assertEquals(obj2brain(doc).document_date, date.today())
+
+    @browsing
+    def test_sets_default_values_correctly_on_document(self, browser):
         registry = getUtility(IRegistry)
         proxy = registry.forInterface(IDocumentSettings)
         proxy.preserved_as_paper_default = False
+        transaction.commit()
 
-        mail = self.create_mail(MESSAGE_TEXT)
-        self.browser.open(
-            '%s/extract_attachments' % mail.absolute_url())
+        browser.login().open(self.mail, view='extract_attachments')
+        browser.fill({'attachments:list': ['1']}).submit()
 
-        # not selected any attachment
-        self.browser.getControl(name='form.submitted').click()
-        self.assertPageContains('You have not selected any attachments')
-
-        self.browser.open(
-            '%s/extract_attachments' % mail.absolute_url())
-        self.browser.getControl(name='attachments:list').value = [1]
-        self.browser.getControl(name='form.submitted').click()
-
-        self.assertPageContains('Created document B\xc3\xbccher')
-
-        # check also the brain and object
-        cat = getToolByName(self.portal, 'portal_catalog')
-        brain = cat(
-            path='/'.join(self.dossier.getPhysicalPath()),
-            portal_type="opengever.document.document")[0]
-
-        doc = brain.getObject()
-
-        # check document date
-        self.assertEquals(brain.document_date, date.today())
-        self.assertEquals(doc.document_date, date.today())
-
-        # check default values
+        doc = self.dossier.listFolderContents(
+            {'portal_type': 'opengever.document.document'})[0]
         self.assertFalse(doc.preserved_as_paper)
         self.assertTrue(doc.digitally_available)
 
-    def test_extracting_line_break_mail(self):
-        mail = self.create_mail(LINEBREAK_MESSAGETEXT)
+    @browsing
+    def test_extracting_line_break_mail(self, browser):
+        mail = create(Builder('mail')
+                      .within(self.dossier)
+                      .with_message(LINEBREAK_MESSAGETEXT))
 
-        self.browser.open('%s/extract_attachments' % mail.absolute_url())
-        self.browser.getControl(name='attachments:list').value = [1]
-        self.browser.getControl(name='form.submitted').click()
-        docs = self.dossier.listFolderContents(
-            {'portal_type': 'opengever.document.document'})
-        self.assertTrue(
-            'Projekt Test Inputvorschlag' in [dd.Title() for dd in docs])
+        browser.login().open(mail, view='extract_attachments')
+        browser.fill({'attachments:list': ['1']}).submit()
 
-    def test_deleting_after_extracting(self):
-        mail = self.create_mail(MESSAGE_TEXT)
+        doc = self.dossier.listFolderContents(
+            {'portal_type': 'opengever.document.document'})[0]
+        self.assertEquals('Projekt Test Inputvorschlag', doc.Title())
 
-        self.browser.open('%s/extract_attachments' % mail.absolute_url())
-        self.browser.getControl(name='attachments:list').value = [1]
-        self.browser.getControl(name='delete_action').value = ['all']
-        self.browser.getControl(name='form.submitted').click()
+    @browsing
+    def test_deleting_after_extracting(self, browser):
+        browser.login().open(self.mail, view='extract_attachments')
+        browser.fill({'attachments:list': ['1'],
+                      'delete_action': ['all']}).submit()
 
         self.assertEquals(
-            len(get_attachments(mail.msg)), 0,
+            len(get_attachments(self.mail.msg)), 0,
             'The attachment deleting after extracting, \
             does not work correctly.')
 
-    def test_journal_entry_after_deleting_attachments(self):
-        mail = self.create_mail(MESSAGE_TEXT)
+    @browsing
+    def test_journal_entry_after_deleting_attachments(self, browser):
+        browser.login().open(self.mail, view='extract_attachments')
+        browser.fill({'attachments:list': ['1'],
+                      'delete_action': ['all']}).submit()
 
-        self.browser.open('%s/extract_attachments' % mail.absolute_url())
-        self.browser.getControl(name='attachments:list').value = [1]
-        self.browser.getControl(name='delete_action').value = ['all']
-        self.browser.getControl(name='form.submitted').click()
-
-        def get_journal(obj):
-            annotations = IAnnotations(mail)
-            return annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, {})
-
-        journal = get_journal(mail)
+        annotations = IAnnotations(self.mail)
+        journal = annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, {})
         last_entry = journal[-1]
 
         self.assertEquals(TEST_USER_ID, last_entry['actor'])
-
-        action = last_entry['action']
         self.assertDictContainsSubset(
             {'type': 'Attachments deleted',
              'title': u'label_attachments_deleted'},
-             action)
-
+            last_entry['action'])
         self.assertEquals(u'Attachments deleted: B\xfccher.txt',
-                          translate(action['title']))
+                          translate(last_entry['action']['title']))
 
-    def test_extract_attachment_without_docs(self):
-        mail = self.create_mail(None)
+    @browsing
+    def test_extract_attachment_without_docs_shows_waring_statusmessage(self, browser):
+        mail = create(Builder('mail').within(self.dossier))
+        browser.login().open(mail, view='extract_attachments')
 
-        self.browser.open(
-            '%s/extract_attachments' % mail.absolute_url())
-        self.browser.assert_url(mail.absolute_url())
+        self.assertEquals(['This mail has no attachments to extract.'],
+                          statusmessages.messages().get('warning'))
+        self.assertEquals(mail.absolute_url(), browser.url)
 
-    def test_cancel(self):
-        mail = self.create_mail(MESSAGE_TEXT)
-        self.browser.open(
-            '%s/extract_attachments' % mail.absolute_url())
+    @browsing
+    def test_cancel_redirects_to_mail(self, browser):
+        browser.login().open(self.mail, view='extract_attachments')
+        browser.css('.formControls input.standalone').first.click()
 
-        self.browser.getControl(name='form.cancelled').click()
-        self.browser.assert_url(mail.absolute_url())
+        self.assertEquals(self.mail.absolute_url(), browser.url)
