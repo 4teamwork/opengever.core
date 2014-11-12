@@ -38,6 +38,19 @@ class TestPasteItems(FunctionalTestCase):
         actions = browser.css('#plone-contentmenu-actions li').text
         self.assertSequenceEqual(['Properties', 'Sharing'], actions)
 
+    @browsing
+    def test_paste_action_not_displayed_for_mails(self, browser):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document').within(dossier))
+        mail = create(Builder('mail').within(dossier))
+
+        paths = ['/'.join(document.getPhysicalPath()),]
+        browser.login().open(dossier, {'paths:list': paths}, view='copy_items')
+
+        browser.open(mail)
+        actions = browser.css('#plone-contentmenu-actions li').text
+        self.assertSequenceEqual(['Properties', 'save attachments'], actions)
+
     def test_pasting_copied_document_into_dossier_succeeds(self):
         dossier = create(Builder('dossier'))
         document = create(Builder('document')
