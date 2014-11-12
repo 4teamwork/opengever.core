@@ -27,6 +27,9 @@ EXTENSION_PROFILES = (
 SQL_BASES = (BASE, opengever.globalindex.model.Base)
 
 
+MIMETYPE_FIX_PROFILE = 'profile-opengever.policy.base:mimetype'
+
+
 class GeverDeployment(object):
 
     def __init__(self, context, config, db_session,
@@ -134,6 +137,8 @@ class GeverDeployment(object):
         stool = getToolByName(self.site, 'portal_setup')
         stool.runAllImportStepsFromProfile(
             'profile-{}'.format(policy_profile))
+        # fix mime-type definitions by overriding temaraum-theme mimetypes
+        stool.runAllImportStepsFromProfile(MIMETYPE_FIX_PROFILE)
 
     def configure_plone_site(self):
         # configure mail settings
