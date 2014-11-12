@@ -5,6 +5,9 @@ Changelog
 4.0.4 (unreleased)
 ------------------
 
+- Extract attachments view: fixed icon display in attachment listing.
+  [phgross]
+
 - Disable paste action for mails.
   [phgross]
 
