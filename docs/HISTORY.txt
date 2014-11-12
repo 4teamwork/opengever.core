@@ -5,6 +5,9 @@ Changelog
 4.1.0 (unreleased)
 ------------------
 
+- Disable paste action for mails.
+  [phgross]
+
 - Set proper Content-Type header in responses from LDAP control panel views.
   [lgraf]
 
@@ -32,7 +35,7 @@ Changelog
 
 - Fixed mail download for mails with already CRLF.
   [phgross]
-  
+
 - Add new type Inbox Container.
   [phgross]
 

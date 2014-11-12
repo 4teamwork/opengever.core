@@ -14,7 +14,8 @@ class IsPastingAllowedView(grok.View):
     grok.require('zope2.View')
 
     disabled_types = ('opengever.dossier.templatedossier',
-                      'opengever.contact.contactfolder')
+                      'opengever.contact.contactfolder',
+                      'ftw.mail.mail')
 
     def render(self):
         valid_cb_data = False
