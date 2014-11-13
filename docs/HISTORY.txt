@@ -5,6 +5,19 @@ Changelog
 4.1.0 (unreleased)
 ------------------
 
+- Rewrite gever setup.
+    - Introduce two zcml directives to configure deployments and ldap profiles.
+    - Simplify deloyment form, remove multi-client configuration options.
+    - Update branding, add onegovgever logo.
+    - Add custom setuphandlers for local roles, initial repository and document templates.
+    - Configure development options and add environment variable to enable them easily.
+
+  [deiferni]
+
+
+4.0.4 (2014-11-13)
+------------------
+
 - Extract attachments view: fixed icon display in attachment listing.
   [phgross]
 
@@ -16,15 +29,6 @@ Changelog
 
 - Fix Unicode handling in OGDSUpdater.
   [lgraf]
-
-- Rewrite gever setup.
-  - Introduce two zcml directives to configure deployments and ldap profiles.
-  - Simplify deloyment form, remove multi-client configuration options.
-  - Update branding, add onegovgever logo.
-  - Add custom setuphandlers for local roles, initial repository and document templates.
-  - Configure development options and add environment variable to enable them easily.
-  [deiferni]
-
 
 4.0.3 (2014-11-10)
 ------------------
