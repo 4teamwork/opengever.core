@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
-from zope.interface import classProvides, implements
-from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.interfaces import ISection
+from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.utils import resolvePackageReferenceOrFile
+from zope.interface import classProvides
+from zope.interface import implements
+import os
 import xlrd
 
 
@@ -39,12 +41,32 @@ class XlsSource(object):
         self.previous = previous
         self.options = options
 
+        self.path = resolvePackageReferenceOrFile(options['directory'])
+        if self.path is None or not os.path.isdir(self.path):
+            raise IOError('Directory does not exists: {}'.format(self.path))
+
     def __iter__(self):
         for item in self.previous:
             yield item
 
-        filename = resolvePackageReferenceOrFile(self.options['filename'])
-        tables = xlrd_xls2array(filename)
+        files = sorted(os.listdir(self.path))
+        for repo_num, filename in enumerate(reversed(files)):
+            if filename.startswith('.') or not filename.endswith('.xlsx'):
+                continue
+
+            xls_path = os.path.join(self.path, filename)
+            if not os.path.isfile(xls_path):
+                continue
+
+            locals()['__traceback_info__'] = xls_path
+            repository_id, extension = os.path.splitext(filename)
+
+            keys, sheet_data = self.read_excel_file(xls_path)
+            for rownum, row in enumerate(sheet_data):
+                yield self.process_row(row, rownum, keys, repository_id)
+
+    def read_excel_file(self, xls_path):
+        tables = xlrd_xls2array(xls_path)
         repository_table = tables[0]
         sheet_data = repository_table['sheet_data']
 
@@ -52,62 +74,64 @@ class XlsSource(object):
         sheet_data = sheet_data[4:]  # remove human readable stuff
         keys = sheet_data[0]
         del sheet_data[0]
+        return keys, sheet_data
 
-        for rownum, row in enumerate(sheet_data):
-            data = {}
-            # repofolder or reporoot
-            if rownum == 0:
-                data['_type'] = u'opengever.repository.repositoryroot'
-            else:
-                data['_type'] = u'opengever.repository.repositoryfolder'
+    def process_row(self, row, rownum, keys, repository_id):
+        data = {}
+        # repofolder or reporoot
+        if rownum == 0:
+            data['_type'] = u'opengever.repository.repositoryroot'
+        else:
+            data['_type'] = u'opengever.repository.repositoryfolder'
+        data['_repo_root_id'] = repository_id
 
-            for colnum, cell in enumerate(row):
-                key = keys[colnum]
+        for colnum, cell in enumerate(row):
+            key = keys[colnum]
 
-                if key in (None, '', u''):
-                    continue
+            if key in (None, '', u''):
+                continue
 
-                if key in ('classification',
-                           'privacy_layer',
-                           'public_trial',
-                           'retention_period',
-                           'custody_period',
-                           'archival_value',
-                           ) and cell in (None, '', u''):
-                    continue
+            if key in ('classification',
+                       'privacy_layer',
+                       'public_trial',
+                       'retention_period',
+                       'custody_period',
+                       'archival_value',
+                       ) and cell in (None, '', u''):
+                continue
 
-                if key == 'reference_number' and not isinstance(cell, basestring):
-                    raise Exception("Reference number has to be string: %s" % cell)
+            if key == 'reference_number' and not isinstance(cell, basestring):
+                raise Exception("Reference number has to be string: %s" % cell)
 
-                if key in ('valid_from', 'valid_until') and cell in ('', u''):
-                    cell = None
+            if key in ('valid_from', 'valid_until') and cell in ('', u''):
+                cell = None
 
-                if key == 'addable_dossier_types':
-                    cell = cell.replace(' ', '').split(',')
-                    cell = [t for t in cell if not t == '']
+            if key == 'addable_dossier_types':
+                cell = cell.replace(' ', '').split(',')
+                cell = [t for t in cell if not t == '']
 
-                if key == 'archival_value':
-                    cell = ARCHIVAL_VALUE_MAPPING.get(cell, cell)
-                if key == 'classification':
-                    cell = CLASSIFICATION_MAPPING.get(cell, cell)
-                if key == 'privacy_layer':
-                    cell = PRIVACY_LAYER_MAPPING.get(cell, cell)
-                if key == 'public_trial':
-                    cell = PUBLIC_TRIAL_MAPPING.get(cell, cell)
+            if key == 'archival_value':
+                cell = ARCHIVAL_VALUE_MAPPING.get(cell, cell)
+            if key == 'classification':
+                cell = CLASSIFICATION_MAPPING.get(cell, cell)
+            if key == 'privacy_layer':
+                cell = PRIVACY_LAYER_MAPPING.get(cell, cell)
+            if key == 'public_trial':
+                cell = PUBLIC_TRIAL_MAPPING.get(cell, cell)
 
-                data[key] = cell
+            data[key] = cell
 
-            yield data
+        return data
 
 
 # Some of the following parts are based on
 # http://code.activestate.com/recipes/546518/
-def xlrd_xls2array(infilename):
+def xlrd_xls2array(path):
     """ Returns a list of sheets; each sheet is a dict containing
     * sheet_name: unicode string naming that sheet
     * sheet_data: 2-D table holding the converted cells of that sheet
     """
-    book = xlrd.open_workbook(infilename)
+    book = xlrd.open_workbook(path)
     sheets = []
     formatter = lambda(t, v): format_excelval(book, t, v, False)
 
@@ -145,15 +169,17 @@ def tupledate_to_isodate(tupledate):
 
 
 def format_excelval(book, type, value, wanttupledate):
-    """ Clean up the incoming excel data """
-    ##  Data Type Codes:
-    ##  EMPTY   0
-    ##  TEXT    1 a Unicode string
-    ##  NUMBER  2 float
-    ##  DATE    3 float
-    ##  BOOLEAN 4 int; 1 means TRUE, 0 means FALSE
-    ##  ERROR   5
-    #returnrow = []
+    """ Clean up the incoming excel data
+
+    Data Type Codes:
+    EMPTY   0
+    TEXT    1 a Unicode string
+    NUMBER  2 float
+    DATE    3 float
+    BOOLEAN 4 int; 1 means TRUE, 0 means FALSE
+    ERROR   5
+
+    """
     if type == 2:  # TEXT
         if value == int(value):
             value = int(value)

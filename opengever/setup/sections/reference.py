@@ -38,7 +38,6 @@ class PathFromReferenceNumberSection(object):
     def __init__(self, transmogrifier, name, options, previous):
         self.previous = previous
         self.logger = logging.getLogger(options['blueprint'])
-        self.repo_root_id = options['repo_root_id']
         self.refnum_mapping = {}
         self.normalizer = queryUtility(IURLNormalizer, name="de")
         self.id_normalizer = queryUtility(IIDNormalizer)
@@ -52,7 +51,7 @@ class PathFromReferenceNumberSection(object):
         for item in self.previous:
             if item.get('_type') == 'opengever.repository.repositoryroot':
                 # It's the repository root, just set _path and move on
-                item['_path'] = '/%s' % self.repo_root_id
+                item['_path'] = '/{}'.format(item['_repo_root_id'])
                 yield item
                 continue
 
@@ -66,7 +65,8 @@ class PathFromReferenceNumberSection(object):
 
             if len(refnum.split('.')) == 1:
                 # Top level repository folder
-                path = "/%s/%s" % (self.repo_root_id,
+                repo_root_id = item['_repo_root_id']
+                path = "/%s/%s" % (repo_root_id,
                                    self.normalize(item, max_length=MAX_LENGTH))
                 self.refnum_mapping[refnum] = path
             else:
