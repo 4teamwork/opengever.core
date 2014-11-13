@@ -5,6 +5,9 @@ Changelog
 4.1.0 (unreleased)
 ------------------
 
+- Disable docproperty updating in YearfolderStorer process.
+  [phgross]
+
 - Rewrite gever setup.
     - Introduce two zcml directives to configure deployments and ldap profiles.
     - Simplify deloyment form, remove multi-client configuration options.
