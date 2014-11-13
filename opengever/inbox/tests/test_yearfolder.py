@@ -1,8 +1,12 @@
 from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
+from ooxml_docprops import read_properties
+from opengever.dossier.docprops import TemporaryDocFile
 from opengever.task.browser.accept.utils import get_current_yearfolder
+from opengever.task.interfaces import IYearfolderStorer
 from opengever.testing import FunctionalTestCase
+from plone.app.testing import TEST_USER_ID
 
 
 class TestYearFolderGetter(FunctionalTestCase):
@@ -55,3 +59,28 @@ class TestYearFolderGetter(FunctionalTestCase):
         self.assertEquals(
             'Context or the current inbox itself must be given.',
             str(cm.exception))
+
+
+class TestYearFolderStorer(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestYearFolderStorer, self).setUp()
+        self.set_docproperty_export_enabled(True)
+
+    def tearDown(self):
+        self.set_docproperty_export_enabled(False)
+        super(TestYearFolderStorer, self).tearDown()
+
+    def test_disable_docproperty_updating(self):
+        inbox = create(Builder('inbox'))
+        forwarding = create(Builder('forwarding').within(inbox))
+        doc = create(Builder('document')
+                     .within(forwarding)
+                     .titled("Document with file")
+                     .with_asset_file('with_gever_user_properties.docx'))
+
+        IYearfolderStorer(forwarding).store_in_yearfolder()
+
+        with TemporaryDocFile(doc.file) as tmpfile:
+            properties = dict(read_properties(tmpfile.path))
+            self.assertItemsEqual(TEST_USER_ID, properties.get('User.ID'))
