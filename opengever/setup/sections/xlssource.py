@@ -2,15 +2,8 @@
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.utils import resolvePackageReferenceOrFile
-from opengever.portlets.tree import treeportlet
-from plone import api
-from plone.portlets.constants import CONTEXT_CATEGORY
-from plone.portlets.interfaces import ILocalPortletAssignmentManager
-from plone.portlets.interfaces import IPortletAssignmentMapping
-from plone.portlets.interfaces import IPortletManager
-from zope.component import getMultiAdapter
-from zope.component import getUtility
-from zope.interface import classProvides, implements
+from zope.interface import classProvides
+from zope.interface import implements
 import os
 import xlrd
 
@@ -71,9 +64,6 @@ class XlsSource(object):
             keys, sheet_data = self.read_excel_file(xls_path)
             for rownum, row in enumerate(sheet_data):
                 yield self.process_row(row, rownum, keys, repository_id)
-
-            if repo_num == 0:
-                assign_repo_root_portlets(api.portal.get(), repository_id)
 
     def read_excel_file(self, xls_path):
         tables = xlrd_xls2array(xls_path)
@@ -199,30 +189,3 @@ def format_excelval(book, type, value, wanttupledate):
     elif type == 5:  # ERROR
         value = xlrd.error_text_from_code[value]
     return value
-
-
-def assign_repo_root_portlets(site, repo_root_id):
-    assign_tree_portlet(context=site, root_path=repo_root_id,
-                        remove_nav=True, block_inheritance=False)
-
-
-def assign_tree_portlet(context, root_path, remove_nav=False,
-                        block_inheritance=False):
-    # Assign tree portlet to given context
-    manager = getUtility(
-        IPortletManager, name=u'plone.leftcolumn', context=context)
-    mapping = getMultiAdapter((context, manager,), IPortletAssignmentMapping)
-    if 'opengever-portlets-tree-TreePortlet' not in mapping.keys():
-        mapping['opengever-portlets-tree-TreePortlet'] = \
-            treeportlet.Assignment(root_path=root_path)
-
-    if remove_nav:
-        # Remove unused navigation portlet
-        if 'navigation' in mapping.keys():
-            del mapping[u'navigation']
-
-    if block_inheritance:
-        # Block inherited context portlets
-        assignable = getMultiAdapter(
-            (context, manager), ILocalPortletAssignmentManager)
-        assignable.setBlacklistStatus(CONTEXT_CATEGORY, True)

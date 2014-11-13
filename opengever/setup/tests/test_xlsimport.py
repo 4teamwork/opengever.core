@@ -30,7 +30,8 @@ class TextXLSImport(TestCase):
         self.assertEquals(sorted(
             [u'valid_until',
              u'reference_number',
-             '_type',
+             u'_repo_root_id',
+             u'_type',
              u'valid_from',
              u'responsible_org_unit',
              u'description',

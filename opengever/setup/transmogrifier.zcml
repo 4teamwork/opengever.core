@@ -65,4 +65,9 @@
       name="opengever.setup.repositoryfirst"
       />
 
+  <utility
+      component=".sections.navigation.AssignRepoRootNavigation"
+      name="opengever.setup.assignreporootnavigation"
+      />
+
 </configure>
