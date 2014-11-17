@@ -3,6 +3,7 @@ from collective import dexteritytextindexer
 from five import grok
 from ftw.mail.interfaces import IEmailAddress
 from opengever.document import _
+from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from plone.autoform import directives as form_directives
 from plone.dexterity.content import Item
@@ -12,6 +13,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.MimetypesRegistry.common import MimeTypeException
 from z3c.form import validator
 from zope import schema
+from zope.component import getMultiAdapter
 from zope.interface import Invalid
 from zope.interface import invariant
 import logging
@@ -157,3 +159,11 @@ class Document(Item):
             # not found
             return False
         return mimetypeitem
+
+    def checked_out_by(self):
+        manager = getMultiAdapter((self, self.REQUEST),
+                                  ICheckinCheckoutManager)
+        return manager.get_checked_out_by()
+
+    def is_checked_out(self):
+        return self.checked_out_by() is not None

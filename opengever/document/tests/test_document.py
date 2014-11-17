@@ -128,6 +128,22 @@ class TestDocument(FunctionalTestCase):
         self.assertEquals(document.Title(), 'Test title')
         self.assertEquals(document.Description(), 'Lorem ipsum')
 
+    def test_checked_out_by_returns_userid(self):
+        document_a = create(Builder('document')
+                            .checked_out_by(TEST_USER_ID))
+        document_b = create(Builder('document'))
+
+        self.assertEquals(TEST_USER_ID, document_a.checked_out_by())
+        self.assertEquals(None, document_b.checked_out_by())
+
+    def test_is_checked_in(self):
+        document_a = create(Builder('document')
+                            .checked_out_by(TEST_USER_ID))
+        document_b = create(Builder('document'))
+
+        self.assertTrue(document_a.is_checked_out())
+        self.assertFalse(document_b.is_checked_out())
+
 
 class TestDocumentDefaultValues(FunctionalTestCase):
 
