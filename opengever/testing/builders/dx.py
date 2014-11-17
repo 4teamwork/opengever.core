@@ -1,9 +1,9 @@
 from ftw.builder import builder_registry
 from ftw.builder.dexterity import DexterityBuilder
-from opengever.testing import assets
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.globalindex.handlers.task import sync_task
 from opengever.task.interfaces import ISuccessorTaskController
+from opengever.testing import assets
 from opengever.trash.trash import ITrashable
 from plone.app.testing import TEST_USER_ID
 from plone.namedfile.file import NamedBlobFile
@@ -74,6 +74,14 @@ class DocumentBuilder(DexterityBuilder):
         self.arguments["file"] = file_
         return self
 
+    def relate_to(self, documents):
+        if not isinstance(documents, list):
+            documents = [documents]
+
+        intids = getUtility(IIntIds)
+        self.arguments['relatedItems'] = [
+            RelationValue(intids.getId(doc)) for doc in documents]
+        return self
 
 builder_registry.register('document', DocumentBuilder, force=True)
 
