@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-12-27 13:02+0000\n"
+"POT-Creation-Date: 2014-11-11 22:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -9,7 +9,10 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
 
 #: ./opengever/trash/trash.py:118
 msgid "You have not selected any items"
@@ -23,6 +26,11 @@ msgstr "L'objet a été déplacé vers la corbeille"
 msgid "could not trash the object ${obj}, it is checked out"
 msgstr "L'objet ${obj} a un checkout. Vous ne pouvez pas le supprimer"
 
+#: ./opengever/trash/profiles/default/actions.xml
+#: ./opengever/trash/upgrades/profiles/4100/actions.xml
+msgid "remove"
+msgstr ""
+
 #: ./opengever/trash/trash.py:112
 msgid "the object ${obj} trashed"
 msgstr "L'objet ${obj} a été déplacé dans la corbeille"
@@ -34,5 +42,4 @@ msgstr "Déplacer dans la corbeille"
 #: ./opengever/trash/profiles/default/actions.xml
 msgid "untrashed"
 msgstr "Réactiver"
-
 
