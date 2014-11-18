@@ -5,6 +5,9 @@ Changelog
 4.1.0 (unreleased)
 ------------------
 
+- Add new action `Remove` to trash tab and add remove confirmation view.
+  [phgross]
+
 - Dropped prevent_deletion handler.
   [phgross]
 
