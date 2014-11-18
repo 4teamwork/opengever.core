@@ -1,9 +1,34 @@
+from AccessControl import Unauthorized
 from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.trash import _
 from opengever.trash.trash import ITrashed
+from plone import api
 from zc.relation.interfaces import ICatalog
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
+
+
+class Remover(object):
+
+    def __init__(self, documents):
+        self.documents = documents
+
+    def remove(self):
+        self.verify_is_allowed()
+
+        for document in self.documents:
+            api.content.transition(obj=document,
+                                   transition='document-transition-remove')
+        return True
+
+    def verify_is_allowed(self):
+        for document in self.documents:
+            if not RemoveConditions(document).remove_allowed():
+                raise RuntimeError('RemoveConditions not satisified')
+
+            if not api.user.get_current().checkPermission(
+                    'Remove GEVER content', document):
+                raise Unauthorized
 
 
 class RemoveConditions(object):
