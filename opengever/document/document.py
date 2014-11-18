@@ -2,6 +2,7 @@ from Acquisition import aq_inner, aq_parent
 from collective import dexteritytextindexer
 from five import grok
 from ftw.mail.interfaces import IEmailAddress
+from opengever.base.browser.helper import get_css_class
 from opengever.document import _
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.behaviors.dossier import IDossierMarker
@@ -109,6 +110,9 @@ class Document(Item):
     def surrender(self, relative_to_portal=1):
         return super(Document, self).getIcon(
             relative_to_portal=relative_to_portal)
+
+    def css_class(self):
+        return get_css_class(self)
 
     def getIcon(self, relative_to_portal=1):
         """Calculate the icon using the mime type of the file
