@@ -105,29 +105,23 @@ msgstr "Télécharger"
 msgid "date (newest first)"
 msgstr "Changement de date (descendant)"
 
-msgid "document-state-checked_out"
-msgstr "Checkout"
-
 msgid "document-state-draft"
 msgstr "Non défini"
 
 msgid "document-state-pending"
 msgstr "En suspend"
 
+msgid "document-state-removed"
+msgstr ""
+
 msgid "document-state-working_copy"
 msgstr "Copie de travail"
 
-msgid "document-transition-cancel_checkout"
-msgstr "Remettre"
+msgid "document-transition-remove"
+msgstr ""
 
-msgid "document-transition-check_in"
-msgstr "Checkin"
-
-msgid "document-transition-check_out"
-msgstr "Checkout"
-
-msgid "document-transition-reject"
-msgstr "Remettre"
+msgid "document-transition-restore"
+msgstr ""
 
 msgid "document_with_template"
 msgstr "Document à partir du modèle"
