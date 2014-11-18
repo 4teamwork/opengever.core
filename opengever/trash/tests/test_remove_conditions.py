@@ -26,7 +26,7 @@ class TestRemoveConditions(FunctionalTestCase):
 
         self.assertFalse(checker.remove_allowed())
         self.assert_error_messages(
-            ['Document is still checked out'], checker.error_msg)
+            [u'The document is still checked out.'], checker.error_msg)
 
     def test_document_has_no_relations(self):
         document_a = create(Builder('document'))
@@ -38,7 +38,7 @@ class TestRemoveConditions(FunctionalTestCase):
 
         self.assertFalse(checker.remove_allowed())
         self.assert_error_messages(
-            [u'The documents contains relations'], checker.error_msg)
+            [u'The document contains relations.'], checker.error_msg)
 
     def test_document_has_no_backreferences(self):
         document_a = create(Builder('document')
@@ -53,7 +53,7 @@ class TestRemoveConditions(FunctionalTestCase):
 
         self.assertFalse(checker.remove_allowed())
         self.assert_error_messages(
-            [u'The documents is reffered by <a href=http://nohost/plone/document-2>Doc b</a>'],
+            [u'The document is reffered by the document <a href=http://nohost/plone/document-2>Doc b</a>.'],
             checker.error_msg)
 
     def test_document_is_trashed(self):

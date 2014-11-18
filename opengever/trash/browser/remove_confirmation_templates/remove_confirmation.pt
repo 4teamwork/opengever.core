@@ -23,7 +23,7 @@
             <dl tal:condition="view/allowed" class="message warning">
               <dt i18n:translate="label_warning">Warning</dt>
               <dd i18n:translate="msg_delete_confirmation">
-                Do you really want to delete the selected documents
+                Do you really want to delete the selected documents?
               </dd>
             </dl>
 

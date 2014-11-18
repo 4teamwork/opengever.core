@@ -50,7 +50,7 @@ class RemoveConditions(object):
         if self.document.is_checked_out():
             self.error_msg.append(
                 _(u'msg_document_is_checked_out',
-                  default=u'Document is still checked out'))
+                  default=u'The document is still checked out.'))
 
     def verify_no_relations(self):
         related_documents = IRelatedDocuments(self.document).relatedItems
@@ -58,7 +58,7 @@ class RemoveConditions(object):
         if related_documents:
             self.error_msg.append(
                 _(u'msg_document_has_relations',
-                  default=u'The documents contains relations'))
+                  default=u'The document contains relations.'))
 
         if objs_with_backreferences:
             links = []
@@ -68,7 +68,7 @@ class RemoveConditions(object):
 
             self.error_msg.append(
                 _(u'msg_document_has_backreferences',
-                  default=u'The documents is reffered by ${links}',
+                  default=u'The document is reffered by the document ${links}.',
                   mapping={'links': ', '.join(links)}))
 
     def verify_is_trashed(self):

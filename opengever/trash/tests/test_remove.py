@@ -117,7 +117,7 @@ class TestRemoveConfirmationView(FunctionalTestCase):
         message = browser.css('.message').first
 
         self.assertEquals(
-            'Warning Do you really want to delete the selected documents',
+            'Warning Do you really want to delete the selected documents?',
             message.text)
         self.assertEquals('message warning', message.get('class'))
 
