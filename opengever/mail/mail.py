@@ -7,6 +7,7 @@ from ftw.mail import _ as ftw_mf
 from ftw.mail import utils
 from ftw.mail.mail import IMail
 from opengever.base import _ as base_mf
+from opengever.base.browser.helper import get_css_class
 from opengever.document.behaviors import metadata as ogmetadata
 from opengever.dossier import _
 from opengever.ogds.base.utils import create_session
@@ -79,9 +80,22 @@ class OGMail(Item):
             return email.message_from_string(data)
         return MIMEText('')
 
+    def css_class(self):
+        return get_css_class(self)
+
     def related_items(self):
         """Mail does not support relatedItems"""
         return []
+
+    def checked_out_by(self):
+        """Mail does not support checkin/checkout.
+        """
+        return None
+
+    def is_checked_out(self):
+        """Mail does not support checkin/checkout.
+        """
+        return False
 
 
 class OGMailBase(metadata.MetadataBase):

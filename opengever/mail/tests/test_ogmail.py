@@ -43,6 +43,12 @@ class TestOGMailAddition(FunctionalTestCase):
         self.assertEquals(u'hanspeter', mail.title)
         self.assertEquals('hanspeter', mail.Title())
 
+    def test_mail_is_never_checked_out(self):
+        mail = create(Builder("mail").with_dummy_message())
+
+        self.assertEquals(None, mail.checked_out_by())
+        self.assertEquals(False, mail.is_checked_out())
+
     def test_mail_has_no_related_items(self):
         mail = create(Builder("mail").with_dummy_message())
 
