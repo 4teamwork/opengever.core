@@ -5,6 +5,9 @@ Changelog
 4.1.0 (unreleased)
 ------------------
 
+- Added journalization for document removing and restoring.
+  [phgross]
+
 - Added new mail workflow state `mail-state-removed`.
   [phgross]
 

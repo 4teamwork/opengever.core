@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.dossier.interfaces import ITemplateDossierProperties
+from opengever.journal.tests.utils import get_journal_entry
 from opengever.testing import builders  # keep!
 from opengever.testing.browser import OGBrowser
 from plone.app.testing import login
@@ -12,6 +13,7 @@ from plone.app.testing import TEST_USER_PASSWORD
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from zope.component import getUtility
+from zope.i18n import translate
 import transaction
 import unittest2
 
@@ -91,6 +93,16 @@ class FunctionalTestCase(TestCase):
 
     def assertNotInTerms(self, value, vocabulary):
         self.assertNotIn(value, [term.value for term in vocabulary])
+
+    """
+    Journal assert helpers
+    """
+
+    def assert_journal_entry(self, obj, type, title, entry=-1):
+        entry = get_journal_entry(obj, entry)
+        action = entry.get('action')
+        self.assertEquals(type, action.get('type'))
+        self.assertEquals(title, translate(action.get('title')))
 
     """
     Browser API

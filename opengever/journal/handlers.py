@@ -625,6 +625,40 @@ def document_untrashed(context, event):
     return
 
 
+OBJECT_REMOVED = 'Object removed'
+
+
+@grok.subscribe(IBaseDocument, IActionSucceededEvent)
+def document_removed(context, event):
+    if event.action == context.remove_transition:
+        title = _(u'label_document_removed',
+                  default=u'Document ${title} removed.',
+                  mapping={'title': context.title_or_id()})
+
+        parent = aq_parent(aq_inner(context))
+        journal_entry_factory(context, OBJECT_REMOVED, title)
+        journal_entry_factory(parent, OBJECT_REMOVED, title)
+
+    return
+
+
+OBJECT_RESTORED = 'Object restored'
+
+
+@grok.subscribe(IBaseDocument, IActionSucceededEvent)
+def document_restored(context, event):
+    if event.action == context.restore_transition:
+        title = _(u'label_document_restored',
+                  default=u'Document ${title} restored.',
+                  mapping={'title': context.title_or_id()})
+
+        parent = aq_parent(aq_inner(context))
+        journal_entry_factory(context, OBJECT_RESTORED, title)
+        journal_entry_factory(parent, OBJECT_RESTORED, title)
+
+    return
+
+
 # ----------------------- DOSSIER PARTICIPATION -----------------------
 
 PARTICIPANT_ADDED = 'Participant added'

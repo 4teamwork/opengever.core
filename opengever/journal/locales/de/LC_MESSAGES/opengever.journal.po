@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2014-09-09 09:46+0000\n"
-"PO-Revision-Date: 2012-11-22 17:26+0100\n"
+"POT-Creation-Date: 2014-11-19 11:11+0000\n"
+"PO-Revision-Date: 2014-11-19 12:13+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -99,6 +99,16 @@ msgstr "Metadaten des Dokuments «${title}» bearbeitet"
 msgid "label_document_public_trial_modified"
 msgstr "Öffentlichkeitsstatus geändert nach «${public_trial}»."
 
+#. Default: "Document ${title} removed."
+#: ./opengever/journal/handlers.py:634
+msgid "label_document_removed"
+msgstr "Dokument ${title} wurde gelöscht."
+
+#. Default: "Document ${title} restored."
+#: ./opengever/journal/handlers.py:651
+msgid "label_document_restored"
+msgstr "Dokument ${title} wurde wiederhergestellt."
+
 #. Default: "Document sent by Mail: ${subject}"
 #: ./opengever/journal/handlers.py:535
 msgid "label_document_sent"
@@ -155,22 +165,22 @@ msgid "label_local_roles_modified_at"
 msgstr "Lokale Rollen von ${repository} modifziert."
 
 #. Default: "Object cut: ${title}"
-#: ./opengever/journal/handlers.py:696
+#: ./opengever/journal/handlers.py:730
 msgid "label_object_cut"
 msgstr "Objekt ausgeschnitten: ${title}"
 
 #. Default: "Object moved: ${title}"
-#: ./opengever/journal/handlers.py:680
+#: ./opengever/journal/handlers.py:714
 msgid "label_object_moved"
 msgstr "Objekt eingefügt: ${title}"
 
 #. Default: "Participant added: ${contact} with roles ${roles}"
-#: ./opengever/journal/handlers.py:640
+#: ./opengever/journal/handlers.py:674
 msgid "label_participant_added"
 msgstr "Beteiligung hinzugefügt für ${contact} als ${roles}"
 
 #. Default: "Participant removed: ${contact}"
-#: ./opengever/journal/handlers.py:655
+#: ./opengever/journal/handlers.py:689
 msgid "label_participant_removed"
 msgstr "Beteiligung von ${contact} entfernt"
 
@@ -218,4 +228,3 @@ msgstr "Journal"
 #: ./opengever/journal/no_selection_amount.pt:3
 msgid "tab_matches"
 msgstr "${amount} Treffer."
-
