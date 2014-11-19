@@ -423,23 +423,6 @@ def document_modified(context, event):
         journal_entry_factory(context, PUBLIC_TRIAL_MODIFIED_ACTION, title)
 
 
-DOCUMENT_STATE_CHANGED = 'Document state changed'
-
-
-@grok.subscribe(IBaseDocument, IActionSucceededEvent)
-def document_state_changed(context, event):
-    skip_transactions = [
-        'check_out',
-        'check_in',
-        ]
-    if event.action in skip_transactions:
-        return
-    newstate = event.workflow.transitions.get(event.action).new_state_id
-    title = pmf(u'Document state changed to %s' % newstate)
-    journal_entry_factory(context, DOCUMENT_STATE_CHANGED, title)
-    return
-
-
 DOCUMENT_CHECKED_OUT = 'Document checked out'
 
 
