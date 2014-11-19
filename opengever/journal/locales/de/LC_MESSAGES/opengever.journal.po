@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "POT-Creation-Date: 2014-11-19 11:11+0000\n"
-"PO-Revision-Date: 2014-11-19 12:13+0100\n"
+"PO-Revision-Date: 2014-11-19 12:25+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -102,12 +102,12 @@ msgstr "Öffentlichkeitsstatus geändert nach «${public_trial}»."
 #. Default: "Document ${title} removed."
 #: ./opengever/journal/handlers.py:634
 msgid "label_document_removed"
-msgstr "Dokument ${title} wurde gelöscht."
+msgstr "Dokument ${title} gelöscht."
 
 #. Default: "Document ${title} restored."
 #: ./opengever/journal/handlers.py:651
 msgid "label_document_restored"
-msgstr "Dokument ${title} wurde wiederhergestellt."
+msgstr "Dokument ${title} wiederhergestellt."
 
 #. Default: "Document sent by Mail: ${subject}"
 #: ./opengever/journal/handlers.py:535
@@ -192,7 +192,7 @@ msgstr "Aktenzeichen ${prefix} in ${repository} wurde freigegeben."
 #. Default: "Object restore: ${title}"
 #: ./opengever/journal/handlers.py:617
 msgid "label_restore"
-msgstr "Objekt wiederhergestellt: ${title}"
+msgstr "Dokument ${title} reaktiviert."
 
 #. Default: "Task added: ${title}"
 #: ./opengever/journal/handlers.py:559
@@ -217,7 +217,7 @@ msgstr "Titel"
 #. Default: "Object moved to trash: ${title}"
 #: ./opengever/journal/handlers.py:599
 msgid "label_to_trash"
-msgstr "Objekt gelöscht: ${title}"
+msgstr "Dokument ${title} in den Papierkorb verschoben."
 
 #. Default: "Journal"
 #: ./opengever/journal/templates/journalhistory.pt:17
