@@ -130,4 +130,23 @@
         directory="profiles/4000"
         />
 
+    <!-- 4000 -> 4100 -->
+    <genericsetup:upgradeStep
+        title="Add removed workflow state."
+        description=""
+        source="4000"
+        destination="4100"
+        handler="opengever.mail.upgrades.to4100.AddRemovedState"
+        profile="opengever.mail:default"
+        />
+
+    <genericsetup:registerProfile
+        name="4100"
+        title="opengever.mail: upgrade profile 4100"
+        description=""
+        directory="profiles/4100"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
 </configure>
