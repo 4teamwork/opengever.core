@@ -115,6 +115,10 @@ class Document(Item):
     def css_class(self):
         return get_css_class(self)
 
+    @property
+    def remove_transition(self):
+        return 'document-transition-remove'
+
     def related_items(self):
         relations = IRelatedDocuments(self).relatedItems
         if relations:

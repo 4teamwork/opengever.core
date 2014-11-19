@@ -80,6 +80,10 @@ class OGMail(Item):
             return email.message_from_string(data)
         return MIMEText('')
 
+    @property
+    def remove_transition(self):
+        return 'mail-transition-remove'
+
     def css_class(self):
         return get_css_class(self)
 

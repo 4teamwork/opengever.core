@@ -1,5 +1,4 @@
 from AccessControl import Unauthorized
-from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.trash import _
 from opengever.trash.trash import ITrashed
 from plone import api
@@ -18,7 +17,8 @@ class Remover(object):
 
         for document in self.documents:
             api.content.transition(obj=document,
-                                   transition='document-transition-remove')
+                                   transition=document.remove_transition)
+
         return True
 
     def verify_is_allowed(self):

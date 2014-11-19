@@ -140,3 +140,15 @@ class TestRemoveConfirmationView(FunctionalTestCase):
 
         self.assertEquals('http://nohost/plone/dossier-1#trash', browser.url)
         assert_message('The documents are succesfully deleted')
+
+    @browsing
+    def test_deletion_works_also_for_mails(self, browser):
+        mail = create(Builder('mail')
+                      .trashed()
+                      .within(self.dossier))
+        data = {'paths': self.obj2paths([mail, self.doc1])}
+        browser.login().open(self.dossier, data, view='remove_confirmation')
+        browser.forms.get('remove_confirmation').submit()
+
+        self.assertEquals('mail-state-removed',
+                          api.content.get_state(obj=mail))
