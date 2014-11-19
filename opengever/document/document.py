@@ -4,6 +4,7 @@ from five import grok
 from ftw.mail.interfaces import IEmailAddress
 from opengever.base.browser.helper import get_css_class
 from opengever.document import _
+from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from plone.autoform import directives as form_directives
@@ -113,6 +114,12 @@ class Document(Item):
 
     def css_class(self):
         return get_css_class(self)
+
+    def related_items(self):
+        relations = IRelatedDocuments(self).relatedItems
+        if relations:
+            return [rel.to_object for rel in relations]
+        return []
 
     def getIcon(self, relative_to_portal=1):
         """Calculate the icon using the mime type of the file

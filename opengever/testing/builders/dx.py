@@ -151,6 +151,7 @@ builder_registry.register('forwarding', ForwardingBuilder)
 
 class MailBuilder(DexterityBuilder):
     portal_type = 'ftw.mail.mail'
+    _trashed = False
 
     def with_dummy_message(self):
         self.with_message("foobar")
@@ -160,6 +161,17 @@ class MailBuilder(DexterityBuilder):
         file_ = NamedBlobFile(data=message, filename=filename)
         self.arguments["message"] = file_
         return self
+
+    def trashed(self):
+        self._trashed = True
+        return self
+
+    def after_create(self, obj):
+        if self._trashed:
+            trasher = ITrashable(obj)
+            trasher.trash()
+
+        super(MailBuilder, self).after_create(obj)
 
 
 builder_registry.register('mail', MailBuilder)

@@ -42,3 +42,8 @@ class TestOGMailAddition(FunctionalTestCase):
 
         self.assertEquals(u'hanspeter', mail.title)
         self.assertEquals('hanspeter', mail.Title())
+
+    def test_mail_has_no_related_items(self):
+        mail = create(Builder("mail").with_dummy_message())
+
+        self.assertEquals([], mail.related_items())

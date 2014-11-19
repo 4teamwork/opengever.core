@@ -144,6 +144,17 @@ class TestDocument(FunctionalTestCase):
         self.assertTrue(document_a.is_checked_out())
         self.assertFalse(document_b.is_checked_out())
 
+    def test_related_items(self):
+        document_a = create(Builder('document'))
+        document_b = create(Builder('document')
+                            .relate_to([document_a]))
+        document_c = create(Builder('document')
+                            .relate_to([document_a, document_b]))
+
+        self.assertEquals([], document_a.related_items())
+        self.assertEquals([document_a], document_b.related_items())
+        self.assertEquals([document_a, document_b], document_c.related_items())
+
 
 class TestDocumentDefaultValues(FunctionalTestCase):
 

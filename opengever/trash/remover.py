@@ -53,7 +53,7 @@ class RemoveConditions(object):
                   default=u'The document is still checked out.'))
 
     def verify_no_relations(self):
-        related_documents = IRelatedDocuments(self.document).relatedItems
+        related_documents = self.document.related_items()
         objs_with_backreferences = self.get_backreferences()
         if related_documents:
             self.error_msg.append(

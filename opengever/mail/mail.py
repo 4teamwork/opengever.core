@@ -79,6 +79,10 @@ class OGMail(Item):
             return email.message_from_string(data)
         return MIMEText('')
 
+    def related_items(self):
+        """Mail does not support relatedItems"""
+        return []
+
 
 class OGMailBase(metadata.MetadataBase):
 
