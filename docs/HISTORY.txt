@@ -4,6 +4,9 @@ Changelog
 3.4.2 (unreleased)
 ------------------
 
+- Dropped prevent_deletion handler.
+  [phgross]
+
 - Fixed mail download for mails with already CRLF.
   [phgross]
 

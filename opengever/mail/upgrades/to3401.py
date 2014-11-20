@@ -12,6 +12,12 @@ from zope.component import queryMultiAdapter
 import zope.schema
 
 
+NEW_BEHAVIORS = [
+    u'ftw.journal.interfaces.IAnnotationsJournalizable',
+    u'opengever.document.behaviors.metadata.IDocumentMetadata',
+    u'opengever.document.behaviors.name_from_title.IDocumentNameFromTitle']
+
+
 class ActivateBehaviors(UpgradeStep):
 
     def __call__(self):
@@ -21,10 +27,9 @@ class ActivateBehaviors(UpgradeStep):
         if 'plone.app.content.interfaces.INameFromTitle' in behaviors:
             behaviors.remove('plone.app.content.interfaces.INameFromTitle')
 
-        behaviors.extend([
-            u'ftw.journal.interfaces.IAnnotationsJournalizable',
-            u'opengever.document.behaviors.metadata.IDocumentMetadata',
-            u'opengever.document.behaviors.name_from_title.IDocumentNameFromTitle'])
+        for behavior in NEW_BEHAVIORS:
+            if not behavior in behaviors:
+                behaviors.append(behavior)
 
         fti._updateProperty('behaviors', tuple(behaviors))
 
