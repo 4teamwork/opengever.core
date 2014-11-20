@@ -423,23 +423,6 @@ def document_modified(context, event):
         journal_entry_factory(context, PUBLIC_TRIAL_MODIFIED_ACTION, title)
 
 
-DOCUMENT_STATE_CHANGED = 'Document state changed'
-
-
-@grok.subscribe(IBaseDocument, IActionSucceededEvent)
-def document_state_changed(context, event):
-    skip_transactions = [
-        'check_out',
-        'check_in',
-        ]
-    if event.action in skip_transactions:
-        return
-    newstate = event.workflow.transitions.get(event.action).new_state_id
-    title = pmf(u'Document state changed to %s' % newstate)
-    journal_entry_factory(context, DOCUMENT_STATE_CHANGED, title)
-    return
-
-
 DOCUMENT_CHECKED_OUT = 'Document checked out'
 
 
@@ -622,6 +605,40 @@ def document_untrashed(context, event):
             })
     journal_entry_factory(context, OBJECT_RESTORE, title)
     journal_entry_factory(context.aq_inner.aq_parent, OBJECT_RESTORE, title)
+    return
+
+
+OBJECT_REMOVED = 'Object removed'
+
+
+@grok.subscribe(IBaseDocument, IActionSucceededEvent)
+def document_removed(context, event):
+    if event.action == context.remove_transition:
+        title = _(u'label_document_removed',
+                  default=u'Document ${title} removed.',
+                  mapping={'title': context.title_or_id()})
+
+        parent = aq_parent(aq_inner(context))
+        journal_entry_factory(context, OBJECT_REMOVED, title)
+        journal_entry_factory(parent, OBJECT_REMOVED, title)
+
+    return
+
+
+OBJECT_RESTORED = 'Object restored'
+
+
+@grok.subscribe(IBaseDocument, IActionSucceededEvent)
+def document_restored(context, event):
+    if event.action == context.restore_transition:
+        title = _(u'label_document_restored',
+                  default=u'Document ${title} restored.',
+                  mapping={'title': context.title_or_id()})
+
+        parent = aq_parent(aq_inner(context))
+        journal_entry_factory(context, OBJECT_RESTORED, title)
+        journal_entry_factory(parent, OBJECT_RESTORED, title)
+
     return
 
 

@@ -205,21 +205,6 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             'Document added: %s' % document.title_or_id(),
             dossier)
 
-        # Get the workflow for the document to test the ActionSucceededEvent
-        wftool = getToolByName(document, 'portal_workflow')
-        workflow = wftool.get('simple_publication_workflow')
-
-        # Action-Succeeded-Event with skipped transaction
-        length = get_journal_length(document)
-        notify(ActionSucceededEvent(
-            document, workflow, 'check_out', 'checked_out', ))
-        self.assertTrue(length == get_journal_length(document))
-
-        # Action-Succeeded-Event
-        notify(ActionSucceededEvent(
-            document, workflow, 'publish', 'published', ))
-        self.check_document_actionsucceeded(document)
-
         # Object Checked-Out-Event
         notify(ObjectCheckedOutEvent(document, comment))
         self.check_document_checkedout(document, comment)
@@ -496,15 +481,6 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
                 action_type='Document modified',
                 action_title='Changed metadata of document %s' % (
                     obj.title_or_id()), )
-
-    def check_document_actionsucceeded(self, obj):
-        """ Check the journal after changing portal state
-        """
-
-        self.check_annotation(
-            obj,
-            action_type='Document state changed',
-            action_title='Document state changed to published')
 
     def check_document_checkedout(self, obj, comment):
         """ Check the journal after checked out

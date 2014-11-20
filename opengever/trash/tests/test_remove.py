@@ -3,6 +3,8 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import assert_message
+from opengever.journal.handlers import OBJECT_REMOVED
+from opengever.journal.handlers import OBJECT_RESTORED
 from opengever.testing import create_plone_user
 from opengever.testing import FunctionalTestCase
 from opengever.trash.remover import Remover
@@ -161,3 +163,74 @@ class TestRemoveConfirmationView(FunctionalTestCase):
 
         with self.assertRaises(Unauthorized):
             browser.login().open(url)
+
+
+class TestRemoveJournalization(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestRemoveJournalization, self).setUp()
+
+        self.grant('Administrator')
+
+        self.dossier = create(Builder('dossier'))
+        self.mail = create(Builder('mail')
+                           .titled(u'T\xe4st Mail')
+                           .within(self.dossier)
+                           .trashed())
+        self.document = create(Builder('document')
+                               .titled(u'T\xe4st Doc')
+                               .within(self.dossier)
+                               .trashed())
+
+    def test_removing_is_journalized_on_object(self):
+        Remover([self.mail, self.document]).remove()
+
+        self.assert_journal_entry(self.mail, OBJECT_REMOVED,
+                                  u'Document T\xe4st Mail removed.')
+        self.assert_journal_entry(self.document, OBJECT_REMOVED,
+                                  u'Document T\xe4st Doc removed.')
+
+    def test_removing_is_journalized_on_parent(self):
+        Remover([self.mail, self.document]).remove()
+
+        self.assert_journal_entry(self.dossier, OBJECT_REMOVED,
+                                  u'Document T\xe4st Doc removed.')
+        self.assert_journal_entry(self.dossier, OBJECT_REMOVED,
+                                  u'Document T\xe4st Mail removed.', entry=-2)
+
+
+class TestRestoreJournalization(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestRestoreJournalization, self).setUp()
+
+        self.grant('Manager')
+
+        self.dossier = create(Builder('dossier'))
+        self.mail = create(Builder('mail')
+                           .titled(u'T\xe4st Mail')
+                           .within(self.dossier)
+                           .in_state('mail-state-removed')
+                           .trashed())
+        self.document = create(Builder('document')
+                               .titled(u'T\xe4st Doc')
+                               .within(self.dossier)
+                               .in_state('document-state-removed')
+                               .trashed())
+
+        api.content.transition(
+            obj=self.mail, transition=self.mail.restore_transition)
+        api.content.transition(
+            obj=self.document, transition=self.document.restore_transition)
+
+    def test_restoring_is_journalized_on_object(self):
+        self.assert_journal_entry(self.mail, OBJECT_RESTORED,
+                                  u'Document T\xe4st Mail restored.')
+        self.assert_journal_entry(self.document, OBJECT_RESTORED,
+                                  u'Document T\xe4st Doc restored.')
+
+    def test_restoring_is_journalized_on_parent(self):
+        self.assert_journal_entry(self.dossier, OBJECT_RESTORED,
+                                  u'Document T\xe4st Doc restored.')
+        self.assert_journal_entry(self.dossier, OBJECT_RESTORED,
+                                  u'Document T\xe4st Mail restored.', entry=-2)
