@@ -38,7 +38,7 @@ class TestRemover(FunctionalTestCase):
         self.assertEquals('RemoveConditions not satisified',
                           str(cm.exception))
 
-    def test_raises_unauthorized_when_user_has_not_remove_permission(self):
+    def test_raises_unauthorized_when_user_does_not_have_remove_permission(self):
         doc1 = create(Builder('document').trashed())
 
         create_plone_user(self.portal, 'hugo.boss')
@@ -97,7 +97,7 @@ class TestRemoveConfirmationView(FunctionalTestCase):
         browser.login().open(self.dossier, data, view='remove_confirmation')
 
         self.assertEquals(
-            ["Error The selected documents can't be removed, see errors messages above."],
+            ["Error The selected documents can't be removed, see error messages below."],
             browser.css('.message').text)
 
     @browsing
@@ -106,7 +106,7 @@ class TestRemoveConfirmationView(FunctionalTestCase):
         browser.login().open(self.dossier, data, view='remove_confirmation')
 
         error_div = browser.css('div.documents div.error').first
-        self.assertEquals('The documents is not trashed.', error_div.text)
+        self.assertEquals('The document is not trashed.', error_div.text)
         self.assertEquals(['Document 2'], error_div.parent().css('a').text)
 
     @browsing
@@ -139,7 +139,7 @@ class TestRemoveConfirmationView(FunctionalTestCase):
         browser.forms.get('remove_confirmation').submit()
 
         self.assertEquals('http://nohost/plone/dossier-1#trash', browser.url)
-        assert_message('The documents are succesfully deleted')
+        assert_message('The documents have been successfully deleted')
 
     @browsing
     def test_deletion_works_also_for_mails(self, browser):

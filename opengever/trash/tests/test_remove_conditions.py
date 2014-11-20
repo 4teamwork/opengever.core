@@ -1,17 +1,17 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.testing import FunctionalTestCase
-from opengever.trash.remover import RemoveConditions
+from opengever.trash.remover import RemoveConditionsChecker
 from plone.app.testing import TEST_USER_ID
 from zope.event import notify
 from zope.i18n import translate
 from zope.lifecycleevent import ObjectModifiedEvent
 
 
-class TestRemoveConditions(FunctionalTestCase):
+class TestRemoveConditionsChecker(FunctionalTestCase):
 
     def setUp(self):
-        super(TestRemoveConditions, self).setUp()
+        super(TestRemoveConditionsChecker, self).setUp()
         self.grant('Administrator')
 
     def assert_error_messages(self, expected, msgs):
@@ -22,25 +22,25 @@ class TestRemoveConditions(FunctionalTestCase):
         document = create(Builder('document')
                           .trashed()
                           .checked_out_by(TEST_USER_ID))
-        checker = RemoveConditions(document)
+        checker = RemoveConditionsChecker(document)
 
-        self.assertFalse(checker.remove_allowed())
+        self.assertFalse(checker.removal_allowed())
         self.assert_error_messages(
             [u'The document is still checked out.'], checker.error_msg)
 
-    def test_document_has_no_relations(self):
+    def test_document_must_not_have_relations(self):
         document_a = create(Builder('document'))
         document_b = create(Builder('document')
                             .trashed()
                             .relate_to([document_a]))
 
-        checker = RemoveConditions(document_b)
+        checker = RemoveConditionsChecker(document_b)
 
-        self.assertFalse(checker.remove_allowed())
+        self.assertFalse(checker.removal_allowed())
         self.assert_error_messages(
             [u'The document contains relations.'], checker.error_msg)
 
-    def test_document_has_no_backreferences(self):
+    def test_document_must_not_have_backreferences(self):
         document_a = create(Builder('document')
                             .trashed())
         document_b = create(Builder('document')
@@ -49,22 +49,22 @@ class TestRemoveConditions(FunctionalTestCase):
 
         notify(ObjectModifiedEvent(document_b))
 
-        checker = RemoveConditions(document_a)
+        checker = RemoveConditionsChecker(document_a)
 
-        self.assertFalse(checker.remove_allowed())
+        self.assertFalse(checker.removal_allowed())
         self.assert_error_messages(
-            [u'The document is reffered by the document <a href=http://nohost/plone/document-2>Doc b</a>.'],
+            [u'The document is referred by the document(s) <a href=http://nohost/plone/document-2>Doc b</a>.'],
             checker.error_msg)
 
-    def test_document_is_trashed(self):
+    def test_document_must_be_trashed(self):
         document = create(Builder('document'))
-        checker = RemoveConditions(document)
-        self.assertFalse(checker.remove_allowed())
+        checker = RemoveConditionsChecker(document)
+        self.assertFalse(checker.removal_allowed())
         self.assert_error_messages(
-            [u'The documents is not trashed.'],
+            [u'The document is not trashed.'],
             checker.error_msg)
 
-    def test_remove_allowed(self):
+    def test_removal_allowed(self):
         document = create(Builder('document').trashed())
-        checker = RemoveConditions(document)
-        self.assertTrue(checker.remove_allowed())
+        checker = RemoveConditionsChecker(document)
+        self.assertTrue(checker.removal_allowed())

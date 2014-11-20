@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: opengever.trash 1.0\n"
-"POT-Creation-Date: 2014-11-18 16:22+0000\n"
+"POT-Creation-Date: 2014-11-20 15:35+0000\n"
 "PO-Revision-Date: 2014-11-18 17:19+0100\n"
 "Last-Translator: Julian Infanger <julian.infangner.@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -47,7 +47,7 @@ msgstr "Dokumente löschen"
 msgid "label_errror"
 msgstr "Fehler"
 
-#. Default: "The documents are succesfully deleted"
+#. Default: "The documents have been successfully deleted"
 #: ./opengever/trash/browser/remove_confirmation.py:20
 msgid "label_successfully_deleted"
 msgstr "Die Dokumente wurden efolgreich gelöscht"
@@ -62,27 +62,27 @@ msgstr "Warnung"
 msgid "msg_delete_confirmation"
 msgstr "Möchten Sie die selektierten Dokumente wirklich löschen?"
 
-#. Default: "The selected documents can't be removed, see errors messages above."
+#. Default: "The selected documents can't be removed, see error messages below."
 #: ./opengever/trash/browser/remove_confirmation_templates/remove_confirmation.pt:32
 msgid "msg_delete_not_possible"
-msgstr "Die selektierten Dokumente können nicht gelöscht werden, sehen Sie die Meldungen unten."
+msgstr "Die selektierten Dokumente können nicht gelöscht werden."
 
-#. Default: "The document is reffered by the document ${links}."
+#. Default: "The document is referred by the document(s) ${links}."
 #: ./opengever/trash/remover.py:70
 msgid "msg_document_has_backreferences"
-msgstr "Das Dokument ist refferenziert vom Dokument ${links}."
+msgstr "Auf das Dokument existiert noch eine Referenz von Dokument ${links}."
 
 #. Default: "The document contains relations."
 #: ./opengever/trash/remover.py:60
 msgid "msg_document_has_relations"
-msgstr "Das Dokument referenziert auf andere Dokumente."
+msgstr "Das Dokument referenziert andere Dokumente."
 
 #. Default: "The document is still checked out."
 #: ./opengever/trash/remover.py:52
 msgid "msg_document_is_checked_out"
 msgstr "Das Dokument ist noch ausgecheckt."
 
-#. Default: "The documents is not trashed."
+#. Default: "The document is not trashed."
 #: ./opengever/trash/remover.py:77
 msgid "msg_is_not_trashed"
 msgstr "Das Dokument ist noch nicht im Papierkorb"

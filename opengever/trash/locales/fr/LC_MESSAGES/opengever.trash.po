@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-11-18 16:22+0000\n"
+"POT-Creation-Date: 2014-11-20 15:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,7 +46,7 @@ msgstr ""
 msgid "label_errror"
 msgstr ""
 
-#. Default: "The documents are succesfully deleted"
+#. Default: "The documents have been successfully deleted"
 #: ./opengever/trash/browser/remove_confirmation.py:20
 msgid "label_successfully_deleted"
 msgstr ""
@@ -61,12 +61,12 @@ msgstr ""
 msgid "msg_delete_confirmation"
 msgstr ""
 
-#. Default: "The selected documents can't be removed, see errors messages above."
+#. Default: "The selected documents can't be removed, see error messages below."
 #: ./opengever/trash/browser/remove_confirmation_templates/remove_confirmation.pt:32
 msgid "msg_delete_not_possible"
 msgstr ""
 
-#. Default: "The document is reffered by the document ${links}."
+#. Default: "The document is referred by the document(s) ${links}."
 #: ./opengever/trash/remover.py:70
 msgid "msg_document_has_backreferences"
 msgstr ""
@@ -81,7 +81,7 @@ msgstr ""
 msgid "msg_document_is_checked_out"
 msgstr ""
 
-#. Default: "The documents is not trashed."
+#. Default: "The document is not trashed."
 #: ./opengever/trash/remover.py:77
 msgid "msg_is_not_trashed"
 msgstr ""

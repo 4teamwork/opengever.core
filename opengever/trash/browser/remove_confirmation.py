@@ -1,6 +1,6 @@
 from five import grok
 from opengever.trash import _
-from opengever.trash.remover import RemoveConditions
+from opengever.trash.remover import RemoveConditionsChecker
 from opengever.trash.remover import Remover
 from Products.statusmessages.interfaces import IStatusMessage
 from zope.interface import Interface
@@ -15,10 +15,10 @@ class RemoveConfirmation(grok.View):
     grok.template('remove_confirmation')
 
     def __call__(self):
-        if self.request.get('form.buttons.delete'):
-            self.delete_objects()
+        if self.request.get('form.buttons.remove'):
+            self.remove_objects()
             msg = _(u'label_successfully_deleted',
-                    default=u'The documents are succesfully deleted')
+                    default=u'The documents have been successfully deleted')
             IStatusMessage(self.request).addStatusMessage(msg, type='info')
             return self.redirect_back()
 
@@ -44,11 +44,11 @@ class RemoveConfirmation(grok.View):
         self.allowed = True
 
         for document in self.get_selected_documents():
-            condition = RemoveConditions(document)
-            allowed = condition.remove_allowed()
+            checker = RemoveConditionsChecker(document)
+            allowed = checker.removal_allowed()
             self.items.append({'document': document,
                                'allowed': allowed,
-                               'error_msg': condition.error_msg})
+                               'error_msg': checker.error_msg})
             if not allowed:
                 self.allowed = False
 
@@ -60,6 +60,6 @@ class RemoveConfirmation(grok.View):
 
         return documents
 
-    def delete_objects(self):
+    def remove_objects(self):
         documents = self.get_selected_documents()
         Remover(documents).remove()

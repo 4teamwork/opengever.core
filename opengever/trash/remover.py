@@ -23,7 +23,7 @@ class Remover(object):
 
     def verify_is_allowed(self):
         for document in self.documents:
-            if not RemoveConditions(document).remove_allowed():
+            if not RemoveConditionsChecker(document).removal_allowed():
                 raise RuntimeError('RemoveConditions not satisified')
 
             if not api.user.get_current().checkPermission(
@@ -31,13 +31,13 @@ class Remover(object):
                 raise Unauthorized
 
 
-class RemoveConditions(object):
+class RemoveConditionsChecker(object):
 
     def __init__(self, document):
         self.document = document
         self.error_msg = []
 
-    def remove_allowed(self):
+    def removal_allowed(self):
         self.verify_checked_in()
         self.verify_no_relations()
         self.verify_is_trashed()
@@ -68,14 +68,14 @@ class RemoveConditions(object):
 
             self.error_msg.append(
                 _(u'msg_document_has_backreferences',
-                  default=u'The document is reffered by the document ${links}.',
+                  default=u'The document is referred by the document(s) ${links}.',
                   mapping={'links': ', '.join(links)}))
 
     def verify_is_trashed(self):
         if not ITrashed.providedBy(self.document):
             self.error_msg.append(
                 _(u'msg_is_not_trashed',
-                  default=u'The documents is not trashed.'))
+                  default=u'The document is not trashed.'))
 
     def get_backreferences(self):
         catalog = getUtility(ICatalog)

@@ -30,7 +30,7 @@
             <dl tal:condition="not: view/allowed" class="message error">
               <dt i18n:translate="label_errror">Error</dt>
               <dd i18n:translate="msg_delete_not_possible">
-                The selected documents can't be removed, see errors messages above.
+                The selected documents can't be removed, see error messages below.
               </dd>
             </dl>
 
@@ -53,7 +53,7 @@
               <input tal:repeat="path view/paths" type="hidden" name="paths:list" tal:attributes="value path" />
 
               <input tal:condition="view/allowed" i18n:attributes="value label_delete"
-                     type="submit" value="Delete" name="form.buttons.delete"
+                     type="submit" value="Delete" name="form.buttons.remove"
                      id="form-buttons-delete" class="destructive" />
 
               <input tal:condition="not: view/allowed" i18n:attributes="value label_delete"
