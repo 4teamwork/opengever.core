@@ -9,13 +9,17 @@ from zope.component import queryMultiAdapter
 import zope.schema
 
 
+CLASSIFICATION_BEHAVIOR = 'opengever.base.behaviors.classification.IClassification'
+
+
 class AddClassifiactionBehavior(UpgradeStep):
 
     def __call__(self):
         fti = getUtility(IDexterityFTI, name=u'ftw.mail.mail')
         behaviors = list(fti.behaviors)
-        behaviors.append(
-            'opengever.base.behaviors.classification.IClassification')
+        if CLASSIFICATION_BEHAVIOR not in behaviors:
+            behaviors.append(CLASSIFICATION_BEHAVIOR)
+
         fti._updateProperty('behaviors', tuple(behaviors))
 
         query = {'portal_type': 'ftw.mail.mail'}
