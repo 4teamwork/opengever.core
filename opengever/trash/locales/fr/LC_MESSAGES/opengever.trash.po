@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-12-27 13:02+0000\n"
+"POT-Creation-Date: 2014-11-20 15:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -9,7 +9,10 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
 
 #: ./opengever/trash/trash.py:118
 msgid "You have not selected any items"
@@ -23,6 +26,71 @@ msgstr "L'objet a été déplacé vers la corbeille"
 msgid "could not trash the object ${obj}, it is checked out"
 msgstr "L'objet ${obj} a un checkout. Vous ne pouvez pas le supprimer"
 
+#. Default: "You have not selected any items"
+#: ./opengever/trash/browser/remove_confirmation.py:29
+msgid "error_no_documents_selected"
+msgstr ""
+
+#. Default: "Delete"
+#: ./opengever/trash/browser/remove_confirmation_templates/remove_confirmation.pt:55
+msgid "label_delete"
+msgstr ""
+
+#. Default: "Delete documents"
+#: ./opengever/trash/browser/remove_confirmation_templates/remove_confirmation.pt:19
+msgid "label_delete_documents"
+msgstr ""
+
+#. Default: "Error"
+#: ./opengever/trash/browser/remove_confirmation_templates/remove_confirmation.pt:31
+msgid "label_errror"
+msgstr ""
+
+#. Default: "The documents have been successfully deleted"
+#: ./opengever/trash/browser/remove_confirmation.py:20
+msgid "label_successfully_deleted"
+msgstr ""
+
+#. Default: "Warning"
+#: ./opengever/trash/browser/remove_confirmation_templates/remove_confirmation.pt:24
+msgid "label_warning"
+msgstr ""
+
+#. Default: "Do you really want to delete the selected documents?"
+#: ./opengever/trash/browser/remove_confirmation_templates/remove_confirmation.pt:25
+msgid "msg_delete_confirmation"
+msgstr ""
+
+#. Default: "The selected documents can't be removed, see error messages below."
+#: ./opengever/trash/browser/remove_confirmation_templates/remove_confirmation.pt:32
+msgid "msg_delete_not_possible"
+msgstr ""
+
+#. Default: "The document is referred by the document(s) ${links}."
+#: ./opengever/trash/remover.py:70
+msgid "msg_document_has_backreferences"
+msgstr ""
+
+#. Default: "The document contains relations."
+#: ./opengever/trash/remover.py:60
+msgid "msg_document_has_relations"
+msgstr ""
+
+#. Default: "The document is still checked out."
+#: ./opengever/trash/remover.py:52
+msgid "msg_document_is_checked_out"
+msgstr ""
+
+#. Default: "The document is not trashed."
+#: ./opengever/trash/remover.py:77
+msgid "msg_is_not_trashed"
+msgstr ""
+
+#: ./opengever/trash/profiles/default/actions.xml
+#: ./opengever/trash/upgrades/profiles/4100/actions.xml
+msgid "remove"
+msgstr ""
+
 #: ./opengever/trash/trash.py:112
 msgid "the object ${obj} trashed"
 msgstr "L'objet ${obj} a été déplacé dans la corbeille"
@@ -34,5 +102,4 @@ msgstr "Déplacer dans la corbeille"
 #: ./opengever/trash/profiles/default/actions.xml
 msgid "untrashed"
 msgstr "Réactiver"
-
 

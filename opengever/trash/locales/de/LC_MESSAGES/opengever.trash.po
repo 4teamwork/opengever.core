@@ -1,14 +1,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: opengever.trash 1.0\n"
-"POT-Creation-Date: 2011-12-27 13:02+0000\n"
-"PO-Revision-Date: 2009-12-08 14:00+0000\n"
+"POT-Creation-Date: 2014-11-20 15:35+0000\n"
+"PO-Revision-Date: 2014-11-18 17:19+0100\n"
 "Last-Translator: Julian Infanger <julian.infangner.@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.trash\n"
 "X-Is-Fallback-For: de-at de-li de-lu de-ch de-de\n"
@@ -25,6 +27,71 @@ msgstr "Das Objekt ${obj} wurde bereits in den Papierkorb verschoben"
 msgid "could not trash the object ${obj}, it is checked out"
 msgstr "Das Objekt ${obj} konnte nicht in den Papierkorb verschoben werden, es ist ausgecheckt."
 
+#. Default: "You have not selected any items"
+#: ./opengever/trash/browser/remove_confirmation.py:29
+msgid "error_no_documents_selected"
+msgstr "Sie haben keine Objekte ausgewählt."
+
+#. Default: "Delete"
+#: ./opengever/trash/browser/remove_confirmation_templates/remove_confirmation.pt:55
+msgid "label_delete"
+msgstr "Löschen"
+
+#. Default: "Delete documents"
+#: ./opengever/trash/browser/remove_confirmation_templates/remove_confirmation.pt:19
+msgid "label_delete_documents"
+msgstr "Dokumente löschen"
+
+#. Default: "Error"
+#: ./opengever/trash/browser/remove_confirmation_templates/remove_confirmation.pt:31
+msgid "label_errror"
+msgstr "Fehler"
+
+#. Default: "The documents have been successfully deleted"
+#: ./opengever/trash/browser/remove_confirmation.py:20
+msgid "label_successfully_deleted"
+msgstr "Die Dokumente wurden efolgreich gelöscht"
+
+#. Default: "Warning"
+#: ./opengever/trash/browser/remove_confirmation_templates/remove_confirmation.pt:24
+msgid "label_warning"
+msgstr "Warnung"
+
+#. Default: "Do you really want to delete the selected documents?"
+#: ./opengever/trash/browser/remove_confirmation_templates/remove_confirmation.pt:25
+msgid "msg_delete_confirmation"
+msgstr "Möchten Sie die selektierten Dokumente wirklich löschen?"
+
+#. Default: "The selected documents can't be removed, see error messages below."
+#: ./opengever/trash/browser/remove_confirmation_templates/remove_confirmation.pt:32
+msgid "msg_delete_not_possible"
+msgstr "Die selektierten Dokumente können nicht gelöscht werden."
+
+#. Default: "The document is referred by the document(s) ${links}."
+#: ./opengever/trash/remover.py:70
+msgid "msg_document_has_backreferences"
+msgstr "Auf das Dokument existiert noch eine Referenz von Dokument ${links}."
+
+#. Default: "The document contains relations."
+#: ./opengever/trash/remover.py:60
+msgid "msg_document_has_relations"
+msgstr "Das Dokument referenziert andere Dokumente."
+
+#. Default: "The document is still checked out."
+#: ./opengever/trash/remover.py:52
+msgid "msg_document_is_checked_out"
+msgstr "Das Dokument ist noch ausgecheckt."
+
+#. Default: "The document is not trashed."
+#: ./opengever/trash/remover.py:77
+msgid "msg_is_not_trashed"
+msgstr "Das Dokument ist noch nicht im Papierkorb"
+
+#: ./opengever/trash/profiles/default/actions.xml
+#: ./opengever/trash/upgrades/profiles/4100/actions.xml
+msgid "remove"
+msgstr "Löschen"
+
 #: ./opengever/trash/trash.py:112
 msgid "the object ${obj} trashed"
 msgstr "Das Objekt ${obj} wurde in den Papierkorb verschoben."
@@ -36,5 +103,3 @@ msgstr "In den Papierkorb verschieben"
 #: ./opengever/trash/profiles/default/actions.xml
 msgid "untrashed"
 msgstr "Reaktivieren"
-
-

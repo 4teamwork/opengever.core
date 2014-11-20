@@ -285,7 +285,8 @@ class Trash(Documents):
 
     enabled_actions = [
         'untrashed',
-        ]
+        'remove',
+    ]
 
     major_actions = []
 

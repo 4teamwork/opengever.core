@@ -13,6 +13,7 @@
         </property>
      <property name="visible">True</property>
     </object>
+
     <object name="untrashed" meta_type="CMF Action" i18n:domain="opengever.trash">
         <property name="title" i18n:translate="">untrashed</property>
         <property name="description" i18n:translate=""></property>
@@ -24,5 +25,18 @@
         </property>
      <property name="visible">True</property>
     </object>
+
+    <object name="remove" meta_type="CMF Action" i18n:domain="opengever.trash">
+      <property name="title" i18n:translate="">remove</property>
+      <property name="description" i18n:translate=""></property>
+      <property name="url_expr">string:./remove_confirmation:method</property>
+      <property name="icon_expr"></property>
+      <property name="available_expr"></property>
+      <property name="permissions">
+        <element value="Remove GEVER content"/>
+      </property>
+      <property name="visible">True</property>
+    </object>
+
   </object>
 </object>
