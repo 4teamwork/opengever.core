@@ -152,3 +152,12 @@ class TestRemoveConfirmationView(FunctionalTestCase):
 
         self.assertEquals('mail-state-removed',
                           api.content.get_state(obj=mail))
+
+    @browsing
+    def test_(self, browser):
+        url = '{}/remove_confirmation?paths:list={}&form.buttons.remove=true'.format(
+            self.dossier.absolute_url(),
+            '/'.join(self.doc1.getPhysicalPath()))
+
+        with self.assertRaises(Unauthorized):
+            browser.login().open(url)

@@ -1,3 +1,4 @@
+from AccessControl import Unauthorized
 from five import grok
 from opengever.trash import _
 from opengever.trash.remover import RemoveConditionsChecker
@@ -16,6 +17,11 @@ class RemoveConfirmation(grok.View):
 
     def __call__(self):
         if self.request.get('form.buttons.remove'):
+
+            # Made form CSRF save
+            if not self.request.method.lower() == 'post':
+                raise Unauthorized
+
             self.remove_objects()
             msg = _(u'label_successfully_deleted',
                     default=u'The documents have been successfully deleted')
