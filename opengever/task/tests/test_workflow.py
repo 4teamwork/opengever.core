@@ -1,8 +1,9 @@
-from Products.CMFCore.utils import getToolByName
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.testing import FunctionalTestCase
+from plone import api
 from plone.app.testing import TEST_USER_ID
+from Products.CMFCore.utils import getToolByName
 from zExceptions import Unauthorized
 import transaction
 
@@ -51,3 +52,14 @@ class TestTaskWorkflow(FunctionalTestCase):
         self.assertEquals(
             'You are not authorized to access this resource.',
             str(cm.exception))
+
+    def test_deleting_task_is_only_allowed_for_managers(self):
+        task = create(Builder('task'))
+
+        acl_users = api.portal.get_tool('acl_users')
+        valid_roles = list(acl_users.portal_role_manager.valid_roles())
+        valid_roles.remove('Manager')
+        self.grant(*valid_roles)
+
+        with self.assertRaises(Unauthorized):
+            api.content.delete(obj=task)

@@ -5,6 +5,7 @@ from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.api.exc import InvalidParameterError
 from plone.app.testing import setRoles
+from zExceptions import Unauthorized
 import transaction
 
 
@@ -48,3 +49,14 @@ class TestDocumentWorkflow(FunctionalTestCase):
 
         self.assertEquals('document-state-draft',
                           api.content.get_state(obj=doc))
+
+    def test_deleting_document_is_only_allowed_for_managers(self):
+        doc = create(Builder('document'))
+
+        acl_users = api.portal.get_tool('acl_users')
+        valid_roles = list(acl_users.portal_role_manager.valid_roles())
+        valid_roles.remove('Manager')
+        self.grant(*valid_roles)
+
+        with self.assertRaises(Unauthorized):
+            api.content.delete(obj=doc)

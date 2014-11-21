@@ -5,6 +5,9 @@ Changelog
 4.1.0 (unreleased)
 ------------------
 
+- Adjust global role mapping for delete objects permission.
+  [phgross]
+
 - Add repository delete action and confirmation view.
   [phgross]
 
