@@ -1,0 +1,45 @@
+<metal:page define-macro="master">
+  <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+        xmlns:tal="http://xml.zope.org/namespaces/tal"
+        xmlns:metal="http://xml.zope.org/namespaces/metal"
+        xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+        lang="en"
+        metal:use-macro="context/main_template/macros/master"
+        i18n:domain="opengever.repository">
+
+    <head>
+      <metal:block fill-slot="top_slot"
+                   tal:define="dummy python:request.set('disable_border',1)" />
+    </head>
+
+    <body>
+      <div metal:fill-slot="main">
+        <metal:main-macro define-macro="main">
+          <form action="@@delete_repository" method="POST" id="delete_confirmation">
+
+            <h1 class="documentFirstHeading" i18n:translate="label_delete_repository">
+              Delete repository
+            </h1>
+
+            <dl class="message warning">
+              <dt i18n:translate="label_warning">Warning</dt>
+              <dd i18n:translate="msg_delete_confirmation">
+                Do you really want to delete the current repository?
+              </dd>
+            </dl>
+
+            <div class="form_elements">
+              <input i18n:attributes="value label_delete"
+                     type="submit" value="Delete" name="form.buttons.delete"
+                     id="form-buttons-delete" class="destructive" />
+
+              <input type="submit" i18n:domain="plone" i18n:attributes="value label_cancel"
+                     value="Cancel" class="standalone" name="form.buttons.cancel" id="form-buttons-cancel"/>
+            </div>
+
+          </form>
+        </metal:main-macro>
+      </div>
+    </body>
+  </html>
+</metal:page>

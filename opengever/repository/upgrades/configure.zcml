@@ -1,5 +1,6 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
+    xmlns:upgrade-step="http://namespaces.zope.org/ftw.upgrade"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
 
 	<genericsetup:upgradeStep
@@ -58,5 +59,13 @@
 	    provides="Products.GenericSetup.interfaces.EXTENSION"
 	    />
 
+  <!-- 4100 -> 4101 -->
+  <upgrade-step:importProfile
+      title="Add repository delete action"
+      profile="opengever.repository:default"
+      source="4100"
+      destination="4101"
+      directory="profiles/4101"
+      />
 
 </configure>

@@ -5,6 +5,9 @@ Changelog
 4.1.0 (unreleased)
 ------------------
 
+- Add repository delete action and confirmation view.
+  [phgross]
+
 - Revoke list folder contents permission for Administrators on repository.
   [phgross]
 
