@@ -84,6 +84,10 @@ class OGMail(Item):
     def remove_transition(self):
         return 'mail-transition-remove'
 
+    @property
+    def restore_transition(self):
+        return 'mail-transition-restore'
+
     def css_class(self):
         return get_css_class(self)
 

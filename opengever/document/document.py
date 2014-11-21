@@ -119,6 +119,10 @@ class Document(Item):
     def remove_transition(self):
         return 'document-transition-remove'
 
+    @property
+    def restore_transition(self):
+        return 'document-transition-restore'
+
     def related_items(self):
         relations = IRelatedDocuments(self).relatedItems
         if relations:
