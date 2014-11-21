@@ -38,4 +38,25 @@
 	    provides="Products.GenericSetup.interfaces.EXTENSION"
 	    />
 
+
+  <!-- 2602 -> 4100 -->
+	<genericsetup:upgradeStep
+	    title="Revoke List folder contents permission on repository and repositoryroot"
+	    description=""
+	    source="2602"
+	    destination="4100"
+	    handler="opengever.repository.upgrades.to4100.RevokeListFolderContentsPermissoin"
+	    profile="opengever.repository:default"
+	    />
+
+	<genericsetup:registerProfile
+	    name="4100"
+	    title="opengever.repository: upgrade profile 4100"
+	    description=""
+	    directory="profiles/4100"
+	    for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+	    provides="Products.GenericSetup.interfaces.EXTENSION"
+	    />
+
+
 </configure>

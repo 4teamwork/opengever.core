@@ -5,6 +5,9 @@ Changelog
 4.1.0 (unreleased)
 ------------------
 
+- Revoke list folder contents permission for Administrators on repository.
+  [phgross]
+
 - Made the AddPublicTrialColumn more robust.
   [phgross]
 
