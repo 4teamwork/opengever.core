@@ -51,13 +51,15 @@ def content_type_helper(item, content_type):
 
     css_class = 'icon-dokument_verweis'
     if content_type == 'application/octet-stream':
-        lookup = mtr.globFilename(item.get('filename'))
+        mimetype = mtr.globFilename(item.get('filename'))
     else:
-        lookup = mtr.lookup(content_type)
+        result = mtr.lookup(content_type)
+        if result and isinstance(result, tuple):
+            mimetype = result[0]
 
-    if lookup:
+    if mimetype:
         # Strip '.gif' from end of icon name and remove leading 'icon_'
-        icon_filename = lookup[0].icon_path
+        icon_filename = mimetype.icon_path
         filetype = os.path.splitext(icon_filename)[0].replace('icon_', '')
         css_class = 'icon-{}'.format(normalize(filetype))
 
