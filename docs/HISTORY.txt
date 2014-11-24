@@ -5,6 +5,9 @@ Changelog
 4.1.0 (unreleased)
 ------------------
 
+- Revoke delete objects permission for dossiers.
+  [phgross]
+
 - Adjust delete objects permission for repositories.
   [phgross]
 
