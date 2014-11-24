@@ -5,6 +5,9 @@ Changelog
 4.1.0 (unreleased)
 ------------------
 
+- Adjust delete objects permission for repositories.
+  [phgross]
+
 - Adjust global role mapping for delete objects permission.
   [phgross]
 

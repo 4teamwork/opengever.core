@@ -1,8 +1,11 @@
 from ftw.upgrade import UpgradeStep
 
 
-class RevokeListFolderContentsPermissoin(UpgradeStep):
-    """Disable List folder contents permission for Administrators
+class AdjustRepositoryPermissions(UpgradeStep):
+    """Adjust permission for repository and repositoryroot objects:
+     - Disable `List folder contents` permission for Administrators.
+     - No longer aqcuire `Delete objects` permission and give to
+    Administrators and Managers
     """
 
     def __call__(self):

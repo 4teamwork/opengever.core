@@ -39,14 +39,13 @@
 	    provides="Products.GenericSetup.interfaces.EXTENSION"
 	    />
 
-
   <!-- 2602 -> 4100 -->
 	<genericsetup:upgradeStep
-	    title="Revoke List folder contents permission on repository and repositoryroot"
+	    title="Adjust permissions for repository and repositoryroot"
 	    description=""
 	    source="2602"
 	    destination="4100"
-	    handler="opengever.repository.upgrades.to4100.RevokeListFolderContentsPermissoin"
+	    handler="opengever.repository.upgrades.to4100.AdjustRepositoryPermissions"
 	    profile="opengever.repository:default"
 	    />
 

@@ -14,6 +14,7 @@
  <permission>Sharing page: Delegate Reader role</permission>
  <permission>Sharing page: Delegate Reviewer role</permission>
  <permission>Sharing page: Delegate roles</permission>
+ <permission>Delete objects</permission>
  <state state_id="repositoryfolder-state-active" title="repositoryfolder-state-active">
   <exit-transition transition_id="repositoryfolder-transition-inactivate"/>
   <permission-map name="Access contents information" acquired="False">
@@ -37,6 +38,10 @@
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="Delete objects" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Manager</permission-role>
   </permission-map>
   <permission-map name="List folder contents" acquired="False">
    <permission-role>Manager</permission-role>
@@ -108,6 +113,10 @@
   <permission-map name="Change portal events" acquired="False">
   </permission-map>
   <permission-map name="Copy or Move" acquired="True">
+  </permission-map>
+  <permission-map name="Delete objects" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Manager</permission-role>
   </permission-map>
   <permission-map name="List folder contents" acquired="False">
    <permission-role>Manager</permission-role>

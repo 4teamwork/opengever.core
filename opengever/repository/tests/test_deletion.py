@@ -4,6 +4,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import assert_message
 from opengever.repository.deleter import RepositoryDeleter
 from opengever.testing import FunctionalTestCase
+from plone import api
 from zExceptions import Unauthorized
 
 
@@ -15,6 +16,8 @@ class TestRepositoryDeleter(FunctionalTestCase):
         self.repository_root = create(Builder('repository_root'))
         self.repository = create(Builder('repository')
                                  .within(self.repository_root))
+
+        self.grant('Administrator')
 
     def test_deletion_is_not_allowed_when_repository_is_not_empty(self):
         create(Builder('dossier').within(self.repository))
@@ -51,6 +54,17 @@ class TestRepositoryDeletion(FunctionalTestCase):
                                  .within(self.repository_root))
 
         self.grant('Administrator')
+
+    @browsing
+    def test_deletion_is_only_be_possible_with_admin_or_manager_role(self, browser):
+        acl_users = api.portal.get_tool('acl_users')
+        valid_roles = list(acl_users.portal_role_manager.valid_roles())
+        valid_roles.remove('Administrator')
+        valid_roles.remove('Manager')
+        self.grant(*valid_roles)
+
+        with self.assertRaises(Unauthorized):
+            api.content.delete(obj=self.repository)
 
     @browsing
     def test_delete_action_is_not_available_when_preconditions_not_satisfied(self, browser):
