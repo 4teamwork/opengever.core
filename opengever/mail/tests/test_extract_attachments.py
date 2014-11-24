@@ -6,6 +6,7 @@ from ftw.mail.utils import get_attachments
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import statusmessages
 from opengever.document.interfaces import IDocumentSettings
+from opengever.mail.browser.extract_attachments import content_type_helper
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
 from plone.app.testing import TEST_USER_ID
@@ -156,3 +157,21 @@ class TestAttachmentExtraction(FunctionalTestCase):
         browser.css('.formControls input.standalone').first.click()
 
         self.assertEquals(self.mail.absolute_url(), browser.url)
+
+
+class TestContentTypeHelper(FunctionalTestCase):
+
+    def test_lookup_the_contenttype(self):
+        self.assertEquals(
+            '<span class=icon-image />',
+            content_type_helper({}, 'image/gif'))
+
+    def test_lookup_via_filename_when_contenttype_is_octet_stream(self):
+        item = {'position': 5,
+                'size': 1835,
+                'content-type': 'application/octet-stream',
+                'filename': 'ATT00001.gif'}
+
+        self.assertEquals(
+            '<span class=icon-image />',
+            content_type_helper(item, 'application/octet-stream'))
