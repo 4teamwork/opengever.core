@@ -109,7 +109,7 @@ class TestGlobalindexTask(TestCase):
 
     def test_deadline_label_returns_span_tag_with_formated_date(self):
         task = create(Builder('globalindex_task').having(
-            int_id=12345, deadline=date(2512,10,25),
+            int_id=12345, deadline=date(2512, 10, 25),
             review_state='task-state-open'))
 
         self.assertEquals('<span>25.10.2512</span>', task.get_deadline_label())
