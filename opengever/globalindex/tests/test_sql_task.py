@@ -2,7 +2,6 @@ from datetime import date
 from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
-from opengever.globalindex.model.task import Task
 from opengever.ogds.base.actor import InboxActor
 from opengever.testing import MEMORY_DB_LAYER
 from sqlalchemy.exc import IntegrityError
@@ -49,17 +48,13 @@ class TestGlobalindexTask(TestCase):
         self.assertEquals([task3], task2.successors)
 
     def test_unique_id(self):
-        task1 = create(Builder('globalindex_task')
-                       .having(admin_unit_id='afi', int_id=1234))
+        create(Builder('globalindex_task')
+               .having(admin_unit_id='afi', int_id=1234))
 
-        with self.assertRaises(IntegrityError) as cm:
-            task1 = create(Builder('globalindex_task')
+        with self.assertRaises(IntegrityError):
+            create(Builder('globalindex_task')
                            .having(admin_unit_id='afi', int_id=1234))
             transaction.commit()
-
-        self.assertIn(
-            '(IntegrityError) columns admin_unit_id, int_id are not unique',
-            str(cm.exception))
 
         transaction.abort()
 
@@ -114,7 +109,7 @@ class TestGlobalindexTask(TestCase):
 
     def test_deadline_label_returns_span_tag_with_formated_date(self):
         task = create(Builder('globalindex_task').having(
-            int_id=12345, deadline=date(2512,10,25),
+            int_id=12345, deadline=date(2512, 10, 25),
             review_state='task-state-open'))
 
         self.assertEquals('<span>25.10.2512</span>', task.get_deadline_label())
