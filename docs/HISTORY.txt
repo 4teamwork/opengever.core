@@ -5,6 +5,9 @@ Changelog
 4.1.0 (unreleased)
 ------------------
 
+- Made the AddPublicTrialColumn more robust.
+  [phgross]
+
 - Extract attachments view: Fixed contenttype helper when lookup via filename.
   [phgross]
 

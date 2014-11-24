@@ -31,7 +31,13 @@ class AddPublicTrialColumn(UpgradeStep):
                          "NULL value - skipping record!" % record.key)
                 continue
 
-            data = json.loads(record.value.encode('utf-8'))
+            try:
+                data = json.loads(record.value.encode('utf-8'))
+            except ValueError:
+                log.warn("DictStorage record with key '%s' has invalid value "
+                         "- skipping record!" % record.key)
+                continue
+
             columns = data.get('columns')
             if PUBLIC_TRIAL_COL_ID not in [col.get('id') for col in columns]:
 
