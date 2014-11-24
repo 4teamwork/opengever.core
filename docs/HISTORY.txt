@@ -5,6 +5,10 @@ Changelog
 4.1.0 (unreleased)
 ------------------
 
+- Added monkeypatch for _verifyObjectPaste to allow moving content
+  without delete objects permission.
+  [phgross]
+
 - Revoke delete objects permission for dossiers.
   [phgross]
 
