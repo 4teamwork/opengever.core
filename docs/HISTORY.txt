@@ -8,9 +8,6 @@ Changelog
 - Made the AddPublicTrialColumn more robust.
   [phgross]
 
-- Extract attachments view: Fixed contenttype helper when lookup via filename.
-  [phgross]
-
 - Dropped no longer used document state journalization.
   [phgross]
 
@@ -21,9 +18,6 @@ Changelog
   [phgross]
 
 - Add new action `Remove` to trash tab and add remove confirmation view.
-  [phgross]
-
-- Dropped prevent_deletion handler.
   [phgross]
 
 - Added new document workflow state `document-state-removed`.
@@ -43,6 +37,13 @@ Changelog
     - Configure development options and add environment variable to enable them easily.
 
   [deiferni]
+
+
+4.0.5 (2014-11-25)
+------------------
+
+- Extract attachments view: Fixed contenttype helper when lookup via filename.
+  [phgross]
 
 
 4.0.4 (2014-11-13)
@@ -70,9 +71,6 @@ Changelog
 - Forwarding Transitioncontroller: Fixed assign_to_dossier check.
   [phgross]
 
-- Fixed mail download for mails with already CRLF.
-  [phgross]
-
 - Add new type Inbox Container.
   [phgross]
 
@@ -84,9 +82,6 @@ Changelog
 ------------------
 
 - Fixed version download, when download confirmation is deactivated.
-  [phgross]
-
-- Mail Download: Convert LF to CRLF, to avoid displaing problems in MS Outlook.
   [phgross]
 
 - Fixed UnicodeEncodeError in task link generation.
@@ -245,9 +240,6 @@ Changelog
   - Sort groupmembers by label for groupmembers list.
     [phgross, deiferni]
 
-  - Use ftw.profilehook instead of custom import steps.
-    [phgross, deiferni]
-
   - Add contact-service for local contacts.
     [phgross, deiferni]
 
@@ -271,9 +263,6 @@ Changelog
     [deiferni]
 
   - Reactivate statefilter for Dossiers.
-    [phgross]
-
-  - Make reference_prefix_manager deal properly with already deleted objects.
     [phgross]
 
   - Added option to checkin documents without comment.
@@ -319,6 +308,28 @@ Changelog
 
   - Security fixes: avoid injecting javascript (XSS) using safe_html transforms.
     [phgross]
+
+
+3.4.2 (2014-11-25)
+------------------
+
+- Dropped prevent_deletion handler.
+  [phgross]
+
+- Fixed mail download for mails with already CRLF.
+  [phgross]
+
+- Mail Download: Convert LF to CRLF, to avoid displaing problems in MS Outlook.
+  [phgross]
+
+- Set content-type correctly for ok_response in inter-client functionalities.
+  [deiferni]
+
+- Make reference_prefix_manager deal properly with already deleted objects.
+  [phgross]
+
+- Use `ftw.profilehook` instead of setuphandlers.
+  [deiferni]
 
 
 3.4.1 (2014-09-03)
