@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-05-21 13:27+0000\n"
+"POT-Creation-Date: 2014-11-25 10:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,7 +34,7 @@ msgstr ""
 msgid "RepositoryRoot"
 msgstr ""
 
-#: ./opengever/repository/repositoryfolder.py:38
+#: ./opengever/repository/repositoryfolder.py:40
 msgid "Title"
 msgstr ""
 
@@ -56,25 +56,25 @@ msgstr ""
 #. Default: "Common"
 #: ./opengever/repository/behaviors/referenceprefix.py:21
 #: ./opengever/repository/behaviors/responsibleorg.py:11
-#: ./opengever/repository/repositoryfolder.py:23
+#: ./opengever/repository/repositoryfolder.py:25
 msgid "fieldset_common"
 msgstr ""
 
 #. Default: "Select all additional dossier types which should be addable in this repository folder."
-#: ./opengever/repository/repositoryfolder.py:85
+#: ./opengever/repository/repositoryfolder.py:87
 msgid "help_addable_dossier_types"
 msgstr ""
 
 #. Default: "A short summary of the content."
-#: ./opengever/repository/repositoryfolder.py:44
+#: ./opengever/repository/repositoryfolder.py:46
 msgid "help_description"
 msgstr ""
 
-#: ./opengever/repository/repositoryfolder.py:78
+#: ./opengever/repository/repositoryfolder.py:80
 msgid "help_former_reference"
 msgstr ""
 
-#: ./opengever/repository/repositoryfolder.py:64
+#: ./opengever/repository/repositoryfolder.py:66
 msgid "help_location"
 msgstr ""
 
@@ -82,41 +82,51 @@ msgstr ""
 msgid "help_reference_number_prefix"
 msgstr ""
 
-#: ./opengever/repository/repositoryfolder.py:72
+#: ./opengever/repository/repositoryfolder.py:74
 msgid "help_referenced_activity"
 msgstr ""
 
-#: ./opengever/repository/repositoryfolder.py:52
-#: ./opengever/repository/repositoryroot.py:19
+#: ./opengever/repository/repositoryfolder.py:54
+#: ./opengever/repository/repositoryroot.py:17
 msgid "help_valid_from"
 msgstr ""
 
-#: ./opengever/repository/repositoryfolder.py:58
-#: ./opengever/repository/repositoryroot.py:25
+#: ./opengever/repository/repositoryfolder.py:60
+#: ./opengever/repository/repositoryroot.py:23
 msgid "help_valid_until"
 msgstr ""
 
-#: ./opengever/repository/repositoryroot.py:31
+#: ./opengever/repository/repositoryroot.py:29
 msgid "help_version"
 msgstr ""
 
 #. Default: "Addable dossier types"
-#: ./opengever/repository/repositoryfolder.py:83
+#: ./opengever/repository/repositoryfolder.py:85
 msgid "label_addable_dossier_types"
 msgstr ""
 
+#. Default: "Delete"
+#: ./opengever/repository/browser/deletion_templates/deletion.pt:32
+msgid "label_delete"
+msgstr ""
+
+#. Default: "Delete repository"
+#: ./opengever/repository/browser/deletion_templates/deletion.pt:20
+msgid "label_delete_repository"
+msgstr ""
+
 #. Default: "Description"
-#: ./opengever/repository/repositoryfolder.py:43
+#: ./opengever/repository/repositoryfolder.py:45
 msgid "label_description"
 msgstr ""
 
 #. Default: "Former reference"
-#: ./opengever/repository/repositoryfolder.py:77
+#: ./opengever/repository/repositoryfolder.py:79
 msgid "label_former_reference"
 msgstr ""
 
 #. Default: "Location"
-#: ./opengever/repository/repositoryfolder.py:63
+#: ./opengever/repository/repositoryfolder.py:65
 msgid "label_location"
 msgstr ""
 
@@ -126,30 +136,45 @@ msgid "label_reference_number_prefix"
 msgstr ""
 
 #. Default: "Referenced activity"
-#: ./opengever/repository/repositoryfolder.py:69
+#: ./opengever/repository/repositoryfolder.py:71
 msgid "label_referenced_activity"
 msgstr ""
 
+#. Default: "The repository have been successfully deleted."
+#: ./opengever/repository/browser/deletion.py:38
+msgid "label_successfully_deleted"
+msgstr ""
+
 #. Default: "Valid from"
-#: ./opengever/repository/repositoryfolder.py:51
-#: ./opengever/repository/repositoryroot.py:18
+#: ./opengever/repository/repositoryfolder.py:53
+#: ./opengever/repository/repositoryroot.py:16
 msgid "label_valid_from"
 msgstr ""
 
 #. Default: "Valid until"
-#: ./opengever/repository/repositoryfolder.py:57
-#: ./opengever/repository/repositoryroot.py:24
+#: ./opengever/repository/repositoryfolder.py:59
+#: ./opengever/repository/repositoryroot.py:22
 msgid "label_valid_until"
 msgstr ""
 
 #. Default: "Version"
-#: ./opengever/repository/repositoryroot.py:30
+#: ./opengever/repository/repositoryroot.py:28
 msgid "label_version"
 msgstr ""
 
+#. Default: "Warning"
+#: ./opengever/repository/browser/deletion_templates/deletion.pt:25
+msgid "label_warning"
+msgstr ""
+
 #. Default: "State"
-#: ./opengever/repository/viewlets/byline.py:22
+#: ./opengever/repository/viewlets/byline.py:17
 msgid "label_workflow_state"
+msgstr ""
+
+#. Default: "Do you really want to delete the current repository?"
+#: ./opengever/repository/browser/deletion_templates/deletion.pt:26
+msgid "msg_delete_confirmation"
 msgstr ""
 
 #. Default: "Name"
