@@ -8,9 +8,6 @@ Changelog
 - Made the AddPublicTrialColumn more robust.
   [phgross]
 
-- Extract attachments view: Fixed contenttype helper when lookup via filename.
-  [phgross]
-
 - Dropped no longer used document state journalization.
   [phgross]
 
@@ -40,6 +37,13 @@ Changelog
     - Configure development options and add environment variable to enable them easily.
 
   [deiferni]
+
+
+4.0.5 (2014-11-25)
+------------------
+
+- Extract attachments view: Fixed contenttype helper when lookup via filename.
+  [phgross]
 
 
 4.0.4 (2014-11-13)
