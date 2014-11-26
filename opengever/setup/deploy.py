@@ -14,7 +14,7 @@ from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin
 from sqlalchemy.exc import NoReferencedTableError
 from zope.component import getAdapter
 from zope.component import getUtility
-import opengever.globalindex.model
+import opengever.core.model
 
 
 # these profiles will be installed automatically
@@ -24,7 +24,7 @@ EXTENSION_PROFILES = (
 )
 
 
-SQL_BASES = (BASE, opengever.globalindex.model.Base)
+SQL_BASES = (BASE, opengever.core.model.Base)
 
 
 MIMETYPE_FIX_PROFILE = 'profile-opengever.policy.base:mimetype'
