@@ -95,11 +95,20 @@
 
     <!-- 4100 -> 4101 -->
     <upgrade-step:importProfile
-        title="Update dossier workflow to also allow Administrator to trigger 'activate' transition"
+        title="Add proposal to dossier's allowed subtypes"
         profile="opengever.dossier:default"
         source="4100"
         destination="4101"
         directory="profiles/4101"
+        />
+
+    <!-- 4101 -> 4102 -->
+    <upgrade-step:importProfile
+        title="Add proposal to dossier's allowed subtypes"
+        profile="opengever.dossier:default"
+        source="4101"
+        destination="4102"
+        directory="profiles/4102"
         />
 
 </configure>
