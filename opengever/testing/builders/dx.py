@@ -56,6 +56,10 @@ class DocumentBuilder(DexterityBuilder):
         self._trashed = True
         return self
 
+    def removed(self):
+        self.review_state = 'document-state-removed'
+        return self
+
     def after_create(self, obj):
         if self.checked_out:
             IAnnotations(obj)[CHECKIN_CHECKOUT_ANNOTATIONS_KEY] = self.checked_out
@@ -164,6 +168,10 @@ class MailBuilder(DexterityBuilder):
 
     def trashed(self):
         self._trashed = True
+        return self
+
+    def removed(self):
+        self.review_state = 'mail-state-removed'
         return self
 
     def after_create(self, obj):
