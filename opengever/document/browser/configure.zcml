@@ -19,4 +19,12 @@
         layer="opengever.base.interfaces.IOpengeverBaseLayer"
         />
 
+    <browser:page
+        name="plone_layout"
+        for="opengever.document.behaviors.IBaseDocument"
+        permission="zope.Public"
+        class=".layout.DocumentishLayoutPolicy"
+        allowed_interface="plone.app.layout.globals.interfaces.ILayoutPolicy"
+        />
+
 </configure>
