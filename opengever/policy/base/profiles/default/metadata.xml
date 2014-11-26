@@ -24,6 +24,7 @@
     <dependency>profile-opengever.advancedsearch:default</dependency>
     <dependency>profile-opengever.sharing:default</dependency>
     <dependency>profile-opengever.latex:default</dependency>
+    <dependency>profile-opengever.meeting:default</dependency>
     <dependency>profile-ftw.datepicker:default</dependency>
     <dependency>profile-ftw.contentmenu:default</dependency>
     <dependency>profile-ftw.zipexport:default</dependency>
