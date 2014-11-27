@@ -1,0 +1,33 @@
+<html xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      tal:omit-tag="python: True">
+
+  <tal:i18n i18n:domain="opengever.meeting"
+    tal:define="css_width python:99/2;">
+
+    <div tal:attributes="class string:boxGroup; style string:width:${css_width}%">
+      <div id="main_attributesBox" class="box">
+        <h2 i18n:translate="label_main_attributes">Main Atrributes</h2>
+          <table class="vertical listing">
+            <tr tal:repeat="item view/get_main_attributes">
+              <th tal:content="item/label" />
+
+              <td tal:condition="python: item.get('is_html', False)"
+                  tal:attributes="class item/css_class|nothing"
+                  tal:content="structure item/value" />
+
+              <td tal:condition="python: not item.get('is_html', False)"
+                  tal:attributes="class item/css_class|nothing"
+                  tal:content="item/value" />
+            </tr>
+          </table>
+      </div>
+    </div>
+
+
+    <div class="visualClear"><!----></div>
+    <div tal:replace="structure provider:plone.belowcontentbody" />
+    <div class="visualClear"><!----></div>
+  </tal:i18n>
+</html>

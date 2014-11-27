@@ -1,4 +1,5 @@
 from opengever.globalindex.oguid import Oguid
+from opengever.meeting import _
 from opengever.meeting.model.proposal import Proposal as ProposalModel
 from opengever.ogds.base.utils import create_session
 from plone.dexterity.content import Container
@@ -23,6 +24,22 @@ class Proposal(Container):
         if oguid is None:
             return None
         return ProposalModel.query.get_by_oguid(oguid)
+
+    def get_overview_attributes(self):
+        model = self.load_model()
+        assert model, 'missing db-model for {}'.format(self)
+
+        return [
+            {
+                'label': _('label_title'),
+                'value': model.title,
+            },
+            {
+                'label': _('label_initial_position'),
+                'value': model.initial_position,
+            },
+
+        ]
 
     def create_model(self, data, context):
         session = create_session()
