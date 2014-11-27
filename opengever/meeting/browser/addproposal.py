@@ -1,12 +1,7 @@
 from five import grok
-from opengever.globalindex.oguid import Oguid
 from opengever.meeting.model.proposal import IProposalModel
-from opengever.meeting.model.proposal import Proposal
-from opengever.ogds.base.utils import create_session
 from plone.directives import dexterity
 from z3c.form import field
-from zope.event import notify
-from zope.lifecycleevent import ObjectModifiedEvent
 
 
 class AddForm(dexterity.AddForm):
@@ -15,12 +10,7 @@ class AddForm(dexterity.AddForm):
     fields = field.Fields(IProposalModel)
 
     def create_model(self, obj, data):
-        session = create_session()
-        oguid = Oguid.for_object(obj)
-        session.add(Proposal(oguid=oguid, **data))
-
-        # for event handling to work, the object must be acquisition-wrapped
-        notify(ObjectModifiedEvent(obj.__of__(self.context)))
+        obj.create_model(data, self.context)
 
     def createAndAdd(self, data):
         """Create proposal, this is a two-step process:

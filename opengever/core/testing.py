@@ -4,7 +4,7 @@ from ftw.builder.testing import BUILDER_LAYER
 from ftw.builder.testing import set_builder_session_factory
 from ftw.testing import ComponentRegistryLayer
 from ftw.testing.quickinstaller import snapshots
-from opengever.globalindex import model
+from opengever.core import model
 from opengever.ogds.base.setup import create_sql_tables
 from opengever.ogds.base.utils import create_session
 from opengever.ogds.models import BASE
@@ -151,6 +151,7 @@ class OpengeverFixture(PloneSandboxLayer):
         applyProfile(portal, 'opengever.advancedsearch:default')
         applyProfile(portal, 'opengever.sharing:default')
         applyProfile(portal, 'opengever.latex:default')
+        applyProfile(portal, 'opengever.meeting:default')
         applyProfile(portal, 'ftw.datepicker:default')
         applyProfile(portal, 'plone.formwidget.autocomplete:default')
         applyProfile(portal, 'plone.formwidget.contenttree:default')

@@ -19,20 +19,17 @@ from zope.intid.interfaces import IIntIds
 class DossierBuilder(DexterityBuilder):
     portal_type = 'opengever.dossier.businesscasedossier'
 
-
 builder_registry.register('dossier', DossierBuilder)
 
 
 class TemplateDossierBuilder(DexterityBuilder):
     portal_type = 'opengever.dossier.templatedossier'
 
-
 builder_registry.register('templatedossier', TemplateDossierBuilder)
 
 
 class InboxBuilder(DexterityBuilder):
     portal_type = 'opengever.inbox.inbox'
-
 
 builder_registry.register('inbox', InboxBuilder)
 
@@ -151,7 +148,6 @@ class ForwardingBuilder(TaskBuilder):
 
     portal_type = 'opengever.inbox.forwarding'
 
-
 builder_registry.register('forwarding', ForwardingBuilder)
 
 
@@ -183,7 +179,6 @@ class MailBuilder(DexterityBuilder):
 
         super(MailBuilder, self).after_create(obj)
 
-
 builder_registry.register('mail', MailBuilder)
 
 
@@ -194,13 +189,11 @@ class RepositoryBuilder(DexterityBuilder):
         self.arguments["effective_title"] = title
         return self
 
-
 builder_registry.register('repository', RepositoryBuilder)
 
 
 class ContactFolderBuilder(DexterityBuilder):
     portal_type = 'opengever.contact.contactfolder'
-
 
 builder_registry.register('contactfolder', ContactFolderBuilder)
 
@@ -208,13 +201,11 @@ builder_registry.register('contactfolder', ContactFolderBuilder)
 class ContactBuilder(DexterityBuilder):
     portal_type = 'opengever.contact.contact'
 
-
 builder_registry.register('contact', ContactBuilder)
 
 
 class RepositoryRootBuilder(DexterityBuilder):
     portal_type = 'opengever.repository.repositoryroot'
-
 
 builder_registry.register('repository_root', RepositoryRootBuilder)
 
@@ -222,12 +213,20 @@ builder_registry.register('repository_root', RepositoryRootBuilder)
 class YearFolderbuilder(DexterityBuilder):
     portal_type = 'opengever.inbox.yearfolder'
 
-
 builder_registry.register('yearfolder', YearFolderbuilder)
 
 
 class InboxContainerBuilder(DexterityBuilder):
     portal_type = 'opengever.inbox.container'
 
-
 builder_registry.register('inbox_container', InboxContainerBuilder)
+
+
+class ProposalBuilder(DexterityBuilder):
+    portal_type = 'opengever.meeting.proposal'
+
+    def after_create(self, obj):
+        obj.create_model(self.arguments, self.container)
+        super(ProposalBuilder, self).after_create(obj)
+
+builder_registry.register('proposal', ProposalBuilder)
