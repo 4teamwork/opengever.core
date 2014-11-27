@@ -5,6 +5,25 @@ Changelog
 4.1.0 (unreleased)
 ------------------
 
+- Added monkeypatch for _verifyObjectPaste to allow moving content
+  without delete objects permission.
+  [phgross]
+
+- Revoke delete objects permission for dossiers.
+  [phgross]
+
+- Adjust delete objects permission for repositories.
+  [phgross]
+
+- Adjust global role mapping for delete objects permission.
+  [phgross]
+
+- Add repository delete action and confirmation view.
+  [phgross]
+
+- Revoke list folder contents permission for Administrators on repository.
+  [phgross]
+
 - Made the AddPublicTrialColumn more robust.
   [phgross]
 

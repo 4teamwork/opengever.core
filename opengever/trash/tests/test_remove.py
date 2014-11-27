@@ -156,7 +156,7 @@ class TestRemoveConfirmationView(FunctionalTestCase):
                           api.content.get_state(obj=mail))
 
     @browsing
-    def test_(self, browser):
+    def test_form_is_csrf_safe(self, browser):
         url = '{}/remove_confirmation?paths:list={}&form.buttons.remove=true'.format(
             self.dossier.absolute_url(),
             '/'.join(self.doc1.getPhysicalPath()))

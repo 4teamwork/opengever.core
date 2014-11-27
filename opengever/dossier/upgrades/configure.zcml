@@ -74,4 +74,23 @@
         directory="profiles/4000"
         />
 
+    <!-- 4000 -> 4100 -->
+    <genericsetup:upgradeStep
+        title="Revoke delete permission for dossiers"
+        description=""
+        source="4000"
+        destination="4100"
+        handler="opengever.dossier.upgrades.to4100.RevokeDeletePermissions"
+        profile="opengever.dossier:default"
+        />
+
+    <genericsetup:registerProfile
+        name="4100"
+        title="opengever.dossier: upgrade profile 4100"
+        description=""
+        directory="profiles/4100"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
 </configure>

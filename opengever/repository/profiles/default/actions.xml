@@ -1,19 +1,31 @@
 <?xml version="1.0"?>
-<object name="portal_actions" meta_type="Plone Actions Tool"
-    xmlns:i18n="http://xml.zope.org/namespaces/i18n">
-    <object name="object_buttons" meta_type="CMF Action Category">
-        <object name="prefix_manager" meta_type="CMF Action" i18n:domain="opengever.repository">
-            <property name="title" i18n:translate="">Prefix Manager</property>
-            <property name="description" i18n:translate="">Unlock unused repository prefixes.</property>
-            <property name="url_expr">string:${object_url}/referenceprefix_manager</property>
-            <property name="link_target"></property>
-            <property name="icon_expr"></property>
-            <property name="available_expr">python:context.restrictedTraverse('@@plone_interface_info').provides('opengever.repository.repositoryroot.IRepositoryRoot') or context.restrictedTraverse('@@plone_interface_info').provides('opengever.repository.interfaces.IRepositoryFolder')</property>
-            <property name="permissions">
-                <element value="opengever.repository: Unlock Reference Prefix" />
-            </property>
-            <property name="visible">True</property>
-        </object>
+<object name="portal_actions" meta_type="Plone Actions Tool" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+  <object name="object_buttons" meta_type="CMF Action Category">
+    <object name="prefix_manager" meta_type="CMF Action" i18n:domain="opengever.repository">
+      <property name="title" i18n:translate="">Prefix Manager</property>
+      <property name="description" i18n:translate="">Unlock unused repository prefixes.</property>
+      <property name="url_expr">string:${object_url}/referenceprefix_manager</property>
+      <property name="link_target"></property>
+      <property name="icon_expr"></property>
+      <property name="available_expr">python:context.restrictedTraverse('@@plone_interface_info').provides('opengever.repository.repositoryroot.IRepositoryRoot') or context.restrictedTraverse('@@plone_interface_info').provides('opengever.repository.interfaces.IRepositoryFolder')</property>
+      <property name="permissions">
+        <element value="opengever.repository: Unlock Reference Prefix" />
+      </property>
+      <property name="visible">True</property>
     </object>
+
+    <object name="delete_repository" meta_type="CMF Action" i18n:domain="plone">
+      <property name="title" i18n:translate="">Delete</property>
+      <property name="description" i18n:translate=""></property>
+      <property
+          name="url_expr">string:${globals_view/getCurrentObjectUrl}/delete_repository</property>
+      <property name="link_target"></property>
+      <property name="icon_expr"></property>
+      <property name="available_expr">python: here.restrictedTraverse('is_deletion_allowed')()</property>
+      <property name="permissions">
+        <element value="Delete objects"/>
+      </property>
+      <property name="visible">True</property>
+    </object>
+  </object>
 </object>
-            

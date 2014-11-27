@@ -1,5 +1,6 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
+    xmlns:upgrade-step="http://namespaces.zope.org/ftw.upgrade"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
 
 	<genericsetup:upgradeStep
@@ -37,5 +38,33 @@
 	    for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
 	    provides="Products.GenericSetup.interfaces.EXTENSION"
 	    />
+
+  <!-- 2602 -> 4100 -->
+	<genericsetup:upgradeStep
+	    title="Adjust permissions for repository and repositoryroot"
+	    description=""
+	    source="2602"
+	    destination="4100"
+	    handler="opengever.repository.upgrades.to4100.AdjustRepositoryPermissions"
+	    profile="opengever.repository:default"
+	    />
+
+	<genericsetup:registerProfile
+	    name="4100"
+	    title="opengever.repository: upgrade profile 4100"
+	    description=""
+	    directory="profiles/4100"
+	    for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+	    provides="Products.GenericSetup.interfaces.EXTENSION"
+	    />
+
+  <!-- 4100 -> 4101 -->
+  <upgrade-step:importProfile
+      title="Add repository delete action"
+      profile="opengever.repository:default"
+      source="4100"
+      destination="4101"
+      directory="profiles/4101"
+      />
 
 </configure>
