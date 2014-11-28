@@ -106,6 +106,10 @@ grok.global_adapter(UploadValidator)
 
 class Document(Item):
 
+    # document state's
+    removed_state = 'document-state-removed'
+    active_state = 'document-state-draft'
+
     # disable file preview creation when modifying or creating document
     buildPreview = False
 
@@ -126,7 +130,7 @@ class Document(Item):
 
     @property
     def is_removed(self):
-        return api.content.get_state(obj=self) == 'document-state-removed'
+        return api.content.get_state(obj=self) == Document.removed_state
 
     def related_items(self):
         relations = IRelatedDocuments(self).relatedItems

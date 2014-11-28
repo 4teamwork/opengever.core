@@ -2,6 +2,8 @@ from ftw.mail.utils import get_header
 from opengever.base import _ as base_mf
 from opengever.base.browser.helper import get_css_class
 from opengever.document.browser.download import DownloadConfirmationHelper
+from opengever.document.document import Document
+from opengever.mail.mail import OGMail
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import ogds_service
 from plone.i18n.normalizer.interfaces import IIDNormalizer
@@ -16,6 +18,7 @@ from zope.globalrequest import getRequest
 from zope.i18n import translate
 import cgi
 import pkg_resources
+
 
 try:
     pkg_resources.get_distribution('opengever.pdfconverter')

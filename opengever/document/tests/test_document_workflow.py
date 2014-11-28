@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.document.document import Document
 from opengever.testing import create_plone_user
 from opengever.testing import FunctionalTestCase
 from plone import api
@@ -14,8 +15,7 @@ class TestDocumentWorkflow(FunctionalTestCase):
     def test_document_draft_state_is_initial_state(self):
         doc = create(Builder('document'))
 
-        self.assertEquals('document-state-draft',
-                          api.content.get_state(obj=doc))
+        self.assertEquals(Document.active_state, api.content.get_state(obj=doc))
 
     def change_user(self):
         create_plone_user(self.portal, 'hugo.boss')
@@ -28,7 +28,8 @@ class TestDocumentWorkflow(FunctionalTestCase):
         self.grant('Editor')
         api.content.transition(obj=doc,
                                transition='document-transition-remove')
-        self.assertEquals('document-state-removed', api.content.get_state(obj=doc))
+        self.assertEquals(Document.removed_state,
+                          api.content.get_state(obj=doc))
 
     def test_document_cant_be_removed_without_remove_gever_content_permission(self):
         doc = create(Builder('document'))
@@ -38,7 +39,7 @@ class TestDocumentWorkflow(FunctionalTestCase):
 
     def test_document_can_only_be_restored_with_manage_portal_permission(self):
 
-        doc = create(Builder('document').in_state('document-state-removed'))
+        doc = create(Builder('document').removed())
 
         with self.assertRaises(InvalidParameterError):
             api.content.transition(obj=doc, transition='document-transition-restore')
@@ -47,7 +48,7 @@ class TestDocumentWorkflow(FunctionalTestCase):
         api.content.transition(obj=doc,
                                transition='document-transition-restore')
 
-        self.assertEquals('document-state-draft',
+        self.assertEquals(Document.active_state,
                           api.content.get_state(obj=doc))
 
     def test_deleting_document_is_only_allowed_for_managers(self):

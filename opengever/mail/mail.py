@@ -65,6 +65,10 @@ alsoProvides(IOGMail, IFormFieldProvider)
 class OGMail(Item):
     """Opengever specific mail class."""
 
+    # mail state's
+    removed_state = 'mail-state-removed'
+    active_state = 'mail-state-active'
+
     @property
     def msg(self):
         """ returns an email.Message instance
@@ -91,7 +95,7 @@ class OGMail(Item):
 
     @property
     def is_removed(self):
-        return api.content.get_state(obj=self) == 'mail-state-removed'
+        return api.content.get_state(obj=self) == self.removed_state
 
     def css_class(self):
         return get_css_class(self)
