@@ -1,0 +1,40 @@
+from opengever.activity.models.notification import Notification
+from opengever.ogds.models import BASE
+from opengever.ogds.models.query import BaseQuery
+from sqlalchemy import Column
+from sqlalchemy import ForeignKey
+from sqlalchemy import Integer
+from sqlalchemy import String
+from sqlalchemy import Text
+from sqlalchemy.orm import relationship
+
+
+class ActivityQuery(BaseQuery):
+
+    pass
+
+
+class Activity(BASE):
+
+    query_cls = ActivityQuery
+
+
+    __tablename__ = 'activities'
+
+    activity_id = Column('id', Integer, primary_key=True)
+    kind = Column(String(50), nullable=False)
+    actor_id = Column(String(255), nullable=False)
+    title = Column(String(512), nullable=False)
+    description = Column(Text)
+
+    resource_id = Column(Integer, ForeignKey('resources.id'), nullable=False)
+    resource = relationship("Resource", backref="activities")
+
+    def __init__(self, **kwargs):
+        super(Activity, self).__init__(**kwargs)
+
+    def notifiy(self):
+        """Create for every resource watcher the corresponding notification.
+        """
+        for watcher in self.resource.watchers:
+            Notification(watcher=watcher, activity=self)
