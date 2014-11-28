@@ -2,6 +2,8 @@ from ftw.mail.utils import get_header
 from opengever.base import _ as base_mf
 from opengever.base.browser.helper import get_css_class
 from opengever.document.browser.download import DownloadConfirmationHelper
+from opengever.document.document import Document
+from opengever.mail.mail import OGMail
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import ogds_service
 from plone.i18n.normalizer.interfaces import IIDNormalizer
@@ -16,6 +18,7 @@ from zope.globalrequest import getRequest
 from zope.i18n import translate
 import cgi
 import pkg_resources
+
 
 try:
     pkg_resources.get_distribution('opengever.pdfconverter')
@@ -161,10 +164,16 @@ def linked_trashed_document_with_tooltip(item, value):
     """Wrapper method for the _linked_document_with_tooltip method
     for normal but trashed documents and mails."""
 
-    return _linked_document_with_tooltip(item, value, trashed=True)
+    if item.review_state in [Document.removed_state, OGMail.removed_state]:
+        removed = True
+    else:
+        removed = False
+
+    return _linked_document_with_tooltip(item, value, trashed=True,
+                                         removed=removed)
 
 
-def _linked_document_with_tooltip(item, value, trashed=False):
+def _linked_document_with_tooltip(item, value, trashed=False, removed=False):
     data = {}
 
     if isinstance(value, unicode):
@@ -226,12 +235,17 @@ def _linked_document_with_tooltip(item, value, trashed=False):
         tooltip_links.append(
             dc_helper.get_html_tag(data['url']))
 
+    if removed:
+        data['removed_span'] = "<span class='removed_document'></span>"
+    else:
+        data['removed_span'] = ''
 
     data['tooltip_links'] = """
                 """.join(tooltip_links)
 
     link = """
     <div class='linkWrapper'>
+        %(removed_span)s
         <a class='tabbedview-tooltip %(css_class)s' href='%(url)s'></a>
         <a href='%(url)s'>%(value)s</a>
         <div class='tabbedview-tooltip-data'>

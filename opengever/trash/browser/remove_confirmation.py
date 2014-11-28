@@ -28,7 +28,7 @@ class RemoveConfirmation(grok.View):
             IStatusMessage(self.request).addStatusMessage(msg, type='info')
             return self.redirect_back()
 
-        elif self.request.get('form.cancelled'):
+        elif self.request.get('form.buttons.cancel'):
             return self.redirect_back()
 
         if not self.context.REQUEST.get('paths'):

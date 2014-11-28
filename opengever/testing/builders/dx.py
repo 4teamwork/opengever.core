@@ -1,7 +1,9 @@
 from ftw.builder import builder_registry
 from ftw.builder.dexterity import DexterityBuilder
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
+from opengever.document.document import Document
 from opengever.globalindex.handlers.task import sync_task
+from opengever.mail.mail import OGMail
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.testing import assets
 from opengever.trash.trash import ITrashable
@@ -54,6 +56,10 @@ class DocumentBuilder(DexterityBuilder):
 
     def trashed(self):
         self._trashed = True
+        return self
+
+    def removed(self):
+        self.review_state = Document.removed_state
         return self
 
     def after_create(self, obj):
@@ -164,6 +170,10 @@ class MailBuilder(DexterityBuilder):
 
     def trashed(self):
         self._trashed = True
+        return self
+
+    def removed(self):
+        self.review_state = OGMail.removed_state
         return self
 
     def after_create(self, obj):

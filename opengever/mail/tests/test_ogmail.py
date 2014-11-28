@@ -53,3 +53,10 @@ class TestOGMailAddition(FunctionalTestCase):
         mail = create(Builder("mail").with_dummy_message())
 
         self.assertEquals([], mail.related_items())
+
+    def test_is_removed(self):
+        mail_a = create(Builder('mail'))
+        mail_b = create(Builder('mail').removed())
+
+        self.assertFalse(mail_a.is_removed)
+        self.assertTrue(mail_b.is_removed)

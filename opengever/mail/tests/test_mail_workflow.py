@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.mail.mail import OGMail
 from opengever.testing import create_plone_user
 from opengever.testing import FunctionalTestCase
 from plone import api
@@ -18,14 +19,15 @@ class TestMailWorkflow(FunctionalTestCase):
 
     def test_mail_active_state_is_initial_state(self):
         mail = create(Builder('mail').with_dummy_message())
-        self.assertEquals('mail-state-active', api.content.get_state(obj=mail))
+        self.assertEquals(OGMail.active_state, api.content.get_state(obj=mail))
 
     def test_mail_can_be_removed_with_remove_gever_content_permission(self):
         mail = create(Builder('mail'))
         self.grant('Editor')
-        api.content.transition(obj=mail,
-                               transition='mail-transition-remove')
-        self.assertEquals('mail-state-removed', api.content.get_state(obj=mail))
+        api.content.transition(obj=mail, transition='mail-transition-remove')
+
+        self.assertEquals(OGMail.removed_state,
+                          api.content.get_state(obj=mail))
 
     def test_mail_cant_be_removed_without_remove_gever_content_permission(self):
         mail = create(Builder('mail'))
@@ -34,7 +36,7 @@ class TestMailWorkflow(FunctionalTestCase):
             api.content.transition(obj=mail, transition='mail-transition-remove')
 
     def test_mail_can_only_be_restored_with_manage_portal_permission(self):
-        mail = create(Builder('mail').in_state('mail-state-removed'))
+        mail = create(Builder('mail').removed())
 
         with self.assertRaises(InvalidParameterError):
             api.content.transition(obj=mail,
@@ -44,5 +46,5 @@ class TestMailWorkflow(FunctionalTestCase):
         api.content.transition(obj=mail,
                                transition='mail-transition-restore')
 
-        self.assertEquals('mail-state-active',
+        self.assertEquals(OGMail.active_state,
                           api.content.get_state(obj=mail))

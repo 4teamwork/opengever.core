@@ -12,6 +12,7 @@ from opengever.document.behaviors import metadata as ogmetadata
 from opengever.dossier import _
 from opengever.ogds.base.utils import create_session
 from opengever.ogds.models.user import User
+from plone import api
 from plone.app.dexterity.behaviors import metadata
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.content import Item
@@ -64,6 +65,10 @@ alsoProvides(IOGMail, IFormFieldProvider)
 class OGMail(Item):
     """Opengever specific mail class."""
 
+    # mail state's
+    removed_state = 'mail-state-removed'
+    active_state = 'mail-state-active'
+
     @property
     def msg(self):
         """ returns an email.Message instance
@@ -87,6 +92,10 @@ class OGMail(Item):
     @property
     def restore_transition(self):
         return 'mail-transition-restore'
+
+    @property
+    def is_removed(self):
+        return api.content.get_state(obj=self) == self.removed_state
 
     def css_class(self):
         return get_css_class(self)

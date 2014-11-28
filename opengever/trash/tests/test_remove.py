@@ -3,8 +3,10 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import assert_message
+from opengever.document.document import Document
 from opengever.journal.handlers import OBJECT_REMOVED
 from opengever.journal.handlers import OBJECT_RESTORED
+from opengever.mail.mail import OGMail
 from opengever.testing import create_plone_user
 from opengever.testing import FunctionalTestCase
 from opengever.trash.remover import Remover
@@ -25,9 +27,9 @@ class TestRemover(FunctionalTestCase):
 
         Remover([doc1, doc2]).remove()
 
-        self.assertEquals('document-state-removed',
+        self.assertEquals(Document.removed_state,
                           api.content.get_state(obj=doc1))
-        self.assertEquals('document-state-removed',
+        self.assertEquals(Document.removed_state,
                           api.content.get_state(obj=doc2))
 
     def test_raises_runtimeerror_when_preconditions_are_not_satisified(self):
@@ -129,9 +131,9 @@ class TestRemoveConfirmationView(FunctionalTestCase):
         browser.login().open(self.dossier, data, view='remove_confirmation')
         browser.forms.get('remove_confirmation').submit()
 
-        self.assertEquals('document-state-removed',
+        self.assertEquals(Document.removed_state,
                           api.content.get_state(obj=self.doc1))
-        self.assertEquals('document-state-removed',
+        self.assertEquals(Document.removed_state,
                           api.content.get_state(obj=self.doc3))
 
     @browsing
@@ -152,7 +154,7 @@ class TestRemoveConfirmationView(FunctionalTestCase):
         browser.login().open(self.dossier, data, view='remove_confirmation')
         browser.forms.get('remove_confirmation').submit()
 
-        self.assertEquals('mail-state-removed',
+        self.assertEquals(OGMail.removed_state,
                           api.content.get_state(obj=mail))
 
     @browsing
@@ -210,12 +212,12 @@ class TestRestoreJournalization(FunctionalTestCase):
         self.mail = create(Builder('mail')
                            .titled(u'T\xe4st Mail')
                            .within(self.dossier)
-                           .in_state('mail-state-removed')
+                           .removed()
                            .trashed())
         self.document = create(Builder('document')
                                .titled(u'T\xe4st Doc')
                                .within(self.dossier)
-                               .in_state('document-state-removed')
+                               .removed()
                                .trashed())
 
         api.content.transition(

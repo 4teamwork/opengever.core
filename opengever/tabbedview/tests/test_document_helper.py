@@ -2,6 +2,7 @@ from ftw.dictstorage.interfaces import IDictStorage
 from ftw.testing import MockTestCase
 from lxml import etree
 from mocker import ANY
+from opengever.document.document import Document
 from opengever.tabbedview.helper import linked_document_with_tooltip
 from opengever.tabbedview.helper import linked_trashed_document_with_tooltip
 from pyquery import PyQuery
@@ -21,9 +22,10 @@ def link(href='#', text=''):
 
 
 class MockBrain(object):
-    def __init__(self, request, type):
+    def __init__(self, request, type, review_state=Document.active_state):
         self.REQUEST = request
         self.portal_type = type
+        self.review_state = review_state
         self.breadcrumb_titles = (
             {'absolute_url': 'http://nohost/plone/dossier1',
              'Title': 'Dossier1'},
@@ -245,6 +247,13 @@ class TestTooltipLinkedHelperWithTrashedDocs(TestWithPDFConverter):
         self.replay()
         self.assertTooltipBreadcrumbsEquals(
             'Dossier1 > Task 1 > lorem ipsum <with tags>', self.markup())
+
+    def test_tooltip_is_prefixed_with_removed_span(self):
+        self.doc_brain.review_state = Document.removed_state
+
+        self.replay()
+        self.assertIn("<span class='removed_document'></span>",
+                      self.markup())
 
 
 class TestTooltipLinkedHelperWithPDFConverter(TestWithPDFConverter):

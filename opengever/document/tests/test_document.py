@@ -155,6 +155,13 @@ class TestDocument(FunctionalTestCase):
         self.assertEquals([document_a], document_b.related_items())
         self.assertEquals([document_a, document_b], document_c.related_items())
 
+    def test_is_removed(self):
+        document_a = create(Builder('document'))
+        document_b = create(Builder('document').removed())
+
+        self.assertFalse(document_a.is_removed)
+        self.assertTrue(document_b.is_removed)
+
 
 class TestDocumentDefaultValues(FunctionalTestCase):
 
