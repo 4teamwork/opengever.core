@@ -212,9 +212,8 @@ class SchemaMigration(UpgradeStep):
 
     def _setup_db_connection(self):
         session = create_session()
-        engine = session.bind
-        self.connection = engine.connect()
+        self.connection = session.connection()
         self.migration_context = MigrationContext.configure(self.connection)
-        self.metadata = MetaData(engine, reflect=True)
+        self.metadata = MetaData(session.bind, reflect=True)
         self.op = IdempotentOperations(self, self.migration_context)
         self.dialect_name = self.connection.dialect.name
