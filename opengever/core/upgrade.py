@@ -144,6 +144,11 @@ class SchemaMigration(UpgradeStep):
         self.metadata.clear()
         self.metadata.reflect()
 
+    def get_foreign_key_name(self, table_name, column_name):
+        foreign_keys = self.op.metadata.tables.get(table_name).columns.get(column_name).foreign_keys
+        assert len(foreign_keys) == 1
+        return foreign_keys.pop().name
+
     def _log_skipping_migration(self):
         logger.log(logging.INFO,
                    'Skipping DB-migration {} -> {}, already installed'.format(
