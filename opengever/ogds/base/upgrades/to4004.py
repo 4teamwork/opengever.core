@@ -19,7 +19,7 @@ class MigrateAdminUnitOrgUnitSchema(SchemaMigration):
         self.op.drop_column('clients', 'site_url')
         self.op.drop_column('clients', 'public_url')
 
-    def make_fk_column_required(self, tablename, column_name,
+    def make_fk_column_required(self, table_name, column_name,
                                 fk_table_name, fk_column_name, length=30):
         """Make a column that is the source of a foreign key constraint
         required.
@@ -28,16 +28,12 @@ class MigrateAdminUnitOrgUnitSchema(SchemaMigration):
         been specified, so we must drop and re-create the constraint.
 
         """
+        fk_name = self.get_foreign_key_name(table_name, column_name)
 
-        foreign_keys = self.op.metadata.tables.get(tablename).columns.get(column_name).foreign_keys
-        assert len(foreign_keys) == 1
-
-        fk_name = foreign_keys.pop().name
-
-        with DeactivatedFKConstraint(self.op, fk_name, tablename,
+        with DeactivatedFKConstraint(self.op, fk_name, table_name,
                                      fk_table_name,
                                      [column_name], [fk_column_name]):
-            self.op.alter_column(tablename, column_name, nullable=False,
+            self.op.alter_column(table_name, column_name, nullable=False,
                                  existing_type=String(length))
 
     def make_org_unit_column_required(self):
