@@ -27,7 +27,6 @@ class IncreaseColumnLength(SchemaMigration):
 
             self.op.alter_column(tablename,
                                  column,
-                                 new_column_name=column,
                                  type_=new_type,
                                  existing_nullable=False,
                                  existing_type=existing_type)
