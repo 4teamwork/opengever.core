@@ -149,6 +149,10 @@ class SchemaMigration(UpgradeStep):
         assert len(foreign_keys) == 1
         return foreign_keys.pop().name
 
+    @property
+    def is_oracle(self):
+        return self.dialect_name == 'oracle'
+
     def _log_skipping_migration(self):
         logger.log(logging.INFO,
                    'Skipping DB-migration {} -> {}, already installed'.format(
@@ -213,3 +217,4 @@ class SchemaMigration(UpgradeStep):
         self.migration_context = MigrationContext.configure(self.connection)
         self.metadata = MetaData(engine, reflect=True)
         self.op = IdempotentOperations(self, self.migration_context)
+        self.dialect_name = self.connection.dialect.name
