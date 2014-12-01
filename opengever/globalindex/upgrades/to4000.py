@@ -18,10 +18,18 @@ class MigrateTaskTable(SchemaMigration):
         self.make_issuing_orgunit_required()
 
     def drop_unique_constraint(self):
+        # oracle can handle column renames with unique constraints
+        if self.is_oracle:
+            return
+
         if self._has_index('client_id', 'tasks'):
             self.op.drop_constraint('client_id', 'tasks', 'unique')
 
     def add_unique_constraint(self):
+        # oracle can handle column renames with unique constraints
+        if self.is_oracle:
+            return
+
         if not self._has_index('admin_unit_id', 'tasks'):
             self.op.create_unique_constraint('admin_unit_id', 'tasks',
                                              ['admin_unit_id', 'int_id'])
