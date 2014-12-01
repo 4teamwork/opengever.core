@@ -15,6 +15,7 @@ class MigrateTaskTable(SchemaMigration):
         self.create_issuing_orgunit_column()
         self.add_unique_constraint()
         self.migrate_issuing_orgunit_data()
+        self.make_issuing_orgunit_required()
 
     def drop_unique_constraint(self):
         if self._has_index('client_id', 'tasks'):
@@ -57,8 +58,12 @@ class MigrateTaskTable(SchemaMigration):
     def create_issuing_orgunit_column(self):
         self.op.add_column(
             'tasks',
-            Column('issuing_org_unit', String(30), index=True, nullable=False)
+            Column('issuing_org_unit', String(30), index=True, nullable=True)
         )
+
+    def make_issuing_orgunit_required(self):
+        self.op.alter_column('tasks', 'issuing_org_unit', nullable=False,
+                             existing_type=String(30))
 
     def _lookup_predecessor_admin_unit(self, task_table, row):
         while row.predecessor_id:
