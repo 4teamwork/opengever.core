@@ -43,7 +43,6 @@ class MigrateAdminUnitOrgUnitSchema(SchemaMigration):
     def make_org_unit_column_required(self):
         self.make_fk_column_required("clients", "users_group_id", "groups", "groupid")
         self.make_fk_column_required("clients", "inbox_group_id", "groups", "groupid")
-        self.make_fk_column_required("clients", "admin_unit_id", "admin_units", "unit_id")
 
     def make_admin_unit_columns_required(self):
         self.op.alter_column("admin_units", "ip_address", nullable=False,
