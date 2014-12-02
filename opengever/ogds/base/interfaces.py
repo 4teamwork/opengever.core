@@ -141,25 +141,6 @@ class IDataCollector(Interface):
         """
 
 
-class IObjectCreator(Interface):
-    """ The object creator adapter creates a transported object.
-    Discriminators: (FTI)
-    Name: portal_type or ''
-    Using the name "basedata" in the json-data dictionary
-    """
-
-    def extract(self):
-        """ Extracts and returns the required data for object
-        creation.
-        This method must return a dictionary containing the portal_type.
-        """
-
-    def create(self, parent, data):
-        """ Creates the object according to the data
-        This method returns the created object
-        """
-
-
 class ISyncStamp(Interface):
     """Adapter Inteface for the Import Stamp"""
 
