@@ -1,27 +1,21 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.globalindex.oguid import Oguid
-from opengever.meeting.interfaces import IMeetingSettings
 from opengever.testing import FunctionalTestCase
 from opengever.testing import index_data_for
-from plone.registry.interfaces import IRegistry
-from zope.component import getUtility
-import transaction
 
 
 class TestProposal(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_MEETING_LAYER
 
     def setUp(self):
         super(TestProposal, self).setUp()
         root = create(Builder('repository_root'))
         folder = create(Builder('repository').within(root))
         self.dossier = create(Builder('dossier').within(folder))
-
-        registry = getUtility(IRegistry)
-        settings = registry.forInterface(IMeetingSettings)
-        settings.is_feature_enabled = True
-        transaction.commit()
 
     def test_proposal_can_be_added(self):
         proposal = create(Builder('proposal').within(self.dossier))

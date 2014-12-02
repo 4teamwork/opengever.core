@@ -5,6 +5,7 @@ from ftw.builder.testing import set_builder_session_factory
 from ftw.testing import ComponentRegistryLayer
 from ftw.testing.quickinstaller import snapshots
 from opengever.core import model
+from opengever.meeting.interfaces import IMeetingSettings
 from opengever.ogds.base.setup import create_sql_tables
 from opengever.ogds.base.utils import create_session
 from opengever.ogds.models import BASE
@@ -18,6 +19,7 @@ from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.browserlayer.utils import unregister_layer
 from plone.dexterity.schema import SCHEMA_CACHE
+from plone.registry.interfaces import IRegistry
 from plone.testing import Layer
 from plone.testing import z2
 from Products.CMFCore.utils import getToolByName
@@ -26,6 +28,7 @@ from z3c.saconfig import EngineFactory
 from z3c.saconfig import GloballyScopedSession
 from z3c.saconfig.interfaces import IEngineFactory
 from z3c.saconfig.interfaces import IScopedSession
+from zope.component import getUtility
 from zope.component import provideUtility
 from zope.configuration import xmlconfig
 from zope.sqlalchemy import datamanager
@@ -249,3 +252,23 @@ class FilingLayer(PloneSandboxLayer):
         inactivate_filing_number(portal)
 
 OPENGEVER_FUNCTIONAL_FILING_LAYER = FilingLayer()
+
+
+class MeetingLayer(PloneSandboxLayer):
+
+    def setUpPloneSite(self, portal):
+        registry = getUtility(IRegistry)
+        settings = registry.forInterface(IMeetingSettings)
+        settings.is_feature_enabled = True
+        transaction.commit()
+
+    def tearDownPloneSite(self, portal):
+        registry = getUtility(IRegistry)
+        settings = registry.forInterface(IMeetingSettings)
+        settings.is_feature_enabled = False
+        transaction.commit()
+
+    defaultBases = (OPENGEVER_FUNCTIONAL_TESTING,)
+
+
+OPENGEVER_FUNCTIONAL_MEETING_LAYER = MeetingLayer()
