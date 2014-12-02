@@ -3,7 +3,7 @@ from opengever.base.utils import ok_response
 from opengever.globalindex.model.task import Task
 from opengever.inbox.utils import get_current_inbox
 from opengever.inbox.yearfolder import get_current_yearfolder
-from opengever.ogds.base.interfaces import ITransporter
+from opengever.ogds.base.transport import Transporter
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import remote_request
@@ -62,7 +62,7 @@ def accept_forwarding_with_successor(
     predecessor = Task.query.by_oguid(predecessor_oguid)
 
     # transport the remote forwarding to the inbox or actual yearfolder
-    transporter = getUtility(ITransporter)
+    transporter = Transporter()
     inbox = get_current_inbox(context)
     if dossier:
         yearfolder = get_current_yearfolder(inbox=inbox)
@@ -213,7 +213,7 @@ def accept_task_with_successor(dossier, predecessor_oguid, response_text):
     # Transport the original task (predecessor) to this dossier. The new
     # response and task change is not yet done and will be done later. This
     # is necessary for beeing as transaction aware as possible.
-    transporter = getUtility(ITransporter)
+    transporter = Transporter()
     successor = transporter.transport_from(
         dossier, predecessor.admin_unit_id, predecessor.physical_path)
     successor_tc = ISuccessorTaskController(successor)

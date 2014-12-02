@@ -115,12 +115,6 @@ class IClientCommunicator(Interface):
     """
 
 
-class ITransporter(Interface):
-    """Utility interface for the transporter utility, which
-    is able to copy objects between tentacles (clients).
-    """
-
-
 class IDataCollector(Interface):
     """ Interface for adapters which are able to serialize and
     unserialize data. With these named-adapters any kind of additional

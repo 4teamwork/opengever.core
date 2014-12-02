@@ -1,7 +1,6 @@
 from five import grok
 from opengever.ogds.base.exceptions import TransportationError
 from opengever.ogds.base.interfaces import IDataCollector
-from opengever.ogds.base.interfaces import ITransporter
 from opengever.ogds.base.utils import decode_for_json
 from opengever.ogds.base.utils import encode_after_json
 from opengever.ogds.base.utils import remote_json_request
@@ -37,12 +36,10 @@ ORIGINAL_INTID_ANNOTATION_KEY = 'transporter_original-intid'
 _marker = object()
 
 
-class Transporter(grok.GlobalUtility):
-    """ The transporter utility is able to copy objects to other
+class Transporter(object):
+    """ The transporter objects is able to copy objects to other
     clients.
     """
-
-    grok.provides(ITransporter)
 
     def transport_to(self, obj, target_cid, container_path):
         """ Copies a *object* to another client (*target_cid*).
@@ -91,7 +88,7 @@ class ReceiveObject(grok.View):
     grok.context(Interface)
 
     def render(self):
-        transporter = getUtility(ITransporter)
+        transporter = Transporter()
         container = self.context
         obj = transporter.receive(container, self.request)
         portal = self.context.portal_url.getPortalObject()
@@ -122,12 +119,10 @@ class ExtractObject(grok.View):
     grok.context(Interface)
 
     def render(self):
-        transporter = getUtility(ITransporter)
-
         # Set correct content type for JSON response
         self.request.response.setHeader("Content-type", "application/json")
 
-        return json.dumps(transporter.extract(self.context))
+        return json.dumps(Transporter().extract(self.context))
 
 
 class DexterityObjectCreator(object):
