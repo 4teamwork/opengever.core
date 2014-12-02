@@ -4,7 +4,6 @@ from five import grok
 from opengever.base.utils import ok_response
 from opengever.ogds.base.interfaces import ITransporter
 from opengever.ogds.base.transport import ORIGINAL_INTID_ANNOTATION_KEY
-from opengever.ogds.base.utils import encode_after_json
 from opengever.ogds.base.utils import remote_json_request
 from opengever.ogds.base.utils import remote_request
 from opengever.task.adapters import IResponse as IPersistentResponse
@@ -18,11 +17,9 @@ from z3c.relationfield import RelationValue
 from zope.annotation.interfaces import IAnnotations
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
-from zope.event import notify
 from zope.interface import Interface
 from zope.interface.interface import Attribute
 from zope.lifecycleevent import modified
-from zope.lifecycleevent import ObjectAddedEvent
 import json
 
 
@@ -249,15 +246,11 @@ class TaskDocumentsTransporter(grok.GlobalUtility):
         intids = getUtility(IIntIds)
 
         for item in data:
-            item = encode_after_json(item)
-            obj = transporter._create_object(target, item)
+            obj = transporter.create(item, target)
 
             oldintid = IAnnotations(obj)[ORIGINAL_INTID_ANNOTATION_KEY]
             newintid = intids.getId(obj)
             intids_mapping[oldintid] = newintid
-
-            # fire the added Event to automaticly create a inital version
-            notify(ObjectAddedEvent(obj))
 
         return intids_mapping
 
@@ -272,7 +265,7 @@ class ExtractDocuments(grok.View):
         data = []
 
         for doc in self.get_documents():
-            data.append(transporter._extract_data(doc))
+            data.append(transporter.extract(doc))
 
         # Set correct content type for JSON response
         self.request.response.setHeader("Content-type", "application/json")

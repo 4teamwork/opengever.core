@@ -75,7 +75,7 @@ class ForwardingRefuseForm(Form):
 
     def store_copy_in_remote_yearfolder(self, refusing_unit_id):
         transporter = getUtility(ITransporter)
-        jsondata = json.dumps(transporter._extract_data(self.context))
+        jsondata = json.dumps(transporter.extract(self.context))
         request_data = {REQUEST_KEY: jsondata, }
 
         response = remote_json_request(

@@ -146,7 +146,8 @@ class TestRefuseForwardingStoring(FunctionalTestCase):
     def refuse_forwarding(self, forwarding):
         transporter = getUtility(ITransporter)
         self.portal.REQUEST.set(REQUEST_KEY,
-                                transporter.extract(forwarding))
+                                json.dumps(transporter.extract(forwarding)))
+
         self.portal.REQUEST.set('review_state', 'forwarding-state-refused')
         response = self.portal.unrestrictedTraverse('store_refused_forwarding')()
         response = json.loads(response)
