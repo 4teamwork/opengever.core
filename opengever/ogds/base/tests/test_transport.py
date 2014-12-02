@@ -1,3 +1,4 @@
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.behaviors.classification import IClassification
@@ -66,3 +67,15 @@ class TestTransporter(FunctionalTestCase):
         # dublin core
         self.assertEquals(document.created(), transported_doc.created())
         self.assertEquals(TEST_USER_ID, transported_doc.Creator())
+
+    def test_transports_tasks_correctly(self):
+        source_dossier = create(Builder("dossier").titled(u"Source"))
+        target_dossier = create(Builder("dossier").titled(u"Target"))
+        task = create(Builder("task")
+                      .within(source_dossier)
+                      .titled(u'Fo\xf6')
+                      .having(deadline=date(2014, 07, 01)))
+
+        transporter = getUtility(ITransporter)
+        transported_task = transporter.transport_from(
+            source_dossier, 'client1', '/'.join(task.getPhysicalPath()))

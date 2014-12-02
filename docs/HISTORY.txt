@@ -5,6 +5,9 @@ Changelog
 4.1.0 (unreleased)
 ------------------
 
+- Fixed transporting task with the OGDS Transporter beetwen different admin_units.
+  [phgross]
+
 - Added monkeypatch for _verifyObjectPaste to allow moving content
   without delete objects permission.
   [phgross]
