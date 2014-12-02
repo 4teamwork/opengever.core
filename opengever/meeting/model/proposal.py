@@ -5,11 +5,12 @@ from opengever.meeting.model.query import ProposalQuery
 from opengever.ogds.base.utils import ogds_service
 from plone import api
 from sqlalchemy import Column
+from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy import Text
 from sqlalchemy.orm import composite
-from sqlalchemy.schema import Sequence
+from sqlalchemy.orm import relationship
 from zope import schema
 from zope.interface import Interface
 
@@ -36,16 +37,16 @@ class Proposal(Base):
     query_cls = ProposalQuery
 
     __tablename__ = 'proposal'
-    proposal_id = Column("id", Integer, Sequence("proposal_id_seq"),
-                         primary_key=True)
 
-    admin_unit_id = Column(String(30), index=True, nullable=False)
-    int_id = Column(Integer, index=True, nullable=False)
+    admin_unit_id = Column(String(30), primary_key=True)
+    int_id = Column(Integer, primary_key=True, autoincrement=False)
     oguid = composite(Oguid, admin_unit_id, int_id)
-
     title = Column(String(256), nullable=False)
-    initial_position = Column(Text)
     physical_path = Column(String(256), nullable=False)
+    initial_position = Column(Text)
+
+    commission_id = Column(Integer, ForeignKey('commissions.id'))
+    commission = relationship('Commission', backref='proposals')
 
     def __repr__(self):
         return "<Proposal {}@{}>".format(self.int_id, self.admin_unit_id)

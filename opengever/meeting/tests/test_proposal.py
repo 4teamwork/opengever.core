@@ -10,10 +10,10 @@ from zope.component import getUtility
 import transaction
 
 
-class TestDossier(FunctionalTestCase):
+class TestProposal(FunctionalTestCase):
 
     def setUp(self):
-        super(TestDossier, self).setUp()
+        super(TestProposal, self).setUp()
         root = create(Builder('repository_root'))
         folder = create(Builder('repository').within(root))
         self.dossier = create(Builder('dossier').within(folder))

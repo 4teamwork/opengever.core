@@ -1,5 +1,10 @@
+from datetime import date
 from ftw.builder import builder_registry
 from opengever.globalindex.model.task import Task
+from opengever.meeting.model import Commission
+from opengever.meeting.model import Member
+from opengever.meeting.model import Membership
+from opengever.meeting.model import Proposal
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.utils import get_ou_selector
 from opengever.ogds.models.tests.builders import AdminUnitBuilder
@@ -84,3 +89,63 @@ class TaskBuilder(SqlObjectBuilder):
         self.arguments['review_state'] = 'task-state-open'
 
 builder_registry.register('globalindex_task', TaskBuilder)
+
+
+class ProposalModelBuilder(SqlObjectBuilder):
+
+    mapped_class = Proposal
+
+    def __init__(self, session):
+        super(ProposalModelBuilder, self).__init__(session)
+        self.arguments['admin_unit_id'] = 'foo'
+        self.arguments['int_id'] = 1234
+        self.arguments['physical_path'] = '/bar'
+        self.arguments['title'] = 'Bar'
+
+    def id(self, identifier):
+        """Proposals have a composite primary key, admin_unit_id and int_id.
+
+        """
+        raise NotImplementedError
+
+builder_registry.register('proposal_model', ProposalModelBuilder)
+
+
+class CommissionBuilder(SqlObjectBuilder):
+
+    mapped_class = Commission
+    id_argument_name = 'commission_id'
+
+    def __init__(self, session):
+        super(CommissionBuilder, self).__init__(session)
+        self.arguments['title'] = 'Bar'
+
+builder_registry.register('commission', CommissionBuilder)
+
+
+class MemberBuilder(SqlObjectBuilder):
+
+    mapped_class = Member
+    id_argument_name = 'member_id'
+
+    def __init__(self, session):
+        super(MemberBuilder, self).__init__(session)
+        self.arguments['firstname'] = 'Peter'
+        self.arguments['lastname'] = 'Meier'
+
+builder_registry.register('member', MemberBuilder)
+
+
+class MemberShipBuilder(SqlObjectBuilder):
+
+    mapped_class = Membership
+
+    def __init__(self, session):
+        super(MemberShipBuilder, self).__init__(session)
+        self.arguments['date_from'] = date(2010, 1, 1)
+        self.arguments['date_to'] = date(2014, 1, 1)
+
+    def id(self, identifier):
+        raise NotImplementedError
+
+builder_registry.register('membership', MemberShipBuilder)

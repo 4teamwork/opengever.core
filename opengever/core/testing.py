@@ -174,7 +174,7 @@ class MemoryDBLayer(Layer):
         setup_sql_tables()
         self.session = create_session()
 
-    def testTearDown(test):
+    def testTearDown(self):
         truncate_sql_tables()
         transaction.abort()
 
