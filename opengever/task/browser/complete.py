@@ -10,7 +10,7 @@ from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.utils import ok_response
 from opengever.globalindex.model.task import Task
-from opengever.ogds.base.interfaces import ITransporter
+from opengever.ogds.base.transport import Transporter
 from opengever.ogds.base.utils import remote_request
 from opengever.tabbedview.helper import linked
 from opengever.task import _
@@ -175,7 +175,7 @@ class CompleteSuccessorTaskForm(Form):
 
         predecessor = Task.query.by_oguid(self.context.predecessor)
 
-        transporter = getUtility(ITransporter)
+        transporter = Transporter()
         intids = getUtility(IIntIds)
 
         data = {'documents': [],
@@ -285,7 +285,7 @@ class CompleteSuccessorTaskReceiveDelivery(grok.View):
         self.request.set('X-CREATING-SUCCESSOR', True)
 
         # Create the delivered documents:
-        transporter = getUtility(ITransporter)
+        transporter = Transporter()
         documents = []
 
         message = _(

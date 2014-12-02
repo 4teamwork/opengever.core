@@ -2,8 +2,8 @@ from DateTime import DateTime
 from datetime import datetime
 from five import grok
 from opengever.base.utils import ok_response
-from opengever.ogds.base.interfaces import ITransporter
 from opengever.ogds.base.transport import ORIGINAL_INTID_ANNOTATION_KEY
+from opengever.ogds.base.transport import Transporter
 from opengever.ogds.base.utils import remote_json_request
 from opengever.ogds.base.utils import remote_request
 from opengever.task.adapters import IResponse as IPersistentResponse
@@ -235,7 +235,7 @@ class TaskDocumentsTransporter(grok.GlobalUtility):
     grok.implements(ITaskDocumentsTransporter)
 
     def copy_documents_from_remote_task(self, task, target, documents=None):
-        transporter = getUtility(ITransporter)
+        transporter = Transporter()
         data = remote_json_request(
             task.admin_unit_id,
             '@@task-documents-extract',
@@ -261,7 +261,7 @@ class ExtractDocuments(grok.View):
     grok.require('zope2.View')
 
     def render(self):
-        transporter = getUtility(ITransporter)
+        transporter = Transporter()
         data = []
 
         for doc in self.get_documents():

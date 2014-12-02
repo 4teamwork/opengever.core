@@ -4,8 +4,8 @@ from ftw.builder import create
 from opengever.inbox.browser.refuse import ForwardingRefuseForm
 from opengever.inbox.browser.refuse import STATUS_ALLREADY_DONE
 from opengever.inbox.browser.refuse import STATUS_SUCCESSFULL
-from opengever.ogds.base.interfaces import ITransporter
 from opengever.ogds.base.transport import REQUEST_KEY
+from opengever.ogds.base.transport import Transporter
 from opengever.task.adapters import IResponseContainer
 from opengever.testing import FunctionalTestCase
 from opengever.testing.helpers import obj2brain
@@ -144,9 +144,8 @@ class TestRefuseForwardingStoring(FunctionalTestCase):
         self.assertEquals(STATUS_ALLREADY_DONE, status)
 
     def refuse_forwarding(self, forwarding):
-        transporter = getUtility(ITransporter)
         self.portal.REQUEST.set(REQUEST_KEY,
-                                json.dumps(transporter.extract(forwarding)))
+                                json.dumps(Transporter().extract(forwarding)))
 
         self.portal.REQUEST.set('review_state', 'forwarding-state-refused')
         response = self.portal.unrestrictedTraverse('store_refused_forwarding')()
