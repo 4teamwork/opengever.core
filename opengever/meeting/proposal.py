@@ -41,13 +41,22 @@ class Proposal(Container):
 
         ]
 
+    def get_physical_path(self):
+        url_tool = self.unrestrictedTraverse('@@plone_tools').url()
+        return '/'.join(url_tool.getRelativeContentPath(self))
+
     def create_model(self, data, context):
         session = create_session()
         oguid = Oguid.for_object(self)
-        session.add(ProposalModel(oguid=oguid, **data))
+
+        aq_wrapped_self = self.__of__(context)
+        session.add(ProposalModel(
+            oguid=oguid,
+            physical_path=aq_wrapped_self.get_physical_path(),
+            **data))
 
         # for event handling to work, the object must be acquisition-wrapped
-        notify(ObjectModifiedEvent(self.__of__(context)))
+        notify(ObjectModifiedEvent(aq_wrapped_self))
 
     def get_searchable_text(self):
         """Return the searchable text for this proposal.

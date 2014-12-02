@@ -12,7 +12,8 @@ class TestProposalQuery(TestCase):
         self.session = self.layer.session
 
     def make_proposal(self, int_id, admin_unit_id):
-        proposal = Proposal(int_id=int_id, admin_unit_id=admin_unit_id)
+        proposal = Proposal(int_id=int_id, admin_unit_id=admin_unit_id,
+                            title=u'foo', physical_path='bar')
         self.session.add(proposal)
         return proposal
 

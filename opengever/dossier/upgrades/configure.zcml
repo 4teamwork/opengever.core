@@ -95,7 +95,7 @@
 
     <!-- 4100 -> 4101 -->
     <upgrade-step:importProfile
-        title="Add proposal to dossier's allowed subtypes"
+        title="Configure dossier for new meeting content"
         profile="opengever.dossier:default"
         source="4100"
         destination="4101"

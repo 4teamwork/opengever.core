@@ -6,4 +6,9 @@
         <element value="opengever.meeting.proposal" />
     </property>
 
+    <action i18n:domain="opengever.dossier" title="Proposals" action_id="proposals" category="tabbedview-tabs"
+            condition_expr="object/@@is_meeting_feature_enabled" url_expr="string:#" visible="True">
+        <permission value="View"/>
+    </action>
+
 </object>

@@ -225,6 +225,10 @@ builder_registry.register('inbox_container', InboxContainerBuilder)
 class ProposalBuilder(DexterityBuilder):
     portal_type = 'opengever.meeting.proposal'
 
+    def __init__(self, session):
+        super(ProposalBuilder, self).__init__(session)
+        self.arguments = {'title': 'Fooo'}
+
     def after_create(self, obj):
         obj.create_model(self.arguments, self.container)
         super(ProposalBuilder, self).after_create(obj)

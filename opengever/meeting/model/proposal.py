@@ -2,6 +2,8 @@ from opengever.core.model import Base
 from opengever.globalindex.oguid import Oguid
 from opengever.meeting import _
 from opengever.meeting.model.query import ProposalQuery
+from opengever.ogds.base.utils import ogds_service
+from plone import api
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import String
@@ -41,11 +43,15 @@ class Proposal(Base):
     int_id = Column(Integer, index=True, nullable=False)
     oguid = composite(Oguid, admin_unit_id, int_id)
 
-    title = Column(String(256))
+    title = Column(String(256), nullable=False)
     initial_position = Column(Text)
+    physical_path = Column(String(256), nullable=False)
 
     def __repr__(self):
         return "<Proposal {}@{}>".format(self.int_id, self.admin_unit_id)
+
+    def get_admin_unit(self):
+        return ogds_service().fetch_admin_unit(self.admin_unit_id)
 
     @property
     def id(self):
@@ -53,4 +59,12 @@ class Proposal(Base):
 
     def get_searchable_text(self):
         searchable = filter(None, [self.title, self.initial_position])
-        return ''.join([term.encode('utf-8') for term in searchable])
+        return ' '.join([term.encode('utf-8') for term in searchable])
+
+    def get_link(self):
+        admin_unit = self.get_admin_unit()
+        url = '/'.join((admin_unit.public_url, self.physical_path))
+        link = u'<a href="{0}" title="{1}">{1}</a>'.format(url, self.title)
+
+        transformer = api.portal.get_tool('portal_transforms')
+        return transformer.convertTo('text/x-html-safe', link).getData()
