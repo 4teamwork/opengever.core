@@ -1,7 +1,7 @@
+from opengever.core.model import create_session
 from opengever.globalindex.oguid import Oguid
 from opengever.meeting import _
 from opengever.meeting.model.proposal import Proposal as ProposalModel
-from opengever.ogds.base.utils import create_session
 from plone.dexterity.content import Container
 from plone.directives import form
 from zope.event import notify

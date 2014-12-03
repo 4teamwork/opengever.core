@@ -1,3 +1,4 @@
+from opengever.core.model import create_session
 from datetime import datetime
 from datetime import timedelta
 from opengever.ogds.base.exceptions import ClientNotFound
@@ -30,22 +31,14 @@ EXPECTED_ENCODINGS = (
     )
 
 
-Session = named_scoped_session('opengever')
-
-
-def create_session():
-    """Returns a new sql session bound to the defined named scope.
-    """
-    return Session()
-
-
 def ogds_service():
     return PloneOGDSService(create_session())
 
 
 class PloneOGDSService(OGDSService):
-    """Extends ogds-service with plone-specific helper methods."""
+    """Extends ogds-service with plone and opengever.core specific methods.
 
+    """
     def _get_current_user_id(self):
         return api.user.get_current().getId()
 
