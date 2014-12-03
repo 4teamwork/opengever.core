@@ -9,6 +9,7 @@ from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from StringIO import StringIO
+from UserDict import DictMixin
 from z3c.saconfig import named_scoped_session
 from zope.app.component.hooks import getSite
 from zope.app.component.hooks import setSite
@@ -61,10 +62,31 @@ class PloneOGDSService(OGDSService):
         return org_units
 
 
+class CookieStorage(DictMixin):
+    """Helper object to store values on the request cookie.
+    """
+
+    def __init__(self, request):
+        self.request = request
+
+    def __getitem__(self, key):
+        return self.request.cookies.get(key)
+
+    def __setitem__(self, key, value):
+        self.request.cookies[key] = value
+        self.request.RESPONSE.setCookie(key, value)
+
+    def __delitem__(self, key):
+        del self.request.cookies[key]
+        self.request.RESPONSE.expireCookie(key)
+
+    def keys(self):
+        return self.request.cookies.keys()
+
+
 def get_ou_selector():
     site = api.portal.get()
-    sdm = site.session_data_manager
-    storage = sdm.getSessionData(create=True)
+    storage = CookieStorage(getRequest())
     mtool = getToolByName(site, 'portal_membership')
     member = mtool.getAuthenticatedMember()
 
