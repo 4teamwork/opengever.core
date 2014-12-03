@@ -17,7 +17,9 @@ class IncreaseColumnLength(SchemaMigration):
         self.increase_groupid_length()
 
     def increase_length(self, tablename, column, existing_type, new_type,
-                        fk_name, fk_table_name, source_cols, referent_cols):
+                        fk_table_name, source_cols, referent_cols):
+
+        fk_name = self.get_foreign_key_name(tablename, column)
 
         with DeactivatedFKConstraint(self.op, fk_name,
                                      tablename, fk_table_name,
@@ -25,8 +27,6 @@ class IncreaseColumnLength(SchemaMigration):
 
             self.op.alter_column(tablename,
                                  column,
-                                 nullable=False,
-                                 new_column_name=column,
                                  type_=new_type,
                                  existing_nullable=False,
                                  existing_type=existing_type)
@@ -34,7 +34,6 @@ class IncreaseColumnLength(SchemaMigration):
     def increase_userid_length(self):
         self.increase_length('groups_users', 'userid',
                              String(30), String(255),
-                             fk_name='groups_users_ibfk_2',
                              fk_table_name='users',
                              source_cols=['userid'],
                              referent_cols=['userid'])
@@ -42,21 +41,18 @@ class IncreaseColumnLength(SchemaMigration):
     def increase_groupid_length(self):
         self.increase_length('groups_users', 'groupid',
                              String(50), String(255),
-                             fk_name='groups_users_ibfk_1',
                              fk_table_name='groups',
                              source_cols=['groupid'],
                              referent_cols=['groupid'])
 
         self.increase_length('org_units', 'users_group_id',
                              String(30), String(255),
-                             fk_name='org_units_ibfk_1',
                              fk_table_name='groups',
                              source_cols=['users_group_id'],
                              referent_cols=['groupid'])
 
         self.increase_length('org_units', 'inbox_group_id',
                              String(30), String(255),
-                             fk_name='org_units_ibfk_2',
                              fk_table_name='groups',
                              source_cols=['inbox_group_id'],
                              referent_cols=['groupid'])

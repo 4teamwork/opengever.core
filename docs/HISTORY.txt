@@ -5,6 +5,9 @@ Changelog
 4.1.0 (unreleased)
 ------------------
 
+- Made schemamigrations to 4.0.x release oracle compatible.
+  [phgross]
+
 - Fixed transporting task with the OGDS Transporter beetwen different admin_units.
   [phgross]
 

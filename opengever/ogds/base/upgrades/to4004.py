@@ -19,7 +19,7 @@ class MigrateAdminUnitOrgUnitSchema(SchemaMigration):
         self.op.drop_column('clients', 'site_url')
         self.op.drop_column('clients', 'public_url')
 
-    def make_fk_column_required(self, tablename, column_name, fk_name,
+    def make_fk_column_required(self, table_name, column_name,
                                 fk_table_name, fk_column_name, length=30):
         """Make a column that is the source of a foreign key constraint
         required.
@@ -28,20 +28,17 @@ class MigrateAdminUnitOrgUnitSchema(SchemaMigration):
         been specified, so we must drop and re-create the constraint.
 
         """
-        with DeactivatedFKConstraint(self.op, fk_name, tablename,
+        fk_name = self.get_foreign_key_name(table_name, column_name)
+
+        with DeactivatedFKConstraint(self.op, fk_name, table_name,
                                      fk_table_name,
                                      [column_name], [fk_column_name]):
-            self.op.alter_column(tablename, column_name, nullable=False,
+            self.op.alter_column(table_name, column_name, nullable=False,
                                  existing_type=String(length))
 
     def make_org_unit_column_required(self):
-        self.make_fk_column_required("clients", "users_group_id",
-                                     "clients_ibfk_1", "groups", "groupid")
-        self.make_fk_column_required("clients", "inbox_group_id",
-                                     "clients_ibfk_2", "groups", "groupid")
-        self.make_fk_column_required("clients", "admin_unit_id",
-                                     "clients_ibfk_3",
-                                     "admin_units", "unit_id")
+        self.make_fk_column_required("clients", "users_group_id", "groups", "groupid")
+        self.make_fk_column_required("clients", "inbox_group_id", "groups", "groupid")
 
     def make_admin_unit_columns_required(self):
         self.op.alter_column("admin_units", "ip_address", nullable=False,
