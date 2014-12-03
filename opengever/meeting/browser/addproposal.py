@@ -22,7 +22,7 @@ class AddForm(dexterity.AddForm):
     def createAndAdd(self, data):
         """Create proposal, this is a two-step process:
 
-            1) Create the plone proxoy object (with no data)
+            1) Create the plone proxy object (with no data)
             2) Create database model where the data is stored
 
         """

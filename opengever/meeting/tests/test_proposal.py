@@ -27,11 +27,14 @@ class TestProposal(FunctionalTestCase):
 
     @browsing
     def test_proposal_can_be_created_in_browser(self, browser):
+        commission = create(Builder('commission'))
+
         browser.login()
         browser.open(self.dossier, view='++add++opengever.meeting.proposal')
         browser.fill({
             'Title': u'A pr\xf6posal',
-            'Proposal': u'My pr\xf6posal'
+            'Proposal': u'My pr\xf6posal',
+            'Commission': str(commission.commission_id),
             }).submit()
 
         self.assertIn('Item created',

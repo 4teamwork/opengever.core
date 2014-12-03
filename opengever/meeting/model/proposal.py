@@ -30,6 +30,11 @@ class IProposalModel(Interface):
         required=False,
         )
 
+    commission = schema.Choice(
+        title=_('label_commission', default=u'Commission'),
+        source='opengever.meeting.CommissionVocabulary',
+        required=True)
+
 
 class Proposal(Base):
     """Sql representation of a proposal."""
