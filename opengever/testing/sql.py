@@ -1,4 +1,5 @@
 from opengever.ogds.base.interfaces import ISyncStamp
+from opengever.ogds.base.ou_selector import CURRENT_ORG_UNIT_KEY
 from opengever.ogds.base.sync.import_stamp import update_sync_stamp
 from opengever.ogds.base.utils import create_session
 from opengever.ogds.base.utils import get_ou_selector
@@ -7,10 +8,12 @@ from opengever.ogds.models.user import User
 from sqlalchemy.orm.exc import NoResultFound
 from zope.component import getUtility
 from zope.component.hooks import getSite
+from zope.globalrequest import getRequest
 
 
 def select_current_org_unit(unit_id='client1'):
-    get_ou_selector().set_current_unit(unit_id)
+    request = getRequest()
+    request.cookies[CURRENT_ORG_UNIT_KEY] = unit_id
 
 
 def create_ogds_user(userid, session=None,

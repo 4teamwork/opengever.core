@@ -94,14 +94,16 @@ def get_ou_selector():
         return AnonymousOrgUnitSelector()
 
     if member.has_role('Manager'):
-        units = ogds_service().all_org_units()
+        users_units = ogds_service().all_org_units()
     else:
-        units = ogds_service().assigned_org_units(member.getId())
+        users_units = ogds_service().assigned_org_units(member.getId())
 
-    if not units:
+    admin_unit_units = get_current_admin_unit().org_units
+
+    if not admin_unit_units:
         return NoAssignedUnitsOrgUnitSelector()
 
-    return OrgUnitSelector(storage, units)
+    return OrgUnitSelector(storage, admin_unit_units, users_units)
 
 
 def admin_unit_cachekey(method):
