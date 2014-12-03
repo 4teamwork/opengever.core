@@ -6,16 +6,18 @@ CURRENT_ORG_UNIT_KEY = 'current_org_unit'
 
 class OrgUnitSelector(object):
 
-    def __init__(self, storage, units):
-        if not units:
+    def __init__(self, storage, admin_unit_units, users_units):
+        if not admin_unit_units:
             raise ValueError(
-                'The OrgUnitSelector needs at least one Unit.')
+                'The OrgUnitSelector needs at least one possible current unit.'
+            )
 
         self._storage = storage
-        self._units = dict((unit.id(), unit) for unit in units)
+        self._admin_unit_units = dict((unit.id(), unit) for unit in admin_unit_units)
+        self._users_units = dict((unit.id(), unit) for unit in users_units)
 
     def get_current_unit(self):
-        return self._units.get(
+        return self._admin_unit_units.get(
             self._get_current_unit_id(),
             self._get_fallback_unit())
 
@@ -23,14 +25,14 @@ class OrgUnitSelector(object):
         self._storage[CURRENT_ORG_UNIT_KEY] = unitid
 
     def available_units(self):
-        return self._units.values()
+        return self._users_units.values()
 
     def _get_current_unit_id(self):
         if self._storage.has_key(CURRENT_ORG_UNIT_KEY):
             return self._storage[CURRENT_ORG_UNIT_KEY]
 
     def _get_fallback_unit(self):
-        return self._units.values()[0]
+        return self._admin_unit_units.values()[0]
 
 
 class AnonymousOrgUnitSelector(object):
