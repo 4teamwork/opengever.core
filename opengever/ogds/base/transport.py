@@ -1,13 +1,10 @@
 from five import grok
 from opengever.ogds.base.exceptions import TransportationError
 from opengever.ogds.base.interfaces import IDataCollector
-from opengever.ogds.base.interfaces import IObjectCreator
-from opengever.ogds.base.interfaces import ITransporter
 from opengever.ogds.base.utils import decode_for_json
 from opengever.ogds.base.utils import encode_after_json
 from opengever.ogds.base.utils import remote_json_request
 from plone.dexterity.interfaces import IDexterityContent
-from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.utils import addContentToContainer
 from plone.dexterity.utils import createContent
 from plone.dexterity.utils import iterSchemata
@@ -18,14 +15,11 @@ from z3c.relationfield.interfaces import IRelationList
 from zope import schema
 from zope.annotation.interfaces import IAnnotations
 from zope.app.intid.interfaces import IIntIds
-from zope.component import getAdapter
 from zope.component import getAdapters
 from zope.component import getUtility
-from zope.component import queryAdapter
 from zope.event import notify
 from zope.interface import Interface
 from zope.lifecycleevent import ObjectCreatedEvent
-from zope.lifecycleevent import ObjectModifiedEvent
 import base64
 import DateTime
 import json
@@ -42,18 +36,16 @@ ORIGINAL_INTID_ANNOTATION_KEY = 'transporter_original-intid'
 _marker = object()
 
 
-class Transporter(grok.GlobalUtility):
-    """ The transporter utility is able to copy objects to other
+class Transporter(object):
+    """ The transporter objects is able to copy objects to other
     clients.
     """
-
-    grok.provides(ITransporter)
 
     def transport_to(self, obj, target_cid, container_path):
         """ Copies a *object* to another client (*target_cid*).
         """
 
-        jsondata = json.dumps(self._extract_data(obj))
+        jsondata = json.dumps(self.extract(obj))
 
         request_data = {
             REQUEST_KEY: jsondata,
@@ -71,73 +63,19 @@ class Transporter(grok.GlobalUtility):
         data = remote_json_request(source_cid,
                                    '@@transporter-extract-object-json',
                                    path=path)
-        data = encode_after_json(data)
 
-        obj = self._create_object(container, data)
-        return obj
+        return self.create(data, container)
 
     def receive(self, container, request):
         jsondata = request.get(REQUEST_KEY)
         data = json.loads(jsondata)
-        data = encode_after_json(data)
-        obj = self._create_object(container, data)
-        return obj
+        return self.create(data, container)
 
     def extract(self, obj):
-        """ Returns a JSON dump of *obj*
-        """
-        return json.dumps(self._extract_data(obj))
+        return DexterityObjectDataExtractor(obj).extract()
 
-    def _extract_data(self, obj):
-        """ Serializes a object
-        """
-        data = {}
-        # base data
-        creator = self._get_object_creator(obj.portal_type)
-        data[BASEDATA_KEY] = creator.extract(obj)
-        # collect data
-        collectors = getAdapters((obj,), IDataCollector)
-        for name, collector in collectors:
-            data[name] = collector.extract()
-        data = decode_for_json(data)
-
-        return data
-
-    def _create_object(self, container, data):
-        """ Creates the object with the data
-        """
-        portal_type = data[BASEDATA_KEY]['portal_type']
-
-        # XXX refactor, we can't use JSON data passed here as certain
-        # type-informations are dropped (e.g. tuples and lists)
-        # XXX double check, can we just use IDataCollector but before creating
-        # the actual object
-        creation_data = {}
-        creation_data.update(data[BASEDATA_KEY])
-        for key, values in data.get(FIELDDATA_KEY, {}).items():
-            if key in REQUIRED_SCHEMA_KEYS:
-                creation_data.update(values)
-
-        # base data
-        creator = self._get_object_creator(portal_type)
-        obj = creator.create(container, creation_data)
-        # insert data from collectors
-        collectors = getAdapters((obj,), IDataCollector)
-        for name, collector in collectors:
-            collector.insert(data[name])
-        # let the object reindex by creating a modified event, which also
-        # runs stuff like globalindex, if needed.
-        notify(ObjectModifiedEvent(obj))
-        return obj
-
-    def _get_object_creator(self, portal_type):
-        # get the FTI
-        fti = getUtility(IDexterityFTI, name=portal_type)
-        # do we have a specific one?
-        creator = queryAdapter(fti, IObjectCreator, name=portal_type)
-        if not creator:
-            creator = getAdapter(fti, IObjectCreator, name='')
-        return creator
+    def create(self, data, container):
+        return DexterityObjectCreator(data).create_in(container)
 
 
 class ReceiveObject(grok.View):
@@ -150,7 +88,7 @@ class ReceiveObject(grok.View):
     grok.context(Interface)
 
     def render(self):
-        transporter = getUtility(ITransporter)
+        transporter = Transporter()
         container = self.context
         obj = transporter.receive(container, self.request)
         portal = self.context.portal_url.getPortalObject()
@@ -181,47 +119,51 @@ class ExtractObject(grok.View):
     grok.context(Interface)
 
     def render(self):
-        transporter = getUtility(ITransporter)
-
         # Set correct content type for JSON response
         self.request.response.setHeader("Content-type", "application/json")
 
-        return transporter.extract(self.context)
+        return json.dumps(Transporter().extract(self.context))
 
 
-class DexterityObjectCreator(grok.Adapter):
-    """Default adapter for creating dexterity objects. This adapter is used
-    by the transporter utility for creating a object.
-    The `IObjectCreator` adapts the FTI. This makes it possible to also support
-    other FTI types such as Archetypes.
-    """
+class DexterityObjectCreator(object):
 
-    grok.context(IDexterityFTI)
-    grok.provides(IObjectCreator)
-    grok.name('')
+    def __init__(self, data):
+        self.data = encode_after_json(data)
+        self.portal_type = self.data[BASEDATA_KEY]['portal_type']
+        self.title = self.data[BASEDATA_KEY].pop('title')
+        if not isinstance(self.title, unicode):
+            self.title = self.title.decode('utf-8')
 
-    def extract(self, obj):
-        return {
-            'id': obj.getId(),
-            'title': obj.Title(),
-            'portal_type': obj.portal_type,
-            }
-
-    def create(self, container, data):
-
-        title = data.pop('title')
-        if not isinstance(title, unicode):
-            title = title.decode('utf-8')
-        portal_type = data.pop('portal_type')
-
-        obj = createContent(portal_type,
-                            title=title,
-                            **data)
+    def create_in(self, container):
+        obj = createContent(self.portal_type, title=self.title)
         notify(ObjectCreatedEvent(obj))
-        obj = addContentToContainer(container,
-                                    obj,
-                                    checkConstraints=True)
+
+        # insert data from collectors
+        collectors = getAdapters((obj.__of__(container),), IDataCollector)
+        for name, collector in collectors:
+            collector.insert(self.data[name])
+
+        obj = addContentToContainer(container, obj, checkConstraints=True)
         return obj
+
+
+class DexterityObjectDataExtractor(object):
+
+    def __init__(self, obj):
+        self.obj = obj
+
+    def extract(self):
+        data = {}
+        data[BASEDATA_KEY] = {'id': self.obj.getId(),
+                              'title': self.obj.Title(),
+                              'portal_type': self.obj.portal_type}
+
+        # collect data
+        collectors = getAdapters((self.obj,), IDataCollector)
+        for name, collector in collectors:
+            data[name] = collector.extract()
+
+        return decode_for_json(data)
 
 
 class DexterityFieldDataCollector(grok.Adapter):
@@ -303,7 +245,6 @@ class DexterityFieldDataCollector(grok.Adapter):
         """Unpacks the value from the basic json types to the objects which
         are stored on the field later.
         """
-
         if self._provided_by_one_of(field, [
                 schema.interfaces.IDate,
                 schema.interfaces.ITime,

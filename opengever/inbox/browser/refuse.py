@@ -2,9 +2,9 @@ from five import grok
 from opengever.inbox import _
 from opengever.inbox.browser.schema import ISimpleResponseForm
 from opengever.inbox.forwarding import IForwarding
-from opengever.ogds.base.interfaces import ITransporter
 from opengever.ogds.base.transport import ORIGINAL_INTID_ANNOTATION_KEY
 from opengever.ogds.base.transport import REQUEST_KEY
+from opengever.ogds.base.transport import Transporter
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.base.utils import remote_json_request
@@ -74,8 +74,8 @@ class ForwardingRefuseForm(Form):
         wf_tool.doActionFor(self.context, 'forwarding-transition-refuse')
 
     def store_copy_in_remote_yearfolder(self, refusing_unit_id):
-        transporter = getUtility(ITransporter)
-        jsondata = json.dumps(transporter._extract_data(self.context))
+        transporter = Transporter()
+        jsondata = json.dumps(transporter.extract(self.context))
         request_data = {REQUEST_KEY: jsondata, }
 
         response = remote_json_request(
@@ -170,7 +170,7 @@ class StoreRefusedForwardingView(grok.View):
         the actual yearfolder."""
 
         yearfolder = self.get_yearfolder()
-        transporter = getUtility(ITransporter)
+        transporter = Transporter()
         return transporter.receive(yearfolder, self.request)
 
     def update_workflow(self, forwarding):
