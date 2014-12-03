@@ -115,12 +115,6 @@ class IClientCommunicator(Interface):
     """
 
 
-class ITransporter(Interface):
-    """Utility interface for the transporter utility, which
-    is able to copy objects between tentacles (clients).
-    """
-
-
 class IDataCollector(Interface):
     """ Interface for adapters which are able to serialize and
     unserialize data. With these named-adapters any kind of additional
@@ -138,25 +132,6 @@ class IDataCollector(Interface):
     def insert(self, data):
         """ Unserializes the *data* and changes the *obj* according to the
         data.
-        """
-
-
-class IObjectCreator(Interface):
-    """ The object creator adapter creates a transported object.
-    Discriminators: (FTI)
-    Name: portal_type or ''
-    Using the name "basedata" in the json-data dictionary
-    """
-
-    def extract(self):
-        """ Extracts and returns the required data for object
-        creation.
-        This method must return a dictionary containing the portal_type.
-        """
-
-    def create(self, parent, data):
-        """ Creates the object according to the data
-        This method returns the created object
         """
 
 

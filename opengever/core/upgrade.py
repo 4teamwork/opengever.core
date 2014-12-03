@@ -144,6 +144,15 @@ class SchemaMigration(UpgradeStep):
         self.metadata.clear()
         self.metadata.reflect()
 
+    def get_foreign_key_name(self, table_name, column_name):
+        foreign_keys = self.op.metadata.tables.get(table_name).columns.get(column_name).foreign_keys
+        assert len(foreign_keys) == 1
+        return foreign_keys.pop().name
+
+    @property
+    def is_oracle(self):
+        return self.dialect_name == 'oracle'
+
     def _log_skipping_migration(self):
         logger.log(logging.INFO,
                    'Skipping DB-migration {} -> {}, already installed'.format(
@@ -203,8 +212,8 @@ class SchemaMigration(UpgradeStep):
 
     def _setup_db_connection(self):
         session = create_session()
-        engine = session.bind
-        self.connection = engine.connect()
+        self.connection = session.connection()
         self.migration_context = MigrationContext.configure(self.connection)
-        self.metadata = MetaData(engine, reflect=True)
+        self.metadata = MetaData(session.bind, reflect=True)
         self.op = IdempotentOperations(self, self.migration_context)
+        self.dialect_name = self.connection.dialect.name

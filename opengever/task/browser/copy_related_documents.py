@@ -1,5 +1,5 @@
 from five import grok
-from opengever.ogds.base.interfaces import ITransporter
+from opengever.ogds.base.transport import Transporter
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.base.vocabulary import ContactsVocabulary
 from opengever.task import _
@@ -85,7 +85,7 @@ class CopyRelatedDocumentsForm(Form):
             return self.request.RESPONSE.redirect(self.context.absolute_url())
 
     def copy_documents(self, client_id):
-        transporter = getUtility(ITransporter)
+        transporter = Transporter()
         for doc in self.get_documents():
             transporter.transport_to(doc, client_id, 'eingangskorb')
 
