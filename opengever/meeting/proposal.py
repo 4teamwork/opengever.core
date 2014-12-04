@@ -70,17 +70,18 @@ class Proposal(Container):
     implements(IProposal)
 
     workflow = Workflow([
-        State('pending', is_default=True),
-        State('submitted'),
-        State('scheduled'),
-        State('decided'),
+        State('pending', is_default=True,
+              title=_('pending', default='Pending')),
+        State('submitted', title=_('submitted', default='Submited')),
+        State('scheduled', title=_('scheduled', default='Scheduled')),
+        State('decided', title=_('decided', default='Decided')),
         ], [
         Transition('pending', 'submitted',
-                   _('submit', default='Submit')),
+                   title=_('submit', default='Submit')),
         Transition('submitted', 'scheduled',
-                   _('schedule', default='Schedule')),
+                   title=_('schedule', default='Schedule')),
         Transition('scheduled', 'decided',
-                   _('decide', default='Decide')),
+                   title=_('decide', default='Decide')),
         ])
 
     @classmethod
@@ -127,6 +128,11 @@ class Proposal(Container):
                 'label': _('label_commission'),
                 'value': model.commission.title,
             },
+            {
+                'label': _('label_workflow_state'),
+                'value': self.get_state().title,
+            },
+
         ]
 
     def get_physical_path(self):

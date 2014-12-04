@@ -1,9 +1,10 @@
 class State(object):
 
-    def __init__(self, name, is_default=False):
+    def __init__(self, name, is_default=False, title=None):
         self.name = name
         self.transitions = []
         self.is_default = is_default
+        self.title = title or name
 
     def register_transition(self, transition):
         self.transitions.append(transition)

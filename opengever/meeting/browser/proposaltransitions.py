@@ -19,9 +19,13 @@ class ProposalTransitionController(grok.View):
             raise NotFound
 
         self.execute_transition(transition)
+        return self.redirect_to_proposal()
 
     def is_valid_transition(self, transition_name):
-        pass
+        return self.context.can_perform_transition(transition_name)
 
     def execute_transition(self, transition_name):
-        pass
+        return self.context.perform_transition(transition_name)
+
+    def redirect_to_proposal(self):
+        return self.request.RESPONSE.redirect(self.context.absolute_url())

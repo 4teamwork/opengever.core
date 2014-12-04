@@ -4,7 +4,8 @@ from opengever.globalindex.model.task import Task
 from opengever.meeting.model import Commission
 from opengever.meeting.model import Member
 from opengever.meeting.model import Membership
-from opengever.meeting.model import Proposal
+from opengever.meeting.model import Proposal as ProposalModel
+from opengever.meeting.proposal import Proposal
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.utils import get_ou_selector
 from opengever.ogds.models.tests.builders import AdminUnitBuilder
@@ -93,7 +94,7 @@ builder_registry.register('globalindex_task', TaskBuilder)
 
 class ProposalModelBuilder(SqlObjectBuilder):
 
-    mapped_class = Proposal
+    mapped_class = ProposalModel
 
     def __init__(self, session):
         super(ProposalModelBuilder, self).__init__(session)
@@ -101,6 +102,7 @@ class ProposalModelBuilder(SqlObjectBuilder):
         self.arguments['int_id'] = 1234
         self.arguments['physical_path'] = '/bar'
         self.arguments['title'] = 'Bar'
+        self.arguments['workflow_state'] = Proposal.workflow.default_state.name
 
     def id(self, identifier):
         """Proposals have a composite primary key, admin_unit_id and int_id.

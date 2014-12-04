@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-12-04 09:32+0000\n"
+"POT-Creation-Date: 2014-12-04 14:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,27 +18,37 @@ msgstr ""
 msgid "Proposal"
 msgstr "Antrag"
 
-#: ./opengever/meeting/proposal.py:30
+#. Default: "Decide"
+#: ./opengever/meeting/proposal.py:84
+msgid "decide"
+msgstr "beschliessen"
+
+#. Default: "Decided"
+#: ./opengever/meeting/proposal.py:77
+msgid "decided"
+msgstr "Beschlossen"
+
+#: ./opengever/meeting/proposal.py:33
 msgid "help_initial_position"
 msgstr ""
 
-#: ./opengever/meeting/proposal.py:23
+#: ./opengever/meeting/proposal.py:26
 msgid "help_title"
 msgstr ""
 
 #. Default: "Commission"
-#: ./opengever/meeting/proposal.py:35
+#: ./opengever/meeting/proposal.py:38
 msgid "label_commission"
 msgstr "Ausschuss"
 
 #. Default: "Documents"
 #: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt:31
-#: ./opengever/meeting/proposal.py:44
+#: ./opengever/meeting/proposal.py:47
 msgid "label_documents"
 msgstr "Dokumente"
 
 #. Default: "Proposal"
-#: ./opengever/meeting/proposal.py:29
+#: ./opengever/meeting/proposal.py:32
 msgid "label_initial_position"
 msgstr "Antrag"
 
@@ -48,7 +58,36 @@ msgid "label_main_attributes"
 msgstr "Eigenschaften"
 
 #. Default: "Title"
-#: ./opengever/meeting/proposal.py:22
+#: ./opengever/meeting/proposal.py:25
 msgid "label_title"
 msgstr "Titel"
+
+#: ./opengever/meeting/proposal.py:132
+msgid "label_workflow_state"
+msgstr "Status"
+
+#. Default: "Pending"
+#: ./opengever/meeting/proposal.py:74
+msgid "pending"
+msgstr "In Bearbeitung"
+
+#. Default: "Schedule"
+#: ./opengever/meeting/proposal.py:82
+msgid "schedule"
+msgstr "traktandieren"
+
+#. Default: "Scheduled"
+#: ./opengever/meeting/proposal.py:76
+msgid "scheduled"
+msgstr "Traktandiert"
+
+#. Default: "Submit"
+#: ./opengever/meeting/proposal.py:80
+msgid "submit"
+msgstr "einreichen"
+
+#. Default: "Submited"
+#: ./opengever/meeting/proposal.py:75
+msgid "submitted"
+msgstr "Eingereicht"
 
