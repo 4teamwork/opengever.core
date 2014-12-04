@@ -3,6 +3,9 @@ from opengever.core.model import create_session
 from opengever.globalindex.oguid import Oguid
 from opengever.meeting import _
 from opengever.meeting.model.proposal import Proposal as ProposalModel
+from opengever.meeting.workflow import State
+from opengever.meeting.workflow import Transition
+from opengever.meeting.workflow import Workflow
 from plone.dexterity.content import Container
 from plone.directives import form
 from z3c.form import interfaces
@@ -66,6 +69,20 @@ class Proposal(Container):
     """
     implements(IProposal)
 
+    workflow = Workflow([
+        State('pending', is_default=True),
+        State('submitted'),
+        State('scheduled'),
+        State('decided'),
+        ], [
+        Transition('pending', 'submitted',
+                   _('submit', default='Submit')),
+        Transition('submitted', 'scheduled',
+                   _('schedule', default='Schedule')),
+        Transition('scheduled', 'decided',
+                   _('decide', default='Decide')),
+        ])
+
     @classmethod
     def partition_data(cls, data):
         """Partition input data in model data and plone object data.
@@ -77,6 +94,15 @@ class Proposal(Container):
                 obj_data[field_name] = data.pop(field_name)
 
         return obj_data, data
+
+    def perform_transition(self, name):
+        self.workflow.perform_transition(self.load_model(), name)
+
+    def can_perform_transition(self, name):
+        return self.workflow.can_perform_transition(self.load_model(), name)
+
+    def get_state(self):
+        return self.workflow.get_state(self.load_model().workflow_state)
 
     def load_model(self):
         oguid = Oguid.for_object(self)
@@ -110,10 +136,12 @@ class Proposal(Container):
     def create_model(self, data, context):
         session = create_session()
         oguid = Oguid.for_object(self)
+        workflow_state = self.workflow.default_state.name
 
         aq_wrapped_self = self.__of__(context)
         session.add(ProposalModel(
             oguid=oguid,
+            workflow_state=workflow_state,
             physical_path=aq_wrapped_self.get_physical_path(),
             **data))
 

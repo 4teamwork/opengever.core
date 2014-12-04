@@ -25,6 +25,7 @@ class Proposal(Base):
     oguid = composite(Oguid, admin_unit_id, int_id)
     title = Column(String(256), nullable=False)
     physical_path = Column(String(256), nullable=False)
+    workflow_state = Column(String(256), nullable=False)
     initial_position = Column(Text)
 
     commission_id = Column(Integer, ForeignKey('commissions.id'))

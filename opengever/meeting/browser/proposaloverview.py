@@ -1,5 +1,6 @@
 from five import grok
 from opengever.base.browser.helper import get_css_class
+from opengever.meeting.browser.proposaltransitions import ProposalTransitionController
 from opengever.meeting.proposal import IProposal
 from opengever.tabbedview.browser.base import OpengeverTab
 from plone.directives.dexterity import DisplayForm
@@ -36,3 +37,9 @@ class ProposalOverview(DisplayForm, OpengeverTab):
                 related_documents.append(obj)
         related_documents.sort(lambda a, b: cmp(b.modified(), a.modified()))
         return related_documents
+
+    def transitions(self):
+        return self.context.get_state().get_transitions()
+
+    def transition_url(self, transition):
+        return ProposalTransitionController.url_for(self.context, transition.name)
