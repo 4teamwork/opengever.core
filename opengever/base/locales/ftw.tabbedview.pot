@@ -191,7 +191,6 @@ msgstr ""
 msgid "contacts"
 msgstr ""
 
-
 msgid "related_documents"
 msgstr ""
 
@@ -205,4 +204,7 @@ msgid "tasktemplatefolders"
 msgstr ""
 
 msgid "closed-forwardings"
+msgstr ""
+
+msgid "proposals"
 msgstr ""

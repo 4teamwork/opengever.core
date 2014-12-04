@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-05-21 13:27+0000\n"
+"POT-Creation-Date: 2014-12-04 09:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -13,4 +13,42 @@ msgstr ""
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+
+#: ./opengever/meeting/profiles/default/types/opengever.meeting.proposal.xml
+msgid "Proposal"
+msgstr ""
+
+#: ./opengever/meeting/proposal.py:30
+msgid "help_initial_position"
+msgstr ""
+
+#: ./opengever/meeting/proposal.py:23
+msgid "help_title"
+msgstr ""
+
+#. Default: "Commission"
+#: ./opengever/meeting/proposal.py:35
+msgid "label_commission"
+msgstr ""
+
+#. Default: "Documents"
+#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt:31
+#: ./opengever/meeting/proposal.py:44
+msgid "label_documents"
+msgstr ""
+
+#. Default: "Proposal"
+#: ./opengever/meeting/proposal.py:29
+msgid "label_initial_position"
+msgstr ""
+
+#. Default: "Main Atrributes"
+#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt:12
+msgid "label_main_attributes"
+msgstr ""
+
+#. Default: "Title"
+#: ./opengever/meeting/proposal.py:22
+msgid "label_title"
+msgstr ""
 

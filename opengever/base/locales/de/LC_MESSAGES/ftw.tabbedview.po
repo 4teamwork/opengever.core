@@ -206,3 +206,5 @@ msgstr "Papierkorb"
 msgid "users"
 msgstr "OGDS"
 
+msgid "proposals"
+msgstr "Anträge"
