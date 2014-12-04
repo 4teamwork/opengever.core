@@ -5,4 +5,3 @@ include *.txt
 global-exclude *.pyc
 global-exclude ._*
 global-exclude *.mo
-global-exclude ldap_plugin.xml
