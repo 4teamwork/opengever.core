@@ -5,6 +5,15 @@ Changelog
 4.1.0 (unreleased)
 ------------------
 
+- Reworked OrgUnit Selector:
+    - Store current unit to regular cookie instead of using the session_data_manager.
+    - Differentiate between users_units (selectable) and admin_unit's org_unit
+      (current org_unit).
+    - Change current org_unit functionality, the current orgunit has to be
+      part of the current admin_unit.
+
+  [phgross]
+
 - Made schemamigrations to 4.0.x release oracle compatible.
   [phgross]
 

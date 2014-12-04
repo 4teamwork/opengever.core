@@ -7,6 +7,8 @@ from opengever.testing import FunctionalTestCase
 
 class TestBaseInboxOverview(FunctionalTestCase):
 
+    use_default_fixture = False
+
     def setUp(self):
         super(TestBaseInboxOverview, self).setUp()
         self.grant('Owner', 'Editor', 'Contributor')
@@ -16,6 +18,9 @@ class TestBaseInboxOverview(FunctionalTestCase):
             .with_user(userid='hans.muster')
             .with_org_unit(unit_id=u'client2')
             .with_admin_unit())
+
+        self.user, self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_all_unit_setup())
 
         self.inbox = create(Builder('inbox').titled(u'eingangskorb'))
         self.view = self.inbox.restrictedTraverse('tabbedview_view-overview')
