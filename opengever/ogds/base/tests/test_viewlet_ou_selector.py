@@ -17,6 +17,10 @@ class TestOrgUnitSelectorViewlet(FunctionalTestCase):
                                  .as_current_admin_unit()
                                  .having(public_url='http://nohost/plone'))
 
+        self.admin_unit_2 = create(Builder('admin_unit')
+                                   .id('unit2')
+                                   .having(public_url='http://nohost/plone'))
+
         self.org_unit4 = create(Builder('org_unit')
                                 .id(u'client4')
                                 .having(title=u'Client 4',
@@ -36,6 +40,11 @@ class TestOrgUnitSelectorViewlet(FunctionalTestCase):
         self.org_unit2 = create(Builder('org_unit')
                                 .id(u'client2')
                                 .having(title=u'Client 2',
+                                        admin_unit=self.admin_unit))
+
+        self.org_unit5 = create(Builder('org_unit')
+                                .id(u'client5')
+                                .having(title=u'Client 5',
                                         admin_unit=self.admin_unit))
 
         self.repo_root = create(Builder('repository_root'))
@@ -58,6 +67,14 @@ class TestOrgUnitSelectorViewlet(FunctionalTestCase):
 
     @browsing
     def test_list_all_assigned_units(self, browser):
+        browser.login().open(self.repo_root)
+        units = browser.css('.orgunitMenuContent li')
+
+        self.assertEquals(
+            ['Client 1', 'Client 3', 'Client 4'], units.text)
+
+    @browsing
+    def test_list_only_current_admin_units_org_units(self, browser):
         browser.login().open(self.repo_root)
         units = browser.css('.orgunitMenuContent li')
 
