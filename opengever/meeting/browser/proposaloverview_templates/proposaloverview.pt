@@ -4,7 +4,8 @@
       tal:omit-tag="python: True">
 
   <tal:i18n i18n:domain="opengever.meeting"
-    tal:define="css_width python:99/2;">
+    tal:define="documents view/documents;
+                css_width python:99/2;">
 
     <div tal:attributes="class string:boxGroup; style string:width:${css_width}%">
       <div id="main_attributesBox" class="box">
@@ -25,6 +26,20 @@
       </div>
     </div>
 
+      <div id="documentsBox" class="box">
+        <tal:condition tal:condition="documents">
+          <h2 i18n:translate="label_documents">Documents</h2>
+          <ul>
+            <li tal:repeat="item documents">
+              <a href="" tal:attributes="href item/absolute_url;
+                                         title python: getattr(item, 'document_date', None) and item.document_date.strftime('%d.%m.%Y') or '';
+                                         class python:view.get_css_class(item)">
+                <span class="document" tal:condition="item/absolute_url" tal:content="item/Title" />
+              </a>
+            </li>
+          </ul>
+        </tal:condition>
+      </div>
 
     <div class="visualClear"><!----></div>
     <div tal:replace="structure provider:plone.belowcontentbody" />

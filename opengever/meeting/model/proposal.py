@@ -11,29 +11,6 @@ from sqlalchemy import String
 from sqlalchemy import Text
 from sqlalchemy.orm import composite
 from sqlalchemy.orm import relationship
-from zope import schema
-from zope.interface import Interface
-
-
-class IProposalModel(Interface):
-
-    title = schema.TextLine(
-        title=_(u"label_title", default=u"Title"),
-        description=_('help_title', default=u""),
-        required=True,
-        max_length=256,
-        )
-
-    initial_position = schema.Text(
-        title=_('label_initial_position', default=u"Proposal"),
-        description=_("help_initial_position", default=u""),
-        required=False,
-        )
-
-    commission = schema.Choice(
-        title=_('label_commission', default=u'Commission'),
-        source='opengever.meeting.CommissionVocabulary',
-        required=True)
 
 
 class Proposal(Base):
@@ -74,3 +51,8 @@ class Proposal(Base):
 
         transformer = api.portal.get_tool('portal_transforms')
         return transformer.convertTo('text/x-html-safe', link).getData()
+
+    def getPath(self):
+        """This method is required by a tabbedview."""
+
+        return self.physical_path

@@ -22,3 +22,17 @@ class ProposalOverview(DisplayForm, OpengeverTab):
         """
         css = get_css_class(item)
         return '{} {}'.format("rollover-breadcrumb", css)
+
+    def documents(self):
+        """ Return containing documents and related documents
+        """
+
+        related_documents = []
+        for item in self.context.relatedItems:
+            obj = item.to_object
+            if obj.portal_type in [
+                    'opengever.document.document', 'ftw.mail.mail']:
+                obj._v__is_relation = True
+                related_documents.append(obj)
+        related_documents.sort(lambda a, b: cmp(b.modified(), a.modified()))
+        return related_documents

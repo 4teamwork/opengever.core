@@ -1,6 +1,7 @@
 from five import grok
 from opengever.meeting import is_meeting_feature_enabled
-from opengever.meeting.model.proposal import IProposalModel
+from opengever.meeting.proposal import IProposalModel
+from opengever.meeting.proposal import Proposal
 from plone.directives import dexterity
 from z3c.form import field
 from zExceptions import Unauthorized
@@ -26,6 +27,7 @@ class AddForm(dexterity.AddForm):
             2) Create database model where the data is stored
 
         """
-        obj = super(AddForm, self).createAndAdd(data={})
-        self.create_model(obj, data)
+        obj_data, model_data = Proposal.partition_data(data)
+        obj = super(AddForm, self).createAndAdd(data=obj_data)
+        self.create_model(obj, model_data)
         return obj

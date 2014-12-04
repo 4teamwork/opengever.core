@@ -3,6 +3,15 @@ from opengever.testing import MEMORY_DB_LAYER
 from unittest2 import TestCase
 
 
+class MockAdminUnit(object):
+
+    def __init__(self, unit_id):
+        self.unit_id = unit_id
+
+    def id(self):
+        return self.unit_id
+
+
 class TestProposalQuery(TestCase):
 
     layer = MEMORY_DB_LAYER
@@ -33,3 +42,11 @@ class TestProposalQuery(TestCase):
 
     def test_get_by_oguid_returns_none_for_unknown_oguids(self):
         self.assertIsNone(Proposal.query.get_by_oguid('theanswer:42'))
+
+    def test_by_admin_unit(self):
+        proposal = create(Builder('proposal_model').having(
+            admin_unit_id='unita', int_id=1))
+
+        self.assertEqual(
+            proposal,
+            Proposal.query.by_admin_unit(MockAdminUnit('unita')).first())

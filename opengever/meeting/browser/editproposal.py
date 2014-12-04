@@ -1,18 +1,22 @@
 from five import grok
-from opengever.meeting.model.proposal import IProposalModel
+from opengever.meeting import is_meeting_feature_enabled
 from opengever.meeting.proposal import IProposal
+from opengever.meeting.proposal import IProposalModel
+from opengever.meeting.proposal import Proposal
 from plone.directives import dexterity
 from z3c.form import field
-from z3c.form import interfaces
-from zope.event import notify
-from zope.lifecycleevent import ObjectModifiedEvent
+from zExceptions import Unauthorized
 
 
 class EditForm(dexterity.EditForm):
     grok.context(IProposal)
 
-    ignoreContext = True
-    fields = field.Fields(IProposalModel)
+    fields = field.Fields(IProposalModel, ignoreContext=True)
+
+    def render(self):
+        if not is_meeting_feature_enabled():
+            raise Unauthorized
+        return super(EditForm, self).render()
 
     def inject_initial_data(self):
         if self.request.method != 'GET':
@@ -22,25 +26,21 @@ class EditForm(dexterity.EditForm):
         model = self.context.load_model()
         for fieldname in self.fields.keys():
             value = getattr(model, fieldname, None)
-            if value:
-                self.request[prefix + fieldname] = value
+
+            if not value:
+                continue
+
+            if fieldname == 'commission':
+                value = str(value.commission_id)
+            self.request[prefix + fieldname] = value
 
     def updateWidgets(self):
         self.inject_initial_data()
         super(EditForm, self).updateWidgets()
 
     def applyChanges(self, data):
-        """Store form input in relational database.
-
-        KISS: Currently assumes that each input is a change an thus always
-        fires a changed event.
-
-        """
-        model = self.context.load_model()
-        for key, value in data.items():
-            if value is interfaces.NOT_CHANGED:
-                continue
-            setattr(model, key, value)
-
-        notify(ObjectModifiedEvent(self.context))
+        obj_data, model_data = Proposal.partition_data(data)
+        self.context.update_model(model_data)
+        super(EditForm, self).applyChanges(obj_data)
+        # pretend to always change the underlying data
         return True

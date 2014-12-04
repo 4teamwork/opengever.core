@@ -5,6 +5,30 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.globalindex.oguid import Oguid
 from opengever.testing import FunctionalTestCase
 from opengever.testing import index_data_for
+from zExceptions import Unauthorized
+
+
+class TestProposalViewsDisabled(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestProposalViewsDisabled, self).setUp()
+        root = create(Builder('repository_root'))
+        folder = create(Builder('repository').within(root))
+        self.dossier = create(Builder('dossier').within(folder))
+
+    @browsing
+    def test_add_form_is_disabled(self, browser):
+        browser.login()
+        with self.assertRaises(Unauthorized):
+            browser.open(self.dossier,
+                         view='++add++opengever.meeting.proposal')
+
+    @browsing
+    def test_edit_form_is_disabled(self, browser):
+        proposal = create(Builder('proposal').within(self.dossier))
+
+        with self.assertRaises(Unauthorized):
+            browser.login().visit(proposal, view='edit')
 
 
 class TestProposal(FunctionalTestCase):
@@ -25,23 +49,39 @@ class TestProposal(FunctionalTestCase):
         self.assertIsNotNone(model)
         self.assertEqual(Oguid.for_object(proposal), model.oguid)
 
+    def search_for_document(self, browser, document):
+        """Relation-widget, search for one document."""
+
+        title = document.Title()
+        browser.fill(
+            {'form.widgets.relatedItems.widgets.query': title}).submit()
+
     @browsing
     def test_proposal_can_be_created_in_browser(self, browser):
         commission = create(Builder('commission'))
+        document = create(Builder('document')
+                          .within(self.dossier)
+                          .titled('A Document'))
 
         browser.login()
         browser.open(self.dossier, view='++add++opengever.meeting.proposal')
+
+        self.search_for_document(browser, document)
+
         browser.fill({
             'Title': u'A pr\xf6posal',
             'Proposal': u'My pr\xf6posal',
             'Commission': str(commission.commission_id),
-            }).submit()
-
+            'form.widgets.relatedItems:list': True,
+            })
+        browser.css('#form-buttons-save').first.click()
         self.assertIn('Item created',
                       browser.css('.portalMessage.info dd').text)
 
         proposal = browser.context
         self.assertEqual('proposal-1', proposal.getId())
+        self.assertEqual(1, len(proposal.relatedItems))
+        self.assertEqual(document, proposal.relatedItems[0].to_object)
 
         model = proposal.load_model()
         self.assertIsNotNone(model)
@@ -51,3 +91,36 @@ class TestProposal(FunctionalTestCase):
 
         self.assertEqual(['a', 'pr\xc3\xb6posal', 'my', 'pr\xc3\xb6posal'],
                          index_data_for(proposal)['SearchableText'])
+
+    @browsing
+    def test_proposal_can_be_edited_in_browser(self, browser):
+        commission = create(Builder('commission'))
+        document = create(Builder('document')
+                          .within(self.dossier)
+                          .titled('A Document'))
+        proposal = create(Builder('proposal').within(self.dossier))
+
+        browser.login().visit(proposal, view='edit')
+
+        self.search_for_document(browser, document)
+
+        browser.fill({
+            'Title': u'A pr\xf6posal',
+            'Proposal': u'My pr\xf6posal',
+            'Commission': str(commission.commission_id),
+            'form.widgets.relatedItems:list': True,
+            })
+
+        browser.css('#form-buttons-save').first.click()
+        self.assertIn('Changes saved',
+                      browser.css('.portalMessage.info dd').text)
+
+        proposal = browser.context
+        self.assertEqual(1, len(proposal.relatedItems))
+        self.assertEqual(document, proposal.relatedItems[0].to_object)
+
+        model = proposal.load_model()
+        self.assertIsNotNone(model)
+        self.assertEqual(Oguid.for_object(proposal), model.oguid)
+        self.assertEqual(u'A pr\xf6posal', model.title)
+        self.assertEqual(u'My pr\xf6posal', model.initial_position)
