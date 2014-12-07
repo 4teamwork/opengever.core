@@ -1,5 +1,6 @@
 from Acquisition import aq_inner
 from five import grok
+from opengever.activity.events import TaskNotifactionEvent
 from opengever.base.source import DossierPathSourceBinder
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
@@ -152,6 +153,7 @@ class AddForm(form.AddForm, AutoExtensibleForm):
     def label(self):
         transition = self.request.get('form.widgets.transition',
                                       self.request.get('transition', None))
+
         label = [self.context.Title().decode('utf-8')]
         if transition:
             label.append(translate(transition, domain='plone',
@@ -254,6 +256,7 @@ class AddForm(form.AddForm, AutoExtensibleForm):
             container.add(new_response)
 
             notify(ObjectModifiedEvent(self.context))
+            notify(TaskNotifactionEvent(self.context, new_response))
 
             if data.get('transition'):
                 syncer = getMultiAdapter((self.context, self.request),
