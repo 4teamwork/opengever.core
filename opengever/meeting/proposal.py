@@ -1,6 +1,6 @@
+from opengever.base.oguid import Oguid
 from opengever.base.source import DossierPathSourceBinder
 from opengever.core.model import create_session
-from opengever.globalindex.oguid import Oguid
 from opengever.meeting import _
 from opengever.meeting.model.proposal import Proposal as ProposalModel
 from opengever.meeting.workflow import State
@@ -83,6 +83,8 @@ class Proposal(Container):
         Transition('scheduled', 'decided',
                    title=_('decide', default='Decide')),
         ])
+
+    model_schema = IProposalModel
 
     @classmethod
     def partition_data(cls, data):

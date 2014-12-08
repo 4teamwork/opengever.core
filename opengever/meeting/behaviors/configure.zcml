@@ -9,13 +9,21 @@
     <include package="plone.directives.form" file="meta.zcml" />
     <include package="plone.directives.form" />
 
-    <!-- name from title beahvior -->
+    <!-- name from title beahviors -->
     <plone:behavior
         title="propsal name from title"
         description=""
-        provides="opengever.meeting.behaviors.proposalnamefromtitle.IProposalNameFromTitle"
-        factory=".proposalnamefromtitle.ProposalNameFromTitle"
+        provides="opengever.meeting.behaviors.namefromtitle.IProposalNameFromTitle"
+        factory=".namefromtitle.ProposalNameFromTitle"
         for="opengever.meeting.proposal.IProposal"
+        />
+
+    <plone:behavior
+        title="committee name from title"
+        description=""
+        provides="opengever.meeting.behaviors.namefromtitle.ICommitteeNameFromTitle"
+        factory=".namefromtitle.CommitteeNameFromTitle"
+        for="opengever.meeting.committee.ICommittee"
         />
 
 </configure>

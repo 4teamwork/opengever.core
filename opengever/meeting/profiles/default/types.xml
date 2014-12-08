@@ -1,3 +1,5 @@
 <object name="portal_types">
     <object name="opengever.meeting.proposal" meta_type="Dexterity FTI" />
+    <object name="opengever.meeting.committee" meta_type="Dexterity FTI" />
+    <object name="opengever.meeting.committeecontainer" meta_type="Dexterity FTI" />
 </object>

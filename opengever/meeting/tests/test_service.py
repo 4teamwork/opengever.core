@@ -16,13 +16,13 @@ class TestService(TestCase):
 
     def test_all_committees(self):
         committee1 = create(Builder('committee'))
-        committee2 = create(Builder('committee'))
+        committee2 = create(Builder('committee').having(int_id=5678))
         self.assertEqual([committee1, committee2],
                          self.service.all_committees())
 
     def test_fetch_committee_returns_correct_committee(self):
         create(Builder('committee'))
-        committee2 = create(Builder('committee'))
+        committee2 = create(Builder('committee').having(int_id=5678))
 
         self.assertEqual(
             committee2,

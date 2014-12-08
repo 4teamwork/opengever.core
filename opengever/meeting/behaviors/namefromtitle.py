@@ -4,6 +4,29 @@ from zope.component import getUtility
 from zope.interface import implements
 
 
+class ICommitteeNameFromTitle(INameFromTitle):
+    """Special name from title behavior for letting the normalizing name
+    chooser choose the ID.
+    The id of a committee should be in the format:
+    "committee-{sequence number}"
+
+    """
+
+
+class CommitteeNameFromTitle(object):
+    implements(ICommitteeNameFromTitle)
+
+    format = u'committee-{}'
+
+    def __init__(self, context):
+        self.context = context
+
+    @property
+    def title(self):
+        seq_number = getUtility(ISequenceNumber).get_number(self.context)
+        return self.format.format(seq_number)
+
+
 class IProposalNameFromTitle(INameFromTitle):
     """Speical name from title behavior for letting the normalizing name
     chooser choose the ID.

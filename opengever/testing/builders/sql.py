@@ -121,6 +121,8 @@ class CommitteeBuilder(SqlObjectBuilder):
     def __init__(self, session):
         super(CommitteeBuilder, self).__init__(session)
         self.arguments['title'] = 'Bar'
+        self.arguments['admin_unit_id'] = 'foo'
+        self.arguments['int_id'] = 1234
 
 builder_registry.register('committee', CommitteeBuilder)
 

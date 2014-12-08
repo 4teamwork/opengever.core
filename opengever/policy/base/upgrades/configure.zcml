@@ -13,9 +13,18 @@
 
   <genericsetup:registerProfile
       name="3100"
-      title="ftw.zipexport: upgrade profile 3100"
+      title="opengever.policy.base: upgrade profile 3100"
       description=""
       directory="profiles/3100"
+      for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <genericsetup:registerProfile
+      name="4000"
+      title="opengever.policy.base: upgrade profile 4000"
+      description=""
+      directory="profiles/4000"
       for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />

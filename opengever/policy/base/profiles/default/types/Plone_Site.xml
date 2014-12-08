@@ -7,5 +7,6 @@
   <element value="opengever.repository.repositoryroot"/>
   <element value="opengever.inbox.inbox"/>
   <element value="opengever.inbox.container"/>
+  <element value="opengever.meeting.committeecontainer"/>
  </property>
 </object>

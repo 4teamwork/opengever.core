@@ -1,4 +1,4 @@
-from opengever.globalindex.oguid import Oguid
+from opengever.base.oguid import Oguid
 from opengever.ogds.models.query import BaseQuery
 from plone import api
 
@@ -10,7 +10,7 @@ class ProposalQuery(BaseQuery):
         admin_unit_id or None if no such proposal exists.
 
         """
-        return self.filter_by(oguid=Oguid(id=oguid)).first()
+        return self.filter_by(oguid=Oguid(oguid=oguid)).first()
 
     def by_container(self, container, admin_unit):
         # XXX same as TaskQuery
