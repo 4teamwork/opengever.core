@@ -1,6 +1,6 @@
 from five import grok
+from opengever.base.oguid import Oguid
 from opengever.globalindex.model.task import Task
-from opengever.globalindex.oguid import Oguid
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
 from zope.lifecycleevent import modified

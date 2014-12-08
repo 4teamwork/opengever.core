@@ -1,6 +1,6 @@
 from AccessControl.SecurityManagement import SpecialUsers
 from five import grok
-from opengever.globalindex.oguid import Oguid
+from opengever.base.oguid import Oguid
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from Products.CMFCore.utils import getToolByName

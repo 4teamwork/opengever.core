@@ -6,10 +6,10 @@ from five import grok
 from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.interfaces import IReferenceNumber
+from opengever.base.oguid import Oguid
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.globalindex.model.task import Task
-from opengever.globalindex.oguid import Oguid
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.task import _

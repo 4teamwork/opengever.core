@@ -1,6 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from opengever.globalindex.oguid import Oguid
+from opengever.base.oguid import Oguid
 from opengever.testing import FunctionalTestCase
 from unittest2 import TestCase
 from zope.component import getUtility

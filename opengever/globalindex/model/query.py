@@ -1,4 +1,4 @@
-from opengever.globalindex.oguid import Oguid
+from opengever.base.oguid import Oguid
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models.query import BaseQuery
 from plone import api
