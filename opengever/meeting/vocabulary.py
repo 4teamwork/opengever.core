@@ -7,13 +7,13 @@ from zope.schema.vocabulary import SimpleVocabulary
 
 class ReferenceFormatterVocabulary(grok.GlobalUtility):
     grok.provides(IVocabularyFactory)
-    grok.name('opengever.meeting.CommissionVocabulary')
+    grok.name('opengever.meeting.CommitteeVocabulary')
 
     def __call__(self, context):
         terms = []
 
-        for commission in meeting_service().all_commissions():
-            terms.append(SimpleTerm(value=commission,
-                                    token=commission.commission_id,
-                                    title=commission.title))
+        for committee in meeting_service().all_committees():
+            terms.append(SimpleTerm(value=committee,
+                                    token=committee.committee_id,
+                                    title=committee.title))
         return SimpleVocabulary(terms)

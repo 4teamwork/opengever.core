@@ -15,9 +15,9 @@ class Membership(Base):
     date_from = Column(Date, nullable=False)
     date_to = Column(Date, nullable=False)
 
-    commission_id = Column(Integer, ForeignKey('commissions.id'),
+    committee_id = Column(Integer, ForeignKey('committees.id'),
                            primary_key=True)
-    commission = relationship("Commission", backref="memberships")
+    committee = relationship("Committee", backref="memberships")
     member_id = Column(Integer, ForeignKey('members.id'),
                        primary_key=True)
     member = relationship("Member", backref="memberships")
@@ -25,6 +25,6 @@ class Membership(Base):
     def __repr__(self):
         return '<Membership "{}" in "{}" {}:{}>'.format(
             self.member.fullname,
-            self.commission.title,
+            self.committee.title,
             self.date_from,
             self.date_to)

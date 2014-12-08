@@ -14,9 +14,9 @@ class TestUnitMembership(TestCase):
 
     def test_string_representation(self):
         member = create(Builder('member'))
-        commission = create(Builder('commission'))
+        committee = create(Builder('committee'))
         membership = create(Builder('membership').having(
-            commission=commission, member=member))
+            committee=committee, member=member))
 
         expected = '<Membership "Peter Meier" in "Bar" 2010-01-01:2014-01-01>'
         self.assertEqual(expected, str(membership))

@@ -14,19 +14,19 @@ class TestService(TestCase):
         self.session = self.layer.session
         self.service = meeting_service()
 
-    def test_all_commissions(self):
-        commission1 = create(Builder('commission'))
-        commission2 = create(Builder('commission'))
-        self.assertEqual([commission1, commission2],
-                         self.service.all_commissions())
+    def test_all_committees(self):
+        committee1 = create(Builder('committee'))
+        committee2 = create(Builder('committee'))
+        self.assertEqual([committee1, committee2],
+                         self.service.all_committees())
 
-    def test_fetch_commission_returns_correct_commission(self):
-        create(Builder('commission'))
-        commission2 = create(Builder('commission'))
+    def test_fetch_committee_returns_correct_committee(self):
+        create(Builder('committee'))
+        committee2 = create(Builder('committee'))
 
         self.assertEqual(
-            commission2,
-            self.service.fetch_commission(commission2.commission_id))
+            committee2,
+            self.service.fetch_committee(committee2.committee_id))
 
-    def test_fetch_commission_returns_none_for_invalid_id(self):
-        self.assertIsNone(self.service.fetch_commission(1337))
+    def test_fetch_committee_returns_none_for_invalid_id(self):
+        self.assertIsNone(self.service.fetch_committee(1337))

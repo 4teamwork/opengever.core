@@ -34,9 +34,9 @@ class IProposalModel(Interface):
         required=False,
         )
 
-    commission = schema.Choice(
-        title=_('label_commission', default=u'Commission'),
-        source='opengever.meeting.CommissionVocabulary',
+    committee = schema.Choice(
+        title=_('label_committee', default=u'Committee'),
+        source='opengever.meeting.CommitteeVocabulary',
         required=True)
 
 
@@ -125,8 +125,8 @@ class Proposal(Container):
                 'value': model.initial_position,
             },
             {
-                'label': _('label_commission'),
-                'value': model.commission.title,
+                'label': _('label_committee'),
+                'value': model.committee.title,
             },
             {
                 'label': _('label_workflow_state'),

@@ -5,13 +5,13 @@ from sqlalchemy import String
 from sqlalchemy.schema import Sequence
 
 
-class Commission(Base):
+class Committee(Base):
 
-    __tablename__ = 'commissions'
+    __tablename__ = 'committees'
 
-    commission_id = Column("id", Integer, Sequence("commission_id_seq"),
+    committee_id = Column("id", Integer, Sequence("committee_id_seq"),
                            primary_key=True)
     title = Column(String(256))
 
     def __repr__(self):
-        return '<Commission "{}">'.format(self.title)
+        return '<Committee "{}">'.format(self.title)

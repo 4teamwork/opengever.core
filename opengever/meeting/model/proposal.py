@@ -9,8 +9,10 @@ from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy import Text
+from sqlalchemy import UniqueConstraint
 from sqlalchemy.orm import composite
 from sqlalchemy.orm import relationship
+from sqlalchemy.schema import Sequence
 
 
 class Proposal(Base):
@@ -19,17 +21,21 @@ class Proposal(Base):
     query_cls = ProposalQuery
 
     __tablename__ = 'proposal'
+    __table_args__ = (UniqueConstraint('admin_unit_id', 'int_id'), {})
 
-    admin_unit_id = Column(String(30), primary_key=True)
-    int_id = Column(Integer, primary_key=True, autoincrement=False)
+    proposal_id = Column("id", Integer, Sequence("proposal_id_seq"),
+                         primary_key=True)
+    admin_unit_id = Column(String(30), nullable=False)
+    int_id = Column(Integer, nullable=False)
     oguid = composite(Oguid, admin_unit_id, int_id)
+
     title = Column(String(256), nullable=False)
     physical_path = Column(String(256), nullable=False)
     workflow_state = Column(String(256), nullable=False)
     initial_position = Column(Text)
 
-    commission_id = Column(Integer, ForeignKey('commissions.id'))
-    commission = relationship('Commission', backref='proposals')
+    committee_id = Column(Integer, ForeignKey('committees.id'))
+    committee = relationship('Committee', backref='proposals')
 
     def __repr__(self):
         return "<Proposal {}@{}>".format(self.int_id, self.admin_unit_id)

@@ -30,8 +30,8 @@ class EditForm(dexterity.EditForm):
             if not value:
                 continue
 
-            if fieldname == 'commission':
-                value = str(value.commission_id)
+            if fieldname == 'committee':
+                value = str(value.committee_id)
             self.request[prefix + fieldname] = value
 
     def updateWidgets(self):

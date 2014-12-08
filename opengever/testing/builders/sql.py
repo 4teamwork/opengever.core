@@ -1,7 +1,7 @@
 from datetime import date
 from ftw.builder import builder_registry
 from opengever.globalindex.model.task import Task
-from opengever.meeting.model import Commission
+from opengever.meeting.model import Committee
 from opengever.meeting.model import Member
 from opengever.meeting.model import Membership
 from opengever.meeting.model import Proposal as ProposalModel
@@ -113,16 +113,16 @@ class ProposalModelBuilder(SqlObjectBuilder):
 builder_registry.register('proposal_model', ProposalModelBuilder)
 
 
-class CommissionBuilder(SqlObjectBuilder):
+class CommitteeBuilder(SqlObjectBuilder):
 
-    mapped_class = Commission
-    id_argument_name = 'commission_id'
+    mapped_class = Committee
+    id_argument_name = 'committee_id'
 
     def __init__(self, session):
-        super(CommissionBuilder, self).__init__(session)
+        super(CommitteeBuilder, self).__init__(session)
         self.arguments['title'] = 'Bar'
 
-builder_registry.register('commission', CommissionBuilder)
+builder_registry.register('committee', CommitteeBuilder)
 
 
 class MemberBuilder(SqlObjectBuilder):

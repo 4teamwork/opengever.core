@@ -36,9 +36,9 @@ msgstr ""
 msgid "help_title"
 msgstr ""
 
-#. Default: "Commission"
+#. Default: "Committee"
 #: ./opengever/meeting/proposal.py:38
-msgid "label_commission"
+msgid "label_committee"
 msgstr "Ausschuss"
 
 #. Default: "Documents"

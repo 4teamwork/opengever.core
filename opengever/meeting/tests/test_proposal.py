@@ -58,7 +58,7 @@ class TestProposal(FunctionalTestCase):
 
     @browsing
     def test_proposal_can_be_created_in_browser(self, browser):
-        commission = create(Builder('commission'))
+        committee = create(Builder('committee'))
         document = create(Builder('document')
                           .within(self.dossier)
                           .titled('A Document'))
@@ -71,7 +71,7 @@ class TestProposal(FunctionalTestCase):
         browser.fill({
             'Title': u'A pr\xf6posal',
             'Proposal': u'My pr\xf6posal',
-            'Commission': str(commission.commission_id),
+            'Committee': str(committee.committee_id),
             'form.widgets.relatedItems:list': True,
             })
         browser.css('#form-buttons-save').first.click()
@@ -94,7 +94,7 @@ class TestProposal(FunctionalTestCase):
 
     @browsing
     def test_proposal_can_be_edited_in_browser(self, browser):
-        commission = create(Builder('commission'))
+        committee = create(Builder('committee'))
         document = create(Builder('document')
                           .within(self.dossier)
                           .titled('A Document'))
@@ -107,7 +107,7 @@ class TestProposal(FunctionalTestCase):
         browser.fill({
             'Title': u'A pr\xf6posal',
             'Proposal': u'My pr\xf6posal',
-            'Commission': str(commission.commission_id),
+            'Committee': str(committee.committee_id),
             'form.widgets.relatedItems:list': True,
             })
 

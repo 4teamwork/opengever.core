@@ -1,5 +1,5 @@
 from opengever.core.model import create_session
-from opengever.meeting.model import Commission
+from opengever.meeting.model import Committee
 
 
 def meeting_service():
@@ -11,11 +11,11 @@ class MeetingService(object):
     def __init__(self, session):
         self.session = session
 
-    def _query_commission(self):
-        return self.session.query(Commission)
+    def _query_committee(self):
+        return self.session.query(Committee)
 
-    def all_commissions(self):
-        return self._query_commission().all()
+    def all_committees(self):
+        return self._query_committee().all()
 
-    def fetch_commission(self, commission_id):
-        return self._query_commission().get(commission_id)
+    def fetch_committee(self, committee_id):
+        return self._query_committee().get(committee_id)
