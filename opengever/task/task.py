@@ -9,9 +9,9 @@ from ftw.datepicker.widget import DatePickerFieldWidget
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
+from opengever.base.oguid import Oguid
 from opengever.base.source import DossierPathSourceBinder
 from opengever.globalindex.model.task import Task as TaskModel
-from opengever.globalindex.oguid import Oguid
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.ogds.base.utils import get_current_admin_unit

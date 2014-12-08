@@ -1,6 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from opengever.globalindex.oguid import Oguid
+from opengever.base.oguid import Oguid
 from opengever.testing import FunctionalTestCase
 from unittest2 import TestCase
 from zope.component import getUtility
@@ -15,36 +15,39 @@ class TestOguid(TestCase):
 
     def test_init_fails_with_too_many_parameters(self):
         with self.assertRaises(AssertionError):
-            Oguid(id='foo:123', admin_unit_id='mah', int_id=3)
+            Oguid(oguid='foo:123', admin_unit_id='mah', int_id=3)
 
     def test_init_with_string_oguid(self):
-        oguid = Oguid(id='foo:123')
+        oguid = Oguid(oguid='foo:123')
         self.assertEqual('foo', oguid.admin_unit_id)
         self.assertEqual(123, oguid.int_id)
         self.assertEqual('foo:123', oguid.id)
 
     def test_init_with_oguid(self):
-        oguid = Oguid(id=Oguid(id='foo:123'))
+        oguid = Oguid(oguid=Oguid(oguid='foo:123'))
         self.assertEqual('foo', oguid.admin_unit_id)
         self.assertEqual(123, oguid.int_id)
         self.assertEqual('foo:123', oguid.id)
 
     def test_init_with_admin_unit_and_intid(self):
-        oguid = Oguid(admin_unit_id='bar', int_id='123')
+        oguid = Oguid('bar', '123')
         self.assertEqual('bar', oguid.admin_unit_id)
         self.assertEqual(123, oguid.int_id)
         self.assertEqual('bar:123', oguid.id)
 
     def test_oguid_string_representation(self):
-        self.assertEqual('foo:123', str(Oguid(id='foo:123')))
+        self.assertEqual('foo:123', str(Oguid(oguid='foo:123')))
 
     def test_comparison(self):
-        self.assertEqual(Oguid('foo', 2), Oguid('foo', 2))
-        self.assertEqual('foo:2', Oguid('foo', 2))
+        self.assertEqual(Oguid(admin_unit_id='foo', int_id=2),
+                         Oguid('foo', 2))
+        self.assertEqual('foo:2', Oguid(admin_unit_id='foo', int_id=2))
 
-        self.assertNotEqual(None, Oguid('foo', 2))
-        self.assertNotEqual(Oguid('foo', 3), Oguid('foo', 2))
-        self.assertNotEqual(Oguid('bar', 2), Oguid('foo', 2))
+        self.assertNotEqual(None, Oguid(admin_unit_id='foo', int_id=2))
+        self.assertNotEqual(Oguid(admin_unit_id='foo', int_id=3),
+                            Oguid('foo', 2))
+        self.assertNotEqual(Oguid(admin_unit_id='bar', int_id=2),
+                            Oguid('foo', 2))
 
 
 class TestOguidFunctional(FunctionalTestCase):

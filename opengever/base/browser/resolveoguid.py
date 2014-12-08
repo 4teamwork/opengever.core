@@ -1,6 +1,6 @@
 from AccessControl.SecurityManagement import SpecialUsers
 from five import grok
-from opengever.globalindex.oguid import Oguid
+from opengever.base.oguid import Oguid
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from Products.CMFCore.utils import getToolByName
@@ -28,7 +28,7 @@ class ResolveOGUIDView(grok.View):
         return admin_unit_id != get_current_admin_unit().id()
 
     def render(self):
-        oguid = Oguid(id=self.request.get('oguid'))
+        oguid = Oguid(oguid=self.request.get('oguid'))
 
         if self._is_on_different_admin_unit(oguid.admin_unit_id):
             admin_unit = ogds_service().fetch_admin_unit(oguid.admin_unit_id)
