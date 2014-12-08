@@ -313,7 +313,7 @@ class CloseTaskView(grok.View):
     def get_task(self):
         intids = getUtility(IIntIds)
         membership = getToolByName(self.context, 'portal_membership')
-        oguid = Oguid(id=self.request.get('oguid'))
+        oguid = Oguid(oguid=self.request.get('oguid'))
 
         if get_current_admin_unit().id() != oguid.admin_unit_id:
             raise NotFound

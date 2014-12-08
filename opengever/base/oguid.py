@@ -3,6 +3,10 @@ from zope.intid.interfaces import IIntIds
 from opengever.ogds.base.utils import get_current_admin_unit
 
 
+def xor(first, second):
+    return bool(first) != bool(second)
+
+
 class Oguid(object):
 
     SEPARATOR = ':'
@@ -13,18 +17,24 @@ class Oguid(object):
         int_id = intids.getId(context)
         return cls(admin_unit_id=get_current_admin_unit().id(), int_id=int_id)
 
-    def __init__(self, admin_unit_id=None, int_id=None, id=None):
-        # poor mans XOR
-        assert bool(id) != bool(admin_unit_id and int_id), \
+    def __init__(self, admin_unit_id=None, int_id=None, oguid=None):
+        """Create an Ogid from either an existing  oguid
+        (string or Ogid instance) or its parts: admin_unit_id and int_id.
+
+        Note that above argument order is required by some sqlalchemy composite
+        objects on mapped classes and must be left like this.
+
+        """
+        assert xor(oguid, (admin_unit_id and int_id)), \
             'either `oguid` or both, `admin_unit_id` and `intid` must be '\
             'specified'
 
-        if id:
-            if isinstance(id, basestring):
-                self.id = id
+        if oguid:
+            if isinstance(oguid, basestring):
+                self.id = oguid
             else:
                 # we assume an Oguid instance
-                self.id = id.id
+                self.id = oguid.id
         else:
             self._admin_unit_id = admin_unit_id
             self._int_id = int(int_id)
