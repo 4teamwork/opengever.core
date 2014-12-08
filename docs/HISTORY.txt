@@ -5,6 +5,11 @@ Changelog
 4.1.0 (unreleased)
 ------------------
 
+- Implement pessimistic connection invalidation (MySQL only):
+  Check every connection that has been checked out from pool, and
+  invalidate it if it's stale.
+  [lgraf]
+
 - Reworked OrgUnit Selector:
     - Store current unit to regular cookie instead of using the session_data_manager.
     - Differentiate between users_units (selectable) and admin_unit's org_unit
