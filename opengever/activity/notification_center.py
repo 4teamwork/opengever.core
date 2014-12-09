@@ -2,13 +2,15 @@ from opengever.activity import Activity
 from opengever.activity import Resource
 from opengever.activity import Session
 from opengever.activity import Watcher
-from opengever.globalindex.oguid import Oguid
 
 
 class NotificationCenter(object):
+    """API Notification center.
+    Splitted completly from plone to rise testability.
+    """
 
     def add_resource(self, oguid):
-        resource = Resource(oguid=Oguid(id=oguid))
+        resource = Resource(oguid=oguid)
         Session.add(resource)
         return resource
 

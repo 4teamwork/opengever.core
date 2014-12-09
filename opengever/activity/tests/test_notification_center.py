@@ -32,7 +32,7 @@ class TestResourceHandling(ActivityTestCase):
     #         self.session.flush()
 
     def test_adding(self):
-        resource = self.center.add_resource('fd:123')
+        resource = self.center.add_resource(Oguid(id='fd:123'))
 
         self.assertEquals(1, len(Resource.query.all()))
         resource = Resource.query.first()
@@ -74,7 +74,7 @@ class TestWatcherHandling(ActivityTestCase):
     def test_add_watcher_to_resource_creates_resource_when_not_exitst(self):
         peter = create(Builder('watcher').having(user_id='peter'))
 
-        self.center.add_watcher_to_resource('fd:123', 'peter')
+        self.center.add_watcher_to_resource(Oguid(id='fd:123'), 'peter')
 
         resource = peter.resources[0]
         self.assertEquals('fd:123', resource.oguid)
@@ -144,7 +144,7 @@ class TestAddActivity(ActivityTestCase):
         self.center = NotificationCenter()
 
     def test_add_resource_if_not_exists(self):
-        self.center.add_acitivity('fd:123',
+        self.center.add_acitivity(Oguid(id='fd:123'),
                                   'TASK_ADDED',
                                   'Task bla added',
                                   'hugo.boss')
