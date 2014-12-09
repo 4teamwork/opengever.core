@@ -58,7 +58,7 @@ class TestProposal(FunctionalTestCase):
 
     @browsing
     def test_proposal_can_be_created_in_browser(self, browser):
-        committee = create(Builder('committee'))
+        committee = create(Builder('committee_model'))
         document = create(Builder('document')
                           .within(self.dossier)
                           .titled('A Document'))
@@ -94,7 +94,7 @@ class TestProposal(FunctionalTestCase):
 
     @browsing
     def test_proposal_can_be_edited_in_browser(self, browser):
-        committee = create(Builder('committee'))
+        committee = create(Builder('committee_model'))
         document = create(Builder('document')
                           .within(self.dossier)
                           .titled('A Document'))

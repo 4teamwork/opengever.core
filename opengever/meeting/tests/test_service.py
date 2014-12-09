@@ -15,14 +15,14 @@ class TestService(TestCase):
         self.service = meeting_service()
 
     def test_all_committees(self):
-        committee1 = create(Builder('committee'))
-        committee2 = create(Builder('committee').having(int_id=5678))
+        committee1 = create(Builder('committee_model'))
+        committee2 = create(Builder('committee_model').having(int_id=5678))
         self.assertEqual([committee1, committee2],
                          self.service.all_committees())
 
     def test_fetch_committee_returns_correct_committee(self):
-        create(Builder('committee'))
-        committee2 = create(Builder('committee').having(int_id=5678))
+        create(Builder('committee_model'))
+        committee2 = create(Builder('committee_model').having(int_id=5678))
 
         self.assertEqual(
             committee2,

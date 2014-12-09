@@ -9,7 +9,6 @@ class ICommitteeNameFromTitle(INameFromTitle):
     chooser choose the ID.
     The id of a committee should be in the format:
     "committee-{sequence number}"
-
     """
 
 
@@ -31,7 +30,6 @@ class IProposalNameFromTitle(INameFromTitle):
     """Speical name from title behavior for letting the normalizing name
     chooser choose the ID.
     The id of a proposal should be in the format: "proposal-{sequence number}"
-
     """
 
 

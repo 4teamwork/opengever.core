@@ -124,7 +124,7 @@ class CommitteeBuilder(SqlObjectBuilder):
         self.arguments['admin_unit_id'] = 'foo'
         self.arguments['int_id'] = 1234
 
-builder_registry.register('committee', CommitteeBuilder)
+builder_registry.register('committee_model', CommitteeBuilder)
 
 
 class MemberBuilder(SqlObjectBuilder):

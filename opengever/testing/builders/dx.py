@@ -234,3 +234,23 @@ class ProposalBuilder(DexterityBuilder):
         super(ProposalBuilder, self).after_create(obj)
 
 builder_registry.register('proposal', ProposalBuilder)
+
+
+class CommitteeContainerBuilder(DexterityBuilder):
+    portal_type = 'opengever.meeting.committeecontainer'
+
+builder_registry.register('committee_container', CommitteeContainerBuilder)
+
+
+class CommitteeBuilder(DexterityBuilder):
+    portal_type = 'opengever.meeting.committee'
+
+    def __init__(self, session):
+        super(CommitteeBuilder, self).__init__(session)
+        self.arguments = {'title': 'My Committee'}
+
+    def after_create(self, obj):
+        obj.create_model(self.arguments, self.container)
+        super(CommitteeBuilder, self).after_create(obj)
+
+builder_registry.register('committee', CommitteeBuilder)

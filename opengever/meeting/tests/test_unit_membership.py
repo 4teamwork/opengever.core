@@ -14,7 +14,7 @@ class TestUnitMembership(TestCase):
 
     def test_string_representation(self):
         member = create(Builder('member'))
-        committee = create(Builder('committee'))
+        committee = create(Builder('committee_model'))
         membership = create(Builder('membership').having(
             committee=committee, member=member))
 

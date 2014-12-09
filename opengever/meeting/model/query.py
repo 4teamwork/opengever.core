@@ -1,4 +1,3 @@
-from opengever.base.oguid import Oguid
 from opengever.ogds.models.query import BaseQuery
 from plone import api
 
@@ -10,7 +9,7 @@ class ProposalQuery(BaseQuery):
         admin_unit_id or None if no such proposal exists.
 
         """
-        return self.filter_by(oguid=Oguid(oguid=oguid)).first()
+        return self.filter(self._attribute('oguid') == oguid).first()
 
     def by_container(self, container, admin_unit):
         # XXX same as TaskQuery
@@ -24,3 +23,13 @@ class ProposalQuery(BaseQuery):
         """List all proposals for admin_unit."""
 
         return self.filter(self._attribute('admin_unit_id') == admin_unit.id())
+
+
+class CommitteeQuery(BaseQuery):
+
+    def get_by_oguid(self, oguid):
+        """Return the committee identified by the given int_id and
+        admin_unit_id or None if no such proposal exists.
+
+        """
+        return self.filter(self._attribute('oguid') == oguid).first()
