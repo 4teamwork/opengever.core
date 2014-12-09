@@ -5,47 +5,33 @@ Changelog
 4.1.0 (unreleased)
 ------------------
 
-- Added monkeypatch for _verifyObjectPaste to allow moving content
-  without delete objects permission.
-  [phgross]
-
-- Revoke delete objects permission for dossiers.
-  [phgross]
-
-- Adjust delete objects permission for repositories.
-  [phgross]
-
-- Adjust global role mapping for delete objects permission.
-  [phgross]
-
-- Add repository delete action and confirmation view.
-  [phgross]
-
-- Revoke list folder contents permission for Administrators on repository.
-  [phgross]
-
 - Made the AddPublicTrialColumn more robust.
   [phgross]
 
 - Dropped no longer used document state journalization.
   [phgross]
 
-- Added journalization for document removing and restoring.
-  [phgross]
-
-- Added new mail workflow state `mail-state-removed`.
-  [phgross]
-
-- Add new action `Remove` to trash tab and add remove confirmation view.
-  [phgross]
-
-- Added new document workflow state `document-state-removed`.
-  [phgross]
-
-- Add new permission `Remove GEVER content`.
-  [phgross]
-
 - Disable docproperty updating in YearfolderStorer process.
+  [phgross]
+
+- Improved repository deletion (it's now possible without folder_contents view):
+    - Revoke list folder contents permission on repository.
+    - Add repository delete action and confirmation view.
+    - Adjust global role mapping for delete objects permission.
+    - Adjust delete objects permission for repositories.
+    - Revoke delete objects permission for dossiers.
+    - Added monkeypatch for _verifyObjectPaste to allow moving content without
+      delete objects permission.
+
+  [phgross]
+
+- Implements content removal functionality for documentish objects:
+    - Add new permission `Remove GEVER content`.
+    - Added new document workflow state `document-state-removed`.
+    - Added new mail workflow state `mail-state-removed`.
+    - Add new action `Remove` to trash tab and add remove confirmation view.
+    - Added journalization for document removing and restoring.
+
   [phgross]
 
 - Rewrite gever setup.
