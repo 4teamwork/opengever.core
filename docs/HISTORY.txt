@@ -5,26 +5,6 @@ Changelog
 4.1.0 (unreleased)
 ------------------
 
-- Implement pessimistic connection invalidation (MySQL only):
-  Check every connection that has been checked out from pool, and
-  invalidate it if it's stale.
-  [lgraf]
-
-- Reworked OrgUnit Selector:
-    - Store current unit to regular cookie instead of using the session_data_manager.
-    - Differentiate between users_units (selectable) and admin_unit's org_unit
-      (current org_unit).
-    - Change current org_unit functionality, the current orgunit has to be
-      part of the current admin_unit.
-
-  [phgross]
-
-- Made schemamigrations to 4.0.x release oracle compatible.
-  [phgross]
-
-- Fixed transporting task with the OGDS Transporter beetwen different admin_units.
-  [phgross]
-
 - Added monkeypatch for _verifyObjectPaste to allow moving content
   without delete objects permission.
   [phgross]
@@ -76,6 +56,30 @@ Changelog
     - Configure development options and add environment variable to enable them easily.
 
   [deiferni]
+
+
+4.0.6 (2014-12-09)
+------------------
+
+- Implement pessimistic connection invalidation (MySQL only):
+  Check every connection that has been checked out from pool, and
+  invalidate it if it's stale.
+  [lgraf]
+
+- Reworked OrgUnit Selector:
+    - Store current unit to regular cookie instead of using the session_data_manager.
+    - Differentiate between users_units (selectable) and admin_unit's org_unit
+      (current org_unit).
+    - Change current org_unit functionality, the current orgunit has to be
+      part of the current admin_unit.
+
+  [phgross]
+
+- Made schemamigrations to 4.0.x release oracle compatible.
+  [phgross]
+
+- Fixed transporting task with the OGDS Transporter beetwen different admin_units.
+  [phgross]
 
 
 4.0.5 (2014-11-25)
