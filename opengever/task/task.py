@@ -7,6 +7,7 @@ from datetime import timedelta
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
+from opengever.activity.utils import notification_center
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.oguid import Oguid
@@ -412,6 +413,19 @@ class AddForm(dexterity.AddForm):
             self.groups[0].widgets['responsible'].field.description = _(
                 u"help_responsible_single_client_setup", default=u"")
 
+    def createAndAdd(self, data):
+        task = super(AddForm, self).createAndAdd(data=data)
+        center = notification_center()
+
+        center.add_watcher_to_resource(task, task.responsible)
+        center.add_watcher_to_resource(task, task.issuer)
+
+        center.add_acitivity(
+            task, 'task-added', task.title,
+            api.user.get_current().getId(),
+            description=task.description)
+
+        return task
 
 class EditForm(dexterity.EditForm):
     """Standard EditForm, just require the Edit Task permission"""
