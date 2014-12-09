@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.0.6 (unreleased)
+4.0.6 (2014-12-09)
 ------------------
 
 - Implement pessimistic connection invalidation (MySQL only):
