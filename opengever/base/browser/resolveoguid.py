@@ -28,7 +28,7 @@ class ResolveOGUIDView(grok.View):
         return admin_unit_id != get_current_admin_unit().id()
 
     def render(self):
-        oguid = Oguid(oguid=self.request.get('oguid'))
+        oguid = Oguid.parse(self.request.get('oguid'))
 
         if self._is_on_different_admin_unit(oguid.admin_unit_id):
             admin_unit = ogds_service().fetch_admin_unit(oguid.admin_unit_id)
