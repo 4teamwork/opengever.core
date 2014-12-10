@@ -1,21 +1,16 @@
-from opengever.base.oguid import Oguid
 from opengever.base.source import DossierPathSourceBinder
-from opengever.core.model import create_session
 from opengever.meeting import _
+from opengever.meeting.container import ModelContainer
 from opengever.meeting.model.proposal import Proposal as ProposalModel
 from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
-from plone.dexterity.content import Container
 from plone.directives import form
-from z3c.form import interfaces
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
 from zope import schema
-from zope.event import notify
 from zope.interface import implements
 from zope.interface import Interface
-from zope.lifecycleevent import ObjectModifiedEvent
 
 
 class IProposalModel(Interface):
@@ -63,11 +58,15 @@ class IProposal(form.Schema):
         )
 
 
-class Proposal(Container):
+class Proposal(ModelContainer):
     """Act as proxy for the proposal stored in the database.
 
     """
-    implements(IProposal)
+    content_schema = IProposal
+    model_schema = IProposalModel
+    model_class = ProposalModel
+
+    implements(content_schema)
 
     workflow = Workflow([
         State('pending', is_default=True,
@@ -84,19 +83,20 @@ class Proposal(Container):
                    title=_('decide', default='Decide')),
         ])
 
-    model_schema = IProposalModel
+    def get_model_create_arguments(self, context):
+        aq_wrapped_self = self.__of__(context)
 
-    @classmethod
-    def partition_data(cls, data):
-        """Partition input data in model data and plone object data.
+        workflow_state = self.workflow.default_state.name
+        return dict(workflow_state=workflow_state,
+                    physical_path=aq_wrapped_self.get_physical_path())
 
-        """
-        obj_data = {}
-        for field_name in IProposal.names():
-            if field_name in data:
-                obj_data[field_name] = data.pop(field_name)
-
-        return obj_data, data
+    def get_edit_values(self, fieldnames):
+        values = super(Proposal, self).get_edit_values(fieldnames)
+        committee = values.pop('committee', None)
+        if committee:
+            committee = str(committee.committee_id)
+            values['committee'] = committee
+        return values
 
     def perform_transition(self, name):
         self.workflow.perform_transition(self.load_model(), name)
@@ -106,12 +106,6 @@ class Proposal(Container):
 
     def get_state(self):
         return self.workflow.get_state(self.load_model().workflow_state)
-
-    def load_model(self):
-        oguid = Oguid.for_object(self)
-        if oguid is None:
-            return None
-        return ProposalModel.query.get_by_oguid(oguid)
 
     def get_overview_attributes(self):
         model = self.load_model()
@@ -140,37 +134,6 @@ class Proposal(Container):
     def get_physical_path(self):
         url_tool = self.unrestrictedTraverse('@@plone_tools').url()
         return '/'.join(url_tool.getRelativeContentPath(self))
-
-    def create_model(self, data, context):
-        session = create_session()
-        oguid = Oguid.for_object(self)
-        workflow_state = self.workflow.default_state.name
-
-        aq_wrapped_self = self.__of__(context)
-        session.add(ProposalModel(
-            oguid=oguid,
-            workflow_state=workflow_state,
-            physical_path=aq_wrapped_self.get_physical_path(),
-            **data))
-
-        # for event handling to work, the object must be acquisition-wrapped
-        notify(ObjectModifiedEvent(aq_wrapped_self))
-
-    def update_model(self, data):
-        """Store form input in relational database.
-
-        KISS: Currently assumes that each input is a change an thus always
-        fires a changed event.
-
-        """
-        model = self.load_model()
-        for key, value in data.items():
-            if value is interfaces.NOT_CHANGED:
-                continue
-            setattr(model, key, value)
-
-        notify(ObjectModifiedEvent(self))
-        return True
 
     def get_searchable_text(self):
         """Return the searchable text for this proposal.

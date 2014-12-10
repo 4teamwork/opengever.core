@@ -1,13 +1,9 @@
-from opengever.base.oguid import Oguid
-from opengever.core.model import create_session
 from opengever.meeting import _
+from opengever.meeting.container import ModelContainer
 from opengever.meeting.model import Committee as CommitteeModel
-from plone.dexterity.content import Container
 from plone.directives import form
 from zope import schema
-from zope.event import notify
 from zope.interface import Interface
-from zope.lifecycleevent import ObjectModifiedEvent
 
 
 class ICommittee(form.Schema):
@@ -26,32 +22,9 @@ class ICommitteeModel(Interface):
         )
 
 
-class Committee(Container):
+class Committee(ModelContainer):
     """Plone Proxy for a Committe."""
 
+    content_schema = ICommittee
     model_schema = ICommitteeModel
-
-    @classmethod
-    def partition_data(cls, data):
-        """Partition input data in model data and plone object data.
-
-        Currenctly plone object data is empty.
-        """
-        obj_data = {}
-        return obj_data, data
-
-    def create_model(self, data, context):
-        session = create_session()
-        oguid = Oguid.for_object(self)
-
-        aq_wrapped_self = self.__of__(context)
-        session.add(CommitteeModel(oguid=oguid, **data))
-
-        # for event handling to work, the object must be acquisition-wrapped
-        notify(ObjectModifiedEvent(aq_wrapped_self))
-
-    def load_model(self):
-        oguid = Oguid.for_object(self)
-        if oguid is None:
-            return None
-        return CommitteeModel.query.get_by_oguid(oguid)
+    model_class = CommitteeModel

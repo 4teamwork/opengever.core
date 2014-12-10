@@ -38,3 +38,24 @@ class TestCommittee(FunctionalTestCase):
         self.assertIsNotNone(model)
         self.assertEqual(Oguid.for_object(committee), model.oguid)
         self.assertEqual(u'A c\xf6mmittee', model.title)
+
+    @browsing
+    def test_committee_can_be_edited_in_browser(self, browser):
+        committee = create(Builder('committee')
+                           .within(self.container)
+                           .titled(u'My Committee'))
+
+        browser.login().visit(committee, view='edit')
+        form = browser.css('#content-core form').first
+        self.assertEqual(u'My Committee', form.find_field('Title').value)
+
+        browser.fill({'Title': u'A c\xf6mmittee'}).submit()
+        self.assertIn('Changes saved',
+                      browser.css('.portalMessage.info dd').text)
+
+        committee = browser.context
+        self.assertEqual('committee-1', committee.getId())
+
+        model = committee.load_model()
+        self.assertIsNotNone(model)
+        self.assertEqual(u'A c\xf6mmittee', model.title)

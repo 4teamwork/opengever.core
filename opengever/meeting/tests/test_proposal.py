@@ -97,10 +97,14 @@ class TestProposal(FunctionalTestCase):
         committee = create(Builder('committee_model'))
         document = create(Builder('document')
                           .within(self.dossier)
-                          .titled('A Document'))
-        proposal = create(Builder('proposal').within(self.dossier))
+                          .titled(u'A Document'))
+        proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .titled(u'My Proposal'))
 
         browser.login().visit(proposal, view='edit')
+        form = browser.css('#content-core form').first
+        self.assertEqual(u'My Proposal', form.find_field('Title').value)
 
         self.search_for_document(browser, document)
 
