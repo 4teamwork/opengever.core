@@ -22,10 +22,10 @@ class ProposalTransitionController(grok.View):
         return self.redirect_to_proposal()
 
     def is_valid_transition(self, transition_name):
-        return self.context.can_perform_transition(transition_name)
+        return self.context.can_execute_transition(transition_name)
 
     def execute_transition(self, transition_name):
-        return self.context.perform_transition(transition_name)
+        return self.context.execute_transition(transition_name)
 
     def redirect_to_proposal(self):
         return self.request.RESPONSE.redirect(self.context.absolute_url())

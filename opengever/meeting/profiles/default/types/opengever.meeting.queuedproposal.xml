@@ -1,39 +1,40 @@
 <?xml version="1.0"?>
-<object name="opengever.meeting.committee" meta_type="Dexterity FTI"
+<object name="opengever.meeting.submittedproposal" meta_type="Dexterity FTI"
         i18n:domain="opengever.meeting" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
 
   <!-- Basic metadata -->
-  <property name="title" i18n:translate="">Committee</property>
+  <property name="title" i18n:translate="">Queued Proposal</property>
   <property name="description" i18n:translate=""></property>
   <property name="icon_expr"></property>
   <property name="allow_discussion">False</property>
   <property name="global_allow">True</property>
   <property name="allowed_content_types">
-      <element value="opengever.meeting.submittedproposal"/>
+      <element value="opengever.document.document"/>
+      <element value="ftw.mail.mail"/>
   </property>
 
   <!-- schema interface -->
-  <property name="schema">opengever.meeting.committee.ICommittee</property>
+  <property name="schema">opengever.meeting.proposal.IProposal</property>
 
   <!-- class used for content items -->
-  <property name="klass">opengever.meeting.committee.Committee</property>
+  <property name="klass">opengever.meeting.proposal.QueuedProposal</property>
 
   <!-- add permission -->
-  <property name="add_permission">opengever.meeting.AddCommittee</property>
+  <property name="add_permission">opengever.meeting.AddProposal</property>
 
   <!-- enabled behaviors -->
   <property name="behaviors" purge="False">
-    <element value="opengever.meeting.behaviors.namefromtitle.ICommitteeNameFromTitle" />
-    <element value="opengever.base.behaviors.sequence.ISequenceNumberBehavior" />
+    <element value="collective.dexteritytextindexer.behavior.IDexterityTextIndexer" />
     <element value="plone.app.lockingbehavior.behaviors.ILocking" />
   </property>
 
   <!-- View information -->
-  <property name="immediate_view">view</property>
-  <property name="default_view">view</property>
+  <property name="default_view">tabbed_view</property>
+  <property name="immediate_view">tabbed_view</property>
   <property name="default_view_fallback">False</property>
   <property name="view_methods">
     <element value="view"/>
+    <element value="tabbed_view" />
   </property>
 
   <!-- Method aliases -->
@@ -59,6 +60,13 @@
           url_expr="string:${object_url}/edit"
           condition_expr="not:object/@@plone_lock_info/is_locked_for_current_user|python:True">
       <permission value="Modify portal content"/>
+  </action>
+
+  <!-- Tab Actions -->
+  <action title="overview" action_id="overview" category="tabbedview-tabs" condition_expr="" url_expr="string:#" visible="True"></action>
+
+  <action i18n:domain="opengever.meeting" title="Sharing" action_id="sharing" category="tabbedview-tabs" condition_expr="" url_expr="string:#" visible="True">
+    <permission value="View"/>
   </action>
 
 </object>

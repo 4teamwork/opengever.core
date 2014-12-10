@@ -27,12 +27,12 @@ class Transition(object):
     def name(self):
         return '-'.join((self.state_from, self.state_to))
 
-    def perform(self, obj):
-        assert self.can_perform(obj)
+    def execute(self, obj, model):
+        assert self.can_execute(model)
         obj.workflow_state = self.state_to
 
-    def can_perform(self, obj):
-        return obj.workflow_state == self.state_from
+    def can_execute(self, model):
+        return model.workflow_state == self.state_from
 
     def __repr__(self):
         return '<Transition "{}">'.format(self.name)
@@ -63,11 +63,11 @@ class Workflow(object):
     def get_state(self, name):
         return self.states[name]
 
-    def perform_transition(self, obj, name):
+    def execute_transition(self, obj, model, name):
         transition = self.transitions.get(name)
         assert transition
-        transition.perform(obj)
+        transition.execute(obj, model)
 
-    def can_perform_transition(self, obj, name):
+    def can_execute_transition(self, model, name):
         transition = self.transitions.get(name)
-        return transition is not None and transition.can_perform(obj)
+        return transition is not None and transition.can_execute(model)

@@ -5,6 +5,7 @@ from opengever.meeting.model.proposal import Proposal as ProposalModel
 from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
+from plone import api
 from plone.directives import form
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
@@ -58,6 +59,65 @@ class IProposal(form.Schema):
         )
 
 
+class Submit(Transition):
+
+    def execute(self, obj, model):
+        super(Submit, self).execute(obj, model)
+        documents = obj.get_documents()
+        create_action = CreateRemoteProposal(obj)
+        copy_actions = [ProposalDocumentCopy(document, create_action)
+                        for document in documents]
+
+        create_action.execute()
+        for copy_action in copy_actions:
+            copy_action.execute()
+
+
+class CreateRemoteProposal(object):
+
+    def __init__(self, proposal):
+        self.proposal = proposal
+        self.committee_proposal = None
+
+    def execute(self):
+        self.committee_proposal = api.content.create(
+            type='opengever.meeting.submittedproposal',
+            id=self.proposal.get_queued_proposal_id(),
+            container=self.proposal.get_committee())
+
+
+class ProposalDocumentCopy(object):
+
+    def __init__(self, document, parent_action):
+        self.document = document
+        self.parent_action = parent_action
+
+    def execute(self):
+        assert self.parent_action.committee_proposal
+        destination = self.parent_action.committee_proposal
+        OgCopy(self.document, destination).run()
+
+
+class OgCopy(object):
+
+    def __init__(self, source, destination):
+        self.source = source
+        self.destination = destination
+
+    def run(self):
+        api.content.copy(self.source, self.destination)
+
+
+class QueuedProposal(ModelContainer):
+    """Proxy for a proposal in queue with a commission."""
+
+    content_schema = IProposal
+    model_schema = IProposalModel
+    model_class = ProposalModel
+
+    implements(content_schema)
+
+
 class Proposal(ModelContainer):
     """Act as proxy for the proposal stored in the database.
 
@@ -75,13 +135,24 @@ class Proposal(ModelContainer):
         State('scheduled', title=_('scheduled', default='Scheduled')),
         State('decided', title=_('decided', default='Decided')),
         ], [
-        Transition('pending', 'submitted',
-                   title=_('submit', default='Submit')),
+        Submit('pending', 'submitted',
+               title=_('submit', default='Submit')),
         Transition('submitted', 'scheduled',
                    title=_('schedule', default='Schedule')),
         Transition('scheduled', 'decided',
                    title=_('decide', default='Decide')),
         ])
+
+    def get_queued_proposal_id(self):
+        model = self.load_model()
+        return 'submitted-proposal-{}'.format(model.proposal_id)
+
+    def get_documents(self):
+        return [relation.to_object for relation in self.relatedItems]
+
+    def get_committee(self):
+        committee_model = self.load_model().committee
+        return committee_model.oguid.resolve_object()
 
     def get_model_create_arguments(self, context):
         aq_wrapped_self = self.__of__(context)
@@ -98,11 +169,11 @@ class Proposal(ModelContainer):
             values['committee'] = committee
         return values
 
-    def perform_transition(self, name):
-        self.workflow.perform_transition(self.load_model(), name)
+    def execute_transition(self, name):
+        self.workflow.execute_transition(self, self.load_model(), name)
 
-    def can_perform_transition(self, name):
-        return self.workflow.can_perform_transition(self.load_model(), name)
+    def can_execute_transition(self, name):
+        return self.workflow.can_execute_transition(self.load_model(), name)
 
     def get_state(self):
         return self.workflow.get_state(self.load_model().workflow_state)

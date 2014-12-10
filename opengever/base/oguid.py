@@ -38,6 +38,11 @@ class Oguid(object):
         self.admin_unit_id = admin_unit_id
         self.int_id = int(int_id)
 
+    def resolve_object(self):
+        if self.admin_unit_id != get_current_admin_unit().id():
+            return None
+        return getUtility(IIntIds).getObject(self.int_id)
+
     @property
     def id(self):
         return self.SEPARATOR.join((self.admin_unit_id, str(self.int_id),))
