@@ -235,8 +235,7 @@ class Task(Container):
 
     @property
     def oguid(self):
-        return Oguid(admin_unit_id=get_current_admin_unit().id(),
-                     int_id=self.int_id)
+        return Oguid(get_current_admin_unit().id(), self.int_id)
 
     def get_issuer_label(self):
         return self.get_sql_object().get_issuer_label()

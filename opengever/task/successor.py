@@ -41,7 +41,7 @@ class SuccessorTaskController(grok.Adapter):
         Returns False if it failed.
         """
 
-        oguid = Oguid(oguid=oguid)
+        oguid = Oguid.parse(oguid)
 
         # do we have it in our indexes?
         predecessor = Task.query.by_oguid(oguid)

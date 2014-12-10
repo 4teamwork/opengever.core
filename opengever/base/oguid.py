@@ -3,89 +3,57 @@ from zope.intid.interfaces import IIntIds
 from opengever.ogds.base.utils import get_current_admin_unit
 
 
-def xor(first, second):
-    return bool(first) != bool(second)
-
-
 class Oguid(object):
+    """An Oguid (OpenGever UID) uniquely identifies a Plone content object.
 
+    This is required for deployments with multiple Plone instances since an
+    IntId is only guaranteed to be unique within one Plone instance.
+
+    This class can be used stand-alone or as an SqlAlchemy composite column
+    type, see: http://docs.sqlalchemy.org/en/latest/orm/mapper_config.html.
+
+    """
     SEPARATOR = ':'
 
     @classmethod
     def for_object(cls, context):
-        intids = getUtility(IIntIds)
-        int_id = intids.getId(context)
-        return cls(admin_unit_id=get_current_admin_unit().id(), int_id=int_id)
+        """Create the Oguid of a Plone content object."""
 
-    def __init__(self, admin_unit_id=None, int_id=None, oguid=None):
-        """Create an Ogid from either an existing  oguid
-        (string or Ogid instance) or its parts: admin_unit_id and int_id.
+        int_id = getUtility(IIntIds).getId(context)
+        return cls(get_current_admin_unit().id(), int_id)
 
-        Note that above argument order is required by some sqlalchemy composite
-        objects on mapped classes and must be left like this.
+    @classmethod
+    def parse(cls, oguid):
+        """Parse an oguid.
+
+        The parameter oguid must be a string in the format
+        [admin_unit_id]:[int_id].
 
         """
-        assert xor(oguid, (admin_unit_id and int_id)), \
-            'either `oguid` or both, `admin_unit_id` and `intid` must be '\
-            'specified'
+        parts = oguid.split(cls.SEPARATOR)
+        admin_unit_id, int_id = parts[0], int(parts[1])
+        return cls(admin_unit_id, int_id)
 
-        if oguid:
-            if isinstance(oguid, basestring):
-                self.id = oguid
-            else:
-                # we assume an Oguid instance
-                self.id = oguid.id
-        else:
-            self._admin_unit_id = admin_unit_id
-            self._int_id = int(int_id)
-            self._id = self._join_oguid(admin_unit_id, int_id)
+    def __init__(self, admin_unit_id, int_id):
+        self.admin_unit_id = admin_unit_id
+        self.int_id = int(int_id)
+
+    @property
+    def id(self):
+        return self.SEPARATOR.join((self.admin_unit_id, str(self.int_id),))
 
     def __composite_values__(self):
         return (self.admin_unit_id, self.int_id,)
 
     def __eq__(self, other):
         if isinstance(other, basestring):
-            return self.id == other
+            return self == self.parse(other)
         return isinstance(other, Oguid) and \
             other.admin_unit_id == self.admin_unit_id and \
             other.int_id == self.int_id
 
     def __ne__(self, other):
         return not self.__eq__(other)
-
-    @property
-    def id(self):
-        return self._id
-
-    @id.setter
-    def id(self, value):
-        self._id = value
-        self._admin_unit_id, self._int_id = self._split_oguid(value)
-
-    @property
-    def admin_unit_id(self):
-        return self._admin_unit_id
-
-    @admin_unit_id.setter
-    def admin_unit_id(self, value):
-        self._admin_unit_id = value
-        self._id = self._join_oguid(value, self._int_id)
-
-    @property
-    def int_id(self):
-        return self._int_id
-
-    @int_id.setter
-    def int_id(self, value):
-        self._int_id = value
-        self._id = self._join_oguid(self._admin_unit_id, value)
-
-    def _split_oguid(self, oguid):
-        parts = oguid.split(self.SEPARATOR)
-        return (parts[0], int(parts[1]),)
-
-    def _join_oguid(self, admin_unit_id, intid):
-        return self.SEPARATOR.join((admin_unit_id, str(intid),))
 
     def __str__(self):
         return self.id
