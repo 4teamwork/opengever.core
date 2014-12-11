@@ -6,6 +6,9 @@ from opengever.meeting.model.proposal import Proposal as ProposalModel
 from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
+from opengever.ogds.base.transport import REQUEST_KEY
+from opengever.ogds.base.transport import Transporter
+from opengever.ogds.base.utils import remote_json_request
 from plone import api
 from plone.directives import form
 from z3c.relationfield.schema import RelationChoice
@@ -13,6 +16,7 @@ from z3c.relationfield.schema import RelationList
 from zope import schema
 from zope.interface import implements
 from zope.interface import Interface
+import json
 
 
 class IProposalModel(Interface):
@@ -82,15 +86,20 @@ class CreateSubmittedProposalCommand(object):
 
     def __init__(self, proposal):
         self.proposal = proposal
-        self.submitted_proposal = None
+        self.submitted_proposal_path = None
+        # XXX NO! NONONONO!
+        self.admin_unit_id = self.proposal.load_model().committee.admin_unit_id
 
     def execute(self):
-        self.submitted_proposal = api.content.create(
-            type='opengever.meeting.submittedproposal',
-            id=self.proposal.get_queued_proposal_id(),
-            container=self.proposal.get_committee())
-
-        self.submitted_proposal.sync_model(Oguid.for_object(self.proposal))
+        model = self.proposal.load_model()
+        jsondata = {'committee_oguid': model.committee.oguid.id,
+                    'proposal_oguid': model.oguid.id}
+        request_data = {
+            REQUEST_KEY: json.dumps(jsondata),
+            }
+        response = remote_json_request(
+            self.admin_unit_id, '@@create_submitted_proposal', data=request_data)
+        self.submitted_proposal_path = response['path']
 
 
 class CopyProposalDocumentCommand(object):
@@ -100,19 +109,21 @@ class CopyProposalDocumentCommand(object):
         self.parent_action = parent_action
 
     def execute(self):
-        assert self.parent_action.submitted_proposal
-        destination = self.parent_action.submitted_proposal
-        OgCopyCommand(self.document, destination).run()
+        assert self.parent_action.submitted_proposal_path
+        target = self.parent_action.submitted_proposal_path
+        OgCopyCommand(self.document, self.parent_action.admin_unit_id, target).run()
 
 
 class OgCopyCommand(object):
 
-    def __init__(self, source, destination):
+    def __init__(self, source, target_admin_unit_id, target_path):
         self.source = source
-        self.destination = destination
+        self.target_path = target_path
+        self.target_admin_unit_id = target_admin_unit_id
 
     def run(self):
-        api.content.copy(self.source, self.destination)
+        Transporter().transport_to(
+            self.source, self.target_admin_unit_id, self.target_path)
 
 
 class ProposalBase(ModelContainer):
@@ -237,10 +248,6 @@ class Proposal(ProposalBase):
         Submit('pending', 'submitted',
                title=_('submit', default='Submit')),
         ])
-
-    def get_queued_proposal_id(self):
-        model = self.load_model()
-        return 'submitted-proposal-{}'.format(model.proposal_id)
 
     def get_documents(self):
         documents = [relation.to_object for relation in self.relatedItems]

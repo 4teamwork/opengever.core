@@ -50,6 +50,7 @@ class Transporter(object):
         request_data = {
             REQUEST_KEY: jsondata,
             }
+
         return remote_json_request(
             target_cid, '@@transporter-receive-object',
             path=container_path, data=request_data)
@@ -134,6 +135,7 @@ class DexterityObjectCreator(object):
         if not isinstance(self.title, unicode):
             self.title = self.title.decode('utf-8')
 
+    #XXX use plone.api
     def create_in(self, container):
         obj = createContent(self.portal_type, title=self.title)
         notify(ObjectCreatedEvent(obj))

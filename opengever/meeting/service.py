@@ -1,5 +1,6 @@
 from opengever.core.model import create_session
 from opengever.meeting.model import Committee
+from opengever.meeting.model import Proposal
 
 
 def meeting_service():
@@ -19,3 +20,6 @@ class MeetingService(object):
 
     def fetch_committee(self, committee_id):
         return self._query_committee().get(committee_id)
+
+    def fetch_proposal_by_oguid(self, proposal_oguid):
+        return Proposal.query.get_by_oguid(proposal_oguid)
