@@ -41,7 +41,7 @@ class Resource(BASE):
     watchers = relationship("Watcher", secondary=resource_watchers, backref="resources")
 
     def __repr__(self):
-        return '<Watcher {}:{}>'.format(self.admin_unit_id, self.int_id)
+        return '<Resource {}:{}>'.format(self.admin_unit_id, self.int_id)
 
     def add_watcher(self, user_id):
         watcher = Watcher.query.get_by_userid(user_id)
