@@ -19,7 +19,9 @@ class Oguid(object):
     def for_object(cls, context):
         """Create the Oguid of a Plone content object."""
 
-        int_id = getUtility(IIntIds).getId(context)
+        int_id = getUtility(IIntIds).queryId(context)
+        if not int_id:
+            return None
         return cls(get_current_admin_unit().id(), int_id)
 
     @classmethod
@@ -36,7 +38,7 @@ class Oguid(object):
 
     def __init__(self, admin_unit_id, int_id):
         self.admin_unit_id = admin_unit_id
-        self.int_id = int(int_id)
+        self.int_id = int(int_id) if int_id else None
 
     def resolve_object(self):
         if self.admin_unit_id != get_current_admin_unit().id():
@@ -59,6 +61,9 @@ class Oguid(object):
 
     def __ne__(self, other):
         return not self.__eq__(other)
+
+    def __repr__(self):
+        return "<Oguid {}>".format(self.id)
 
     def __str__(self):
         return self.id

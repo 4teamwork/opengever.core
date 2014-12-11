@@ -1,3 +1,4 @@
+from opengever.base.oguid import Oguid
 from opengever.base.source import DossierPathSourceBinder
 from opengever.meeting import _
 from opengever.meeting.container import ModelContainer
@@ -59,42 +60,48 @@ class IProposal(form.Schema):
         )
 
 
+class ISubmittedProposal(IProposal):
+    pass
+
+
 class Submit(Transition):
 
     def execute(self, obj, model):
         super(Submit, self).execute(obj, model)
         documents = obj.get_documents()
-        create_action = CreateRemoteProposal(obj)
-        copy_actions = [ProposalDocumentCopy(document, create_action)
-                        for document in documents]
+        create_command = CreateSubmittedProposalCommand(obj)
+        copy_commands = [CopyProposalDocumentCommand(document, create_command)
+                         for document in documents]
 
-        create_action.execute()
-        for copy_action in copy_actions:
-            copy_action.execute()
+        create_command.execute()
+        for copy_command in copy_commands:
+            copy_command.execute()
 
 
-class CreateRemoteProposal(object):
+class CreateSubmittedProposalCommand(object):
 
     def __init__(self, proposal):
         self.proposal = proposal
-        self.committee_proposal = None
+        self.submitted_proposal = None
 
     def execute(self):
-        self.committee_proposal = api.content.create(
+        self.submitted_proposal = api.content.create(
             type='opengever.meeting.submittedproposal',
             id=self.proposal.get_queued_proposal_id(),
             container=self.proposal.get_committee())
 
+        self.submitted_proposal.sync_model(Oguid.for_object(self.proposal))
 
-class ProposalDocumentCopy(object):
+
+class CopyProposalDocumentCommand(object):
 
     def __init__(self, document, parent_action):
         self.document = document
         self.parent_action = parent_action
 
     def execute(self):
-        assert self.parent_action.committee_proposal
-        destination = self.parent_action.committee_proposal
+        assert self.parent_action.submitted_proposal
+        destination = self.parent_action.submitted_proposal
         OgCopy(self.document, destination).run()
 
 
@@ -108,75 +115,9 @@ class OgCopy(object):
         api.content.copy(self.source, self.destination)
 
 
-class QueuedProposal(ModelContainer):
-    """Proxy for a proposal in queue with a commission."""
+class ProposalBase(ModelContainer):
 
-    content_schema = IProposal
-    model_schema = IProposalModel
-    model_class = ProposalModel
-
-    implements(content_schema)
-
-
-class Proposal(ModelContainer):
-    """Act as proxy for the proposal stored in the database.
-
-    """
-    content_schema = IProposal
-    model_schema = IProposalModel
-    model_class = ProposalModel
-
-    implements(content_schema)
-
-    workflow = Workflow([
-        State('pending', is_default=True,
-              title=_('pending', default='Pending')),
-        State('submitted', title=_('submitted', default='Submited')),
-        State('scheduled', title=_('scheduled', default='Scheduled')),
-        State('decided', title=_('decided', default='Decided')),
-        ], [
-        Submit('pending', 'submitted',
-               title=_('submit', default='Submit')),
-        Transition('submitted', 'scheduled',
-                   title=_('schedule', default='Schedule')),
-        Transition('scheduled', 'decided',
-                   title=_('decide', default='Decide')),
-        ])
-
-    def get_queued_proposal_id(self):
-        model = self.load_model()
-        return 'submitted-proposal-{}'.format(model.proposal_id)
-
-    def get_documents(self):
-        return [relation.to_object for relation in self.relatedItems]
-
-    def get_committee(self):
-        committee_model = self.load_model().committee
-        return committee_model.oguid.resolve_object()
-
-    def get_model_create_arguments(self, context):
-        aq_wrapped_self = self.__of__(context)
-
-        workflow_state = self.workflow.default_state.name
-        return dict(workflow_state=workflow_state,
-                    physical_path=aq_wrapped_self.get_physical_path())
-
-    def get_edit_values(self, fieldnames):
-        values = super(Proposal, self).get_edit_values(fieldnames)
-        committee = values.pop('committee', None)
-        if committee:
-            committee = str(committee.committee_id)
-            values['committee'] = committee
-        return values
-
-    def execute_transition(self, name):
-        self.workflow.execute_transition(self, self.load_model(), name)
-
-    def can_execute_transition(self, name):
-        return self.workflow.can_execute_transition(self.load_model(), name)
-
-    def get_state(self):
-        return self.workflow.get_state(self.load_model().workflow_state)
+    workflow = None
 
     def get_overview_attributes(self):
         model = self.load_model()
@@ -202,6 +143,15 @@ class Proposal(ModelContainer):
 
         ]
 
+    def execute_transition(self, name):
+        self.workflow.execute_transition(self, self.load_model(), name)
+
+    def can_execute_transition(self, name):
+        return self.workflow.can_execute_transition(self.load_model(), name)
+
+    def get_state(self):
+        return self.workflow.get_state(self.load_model().workflow_state)
+
     def get_physical_path(self):
         url_tool = self.unrestrictedTraverse('@@plone_tools').url()
         return '/'.join(url_tool.getRelativeContentPath(self))
@@ -218,3 +168,100 @@ class Proposal(ModelContainer):
             return ''
 
         return model.get_searchable_text()
+
+
+class SubmittedProposal(ProposalBase):
+    """Proxy for a proposal in queue with a commission."""
+
+    content_schema = ISubmittedProposal
+    model_schema = IProposalModel
+    model_class = ProposalModel
+
+    implements(content_schema)
+
+    workflow = Workflow([
+        State('pending', is_default=True,
+              title=_('pending', default='Pending')),
+        State('submitted', title=_('submitted', default='Submited')),
+        State('scheduled', title=_('scheduled', default='Scheduled')),
+        State('decided', title=_('decided', default='Decided'))
+        ], [
+        Transition('submitted', 'scheduled',
+                   title=_('schedule', default='Schedule')),
+        Transition('scheduled', 'decided',
+                   title=_('decide', default='Decide')),
+        ])
+
+    def load_proposal(self, oguid):
+        return ProposalModel.query.get_by_oguid(oguid)
+
+    def sync_model(self, proposal_oguid):
+        proposal_model = self.load_proposal(proposal_oguid)
+        proposal_model.submitted_oguid = Oguid.for_object(self)
+
+    def load_model(self):
+        oguid = Oguid.for_object(self)
+        if oguid is None:
+            return None
+        return ProposalModel.query.filter_by(
+            submitted_oguid=Oguid.for_object(self)).first()
+
+    def get_documents(self):
+        catalog = api.portal.get_tool('portal_catalog')
+        documents = catalog(
+            portal_type=['opengever.document.document', 'ftw.mail.mail'],
+            path=dict(query='/'.join(self.getPhysicalPath())),
+            sort_on='modified',
+            sort_order='reverse')
+
+        return [document.getObject() for document in documents]
+
+
+class Proposal(ProposalBase):
+    """Act as proxy for the proposal stored in the database.
+
+    """
+    content_schema = IProposal
+    model_schema = IProposalModel
+    model_class = ProposalModel
+
+    implements(content_schema)
+
+    workflow = Workflow([
+        State('pending', is_default=True,
+              title=_('pending', default='Pending')),
+        State('submitted', title=_('submitted', default='Submited')),
+        State('scheduled', title=_('scheduled', default='Scheduled')),
+        State('decided', title=_('decided', default='Decided'))
+        ], [
+        Submit('pending', 'submitted',
+               title=_('submit', default='Submit')),
+        ])
+
+    def get_queued_proposal_id(self):
+        model = self.load_model()
+        return 'submitted-proposal-{}'.format(model.proposal_id)
+
+    def get_documents(self):
+        documents = [relation.to_object for relation in self.relatedItems]
+        documents.sort(lambda a, b: cmp(b.modified(), a.modified()))
+        return documents
+
+    def get_committee(self):
+        committee_model = self.load_model().committee
+        return committee_model.oguid.resolve_object()
+
+    def get_model_create_arguments(self, context):
+        aq_wrapped_self = self.__of__(context)
+
+        workflow_state = self.workflow.default_state.name
+        return dict(workflow_state=workflow_state,
+                    physical_path=aq_wrapped_self.get_physical_path())
+
+    def get_edit_values(self, fieldnames):
+        values = super(Proposal, self).get_edit_values(fieldnames)
+        committee = values.pop('committee', None)
+        if committee:
+            committee = str(committee.committee_id)
+            values['committee'] = committee
+        return values

@@ -29,7 +29,7 @@ class Transition(object):
 
     def execute(self, obj, model):
         assert self.can_execute(model)
-        obj.workflow_state = self.state_to
+        model.workflow_state = self.state_to
 
     def can_execute(self, model):
         return model.workflow_state == self.state_from

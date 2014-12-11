@@ -21,13 +21,21 @@ class Proposal(Base):
     query_cls = ProposalQuery
 
     __tablename__ = 'proposal'
-    __table_args__ = (UniqueConstraint('admin_unit_id', 'int_id'), {})
+    __table_args__ = (
+        UniqueConstraint('admin_unit_id', 'int_id'),
+        UniqueConstraint('submitted_admin_unit_id', 'submitted_int_id'),
+        {})
 
     proposal_id = Column("id", Integer, Sequence("proposal_id_seq"),
                          primary_key=True)
     admin_unit_id = Column(String(30), nullable=False)
     int_id = Column(Integer, nullable=False)
     oguid = composite(Oguid, admin_unit_id, int_id)
+
+    submitted_admin_unit_id = Column(String(30))
+    submitted_int_id = Column(Integer)
+    submitted_oguid = composite(
+        Oguid, submitted_admin_unit_id, submitted_int_id)
 
     title = Column(String(256), nullable=False)
     physical_path = Column(String(256), nullable=False)

@@ -80,19 +80,19 @@ class TestUnitWorkflow(TestCase):
 
     def test_performs_available_transition(self):
         obj = SomethingWithWorkflow(initial_state=self.pending.name)
-        self.workflow.execute_transition(obj, self.publish.name)
+        self.workflow.execute_transition(None, obj, self.publish.name)
 
         self.assertEqual(self.published.name, obj.workflow_state)
 
     def test_does_not_perform_unavailable_transition(self):
         obj = SomethingWithWorkflow(initial_state=self.pending.name)
         with self.assertRaises(AssertionError):
-            self.workflow.execute_transition(obj, self.submit.name)
+            self.workflow.execute_transition(None, obj, self.submit.name)
 
     def test_does_not_perform_invalid_transition(self):
         obj = SomethingWithWorkflow(initial_state=self.published.name)
         with self.assertRaises(AssertionError):
-            self.workflow.execute_transition(obj, 'invalid_identifier')
+            self.workflow.execute_transition(None, obj, 'invalid_identifier')
 
     def test_transitions_are_registered_with_their_state(self):
         self.assertEqual([self.submit], self.private.get_transitions())

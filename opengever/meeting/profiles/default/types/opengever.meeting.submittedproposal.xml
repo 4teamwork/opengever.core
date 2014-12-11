@@ -3,7 +3,7 @@
         i18n:domain="opengever.meeting" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
 
   <!-- Basic metadata -->
-  <property name="title" i18n:translate="">Queued Proposal</property>
+  <property name="title" i18n:translate="">Submitted Proposal</property>
   <property name="description" i18n:translate=""></property>
   <property name="icon_expr"></property>
   <property name="allow_discussion">False</property>
@@ -17,7 +17,7 @@
   <property name="schema">opengever.meeting.proposal.IProposal</property>
 
   <!-- class used for content items -->
-  <property name="klass">opengever.meeting.proposal.QueuedProposal</property>
+  <property name="klass">opengever.meeting.proposal.SubmittedProposal</property>
 
   <!-- add permission -->
   <property name="add_permission">opengever.meeting.AddProposal</property>
