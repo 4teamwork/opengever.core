@@ -102,10 +102,10 @@ class CopyProposalDocumentCommand(object):
     def execute(self):
         assert self.parent_action.submitted_proposal
         destination = self.parent_action.submitted_proposal
-        OgCopy(self.document, destination).run()
+        OgCopyCommand(self.document, destination).run()
 
 
-class OgCopy(object):
+class OgCopyCommand(object):
 
     def __init__(self, source, destination):
         self.source = source
