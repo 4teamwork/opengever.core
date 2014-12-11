@@ -79,8 +79,10 @@ class Transporter(object):
 
 
 class ReceiveObject(grok.View):
-    """The `ReceiveObject` view receives a object-transporter request on the
-    target client and creates or updates the object.
+    """Receives a JSON serialzed object and creates or updates an instance
+    within its context.
+
+    It returns JSON containing the object's path and intid.
     """
 
     grok.name('transporter-receive-object')
@@ -109,9 +111,7 @@ class ReceiveObject(grok.View):
 
 
 class ExtractObject(grok.View):
-    """The `ExtractObject` view is called by the transporter on a specific
-    context on the source client for extract the data and returning it to
-    the receiver.
+    """Extract data from its context and returns a JSON serialized object.
     """
 
     grok.name('transporter-extract-object-json')
