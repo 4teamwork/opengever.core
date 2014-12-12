@@ -5,7 +5,6 @@ from opengever.activity import Watcher
 from opengever.activity.notification_center import NotificationCenter
 from opengever.activity.tests.base import ActivityTestCase
 from opengever.globalindex.oguid import Oguid
-from sqlalchemy.exc import IntegrityError
 
 
 class TestResourceHandling(ActivityTestCase):
@@ -144,8 +143,9 @@ class TestAddActivity(ActivityTestCase):
         self.center = NotificationCenter()
 
     def test_add_resource_if_not_exists(self):
-        self.center.add_acitivity(Oguid(id='fd:123'),
-                                  'TASK_ADDED',
+        self.center.add_activity(Oguid(id='fd:123'),
+                                  'task_added',
+                                  'Kennzahlen 2014',
                                   'Task bla added',
                                   'hugo.boss')
 
@@ -160,8 +160,9 @@ class TestAddActivity(ActivityTestCase):
         resource_a = create(Builder('resource').oguid('fd:123')
                             .having(watchers=[hugo, peter]))
 
-        activity = self.center.add_acitivity('fd:123',
+        activity = self.center.add_activity('fd:123',
                                              'TASK_ADDED',
+                                             'Kennzahlen 2014',
                                              'Task bla added',
                                              'hugo.boss')
 

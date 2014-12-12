@@ -54,13 +54,14 @@ class NotificationCenter(object):
 
         return resource.watchers
 
-    def add_acitivity(self, oguid, kind, title, actor_id, description=u''):
+    def add_activity(self, oguid, kind, title, summary, actor_id, description=u''):
         resource = self.fetch_resource(oguid)
 
         if not resource:
             resource = self.add_resource(oguid)
 
-        activity = Activity(resource=resource, kind=kind, title=title,
+        activity = Activity(resource=resource, kind=kind,
+                            title=title, summary=summary,
                             actor_id=actor_id, description=description)
         Session.add(activity)
 
