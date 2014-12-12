@@ -3,13 +3,14 @@
   <h5 class="hiddenStructure" i18n:translate="heading_notifications">Notifications</h5>
 
   <dl class="notificationsMenu actionMenu deactivated" id="portal-notifications-selector-menu">
-    <dt class="notificationsMenuHeader actionMenuHeader" style="width: 0px;">
+    <dt class="notificationsMenuHeader actionMenuHeader">
+      <a tal:attributes="href string:#">
+      </a>
+      <div class="visualClear"><!-- --></div>
       <tal:unread tal:define="unread view/unread">
-        <a href="#" tal:attributes="class python:unread and 'unread-notifications' or ''">
-          <span tal:condition="unread" tal:content="view/num_unread" class="num-unread"></span>
-        </a>
+        <span tal:condition="unread" tal:content="view/num_unread" class="unread_number"></span>
       </tal:unread>
-    </dt>
+
     <dd class="actionMenuContent notificationsMenuContent">
       <ul>
         <li class="notification-item" tal:repeat="notification view/get_notifications">
@@ -17,19 +18,18 @@
             <div class="item-content"
                  tal:attributes="class python: notification.get('read') and 'item-content' or 'item-content unread'" >
               <div class="item-header">
-                <span class="item-type" tal:content="notification/activity/kind" />
                 <span class="item-creation">
                   <span class="relativetime" title="2014-11-16 15:03:40Z" tal:content="notification/activity/created" />
                 </span>
+                <span class="item-type" tal:content="notification/activity/kind" />
               </div>
               <div class="item-location" tal:content="notification/activity/title" />
               <div class="item-summary" tal:content="notification/activity/summary" />
             </div>
           </a>
-
         </li>
       </ul>
-      <a href="#"><small>Show all notifications</small></a>
+      <a href="#" class="all_link"><small>Show all notifications</small></a>
     </dd>
   </dl>
 </div>
