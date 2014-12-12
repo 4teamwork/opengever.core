@@ -1,4 +1,5 @@
 from opengever.activity import Activity
+from opengever.activity import Notification
 from opengever.activity import Resource
 from opengever.activity import Session
 from opengever.activity import Watcher
@@ -68,3 +69,10 @@ class NotificationCenter(object):
         activity.notifiy()
 
         return activity
+
+    def get_users_notifications(self, userid):
+        return Notification.query.by_user(userid).all()
+
+    def mark_notification_as_read(self, notification_id):
+        notification = Notification.get(notification_id)
+        notification.read = True

@@ -1,4 +1,5 @@
 from opengever.ogds.models import BASE
+from opengever.ogds.models.query import BaseQuery
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
@@ -6,7 +7,15 @@ from sqlalchemy import Integer
 from sqlalchemy.orm import relationship
 
 
+class NotificationQuery(BaseQuery):
+
+    def by_user(self, userid):
+        return self.join(Notification.watcher).filter_by(user_id=userid)
+
+
 class Notification(BASE):
+
+    query_cls = NotificationQuery
 
     __tablename__ = 'notifications'
 
@@ -19,3 +28,6 @@ class Notification(BASE):
     activity = relationship("Activity", backref="notifications")
 
     read = Column(Boolean(), default=False, nullable=False)
+
+    def __repr__(self):
+        return '<Notification {}>'.format(self.notification_id)
