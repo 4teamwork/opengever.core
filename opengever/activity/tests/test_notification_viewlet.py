@@ -59,3 +59,12 @@ class TestNotificationViewlet(FunctionalTestCase):
         self.assertEquals(
             ['Task added', 'Task resolved'],
             browser.css('.item-content.unread .item-summary').text)
+
+    @browsing
+    def test_notifications_is_limited_to_five_latest(self, browser):
+        for i in range(7):
+            create(Builder('notification')
+                   .having(activity=self.activity_a,watcher=self.test_watcher))
+
+        browser.login().open()
+        self.assertEquals(5, len(browser.css('.notification-item')))

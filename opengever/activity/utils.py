@@ -26,6 +26,6 @@ class PloneNotificationCenter(NotificationCenter):
         oguid = Oguid.for_object(obj)
         return super(PloneNotificationCenter, self).get_watchers(oguid)
 
-    def get_current_users_notifications(self):
+    def get_current_users_notifications(self, limit=None):
         return super(PloneNotificationCenter, self).get_users_notifications(
-            api.user.get_current().getId())
+            api.user.get_current().getId(), limit=limit)

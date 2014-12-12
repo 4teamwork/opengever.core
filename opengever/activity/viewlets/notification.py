@@ -22,7 +22,7 @@ class NotificationViewlet(common.ViewletBase):
     def fetch_notifications(self):
         if not self.notifications:
             center = notification_center()
-            self.notifications = center.get_current_users_notifications()
+            self.notifications = center.get_current_users_notifications(limit=5)
 
         return self.notifications
 
