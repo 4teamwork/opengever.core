@@ -8,4 +8,14 @@
 
   <grok:grok package="." />
 
+  <include package=".viewlets" />
+
+  <genericsetup:registerProfile
+      name="default"
+      title="opengever.activity"
+      description="the opengever.activity profile"
+      directory="profiles/default"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
 </configure>

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<object>
+  <order manager="plone.portalheader" skinname="*">
+    <viewlet name="opengever.activity.notification" insert-after="plone.personal_bar" />
+  </order>
+</object>

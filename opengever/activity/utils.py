@@ -1,5 +1,6 @@
 from opengever.activity.notification_center import NotificationCenter
 from opengever.globalindex.oguid import Oguid
+from plone import api
 
 
 def notification_center():
@@ -24,3 +25,7 @@ class PloneNotificationCenter(NotificationCenter):
     def get_watchers(self, obj):
         oguid = Oguid.for_object(obj)
         return super(PloneNotificationCenter, self).get_watchers(oguid)
+
+    def get_current_users_notifications(self):
+        return super(PloneNotificationCenter, self).get_users_notifications(
+            api.user.get_current().getId())
