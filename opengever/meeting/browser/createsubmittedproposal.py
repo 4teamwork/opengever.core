@@ -1,12 +1,11 @@
-from AccessControl.SecurityManagement import SpecialUsers
 from five import grok
 from opengever.base.oguid import Oguid
+from opengever.base.security import changed_security
+from opengever.meeting.proposal import SubmittedProposal
 from opengever.meeting.service import meeting_service
 from opengever.ogds.base.transport import REQUEST_KEY
-from plone import api
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 import json
-import AccessControl
 
 
 class CreateSubmittedProposal(grok.View):
@@ -21,33 +20,9 @@ class CreateSubmittedProposal(grok.View):
         proposal_oguid = Oguid.parse(data['proposal_oguid'])
         proposal = meeting_service().fetch_proposal_by_oguid(proposal_oguid)
 
-        # XXX create context manager!
-        try:
-            # change security context
-            _sm = AccessControl.getSecurityManager()
-            AccessControl.SecurityManagement.newSecurityManager(
-                    self.context.REQUEST,
-                    SpecialUsers.system)
-
-
-            submitted_proposal = api.content.create(
-                type='opengever.meeting.submittedproposal',
-                id=self.generate_submitted_proposal_id(proposal),
-                container=committee)
-
-            submitted_proposal.sync_model(proposal_oguid)
+        with changed_security():
+            submitted_proposal = SubmittedProposal.create(proposal, committee)
 
             self.request.response.setHeader("Content-type", "application/json")
             return json.dumps(
                 {'path': '/'.join(submitted_proposal.getPhysicalPath())})
-
-
-
-
-        finally:
-            AccessControl.SecurityManagement.setSecurityManager(
-                _sm)
-
-
-    def generate_submitted_proposal_id(self, proposal):
-        return 'submitted-proposal-{}'.format(proposal.proposal_id)

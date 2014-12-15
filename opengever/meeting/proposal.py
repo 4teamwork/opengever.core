@@ -203,11 +203,24 @@ class SubmittedProposal(ProposalBase):
                    title=_('decide', default='Decide')),
         ])
 
+    @classmethod
+    def create(cls, proposal, container):
+        submitted_proposal = api.content.create(
+            type='opengever.meeting.submittedproposal',
+            id=cls.generate_submitted_proposal_id(proposal),
+            container=container)
+
+        submitted_proposal.sync_model(proposal)
+        return submitted_proposal
+
+    @classmethod
+    def generate_submitted_proposal_id(cls, proposal):
+        return 'submitted-proposal-{}'.format(proposal.proposal_id)
+
     def load_proposal(self, oguid):
         return ProposalModel.query.get_by_oguid(oguid)
 
-    def sync_model(self, proposal_oguid):
-        proposal_model = self.load_proposal(proposal_oguid)
+    def sync_model(self, proposal_model):
         proposal_model.submitted_oguid = Oguid.for_object(self)
 
     def load_model(self):
