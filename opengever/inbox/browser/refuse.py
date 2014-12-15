@@ -1,4 +1,5 @@
 from five import grok
+from opengever.base.request import dispatch_json_request
 from opengever.base.transport import ORIGINAL_INTID_ANNOTATION_KEY
 from opengever.base.transport import REQUEST_KEY
 from opengever.base.transport import Transporter
@@ -7,7 +8,6 @@ from opengever.inbox.browser.schema import ISimpleResponseForm
 from opengever.inbox.forwarding import IForwarding
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
-from opengever.ogds.base.utils import remote_json_request
 from opengever.task import _ as task_mf
 from opengever.task.browser.accept.utils import get_current_yearfolder
 from opengever.task.transporter import IResponseTransporter
@@ -77,7 +77,7 @@ class ForwardingRefuseForm(Form):
         jsondata = json.dumps(transporter.extract(self.context))
         request_data = {REQUEST_KEY: jsondata, }
 
-        response = remote_json_request(
+        response = dispatch_json_request(
             refusing_unit_id, '@@store_refused_forwarding',
             data=request_data)
 

@@ -1,5 +1,5 @@
 from five import grok
-from opengever.ogds.base.utils import remote_request
+from opengever.base.request import dispatch_request
 from opengever.task.browser.transitioncontroller import get_conditions
 from opengever.task.interfaces import IDeadlineModifier
 from opengever.task.interfaces import ISuccessorTaskController
@@ -80,7 +80,7 @@ class DeadlineModifier(grok.Adapter):
         sct = ISuccessorTaskController(self.context)
         for successor in sct.get_successors():
 
-            response = remote_request(
+            response = dispatch_request(
                 successor.admin_unit_id,
                 '@@remote_deadline_modifier',
                 successor.physical_path,

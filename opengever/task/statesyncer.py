@@ -2,8 +2,8 @@
 predecessors).
 """
 from five import grok
+from opengever.base.request import dispatch_request
 from opengever.base.utils import ok_response
-from opengever.ogds.base import utils
 from opengever.ogds.base.interfaces import IInternalOpengeverRequestLayer
 from opengever.task import _
 from opengever.task.adapters import IResponseContainer
@@ -54,7 +54,7 @@ class WorkflowStateSyncer(grok.MultiAdapter):
 
         for task in tasks:
 
-            response = utils.remote_request(
+            response = dispatch_request(
                 task.admin_unit_id,
                 '@@sync-task-workflow-state-receive',
                 task.physical_path,

@@ -8,10 +8,10 @@ from Acquisition import aq_parent
 from five import grok
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.interfaces import IReferenceNumber
+from opengever.base.request import dispatch_request
 from opengever.base.transport import Transporter
 from opengever.base.utils import ok_response
 from opengever.globalindex.model.task import Task
-from opengever.ogds.base.utils import remote_request
 from opengever.tabbedview.helper import linked
 from opengever.task import _
 from opengever.task import util
@@ -228,7 +228,7 @@ class CompleteSuccessorTaskForm(Form):
                     linked(doc, doc.Title()))
 
         request_data = {'data': json.dumps(data)}
-        response = remote_request(
+        response = dispatch_request(
             predecessor.admin_unit_id,
             '@@complete_successor_task-receive_delivery',
             predecessor.physical_path,

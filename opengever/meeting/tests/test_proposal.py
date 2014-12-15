@@ -128,3 +128,42 @@ class TestProposal(FunctionalTestCase):
         self.assertEqual(Oguid.for_object(proposal), model.oguid)
         self.assertEqual(u'A pr\xf6posal', model.title)
         self.assertEqual(u'My pr\xf6posal', model.initial_position)
+
+    @browsing
+    def test_proposal_submission_works_correctly(self, browser):
+        committee = create(Builder('committee').titled('My committee'))
+        document = create(Builder('document')
+                          .within(self.dossier)
+                          .titled(u'A Document')
+                          .with_dummy_content())
+        proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .titled(u'My Proposal')
+                          .having(committee=committee.load_model())
+                          .relate_to(document))
+
+        self.assertSequenceEqual([], committee.listFolderContents())
+
+        browser.login().open(proposal)
+
+        browser.open(proposal, view='tabbedview_view-overview')
+        browser.css('#pending-submitted').first.click()
+
+        proposal_model = proposal.load_model()
+
+        # submitted proposal created
+        self.assertEqual(1, len(committee.listFolderContents()))
+        submitted_proposal = committee.listFolderContents()[0]
+
+        # model synced
+        self.assertEqual(proposal_model, submitted_proposal.load_model())
+        self.assertEqual(Oguid.for_object(submitted_proposal),
+                         proposal_model.submitted_oguid)
+        self.assertEqual('submitted', proposal_model.workflow_state)
+
+        # document copied
+        self.assertEqual(1, len(submitted_proposal.get_documents()))
+        submitted_document = submitted_proposal.get_documents()[0]
+        self.assertEqual(document.Title(), submitted_document.Title())
+        self.assertEqual(document.file.filename,
+                         submitted_document.file.filename)

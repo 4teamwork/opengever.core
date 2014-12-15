@@ -4,8 +4,8 @@ from datetime import datetime
 from datetime import timedelta
 from five import grok
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
+from opengever.base.request import dispatch_request
 from opengever.base.utils import ok_response
-from opengever.ogds.base.utils import remote_request
 from persistent.dict import PersistentDict
 from zope.annotation.interfaces import IAnnotations
 from zope.app.component.hooks import getSite
@@ -66,9 +66,9 @@ class WizardDataStorage(grok.GlobalUtility):
 
         req_data = {'data-set': json.dumps(data),
                     'key': key}
-        response = remote_request(admin_unit_id,
-                                  '@@receive-wizard-data-set',
-                                  data=req_data)
+        response = dispatch_request(admin_unit_id,
+                                    '@@receive-wizard-data-set',
+                                    data=req_data)
 
         if response.read().strip() != 'OK':
             raise Exception('Could not push session data to admin_unit %s' % (

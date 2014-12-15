@@ -4,6 +4,7 @@ from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.document import Document
 from opengever.globalindex.handlers.task import sync_task
 from opengever.mail.mail import OGMail
+from opengever.meeting.proposal import Proposal
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.testing import assets
 from opengever.trash.trash import ITrashable
@@ -228,10 +229,21 @@ class ProposalBuilder(DexterityBuilder):
     def __init__(self, session):
         super(ProposalBuilder, self).__init__(session)
         self.arguments = {'title': 'Fooo'}
+        self.model_arguments = None
+
+    def before_create(self):
+        self.arguments, self.model_arguments = Proposal.partition_data(
+            self.arguments)
 
     def after_create(self, obj):
-        obj.create_model(self.arguments, self.container)
+        obj.create_model(self.model_arguments, self.container)
         super(ProposalBuilder, self).after_create(obj)
+
+    def relate_to(self, *documents):
+        intids = getUtility(IIntIds)
+        related_documents = [RelationValue(intids.getId(document))
+                             for document in documents]
+        return self.having(relatedItems=related_documents)
 
 builder_registry.register('proposal', ProposalBuilder)
 
