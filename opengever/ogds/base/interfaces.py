@@ -110,11 +110,6 @@ class IAdminUnitConfiguration(Interface):
         in the OGDS (Opengever Global Directory Service).', )
 
 
-class IClientCommunicator(Interface):
-    """Utility interface for the client communicator.
-    """
-
-
 class IDataCollector(Interface):
     """ Interface for adapters which are able to serialize and
     unserialize data. With these named-adapters any kind of additional
