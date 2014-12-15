@@ -13,7 +13,6 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from StringIO import StringIO
 from UserDict import DictMixin
-from z3c.saconfig import named_scoped_session
 from zope.app.component.hooks import getSite
 from zope.app.component.hooks import setSite
 from zope.component import getUtility

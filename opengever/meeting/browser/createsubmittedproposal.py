@@ -1,9 +1,9 @@
 from five import grok
 from opengever.base.oguid import Oguid
 from opengever.base.security import changed_security
+from opengever.base.transport import REQUEST_KEY
 from opengever.meeting.proposal import SubmittedProposal
 from opengever.meeting.service import meeting_service
-from opengever.ogds.base.transport import REQUEST_KEY
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 import json
 

@@ -1,5 +1,5 @@
 from five import grok
-from opengever.ogds.base.transport import Transporter
+from opengever.base.transport import Transporter
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.base.vocabulary import ContactsVocabulary
 from opengever.task import _

@@ -8,9 +8,9 @@ from Acquisition import aq_parent
 from five import grok
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.interfaces import IReferenceNumber
+from opengever.base.transport import Transporter
 from opengever.base.utils import ok_response
 from opengever.globalindex.model.task import Task
-from opengever.ogds.base.transport import Transporter
 from opengever.ogds.base.utils import remote_request
 from opengever.tabbedview.helper import linked
 from opengever.task import _

@@ -1,13 +1,13 @@
 from opengever.base.oguid import Oguid
 from opengever.base.source import DossierPathSourceBinder
+from opengever.base.transport import REQUEST_KEY
+from opengever.base.transport import Transporter
 from opengever.meeting import _
 from opengever.meeting.container import ModelContainer
 from opengever.meeting.model.proposal import Proposal as ProposalModel
 from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
-from opengever.ogds.base.transport import REQUEST_KEY
-from opengever.ogds.base.transport import Transporter
 from opengever.ogds.base.utils import remote_json_request
 from plone import api
 from plone.directives import form

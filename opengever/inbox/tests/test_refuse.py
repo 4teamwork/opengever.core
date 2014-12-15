@@ -1,16 +1,15 @@
 from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.base.transport import REQUEST_KEY
+from opengever.base.transport import Transporter
 from opengever.inbox.browser.refuse import ForwardingRefuseForm
 from opengever.inbox.browser.refuse import STATUS_ALLREADY_DONE
 from opengever.inbox.browser.refuse import STATUS_SUCCESSFULL
-from opengever.ogds.base.transport import REQUEST_KEY
-from opengever.ogds.base.transport import Transporter
 from opengever.task.adapters import IResponseContainer
 from opengever.testing import FunctionalTestCase
 from opengever.testing.helpers import obj2brain
 from Products.CMFCore.utils import getToolByName
-from zope.component import getUtility
 import json
 import unittest
 
