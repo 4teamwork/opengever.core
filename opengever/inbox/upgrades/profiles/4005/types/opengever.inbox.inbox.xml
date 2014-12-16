@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<object name="opengever.inbox.inbox" meta_type="Dexterity FTI"
+        i18n:domain="opengever.inbox" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+    <property name="allowed_content_types">
+        <element value="opengever.document.document" />
+        <element value="opengever.inbox.forwarding"/>
+        <element value="ftw.mail.mail"/>
+        <element value="opengever.inbox.yearfolder"/>
+    </property>
+
+</object>

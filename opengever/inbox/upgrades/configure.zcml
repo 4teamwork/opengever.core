@@ -119,4 +119,13 @@
         profile="opengever.inbox:default"
         />
 
+    <!-- 4004 -> 4005 -->
+    <upgrade-step:importProfile
+        title="Disable nested inboxes"
+        profile="opengever.inbox:default"
+        source="4004"
+        destination="4005"
+        directory="profiles/4005"
+        />
+
 </configure>

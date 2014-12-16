@@ -18,7 +18,7 @@ class TestForwarding(FunctionalTestCase):
     def test_forwarding_is_not_addable_over_the_factory_menu(self, browser):
         browser.login().open(self.inbox)
 
-        self.assertEqual(['Document', 'Inbox'], addable_types(browser))
+        self.assertEqual(['Document'], addable_types(browser))
 
     @browsing
     def test_at_least_one_document_references_is_required(self, browser):
