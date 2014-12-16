@@ -43,6 +43,9 @@ Changelog
 
   [deiferni]
 
+- Disable nested inboxes.
+  [deiferni]
+
 
 4.0.6 (2014-12-09)
 ------------------

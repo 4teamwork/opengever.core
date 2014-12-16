@@ -14,7 +14,6 @@
         <element value="opengever.inbox.forwarding"/>
         <element value="ftw.mail.mail"/>
         <element value="opengever.inbox.yearfolder"/>
-        <element value="opengever.inbox.inbox"/>
     </property>
 
     <!-- schema interface -->
