@@ -5,12 +5,44 @@ from Products.CMFPlone.interfaces import IPloneSiteRoot
 from zope.interface import Interface
 
 
-class PloneSitePostFactoryMenu(grok.MultiAdapter):
-    """If a task is added to another task, it is called subtask. So we need
-    to change the name of the task in the add-menu if we are in a task.
+def order_factories(context, factories):
+    """Orders the entries in the factory menu based on a hardcoded order.
     """
 
-    grok.adapts(IPloneSiteRoot, Interface)
+    factories_order = ['Document',
+                       'Document with docucomposer',
+                       'Document with docugate',
+                       'document_with_template',
+                       'Task',
+                       'Add task from template',
+                       'Mail',
+                       'Subdossier',
+                       'Add Participant',
+                       ]
+
+    ordered_factories = []
+    for factory_title in factories_order:
+        try:
+            factory = [f for f in factories if f.get(
+                'title') == factory_title][0]
+            ordered_factories.append(factory)
+        except IndexError:
+            pass
+
+    remaining_factories = [
+        f for f in factories if f.get('title') not in factories_order]
+
+    all_factories = ordered_factories + remaining_factories
+    return all_factories
+
+
+class FilteredPostFactoryMenu(grok.MultiAdapter):
+    """Build a filtered factory menu.
+
+    Concrete filtering can be implemented by subclasses.
+    """
+
+    grok.adapts(Interface, Interface)
     grok.implements(IContentmenuPostFactoryMenu)
 
     def __init__(self, context, request):
@@ -18,10 +50,6 @@ class PloneSitePostFactoryMenu(grok.MultiAdapter):
         self.request = request
 
     def is_filtered(self, factory):
-        factory_id = factory.get('id')
-        if factory_id == u'opengever.meeting.committeecontainer':
-            return not is_meeting_feature_enabled()
-
         return False
 
     def __call__(self, factories):
@@ -30,4 +58,15 @@ class PloneSitePostFactoryMenu(grok.MultiAdapter):
             if not self.is_filtered(factory):
                 filtered_factories.append(factory)
 
-        return filtered_factories
+        return order_factories(self.context, filtered_factories)
+
+
+class PloneSitePostFactoryMenu(FilteredPostFactoryMenu):
+    grok.adapts(IPloneSiteRoot, Interface)
+
+    def is_filtered(self, factory):
+        factory_id = factory.get('id')
+        if factory_id == u'opengever.meeting.committeecontainer':
+            return not is_meeting_feature_enabled()
+
+        return False
