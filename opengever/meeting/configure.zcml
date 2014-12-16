@@ -6,6 +6,8 @@
     >
 
     <include package=".behaviors" />
+    <include package=".browser" />
+    <include package=".upgrades" />
 
     <!-- Grok the package to initialise schema interfaces and content classes -->
     <grok:grok package="." />

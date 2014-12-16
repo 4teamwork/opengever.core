@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:upgrade-step="http://namespaces.zope.org/ftw.upgrade"
+    i18n_domain="opengever.meeting">
+
+    <include package="ftw.upgrade" file="meta.zcml" />
+
+    <!-- 1 -> 4200 -->
+    <genericsetup:upgradeStep
+        title="Add meetings"
+        description=""
+        source="1"
+        destination="4200"
+        handler="opengever.meeting.upgrades.to4200.AddMeetingTable"
+        profile="opengever.meeting:default"
+        />
+
+</configure>
