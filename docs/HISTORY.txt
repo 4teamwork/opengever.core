@@ -78,6 +78,16 @@ Changelog
 
   [deiferni]
 
+- Add initial meeting support.
+    - Add Proposal content type (proxies) and model.
+    - Add feature flag, disable meeting feature by default.
+    - Add Committee content type (proxy) and model.
+    - Add custom forms to create/edit proxy-supported entities.
+    - Add custom workflow implementation (no plone workflow).
+    - Add a context manager to temporarily change the security context.
+
+  [deiferni]
+
 - Disable nested inboxes.
   [deiferni]
 
