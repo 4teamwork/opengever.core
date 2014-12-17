@@ -168,6 +168,22 @@ class TestAddActivity(ActivityTestCase):
         self.assertEquals(resource_a, notification.activity.resource)
         self.assertFalse(notification.read)
 
+    def test_does_not_create_an_notification_for_the_actor(self):
+        peter = create(Builder('watcher').having(user_id='peter'))
+        hugo = create(Builder('watcher').having(user_id='hugo'))
+
+        resource_a = create(Builder('resource').oguid('fd:123')
+                            .having(watchers=[hugo, peter]))
+
+        activity = self.center.add_activity('fd:123',
+                                             'TASK_ADDED',
+                                             'Kennzahlen 2014',
+                                             'Task bla added',
+                                             'peter')
+
+        self.assertEquals(1, len(hugo.notifications))
+        self.assertEquals(0, len(peter.notifications))
+
 
 class TestNotificationHandling(ActivityTestCase):
 

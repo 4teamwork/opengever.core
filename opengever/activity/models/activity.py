@@ -38,6 +38,9 @@ class Activity(BASE):
 
     def notifiy(self):
         """Create for every resource watcher the corresponding notification.
+        The actor of the activity is ignored.
         """
+
         for watcher in self.resource.watchers:
-            Notification(watcher=watcher, activity=self)
+            if watcher.user_id != self.actor_id:
+                Notification(watcher=watcher, activity=self)
