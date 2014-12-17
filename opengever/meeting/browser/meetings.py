@@ -4,8 +4,12 @@ from opengever.meeting import _
 from opengever.meeting.committee import ICommittee
 from opengever.meeting.model import Meeting
 from Products.Five.browser import BrowserView
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from z3c.form import button
 from z3c.form import field
 from z3c.form.form import AddForm
+from z3c.form.form import EditForm
+from z3c.form.interfaces import HIDDEN_MODE
 from zExceptions import NotFound
 from zope import schema
 from zope.interface import implements
@@ -51,6 +55,13 @@ class AddMeeting(AddForm):
     ignoreContext = True
     fields = field.Fields(IMeetingModel)
 
+    def updateWidgets(self):
+        super(AddMeeting, self).updateWidgets()
+
+        committee_id = self.context.load_model().committee_id
+        self.widgets['committee'].mode = HIDDEN_MODE
+        self.widgets['committee'].value = (str(committee_id), )
+
     def __init__(self, context, request):
         super(AddMeeting, self).__init__(context, request)
         self._created_object = None
@@ -68,6 +79,55 @@ class AddMeeting(AddForm):
         return MeetingList.url_for(self.context, self._created_object)
 
 
+class EditMeeting(EditForm):
+
+    ignoreContext = True
+    fields = field.Fields(IMeetingModel)
+
+    def __init__(self, context, request, model):
+        super(EditMeeting, self).__init__(context, request)
+        self.model = model
+        self._has_finished_edit = False
+
+    def inject_initial_data(self):
+        if self.request.method != 'GET':
+            return
+
+        prefix = 'form.widgets.'
+        values = self.model.get_edit_values(self.fields.keys())
+
+        for fieldname, value in values.items():
+            self.request[prefix + fieldname] = value
+
+    def updateWidgets(self):
+        self.inject_initial_data()
+        super(EditMeeting, self).updateWidgets()
+
+        committee_id = self.context.load_model().committee_id
+        self.widgets['committee'].mode = HIDDEN_MODE
+        self.widgets['committee'].value = (str(committee_id), )
+
+    def applyChanges(self, data):
+        self.model.update_model(data)
+        # pretend to always change the underlying data
+        self._has_finished_edit = True
+        return True
+
+    # this renames the button but otherwise preserves super's behaivor
+    @button.buttonAndHandler(_('Save'), name='save')
+    def handleApply(self, action):
+        # self as first argument is required by to the decorator
+        super(EditMeeting, self).handleApply(self, action)
+
+    def nextURL(self):
+        return MeetingList.url_for(self.context, self.model)
+
+    def render(self):
+        if self._has_finished_edit:
+            return self.request.response.redirect(self.nextURL())
+        return super(EditMeeting, self).render()
+
+
 class MeetingList(grok.View):
 
     implements(IPublishTraverse)
@@ -76,7 +136,7 @@ class MeetingList(grok.View):
 
     @classmethod
     def url_for(cls, context, meeting):
-        return "{}/@@{}/{}".format(
+        return "{}/{}/{}".format(
             context.absolute_url(), cls.__view_name__, meeting.meeting_id)
 
     def render(self):
@@ -103,21 +163,13 @@ class MeetingList(grok.View):
         return MeetingView(self.context, self.request, meeting)
 
 
-class EditMeetingView(BrowserView):
-
-    def __init__(self, context, request):
-        super(EditMeetingView, self).__init__(context, request)
-
-    def __call__(self):
-        return 'edit'
-
-
 class MeetingView(BrowserView):
 
+    template = ViewPageTemplateFile('meetings_templates/meeting.pt')
     implements(IBrowserView, IPublishTraverse)
 
     mapped_actions = {
-        'edit': EditMeetingView
+        'edit': EditMeeting
     }
 
     def __init__(self, context, request, meeting):
@@ -125,9 +177,10 @@ class MeetingView(BrowserView):
         self.meeting = meeting
 
     def __call__(self):
-        return self.meeting
+        return self.template()
 
     def publishTraverse(self, request, name):
         if name in self.mapped_actions:
-            return self.mapped_actions.get(name)(self.context, self.request)
+            view_class = self.mapped_actions.get(name)
+            return view_class(self.context, self.request, self.meeting)
         raise NotFound
