@@ -36,7 +36,7 @@ class Activity(BASE):
     def __init__(self, **kwargs):
         super(Activity, self).__init__(**kwargs)
 
-    def notifiy(self):
+    def notify(self):
         """Create for every resource watcher the corresponding notification.
         The actor of the activity is ignored.
         """

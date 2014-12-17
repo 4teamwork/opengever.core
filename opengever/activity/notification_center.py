@@ -66,7 +66,7 @@ class NotificationCenter(object):
                             actor_id=actor_id, description=description)
         Session.add(activity)
 
-        activity.notifiy()
+        activity.notify()
 
         return activity
 
