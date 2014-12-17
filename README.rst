@@ -436,7 +436,7 @@ OrgUnit example:
 Creating initial repositories
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Gever repositories are initialized from an excel file. To add initial repository setup add a folder ``opengever_repositories`` to your generic setup profile. Each ``*.xlsx`` file in that folder will then be processed, the filename will serve as the ID for the repository root. See `ordnungssystem.xlsx <https://github.com/4teamwork/opengever.core/blob/master/opengever/examplecontent/profiles/default/opengever_repositories/ordnungssystem.xlsx>`_ for an example. Note that this setuphandler is called after `ftw.inflator` but before custom GEVER content.
+Gever repositories are initialized from an excel file. To add initial repository setup add a folder ``opengever_repositories`` to your generic setup profile. Each ``*.xlsx`` file in that folder will then be processed, the filename will serve as the ID for the repository root. See `ordnungssystem.xlsx <https://github.com/4teamwork/opengever.core/blob/master/opengever/examplecontent/profiles/init/opengever_repositories/ordnungssystem.xlsx>`_ for an example. Note that this setuphandler is called after `ftw.inflator` but before custom GEVER content.
 
 
 Creating GEVER specific content
