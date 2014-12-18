@@ -1,6 +1,7 @@
 from opengever.base.model import Base
 from opengever.base.oguid import Oguid
 from opengever.meeting import _
+from opengever.meeting.model import AgendaItem
 from opengever.meeting.model.query import ProposalQuery
 from opengever.ogds.base.utils import ogds_service
 from plone import api
@@ -71,3 +72,13 @@ class Proposal(Base):
         """This method is required by a tabbedview."""
 
         return self.physical_path
+
+    def can_be_scheduled(self):
+        return self.workflow_state == 'submitted'
+
+    def schedule(self, meeting):
+        assert self.can_be_scheduled()
+
+        self.workflow_state = 'scheduled'
+        agenda_item = AgendaItem(meeting=meeting, proposal=self)
+        meeting.agenda_items.append(agenda_item)

@@ -1,3 +1,4 @@
+from opengever.meeting.model.agendaitem import AgendaItem
 from opengever.meeting.model.committee import Committee
 from opengever.meeting.model.meeting import Meeting
 from opengever.meeting.model.member import Member

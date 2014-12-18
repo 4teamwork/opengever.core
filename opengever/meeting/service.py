@@ -23,3 +23,10 @@ class MeetingService(object):
 
     def fetch_proposal_by_oguid(self, proposal_oguid):
         return Proposal.query.get_by_oguid(proposal_oguid)
+
+    def get_submitted_proposals(self, committee):
+        return Proposal.query.filter_by(committee=committee,
+                                        workflow_state='submitted').all()
+
+    def fetch_proposal(self, proposal_id):
+        return Proposal.get(proposal_id)

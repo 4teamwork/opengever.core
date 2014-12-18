@@ -3,6 +3,7 @@ from opengever.core.model import create_session
 from opengever.meeting import _
 from opengever.meeting.committee import ICommittee
 from opengever.meeting.model import Meeting
+from opengever.meeting.service import meeting_service
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import button
@@ -30,14 +31,12 @@ class IMeetingModel(Interface):
         title=_(u"label_location", default=u"Location"),
         description=_('help_location', default=u""),
         max_length=256,
-        required=False,
-        )
+        required=False)
 
     date = schema.Date(
         title=_('label_date', default=u"Date"),
         description=_("help_date", default=u""),
-        required=True,
-        )
+        required=True)
 
     start_time = schema.Time(
         title=_('label_start_time', default=u'Start time'),
@@ -163,14 +162,91 @@ class MeetingList(grok.View):
         return MeetingView(self.context, self.request, meeting)
 
 
+class ScheduleSubmittedProposal(BrowserView):
+
+    implements(IBrowserView)
+
+    @classmethod
+    def url_for(cls, context, meeting):
+        return "{}/{}".format(MeetingList.url_for(context, meeting),
+                              'schedule_proposal')
+
+    def __init__(self, context, request, meeting):
+        super(ScheduleSubmittedProposal, self).__init__(context, request)
+        self.meeting = meeting
+
+    def nextURL(self):
+        return MeetingList.url_for(self.context, self.meeting)
+
+    def extract_proposal(self):
+        if self.request.method != 'POST':
+            return
+
+        if 'submit' not in self.request:
+            return
+
+        proposal_value = self.request.get('proposal_id')
+        try:
+            proposal_id = int(proposal_value)
+        except ValueError:
+            return
+
+        return meeting_service().fetch_proposal(proposal_id)
+
+    def __call__(self):
+        proposal = self.extract_proposal()
+        if proposal:
+            self.meeting.schedule_proposal(proposal)
+
+        return self.request.response.redirect(self.nextURL())
+
+
+class ScheduleText(ScheduleSubmittedProposal):
+
+    implements(IBrowserView)
+
+    @classmethod
+    def url_for(cls, context, meeting):
+        return "{}/{}".format(MeetingList.url_for(context, meeting),
+                              'schedule_text')
+
+    def __init__(self, context, request, meeting):
+        super(ScheduleSubmittedProposal, self).__init__(context, request)
+        self.meeting = meeting
+
+    def nextURL(self):
+        return MeetingList.url_for(self.context, self.meeting)
+
+    def extract_title(self):
+        if self.request.method != 'POST':
+            return
+
+        if 'submit' not in self.request:
+            return
+
+        return self.request.get('title')
+
+    def __call__(self):
+        title = self.extract_title()
+        if title:
+            self.meeting.schedule_text(title)
+
+        return self.request.response.redirect(self.nextURL())
+
+
 class MeetingView(BrowserView):
 
     template = ViewPageTemplateFile('meetings_templates/meeting.pt')
     implements(IBrowserView, IPublishTraverse)
 
     mapped_actions = {
-        'edit': EditMeeting
+        'edit': EditMeeting,
+        'schedule_proposal': ScheduleSubmittedProposal,
+        'schedule_text': ScheduleText,
     }
+
+    def unscheduled_proposals(self):
+        return self.context.get_unscheduled_proposals()
 
     def __init__(self, context, request, meeting):
         super(MeetingView, self).__init__(context, request)
@@ -184,3 +260,12 @@ class MeetingView(BrowserView):
             view_class = self.mapped_actions.get(name)
             return view_class(self.context, self.request, self.meeting)
         raise NotFound
+
+    def url_schedule_proposal(self):
+        return ScheduleSubmittedProposal.url_for(self.context, self.meeting)
+
+    def url_schedule_text(self):
+        return ScheduleText.url_for(self.context, self.meeting)
+
+    def agenda_items(self):
+        return self.meeting.agenda_items

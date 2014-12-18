@@ -1,15 +1,16 @@
 from opengever.core.model import Base
 from sqlalchemy import Column
-from sqlalchemy import Date
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
-from sqlalchemy import String
-from sqlalchemy import Time
+from sqlalchemy import Text
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
 
 
 class AgendaItem(Base):
+    """It item must either have a reference to a proposal or a title.
+
+    """
 
     __tablename__ = 'agendaitems'
 
@@ -18,8 +19,11 @@ class AgendaItem(Base):
     meeting_id = Column(Integer, ForeignKey('meetings.id'), nullable=False)
     meeting = relationship("Meeting", backref='agenda_items')
 
-    proposal_id = Column(Integer, ForeignKey('proposals.id'))
+    proposal_id = Column(Integer, ForeignKey('proposal.id'))
     proposal = relationship("Proposal", backref='agenda_item', uselist=False)
 
-    title = Column(String(256))
-    sort_order = Column(Integer, nullable=False)
+    title = Column(Text)
+    sort_order = Column(Integer, nullable=False, default=0)
+
+    def get_title(self):
+        return self.proposal.title if self.proposal else self.title

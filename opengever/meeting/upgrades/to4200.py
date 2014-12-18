@@ -4,6 +4,7 @@ from sqlalchemy import Date
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
+from sqlalchemy import Text
 from sqlalchemy import Time
 from sqlalchemy.schema import Sequence
 
@@ -15,6 +16,7 @@ class AddMeetingTable(SchemaMigration):
 
     def migrate(self):
         self.create_meeting_table()
+        self.create_agenda_item_table()
 
     def create_meeting_table(self):
         self.op.create_table(
@@ -25,4 +27,15 @@ class AddMeetingTable(SchemaMigration):
             Column("date", Date, nullable=False),
             Column("start_time", Time),
             Column("end_time", Time),
+            Column("workflow_state", String(256), nullable=False, default='pending')
+        )
+
+    def create_agenda_item_table(self):
+        self.op.create_table(
+            'agendaitems',
+            Column("id", Integer, Sequence("agendaitems_id_seq"), primary_key=True),
+            Column("agenda_item_id", Integer, ForeignKey('meetings.id'), nullable=False),
+            Column("proposal_id", Integer, ForeignKey('proposals.id')),
+            Column("title", Text),
+            Column("sort_order", Integer, nullable=False, default=0),
         )

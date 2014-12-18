@@ -1,4 +1,6 @@
 from opengever.core.model import Base
+from opengever.meeting import _
+from opengever.meeting.model import AgendaItem
 from sqlalchemy import Column
 from sqlalchemy import Date
 from sqlalchemy import ForeignKey
@@ -11,6 +13,14 @@ from sqlalchemy.schema import Sequence
 
 class Meeting(Base):
 
+    PENDING = 'pending'
+    CLOSED = 'closed'
+
+    workflow_states = {
+        PENDING: _('pending', default='Pending'),
+        CLOSED: _('pending', default='Pending'),
+    }
+
     __tablename__ = 'meetings'
 
     meeting_id = Column("id", Integer, Sequence("meeting_id_seq"),
@@ -21,6 +31,7 @@ class Meeting(Base):
     date = Column(Date, nullable=False)
     start_time = Column(Time)
     end_time = Column(Time)
+    workflow_state = Column(String(256), nullable=False, default=PENDING)
 
     def __repr__(self):
         return '<Meeting at "{}">'.format(self.date)
@@ -49,3 +60,26 @@ class Meeting(Base):
     def update_model(self, data):
         for key, value in data.items():
             setattr(self, key, value)
+
+    def get_title(self):
+        return u"{} {}".format(self.committee.title,
+                               self.date.strftime('%A, %d. %B %Y'))
+
+    def get_workflow_state(self):
+        return self.workflow_states.get(self.workflow_state)
+
+    def schedule_proposal(self, proposal):
+        assert proposal.committee == self.committee
+
+        proposal.schedule(self)
+        self.reorder_agenda_items()
+
+    def schedule_text(self, title):
+        self.agenda_items.append(AgendaItem(meeting=self, title=title))
+        self.reorder_agenda_items()
+
+    def reorder_agenda_items(self):
+        sort_order = 1
+        for agenda_item in self.agenda_items:
+            agenda_item.sort_order = sort_order
+            sort_order += 1

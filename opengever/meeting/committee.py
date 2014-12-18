@@ -1,6 +1,7 @@
 from opengever.meeting import _
 from opengever.meeting.container import ModelContainer
 from opengever.meeting.model import Committee as CommitteeModel
+from opengever.meeting.service import meeting_service
 from plone.directives import form
 from zope import schema
 from zope.interface import Interface
@@ -27,3 +28,7 @@ class Committee(ModelContainer):
     content_schema = ICommittee
     model_schema = ICommitteeModel
     model_class = CommitteeModel
+
+    def get_unscheduled_proposals(self):
+        committee_model = self.load_model()
+        return meeting_service().get_submitted_proposals(committee_model)
