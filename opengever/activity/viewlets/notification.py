@@ -14,15 +14,14 @@ class NotificationViewlet(common.ViewletBase):
             context, request, view, manager=manager)
 
     def num_unread(self):
-        return len(self.fetch_notifications())
-
-    def unread(self):
-        return self.num_unread() > 0
+        notifications = self.fetch_notifications()
+        return len(notifications)
 
     def fetch_notifications(self):
         if not self.notifications:
             center = notification_center()
-            self.notifications = center.get_current_users_notifications(limit=5)
+            self.notifications = center.get_current_users_notifications(
+                only_unread=True, limit=10)
 
         return self.notifications
 
@@ -31,10 +30,18 @@ class NotificationViewlet(common.ViewletBase):
 
         for notification in self.fetch_notifications():
             notifications.append({
-                'activity': notification.activity,
+                'kind': notification.activity.kind,
+                'title': notification.activity.title,
+                'summary': notification.activity.summary,
+                'created': notification.activity.created,
                 'link': '{}/resolve_oguid?oguid={}'.format(
                     self.context.absolute_url(),
                     notification.activity.resource.oguid),
-                'read': notification.read})
+                'read': notification.read,
+                'id': notification.notification_id})
 
         return notifications
+
+    @property
+    def read_url(self):
+        '{}/notifications/read'.format(self.context.absolute_url())

@@ -8,6 +8,7 @@
 
   <grok:grok package="." />
 
+  <include package=".browser" />
   <include package=".viewlets" />
 
   <genericsetup:registerProfile

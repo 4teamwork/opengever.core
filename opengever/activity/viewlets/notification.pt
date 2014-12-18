@@ -2,34 +2,43 @@
 
   <h5 class="hiddenStructure" i18n:translate="heading_notifications">Notifications</h5>
 
-  <dl class="notificationsMenu actionMenu deactivated" id="portal-notifications-selector-menu">
-    <dt class="notificationsMenuHeader actionMenuHeader">
-      <a tal:attributes="href string:#">
-      </a>
-      <div class="visualClear"><!-- --></div>
-      <tal:unread tal:define="unread view/unread">
-        <span tal:condition="unread" tal:content="view/num_unread" class="unread_number"></span>
-      </tal:unread>
+  <dl class="notificationsMenu actionMenu deactivated" id="portal-notifications-selector-menu"
+      tal:attributes="data-read-url view/read_url">
+
+    <dt class="notificationsMenuHeader actionMenuHeader" tal:define="num_unread view/num_unread">
+
+      <a tal:attributes="href string:#"></a>
+
+      <div class="visualClear"></div>
+
+      <span tal:condition="python: num_unread > 0"
+            tal:content="num_unread" class="unread_number"></span>
+
+    </dt>
 
     <dd class="actionMenuContent notificationsMenuContent">
       <ul>
-        <li class="notification-item" tal:repeat="notification view/get_notifications">
-          <a href="#">
-            <div class="item-content"
-                 tal:attributes="class python: notification.get('read') and 'item-content' or 'item-content unread'" >
-              <div class="item-header">
-                <span class="item-creation">
-                  <span class="relativetime" title="2014-11-16 15:03:40Z" tal:content="notification/activity/created" />
-                </span>
-                <span class="item-type" tal:content="notification/activity/kind" />
-              </div>
-              <div class="item-location" tal:content="notification/activity/title" />
-              <div class="item-summary" tal:content="notification/activity/summary" />
+
+        <li class="notification-item" tal:repeat="notification view/get_notifications"
+            tal:attributes="data-notification-id notification/id">
+
+          <div class="item-content">
+            <a href="#" class="mark_as_read" tal:condition="not: notification/read"></a>
+            <div class="item-header">
+              <span class="item-creation">
+                <span class="relativetime" title="2014-11-16 15:03:40Z" tal:content="notification/created" />
+              </span>
+              <span class="item-type" tal:content="notification/kind" />
             </div>
-          </a>
+            <a href="#" class="item-location"
+               tal:content="notification/title"
+               tal:attributes="href notification/link" />
+            <div class="item-summary" tal:content="notification/summary" />
+          </div>
         </li>
+
       </ul>
-      <a href="#" class="all_link"><small>Show all notifications</small></a>
+      <a href="#" class="all_link"><small>Notifications Overview</small></a>
     </dd>
   </dl>
 </div>
