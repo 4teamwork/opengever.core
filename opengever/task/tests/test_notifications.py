@@ -6,7 +6,6 @@ from opengever.activity.utils import notification_center
 from opengever.globalindex.oguid import Oguid
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
-from zope.i18n import translate
 
 
 class TestTaskNotifications(FunctionalTestCase):
