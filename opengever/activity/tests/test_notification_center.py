@@ -219,8 +219,8 @@ class TestNotificationHandling(ActivityTestCase):
             'Task Test added', 'franz.meier')
 
     def test_get_users_notifications_lists_only_users_notifications(self):
-        peters_notifications = self.center.get_users_unread_notifications('peter')
-        hugos_notifications = self.center.get_users_unread_notifications('hugo')
+        peters_notifications = self.center.get_users_notifications('peter')
+        hugos_notifications = self.center.get_users_notifications('hugo')
 
         self.assertEquals(
             [self.activity_1, self.activity_2, self.activity_4],
@@ -230,11 +230,18 @@ class TestNotificationHandling(ActivityTestCase):
             [self.activity_1, self.activity_2, self.activity_3],
             [notification.activity for notification in hugos_notifications])
 
+    def test_get_users_notifications_only_unread_parameter(self):
+        notifications = self.center.get_users_notifications('peter')
+        self.center.mark_notification_as_read(notifications[0].notification_id)
+
+        peters_notifications = self.center.get_users_notifications('peter', only_unread=True)
+        self.assertEquals(2, len(peters_notifications))
+
     def test_get_users_notifications_retuns_empty_list_when_no_notifications_for_this_user_exists(self):
         create(Builder('watcher').having(user_id='franz'))
 
         self.assertEquals([],
-                          self.center.get_users_unread_notifications('franz'))
+                          self.center.get_users_notifications('franz'))
 
     def test_mark_notification_as_read(self):
         notification_id = self.peter.notifications[0].notification_id
