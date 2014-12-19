@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from Products.CMFPlone import PloneMessageFactory as pmf
 
 
@@ -13,8 +14,12 @@ class OrgUnitSelector(object):
             )
 
         self._storage = storage
-        self._admin_unit_units = dict((unit.id(), unit) for unit in admin_unit_units)
-        self._users_units = dict((unit.id(), unit) for unit in users_units)
+
+        self._admin_unit_units = OrderedDict(
+            (u.id(), u) for u in admin_unit_units)
+
+        self._users_units = OrderedDict(
+            (u.id(), u) for u in users_units)
 
     def get_current_unit(self):
         return self._admin_unit_units.get(
