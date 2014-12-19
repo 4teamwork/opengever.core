@@ -28,7 +28,7 @@ class OrgUnitSelector(object):
         return self._users_units.values()
 
     def _get_current_unit_id(self):
-        if self._storage.has_key(CURRENT_ORG_UNIT_KEY):
+        if CURRENT_ORG_UNIT_KEY in self._storage:
             return self._storage[CURRENT_ORG_UNIT_KEY]
 
     def _get_fallback_unit(self):
