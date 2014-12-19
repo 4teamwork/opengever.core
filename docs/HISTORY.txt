@@ -5,7 +5,15 @@ Changelog
 4.0.7 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- OrgUnitSelector: Fix fallback logic:
+
+  Build intersection of current admin units' org units and
+  user's org units. If some of the user's org units are in the
+  current admin unit, use the first of those as the fallback.
+
+  Otherwise we're in an inter-admin unit operation, default to
+  current admin unit's first org unit.
+  [lgraf]
 
 
 4.0.6 (2014-12-09)

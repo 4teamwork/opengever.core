@@ -32,6 +32,16 @@ class OrgUnitSelector(object):
             return self._storage[CURRENT_ORG_UNIT_KEY]
 
     def _get_fallback_unit(self):
+        # Build intersection of current admin units' org units
+        # and user's org units
+        user_local_units = [u for u in self._users_units.values()
+                            if u in self._admin_unit_units.values()]
+        # If some of the user's org units are in the current admin unit,
+        # use the first of those as the fallback
+        if user_local_units:
+            return user_local_units[0]
+        # Otherwise we're in an inter-admin unit operation, default to
+        # current admin unit's first org unit
         return self._admin_unit_units.values()[0]
 
 
