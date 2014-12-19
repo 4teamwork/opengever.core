@@ -19,6 +19,9 @@ Changelog
   "end of browser session" before).
   [lgraf]
 
+- OrgUnitSelector: Store selected OrgUnit after determining fallback.
+  [lgraf]
+
 
 4.0.6 (2014-12-09)
 ------------------
