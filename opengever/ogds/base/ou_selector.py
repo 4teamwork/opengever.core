@@ -22,9 +22,13 @@ class OrgUnitSelector(object):
             (u.id(), u) for u in users_units)
 
     def get_current_unit(self):
-        return self._admin_unit_units.get(
-            self._get_current_unit_id(),
-            self._get_fallback_unit())
+        unit = self._admin_unit_units.get(self._get_current_unit_id())
+
+        if not unit:
+            unit = self._get_fallback_unit()
+            self.set_current_unit(unit.id())
+
+        return unit
 
     def set_current_unit(self, unitid):
         self._storage[CURRENT_ORG_UNIT_KEY] = unitid
