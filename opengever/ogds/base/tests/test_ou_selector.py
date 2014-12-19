@@ -36,6 +36,15 @@ class TestOrgUnitSelector(unittest2.TestCase):
 
         self.assertEquals(self.unit_a, selector.get_current_unit())
 
+    def test_get_current_unit_stores_selected_unit_after_determining_fallback(self):
+        storage = {}
+        selector = OrgUnitSelector(storage,
+                                   [self.unit_a, self.unit_b],
+                                   [self.unit_a, self.unit_b])
+
+        self.assertEquals(self.unit_a, selector.get_current_unit())
+        self.assertEquals({'current_org_unit': 'clienta'}, storage)
+
     def test_fallback_is_first_of_intersection_between_users_and_current_adminunit_units(self):
         selector = OrgUnitSelector({},
                                    [self.unit_a, self.unit_b],
@@ -56,7 +65,7 @@ class TestOrgUnitSelector(unittest2.TestCase):
                                    [self.unit_a, self.unit_b])
 
         self.assertEquals(self.unit_c, selector.get_current_unit())
-        self.assertEquals('clientb', selector._get_current_unit_id())
+        self.assertEquals('clientc', selector._get_current_unit_id())
 
     def test_available_units_are_all_selectable_units(self):
         selector = OrgUnitSelector({},
