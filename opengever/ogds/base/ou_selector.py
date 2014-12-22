@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from Products.CMFPlone import PloneMessageFactory as pmf
 
 
@@ -13,13 +14,21 @@ class OrgUnitSelector(object):
             )
 
         self._storage = storage
-        self._admin_unit_units = dict((unit.id(), unit) for unit in admin_unit_units)
-        self._users_units = dict((unit.id(), unit) for unit in users_units)
+
+        self._admin_unit_units = OrderedDict(
+            (u.id(), u) for u in admin_unit_units)
+
+        self._users_units = OrderedDict(
+            (u.id(), u) for u in users_units)
 
     def get_current_unit(self):
-        return self._admin_unit_units.get(
-            self._get_current_unit_id(),
-            self._get_fallback_unit())
+        unit = self._admin_unit_units.get(self._get_current_unit_id())
+
+        if not unit:
+            unit = self._get_fallback_unit()
+            self.set_current_unit(unit.id())
+
+        return unit
 
     def set_current_unit(self, unitid):
         self._storage[CURRENT_ORG_UNIT_KEY] = unitid
@@ -28,10 +37,20 @@ class OrgUnitSelector(object):
         return self._users_units.values()
 
     def _get_current_unit_id(self):
-        if self._storage.has_key(CURRENT_ORG_UNIT_KEY):
+        if CURRENT_ORG_UNIT_KEY in self._storage:
             return self._storage[CURRENT_ORG_UNIT_KEY]
 
     def _get_fallback_unit(self):
+        # Build intersection of current admin units' org units
+        # and user's org units
+        user_local_units = [u for u in self._users_units.values()
+                            if u in self._admin_unit_units.values()]
+        # If some of the user's org units are in the current admin unit,
+        # use the first of those as the fallback
+        if user_local_units:
+            return user_local_units[0]
+        # Otherwise we're in an inter-admin unit operation, default to
+        # current admin unit's first org unit
         return self._admin_unit_units.values()[0]
 
 

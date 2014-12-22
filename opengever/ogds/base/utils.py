@@ -1,3 +1,5 @@
+from datetime import datetime
+from datetime import timedelta
 from opengever.ogds.base.exceptions import ClientNotFound
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.ou_selector import AnonymousOrgUnitSelector
@@ -74,7 +76,7 @@ class CookieStorage(DictMixin):
 
     def __setitem__(self, key, value):
         self.request.cookies[key] = value
-        self.request.RESPONSE.setCookie(key, value)
+        self.request.RESPONSE.setCookie(key, value, expires=self.expires)
 
     def __delitem__(self, key):
         del self.request.cookies[key]
@@ -82,6 +84,12 @@ class CookieStorage(DictMixin):
 
     def keys(self):
         return self.request.cookies.keys()
+
+    @property
+    def expires(self):
+        max_age = timedelta(days=30)
+        expiration_date = datetime.now() + max_age
+        return expiration_date.strftime("%a, %d-%b-%Y %H:%M:%S GMT")
 
 
 def get_ou_selector():

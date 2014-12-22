@@ -5,7 +5,22 @@ Changelog
 4.1.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- OrgUnitSelector: Fix fallback logic:
+
+  Build intersection of current admin units' org units and
+  user's org units. If some of the user's org units are in the
+  current admin unit, use the first of those as the fallback.
+
+  Otherwise we're in an inter-admin unit operation, default to
+  current admin unit's first org unit.
+  [lgraf]
+
+- CookieStorage: Extend max age of cookies to 30 days (was
+  "end of browser session" before).
+  [lgraf]
+
+- OrgUnitSelector: Store selected OrgUnit after determining fallback.
+  [lgraf]
 
 
 4.1.0 (2014-12-18)
