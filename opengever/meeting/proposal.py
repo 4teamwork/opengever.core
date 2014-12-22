@@ -8,6 +8,7 @@ from opengever.meeting.model.proposal import Proposal as ProposalModel
 from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from plone import api
 from plone.directives import form
@@ -172,7 +173,10 @@ class SubmittedProposal(ProposalBase):
         return ProposalModel.query.get_by_oguid(oguid)
 
     def sync_model(self, proposal_model):
+        physical_path = '/'.join(self.getPhysicalPath())
         proposal_model.submitted_oguid = Oguid.for_object(self)
+        proposal_model.submitted_physical_path = physical_path
+        proposal_model.submitted_admin_unit_id = get_current_admin_unit().id()
 
     def load_model(self):
         oguid = Oguid.for_object(self)

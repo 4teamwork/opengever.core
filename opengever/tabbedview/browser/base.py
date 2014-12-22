@@ -26,6 +26,7 @@ class OpengeverTab(object):
     # XXX : will be moved to registry later...
     extjs_enabled = True
 
+    # XXX: this method contains sorting stuff that applies to tasks only.
     def custom_sort(self, results, sort_on, sort_reverse):
         """We need to handle some sorting for special columns, which are
         not sortable in the catalog...

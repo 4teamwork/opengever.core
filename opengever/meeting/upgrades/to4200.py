@@ -17,6 +17,7 @@ class AddMeetingTable(SchemaMigration):
     def migrate(self):
         self.create_meeting_table()
         self.create_agenda_item_table()
+        self.add_proposal_columns()
 
     def create_meeting_table(self):
         self.op.create_table(
@@ -39,3 +40,7 @@ class AddMeetingTable(SchemaMigration):
             Column("title", Text),
             Column("sort_order", Integer, nullable=False, default=0),
         )
+
+    def add_proposal_columns(self):
+        self.op.add_column('proposal',
+                           Column('submitted_physical_path', String(256)))

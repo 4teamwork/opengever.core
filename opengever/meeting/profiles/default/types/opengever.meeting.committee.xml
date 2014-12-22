@@ -29,11 +29,12 @@
   </property>
 
   <!-- View information -->
-  <property name="immediate_view">view</property>
-  <property name="default_view">view</property>
+  <property name="default_view">tabbed_view</property>
+  <property name="immediate_view">tabbed_view</property>
   <property name="default_view_fallback">False</property>
   <property name="view_methods">
-    <element value="view"/>
+    <element value="view" />
+    <element value="tabbed_view" />
   </property>
 
   <!-- Method aliases -->
@@ -61,4 +62,7 @@
       <permission value="Modify portal content"/>
   </action>
 
+  <!-- Tab Actions -->
+  <action title="meetings" action_id="meetings" category="tabbedview-tabs" condition_expr="" url_expr="string:#" visible="True"></action>
+  <action title="submittedproposals" action_id="submittedproposals" category="tabbedview-tabs" condition_expr="" url_expr="string:#" visible="True"></action>
 </object>

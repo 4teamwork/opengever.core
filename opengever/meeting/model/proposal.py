@@ -32,14 +32,15 @@ class Proposal(Base):
     admin_unit_id = Column(String(30), nullable=False)
     int_id = Column(Integer, nullable=False)
     oguid = composite(Oguid, admin_unit_id, int_id)
+    physical_path = Column(String(256), nullable=False)
 
     submitted_admin_unit_id = Column(String(30))
     submitted_int_id = Column(Integer)
     submitted_oguid = composite(
         Oguid, submitted_admin_unit_id, submitted_int_id)
+    submitted_physical_path = Column(String(256))
 
     title = Column(String(256), nullable=False)
-    physical_path = Column(String(256), nullable=False)
     workflow_state = Column(String(256), nullable=False)
     initial_position = Column(Text)
 
@@ -52,6 +53,9 @@ class Proposal(Base):
     def get_admin_unit(self):
         return ogds_service().fetch_admin_unit(self.admin_unit_id)
 
+    def get_submitted_admin_unit(self):
+        return ogds_service().fetch_admin_unit(self.submitted_admin_unit_id)
+
     @property
     def id(self):
         return self.proposal_id
@@ -61,8 +65,16 @@ class Proposal(Base):
         return ' '.join([term.encode('utf-8') for term in searchable])
 
     def get_link(self):
-        admin_unit = self.get_admin_unit()
-        url = '/'.join((admin_unit.public_url, self.physical_path))
+        return self._get_link(self.get_admin_unit(), self.physical_path)
+
+    def get_submitted_link(self):
+        return self._get_link(self.get_submitted_admin_unit(),
+                              self.submitted_physical_path)
+
+    def _get_link(self, admin_unit, physical_path):
+        if not (admin_unit and physical_path):
+            return ''
+        url = '/'.join((admin_unit.public_url, physical_path))
         link = u'<a href="{0}" title="{1}">{1}</a>'.format(url, self.title)
 
         transformer = api.portal.get_tool('portal_transforms')

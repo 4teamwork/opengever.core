@@ -17,4 +17,13 @@
         profile="opengever.meeting:default"
         />
 
+    <!-- 4200 -> 4201 -->
+    <upgrade-step:importProfile
+        title="Add tabbedview views for committees."
+        profile="opengever.meeting:default"
+        source="4200"
+        destination="4201"
+        directory="profiles/4201"
+        />
+
 </configure>

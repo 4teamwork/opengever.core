@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<object name="opengever.meeting.committee" meta_type="Dexterity FTI"
+        i18n:domain="opengever.meeting" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+  <!-- View information -->
+  <property name="default_view">tabbed_view</property>
+  <property name="immediate_view">tabbed_view</property>
+  <property name="view_methods">
+    <element value="view" />
+    <element value="tabbed_view" />
+  </property>
+
+  <!-- Tab Actions -->
+  <action title="meetings" action_id="meetings" category="tabbedview-tabs" condition_expr="" url_expr="string:#" visible="True"></action>
+  <action title="submittedproposals" action_id="submittedproposals" category="tabbedview-tabs" condition_expr="" url_expr="string:#" visible="True"></action>
+</object>
