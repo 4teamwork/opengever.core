@@ -10,7 +10,31 @@
     <element value="tabbed_view" />
   </property>
 
+  <!-- Actions -->
+  <action action_id="add-meeting"
+          visible="True"
+          title="Meeting"
+          category="folder_factories"
+          url_expr="string:${object_url}/add-meeting"
+          icon_expr=""
+          condition_expr=""
+          i18n:domain="opengever.meeting">
+      <permission value="Add portal content"/>
+  </action>
+
   <!-- Tab Actions -->
-  <action title="meetings" action_id="meetings" category="tabbedview-tabs" condition_expr="" url_expr="string:#" visible="True"></action>
-  <action title="submittedproposals" action_id="submittedproposals" category="tabbedview-tabs" condition_expr="" url_expr="string:#" visible="True"></action>
+  <action title="meetings"
+          action_id="meetings"
+          category="tabbedview-tabs"
+          condition_expr=""
+          url_expr="string:#"
+          visible="True">
+  </action>
+  <action title="submittedproposals"
+          action_id="submittedproposals"
+          category="tabbedview-tabs"
+          condition_expr=""
+          url_expr="string:#"
+          visible="True">
+  </action>
 </object>
