@@ -123,6 +123,7 @@ class CommitteeBuilder(SqlObjectBuilder):
         self.arguments['title'] = 'Bar'
         self.arguments['admin_unit_id'] = 'foo'
         self.arguments['int_id'] = 1234
+        self.arguments['physical_path'] = '/foo'
 
 builder_registry.register('committee_model', CommitteeBuilder)
 

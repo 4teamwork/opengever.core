@@ -83,6 +83,9 @@ class EditMeeting(EditForm):
     ignoreContext = True
     fields = field.Fields(IMeetingModel)
 
+    is_model_view = True
+    is_model_edit_view = True
+
     def __init__(self, context, request, model):
         super(EditMeeting, self).__init__(context, request)
         self.model = model
@@ -239,6 +242,9 @@ class MeetingView(BrowserView):
     template = ViewPageTemplateFile('meetings_templates/meeting.pt')
     implements(IBrowserView, IPublishTraverse)
 
+    is_model_view = True
+    is_model_edit_view = False
+
     mapped_actions = {
         'edit': EditMeeting,
         'schedule_proposal': ScheduleSubmittedProposal,
@@ -250,7 +256,7 @@ class MeetingView(BrowserView):
 
     def __init__(self, context, request, meeting):
         super(MeetingView, self).__init__(context, request)
-        self.meeting = meeting
+        self.model = meeting
 
     def __call__(self):
         return self.template()
@@ -258,14 +264,14 @@ class MeetingView(BrowserView):
     def publishTraverse(self, request, name):
         if name in self.mapped_actions:
             view_class = self.mapped_actions.get(name)
-            return view_class(self.context, self.request, self.meeting)
+            return view_class(self.context, self.request, self.model)
         raise NotFound
 
     def url_schedule_proposal(self):
-        return ScheduleSubmittedProposal.url_for(self.context, self.meeting)
+        return ScheduleSubmittedProposal.url_for(self.context, self.model)
 
     def url_schedule_text(self):
-        return ScheduleText.url_for(self.context, self.meeting)
+        return ScheduleText.url_for(self.context, self.model)
 
     def agenda_items(self):
-        return self.meeting.agenda_items
+        return self.model.agenda_items

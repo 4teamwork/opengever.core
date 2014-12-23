@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<object>
+
+    <hidden manager="plone.contentviews" skinname="*">
+        <viewlet name="plone.contentviews" />
+    </hidden>
+
+    <order manager="plone.contentviews" skinname="*">
+        <viewlet name="opengever.contentviews" insert-before="*" />
+    </order>
+
+</object>
+
