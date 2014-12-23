@@ -19,8 +19,19 @@ class MeetingListingTab(BaseListingTab):
     model = Meeting
 
     columns = (
-        {'column': 'location',
-         'column_location': _(u'column_location', default=u'Location'),},
+        {'column': '',
+         'column_title': _(u'column_title', default=u'Title'),
+         'transform': lambda item, value: item.get_link()},
+
+        {'column': '',
+         'column_title': _(u'column_date', default=u'Date'),
+         'transform': lambda item, value: item.get_date()},
+
+        {'column': 'start_time',
+         'column_title': _(u'column_start_time', default=u'Start Time')},
+
+        {'column': 'end_time',
+         'column_title': _(u'column_end_time', default=u'End Time')},
         )
 
     def get_base_query(self):

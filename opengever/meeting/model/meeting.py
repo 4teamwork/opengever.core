@@ -1,6 +1,7 @@
 from opengever.core.model import Base
 from opengever.meeting import _
 from opengever.meeting.model import AgendaItem
+from plone import api
 from sqlalchemy import Column
 from sqlalchemy import Date
 from sqlalchemy import ForeignKey
@@ -36,6 +37,11 @@ class Meeting(Base):
     def __repr__(self):
         return '<Meeting at "{}">'.format(self.date)
 
+    @property
+    def physical_path(self):
+        return '/'.join(
+            (self.committee.physical_path, 'meeting', str(self.meeting_id)))
+
     def get_edit_values(self, fieldnames):
         # XXX this should be done in a more generic way by using either
         # the already present valueconverter stuff
@@ -62,8 +68,10 @@ class Meeting(Base):
             setattr(self, key, value)
 
     def get_title(self):
-        return u"{} {}".format(self.committee.title,
-                               self.date.strftime('%A, %d. %B %Y'))
+        return u"{} {}".format(self.committee.title, self.get_date())
+
+    def get_date(self):
+        return self.date.strftime('%A, %d. %B %Y')
 
     def get_workflow_state(self):
         return self.workflow_states.get(self.workflow_state)
@@ -83,3 +91,21 @@ class Meeting(Base):
         for agenda_item in self.agenda_items:
             agenda_item.sort_order = sort_order
             sort_order += 1
+
+    def get_submitted_link(self):
+        return self._get_link(self.get_submitted_admin_unit(),
+                              self.submitted_physical_path)
+
+    def get_link(self):
+        url = self.get_url()
+        link = u'<a href="{0}" title="{1}">{1}</a>'.format(url, self.get_title())
+
+        transformer = api.portal.get_tool('portal_transforms')
+        return transformer.convertTo('text/x-html-safe', link).getData()
+
+    def get_url(self):
+        admin_unit = self.committee.get_admin_unit()
+        return '/'.join((admin_unit.public_url, self.physical_path))
+
+    def get_edit_url(self):
+        return '/'.join((self.get_url(), 'edit'))

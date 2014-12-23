@@ -21,7 +21,8 @@ class SubmittedProposalListingTab(ProposalListingTab):
     implements(ISubmittedProposalTableSourceConfig)
 
     def get_base_query(self):
-        return Proposal.query.filter_by(committee=self.context.load_model())
+        return Proposal.query.visible_for_committee(
+            self.context.load_model())
 
     columns = (
         {'column': 'title',

@@ -11,6 +11,7 @@ from opengever.meeting.workflow import Workflow
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from plone import api
+from plone import api
 from plone.directives import form
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
@@ -112,7 +113,7 @@ class ProposalBase(ModelContainer):
         return self.workflow.get_state(self.load_model().workflow_state)
 
     def get_physical_path(self):
-        url_tool = self.unrestrictedTraverse('@@plone_tools').url()
+        url_tool = api.portal.get_tool(name="portal_url")
         return '/'.join(url_tool.getRelativeContentPath(self))
 
     def get_searchable_text(self):
@@ -169,13 +170,16 @@ class SubmittedProposal(ProposalBase):
     def generate_submitted_proposal_id(cls, proposal):
         return 'submitted-proposal-{}'.format(proposal.proposal_id)
 
+    def get_physical_path(self):
+        url_tool = api.portal.get_tool(name="portal_url")
+        return '/'.join(url_tool.getRelativeContentPath(self))
+
     def load_proposal(self, oguid):
         return ProposalModel.query.get_by_oguid(oguid)
 
     def sync_model(self, proposal_model):
-        physical_path = '/'.join(self.getPhysicalPath())
         proposal_model.submitted_oguid = Oguid.for_object(self)
-        proposal_model.submitted_physical_path = physical_path
+        proposal_model.submitted_physical_path = self.get_physical_path()
         proposal_model.submitted_admin_unit_id = get_current_admin_unit().id()
 
     def load_model(self):

@@ -32,3 +32,12 @@ class Committee(ModelContainer):
     def get_unscheduled_proposals(self):
         committee_model = self.load_model()
         return meeting_service().get_submitted_proposals(committee_model)
+
+    def get_model_create_arguments(self, context):
+        aq_wrapped_self = self.__of__(context)
+
+        return dict(physical_path=aq_wrapped_self.get_physical_path())
+
+    def get_physical_path(self):
+        url_tool = self.unrestrictedTraverse('@@plone_tools').url()
+        return '/'.join(url_tool.getRelativeContentPath(self))
