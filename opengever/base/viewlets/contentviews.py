@@ -1,18 +1,4 @@
 from plone.app.layout.viewlets.common import ContentViewsViewlet
-from plone.app.layout.viewlets.common import PathBarViewlet
-
-
-class ModelPathbarViewlet(PathBarViewlet):
-
-    def update(self):
-        super(ModelPathbarViewlet, self).update()
-
-        if hasattr(self.view, 'is_model_view') and self.view.is_model_view:
-            self.append_model_breadcrumbs()
-
-    def append_model_breadcrumbs(self):
-        model = self.view.model
-        self.breadcrumbs = self.breadcrumbs + (model.get_breadcrumbs(),)
 
 
 class ModelContentViewsViewlet(ContentViewsViewlet):
