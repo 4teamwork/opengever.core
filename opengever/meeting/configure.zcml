@@ -35,12 +35,22 @@
           title="opengever.meeting: Add Committee"
           />
 
+    <!-- Custom content views -->
     <browser:viewlet
         name="opengever.contentviews"
         manager="plone.app.layout.viewlets.interfaces.IContentViews"
         permission="zope2.View"
         layer="opengever.base.interfaces.IOpengeverBaseLayer"
         class=".viewlets.ModelContentViewsViewlet"
+        />
+
+    <!-- Custom breadcrumbs -->
+    <browser:viewlet
+        name="opengever.path_bar"
+        manager="plone.app.layout.viewlets.interfaces.IAboveContent"
+        permission="zope2.View"
+        layer="opengever.base.interfaces.IOpengeverBaseLayer"
+        class=".viewlets.ModelPathbarViewlet"
         />
 
 </configure>

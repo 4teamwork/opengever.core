@@ -109,3 +109,6 @@ class Meeting(Base):
 
     def get_edit_url(self):
         return '/'.join((self.get_url(), 'edit'))
+
+    def get_breadcrumbs(self):
+        return {'absolute_url': self.get_url(), 'Title': self.get_title()}
