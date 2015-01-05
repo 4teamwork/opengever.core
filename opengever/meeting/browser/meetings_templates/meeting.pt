@@ -54,22 +54,7 @@
 
         <div class="visualClear"><!----></div>
 
-        <ul class="regular_buttons">
-            <tal:block repeat="transition view/transitions">
-              <li>
-                <a tal:attributes="href python: view.transition_url(transition);
-                                   title transition/title;
-                                   id transition/name;
-                                   class string: ${transition/name} button;"
-                   i18n:attributes="title">
-                    <span tal:content="transition/title"
-                          i18n:translate=""
-                          class="subMenuTitle actionText">
-                    </span>
-                </a>
-              </li>
-            </tal:block>
-        </ul>
+        <metal:use use-macro="context/@@meeting-macros/workflow_actions" />
 
         </metal:content-core>
     </metal:content-core>
