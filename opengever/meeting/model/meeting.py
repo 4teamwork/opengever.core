@@ -1,6 +1,9 @@
 from opengever.core.model import Base
 from opengever.meeting import _
 from opengever.meeting.model import AgendaItem
+from opengever.meeting.workflow import State
+from opengever.meeting.workflow import Transition
+from opengever.meeting.workflow import Workflow
 from plone import api
 from sqlalchemy import Column
 from sqlalchemy import Date
@@ -14,13 +17,17 @@ from sqlalchemy.schema import Sequence
 
 class Meeting(Base):
 
-    PENDING = 'pending'
-    CLOSED = 'closed'
-
-    workflow_states = {
-        PENDING: _('pending', default='Pending'),
-        CLOSED: _('pending', default='Pending'),
-    }
+    workflow = Workflow([
+        State('pending', is_default=True,
+              title=_('pending', default='Pending')),
+        State('held', title=_('held', default='Held')),
+        State('closed', title=_('closed', default='Closed')),
+        ], [
+        Transition('pending', 'held',
+                   title=_('hold meeting', default='Hold meeting')),
+        Transition('held', 'closed',
+                   title=_('close', default='Close')),
+        ])
 
     __tablename__ = 'meetings'
 
@@ -32,7 +39,7 @@ class Meeting(Base):
     date = Column(Date, nullable=False)
     start_time = Column(Time)
     end_time = Column(Time)
-    workflow_state = Column(String(256), nullable=False, default=PENDING)
+    workflow_state = Column(String(256), nullable=False, default='pending')
 
     def __repr__(self):
         return '<Meeting at "{}">'.format(self.date)
@@ -41,6 +48,15 @@ class Meeting(Base):
     def physical_path(self):
         return '/'.join(
             (self.committee.physical_path, 'meeting', str(self.meeting_id)))
+
+    def execute_transition(self, name):
+        self.workflow.execute_transition(self, self, name)
+
+    def can_execute_transition(self, name):
+        return self.workflow.can_execute_transition(self, name)
+
+    def get_state(self):
+        return self.workflow.get_state(self.workflow_state)
 
     def get_edit_values(self, fieldnames):
         # XXX this should be done in a more generic way by using either
@@ -63,6 +79,11 @@ class Meeting(Base):
             values[fieldname] = value
         return values
 
+    def hold_meeting(self):
+        assert self.workflow_state == self.PENDING, 'invalid workflow state'
+
+        self.workflow_state = self.HELD
+
     def update_model(self, data):
         for key, value in data.items():
             setattr(self, key, value)
@@ -72,9 +93,6 @@ class Meeting(Base):
 
     def get_date(self):
         return self.date.strftime('%A, %d. %B %Y')
-
-    def get_workflow_state(self):
-        return self.workflow_states.get(self.workflow_state)
 
     def schedule_proposal(self, proposal):
         assert proposal.committee == self.committee

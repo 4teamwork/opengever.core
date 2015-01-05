@@ -15,7 +15,7 @@
 
         <dl>
             <dt i18n:translate="">State</dt>
-            <dd tal:content="meeting/get_workflow_state"></dd>
+            <dd tal:content="python: meeting.get_state().title"></dd>
 
             <dt i18n:translate="">Location</dt>
             <dd tal:content="meeting/location"></dd>
@@ -51,6 +51,25 @@
                 <td tal:content="agenda_item/get_title"></td>
             </tr>
         </table>
+
+        <div class="visualClear"><!----></div>
+
+        <ul class="regular_buttons">
+            <tal:block repeat="transition view/transitions">
+              <li>
+                <a tal:attributes="href python: view.transition_url(transition);
+                                   title transition/title;
+                                   id transition/name;
+                                   class string: ${transition/name} button;"
+                   i18n:attributes="title">
+                    <span tal:content="transition/title"
+                          i18n:translate=""
+                          class="subMenuTitle actionText">
+                    </span>
+                </a>
+              </li>
+            </tal:block>
+        </ul>
 
         </metal:content-core>
     </metal:content-core>

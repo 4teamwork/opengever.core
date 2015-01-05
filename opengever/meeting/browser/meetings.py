@@ -78,6 +78,28 @@ class AddMeeting(AddForm):
         return MeetingList.url_for(self.context, self._created_object)
 
 
+class HoldMeeting(BrowserView):
+
+    implements(IBrowserView)
+
+    @classmethod
+    def url_for(cls, context, meeting):
+        return "{}/{}".format(MeetingList.url_for(context, meeting),
+                              'hold')
+
+    def __init__(self, context, request, meeting):
+        super(HoldMeeting, self).__init__(context, request)
+        self.model = meeting
+
+    def nextURL(self):
+        return MeetingList.url_for(self.context, self.model)
+
+    def __call__(self):
+        self.model.hold_meeting()
+
+        return self.request.response.redirect(self.nextURL())
+
+
 class EditMeeting(EditForm):
 
     ignoreContext = True
@@ -237,6 +259,39 @@ class ScheduleText(ScheduleSubmittedProposal):
         return self.request.response.redirect(self.nextURL())
 
 
+class MeetingTransitionController(BrowserView):
+
+    implements(IBrowserView)
+
+    def __init__(self, context, request, model):
+        super(MeetingTransitionController, self).__init__(context, request)
+        self.model = model
+
+    def __call__(self):
+        transition = self.request.get('transition')
+        if not self.is_valid_transition(transition):
+            raise NotFound
+
+        self.execute_transition(transition)
+        return self.redirect_to_meeting()
+
+    @classmethod
+    def url_for(cls, context, meeting, transition):
+        return "{}/{}?transition={}".format(
+            MeetingList.url_for(context, meeting),
+            'meetingtransitioncontroller',
+            transition)
+
+    def is_valid_transition(self, transition_name):
+        return self.model.can_execute_transition(transition_name)
+
+    def execute_transition(self, transition_name):
+        return self.model.execute_transition(transition_name)
+
+    def redirect_to_meeting(self):
+        return self.request.RESPONSE.redirect(self.model.get_url())
+
+
 class MeetingView(BrowserView):
 
     template = ViewPageTemplateFile('meetings_templates/meeting.pt')
@@ -246,13 +301,12 @@ class MeetingView(BrowserView):
     is_model_edit_view = False
 
     mapped_actions = {
+        'hold': HoldMeeting,
         'edit': EditMeeting,
         'schedule_proposal': ScheduleSubmittedProposal,
         'schedule_text': ScheduleText,
+        'meetingtransitioncontroller': MeetingTransitionController,
     }
-
-    def unscheduled_proposals(self):
-        return self.context.get_unscheduled_proposals()
 
     def __init__(self, context, request, meeting):
         super(MeetingView, self).__init__(context, request)
@@ -260,6 +314,13 @@ class MeetingView(BrowserView):
 
     def __call__(self):
         return self.template()
+
+    def transition_url(self, transition):
+        return MeetingTransitionController.url_for(
+            self.context, self.model, transition.name)
+
+    def unscheduled_proposals(self):
+        return self.context.get_unscheduled_proposals()
 
     def publishTraverse(self, request, name):
         if name in self.mapped_actions:
@@ -272,6 +333,9 @@ class MeetingView(BrowserView):
 
     def url_schedule_text(self):
         return ScheduleText.url_for(self.context, self.model)
+
+    def transitions(self):
+        return self.model.get_state().get_transitions()
 
     def agenda_items(self):
         return self.model.agenda_items
