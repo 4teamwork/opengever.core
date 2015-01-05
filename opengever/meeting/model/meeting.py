@@ -101,14 +101,22 @@ class Meeting(Base):
         self.reorder_agenda_items()
 
     def schedule_text(self, title):
-        self.agenda_items.append(AgendaItem(meeting=self, title=title))
+        self.agenda_items.append(AgendaItem(title=title))
+        self.reorder_agenda_items()
+
+    def schedule_paragraph(self, title):
+        self.agenda_items.append(AgendaItem(title=title, is_paragraph=True))
         self.reorder_agenda_items()
 
     def reorder_agenda_items(self):
         sort_order = 1
+        number = 1
         for agenda_item in self.agenda_items:
             agenda_item.sort_order = sort_order
             sort_order += 1
+            if not agenda_item.is_paragraph:
+                agenda_item.number = '{}.'.format(number)
+                number += 1
 
     def get_submitted_link(self):
         return self._get_link(self.get_submitted_admin_unit(),

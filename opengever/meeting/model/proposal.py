@@ -92,5 +92,4 @@ class Proposal(Base):
         assert self.can_be_scheduled()
 
         self.workflow_state = 'scheduled'
-        agenda_item = AgendaItem(meeting=meeting, proposal=self)
-        meeting.agenda_items.append(agenda_item)
+        AgendaItem(meeting=meeting, proposal=self)

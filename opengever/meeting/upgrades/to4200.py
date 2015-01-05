@@ -1,4 +1,5 @@
 from opengever.core.upgrade import SchemaMigration
+from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import Date
 from sqlalchemy import ForeignKey
@@ -39,6 +40,8 @@ class AddMeetingTable(SchemaMigration):
             Column("agenda_item_id", Integer, ForeignKey('meetings.id'), nullable=False),
             Column("proposal_id", Integer, ForeignKey('proposals.id')),
             Column("title", Text),
+            Column('number', String(16)),
+            Column('is_paragraph', Boolean, nullable=False, default=False),
             Column("sort_order", Integer, nullable=False, default=0),
         )
 

@@ -1,7 +1,9 @@
 from opengever.core.model import Base
+from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
+from sqlalchemy import String
 from sqlalchemy import Text
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
@@ -23,6 +25,8 @@ class AgendaItem(Base):
     proposal = relationship("Proposal", backref='agenda_item', uselist=False)
 
     title = Column(Text)
+    number = Column(String(16))
+    is_paragraph = Column(Boolean, nullable=False, default=False)
     sort_order = Column(Integer, nullable=False, default=0)
 
     def get_title(self):

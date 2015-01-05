@@ -259,6 +259,21 @@ class ScheduleText(ScheduleSubmittedProposal):
         return self.request.response.redirect(self.nextURL())
 
 
+class ScheduleParagraph(ScheduleText):
+
+    @classmethod
+    def url_for(cls, context, meeting):
+        return "{}/{}".format(MeetingList.url_for(context, meeting),
+                              'schedule_paragraph')
+
+    def __call__(self):
+        title = self.extract_title()
+        if title:
+            self.meeting.schedule_paragraph(title)
+
+        return self.request.response.redirect(self.nextURL())
+
+
 class MeetingTransitionController(BrowserView):
 
     implements(IBrowserView)
@@ -303,6 +318,7 @@ class MeetingView(BrowserView):
     mapped_actions = {
         'hold': HoldMeeting,
         'edit': EditMeeting,
+        'schedule_paragraph': ScheduleParagraph,
         'schedule_proposal': ScheduleSubmittedProposal,
         'schedule_text': ScheduleText,
         'meetingtransitioncontroller': MeetingTransitionController,
@@ -333,6 +349,9 @@ class MeetingView(BrowserView):
 
     def url_schedule_text(self):
         return ScheduleText.url_for(self.context, self.model)
+
+    def url_schedule_paragraph(self):
+        return ScheduleParagraph.url_for(self.context, self.model)
 
     def transitions(self):
         return self.model.get_state().get_transitions()
