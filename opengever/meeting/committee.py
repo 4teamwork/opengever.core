@@ -29,6 +29,12 @@ class Committee(ModelContainer):
     model_schema = ICommitteeModel
     model_class = CommitteeModel
 
+    def Title(self):
+        model = self.load_model()
+        if not model:
+            return ''
+        return model.title
+
     def get_unscheduled_proposals(self):
         committee_model = self.load_model()
         return meeting_service().get_submitted_proposals(committee_model)

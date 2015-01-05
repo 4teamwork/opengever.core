@@ -2,6 +2,7 @@ from datetime import date
 from ftw.builder import builder_registry
 from opengever.globalindex.model.task import Task
 from opengever.meeting.model import Committee
+from opengever.meeting.model import Meeting
 from opengever.meeting.model import Member
 from opengever.meeting.model import Membership
 from opengever.meeting.model import Proposal as ProposalModel
@@ -154,3 +155,10 @@ class MemberShipBuilder(SqlObjectBuilder):
         raise NotImplementedError
 
 builder_registry.register('membership', MemberShipBuilder)
+
+
+class MeetingBuilder(SqlObjectBuilder):
+
+    mapped_class = Meeting
+
+builder_registry.register('meeting', MeetingBuilder)

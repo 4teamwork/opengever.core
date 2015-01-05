@@ -85,6 +85,12 @@ class ProposalBase(ModelContainer):
 
     workflow = None
 
+    def Title(self):
+        model = self.load_model()
+        if not model:
+            return ''
+        return model.title
+
     def get_overview_attributes(self):
         model = self.load_model()
         assert model, 'missing db-model for {}'.format(self)
