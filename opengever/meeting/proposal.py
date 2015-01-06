@@ -40,6 +40,35 @@ class IProposalModel(Interface):
         required=True)
 
 
+class ISubmittedProposalModel(Interface):
+    """Proposal model schema interface."""
+
+    title = schema.TextLine(
+        title=_(u"label_title", default=u"Title"),
+        description=_('help_title', default=u""),
+        required=True,
+        max_length=256,
+        )
+
+    initial_position = schema.Text(
+        title=_('label_initial_position', default=u"Proposal"),
+        description=_("help_initial_position", default=u""),
+        required=False,
+        )
+
+    considerations = schema.Text(
+        title=_('label_considerations', default=u"Considerations"),
+        description=_("help_considerations", default=u""),
+        required=False,
+        )
+
+    proposal = schema.Text(
+        title=_('label_proposal', default=u"Proposal"),
+        description=_("help_proposal", default=u""),
+        required=False,
+        )
+
+
 class IProposal(form.Schema):
     """Proposal Proxy Object Schema Interface"""
 
@@ -144,7 +173,7 @@ class SubmittedProposal(ProposalBase):
     """Proxy for a proposal in queue with a committee."""
 
     content_schema = ISubmittedProposal
-    model_schema = IProposalModel
+    model_schema = ISubmittedProposalModel
     model_class = ProposalModel
 
     implements(content_schema)
@@ -161,6 +190,21 @@ class SubmittedProposal(ProposalBase):
         Transition('scheduled', 'decided',
                    title=_('decide', default='Decide')),
         ])
+
+    def get_overview_attributes(self):
+        data = super(SubmittedProposal, self).get_overview_attributes()
+        model = self.load_model()
+        data.extend([
+            {
+                'label': _('label_considerations'),
+                'value': model.considerations,
+            },
+            {
+                'label': _('label_proposal'),
+                'value': model.proposal,
+            },
+        ])
+        return data
 
     @classmethod
     def create(cls, proposal, container):

@@ -44,6 +44,9 @@ class Proposal(Base):
     workflow_state = Column(String(256), nullable=False)
     initial_position = Column(Text)
 
+    considerations = Column(Text)
+    proposal = Column(Text)
+
     committee_id = Column(Integer, ForeignKey('committees.id'))
     committee = relationship('Committee', backref='proposals')
 

@@ -48,6 +48,10 @@ class AddMeetingTable(SchemaMigration):
     def add_proposal_columns(self):
         self.op.add_column('proposal',
                            Column('submitted_physical_path', String(256)))
+        self.op.add_column('proposal',
+                           Column('considerations', Text))
+        self.op.add_column('proposal',
+                           Column('proposal', Text))
 
     def add_committee_columns(self):
         self.op.add_column('committees',
