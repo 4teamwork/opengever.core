@@ -7,6 +7,7 @@ from opengever.meeting.proposal import Proposal
 from opengever.meeting.proposal import SubmittedProposal
 from plone.directives import dexterity
 from z3c.form import field
+from z3c.form.interfaces import HIDDEN_MODE
 
 
 class ProposalEditForm(MeetingModelEditForm, dexterity.EditForm):
@@ -21,6 +22,10 @@ class SubmittedProposalEditForm(MeetingModelEditForm, dexterity.EditForm):
     grok.context(ISubmittedProposal)
     fields = field.Fields(SubmittedProposal.model_schema, ignoreContext=True)
     content_type = Proposal
+
+    def updateWidgets(self):
+        super(SubmittedProposalEditForm, self).updateWidgets()
+        self.widgets['relatedItems'].mode = HIDDEN_MODE
 
 
 class AddForm(MeetingModelAddForm, dexterity.AddForm):
