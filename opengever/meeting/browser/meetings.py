@@ -1,5 +1,6 @@
 from five import grok
 from opengever.core.model import create_session
+from opengever.core.model import create_session
 from opengever.meeting import _
 from opengever.meeting.committee import ICommittee
 from opengever.meeting.model import Meeting
@@ -76,28 +77,6 @@ class AddMeeting(AddForm):
 
     def nextURL(self):
         return MeetingList.url_for(self.context, self._created_object)
-
-
-class HoldMeeting(BrowserView):
-
-    implements(IBrowserView)
-
-    @classmethod
-    def url_for(cls, context, meeting):
-        return "{}/{}".format(MeetingList.url_for(context, meeting),
-                              'hold')
-
-    def __init__(self, context, request, meeting):
-        super(HoldMeeting, self).__init__(context, request)
-        self.model = meeting
-
-    def nextURL(self):
-        return MeetingList.url_for(self.context, self.model)
-
-    def __call__(self):
-        self.model.hold_meeting()
-
-        return self.request.response.redirect(self.nextURL())
 
 
 class EditMeeting(EditForm):
@@ -307,6 +286,55 @@ class MeetingTransitionController(BrowserView):
         return self.request.RESPONSE.redirect(self.model.get_url())
 
 
+class DeleteAgendaItem(BrowserView):
+
+    implements(IBrowserView, IPublishTraverse)
+
+    @classmethod
+    def url_for(cls, context, meeting, agend_item):
+        return "{}/{}/{}".format(
+            MeetingList.url_for(context, meeting),
+            'delete_agenda_item',
+            agend_item.agenda_item_id)
+
+    def __init__(self, context, request, model):
+        super(DeleteAgendaItem, self).__init__(context, request)
+        self.model = model
+        self.item_id = None
+
+    def nextURL(self):
+        return MeetingList.url_for(self.context, self.model)
+
+    def publishTraverse(self, request, name):
+        # we only support exactly one id
+        if self.item_id:
+            raise NotFound
+        self.item_id = name
+        return self
+
+    def __call__(self):
+        if not self.item_id:
+            raise NotFound
+
+        try:
+            item_id = int(self.item_id)
+        except ValueError:
+            raise NotFound
+
+        agenda_item = meeting_service().fetch_agenda_item(item_id)
+        if not agenda_item:
+            raise NotFound
+
+        meeting = agenda_item.meeting
+        assert meeting.is_editable()
+
+        session = create_session()
+        session.delete(agenda_item)
+        meeting.reorder_agenda_items()
+
+        return self.request.response.redirect(self.nextURL())
+
+
 class MeetingView(BrowserView):
 
     template = ViewPageTemplateFile('meetings_templates/meeting.pt')
@@ -316,8 +344,8 @@ class MeetingView(BrowserView):
     is_model_edit_view = False
 
     mapped_actions = {
-        'hold': HoldMeeting,
         'edit': EditMeeting,
+        'delete_agenda_item': DeleteAgendaItem,
         'schedule_paragraph': ScheduleParagraph,
         'schedule_proposal': ScheduleSubmittedProposal,
         'schedule_text': ScheduleText,
@@ -352,6 +380,9 @@ class MeetingView(BrowserView):
 
     def url_schedule_paragraph(self):
         return ScheduleParagraph.url_for(self.context, self.model)
+
+    def url_delete_agenda_item(self, agenda_item):
+        return DeleteAgendaItem.url_for(self.context, self.model, agenda_item)
 
     def transitions(self):
         return self.model.get_state().get_transitions()

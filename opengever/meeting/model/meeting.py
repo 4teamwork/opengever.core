@@ -17,10 +17,13 @@ from sqlalchemy.schema import Sequence
 
 class Meeting(Base):
 
+    STATE_PENDING = State('pending', is_default=True,
+                    title=_('pending', default='Pending'))
+    STATE_HELD = State('held', title=_('held', default='Held'))
+
     workflow = Workflow([
-        State('pending', is_default=True,
-              title=_('pending', default='Pending')),
-        State('held', title=_('held', default='Held')),
+        STATE_PENDING,
+        STATE_HELD,
         State('closed', title=_('closed', default='Closed')),
         ], [
         Transition('pending', 'held',
@@ -43,6 +46,9 @@ class Meeting(Base):
 
     def __repr__(self):
         return '<Meeting at "{}">'.format(self.date)
+
+    def is_editable(self):
+        return self.get_state() == self.STATE_PENDING
 
     @property
     def physical_path(self):
@@ -78,11 +84,6 @@ class Meeting(Base):
                 value = value.strftime('%H:%M')
             values[fieldname] = value
         return values
-
-    def hold_meeting(self):
-        assert self.workflow_state == self.PENDING, 'invalid workflow state'
-
-        self.workflow_state = self.HELD
 
     def update_model(self, data):
         for key, value in data.items():

@@ -62,6 +62,11 @@
                 <td>
                   <b tal:omit-tag="not: agenda_item/is_paragraph" tal:content="agenda_item/get_title" />
                 </td>
+                <td>
+                  <a tal:condition="meeting/is_editable"
+                     tal:attributes="href python: view.url_delete_agenda_item(agenda_item)"
+                     i18n:translate="">delete</a>
+                </td>
             </tr>
         </table>
 
