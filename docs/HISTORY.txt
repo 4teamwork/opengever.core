@@ -5,6 +5,10 @@ Changelog
 4.1.1 (unreleased)
 ------------------
 
+- Dossier workflow: Also allow Administrator role to activate deactivated
+  dossiers.
+  [lgraf]
+
 - OrgUnitSelector: Fix fallback logic:
 
   Build intersection of current admin units' org units and
