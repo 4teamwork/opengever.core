@@ -149,6 +149,10 @@ class CreateOpengeverClient(BrowserView):
             default_language=config.get('language', 'de-ch'),
         )
 
+        registry = getUtility(IRegistry)
+        proxy = registry.forInterface(IAdminUnitConfiguration)
+        proxy.current_unit_id = form['client_id'].decode('utf-8')
+
         # ldap
         stool = getToolByName(site, 'portal_setup')
         if form.get('ldap'):
@@ -225,10 +229,6 @@ class CreateOpengeverClient(BrowserView):
                 site_url=form['site_url'],
                 public_url=form['public_url'],
             )
-
-            registry = getUtility(IRegistry)
-            proxy = registry.forInterface(IAdminUnitConfiguration)
-            proxy.current_unit_id = form['client_id'].decode('utf-8')
 
             client = OrgUnit(form['client_id'],
                              enabled=active,

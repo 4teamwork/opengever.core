@@ -5,7 +5,9 @@ Changelog
 4.0.8 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Setup: Make sure to set `current_unit_id` registry setting
+  even when `SQL` is not ticked.
+  [lgraf]
 
 
 4.0.7 (2015-01-06)
