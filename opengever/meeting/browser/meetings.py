@@ -1,10 +1,12 @@
 from five import grok
-from opengever.core.model import create_session
+from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.core.model import create_session
 from opengever.meeting import _
 from opengever.meeting.committee import ICommittee
 from opengever.meeting.model import Meeting
 from opengever.meeting.service import meeting_service
+from plone.autoform.form import AutoExtensibleForm
+from plone.directives import form
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import button
@@ -15,12 +17,11 @@ from z3c.form.interfaces import HIDDEN_MODE
 from zExceptions import NotFound
 from zope import schema
 from zope.interface import implements
-from zope.interface import Interface
 from zope.publisher.interfaces import IPublishTraverse
 from zope.publisher.interfaces.browser import IBrowserView
 
 
-class IMeetingModel(Interface):
+class IMeetingModel(form.Schema):
     """Proposal model schema interface."""
 
     committee = schema.Choice(
@@ -34,6 +35,7 @@ class IMeetingModel(Interface):
         max_length=256,
         required=False)
 
+    form.widget(date=DatePickerFieldWidget)
     date = schema.Date(
         title=_('label_date', default=u"Date"),
         description=_("help_date", default=u""),
@@ -50,10 +52,10 @@ class IMeetingModel(Interface):
         required=False)
 
 
-class AddMeeting(AddForm):
+class AddMeeting(AutoExtensibleForm, AddForm):
 
     ignoreContext = True
-    fields = field.Fields(IMeetingModel)
+    schema = IMeetingModel
 
     def updateWidgets(self):
         super(AddMeeting, self).updateWidgets()
