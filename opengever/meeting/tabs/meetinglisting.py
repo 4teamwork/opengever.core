@@ -28,10 +28,12 @@ class MeetingListingTab(BaseListingTab):
          'transform': lambda item, value: item.get_date()},
 
         {'column': 'start_time',
-         'column_title': _(u'column_start_time', default=u'Start Time')},
+         'column_title': _(u'column_start_time', default=u'Start Time'),
+         'transform': lambda item, value: item.get_start_time()},
 
         {'column': 'end_time',
-         'column_title': _(u'column_end_time', default=u'End Time')},
+         'column_title': _(u'column_end_time', default=u'End Time'),
+         'transform': lambda item, value: item.get_end_time()},
         )
 
     def get_base_query(self):

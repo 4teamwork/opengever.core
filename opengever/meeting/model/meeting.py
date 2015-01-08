@@ -18,7 +18,7 @@ from sqlalchemy.schema import Sequence
 class Meeting(Base):
 
     STATE_PENDING = State('pending', is_default=True,
-                    title=_('pending', default='Pending'))
+                          title=_('pending', default='Pending'))
     STATE_HELD = State('held', title=_('held', default='Held'))
 
     workflow = Workflow([
@@ -94,6 +94,12 @@ class Meeting(Base):
 
     def get_date(self):
         return self.date.strftime('%A, %d. %B %Y')
+
+    def get_start_time(self):
+        return self.start_time.strftime('%H:%M') if self.start_time else ''
+
+    def get_end_time(self):
+        return self.end_time.strftime('%H:%M') if self.end_time else ''
 
     def schedule_proposal(self, proposal):
         assert proposal.committee == self.committee
