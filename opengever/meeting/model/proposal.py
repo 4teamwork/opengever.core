@@ -20,7 +20,7 @@ class Proposal(Base):
 
     query_cls = ProposalQuery
 
-    __tablename__ = 'proposal'
+    __tablename__ = 'proposals'
     __table_args__ = (
         UniqueConstraint('admin_unit_id', 'int_id'),
         UniqueConstraint('submitted_admin_unit_id', 'submitted_int_id'),
