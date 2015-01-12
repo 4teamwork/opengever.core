@@ -2,6 +2,7 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
 
+  <!-- 3000 -> 3100 -->
   <genericsetup:upgradeStep
       title="Enable zipexport on supported types."
       description=""
@@ -20,6 +21,17 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
+  <!-- 3100 -> 3400 -->
+  <genericsetup:upgradeStep
+      title="Rebuild indexes and metadata for documentish objects"
+      description=""
+      source="3100"
+      destination="3400"
+      handler="opengever.policy.base.upgrades.to3400.RebuildIndexesForDocumentishObjects"
+      profile="opengever.policy.base:default"
+       />
+
+  <!-- 3400 -> 4000 -->
   <genericsetup:registerProfile
       name="4000"
       title="opengever.policy.base: upgrade profile 4000"
