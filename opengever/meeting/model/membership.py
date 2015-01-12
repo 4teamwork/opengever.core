@@ -23,8 +23,8 @@ class Membership(Base):
     member = relationship("Member", backref="memberships")
 
     def __repr__(self):
-        return '<Membership "{}" in "{}" {}:{}>'.format(
-            self.member.fullname,
-            self.committee.title,
+        return '<Membership {} in {} {}:{}>'.format(
+            repr(self.member.fullname),
+            repr(self.committee.title),
             self.date_from,
             self.date_to)

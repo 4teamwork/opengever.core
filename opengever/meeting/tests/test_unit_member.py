@@ -14,6 +14,6 @@ class TestUnitMember(TestCase):
 
     def test_string_representation(self):
         proposal = create(Builder('member').having(
-            firstname='Peter', lastname="Meier"))
-        self.assertEqual('<Member "Peter Meier">', str(proposal))
-        self.assertEqual('<Member "Peter Meier">', repr(proposal))
+            firstname=u'Peter', lastname=u'M\xfcller'))
+        self.assertEqual("<Member u'Peter M\\xfcller'>", str(proposal))
+        self.assertEqual("<Member u'Peter M\\xfcller'>", repr(proposal))

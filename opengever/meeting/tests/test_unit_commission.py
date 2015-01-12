@@ -13,6 +13,7 @@ class TestUnitCommittee(TestCase):
         self.session = self.layer.session
 
     def test_string_representation(self):
-        proposal = create(Builder('committee_model').having(title='Peter'))
-        self.assertEqual('<Committee "Peter">', str(proposal))
-        self.assertEqual('<Committee "Peter">', repr(proposal))
+        committee = create(Builder('committee_model')
+                           .having(title=u'\xdcbungskommission'))
+        self.assertEqual("<Committee u'\\xdcbungskommission'>", str(committee))
+        self.assertEqual("<Committee u'\\xdcbungskommission'>", repr(committee))

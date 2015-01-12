@@ -25,4 +25,4 @@ class Committee(Base):
     title = Column(String(256))
 
     def __repr__(self):
-        return '<Committee "{}">'.format(self.title)
+        return '<Committee {}>'.format(repr(self.title))

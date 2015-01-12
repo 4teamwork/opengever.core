@@ -13,11 +13,12 @@ class TestUnitMembership(TestCase):
         self.session = self.layer.session
 
     def test_string_representation(self):
-        member = create(Builder('member'))
-        committee = create(Builder('committee_model'))
+        member = create(Builder('member').having(lastname=u'M\xfcller'))
+        committee = create(Builder('committee_model')
+                           .having(title=u'\xdcbungskommission'))
         membership = create(Builder('membership').having(
             committee=committee, member=member))
 
-        expected = '<Membership "Peter Meier" in "Bar" 2010-01-01:2014-01-01>'
+        expected = "<Membership u'Peter M\\xfcller' in u'\\xdcbungskommission' 2010-01-01:2014-01-01>"
         self.assertEqual(expected, str(membership))
         self.assertEqual(expected, repr(membership))

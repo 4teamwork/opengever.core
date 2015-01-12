@@ -18,4 +18,4 @@ class Member(Base):
     email = Column(String(256))
 
     def __repr__(self):
-        return '<Member "{}">'.format(self.fullname)
+        return '<Member {}>'.format(repr(self.fullname))
