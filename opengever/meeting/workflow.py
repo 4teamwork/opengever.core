@@ -45,17 +45,17 @@ class Workflow(object):
         self.states = {}
         for state in states:
             if state.is_default:
-                assert self.default_state is None
+                assert self.default_state is None, 'only one default state is allowed'
                 self.default_state = state
             self.states[state.name] = state
-        assert self.default_state
+        assert self.default_state, 'missing default state'
 
         self.transitions = {}
         for transition in transitions:
             assert transition.name not in self.transitions
             state_from = self.states.get(transition.state_from)
-            assert self.states.get(transition.state_to)
-            assert state_from
+            assert self.states.get(transition.state_to), 'no such state: {}'.format(transition.state_to)
+            assert state_from, 'no such state: {}'.format(transition.state_from)
 
             self.transitions[transition.name] = transition
             state_from.register_transition(transition)
@@ -65,7 +65,7 @@ class Workflow(object):
 
     def execute_transition(self, obj, model, name):
         transition = self.transitions.get(name)
-        assert transition
+        assert transition, 'no such transition: {}'.format(name)
         transition.execute(obj, model)
 
     def can_execute_transition(self, model, name):
