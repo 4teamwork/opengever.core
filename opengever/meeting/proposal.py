@@ -23,14 +23,12 @@ class IProposalModel(Interface):
 
     title = schema.TextLine(
         title=_(u"label_title", default=u"Title"),
-        description=_('help_title', default=u""),
         required=True,
         max_length=256,
         )
 
     initial_position = schema.Text(
         title=_('label_initial_position', default=u"Proposal"),
-        description=_("help_initial_position", default=u""),
         required=False,
         )
 

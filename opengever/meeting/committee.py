@@ -16,7 +16,6 @@ class ICommitteeModel(Interface):
 
     title = schema.TextLine(
         title=_(u"label_title", default=u"Title"),
-        description=_('help_title', default=u""),
         required=True,
         max_length=256,
         )
