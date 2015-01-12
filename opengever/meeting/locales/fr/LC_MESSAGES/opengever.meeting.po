@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-12-04 14:33+0000\n"
+"POT-Creation-Date: 2015-01-12 16:37+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,41 +14,45 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
+#: ./opengever/meeting/profiles/default/types/opengever.meeting.committee.xml
+msgid "Committee"
+msgstr ""
+
+#: ./opengever/meeting/profiles/default/types/opengever.meeting.committeecontainer.xml
+msgid "Committee Container"
+msgstr ""
+
 #: ./opengever/meeting/profiles/default/types/opengever.meeting.proposal.xml
 msgid "Proposal"
 msgstr ""
 
+#: ./opengever/meeting/profiles/default/types/opengever.meeting.submittedproposal.xml
+msgid "Submitted Proposal"
+msgstr ""
+
 #. Default: "Decide"
-#: ./opengever/meeting/proposal.py:84
+#: ./opengever/meeting/proposal.py:154
 msgid "decide"
 msgstr ""
 
 #. Default: "Decided"
-#: ./opengever/meeting/proposal.py:77
+#: ./opengever/meeting/proposal.py:149
 msgid "decided"
 msgstr ""
 
-#: ./opengever/meeting/proposal.py:33
-msgid "help_initial_position"
-msgstr ""
-
-#: ./opengever/meeting/proposal.py:26
-msgid "help_title"
-msgstr ""
-
 #. Default: "Committee"
-#: ./opengever/meeting/proposal.py:38
+#: ./opengever/meeting/proposal.py:36
 msgid "label_committee"
 msgstr ""
 
 #. Default: "Documents"
 #: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt:31
-#: ./opengever/meeting/proposal.py:47
+#: ./opengever/meeting/proposal.py:45
 msgid "label_documents"
 msgstr ""
 
 #. Default: "Proposal"
-#: ./opengever/meeting/proposal.py:32
+#: ./opengever/meeting/proposal.py:31
 msgid "label_initial_position"
 msgstr ""
 
@@ -58,36 +62,37 @@ msgid "label_main_attributes"
 msgstr ""
 
 #. Default: "Title"
+#: ./opengever/meeting/committee.py:18
 #: ./opengever/meeting/proposal.py:25
 msgid "label_title"
 msgstr ""
 
-#: ./opengever/meeting/proposal.py:132
+#: ./opengever/meeting/proposal.py:100
 msgid "label_workflow_state"
 msgstr ""
 
 #. Default: "Pending"
-#: ./opengever/meeting/proposal.py:74
+#: ./opengever/meeting/proposal.py:146
 msgid "pending"
 msgstr ""
 
 #. Default: "Schedule"
-#: ./opengever/meeting/proposal.py:82
+#: ./opengever/meeting/proposal.py:152
 msgid "schedule"
 msgstr ""
 
 #. Default: "Scheduled"
-#: ./opengever/meeting/proposal.py:76
+#: ./opengever/meeting/proposal.py:148
 msgid "scheduled"
 msgstr ""
 
 #. Default: "Submit"
-#: ./opengever/meeting/proposal.py:80
+#: ./opengever/meeting/proposal.py:213
 msgid "submit"
 msgstr ""
 
 #. Default: "Submited"
-#: ./opengever/meeting/proposal.py:75
+#: ./opengever/meeting/proposal.py:147
 msgid "submitted"
 msgstr ""
 
