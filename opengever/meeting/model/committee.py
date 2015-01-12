@@ -1,5 +1,5 @@
+from opengever.base.model import Base
 from opengever.base.oguid import Oguid
-from opengever.core.model import Base
 from opengever.meeting.model.query import CommitteeQuery
 from sqlalchemy import Column
 from sqlalchemy import Integer

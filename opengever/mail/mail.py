@@ -8,7 +8,7 @@ from ftw.mail import utils
 from ftw.mail.mail import IMail
 from opengever.base import _ as base_mf
 from opengever.base.browser.helper import get_css_class
-from opengever.core.model import create_session
+from opengever.base.model import create_session
 from opengever.document.behaviors import metadata as ogmetadata
 from opengever.dossier import _
 from opengever.ogds.models.user import User

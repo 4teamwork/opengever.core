@@ -1,4 +1,4 @@
-from opengever.core.model import create_session
+from opengever.base.model import create_session
 from opengever.ogds.base.interfaces import ISyncStamp
 from opengever.ogds.base.ou_selector import CURRENT_ORG_UNIT_KEY
 from opengever.ogds.base.sync.import_stamp import update_sync_stamp

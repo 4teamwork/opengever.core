@@ -1,5 +1,5 @@
+from opengever.base.model import create_session
 from opengever.contact import contact_service
-from opengever.core.model import create_session
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.interfaces import ISyncStamp
 from opengever.ogds.base.utils import ogds_service

@@ -1,6 +1,6 @@
 from AccessControl.SecurityInfo import ClassSecurityInformation
 from datetime import datetime
-from opengever.core.model import create_session
+from opengever.base.model import create_session
 from opengever.setup.deploy import GeverDeployment
 from opengever.setup.interfaces import IDeploymentConfigurationRegistry
 from opengever.setup.interfaces import ILDAPConfigurationRegistry

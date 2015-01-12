@@ -1,6 +1,6 @@
 from five import grok
 from ftw.table.interfaces import ITableSource, ITableSourceConfig
-from opengever.core.model import create_session
+from opengever.base.model import create_session
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.models.user import User
 from opengever.tabbedview import _

@@ -1,5 +1,5 @@
 from ftw.upgrade import UpgradeStep
-from opengever.core import model
+from opengever.base import model
 
 
 class InstallMeeting(UpgradeStep):

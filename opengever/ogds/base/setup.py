@@ -1,5 +1,5 @@
 from ftw.dictstorage.sql import DictStorageModel
-from opengever.core.model import create_session
+from opengever.base.model import create_session
 from opengever.ogds.models import BASE
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.org_unit import OrgUnit

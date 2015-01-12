@@ -1,5 +1,5 @@
+from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
-from opengever.core.model import create_session
 from plone.dexterity.content import Container
 from z3c.form import interfaces
 from zope.event import notify

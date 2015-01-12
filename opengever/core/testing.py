@@ -4,8 +4,8 @@ from ftw.builder.testing import BUILDER_LAYER
 from ftw.builder.testing import set_builder_session_factory
 from ftw.testing import ComponentRegistryLayer
 from ftw.testing.quickinstaller import snapshots
-from opengever.core import model
-from opengever.core.model import create_session
+from opengever.base import model
+from opengever.base.model import create_session
 from opengever.meeting.interfaces import IMeetingSettings
 from opengever.ogds.base.setup import create_sql_tables
 from opengever.ogds.models import BASE

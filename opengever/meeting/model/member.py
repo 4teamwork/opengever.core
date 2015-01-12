@@ -1,4 +1,4 @@
-from opengever.core.model import Base
+from opengever.base.model import Base
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import String

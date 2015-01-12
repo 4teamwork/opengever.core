@@ -2,7 +2,7 @@ from five import grok
 from ftw.table import helper
 from ftw.table.basesource import BaseTableSource
 from ftw.table.interfaces import ITableSource, ITableSourceConfig
-from opengever.core.model import create_session
+from opengever.base.model import create_session
 from opengever.globalindex.model.task import Task
 from opengever.ogds.models.org_unit import OrgUnit
 from opengever.tabbedview import _

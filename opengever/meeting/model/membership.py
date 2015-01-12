@@ -1,4 +1,4 @@
-from opengever.core.model import Base
+from opengever.base.model import Base
 from sqlalchemy import Column
 from sqlalchemy import Date
 from sqlalchemy import ForeignKey

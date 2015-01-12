@@ -1,4 +1,4 @@
-from opengever.core.model import create_session
+from opengever.base.model import create_session
 from opengever.meeting.model import Committee
 from opengever.meeting.model import Proposal
 

@@ -1,6 +1,6 @@
 from datetime import datetime
 from datetime import timedelta
-from opengever.core.model import create_session
+from opengever.base.model import create_session
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.ou_selector import AnonymousOrgUnitSelector
 from opengever.ogds.base.ou_selector import NoAssignedUnitsOrgUnitSelector
