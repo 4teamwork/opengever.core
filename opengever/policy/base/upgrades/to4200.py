@@ -8,7 +8,7 @@ class InstallMeeting(UpgradeStep):
         self.setup_install_profile(
             'profile-opengever.meeting:default')
         self.setup_install_profile(
-            'profile-opengever.policy.base.upgrades:4000')
+            'profile-opengever.policy.base.upgrades:4200')
         self.create_meeting_tables()
 
     def create_meeting_tables(self):
