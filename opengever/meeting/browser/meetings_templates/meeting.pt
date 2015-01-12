@@ -40,14 +40,14 @@
 
         <form method="post" tal:attributes="action view/url_schedule_text"
               id="schedule_text">
-            <input type="textline" name="title" />
+            <input type="textline" name="title" id="text-agenda-item" />
             <input type="submit" name="submit" id="submit-schedule"
                    i18n:attributes="value schedule" />
         </form>
 
         <h2 i18n:translate="">Add new Paragraph</h2>
         <form method="post" tal:attributes="action view/url_schedule_paragraph"
-              id="schedule_text">
+              id="schedule_paragraph">
             <input type="textline" name="title" />
             <input type="submit" name="submit" id="submit-schedule"
                    i18n:attributes="value schedule" />
@@ -64,6 +64,7 @@
                 </td>
                 <td>
                   <a tal:condition="meeting/is_editable"
+                     class="delete_agenda_item"
                      tal:attributes="href python: view.url_delete_agenda_item(agenda_item)"
                      i18n:translate="">delete</a>
                 </td>
