@@ -39,7 +39,6 @@ class ProposalOverview(OverviewBase, DisplayForm, OpengeverTab):
 
 
 class SubmittedProposalOverview(OverviewBase, DisplayForm, OpengeverTab):
-
     grok.context(ISubmittedProposal)
     grok.name('tabbedview_view-overview')
     grok.template('proposaloverview')

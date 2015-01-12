@@ -80,7 +80,7 @@ class Transporter(object):
 
 
 class ReceiveObject(grok.View):
-    """Receives a JSON serialzed object and creates or updates an instance
+    """Receives a JSON serialized object and creates or updates an instance
     within its context.
 
     It returns JSON containing the object's path and intid.

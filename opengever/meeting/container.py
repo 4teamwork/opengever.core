@@ -29,7 +29,7 @@ class ModelContainer(Container):
         model = self.load_model()
         for fieldname in fieldnames:
             value = getattr(model, fieldname, None)
-            if not value:
+            if value is None:
                 continue
             values[fieldname] = value
         return values
@@ -55,7 +55,7 @@ class ModelContainer(Container):
     def update_model(self, data):
         """Store form input in relational database.
 
-        KISS: Currently assumes that each input is a change an thus always
+        KISS: Currently assumes that each input is a change and thus always
         fires a changed event.
 
         """

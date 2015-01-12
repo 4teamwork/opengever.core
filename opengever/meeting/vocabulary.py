@@ -5,7 +5,7 @@ from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
 
 
-class ReferenceFormatterVocabulary(grok.GlobalUtility):
+class CommitteeVocabulary(grok.GlobalUtility):
     grok.provides(IVocabularyFactory)
     grok.name('opengever.meeting.CommitteeVocabulary')
 

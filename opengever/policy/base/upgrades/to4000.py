@@ -15,7 +15,7 @@ class InstallMeeting(UpgradeStep):
         """When installing meeting via upgrade-step we need to initialize
         its database tables.
 
-        If if is instlalled on an new plone-site `opengever.base.hooks` takes
+        If it is installed on an new plone-site `opengever.base.hooks` takes
         care of that.
 
         """

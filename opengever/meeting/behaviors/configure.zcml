@@ -2,16 +2,16 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:plone="http://namespaces.plone.org/plone"
     xmlns:grok="http://namespaces.zope.org/grok"
-    i18n_domain="collective.gtags">
+    i18n_domain="opengever.meeting">
 
     <include package="plone.behavior" file="meta.zcml" />
 
     <include package="plone.directives.form" file="meta.zcml" />
     <include package="plone.directives.form" />
 
-    <!-- name from title beahviors -->
+    <!-- name from title behaviors -->
     <plone:behavior
-        title="propsal name from title"
+        title="proposal name from title"
         description=""
         provides="opengever.meeting.behaviors.namefromtitle.IProposalNameFromTitle"
         factory=".namefromtitle.ProposalNameFromTitle"

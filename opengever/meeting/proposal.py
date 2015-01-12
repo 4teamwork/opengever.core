@@ -90,23 +90,17 @@ class ProposalBase(ModelContainer):
         assert model, 'missing db-model for {}'.format(self)
 
         return [
-            {
-                'label': _('label_title'),
-                'value': model.title,
-            },
-            {
-                'label': _('label_initial_position'),
-                'value': model.initial_position,
-            },
-            {
-                'label': _('label_committee'),
-                'value': model.committee.title,
-            },
-            {
-                'label': _('label_workflow_state'),
-                'value': self.get_state().title,
-            },
+            {'label': _('label_title'),
+             'value': model.title},
 
+            {'label': _('label_initial_position'),
+             'value': model.initial_position},
+
+            {'label': _('label_committee'),
+             'value': model.committee.title},
+
+            {'label': _('label_workflow_state'),
+             'value': self.get_state().title},
         ]
 
     def execute_transition(self, name):
@@ -140,9 +134,8 @@ class ProposalBase(ModelContainer):
         return ogds_service().fetch_admin_unit(admin_unit_id)
 
 
-
 class SubmittedProposal(ProposalBase):
-    """Proxy for a proposal in queue with a commission."""
+    """Proxy for a proposal in queue with a committee."""
 
     content_schema = ISubmittedProposal
     model_schema = IProposalModel

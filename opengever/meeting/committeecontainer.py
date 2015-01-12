@@ -8,4 +8,4 @@ class ICommitteeContainer(form.Schema):
 
 
 class CommitteeContainer(Container):
-    """Committee Container class, a container for all committeees."""
+    """Committee Container class, a container for all committees."""

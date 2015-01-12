@@ -19,7 +19,7 @@ class IProposalTableSourceConfig(ITableSourceConfig):
 
 
 class ProposalListingTab(grok.View, OpengeverTab, ListingView):
-    """A tabbed view mixing which supports listing proposals.
+    """A tabbed view mixin which supports listing proposals.
 
     There is support for searching, batching and ordering.
 
@@ -55,8 +55,7 @@ class ProposalListingTab(grok.View, OpengeverTab, ListingView):
 
 
 class ProposalTableSource(SqlTableSource):
-    """Source adapter for Tasks we got from SQL
-    """
+    """Source adapter for Proposals we got from SQL."""
 
     grok.implements(ITableSource)
     grok.adapts(ProposalListingTab, Interface)
