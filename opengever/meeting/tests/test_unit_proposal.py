@@ -2,17 +2,9 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.oguid import Oguid
 from opengever.meeting.model.proposal import Proposal
+from opengever.ogds.models.admin_unit import AdminUnit
 from opengever.testing import MEMORY_DB_LAYER
 from unittest2 import TestCase
-
-
-class MockAdminUnit(object):
-
-    def __init__(self, unit_id):
-        self.unit_id = unit_id
-
-    def id(self):
-        return self.unit_id
 
 
 class TestUnitProposal(TestCase):
@@ -65,4 +57,4 @@ class TestUnitProposal(TestCase):
 
         self.assertEqual(
             proposal,
-            Proposal.query.by_admin_unit(MockAdminUnit('unita')).first())
+            Proposal.query.by_admin_unit(AdminUnit(unit_id='unita')).first())
