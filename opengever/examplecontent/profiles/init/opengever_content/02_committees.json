@@ -2,6 +2,18 @@
     {
         "_path": "kommittees",
         "_type": "opengever.meeting.committeecontainer",
-        "title": "Kommitees"
+        "title": "Kommitees",
+        "_children": [
+            {
+                "_id": "committee-1",
+                "_type": "opengever.meeting.committee",
+                "title": "Kommission für Rechtsfragen"
+            },
+            {
+                "_id": "committee-2",
+                "_type": "opengever.meeting.committee",
+                "title": "Wirtschaftsförderungskommission"
+            }
+        ]
     }
 ]
