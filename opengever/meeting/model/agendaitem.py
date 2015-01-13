@@ -1,4 +1,4 @@
-from opengever.core.model import Base
+from opengever.base.model import Base
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
@@ -21,7 +21,7 @@ class AgendaItem(Base):
     meeting_id = Column(Integer, ForeignKey('meetings.id'), nullable=False)
     meeting = relationship("Meeting", backref='agenda_items')
 
-    proposal_id = Column(Integer, ForeignKey('proposal.id'))
+    proposal_id = Column(Integer, ForeignKey('proposals.id'))
     proposal = relationship("Proposal", backref='agenda_item', uselist=False)
 
     title = Column(Text)

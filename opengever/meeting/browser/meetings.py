@@ -1,6 +1,6 @@
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
-from opengever.core.model import create_session
+from opengever.base.model import create_session
 from opengever.meeting import _
 from opengever.meeting.committee import ICommittee
 from opengever.meeting.model import Meeting

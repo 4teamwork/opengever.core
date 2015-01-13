@@ -1,4 +1,4 @@
-from opengever.core.model import Base
+from opengever.base.model import Base
 from opengever.meeting import _
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.workflow import State
