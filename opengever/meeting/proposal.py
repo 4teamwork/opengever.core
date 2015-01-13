@@ -138,6 +138,9 @@ class ProposalBase(ModelContainer):
              'value': self.get_state().title},
         ]
 
+    def can_execute_transition(self, name):
+        return self.workflow.can_execute_transition(self.load_model(), name)
+
     def execute_transition(self, name):
         self.workflow.execute_transition(self, self.load_model(), name)
 
@@ -260,10 +263,12 @@ class Proposal(ProposalBase):
 
     implements(content_schema)
 
+    STATE_SUBMITTED = State('submitted', title=_('submitted', default='Submited'))
+
     workflow = Workflow([
         State('pending', is_default=True,
               title=_('pending', default='Pending')),
-        State('submitted', title=_('submitted', default='Submited')),
+        STATE_SUBMITTED,
         State('scheduled', title=_('scheduled', default='Scheduled')),
         State('decided', title=_('decided', default='Decided'))
         ], [

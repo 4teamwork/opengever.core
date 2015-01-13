@@ -3,6 +3,8 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.base.oguid import Oguid
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
+from opengever.meeting.interfaces import IMeetingSettings
+from opengever.meeting.proposal import Proposal
 from opengever.testing import FunctionalTestCase
 from opengever.testing import index_data_for
 from zExceptions import Unauthorized
@@ -167,3 +169,16 @@ class TestProposal(FunctionalTestCase):
         self.assertEqual(document.Title(), submitted_document.Title())
         self.assertEqual(document.file.filename,
                          submitted_document.file.filename)
+
+    @browsing
+    def test_proposal_can_be_submitted(self, browser):
+        committee = create(Builder('committee'))
+        proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .having(title='Mach doch',
+                                  committee=committee.load_model()))
+
+        browser.login().open(proposal, view='tabbedview_view-overview')
+        browser.css('#pending-submitted').first.click()
+
+        self.assertEqual(Proposal.STATE_SUBMITTED, proposal.get_state())
