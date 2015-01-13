@@ -1,9 +1,9 @@
 from datetime import datetime
 from five import grok
+from opengever.base.request import dispatch_request
 from opengever.core import dictstorage
 from opengever.ogds.base.interfaces import ISyncStamp
 from opengever.ogds.base.utils import ogds_service
-from opengever.ogds.base.utils import remote_request
 from plone import api
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from urllib2 import URLError
@@ -34,13 +34,13 @@ def set_remote_import_stamp(context):
 
     timestamp = update_sync_stamp(context)
 
-    # fake the request, because the remote_request expects it
+    # fake the request, because dispatch_request expects it
     setRequest(context.REQUEST)
 
     for admin_unit in ogds_service().all_admin_units():
         try:
-            remote_request(admin_unit.id(), '@@update_sync_stamp',
-                           data={REQUEST_SYNC_KEY: timestamp})
+            dispatch_request(admin_unit.id(), '@@update_sync_stamp',
+                             data={REQUEST_SYNC_KEY: timestamp})
             logger.info(
                 "Issued remote request to update sync_stamp on %s to %s" % (
                     admin_unit.id(), timestamp))

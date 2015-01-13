@@ -1,13 +1,10 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from opengever.ogds.base import communication
 from opengever.ogds.base.vocabulary import ContactsVocabulary
 from opengever.testing import create_ogds_user
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 from zope.component import getUtility
-from zope.component import provideUtility
-from zope.interface import implements
 from zope.schema.interfaces import IVocabularyFactory
 
 
@@ -250,7 +247,7 @@ class TestAssignedUsersVocabulary(FunctionalTestCase):
                             .with_default_groups()
                             .assign_users([user])
                             .as_current_org_unit())
-        
+
         org_unit_3 = create(Builder('org_unit')
                             .id('client3')
                             .having(title=u"Client 3", admin_unit=additional)
@@ -549,42 +546,4 @@ class TestOGDSVocabularies(FunctionalTestCase):
         self.assertTerms(
             [('contact:croft-lara', u'Croft Lara (lara.croft@test.ch)'),
              ('contact:man-super', u'M\xe4n Super (superman@test.ch)')],
-            voca_factory(self.portal))
-
-    def test_document_contains_all_documents_of_the_given_remote_dossier(self):
-
-        class ClientCommunicatorMockUtility(communication.ClientCommunicator):
-
-            implements(communication.IClientCommunicator)
-
-            def get_documents_of_dossier(self, target_client_id, dossier_path):
-                dossier_url = 'http://nohost/client2/' + dossier_path
-                return [{'path': dossier_path + '/document-1',
-                         'url': dossier_url + '/document-1',
-                         'title': 'First Document',
-                         'review_state': 'draft'},
-                        {'path': dossier_path + '/document-2',
-                         'url': dossier_url + '/document-2',
-                         'title': 'Second Document',
-                         'review_state': 'draft'}]
-
-        provideUtility(ClientCommunicatorMockUtility())
-
-        admin_unit = create(Builder('admin_unit').as_current_admin_unit())
-        create(Builder('org_unit').id("client1").having(admin_unit=admin_unit))
-        org_unit_2 = create(Builder('org_unit').id("client2")
-                            .having(admin_unit=admin_unit)
-                            .with_default_groups())
-        create(Builder('ogds_user').assign_to_org_units([org_unit_2]))
-
-        self.portal.REQUEST.set('dossier_path', 'op1/op2/dossier2')
-        self.portal.REQUEST.set('client', 'client2')
-
-        voca_factory = getUtility(
-            IVocabularyFactory,
-            name='opengever.ogds.base.DocumentInSelectedDossierVocabulary')
-
-        self.assertTerms(
-            [('op1/op2/dossier2/document-1', 'First Document'),
-             ('op1/op2/dossier2/document-2', 'Second Document')],
             voca_factory(self.portal))

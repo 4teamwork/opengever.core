@@ -1,8 +1,8 @@
 from datetime import date
 from DateTime import DateTime as ZopeDateTime
+from opengever.base.model import Base
+from opengever.base.model import Session
 from opengever.base.oguid import Oguid
-from opengever.globalindex import Session
-from opengever.globalindex.model import Base
 from opengever.globalindex.model.query import TaskQuery
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit

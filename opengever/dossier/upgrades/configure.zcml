@@ -102,4 +102,13 @@
         directory="profiles/4101"
         />
 
+    <!-- 4101 -> 4200 -->
+    <upgrade-step:importProfile
+        title="Configure dossier for new meeting content"
+        profile="opengever.dossier:default"
+        source="4101"
+        destination="4200"
+        directory="profiles/4200"
+        />
+
 </configure>

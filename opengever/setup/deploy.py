@@ -1,5 +1,6 @@
 from AccessControl.interfaces import IRoleManager
 from ftw.mail.interfaces import IMailSettings
+from opengever.base.model import Base
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.sync.ogds_updater import sync_ogds
 from opengever.ogds.models import BASE
@@ -14,7 +15,6 @@ from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin
 from sqlalchemy.exc import NoReferencedTableError
 from zope.component import getAdapter
 from zope.component import getUtility
-import opengever.globalindex.model
 
 
 # these profiles will be installed automatically
@@ -24,7 +24,7 @@ EXTENSION_PROFILES = (
 )
 
 
-SQL_BASES = (BASE, opengever.globalindex.model.Base)
+SQL_BASES = (BASE, Base)
 
 
 MIMETYPE_FIX_PROFILE = 'profile-opengever.policy.base:mimetype'

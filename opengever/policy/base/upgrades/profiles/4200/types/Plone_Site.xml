@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<object name="Plone Site">
+ <property name="allowed_content_types" purge="False">
+  <element value="opengever.meeting.committeecontainer"/>
+ </property>
+</object>

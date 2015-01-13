@@ -4,6 +4,7 @@ from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.document import Document
 from opengever.globalindex.handlers.task import sync_task
 from opengever.mail.mail import OGMail
+from opengever.meeting.proposal import Proposal
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.testing import assets
 from opengever.trash.trash import ITrashable
@@ -19,20 +20,17 @@ from zope.intid.interfaces import IIntIds
 class DossierBuilder(DexterityBuilder):
     portal_type = 'opengever.dossier.businesscasedossier'
 
-
 builder_registry.register('dossier', DossierBuilder)
 
 
 class TemplateDossierBuilder(DexterityBuilder):
     portal_type = 'opengever.dossier.templatedossier'
 
-
 builder_registry.register('templatedossier', TemplateDossierBuilder)
 
 
 class InboxBuilder(DexterityBuilder):
     portal_type = 'opengever.inbox.inbox'
-
 
 builder_registry.register('inbox', InboxBuilder)
 
@@ -151,7 +149,6 @@ class ForwardingBuilder(TaskBuilder):
 
     portal_type = 'opengever.inbox.forwarding'
 
-
 builder_registry.register('forwarding', ForwardingBuilder)
 
 
@@ -183,7 +180,6 @@ class MailBuilder(DexterityBuilder):
 
         super(MailBuilder, self).after_create(obj)
 
-
 builder_registry.register('mail', MailBuilder)
 
 
@@ -194,13 +190,11 @@ class RepositoryBuilder(DexterityBuilder):
         self.arguments["effective_title"] = title
         return self
 
-
 builder_registry.register('repository', RepositoryBuilder)
 
 
 class ContactFolderBuilder(DexterityBuilder):
     portal_type = 'opengever.contact.contactfolder'
-
 
 builder_registry.register('contactfolder', ContactFolderBuilder)
 
@@ -208,13 +202,11 @@ builder_registry.register('contactfolder', ContactFolderBuilder)
 class ContactBuilder(DexterityBuilder):
     portal_type = 'opengever.contact.contact'
 
-
 builder_registry.register('contact', ContactBuilder)
 
 
 class RepositoryRootBuilder(DexterityBuilder):
     portal_type = 'opengever.repository.repositoryroot'
-
 
 builder_registry.register('repository_root', RepositoryRootBuilder)
 
@@ -222,12 +214,55 @@ builder_registry.register('repository_root', RepositoryRootBuilder)
 class YearFolderbuilder(DexterityBuilder):
     portal_type = 'opengever.inbox.yearfolder'
 
-
 builder_registry.register('yearfolder', YearFolderbuilder)
 
 
 class InboxContainerBuilder(DexterityBuilder):
     portal_type = 'opengever.inbox.container'
 
-
 builder_registry.register('inbox_container', InboxContainerBuilder)
+
+
+class ProposalBuilder(DexterityBuilder):
+    portal_type = 'opengever.meeting.proposal'
+
+    def __init__(self, session):
+        super(ProposalBuilder, self).__init__(session)
+        self.arguments = {'title': 'Fooo'}
+        self.model_arguments = None
+
+    def before_create(self):
+        self.arguments, self.model_arguments = Proposal.partition_data(
+            self.arguments)
+
+    def after_create(self, obj):
+        obj.create_model(self.model_arguments, self.container)
+        super(ProposalBuilder, self).after_create(obj)
+
+    def relate_to(self, *documents):
+        intids = getUtility(IIntIds)
+        related_documents = [RelationValue(intids.getId(document))
+                             for document in documents]
+        return self.having(relatedItems=related_documents)
+
+builder_registry.register('proposal', ProposalBuilder)
+
+
+class CommitteeContainerBuilder(DexterityBuilder):
+    portal_type = 'opengever.meeting.committeecontainer'
+
+builder_registry.register('committee_container', CommitteeContainerBuilder)
+
+
+class CommitteeBuilder(DexterityBuilder):
+    portal_type = 'opengever.meeting.committee'
+
+    def __init__(self, session):
+        super(CommitteeBuilder, self).__init__(session)
+        self.arguments = {'title': 'My Committee'}
+
+    def after_create(self, obj):
+        obj.create_model(self.arguments, self.container)
+        super(CommitteeBuilder, self).after_create(obj)
+
+builder_registry.register('committee', CommitteeBuilder)

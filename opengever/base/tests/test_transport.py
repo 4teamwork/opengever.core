@@ -2,10 +2,9 @@ from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.behaviors.classification import IClassification
-from opengever.ogds.base.transport import Transporter
+from opengever.base.transport import Transporter
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
-from zope.component import getUtility
 
 
 class TestTransporter(FunctionalTestCase):

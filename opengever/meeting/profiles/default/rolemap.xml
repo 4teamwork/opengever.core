@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<rolemap>
+  <permissions>
+
+    <permission name="opengever.meeting: Add Proposal" acquire="True">
+      <role name="Manager"/>
+      <role name="Owner"/>
+      <role name="Contributor"/>
+      <role name="Administrator"/>
+    </permission>
+
+    <permission name="opengever.meeting: Add Committee" acquire="True">
+      <role name="Manager"/>
+      <role name="Owner"/>
+      <role name="Contributor"/>
+      <role name="Administrator"/>
+    </permission>
+
+  </permissions>
+</rolemap>

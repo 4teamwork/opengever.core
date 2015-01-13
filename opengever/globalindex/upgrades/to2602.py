@@ -1,5 +1,5 @@
 from ftw.upgrade import UpgradeStep
-from opengever.ogds.base.utils import create_session
+from opengever.base.model import create_session
 from opengever.ogds.models.utils import alter_column_length
 
 

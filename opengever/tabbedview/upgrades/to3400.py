@@ -1,6 +1,6 @@
 from ftw.dictstorage.sql import DictStorageModel
 from ftw.upgrade import UpgradeStep
-from opengever.ogds.base.utils import create_session
+from opengever.base.model import create_session
 from sqlalchemy import or_
 import json
 import logging

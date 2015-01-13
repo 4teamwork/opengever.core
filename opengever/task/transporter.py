@@ -1,11 +1,11 @@
 from DateTime import DateTime
 from datetime import datetime
 from five import grok
+from opengever.base.request import dispatch_json_request
+from opengever.base.request import dispatch_request
+from opengever.base.transport import ORIGINAL_INTID_ANNOTATION_KEY
+from opengever.base.transport import Transporter
 from opengever.base.utils import ok_response
-from opengever.ogds.base.transport import ORIGINAL_INTID_ANNOTATION_KEY
-from opengever.ogds.base.transport import Transporter
-from opengever.ogds.base.utils import remote_json_request
-from opengever.ogds.base.utils import remote_request
 from opengever.task.adapters import IResponse as IPersistentResponse
 from opengever.task.adapters import IResponseContainer
 from opengever.task.interfaces import ITaskDocumentsTransporter
@@ -51,10 +51,10 @@ class ResponseTransporter(grok.Adapter):
         """
         jsondata = self.extract_responses(intids_mapping)
 
-        return remote_request(target_admin_unit_id,
-                              '@@task-responses-receive',
-                              path=remote_task_url,
-                              data=dict(responses=jsondata))
+        return dispatch_request(target_admin_unit_id,
+                                '@@task-responses-receive',
+                                path=remote_task_url,
+                                data=dict(responses=jsondata))
 
     def get_responses(self, target_admin_unit_id, remote_task_path,
                       intids_mapping):
@@ -68,10 +68,10 @@ class ResponseTransporter(grok.Adapter):
 
         """
         req_data = {'intids_mapping': json.dumps(intids_mapping)}
-        response = remote_request(target_admin_unit_id,
-                                  '@@task-responses-extract',
-                                  path=remote_task_path,
-                                  data=req_data)
+        response = dispatch_request(target_admin_unit_id,
+                                    '@@task-responses-extract',
+                                    path=remote_task_path,
+                                    data=req_data)
         try:
             data = json.loads(response.read())
         except ValueError:
@@ -236,7 +236,7 @@ class TaskDocumentsTransporter(grok.GlobalUtility):
 
     def copy_documents_from_remote_task(self, task, target, documents=None):
         transporter = Transporter()
-        data = remote_json_request(
+        data = dispatch_json_request(
             task.admin_unit_id,
             '@@task-documents-extract',
             path=task.physical_path,

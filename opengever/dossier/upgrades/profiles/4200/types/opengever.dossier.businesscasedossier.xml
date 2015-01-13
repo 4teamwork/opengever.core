@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<object name="opengever.dossier.businesscasedossier" meta_type="Dexterity FTI"
+        i18n:domain="opengever.dossier" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+    <property name="allowed_content_types" purge="False">
+        <element value="opengever.meeting.proposal" />
+    </property>
+
+    <action i18n:domain="opengever.dossier" title="Proposals" action_id="proposals" category="tabbedview-tabs"
+            condition_expr="object/@@is_meeting_feature_enabled" url_expr="string:#" visible="True">
+        <permission value="View"/>
+    </action>
+
+</object>

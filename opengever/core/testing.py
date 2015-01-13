@@ -4,9 +4,10 @@ from ftw.builder.testing import BUILDER_LAYER
 from ftw.builder.testing import set_builder_session_factory
 from ftw.testing import ComponentRegistryLayer
 from ftw.testing.quickinstaller import snapshots
-from opengever.globalindex import model
+from opengever.base import model
+from opengever.base.model import create_session
+from opengever.meeting.interfaces import IMeetingSettings
 from opengever.ogds.base.setup import create_sql_tables
-from opengever.ogds.base.utils import create_session
 from opengever.ogds.models import BASE
 from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
@@ -18,6 +19,7 @@ from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.browserlayer.utils import unregister_layer
 from plone.dexterity.schema import SCHEMA_CACHE
+from plone.registry.interfaces import IRegistry
 from plone.testing import Layer
 from plone.testing import z2
 from Products.CMFCore.utils import getToolByName
@@ -26,6 +28,7 @@ from z3c.saconfig import EngineFactory
 from z3c.saconfig import GloballyScopedSession
 from z3c.saconfig.interfaces import IEngineFactory
 from z3c.saconfig.interfaces import IScopedSession
+from zope.component import getUtility
 from zope.component import provideUtility
 from zope.configuration import xmlconfig
 from zope.sqlalchemy import datamanager
@@ -151,6 +154,7 @@ class OpengeverFixture(PloneSandboxLayer):
         applyProfile(portal, 'opengever.advancedsearch:default')
         applyProfile(portal, 'opengever.sharing:default')
         applyProfile(portal, 'opengever.latex:default')
+        applyProfile(portal, 'opengever.meeting:default')
         applyProfile(portal, 'ftw.datepicker:default')
         applyProfile(portal, 'plone.formwidget.autocomplete:default')
         applyProfile(portal, 'plone.formwidget.contenttree:default')
@@ -173,7 +177,7 @@ class MemoryDBLayer(Layer):
         setup_sql_tables()
         self.session = create_session()
 
-    def testTearDown(test):
+    def testTearDown(self):
         truncate_sql_tables()
         transaction.abort()
 
@@ -248,3 +252,23 @@ class FilingLayer(PloneSandboxLayer):
         inactivate_filing_number(portal)
 
 OPENGEVER_FUNCTIONAL_FILING_LAYER = FilingLayer()
+
+
+class MeetingLayer(PloneSandboxLayer):
+
+    def setUpPloneSite(self, portal):
+        registry = getUtility(IRegistry)
+        settings = registry.forInterface(IMeetingSettings)
+        settings.is_feature_enabled = True
+        transaction.commit()
+
+    def tearDownPloneSite(self, portal):
+        registry = getUtility(IRegistry)
+        settings = registry.forInterface(IMeetingSettings)
+        settings.is_feature_enabled = False
+        transaction.commit()
+
+    defaultBases = (OPENGEVER_FUNCTIONAL_TESTING,)
+
+
+OPENGEVER_FUNCTIONAL_MEETING_LAYER = MeetingLayer()

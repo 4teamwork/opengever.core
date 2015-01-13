@@ -2,7 +2,6 @@ from collective.elephantvocabulary import wrap_vocabulary
 from five import grok
 from opengever.contact import contact_service
 from opengever.ogds.base.actor import Actor
-from opengever.ogds.base.interfaces import IClientCommunicator
 from opengever.ogds.base.interfaces import ISyncStamp
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
@@ -12,7 +11,6 @@ from plone.memoize import ram
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.schema.interfaces import IVocabularyFactory
-import AccessControl
 
 
 def voc_cachekey(method, self):
@@ -486,55 +484,3 @@ class OtherAssignedClientsVocabularyFactory(grok.GlobalUtility):
 
         for org_unit in ogds_service().assigned_org_units(omit_current=True):
             yield (org_unit.id(), org_unit.label())
-
-
-class DocumentInSelectedDossierVocabularyFactory(grok.GlobalUtility):
-    """ Provides a vocabulary containing all documents within the previously
-    selected dossier. Expects the context to be a dict containing the path
-    to the dossier under the key 'source_dossier'
-    """
-    grok.provides(IVocabularyFactory)
-    grok.name('opengever.ogds.base.DocumentInSelectedDossierVocabulary')
-
-    def __call__(self, context):
-        self.context = context
-        vocab = ContactsVocabulary.create_with_provider(
-            self.key_value_provider)
-        return vocab
-
-    def key_value_provider(self):
-        request = getRequest()
-
-        # if we are not logged in we are in the traversal and should not
-        # do anything...
-        user = AccessControl.getSecurityManager().getUser()
-        if user == AccessControl.SpecialUsers.nobody:
-            return
-
-        comm = getUtility(IClientCommunicator)
-
-        # get client
-        client_id = request.get('client', request.get('form.widgets.client'))
-        if type(client_id) in (list, tuple, set):
-            client_id = client_id[0]
-
-        org_unit = ogds_service().fetch_org_unit(client_id)
-        current_user = ogds_service().fetch_current_user()
-        if current_user not in org_unit.assigned_users():
-            raise ValueError(
-                'Expected %s to be a assigned client of the current user.' %
-                client_id)
-
-        # get dossier path
-        dossier_path = request.get(
-            'dossier_path', request.get('form.widgets.source_dossier'))
-        if type(dossier_path) in (list, tuple, set):
-            dossier_path = dossier_path[0]
-
-        if dossier_path:
-            cid = client_id
-            if cid:
-                for doc in comm.get_documents_of_dossier(cid, dossier_path):
-                    key = doc.get('path')
-                    value = doc.get('title')
-                    yield (key, value)

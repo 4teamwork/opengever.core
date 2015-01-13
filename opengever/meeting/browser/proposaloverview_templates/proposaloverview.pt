@@ -1,0 +1,66 @@
+<html xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      tal:omit-tag="python: True">
+
+  <tal:i18n i18n:domain="opengever.meeting"
+    tal:define="documents view/documents;
+                css_width python:99/2;">
+
+    <div tal:attributes="class string:boxGroup; style string:width:${css_width}%">
+      <div id="main_attributesBox" class="box">
+        <h2 i18n:translate="label_main_attributes">Main Atrributes</h2>
+          <table class="vertical listing">
+            <tr tal:repeat="item view/get_main_attributes">
+              <th tal:content="item/label" />
+
+              <td tal:condition="python: item.get('is_html', False)"
+                  tal:attributes="class item/css_class|nothing"
+                  tal:content="structure item/value" />
+
+              <td tal:condition="python: not item.get('is_html', False)"
+                  tal:attributes="class item/css_class|nothing"
+                  tal:content="item/value" />
+            </tr>
+          </table>
+      </div>
+    </div>
+
+    <div id="documentsBox" class="box">
+      <tal:condition tal:condition="documents">
+        <h2 i18n:translate="label_documents">Documents</h2>
+        <ul>
+          <li tal:repeat="item documents">
+            <a href="" tal:attributes="href item/absolute_url;
+                                       title python: getattr(item, 'document_date', None) and item.document_date.strftime('%d.%m.%Y') or '';
+                                       class python:view.get_css_class(item)">
+              <span class="document" tal:condition="item/absolute_url" tal:content="item/Title" />
+            </a>
+          </li>
+        </ul>
+      </tal:condition>
+    </div>
+
+    <div class="visualClear"><!----></div>
+
+    <ul class="regular_buttons">
+        <tal:block repeat="transition view/transitions">
+          <li>
+            <a tal:attributes="href python: view.transition_url(transition);
+                               title transition/title;
+                               id transition/name;
+                               class string: ${transition/name} button;"
+               i18n:attributes="title">
+                <span tal:content="transition/title"
+                      i18n:translate=""
+                      class="subMenuTitle actionText">
+                </span>
+            </a>
+          </li>
+        </tal:block>
+    </ul>
+
+    <div tal:replace="structure provider:plone.belowcontentbody" />
+    <div class="visualClear"><!----></div>
+  </tal:i18n>
+</html>

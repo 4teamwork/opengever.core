@@ -30,7 +30,7 @@ class IGlobalTaskTableSourceConfig(ITableSourceConfig):
 
 class GlobalTaskListingTab(grok.View, OpengeverTab,
                            ListingView):
-    """A tabbed view mixing which brings support for listing tasks from
+    """A tabbed view mixin which brings support for listing tasks from
     the SQL (globally over all clients).
 
     There is support for searching, batching and ordering.

@@ -1,9 +1,9 @@
 from five import grok
-from opengever.ogds.base.exceptions import TransportationError
-from opengever.ogds.base.interfaces import IDataCollector
+from opengever.base.exceptions import TransportationError
+from opengever.base.interfaces import IDataCollector
+from opengever.base.request import dispatch_json_request
 from opengever.ogds.base.utils import decode_for_json
 from opengever.ogds.base.utils import encode_after_json
-from opengever.ogds.base.utils import remote_json_request
 from plone.dexterity.interfaces import IDexterityContent
 from plone.dexterity.utils import addContentToContainer
 from plone.dexterity.utils import createContent
@@ -50,7 +50,8 @@ class Transporter(object):
         request_data = {
             REQUEST_KEY: jsondata,
             }
-        return remote_json_request(
+
+        return dispatch_json_request(
             target_cid, '@@transporter-receive-object',
             path=container_path, data=request_data)
 
@@ -60,7 +61,7 @@ class Transporter(object):
         *path* is the relative path of the object to its plone site root.
         """
 
-        data = remote_json_request(source_cid,
+        data = dispatch_json_request(source_cid,
                                    '@@transporter-extract-object-json',
                                    path=path)
 
@@ -79,8 +80,10 @@ class Transporter(object):
 
 
 class ReceiveObject(grok.View):
-    """The `ReceiveObject` view receives a object-transporter request on the
-    target client and creates or updates the object.
+    """Receives a JSON serialized object and creates or updates an instance
+    within its context.
+
+    It returns JSON containing the object's path and intid.
     """
 
     grok.name('transporter-receive-object')
@@ -109,9 +112,7 @@ class ReceiveObject(grok.View):
 
 
 class ExtractObject(grok.View):
-    """The `ExtractObject` view is called by the transporter on a specific
-    context on the source client for extract the data and returning it to
-    the receiver.
+    """Extract data from its context and returns a JSON serialized object.
     """
 
     grok.name('transporter-extract-object-json')
@@ -134,6 +135,7 @@ class DexterityObjectCreator(object):
         if not isinstance(self.title, unicode):
             self.title = self.title.decode('utf-8')
 
+    #XXX use plone.api
     def create_in(self, container):
         obj = createContent(self.portal_type, title=self.title)
         notify(ObjectCreatedEvent(obj))

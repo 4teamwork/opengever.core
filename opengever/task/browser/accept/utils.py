@@ -1,12 +1,12 @@
 from five import grok
+from opengever.base.request import dispatch_request
+from opengever.base.transport import Transporter
 from opengever.base.utils import ok_response
 from opengever.globalindex.model.task import Task
 from opengever.inbox.utils import get_current_inbox
 from opengever.inbox.yearfolder import get_current_yearfolder
-from opengever.ogds.base.transport import Transporter
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
-from opengever.ogds.base.utils import remote_request
 from opengever.task import _
 from opengever.task.adapters import IResponseContainer
 from opengever.task.interfaces import ISuccessorTaskController
@@ -132,10 +132,10 @@ def accept_forwarding_with_successor(
                     'successor_oguid': successor_tc.get_oguid(),
                     'transition': 'forwarding-transition-accept'}
 
-    response = remote_request(predecessor.admin_unit_id,
-                              '@@store_forwarding_in_yearfolder',
-                              path=predecessor.physical_path,
-                              data=request_data)
+    response = dispatch_request(predecessor.admin_unit_id,
+                                '@@store_forwarding_in_yearfolder',
+                                path=predecessor.physical_path,
+                                data=request_data)
 
     if response.read().strip() != 'OK':
         raise Exception('Adding the response and changing the '
@@ -245,10 +245,10 @@ def accept_task_with_successor(dossier, predecessor_oguid, response_text):
     request_data = {'text': response_text.encode('utf-8'),
                     'successor_oguid': successor_tc.get_oguid()}
 
-    response = remote_request(predecessor.admin_unit_id,
-                              '@@accept_task_workflow_transition',
-                              path=predecessor.physical_path,
-                              data=request_data)
+    response = dispatch_request(predecessor.admin_unit_id,
+                                '@@accept_task_workflow_transition',
+                                path=predecessor.physical_path,
+                                data=request_data)
 
     if response.read().strip() != 'OK':
         raise Exception('Adding the response and changing the '

@@ -54,7 +54,8 @@ class TestDossier(FunctionalTestCase):
 
     def test_tabbedview_tabs(self):
         expected_tabs = ['Overview', 'Subdossiers', 'Documents', 'Tasks',
-                         'Participants', 'Trash', 'Journal', 'Sharing', ]
+                         'Proposals', 'Participants', 'Trash', 'Journal',
+                         'Sharing', ]
 
         self.assert_tabbedview_tabs_for_obj(expected_tabs, self.dossier)
 

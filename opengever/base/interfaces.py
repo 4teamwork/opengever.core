@@ -216,3 +216,23 @@ class IRepositoryPathSourceBinderQueryModificator(Interface):
 
     def modify_query(self, query):
         """Modify the ReppositoryPathSourceBinderQuery"""
+
+
+class IDataCollector(Interface):
+    """Interface for adapters which are able to serialize and
+    deserialize data. With these named-adapters any kind of additional
+    information can be transmitted.
+    Discriminators: object
+    Name: unique adapter name, which is used as key for sending the data
+    """
+
+    def extract(self):
+        """Returns the serialized data. Serialized data consists of raw
+        type data (dicts, lists, tuples, strings, numbers, bools, etc. ).
+        The data is json-able.
+        """
+
+    def insert(self, data):
+        """Deserializes the *data* and changes the *obj* according to the
+        data.
+        """

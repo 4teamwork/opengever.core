@@ -110,31 +110,6 @@ class IAdminUnitConfiguration(Interface):
         in the OGDS (Opengever Global Directory Service).', )
 
 
-class IClientCommunicator(Interface):
-    """Utility interface for the client communicator.
-    """
-
-
-class IDataCollector(Interface):
-    """ Interface for adapters which are able to serialize and
-    unserialize data. With these named-adapters any kind of additional
-    information can be transmitted.
-    Discriminators: object
-    Name: unique adapter name, which is used as key for sending the data
-    """
-
-    def extract(self):
-        """ Returns the serialized data. Serialized data consists of raw
-        type data (dicts, lists, tuples, strings, numbers, bools, etc. ).
-        The data is json-able.
-        """
-
-    def insert(self, data):
-        """ Unserializes the *data* and changes the *obj* according to the
-        data.
-        """
-
-
 class ISyncStamp(Interface):
     """Adapter Inteface for the Import Stamp"""
 

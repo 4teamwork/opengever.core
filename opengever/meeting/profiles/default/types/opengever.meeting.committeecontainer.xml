@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<object name="opengever.meeting.committeecontainer" meta_type="Dexterity FTI"
+        i18n:domain="opengever.meeting" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+  <!-- Basic metadata -->
+  <property name="title" i18n:translate="">Committee Container</property>
+  <property name="description" i18n:translate=""></property>
+  <property name="icon_expr"></property>
+  <property name="allow_discussion">False</property>
+  <property name="global_allow">True</property>
+  <property name="filter_content_types">True</property>
+  <property name="allowed_content_types">
+      <element value="opengever.meeting.committee"/>
+  </property>
+
+  <!-- schema interface -->
+  <property name="schema">opengever.meeting.committeecontainer.ICommitteeContainer</property>
+
+  <!-- class used for content items -->
+  <property name="klass">opengever.meeting.committeecontainer.CommitteeContainer</property>
+
+  <!-- add permission -->
+  <property name="add_permission">opengever.meeting.AddCommittee</property>
+
+  <!-- enabled behaviors -->
+  <property name="behaviors">
+    <element value="opengever.base.behaviors.base.IOpenGeverBase" />
+    <element value="plone.app.content.interfaces.INameFromTitle" />
+  </property>
+
+  <!-- View information -->
+  <property name="immediate_view">view</property>
+  <property name="default_view">view</property>
+  <property name="default_view_fallback">False</property>
+  <property name="view_methods">
+    <element value="view"/>
+  </property>
+
+  <!-- Method aliases -->
+  <alias from="(Default)" to="(selected layout)"/>
+  <alias from="edit" to="@@edit"/>
+  <alias from="sharing" to="@@sharing"/>
+  <alias from="view" to="@@view"/>
+
+  <!-- Actions -->
+  <action title="View" action_id="view" category="object" condition_expr=""
+          url_expr="string:${object_url}" visible="False">
+      <permission value="View"/>
+  </action>
+
+  <action title="Edit" action_id="edit" category="object" condition_expr=""
+          url_expr="string:${object_url}/edit" visible="True">
+      <permission value="Modify portal content"/>
+  </action>
+
+</object>

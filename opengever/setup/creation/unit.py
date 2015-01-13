@@ -1,5 +1,5 @@
 from ftw.inflator.creation.sections.jsonsource import recursive_encode
-from opengever.ogds.base.utils import create_session
+from opengever.base.model import create_session
 from opengever.setup.exception import GeverSetupException
 import json
 

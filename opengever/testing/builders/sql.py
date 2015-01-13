@@ -1,5 +1,11 @@
+from datetime import date
 from ftw.builder import builder_registry
 from opengever.globalindex.model.task import Task
+from opengever.meeting.model import Committee
+from opengever.meeting.model import Member
+from opengever.meeting.model import Membership
+from opengever.meeting.model import Proposal as ProposalModel
+from opengever.meeting.proposal import Proposal
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.utils import get_ou_selector
 from opengever.ogds.models.tests.builders import AdminUnitBuilder
@@ -84,3 +90,66 @@ class TaskBuilder(SqlObjectBuilder):
         self.arguments['review_state'] = 'task-state-open'
 
 builder_registry.register('globalindex_task', TaskBuilder)
+
+
+class ProposalModelBuilder(SqlObjectBuilder):
+
+    mapped_class = ProposalModel
+
+    def __init__(self, session):
+        super(ProposalModelBuilder, self).__init__(session)
+        self.arguments['admin_unit_id'] = 'foo'
+        self.arguments['int_id'] = 1234
+        self.arguments['physical_path'] = '/bar'
+        self.arguments['title'] = 'Bar'
+        self.arguments['workflow_state'] = Proposal.workflow.default_state.name
+
+    def id(self, identifier):
+        """Proposals have a composite primary key, admin_unit_id and int_id.
+
+        """
+        raise NotImplementedError
+
+builder_registry.register('proposal_model', ProposalModelBuilder)
+
+
+class CommitteeBuilder(SqlObjectBuilder):
+
+    mapped_class = Committee
+    id_argument_name = 'committee_id'
+
+    def __init__(self, session):
+        super(CommitteeBuilder, self).__init__(session)
+        self.arguments['title'] = 'Bar'
+        self.arguments['admin_unit_id'] = 'foo'
+        self.arguments['int_id'] = 1234
+
+builder_registry.register('committee_model', CommitteeBuilder)
+
+
+class MemberBuilder(SqlObjectBuilder):
+
+    mapped_class = Member
+    id_argument_name = 'member_id'
+
+    def __init__(self, session):
+        super(MemberBuilder, self).__init__(session)
+        self.arguments['firstname'] = 'Peter'
+        self.arguments['lastname'] = 'Meier'
+
+builder_registry.register('member', MemberBuilder)
+
+
+class MemberShipBuilder(SqlObjectBuilder):
+
+    mapped_class = Membership
+
+    def __init__(self, session):
+        super(MemberShipBuilder, self).__init__(session)
+        self.arguments['date_from'] = date(2010, 1, 1)
+        self.arguments['date_to'] = date(2014, 1, 1)
+
+    def id(self, identifier):
+        raise NotImplementedError
+
+builder_registry.register('membership', MemberShipBuilder)

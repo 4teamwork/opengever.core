@@ -88,14 +88,12 @@ class TestWorkflowStateSyncer(MockTestCase):
         self.expect(stc(context)).result(stc)
         self.expect(stc.get_successors()).result([succ1])
         self.expect(stc.get_predecessor(None)).result(pred)
-        remote_request = self.mocker.replace(
-                'opengever.ogds.base.utils.remote_request')
-        # from opengever.ogds.base import utils
-        # utils.remote_request = lambda *a, **kw: remote_request()
+        dispatch_request = self.mocker.replace(
+                'opengever.base.request.dispatch_request')
 
         ok_response = self.stub()
         self.expect(ok_response.read().strip()).result('OK')
-        self.expect(remote_request(
+        self.expect(dispatch_request(
                 u'client2',
                 '@@sync-task-workflow-state-receive',
                 u'path1',
@@ -105,7 +103,7 @@ class TestWorkflowStateSyncer(MockTestCase):
                     'transition': 'task-transition-resolved-in-progress',
                     'responsible': ''})).result(ok_response).count(0, None)
 
-        self.expect(remote_request(
+        self.expect(dispatch_request(
                 u'client2',
                 '@@sync-task-workflow-state-receive',
                 u'path2',
@@ -118,7 +116,7 @@ class TestWorkflowStateSyncer(MockTestCase):
         fail_response = self.stub()
         self.expect(fail_response.read().strip()).result('Exception')
 
-        self.expect(remote_request(
+        self.expect(dispatch_request(
                 u'client1',
                 '@@sync-task-workflow-state-receive',
                 u'path1',
@@ -128,7 +126,7 @@ class TestWorkflowStateSyncer(MockTestCase):
                     'transition': 'task-transition-resolved-tested-and-closed',
                     'responsible': ''})).result(fail_response).count(0, None)
 
-        self.expect(remote_request(ARGS, KWARGS)).result(ok_response)
+        self.expect(dispatch_request(ARGS, KWARGS)).result(ok_response)
 
         self.replay()
 
