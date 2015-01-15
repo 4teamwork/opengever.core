@@ -5,6 +5,7 @@ from opengever.mail.behaviors import ISendableDocsContainer
 from opengever.testing import FunctionalTestCase
 from opengever.testing import index_data_for
 from Products.CMFCore.utils import getToolByName
+from Products.CMFCore.Expression import createExprContext
 
 
 class TestDossier(FunctionalTestCase):
@@ -18,6 +19,13 @@ class TestDossier(FunctionalTestCase):
 
     def create_test_dossier(self):
         return create(Builder(self.builder_id))
+
+    def _get_active_tabbedview_tab_titles(self, obj):
+        types_tool = getToolByName(self.portal, 'portal_types')
+        actions = types_tool.listActionInfos(
+            object=obj, category='tabbedview-tabs')
+        tabs = [action['title'] for action in actions]
+        return tabs
 
     def assert_additional_attributes_overview_box_labels(self, expected, obj):
         overview = obj.restrictedTraverse('tabbedview_view-overview')
@@ -34,12 +42,8 @@ class TestDossier(FunctionalTestCase):
             expected, [widget.value for widget in additional_widgets])
 
     def assert_tabbedview_tabs_for_obj(self, expected_tabs, obj):
-        types_tool = getToolByName(self.portal, 'portal_types')
-        actions = types_tool.listActions(object=obj)
-        tabs = [action.title for
-                action in actions if action.category == 'tabbedview-tabs']
-
-        self.assertEquals(expected_tabs, tabs)
+        self.assertEquals(expected_tabs,
+                          self._get_active_tabbedview_tab_titles(obj))
 
     def assert_searchable_text(self, expected, dossier):
         values = index_data_for(dossier).get('SearchableText')
@@ -54,8 +58,7 @@ class TestDossier(FunctionalTestCase):
 
     def test_tabbedview_tabs(self):
         expected_tabs = ['Overview', 'Subdossiers', 'Documents', 'Tasks',
-                         'Proposals', 'Participants', 'Trash', 'Journal',
-                         'Sharing', ]
+                         'Participants', 'Trash', 'Journal', 'Sharing', ]
 
         self.assert_tabbedview_tabs_for_obj(expected_tabs, self.dossier)
 
