@@ -31,24 +31,20 @@ class IMeetingModel(form.Schema):
 
     location = schema.TextLine(
         title=_(u"label_location", default=u"Location"),
-        description=_('help_location', default=u""),
         max_length=256,
         required=False)
 
     form.widget(date=DatePickerFieldWidget)
     date = schema.Date(
         title=_('label_date', default=u"Date"),
-        description=_("help_date", default=u""),
         required=True)
 
     start_time = schema.Time(
         title=_('label_start_time', default=u'Start time'),
-        description=_("help_start_time", default=u""),
         required=False)
 
     end_time = schema.Time(
         title=_('label_end_time', default=u'End time'),
-        description=_("help_end_time", default=u""),
         required=False)
 
 
