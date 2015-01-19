@@ -9,6 +9,10 @@ Changelog
   even when `SQL` is not ticked.
   [lgraf]
 
+- Setup: Make sure that an admin-unit is created before it is queried
+  during `sync-ogds`.
+  [deiferni]
+
 
 4.0.7 (2015-01-06)
 ------------------

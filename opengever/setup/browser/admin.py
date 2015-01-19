@@ -187,6 +187,19 @@ class CreateOpengeverClient(BrowserView):
             plugins.movePluginsUp(IPropertiesPlugin, ('ldap',))
             plugins.movePluginsUp(IPropertiesPlugin, ('ldap',))
 
+        # create admin-unit before sync_ogds - it might be required
+        if form.get('configsql'):
+            admin_unit = AdminUnit(
+                form['client_id'],
+                enabled=bool(form.get('active')),
+                title=form['title'],
+                abbreviation=form['title'],
+                ip_address=form['ip_address'],
+                site_url=form['site_url'],
+                public_url=form['public_url'],
+            )
+            session.add(admin_unit)
+
         if form.get('first') and form.get('import_users'):
             print '===== SYNC LDAP ===='
             # Import LDAP users and groups
@@ -218,27 +231,13 @@ class CreateOpengeverClient(BrowserView):
                 raise SetupError("Inbox group '%s' could not be found." %
                                  form['inbox_group'])
 
-            active = bool(form.get('active'))
-
-            admin_unit = AdminUnit(
-                form['client_id'],
-                enabled=active,
-                title=form['title'],
-                abbreviation=form['title'],
-                ip_address=form['ip_address'],
-                site_url=form['site_url'],
-                public_url=form['public_url'],
-            )
-
             client = OrgUnit(form['client_id'],
-                             enabled=active,
+                             enabled=bool(form.get('active')),
                              title=form['title'],
                              admin_unit=admin_unit)
 
             client.users_group = users_group
             client.inbox_group = inbox_group
-
-            session.add(admin_unit)
             session.add(client)
 
         # create the admin user in the ogds if he not exist
