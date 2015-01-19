@@ -3,8 +3,8 @@ from ftw.table.interfaces import ITableSource
 from ftw.table.interfaces import ITableSourceConfig
 from opengever.meeting import _
 from opengever.meeting.model import Proposal
-from opengever.meeting.tabs import BaseTableSource
 from opengever.meeting.tabs.proposallisting import ProposalListingTab
+from opengever.tabbedview.browser.base import BaseTableSource
 from zope.interface import implements
 from zope.interface import Interface
 
