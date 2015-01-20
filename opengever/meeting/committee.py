@@ -2,6 +2,7 @@ from opengever.meeting import _
 from opengever.meeting.container import ModelContainer
 from opengever.meeting.model import Committee as CommitteeModel
 from opengever.meeting.service import meeting_service
+from plone import api
 from plone.directives import form
 from zope import schema
 from zope.interface import Interface
@@ -45,5 +46,5 @@ class Committee(ModelContainer):
         return dict(physical_path=aq_wrapped_self.get_physical_path())
 
     def get_physical_path(self):
-        url_tool = self.unrestrictedTraverse('@@plone_tools').url()
+        url_tool = api.portal.get_tool(name='portal_url')
         return '/'.join(url_tool.getRelativeContentPath(self))

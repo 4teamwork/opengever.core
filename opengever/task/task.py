@@ -20,6 +20,7 @@ from opengever.ogds.base.utils import ogds_service
 from opengever.task import _
 from opengever.task import util
 from opengever.task.validators import NoCheckedoutDocsValidator
+from plone import api
 from plone.dexterity.content import Container
 from plone.directives import form, dexterity
 from plone.indexer.interfaces import IIndexer
@@ -290,7 +291,7 @@ class Task(Container):
         return wftool.getInfoFor(self, 'review_state')
 
     def get_physical_path(self):
-        url_tool = self.unrestrictedTraverse('@@plone_tools').url()
+        url_tool = api.portal.get_tool(name='portal_url')
         return '/'.join(url_tool.getRelativeContentPath(self))
 
     def get_is_subtask(self):
