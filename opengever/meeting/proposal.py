@@ -41,7 +41,7 @@ class IProposalModel(Interface):
 
 
 class ISubmittedProposalModel(Interface):
-    """Proposal model schema interface."""
+    """Submitted proposal model schema interface."""
 
     title = schema.TextLine(
         title=_(u"label_title", default=u"Title"),

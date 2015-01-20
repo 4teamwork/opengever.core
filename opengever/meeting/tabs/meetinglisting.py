@@ -10,7 +10,7 @@ from zope.interface import Interface
 
 
 class IMeetingTableSourceConfig(ITableSourceConfig):
-    """Marker interface for proposal table source configs."""
+    """Marker interface for meeting table source configs."""
 
 
 class MeetingListingTab(BaseListingTab):

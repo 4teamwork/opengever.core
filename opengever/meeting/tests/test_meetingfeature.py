@@ -4,7 +4,7 @@ from opengever.testing import FunctionalTestCase
 
 class TestDisabledMeetingFeature(FunctionalTestCase):
 
-    def test_meeting_feature_is_enabled(self):
+    def test_meeting_feature_is_disabled(self):
         view = self.portal.restrictedTraverse('is_meeting_feature_enabled')
         self.assertFalse(view())
 

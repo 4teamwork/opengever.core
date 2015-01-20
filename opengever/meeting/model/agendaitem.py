@@ -10,7 +10,7 @@ from sqlalchemy.schema import Sequence
 
 
 class AgendaItem(Base):
-    """It item must either have a reference to a proposal or a title.
+    """An item must either have a reference to a proposal or a title.
 
     """
 

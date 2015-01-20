@@ -9,12 +9,12 @@ from zope.interface import implements
 from zope.interface import Interface
 
 
-def proposal_title(item, value):
+def proposal_title_link(item, value):
     return item.get_submitted_link()
 
 
 class ISubmittedProposalTableSourceConfig(ITableSourceConfig):
-    """Marker interface for proposal table source configs."""
+    """Marker interface for submitted proposal table source configs."""
 
 
 class SubmittedProposalListingTab(ProposalListingTab):
@@ -27,7 +27,7 @@ class SubmittedProposalListingTab(ProposalListingTab):
     columns = (
         {'column': 'title',
          'column_title': _(u'column_title', default=u'Title'),
-         'transform': proposal_title},
+         'transform': proposal_title_link},
 
         {'column': 'initial_position',
          'column_title': _(u'column_initial_position',

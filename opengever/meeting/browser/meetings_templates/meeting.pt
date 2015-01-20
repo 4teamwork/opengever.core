@@ -41,7 +41,7 @@
         <form method="post" tal:attributes="action view/url_schedule_text"
               id="schedule_text">
             <input type="textline" name="title" id="text-agenda-item" />
-            <input type="submit" name="submit" id="submit-schedule"
+            <input type="submit" name="submit" id="submit-schedule-text"
                    i18n:attributes="value schedule" />
         </form>
 
@@ -49,7 +49,7 @@
         <form method="post" tal:attributes="action view/url_schedule_paragraph"
               id="schedule_paragraph">
             <input type="textline" name="title" />
-            <input type="submit" name="submit" id="submit-schedule"
+            <input type="submit" name="submit" id="submit-schedule-paragraph"
                    i18n:attributes="value schedule" />
         </form>
 

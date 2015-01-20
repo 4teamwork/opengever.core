@@ -22,7 +22,7 @@ from zope.publisher.interfaces.browser import IBrowserView
 
 
 class IMeetingModel(form.Schema):
-    """Proposal model schema interface."""
+    """Meeting model schema interface."""
 
     committee = schema.Choice(
         title=_('label_committee', default=u'Committee'),
@@ -117,7 +117,7 @@ class EditMeeting(EditForm):
     # this renames the button but otherwise preserves super's behaivor
     @button.buttonAndHandler(_('Save'), name='save')
     def handleApply(self, action):
-        # self as first argument is required by to the decorator
+        # self as first argument is required by the decorator
         super(EditMeeting, self).handleApply(self, action)
 
     def nextURL(self):
@@ -150,7 +150,11 @@ class MeetingList(grok.View):
         pass
 
     def publishTraverse(self, request, name):
-        """
+        """Allows us to handle URLs like ../committee-3/meeting/42.
+
+        Note that meetings are stored in a relational database only and not as
+        plone content.
+
         """
         try:
             meeting_id = int(name)

@@ -12,7 +12,7 @@ class ModelContentViewsViewlet(ContentViewsViewlet):
         out which tab is selected. Used in global_contentviews.pt
         """
 
-        if hasattr(self.view, 'is_model_view') and self.view.is_model_view:
+        if getattr(self.view, 'is_model_view', False):
             return self.prepare_model_tabs()
         else:
             return super(ModelContentViewsViewlet, self).prepareObjectTabs(
