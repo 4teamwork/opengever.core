@@ -20,11 +20,12 @@ class Meeting(Base):
     STATE_PENDING = State('pending', is_default=True,
                           title=_('pending', default='Pending'))
     STATE_HELD = State('held', title=_('held', default='Held'))
+    STATE_CLOSED = State('closed', title=_('closed', default='Closed'))
 
     workflow = Workflow([
         STATE_PENDING,
         STATE_HELD,
-        State('closed', title=_('closed', default='Closed')),
+        STATE_CLOSED,
         ], [
         Transition('pending', 'held',
                    title=_('hold meeting', default='Hold meeting')),
@@ -42,7 +43,8 @@ class Meeting(Base):
     date = Column(Date, nullable=False)
     start_time = Column(Time)
     end_time = Column(Time)
-    workflow_state = Column(String(256), nullable=False, default='pending')
+    workflow_state = Column(String(256), nullable=False,
+                            default=workflow.default_state.name)
 
     def __repr__(self):
         return '<Meeting at "{}">'.format(self.date)
