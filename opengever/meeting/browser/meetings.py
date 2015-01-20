@@ -290,9 +290,8 @@ class DeleteAgendaItem(BrowserView):
 
     @classmethod
     def url_for(cls, context, meeting, agend_item):
-        return "{}/{}/{}".format(
+        return "{}/delete_agenda_item/{}".format(
             MeetingList.url_for(context, meeting),
-            'delete_agenda_item',
             agend_item.agenda_item_id)
 
     def __init__(self, context, request, model):

@@ -165,8 +165,8 @@ class MeetingBuilder(SqlObjectBuilder):
 builder_registry.register('meeting', MeetingBuilder)
 
 
-class AgendaItemBuildeR(SqlObjectBuilder):
+class AgendaItemBuilder(SqlObjectBuilder):
 
     mapped_class = AgendaItem
 
-builder_registry.register('agenda_item', AgendaItemBuildeR)
+builder_registry.register('agenda_item', AgendaItemBuilder)
