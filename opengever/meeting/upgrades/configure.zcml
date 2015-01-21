@@ -28,11 +28,11 @@
 
     <!-- 4201 -> 4202 -->
     <genericsetup:upgradeStep
-        title="Add AgendaItem columns."
+        title="Add Protocols to Meetings."
         description=""
         source="4201"
         destination="4202"
-        handler="opengever.meeting.upgrades.to4202.AddAgendaItemColumns"
+        handler="opengever.meeting.upgrades.to4202.AddProtocolsToMeetings"
         profile="opengever.meeting:default"
         />
 
