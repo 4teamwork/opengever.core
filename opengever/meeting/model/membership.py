@@ -1,4 +1,5 @@
 from opengever.base.model import Base
+from opengever.meeting.model.query import MembershipQuery
 from sqlalchemy import Column
 from sqlalchemy import Date
 from sqlalchemy import ForeignKey
@@ -10,6 +11,8 @@ class Membership(Base):
     """Associate members with their commmission for a certain timespan.
 
     """
+    query_cls = MembershipQuery
+
     __tablename__ = 'memberships'
 
     date_from = Column(Date, nullable=False)

@@ -4,7 +4,9 @@ from opengever.base.model import create_session
 from opengever.meeting import _
 from opengever.meeting.browser.preprotocol import PreProtocol
 from opengever.meeting.committee import ICommittee
+from opengever.meeting.form import ModelEditForm
 from opengever.meeting.model import Meeting
+from opengever.meeting.model import Member
 from opengever.meeting.service import meeting_service
 from plone.autoform.form import AutoExtensibleForm
 from plone.directives import form
@@ -12,6 +14,7 @@ from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import button
 from z3c.form import field
+from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form.form import AddForm
 from z3c.form.form import EditForm
 from z3c.form.interfaces import HIDDEN_MODE
@@ -20,6 +23,8 @@ from zope import schema
 from zope.interface import implements
 from zope.publisher.interfaces import IPublishTraverse
 from zope.publisher.interfaces.browser import IBrowserView
+from zope.schema.interfaces import IContextSourceBinder
+from zope.schema.vocabulary import SimpleVocabulary
 
 
 class IMeetingModel(form.Schema):
@@ -337,18 +342,51 @@ class DeleteAgendaItem(BrowserView):
         return self.request.response.redirect(self.nextURL())
 
 
+@grok.provider(IContextSourceBinder)
+def get_committee_member_vocabulary(committee):
+    members = []
+    for membership in committee.get_active_memberships():
+        member = membership.member
+        members.append(
+            SimpleVocabulary.createTerm(member,
+                                        str(member.member_id),
+                                        member.fullname))
+
+    return SimpleVocabulary(members)
+
+
 class IParticipants(form.Schema):
     """Schema interface for participants of a meeting."""
+
+    presidency = schema.Choice(
+        title=_('label_presidency', default=u'Presidency'),
+        source=get_committee_member_vocabulary,
+        required=False)
+
+    secretary = schema.Choice(
+        title=_('label_secretary', default=u'Secretary'),
+        source=get_committee_member_vocabulary,
+        required=False)
+
+    form.widget(participants=CheckBoxFieldWidget)
+    participants = schema.List(
+        title=_('label_participants', default='Participants'),
+        value_type=schema.Choice(
+            source=get_committee_member_vocabulary,
+        ),
+        required=False,
+    )
 
     other_participants = schema.Text(
         title=_(u"label_other_participants", default=u"Other Participants"),
         required=False)
 
 
-class EditPreProtocol(EditForm):
+class EditPreProtocol(AutoExtensibleForm, ModelEditForm, EditForm):
 
     ignoreContext = True
-    fields = field.Fields(IParticipants)
+    schema = IParticipants
+    content_type = Meeting
 
     template = ViewPageTemplateFile('pre_protocol_templates/pre_protocol.pt')
 
@@ -362,11 +400,38 @@ class EditPreProtocol(EditForm):
         self._has_finished_edit = False
 
     def applyChanges(self, data):
+        ModelEditForm.applyChanges(self, data)
         for protocol in self.get_pre_protocols():
             protocol.update(self.request)
         # pretend to always change the underlying data
         self._has_finished_edit = True
         return True
+
+    def partition_data(self, data):
+        participation_data = {}
+        for key in self.schema.names():
+            if key in data:
+                participation_data[key] = data.pop(key)
+        return {}, participation_data
+
+    def _convert_value(self, value):
+        if isinstance(value, Member):
+            value = str(value.member_id)
+        elif isinstance(value, list):
+            value = [self._convert_value(item) for item in value]
+        return value
+
+    def get_edit_values(self, keys):
+        values = {}
+        for fieldname in keys:
+            value = getattr(self.model, fieldname, None)
+            if value is None:
+                continue
+            values[fieldname] = self._convert_value(value)
+        return values
+
+    def update_model(self, model_data):
+        self.model.update_model(model_data)
 
     # this renames the button but otherwise preserves super's behaivor
     @button.buttonAndHandler(_('Save'), name='save')
@@ -379,6 +444,7 @@ class EditPreProtocol(EditForm):
         return self.redirect_to_meetinglist()
 
     def render(self):
+        ModelEditForm.render(self)
         if self._has_finished_edit:
             return self.redirect_to_meetinglist()
 

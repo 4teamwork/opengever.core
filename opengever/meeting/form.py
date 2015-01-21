@@ -47,18 +47,28 @@ class ModelEditForm(object):
             return
 
         prefix = 'form.widgets.'
-        values = self.context.get_edit_values(self.fields.keys())
+        values = self.get_edit_values(self.fields.keys())
 
         for fieldname, value in values.items():
             self.request[prefix + fieldname] = value
+
+    def get_edit_values(self, keys):
+        return self.context.get_edit_values(keys)
 
     def updateWidgets(self):
         self.inject_initial_data()
         super(ModelEditForm, self).updateWidgets()
 
-    def applyChanges(self, data):
+    def partition_data(self, data):
         obj_data, model_data = self.content_type.partition_data(data)
+        return obj_data, model_data
+
+    def update_model(self, model_data):
         self.context.update_model(model_data)
+
+    def applyChanges(self, data):
+        obj_data, model_data = self.partition_data(data)
+        self.update_model(model_data)
         super(ModelEditForm, self).applyChanges(obj_data)
         # pretend to always change the underlying data
         return True
