@@ -1,0 +1,81 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="opengever.meeting">
+
+    <metal:content-core fill-slot="content-core">
+        <metal:content-core define-macro="content-core"
+                            tal:define="meeting view/model;
+                                        unscheduled_proposals view/unscheduled_proposals">
+
+        <h1 tal:content="meeting/get_title"></h1>
+
+        <dl>
+            <dt i18n:translate="">State</dt>
+            <dd tal:content="python: meeting.get_state().title"></dd>
+
+            <dt i18n:translate="">Location</dt>
+            <dd tal:content="meeting/location"></dd>
+        </dl>
+
+        <h2 i18n:translate="">Add new Agenda Items</h2>
+        <metal:block tal:condition="unscheduled_proposals">
+        <form method="post" tal:attributes="action view/url_schedule_proposal"
+              id="schedule_proposal">
+            <select id="proposal_id" name="proposal_id">
+                <tal:repeat tal:repeat="proposal unscheduled_proposals">
+                    <option tal:attributes="id proposal/proposal_id;
+                                            value proposal/proposal_id;"
+                            tal:content="proposal/title">
+                    </option>
+                </tal:repeat>
+            </select>
+            <input type="submit" name="submit" id="submit-schedule"
+                   i18n:attributes="value schedule" />
+        </form>
+        </metal:block>
+
+        <form method="post" tal:attributes="action view/url_schedule_text"
+              id="schedule_text">
+            <input type="textline" name="title" id="text-agenda-item" />
+            <input type="submit" name="submit" id="submit-schedule-text"
+                   i18n:attributes="value schedule" />
+        </form>
+
+        <h2 i18n:translate="">Add new Paragraph</h2>
+        <form method="post" tal:attributes="action view/url_schedule_paragraph"
+              id="schedule_paragraph">
+            <input type="textline" name="title" />
+            <input type="submit" name="submit" id="submit-schedule-paragraph"
+                   i18n:attributes="value schedule" />
+        </form>
+
+        <h2 i18n:translate="">Agenda Items</h2>
+        <table id="agenda_items">
+            <tr tal:repeat="agenda_item view/agenda_items">
+                <td>
+                  <b tal:omit-tag="not: agenda_item/is_paragraph" tal:content="agenda_item/number" />
+                </td>
+                <td>
+                  <b tal:omit-tag="not: agenda_item/is_paragraph" tal:content="agenda_item/get_title" />
+                </td>
+                <td>
+                  <a tal:condition="meeting/is_editable"
+                     class="delete_agenda_item"
+                     tal:attributes="href python: view.url_delete_agenda_item(agenda_item)"
+                     i18n:translate="">delete</a>
+                </td>
+            </tr>
+        </table>
+
+        <div class="visualClear"><!----></div>
+
+        <metal:use use-macro="context/@@meeting-macros/workflow_actions" />
+
+        </metal:content-core>
+    </metal:content-core>
+
+</html>

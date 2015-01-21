@@ -240,4 +240,13 @@
         directory="profiles/4101"
         />
 
+    <!-- 4101 -> 4200 -->
+    <upgrade-step:importProfile
+        title="Override pathbar and content-views viewlets with sql-model supported implementations."
+        profile="opengever.base:default"
+        source="4101"
+        destination="4200"
+        directory="profiles/4200"
+        />
+
 </configure>

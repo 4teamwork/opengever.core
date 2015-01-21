@@ -6,11 +6,11 @@ from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.interfaces import IDossierMarker
 from opengever.globalindex.model.task import Task
 from opengever.meeting.model.proposal import Proposal
+from opengever.meeting.tabs.proposallisting import ProposalListingTab
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.tabbedview import _
 from opengever.tabbedview.browser.base import OpengeverTab
 from opengever.tabbedview.browser.listing import CatalogListingView
-from opengever.tabbedview.browser.proposallisting import ProposalListingTab
 from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
 from opengever.tabbedview.helper import external_edit_link
 from opengever.tabbedview.helper import linked_document_with_tooltip

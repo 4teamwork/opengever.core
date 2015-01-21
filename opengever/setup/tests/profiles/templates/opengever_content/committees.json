@@ -1,0 +1,14 @@
+[
+    {
+        "_path": "kommitees",
+        "_type": "opengever.meeting.committeecontainer",
+        "title": "Kommitees",
+        "_children": [
+            {
+                "_id": "committee-1",
+                "_type": "opengever.meeting.committee",
+                "title": "Testkommission"
+            }
+        ]
+    }
+]

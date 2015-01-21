@@ -1,6 +1,6 @@
 [
     {
-        "_path": "kommittees",
+        "_path": "kommitees",
         "_type": "opengever.meeting.committeecontainer",
         "title": "Kommitees",
         "_children": [

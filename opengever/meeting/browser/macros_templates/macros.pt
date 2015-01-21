@@ -1,0 +1,38 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      i18n:domain="seantis.reservation"
+      tal:omit-tag="">
+  <head>
+  </head>
+
+  <body>
+
+    <tal:comment replace="nothing">
+    Workflow actions.
+
+    Display workflow actions for meeting's SQL-model based workflow implementation.
+    </tal:comment>
+
+    <metal:define define-macro="workflow_actions">
+        <ul class="regular_buttons">
+            <tal:block repeat="transition view/transitions">
+              <li>
+                <a tal:attributes="href python: view.transition_url(transition);
+                                   title transition/title;
+                                   id transition/name;
+                                   class string: ${transition/name} button;"
+                   i18n:attributes="title">
+                    <span tal:content="transition/title"
+                          i18n:translate=""
+                          class="subMenuTitle actionText">
+                    </span>
+                </a>
+              </li>
+            </tal:block>
+        </ul>
+    </metal:define>
+
+  </body>
+</html>

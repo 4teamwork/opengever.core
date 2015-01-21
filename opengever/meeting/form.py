@@ -2,7 +2,7 @@ from opengever.meeting import is_meeting_feature_enabled
 from zExceptions import Unauthorized
 
 
-class MeetingModelAddForm(object):
+class ModelAddForm(object):
 
     content_type = None
     fields = None
@@ -13,7 +13,7 @@ class MeetingModelAddForm(object):
 
         if not is_meeting_feature_enabled():
             raise Unauthorized
-        return super(MeetingModelAddForm, self).render()
+        return super(ModelAddForm, self).render()
 
     def createAndAdd(self, data):
         """Create sql-model supported content types.
@@ -24,12 +24,12 @@ class MeetingModelAddForm(object):
 
         """
         obj_data, model_data = self.content_type.partition_data(data)
-        obj = super(MeetingModelAddForm, self).createAndAdd(data=obj_data)
+        obj = super(ModelAddForm, self).createAndAdd(data=obj_data)
         obj.create_model(model_data, self.context)
         return obj
 
 
-class MeetingModelEditForm(object):
+class ModelEditForm(object):
 
     content_type = None
     fields = None
@@ -40,7 +40,7 @@ class MeetingModelEditForm(object):
 
         if not is_meeting_feature_enabled():
             raise Unauthorized
-        return super(MeetingModelEditForm, self).render()
+        return super(ModelEditForm, self).render()
 
     def inject_initial_data(self):
         if self.request.method != 'GET':
@@ -54,11 +54,11 @@ class MeetingModelEditForm(object):
 
     def updateWidgets(self):
         self.inject_initial_data()
-        super(MeetingModelEditForm, self).updateWidgets()
+        super(ModelEditForm, self).updateWidgets()
 
     def applyChanges(self, data):
         obj_data, model_data = self.content_type.partition_data(data)
         self.context.update_model(model_data)
-        super(MeetingModelEditForm, self).applyChanges(obj_data)
+        super(ModelEditForm, self).applyChanges(obj_data)
         # pretend to always change the underlying data
         return True

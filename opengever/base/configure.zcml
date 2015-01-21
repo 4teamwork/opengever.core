@@ -1,14 +1,15 @@
 <configure
-    xmlns="http://namespaces.zope.org/zope"
-    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
-    xmlns:grok="http://namespaces.zope.org/grok"
-    xmlns:i18n="http://namespaces.zope.org/i18n"
-    xmlns:meta="http://namespaces.zope.org/meta"
-    xmlns:monkey="http://namespaces.plone.org/monkey"
-    xmlns:plone="http://namespaces.plone.org/plone"
-    xmlns:profilehook="http://namespaces.zope.org/profilehook"
-    xmlns:vdex="http://namespaces.zope.org/vdex"
-    i18n_domain="opengever.base">
+      xmlns="http://namespaces.zope.org/zope"
+      xmlns:browser="http://namespaces.zope.org/browser"
+      xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+      xmlns:grok="http://namespaces.zope.org/grok"
+      xmlns:i18n="http://namespaces.zope.org/i18n"
+      xmlns:meta="http://namespaces.zope.org/meta"
+      xmlns:monkey="http://namespaces.plone.org/monkey"
+      xmlns:plone="http://namespaces.plone.org/plone"
+      xmlns:profilehook="http://namespaces.zope.org/profilehook"
+      xmlns:vdex="http://namespaces.zope.org/vdex"
+      i18n_domain="opengever.base">
 
   <meta:provides feature="opengever" />
 

@@ -24,6 +24,11 @@ class ProposalQuery(BaseQuery):
 
         return self.filter(self._attribute('admin_unit_id') == admin_unit.id())
 
+    def visible_for_committee(self, committee):
+        states = ['submitted', 'scheduled']
+        query = self.filter(self._attribute('workflow_state').in_(states))
+        return query.filter(self._attribute('committee') == committee)
+
 
 class CommitteeQuery(BaseQuery):
 

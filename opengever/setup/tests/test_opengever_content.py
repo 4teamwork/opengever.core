@@ -20,3 +20,10 @@ class TestDocumentTemplates(FunctionalTestCase):
         self.assertIsNotNone(template.file)
         version_0_template = rt.retrieve(template, 0).object
         self.assertIsNotNone(version_0_template.file)
+
+    def test_commitee_models_are_created(self):
+        committee = self.portal['kommitees']['committee-1']
+        committee_model = committee.load_model()
+
+        self.assertIsNotNone(committee_model)
+        self.assertEqual(u'Testkommission', committee_model.title)

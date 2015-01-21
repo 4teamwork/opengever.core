@@ -8,7 +8,9 @@ from opengever.meeting.model.proposal import Proposal as ProposalModel
 from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
+from plone import api
 from plone import api
 from plone.directives import form
 from z3c.relationfield.schema import RelationChoice
@@ -36,6 +38,35 @@ class IProposalModel(Interface):
         title=_('label_committee', default=u'Committee'),
         source='opengever.meeting.CommitteeVocabulary',
         required=True)
+
+
+class ISubmittedProposalModel(Interface):
+    """Submitted proposal model schema interface."""
+
+    title = schema.TextLine(
+        title=_(u"label_title", default=u"Title"),
+        description=_('help_title', default=u""),
+        required=True,
+        max_length=256,
+        )
+
+    initial_position = schema.Text(
+        title=_('label_initial_position', default=u"Proposal"),
+        description=_("help_initial_position", default=u""),
+        required=False,
+        )
+
+    considerations = schema.Text(
+        title=_('label_considerations', default=u"Considerations"),
+        description=_("help_considerations", default=u""),
+        required=False,
+        )
+
+    proposed_action = schema.Text(
+        title=_('label_proposal', default=u"Proposal"),
+        description=_("help_proposal", default=u""),
+        required=False,
+        )
 
 
 class IProposal(form.Schema):
@@ -83,6 +114,12 @@ class ProposalBase(ModelContainer):
 
     workflow = None
 
+    def Title(self):
+        model = self.load_model()
+        if not model:
+            return ''
+        return model.title
+
     def get_overview_attributes(self):
         model = self.load_model()
         assert model, 'missing db-model for {}'.format(self)
@@ -101,6 +138,9 @@ class ProposalBase(ModelContainer):
              'value': self.get_state().title},
         ]
 
+    def can_execute_transition(self, name):
+        return self.workflow.can_execute_transition(self.load_model(), name)
+
     def execute_transition(self, name):
         self.workflow.execute_transition(self, self.load_model(), name)
 
@@ -111,7 +151,7 @@ class ProposalBase(ModelContainer):
         return self.workflow.get_state(self.load_model().workflow_state)
 
     def get_physical_path(self):
-        url_tool = self.unrestrictedTraverse('@@plone_tools').url()
+        url_tool = api.portal.get_tool(name="portal_url")
         return '/'.join(url_tool.getRelativeContentPath(self))
 
     def get_searchable_text(self):
@@ -136,7 +176,7 @@ class SubmittedProposal(ProposalBase):
     """Proxy for a proposal in queue with a committee."""
 
     content_schema = ISubmittedProposal
-    model_schema = IProposalModel
+    model_schema = ISubmittedProposalModel
     model_class = ProposalModel
 
     implements(content_schema)
@@ -154,6 +194,21 @@ class SubmittedProposal(ProposalBase):
                    title=_('decide', default='Decide')),
         ])
 
+    def get_overview_attributes(self):
+        data = super(SubmittedProposal, self).get_overview_attributes()
+        model = self.load_model()
+        data.extend([
+            {
+                'label': _('label_considerations'),
+                'value': model.considerations,
+            },
+            {
+                'label': _('label_proposal'),
+                'value': model.proposed_action,
+            },
+        ])
+        return data
+
     @classmethod
     def create(cls, proposal, container):
         submitted_proposal = api.content.create(
@@ -168,11 +223,17 @@ class SubmittedProposal(ProposalBase):
     def generate_submitted_proposal_id(cls, proposal):
         return 'submitted-proposal-{}'.format(proposal.proposal_id)
 
+    def get_physical_path(self):
+        url_tool = api.portal.get_tool(name="portal_url")
+        return '/'.join(url_tool.getRelativeContentPath(self))
+
     def load_proposal(self, oguid):
         return ProposalModel.query.get_by_oguid(oguid)
 
     def sync_model(self, proposal_model):
         proposal_model.submitted_oguid = Oguid.for_object(self)
+        proposal_model.submitted_physical_path = self.get_physical_path()
+        proposal_model.submitted_admin_unit_id = get_current_admin_unit().id()
 
     def load_model(self):
         oguid = Oguid.for_object(self)
@@ -202,10 +263,12 @@ class Proposal(ProposalBase):
 
     implements(content_schema)
 
+    STATE_SUBMITTED = State('submitted', title=_('submitted', default='Submited'))
+
     workflow = Workflow([
         State('pending', is_default=True,
               title=_('pending', default='Pending')),
-        State('submitted', title=_('submitted', default='Submited')),
+        STATE_SUBMITTED,
         State('scheduled', title=_('scheduled', default='Scheduled')),
         State('decided', title=_('decided', default='Decided'))
         ], [

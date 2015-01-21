@@ -1,14 +1,18 @@
+from five import grok
 from ftw.dictstorage.interfaces import ISQLAlchemy
 from opengever.base.behaviors.classification import translated_public_trial_terms
 from opengever.base.interfaces import IReferenceNumberFormatter
 from opengever.base.interfaces import IReferenceNumberSettings
 from opengever.ogds.base.sort_helpers import SortHelpers
+from opengever.tabbedview.browser.listing import ListingView
+from opengever.tabbedview.browser.sqltablelisting import SqlTableSource
 from opengever.tabbedview.utils import get_translated_transitions
 from opengever.tabbedview.utils import get_translated_types
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 from zope.component import queryAdapter
 from zope.interface import implements
+from zope.interface import Interface
 import re
 
 
@@ -26,6 +30,7 @@ class OpengeverTab(object):
     # XXX : will be moved to registry later...
     extjs_enabled = True
 
+    # XXX: this method contains sorting stuff that applies to tasks only.
     def custom_sort(self, results, sort_on, sort_reverse):
         """We need to handle some sorting for special columns, which are
         not sortable in the catalog...
@@ -135,3 +140,44 @@ class OpengeverTab(object):
             results.sort(_public_trial_sorter, reverse=sort_reverse)
 
         return results
+
+
+class BaseListingTab(grok.View, OpengeverTab, ListingView):
+    """Base listing tab."""
+
+    grok.context(Interface)
+    grok.require('zope2.View')
+
+    sort_on = 'modified'
+    sort_reverse = False
+    #lazy must be false otherwise there will be no correct batching
+    lazy = False
+
+    # the model attributes is used for a dynamic textfiltering functionality
+    enabled_actions = []
+    major_actions = []
+
+    model = None
+
+    # seems like grok cannot inherit these:
+    __call__ = ListingView.__call__
+    update = ListingView.update
+    render = __call__
+
+
+class BaseTableSource(SqlTableSource):
+
+    grok.baseclass()
+
+    def build_query(self):
+        """Builds the query based on `get_base_query()` method of config.
+        Returns the query object.
+        """
+        # initalize config
+        self.config.update_config()
+
+        # get the base query from the config
+        query = self.config.get_base_query()
+        query = self.validate_base_query(query)
+
+        return query

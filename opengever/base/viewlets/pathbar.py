@@ -8,3 +8,13 @@ class PathBar(common.PathBarViewlet):
 
     def admin_unit_label(self):
         return get_current_admin_unit().label()
+
+    def update(self):
+        super(PathBar, self).update()
+
+        if hasattr(self.view, 'is_model_view') and self.view.is_model_view:
+            self.append_model_breadcrumbs()
+
+    def append_model_breadcrumbs(self):
+        model = self.view.model
+        self.breadcrumbs = self.breadcrumbs + (model.get_breadcrumbs(),)

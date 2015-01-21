@@ -70,4 +70,9 @@
       name="opengever.setup.assignreporootnavigation"
       />
 
+  <utility
+    component=".sections.modelconstructor.ModelConstructor"
+    name="opengever.setup.modelconstructor"
+    />
+
 </configure>

@@ -2,8 +2,26 @@
 Changelog
 =========
 
-4.1.1 (unreleased)
+4.2.0 (unreleased)
 ------------------
+
+- Add initial meeting support.
+    - Add Proposal content type (proxies) and model.
+    - Add feature flag, disable meeting feature by default.
+    - Add Committee content type (proxy) and model.
+    - Add custom forms to create/edit proxy-supported entities.
+    - Add custom workflow implementation (no plone workflow).
+    - Add a context manager to temporarily change the security context.
+    - Add meeting model and forms.
+    - Add schedule meeting action to committee.
+    - Add scheduling of proposals as agenda items.
+    - Add better committee page displaying meetings and submitted proposals.
+    - Add custom content-views viewlet to display correct edit links for models.
+    - Add custom pathbar viewlet which can display sql-models.
+    - Add paragraph and custom text agenda items.
+    - Make agenda items deletable.
+
+  [deiferni]
 
 - Dossier workflow: Also allow Administrator role to activate deactivated
   dossiers.
@@ -65,16 +83,6 @@ Changelog
     - Update branding, add onegovgever logo.
     - Add custom setuphandlers for local roles, initial repository and document templates.
     - Configure development options and add environment variable to enable them easily.
-
-  [deiferni]
-
-- Add initial meeting support.
-    - Add Proposal content type (proxies) and model.
-    - Add feature flag, disable meeting feature by default.
-    - Add Committee content type (proxy) and model.
-    - Add custom forms to create/edit proxy-supported entities.
-    - Add custom workflow implementation (no plone workflow).
-    - Add a context manager to temporarily change the security context.
 
   [deiferni]
 

@@ -1,6 +1,7 @@
 from opengever.base.model import Base
 from opengever.base.oguid import Oguid
 from opengever.meeting.model.query import CommitteeQuery
+from opengever.ogds.base.utils import ogds_service
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import String
@@ -23,6 +24,10 @@ class Committee(Base):
     int_id = Column(Integer, nullable=False)
     oguid = composite(Oguid, admin_unit_id, int_id)
     title = Column(String(256))
+    physical_path = Column(String(256), nullable=False)
 
     def __repr__(self):
         return '<Committee {}>'.format(repr(self.title))
+
+    def get_admin_unit(self):
+        return ogds_service().fetch_admin_unit(self.admin_unit_id)

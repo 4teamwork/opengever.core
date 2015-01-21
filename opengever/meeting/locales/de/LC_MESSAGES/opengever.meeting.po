@@ -43,7 +43,7 @@ msgstr "Beschlossen"
 #. Default: "Committee"
 #: ./opengever/meeting/proposal.py:36
 msgid "label_committee"
-msgstr "Ausschuss"
+msgstr "Kommitee"
 
 #. Default: "Documents"
 #: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt:31

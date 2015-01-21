@@ -1,3 +1,4 @@
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -33,3 +34,28 @@ class TestPathBar(FunctionalTestCase):
         last_link = browser.css('#portal-breadcrumbs a')[-1]
         self.assertEqual(self.dossier.absolute_url(),
                          last_link.node.attrib['href'])
+
+    @browsing
+    def test_proposal_is_linked_with_title(self, browser):
+        proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .titled('My Proposal'))
+
+        browser.login().open(proposal)
+        last_link = browser.css('#portal-breadcrumbs a')[-1]
+        self.assertEqual(proposal.absolute_url(),
+                         last_link.node.attrib['href'])
+        self.assertEqual('My Proposal', last_link.text)
+
+    @browsing
+    def test_meeting_is_linked_with_title(self, browser):
+        container = create(Builder('committee_container'))
+        committee = create(Builder('committee').within(container))
+        meeting = create(Builder('meeting')
+                         .having(committee=committee.load_model(),
+                                 date=date(2010, 1, 1)))
+
+        browser.login().open(view=meeting.physical_path)
+        last_link = browser.css('#portal-breadcrumbs a')[-1]
+        self.assertEqual(meeting.get_url(), last_link.node.attrib['href'])
+        self.assertEqual(meeting.get_title(), last_link.node.text)
