@@ -62,7 +62,7 @@ class ISubmittedProposalModel(Interface):
         required=False,
         )
 
-    proposal = schema.Text(
+    proposed_action = schema.Text(
         title=_('label_proposal', default=u"Proposal"),
         description=_("help_proposal", default=u""),
         required=False,
@@ -204,7 +204,7 @@ class SubmittedProposal(ProposalBase):
             },
             {
                 'label': _('label_proposal'),
-                'value': model.proposal,
+                'value': model.proposed_action,
             },
         ])
         return data

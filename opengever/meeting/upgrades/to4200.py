@@ -51,7 +51,7 @@ class AddMeetingTable(SchemaMigration):
         self.op.add_column('proposal',
                            Column('considerations', Text))
         self.op.add_column('proposal',
-                           Column('proposal', Text))
+                           Column('proposed_action', Text))
 
     def add_committee_columns(self):
         self.op.add_column('committees',

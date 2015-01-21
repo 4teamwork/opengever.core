@@ -45,7 +45,7 @@ class Proposal(Base):
     initial_position = Column(Text)
 
     considerations = Column(Text)
-    proposal = Column(Text)
+    proposed_action = Column(Text)
 
     committee_id = Column(Integer, ForeignKey('committees.id'))
     committee = relationship('Committee', backref='proposals')
