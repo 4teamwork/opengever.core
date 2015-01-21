@@ -11,7 +11,6 @@ from opengever.meeting.workflow import Workflow
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from plone import api
-from plone import api
 from plone.directives import form
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList

@@ -26,4 +26,14 @@
         directory="profiles/4201"
         />
 
+    <!-- 4201 -> 4202 -->
+    <genericsetup:upgradeStep
+        title="Add AgendaItem columns."
+        description=""
+        source="4201"
+        destination="4202"
+        handler="opengever.meeting.upgrades.to4202.AddAgendaItemColumns"
+        profile="opengever.meeting:default"
+        />
+
 </configure>

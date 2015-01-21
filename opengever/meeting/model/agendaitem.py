@@ -29,5 +29,8 @@ class AgendaItem(Base):
     is_paragraph = Column(Boolean, nullable=False, default=False)
     sort_order = Column(Integer, nullable=False, default=0)
 
+    discussion = Column(Text)
+    decision = Column(Text)
+
     def get_title(self):
         return self.proposal.title if self.proposal else self.title
