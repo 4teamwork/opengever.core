@@ -427,6 +427,9 @@ class MeetingView(BrowserView):
     def url_delete_agenda_item(self, agenda_item):
         return DeleteAgendaItem.url_for(self.context, self.model, agenda_item)
 
+    def url_pre_protocol(self):
+        return EditPreProtocol.url_for(self.context, self.model)
+
     def transitions(self):
         return self.model.get_state().get_transitions()
 
