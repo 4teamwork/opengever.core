@@ -337,7 +337,18 @@ class DeleteAgendaItem(BrowserView):
         return self.request.response.redirect(self.nextURL())
 
 
-class EditPreProtocol(BrowserView):
+class IParticipants(form.Schema):
+    """Schema interface for participants of a meeting."""
+
+    other_participants = schema.Text(
+        title=_(u"label_other_participants", default=u"Other Participants"),
+        required=False)
+
+
+class EditPreProtocol(EditForm):
+
+    ignoreContext = True
+    fields = field.Fields(IParticipants)
 
     template = ViewPageTemplateFile('pre_protocol_templates/pre_protocol.pt')
 
@@ -348,13 +359,28 @@ class EditPreProtocol(BrowserView):
     def __init__(self, context, request, model):
         super(EditPreProtocol, self).__init__(context, request)
         self.model = model
+        self._has_finished_edit = False
 
-    def __call__(self):
-        if self.request.method == 'POST':
-            if 'submit' in self.request:
-                return self.handle_submit()
-            elif 'cancel' in self.request:
-                return self.handle_cancel()
+    def applyChanges(self, data):
+        for protocol in self.get_pre_protocols():
+            protocol.update(self.request)
+        # pretend to always change the underlying data
+        self._has_finished_edit = True
+        return True
+
+    # this renames the button but otherwise preserves super's behaivor
+    @button.buttonAndHandler(_('Save'), name='save')
+    def handleApply(self, action):
+        # self as first argument is required by to the decorator
+        super(EditPreProtocol, self).handleApply(self, action)
+
+    @button.buttonAndHandler(_('Cancel'), name='cancel')
+    def handleCancel(self, action):
+        return self.redirect_to_meetinglist()
+
+    def render(self):
+        if self._has_finished_edit:
+            return self.redirect_to_meetinglist()
 
         return self.template()
 
@@ -362,15 +388,6 @@ class EditPreProtocol(BrowserView):
         for agenda_item in self.model.agenda_items:
             if not agenda_item.is_paragraph:
                 yield PreProtocol(agenda_item)
-
-    def handle_submit(self):
-        for protocol in self.get_pre_protocols():
-            protocol.update(self.request)
-
-        return self.redirect_to_meetinglist()
-
-    def handle_cancel(self):
-        return self.redirect_to_meetinglist()
 
     def redirect_to_meetinglist(self):
         return self.request.RESPONSE.redirect(

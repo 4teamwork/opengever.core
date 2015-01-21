@@ -37,8 +37,7 @@ class TestPreProtocol(FunctionalTestCase):
         browser.fill({'Considerations': 'It is important',
                       'Proposal': 'Accept it',
                       'Discussion': 'We should accept it',
-                      'Decision': 'Accepted'})
-        browser.css('#button-save').first.click()
+                      'Decision': 'Accepted'}).submit()
 
         proposal = Proposal.query.get(self.proposal_model.proposal_id)
         self.assertEqual('It is important', proposal.considerations)
