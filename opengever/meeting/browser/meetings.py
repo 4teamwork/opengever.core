@@ -2,6 +2,7 @@ from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.base.model import create_session
 from opengever.meeting import _
+from opengever.meeting.browser.preprotocol import PreProtocol
 from opengever.meeting.committee import ICommittee
 from opengever.meeting.model import Meeting
 from opengever.meeting.service import meeting_service
@@ -336,6 +337,46 @@ class DeleteAgendaItem(BrowserView):
         return self.request.response.redirect(self.nextURL())
 
 
+class EditPreProtocol(BrowserView):
+
+    template = ViewPageTemplateFile('pre_protocol_templates/pre_protocol.pt')
+
+    @classmethod
+    def url_for(cls, context, meeting):
+        return "{}/pre_protocol".format(MeetingList.url_for(context, meeting))
+
+    def __init__(self, context, request, model):
+        super(EditPreProtocol, self).__init__(context, request)
+        self.model = model
+
+    def __call__(self):
+        if self.request.method == 'POST':
+            if 'submit' in self.request:
+                return self.handle_submit()
+            elif 'cancel' in self.request:
+                return self.handle_cancel()
+
+        return self.template()
+
+    def get_pre_protocols(self):
+        for agenda_item in self.model.agenda_items:
+            if not agenda_item.is_paragraph:
+                yield PreProtocol(agenda_item)
+
+    def handle_submit(self):
+        for protocol in self.get_pre_protocols():
+            protocol.update(self.request)
+
+        return self.redirect_to_meetinglist()
+
+    def handle_cancel(self):
+        return self.redirect_to_meetinglist()
+
+    def redirect_to_meetinglist(self):
+        return self.request.RESPONSE.redirect(
+            MeetingList.url_for(self.context, self.model))
+
+
 class MeetingView(BrowserView):
 
     template = ViewPageTemplateFile('meetings_templates/meeting.pt')
@@ -350,6 +391,7 @@ class MeetingView(BrowserView):
         'schedule_paragraph': ScheduleParagraph,
         'schedule_proposal': ScheduleSubmittedProposal,
         'schedule_text': ScheduleText,
+        'pre_protocol': EditPreProtocol,
         'meetingtransitioncontroller': MeetingTransitionController,
     }
 

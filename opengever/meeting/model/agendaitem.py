@@ -13,7 +13,6 @@ class AgendaItem(Base):
     """An item must either have a reference to a proposal or a title.
 
     """
-
     __tablename__ = 'agendaitems'
 
     agenda_item_id = Column("id", Integer, Sequence("agendaitems_id_seq"),
