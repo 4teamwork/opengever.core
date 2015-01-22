@@ -83,3 +83,16 @@ class TestPasteItems(FunctionalTestCase):
 
         self.assertIn(copied_dossier_id, repofolder.objectIds())
         self.assertIn(document.id, repofolder["copy_of_%s" % dossier.id])
+
+    def test_pasting_not_allowed_if_disallowed_subobject_type(self):
+        repofolder = create(Builder('repository'))
+        dossier = create(Builder('dossier')
+                         .within(repofolder))
+        document = create(Builder('document')
+                          .within(dossier))
+
+        dossier.manage_copyObjects(document.id)
+        pasting_allowed_view = repofolder.restrictedTraverse(
+            'is_pasting_allowed')
+        allowed = pasting_allowed_view()
+        self.assertFalse(allowed)
