@@ -5,6 +5,9 @@ Changelog
 4.2.0 (unreleased)
 ------------------
 
+- Fix and rework dossier deactivation and activation.
+  [phgross]
+
 - Add initial meeting support.
     - Add Proposal content type (proxies) and model.
     - Add feature flag, disable meeting feature by default.
