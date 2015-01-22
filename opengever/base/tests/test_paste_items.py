@@ -28,7 +28,7 @@ class TestPasteItems(FunctionalTestCase):
     def test_paste_action_not_displayed_for_templatedossier(self, browser):
         templatedossier = create(Builder('templatedossier'))
         document = create(Builder('document')
-                         .within(templatedossier))
+                          .within(templatedossier))
 
         paths = ['/'.join(document.getPhysicalPath())]
         browser.login().open(templatedossier, {'paths:list': paths},
@@ -44,7 +44,7 @@ class TestPasteItems(FunctionalTestCase):
         document = create(Builder('document').within(dossier))
         mail = create(Builder('mail').within(dossier))
 
-        paths = ['/'.join(document.getPhysicalPath()),]
+        paths = ['/'.join(document.getPhysicalPath())]
         browser.login().open(dossier, {'paths:list': paths}, view='copy_items')
 
         browser.open(mail)
@@ -54,7 +54,7 @@ class TestPasteItems(FunctionalTestCase):
     def test_pasting_copied_document_into_dossier_succeeds(self):
         dossier = create(Builder('dossier'))
         document = create(Builder('document')
-                         .within(dossier))
+                          .within(dossier))
 
         cb = dossier.manage_copyObjects(document.id)
         dossier.manage_pasteObjects(cb)
