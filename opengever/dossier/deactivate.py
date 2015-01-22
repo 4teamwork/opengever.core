@@ -1,8 +1,8 @@
-from Products.CMFCore.utils import getToolByName
-from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from plone import api
+from Products.statusmessages.interfaces import IStatusMessage
 
 
 class DossierDeactivateView(grok.View):
@@ -15,57 +15,47 @@ class DossierDeactivateView(grok.View):
     grok.require('zope2.View')
 
     def render(self):
+        if not self.check_preconditions():
+            return self.redirect()
 
-        wft = getToolByName(self.context, 'portal_workflow')
-        # check for resolved subdossiers
+        # recursively deactivate all dossiers
         for subdossier in self.context.get_subdossiers():
-
-            if wft.getInfoFor(subdossier.getObject(), 'review_state') \
-                    == 'dossier-state-resolved':
-                IStatusMessage(self.request).add(
-                    _("The Dossier can't be deactivated, the subdossier "
-                      "${dossier} is already resolved",
-                      mapping=dict(dossier=subdossier.Title.decode('utf-8'),)),
-                    type='error')
-                return self.request.RESPONSE.redirect(
-                    self.context.absolute_url())
-
-        # recursively resolve all dossier
-        for subdossier in self.context.get_subdossiers():
-            if wft.getInfoFor(subdossier.getObject(), 'review_state') \
-                    != 'dossier-state-inactive':
-                wft.doActionFor(
-                    subdossier.getObject(), 'dossier-transition-deactivate')
+            state = api.content.get_state(obj=subdossier.getObject())
+            if state != 'dossier-state-inactive':
+                api.content.transition(
+                    obj=subdossier.getObject(),
+                    transition=u'dossier-transition-deactivate')
 
         # deactivate main dossier
-        wft.doActionFor(
-            self.context, 'dossier-transition-deactivate')
+        api.content.transition(obj=self.context,
+                               transition='dossier-transition-deactivate')
 
         IStatusMessage(self.request).add(
             _("The Dossier has been deactivated"), type='info')
 
+        return self.redirect()
+
+    def redirect(self):
         return self.request.RESPONSE.redirect(self.context.absolute_url())
 
+    def check_preconditions(self):
+        satisfied = True
 
-class DossierActivateView(grok.View):
-    """View wich activate the dossiers including his subdossiers."""
+        if not self.context.is_all_checked_in():
+            IStatusMessage(self.request).add(
+                _(u"The Dossier can't be deactivated, not all contained"
+                  "documents are checked in."), type='error')
+            satisfied = False
 
-    grok.context(IDossierMarker)
-    grok.name('transition-activate')
-    grok.require('zope2.View')
-
-    def render(self):
-
-        wft = getToolByName(self.context, 'portal_workflow')
+        # check for resolved subdossiers
         for subdossier in self.context.get_subdossiers():
-            wft.doActionFor(
-                subdossier.getObject(), 'dossier-transition-activate')
+            state = api.content.get_state(obj=subdossier.getObject())
+            if state == 'dossier-state-resolved':
+                IStatusMessage(self.request).add(
+                    _(u"The Dossier can't be deactivated, the subdossier "
+                      "${dossier} is already resolved",
+                      mapping=dict(dossier=subdossier.Title.decode('utf-8'),)),
+                    type='error')
+                satisfied = False
 
-        # deactivate main dossier
-        wft.doActionFor(
-            self.context, 'dossier-transition-activate')
-
-        IStatusMessage(self.request).add(
-            _("The Dossier has been activated"), type='info')
-
-        return self.request.RESPONSE.redirect(self.context.absolute_url())
+        return satisfied

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2014-09-01 15:24+0000\n"
+"POT-Creation-Date: 2015-01-22 15:57+0000\n"
 "PO-Revision-Date: 2013-04-03 10:08+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./opengever/dossier/move_items.py:136
+#: ./opengever/dossier/move_items.py:146
 msgid "${copied_items} Elements were moved successfully"
 msgstr "${copied_items} Elemente wurden erfolgreich verschoben"
 
@@ -43,7 +43,7 @@ msgstr "Report konnte nicht generiert werden."
 msgid "Delete"
 msgstr "Beteiligung löschen"
 
-#: ./opengever/dossier/move_items.py:94
+#: ./opengever/dossier/move_items.py:104
 msgid "Document ${name} is connected to a Task.                    Please move the Task."
 msgstr "Dokument ${name} ist mit einer Aufgabe verbunden, bitte Aufgabe verschieben."
 
@@ -60,15 +60,15 @@ msgstr "Subdossier bearbeiten"
 msgid "Export selection"
 msgstr "Auswahl exportieren"
 
-#: ./opengever/dossier/move_items.py:142
+#: ./opengever/dossier/move_items.py:152
 msgid "Failed to copy following objects: ${failed_objects}"
 msgstr "Folgende Elemente konnten nicht verschoben werden: ${failed_objects}"
 
-#: ./opengever/dossier/move_items.py:148
+#: ./opengever/dossier/move_items.py:158
 msgid "Failed to copy following objects: ${failed_objects}                    . Locked via WebDAV"
 msgstr ""
 
-#: ./opengever/dossier/move_items.py:189
+#: ./opengever/dossier/move_items.py:199
 msgid "It isn't allowed to add such items there"
 msgstr "Sie dürfen dieses Objekt nicht an den Zielort verschieben"
 
@@ -93,7 +93,7 @@ msgstr "Es sind keine Vorlagen vorhanden."
 msgid "Project Dossier"
 msgstr "Projektdossier"
 
-#: ./opengever/dossier/menu.py:28
+#: ./opengever/dossier/menu.py:25
 msgid "Subdossier"
 msgstr "Subdossier"
 
@@ -105,15 +105,19 @@ msgstr "Vorlagendossier"
 msgid "Templates"
 msgstr "Vorlagen"
 
-#: ./opengever/dossier/deactivate.py:26
+#: ./opengever/dossier/deactivate.py:46
+msgid "The Dossier can't be deactivated, not all containeddocuments are checked in."
+msgstr "Das Dossier kann nicht storniert werden, da nicht alle enthaltenen Dokumente eingecheckt sind."
+
+#: ./opengever/dossier/deactivate.py:55
 msgid "The Dossier can't be deactivated, the subdossier ${dossier} is already resolved"
 msgstr "Das Dossier konnte nicht storniert werden, da das Subdossier ${dossier} bereits abgeschlossen ist. Das Subdossier muss vorgängig wieder eröffnet werden."
 
-#: ./opengever/dossier/deactivate.py:68
+#: ./opengever/dossier/activate.py:43
 msgid "The Dossier has been activated"
 msgstr "Das Dossier wurde aktiviert."
 
-#: ./opengever/dossier/deactivate.py:44
+#: ./opengever/dossier/deactivate.py:34
 msgid "The Dossier has been deactivated"
 msgstr "Das Dossier wurde storniert."
 
@@ -153,11 +157,15 @@ msgstr "Das Beginn- oder Ende-Datum ist ungültig."
 msgid "The subdossier has been succesfully resolved"
 msgstr "Das Subdossier wurde erfolgreich abgeschlossen."
 
+#: ./opengever/dossier/activate.py:28
+msgid "This subdossier can't be activated,because the main dossiers is inactive"
+msgstr "Dieses Subdossier kann nicht wieder aktiviert werden, da das Hauptdossier storniert ist."
+
 #: ./opengever/dossier/archive.py:168
 msgid "When the Action give filing number is selected,                         all fields are required."
 msgstr "Für die Vergabe der Ablagenummer, werden alle Felder benötigt."
 
-#: ./opengever/dossier/move_items.py:172
+#: ./opengever/dossier/move_items.py:182
 msgid "You have not selected any items"
 msgstr "Sie haben kein Element ausgewählt"
 
@@ -177,22 +185,22 @@ msgstr "Speichern"
 #. Default: "Cancel"
 #: ./opengever/dossier/archive.py:271
 #: ./opengever/dossier/behaviors/participation.py:164
-#: ./opengever/dossier/move_items.py:123
+#: ./opengever/dossier/move_items.py:133
 msgid "button_cancel"
 msgstr "Abbrechen"
 
 #. Default: "Move"
-#: ./opengever/dossier/move_items.py:64
+#: ./opengever/dossier/move_items.py:74
 msgid "button_submit"
 msgstr "Verschieben"
 
 #. Default: "Contact"
-#: ./opengever/dossier/browser/participants.py:111
+#: ./opengever/dossier/browser/participants.py:113
 msgid "column_contact"
 msgstr "Kontakt"
 
 #. Default: "role_list"
-#: ./opengever/dossier/browser/participants.py:115
+#: ./opengever/dossier/browser/participants.py:117
 msgid "column_rolelist"
 msgstr "Rolle"
 
@@ -208,7 +216,7 @@ msgid "documents"
 msgstr "Dokumente"
 
 #. Default: "It isn't allowed to add such items there: ${failed_objects}"
-#: ./opengever/dossier/move_items.py:220
+#: ./opengever/dossier/move_items.py:230
 msgid "error_NotInContentTypes ${failed_objects}"
 msgstr "Es wurden keine Objekte verschoben. Folgende Objekte dürfen nicht in den Zielordner eingefügt werden: ${failed_objects}"
 
@@ -276,7 +284,7 @@ msgid "heading_archive_form"
 msgstr "Dossier ablegen"
 
 #. Default: "Move Items"
-#: ./opengever/dossier/move_items.py:55
+#: ./opengever/dossier/move_items.py:56
 msgid "heading_move_items"
 msgstr "Elemente verschieben"
 
@@ -297,7 +305,7 @@ msgid "help_container_type"
 msgstr "Art des Behälters, in dem ein Dossier in Papierform abgelegt ist"
 
 #. Default: "Live Search: search the Plone Site"
-#: ./opengever/dossier/move_items.py:26
+#: ./opengever/dossier/move_items.py:27
 msgid "help_destination"
 msgstr "Live Search: Durchsuchen Sie diesen Mandanten"
 
@@ -397,7 +405,7 @@ msgid "label_creator"
 msgstr "Erstellt von"
 
 #. Default: "Destination"
-#: ./opengever/dossier/move_items.py:25
+#: ./opengever/dossier/move_items.py:26
 msgid "label_destination"
 msgstr "Zielposition / Zieldossier"
 
@@ -478,7 +486,7 @@ msgstr "Verwandte Dossiers"
 
 #. Default: "Responsible"
 #: ./opengever/dossier/behaviors/dossier.py:85
-#: ./opengever/dossier/browser/participants.py:161
+#: ./opengever/dossier/browser/participants.py:174
 #: ./opengever/dossier/browser/report.py:44
 msgid "label_responsible"
 msgstr "Federführend"
@@ -608,4 +616,3 @@ msgstr "abgelaufen"
 #: ./opengever/dossier/behaviors/participation.py:194
 msgid "warning_no_participants_selected"
 msgstr "Sie haben keine Beteiligungen ausgewählt."
-

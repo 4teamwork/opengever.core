@@ -63,6 +63,7 @@ class DocumentBuilder(DexterityBuilder):
     def after_create(self, obj):
         if self.checked_out:
             IAnnotations(obj)[CHECKIN_CHECKOUT_ANNOTATIONS_KEY] = self.checked_out
+            obj.reindexObject()
 
         if self._trashed:
             trasher = ITrashable(obj)
