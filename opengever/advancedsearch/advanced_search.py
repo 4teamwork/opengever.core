@@ -369,62 +369,104 @@ class AdvancedSearchForm(directives_form.Form):
                 'help_portal_type',
                 default='Select the contenttype to be searched for.')
 
+    def get_field_mapping_for_interface(self, interface_name):
+        interface_name = interface_name.replace('.', '-')
+        return self.field_mapping().get(interface_name, [])
+
+    def get_key_for_field_name(self, field_name):
+        """Some fields need a new key in the upcoming request to @@search."""
+
+        if field_name in ('task_review_state', 'dossier_review_state'):
+            return 'review_state'
+        return field_name
+
+    def append_field_to_params(self, data, field_name, params):
+        value = data.get(field_name, None)
+        if not value:
+            return
+
+        key = self.get_key_for_field_name(field_name)
+
+        if isinstance(value, date):
+            self.append_date_field_to_params(data, field_name, params)
+        elif isinstance(value, list):
+            self.append_list_field_to_params(key, value, params)
+        elif field_name == 'trashed':
+            self.append_trashed_to_params(params)
+        elif isinstance(value, int):
+            self.append_sequence_number_to_params(value, params)
+        else:
+            self.append_key_to_params(key, value, params)
+
+    def append_key_to_params(self, key, value, params):
+        params.append((key, quotestring(value.encode('utf-8'))))
+
+    def append_sequence_number_to_params(self, value, params):
+        params.append(('sequence_number:int', value))
+
+    def append_trashed_to_params(self, params):
+        params.append(('trashed:list:boolean', 'True'))
+        params.append(('trashed:list:boolean', 'False'))
+
+    def append_list_field_to_params(self, key, value, params):
+        for list_value in value:
+            params.append(
+                ('{}:list'.format(key), list_value.encode('utf-8'))
+            )
+
+    def append_date_field_to_params(self, data, field_name, params):
+        """Append a date field to the query parameters and handle date-ranges.
+
+        A date it might be a composite of two values to filter a range. It
+        might be one date only to filter a minimum or maximum date only.
+
+        In case of a date-range we handle both values at once and drop them
+        from data when we see the first entry.
+
+        """
+        base_field_name = field_name[:-2]
+        field_1_name = "{}_1".format(base_field_name)
+        field_2_name = "{}_2".format(base_field_name)
+
+        field_1_value = data.pop(field_1_name, None)
+        field_2_value = data.pop(field_2_name, None)
+
+        if field_1_value and field_2_value:
+            usage = 'minmax'
+        elif field_1_value:
+            usage = 'min'
+        elif field_2_value:
+            usage = 'max'
+        params.append(('{}_usage'.format(base_field_name), usage))
+
+        key = '{}:list'.format(base_field_name)
+        if field_1_value:
+            params.append((key, field_1_value.strftime('%m/%d/%y')))
+        if field_2_value:
+            inclusive_end_date = field_2_value + timedelta(days=1)
+            params.append((key, inclusive_end_date.strftime('%m/%d/%y')))
+
+    def build_search_params(self, data):
+        # cannot use dict since the same parameter key might be used repeatedly
+        params = []
+
+        object_provides = data.get('object_provides', '')
+        params.append(('object_provides', object_provides))
+        # if clause because it entered a searchableText=none without text
+        if data.get('searchableText'):
+            params.append(('SearchableText',
+                           data.get('searchableText').encode('utf-8')))
+
+        for field_name in self.get_field_mapping_for_interface(object_provides):
+            self.append_field_to_params(data, field_name, params)
+
+        return params
+
     @button.buttonAndHandler(_(u'button_search', default=u'Search'))
     def search(self, action):
         data, errors = self.extractData()
         if not errors:
-            # create Parameters and url
-            params = '/@@search?object_provides=%s' % (
-                urllib.quote(data.get('object_provides', '')))
-            # if clause because it entered a searchableText=none without text
-            if data.get('searchableText'):
-                params = '%s&SearchableText=%s' % (
-                    params, data.get('searchableText').encode('utf-8'))
-
-            for field in self.field_mapping().get(
-                    data.get('object_provides').replace('.', '-')):
-                if data.get(field, None):
-                    if isinstance(data.get(field), date):
-                        if '1' in field:
-                            params = '%s&%s_usage=range:minmax' % (
-                                params, field[:-2])
-                            if not data.get(field[:-2] + '_2'):
-                                data[field[:-2] + '_2'] = datetime.date(
-                                    2020, 12, 30)
-                        else:
-                            if not data.get(field[:-2] + '_1'):
-                                params = '%s&%s_usage=range:minmax' % (
-                                    params, field[:-2])
-                                data[field[:-2] + '_1'] = datetime.date(
-                                    1900, 1, 1)
-                                params = '%s&%s:list=%s' % (
-                                    params,
-                                    field[:-2],
-                                    data.get(field[:-2] + '_1').strftime(
-                                        '%m/%d/%y'))
-                            data[field] = data.get(field) + timedelta(1)
-                        params = '%s&%s:list=%s' % (
-                            params,
-                            field[:-2],
-                            data.get(field).strftime('%m/%d/%y'))
-
-                    elif isinstance(data.get(field), list):
-                        for value in data.get(field):
-                            params = '%s&%s:list=%s' % (
-                                params, field, value.encode('utf-8'))
-                    elif field == 'trashed':
-                        params = '%s&trashed:list:boolean=True&trashed:list:boolean=False' % (params)
-                    elif isinstance(data.get(field), int):
-                        params = '%s&sequence_number:int=%s' % (
-                            params, data.get(field))
-                    else:
-                        params = '%s&%s=%s' % (
-                            params,
-                            field,
-                            quotestring(data.get(field).encode('utf-8')))
-
-            params = params.replace('task_review_state', 'review_state')
-            params = params.replace('dossier_review_state', 'review_state')
-
-            return self.context.REQUEST.RESPONSE.redirect('%s%s' % (
-                    self.context.portal_url(), params))
+            params = self.build_search_params(data)
+            url = "{}/@@search?{}".format(self.context.portal_url(),
+                                          urllib.urlencode(params))
+            return self.context.REQUEST.RESPONSE.redirect(url)

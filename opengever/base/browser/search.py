@@ -1,7 +1,9 @@
 from DateTime import DateTime
-from Products.CMFCore.utils import getToolByName
+from plone import api
+from plone.app.search.browser import EVER
+from plone.app.search.browser import quote_chars
+from plone.app.search.browser import Search
 from Products.CMFPlone.browser.navtree import getNavigationRoot
-from plone.app.search.browser import Search, quote_chars, EVER
 from zope.component import getMultiAdapter
 
 
@@ -17,6 +19,12 @@ class OpengeverSearch(Search):
     """Customizing the plone default Search View.
     """
 
+    def __init__(self, context, request):
+        super(OpengeverSearch, self).__init__(context, request)
+
+        catalog = api.portal.get_tool('portal_catalog')
+        self.valid_keys = self.valid_keys + tuple(catalog.indexes())
+
     def breadcrumbs(self, item):
         obj = item.getObject()
         view = getMultiAdapter((obj, self.request), name='breadcrumbs_view')
@@ -29,6 +37,32 @@ class OpengeverSearch(Search):
         types = super(OpengeverSearch, self).types_list()
         return list(set(FILTER_TYPES) & set(types))
 
+    def should_handle_key(self, key):
+        return ((key in self.valid_keys) or key.startswith('facet.')) \
+            and not key.endswith('_usage')
+
+    def handle_query_filter_value(self, query, key, value):
+        if not value or not self.should_handle_key(key):
+            return
+
+        usage = self.request.form.get('{}_usage'.format(key))
+        if usage:
+            self.handle_date_query_filter_value(usage, query, key, value)
+        else:
+            query[key] = value
+
+    def handle_date_query_filter_value(self, usage, query, key, value):
+        if usage not in ('min', 'max', 'minmax'):
+            return
+        if usage == 'minmax' and len(value) == 2:
+            query_value = [DateTime(value[0]), DateTime(value[1])]
+        else:
+            query_value = [DateTime(value[0])]
+        query[key] = {
+            'query': query_value,
+            'range': usage
+        }
+
     def filter_query(self, query):
         """The filter query of the standard search view (plone.app.search)
         cancel the query generation if not SearchableText is given.
@@ -36,23 +70,17 @@ class OpengeverSearch(Search):
         also searches without a searchabletext. So we temporarily fake
         the SearchableText.
 
-        XXX This method should be removed, after the solr integration"""
+        XXX This method should be removed, after the solr integration
+        meta-XXX should it? now it contains custom stuff.
 
+        """
         request = self.request
         text = query.get('SearchableText', None)
         if text is None:
             text = request.form.get('SearchableText', '')
 
-        catalog = getToolByName(self.context, 'portal_catalog')
-        valid_keys = self.valid_keys + tuple(catalog.indexes())
-
-        for k, v in request.form.items():
-            if v and ((k in valid_keys) or k.startswith('facet.')) \
-                    and not k.endswith('_usage'):
-                if '%s_usage' % (k) in request.form.keys():
-                    v = {'query': (DateTime(v[0]), DateTime(v[1])),
-                         'range': 'min:max'}
-                query[k] = v
+        for key, value in request.form.items():
+            self.handle_query_filter_value(query, key, value)
 
         if text:
             query['SearchableText'] = quote_chars(text)
