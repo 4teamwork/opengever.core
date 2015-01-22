@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-09-01 15:24+0000\n"
+"POT-Creation-Date: 2015-01-22 15:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.dossier\n"
 
-#: ./opengever/dossier/move_items.py:136
+#: ./opengever/dossier/move_items.py:146
 msgid "${copied_items} Elements were moved successfully"
 msgstr ""
 
@@ -44,7 +44,7 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: ./opengever/dossier/move_items.py:94
+#: ./opengever/dossier/move_items.py:104
 msgid "Document ${name} is connected to a Task.                    Please move the Task."
 msgstr ""
 
@@ -61,15 +61,15 @@ msgstr ""
 msgid "Export selection"
 msgstr ""
 
-#: ./opengever/dossier/move_items.py:142
+#: ./opengever/dossier/move_items.py:152
 msgid "Failed to copy following objects: ${failed_objects}"
 msgstr ""
 
-#: ./opengever/dossier/move_items.py:148
+#: ./opengever/dossier/move_items.py:158
 msgid "Failed to copy following objects: ${failed_objects}                    . Locked via WebDAV"
 msgstr ""
 
-#: ./opengever/dossier/move_items.py:189
+#: ./opengever/dossier/move_items.py:199
 msgid "It isn't allowed to add such items there"
 msgstr ""
 
@@ -93,7 +93,7 @@ msgstr ""
 msgid "Project Dossier"
 msgstr ""
 
-#: ./opengever/dossier/menu.py:28
+#: ./opengever/dossier/menu.py:25
 msgid "Subdossier"
 msgstr ""
 
@@ -104,15 +104,19 @@ msgstr ""
 msgid "Templates"
 msgstr ""
 
-#: ./opengever/dossier/deactivate.py:26
+#: ./opengever/dossier/deactivate.py:46
+msgid "The Dossier can't be deactivated, not all containeddocuments are checked in."
+msgstr ""
+
+#: ./opengever/dossier/deactivate.py:55
 msgid "The Dossier can't be deactivated, the subdossier ${dossier} is already resolved"
 msgstr ""
 
-#: ./opengever/dossier/deactivate.py:68
+#: ./opengever/dossier/activate.py:43
 msgid "The Dossier has been activated"
 msgstr ""
 
-#: ./opengever/dossier/deactivate.py:44
+#: ./opengever/dossier/deactivate.py:34
 msgid "The Dossier has been deactivated"
 msgstr ""
 
@@ -152,11 +156,15 @@ msgstr ""
 msgid "The subdossier has been succesfully resolved"
 msgstr ""
 
+#: ./opengever/dossier/activate.py:28
+msgid "This subdossier can't be activated,because the main dossiers is inactive"
+msgstr ""
+
 #: ./opengever/dossier/archive.py:168
 msgid "When the Action give filing number is selected,                         all fields are required."
 msgstr ""
 
-#: ./opengever/dossier/move_items.py:172
+#: ./opengever/dossier/move_items.py:182
 msgid "You have not selected any items"
 msgstr ""
 
@@ -176,22 +184,22 @@ msgstr ""
 #. Default: "Cancel"
 #: ./opengever/dossier/archive.py:271
 #: ./opengever/dossier/behaviors/participation.py:164
-#: ./opengever/dossier/move_items.py:123
+#: ./opengever/dossier/move_items.py:133
 msgid "button_cancel"
 msgstr ""
 
 #. Default: "Move"
-#: ./opengever/dossier/move_items.py:64
+#: ./opengever/dossier/move_items.py:74
 msgid "button_submit"
 msgstr ""
 
 #. Default: "Contact"
-#: ./opengever/dossier/browser/participants.py:111
+#: ./opengever/dossier/browser/participants.py:113
 msgid "column_contact"
 msgstr ""
 
 #. Default: "role_list"
-#: ./opengever/dossier/browser/participants.py:115
+#: ./opengever/dossier/browser/participants.py:117
 msgid "column_rolelist"
 msgstr ""
 
@@ -207,7 +215,7 @@ msgid "documents"
 msgstr ""
 
 #. Default: "It isn't allowed to add such items there: ${failed_objects}"
-#: ./opengever/dossier/move_items.py:220
+#: ./opengever/dossier/move_items.py:230
 msgid "error_NotInContentTypes ${failed_objects}"
 msgstr ""
 
@@ -275,7 +283,7 @@ msgid "heading_archive_form"
 msgstr ""
 
 #. Default: "Move Items"
-#: ./opengever/dossier/move_items.py:55
+#: ./opengever/dossier/move_items.py:56
 msgid "heading_move_items"
 msgstr ""
 
@@ -296,7 +304,7 @@ msgid "help_container_type"
 msgstr ""
 
 #. Default: "Live Search: search the Plone Site"
-#: ./opengever/dossier/move_items.py:26
+#: ./opengever/dossier/move_items.py:27
 msgid "help_destination"
 msgstr ""
 
@@ -395,7 +403,7 @@ msgid "label_creator"
 msgstr ""
 
 #. Default: "Destination"
-#: ./opengever/dossier/move_items.py:25
+#: ./opengever/dossier/move_items.py:26
 msgid "label_destination"
 msgstr ""
 
@@ -476,7 +484,7 @@ msgstr ""
 
 #. Default: "Responsible"
 #: ./opengever/dossier/behaviors/dossier.py:85
-#: ./opengever/dossier/browser/participants.py:161
+#: ./opengever/dossier/browser/participants.py:174
 #: ./opengever/dossier/browser/report.py:44
 msgid "label_responsible"
 msgstr ""
