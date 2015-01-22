@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-01-22 15:57+0000\n"
+"POT-Creation-Date: 2015-01-22 16:48+0000\n"
 "PO-Revision-Date: 2012-09-10 10:17+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./opengever/dossier/move_items.py:146
+#: ./opengever/dossier/move_items.py:156
 msgid "${copied_items} Elements were moved successfully"
 msgstr "${copied_items} éléments déplacés avec succès"
 
@@ -58,15 +58,15 @@ msgstr "Modifier le sous-dossier"
 msgid "Export selection"
 msgstr "Exporter le choix"
 
-#: ./opengever/dossier/move_items.py:152
+#: ./opengever/dossier/move_items.py:162
 msgid "Failed to copy following objects: ${failed_objects}"
 msgstr "Impossible de déplacer les éléments suivants: ${failed_objects}"
 
-#: ./opengever/dossier/move_items.py:158
+#: ./opengever/dossier/move_items.py:168
 msgid "Failed to copy following objects: ${failed_objects}                    . Locked via WebDAV"
 msgstr ""
 
-#: ./opengever/dossier/move_items.py:199
+#: ./opengever/dossier/move_items.py:209
 msgid "It isn't allowed to add such items there"
 msgstr "Cet élément ne peut être déplacé ici."
 
@@ -141,6 +141,10 @@ msgstr "La date de clôture n'est pas valable. Elle doit être plus récente ou 
 msgid "The given value is not a valid Year"
 msgstr "L'année de dépôt attribuée n'est pas valable"
 
+#: ./opengever/dossier/move_items.py:89
+msgid "The selected objects can't be found, please try it again."
+msgstr ""
+
 #: ./opengever/dossier/behaviors/dossier.py:194
 msgid "The start date must be before the end date."
 msgstr "La date de début doit être plus récente que la date de clôture."
@@ -161,7 +165,7 @@ msgstr ""
 msgid "When the Action give filing number is selected,                         all fields are required."
 msgstr "Pour l'attribution de numéro d'inventaire, tous les champs sont obligatoires"
 
-#: ./opengever/dossier/move_items.py:182
+#: ./opengever/dossier/move_items.py:192
 msgid "You have not selected any items"
 msgstr "Pas d'élément sélectionné"
 
@@ -212,7 +216,7 @@ msgid "documents"
 msgstr "Documents"
 
 #. Default: "It isn't allowed to add such items there: ${failed_objects}"
-#: ./opengever/dossier/move_items.py:230
+#: ./opengever/dossier/move_items.py:240
 msgid "error_NotInContentTypes ${failed_objects}"
 msgstr "Pas d'objet déplacé. Les objets suivants ne peuvent être insérés dans le classeur choisi : ${failed_objects}"
 

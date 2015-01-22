@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-01-22 15:57+0000\n"
+"POT-Creation-Date: 2015-01-22 16:48+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.dossier\n"
 
-#: ./opengever/dossier/move_items.py:146
+#: ./opengever/dossier/move_items.py:156
 msgid "${copied_items} Elements were moved successfully"
 msgstr ""
 
@@ -61,15 +61,15 @@ msgstr ""
 msgid "Export selection"
 msgstr ""
 
-#: ./opengever/dossier/move_items.py:152
+#: ./opengever/dossier/move_items.py:162
 msgid "Failed to copy following objects: ${failed_objects}"
 msgstr ""
 
-#: ./opengever/dossier/move_items.py:158
+#: ./opengever/dossier/move_items.py:168
 msgid "Failed to copy following objects: ${failed_objects}                    . Locked via WebDAV"
 msgstr ""
 
-#: ./opengever/dossier/move_items.py:199
+#: ./opengever/dossier/move_items.py:209
 msgid "It isn't allowed to add such items there"
 msgstr ""
 
@@ -144,6 +144,10 @@ msgstr ""
 msgid "The given value is not a valid Year"
 msgstr ""
 
+#: ./opengever/dossier/move_items.py:89
+msgid "The selected objects can't be found, please try it again."
+msgstr ""
+
 #: ./opengever/dossier/behaviors/dossier.py:194
 msgid "The start date must be before the end date."
 msgstr ""
@@ -164,7 +168,7 @@ msgstr ""
 msgid "When the Action give filing number is selected,                         all fields are required."
 msgstr ""
 
-#: ./opengever/dossier/move_items.py:182
+#: ./opengever/dossier/move_items.py:192
 msgid "You have not selected any items"
 msgstr ""
 
@@ -215,7 +219,7 @@ msgid "documents"
 msgstr ""
 
 #. Default: "It isn't allowed to add such items there: ${failed_objects}"
-#: ./opengever/dossier/move_items.py:230
+#: ./opengever/dossier/move_items.py:240
 msgid "error_NotInContentTypes ${failed_objects}"
 msgstr ""
 

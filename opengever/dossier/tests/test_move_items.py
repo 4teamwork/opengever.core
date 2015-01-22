@@ -1,6 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import error_messages
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
@@ -98,6 +99,27 @@ class TestMoveItems(FunctionalTestCase):
                       "Active dossier not found as target in move items")
 
     @browsing
+    def test_redirects_to_context_and_show_statusmessage_when_obj_cant_be_found(self, browser):
+        dossier = create(Builder('dossier').titled(u'Maindossier'))
+        subdossier = create(Builder('dossier')
+                            .titled(u'Subdossier')
+                            .within(dossier))
+        document = create(Builder('document')
+                          .titled(u'Doc A')
+                          .within(dossier))
+
+        browser.login().open(dossier,
+                             {'paths:list':['/invalid/path']},
+                             view='move_items')
+        browser.fill({'Destination': subdossier})
+        browser.css('#form-buttons-button_submit').first.click()
+
+        self.assertEqual(dossier.absolute_url(), browser.url)
+        self.assertEqual(
+            "The selected objects can't be found, please try it again.",
+            error_messages()[0])
+
+    @browsing
     def test_task_are_handled_correctly(self, browser):
         dossier = create(Builder('dossier').titled(u'Maindossier'))
         subdossier = create(Builder('dossier')
@@ -112,8 +134,6 @@ class TestMoveItems(FunctionalTestCase):
                              view='move_items')
         browser.fill({'Destination': subdossier})
         browser.css('#form-buttons-button_submit').first.click()
-
-        self.assertEquals([task], subdossier.listFolderContents())
 
     def get_uids_from_tree_widget(self):
         view = self.source_repo.restrictedTraverse('move_items')

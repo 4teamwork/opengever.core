@@ -77,30 +77,30 @@ class MoveItemsForm(form.Form):
         data, errors = self.extractData()
         if len(errors) == 0:
 
-            source = data['request_paths'].split(';;')
             destination = data['destination_folder']
             failed_objects = []
             failed_resource_locked_objects = []
             copied_items = 0
 
-            for path in source:
+            try:
+                objs = self.extract_selected_objs(data)
+            except KeyError:
+                IStatusMessage(self.request).addStatusMessage(
+                    _(u"The selected objects can't be found, please try it again."),
+                    type='error')
+                return self.request.RESPONSE.redirect(self.context.absolute_url())
 
-                # Get source object
-                src_object = self.context.unrestrictedTraverse(
-                    path.encode('utf-8'))
-
+            for obj in objs:
                 # Get parent object
-                source_container = aq_parent(aq_inner(
-                    self.context.unrestrictedTraverse(
-                        path.encode('utf-8'))))
+                parent = aq_parent(aq_inner(obj))
 
-                src_name = src_object.title
-                src_id = src_object.id
+                src_name = obj.title
+                src_id = obj.id
 
                 # If parent isn't a dossier and obj is a document
                 # it's connected to a task and shouldn't be moved
-                if not IDossierMarker.providedBy(source_container) and \
-                    IDocumentSchema.providedBy(src_object):
+                if not IDossierMarker.providedBy(parent) and \
+                    IDocumentSchema.providedBy(obj):
                     msg = _(u'Document ${name} is connected to a Task.\
                     Please move the Task.', mapping=dict(name=src_name))
                     IStatusMessage(self.request).addStatusMessage(
@@ -109,7 +109,7 @@ class MoveItemsForm(form.Form):
 
                 try:
                     # Try to cut and paste object
-                    clipboard = source_container.manage_cutObjects(src_id)
+                    clipboard = parent.manage_cutObjects(src_id)
                     destination.manage_pasteObjects(clipboard)
                     copied_items += 1
 
@@ -134,6 +134,16 @@ class MoveItemsForm(form.Form):
                                         default=u'Cancel'))
     def handle_cancel(self, action):
         return self.request.RESPONSE.redirect(self.context.absolute_url())
+
+    def extract_selected_objs(self, data):
+        paths = data['request_paths'].split(';;')
+        objs = []
+
+        for path in paths:
+            objs.append(
+                self.context.unrestrictedTraverse(path.encode('utf-8')))
+
+        return objs
 
     def create_statusmessages(
         self,
