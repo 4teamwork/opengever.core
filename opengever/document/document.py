@@ -7,6 +7,7 @@ from opengever.document import _
 from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.task.task import ITask
 from plone import api
 from plone.autoform import directives as form_directives
 from plone.dexterity.content import Item
@@ -59,7 +60,6 @@ class IDocumentSchema(form.Schema):
         description=_(u'help_file', default=''),
         required=False,
         )
-
 
     @invariant
     def title_or_file_required(data):
@@ -195,3 +195,13 @@ class Document(Item):
 
     def is_checked_out(self):
         return self.checked_out_by() is not None
+
+    def is_movable(self):
+        return not self.is_inside_a_task()
+
+    def is_inside_a_task(self):
+        parent = aq_parent(aq_inner(self))
+        if ITask.providedBy(parent):
+            return True
+        else:
+            return False

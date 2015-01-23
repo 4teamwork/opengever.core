@@ -5,7 +5,6 @@ from opengever.base.source import RepositoryPathSourceBinder
 from opengever.document.document import IDocumentSchema
 from opengever.dossier import _
 from opengever.dossier.base import DOSSIER_STATES_OPEN
-from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.globalindex.model.task import Task
 from plone.dexterity.interfaces import IDexterityContainer
 from plone.z3cform import layout
@@ -77,50 +76,43 @@ class MoveItemsForm(form.Form):
         data, errors = self.extractData()
         if len(errors) == 0:
 
-            source = data['request_paths'].split(';;')
             destination = data['destination_folder']
             failed_objects = []
             failed_resource_locked_objects = []
             copied_items = 0
 
-            for path in source:
+            try:
+                objs = self.extract_selected_objs(data)
+            except KeyError:
+                IStatusMessage(self.request).addStatusMessage(
+                    _(u"The selected objects can't be found, please try it again."),
+                    type='error')
+                return self.request.RESPONSE.redirect(self.context.absolute_url())
 
-                # Get source object
-                src_object = self.context.unrestrictedTraverse(
-                    path.encode('utf-8'))
+            for obj in objs:
+                parent = aq_parent(aq_inner(obj))
 
-                # Get parent object
-                source_container = aq_parent(aq_inner(
-                    self.context.unrestrictedTraverse(
-                        path.encode('utf-8'))))
-
-                src_name = src_object.title
-                src_id = src_object.id
-
-                # If parent isn't a dossier and obj is a document
-                # it's connected to a task and shouldn't be moved
-                if not IDossierMarker.providedBy(source_container) and \
-                    IDocumentSchema.providedBy(src_object):
-                    msg = _(u'Document ${name} is connected to a Task.\
-                    Please move the Task.', mapping=dict(name=src_name))
-                    IStatusMessage(self.request).addStatusMessage(
-                        msg, type='error')
+                if IDocumentSchema.providedBy(obj) and not obj.is_movable():
+                    msg = _(u'Document ${name} is connected to a Task. '
+                            'Please move the Task.',
+                            mapping=dict(name=obj.title))
+                    IStatusMessage(self.request).addStatusMessage(msg, type='error')
                     continue
 
                 try:
                     # Try to cut and paste object
-                    clipboard = source_container.manage_cutObjects(src_id)
+                    clipboard = parent.manage_cutObjects(obj.id)
                     destination.manage_pasteObjects(clipboard)
                     copied_items += 1
 
                 except ResourceLockedError:
                     # The object is locket over webdav
-                    failed_resource_locked_objects.append(src_name)
+                    failed_resource_locked_objects.append(obj.title)
                     continue
 
                 except (ValueError, CopyError):
                     # Catch exception and add title to a list of failed objects
-                    failed_objects.append(src_name)
+                    failed_objects.append(obj.title)
                     continue
 
             self.create_statusmessages(
@@ -134,6 +126,16 @@ class MoveItemsForm(form.Form):
                                         default=u'Cancel'))
     def handle_cancel(self, action):
         return self.request.RESPONSE.redirect(self.context.absolute_url())
+
+    def extract_selected_objs(self, data):
+        paths = data['request_paths'].split(';;')
+        objs = []
+
+        for path in paths:
+            objs.append(
+                self.context.unrestrictedTraverse(path.encode('utf-8')))
+
+        return objs
 
     def create_statusmessages(
         self,

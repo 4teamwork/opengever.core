@@ -5,6 +5,9 @@ Changelog
 4.2.0 (unreleased)
 ------------------
 
+- Move items: handle twice submitted forms or invalid selected paths.
+  [phgross]
+
 - Fix and rework dossier deactivation and activation.
   [phgross]
 

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2015-01-22 15:57+0000\n"
-"PO-Revision-Date: 2013-04-03 10:08+0200\n"
+"POT-Creation-Date: 2015-01-22 16:48+0000\n"
+"PO-Revision-Date: 2015-01-22 17:49+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./opengever/dossier/move_items.py:146
+#: ./opengever/dossier/move_items.py:156
 msgid "${copied_items} Elements were moved successfully"
 msgstr "${copied_items} Elemente wurden erfolgreich verschoben"
 
@@ -60,15 +60,15 @@ msgstr "Subdossier bearbeiten"
 msgid "Export selection"
 msgstr "Auswahl exportieren"
 
-#: ./opengever/dossier/move_items.py:152
+#: ./opengever/dossier/move_items.py:162
 msgid "Failed to copy following objects: ${failed_objects}"
 msgstr "Folgende Elemente konnten nicht verschoben werden: ${failed_objects}"
 
-#: ./opengever/dossier/move_items.py:158
+#: ./opengever/dossier/move_items.py:168
 msgid "Failed to copy following objects: ${failed_objects}                    . Locked via WebDAV"
 msgstr ""
 
-#: ./opengever/dossier/move_items.py:199
+#: ./opengever/dossier/move_items.py:209
 msgid "It isn't allowed to add such items there"
 msgstr "Sie dürfen dieses Objekt nicht an den Zielort verschieben"
 
@@ -145,6 +145,10 @@ msgstr "Das Ende-Datum ist ungültig, es muss jünger oder gleich sein wie das D
 msgid "The given value is not a valid Year"
 msgstr "Das angegeben Ablagejahr ist ungültig."
 
+#: ./opengever/dossier/move_items.py:89
+msgid "The selected objects can't be found, please try it again."
+msgstr "Die selektierten Objekte konnten nicht gefunden werden, bitte versuchen Sie es erneut."
+
 #: ./opengever/dossier/behaviors/dossier.py:194
 msgid "The start date must be before the end date."
 msgstr "Das Beginn-Datum muss vor dem Ende-Datum liegen."
@@ -165,7 +169,7 @@ msgstr "Dieses Subdossier kann nicht wieder aktiviert werden, da das Hauptdossie
 msgid "When the Action give filing number is selected,                         all fields are required."
 msgstr "Für die Vergabe der Ablagenummer, werden alle Felder benötigt."
 
-#: ./opengever/dossier/move_items.py:182
+#: ./opengever/dossier/move_items.py:192
 msgid "You have not selected any items"
 msgstr "Sie haben kein Element ausgewählt"
 
@@ -216,7 +220,7 @@ msgid "documents"
 msgstr "Dokumente"
 
 #. Default: "It isn't allowed to add such items there: ${failed_objects}"
-#: ./opengever/dossier/move_items.py:230
+#: ./opengever/dossier/move_items.py:240
 msgid "error_NotInContentTypes ${failed_objects}"
 msgstr "Es wurden keine Objekte verschoben. Folgende Objekte dürfen nicht in den Zielordner eingefügt werden: ${failed_objects}"
 
@@ -616,3 +620,4 @@ msgstr "abgelaufen"
 #: ./opengever/dossier/behaviors/participation.py:194
 msgid "warning_no_participants_selected"
 msgstr "Sie haben keine Beteiligungen ausgewählt."
+
