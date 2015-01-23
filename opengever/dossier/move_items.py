@@ -5,7 +5,6 @@ from opengever.base.source import RepositoryPathSourceBinder
 from opengever.document.document import IDocumentSchema
 from opengever.dossier import _
 from opengever.dossier.base import DOSSIER_STATES_OPEN
-from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.globalindex.model.task import Task
 from plone.dexterity.interfaces import IDexterityContainer
 from plone.z3cform import layout
@@ -91,36 +90,29 @@ class MoveItemsForm(form.Form):
                 return self.request.RESPONSE.redirect(self.context.absolute_url())
 
             for obj in objs:
-                # Get parent object
                 parent = aq_parent(aq_inner(obj))
 
-                src_name = obj.title
-                src_id = obj.id
-
-                # If parent isn't a dossier and obj is a document
-                # it's connected to a task and shouldn't be moved
-                if not IDossierMarker.providedBy(parent) and \
-                    IDocumentSchema.providedBy(obj):
-                    msg = _(u'Document ${name} is connected to a Task.\
-                    Please move the Task.', mapping=dict(name=src_name))
-                    IStatusMessage(self.request).addStatusMessage(
-                        msg, type='error')
+                if IDocumentSchema.providedBy(obj) and not obj.is_movable():
+                    msg = _(u'Document ${name} is connected to a Task. '
+                            'Please move the Task.',
+                            mapping=dict(name=obj.title))
+                    IStatusMessage(self.request).addStatusMessage(msg, type='error')
                     continue
 
                 try:
                     # Try to cut and paste object
-                    clipboard = parent.manage_cutObjects(src_id)
+                    clipboard = parent.manage_cutObjects(obj.id)
                     destination.manage_pasteObjects(clipboard)
                     copied_items += 1
 
                 except ResourceLockedError:
                     # The object is locket over webdav
-                    failed_resource_locked_objects.append(src_name)
+                    failed_resource_locked_objects.append(obj.title)
                     continue
 
                 except (ValueError, CopyError):
                     # Catch exception and add title to a list of failed objects
-                    failed_objects.append(src_name)
+                    failed_objects.append(obj.title)
                     continue
 
             self.create_statusmessages(

@@ -162,6 +162,18 @@ class TestDocument(FunctionalTestCase):
         self.assertFalse(document_a.is_removed)
         self.assertTrue(document_b.is_removed)
 
+    def test_document_inside_a_dossier_is_movable(self):
+        dossier = create(Builder('dossier'))
+        doc = create(Builder('document').within(dossier))
+
+        self.assertTrue(doc.is_movable())
+
+    def test_document_inside_a_task_is_not_movable(self):
+        task = create(Builder('task'))
+        doc = create(Builder('document').within(task))
+
+        self.assertFalse(doc.is_movable())
+
 
 class TestDocumentDefaultValues(FunctionalTestCase):
 
