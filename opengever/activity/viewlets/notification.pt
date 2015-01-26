@@ -26,7 +26,9 @@
             <a href="#" class="mark_as_read" tal:condition="not: notification/read"></a>
             <div class="item-header">
               <span class="item-creation">
-                <span class="relativetime" title="2014-11-16 15:03:40Z" tal:content="notification/created" />
+                <span class="timeago relativetime"
+                      tal:attributes="title notification/created"
+                      tal:content="notification/created" />
               </span>
               <span class="item-type" tal:content="notification/kind" />
             </div>
