@@ -20,7 +20,9 @@ from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.task import _
 from opengever.task import util
+from opengever.task.activities import TaskAddedDescription
 from opengever.task.validators import NoCheckedoutDocsValidator
+from plone import api
 from plone.dexterity.content import Container
 from plone.directives import form, dexterity
 from plone.indexer.interfaces import IIndexer
@@ -419,16 +421,10 @@ class AddForm(dexterity.AddForm):
         center.add_watcher_to_resource(task, task.responsible)
         center.add_watcher_to_resource(task, task.issuer)
 
-        summary = _('transition_label_created', 'Created by ${user}',
-                    mapping={'user': Actor.user(task.Creator()).get_link()})
-
-        center.add_activity(
-            task,
-            'task-added',
-            task.title,
-            summary,
-            task.Creator(),
-            description=task.description)
+        description = TaskAddedDescription(task, self.request)
+        center.add_activity(task, description.kind, description.title,
+                            description.summary, task.Creator(),
+                            description=description.description)
 
         return task
 

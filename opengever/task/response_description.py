@@ -53,6 +53,15 @@ class ResponseDescription(object):
         return {'user': self.response.creator_link()}
 
 
+class TaskAdded(ResponseDescription):
+    transition = 'task-added'
+    css_class = 'created'
+
+    def msg(self):
+        return _('transition_label_created', 'Created by ${user}',
+                 mapping=self._msg_mapping)
+
+
 class Reactivate(ResponseDescription):
     transition = 'task-transition-cancelled-open'
     css_class = 'reactivate'
