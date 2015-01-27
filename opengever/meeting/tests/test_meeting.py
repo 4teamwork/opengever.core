@@ -4,9 +4,9 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
-from opengever.testing import FunctionalTestCase
-from opengever.meeting.browser.meetings import MeetingList
+from opengever.meeting.browser.meetings.meetinglist import MeetingList
 from opengever.meeting.model import Meeting
+from opengever.testing import FunctionalTestCase
 
 
 class TestMeeting(FunctionalTestCase):

@@ -1,0 +1,13 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="opengever.meeting">
+
+  <browser:page
+      for="opengever.meeting.committee.ICommittee"
+      name="add-meeting"
+      class=".meeting.AddMeeting"
+      permission="zope2.View"
+    />
+
+</configure>

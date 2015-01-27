@@ -3,11 +3,6 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="opengever.meeting">
 
-  <browser:page
-      for="opengever.meeting.committee.ICommittee"
-      name="add-meeting"
-      class=".meetings.AddMeeting"
-      permission="zope2.View"
-    />
+  <include package=".meetings" />
 
 </configure>
