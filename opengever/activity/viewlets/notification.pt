@@ -40,7 +40,7 @@
         </li>
 
       </ul>
-      <a href="#" class="all_link"><small>Notifications Overview</small></a>
+      <a href="./notification_overview" class="all_link"><small>Notifications Overview</small></a>
     </dd>
   </dl>
 </div>
