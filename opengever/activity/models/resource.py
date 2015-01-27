@@ -1,6 +1,6 @@
 from opengever.activity.models.watcher import Watcher
+from opengever.base.oguid import Oguid
 from opengever.globalindex import Session
-from opengever.globalindex.oguid import Oguid
 from opengever.ogds.models import BASE
 from opengever.ogds.models.query import BaseQuery
 from sqlalchemy import Column
@@ -16,7 +16,7 @@ from sqlalchemy.orm import relationship
 class ResourceQuery(BaseQuery):
 
     def get_by_oguid(self, oguid):
-        return self.filter_by(oguid=Oguid(id=oguid)).first()
+        return self.filter_by(oguid=oguid).first()
 
 
 resource_watchers = Table(

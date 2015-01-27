@@ -3,7 +3,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.activity.models.activity import Activity
 from opengever.activity.utils import notification_center
-from opengever.globalindex.oguid import Oguid
+from opengever.base.oguid import Oguid
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 

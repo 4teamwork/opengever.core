@@ -1,5 +1,5 @@
 from opengever.activity.notification_center import NotificationCenter
-from opengever.globalindex.oguid import Oguid
+from opengever.base.oguid import Oguid
 from plone import api
 
 

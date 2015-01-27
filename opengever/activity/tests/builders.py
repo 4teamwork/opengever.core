@@ -3,7 +3,7 @@ from opengever.activity import Activity
 from opengever.activity import Notification
 from opengever.activity import Resource
 from opengever.activity import Watcher
-from opengever.globalindex.oguid import Oguid
+from opengever.base.oguid import Oguid
 from opengever.ogds.models.tests.builders import SqlObjectBuilder
 from plone.app.testing import TEST_USER_ID
 
@@ -17,7 +17,7 @@ class ResourceBuilder(SqlObjectBuilder):
         super(ResourceBuilder, self).__init__(session)
 
     def oguid(self, oguid):
-        self.arguments['oguid'] = Oguid(id=oguid)
+        self.arguments['oguid'] = Oguid.parse(oguid)
         return self
 
 builder_registry.register('resource', ResourceBuilder)

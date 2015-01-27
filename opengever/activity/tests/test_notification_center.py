@@ -5,7 +5,7 @@ from opengever.activity import Resource
 from opengever.activity import Watcher
 from opengever.activity.notification_center import NotificationCenter
 from opengever.activity.tests.base import ActivityTestCase
-from opengever.globalindex.oguid import Oguid
+from opengever.base.oguid import Oguid
 
 
 class TestResourceHandling(ActivityTestCase):
@@ -18,18 +18,21 @@ class TestResourceHandling(ActivityTestCase):
         resource_a = create(Builder('resource').oguid('fd:123'))
         resource_b = create(Builder('resource').oguid('fd:456'))
 
-        self.assertEquals(resource_a, self.center.fetch_resource('fd:123'))
-        self.assertEquals(resource_b, self.center.fetch_resource('fd:456'))
+        self.assertEquals(resource_a,
+                          self.center.fetch_resource(Oguid('fd', '123')))
+        self.assertEquals(resource_b,
+                          self.center.fetch_resource(Oguid('fd', '456')))
 
     def test_fetch_return_none_when_resource_not_exists(self):
-        self.assertEquals(None, self.center.fetch_resource('fd:123'))
+        self.assertEquals(None,
+                          self.center.fetch_resource(Oguid('fd', '123')))
 
     def test_adding(self):
-        resource = self.center.add_resource(Oguid(id='fd:123'))
+        resource = self.center.add_resource(Oguid('fd','123'))
 
         self.assertEquals(1, len(Resource.query.all()))
         resource = Resource.query.first()
-        self.assertEquals(Oguid(id='fd:123'), resource.oguid)
+        self.assertEquals(Oguid('fd','123'), resource.oguid)
         self.assertEquals('fd', resource.admin_unit_id)
         self.assertEquals(123, resource.int_id)
 
@@ -60,14 +63,14 @@ class TestWatcherHandling(ActivityTestCase):
         peter = create(Builder('watcher').having(user_id='peter'))
         resource = create(Builder('resource').oguid('fd:123'))
 
-        self.center.add_watcher_to_resource('fd:123', 'peter')
+        self.center.add_watcher_to_resource(Oguid('fd', '123'), 'peter')
 
         self.assertEquals([peter], resource.watchers)
 
     def test_add_watcher_to_resource_creates_resource_when_not_exitst(self):
         peter = create(Builder('watcher').having(user_id='peter'))
 
-        self.center.add_watcher_to_resource(Oguid(id='fd:123'), 'peter')
+        self.center.add_watcher_to_resource(Oguid('fd','123'), 'peter')
 
         resource = peter.resources[0]
         self.assertEquals('fd:123', resource.oguid)
@@ -75,7 +78,7 @@ class TestWatcherHandling(ActivityTestCase):
     def test_add_watcher_to_resource_creates_watcher_when_not_exitst(self):
         resource = create(Builder('resource').oguid('fd:123'))
 
-        self.center.add_watcher_to_resource('fd:123', 'peter')
+        self.center.add_watcher_to_resource(Oguid('fd', '123'), 'peter')
 
         watcher = resource.watchers[0]
         self.assertEquals('peter', watcher.user_id)
@@ -91,18 +94,18 @@ class TestWatcherHandling(ActivityTestCase):
                .having(watchers=[peter]))
 
         self.assertEquals([hugo, fritz],
-                          self.center.get_watchers('fd:123'))
+                          self.center.get_watchers(Oguid('fd', '123')))
         self.assertEquals([peter],
-                          self.center.get_watchers('fd:456'))
+                          self.center.get_watchers(Oguid('fd', '456')))
 
     def test_get_watchers_returns_empty_list_when_resource_not_exists(self):
-        self.assertEquals([], self.center.get_watchers('fd:123'))
+        self.assertEquals([], self.center.get_watchers(Oguid('fd', '123')))
 
     def test_remove_watcher_from_resource_raise_exception_when_watcher_not_exists(self):
         create(Builder('resource').oguid('fd:123'))
 
         with self.assertRaises(Exception) as cm:
-            self.center.remove_watcher_from_resource('fd:123', 'peter')
+            self.center.remove_watcher_from_resource(Oguid('fd', '123'), 'peter')
 
         self.assertEquals('Watcher with userid peter not found.',
                           str(cm.exception))
@@ -111,7 +114,7 @@ class TestWatcherHandling(ActivityTestCase):
         create(Builder('watcher').having(user_id='peter'))
 
         with self.assertRaises(Exception) as cm:
-            self.center.remove_watcher_from_resource('fd:123', 'peter')
+            self.center.remove_watcher_from_resource(Oguid('fd', '123'), 'peter')
 
         self.assertEquals('Resource with oguid fd:123 not found.',
                           str(cm.exception))
@@ -123,7 +126,7 @@ class TestWatcherHandling(ActivityTestCase):
                           .oguid('fd:123')
                           .having(watchers=[hugo, peter]))
 
-        self.center.remove_watcher_from_resource('fd:123', 'peter')
+        self.center.remove_watcher_from_resource(Oguid('fd', '123'), 'peter')
 
         self.assertEquals([hugo], resource.watchers)
 
@@ -135,13 +138,13 @@ class TestAddActivity(ActivityTestCase):
         self.center = NotificationCenter()
 
     def test_add_resource_if_not_exists(self):
-        self.center.add_activity(Oguid(id='fd:123'),
+        self.center.add_activity(Oguid('fd','123'),
                                   'task_added',
                                   'Kennzahlen 2014',
                                   'Task bla added',
                                   'hugo.boss')
 
-        resource = self.center.fetch_resource('fd:123')
+        resource = self.center.fetch_resource(Oguid('fd','123'))
         self.assertEquals('fd', resource.admin_unit_id)
         self.assertEquals(123, resource.int_id)
 
@@ -152,7 +155,7 @@ class TestAddActivity(ActivityTestCase):
         resource_a = create(Builder('resource').oguid('fd:123')
                             .having(watchers=[hugo, peter]))
 
-        activity = self.center.add_activity('fd:123',
+        activity = self.center.add_activity(Oguid('fd', '123'),
                                              'TASK_ADDED',
                                              'Kennzahlen 2014',
                                              'Task bla added',
@@ -175,11 +178,11 @@ class TestAddActivity(ActivityTestCase):
         resource_a = create(Builder('resource').oguid('fd:123')
                             .having(watchers=[hugo, peter]))
 
-        activity = self.center.add_activity('fd:123',
-                                             'TASK_ADDED',
-                                             'Kennzahlen 2014',
-                                             'Task bla added',
-                                             'peter')
+        activity = self.center.add_activity(Oguid('fd', '123'),
+                                            'TASK_ADDED',
+                                            'Kennzahlen 2014',
+                                            'Task bla added',
+                                            'peter')
 
         self.assertEquals(1, len(hugo.notifications))
         self.assertEquals(0, len(peter.notifications))
@@ -206,16 +209,16 @@ class TestNotificationHandling(ActivityTestCase):
                                  .having(watchers=[self.peter]))
 
         self.activity_1 = self.center.add_activity(
-            Oguid(id='fd:123'), 'task-added', 'Kennzahlen 2014 erfassen',
+            Oguid('fd','123'), 'task-added', 'Kennzahlen 2014 erfassen',
             'Task bla added', 'hugo.boss')
         self.activity_2 = self.center.add_activity(
-            Oguid(id='fd:123'), 'task-transition-open-in-progress',
+            Oguid('fd','123'), 'task-transition-open-in-progress',
             'Kennzahlen 2014 erfassen', 'Task bla accepted', 'peter.mueller')
         self.activity_3 = self.center.add_activity(
-            Oguid(id='fd:456'), 'task-added', 'Kennzahlen 2014 erfassen',
+            Oguid('fd','456'), 'task-added', 'Kennzahlen 2014 erfassen',
             'Task foo added', 'peter.mueller')
         self.activity_4 = self.center.add_activity(
-            Oguid(id='fd:789'), 'task-added', 'Kennzahlen 2014 erfassen',
+            Oguid('fd','789'), 'task-added', 'Kennzahlen 2014 erfassen',
             'Task Test added', 'franz.meier')
 
     def test_get_users_notifications_lists_only_users_notifications(self):
