@@ -5,6 +5,7 @@ from opengever.activity.models.notification import Notification
 from opengever.activity.utils import notification_center
 from plone import api
 from Products.Five import BrowserView
+from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.interface import Interface
 
 
@@ -35,6 +36,8 @@ class MyNotifications(NotificationListingTab):
 
     enabled_actions = []
     major_actions = []
+
+    selection = ViewPageTemplateFile("no_selection.pt")
 
     def get_base_query(self):
         userid = api.user.get_current().getId()
