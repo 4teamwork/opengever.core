@@ -44,3 +44,7 @@ class Activity(BASE):
         for watcher in self.resource.watchers:
             if watcher.user_id != self.actor_id:
                 Notification(watcher=watcher, activity=self)
+
+    def get_link(self):
+        return u'<a href="./resolve_oguid?oguid={}">{}</a>'.format(
+            self.resource.oguid, self.title)

@@ -14,4 +14,11 @@
       allowed_attributes="read"
       />
 
+  <browser:page
+      for="*"
+      name="notification_overview"
+      class=".views.NotificationOverview"
+      permission="zope2.View"
+      />
+
 </configure>
