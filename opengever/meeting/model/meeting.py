@@ -162,8 +162,8 @@ class Meeting(Base):
         admin_unit = self.committee.get_admin_unit()
         return '/'.join((admin_unit.public_url, self.physical_path))
 
-    def get_edit_url(self):
+    def get_edit_url(self, context):
         return '/'.join((self.get_url(), 'edit'))
 
-    def get_breadcrumbs(self):
+    def get_breadcrumbs(self, context):
         return {'absolute_url': self.get_url(), 'Title': self.get_title()}
