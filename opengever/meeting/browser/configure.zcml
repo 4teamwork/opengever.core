@@ -6,6 +6,13 @@
   <include package=".meetings" />
 
   <browser:page
+      for="opengever.meeting.committee.ICommittee"
+      name="add-membership"
+      class=".memberships.AddMembership"
+      permission="zope2.View"
+    />
+
+  <browser:page
       for="opengever.meeting.committeecontainer.ICommitteeContainer"
       name="add-member"
       class=".members.AddMember"

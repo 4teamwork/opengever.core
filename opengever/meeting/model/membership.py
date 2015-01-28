@@ -16,11 +16,11 @@ class Membership(Base):
 
     __tablename__ = 'memberships'
 
-    date_from = Column(Date, nullable=False)
+    date_from = Column(Date, primary_key=True)
     date_to = Column(Date, nullable=False)
 
     committee_id = Column(Integer, ForeignKey('committees.id'),
-                           primary_key=True)
+                          primary_key=True)
     committee = relationship("Committee", backref="memberships")
     member_id = Column(Integer, ForeignKey('members.id'),
                        primary_key=True)
