@@ -37,3 +37,18 @@ class TestMemberListing(FunctionalTestCase):
         self.assertEqual(u'Hanspeter', hans.firstname)
         self.assertEqual(u'Hansj\xf6rg', hans.lastname)
         self.assertEqual(u'foo@example.com', hans.email)
+
+    @browsing
+    def test_memers_can_be_edited_in_browser(self, browser):
+        browser.login()
+        browser.open(self.member.get_edit_url(self.container))
+
+        browser.fill({'Firstname': u'Hanspeter',
+                      'Lastname': u'Hansj\xf6rg',
+                      'E-Mail': u'foo@example.com'}).submit()
+
+        member = Member.get(self.member.member_id)
+        self.assertIsNotNone(member)
+        self.assertEqual(u'Hanspeter', member.firstname)
+        self.assertEqual(u'Hansj\xf6rg', member.lastname)
+        self.assertEqual(u'foo@example.com', member.email)

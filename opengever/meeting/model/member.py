@@ -36,3 +36,17 @@ class Member(Base):
 
     def get_breadcrumbs(self, context):
         return {'absolute_url': self.get_url(context), 'Title': self.fullname}
+
+    def get_edit_values(self, fieldnames):
+        values = {}
+        for fieldname in fieldnames:
+            value = getattr(self, fieldname, None)
+            if not value:
+                continue
+
+            values[fieldname] = value
+        return values
+
+    def update_model(self, data):
+        for key, value in data.items():
+            setattr(self, key, value)
