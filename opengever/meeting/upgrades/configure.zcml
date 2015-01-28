@@ -36,4 +36,14 @@
         profile="opengever.meeting:default"
         />
 
+    <!-- 4202 -> 4203 -->
+    <genericsetup:upgradeStep
+        title="Add committee membership role."
+        description=""
+        source="4202"
+        destination="4203"
+        handler="opengever.meeting.upgrades.to4203.AddMembershipRole"
+        profile="opengever.meeting:default"
+        />
+
 </configure>

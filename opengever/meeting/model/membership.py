@@ -4,6 +4,7 @@ from sqlalchemy import Column
 from sqlalchemy import Date
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
+from sqlalchemy import String
 from sqlalchemy.orm import relationship
 
 
@@ -24,6 +25,7 @@ class Membership(Base):
     member_id = Column(Integer, ForeignKey('members.id'),
                        primary_key=True)
     member = relationship("Member", backref="memberships")
+    role = Column(String(256))
 
     def __repr__(self):
         return '<Membership {} in {} {}:{}>'.format(
