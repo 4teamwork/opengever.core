@@ -10,7 +10,7 @@ Changelog
 
 - XlsSource: Raise KeyError if a value can't be found in the translation mapping
   for fields with a vocabulary, instead of just setting the translated value anyway.
-  [lgraf] 
+  [lgraf]
 
 - XlsSource: Add some more alternate spellings for archival_value mapping.
   [lgraf]
@@ -37,6 +37,9 @@ Changelog
     - Add paragraph and custom text agenda items.
     - Make agenda items deletable.
     - Add a form to create a pre-protocols for meetings.
+    - Disable edit-bar for model add-forms.
+    - Add forms for Members and their Memberships in Committees.
+    - Add tab to committees listing all memberships.
 
   [deiferni]
 
