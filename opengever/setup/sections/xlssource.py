@@ -113,13 +113,13 @@ class XlsSource(object):
                 cell = [t for t in cell if not t == '']
 
             if key == 'archival_value':
-                cell = ARCHIVAL_VALUE_MAPPING.get(cell, cell)
+                cell = ARCHIVAL_VALUE_MAPPING[cell]
             if key == 'classification':
-                cell = CLASSIFICATION_MAPPING.get(cell, cell)
+                cell = CLASSIFICATION_MAPPING[cell]
             if key == 'privacy_layer':
-                cell = PRIVACY_LAYER_MAPPING.get(cell, cell)
+                cell = PRIVACY_LAYER_MAPPING[cell]
             if key == 'public_trial':
-                cell = PUBLIC_TRIAL_MAPPING.get(cell, cell)
+                cell = PUBLIC_TRIAL_MAPPING[cell]
 
             data[key] = cell
 
