@@ -5,6 +5,9 @@ Changelog
 4.2.0 (unreleased)
 ------------------
 
+- XlsSource: Add some more alternate spellings for archival_value mapping.
+  [lgraf]
+
 - Move items: handle twice submitted forms or invalid selected paths.
   [phgross]
 
