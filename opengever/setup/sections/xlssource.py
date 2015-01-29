@@ -26,8 +26,10 @@ ARCHIVAL_VALUE_MAPPING = {u'Nicht geprüft': u'unchecked',
                           u"Noch nicht geprüft": u'unchecked',
                           u'Anbieten': u'prompt',
                           u'Archivwürdig': u'archival worthy',
+                          u'Archivieren': u'archival worthy',
                           u'Nicht archivwürdig': u'not archival worthy',
                           u'Sampling': u'archival worthy with sampling',
+                          u'Auswahl archivw\xfcrdig': u'archival worthy with sampling',
                           }
 
 
