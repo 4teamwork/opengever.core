@@ -55,4 +55,13 @@
         directory="profiles/4204"
         />
 
+    <!-- 4204 -> 4205 -->
+    <upgrade-step:importProfile
+        title="Add member action to committee container."
+        profile="opengever.meeting:default"
+        source="4204"
+        destination="4205"
+        directory="profiles/4205"
+        />
+
 </configure>

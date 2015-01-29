@@ -42,6 +42,16 @@
   <alias from="sharing" to="@@sharing"/>
   <alias from="view" to="@@view"/>
 
+  <action action_id="add-member"
+          visible="True"
+          title="Member"
+          category="folder_factories"
+          url_expr="string:${object_url}/add-member"
+          icon_expr=""
+          condition_expr="">
+      <permission value="Add portal content"/>
+  </action>
+
   <!-- Actions -->
   <action title="View" action_id="view" category="object" condition_expr=""
           url_expr="string:${object_url}" visible="False">
