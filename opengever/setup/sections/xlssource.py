@@ -33,6 +33,13 @@ ARCHIVAL_VALUE_MAPPING = {u'Nicht geprüft': u'unchecked',
                           }
 
 
+MAPPED_FIELDS = {'archival_value': ARCHIVAL_VALUE_MAPPING,
+                 'classification': CLASSIFICATION_MAPPING,
+                 'privacy_layer': PRIVACY_LAYER_MAPPING,
+                 'public_trial': PUBLIC_TRIAL_MAPPING,
+                 }
+
+
 class XlsSource(object):
     classProvides(ISectionBlueprint)
     implements(ISection)
@@ -88,14 +95,14 @@ class XlsSource(object):
                     cell = cell.replace(' ', '').split(',')
                     cell = [t for t in cell if not t == '']
 
-                if key == 'archival_value':
-                    cell = ARCHIVAL_VALUE_MAPPING[cell]
-                if key == 'classification':
-                    cell = CLASSIFICATION_MAPPING[cell]
-                if key == 'privacy_layer':
-                    cell = PRIVACY_LAYER_MAPPING[cell]
-                if key == 'public_trial':
-                    cell = PUBLIC_TRIAL_MAPPING[cell]
+                if key in MAPPED_FIELDS.keys():
+                    mapping = MAPPED_FIELDS[key]
+
+                    # Data is already a valid term
+                    if cell in mapping.values():
+                        continue
+
+                    cell = mapping[cell]
 
                 data[key] = cell
 
