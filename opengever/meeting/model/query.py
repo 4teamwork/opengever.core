@@ -1,3 +1,4 @@
+from datetime import date
 from opengever.ogds.models.query import BaseQuery
 from plone import api
 
@@ -38,3 +39,9 @@ class CommitteeQuery(BaseQuery):
 
         """
         return self.filter(self._attribute('oguid') == oguid).first()
+
+
+class MembershipQuery(BaseQuery):
+
+    def only_active(self):
+        return self.filter(self._attribute('date_from') <= date.today())

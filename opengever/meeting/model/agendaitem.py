@@ -13,7 +13,6 @@ class AgendaItem(Base):
     """An item must either have a reference to a proposal or a title.
 
     """
-
     __tablename__ = 'agendaitems'
 
     agenda_item_id = Column("id", Integer, Sequence("agendaitems_id_seq"),
@@ -28,6 +27,9 @@ class AgendaItem(Base):
     number = Column(String(16))
     is_paragraph = Column(Boolean, nullable=False, default=False)
     sort_order = Column(Integer, nullable=False, default=0)
+
+    discussion = Column(Text)
+    decision = Column(Text)
 
     def get_title(self):
         return self.proposal.title if self.proposal else self.title

@@ -26,4 +26,14 @@
         directory="profiles/4201"
         />
 
+    <!-- 4201 -> 4202 -->
+    <genericsetup:upgradeStep
+        title="Add Protocols to Meetings."
+        description=""
+        source="4201"
+        destination="4202"
+        handler="opengever.meeting.upgrades.to4202.AddProtocolsToMeetings"
+        profile="opengever.meeting:default"
+        />
+
 </configure>

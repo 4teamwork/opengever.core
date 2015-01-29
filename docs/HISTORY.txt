@@ -36,6 +36,7 @@ Changelog
     - Add custom pathbar viewlet which can display sql-models.
     - Add paragraph and custom text agenda items.
     - Make agenda items deletable.
+    - Add a form to create a pre-protocols for meetings.
 
   [deiferni]
 

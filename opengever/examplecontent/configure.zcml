@@ -47,4 +47,9 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
+  <profilehook:hook
+      profile="opengever.examplecontent:init"
+      handler=".hooks.init_profile_installed"
+      />
+
 </configure>

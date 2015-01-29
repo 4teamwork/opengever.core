@@ -1,6 +1,7 @@
 from opengever.meeting import _
 from opengever.meeting.container import ModelContainer
 from opengever.meeting.model import Committee as CommitteeModel
+from opengever.meeting.model import Membership
 from opengever.meeting.service import meeting_service
 from plone import api
 from plone.directives import form
@@ -48,3 +49,7 @@ class Committee(ModelContainer):
     def get_physical_path(self):
         url_tool = api.portal.get_tool(name='portal_url')
         return '/'.join(url_tool.getRelativeContentPath(self))
+
+    def get_active_memberships(self):
+        return Membership.query.filter_by(
+            committee=self.load_model()).only_active()

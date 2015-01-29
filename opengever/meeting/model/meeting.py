@@ -10,9 +10,18 @@ from sqlalchemy import Date
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
+from sqlalchemy import Table
+from sqlalchemy import Text
 from sqlalchemy import Time
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
+
+
+meeting_participants = Table(
+    'meeting_participants', Base.metadata,
+    Column('meeting_id', Integer, ForeignKey('meetings.id')),
+    Column('member_id', Integer, ForeignKey('members.id'))
+)
 
 
 class Meeting(Base):
@@ -45,6 +54,17 @@ class Meeting(Base):
     end_time = Column(Time)
     workflow_state = Column(String(256), nullable=False,
                             default=workflow.default_state.name)
+
+    presidency = relationship(
+        'Member', primaryjoin="Member.member_id==Meeting.presidency_id")
+    presidency_id = Column(Integer, ForeignKey('members.id'))
+    secretary = relationship(
+        'Member', primaryjoin="Member.member_id==Meeting.secretary_id")
+    secretary_id = Column(Integer, ForeignKey('members.id'))
+    other_participants = Column(Text)
+    participants = relationship('Member',
+                                secondary=meeting_participants,
+                                backref='meetings')
 
     def __repr__(self):
         return '<Meeting at "{}">'.format(self.date)
