@@ -88,4 +88,11 @@
           url_expr="string:#"
           visible="True">
   </action>
+  <action title="memberships"
+          action_id="memberships"
+          category="tabbedview-tabs"
+          condition_expr=""
+          url_expr="string:#"
+          visible="True">
+  </action>
 </object>

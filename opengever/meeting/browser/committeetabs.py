@@ -1,6 +1,7 @@
 from five import grok
 from opengever.meeting.committee import ICommittee
 from opengever.meeting.tabs.meetinglisting import MeetingListingTab
+from opengever.meeting.tabs.membershiplisting import MembershipListingTab
 from opengever.meeting.tabs.submittedproposallisting import SubmittedProposalListingTab
 
 
@@ -14,6 +15,14 @@ class Meetings(MeetingListingTab):
 
 class SubmittedProposals(SubmittedProposalListingTab):
     grok.name('tabbedview_view-submittedproposals')
+    grok.context(ICommittee)
+
+    enabled_actions = []
+    major_actions = []
+
+
+class Memberships(MembershipListingTab):
+    grok.name('tabbedview_view-memberships')
     grok.context(ICommittee)
 
     enabled_actions = []

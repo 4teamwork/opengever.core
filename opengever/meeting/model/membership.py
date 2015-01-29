@@ -33,3 +33,16 @@ class Membership(Base):
             repr(self.committee.title),
             self.date_from,
             self.date_to)
+
+    def get_date_from(self):
+        return self._get_date(self.date_from)
+
+    def get_date_to(self):
+        if not self.date_to:
+            return ''
+
+        return self._get_date(self.date_to)
+        pass
+
+    def _get_date(self, date):
+        return date.strftime('%A, %d. %B %Y')
