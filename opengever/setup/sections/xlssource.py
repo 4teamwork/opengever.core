@@ -26,9 +26,18 @@ ARCHIVAL_VALUE_MAPPING = {u'Nicht geprüft': u'unchecked',
                           u"Noch nicht geprüft": u'unchecked',
                           u'Anbieten': u'prompt',
                           u'Archivwürdig': u'archival worthy',
+                          u'Archivieren': u'archival worthy',
                           u'Nicht archivwürdig': u'not archival worthy',
                           u'Sampling': u'archival worthy with sampling',
+                          u'Auswahl archivw\xfcrdig': u'archival worthy with sampling',
                           }
+
+
+MAPPED_FIELDS = {'archival_value': ARCHIVAL_VALUE_MAPPING,
+                 'classification': CLASSIFICATION_MAPPING,
+                 'privacy_layer': PRIVACY_LAYER_MAPPING,
+                 'public_trial': PUBLIC_TRIAL_MAPPING,
+                 }
 
 
 class XlsSource(object):
@@ -86,14 +95,14 @@ class XlsSource(object):
                     cell = cell.replace(' ', '').split(',')
                     cell = [t for t in cell if not t == '']
 
-                if key == 'archival_value':
-                    cell = ARCHIVAL_VALUE_MAPPING.get(cell, cell)
-                if key == 'classification':
-                    cell = CLASSIFICATION_MAPPING.get(cell, cell)
-                if key == 'privacy_layer':
-                    cell = PRIVACY_LAYER_MAPPING.get(cell, cell)
-                if key == 'public_trial':
-                    cell = PUBLIC_TRIAL_MAPPING.get(cell, cell)
+                if key in MAPPED_FIELDS.keys():
+                    mapping = MAPPED_FIELDS[key]
+
+                    # Data is already a valid term
+                    if cell in mapping.values():
+                        continue
+
+                    cell = mapping[cell]
 
                 data[key] = cell
 

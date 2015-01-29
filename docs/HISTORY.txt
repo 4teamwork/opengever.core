@@ -5,6 +5,16 @@ Changelog
 4.0.8 (unreleased)
 ------------------
 
+- XlsSource: Handle values that are already a valid term for vocabulary fields.
+  [lgraf]
+
+- XlsSource: Raise KeyError if a value can't be found in the translation mapping
+  for fields with a vocabulary, instead of just setting the translated value anyway.
+  [lgraf] 
+
+- XlsSource: Add some more alternate spellings for archival_value mapping.
+  [lgraf]
+
 - Setup: Make sure to set `current_unit_id` registry setting
   even when `SQL` is not ticked.
   [lgraf]
