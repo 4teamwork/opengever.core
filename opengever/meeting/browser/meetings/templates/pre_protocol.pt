@@ -34,7 +34,7 @@
 
                   <label tal:attributes="for string:${name}.proposed_action:record"
                          i18n:translate="">
-                         Proposal
+                         Proposed action
                   </label>
                   <textarea class="textarea-widget text-field"
                             tal:attributes="name string:${name}.proposed_action:record;

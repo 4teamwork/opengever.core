@@ -38,7 +38,7 @@ class TestPreProtocol(FunctionalTestCase):
         browser.open(EditPreProtocol.url_for(self.committee, self.meeting))
 
         browser.fill({'Considerations': 'It is important',
-                      'Proposal': 'Accept it',
+                      'Proposed action': 'Accept it',
                       'Discussion': 'We should accept it',
                       'Decision': 'Accepted'}).submit()
 
