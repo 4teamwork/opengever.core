@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.0.8 (unreleased)
+4.0.8 (2015-01-29)
 ------------------
 
 - XlsSource: Handle values that are already a valid term for vocabulary fields.
