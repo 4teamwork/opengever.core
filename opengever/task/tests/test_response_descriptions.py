@@ -18,26 +18,29 @@ class TestResponseDescriptions(FunctionalTestCase):
 
         self.user = create(Builder('ogds_user')
                            .having(userid=TEST_USER_ID,
-                                   firstname='User',
-                                   lastname='Test'))
+                                   firstname=u'Hans',
+                                   lastname=u'M\xfcller'))
 
         self.other_user = create(Builder('ogds_user')
                                  .having(userid='other_user',
-                                         firstname='Other',
-                                         lastname='User'))
+                                         firstname=u'J\xf6rg',
+                                         lastname='Steiner'))
 
         create(Builder('org_unit')
                .as_current_org_unit()
                .id('client1')
-               .having(title="Organization 1", admin_unit=self.admin_unit)
+               .having(title=u'Amt f\xfcr Umwelt', admin_unit=self.admin_unit)
                .assign_users([self.user, self.other_user]))
 
+        # TODO: Use non-ASCII characters in dossier title as well, but
+        # currently og.globalindex.model.task.Task.sync_with() can't
+        # handle it correctly
         self.dossier = create(Builder('dossier').titled(u'Dossier'))
 
         self.task = create(Builder("task")
                            .within(self.dossier)
-                           .titled(u'Aufgabe')
-                           .having(text='Text blabla',
+                           .titled(u'Aufgabe f\xfcr Hans')
+                           .having(text=u'Text f\xfcr Aufgabe',
                                    task_type='comment',
                                    deadline=datetime(2010, 1, 1),
                                    issuer=TEST_USER_ID,
@@ -77,7 +80,7 @@ class TestResponseDescriptions(FunctionalTestCase):
         self.click_task_button(browser, 'reactivate')
 
         self.assertEqual(
-            'Reactivate by Test User (test_user_1_)',
+            u'Reactivate by M\xfcller Hans (test_user_1_)',
             self.get_latest_answer(browser))
 
     @browsing
@@ -89,7 +92,7 @@ class TestResponseDescriptions(FunctionalTestCase):
         self.click_task_button(browser, 'refuse')
 
         self.assertEqual(
-            'Rejected by Test User (test_user_1_)',
+            u'Rejected by M\xfcller Hans (test_user_1_)',
             self.get_latest_answer(browser))
 
     @browsing
@@ -100,7 +103,7 @@ class TestResponseDescriptions(FunctionalTestCase):
         self.click_task_button(browser, 'complete')
 
         self.assertEqual(
-            'Resolved by Test User (test_user_1_)',
+            u'Resolved by M\xfcller Hans (test_user_1_)',
             self.get_latest_answer(browser))
 
     @browsing
@@ -111,7 +114,7 @@ class TestResponseDescriptions(FunctionalTestCase):
         self.click_task_button(browser, 'close')
 
         self.assertEqual(
-            'Closed by Test User (test_user_1_)',
+            u'Closed by M\xfcller Hans (test_user_1_)',
             self.get_latest_answer(browser))
 
     @browsing
@@ -122,7 +125,7 @@ class TestResponseDescriptions(FunctionalTestCase):
         self.click_task_button(browser, 'cancelled')
 
         self.assertEqual(
-            'Cancelled by Test User (test_user_1_)',
+            u'Cancelled by M\xfcller Hans (test_user_1_)',
             self.get_latest_answer(browser))
 
     @browsing
@@ -132,7 +135,7 @@ class TestResponseDescriptions(FunctionalTestCase):
         self.click_task_button(browser, 'accept')
 
         self.assertEqual(
-            'Accepted by Test User (test_user_1_)',
+            u'Accepted by M\xfcller Hans (test_user_1_)',
             self.get_latest_answer(browser))
 
     @browsing
@@ -146,7 +149,7 @@ class TestResponseDescriptions(FunctionalTestCase):
         self.click_task_button(browser, 'reopen')
 
         self.assertEqual(
-            'Reopened by Test User (test_user_1_)',
+            u'Reopened by M\xfcller Hans (test_user_1_)',
             self.get_latest_answer(browser))
 
     @browsing
@@ -160,7 +163,7 @@ class TestResponseDescriptions(FunctionalTestCase):
         self.click_task_button(browser, 'revise')
 
         self.assertEqual(
-            'Revised by Test User (test_user_1_)',
+            u'Revised by M\xfcller Hans (test_user_1_)',
             self.get_latest_answer(browser))
 
     @browsing
@@ -176,8 +179,8 @@ class TestResponseDescriptions(FunctionalTestCase):
         self.visit_overview(browser)
 
         self.assertEqual(
-            'Reassigned from Test User (test_user_1_) to User Other '
-            '(other_user) by Test User (test_user_1_)',
+            u'Reassigned from M\xfcller Hans (test_user_1_) to Steiner '
+            u'J\xf6rg (other_user) by M\xfcller Hans (test_user_1_)',
             self.get_latest_answer(browser))
 
     @browsing
@@ -192,8 +195,8 @@ class TestResponseDescriptions(FunctionalTestCase):
         self.visit_overview(browser)
 
         self.assertEqual(
-            'Deadline modified from 01.01.2010 to 07.07.2015 '
-            'by Test User (test_user_1_)',
+            u'Deadline modified from 01.01.2010 to 07.07.2015 '
+            u'by M\xfcller Hans (test_user_1_)',
             self.get_latest_answer(browser))
 
     @browsing
@@ -218,8 +221,8 @@ class TestResponseDescriptions(FunctionalTestCase):
 
         # Delegation doesn't create a response (yet), but adding subtask does
         self.assertEqual(
-            'Subtask My delegated subtask (Test User (test_user_1_)) added '
-            'by Test User (test_user_1_)',
+            u'Subtask My delegated subtask (M\xfcller Hans (test_user_1_)) '
+            u'added by M\xfcller Hans (test_user_1_)',
             self.get_latest_answer(browser))
 
     @browsing
@@ -232,22 +235,22 @@ class TestResponseDescriptions(FunctionalTestCase):
         self.visit_overview(browser)
 
         self.assertEqual(
-            'Subtask My Subtask (Test User (test_user_1_)) added by '
-            'Test User (test_user_1_)',
+            u'Subtask My Subtask (M\xfcller Hans (test_user_1_)) added by '
+            u'M\xfcller Hans (test_user_1_)',
             self.get_latest_answer(browser))
 
     @browsing
     def test_adding_document_creates_response(self, browser):
         create(Builder('document')
-               .titled(u'Ein Dokument.docx')
+               .titled(u'Sanierung B\xe4rengraben.docx')
                .within(self.task))
 
         browser.login()
         self.visit_overview(browser)
 
         self.assertEqual(
-            'Document Ein Dokument.docx added by '
-            'Test User (test_user_1_)',
+            u'Document Sanierung B\xe4rengraben.docx added by '
+            u'M\xfcller Hans (test_user_1_)',
             self.get_latest_answer(browser))
 
     # TODO:
