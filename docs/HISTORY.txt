@@ -5,6 +5,9 @@ Changelog
 4.2.0 (unreleased)
 ------------------
 
+- Make sure response descriptions are always unicode.
+  [lgraf]
+
 - Add ftw.testbrowser widget for our customized AutocompleteWidget.
   [lgraf]
 
