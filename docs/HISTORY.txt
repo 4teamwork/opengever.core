@@ -5,6 +5,9 @@ Changelog
 4.2.0 (unreleased)
 ------------------
 
+- Add ftw.testbrowser widget for our customized AutocompleteWidget.
+  [lgraf]
+
 - Only show "Paste" action if objects in clipboard are in allowed addable
   types of target container.
   [lgraf]
