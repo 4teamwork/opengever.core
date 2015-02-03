@@ -1,5 +1,4 @@
 from five import grok
-from ZODB.POSException import ConflictError
 from zope.interface import Interface
 
 
@@ -17,16 +16,36 @@ class IsPastingAllowedView(grok.View):
                       'opengever.contact.contactfolder',
                       'ftw.mail.mail')
 
+    @property
+    def allowed_content_types(self):
+        """Returns a tuple of allowed portal types for the container as
+        per the container's FTI.
+
+        XXX: This should be extended to consider
+             1) Per-context constrained dossier types (special dossiers)
+             2) The constraint that dossiers can't be added in non-leaf nodes
+                of the repository
+        """
+        container_fti = self.context.getTypeInfo()
+        return container_fti.allowed_content_types
+
     def render(self):
-        valid_cb_data = False
-        try:
-            valid_cb_data = self.context.cb_dataValid()
-        except (ConflictError, KeyboardInterrupt, SystemExit):
-            raise
-        except:
-            pass
+        """Perform the necessary checks to determine whether pasting is
+        allowed / possible on the current context.
+        """
+        # Check whether pasting is allowed at all for the container type
+        if self.context.portal_type in self.disabled_types:
+            return False
 
-        pasting_allowed = valid_cb_data and \
-            self.context.portal_type not in self.disabled_types
+        obj_list = self.context.cb_dataItems()
+        if not obj_list:
+            # Clipboard empty or not valid
+            return False
 
-        return pasting_allowed
+        # Check whether there's an object in the clipboard whose type
+        # is not allowed to be added to the container
+        for obj in obj_list:
+            if obj.portal_type not in self.allowed_content_types:
+                return False
+
+        return True
