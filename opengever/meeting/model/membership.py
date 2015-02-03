@@ -46,3 +46,6 @@ class Membership(Base):
 
     def _format_date(self, date):
         return date.strftime('%A, %d. %B %Y')
+
+    def title(self):
+        return self.member.fullname

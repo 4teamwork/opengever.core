@@ -165,6 +165,7 @@ class BaseListingTab(grok.View, OpengeverTab, ListingView):
     render = __call__
 
 
+#XXX this is only for SQL stuff. rename?
 class BaseTableSource(SqlTableSource):
 
     grok.baseclass()

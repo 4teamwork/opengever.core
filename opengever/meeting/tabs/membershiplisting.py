@@ -19,15 +19,15 @@ class MembershipListingTab(BaseListingTab):
     model = Membership
 
     columns = (
-        {'column': '',
+        {'column': 'title',
          'column_title': _(u'column_title', default=u'Title'),
-         'transform': lambda item, value: item.member.fullname},
+         },
 
-        {'column': '',
+        {'column': 'date_from',
          'column_title': _(u'column_date_from', default=u'Date from'),
          'transform': lambda item, value: item.format_date_from()},
 
-        {'column': '',
+        {'column': 'date_to',
          'column_title': _(u'column_date_to', default=u'Date to'),
          'transform': lambda item, value: item.format_date_to()},
 
