@@ -93,7 +93,7 @@ class EditMember(EditForm):
         self._has_finished_edit = True
         return True
 
-    # this renames the button but otherwise preserves super's behaivor
+    # this renames the button but otherwise preserves super's behavior
     @button.buttonAndHandler(_('Save'), name='save')
     def handleApply(self, action):
         # self as first argument is required by the decorator
