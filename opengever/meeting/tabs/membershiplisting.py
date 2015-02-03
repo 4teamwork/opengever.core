@@ -25,11 +25,11 @@ class MembershipListingTab(BaseListingTab):
 
         {'column': '',
          'column_title': _(u'column_date_from', default=u'Date from'),
-         'transform': lambda item, value: item.get_date_from()},
+         'transform': lambda item, value: item.format_date_from()},
 
         {'column': '',
          'column_title': _(u'column_date_to', default=u'Date to'),
-         'transform': lambda item, value: item.get_date_to()},
+         'transform': lambda item, value: item.format_date_to()},
 
         {'column': 'role',
          'column_title': _(u'column_role', default=u'Role'),

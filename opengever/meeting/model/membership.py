@@ -34,15 +34,15 @@ class Membership(Base):
             self.date_from,
             self.date_to)
 
-    def get_date_from(self):
-        return self._get_date(self.date_from)
+    def format_date_from(self):
+        return self._format_date(self.date_from)
 
-    def get_date_to(self):
+    def format_date_to(self):
         if not self.date_to:
             return ''
 
-        return self._get_date(self.date_to)
+        return self._format_date(self.date_to)
         pass
 
-    def _get_date(self, date):
+    def _format_date(self, date):
         return date.strftime('%A, %d. %B %Y')
