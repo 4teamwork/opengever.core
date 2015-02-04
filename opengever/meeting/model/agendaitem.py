@@ -1,4 +1,5 @@
 from opengever.base.model import Base
+from plone.uuid.interfaces import IUUID
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
@@ -33,3 +34,6 @@ class AgendaItem(Base):
 
     def get_title(self):
         return self.proposal.title if self.proposal else self.title
+
+    def get_css_class(self):
+        return "paragraph" if self.is_paragraph else ""
