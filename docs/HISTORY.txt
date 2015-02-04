@@ -71,6 +71,11 @@ Changelog
 - OrgUnitSelector: Store selected OrgUnit after determining fallback.
   [lgraf]
 
+- Rewrite advancedsearch to fix an issue with invalid requests to the search view.
+  It is now allowed to filter by min or max value instead of just by date ranges
+  (min and max) when querying for dates.
+  [deiferni]
+
 
 4.1.0 (2014-12-18)
 ------------------

@@ -1,10 +1,10 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from opengever.core.testing import activate_filing_number
 from ftw.testbrowser import browsing
 from opengever.core.testing import activate_filing_number
 from opengever.core.testing import inactivate_filing_number
 from opengever.testing import FunctionalTestCase
+import urllib
 
 
 class TestSearchForm(FunctionalTestCase):
@@ -123,7 +123,6 @@ class TestSearchWithContent(FunctionalTestCase):
 
 
 class TestSearchWithoutContent(FunctionalTestCase):
-    use_browser = True
 
     def setUp(self):
         super(TestSearchWithoutContent, self).setUp()
@@ -137,46 +136,106 @@ class TestSearchWithoutContent(FunctionalTestCase):
 
         inactivate_filing_number(self.portal)
 
-    def test_validate_searchstring_for_dossiers(self):
-        self.browser.open('%s/advanced_search' % self.dossier1.absolute_url())
-        self.browser.fill({'form.widgets.searchableText': "dossier1",
-                           'form.widgets.object_provides:list': ['opengever.dossier.behaviors.dossier.IDossierMarker'],
-                           'form.widgets.start_1': "1/1/10",
-                           'form.widgets.start_2': "2/1/10",
-                           'form.widgets.end_1': "3/1/10",
-                           'form.widgets.end_2': "4/1/10",
-                           'form.widgets.reference': "OG 14.2",
-                           'form.widgets.sequence_number': "5",
-                           'form.widgets.searchable_filing_no': "14",
-                           'form.widgets.dossier_review_state:list': ['dossier-state-active']})
-        self.browser.click('form.buttons.button_search')
-        self.browser.assert_url('http://nohost/plone/@@search?object_provides=opengever.dossier.behaviors.dossier.IDossierMarker&SearchableText=dossier1&start_usage=range:minmax&start:list=01/01/10&start:list=02/02/10&end_usage=range:minmax&end:list=03/01/10&end:list=04/02/10&reference=OG%2014.2&sequence_number:int=5&searchable_filing_no=14&review_state:list=dossier-state-active')
+    def assertBrowserUrlContainsSearchParams(self, browser, params):
+        url = "http://nohost/plone/@@search?{}".format(urllib.urlencode(params))
+        self.assertEqual(browser.url, url)
 
-    def test_validate_searchstring_for_documents(self):
-        self.browser.open('%s/advanced_search' % self.dossier1.absolute_url())
-        self.browser.fill({'form.widgets.searchableText': "document1",
-                           'form.widgets.object_provides:list': ['opengever.document.behaviors.IBaseDocument'],
-                           'form.widgets.receipt_date_1': "1/1/10",
-                           'form.widgets.receipt_date_2': "2/1/10",
-                           'form.widgets.delivery_date_1': "3/1/10",
-                           'form.widgets.delivery_date_2': "4/1/10",
-                           'form.widgets.document_author': "Eduard",
-                           'form.widgets.sequence_number': "5",
-                           'form.widgets.trashed:list': True})
-        self.browser.click('form.buttons.button_search')
-        self.browser.assert_url('http://nohost/plone/@@search?object_provides=opengever.document.behaviors.IBaseDocument&SearchableText=document1&receipt_date_usage=range:minmax&receipt_date:list=01/01/10&receipt_date:list=02/02/10&delivery_date_usage=range:minmax&delivery_date:list=03/01/10&delivery_date:list=04/02/10&document_author=Eduard&trashed:list:boolean=True&trashed:list:boolean=False')
+    @browsing
+    def test_date_min_or_max_range_is_queried(self, browser):
+        browser.login()
+        browser.open(view='advanced_search')
+        browser.fill({'form.widgets.object_provides:list': 'opengever.dossier.behaviors.dossier.IDossierMarker',
+                      'form.widgets.start_1': "1/1/10",
+                      'form.widgets.end_2': "4/1/10"})
+        browser.css('#form-buttons-button_search').first.click()
 
-    def test_validate_searchstring_for_tasks(self):
-        self.browser.open('%s/advanced_search' % self.dossier1.absolute_url())
-        self.browser.fill({'form.widgets.searchableText': "task1",
-                           'form.widgets.object_provides:list': ['opengever.task.task.ITask'],
-                           'form.widgets.deadline_1': "1/1/10",
-                           'form.widgets.deadline_2': "1/1/10",
-                           'form.widgets.task_type:list': ['information'],
-                           'form.widgets.dossier_review_state:list': ['dossier-state-active']})
-        self.browser.click('form.buttons.button_search')
-        self.browser.assert_url('http://nohost/plone/@@search?object_provides=opengever.task.task.ITask&SearchableText=task1&deadline_usage=range:minmax&deadline:list=01/01/10&deadline:list=01/02/10&task_type=information')
+        self.assertBrowserUrlContainsSearchParams(browser, [
+            ('object_provides', 'opengever.dossier.behaviors.dossier.IDossierMarker'),
+            ('start_usage', 'min'),
+            ('start:list', '01/01/10'),
+            ('end_usage', 'max'),
+            ('end:list', '04/02/10'),
+        ])
 
-    def test_disable_unload_protection(self):
-        self.browser.open('%s/advanced_search' % (self.portal.absolute_url()))
-        self.assertPageContainsNot('enableUnloadProtection')
+    @browsing
+    def test_validate_searchstring_for_dossiers(self, browser):
+        browser.open(view='advanced_search')
+        browser.fill({'form.widgets.searchableText': "dossier1",
+                      'form.widgets.object_provides:list': ['opengever.dossier.behaviors.dossier.IDossierMarker'],
+                      'form.widgets.start_1': "1/1/10",
+                      'form.widgets.start_2': "2/1/10",
+                      'form.widgets.end_1': "3/1/10",
+                      'form.widgets.end_2': "4/1/10",
+                      'form.widgets.reference': "OG 14.2",
+                      'form.widgets.sequence_number': "5",
+                      'form.widgets.searchable_filing_no': "14",
+                      'form.widgets.dossier_review_state:list': 'dossier-state-active'})
+        browser.css('#form-buttons-button_search').first.click()
+
+        self.assertBrowserUrlContainsSearchParams(browser, [
+            ('object_provides', 'opengever.dossier.behaviors.dossier.IDossierMarker'),
+            ('SearchableText', 'dossier1'),
+            ('start_usage', 'minmax'),
+            ('start:list', '01/01/10'),
+            ('start:list', '02/02/10'),
+            ('end_usage', 'minmax'),
+            ('end:list', '03/01/10'),
+            ('end:list', '04/02/10'),
+            ('reference', 'OG%2014.2'),
+            ('sequence_number:int', '5'),
+            ('searchable_filing_no', '14'),
+            ('review_state:list', 'dossier-state-active'),
+        ])
+
+    @browsing
+    def test_validate_searchstring_for_documents(self, browser):
+        browser.open(view='advanced_search')
+        browser.fill({'form.widgets.searchableText': "document1",
+                      'form.widgets.object_provides:list': 'opengever.document.behaviors.IBaseDocument',
+                      'form.widgets.receipt_date_1': "1/1/10",
+                      'form.widgets.receipt_date_2': "2/1/10",
+                      'form.widgets.delivery_date_1': "3/1/10",
+                      'form.widgets.delivery_date_2': "4/1/10",
+                      'form.widgets.document_author': "Eduard",
+                      'form.widgets.sequence_number': "5",
+                      'form.widgets.trashed:list': True})
+        browser.css('#form-buttons-button_search').first.click()
+
+        self.assertBrowserUrlContainsSearchParams(browser, [
+            ('object_provides', 'opengever.document.behaviors.IBaseDocument'),
+            ('SearchableText', 'document1'),
+            ('receipt_date_usage', 'minmax'),
+            ('receipt_date:list', '01/01/10'),
+            ('receipt_date:list', '02/02/10'),
+            ('delivery_date_usage', 'minmax'),
+            ('delivery_date:list', '03/01/10'),
+            ('delivery_date:list', '04/02/10'),
+            ('document_author', 'Eduard'),
+            ('trashed:list:boolean', 'True'),
+            ('trashed:list:boolean', 'False'),
+        ])
+
+    @browsing
+    def test_validate_searchstring_for_tasks(self, browser):
+        browser.open(view='advanced_search')
+        browser.fill({'form.widgets.searchableText': "task1",
+                      'form.widgets.object_provides:list': 'opengever.task.task.ITask',
+                      'form.widgets.deadline_1': "1/1/10",
+                      'form.widgets.deadline_2': "2/1/10",
+                      'form.widgets.task_type:list': 'information',
+                      'form.widgets.dossier_review_state:list': 'dossier-state-active'})
+        browser.css('#form-buttons-button_search').first.click()
+
+        self.assertBrowserUrlContainsSearchParams(browser, [
+            ('object_provides', 'opengever.task.task.ITask'),
+            ('SearchableText', 'task1'),
+            ('deadline_usage', 'minmax'),
+            ('deadline:list', '01/01/10'),
+            ('deadline:list', '02/02/10'),
+            ('task_type', 'information'),
+        ])
+
+    @browsing
+    def test_disable_unload_protection(self, browser):
+        browser.open(view='advanced_search')
+        self.assertNotIn('enableUnloadProtection', browser.contents)
