@@ -1,5 +1,6 @@
 from opengever.activity.mail import NotificationMailer
 from opengever.activity.models.notification import Notification
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models import BASE
 from opengever.ogds.models.query import BaseQuery
 from plone import api
@@ -49,8 +50,9 @@ class Activity(BASE):
                     NotificationMailer(api.portal.get(), notification).send_mail()
 
     def get_link(self):
-        return u'{}/resolve_oguid?oguid={}'.format(api.portal.get(),
-                                                   self.resource.oguid)
+        return u'{}/resolve_oguid?oguid={}'.format(
+            get_current_admin_unit().public_url,
+            self.resource.oguid)
 
     def render_link(self):
         return u'<a href="{}">{}</a>'.format(self.get_link(), self.title)
