@@ -1,5 +1,6 @@
 from opengever.ogds.models import BASE
 from opengever.ogds.models.query import BaseQuery
+from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import String
@@ -20,6 +21,7 @@ class Watcher(BASE):
 
     watcher_id = Column('id', Integer, primary_key=True)
     user_id = Column(String(255), nullable=False)
+    mail_notification = Column(Boolean(), nullable=False, default=False)
 
     def __repr__(self):
         return '<Watcher {}>'.format(self.user_id)

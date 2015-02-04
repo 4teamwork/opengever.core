@@ -12,7 +12,6 @@ class TestEmailNotification(FunctionalTestCase):
 
     def setUp(self):
         super(TestEmailNotification, self).setUp()
-
         # setup mail
         Mailing(self.portal).set_up()
 
@@ -29,6 +28,9 @@ class TestEmailNotification(FunctionalTestCase):
                        firstname='Franz',
                        lastname='Michel',
                        email='hugo.boss@example.org'))
+
+        create(Builder('watcher').having(user_id='hugo.boss',
+                                         mail_notification=True))
 
         self.dossier = create(Builder('dossier').titled(u'Dossier A'))
 

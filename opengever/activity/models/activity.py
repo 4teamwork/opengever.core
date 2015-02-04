@@ -45,7 +45,8 @@ class Activity(BASE):
         for watcher in self.resource.watchers:
             if watcher.user_id != self.actor_id:
                 notification = Notification(watcher=watcher, activity=self)
-                NotificationMailer(api.portal.get(), notification).send_mail()
+                if watcher.mail_notification:
+                    NotificationMailer(api.portal.get(), notification).send_mail()
 
     def get_link(self):
         return u'{}/resolve_oguid?oguid={}'.format(api.portal.get(),
