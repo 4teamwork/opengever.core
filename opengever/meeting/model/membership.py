@@ -42,7 +42,6 @@ class Membership(Base):
             return ''
 
         return self._format_date(self.date_to)
-        pass
 
     def _format_date(self, date):
         return date.strftime('%A, %d. %B %Y')
