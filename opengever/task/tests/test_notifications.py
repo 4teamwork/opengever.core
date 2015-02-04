@@ -75,5 +75,5 @@ class TestTaskNotifications(FunctionalTestCase):
         self.assertEquals(u'task-added', activity.kind)
         self.assertEquals(TEST_USER_ID, activity.actor_id)
         self.assertEquals(u'Test task', activity.title)
-        self.assertEquals(u'transition_label_created', activity.summary)
+        self.assertEquals(u'Created by Test User', activity.summary)
         self.assertEquals(Oguid.for_object(task), activity.resource.oguid)
