@@ -57,20 +57,19 @@
 
         <h2 i18n:translate="">Agenda Items</h2>
         <table id="agenda_items">
-            <tr tal:repeat="agenda_item view/agenda_items">
-                <td>
-                  <b tal:omit-tag="not: agenda_item/is_paragraph" tal:content="agenda_item/number" />
-                </td>
-                <td>
-                  <b tal:omit-tag="not: agenda_item/is_paragraph" tal:content="agenda_item/get_title" />
-                </td>
-                <td>
-                  <a tal:condition="meeting/is_editable"
-                     class="delete_agenda_item"
-                     tal:attributes="href python: view.url_delete_agenda_item(agenda_item)"
-                     i18n:translate="">delete</a>
-                </td>
-            </tr>
+            <tbody>
+                <tr tal:repeat="agenda_item view/agenda_items" tal:attributes="data-uid agenda_item/agenda_item_id">
+                    <td class="sortable_handle"></td>
+                    <td tal:attributes="class agenda_item/get_css_class" tal:content="agenda_item/number"></td>
+                    <td tal:attributes="class agenda_item/get_css_class" tal:content="agenda_item/get_title"></td>
+                    <td>
+                      <a tal:condition="meeting/is_editable"
+                          class="delete_agenda_item"
+                          tal:attributes="href python: view.url_delete_agenda_item(agenda_item)"
+                          i18n:translate=""></a>
+                    </td>
+                </tr>
+            </tbody>
         </table>
 
         <div class="visualClear"><!----></div>
