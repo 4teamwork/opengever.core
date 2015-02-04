@@ -65,6 +65,13 @@
   </action>
 
   <!-- Tab Actions -->
+  <action title="committees"
+          action_id="committees"
+          category="tabbedview-tabs"
+          condition_expr=""
+          url_expr="string:#"
+          visible="True">
+  </action>
   <action title="members"
           action_id="members"
           category="tabbedview-tabs"
