@@ -64,4 +64,13 @@
         directory="profiles/4205"
         />
 
+    <!-- 4205 -> 4206 -->
+    <upgrade-step:importProfile
+        title="Add js-registry entry for meeting.js."
+        profile="opengever.meeting:default"
+        source="4205"
+        destination="4206"
+        directory="profiles/4206"
+        />
+
 </configure>

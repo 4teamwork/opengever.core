@@ -5,6 +5,11 @@
 
   <include package=".meetings" />
 
+  <browser:resourceDirectory
+      name="opengever.meeting"
+      directory="resources"
+      />
+
   <browser:page
       for="opengever.meeting.committee.ICommittee"
       name="add-membership"
