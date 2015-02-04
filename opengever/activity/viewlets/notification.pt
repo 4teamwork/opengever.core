@@ -1,4 +1,4 @@
-<div id="portal-notifications" i18n:domain="opengever.activity">
+<div id="portal-notifications" i18n:domain="opengever.activity" tal:condition="view/available">
 
   <h5 class="hiddenStructure" i18n:translate="heading_notifications">Notifications</h5>
 

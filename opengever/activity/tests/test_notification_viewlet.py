@@ -1,11 +1,24 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 
 
+class TestViewletAvailability(FunctionalTestCase):
+
+    @browsing
+    def test_is_not_available_when_activity_feature_is_disabled(self, browser):
+        browser.login().open(self.portal)
+
+        self.assertEquals([],
+                          browser.css('#portal-notifications'))
+
+
 class TestNotificationViewlet(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 
     def setUp(self):
         super(TestNotificationViewlet, self).setUp()

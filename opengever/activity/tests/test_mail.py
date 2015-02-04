@@ -3,12 +3,15 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing.mailing import Mailing
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 import email
 
 
 class TestEmailNotification(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 
     def setUp(self):
         super(TestEmailNotification, self).setUp()

@@ -4,11 +4,14 @@ from ftw.testbrowser import browsing
 from opengever.activity.models.activity import Activity
 from opengever.activity.utils import notification_center
 from opengever.base.oguid import Oguid
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 
 
 class TestTaskNotifications(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 
     def setUp(self):
         super(TestTaskNotifications, self).setUp()
@@ -26,7 +29,7 @@ class TestTaskNotifications(FunctionalTestCase):
         self.dossier = create(Builder('dossier').titled(u'Dossier'))
 
     @browsing
-    def test_ervery_task_transtition_add_an_activityn(self, browser):
+    def test_ervery_task_transtition_add_an_activity(self, browser):
         task = create(Builder('task').titled(u'Test t\xe4sk'))
 
         browser.login().open(task)
