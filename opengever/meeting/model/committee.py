@@ -34,13 +34,17 @@ class Committee(Base):
         return ogds_service().fetch_admin_unit(self.admin_unit_id)
 
     def get_link(self):
-        return self._get_link(self.get_admin_unit(), self.physical_path)
-
-    def _get_link(self, admin_unit, physical_path):
-        if not (admin_unit and physical_path):
+        url = self.get_url()
+        if not url:
             return ''
-        url = '/'.join((admin_unit.public_url, physical_path))
-        link = u'<a href="{0}" title="{1}">{1}</a>'.format(url, self.title)
 
+        link = u'<a href="{0}" title="{1}">{1}</a>'.format(url, self.title)
         transformer = api.portal.get_tool('portal_transforms')
         return transformer.convertTo('text/x-html-safe', link).getData()
+
+    def get_url(self, admin_unit=None):
+        admin_unit = admin_unit or self.get_admin_unit()
+        if not admin_unit:
+            return None
+
+        return '/'.join((admin_unit.public_url, self.physical_path))
