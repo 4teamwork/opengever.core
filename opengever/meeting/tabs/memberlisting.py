@@ -18,19 +18,29 @@ class MemberListingTab(BaseListingTab):
 
     model = Member
 
-    columns = (
-        {'column': 'firstname',
-         'column_title': _(u'column_firstname', default=u'Firstname'),
-         },
+    @property
+    def columns(self):
+        return (
+            {'column': 'firstname',
+             'column_title': _(u'column_firstname', default=u'Firstname'),
+             'transform': self.get_firstname_link,
+             },
 
-        {'column': 'lastname',
-         'column_title': _(u'column_lastname', default=u'Lastname'),
-         },
+            {'column': 'lastname',
+             'column_title': _(u'column_lastname', default=u'Lastname'),
+             'transform': self.get_lastname_link,
+             },
 
-        {'column': 'email',
-         'column_title': _(u'column_email', default=u'E-Mail'),
-         },
-        )
+            {'column': 'email',
+             'column_title': _(u'column_email', default=u'E-Mail'),
+             },
+            )
+
+    def get_firstname_link(self, item, value):
+        return item.get_firstname_link(self.context)
+
+    def get_lastname_link(self, item, value):
+        return item.get_lastname_link(self.context)
 
     def get_base_query(self):
         return Member.query
