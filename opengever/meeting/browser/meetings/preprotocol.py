@@ -5,6 +5,7 @@ from opengever.meeting.browser.preprotocol import PreProtocol
 from opengever.meeting.form import ModelEditForm
 from opengever.meeting.model import Meeting
 from opengever.meeting.model import Member
+from opengever.meeting.vocabulary import get_committee_member_vocabulary
 from plone.autoform.form import AutoExtensibleForm
 from plone.directives import form
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
@@ -12,21 +13,6 @@ from z3c.form import button
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form.form import EditForm
 from zope import schema
-from zope.schema.interfaces import IContextSourceBinder
-from zope.schema.vocabulary import SimpleVocabulary
-
-
-@grok.provider(IContextSourceBinder)
-def get_committee_member_vocabulary(committee):
-    members = []
-    for membership in committee.get_active_memberships():
-        member = membership.member
-        members.append(
-            SimpleVocabulary.createTerm(member,
-                                        str(member.member_id),
-                                        member.fullname))
-
-    return SimpleVocabulary(members)
 
 
 class IParticipants(form.Schema):

@@ -1,4 +1,5 @@
 from opengever.base.model import Base
+from plone import api
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import String
@@ -19,3 +20,33 @@ class Member(Base):
 
     def __repr__(self):
         return '<Member {}>'.format(repr(self.fullname))
+
+    def get_link(self, context):
+        url = self.get_url(context)
+        link = u'<a href="{0}" title="{1}">{1}</a>'.format(url, self.fullname)
+
+        transformer = api.portal.get_tool('portal_transforms')
+        return transformer.convertTo('text/x-html-safe', link).getData()
+
+    def get_url(self, context):
+        return "{}/member/{}".format(context.absolute_url(), self.member_id)
+
+    def get_edit_url(self, context):
+        return '/'.join((self.get_url(context), 'edit'))
+
+    def get_breadcrumbs(self, context):
+        return {'absolute_url': self.get_url(context), 'Title': self.fullname}
+
+    def get_edit_values(self, fieldnames):
+        values = {}
+        for fieldname in fieldnames:
+            value = getattr(self, fieldname, None)
+            if not value:
+                continue
+
+            values[fieldname] = value
+        return values
+
+    def update_model(self, data):
+        for key, value in data.items():
+            setattr(self, key, value)

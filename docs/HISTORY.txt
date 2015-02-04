@@ -47,6 +47,9 @@ Changelog
     - Add paragraph and custom text agenda items.
     - Make agenda items deletable.
     - Add a form to create a pre-protocols for meetings.
+    - Disable edit-bar for model add-forms.
+    - Add forms for Members and their Memberships in Committees.
+    - Add tab to committees listing all memberships.
 
   [deiferni]
 

@@ -48,7 +48,7 @@ class GlobalTaskListingTab(grok.View, OpengeverTab,
     #lazy must be false otherwise there will be no correct batching
     lazy = False
 
-    # the model attributes is used for a dynamic textfiltering functionality
+    # the model attribute is used for a dynamic textfiltering functionality
     model = Task
     enabled_actions = []
     major_actions = []

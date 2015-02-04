@@ -73,6 +73,16 @@
       <permission value="Add portal content"/>
   </action>
 
+  <action action_id="add-membership"
+          visible="True"
+          title="Membership"
+          category="folder_factories"
+          url_expr="string:${object_url}/add-membership"
+          icon_expr=""
+          condition_expr="">
+      <permission value="Add portal content"/>
+  </action>
+
   <!-- Tab Actions -->
   <action title="meetings"
           action_id="meetings"
@@ -83,6 +93,13 @@
   </action>
   <action title="submittedproposals"
           action_id="submittedproposals"
+          category="tabbedview-tabs"
+          condition_expr=""
+          url_expr="string:#"
+          visible="True">
+  </action>
+  <action title="memberships"
+          action_id="memberships"
           category="tabbedview-tabs"
           condition_expr=""
           url_expr="string:#"

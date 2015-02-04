@@ -67,6 +67,7 @@ class AddMeeting(AutoExtensibleForm, AddForm):
     def __init__(self, context, request):
         super(AddMeeting, self).__init__(context, request)
         self._created_object = None
+        self.request.set('disable_border', True)  # disables the edit bar.
 
     def create(self, data):
         return Meeting(**data)

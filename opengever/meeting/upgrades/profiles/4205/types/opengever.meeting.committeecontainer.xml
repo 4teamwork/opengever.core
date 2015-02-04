@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<object name="opengever.meeting.committeecontainer" meta_type="Dexterity FTI"
+        i18n:domain="opengever.meeting" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+  <action action_id="add-member"
+          visible="True"
+          title="Member"
+          category="folder_factories"
+          url_expr="string:${object_url}/add-member"
+          icon_expr=""
+          condition_expr="">
+      <permission value="Add portal content"/>
+  </action>
+
+</object>

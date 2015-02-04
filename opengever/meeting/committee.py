@@ -53,3 +53,6 @@ class Committee(ModelContainer):
     def get_active_memberships(self):
         return Membership.query.filter_by(
             committee=self.load_model()).only_active()
+
+    def get_memberships(self):
+        return self.load_model().memberships

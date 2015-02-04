@@ -19,11 +19,11 @@ class MeetingListingTab(BaseListingTab):
     model = Meeting
 
     columns = (
-        {'column': '',
+        {'column': 'title',
          'column_title': _(u'column_title', default=u'Title'),
          'transform': lambda item, value: item.get_link()},
 
-        {'column': '',
+        {'column': 'date',
          'column_title': _(u'column_date', default=u'Date'),
          'transform': lambda item, value: item.get_date()},
 

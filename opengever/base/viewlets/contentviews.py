@@ -26,7 +26,7 @@ class ModelContentViewsViewlet(ContentViewsViewlet):
             'description': u'',
             'icon': '',
             'title': u'Edit',
-            'url': model.get_edit_url(),
+            'url': model.get_edit_url(self.view.context),
             'selected': self.view.is_model_edit_view,
             'visible': True,
             'allowed': True,
