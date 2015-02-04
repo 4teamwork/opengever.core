@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    tal:omit-tag="python: True"
+    i18n:domain="opengever.activity">
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title tal:content="options/subject">
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  </head>
+
+  <body>
+    <p><b tal:content="options/kind"></b></p>
+    <a href="" tal:content="options/title" tal:attributes="href options/link"></a>
+    <p tal:content="options/summary" />
+
+    <p>Description:</p>
+    <span tal:replace="structure options/description" />
+  </body>
+
+  <br />
+  <hr />
+  <br />
+  <a href="" tal:attributes="href options/link">See on GEVER</a>
+
+</html>
