@@ -41,7 +41,7 @@ class NotificationListingTab(BaseListingTab):
 
         {'column': 'title',
          'column_title': _(u'column_title', default=u'Title'),
-         'transform': lambda item, value: item.activity.get_link()},
+         'transform': lambda item, value: item.activity.render_link()},
 
         {'column': 'actor',
          'column_title': _(u'column_Actor', default=u'Actor'),

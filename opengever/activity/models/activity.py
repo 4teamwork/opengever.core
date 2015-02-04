@@ -1,6 +1,8 @@
+from opengever.activity.mail import NotificationMailer
 from opengever.activity.models.notification import Notification
 from opengever.ogds.models import BASE
 from opengever.ogds.models.query import BaseQuery
+from plone import api
 from sqlalchemy import Column
 from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
@@ -40,11 +42,14 @@ class Activity(BASE):
         """Create for every resource watcher the corresponding notification.
         The actor of the activity is ignored.
         """
-
         for watcher in self.resource.watchers:
             if watcher.user_id != self.actor_id:
-                Notification(watcher=watcher, activity=self)
+                notification = Notification(watcher=watcher, activity=self)
+                NotificationMailer(api.portal.get(), notification).send_mail()
 
     def get_link(self):
-        return u'<a href="./resolve_oguid?oguid={}">{}</a>'.format(
-            self.resource.oguid, self.title)
+        return u'{}/resolve_oguid?oguid={}'.format(api.portal.get(),
+                                                   self.resource.oguid)
+
+    def render_link(self):
+        return u'<a href="{}">{}</a>'.format(self.get_link(), self.title)
