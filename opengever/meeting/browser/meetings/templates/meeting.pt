@@ -42,7 +42,7 @@
 
         <form method="post" tal:attributes="action view/url_schedule_text"
               id="schedule_text">
-            <input type="textline" name="title" id="text-agenda-item" />
+            <input type="text" name="title" id="text-agenda-item" />
             <input type="submit" name="submit" id="submit-schedule-text"
                    i18n:attributes="value schedule" />
         </form>
@@ -50,7 +50,7 @@
         <h2 i18n:translate="">Add new Paragraph</h2>
         <form method="post" tal:attributes="action view/url_schedule_paragraph"
               id="schedule_paragraph">
-            <input type="textline" name="title" />
+            <input type="text" name="title" />
             <input type="submit" name="submit" id="submit-schedule-paragraph"
                    i18n:attributes="value schedule" />
         </form>
