@@ -1,5 +1,4 @@
 from ftw.datepicker.widget import DatePickerFieldWidget
-from opengever.base.model import create_session
 from opengever.meeting import _
 from opengever.meeting.browser.meetings.agendaitem import DeleteAgendaItem
 from opengever.meeting.browser.meetings.agendaitem import ScheduleSubmittedProposal
@@ -8,14 +7,13 @@ from opengever.meeting.browser.meetings.agendaitem import UpdateAgendaItemOrder
 from opengever.meeting.browser.meetings.meetinglist import MeetingList
 from opengever.meeting.browser.meetings.preprotocol import EditPreProtocol
 from opengever.meeting.browser.meetings.transitions import MeetingTransitionController
+from opengever.meeting.form import ModelAddForm
 from opengever.meeting.model import Meeting
-from plone.autoform.form import AutoExtensibleForm
 from plone.directives import form
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import button
 from z3c.form import field
-from z3c.form.form import AddForm
 from z3c.form.form import EditForm
 from z3c.form.interfaces import HIDDEN_MODE
 from zExceptions import NotFound
@@ -53,10 +51,10 @@ class IMeetingModel(form.Schema):
         required=False)
 
 
-class AddMeeting(AutoExtensibleForm, AddForm):
+class AddMeeting(ModelAddForm):
 
-    ignoreContext = True
     schema = IMeetingModel
+    model_class = Meeting
 
     def updateWidgets(self):
         super(AddMeeting, self).updateWidgets()
@@ -64,20 +62,6 @@ class AddMeeting(AutoExtensibleForm, AddForm):
         committee_id = self.context.load_model().committee_id
         self.widgets['committee'].mode = HIDDEN_MODE
         self.widgets['committee'].value = (str(committee_id), )
-
-    def __init__(self, context, request):
-        super(AddMeeting, self).__init__(context, request)
-        self._created_object = None
-        self.request.set('disable_border', True)  # disables the edit bar.
-
-    def create(self, data):
-        return Meeting(**data)
-
-    def add(self, obj):
-        session = create_session()
-        session.add(obj)
-        session.flush()  # required to create an autoincremented id
-        self._created_object = obj
 
     def nextURL(self):
         return MeetingList.url_for(self.context, self._created_object)

@@ -1,5 +1,34 @@
+from opengever.base.model import create_session
 from opengever.meeting import is_meeting_feature_enabled
+from plone.autoform.form import AutoExtensibleForm
+from z3c.form.form import AddForm
 from zExceptions import Unauthorized
+
+
+class ModelAddForm(AutoExtensibleForm, AddForm):
+    """Base add-form for stand-alone model objects.
+    """
+
+    ignoreContext = True
+    schema = None
+    model_class = None
+
+    def __init__(self, context, request):
+        super(ModelAddForm, self).__init__(context, request)
+        self._created_object = None
+        self.request.set('disable_border', True)  # disables the edit bar.
+
+    def create(self, data):
+        return self.model_class(**data)
+
+    def add(self, obj):
+        session = create_session()
+        session.add(obj)
+        session.flush()  # required to create an autoincremented id
+        self._created_object = obj
+
+    def nextURL(self):
+        return self.context.absolute_url()
 
 
 class ModelProxyAddForm(object):

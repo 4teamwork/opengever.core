@@ -1,15 +1,13 @@
 from five import grok
-from opengever.base.model import create_session
 from opengever.meeting import _
 from opengever.meeting.committeecontainer import ICommitteeContainer
+from opengever.meeting.form import ModelAddForm
 from opengever.meeting.model import Member
-from plone.autoform.form import AutoExtensibleForm
 from plone.directives import form
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import button
 from z3c.form import field
-from z3c.form.form import AddForm
 from z3c.form.form import EditForm
 from zExceptions import NotFound
 from zope import schema
@@ -37,27 +35,10 @@ class IMemberModel(form.Schema):
         required=False)
 
 
-class AddMember(AutoExtensibleForm, AddForm):
+class AddMember(ModelAddForm):
 
-    ignoreContext = True
     schema = IMemberModel
-
-    def __init__(self, context, request):
-        super(AddMember, self).__init__(context, request)
-        self._created_object = None
-        self.request.set('disable_border', True)  # disables the edit bar.
-
-    def create(self, data):
-        return Member(**data)
-
-    def add(self, obj):
-        session = create_session()
-        session.add(obj)
-        session.flush()  # required to create an autoincremented id
-        self._created_object = obj
-
-    def nextURL(self):
-        return self.context.absolute_url()
+    model_class = Member
 
 
 class EditMember(EditForm):

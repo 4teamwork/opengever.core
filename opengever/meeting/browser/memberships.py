@@ -1,10 +1,8 @@
 from ftw.datepicker.widget import DatePickerFieldWidget
-from opengever.base.model import create_session
 from opengever.meeting import _
+from opengever.meeting.form import ModelAddForm
 from opengever.meeting.model import Membership
-from plone.autoform.form import AutoExtensibleForm
 from plone.directives import form
-from z3c.form.form import AddForm
 from zope import schema
 
 
@@ -32,25 +30,11 @@ class IMembershipModel(form.Schema):
         required=False)
 
 
-class AddMembership(AutoExtensibleForm, AddForm):
+class AddMembership(ModelAddForm):
 
-    ignoreContext = True
     schema = IMembershipModel
-
-    def __init__(self, context, request):
-        super(AddMembership, self).__init__(context, request)
-        self._created_object = None
-        self.request.set('disable_border', True)  # disables the edit bar.
+    model_class = Membership
 
     def create(self, data):
-        committee = self.context.load_model()
-        return Membership(committee=committee, **data)
-
-    def add(self, obj):
-        session = create_session()
-        session.add(obj)
-        session.flush()  # required to create an autoincremented id
-        self._created_object = obj
-
-    def nextURL(self):
-        return self.context.absolute_url()
+        data['committee'] = self.context.load_model()
+        return super(AddMembership, self).create(data)
