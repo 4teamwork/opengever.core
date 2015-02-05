@@ -1,7 +1,10 @@
 from opengever.base.model import create_session
+from opengever.meeting import _
 from opengever.meeting import is_meeting_feature_enabled
 from plone.autoform.form import AutoExtensibleForm
+from z3c.form import button
 from z3c.form.form import AddForm
+from z3c.form.form import EditForm
 from zExceptions import Unauthorized
 
 
@@ -29,6 +32,56 @@ class ModelAddForm(AutoExtensibleForm, AddForm):
 
     def nextURL(self):
         return self.context.absolute_url()
+
+
+class ModelEditForm(EditForm):
+    """Base edit-form for stand-alone model objects.
+    """
+
+    ignoreContext = True
+    is_model_view = True
+    is_model_edit_view = True
+
+    fields = None
+    field_prefix = 'form.widgets.'
+
+    def __init__(self, context, request, model):
+        super(ModelEditForm, self).__init__(context, request)
+        self.model = model
+        self._has_finished_edit = False
+
+    def inject_initial_data(self):
+        if self.request.method != 'GET':
+            return
+
+        values = self.model.get_edit_values(self.fields.keys())
+
+        for fieldname, value in values.items():
+            self.request[self.field_prefix + fieldname] = value
+
+    def updateWidgets(self):
+        self.inject_initial_data()
+        super(ModelEditForm, self).updateWidgets()
+
+    def applyChanges(self, data):
+        self.model.update_model(data)
+        # pretend to always change the underlying data
+        self._has_finished_edit = True
+        return True
+
+    # this renames the button but otherwise preserves super's behavior
+    @button.buttonAndHandler(_('Save'), name='save')
+    def handleApply(self, action):
+        # self as first argument is required by the decorator
+        super(ModelEditForm, self).handleApply(self, action)
+
+    def nextURL(self):
+        raise NotImplementedError()
+
+    def render(self):
+        if self._has_finished_edit:
+            return self.request.response.redirect(self.nextURL())
+        return super(ModelEditForm, self).render()
 
 
 class ModelProxyAddForm(object):

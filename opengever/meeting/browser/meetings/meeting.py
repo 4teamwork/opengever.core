@@ -8,13 +8,12 @@ from opengever.meeting.browser.meetings.meetinglist import MeetingList
 from opengever.meeting.browser.meetings.preprotocol import EditPreProtocol
 from opengever.meeting.browser.meetings.transitions import MeetingTransitionController
 from opengever.meeting.form import ModelAddForm
+from opengever.meeting.form import ModelEditForm
 from opengever.meeting.model import Meeting
 from plone.directives import form
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from z3c.form import button
 from z3c.form import field
-from z3c.form.form import EditForm
 from z3c.form.interfaces import HIDDEN_MODE
 from zExceptions import NotFound
 from zope import schema
@@ -67,28 +66,9 @@ class AddMeeting(ModelAddForm):
         return MeetingList.url_for(self.context, self._created_object)
 
 
-class EditMeeting(EditForm):
+class EditMeeting(ModelEditForm):
 
-    ignoreContext = True
     fields = field.Fields(IMeetingModel)
-
-    is_model_view = True
-    is_model_edit_view = True
-
-    def __init__(self, context, request, model):
-        super(EditMeeting, self).__init__(context, request)
-        self.model = model
-        self._has_finished_edit = False
-
-    def inject_initial_data(self):
-        if self.request.method != 'GET':
-            return
-
-        prefix = 'form.widgets.'
-        values = self.model.get_edit_values(self.fields.keys())
-
-        for fieldname, value in values.items():
-            self.request[prefix + fieldname] = value
 
     def updateWidgets(self):
         self.inject_initial_data()
@@ -98,25 +78,8 @@ class EditMeeting(EditForm):
         self.widgets['committee'].mode = HIDDEN_MODE
         self.widgets['committee'].value = (str(committee_id), )
 
-    def applyChanges(self, data):
-        self.model.update_model(data)
-        # pretend to always change the underlying data
-        self._has_finished_edit = True
-        return True
-
-    # this renames the button but otherwise preserves super's behavior
-    @button.buttonAndHandler(_('Save'), name='save')
-    def handleApply(self, action):
-        # self as first argument is required by the decorator
-        super(EditMeeting, self).handleApply(self, action)
-
     def nextURL(self):
         return MeetingList.url_for(self.context, self.model)
-
-    def render(self):
-        if self._has_finished_edit:
-            return self.request.response.redirect(self.nextURL())
-        return super(EditMeeting, self).render()
 
 
 class MeetingView(BrowserView):
