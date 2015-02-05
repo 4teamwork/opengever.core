@@ -185,6 +185,10 @@ dl.portlet ul.filetree a.toggleNav.expanded {
     margin: 0;
   }
 
+  form#schedule_proposal fieldset {
+    border-style: solid solid solid solid;
+  }
+
   form input[type="text"] {
     padding: 4px 5px;
     line-height: 20px;

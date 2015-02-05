@@ -13,17 +13,53 @@
 
         <h1 tal:content="meeting/get_title"></h1>
 
-        <a tal:attributes="href view/url_pre_protocol" i18n:translate="">Pre-Protocol</a>
+        <a class="button" tal:attributes="href view/url_pre_protocol" i18n:translate="">Pre-Protocol</a>
 
-        <dl>
-            <dt i18n:translate="">State</dt>
-            <dd tal:content="python: meeting.get_state().title"></dd>
+        <table class="vertical listing">
+            <tbody>
+                <tr>
+                    <th i18n:translate="">State</th>
+                    <td tal:content="python: meeting.get_state().title"></td>
+                </tr>
 
-            <dt i18n:translate="">Location</dt>
-            <dd tal:content="meeting/location"></dd>
-        </dl>
+                <tr>
+                    <th i18n:translate="">Location</th>
+                    <td tal:content="meeting/location"></td>
+                </tr>
+            </tbody>
+        </table>
 
-        <h2 i18n:translate="">Add new Agenda Items</h2>
+        <!-- <metal:block tal:condition="unscheduled_proposals"> -->
+        <form method="post" tal:attributes="action view/url_schedule_proposal"
+              id="schedule_proposal">
+            <fieldset>
+                <legend>Traktandieren</legend>
+                <div class="form_group">
+                    <select id="proposal_id" class="button" name="proposal_id">
+                        <tal:repeat tal:repeat="proposal unscheduled_proposals">
+                            <option tal:attributes="id proposal/proposal_id;
+                                                    value proposal/proposal_id;"
+                                    tal:content="proposal/title">
+                            </option>
+                        </tal:repeat>
+                    </select>
+                    <input type="submit" name="submit" id="submit-schedule"
+                       i18n:attributes="value schedule" />
+                </div>
+                <div class="form_group">
+                    <input type="text" name="title" id="text-agenda-item" />
+                    <div class="button_group">
+                        <input type="submit" name="submit" id="submit-schedule-paragraph"
+                            value="als Paragraph" />
+                        <input type="submit" name="submit" id="submit-schedule-text"
+                            value="als Freitext" />
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+        <!-- </metal:block> -->
+
+        <!-- <h2 i18n:translate="">Add new Agenda Items</h2>
         <metal:block tal:condition="unscheduled_proposals">
         <form method="post" tal:attributes="action view/url_schedule_proposal"
               id="schedule_proposal">
@@ -38,9 +74,9 @@
             <input type="submit" name="submit" id="submit-schedule"
                    i18n:attributes="value schedule" />
         </form>
-        </metal:block>
+        </metal:block> -->
 
-        <form method="post" tal:attributes="action view/url_schedule_text"
+        <!-- <form method="post" tal:attributes="action view/url_schedule_text"
               id="schedule_text">
             <input type="text" name="title" id="text-agenda-item" />
             <input type="submit" name="submit" id="submit-schedule-text"
@@ -53,7 +89,7 @@
             <input type="text" name="title" />
             <input type="submit" name="submit" id="submit-schedule-paragraph"
                    i18n:attributes="value schedule" />
-        </form>
+        </form> -->
 
         <h2 i18n:translate="">Agenda Items</h2>
         <table id="agenda_items">
@@ -65,8 +101,7 @@
                     <td>
                       <a tal:condition="meeting/is_editable"
                           class="delete_agenda_item"
-                          tal:attributes="href python: view.url_delete_agenda_item(agenda_item)"
-                          i18n:translate=""></a>
+                          tal:attributes="href python: view.url_delete_agenda_item(agenda_item)"></a>
                     </td>
                 </tr>
             </tbody>
