@@ -35,6 +35,8 @@ class AddMembership(ModelAddForm):
     schema = IMembershipModel
     model_class = Membership
 
+    label = _('Add Membership', default=u'Add Membership')
+
     def create(self, data):
         data['committee'] = self.context.load_model()
         return super(AddMembership, self).create(data)

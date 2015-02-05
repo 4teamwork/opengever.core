@@ -55,6 +55,8 @@ class AddMeeting(ModelAddForm):
     schema = IMeetingModel
     model_class = Meeting
 
+    label = _('Add Meeting', default=u'Add Meeting')
+
     def updateWidgets(self):
         super(AddMeeting, self).updateWidgets()
 

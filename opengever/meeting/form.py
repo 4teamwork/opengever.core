@@ -30,7 +30,20 @@ class ModelAddForm(AutoExtensibleForm, AddForm):
         session.flush()  # required to create an autoincremented id
         self._created_object = obj
 
+    # this renames the button but otherwise preserves super's behavior
+    @button.buttonAndHandler(_('Save', default=u'Save'), name='save')
+    def handleAdd(self, action):
+        # self as first argument is required by the decorator
+        super(ModelAddForm, self).handleAdd(self, action)
+
+    @button.buttonAndHandler(_(u'Cancel', default=u'Cancel'), name='cancel')
+    def cancel(self, action):
+        return self.request.RESPONSE.redirect(self.cancelURL())
+
     def nextURL(self):
+        return self.context.absolute_url()
+
+    def cancelURL(self):
         return self.context.absolute_url()
 
 
@@ -70,10 +83,14 @@ class ModelEditForm(EditForm):
         return True
 
     # this renames the button but otherwise preserves super's behavior
-    @button.buttonAndHandler(_('Save'), name='save')
+    @button.buttonAndHandler(_('Save', default=u'Save'), name='save')
     def handleApply(self, action):
         # self as first argument is required by the decorator
         super(ModelEditForm, self).handleApply(self, action)
+
+    @button.buttonAndHandler(_(u'Cancel', default=u'Cancel'), name='cancel')
+    def cancel(self, action):
+        return self.request.RESPONSE.redirect(self.nextURL())
 
     def nextURL(self):
         raise NotImplementedError()

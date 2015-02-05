@@ -39,6 +39,8 @@ class AddMember(ModelAddForm):
     schema = IMemberModel
     model_class = Member
 
+    label = _('Add Member', default=u'Add Member')
+
 
 class EditMember(ModelEditForm):
 
