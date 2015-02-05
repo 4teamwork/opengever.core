@@ -67,6 +67,8 @@ class Meeting(Base):
                                 secondary=meeting_participants,
                                 backref='meetings')
 
+    agenda_items = relationship("AgendaItem", order_by='AgendaItem.sort_order')
+
     def __repr__(self):
         return '<Meeting at "{}">'.format(self.date)
 

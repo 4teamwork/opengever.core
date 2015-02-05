@@ -17,9 +17,6 @@ class AgendaItem(Base):
 
     agenda_item_id = Column("id", Integer, Sequence("agendaitems_id_seq"),
                             primary_key=True)
-    meeting_id = Column(Integer, ForeignKey('meetings.id'), nullable=False)
-    meeting = relationship("Meeting", backref='agenda_items')
-
     proposal_id = Column(Integer, ForeignKey('proposals.id'))
     proposal = relationship("Proposal", backref='agenda_item', uselist=False)
 
@@ -27,6 +24,9 @@ class AgendaItem(Base):
     number = Column(String(16))
     is_paragraph = Column(Boolean, nullable=False, default=False)
     sort_order = Column(Integer, nullable=False, default=0)
+
+    meeting_id = Column(Integer, ForeignKey('meetings.id'), nullable=False)
+    meeting = relationship("Meeting")
 
     discussion = Column(Text)
     decision = Column(Text)
