@@ -185,8 +185,12 @@ dl.portlet ul.filetree a.toggleNav.expanded {
     margin: 0;
   }
 
-  form#schedule_proposal fieldset {
+  #content fieldset.proposal {
     border-style: solid solid solid solid;
+  }
+
+  #content fieldset.proposal legend{
+    font-size: 1em;
   }
 
   form input[type="text"] {

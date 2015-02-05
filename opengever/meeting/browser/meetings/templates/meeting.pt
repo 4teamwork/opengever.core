@@ -44,7 +44,7 @@
             </tbody>
         </table>
 
-        <fieldset>
+        <fieldset class="proposal">
         <legend>Traktandieren</legend>
           <metal:block tal:condition="unscheduled_proposals">
             <form method="post" tal:attributes="action view/url_schedule_proposal"
@@ -82,7 +82,7 @@
             <tbody>
                 <tr tal:repeat="agenda_item view/agenda_items" tal:attributes="data-uid agenda_item/agenda_item_id">
                     <td class="sortable_handle"></td>
-                    <td tal:attributes="class agenda_item/get_css_class" tal:content="agenda_item/number"></td>
+                    <td class="number" tal:content="agenda_item/number"></td>
                     <td tal:attributes="class agenda_item/get_css_class" tal:content="agenda_item/get_title"></td>
                     <td>
                       <a tal:condition="meeting/is_editable"

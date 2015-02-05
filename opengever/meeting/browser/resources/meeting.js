@@ -41,6 +41,11 @@
 
   $(function() {
     var agendaItemTable = $("#agenda_items"),
+    updateNumbers = function(numbers) {
+      $("tr", agendaItemTable).each(function(idx, row) {
+        $(".number", row).html(numbers[row.dataset.uid]);
+      });
+    },
       onUpdate = function() {
         var updatePaylod = {
           sortOrder: []
@@ -58,6 +63,7 @@
           data: JSON.stringify(updatePaylod),
           success: function(data) {
             listMessages(data.messages);
+            updateNumbers(data.numbers);
           },
           error: function() {
             listMessages();
