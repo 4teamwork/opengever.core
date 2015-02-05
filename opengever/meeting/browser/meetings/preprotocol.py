@@ -2,7 +2,7 @@ from five import grok
 from opengever.meeting import _
 from opengever.meeting.browser.meetings.meetinglist import MeetingList
 from opengever.meeting.browser.preprotocol import PreProtocol
-from opengever.meeting.form import ModelEditForm
+from opengever.meeting.form import ModelProxyEditForm
 from opengever.meeting.model import Meeting
 from opengever.meeting.model import Member
 from opengever.meeting.vocabulary import get_committee_member_vocabulary
@@ -42,7 +42,7 @@ class IParticipants(form.Schema):
         required=False)
 
 
-class EditPreProtocol(AutoExtensibleForm, ModelEditForm, EditForm):
+class EditPreProtocol(AutoExtensibleForm, ModelProxyEditForm, EditForm):
 
     ignoreContext = True
     schema = IParticipants
@@ -60,7 +60,7 @@ class EditPreProtocol(AutoExtensibleForm, ModelEditForm, EditForm):
         self._has_finished_edit = False
 
     def applyChanges(self, data):
-        ModelEditForm.applyChanges(self, data)
+        ModelProxyEditForm.applyChanges(self, data)
         for protocol in self.get_pre_protocols():
             protocol.update(self.request)
         # pretend to always change the underlying data
@@ -104,7 +104,7 @@ class EditPreProtocol(AutoExtensibleForm, ModelEditForm, EditForm):
         return self.redirect_to_meetinglist()
 
     def render(self):
-        ModelEditForm.render(self)
+        ModelProxyEditForm.render(self)
         if self._has_finished_edit:
             return self.redirect_to_meetinglist()
 

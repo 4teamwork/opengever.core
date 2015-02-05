@@ -2,7 +2,9 @@ from opengever.meeting import is_meeting_feature_enabled
 from zExceptions import Unauthorized
 
 
-class ModelAddForm(object):
+class ModelProxyAddForm(object):
+    """Base add-form for dexterity proxy objects and their associated model.
+    """
 
     content_type = None
     fields = None
@@ -13,7 +15,7 @@ class ModelAddForm(object):
 
         if not is_meeting_feature_enabled():
             raise Unauthorized
-        return super(ModelAddForm, self).render()
+        return super(ModelProxyAddForm, self).render()
 
     def createAndAdd(self, data):
         """Create sql-model supported content types.
@@ -24,12 +26,14 @@ class ModelAddForm(object):
 
         """
         obj_data, model_data = self.content_type.partition_data(data)
-        obj = super(ModelAddForm, self).createAndAdd(data=obj_data)
+        obj = super(ModelProxyAddForm, self).createAndAdd(data=obj_data)
         obj.create_model(model_data, self.context)
         return obj
 
 
-class ModelEditForm(object):
+class ModelProxyEditForm(object):
+    """Base edit-form for dexterity proxy objects and their associated model.
+    """
 
     content_type = None
     fields = None
@@ -40,7 +44,7 @@ class ModelEditForm(object):
 
         if not is_meeting_feature_enabled():
             raise Unauthorized
-        return super(ModelEditForm, self).render()
+        return super(ModelProxyEditForm, self).render()
 
     def inject_initial_data(self):
         if self.request.method != 'GET':
@@ -57,7 +61,7 @@ class ModelEditForm(object):
 
     def updateWidgets(self):
         self.inject_initial_data()
-        super(ModelEditForm, self).updateWidgets()
+        super(ModelProxyEditForm, self).updateWidgets()
 
     def partition_data(self, data):
         obj_data, model_data = self.content_type.partition_data(data)
@@ -69,6 +73,6 @@ class ModelEditForm(object):
     def applyChanges(self, data):
         obj_data, model_data = self.partition_data(data)
         self.update_model(model_data)
-        super(ModelEditForm, self).applyChanges(obj_data)
+        super(ModelProxyEditForm, self).applyChanges(obj_data)
         # pretend to always change the underlying data
         return True
