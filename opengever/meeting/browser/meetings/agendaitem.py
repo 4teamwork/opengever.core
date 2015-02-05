@@ -36,7 +36,7 @@ class ScheduleSubmittedProposal(BrowserView):
         proposal_value = self.request.get('proposal_id')
         try:
             proposal_id = int(proposal_value)
-        except ValueError:
+        except (ValueError, TypeError):
             return
 
         return meeting_service().fetch_proposal(proposal_id)
@@ -69,30 +69,20 @@ class ScheduleText(ScheduleSubmittedProposal):
         if self.request.method != 'POST':
             return
 
-        if 'submit' not in self.request:
+        if 'schedule-paragraph' not in self.request \
+                and 'schedule-text' not in self.request:
             return
 
         return self.request.get('title')
 
-    def __call__(self):
-        title = self.extract_title()
-        if title:
-            self.meeting.schedule_text(title)
-
-        return self.request.response.redirect(self.nextURL())
-
-
-class ScheduleParagraph(ScheduleText):
-
-    @classmethod
-    def url_for(cls, context, meeting):
-        return "{}/{}".format(MeetingList.url_for(context, meeting),
-                              'schedule_paragraph')
+    def extract_is_paragraph(self):
+        return 'schedule-paragraph' in self.request
 
     def __call__(self):
         title = self.extract_title()
+        is_paragraph = self.extract_is_paragraph()
         if title:
-            self.meeting.schedule_paragraph(title)
+            self.meeting.schedule_text(title, is_paragraph=is_paragraph)
 
         return self.request.response.redirect(self.nextURL())
 

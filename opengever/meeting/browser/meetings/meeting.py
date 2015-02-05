@@ -2,7 +2,6 @@ from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.base.model import create_session
 from opengever.meeting import _
 from opengever.meeting.browser.meetings.agendaitem import DeleteAgendaItem
-from opengever.meeting.browser.meetings.agendaitem import ScheduleParagraph
 from opengever.meeting.browser.meetings.agendaitem import ScheduleSubmittedProposal
 from opengever.meeting.browser.meetings.agendaitem import ScheduleText
 from opengever.meeting.browser.meetings.agendaitem import UpdateAgendaItemOrder
@@ -146,7 +145,6 @@ class MeetingView(BrowserView):
     mapped_actions = {
         'edit': EditMeeting,
         'delete_agenda_item': DeleteAgendaItem,
-        'schedule_paragraph': ScheduleParagraph,
         'schedule_proposal': ScheduleSubmittedProposal,
         'schedule_text': ScheduleText,
         'pre_protocol': EditPreProtocol,
@@ -179,9 +177,6 @@ class MeetingView(BrowserView):
 
     def url_schedule_text(self):
         return ScheduleText.url_for(self.context, self.model)
-
-    def url_schedule_paragraph(self):
-        return ScheduleParagraph.url_for(self.context, self.model)
 
     def url_delete_agenda_item(self, agenda_item):
         return DeleteAgendaItem.url_for(self.context, self.model, agenda_item)

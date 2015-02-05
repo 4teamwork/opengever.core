@@ -48,3 +48,5 @@ class TestUnitMeeting(TestCase):
             new_order=[item_2.agenda_item_id, item_1.agenda_item_id])
 
         self.assertSequenceEqual([item_2, item_1], self.meeting.agenda_items)
+        self.assertEqual(1, item_2.sort_order)
+        self.assertEqual(2, item_1.sort_order)

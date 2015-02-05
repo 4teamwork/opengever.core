@@ -130,12 +130,9 @@ class Meeting(Base):
         proposal.schedule(self)
         self.reorder_agenda_items()
 
-    def schedule_text(self, title):
-        self.agenda_items.append(AgendaItem(title=title))
-        self.reorder_agenda_items()
-
-    def schedule_paragraph(self, title):
-        self.agenda_items.append(AgendaItem(title=title, is_paragraph=True))
+    def schedule_text(self, title, is_paragraph=False):
+        self.agenda_items.append(AgendaItem(title=title,
+                                            is_paragraph=is_paragraph))
         self.reorder_agenda_items()
 
     def _set_agenda_item_order(self, new_order):
