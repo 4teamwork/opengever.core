@@ -13,23 +13,36 @@
 
         <h1 tal:content="meeting/get_title"></h1>
 
-        <a class="button" tal:attributes="href view/url_pre_protocol" i18n:translate="">Pre-Protocol</a>
-
+        <h2>Eigenschaften</h2>
         <table class="vertical listing">
             <tbody>
                 <tr>
-                    <th i18n:translate="">State</th>
+                    <th>State</th>
                     <td tal:content="python: meeting.get_state().title"></td>
                 </tr>
 
                 <tr>
-                    <th i18n:translate="">Location</th>
+                    <th>Location</th>
                     <td tal:content="meeting/location"></td>
                 </tr>
             </tbody>
         </table>
 
-        <!-- <metal:block tal:condition="unscheduled_proposals"> -->
+        <h2>Protokolle</h2>
+        <table class="vertical listing">
+            <tbody>
+                <tr>
+                    <th>Vorprotokoll</th>
+                    <td><a tal:attributes="href view/url_pre_protocol" i18n:translate="">[modified date]</a></td>
+                </tr>
+
+                <tr>
+                    <th i18n:translate="">Prokoll</th>
+                    <td><a tal:attributes="href view/url_pre_protocol" i18n:translate="">[modified date]</a></td>
+                </tr>
+            </tbody>
+        </table>
+
         <form method="post" tal:attributes="action view/url_schedule_proposal"
               id="schedule_proposal">
             <fieldset>
@@ -57,7 +70,6 @@
                 </div>
             </fieldset>
         </form>
-        <!-- </metal:block> -->
 
         <!-- <h2 i18n:translate="">Add new Agenda Items</h2>
         <metal:block tal:condition="unscheduled_proposals">
