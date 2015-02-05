@@ -5,6 +5,9 @@ Changelog
 4.2.0 (unreleased)
 ------------------
 
+- Wrap checks in is_pasting_allowed in a try..except for safety.
+  [lgraf]
+
 - Make sure response descriptions are always unicode.
   [lgraf]
 
