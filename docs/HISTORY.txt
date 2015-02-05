@@ -57,6 +57,8 @@ Changelog
     - Disable edit-bar for model add-forms.
     - Add forms for Members and their Memberships in Committees.
     - Add tab to committees listing all memberships.
+    - Add cancel buttons and form labels.
+    - Add tabs to committee container for committees and members
 
   [deiferni]
 
