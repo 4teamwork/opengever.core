@@ -149,6 +149,25 @@ class TestMoveItems(FunctionalTestCase):
         browser.fill({'Destination': subdossier})
         browser.css('#form-buttons-button_submit').first.click()
 
+    @browsing
+    def test_copy_then_move(self, browser):
+        dossier = create(Builder('dossier').titled(u'Dossier'))
+        subdossier = create(Builder('dossier').within(dossier))
+        document = create(Builder('document').within(dossier))
+
+        browser.login()
+
+        # Copy the document
+        paths = ['/'.join(document.getPhysicalPath())]
+        browser.open(dossier, {'paths:list': paths}, view='copy_items')
+
+        # Move the same document we copied before
+        browser.open(dossier, {'paths:list': paths}, view='move_items')
+        browser.fill({'Destination': subdossier})
+
+        # Should not cause our check in is_pasting_allowed view to fail
+        browser.css('#form-buttons-button_submit').first.click()
+
     def get_uids_from_tree_widget(self):
         view = self.source_repo.restrictedTraverse('move_items')
         form = view.form(self.source_repo, self.request)

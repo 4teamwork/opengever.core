@@ -1,5 +1,6 @@
 from five import grok
 from zope.interface import Interface
+from ZODB.POSException import ConflictError
 
 
 class IsPastingAllowedView(grok.View):
@@ -29,7 +30,7 @@ class IsPastingAllowedView(grok.View):
         container_fti = self.context.getTypeInfo()
         return container_fti.allowed_content_types
 
-    def render(self):
+    def is_allowed(self):
         """Perform the necessary checks to determine whether pasting is
         allowed / possible on the current context.
         """
@@ -49,3 +50,18 @@ class IsPastingAllowedView(grok.View):
                 return False
 
         return True
+
+    def render(self):
+        allowed = False
+        # This view is called on *every request*. It's therefore critical
+        # that it doesn't raise any exceptions.
+        # (One example of an exception that could be raised is a KeyError
+        # if a document is first copied, and after that the same document
+        # is then moved, and the restrictedTraverse fails)
+        try:
+            allowed = self.is_allowed()
+        except (ConflictError, KeyboardInterrupt, SystemExit):
+            raise
+        except Exception:
+            pass
+        return allowed
