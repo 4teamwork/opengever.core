@@ -113,28 +113,22 @@ class MemberList(grok.View):
     implements(IPublishTraverse)
     grok.context(ICommitteeContainer)
     grok.name('member')
-    grok.template('members')
-
-    mapped_actions = {
-        'add-member': AddMember,
-    }
 
     @classmethod
     def url_for(cls, context):
         return "{}/{}".format(
             context.absolute_url(), cls.__view_name__)
 
-    def members(self):
-        return Member.query
+    def render(self):
+        """This view is never rendered directly.
 
-    def member_url(self, member):
-        return MemberView.url_for(self.context, member)
+        This method ist still needed to make grok checks happy, every grokked
+        view must have an associated template or 'render' method.
+
+        """
+        pass
 
     def publishTraverse(self, request, name):
-        if name in self.mapped_actions:
-            view_class = self.mapped_actions.get(name)
-            return view_class(self.context, self.request)
-
         try:
             member_id = int(name)
         except ValueError:
