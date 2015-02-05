@@ -105,13 +105,17 @@ class UpdateAgendaItemOrder(BrowserView):
         new_order = [int(item_id) for item_id in data['sortOrder']]
         self.model.reorder_agenda_items(new_order)
 
+        numbers = dict((each.agenda_item_id, each.number) for each in
+                       self.model.agenda_items)
+
         self.request.response.setHeader("Content-type", "application/json")
-        return json.dumps({'messages': [{
-            'messageClass': 'info',
-            'messageTitle': 'Info',
-            'message': _('agenda_item_order_updated',
-                         default=u"Agenda Item order updated."),
-        }]})
+        return json.dumps(
+            {'messages': [{'messageClass': 'info',
+                           'messageTitle': 'Info',
+                           'message': _('agenda_item_order_updated',
+                                        default=u"Agenda Item order updated."),
+                           }],
+             'numbers': numbers})
 
 
 class DeleteAgendaItem(BrowserView):
