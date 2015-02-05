@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from opengever.base.model import Base
 from opengever.meeting import _
 from opengever.meeting.model import AgendaItem
@@ -137,7 +138,22 @@ class Meeting(Base):
         self.agenda_items.append(AgendaItem(title=title, is_paragraph=True))
         self.reorder_agenda_items()
 
-    def reorder_agenda_items(self):
+    def _set_agenda_item_order(self, new_order):
+        agenda_items_by_id = OrderedDict((item.agenda_item_id, item)
+                                         for item in self.agenda_items)
+        agenda_items = []
+
+        for agenda_item_id in new_order:
+            agenda_item = agenda_items_by_id.pop(agenda_item_id, None)
+            if agenda_item:
+                agenda_items.append(agenda_item)
+        agenda_items.extend(agenda_items_by_id.values())
+        self.agenda_items = agenda_items
+
+    def reorder_agenda_items(self, new_order=None):
+        if new_order:
+            self._set_agenda_item_order(new_order)
+
         sort_order = 1
         number = 1
         for agenda_item in self.agenda_items:

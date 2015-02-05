@@ -1,5 +1,4 @@
 from opengever.base.model import Base
-from plone.uuid.interfaces import IUUID
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey

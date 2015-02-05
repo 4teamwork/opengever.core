@@ -37,3 +37,14 @@ class TestUnitMeeting(TestCase):
         self.assertEqual(2, item.sort_order)
         self.assertIsNone(para.number)
         self.assertEqual('1.', item.number)
+
+    def test_set_agenda_item_order(self):
+        item_1 = create(Builder('agenda_item')
+                        .having(meeting=self.meeting))
+        item_2 = create(Builder('agenda_item')
+                        .having(meeting=self.meeting))
+
+        self.meeting.reorder_agenda_items(
+            new_order=[item_2.agenda_item_id, item_1.agenda_item_id])
+
+        self.assertSequenceEqual([item_2, item_1], self.meeting.agenda_items)

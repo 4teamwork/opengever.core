@@ -11,6 +11,7 @@
                             tal:define="meeting view/model;
                                         unscheduled_proposals view/unscheduled_proposals">
 
+        <script tal:content="string:var js_update_order_url = '${view/url_update_agenda_item_order}'"></script>
         <h1 tal:content="meeting/get_title"></h1>
 
         <h2>Eigenschaften</h2>

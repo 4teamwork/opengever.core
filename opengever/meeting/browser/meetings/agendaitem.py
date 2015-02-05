@@ -1,4 +1,5 @@
 from opengever.base.model import create_session
+from opengever.meeting import _
 from opengever.meeting.browser.meetings.meetinglist import MeetingList
 from opengever.meeting.service import meeting_service
 from Products.Five.browser import BrowserView
@@ -6,6 +7,7 @@ from zExceptions import NotFound
 from zope.interface import implements
 from zope.publisher.interfaces import IPublishTraverse
 from zope.publisher.interfaces.browser import IBrowserView
+import json
 
 
 class ScheduleSubmittedProposal(BrowserView):
@@ -93,6 +95,33 @@ class ScheduleParagraph(ScheduleText):
             self.meeting.schedule_paragraph(title)
 
         return self.request.response.redirect(self.nextURL())
+
+
+class UpdateAgendaItemOrder(BrowserView):
+
+    implements(IBrowserView, IPublishTraverse)
+
+    @classmethod
+    def url_for(cls, context, meeting):
+        return "{}/{}".format(MeetingList.url_for(context, meeting),
+                              'update_agenda_item_order')
+
+    def __init__(self, context, request, model):
+        super(UpdateAgendaItemOrder, self).__init__(context, request)
+        self.model = model
+
+    def __call__(self):
+        data = json.loads(self.request.get('BODY'))
+        new_order = [int(item_id) for item_id in data['sortOrder']]
+        self.model.reorder_agenda_items(new_order)
+
+        self.request.response.setHeader("Content-type", "application/json")
+        return json.dumps({'messages': [{
+            'messageClass': 'info',
+            'messageTitle': 'Info',
+            'message': _('agenda_item_order_updated',
+                         default=u"Agenda Item order updated."),
+        }]})
 
 
 class DeleteAgendaItem(BrowserView):

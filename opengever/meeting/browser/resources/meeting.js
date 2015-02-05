@@ -43,16 +43,18 @@
     var agendaItemTable = $("#agenda_items"),
       onUpdate = function() {
         var updatePaylod = {
-          agenda: []
+          sortOrder: []
         };
 
         $("tr", agendaItemTable).each(function(index, tableRow) {
-          updatePaylod.agenda.push(tableRow.dataset.uid);
+          updatePaylod.sortOrder.push(tableRow.dataset.uid);
         });
 
         $.ajax({
-          url: "@@update_agenda_item_order",
+          type: "POST",
           dataType: "json",
+          contentType: "application/json",
+          url: js_update_order_url, // this variable is set by the template
           data: JSON.stringify(updatePaylod),
           success: function(data) {
             listMessages(data.messages);
