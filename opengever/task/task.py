@@ -421,7 +421,7 @@ class AddForm(dexterity.AddForm):
         center.add_watcher_to_resource(task, task.responsible)
         center.add_watcher_to_resource(task, task.issuer)
 
-        description = TaskAddedDescription(task, self.request)
+        description = TaskAddedDescription(task, self.request, self.context)
         center.add_activity(task, description.kind, description.title,
                             description.summary, task.Creator(),
                             description=description.description)
