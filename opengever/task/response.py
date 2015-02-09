@@ -1,12 +1,13 @@
 from Acquisition import aq_inner
 from five import grok
-from opengever.activity.events import TaskNotifactionEvent
+from opengever.activity.utils import notification_center
 from opengever.base.source import DossierPathSourceBinder
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.tabbedview.helper import linked
 from opengever.task import _
 from opengever.task import util
+from opengever.task.activities import TaskTransitionDescription
 from opengever.task.adapters import IResponseContainer
 from opengever.task.adapters import Response
 from opengever.task.interfaces import IResponseAdder
@@ -256,7 +257,8 @@ class AddForm(form.AddForm, AutoExtensibleForm):
             container.add(new_response)
 
             notify(ObjectModifiedEvent(self.context))
-            notify(TaskNotifactionEvent(self.context, new_response))
+
+            self.log_activity(new_response)
 
             if data.get('transition'):
                 syncer = getMultiAdapter((self.context, self.request),
@@ -291,6 +293,16 @@ class AddForm(form.AddForm, AutoExtensibleForm):
     def is_user_assigned_to_current_org_unit(self):
         units = ogds_service().assigned_org_units()
         return get_current_org_unit() in units
+
+    def log_activity(self, response):
+        description = TaskTransitionDescription.get(
+            self.context, self.context.REQUEST, response)
+        center = notification_center()
+
+        center.add_activity(self.context, description.kind, description.title,
+                            description.summary, description.actor,
+                            description=description.description)
+
 
 
 class SingleAddFormView(layout.FormWrapper, grok.View):

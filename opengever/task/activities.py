@@ -1,5 +1,7 @@
 from opengever.ogds.base.actor import Actor
 from opengever.task import _
+from opengever.task.response_description import ResponseDescription
+from plone import api
 from zope.i18n import translate
 
 
@@ -51,3 +53,33 @@ class TaskAddedDescription(object):
 
     def translate(self, msg):
         return translate(msg, context=self.request)
+
+
+class TaskTransitionDescription(TaskAddedDescription):
+
+    def __init__(self, context, request, response):
+        self.context = context
+        self.request = request
+        self.transition = response.transition
+        self.response = response
+
+    @classmethod
+    def get(cls, context, request, response):
+        return cls(context, request, response)
+
+    @property
+    def kind(self):
+        return self.response.transition
+
+    @property
+    def summary(self):
+        msg = ResponseDescription.get(response=self.response).msg()
+        return self.translate(msg)
+
+    @property
+    def actor(self):
+        return api.user.get_current().getId()
+
+    @property
+    def description(self):
+        return self.response.text
