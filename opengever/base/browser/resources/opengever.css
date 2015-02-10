@@ -177,21 +177,21 @@ dl.portlet ul.filetree a.toggleNav.expanded {
 
 @media screen {
 
-  #content fieldset.proposal {
+  #opengever_meeting_meeting fieldset.proposal {
     border-style: solid solid solid solid;
   }
 
-  #content fieldset.proposal legend{
+  #opengever_meeting_meeting fieldset.proposal legend{
     font-size: 1em;
   }
 
-  form input[type="text"] {
+  #opengever_meeting_meeting form input[type="text"] {
     padding: 4px 5px;
     line-height: 20px;
     min-width: 300px;
   }
 
-  #content form select {
+  #opengever_meeting_meeting form select {
     min-width: 312px;
     padding: 4px 5px;
   }
