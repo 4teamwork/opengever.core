@@ -41,11 +41,22 @@
 
   $(function() {
     var agendaItemTable = $("#agenda_items"),
-    updateNumbers = function(numbers) {
-      $("tr", agendaItemTable).each(function(idx, row) {
-        $(".number", row).html(numbers[row.dataset.uid]);
-      });
-    },
+      agendaItemStore = $("tbody", agendaItemTable).clone(),
+      updateNumbers = function(numbers) {
+        $("tr", agendaItemTable).each(function(idx, row) {
+          $(".number", row).html(numbers[row.dataset.uid]);
+        });
+      },
+      onOrderSuccess = function(data) {
+        listMessages(data.messages);
+        updateNumbers(data.numbers);
+        agendaItemStore = $("tbody", agendaItemTable).clone();
+      },
+      onOrderFail = function() {
+        listMessages();
+        agendaItemTable.html(agendaItemStore.clone());
+        $("tbody", agendaItemTable).sortable(sortableSettings);
+      },
       onUpdate = function() {
         var updatePayload = {
           sortOrder: []
@@ -59,15 +70,10 @@
           type: "POST",
           dataType: "json",
           contentType: "application/json",
-          url: js_update_order_url, // this variable is set by the template
+          url: global.js_update_order_url, // this variable is set by the template
           data: JSON.stringify(updatePayload),
-          success: function(data) {
-            listMessages(data.messages);
-            updateNumbers(data.numbers);
-          },
-          error: function() {
-            listMessages();
-          }
+          success: onOrderSuccess,
+          error: onOrderFail
         });
 
       },
