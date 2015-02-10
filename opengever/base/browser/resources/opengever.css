@@ -176,14 +176,6 @@ dl.portlet ul.filetree a.toggleNav.expanded {
 /* @group meeting */
 
 @media screen {
-  #content ul.regular_buttons {
-    list-style-type: none;
-    margin: 1em 0 .5em 0;
-  }
-
-  #content ul.regular_buttons li {
-    margin: 0;
-  }
 
   #content fieldset.proposal {
     border-style: solid solid solid solid;
