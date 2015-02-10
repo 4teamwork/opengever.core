@@ -47,12 +47,12 @@
       });
     },
       onUpdate = function() {
-        var updatePaylod = {
+        var updatePayload = {
           sortOrder: []
         };
 
         $("tr", agendaItemTable).each(function(index, tableRow) {
-          updatePaylod.sortOrder.push(tableRow.dataset.uid);
+          updatePayload.sortOrder.push(tableRow.dataset.uid);
         });
 
         $.ajax({
@@ -60,7 +60,7 @@
           dataType: "json",
           contentType: "application/json",
           url: js_update_order_url, // this variable is set by the template
-          data: JSON.stringify(updatePaylod),
+          data: JSON.stringify(updatePayload),
           success: function(data) {
             listMessages(data.messages);
             updateNumbers(data.numbers);
