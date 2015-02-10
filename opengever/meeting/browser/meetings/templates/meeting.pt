@@ -15,38 +15,33 @@
                                       var msg_unexpected_error = '${view/msg_unexpected_error}';"></script>
           <h1 tal:content="meeting/get_title"></h1>
 
-          <h2>Eigenschaften</h2>
+          <h2 i18n:translate="">Properties</h2>
           <table class="vertical listing">
               <tbody>
                   <tr>
-                      <th>State</th>
+                      <th i18n:translate="">State</th>
                       <td tal:content="python: meeting.get_state().title"></td>
                   </tr>
 
                   <tr>
-                      <th>Location</th>
+                      <th i18n:translate="">Location</th>
                       <td tal:content="meeting/location"></td>
                   </tr>
               </tbody>
           </table>
 
-          <h2>Protokolle</h2>
+          <h2 i18n:translate="">Protocols</h2>
           <table class="vertical listing">
               <tbody>
                   <tr>
-                      <th>Vorprotokoll</th>
-                      <td><a tal:attributes="href view/url_pre_protocol" i18n:translate="">[modified date]</a></td>
-                  </tr>
-
-                  <tr>
-                      <th i18n:translate="">Prokoll</th>
-                      <td><a tal:attributes="href view/url_pre_protocol" i18n:translate="">[modified date]</a></td>
+                      <th i18n:translate="">Pre-Protocol</th>
+                      <td><a tal:attributes="href view/url_pre_protocol" i18n:translate="">Edit pre-protocol</a></td>
                   </tr>
               </tbody>
           </table>
 
           <fieldset class="proposal">
-          <legend>Traktandieren</legend>
+          <legend i18n:translate="">Add Agenda Item</legend>
             <metal:block tal:condition="unscheduled_proposals">
               <form method="post" tal:attributes="action view/url_schedule_proposal"
                     id="schedule_proposal">
@@ -70,9 +65,9 @@
                     <input type="text" name="title" id="text-agenda-item" />
                     <div class="button_group">
                         <input type="submit" name="schedule-paragraph" id="submit-schedule-paragraph"
-                            value="als Paragraph" />
+                            value="as paragraph" i18n:attributes="value" />
                         <input type="submit" name="schedule-text" id="submit-schedule-text"
-                            value="als Freitext" />
+                            value="as free-text"  i18n:attributes="value" />
                     </div>
                 </div>
               </form>
