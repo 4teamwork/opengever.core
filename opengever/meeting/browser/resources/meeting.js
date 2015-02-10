@@ -9,7 +9,7 @@
     var defaultMessage = {
       messageClass: "error",
       messageTitle: "Fehler",
-      message: "Es ist ein unerwarteter Fehler aufgetreten."
+      message: global.msg_unexpected_error
     };
     var currentMessages = $(".portalMessage:visible");
 

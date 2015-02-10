@@ -4,6 +4,7 @@ from opengever.meeting.browser.meetings.meetinglist import MeetingList
 from opengever.meeting.service import meeting_service
 from Products.Five.browser import BrowserView
 from zExceptions import NotFound
+from zope.i18n import translate
 from zope.interface import implements
 from zope.publisher.interfaces import IPublishTraverse
 from zope.publisher.interfaces.browser import IBrowserView
@@ -112,8 +113,10 @@ class UpdateAgendaItemOrder(BrowserView):
         return json.dumps(
             {'messages': [{'messageClass': 'info',
                            'messageTitle': 'Info',
-                           'message': _('agenda_item_order_updated',
-                                        default=u"Agenda Item order updated."),
+                           'message': translate(
+                               _('agenda_item_order_updated',
+                                 default=u"Agenda Item order updated."),
+                               context=self.request),
                            }],
              'numbers': numbers})
 

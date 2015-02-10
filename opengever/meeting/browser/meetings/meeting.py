@@ -20,6 +20,7 @@ from z3c.form.form import EditForm
 from z3c.form.interfaces import HIDDEN_MODE
 from zExceptions import NotFound
 from zope import schema
+from zope.i18n import translate
 from zope.interface import implements
 from zope.publisher.interfaces import IPublishTraverse
 from zope.publisher.interfaces.browser import IBrowserView
@@ -192,3 +193,8 @@ class MeetingView(BrowserView):
 
     def agenda_items(self):
         return self.model.agenda_items
+
+    def msg_unexpected_error(self):
+        return translate(_('An unexpected error has occurred',
+                           default='An unexpected error has occurred'),
+                         context=self.request)
