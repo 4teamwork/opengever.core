@@ -52,4 +52,4 @@ class SortHelpers(object):
         for contact in contact_service().all_contact_brains():
             sort_dict['contact:%s' % (contact.id)] = u'%s %s' % (
                 contact.lastname, contact.firstname)
-            return sort_dict
+        return sort_dict
