@@ -31,8 +31,8 @@ class TestUserSortDict(FunctionalTestCase):
         self.assertEqual(
             {u'albert.peter': u'Peter Albert',
              u'test_user_1_': u'Test User',
-             'inbox:client1': u'Inbox: Client1',
-             'inbox:arch': u'Inbox: Landesarchiv',
+             u'inbox:client1': u'Inbox: Client1',
+             u'inbox:arch': u'Inbox: Landesarchiv',
              u'hugo.boss': u'Boss Hugo',
              u'james.bond': u'Bond James'},
             SortHelpers().get_user_sort_dict())
@@ -50,10 +50,22 @@ class TestUserSortDict(FunctionalTestCase):
 
         self.assertEqual(
             {u'albert.peter': u'Peter Albert',
-             'contact:croft-lara': u'Croft Lara',
+             u'contact:croft-lara': u'Croft Lara',
+             u'contact:man-super': u'M\xe4n Super',
              u'test_user_1_': u'Test User',
-             'inbox:client1': u'Inbox: Client1',
-             'inbox:arch': u'Inbox: Landesarchiv',
+             u'inbox:client1': u'Inbox: Client1',
+             u'inbox:arch': u'Inbox: Landesarchiv',
+             u'hugo.boss': u'Boss Hugo',
+             u'james.bond': u'Bond James'},
+            SortHelpers().get_user_contact_sort_dict())
+
+    def test_user_contact_sort_dict_is_not_none_for_emtpy_contacts(self):
+        self.assertIsNotNone(SortHelpers().get_user_contact_sort_dict())
+        self.assertEqual(
+            {u'albert.peter': u'Peter Albert',
+             u'test_user_1_': u'Test User',
+             u'inbox:client1': u'Inbox: Client1',
+             u'inbox:arch': u'Inbox: Landesarchiv',
              u'hugo.boss': u'Boss Hugo',
              u'james.bond': u'Bond James'},
             SortHelpers().get_user_contact_sort_dict())
