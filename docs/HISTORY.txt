@@ -5,6 +5,9 @@ Changelog
 4.2.0 (unreleased)
 ------------------
 
+- Livesearch: Dropped unused icon <img> tag.
+  [phgross]
+
 - Style meeting form.
   Add agendaitem sorting implementation.
   [deiferni, Kevin Bieri]
