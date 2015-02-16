@@ -3,6 +3,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.base.oguid import Oguid
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
+from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.proposal import Proposal
 from opengever.testing import FunctionalTestCase
 from opengever.testing import index_data_for
@@ -168,6 +169,16 @@ class TestProposal(FunctionalTestCase):
         self.assertEqual(document.Title(), submitted_document.Title())
         self.assertEqual(document.file.filename,
                          submitted_document.file.filename)
+
+        # submitted document is created
+        submitted_document_model = SubmittedDocument.query.get_by_source(
+            proposal, document)
+        self.assertIsNotNone(submitted_document_model)
+        self.assertEqual(Oguid.for_object(submitted_document),
+                         submitted_document_model.submitted_oguid)
+        self.assertEqual(0, submitted_document_model.submitted_version)
+        self.assertEqual(proposal.load_model(),
+                         submitted_document_model.proposal)
 
     @browsing
     def test_proposal_can_be_submitted(self, browser):
