@@ -2,6 +2,7 @@ from five import grok
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import _
+from opengever.task.activities import TaskReassignActivity
 from opengever.task.interfaces import IWorkflowStateSyncer
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
@@ -92,9 +93,10 @@ class AssignTaskForm(Form):
         return self.request.RESPONSE.redirect('.')
 
     def reassing_task(self, **kwargs):
-        self.add_response(**kwargs)
+        response = self.add_response(**kwargs)
         self.update_task(**kwargs)
         notify(ObjectModifiedEvent(self.context))
+        self.log_activity(response)
         self.sync_remote_task(**kwargs)
 
     def update_task(self, **kwargs):
@@ -102,7 +104,7 @@ class AssignTaskForm(Form):
         self.context.responsible = kwargs.get('responsible')
 
     def add_response(self, **kwargs):
-        add_simple_response(
+        return add_simple_response(
             self.context,
             text=kwargs.get('text'),
             field_changes=(
@@ -120,6 +122,9 @@ class AssignTaskForm(Form):
             text=kwargs.get('text'),
             responsible=kwargs.get('responsible'),
             responsible_client=kwargs.get('responsible_client'))
+
+    def log_activity(self, response):
+        TaskReassignActivity(self.context, response).log()
 
     @buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
     def handle_cancel(self, action):

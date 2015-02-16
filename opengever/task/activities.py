@@ -1,3 +1,4 @@
+from opengever.activity.utils import notification_center
 from opengever.ogds.base.actor import Actor
 from opengever.task import _
 from opengever.task.response_description import ResponseDescription
@@ -5,25 +6,62 @@ from plone import api
 from zope.i18n import translate
 
 
-class TaskAddedDescription(object):
+class TaskActivity(object):
 
     def __init__(self, context, request, parent):
         self.context = context
         self.request = request
         self.parent = parent
+        self.center = notification_center()
 
     @property
     def kind(self):
-        return _(u'task-added', default=u'Task added')
+        raise NotImplementedError()
 
     @property
     def title(self):
         return self.context.title
 
     @property
+    def actor_id(self):
+        return self.context.Creator()
+
+    @property
+    def summary(self):
+        raise NotImplementedError()
+
+    @property
+    def description(self):
+        raise NotImplementedError()
+
+    def before_logging(self):
+        pass
+    def after_logging(self):
+        pass
+
+    def log(self):
+        self.before_logging()
+
+        self.center.add_activity(
+            self.context, self.kind, self.title, self.summary,
+            self.actor_id, description=self.description)
+
+        self.after_logging()
+
+    def translate(self, msg):
+        return translate(msg, context=self.request)
+
+
+class TaskAddedActivity(TaskActivity):
+
+    @property
+    def kind(self):
+        return _(u'task-added', default=u'Task added')
+
+    @property
     def summary(self):
         actor = Actor.lookup(self.context.Creator())
-        msg = _('label_task_added', 'New task added by ${user}',
+        msg = _('label_task_added', u'New task added by ${user}',
                 mapping={'user': actor.get_label(with_principal=False)})
         return self.translate(msg)
 
@@ -51,21 +89,21 @@ class TaskAddedDescription(object):
 
         return msg
 
-    def translate(self, msg):
-        return translate(msg, context=self.request)
+    def before_logging(self):
+        self.center.add_watcher_to_resource(self.context,
+                                            self.context.responsible)
+        self.center.add_watcher_to_resource(self.context,
+                                            self.context.issuer)
 
 
-class TaskTransitionDescription(TaskAddedDescription):
+class TaskTransitionActivity(TaskActivity):
 
-    def __init__(self, context, request, response):
+    def __init__(self, context, response):
         self.context = context
-        self.request = request
+        self.request = self.context.REQUEST
         self.transition = response.transition
         self.response = response
-
-    @classmethod
-    def get(cls, context, request, response):
-        return cls(context, request, response)
+        self.center = notification_center()
 
     @property
     def kind(self):
@@ -83,3 +121,15 @@ class TaskTransitionDescription(TaskAddedDescription):
     @property
     def description(self):
         return self.response.text
+
+
+class TaskReassignActivity(TaskTransitionActivity):
+
+    def before_logging(self):
+        self.center.add_watcher_to_resource(self.context,
+                                            self.context.responsible)
+
+    def after_logging(self):
+        change = self.response.get_change('responsible')
+        self.center.remove_watcher_from_resource(self.context,
+                                                 change.get('before'))

@@ -7,7 +7,6 @@ from datetime import timedelta
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
-from opengever.activity.utils import notification_center
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.oguid import Oguid
@@ -20,7 +19,7 @@ from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.task import _
 from opengever.task import util
-from opengever.task.activities import TaskAddedDescription
+from opengever.task.activities import TaskAddedActivity
 from opengever.task.validators import NoCheckedoutDocsValidator
 from plone import api
 from plone.dexterity.content import Container
@@ -416,17 +415,10 @@ class AddForm(dexterity.AddForm):
 
     def createAndAdd(self, data):
         task = super(AddForm, self).createAndAdd(data=data)
-        center = notification_center()
-
-        center.add_watcher_to_resource(task, task.responsible)
-        center.add_watcher_to_resource(task, task.issuer)
-
-        description = TaskAddedDescription(task, self.request, self.context)
-        center.add_activity(task, description.kind, description.title,
-                            description.summary, task.Creator(),
-                            description=description.description)
-
+        activity = TaskAddedActivity(task, self.request, self.context)
+        activity.log()
         return task
+
 
 class EditForm(dexterity.EditForm):
     """Standard EditForm, just require the Edit Task permission"""
