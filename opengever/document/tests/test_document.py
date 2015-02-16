@@ -17,6 +17,7 @@ from opengever.testing import FunctionalTestCase
 from opengever.testing import index_data_for
 from opengever.testing import obj2brain
 from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
+from plone import api
 from plone.app.testing import TEST_USER_ID
 from plone.dexterity.fti import DexterityFTI
 from plone.dexterity.fti import register
@@ -174,6 +175,14 @@ class TestDocument(FunctionalTestCase):
 
         self.assertFalse(doc.is_movable())
 
+    def test_current_document_version_is_increased(self):
+        document = create(Builder("document"))
+        self.assertEqual(0, document.get_current_version())
+
+        repository = api.portal.get_tool('portal_repository')
+        repository.save(document)
+
+        self.assertEqual(1, document.get_current_version())
 
 class TestDocumentDefaultValues(FunctionalTestCase):
 

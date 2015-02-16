@@ -205,3 +205,15 @@ class Document(Item):
             return True
         else:
             return False
+
+    def get_current_version(self):
+        """Return the current document history version."""
+
+        repository = api.portal.get_tool("portal_repository")
+        assert repository.isVersionable(self), \
+            'Document is not versionable'
+        history = repository.getHistoryMetadata(self)
+        current_version = history.getLength(countPurged=False) - 1
+        assert history.retrieve(current_version), \
+            'missing history entry for verion {}'.format(current_version)
+        return current_version
