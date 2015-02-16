@@ -4,6 +4,7 @@ from ftw.mail.utils import get_attachments
 from ftw.mail.utils import get_filename
 from ftw.mail.utils import remove_attachments
 from ftw.table.interfaces import ITableGenerator
+from opengever.base.utils import disable_edit_bar
 from opengever.base.utils import find_parent_dossier
 from opengever.mail import _
 from opengever.mail.events import AttachmentsDeleted
@@ -137,8 +138,7 @@ class ExtractAttachments(grok.View):
         return generator.generate(items, columns, sortable=False)
 
     def __call__(self):
-        # Disable the editable border for extract attachments view
-        self.request.set('disable_border', 1)
+        disable_edit_bar()
 
         items = get_attachments(self.context.msg)
         if not len(items):

@@ -1,4 +1,5 @@
 from opengever.base.model import create_session
+from opengever.base.utils import disable_edit_bar
 from opengever.meeting import _
 from opengever.meeting import is_meeting_feature_enabled
 from plone.autoform.form import AutoExtensibleForm
@@ -19,7 +20,7 @@ class ModelAddForm(AutoExtensibleForm, AddForm):
     def __init__(self, context, request):
         super(ModelAddForm, self).__init__(context, request)
         self._created_object = None
-        self.request.set('disable_border', True)  # disables the edit bar.
+        disable_edit_bar()
 
     def create(self, data):
         return self.model_class(**data)

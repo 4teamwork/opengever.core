@@ -1,6 +1,7 @@
 from five import grok
 from opengever.base.source import DossierPathSourceBinder
 from opengever.base.transport import Transporter
+from opengever.base.utils import disable_edit_bar
 from opengever.document import _
 from opengever.document.document import IDocumentSchema
 from opengever.meeting import is_meeting_feature_enabled
@@ -49,6 +50,10 @@ class SubmitAdditionalDocuments(AutoExtensibleForm, Form):
     ignoreContext = True
 
     schema = ISubmitAdditionalDocuments
+
+    def __call__(self):
+        disable_edit_bar()
+        return super(SubmitAdditionalDocuments, self).__call__()
 
     def available(self):
         return is_meeting_feature_enabled() and \
