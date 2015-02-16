@@ -16,6 +16,11 @@ class PloneNotificationCenter(NotificationCenter):
         oguid = Oguid.for_object(obj)
         super(PloneNotificationCenter, self).add_watcher_to_resource(oguid, userid)
 
+    def remove_watcher_from_resource(self, obj, userid):
+        oguid = Oguid.for_object(obj)
+        super(PloneNotificationCenter, self).remove_watcher_from_resource(
+            oguid, userid)
+
     def add_activity(self, obj, kind, title, summary, actor_id, description=u''):
         oguid = Oguid.for_object(obj)
 
