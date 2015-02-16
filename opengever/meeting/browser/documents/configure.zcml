@@ -1,0 +1,13 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="opengever.meeting">
+
+  <browser:page
+      for="opengever.document.document.IDocumentSchema"
+      name="submit_additional_document"
+      class=".submit.SubmitAdditionalDocument"
+      permission="zope2.View"
+    />
+
+</configure>

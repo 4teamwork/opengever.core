@@ -148,4 +148,13 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <!-- 4100 -> 4200 -->
+    <upgrade-step:importProfile
+        title="Add update proposal action"
+        profile="opengever.document:default"
+        source="4100"
+        destination="4200"
+        directory="profiles/4200"
+        />
+
 </configure>
