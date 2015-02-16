@@ -24,6 +24,26 @@ class CreateSubmittedProposalCommand(object):
         self.submitted_proposal_path = response['path']
 
 
+class UpdateSubmittedDocumentCommand(object):
+
+    def __init__(self, proposal, document, submitted_document):
+        self.proposal = proposal
+        self.document = document
+        self.submitted_document = submitted_document
+
+    def execute(self):
+        Transporter().transport_to(
+            self.document,
+            self.submitted_document.submitted_admin_unit_id,
+            self.submitted_document.submitted_physical_path,
+            view='update-submitted-document')
+
+        submitted_version = self.document.get_current_version()
+        submitted_document = SubmittedDocument.query.get_by_source(
+            self.proposal, self.document)
+        submitted_document.submitted_version = submitted_version
+
+
 class CopyProposalDocumentCommand(object):
     """Copy documents attached to a proposal to the proposal's associated
     committee once a proposal is submitted.

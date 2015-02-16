@@ -3,7 +3,9 @@ from opengever.base.source import DossierPathSourceBinder
 from opengever.meeting import _
 from opengever.meeting.command import CopyProposalDocumentCommand
 from opengever.meeting.command import CreateSubmittedProposalCommand
+from opengever.meeting.command import UpdateSubmittedDocumentCommand
 from opengever.meeting.container import ModelContainer
+from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.model.proposal import Proposal as ProposalModel
 from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
@@ -101,8 +103,10 @@ class Submit(Transition):
         super(Submit, self).execute(obj, model)
         documents = obj.get_documents()
         create_command = CreateSubmittedProposalCommand(obj)
-        copy_commands = [CopyProposalDocumentCommand(document, create_command)
-                         for document in documents]
+        copy_commands = [
+            CopyProposalDocumentCommand(
+                obj, document, parent_action=create_command)
+            for document in documents]
 
         create_command.execute()
         for copy_command in copy_commands:
@@ -298,3 +302,29 @@ class Proposal(ProposalBase):
             committee = str(committee.committee_id)
             values['committee'] = committee
         return values
+
+    def is_submit_additional_documents_allowed(self):
+        return self.get_state() == self.STATE_SUBMITTED
+
+    def submit_additional_document(self, document):
+        assert self.is_submit_additional_documents_allowed()
+
+        submitted_document = SubmittedDocument.query.get_by_source(
+            self, document)
+        proposal_model = self.load_model()
+
+        if submitted_document:
+            if submitted_document.is_up_to_date(document):
+                return None
+            command = UpdateSubmittedDocumentCommand(
+                self, document, submitted_document)
+
+        else:
+            command = CopyProposalDocumentCommand(
+                self,
+                document,
+                target_path=proposal_model.submitted_physical_path,
+                target_admin_unit_id=proposal_model.submitted_admin_unit_id)
+
+        command.execute()
+        return command
