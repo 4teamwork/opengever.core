@@ -82,4 +82,13 @@
         directory="profiles/4207"
         />
 
+    <!-- 4207 -> 4208 -->
+    <genericsetup:upgradeStep
+        title="Add Submitted Documents table."
+        description=""
+        source="4207"
+        destination="4208"
+        handler="opengever.meeting.upgrades.to4208.AddSubmittedDocumentsTable"
+        profile="opengever.meeting:default"
+        />
 </configure>
