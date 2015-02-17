@@ -32,4 +32,11 @@
       permission="zope2.View"
     />
 
+  <browser:page
+      for="zope.interface.Interface"
+      name="submit_additional_documents"
+      class=".submitdocuments.SubmitDocumentsByPaths"
+      permission="zope2.View"
+    />
+
 </configure>

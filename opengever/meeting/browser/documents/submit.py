@@ -36,6 +36,7 @@ class ISubmitAdditionalDocument(form.Schema):
                     ['opengever.dossier.behaviors.dossier.IDossierMarker',
                      'opengever.meeting.proposal.IProposal'],
                 }),
+        required=True
         )
 
 
