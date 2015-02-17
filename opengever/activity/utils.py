@@ -1,9 +1,13 @@
+from opengever.activity import is_activity_feature_enabled
 from opengever.activity.notification_center import NotificationCenter
 from opengever.base.oguid import Oguid
 from plone import api
 
 
 def notification_center():
+    if not is_activity_feature_enabled():
+        return DisabledNotificationCenter()
+
     return PloneNotificationCenter()
 
 
@@ -36,3 +40,39 @@ class PloneNotificationCenter(NotificationCenter):
             api.user.get_current().getId(),
             only_unread=only_unread,
             limit=limit)
+
+
+class DisabledNotificationCenter(NotificationCenter):
+
+    def add_resource(self, oguid):
+        pass
+
+    def fetch_resource(self, oguid):
+        return None
+
+    def add_watcher(self, user_id):
+        pass
+
+    def fetch_watcher(self, user_id):
+        return None
+
+    def add_watcher_to_resource(self, obj, userid):
+        pass
+
+    def remove_watcher_from_resource(self, obj, userid):
+        pass
+
+    def get_watchers(self, obj):
+        return []
+
+    def add_activity(self, obj, kind, title, summary, actor_id, description=u''):
+        pass
+
+    def get_users_notifications(self, userid, only_unread=False, limit=None):
+        return []
+
+    def mark_notification_as_read(self, notification_id):
+        pass
+
+    def get_current_users_notifications(self, only_unread=False, limit=None):
+        return []
