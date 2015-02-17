@@ -3,7 +3,9 @@ from opengever.base.oguid import Oguid
 from opengever.base.request import dispatch_json_request
 from opengever.base.transport import REQUEST_KEY
 from opengever.base.transport import Transporter
+from opengever.meeting import _
 from opengever.meeting.model import SubmittedDocument
+from plone import api
 import json
 
 
@@ -24,6 +26,23 @@ class CreateSubmittedProposalCommand(object):
         self.submitted_proposal_path = response['path']
 
 
+class NullUpdateSubmittedDocumentCommand(object):
+
+    def __init__(self, document):
+        self.document = document
+
+    def execute(self):
+        pass
+
+    def show_message(self):
+        portal = api.portal.get()
+        api.portal.show_message(
+            _(u'Document ${title} has already been submitted in that version',
+              mapping=dict(title=self.document.Title().decode('utf-8'))),
+            portal.REQUEST,
+            type='warn')
+
+
 class UpdateSubmittedDocumentCommand(object):
 
     def __init__(self, proposal, document, submitted_document):
@@ -42,6 +61,13 @@ class UpdateSubmittedDocumentCommand(object):
         submitted_document = SubmittedDocument.query.get_by_source(
             self.proposal, self.document)
         submitted_document.submitted_version = submitted_version
+
+    def show_message(self):
+        portal = api.portal.get()
+        api.portal.show_message(
+            _(u'A new submitted version of document ${title} has been created',
+              mapping=dict(title=self.document.Title().decode('utf-8'))),
+            portal.REQUEST)
 
 
 class CopyProposalDocumentCommand(object):
@@ -68,6 +94,13 @@ class CopyProposalDocumentCommand(object):
     def execute(self):
         reponse = self.copy_document(self.target_path, self.target_admin_unit_id)
         self.add_database_entry(reponse, self.target_admin_unit_id)
+
+    def show_message(self):
+        portal = api.portal.get()
+        api.portal.show_message(
+            _(u'Additional document ${title} has been submitted successfully',
+              mapping=dict(title=self.document.Title().decode('utf-8'))),
+            portal.REQUEST)
 
     def add_database_entry(self, reponse, target_admin_unit_id):
         oguid = Oguid.for_object(self.document)

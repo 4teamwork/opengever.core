@@ -2,7 +2,6 @@ from opengever.base.source import DossierPathSourceBinder
 from opengever.base.utils import disable_edit_bar
 from opengever.document import _
 from opengever.meeting.proposal import IProposal
-from plone import api
 from plone.autoform.form import AutoExtensibleForm
 from plone.directives import form
 from plone.formwidget.contenttree.source import CustomFilter
@@ -60,15 +59,9 @@ class SubmitAdditionalDocument(AutoExtensibleForm, Form):
 
         proposal = data['proposal']
         document = self.context
-        if proposal.submit_additional_document(document):
-            api.portal.show_message(
-                _(u'This document was already submitted in that version.'),
-                self.request,
-                type='warn')
+        command = proposal.submit_additional_document(document)
+        command.show_message()
 
-        api.portal.show_message(
-            _(u'Additional document has been submitted successfully'),
-            self.request)
         self.request.RESPONSE.redirect(self.nextURL())
 
     @buttonAndHandler(_(u'button_cancel', default=u'Cancel'))

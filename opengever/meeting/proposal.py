@@ -3,6 +3,7 @@ from opengever.base.source import DossierPathSourceBinder
 from opengever.meeting import _
 from opengever.meeting.command import CopyProposalDocumentCommand
 from opengever.meeting.command import CreateSubmittedProposalCommand
+from opengever.meeting.command import NullUpdateSubmittedDocumentCommand
 from opengever.meeting.command import UpdateSubmittedDocumentCommand
 from opengever.meeting.container import ModelContainer
 from opengever.meeting.model import SubmittedDocument
@@ -315,9 +316,10 @@ class Proposal(ProposalBase):
 
         if submitted_document:
             if submitted_document.is_up_to_date(document):
-                return None
-            command = UpdateSubmittedDocumentCommand(
-                self, document, submitted_document)
+                command = NullUpdateSubmittedDocumentCommand(document)
+            else:
+                command = UpdateSubmittedDocumentCommand(
+                    self, document, submitted_document)
 
         else:
             command = CopyProposalDocumentCommand(

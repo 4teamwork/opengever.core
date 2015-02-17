@@ -71,11 +71,9 @@ class SubmitAdditionalDocuments(AutoExtensibleForm, Form):
 
         proposal = self.context
         for document in data['additionalDocuments']:
-            proposal.submit_additional_document(document)
+            command = proposal.submit_additional_document(document)
+            command.show_message()
 
-        api.portal.show_message(
-            _(u'Additional documents have been submitted successfully'),
-            self.request)
         self.request.RESPONSE.redirect(self.nextURL())
 
     @buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
@@ -113,7 +111,8 @@ class SubmitDocumentsByPaths(AutoExtensibleForm, Form):
 
         proposal = data['proposal']
         for document in self.get_documents():
-            proposal.submit_additional_document(document)
+            command = proposal.submit_additional_document(document)
+            command.show_message()
 
         self.request.RESPONSE.redirect(self.nextURL())
 
