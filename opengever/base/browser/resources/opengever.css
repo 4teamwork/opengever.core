@@ -247,11 +247,11 @@ dl.portlet ul.filetree a.toggleNav.expanded {
     border-bottom: 1px solid #e6e6e6;
   }
 
-  .sortable_handle:hover {
+  #agenda_items .sortable_handle:hover {
     cursor: ns-resize;
   }
 
-  .sortable_handle:before {
+  #agenda_items .sortable_handle:before {
     font-family: 'icomoon';
     content:'\e114';
   }
