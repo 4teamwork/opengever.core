@@ -16,15 +16,6 @@ class TestMemberListing(FunctionalTestCase):
         self.member = create(Builder('member'))
 
     @browsing
-    def test_list_member(self, browser):
-        browser.login().open(self.container, view='member')
-        link = browser.find('Peter Meier')
-        self.assertIsNotNone(link)
-
-        link.click()
-        self.assertEqual(self.member.get_url(self.container), browser.url)
-
-    @browsing
     def test_members_can_be_added_in_browser(self, browser):
         browser.login().open(self.container, view='add-member')
         browser.fill({'Firstname': u'Hanspeter',

@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<object name="opengever.meeting.committeecontainer" meta_type="Dexterity FTI"
+        i18n:domain="opengever.meeting" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+  <!-- View information -->
+  <property name="default_view">tabbed_view</property>
+  <property name="immediate_view">tabbed_view</property>
+  <property name="default_view_fallback">False</property>
+  <property name="view_methods">
+    <element value="view" />
+    <element value="tabbed_view" />
+  </property>
+
+  <!-- Tab Actions -->
+  <action title="committees"
+          action_id="committees"
+          category="tabbedview-tabs"
+          condition_expr=""
+          url_expr="string:#"
+          visible="True">
+  </action>
+  <action title="members"
+          action_id="members"
+          category="tabbedview-tabs"
+          condition_expr=""
+          url_expr="string:#"
+          visible="True">
+  </action>
+
+</object>

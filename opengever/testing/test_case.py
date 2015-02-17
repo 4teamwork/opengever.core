@@ -5,6 +5,7 @@ from opengever.dossier.interfaces import ITemplateDossierProperties
 from opengever.journal.tests.utils import get_journal_entry
 from opengever.testing import builders  # keep!
 from opengever.testing.browser import OGBrowser
+from plone import api
 from plone.app.testing import login
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
@@ -39,6 +40,12 @@ class FunctionalTestCase(TestCase):
         if self.use_default_fixture:
             self.user, self.org_unit, self.admin_unit = create(
                 Builder('fixture').with_all_unit_setup())
+
+        # necessary to force tabbed-view into correct mode, otherwise it only
+        # renders empty views/tabs.
+        api.portal.set_registry_record(
+            'ftw.tabbedview.interfaces.ITabbedView.extjs_enabled', False)
+
         # currently necessary to have persistent SQL data
         transaction.commit()
 

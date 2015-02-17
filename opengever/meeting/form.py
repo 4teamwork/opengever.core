@@ -1,8 +1,109 @@
+from opengever.base.model import create_session
+from opengever.meeting import _
 from opengever.meeting import is_meeting_feature_enabled
+from plone.autoform.form import AutoExtensibleForm
+from z3c.form import button
+from z3c.form.form import AddForm
+from z3c.form.form import EditForm
 from zExceptions import Unauthorized
 
 
-class ModelAddForm(object):
+class ModelAddForm(AutoExtensibleForm, AddForm):
+    """Base add-form for stand-alone model objects.
+    """
+
+    ignoreContext = True
+    schema = None
+    model_class = None
+
+    def __init__(self, context, request):
+        super(ModelAddForm, self).__init__(context, request)
+        self._created_object = None
+        self.request.set('disable_border', True)  # disables the edit bar.
+
+    def create(self, data):
+        return self.model_class(**data)
+
+    def add(self, obj):
+        session = create_session()
+        session.add(obj)
+        session.flush()  # required to create an autoincremented id
+        self._created_object = obj
+
+    # this renames the button but otherwise preserves super's behavior
+    @button.buttonAndHandler(_('Save', default=u'Save'), name='save')
+    def handleAdd(self, action):
+        # self as first argument is required by the decorator
+        super(ModelAddForm, self).handleAdd(self, action)
+
+    @button.buttonAndHandler(_(u'Cancel', default=u'Cancel'), name='cancel')
+    def cancel(self, action):
+        return self.request.RESPONSE.redirect(self.cancelURL())
+
+    def nextURL(self):
+        return self.context.absolute_url()
+
+    def cancelURL(self):
+        return self.context.absolute_url()
+
+
+class ModelEditForm(EditForm):
+    """Base edit-form for stand-alone model objects.
+    """
+
+    ignoreContext = True
+    is_model_view = True
+    is_model_edit_view = True
+
+    fields = None
+    field_prefix = 'form.widgets.'
+
+    def __init__(self, context, request, model):
+        super(ModelEditForm, self).__init__(context, request)
+        self.model = model
+        self._has_finished_edit = False
+
+    def inject_initial_data(self):
+        if self.request.method != 'GET':
+            return
+
+        values = self.model.get_edit_values(self.fields.keys())
+
+        for fieldname, value in values.items():
+            self.request[self.field_prefix + fieldname] = value
+
+    def updateWidgets(self):
+        self.inject_initial_data()
+        super(ModelEditForm, self).updateWidgets()
+
+    def applyChanges(self, data):
+        self.model.update_model(data)
+        # pretend to always change the underlying data
+        self._has_finished_edit = True
+        return True
+
+    # this renames the button but otherwise preserves super's behavior
+    @button.buttonAndHandler(_('Save', default=u'Save'), name='save')
+    def handleApply(self, action):
+        # self as first argument is required by the decorator
+        super(ModelEditForm, self).handleApply(self, action)
+
+    @button.buttonAndHandler(_(u'Cancel', default=u'Cancel'), name='cancel')
+    def cancel(self, action):
+        return self.request.RESPONSE.redirect(self.nextURL())
+
+    def nextURL(self):
+        raise NotImplementedError()
+
+    def render(self):
+        if self._has_finished_edit:
+            return self.request.response.redirect(self.nextURL())
+        return super(ModelEditForm, self).render()
+
+
+class ModelProxyAddForm(object):
+    """Base add-form for dexterity proxy objects and their associated model.
+    """
 
     content_type = None
     fields = None
@@ -13,7 +114,7 @@ class ModelAddForm(object):
 
         if not is_meeting_feature_enabled():
             raise Unauthorized
-        return super(ModelAddForm, self).render()
+        return super(ModelProxyAddForm, self).render()
 
     def createAndAdd(self, data):
         """Create sql-model supported content types.
@@ -24,12 +125,14 @@ class ModelAddForm(object):
 
         """
         obj_data, model_data = self.content_type.partition_data(data)
-        obj = super(ModelAddForm, self).createAndAdd(data=obj_data)
+        obj = super(ModelProxyAddForm, self).createAndAdd(data=obj_data)
         obj.create_model(model_data, self.context)
         return obj
 
 
-class ModelEditForm(object):
+class ModelProxyEditForm(object):
+    """Base edit-form for dexterity proxy objects and their associated model.
+    """
 
     content_type = None
     fields = None
@@ -40,7 +143,7 @@ class ModelEditForm(object):
 
         if not is_meeting_feature_enabled():
             raise Unauthorized
-        return super(ModelEditForm, self).render()
+        return super(ModelProxyEditForm, self).render()
 
     def inject_initial_data(self):
         if self.request.method != 'GET':
@@ -57,7 +160,7 @@ class ModelEditForm(object):
 
     def updateWidgets(self):
         self.inject_initial_data()
-        super(ModelEditForm, self).updateWidgets()
+        super(ModelProxyEditForm, self).updateWidgets()
 
     def partition_data(self, data):
         obj_data, model_data = self.content_type.partition_data(data)
@@ -69,6 +172,6 @@ class ModelEditForm(object):
     def applyChanges(self, data):
         obj_data, model_data = self.partition_data(data)
         self.update_model(model_data)
-        super(ModelEditForm, self).applyChanges(obj_data)
+        super(ModelProxyEditForm, self).applyChanges(obj_data)
         # pretend to always change the underlying data
         return True

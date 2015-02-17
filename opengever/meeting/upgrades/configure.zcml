@@ -73,4 +73,13 @@
         directory="profiles/4206"
         />
 
+    <!-- 4206 -> 4207 -->
+    <upgrade-step:importProfile
+        title="Add tabs to committee container."
+        profile="opengever.meeting:default"
+        source="4206"
+        destination="4207"
+        directory="profiles/4207"
+        />
+
 </configure>

@@ -21,12 +21,19 @@ class Member(Base):
     def __repr__(self):
         return '<Member {}>'.format(repr(self.fullname))
 
-    def get_link(self, context):
+    def get_link(self, context, title=None):
+        title = title or self.fullname
         url = self.get_url(context)
-        link = u'<a href="{0}" title="{1}">{1}</a>'.format(url, self.fullname)
+        link = u'<a href="{0}" title="{1}">{1}</a>'.format(url, title)
 
         transformer = api.portal.get_tool('portal_transforms')
         return transformer.convertTo('text/x-html-safe', link).getData()
+
+    def get_firstname_link(self, context):
+        return self.get_link(context, title=self.firstname)
+
+    def get_lastname_link(self, context):
+        return self.get_link(context, title=self.lastname)
 
     def get_url(self, context):
         return "{}/member/{}".format(context.absolute_url(), self.member_id)

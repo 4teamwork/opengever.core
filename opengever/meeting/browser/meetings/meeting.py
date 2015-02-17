@@ -1,5 +1,4 @@
 from ftw.datepicker.widget import DatePickerFieldWidget
-from opengever.base.model import create_session
 from opengever.meeting import _
 from opengever.meeting.browser.meetings.agendaitem import DeleteAgendaItem
 from opengever.meeting.browser.meetings.agendaitem import ScheduleSubmittedProposal
@@ -8,15 +7,13 @@ from opengever.meeting.browser.meetings.agendaitem import UpdateAgendaItemOrder
 from opengever.meeting.browser.meetings.meetinglist import MeetingList
 from opengever.meeting.browser.meetings.preprotocol import EditPreProtocol
 from opengever.meeting.browser.meetings.transitions import MeetingTransitionController
+from opengever.meeting.form import ModelAddForm
+from opengever.meeting.form import ModelEditForm
 from opengever.meeting.model import Meeting
-from plone.autoform.form import AutoExtensibleForm
 from plone.directives import form
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from z3c.form import button
 from z3c.form import field
-from z3c.form.form import AddForm
-from z3c.form.form import EditForm
 from z3c.form.interfaces import HIDDEN_MODE
 from zExceptions import NotFound
 from zope import schema
@@ -53,10 +50,12 @@ class IMeetingModel(form.Schema):
         required=False)
 
 
-class AddMeeting(AutoExtensibleForm, AddForm):
+class AddMeeting(ModelAddForm):
 
-    ignoreContext = True
     schema = IMeetingModel
+    model_class = Meeting
+
+    label = _('Add Meeting', default=u'Add Meeting')
 
     def updateWidgets(self):
         super(AddMeeting, self).updateWidgets()
@@ -65,46 +64,13 @@ class AddMeeting(AutoExtensibleForm, AddForm):
         self.widgets['committee'].mode = HIDDEN_MODE
         self.widgets['committee'].value = (str(committee_id), )
 
-    def __init__(self, context, request):
-        super(AddMeeting, self).__init__(context, request)
-        self._created_object = None
-        self.request.set('disable_border', True)  # disables the edit bar.
-
-    def create(self, data):
-        return Meeting(**data)
-
-    def add(self, obj):
-        session = create_session()
-        session.add(obj)
-        session.flush()  # required to create an autoincremented id
-        self._created_object = obj
-
     def nextURL(self):
         return MeetingList.url_for(self.context, self._created_object)
 
 
-class EditMeeting(EditForm):
+class EditMeeting(ModelEditForm):
 
-    ignoreContext = True
     fields = field.Fields(IMeetingModel)
-
-    is_model_view = True
-    is_model_edit_view = True
-
-    def __init__(self, context, request, model):
-        super(EditMeeting, self).__init__(context, request)
-        self.model = model
-        self._has_finished_edit = False
-
-    def inject_initial_data(self):
-        if self.request.method != 'GET':
-            return
-
-        prefix = 'form.widgets.'
-        values = self.model.get_edit_values(self.fields.keys())
-
-        for fieldname, value in values.items():
-            self.request[prefix + fieldname] = value
 
     def updateWidgets(self):
         self.inject_initial_data()
@@ -114,25 +80,8 @@ class EditMeeting(EditForm):
         self.widgets['committee'].mode = HIDDEN_MODE
         self.widgets['committee'].value = (str(committee_id), )
 
-    def applyChanges(self, data):
-        self.model.update_model(data)
-        # pretend to always change the underlying data
-        self._has_finished_edit = True
-        return True
-
-    # this renames the button but otherwise preserves super's behavior
-    @button.buttonAndHandler(_('Save'), name='save')
-    def handleApply(self, action):
-        # self as first argument is required by the decorator
-        super(EditMeeting, self).handleApply(self, action)
-
     def nextURL(self):
         return MeetingList.url_for(self.context, self.model)
-
-    def render(self):
-        if self._has_finished_edit:
-            return self.request.response.redirect(self.nextURL())
-        return super(EditMeeting, self).render()
 
 
 class MeetingView(BrowserView):
