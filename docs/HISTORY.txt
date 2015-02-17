@@ -5,6 +5,10 @@ Changelog
 4.2.0 (unreleased)
 ------------------
 
+- Style meeting form.
+  Add agendaitem sorting implementation.
+  [deiferni, Kevin Bieri]
+
 - Wrap checks in is_pasting_allowed in a try..except for safety.
   [lgraf]
 

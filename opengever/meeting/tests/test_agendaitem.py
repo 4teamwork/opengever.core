@@ -28,7 +28,8 @@ class TestAgendaItem(FunctionalTestCase):
         browser.open(MeetingList.url_for(self.committee, self.meeting))
 
         form = browser.css('#schedule_text').first
-        form.fill({'title': 'My Agenda Item'}).submit()
+        form.fill({'title': 'My Agenda Item'})
+        browser.css('#submit-schedule-text').first.click()
 
         meeting = Meeting.query.get(self.meeting.meeting_id)
         self.assertEqual(1, len(meeting.agenda_items))
@@ -42,8 +43,9 @@ class TestAgendaItem(FunctionalTestCase):
         browser.login()
         browser.open(MeetingList.url_for(self.committee, self.meeting))
 
-        form = browser.css('#schedule_paragraph').first
-        form.fill({'title': 'My Paragraph'}).submit()
+        form = browser.css('#schedule_text').first
+        form.fill({'title': 'My Paragraph'})
+        browser.css('#submit-schedule-paragraph').first.click()
 
         meeting = Meeting.query.get(self.meeting.meeting_id)
         self.assertEqual(1, len(meeting.agenda_items))

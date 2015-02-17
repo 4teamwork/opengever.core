@@ -10,74 +10,91 @@
         <metal:content-core define-macro="content-core"
                             tal:define="meeting view/model;
                                         unscheduled_proposals view/unscheduled_proposals">
+        <div id="opengever_meeting_meeting">
+          <script tal:content="string:var js_update_order_url = '${view/url_update_agenda_item_order}'
+                                      var msg_unexpected_error = '${view/msg_unexpected_error}';"></script>
+          <h1 tal:content="meeting/get_title"></h1>
 
-        <h1 tal:content="meeting/get_title"></h1>
+          <h2 i18n:translate="">Properties</h2>
+          <table class="vertical listing">
+              <tbody>
+                  <tr>
+                      <th i18n:translate="">State</th>
+                      <td tal:content="python: meeting.get_state().title"></td>
+                  </tr>
 
-        <a tal:attributes="href view/url_pre_protocol" i18n:translate="">Pre-Protocol</a>
+                  <tr>
+                      <th i18n:translate="">Location</th>
+                      <td tal:content="meeting/location"></td>
+                  </tr>
+              </tbody>
+          </table>
 
-        <dl>
-            <dt i18n:translate="">State</dt>
-            <dd tal:content="python: meeting.get_state().title"></dd>
+          <h2 i18n:translate="">Protocols</h2>
+          <table class="vertical listing">
+              <tbody>
+                  <tr>
+                      <th i18n:translate="">Pre-Protocol</th>
+                      <td><a tal:attributes="href view/url_pre_protocol" i18n:translate="">Edit pre-protocol</a></td>
+                  </tr>
+              </tbody>
+          </table>
 
-            <dt i18n:translate="">Location</dt>
-            <dd tal:content="meeting/location"></dd>
-        </dl>
+          <fieldset class="proposal">
+          <legend i18n:translate="">Add Agenda Item</legend>
+            <metal:block tal:condition="unscheduled_proposals">
+              <form method="post" tal:attributes="action view/url_schedule_proposal"
+                    id="schedule_proposal">
+                  <div class="form_group">
+                      <select id="proposal_id" class="button" name="proposal_id">
+                          <tal:repeat tal:repeat="proposal unscheduled_proposals">
+                              <option tal:attributes="id proposal/proposal_id;
+                                                      value proposal/proposal_id;"
+                                      tal:content="proposal/title">
+                              </option>
+                          </tal:repeat>
+                      </select>
+                      <input type="submit" name="submit" id="submit-schedule"
+                         i18n:attributes="value schedule" />
+                  </div>
+                </form>
+              </metal:block>
+              <form method="post" tal:attributes="action view/url_schedule_text"
+                    id="schedule_text">
+                <div class="form_group">
+                    <input type="text" name="title" id="text-agenda-item" />
+                    <div class="button_group">
+                        <input type="submit" name="schedule-paragraph" id="submit-schedule-paragraph"
+                            value="as paragraph" i18n:attributes="value" />
+                        <input type="submit" name="schedule-text" id="submit-schedule-text"
+                            value="as free-text"  i18n:attributes="value" />
+                    </div>
+                </div>
+              </form>
+            </fieldset>
 
-        <h2 i18n:translate="">Add new Agenda Items</h2>
-        <metal:block tal:condition="unscheduled_proposals">
-        <form method="post" tal:attributes="action view/url_schedule_proposal"
-              id="schedule_proposal">
-            <select id="proposal_id" name="proposal_id">
-                <tal:repeat tal:repeat="proposal unscheduled_proposals">
-                    <option tal:attributes="id proposal/proposal_id;
-                                            value proposal/proposal_id;"
-                            tal:content="proposal/title">
-                    </option>
-                </tal:repeat>
-            </select>
-            <input type="submit" name="submit" id="submit-schedule"
-                   i18n:attributes="value schedule" />
-        </form>
-        </metal:block>
+          <h2 i18n:translate="">Agenda Items</h2>
+          <table id="agenda_items">
+              <tbody>
+                  <tr tal:repeat="agenda_item view/agenda_items" tal:attributes="data-uid agenda_item/agenda_item_id">
+                      <td class="sortable_handle"></td>
+                      <td class="number" tal:content="agenda_item/number"></td>
+                      <td tal:attributes="class agenda_item/get_css_class" tal:content="agenda_item/get_title"></td>
+                      <td>
+                        <a tal:condition="meeting/is_editable"
+                            class="delete_agenda_item"
+                            tal:attributes="href python: view.url_delete_agenda_item(agenda_item)"></a>
+                      </td>
+                  </tr>
+              </tbody>
+          </table>
 
-        <form method="post" tal:attributes="action view/url_schedule_text"
-              id="schedule_text">
-            <input type="textline" name="title" id="text-agenda-item" />
-            <input type="submit" name="submit" id="submit-schedule-text"
-                   i18n:attributes="value schedule" />
-        </form>
-
-        <h2 i18n:translate="">Add new Paragraph</h2>
-        <form method="post" tal:attributes="action view/url_schedule_paragraph"
-              id="schedule_paragraph">
-            <input type="textline" name="title" />
-            <input type="submit" name="submit" id="submit-schedule-paragraph"
-                   i18n:attributes="value schedule" />
-        </form>
-
-        <h2 i18n:translate="">Agenda Items</h2>
-        <table id="agenda_items">
-            <tr tal:repeat="agenda_item view/agenda_items">
-                <td>
-                  <b tal:omit-tag="not: agenda_item/is_paragraph" tal:content="agenda_item/number" />
-                </td>
-                <td>
-                  <b tal:omit-tag="not: agenda_item/is_paragraph" tal:content="agenda_item/get_title" />
-                </td>
-                <td>
-                  <a tal:condition="meeting/is_editable"
-                     class="delete_agenda_item"
-                     tal:attributes="href python: view.url_delete_agenda_item(agenda_item)"
-                     i18n:translate="">delete</a>
-                </td>
-            </tr>
-        </table>
-
-        <div class="visualClear"><!----></div>
+          <div class="visualClear"><!----></div>
+        </div>
 
         <metal:use use-macro="context/@@meeting-macros/workflow_actions" />
 
-        </metal:content-core>
+      </metal:content-core>
     </metal:content-core>
 
 </html>

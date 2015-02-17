@@ -2,9 +2,9 @@ from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.base.model import create_session
 from opengever.meeting import _
 from opengever.meeting.browser.meetings.agendaitem import DeleteAgendaItem
-from opengever.meeting.browser.meetings.agendaitem import ScheduleParagraph
 from opengever.meeting.browser.meetings.agendaitem import ScheduleSubmittedProposal
 from opengever.meeting.browser.meetings.agendaitem import ScheduleText
+from opengever.meeting.browser.meetings.agendaitem import UpdateAgendaItemOrder
 from opengever.meeting.browser.meetings.meetinglist import MeetingList
 from opengever.meeting.browser.meetings.preprotocol import EditPreProtocol
 from opengever.meeting.browser.meetings.transitions import MeetingTransitionController
@@ -20,6 +20,7 @@ from z3c.form.form import EditForm
 from z3c.form.interfaces import HIDDEN_MODE
 from zExceptions import NotFound
 from zope import schema
+from zope.i18n import translate
 from zope.interface import implements
 from zope.publisher.interfaces import IPublishTraverse
 from zope.publisher.interfaces.browser import IBrowserView
@@ -145,11 +146,11 @@ class MeetingView(BrowserView):
     mapped_actions = {
         'edit': EditMeeting,
         'delete_agenda_item': DeleteAgendaItem,
-        'schedule_paragraph': ScheduleParagraph,
         'schedule_proposal': ScheduleSubmittedProposal,
         'schedule_text': ScheduleText,
         'pre_protocol': EditPreProtocol,
         'meetingtransitioncontroller': MeetingTransitionController,
+        'update_agenda_item_order': UpdateAgendaItemOrder,
     }
 
     def __init__(self, context, request, meeting):
@@ -178,17 +179,22 @@ class MeetingView(BrowserView):
     def url_schedule_text(self):
         return ScheduleText.url_for(self.context, self.model)
 
-    def url_schedule_paragraph(self):
-        return ScheduleParagraph.url_for(self.context, self.model)
-
     def url_delete_agenda_item(self, agenda_item):
         return DeleteAgendaItem.url_for(self.context, self.model, agenda_item)
 
     def url_pre_protocol(self):
         return EditPreProtocol.url_for(self.context, self.model)
 
+    def url_update_agenda_item_order(self):
+        return UpdateAgendaItemOrder.url_for(self.context, self.model)
+
     def transitions(self):
         return self.model.get_state().get_transitions()
 
     def agenda_items(self):
         return self.model.agenda_items
+
+    def msg_unexpected_error(self):
+        return translate(_('An unexpected error has occurred',
+                           default='An unexpected error has occurred'),
+                         context=self.request)
