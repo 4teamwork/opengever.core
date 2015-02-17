@@ -162,7 +162,7 @@ ResponseDescription.add_description(Revise)
 class Reassign(ResponseDescription):
     transitions = ['task-transition-reassign',
                    'forwarding-transition-reassign',
-                   'forwarding-transition-reassign-refuse']
+                   'forwarding-transition-reassign-refused']
     css_class = 'reassign'
 
     def msg(self):
