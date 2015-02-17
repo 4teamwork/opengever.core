@@ -2,11 +2,11 @@ from five import grok
 from opengever.activity import is_activity_feature_enabled
 from opengever.activity.interfaces import INotificationEvent
 from opengever.activity.utils import notification_center
-from opengever.task.task import ITask
+from zope.interface import Interface
 
 
-@grok.subscribe(ITask, INotificationEvent)
-def set_dates(task, event):
+@grok.subscribe(Interface, INotificationEvent)
+def log_activity(task, event):
     if is_activity_feature_enabled():
         notification_center().add_activity(
             event.object,
