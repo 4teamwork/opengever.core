@@ -125,7 +125,6 @@ else:
     write('''<ul class="LSTable">''')
     for result in results[:limit]:
 
-        icon = plone_view.getIcon(result)
         itemUrl = result.getURL()
         if result.portal_type in useViewAction:
             itemUrl += '/view'
@@ -133,7 +132,6 @@ else:
         itemUrl = itemUrl + searchterm_query
 
         write('''<li class="LSRow">''')
-        write(icon.html_tag() or '')
         full_title = safe_unicode(pretty_title_or_id(result))
         if len(full_title) > MAX_TITLE:
             display_title = ''.join((full_title[:MAX_TITLE], '...'))
