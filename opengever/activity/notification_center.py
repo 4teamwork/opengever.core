@@ -40,13 +40,8 @@ class NotificationCenter(object):
         watcher = self.fetch_watcher(userid)
         resource = self.fetch_resource(oguid)
 
-        if not watcher:
-            raise Exception('Watcher with userid {} not found.'.format(userid))
-
-        if not resource:
-            raise Exception('Resource with oguid {} not found.'.format(oguid))
-
-        resource.remove_watcher(watcher)
+        if watcher and resource:
+            resource.remove_watcher(watcher)
 
     def get_watchers(self, oguid):
         resource = Resource.query.get_by_oguid(oguid)

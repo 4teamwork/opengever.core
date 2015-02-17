@@ -101,23 +101,15 @@ class TestWatcherHandling(ActivityTestCase):
     def test_get_watchers_returns_empty_list_when_resource_not_exists(self):
         self.assertEquals([], self.center.get_watchers(Oguid('fd', '123')))
 
-    def test_remove_watcher_from_resource_raise_exception_when_watcher_not_exists(self):
+    def test_remove_watcher_from_resource_will_be_ignored_when_watcher_not_exists(self):
         create(Builder('resource').oguid('fd:123'))
 
-        with self.assertRaises(Exception) as cm:
-            self.center.remove_watcher_from_resource(Oguid('fd', '123'), 'peter')
+        self.center.remove_watcher_from_resource(Oguid('fd', '123'), 'peter')
 
-        self.assertEquals('Watcher with userid peter not found.',
-                          str(cm.exception))
-
-    def test_remove_watcher_from_resource_raise_exception_when_resource_not_exists(self):
+    def test_remove_watcher_from_resource_will_be_ignored_when_resource_not_exists(self):
         create(Builder('watcher').having(user_id='peter'))
 
-        with self.assertRaises(Exception) as cm:
-            self.center.remove_watcher_from_resource(Oguid('fd', '123'), 'peter')
-
-        self.assertEquals('Resource with oguid fd:123 not found.',
-                          str(cm.exception))
+        self.center.remove_watcher_from_resource(Oguid('fd', '123'), 'peter')
 
     def test_remove_watcher_from_resource(self):
         peter = create(Builder('watcher').having(user_id='peter'))
