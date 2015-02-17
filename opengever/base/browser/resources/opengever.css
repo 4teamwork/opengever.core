@@ -196,24 +196,24 @@ dl.portlet ul.filetree a.toggleNav.expanded {
     padding: 4px 5px;
   }
 
-  form .form_group {
+  #opengever_meeting_meeting form .form_group {
     margin-bottom: 10px;
   }
 
-  form .form_group .button_group {
+  #opengever_meeting_meeting form .form_group .button_group {
     display: inline;
   }
 
-  form .from_group .button_group input {
+  #opengever_meeting_meeting form .from_group .button_group input {
     border-radius: 0;
   }
 
-  form .form_group .button_group input:first-child {
+  #opengever_meeting_meeting form .form_group .button_group input:first-child {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
   }
 
-  form .form_group .button_group input:last-child {
+  #opengever_meeting_meeting form .form_group .button_group input:last-child {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     margin-left: -8px;
