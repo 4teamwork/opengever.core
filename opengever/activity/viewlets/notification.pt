@@ -18,28 +18,28 @@
 
     <dd class="actionMenuContent notificationsMenuContent">
       <ul>
-
         <li class="notification-item" tal:repeat="notification view/get_notifications"
             tal:attributes="data-notification-id notification/id">
 
-          <div class="item-content">
+          <div class="buttons">
             <a href="#" class="mark_as_read" tal:condition="not: notification/read"></a>
-            <div class="item-header">
-              <span class="item-creation">
-                <span class="timeago relativetime"
-                      tal:attributes="title notification/created"
-                      tal:content="notification/created" />
-              </span>
-              <span class="item-type" tal:content="notification/kind" />
-            </div>
-            <a href="#" class="item-location"
-               tal:content="notification/title"
-               tal:attributes="href notification/link" />
-            <div class="item-summary" tal:content="notification/summary" />
+          </div>
+
+          <div class="item-content">
+            <a href="#" tal:attributes="href notification/link">
+              <div class="item-header">
+                <span class="item-creation">
+                  <span class="timeago relativetime"
+                        tal:attributes="title notification/created"
+                        tal:content="notification/created" />
+                </span>
+                <span class="item-type" i18n:domain="plone" i18n:translate="" tal:content="notification/kind" />
+              </div>
+              <span class="item-location" tal:content="notification/title"></span>
+              <div class="item-summary" tal:content="notification/summary" />
+            </a>
           </div>
         </li>
-
-                <span class="item-type" i18n:domain="plone" i18n:translate="" tal:content="notification/kind" />
       </ul>
       <a href="./notification_overview" class="all_link"><small>Notifications Overview</small></a>
     </dd>
