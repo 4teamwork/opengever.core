@@ -60,6 +60,13 @@ class TestNotificationViewlet(FunctionalTestCase):
         self.assertEquals([], browser.css('#portal-notifications .num-unread'))
 
     @browsing
+    def test_read_url(self, browser):
+        browser.login().open()
+        self.assertEquals(
+            'http://nohost/plone/notifications/read',
+            browser.css('dl.notificationsMenu').first.get('data-read-url'))
+
+    @browsing
     def test_lists_only_unread_notifications(self, browser):
         create(Builder('notification')
                .having(activity=self.activity_a, watcher=self.test_watcher))

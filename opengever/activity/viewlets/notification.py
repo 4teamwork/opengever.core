@@ -48,4 +48,4 @@ class NotificationViewlet(common.ViewletBase):
 
     @property
     def read_url(self):
-        '{}/notifications/read'.format(self.context.absolute_url())
+        return '{}/notifications/read'.format(self.context.absolute_url())
