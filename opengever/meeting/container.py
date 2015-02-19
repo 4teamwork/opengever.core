@@ -48,9 +48,15 @@ class ModelContainer(Container):
         # the just created plone content now.
         aq_wrapped_self = self.__of__(context)
         data.update(self.get_model_create_arguments(context))
-        session.add(self.model_class(oguid=oguid, **data))
+        model_instance = self.model_class(oguid=oguid, **data)
+        session.add(model_instance)
+        self._after_model_created(model_instance)
 
         notify(ObjectModifiedEvent(aq_wrapped_self))
+
+    def _after_model_created(self, model_instance):
+        """Hook called right after creating a model instance."""
+        pass
 
     def update_model(self, data):
         """Store form input in relational database.
