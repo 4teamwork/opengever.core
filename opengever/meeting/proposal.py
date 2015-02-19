@@ -256,6 +256,9 @@ class SubmittedProposal(ProposalBase):
 
         return [document.getObject() for document in documents]
 
+    def is_submit_additional_documents_allowed(self):
+        return False
+
 
 class Proposal(ProposalBase):
     """Act as proxy for the proposal stored in the database.

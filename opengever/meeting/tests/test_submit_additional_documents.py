@@ -62,6 +62,42 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
                 physical_path,
                 view='update-submitted-document')
 
+    def test_database_entry_is_deleted_when_removing_target_document(self):
+        self.grant('Manager')
+        proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .having(title='Mach doch',
+                                  committee=self.committee.load_model())
+                          .relate_to(self.document))
+        submitted_proposal = create(
+            Builder('submitted_proposal').submitting(proposal))
+        submitted_document = submitted_proposal.get_documents()[0]
+
+        self.assertIsNotNone(
+            SubmittedDocument.query.get_by_target(submitted_document))
+
+        api.content.delete(submitted_document)
+
+        self.assertIsNone(
+            SubmittedDocument.query.get_by_target(submitted_document))
+
+    def test_database_entry_is_deleted_when_removing_source_document(self):
+        self.grant('Manager')
+        proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .having(title='Mach doch',
+                                  committee=self.committee.load_model())
+                          .relate_to(self.document))
+        create(Builder('submitted_proposal').submitting(proposal))
+
+        self.assertIsNotNone(
+            SubmittedDocument.query.get_by_source(proposal, self.document))
+
+        api.content.delete(self.document)
+
+        self.assertIsNone(
+            SubmittedDocument.query.get_by_source(proposal, self.document))
+
     @browsing
     def test_submit_new_document_to_proposal_on_document_view(self, browser):
         proposal = self.setup_proposal()

@@ -2,6 +2,7 @@ from datetime import date
 from opengever.base.oguid import Oguid
 from opengever.ogds.models.query import BaseQuery
 from plone import api
+from sqlalchemy import or_
 
 
 class ProposalQuery(BaseQuery):
@@ -60,3 +61,14 @@ class SubmittedDocumentQuery(BaseQuery):
     def get_by_target(self, document):
         oguid = Oguid.for_object(document)
         return self.filter(self._attribute('submitted_oguid') == oguid).first()
+
+    def by_document(self, document):
+        """Filter by document's oguid on source or target side of a submitted
+        doucment.
+
+        """
+        oguid = Oguid.for_object(document)
+        return self.filter(or_(
+            self._attribute('submitted_oguid') == oguid,
+            self._attribute('oguid') == oguid
+        ))
