@@ -3,6 +3,7 @@ from opengever.ogds.base.actor import Actor
 from opengever.task import _
 from opengever.task.response_description import ResponseDescription
 from plone import api
+from Products.CMFPlone import PloneMessageFactory as PMF
 from zope.i18n import translate
 
 
@@ -56,7 +57,7 @@ class TaskAddedActivity(TaskActivity):
 
     @property
     def kind(self):
-        return _(u'task-added', default=u'Task added')
+        return PMF(u'task-added', default=u'Task added')
 
     @property
     def summary(self):
