@@ -111,7 +111,6 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
             ['A new submitted version of document A Document has been created'],
             info_messages())
 
-
     def assertSubmittedDocumentCreated(self, proposal, document,
                                        submitted_version=0):
         portal = api.portal.get()

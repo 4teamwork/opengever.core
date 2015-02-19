@@ -8,6 +8,7 @@ from opengever.meeting.proposal import Proposal
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.testing import assets
 from opengever.trash.trash import ITrashable
+from plone import api
 from plone.app.testing import TEST_USER_ID
 from plone.namedfile.file import NamedBlobFile
 from Products.CMFCore.utils import getToolByName
@@ -247,6 +248,27 @@ class ProposalBuilder(DexterityBuilder):
         return self.having(relatedItems=related_documents)
 
 builder_registry.register('proposal', ProposalBuilder)
+
+
+class SubmittedProposalBuilder(object):
+
+    def __init__(self, session):
+        self.session = session
+        self.proposal = None
+
+    def submitting(self, proposal):
+        self.proposal = proposal
+        return self
+
+    def create(self):
+        assert self.proposal, 'source proposal must be specified'
+
+        self.proposal.execute_transition('pending-submitted')
+        proposal_model = self.proposal.load_model()
+        path = proposal_model.submitted_physical_path.encode('utf-8')
+        return api.portal.get().restrictedTraverse(path)
+
+builder_registry.register('submitted_proposal', SubmittedProposalBuilder)
 
 
 class CommitteeContainerBuilder(DexterityBuilder):

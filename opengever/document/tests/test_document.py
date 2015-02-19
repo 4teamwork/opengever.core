@@ -175,6 +175,21 @@ class TestDocument(FunctionalTestCase):
 
         self.assertFalse(doc.is_movable())
 
+    def test_document_inside_a_submitted_proposal_is_not_movable(self):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document').within(dossier))
+        committee = create(Builder('committee'))
+        proposal = create(Builder('proposal')
+                          .within(dossier)
+                          .having(title='Mach doch',
+                                  committee=committee.load_model())
+                          .relate_to(document))
+
+        submitted_proposal = create(
+            Builder('submitted_proposal').submitting(proposal))
+        submitted_document = submitted_proposal.get_documents()[0]
+        self.assertFalse(submitted_document.is_movable())
+
     def test_current_document_version_is_increased(self):
         document = create(Builder("document"))
         self.assertEqual(0, document.get_current_version())
@@ -183,6 +198,7 @@ class TestDocument(FunctionalTestCase):
         repository.save(document)
 
         self.assertEqual(1, document.get_current_version())
+
 
 class TestDocumentDefaultValues(FunctionalTestCase):
 
