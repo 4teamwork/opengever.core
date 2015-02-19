@@ -3,8 +3,11 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.oguid import Oguid
+from opengever.base.transport import Transporter
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
+from opengever.meeting.exceptions import NoSubmittedDocument
 from opengever.meeting.model import SubmittedDocument
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.testing import FunctionalTestCase
 from plone import api
 import transaction
@@ -42,6 +45,22 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
         self.assertTrue(proposal.is_submit_additional_documents_allowed())
         transaction.commit()
         return proposal
+
+    def test_cannot_submit_new_document_versions_outside_proposals(self):
+        document = create(Builder('document')
+                          .within(self.dossier)
+                          .titled(u'Another Document')
+                          .with_dummy_content())
+
+        url_tool = api.portal.get_tool(name="portal_url")
+        physical_path = '/'.join(url_tool.getRelativeContentPath(document))
+
+        with self.assertRaises(NoSubmittedDocument):
+            Transporter().transport_to(
+                self.document,
+                get_current_admin_unit().id(),
+                physical_path,
+                view='update-submitted-document')
 
     @browsing
     def test_submit_new_document_to_proposal_on_document_view(self, browser):
@@ -91,6 +110,7 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
         self.assertSequenceEqual(
             ['A new submitted version of document A Document has been created'],
             info_messages())
+
 
     def assertSubmittedDocumentCreated(self, proposal, document,
                                        submitted_version=0):

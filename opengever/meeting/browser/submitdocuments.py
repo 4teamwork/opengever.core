@@ -6,6 +6,8 @@ from opengever.document import _
 from opengever.document.document import IDocumentSchema
 from opengever.meeting import is_meeting_feature_enabled
 from opengever.meeting.browser.documents.submit import ISubmitAdditionalDocument
+from opengever.meeting.exceptions import NoSubmittedDocument
+from opengever.meeting.model import SubmittedDocument
 from opengever.tabbedview.utils import get_containing_document_tab_url
 from plone import api
 from plone.autoform.form import AutoExtensibleForm
@@ -15,6 +17,7 @@ from z3c.form.form import Form
 from z3c.form.interfaces import HIDDEN_MODE
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
+from zExceptions import Unauthorized
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
 from zope.schema import TextLine
@@ -161,9 +164,16 @@ class ReceiveObject(grok.View):
     grok.require('cmf.AddPortalContent')
     grok.context(IDocumentSchema)
 
-    # XXX only allow if document is in a submitted proposal
-    # XXX only allow if document is not checked out
+    def is_submitted_document(self):
+        return SubmittedDocument.query.get_by_target(self.context) is not None
+
     def render(self):
+        if not self.context.is_submitted_document():
+            raise NoSubmittedDocument()
+
+        if self.context.is_checked_out():
+            raise Unauthorized()
+
         transporter = Transporter()
         transporter.update(self.context, self.request)
 
