@@ -63,7 +63,7 @@ class Overview(DisplayForm, OpengeverTab):
 
         items = [
             {
-                'label': _('label_task_title'),
+                'label': _('label_task_title', u'Task title'),
                 'value': task.title,
             },
             {

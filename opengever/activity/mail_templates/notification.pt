@@ -25,6 +25,6 @@
   <br />
   <hr />
   <br />
-  <a href="" tal:attributes="href options/link">See on GEVER</a>
+  <a href="" i18n:translate="" tal:attributes="href options/link">See on GEVER</a>
 
 </html>

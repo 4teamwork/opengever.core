@@ -1,0 +1,53 @@
+# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
+# SOME DESCRIPTIVE TITLE.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2015-02-19 14:51+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: opengever.activity\n"
+
+#: ./opengever/activity/mail_templates/notification.pt:28
+msgid "See on GEVER"
+msgstr ""
+
+#. Default: "Actor"
+#: ./opengever/activity/browser/listing.py:47
+msgid "column_Actor"
+msgstr ""
+
+#. Default: "Kind"
+#: ./opengever/activity/browser/listing.py:39
+msgid "column_kind"
+msgstr ""
+
+#. Default: "Mark as read"
+#: ./opengever/activity/browser/listing.py:35
+msgid "column_mark_read"
+msgstr ""
+
+#. Default: "Title"
+#: ./opengever/activity/browser/listing.py:43
+msgid "column_title"
+msgstr ""
+
+#. Default: "Notifications"
+#: ./opengever/activity/viewlets/notification.pt:3
+msgid "heading_notifications"
+msgstr ""
+
+#. Default: "${amount} matches."
+#: ./opengever/activity/browser/no_selection.pt:2
+msgid "tab_matches"
+msgstr ""
+
