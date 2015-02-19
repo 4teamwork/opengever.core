@@ -78,7 +78,7 @@ class TaskAddedActivity(TaskActivity):
                   label_task_title=self.translate(_('label_task_title', u'Task title')),
                   value_task_title=self.title,
                   label_deadline=self.translate(_('label_deadline', u'Deadline')),
-                  value_deadline=self.context.deadline,
+                  value_deadline=api.portal.get_localized_time(str(self.context.deadline)),
                   label_task_type=self.translate(_('label_task_type', u'Task Type')),
                   value_task_type=self.context.get_task_type_label(),
                   label_dossier_title=self.translate(_('label_dossier_title',

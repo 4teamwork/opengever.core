@@ -41,8 +41,8 @@ class TestTaskActivites(FunctionalTestCase):
         self.maxDiff = None
         expected = (u'<table><tbody>'
                     u'<tr><th>Task title</th><td>Abkl\xe4rung Fall Meier</td></tr>'
-                    u'<tr><th>Deadline</th><td>2015-02-13</td></tr>'
-                    u'<tr><th>Task type</th><td>To comment</td></tr>'
+                    u'<tr><th>Deadline</th><td>Feb 13, 2015</td></tr>'
+                    u'<tr><th>Task Type</th><td>To comment</td></tr>'
                     u'<tr><th>Dossier title</th><td>Dossier XY</td></tr>'
                     u'<tr><th>Text</th><td>Lorem ipsum</td></tr></tbody></table>')
         self.assertEquals(expected, activity.description)
