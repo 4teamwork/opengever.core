@@ -68,6 +68,7 @@ Changelog
     - Add cancel buttons and form labels.
     - Add tabs to committee container for committees and members.
     - Allow submission of additional documents to already submitted proposals.
+    - Log proposal history and display changes on the proposal overview.
 
   [deiferni]
 
