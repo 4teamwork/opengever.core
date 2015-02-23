@@ -1,6 +1,7 @@
 from five import grok
 from ftw.table.interfaces import ITableSource
 from ftw.table.interfaces import ITableSourceConfig
+from opengever.activity.browser.resolve import ResolveNotificationView
 from opengever.activity.models.notification import Notification
 from opengever.ogds.base.actor import Actor
 from opengever.tabbedview import _
@@ -15,6 +16,12 @@ def mark_unread(item, value):
         return ''
     else:
         return '<a href="#" class="mark_as_read"></a>'
+
+
+def resolve_notification_link(item, value):
+    return u'<a href="{}">{}</a>'.format(
+        ResolveNotificationView.url_for(item.notification_id),
+        item.activity.title)
 
 
 def readable_actor(item, value):
@@ -39,9 +46,9 @@ class NotificationListingTab(BaseListingTab):
          'column_title': _(u'column_kind', default=u'Kind'),
          'transform': lambda item, value: item.activity.kind},
 
-        {'column': 'title',
+        {'column': '',
          'column_title': _(u'column_title', default=u'Title'),
-         'transform': lambda item, value: item.activity.render_link()},
+         'transform': resolve_notification_link},
 
         {'column': 'actor',
          'column_title': _(u'column_Actor', default=u'Actor'),

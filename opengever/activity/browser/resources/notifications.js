@@ -7,12 +7,6 @@ $(function(){
     mark_as_read(notification_item);
   });
 
-  $('#portal-notifications a.item-location').live('click', function(e){
-    notification_item = $(this).parents('li.notification-item');
-    mark_as_read(notification_item);
-    console.info('success');
-  });
-
   function mark_as_read(item){
     $.ajax({
       type: 'POST',
@@ -21,7 +15,7 @@ $(function(){
       success: function(data) {
         update_unread_counter(-1);
         $(item).hide();
-      },
+      }
     });
   }
 
@@ -34,6 +28,4 @@ $(function(){
       unread_counter.hide();
     }
   }
-
-
 });

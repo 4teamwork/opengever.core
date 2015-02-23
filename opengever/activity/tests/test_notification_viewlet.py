@@ -90,3 +90,14 @@ class TestNotificationViewlet(FunctionalTestCase):
 
         browser.login().open()
         self.assertEquals(10, len(browser.css('.notification-item')))
+
+    @browsing
+    def test_notifications_are_linked_to_resolve_notification_view(self, browser):
+        create(Builder('notification')
+               .having(activity=self.activity_c, watcher=self.test_watcher))
+
+        browser.login().open()
+        link = browser.css('dl.notificationsMenu .item-content a').first
+        self.assertEquals(
+            'http://example.com/@@resolve_notification?notification_id=1',
+            link.get('href'))

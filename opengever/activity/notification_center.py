@@ -73,5 +73,8 @@ class NotificationCenter(object):
         return query.limit(limit).all()
 
     def mark_notification_as_read(self, notification_id):
-        notification = Notification.get(notification_id)
+        notification = self.get_notification(notification_id)
         notification.read = True
+
+    def get_notification(self, notification_id):
+        return Notification.get(notification_id)

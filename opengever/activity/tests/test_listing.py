@@ -76,7 +76,7 @@ class TestMyNotifications(FunctionalTestCase):
             browser.css('.listing').first.dicts())
 
     @browsing
-    def test_title_is_linked(self, browser):
+    def test_title_is_linked_to_resolve_notification_view(self, browser):
         browser.login().open(self.portal,
                              view='tabbedview_view-mynotifications')
 
@@ -84,5 +84,6 @@ class TestMyNotifications(FunctionalTestCase):
         link = row.css('a')[1]
 
         self.assertEquals('Kennzahlen 2014 erfassen', link.text)
-        self.assertEquals('http://example.com/resolve_oguid?oguid=fd:123',
-                          link.get('href'))
+        self.assertEquals(
+            'http://example.com/@@resolve_notification?notification_id=1',
+            link.get('href'))
