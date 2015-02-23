@@ -1,7 +1,9 @@
 from opengever.base.model import Base
+from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.meeting import _
 from opengever.meeting.model import AgendaItem
+from opengever.meeting.model import proposalhistory
 from opengever.meeting.model.query import ProposalQuery
 from opengever.ogds.base.utils import ogds_service
 from plone import api
@@ -50,6 +52,9 @@ class Proposal(Base):
     committee_id = Column(Integer, ForeignKey('committees.id'))
     committee = relationship('Committee', backref='proposals')
 
+    history_records = relationship('ProposalHistory',
+                                   order_by="desc(ProposalHistory.created)")
+
     def __repr__(self):
         return "<Proposal {}@{}>".format(self.int_id, self.admin_unit_id)
 
@@ -95,4 +100,13 @@ class Proposal(Base):
         assert self.can_be_scheduled()
 
         self.workflow_state = 'scheduled'
-        AgendaItem(meeting=meeting, proposal=self)
+        session = create_session()
+        session.add(AgendaItem(meeting=meeting, proposal=self))
+        session.add(proposalhistory.Scheduled(proposal=self))
+
+    def remove_scheduled(self, meeting):
+        assert self.workflow_state == 'scheduled'
+
+        self.workflow_state = 'submitted'
+        session = create_session()
+        session.add(proposalhistory.RemoveScheduled(proposal=self))

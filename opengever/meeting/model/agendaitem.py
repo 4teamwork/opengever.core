@@ -42,5 +42,7 @@ class AgendaItem(Base):
         assert self.meeting.is_editable()
 
         session = create_session()
+        if self.proposal:
+            self.proposal.remove_scheduled(self.meeting)
         session.delete(self)
         self.meeting.reorder_agenda_items()
