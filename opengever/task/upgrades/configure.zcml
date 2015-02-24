@@ -92,4 +92,23 @@
         directory="profiles/4001"
         />
 
+    <!-- 4001 -> 4200 -->
+    <genericsetup:upgradeStep
+        title="Task workflow: Also manage add permissions for mails"
+        description=""
+        source="4001"
+        destination="4200"
+        handler="opengever.task.upgrades.to4200.AlsoManageAddPermissionsForMails"
+        profile="opengever.task:default"
+        />
+
+    <genericsetup:registerProfile
+        name="4200"
+        title="opengever.task: upgrade profile 4200"
+        description=""
+        directory="profiles/4200"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
 </configure>
