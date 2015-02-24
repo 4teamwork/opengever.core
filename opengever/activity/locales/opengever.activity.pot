@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-02-19 14:51+0000\n"
+"POT-Creation-Date: 2015-02-24 07:42+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,28 +22,28 @@ msgid "See on GEVER"
 msgstr ""
 
 #. Default: "Actor"
-#: ./opengever/activity/browser/listing.py:47
+#: ./opengever/activity/browser/listing.py:49
 msgid "column_Actor"
 msgstr ""
 
 #. Default: "Kind"
-#: ./opengever/activity/browser/listing.py:39
+#: ./opengever/activity/browser/listing.py:41
 msgid "column_kind"
 msgstr ""
 
-#. Default: "Mark as read"
-#: ./opengever/activity/browser/listing.py:35
-msgid "column_mark_read"
-msgstr ""
-
 #. Default: "Title"
-#: ./opengever/activity/browser/listing.py:43
+#: ./opengever/activity/browser/listing.py:45
 msgid "column_title"
 msgstr ""
 
 #. Default: "Notifications"
 #: ./opengever/activity/viewlets/notification.pt:3
 msgid "heading_notifications"
+msgstr ""
+
+#. Default: "My notifications"
+#: ./opengever/activity/browser/views.py:32
+msgid "label_my_notifications"
 msgstr ""
 
 #. Default: "${amount} matches."

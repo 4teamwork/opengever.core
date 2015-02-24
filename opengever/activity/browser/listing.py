@@ -4,7 +4,7 @@ from ftw.table.interfaces import ITableSourceConfig
 from opengever.activity.browser.resolve import ResolveNotificationView
 from opengever.activity.models.notification import Notification
 from opengever.ogds.base.actor import Actor
-from opengever.tabbedview import _
+from opengever.activity import _
 from opengever.tabbedview.browser.base import BaseListingTab
 from opengever.tabbedview.browser.base import BaseTableSource
 from zope.globalrequest import getRequest

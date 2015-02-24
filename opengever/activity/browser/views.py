@@ -1,5 +1,6 @@
 from five import grok
 from ftw.tabbedview.browser.tabbed import TabbedView
+from opengever.activity import _
 from opengever.activity.browser.listing import NotificationListingTab
 from opengever.activity.models.notification import Notification
 from opengever.activity.utils import notification_center
@@ -24,7 +25,11 @@ class NotificationOverview(TabbedView):
 
     def get_tabs(self):
         tabs = [
-            {'id': 'mynotifications', 'icon': None, 'url': '#', 'class': None},
+            {'id': 'mynotifications',
+             'icon': None,
+             'url': '#',
+             'class': None,
+             'title':_('label_my_notifications', default=u'My notifications')},
         ]
 
         return tabs
