@@ -43,6 +43,12 @@ class IProposalModel(Interface):
         source='opengever.meeting.CommitteeVocabulary',
         required=True)
 
+    proposed_action = schema.Text(
+        title=_('label_proposed_action', default=u"Proposed action"),
+        description=_("help_proposed_action", default=u""),
+        required=False,
+    )
+
 
 class ISubmittedProposalModel(Interface):
     """Submitted proposal model schema interface."""
@@ -67,10 +73,10 @@ class ISubmittedProposalModel(Interface):
         )
 
     proposed_action = schema.Text(
-        title=_('label_proposal', default=u"Proposal"),
-        description=_("help_proposal", default=u""),
+        title=_('label_proposed_action', default=u"Proposed action"),
+        description=_("help_proposed_action", default=u""),
         required=False,
-        )
+    )
 
 
 class IProposal(form.Schema):
@@ -139,6 +145,9 @@ class ProposalBase(ModelContainer):
 
             {'label': _('label_committee'),
              'value': model.committee.title},
+
+            {'label': _('label_proposed_action', default=u"Proposed action"),
+             'value': model.proposed_action},
 
             {'label': _('label_workflow_state'),
              'value': self.get_state().title},
