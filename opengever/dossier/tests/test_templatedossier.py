@@ -310,7 +310,6 @@ class TestTemplateDossierListings(FunctionalTestCase):
         view = self.templatedossier.unrestrictedTraverse(DOCUMENT_TAB)
         self.assertEquals(['checkin_with_comment',
                            'checkin_without_comment',
-                           'submit_additional_documents',
                            'trashed',
                            'copy_items',
                            'zip_selected'],
