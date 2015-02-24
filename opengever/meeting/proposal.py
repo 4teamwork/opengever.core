@@ -126,6 +126,14 @@ class ProposalBase(ModelContainer):
 
     workflow = None
 
+    STATE_PENDING = State('pending', is_default=True,
+                          title=_('pending', default='Pending'))
+    STATE_SUBMITTED = State('submitted',
+                            title=_('submitted', default='Submited'))
+    STATE_SCHEDULED = State('scheduled',
+                            title=_('scheduled', default='Scheduled'))
+    STATE_DECIDED = State('decided', title=_('decided', default='Decided'))
+
     def Title(self):
         model = self.load_model()
         if not model:
@@ -194,11 +202,10 @@ class SubmittedProposal(ProposalBase):
     implements(content_schema)
 
     workflow = Workflow([
-        State('pending', is_default=True,
-              title=_('pending', default='Pending')),
-        State('submitted', title=_('submitted', default='Submited')),
-        State('scheduled', title=_('scheduled', default='Scheduled')),
-        State('decided', title=_('decided', default='Decided'))
+        ProposalBase.STATE_PENDING,
+        ProposalBase.STATE_SUBMITTED,
+        ProposalBase.STATE_SCHEDULED,
+        ProposalBase.STATE_DECIDED
         ], [
         Transition('submitted', 'scheduled',
                    title=_('schedule', default='Schedule')),
@@ -278,14 +285,11 @@ class Proposal(ProposalBase):
 
     implements(content_schema)
 
-    STATE_SUBMITTED = State('submitted', title=_('submitted', default='Submited'))
-
     workflow = Workflow([
-        State('pending', is_default=True,
-              title=_('pending', default='Pending')),
-        STATE_SUBMITTED,
-        State('scheduled', title=_('scheduled', default='Scheduled')),
-        State('decided', title=_('decided', default='Decided'))
+        ProposalBase.STATE_PENDING,
+        ProposalBase.STATE_SUBMITTED,
+        ProposalBase.STATE_SCHEDULED,
+        ProposalBase.STATE_DECIDED
         ], [
         Submit('pending', 'submitted',
                title=_('submit', default='Submit')),
