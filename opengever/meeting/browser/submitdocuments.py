@@ -164,9 +164,6 @@ class ReceiveObject(grok.View):
     grok.require('cmf.AddPortalContent')
     grok.context(IDocumentSchema)
 
-    def is_submitted_document(self):
-        return SubmittedDocument.query.get_by_target(self.context) is not None
-
     def render(self):
         if not self.context.is_submitted_document():
             raise NoSubmittedDocument()
