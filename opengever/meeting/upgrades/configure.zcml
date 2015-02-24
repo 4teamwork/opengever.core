@@ -101,4 +101,14 @@
         directory="profiles/4209"
         />
 
+    <!-- 4209 -> 4210 -->
+    <genericsetup:upgradeStep
+        title="Add proposal history table."
+        description=""
+        source="4209"
+        destination="4210"
+        handler="opengever.meeting.upgrades.to4210.AddProposalHistory"
+        profile="opengever.meeting:default"
+        />
+
 </configure>

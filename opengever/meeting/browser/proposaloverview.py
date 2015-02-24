@@ -31,6 +31,9 @@ class OverviewBase(object):
     def documents(self):
         return self.context.get_documents()
 
+    def history(self):
+        return self.context.load_model().history_records
+
 
 class ProposalOverview(OverviewBase, DisplayForm, OpengeverTab):
     grok.context(IProposal)

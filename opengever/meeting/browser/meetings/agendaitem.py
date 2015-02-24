@@ -159,11 +159,6 @@ class DeleteAgendaItem(BrowserView):
         if not agenda_item:
             raise NotFound
 
-        meeting = agenda_item.meeting
-        assert meeting.is_editable()
-
-        session = create_session()
-        session.delete(agenda_item)
-        meeting.reorder_agenda_items()
+        agenda_item.remove()
 
         return self.request.response.redirect(self.nextURL())

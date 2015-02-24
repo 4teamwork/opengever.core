@@ -47,5 +47,28 @@
 
     <div tal:replace="structure provider:plone.belowcontentbody" />
     <div class="visualClear"><!----></div>
+
+    <h3 i18n:translate="">History</h3>
+
+    <div class="answers">
+      <tal:repeat tal:repeat="history_record view/history">
+
+          <div tal:attributes="class string:answer ${history_record/css_class}">
+
+            <div class="answerType">&nbsp;</div>
+            <div class="answerBody">
+              <div class="date" tal:content="python:here.toLocalizedTime(history_record.created, long_format=True)" />
+
+              <div class="manageActions">
+              </div>
+
+              <h3 tal:content="structure history_record/message" i18n:translate="">
+              </h3>
+            </div>
+          </div>
+          <div style="clear:both"><!-- --></div>
+      </tal:repeat>
+    </div>
+
   </tal:i18n>
 </html>

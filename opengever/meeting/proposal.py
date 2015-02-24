@@ -1,3 +1,4 @@
+from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.base.source import DossierPathSourceBinder
 from opengever.meeting import _
@@ -6,6 +7,7 @@ from opengever.meeting.command import CreateSubmittedProposalCommand
 from opengever.meeting.command import NullUpdateSubmittedDocumentCommand
 from opengever.meeting.command import UpdateSubmittedDocumentCommand
 from opengever.meeting.container import ModelContainer
+from opengever.meeting.model import proposalhistory
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.model.proposal import Proposal as ProposalModel
 from opengever.meeting.workflow import State
@@ -282,6 +284,10 @@ class Proposal(ProposalBase):
         Submit('pending', 'submitted',
                title=_('submit', default='Submit')),
         ])
+
+    def _after_model_created(self, model_instance):
+        session = create_session()
+        session.add(proposalhistory.Created(proposal=model_instance))
 
     def get_documents(self):
         documents = [relation.to_object for relation in self.relatedItems]

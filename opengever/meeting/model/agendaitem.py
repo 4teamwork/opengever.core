@@ -1,4 +1,5 @@
 from opengever.base.model import Base
+from opengever.base.model import create_session
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
@@ -36,3 +37,12 @@ class AgendaItem(Base):
 
     def get_css_class(self):
         return "paragraph" if self.is_paragraph else ""
+
+    def remove(self):
+        assert self.meeting.is_editable()
+
+        session = create_session()
+        if self.proposal:
+            self.proposal.remove_scheduled(self.meeting)
+        session.delete(self)
+        self.meeting.reorder_agenda_items()

@@ -4,6 +4,7 @@ from opengever.base.request import dispatch_json_request
 from opengever.base.transport import REQUEST_KEY
 from opengever.base.transport import Transporter
 from opengever.meeting import _
+from opengever.meeting.model import proposalhistory
 from opengever.meeting.model import SubmittedDocument
 from plone import api
 import json
@@ -23,7 +24,9 @@ class CreateSubmittedProposalCommand(object):
         request_data = {REQUEST_KEY: json.dumps(jsondata)}
         response = dispatch_json_request(
             self.admin_unit_id, '@@create_submitted_proposal', data=request_data)
+
         self.submitted_proposal_path = response['path']
+        create_session().add(proposalhistory.Submitted(proposal=model))
 
 
 class NullUpdateSubmittedDocumentCommand(object):
@@ -57,10 +60,15 @@ class UpdateSubmittedDocumentCommand(object):
             self.submitted_document.submitted_physical_path,
             view='update-submitted-document')
 
+        session = create_session()
+        proposal_model = self.proposal.load_model()
+
         submitted_version = self.document.get_current_version()
         submitted_document = SubmittedDocument.query.get_by_source(
             self.proposal, self.document)
         submitted_document.submitted_version = submitted_version
+
+        session.add(proposalhistory.DocumentUpdated(proposal=proposal_model))
 
     def show_message(self):
         portal = api.portal.get()
@@ -103,16 +111,20 @@ class CopyProposalDocumentCommand(object):
             portal.REQUEST)
 
     def add_database_entry(self, reponse, target_admin_unit_id):
+        session = create_session()
+        proposal_model = self.proposal.load_model()
         oguid = Oguid.for_object(self.document)
         submitted_version = self.document.get_current_version()
+
         doc = SubmittedDocument(oguid=oguid,
-                                proposal=self.proposal.load_model(),
+                                proposal=proposal_model,
                                 submitted_admin_unit_id=target_admin_unit_id,
                                 submitted_int_id=reponse['intid'],
                                 submitted_physical_path=reponse['path'],
                                 submitted_version=submitted_version)
-        session = create_session()
         session.add(doc)
+
+        session.add(proposalhistory.DocumentSubmitted(proposal=proposal_model))
 
     def copy_document(self, target_path, target_admin_unit_id):
         return OgCopyCommand(
