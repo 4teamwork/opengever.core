@@ -11,13 +11,6 @@ from zope.interface import implements
 from zope.interface import Interface
 
 
-def mark_unread(item, value):
-    if value:
-        return ''
-    else:
-        return '<a href="#" class="mark_as_read"></a>'
-
-
 def resolve_notification_link(item, value):
     return u'<a href="{}">{}</a>'.format(
         ResolveNotificationView.url_for(item.notification_id),
@@ -38,10 +31,6 @@ class NotificationListingTab(BaseListingTab):
     model = Notification
 
     columns = (
-        {'column': 'read',
-         'column_title': _(u'column_mark_read', default=u'Mark as read'),
-         'transform': mark_unread},
-
         {'column': 'kind',
          'column_title': _(u'column_kind', default=u'Kind'),
          'transform': lambda item, value: item.activity.kind},

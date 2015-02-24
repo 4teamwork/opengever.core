@@ -67,11 +67,9 @@ class TestMyNotifications(FunctionalTestCase):
         self.assertEquals(
             [{'Actor': 'Boss Hugo (hugo.boss)',
               'Kind': 'task-added',
-              'Mark as read': '',
               'Title': 'Kennzahlen 2014 erfassen'},
              {'Actor': 'Mueller Peter (peter.mueller)',
               'Kind': 'task-transition-open-in-progress',
-              'Mark as read': '',
               'Title': 'Kennzahlen 2014 erfassen'}],
             browser.css('.listing').first.dicts())
 
@@ -81,7 +79,7 @@ class TestMyNotifications(FunctionalTestCase):
                              view='tabbedview_view-mynotifications')
 
         row = browser.css('.listing tr')[1]
-        link = row.css('a')[1]
+        link = row.css('a').first
 
         self.assertEquals('Kennzahlen 2014 erfassen', link.text)
         self.assertEquals(
