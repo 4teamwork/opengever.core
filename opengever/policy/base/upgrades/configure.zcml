@@ -50,4 +50,14 @@
       profile="opengever.policy.base:default"
        />
 
+  <!-- 4200 -> 4201 -->
+  <genericsetup:upgradeStep
+      title="Install the opengever.activity sub-package."
+      description=""
+      source="4200"
+      destination="4201"
+      handler="opengever.policy.base.upgrades.to4201.InstallActivity"
+      profile="opengever.policy.base:default"
+      />
+
 </configure>

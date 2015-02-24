@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <metadata>
-  <version>4200</version>
+  <version>4201</version>
   <dependencies>
     <dependency>profile-plone.app.dexterity:default</dependency>
     <dependency>profile-plone.app.registry:default</dependency>
@@ -25,6 +25,7 @@
     <dependency>profile-opengever.sharing:default</dependency>
     <dependency>profile-opengever.latex:default</dependency>
     <dependency>profile-opengever.meeting:default</dependency>
+    <dependency>profile-opengever.activity:default</dependency>
     <dependency>profile-ftw.datepicker:default</dependency>
     <dependency>profile-ftw.contentmenu:default</dependency>
     <dependency>profile-ftw.zipexport:default</dependency>
