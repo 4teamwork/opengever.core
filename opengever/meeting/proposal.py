@@ -213,6 +213,12 @@ class SubmittedProposal(ProposalBase):
                    title=_('decide', default='Decide')),
         ])
 
+    def is_editable(self):
+        """A proposal in a meeting/committee is editable when not yet decided.
+
+        """
+        return self.get_state() in [self.STATE_SUBMITTED, self.STATE_SCHEDULED]
+
     def get_overview_attributes(self):
         data = super(SubmittedProposal, self).get_overview_attributes()
         model = self.load_model()
@@ -298,6 +304,15 @@ class Proposal(ProposalBase):
     def _after_model_created(self, model_instance):
         session = create_session()
         session.add(proposalhistory.Created(proposal=model_instance))
+
+    def is_editable(self):
+        """A proposal in a dossier is only editable while not submitted.
+
+        It will remain editable on the submitted side but with a different set
+        of editable attributes.
+
+        """
+        return self.get_state() == self.STATE_PENDING
 
     def get_documents(self):
         documents = [relation.to_object for relation in self.relatedItems]

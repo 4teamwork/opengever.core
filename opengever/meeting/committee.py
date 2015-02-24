@@ -57,6 +57,11 @@ class Committee(ModelContainer):
     def get_memberships(self):
         return self.load_model().memberships
 
+    def is_editable(self):
+        """A committee is always editable."""
+
+        return True
+
     def get_upcoming_meetings(self):
         committee_model = self.load_model()
         return meeting_service().get_upcoming_meetings(committee_model)

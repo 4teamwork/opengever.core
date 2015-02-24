@@ -144,6 +144,10 @@ class ModelProxyEditForm(object):
 
         if not is_meeting_feature_enabled():
             raise Unauthorized
+
+        if not self.context.is_editable():
+            raise Unauthorized
+
         return super(ModelProxyEditForm, self).render()
 
     def inject_initial_data(self):

@@ -9,6 +9,7 @@ from opengever.testing import FunctionalTestCase
 from opengever.testing import index_data_for
 from plone import api
 from zExceptions import Unauthorized
+import transaction
 
 
 class TestProposalViewsDisabled(FunctionalTestCase):
@@ -135,6 +136,55 @@ class TestProposal(FunctionalTestCase):
         self.assertEqual(u'A pr\xf6posal', model.title)
         self.assertEqual(u'My pr\xf6posal', model.initial_position)
         self.assertEqual(u'Lorem ips\xfcm', model.proposed_action)
+
+    @browsing
+    def test_edit_view_availability_for_proposal(self, browser):
+        committee = create(Builder('committee'))
+        proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .titled(u'My Proposal')
+                          .having(committee=committee.load_model()))
+
+        # can edit pending proposal
+        browser.login().open(proposal)
+        self.assertEqual(['Edit'], browser.css('#content-views li').text)
+
+        browser.open(proposal, view='tabbedview_view-overview')
+        browser.css('#pending-submitted').first.click()
+
+        # cannot edit submitted proposal
+        browser.open(proposal)
+        self.assertEqual([], browser.css('#content-views li').text)
+        with self.assertRaises(Unauthorized):
+            browser.open(proposal, view='edit')
+
+    @browsing
+    def test_edit_view_availability_for_submitted_proposal(self, browser):
+        committee = create(Builder('committee'))
+        proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .titled(u'My Proposal')
+                          .having(committee=committee.load_model()))
+        proposal.execute_transition('pending-submitted')
+        transaction.commit()
+
+        # can edit submitted SubmittedProposal
+        submitted_proposal = api.portal.get().restrictedTraverse(
+            proposal.load_model().submitted_physical_path.encode('utf-8'))
+        browser.login().open(submitted_proposal)
+        self.assertEqual(['Contents', 'Edit', 'Sharing'],
+                         browser.css('#content-views li').text)
+
+        proposal_model = submitted_proposal.load_model()
+        proposal_model.workflow_state = 'decided'
+        transaction.commit()
+
+        # cannot edit decided SubmittedProposal
+        browser.open(submitted_proposal)
+        self.assertEqual(['Contents', 'Sharing'],
+                         browser.css('#content-views li').text)
+        with self.assertRaises(Unauthorized):
+            browser.open(submitted_proposal, view='edit')
 
     @browsing
     def test_proposal_submission_works_correctly(self, browser):
