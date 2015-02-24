@@ -1,6 +1,8 @@
 from datetime import date
+from opengever.base.oguid import Oguid
 from opengever.ogds.models.query import BaseQuery
 from plone import api
+from sqlalchemy import or_
 
 
 class ProposalQuery(BaseQuery):
@@ -45,3 +47,28 @@ class MembershipQuery(BaseQuery):
 
     def only_active(self):
         return self.filter(self._attribute('date_from') <= date.today())
+
+
+class SubmittedDocumentQuery(BaseQuery):
+
+    def get_by_source(self, proposal, document):
+        oguid = Oguid.for_object(document)
+        proposal_model = proposal.load_model()
+        return self.filter(self._attribute('oguid') == oguid)\
+                   .filter(self._attribute('proposal') == proposal_model)\
+                   .first()
+
+    def get_by_target(self, document):
+        oguid = Oguid.for_object(document)
+        return self.filter(self._attribute('submitted_oguid') == oguid).first()
+
+    def by_document(self, document):
+        """Filter by document's oguid on source or target side of a submitted
+        doucment.
+
+        """
+        oguid = Oguid.for_object(document)
+        return self.filter(or_(
+            self._attribute('submitted_oguid') == oguid,
+            self._attribute('oguid') == oguid
+        ))

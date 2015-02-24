@@ -35,12 +35,13 @@ class TemplateDossierDocuments(Documents):
             super(TemplateDossierDocuments, self).enabled_actions)
 
     disabled_actions = [
-        'send_as_email',
-        'checkout',
-        'checkin',
         'cancel',
-        'move_items',
+        'checkin',
+        'checkout',
         'create_task',
+        'move_items',
+        'send_as_email',
+        'submit_additional_documents',
     ]
 
 

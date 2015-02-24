@@ -20,6 +20,7 @@ from zope.component import getUtility
 from zope.event import notify
 from zope.interface import Interface
 from zope.lifecycleevent import ObjectCreatedEvent
+from zope.lifecycleevent import ObjectModifiedEvent
 import base64
 import DateTime
 import json
@@ -41,8 +42,9 @@ class Transporter(object):
     clients.
     """
 
-    def transport_to(self, obj, target_cid, container_path):
-        """ Copies a *object* to another client (*target_cid*).
+    def transport_to(self, obj, target_cid, container_path,
+                     view='transporter-receive-object'):
+        """ Copies an *object* to another client (*target_cid*).
         """
 
         jsondata = json.dumps(self.extract(obj))
@@ -52,7 +54,7 @@ class Transporter(object):
             }
 
         return dispatch_json_request(
-            target_cid, '@@transporter-receive-object',
+            target_cid, '@@{}'.format(view),
             path=container_path, data=request_data)
 
     def transport_from(self, container, source_cid, path):
@@ -62,15 +64,16 @@ class Transporter(object):
         """
 
         data = dispatch_json_request(source_cid,
-                                   '@@transporter-extract-object-json',
-                                   path=path)
+                                     '@@transporter-extract-object-json',
+                                     path=path)
 
         return self.create(data, container)
+
+    def _extract_data(self, request):
+        return json.loads(request.get(REQUEST_KEY))
 
     def receive(self, container, request):
-        jsondata = request.get(REQUEST_KEY)
-        data = json.loads(jsondata)
-        return self.create(data, container)
+        return self.create(self._extract_data(request), container)
 
     def extract(self, obj):
         return DexterityObjectDataExtractor(obj).extract()
@@ -78,12 +81,15 @@ class Transporter(object):
     def create(self, data, container):
         return DexterityObjectCreator(data).create_in(container)
 
+    def update(self, obj, request):
+        return DexterityObjectUpdater(self._extract_data(request)).update(obj)
+
 
 class ReceiveObject(grok.View):
     """Receives a JSON serialized object and creates or updates an instance
     within its context.
 
-    It returns JSON containing the object's path and intid.
+    It returns JSON containing the created object's path and intid.
     """
 
     grok.name('transporter-receive-object')
@@ -102,12 +108,11 @@ class ReceiveObject(grok.View):
         data = {
             'path': '/'.join(obj.getPhysicalPath())[
                 len(portal_path) + 1:],
-            'intid': intids.queryId(self.context)
+            'intid': intids.queryId(obj)
             }
 
         # Set correct content type for JSON response
         self.request.response.setHeader("Content-type", "application/json")
-
         return json.dumps(data)
 
 
@@ -147,6 +152,16 @@ class DexterityObjectCreator(object):
 
         obj = addContentToContainer(container, obj, checkConstraints=True)
         return obj
+
+
+class DexterityObjectUpdater(DexterityObjectCreator):
+
+    def update(self, obj):
+        collectors = getAdapters((obj,), IDataCollector)
+        for name, collector in collectors:
+            collector.insert(self.data[name])
+
+        notify(ObjectModifiedEvent(obj))
 
 
 class DexterityObjectDataExtractor(object):

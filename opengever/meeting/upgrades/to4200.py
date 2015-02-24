@@ -37,7 +37,7 @@ class AddMeetingTable(SchemaMigration):
         self.op.create_table(
             'agendaitems',
             Column("id", Integer, Sequence("agendaitems_id_seq"), primary_key=True),
-            Column("agenda_item_id", Integer, ForeignKey('meetings.id'), nullable=False),
+            Column("meeting_id", Integer, ForeignKey('meetings.id'), nullable=False),
             Column("proposal_id", Integer, ForeignKey('proposals.id')),
             Column("title", Text),
             Column('number', String(16)),

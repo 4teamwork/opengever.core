@@ -3,9 +3,11 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.base.oguid import Oguid
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
+from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.proposal import Proposal
 from opengever.testing import FunctionalTestCase
 from opengever.testing import index_data_for
+from plone import api
 from zExceptions import Unauthorized
 
 
@@ -169,6 +171,8 @@ class TestProposal(FunctionalTestCase):
         self.assertEqual(document.file.filename,
                          submitted_document.file.filename)
 
+        self.assertSubmittedDocumentCreated(proposal, document, submitted_document)
+
     @browsing
     def test_proposal_can_be_submitted(self, browser):
         committee = create(Builder('committee'))
@@ -181,3 +185,81 @@ class TestProposal(FunctionalTestCase):
         browser.css('#pending-submitted').first.click()
 
         self.assertEqual(Proposal.STATE_SUBMITTED, proposal.get_state())
+
+    def test_is_submission_allowed(self):
+        committee = create(Builder('committee').titled('My committee'))
+        proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .titled(u'My Proposal')
+                          .having(committee=committee.load_model()))
+
+        self.assertFalse(proposal.is_submit_additional_documents_allowed())
+        proposal.execute_transition('pending-submitted')
+        self.assertTrue(proposal.is_submit_additional_documents_allowed())
+
+        # these transitions are not exposed on the proposal side
+        proposal_model = proposal.load_model()
+        proposal_model.workflow_state = 'scheduled'
+        self.assertFalse(proposal.is_submit_additional_documents_allowed())
+
+    def test_submit_additional_document_creates_new_document(self):
+        committee = create(Builder('committee').titled('My committee'))
+        document = create(Builder('document')
+                          .within(self.dossier)
+                          .titled(u'A Document')
+                          .with_dummy_content())
+        proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .titled(u'My Proposal')
+                          .having(committee=committee.load_model()))
+        proposal.execute_transition('pending-submitted')
+
+        proposal.submit_additional_document(document)
+        submitted_proposal = api.portal.get().restrictedTraverse(
+            proposal.load_model().submitted_physical_path.encode('utf-8'))
+        docs = submitted_proposal.listFolderContents()
+        self.assertEqual(1, len(docs))
+        submitted_document = docs.pop()
+
+        self.assertEqual(document.Title(), submitted_document.Title())
+        self.assertEqual(document.file.filename,
+                         submitted_document.file.filename)
+
+        self.assertSubmittedDocumentCreated(proposal, document, submitted_document)
+
+    def test_submit_new_document_version_updates_submitted_document(self):
+        committee = create(Builder('committee').titled('My committee'))
+        document = create(Builder('document')
+                          .within(self.dossier)
+                          .titled(u'A Document')
+                          .with_dummy_content())
+        proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .titled(u'My Proposal')
+                          .having(committee=committee.load_model())
+                          .relate_to(document))
+        proposal.execute_transition('pending-submitted')
+
+        submitted_proposal = api.portal.get().restrictedTraverse(
+            proposal.load_model().submitted_physical_path.encode('utf-8'))
+        docs = submitted_proposal.get_documents()
+        submitted_document = docs.pop()
+        self.assertEqual(0, submitted_document.get_current_version())
+
+        # create some new document versions
+        repository = api.portal.get_tool('portal_repository')
+        repository.save(document)
+        repository.save(document)
+        proposal.submit_additional_document(document)
+
+        self.assertEqual(1, submitted_document.get_current_version())
+
+    def assertSubmittedDocumentCreated(self, proposal, document, submitted_document):
+        submitted_document_model = SubmittedDocument.query.get_by_source(
+            proposal, document)
+        self.assertIsNotNone(submitted_document_model)
+        self.assertEqual(Oguid.for_object(submitted_document),
+                         submitted_document_model.submitted_oguid)
+        self.assertEqual(0, submitted_document_model.submitted_version)
+        self.assertEqual(proposal.load_model(),
+                         submitted_document_model.proposal)

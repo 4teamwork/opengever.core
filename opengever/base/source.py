@@ -1,7 +1,8 @@
-from plone.formwidget.contenttree import ObjPathSourceBinder
 from Acquisition import aq_inner, aq_parent
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from opengever.base import interfaces
+from plone.formwidget.contenttree import ObjPathSourceBinder
+from plone.formwidget.contenttree.source import CustomFilter
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from zope.component import queryMultiAdapter
 
 
@@ -61,6 +62,10 @@ class DossierPathSourceBinder(ObjPathSourceBinder):
     """A Special PathSourceBinder wich only search in the main Dossier
     of the actual context
     """
+
+    def __init__(self, navigation_tree_query=None, filter_class=CustomFilter, **kw):
+        self.selectable_filter = filter_class(**kw)
+        self.navigation_tree_query = navigation_tree_query
 
     def __call__(self, context):
         """ gets main-dossier path and put it to the navigation_tree_query """

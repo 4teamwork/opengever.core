@@ -113,6 +113,7 @@ class Documents(OpengeverCatalogListingTab):
         'checkin_without_comment',
         'cancel',
         'create_task',
+        'submit_additional_documents',
         'trashed',
         'move_items',
         'copy_items',

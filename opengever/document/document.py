@@ -7,6 +7,7 @@ from opengever.document import _
 from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.meeting.proposal import ISubmittedProposal
 from opengever.task.task import ITask
 from plone import api
 from plone.autoform import directives as form_directives
@@ -197,11 +198,24 @@ class Document(Item):
         return self.checked_out_by() is not None
 
     def is_movable(self):
-        return not self.is_inside_a_task()
+        return not self.is_inside_a_task() and not self.is_submitted_document()
 
     def is_inside_a_task(self):
         parent = aq_parent(aq_inner(self))
-        if ITask.providedBy(parent):
-            return True
-        else:
-            return False
+        return ITask.providedBy(parent)
+
+    def is_submitted_document(self):
+        parent = aq_parent(aq_inner(self))
+        return ISubmittedProposal.providedBy(parent)
+
+    def get_current_version(self):
+        """Return the current document history version."""
+
+        repository = api.portal.get_tool("portal_repository")
+        assert repository.isVersionable(self), \
+            'Document is not versionable'
+        history = repository.getHistoryMetadata(self)
+        current_version = history.getLength(countPurged=False) - 1
+        assert history.retrieve(current_version), \
+            'missing history entry for verion {}'.format(current_version)
+        return current_version

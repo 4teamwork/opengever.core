@@ -3,6 +3,7 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="opengever.meeting">
 
+  <include package=".documents" />
   <include package=".meetings" />
 
   <browser:resourceDirectory
@@ -21,6 +22,20 @@
       for="opengever.meeting.committeecontainer.ICommitteeContainer"
       name="add-member"
       class=".members.AddMember"
+      permission="zope2.View"
+    />
+
+  <browser:page
+      for="opengever.meeting.proposal.IProposal"
+      name="submit_additional_documents"
+      class=".submitdocuments.SubmitAdditionalDocuments"
+      permission="zope2.View"
+    />
+
+  <browser:page
+      for="zope.interface.Interface"
+      name="submit_additional_documents"
+      class=".submitdocuments.SubmitDocumentsByPaths"
       permission="zope2.View"
     />
 

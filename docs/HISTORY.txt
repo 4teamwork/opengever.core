@@ -66,7 +66,8 @@ Changelog
     - Add forms for Members and their Memberships in Committees.
     - Add tab to committees listing all memberships.
     - Add cancel buttons and form labels.
-    - Add tabs to committee container for committees and members
+    - Add tabs to committee container for committees and members.
+    - Allow submission of additional documents to already submitted proposals.
 
   [deiferni]
 

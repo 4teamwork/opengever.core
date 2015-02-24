@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<object name="opengever.meeting.proposal" meta_type="Dexterity FTI"
+        i18n:domain="opengever.meeting" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+  <action
+        action_id="submit_additional_documents"
+        visible="True"
+        title="Submit additional documents"
+        url_expr="string:${object_url}/@@submit_additional_documents"
+        condition_expr="object/@@submit_additional_documents/available"
+        category="object_buttons">
+    <permission value="opengever.meeting: Add Proposal"/>
+  </action>
+
+</object>

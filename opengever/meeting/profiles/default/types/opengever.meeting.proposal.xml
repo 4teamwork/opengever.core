@@ -67,4 +67,14 @@
     <permission value="View"/>
   </action>
 
+  <action
+        action_id="submit_additional_documents"
+        visible="True"
+        title="Submit additional documents"
+        url_expr="string:${object_url}/@@submit_additional_documents"
+        condition_expr="object/@@submit_additional_documents/available"
+        category="object_buttons">
+    <permission value="opengever.meeting: Add Proposal"/>
+  </action>
+
 </object>

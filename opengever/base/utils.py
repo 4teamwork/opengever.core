@@ -60,3 +60,7 @@ def ok_response(request=None):
         request =  api.portal.get().REQUEST
     request.response.setHeader("Content-type", "text/plain")
     return 'OK'
+
+
+def disable_edit_bar():
+    api.portal.get().REQUEST.set('disable_border', True)
