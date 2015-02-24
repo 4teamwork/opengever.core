@@ -24,16 +24,17 @@ class SubmittedProposalListingTab(ProposalListingTab):
         return Proposal.query.visible_for_committee(
             self.context.load_model())
 
-    columns = (
-        {'column': 'title',
-         'column_title': _(u'column_title', default=u'Title'),
-         'transform': proposal_title_link},
+    @property
+    def columns(self):
+        """Inherit column definition from the ProposalListingTab,
+        but replace transform with """
 
-        {'column': 'initial_position',
-         'column_title': _(u'column_initial_position',
-                           default=u'Initial Position')},
-        )
+        columns = super(SubmittedProposalListingTab, self).columns
+        for col in columns:
+            if col.get('column') == 'title':
+                col['transform'] = proposal_title_link
 
+        return columns
 
 class SubmittedProposalTableSource(BaseTableSource):
     grok.implements(ITableSource)

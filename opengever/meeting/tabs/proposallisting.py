@@ -27,10 +27,24 @@ class ProposalListingTab(BaseListingTab):
          'column_title': _(u'column_title', default=u'Title'),
          'transform': proposal_link},
 
+        # TODO: state translation, therefore the workflow has to moved to
+        # the proposal model
+        {'column': 'state',
+         'column_title': _(u'column_state', default=u'State'),
+         'transform': lambda item, value: item.workflow_state},
+
+        {'column': 'comittee',
+         'column_title': _(u'column_comittee', default=u'Comittee'),
+         'transform': lambda item, value: item.committee.title},
+
         {'column': 'initial_position',
          'column_title': _(u'column_initial_position',
                            default=u'Initial Position')},
-        )
+
+        {'column': 'proposed_action',
+         'column_title': _(u'column_proposed_action',
+                           default=u'Proposed action')},
+    )
 
 
 class ProposalTableSource(BaseTableSource):

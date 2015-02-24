@@ -5,8 +5,9 @@ Changelog
 4.2.0 (unreleased)
 ------------------
 
-- Meeting listing improvments:
+- Meeting listing improvements:
     - Disable selection links for listins without checkbox column.
+    - Extend proposal listing columns.
 
   [phgross]
 
