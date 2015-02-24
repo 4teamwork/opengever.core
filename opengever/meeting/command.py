@@ -38,7 +38,7 @@ class NullUpdateSubmittedDocumentCommand(object):
         portal = api.portal.get()
         api.portal.show_message(
             _(u'Document ${title} has already been submitted in that version',
-              mapping=dict(title=self.document.Title().decode('utf-8'))),
+              mapping=dict(title=self.document.title)),
             portal.REQUEST,
             type='warn')
 
@@ -66,7 +66,7 @@ class UpdateSubmittedDocumentCommand(object):
         portal = api.portal.get()
         api.portal.show_message(
             _(u'A new submitted version of document ${title} has been created',
-              mapping=dict(title=self.document.Title().decode('utf-8'))),
+              mapping=dict(title=self.document.title)),
             portal.REQUEST)
 
 
@@ -99,7 +99,7 @@ class CopyProposalDocumentCommand(object):
         portal = api.portal.get()
         api.portal.show_message(
             _(u'Additional document ${title} has been submitted successfully',
-              mapping=dict(title=self.document.Title().decode('utf-8'))),
+              mapping=dict(title=self.document.title)),
             portal.REQUEST)
 
     def add_database_entry(self, reponse, target_admin_unit_id):
