@@ -159,9 +159,6 @@ class ProposalBase(ModelContainer):
     def execute_transition(self, name):
         self.workflow.execute_transition(self, self.load_model(), name)
 
-    def can_execute_transition(self, name):
-        return self.workflow.can_execute_transition(self.load_model(), name)
-
     def get_state(self):
         return self.workflow.get_state(self.load_model().workflow_state)
 
