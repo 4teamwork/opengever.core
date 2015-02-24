@@ -186,6 +186,22 @@ class TestProposal(FunctionalTestCase):
 
         self.assertEqual(Proposal.STATE_SUBMITTED, proposal.get_state())
 
+    def test_is_submission_allowed(self):
+        committee = create(Builder('committee').titled('My committee'))
+        proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .titled(u'My Proposal')
+                          .having(committee=committee.load_model()))
+
+        self.assertFalse(proposal.is_submit_additional_documents_allowed())
+        proposal.execute_transition('pending-submitted')
+        self.assertTrue(proposal.is_submit_additional_documents_allowed())
+
+        # these transitions are not exposed on the proposal side
+        proposal_model = proposal.load_model()
+        proposal_model.workflow_state = 'scheduled'
+        self.assertFalse(proposal.is_submit_additional_documents_allowed())
+
     def test_submit_additional_document_creates_new_document(self):
         committee = create(Builder('committee').titled('My committee'))
         document = create(Builder('document')
@@ -196,10 +212,7 @@ class TestProposal(FunctionalTestCase):
                           .within(self.dossier)
                           .titled(u'My Proposal')
                           .having(committee=committee.load_model()))
-
-        self.assertFalse(proposal.is_submit_additional_documents_allowed())
         proposal.execute_transition('pending-submitted')
-        self.assertTrue(proposal.is_submit_additional_documents_allowed())
 
         proposal.submit_additional_document(document)
         submitted_proposal = api.portal.get().restrictedTraverse(
@@ -225,9 +238,7 @@ class TestProposal(FunctionalTestCase):
                           .titled(u'My Proposal')
                           .having(committee=committee.load_model())
                           .relate_to(document))
-
         proposal.execute_transition('pending-submitted')
-        self.assertTrue(proposal.is_submit_additional_documents_allowed())
 
         submitted_proposal = api.portal.get().restrictedTraverse(
             proposal.load_model().submitted_physical_path.encode('utf-8'))
