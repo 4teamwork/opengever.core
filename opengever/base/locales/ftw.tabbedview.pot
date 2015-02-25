@@ -208,3 +208,15 @@ msgstr ""
 
 msgid "proposals"
 msgstr ""
+
+msgid "committees"
+msgstr ""
+
+msgid "members"
+msgstr ""
+
+msgid "meetings"
+msgstr ""
+
+msgid "memberships"
+msgstr ""
