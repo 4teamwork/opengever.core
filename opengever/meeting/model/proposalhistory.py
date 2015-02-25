@@ -53,6 +53,8 @@ class Submitted(ProposalHistory):
 
     __mapper_args__ = {'polymorphic_identity': 'submitted'}
 
+    css_class = 'submitted'
+
     def message(self):
         return _(u'proposal_history_label_submitted',
                  u'Submitted by ${user}',
@@ -62,6 +64,8 @@ class Submitted(ProposalHistory):
 class Scheduled(ProposalHistory):
 
     __mapper_args__ = {'polymorphic_identity': 'scheduled'}
+
+    css_class = 'scheduled'
 
     def message(self):
         return _(u'proposal_history_label_scheduled',
@@ -73,6 +77,8 @@ class RemoveScheduled(ProposalHistory):
 
     __mapper_args__ = {'polymorphic_identity': 'removescheduled'}
 
+    css_class = 'scheduleRemoved'
+
     def message(self):
         return _(u'proposal_history_label_remove_scheduled',
                  u'Removed from schedule by ${user}',
@@ -83,7 +89,7 @@ class DocumentSubmitted(ProposalHistory):
 
     __mapper_args__ = {'polymorphic_identity': 'documentsubmitted'}
 
-    css_class = 'addDocument'
+    css_class = 'documentAdded'
 
     def message(self):
         return _(u'proposal_history_label_document_submitted',
@@ -95,7 +101,7 @@ class DocumentUpdated(ProposalHistory):
 
     __mapper_args__ = {'polymorphic_identity': 'documentupdated'}
 
-    css_class = 'updateDocument'
+    css_class = 'documentUpdated'
 
     def message(self):
         return _(u'proposal_history_label_document_submitted',
