@@ -282,8 +282,8 @@ class Proposals(ProposalListingTab):
     grok.context(IDossierMarker)
 
     enabled_actions = []
-
     major_actions = []
+    sort_on = 'title'
 
     def get_base_query(self):
         return Proposal.query.by_container(

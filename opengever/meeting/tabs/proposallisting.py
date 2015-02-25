@@ -4,7 +4,7 @@ from ftw.table.interfaces import ITableSourceConfig
 from opengever.meeting.model import Proposal
 from opengever.meeting import _
 from opengever.tabbedview.browser.base import BaseListingTab
-from opengever.tabbedview.browser.base import BaseTableSource
+from opengever.tabbedview.browser.sqltablelisting import SqlTableSource
 from zope.interface import implements
 from zope.interface import Interface
 
@@ -29,11 +29,11 @@ class ProposalListingTab(BaseListingTab):
 
         # TODO: state translation, therefore the workflow has to moved to
         # the proposal model
-        {'column': 'state',
+        {'column': 'workflow_state',
          'column_title': _(u'column_state', default=u'State'),
          'transform': lambda item, value: item.workflow_state},
 
-        {'column': 'comittee',
+        {'column': 'committee_id',
          'column_title': _(u'column_comittee', default=u'Comittee'),
          'transform': lambda item, value: item.committee.title},
 
@@ -47,8 +47,10 @@ class ProposalListingTab(BaseListingTab):
     )
 
 
-class ProposalTableSource(BaseTableSource):
+class ProposalTableSource(SqlTableSource):
     grok.implements(ITableSource)
     grok.adapts(ProposalListingTab, Interface)
 
-    searchable_columns = [Proposal.title, Proposal.initial_position]
+    searchable_columns = [Proposal.title,
+                          Proposal.initial_position,
+                          Proposal.proposed_action]
