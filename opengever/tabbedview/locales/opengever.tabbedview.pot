@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2014-09-01 15:27+0000\n"
+"POT-Creation-Date: 2015-02-25 09:49+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -90,19 +90,37 @@ msgstr ""
 msgid "column_client_id"
 msgstr ""
 
+msgid "column_date"
+msgstr ""
+
+msgid "column_date_from"
+msgstr ""
+
 #. Default: "Date of completion"
-#: ./opengever/tabbedview/browser/tasklisting.py:92
+#: ./opengever/tabbedview/browser/tasklisting.py:93
 msgid "column_date_of_completion"
 msgstr ""
 
+msgid "column_date_to"
+msgstr ""
+
 #. Default: "Deadline"
-#: ./opengever/tabbedview/browser/tasklisting.py:88
+#: ./opengever/tabbedview/browser/tasklisting.py:89
 msgid "column_deadline"
+msgstr ""
+
+msgid "column_email"
 msgstr ""
 
 #. Default: "Enabled"
 #: ./opengever/tabbedview/browser/clientslisting.py:69
 msgid "column_enabled"
+msgstr ""
+
+msgid "column_end_time"
+msgstr ""
+
+msgid "column_firstname"
 msgstr ""
 
 #. Default: "Users group"
@@ -113,6 +131,9 @@ msgstr ""
 #. Default: "Inbox user group"
 #: ./opengever/tabbedview/browser/clientslisting.py:87
 msgid "column_inbox_group"
+msgstr ""
+
+msgid "column_initial_position"
 msgstr ""
 
 #. Default: "Internal site URL"
@@ -126,13 +147,16 @@ msgid "column_ip_address"
 msgstr ""
 
 #. Default: "Issued at"
-#: ./opengever/tabbedview/browser/tasklisting.py:105
+#: ./opengever/tabbedview/browser/tasklisting.py:106
 msgid "column_issued_at"
 msgstr ""
 
 #. Default: "Organisational Unit"
-#: ./opengever/tabbedview/browser/tasklisting.py:112
+#: ./opengever/tabbedview/browser/tasklisting.py:113
 msgid "column_issuing_org_unit"
+msgstr ""
+
+msgid "column_lastname"
 msgstr ""
 
 #. Default: "Public URL"
@@ -141,23 +165,29 @@ msgid "column_public_url"
 msgstr ""
 
 #. Default: "Review state"
-#: ./opengever/tabbedview/browser/tasklisting.py:76
+#: ./opengever/tabbedview/browser/tasklisting.py:77
 msgid "column_review_state"
 msgstr ""
 
+msgid "column_role"
+msgstr ""
+
 #. Default: "Sequence number"
-#: ./opengever/tabbedview/browser/tasklisting.py:118
+#: ./opengever/tabbedview/browser/tasklisting.py:119
 msgid "column_sequence_number"
 msgstr ""
 
+msgid "column_start_time"
+msgstr ""
+
 #. Default: "Task type"
-#: ./opengever/tabbedview/browser/tasklisting.py:84
+#: ./opengever/tabbedview/browser/tasklisting.py:85
 msgid "column_task_type"
 msgstr ""
 
 #. Default: "Title"
 #: ./opengever/tabbedview/browser/clientslisting.py:66
-#: ./opengever/tabbedview/browser/tasklisting.py:80
+#: ./opengever/tabbedview/browser/tasklisting.py:81
 msgid "column_title"
 msgstr ""
 
@@ -171,7 +201,7 @@ msgid "contact"
 msgstr ""
 
 #. Default: "Dossier"
-#: ./opengever/tabbedview/browser/tasklisting.py:109
+#: ./opengever/tabbedview/browser/tasklisting.py:110
 msgid "containing_dossier"
 msgstr ""
 
@@ -194,7 +224,7 @@ msgid "document_date"
 msgstr ""
 
 #. Default: "Sequence Number"
-#: ./opengever/tabbedview/browser/tabs.py:67
+#: ./opengever/tabbedview/browser/tabs.py:72
 msgid "document_sequence_number"
 msgstr ""
 
@@ -231,12 +261,12 @@ msgid "label_active"
 msgstr ""
 
 #. Default: "Checked out by"
-#: ./opengever/tabbedview/browser/tabs.py:93
+#: ./opengever/tabbedview/browser/tabs.py:98
 msgid "label_checked_out"
 msgstr ""
 
 #. Default: "Delivery Date"
-#: ./opengever/tabbedview/browser/tabs.py:89
+#: ./opengever/tabbedview/browser/tabs.py:94
 msgid "label_delivery_date"
 msgstr ""
 
@@ -251,67 +281,67 @@ msgid "label_directorate_user"
 msgstr ""
 
 #. Default: "Document Author"
-#: ./opengever/tabbedview/browser/tabs.py:77
+#: ./opengever/tabbedview/browser/tabs.py:82
 msgid "label_document_author"
 msgstr ""
 
 #. Default: "Document Date"
-#: ./opengever/tabbedview/browser/tabs.py:81
+#: ./opengever/tabbedview/browser/tabs.py:86
 msgid "label_document_date"
 msgstr ""
 
 #. Default: "Responsible"
-#: ./opengever/tabbedview/browser/tabs.py:145
+#: ./opengever/tabbedview/browser/tabs.py:153
 msgid "label_dossier_responsible"
 msgstr ""
 
 #. Default: "End"
-#: ./opengever/tabbedview/browser/tabs.py:154
+#: ./opengever/tabbedview/browser/tabs.py:162
 msgid "label_end"
 msgstr ""
 
 #. Default: "Issuer"
-#: ./opengever/tabbedview/browser/tasklisting.py:101
+#: ./opengever/tabbedview/browser/tasklisting.py:102
 msgid "label_issuer"
 msgstr ""
 
 #. Default: "Public Trial"
-#: ./opengever/tabbedview/browser/tabs.py:100
+#: ./opengever/tabbedview/browser/tabs.py:105
 msgid "label_public_trial"
 msgstr ""
 
 #. Default: "Receipt Date"
-#: ./opengever/tabbedview/browser/tabs.py:85
+#: ./opengever/tabbedview/browser/tabs.py:90
 msgid "label_receipt_date"
 msgstr ""
 
 #. Default: "Reference Number"
-#: ./opengever/tabbedview/browser/tabs.py:133
+#: ./opengever/tabbedview/browser/tabs.py:141
 msgid "label_reference"
 msgstr ""
 
 #. Default: "Responsible"
-#: ./opengever/tabbedview/browser/tasklisting.py:97
+#: ./opengever/tabbedview/browser/tasklisting.py:98
 msgid "label_responsible_task"
 msgstr ""
 
 #. Default: "Review state"
-#: ./opengever/tabbedview/browser/tabs.py:141
+#: ./opengever/tabbedview/browser/tabs.py:149
 msgid "label_review_state"
 msgstr ""
 
 #. Default: "Start"
-#: ./opengever/tabbedview/browser/tabs.py:150
+#: ./opengever/tabbedview/browser/tabs.py:158
 msgid "label_start"
 msgstr ""
 
 #. Default: "Subdossier"
-#: ./opengever/tabbedview/browser/tabs.py:97
+#: ./opengever/tabbedview/browser/tabs.py:102
 msgid "label_subdossier"
 msgstr ""
 
 #. Default: "Title"
-#: ./opengever/tabbedview/browser/tabs.py:72
+#: ./opengever/tabbedview/browser/tabs.py:77
 msgid "label_title"
 msgstr ""
 
