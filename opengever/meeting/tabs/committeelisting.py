@@ -5,7 +5,7 @@ from opengever.meeting.model import Committee
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.tabbedview import _
 from opengever.tabbedview.browser.base import BaseListingTab
-from opengever.tabbedview.browser.base import BaseTableSource
+from opengever.tabbedview.browser.sqltablelisting import SqlTableSource
 from zope.interface import implements
 from zope.interface import Interface
 
@@ -31,7 +31,7 @@ class CommitteeListingTab(BaseListingTab):
             admin_unit_id=get_current_admin_unit().id())
 
 
-class CommitteeTableSource(BaseTableSource):
+class CommitteeTableSource(SqlTableSource):
     grok.implements(ITableSource)
     grok.adapts(CommitteeListingTab, Interface)
 

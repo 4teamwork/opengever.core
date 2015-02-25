@@ -10,6 +10,7 @@ class Committees(CommitteeListingTab):
     grok.context(ICommitteeContainer)
 
     selection = ViewPageTemplateFile("templates/no_selection.pt")
+    sort_on = 'title'
 
     enabled_actions = []
     major_actions = []
@@ -20,6 +21,7 @@ class Members(MemberListingTab):
     grok.context(ICommitteeContainer)
 
     selection = ViewPageTemplateFile("templates/no_selection.pt")
+    sort_on = 'lastname'
 
     enabled_actions = []
     major_actions = []

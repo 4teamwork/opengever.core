@@ -13,6 +13,7 @@ Changelog
     - Disable selection links for listins without checkbox column.
     - Extend proposal listing columns.
     - Fixed sorting and filtering fo proposal and submittedproposal listings.
+    - Fixed sorting and filtering fo comitteecontainer tabs.
 
   [phgross]
 
