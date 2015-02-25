@@ -9,77 +9,78 @@
     <metal:content-core fill-slot="content-core">
       <metal:content-core define-macro="content-core"
                           tal:define="meeting view/model;">
+        <div id="opengever_meeting_protocol">
+          <metal:use use-macro="context/@@ploneform-macros/titlelessform">
 
-        <metal:use use-macro="context/@@ploneform-macros/titlelessform">
+            <metal:block fill-slot="actions">
 
-          <metal:block fill-slot="actions">
+              <metal:block tal:repeat="protocol view/get_pre_protocols">
+              <metal:block tal:define="name protocol/name">
 
-            <metal:block tal:repeat="protocol view/get_pre_protocols">
-            <metal:block tal:define="name protocol/name">
+                <h2 class="protocol_title" tal:content="protocol/title"></h2>
 
-              <h2 tal:content="protocol/title"></h2>
+                <metal:block tal:condition="protocol/has_proposal">
+                    <label i18n:translate="">Initial position</label>
+                    <p class="initial_position" tal:content="protocol/initial_position"></p>
 
-              <metal:block tal:condition="protocol/has_proposal">
-                  <label i18n:translate="">Initial position</label>
-                  <p tal:content="protocol/initial_position"></p>
+                    <label tal:attributes="for string:${name}.considerations:record"
+                           i18n:translate="">
+                           Considerations
+                    </label>
+                    <textarea class="textarea-widget text-field"
+                              tal:attributes="name string:${name}.considerations:record;
+                                              id string:${name}.considerations:record"
+                              tal:content="protocol/considerations"/>
 
-                  <label tal:attributes="for string:${name}.considerations:record"
-                         i18n:translate="">
-                         Considerations
-                  </label>
-                  <textarea class="textarea-widget text-field"
-                            tal:attributes="name string:${name}.considerations:record;
-                                            id string:${name}.considerations:record"
-                            tal:content="protocol/considerations"/>
+                    <label tal:attributes="for string:${name}.proposed_action:record"
+                           i18n:translate="">
+                           Proposed action
+                    </label>
+                    <textarea class="textarea-widget text-field"
+                              tal:attributes="name string:${name}.proposed_action:record;
+                                              id string:${name}.proposed_action:record"
+                              tal:content="protocol/proposed_action"/>
+                </metal:block>
 
-                  <label tal:attributes="for string:${name}.proposed_action:record"
-                         i18n:translate="">
-                         Proposed action
-                  </label>
-                  <textarea class="textarea-widget text-field"
-                            tal:attributes="name string:${name}.proposed_action:record;
-                                            id string:${name}.proposed_action:record"
-                            tal:content="protocol/proposed_action"/>
+                <label tal:attributes="for string:${name}.discussion:record"
+                       i18n:translate="">
+                       Discussion
+                </label>
+                <textarea class="textarea-widget text-field"
+                          tal:attributes="name string:${name}.discussion:record;
+                                          id string:${name}.discussion:record"
+                          tal:content="protocol/discussion"/>
+
+                <label tal:attributes="for string:${name}.decision:record"
+                       i18n:translate="">
+                       Decision
+                </label>
+                <textarea class="textarea-widget text-field"
+                          tal:attributes="name string:${name}.decision:record;
+                                          id string:${name}.decision:record"
+                          tal:content="protocol/decision"/>
+
+              </metal:block>
               </metal:block>
 
-              <label tal:attributes="for string:${name}.discussion:record"
-                     i18n:translate="">
-                     Discussion
-              </label>
-              <textarea class="textarea-widget text-field"
-                        tal:attributes="name string:${name}.discussion:record;
-                                        id string:${name}.discussion:record"
-                        tal:content="protocol/discussion"/>
+            <metal:use use-macro="context/@@ploneform-macros/actions" />
 
-              <label tal:attributes="for string:${name}.decision:record"
-                     i18n:translate="">
-                     Decision
-              </label>
-              <textarea class="textarea-widget text-field"
-                        tal:attributes="name string:${name}.decision:record;
-                                        id string:${name}.decision:record"
-                        tal:content="protocol/decision"/>
+            <metal:comment tal:replace="nothing">
+              This seems to be the only way to disable kss inline validation.
+
+              In our case it does not work because we are editing a Meeting which at the moment exists
+              only in a relational database.
+
+              See http://stackoverflow.com/questions/27515472/how-can-you-disable-inline-validation-for-a-z3c-form-on-plone
+            </metal:comment>
+            <script type="text/javascript">
+              $('.z3cformInlineValidation').removeClass('z3cformInlineValidation');
+            </script>
 
             </metal:block>
-            </metal:block>
 
-          <metal:use use-macro="context/@@ploneform-macros/actions" />
-
-          <metal:comment tal:replace="nothing">
-            This seems to be the only way to disable kss inline validation.
-
-            In our case it does not work because we are editing a Meeting which at the moment exists
-            only in a relational database.
-
-            See http://stackoverflow.com/questions/27515472/how-can-you-disable-inline-validation-for-a-z3c-form-on-plone
-          </metal:comment>
-          <script type="text/javascript">
-            $('.z3cformInlineValidation').removeClass('z3cformInlineValidation');
-          </script>
-
-          </metal:block>
-
-        </metal:use>
+          </metal:use>
+        </div>
       </metal:content-core>
     </metal:content-core>
 

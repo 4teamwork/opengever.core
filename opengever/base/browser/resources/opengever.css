@@ -173,9 +173,9 @@ dl.portlet ul.filetree a.toggleNav.expanded {
 
 /* @end */
 
-/* @group meeting */
-
 @media screen {
+
+  /* @group meeting */
 
   #opengever_meeting_meeting fieldset.proposal {
     border-style: solid solid solid solid;
@@ -267,6 +267,31 @@ dl.portlet ul.filetree a.toggleNav.expanded {
     box-shadow: 0 0 20px 0 #000;
   }
 
-}
+  /* @end */
 
-/* @end */
+  /* @group protocol */
+
+  #opengever_meeting_protocol .protocol_title {
+    position:static;
+    background-color: #fff;
+    line-height: 2em;
+  }
+
+  #opengever_meeting_protocol .protocol_title.sticky {
+    position:relative;
+    padding: 0 20px;
+    width: 110%;
+  }
+
+  #opengever_meeting_protocol textarea {
+    margin-bottom: 1em;
+    padding: 0.5em;
+  }
+
+  #opengever_meeting_protocol .initial_position {
+    text-align: justify;
+  }
+
+  /* @end */
+
+}
