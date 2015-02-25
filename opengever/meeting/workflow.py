@@ -15,6 +15,21 @@ class State(object):
     def __repr__(self):
         return '<State "{}">'.format(self.name)
 
+    def __eq__(self, other):
+        if isinstance(other, State):
+            return self.name == other.name
+        return NotImplemented
+
+    def __ne__(self, other):
+        result = self.__eq__(other)
+        if result is NotImplemented:
+            return result
+        return not result
+
+    def copy(self):
+        return self.__class__(
+            self.name, is_default=self.is_default, title=self.title)
+
 
 class Transition(object):
 
@@ -36,6 +51,9 @@ class Transition(object):
 
     def __repr__(self):
         return '<Transition "{}">'.format(self.name)
+
+    def copy(self):
+        return self.__class__(self.state_from, self.state_to, title=self.title)
 
 
 class Workflow(object):
@@ -71,3 +89,12 @@ class Workflow(object):
     def can_execute_transition(self, model, name):
         transition = self.transitions.get(name)
         return transition is not None and transition.can_execute(model)
+
+    def get_transitions(self, state):
+        return self.get_state(state.name).get_transitions()
+
+    def with_visible_transitions(self, transitions):
+        copied_states = [each.copy() for each in self.states.values()]
+        copied_transitions = [each.copy() for each in self.transitions.values()
+                              if each.name in transitions]
+        return Workflow(copied_states, copied_transitions)

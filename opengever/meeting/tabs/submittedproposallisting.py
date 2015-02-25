@@ -37,6 +37,7 @@ class SubmittedProposalListingTab(ProposalListingTab):
 
         return columns
 
+
 class SubmittedProposalTableSource(SqlTableSource):
     grok.implements(ITableSource)
     grok.adapts(SubmittedProposalListingTab, Interface)

@@ -3,8 +3,8 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.base.oguid import Oguid
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
+from opengever.meeting.model import Proposal
 from opengever.meeting.model import SubmittedDocument
-from opengever.meeting.proposal import Proposal
 from opengever.testing import FunctionalTestCase
 from opengever.testing import index_data_for
 from plone import api
