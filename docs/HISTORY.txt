@@ -12,7 +12,7 @@ Changelog
 - Meeting listing improvements:
     - Disable selection links for listins without checkbox column.
     - Extend proposal listing columns.
-    - Fixed sorting and filtering fo proposal listings.
+    - Fixed sorting and filtering fo proposal and submittedproposal listings.
 
   [phgross]
 
