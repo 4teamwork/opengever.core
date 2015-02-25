@@ -4,7 +4,7 @@ from ftw.table.interfaces import ITableSourceConfig
 from opengever.meeting.model import Membership
 from opengever.tabbedview import _
 from opengever.tabbedview.browser.base import BaseListingTab
-from opengever.tabbedview.browser.base import BaseTableSource
+from opengever.tabbedview.browser.sqltablelisting import SqlTableSource
 from zope.interface import implements
 from zope.interface import Interface
 
@@ -19,9 +19,9 @@ class MembershipListingTab(BaseListingTab):
     model = Membership
 
     columns = (
-        {'column': 'title',
+        {'column': 'member_id',
          'column_title': _(u'column_title', default=u'Title'),
-         },
+         'transform': lambda item, value: item.title()},
 
         {'column': 'date_from',
          'column_title': _(u'column_date_from', default=u'Date from'),
@@ -34,13 +34,13 @@ class MembershipListingTab(BaseListingTab):
         {'column': 'role',
          'column_title': _(u'column_role', default=u'Role'),
          'transform': lambda item, value: item.role},
-        )
+    )
 
     def get_base_query(self):
         return Membership.query.filter_by(committee=self.context.load_model())
 
 
-class MembershipTableSource(BaseTableSource):
+class MembershipTableSource(SqlTableSource):
     grok.implements(ITableSource)
     grok.adapts(MembershipListingTab, Interface)
 

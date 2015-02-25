@@ -10,10 +10,11 @@ Changelog
   [Kevin Bieri]
 
 - Meeting listing improvements:
-    - Disable selection links for listins without checkbox column.
+    - Disable selection links for listings without checkbox column.
     - Extend proposal listing columns.
-    - Fixed sorting and filtering fo proposal and submittedproposal listings.
-    - Fixed sorting and filtering fo comitteecontainer tabs.
+    - Fixed sorting and filtering for proposal and submittedproposal listings.
+    - Fixed sorting and filtering for comitteecontainer tabs.
+    - Fixed sorting and filtering for committee tabs.
 
   [phgross]
 
