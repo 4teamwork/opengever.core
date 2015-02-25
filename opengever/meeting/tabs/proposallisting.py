@@ -2,7 +2,7 @@ from five import grok
 from ftw.table.interfaces import ITableSource
 from ftw.table.interfaces import ITableSourceConfig
 from opengever.meeting.model import Proposal
-from opengever.tabbedview import _
+from opengever.meeting import _
 from opengever.tabbedview.browser.base import BaseListingTab
 from opengever.tabbedview.browser.base import BaseTableSource
 from zope.interface import implements

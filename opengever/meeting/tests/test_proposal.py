@@ -73,11 +73,11 @@ class TestProposal(FunctionalTestCase):
 
         browser.fill({
             'Title': u'A pr\xf6posal',
-            'Proposal': u'My pr\xf6posal',
+            'Initial position': u'My pr\xf6posal',
             'Proposed action': u'Lorem ips\xfcm',
             'Committee': str(committee.committee_id),
             'form.widgets.relatedItems:list': True,
-            })
+        })
         browser.css('#form-buttons-save').first.click()
         self.assertIn('Item created',
                       browser.css('.portalMessage.info dd').text)
@@ -115,7 +115,7 @@ class TestProposal(FunctionalTestCase):
 
         browser.fill({
             'Title': u'A pr\xf6posal',
-            'Proposal': u'My pr\xf6posal',
+            'Initial position': u'My pr\xf6posal',
             'Proposed action': u'Lorem ips\xfcm',
             'Committee': str(committee.committee_id),
             'form.widgets.relatedItems:list': True,

@@ -3,7 +3,7 @@
         i18n:domain="opengever.meeting" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
 
   <!-- Basic metadata -->
-  <property name="title" i18n:translate="">Proposal</property>
+  <property name="title" i18n:translate="Proposal">Proposal</property>
   <property name="description" i18n:translate=""></property>
   <property name="icon_expr"></property>
   <property name="allow_discussion">False</property>

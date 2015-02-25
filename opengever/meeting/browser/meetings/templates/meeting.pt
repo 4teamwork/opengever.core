@@ -54,7 +54,7 @@
                               </option>
                           </tal:repeat>
                       </select>
-                      <span class="inputIcon"><input type="submit" name="submit" id="submit-schedule"
+                      <span class="inputIcon"><input type="submit" name="submit" id="submit-schedule" value="Schedule"
                          i18n:attributes="value schedule" /></span>
                   </div>
                 </form>
