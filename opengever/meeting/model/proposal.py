@@ -139,7 +139,7 @@ class Proposal(Base):
         return self.get_state() == self.STATE_SUBMITTED
 
     def is_submit_additional_documents_allowed(self):
-        return self.get_state() in [self.STATE_SUBMITTED]
+        return self.get_state() in [self.STATE_SUBMITTED, self.STATE_SCHEDULED]
 
     def is_editable_in_dossier(self):
         return self.get_state() == self.STATE_PENDING

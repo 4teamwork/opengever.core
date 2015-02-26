@@ -253,7 +253,10 @@ class TestProposal(FunctionalTestCase):
 
         # these transitions are not exposed on the proposal side
         proposal_model = proposal.load_model()
-        proposal_model.workflow_state = 'scheduled'
+        proposal_model.execute_transition('submitted-scheduled')
+        self.assertTrue(proposal.is_submit_additional_documents_allowed())
+
+        proposal_model.execute_transition('scheduled-decided')
         self.assertFalse(proposal.is_submit_additional_documents_allowed())
 
     def test_submit_additional_document_creates_new_document(self):
