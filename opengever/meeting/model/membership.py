@@ -1,5 +1,8 @@
+from datetime import datetime
+from datetime import time
 from opengever.base.model import Base
 from opengever.meeting.model.query import MembershipQuery
+from plone import api
 from sqlalchemy import Column
 from sqlalchemy import Date
 from sqlalchemy import ForeignKey
@@ -44,7 +47,8 @@ class Membership(Base):
         return self._format_date(self.date_to)
 
     def _format_date(self, date):
-        return date.strftime('%A, %d. %B %Y')
+        return api.portal.get_localized_time(
+            datetime=datetime.combine(date, time()))
 
     def title(self):
         return self.member.fullname

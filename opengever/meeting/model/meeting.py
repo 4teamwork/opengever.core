@@ -1,4 +1,6 @@
 from collections import OrderedDict
+from datetime import datetime
+from datetime import time
 from opengever.base.model import Base
 from opengever.meeting import _
 from opengever.meeting.model import AgendaItem
@@ -121,13 +123,21 @@ class Meeting(Base):
             return self.get_date()
 
     def get_date(self):
-        return self.date.strftime('%A, %d. %B %Y')
+        return api.portal.get_localized_time(
+            datetime=datetime.combine(self.date, time()))
 
     def get_start_time(self):
-        return self.start_time.strftime('%H:%M') if self.start_time else ''
+        return self._get_localized_time(self.start_time)
 
     def get_end_time(self):
-        return self.end_time.strftime('%H:%M') if self.end_time else ''
+        return self._get_localized_time(self.end_time)
+
+    def _get_localized_time(self, time):
+        if not time:
+            return ''
+
+        return api.portal.get_localized_time(
+            datetime=datetime.combine(self.date, time), time_only=True)
 
     def schedule_proposal(self, proposal):
         assert proposal.committee == self.committee

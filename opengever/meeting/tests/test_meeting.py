@@ -20,11 +20,11 @@ class TestMeeting(FunctionalTestCase):
 
     def test_meeting_title(self):
         self.assertEqual(
-            u'Bern, Friday, 18. October 2013',
+            u'Bern, Oct 18, 2013',
             Meeting(location=u'Bern', date=date(2013, 10, 18)).get_title())
 
         self.assertEqual(
-            u'Friday, 18. October 2013',
+            u'Oct 18, 2013',
             Meeting(date=date(2013, 10, 18)).get_title())
 
     @browsing
