@@ -30,15 +30,15 @@ class IProposalModel(Interface):
         max_length=256,
         )
 
-    initial_position = schema.Text(
-        title=_('label_initial_position', default=u"Initial position"),
-        required=False,
-        )
-
     committee = schema.Choice(
         title=_('label_committee', default=u'Committee'),
         source='opengever.meeting.CommitteeVocabulary',
         required=True)
+
+    initial_position = schema.Text(
+        title=_('label_initial_position', default=u"Initial position"),
+        required=False,
+        )
 
     proposed_action = schema.Text(
         title=_('label_proposed_action', default=u"Proposed action"),
