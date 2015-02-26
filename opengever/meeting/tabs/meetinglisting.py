@@ -27,6 +27,9 @@ class MeetingListingTab(BaseListingTab):
          'column_title': _(u'column_date', default=u'Date'),
          'transform': lambda item, value: item.get_date()},
 
+        {'column': 'location',
+         'column_title': _(u'column_location', default=u'Location')},
+
         {'column': 'start_time',
          'column_title': _(u'column_start_time', default=u'Start Time'),
          'transform': lambda item, value: item.get_start_time()},
