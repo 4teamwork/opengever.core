@@ -4,7 +4,7 @@ from ftw.table.interfaces import ITableSourceConfig
 from opengever.meeting.model import Member
 from opengever.tabbedview import _
 from opengever.tabbedview.browser.base import BaseListingTab
-from opengever.tabbedview.browser.base import BaseTableSource
+from opengever.tabbedview.browser.sqltablelisting import SqlTableSource
 from zope.interface import implements
 from zope.interface import Interface
 
@@ -46,7 +46,7 @@ class MemberListingTab(BaseListingTab):
         return Member.query
 
 
-class MemberTableSource(BaseTableSource):
+class MemberTableSource(SqlTableSource):
     grok.implements(ITableSource)
     grok.adapts(MemberListingTab, Interface)
 

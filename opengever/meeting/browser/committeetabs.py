@@ -12,6 +12,8 @@ class Meetings(MeetingListingTab):
 
     selection = ViewPageTemplateFile("templates/no_selection.pt")
 
+    sort_on = 'date'
+
     enabled_actions = []
     major_actions = []
 
@@ -31,6 +33,8 @@ class Memberships(MembershipListingTab):
     grok.context(ICommittee)
 
     selection = ViewPageTemplateFile("templates/no_selection.pt")
+
+    sort_on = 'member_id'
 
     enabled_actions = []
     major_actions = []
