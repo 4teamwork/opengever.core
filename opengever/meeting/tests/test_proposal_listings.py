@@ -28,7 +28,7 @@ class TestDossierProposalListing(ProposalListingTests):
 
         # TODO: state should be translated
         self.assertEquals(
-            [{'State': 'pending',
+            [{'State': 'Pending',
               'Proposed action': u'My proposed acti\xf6n',
               'Initial Position': u'My p\xf6sition is',
               'Comittee': 'My committee',
@@ -63,7 +63,7 @@ class TestSubmittedProposals(ProposalListingTests):
 
         # TODO: state should be translated
         self.assertEquals(
-            [{'State': 'submitted',
+            [{'State': 'Submitted',
               'Proposed action': u'My proposed acti\xf6n',
               'Initial Position': u'My p\xf6sition is',
               'Comittee': 'My committee',

@@ -70,7 +70,7 @@ class Proposal(Base):
     STATE_PENDING = State('pending', is_default=True,
                           title=_('pending', default='Pending'))
     STATE_SUBMITTED = State('submitted',
-                            title=_('submitted', default='Submited'))
+                            title=_('submitted', default='Submitted'))
     STATE_SCHEDULED = State('scheduled',
                             title=_('scheduled', default='Scheduled'))
     STATE_DECIDED = State('decided', title=_('decided', default='Decided'))
