@@ -40,6 +40,11 @@
   };
 
   $(function() {
+
+    $("#opengever_meeting_protocol textarea").autosize();
+
+    stickyHeading("#opengever_meeting_protocol .protocol_title");
+
     var agendaItemTable = $("#agenda_items"),
       agendaItemStore = $("tbody", agendaItemTable).clone(),
       updateNumbers = function(numbers) {

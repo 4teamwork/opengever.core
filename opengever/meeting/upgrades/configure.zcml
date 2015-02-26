@@ -111,4 +111,13 @@
         profile="opengever.meeting:default"
         />
 
+    <!-- 4210 -> 4211 -->
+    <upgrade-step:importProfile
+        title="Add js-registry entry for autosize and sticky heading for protocol view."
+        profile="opengever.meeting:default"
+        source="4210"
+        destination="4211"
+        directory="profiles/4211"
+        />
+
 </configure>

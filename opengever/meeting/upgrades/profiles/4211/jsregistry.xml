@@ -2,11 +2,6 @@
 <object name="portal_javascripts" meta_type="JavaScripts Registry">
 
     <javascript cacheable="True" compression="safe" cookable="True" expression=""
-                enabled="True" id="++resource++opengever.meeting/meeting.js" inline="False"
-                insert-after="++resource++jquery-ui-i18n.js"
-                />
-
-    <javascript cacheable="True" compression="safe" cookable="True" expression=""
                 enabled="True" id="++resource++opengever.meeting/sticky_heading.js" inline="False"
                 insert-after="++resource++plone.app.jquery.js"
                 />
@@ -15,5 +10,4 @@
                 enabled="True" id="++resource++opengever.meeting/jquery.autosize.js" inline="False"
                 insert-after="++resource++plone.app.jquery.js"
                 />
-
 </object>
