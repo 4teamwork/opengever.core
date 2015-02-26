@@ -115,7 +115,10 @@ class Meeting(Base):
             setattr(self, key, value)
 
     def get_title(self):
-        return u"{} {}".format(self.committee.title, self.get_date())
+        if self.location:
+            return u"{}, {}".format(self.location, self.get_date())
+        else:
+            return self.get_date()
 
     def get_date(self):
         return self.date.strftime('%A, %d. %B %Y')
