@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2015-02-25 09:49+0000\n"
+"POT-Creation-Date: 2015-02-26 14:58+0000\n"
 "PO-Revision-Date: 2012-11-22 14:19+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -92,38 +92,20 @@ msgstr "Auschecken / Bearbeiten"
 msgid "column_client_id"
 msgstr "Mandant ID"
 
-msgid "column_date"
-msgstr "Datum"
-
-msgid "column_date_from"
-msgstr "Von"
-
 #. Default: "Date of completion"
 #: ./opengever/tabbedview/browser/tasklisting.py:93
 msgid "column_date_of_completion"
 msgstr "Erledigt am"
-
-msgid "column_date_to"
-msgstr "Bis"
 
 #. Default: "Deadline"
 #: ./opengever/tabbedview/browser/tasklisting.py:89
 msgid "column_deadline"
 msgstr "Zu erledigen bis"
 
-msgid "column_email"
-msgstr "E-Mail"
-
 #. Default: "Enabled"
 #: ./opengever/tabbedview/browser/clientslisting.py:69
 msgid "column_enabled"
 msgstr "Aktiviert"
-
-msgid "column_end_time"
-msgstr "Bis (Uhrzeit)"
-
-msgid "column_firstname"
-msgstr "Vorname"
 
 #. Default: "Users group"
 #: ./opengever/tabbedview/browser/clientslisting.py:83
@@ -134,9 +116,6 @@ msgstr "Benutzer-Gruppe"
 #: ./opengever/tabbedview/browser/clientslisting.py:87
 msgid "column_inbox_group"
 msgstr "Eingangskorb-Gruppe"
-
-msgid "column_initial_position"
-msgstr "Ausgangslage"
 
 #. Default: "Internal site URL"
 #: ./opengever/tabbedview/browser/clientslisting.py:75
@@ -158,9 +137,6 @@ msgstr "Erstellt am"
 msgid "column_issuing_org_unit"
 msgstr "Organisationseinheit"
 
-msgid "column_lastname"
-msgstr "Nachname"
-
 #. Default: "Public URL"
 #: ./opengever/tabbedview/browser/clientslisting.py:79
 msgid "column_public_url"
@@ -171,16 +147,10 @@ msgstr "Öffentliche URL"
 msgid "column_review_state"
 msgstr "Status"
 
-msgid "column_role"
-msgstr "Rolle"
-
 #. Default: "Sequence number"
 #: ./opengever/tabbedview/browser/tasklisting.py:119
 msgid "column_sequence_number"
 msgstr "Laufnummer"
-
-msgid "column_start_time"
-msgstr "Von (Uhrzeit)"
 
 #. Default: "Task type"
 #: ./opengever/tabbedview/browser/tasklisting.py:85

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-02-25 09:49+0000\n"
+"POT-Creation-Date: 2015-02-26 14:58+0000\n"
 "PO-Revision-Date: 2013-03-27 11:23+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -89,38 +89,20 @@ msgstr "Checkout et modifier"
 msgid "column_client_id"
 msgstr "ID du client"
 
-msgid "column_date"
-msgstr ""
-
-msgid "column_date_from"
-msgstr ""
-
 #. Default: "Date of completion"
 #: ./opengever/tabbedview/browser/tasklisting.py:93
 msgid "column_date_of_completion"
 msgstr "Accompli le"
-
-msgid "column_date_to"
-msgstr ""
 
 #. Default: "Deadline"
 #: ./opengever/tabbedview/browser/tasklisting.py:89
 msgid "column_deadline"
 msgstr "A accomplir jusqu'au"
 
-msgid "column_email"
-msgstr ""
-
 #. Default: "Enabled"
 #: ./opengever/tabbedview/browser/clientslisting.py:69
 msgid "column_enabled"
 msgstr "Activé"
-
-msgid "column_end_time"
-msgstr ""
-
-msgid "column_firstname"
-msgstr ""
 
 #. Default: "Users group"
 #: ./opengever/tabbedview/browser/clientslisting.py:83
@@ -131,9 +113,6 @@ msgstr "Groupe d'utilisateur"
 #: ./opengever/tabbedview/browser/clientslisting.py:87
 msgid "column_inbox_group"
 msgstr "Groupe de boîte de réception"
-
-msgid "column_initial_position"
-msgstr ""
 
 #. Default: "Internal site URL"
 #: ./opengever/tabbedview/browser/clientslisting.py:75
@@ -155,9 +134,6 @@ msgstr "Créé le"
 msgid "column_issuing_org_unit"
 msgstr "Unité d'organisation"
 
-msgid "column_lastname"
-msgstr ""
-
 #. Default: "Public URL"
 #: ./opengever/tabbedview/browser/clientslisting.py:79
 msgid "column_public_url"
@@ -168,16 +144,10 @@ msgstr "Adresse URL publique"
 msgid "column_review_state"
 msgstr "Etat"
 
-msgid "column_role"
-msgstr ""
-
 #. Default: "Sequence number"
 #: ./opengever/tabbedview/browser/tasklisting.py:119
 msgid "column_sequence_number"
 msgstr "Numéro courant"
-
-msgid "column_start_time"
-msgstr ""
 
 #. Default: "Task type"
 #: ./opengever/tabbedview/browser/tasklisting.py:85

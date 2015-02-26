@@ -185,36 +185,3 @@ msgstr ""
 #: ./opengever/tabbedview/browser/tabs_templates/generic.pt:12
 msgid "none"
 msgstr ""
-
-msgid "column_initial_position"
-msgstr ""
-
-msgid "column_date"
-msgstr ""
-
-msgid "column_date_from"
-msgstr ""
-
-msgid "column_date_to"
-msgstr ""
-
-msgid "column_email"
-msgstr ""
-
-msgid "column_end_time"
-msgstr ""
-
-msgid "column_firstname"
-msgstr ""
-
-msgid "column_initial_position"
-msgstr ""
-
-msgid "column_lastname"
-msgstr ""
-
-msgid "column_role"
-msgstr ""
-
-msgid "column_start_time"
-msgstr ""

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2015-02-25 09:49+0000\n"
+"POT-Creation-Date: 2015-02-26 14:58+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -90,18 +90,9 @@ msgstr ""
 msgid "column_client_id"
 msgstr ""
 
-msgid "column_date"
-msgstr ""
-
-msgid "column_date_from"
-msgstr ""
-
 #. Default: "Date of completion"
 #: ./opengever/tabbedview/browser/tasklisting.py:93
 msgid "column_date_of_completion"
-msgstr ""
-
-msgid "column_date_to"
 msgstr ""
 
 #. Default: "Deadline"
@@ -109,18 +100,9 @@ msgstr ""
 msgid "column_deadline"
 msgstr ""
 
-msgid "column_email"
-msgstr ""
-
 #. Default: "Enabled"
 #: ./opengever/tabbedview/browser/clientslisting.py:69
 msgid "column_enabled"
-msgstr ""
-
-msgid "column_end_time"
-msgstr ""
-
-msgid "column_firstname"
 msgstr ""
 
 #. Default: "Users group"
@@ -131,9 +113,6 @@ msgstr ""
 #. Default: "Inbox user group"
 #: ./opengever/tabbedview/browser/clientslisting.py:87
 msgid "column_inbox_group"
-msgstr ""
-
-msgid "column_initial_position"
 msgstr ""
 
 #. Default: "Internal site URL"
@@ -156,9 +135,6 @@ msgstr ""
 msgid "column_issuing_org_unit"
 msgstr ""
 
-msgid "column_lastname"
-msgstr ""
-
 #. Default: "Public URL"
 #: ./opengever/tabbedview/browser/clientslisting.py:79
 msgid "column_public_url"
@@ -169,15 +145,9 @@ msgstr ""
 msgid "column_review_state"
 msgstr ""
 
-msgid "column_role"
-msgstr ""
-
 #. Default: "Sequence number"
 #: ./opengever/tabbedview/browser/tasklisting.py:119
 msgid "column_sequence_number"
-msgstr ""
-
-msgid "column_start_time"
 msgstr ""
 
 #. Default: "Task type"
