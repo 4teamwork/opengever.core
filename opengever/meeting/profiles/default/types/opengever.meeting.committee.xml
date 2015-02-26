@@ -84,6 +84,13 @@
   </action>
 
   <!-- Tab Actions -->
+  <action title="overview"
+          action_id="overview"
+          category="tabbedview-tabs"
+          condition_expr=""
+          url_expr="string:#"
+          visible="True">
+  </action>
   <action title="meetings"
           action_id="meetings"
           category="tabbedview-tabs"

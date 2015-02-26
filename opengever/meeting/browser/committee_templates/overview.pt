@@ -1,0 +1,22 @@
+<tal:block i18n:domain="opengever.dossier"
+           tal:define="groups view/boxes; css_width python:99/len(groups)">
+
+  <div tal:repeat="boxes groups"
+       tal:attributes="class string:boxGroup boxGroup${repeat/boxes/index};
+                       style string:width:${css_width}%">
+
+    <div class="box" tal:repeat="box boxes"
+         tal:attributes="id string:${box/id}Box">
+
+      <h2 i18n:translate="" tal:content="box/label|box/id"></h2>
+
+      <ul tal:condition="box/content">
+        <li tal:repeat="item box/content">
+          <span tal:replace="structure item"></span>
+        </li>
+      </ul>
+
+    </div>
+
+  </div>
+</tal:block>

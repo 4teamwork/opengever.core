@@ -5,6 +5,9 @@ Changelog
 4.2.0 (unreleased)
 ------------------
 
+- Added committee overview tab.
+  [phgross]
+
 - Fixed `only_active` membership query.
   [phgross]
 
