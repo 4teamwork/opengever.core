@@ -94,12 +94,12 @@ class EditPreProtocol(AutoExtensibleForm, ModelProxyEditForm, EditForm):
         self.model.update_model(model_data)
 
     # this renames the button but otherwise preserves super's behaviour
-    @button.buttonAndHandler(_('Save'), name='save')
+    @button.buttonAndHandler(_('Save', default=u'Save'), name='save')
     def handleApply(self, action):
         # self as first argument is required by to the decorator
         super(EditPreProtocol, self).handleApply(self, action)
 
-    @button.buttonAndHandler(_('Cancel'), name='cancel')
+    @button.buttonAndHandler(_('Cancel', default=u'Cancel'), name='cancel')
     def handleCancel(self, action):
         return self.redirect_to_meetinglist()
 

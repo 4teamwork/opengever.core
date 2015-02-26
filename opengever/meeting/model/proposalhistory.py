@@ -104,6 +104,6 @@ class DocumentUpdated(ProposalHistory):
     css_class = 'documentUpdated'
 
     def message(self):
-        return _(u'proposal_history_label_document_submitted',
+        return _(u'proposal_history_label_document_updated',
                  u'Submitted document updated by ${user}',
                  mapping={'user': Actor.lookup(self.userid).get_link()})

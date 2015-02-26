@@ -5,6 +5,12 @@ Changelog
 4.2.0 (unreleased)
 ------------------
 
+- Meeting listing improvements:
+    - Disable selection links for listins without checkbox column.
+    - Extend proposal listing columns.
+
+  [phgross]
+
 - Task workflow: Make workflow also manage add permissions for mails,
   the same way it does for documents. In particular, this avoids mails
   being addable in tasks in state 'tested-and-closed'.

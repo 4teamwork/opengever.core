@@ -73,10 +73,11 @@ class TestProposal(FunctionalTestCase):
 
         browser.fill({
             'Title': u'A pr\xf6posal',
-            'Proposal': u'My pr\xf6posal',
+            'Initial position': u'My pr\xf6posal',
+            'Proposed action': u'Lorem ips\xfcm',
             'Committee': str(committee.committee_id),
             'form.widgets.relatedItems:list': True,
-            })
+        })
         browser.css('#form-buttons-save').first.click()
         self.assertIn('Item created',
                       browser.css('.portalMessage.info dd').text)
@@ -90,6 +91,7 @@ class TestProposal(FunctionalTestCase):
         self.assertIsNotNone(model)
         self.assertEqual(Oguid.for_object(proposal), model.oguid)
         self.assertEqual(u'A pr\xf6posal', model.title)
+        self.assertEqual(u'Lorem ips\xfcm', model.proposed_action)
         self.assertEqual(u'My pr\xf6posal', model.initial_position)
 
         self.assertEqual(['a', 'pr\xc3\xb6posal', 'my', 'pr\xc3\xb6posal'],
@@ -113,7 +115,8 @@ class TestProposal(FunctionalTestCase):
 
         browser.fill({
             'Title': u'A pr\xf6posal',
-            'Proposal': u'My pr\xf6posal',
+            'Initial position': u'My pr\xf6posal',
+            'Proposed action': u'Lorem ips\xfcm',
             'Committee': str(committee.committee_id),
             'form.widgets.relatedItems:list': True,
             })
@@ -131,6 +134,7 @@ class TestProposal(FunctionalTestCase):
         self.assertEqual(Oguid.for_object(proposal), model.oguid)
         self.assertEqual(u'A pr\xf6posal', model.title)
         self.assertEqual(u'My pr\xf6posal', model.initial_position)
+        self.assertEqual(u'Lorem ips\xfcm', model.proposed_action)
 
     @browsing
     def test_proposal_submission_works_correctly(self, browser):

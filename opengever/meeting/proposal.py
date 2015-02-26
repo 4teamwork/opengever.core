@@ -34,7 +34,7 @@ class IProposalModel(Interface):
         )
 
     initial_position = schema.Text(
-        title=_('label_initial_position', default=u"Proposal"),
+        title=_('label_initial_position', default=u"Initial position"),
         required=False,
         )
 
@@ -42,6 +42,12 @@ class IProposalModel(Interface):
         title=_('label_committee', default=u'Committee'),
         source='opengever.meeting.CommitteeVocabulary',
         required=True)
+
+    proposed_action = schema.Text(
+        title=_('label_proposed_action', default=u"Proposed action"),
+        description=_("help_proposed_action", default=u""),
+        required=False,
+    )
 
 
 class ISubmittedProposalModel(Interface):
@@ -55,7 +61,7 @@ class ISubmittedProposalModel(Interface):
         )
 
     initial_position = schema.Text(
-        title=_('label_initial_position', default=u"Proposal"),
+        title=_('label_initial_position', default=u"Initial position"),
         description=_("help_initial_position", default=u""),
         required=False,
         )
@@ -67,10 +73,10 @@ class ISubmittedProposalModel(Interface):
         )
 
     proposed_action = schema.Text(
-        title=_('label_proposal', default=u"Proposal"),
-        description=_("help_proposal", default=u""),
+        title=_('label_proposed_action', default=u"Proposed action"),
+        description=_("help_proposed_action", default=u""),
         required=False,
-        )
+    )
 
 
 class IProposal(form.Schema):
@@ -131,16 +137,19 @@ class ProposalBase(ModelContainer):
         assert model, 'missing db-model for {}'.format(self)
 
         return [
-            {'label': _('label_title'),
+            {'label': _(u"label_title", default=u'Title'),
              'value': model.title},
 
-            {'label': _('label_initial_position'),
+            {'label': _('label_initial_position', default=u'Initial position'),
              'value': model.initial_position},
 
-            {'label': _('label_committee'),
+            {'label': _('label_committee', default=u'Committee'),
              'value': model.committee.title},
 
-            {'label': _('label_workflow_state'),
+            {'label': _('label_proposed_action', default=u'Proposed action'),
+             'value': model.proposed_action},
+
+            {'label': _('label_workflow_state', default=u'State'),
              'value': self.get_state().title},
         ]
 
@@ -205,7 +214,7 @@ class SubmittedProposal(ProposalBase):
         model = self.load_model()
         data.extend([
             {
-                'label': _('label_considerations'),
+                'label': _('label_considerations', default=u"Considerations"),
                 'value': model.considerations,
             },
             {

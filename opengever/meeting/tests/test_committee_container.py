@@ -24,3 +24,14 @@ class TestCommitteeContainer(FunctionalTestCase):
         browser.open(self.container, view='tabbedview_view-committees')
         href = browser.find(u'My Committee').node.attrib['href']
         self.assertEqual(committee_model.get_url(), href)
+
+    @browsing
+    def test_selection_links_are_hidden(self, browser):
+        committee = create(Builder('committee')
+                           .having(title=u'My Committee')
+                           .within(self.container))
+        committee_model = committee.load_model()
+
+        browser.login()
+        browser.open(self.container, view='tabbedview_view-committees')
+        self.assertEquals([], browser.css('div.tabbedview_select'))
