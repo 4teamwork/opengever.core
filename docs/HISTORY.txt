@@ -5,6 +5,9 @@ Changelog
 4.2.0 (unreleased)
 ------------------
 
+- Fixed `only_active` membership query.
+  [phgross]
+
 - Style protocol view in opengever.meeting.
   Implement sticky headings and autosize textareas.
   [Kevin Bieri]
@@ -15,8 +18,6 @@ Changelog
     - Fixed sorting and filtering for proposal and submittedproposal listings.
     - Fixed sorting and filtering for comitteecontainer tabs.
     - Fixed sorting and filtering for committee tabs.
-
-  [phgross]
 
 - Task workflow: Make workflow also manage add permissions for mails,
   the same way it does for documents. In particular, this avoids mails

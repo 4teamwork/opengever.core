@@ -1,11 +1,12 @@
 from datetime import date
+from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.model import Member
 from opengever.testing import FunctionalTestCase
-
+from opengever.meeting.model import Membership
 
 class TestMemberships(FunctionalTestCase):
 
@@ -36,3 +37,33 @@ class TestMemberships(FunctionalTestCase):
         self.assertEqual(date(2010, 1, 1), membership.date_from)
         self.assertEqual(date(2010, 12, 31), membership.date_to)
         self.assertEqual(u'H\xe4nswurscht', membership.role)
+
+    def test_not_started_membership_is_inactive(self):
+        create(Builder('membership')
+               .having(member=self.member,
+                       committee=self.committee.load_model(),
+                       date_from=date.today() + timedelta(days=1),
+                       date_to=date.today() + timedelta(days=100)))
+
+        self.assertEquals([],
+                          Membership.query.only_active().all())
+
+    def test_already_finished_membership_is_inactive(self):
+        create(Builder('membership')
+               .having(member=self.member,
+                       committee=self.committee.load_model(),
+                       date_from=date.today() - timedelta(days=100),
+                       date_to=date.today() - timedelta(days=1)))
+
+        self.assertEquals([],
+                          Membership.query.only_active().all())
+
+    def test_actual_membership_is_active(self):
+        membership = create(Builder('membership')
+               .having(member=self.member,
+                       committee=self.committee.load_model(),
+                       date_from=date.today() - timedelta(days=1),
+                       date_to=date.today() + timedelta(days=1)))
+
+        self.assertEquals([membership],
+                          Membership.query.only_active().all())
