@@ -120,4 +120,14 @@
         directory="profiles/4211"
         />
 
+    <!-- 4211 -> 4212 -->
+    <genericsetup:upgradeStep
+        title="Add overview tab action for the committee tabbedview."
+        description=""
+        source="4211"
+        destination="4212"
+        handler="opengever.meeting.upgrades.to4212.AddCommitteeOverviewTab"
+        profile="opengever.meeting:default"
+        />
+
 </configure>
