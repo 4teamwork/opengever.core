@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-02-25 11:55+0000\n"
-"PO-Revision-Date: 2015-02-25 13:06+0100\n"
+"POT-Creation-Date: 2015-03-02 09:59+0000\n"
+"PO-Revision-Date: 2015-03-02 11:18+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -283,6 +283,11 @@ msgstr ""
 msgid "hold meeting"
 msgstr "Sitzung durchführen"
 
+#. Default: "Coming meetings"
+#: ./opengever/meeting/browser/committee.py:20
+msgid "label_coming_meetings"
+msgstr "Kommende Sitzungen"
+
 #. Default: "Committee"
 #: ./opengever/meeting/browser/meetings/meeting.py:30
 #: ./opengever/meeting/proposal.py:42
@@ -293,6 +298,11 @@ msgstr "Kommission"
 #: ./opengever/meeting/proposal.py:70
 msgid "label_considerations"
 msgstr "Erwägungen"
+
+#. Default: "Current members"
+#: ./opengever/meeting/browser/committee.py:29
+msgid "label_current_members"
+msgstr "Aktuelle Mitglieder"
 
 #. Default: "Date"
 #: ./opengever/meeting/browser/meetings/meeting.py:41
@@ -401,6 +411,11 @@ msgstr "Von (Uhrzeit)"
 #: ./opengever/meeting/proposal.py:31
 msgid "label_title"
 msgstr "Titel"
+
+#. Default: "Unscheduled proposals"
+#: ./opengever/meeting/browser/committee.py:24
+msgid "label_unscheduled_proposals"
+msgstr "Nicht geplante Anträge"
 
 #. Default: "State"
 #: ./opengever/meeting/proposal.py:152
