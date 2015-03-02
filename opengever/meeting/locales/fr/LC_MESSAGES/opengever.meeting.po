@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-03-02 09:59+0000\n"
+"POT-Creation-Date: 2015-03-02 14:53+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -122,6 +122,10 @@ msgstr ""
 #: ./opengever/meeting/browser/meetings/preprotocol.py:97
 #: ./opengever/meeting/form.py:35
 msgid "Save"
+msgstr ""
+
+#: ./opengever/meeting/browser/committee_templates/overview.pt:19
+msgid "See more"
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:22
@@ -300,7 +304,7 @@ msgid "label_considerations"
 msgstr ""
 
 #. Default: "Current members"
-#: ./opengever/meeting/browser/committee.py:29
+#: ./opengever/meeting/browser/committee.py:31
 msgid "label_current_members"
 msgstr ""
 
@@ -413,7 +417,7 @@ msgid "label_title"
 msgstr ""
 
 #. Default: "Unscheduled proposals"
-#: ./opengever/meeting/browser/committee.py:24
+#: ./opengever/meeting/browser/committee.py:25
 msgid "label_unscheduled_proposals"
 msgstr ""
 

@@ -24,13 +24,14 @@ class CommitteeOverview(grok.View, OpengeverTab):
             [{'id': 'unscheduled_proposals',
               'label': _('label_unscheduled_proposals',
                          default=u'Unscheduled proposals'),
-              'content': self.unscheduled_proposals()}],
+              'content': self.unscheduled_proposals(),
+              'href': 'submittedproposals'}],
 
             [{'id': 'current_members',
               'label': _('label_current_members',
                          default=u'Current members'),
-              'content': self.current_members()}],
-        ]
+              'content': self.current_members(),
+              'href': 'memberships'}]]
 
         return items
 

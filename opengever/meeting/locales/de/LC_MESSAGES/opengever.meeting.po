@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-03-02 09:59+0000\n"
-"PO-Revision-Date: 2015-03-02 11:18+0100\n"
+"POT-Creation-Date: 2015-03-02 14:53+0000\n"
+"PO-Revision-Date: 2015-03-02 15:53+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -123,6 +123,10 @@ msgstr "Protokolle"
 #: ./opengever/meeting/form.py:35
 msgid "Save"
 msgstr "Speichern"
+
+#: ./opengever/meeting/browser/committee_templates/overview.pt:19
+msgid "See more"
+msgstr "Mehr anzeigen"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:22
 msgid "State"
@@ -300,7 +304,7 @@ msgid "label_considerations"
 msgstr "Erwägungen"
 
 #. Default: "Current members"
-#: ./opengever/meeting/browser/committee.py:29
+#: ./opengever/meeting/browser/committee.py:31
 msgid "label_current_members"
 msgstr "Aktuelle Mitglieder"
 
@@ -413,7 +417,7 @@ msgid "label_title"
 msgstr "Titel"
 
 #. Default: "Unscheduled proposals"
-#: ./opengever/meeting/browser/committee.py:24
+#: ./opengever/meeting/browser/committee.py:25
 msgid "label_unscheduled_proposals"
 msgstr "Nicht geplante Anträge"
 
@@ -483,3 +487,4 @@ msgstr "Eingereicht"
 #: ./opengever/meeting/browser/templates/no_selection.pt:2
 msgid "tab_matches"
 msgstr "${amount} Treffer"
+

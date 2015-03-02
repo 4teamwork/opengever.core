@@ -37,7 +37,7 @@ class TestCommitteeOverview(FunctionalTestCase):
         browser.login().open(self.committee, view='tabbedview_view-overview')
 
         self.assertEquals(['Peter Meier', u'Hans M\xfcller'],
-                          browser.css('#current_membersBox li').text)
+                          browser.css('#current_membersBox li:not(.moreLink)').text)
 
     @browsing
     def test_member_is_linked_correctly(self, browser):
@@ -140,7 +140,7 @@ class TestCommitteeOverview(FunctionalTestCase):
 
         self.assertEquals(
             [u'Proposal A'],
-            browser.css('#unscheduled_proposalsBox li a').text)
+            browser.css('#unscheduled_proposalsBox li:not(.moreLink) a').text)
 
     @browsing
     def test_proposals_are_linked_correctly(self, browser):
