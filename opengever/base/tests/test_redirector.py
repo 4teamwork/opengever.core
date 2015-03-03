@@ -1,6 +1,61 @@
 from opengever.base.interfaces import IRedirector
+from opengever.base.redirector import REDIRECTOR_COOKIE_NAME
+from opengever.base.redirector import RedirectorCookie
 from opengever.base.redirector import RedirectorViewlet
 from opengever.testing import FunctionalTestCase
+
+
+class TestRedirectorCookie(FunctionalTestCase):
+
+    def test_adding_string_to_cookie(self):
+        self.assertEquals([], RedirectorCookie(self.request).read())
+        RedirectorCookie(self.request).add({'foo': 'one'})
+        RedirectorCookie(self.request).add({'foo': 'two'})
+        self.assertEquals([{'foo': 'one'}, {'foo': 'two'}],
+                          RedirectorCookie(self.request).read())
+        self.assertEquals([], RedirectorCookie(self.request).read())
+
+    def test_read_remove_flag(self):
+        RedirectorCookie(self.request).add({'foo': 'one'})
+        self.assertEquals([{'foo': 'one'}],
+                          RedirectorCookie(self.request).read(remove=False))
+        self.assertEquals([{'foo': 'one'}],
+                          RedirectorCookie(self.request).read())
+        self.assertEquals([], RedirectorCookie(self.request).read())
+
+    def test_cookie_is_set(self):
+        self.assertEquals(None, self.get_cookie())
+
+        RedirectorCookie(self.request).add({'foo': 'one'})
+        self.assertEquals({'quoted': True,
+                           'value': '[{"foo": "one"}]',
+                           'path': '/'},
+                          self.get_cookie())
+
+        RedirectorCookie(self.request).add({'foo': 'two'})
+        self.assertEquals({'quoted': True,
+                           'value': '[{"foo": "one"}, {"foo": "two"}]',
+                           'path': '/'},
+                          self.get_cookie())
+
+    def test_cookie_is_invalidated(self):
+        RedirectorCookie(self.request).add({'foo': 'one'})
+        self.assertEquals({'quoted': True,
+                           'value': '[{"foo": "one"}]',
+                           'path': '/'},
+                          self.get_cookie())
+
+        RedirectorCookie(self.request).read()
+        self.assertEquals({'quoted': True,
+                           'max_age': 0,
+                           'expires': 'Wed, 31-Dec-97 23:59:59 GMT',
+                           'value': 'deleted',
+                           'path': '/'},
+                          self.get_cookie())
+
+    def get_cookie(self):
+        return self.request.response.cookies.get(REDIRECTOR_COOKIE_NAME, None)
+
 
 class TestRedirector(FunctionalTestCase):
 
