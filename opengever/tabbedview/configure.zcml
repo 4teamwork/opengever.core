@@ -41,4 +41,13 @@
       handler=".hooks.installed"
       />
 
+  <class class="ftw.tabbedview.browser.tabbed.TabbedView">
+      <!-- This avoids having write transactions when visiting /tabbed_view for the
+           very first time (mostly relevant for tests).
+           It avoids storing an empty BTree in the annotations of the site root.
+           If you want to have some fun, remove it and fix the tests.
+      -->
+      <implements interface="ftw.dictstorage.interfaces.ISQLAlchemy" />
+  </class>
+
 </configure>
