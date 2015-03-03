@@ -1,0 +1,46 @@
+<div i18n:domain="opengever.meeting" id="committees_view"
+     tal:define="committees view/committees">
+
+  <div tal:repeat="committee committees" class="committee_box">
+
+    <div class="header">
+      <a href="" tal:attributes="href committee/url">
+        <h2 i18n:translate="" tal:content="committee/title"></h2>
+      </a>
+    </div>
+
+    <div class="unscheduled_proposals"
+         tal:define="unscheduled_number committee/number_unscheduled_proposals">
+      <span i18n:translate="new_unscheduled_proposals">
+        New unschedulded proposals:
+      </span>
+      <a class="number"
+         tal:attributes="href string:${committee/url}#submittedproposals;
+                         class python: 'number unscheduled_number' if unscheduled_number else 'number'"
+         tal:content="unscheduled_number"></a>
+    </div>
+
+    <ul class="meetings" tal:define="next_meeting committee/next_meeting;
+                                     last_meeting committee/last_meeting">
+
+      <li tal:condition="last_meeting">
+        <span i18n:translate="label_last_meeting">Last Meeting:</span>
+        <a href="" tal:attributes="href last_meeting/get_url"
+           tal:content="last_meeting/get_date">
+          01.01.2015
+        </a>
+      </li>
+
+      <li tal:condition="next_meeting">
+        <span i18n:translate="label_next_meeting">Next Meeting:</span>
+        <a href="" tal:attributes="href next_meeting/get_url"
+           tal:content="next_meeting/get_date">
+          01.01.2015
+        </a>
+      </li>
+
+    </ul>
+
+  </div>
+
+</div>
