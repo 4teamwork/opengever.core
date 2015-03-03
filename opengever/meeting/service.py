@@ -4,6 +4,7 @@ from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import Committee
 from opengever.meeting.model import Meeting
 from opengever.meeting.model import Proposal
+from sqlalchemy import desc
 
 
 def meeting_service():
@@ -42,3 +43,15 @@ class MeetingService(object):
         query = query.filter(Meeting.date >= date.today())
 
         return query.all()
+
+    def get_next_meeting(self, committee):
+        query = Meeting.query.filter_by(committee=committee)
+        query = query.filter(Meeting.date >= date.today())
+        query = query.order_by(Meeting.date)
+        return query.first()
+
+    def get_last_meeting(self, committee):
+        query = Meeting.query.filter_by(committee=committee)
+        query = query.filter(Meeting.date < date.today())
+        query = query.order_by(desc(Meeting.date))
+        return query.first()

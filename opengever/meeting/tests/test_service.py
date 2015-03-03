@@ -60,3 +60,34 @@ class TestService(TestCase):
 
         self.assertEquals([today, tomorrow],
                           self.service.get_upcoming_meetings(committee1))
+
+    def test_get_next_meeting(self):
+        committee = create(Builder('committee_model'))
+
+        create(Builder('meeting')
+               .having(committee=committee,
+                       date=date.today() + timedelta(days=2)))
+
+        create(Builder('meeting')
+               .having(committee=committee,
+                       date=date.today() + timedelta(days=1)))
+
+        meeting3 = create(Builder('meeting')
+                          .having(committee=committee,
+                                  date=date.today()))
+
+        self.assertEquals(meeting3, self.service.get_next_meeting(committee))
+
+    def test_get_last_meeting(self):
+        committee = create(Builder('committee_model'))
+
+        create(Builder('meeting').having(committee=committee,
+                                         date=date(2015, 01, 02)))
+
+        create(Builder('meeting').having(committee=committee,
+                                         date=date(2015, 02, 02)))
+
+        meeting3 = create(Builder('meeting').having(committee=committee,
+                                                    date=date(2015, 02, 15)))
+
+        self.assertEquals(meeting3, self.service.get_last_meeting(committee))
