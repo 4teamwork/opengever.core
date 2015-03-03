@@ -1,10 +1,26 @@
-# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
 # SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#~ # SOME DESCRIPTIVE TITLE.
+#~ # Copyright (C) YEAR Free Software Foundation, Inc.
+#~ # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#~ #
+#~ msgid ""
+#~ msgstr ""
+#~ "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2015-03-05 10:35+0000\n"
+"POT-Creation-Date: 2015-03-03 11:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +37,7 @@ msgstr ""
 msgid "A new submitted version of document ${title} has been created"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:44
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:50
 msgid "Add Agenda Item"
 msgstr ""
 
@@ -44,7 +60,7 @@ msgstr ""
 msgid "Additional document ${title} has been submitted successfully"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:76
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:82
 msgid "Agenda Items"
 msgstr ""
 
@@ -83,7 +99,7 @@ msgstr ""
 msgid "Document ${title} has already been submitted in that version"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:38
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:44
 msgid "Edit pre-protocol"
 msgstr ""
 
@@ -95,15 +111,15 @@ msgstr ""
 msgid "Initial position"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:27
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:33
 msgid "Location"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:37
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:43
 msgid "Pre-Protocol"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:18
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:24
 msgid "Properties"
 msgstr ""
 
@@ -117,7 +133,7 @@ msgstr ""
 msgid "Proposed action"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:33
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:39
 msgid "Protocols"
 msgstr ""
 
@@ -131,7 +147,7 @@ msgstr ""
 msgid "Show more"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:22
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:28
 msgid "State"
 msgstr ""
 
@@ -148,11 +164,11 @@ msgstr ""
 msgid "agenda_item_order_updated"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:69
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:75
 msgid "as free-text"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:67
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:73
 msgid "as paragraph"
 msgstr ""
 
@@ -353,6 +369,11 @@ msgstr ""
 msgid "label_initial_position"
 msgstr ""
 
+#. Default: "Last Meeting:"
+#: ./opengever/meeting/browser/committeecontainertabs_templates/overview.pt:23
+msgid "label_last_meeting"
+msgstr ""
+
 #. Default: "Lastname"
 #: ./opengever/meeting/browser/members.py:27
 msgid "label_lastname"
@@ -371,6 +392,11 @@ msgstr ""
 #. Default: "Member"
 #: ./opengever/meeting/browser/memberships.py:23
 msgid "label_member"
+msgstr ""
+
+#. Default: "Next Meeting:"
+#: ./opengever/meeting/browser/committeecontainertabs_templates/overview.pt:31
+msgid "label_next_meeting"
 msgstr ""
 
 #. Default: "Other Participants"
@@ -442,6 +468,10 @@ msgstr ""
 #. Default: "Record created"
 #: ./opengever/meeting/form.py:41
 msgid "message_record_created"
+
+#. Default: "New unschedulded proposals:"
+#: ./opengever/meeting/browser/committeecontainertabs_templates/overview.pt:13
+msgid "new_unscheduled_proposals"
 msgstr ""
 
 #. Default: "Pending"
@@ -481,8 +511,8 @@ msgid "proposal_history_label_submitted"
 msgstr ""
 
 #. Default: "Schedule"
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:57
-#: ./opengever/meeting/model/proposal.py:87
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:63
+#: ./opengever/meeting/proposal.py:207
 msgid "schedule"
 msgstr ""
 
@@ -510,4 +540,3 @@ msgstr ""
 #: ./opengever/meeting/model/proposal.py:89
 msgid "un-schedule"
 msgstr ""
-
