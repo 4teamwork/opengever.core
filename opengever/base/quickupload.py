@@ -1,5 +1,7 @@
 from Acquisition import aq_base
 from Acquisition import aq_inner
+from collective.quickupload.browser.quick_upload import QuickUploadInit
+from collective.quickupload.browser.quick_upload import QuickUploadView
 from collective.quickupload.interfaces import IQuickUploadFileFactory
 from five import grok
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
@@ -7,16 +9,41 @@ from opengever.base.transforms.msg2mime import Msg2MimeTransform
 from plone.dexterity.utils import addContentToContainer
 from plone.dexterity.utils import createContent
 from plone.dexterity.utils import iterSchemata
+from plone.protect.interfaces import IDisableCSRFProtection
 from plone.rfc822.interfaces import IPrimaryField
 from plone.rfc822.interfaces import IPrimaryFieldInfo
 from z3c.form.interfaces import IValue
 from zope.component import queryMultiAdapter
 from zope.event import notify
+from zope.interface import alsoProvides
 from zope.lifecycleevent import ObjectCreatedEvent
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.schema import getFieldsInOrder
 import mimetypes
 import os
+
+
+
+class OGQuickUploadInit(QuickUploadInit):
+    """collective.quickupload uses the session, causing GET requests to
+    make writes to the database which is prohibited by plone.protect.
+    We must disable plone.protect.
+    """
+
+    def upload_settings(self, *args, **kwargs):
+        alsoProvides(self.request, IDisableCSRFProtection)
+        return super(OGQuickUploadInit, self).upload_settings(*args, **kwargs)
+
+
+class OGQuickUploadView(QuickUploadView):
+    """collective.quickupload uses the session, causing GET requests to
+    make writes to the database which is prohibited by plone.protect.
+    We must disable plone.protect.
+    """
+
+    def header_upload(self, *args, **kwargs):
+        alsoProvides(self.request, IDisableCSRFProtection)
+        return super(OGQuickUploadView, self).header_upload(*args, **kwargs)
 
 
 class OGQuickUploadCapableFileFactory(grok.Adapter):
