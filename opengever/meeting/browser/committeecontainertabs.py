@@ -15,7 +15,8 @@ class Committees(grok.View, OpengeverTab):
     def committees(self):
         committees = []
 
-        for committee in meeting_service().all_committees():
+        filter = self.request.form.get('searchable_text', None)
+        for committee in meeting_service().all_committees(text_filter=filter):
             committees.append(
                 {'title': committee.title,
                  'url': committee.get_url(),

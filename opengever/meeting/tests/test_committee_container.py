@@ -7,10 +7,10 @@ from ftw.testing import freeze
 from opengever.testing import FunctionalTestCase
 
 
-class TestCommitteeTab(FunctionalTestCase):
+class TestCommitteesTab(FunctionalTestCase):
 
     def setUp(self):
-        super(TestCommitteeTab, self).setUp()
+        super(TestCommitteesTab, self).setUp()
 
         self.container = create(Builder('committee_container'))
         self.committee = create(Builder('committee')
@@ -32,6 +32,24 @@ class TestCommitteeTab(FunctionalTestCase):
 
         self.assertEquals(
             [u'Kleiner Burgerrat', u'Wirtschafts Kommission', u'Gew\xe4sser Kommission'],
+            browser.css('#committees_view .committee_box h2').text)
+
+    @browsing
+    def test_tabbedview_text_filter(self, browser):
+        create(Builder('committee')
+               .within(self.container)
+               .titled(u'Wirtschafts Kommission'))
+
+        create(Builder('committee')
+               .within(self.container)
+               .titled(u'Gew\xe4sser Kommission'))
+
+        browser.login().open(self.container,
+                             view='tabbedview_view-committees',
+                             data={'searchable_text': 'Wirtschaft'})
+
+        self.assertEquals(
+            [u'Wirtschafts Kommission'],
             browser.css('#committees_view .committee_box h2').text)
 
     @browsing

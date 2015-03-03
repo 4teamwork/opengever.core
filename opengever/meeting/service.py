@@ -5,6 +5,7 @@ from opengever.meeting.model import Committee
 from opengever.meeting.model import Meeting
 from opengever.meeting.model import Proposal
 from sqlalchemy import desc
+from sqlalchemy import or_
 
 
 def meeting_service():
@@ -19,8 +20,13 @@ class MeetingService(object):
     def _query_committee(self):
         return self.session.query(Committee)
 
-    def all_committees(self):
-        return self._query_committee().all()
+    def all_committees(self, text_filter=None):
+        query = self._query_committee()
+        if text_filter:
+            query = self.extend_query_with_textfilter(
+                query, text_filter, [Committee.title])
+
+        return query.all()
 
     def fetch_committee(self, committee_id):
         return self._query_committee().get(committee_id)
@@ -55,3 +61,26 @@ class MeetingService(object):
         query = query.filter(Meeting.date < date.today())
         query = query.order_by(desc(Meeting.date))
         return query.first()
+
+    def extend_query_with_textfilter(self, query, text, fields):
+        """Extends the given `query` with text filters. This is only done when
+        config's `filter_text` is set.
+        """
+
+        if len(text):
+            if isinstance(text, str):
+                text = text.decode('utf-8')
+
+            # remove trailing asterisk
+            if text.endswith('*'):
+                text = text[:-1]
+
+            # lets split up the search term into words, extend them with
+            # the default wildcards and then search for every word
+            # seperately
+            for word in text.strip().split(' '):
+                term = '%%%s%%' % word
+                query = query.filter(
+                    or_(*[field.like(term) for field in fields]))
+
+        return query
