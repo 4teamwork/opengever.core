@@ -18,7 +18,7 @@ def unprotected_write(obj):
     if obj is None:
         return obj
 
-    # Unwrap unpersistent AttributeAnnotations
+    # Unwrap nonpersistent AttributeAnnotations
     if isinstance(obj, AttributeAnnotations):
         unprotected_write(getattr(obj.obj, '__annotations__', None))
         return obj

@@ -4,6 +4,7 @@ from opengever.base import _
 from opengever.base.behaviors.utils import split_string_by_numbers
 from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.base.interfaces import IReferenceNumberSettings
+from opengever.base.protect import unprotected_write
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from persistent.dict import PersistentDict
 from plone.registry.interfaces import IRegistry
@@ -32,10 +33,10 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
 
     def get_reference_mapping(self, obj=None):
         type_key = self.get_type_key(obj)
-        annotations = IAnnotations(self.context)
+        annotations = unprotected_write(IAnnotations(self.context))
 
         if not annotations.get(type_key):
-            annotations[type_key] = PersistentDict({})
+            annotations[type_key] = PersistentDict()
         return annotations[type_key]
 
     def get_child_mapping(self, obj=None):
