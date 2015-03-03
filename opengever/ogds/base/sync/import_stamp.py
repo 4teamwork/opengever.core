@@ -1,5 +1,6 @@
 from datetime import datetime
 from five import grok
+from opengever.base.protect import unprotected_write
 from opengever.base.request import dispatch_request
 from opengever.core import dictstorage
 from opengever.ogds.base.interfaces import ISyncStamp
@@ -75,7 +76,7 @@ class SyncStampUtility(grok.GlobalUtility):
         """update the stamp with the given value"""
 
         context = self.get_context(context)
-        self.annotations = IAnnotations(context)
+        self.annotations = unprotected_write(IAnnotations(context))
         self.annotations['sync_stamp'] = stamp
         logger.info("Stored sync_stamp %s in annotations" % stamp)
 

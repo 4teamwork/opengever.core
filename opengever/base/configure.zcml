@@ -69,4 +69,9 @@
           permission="cmf.AddPortalContent"/>
   </configure>
 
+  <adapter
+      name="plone.protect.autocsrf"
+      factory=".protect.OGProtectTransform"
+      />
+
 </configure>
