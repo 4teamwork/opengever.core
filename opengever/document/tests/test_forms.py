@@ -69,7 +69,7 @@ class TestDocumentIntegration(FunctionalTestCase):
 
         self.browser.open('%s/edit' % self.document.absolute_url())
 
-        self.file_field = '<input type="file" id="form-widgets-file-input" name="form.widgets.file" />'
+        self.file_field = '<input type="file" id="form-widgets-file-input" name="form.widgets.file"'
 
         self.assertPageContains(self.file_field)
 
