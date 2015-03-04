@@ -36,6 +36,9 @@ class ProposalHistory(Base):
     def message(self):
         raise NotImplementedError()
 
+    def get_actor_link(self):
+        return Actor.lookup(self.userid).get_link()
+
 
 class Created(ProposalHistory):
 
@@ -46,7 +49,7 @@ class Created(ProposalHistory):
     def message(self):
         return _(u'proposal_history_label_created',
                  u'Created by ${user}',
-                 mapping={'user': Actor.lookup(self.userid).get_link()})
+                 mapping={'user': self.get_actor_link()})
 
 
 class Submitted(ProposalHistory):
@@ -58,7 +61,7 @@ class Submitted(ProposalHistory):
     def message(self):
         return _(u'proposal_history_label_submitted',
                  u'Submitted by ${user}',
-                 mapping={'user': Actor.lookup(self.userid).get_link()})
+                 mapping={'user': self.get_actor_link()})
 
 
 class Scheduled(ProposalHistory):
@@ -70,7 +73,7 @@ class Scheduled(ProposalHistory):
     def message(self):
         return _(u'proposal_history_label_scheduled',
                  u'Scheduled by ${user}',
-                 mapping={'user': Actor.lookup(self.userid).get_link()})
+                 mapping={'user': self.get_actor_link()})
 
 
 class RemoveScheduled(ProposalHistory):
@@ -82,7 +85,7 @@ class RemoveScheduled(ProposalHistory):
     def message(self):
         return _(u'proposal_history_label_remove_scheduled',
                  u'Removed from schedule by ${user}',
-                 mapping={'user': Actor.lookup(self.userid).get_link()})
+                 mapping={'user': self.get_actor_link()})
 
 
 class DocumentSubmitted(ProposalHistory):
@@ -94,7 +97,7 @@ class DocumentSubmitted(ProposalHistory):
     def message(self):
         return _(u'proposal_history_label_document_submitted',
                  u'Document submitted by ${user}',
-                 mapping={'user': Actor.lookup(self.userid).get_link()})
+                 mapping={'user': self.get_actor_link()})
 
 
 class DocumentUpdated(ProposalHistory):
@@ -106,4 +109,4 @@ class DocumentUpdated(ProposalHistory):
     def message(self):
         return _(u'proposal_history_label_document_updated',
                  u'Submitted document updated by ${user}',
-                 mapping={'user': Actor.lookup(self.userid).get_link()})
+                 mapping={'user': self.get_actor_link()})
