@@ -10,7 +10,7 @@ from plone.directives.dexterity import DisplayForm
 class OverviewBase(object):
 
     def transitions(self):
-        return self.context.get_state().get_transitions()
+        return self.context.get_transitions()
 
     def transition_url(self, transition):
         return ProposalTransitionController.url_for(self.context, transition.name)

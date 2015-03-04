@@ -10,9 +10,6 @@ from opengever.meeting.container import ModelContainer
 from opengever.meeting.model import proposalhistory
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.model.proposal import Proposal as ProposalModel
-from opengever.meeting.workflow import State
-from opengever.meeting.workflow import Transition
-from opengever.meeting.workflow import Workflow
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from plone import api
@@ -33,15 +30,15 @@ class IProposalModel(Interface):
         max_length=256,
         )
 
-    initial_position = schema.Text(
-        title=_('label_initial_position', default=u"Initial position"),
-        required=False,
-        )
-
     committee = schema.Choice(
         title=_('label_committee', default=u'Committee'),
         source='opengever.meeting.CommitteeVocabulary',
         required=True)
+
+    initial_position = schema.Text(
+        title=_('label_initial_position', default=u"Initial position"),
+        required=False,
+        )
 
     proposed_action = schema.Text(
         title=_('label_proposed_action', default=u"Proposed action"),
@@ -106,22 +103,6 @@ class ISubmittedProposal(IProposal):
     pass
 
 
-class Submit(Transition):
-
-    def execute(self, obj, model):
-        super(Submit, self).execute(obj, model)
-        documents = obj.get_documents()
-        create_command = CreateSubmittedProposalCommand(obj)
-        copy_commands = [
-            CopyProposalDocumentCommand(
-                obj, document, parent_action=create_command)
-            for document in documents]
-
-        create_command.execute()
-        for copy_command in copy_commands:
-            copy_command.execute()
-
-
 class ProposalBase(ModelContainer):
 
     workflow = None
@@ -159,11 +140,11 @@ class ProposalBase(ModelContainer):
     def execute_transition(self, name):
         self.workflow.execute_transition(self, self.load_model(), name)
 
-    def can_execute_transition(self, name):
-        return self.workflow.can_execute_transition(self.load_model(), name)
+    def get_transitions(self):
+        return self.workflow.get_transitions(self.get_state())
 
     def get_state(self):
-        return self.workflow.get_state(self.load_model().workflow_state)
+        return self.load_model().get_state()
 
     def get_physical_path(self):
         url_tool = api.portal.get_tool(name="portal_url")
@@ -195,19 +176,14 @@ class SubmittedProposal(ProposalBase):
     model_class = ProposalModel
 
     implements(content_schema)
+    workflow = ProposalModel.workflow.with_visible_transitions([])
 
-    workflow = Workflow([
-        State('pending', is_default=True,
-              title=_('pending', default='Pending')),
-        State('submitted', title=_('submitted', default='Submited')),
-        State('scheduled', title=_('scheduled', default='Scheduled')),
-        State('decided', title=_('decided', default='Decided'))
-        ], [
-        Transition('submitted', 'scheduled',
-                   title=_('schedule', default='Schedule')),
-        Transition('scheduled', 'decided',
-                   title=_('decide', default='Decide')),
-        ])
+    def is_editable(self):
+        """A proposal in a meeting/committee is editable when not yet decided.
+
+        """
+        return self.get_state() in [
+            ProposalModel.STATE_SUBMITTED, ProposalModel.STATE_SCHEDULED]
 
     def get_overview_attributes(self):
         data = super(SubmittedProposal, self).get_overview_attributes()
@@ -281,22 +257,21 @@ class Proposal(ProposalBase):
 
     implements(content_schema)
 
-    STATE_SUBMITTED = State('submitted', title=_('submitted', default='Submited'))
-
-    workflow = Workflow([
-        State('pending', is_default=True,
-              title=_('pending', default='Pending')),
-        STATE_SUBMITTED,
-        State('scheduled', title=_('scheduled', default='Scheduled')),
-        State('decided', title=_('decided', default='Decided'))
-        ], [
-        Submit('pending', 'submitted',
-               title=_('submit', default='Submit')),
-        ])
+    workflow = ProposalModel.workflow.with_visible_transitions(
+        ['pending-submitted'])
 
     def _after_model_created(self, model_instance):
         session = create_session()
         session.add(proposalhistory.Created(proposal=model_instance))
+
+    def is_editable(self):
+        """A proposal in a dossier is only editable while not submitted.
+
+        It will remain editable on the submitted side but with a different set
+        of editable attributes.
+
+        """
+        return self.get_state() == ProposalModel.STATE_PENDING
 
     def get_documents(self):
         documents = [relation.to_object for relation in self.relatedItems]
@@ -323,7 +298,7 @@ class Proposal(ProposalBase):
         return values
 
     def is_submit_additional_documents_allowed(self):
-        return self.get_state() == self.STATE_SUBMITTED
+        return self.get_state() == ProposalModel.STATE_SUBMITTED
 
     def submit_additional_document(self, document):
         assert self.is_submit_additional_documents_allowed()
@@ -348,3 +323,15 @@ class Proposal(ProposalBase):
 
         command.execute()
         return command
+
+    def submit(self):
+        documents = self.get_documents()
+        create_command = CreateSubmittedProposalCommand(self)
+        copy_commands = [
+            CopyProposalDocumentCommand(
+                self, document, parent_action=create_command)
+            for document in documents]
+
+        create_command.execute()
+        for copy_command in copy_commands:
+            copy_command.execute()

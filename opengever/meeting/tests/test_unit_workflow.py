@@ -36,6 +36,14 @@ class TestUnitWorkflow(TestCase):
         self.assertEqual('<State "pending">', str(self.pending))
         self.assertEqual('<State "pending">', repr(self.pending))
 
+    def test_state_equality(self):
+        self.assertEqual(self.private, self.private)
+        self.assertEqual(self.private, State('private'))
+
+        self.assertNotEqual(self.private, self.pending)
+        self.assertNotEqual(self.pending, None)
+        self.assertNotEqual(self.pending, object())
+
     def test_default_workflow_is_set(self):
         self.assertEqual(self.private, self.workflow.default_state)
 

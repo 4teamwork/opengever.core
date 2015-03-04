@@ -15,8 +15,11 @@ class ModelContentViewsViewlet(ContentViewsViewlet):
         if getattr(self.view, 'is_model_view', False):
             return self.prepare_model_tabs()
         else:
-            return super(ModelContentViewsViewlet, self).prepareObjectTabs(
+            tabs = super(ModelContentViewsViewlet, self).prepareObjectTabs(
                 default_tab, sort_first)
+            if getattr(self.view, 'is_model_proxy_view', False):
+                tabs = self.view.prepare_model_proxy_tabs(tabs)
+            return tabs
 
     def prepare_model_tabs(self):
         model = self.view.model

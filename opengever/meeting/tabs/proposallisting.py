@@ -1,16 +1,22 @@
 from five import grok
 from ftw.table.interfaces import ITableSource
 from ftw.table.interfaces import ITableSourceConfig
-from opengever.meeting.model import Proposal
 from opengever.meeting import _
+from opengever.meeting.model import Proposal
 from opengever.tabbedview.browser.base import BaseListingTab
 from opengever.tabbedview.browser.sqltablelisting import SqlTableSource
+from zope.globalrequest import getRequest
+from zope.i18n import translate
 from zope.interface import implements
 from zope.interface import Interface
 
 
 def proposal_link(item, value):
     return item.get_link()
+
+
+def translated_state(item, value):
+    return translate(item.get_state().title, context=getRequest())
 
 
 class IProposalTableSourceConfig(ITableSourceConfig):
@@ -27,11 +33,9 @@ class ProposalListingTab(BaseListingTab):
          'column_title': _(u'column_title', default=u'Title'),
          'transform': proposal_link},
 
-        # TODO: state translation, therefore the workflow has to moved to
-        # the proposal model
         {'column': 'workflow_state',
          'column_title': _(u'column_state', default=u'State'),
-         'transform': lambda item, value: item.workflow_state},
+         'transform': translated_state},
 
         {'column': 'committee_id',
          'column_title': _(u'column_comittee', default=u'Comittee'),

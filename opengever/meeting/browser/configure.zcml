@@ -39,4 +39,28 @@
       permission="zope2.View"
     />
 
+  <browser:page
+      for="opengever.meeting.proposal.IProposal"
+      name="tabbed_view"
+      class=".tabbed.ModelProxyTabbedView"
+      permission="zope2.View"
+      allowed_attributes="listing select_all reorder setgridstate set_default_tab"
+      />
+
+  <browser:page
+      for="opengever.meeting.proposal.ISubmittedProposal"
+      name="tabbed_view"
+      class=".tabbed.ModelProxyTabbedView"
+      permission="zope2.View"
+      allowed_attributes="listing select_all reorder setgridstate set_default_tab"
+      />
+
+  <browser:page
+      for="opengever.meeting.committee.ICommittee"
+      name="tabbed_view"
+      class=".tabbed.ModelProxyTabbedView"
+      permission="zope2.View"
+      allowed_attributes="listing select_all reorder setgridstate set_default_tab"
+      />
+
 </configure>
