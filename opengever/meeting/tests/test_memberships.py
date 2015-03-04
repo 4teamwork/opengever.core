@@ -3,10 +3,12 @@ from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.model import Member
-from opengever.testing import FunctionalTestCase
 from opengever.meeting.model import Membership
+from opengever.testing import FunctionalTestCase
+
 
 class TestMemberships(FunctionalTestCase):
 
@@ -28,6 +30,8 @@ class TestMemberships(FunctionalTestCase):
                       'End date': '12/31/10',
                       'Member': str(self.member.member_id),
                       'Role': u'H\xe4nswurscht'}).submit()
+
+        self.assertEquals([u'Record created'], info_messages())
 
         memberships = self.committee.get_memberships()
         self.assertEqual(1, len(memberships))

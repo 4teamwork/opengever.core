@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-03-05 10:25+0000\n"
+"POT-Creation-Date: 2015-03-05 10:35+0000\n"
 "PO-Revision-Date: 2015-03-03 12:33+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,8 +51,8 @@ msgid "An unexpected error has occurred"
 msgstr "Ein unerwarteter Fehler ist aufgetreten"
 
 #. Default: "Cancel"
-#: ./opengever/meeting/browser/meetings/preprotocol.py:102
-#: ./opengever/meeting/form.py:40
+#: ./opengever/meeting/browser/meetings/preprotocol.py:104
+#: ./opengever/meeting/form.py:44
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -119,8 +119,8 @@ msgid "Protocols"
 msgstr "Protokolle"
 
 #. Default: "Save"
-#: ./opengever/meeting/browser/meetings/preprotocol.py:97
-#: ./opengever/meeting/form.py:35
+#: ./opengever/meeting/browser/meetings/preprotocol.py:95
+#: ./opengever/meeting/form.py:36
 msgid "Save"
 msgstr "Speichern"
 
@@ -430,6 +430,17 @@ msgstr "Kommende Sitzungen"
 #: ./opengever/meeting/proposal.py:133
 msgid "label_workflow_state"
 msgstr "Status"
+
+#. Default: "Changes saved"
+#: ./opengever/meeting/browser/meetings/preprotocol.py:100
+#: ./opengever/meeting/form.py:94
+msgid "message_changes_saved"
+msgstr "Änderungen gespeichert"
+
+#. Default: "Record created"
+#: ./opengever/meeting/form.py:41
+msgid "message_record_created"
+msgstr "Eintrag erzeugt"
 
 #. Default: "Pending"
 #: ./opengever/meeting/model/meeting.py:33

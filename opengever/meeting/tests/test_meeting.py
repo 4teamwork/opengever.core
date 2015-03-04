@@ -3,6 +3,7 @@ from datetime import time
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.browser.meetings.meetinglist import MeetingList
 from opengever.meeting.model import Meeting
@@ -37,6 +38,8 @@ class TestMeeting(FunctionalTestCase):
             'End time': '11:00 AM'
         }).submit()
 
+        self.assertEquals([u'Record created'], info_messages())
+
         committee_model = self.committee.load_model()
         self.assertEqual(1, len(committee_model.meetings))
         meeting = committee_model.meetings[0]
@@ -57,6 +60,8 @@ class TestMeeting(FunctionalTestCase):
         browser.login()
         browser.open(MeetingList.url_for(self.committee, meeting) + '/edit')
         browser.fill({'Date': '5/5/12', 'Start time': '3:00 PM'}).submit()
+
+        self.assertEquals([u'Changes saved'], info_messages())
 
         # refresh meeting, due to above request it has lost its session
         # this is expected behavior

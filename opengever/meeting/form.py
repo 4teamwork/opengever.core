@@ -2,6 +2,7 @@ from opengever.base.model import create_session
 from opengever.base.utils import disable_edit_bar
 from opengever.meeting import _
 from opengever.meeting import is_meeting_feature_enabled
+from plone import api
 from plone.autoform.form import AutoExtensibleForm
 from z3c.form import button
 from z3c.form.form import AddForm
@@ -36,6 +37,9 @@ class ModelAddForm(AutoExtensibleForm, AddForm):
     def handleAdd(self, action):
         # self as first argument is required by the decorator
         super(ModelAddForm, self).handleAdd(self, action)
+        api.portal.show_message(
+            _(u'message_record_created', default='Record created'),
+            api.portal.get().REQUEST)
 
     @button.buttonAndHandler(_(u'Cancel', default=u'Cancel'), name='cancel')
     def cancel(self, action):
@@ -88,6 +92,9 @@ class ModelEditForm(EditForm):
     def handleApply(self, action):
         # self as first argument is required by the decorator
         super(ModelEditForm, self).handleApply(self, action)
+        api.portal.show_message(
+            _(u'message_changes_saved', default='Changes saved'),
+            api.portal.get().REQUEST)
 
     @button.buttonAndHandler(_(u'Cancel', default=u'Cancel'), name='cancel')
     def cancel(self, action):
