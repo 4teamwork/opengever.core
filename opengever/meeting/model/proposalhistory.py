@@ -106,8 +106,10 @@ class DocumentSubmitted(ProposalHistory):
 
     def message(self):
         return _(u'proposal_history_label_document_submitted',
-                 u'Document submitted by ${user}',
-                 mapping={'user': self.get_actor_link()})
+                 u'Document ${title} submitted in version ${version} by ${user}',
+                 mapping={'user': self.get_actor_link(),
+                          'title': self.document_title or '',
+                          'version': self.submitted_version})
 
 
 class DocumentUpdated(ProposalHistory):
@@ -118,5 +120,7 @@ class DocumentUpdated(ProposalHistory):
 
     def message(self):
         return _(u'proposal_history_label_document_updated',
-                 u'Submitted document updated by ${user}',
-                 mapping={'user': self.get_actor_link()})
+                 u'Submitted document ${title} updated to version ${version} by ${user}',
+                 mapping={'user': self.get_actor_link(),
+                          'title': self.document_title or '',
+                          'version': self.submitted_version})

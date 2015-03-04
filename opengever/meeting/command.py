@@ -68,7 +68,11 @@ class UpdateSubmittedDocumentCommand(object):
             self.proposal, self.document)
         submitted_document.submitted_version = submitted_version
 
-        session.add(proposalhistory.DocumentUpdated(proposal=proposal_model))
+        session.add(proposalhistory.DocumentUpdated(
+            proposal=proposal_model,
+            submitted_document=submitted_document,
+            submitted_version=submitted_version,
+            document_title=self.document.title))
 
     def show_message(self):
         portal = api.portal.get()
@@ -124,7 +128,11 @@ class CopyProposalDocumentCommand(object):
                                 submitted_version=submitted_version)
         session.add(doc)
 
-        session.add(proposalhistory.DocumentSubmitted(proposal=proposal_model))
+        session.add(proposalhistory.DocumentSubmitted(
+            proposal=proposal_model,
+            submitted_document=doc,
+            submitted_version=submitted_version,
+            document_title=self.document.title))
 
     def copy_document(self, target_path, target_admin_unit_id):
         return OgCopyCommand(

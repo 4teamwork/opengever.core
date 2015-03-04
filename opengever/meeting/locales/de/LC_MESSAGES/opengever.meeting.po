@@ -445,12 +445,12 @@ msgstr "Erstellt durch ${user}"
 #. Default: "Document submitted by ${user}"
 #: ./opengever/meeting/model/proposalhistory.py:95
 msgid "proposal_history_label_document_submitted"
-msgstr "Dokument eingereicht durch ${user}"
+msgstr "Dokument ${title} in Version ${version} eingereicht durch ${user}"
 
 #. Default: "Submitted document updated by ${user}"
 #: ./opengever/meeting/model/proposalhistory.py:107
 msgid "proposal_history_label_document_updated"
-msgstr "Eingereichtes Dokument aktualisiert durch ${user}"
+msgstr "Eingereichtes Dokument ${title} aktualisiert zu Version ${version} durch ${user}"
 
 #. Default: "Removed from schedule by ${user}"
 #: ./opengever/meeting/model/proposalhistory.py:83
