@@ -40,3 +40,6 @@ class AddMembership(ModelAddForm):
     def create(self, data):
         data['committee'] = self.context.load_model()
         return super(AddMembership, self).create(data)
+
+    def nextURL(self):
+        return super(AddMembership, self).nextURL() + '#memberships'

@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
+from opengever.meeting.browser.members import MemberView
 from opengever.meeting.model import Member
 from opengever.testing import FunctionalTestCase
 
@@ -21,9 +22,11 @@ class TestMemberListing(FunctionalTestCase):
         browser.fill({'Firstname': u'Hanspeter',
                       'Lastname': u'Hansj\xf6rg',
                       'E-Mail': u'foo@example.com'}).submit()
-        self.assertEqual(self.container.absolute_url(), browser.url)
-
         hans = Member.query.filter_by(firstname=u'Hanspeter').first()
+
+        self.assertEqual(MemberView.url_for(self.container, hans),
+                         browser.url)
+
         self.assertIsNotNone(hans)
         self.assertEqual(u'Hanspeter', hans.firstname)
         self.assertEqual(u'Hansj\xf6rg', hans.lastname)

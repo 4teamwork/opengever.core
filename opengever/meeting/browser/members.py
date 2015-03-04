@@ -41,6 +41,9 @@ class AddMember(ModelAddForm):
 
     label = _('Add Member', default=u'Add Member')
 
+    def nextURL(self):
+        return MemberView.url_for(self.context, self._created_object)
+
 
 class EditMember(ModelEditForm):
 
