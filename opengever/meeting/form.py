@@ -66,7 +66,6 @@ class ModelEditForm(EditForm):
     def __init__(self, context, request, model):
         super(ModelEditForm, self).__init__(context, request)
         self.model = model
-        self._has_finished_edit = False
 
     def inject_initial_data(self):
         if self.request.method != 'GET':
@@ -84,7 +83,6 @@ class ModelEditForm(EditForm):
     def applyChanges(self, data):
         self.model.update_model(data)
         # pretend to always change the underlying data
-        self._has_finished_edit = True
         return True
 
     # this renames the button but otherwise preserves super's behavior
@@ -95,6 +93,7 @@ class ModelEditForm(EditForm):
         api.portal.show_message(
             _(u'message_changes_saved', default='Changes saved'),
             api.portal.get().REQUEST)
+        return self.request.RESPONSE.redirect(self.nextURL())
 
     @button.buttonAndHandler(_(u'Cancel', default=u'Cancel'), name='cancel')
     def cancel(self, action):
@@ -102,11 +101,6 @@ class ModelEditForm(EditForm):
 
     def nextURL(self):
         raise NotImplementedError()
-
-    def render(self):
-        if self._has_finished_edit:
-            return self.request.response.redirect(self.nextURL())
-        return super(ModelEditForm, self).render()
 
 
 class ModelProxyAddForm(object):

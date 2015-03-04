@@ -3,6 +3,7 @@ from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.browser.meetings.meetinglist import MeetingList
 from opengever.meeting.browser.meetings.preprotocol import EditPreProtocol
@@ -42,6 +43,8 @@ class TestPreProtocol(FunctionalTestCase):
                       'Discussion': 'We should accept it',
                       'Decision': 'Accepted'}).submit()
 
+        self.assertEquals(['Changes saved'], info_messages())
+
         proposal = Proposal.query.get(self.proposal_model.proposal_id)
         self.assertEqual('It is important', proposal.considerations)
         self.assertEqual('Accept it', proposal.proposed_action)
@@ -76,6 +79,8 @@ class TestPreProtocol(FunctionalTestCase):
                       'Secretary': str(hans.member_id),
                       'Participants': str(peter.member_id),
                       'Other Participants': 'Klara'}).submit()
+
+        self.assertEquals(['Changes saved'], info_messages())
 
         # refresh intances
         meeting = Meeting.query.get(self.meeting.meeting_id)
