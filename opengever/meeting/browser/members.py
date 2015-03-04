@@ -1,6 +1,5 @@
 from five import grok
 from opengever.meeting import _
-from opengever.meeting.committeecontainer import ICommitteeContainer
 from opengever.meeting.form import ModelAddForm
 from opengever.meeting.form import ModelEditForm
 from opengever.meeting.model import Member
@@ -11,6 +10,7 @@ from z3c.form import field
 from zExceptions import NotFound
 from zope import schema
 from zope.interface import implements
+from zope.interface import Interface
 from zope.publisher.interfaces import IPublishTraverse
 from zope.publisher.interfaces.browser import IBrowserView
 
@@ -53,7 +53,7 @@ class EditMember(ModelEditForm):
 class MemberList(grok.View):
 
     implements(IPublishTraverse)
-    grok.context(ICommitteeContainer)
+    grok.context(Interface)
     grok.name('member')
 
     @classmethod

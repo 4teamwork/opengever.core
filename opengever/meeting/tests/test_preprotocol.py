@@ -56,17 +56,18 @@ class TestPreProtocol(FunctionalTestCase):
     @browsing
     def test_pre_protocol_participants_can_be_edited(self, browser):
         yesterday = date.today() - timedelta(days=1)
+        tomorrow = date.today() + timedelta(days=1)
         peter = create(Builder('member'))
         hans = create(Builder('member').having(
             firstname=u'Hans', lastname=u'M\xfcller'))
         create(Builder('membership').having(
             member=peter,
             committee=self.committee_model,
-            date_from=yesterday))
+            date_from=yesterday, date_to=tomorrow))
         create(Builder('membership').having(
             member=hans,
             committee=self.committee_model,
-            date_from=yesterday))
+            date_from=yesterday, date_to=tomorrow))
 
         browser.login()
         browser.open(EditPreProtocol.url_for(self.committee, self.meeting))

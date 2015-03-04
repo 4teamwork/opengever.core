@@ -2,6 +2,7 @@ from datetime import date
 from opengever.base.oguid import Oguid
 from opengever.ogds.models.query import BaseQuery
 from plone import api
+from sqlalchemy import and_
 from sqlalchemy import or_
 
 
@@ -46,7 +47,9 @@ class CommitteeQuery(BaseQuery):
 class MembershipQuery(BaseQuery):
 
     def only_active(self):
-        return self.filter(self._attribute('date_from') <= date.today())
+        return self.filter(
+            and_(self._attribute('date_from') <= date.today(),
+                 self._attribute('date_to') >= date.today()))
 
 
 class SubmittedDocumentQuery(BaseQuery):
