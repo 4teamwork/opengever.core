@@ -63,17 +63,17 @@ class ISubmittedProposalModel(Interface):
         required=False,
         )
 
-    considerations = schema.Text(
-        title=_('label_considerations', default=u"Considerations"),
-        description=_("help_considerations", default=u""),
-        required=False,
-        )
-
     proposed_action = schema.Text(
         title=_('label_proposed_action', default=u"Proposed action"),
         description=_("help_proposed_action", default=u""),
         required=False,
     )
+
+    considerations = schema.Text(
+        title=_('label_considerations', default=u"Considerations"),
+        description=_("help_considerations", default=u""),
+        required=False,
+        )
 
 
 class IProposal(form.Schema):

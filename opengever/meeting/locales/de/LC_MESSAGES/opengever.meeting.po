@@ -112,7 +112,7 @@ msgstr "Antrag"
 
 #: ./opengever/meeting/browser/meetings/templates/pre_protocol.pt:26
 msgid "Proposed action"
-msgstr "Erwägungen"
+msgstr "Antrag"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:33
 msgid "Protocols"
@@ -232,7 +232,7 @@ msgstr "Ort"
 #. Default: "Proposed action"
 #: ./opengever/meeting/tabs/proposallisting.py:49
 msgid "column_proposed_action"
-msgstr "Erwägungen"
+msgstr "Antrag"
 
 #. Default: "Role"
 #: ./opengever/meeting/tabs/membershiplisting.py:35
@@ -348,7 +348,7 @@ msgstr "Vorname"
 #. Default: "Initial position"
 #: ./opengever/meeting/proposal.py:39
 msgid "label_initial_position"
-msgstr "Antrag"
+msgstr "Ausgangslage"
 
 #. Default: "Lastname"
 #: ./opengever/meeting/browser/members.py:27
@@ -393,7 +393,7 @@ msgstr "Antrag"
 #. Default: "Proposed action"
 #: ./opengever/meeting/proposal.py:44
 msgid "label_proposed_action"
-msgstr "Erwägungen"
+msgstr "Antrag"
 
 #. Default: "Role"
 #: ./opengever/meeting/browser/memberships.py:28
