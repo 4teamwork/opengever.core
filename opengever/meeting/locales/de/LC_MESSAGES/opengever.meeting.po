@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-03-05 10:18+0000\n"
+"POT-Creation-Date: 2015-03-05 10:25+0000\n"
 "PO-Revision-Date: 2015-03-03 12:33+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./opengever/meeting/command.py:76
+#: ./opengever/meeting/command.py:80
 msgid "A new submitted version of document ${title} has been created"
 msgstr "Eine neue eingereichte Version des Dokuments ${title} wurde erstellt."
 
@@ -37,7 +37,7 @@ msgstr "Mitglied hinzufügen"
 msgid "Add Membership"
 msgstr "Mitgliedschaft hinzufügen"
 
-#: ./opengever/meeting/command.py:109
+#: ./opengever/meeting/command.py:113
 msgid "Additional document ${title} has been submitted successfully"
 msgstr "Das zusätzliche Dokument ${title} wurde erfolgreich eingereicht."
 
@@ -438,17 +438,17 @@ msgid "pending"
 msgstr "In Bearbeitung"
 
 #. Default: "Created by ${user}"
-#: ./opengever/meeting/model/proposalhistory.py:47
+#: ./opengever/meeting/model/proposalhistory.py:60
 msgid "proposal_history_label_created"
 msgstr "Erstellt durch ${user}"
 
-#. Default: "Document submitted by ${user}"
-#: ./opengever/meeting/model/proposalhistory.py:95
+#. Default: "Document ${title} submitted in version ${version} by ${user}"
+#: ./opengever/meeting/model/proposalhistory.py:112
 msgid "proposal_history_label_document_submitted"
 msgstr "Dokument ${title} in Version ${version} eingereicht durch ${user}"
 
-#. Default: "Submitted document updated by ${user}"
-#: ./opengever/meeting/model/proposalhistory.py:107
+#. Default: "Submitted document ${title} updated to version ${version} by ${user}"
+#: ./opengever/meeting/model/proposalhistory.py:126
 msgid "proposal_history_label_document_updated"
 msgstr "Eingereichtes Dokument ${title} aktualisiert zu Version ${version} durch ${user}"
 
@@ -463,7 +463,7 @@ msgid "proposal_history_label_scheduled"
 msgstr "Geplant für Sitzung ${meeting} durch ${user}"
 
 #. Default: "Submitted by ${user}"
-#: ./opengever/meeting/model/proposalhistory.py:59
+#: ./opengever/meeting/model/proposalhistory.py:72
 msgid "proposal_history_label_submitted"
 msgstr "Eingereicht durch ${user}"
 
