@@ -147,11 +147,11 @@ msgstr "Die Reihenfolge der Traktanden wurde aktualisiert."
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:69
 msgid "as free-text"
-msgstr "Als Freitext"
+msgstr "Als Traktandum"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:67
 msgid "as paragraph"
-msgstr "Als Traktandum"
+msgstr "Als Abschnitt"
 
 #. Default: "Cancel"
 #: ./opengever/meeting/browser/documents/submit.py:67
