@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-03-04 16:45+0000\n"
+"POT-Creation-Date: 2015-03-05 10:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -452,13 +452,13 @@ msgstr ""
 msgid "proposal_history_label_document_updated"
 msgstr ""
 
-#. Default: "Removed from schedule by ${user}"
-#: ./opengever/meeting/model/proposalhistory.py:83
+#. Default: "Removed from schedule of meeting ${meeting} by ${user}"
+#: ./opengever/meeting/model/proposalhistory.py:99
 msgid "proposal_history_label_remove_scheduled"
 msgstr ""
 
-#. Default: "Scheduled by ${user}"
-#: ./opengever/meeting/model/proposalhistory.py:71
+#. Default: "Scheduled for meeting ${meeting} by ${user}"
+#: ./opengever/meeting/model/proposalhistory.py:85
 msgid "proposal_history_label_scheduled"
 msgstr ""
 

@@ -81,9 +81,11 @@ class Scheduled(ProposalHistory):
     css_class = 'scheduled'
 
     def message(self):
+        meeting_title = self.meeting.get_title() if self.meeting else u''
         return _(u'proposal_history_label_scheduled',
-                 u'Scheduled by ${user}',
-                 mapping={'user': self.get_actor_link()})
+                 u'Scheduled for meeting ${meeting} by ${user}',
+                 mapping={'user': self.get_actor_link(),
+                          'meeting': meeting_title})
 
 
 class RemoveScheduled(ProposalHistory):
@@ -93,9 +95,11 @@ class RemoveScheduled(ProposalHistory):
     css_class = 'scheduleRemoved'
 
     def message(self):
+        meeting_title = self.meeting.get_title() if self.meeting else u''
         return _(u'proposal_history_label_remove_scheduled',
-                 u'Removed from schedule by ${user}',
-                 mapping={'user': self.get_actor_link()})
+                 u'Removed from schedule of meeting ${meeting} by ${user}',
+                 mapping={'user': self.get_actor_link(),
+                          'meeting': meeting_title})
 
 
 class DocumentSubmitted(ProposalHistory):

@@ -113,7 +113,7 @@ class TestProposalHistory(FunctionalTestCase):
 
         self.open_overview(browser)
         self.assertEqual(
-            u'Scheduled by Test User (test_user_1_)',
+            u'Scheduled for meeting There, Jan 01, 2013 by Test User (test_user_1_)',
             self.get_latest_history_entry_text(browser))
 
     @browsing
@@ -130,5 +130,5 @@ class TestProposalHistory(FunctionalTestCase):
 
         self.open_overview(browser)
         self.assertEqual(
-            u'Removed from schedule by Test User (test_user_1_)',
+            u'Removed from schedule of meeting There, Jan 01, 2013 by Test User (test_user_1_)',
             self.get_latest_history_entry_text(browser))
