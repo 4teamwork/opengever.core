@@ -18,6 +18,15 @@ class TestMeeting(FunctionalTestCase):
         container = create(Builder('committee_container'))
         self.committee = create(Builder('committee').within(container))
 
+    def test_meeting_title(self):
+        self.assertEqual(
+            u'Bern, Oct 18, 2013',
+            Meeting(location=u'Bern', date=date(2013, 10, 18)).get_title())
+
+        self.assertEqual(
+            u'Oct 18, 2013',
+            Meeting(date=date(2013, 10, 18)).get_title())
+
     @browsing
     def test_add_meeting(self, browser):
         browser.login().open(self.committee, view='add-meeting')

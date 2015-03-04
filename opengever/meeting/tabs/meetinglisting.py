@@ -1,8 +1,8 @@
 from five import grok
 from ftw.table.interfaces import ITableSource
 from ftw.table.interfaces import ITableSourceConfig
+from opengever.meeting import _
 from opengever.meeting.model import Meeting
-from opengever.tabbedview import _
 from opengever.tabbedview.browser.base import BaseListingTab
 from opengever.tabbedview.browser.sqltablelisting import SqlTableSource
 from zope.interface import implements
@@ -26,6 +26,9 @@ class MeetingListingTab(BaseListingTab):
         {'column': 'date',
          'column_title': _(u'column_date', default=u'Date'),
          'transform': lambda item, value: item.get_date()},
+
+        {'column': 'location',
+         'column_title': _(u'column_location', default=u'Location')},
 
         {'column': 'start_time',
          'column_title': _(u'column_start_time', default=u'Start Time'),

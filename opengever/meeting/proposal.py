@@ -63,17 +63,17 @@ class ISubmittedProposalModel(Interface):
         required=False,
         )
 
-    considerations = schema.Text(
-        title=_('label_considerations', default=u"Considerations"),
-        description=_("help_considerations", default=u""),
-        required=False,
-        )
-
     proposed_action = schema.Text(
         title=_('label_proposed_action', default=u"Proposed action"),
         description=_("help_proposed_action", default=u""),
         required=False,
     )
+
+    considerations = schema.Text(
+        title=_('label_considerations', default=u"Considerations"),
+        description=_("help_considerations", default=u""),
+        required=False,
+        )
 
 
 class IProposal(form.Schema):
@@ -179,11 +179,11 @@ class SubmittedProposal(ProposalBase):
     workflow = ProposalModel.workflow.with_visible_transitions([])
 
     def is_editable(self):
-        """A proposal in a meeting/committee is editable when not yet decided.
+        """A proposal in a meeting/committee is editable when submitted but not
+        yet decided.
 
         """
-        return self.get_state() in [
-            ProposalModel.STATE_SUBMITTED, ProposalModel.STATE_SCHEDULED]
+        return self.load_model().is_editable_in_committee()
 
     def get_overview_attributes(self):
         data = super(SubmittedProposal, self).get_overview_attributes()
@@ -271,7 +271,7 @@ class Proposal(ProposalBase):
         of editable attributes.
 
         """
-        return self.get_state() == ProposalModel.STATE_PENDING
+        return self.load_model().is_editable_in_dossier()
 
     def get_documents(self):
         documents = [relation.to_object for relation in self.relatedItems]
@@ -298,7 +298,7 @@ class Proposal(ProposalBase):
         return values
 
     def is_submit_additional_documents_allowed(self):
-        return self.get_state() == ProposalModel.STATE_SUBMITTED
+        return self.load_model().is_submit_additional_documents_allowed()
 
     def submit_additional_document(self, document):
         assert self.is_submit_additional_documents_allowed()
