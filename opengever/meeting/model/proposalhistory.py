@@ -30,6 +30,16 @@ class ProposalHistory(Base):
     created = Column(DateTime, default=datetime.now, nullable=False)
     userid = Column(String(256), default=get_current_user_id, nullable=False)
 
+    # intended to be used only by DocumentSubmitted/DocumentUpdated
+    submitted_document_id = Column(Integer, ForeignKey('submitteddocuments.id'))
+    submitted_document = relationship("SubmittedDocument")
+    document_title = Column(String(256))
+    submitted_version = Column(Integer)
+
+    # intended to be used only by Scheduled
+    meeting_id = Column(Integer, ForeignKey('meetings.id'))
+    meeting = relationship("Meeting")
+
     proposal_history_type = Column(String(100), nullable=False)
     __mapper_args__ = {'polymorphic_on': proposal_history_type}
 

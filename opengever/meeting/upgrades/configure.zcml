@@ -130,4 +130,14 @@
         profile="opengever.meeting:default"
         />
 
+    <!-- 4212 -> 4213 -->
+    <genericsetup:upgradeStep
+        title="Extend proposal history."
+        description=""
+        source="4212"
+        destination="4213"
+        handler="opengever.meeting.upgrades.to4213.ExtendProposalHistory"
+        profile="opengever.meeting:default"
+        />
+
 </configure>
