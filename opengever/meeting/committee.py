@@ -1,6 +1,7 @@
 from opengever.meeting import _
 from opengever.meeting.container import ModelContainer
 from opengever.meeting.model import Committee as CommitteeModel
+from opengever.meeting.model import Meeting
 from opengever.meeting.model import Membership
 from opengever.meeting.service import meeting_service
 from plone import api
@@ -64,4 +65,4 @@ class Committee(ModelContainer):
 
     def get_upcoming_meetings(self):
         committee_model = self.load_model()
-        return meeting_service().get_upcoming_meetings(committee_model)
+        return Meeting.query.all_upcoming_meetings(committee_model)

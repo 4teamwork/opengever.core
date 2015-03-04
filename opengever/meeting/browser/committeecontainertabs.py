@@ -1,5 +1,6 @@
 from five import grok
 from opengever.meeting.committeecontainer import ICommitteeContainer
+from opengever.meeting.model import Meeting
 from opengever.meeting.service import meeting_service
 from opengever.meeting.tabs.memberlisting import MemberListingTab
 from opengever.tabbedview.browser.base import OpengeverTab
@@ -22,8 +23,8 @@ class Committees(grok.View, OpengeverTab):
                  'url': committee.get_url(),
                  'number_unscheduled_proposals': len(
                      meeting_service().get_submitted_proposals(committee)),
-                 'next_meeting': meeting_service().get_next_meeting(committee),
-                 'last_meeting': meeting_service().get_last_meeting(committee)}
+                 'next_meeting': Meeting.query.get_next_meeting(committee),
+                 'last_meeting': Meeting.query.get_last_meeting(committee)}
             )
 
         return committees

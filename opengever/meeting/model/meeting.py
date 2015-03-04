@@ -4,6 +4,7 @@ from datetime import time
 from opengever.base.model import Base
 from opengever.meeting import _
 from opengever.meeting.model import AgendaItem
+from opengever.meeting.model.query import MeetingQuery
 from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
@@ -28,6 +29,8 @@ meeting_participants = Table(
 
 
 class Meeting(Base):
+
+    query_cls = MeetingQuery
 
     STATE_PENDING = State('pending', is_default=True,
                           title=_('pending', default='Pending'))

@@ -1,10 +1,7 @@
-from datetime import date
 from opengever.base.model import create_session
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import Committee
-from opengever.meeting.model import Meeting
 from opengever.meeting.model import Proposal
-from sqlalchemy import desc
 from sqlalchemy import or_
 
 
@@ -43,24 +40,6 @@ class MeetingService(object):
 
     def fetch_agenda_item(self, agenda_item_id):
         return AgendaItem.query.get(agenda_item_id)
-
-    def get_upcoming_meetings(self, committee):
-        query = Meeting.query.filter_by(committee=committee)
-        query = query.filter(Meeting.date >= date.today())
-
-        return query.all()
-
-    def get_next_meeting(self, committee):
-        query = Meeting.query.filter_by(committee=committee)
-        query = query.filter(Meeting.date >= date.today())
-        query = query.order_by(Meeting.date)
-        return query.first()
-
-    def get_last_meeting(self, committee):
-        query = Meeting.query.filter_by(committee=committee)
-        query = query.filter(Meeting.date < date.today())
-        query = query.order_by(desc(Meeting.date))
-        return query.first()
 
     def extend_query_with_textfilter(self, query, text, fields):
         """Extends the given `query` with text filters. This is only done when

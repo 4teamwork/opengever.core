@@ -3,6 +3,7 @@ from opengever.base.oguid import Oguid
 from opengever.ogds.models.query import BaseQuery
 from plone import api
 from sqlalchemy import and_
+from sqlalchemy import desc
 from sqlalchemy import or_
 
 
@@ -75,3 +76,30 @@ class SubmittedDocumentQuery(BaseQuery):
             self._attribute('submitted_oguid') == oguid,
             self._attribute('oguid') == oguid
         ))
+
+
+class MeetingQuery(BaseQuery):
+
+    def _committee_meetings(self, committee):
+        return self.filter(self._attribute('committee') == committee)
+
+    def _upcoming_meetings(self, committee):
+        query = self._committee_meetings(committee)
+        query = query.filter(self._attribute('date') >= date.today())
+        query = query.order_by(self._attribute('date'))
+        return query
+
+    def _past_meetings(self, committee):
+        query = self._committee_meetings(committee)
+        query = query.filter(self._attribute('date') < date.today())
+        query = query.order_by(desc(self._attribute('date')))
+        return query
+
+    def all_upcoming_meetings(self, committee):
+        return self._upcoming_meetings(committee).all()
+
+    def get_next_meeting(self, committee):
+        return self._upcoming_meetings(committee).first()
+
+    def get_last_meeting(self, committee):
+        return self._past_meetings(committee).first()
