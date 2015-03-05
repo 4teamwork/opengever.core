@@ -30,11 +30,24 @@ class ProposalHistory(Base):
     created = Column(DateTime, default=datetime.now, nullable=False)
     userid = Column(String(256), default=get_current_user_id, nullable=False)
 
+    # intended to be used only by DocumentSubmitted/DocumentUpdated
+    submitted_document_id = Column(Integer, ForeignKey('submitteddocuments.id'))
+    submitted_document = relationship("SubmittedDocument")
+    document_title = Column(String(256))
+    submitted_version = Column(Integer)
+
+    # intended to be used only by Scheduled
+    meeting_id = Column(Integer, ForeignKey('meetings.id'))
+    meeting = relationship("Meeting")
+
     proposal_history_type = Column(String(100), nullable=False)
     __mapper_args__ = {'polymorphic_on': proposal_history_type}
 
     def message(self):
         raise NotImplementedError()
+
+    def get_actor_link(self):
+        return Actor.lookup(self.userid).get_link()
 
 
 class Created(ProposalHistory):
@@ -46,7 +59,7 @@ class Created(ProposalHistory):
     def message(self):
         return _(u'proposal_history_label_created',
                  u'Created by ${user}',
-                 mapping={'user': Actor.lookup(self.userid).get_link()})
+                 mapping={'user': self.get_actor_link()})
 
 
 class Submitted(ProposalHistory):
@@ -58,7 +71,7 @@ class Submitted(ProposalHistory):
     def message(self):
         return _(u'proposal_history_label_submitted',
                  u'Submitted by ${user}',
-                 mapping={'user': Actor.lookup(self.userid).get_link()})
+                 mapping={'user': self.get_actor_link()})
 
 
 class Scheduled(ProposalHistory):
@@ -68,9 +81,11 @@ class Scheduled(ProposalHistory):
     css_class = 'scheduled'
 
     def message(self):
+        meeting_title = self.meeting.get_title() if self.meeting else u''
         return _(u'proposal_history_label_scheduled',
-                 u'Scheduled by ${user}',
-                 mapping={'user': Actor.lookup(self.userid).get_link()})
+                 u'Scheduled for meeting ${meeting} by ${user}',
+                 mapping={'user': self.get_actor_link(),
+                          'meeting': meeting_title})
 
 
 class RemoveScheduled(ProposalHistory):
@@ -80,9 +95,11 @@ class RemoveScheduled(ProposalHistory):
     css_class = 'scheduleRemoved'
 
     def message(self):
+        meeting_title = self.meeting.get_title() if self.meeting else u''
         return _(u'proposal_history_label_remove_scheduled',
-                 u'Removed from schedule by ${user}',
-                 mapping={'user': Actor.lookup(self.userid).get_link()})
+                 u'Removed from schedule of meeting ${meeting} by ${user}',
+                 mapping={'user': self.get_actor_link(),
+                          'meeting': meeting_title})
 
 
 class DocumentSubmitted(ProposalHistory):
@@ -93,8 +110,10 @@ class DocumentSubmitted(ProposalHistory):
 
     def message(self):
         return _(u'proposal_history_label_document_submitted',
-                 u'Document submitted by ${user}',
-                 mapping={'user': Actor.lookup(self.userid).get_link()})
+                 u'Document ${title} submitted in version ${version} by ${user}',
+                 mapping={'user': self.get_actor_link(),
+                          'title': self.document_title or '',
+                          'version': self.submitted_version})
 
 
 class DocumentUpdated(ProposalHistory):
@@ -105,5 +124,7 @@ class DocumentUpdated(ProposalHistory):
 
     def message(self):
         return _(u'proposal_history_label_document_updated',
-                 u'Submitted document updated by ${user}',
-                 mapping={'user': Actor.lookup(self.userid).get_link()})
+                 u'Submitted document ${title} updated to version ${version} by ${user}',
+                 mapping={'user': self.get_actor_link(),
+                          'title': self.document_title or '',
+                          'version': self.submitted_version})

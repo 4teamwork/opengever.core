@@ -64,7 +64,7 @@ class TestProposalHistory(FunctionalTestCase):
 
         self.open_overview(browser)
         self.assertSequenceEqual(
-            [u'Document submitted by Test User (test_user_1_)',
+            [u'Document A Document submitted in version 0 by Test User (test_user_1_)',
              u'Submitted by Test User (test_user_1_)'],
             self.get_history_entries_text(browser)[:2])
 
@@ -82,7 +82,7 @@ class TestProposalHistory(FunctionalTestCase):
 
         self.open_overview(browser)
         self.assertEqual(
-            u'Document submitted by Test User (test_user_1_)',
+            u'Document Another document submitted in version 0 by Test User (test_user_1_)',
             self.get_latest_history_entry_text(browser))
 
     @browsing
@@ -99,7 +99,7 @@ class TestProposalHistory(FunctionalTestCase):
 
         self.open_overview(browser)
         self.assertEqual(
-            u'Submitted document updated by Test User (test_user_1_)',
+            u'Submitted document A Document updated to version 1 by Test User (test_user_1_)',
             self.get_latest_history_entry_text(browser))
 
     @browsing
@@ -113,7 +113,7 @@ class TestProposalHistory(FunctionalTestCase):
 
         self.open_overview(browser)
         self.assertEqual(
-            u'Scheduled by Test User (test_user_1_)',
+            u'Scheduled for meeting There, Jan 01, 2013 by Test User (test_user_1_)',
             self.get_latest_history_entry_text(browser))
 
     @browsing
@@ -130,5 +130,5 @@ class TestProposalHistory(FunctionalTestCase):
 
         self.open_overview(browser)
         self.assertEqual(
-            u'Removed from schedule by Test User (test_user_1_)',
+            u'Removed from schedule of meeting There, Jan 01, 2013 by Test User (test_user_1_)',
             self.get_latest_history_entry_text(browser))

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-03-04 16:45+0000\n"
-"PO-Revision-Date: 2015-02-25 13:06+0100\n"
+"POT-Creation-Date: 2015-03-05 10:25+0000\n"
+"PO-Revision-Date: 2015-03-03 12:33+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./opengever/meeting/command.py:76
+#: ./opengever/meeting/command.py:80
 msgid "A new submitted version of document ${title} has been created"
 msgstr "Eine neue eingereichte Version des Dokuments ${title} wurde erstellt."
 
@@ -37,7 +37,7 @@ msgstr "Mitglied hinzufügen"
 msgid "Add Membership"
 msgstr "Mitgliedschaft hinzufügen"
 
-#: ./opengever/meeting/command.py:109
+#: ./opengever/meeting/command.py:113
 msgid "Additional document ${title} has been submitted successfully"
 msgstr "Das zusätzliche Dokument ${title} wurde erfolgreich eingereicht."
 
@@ -438,32 +438,32 @@ msgid "pending"
 msgstr "In Bearbeitung"
 
 #. Default: "Created by ${user}"
-#: ./opengever/meeting/model/proposalhistory.py:47
+#: ./opengever/meeting/model/proposalhistory.py:60
 msgid "proposal_history_label_created"
 msgstr "Erstellt durch ${user}"
 
-#. Default: "Document submitted by ${user}"
-#: ./opengever/meeting/model/proposalhistory.py:95
+#. Default: "Document ${title} submitted in version ${version} by ${user}"
+#: ./opengever/meeting/model/proposalhistory.py:112
 msgid "proposal_history_label_document_submitted"
-msgstr "Dokument eingereicht durch ${user}"
+msgstr "Dokument ${title} in Version ${version} eingereicht durch ${user}"
 
-#. Default: "Submitted document updated by ${user}"
-#: ./opengever/meeting/model/proposalhistory.py:107
+#. Default: "Submitted document ${title} updated to version ${version} by ${user}"
+#: ./opengever/meeting/model/proposalhistory.py:126
 msgid "proposal_history_label_document_updated"
-msgstr "Eingereichtes Dokument aktualisiert durch ${user}"
+msgstr "Eingereichtes Dokument ${title} aktualisiert zu Version ${version} durch ${user}"
 
-#. Default: "Removed from schedule by ${user}"
-#: ./opengever/meeting/model/proposalhistory.py:83
+#. Default: "Removed from schedule of meeting ${meeting} by ${user}"
+#: ./opengever/meeting/model/proposalhistory.py:99
 msgid "proposal_history_label_remove_scheduled"
-msgstr "Von der Traktandeniste entfernt durch ${user}"
+msgstr "Von der Traktandenliste der Sitzung ${meeting} entfernt durch ${user}"
 
-#. Default: "Scheduled by ${user}"
-#: ./opengever/meeting/model/proposalhistory.py:71
+#. Default: "Scheduled for meeting ${meeting} by ${user}"
+#: ./opengever/meeting/model/proposalhistory.py:85
 msgid "proposal_history_label_scheduled"
-msgstr "Geplant durch ${user}"
+msgstr "Geplant für Sitzung ${meeting} durch ${user}"
 
 #. Default: "Submitted by ${user}"
-#: ./opengever/meeting/model/proposalhistory.py:59
+#: ./opengever/meeting/model/proposalhistory.py:72
 msgid "proposal_history_label_submitted"
 msgstr "Eingereicht durch ${user}"
 
