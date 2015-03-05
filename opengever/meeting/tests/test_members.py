@@ -1,6 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.browser.members import MemberView
 from opengever.meeting.model import Member
@@ -22,8 +23,9 @@ class TestMemberListing(FunctionalTestCase):
         browser.fill({'Firstname': u'Hanspeter',
                       'Lastname': u'Hansj\xf6rg',
                       'E-Mail': u'foo@example.com'}).submit()
-        hans = Member.query.filter_by(firstname=u'Hanspeter').first()
+        self.assertEquals([u'Record created'], info_messages())
 
+        hans = Member.query.filter_by(firstname=u'Hanspeter').first()
         self.assertEqual(MemberView.url_for(self.container, hans),
                          browser.url)
 
@@ -40,6 +42,8 @@ class TestMemberListing(FunctionalTestCase):
         browser.fill({'Firstname': u'Hanspeter',
                       'Lastname': u'Hansj\xf6rg',
                       'E-Mail': u'foo@example.com'}).submit()
+
+        self.assertEquals([u'Changes saved'], info_messages())
 
         member = Member.get(self.member.member_id)
         self.assertIsNotNone(member)
