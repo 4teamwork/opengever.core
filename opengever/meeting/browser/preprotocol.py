@@ -34,8 +34,15 @@ class PreProtocol(object):
 
     @property
     def title(self):
-        return u"{} {}".format(self._agenda_item.number,
-                               self._agenda_item.get_title())
+        return u"{} {}".format(self.number, self.description)
+
+    @property
+    def description(self):
+        return self._agenda_item.get_title()
+
+    @property
+    def number(self):
+        return self._agenda_item.number
 
     def update(self, request):
         """Update with changed data."""
