@@ -1,4 +1,3 @@
-from Products.CMFCore.utils import getToolByName
 from five import grok
 from opengever.dossier import _
 from opengever.dossier.base import DOSSIER_STATES_OPEN
@@ -6,6 +5,7 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.filing import IFilingNumberMarker
 from opengever.dossier.interfaces import IDossierResolver
+from Products.CMFCore.utils import getToolByName
 
 
 NOT_SUPPLIED_OBJECTS = _(
