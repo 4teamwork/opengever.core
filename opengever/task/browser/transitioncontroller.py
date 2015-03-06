@@ -8,6 +8,7 @@ from opengever.task.browser.modify_deadline import ModifyDeadlineFormView
 from opengever.task.interfaces import IDeadlineModifier
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.util import get_documents_of_task
+from plone.protect.utils import addTokenToUrl
 from Products.CMFCore.utils import getToolByName
 from Products.Five import BrowserView
 from zExceptions import NotFound
@@ -99,7 +100,7 @@ class TaskTransitionController(BrowserView):
 
         else:
             url = self.get_transition_action(transition)
-            return self.request.RESPONSE.redirect(url)
+            return self.request.RESPONSE.redirect(addTokenToUrl(url))
 
     def _is_transition_possible(self, transition, include_agency, condition):
         guard = self._get_function_for_transition('guard', transition)
