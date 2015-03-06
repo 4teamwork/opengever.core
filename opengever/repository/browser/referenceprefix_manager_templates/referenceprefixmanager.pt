@@ -33,7 +33,7 @@
 				      <td tal:content="posnumber/title"></td>
               <td tal:condition="not: posnumber/active">
                 <a class="unlock button"
-                   tal:attributes="href string:@@referenceprefix_manager?prefix=${posnumber/prefix}"
+                   tal:attributes="href string:@@referenceprefix_manager?prefix=${posnumber/prefix}&amp;_authenticator=${context/@@authenticator/token}"
                    i18n:translate="unlock">Unlock</a>
               </td>
 				      <td tal:condition="posnumber/active">
