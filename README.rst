@@ -34,16 +34,24 @@ Before you can configure your first client you need to set up a database.
 
 Currently there are three SQL databases supported:
 
+- **PostgreSQL**
+
+.. code::
+
+    $ brew install postgresql --with-python
+    $ ln -sfv /usr/local/opt/postgresql/*.plist ~/Library/LaunchAgents
+    $ launchctl load ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
+    $ createdb opengever
+
 - **MySQL**
 
 .. code::
 
     $ brew install mysql
     $ mysql -u root
-    > CREATE DATABASE opengever;
+    > CREATE DATABASE opengever CHARACTER SET utf8;
     > GRANT ALL ON opengever.* TO opengever@localhost IDENTIFIED BY 'opengever';
-
-- **PostgreSQL**
+    > FLUSH PRIVILEGES;
 
 - **Oracle**
 
