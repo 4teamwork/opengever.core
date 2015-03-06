@@ -20,18 +20,19 @@ class TestDocumentWorkflow(FunctionalTestCase):
     def change_user(self):
         create_plone_user(self.portal, 'hugo.boss')
         self.login(user_id='hugo.boss')
-        setRoles(self.portal, 'hugo.boss', ['Contributor'])
+        setRoles(self.portal, 'hugo.boss', ['Contributor', 'Editor', 'Reviewer', 'Publisher'])
         transaction.commit()
 
     def test_document_can_be_removed_with_remove_gever_content_permission(self):
         doc = create(Builder('document'))
-        self.grant('Editor')
+        self.grant('Manager')
         api.content.transition(obj=doc,
                                transition='document-transition-remove')
         self.assertEquals(Document.removed_state,
                           api.content.get_state(obj=doc))
 
     def test_document_cant_be_removed_without_remove_gever_content_permission(self):
+        # Only manager has 'Delete GEVER content' permission by default
         doc = create(Builder('document'))
         self.change_user()
         with self.assertRaises(InvalidParameterError):

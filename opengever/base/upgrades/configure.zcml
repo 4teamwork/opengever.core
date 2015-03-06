@@ -249,4 +249,13 @@
         directory="profiles/4200"
         />
 
+    <!-- 4200 -> 4201 -->
+    <upgrade-step:importProfile
+        title="Only assign 'Remove GEVER content' permission to Manager role by default"
+        profile="opengever.base:default"
+        source="4200"
+        destination="4201"
+        directory="profiles/4201"
+        />
+
 </configure>

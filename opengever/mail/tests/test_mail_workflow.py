@@ -14,7 +14,7 @@ class TestMailWorkflow(FunctionalTestCase):
     def change_user(self):
         create_plone_user(self.portal, 'hugo.boss')
         self.login(user_id='hugo.boss')
-        setRoles(self.portal, 'hugo.boss', ['Contributor'])
+        setRoles(self.portal, 'hugo.boss', ['Contributor', 'Editor', 'Reviewer', 'Publisher'])
         transaction.commit()
 
     def test_mail_active_state_is_initial_state(self):
@@ -23,13 +23,14 @@ class TestMailWorkflow(FunctionalTestCase):
 
     def test_mail_can_be_removed_with_remove_gever_content_permission(self):
         mail = create(Builder('mail'))
-        self.grant('Editor')
+        self.grant('Manager')
         api.content.transition(obj=mail, transition='mail-transition-remove')
 
         self.assertEquals(OGMail.removed_state,
                           api.content.get_state(obj=mail))
 
     def test_mail_cant_be_removed_without_remove_gever_content_permission(self):
+        # Only manager has 'Delete GEVER content' permission by default
         mail = create(Builder('mail'))
         self.change_user()
         with self.assertRaises(InvalidParameterError):
