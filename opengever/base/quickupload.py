@@ -1,5 +1,7 @@
 from Acquisition import aq_base
 from Acquisition import aq_inner
+from collective.quickupload.browser.quick_upload import getDataFromAllRequests
+from collective.quickupload.browser.quick_upload import QuickUploadFile
 from collective.quickupload.browser.quick_upload import QuickUploadInit
 from collective.quickupload.browser.quick_upload import QuickUploadView
 from collective.quickupload.interfaces import IQuickUploadFileFactory
@@ -9,6 +11,7 @@ from opengever.base.transforms.msg2mime import Msg2MimeTransform
 from plone.dexterity.utils import addContentToContainer
 from plone.dexterity.utils import createContent
 from plone.dexterity.utils import iterSchemata
+from plone.protect import createToken
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.rfc822.interfaces import IPrimaryField
 from plone.rfc822.interfaces import IPrimaryFieldInfo
@@ -34,6 +37,13 @@ class OGQuickUploadInit(QuickUploadInit):
         alsoProvides(self.request, IDisableCSRFProtection)
         return super(OGQuickUploadInit, self).upload_settings(*args, **kwargs)
 
+    def __call__(self, *args, **kwargs):
+        ori_js = super(OGQuickUploadInit, self).__call__(*args, **kwargs)
+        og_js = 'xhr_{ul_id}.setParams({{"_authenticator": "{token}"}});'.format(
+            ul_id=self.uploader_id,
+            token=createToken())
+        return '\n'.join((ori_js, og_js))
+
 
 class OGQuickUploadView(QuickUploadView):
     """collective.quickupload uses the session, causing GET requests to
@@ -44,6 +54,22 @@ class OGQuickUploadView(QuickUploadView):
     def header_upload(self, *args, **kwargs):
         alsoProvides(self.request, IDisableCSRFProtection)
         return super(OGQuickUploadView, self).header_upload(*args, **kwargs)
+
+
+class OGQuickUploadFile(QuickUploadFile):
+    """When uploading a file with XHR, we have an empty request.form even
+    when request params are submitted.
+    For CSRF protection to work, we need to update the _authenticator in the form.
+    """
+
+    def quick_upload_file(self):
+        token = getDataFromAllRequests(self.request, '_authenticator')
+        if token:
+            self.request.form['_authenticator'] = token
+
+        result = super(OGQuickUploadFile, self).quick_upload_file()
+        self.request.response.setHeader('Content-Type', 'application/json')
+        return result
 
 
 class OGQuickUploadCapableFileFactory(grok.Adapter):

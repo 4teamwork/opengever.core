@@ -67,6 +67,15 @@
           for="*"
           name="quick_upload_init"
           permission="cmf.AddPortalContent"/>
+
+
+      <browser:page
+          class="opengever.base.quickupload.OGQuickUploadFile"
+          layer="opengever.base.interfaces.IOpengeverBaseLayer"
+          for="*"
+          name="quick_upload_file"
+          attribute="quick_upload_file"
+          permission="cmf.AddPortalContent"/>
   </configure>
 
   <adapter
