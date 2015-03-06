@@ -5,6 +5,10 @@ Changelog
 4.2.0 (unreleased)
 ------------------
 
+- Rewrite Redirector adapter to use cookies instead of sessions.
+  Accessing sessions causes the transaction to be a write.
+  [jone]
+
 - Added committee overview tab.
   [phgross]
 
