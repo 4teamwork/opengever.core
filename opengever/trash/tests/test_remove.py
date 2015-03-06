@@ -19,7 +19,8 @@ class TestRemover(FunctionalTestCase):
 
     def setUp(self):
         super(TestRemover, self).setUp()
-        self.grant('Administrator')
+        # Only manager has 'Delete GEVER content' permission by default
+        self.grant('Manager')
 
     def test_changes_state_to_removed_for_all_documents(self):
         doc1 = create(Builder('document').trashed())
@@ -59,7 +60,8 @@ class TestRemoveConfirmationView(FunctionalTestCase):
     def setUp(self):
         super(TestRemoveConfirmationView, self).setUp()
 
-        self.grant('Editor')
+        # Only manager has 'Delete GEVER content' permission by default
+        self.grant('Manager')
         self.dossier = create(Builder('dossier'))
 
         self.doc1 = create(Builder('document')
@@ -172,7 +174,8 @@ class TestRemoveJournalization(FunctionalTestCase):
     def setUp(self):
         super(TestRemoveJournalization, self).setUp()
 
-        self.grant('Administrator')
+        # Only manager has 'Delete GEVER content' permission by default
+        self.grant('Manager')
 
         self.dossier = create(Builder('dossier'))
         self.mail = create(Builder('mail')

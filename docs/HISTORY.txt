@@ -5,6 +5,9 @@ Changelog
 4.2.0 (unreleased)
 ------------------
 
+- Only assign 'Remove GEVER content' permission to manager by default.
+  [lgraf]
+
 - Protect 'remove_confirmation' view with 'Remove GEVER content' permission.
   [lgraf]
 
