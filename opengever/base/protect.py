@@ -1,5 +1,6 @@
 from plone.protect.auto import ProtectTransform
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.interfaces import IPloneSiteRoot
 from zope.annotation.attribute import AttributeAnnotations
 from zope.component import adapts
 from zope.component.hooks import getSite
@@ -67,4 +68,5 @@ class OGProtectTransform(ProtectTransform):
 
     def _global_unprotect(self):
         # portal_memberdata._members cache will be written sometimes.
-        unprotected_write(getToolByName(getSite(), 'portal_memberdata')._members)
+        if IPloneSiteRoot.providedBy(getSite()):
+            unprotected_write(getToolByName(getSite(), 'portal_memberdata')._members)
