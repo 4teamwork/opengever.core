@@ -12,7 +12,7 @@ class RemoveConfirmation(grok.View):
     """
     grok.context(Interface)
     grok.name('remove_confirmation')
-    grok.require('zope2.View')
+    grok.require('opengever.base.RemoveGEVERContent')
     grok.template('remove_confirmation')
 
     def __call__(self):
