@@ -46,7 +46,25 @@ class TestCommitteesTab(FunctionalTestCase):
 
         browser.login().open(self.container,
                              view='tabbedview_view-committees',
-                             data={'searchable_text': 'Wirtschaft'})
+                             data={'searchable_text': 'Wirtschaf Komm'})
+
+        self.assertEquals(
+            [u'Wirtschafts Kommission'],
+            browser.css('#committees_view .committee_box h2').text)
+
+    @browsing
+    def test_text_filter_ignores_trailing_asterisk(self, browser):
+        create(Builder('committee')
+               .within(self.container)
+               .titled(u'Wirtschafts Kommission'))
+
+        create(Builder('committee')
+               .within(self.container)
+               .titled(u'Gew\xe4sser Kommission'))
+
+        browser.login().open(self.container,
+                             view='tabbedview_view-committees',
+                             data={'searchable_text': 'Wirtschaft*'})
 
         self.assertEquals(
             [u'Wirtschafts Kommission'],
@@ -119,8 +137,7 @@ class TestCommitteesTab(FunctionalTestCase):
             browser.login().open(self.container, view='tabbedview_view-committees')
 
             self.assertEquals(
-                ['Last Meeting: Thursday, 01. January 2015',
-                 'Next Meeting: Sunday, 01. March 2015'],
+                ['Last Meeting: Jan 01, 2015', 'Next Meeting: Mar 01, 2015'],
                 browser.css('#committees_view .meetings li').text)
 
             last_meeting = browser.css('#committees_view .meetings li a')[0]

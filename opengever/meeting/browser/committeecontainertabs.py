@@ -1,5 +1,6 @@
 from five import grok
 from opengever.meeting.committeecontainer import ICommitteeContainer
+from opengever.meeting.model import Committee
 from opengever.meeting.model import Meeting
 from opengever.meeting.service import meeting_service
 from opengever.meeting.tabs.memberlisting import MemberListingTab
@@ -16,8 +17,8 @@ class Committees(grok.View, OpengeverTab):
     def committees(self):
         committees = []
 
-        filter = self.request.form.get('searchable_text', None)
-        for committee in meeting_service().all_committees(text_filter=filter):
+        filter = self.get_filter_text()
+        for committee in Committee.query.by_searchable_text(text_filters=filter).all():
             committees.append(
                 {'title': committee.title,
                  'url': committee.get_url(),
