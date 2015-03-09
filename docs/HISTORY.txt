@@ -5,6 +5,9 @@ Changelog
 4.2.0 (unreleased)
 ------------------
 
+- Switch to PostgreSQL for local development.
+  [lgraf]
+
 - Only assign 'Remove GEVER content' permission to manager by default.
   [lgraf]
 
