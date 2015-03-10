@@ -21,6 +21,7 @@ class TestPreProtocol(FunctionalTestCase):
 
     def setUp(self):
         super(TestPreProtocol, self).setUp()
+        self.repository = create(Builder('repository_root'))
         container = create(Builder('committee_container'))
         self.committee = create(Builder('committee').within(container))
         self.committee_model = self.committee.load_model()

@@ -1,4 +1,3 @@
-from opengever.base.model import create_session
 from opengever.meeting import _
 from opengever.meeting.browser.meetings.meetinglist import MeetingList
 from opengever.meeting.service import meeting_service

@@ -131,7 +131,11 @@ class MeetingView(BrowserView):
         return EditPreProtocol.url_for(self.context, self.model)
 
     def url_generate_pre_protocol(self):
-        return GeneratePreProtocol.url_for(self.context, self.model)
+        root = self.context.restrictedTraverse(
+            '@@primary_repository_root').get_primary_repository_root()
+
+        return '{}/@@generate_pre_protocol?meeting_id={}'.format(
+            root.absolute_url(), self.model.meeting_id)
 
     def url_update_agenda_item_order(self):
         return UpdateAgendaItemOrder.url_for(self.context, self.model)

@@ -1,13 +1,49 @@
+from opengever.base.command import CreateDocumentCommand
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.base.request import dispatch_json_request
 from opengever.base.transport import REQUEST_KEY
 from opengever.base.transport import Transporter
 from opengever.meeting import _
+from opengever.meeting import templates
 from opengever.meeting.model import proposalhistory
 from opengever.meeting.model import SubmittedDocument
+from opengever.meeting.preprotocol import PreProtocolData
+from opengever.meeting.sablon import Sablon
 from plone import api
 import json
+
+
+MIME_DOCX = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+
+
+class CreatePreProtocolCommand(CreateDocumentCommand):
+
+    def __init__(self, target_dossier, meeting):
+        """Data will be initialized lazily since it is only available after the
+        document has been generated in `execute`.
+
+        """
+        super(CreatePreProtocolCommand, self).__init__(
+            target_dossier,
+            filename=meeting.get_title() + '.docx',
+            data=None,
+            title=meeting.get_title(),
+            content_type=MIME_DOCX)
+
+        self.meeting = meeting
+
+    def generate_pre_protocol_file_data(self):
+        sablon = Sablon(templates.path('protocol_template.docx'))
+        sablon.process(PreProtocolData(self.meeting).as_json())
+
+        assert sablon.is_processed_successfully(), sablon.stderr
+        return sablon.file_data
+
+    def execute(self):
+        self.data = self.generate_pre_protocol_file_data()
+
+        return super(CreatePreProtocolCommand, self).execute()
 
 
 class CreateSubmittedProposalCommand(object):

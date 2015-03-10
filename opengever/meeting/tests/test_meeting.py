@@ -15,6 +15,7 @@ class TestMeeting(FunctionalTestCase):
 
     def setUp(self):
         super(TestMeeting, self).setUp()
+        self.repo = create(Builder('repository_root'))
         container = create(Builder('committee_container'))
         self.committee = create(Builder('committee').within(container))
 

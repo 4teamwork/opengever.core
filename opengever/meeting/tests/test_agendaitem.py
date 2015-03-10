@@ -15,6 +15,7 @@ class TestAgendaItem(FunctionalTestCase):
 
     def setUp(self):
         super(TestAgendaItem, self).setUp()
+        self.repo = create(Builder('repository_root'))
         container = create(Builder('committee_container'))
         self.committee = create(Builder('committee').within(container))
         self.meeting = create(Builder('meeting')
