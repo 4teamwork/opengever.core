@@ -141,6 +141,14 @@ class OpengeverTab(object):
 
         return results
 
+    def get_filter_text(self):
+        filter = self.request.form.get('searchable_text', u'')
+
+        if isinstance(filter, str):
+            filter = filter.decode('utf-8')
+
+        return filter.strip().split(' ')
+
 
 class BaseListingTab(grok.View, OpengeverTab, ListingView):
     """Base listing tab."""

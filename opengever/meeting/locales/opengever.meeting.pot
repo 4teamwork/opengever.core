@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-03-05 10:35+0000\n"
+"POT-Creation-Date: 2015-03-09 12:42+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -173,12 +173,12 @@ msgid "button_submit_documents"
 msgstr ""
 
 #. Default: "Close"
-#: ./opengever/meeting/model/meeting.py:45
+#: ./opengever/meeting/model/meeting.py:48
 msgid "close"
 msgstr ""
 
 #. Default: "Closed"
-#: ./opengever/meeting/model/meeting.py:35
+#: ./opengever/meeting/model/meeting.py:38
 msgid "closed"
 msgstr ""
 
@@ -270,7 +270,7 @@ msgid "decided"
 msgstr ""
 
 #. Default: "Held"
-#: ./opengever/meeting/model/meeting.py:34
+#: ./opengever/meeting/model/meeting.py:37
 msgid "held"
 msgstr ""
 
@@ -291,7 +291,7 @@ msgid "help_title"
 msgstr ""
 
 #. Default: "Hold meeting"
-#: ./opengever/meeting/model/meeting.py:43
+#: ./opengever/meeting/model/meeting.py:46
 msgid "hold meeting"
 msgstr ""
 
@@ -353,6 +353,11 @@ msgstr ""
 msgid "label_initial_position"
 msgstr ""
 
+#. Default: "Last Meeting:"
+#: ./opengever/meeting/browser/committeecontainertabs_templates/committee.pt:27
+msgid "label_last_meeting"
+msgstr ""
+
 #. Default: "Lastname"
 #: ./opengever/meeting/browser/members.py:27
 msgid "label_lastname"
@@ -371,6 +376,11 @@ msgstr ""
 #. Default: "Member"
 #: ./opengever/meeting/browser/memberships.py:23
 msgid "label_member"
+msgstr ""
+
+#. Default: "Next Meeting:"
+#: ./opengever/meeting/browser/committeecontainertabs_templates/committee.pt:35
+msgid "label_next_meeting"
 msgstr ""
 
 #. Default: "Other Participants"
@@ -413,7 +423,7 @@ msgid "label_start_time"
 msgstr ""
 
 #. Default: "Title"
-#: ./opengever/meeting/committee.py:21
+#: ./opengever/meeting/committee.py:22
 #: ./opengever/meeting/proposal.py:28
 msgid "label_title"
 msgstr ""
@@ -444,8 +454,13 @@ msgstr ""
 msgid "message_record_created"
 msgstr ""
 
+#. Default: "New unschedulded proposals:"
+#: ./opengever/meeting/browser/committeecontainertabs_templates/committee.pt:14
+msgid "new_unscheduled_proposals"
+msgstr ""
+
 #. Default: "Pending"
-#: ./opengever/meeting/model/meeting.py:33
+#: ./opengever/meeting/model/meeting.py:36
 #: ./opengever/meeting/model/proposal.py:71
 msgid "pending"
 msgstr ""

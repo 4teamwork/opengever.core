@@ -1,5 +1,3 @@
-from datetime import date
-from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.meeting.service import meeting_service
@@ -32,31 +30,3 @@ class TestService(TestCase):
 
     def test_fetch_committee_returns_none_for_invalid_id(self):
         self.assertIsNone(self.service.fetch_committee(1337))
-
-    def test_get_upcoming_meetings_only_returns_meeting_for_the_given_committee(self):
-        committee1 = create(Builder('committee_model'))
-        committee2 = create(Builder('committee_model').having(int_id=5678))
-
-        meeting1 = create(Builder('meeting')
-                          .having(committee=committee1, date=date.today()))
-        create(Builder('meeting')
-               .having(committee=committee2, date=date.today()))
-        meeting3 = create(Builder('meeting')
-                          .having(committee=committee1, date=date.today()))
-
-        self.assertEquals([meeting1, meeting3],
-                          self.service.get_upcoming_meetings(committee1))
-
-    def test_get_upcoming_meetings_only_returns_metting_in_the_future(self):
-        committee1 = create(Builder('committee_model'))
-
-        create(Builder('meeting').having(committee=committee1,
-                                         date=date.today() - timedelta(days=1)))
-        today = create(Builder('meeting')
-                       .having(committee=committee1, date=date.today()))
-        tomorrow = create(Builder('meeting')
-                          .having(committee=committee1,
-                                  date=date.today() + timedelta(days=1)))
-
-        self.assertEquals([today, tomorrow],
-                          self.service.get_upcoming_meetings(committee1))

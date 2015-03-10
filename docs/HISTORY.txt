@@ -5,6 +5,9 @@ Changelog
 4.2.0 (unreleased)
 ------------------
 
+- Replaced committees listing tab with a committes overview listing.
+  [phgross]
+
 - Switch to PostgreSQL for local development.
   [lgraf]
 

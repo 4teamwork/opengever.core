@@ -1,8 +1,11 @@
+# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
+# SOME DESCRIPTIVE TITLE.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-03-05 10:35+0000\n"
-"PO-Revision-Date: 2015-03-03 12:33+0100\n"
+"POT-Creation-Date: 2015-03-09 12:42+0000\n"
+"PO-Revision-Date: 2015-03-09 13:47+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -170,12 +173,12 @@ msgid "button_submit_documents"
 msgstr "Dokumente einreichen"
 
 #. Default: "Close"
-#: ./opengever/meeting/model/meeting.py:45
+#: ./opengever/meeting/model/meeting.py:48
 msgid "close"
 msgstr "Schliessen"
 
 #. Default: "Closed"
-#: ./opengever/meeting/model/meeting.py:35
+#: ./opengever/meeting/model/meeting.py:38
 msgid "closed"
 msgstr "geschlossen"
 
@@ -267,7 +270,7 @@ msgid "decided"
 msgstr "Beschlossen"
 
 #. Default: "Held"
-#: ./opengever/meeting/model/meeting.py:34
+#: ./opengever/meeting/model/meeting.py:37
 msgid "held"
 msgstr "Durchgeführt"
 
@@ -288,7 +291,7 @@ msgid "help_title"
 msgstr ""
 
 #. Default: "Hold meeting"
-#: ./opengever/meeting/model/meeting.py:43
+#: ./opengever/meeting/model/meeting.py:46
 msgid "hold meeting"
 msgstr "Sitzung durchführen"
 
@@ -350,6 +353,11 @@ msgstr "Vorname"
 msgid "label_initial_position"
 msgstr "Ausgangslage"
 
+#. Default: "Last Meeting:"
+#: ./opengever/meeting/browser/committeecontainertabs_templates/committee.pt:27
+msgid "label_last_meeting"
+msgstr "Letzte Sitzung:"
+
 #. Default: "Lastname"
 #: ./opengever/meeting/browser/members.py:27
 msgid "label_lastname"
@@ -369,6 +377,11 @@ msgstr "Eigenschaften"
 #: ./opengever/meeting/browser/memberships.py:23
 msgid "label_member"
 msgstr "Mitglied"
+
+#. Default: "Next Meeting:"
+#: ./opengever/meeting/browser/committeecontainertabs_templates/committee.pt:35
+msgid "label_next_meeting"
+msgstr "Nächste Sitzung:"
 
 #. Default: "Other Participants"
 #: ./opengever/meeting/browser/meetings/preprotocol.py:41
@@ -411,7 +424,7 @@ msgid "label_start_time"
 msgstr "Von (Uhrzeit)"
 
 #. Default: "Title"
-#: ./opengever/meeting/committee.py:21
+#: ./opengever/meeting/committee.py:22
 #: ./opengever/meeting/proposal.py:28
 msgid "label_title"
 msgstr "Titel"
@@ -442,8 +455,13 @@ msgstr "Änderungen gespeichert"
 msgid "message_record_created"
 msgstr "Eintrag erzeugt"
 
+#. Default: "New unschedulded proposals:"
+#: ./opengever/meeting/browser/committeecontainertabs_templates/committee.pt:14
+msgid "new_unscheduled_proposals"
+msgstr "Neu eingereichte Anträge"
+
 #. Default: "Pending"
-#: ./opengever/meeting/model/meeting.py:33
+#: ./opengever/meeting/model/meeting.py:36
 #: ./opengever/meeting/model/proposal.py:71
 msgid "pending"
 msgstr "In Bearbeitung"

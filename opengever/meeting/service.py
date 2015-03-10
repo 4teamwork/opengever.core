@@ -1,8 +1,6 @@
-from datetime import date
 from opengever.base.model import create_session
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import Committee
-from opengever.meeting.model import Meeting
 from opengever.meeting.model import Proposal
 
 
@@ -36,9 +34,3 @@ class MeetingService(object):
 
     def fetch_agenda_item(self, agenda_item_id):
         return AgendaItem.query.get(agenda_item_id)
-
-    def get_upcoming_meetings(self, committee):
-        query = Meeting.query.filter_by(committee=committee)
-        query = query.filter(Meeting.date >= date.today())
-
-        return query.all()

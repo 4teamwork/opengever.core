@@ -267,6 +267,64 @@ dl.portlet ul.filetree a.toggleNav.expanded {
     box-shadow: 0 0 20px 0 #000;
   }
 
+  #committees_view div.committee_box {
+    float: left;
+    width: 25em;
+    height: 15em;
+    border: 1px solid #CCC;
+    background-color: #F9F9F9;
+    margin: 1em;
+    padding-left: 1em;
+    padding-right: 1em;
+    border-radius: 4px 4px 0 0;
+    -moz-border-radius: 4px 4px 0 0;
+    -webkit-border-radius: 4px 4px 0 0;
+  }
+
+  #committees_view div.committee_box .header {
+    height: 5em;
+  }
+
+  #committees_view div.committee_box .header a {
+    color: #205C90;
+  }
+
+  #committees_view div.committee_box .header a:visited {
+    color: #205C90;
+  }
+
+  #committees_view div.committee_box .header a:hover {
+    color: #205C90;
+  }
+
+  #committees_view div.unscheduled_proposals {
+    padding-bottom: 0.75em;
+    border-bottom: 1px solid #CCC;
+  }
+
+  #committees_view div.unscheduled_proposals .number {
+    float: right;
+    background: #71A971;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: 12px;
+    color: white;
+  }
+
+  #committees_view div.unscheduled_proposals .number:hover {
+    text-decoration: none;
+  }
+
+  #committees_view div.unscheduled_proposals .unscheduled_number {
+    background: #FF7070;
+  }
+
+  #committees_view div.committee_box .meetings {
+    list-style-type: none;
+    margin-top: 2em;
+    margin-left: 0em;
+  }
+
   /* @end */
 
   /* @group protocol */
