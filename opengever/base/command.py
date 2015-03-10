@@ -23,18 +23,26 @@ class CreateDocumentCommand(object):
     portal_type = 'opengever.document.document'
     skip_defaults_fields = []
 
-    def __init__(self, context, filename, data):
+    def __init__(self, context, filename, data, title=None, content_type='',
+                 **kwargs):
+        # filename must be unicode
+        if not isinstance(filename, unicode):
+            filename = filename.decode('utf-8')
+
         self.context = context
         self.data = data
         self.filename = filename
-        self.title = filename
+        self.title = title or filename
+        self.content_type = content_type
+        self.additional_args = kwargs
 
     def execute(self):
-        content = createContent(self.portal_type, title=self.title)
+        content = createContent(self.portal_type, title=self.title,
+                                **self.additional_args)
 
         # Temporarily acquisition wrap content to make adaptation work
         content = content.__of__(self.context)
-        self.set_primary_field_value(self.filename, self.data, content)
+        self.set_primary_field_value(content)
         self.set_default_values(content, self.context)
         self.notify_created(content)
 
@@ -60,13 +68,13 @@ class CreateDocumentCommand(object):
 
         notify(ObjectModifiedEvent(content))
 
-    def set_primary_field_value(self, filename, data, obj):
-        # filename must be unicode
-        if not isinstance(filename, unicode):
-            filename = filename.decode('utf-8')
+    def set_primary_field_value(self, obj):
+        if not self.data:
+            return
 
         field = IPrimaryFieldInfo(obj).field
-        value = field._type(data=data, filename=filename)
+        value = field._type(data=self.data, filename=self.filename,
+                            contentType=self.content_type)
         field.set(field.interface(obj), value)
 
     def set_default_values(self, content, container):
