@@ -37,6 +37,9 @@ Changelog
 4.2.1 (2015-03-17)
 ------------------
 
+- Refactor quickupload-adapter to use commands.
+  [deiferni]
+
 - SchemaMigration: Use IdempotentOperations only when executing migrations for MySQL.
   Also make sure that IdempotentOperations always keeps database metadata up to date.
   [deiferni]
