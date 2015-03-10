@@ -25,11 +25,12 @@ class CreateDocumentCommand(object):
 
     def __init__(self, context, filename, data):
         self.context = context
-        self.filename = filename
         self.data = data
+        self.filename = filename
+        self.title = filename
 
     def execute(self):
-        content = createContent(self.portal_type, title=self.filename)
+        content = createContent(self.portal_type, title=self.title)
 
         # Temporarily acquisition wrap content to make adaptation work
         content = content.__of__(self.context)
@@ -69,7 +70,12 @@ class CreateDocumentCommand(object):
         field.set(field.interface(obj), value)
 
     def set_default_values(self, content, container):
-        # set default values for all fields
+        """Set default values for all fields.
+
+        This is necessary for content created programmatically since dexterity
+        only sets default values in a view.
+
+        """
         for schema in iterSchemata(content):
             for name, field in getFieldsInOrder(schema):
                 if name in self.skip_defaults_fields:

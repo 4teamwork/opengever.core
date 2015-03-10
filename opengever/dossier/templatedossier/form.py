@@ -3,11 +3,9 @@ from ftw.table import helper
 from ftw.table.interfaces import ITableGenerator
 from opengever.base.interfaces import IRedirector
 from opengever.dossier import _
-from opengever.dossier.interfaces import ITemplateDossierProperties
-from opengever.dossier.templatedossier.create import DocumentFromTemplate
+from opengever.dossier.command import CreateDocumentFromTemplateCommand
 from opengever.dossier.templatedossier.interfaces import ITemplateUtility
 from opengever.tabbedview.helper import linked
-from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
 from zope.component import getUtility
@@ -86,24 +84,13 @@ class TemplateDocumentFormView(grok.View):
             timeout=1000)
 
     def create_document(self, template_path):
-        """Create a new document based on a template:
-
-        - Create a new opengever.document.document object
-        - Store a copy of the template in its primary file field
-        - Update its fields with default values
-        """
+        """Create a new document based on a template."""
 
         template_doc = self.context.restrictedTraverse(template_path)
-        # TODO: Add registry option to globally disable docproperty code
 
-        registry = getUtility(IRegistry)
-        props = registry.forInterface(ITemplateDossierProperties)
-
-        return DocumentFromTemplate(template_doc).create_in(
-            self.context,
-            self.title,
-            with_properties=props.create_doc_properties
-        )
+        command = CreateDocumentFromTemplateCommand(
+            self.context, template_doc, self.title)
+        return command.execute()
 
     def render_form(self):
         """Get the list of template documents and render the "document from

@@ -37,7 +37,7 @@ Changelog
 4.2.1 (2015-03-17)
 ------------------
 
-- Refactor quickupload-adapter to use commands.
+- Refactor quickupload-adapter and creating-documents from template to use commands.
   [deiferni]
 
 - SchemaMigration: Use IdempotentOperations only when executing migrations for MySQL.
