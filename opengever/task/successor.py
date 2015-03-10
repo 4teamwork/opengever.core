@@ -36,11 +36,8 @@ class SuccessorTaskController(grok.Adapter):
 
     def set_predecessor(self, oguid):
         """Sets the predecessor on the adapted object to ``oguid``.
-        A gouid is the client id and the intid seperated by ":".
-        Example: "m1:2331"
         Returns False if it failed.
         """
-
         oguid = Oguid.parse(oguid)
 
         # do we have it in our indexes?
@@ -51,6 +48,11 @@ class SuccessorTaskController(grok.Adapter):
         # set the predecessor in the task object
         self.task.predecessor = oguid.id
         modified(self.task)
+
+        # keep predecessor's issuing_org_unit
+        successor = self.task.get_sql_object()
+        successor.issuing_org_unit = predecessor.issuing_org_unit
+
         return True
 
     def get_successors(self):

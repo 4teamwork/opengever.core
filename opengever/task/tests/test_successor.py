@@ -1,8 +1,8 @@
-from Products.CMFCore.utils import getToolByName
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.testing import FunctionalTestCase
+from Products.CMFCore.utils import getToolByName
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 
@@ -69,6 +69,24 @@ class TestSuccessorTaskController(FunctionalTestCase):
         task2_oguid = ISuccessorTaskController(task2).get_oguid()
         self.assertTrue(
             ISuccessorTaskController(task1).set_predecessor(task2_oguid))
+
+    def test_set_predecessor_resets_issuing_org_unit_to_predecessors_one(self):
+        additional_admin_unit = create(Builder('admin_unit').id(u'additional'))
+        additional = create(Builder('org_unit')
+                            .having(admin_unit=additional_admin_unit)
+                            .id(u'additional'))
+
+        create(Builder('globalindex_task')
+               .having(int_id='1234', issuing_org_unit='additional',
+                       admin_unit_id='additional'))
+        successor = create(Builder('task'))
+
+        self.assertEquals(self.org_unit,
+                          successor.get_sql_object().get_issuing_org_unit())
+
+        ISuccessorTaskController(successor).set_predecessor('additional:1234')
+        self.assertEquals(additional,
+                          successor.get_sql_object().get_issuing_org_unit())
 
     def test_set_predecessor_with_invalid_oguid_returns_false(self):
         task1 = create(Builder('task'))
