@@ -37,7 +37,7 @@ class TestDocumentOverview(FunctionalTestCase):
         self.assertEquals(
             '{0}/editing_document'.format(
                 self.document.absolute_url()),
-            browser.css('a.function-edit').first.attrib['href'])
+            browser.css('a.function-edit').first.attrib['href'].split('?', 1)[0])
 
     @browsing
     def test_overview_has_creator_link(self, browser):
@@ -82,6 +82,31 @@ class TestDocumentOverview(FunctionalTestCase):
 
         self.assertEquals('Download copy',
                           browser.css('a.function-download-copy').first.text)
+
+    @browsing
+    def test_checkout_and_edit(self, browser):
+        document = create(Builder('document').with_dummy_content())
+        manager = queryMultiAdapter(
+            (document, self.portal.REQUEST), ICheckinCheckoutManager)
+
+        self.assertEquals(
+            None, manager.get_checked_out_by(),
+            'Didn\'t expect the document to be checked out yet.')
+
+        browser.login().open(document, view='tabbedview_view-overview')
+        browser.find('Edit Document').click()
+
+        self.assertEquals('http://nohost/plone/document-2', browser.url,
+                          'editing_document should redirect back to document')
+
+        self.assertEquals(
+            TEST_USER_ID, manager.get_checked_out_by(),
+            'The document should be checked out by the test user now.')
+
+        self.assertIn(
+            'http://nohost/plone/document-2/external_edit',
+            browser.css('script.redirector').first.text,
+            'Redirector should open external_edit.')
 
     @browsing
     def test_inactive_links_if_document_is_checked_out(self, browser):
