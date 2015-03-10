@@ -56,6 +56,7 @@ class RepositoryFavorites(object):
         if ANNOTATION_KEY not in annotations:
             annotations[ANNOTATION_KEY] = OOBTree()
 
+        unprotected_write(annotations[ANNOTATION_KEY])
         if self.username not in annotations[ANNOTATION_KEY]:
             annotations[ANNOTATION_KEY][self.username] = PersistentList()
 
