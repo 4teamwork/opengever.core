@@ -37,6 +37,9 @@ class NotificationMailer(object):
         return msg
 
     def prepare_html(self):
+
+        # Todo: solve circular dependency
+        from opengever.activity.browser.resolve import ResolveNotificationView
         template = ViewPageTemplateFile("mail_templates/notification.pt")
         options = {
             'subject': self.notification.activity.title,
@@ -44,6 +47,7 @@ class NotificationMailer(object):
             'kind': self.notification.activity.kind,
             'summary': self.notification.activity.summary,
             'description': self.notification.activity.description,
-            'link': self.notification.activity.get_link()}
+            'link': ResolveNotificationView.url_for(self.notification.notification_id)
+        }
 
         return template(self, **options)
