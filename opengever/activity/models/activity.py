@@ -1,7 +1,5 @@
 from opengever.activity.models.notification import Notification
-from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models import BASE
-from opengever.ogds.models.query import BaseQuery
 from sqlalchemy import Column
 from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
@@ -12,14 +10,7 @@ from sqlalchemy.orm import relationship
 import datetime
 
 
-class ActivityQuery(BaseQuery):
-
-    pass
-
-
 class Activity(BASE):
-
-    query_cls = ActivityQuery
 
     __tablename__ = 'activities'
 
@@ -51,11 +42,3 @@ class Activity(BASE):
 
     def is_current_user(self, watcher):
         return watcher.user_id == self.actor_id
-
-    def get_link(self):
-        return u'{}/resolve_oguid?oguid={}'.format(
-            get_current_admin_unit().public_url,
-            self.resource.oguid)
-
-    def render_link(self):
-        return u'<a href="{}">{}</a>'.format(self.get_link(), self.title)
