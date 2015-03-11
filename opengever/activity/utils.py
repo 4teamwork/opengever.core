@@ -1,4 +1,5 @@
 from opengever.activity import is_activity_feature_enabled
+from opengever.activity.mail import PloneNotificationMailer
 from opengever.activity.notification_center import NotificationCenter
 from opengever.base.oguid import Oguid
 from plone import api
@@ -15,6 +16,10 @@ class PloneNotificationCenter(NotificationCenter):
     """The PloneNotificationCenter is a wrapper of the NotificationCenter,
     which provides some helper methods for easier access.
     """
+
+    def __init__(self):
+        dispatchers = [PloneNotificationMailer()]
+        super(PloneNotificationCenter, self).__init__(dispatchers)
 
     def add_watcher_to_resource(self, obj, userid):
         oguid = Oguid.for_object(obj)

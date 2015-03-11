@@ -10,6 +10,9 @@ class NotificationCenter(object):
     Splitted completly from plone to rise testability.
     """
 
+    def __init__(self, dispatchers=[]):
+        self.dispatchers = dispatchers
+
     def add_resource(self, oguid):
         resource = Resource(oguid=oguid)
         Session.add(resource)
@@ -52,18 +55,23 @@ class NotificationCenter(object):
 
     def add_activity(self, oguid, kind, title, summary, actor_id, description=u''):
         resource = self.fetch_resource(oguid)
-
         if not resource:
             resource = self.add_resource(oguid)
 
-        activity = Activity(resource=resource, kind=kind,
-                            title=title, summary=summary,
-                            actor_id=actor_id, description=description)
+        activity = Activity(resource=resource, kind=kind, title=title,
+                            summary=summary, actor_id=actor_id,
+                            description=description)
         Session.add(activity)
 
-        activity.notify()
+        self.create_notifications(activity)
 
         return activity
+
+    def create_notifications(self, activity):
+        notifications = activity.create_notifications()
+        for notification in notifications:
+            for dispatcher in self.dispatchers:
+                dispatcher.dispatch_notification(notification)
 
     def get_users_notifications(self, userid, only_unread=False, limit=None):
         query = Notification.query.by_user(userid)

@@ -1,4 +1,3 @@
-from Acquisition import aq_inner
 from email.header import Header
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -7,47 +6,58 @@ from plone import api
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 
 
-class NotificationMailer(object):
+class PloneNotificationMailer(object):
+    """The PloneNotificationMailer is a notification dispatcher,
+    which generates mail(s) for passed notification(s) and send them to
+    the corresponding watcher.
+    """
 
-    def __init__(self, context, notification):
-        self.context = aq_inner(context)
+    def __init__(self):
+        self.mailhost = api.portal.get_tool('MailHost')
+
+        # This is required by ViewPageTemplateFile for
+        # the html mail-template
+        self.context = api.portal.get()
         self.request = self.context.REQUEST
-        self.notification = notification
 
-    def send_mail(self):
-        msg = self.prepare_mail()
-        mailhost = api.portal.get_tool('MailHost')
-        mailhost.send(msg)
+    def dispatch_notifications(self, notifications):
+        for notification in notifications:
+            self.dispatch_notification(notification)
 
-    def prepare_mail(self):
+    def dispatch_notification(self, notification):
+        msg = self.prepare_mail(notification)
+        self.send_mail(msg)
+
+    def send_mail(self, msg):
+        self.mailhost.send(msg)
+
+    def prepare_mail(self, notification):
         msg = MIMEMultipart('alternative')
 
-        actor = ogds_service().fetch_user(self.notification.activity.actor_id)
+        actor = ogds_service().fetch_user(notification.activity.actor_id)
         msg['From'] = Header(u'{} <{}>'.format(actor.fullname(), actor.email),
                              'utf-8')
 
-        recipient = ogds_service().fetch_user(
-            self.notification.watcher.user_id)
+        recipient = ogds_service().fetch_user(notification.watcher.user_id)
         msg['To'] = recipient.email
-        msg['Subject'] = Header(self.notification.activity.title, 'utf-8')
+        msg['Subject'] = Header(notification.activity.title, 'utf-8')
 
-        html = self.prepare_html()
+        html = self.prepare_html(notification)
         msg.attach(MIMEText(html.encode('utf-8'), 'html', 'utf-8'))
 
         return msg
 
-    def prepare_html(self):
-
+    def prepare_html(self, notification):
         # Todo: solve circular dependency
         from opengever.activity.browser.resolve import ResolveNotificationView
         template = ViewPageTemplateFile("mail_templates/notification.pt")
         options = {
-            'subject': self.notification.activity.title,
-            'title': self.notification.activity.title,
-            'kind': self.notification.activity.kind,
-            'summary': self.notification.activity.summary,
-            'description': self.notification.activity.description,
-            'link': ResolveNotificationView.url_for(self.notification.notification_id)
+            'subject': notification.activity.title,
+            'title': notification.activity.title,
+            'kind': notification.activity.kind,
+            'summary': notification.activity.summary,
+            'description': notification.activity.description,
+            'link': ResolveNotificationView.url_for(notification.notification_id)
         }
 
         return template(self, **options)
