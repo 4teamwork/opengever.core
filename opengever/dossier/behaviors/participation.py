@@ -1,4 +1,3 @@
-from Products.statusmessages.interfaces import IStatusMessage
 from collective.elephantvocabulary import wrap_vocabulary
 from five import grok
 from opengever.dossier import _
@@ -8,7 +7,9 @@ from persistent.list import PersistentList
 from plone.directives import form
 from plone.formwidget.autocomplete import AutocompleteFieldWidget
 from plone.z3cform import layout
+from Products.statusmessages.interfaces import IStatusMessage
 from rwproperty import getproperty, setproperty
+from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from zope import schema
 from zope.annotation.interfaces import IAnnotations
 from zope.event import notify
@@ -147,6 +148,7 @@ class ParticipationAddForm(z3c.form.form.Form):
     label = _(u'label_participation', default=u'Participation')
     ignoreContext = True
     fields['contact'].widgetFactory = AutocompleteFieldWidget
+    fields['roles'].widgetFactory = CheckBoxFieldWidget
 
     @z3c.form.button.buttonAndHandler(_(u'button_add', default=u'Add'))
     def handle_add(self, action):
