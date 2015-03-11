@@ -5,6 +5,10 @@ Changelog
 4.2.0 (unreleased)
 ------------------
 
+- Use checkbox widget to select participations roles.
+  This fixes an issue with ie10 and ie11 where no selection could be made.
+  [deiferni]
+
 - Keep predecessor's issuing_org_unit for successor tasks.
   [phgross]
 
