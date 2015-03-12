@@ -160,4 +160,14 @@
         profile="opengever.meeting:default"
         />
 
+    <!-- 4215 -> 4216 -->
+    <genericsetup:upgradeStep
+        title="Create generated document table."
+        description=""
+        source="4215"
+        destination="4216"
+        handler="opengever.meeting.upgrades.to4216.CreateGeneratedDocument"
+        profile="opengever.meeting:default"
+        />
+
 </configure>

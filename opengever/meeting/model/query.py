@@ -106,3 +106,7 @@ class MeetingQuery(BaseQuery):
 
     def get_last_meeting(self, committee):
         return self._past_meetings(committee).first()
+
+
+class GeneratedDocumentQuery(BaseQuery):
+    pass

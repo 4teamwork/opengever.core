@@ -70,6 +70,16 @@ class Meeting(Base):
 
     agenda_items = relationship("AgendaItem", order_by='AgendaItem.sort_order')
 
+    pre_protocol_document_id = Column(
+        Integer, ForeignKey('generateddocuments.id'))
+    pre_protocol_document = relationship(
+        'GeneratedPreProtocol', backref='meeting',
+        primaryjoin="GeneratedPreProtocol.document_id==Meeting.pre_protocol_document_id")
+    protocol_document_id = Column(Integer, ForeignKey('generateddocuments.id'))
+    protocol_document = relationship(
+        'GeneratedProtocol', backref='meeting',
+        primaryjoin="GeneratedProtocol.document_id==Meeting.protocol_document_id")
+
     def __repr__(self):
         return '<Meeting at "{}">'.format(self.start)
 
