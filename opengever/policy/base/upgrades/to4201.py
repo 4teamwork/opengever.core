@@ -11,7 +11,7 @@ class InstallActivity(UpgradeStep):
             'profile-collective.js.timeago:default')
         self.create_activity_tables()
 
-    def create_meeting_tables(self):
+    def create_activity_tables(self):
         """When installing the activity suppackage via upgrade-step we need
         to initialize its database tables.
 
