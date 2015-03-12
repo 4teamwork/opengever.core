@@ -4,23 +4,23 @@
       xmlns:i18n="http://xml.zope.org/namespaces/i18n"
       lang="en"
       metal:use-macro="context/main_template/macros/master"
-      i18n:domain="plone">
+      i18n:domain="opengever.base">
 <body>
   <metal:title fill-slot="content-title">
-     <h1 class="documentFirstHeading">
+     <h1 class="documentFirstHeading" i18n:translate="title_confirming_user_action">
          Confirming User Action.
      </h1>
   </metal:title>
 
   <metal:description fill-slot="content-description">
-     <div class="documentDescription">
+     <div class="documentDescription" i18n:translate="desc_confirm_action">
          Confirm that you'd like to perform this action.
      </div>
   </metal:description>
 
   <metal:content-core fill-slot="content-core">
     <metal:content-core define-macro="content-core">
-      <p class="discreet">
+      <p class="discreet" i18n:translate="msg_verify_you_performed_this_action">
         Careful, it's possible someone is executing an exploit against you.
         Verify you just performed an action on this site and that you were
         not referred here by a different website or email.
@@ -34,7 +34,7 @@
           <dd tal:content="request/original_url" />
         </dl>
         <div class="formControls">
-          <input type="submit" value="Confirm action" name="form.button.confirm" class="standalone" />
+          <input i18n:attributes="value label_confirm_action" type="submit" value="Confirm action" name="form.button.confirm" class="standalone" />
         </div>
       </form>
     </metal:content-core>
