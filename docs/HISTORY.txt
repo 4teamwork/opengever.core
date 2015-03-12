@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.2.0 (unreleased)
+4.2.0 (2015-03-12)
 ------------------
 
 - Fixed date_of_completion display in task overview.
