@@ -9,6 +9,7 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.browser.meetings.meetinglist import MeetingList
 from opengever.meeting.browser.meetings.preprotocol import EditPreProtocol
 from opengever.meeting.model import AgendaItem
+from opengever.meeting.model import GeneratedPreProtocol
 from opengever.meeting.model import Meeting
 from opengever.meeting.model import Member
 from opengever.meeting.model import Proposal
@@ -21,7 +22,13 @@ class TestPreProtocol(FunctionalTestCase):
 
     def setUp(self):
         super(TestPreProtocol, self).setUp()
-        self.repository = create(Builder('repository_root'))
+
+        self.repository_root = create(Builder('repository_root'))
+        self.repository_folder = create(
+            Builder('repository').within(self.repository_root))
+        self.dossier = create(
+            Builder('dossier').within(self.repository_folder))
+
         container = create(Builder('committee_container'))
         self.committee = create(Builder('committee').within(container))
         self.committee_model = self.committee.load_model()
@@ -93,3 +100,29 @@ class TestPreProtocol(FunctionalTestCase):
         self.assertEqual(peter, meeting.presidency)
         self.assertEqual(hans, meeting.secretary)
         self.assertEqual(u'Klara', meeting.other_participants)
+
+    @browsing
+    def test_pre_protocol_can_be_generated(self, browser):
+        browser.login()
+        browser.open(EditPreProtocol.url_for(self.committee, self.meeting))
+        browser.fill({'Considerations': 'It is important',
+                      'Proposed action': 'Accept it',
+                      'Discussion': 'We should accept it',
+                      'Decision': 'Accepted'}).submit()
+
+        browser.find('Generate pre-protocol').click()
+        browser.fill({'Target dossier': self.dossier})
+        browser.find('Generate').click()
+
+        self.assertEquals(
+            ['Pre-protocol for meeting There, Jan 01, 2013 '
+             'has been generated successfully'],
+            info_messages())
+
+        meeting = Meeting.get(self.meeting.meeting_id)  # refresh meeting
+        document = browser.context
+        generated_document = GeneratedPreProtocol.query.by_document(
+            document).first()
+        self.assertIsNotNone(generated_document)
+        self.assertEqual(0, generated_document.generated_version)
+        self.assertEqual(meeting, generated_document.meeting)

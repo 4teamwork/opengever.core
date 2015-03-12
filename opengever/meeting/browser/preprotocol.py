@@ -68,7 +68,9 @@ class ChooseDossierForm(Form):
                 raise NotFound
             # XXX permission checks on meeting?
 
-            document = CreatePreProtocolCommand(dossier, meeting).execute()
+            command = CreatePreProtocolCommand(dossier, meeting)
+            document = command.execute()
+            command.show_message()
             return self.request.RESPONSE.redirect(document.absolute_url())
 
     @buttonAndHandler(_(u'button_cancel', default=u'Cancel'), name='cancel')

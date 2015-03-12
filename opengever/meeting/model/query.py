@@ -109,4 +109,9 @@ class MeetingQuery(BaseQuery):
 
 
 class GeneratedDocumentQuery(BaseQuery):
-    pass
+
+    def by_document(self, document):
+        """Filter generated document by document."""
+
+        oguid = Oguid.for_object(document)
+        return self.filter(self._attribute('oguid') == oguid)

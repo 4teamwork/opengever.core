@@ -6,6 +6,7 @@ from opengever.base.transport import REQUEST_KEY
 from opengever.base.transport import Transporter
 from opengever.meeting import _
 from opengever.meeting import templates
+from opengever.meeting.model import GeneratedPreProtocol
 from opengever.meeting.model import proposalhistory
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.preprotocol import PreProtocolData
@@ -43,7 +44,24 @@ class CreatePreProtocolCommand(CreateDocumentCommand):
     def execute(self):
         self.data = self.generate_pre_protocol_file_data()
 
-        return super(CreatePreProtocolCommand, self).execute()
+        document = super(CreatePreProtocolCommand, self).execute()
+
+        session = create_session()
+        pre_protocol_document = GeneratedPreProtocol(
+            oguid=Oguid.for_object(document),
+            generated_version=document.get_current_version())
+        self.meeting.pre_protocol_document = pre_protocol_document
+        session.add(pre_protocol_document)
+
+        return document
+
+    def show_message(self):
+        portal = api.portal.get()
+        api.portal.show_message(
+            _(u'Pre-protocol for meeting ${title} has been generated '
+                'successfully',
+              mapping=dict(title=self.meeting.get_title())),
+            portal.REQUEST)
 
 
 class CreateSubmittedProposalCommand(object):

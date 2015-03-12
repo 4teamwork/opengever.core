@@ -14,6 +14,7 @@ from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy import Table
 from sqlalchemy import Text
+from sqlalchemy.orm import backref
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
 
@@ -73,11 +74,13 @@ class Meeting(Base):
     pre_protocol_document_id = Column(
         Integer, ForeignKey('generateddocuments.id'))
     pre_protocol_document = relationship(
-        'GeneratedPreProtocol', backref='meeting',
+        'GeneratedPreProtocol', uselist=False,
+        backref=backref('meeting', uselist=False),
         primaryjoin="GeneratedPreProtocol.document_id==Meeting.pre_protocol_document_id")
     protocol_document_id = Column(Integer, ForeignKey('generateddocuments.id'))
     protocol_document = relationship(
-        'GeneratedProtocol', backref='meeting',
+        'GeneratedProtocol', uselist=False,
+        backref=backref('meeting', uselist=False),
         primaryjoin="GeneratedProtocol.document_id==Meeting.protocol_document_id")
 
     def __repr__(self):
