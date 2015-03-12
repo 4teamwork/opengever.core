@@ -1,3 +1,4 @@
+from datetime import date
 from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
@@ -51,6 +52,19 @@ class TestTaskOverview(FunctionalTestCase):
         self.assertEquals(
             'Client1 / Test User (test_user_1_)',
             browser.css('.issuer').first.text)
+
+    @browsing
+    def test_date_of_completion_is_displayed_correclty(self, browser):
+        task = create(Builder("task").having(task_type='comment',
+                                             date_of_completion=date(2015, 02, 02),
+                                             issuer=TEST_USER_ID))
+
+        browser.login().open(task, view='tabbedview_view-overview')
+
+        main_attributes_table = browser.css('#main_attributesBox .listing').first
+        date_of_completion_row = main_attributes_table.lists()[-1]
+        self.assertEquals(['Date of completion', 'Feb 02, 2015'],
+                          date_of_completion_row)
 
     @browsing
     def test_documents_are_listed(self, browser):

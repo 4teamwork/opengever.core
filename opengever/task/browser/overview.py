@@ -59,7 +59,7 @@ class Overview(DisplayForm, OpengeverTab):
         def _format_date(date):
             if not date:
                 return ''
-            return api.portal.get().toLocalizedTime(task.get_deadline())
+            return api.portal.get().toLocalizedTime(date)
 
         items = [
             {
