@@ -5,6 +5,9 @@ Changelog
 4.2.0 (unreleased)
 ------------------
 
+- Fixed date_of_completion display in task overview.
+  [phgross]
+
 - Use checkbox widget to select participations roles.
   This fixes an issue with ie10 and ie11 where no selection could be made.
   [deiferni]
