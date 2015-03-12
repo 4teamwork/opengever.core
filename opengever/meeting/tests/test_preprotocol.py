@@ -1,4 +1,5 @@
 from datetime import date
+from datetime import datetime
 from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
@@ -25,7 +26,7 @@ class TestPreProtocol(FunctionalTestCase):
         self.committee_model = self.committee.load_model()
         self.meeting = create(Builder('meeting')
                               .having(committee=self.committee_model,
-                                      date=date(2013, 1, 1),
+                                      start=datetime(2013, 1, 1),
                                       location='There',))
         self.proposal_model = create(Builder('proposal_model'))
         self.agenda_item = create(

@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -53,7 +53,7 @@ class TestPathBar(FunctionalTestCase):
         committee = create(Builder('committee').within(container))
         meeting = create(Builder('meeting')
                          .having(committee=committee.load_model(),
-                                 date=date(2010, 1, 1)))
+                                 start=datetime(2010, 1, 1)))
 
         browser.login().open(view=meeting.physical_path)
         last_link = browser.css('#portal-breadcrumbs a')[-1]

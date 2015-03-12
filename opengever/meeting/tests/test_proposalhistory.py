@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -19,7 +19,7 @@ class TestProposalHistory(FunctionalTestCase):
         self.committee = create(Builder('committee').within(container))
         self.meeting = create(Builder('meeting')
                               .having(committee=self.committee.load_model(),
-                                      date=date(2013, 1, 1),
+                                      start=datetime(2013, 1, 1),
                                       location='There',))
         root = create(Builder('repository_root'))
         folder = create(Builder('repository').within(root))

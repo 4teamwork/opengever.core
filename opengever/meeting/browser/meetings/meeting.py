@@ -1,4 +1,3 @@
-from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.meeting import _
 from opengever.meeting.browser.meetings.agendaitem import DeleteAgendaItem
 from opengever.meeting.browser.meetings.agendaitem import ScheduleSubmittedProposal
@@ -36,17 +35,12 @@ class IMeetingModel(form.Schema):
         max_length=256,
         required=False)
 
-    form.widget(date=DatePickerFieldWidget)
-    date = schema.Date(
-        title=_('label_date', default=u"Date"),
+    start = schema.Datetime(
+        title=_('label_start', default=u"Start"),
         required=True)
 
-    start_time = schema.Time(
-        title=_('label_start_time', default=u'Start time'),
-        required=False)
-
-    end_time = schema.Time(
-        title=_('label_end_time', default=u'End time'),
+    end = schema.Datetime(
+        title=_('label_end', default=u"End"),
         required=False)
 
 

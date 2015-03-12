@@ -1,4 +1,5 @@
 from datetime import date
+from datetime import datetime
 from opengever.base.oguid import Oguid
 from opengever.ogds.models.query import BaseQuery
 from plone import api
@@ -87,14 +88,14 @@ class MeetingQuery(BaseQuery):
 
     def _upcoming_meetings(self, committee):
         query = self._committee_meetings(committee)
-        query = query.filter(self._attribute('date') >= date.today())
-        query = query.order_by(self._attribute('date'))
+        query = query.filter(self._attribute('start') >= datetime.now())
+        query = query.order_by(self._attribute('start'))
         return query
 
     def _past_meetings(self, committee):
         query = self._committee_meetings(committee)
-        query = query.filter(self._attribute('date') < date.today())
-        query = query.order_by(desc(self._attribute('date')))
+        query = query.filter(self._attribute('start') < datetime.now())
+        query = query.order_by(desc(self._attribute('start')))
         return query
 
     def all_upcoming_meetings(self, committee):

@@ -1,9 +1,8 @@
-from datetime import date
 from datetime import datetime
+from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
-from ftw.testing import freeze
 from opengever.testing import FunctionalTestCase
 
 
@@ -127,21 +126,21 @@ class TestCommitteesTab(FunctionalTestCase):
     def test_meetings_display(self, browser):
         meeting1 = create(Builder('meeting')
                           .having(committee=self.committee_model,
-                                  date=date(2015, 01, 01)))
+                                  start=datetime(2015, 01, 01)))
 
         meeting2 = create(Builder('meeting')
                           .having(committee=self.committee_model,
-                                  date=date(2015, 03, 01)))
+                                  start=datetime.now() + timedelta(days=1)))
 
-        with freeze(datetime(2015, 02, 01)):
-            browser.login().open(self.container, view='tabbedview_view-committees')
+        browser.login().open(self.container, view='tabbedview_view-committees')
 
-            self.assertEquals(
-                ['Last Meeting: Jan 01, 2015', 'Next Meeting: Mar 01, 2015'],
-                browser.css('#committees_view .meetings li').text)
+        self.assertEquals(
+            ['Last Meeting: Jan 01, 2015',
+             'Next Meeting: {}'.format(meeting2.get_date())],
+            browser.css('#committees_view .meetings li').text)
 
-            last_meeting = browser.css('#committees_view .meetings li a')[0]
-            next_meeting = browser.css('#committees_view .meetings li a')[1]
+        last_meeting = browser.css('#committees_view .meetings li a')[0]
+        next_meeting = browser.css('#committees_view .meetings li a')[1]
 
-            self.assertEquals(meeting1.get_url(), last_meeting.get('href'))
-            self.assertEquals(meeting2.get_url(), next_meeting.get('href'))
+        self.assertEquals(meeting1.get_url(), last_meeting.get('href'))
+        self.assertEquals(meeting2.get_url(), next_meeting.get('href'))

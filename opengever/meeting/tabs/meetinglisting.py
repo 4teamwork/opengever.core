@@ -30,11 +30,11 @@ class MeetingListingTab(BaseListingTab):
         {'column': 'location',
          'column_title': _(u'column_location', default=u'Location')},
 
-        {'column': 'start_time',
+        {'column': 'start',
          'column_title': _(u'column_start_time', default=u'Start Time'),
          'transform': lambda item, value: item.get_start_time()},
 
-        {'column': 'end_time',
+        {'column': 'end',
          'column_title': _(u'column_end_time', default=u'End Time'),
          'transform': lambda item, value: item.get_end_time()},
         )
