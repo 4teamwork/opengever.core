@@ -352,4 +352,11 @@ dl.portlet ul.filetree a.toggleNav.expanded {
 
   /* @end */
 
+  /* @group general */
+
+  .template-confirm-action .documentByLine {
+    display: none;
+  }
+
+/* @end */
 }
