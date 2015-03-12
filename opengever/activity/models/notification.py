@@ -1,4 +1,4 @@
-from opengever.ogds.models import BASE
+from opengever.base.model import Base
 from opengever.ogds.models.query import BaseQuery
 from sqlalchemy import Boolean
 from sqlalchemy import Column
@@ -13,7 +13,7 @@ class NotificationQuery(BaseQuery):
         return self.join(Notification.watcher).filter_by(user_id=userid)
 
 
-class Notification(BASE):
+class Notification(Base):
 
     query_cls = NotificationQuery
 

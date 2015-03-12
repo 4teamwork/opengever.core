@@ -1,4 +1,4 @@
-from opengever.ogds.models import BASE
+from opengever.base.model import Base
 from opengever.ogds.models.query import BaseQuery
 from sqlalchemy import Column
 from sqlalchemy import Integer
@@ -11,7 +11,7 @@ class WatcherQuery(BaseQuery):
         return self.filter_by(user_id=user_id).first()
 
 
-class Watcher(BASE):
+class Watcher(Base):
     """A user
     """
     query_cls = WatcherQuery

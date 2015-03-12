@@ -1,7 +1,7 @@
 from opengever.activity.models.watcher import Watcher
+from opengever.base.model import Base
 from opengever.base.oguid import Oguid
 from opengever.globalindex import Session
-from opengever.ogds.models import BASE
 from opengever.ogds.models.query import BaseQuery
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
@@ -20,12 +20,12 @@ class ResourceQuery(BaseQuery):
 
 
 resource_watchers = Table(
-    'resource_watchers', BASE.metadata,
+    'resource_watchers', Base.metadata,
     Column('resource_id', Integer, ForeignKey('resources.id'), primary_key=True),
     Column('watcher_id', Integer, ForeignKey('watchers.id'), primary_key=True))
 
 
-class Resource(BASE):
+class Resource(Base):
 
     query_cls = ResourceQuery
 
