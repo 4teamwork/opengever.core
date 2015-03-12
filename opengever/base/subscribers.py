@@ -5,8 +5,10 @@ from plone.app.lockingbehavior.behaviors import ILocking
 from plone.dexterity.interfaces import IDexterityContent
 from plone.dexterity.interfaces import IEditBegunEvent
 from plone.protect.interfaces import IDisableCSRFProtection
+from Products.PluggableAuthService.interfaces.events import IUserLoggedOutEvent
 from zope.component.hooks import getSite
 from zope.interface import alsoProvides
+from zope.interface import Interface
 
 
 @grok.subscribe(IDexterityContent, IObjectClonedEvent)
@@ -34,3 +36,11 @@ def disable_plone_protect(obj, event):
     unless we allow writes by disabling plone.protect.
     """
     alsoProvides(obj.REQUEST, IDisableCSRFProtection)
+
+
+@grok.subscribe(Interface, IUserLoggedOutEvent)
+def disable_plone_protect_when_logging_out(user, event):
+    """When logging out, the session is manipulated.
+    This results in a lot of changes in the database, so we disable CSRF protection.
+    """
+    alsoProvides(user.REQUEST, IDisableCSRFProtection)
