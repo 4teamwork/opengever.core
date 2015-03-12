@@ -6,13 +6,13 @@
       metal:use-macro="context/main_template/macros/master"
       i18n:domain="plone">
 <body>
-  <metal:title define-slot="content-title">
+  <metal:title fill-slot="content-title">
      <h1 class="documentFirstHeading">
          Confirming User Action.
      </h1>
   </metal:title>
 
-  <metal:description define-slot="content-description">
+  <metal:description fill-slot="content-description">
      <div class="documentDescription">
          Confirm that you'd like to perform this action.
      </div>
