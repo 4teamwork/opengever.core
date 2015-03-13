@@ -58,7 +58,7 @@ class TestTaskActivites(FunctionalTestCase):
 
         center = notification_center()
         watchers = center.get_watchers(self.dossier.listFolderContents()[0])
-        self.assertEquals(
+        self.assertItemsEqual(
             ['hugo.boss', TEST_USER_ID],
             [watcher.user_id for watcher in watchers])
 
@@ -151,7 +151,7 @@ class TestTaskReassignActivity(TestTaskActivites):
 
         activity = Activity.query.all()[-1]
 
-        self.assertEquals(
+        self.assertItemsEqual(
             [u'james.meier', u'peter.meier', u'hugo.boss'],
             [notes.watcher.user_id for notes in activity.notifications])
 
@@ -161,6 +161,6 @@ class TestTaskReassignActivity(TestTaskActivites):
         self.reassign(browser, 'hugo.boss', u'Bitte Abkl\xe4rungen erledigen.')
 
         watchers = notification_center().get_watchers(self.task)
-        self.assertEquals(
+        self.assertItemsEqual(
             ['peter.meier', 'hugo.boss'],
             [watcher.user_id for watcher in watchers])

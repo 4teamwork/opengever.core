@@ -38,7 +38,8 @@ class Resource(Base):
     int_id = Column(Integer, index=True, nullable=False)
     oguid = composite(Oguid, admin_unit_id, int_id)
 
-    watchers = relationship("Watcher", secondary=resource_watchers, backref="resources")
+    watchers = relationship("Watcher", secondary=resource_watchers,
+                            backref="resources", collection_class=set)
 
     def __repr__(self):
         return '<Resource {}:{}>'.format(self.admin_unit_id, self.int_id)
@@ -49,7 +50,7 @@ class Resource(Base):
             watcher = Watcher(user_id=user_id)
             Session.add(watcher)
 
-        self.watchers.append(watcher)
+        self.watchers.add(watcher)
         return watcher
 
     def remove_watcher(self, watcher):

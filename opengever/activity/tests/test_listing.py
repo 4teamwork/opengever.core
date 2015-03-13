@@ -25,10 +25,10 @@ class TestMyNotifications(FunctionalTestCase):
 
         self.resource_a = create(Builder('resource')
                                  .oguid('fd:123')
-                                 .having(watchers=[self.test_user]))
+                                 .watchers([self.test_user]))
         self.resource_b = create(Builder('resource')
                                  .oguid('fd:456')
-                                 .having(watchers=[self.test_user]))
+                                 .watchers([self.test_user]))
 
         self.activity_1 = self.center.add_activity(
             Oguid('fd', '123'),

@@ -20,6 +20,13 @@ class ResourceBuilder(SqlObjectBuilder):
         self.arguments['oguid'] = Oguid.parse(oguid)
         return self
 
+    def watchers(self, watchers):
+        if isinstance(watchers, list):
+            watchers = set(watchers)
+
+        self.arguments['watchers'] = watchers
+        return self
+
 builder_registry.register('resource', ResourceBuilder)
 
 

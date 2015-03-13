@@ -65,7 +65,16 @@ class TestWatcherHandling(ActivityTestCase):
 
         self.center.add_watcher_to_resource(Oguid('fd', '123'), 'peter')
 
-        self.assertEquals([peter], resource.watchers)
+        self.assertEquals([peter], list(resource.watchers))
+
+    def test_adding_watcher_twice_to_resource_is_ignored(self):
+        peter = create(Builder('watcher').having(user_id='peter'))
+        resource = create(Builder('resource').oguid('fd:123'))
+
+        self.center.add_watcher_to_resource(Oguid('fd', '123'), 'peter')
+        self.center.add_watcher_to_resource(Oguid('fd', '123'), 'peter')
+
+        self.assertEquals([peter], list(resource.watchers))
 
     def test_add_watcher_to_resource_creates_resource_when_not_exitst(self):
         peter = create(Builder('watcher').having(user_id='peter'))
@@ -80,7 +89,7 @@ class TestWatcherHandling(ActivityTestCase):
 
         self.center.add_watcher_to_resource(Oguid('fd', '123'), 'peter')
 
-        watcher = resource.watchers[0]
+        watcher = list(resource.watchers)[0]
         self.assertEquals('peter', watcher.user_id)
 
     def test_get_watchers_returns_a_list_of_resource_watchers(self):
@@ -88,14 +97,12 @@ class TestWatcherHandling(ActivityTestCase):
         hugo = create(Builder('watcher').having(user_id='hugo'))
         fritz = create(Builder('watcher').having(user_id='fritz'))
 
-        create(Builder('resource').oguid('fd:123')
-               .having(watchers=[hugo, fritz]))
-        create(Builder('resource').oguid('fd:456')
-               .having(watchers=[peter]))
+        create(Builder('resource').oguid('fd:123').watchers([hugo, fritz]))
+        create(Builder('resource').oguid('fd:456').watchers([peter]))
 
-        self.assertEquals([hugo, fritz],
+        self.assertEquals(set([hugo, fritz]),
                           self.center.get_watchers(Oguid('fd', '123')))
-        self.assertEquals([peter],
+        self.assertEquals(set([peter]),
                           self.center.get_watchers(Oguid('fd', '456')))
 
     def test_get_watchers_returns_empty_list_when_resource_not_exists(self):
@@ -116,11 +123,11 @@ class TestWatcherHandling(ActivityTestCase):
         hugo = create(Builder('watcher').having(user_id='hugo'))
         resource = create(Builder('resource')
                           .oguid('fd:123')
-                          .having(watchers=[hugo, peter]))
+                          .watchers([hugo, peter]))
 
         self.center.remove_watcher_from_resource(Oguid('fd', '123'), 'peter')
 
-        self.assertEquals([hugo], resource.watchers)
+        self.assertEquals(set([hugo]), resource.watchers)
 
 
 class TestAddActivity(ActivityTestCase):
@@ -145,7 +152,7 @@ class TestAddActivity(ActivityTestCase):
         hugo = create(Builder('watcher').having(user_id='hugo'))
 
         resource_a = create(Builder('resource').oguid('fd:123')
-                            .having(watchers=[hugo, peter]))
+                            .watchers([hugo, peter]))
 
         activity = self.center.add_activity(Oguid('fd', '123'),
                                              'TASK_ADDED',
@@ -167,14 +174,11 @@ class TestAddActivity(ActivityTestCase):
         peter = create(Builder('watcher').having(user_id='peter'))
         hugo = create(Builder('watcher').having(user_id='hugo'))
 
-        resource_a = create(Builder('resource').oguid('fd:123')
-                            .having(watchers=[hugo, peter]))
+        create(Builder('resource').oguid('fd:123').watchers([hugo, peter]))
 
-        activity = self.center.add_activity(Oguid('fd', '123'),
-                                            'TASK_ADDED',
-                                            'Kennzahlen 2014',
-                                            'Task bla added',
-                                            'peter')
+        self.center.add_activity(Oguid('fd', '123'), 'TASK_ADDED',
+                                 'Kennzahlen 2014', 'Task bla added',
+                                 'peter')
 
         self.assertEquals(1, len(hugo.notifications))
         self.assertEquals(0, len(peter.notifications))
@@ -192,13 +196,13 @@ class TestNotificationHandling(ActivityTestCase):
 
         self.resource_a = create(Builder('resource')
                                  .oguid('fd:123')
-                                 .having(watchers=[self.hugo, self.peter]))
+                                 .watchers([self.hugo, self.peter]))
         self.resource_b = create(Builder('resource')
                                  .oguid('fd:456')
-                                 .having(watchers=[self.hugo]))
+                                 .watchers([self.hugo]))
         self.resource_c = create(Builder('resource')
                                  .oguid('fd:789')
-                                 .having(watchers=[self.peter]))
+                                 .watchers([self.peter]))
 
         self.activity_1 = self.center.add_activity(
             Oguid('fd','123'), 'task-added', 'Kennzahlen 2014 erfassen',
