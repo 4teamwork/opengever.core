@@ -5,6 +5,19 @@ Changelog
 4.2.1 (unreleased)
 ------------------
 
+- SchemaMigration: Fix tracking table creation for DBs supporting transactional DDL:
+
+  If the tracking table is created for the first time, it's not visible in
+  metadata until the transaction has been committed.
+
+  Therefore we need to have a method that tries to fetch an existing tracking
+  table and return it, or if it doesn't exist yet, creates it and then
+  returns the created table. In order to keep a reference to the tracking table
+  across several SchemaMigration upgrade steps, a module global is used.
+
+  Returning the table created by op.create_table requires alembic >= 0.7.0.
+  [lgraf]
+
 - Rename UniqueConstraints names of the SubmittedDocument table,
   because of oracle's limitation to 30 chars.
   [phgross]
