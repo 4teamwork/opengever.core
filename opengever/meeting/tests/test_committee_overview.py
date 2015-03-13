@@ -115,18 +115,6 @@ class TestCommitteeOverview(FunctionalTestCase):
         self.assertEquals(10, len(meetings))
 
     @browsing
-    def test_meetings_are_limited_to_ten_entries(self, browser):
-        for i in range(0, 12):
-            create(Builder('meeting')
-                   .having(committee=self.committee_model,
-                           start=datetime.now() + timedelta(days=i)))
-
-        browser.login().open(self.committee, view='tabbedview_view-overview')
-
-        meetings = browser.css('#upcoming_meetingsBox li:not(.moreLink) a')
-        self.assertEquals(10, len(meetings))
-
-    @browsing
     def test_proposal_box_only_lists_unscheduled_proposals(self, browser):
         proposal_a = create(Builder('proposal')
                             .having(title=u'Proposal A',
