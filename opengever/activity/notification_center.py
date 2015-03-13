@@ -1,8 +1,8 @@
 from opengever.activity import Activity
 from opengever.activity import Notification
 from opengever.activity import Resource
-from opengever.activity import Session
 from opengever.activity import Watcher
+from opengever.base.model import Session
 
 
 class NotificationCenter(object):
