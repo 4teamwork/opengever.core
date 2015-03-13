@@ -20,7 +20,7 @@ $(function(){
   }
 
   function update_unread_counter(value){
-    unread_counter = $('dl.notificationsMenu .unread_number');
+    unread_counter = viewlet.find('.unread_number');
     unread_number = parseInt(unread_counter.text());
     unread_number += value;
     unread_counter.html(unread_number);
