@@ -175,7 +175,8 @@ class SchemaMigration(UpgradeStep):
         self.metadata.reflect()
 
     def get_foreign_key_name(self, table_name, column_name):
-        foreign_keys = self.op.metadata.tables.get(table_name).columns.get(column_name).foreign_keys
+        table = self.op.metadata.tables.get(table_name)
+        foreign_keys = table.columns.get(column_name).foreign_keys
         assert len(foreign_keys) == 1
         return foreign_keys.pop().name
 
@@ -203,7 +204,7 @@ class SchemaMigration(UpgradeStep):
         current_version_row = self.execute(
             select([versions_table.c.upgradeid]).where(
                 versions_table.c.profileid == self.profileid).distinct()
-            ).fetchone()
+        ).fetchone()
         return current_version_row.upgradeid or 0
 
     def _has_upgrades_to_install(self):
@@ -225,7 +226,7 @@ class SchemaMigration(UpgradeStep):
         result = self.execute(
             versions_table.select().where(
                 versions_table.c.profileid == self.profileid)
-            ).fetchall()
+        ).fetchall()
         if result:
             return
 
