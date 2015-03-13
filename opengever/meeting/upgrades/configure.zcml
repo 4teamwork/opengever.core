@@ -140,4 +140,14 @@
         profile="opengever.meeting:default"
         />
 
+    <!-- 4213 -> 4214 -->
+    <genericsetup:upgradeStep
+        title="Drop three date/time fields in favour of two dattime fields."
+        description="Replace date start_time end_time with two datetime fields (start and end)"
+        source="4213"
+        destination="4214"
+        handler="opengever.meeting.upgrades.to4214.ReplaceTimeFields"
+        profile="opengever.meeting:default"
+        />
+
 </configure>

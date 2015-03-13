@@ -5,7 +5,8 @@ Changelog
 4.2.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Drop three date/time fields in favour of two datetime fields.
+  [deiferni, phgross]
 
 
 4.2.0 (2015-03-12)
