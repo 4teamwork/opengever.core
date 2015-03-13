@@ -2,7 +2,7 @@ from opengever.activity import Activity
 from opengever.activity import Notification
 from opengever.activity import Resource
 from opengever.activity import Watcher
-from opengever.base.model import Session
+from opengever.base.model import create_session
 
 
 class NotificationCenter(object):
@@ -12,10 +12,11 @@ class NotificationCenter(object):
 
     def __init__(self, dispatchers=[]):
         self.dispatchers = dispatchers
+        self.session = create_session()
 
     def add_resource(self, oguid):
         resource = Resource(oguid=oguid)
-        Session.add(resource)
+        self.session.add(resource)
         return resource
 
     def fetch_resource(self, oguid):
@@ -26,7 +27,7 @@ class NotificationCenter(object):
 
     def add_watcher(self, user_id):
         watcher = Watcher(user_id=user_id)
-        Session.add(watcher)
+        self.session.add(watcher)
         return watcher
 
     def fetch_watcher(self, user_id):
@@ -61,7 +62,7 @@ class NotificationCenter(object):
         activity = Activity(resource=resource, kind=kind, title=title,
                             summary=summary, actor_id=actor_id,
                             description=description)
-        Session.add(activity)
+        self.session.add(activity)
 
         self.create_notifications(activity)
 

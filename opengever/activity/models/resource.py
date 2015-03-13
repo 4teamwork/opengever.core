@@ -1,7 +1,7 @@
 from opengever.activity.models.watcher import Watcher
 from opengever.base.model import Base
+from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
-from opengever.globalindex import Session
 from opengever.ogds.models.query import BaseQuery
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
@@ -48,7 +48,7 @@ class Resource(Base):
         watcher = Watcher.query.get_by_userid(user_id)
         if not watcher:
             watcher = Watcher(user_id=user_id)
-            Session.add(watcher)
+            create_session().add(watcher)
 
         self.watchers.add(watcher)
         return watcher
