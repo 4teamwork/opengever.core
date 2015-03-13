@@ -1,6 +1,4 @@
 from collections import OrderedDict
-from datetime import datetime
-from datetime import time
 from opengever.base.model import Base
 from opengever.meeting import _
 from opengever.meeting.model import AgendaItem
@@ -10,13 +8,12 @@ from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
 from plone import api
 from sqlalchemy import Column
-from sqlalchemy import Date
+from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy import Table
 from sqlalchemy import Text
-from sqlalchemy import Time
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
 
@@ -55,9 +52,8 @@ class Meeting(Base):
     committee_id = Column(Integer, ForeignKey('committees.id'), nullable=False)
     committee = relationship("Committee", backref='meetings')
     location = Column(String(256))
-    date = Column(Date, nullable=False)
-    start_time = Column(Time)
-    end_time = Column(Time)
+    start = Column(DateTime, nullable=False)
+    end = Column(DateTime)
     workflow_state = Column(String(256), nullable=False,
                             default=workflow.default_state.name)
 
@@ -75,7 +71,7 @@ class Meeting(Base):
     agenda_items = relationship("AgendaItem", order_by='AgendaItem.sort_order')
 
     def __repr__(self):
-        return '<Meeting at "{}">'.format(self.date)
+        return '<Meeting at "{}">'.format(self.start)
 
     def is_editable(self):
         return self.get_state() == self.STATE_PENDING
@@ -104,14 +100,14 @@ class Meeting(Base):
             if not value:
                 continue
 
-            if fieldname == 'date':
-                values['date-day'] = str(value.day)
-                values['date-month'] = str(value.month)
-                values['date-year'] = str(value.year)
+            if fieldname in ['start', 'end']:
+                values['{}-day'.format(fieldname)] = str(value.day)
+                values['{}-month'.format(fieldname)] = str(value.month)
+                values['{}-year'.format(fieldname)] = str(value.year)
+                values['{}-hour'.format(fieldname)] = str(value.hour)
+                values['{}-min'.format(fieldname)] = str(value.minute)
                 continue
 
-            if fieldname in ['start_time', 'end_time']:
-                value = value.strftime('%H:%M')
             values[fieldname] = value
         return values
 
@@ -126,21 +122,19 @@ class Meeting(Base):
             return self.get_date()
 
     def get_date(self):
-        return api.portal.get_localized_time(
-            datetime=datetime.combine(self.date, time()))
+        return api.portal.get_localized_time(datetime=self.start)
 
     def get_start_time(self):
-        return self._get_localized_time(self.start_time)
+        return self._get_localized_time(self.start)
 
     def get_end_time(self):
-        return self._get_localized_time(self.end_time)
+        return self._get_localized_time(self.end)
 
-    def _get_localized_time(self, time):
-        if not time:
+    def _get_localized_time(self, date):
+        if not date:
             return ''
 
-        return api.portal.get_localized_time(
-            datetime=datetime.combine(self.date, time), time_only=True)
+        return api.portal.get_localized_time(datetime=date, time_only=True)
 
     def schedule_proposal(self, proposal):
         assert proposal.committee == self.committee

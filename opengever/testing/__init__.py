@@ -18,3 +18,4 @@ else:
     from opengever.testing.sql import select_current_org_unit
     from opengever.testing.test_case import FunctionalTestCase
     import opengever.testing.testbrowser_autocomplete_widget
+    import opengever.testing.testbrowser_datetime_widget
