@@ -28,11 +28,11 @@ class TestResourceHandling(ActivityTestCase):
                           self.center.fetch_resource(Oguid('fd', '123')))
 
     def test_adding(self):
-        resource = self.center.add_resource(Oguid('fd','123'))
+        resource = self.center.add_resource(Oguid('fd', '123'))
 
         self.assertEquals(1, len(Resource.query.all()))
         resource = Resource.query.first()
-        self.assertEquals(Oguid('fd','123'), resource.oguid)
+        self.assertEquals(Oguid('fd', '123'), resource.oguid)
         self.assertEquals('fd', resource.admin_unit_id)
         self.assertEquals(123, resource.int_id)
 
@@ -79,7 +79,7 @@ class TestWatcherHandling(ActivityTestCase):
     def test_add_watcher_to_resource_creates_resource_when_not_exitst(self):
         peter = create(Builder('watcher').having(user_id='peter'))
 
-        self.center.add_watcher_to_resource(Oguid('fd','123'), 'peter')
+        self.center.add_watcher_to_resource(Oguid('fd', '123'), 'peter')
 
         resource = peter.resources[0]
         self.assertEquals('fd:123', resource.oguid)
@@ -137,13 +137,11 @@ class TestAddActivity(ActivityTestCase):
         self.center = NotificationCenter()
 
     def test_add_resource_if_not_exists(self):
-        self.center.add_activity(Oguid('fd','123'),
-                                  'task_added',
-                                  'Kennzahlen 2014',
-                                  'Task bla added',
-                                  'hugo.boss')
+        self.center.add_activity(
+            Oguid('fd', '123'), 'task_added', 'Kennzahlen 2014',
+            'Task bla added', 'hugo.boss')
 
-        resource = self.center.fetch_resource(Oguid('fd','123'))
+        resource = self.center.fetch_resource(Oguid('fd', '123'))
         self.assertEquals('fd', resource.admin_unit_id)
         self.assertEquals(123, resource.int_id)
 
@@ -205,16 +203,16 @@ class TestNotificationHandling(ActivityTestCase):
                                  .watchers([self.peter]))
 
         self.activity_1 = self.center.add_activity(
-            Oguid('fd','123'), 'task-added', 'Kennzahlen 2014 erfassen',
+            Oguid('fd', '123'), 'task-added', 'Kennzahlen 2014 erfassen',
             'Task bla added', 'hugo.boss')
         self.activity_2 = self.center.add_activity(
-            Oguid('fd','123'), 'task-transition-open-in-progress',
+            Oguid('fd', '123'), 'task-transition-open-in-progress',
             'Kennzahlen 2014 erfassen', 'Task bla accepted', 'peter.mueller')
         self.activity_3 = self.center.add_activity(
-            Oguid('fd','456'), 'task-added', 'Kennzahlen 2014 erfassen',
+            Oguid('fd', '456'), 'task-added', 'Kennzahlen 2014 erfassen',
             'Task foo added', 'peter.mueller')
         self.activity_4 = self.center.add_activity(
-            Oguid('fd','789'), 'task-added', 'Kennzahlen 2014 erfassen',
+            Oguid('fd', '789'), 'task-added', 'Kennzahlen 2014 erfassen',
             'Task Test added', 'franz.meier')
 
     def test_get_users_notifications_lists_only_users_notifications(self):
