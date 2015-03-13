@@ -199,8 +199,11 @@ class SchemaMigration(UpgradeStep):
         assert int(self.upgradeid) > 0, 'upgradeid must be > 0'
         assert len(self.profileid) < 50, 'profileid max length is 50 chars'
 
+    def _get_tracking_table(self):
+        return self.metadata.tables.get(TRACKING_TABLE_NAME)
+
     def _current_version(self):
-        versions_table = self.metadata.tables.get(TRACKING_TABLE_NAME)
+        versions_table = self._get_tracking_table()
         current_version_row = self.execute(
             select([versions_table.c.upgradeid]).where(
                 versions_table.c.profileid == self.profileid).distinct()
@@ -211,7 +214,7 @@ class SchemaMigration(UpgradeStep):
         return self._current_version() < self.upgradeid
 
     def _create_tracking_table(self):
-        if self.metadata.tables.get(TRACKING_TABLE_NAME, None) is not None:
+        if self._get_tracking_table() is not None:
             return
 
         self.op.create_table(
@@ -222,7 +225,7 @@ class SchemaMigration(UpgradeStep):
         self.refresh_metadata()
 
     def _insert_initial_version(self):
-        versions_table = self.metadata.tables.get(TRACKING_TABLE_NAME)
+        versions_table = self._get_tracking_table()
         result = self.execute(
             versions_table.select().where(
                 versions_table.c.profileid == self.profileid)
@@ -235,7 +238,7 @@ class SchemaMigration(UpgradeStep):
                                            upgradeid=0))
 
     def _update_migrated_version(self):
-        versions_table = self.metadata.tables.get(TRACKING_TABLE_NAME)
+        versions_table = self._get_tracking_table()
         self.execute(
             versions_table.update().values(upgradeid=self.upgradeid).
             where(versions_table.c.profileid == self.profileid)
