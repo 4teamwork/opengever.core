@@ -207,12 +207,12 @@ class TestNotificationHandling(ActivityTestCase):
             'Task bla added', 'hugo.boss')
         self.activity_2 = self.center.add_activity(
             Oguid('fd', '123'), 'task-transition-open-in-progress',
-            'Kennzahlen 2014 erfassen', 'Task bla accepted', 'peter.mueller')
+            'Kennzahlen 2015 erfassen', 'Task bla accepted', 'peter.mueller')
         self.activity_3 = self.center.add_activity(
-            Oguid('fd', '456'), 'task-added', 'Kennzahlen 2014 erfassen',
+            Oguid('fd', '456'), 'task-added', 'Besprechung Gesuch',
             'Task foo added', 'peter.mueller')
         self.activity_4 = self.center.add_activity(
-            Oguid('fd', '789'), 'task-added', 'Kennzahlen 2014 erfassen',
+            Oguid('fd', '789'), 'task-added', 'Vorbereitung Besprechung',
             'Task Test added', 'franz.meier')
 
     def test_get_users_notifications_lists_only_users_notifications(self):
@@ -255,3 +255,40 @@ class TestNotificationHandling(ActivityTestCase):
 
         self.center.mark_notification_as_read(notification_id)
         self.assertTrue(Notification.get(notification_id).read)
+
+    def test_list_notifications_by_userid(self):
+        notifications = self.center.list_notifications(userid='peter')
+        self.assertEquals(
+            [self.activity_1, self.activity_2, self.activity_4],
+            [notification.activity for notification in notifications])
+
+    def test_list_notifications_with_sorting(self):
+        notifications = self.center.list_notifications(userid='peter', sort_on='kind')
+
+        self.assertEquals(
+            ['task-added', 'task-added', 'task-transition-open-in-progress'],
+            [notification.activity.kind for notification in notifications])
+
+    def test_list_notifications_with_reverse_sorting(self):
+        notifications = self.center.list_notifications(
+            userid='peter', sort_on='kind', sort_reverse=True)
+
+        self.assertEquals(
+            ['task-transition-open-in-progress', 'task-added', 'task-added'],
+            [notification.activity.kind for notification in notifications])
+
+    def test_list_notifications_with_text_filter_on_title(self):
+        notifications = self.center.list_notifications(
+            userid='peter', sort_on='kind', filters=['kennzahlen'])
+
+        self.assertEquals(
+            [self.activity_1, self.activity_2],
+            [notification.activity for notification in notifications])
+
+    def test_list_notifications_with_text_filter_on_kind(self):
+        notifications = self.center.list_notifications(
+            userid='peter', sort_on='kind', filters=['task', 'added'])
+
+        self.assertEquals(
+            ['task-added', 'task-added'],
+            [notification.activity.kind for notification in notifications])

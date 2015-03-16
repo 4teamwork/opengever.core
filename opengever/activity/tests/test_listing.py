@@ -64,11 +64,14 @@ class TestMyNotifications(FunctionalTestCase):
     def test_listing_content(self, browser):
         browser.login().open(self.portal,
                              view='tabbedview_view-mynotifications')
+
         self.assertEquals(
             [{'Actor': 'Boss Hugo (hugo.boss)',
+              'Created': self.activity_1.created.strftime('%d.%m.%Y %H:%M'),
               'Kind': 'task-added',
               'Title': 'Kennzahlen 2014 erfassen'},
              {'Actor': 'Mueller Peter (peter.mueller)',
+              'Created': self.activity_2.created.strftime('%d.%m.%Y %H:%M'),
               'Kind': 'task-transition-open-in-progress',
               'Title': 'Kennzahlen 2014 erfassen'}],
             browser.css('.listing').first.dicts())

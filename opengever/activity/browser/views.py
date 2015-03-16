@@ -3,7 +3,6 @@ from ftw.tabbedview.browser.tabbed import TabbedView
 from opengever.activity import _
 from opengever.activity import notification_center
 from opengever.activity.browser.listing import NotificationListingTab
-from opengever.activity.models.notification import Notification
 from plone import api
 from Products.Five import BrowserView
 from zope.app.pagetemplate import ViewPageTemplateFile
@@ -45,5 +44,4 @@ class MyNotifications(NotificationListingTab):
     selection = ViewPageTemplateFile("no_selection.pt")
 
     def get_base_query(self):
-        userid = api.user.get_current().getId()
-        return Notification.query.by_user(userid)
+        return {'userid': api.user.get_current().getId()}
