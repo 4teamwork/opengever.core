@@ -23,9 +23,9 @@ class SubmittedDocument(Base):
     __tablename__ = 'submitteddocuments'
     __table_args__ = (
         UniqueConstraint('admin_unit_id', 'int_id', 'proposal_id',
-                         name='ix_submitted_document_unique_source'),
+                         name='ix_s_docs_unique_src'),
         UniqueConstraint('submitted_admin_unit_id', 'submitted_int_id',
-                         name='ix_submitted_document_unique_target'),
+                         name='ix_s_docs_unique_dst'),
         {})
 
     document_id = Column("id", Integer, Sequence("submitteddocument_id_seq"),

@@ -40,6 +40,13 @@ class IdempotentOperations(Operations):
             return None
         return table.columns.get(column_name)
 
+    def _has_index(self, indexname, tablename):
+        table = self.metadata.tables.get(tablename)
+        for index in table.indexes:
+            if index.name == indexname:
+                return True
+        return False
+
     def drop_column(self, table_name, column_name, **kw):
         if self._get_column(table_name, column_name) is None:
             logger.log(logging.INFO,
@@ -71,6 +78,29 @@ class IdempotentOperations(Operations):
             return
 
         super(IdempotentOperations, self).create_table(name, *columns, **kw)
+
+    def drop_constraint(self, name, table_name, type_=None, schema=None):
+        if not self._has_index(name, table_name):
+            logger.log(logging.INFO,
+                       "Skipping drop constraint '{0}' for table '{1}', "
+                       "constraint does not exists."
+                       .format(name, table_name))
+            return
+
+        super(IdempotentOperations, self).drop_constraint(
+            name, table_name, type_=type_, schema=schema)
+
+    def create_unique_constraint(self, name, source, local_cols,
+                                 schema=None, **kw):
+        if self._has_index(name, source):
+            logger.log(logging.INFO,
+                       "Skipping create unique constraint '{0}' for table '{1}', "
+                       "constraint already exists."
+                       .format(name, source))
+            return
+
+        super(IdempotentOperations, self).create_unique_constraint(
+            name, source, local_cols, schema, **kw)
 
 
 class DeactivatedFKConstraint(object):

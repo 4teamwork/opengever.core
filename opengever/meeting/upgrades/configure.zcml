@@ -150,4 +150,14 @@
         profile="opengever.meeting:default"
         />
 
+    <!-- 4214 -> 4215 -->
+    <genericsetup:upgradeStep
+        title="Rename UniqueConstraints."
+        description="The UniqueConstraints name has to be limited to 30 chars for Oraclecompatibility."
+        source="4214"
+        destination="4215"
+        handler="opengever.meeting.upgrades.to4215.RenameUniqueConstraints"
+        profile="opengever.meeting:default"
+        />
+
 </configure>
