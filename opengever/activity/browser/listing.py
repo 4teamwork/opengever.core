@@ -23,6 +23,10 @@ def readable_actor(item, value):
     return Actor.lookup(item.activity.actor_id).get_label()
 
 
+def readable_date(item, date):
+    return item.activity.created.strftime('%d.%m.%Y %H:%M')
+
+
 def translated_kind(item, value):
     return translate(item.activity.kind, domain='plone', context=getRequest())
 
@@ -47,7 +51,11 @@ class NotificationListingTab(BaseListingTab):
 
         {'column': 'actor',
          'column_title': _(u'column_Actor', default=u'Actor'),
-         'transform': readable_actor}
+         'transform': readable_actor},
+
+        {'column': 'created',
+         'column_title': _(u'created', default=u'Created'),
+         'transform': readable_date},
     )
 
     def get_base_query(self):
