@@ -20,6 +20,10 @@ _tracking_table = None
 logger = logging.getLogger('opengever.upgrade')
 
 
+class AbortUpgrade(Exception):
+    """The upgrade had to be aborted for the reason specified in message."""
+
+
 class IdempotentOperations(Operations):
     """Make alembic.operations tolerant to the same migration instruction being
     called multiple times.
@@ -194,6 +198,14 @@ class SchemaMigration(UpgradeStep):
     @property
     def is_oracle(self):
         return self.dialect_name == 'oracle'
+
+    @property
+    def is_postgres(self):
+        return self.dialect_name == 'postgresql'
+
+    @property
+    def is_mysql(self):
+        return self.dialect_name == 'mysql'
 
     def _log_skipping_migration(self):
         logger.log(logging.INFO,
