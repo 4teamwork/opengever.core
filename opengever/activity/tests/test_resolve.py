@@ -6,6 +6,7 @@ from opengever.activity.browser.resolve import ResolveNotificationView
 from opengever.base.oguid import Oguid
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
+from zExceptions import NotFound
 from zExceptions import Unauthorized
 import unittest2
 
@@ -19,13 +20,13 @@ class TestResolveNotificationView(FunctionalTestCase):
             url)
 
     @browsing
-    def test_raises_an_attribute_error_when_notification_id_is_missing(self, browser):
-        with self.assertRaises(AttributeError):
+    def test_raises_notfound_when_notification_id_is_missing(self, browser):
+        with self.assertRaises(NotFound):
             browser.login().open(self.portal, view='resolve_notification')
 
     @browsing
-    def test_raises_an_attribute_error_when_notification_id_is_invalid(self, browser):
-        with self.assertRaises(AttributeError):
+    def test_raises_notfound_when_notification_id_is_invalid(self, browser):
+        with self.assertRaises(NotFound):
             browser.login().open(self.portal, view='resolve_notification',
                                  data={'notification_id': '123'})
 

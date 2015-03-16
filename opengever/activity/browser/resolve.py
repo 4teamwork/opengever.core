@@ -5,6 +5,7 @@ from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from plone import api
 from Products.CMFPlone.interfaces import IPloneSiteRoot
+from zExceptions import NotFound
 from zExceptions import Unauthorized
 
 
@@ -25,9 +26,8 @@ class ResolveNotificationView(ResolveOGUIDView):
         self.notification = center.get_notification(notification_id)
 
         if not self.notification:
-            raise AttributeError(
-                'Invalid notification_id ({}) is given'.format(
-                    self.request.get('notification')))
+            raise NotFound('Invalid notification_id ({}) is given'.format(
+                self.request.get('notification')))
 
         if not self.check_permission():
             raise Unauthorized()
@@ -36,7 +36,7 @@ class ResolveNotificationView(ResolveOGUIDView):
         self.redirect()
 
     def check_permission(self):
-        """Checks if the notification is for the current user."""
+        """Check if the current user is allowed to view the notification."""
 
         current_user = api.user.get_current()
         return self.notification.watcher.user_id == current_user.getId()
@@ -45,9 +45,9 @@ class ResolveNotificationView(ResolveOGUIDView):
         self.notification.read = True
 
     def redirect(self):
-        """Redirect to the affected object. If the object is stored
-        in an other admin_unit thant the current one, it redirects to the
-        resolve_oguid view on this admin_unit """
+        """Redirect to the affected resource. If the resource is stored
+        in an other admin_unit than the current one, it redirects to the
+        resolve_oguid view on this admin_unit."""
 
         oguid = self.notification.activity.resource.oguid
         obj = oguid.resolve_object()
