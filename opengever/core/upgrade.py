@@ -7,6 +7,7 @@ from sqlalchemy import Integer
 from sqlalchemy import MetaData
 from sqlalchemy import select
 from sqlalchemy import String
+from zope.sqlalchemy.datamanager import mark_changed
 import logging
 
 
@@ -161,12 +162,16 @@ class SchemaMigration(UpgradeStep):
 
     def __call__(self):
         self._assert_configuration()
-        self._setup_db_connection()
+        self.session = self._setup_db_connection()
         self._insert_initial_version()
         if self._has_upgrades_to_install():
             self._log_do_migration()
             self.migrate()
             self._update_migrated_version()
+            # If the transaction contains only DDL statements, the transaction
+            # isn't automatically marked as changed, so we do it ourselves
+            mark_changed(self.session)
+
         else:
             self._log_skipping_migration()
 
@@ -268,3 +273,4 @@ class SchemaMigration(UpgradeStep):
         self.metadata = MetaData(session.bind, reflect=True)
         self.op = IdempotentOperations(self, self.migration_context)
         self.dialect_name = self.connection.dialect.name
+        return session

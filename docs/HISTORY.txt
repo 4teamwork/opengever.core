@@ -5,6 +5,10 @@ Changelog
 4.2.1 (unreleased)
 ------------------
 
+- SchemaMigration: Make sure transaction is marked as changed even if it
+  only contains DDL statements. See zope/sqlalchemy/README.txt#L145-L164
+  [lgraf]
+
 - SchemaMigration: Fix tracking table creation for DBs supporting transactional DDL:
 
   If the tracking table is created for the first time, it's not visible in
