@@ -1,5 +1,5 @@
 from five import grok
-from opengever.activity.utils import notification_center
+from opengever.activity import notification_center
 from opengever.base.browser.resolveoguid import ResolveOGUIDView
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service

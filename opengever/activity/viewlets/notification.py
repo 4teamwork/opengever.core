@@ -1,6 +1,6 @@
+from opengever.activity import notification_center
 from opengever.activity.browser.resolve import ResolveNotificationView
 from opengever.activity.utils import is_activity_feature_enabled
-from opengever.activity.utils import notification_center
 from plone.app.layout.viewlets import common
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 

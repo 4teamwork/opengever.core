@@ -1,7 +1,7 @@
 from five import grok
 from opengever.activity import is_activity_feature_enabled
+from opengever.activity import notification_center
 from opengever.activity.interfaces import INotificationEvent
-from opengever.activity.utils import notification_center
 from zope.interface import Interface
 
 

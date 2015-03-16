@@ -1,9 +1,9 @@
 from five import grok
 from ftw.tabbedview.browser.tabbed import TabbedView
 from opengever.activity import _
+from opengever.activity import notification_center
 from opengever.activity.browser.listing import NotificationListingTab
 from opengever.activity.models.notification import Notification
-from opengever.activity.utils import notification_center
 from plone import api
 from Products.Five import BrowserView
 from zope.app.pagetemplate import ViewPageTemplateFile
@@ -13,7 +13,7 @@ from zope.interface import Interface
 class NotificationView(BrowserView):
 
     def read(self):
-        """Mark the notification given as request parameter `notification_id`
+        """Mark the notification passed as request parameter `notification_id`
         as read.
         """
         notification_id = self.request.get('notification_id')

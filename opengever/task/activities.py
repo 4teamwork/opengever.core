@@ -1,4 +1,4 @@
-from opengever.activity.utils import notification_center
+from opengever.activity import notification_center
 from opengever.ogds.base.actor import Actor
 from opengever.task import _
 from opengever.task.response_description import ResponseDescription

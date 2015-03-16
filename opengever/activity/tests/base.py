@@ -1,6 +1,10 @@
+from opengever.activity.models.activity import Activity
+from opengever.activity.models.notification import Notification
+from opengever.activity.models.resource import Resource
+from opengever.activity.models.watcher import Watcher
 from opengever.testing import MEMORY_DB_LAYER
 import unittest2
-from opengever.activity.tests import builders #keep
+
 
 
 class ActivityTestCase(unittest2.TestCase):
