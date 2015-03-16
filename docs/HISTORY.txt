@@ -5,6 +5,10 @@ Changelog
 4.2.1 (unreleased)
 ------------------
 
+- Rename UniqueConstraints names of the SubmittedDocument table,
+  because of oracle's limitation to 30 chars.
+  [phgross]
+
 - Drop three date/time fields in favour of two datetime fields.
   [deiferni, phgross]
 
