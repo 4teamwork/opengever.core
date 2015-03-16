@@ -1,5 +1,6 @@
 from opengever.activity.models.notification import Notification
 from opengever.base.model import Base
+from opengever.ogds.models.query import BaseQuery
 from sqlalchemy import Column
 from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
@@ -10,7 +11,13 @@ from sqlalchemy.orm import relationship
 import datetime
 
 
+class ActivityQuery(BaseQuery):
+    pass
+
+
 class Activity(Base):
+
+    query_cls = ActivityQuery
 
     __tablename__ = 'activities'
 
