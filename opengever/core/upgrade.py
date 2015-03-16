@@ -7,10 +7,16 @@ from sqlalchemy import Integer
 from sqlalchemy import MetaData
 from sqlalchemy import select
 from sqlalchemy import String
+from zope.sqlalchemy.datamanager import mark_changed
 import logging
 
 
 TRACKING_TABLE_NAME = 'opengever_upgrade_version'
+
+# Module global to keep a reference to the tracking table across several
+# instances of SchemaMigration upgrade steps
+_tracking_table = None
+
 logger = logging.getLogger('opengever.upgrade')
 
 
@@ -77,7 +83,9 @@ class IdempotentOperations(Operations):
                        .format(name))
             return
 
-        super(IdempotentOperations, self).create_table(name, *columns, **kw)
+        table = super(IdempotentOperations, self).create_table(
+            name, *columns, **kw)
+        return table
 
     def drop_constraint(self, name, table_name, type_=None, schema=None):
         if not self._has_index(name, table_name):
@@ -154,13 +162,16 @@ class SchemaMigration(UpgradeStep):
 
     def __call__(self):
         self._assert_configuration()
-        self._setup_db_connection()
-        self._create_tracking_table()
+        self.session = self._setup_db_connection()
         self._insert_initial_version()
         if self._has_upgrades_to_install():
             self._log_do_migration()
             self.migrate()
             self._update_migrated_version()
+            # If the transaction contains only DDL statements, the transaction
+            # isn't automatically marked as changed, so we do it ourselves
+            mark_changed(self.session)
+
         else:
             self._log_skipping_migration()
 
@@ -175,7 +186,8 @@ class SchemaMigration(UpgradeStep):
         self.metadata.reflect()
 
     def get_foreign_key_name(self, table_name, column_name):
-        foreign_keys = self.op.metadata.tables.get(table_name).columns.get(column_name).foreign_keys
+        table = self.op.metadata.tables.get(table_name)
+        foreign_keys = table.columns.get(column_name).foreign_keys
         assert len(foreign_keys) == 1
         return foreign_keys.pop().name
 
@@ -198,34 +210,48 @@ class SchemaMigration(UpgradeStep):
         assert int(self.upgradeid) > 0, 'upgradeid must be > 0'
         assert len(self.profileid) < 50, 'profileid max length is 50 chars'
 
+    def _get_tracking_table(self):
+        """Fetches the tracking table from the DB schema metadata if present,
+        or creates it if necessary.
+
+        Once a reference to the tracking table has been obtained it's memoized
+        in the module global `_tracking_table` and reused in further calls to
+        this method.
+        """
+        global _tracking_table
+        if _tracking_table is None:
+            table = self.metadata.tables.get(TRACKING_TABLE_NAME)
+            if table is None:
+                table = self._create_tracking_table()
+            _tracking_table = table
+        return _tracking_table
+
     def _current_version(self):
-        versions_table = self.metadata.tables.get(TRACKING_TABLE_NAME)
+        versions_table = self._get_tracking_table()
         current_version_row = self.execute(
             select([versions_table.c.upgradeid]).where(
                 versions_table.c.profileid == self.profileid).distinct()
-            ).fetchone()
+        ).fetchone()
         return current_version_row.upgradeid or 0
 
     def _has_upgrades_to_install(self):
         return self._current_version() < self.upgradeid
 
     def _create_tracking_table(self):
-        if self.metadata.tables.get(TRACKING_TABLE_NAME, None) is not None:
-            return
-
-        self.op.create_table(
+        tracking_table_definition = (
             TRACKING_TABLE_NAME,
             Column('profileid', String(50), primary_key=True),
             Column('upgradeid', Integer, nullable=False),
         )
-        self.refresh_metadata()
+        table = self.op.create_table(*tracking_table_definition)
+        return table
 
     def _insert_initial_version(self):
-        versions_table = self.metadata.tables.get(TRACKING_TABLE_NAME)
+        versions_table = self._get_tracking_table()
         result = self.execute(
             versions_table.select().where(
                 versions_table.c.profileid == self.profileid)
-            ).fetchall()
+        ).fetchall()
         if result:
             return
 
@@ -234,7 +260,7 @@ class SchemaMigration(UpgradeStep):
                                            upgradeid=0))
 
     def _update_migrated_version(self):
-        versions_table = self.metadata.tables.get(TRACKING_TABLE_NAME)
+        versions_table = self._get_tracking_table()
         self.execute(
             versions_table.update().values(upgradeid=self.upgradeid).
             where(versions_table.c.profileid == self.profileid)
@@ -247,3 +273,4 @@ class SchemaMigration(UpgradeStep):
         self.metadata = MetaData(session.bind, reflect=True)
         self.op = IdempotentOperations(self, self.migration_context)
         self.dialect_name = self.connection.dialect.name
+        return session

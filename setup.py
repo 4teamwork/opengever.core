@@ -55,7 +55,7 @@ setup(name='opengever.core',
         # Remove ftw.treeview when uninstall upgrade installed.
         'ftw.treeview',
 
-        'alembic',
+        'alembic >= 0.7.0',
         'collective.autopermission',
         'collective.blueprint.jsonmigrator',
         'collective.blueprint.usersandgroups',
