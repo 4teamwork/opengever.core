@@ -46,6 +46,10 @@ class Oguid(object):
         return getUtility(IIntIds).getObject(self.int_id)
 
     @property
+    def is_on_current_admin_unit(self):
+        return self.admin_unit_id == get_current_admin_unit().id()
+
+    @property
     def id(self):
         return self.SEPARATOR.join((self.admin_unit_id, str(self.int_id),))
 

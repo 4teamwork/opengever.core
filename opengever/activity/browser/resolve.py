@@ -50,10 +50,10 @@ class ResolveNotificationView(ResolveOGUIDView):
         resolve_oguid view on this admin_unit."""
 
         oguid = self.notification.activity.resource.oguid
-        obj = oguid.resolve_object()
 
-        if obj:
-            url = obj.absolute_url()
+        if oguid.is_on_current_admin_unit:
+            url = oguid.resolve_object().absolute_url()
+
         else:
             admin_unit = ogds_service().fetch_admin_unit(oguid.admin_unit_id)
             url = ResolveOGUIDView.url_for(oguid, admin_unit)
