@@ -2,6 +2,8 @@ from datetime import datetime
 from opengever.core.upgrade import SchemaMigration
 from sqlalchemy import Column
 from sqlalchemy import DateTime
+from sqlalchemy.sql.expression import column
+from sqlalchemy.sql.expression import table
 
 
 class ReplaceTimeFields(SchemaMigration):
@@ -24,16 +26,17 @@ class ReplaceTimeFields(SchemaMigration):
         self.op.add_column(
             'meetings', Column('end', DateTime))
 
-    def drop_date_and_time_columns(self):
-        self.op.drop_column('meetings', 'date')
-        self.op.drop_column('meetings', 'start_time')
-        self.op.drop_column('meetings', 'end_time')
-
     def migrate_data(self):
-        self.metadata.clear()
-        self.metadata.reflect()
+        meeting_table = table(
+            "meetings",
+            column("id"),
+            column("date"),
+            column("start_time"),
+            column("end_time"),
+            column("start"),
+            column("end"),
+        )
 
-        meeting_table = self.metadata.tables.get('meetings')
         meetings = self.connection.execute(meeting_table.select()).fetchall()
         for meeting in meetings:
             date = meeting.date
@@ -43,10 +46,16 @@ class ReplaceTimeFields(SchemaMigration):
             start = datetime.combine(date, start_time)
             end = datetime.combine(date, end_time)
 
-            self.execute(meeting_table.update()
+            self.execute(
+                meeting_table.update()
                 .values(start=start, end=end)
                 .where(meeting_table.columns.id == meeting.id)
             )
+
+    def drop_date_and_time_columns(self):
+        self.op.drop_column('meetings', 'date')
+        self.op.drop_column('meetings', 'start_time')
+        self.op.drop_column('meetings', 'end_time')
 
     def make_start_column_required(self):
         self.op.alter_column('meetings', 'start', nullable=False,
