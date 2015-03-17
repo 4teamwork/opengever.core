@@ -7,11 +7,14 @@ from zope.interface import Interface
 
 @grok.subscribe(Interface, INotificationEvent)
 def log_activity(task, event):
-    if is_activity_feature_enabled():
-        notification_center().add_activity(
-            event.object,
-            event.kind,
-            event.object.title,
-            event.summary,
-            event.actor.getId(),
-            description=event.description)
+
+    if not is_activity_feature_enabled():
+        return
+
+    notification_center().add_activity(
+        event.object,
+        event.kind,
+        event.object.title,
+        event.summary,
+        event.actor.getId(),
+        description=event.description)
