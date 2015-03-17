@@ -5,6 +5,25 @@ Changelog
 4.2.1 (unreleased)
 ------------------
 
+- SchemaMigration: Use IdempotentOperations only when executing migrations for MySQL.
+  Also make sure that IdempotentOperations always keeps database metadata up to date.
+  [deiferni]
+
+- Upgrade: fix meeting upgrade to 4200, also migrate data, not only schema.
+  [deiferni]
+
+- Upgrade: add oracle/postgres implementation for upgrade to 4203.
+  [deiferni]
+
+- Upgrade: fix meeting upgrade to 4214, use sqlalchemy expression api as table definition
+  instead of metadata.
+  [deiferni]
+
+- Upgrade: fix meeting upgrate to 4208, correctly create unique constraints.
+
+- Fix an issue with event handlers while deleting a plone-site.
+  [deiferni]
+
 - Update translation for forwarding-transition-reassign transition.
   [phgross]
 

@@ -1,5 +1,6 @@
 from alembic.migration import MigrationContext
 from alembic.operations import Operations
+from decorator import decorator
 from ftw.upgrade import UpgradeStep
 from opengever.base.model import create_session
 from sqlalchemy import Column
@@ -20,19 +21,36 @@ _tracking_table = None
 logger = logging.getLogger('opengever.upgrade')
 
 
+class AbortUpgrade(Exception):
+    """The upgrade had to be aborted for the reason specified in message."""
+
+
+@decorator
+def metadata_operation(f, *args, **kwargs):
+    """Refresh metadata after executing an operation."""
+
+    operations = args[0]
+    result = f(*args, **kwargs)
+    operations._refresh_metadata()
+    return result
+
+
 class IdempotentOperations(Operations):
-    """Make alembic.operations tolerant to the same migration instruction being
-    called multiple times.
+    """Operations for MySQL - make alembic.operations tolerant to the same
+    migration instruction being called multiple times.
+
+    Works only for non-transactional DDL since it relies on a metadata
+    instance to reflect about the database which seems not to see non-committed
+    changes.
 
     This might happen when a DB-migration has been executed halfway but then
     fails. Since MYSQL does not support transaction aware schema changes we
     have to handle these partially executed migrations by ourself.
 
-    This class relies on an updated metadata, you have to do that manually
-    in your schema migrations by calling `SchemaMigration.refresh_metadata`.
+    XXX: once we drop MySQL support this class should be removed.
 
     """
-    def __init__(self, schema_migration, migration_context):
+    def __init__(self, migration_context, schema_migration):
         super(IdempotentOperations, self).__init__(migration_context)
         self.schema_migration = schema_migration
         self.metadata = self.schema_migration.metadata
@@ -53,6 +71,10 @@ class IdempotentOperations(Operations):
                 return True
         return False
 
+    def _refresh_metadata(self):
+        self.schema_migration.refresh_metadata()
+
+    @metadata_operation
     def drop_column(self, table_name, column_name, **kw):
         if self._get_column(table_name, column_name) is None:
             logger.log(logging.INFO,
@@ -61,9 +83,10 @@ class IdempotentOperations(Operations):
                        .format(column_name, table_name))
             return
 
-        super(IdempotentOperations, self).drop_column(
+        return super(IdempotentOperations, self).drop_column(
             table_name, column_name, **kw)
 
+    @metadata_operation
     def add_column(self, table_name, column, schema=None):
         column_name = column.name
         if self._get_column(table_name, column_name) is not None:
@@ -73,9 +96,10 @@ class IdempotentOperations(Operations):
                        .format(column_name, table_name))
             return
 
-        super(IdempotentOperations, self).add_column(
+        return super(IdempotentOperations, self).add_column(
             table_name, column, schema)
 
+    @metadata_operation
     def create_table(self, name, *columns, **kw):
         if self._get_table(name) is not None:
             logger.log(logging.INFO,
@@ -83,10 +107,10 @@ class IdempotentOperations(Operations):
                        .format(name))
             return
 
-        table = super(IdempotentOperations, self).create_table(
+        return super(IdempotentOperations, self).create_table(
             name, *columns, **kw)
-        return table
 
+    @metadata_operation
     def drop_constraint(self, name, table_name, type_=None, schema=None):
         if not self._has_index(name, table_name):
             logger.log(logging.INFO,
@@ -98,6 +122,7 @@ class IdempotentOperations(Operations):
         super(IdempotentOperations, self).drop_constraint(
             name, table_name, type_=type_, schema=schema)
 
+    @metadata_operation
     def create_unique_constraint(self, name, source, local_cols,
                                  schema=None, **kw):
         if self._has_index(name, source):
@@ -107,8 +132,53 @@ class IdempotentOperations(Operations):
                        .format(name, source))
             return
 
-        super(IdempotentOperations, self).create_unique_constraint(
+        return super(IdempotentOperations, self).create_unique_constraint(
             name, source, local_cols, schema, **kw)
+
+    @metadata_operation
+    def batch_alter_table(self, *args, **kwargs):
+        return super(IdempotentOperations, self).batch_alter_table(
+            *args, **kwargs)
+
+    @metadata_operation
+    def rename_table(self, *args, **kwargs):
+        return super(IdempotentOperations, self).rename_table(
+            *args, **kwargs)
+
+    @metadata_operation
+    def alter_column(self, *args, **kwargs):
+        return super(IdempotentOperations, self).alter_column(
+            *args, **kwargs)
+
+    @metadata_operation
+    def create_primary_key(self, *args, **kwargs):
+        return super(IdempotentOperations, self).create_primary_key(
+            *args, **kwargs)
+
+    @metadata_operation
+    def create_foreign_key(self, *args, **kwargs):
+        return super(IdempotentOperations, self).create_foreign_key(
+            *args, **kwargs)
+
+    @metadata_operation
+    def create_check_constraint(self, *args, **kwargs):
+        return super(IdempotentOperations, self).create_check_constraint(
+            *args, **kwargs)
+
+    @metadata_operation
+    def drop_table(self, *args, **kwargs):
+        return super(IdempotentOperations, self).drop_table(
+            *args, **kwargs)
+
+    @metadata_operation
+    def create_index(self, *args, **kwargs):
+        return super(IdempotentOperations, self).create_index(
+            *args, **kwargs)
+
+    @metadata_operation
+    def drop_index(self, *args, **kwargs):
+        return super(IdempotentOperations, self).drop_index(
+            *args, **kwargs)
 
 
 class DeactivatedFKConstraint(object):
@@ -171,7 +241,6 @@ class SchemaMigration(UpgradeStep):
             # If the transaction contains only DDL statements, the transaction
             # isn't automatically marked as changed, so we do it ourselves
             mark_changed(self.session)
-
         else:
             self._log_skipping_migration()
 
@@ -186,7 +255,7 @@ class SchemaMigration(UpgradeStep):
         self.metadata.reflect()
 
     def get_foreign_key_name(self, table_name, column_name):
-        table = self.op.metadata.tables.get(table_name)
+        table = self.metadata.tables.get(table_name)
         foreign_keys = table.columns.get(column_name).foreign_keys
         assert len(foreign_keys) == 1
         return foreign_keys.pop().name
@@ -194,6 +263,14 @@ class SchemaMigration(UpgradeStep):
     @property
     def is_oracle(self):
         return self.dialect_name == 'oracle'
+
+    @property
+    def is_postgres(self):
+        return self.dialect_name == 'postgresql'
+
+    @property
+    def is_mysql(self):
+        return self.dialect_name == 'mysql'
 
     def _log_skipping_migration(self):
         logger.log(logging.INFO,
@@ -266,11 +343,26 @@ class SchemaMigration(UpgradeStep):
             where(versions_table.c.profileid == self.profileid)
         )
 
+    def _create_operations(self):
+        """MySQL does not have transactional DDL, we might have to recover
+        from partially executed migrations, thus we use IdempotentOperations.
+
+        For all other DBMS (oracle and PostgreSQL) use alembic operations since
+        they have transactional DDL and IdempotentOperations does not work
+        there.
+
+        """
+        if self.is_mysql:
+            return IdempotentOperations(self.migration_context, self)
+        else:
+            return Operations(self.migration_context)
+
     def _setup_db_connection(self):
         session = create_session()
         self.connection = session.connection()
-        self.migration_context = MigrationContext.configure(self.connection)
-        self.metadata = MetaData(session.bind, reflect=True)
-        self.op = IdempotentOperations(self, self.migration_context)
         self.dialect_name = self.connection.dialect.name
+
+        self.migration_context = MigrationContext.configure(self.connection)
+        self.metadata = MetaData(self.connection, reflect=True)
+        self.op = self._create_operations()
         return session

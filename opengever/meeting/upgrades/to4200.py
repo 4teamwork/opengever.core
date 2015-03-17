@@ -1,4 +1,5 @@
 from opengever.core.upgrade import SchemaMigration
+from opengever.ogds.base.utils import get_current_admin_unit
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import Date
@@ -8,6 +9,10 @@ from sqlalchemy import String
 from sqlalchemy import Text
 from sqlalchemy import Time
 from sqlalchemy.schema import Sequence
+from sqlalchemy.sql.expression import column
+from sqlalchemy.sql.expression import table
+from zope.component import getUtility
+from zope.intid.interfaces import IIntIds
 
 
 class AddMeetingTable(SchemaMigration):
@@ -54,5 +59,47 @@ class AddMeetingTable(SchemaMigration):
                            Column('proposed_action', Text))
 
     def add_committee_columns(self):
+        """Careful, when committee objects/records have been created
+        this works only under the assumption that this upgrade is run in a
+        deployment with exactly one plone instance. When no objects/records
+        have been created the upgrade can be safely run in a deployment with
+        multiple instances.
+
+        Some hints for further debugging if this upgrade fails and complains
+        about null-values in the `physical_path` column:
+        - verify that you are really runing only one deployment
+        - verify that there are no orphaned committees in your sql-database
+          (orphaned means that the corresponding plone content-type has been
+           removed without deleting the sql record)
+
+        """
+        self.add_physical_path_column()
+        self.migrate_commitee_data()
+        self.make_physical_path_column_non_nullable()
+
+    def add_physical_path_column(self):
         self.op.add_column('committees',
-                           Column('physical_path', String(256), nullable=False))
+                           Column('physical_path', String(256)))
+
+    def migrate_commitee_data(self):
+        query = {'object_provides': 'opengever.meeting.committee.ICommittee'}
+        msg = 'Add physical_path to committees'
+        committee_table = table(
+            "committees",
+            column("int_id"),
+            column("admin_unit_id"),
+            column("physical_path"),
+        )
+
+        for obj in self.objects(query, msg):
+            int_id = getUtility(IIntIds).queryId(obj)
+            admin_unit_id = get_current_admin_unit().id()
+
+            self.execute(committee_table.update()
+                         .values(physical_path=obj.get_physical_path())
+                         .where(committee_table.c.int_id == int_id)
+                         .where(committee_table.c.admin_unit_id == admin_unit_id))
+
+    def make_physical_path_column_non_nullable(self):
+        self.op.alter_column('committees', 'physical_path', nullable=False,
+                             existing_type=String(256))
