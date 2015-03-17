@@ -1,4 +1,4 @@
-from opengever.activity.models.watcher import Watcher
+from opengever.activity.model.watcher import Watcher
 from opengever.base.model import Base
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid

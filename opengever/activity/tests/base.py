@@ -1,7 +1,7 @@
-from opengever.activity.models.activity import Activity
-from opengever.activity.models.notification import Notification
-from opengever.activity.models.resource import Resource
-from opengever.activity.models.watcher import Watcher
+from opengever.activity.model.activity import Activity
+from opengever.activity.model.notification import Notification
+from opengever.activity.model.resource import Resource
+from opengever.activity.model.watcher import Watcher
 from opengever.testing import MEMORY_DB_LAYER
 import unittest2
 

@@ -1,4 +1,4 @@
-from opengever.activity.models.notification import Notification
+from opengever.activity.model.notification import Notification
 from opengever.base.model import Base
 from opengever.ogds.models.query import BaseQuery
 from sqlalchemy import Column
@@ -31,9 +31,6 @@ class Activity(Base):
 
     resource_id = Column(Integer, ForeignKey('resources.id'), nullable=False)
     resource = relationship("Resource", backref="activities")
-
-    def __init__(self, **kwargs):
-        super(Activity, self).__init__(**kwargs)
 
     def create_notifications(self):
         """Create for every resource watcher the corresponding notification.

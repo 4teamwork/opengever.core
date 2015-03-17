@@ -1,9 +1,9 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.activity.center import NotificationCenter
-from opengever.activity.models import Notification
-from opengever.activity.models import Resource
-from opengever.activity.models import Watcher
+from opengever.activity.model import Notification
+from opengever.activity.model import Resource
+from opengever.activity.model import Watcher
 from opengever.activity.tests.base import ActivityTestCase
 from opengever.base.oguid import Oguid
 
