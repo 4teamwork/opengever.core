@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.2.1 (unreleased)
+4.2.1 (2015-03-17)
 ------------------
 
 - SchemaMigration: Use IdempotentOperations only when executing migrations for MySQL.
