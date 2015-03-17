@@ -28,11 +28,12 @@ class AddSubmittedDocumentsTable(SchemaMigration):
             Column("submitted_int_id", Integer),
             Column("submitted_physical_path", String(256))
         )
-        self.op.create_index(
+
+        self.op.create_unique_constraint(
             'ix_submitted_document_unique_source',
             'submitteddocuments',
             ['admin_unit_id', 'int_id', 'proposal_id'])
-        self.op.create_index(
+        self.op.create_unique_constraint(
             'ix_submitted_document_unique_target',
             'submitteddocuments',
             ['submitted_admin_unit_id', 'submitted_int_id'])
