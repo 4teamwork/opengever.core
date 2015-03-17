@@ -1,5 +1,6 @@
 from alembic.migration import MigrationContext
 from alembic.operations import Operations
+from decorator import decorator
 from ftw.upgrade import UpgradeStep
 from opengever.base.model import create_session
 from sqlalchemy import Column
@@ -24,6 +25,16 @@ class AbortUpgrade(Exception):
     """The upgrade had to be aborted for the reason specified in message."""
 
 
+@decorator
+def metadata_operation(f, *args, **kwargs):
+    """Refresh metadata after executing an operation."""
+
+    operations = args[0]
+    result = f(*args, **kwargs)
+    operations._refresh_metadata()
+    return result
+
+
 class IdempotentOperations(Operations):
     """Operations for MySQL - make alembic.operations tolerant to the same
     migration instruction being called multiple times.
@@ -36,15 +47,13 @@ class IdempotentOperations(Operations):
     fails. Since MYSQL does not support transaction aware schema changes we
     have to handle these partially executed migrations by ourself.
 
-    This class relies on an updated metadata, you have to do that manually
-    in your schema migrations by calling `SchemaMigration.refresh_metadata`.
-
     XXX: once we drop MySQL support this class should be removed.
 
     """
-    def __init__(self, migration_context, metadata):
+    def __init__(self, migration_context, schema_migration):
         super(IdempotentOperations, self).__init__(migration_context)
-        self.metadata = metadata
+        self.schema_migration = schema_migration
+        self.metadata = self.schema_migration.metadata
 
     def _get_table(self, table_name):
         return self.metadata.tables.get(table_name)
@@ -62,6 +71,10 @@ class IdempotentOperations(Operations):
                 return True
         return False
 
+    def _refresh_metadata(self):
+        self.schema_migration.refresh_metadata()
+
+    @metadata_operation
     def drop_column(self, table_name, column_name, **kw):
         if self._get_column(table_name, column_name) is None:
             logger.log(logging.INFO,
@@ -70,9 +83,10 @@ class IdempotentOperations(Operations):
                        .format(column_name, table_name))
             return
 
-        super(IdempotentOperations, self).drop_column(
+        return super(IdempotentOperations, self).drop_column(
             table_name, column_name, **kw)
 
+    @metadata_operation
     def add_column(self, table_name, column, schema=None):
         column_name = column.name
         if self._get_column(table_name, column_name) is not None:
@@ -82,9 +96,10 @@ class IdempotentOperations(Operations):
                        .format(column_name, table_name))
             return
 
-        super(IdempotentOperations, self).add_column(
+        return super(IdempotentOperations, self).add_column(
             table_name, column, schema)
 
+    @metadata_operation
     def create_table(self, name, *columns, **kw):
         if self._get_table(name) is not None:
             logger.log(logging.INFO,
@@ -92,10 +107,10 @@ class IdempotentOperations(Operations):
                        .format(name))
             return
 
-        table = super(IdempotentOperations, self).create_table(
+        return super(IdempotentOperations, self).create_table(
             name, *columns, **kw)
-        return table
 
+    @metadata_operation
     def drop_constraint(self, name, table_name, type_=None, schema=None):
         if not self._has_index(name, table_name):
             logger.log(logging.INFO,
@@ -107,6 +122,7 @@ class IdempotentOperations(Operations):
         super(IdempotentOperations, self).drop_constraint(
             name, table_name, type_=type_, schema=schema)
 
+    @metadata_operation
     def create_unique_constraint(self, name, source, local_cols,
                                  schema=None, **kw):
         if self._has_index(name, source):
@@ -116,8 +132,53 @@ class IdempotentOperations(Operations):
                        .format(name, source))
             return
 
-        super(IdempotentOperations, self).create_unique_constraint(
+        return super(IdempotentOperations, self).create_unique_constraint(
             name, source, local_cols, schema, **kw)
+
+    @metadata_operation
+    def batch_alter_table(self, *args, **kwargs):
+        return super(IdempotentOperations, self).batch_alter_table(
+            *args, **kwargs)
+
+    @metadata_operation
+    def rename_table(self, *args, **kwargs):
+        return super(IdempotentOperations, self).rename_table(
+            *args, **kwargs)
+
+    @metadata_operation
+    def alter_column(self, *args, **kwargs):
+        return super(IdempotentOperations, self).alter_column(
+            *args, **kwargs)
+
+    @metadata_operation
+    def create_primary_key(self, *args, **kwargs):
+        return super(IdempotentOperations, self).create_primary_key(
+            *args, **kwargs)
+
+    @metadata_operation
+    def create_foreign_key(self, *args, **kwargs):
+        return super(IdempotentOperations, self).create_foreign_key(
+            *args, **kwargs)
+
+    @metadata_operation
+    def create_check_constraint(self, *args, **kwargs):
+        return super(IdempotentOperations, self).create_check_constraint(
+            *args, **kwargs)
+
+    @metadata_operation
+    def drop_table(self, *args, **kwargs):
+        return super(IdempotentOperations, self).drop_table(
+            *args, **kwargs)
+
+    @metadata_operation
+    def create_index(self, *args, **kwargs):
+        return super(IdempotentOperations, self).create_index(
+            *args, **kwargs)
+
+    @metadata_operation
+    def drop_index(self, *args, **kwargs):
+        return super(IdempotentOperations, self).drop_index(
+            *args, **kwargs)
 
 
 class DeactivatedFKConstraint(object):
@@ -292,7 +353,7 @@ class SchemaMigration(UpgradeStep):
 
         """
         if self.is_mysql:
-            return IdempotentOperations(self.migration_context, self.metadata)
+            return IdempotentOperations(self.migration_context, self)
         else:
             return Operations(self.migration_context)
 
