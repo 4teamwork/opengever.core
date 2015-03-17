@@ -89,6 +89,9 @@ class Meeting(Base):
     def is_editable(self):
         return self.get_state() == self.STATE_PENDING
 
+    def has_pre_protocol_document(self):
+        return self.pre_protocol_document is not None
+
     @property
     def physical_path(self):
         return '/'.join(

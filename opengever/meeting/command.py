@@ -1,3 +1,5 @@
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
@@ -45,7 +47,10 @@ class CreatePreProtocolCommand(CreateDocumentCommand):
         self.data = self.generate_pre_protocol_file_data()
 
         document = super(CreatePreProtocolCommand, self).execute()
+        self.add_database_entry(document)
+        return document
 
+    def add_database_entry(self, document):
         session = create_session()
         pre_protocol_document = GeneratedPreProtocol(
             oguid=Oguid.for_object(document),
@@ -53,13 +58,64 @@ class CreatePreProtocolCommand(CreateDocumentCommand):
         self.meeting.pre_protocol_document = pre_protocol_document
         session.add(pre_protocol_document)
 
-        return document
-
     def show_message(self):
         portal = api.portal.get()
         api.portal.show_message(
             _(u'Pre-protocol for meeting ${title} has been generated '
                 'successfully',
+              mapping=dict(title=self.meeting.get_title())),
+            portal.REQUEST)
+
+
+class CreateNewPreProtocolDocumentCommand(CreatePreProtocolCommand):
+
+    def __init__(self, pre_protocol_document):
+        meeting = pre_protocol_document.meeting
+        document = pre_protocol_document.resolve_document()
+        dossier = aq_parent(aq_inner(document))
+        super(CreateNewPreProtocolDocumentCommand, self).__init__(
+            dossier, meeting)
+
+        self.pre_protocol_document = pre_protocol_document
+
+    def add_database_entry(self, document):
+        self.pre_protocol_document.oguid = Oguid.for_object(document)
+        self.pre_protocol_document.generated_version = document.get_current_version()
+
+
+class UpdatePreProtocolCommand(object):
+
+    def __init__(self, generated_pre_protocol):
+        self.generated_pre_protocol = generated_pre_protocol
+        self.meeting = generated_pre_protocol.meeting
+
+    def generate_pre_protocol_file_data(self):
+        sablon = Sablon(templates.path('protocol_template.docx'))
+        sablon.process(PreProtocolData(self.meeting).as_json())
+
+        assert sablon.is_processed_successfully(), sablon.stderr
+        return sablon.file_data
+
+    def execute(self):
+        document = Oguid.resolve_object(self.generated_pre_protocol.oguid)
+        document.file.data = self.generate_pre_protocol_file_data()
+
+        repository = api.portal.get_tool('portal_repository')
+        comment = _(u'Updated with a newer generated version from meeting '
+                    '${title}.',
+                    mapping=dict(title=self.meeting.get_title()))
+        repository.save(obj=document, comment=comment)
+
+        new_version = document.get_current_version()
+        self.generated_pre_protocol.generated_version = new_version
+
+        return document
+
+    def show_message(self):
+        portal = api.portal.get()
+        api.portal.show_message(
+            _(u'Pre-protocol for meeting ${title} has been updated '
+              'successfully',
               mapping=dict(title=self.meeting.get_title())),
             portal.REQUEST)
 

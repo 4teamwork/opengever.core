@@ -7,6 +7,8 @@ from opengever.meeting.browser.meetings.meetinglist import MeetingList
 from opengever.meeting.browser.meetings.preprotocol import DownloadGeneratedPreProtocol
 from opengever.meeting.browser.meetings.preprotocol import EditPreProtocol
 from opengever.meeting.browser.meetings.transitions import MeetingTransitionController
+from opengever.meeting.browser.preprotocol import GeneratePreProtocol
+from opengever.meeting.browser.preprotocol import UpdatePreProtocol
 from opengever.meeting.form import ModelAddForm
 from opengever.meeting.form import ModelEditForm
 from opengever.meeting.model import Meeting
@@ -131,13 +133,13 @@ class MeetingView(BrowserView):
         return EditPreProtocol.url_for(self.context, self.model)
 
     def url_generate_pre_protocol(self):
-        root = self.context.restrictedTraverse(
-            '@@primary_repository_root').get_primary_repository_root()
+        if not self.model.has_pre_protocol_document():
+            return GeneratePreProtocol.url_for(self.context, self.model)
+        else:
+            return UpdatePreProtocol.url_for(self.model.pre_protocol_document)
 
-        return '{}/@@generate_pre_protocol?meeting_id={}'.format(
-            root.absolute_url(), self.model.meeting_id)
     def url_download_pre_protocol(self):
-         return DownloadGeneratedPreProtocol.url_for(self.context, self.model)
+        return DownloadGeneratedPreProtocol.url_for(self.context, self.model)
 
     def url_update_agenda_item_order(self):
         return UpdateAgendaItemOrder.url_for(self.context, self.model)

@@ -42,6 +42,9 @@ class GeneratedDocument(Base):
 
         return self.generated_version == document.get_current_version()
 
+    def resolve_document(self):
+        return self.oguid.resolve_object()
+
 
 class GeneratedPreProtocol(GeneratedDocument):
 

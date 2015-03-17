@@ -8,6 +8,8 @@ from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.browser.meetings.meetinglist import MeetingList
 from opengever.meeting.browser.meetings.preprotocol import EditPreProtocol
+from opengever.meeting.browser.preprotocol import METHOD_NEW_DOCUMENT
+from opengever.meeting.browser.preprotocol import METHOD_NEW_VERSION
 from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import GeneratedPreProtocol
@@ -50,6 +52,12 @@ class TestPreProtocol(FunctionalTestCase):
                       'Proposed action': 'Accept it',
                       'Discussion': 'We should accept it',
                       'Decision': 'Accepted'}).submit()
+
+    def setup_generated_pre_protocol(self, browser):
+        self.setup_pre_protocol(browser)
+        browser.find('Generate pre-protocol').click()
+        browser.fill({'Target dossier': self.dossier})
+        browser.find('Generate').click()
 
     @browsing
     def test_pre_protocol_can_be_edited(self, browser):
@@ -136,3 +144,37 @@ class TestPreProtocol(FunctionalTestCase):
         self.assertIsNotNone(generated_document)
         self.assertEqual(0, generated_document.generated_version)
         self.assertEqual(meeting, generated_document.meeting)
+
+    @browsing
+    def test_generated_pre_protocol_can_be_updated(self, browser):
+        self.setup_generated_pre_protocol(browser)
+
+        browser.open(MeetingList.url_for(self.committee, self.meeting))
+        browser.find('Generate pre-protocol').click()
+        browser.fill({'form.widgets.method:list': METHOD_NEW_VERSION}).submit()
+
+        meeting = Meeting.get(self.meeting.meeting_id)  # refresh meeting
+        document = browser.context
+        generated_document = GeneratedPreProtocol.query.by_document(
+            document).first()
+        self.assertIsNotNone(generated_document)
+        self.assertEqual(1, generated_document.generated_version)
+        self.assertEqual(meeting, generated_document.meeting)
+        self.assertEqual(1, GeneratedPreProtocol.query.count())
+
+    @browsing
+    def test_new_generated_pre_protocol_can_be_created(self, browser):
+        self.setup_generated_pre_protocol(browser)
+
+        browser.open(MeetingList.url_for(self.committee, self.meeting))
+        browser.find('Generate pre-protocol').click()
+        browser.fill({'form.widgets.method:list': METHOD_NEW_DOCUMENT}).submit()
+
+        meeting = Meeting.get(self.meeting.meeting_id)  # refresh meeting
+        document = browser.context
+        generated_document = GeneratedPreProtocol.query.by_document(
+            document).first()
+        self.assertIsNotNone(generated_document)
+        self.assertEqual(0, generated_document.generated_version)
+        self.assertEqual(meeting, generated_document.meeting)
+        self.assertEqual(1, GeneratedPreProtocol.query.count())
