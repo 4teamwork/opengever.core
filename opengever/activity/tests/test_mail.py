@@ -74,7 +74,6 @@ class TestEmailNotification(FunctionalTestCase):
         html_part = mail.get_payload()[0].as_string()
 
         # TODO: better assertion ...
-        expected = """<a href=3D"http://example.com/@@resolve_notification?notification_id=3D1"=
->See on GEVER</a>"""
+        expected = '<a href=3D"http://example.com/@@resolve_notification?notification_id=3D=\n1">View in GEVER</a>'
 
         self.assertIn(expected, html_part)

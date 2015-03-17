@@ -20,11 +20,11 @@
 
     <p>Description:</p>
     <span tal:replace="structure options/description" />
-  </body>
 
-  <br />
-  <hr />
-  <br />
-  <a href="" i18n:translate="" tal:attributes="href options/link">See on GEVER</a>
+    <br />
+    <hr />
+    <br />
+    <a href="" i18n:translate="" tal:attributes="href options/link">View in GEVER</a>
+  </body>
 
 </html>
