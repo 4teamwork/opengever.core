@@ -5,6 +5,7 @@ from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.testing import FunctionalTestCase
 from plone import api
+from plone.protect import createToken
 
 
 class TestDossierActivation(FunctionalTestCase):
@@ -24,7 +25,8 @@ class TestDossierActivation(FunctionalTestCase):
                                .within(subdossier)
                                .in_state('dossier-state-inactive'))
 
-        browser.login().open(self.dossier, view='transition-activate')
+        browser.login().open(self.dossier, view='transition-activate',
+                             data={'_authenticator': createToken()})
 
         self.assertEqual('dossier-state-active',
                          api.content.get_state(self.dossier))
@@ -41,7 +43,8 @@ class TestDossierActivation(FunctionalTestCase):
                             .within(self.dossier)
                             .in_state('dossier-state-inactive'))
 
-        browser.login().open(subdossier, view='transition-activate')
+        browser.login().open(subdossier, view='transition-activate',
+                             data={'_authenticator': createToken()})
 
         self.assertEqual('dossier-state-inactive',
                          api.content.get_state(subdossier))

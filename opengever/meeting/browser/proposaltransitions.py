@@ -1,5 +1,6 @@
 from five import grok
 from opengever.meeting.proposal import IProposal
+from plone.protect.utils import addTokenToUrl
 from zExceptions import NotFound
 
 
@@ -10,8 +11,8 @@ class ProposalTransitionController(grok.View):
 
     @classmethod
     def url_for(cls, context, transition):
-        return "{}/@@{}?transition={}".format(
-            context.absolute_url(), cls.__view_name__, transition)
+        return addTokenToUrl("{}/@@{}?transition={}".format(
+                context.absolute_url(), cls.__view_name__, transition))
 
     def render(self):
         transition = self.request.get('transition')

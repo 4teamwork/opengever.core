@@ -52,4 +52,35 @@
       for="opengever.base.interfaces.IOpengeverCatalogBrain"
       />
 
+  <configure package="collective.quickupload.browser">
+      <browser:page
+          class="opengever.base.quickupload.OGQuickUploadView"
+          layer="opengever.base.interfaces.IOpengeverBaseLayer"
+          for="..interfaces.IQuickUploadCapable"
+          name="quick_upload"
+          permission="cmf.AddPortalContent"
+          />
+
+      <browser:page
+          class="opengever.base.quickupload.OGQuickUploadInit"
+          layer="opengever.base.interfaces.IOpengeverBaseLayer"
+          for="*"
+          name="quick_upload_init"
+          permission="cmf.AddPortalContent"/>
+
+
+      <browser:page
+          class="opengever.base.quickupload.OGQuickUploadFile"
+          layer="opengever.base.interfaces.IOpengeverBaseLayer"
+          for="*"
+          name="quick_upload_file"
+          attribute="quick_upload_file"
+          permission="cmf.AddPortalContent"/>
+  </configure>
+
+  <adapter
+      name="plone.protect.autocsrf"
+      factory=".protect.OGProtectTransform"
+      />
+
 </configure>

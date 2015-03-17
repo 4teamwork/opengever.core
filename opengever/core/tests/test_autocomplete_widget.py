@@ -2,6 +2,8 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.testing import BROWSER_FUNCTIONAL_TESTING
 from plone.app.testing import SITE_OWNER_NAME
 from unittest2 import TestCase
+import os
+import plone.protect.auto
 
 
 class TestOpengeverAutocompleteWidgetForTestbrowser(TestCase):
@@ -11,6 +13,12 @@ class TestOpengeverAutocompleteWidgetForTestbrowser(TestCase):
     """
 
     layer = BROWSER_FUNCTIONAL_TESTING
+
+    def setUp(self):
+        plone.protect.auto.CSRF_DISABLED = True
+
+    def tearDown(self):
+        plone.protect.auto.CSRF_DISABLED = False
 
     @browsing
     def test_autocomplete_form_fill(self, browser):

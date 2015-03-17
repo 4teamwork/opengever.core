@@ -13,6 +13,7 @@ from plone.app.testing import TEST_USER_NAME
 from plone.dexterity.utils import createContentInContainer
 from plone.locking.interfaces import IRefreshableLockable
 from plone.namedfile.file import NamedBlobFile
+from plone.protect import createToken
 from Products.CMFCore.utils import getToolByName
 from zope.component import getMultiAdapter
 import datetime
@@ -163,7 +164,8 @@ class TestCheckinViews(FunctionalTestCase):
             self.dossier,
             data={'paths': [obj2brain(self.document).getPath(),
                             obj2brain(document2).getPath()],
-                  'checkin_documents:method': 1})
+                  'checkin_documents:method': 1,
+                  '_authenticator': createToken()})
 
         # fill and submit checkin form
         browser.fill({'Journal Comment Describe, why you checkin the selected documents': 'Checkini'})
@@ -208,7 +210,8 @@ class TestCheckinViews(FunctionalTestCase):
             self.dossier,
             data={'paths': [obj2brain(self.document).getPath(),
                             obj2brain(document2).getPath()],
-                  'checkin_without_comment:method': 1})
+                  'checkin_without_comment:method': 1,
+                  '_authenticator': createToken()})
 
         manager1 = getMultiAdapter((self.document, self.portal.REQUEST),
                                    ICheckinCheckoutManager)

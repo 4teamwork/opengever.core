@@ -1,5 +1,6 @@
 from five import grok
 from ftw.contentmenu.interfaces import IContentmenuPostFactoryMenu
+from ftw.contentmenu.menu import CombinedActionsWorkflowMenu
 from opengever.meeting import is_meeting_feature_enabled
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from zope.interface import Interface
@@ -70,3 +71,17 @@ class PloneSitePostFactoryMenu(FilteredPostFactoryMenu):
             return not is_meeting_feature_enabled()
 
         return False
+
+
+class OGCombinedActionsWorkflowMenu(CombinedActionsWorkflowMenu):
+
+    def getWorkflowMenuItems(self, context, request):
+        """ftw.contentmenu >= 2.2.2 does no longer protect the workflows
+        "Advanced..." action with "Manage portal".
+        We therefore just filter it.
+        """
+
+        result = (super(OGCombinedActionsWorkflowMenu, self)
+                  .getWorkflowMenuItems(context, request))
+        return filter(lambda item: (item.get('extra', {})
+                                    .get('id', None) != 'advanced'), result)

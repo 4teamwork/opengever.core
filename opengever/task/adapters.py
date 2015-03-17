@@ -1,6 +1,7 @@
 from AccessControl import getSecurityManager
 from DateTime import DateTime
 from five import grok
+from opengever.base.protect import unprotected_write
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.actor import Actor
 from opengever.task.response_description import ResponseDescription
@@ -47,7 +48,7 @@ class ResponseContainer(grok.Adapter):
 
     def __init__(self, context):
         self.context = context
-        annotations = IAnnotations(self.context)
+        annotations = unprotected_write(IAnnotations(self.context))
         self.__mapping = annotations.get(self.ANNO_KEY, None)
         if self.__mapping is None:
             self.__mapping = PersistentList()

@@ -5,6 +5,7 @@ from ftw.testbrowser.pages.statusmessages import error_messages
 from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.app.testing import TEST_USER_ID
+from plone.protect import createToken
 
 
 class TestDossierDeactivation(FunctionalTestCase):
@@ -21,7 +22,8 @@ class TestDossierDeactivation(FunctionalTestCase):
                .titled(u'b\xe4\xe4\xe4h')
                .in_state('dossier-state-resolved'))
 
-        browser.login().open(self.dossier, view='transition-deactivate')
+        browser.login().open(self.dossier, view='transition-deactivate',
+                             data={'_authenticator': createToken()})
         self.assertEqual(
             u"The Dossier can't be deactivated, the subdossier b\xe4\xe4\xe4h is already resolved",
             error_messages()[0])
@@ -32,7 +34,8 @@ class TestDossierDeactivation(FunctionalTestCase):
                .within(self.dossier)
                .checked_out_by(TEST_USER_ID))
 
-        browser.login().open(self.dossier, view='transition-deactivate')
+        browser.login().open(self.dossier, view='transition-deactivate',
+                             data={'_authenticator': createToken()})
         self.assertEqual(
             u"The Dossier can't be deactivated, not all containeddocuments "
             "are checked in.",
@@ -42,7 +45,8 @@ class TestDossierDeactivation(FunctionalTestCase):
     def test_recursively_deactivate_subdossier(self, browser):
         subdossier = create(Builder('dossier').within(self.dossier))
         subsubdossier = create(Builder('dossier').within(subdossier))
-        browser.login().open(self.dossier, view='transition-deactivate')
+        browser.login().open(self.dossier, view='transition-deactivate',
+                             data={'_authenticator': createToken()})
 
         self.assertEqual('dossier-state-inactive',
                          api.content.get_state(self.dossier))
@@ -58,7 +62,8 @@ class TestDossierDeactivation(FunctionalTestCase):
                              .within(self.dossier)
                              .in_state('dossier-state-inactive'))
 
-        browser.login().open(self.dossier, view='transition-deactivate')
+        browser.login().open(self.dossier, view='transition-deactivate',
+                             data={'_authenticator': createToken()})
 
         self.assertEqual('dossier-state-inactive',
                          api.content.get_state(self.dossier))

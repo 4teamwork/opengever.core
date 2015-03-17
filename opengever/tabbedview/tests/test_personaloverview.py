@@ -72,7 +72,6 @@ class TestPersonalOverview(FunctionalTestCase):
 
     @browsing
     def test_additional_tabs_are_hidden_for_regular_users(self, browser):
-        setRoles(self.portal, 'hugo.boss', ['Reader'])
         browser.login(username='hugo.boss', password='demo09').open(
             view='personal_overview')
         self.assertEqual(

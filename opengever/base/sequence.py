@@ -1,4 +1,5 @@
 from five import grok
+from opengever.base.protect import unprotected_write
 from persistent.dict import PersistentDict
 from plone.dexterity.interfaces import IDexterityContent
 from Products.CMFCore.interfaces import ISiteRoot
@@ -19,7 +20,7 @@ class SequenceNumber(grok.GlobalUtility):
     grok.provides(ISequenceNumber)
 
     def get_number(self, obj):
-        ann = IAnnotations(obj)
+        ann = unprotected_write(IAnnotations(obj))
         if SEQUENCE_NUMBER_ANNOTATION_KEY not in ann.keys():
             generator = getAdapter(obj, ISequenceNumberGenerator)
             value = generator.generate()
@@ -27,7 +28,7 @@ class SequenceNumber(grok.GlobalUtility):
         return ann.get(SEQUENCE_NUMBER_ANNOTATION_KEY)
 
     def remove_number(self, obj):
-        ann = IAnnotations(obj)
+        ann = unprotected_write(IAnnotations(obj))
         if SEQUENCE_NUMBER_ANNOTATION_KEY in ann.keys():
             del ann[SEQUENCE_NUMBER_ANNOTATION_KEY]
 
@@ -52,9 +53,9 @@ class DefaultSequenceNumberGenerator(grok.Adapter):
 
     def get_next(self, key):
         portal = getUtility(ISiteRoot)
-        ann = IAnnotations(portal)
+        ann = unprotected_write(IAnnotations(portal))
         if SEQUENCE_NUMBER_ANNOTATION_KEY not in ann.keys():
-            ann[SEQUENCE_NUMBER_ANNOTATION_KEY] = PersistentDict()
+            ann[SEQUENCE_NUMBER_ANNOTATION_KEY] = unprotected_write(PersistentDict())
         map = ann.get(SEQUENCE_NUMBER_ANNOTATION_KEY)
         if key not in map:
             map[key] = Increaser(0)

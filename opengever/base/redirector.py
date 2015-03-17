@@ -90,7 +90,7 @@ class RedirectorViewlet(grok.Viewlet):
     grok.require('zope2.View')
 
     JS_TEMPLATE = '''
-<script type="text/javascript">
+<script type="text/javascript" class="redirector">
 $(function() {
     window.setTimeout("window.open('%(url)s', '%(target)s');", %(timeout)s);
 });

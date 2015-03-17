@@ -5,13 +5,14 @@ from ftw.testing import MockTestCase
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.interfaces import IDossierResolver
 from opengever.dossier.resolve import DossierResolver
+from opengever.dossier.resolve import NO_START_DATE
 from opengever.dossier.resolve import NOT_CHECKED_IN_DOCS
 from opengever.dossier.resolve import NOT_CLOSED_TASKS
 from opengever.dossier.resolve import NOT_SUPPLIED_OBJECTS
-from opengever.dossier.resolve import NO_START_DATE
 from opengever.dossier.resolve import ResolveConditions, Resolver
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import applyProfile
+from plone.protect import createToken
 from zope.interface import implements
 from zope.interface.verify import verifyClass
 
@@ -32,7 +33,8 @@ class TestResolvingDossiers(FunctionalTestCase):
                          .having(start=date(2013, 11, 5)))
 
         self.browser.open(
-            '{}/transition-resolve'.format(dossier.absolute_url()))
+            '{}/transition-resolve?_authenticator={}'.format(
+                dossier.absolute_url(), createToken()))
 
         self.browser.assert_url(dossier.absolute_url())
         self.browser.assert_portal_message(
@@ -45,7 +47,8 @@ class TestResolvingDossiers(FunctionalTestCase):
                             .having(start=date(2013, 11, 5)))
 
         self.browser.open(
-            '{}/transition-resolve'.format(subdossier.absolute_url()))
+            '{}/transition-resolve?_authenticator={}'.format(
+                subdossier.absolute_url(), createToken()))
 
         self.browser.assert_url(subdossier.absolute_url())
         self.browser.assert_portal_message(
@@ -68,7 +71,8 @@ class TestResolvingDossiersWithFilingNumberSupport(FunctionalTestCase):
                          .having(start=date(2013, 11, 5)))
 
         self.browser.open(
-            '{}/transition-resolve'.format(dossier.absolute_url()))
+            '{}/transition-resolve?_authenticator={}'.format(
+                dossier.absolute_url(), createToken()))
 
         self.browser.assert_url(
             '{}/transition-archive'.format(dossier.absolute_url()))

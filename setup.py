@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '4.2.2.dev0'
+version = '4.3.0.dev0'
 maintainer = '4teamwork AG'
 
 tests_require = [
@@ -69,8 +69,7 @@ setup(name='opengever.core',
         'collective.z3cform.datagridfield',
         'five.globalrequest',
         'five.grok',
-        'ftw.contentmenu',
-        'ftw.contentmenu',
+        'ftw.contentmenu >= 2.4.0',
         'ftw.datepicker',
         'ftw.dictstorage [sqlalchemy]',
         'ftw.inflator',
@@ -103,6 +102,7 @@ setup(name='opengever.core',
         'plone.formwidget.namedfile',
         'plone.namedfile[blobs]',
         'plone.principalsource',
+        'plone.protect >= 3.0.1',
         'plone.registry',
         'plone.rfc822',
         'plone.supermodel',

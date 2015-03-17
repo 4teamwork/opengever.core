@@ -32,7 +32,18 @@ from zope.component import getUtility
 from zope.component import provideUtility
 from zope.configuration import xmlconfig
 from zope.sqlalchemy import datamanager
+import logging
+import sys
 import transaction
+
+
+loghandler = logging.StreamHandler(stream=sys.stdout)
+loghandler.setLevel(logging.DEBUG)
+for name, level in {'plone.protect': logging.INFO,
+                    'opengever.base.protect': logging.INFO}.items():
+    logger = logging.getLogger(name)
+    logger.addHandler(loghandler)
+    logger.setLevel(level)
 
 
 snapshots.disable()

@@ -14,7 +14,7 @@
 
     <div class="downloadActions">
       <a class="function-download-copy" href="#"
-         tal:attributes="href string:${context/absolute_url}/download"
+         tal:attributes="href string:${context/absolute_url}/download?_authenticator=${context/@@authenticator/token}"
          i18n:domain="opengever.document"
          i18n:translate="label_download_copy">
         Download copy

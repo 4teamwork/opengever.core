@@ -1,5 +1,6 @@
 from AccessControl import getSecurityManager
 from BTrees.OOBTree import OOBTree
+from opengever.base.protect import unprotected_write
 from opengever.portlets.tree.interfaces import IRepositoryFavorites
 from opengever.repository.repositoryroot import IRepositoryRoot
 from persistent.list import PersistentList
@@ -51,14 +52,15 @@ class RepositoryFavorites(object):
 
     @property
     def annotations(self):
-        annotations = IAnnotations(self.context)
+        annotations = unprotected_write(IAnnotations(self.context))
         if ANNOTATION_KEY not in annotations:
             annotations[ANNOTATION_KEY] = OOBTree()
 
+        unprotected_write(annotations[ANNOTATION_KEY])
         if self.username not in annotations[ANNOTATION_KEY]:
             annotations[ANNOTATION_KEY][self.username] = PersistentList()
 
-        return annotations[ANNOTATION_KEY][self.username]
+        return unprotected_write(annotations[ANNOTATION_KEY][self.username])
 
 
 class RepositoryFavoritesView(BrowserView):
