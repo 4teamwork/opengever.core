@@ -8,6 +8,7 @@ from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.browser.meetings.meetinglist import MeetingList
 from opengever.meeting.browser.meetings.preprotocol import EditPreProtocol
+from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import GeneratedPreProtocol
 from opengever.meeting.model import Meeting
@@ -41,6 +42,14 @@ class TestPreProtocol(FunctionalTestCase):
             Builder('agenda_item')
             .having(meeting=self.meeting,
                     proposal=self.proposal_model))
+
+    def setup_pre_protocol(self, browser):
+        browser.login()
+        browser.open(EditPreProtocol.url_for(self.committee, self.meeting))
+        browser.fill({'Considerations': 'It is important',
+                      'Proposed action': 'Accept it',
+                      'Discussion': 'We should accept it',
+                      'Decision': 'Accepted'}).submit()
 
     @browsing
     def test_pre_protocol_can_be_edited(self, browser):
@@ -102,14 +111,15 @@ class TestPreProtocol(FunctionalTestCase):
         self.assertEqual(u'Klara', meeting.other_participants)
 
     @browsing
-    def test_pre_protocol_can_be_generated(self, browser):
-        browser.login()
-        browser.open(EditPreProtocol.url_for(self.committee, self.meeting))
-        browser.fill({'Considerations': 'It is important',
-                      'Proposed action': 'Accept it',
-                      'Discussion': 'We should accept it',
-                      'Decision': 'Accepted'}).submit()
+    def test_pre_protocol_can_be_downloaded(self, browser):
+        self.setup_pre_protocol(browser)
+        browser.find('Download pre-protocol').click()
+        self.assertEqual(browser.headers['content-type'], MIME_DOCX)
+        self.assertIsNotNone(browser.contents)
 
+    @browsing
+    def test_pre_protocol_can_be_generated(self, browser):
+        self.setup_pre_protocol(browser)
         browser.find('Generate pre-protocol').click()
         browser.fill({'Target dossier': self.dossier})
         browser.find('Generate').click()

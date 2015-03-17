@@ -4,8 +4,8 @@ from opengever.meeting.browser.meetings.agendaitem import ScheduleSubmittedPropo
 from opengever.meeting.browser.meetings.agendaitem import ScheduleText
 from opengever.meeting.browser.meetings.agendaitem import UpdateAgendaItemOrder
 from opengever.meeting.browser.meetings.meetinglist import MeetingList
+from opengever.meeting.browser.meetings.preprotocol import DownloadGeneratedPreProtocol
 from opengever.meeting.browser.meetings.preprotocol import EditPreProtocol
-from opengever.meeting.browser.meetings.preprotocol import GeneratePreProtocol
 from opengever.meeting.browser.meetings.transitions import MeetingTransitionController
 from opengever.meeting.form import ModelAddForm
 from opengever.meeting.form import ModelEditForm
@@ -93,7 +93,7 @@ class MeetingView(BrowserView):
         'schedule_proposal': ScheduleSubmittedProposal,
         'schedule_text': ScheduleText,
         'pre_protocol': EditPreProtocol,
-        'generate_pre_protocol': GeneratePreProtocol,
+        'download_pre_protocol': DownloadGeneratedPreProtocol,
         'meetingtransitioncontroller': MeetingTransitionController,
         'update_agenda_item_order': UpdateAgendaItemOrder,
     }
@@ -136,6 +136,8 @@ class MeetingView(BrowserView):
 
         return '{}/@@generate_pre_protocol?meeting_id={}'.format(
             root.absolute_url(), self.model.meeting_id)
+    def url_download_pre_protocol(self):
+         return DownloadGeneratedPreProtocol.url_for(self.context, self.model)
 
     def url_update_agenda_item_order(self):
         return UpdateAgendaItemOrder.url_for(self.context, self.model)
