@@ -111,4 +111,23 @@
         directory="profiles/4200"
         />
 
+    <!-- 4200 -> 4201 -->
+    <genericsetup:upgradeStep
+        title="Disable Remove GEVER content for inactive or resolved dossiers."
+        description=""
+        source="4200"
+        destination="4201"
+        handler="opengever.dossier.upgrades.to4201.UpdateRemoveGEVERContentPermission"
+        profile="opengever.dossier:default"
+        />
+
+    <genericsetup:registerProfile
+        name="4201"
+        title="opengever.dossier: upgrade profile 4201"
+        description=""
+        directory="profiles/4201"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
 </configure>

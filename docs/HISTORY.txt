@@ -5,6 +5,9 @@ Changelog
 4.2.1 (unreleased)
 ------------------
 
+- Disable Remove GEVER content for inactive or resolved dossiers.
+  [phgross]
+
 - SchemaMigration: Make sure transaction is marked as changed even if it
   only contains DDL statements. See zope/sqlalchemy/README.txt#L145-L164
   [lgraf]
