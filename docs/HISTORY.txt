@@ -5,6 +5,9 @@ Changelog
 4.2.1 (unreleased)
 ------------------
 
+- Update translation for forwarding-transition-reassign transition.
+  [phgross]
+
 - Disable Remove GEVER content for inactive or resolved dossiers.
   [phgross]
 
