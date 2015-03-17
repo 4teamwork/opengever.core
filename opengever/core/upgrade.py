@@ -25,8 +25,12 @@ class AbortUpgrade(Exception):
 
 
 class IdempotentOperations(Operations):
-    """Make alembic.operations tolerant to the same migration instruction being
-    called multiple times.
+    """Operations for MySQL - make alembic.operations tolerant to the same
+    migration instruction being called multiple times.
+
+    Works only for non-transactional DDL since it relies on a metadata
+    instance to reflect about the database which seems not to see non-committed
+    changes.
 
     This might happen when a DB-migration has been executed halfway but then
     fails. Since MYSQL does not support transaction aware schema changes we
@@ -35,11 +39,12 @@ class IdempotentOperations(Operations):
     This class relies on an updated metadata, you have to do that manually
     in your schema migrations by calling `SchemaMigration.refresh_metadata`.
 
+    XXX: once we drop MySQL support this class should be removed.
+
     """
-    def __init__(self, schema_migration, migration_context):
+    def __init__(self, migration_context, metadata):
         super(IdempotentOperations, self).__init__(migration_context)
-        self.schema_migration = schema_migration
-        self.metadata = self.schema_migration.metadata
+        self.metadata = metadata
 
     def _get_table(self, table_name):
         return self.metadata.tables.get(table_name)
@@ -175,7 +180,6 @@ class SchemaMigration(UpgradeStep):
             # If the transaction contains only DDL statements, the transaction
             # isn't automatically marked as changed, so we do it ourselves
             mark_changed(self.session)
-
         else:
             self._log_skipping_migration()
 
@@ -278,11 +282,26 @@ class SchemaMigration(UpgradeStep):
             where(versions_table.c.profileid == self.profileid)
         )
 
+    def _create_operations(self):
+        """MySQL does not have transactional DDL, we might have to recover
+        from partially executed migrations, thus we use IdempotentOperations.
+
+        For all other DBMS (oracle and PostgreSQL) use alembic operations since
+        they have transactional DDL and IdempotentOperations does not work
+        there.
+
+        """
+        if self.is_mysql:
+            return IdempotentOperations(self.migration_context, self.metadata)
+        else:
+            return Operations(self.migration_context)
+
     def _setup_db_connection(self):
         session = create_session()
         self.connection = session.connection()
-        self.migration_context = MigrationContext.configure(self.connection)
-        self.op = IdempotentOperations(self, self.migration_context)
         self.dialect_name = self.connection.dialect.name
+
+        self.migration_context = MigrationContext.configure(self.connection)
         self.metadata = MetaData(self.connection, reflect=True)
+        self.op = self._create_operations()
         return session
