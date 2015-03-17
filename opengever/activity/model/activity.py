@@ -33,9 +33,11 @@ class Activity(Base):
     resource = relationship("Resource", backref="activities")
 
     def create_notifications(self):
-        """Create for every resource watcher the corresponding notification.
-        The actor of the activity is ignored.
+        """Create a notification for every resource watcher.
+        Don't create a notification for the activity's actor, he had create the
+        activity, therefore a notification is unecessary or disruptive.
         """
+
         notifications = []
         for watcher in self.resource.watchers:
             if not self.is_current_user(watcher):
