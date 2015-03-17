@@ -190,7 +190,7 @@ class SchemaMigration(UpgradeStep):
         self.metadata.reflect()
 
     def get_foreign_key_name(self, table_name, column_name):
-        table = self.op.metadata.tables.get(table_name)
+        table = self.metadata.tables.get(table_name)
         foreign_keys = table.columns.get(column_name).foreign_keys
         assert len(foreign_keys) == 1
         return foreign_keys.pop().name
@@ -282,7 +282,7 @@ class SchemaMigration(UpgradeStep):
         session = create_session()
         self.connection = session.connection()
         self.migration_context = MigrationContext.configure(self.connection)
-        self.metadata = MetaData(session.bind, reflect=True)
         self.op = IdempotentOperations(self, self.migration_context)
         self.dialect_name = self.connection.dialect.name
+        self.metadata = MetaData(self.connection, reflect=True)
         return session
