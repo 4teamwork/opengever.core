@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.2.2 (unreleased)
+4.3.0 (unreleased)
 ------------------
 
 - Automatic CSRF protection with plone.protect 3.
