@@ -117,7 +117,7 @@
         visible="True"
         title="Submit additional document"
         url_expr="string:${object_url}/@@submit_additional_document"
-        condition_expr="object/@@is_meeting_feature_enabled"
+        condition_expr="object/@@submit_additional_document/available"
         category="object_buttons">
     <permission value="opengever.meeting: Add Proposal"/>
   </action>

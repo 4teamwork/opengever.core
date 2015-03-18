@@ -30,6 +30,9 @@ Changelog
 4.3.0 (2015-03-20)
 ------------------
 
+- Meeting: only allow documents in dossiers to be submitted as additional documents.
+  [deiferni]
+
 - Meeting: add missing translations for meeting/membership add menu.
   [deiferni]
 

@@ -166,4 +166,13 @@
         directory="profiles/4201"
         />
 
+    <!-- 4201 -> 4300 -->
+    <upgrade-step:importProfile
+        title="Change submit_additional_document action available expression."
+        profile="opengever.document:default"
+        source="4201"
+        destination="4300"
+        directory="profiles/4300"
+        />
+
 </configure>

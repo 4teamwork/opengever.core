@@ -208,6 +208,10 @@ class Document(Item):
         parent = aq_parent(aq_inner(self))
         return ISubmittedProposal.providedBy(parent)
 
+    def can_be_submitted_as_additional_document(self):
+        parent = aq_parent(aq_inner(self))
+        return IDossierMarker.providedBy(parent)
+
     def get_current_version(self):
         """Return the current document history version."""
 
