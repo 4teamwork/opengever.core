@@ -8,7 +8,6 @@ from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 from zExceptions import NotFound
 from zExceptions import Unauthorized
-import unittest2
 
 
 class TestResolveNotificationView(FunctionalTestCase):
@@ -81,9 +80,9 @@ class TestResolveNotificationView(FunctionalTestCase):
 
         self.assertEquals(task.absolute_url(), browser.url)
 
-    @unittest2.skip("Raises notfound because of redirecting to the foreign admin unit's public_url'.")
     @browsing
-    def test_redirects_to_the_resolveoguid_view_on_other_admin_unit_for_foreign_objects(self, browser):
+    def test_redirects_to_the_resolveoguid_on_admin_unit_for_foreign_ressources(self, browser):
+
         create(Builder('admin_unit')
                .having(public_url='http://example.com/additional')
                .id('additional'))
@@ -94,9 +93,11 @@ class TestResolveNotificationView(FunctionalTestCase):
         notification = create(Builder('notification')
                               .having(activity=activity, watcher=watcher))
 
-        browser.login().open(self.portal, view='resolve_notification',
-                             data={'notification_id': notification.notification_id})
-
-        self.assertEquals(
-            'http://example.com/additional/@@resolve_oguid?oguid=additional:123',
-            browser.url)
+        # Calling the resolve_notification view for a foreign object should
+        # raise an NotFound exception,  because the view redirects to the
+        # foreign admin_unit. But we can't setup a second plone site
+        # in this test.
+        with self.assertRaises(NotFound):
+            browser.login().open(
+                self.portal, view='resolve_notification',
+                data={'notification_id': notification.notification_id})
