@@ -1,6 +1,6 @@
 from opengever.base.source import DossierPathSourceBinder
 from opengever.base.utils import disable_edit_bar
-from opengever.document import _
+from opengever.meeting import _
 from opengever.meeting.proposal import IProposal
 from plone.autoform.form import AutoExtensibleForm
 from plone.directives import form
