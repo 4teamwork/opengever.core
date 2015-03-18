@@ -134,7 +134,7 @@ class ProposalBase(ModelContainer):
             {'label': _('label_committee', default=u'Committee'),
              'value': model.committee.title},
 
-            {'label': _('label_legal_basis', default=u'Legal Basis'),
+            {'label': _('label_legal_basis', default=u'Legal basis'),
              'value': model.legal_basis},
 
             {'label': _('label_initial_position', default=u'Initial position'),

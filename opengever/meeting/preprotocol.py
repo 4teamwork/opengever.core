@@ -21,6 +21,10 @@ class PreProtocol(object):
         return self._proposal is not None
 
     @property
+    def legal_basis(self):
+        return self._proposal.legal_basis if self.has_proposal else None
+
+    @property
     def initial_position(self):
         return self._proposal.initial_position if self.has_proposal else None
 
@@ -64,6 +68,7 @@ class PreProtocol(object):
             return
 
         if self.has_proposal:
+            self._proposal.legal_basis = data.get('legal_basis')
             self._proposal.initial_position = data.get('initial_position')
             self._proposal.considerations = data.get('considerations')
             self._proposal.proposed_action = data.get('proposed_action')

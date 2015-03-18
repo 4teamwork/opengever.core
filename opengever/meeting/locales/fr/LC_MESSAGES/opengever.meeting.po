@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-03-18 14:44+0000\n"
+"POT-Creation-Date: 2015-03-18 15:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -71,15 +71,15 @@ msgstr ""
 msgid "Committee Container"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/pre_protocol.pt:41
+#: ./opengever/meeting/browser/meetings/templates/pre_protocol.pt:50
 msgid "Considerations"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/pre_protocol.pt:60
+#: ./opengever/meeting/browser/meetings/templates/pre_protocol.pt:69
 msgid "Decision"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/pre_protocol.pt:51
+#: ./opengever/meeting/browser/meetings/templates/pre_protocol.pt:60
 msgid "Discussion"
 msgstr ""
 
@@ -103,8 +103,12 @@ msgstr ""
 msgid "History"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/pre_protocol.pt:23
+#: ./opengever/meeting/browser/meetings/templates/pre_protocol.pt:32
 msgid "Initial position"
+msgstr ""
+
+#: ./opengever/meeting/browser/meetings/templates/pre_protocol.pt:23
+msgid "Legal basis"
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:27
@@ -134,7 +138,7 @@ msgstr ""
 msgid "Proposal"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/pre_protocol.pt:32
+#: ./opengever/meeting/browser/meetings/templates/pre_protocol.pt:41
 msgid "Proposed action"
 msgstr ""
 
@@ -310,11 +314,11 @@ msgstr ""
 msgid "help_accept_select_dossier"
 msgstr ""
 
-#: ./opengever/meeting/proposal.py:79
+#: ./opengever/meeting/proposal.py:84
 msgid "help_considerations"
 msgstr ""
 
-#: ./opengever/meeting/proposal.py:67
+#: ./opengever/meeting/proposal.py:72
 msgid "help_initial_position"
 msgstr ""
 
@@ -343,7 +347,7 @@ msgid "label_committee"
 msgstr ""
 
 #. Default: "Considerations"
-#: ./opengever/meeting/proposal.py:78
+#: ./opengever/meeting/proposal.py:83
 msgid "label_considerations"
 msgstr ""
 
@@ -365,7 +369,7 @@ msgstr ""
 #. Default: "Documents"
 #: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt:31
 #: ./opengever/meeting/browser/submitdocuments.py:31
-#: ./opengever/meeting/proposal.py:88
+#: ./opengever/meeting/proposal.py:93
 msgid "label_documents"
 msgstr ""
 
@@ -440,7 +444,7 @@ msgid "label_presidency"
 msgstr ""
 
 #. Default: "Proposal"
-#: ./opengever/meeting/proposal.py:205
+#: ./opengever/meeting/proposal.py:210
 msgid "label_proposal"
 msgstr ""
 
@@ -486,7 +490,7 @@ msgid "label_update_generated_pre_protocol_choose_method"
 msgstr ""
 
 #. Default: "State"
-#: ./opengever/meeting/proposal.py:141
+#: ./opengever/meeting/proposal.py:146
 msgid "label_workflow_state"
 msgstr ""
 
@@ -523,7 +527,7 @@ msgid "pending"
 msgstr ""
 
 #. Default: "Pre-Protocol"
-#: ./opengever/meeting/preprotocol.py:90
+#: ./opengever/meeting/preprotocol.py:94
 msgid "pre_protocol"
 msgstr ""
 
