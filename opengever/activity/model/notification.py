@@ -30,4 +30,7 @@ class Notification(Base):
     read = Column(Boolean(), default=False, nullable=False)
 
     def __repr__(self):
-        return '<Notification {}>'.format(self.notification_id)
+        return u'<Notification {} for {} on {} >'.format(
+            self.notification_id,
+            repr(self.watcher),
+            repr(self.activity.resource))

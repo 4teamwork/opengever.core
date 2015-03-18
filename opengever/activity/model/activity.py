@@ -32,6 +32,9 @@ class Activity(Base):
     resource_id = Column(Integer, ForeignKey('resources.id'), nullable=False)
     resource = relationship("Resource", backref="activities")
 
+    def __repr__(self):
+        return u'<Activity {} on {} >'.format(self.kind, repr(self.resource))
+
     def create_notifications(self):
         """Create a notification for every resource watcher.
         Don't create a notification for the activity's actor, he had create the
