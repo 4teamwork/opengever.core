@@ -62,6 +62,11 @@ class ISubmittedProposalModel(Interface):
         max_length=256,
         )
 
+    legal_basis = schema.Text(
+        title=_('label_legal_basis', default=u"Legal basis"),
+        required=False,
+        )
+
     initial_position = schema.Text(
         title=_('label_initial_position', default=u"Initial position"),
         description=_("help_initial_position", default=u""),
