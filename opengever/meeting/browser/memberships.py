@@ -61,3 +61,6 @@ class AddMembership(ModelAddForm):
 
     def nextURL(self):
         return super(AddMembership, self).nextURL() + '#memberships'
+
+    def cancelURL(self):
+        return self.nextURL()
