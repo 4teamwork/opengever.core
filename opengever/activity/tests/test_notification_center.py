@@ -257,7 +257,7 @@ class TestNotificationHandling(ActivityTestCase):
 
         self.assertTrue(Notification.get(notification_id).read)
 
-    def test_mark_an_already_readed_notification_is_ignored(self):
+    def test_mark_an_already_read_notification_is_ignored(self):
         notification_id = self.peter.notifications[0].notification_id
 
         self.center.mark_notification_as_read(notification_id)
