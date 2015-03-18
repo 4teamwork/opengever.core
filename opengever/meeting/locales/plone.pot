@@ -17,5 +17,8 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: plone\n"
 
-msgid "add-meeting"
+msgid "Meeting"
+msgstr ""
+
+msgid "Membership"
 msgstr ""

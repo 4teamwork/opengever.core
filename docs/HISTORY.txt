@@ -30,6 +30,9 @@ Changelog
 4.3.0 (2015-03-20)
 ------------------
 
+- Meeting: add missing translations for meeting/membership add menu.
+  [deiferni]
+
 - Automatic CSRF protection with plone.protect 3.
   [jone]
 
