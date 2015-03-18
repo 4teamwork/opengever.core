@@ -416,7 +416,7 @@ class AddForm(dexterity.AddForm):
     def createAndAdd(self, data):
         task = super(AddForm, self).createAndAdd(data=data)
         activity = TaskAddedActivity(task, self.request, self.context)
-        activity.log()
+        activity.record()
         return task
 
 

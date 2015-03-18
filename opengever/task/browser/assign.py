@@ -96,7 +96,7 @@ class AssignTaskForm(Form):
         response = self.add_response(**kwargs)
         self.update_task(**kwargs)
         notify(ObjectModifiedEvent(self.context))
-        self.log_activity(response)
+        self.record_activity(response)
         self.sync_remote_task(**kwargs)
 
     def update_task(self, **kwargs):
@@ -123,8 +123,8 @@ class AssignTaskForm(Form):
             responsible=kwargs.get('responsible'),
             responsible_client=kwargs.get('responsible_client'))
 
-    def log_activity(self, response):
-        TaskReassignActivity(self.context, response).log()
+    def record_activity(self, response):
+        TaskReassignActivity(self.context, response).record()
 
     @buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
     def handle_cancel(self, action):

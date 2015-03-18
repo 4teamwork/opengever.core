@@ -3,11 +3,15 @@ from opengever.ogds.base.actor import Actor
 from opengever.task import _
 from opengever.task.response_description import ResponseDescription
 from plone import api
-from Products.CMFPlone import PloneMessageFactory as PMF
+from Products.CMFPlone import PloneMessageFactory
 from zope.i18n import translate
 
 
 class TaskActivity(object):
+    """The TaskActivity class is a representation for every activity which can be done with or
+    on a task. It provides every needed attribute/methods to record the activity
+    in the notification center.
+    """
 
     def __init__(self, context, request, parent):
         self.context = context
@@ -35,29 +39,41 @@ class TaskActivity(object):
     def description(self):
         raise NotImplementedError()
 
-    def before_logging(self):
-        pass
-    def after_logging(self):
+    def before_recording(self):
+        """Will be called before adding the activity to the
+        notification center (see method `record`). Used for watcher
+        adjustments ect.
+        """
         pass
 
-    def log(self):
-        self.before_logging()
+    def after_recording(self):
+        """Will be called after adding the activity to the
+        notification center (see method `record`). Used for watcher
+        adjustments ect.
+        """
+        pass
+
+    def record(self):
+        """Adds the activity itself to the notification center.
+        """
+        self.before_recording()
 
         self.center.add_activity(
             self.context, self.kind, self.title, self.summary,
             self.actor_id, description=self.description)
 
-        self.after_logging()
+        self.after_recording()
 
     def translate(self, msg):
         return translate(msg, context=self.request)
 
 
 class TaskAddedActivity(TaskActivity):
+    """Activity representation for adding a task."""
 
     @property
     def kind(self):
-        return PMF(u'task-added', default=u'Task added')
+        return PloneMessageFactory(u'task-added', default=u'Task added')
 
     @property
     def summary(self):
@@ -90,7 +106,7 @@ class TaskAddedActivity(TaskActivity):
 
         return msg
 
-    def before_logging(self):
+    def before_recording(self):
         self.center.add_watcher_to_resource(self.context,
                                             self.context.responsible)
         self.center.add_watcher_to_resource(self.context,
@@ -98,6 +114,8 @@ class TaskAddedActivity(TaskActivity):
 
 
 class TaskTransitionActivity(TaskActivity):
+    """Activity which represents a transition task transition change.
+    """
 
     def __init__(self, context, response):
         self.context = context
@@ -125,12 +143,23 @@ class TaskTransitionActivity(TaskActivity):
 
 
 class TaskReassignActivity(TaskTransitionActivity):
+    """Updates the watcherlist for the current task because of the responsible
+    change on the task.
 
-    def before_logging(self):
+    The issuer and the old and the new responsible should be notified.
+    After recording the activity the old responsible should be removed from
+    the watchers list.
+    """
+
+    def before_recording(self):
+        """Adds new responsible to watchers list.
+        """
         self.center.add_watcher_to_resource(self.context,
                                             self.context.responsible)
 
-    def after_logging(self):
+    def after_recording(self):
+        """Remove old responsible from watchers list.
+        """
         change = self.response.get_change('responsible')
         self.center.remove_watcher_from_resource(self.context,
                                                  change.get('before'))

@@ -257,7 +257,7 @@ class AddForm(form.AddForm, AutoExtensibleForm):
 
             notify(ObjectModifiedEvent(self.context))
 
-            self.log_activity(new_response)
+            self.record_activity(new_response)
 
             if data.get('transition'):
                 syncer = getMultiAdapter((self.context, self.request),
@@ -293,8 +293,8 @@ class AddForm(form.AddForm, AutoExtensibleForm):
         units = ogds_service().assigned_org_units()
         return get_current_org_unit() in units
 
-    def log_activity(self, response):
-        TaskTransitionActivity(self.context, response).log()
+    def record_activity(self, response):
+        TaskTransitionActivity(self.context, response).record()
 
 
 class SingleAddFormView(layout.FormWrapper, grok.View):
