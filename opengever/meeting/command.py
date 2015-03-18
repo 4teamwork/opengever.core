@@ -29,9 +29,9 @@ class CreatePreProtocolCommand(CreateDocumentCommand):
         """
         super(CreatePreProtocolCommand, self).__init__(
             target_dossier,
-            filename=meeting.get_title() + '.docx',
+            meeting.get_pre_protocol_filename(),
             data=None,
-            title=meeting.get_title(),
+            title=meeting.get_pre_protocol_title(),
             content_type=MIME_DOCX)
 
         self.meeting = meeting

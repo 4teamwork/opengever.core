@@ -62,7 +62,7 @@ class DownloadGeneratedPreProtocol(BrowserView):
         sablon.process(PreProtocolData(self.model).as_json())
 
         assert sablon.is_processed_successfully(), sablon.stderr
-        filename = (self.model.get_title() + '.docx').encode('utf-8')
+        filename = self.model.get_pre_protocol_filename().encode('utf-8')
         response = self.request.response
         response.setHeader('X-Theme-Disabled', 'True')
         response.setHeader('Content-Type', MIME_DOCX)

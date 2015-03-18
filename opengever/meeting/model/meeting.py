@@ -7,6 +7,7 @@ from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
 from plone import api
+from plone.i18n.normalizer.interfaces import IIDNormalizer
 from sqlalchemy import Column
 from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
@@ -17,6 +18,9 @@ from sqlalchemy import Text
 from sqlalchemy.orm import backref
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
+from zope.component import getUtility
+from zope.globalrequest import getRequest
+from zope.i18n import translate
 
 
 meeting_participants = Table(
@@ -91,6 +95,17 @@ class Meeting(Base):
 
     def has_pre_protocol_document(self):
         return self.pre_protocol_document is not None
+
+    def get_pre_protocol_title(self):
+        return u"{}-{}.docx".format(
+            translate(_("Pre-Protocol"), context=getRequest()),
+            self.get_title())
+
+    def get_pre_protocol_filename(self):
+        normalizer = getUtility(IIDNormalizer)
+        return u"{}-{}.docx".format(
+            translate(_("Pre-Protocol"), context=getRequest()),
+            normalizer.normalize(self.get_title()))
 
     @property
     def physical_path(self):
