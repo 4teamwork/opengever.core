@@ -139,6 +139,7 @@ class PreProtocolData(object):
                 'number': pre_protocol.number,
                 'description': pre_protocol.description,
                 'title': pre_protocol.title,
+                'legal_basis': pre_protocol.legal_basis,
                 'initial_position': pre_protocol.initial_position,
                 'proposed_action': pre_protocol.proposed_action,
                 'considerations': pre_protocol.considerations,
