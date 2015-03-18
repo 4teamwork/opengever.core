@@ -41,7 +41,9 @@
           </div>
         </li>
       </ul>
-      <a href="./notification_overview" class="all_link"><small>Notifications Overview</small></a>
+      <a href="#" class="all_link" tal:attributes="href view/overview_url">
+        <small>Notifications Overview</small>
+      </a>
     </dd>
   </dl>
 </div>

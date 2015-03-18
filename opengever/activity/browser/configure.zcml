@@ -15,7 +15,7 @@
       />
 
   <browser:page
-      for="*"
+      for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot"
       name="notification_overview"
       class=".views.NotificationOverview"
       permission="zope2.View"

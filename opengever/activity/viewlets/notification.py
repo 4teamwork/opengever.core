@@ -1,6 +1,7 @@
 from opengever.activity import notification_center
 from opengever.activity.browser.resolve import ResolveNotificationView
 from opengever.activity.utils import is_activity_feature_enabled
+from plone import api
 from plone.app.layout.viewlets import common
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 
@@ -49,3 +50,8 @@ class NotificationViewlet(common.ViewletBase):
     @property
     def read_url(self):
         return '{}/notifications/read'.format(self.context.absolute_url())
+
+    @property
+    def overview_url(self):
+        return '{}/notification_overview'.format(
+            api.portal.get().absolute_url())
