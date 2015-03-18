@@ -84,27 +84,31 @@ class TaskAddedActivity(TaskActivity):
 
     @property
     def description(self):
-        msg = u'<table>'\
-              '<tbody>'\
-              '<tr><th>{label_task_title}</th><td>{value_task_title}</td></tr>'\
-              '<tr><th>{label_deadline}</th><td>{value_deadline}</td></tr>'\
-              '<tr><th>{label_task_type}</th><td>{value_task_type}</td></tr>'\
-              '<tr><th>{label_dossier_title}</th><td>{value_dossier_title}</td></tr>'\
-              '<tr><th>{label_text}</th><td>{value_text}</td></tr>'\
-              '</tbody></table>'.format(
-                  label_task_title=self.translate(_('label_task_title', u'Task title')),
-                  value_task_title=self.title,
-                  label_deadline=self.translate(_('label_deadline', u'Deadline')),
-                  value_deadline=api.portal.get_localized_time(str(self.context.deadline)),
-                  label_task_type=self.translate(_('label_task_type', u'Task Type')),
-                  value_task_type=self.context.get_task_type_label(),
-                  label_dossier_title=self.translate(_('label_dossier_title',
-                                                       u'Dossier title')),
-                  value_dossier_title=self.parent.title,
-                  label_text=self.translate(_('label_text', u'Text')),
-                  value_text=self.context.text)
+        return self.render_description_markup(self.collects_description_data())
 
-        return msg
+    def render_description_markup(self, data):
+        msg = u'<table><tbody>'
+        for label, value in data:
+            msg = u'{}<tr><th>{}</th><td>{}</td></tr>'.format(msg, label, value)
+
+        return u'{}</tbody></table>'.format(msg)
+
+    def collects_description_data(self):
+        """Returns a list with [label, value] pairs.
+        """
+        return [
+            [self.translate(_('label_task_title', u'Task title')),
+             self.title],
+            [self.translate(_('label_deadline', u'Deadline')),
+             api.portal.get_localized_time(str(self.context.deadline))],
+            [self.translate(_('label_task_type', u'Task Type')),
+             self.context.get_task_type_label()],
+            [self.translate(_('label_dossier_title', u'Dossier title')),
+             self.parent.title],
+            [self.translate(_('label_text', u'Text')),
+             self.context.text]
+        ]
+
 
     def before_recording(self):
         self.center.add_watcher_to_resource(self.context,
