@@ -121,11 +121,11 @@ class ProposalBase(ModelContainer):
             {'label': _(u"label_title", default=u'Title'),
              'value': model.title},
 
-            {'label': _('label_initial_position', default=u'Initial position'),
-             'value': model.initial_position},
-
             {'label': _('label_committee', default=u'Committee'),
              'value': model.committee.title},
+
+            {'label': _('label_initial_position', default=u'Initial position'),
+             'value': model.initial_position},
 
             {'label': _('label_proposed_action', default=u'Proposed action'),
              'value': model.proposed_action},
