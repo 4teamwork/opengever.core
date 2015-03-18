@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-03-18 10:12+0000\n"
+"POT-Creation-Date: 2015-03-18 13:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -36,7 +36,7 @@ msgid "Add Member"
 msgstr ""
 
 #. Default: "Add Membership"
-#: ./opengever/meeting/browser/memberships.py:38
+#: ./opengever/meeting/browser/memberships.py:40
 msgid "Add Membership"
 msgstr ""
 
@@ -53,9 +53,13 @@ msgstr ""
 msgid "An unexpected error has occurred"
 msgstr ""
 
+#: ./opengever/meeting/browser/memberships.py:53
+msgid "Can't add membership, it overlaps an existing membership from ${date_from} to ${date_to}"
+msgstr ""
+
 #. Default: "Cancel"
 #: ./opengever/meeting/browser/meetings/preprotocol.py:133
-#: ./opengever/meeting/form.py:44
+#: ./opengever/meeting/form.py:49
 msgid "Cancel"
 msgstr ""
 
@@ -139,7 +143,7 @@ msgstr ""
 
 #. Default: "Save"
 #: ./opengever/meeting/browser/meetings/preprotocol.py:124
-#: ./opengever/meeting/form.py:36
+#: ./opengever/meeting/form.py:41
 msgid "Save"
 msgstr ""
 
@@ -348,12 +352,12 @@ msgid "label_current_members"
 msgstr ""
 
 #. Default: "Start date"
-#: ./opengever/meeting/browser/memberships.py:14
+#: ./opengever/meeting/browser/memberships.py:16
 msgid "label_date_from"
 msgstr ""
 
 #. Default: "End date"
-#: ./opengever/meeting/browser/memberships.py:19
+#: ./opengever/meeting/browser/memberships.py:21
 msgid "label_date_to"
 msgstr ""
 
@@ -405,7 +409,7 @@ msgid "label_main_attributes"
 msgstr ""
 
 #. Default: "Member"
-#: ./opengever/meeting/browser/memberships.py:23
+#: ./opengever/meeting/browser/memberships.py:25
 msgid "label_member"
 msgstr ""
 
@@ -439,7 +443,7 @@ msgid "label_proposed_action"
 msgstr ""
 
 #. Default: "Role"
-#: ./opengever/meeting/browser/memberships.py:28
+#: ./opengever/meeting/browser/memberships.py:30
 msgid "label_role"
 msgstr ""
 
@@ -481,12 +485,12 @@ msgstr ""
 
 #. Default: "Changes saved"
 #: ./opengever/meeting/browser/meetings/preprotocol.py:129
-#: ./opengever/meeting/form.py:94
+#: ./opengever/meeting/form.py:99
 msgid "message_changes_saved"
 msgstr ""
 
 #. Default: "Record created"
-#: ./opengever/meeting/form.py:41
+#: ./opengever/meeting/form.py:46
 msgid "message_record_created"
 msgstr ""
 

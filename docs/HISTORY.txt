@@ -33,6 +33,9 @@ Changelog
 - Automatic CSRF protection with plone.protect 3.
   [jone]
 
+- Meeting: don't allow overlapping committee-memberships.
+  [deiferni]
+
 
 4.2.1 (2015-03-17)
 ------------------

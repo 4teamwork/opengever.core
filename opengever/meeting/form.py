@@ -24,7 +24,12 @@ class ModelAddForm(AutoExtensibleForm, AddForm):
         disable_edit_bar()
 
     def create(self, data):
+        self.validate(data)
         return self.model_class(**data)
+
+    def validate(self, data):
+        """Hook to perform additional input validation."""
+        pass
 
     def add(self, obj):
         session = create_session()

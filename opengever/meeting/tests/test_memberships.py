@@ -3,6 +3,7 @@ from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.model import Member
@@ -41,6 +42,26 @@ class TestMemberships(FunctionalTestCase):
         self.assertEqual(date(2010, 1, 1), membership.date_from)
         self.assertEqual(date(2010, 12, 31), membership.date_to)
         self.assertEqual(u'H\xe4nswurscht', membership.role)
+
+    @browsing
+    def test_no_overlapping_memberships_can_be_added(self, browser):
+        browser.login().open(self.committee, view='add-membership')
+        browser.fill({'Start date': '1/1/10',
+                      'End date': '12/31/10',
+                      'Member': str(self.member.member_id)}).submit()
+
+        browser.open(self.committee, view='add-membership')
+        browser.fill({'Start date': '6/1/10',
+                      'End date': '12/31/10',
+                      'Member': str(self.member.member_id)}).submit()
+
+        # portal messages
+        self.assertEqual(['There were some errors.'], error_messages())
+        # form field error
+        self.assertEqual(
+            ["Can't add membership, it overlaps an existing membership from "
+             "Jan 01, 2010 to Dec 31, 2010"],
+            browser.css('div#content-core div.error').text)
 
     def test_not_started_membership_is_inactive(self):
         create(Builder('membership')

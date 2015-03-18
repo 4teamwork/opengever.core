@@ -55,6 +55,10 @@ class MembershipQuery(BaseQuery):
             and_(self._attribute('date_from') <= date.today(),
                  self._attribute('date_to') >= date.today()))
 
+    def overlapping(self, start, end):
+        return self.filter(and_(self._attribute('date_from') <= end,
+                                self._attribute('date_to') >= start))
+
 
 class SubmittedDocumentQuery(BaseQuery):
 
