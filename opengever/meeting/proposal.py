@@ -35,6 +35,11 @@ class IProposalModel(Interface):
         source='opengever.meeting.CommitteeVocabulary',
         required=True)
 
+    legal_basis = schema.Text(
+        title=_('label_legal_basis', default=u"Legal basis"),
+        required=False,
+        )
+
     initial_position = schema.Text(
         title=_('label_initial_position', default=u"Initial position"),
         required=False,
@@ -123,6 +128,9 @@ class ProposalBase(ModelContainer):
 
             {'label': _('label_committee', default=u'Committee'),
              'value': model.committee.title},
+
+            {'label': _('label_legal_basis', default=u'Legal Basis'),
+             'value': model.legal_basis},
 
             {'label': _('label_initial_position', default=u'Initial position'),
              'value': model.initial_position},

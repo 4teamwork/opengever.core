@@ -74,6 +74,7 @@ class TestProposal(FunctionalTestCase):
 
         browser.fill({
             'Title': u'A pr\xf6posal',
+            'Legal basis': u'possible',
             'Initial position': u'My pr\xf6posal',
             'Proposed action': u'Lorem ips\xfcm',
             'Committee': str(committee.committee_id),
@@ -92,6 +93,7 @@ class TestProposal(FunctionalTestCase):
         self.assertIsNotNone(model)
         self.assertEqual(Oguid.for_object(proposal), model.oguid)
         self.assertEqual(u'A pr\xf6posal', model.title)
+        self.assertEqual(u'possible', model.legal_basis)
         self.assertEqual(u'Lorem ips\xfcm', model.proposed_action)
         self.assertEqual(u'My pr\xf6posal', model.initial_position)
 
@@ -116,6 +118,7 @@ class TestProposal(FunctionalTestCase):
 
         browser.fill({
             'Title': u'A pr\xf6posal',
+            'Legal basis': u'not possible',
             'Initial position': u'My pr\xf6posal',
             'Proposed action': u'Lorem ips\xfcm',
             'Committee': str(committee.committee_id),
@@ -134,6 +137,7 @@ class TestProposal(FunctionalTestCase):
         self.assertIsNotNone(model)
         self.assertEqual(Oguid.for_object(proposal), model.oguid)
         self.assertEqual(u'A pr\xf6posal', model.title)
+        self.assertEqual(u'not possible', model.legal_basis)
         self.assertEqual(u'My pr\xf6posal', model.initial_position)
         self.assertEqual(u'Lorem ips\xfcm', model.proposed_action)
 
