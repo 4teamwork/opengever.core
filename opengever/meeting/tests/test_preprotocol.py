@@ -64,7 +64,8 @@ class TestPreProtocol(FunctionalTestCase):
         browser.login()
         browser.open(EditPreProtocol.url_for(self.committee, self.meeting))
 
-        browser.fill({'Considerations': 'It is important',
+        browser.fill({'Initial position': 'Still the same',
+                      'Considerations': 'It is important',
                       'Proposed action': 'Accept it',
                       'Discussion': 'We should accept it',
                       'Decision': 'Accepted'}).submit()
@@ -72,6 +73,7 @@ class TestPreProtocol(FunctionalTestCase):
         self.assertEquals(['Changes saved'], info_messages())
 
         proposal = Proposal.query.get(self.proposal_model.proposal_id)
+        self.assertEqual('Still the same', proposal.initial_position)
         self.assertEqual('It is important', proposal.considerations)
         self.assertEqual('Accept it', proposal.proposed_action)
 

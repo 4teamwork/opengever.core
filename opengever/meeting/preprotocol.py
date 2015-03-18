@@ -64,6 +64,7 @@ class PreProtocol(object):
             return
 
         if self.has_proposal:
+            self._proposal.initial_position = data.get('initial_position')
             self._proposal.considerations = data.get('considerations')
             self._proposal.proposed_action = data.get('proposed_action')
 

@@ -20,8 +20,14 @@
                 <h2 class="protocol_title" tal:content="protocol/title"></h2>
 
                 <metal:block tal:condition="protocol/has_proposal">
-                    <label i18n:translate="">Initial position</label>
-                    <p class="initial_position" tal:content="protocol/initial_position"></p>
+                    <label tal:attributes="for string:${name}.initial_position:record"
+                           i18n:translate="">
+                           Initial position
+                    </label>
+                    <textarea class="textarea-widget text-field"
+                              tal:attributes="name string:${name}.initial_position:record;
+                                              id string:${name}.initial_position:record"
+                              tal:content="protocol/initial_position"/>
 
                     <label tal:attributes="for string:${name}.proposed_action:record"
                            i18n:translate="">

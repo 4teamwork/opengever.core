@@ -36,6 +36,9 @@ Changelog
 - Meeting: don't allow overlapping committee-memberships.
   [deiferni]
 
+- Meeting: allow editing initial position in pre-protocol.
+  [deiferni]
+
 
 4.2.1 (2015-03-17)
 ------------------
