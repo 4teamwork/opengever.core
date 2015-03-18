@@ -3,7 +3,7 @@ from opengever.ogds.models.query import BaseQuery
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import String
-
+from sqlalchemy import UniqueConstraint
 
 class WatcherQuery(BaseQuery):
 
@@ -19,7 +19,7 @@ class Watcher(Base):
     __tablename__ = 'watchers'
 
     watcher_id = Column('id', Integer, primary_key=True)
-    user_id = Column(String(255), nullable=False)
+    user_id = Column(String(255), nullable=False, unique=True)
 
     def __repr__(self):
         return '<Watcher {}>'.format(self.user_id)

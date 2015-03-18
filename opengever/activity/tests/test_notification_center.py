@@ -6,6 +6,8 @@ from opengever.activity.model import Resource
 from opengever.activity.model import Watcher
 from opengever.activity.tests.base import ActivityTestCase
 from opengever.base.oguid import Oguid
+from sqlalchemy.exc import IntegrityError
+import transaction
 
 
 class TestResourceHandling(ActivityTestCase):
@@ -58,6 +60,14 @@ class TestWatcherHandling(ActivityTestCase):
 
         self.assertEquals(1, len(Watcher.query.all()))
         self.assertEquals('peter', Watcher.query.first().user_id)
+
+    def test_add_watcher_twice_raise_integrity_error(self):
+        self.center.add_watcher('peter')
+        with self.assertRaises(IntegrityError):
+            self.center.add_watcher('peter')
+            transaction.commit()
+
+        transaction.abort()
 
     def test_add_watcher_to_resource(self):
         peter = create(Builder('watcher').having(user_id='peter'))
