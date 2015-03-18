@@ -39,6 +39,22 @@ Changelog
 - Meeting: allow editing initial position in pre-protocol.
   [deiferni]
 
+- Meeting: integrate sablon document template processor for Word:
+    - Integrate subprocess calls to sablon
+    - Add pre-protocol download
+    - Add pre-protocol document generation in dossiers
+    - Add pre-protocol document updates for documents in dossiers
+
+  [deiferni]
+
+- Refactor document creation: deduce code duplication by extracting class
+  to create documents and set default values properly.
+  [deiferni]
+
+- Meeting: add legal basis field to proposals, submitted proposals and
+  pre-protocols.
+  [deiferni]
+
 
 4.2.1 (2015-03-17)
 ------------------
