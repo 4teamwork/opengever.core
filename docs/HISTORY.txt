@@ -33,6 +33,9 @@ Changelog
 - Meeting: add missing translations for meeting/membership add menu.
   [deiferni]
 
+- Meeting: add missing translations for submitting additional documents.
+  [deiferni]
+
 - Automatic CSRF protection with plone.protect 3.
   [jone]
 

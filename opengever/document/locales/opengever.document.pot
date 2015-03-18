@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-09-25 12:57+0000\n"
+"POT-Creation-Date: 2015-03-18 16:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -98,6 +98,11 @@ msgstr ""
 msgid "Send as email"
 msgstr ""
 
+#: ./opengever/document/profiles/default/actions.xml
+#: ./opengever/document/upgrades/profiles/4200/actions.xml
+msgid "Submit additional documents"
+msgstr ""
+
 #: ./opengever/document/browser/download.py:39
 #: ./opengever/document/browser/edit.py:81
 msgid "The Document ${title} has no File"
@@ -133,7 +138,7 @@ msgid "button_checkin"
 msgstr ""
 
 #. Default: "copy of"
-#: ./opengever/document/subscribers.py:71
+#: ./opengever/document/subscribers.py:75
 msgid "copy_of"
 msgstr ""
 
@@ -148,19 +153,19 @@ msgid "error_file_and_preserved_as_paper"
 msgstr ""
 
 #. Default: "It's not possible to add E-mails here, please '                    'send it to ${mailaddress} or drag it to the dossier '                    ' (Dragn'n'Drop)."
-#: ./opengever/document/document.py:85
+#: ./opengever/document/document.py:91
 msgid "error_mail_upload"
 msgstr ""
 
 #. Default: "Either the title or the file is required."
-#: ./opengever/document/document.py:62
+#: ./opengever/document/document.py:68
 msgid "error_title_or_file_required"
 msgstr ""
 
 #. Default: "Common"
 #: ./opengever/document/behaviors/metadata.py:27
 #: ./opengever/document/behaviors/related_docs.py:38
-#: ./opengever/document/document.py:37
+#: ./opengever/document/document.py:44
 msgid "fieldset_common"
 msgstr ""
 
@@ -219,7 +224,7 @@ msgstr ""
 msgid "help_document_type"
 msgstr ""
 
-#: ./opengever/document/document.py:54
+#: ./opengever/document/document.py:61
 msgid "help_file"
 msgstr ""
 
@@ -272,7 +277,7 @@ msgid "label_cancel"
 msgstr ""
 
 #. Default: "Checked out"
-#: ./opengever/document/browser/overview.py:124
+#: ./opengever/document/browser/overview.py:123
 #: ./opengever/document/checkout/viewlets_templates/checkedoutviewlet.pt:5
 msgid "label_checked_out"
 msgstr ""
@@ -288,7 +293,7 @@ msgid "label_checkout_and_edit"
 msgstr ""
 
 #. Default: "creator"
-#: ./opengever/document/browser/overview.py:120
+#: ./opengever/document/browser/overview.py:119
 msgid "label_creator"
 msgstr ""
 
@@ -322,15 +327,15 @@ msgid "label_download"
 msgstr ""
 
 #. Default: "Download copy"
-#: ./opengever/document/browser/download.py:130
+#: ./opengever/document/browser/download.py:134
 #: ./opengever/document/browser/download_templates/downloadconfirmation.pt:4
 #: ./opengever/document/browser/overview_templates/file.pt:53
 msgid "label_download_copy"
 msgstr ""
 
 #. Default: "File"
-#: ./opengever/document/browser/overview.py:126
-#: ./opengever/document/document.py:53
+#: ./opengever/document/browser/overview.py:125
+#: ./opengever/document/document.py:60
 msgid "label_file"
 msgstr ""
 
@@ -345,7 +350,7 @@ msgid "label_keywords"
 msgstr ""
 
 #. Default: "no"
-#: ./opengever/document/browser/overview.py:83
+#: ./opengever/document/browser/overview.py:82
 msgid "label_no"
 msgstr ""
 
@@ -399,12 +404,12 @@ msgid "label_thumbnail"
 msgstr ""
 
 #. Default: "Title"
-#: ./opengever/document/document.py:47
+#: ./opengever/document/document.py:54
 msgid "label_title"
 msgstr ""
 
 #. Default: "yes"
-#: ./opengever/document/browser/overview.py:82
+#: ./opengever/document/browser/overview.py:81
 msgid "label_yes"
 msgstr ""
 
