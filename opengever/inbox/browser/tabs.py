@@ -94,6 +94,10 @@ class InboxDocuments(Documents):
     # do not list documents in forwardings
     depth = 1
 
+    disabled_actions = ['create_task',
+                        'move_items',
+                        'submit_additional_documents']
+
     @property
     def columns(self):
         """Remove default columns `containing_subdossier`, `checked_out`
@@ -118,9 +122,7 @@ class InboxDocuments(Documents):
         """Defines the enabled Actions"""
         actions = super(InboxDocuments, self).enabled_actions
         actions = [action for action in actions
-                   if action not in (
-                    'create_task',
-                    'move_items',)]
+                   if action not in self.disabled_actions]
 
         actions += ['create_forwarding']
         return actions
