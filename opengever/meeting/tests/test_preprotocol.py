@@ -34,12 +34,19 @@ class TestPreProtocol(FunctionalTestCase):
 
         container = create(Builder('committee_container'))
         self.committee = create(Builder('committee').within(container))
+        self.proposal = create(Builder('proposal')
+                               .within(self.dossier)
+                               .having(title='Mach doch',
+                                       committee=self.committee.load_model()))
+        self.proposal.execute_transition('pending-submitted')
+
         self.committee_model = self.committee.load_model()
         self.meeting = create(Builder('meeting')
                               .having(committee=self.committee_model,
                                       start=datetime(2013, 1, 1),
                                       location='There',))
-        self.proposal_model = create(Builder('proposal_model'))
+        self.proposal_model = self.proposal.load_model()
+
         self.agenda_item = create(
             Builder('agenda_item')
             .having(meeting=self.meeting,
