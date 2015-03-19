@@ -26,7 +26,7 @@
           </div>
 
           <div class="item-content">
-            <a href="#" tal:attributes="href notification/link">
+            <div>
               <div class="item-header">
                 <span class="item-creation">
                   <span class="timeago relativetime"
@@ -35,9 +35,11 @@
                 </span>
                 <span class="item-type" i18n:domain="plone" i18n:translate="" tal:content="notification/kind" />
               </div>
-              <span class="item-location" tal:content="notification/title"></span>
+              <a class="item-location" href="#"
+                 tal:attributes="href notification/link"
+                 tal:content="notification/title"></a>
               <div class="item-summary" tal:content="notification/summary" />
-            </a>
+            </div>
           </div>
         </li>
       </ul>
