@@ -90,13 +90,13 @@ class MeetingView(BrowserView):
     is_model_edit_view = False
 
     mapped_actions = {
-        'edit': EditMeeting,
         'delete_agenda_item': DeleteAgendaItem,
+        'download_pre_protocol': DownloadGeneratedPreProtocol,
+        'edit': EditMeeting,
+        'meetingtransitioncontroller': MeetingTransitionController,
+        'pre_protocol': EditPreProtocol,
         'schedule_proposal': ScheduleSubmittedProposal,
         'schedule_text': ScheduleText,
-        'pre_protocol': EditPreProtocol,
-        'download_pre_protocol': DownloadGeneratedPreProtocol,
-        'meetingtransitioncontroller': MeetingTransitionController,
         'update_agenda_item_order': UpdateAgendaItemOrder,
     }
 
