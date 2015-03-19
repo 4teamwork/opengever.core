@@ -42,8 +42,8 @@
               </tbody>
           </table>
 
-          <fieldset class="proposal">
-          <legend i18n:translate="">Add Agenda Item</legend>
+          <fieldset class="proposal" tal:condition="meeting/is_editable">
+            <legend i18n:translate="">Add Agenda Item</legend>
             <metal:block tal:condition="unscheduled_proposals">
               <form method="post" tal:attributes="action view/url_schedule_proposal"
                     id="schedule_proposal">
@@ -73,7 +73,7 @@
                     </div>
                 </div>
               </form>
-            </fieldset>
+        </fieldset>
 
           <h2 i18n:translate="">Agenda Items</h2>
           <table id="agenda_items">
