@@ -3,6 +3,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
+from opengever.meeting.browser.meetings.agendaitem import UpdateAgendaItemOrder
 from opengever.meeting.browser.meetings.meetinglist import MeetingList
 from opengever.meeting.model import Meeting
 from opengever.meeting.model import Proposal
@@ -94,3 +95,19 @@ class TestAgendaItem(FunctionalTestCase):
         # refresh model instances
         meeting = Meeting.query.get(self.meeting.meeting_id)
         self.assertEqual(0, len(meeting.agenda_items))
+
+    def test_update_agenda_item_order(self):
+        item1 = create(Builder('agenda_item').having(
+            title=u'foo', meeting=self.meeting, sort_order=1))
+        item2 = create(Builder('agenda_item').having(
+            title=u'bar', meeting=self.meeting, sort_order=2))
+
+        self.assertEqual(1, item1.sort_order)
+        self.assertEqual(2, item2.sort_order)
+
+        view = UpdateAgendaItemOrder(
+            self.committee, self.request, self.meeting)
+        view.update_sortorder({"sortOrder": [2, 1]})
+
+        self.assertEqual(2, item1.sort_order)
+        self.assertEqual(1, item2.sort_order)
