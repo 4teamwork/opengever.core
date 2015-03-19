@@ -72,6 +72,12 @@ class ModelEditForm(EditForm):
         super(ModelEditForm, self).__init__(context, request)
         self.model = model
 
+    def __call__(self):
+        if not self.model.is_editable():
+            raise Unauthorized('Editing is not allowed')
+
+        return super(ModelEditForm, self).__call__()
+
     def inject_initial_data(self):
         if self.request.method != 'GET':
             return
