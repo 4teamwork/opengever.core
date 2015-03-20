@@ -5,6 +5,10 @@ Changelog
 4.1.1 (unreleased)
 ------------------
 
+- Add DossierMigrator that migrates dossier responsibles (to be used
+  with ftw.usermigration).
+  [lgraf]
+
 - XlsSource: Handle values that are already a valid term for vocabulary fields.
   [lgraf]
 
