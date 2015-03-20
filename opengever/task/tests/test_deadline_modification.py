@@ -152,6 +152,7 @@ class RemoteDeadlineModifier(FunctionalTestCase):
 
         task.REQUEST.set('new_deadline', datetime.date(2013, 10, 1).toordinal())
         task.REQUEST.set('text', 'Lorem ipsum')
+        task.REQUEST.set('transition', 'task-transition-modify-deadline')
         task.unrestrictedTraverse('remote_deadline_modifier')()
 
         self.assertEquals(task.deadline, datetime.date(2013, 10, 1))
@@ -162,6 +163,7 @@ class RemoteDeadlineModifier(FunctionalTestCase):
                               deadline=datetime.date(2013, 1, 1)))
 
         task.REQUEST.set('text', 'Lorem Ipsum')
+        task.REQUEST.set('transition', 'task-transition-modify-deadline')
         with self.assertRaises(TypeError):
             task.unrestrictedTraverse('remote_deadline_modifier')()
 
@@ -172,6 +174,7 @@ class RemoteDeadlineModifier(FunctionalTestCase):
 
         task.REQUEST.set('new_deadline', datetime.date(2013, 10, 1).toordinal())
         task.REQUEST.set('text', 'Lorem Ipsum')
+        task.REQUEST.set('transition', 'task-transition-modify-deadline')
         task.unrestrictedTraverse('remote_deadline_modifier')()
 
         container = IResponseContainer(task)

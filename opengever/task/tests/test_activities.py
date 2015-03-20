@@ -1,3 +1,4 @@
+from datetime import datetime, date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -99,6 +100,31 @@ class TestTaskActivites(FunctionalTestCase):
         self.assertEquals(
             u'Resolved by <a href="http://nohost/plone/@@user-details/test_user_1_">Test User (test_user_1_)</a>', activity.summary)
         self.assertEquals(u'Ist erledigt.', activity.description)
+
+    @browsing
+    def test_deadline_modified_activity(self, browser):
+        task = create(Builder('task')
+                      .titled(u'Abkl\xe4rung Fall Meier')
+                      .having(responsible=u'hugo.boss',
+                              deadline=date(2015, 03, 01))
+                      .in_state('task-state-in-progress'))
+
+        browser.login().open(
+            task, view='modify_deadline',
+            data={'form.widgets.transition': 'task-transition-modify-deadline'})
+
+        browser.fill({
+            'New Deadline': '03/20/16',
+            'Response': u'nicht dring\xe4nd'}).save()
+
+        activity = Activity.query.first()
+        self.assertEquals(u'task-transition-modify-deadline', activity.kind)
+        self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
+        self.assertEquals(
+            'Deadline modified from 01.03.2015 to 20.03.2016 by'
+            ' <a href="http://nohost/plone/@@user-details/test_user_1_">'
+            'Test User (test_user_1_)</a>', activity.summary)
+        self.assertEquals(u'nicht dring\xe4nd', activity.description)
 
 
 class TestTaskReassignActivity(TestTaskActivites):
