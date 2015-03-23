@@ -38,6 +38,7 @@ class Task(Base):
     OVERDUE_INDEPENDENT_STATES = ['task-state-cancelled',
                                   'task-state-rejected',
                                   'task-state-tested-and-closed',
+                                  'task-state-resolved',
                                   'forwarding-state-closed']
 
     __tablename__ = 'tasks'
