@@ -7,7 +7,7 @@ from opengever.meeting.model import Membership
 
 def create_example_meeting_content(site):
     session = create_session()
-    committee = site['kommitees']['committee-1']
+    committee = site['sitzungen']['committee-1']
     committee_model = committee.load_model()
 
     peter = Member(firstname=u'Peter', lastname=u'M\xfcller')
