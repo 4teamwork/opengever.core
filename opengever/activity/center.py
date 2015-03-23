@@ -5,6 +5,7 @@ from opengever.activity.model import Resource
 from opengever.activity.model import Watcher
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
+from opengever.ogds.base.actor import Actor
 from opengever.ogds.models.query import extend_query_with_textfilter
 from plone import api
 from sqlalchemy.orm import contains_eager
@@ -129,9 +130,12 @@ class PloneNotificationCenter(NotificationCenter):
         dispatchers = [PloneNotificationMailer()]
         super(PloneNotificationCenter, self).__init__(dispatchers)
 
-    def add_watcher_to_resource(self, obj, userid):
+    def add_watcher_to_resource(self, obj, actorid):
+        actor = Actor.lookup(actorid)
         oguid = Oguid.for_object(obj)
-        super(PloneNotificationCenter, self).add_watcher_to_resource(oguid, userid)
+        for representative in actor.representatives():
+            super(PloneNotificationCenter, self).add_watcher_to_resource(
+                oguid, representative.userid)
 
     def remove_watcher_from_resource(self, obj, userid):
         oguid = Oguid.for_object(obj)
