@@ -23,13 +23,6 @@ Changelog
   with ftw.usermigration).
   [lgraf]
 
-- Drop all SQL-tables during dev-setup, not only those defined in metadata.
-  [deiferni]
-
-
-4.3.0 (2015-03-20)
-------------------
-
 - Meeting: disable navigation portlet for commitee-container when installing
   example profile.
   [deiferni]
@@ -42,9 +35,6 @@ Changelog
 
 - Meeting: add missing translations for submitting additional documents.
   [deiferni]
-
-- Automatic CSRF protection with plone.protect 3.
-  [jone]
 
 - Meeting: don't allow overlapping committee-memberships.
   [deiferni]
@@ -68,14 +58,24 @@ Changelog
   pre-protocols.
   [deiferni]
 
-
-4.2.1 (2015-03-17)
-------------------
-
 - Refactor: add command to create documents. Use this command for
   quickupload-adapter, when creating-documents from template and when extracting
   documents from emails.
   [deiferni]
+
+- Drop all SQL-tables during dev-setup, not only those defined in metadata.
+  [deiferni]
+
+
+4.3.0 (2015-03-20)
+------------------
+
+- Automatic CSRF protection with plone.protect 3.
+  [jone]
+
+
+4.2.1 (2015-03-17)
+------------------
 
 - SchemaMigration: Use IdempotentOperations only when executing migrations for MySQL.
   Also make sure that IdempotentOperations always keeps database metadata up to date.
