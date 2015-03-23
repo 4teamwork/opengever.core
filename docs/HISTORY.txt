@@ -30,6 +30,10 @@ Changelog
 4.3.0 (2015-03-20)
 ------------------
 
+- Meeting: disable navigation portlet for commitee-container when installing
+  example profile.
+  [deiferni]
+
 - Meeting: only allow documents in dossiers to be submitted as additional documents.
   [deiferni]
 

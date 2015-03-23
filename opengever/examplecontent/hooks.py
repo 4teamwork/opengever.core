@@ -3,6 +3,11 @@ from datetime import timedelta
 from opengever.base.model import create_session
 from opengever.meeting.model import Member
 from opengever.meeting.model import Membership
+from plone.portlets.constants import CONTEXT_CATEGORY
+from plone.portlets.interfaces import ILocalPortletAssignmentManager
+from plone.portlets.interfaces import IPortletManager
+from zope.component import getMultiAdapter
+from zope.component import getUtility
 
 
 def create_example_meeting_content(site):
@@ -30,5 +35,17 @@ def create_example_meeting_content(site):
     session.add(hans_membership)
 
 
+def block_portlets_for_meetings(site):
+    content = site.restrictedTraverse('sitzungen')
+    manager = getUtility(
+        IPortletManager, name=u'plone.leftcolumn', context=content)
+
+    # Block inherited context portlets on content
+    assignable = getMultiAdapter(
+        (content, manager), ILocalPortletAssignmentManager)
+    assignable.setBlacklistStatus(CONTEXT_CATEGORY, True)
+
+
 def init_profile_installed(site):
     create_example_meeting_content(site)
+    block_portlets_for_meetings(site)
