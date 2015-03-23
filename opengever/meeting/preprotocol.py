@@ -79,10 +79,18 @@ class PreProtocol(object):
 
 class PreProtocolData(object):
 
-    def __init__(self, meeting):
+    def __init__(self, meeting, pre_protocols=None):
         self.meeting = meeting
-        self.data = {}
+        if pre_protocols:
+            self.pre_protocols = pre_protocols
+        else:
+            self.pre_protocols = []
+            for agenda_item in self.meeting.agenda_items:
+                if agenda_item.is_paragraph:
+                    continue
+                self.pre_protocols.append(PreProtocol(agenda_item))
 
+        self.data = {}
         self.add_base()
         self.add_protocol_type()
         self.add_participants()
@@ -130,11 +138,7 @@ class PreProtocolData(object):
 
     def add_agenda_items(self):
         self.data['agenda_items'] = []
-        for agenda_item in self.meeting.agenda_items:
-            if agenda_item.is_paragraph:
-                continue
-
-            pre_protocol = PreProtocol(agenda_item)
+        for pre_protocol in self.pre_protocols:
             self.data['agenda_items'].append({
                 'number': pre_protocol.number,
                 'description': pre_protocol.description,

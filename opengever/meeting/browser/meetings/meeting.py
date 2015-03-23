@@ -3,6 +3,7 @@ from opengever.meeting.browser.meetings.agendaitem import DeleteAgendaItem
 from opengever.meeting.browser.meetings.agendaitem import ScheduleSubmittedProposal
 from opengever.meeting.browser.meetings.agendaitem import ScheduleText
 from opengever.meeting.browser.meetings.agendaitem import UpdateAgendaItemOrder
+from opengever.meeting.browser.meetings.excerpt import GenerateExcerpt
 from opengever.meeting.browser.meetings.meetinglist import MeetingList
 from opengever.meeting.browser.meetings.preprotocol import DownloadGeneratedPreProtocol
 from opengever.meeting.browser.meetings.preprotocol import EditPreProtocol
@@ -93,6 +94,7 @@ class MeetingView(BrowserView):
         'delete_agenda_item': DeleteAgendaItem,
         'download_pre_protocol': DownloadGeneratedPreProtocol,
         'edit': EditMeeting,
+        'generate_excerpt': GenerateExcerpt,
         'meetingtransitioncontroller': MeetingTransitionController,
         'pre_protocol': EditPreProtocol,
         'schedule_proposal': ScheduleSubmittedProposal,

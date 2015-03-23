@@ -1,0 +1,53 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      metal:use-macro="here/main_template/macros/master"
+      lang="en"
+      i18n:domain="opengever.meeting">
+
+    <metal:content-core fill-slot="content-core">
+      <metal:content-core define-macro="content-core"
+                          tal:define="meeting view/model;">
+        <div id="opengever_meeting_excerpt">
+          <metal:use use-macro="context/@@ploneform-macros/titlelessform">
+
+            <metal:block fill-slot="actions">
+
+              <metal:block tal:repeat="protocol view/get_pre_protocols">
+              <metal:block tal:define="name protocol/name">
+
+                <p>
+                <input type="checkbox"
+                       tal:attributes="name string:${name}.include:record;
+                                       id string:${name}.include:record" />
+                <label tal:attributes="for string:${name}.include:record"
+                       tal:content="protocol/title">
+                </label>
+                </p>
+
+              </metal:block>
+              </metal:block>
+
+
+            <metal:use use-macro="context/@@ploneform-macros/actions" />
+
+            <metal:comment tal:replace="nothing">
+              This seems to be the only way to disable kss inline validation.
+
+              In our case it does not work because we are editing an input form without plone content.
+
+              See http://stackoverflow.com/questions/27515472/how-can-you-disable-inline-validation-for-a-z3c-form-on-plone
+            </metal:comment>
+            <script type="text/javascript">
+              $('.z3cformInlineValidation').removeClass('z3cformInlineValidation');
+            </script>
+
+            </metal:block>
+
+          </metal:use>
+        </div>
+      </metal:content-core>
+    </metal:content-core>
+
+</html>
