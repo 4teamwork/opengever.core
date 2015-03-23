@@ -5,7 +5,9 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add DossierMigrator that migrates dossier responsibles (to be used
+  with ftw.usermigration).
+  [lgraf]
 
 
 4.3.0 (2015-03-20)
