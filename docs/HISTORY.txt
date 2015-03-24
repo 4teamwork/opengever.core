@@ -5,6 +5,9 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Include newest plone.formwidget.namedfile version (solves MIME-Type upload problems).
+  [phgross]
+
 - Add DictstorageMigrator that migrates user IDs in dictstorage keys (in SQL).
   (to be used with ftw.usermigration).
   [lgraf]
