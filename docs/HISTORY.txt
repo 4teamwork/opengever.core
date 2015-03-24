@@ -5,6 +5,10 @@ Changelog
 4.1.1 (unreleased)
 ------------------
 
+- Add DictstorageMigrator that migrates user IDs in dictstorage keys (in SQL).
+  (to be used with ftw.usermigration).
+  [lgraf]
+
 - Add OGDSMigrator that migrates users and inbox groups in OGDS SQL tables
   (to be used with ftw.usermigration).
   [lgraf]
