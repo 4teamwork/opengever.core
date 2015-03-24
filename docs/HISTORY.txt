@@ -5,6 +5,9 @@ Changelog
 4.2.2 (unreleased)
 ------------------
 
+- Implement migrating participants in DossierMigrator.
+  [lgraf]
+
 - Add DictstorageMigrator that migrates user IDs in dictstorage keys (in SQL).
   (to be used with ftw.usermigration).
   [lgraf]
