@@ -1,9 +1,7 @@
 from AccessControl.interfaces import IRoleManager
 from ftw.mail.interfaces import IMailSettings
-from opengever.base.model import Base
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.sync.ogds_updater import sync_ogds
-from opengever.ogds.models import BASE
 from opengever.setup import DEVELOPMENT_USERS_GROUP
 from opengever.setup.ldap_creds import configure_ldap_credentials
 from plone.app.controlpanel.language import ILanguageSelectionSchema
@@ -12,7 +10,7 @@ from Products.CMFPlone.factory import _DEFAULT_PROFILE
 from Products.CMFPlone.factory import addPloneSite
 from Products.CMFPlone.utils import getToolByName
 from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin
-from sqlalchemy.exc import NoReferencedTableError
+from sqlalchemy import MetaData
 from zope.component import getAdapter
 from zope.component import getUtility
 
@@ -22,9 +20,6 @@ EXTENSION_PROFILES = (
     'plonetheme.classic:default',
     'plonetheme.sunburst:default',
 )
-
-
-SQL_BASES = (BASE, Base)
 
 
 MIMETYPE_FIX_PROFILE = 'profile-opengever.policy.base:mimetype'
@@ -190,8 +185,5 @@ class GeverDeployment(object):
     def drop_sql_tables(self, session):
         """Drops all sql tables, usually for a dev-setup.
         """
-        for base in SQL_BASES:
-            try:
-                getattr(base, 'metadata').drop_all(session.bind)
-            except NoReferencedTableError:
-                pass
+        temp_metadata = MetaData(bind=session.bind, reflect=True)
+        temp_metadata.drop_all()
