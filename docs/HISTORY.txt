@@ -5,6 +5,10 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Add OGDSMigrator that migrates users and inbox groups in OGDS SQL tables
+  (to be used with ftw.usermigration).
+  [lgraf]
+
 - Do not show resolved tasks as overdue.
   [phgross]
 
