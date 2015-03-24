@@ -2,6 +2,7 @@ from Acquisition import aq_inner, aq_parent
 from datetime import datetime
 from five import grok
 from opengever.inbox import _
+from opengever.inbox.activities import ForwardingAddedActivity
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import _ as task_mf
@@ -131,6 +132,12 @@ class ForwardingAddForm(AddForm):
                              [org_unit.inbox().id()])
 
         super(ForwardingAddForm, self).update()
+
+    def createAndAdd(self, data):
+        forwarding = super(AddForm, self).createAndAdd(data=data)
+        ForwardingAddedActivity(
+            forwarding, self.request, self.context).record()
+        return forwarding
 
 
 @grok.subscribe(IForwarding, IObjectAddedEvent)
