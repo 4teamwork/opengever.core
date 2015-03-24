@@ -5,6 +5,9 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Do not show resolved tasks as overdue.
+  [phgross]
+
 - Add DossierMigrator that migrates dossier responsibles (to be used
   with ftw.usermigration).
   [lgraf]

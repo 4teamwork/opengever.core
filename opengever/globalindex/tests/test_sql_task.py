@@ -101,11 +101,30 @@ class TestGlobalindexTask(TestCase):
         self.assertTrue(overdue.is_overdue)
 
     def test_is_overdue_respect_overdue_independent_states(self):
-        overdue = create(Builder('globalindex_task').having(
-            int_id=12345, deadline=date.today() - timedelta(days=10),
-            review_state='task-state-tested-and-closed'))
+        overdue_date = date.today() - timedelta(days=10)
 
-        self.assertFalse(overdue.is_overdue)
+        closed = create(Builder('globalindex_task')
+                        .having(int_id=1, deadline=overdue_date,
+                                review_state='task-state-tested-and-closed'))
+        cancelled = create(Builder('globalindex_task')
+                           .having(int_id=2, deadline=overdue_date,
+                                   review_state='task-state-cancelled'))
+        resolved = create(Builder('globalindex_task')
+                          .having(int_id=3, deadline=overdue_date,
+                                  review_state='task-state-resolved'))
+        rejected = create(Builder('globalindex_task')
+                          .having(int_id=4, deadline=overdue_date,
+                                  review_state='task-state-rejected'))
+        closed_forwarding = create(Builder('globalindex_task')
+                                   .having(int_id=5, deadline=overdue_date,
+                                           task_type='forwarding',
+                                           review_state='forwarding-state-closed'))
+
+        self.assertFalse(closed.is_overdue)
+        self.assertFalse(cancelled.is_overdue)
+        self.assertFalse(resolved.is_overdue)
+        self.assertFalse(rejected.is_overdue)
+        self.assertFalse(closed_forwarding.is_overdue)
 
     def test_deadline_label_returns_span_tag_with_formated_date(self):
         task = create(Builder('globalindex_task').having(
