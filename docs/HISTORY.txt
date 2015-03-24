@@ -12,6 +12,9 @@ Changelog
   with ftw.usermigration).
   [lgraf]
 
+- Drop all SQL-tables during dev-setup, not only those defined in metadata.
+  [deiferni]
+
 
 4.3.0 (2015-03-20)
 ------------------
