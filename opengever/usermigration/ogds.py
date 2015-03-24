@@ -12,7 +12,7 @@ logger = logging.getLogger('opengever.usermigration')
 
 class OGDSMigrator(object):
 
-    def __init__(self, portal, principal_mapping, mode='move'):
+    def __init__(self, portal, principal_mapping, mode='move', strict=True):
         self.portal = portal
         self.principal_mapping = principal_mapping
 
@@ -20,6 +20,7 @@ class OGDSMigrator(object):
             raise NotImplementedError(
                 "OGDSMigrator only supports 'move' mode")
         self.mode = mode
+        self.strict = strict
 
     def _verify_group(self, groupid):
         ogds_group = ogds_service().fetch_group(groupid)
