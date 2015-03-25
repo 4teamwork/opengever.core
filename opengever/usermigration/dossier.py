@@ -4,6 +4,8 @@ Helpers for migrating user-related data on dossiers.
 
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.behaviors.participation import IParticipationAware
+from opengever.dossier.behaviors.participation import IParticipationAwareMarker
 from opengever.ogds.base.utils import ogds_service
 from opengever.usermigration.exceptions import UserMigrationException
 from plone import api
@@ -62,8 +64,33 @@ class DossierMigrator(object):
 
         return modified_idxs, moved
 
+    def _migrate_participations(self, dossier):
+        moved = []
+        modified_idxs = []
+        path = '/'.join(dossier.getPhysicalPath())
+
+        if not IParticipationAwareMarker.providedBy(dossier):
+            # No participation support - probably a template dossier
+            return modified_idxs, moved
+
+        phandler = IParticipationAware(dossier)
+        participations = phandler.get_participations()
+        for participation in participations:
+            old_userid = participation.contact
+            if old_userid in self.principal_mapping:
+                new_userid = self.principal_mapping[old_userid]
+                logger.info("Migrating participation for {} ({} -> {})".format(
+                    path, old_userid, new_userid))
+                self._verify_user(new_userid)
+                participation.contact = new_userid
+                moved.append((path, old_userid, new_userid))
+
+        return modified_idxs, moved
+
     def migrate(self):
         responsibles_moved = []
+        participations_moved = []
+
         dossiers = self._get_dossiers()
 
         for dossier in dossiers:
@@ -74,11 +101,18 @@ class DossierMigrator(object):
             modified_idxs.extend(idxs)
             responsibles_moved.extend(moved)
 
-            # TODO: participants
+            # Migrate participations
+            idxs, moved = self._migrate_participations(dossier)
+            modified_idxs.extend(idxs)
+            participations_moved.extend(moved)
 
             dossier.reindexObject(idxs=modified_idxs)
 
-        results = {'responsible': {
-            'moved': responsibles_moved, 'copied': [], 'deleted': []}}
+        results = {
+            'responsibles': {
+                'moved': responsibles_moved, 'copied': [], 'deleted': []},
+            'participations': {
+                'moved': participations_moved, 'copied': [], 'deleted': []},
+        }
 
         return results
