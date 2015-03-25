@@ -5,6 +5,9 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Customize LanguageSelector viewlet to display it as a menu.
+  [phgross]
+
 - Fixed actor for all task activities.
   [phgross]
 
