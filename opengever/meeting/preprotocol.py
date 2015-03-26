@@ -76,6 +76,19 @@ class PreProtocol(object):
         self._agenda_item.discussion = data.get('discussion')
         self._agenda_item.decision = data.get('decision')
 
+    def get_field_data(self):
+        return {
+            'number': self.number,
+            'description': self.description,
+            'title': self.title,
+            'legal_basis': self.legal_basis,
+            'initial_position': self.initial_position,
+            'proposed_action': self.proposed_action,
+            'considerations': self.considerations,
+            'discussion': self.discussion,
+            'decision': self.decision,
+        }
+
 
 class PreProtocolData(object):
 
@@ -139,17 +152,8 @@ class PreProtocolData(object):
     def add_agenda_items(self):
         self.data['agenda_items'] = []
         for pre_protocol in self.pre_protocols:
-            self.data['agenda_items'].append({
-                'number': pre_protocol.number,
-                'description': pre_protocol.description,
-                'title': pre_protocol.title,
-                'legal_basis': pre_protocol.legal_basis,
-                'initial_position': pre_protocol.initial_position,
-                'proposed_action': pre_protocol.proposed_action,
-                'considerations': pre_protocol.considerations,
-                'discussion': pre_protocol.discussion,
-                'decision': pre_protocol.decision,
-            })
+            self.data['agenda_items'].append(
+                pre_protocol.get_field_data())
 
     def as_json(self):
         return json.dumps(self.data)
