@@ -4,6 +4,7 @@ from ftw.testbrowser import browsing
 from opengever.activity.center import NotificationCenter
 from opengever.base.oguid import Oguid
 from opengever.testing import FunctionalTestCase
+from plone import api
 from plone.app.testing import TEST_USER_ID
 
 
@@ -67,11 +68,13 @@ class TestMyNotifications(FunctionalTestCase):
 
         self.assertEquals(
             [{'Actor': 'Boss Hugo (hugo.boss)',
-              'Created': self.activity_1.created.strftime('%d.%m.%Y %H:%M'),
+              'Created': api.portal.get_localized_time(
+                  self.activity_1.created, long_format=True),
               'Kind': 'task-added',
               'Title': 'Kennzahlen 2014 erfassen'},
              {'Actor': 'Mueller Peter (peter.mueller)',
-              'Created': self.activity_2.created.strftime('%d.%m.%Y %H:%M'),
+              'Created': api.portal.get_localized_time(
+                  self.activity_1.created, long_format=True),
               'Kind': 'task-transition-open-in-progress',
               'Title': 'Kennzahlen 2014 erfassen'}],
             browser.css('.listing').first.dicts())

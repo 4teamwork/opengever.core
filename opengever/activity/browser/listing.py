@@ -7,6 +7,7 @@ from opengever.activity import notification_center
 from opengever.activity.browser import resolve_notification_url
 from opengever.ogds.base.actor import Actor
 from opengever.tabbedview.browser.base import BaseListingTab
+from plone import api
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import implements
@@ -24,7 +25,8 @@ def readable_actor(item, value):
 
 
 def readable_date(item, date):
-    return item.activity.created.strftime('%d.%m.%Y %H:%M')
+    return api.portal.get_localized_time(
+        item.activity.created, long_format=True)
 
 
 def translated_kind(item, value):
@@ -60,7 +62,7 @@ class NotificationListingTab(BaseListingTab):
 
 
 class NotificationTableSource(grok.MultiAdapter, BaseTableSource):
-    """Base table source adapter for notification listings, which get they
+    """Base table source adapter for notification listings, which get their
     data from the notification center.
     """
 
