@@ -90,7 +90,11 @@ class ChooseDossierForm(Form):
 
     @buttonAndHandler(_(u'button_cancel', default=u'Cancel'), name='cancel')
     def handle_cancel(self, action):
-        return self.request.RESPONSE.redirect('')
+        data, errors = self.extractData()
+        meeting = Meeting.get(data['meeting_id'])
+        assert meeting, 'invalid form state, missing meeting'
+
+        return self.request.RESPONSE.redirect(meeting.get_url())
 
 
 class GeneratePreProtocol(FormWrapper, grok.View):
@@ -194,7 +198,11 @@ class ChooseUpdateMethod(Form):
 
     @buttonAndHandler(_(u'button_cancel', default=u'Cancel'), name='cancel')
     def handle_cancel(self, action):
-        return self.request.RESPONSE.redirect('')
+        data, errors = self.extractData()
+        meeting = GeneratedPreProtocol.get(data['document_id']).meeting
+
+        assert meeting, 'invalid form state, missing meeting'
+        return self.request.RESPONSE.redirect(meeting.get_url())
 
 
 class UpdatePreProtocol(FormWrapper, grok.View):
