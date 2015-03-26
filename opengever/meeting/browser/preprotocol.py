@@ -61,6 +61,8 @@ class IChooseDossierSchema(Schema):
 class ChooseDossierForm(Form):
     fields = Fields(IChooseDossierSchema)
     ignoreContext = True
+    label = _(u'form_label_generate_preprotocol',
+              default=u'Generate pre-protocol')
 
     def updateWidgets(self):
         super(ChooseDossierForm, self).updateWidgets()
@@ -158,6 +160,8 @@ class ChooseUpdateMethod(Form):
     fields = Fields(IChooseUpdateMethod)
     fields['method'].widgetFactory[INPUT_MODE] = RadioFieldWidget
     ignoreContext = True
+    label = _(u'form_label_update_preprotocol',
+              default=u'Update pre-protocol')
 
     def updateWidgets(self):
         super(ChooseUpdateMethod, self).updateWidgets()
