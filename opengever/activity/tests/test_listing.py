@@ -56,8 +56,8 @@ class TestMyNotifications(FunctionalTestCase):
 
         links = [link.get('href') for link in browser.css('.listing a')]
         self.assertEquals(
-            ['http://example.com/@@resolve_notification?notification_id=1',
-             'http://example.com/@@resolve_notification?notification_id=2'],
+            ['http://nohost/plone/@@resolve_notification?notification_id=1',
+             'http://nohost/plone/@@resolve_notification?notification_id=2'],
             links)
 
     @browsing
@@ -86,5 +86,5 @@ class TestMyNotifications(FunctionalTestCase):
 
         self.assertEquals('Kennzahlen 2014 erfassen', link.text)
         self.assertEquals(
-            'http://example.com/@@resolve_notification?notification_id=1',
+            'http://nohost/plone/@@resolve_notification?notification_id=1',
             link.get('href'))

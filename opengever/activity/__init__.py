@@ -1,6 +1,7 @@
 from opengever.activity.center import DisabledNotificationCenter
 from opengever.activity.center import PloneNotificationCenter
 from opengever.activity.interfaces import IActivitySettings
+from opengever.activity.mail import PloneNotificationMailer
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 from zope.i18nmessageid import MessageFactory
@@ -18,4 +19,4 @@ def notification_center():
     if not is_activity_feature_enabled():
         return DisabledNotificationCenter()
 
-    return PloneNotificationCenter()
+    return PloneNotificationCenter(dispatchers=[PloneNotificationMailer()])

@@ -1,6 +1,7 @@
 from email.header import Header
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from opengever.activity.browser import resolve_notification_url
 from opengever.ogds.base.utils import ogds_service
 from plone import api
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
@@ -48,8 +49,6 @@ class PloneNotificationMailer(object):
         return msg
 
     def prepare_html(self, notification):
-        # Todo: solve circular dependency
-        from opengever.activity.browser.resolve import ResolveNotificationView
         template = ViewPageTemplateFile("mail_templates/notification.pt")
         options = {
             'subject': notification.activity.title,
@@ -57,7 +56,7 @@ class PloneNotificationMailer(object):
             'kind': notification.activity.kind,
             'summary': notification.activity.summary,
             'description': notification.activity.description,
-            'link': ResolveNotificationView.url_for(notification.notification_id)
+            'link': resolve_notification_url(notification)
         }
 
         return template(self, **options)

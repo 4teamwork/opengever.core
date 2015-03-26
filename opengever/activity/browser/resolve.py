@@ -1,7 +1,6 @@
 from five import grok
 from opengever.activity import notification_center
 from opengever.base.browser.resolveoguid import ResolveOGUIDView
-from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from plone import api
 from Products.CMFPlone.interfaces import IPloneSiteRoot
@@ -13,12 +12,6 @@ class ResolveNotificationView(ResolveOGUIDView):
     grok.name('resolve_notification')
     grok.context(IPloneSiteRoot)
     grok.require('zope2.View')
-
-    @classmethod
-    def url_for(cls, notification_id):
-        return "{}/@@{}?notification_id={}".format(
-            get_current_admin_unit().public_url,
-            cls.__view_name__, notification_id)
 
     def render(self):
         notification_id = self.request.get('notification_id', '')

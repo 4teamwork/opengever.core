@@ -1,6 +1,6 @@
 from opengever.activity import is_activity_feature_enabled
 from opengever.activity import notification_center
-from opengever.activity.browser.resolve import ResolveNotificationView
+from opengever.activity.browser import resolve_notification_url
 from plone import api
 from plone.app.layout.viewlets import common
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
@@ -40,8 +40,7 @@ class NotificationViewlet(common.ViewletBase):
                 'title': notification.activity.title,
                 'summary': notification.activity.summary,
                 'created': notification.activity.created,
-                'link': ResolveNotificationView.url_for(
-                    notification.notification_id),
+                'link': resolve_notification_url(notification),
                 'read': notification.read,
                 'id': notification.notification_id})
 

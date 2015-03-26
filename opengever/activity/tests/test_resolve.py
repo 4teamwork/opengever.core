@@ -2,7 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.activity import notification_center
-from opengever.activity.browser.resolve import ResolveNotificationView
+from opengever.activity.browser import resolve_notification_url
 from opengever.base.oguid import Oguid
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
@@ -12,10 +12,11 @@ from zExceptions import Unauthorized
 
 class TestResolveNotificationView(FunctionalTestCase):
 
-    def test_url_for(self):
-        url = ResolveNotificationView.url_for('123')
+    def test_resolve_notification_url(self):
+        notification = create(Builder('notification').id('123'))
+        url = resolve_notification_url(notification)
         self.assertEquals(
-            'http://example.com/@@resolve_notification?notification_id=123',
+            'http://nohost/plone/@@resolve_notification?notification_id=123',
             url)
 
     @browsing

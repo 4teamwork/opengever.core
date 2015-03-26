@@ -4,7 +4,7 @@ from ftw.table.interfaces import ITableSource
 from ftw.table.interfaces import ITableSourceConfig
 from opengever.activity import _
 from opengever.activity import notification_center
-from opengever.activity.browser.resolve import ResolveNotificationView
+from opengever.activity.browser import resolve_notification_url
 from opengever.ogds.base.actor import Actor
 from opengever.tabbedview.browser.base import BaseListingTab
 from zope.globalrequest import getRequest
@@ -15,7 +15,7 @@ from zope.interface import Interface
 
 def resolve_notification_link(item, value):
     return u'<a href="{}">{}</a>'.format(
-        ResolveNotificationView.url_for(item.notification_id),
+        resolve_notification_url(item),
         item.activity.title)
 
 

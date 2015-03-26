@@ -99,5 +99,5 @@ class TestNotificationViewlet(FunctionalTestCase):
         browser.login().open()
         link = browser.css('dl.notificationsMenu .item-content a').first
         self.assertEquals(
-            'http://example.com/@@resolve_notification?notification_id=1',
+            'http://nohost/plone/@@resolve_notification?notification_id=1',
             link.get('href'))

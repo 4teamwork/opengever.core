@@ -1,4 +1,3 @@
-from opengever.activity.mail import PloneNotificationMailer
 from opengever.activity.model import Activity
 from opengever.activity.model import Notification
 from opengever.activity.model import Resource
@@ -125,10 +124,6 @@ class PloneNotificationCenter(NotificationCenter):
     """The PloneNotificationCenter is a wrapper of the NotificationCenter,
     which provides some helper methods for easier access directly from plone.
     """
-
-    def __init__(self):
-        dispatchers = [PloneNotificationMailer()]
-        super(PloneNotificationCenter, self).__init__(dispatchers)
 
     def add_watcher_to_resource(self, obj, actorid):
         actor = Actor.lookup(actorid)
