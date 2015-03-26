@@ -28,7 +28,8 @@ class NotificationOverview(TabbedView):
              'icon': None,
              'url': '#',
              'class': None,
-             'title':_('label_my_notifications', default=u'My notifications')},
+             'title': _('label_my_notifications',
+                        default=u'My notifications')},
         ]
 
         return tabs

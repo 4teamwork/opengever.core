@@ -21,8 +21,10 @@ class ResourceQuery(BaseQuery):
 
 resource_watchers = Table(
     'resource_watchers', Base.metadata,
-    Column('resource_id', Integer, ForeignKey('resources.id'), primary_key=True),
-    Column('watcher_id', Integer, ForeignKey('watchers.id'), primary_key=True))
+    Column('resource_id', Integer,
+           ForeignKey('resources.id'), primary_key=True),
+    Column('watcher_id', Integer,
+           ForeignKey('watchers.id'), primary_key=True))
 
 
 class Resource(Base):

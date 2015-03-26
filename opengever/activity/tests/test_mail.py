@@ -42,7 +42,7 @@ class TestEmailNotification(FunctionalTestCase):
     def test_subject_is_title(self, browser):
         browser.login().open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': 'Test Task',
-                      'Responsible':'hugo.boss',
+                      'Responsible': 'hugo.boss',
                       'Task Type': 'comment'})
         browser.css('#form-buttons-save').first.click()
 
@@ -54,7 +54,7 @@ class TestEmailNotification(FunctionalTestCase):
     def test_from_and_to_addresses(self, browser):
         browser.login().open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': 'Test Task',
-                      'Responsible':'hugo.boss',
+                      'Responsible': 'hugo.boss',
                       'Task Type': 'comment'})
         browser.css('#form-buttons-save').first.click()
 
@@ -66,7 +66,7 @@ class TestEmailNotification(FunctionalTestCase):
     def test_see_on_gever_is_linked_to_resolve_notification_view(self, browser):
         browser.login().open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': 'Test Task',
-                      'Responsible':'hugo.boss',
+                      'Responsible': 'hugo.boss',
                       'Task Type': 'comment'})
         browser.css('#form-buttons-save').first.click()
 

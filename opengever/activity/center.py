@@ -71,7 +71,8 @@ class NotificationCenter(object):
 
         return resource.watchers
 
-    def add_activity(self, oguid, kind, title, summary, actor_id, description=u''):
+    def add_activity(self, oguid, kind, title, summary, actor_id,
+                     description=u''):
         resource = self.fetch_resource(oguid)
         if not resource:
             resource = self.add_resource(oguid)
@@ -137,7 +138,8 @@ class PloneNotificationCenter(NotificationCenter):
         super(PloneNotificationCenter, self).remove_watcher_from_resource(
             oguid, userid)
 
-    def add_activity(self, obj, kind, title, summary, actor_id, description=u''):
+    def add_activity(self, obj, kind, title, summary, actor_id,
+                     description=u''):
         oguid = Oguid.for_object(obj)
 
         return super(PloneNotificationCenter, self).add_activity(
@@ -180,7 +182,8 @@ class DisabledNotificationCenter(NotificationCenter):
     def get_watchers(self, obj):
         return []
 
-    def add_activity(self, obj, kind, title, summary, actor_id, description=u''):
+    def add_activity(self, obj, kind, title, summary, actor_id,
+                     description=u''):
         pass
 
     def get_users_notifications(self, userid, only_unread=False, limit=None):
