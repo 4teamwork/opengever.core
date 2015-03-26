@@ -51,7 +51,7 @@ class CreateDocumentCommand(object):
         obj = addContentToContainer(self.context,
                                     content,
                                     checkConstraints=True)
-        self.notify_modified(obj)
+        self.finish_creation(obj)
 
         obj.reindexObject()
         return obj
@@ -63,7 +63,7 @@ class CreateDocumentCommand(object):
         """
         notify(ObjectCreatedEvent(content))
 
-    def notify_modified(self, content):
+    def finish_creation(self, content):
         """Trigger rest of initialization."""
 
         notify(ObjectModifiedEvent(content))

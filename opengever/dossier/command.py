@@ -13,8 +13,8 @@ class CreateDocumentFromTemplateCommand(CreateDocumentCommand):
             context, template_doc.file.filename, template_doc.file.data,
             title=title)
 
-    def notify_modified(self, content):
+    def finish_creation(self, content):
         """Also make sure doc-properties are updated from template."""
 
         DocPropertyWriter(content).initialize()
-        super(CreateDocumentFromTemplateCommand, self).notify_modified(content)
+        super(CreateDocumentFromTemplateCommand, self).finish_creation(content)
