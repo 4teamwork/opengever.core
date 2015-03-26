@@ -89,7 +89,8 @@ class TestNotificationViewlet(FunctionalTestCase):
                    .having(activity=self.activity_a, watcher=self.test_watcher))
 
         browser.login().open()
-        self.assertEquals(10, len(browser.css('.notification-item')))
+        notifications = browser.css('.notification-item a.item-location')
+        self.assertEquals(10, len(notifications))
 
     @browsing
     def test_notifications_are_linked_to_resolve_notification_view(self, browser):

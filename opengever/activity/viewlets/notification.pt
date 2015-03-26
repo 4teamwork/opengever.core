@@ -38,14 +38,16 @@
               <a class="item-location" href="#"
                  tal:attributes="href notification/link"
                  tal:content="notification/title"></a>
-              <div class="item-summary" tal:content="notification/summary" />
+              <div class="item-summary" tal:content="structure notification/summary" />
             </div>
           </div>
         </li>
+        <li class="notification-item">
+          <a href="#" class="all_link" tal:attributes="href view/overview_url">
+            Notifications Overview
+          </a>
+        </li>
       </ul>
-      <a href="#" class="all_link" tal:attributes="href view/overview_url">
-        <small>Notifications Overview</small>
-      </a>
     </dd>
   </dl>
 </div>
