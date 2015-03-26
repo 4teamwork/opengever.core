@@ -7,6 +7,8 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.browser.meetings.meetinglist import MeetingList
 from opengever.meeting.model import Meeting
 from opengever.testing import FunctionalTestCase
+from zExceptions import Unauthorized
+import transaction
 
 
 class TestMeeting(FunctionalTestCase):
@@ -15,6 +17,7 @@ class TestMeeting(FunctionalTestCase):
 
     def setUp(self):
         super(TestMeeting, self).setUp()
+        self.repo = create(Builder('repository_root'))
         container = create(Builder('committee_container'))
         self.committee = create(Builder('committee').within(container))
 
@@ -65,3 +68,17 @@ class TestMeeting(FunctionalTestCase):
         meeting = Meeting.query.get(meeting.meeting_id)
         self.assertEqual(datetime(2012, 5, 5, 15), meeting.start)
         self.assertEqual('There', meeting.location)
+
+    @browsing
+    def test_edit_meeting_not_possible_when_not_editable(self, browser):
+        committee_model = self.committee.load_model()
+        meeting = create(Builder('meeting')
+                         .having(committee=committee_model,
+                                 start=datetime(2013, 1, 1),
+                                 location='There',))
+        meeting.execute_transition('pending-held')
+        transaction.commit()
+
+        with self.assertRaises(Unauthorized):
+            browser.open(
+                MeetingList.url_for(self.committee, meeting) + '/edit')

@@ -12,7 +12,7 @@ class Msg2MimeTransform(object):
        message.
     """
 
-    def __call__(self, value):
+    def transform(self, value):
         # Create a temporary msg file.
         msg_file = tempfile.NamedTemporaryFile(delete=False)
         msg_file.write(value)

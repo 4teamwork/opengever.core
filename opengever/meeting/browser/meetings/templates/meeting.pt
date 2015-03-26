@@ -36,12 +36,14 @@
                   <tr>
                       <th i18n:translate="">Pre-Protocol</th>
                       <td><a tal:attributes="href view/url_pre_protocol" i18n:translate="">Edit pre-protocol</a></td>
+                      <td><a tal:attributes="href view/url_generate_pre_protocol" i18n:translate="">Generate pre-protocol</a></td>
+                      <td><a tal:attributes="href view/url_download_pre_protocol" i18n:translate="">Download pre-protocol</a></td>
                   </tr>
               </tbody>
           </table>
 
-          <fieldset class="proposal">
-          <legend i18n:translate="">Add Agenda Item</legend>
+          <fieldset class="proposal" tal:condition="meeting/is_editable">
+            <legend i18n:translate="">Add Agenda Item</legend>
             <metal:block tal:condition="unscheduled_proposals">
               <form method="post" tal:attributes="action view/url_schedule_proposal"
                     id="schedule_proposal">
@@ -71,7 +73,7 @@
                     </div>
                 </div>
               </form>
-            </fieldset>
+        </fieldset>
 
           <h2 i18n:translate="">Agenda Items</h2>
           <table id="agenda_items">
@@ -79,7 +81,8 @@
                   <tr tal:repeat="agenda_item view/agenda_items" tal:attributes="data-uid agenda_item/agenda_item_id">
                       <td class="sortable_handle"></td>
                       <td class="number" tal:content="agenda_item/number"></td>
-                      <td tal:attributes="class agenda_item/get_css_class" tal:content="agenda_item/get_title"></td>
+                      <td tal:attributes="class agenda_item/get_css_class" tal:content="structure agenda_item/get_proposal_link">
+                      </td>
                       <td>
                         <a tal:condition="meeting/is_editable"
                             class="delete_agenda_item"

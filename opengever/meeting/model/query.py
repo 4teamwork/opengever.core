@@ -55,6 +55,10 @@ class MembershipQuery(BaseQuery):
             and_(self._attribute('date_from') <= date.today(),
                  self._attribute('date_to') >= date.today()))
 
+    def overlapping(self, start, end):
+        return self.filter(and_(self._attribute('date_from') <= end,
+                                self._attribute('date_to') >= start))
+
 
 class SubmittedDocumentQuery(BaseQuery):
 
@@ -106,3 +110,12 @@ class MeetingQuery(BaseQuery):
 
     def get_last_meeting(self, committee):
         return self._past_meetings(committee).first()
+
+
+class GeneratedDocumentQuery(BaseQuery):
+
+    def by_document(self, document):
+        """Filter generated document by document."""
+
+        oguid = Oguid.for_object(document)
+        return self.filter(self._attribute('oguid') == oguid)

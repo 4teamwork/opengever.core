@@ -24,7 +24,12 @@ class ModelAddForm(AutoExtensibleForm, AddForm):
         disable_edit_bar()
 
     def create(self, data):
+        self.validate(data)
         return self.model_class(**data)
+
+    def validate(self, data):
+        """Hook to perform additional input validation."""
+        pass
 
     def add(self, obj):
         session = create_session()
@@ -66,6 +71,12 @@ class ModelEditForm(EditForm):
     def __init__(self, context, request, model):
         super(ModelEditForm, self).__init__(context, request)
         self.model = model
+
+    def __call__(self):
+        if not self.model.is_editable():
+            raise Unauthorized('Editing is not allowed')
+
+        return super(ModelEditForm, self).__call__()
 
     def inject_initial_data(self):
         if self.request.method != 'GET':

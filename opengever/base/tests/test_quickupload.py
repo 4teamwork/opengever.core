@@ -16,21 +16,17 @@ class TestOGQuickupload(FunctionalTestCase):
 
     def test_get_mimetype(self):
         self.assertEqual('application/msword',
-                         self.adapter._get_mimetype('hanspeter.doc'))
+                         self.adapter._get_mimetype('.doc'))
 
         self.assertEqual('image/jpeg',
-                         self.adapter._get_mimetype('hanspeter.jpeg'))
+                         self.adapter._get_mimetype('.jpeg'))
 
-    def test_get_portal_type(self):
+    def test_is_email_upload(self):
+        self.assertTrue(self.adapter.is_email_upload('mail.msg'))
+        self.assertTrue(self.adapter.is_email_upload('mail.eml'))
 
-        self.assertEqual(
-            self.adapter.get_portal_type('image.jpeg'),
-            'opengever.document.document')
-        self.assertEqual(
-            self.adapter.get_portal_type('mail.eml'), 'ftw.mail.mail')
-        self.assertEqual(
-            self.adapter.get_portal_type('test.doc'),
-            'opengever.document.document')
+        self.assertFalse(self.adapter.is_email_upload('image.jpeg'))
+        self.assertFalse(self.adapter.is_email_upload('test.doc'))
 
     def test_set_default_values(self):
         result = self.adapter(filename='document.txt',
@@ -46,7 +42,6 @@ class TestOGQuickupload(FunctionalTestCase):
         self.assertIsNone(content.description)
 
     def test_expect_one_journal_entry_after_upload(self):
-
         result = self.adapter(filename='document.txt',
                               title='Title of document',
                               description='',

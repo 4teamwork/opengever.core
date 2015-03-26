@@ -23,6 +23,9 @@ class ModelContentViewsViewlet(ContentViewsViewlet):
 
     def prepare_model_tabs(self):
         model = self.view.model
+        if not model.is_editable():
+            return tuple()
+
         return ({
             'category': 'object',
             'available': True,

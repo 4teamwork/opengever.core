@@ -146,6 +146,11 @@ is used, we require `Celery <http://www.celeryproject.org/>`_ and
 first need to install `Erlang <http://www.erlang.org/>`_.
 
 
+Sablon
+^^^^^^
+
+if `opengever.meeting` is activated the ruby gem `Sablon <https://github.com/senny/sablon/>`_ is required to generate documents from ``*.docx`` templates. Sablon is executed as subprocess so the ``sablon`` script provided by the sablon gem must be accessible as the user that is running gever instances.
+
 
 LDAP credentials
 ~~~~~~~~~~~~~~~~

@@ -1,6 +1,7 @@
 from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.meeting.model import GeneratedPreProtocol
 from opengever.testing import MEMORY_DB_LAYER
 from unittest2 import TestCase
 
@@ -25,6 +26,12 @@ class TestUnitMeeting(TestCase):
         self.assertTrue(self.meeting.is_editable())
         self.meeting.workflow_state = 'held'
         self.assertFalse(self.meeting.is_editable())
+
+    def test_has_pre_protocol_document(self):
+        self.assertFalse(self.meeting.has_pre_protocol_document())
+        self.meeting.pre_protocol_document = GeneratedPreProtocol(
+            admin_unit_id='foo', int_id=1, generated_version=42)
+        self.assertTrue(self.meeting.has_pre_protocol_document())
 
     def test_reorder_agenda_items(self):
         para = create(Builder('agenda_item')

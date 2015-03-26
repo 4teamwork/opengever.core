@@ -4,24 +4,20 @@ from ftw.mail.utils import get_attachments
 from ftw.mail.utils import get_filename
 from ftw.mail.utils import remove_attachments
 from ftw.table.interfaces import ITableGenerator
+from opengever.base.command import CreateDocumentCommand
 from opengever.base.utils import disable_edit_bar
 from opengever.base.utils import find_parent_dossier
 from opengever.mail import _
 from opengever.mail.events import AttachmentsDeleted
 from opengever.mail.interfaces import IAttachmentsDeletedEvent
 from plone import api
-from plone.dexterity.utils import createContentInContainer
-from plone.dexterity.utils import iterSchemata
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from Products.statusmessages.interfaces import IStatusMessage
-from z3c.form.interfaces import IValue
 from z3c.relationfield.relation import RelationValue
 from zope.component import getUtility
-from zope.component import queryMultiAdapter
 from zope.event import notify
 from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import Attributes
-from zope.schema import getFieldsInOrder
 import os.path
 import re
 
@@ -184,40 +180,18 @@ class ExtractAttachments(grok.View):
         # create documents from the selected attachments
         for att in attachments_to_extract:
             pos = att.get('position')
-            filename = att.get('filename')
 
-            # remove line breaks from the filename
-            filename = re.sub('\s{1,}', ' ', filename)
+            # remove line breaks from the title
+            title = re.sub('\s{1,}', ' ', att.get('filename'))
+            title = os.path.splitext(title.decode('utf-8'))[0]
 
-            kwargs = {'title': filename[:filename.rfind('.')].decode('utf-8'),
-                      'file': self.get_attachment_as_namedfile(pos),
-                      'keywords': (),
-                      'digitally_available': True}
+            data, content_type, filename = self.get_attachment_data(pos)
 
-            doc = createContentInContainer(dossier,
-                                           'opengever.document.document',
-                                           **kwargs)
-
-            for schemata in iterSchemata(doc):
-                for name, field in getFieldsInOrder(schemata):
-                    if name not in kwargs.keys():
-                        default = queryMultiAdapter((
-                                doc,
-                                doc.REQUEST,  # request
-                                None,  # form
-                                field,
-                                None,  # Widget
-                                ), IValue, name='default')
-                        if default is not None:
-                            default = default.get()
-                        if default is None:
-                            default = getattr(field, 'default', None)
-                        if default is None:
-                            try:
-                                default = field.missing_value
-                            except:
-                                pass
-                        field.set(field.interface(doc), default)
+            doc = CreateDocumentCommand(
+                dossier, filename, data,
+                title=title,
+                content_type=content_type,
+                digitally_available=True).execute()
 
             # add a reference from the attachment to the mail
             intids = getUtility(IIntIds)
@@ -260,9 +234,9 @@ class ExtractAttachments(grok.View):
                 contentType=self.context.message.contentType,
                 filename=self.context.message.filename)
 
-    def get_attachment_as_namedfile(self, pos):
-        """Return a namedfile extracted from the attachment in
-        position `pos`.
+    def get_attachment_data(self, pos):
+        """Return a tuple: file-data, content-type and filename extracted from
+        the attachment in position `pos`.
         """
 
         # get attachment at position pos
@@ -273,16 +247,16 @@ class ExtractAttachments(grok.View):
                 continue
 
         if not attachment:
-            return None
+            return None, '', ''
 
         # decode when it's necessary
         filename = get_filename(attachment)
         if not isinstance(filename, unicode):
             filename = filename.decode('utf-8')
-
         # remove line breaks from the filename
         filename = re.sub('\s{1,}', ' ', filename)
 
-        return NamedFile(data=attachment.get_payload(decode=1),
-                         contentType=attachment.get_content_type(),
-                         filename=filename)
+        data = attachment.get_payload(decode=1)
+        content_type = attachment.get_content_type()
+
+        return data, content_type, filename

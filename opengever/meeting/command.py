@@ -1,13 +1,123 @@
+from Acquisition import aq_inner
+from Acquisition import aq_parent
+from opengever.base.command import CreateDocumentCommand
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.base.request import dispatch_json_request
 from opengever.base.transport import REQUEST_KEY
 from opengever.base.transport import Transporter
 from opengever.meeting import _
+from opengever.meeting import templates
+from opengever.meeting.model import GeneratedPreProtocol
 from opengever.meeting.model import proposalhistory
 from opengever.meeting.model import SubmittedDocument
+from opengever.meeting.preprotocol import PreProtocolData
+from opengever.meeting.sablon import Sablon
 from plone import api
 import json
+
+
+MIME_DOCX = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+
+
+class CreatePreProtocolCommand(CreateDocumentCommand):
+
+    def __init__(self, target_dossier, meeting):
+        """Data will be initialized lazily since it is only available after the
+        document has been generated in `execute`.
+
+        """
+        super(CreatePreProtocolCommand, self).__init__(
+            target_dossier,
+            meeting.get_pre_protocol_filename(),
+            data=None,
+            title=meeting.get_pre_protocol_title(),
+            content_type=MIME_DOCX)
+
+        self.meeting = meeting
+
+    def generate_pre_protocol_file_data(self):
+        sablon = Sablon(templates.path('protocol_template.docx'))
+        sablon.process(PreProtocolData(self.meeting).as_json())
+
+        assert sablon.is_processed_successfully(), sablon.stderr
+        return sablon.file_data
+
+    def execute(self):
+        self.data = self.generate_pre_protocol_file_data()
+
+        document = super(CreatePreProtocolCommand, self).execute()
+        self.add_database_entry(document)
+        return document
+
+    def add_database_entry(self, document):
+        session = create_session()
+        pre_protocol_document = GeneratedPreProtocol(
+            oguid=Oguid.for_object(document),
+            generated_version=document.get_current_version())
+        self.meeting.pre_protocol_document = pre_protocol_document
+        session.add(pre_protocol_document)
+
+    def show_message(self):
+        portal = api.portal.get()
+        api.portal.show_message(
+            _(u'Pre-protocol for meeting ${title} has been generated '
+                'successfully',
+              mapping=dict(title=self.meeting.get_title())),
+            portal.REQUEST)
+
+
+class CreateNewPreProtocolDocumentCommand(CreatePreProtocolCommand):
+
+    def __init__(self, pre_protocol_document):
+        meeting = pre_protocol_document.meeting
+        document = pre_protocol_document.resolve_document()
+        dossier = aq_parent(aq_inner(document))
+        super(CreateNewPreProtocolDocumentCommand, self).__init__(
+            dossier, meeting)
+
+        self.pre_protocol_document = pre_protocol_document
+
+    def add_database_entry(self, document):
+        self.pre_protocol_document.oguid = Oguid.for_object(document)
+        self.pre_protocol_document.generated_version = document.get_current_version()
+
+
+class UpdatePreProtocolCommand(object):
+
+    def __init__(self, generated_pre_protocol):
+        self.generated_pre_protocol = generated_pre_protocol
+        self.meeting = generated_pre_protocol.meeting
+
+    def generate_pre_protocol_file_data(self):
+        sablon = Sablon(templates.path('protocol_template.docx'))
+        sablon.process(PreProtocolData(self.meeting).as_json())
+
+        assert sablon.is_processed_successfully(), sablon.stderr
+        return sablon.file_data
+
+    def execute(self):
+        document = Oguid.resolve_object(self.generated_pre_protocol.oguid)
+        document.file.data = self.generate_pre_protocol_file_data()
+
+        repository = api.portal.get_tool('portal_repository')
+        comment = _(u'Updated with a newer generated version from meeting '
+                    '${title}.',
+                    mapping=dict(title=self.meeting.get_title()))
+        repository.save(obj=document, comment=comment)
+
+        new_version = document.get_current_version()
+        self.generated_pre_protocol.generated_version = new_version
+
+        return document
+
+    def show_message(self):
+        portal = api.portal.get()
+        api.portal.show_message(
+            _(u'Pre-protocol for meeting ${title} has been updated '
+              'successfully',
+              mapping=dict(title=self.meeting.get_title())),
+            portal.REQUEST)
 
 
 class CreateSubmittedProposalCommand(object):

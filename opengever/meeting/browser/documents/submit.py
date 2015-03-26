@@ -1,6 +1,7 @@
 from opengever.base.source import DossierPathSourceBinder
 from opengever.base.utils import disable_edit_bar
-from opengever.document import _
+from opengever.meeting import _
+from opengever.meeting import is_meeting_feature_enabled
 from opengever.meeting.proposal import IProposal
 from plone.autoform.form import AutoExtensibleForm
 from plone.directives import form
@@ -46,6 +47,10 @@ class SubmitAdditionalDocument(AutoExtensibleForm, Form):
     ignoreContext = True
 
     schema = ISubmitAdditionalDocument
+
+    def available(self):
+        return is_meeting_feature_enabled() and \
+            self.context.can_be_submitted_as_additional_document()
 
     def __call__(self):
         disable_edit_bar()

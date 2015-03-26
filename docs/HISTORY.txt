@@ -23,6 +23,46 @@ Changelog
   with ftw.usermigration).
   [lgraf]
 
+- Meeting: disable navigation portlet for commitee-container when installing
+  example profile.
+  [deiferni]
+
+- Meeting: only allow documents in dossiers to be submitted as additional documents.
+  [deiferni]
+
+- Meeting: add missing translations for meeting/membership add menu.
+  [deiferni]
+
+- Meeting: add missing translations for submitting additional documents.
+  [deiferni]
+
+- Meeting: don't allow overlapping committee-memberships.
+  [deiferni]
+
+- Meeting: allow editing initial position in pre-protocol.
+  [deiferni]
+
+- Meeting: integrate sablon document template processor for Word:
+    - Integrate subprocess calls to sablon
+    - Add pre-protocol download
+    - Add pre-protocol document generation in dossiers
+    - Add pre-protocol document updates for documents in dossiers
+
+  [deiferni]
+
+- Refactor document creation: deduce code duplication by extracting class
+  to create documents and set default values properly.
+  [deiferni]
+
+- Meeting: add legal basis field to proposals, submitted proposals and
+  pre-protocols.
+  [deiferni]
+
+- Refactor: add command to create documents. Use this command for
+  quickupload-adapter, when creating-documents from template and when extracting
+  documents from emails.
+  [deiferni]
+
 - Drop all SQL-tables during dev-setup, not only those defined in metadata.
   [deiferni]
 

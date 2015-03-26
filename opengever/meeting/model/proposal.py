@@ -55,6 +55,7 @@ class Proposal(Base):
 
     title = Column(String(256), nullable=False)
     workflow_state = Column(String(256), nullable=False)
+    legal_basis = Column(Text)
     initial_position = Column(Text)
     proposed_action = Column(Text)
 

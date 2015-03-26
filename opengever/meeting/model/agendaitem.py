@@ -46,3 +46,12 @@ class AgendaItem(Base):
             self.proposal.remove_scheduled(self.meeting)
         session.delete(self)
         self.meeting.reorder_agenda_items()
+
+    def has_proposal(self):
+        return self.proposal is not None
+
+    def get_proposal_link(self):
+        if not self.has_proposal():
+            return self.get_title()
+
+        return self.proposal.get_submitted_link()

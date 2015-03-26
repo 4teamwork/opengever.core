@@ -160,4 +160,24 @@
         profile="opengever.meeting:default"
         />
 
+    <!-- 4215 -> 4216 -->
+    <genericsetup:upgradeStep
+        title="Create generated document table."
+        description=""
+        source="4215"
+        destination="4216"
+        handler="opengever.meeting.upgrades.to4216.CreateGeneratedDocument"
+        profile="opengever.meeting:default"
+        />
+
+    <!-- 4216 -> 4217 -->
+    <genericsetup:upgradeStep
+        title="Add legal basis column to proposal."
+        description=""
+        source="4216"
+        destination="4217"
+        handler="opengever.meeting.upgrades.to4217.AddLegalBasisColumn"
+        profile="opengever.meeting:default"
+        />
+
 </configure>

@@ -7,6 +7,7 @@ from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
 from plone import api
+from plone.i18n.normalizer.interfaces import IIDNormalizer
 from sqlalchemy import Column
 from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
@@ -14,8 +15,12 @@ from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy import Table
 from sqlalchemy import Text
+from sqlalchemy.orm import backref
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
+from zope.component import getUtility
+from zope.globalrequest import getRequest
+from zope.i18n import translate
 
 
 meeting_participants = Table(
@@ -70,11 +75,37 @@ class Meeting(Base):
 
     agenda_items = relationship("AgendaItem", order_by='AgendaItem.sort_order')
 
+    pre_protocol_document_id = Column(
+        Integer, ForeignKey('generateddocuments.id'))
+    pre_protocol_document = relationship(
+        'GeneratedPreProtocol', uselist=False,
+        backref=backref('meeting', uselist=False),
+        primaryjoin="GeneratedPreProtocol.document_id==Meeting.pre_protocol_document_id")
+    protocol_document_id = Column(Integer, ForeignKey('generateddocuments.id'))
+    protocol_document = relationship(
+        'GeneratedProtocol', uselist=False,
+        backref=backref('meeting', uselist=False),
+        primaryjoin="GeneratedProtocol.document_id==Meeting.protocol_document_id")
+
     def __repr__(self):
         return '<Meeting at "{}">'.format(self.start)
 
     def is_editable(self):
         return self.get_state() == self.STATE_PENDING
+
+    def has_pre_protocol_document(self):
+        return self.pre_protocol_document is not None
+
+    def get_pre_protocol_title(self):
+        return u"{}-{}.docx".format(
+            translate(_("Pre-Protocol"), context=getRequest()),
+            self.get_title())
+
+    def get_pre_protocol_filename(self):
+        normalizer = getUtility(IIDNormalizer)
+        return u"{}-{}.docx".format(
+            translate(_("Pre-Protocol"), context=getRequest()),
+            normalizer.normalize(self.get_title()))
 
     @property
     def physical_path(self):

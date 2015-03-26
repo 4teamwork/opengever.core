@@ -1,9 +1,9 @@
-from opengever.base.model import create_session
 from opengever.meeting import _
 from opengever.meeting.browser.meetings.meetinglist import MeetingList
 from opengever.meeting.service import meeting_service
 from Products.Five.browser import BrowserView
 from zExceptions import NotFound
+from zExceptions import Unauthorized
 from zope.i18n import translate
 from zope.interface import implements
 from zope.publisher.interfaces import IPublishTraverse
@@ -43,6 +43,9 @@ class ScheduleSubmittedProposal(BrowserView):
         return meeting_service().fetch_proposal(proposal_id)
 
     def __call__(self):
+        if not self.meeting.is_editable():
+            raise Unauthorized("Editing is not allowed")
+
         proposal = self.extract_proposal()
         if proposal:
             self.meeting.schedule_proposal(proposal)
@@ -80,6 +83,9 @@ class ScheduleText(ScheduleSubmittedProposal):
         return 'schedule-paragraph' in self.request
 
     def __call__(self):
+        if not self.meeting.is_editable():
+            raise Unauthorized("Editing is not allowed")
+
         title = self.extract_title()
         is_paragraph = self.extract_is_paragraph()
         if title:
@@ -102,8 +108,14 @@ class UpdateAgendaItemOrder(BrowserView):
         self.model = model
 
     def __call__(self):
-        data = json.loads(self.request.get('BODY'))
-        new_order = [int(item_id) for item_id in data['sortOrder']]
+        if not self.model.is_editable():
+            raise Unauthorized("Editing is not allowed")
+
+        json_data = json.loads(self.request.get('BODY'))
+        return self.update_sortorder(json_data)
+
+    def update_sortorder(self, json_data):
+        new_order = [int(item_id) for item_id in json_data['sortOrder']]
         self.model.reorder_agenda_items(new_order)
 
         numbers = dict((each.agenda_item_id, each.number) for each in
@@ -147,6 +159,9 @@ class DeleteAgendaItem(BrowserView):
         return self
 
     def __call__(self):
+        if not self.model.is_editable():
+            raise Unauthorized("Editing is not allowed")
+
         if not self.item_id:
             raise NotFound
 

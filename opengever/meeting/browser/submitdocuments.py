@@ -2,12 +2,11 @@ from five import grok
 from opengever.base.source import DossierPathSourceBinder
 from opengever.base.transport import Transporter
 from opengever.base.utils import disable_edit_bar
-from opengever.document import _
 from opengever.document.document import IDocumentSchema
+from opengever.meeting import _
 from opengever.meeting import is_meeting_feature_enabled
 from opengever.meeting.browser.documents.submit import ISubmitAdditionalDocument
 from opengever.meeting.exceptions import NoSubmittedDocument
-from opengever.meeting.model import SubmittedDocument
 from opengever.tabbedview.utils import get_containing_document_tab_url
 from plone import api
 from plone.autoform.form import AutoExtensibleForm

@@ -21,6 +21,9 @@ class Member(Base):
     def __repr__(self):
         return '<Member {}>'.format(repr(self.fullname))
 
+    def is_editable(self):
+        return True
+
     def get_link(self, context, title=None):
         title = title or self.fullname
         url = self.get_url(context)

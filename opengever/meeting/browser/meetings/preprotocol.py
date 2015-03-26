@@ -1,13 +1,18 @@
 from opengever.meeting import _
+from opengever.meeting import templates
 from opengever.meeting.browser.meetings.meetinglist import MeetingList
-from opengever.meeting.browser.preprotocol import PreProtocol
+from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.form import ModelProxyEditForm
 from opengever.meeting.model import Meeting
 from opengever.meeting.model import Member
+from opengever.meeting.preprotocol import PreProtocol
+from opengever.meeting.preprotocol import PreProtocolData
+from opengever.meeting.sablon import Sablon
 from opengever.meeting.vocabulary import get_committee_member_vocabulary
 from plone import api
 from plone.autoform.form import AutoExtensibleForm
 from plone.directives import form
+from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import button
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
@@ -40,6 +45,30 @@ class IParticipants(form.Schema):
     other_participants = schema.Text(
         title=_(u"label_other_participants", default=u"Other Participants"),
         required=False)
+
+
+class DownloadGeneratedPreProtocol(BrowserView):
+
+    @classmethod
+    def url_for(cls, context, meeting):
+        return "{}/download_pre_protocol".format(MeetingList.url_for(context, meeting))
+
+    def __init__(self, context, request, model):
+        super(DownloadGeneratedPreProtocol, self).__init__(context, request)
+        self.model = model
+
+    def __call__(self):
+        sablon = Sablon(templates.path('protocol_template.docx'))
+        sablon.process(PreProtocolData(self.model).as_json())
+
+        assert sablon.is_processed_successfully(), sablon.stderr
+        filename = self.model.get_pre_protocol_filename().encode('utf-8')
+        response = self.request.response
+        response.setHeader('X-Theme-Disabled', 'True')
+        response.setHeader('Content-Type', MIME_DOCX)
+        response.setHeader("Content-Disposition",
+                           "attachment; filename='{}'".format(filename))
+        return sablon.file_data
 
 
 class EditPreProtocol(AutoExtensibleForm, ModelProxyEditForm, EditForm):
