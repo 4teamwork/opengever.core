@@ -381,7 +381,7 @@ msgstr "E-Mail"
 #. Default: "End"
 #: ./opengever/meeting/browser/meetings/meeting.py:46
 msgid "label_end"
-msgstr ""
+msgstr "Ende"
 
 #. Default: "Firstname"
 #: ./opengever/meeting/browser/members.py:22
@@ -466,7 +466,7 @@ msgstr "Sekretär"
 #. Default: "Start"
 #: ./opengever/meeting/browser/meetings/meeting.py:42
 msgid "label_start"
-msgstr ""
+msgstr "Start"
 
 #. Default: "Title"
 #: ./opengever/meeting/committee.py:22
