@@ -5,6 +5,9 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Examplecontent profile: Add french to the supported language.
+  [phgross]
+
 - Customize LanguageSelector viewlet to display it as a menu.
   [phgross]
 

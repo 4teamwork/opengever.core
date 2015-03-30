@@ -1,6 +1,7 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:zcml="http://namespaces.zope.org/zcml"
+    xmlns:upgrade-step="http://namespaces.zope.org/ftw.upgrade"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
 
   <!-- 3 -> 2501 -->
@@ -23,4 +24,14 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
   </configure>
+
+  <!-- 2501 -> 4300 -->
+  <upgrade-step:importProfile
+      title="Activate french as second language."
+      profile="opengever.examplecontent:default"
+      source="2501"
+      destination="4300"
+      directory="profiles/4300"
+      />
+
 </configure>
