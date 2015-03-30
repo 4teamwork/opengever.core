@@ -60,7 +60,7 @@ Changelog
 
   [deiferni]
 
-- Refactor document creation: deduce code duplication by extracting class
+- Refactor document creation: reduce code duplication by extracting class
   to create documents and set default values properly.
   [deiferni]
 
