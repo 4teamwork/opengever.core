@@ -5,6 +5,16 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Add initial notification support:
+
+  - Added NotificationCenter including SQL representations for activitities, notifications, resource and watchers.
+  - Added a feature flag to disable/enable notifications
+  - Added notification viewlet which contains a badge icon and lists unread notifications
+  - Added notifications overview with a MyNotification tab
+  - Add mail notification dispatcher.
+
+  [phgross]
+
 - Implement migrating participants in DossierMigrator.
   [lgraf]
 
@@ -50,7 +60,7 @@ Changelog
 
   [deiferni]
 
-- Refactor document creation: deduce code duplication by extracting class
+- Refactor document creation: reduce code duplication by extracting class
   to create documents and set default values properly.
   [deiferni]
 

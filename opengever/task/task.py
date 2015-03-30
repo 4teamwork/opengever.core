@@ -19,6 +19,7 @@ from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.task import _
 from opengever.task import util
+from opengever.task.activities import TaskAddedActivity
 from opengever.task.validators import NoCheckedoutDocsValidator
 from plone import api
 from plone.dexterity.content import Container
@@ -411,6 +412,12 @@ class AddForm(dexterity.AddForm):
             self.groups[0].widgets['responsible_client'].mode = HIDDEN_MODE
             self.groups[0].widgets['responsible'].field.description = _(
                 u"help_responsible_single_client_setup", default=u"")
+
+    def createAndAdd(self, data):
+        task = super(AddForm, self).createAndAdd(data=data)
+        activity = TaskAddedActivity(task, self.request, self.context)
+        activity.record()
+        return task
 
 
 class EditForm(dexterity.EditForm):

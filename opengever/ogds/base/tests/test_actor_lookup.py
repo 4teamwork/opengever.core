@@ -1,6 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.ogds.base.actor import Actor
+from opengever.ogds.base.utils import ogds_service
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 
@@ -99,3 +100,32 @@ class TestActorCorresponding(FunctionalTestCase):
 
         self.assertTrue(actor.corresponds_to(self.user))
         self.assertFalse(actor.corresponds_to(self.hugo))
+
+
+class TestActorRepresentatives(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestActorRepresentatives, self).setUp()
+        group = ogds_service().fetch_group(self.org_unit.inbox_group_id)
+        self.hugo = create(Builder('ogds_user').id('hugo.boss').in_group(group))
+        self.peter = create(Builder('ogds_user').id('peter'))
+        self.james = create(Builder('ogds_user').id('james').in_group(group))
+
+    def test_user_is_the_only_representatives_of_a_user(self):
+        self.assertEquals([self.user],
+                          Actor.lookup(TEST_USER_ID).representatives())
+        self.assertEquals([self.peter],
+                          Actor.lookup('peter').representatives())
+
+    def test_all_users_of_the_inbox_group_are_inbox_representatives(self):
+        actor = Actor.lookup('inbox:client1')
+        self.assertItemsEqual([self.user, self.hugo, self.james],
+                               actor.representatives())
+
+    def test_contact_has_no_representatives(self):
+        contact = create(Builder('contact')
+                         .having(firstname=u'Paul')
+                         .in_state('published'))
+
+        actor = Actor.lookup('contact:{}'.format(contact.id))
+        self.assertItemsEqual([], actor.representatives())

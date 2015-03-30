@@ -167,6 +167,9 @@ msgstr "Vorschau"
 msgid "process"
 msgstr "Fortschritt"
 
+msgid "proposals"
+msgstr "Anträge"
+
 msgid "related_documents"
 msgstr "Verwande Dokumente"
 

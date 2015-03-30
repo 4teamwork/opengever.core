@@ -94,6 +94,12 @@ class Actor(object):
     def permission_identifier(self):
         raise NotImplementedError()
 
+    def representatives(self):
+        """Returns a list of users which are representative for the current
+        actor. Used for example when notifying an actor.
+        """
+        raise NotImplementedError()
+
 
 class NullActor(object):
 
@@ -111,6 +117,9 @@ class NullActor(object):
 
     def get_link(self):
         return self.identifier or u''
+
+    def representatives(self):
+        return []
 
 
 class InboxActor(Actor):
@@ -139,6 +148,9 @@ class InboxActor(Actor):
     def permission_identifier(self):
         return self.org_unit.inbox_group.groupid
 
+    def representatives(self):
+        return self.org_unit.inbox().assigned_users()
+
 
 class ContactActor(Actor):
 
@@ -164,6 +176,9 @@ class ContactActor(Actor):
     def get_profile_url(self):
         return self.contact.getURL()
 
+    def representatives(self):
+        return []
+
 
 class PloneUserActor(Actor):
 
@@ -187,6 +202,9 @@ class PloneUserActor(Actor):
     def get_profile_url(self):
         return self.user.getHomeUrl()
 
+    def representatives(self):
+        return []
+
 
 class OGDSUserActor(Actor):
 
@@ -206,6 +224,9 @@ class OGDSUserActor(Actor):
     @property
     def permission_identifier(self):
         return self.identifier
+
+    def representatives(self):
+        return [self.user]
 
 
 class ActorLookup(object):

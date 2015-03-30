@@ -1,0 +1,3 @@
+<registry>
+    <records interface="opengever.activity.interfaces.IActivitySettings" />
+</registry>

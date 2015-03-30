@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2010-08-11 09:27+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"PO-Revision-Date: 2015-02-19 18:05+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -208,6 +208,9 @@ msgid "Attach remote document"
 msgstr ""
 
 msgid "Modify deadline"
+msgstr ""
+
+msgid "task-added"
 msgstr ""
 
 msgid "task-transition-cancelled-open"

@@ -1,0 +1,53 @@
+<div id="portal-notifications" i18n:domain="opengever.activity" tal:condition="view/available">
+
+  <h5 class="hiddenStructure" i18n:translate="heading_notifications">Notifications</h5>
+
+  <dl class="notificationsMenu actionMenu deactivated" id="portal-notifications-selector-menu"
+      tal:attributes="data-read-url view/read_url">
+
+    <dt class="notificationsMenuHeader actionMenuHeader" tal:define="num_unread view/num_unread">
+
+      <a tal:attributes="href string:#"></a>
+
+      <div class="visualClear"></div>
+
+      <span tal:condition="python: num_unread > 0"
+            tal:content="num_unread" class="unread_number"></span>
+
+    </dt>
+
+    <dd class="actionMenuContent notificationsMenuContent">
+      <ul>
+        <li class="notification-item" tal:repeat="notification view/get_notifications"
+            tal:attributes="data-notification-id notification/id">
+
+          <div class="buttons">
+            <a href="#" class="mark_as_read" tal:condition="not: notification/read"></a>
+          </div>
+
+          <div class="item-content">
+            <div>
+              <div class="item-header">
+                <span class="item-creation">
+                  <span class="timeago relativetime"
+                        tal:attributes="title notification/created"
+                        tal:content="notification/created" />
+                </span>
+                <span class="item-type" i18n:domain="plone" i18n:translate="" tal:content="notification/kind" />
+              </div>
+              <a class="item-location" href="#"
+                 tal:attributes="href notification/link"
+                 tal:content="notification/title"></a>
+              <div class="item-summary" tal:content="structure notification/summary" />
+            </div>
+          </div>
+        </li>
+        <li class="notification-item">
+          <a href="#" class="all_link" tal:attributes="href view/overview_url">
+            Notifications Overview
+          </a>
+        </li>
+      </ul>
+    </dd>
+  </dl>
+</div>

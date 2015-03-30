@@ -204,6 +204,9 @@ msgstr "Desactiver"
 msgid "save attachments"
 msgstr "Sauvegarder les fichiers attachés"
 
+msgid "task-added"
+msgstr ""
+
 msgid "task-state-cancelled"
 msgstr "Annulé"
 

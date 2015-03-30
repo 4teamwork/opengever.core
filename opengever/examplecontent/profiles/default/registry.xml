@@ -3,4 +3,8 @@
       <field type="plone.registry.field.Bool" />
       <value>True</value>
     </record>
+    <record interface="opengever.activity.interfaces.IActivitySettings" field="is_feature_enabled">
+      <field type="plone.registry.field.Bool" />
+      <value>True</value>
+    </record>
 </registry>

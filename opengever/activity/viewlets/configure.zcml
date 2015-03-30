@@ -1,0 +1,13 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="opengever.activity">
+
+  <browser:viewlet
+      name="opengever.activity.notification"
+      manager="plone.app.layout.viewlets.interfaces.IPortalHeader"
+      class=".notification.NotificationViewlet"
+      permission="zope2.View"
+      />
+
+</configure>

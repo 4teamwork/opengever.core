@@ -6,6 +6,7 @@ from opengever.ogds.base.utils import ogds_service
 from opengever.tabbedview.helper import linked
 from opengever.task import _
 from opengever.task import util
+from opengever.task.activities import TaskTransitionActivity
 from opengever.task.adapters import IResponseContainer
 from opengever.task.adapters import Response
 from opengever.task.interfaces import IResponseAdder
@@ -152,6 +153,7 @@ class AddForm(form.AddForm, AutoExtensibleForm):
     def label(self):
         transition = self.request.get('form.widgets.transition',
                                       self.request.get('transition', None))
+
         label = [self.context.Title().decode('utf-8')]
         if transition:
             label.append(translate(transition, domain='plone',
@@ -255,6 +257,8 @@ class AddForm(form.AddForm, AutoExtensibleForm):
 
             notify(ObjectModifiedEvent(self.context))
 
+            self.record_activity(new_response)
+
             if data.get('transition'):
                 syncer = getMultiAdapter((self.context, self.request),
                                          IWorkflowStateSyncer)
@@ -288,6 +292,9 @@ class AddForm(form.AddForm, AutoExtensibleForm):
     def is_user_assigned_to_current_org_unit(self):
         units = ogds_service().assigned_org_units()
         return get_current_org_unit() in units
+
+    def record_activity(self, response):
+        TaskTransitionActivity(self.context, response).record()
 
 
 class SingleAddFormView(layout.FormWrapper, grok.View):

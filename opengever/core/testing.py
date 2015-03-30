@@ -4,6 +4,7 @@ from ftw.builder.testing import BUILDER_LAYER
 from ftw.builder.testing import set_builder_session_factory
 from ftw.testing import ComponentRegistryLayer
 from ftw.testing.quickinstaller import snapshots
+from opengever.activity.interfaces import IActivitySettings
 from opengever.base import model
 from opengever.base.model import create_session
 from opengever.meeting.interfaces import IMeetingSettings
@@ -166,6 +167,7 @@ class OpengeverFixture(PloneSandboxLayer):
         applyProfile(portal, 'opengever.sharing:default')
         applyProfile(portal, 'opengever.latex:default')
         applyProfile(portal, 'opengever.meeting:default')
+        applyProfile(portal, 'opengever.activity:default')
         applyProfile(portal, 'ftw.datepicker:default')
         applyProfile(portal, 'plone.formwidget.autocomplete:default')
         applyProfile(portal, 'plone.formwidget.contenttree:default')
@@ -283,3 +285,23 @@ class MeetingLayer(PloneSandboxLayer):
 
 
 OPENGEVER_FUNCTIONAL_MEETING_LAYER = MeetingLayer()
+
+
+class ActivityLayer(PloneSandboxLayer):
+
+    def setUpPloneSite(self, portal):
+        registry = getUtility(IRegistry)
+        settings = registry.forInterface(IActivitySettings)
+        settings.is_feature_enabled = True
+        transaction.commit()
+
+    def tearDownPloneSite(self, portal):
+        registry = getUtility(IRegistry)
+        settings = registry.forInterface(IActivitySettings)
+        settings.is_feature_enabled = False
+        transaction.commit()
+
+    defaultBases = (OPENGEVER_FUNCTIONAL_TESTING,)
+
+
+OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER = ActivityLayer()
