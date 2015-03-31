@@ -21,13 +21,18 @@ class Member(Base):
     def __repr__(self):
         return '<Member {}>'.format(repr(self.fullname))
 
+    @property
+    def css_class(self):
+        return 'contenttype-opengever-meeting-member'
+
     def is_editable(self):
         return True
 
     def get_link(self, context, title=None):
         title = title or self.fullname
         url = self.get_url(context)
-        link = u'<a href="{0}" title="{1}">{1}</a>'.format(url, title)
+        link = u'<a href="{0}" title="{1}" class="{2}">{1}</a>'.format(
+            url, title, self.css_class)
 
         transformer = api.portal.get_tool('portal_transforms')
         return transformer.convertTo('text/x-html-safe', link).getData()

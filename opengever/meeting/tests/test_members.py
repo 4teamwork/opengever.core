@@ -6,6 +6,7 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.browser.members import MemberView
 from opengever.meeting.model import Member
 from opengever.testing import FunctionalTestCase
+from pyquery import PyQuery
 
 
 class TestMemberListing(FunctionalTestCase):
@@ -50,3 +51,14 @@ class TestMemberListing(FunctionalTestCase):
         self.assertEqual(u'Hanspeter', member.firstname)
         self.assertEqual(u'Hansj\xf6rg', member.lastname)
         self.assertEqual(u'foo@example.com', member.email)
+
+    def test_member_link(self):
+        link = self.member.get_link(self.container)
+        link = PyQuery(link)[0]
+
+        self.assertEqual(
+            'http://nohost/plone/opengever-meeting-committeecontainer/member/1',
+            link.get('href'))
+        self.assertEqual('contenttype-opengever-meeting-member', link.get('class'))
+        self.assertEqual('Peter Meier', link.get('title'))
+        self.assertEqual('Peter Meier', link.text)

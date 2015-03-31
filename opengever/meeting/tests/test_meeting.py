@@ -36,7 +36,7 @@ class TestMeeting(FunctionalTestCase):
                           start=datetime(2013, 10, 18),
                           committee=self.committee.load_model())
 
-        link = PyQuery(self.meeting.get_link())[0]
+        link = PyQuery(meeting.get_link())[0]
 
         self.assertEqual(
             'http://example.com/opengever-meeting-committeecontainer/committee-1/meeting/1',
