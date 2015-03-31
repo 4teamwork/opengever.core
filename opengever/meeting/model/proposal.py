@@ -111,6 +111,10 @@ class Proposal(Base):
     def id(self):
         return self.proposal_id
 
+    @property
+    def css_class(self):
+        return 'contenttype-opengever-meeting-proposal'
+
     def get_searchable_text(self):
         searchable = filter(None, [self.title, self.initial_position])
         return ' '.join([term.encode('utf-8') for term in searchable])
@@ -126,7 +130,7 @@ class Proposal(Base):
         if not (admin_unit and physical_path):
             return ''
         url = '/'.join((admin_unit.public_url, physical_path))
-        link = u'<a href="{0}" title="{1}">{1}</a>'.format(url, self.title)
+        link = u'<a href="{0}" title="{1}" class="{2}">{1}</a>'.format(url, self.title, self.css_class)
 
         transformer = api.portal.get_tool('portal_transforms')
         return transformer.convertTo('text/x-html-safe', link).getData()
