@@ -7,9 +7,9 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.browser.meetings.meetinglist import MeetingList
-from opengever.meeting.browser.meetings.preprotocol import EditPreProtocol
-from opengever.meeting.browser.preprotocol import METHOD_NEW_DOCUMENT
-from opengever.meeting.browser.preprotocol import METHOD_NEW_VERSION
+from opengever.meeting.browser.meetings.protocol import EditPreProtocol
+from opengever.meeting.browser.protocol import METHOD_NEW_DOCUMENT
+from opengever.meeting.browser.protocol import METHOD_NEW_VERSION
 from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import GeneratedPreProtocol

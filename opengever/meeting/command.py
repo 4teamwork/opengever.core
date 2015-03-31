@@ -11,7 +11,7 @@ from opengever.meeting import templates
 from opengever.meeting.model import GeneratedPreProtocol
 from opengever.meeting.model import proposalhistory
 from opengever.meeting.model import SubmittedDocument
-from opengever.meeting.preprotocol import PreProtocolData
+from opengever.meeting.protocol import PreProtocolData
 from opengever.meeting.sablon import Sablon
 from plone import api
 import json

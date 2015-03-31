@@ -5,8 +5,8 @@ from opengever.meeting.browser.meetings.agendaitem import ScheduleText
 from opengever.meeting.browser.meetings.agendaitem import UpdateAgendaItemOrder
 from opengever.meeting.browser.meetings.excerpt import GenerateExcerpt
 from opengever.meeting.browser.meetings.meetinglist import MeetingList
-from opengever.meeting.browser.meetings.preprotocol import DownloadGeneratedPreProtocol
-from opengever.meeting.browser.meetings.preprotocol import EditPreProtocol
+from opengever.meeting.browser.meetings.protocol import DownloadGeneratedPreProtocol
+from opengever.meeting.browser.meetings.protocol import EditPreProtocol
 from opengever.meeting.browser.meetings.transitions import MeetingTransitionController
 from opengever.meeting.browser.preprotocol import GeneratePreProtocol
 from opengever.meeting.browser.preprotocol import UpdatePreProtocol
