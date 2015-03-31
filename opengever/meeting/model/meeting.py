@@ -90,6 +90,10 @@ class Meeting(Base):
     def __repr__(self):
         return '<Meeting at "{}">'.format(self.start)
 
+    @property
+    def css_class(self):
+        return 'contenttype-opengever-meeting-meeting'
+
     def is_editable(self):
         return self.get_state() == self.STATE_PENDING
 
@@ -238,7 +242,8 @@ class Meeting(Base):
 
     def get_link(self):
         url = self.get_url()
-        link = u'<a href="{0}" title="{1}">{1}</a>'.format(url, self.get_title())
+        link = u'<a href="{0}" title="{1}" class="{2}">{1}</a>'.format(
+            url, self.get_title(), self.css_class)
 
         transformer = api.portal.get_tool('portal_transforms')
         return transformer.convertTo('text/x-html-safe', link).getData()
