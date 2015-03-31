@@ -137,6 +137,12 @@ class MeetingView(BrowserView):
     def url_delete_agenda_item(self, agenda_item):
         return DeleteAgendaItem.url_for(self.context, self.model, agenda_item)
 
+    def is_pre_protocol_editable(self):
+        return self.model.is_pre_protocol_editable()
+
+    def is_protocol_editable(self):
+        return self.model.is_protocol_editable()
+
     def url_pre_protocol(self):
         return EditPreProtocol.url_for(self.context, self.model)
 

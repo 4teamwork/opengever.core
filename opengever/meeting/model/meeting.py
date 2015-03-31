@@ -93,6 +93,12 @@ class Meeting(Base):
     def is_editable(self):
         return self.get_state() == self.STATE_PENDING
 
+    def is_pre_protocol_editable(self):
+        return self.get_state() == self.STATE_PENDING
+
+    def is_protocol_editable(self):
+        return self.get_state() == self.STATE_HELD
+
     def has_pre_protocol_document(self):
         return self.pre_protocol_document is not None
 
