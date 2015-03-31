@@ -29,7 +29,7 @@ class TaskActivity(object):
 
     @property
     def actor_id(self):
-        return self.context.Creator()
+        return api.user.get_current().getId()
 
     @property
     def summary(self):

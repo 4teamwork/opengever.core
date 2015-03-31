@@ -1,4 +1,4 @@
-from datetime import datetime, date
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -81,6 +81,24 @@ class TestTaskActivites(FunctionalTestCase):
             u'Accepted by <a href="http://nohost/plone/@@user-details/test_user_1_">Test User (test_user_1_)</a>',
             activity.summary)
         self.assertEquals(u'Wird n\xe4chste Woche erledigt.', activity.description)
+
+    @browsing
+    def test_activity_actor_is_current_user(self, browser):
+        create(Builder('user')
+               .with_userid('hugo.boss')
+               .with_roles('Reader', 'Editor', 'Contributor'))
+        task = create(Builder('task')
+                      .titled(u'Abkl\xe4rung Fall Meier')
+                      .having(responsible='hugo.boss'))
+
+        browser.login(username='hugo.boss', password='secret').open(task)
+        browser.css('#workflow-transition-task-transition-open-in-progress').first.click()
+        browser.fill({'Response': u'Wird n\xe4chste Woche erledigt.'})
+        browser.css('#form-buttons-save').first.click()
+
+        activity = Activity.query.first()
+        self.assertEquals(u'task-transition-open-in-progress', activity.kind)
+        self.assertEquals('hugo.boss', activity.actor_id)
 
     @browsing
     def test_task_resolved(self, browser):

@@ -5,6 +5,9 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Fixed actor for all task activities.
+  [phgross]
+
 - Add initial notification support:
 
   - Added NotificationCenter including SQL representations for activitities, notifications, resource and watchers.
