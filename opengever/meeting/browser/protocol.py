@@ -12,6 +12,7 @@ from opengever.meeting.command import ProtocolOperations
 from opengever.meeting.command import ReplaceGeneratedDocumentCommand
 from opengever.meeting.command import UpdateGeneratedDocumentCommand
 from opengever.meeting.model import GeneratedPreProtocol
+from opengever.meeting.model import GeneratedProtocol
 from opengever.meeting.model import Meeting
 from opengever.repository.repositoryroot import IRepositoryRoot
 from plone.directives import form
@@ -206,24 +207,27 @@ class ChoosePreProtocolUpdateMethod(Form):
     def handle_generate(self, action):
         data, errors = self.extractData()
         if not errors:
-            generated_pre_protocol = GeneratedPreProtocol.get(
+            generated_document = self.get_generated_document(
                 data['document_id'])
 
-            if not generated_pre_protocol:
+            if not generated_document:
                 raise NotFound
             # XXX permission checks on meeting?
 
             method = data['method']
             if method == METHOD_NEW_DOCUMENT:
                 command = ReplaceGeneratedDocumentCommand(
-                    generated_pre_protocol, self.operations())
+                    generated_document, self.operations())
             elif method == METHOD_NEW_VERSION:
                 command = UpdateGeneratedDocumentCommand(
-                    generated_pre_protocol, self.operations())
+                    generated_document, self.operations())
 
             document = command.execute()
             command.show_message()
             return self.request.RESPONSE.redirect(document.absolute_url())
+
+    def get_generated_document(self, document_id):
+        return GeneratedPreProtocol.get(document_id)
 
     @buttonAndHandler(_(u'button_cancel', default=u'Cancel'), name='cancel')
     def handle_cancel(self, action):
@@ -255,6 +259,9 @@ class UpdatePreProtocol(FormWrapper, grok.View):
 class ChooseProtocolUpdateMethod(ChoosePreProtocolUpdateMethod):
 
     operations = ProtocolOperations
+
+    def get_generated_document(self, document_id):
+        return GeneratedProtocol.get(document_id)
 
 
 class UpdateProtocol(UpdatePreProtocol):

@@ -39,6 +39,13 @@
                       <td><a tal:attributes="href view/url_generate_pre_protocol" i18n:translate="">Generate pre-protocol</a></td>
                       <td><a tal:attributes="href view/url_download_pre_protocol" i18n:translate="">Download pre-protocol</a></td>
                   </tr>
+
+                  <tr>
+                      <th i18n:translate="">Protocol</th>
+                      <td><a tal:attributes="href view/url_protocol" i18n:translate="">Edit protocol</a></td>
+                      <td><a tal:attributes="href view/url_generate_protocol" i18n:translate="">Generate protocol</a></td>
+                      <td><a tal:attributes="href view/url_download_protocol" i18n:translate="">Download protocol</a></td>
+                  </tr>
               </tbody>
           </table>
 

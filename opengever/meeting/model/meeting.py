@@ -96,8 +96,11 @@ class Meeting(Base):
     def has_pre_protocol_document(self):
         return self.pre_protocol_document is not None
 
+    def has_protocol_document(self):
+        return self.protocol_document is not None
+
     def get_pre_protocol_title(self):
-        return u"{}-{}.docx".format(
+        return u"{}-{}".format(
             translate(_("Pre-Protocol"), context=getRequest()),
             self.get_title())
 
@@ -105,6 +108,17 @@ class Meeting(Base):
         normalizer = getUtility(IIDNormalizer)
         return u"{}-{}.docx".format(
             translate(_("Pre-Protocol"), context=getRequest()),
+            normalizer.normalize(self.get_title()))
+
+    def get_protocol_title(self):
+        return u"{}-{}".format(
+            translate(_("Protocol"), context=getRequest()),
+            self.get_title())
+
+    def get_protocol_filename(self):
+        normalizer = getUtility(IIDNormalizer)
+        return u"{}-{}.docx".format(
+            translate(_("Protocol"), context=getRequest()),
             normalizer.normalize(self.get_title()))
 
     @property
