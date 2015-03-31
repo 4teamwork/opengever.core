@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<object>
+  <supported_langs>
+    <element value="fr"/>
+    <element value="de-ch"/>
+  </supported_langs>
+</object>

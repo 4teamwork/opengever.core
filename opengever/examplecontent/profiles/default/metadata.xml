@@ -1,5 +1,5 @@
 <metadata>
-  <version>2501</version>
+  <version>4300</version>
   <dependencies>
     <dependency>profile-opengever.policy.base:default</dependency>
     <dependency>profile-plonetheme.teamraum:gever</dependency>

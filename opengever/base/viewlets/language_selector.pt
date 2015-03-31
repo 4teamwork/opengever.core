@@ -1,0 +1,32 @@
+<div id="portal-languageselector-wrapper"
+     tal:define="languages view/languages;
+                 here_url context/absolute_url;
+                 current view/get_current_language"
+     tal:condition="view/available">
+
+  <dl id="portal-languageselector" class="actionMenu deactivated">
+
+    <dt class="actionMenuHeader" >
+      <a tal:content="current/native|current/name" href="#"/>
+    </dt>
+
+    <dd class="actionMenuContent">
+      <ul>
+
+        <tal:language repeat="lang languages">
+          <li tal:define="code lang/code;
+                          selected lang/selected;
+                          codeclass string:language-${code};
+                          current python: selected and 'currentLanguage ' or '';"
+              tal:attributes="class string:${current}${codeclass}">
+            <a href="" tal:define="name lang/native|lang/name" tal:content="name"
+               tal:attributes="title name;
+                               href string:${here_url}/switchLanguage?set_language=${code};">
+            </a>
+          </li>
+        </tal:language>
+
+      </ul>
+    </dd>
+  </dl>
+</div>
