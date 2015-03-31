@@ -5,6 +5,7 @@ from opengever.activity.browser import resolve_notification_url
 from opengever.ogds.base.utils import ogds_service
 from plone import api
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from zope.i18n import translate
 
 
 class PloneNotificationMailer(object):
@@ -53,7 +54,8 @@ class PloneNotificationMailer(object):
         options = {
             'subject': notification.activity.title,
             'title': notification.activity.title,
-            'kind': notification.activity.kind,
+            'kind': translate(notification.activity.kind,
+                              context=self.request, domain="plone"),
             'summary': notification.activity.summary,
             'description': notification.activity.description,
             'link': resolve_notification_url(notification)
