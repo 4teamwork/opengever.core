@@ -5,16 +5,16 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
-- Extend meeting type views with corresonding watermark icon.
-  [phgross]
-
-- Extend meeting type links with corresonding icon.
-  [phgross]
-
 - Order Memberships on date_from date by default.
   [phgross]
 
 - Add memberhip_id column to membership table.
+  [phgross]
+
+- Extend meeting type views with corresonding watermark icon.
+  [phgross]
+
+- Extend meeting type links with corresonding icon.
   [phgross]
 
 - Make sablon templates configurable on commitee-container. The following

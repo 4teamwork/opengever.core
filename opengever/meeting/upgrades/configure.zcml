@@ -208,4 +208,14 @@
         directory="profiles/4301"
         />
 
+    <!-- 4301 -> 4302 -->
+    <genericsetup:upgradeStep
+        title="Add membership_id column."
+        description=""
+        source="4301"
+        destination="4302"
+        handler="opengever.meeting.upgrades.to4302.AddMembershipIdColumn"
+        profile="opengever.meeting:default"
+        />
+
 </configure>

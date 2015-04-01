@@ -8,7 +8,9 @@ from sqlalchemy import Date
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
+from sqlalchemy import UniqueConstraint
 from sqlalchemy.orm import relationship
+from sqlalchemy.schema import Sequence
 
 
 class Membership(Base):
@@ -18,15 +20,20 @@ class Membership(Base):
     query_cls = MembershipQuery
 
     __tablename__ = 'memberships'
+    __table_args__ = (UniqueConstraint('committee_id',
+                                       'member_id',
+                                       'date_from',
+                                       name='ix_membership_unique'), {})
 
-    date_from = Column(Date, primary_key=True)
+    membership_id = Column("id", Integer, Sequence("membership_id_seq"),
+                           primary_key=True)
+
+    date_from = Column(Date, nullable=False)
     date_to = Column(Date, nullable=False)
 
-    committee_id = Column(Integer, ForeignKey('committees.id'),
-                          primary_key=True)
+    committee_id = Column(Integer, ForeignKey('committees.id'))
     committee = relationship("Committee", backref="memberships")
-    member_id = Column(Integer, ForeignKey('members.id'),
-                       primary_key=True)
+    member_id = Column(Integer, ForeignKey('members.id'))
     member = relationship("Member", backref="memberships")
     role = Column(String(256))
 
@@ -52,3 +59,12 @@ class Membership(Base):
 
     def title(self):
         return self.member.fullname
+
+    def get_url(self, context):
+        return "{}/membership/{}".format(context.absolute_url(), self.membership_id)
+
+    def get_edit_url(self, context):
+        return '/'.join((self.get_url(context), 'edit'))
+
+    def get_remove_link(self):
+        return '#'
