@@ -199,4 +199,13 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <!-- 4300 -> 4301 -->
+    <upgrade-step:importProfile
+        title="Add Sablon Templates."
+        profile="opengever.meeting:default"
+        source="4300"
+        destination="4301"
+        directory="profiles/4301"
+        />
+
 </configure>
