@@ -16,9 +16,6 @@ class TestCommitteeOverview(FunctionalTestCase):
 
     @browsing
     def test_membership_box_shows_only_active_members(self, browser):
-        yesterday = date.today() - timedelta(days=1)
-        tomorrow = date.today() + timedelta(days=1)
-
         peter = create(Builder('member'))
         hans = create(Builder('member')
                       .having(firstname=u'Hans', lastname=u'M\xfcller'))
@@ -26,11 +23,11 @@ class TestCommitteeOverview(FunctionalTestCase):
                        .having(firstname=u'James', lastname=u'Bond'))
 
         create(Builder('membership')
-               .having(member=peter, committee=self.committee_model,
-                       date_from=yesterday, date_to=tomorrow))
+               .having(member=peter, committee=self.committee_model)
+               .as_active())
         create(Builder('membership')
-               .having(member=hans, committee=self.committee_model,
-                       date_from=yesterday, date_to=tomorrow))
+               .having(member=hans, committee=self.committee_model)
+               .as_active())
         create(Builder('membership')
                .having(member=james, committee=self.committee_model,
                        date_from=date(2014, 1, 1), date_to=date(2015, 1, 1)))

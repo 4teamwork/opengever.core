@@ -1,6 +1,4 @@
-from datetime import date
 from datetime import datetime
-from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -96,19 +94,15 @@ class TestProtocol(FunctionalTestCase):
 
     @browsing
     def test_protocol_participants_can_be_edited(self, browser):
-        yesterday = date.today() - timedelta(days=1)
-        tomorrow = date.today() + timedelta(days=1)
         peter = create(Builder('member'))
         hans = create(Builder('member').having(
             firstname=u'Hans', lastname=u'M\xfcller'))
         create(Builder('membership').having(
             member=peter,
-            committee=self.committee_model,
-            date_from=yesterday, date_to=tomorrow))
+            committee=self.committee_model).as_active())
         create(Builder('membership').having(
             member=hans,
-            committee=self.committee_model,
-            date_from=yesterday, date_to=tomorrow))
+            committee=self.committee_model).as_active())
 
         browser.login()
         browser.open(EditProtocol.url_for(self.committee, self.meeting))
