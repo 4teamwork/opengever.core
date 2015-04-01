@@ -1,4 +1,5 @@
 from datetime import date
+from datetime import timedelta
 from ftw.builder import builder_registry
 from opengever.globalindex.model.task import Task
 from opengever.meeting.model import AgendaItem
@@ -154,6 +155,13 @@ class MemberShipBuilder(SqlObjectBuilder):
 
     def id(self, identifier):
         raise NotImplementedError
+
+    def as_active(self, delta_before=1, delta_after=1):
+        past_date = date.today() - timedelta(days=delta_before)
+        future_date = date.today() + timedelta(days=delta_after)
+        self.arguments['date_from'] = past_date
+        self.arguments['date_to'] = future_date
+        return self
 
 builder_registry.register('membership', MemberShipBuilder)
 

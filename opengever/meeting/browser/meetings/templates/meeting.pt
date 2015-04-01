@@ -30,17 +30,26 @@
               </tbody>
           </table>
 
+          <tal:block tal:condition="python: view.is_pre_protocol_editable() or view.is_protocol_editable()">
           <h2 i18n:translate="">Protocols</h2>
           <table class="vertical listing">
               <tbody>
-                  <tr>
+                  <tr tal:condition="view/is_pre_protocol_editable">
                       <th i18n:translate="">Pre-Protocol</th>
                       <td><a tal:attributes="href view/url_pre_protocol" i18n:translate="">Edit pre-protocol</a></td>
                       <td><a tal:attributes="href view/url_generate_pre_protocol" i18n:translate="">Generate pre-protocol</a></td>
                       <td><a tal:attributes="href view/url_download_pre_protocol" i18n:translate="">Download pre-protocol</a></td>
                   </tr>
+
+                  <tr tal:condition="view/is_protocol_editable">
+                      <th i18n:translate="">Protocol</th>
+                      <td><a tal:attributes="href view/url_protocol" i18n:translate="">Edit protocol</a></td>
+                      <td><a tal:attributes="href view/url_generate_protocol" i18n:translate="">Generate protocol</a></td>
+                      <td><a tal:attributes="href view/url_download_protocol" i18n:translate="">Download protocol</a></td>
+                  </tr>
               </tbody>
           </table>
+          </tal:block>
 
           <fieldset class="proposal" tal:condition="meeting/is_editable">
             <legend i18n:translate="">Add Agenda Item</legend>

@@ -157,3 +157,13 @@ class PreProtocolData(object):
 
     def as_json(self):
         return json.dumps(self.data)
+
+
+class ProtocolData(PreProtocolData):
+
+    def add_protocol_type(self):
+        self.data['protocol'] = {
+            'type': translate(
+                _(u'protocol', default=u'Protocol'),
+                context=getRequest())
+        }

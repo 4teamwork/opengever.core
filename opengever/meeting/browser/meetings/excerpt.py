@@ -5,8 +5,8 @@ from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.form import ModelProxyEditForm
 from opengever.meeting.model import Meeting
 from opengever.meeting.model import Member
-from opengever.meeting.preprotocol import PreProtocol
-from opengever.meeting.preprotocol import PreProtocolData
+from opengever.meeting.protocol import PreProtocol
+from opengever.meeting.protocol import PreProtocolData
 from opengever.meeting.sablon import Sablon
 from opengever.meeting.vocabulary import get_committee_member_vocabulary
 from plone import api

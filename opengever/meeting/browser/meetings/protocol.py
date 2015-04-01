@@ -1,12 +1,12 @@
 from opengever.meeting import _
-from opengever.meeting import templates
 from opengever.meeting.browser.meetings.meetinglist import MeetingList
 from opengever.meeting.command import MIME_DOCX
+from opengever.meeting.command import PreProtocolOperations
+from opengever.meeting.command import ProtocolOperations
 from opengever.meeting.form import ModelProxyEditForm
 from opengever.meeting.model import Meeting
 from opengever.meeting.model import Member
-from opengever.meeting.preprotocol import PreProtocol
-from opengever.meeting.preprotocol import PreProtocolData
+from opengever.meeting.protocol import PreProtocol
 from opengever.meeting.sablon import Sablon
 from opengever.meeting.vocabulary import get_committee_member_vocabulary
 from plone import api
@@ -49,6 +49,8 @@ class IParticipants(form.Schema):
 
 class DownloadGeneratedPreProtocol(BrowserView):
 
+    operations = PreProtocolOperations()
+
     @classmethod
     def url_for(cls, context, meeting):
         return "{}/download_pre_protocol".format(MeetingList.url_for(context, meeting))
@@ -58,11 +60,11 @@ class DownloadGeneratedPreProtocol(BrowserView):
         self.model = model
 
     def __call__(self):
-        sablon = Sablon(templates.path('protocol_template.docx'))
-        sablon.process(PreProtocolData(self.model).as_json())
+        sablon = Sablon(self.operations.get_template_path())
+        sablon.process(self.operations.get_meeting_data(self.model).as_json())
 
         assert sablon.is_processed_successfully(), sablon.stderr
-        filename = self.model.get_pre_protocol_filename().encode('utf-8')
+        filename = self.operations.get_filename(self.model).encode('utf-8')
         response = self.request.response
         response.setHeader('X-Theme-Disabled', 'True')
         response.setHeader('Content-Type', MIME_DOCX)
@@ -71,13 +73,22 @@ class DownloadGeneratedPreProtocol(BrowserView):
         return sablon.file_data
 
 
+class DownloadGeneratedProtocol(DownloadGeneratedPreProtocol):
+
+    operations = ProtocolOperations()
+
+    @classmethod
+    def url_for(cls, context, meeting):
+        return "{}/download_protocol".format(MeetingList.url_for(context, meeting))
+
+
 class EditPreProtocol(AutoExtensibleForm, ModelProxyEditForm, EditForm):
 
     ignoreContext = True
     schema = IParticipants
     content_type = Meeting
 
-    template = ViewPageTemplateFile('templates/pre_protocol.pt')
+    template = ViewPageTemplateFile('templates/protocol.pt')
 
     @classmethod
     def url_for(cls, context, meeting):
@@ -146,3 +157,10 @@ class EditPreProtocol(AutoExtensibleForm, ModelProxyEditForm, EditForm):
     def redirect_to_meetinglist(self):
         return self.request.RESPONSE.redirect(
             MeetingList.url_for(self.context, self.model))
+
+
+class EditProtocol(EditPreProtocol):
+
+    @classmethod
+    def url_for(cls, context, meeting):
+        return "{}/protocol".format(MeetingList.url_for(context, meeting))
