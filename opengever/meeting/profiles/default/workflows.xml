@@ -4,6 +4,7 @@
   <object name="opengever_proposal_workflow" meta_type="Workflow"/>
   <object name="opengever_committee_workflow" meta_type="Workflow"/>
   <object name="opengever_committeecontainer_workflow" meta_type="Workflow"/>
+  <object name="opengever_submitted_proposal_workflow" meta_type="Workflow"/>
 
   <bindings>
     <type type_id="opengever.meeting.proposal">
@@ -14,6 +15,9 @@
     </type>
     <type type_id="opengever.meeting.committee">
       <bound-workflow workflow_id="opengever_committee_workflow"/>
+    </type>
+    <type type_id="opengever.meeting.submittedproposal">
+      <bound-workflow workflow_id="opengever_submitted_proposal_workflow"/>
     </type>
   </bindings>
 
