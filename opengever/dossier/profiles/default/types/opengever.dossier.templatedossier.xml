@@ -13,6 +13,7 @@
         <element value="opengever.document.document" />
         <element value="opengever.tasktemplates.tasktemplatefolder" />
         <element value="opengever.dossier.templatedossier" />
+        <element value="opengever.meeting.sablontemplate" />
     </property>
 
     <!-- schema interface -->

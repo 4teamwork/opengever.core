@@ -242,7 +242,8 @@ class TestTemplateDossier(FunctionalTestCase):
         browser.login().open(templatedossier)
 
         self.assertEquals(
-            ['Document', 'TaskTemplateFolder', 'Template Dossier'],
+            ['Document', 'Sablon Template', 'TaskTemplateFolder',
+             'Template Dossier'],
             factoriesmenu.addable_types())
 
 

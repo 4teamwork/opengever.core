@@ -130,4 +130,13 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <!-- 4201 -> 4300 -->
+    <upgrade-step:importProfile
+        title="Allow sablon-templates inside template-dossiers."
+        profile="opengever.dossier:default"
+        source="4201"
+        destination="4300"
+        directory="profiles/4300"
+        />
+
 </configure>
