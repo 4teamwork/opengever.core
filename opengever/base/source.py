@@ -1,4 +1,5 @@
-from Acquisition import aq_inner, aq_parent
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from opengever.base import interfaces
 from plone.formwidget.contenttree import ObjPathSourceBinder
 from plone.formwidget.contenttree.source import CustomFilter
