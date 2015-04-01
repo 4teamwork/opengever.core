@@ -191,6 +191,31 @@ class TestProposal(FunctionalTestCase):
             browser.open(submitted_proposal, view='edit')
 
     @browsing
+    def test_regression_proposal_submission_with_mails(self, browser):
+        self.grant('Contributor', 'Reader')
+
+        committee = create(Builder('committee').titled('My committee'))
+        mail = create(Builder('mail')
+                      .within(self.dossier)
+                      .with_dummy_message())
+        proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .titled(u'My Proposal')
+                          .having(committee=committee.load_model())
+                          .relate_to(mail))
+
+        browser.login().open(proposal)
+        browser.open(proposal, view='tabbedview_view-overview')
+        browser.find('Submit').click()
+
+        # submitted proposal created
+        self.assertEqual(1, len(committee.listFolderContents()))
+        submitted_proposal = committee.listFolderContents()[0]
+
+        submitted_mail = submitted_proposal.get_documents()[0]
+        self.assertSubmittedDocumentCreated(proposal, mail, submitted_mail)
+
+    @browsing
     def test_proposal_submission_works_correctly(self, browser):
         committee = create(Builder('committee').titled('My committee'))
         document = create(Builder('document')
