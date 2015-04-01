@@ -114,6 +114,11 @@ class OGMail(Item):
         """
         return False
 
+    def get_current_version(self):
+        """Mails cannot be edited, they are read-only."""
+
+        return 0
+
 
 class OGMailBase(metadata.MetadataBase):
 

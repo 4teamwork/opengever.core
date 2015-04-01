@@ -180,4 +180,23 @@
         profile="opengever.meeting:default"
         />
 
+    <!-- 4217 -> 4300 -->
+    <genericsetup:upgradeStep
+        title="Add submitted proposal workflow."
+        description=""
+        source="4217"
+        destination="4300"
+        handler="opengever.meeting.upgrades.to4300.AddSubmittedProposalWorkflow"
+        profile="opengever.meeting:default"
+        />
+
+    <genericsetup:registerProfile
+        name="4300"
+        title="opengever.meeting: upgrade profile 4300"
+        description=""
+        directory="profiles/4300"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
 </configure>
