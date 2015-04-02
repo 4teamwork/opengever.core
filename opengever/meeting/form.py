@@ -7,6 +7,7 @@ from plone.autoform.form import AutoExtensibleForm
 from z3c.form import button
 from z3c.form.form import AddForm
 from z3c.form.form import EditForm
+from z3c.form.interfaces import IDataConverter
 from zExceptions import Unauthorized
 
 
@@ -85,25 +86,36 @@ class ModelEditForm(EditForm):
         values = self.model.get_edit_values(self.fields.keys())
 
         for fieldname, value in values.items():
-            self.request[self.field_prefix + fieldname] = value
+            widget = self.widgets[fieldname]
+            value = IDataConverter(widget).toWidgetValue(value)
+            widget.value = value
 
     def updateWidgets(self):
-        self.inject_initial_data()
         super(ModelEditForm, self).updateWidgets()
+        self.inject_initial_data()
 
     def applyChanges(self, data):
         self.model.update_model(data)
-        # pretend to always change the underlying data
-        return True
 
-    # this renames the button but otherwise preserves super's behavior
+    def validate(self, data):
+        return
+
     @button.buttonAndHandler(_('Save', default=u'Save'), name='save')
     def handleApply(self, action):
-        # self as first argument is required by the decorator
-        super(ModelEditForm, self).handleApply(self, action)
+        data, errors = self.extractData()
+        if errors:
+            self.status = self.formErrorsMessage
+            return
+
+        self.validate(data)
+
+        self.applyChanges(data)
+        self.status = self.successMessage
+
         api.portal.show_message(
             _(u'message_changes_saved', default='Changes saved'),
             api.portal.get().REQUEST)
+
         return self.request.RESPONSE.redirect(self.nextURL())
 
     @button.buttonAndHandler(_(u'Cancel', default=u'Cancel'), name='cancel')
