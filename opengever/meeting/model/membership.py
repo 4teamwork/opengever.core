@@ -20,6 +20,7 @@ class Membership(Base):
     query_cls = MembershipQuery
 
     __tablename__ = 'memberships'
+    __mapper_args__= {'order_by': 'date_from'}
     __table_args__ = (UniqueConstraint('committee_id',
                                        'member_id',
                                        'date_from',
