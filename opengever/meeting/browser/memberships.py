@@ -42,7 +42,6 @@ class IMembershipModel(form.Schema):
         max_length=256,
         required=False)
 
-
 class AddMembership(ModelAddForm):
 
     schema = IMembershipModel
@@ -51,19 +50,16 @@ class AddMembership(ModelAddForm):
     label = _('Add Membership', default=u'Add Membership')
 
     def validate(self, data):
-        query = Membership.query.overlapping(
-            data['date_from'], data['date_to'])
-        query = query.filter_by(committee=data['committee'])
-        query = query.filter_by(member=data['member'])
+        overlapping = Membership.query.fetch_overlapping(
+            data['date_from'], data['date_to'],
+            data['member'], data['committee'])
 
-        overlapping_membership = query.first()
-        if overlapping_membership:
-            date_from = overlapping_membership.format_date_from()
-            date_to = overlapping_membership.format_date_to()
-
+        if overlapping:
             msg = _("Can't add membership, it overlaps an existing membership "
                     "from ${date_from} to ${date_to}",
-                    mapping=dict(date_from=date_from, date_to=date_to))
+                    mapping=dict(date_from=overlapping.format_date_from(),
+                                 date_to=overlapping.format_date_to()))
+
             raise(ActionExecutionError(Invalid(msg)))
 
     def create(self, data):
