@@ -44,6 +44,9 @@ class Membership(Base):
             self.date_from,
             self.date_to)
 
+    def is_editable(self):
+        return True
+
     def format_date_from(self):
         return self._format_date(self.date_from)
 
@@ -60,11 +63,28 @@ class Membership(Base):
     def title(self):
         return self.member.fullname
 
+    def get_edit_values(self, fieldnames):
+        values = {}
+        for fieldname in fieldnames:
+            value = getattr(self, fieldname, None)
+            if value:
+                values[fieldname] = value
+
+        return values
+
+    def update_model(self, data):
+        for key, value in data.items():
+            setattr(self, key, value)
+
     def get_url(self, context):
-        return "{}/membership/{}".format(context.absolute_url(), self.membership_id)
+        return "{}/membership/{}".format(context.absolute_url(),
+                                         self.membership_id)
 
     def get_edit_url(self, context):
         return '/'.join((self.get_url(context), 'edit'))
 
-    def get_remove_link(self):
-        return '#'
+    def get_remove_url(self, context):
+        return '/'.join((self.get_url(context), 'remove'))
+
+    def get_breadcrumbs(self, context):
+        return {'absolute_url': self.get_url(context), 'Title': self.title}

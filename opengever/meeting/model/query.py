@@ -59,6 +59,15 @@ class MembershipQuery(BaseQuery):
         return self.filter(and_(self._attribute('date_from') <= end,
                                 self._attribute('date_to') >= start))
 
+    def fetch_overlapping(self, start, end, member, committee, ignore_id=None):
+        query = self.overlapping(start, end)
+        query = query.filter_by(member=member)
+        query = query.filter_by(committee=committee)
+        if ignore_id:
+            query = query.filter(self._attribute('membership_id') != ignore_id)
+
+        return query.first()
+
 
 class SubmittedDocumentQuery(BaseQuery):
 
