@@ -6,11 +6,71 @@
       metal:use-macro="here/main_template/macros/master"
       i18n:domain="opengever.meeting">
 
-    <metal:content-core fill-slot="content-core">
-        <metal:content-core define-macro="content-core"
-                            tal:define="member view/model;">
-        <h1 tal:content="member/fullname"></h1>
-        </metal:content-core>
+  <metal:title metal:fill-slot="content-title">
+    <h1 class="documentFirstHeading" tal:content="view/model/fullname" />
+  </metal:title>
+
+  <metal:content-core fill-slot="content-core">
+    <metal:content-core define-macro="content-core"
+                        tal:define="member view/model;">
+
+      <h2 i18n:translate="">Properties</h2>
+
+      <table class="vertical listing" id="properties">
+        <tbody>
+          <tr>
+            <th i18n:translate="label_lastname">Lastname</th>
+            <td tal:content="member/lastname" />
+          </tr>
+          <tr>
+            <th i18n:translate="label_firstname">Firstname</th>
+            <td tal:content="member/firstname" />
+          </tr>
+          <tr>
+            <th i18n:translate="label_email">E-Mail</th>
+            <td tal:content="member/email" />
+          </tr>
+        </tbody>
+      </table>
+
+
+
+      <div tal:define="memberships member/memberships" id="memberships">
+        <h2 i18n:translate="">Memberships</h2>
+
+        <span tal:condition="not: memberships" i18n_translate="label_no_memberships">
+          This member has no memberships.
+        </span>
+
+        <table class="listing" id="membership_listing" tal:condition="memberships">
+          <tbody>
+            <th i18n:translate="label_committee">Committee</th>
+            <th i18n:translate="label_date_from">Start date</th>
+            <th i18n:translate="label_date_to">End date</th>
+            <th i18n:translate="label_role">Role</th>
+            <th></th>
+            <th></th>
+
+            <tr tal:repeat="membership memberships">
+              <td class="committee" tal:content="structure membership/committee/get_link" />
+              <td class="date_from" tal:content="membership/format_date_from" />
+              <td class="date_to" tal:content="membership/format_date_to" />
+              <td class="role" tal:content="membership/role" />
+              <td>
+                <a title="Edit" i18n:attributes="title label_edit"
+                   tal:attributes="href python: membership.get_edit_url(context)" class="edit_membership" />
+              </td>
+              <td>
+                <a title="Remove" i18n:attributes="title label_remove"
+                   tal:attributes="href python: membership.get_remove_url(context)" class="remove_membership" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+
     </metal:content-core>
+  </metal:content-core>
 
 </html>
