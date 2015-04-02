@@ -2,6 +2,7 @@ from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.meeting import _
 from opengever.meeting.browser.members import MemberView
+from opengever.meeting.browser.views import RemoveModelView
 from opengever.meeting.form import ModelAddForm
 from opengever.meeting.form import ModelEditForm
 from opengever.meeting.model import Membership
@@ -75,6 +76,8 @@ class AddMembership(ModelAddForm):
 
 class EditMembership(ModelEditForm):
 
+    label = _('label_edit_membership', default=u'Edit Membership')
+
     fields = field.Fields(IMembershipModel)
     fields['date_to'].widgetFactory[INPUT_MODE] = DatePickerFieldWidget
     fields['date_from'].widgetFactory[INPUT_MODE] = DatePickerFieldWidget
@@ -92,6 +95,18 @@ class EditMembership(ModelEditForm):
                                  date_to=overlapping.format_date_to()))
 
             raise(ActionExecutionError(Invalid(msg)))
+
+    def nextURL(self):
+        return MemberView.url_for(self.context, self.model.member)
+
+
+class RemoveMembership(RemoveModelView):
+    implements(IBrowserView, IPublishTraverse)
+
+    @property
+    def success_message(self):
+        return _('msg_membership_deleted',
+                 default=u'The membership was deleted successfully')
 
     def nextURL(self):
         return MemberView.url_for(self.context, self.model.member)
@@ -136,6 +151,7 @@ class MembershipView(BrowserView):
 
     mapped_actions = {
         'edit': EditMembership,
+        'remove': RemoveMembership,
     }
 
     @classmethod

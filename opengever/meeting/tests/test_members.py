@@ -137,7 +137,7 @@ class TestMemberView(FunctionalTestCase):
             row.css('td.committee a').first.get('href'))
 
     @browsing
-    def test_edit_membership_is_correctly(self, browser):
+    def test_edit_membership_is_linked_correctly(self, browser):
         browser.login().open(self.member.get_url(self.container))
 
         link = browser.css('a.edit_membership').first
@@ -145,9 +145,26 @@ class TestMemberView(FunctionalTestCase):
                          link.get('href'))
 
     @browsing
-    def test_remove_membership_link_is_correctly(self, browser):
+    def test_remove_membership_link_is_correct(self, browser):
         browser.login().open(self.member.get_url(self.container))
 
         link = browser.css('a.remove_membership').first
         self.assertEqual(self.membership_2.get_remove_url(self.container),
                          link.get('href'))
+
+    @browsing
+    def test_remove_membership_works_correctly(self, browser):
+        browser.login().open(self.member.get_url(self.container))
+        self.assertEqual(2, len(browser.css('#membership_listing').first.rows))
+
+        link = browser.css('a.remove_membership').first
+        link.click()
+
+        self.assertEqual(['The membership was deleted successfully'],
+                         info_messages())
+
+        self.assertEqual(1, len(browser.css('#membership_listing').first.rows))
+        self.assertEqual(['My Committee Jan 01, 2008 Jan 01, 2015 Leitung'],
+                         browser.css('#membership_listing').first.rows.text)
+
+        self.assertEqual(1, len(Member.query.first().memberships))

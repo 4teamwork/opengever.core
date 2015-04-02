@@ -48,6 +48,9 @@ class Membership(Base):
     def is_editable(self):
         return True
 
+    def is_removable(self):
+        return True
+
     def format_date_from(self):
         return self._format_date(self.date_from)
 
