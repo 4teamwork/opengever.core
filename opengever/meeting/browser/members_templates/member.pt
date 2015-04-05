@@ -7,7 +7,9 @@
       i18n:domain="opengever.meeting">
 
   <metal:title metal:fill-slot="content-title">
-    <h1 class="documentFirstHeading" tal:content="view/model/fullname" />
+    <div id="tabbedview-header">
+      <h1 class="memberHeading documentFirstHeading" tal:content="view/model/fullname" />
+    </div>
   </metal:title>
 
   <metal:content-core fill-slot="content-core">

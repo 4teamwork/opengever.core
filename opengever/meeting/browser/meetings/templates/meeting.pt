@@ -6,14 +6,19 @@
       metal:use-macro="here/main_template/macros/master"
       i18n:domain="opengever.meeting">
 
+  <metal:title metal:fill-slot="content-title">
+    <div id="tabbedview-header">
+      <h1 class="memberHeading documentFirstHeading" tal:content="view/model/get_title" />
+    </div>
+  </metal:title>
+
     <metal:content-core fill-slot="content-core">
         <metal:content-core define-macro="content-core"
                             tal:define="meeting view/model;
                                         unscheduled_proposals view/unscheduled_proposals">
         <div id="opengever_meeting_meeting">
           <script tal:content="string:var js_update_order_url = '${view/url_update_agenda_item_order}'
-                                      var msg_unexpected_error = '${view/msg_unexpected_error}';"></script>
-          <h1 tal:content="meeting/get_title"></h1>
+                               var msg_unexpected_error = '${view/msg_unexpected_error}';"></script>
 
           <h2 i18n:translate="">Properties</h2>
           <table class="vertical listing">
