@@ -198,7 +198,7 @@ class DeactivatedFKConstraint(object):
         self.referent_cols = referent_cols
 
     def __enter__(self):
-        self.op.drop_constraint(self.name, self.source, type='foreignkey')
+        self.op.drop_constraint(self.name, self.source, type_='foreignkey')
 
     def __exit__(self, exc_type, exc_value, exc_tb):
         self.op.create_foreign_key(self.name, self.source, self.referent,
