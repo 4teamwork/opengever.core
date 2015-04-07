@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.1.1 (unreleased)
+4.1.1 (2015-04-07)
 ------------------
 
 - Implement migrating participants in DossierMigrator.
