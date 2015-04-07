@@ -64,10 +64,23 @@ class IdempotentOperations(Operations):
             return None
         return table.columns.get(column_name)
 
+    def _constraint_exists(self, name, table_name, type_):
+        if type_ == 'unique':
+            return self._has_index(name, table_name)
+        else:
+            return self._has_constraint(name, table_name)
+
     def _has_index(self, indexname, tablename):
         table = self.metadata.tables.get(tablename)
         for index in table.indexes:
             if index.name == indexname:
+                return True
+        return False
+
+    def _has_constraint(self, name, tablename):
+        table = self.metadata.tables.get(tablename)
+        for constraint in table.constraints:
+            if constraint.name == name:
                 return True
         return False
 
@@ -112,7 +125,7 @@ class IdempotentOperations(Operations):
 
     @metadata_operation
     def drop_constraint(self, name, table_name, type_=None, schema=None):
-        if not self._has_index(name, table_name):
+        if not self._constraint_exists(name, table_name, type_):
             logger.log(logging.INFO,
                        "Skipping drop constraint '{0}' for table '{1}', "
                        "constraint does not exists."
