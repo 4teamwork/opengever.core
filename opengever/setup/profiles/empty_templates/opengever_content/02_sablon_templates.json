@@ -1,0 +1,18 @@
+[
+    {
+        "_path": "/vorlagen/sablon-template-1",
+        "_type": "opengever.meeting.sablontemplate",
+        "title": "Vorprotokoll",
+        "file:file": "templates/vorprotokoll.docx"
+    }, {
+        "_path": "/vorlagen/sablon-template-2",
+        "_type": "opengever.meeting.sablontemplate",
+        "title": "Protokoll",
+        "file:file": "templates/protokoll.docx"
+    }, {
+        "_path": "/vorlagen/sablon-template-3",
+        "_type": "opengever.meeting.sablontemplate",
+        "title": "Protokollauszug",
+        "file:file": "templates/protokollauszug.docx"
+    }
+]
