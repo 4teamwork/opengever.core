@@ -5,11 +5,14 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Fix icons for the treeporlet favorite functionality.
+  [phgross]
+
 - Made DeactivatedFKConstraint compatible with newer alembic versions.
   [phgross]
 
 - Fix submitting proposals that reference mails.
- [deiferni]
+  [deiferni]
 
 - Meeting: add editing protocols, creating/downloading/updating protocol documents.
   [deiferni]
