@@ -117,8 +117,8 @@ dl.portlet.portletTreePortlet .helptext p {
 }
 
 dl.portlet.portletTreePortlet .favorite-icon:before {
-  font-family: 'Glyphicons';
-  content: "\e050";
+  font-family: 'opengever';
+  content: "\e62c";
   width: 22px;
   color: #AAA;
   text-align: center;
@@ -135,7 +135,7 @@ dl.portlet.portletTreePortlet .filetree a:hover .favorite-icon:before {
 
 dl.portlet.portletTreePortlet .remove-from-favorites:before,
 dl.portlet.portletTreePortlet .filetree a:hover .favorite-icon.bookmarked:before {
-  content: "\e049";
+  content: "\e62b";
   color: #A13333;
 }
 
