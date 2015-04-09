@@ -5,6 +5,10 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Make sablon templates configurable on commitee-container. The following
+  templates are available: Pre-protocol, protocol and excerpt.
+  [deiferni]
+
 - Made different SchemaMigration Upgradesteps more robust.
   [phgross]
 
