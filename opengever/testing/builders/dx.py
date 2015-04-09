@@ -92,6 +92,13 @@ class DocumentBuilder(DexterityBuilder):
 builder_registry.register('document', DocumentBuilder, force=True)
 
 
+class SablonTemplateBuilder(DocumentBuilder):
+
+    portal_type = 'opengever.meeting.sablontemplate'
+
+builder_registry.register('sablontemplate', SablonTemplateBuilder)
+
+
 class TaskBuilder(DexterityBuilder):
     portal_type = 'opengever.task.task'
 
@@ -273,6 +280,20 @@ builder_registry.register('submitted_proposal', SubmittedProposalBuilder)
 
 class CommitteeContainerBuilder(DexterityBuilder):
     portal_type = 'opengever.meeting.committeecontainer'
+
+    relation_fields = [
+        'pre_protocol_template', 'protocol_template', 'excerpt_template']
+
+    def before_create(self):
+        """Make sure relations are set up correctly."""
+
+        super(CommitteeContainerBuilder, self).before_create()
+
+        intids = getUtility(IIntIds)
+        for field_name in self.relation_fields:
+            obj = self.arguments.pop(field_name, None)
+            if obj:
+                self.arguments[field_name] = RelationValue(intids.getId(obj))
 
 builder_registry.register('committee_container', CommitteeContainerBuilder)
 
