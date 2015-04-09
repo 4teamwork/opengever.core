@@ -1,3 +1,5 @@
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from opengever.meeting import _
 from opengever.meeting.container import ModelContainer
 from opengever.meeting.model import Committee as CommitteeModel
@@ -66,3 +68,15 @@ class Committee(ModelContainer):
     def get_upcoming_meetings(self):
         committee_model = self.load_model()
         return Meeting.query.all_upcoming_meetings(committee_model)
+
+    def get_pre_protocol_template(self):
+        container = aq_parent(aq_inner(self))
+        return container.get_pre_protocol_template()
+
+    def get_protocol_template(self):
+        container = aq_parent(aq_inner(self))
+        return container.get_protocol_template()
+
+    def get_excerpt_template(self):
+        container = aq_parent(aq_inner(self))
+        return container.get_excerpt_template()

@@ -30,7 +30,14 @@ class TestProtocol(FunctionalTestCase):
         self.dossier = create(
             Builder('dossier').within(self.repository_folder))
 
-        container = create(Builder('committee_container'))
+        self.templates = create(Builder('templatedossier'))
+        self.sablon_template = create(
+            Builder('sablontemplate')
+            .with_asset_file('sablon_template.docx'))
+        container = create(Builder('committee_container').having(
+            pre_protocol_template=self.sablon_template,
+            protocol_template=self.sablon_template))
+
         self.committee = create(Builder('committee').within(container))
         self.proposal = create(Builder('proposal')
                                .within(self.dossier)

@@ -41,3 +41,12 @@ class ICommitteeContainer(form.Schema):
 
 class CommitteeContainer(Container):
     """Committee Container class, a container for all committees."""
+
+    def get_pre_protocol_template(self):
+        return self.pre_protocol_template.to_object
+
+    def get_protocol_template(self):
+        return self.protocol_template.to_object
+
+    def get_excerpt_template(self):
+        return self.excerpt_template.to_object

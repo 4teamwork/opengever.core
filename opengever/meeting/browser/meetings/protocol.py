@@ -60,7 +60,7 @@ class DownloadGeneratedPreProtocol(BrowserView):
         self.model = model
 
     def __call__(self):
-        sablon = Sablon(self.operations.get_template_path())
+        sablon = Sablon(self.operations.get_sablon_template(self.model))
         sablon.process(self.operations.get_meeting_data(self.model).as_json())
 
         assert sablon.is_processed_successfully(), sablon.stderr

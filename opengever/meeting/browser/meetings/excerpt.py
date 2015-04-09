@@ -53,7 +53,7 @@ class GenerateExcerpt(AutoExtensibleForm, EditForm):
                 if pre_protocol.name in self.request:
                     pre_protocols_to_include.append(pre_protocol)
 
-            sablon = Sablon(templates.path('protocol_template.docx'))
+            sablon = Sablon(self.model.get_excerpt_template())
             sablon.process(PreProtocolData(
                 self.model, pre_protocols_to_include).as_json())
 
