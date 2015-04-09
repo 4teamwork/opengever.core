@@ -12,8 +12,8 @@ class Sablon(object):
     See https://github.com/senny/sablon
 
     """
-    def __init__(self, template_path):
-        self.template_path = template_path
+    def __init__(self, template):
+        self.template = template
         self.returncode = None
         self.stdout = None
         self.stderr = None
@@ -22,11 +22,12 @@ class Sablon(object):
     def process(self, json_data):
         tmpdir_path = tempfile.mkdtemp(prefix='opengever.core.sablon_')
         output_path = join(tmpdir_path, 'sablon_output.docx')
+        template_path = self.template.as_file(tmpdir_path)
 
         try:
             sablon_path = environ.get('SABLON_BIN', 'sablon')
             subprocess = Popen(
-                [sablon_path, self.template_path, output_path],
+                [sablon_path, template_path, output_path],
                 stdin=PIPE, stdout=PIPE, stderr=PIPE)
             self.stdout, self.stderr = subprocess.communicate(input=json_data)
             self.returncode = subprocess.returncode
