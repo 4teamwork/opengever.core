@@ -2,6 +2,8 @@ from plone.protect.auto import ProtectTransform
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from zope.annotation.attribute import AttributeAnnotations
+from zope.annotation.interfaces import IAnnotatable
+from zope.annotation.interfaces import IAnnotations
 from zope.component import adapts
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
@@ -70,3 +72,8 @@ class OGProtectTransform(ProtectTransform):
         # portal_memberdata._members cache will be written sometimes.
         if IPloneSiteRoot.providedBy(getSite()):
             unprotected_write(getToolByName(getSite(), 'portal_memberdata')._members)
+
+        # always allow writes to context's annotations.
+        context = self.request.PARENTS[0]
+        if IAnnotatable.providedBy(context):
+            unprotected_write(IAnnotations(context))

@@ -5,6 +5,9 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- CSRF: always allow object annotations to be written.
+  [jone, deiferni]
+
 - Fix icons for the treeporlet favorite functionality.
   [phgross]
 
