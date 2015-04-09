@@ -149,7 +149,29 @@ first need to install `Erlang <http://www.erlang.org/>`_.
 Sablon
 ^^^^^^
 
-if `opengever.meeting` is activated the ruby gem `Sablon <https://github.com/senny/sablon/>`_ is required to generate documents from ``*.docx`` templates. Sablon is executed as subprocess so the ``sablon`` script provided by the sablon gem must be accessible as the user that is running gever instances.
+If ``opengever.meeting`` is activated (which it is for the default development
+installation), the Ruby gem `Sablon <https://github.com/senny/sablon/>`_ is
+required to generate documents from ``*.docx`` templates. Sablon is executed
+as subprocess so the ``sablon`` script provided by the sablon gem must be
+accessible as the user that is running gever instances.
+
+In order for buildout to be able to install the `Sablon` gem, you need to
+have `bundler` installed. For local development on Mac OS X it is recommended
+to set up your Ruby using `rbenv <https://github.com/sstephenson/rbenv>`_
+and the `ruby-build <https://github.com/sstephenson/ruby-build>`_ plugin:
+
+.. code::
+
+    git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
+    git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
+    echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bash_profile
+    echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
+    source ~/.bash_profile
+    rbenv install 2.1.5
+    gem install bundler
+
+The installation of the ``Sablon`` gem can then be performed by buildout (by
+extending from `ruby-gems.cfg <http://buildout-proxy.4teamwork.ch/4teamwork/opengever-buildouts/master/ruby-gems.cfg>`_).
 
 
 LDAP credentials
