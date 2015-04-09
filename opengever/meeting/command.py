@@ -7,7 +7,6 @@ from opengever.base.request import dispatch_json_request
 from opengever.base.transport import REQUEST_KEY
 from opengever.base.transport import Transporter
 from opengever.meeting import _
-from opengever.meeting import templates
 from opengever.meeting.model import GeneratedPreProtocol
 from opengever.meeting.model import GeneratedProtocol
 from opengever.meeting.model import proposalhistory

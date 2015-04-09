@@ -1,5 +1,4 @@
 from opengever.meeting import _
-from opengever.meeting import templates
 from opengever.meeting.browser.meetings.meetinglist import MeetingList
 from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.form import ModelProxyEditForm
