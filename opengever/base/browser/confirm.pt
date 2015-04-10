@@ -6,6 +6,10 @@
       metal:use-macro="context/main_template/macros/master"
       i18n:domain="opengever.base">
 <body>
+
+  <metal:block fill-slot="top_slot"
+               tal:define="dummy python:request.set('disable_border',1)" />
+
   <metal:title fill-slot="content-title">
      <h1 class="documentFirstHeading" i18n:translate="title_confirming_user_action">
          Confirming User Action.
