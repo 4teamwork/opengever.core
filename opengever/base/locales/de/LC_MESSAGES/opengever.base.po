@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-02-19 17:05+0000\n"
+"POT-Creation-Date: 2015-04-10 07:28+0000\n"
 "PO-Revision-Date: 2014-09-04 01:03+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -158,7 +158,7 @@ msgid "label_actor"
 msgstr "Geändert von"
 
 #. Default: "-- Already removed object --"
-#: ./opengever/base/adapters.py:191
+#: ./opengever/base/adapters.py:192
 msgid "label_already_removed"
 msgstr "-- Bereits gelöscht --"
 
@@ -228,7 +228,7 @@ msgid "label_history"
 msgstr "Versionen"
 
 #. Default: "Initial version (document copied)"
-#: ./opengever/base/subscribers.py:17
+#: ./opengever/base/subscribers.py:23
 msgid "label_initial_version_copied"
 msgstr "Dokument kopiert (Initialversion)"
 
