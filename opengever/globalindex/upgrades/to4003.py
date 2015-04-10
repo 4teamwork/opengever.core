@@ -27,8 +27,9 @@ class AlterSequenceNumberType(SchemaMigration):
         else:
             self.migrate_mysql()
 
-        self.op.create_index('ix_dossier_sequence_number', 'tasks',
-                             ['dossier_sequence_number'])
+        if not self.op._has_index('ix_dossier_sequence_number', 'tasks'):
+            self.op.create_index('ix_dossier_sequence_number', 'tasks',
+                                 ['dossier_sequence_number'])
 
     def migrate_oracle(self):
         # sequence_number
