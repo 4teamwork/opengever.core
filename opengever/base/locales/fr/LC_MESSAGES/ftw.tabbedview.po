@@ -68,6 +68,9 @@ msgstr "Dernières modifications"
 msgid "closed-forwardings"
 msgstr "Transmissions fermé"
 
+msgid "committees"
+msgstr ""
+
 msgid "contacts"
 msgstr "Contacts"
 
@@ -130,6 +133,15 @@ msgstr "Centre de coûts"
 
 msgid "local"
 msgstr "Local"
+
+msgid "meetings"
+msgstr ""
+
+msgid "members"
+msgstr ""
+
+msgid "memberships"
+msgstr ""
 
 msgid "my_issues"
 msgstr "Mes tickets"

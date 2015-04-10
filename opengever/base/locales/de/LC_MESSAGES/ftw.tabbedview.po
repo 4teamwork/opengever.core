@@ -68,6 +68,9 @@ msgstr "Letzte Änderungen"
 msgid "closed-forwardings"
 msgstr "Abgeschlossene Weiterleitungen"
 
+msgid "committees"
+msgstr "Kommissionen"
+
 msgid "contacts"
 msgstr "Kontakte"
 
@@ -130,6 +133,15 @@ msgstr "Kostenstelle"
 
 msgid "local"
 msgstr "Lokal"
+
+msgid "meetings"
+msgstr "Sitzungen"
+
+msgid "members"
+msgstr "Mitglieder"
+
+msgid "memberships"
+msgstr "Mitgliedschaften"
 
 msgid "my_issues"
 msgstr "Meine Tickets"
@@ -209,20 +221,3 @@ msgstr "Papierkorb"
 msgid "users"
 msgstr "OGDS"
 
-msgid "proposals"
-msgstr "Anträge"
-
-msgid "committees"
-msgstr "Kommissionen"
-
-msgid "members"
-msgstr "Mitglieder"
-
-msgid "meetings"
-msgstr "Sitzungen"
-
-msgid "submittedproposals"
-msgstr "Anträge"
-
-msgid "memberships"
-msgstr "Mitgliedschaften"

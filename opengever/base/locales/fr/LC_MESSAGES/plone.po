@@ -86,6 +86,9 @@ msgstr "Liste des affaires en suspens"
 msgid "Overview"
 msgstr "Sommaire"
 
+msgid "Search OneGov Gever"
+msgstr "Parcourir OneGov Gever"
+
 #: plone.app.search/plone/app/search/search.pt:59
 msgid "Search results"
 msgstr "Résultat de la recherche"
@@ -285,5 +288,3 @@ msgstr "Déactiver"
 msgid "tasktemplatefolder-transition-inactiv-activ"
 msgstr "Activer"
 
-msgid "Search OneGov Gever"
-msgstr "Parcourir OneGov Gever"

@@ -5,6 +5,9 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Customize CSRF confirmation page and add German translations.
+  [lgraf]
+
 - Added translations for the SearchBoxViewlet placeholder.
   [phgross]
 

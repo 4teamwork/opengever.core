@@ -86,6 +86,9 @@ msgstr "Pendenzenliste"
 msgid "Overview"
 msgstr "Übersicht"
 
+msgid "Search OneGov Gever"
+msgstr "OneGov GEVER durchsuchen"
+
 #: plone.app.search/plone/app/search/search.pt:59
 msgid "Search results"
 msgstr "Suchresultate"
@@ -285,5 +288,3 @@ msgstr "Deaktivieren"
 msgid "tasktemplatefolder-transition-inactiv-activ"
 msgstr "Aktivieren"
 
-msgid "Search OneGov Gever"
-msgstr "OneGov GEVER durchsuchen"
