@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-04-10 07:28+0000\n"
+"POT-Creation-Date: 2015-04-10 07:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -65,6 +65,11 @@ msgstr ""
 #. Default: "confidential"
 #: opengever/repository/classification.py
 msgid "confidential"
+msgstr ""
+
+#. Default: "Confirm that you'd like to perform this action."
+#: ./opengever/base/browser/confirm.pt:16
+msgid "desc_confirm_action"
 msgstr ""
 
 #. Default: "You have not selected any Items"
@@ -184,6 +189,11 @@ msgstr ""
 msgid "label_comment"
 msgstr ""
 
+#. Default: "Confirm action"
+#: ./opengever/base/browser/confirm.pt:37
+msgid "label_confirm_action"
+msgstr ""
+
 #. Default: "Created"
 #: ./opengever/base/viewlets/byline.py:60
 msgid "label_created"
@@ -283,6 +293,11 @@ msgstr ""
 msgid "limited-public"
 msgstr ""
 
+#. Default: "Careful, it's possible someone is executing an exploit against you. Verify you just performed an action on this site and that you were not referred here by a different website or email."
+#: ./opengever/base/browser/confirm.pt:23
+msgid "msg_verify_you_performed_this_action"
+msgstr ""
+
 #. Default ""
 #: opengever/repository/classification.py
 msgid "not archival worthy"
@@ -321,6 +336,11 @@ msgstr ""
 #. Default: "Advanced Search"
 #: ./opengever/base/browser/search.pt:61
 msgid "search_results_advanced_link"
+msgstr ""
+
+#. Default: "Confirming User Action."
+#: ./opengever/base/browser/confirm.pt:10
+msgid "title_confirming_user_action"
 msgstr ""
 
 #. Default ""
