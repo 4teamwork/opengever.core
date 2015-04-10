@@ -41,6 +41,11 @@ msgstr "Titre"
 msgid "created"
 msgstr ""
 
+#. Default: "Created"
+#: ./opengever/activity/browser/listing.py:59
+msgid "created"
+msgstr ""
+
 #. Default: "Notifications"
 #: ./opengever/activity/viewlets/notification.pt:3
 msgid "heading_notifications"
@@ -60,4 +65,3 @@ msgstr "Mes notifications"
 #: ./opengever/activity/viewlets/notification.pt:46
 msgid "label_notifications_overview"
 msgstr ""
-

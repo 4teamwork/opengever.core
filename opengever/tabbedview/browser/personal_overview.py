@@ -1,6 +1,7 @@
 from AccessControl import Unauthorized
 from five import grok
 from ftw.tabbedview.browser.tabbed import TabbedView
+from opengever.activity import is_activity_feature_enabled
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
@@ -46,7 +47,7 @@ class PersonalOverview(TabbedView):
         {'id': 'mydocuments', 'icon': None, 'url': '#', 'class': None},
         {'id': 'mytasks', 'icon': None, 'url': '#', 'class': None},
         {'id': 'myissuedtasks', 'icon': None, 'url': '#', 'class': None},
-        ]
+    ]
 
     admin_tabs = [
         {'id': 'alltasks', 'icon': None, 'url': '#', 'class': None},
@@ -89,11 +90,26 @@ class PersonalOverview(TabbedView):
                 return True
         return False
 
+    @property
+    def notification_tabs(self):
+        tabs = []
+        if is_activity_feature_enabled():
+            tabs.append(
+                {'id': 'mynotifications',
+                 'title': _('label_my_notifications', default=u'My notifications'),
+                 'icon': None, 'url': '#', 'class': None})
+
+        return tabs
+
     def get_tabs(self):
+        tabs = []
+
         if self.is_user_allowed_to_view_additional_tabs():
-            return self.default_tabs + self.admin_tabs
+            tabs = self.default_tabs + self.notification_tabs + self.admin_tabs
         else:
-            return self.default_tabs
+            tabs = self.default_tabs
+
+        return tabs
 
     def is_user_allowed_to_view_additional_tabs(self):
         """The additional tabs Alltasks and AllIssuedTasks are only shown

@@ -8,20 +8,6 @@ from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 
 
-class TestNotificationOverview(FunctionalTestCase):
-
-    layer = OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
-
-    @browsing
-    def test_tabs(self, browser):
-        browser.login().open(self.portal, view='notification_overview')
-
-        tabs = browser.css('.tabbedview-tabs li.formTab a')
-
-        self.assertEquals(['My notifications'], tabs.text)
-        self.assertEquals('#mynotifications', tabs[0].get('href'))
-
-
 class TestNotificationView(FunctionalTestCase):
 
     layer = OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER

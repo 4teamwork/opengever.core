@@ -60,4 +60,3 @@ msgstr ""
 #: ./opengever/activity/viewlets/notification.pt:46
 msgid "label_notifications_overview"
 msgstr ""
-
