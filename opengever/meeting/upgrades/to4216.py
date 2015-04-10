@@ -25,10 +25,14 @@ class CreateGeneratedDocument(SchemaMigration):
             Column("generated_version", Integer, nullable=False),
             Column("generated_document_type", String(100), nullable=False),
         )
-        self.op.create_index(
-            'ix_generated_document_unique',
-            'generateddocuments',
-            ['admin_unit_id', 'int_id'])
+
+        if not self.op._has_index('ix_generated_document_unique',
+                                  'generateddocuments'):
+
+            self.op.create_index(
+                'ix_generated_document_unique',
+                'generateddocuments',
+                ['admin_unit_id', 'int_id'])
 
     def create_meeting_columns(self):
         self.op.add_column(
