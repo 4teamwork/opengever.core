@@ -5,6 +5,9 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Made different SchemaMigration Upgradesteps more robust.
+  [phgross]
+
 - Customize CSRF confirmation page and add German translations.
   [lgraf]
 
