@@ -27,7 +27,6 @@ class SearchBoxViewlet(SearchBoxViewlet):
         return HAS_FTW_SOLR and IFtwSolrLayer.providedBy(self.request)
 
     def placeholder(self):
-        placeholder = getattr(self.context, 'search_label', u'title_search_site')
-        return translate(placeholder,
-                         domain='plone',
-                         context=self.request)
+        placeholder = getattr(self.context, 'search_label',
+                              u'title_search_site')
+        return translate(placeholder, domain='plone', context=self.request)
