@@ -18,7 +18,7 @@ class RemoveModelView(BrowserView):
 
     @property
     def success_message(self):
-        return _('msg_succesfully_deleted',
+        return _('msg_successfully_deleted',
                  default=u'The object was deleted successfully')
 
     def nextURL(self):
