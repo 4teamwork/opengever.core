@@ -5,6 +5,9 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Added translations for the SearchBoxViewlet placeholder.
+  [phgross]
+
 - CSRF: always allow object annotations to be written.
   [jone, deiferni]
 
