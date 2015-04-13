@@ -1,19 +1,8 @@
 from opengever.meeting import _
+from opengever.meeting.sources import sablon_template_source
 from plone.dexterity.content import Container
 from plone.directives import form
-from plone.formwidget.contenttree import ObjPathSourceBinder
 from z3c.relationfield.schema import RelationChoice
-
-
-sablon_template_source = ObjPathSourceBinder(
-    portal_type=("opengever.meeting.sablontemplate"),
-    navigation_tree_query={
-        'object_provides':
-            ['opengever.dossier.templatedossier.interfaces.ITemplateDossier',
-             'opengever.meeting.sablontemplate.ISablonTemplate',
-             ],
-        }
-)
 
 
 class ICommitteeContainer(form.Schema):
