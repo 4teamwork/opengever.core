@@ -1,7 +1,6 @@
-from unittest2 import TestCase
 from opengever.setup.sections.xlssource import XlsSource
-import os.path
-import opengever.setup.tests
+from pkg_resources import resource_filename
+from unittest2 import TestCase
 
 
 class TextXLSImport(TestCase):
@@ -9,8 +8,7 @@ class TextXLSImport(TestCase):
     def setUp(self):
         super(TextXLSImport, self).setUp()
 
-        xls_directory = os.path.join(
-            os.path.dirname(opengever.setup.tests.__file__), 'assets')
+        xls_directory = resource_filename('opengever.setup.tests', 'assets')
 
         self.source = list(XlsSource(
             None, '', {'directory': xls_directory, 'client_id': 'test'}, []))

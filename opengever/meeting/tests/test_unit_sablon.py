@@ -1,7 +1,5 @@
 from opengever.meeting.sablon import Sablon
-from os.path import abspath
-from os.path import dirname
-from os.path import join
+from pkg_resources import resource_filename
 from unittest2 import TestCase
 import json
 
@@ -10,8 +8,8 @@ class MockTemplate(object):
     """Return hardcoded path to test asset template."""
 
     def as_file(self, path):
-        template_path = join(dirname(abspath(__file__)),
-                             'assets', 'sablon_template.docx')
+        template_path = resource_filename('opengever.meeting.tests',
+                                          'assets/sablon_template.docx')
         return template_path
 
 

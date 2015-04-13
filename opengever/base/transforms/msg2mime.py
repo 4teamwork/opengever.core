@@ -1,4 +1,4 @@
-import opengever.base
+from pkg_resources import resource_filename
 import os
 import subprocess
 import tempfile
@@ -19,10 +19,7 @@ class Msg2MimeTransform(object):
         msg_file.close()
 
         # Locate conversion tool and launch it as a subprocess.
-        cmd = os.path.join(
-            os.path.dirname(opengever.base.__file__),
-            'transforms',
-            'msg2mime.pl')
+        cmd = resource_filename('opengever.base.transforms', 'msg2mime.pl')
 
         process = subprocess.Popen(
             [PERL_PATH, cmd, msg_file.name],

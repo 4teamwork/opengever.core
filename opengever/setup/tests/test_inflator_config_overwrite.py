@@ -1,8 +1,6 @@
-from ftw.inflator import creation as inflator_creation
 from lxml import etree
-from opengever.setup import creation as gever_creation
+from pkg_resources import resource_filename
 from unittest import TestCase
-import os.path
 
 
 NAMESPACES = {'genericsetup': 'http://namespaces.zope.org/genericsetup', }
@@ -15,10 +13,6 @@ def xpath(node, xpath):
     return node.xpath(xpath, namespaces=NAMESPACES)[0]
 
 
-def package_zcml_path(module):
-    return os.path.join(os.path.dirname(module.__file__), 'configure.zcml')
-
-
 class TestInflatorConfig(TestCase):
 
     maxDiff = None
@@ -27,11 +21,13 @@ class TestInflatorConfig(TestCase):
     def test_inflator_config_correctly_overwritten(self):
         parser = etree.XMLParser(remove_blank_text=True)
 
-        inflator_path = package_zcml_path(inflator_creation)
+        inflator_path = resource_filename(
+            'ftw.inflator.creation', 'configure.zcml')
         inflator_config = etree.parse(inflator_path, parser)
         inflator_setup = xpath(inflator_config, XPATH_INFLATOR)
 
-        gever_path = package_zcml_path(gever_creation)
+        gever_path = resource_filename(
+            'opengever.setup.creation', 'configure.zcml')
         gever_config = etree.parse(gever_path, parser)
         gever_setup = xpath(gever_config, XPATH_GEVER)
         additional_element = xpath(gever_config, XPATH_DEPENDS)
