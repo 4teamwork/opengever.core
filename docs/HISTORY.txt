@@ -15,14 +15,10 @@ Changelog
 
   [phgross]
 
-- Extend meeting type views with corresonding watermark icon.
+- Extend meeting type views with corresponding watermark icon.
   [phgross]
 
-
-- Extend meeting type views with corresonding watermark icon.
-  [phgross]
-
-- Extend meeting type links with corresonding icon.
+- Extend meeting type links with corresponding icon.
   [phgross]
 
 - Make sablon templates configurable on commitee-container. The following
