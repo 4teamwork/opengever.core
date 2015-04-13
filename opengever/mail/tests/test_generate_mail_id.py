@@ -1,10 +1,10 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.testing import FunctionalTestCase
-import os
+from pkg_resources import resource_string
 
-MAIL_DATA = open(
-    os.path.join(os.path.dirname(__file__), 'mail.txt'), 'r').read()
+
+MAIL_DATA = resource_string('opengever.mail.tests', 'mail.txt')
 
 
 class TestGenerateMailIdAndSequentialNumber(FunctionalTestCase):

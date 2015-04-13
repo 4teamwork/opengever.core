@@ -48,3 +48,15 @@ class Committee(Base):
             return None
 
         return '/'.join((admin_unit.public_url, self.physical_path))
+
+    def resolve_committee(self):
+        return self.oguid.resolve_object()
+
+    def get_pre_protocol_template(self):
+        return self.resolve_committee().get_pre_protocol_template()
+
+    def get_protocol_template(self):
+        return self.resolve_committee().get_protocol_template()
+
+    def get_excerpt_template(self):
+        return self.resolve_committee().get_excerpt_template()

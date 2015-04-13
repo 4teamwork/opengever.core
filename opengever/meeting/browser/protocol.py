@@ -67,7 +67,7 @@ class ChoosePreProtocolDossierForm(Form):
     label = _(u'form_label_generate_preprotocol',
               default=u'Generate pre-protocol')
 
-    operations = PreProtocolOperations
+    operations = PreProtocolOperations()
 
     def updateWidgets(self):
         super(ChoosePreProtocolDossierForm, self).updateWidgets()
@@ -89,7 +89,7 @@ class ChoosePreProtocolDossierForm(Form):
             # XXX permission checks on meeting?
 
             command = CreateGeneratedDocumentCommand(
-                dossier, meeting, self.operations())
+                dossier, meeting, self.operations)
             document = command.execute()
             command.show_message()
             return self.request.RESPONSE.redirect(document.absolute_url())
@@ -125,7 +125,7 @@ class GeneratePreProtocol(FormWrapper, grok.View):
 
 class ChooseProtocolDossierForm(ChoosePreProtocolDossierForm):
 
-    operations = ProtocolOperations
+    operations = ProtocolOperations()
 
 
 class GenerateProtocol(GeneratePreProtocol):
@@ -193,7 +193,7 @@ class ChoosePreProtocolUpdateMethod(Form):
     label = _(u'form_label_update_preprotocol',
               default=u'Update pre-protocol')
 
-    operations = PreProtocolOperations
+    operations = PreProtocolOperations()
 
     def updateWidgets(self):
         super(ChoosePreProtocolUpdateMethod, self).updateWidgets()
@@ -217,10 +217,10 @@ class ChoosePreProtocolUpdateMethod(Form):
             method = data['method']
             if method == METHOD_NEW_DOCUMENT:
                 command = ReplaceGeneratedDocumentCommand(
-                    generated_document, self.operations())
+                    generated_document, self.operations)
             elif method == METHOD_NEW_VERSION:
                 command = UpdateGeneratedDocumentCommand(
-                    generated_document, self.operations())
+                    generated_document, self.operations)
 
             document = command.execute()
             command.show_message()
@@ -258,7 +258,7 @@ class UpdatePreProtocol(FormWrapper, grok.View):
 
 class ChooseProtocolUpdateMethod(ChoosePreProtocolUpdateMethod):
 
-    operations = ProtocolOperations
+    operations = ProtocolOperations()
 
     def get_generated_document(self, document_id):
         return GeneratedProtocol.get(document_id)

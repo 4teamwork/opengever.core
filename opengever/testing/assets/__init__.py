@@ -1,9 +1,5 @@
-from os.path import abspath
-from os.path import dirname
-from os.path import join
+from pkg_resources import resource_string
 
 
 def load(asset_filename):
-    filepath = join(dirname(abspath(__file__)), asset_filename)
-    with open(filepath, 'rb') as asset_file:
-        return asset_file.read()
+    return resource_string('opengever.testing.assets', asset_filename)

@@ -7,7 +7,6 @@ from opengever.base.request import dispatch_json_request
 from opengever.base.transport import REQUEST_KEY
 from opengever.base.transport import Transporter
 from opengever.meeting import _
-from opengever.meeting import templates
 from opengever.meeting.model import GeneratedPreProtocol
 from opengever.meeting.model import GeneratedProtocol
 from opengever.meeting.model import proposalhistory
@@ -24,8 +23,8 @@ MIME_DOCX = 'application/vnd.openxmlformats-officedocument.wordprocessingml.docu
 
 class PreProtocolOperations(object):
 
-    def get_template_path(self):
-        return templates.path('protocol_template.docx')
+    def get_sablon_template(self, meeting):
+        return meeting.get_pre_protocol_template()
 
     def get_meeting_data(self, meeting):
         return PreProtocolData(meeting)
@@ -55,6 +54,9 @@ class PreProtocolOperations(object):
 
 
 class ProtocolOperations(PreProtocolOperations):
+
+    def get_sablon_template(self, meeting):
+        return meeting.get_protocol_template()
 
     def get_meeting_data(self, meeting):
         return ProtocolData(meeting)
@@ -101,7 +103,7 @@ class CreateGeneratedDocumentCommand(CreateDocumentCommand):
             content_type=MIME_DOCX)
 
     def generate_file_data(self):
-        template = self.document_operations.get_template_path()
+        template = self.document_operations.get_sablon_template(self.meeting)
         sablon = Sablon(template)
         sablon.process(
             self.document_operations.get_meeting_data(self.meeting).as_json())
@@ -153,7 +155,7 @@ class UpdateGeneratedDocumentCommand(object):
         self.document_operations = document_operations
 
     def generate_file_data(self):
-        template = self.document_operations.get_template_path()
+        template = self.document_operations.get_sablon_template(self.meeting)
         sablon = Sablon(template)
         sablon.process(
             self.document_operations.get_meeting_data(self.meeting).as_json())

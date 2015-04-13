@@ -3,6 +3,10 @@
         "_path": "sitzungen",
         "_type": "opengever.meeting.committeecontainer",
         "title": "Sitzungen",
+        "pre_protocol_template": "resolvePath::/vorlagen/sablon-template-1",
+        "protocol_template": "resolvePath::/vorlagen/sablon-template-2",
+        "excerpt_template": "resolvePath::/vorlagen/sablon-template-3",
+
         "_children": [
             {
                 "_id": "committee-1",

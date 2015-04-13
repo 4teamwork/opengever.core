@@ -4,7 +4,7 @@ from ftw.table.interfaces import ITableGenerator
 from opengever.base.interfaces import IRedirector
 from opengever.dossier import _
 from opengever.dossier.command import CreateDocumentFromTemplateCommand
-from opengever.dossier.templatedossier.interfaces import ITemplateUtility
+from opengever.dossier.templatedossier import get_template_dossier
 from opengever.tabbedview.helper import linked
 from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
@@ -96,16 +96,16 @@ class TemplateDocumentFormView(grok.View):
         """Get the list of template documents and render the "document from
         template" form
         """
-
-        template_util = getUtility(
-            ITemplateUtility, 'opengever.templatedossier')
-        self.templatedossier = template_util.templateFolder(self.context)
-        if self.templatedossier is None:
+        template_dossier = get_template_dossier()
+        if template_dossier is None:
             status = IStatusMessage(self.request)
             status.addStatusMessage(
                 _("Not found the templatedossier"), type="error")
             return self.context.request.RESPONSE.redirect(
                 self.context.absolute_url())
+
+        self.templatedossier_path = '/'.join(
+            template_dossier.getPhysicalPath())
         return super(TemplateDocumentFormView, self).__call__()
 
     def templates(self):
@@ -115,7 +115,7 @@ class TemplateDocumentFormView(grok.View):
         catalog = getToolByName(self.context, 'portal_catalog')
         templates = catalog(
             path=dict(
-                depth=-1, query=self.templatedossier),
+                depth=-1, query=self.templatedossier_path),
             portal_type="opengever.document.document")
 
         generator = getUtility(ITableGenerator, 'ftw.tablegenerator')

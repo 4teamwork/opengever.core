@@ -19,6 +19,9 @@
     <type type_id="opengever.meeting.submittedproposal">
       <bound-workflow workflow_id="opengever_submitted_proposal_workflow"/>
     </type>
+    <type type_id="opengever.meeting.sablontemplate">
+      <bound-workflow workflow_id="opengever_document_workflow"/>
+    </type>
   </bindings>
 
 </object>

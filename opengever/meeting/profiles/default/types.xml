@@ -3,4 +3,5 @@
     <object name="opengever.meeting.submittedproposal" meta_type="Dexterity FTI" />
     <object name="opengever.meeting.committee" meta_type="Dexterity FTI" />
     <object name="opengever.meeting.committeecontainer" meta_type="Dexterity FTI" />
+    <object name="opengever.meeting.sablontemplate" meta_type="Dexterity FTI" />
 </object>

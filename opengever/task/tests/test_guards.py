@@ -10,6 +10,7 @@ from zope.interface import alsoProvides
 from zope.interface import Interface
 from zope.interface.verify import verifyClass
 import os.path
+from pkg_resources import resource_filename
 
 
 class TestTaskTransitionController(MockTestCase):
@@ -28,11 +29,8 @@ class TestTaskTransitionController(MockTestCase):
                         TaskTransitionController))
 
     def test_transitions_in_defintion_use_controller(self):
-        import opengever.task
-        path = os.path.join(
-            os.path.dirname(os.path.abspath(opengever.task.__file__)),
-            'profiles', 'default', 'workflows', 'opengever_task_workflow',
-            'definition.xml')
+        path = resource_filename('opengever.task',
+            'profiles/default/workflows/opengever_task_workflow/definition.xml')
         self.assertTrue(os.path.isfile(path))
 
         doc = parse(path)

@@ -127,6 +127,15 @@ class Meeting(Base):
             translate(_("Protocol"), context=getRequest()),
             normalizer.normalize(self.get_title()))
 
+    def get_pre_protocol_template(self):
+        return self.committee.get_pre_protocol_template()
+
+    def get_protocol_template(self):
+        return self.committee.get_protocol_template()
+
+    def get_excerpt_template(self):
+        return self.committee.get_excerpt_template()
+
     @property
     def physical_path(self):
         return '/'.join(

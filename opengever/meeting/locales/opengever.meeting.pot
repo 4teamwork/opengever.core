@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-03-31 15:53+0000\n"
+"POT-Creation-Date: 2015-04-13 12:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.meeting\n"
 
-#: ./opengever/meeting/command.py:253
+#: ./opengever/meeting/command.py:255
 msgid "A new submitted version of document ${title} has been created"
 msgstr ""
 
@@ -40,7 +40,7 @@ msgstr ""
 msgid "Add Membership"
 msgstr ""
 
-#: ./opengever/meeting/command.py:286
+#: ./opengever/meeting/command.py:288
 msgid "Additional document ${title} has been submitted successfully"
 msgstr ""
 
@@ -58,7 +58,7 @@ msgid "Can't add membership, it overlaps an existing membership from ${date_from
 msgstr ""
 
 #. Default: "Cancel"
-#: ./opengever/meeting/browser/meetings/excerpt.py:69
+#: ./opengever/meeting/browser/meetings/excerpt.py:68
 #: ./opengever/meeting/browser/meetings/protocol.py:144
 #: ./opengever/meeting/form.py:49
 msgid "Cancel"
@@ -84,7 +84,7 @@ msgstr ""
 msgid "Discussion"
 msgstr ""
 
-#: ./opengever/meeting/command.py:216
+#: ./opengever/meeting/command.py:218
 msgid "Document ${title} has already been submitted in that version"
 msgstr ""
 
@@ -102,6 +102,10 @@ msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:46
 msgid "Edit protocol"
+msgstr ""
+
+#: ./opengever/meeting/committeecontainer.py:36
+msgid "Excerpt template"
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:40
@@ -133,12 +137,16 @@ msgstr ""
 msgid "Pre-Protocol"
 msgstr ""
 
-#: ./opengever/meeting/command.py:41
+#: ./opengever/meeting/command.py:40
 msgid "Pre-protocol for meeting ${title} has been generated successfully"
 msgstr ""
 
-#: ./opengever/meeting/command.py:46
+#: ./opengever/meeting/command.py:45
 msgid "Pre-protocol for meeting ${title} has been updated successfully"
+msgstr ""
+
+#: ./opengever/meeting/committeecontainer.py:24
+msgid "Pre-protocol template"
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:18
@@ -160,20 +168,29 @@ msgstr ""
 msgid "Protocol"
 msgstr ""
 
-#: ./opengever/meeting/command.py:70
+#: ./opengever/meeting/command.py:72
 msgid "Protocol for meeting ${title} has been generated successfully"
 msgstr ""
 
-#: ./opengever/meeting/command.py:75
+#: ./opengever/meeting/command.py:77
 msgid "Protocol for meeting ${title} has been updated successfully"
+msgstr ""
+
+#: ./opengever/meeting/committeecontainer.py:30
+msgid "Protocol template"
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:34
 msgid "Protocols"
 msgstr ""
 
+#: ./opengever/meeting/profiles/default/types/opengever.meeting.sablontemplate.xml
+#: ./opengever/meeting/upgrades/profiles/4301/types/opengever.meeting.sablontemplate.xml
+msgid "Sablon Template"
+msgstr ""
+
 #. Default: "Save"
-#: ./opengever/meeting/browser/meetings/excerpt.py:47
+#: ./opengever/meeting/browser/meetings/excerpt.py:46
 #: ./opengever/meeting/browser/meetings/protocol.py:135
 #: ./opengever/meeting/form.py:41
 msgid "Save"
@@ -195,7 +212,7 @@ msgstr ""
 msgid "Updated with a newer docment version from proposal's dossier."
 msgstr ""
 
-#: ./opengever/meeting/command.py:169
+#: ./opengever/meeting/command.py:171
 msgid "Updated with a newer generated version from meeting ${title}."
 msgstr ""
 
@@ -494,6 +511,11 @@ msgstr ""
 msgid "label_role"
 msgstr ""
 
+#. Default: "File"
+#: ./opengever/meeting/sablontemplate.py:11
+msgid "label_sablon_template_file"
+msgstr ""
+
 #. Default: "Secretary"
 #: ./opengever/meeting/browser/meetings/protocol.py:32
 msgid "label_secretary"
@@ -505,7 +527,7 @@ msgid "label_start"
 msgstr ""
 
 #. Default: "Title"
-#: ./opengever/meeting/committee.py:22
+#: ./opengever/meeting/committee.py:24
 #: ./opengever/meeting/proposal.py:28
 msgid "label_title"
 msgstr ""

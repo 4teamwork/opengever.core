@@ -60,6 +60,7 @@ class ISendDocumentSchema(Interface):
             source=u'opengever.ogds.base.EmailContactsAndUsersVocabulary'),
         required=False,
         missing_value=(),  # important!
+        default=(),
         )
 
     extern_receiver = schema.List(

@@ -57,6 +57,7 @@ class IDocumentMetadata(form.Schema):
         value_type=schema.TextLine(),
         required=False,
         missing_value=(),
+        default=(),
         )
 
     foreign_reference = schema.TextLine(

@@ -8,7 +8,7 @@ from ftw.testbrowser.pages import plone
 from ooxml_docprops import read_properties
 from opengever.dossier.docprops import TemporaryDocFile
 from opengever.dossier.interfaces import ITemplateDossierProperties
-from opengever.dossier.templatedossier.interfaces import ITemplateUtility
+from opengever.dossier.templatedossier import get_template_dossier
 from opengever.journal.handlers import DOC_PROPERTIES_UPDATED
 from opengever.journal.tests.utils import get_journal_entry
 from opengever.testing import FunctionalTestCase
@@ -242,7 +242,8 @@ class TestTemplateDossier(FunctionalTestCase):
         browser.login().open(templatedossier)
 
         self.assertEquals(
-            ['Document', 'TaskTemplateFolder', 'Template Dossier'],
+            ['Document', 'Sablon Template', 'TaskTemplateFolder',
+             'Template Dossier'],
             factoriesmenu.addable_types())
 
 
@@ -250,24 +251,19 @@ class TestTemplateFolderUtility(FunctionalTestCase):
 
     def setUp(self):
         super(TestTemplateFolderUtility, self).setUp()
-        self.utility = getUtility(ITemplateUtility, 'opengever.templatedossier')
         self.grant('Manager')
 
     def test_get_template_folder_returns_path_of_the_templatedossier(self):
         templatedossier = create(Builder('templatedossier'))
 
-        self.assertEquals(
-            '/'.join(templatedossier.getPhysicalPath()),
-            self.utility.templateFolder(self.portal))
+        self.assertEquals(templatedossier, get_template_dossier())
 
     def test_get_template_folder_returns_allways_root_templatefolder(self):
         templatedossier = create(Builder('templatedossier'))
         create(Builder('templatedossier')
                .within(templatedossier))
 
-        self.assertEquals(
-            '/'.join(templatedossier.getPhysicalPath()),
-            self.utility.templateFolder(self.portal))
+        self.assertEquals(templatedossier, get_template_dossier())
 
 
 OVERVIEW_TAB = 'tabbedview_view-overview'
