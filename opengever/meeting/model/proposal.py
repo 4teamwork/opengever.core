@@ -122,15 +122,21 @@ class Proposal(Base):
     def get_link(self):
         return self._get_link(self.get_admin_unit(), self.physical_path)
 
-    def get_submitted_link(self):
+    def get_submitted_link(self, include_icon=True):
         return self._get_link(self.get_submitted_admin_unit(),
-                              self.submitted_physical_path)
+                              self.submitted_physical_path,
+                              include_icon=include_icon)
 
-    def _get_link(self, admin_unit, physical_path):
+    def _get_link(self, admin_unit, physical_path, include_icon=True):
         if not (admin_unit and physical_path):
             return ''
         url = '/'.join((admin_unit.public_url, physical_path))
-        link = u'<a href="{0}" title="{1}" class="{2}">{1}</a>'.format(url, self.title, self.css_class)
+
+        if include_icon:
+            link = u'<a href="{0}" title="{1}" class="{2}">{1}</a>'.format(
+                url, self.title, self.css_class)
+        else:
+            link = u'<a href="{0}" title="{1}">{1}</a>'.format(url, self.title)
 
         transformer = api.portal.get_tool('portal_transforms')
         return transformer.convertTo('text/x-html-safe', link).getData()

@@ -50,8 +50,8 @@ class AgendaItem(Base):
     def has_proposal(self):
         return self.proposal is not None
 
-    def get_proposal_link(self):
+    def get_proposal_link(self, include_icon=True):
         if not self.has_proposal():
             return self.get_title()
 
-        return self.proposal.get_submitted_link()
+        return self.proposal.get_submitted_link(include_icon=include_icon)

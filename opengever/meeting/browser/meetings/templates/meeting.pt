@@ -95,7 +95,7 @@
                   <tr tal:repeat="agenda_item view/agenda_items" tal:attributes="data-uid agenda_item/agenda_item_id">
                       <td class="sortable_handle"></td>
                       <td class="number" tal:content="agenda_item/number"></td>
-                      <td tal:attributes="class agenda_item/get_css_class" tal:content="structure agenda_item/get_proposal_link">
+                      <td tal:content="structure python: agenda_item.get_proposal_link(include_icon=False)">
                       </td>
                       <td>
                         <a tal:condition="meeting/is_editable"
