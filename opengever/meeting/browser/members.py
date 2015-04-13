@@ -53,7 +53,7 @@ class EditMember(ModelEditForm):
         return MemberView.url_for(self.context, self.model)
 
 
-class MemberList(grok.View):
+class MemberTraverser(grok.View):
 
     implements(IPublishTraverse)
     grok.context(Interface)

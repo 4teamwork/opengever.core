@@ -230,30 +230,12 @@ dl.portlet ul.filetree a.toggleNav.expanded {
     font-weight: bold;
   }
 
-  #agenda_items tr td a.delete_agenda_item:before {
-    font-family: 'icomoon';
-    content: '\e202';
-  }
-
-  #agenda_items tr td a.delete_agenda_item:hover {
-    text-decoration: none;
-  }
-
   #agenda_items tr td:last-child {
     border-right: 1px solid #e6e6e6;
   }
 
   #agenda_items tr:last-child td {
     border-bottom: 1px solid #e6e6e6;
-  }
-
-  #agenda_items .sortable_handle:hover {
-    cursor: ns-resize;
-  }
-
-  #agenda_items .sortable_handle:before {
-    font-family: 'icomoon';
-    content:'\e114';
   }
 
   #agenda_items tr.placeholder{

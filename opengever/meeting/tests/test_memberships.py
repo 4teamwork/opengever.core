@@ -63,6 +63,45 @@ class TestMemberships(FunctionalTestCase):
              "Jan 01, 2010 to Dec 31, 2010"],
             browser.css('div#content-core div.error').text)
 
+    @browsing
+    def test_membership_can_be_edited(self, browser):
+        membership = create(Builder('membership')
+                            .having(member=self.member,
+                                    committee=self.committee.load_model(),
+                                    date_from=date(2003, 01, 01),
+                                    date_to=date(2007, 12, 31)))
+
+        browser.login().open(membership.get_edit_url(self.committee))
+        browser.fill({'Role': u'tempor\xe4re Leitung',
+                      'Start date': 'December 31, 2003'}).submit()
+
+        membership = Membership.get(membership.membership_id)
+        self.assertEqual(['Changes saved'], info_messages())
+        self.assertEqual(date(2003, 12, 31), membership.date_from)
+        self.assertEqual(u'tempor\xe4re Leitung', membership.role)
+
+    @browsing
+    def test_overlapping_membership_not_possible_when_editing(self, browser):
+        create(Builder('membership')
+               .having(member=self.member,
+                       committee=self.committee.load_model(),
+                       date_from=date(2003, 01, 01),
+                       date_to=date(2007, 01, 01)))
+        membership = create(Builder('membership')
+                            .having(member=self.member,
+                                    committee=self.committee.load_model(),
+                                    date_from=date(2008, 01, 01),
+                                    date_to=date(2014, 01, 01)))
+
+        browser.login().open(membership.get_edit_url(self.committee))
+        browser.fill({'Start date': 'December 31, 2005'}).submit()
+
+        self.assertEqual(['There were some errors.'], error_messages())
+        self.assertEqual(
+            ["Can't change membership, it overlaps an existing membership from "
+             "Jan 01, 2003 to Jan 01, 2007"],
+            browser.css('div#content-core div.error').text)
+
     def test_not_started_membership_is_inactive(self):
         create(Builder('membership')
                .having(member=self.member,

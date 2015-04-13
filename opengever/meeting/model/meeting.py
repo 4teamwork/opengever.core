@@ -90,6 +90,10 @@ class Meeting(Base):
     def __repr__(self):
         return '<Meeting at "{}">'.format(self.start)
 
+    @property
+    def css_class(self):
+        return 'contenttype-opengever-meeting-meeting'
+
     def is_editable(self):
         return self.get_state() == self.STATE_PENDING
 
@@ -151,24 +155,12 @@ class Meeting(Base):
         return self.workflow.get_state(self.workflow_state)
 
     def get_edit_values(self, fieldnames):
-        # XXX this should be done in a more generic way by using either
-        # the already present valueconverter stuff
-        # or by registering our own converters based on column types
         values = {}
         for fieldname in fieldnames:
             value = getattr(self, fieldname, None)
-            if not value:
-                continue
+            if value:
+                values[fieldname] = value
 
-            if fieldname in ['start', 'end']:
-                values['{}-day'.format(fieldname)] = str(value.day)
-                values['{}-month'.format(fieldname)] = str(value.month)
-                values['{}-year'.format(fieldname)] = str(value.year)
-                values['{}-hour'.format(fieldname)] = str(value.hour)
-                values['{}-min'.format(fieldname)] = str(value.minute)
-                continue
-
-            values[fieldname] = value
         return values
 
     def update_model(self, data):
@@ -238,7 +230,8 @@ class Meeting(Base):
 
     def get_link(self):
         url = self.get_url()
-        link = u'<a href="{0}" title="{1}">{1}</a>'.format(url, self.get_title())
+        link = u'<a href="{0}" title="{1}" class="{2}">{1}</a>'.format(
+            url, self.get_title(), self.css_class)
 
         transformer = api.portal.get_tool('portal_transforms')
         return transformer.convertTo('text/x-html-safe', link).getData()

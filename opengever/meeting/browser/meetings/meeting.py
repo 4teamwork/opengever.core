@@ -75,8 +75,8 @@ class EditMeeting(ModelEditForm):
     fields = field.Fields(IMeetingModel)
 
     def updateWidgets(self):
-        self.inject_initial_data()
         super(EditMeeting, self).updateWidgets()
+        self.inject_initial_data()
 
         committee_id = self.context.load_model().committee_id
         self.widgets['committee'].mode = HIDDEN_MODE

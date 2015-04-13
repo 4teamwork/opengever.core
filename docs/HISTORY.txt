@@ -5,6 +5,22 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Optimize member and membership view:
+
+  - Added Membership listing to MemberView.
+  - Added Edit functionality for Memberships.
+  - Added Remove functionality for Memberships.
+  - Order Memberships on date_from date by default.
+  - Add memberhip_id column to membership table.
+
+  [phgross]
+
+- Extend meeting type views with corresponding watermark icon.
+  [phgross]
+
+- Extend meeting type links with corresponding icon.
+  [phgross]
+
 - Make sablon templates configurable on commitee-container. The following
   templates are available: Pre-protocol, protocol and excerpt.
   [deiferni]

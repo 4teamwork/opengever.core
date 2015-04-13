@@ -7,6 +7,7 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.browser.meetings.meetinglist import MeetingList
 from opengever.meeting.model import Meeting
 from opengever.testing import FunctionalTestCase
+from pyquery import PyQuery
 from zExceptions import Unauthorized
 import transaction
 
@@ -29,6 +30,20 @@ class TestMeeting(FunctionalTestCase):
         self.assertEqual(
             u'Oct 18, 2013',
             Meeting(start=datetime(2013, 10, 18)).get_title())
+
+    def test_meeting_link(self):
+        meeting = Meeting(location=u'Bern',
+                          start=datetime(2013, 10, 18),
+                          committee=self.committee.load_model())
+
+        link = PyQuery(meeting.get_link())[0]
+
+        self.assertEqual(
+            'http://example.com/opengever-meeting-committeecontainer/committee-1/meeting/1',
+            link.get('href'))
+        self.assertEqual('contenttype-opengever-meeting-meeting', link.get('class'))
+        self.assertEqual('Bern, Oct 18, 2013', link.get('title'))
+        self.assertEqual('Bern, Oct 18, 2013', link.text)
 
     @browsing
     def test_add_meeting(self, browser):

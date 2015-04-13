@@ -63,4 +63,12 @@
       allowed_attributes="listing select_all reorder setgridstate set_default_tab"
       />
 
+  <browser:page
+      name="plone_layout"
+      for="opengever.meeting.committee.ICommittee"
+      permission="zope.Public"
+      class=".layout.CommitteeLayoutPolicy"
+      allowed_interface="plone.app.layout.globals.interfaces.ILayoutPolicy"
+      />
+
 </configure>

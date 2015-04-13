@@ -8,7 +8,9 @@ from sqlalchemy import Date
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
+from sqlalchemy import UniqueConstraint
 from sqlalchemy.orm import relationship
+from sqlalchemy.schema import Sequence
 
 
 class Membership(Base):
@@ -18,15 +20,21 @@ class Membership(Base):
     query_cls = MembershipQuery
 
     __tablename__ = 'memberships'
+    __mapper_args__= {'order_by': 'date_from'}
+    __table_args__ = (UniqueConstraint('committee_id',
+                                       'member_id',
+                                       'date_from',
+                                       name='ix_membership_unique'), {})
 
-    date_from = Column(Date, primary_key=True)
+    membership_id = Column("id", Integer, Sequence("membership_id_seq"),
+                           primary_key=True)
+
+    date_from = Column(Date, nullable=False)
     date_to = Column(Date, nullable=False)
 
-    committee_id = Column(Integer, ForeignKey('committees.id'),
-                          primary_key=True)
+    committee_id = Column(Integer, ForeignKey('committees.id'))
     committee = relationship("Committee", backref="memberships")
-    member_id = Column(Integer, ForeignKey('members.id'),
-                       primary_key=True)
+    member_id = Column(Integer, ForeignKey('members.id'))
     member = relationship("Member", backref="memberships")
     role = Column(String(256))
 
@@ -36,6 +44,12 @@ class Membership(Base):
             repr(self.committee.title),
             self.date_from,
             self.date_to)
+
+    def is_editable(self):
+        return True
+
+    def is_removable(self):
+        return True
 
     def format_date_from(self):
         return self._format_date(self.date_from)
@@ -52,3 +66,29 @@ class Membership(Base):
 
     def title(self):
         return self.member.fullname
+
+    def get_edit_values(self, fieldnames):
+        values = {}
+        for fieldname in fieldnames:
+            value = getattr(self, fieldname, None)
+            if value:
+                values[fieldname] = value
+
+        return values
+
+    def update_model(self, data):
+        for key, value in data.items():
+            setattr(self, key, value)
+
+    def get_url(self, context):
+        return "{}/membership/{}".format(context.absolute_url(),
+                                         self.membership_id)
+
+    def get_edit_url(self, context):
+        return '/'.join((self.get_url(context), 'edit'))
+
+    def get_remove_url(self, context):
+        return '/'.join((self.get_url(context), 'remove'))
+
+    def get_breadcrumbs(self, context):
+        return {'absolute_url': self.get_url(context), 'Title': self.title}
