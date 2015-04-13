@@ -105,6 +105,7 @@ class IParticipation(form.Schema):
             ),
         required=True,
         missing_value=[],
+        default=[],
         )
 
 # --------- model class --------

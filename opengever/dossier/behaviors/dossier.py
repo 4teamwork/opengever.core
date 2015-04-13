@@ -55,6 +55,7 @@ class IDossier(form.Schema):
         value_type=schema.TextLine(),
         required=False,
         missing_value=(),
+        default=(),
     )
     form.widget(keywords=TextLinesFieldWidget)
 

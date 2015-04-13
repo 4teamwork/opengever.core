@@ -31,6 +31,7 @@ class IOpenGeverBase(form.Schema):
         description=_(u'help_description', default=u''),
         required=False,
         missing_value=u'',
+        default=u'',
         )
 
 
