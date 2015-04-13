@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-04-13 10:11+0000\n"
+"POT-Creation-Date: 2015-04-13 13:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -62,7 +62,7 @@ msgid "Can't change membership, it overlaps an existing membership from ${date_f
 msgstr ""
 
 #. Default: "Cancel"
-#: ./opengever/meeting/browser/meetings/excerpt.py:69
+#: ./opengever/meeting/browser/meetings/excerpt.py:68
 #: ./opengever/meeting/browser/meetings/protocol.py:144
 #: ./opengever/meeting/form.py:50
 msgid "Cancel"
@@ -100,20 +100,16 @@ msgstr ""
 msgid "Download protocol"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:46
-msgid "Edit protocol"
-msgstr ""
-
-#: ./opengever/meeting/committeecontainer.py:36
-msgid "Excerpt template"
-msgstr ""
-
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:44
 msgid "Edit pre-protocol"
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:51
 msgid "Edit protocol"
+msgstr ""
+
+#: ./opengever/meeting/committeecontainer.py:36
+msgid "Excerpt template"
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:45
@@ -176,8 +172,8 @@ msgstr ""
 msgid "Proposed action"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:45
-#: ./opengever/meeting/model/meeting.py:121
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:50
+#: ./opengever/meeting/model/meeting.py:125
 msgid "Protocol"
 msgstr ""
 
@@ -193,19 +189,6 @@ msgstr ""
 msgid "Protocol template"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:50
-#: ./opengever/meeting/model/meeting.py:125
-msgid "Protocol"
-msgstr ""
-
-#: ./opengever/meeting/command.py:70
-msgid "Protocol for meeting ${title} has been generated successfully"
-msgstr ""
-
-#: ./opengever/meeting/command.py:75
-msgid "Protocol for meeting ${title} has been updated successfully"
-msgstr ""
-
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:39
 msgid "Protocols"
 msgstr ""
@@ -216,7 +199,7 @@ msgid "Sablon Template"
 msgstr ""
 
 #. Default: "Save"
-#: ./opengever/meeting/browser/meetings/excerpt.py:47
+#: ./opengever/meeting/browser/meetings/excerpt.py:46
 #: ./opengever/meeting/browser/meetings/protocol.py:135
 #: ./opengever/meeting/form.py:42
 msgid "Save"
@@ -718,3 +701,4 @@ msgstr ""
 #: ./opengever/meeting/model/proposal.py:90
 msgid "un-schedule"
 msgstr ""
+
