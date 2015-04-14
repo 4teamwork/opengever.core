@@ -80,17 +80,7 @@
 
             <metal:use use-macro="context/@@ploneform-macros/actions" />
 
-            <metal:comment tal:replace="nothing">
-              This seems to be the only way to disable kss inline validation.
-
-              In our case it does not work because we are editing a Meeting which at the moment exists
-              only in a relational database.
-
-              See http://stackoverflow.com/questions/27515472/how-can-you-disable-inline-validation-for-a-z3c-form-on-plone
-            </metal:comment>
-            <script type="text/javascript">
-              $('.z3cformInlineValidation').removeClass('z3cformInlineValidation');
-            </script>
+            <metal:use use-macro="context/@@meeting-macros/disable_kss_inline_validation" />
 
             </metal:block>
 
