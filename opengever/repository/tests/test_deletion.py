@@ -71,7 +71,8 @@ class TestRepositoryDeletion(FunctionalTestCase):
         create(Builder('dossier').within(self.repository))
         browser.login().open(self.repository)
         self.assertEquals(
-            ['Prefix Manager',
+            ['Export as Zip',
+             'Prefix Manager',
              'Properties',
              'Sharing',
              'repositoryfolder-transition-inactivate'],
@@ -82,6 +83,7 @@ class TestRepositoryDeletion(FunctionalTestCase):
         browser.login().open(self.repository)
         self.assertEquals(
             ['Delete',
+             'Export as Zip',
              'Prefix Manager',
              'Properties',
              'Sharing',

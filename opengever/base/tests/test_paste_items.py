@@ -22,7 +22,7 @@ class TestPasteItems(FunctionalTestCase):
 
         browser.open(contactfolder)
         actions = browser.css('#plone-contentmenu-actions li').text
-        self.assertSequenceEqual(['Sharing'], actions)
+        self.assertSequenceEqual(['Export as Zip', 'Sharing'], actions)
 
     @browsing
     def test_paste_action_not_displayed_for_templatedossier(self, browser):
@@ -36,7 +36,8 @@ class TestPasteItems(FunctionalTestCase):
 
         browser.open(templatedossier)
         actions = browser.css('#plone-contentmenu-actions li').text
-        self.assertSequenceEqual(['Properties', 'Sharing'], actions)
+        self.assertSequenceEqual(
+            ['Export as Zip', 'Properties', 'Sharing'], actions)
 
     @browsing
     def test_paste_action_not_displayed_for_mails(self, browser):
@@ -49,7 +50,8 @@ class TestPasteItems(FunctionalTestCase):
 
         browser.open(mail)
         actions = browser.css('#plone-contentmenu-actions li').text
-        self.assertSequenceEqual(['Properties', 'save attachments'], actions)
+        self.assertSequenceEqual(
+            ['Export as Zip', 'Properties', 'save attachments'], actions)
 
     def test_pasting_copied_document_into_dossier_succeeds(self):
         dossier = create(Builder('dossier'))
