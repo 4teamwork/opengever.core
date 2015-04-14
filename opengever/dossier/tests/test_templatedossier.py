@@ -6,6 +6,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages import plone
 from ooxml_docprops import read_properties
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.dossier.docprops import TemporaryDocFile
 from opengever.dossier.interfaces import ITemplateDossierProperties
 from opengever.dossier.templatedossier import get_template_dossier
@@ -238,6 +239,24 @@ class TestTemplateDossier(FunctionalTestCase):
 
     @browsing
     def test_addable_types(self, browser):
+        templatedossier = create(Builder('templatedossier'))
+        browser.login().open(templatedossier)
+
+        self.assertEquals(
+            ['Document', 'TaskTemplateFolder', 'Template Dossier'],
+            factoriesmenu.addable_types())
+
+
+class TestTemplateDossierMeetingEnabled(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_MEETING_LAYER
+
+    def setUp(self):
+        super(TestTemplateDossierMeetingEnabled, self).setUp()
+        self.grant('Manager')
+
+    @browsing
+    def test_addable_types_with_meating_feature(self, browser):
         templatedossier = create(Builder('templatedossier'))
         browser.login().open(templatedossier)
 
