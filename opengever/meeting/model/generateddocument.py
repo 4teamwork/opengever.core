@@ -54,3 +54,8 @@ class GeneratedPreProtocol(GeneratedDocument):
 class GeneratedProtocol(GeneratedDocument):
 
     __mapper_args__ = {'polymorphic_identity': 'generated_protocol'}
+
+
+class GeneratedExcerpt(GeneratedDocument):
+
+    __mapper_args__ = {'polymorphic_identity': 'generated_excerpt'}

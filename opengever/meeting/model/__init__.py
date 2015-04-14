@@ -1,5 +1,6 @@
 from opengever.meeting.model.agendaitem import AgendaItem
 from opengever.meeting.model.committee import Committee
+from opengever.meeting.model.generateddocument import GeneratedExcerpt
 from opengever.meeting.model.generateddocument import GeneratedPreProtocol
 from opengever.meeting.model.generateddocument import GeneratedProtocol
 from opengever.meeting.model.meeting import Meeting

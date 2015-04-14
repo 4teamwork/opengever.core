@@ -16,6 +16,7 @@ from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy import Text
 from sqlalchemy import UniqueConstraint
+from sqlalchemy.orm import backref
 from sqlalchemy.orm import composite
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
@@ -52,6 +53,19 @@ class Proposal(Base):
     submitted_oguid = composite(
         Oguid, submitted_admin_unit_id, submitted_int_id)
     submitted_physical_path = Column(String(256))
+
+    excerpt_document_id = Column(Integer, ForeignKey('generateddocuments.id'))
+    excerpt_document = relationship(
+        'GeneratedExcerpt', uselist=False,
+        backref=backref('proposal', uselist=False),
+        primaryjoin="GeneratedExcerpt.document_id==Proposal.excerpt_document_id")
+
+    submitted_excerpt_document_id = Column(Integer,
+                                           ForeignKey('generateddocuments.id'))
+    submitted_excerpt_document = relationship(
+        'GeneratedExcerpt', uselist=False,
+        backref=backref('submitted_proposal', uselist=False),
+        primaryjoin="GeneratedExcerpt.document_id==Proposal.submitted_excerpt_document_id")
 
     title = Column(String(256), nullable=False)
     workflow_state = Column(String(256), nullable=False)
