@@ -1,8 +1,8 @@
 from five import grok
 from opengever.base import _
-from opengever.base.behaviors.utils import PrimaryFieldInfo
 from opengever.base.behaviors.utils import set_attachment_content_disposition
 from plone.app.versioningbehavior.behaviors import IVersioningSupport
+from plone.dexterity.primary import PrimaryFieldInfo
 from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
 
