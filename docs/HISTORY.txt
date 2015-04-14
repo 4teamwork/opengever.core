@@ -9,6 +9,10 @@ Changelog
 
   - Added automatic generation of excerpts for every scheduled proposal.
   - Copy back the excerpt to the original proposal.
+  - Create Proposalhistory entry when decided.
+  - Add excerpt box to the ProposalOverview.
+  - Update proposal states during closing a meeting.
+  - Show decision in ProposalOverview.
 
   [phgross]
 

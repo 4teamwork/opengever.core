@@ -7,6 +7,7 @@ from opengever.base.request import dispatch_json_request
 from opengever.base.transport import REQUEST_KEY
 from opengever.base.transport import Transporter
 from opengever.meeting import _
+from opengever.meeting.model import GeneratedExcerpt
 from opengever.meeting.model import GeneratedPreProtocol
 from opengever.meeting.model import GeneratedProtocol
 from opengever.meeting.model import proposalhistory
@@ -409,6 +410,7 @@ class DecideProposalsCommand(object):
         session.add(excerpt)
 
         proposal.excerpt_document = excerpt
+        session.add(proposalhistory.ProposalDecided(proposal=proposal))
 
     def copy_document(self, proposal):
         document = proposal.submitted_excerpt_document.oguid.resolve_object()

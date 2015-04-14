@@ -74,3 +74,15 @@ class TestCloseMeeting(FunctionalTestCase):
 
         generated_document = self.proposal_a.load_model().excerpt_document
         self.assertEquals(excerpt, generated_document.oguid.resolve_object())
+
+    @browsing
+    def test_proposalhistory_is_added(self, browser):
+        browser.login().open(MeetingList.url_for(self.committee, self.meeting))
+        browser.css('#held-closed').first.click()
+
+        browser.open(self.proposal_a, view=u'tabbedview_view-overview')
+        entry = browser.css('.answer').first
+
+        self.assertEquals('Proposal decided by Test User (test_user_1_)',
+                          entry.css('h3').first.text)
+        self.assertEquals('answer decided', entry.get('class'))
