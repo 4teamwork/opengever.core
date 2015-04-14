@@ -76,23 +76,45 @@ class PreProtocol(object):
         self._agenda_item.discussion = data.get('discussion')
         self._agenda_item.decision = data.get('decision')
 
-    def get_field_data(self):
-        return {
+    def get_field_data(self, include_initial_position=True,
+                       include_legal_basis=True, include_considerations=True,
+                       include_proposed_action=True, include_discussion=True,
+                       include_decision=True):
+        data = {
             'number': self.number,
             'description': self.description,
             'title': self.title,
-            'legal_basis': self.legal_basis,
-            'initial_position': self.initial_position,
-            'proposed_action': self.proposed_action,
-            'considerations': self.considerations,
-            'discussion': self.discussion,
-            'decision': self.decision,
         }
+        if include_initial_position:
+            data['initial_position'] = self.initial_position,
+        if include_legal_basis:
+            data['legal_basis'] = self.legal_basis
+        if include_considerations:
+            data['considerations'] = self.considerations
+        if include_proposed_action:
+            data['proposed_action'] = self.proposed_action
+        if include_discussion:
+            data['discussion'] = self.discussion
+        if include_decision:
+            data['decision'] = self.decision
+
+        return data
 
 
 class PreProtocolData(object):
 
-    def __init__(self, meeting, pre_protocols=None):
+    def __init__(self, meeting, pre_protocols=None,
+                 include_initial_position=True, include_legal_basis=True,
+                 include_considerations=True, include_proposed_action=True,
+                 include_discussion=True, include_decision=True):
+
+        self.include_initial_position = include_initial_position
+        self.include_legal_basis = include_legal_basis
+        self.include_considerations = include_considerations
+        self.include_proposed_action = include_proposed_action
+        self.include_discussion = include_discussion
+        self.include_decision = include_decision
+
         self.meeting = meeting
         if pre_protocols:
             self.pre_protocols = pre_protocols
@@ -153,7 +175,13 @@ class PreProtocolData(object):
         self.data['agenda_items'] = []
         for pre_protocol in self.pre_protocols:
             self.data['agenda_items'].append(
-                pre_protocol.get_field_data())
+                pre_protocol.get_field_data(
+                    include_initial_position=self.include_initial_position,
+                    include_legal_basis=self.include_legal_basis,
+                    include_considerations=self.include_considerations,
+                    include_proposed_action=self.include_proposed_action,
+                    include_discussion=self.include_discussion,
+                    include_decision=self.include_decision))
 
     def as_json(self):
         return json.dumps(self.data)
