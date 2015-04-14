@@ -191,6 +191,9 @@ msgstr "Dokumente"
 msgid "reports"
 msgstr "Arbeitsrapporte"
 
+msgid "sablontemplates"
+msgstr "Sablon Vorlagen"
+
 msgid "sharing"
 msgstr "Info"
 

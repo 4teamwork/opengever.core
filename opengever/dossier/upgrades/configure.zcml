@@ -139,4 +139,14 @@
         directory="profiles/4300"
         />
 
+    <!-- 4300 -> 4301 -->
+    <genericsetup:upgradeStep
+        title="Display sablon-template tab for template-dossiers."
+        description=""
+        source="4300"
+        destination="4301"
+        handler="opengever.dossier.upgrades.to4301.AddSablonTemplatesTab"
+        profile="opengever.dossier:default"
+        />
+
 </configure>

@@ -45,6 +45,36 @@ class TemplateDossierDocuments(Documents):
     ]
 
 
+class TemplateDossierSablonTemplates(Documents):
+    grok.context(ITemplateDossier)
+    grok.name('tabbedview_view-sablontemplates')
+
+    types = ['opengever.meeting.sablontemplate']
+
+    depth = 1
+
+    @property
+    def columns(self):
+        return drop_columns(
+            super(TemplateDossierSablonTemplates, self).columns)
+
+    @property
+    def enabled_actions(self):
+        return filter(
+            lambda x: x not in self.disabled_actions,
+            super(TemplateDossierSablonTemplates, self).enabled_actions)
+
+    disabled_actions = [
+        'cancel',
+        'checkin',
+        'checkout',
+        'create_task',
+        'move_items',
+        'send_as_email',
+        'submit_additional_documents',
+    ]
+
+
 class TemplateDossierTrash(Trash):
     grok.context(ITemplateDossier)
 

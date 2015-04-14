@@ -271,6 +271,7 @@ DOCUMENT_TAB = 'tabbedview_view-documents'
 TRASH_TAB = 'tabbedview_view-trash'
 JOURNAL_TAB = 'tabbedview_view-journal'
 INFO_TAB = 'tabbedview_view-sharing'
+SABLONTEMPLATES_TAB = 'tabbedview_view-sablontemplates'
 
 
 class TestTemplateDossierListings(FunctionalTestCase):
@@ -318,6 +319,28 @@ class TestTemplateDossierListings(FunctionalTestCase):
         create(Builder('document').within(subdossier))
 
         view = self.templatedossier.unrestrictedTraverse(DOCUMENT_TAB)
+        view.update()
+
+        self.assertEquals([document_a],
+                          [brain.getObject() for brain in view.contents])
+
+    def test_enabled_actions_are_limited_in_sablontemplates_tab(self):
+        view = self.templatedossier.unrestrictedTraverse(SABLONTEMPLATES_TAB)
+        self.assertEquals(['checkin_with_comment',
+                           'checkin_without_comment',
+                           'trashed',
+                           'copy_items',
+                           'zip_selected'],
+                          view.enabled_actions)
+
+    def test_sablontemplates_tab_lists_only_documents_directly_beneath(self):
+        subdossier = create(Builder('templatedossier')
+                            .within(self.templatedossier))
+        document_a = create(Builder('sablontemplate')
+                            .within(self.templatedossier))
+        create(Builder('sablontemplate').within(subdossier))
+
+        view = self.templatedossier.unrestrictedTraverse(SABLONTEMPLATES_TAB)
         view.update()
 
         self.assertEquals([document_a],
