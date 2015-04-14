@@ -62,7 +62,7 @@ class GenerateExcerpt(AutoExtensibleForm, EditForm):
             response.setHeader('X-Theme-Disabled', 'True')
             response.setHeader('Content-Type', MIME_DOCX)
             response.setHeader("Content-Disposition",
-                               "attachment; filename='{}'".format(filename))
+                               'attachment; filename="{}"'.format(filename))
             return sablon.file_data
 
     @button.buttonAndHandler(_('Cancel', default=u'Cancel'), name='cancel')
