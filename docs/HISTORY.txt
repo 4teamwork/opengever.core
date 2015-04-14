@@ -5,6 +5,9 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Made documents and mails addable in proposals.
+  [phgross]
+
 - Activate statefilter also in subdossiers listings.
   [phgross]
 

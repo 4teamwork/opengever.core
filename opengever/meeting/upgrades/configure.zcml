@@ -228,4 +228,13 @@
         profile="opengever.meeting:default"
         />
 
+    <!-- 4303 -> 4304 -->
+    <upgrade-step:importProfile
+        title="Made documents addable in proposals."
+        profile="opengever.meeting:default"
+        source="4303"
+        destination="4304"
+        directory="profiles/4304"
+        />
+
 </configure>
