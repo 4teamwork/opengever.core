@@ -2,7 +2,6 @@
 <object name="portal_properties" meta_type="Plone Properties Tool">
 
     <object name="navtree_properties" meta_type="Plone Property Sheet">
-
         <property name="metaTypesNotToList" type="lines">
             <element value="ATBooleanCriterion"/>
             <element value="ATCurrentAuthorCriterion"/>
@@ -32,13 +31,13 @@
             <element value="opengever.contact.contact"/>
             <element value="opengever.document.document"/>
             <element value="opengever.inbox.forwarding"/>
+            <element value="opengever.meeting.sablontemplate"/>
             <element value="opengever.task.task"/>
             <element value="opengever.tasktemplates.tasktemplate"/>
             <element value="opengever.tasktemplates.tasktemplatefolder"/>
         </property>
-
     </object>
-    
+
     <object name="site_properties" meta_type="Plone Property Sheet">
         <property name="icon_visibility" type="string">enabled</property>
     </object>
