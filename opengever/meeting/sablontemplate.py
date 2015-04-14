@@ -2,11 +2,13 @@ from opengever.document.document import Document
 from opengever.document.document import IDocumentSchema
 from opengever.meeting import _
 from os.path import join
+from plone.directives import form
 from plone.namedfile.field import NamedBlobFile
 
 
 class ISablonTemplate(IDocumentSchema):
 
+    form.primary('file')
     file = NamedBlobFile(
         title=_(u'label_sablon_template_file', default='File'),
         required=True,
