@@ -296,7 +296,8 @@ class Trash(Documents):
     types = ['opengever.dossier.dossier',
              'opengever.document.document',
              'opengever.task.task',
-             'ftw.mail.mail', ]
+             'ftw.mail.mail',
+             'opengever.meeting.sablontemplate', ]
 
     search_options = {'trashed': True}
 
