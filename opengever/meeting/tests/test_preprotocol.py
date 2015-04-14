@@ -33,10 +33,12 @@ class TestPreProtocol(FunctionalTestCase):
         self.templates = create(Builder('templatedossier'))
         self.sablon_template = create(
             Builder('sablontemplate')
+            .within(self.templates)
             .with_asset_file('sablon_template.docx'))
         container = create(Builder('committee_container').having(
             pre_protocol_template=self.sablon_template,
-            protocol_template=self.sablon_template))
+            protocol_template=self.sablon_template,
+            excerpt_template=self.sablon_template))
 
         self.committee = create(Builder('committee').within(container))
         self.proposal = create(Builder('proposal')
@@ -70,6 +72,24 @@ class TestPreProtocol(FunctionalTestCase):
         browser.find('Generate pre-protocol').click()
         browser.fill({'Target dossier': self.dossier})
         browser.find('Generate').click()
+
+    def test_default_pre_protocol_is_configured_on_commitee_container(self):
+        self.assertEqual(self.sablon_template,
+                         self.committee.get_pre_protocol_template())
+
+    @browsing
+    def test_pre_protocol_template_can_be_configured_per_commitee(self, browser):
+        custom_template = create(
+            Builder('sablontemplate')
+            .within(self.templates)
+            .with_asset_file('sablon_template.docx'))
+
+        browser.login().open(self.committee, view='edit')
+        browser.fill({'Pre-protocol template': custom_template})
+        browser.css('#form-buttons-save').first.click()
+
+        self.assertEqual(custom_template,
+                         self.committee.get_pre_protocol_template())
 
     @browsing
     def test_pre_protocol_can_be_edited(self, browser):

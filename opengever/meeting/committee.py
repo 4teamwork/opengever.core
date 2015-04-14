@@ -6,8 +6,10 @@ from opengever.meeting.model import Committee as CommitteeModel
 from opengever.meeting.model import Meeting
 from opengever.meeting.model import Membership
 from opengever.meeting.service import meeting_service
+from opengever.meeting.sources import sablon_template_source
 from plone import api
 from plone.directives import form
+from z3c.relationfield.schema import RelationChoice
 from zope import schema
 from zope.interface import Interface
 
@@ -15,6 +17,24 @@ from zope.interface import Interface
 class ICommittee(form.Schema):
     """Base schema for the committee.
     """
+
+    pre_protocol_template = RelationChoice(
+        title=_('Pre-protocol template'),
+        source=sablon_template_source,
+        required=False,
+    )
+
+    protocol_template = RelationChoice(
+        title=_('Protocol template'),
+        source=sablon_template_source,
+        required=False,
+    )
+
+    excerpt_template = RelationChoice(
+        title=_('Excerpt template'),
+        source=sablon_template_source,
+        required=False,
+    )
 
 
 class ICommitteeModel(Interface):
@@ -69,14 +89,23 @@ class Committee(ModelContainer):
         committee_model = self.load_model()
         return Meeting.query.all_upcoming_meetings(committee_model)
 
+    def get_committee_container(self):
+        return aq_parent(aq_inner(self))
+
     def get_pre_protocol_template(self):
-        container = aq_parent(aq_inner(self))
-        return container.get_pre_protocol_template()
+        if self.pre_protocol_template:
+            return self.pre_protocol_template.to_object
+
+        return self.get_committee_container().get_pre_protocol_template()
 
     def get_protocol_template(self):
-        container = aq_parent(aq_inner(self))
-        return container.get_protocol_template()
+        if self.protocol_template:
+            return self.protocol_template.to_object
+
+        return self.get_committee_container().get_protocol_template()
 
     def get_excerpt_template(self):
-        container = aq_parent(aq_inner(self))
-        return container.get_excerpt_template()
+        if self.excerpt_template:
+            return self.excerpt_template.to_object
+
+        return self.get_committee_container().get_excerpt_template()

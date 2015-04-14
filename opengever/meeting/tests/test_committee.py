@@ -27,7 +27,8 @@ class TestCommittee(FunctionalTestCase):
         browser.login()
         browser.open(self.container, view='++add++opengever.meeting.committee')
 
-        browser.fill({'Title': u'A c\xf6mmittee'}).submit()
+        browser.fill({'Title': u'A c\xf6mmittee'})
+        browser.css('#form-buttons-save').first.click()
         self.assertIn('Item created',
                       browser.css('.portalMessage.info dd').text)
 
@@ -49,7 +50,8 @@ class TestCommittee(FunctionalTestCase):
         form = browser.css('#content-core form').first
         self.assertEqual(u'My Committee', form.find_field('Title').value)
 
-        browser.fill({'Title': u'A c\xf6mmittee'}).submit()
+        browser.fill({'Title': u'A c\xf6mmittee'})
+        browser.css('#form-buttons-save').first.click()
         self.assertIn('Changes saved',
                       browser.css('.portalMessage.info dd').text)
 
