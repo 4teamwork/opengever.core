@@ -86,3 +86,16 @@ class TestCloseMeeting(FunctionalTestCase):
         self.assertEquals('Proposal decided by Test User (test_user_1_)',
                           entry.css('h3').first.text)
         self.assertEquals('answer decided', entry.get('class'))
+
+    @browsing
+    def test_excerpt_is_displayed_in_proposal_view(self, browser):
+        browser.login().open(MeetingList.url_for(self.committee, self.meeting))
+        browser.css('#held-closed').first.click()
+
+        generated_document = self.proposal_a.load_model().excerpt_document
+        excerpt = generated_document.oguid.resolve_object()
+
+        browser.open(self.proposal_a, view=u'tabbedview_view-overview')
+        link = browser.css('#excerptBox a').first
+        self.assertEquals(excerpt.absolute_url(), link.get('href'))
+        self.assertEquals('Protocol Excerpt-there-jan-01-2013', link.text)

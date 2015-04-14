@@ -160,6 +160,19 @@ class Proposal(Base):
 
         return self.physical_path
 
+    def resolve_sumitted_proposal(self):
+        return self.submitted_oguid.resolve_object()
+
+    def resolve_excerpt_document(self):
+        document = self.excerpt_document
+        if document:
+            return document.oguid.resolve_object()
+
+    def resolve_submitted_excerpt_document(self):
+        document = self.submitted_excerpt_document
+        if document:
+            return document.oguid.resolve_object()
+
     def can_be_scheduled(self):
         return self.get_state() == self.STATE_SUBMITTED
 

@@ -31,6 +31,9 @@ class OverviewBase(object):
     def documents(self):
         return self.context.get_documents()
 
+    def excerpt(self):
+        return self.context.get_excerpt()
+
     def history(self):
         return self.context.load_model().history_records
 
