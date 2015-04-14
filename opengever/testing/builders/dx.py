@@ -239,6 +239,7 @@ class ProposalBuilder(DexterityBuilder):
         super(ProposalBuilder, self).__init__(session)
         self.arguments = {'title': 'Fooo'}
         self.model_arguments = None
+        self._submitted = False
 
     def before_create(self):
         self.arguments, self.model_arguments = Proposal.partition_data(
@@ -246,6 +247,10 @@ class ProposalBuilder(DexterityBuilder):
 
     def after_create(self, obj):
         obj.create_model(self.model_arguments, self.container)
+
+        if self._submitted:
+            obj.execute_transition('pending-submitted')
+
         super(ProposalBuilder, self).after_create(obj)
 
     def relate_to(self, *documents):
@@ -253,6 +258,10 @@ class ProposalBuilder(DexterityBuilder):
         related_documents = [RelationValue(intids.getId(document))
                              for document in documents]
         return self.having(relatedItems=related_documents)
+
+    def as_submitted(self):
+        self._submitted = True
+        return self
 
 builder_registry.register('proposal', ProposalBuilder)
 
