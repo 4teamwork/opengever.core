@@ -30,6 +30,19 @@ meeting_participants = Table(
 )
 
 
+class HeldCloseTransition(Transition):
+
+    def execute(self, obj, model):
+        assert self.can_execute(model)
+
+        # Has to be done because of circular imports between Commands
+        # and Models.
+        from opengever.meeting.command import CloseMeeting
+        CloseMeeting(model).execute()
+
+        model.workflow_state = self.state_to
+
+
 class Meeting(Base):
 
     query_cls = MeetingQuery
@@ -46,8 +59,8 @@ class Meeting(Base):
         ], [
         Transition('pending', 'held',
                    title=_('hold meeting', default='Hold meeting')),
-        Transition('held', 'closed',
-                   title=_('close', default='Close')),
+        HeldCloseTransition('held', 'closed',
+                            title=_('close', default='Close')),
         ])
 
     __tablename__ = 'meetings'
@@ -129,6 +142,17 @@ class Meeting(Base):
         normalizer = getUtility(IIDNormalizer)
         return u"{}-{}.docx".format(
             translate(_("Protocol"), context=getRequest()),
+            normalizer.normalize(self.get_title()))
+
+    def get_excerpt_title(self):
+        return u"{}-{}".format(
+            translate(_("Protocol Excerpt"), context=getRequest()),
+            self.get_title())
+
+    def get_excerpt_filename(self):
+        normalizer = getUtility(IIDNormalizer)
+        return u"{}-{}.docx".format(
+            translate(_("Protocol Excerpt"), context=getRequest()),
             normalizer.normalize(self.get_title()))
 
     def get_pre_protocol_template(self):

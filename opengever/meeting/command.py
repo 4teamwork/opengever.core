@@ -11,6 +11,7 @@ from opengever.meeting.model import GeneratedPreProtocol
 from opengever.meeting.model import GeneratedProtocol
 from opengever.meeting.model import proposalhistory
 from opengever.meeting.model import SubmittedDocument
+from opengever.meeting.protocol import ExcerptProtocolData
 from opengever.meeting.protocol import PreProtocolData
 from opengever.meeting.protocol import ProtocolData
 from opengever.meeting.sablon import Sablon
@@ -85,6 +86,44 @@ class ProtocolOperations(PreProtocolOperations):
         return meeting.get_protocol_filename()
 
 
+class ExcerptOperations(PreProtocolOperations):
+
+    def __init__(self, agenda_items):
+        self.agenda_items = agenda_items
+
+    def get_sablon_template(self, meeting):
+        return meeting.get_excerpt_template()
+
+    def get_meeting_data(self, meeting):
+        return ExcerptProtocolData(meeting, self.agenda_items)
+
+    def create_database_entry(self, meeting, document):
+        excerpt = GeneratedExcerpt(
+            oguid=Oguid.for_object(document),
+            generated_version=document.get_current_version())
+
+        for agenda_item in self.agenda_items:
+            agenda_item.proposal.submitted_excerpt_document = excerpt
+
+        return excerpt
+
+    def get_generated_message(self, meeting):
+        return _(u'Excerpt for meeting ${title} has been generated '
+                 'successfully',
+                 mapping=dict(title=meeting.get_title()))
+
+    def get_updated_message(self, meeting):
+        return _(u'Excerpt for meeting ${title} has been updated '
+                 'successfully',
+                 mapping=dict(title=meeting.get_title()))
+
+    def get_title(self, meeting):
+        return meeting.get_excerpt_title()
+
+    def get_filename(self, meeting):
+        return meeting.get_excerpt_filename()
+
+
 class CreateGeneratedDocumentCommand(CreateDocumentCommand):
 
     def __init__(self, target_dossier, meeting, document_operations):
@@ -105,9 +144,7 @@ class CreateGeneratedDocumentCommand(CreateDocumentCommand):
     def generate_file_data(self):
         template = self.document_operations.get_sablon_template(self.meeting)
         sablon = Sablon(template)
-        sablon.process(
-            self.document_operations.get_meeting_data(self.meeting).as_json())
-
+        sablon.process(self.document_operations.get_meeting_data(self.meeting).as_json())
         assert sablon.is_processed_successfully(), sablon.stderr
         return sablon.file_data
 
@@ -122,7 +159,8 @@ class CreateGeneratedDocumentCommand(CreateDocumentCommand):
         session = create_session()
         generated_document = self.document_operations.create_database_entry(
             self.meeting, document)
-        session.add(generated_document)
+        if generated_document:
+            session.add(generated_document)
 
     def show_message(self):
         portal = api.portal.get()
@@ -324,3 +362,65 @@ class OgCopyCommand(object):
     def execute(self):
         return Transporter().transport_to(
             self.source, self.target_admin_unit_id, self.target_path)
+
+
+class GenerateExcerptsCommand(object):
+
+    def __init__(self, meeting):
+        self.meeting = meeting
+
+    def execute(self):
+        for agenda_item in self.meeting.agenda_items:
+            if agenda_item.has_proposal():
+                self.generate_excerpt(agenda_item)
+
+    def generate_excerpt(self, agenda_item):
+        proposal_obj = agenda_item.proposal.submitted_oguid.resolve_object()
+        operations = ExcerptOperations([agenda_item])
+
+        CreateGeneratedDocumentCommand(
+            proposal_obj, self.meeting, operations).execute()
+
+
+class DecideProposalsCommand(object):
+
+    def __init__(self, meeting):
+        self.meeting = meeting
+
+    def execute(self):
+        for agenda_item in self.meeting.agenda_items:
+            if not agenda_item.has_proposal():
+                continue
+
+            self.decide_proposals(agenda_item.proposal)
+
+    def decide_proposals(self, proposal):
+        response = self.copy_document(proposal)
+        self.add_database_entry(proposal, response)
+
+    def add_database_entry(self, proposal, response):
+        session = create_session()
+        version = proposal.submitted_excerpt_document.generated_version
+
+        excerpt = GeneratedExcerpt(
+            admin_unit_id=proposal.admin_unit_id,
+            int_id=response['intid'],
+            generated_version=version)
+        session.add(excerpt)
+
+        proposal.excerpt_document = excerpt
+
+    def copy_document(self, proposal):
+        document = proposal.submitted_excerpt_document.oguid.resolve_object()
+        return OgCopyCommand(
+            document, proposal.admin_unit_id, proposal.physical_path).execute()
+
+
+class CloseMeeting(object):
+
+    def __init__(self, meeting):
+        self.meeting = meeting
+
+    def execute(self):
+        GenerateExcerptsCommand(self.meeting).execute()
+        DecideProposalsCommand(self.meeting).execute()

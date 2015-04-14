@@ -5,6 +5,13 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Implement meeting closing:
+
+  - Added automatic generation of excerpts for every scheduled proposal.
+  - Copy back the excerpt to the original proposal.
+
+  [phgross]
+
 - Made MeetingTransition's CSRF safe.
   [phgross]
 
