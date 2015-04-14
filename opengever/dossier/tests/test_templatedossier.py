@@ -12,6 +12,7 @@ from opengever.dossier.interfaces import ITemplateDossierProperties
 from opengever.dossier.templatedossier import get_template_dossier
 from opengever.journal.handlers import DOC_PROPERTIES_UPDATED
 from opengever.journal.tests.utils import get_journal_entry
+from opengever.ogds.base.actor import Actor
 from opengever.testing import FunctionalTestCase
 from opengever.testing.pages import sharing_tab_data
 from plone.app.testing import TEST_USER_ID
@@ -21,8 +22,6 @@ import transaction
 
 
 class TestDocumentWithTemplateForm(FunctionalTestCase):
-
-    use_browser = True
 
     expected_doc_properties = [
         ('User.ID', TEST_USER_ID,),
@@ -301,83 +300,94 @@ class TestTemplateDossierListings(FunctionalTestCase):
 
         self.templatedossier = create(Builder('templatedossier'))
         self.dossier = create(Builder('dossier'))
+        self.template = create(Builder('sablontemplate')
+                               .within(self.templatedossier))
+        self.document = create(Builder('document')
+                               .within(self.templatedossier))
 
-    def test_receipt_delivery_and_subdossier_column_are_hidden_in_document_tab(self):
-        view = self.templatedossier.unrestrictedTraverse(DOCUMENT_TAB)
-        view.update()
-        columns = [col.get('column') for col in view.columns]
+    @browsing
+    def test_receipt_delivery_and_subdossier_column_are_hidden_in_document_tab(self, browser):
+        browser.login().open(self.templatedossier, view=DOCUMENT_TAB)
 
-        self.assertEquals(
-            ['', 'sequence_number', 'Title', 'document_author',
-             'document_date', 'checked_out', 'public_trial'],
-            columns)
+        table_heading = browser.css('table.listing').first.lists()[0]
+        self.assertEquals(['', 'Sequence Number', 'Title', 'Document Author',
+                           'Document Date', 'Checked out by', 'Public Trial'],
+                          table_heading)
 
-    def test_receipt_delivery_and_subdossier_column_are_hidden_in_trash_tab(self):
-        view = self.templatedossier.unrestrictedTraverse(TRASH_TAB)
-        view.update()
-        columns = [col.get('column') for col in view.columns]
+    @browsing
+    def test_receipt_delivery_and_subdossier_column_are_hidden_in_sablon_template_tab(self, browser):
+        browser.login().open(self.templatedossier, view=SABLONTEMPLATES_TAB)
 
-        self.assertEquals(
-            ['', 'sequence_number', 'Title',
-             'document_author', 'document_date', 'public_trial'],
-            columns)
+        table_heading = browser.css('table.listing').first.lists()[0]
+        self.assertEquals(['', 'Sequence Number', 'Title', 'Document Author',
+                           'Document Date', 'Checked out by', 'Public Trial'],
+                          table_heading)
 
-    def test_enabled_actions_are_limited_in_document_tab(self):
-        view = self.templatedossier.unrestrictedTraverse(DOCUMENT_TAB)
-        self.assertEquals(['checkin_with_comment',
-                           'checkin_without_comment',
-                           'trashed',
-                           'copy_items',
-                           'zip_selected'],
-                          view.enabled_actions)
+    @browsing
+    def test_receipt_delivery_and_subdossier_column_are_hidden_in_trash_tab(self, browser):
+        create(Builder('document').within(self.templatedossier).trashed())
 
-    def test_document_tab_lists_only_documents_directly_beneath(self):
+        browser.login().open(self.templatedossier, view=TRASH_TAB)
+        table_heading = browser.css('table.listing').first.lists()[0]
+        self.assertEquals(['', 'Sequence Number', 'Title', 'Document Author',
+                          'Document Date', 'Public Trial'],
+                          table_heading)
+
+    @browsing
+    def test_enabled_actions_are_limited_in_document_tab(self, browser):
+        browser.login().open(self.templatedossier, view=DOCUMENT_TAB)
+
+        self.assertEqual(
+            ['Copy Items', 'Checkin with comment', 'Checkin without comment',
+             'trashed', 'Export as Zip'],
+            browser.css('.actionMenuContent li').text)
+
+    @browsing
+    def test_document_tab_lists_only_documents_directly_beneath(self, browser):
         subdossier = create(Builder('templatedossier')
                             .within(self.templatedossier))
-        document_a = create(Builder('document').within(self.templatedossier))
         create(Builder('document').within(subdossier))
 
-        view = self.templatedossier.unrestrictedTraverse(DOCUMENT_TAB)
-        view.update()
+        browser.login().open(self.templatedossier, view=DOCUMENT_TAB)
+        templates = browser.css('table.listing').first.dicts(as_text=False)
+        self.assertEqual(1, len(templates))
+        document_link = templates[0]['Title'].css('a').first.get('href')
+        self.assertEqual(self.document.absolute_url(), document_link)
 
-        self.assertEquals([document_a],
-                          [brain.getObject() for brain in view.contents])
+    @browsing
+    def test_enabled_actions_are_limited_in_sablontemplates_tab(self, browser):
+        browser.login().open(self.templatedossier, view=SABLONTEMPLATES_TAB)
 
-    def test_enabled_actions_are_limited_in_sablontemplates_tab(self):
-        view = self.templatedossier.unrestrictedTraverse(SABLONTEMPLATES_TAB)
-        self.assertEquals(['checkin_with_comment',
-                           'checkin_without_comment',
-                           'trashed',
-                           'copy_items',
-                           'zip_selected'],
-                          view.enabled_actions)
+        self.assertEqual(
+            ['Copy Items', 'Checkin with comment', 'Checkin without comment',
+             'trashed', 'Export as Zip'],
+            browser.css('.actionMenuContent li').text)
 
-    def test_sablontemplates_tab_lists_only_documents_directly_beneath(self):
+    @browsing
+    def test_sablontemplates_tab_lists_only_documents_directly_beneath(self, browser):
         subdossier = create(Builder('templatedossier')
-                            .within(self.templatedossier))
-        document_a = create(Builder('sablontemplate')
                             .within(self.templatedossier))
         create(Builder('sablontemplate').within(subdossier))
 
-        view = self.templatedossier.unrestrictedTraverse(SABLONTEMPLATES_TAB)
-        view.update()
+        browser.login().open(self.templatedossier, view=SABLONTEMPLATES_TAB)
+        templates = browser.css('table.listing').first.dicts(as_text=False)
+        self.assertEqual(1, len(templates))
+        template_link = templates[0]['Title'].css('a').first.get('href')
+        self.assertEqual(self.template.absolute_url(), template_link)
 
-        self.assertEquals([document_a],
-                          [brain.getObject() for brain in view.contents])
-
-    def test_trash_tab_lists_only_documents_directly_beneath(self):
+    @browsing
+    def test_trash_tab_lists_only_documents_directly_beneath(self, browser):
+        trashed = create(
+            Builder('document').trashed().within(self.templatedossier))
         subdossier = create(Builder('templatedossier')
-                            .within(self.templatedossier))
-        document_a = create(Builder('document')
-                            .trashed()
                             .within(self.templatedossier))
         create(Builder('document').trashed().within(subdossier))
 
-        view = self.templatedossier.unrestrictedTraverse(TRASH_TAB)
-        view.update()
-
-        self.assertEquals([document_a],
-                          [brain.getObject() for brain in view.contents])
+        browser.login().open(self.templatedossier, view=TRASH_TAB)
+        templates = browser.css('table.listing').first.dicts(as_text=False)
+        self.assertEqual(1, len(templates))
+        trashed_link = templates[0]['Title'].css('a').first.get('href')
+        self.assertEqual(trashed.absolute_url(), trashed_link)
 
 
 class TestTemplateDocumentTabs(FunctionalTestCase):
@@ -397,13 +407,14 @@ class TestTemplateDocumentTabs(FunctionalTestCase):
         table = browser.css('table.listing').first
         self.assertIn(['Title', 'My Document'], table.lists())
 
-    def test_template_journal_tab(self):
-        view = self.template.unrestrictedTraverse(JOURNAL_TAB)
-        view.update()
-        entry = view.contents[0]
-        self.assertDictContainsSubset({'type': 'Document added'},
-                                      entry['action'])
-        self.assertEquals(TEST_USER_ID, entry['actor'])
+    @browsing
+    def test_template_journal_tab(self, browser):
+        browser.login().open(self.template, view=JOURNAL_TAB)
+        journal_entries = browser.css('table.listing').first.dicts()
+        self.assertEqual(Actor.lookup(TEST_USER_ID).get_label(),
+                         journal_entries[0]['Actor'])
+        self.assertEqual('Document added: My Document',
+                         journal_entries[0]['Title'])
 
     @browsing
     def test_template_info_tab(self, browser):
