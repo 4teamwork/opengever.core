@@ -5,6 +5,18 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Add sablon-template tab on template dossiers.
+  [deiferni]
+
+- No longer show sablon templates in navigation.
+  [deiferni]
+
+- Fix downloading protocol-previews in safari.
+  [deiferni]
+
+- Fix downloading sablong templates in template dossier.
+  [deiferni]
+
 - Optimize member and membership view:
 
   - Added Membership listing to MemberView.
