@@ -86,19 +86,29 @@ class PreProtocol(object):
             'title': self.title,
         }
         if include_initial_position:
-            data['initial_position'] = self.initial_position,
+            data['markdown:initial_position'] = self._sanitize_text(
+                self.initial_position)
         if include_legal_basis:
-            data['legal_basis'] = self.legal_basis
+            data['markdown:legal_basis'] = self._sanitize_text(
+                self.legal_basis)
         if include_considerations:
-            data['considerations'] = self.considerations
+            data['markdown:considerations'] = self._sanitize_text(
+                self.considerations)
         if include_proposed_action:
-            data['proposed_action'] = self.proposed_action
+            data['markdown:proposed_action'] = self._sanitize_text(
+                self.proposed_action)
         if include_discussion:
-            data['discussion'] = self.discussion
+            data['markdown:discussion'] = self._sanitize_text(self.discussion)
         if include_decision:
-            data['decision'] = self.decision
+            data['markdown:decision'] = self._sanitize_text(self.decision)
 
         return data
+
+    def _sanitize_text(self, text):
+        if not text:
+            return None
+
+        return text
 
 
 class PreProtocolData(object):
