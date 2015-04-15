@@ -38,7 +38,9 @@ class HeldCloseTransition(Transition):
         # Has to be done because of circular imports between Commands
         # and Models.
         from opengever.meeting.command import CloseMeeting
-        CloseMeeting(model).execute()
+        command = CloseMeeting(model)
+        command.execute()
+        command.show_message()
 
         model.workflow_state = self.state_to
 

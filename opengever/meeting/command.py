@@ -430,3 +430,12 @@ class CloseMeeting(object):
     def execute(self):
         GenerateExcerptsCommand(self.meeting).execute()
         DecideProposalsCommand(self.meeting).execute()
+
+    def show_message(self):
+        msg = _(u'msg_meeting_successfully_closed',
+                default=u'The meeting ${title} has been successfully closed, '
+                'the excerpts have been generated and sent back to the '
+                'initial dossier.',
+                mapping=dict(title=self.meeting.get_title()))
+
+        api.portal.show_message(msg, api.portal.get().REQUEST)

@@ -2,6 +2,7 @@ from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.meeting.browser.meetings.meetinglist import MeetingList
 from opengever.meeting.model import Meeting
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -106,3 +107,16 @@ class TestCloseMeeting(FunctionalTestCase):
         browser.css('#held-closed').first.click()
         self.assertEquals('closed', Meeting.query.first().get_state().name)
         self.assertEquals('decided', self.proposal_a.get_state().name)
+
+    @browsing
+    def test_redirects_to_meeting_and_show_statusmessage(self, browser):
+        browser.login().open(MeetingList.url_for(self.committee, self.meeting))
+        browser.css('#held-closed').first.click()
+
+        self.assertEquals(
+            ['The meeting There, Jan 01, 2013 has been successfully closed, '
+             'the excerpts have been generated and sent back to the '
+             'initial dossier.'],
+            info_messages())
+
+        self.assertEquals(self.meeting.get_url(), browser.url)
