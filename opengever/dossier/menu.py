@@ -13,7 +13,8 @@ class DossierPostFactoryMenu(FilteredPostFactoryMenu):
         factory_id = factory.get('id')
         if factory_id == u'ftw.mail.mail':
             return True
-        if factory_id == u'opengever.meeting.proposal':
+        if factory_id in [u'opengever.meeting.proposal',
+                          u'opengever.meeting.sablontemplate', ]:
             return not is_meeting_feature_enabled()
 
         return False

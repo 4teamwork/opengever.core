@@ -70,6 +70,11 @@
         <permission value="View"/>
     </action>
 
+    <action title="Sablon Templates" action_id="sablontemplates" category="tabbedview-tabs"
+            condition_expr="object/@@is_meeting_feature_enabled" url_expr="string:#" visible="True">
+        <permission value="View"/>
+    </action>
+
     <action title="Tasktemplate Folders" action_id="tasktemplatefolders"
             category="tabbedview-tabs"
             condition_expr="" url_expr="string:#" visible="True">

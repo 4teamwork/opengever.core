@@ -258,4 +258,13 @@
         directory="profiles/4201"
         />
 
+    <!-- 4201 -> 4300 -->
+    <upgrade-step:importProfile
+        title="No longer show sablon templates in navigation"
+        profile="opengever.base:default"
+        source="4201"
+        destination="4300"
+        directory="profiles/4300"
+        />
+
 </configure>

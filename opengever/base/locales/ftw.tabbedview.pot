@@ -220,3 +220,6 @@ msgstr ""
 
 msgid "memberships"
 msgstr ""
+
+msgid "sablontemplates"
+msgstr ""

@@ -69,7 +69,7 @@ class DownloadGeneratedPreProtocol(BrowserView):
         response.setHeader('X-Theme-Disabled', 'True')
         response.setHeader('Content-Type', MIME_DOCX)
         response.setHeader("Content-Disposition",
-                           "attachment; filename='{}'".format(filename))
+                           'attachment; filename="{}"'.format(filename))
         return sablon.file_data
 
 

@@ -1,46 +1,15 @@
-from Acquisition import aq_inner, aq_parent
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from plone.app.dexterity.behaviors.metadata import MetadataBase
-from plone.dexterity.interfaces import IDexterityContent
-from plone.dexterity.interfaces import IDexterityFTI
 from plone.namedfile.utils import get_contenttype
-from plone.rfc822.interfaces import IPrimaryField
-from plone.rfc822.interfaces import IPrimaryFieldInfo
 from Products.CMFCore.interfaces import ISiteRoot
 from urllib import quote
 from z3c.form.interfaces import HIDDEN_MODE
 from z3c.form.interfaces import IValue
 from z3c.form.value import ComputedValue
-from zope.component import adapts
 from zope.component import getMultiAdapter
-from zope.component import getUtility
-from zope.interface import implements
-from zope.schema import getFieldsInOrder
 import re
 import zope.schema.vocabulary
-
-
-class PrimaryFieldInfo(object):
-    """Helper class that determines the primary field of a schema.
-    See http://groups.google.com/group/dexterity-development/browse_thread/thread/1f244caa7425b814
-    """
-    # XXX: Remove as soon as this gets implemented in dexterity
-    implements(IPrimaryFieldInfo)
-    adapts(IDexterityContent)
-
-    def __init__(self, context):
-        self.context = context
-        fti = getUtility(IDexterityFTI, name=context.portal_type)
-        self.schema = fti.lookupSchema()
-        primary = [
-            (name, field) for name, field in getFieldsInOrder(self.schema)
-            if IPrimaryField.providedBy(field)]
-        if len(primary) != 1:
-            raise TypeError('Could not adapt', context, IPrimaryFieldInfo)
-        self.fieldname, self.field = primary[0]
-
-    @property
-    def value(self):
-        return self.field.get(self.schema(self.context))
 
 
 def create_simple_vocabulary(options, message_factory):

@@ -172,6 +172,7 @@ class OpengeverFixture(PloneSandboxLayer):
         applyProfile(portal, 'plone.formwidget.autocomplete:default')
         applyProfile(portal, 'plone.formwidget.contenttree:default')
         applyProfile(portal, 'ftw.contentmenu:default')
+        applyProfile(portal, 'ftw.zipexport:default')
 
     def createMemberFolder(self, portal):
         # Create a Members folder.
