@@ -99,3 +99,10 @@ class TestCloseMeeting(FunctionalTestCase):
         link = browser.css('#excerptBox a').first
         self.assertEquals(excerpt.absolute_url(), link.get('href'))
         self.assertEquals('Protocol Excerpt-there-jan-01-2013', link.text)
+
+    @browsing
+    def test_states_are_updated(self, browser):
+        browser.login().open(MeetingList.url_for(self.committee, self.meeting))
+        browser.css('#held-closed').first.click()
+        self.assertEquals('closed', Meeting.query.first().get_state().name)
+        self.assertEquals('decided', self.proposal_a.get_state().name)

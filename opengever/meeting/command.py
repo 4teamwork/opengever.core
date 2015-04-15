@@ -398,6 +398,7 @@ class DecideProposalsCommand(object):
     def decide_proposals(self, proposal):
         response = self.copy_document(proposal)
         self.add_database_entry(proposal, response)
+        self.update_state(proposal)
 
     def add_database_entry(self, proposal, response):
         session = create_session()
@@ -411,6 +412,9 @@ class DecideProposalsCommand(object):
 
         proposal.excerpt_document = excerpt
         session.add(proposalhistory.ProposalDecided(proposal=proposal))
+
+    def update_state(self, proposal):
+        proposal.execute_transition('scheduled-decided')
 
     def copy_document(self, proposal):
         document = proposal.submitted_excerpt_document.oguid.resolve_object()
