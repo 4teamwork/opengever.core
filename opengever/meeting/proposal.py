@@ -143,6 +143,9 @@ class ProposalBase(ModelContainer):
             {'label': _('label_proposed_action', default=u'Proposed action'),
              'value': model.proposed_action},
 
+            {'label': _('label_decision', default=u'Decision'),
+             'value': model.get_decision()},
+
             {'label': _('label_workflow_state', default=u'State'),
              'value': self.get_state().title},
         ]

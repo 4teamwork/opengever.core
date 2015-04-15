@@ -67,7 +67,7 @@
                           tal:content="protocol/discussion"/>
 
                 <label tal:attributes="for string:${name}.decision:record"
-                       i18n:translate="">
+                       i18n:translate="label_decision">
                        Decision
                 </label>
                 <textarea class="textarea-widget text-field"
