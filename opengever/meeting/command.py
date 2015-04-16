@@ -396,17 +396,17 @@ class DecideProposalsCommand(object):
             self.decide_proposals(agenda_item.proposal)
 
     def decide_proposals(self, proposal):
-        response = self.copy_document(proposal)
-        self.add_database_entry(proposal, response)
+        document_intid = self.copy_document(proposal)
+        self.add_database_entry(proposal, document_intid)
         self.update_state(proposal)
 
-    def add_database_entry(self, proposal, response):
+    def add_database_entry(self, proposal, document_intid):
         session = create_session()
         version = proposal.submitted_excerpt_document.generated_version
 
         excerpt = GeneratedExcerpt(
             admin_unit_id=proposal.admin_unit_id,
-            int_id=response['intid'],
+            int_id=document_intid,
             generated_version=version)
         session.add(excerpt)
 
@@ -418,8 +418,9 @@ class DecideProposalsCommand(object):
 
     def copy_document(self, proposal):
         document = proposal.submitted_excerpt_document.oguid.resolve_object()
-        return OgCopyCommand(
+        response = OgCopyCommand(
             document, proposal.admin_unit_id, proposal.physical_path).execute()
+        return response['intid']
 
 
 class CloseMeeting(object):
