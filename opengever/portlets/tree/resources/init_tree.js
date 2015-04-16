@@ -83,6 +83,7 @@ $(function() {
 
   portlet.find('#tree-favorites a.toggle-helptext').click(function(event) {
     event.preventDefault();
+    $(this).toggleClass("expanded");
     portlet.find('#tree-favorites .helptext').toggle();
   });
 

@@ -103,14 +103,39 @@ dl.portlet.portletTreePortlet .filetree a.inPath:last-child {
 
 dl.portlet.portletTreePortlet .no-favorites {
   padding: 10px;
+  border-bottom: 1px solid #cbcbcb;
 }
 
 dl.portlet.portletTreePortlet .toggle-helptext {
-  float: right;
-  padding-right: 10px;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 8px;
+  display: inline-block;
+  position: relative;
+  padding: 5px 0 0 0;
 }
+
+dl.portlet.portletTreePortlet .toggle-helptext:before {
+  content: "";
+  position: absolute;
+  right: 75px;
+  top: 8px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 4px;
+  border-color: transparent transparent #cbcbcb transparent;
+  display: block;
+}
+
+dl.portlet.portletTreePortlet .toggle-helptext.expanded:before {
+  border-color: #cbcbcb transparent transparent transparent;
+  top: 12px;
+}
+
 dl.portlet.portletTreePortlet .helptext {
   padding: 0 10px;
+
 }
 dl.portlet.portletTreePortlet .helptext p {
   padding-bottom: 10px;
