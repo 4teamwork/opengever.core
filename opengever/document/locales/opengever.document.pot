@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-03-18 16:07+0000\n"
+"POT-Creation-Date: 2015-04-16 17:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -148,7 +148,7 @@ msgid "description_download_confirmation"
 msgstr ""
 
 #. Default: "You don't select a file and document is also not preserved in paper_form, please correct it."
-#: ./opengever/document/behaviors/metadata.py:170
+#: ./opengever/document/behaviors/metadata.py:171
 msgid "error_file_and_preserved_as_paper"
 msgstr ""
 
@@ -189,12 +189,12 @@ msgstr ""
 msgid "heading_checkin_comment_form"
 msgstr ""
 
-#: ./opengever/document/behaviors/metadata.py:129
+#: ./opengever/document/behaviors/metadata.py:130
 msgid "help_archival_file"
 msgstr ""
 
 #. Default: "Surname firstname or a userid(would be automatically resolved to fullname)"
-#: ./opengever/document/behaviors/metadata.py:104
+#: ./opengever/document/behaviors/metadata.py:105
 msgid "help_author"
 msgstr ""
 
@@ -203,7 +203,7 @@ msgstr ""
 msgid "help_checkin_journal_comment"
 msgstr ""
 
-#: ./opengever/document/behaviors/metadata.py:88
+#: ./opengever/document/behaviors/metadata.py:89
 msgid "help_delivery_date"
 msgstr ""
 
@@ -212,15 +212,15 @@ msgid "help_description"
 msgstr ""
 
 #. Default: "Is the Document Digital Availabe"
-#: ./opengever/document/behaviors/metadata.py:113
+#: ./opengever/document/behaviors/metadata.py:114
 msgid "help_digitally_available"
 msgstr ""
 
-#: ./opengever/document/behaviors/metadata.py:72
+#: ./opengever/document/behaviors/metadata.py:73
 msgid "help_document_date"
 msgstr ""
 
-#: ./opengever/document/behaviors/metadata.py:94
+#: ./opengever/document/behaviors/metadata.py:95
 msgid "help_document_type"
 msgstr ""
 
@@ -228,7 +228,7 @@ msgstr ""
 msgid "help_file"
 msgstr ""
 
-#: ./opengever/document/behaviors/metadata.py:64
+#: ./opengever/document/behaviors/metadata.py:65
 msgid "help_foreign_reference"
 msgstr ""
 
@@ -236,19 +236,19 @@ msgstr ""
 msgid "help_keywords"
 msgstr ""
 
-#: ./opengever/document/behaviors/metadata.py:121
+#: ./opengever/document/behaviors/metadata.py:122
 msgid "help_preserved_as_paper"
 msgstr ""
 
-#: ./opengever/document/behaviors/metadata.py:143
+#: ./opengever/document/behaviors/metadata.py:144
 msgid "help_preview"
 msgstr ""
 
-#: ./opengever/document/behaviors/metadata.py:80
+#: ./opengever/document/behaviors/metadata.py:81
 msgid "help_receipt_date"
 msgstr ""
 
-#: ./opengever/document/behaviors/metadata.py:136
+#: ./opengever/document/behaviors/metadata.py:137
 msgid "help_thumbnail"
 msgstr ""
 
@@ -258,12 +258,12 @@ msgid "initial_document_version_change_note"
 msgstr ""
 
 #. Default: "Archival File"
-#: ./opengever/document/behaviors/metadata.py:128
+#: ./opengever/document/behaviors/metadata.py:129
 msgid "label_archival_file"
 msgstr ""
 
 #. Default: "Author"
-#: ./opengever/document/behaviors/metadata.py:103
+#: ./opengever/document/behaviors/metadata.py:104
 msgid "label_author"
 msgstr ""
 
@@ -298,7 +298,7 @@ msgid "label_creator"
 msgstr ""
 
 #. Default: "Date of delivery"
-#: ./opengever/document/behaviors/metadata.py:87
+#: ./opengever/document/behaviors/metadata.py:88
 msgid "label_delivery_date"
 msgstr ""
 
@@ -308,17 +308,17 @@ msgid "label_description"
 msgstr ""
 
 #. Default: "Digital Available"
-#: ./opengever/document/behaviors/metadata.py:112
+#: ./opengever/document/behaviors/metadata.py:113
 msgid "label_digitally_available"
 msgstr ""
 
 #. Default: "Document Date"
-#: ./opengever/document/behaviors/metadata.py:71
+#: ./opengever/document/behaviors/metadata.py:72
 msgid "label_document_date"
 msgstr ""
 
 #. Default: "Document Type"
-#: ./opengever/document/behaviors/metadata.py:93
+#: ./opengever/document/behaviors/metadata.py:94
 msgid "label_document_type"
 msgstr ""
 
@@ -340,7 +340,7 @@ msgid "label_file"
 msgstr ""
 
 #. Default: "Foreign Reference"
-#: ./opengever/document/behaviors/metadata.py:63
+#: ./opengever/document/behaviors/metadata.py:64
 msgid "label_foreign_reference"
 msgstr ""
 
@@ -364,17 +364,17 @@ msgid "label_pdf_preview"
 msgstr ""
 
 #. Default: "Preserved as paper"
-#: ./opengever/document/behaviors/metadata.py:120
+#: ./opengever/document/behaviors/metadata.py:121
 msgid "label_preserved_as_paper"
 msgstr ""
 
 #. Default: "Preview"
-#: ./opengever/document/behaviors/metadata.py:142
+#: ./opengever/document/behaviors/metadata.py:143
 msgid "label_preview"
 msgstr ""
 
 #. Default: "Date of receipt"
-#: ./opengever/document/behaviors/metadata.py:79
+#: ./opengever/document/behaviors/metadata.py:80
 msgid "label_receipt_date"
 msgstr ""
 
@@ -399,7 +399,7 @@ msgid "label_start_byline"
 msgstr ""
 
 #. Default: "Thumbnail"
-#: ./opengever/document/behaviors/metadata.py:135
+#: ./opengever/document/behaviors/metadata.py:136
 msgid "label_thumbnail"
 msgstr ""
 

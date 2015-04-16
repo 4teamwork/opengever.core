@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-02-17 17:40+0000\n"
+"POT-Creation-Date: 2015-04-16 17:18+0000\n"
 "PO-Revision-Date: 2015-02-17 18:42+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -9,7 +9,10 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
 
 #: ./opengever/task/browser/close.py:249
 msgid "${num} documents were copied."
@@ -478,7 +481,7 @@ msgid "label_date_of_completion"
 msgstr "Date de réalisation"
 
 #. Default: "Deadline"
-#: ./opengever/task/activities.py:80
+#: ./opengever/task/activities.py:102
 #: ./opengever/task/browser/delegate/metadata.py:33
 #: ./opengever/task/browser/overview.py:87
 msgid "label_deadline"
@@ -490,7 +493,7 @@ msgid "label_documents"
 msgstr "Documents"
 
 #. Default: "Dossier title"
-#: ./opengever/task/activities.py:84
+#: ./opengever/task/activities.py:106
 msgid "label_dossier_title"
 msgstr "Titre du dossier"
 
@@ -619,25 +622,25 @@ msgid "label_target_client"
 msgstr "Client final"
 
 #. Default: "New task added by ${user}"
-#: ./opengever/task/activities.py:64
+#: ./opengever/task/activities.py:81
 msgid "label_task_added"
 msgstr "Nouvelle tâche ajoutée par ${user}"
 
 #. Default: "Task title"
-#: ./opengever/task/activities.py:78
+#: ./opengever/task/activities.py:100
 #: ./opengever/task/browser/overview.py:66
 msgid "label_task_title"
 msgstr "Titre de la tâche"
 
 #. Default: "Task Type"
-#: ./opengever/task/activities.py:82
+#: ./opengever/task/activities.py:104
 #: ./opengever/task/browser/overview.py:78
 #: ./opengever/task/task.py:95
 msgid "label_task_type"
 msgstr "Type de mandat"
 
 #. Default: "Text"
-#: ./opengever/task/activities.py:87
+#: ./opengever/task/activities.py:108
 #: ./opengever/task/browser/delegate/metadata.py:38
 #: ./opengever/task/browser/overview.py:74
 msgid "label_text"
@@ -723,11 +726,6 @@ msgstr "Troisième étape"
 msgid "step_4"
 msgstr "Quatrième étape"
 
-#. Default: "Task added"
-#: ./opengever/task/activities.py:59
-msgid "task-added"
-msgstr ""
-
 #. Default: "Accept forwarding"
 #: ./opengever/task/browser/accept/main.py:140
 msgid "title_accept_forwarding"
@@ -784,37 +782,36 @@ msgid "title_modify_deadline"
 msgstr "Changer le délai"
 
 #. Default: "Document ${doc} added by ${user}"
-#: ./opengever/task/response_description.py:274
+#: ./opengever/task/response_description.py:265
 msgid "transition_add_document"
 msgstr "Document ${doc} ajouté par ${user}"
 
 #. Default: "Subtask ${task} added by ${user}"
-#: ./opengever/task/response_description.py:257
+#: ./opengever/task/response_description.py:248
 msgid "transition_add_subtask"
 msgstr "Sous-tâche ${task} ajoutée par ${user}"
 
 #. Default: "Accepted by ${user}"
-#: ./opengever/task/response_description.py:133
+#: ./opengever/task/response_description.py:124
 msgid "transition_label_accept"
 msgstr "Accépté par ${user}"
 
 #. Default: "Assigned to dossier by ${user} successor=${successor}"
-#: ./opengever/task/response_description.py:238
+#: ./opengever/task/response_description.py:229
 msgid "transition_label_assign_to_dossier"
 msgstr "Attribué à un dossier par ${user} Tâche suivante=${successor}"
 
 #. Default: "Cancelled by ${user}"
-#: ./opengever/task/response_description.py:120
+#: ./opengever/task/response_description.py:111
 msgid "transition_label_cancel"
 msgstr "Annulé par ${user}"
 
 #. Default: "Closed by ${user}"
-#: ./opengever/task/response_description.py:109
+#: ./opengever/task/response_description.py:100
 msgid "transition_label_close"
 msgstr "Fermé par ${user}"
 
 #. Default: "Created by ${user}"
-#: ./opengever/task/response_description.py:61
 #: ./opengever/task/viewlets/response.py:68
 msgid "transition_label_created"
 msgstr "Créé par ${user}"
@@ -825,42 +822,42 @@ msgid "transition_label_default"
 msgstr "Réponse ajouté"
 
 #. Default: "Deadline modified from ${deadline_old} to ${deadline_new} by ${user}"
-#: ./opengever/task/response_description.py:194
+#: ./opengever/task/response_description.py:185
 msgid "transition_label_modify_deadline"
 msgstr "Délai modifié de ${deadline_old} à ${deadline_new} par ${user}"
 
 #. Default: "Reactivate by ${user}"
-#: ./opengever/task/response_description.py:70
+#: ./opengever/task/response_description.py:61
 msgid "transition_label_reactivate"
 msgstr "Réactivé par ${user}"
 
 #. Default: "Reassigned from ${responsible_old} to ${responsible_new} by ${user}"
-#: ./opengever/task/response_description.py:172
+#: ./opengever/task/response_description.py:163
 msgid "transition_label_reassign"
 msgstr "Attribué à nouveau de ${responsible_old} à ${responsible_new} par ${user}"
 
 #. Default: "Refused by ${user}"
-#: ./opengever/task/response_description.py:224
+#: ./opengever/task/response_description.py:215
 msgid "transition_label_refuse"
 msgstr "Refusé par ${user}"
 
 #. Default: "Rejected by ${user}"
-#: ./opengever/task/response_description.py:81
+#: ./opengever/task/response_description.py:72
 msgid "transition_label_reject"
 msgstr "Refusé par ${user}"
 
 #. Default: "Reopened by ${user}"
-#: ./opengever/task/response_description.py:144
+#: ./opengever/task/response_description.py:135
 msgid "transition_label_reopen"
 msgstr "Réouvert par ${user}"
 
 #. Default: "Resolved by ${user}"
-#: ./opengever/task/response_description.py:94
+#: ./opengever/task/response_description.py:85
 msgid "transition_label_resolve"
 msgstr "Accompli par ${user}"
 
 #. Default: "Revised by ${user}"
-#: ./opengever/task/response_description.py:156
+#: ./opengever/task/response_description.py:147
 msgid "transition_label_revise"
 msgstr "Révision demandée par ${user}"
 
@@ -884,3 +881,4 @@ msgstr "Document copié de la tâche (tâche finie)"
 #: ./opengever/task/browser/complete.py:291
 msgid "version_message_resolved_task"
 msgstr "Document copié de la tâche (tâche achevée)"
+

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-07-03 08:38+0000\n"
+"POT-Creation-Date: 2015-04-16 17:18+0000\n"
 "PO-Revision-Date: 2012-02-22 11:55+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -9,7 +9,10 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
 
 #: ./opengever/globalindex/browser/report.py:93
 msgid "Could not generate the report"
@@ -19,10 +22,6 @@ msgstr "Aufgaben Export konnte nicht erstellt werden."
 #: ./opengever/globalindex/upgrades/profiles/2601/actions.xml
 msgid "Export selection"
 msgstr "Auswahl exportieren"
-
-#: ./opengever/globalindex/browser/cleartasks.py:46
-msgid "Global task index has been cleared (${cleared}) and rebuilt (${rebuilt})"
-msgstr ""
 
 #. Default: "You have not selected any Items"
 #: ./opengever/globalindex/browser/report.py:50
@@ -78,5 +77,4 @@ msgstr "Tasks"
 #: ./opengever/globalindex/browser/report.py:62
 msgid "review_state"
 msgstr "Status"
-
 

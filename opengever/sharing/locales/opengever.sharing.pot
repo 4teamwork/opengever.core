@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-10-17 13:55+0000\n"
+"POT-Creation-Date: 2015-04-16 17:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,53 +17,49 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.sharing\n"
 
-#: ./opengever/sharing/browser/sharing.py:22
+#: ./opengever/sharing/browser/sharing.py:35
 msgid "sharing_contributor"
 msgstr ""
 
-#: ./opengever/sharing/browser/sharing.py:17
-msgid "sharing_dossier_administrator"
-msgstr ""
-
-#: ./opengever/sharing/browser/sharing.py:13
+#: ./opengever/sharing/browser/sharing.py:27
 msgid "sharing_dossier_contributor"
 msgstr ""
 
-#: ./opengever/sharing/browser/sharing.py:14
+#: ./opengever/sharing/browser/sharing.py:28
 msgid "sharing_dossier_editor"
 msgstr ""
 
-#: ./opengever/sharing/browser/sharing.py:16
+#: ./opengever/sharing/browser/sharing.py:30
 msgid "sharing_dossier_publisher"
 msgstr ""
 
-#: ./opengever/sharing/browser/sharing.py:12
+#: ./opengever/sharing/browser/sharing.py:26
 msgid "sharing_dossier_reader"
 msgstr ""
 
-#: ./opengever/sharing/browser/sharing.py:15
+#: ./opengever/sharing/browser/sharing.py:29
 msgid "sharing_dossier_reviewer"
 msgstr ""
 
-#: ./opengever/sharing/browser/sharing.py:23
+#: ./opengever/sharing/browser/sharing.py:36
 msgid "sharing_editor"
 msgstr ""
 
-#: ./opengever/sharing/browser/sharing.py:21
+#: ./opengever/sharing/browser/sharing.py:34
 msgid "sharing_reader"
 msgstr ""
 
-#: ./opengever/sharing/browser/sharing.py:24
+#: ./opengever/sharing/browser/sharing.py:37
 msgid "sharing_role_manager"
 msgstr ""
 
 #. Default: "Can administrate"
-#: ./opengever/sharing/utilities.py:14
+#: ./opengever/sharing/utilities.py:12
 msgid "title_can_administrate"
 msgstr ""
 
 #. Default: "Can publish"
-#: ./opengever/sharing/utilities.py:22
+#: ./opengever/sharing/utilities.py:20
 msgid "title_can_publish"
 msgstr ""
 

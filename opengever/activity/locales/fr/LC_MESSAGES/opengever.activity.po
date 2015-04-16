@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-02-24 07:42+0000\n"
+"POT-Creation-Date: 2015-04-16 17:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -12,26 +12,34 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
 
-#: ./opengever/activity/mail_templates/notification.pt:28
-msgid "See on GEVER"
+#: ./opengever/activity/mail_templates/notification.pt:27
+msgid "View in GEVER"
 msgstr ""
 
 #. Default: "Actor"
-#: ./opengever/activity/browser/listing.py:49
+#: ./opengever/activity/browser/listing.py:55
 msgid "column_Actor"
 msgstr "Acteur"
 
 #. Default: "Kind"
-#: ./opengever/activity/browser/listing.py:41
+#: ./opengever/activity/browser/listing.py:47
 msgid "column_kind"
 msgstr "Type"
 
 #. Default: "Title"
-#: ./opengever/activity/browser/listing.py:45
+#: ./opengever/activity/browser/listing.py:51
 msgid "column_title"
 msgstr "Titre"
+
+#. Default: "Created"
+#: ./opengever/activity/browser/listing.py:59
+msgid "created"
+msgstr ""
 
 #. Default: "Notifications"
 #: ./opengever/activity/viewlets/notification.pt:3
@@ -39,13 +47,7 @@ msgid "heading_notifications"
 msgstr "Notifications"
 
 #. Default: "My notifications"
-#: ./opengever/activity/browser/views.py:32
+#: ./opengever/activity/browser/views.py:31
 msgid "label_my_notifications"
 msgstr "Mes notifications"
-
-#. Default: "${amount} matches."
-#: ./opengever/activity/browser/no_selection.pt:2
-msgid "tab_matches"
-msgstr ""
-
 

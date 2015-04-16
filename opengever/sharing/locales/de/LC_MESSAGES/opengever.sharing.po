@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-10-17 13:55+0000\n"
+"POT-Creation-Date: 2015-04-16 17:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -9,56 +9,54 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
 
-#: ./opengever/sharing/browser/sharing.py:22
+#: ./opengever/sharing/browser/sharing.py:35
 msgid "sharing_contributor"
 msgstr "Hinzufügen"
 
-#: ./opengever/sharing/browser/sharing.py:17
-msgid "sharing_dossier_administrator"
-msgstr "Ordnungssystem verwalten"
-
-#: ./opengever/sharing/browser/sharing.py:13
+#: ./opengever/sharing/browser/sharing.py:27
 msgid "sharing_dossier_contributor"
 msgstr "Dossiers hinzufügen"
 
-#: ./opengever/sharing/browser/sharing.py:14
+#: ./opengever/sharing/browser/sharing.py:28
 msgid "sharing_dossier_editor"
 msgstr "Dossiers bearbeiten"
 
-#: ./opengever/sharing/browser/sharing.py:16
+#: ./opengever/sharing/browser/sharing.py:30
 msgid "sharing_dossier_publisher"
 msgstr "Dossiers reaktivieren"
 
-#: ./opengever/sharing/browser/sharing.py:12
+#: ./opengever/sharing/browser/sharing.py:26
 msgid "sharing_dossier_reader"
 msgstr "Lesen"
 
-#: ./opengever/sharing/browser/sharing.py:15
+#: ./opengever/sharing/browser/sharing.py:29
 msgid "sharing_dossier_reviewer"
 msgstr "Dossiers abschliessen"
 
-#: ./opengever/sharing/browser/sharing.py:23
+#: ./opengever/sharing/browser/sharing.py:36
 msgid "sharing_editor"
 msgstr "Bearbeiten"
 
-#: ./opengever/sharing/browser/sharing.py:21
+#: ./opengever/sharing/browser/sharing.py:34
 msgid "sharing_reader"
 msgstr "Lesen"
 
-#: ./opengever/sharing/browser/sharing.py:24
+#: ./opengever/sharing/browser/sharing.py:37
 msgid "sharing_role_manager"
 msgstr "Rollen verwalten"
 
 #. Default: "Can administrate"
-#: ./opengever/sharing/utilities.py:14
+#: ./opengever/sharing/utilities.py:12
 msgid "title_can_administrate"
 msgstr "Administrieren"
 
 #. Default: "Can publish"
-#: ./opengever/sharing/utilities.py:22
+#: ./opengever/sharing/utilities.py:20
 msgid "title_can_publish"
 msgstr "Publizieren"
-
 

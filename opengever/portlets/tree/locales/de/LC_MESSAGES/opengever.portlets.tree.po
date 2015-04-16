@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-09-18 12:15+0000\n"
+"POT-Creation-Date: 2015-04-16 17:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -9,7 +9,10 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
 
 #: ./opengever/portlets/tree/treeportlet.pt:14
 msgid "Favorites"
@@ -52,5 +55,4 @@ msgstr "Um einen Favoriten zu entfernen, wechseln Sie zurück in den Reiter «Or
 #: ./opengever/portlets/tree/treeportlet.pt:38
 msgid "tree_favorites_help_summary"
 msgstr "Das Markieren und Entfernen von Favoriten geschieht über den Ordnungssystem-Reiter."
-
 

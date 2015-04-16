@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-03-30 06:44+0000\n"
+"POT-Creation-Date: 2015-04-16 17:18+0000\n"
 "PO-Revision-Date: 2015-03-30 08:56+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -9,7 +9,10 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
 
 #: ./opengever/inbox/profiles/default/actions.xml
 msgid "Forward"
@@ -44,7 +47,7 @@ msgid "current_inbox_not_available"
 msgstr "Sie sind nicht dazu berechtigt auf den Eingangskorb der/des ${current_org_unit} zuzugreifen."
 
 #. Default: "Error: Please select at least one document to forward"
-#: ./opengever/inbox/forwarding.py:111
+#: ./opengever/inbox/forwarding.py:112
 msgid "error_no_document_selected"
 msgstr "Fehler: Bitte wählen Sie mindestens ein Dokument aus das weitergeleitet werden soll"
 
@@ -54,7 +57,7 @@ msgid "fieldset_common"
 msgstr "Allgemein"
 
 #. Default: "Forwarding"
-#: ./opengever/inbox/forwarding.py:82
+#: ./opengever/inbox/forwarding.py:83
 msgid "forwarding_task_type"
 msgstr "Weiterleitung"
 
@@ -62,7 +65,7 @@ msgstr "Weiterleitung"
 msgid "help_inbox_group"
 msgstr "Diese Gruppe wird berechtigt, wenn dem Eingangskorb eine Aufgabe zugewiesen wird."
 
-#: ./opengever/inbox/forwarding.py:51
+#: ./opengever/inbox/forwarding.py:52
 msgid "help_responsible"
 msgstr "Wählen Sie die verantwortliche Person bzw. den Eingangskorb des oben gewählten Mandanten aus."
 
@@ -70,6 +73,16 @@ msgstr "Wählen Sie die verantwortliche Person bzw. den Eingangskorb des oben ge
 #: ./opengever/inbox/browser/overview.py:24
 msgid "label_assigned_inbox_tasks"
 msgstr "Erhaltene Aufgaben"
+
+#. Default: "Deadline"
+#: ./opengever/inbox/activities.py:29
+msgid "label_deadline"
+msgstr "Frist"
+
+#. Default: "New forwarding added by ${user}"
+#: ./opengever/inbox/activities.py:19
+msgid "label_forwarding_added"
+msgstr "Neue Weiterleitung hinzugefügt durch ${user}"
 
 #. Default: "Inbox Group"
 #: ./opengever/inbox/inbox.py:23
@@ -92,9 +105,19 @@ msgid "label_refuse_forwarding"
 msgstr "Weiterleitung ablehnen"
 
 #. Default: "Responsible"
-#: ./opengever/inbox/forwarding.py:50
+#: ./opengever/inbox/forwarding.py:51
 msgid "label_responsible"
 msgstr "Auftragnehmer"
+
+#. Default: "Task title"
+#: ./opengever/inbox/activities.py:27
+msgid "label_task_title"
+msgstr "Aufgabentitel"
+
+#. Default: "Text"
+#: ./opengever/inbox/activities.py:31
+msgid "label_text"
+msgstr "Text"
 
 #. Default: "Assign Forwarding"
 #: ./opengever/inbox/browser/assign.py:34
@@ -110,5 +133,3 @@ msgstr "Weiterleitung abschliessen"
 #: ./opengever/inbox/yearfolder.py:39
 msgid "yearfolder_title"
 msgstr "Abgeschlossen ${year}"
-
-

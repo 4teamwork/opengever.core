@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2012-02-23 13:38+0000\n"
+"POT-Creation-Date: 2015-04-16 17:18+0000\n"
 "PO-Revision-Date: 2012-02-23 14:39+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -9,7 +9,10 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
 
 msgid "Description"
 msgstr "Beschreibung"
@@ -25,53 +28,53 @@ msgstr "Standardablauf"
 msgid "Title"
 msgstr "Titel"
 
-#: ./opengever/tasktemplates/browser/form.pt:19
+#: ./opengever/tasktemplates/browser/form.pt:29
 msgid "add tasktemplate"
 msgstr "Aufgabenvorlage hinzufügen"
 
-#: ./opengever/tasktemplates/browser/form.pt:22
+#: ./opengever/tasktemplates/browser/form.pt:32
 msgid "choose template"
 msgstr "Vorlage auswählen"
 
 #. Default: "Interactive users"
-#: ./opengever/tasktemplates/vocabularies.py:49
+#: ./opengever/tasktemplates/vocabularies.py:48
 msgid "client_interactive_users"
 msgstr "Interaktiver Benutzer"
 
 #. Default: "Common"
-#: ./opengever/tasktemplates/content/tasktemplate.py:16
+#: ./opengever/tasktemplates/content/tasktemplate.py:18
 msgid "fieldset_common"
 msgstr "Allgemein"
 
-#: ./opengever/tasktemplates/content/tasktemplate.py:72
+#: ./opengever/tasktemplates/content/tasktemplate.py:74
 msgid "help_deadline"
 msgstr "Frist in Tagen ab Startdatum der Aufgabe."
 
-#: ./opengever/tasktemplates/content/tasktemplate.py:38
+#: ./opengever/tasktemplates/content/tasktemplate.py:40
 msgid "help_issuer"
 msgstr "Wählen Sie einen Auftraggeber aus. Sie können auch die interaktiven Benutzer \"Federführender\" oder \"Sachbearbeiter\" auswählen."
 
-#: ./opengever/tasktemplates/content/tasktemplate.py:86
+#: ./opengever/tasktemplates/content/tasktemplate.py:88
 msgid "help_preselected"
 msgstr "Diese Vorlage gehört zur Standardauswahl des Standardablaufs."
 
-#: ./opengever/tasktemplates/content/tasktemplate.py:65
+#: ./opengever/tasktemplates/content/tasktemplate.py:67
 msgid "help_responsible"
 msgstr "Wählen Sie den Auftragnehmer aus. Wenn Sie im Feld \"Mandanten des Auftragnehmers\" die Option \"Interaktiver Benutzer\" auswählen, können Sie in diesem Feld auch \"Federführender\" oder \"Sachbearbeiter\" auswählen."
 
-#: ./opengever/tasktemplates/content/tasktemplate.py:57
+#: ./opengever/tasktemplates/content/tasktemplate.py:59
 msgid "help_responsible_client"
 msgstr "Wählen Sie den Mandanten des Auftragnehmers aus oder wählen Sie \"Interaktiver Benutzer\"."
 
-#: ./opengever/tasktemplates/content/tasktemplate.py:46
+#: ./opengever/tasktemplates/content/tasktemplate.py:48
 msgid "help_task_type"
 msgstr "Wählen Sie den Typ der Aufgabe aus."
 
-#: ./opengever/tasktemplates/content/tasktemplate.py:79
+#: ./opengever/tasktemplates/content/tasktemplate.py:81
 msgid "help_text"
 msgstr "Geben Sie eine detaillierte Arbeitsanweisung oder einen Kommentar ein."
 
-#: ./opengever/tasktemplates/content/tasktemplate.py:31
+#: ./opengever/tasktemplates/content/tasktemplate.py:33
 msgid "help_title"
 msgstr "Der Name der Aufgabe."
 
@@ -86,67 +89,67 @@ msgid "interactive_user_responsible"
 msgstr "Federführender"
 
 #. Default: "Continue"
-#: ./opengever/tasktemplates/browser/form.pt:30
+#: ./opengever/tasktemplates/browser/form.pt:40
 msgid "label_continue"
 msgstr "Weiter"
 
 #. Default: "Created"
-#: ./opengever/tasktemplates/browser/form.py:114
+#: ./opengever/tasktemplates/browser/form.py:119
 msgid "label_created"
 msgstr "Erstelldatum"
 
 #. Default: "Deadline in Days"
-#: ./opengever/tasktemplates/browser/tasktemplates.py:46
-#: ./opengever/tasktemplates/content/tasktemplate.py:71
+#: ./opengever/tasktemplates/browser/tasktemplates.py:58
+#: ./opengever/tasktemplates/content/tasktemplate.py:73
 msgid "label_deadline"
 msgstr "Frist in Tagen"
 
 #. Default: "Issuer"
-#: ./opengever/tasktemplates/browser/tasktemplates.py:38
-#: ./opengever/tasktemplates/content/tasktemplate.py:37
+#: ./opengever/tasktemplates/browser/tasktemplates.py:50
+#: ./opengever/tasktemplates/content/tasktemplate.py:39
 msgid "label_issuer"
 msgstr "Auftraggeber"
 
 #. Default: "Preselect"
-#: ./opengever/tasktemplates/browser/tasktemplates.py:49
-#: ./opengever/tasktemplates/content/tasktemplate.py:85
+#: ./opengever/tasktemplates/browser/tasktemplates.py:61
+#: ./opengever/tasktemplates/content/tasktemplate.py:87
 msgid "label_preselected"
 msgstr "Vorselektiert"
 
 #. Default: "Responsible Client"
-#: ./opengever/tasktemplates/content/tasktemplate.py:55
+#: ./opengever/tasktemplates/content/tasktemplate.py:57
 msgid "label_resonsible_client"
 msgstr "Mandant des Auftragnehmers"
 
 #. Default: "Responsible"
-#: ./opengever/tasktemplates/content/tasktemplate.py:64
+#: ./opengever/tasktemplates/content/tasktemplate.py:66
 msgid "label_responsible"
 msgstr "Auftragnehmer"
 
 #. Default: "Responsible"
-#: ./opengever/tasktemplates/browser/tasktemplates.py:42
+#: ./opengever/tasktemplates/browser/tasktemplates.py:54
 msgid "label_responsible_task"
 msgstr "Auftragnehmer"
 
 #. Default: "Review state"
-#: ./opengever/tasktemplates/browser/templatefolders.py:22
+#: ./opengever/tasktemplates/browser/templatefolders.py:33
 msgid "label_review_state"
 msgstr "Status"
 
 #. Default: "Task Type"
-#: ./opengever/tasktemplates/content/tasktemplate.py:45
+#: ./opengever/tasktemplates/content/tasktemplate.py:47
 msgid "label_task_type"
 msgstr "Auftragstyp"
 
 #. Default: "Text"
-#: ./opengever/tasktemplates/content/tasktemplate.py:78
+#: ./opengever/tasktemplates/content/tasktemplate.py:80
 msgid "label_text"
 msgstr "Kommentar"
 
 #. Default: "Title"
-#: ./opengever/tasktemplates/browser/form.py:112
-#: ./opengever/tasktemplates/browser/tasktemplates.py:29
-#: ./opengever/tasktemplates/browser/templatefolders.py:18
+#: ./opengever/tasktemplates/browser/form.py:117
+#: ./opengever/tasktemplates/browser/tasktemplates.py:41
+#: ./opengever/tasktemplates/browser/templatefolders.py:29
 msgid "label_title"
 msgstr "Titel"
 
@@ -156,22 +159,21 @@ msgid "label_yes"
 msgstr "Ja"
 
 #. Default: "You have not selected any templates"
-#: ./opengever/tasktemplates/browser/form.py:203
+#: ./opengever/tasktemplates/browser/form.py:208
 msgid "message_no_templates_selected"
 msgstr "Sie haben keine Vorlagen ausgewählt."
 
 #. Default: "tasks created"
-#: ./opengever/tasktemplates/browser/form.py:262
+#: ./opengever/tasktemplates/browser/form.py:277
 msgid "message_tasks_created"
 msgstr "Alle Aufgaben aus gewähltem Standardablauf wurden erstellt."
 
 #. Default: "Yes"
-#: ./opengever/tasktemplates/browser/tasktemplates.py:16
+#: ./opengever/tasktemplates/browser/tasktemplates.py:19
 msgid "preselected_yes"
 msgstr "Ja"
 
-#: ./opengever/tasktemplates/browser/form.pt:23
+#: ./opengever/tasktemplates/browser/form.pt:33
 msgid "select tasks"
 msgstr "Aufgaben auswählen"
-
 

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-04-10 07:35+0000\n"
+"POT-Creation-Date: 2015-04-16 17:18+0000\n"
 "PO-Revision-Date: 2012-08-30 15:34+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -12,7 +12,10 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
 
 #: ./opengever/base/profiles/default/actions.xml
 msgid "Copy Items"
@@ -65,7 +68,7 @@ msgid "confidential"
 msgstr "Confidentiel"
 
 #. Default: "Confirm that you'd like to perform this action."
-#: ./opengever/base/browser/confirm.pt:16
+#: ./opengever/base/browser/confirm.pt:20
 msgid "desc_confirm_action"
 msgstr ""
 
@@ -187,7 +190,7 @@ msgid "label_comment"
 msgstr "commentaire"
 
 #. Default: "Confirm action"
-#: ./opengever/base/browser/confirm.pt:37
+#: ./opengever/base/browser/confirm.pt:41
 msgid "label_confirm_action"
 msgstr ""
 
@@ -292,7 +295,7 @@ msgid "limited-public"
 msgstr "Accès public restreint"
 
 #. Default: "Careful, it's possible someone is executing an exploit against you. Verify you just performed an action on this site and that you were not referred here by a different website or email."
-#: ./opengever/base/browser/confirm.pt:23
+#: ./opengever/base/browser/confirm.pt:27
 msgid "msg_verify_you_performed_this_action"
 msgstr ""
 
@@ -337,7 +340,7 @@ msgid "search_results_advanced_link"
 msgstr "Recherche avancée"
 
 #. Default: "Confirming User Action."
-#: ./opengever/base/browser/confirm.pt:10
+#: ./opengever/base/browser/confirm.pt:14
 msgid "title_confirming_user_action"
 msgstr ""
 
@@ -350,5 +353,4 @@ msgstr "Non contrôlé"
 #: opengever/repository/classification.py
 msgid "unprotected"
 msgstr "Non classé"
-
 

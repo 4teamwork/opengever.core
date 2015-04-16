@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: opengever.trash 1.0\n"
-"POT-Creation-Date: 2014-11-20 15:35+0000\n"
+"POT-Creation-Date: 2015-04-16 17:18+0000\n"
 "PO-Revision-Date: 2014-11-18 17:19+0100\n"
 "Last-Translator: Julian Infanger <julian.infangner.@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -9,7 +9,10 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
 "X-Is-Fallback-For: de-at de-li de-lu de-ch de-de\n"
 
 #: ./opengever/trash/trash.py:118
@@ -25,7 +28,7 @@ msgid "could not trash the object ${obj}, it is checked out"
 msgstr "Das Objekt ${obj} konnte nicht in den Papierkorb verschoben werden, es ist ausgecheckt."
 
 #. Default: "You have not selected any items"
-#: ./opengever/trash/browser/remove_confirmation.py:29
+#: ./opengever/trash/browser/remove_confirmation.py:35
 msgid "error_no_documents_selected"
 msgstr "Sie haben keine Objekte ausgewählt."
 
@@ -45,7 +48,7 @@ msgid "label_errror"
 msgstr "Fehler"
 
 #. Default: "The documents have been successfully deleted"
-#: ./opengever/trash/browser/remove_confirmation.py:20
+#: ./opengever/trash/browser/remove_confirmation.py:26
 msgid "label_successfully_deleted"
 msgstr "Die Dokumente wurden efolgreich gelöscht"
 
@@ -100,5 +103,4 @@ msgstr "In den Papierkorb verschieben"
 #: ./opengever/trash/profiles/default/actions.xml
 msgid "untrashed"
 msgstr "Reaktivieren"
-
 

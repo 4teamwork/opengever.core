@@ -9,7 +9,10 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
 
 msgid "By Area"
 msgstr "Domaine"
@@ -220,5 +223,4 @@ msgstr "Corbeille"
 
 msgid "users"
 msgstr "OGDS"
-
 

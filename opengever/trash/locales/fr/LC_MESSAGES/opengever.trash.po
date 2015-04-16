@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-11-20 15:35+0000\n"
+"POT-Creation-Date: 2015-04-16 17:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -9,7 +9,10 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
 
 #: ./opengever/trash/trash.py:118
 msgid "You have not selected any items"
@@ -24,7 +27,7 @@ msgid "could not trash the object ${obj}, it is checked out"
 msgstr "L'objet ${obj} a un checkout. Vous ne pouvez pas le supprimer"
 
 #. Default: "You have not selected any items"
-#: ./opengever/trash/browser/remove_confirmation.py:29
+#: ./opengever/trash/browser/remove_confirmation.py:35
 msgid "error_no_documents_selected"
 msgstr "Vous n'avez sélectionné aucun élément."
 
@@ -44,7 +47,7 @@ msgid "label_errror"
 msgstr "Erreur"
 
 #. Default: "The documents have been successfully deleted"
-#: ./opengever/trash/browser/remove_confirmation.py:20
+#: ./opengever/trash/browser/remove_confirmation.py:26
 msgid "label_successfully_deleted"
 msgstr "Les documents ont été effacés avec succès"
 
@@ -99,5 +102,4 @@ msgstr "Déplacer dans la corbeille"
 #: ./opengever/trash/profiles/default/actions.xml
 msgid "untrashed"
 msgstr "Réactiver"
-
 
