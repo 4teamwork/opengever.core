@@ -6,6 +6,7 @@ from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy import Text
+from sqlalchemy.orm import backref
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
 
@@ -19,7 +20,8 @@ class AgendaItem(Base):
     agenda_item_id = Column("id", Integer, Sequence("agendaitems_id_seq"),
                             primary_key=True)
     proposal_id = Column(Integer, ForeignKey('proposals.id'))
-    proposal = relationship("Proposal", backref='agenda_item', uselist=False)
+    proposal = relationship("Proposal", uselist=False,
+                            backref=backref('agenda_item', uselist=False))
 
     title = Column(Text)
     number = Column(String(16))

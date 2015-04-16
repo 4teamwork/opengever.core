@@ -135,7 +135,8 @@ class Proposal(Base):
 
     def get_decision(self):
         if self.agenda_item:
-            return self.agenda_item[0].decision
+            return self.agenda_item.decision
+        return None
 
     def get_link(self):
         return self._get_link(self.get_admin_unit(), self.physical_path)

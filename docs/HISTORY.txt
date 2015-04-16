@@ -13,6 +13,7 @@ Changelog
   - Add excerpt box to the ProposalOverview.
   - Update proposal states during closing a meeting.
   - Show decision in ProposalOverview.
+  - Made Proposal's Agendaitem backref a One-To-One relation.
 
   [phgross]
 
