@@ -1,9 +1,12 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import info_messages
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import FunctionalTestCase
+from plone import api
 from plone.app.testing import login
 from plone.app.testing import logout
 from plone.app.testing import setRoles
@@ -197,3 +200,70 @@ class TestDocumentOverview(FunctionalTestCase):
             browser.css(
                 '#form-widgets-IClassification-public_trial-edit-link'),
             'Public trial edit link should be visible.')
+
+    @browsing
+    def test_submitted_documents_hidden_when_feature_disabled(self, browser):
+        container = create(Builder('committee_container'))
+        self.committee = create(Builder('committee').within(container))
+        self.proposal = create(Builder('proposal')
+                               .having(title=u'Pr\xf6posal',
+                                       committee=self.committee.load_model())
+                               .relate_to(self.document)
+                               .as_submitted())
+
+        browser.login().open(self.document, view='tabbedview_view-overview')
+        proposals = browser.css('#proposals_box .proposal')
+        self.assertEqual(0, len(proposals))
+
+
+class TestOverviewMeetingFeatures(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_MEETING_LAYER
+
+    def setUp(self):
+        super(TestOverviewMeetingFeatures, self).setUp()
+
+        self.repository_root = create(Builder('repository_root'))
+        self.repository_folder = create(
+            Builder('repository').within(self.repository_root))
+        self.dossier = create(
+            Builder('dossier').within(self.repository_folder))
+        self.document = create(Builder('document').within(self.dossier))
+
+        container = create(Builder('committee_container'))
+        self.committee = create(Builder('committee').within(container))
+        self.proposal = create(Builder('proposal')
+                               .within(self.dossier)
+                               .having(title=u'Pr\xf6posal',
+                                       committee=self.committee.load_model())
+                               .relate_to(self.document)
+                               .as_submitted())
+
+    @browsing
+    def test_submitted_proposal_is_shown_on_document_overview(self, browser):
+        browser.login().open(self.document, view='tabbedview_view-overview')
+
+        proposals = browser.css('#proposals_box .proposal')
+        self.assertEqual(1, len(proposals))
+
+        proposal = proposals.first
+        self.assertEqual(u'Pr\xf6posal', proposal.text)
+        self.assertEqual(self.proposal.load_model().get_url(),
+                         proposal.css('a').first.get('href'))
+
+    @browsing
+    def test_outdated_document_can_be_updated(self, browser):
+        # create a new document version
+        repository = api.portal.get_tool('portal_repository')
+        repository.save(self.document)
+        transaction.commit()
+
+        browser.login().open(self.document, view='tabbedview_view-overview')
+        browser.find('Update document in proposal').click()
+        browser.find('Submit Document').click()
+
+        self.assertEqual(
+            ['A new submitted version of document None has been created'],
+            info_messages())
+        self.assertSubmittedDocumentCreated(
+            self.proposal, self.document, submitted_version=1)

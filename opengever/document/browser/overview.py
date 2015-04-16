@@ -10,6 +10,8 @@ from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.base import DOSSIER_STATES_CLOSED
+from opengever.meeting import is_meeting_feature_enabled
+from opengever.meeting.model import SubmittedDocument
 from opengever.ogds.base.actor import Actor
 from opengever.tabbedview.browser.base import OpengeverTab
 from plone.directives.dexterity import DisplayForm
@@ -144,6 +146,29 @@ class Overview(DisplayForm, OpengeverTab):
             data = dict(label=row.get_label(),
                         content=row.get_content())
             yield data
+
+    def display_submitted_documents(self):
+        return is_meeting_feature_enabled() and self.submitted_documents
+
+    def submitted_documents(self):
+        return SubmittedDocument.query.by_document(self.context).all()
+
+    def get_update_document_url(self, submitted_document):
+        return '{}/@@submit_additional_document?submitted_document_id={}'.format(
+            self.context.absolute_url(),
+            submitted_document.document_id
+        )
+
+    def is_outdated(self, submitted_document):
+        return not submitted_document.is_up_to_date(self.context)
+
+    def render_submitted_version(self, submitted_document):
+        return _(u"Submitted version: ${version}",
+                 mapping={'version': submitted_document.submitted_version})
+
+    def render_current_document_version(self):
+        return _(u"Current version: ${version}",
+                 mapping={'version': self.context.get_current_version()})
 
     def render_file_widget(self):
         template = ViewPageTemplateFile('overview_templates/file.pt')
