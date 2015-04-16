@@ -168,9 +168,8 @@ class TestProposal(FunctionalTestCase):
         proposal = create(Builder('proposal')
                           .within(self.dossier)
                           .titled(u'My Proposal')
-                          .having(committee=committee.load_model()))
-        proposal.execute_transition('pending-submitted')
-        transaction.commit()
+                          .having(committee=committee.load_model())
+                          .as_submitted())
 
         # can edit submitted SubmittedProposal
         submitted_proposal = api.portal.get().restrictedTraverse(
@@ -297,8 +296,8 @@ class TestProposal(FunctionalTestCase):
         proposal = create(Builder('proposal')
                           .within(self.dossier)
                           .titled(u'My Proposal')
+                          .as_submitted()
                           .having(committee=committee.load_model()))
-        proposal.execute_transition('pending-submitted')
 
         proposal.submit_additional_document(document)
         submitted_proposal = api.portal.get().restrictedTraverse(
@@ -323,8 +322,8 @@ class TestProposal(FunctionalTestCase):
                           .within(self.dossier)
                           .titled(u'My Proposal')
                           .having(committee=committee.load_model())
-                          .relate_to(document))
-        proposal.execute_transition('pending-submitted')
+                          .relate_to(document)
+                          .as_submitted())
 
         submitted_proposal = api.portal.get().restrictedTraverse(
             proposal.load_model().submitted_physical_path.encode('utf-8'))

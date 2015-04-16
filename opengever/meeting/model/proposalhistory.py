@@ -128,3 +128,15 @@ class DocumentUpdated(ProposalHistory):
                  mapping={'user': self.get_actor_link(),
                           'title': self.document_title or '',
                           'version': self.submitted_version})
+
+
+class ProposalDecided(ProposalHistory):
+
+    __mapper_args__ = {'polymorphic_identity': 'decided'}
+
+    css_class = 'decided'
+
+    def message(self):
+        return _(u'proposal_history_label_decided',
+                 u'Proposal decided by ${user}',
+                 mapping={'user': self.get_actor_link()})

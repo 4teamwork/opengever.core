@@ -143,6 +143,9 @@ class ProposalBase(ModelContainer):
             {'label': _('label_proposed_action', default=u'Proposed action'),
              'value': model.proposed_action},
 
+            {'label': _('label_decision', default=u'Decision'),
+             'value': model.get_decision()},
+
             {'label': _('label_workflow_state', default=u'State'),
              'value': self.get_state().title},
         ]
@@ -256,6 +259,9 @@ class SubmittedProposal(ProposalBase):
 
         return [document.getObject() for document in documents]
 
+    def get_excerpt(self):
+        return self.load_model().resolve_submitted_excerpt_document()
+
     def is_submit_additional_documents_allowed(self):
         return False
 
@@ -290,6 +296,9 @@ class Proposal(ProposalBase):
         documents = [relation.to_object for relation in self.relatedItems]
         documents.sort(lambda a, b: cmp(b.modified(), a.modified()))
         return documents
+
+    def get_excerpt(self):
+        return self.load_model().resolve_excerpt_document()
 
     def get_committee(self):
         committee_model = self.load_model().committee

@@ -4,8 +4,9 @@
       tal:omit-tag="python: True">
 
   <tal:i18n i18n:domain="opengever.meeting"
-    tal:define="documents view/documents;
-                css_width python:99/2;">
+            tal:define="documents view/documents;
+                        excerpt view/excerpt;
+                        css_width python:99/2;">
 
     <div tal:attributes="class string:boxGroup; style string:width:${css_width}%">
       <div id="main_attributesBox" class="box">
@@ -35,6 +36,20 @@
                                        title python: getattr(item, 'document_date', None) and item.document_date.strftime('%d.%m.%Y') or '';
                                        class python:view.get_css_class(item)">
               <span class="document" tal:condition="item/absolute_url" tal:content="item/Title" />
+            </a>
+          </li>
+        </ul>
+      </tal:condition>
+    </div>
+
+    <div id="excerptBox" class="box">
+      <tal:condition tal:condition="excerpt">
+        <h2 i18n:translate="label_excerpt">Excerpt</h2>
+        <ul>
+          <li>
+            <a href="" tal:attributes="href excerpt/absolute_url;
+                                       class python:view.get_css_class(excerpt)">
+              <span class="document" tal:content="excerpt/Title" />
             </a>
           </li>
         </ul>

@@ -43,9 +43,9 @@ class TestPreProtocol(FunctionalTestCase):
         self.committee = create(Builder('committee').within(container))
         self.proposal = create(Builder('proposal')
                                .within(self.dossier)
+                               .as_submitted()
                                .having(title='Mach doch',
                                        committee=self.committee.load_model()))
-        self.proposal.execute_transition('pending-submitted')
 
         self.committee_model = self.committee.load_model()
         self.meeting = create(Builder('meeting')

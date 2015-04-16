@@ -5,6 +5,24 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Implement meeting closing:
+
+  - Added automatic generation of excerpts for every scheduled proposal.
+  - Copy back the excerpt to the original proposal.
+  - Create Proposalhistory entry when decided.
+  - Add excerpt box to the ProposalOverview.
+  - Update proposal states during closing a meeting.
+  - Show decision in ProposalOverview.
+  - Made Proposal's Agendaitem backref a One-To-One relation.
+
+  [phgross]
+
+- Made MeetingTransition's CSRF safe.
+  [phgross]
+
+- Made documents and mails addable in proposals.
+  [phgross]
+
 - Activate statefilter also in subdossiers listings.
   [phgross]
 

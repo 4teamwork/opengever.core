@@ -218,4 +218,23 @@
         profile="opengever.meeting:default"
         />
 
+    <!-- 4302 -> 4303 -->
+    <genericsetup:upgradeStep
+        title="Add excerpt columns to Proposal table."
+        description=""
+        source="4302"
+        destination="4303"
+        handler="opengever.meeting.upgrades.to4303.AddExcerptColumns"
+        profile="opengever.meeting:default"
+        />
+
+    <!-- 4303 -> 4304 -->
+    <upgrade-step:importProfile
+        title="Made documents addable in proposals."
+        profile="opengever.meeting:default"
+        source="4303"
+        destination="4304"
+        directory="profiles/4304"
+        />
+
 </configure>

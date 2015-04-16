@@ -35,8 +35,8 @@ class TestAgendaItem(FunctionalTestCase):
         dossier = create(Builder('dossier').within(folder))
         proposal = create(Builder('proposal')
                           .within(dossier)
-                          .having(committee=self.committee.load_model()))
-        proposal.execute_transition('pending-submitted')
+                          .having(committee=self.committee.load_model())
+                          .as_submitted())
 
         return proposal
 

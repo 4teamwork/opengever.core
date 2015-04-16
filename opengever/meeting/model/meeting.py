@@ -30,6 +30,21 @@ meeting_participants = Table(
 )
 
 
+class HeldCloseTransition(Transition):
+
+    def execute(self, obj, model):
+        assert self.can_execute(model)
+
+        # Has to be done because of circular imports between Commands
+        # and Models.
+        from opengever.meeting.command import CloseMeetingCommand
+        command = CloseMeetingCommand(model)
+        command.execute()
+        command.show_message()
+
+        model.workflow_state = self.state_to
+
+
 class Meeting(Base):
 
     query_cls = MeetingQuery
@@ -46,8 +61,8 @@ class Meeting(Base):
         ], [
         Transition('pending', 'held',
                    title=_('hold meeting', default='Hold meeting')),
-        Transition('held', 'closed',
-                   title=_('close', default='Close')),
+        HeldCloseTransition('held', 'closed',
+                            title=_('close', default='Close')),
         ])
 
     __tablename__ = 'meetings'
@@ -109,27 +124,33 @@ class Meeting(Base):
     def has_protocol_document(self):
         return self.protocol_document is not None
 
-    def get_pre_protocol_title(self):
+    def _get_title(self, prefix):
         return u"{}-{}".format(
-            translate(_("Pre-Protocol"), context=getRequest()),
-            self.get_title())
+            translate(prefix, context=getRequest()), self.get_title())
 
-    def get_pre_protocol_filename(self):
+    def _get_filename(self, prefix):
         normalizer = getUtility(IIDNormalizer)
         return u"{}-{}.docx".format(
-            translate(_("Pre-Protocol"), context=getRequest()),
+            translate(prefix, context=getRequest()),
             normalizer.normalize(self.get_title()))
+
+    def get_pre_protocol_title(self):
+        return self._get_title(_("Pre-Protocol"))
 
     def get_protocol_title(self):
-        return u"{}-{}".format(
-            translate(_("Protocol"), context=getRequest()),
-            self.get_title())
+        return self._get_title(_("Protocol"))
+
+    def get_excerpt_title(self):
+        return self._get_title(_("Protocol Excerpt"))
+
+    def get_pre_protocol_filename(self):
+        return self._get_filename(_("Pre-Protocol"))
 
     def get_protocol_filename(self):
-        normalizer = getUtility(IIDNormalizer)
-        return u"{}-{}.docx".format(
-            translate(_("Protocol"), context=getRequest()),
-            normalizer.normalize(self.get_title()))
+        return self._get_filename(_("Protocol"))
+
+    def get_excerpt_filename(self):
+        return self._get_filename(_("Protocol Excerpt"))
 
     def get_pre_protocol_template(self):
         return self.committee.get_pre_protocol_template()

@@ -8,6 +8,10 @@
   <property name="icon_expr"></property>
   <property name="allow_discussion">False</property>
   <property name="global_allow">True</property>
+  <property name="allowed_content_types">
+      <element value="opengever.document.document"/>
+      <element value="ftw.mail.mail"/>
+  </property>
 
   <!-- schema interface -->
   <property name="schema">opengever.meeting.proposal.IProposal</property>

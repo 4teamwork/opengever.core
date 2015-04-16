@@ -16,6 +16,7 @@ from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy import Text
 from sqlalchemy import UniqueConstraint
+from sqlalchemy.orm import backref
 from sqlalchemy.orm import composite
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
@@ -52,6 +53,19 @@ class Proposal(Base):
     submitted_oguid = composite(
         Oguid, submitted_admin_unit_id, submitted_int_id)
     submitted_physical_path = Column(String(256))
+
+    excerpt_document_id = Column(Integer, ForeignKey('generateddocuments.id'))
+    excerpt_document = relationship(
+        'GeneratedExcerpt', uselist=False,
+        backref=backref('proposal', uselist=False),
+        primaryjoin="GeneratedExcerpt.document_id==Proposal.excerpt_document_id")
+
+    submitted_excerpt_document_id = Column(Integer,
+                                           ForeignKey('generateddocuments.id'))
+    submitted_excerpt_document = relationship(
+        'GeneratedExcerpt', uselist=False,
+        backref=backref('submitted_proposal', uselist=False),
+        primaryjoin="GeneratedExcerpt.document_id==Proposal.submitted_excerpt_document_id")
 
     title = Column(String(256), nullable=False)
     workflow_state = Column(String(256), nullable=False)
@@ -119,6 +133,11 @@ class Proposal(Base):
         searchable = filter(None, [self.title, self.initial_position])
         return ' '.join([term.encode('utf-8') for term in searchable])
 
+    def get_decision(self):
+        if self.agenda_item:
+            return self.agenda_item.decision
+        return None
+
     def get_link(self):
         return self._get_link(self.get_admin_unit(), self.physical_path)
 
@@ -145,6 +164,19 @@ class Proposal(Base):
         """This method is required by a tabbedview."""
 
         return self.physical_path
+
+    def resolve_sumitted_proposal(self):
+        return self.submitted_oguid.resolve_object()
+
+    def resolve_excerpt_document(self):
+        document = self.excerpt_document
+        if document:
+            return document.oguid.resolve_object()
+
+    def resolve_submitted_excerpt_document(self):
+        document = self.submitted_excerpt_document
+        if document:
+            return document.oguid.resolve_object()
 
     def can_be_scheduled(self):
         return self.get_state() == self.STATE_SUBMITTED

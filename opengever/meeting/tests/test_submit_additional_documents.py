@@ -36,12 +36,12 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
             Builder('proposal')
             .within(self.dossier)
             .titled(u'My Proposal')
-            .having(committee=self.committee.load_model()))
+            .having(committee=self.committee.load_model())
+            .as_submitted())
         if attach_document:
             builder = builder.relate_to(self.document)
 
         proposal = create(builder)
-        proposal.execute_transition('pending-submitted')
         self.assertTrue(proposal.is_submit_additional_documents_allowed())
         transaction.commit()
         return proposal

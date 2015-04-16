@@ -8,6 +8,7 @@ from opengever.meeting.model import Meeting
 from opengever.meeting.model import Member
 from opengever.meeting.model import Membership
 from opengever.meeting.model import Proposal as ProposalModel
+from opengever.meeting.proposal import IProposal
 from opengever.meeting.proposal import Proposal
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.utils import get_ou_selector
@@ -169,6 +170,27 @@ builder_registry.register('membership', MemberShipBuilder)
 class MeetingBuilder(SqlObjectBuilder):
 
     mapped_class = Meeting
+
+    def __init__(self, session):
+        super(MeetingBuilder, self).__init__(session)
+        self._scheduled_proposals = []
+
+    def scheduled_proposals(self, proposals):
+        for proposal in proposals:
+            if IProposal.providedBy(proposal):
+                self._scheduled_proposals.append(proposal.load_model())
+            else:
+                self._scheduled_proposals.append(proposal)
+
+        return self
+
+    def after_create(self, obj):
+        obj = super(MeetingBuilder, self).after_create(obj)
+
+        for proposal in self._scheduled_proposals:
+            obj.schedule_proposal(proposal)
+
+        return obj
 
 builder_registry.register('meeting', MeetingBuilder)
 
