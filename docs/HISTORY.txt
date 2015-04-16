@@ -5,6 +5,9 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Activate statefilter also in subdossiers listings.
+  [phgross]
+
 - Fixed french translations
   [phgross]
 
