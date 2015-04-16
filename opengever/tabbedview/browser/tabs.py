@@ -125,7 +125,17 @@ class Documents(OpengeverCatalogListingTab):
         ]
 
 
-class BaseDossiersTab(OpengeverCatalogListingTab):
+class Dossiers(OpengeverCatalogListingTab):
+    grok.name('tabbedview_view-dossiers')
+
+    implements(IStateFilterTableSourceConfig)
+
+    selection = ViewPageTemplateFile("selection_dossier.pt")
+    template = ViewPageTemplateFile("generic_dossier.pt")
+
+    open_states = DOSSIER_STATES_OPEN
+    state_filter_name = 'dossier_state_filter'
+    state_filter_available = True
 
     object_provides = 'opengever.dossier.behaviors.dossier.IDossierMarker'
 
@@ -175,29 +185,12 @@ class BaseDossiersTab(OpengeverCatalogListingTab):
     major_actions = ['change_state', ]
 
 
-class Dossiers(BaseDossiersTab):
-    """Dossier listing view. Using the base dossier tab configuration
-    and install additonaly a statefilter (active/all)."""
-
-    grok.name('tabbedview_view-dossiers')
-
-    implements(IStateFilterTableSourceConfig)
-
-    selection = ViewPageTemplateFile("selection_dossier.pt")
-
-    template = ViewPageTemplateFile("generic_dossier.pt")
-
-    open_states = DOSSIER_STATES_OPEN
-
-    state_filter_name = 'dossier_state_filter'
-    state_filter_available = True
-
-
-class SubDossiers(BaseDossiersTab):
+class SubDossiers(Dossiers):
     """Listing of all subdossier. Using only the base dossier tab
     configuration (without a statefilter)."""
 
     grok.name('tabbedview_view-subdossiers')
+
     search_options = {'is_subdossier': True}
 
 
