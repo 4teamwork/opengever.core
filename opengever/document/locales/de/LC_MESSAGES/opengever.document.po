@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2015-04-16 17:18+0000\n"
+"POT-Creation-Date: 2015-04-20 09:47+0000\n"
 "PO-Revision-Date: 2013-03-27 10:44+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -76,6 +76,10 @@ msgstr "${title} ist kein Dokument und konnte deshalb nicht ausgecheckt werden."
 msgid "Create Task"
 msgstr "Aufgabe erstellen"
 
+#: ./opengever/document/browser/overview.py:170
+msgid "Current version: ${version}"
+msgstr "Aktuelle Version: ${version}"
+
 #: ./opengever/document/profiles/default/types/opengever.document.document.xml
 msgid "Document"
 msgstr "Dokument"
@@ -103,6 +107,14 @@ msgstr "Als E-Mail versenden"
 msgid "Submit additional documents"
 msgstr "Dokumente nachreichen"
 
+#: ./opengever/document/browser/overview.py:166
+msgid "Submitted version: ${version}"
+msgstr "Eingereichte Version: ${version}"
+
+#: ./opengever/document/browser/overview_templates/overview.pt:20
+msgid "Submitted with"
+msgstr "Eingereicht bei"
+
 #: ./opengever/document/browser/download.py:39
 #: ./opengever/document/browser/edit.py:81
 msgid "The Document ${title} has no File"
@@ -111,6 +123,10 @@ msgstr "Das Dokument ${title} enthält keine Datei."
 #: ./opengever/document/browser/edit.py:113
 msgid "The Document is allready checked out by: ${userid}"
 msgstr "Das Dokument ist bereits von ${userid} ausgecheckt."
+
+#: ./opengever/document/browser/overview_templates/overview.pt:32
+msgid "Update document in proposal"
+msgstr "Eingereichte Version aktualisieren"
 
 #: ./opengever/document/browser/edit.py:59
 msgid "You are not authorized to edit the document ${title}"
@@ -284,7 +300,7 @@ msgid "label_cancel"
 msgstr "Abbrechen"
 
 #. Default: "Checked out"
-#: ./opengever/document/browser/overview.py:123
+#: ./opengever/document/browser/overview.py:125
 #: ./opengever/document/checkout/viewlets_templates/checkedoutviewlet.pt:5
 msgid "label_checked_out"
 msgstr "Ausgecheckt"
@@ -300,7 +316,7 @@ msgid "label_checkout_and_edit"
 msgstr "Auschecken / Bearbeiten"
 
 #. Default: "creator"
-#: ./opengever/document/browser/overview.py:119
+#: ./opengever/document/browser/overview.py:121
 msgid "label_creator"
 msgstr "Ersteller"
 
@@ -341,7 +357,7 @@ msgid "label_download_copy"
 msgstr "Kopie herunterladen"
 
 #. Default: "File"
-#: ./opengever/document/browser/overview.py:125
+#: ./opengever/document/browser/overview.py:127
 #: ./opengever/document/document.py:60
 msgid "label_file"
 msgstr "Datei"
@@ -357,7 +373,7 @@ msgid "label_keywords"
 msgstr "Schlagworte"
 
 #. Default: "no"
-#: ./opengever/document/browser/overview.py:82
+#: ./opengever/document/browser/overview.py:84
 msgid "label_no"
 msgstr "Nein"
 
@@ -416,7 +432,7 @@ msgid "label_title"
 msgstr "Titel"
 
 #. Default: "yes"
-#: ./opengever/document/browser/overview.py:81
+#: ./opengever/document/browser/overview.py:83
 msgid "label_yes"
 msgstr "Ja"
 
