@@ -12,14 +12,11 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: DOMAIN\n"
 
 #: ./opengever/meeting/command.py:294
 msgid "A new submitted version of document ${title} has been created"
-msgstr "Eine neue eingereichte Version des Dokuments ${title} wurde erstellt."
+msgstr "Eine neu eingereichte Version des Dokuments ${title} wurde erstellt."
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:60
 msgid "Add Agenda Item"
@@ -55,7 +52,7 @@ msgstr "Ein unerwarteter Fehler ist aufgetreten"
 
 #: ./opengever/meeting/browser/memberships.py:59
 msgid "Can't add membership, it overlaps an existing membership from ${date_from} to ${date_to}"
-msgstr "Die Mitgliedschaft kann nicht erstellt werden weil sie eine bestehende Mitgliedschaft von ${date_from} bis ${date_to} überschneidet."
+msgstr "Die Mitgliedschaft kann nicht erstellt werden, weil sie eine bestehende Mitgliedschaft vom ${date_from} bis ${date_to} überschneidet."
 
 #: ./opengever/meeting/browser/memberships.py:92
 msgid "Can't change membership, it overlaps an existing membership from ${date_from} to ${date_to}"
@@ -139,7 +136,7 @@ msgstr "Rechtsgrundlage"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:32
 msgid "Location"
-msgstr "Ort"
+msgstr "Standort"
 
 #: ./opengever/meeting/browser/members_templates/member.pt:41
 msgid "Memberships"
@@ -152,7 +149,7 @@ msgstr "Vorprotokoll"
 
 #: ./opengever/meeting/command.py:42
 msgid "Pre-protocol for meeting ${title} has been generated successfully"
-msgstr "Vorprotokoll für Sitzung ${title} wurde erfolgreich erstellt."
+msgstr "Vorprotokoll für die Sitzung ${title} wurde erfolgreich erstellt."
 
 #: ./opengever/meeting/command.py:47
 msgid "Pre-protocol for meeting ${title} has been updated successfully"
@@ -234,7 +231,7 @@ msgstr "Das Dokument wurde durch eine neuere Version aus dem Antragsdossier übe
 
 #: ./opengever/meeting/command.py:210
 msgid "Updated with a newer generated version from meeting ${title}."
-msgstr "Mit einer neuen Version von Sitzung ${title} aktualisiert."
+msgstr "Mit einer neuen Version der Sitzung ${title} aktualisiert."
 
 #. Default: "Agenda Item order updated."
 #: ./opengever/meeting/browser/meetings/agendaitem.py:129
@@ -329,7 +326,7 @@ msgstr "Nachname"
 #. Default: "Location"
 #: ./opengever/meeting/tabs/meetinglisting.py:31
 msgid "column_location"
-msgstr "Ort"
+msgstr "Standort"
 
 #. Default: "Member"
 #: ./opengever/meeting/tabs/membershiplisting.py:25
@@ -517,7 +514,7 @@ msgstr "Rechtsgrundlage"
 #. Default: "Location"
 #: ./opengever/meeting/browser/meetings/meeting.py:42
 msgid "label_location"
-msgstr "Ort"
+msgstr "Standort"
 
 #. Default: "Main Atrributes"
 #: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt:13
@@ -691,7 +688,7 @@ msgstr "Von der Traktandenliste der Sitzung ${meeting} entfernt durch ${user}"
 #. Default: "Scheduled for meeting ${meeting} by ${user}"
 #: ./opengever/meeting/model/proposalhistory.py:85
 msgid "proposal_history_label_scheduled"
-msgstr "Geplant für Sitzung ${meeting} durch ${user}"
+msgstr "Geplant für die Sitzung ${meeting} durch ${user}"
 
 #. Default: "Submitted by ${user}"
 #: ./opengever/meeting/model/proposalhistory.py:72
@@ -738,3 +735,5 @@ msgstr "${amount} Treffer"
 #: ./opengever/meeting/model/proposal.py:104
 msgid "un-schedule"
 msgstr "Traktandum entfernen"
+
+

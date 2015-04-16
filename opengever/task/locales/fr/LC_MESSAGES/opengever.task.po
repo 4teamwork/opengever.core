@@ -9,10 +9,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: DOMAIN\n"
 
 #: ./opengever/task/browser/close.py:249
 msgid "${num} documents were copied."
@@ -431,7 +428,7 @@ msgstr "Numéro de classement"
 #. Default: "Agency"
 #: ./opengever/task/viewlets/actionmenu_templates/actionmenuviewlet.pt:22
 msgid "label_agency"
-msgstr ""
+msgstr "Remplacement"
 
 #. Default: "Assign to a ..."
 #: ./opengever/task/browser/assign_dossier.py:54
@@ -495,7 +492,7 @@ msgstr "Documents"
 #. Default: "Dossier title"
 #: ./opengever/task/activities.py:84
 msgid "label_dossier_title"
-msgstr ""
+msgstr "Titre du dossier"
 
 #. Default: "You are not allowed to edit this response."
 #: ./opengever/task/templates/edit_response.pt:44
@@ -624,7 +621,7 @@ msgstr "Client final"
 #. Default: "New task added by ${user}"
 #: ./opengever/task/activities.py:64
 msgid "label_task_added"
-msgstr ""
+msgstr "Nouvelle tâche ajoutée par ${user}"
 
 #. Default: "Task title"
 #: ./opengever/task/activities.py:78
@@ -685,7 +682,7 @@ msgstr "Nouveau Dossier"
 #. Default: "Progress:"
 #: ./opengever/task/viewlets/response_templates/responseview.pt:3
 msgid "progress"
-msgstr ""
+msgstr "Progrès"
 
 #. Default: "Response"
 #: ./opengever/task/templates/edit_response.pt:56
@@ -789,83 +786,83 @@ msgstr "Changer le délai"
 #. Default: "Document ${doc} added by ${user}"
 #: ./opengever/task/response_description.py:274
 msgid "transition_add_document"
-msgstr ""
+msgstr "Document ${doc} ajouté par ${user}"
 
 #. Default: "Subtask ${task} added by ${user}"
 #: ./opengever/task/response_description.py:257
 msgid "transition_add_subtask"
-msgstr ""
+msgstr "Sous-tâche ${task} ajoutée par ${user}"
 
 #. Default: "Accepted by ${user}"
 #: ./opengever/task/response_description.py:133
 msgid "transition_label_accept"
-msgstr ""
+msgstr "Accépté par ${user}"
 
 #. Default: "Assigned to dossier by ${user} successor=${successor}"
 #: ./opengever/task/response_description.py:238
 msgid "transition_label_assign_to_dossier"
-msgstr ""
+msgstr "Attribué à un dossier par ${user} Tâche suivante=${successor}"
 
 #. Default: "Cancelled by ${user}"
 #: ./opengever/task/response_description.py:120
 msgid "transition_label_cancel"
-msgstr ""
+msgstr "Annulé par ${user}"
 
 #. Default: "Closed by ${user}"
 #: ./opengever/task/response_description.py:109
 msgid "transition_label_close"
-msgstr ""
+msgstr "Fermé par ${user}"
 
 #. Default: "Created by ${user}"
 #: ./opengever/task/response_description.py:61
 #: ./opengever/task/viewlets/response.py:68
 msgid "transition_label_created"
-msgstr ""
+msgstr "Créé par ${user}"
 
 #. Default: "Response added"
 #: ./opengever/task/response_description.py:46
 msgid "transition_label_default"
-msgstr ""
+msgstr "Réponse ajouté"
 
 #. Default: "Deadline modified from ${deadline_old} to ${deadline_new} by ${user}"
 #: ./opengever/task/response_description.py:194
 msgid "transition_label_modify_deadline"
-msgstr ""
+msgstr "Délai modifié de ${deadline_old} à ${deadline_new} par ${user}"
 
 #. Default: "Reactivate by ${user}"
 #: ./opengever/task/response_description.py:70
 msgid "transition_label_reactivate"
-msgstr ""
+msgstr "Réactivé par ${user}"
 
 #. Default: "Reassigned from ${responsible_old} to ${responsible_new} by ${user}"
 #: ./opengever/task/response_description.py:172
 msgid "transition_label_reassign"
-msgstr ""
+msgstr "Attribué à nouveau de ${responsible_old} à ${responsible_new} par ${user}"
 
 #. Default: "Refused by ${user}"
 #: ./opengever/task/response_description.py:224
 msgid "transition_label_refuse"
-msgstr ""
+msgstr "Refusé par ${user}"
 
 #. Default: "Rejected by ${user}"
 #: ./opengever/task/response_description.py:81
 msgid "transition_label_reject"
-msgstr ""
+msgstr "Refusé par ${user}"
 
 #. Default: "Reopened by ${user}"
 #: ./opengever/task/response_description.py:144
 msgid "transition_label_reopen"
-msgstr ""
+msgstr "Réouvert par ${user}"
 
 #. Default: "Resolved by ${user}"
 #: ./opengever/task/response_description.py:94
 msgid "transition_label_resolve"
-msgstr ""
+msgstr "Accompli par ${user}"
 
 #. Default: "Revised by ${user}"
 #: ./opengever/task/response_description.py:156
 msgid "transition_label_revise"
-msgstr ""
+msgstr "Révision demandée par ${user}"
 
 #. Default: "Document copied from forwarding (forwarding accepted)"
 #: ./opengever/task/browser/accept/utils.py:87

@@ -9,10 +9,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: DOMAIN\n"
 
 #: ./opengever/document/browser/edit.py:104
 msgid "Can't edit the document at moment, beacuse it's locked."
@@ -38,12 +35,12 @@ msgstr "Checkout du document:  ${title}"
 #: ./opengever/document/profiles/default/actions.xml
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "Checkin with comment"
-msgstr ""
+msgstr "Checkin avec commentaire"
 
 #: ./opengever/document/profiles/default/actions.xml
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "Checkin without comment"
-msgstr ""
+msgstr "Checkin sans commentaire"
 
 #: ./opengever/document/profiles/default/actions.xml
 msgid "Checkout"
@@ -80,7 +77,7 @@ msgstr "Document"
 
 #: ./opengever/document/browser/download_templates/downloadconfirmation.pt:22
 msgid "Don't show this message again."
-msgstr ""
+msgstr "Ne plus afficher ce message."
 
 #: ./opengever/document/browser/logout_overlay_templates/logout_overlay.pt:18
 msgid "Logout"
@@ -98,7 +95,7 @@ msgstr "Envoyer par E-Mail"
 #: ./opengever/document/profiles/default/actions.xml
 #: ./opengever/document/upgrades/profiles/4200/actions.xml
 msgid "Submit additional documents"
-msgstr ""
+msgstr "Soumettre des documents additionnels"
 
 #: ./opengever/document/browser/download.py:39
 #: ./opengever/document/browser/edit.py:81
@@ -353,7 +350,7 @@ msgstr "Non"
 
 #: ./opengever/document/browser/download_templates/downloadconfirmation.pt:40
 msgid "label_ok"
-msgstr ""
+msgstr "Ok"
 
 #. Default: "PDF Preview"
 #: ./opengever/document/browser/overview_templates/file.pt:23
@@ -433,9 +430,11 @@ msgstr "Attention ! En ouvrant le document de cette manière, toutes les modifi
 #: ./opengever/document/profiles/default/actions.xml
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "with comment"
-msgstr ""
+msgstr "Avec commentaire"
 
 #: ./opengever/document/profiles/default/actions.xml
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "without comment"
-msgstr ""
+msgstr "Sans commentaire"
+
+

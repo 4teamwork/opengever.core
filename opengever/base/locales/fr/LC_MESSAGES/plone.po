@@ -9,10 +9,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: DOMAIN\n"
 
 msgid "Add Participant"
 msgstr "Participant"
@@ -115,16 +112,16 @@ msgid "document-state-pending"
 msgstr "En suspend"
 
 msgid "document-state-removed"
-msgstr ""
+msgstr "Effacé"
 
 msgid "document-state-working_copy"
 msgstr "Copie de travail"
 
 msgid "document-transition-remove"
-msgstr ""
+msgstr "Effacer"
 
 msgid "document-transition-restore"
-msgstr ""
+msgstr "Récupérer"
 
 msgid "document_with_template"
 msgstr "Document à partir du modèle"
@@ -208,7 +205,7 @@ msgid "save attachments"
 msgstr "Sauvegarder les fichiers attachés"
 
 msgid "task-added"
-msgstr ""
+msgstr "Tâche ajoutée."
 
 msgid "task-state-cancelled"
 msgstr "Annulé"
@@ -287,4 +284,5 @@ msgstr "Déactiver"
 
 msgid "tasktemplatefolder-transition-inactiv-activ"
 msgstr "Activer"
+
 

@@ -9,10 +9,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: DOMAIN\n"
 
 #: ./opengever/inbox/profiles/default/actions.xml
 msgid "Forward"
@@ -30,7 +27,7 @@ msgstr "Boîte de réception"
 #: ./opengever/inbox/profiles/default/types/opengever.inbox.container.xml
 #: ./opengever/inbox/upgrades/profiles/4003/types/opengever.inbox.container.xml
 msgid "Inbox Container"
-msgstr ""
+msgstr "Conteneur de la boîte de réception"
 
 #: ./opengever/inbox/profiles/default/types/opengever.inbox.yearfolder.xml
 msgid "YearFolder"
@@ -44,7 +41,7 @@ msgstr "Fermer"
 #. Default: "Your not allowed to access the inbox of ${current_org_unit}"
 #: ./opengever/inbox/browser/view.py:15
 msgid "current_inbox_not_available"
-msgstr ""
+msgstr "Vous n'avez pas accès à la boîte de réception de ${current_org_unit}"
 
 #. Default: "Error: Please select at least one document to forward"
 #: ./opengever/inbox/forwarding.py:111
@@ -113,4 +110,5 @@ msgstr "Fermer le transfert"
 #: ./opengever/inbox/yearfolder.py:39
 msgid "yearfolder_title"
 msgstr "Fermé ${year}"
+
 

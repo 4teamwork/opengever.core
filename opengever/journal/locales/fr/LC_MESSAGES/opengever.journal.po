@@ -9,10 +9,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: DOMAIN\n"
 
 #. Default: "Journal"
 #: ./opengever/journal/templates/journalhistory.pt:15
@@ -27,7 +24,7 @@ msgstr "Modifier le"
 #. Default: "Attachments deleted: ${filenames}"
 #: ./opengever/journal/handlers.py:316
 msgid "label_attachments_deleted"
-msgstr ""
+msgstr "Fichiers attachés effacés: ${titles}"
 
 #. Default: "Comments"
 #: ./opengever/journal/tab.py:73
@@ -37,7 +34,7 @@ msgstr "Commentaire"
 #. Default: "DocProperties updated."
 #: ./opengever/journal/handlers.py:306
 msgid "label_doc_properties_updated"
-msgstr ""
+msgstr "DocProperties actualisé"
 
 #. Default: "Document added: ${title}"
 #: ./opengever/journal/handlers.py:331
@@ -102,12 +99,12 @@ msgstr "Statut public modifié en «${public_trial}»"
 #. Default: "Document ${title} removed."
 #: ./opengever/journal/handlers.py:634
 msgid "label_document_removed"
-msgstr ""
+msgstr "Document ${title} effacé"
 
 #. Default: "Document ${title} restored."
 #: ./opengever/journal/handlers.py:651
 msgid "label_document_restored"
-msgstr ""
+msgstr "Document restoré"
 
 #. Default: "Document sent by Mail: ${subject}"
 #: ./opengever/journal/handlers.py:535
@@ -228,4 +225,5 @@ msgstr "Historique"
 #: ./opengever/journal/no_selection_amount.pt:3
 msgid "tab_matches"
 msgstr "Résultat(s) : ${amount}"
+
 

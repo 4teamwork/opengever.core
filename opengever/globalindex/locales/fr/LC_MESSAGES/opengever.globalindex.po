@@ -9,10 +9,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: DOMAIN\n"
 
 #: ./opengever/globalindex/browser/report.py:93
 msgid "Could not generate the report"
@@ -39,7 +36,7 @@ msgstr "Faire suivre"
 
 #: ./opengever/globalindex/browser/report.py:76
 msgid "label_admin_unit_id"
-msgstr ""
+msgstr "Unité administrative"
 
 #: ./opengever/globalindex/browser/report.py:67
 msgid "label_completed"
@@ -81,4 +78,5 @@ msgstr "Mandats"
 #: ./opengever/globalindex/browser/report.py:62
 msgid "review_state"
 msgstr "Etat"
+
 

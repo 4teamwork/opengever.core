@@ -9,10 +9,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: DOMAIN\n"
 
 #: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:109
 msgid "Cancel"
@@ -28,7 +25,7 @@ msgstr "Extraire documents"
 
 #: ./opengever/mail/browser/send_document.py:313
 msgid "Sent mail filed as '${title}'."
-msgstr ""
+msgstr "Email envoyé classé sous '${title}'"
 
 #: ./opengever/mail/validators.py:20
 msgid "The files you selected are larger than the maximum size"
@@ -123,7 +120,7 @@ msgstr "Document créé : ${title}"
 #. Default: "E-mail has been sent."
 #: ./opengever/mail/browser/send_document.py:223
 msgid "info_mail_sent"
-msgstr ""
+msgstr "Email envoyé."
 
 #. Default: "Intern receiver"
 #: ./opengever/mail/browser/send_document.py:54
@@ -168,12 +165,12 @@ msgstr "Envoyer seulement le lien du document"
 #. Default: "File a copy of the sent mail in dossier"
 #: ./opengever/mail/browser/send_document.py:111
 msgid "label_file_copy_in_dossier"
-msgstr ""
+msgstr "Classer une copie de l'email envoyé dans le dossier"
 
 #. Default: "Journal initialized"
 #: ./opengever/mail/upgrades/to3406.py:7
 msgid "label_journal_initialized"
-msgstr ""
+msgstr "Document migré"
 
 #. Default: "Message"
 #: ./opengever/mail/browser/send_document.py:81
@@ -183,7 +180,7 @@ msgstr "Message"
 #. Default: "Original message"
 #: ./opengever/mail/browser/mail.py:77
 msgid "label_org_message"
-msgstr ""
+msgstr "Message original"
 
 #. Default: "see attachment"
 #: ./opengever/mail/browser/send_document.py:278
@@ -207,9 +204,10 @@ msgstr "Email"
 #. Default: "No message"
 #: ./opengever/mail/browser/mail_templates/file.pt:26
 msgid "no_message"
-msgstr ""
+msgstr "Pas de message"
 
 #: ./opengever/mail/browser/send_document.py:70
 msgid "receiver"
 msgstr "Destinataire"
+
 

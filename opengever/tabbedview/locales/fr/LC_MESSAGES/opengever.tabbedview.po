@@ -9,10 +9,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: DOMAIN\n"
 
 #: ./opengever/tabbedview/browser/generic_dossier.pt:62
 #: ./opengever/tabbedview/browser/selection_dossier.pt:24
@@ -361,7 +358,7 @@ msgstr "Participants"
 #. Default: "Personal Overview: ${user_name}"
 #: ./opengever/tabbedview/browser/personal_overview.py:79
 msgid "personal_overview_title"
-msgstr ""
+msgstr "Vue d'ensemble personnelle: ${user_name}"
 
 msgid "phone_office"
 msgstr "Numéro de téléphone"
@@ -421,4 +418,5 @@ msgstr "Titre"
 
 msgid "trash"
 msgstr "Corbeille"
+
 

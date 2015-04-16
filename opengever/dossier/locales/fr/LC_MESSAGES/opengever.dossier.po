@@ -9,10 +9,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: DOMAIN\n"
 
 #: ./opengever/dossier/move_items.py:156
 msgid "${copied_items} Elements were moved successfully"
@@ -103,7 +100,7 @@ msgstr "Modèles"
 
 #: ./opengever/dossier/deactivate.py:46
 msgid "The Dossier can't be deactivated, not all containeddocuments are checked in."
-msgstr ""
+msgstr "Ce dossier ne peut pas être annulé, il contient encore des documents avec le statut checkout"
 
 #: ./opengever/dossier/deactivate.py:55
 msgid "The Dossier can't be deactivated, the subdossier ${dossier} is already resolved"
@@ -143,7 +140,7 @@ msgstr "L'année de dépôt attribuée n'est pas valable"
 
 #: ./opengever/dossier/move_items.py:89
 msgid "The selected objects can't be found, please try it again."
-msgstr ""
+msgstr "Impossible de trouver les objets sélectionnés, merci de réessayer."
 
 #: ./opengever/dossier/behaviors/dossier.py:194
 msgid "The start date must be before the end date."
@@ -159,7 +156,7 @@ msgstr "Le sous-dossier a été fermé avec succès"
 
 #: ./opengever/dossier/activate.py:28
 msgid "This subdossier can't be activated,because the main dossiers is inactive"
-msgstr ""
+msgstr "Ce sous-dossier ne peut pas être réactivé parce que le dossier prinicipal a été annulé."
 
 #: ./opengever/dossier/archive.py:168
 msgid "When the Action give filing number is selected,                         all fields are required."
@@ -616,4 +613,5 @@ msgstr "Périmé"
 #: ./opengever/dossier/behaviors/participation.py:194
 msgid "warning_no_participants_selected"
 msgstr "Vous n'avez sélectionné aucune participation"
+
 

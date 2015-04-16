@@ -12,10 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: opengever.activity\n"
 
 #: ./opengever/activity/mail_templates/notification.pt:28
 msgid "See on GEVER"
@@ -24,30 +21,31 @@ msgstr ""
 #. Default: "Actor"
 #: ./opengever/activity/browser/listing.py:49
 msgid "column_Actor"
-msgstr ""
+msgstr "Acteur"
 
 #. Default: "Kind"
 #: ./opengever/activity/browser/listing.py:41
 msgid "column_kind"
-msgstr ""
+msgstr "Type"
 
 #. Default: "Title"
 #: ./opengever/activity/browser/listing.py:45
 msgid "column_title"
-msgstr ""
+msgstr "Titre"
 
 #. Default: "Notifications"
 #: ./opengever/activity/viewlets/notification.pt:3
 msgid "heading_notifications"
-msgstr ""
+msgstr "Notifications"
 
 #. Default: "My notifications"
 #: ./opengever/activity/browser/views.py:32
 msgid "label_my_notifications"
-msgstr ""
+msgstr "Mes notifications"
 
 #. Default: "${amount} matches."
 #: ./opengever/activity/browser/no_selection.pt:2
 msgid "tab_matches"
 msgstr ""
+
 

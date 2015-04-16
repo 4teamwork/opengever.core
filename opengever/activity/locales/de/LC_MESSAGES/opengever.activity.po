@@ -12,10 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: opengever.activity\n"
 
 #: ./opengever/activity/mail_templates/notification.pt:28
 msgid "See on GEVER"
@@ -50,4 +47,5 @@ msgstr "Meine Benachrichtigungen"
 #: ./opengever/activity/browser/no_selection.pt:2
 msgid "tab_matches"
 msgstr "${amount} Treffer."
+
 

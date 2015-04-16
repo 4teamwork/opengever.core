@@ -12,10 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: DOMAIN\n"
 
 #: ./opengever/base/profiles/default/actions.xml
 msgid "Copy Items"
@@ -136,7 +133,7 @@ msgstr "Marquage des documents contenant des données sensibles (loi sur la prot
 
 #: ./opengever/base/behaviors/classification.py:68
 msgid "help_public_trial"
-msgstr ""
+msgstr "Mention, si les documents sont accessibles ou non selon la loi sur la protection des données"
 
 #: ./opengever/base/behaviors/classification.py:97
 msgid "help_public_trial_default_value"
@@ -144,7 +141,7 @@ msgstr ""
 
 #: ./opengever/base/behaviors/classification.py:76
 msgid "help_public_trial_statement"
-msgstr ""
+msgstr "Date de la requête, requérant, date de la décision, Référence vers le dossier de la requête GEVER"
 
 #: ./opengever/base/behaviors/lifecycle.py:42
 msgid "help_retention_period"
@@ -162,7 +159,7 @@ msgstr "Modifier par"
 #. Default: "-- Already removed object --"
 #: ./opengever/base/adapters.py:192
 msgid "label_already_removed"
-msgstr ""
+msgstr "-- Déjà annulé --"
 
 #. Default: "Archival value"
 #: ./opengever/base/behaviors/lifecycle.py:57
@@ -292,7 +289,7 @@ msgstr "Version"
 #. Default: "limited-public"
 #: opengever/repository/classification.py
 msgid "limited-public"
-msgstr ""
+msgstr "Accès public restreint"
 
 #. Default: "Careful, it's possible someone is executing an exploit against you. Verify you just performed an action on this site and that you were not referred here by a different website or email."
 #: ./opengever/base/browser/confirm.pt:23
@@ -353,4 +350,5 @@ msgstr "Non contrôlé"
 #: opengever/repository/classification.py
 msgid "unprotected"
 msgstr "Non classé"
+
 

@@ -9,10 +9,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: DOMAIN\n"
 
 #: ./opengever/task/browser/close.py:249
 msgid "${num} documents were copied."
@@ -496,7 +493,7 @@ msgstr "Dokumente"
 #. Default: "Dossier title"
 #: ./opengever/task/activities.py:84
 msgid "label_dossier_title"
-msgstr "Dossier Titel"
+msgstr "Dossiertitel"
 
 #. Default: "You are not allowed to edit this response."
 #: ./opengever/task/templates/edit_response.pt:44
@@ -888,3 +885,5 @@ msgstr "Dokument von Aufgabe kopiert (Aufgabe abgeschlossen)"
 #: ./opengever/task/browser/complete.py:291
 msgid "version_message_resolved_task"
 msgstr "Dokument von Aufgabe kopiert (Aufgabe erledigt)"
+
+
