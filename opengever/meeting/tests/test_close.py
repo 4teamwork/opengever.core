@@ -52,7 +52,7 @@ class TestCloseMeeting(FunctionalTestCase):
         browser.login().open(MeetingList.url_for(self.committee, self.meeting))
         browser.css('#held-closed').first.click()
 
-        submitted_proposal = self.proposal_a.load_model().submitted_oguid.resolve_object()
+        submitted_proposal = self.proposal_a.load_model().resolve_sumitted_proposal()
         excerpt = submitted_proposal.listFolderContents()[0]
         self.assertEquals('Protocol Excerpt-there-jan-01-2013',
                           excerpt.Title())

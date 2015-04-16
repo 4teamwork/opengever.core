@@ -376,7 +376,7 @@ class GenerateExcerptsCommand(object):
                 self.generate_excerpt(agenda_item)
 
     def generate_excerpt(self, agenda_item):
-        proposal_obj = agenda_item.proposal.submitted_oguid.resolve_object()
+        proposal_obj = agenda_item.proposal.resolve_sumitted_proposal()
         operations = ExcerptOperations([agenda_item])
 
         CreateGeneratedDocumentCommand(
