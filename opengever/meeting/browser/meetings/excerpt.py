@@ -4,11 +4,13 @@ from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.protocol import ExcerptProtocolData
 from opengever.meeting.protocol import PreProtocol
 from opengever.meeting.sablon import Sablon
+from opengever.meeting.sources import all_open_dossiers_source
 from plone.autoform.form import AutoExtensibleForm
 from plone.directives import form
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import button
 from z3c.form.form import EditForm
+from z3c.relationfield.schema import RelationChoice
 from zope import schema
 from zope.interface import Invalid
 from zope.interface import invariant
@@ -17,6 +19,16 @@ from zope.interface import invariant
 class IGenerateExcerpt(form.Schema):
     """Schema interface with configuration options for excerpt generation.
     """
+
+    dossier = RelationChoice(
+        title=_(u'label_accept_select_dossier',
+                default=u'Target dossier'),
+        description=_(u'help_accept_select_dossier',
+                      default=u'Select the target dossier where the '
+                               'excerpts should be created.'),
+        required=True,
+
+        source=all_open_dossiers_source)
 
     include_initial_position = schema.Bool(
         title=_(u'Include initial position'),
