@@ -70,7 +70,7 @@ msgstr "Confidentiel"
 #. Default: "Confirm that you'd like to perform this action."
 #: ./opengever/base/browser/confirm.pt:20
 msgid "desc_confirm_action"
-msgstr ""
+msgstr "Veuillez confirmer que vous souhaitez effectuer cette action."
 
 #. Default: "You have not selected any Items"
 #: ./opengever/base/browser/copy_items.py:47
@@ -192,7 +192,7 @@ msgstr "commentaire"
 #. Default: "Confirm action"
 #: ./opengever/base/browser/confirm.pt:41
 msgid "label_confirm_action"
-msgstr ""
+msgstr "Confirmer l'action"
 
 #. Default: "Created"
 #: ./opengever/base/viewlets/byline.py:60
@@ -297,7 +297,7 @@ msgstr "Accès public restreint"
 #. Default: "Careful, it's possible someone is executing an exploit against you. Verify you just performed an action on this site and that you were not referred here by a different website or email."
 #: ./opengever/base/browser/confirm.pt:27
 msgid "msg_verify_you_performed_this_action"
-msgstr ""
+msgstr "Veuillez confirmer que vous êtes à l'origine de cette action et que la requête ne provient pas d'un lien courriel ou d'un site web externe à GEVER. Cette mesure de protection permet de prévenir les éventuelles attaques CSRF. Si ce message apparaît suite à une action entreprise dans l'espace GEVER, veuillez en informer le support (Screenshot du message et le lien URL correspondant)."
 
 #. Default ""
 #: opengever/repository/classification.py
@@ -342,7 +342,7 @@ msgstr "Recherche avancée"
 #. Default: "Confirming User Action."
 #: ./opengever/base/browser/confirm.pt:14
 msgid "title_confirming_user_action"
-msgstr ""
+msgstr "Confirmation de l'action"
 
 #. Default ""
 #: opengever/repository/classification.py
@@ -353,4 +353,3 @@ msgstr "Non contrôlé"
 #: opengever/repository/classification.py
 msgid "unprotected"
 msgstr "Non classé"
-
