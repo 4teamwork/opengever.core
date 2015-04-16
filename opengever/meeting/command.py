@@ -424,7 +424,7 @@ class DecideProposalsCommand(object):
         return response['intid']
 
 
-class CloseMeeting(object):
+class CloseMeetingCommand(object):
 
     def __init__(self, meeting):
         self.meeting = meeting
