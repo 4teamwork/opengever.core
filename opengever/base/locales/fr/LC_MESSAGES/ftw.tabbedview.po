@@ -69,7 +69,7 @@ msgid "closed-forwardings"
 msgstr "Transmissions fermé"
 
 msgid "committees"
-msgstr ""
+msgstr "Commissions"
 
 msgid "contacts"
 msgstr "Contacts"
@@ -135,13 +135,13 @@ msgid "local"
 msgstr "Local"
 
 msgid "meetings"
-msgstr ""
+msgstr "Séances"
 
 msgid "members"
-msgstr ""
+msgstr "Membres"
 
 msgid "memberships"
-msgstr ""
+msgstr "Affiliations"
 
 msgid "my_issues"
 msgstr "Mes tickets"
@@ -180,7 +180,7 @@ msgid "process"
 msgstr "Avancement"
 
 msgid "proposals"
-msgstr ""
+msgstr "Propositions"
 
 msgid "related_documents"
 msgstr "Documents liés"

@@ -5,6 +5,9 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Add and update french and german translations.
+  [phgross]
+
 - Treeportlet: extend caching parameters with current language code.
   [phgross]
 

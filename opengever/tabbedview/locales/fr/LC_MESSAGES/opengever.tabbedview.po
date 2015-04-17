@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-02-26 14:58+0000\n"
+"POT-Creation-Date: 2015-04-16 17:18+0000\n"
 "PO-Revision-Date: 2013-03-27 11:23+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -260,12 +260,12 @@ msgid "label_document_date"
 msgstr "Date du document"
 
 #. Default: "Responsible"
-#: ./opengever/tabbedview/browser/tabs.py:153
+#: ./opengever/tabbedview/browser/tabs.py:163
 msgid "label_dossier_responsible"
 msgstr "Responsable"
 
 #. Default: "End"
-#: ./opengever/tabbedview/browser/tabs.py:162
+#: ./opengever/tabbedview/browser/tabs.py:172
 msgid "label_end"
 msgstr "Fin"
 
@@ -285,7 +285,7 @@ msgid "label_receipt_date"
 msgstr "Date d'entrée"
 
 #. Default: "Reference Number"
-#: ./opengever/tabbedview/browser/tabs.py:141
+#: ./opengever/tabbedview/browser/tabs.py:151
 msgid "label_reference"
 msgstr "Numéro de référence"
 
@@ -295,12 +295,12 @@ msgid "label_responsible_task"
 msgstr "Mandataire"
 
 #. Default: "Review state"
-#: ./opengever/tabbedview/browser/tabs.py:149
+#: ./opengever/tabbedview/browser/tabs.py:159
 msgid "label_review_state"
 msgstr "Etat"
 
 #. Default: "Start"
-#: ./opengever/tabbedview/browser/tabs.py:158
+#: ./opengever/tabbedview/browser/tabs.py:168
 msgid "label_start"
 msgstr "Début"
 
@@ -361,7 +361,7 @@ msgstr "Participants"
 #. Default: "Personal Overview: ${user_name}"
 #: ./opengever/tabbedview/browser/personal_overview.py:79
 msgid "personal_overview_title"
-msgstr ""
+msgstr "Vue d'ensemble personnelle: ${user_name}"
 
 msgid "phone_office"
 msgstr "Numéro de téléphone"

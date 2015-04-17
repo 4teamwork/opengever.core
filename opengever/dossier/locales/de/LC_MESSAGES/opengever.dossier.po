@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2015-01-22 16:48+0000\n"
+"POT-Creation-Date: 2015-04-16 17:18+0000\n"
 "PO-Revision-Date: 2015-01-22 17:49+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./opengever/dossier/move_items.py:156
+#: ./opengever/dossier/move_items.py:148
 msgid "${copied_items} Elements were moved successfully"
 msgstr "${copied_items} Elemente wurden erfolgreich verschoben"
 
@@ -26,7 +26,7 @@ msgstr "Geschäftsdossier hinzufügen"
 msgid "Add Participant"
 msgstr "Beteiligung hinzufügen"
 
-#: ./opengever/dossier/behaviors/dossier.py:224
+#: ./opengever/dossier/behaviors/dossier.py:225
 msgid "Add Subdossier"
 msgstr "Subdossier hinzufügen"
 
@@ -43,15 +43,15 @@ msgstr "Report konnte nicht generiert werden."
 msgid "Delete"
 msgstr "Beteiligung löschen"
 
-#: ./opengever/dossier/move_items.py:104
-msgid "Document ${name} is connected to a Task.                    Please move the Task."
+#: ./opengever/dossier/move_items.py:96
+msgid "Document ${name} is connected to a Task. Please move the Task."
 msgstr "Dokument ${name} ist mit einer Aufgabe verbunden, bitte Aufgabe verschieben."
 
 #: ./opengever/dossier/resolve.py:80
 msgid "Dossiers successfully reactivated."
 msgstr "Das Dossier wurde erfolgreich wieder eröffnet."
 
-#: ./opengever/dossier/behaviors/dossier.py:245
+#: ./opengever/dossier/behaviors/dossier.py:246
 msgid "Edit Subdossier"
 msgstr "Subdossier bearbeiten"
 
@@ -60,15 +60,15 @@ msgstr "Subdossier bearbeiten"
 msgid "Export selection"
 msgstr "Auswahl exportieren"
 
-#: ./opengever/dossier/move_items.py:162
+#: ./opengever/dossier/move_items.py:154
 msgid "Failed to copy following objects: ${failed_objects}"
 msgstr "Folgende Elemente konnten nicht verschoben werden: ${failed_objects}"
 
-#: ./opengever/dossier/move_items.py:168
+#: ./opengever/dossier/move_items.py:160
 msgid "Failed to copy following objects: ${failed_objects}                    . Locked via WebDAV"
 msgstr ""
 
-#: ./opengever/dossier/move_items.py:209
+#: ./opengever/dossier/move_items.py:201
 msgid "It isn't allowed to add such items there"
 msgstr "Sie dürfen dieses Objekt nicht an den Zielort verschieben"
 
@@ -84,7 +84,7 @@ msgstr "Elemente verschieben"
 msgid "Not all required fields are filled"
 msgstr "Nicht alle benötigten Felder wurden ausgefüllt."
 
-#: ./opengever/dossier/templatedossier/form.py:119
+#: ./opengever/dossier/templatedossier/form.py:103
 msgid "Not found the templatedossier"
 msgstr "Es sind keine Vorlagen vorhanden."
 
@@ -93,7 +93,7 @@ msgstr "Es sind keine Vorlagen vorhanden."
 msgid "Project Dossier"
 msgstr "Projektdossier"
 
-#: ./opengever/dossier/menu.py:25
+#: ./opengever/dossier/menu.py:26
 msgid "Subdossier"
 msgstr "Subdossier"
 
@@ -145,15 +145,15 @@ msgstr "Das Ende-Datum ist ungültig, es muss jünger oder gleich sein wie das D
 msgid "The given value is not a valid Year"
 msgstr "Das angegeben Ablagejahr ist ungültig."
 
-#: ./opengever/dossier/move_items.py:89
+#: ./opengever/dossier/move_items.py:88
 msgid "The selected objects can't be found, please try it again."
 msgstr "Die selektierten Objekte konnten nicht gefunden werden, bitte versuchen Sie es erneut."
 
-#: ./opengever/dossier/behaviors/dossier.py:194
+#: ./opengever/dossier/behaviors/dossier.py:195
 msgid "The start date must be before the end date."
 msgstr "Das Beginn-Datum muss vor dem Ende-Datum liegen."
 
-#: ./opengever/dossier/behaviors/dossier.py:252
+#: ./opengever/dossier/behaviors/dossier.py:253
 msgid "The start or end date is invalid"
 msgstr "Das Beginn- oder Ende-Datum ist ungültig."
 
@@ -169,7 +169,7 @@ msgstr "Dieses Subdossier kann nicht wieder aktiviert werden, da das Hauptdossie
 msgid "When the Action give filing number is selected,                         all fields are required."
 msgstr "Für die Vergabe der Ablagenummer, werden alle Felder benötigt."
 
-#: ./opengever/dossier/move_items.py:192
+#: ./opengever/dossier/move_items.py:184
 msgid "You have not selected any items"
 msgstr "Sie haben kein Element ausgewählt"
 
@@ -177,7 +177,7 @@ msgid "additional_attributes"
 msgstr "Zusatzattribute"
 
 #. Default: "Add"
-#: ./opengever/dossier/behaviors/participation.py:151
+#: ./opengever/dossier/behaviors/participation.py:154
 msgid "button_add"
 msgstr "Erstellen"
 
@@ -188,13 +188,13 @@ msgstr "Speichern"
 
 #. Default: "Cancel"
 #: ./opengever/dossier/archive.py:271
-#: ./opengever/dossier/behaviors/participation.py:164
-#: ./opengever/dossier/move_items.py:133
+#: ./opengever/dossier/behaviors/participation.py:167
+#: ./opengever/dossier/move_items.py:125
 msgid "button_cancel"
 msgstr "Abbrechen"
 
 #. Default: "Move"
-#: ./opengever/dossier/move_items.py:74
+#: ./opengever/dossier/move_items.py:73
 msgid "button_submit"
 msgstr "Verschieben"
 
@@ -209,7 +209,7 @@ msgid "column_rolelist"
 msgstr "Rolle"
 
 #. Default: "create document with template"
-#: ./opengever/dossier/templatedossier/form.py:30
+#: ./opengever/dossier/templatedossier/form.py:28
 msgid "create_document_with_template"
 msgstr "Dokument aus Vorlage erstellen"
 
@@ -220,7 +220,7 @@ msgid "documents"
 msgstr "Dokumente"
 
 #. Default: "It isn't allowed to add such items there: ${failed_objects}"
-#: ./opengever/dossier/move_items.py:240
+#: ./opengever/dossier/move_items.py:232
 msgid "error_NotInContentTypes ${failed_objects}"
 msgstr "Es wurden keine Objekte verschoben. Folgende Objekte dürfen nicht in den Zielordner eingefügt werden: ${failed_objects}"
 
@@ -235,7 +235,7 @@ msgid "error_no_items"
 msgstr "Sie haben keine Objekte ausgewählt."
 
 #. Default: "Filing"
-#: ./opengever/dossier/behaviors/dossier.py:93
+#: ./opengever/dossier/behaviors/dossier.py:94
 #: ./opengever/dossier/behaviors/filing.py:17
 msgid "fieldset_filing"
 msgstr "Ablage"
@@ -273,7 +273,7 @@ msgstr "Ablagenummer"
 
 #. Default: "filing prefix"
 #: ./opengever/dossier/archive.py:134
-#: ./opengever/dossier/behaviors/dossier.py:105
+#: ./opengever/dossier/behaviors/dossier.py:106
 msgid "filing_prefix"
 msgstr "Ablage Präfix"
 
@@ -288,33 +288,33 @@ msgid "heading_archive_form"
 msgstr "Dossier ablegen"
 
 #. Default: "Move Items"
-#: ./opengever/dossier/move_items.py:56
+#: ./opengever/dossier/move_items.py:55
 msgid "heading_move_items"
 msgstr "Elemente verschieben"
 
-#: ./opengever/dossier/behaviors/dossier.py:79
+#: ./opengever/dossier/behaviors/dossier.py:80
 msgid "help_comments"
 msgstr ""
 
-#: ./opengever/dossier/behaviors/participation.py:91
+#: ./opengever/dossier/behaviors/participation.py:92
 msgid "help_contact"
 msgstr "Wählen Sie einen Benutzer oder einen Kontakt aus."
 
-#: ./opengever/dossier/behaviors/dossier.py:143
+#: ./opengever/dossier/behaviors/dossier.py:144
 msgid "help_container_location"
 msgstr "Standortangabe des Behälters, in dem ein Dossier in Papierform abgelegt ist"
 
-#: ./opengever/dossier/behaviors/dossier.py:126
+#: ./opengever/dossier/behaviors/dossier.py:127
 msgid "help_container_type"
 msgstr "Art des Behälters, in dem ein Dossier in Papierform abgelegt ist"
 
 #. Default: "Live Search: search the Plone Site"
-#: ./opengever/dossier/move_items.py:27
+#: ./opengever/dossier/move_items.py:26
 msgid "help_destination"
 msgstr "Live Search: Durchsuchen Sie diesen Mandanten"
 
 #: ./opengever/dossier/archive.py:144
-#: ./opengever/dossier/behaviors/dossier.py:73
+#: ./opengever/dossier/behaviors/dossier.py:74
 msgid "help_end"
 msgstr ""
 
@@ -326,11 +326,11 @@ msgstr ""
 msgid "help_filing_number"
 msgstr ""
 
-#: ./opengever/dossier/behaviors/dossier.py:106
+#: ./opengever/dossier/behaviors/dossier.py:107
 msgid "help_filing_prefix"
 msgstr ""
 
-#: ./opengever/dossier/behaviors/dossier.py:171
+#: ./opengever/dossier/behaviors/dossier.py:172
 msgid "help_former_reference_number"
 msgstr ""
 
@@ -338,38 +338,38 @@ msgstr ""
 msgid "help_keywords"
 msgstr "Schlagwörter zur Umschreibung eines Dossiers. Nicht zu verwechseln mit der Ordnungsposition"
 
-#: ./opengever/dossier/behaviors/dossier.py:137
+#: ./opengever/dossier/behaviors/dossier.py:138
 msgid "help_number_of_containers"
 msgstr "Anzahl Behälter, die ein (grosses) Dossier in Papierform enthalten"
 
-#: ./opengever/dossier/behaviors/dossier.py:178
+#: ./opengever/dossier/behaviors/dossier.py:179
 msgid "help_reference_number "
 msgstr ""
 
 #. Default: "Select the responsible manager"
-#: ./opengever/dossier/behaviors/dossier.py:86
+#: ./opengever/dossier/behaviors/dossier.py:87
 msgid "help_responsible"
 msgstr ""
 
-#: ./opengever/dossier/behaviors/participation.py:98
+#: ./opengever/dossier/behaviors/participation.py:99
 msgid "help_roles"
 msgstr ""
 
-#: ./opengever/dossier/behaviors/dossier.py:65
+#: ./opengever/dossier/behaviors/dossier.py:66
 msgid "help_start"
 msgstr ""
 
-#: ./opengever/dossier/behaviors/dossier.py:120
+#: ./opengever/dossier/behaviors/dossier.py:121
 msgid "help_temporary_former_reference_number"
 msgstr ""
 
 #. Default: "Participation created"
-#: ./opengever/dossier/behaviors/participation.py:159
+#: ./opengever/dossier/behaviors/participation.py:162
 msgid "info_participation_create"
 msgstr "Die Beteiligung wurde gespeichert."
 
 #. Default: "Removed participations"
-#: ./opengever/dossier/behaviors/participation.py:204
+#: ./opengever/dossier/behaviors/participation.py:207
 msgid "info_removed_participations"
 msgstr "Die Beteiligungen wurde entfernt."
 
@@ -384,32 +384,32 @@ msgid "label_by_author"
 msgstr "Federführend: ${author}"
 
 #. Default: "Comments"
-#: ./opengever/dossier/behaviors/dossier.py:78
+#: ./opengever/dossier/behaviors/dossier.py:79
 msgid "label_comments"
 msgstr "Kommentar"
 
 #. Default: "Contact"
-#: ./opengever/dossier/behaviors/participation.py:90
+#: ./opengever/dossier/behaviors/participation.py:91
 msgid "label_contact"
 msgstr "Person"
 
 #. Default: "Container Location"
-#: ./opengever/dossier/behaviors/dossier.py:142
+#: ./opengever/dossier/behaviors/dossier.py:143
 msgid "label_container_location"
 msgstr "Behältnis-Standort"
 
 #. Default: "Container Type"
-#: ./opengever/dossier/behaviors/dossier.py:125
+#: ./opengever/dossier/behaviors/dossier.py:126
 msgid "label_container_type"
 msgstr "Behältnis-Art"
 
 #. Default: "Creator"
-#: ./opengever/dossier/templatedossier/form.py:143
+#: ./opengever/dossier/templatedossier/form.py:130
 msgid "label_creator"
 msgstr "Erstellt von"
 
 #. Default: "Destination"
-#: ./opengever/dossier/move_items.py:26
+#: ./opengever/dossier/move_items.py:25
 msgid "label_destination"
 msgstr "Zielposition / Zieldossier"
 
@@ -425,7 +425,7 @@ msgstr "E-Mail"
 
 #. Default: "Closing Date"
 #: ./opengever/dossier/archive.py:143
-#: ./opengever/dossier/behaviors/dossier.py:72
+#: ./opengever/dossier/behaviors/dossier.py:73
 #: ./opengever/dossier/browser/report.py:40
 msgid "label_end"
 msgstr "Ende"
@@ -447,7 +447,7 @@ msgid "label_filing_number"
 msgstr ""
 
 #. Default: "Reference Number"
-#: ./opengever/dossier/behaviors/dossier.py:169
+#: ./opengever/dossier/behaviors/dossier.py:170
 msgid "label_former_reference_number"
 msgstr "Früheres Aktenzeichen"
 
@@ -457,7 +457,7 @@ msgid "label_keywords"
 msgstr "Schlagworte"
 
 #. Default: "Modified"
-#: ./opengever/dossier/templatedossier/form.py:146
+#: ./opengever/dossier/templatedossier/form.py:133
 msgid "label_modified"
 msgstr "Zuletzt Bearbeitet"
 
@@ -467,29 +467,29 @@ msgid "label_no_reference_number"
 msgstr "Die Archivnummer wird erst beim Erstellen generiert."
 
 #. Default: "Number of Containers"
-#: ./opengever/dossier/behaviors/dossier.py:135
+#: ./opengever/dossier/behaviors/dossier.py:136
 msgid "label_number_of_containers"
 msgstr "Anzahl Behältnisse"
 
 #. Default: "Participation"
-#: ./opengever/dossier/behaviors/participation.py:147
+#: ./opengever/dossier/behaviors/participation.py:149
 msgid "label_participation"
 msgstr "Beteiligung"
 
 #. Default: "Reference Number"
-#: ./opengever/dossier/behaviors/dossier.py:177
+#: ./opengever/dossier/behaviors/dossier.py:178
 #: ./opengever/dossier/browser/report.py:50
 #: ./opengever/dossier/viewlets/byline.py:67
 msgid "label_reference_number"
 msgstr "Aktenzeichen"
 
 #. Default: "Related Dossier"
-#: ./opengever/dossier/behaviors/dossier.py:148
+#: ./opengever/dossier/behaviors/dossier.py:149
 msgid "label_related_dossier"
 msgstr "Verwandte Dossiers"
 
 #. Default: "Responsible"
-#: ./opengever/dossier/behaviors/dossier.py:85
+#: ./opengever/dossier/behaviors/dossier.py:86
 #: ./opengever/dossier/browser/participants.py:174
 #: ./opengever/dossier/browser/report.py:44
 msgid "label_responsible"
@@ -501,7 +501,7 @@ msgid "label_review_state"
 msgstr "Status"
 
 #. Default: "Roles"
-#: ./opengever/dossier/behaviors/participation.py:97
+#: ./opengever/dossier/behaviors/participation.py:98
 msgid "label_roles"
 msgstr "Rollen"
 
@@ -511,7 +511,7 @@ msgid "label_sequence_number"
 msgstr "Laufnummer"
 
 #. Default: "Opening Date"
-#: ./opengever/dossier/behaviors/dossier.py:64
+#: ./opengever/dossier/behaviors/dossier.py:65
 #: ./opengever/dossier/browser/report.py:36
 msgid "label_start"
 msgstr "Beginn"
@@ -529,7 +529,7 @@ msgstr "Vorlage"
 
 #. Default: "title"
 #: ./opengever/dossier/browser/report.py:33
-#: ./opengever/dossier/templatedossier/form.py:139
+#: ./opengever/dossier/templatedossier/form.py:126
 #: ./opengever/dossier/templatedossier/form_templates/template_form.pt:30
 msgid "label_title"
 msgstr "Titel"
@@ -603,7 +603,7 @@ msgid "tasks"
 msgstr "Aufgaben"
 
 #. Default: "Temporary former reference number"
-#: ./opengever/dossier/behaviors/dossier.py:118
+#: ./opengever/dossier/behaviors/dossier.py:119
 msgid "temporary_former_reference_number"
 msgstr ""
 
@@ -617,7 +617,6 @@ msgid "time_expired"
 msgstr "abgelaufen"
 
 #. Default: "You didn't select any participants."
-#: ./opengever/dossier/behaviors/participation.py:194
+#: ./opengever/dossier/behaviors/participation.py:197
 msgid "warning_no_participants_selected"
 msgstr "Sie haben keine Beteiligungen ausgewählt."
-

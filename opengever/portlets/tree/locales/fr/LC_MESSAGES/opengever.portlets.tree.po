@@ -1,6 +1,3 @@
-# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
-# SOME DESCRIPTIVE TITLE.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -15,47 +12,47 @@ msgstr ""
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: opengever.portlets.tree\n"
+"Domain: DOMAIN\n"
 
 #: ./opengever/portlets/tree/treeportlet.pt:14
 msgid "Favorites"
-msgstr ""
+msgstr "Favoris"
 
 #: ./opengever/portlets/tree/treeportlet.pt:1
 msgid "label_add_to_favorites"
-msgstr ""
+msgstr "Ajouter aux favoris"
 
 #. Default: "Help"
 #: ./opengever/portlets/tree/treeportlet.pt:35
 msgid "label_help"
-msgstr ""
+msgstr "Aide"
 
 #: ./opengever/portlets/tree/treeportlet.pt:1
 msgid "label_remove_from_favorites"
-msgstr ""
+msgstr "Effacer des favoris"
 
 #. Default: "No favorites set yet."
 #: ./opengever/portlets/tree/treeportlet.pt:27
 msgid "tree_favorites_empty"
-msgstr ""
+msgstr "Il n'y a encore aucun numéro de classement épinglé en favoris."
 
 #. Default: "When hovering over a repository folder, the icon for marking folders as favorites (${icon}) appears at the right side. Clicking this icon adds the folder as favorite here."
 #: ./opengever/portlets/tree/treeportlet.pt:44
 msgid "tree_favorites_help_adding"
-msgstr ""
+msgstr "En survolant les numéros de classement dans le plan de classement avec le pointeur de la souris, le symbole pour marquer les favoris (${icon}) s'affiche à droite. En cliquant sur ce symbole, ce numéro de classement apparaît dans l'onglet \"Favoris\"."
 
 #. Default: "Your favorite folders are marked with the favorites icon (${icon}) in the repository tree."
 #: ./opengever/portlets/tree/treeportlet.pt:52
 msgid "tree_favorites_help_marked"
-msgstr ""
+msgstr "Vos numéros de classement choisis comme favoris sont épinglés dans l'onglet du plan de classement avec le symbole correspondant (${icon})"
 
 #. Default: "For removing a favorite, switch back to the repository tree tab and click on the icon for removing a favorite (${icon})."
 #: ./opengever/portlets/tree/treeportlet.pt:59
 msgid "tree_favorites_help_removing"
-msgstr ""
+msgstr "Pour effacer un favori, retournez sur l'onglet \"Plan de classement\" et cliquez sur le symbole pour effacer les favoris (${icon})."
 
 #. Default: "Adding and removing of favorites is done in the repository tree tab."
 #: ./opengever/portlets/tree/treeportlet.pt:38
 msgid "tree_favorites_help_summary"
-msgstr ""
+msgstr "L'ajout ou la suppression des favoris se fait dans l'onglet plan de classement"
 

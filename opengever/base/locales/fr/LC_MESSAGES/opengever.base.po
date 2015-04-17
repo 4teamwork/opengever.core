@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-04-10 07:35+0000\n"
+"POT-Creation-Date: 2015-04-16 17:18+0000\n"
 "PO-Revision-Date: 2012-08-30 15:34+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -68,9 +68,9 @@ msgid "confidential"
 msgstr "Confidentiel"
 
 #. Default: "Confirm that you'd like to perform this action."
-#: ./opengever/base/browser/confirm.pt:16
+#: ./opengever/base/browser/confirm.pt:20
 msgid "desc_confirm_action"
-msgstr ""
+msgstr "Veuillez confirmer que vous souhaitez effectuer cette action."
 
 #. Default: "You have not selected any Items"
 #: ./opengever/base/browser/copy_items.py:47
@@ -136,7 +136,7 @@ msgstr "Marquage des documents contenant des données sensibles (loi sur la prot
 
 #: ./opengever/base/behaviors/classification.py:68
 msgid "help_public_trial"
-msgstr ""
+msgstr "Mention, si les documents sont accessibles ou non selon la loi sur la protection des données"
 
 #: ./opengever/base/behaviors/classification.py:97
 msgid "help_public_trial_default_value"
@@ -144,7 +144,7 @@ msgstr ""
 
 #: ./opengever/base/behaviors/classification.py:76
 msgid "help_public_trial_statement"
-msgstr ""
+msgstr "Date de la requête, requérant, date de la décision, Référence vers le dossier de la requête GEVER"
 
 #: ./opengever/base/behaviors/lifecycle.py:42
 msgid "help_retention_period"
@@ -162,7 +162,7 @@ msgstr "Modifier par"
 #. Default: "-- Already removed object --"
 #: ./opengever/base/adapters.py:192
 msgid "label_already_removed"
-msgstr ""
+msgstr "-- Déjà annulé --"
 
 #. Default: "Archival value"
 #: ./opengever/base/behaviors/lifecycle.py:57
@@ -190,9 +190,9 @@ msgid "label_comment"
 msgstr "commentaire"
 
 #. Default: "Confirm action"
-#: ./opengever/base/browser/confirm.pt:37
+#: ./opengever/base/browser/confirm.pt:41
 msgid "label_confirm_action"
-msgstr ""
+msgstr "Confirmer l'action"
 
 #. Default: "Created"
 #: ./opengever/base/viewlets/byline.py:60
@@ -292,12 +292,12 @@ msgstr "Version"
 #. Default: "limited-public"
 #: opengever/repository/classification.py
 msgid "limited-public"
-msgstr ""
+msgstr "Accès public restreint"
 
 #. Default: "Careful, it's possible someone is executing an exploit against you. Verify you just performed an action on this site and that you were not referred here by a different website or email."
-#: ./opengever/base/browser/confirm.pt:23
+#: ./opengever/base/browser/confirm.pt:27
 msgid "msg_verify_you_performed_this_action"
-msgstr ""
+msgstr "Veuillez confirmer que vous êtes à l'origine de cette action et que la requête ne provient pas d'un lien courriel ou d'un site web externe à GEVER. Cette mesure de protection permet de prévenir les éventuelles attaques CSRF. Si ce message apparaît suite à une action entreprise dans l'espace GEVER, veuillez en informer le support (Screenshot du message et le lien URL correspondant)."
 
 #. Default ""
 #: opengever/repository/classification.py
@@ -340,9 +340,9 @@ msgid "search_results_advanced_link"
 msgstr "Recherche avancée"
 
 #. Default: "Confirming User Action."
-#: ./opengever/base/browser/confirm.pt:10
+#: ./opengever/base/browser/confirm.pt:14
 msgid "title_confirming_user_action"
-msgstr ""
+msgstr "Confirmation de l'action"
 
 #. Default ""
 #: opengever/repository/classification.py
@@ -353,4 +353,3 @@ msgstr "Non contrôlé"
 #: opengever/repository/classification.py
 msgid "unprotected"
 msgstr "Non classé"
-

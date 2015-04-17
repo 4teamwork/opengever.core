@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-11-20 15:35+0000\n"
+"POT-Creation-Date: 2015-04-16 17:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,69 +27,69 @@ msgid "could not trash the object ${obj}, it is checked out"
 msgstr "L'objet ${obj} a un checkout. Vous ne pouvez pas le supprimer"
 
 #. Default: "You have not selected any items"
-#: ./opengever/trash/browser/remove_confirmation.py:29
+#: ./opengever/trash/browser/remove_confirmation.py:35
 msgid "error_no_documents_selected"
-msgstr ""
+msgstr "Vous n'avez sélectionné aucun élément."
 
 #. Default: "Delete"
 #: ./opengever/trash/browser/remove_confirmation_templates/remove_confirmation.pt:55
 msgid "label_delete"
-msgstr ""
+msgstr "Effacer"
 
 #. Default: "Delete documents"
 #: ./opengever/trash/browser/remove_confirmation_templates/remove_confirmation.pt:19
 msgid "label_delete_documents"
-msgstr ""
+msgstr "Effacer les documents"
 
 #. Default: "Error"
 #: ./opengever/trash/browser/remove_confirmation_templates/remove_confirmation.pt:31
 msgid "label_errror"
-msgstr ""
+msgstr "Erreur"
 
 #. Default: "The documents have been successfully deleted"
-#: ./opengever/trash/browser/remove_confirmation.py:20
+#: ./opengever/trash/browser/remove_confirmation.py:26
 msgid "label_successfully_deleted"
-msgstr ""
+msgstr "Les documents ont été effacés avec succès"
 
 #. Default: "Warning"
 #: ./opengever/trash/browser/remove_confirmation_templates/remove_confirmation.pt:24
 msgid "label_warning"
-msgstr ""
+msgstr "Avertissement"
 
 #. Default: "Do you really want to delete the selected documents?"
 #: ./opengever/trash/browser/remove_confirmation_templates/remove_confirmation.pt:25
 msgid "msg_delete_confirmation"
-msgstr ""
+msgstr "Voulez-vous vraiment effacer les documents seléctionnés?"
 
 #. Default: "The selected documents can't be removed, see error messages below."
 #: ./opengever/trash/browser/remove_confirmation_templates/remove_confirmation.pt:32
 msgid "msg_delete_not_possible"
-msgstr ""
+msgstr "Les documents seléctionnés ne peuvent pas être effacés."
 
 #. Default: "The document is referred by the document(s) ${links}."
 #: ./opengever/trash/remover.py:70
 msgid "msg_document_has_backreferences"
-msgstr ""
+msgstr "Il existe encore une référence de document ${links} sur le document."
 
 #. Default: "The document contains relations."
 #: ./opengever/trash/remover.py:60
 msgid "msg_document_has_relations"
-msgstr ""
+msgstr "Le document fait réference à d'autres documents"
 
 #. Default: "The document is still checked out."
 #: ./opengever/trash/remover.py:52
 msgid "msg_document_is_checked_out"
-msgstr ""
+msgstr "Le document est encore en checkout."
 
 #. Default: "The document is not trashed."
 #: ./opengever/trash/remover.py:77
 msgid "msg_is_not_trashed"
-msgstr ""
+msgstr "Le documents n'est pas encore dans la corbeille."
 
 #: ./opengever/trash/profiles/default/actions.xml
 #: ./opengever/trash/upgrades/profiles/4100/actions.xml
 msgid "remove"
-msgstr ""
+msgstr "Effacer"
 
 #: ./opengever/trash/trash.py:112
 msgid "the object ${obj} trashed"

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2015-03-18 16:07+0000\n"
+"POT-Creation-Date: 2015-04-16 17:18+0000\n"
 "PO-Revision-Date: 2013-03-27 10:44+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -148,7 +148,7 @@ msgid "description_download_confirmation"
 msgstr "Sie sind dabei, eine Kopie des Dokuments ${filename} herunterzuladen."
 
 #. Default: "You don't select a file and document is also not preserved in paper_form, please correct it."
-#: ./opengever/document/behaviors/metadata.py:170
+#: ./opengever/document/behaviors/metadata.py:171
 msgid "error_file_and_preserved_as_paper"
 msgstr "Sie haben weder eine Datei ausgewählt noch ist das Dokument in Papierform aufbewahrt, bitte korrigieren."
 
@@ -190,12 +190,12 @@ msgid "heading_checkin_comment_form"
 msgstr "Dokumente einchecken"
 
 #. Default: ""
-#: ./opengever/document/behaviors/metadata.py:129
+#: ./opengever/document/behaviors/metadata.py:130
 msgid "help_archival_file"
 msgstr "Archivtaugliche Version der Originaldatei"
 
 #. Default: "Surname firstname or a userid(would be automatically resolved to fullname)"
-#: ./opengever/document/behaviors/metadata.py:104
+#: ./opengever/document/behaviors/metadata.py:105
 msgid "help_author"
 msgstr "Nachname Vorname oder ein Benutzerkürzel (wird automatisch nach Nachname Vorname aufgelöst)."
 
@@ -204,7 +204,7 @@ msgstr "Nachname Vorname oder ein Benutzerkürzel (wird automatisch nach Nachnam
 msgid "help_checkin_journal_comment"
 msgstr "Was wurde am Dokument geändert?"
 
-#: ./opengever/document/behaviors/metadata.py:88
+#: ./opengever/document/behaviors/metadata.py:89
 msgid "help_delivery_date"
 msgstr "Datum, an dem das Dokument über den Korrespondenzweg versandt worden ist"
 
@@ -214,15 +214,15 @@ msgid "help_description"
 msgstr ""
 
 #. Default: "Is the Document Digital Availabe"
-#: ./opengever/document/behaviors/metadata.py:113
+#: ./opengever/document/behaviors/metadata.py:114
 msgid "help_digitally_available"
 msgstr ""
 
-#: ./opengever/document/behaviors/metadata.py:72
+#: ./opengever/document/behaviors/metadata.py:73
 msgid "help_document_date"
 msgstr "Datum, an dem das Dokument erstellt worden ist"
 
-#: ./opengever/document/behaviors/metadata.py:94
+#: ./opengever/document/behaviors/metadata.py:95
 msgid "help_document_type"
 msgstr ""
 
@@ -232,7 +232,7 @@ msgid "help_file"
 msgstr "Datei, die zu einem Dossier hinzugefügt wird"
 
 #. Default: ""
-#: ./opengever/document/behaviors/metadata.py:64
+#: ./opengever/document/behaviors/metadata.py:65
 msgid "help_foreign_reference"
 msgstr "Referenz auf das entsprechende Dossier des Absenders"
 
@@ -241,21 +241,21 @@ msgid "help_keywords"
 msgstr ""
 
 #. Default: ""
-#: ./opengever/document/behaviors/metadata.py:121
+#: ./opengever/document/behaviors/metadata.py:122
 msgid "help_preserved_as_paper"
 msgstr "In Papierform aufbewahrt"
 
 #. Default: ""
-#: ./opengever/document/behaviors/metadata.py:143
+#: ./opengever/document/behaviors/metadata.py:144
 msgid "help_preview"
 msgstr "Online Voransicht des Originaldokuments"
 
-#: ./opengever/document/behaviors/metadata.py:80
+#: ./opengever/document/behaviors/metadata.py:81
 msgid "help_receipt_date"
 msgstr "Datum, an dem das Dokument über den Korrespondenzweg angekommen ist"
 
 #. Default: ""
-#: ./opengever/document/behaviors/metadata.py:136
+#: ./opengever/document/behaviors/metadata.py:137
 msgid "help_thumbnail"
 msgstr ""
 
@@ -265,12 +265,12 @@ msgid "initial_document_version_change_note"
 msgstr "Dokument erstellt (Initialversion)"
 
 #. Default: "Archival File"
-#: ./opengever/document/behaviors/metadata.py:128
+#: ./opengever/document/behaviors/metadata.py:129
 msgid "label_archival_file"
 msgstr "Archivierte Datei"
 
 #. Default: "Author"
-#: ./opengever/document/behaviors/metadata.py:103
+#: ./opengever/document/behaviors/metadata.py:104
 msgid "label_author"
 msgstr "Autor"
 
@@ -305,7 +305,7 @@ msgid "label_creator"
 msgstr "Ersteller"
 
 #. Default: "Date of delivery"
-#: ./opengever/document/behaviors/metadata.py:87
+#: ./opengever/document/behaviors/metadata.py:88
 msgid "label_delivery_date"
 msgstr "Ausgangsdatum"
 
@@ -315,17 +315,17 @@ msgid "label_description"
 msgstr "Beschreibung"
 
 #. Default: "Digital Available"
-#: ./opengever/document/behaviors/metadata.py:112
+#: ./opengever/document/behaviors/metadata.py:113
 msgid "label_digitally_available"
 msgstr "Digital verfügbar"
 
 #. Default: "Document Date"
-#: ./opengever/document/behaviors/metadata.py:71
+#: ./opengever/document/behaviors/metadata.py:72
 msgid "label_document_date"
 msgstr "Dokumentdatum"
 
 #. Default: "Document Type"
-#: ./opengever/document/behaviors/metadata.py:93
+#: ./opengever/document/behaviors/metadata.py:94
 msgid "label_document_type"
 msgstr "Dokumenttyp"
 
@@ -347,7 +347,7 @@ msgid "label_file"
 msgstr "Datei"
 
 #. Default: "Foreign Reference"
-#: ./opengever/document/behaviors/metadata.py:63
+#: ./opengever/document/behaviors/metadata.py:64
 msgid "label_foreign_reference"
 msgstr "Fremdzeichen"
 
@@ -371,17 +371,17 @@ msgid "label_pdf_preview"
 msgstr "PDF Vorschau"
 
 #. Default: "Preserved as paper"
-#: ./opengever/document/behaviors/metadata.py:120
+#: ./opengever/document/behaviors/metadata.py:121
 msgid "label_preserved_as_paper"
 msgstr "In Papierform aufbewahrt"
 
 #. Default: "Preview"
-#: ./opengever/document/behaviors/metadata.py:142
+#: ./opengever/document/behaviors/metadata.py:143
 msgid "label_preview"
 msgstr "Vorschau"
 
 #. Default: "Date of receipt"
-#: ./opengever/document/behaviors/metadata.py:79
+#: ./opengever/document/behaviors/metadata.py:80
 msgid "label_receipt_date"
 msgstr "Eingangsdatum"
 
@@ -406,7 +406,7 @@ msgid "label_start_byline"
 msgstr "Dokumentdatum"
 
 #. Default: "Thumbnail"
-#: ./opengever/document/behaviors/metadata.py:135
+#: ./opengever/document/behaviors/metadata.py:136
 msgid "label_thumbnail"
 msgstr "Kurzbild"
 

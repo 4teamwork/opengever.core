@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-11-25 10:30+0000\n"
+"POT-Creation-Date: 2015-04-16 17:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -105,12 +105,12 @@ msgstr "Types de dossiers à ajouter"
 #. Default: "Delete"
 #: ./opengever/repository/browser/deletion_templates/deletion.pt:32
 msgid "label_delete"
-msgstr ""
+msgstr "Effacer"
 
 #. Default: "Delete repository"
 #: ./opengever/repository/browser/deletion_templates/deletion.pt:20
 msgid "label_delete_repository"
-msgstr ""
+msgstr "Effacer le numéro de la position"
 
 #. Default: "Description"
 #: ./opengever/repository/repositoryfolder.py:45
@@ -140,7 +140,7 @@ msgstr "Performance"
 #. Default: "The repository have been successfully deleted."
 #: ./opengever/repository/browser/deletion.py:38
 msgid "label_successfully_deleted"
-msgstr ""
+msgstr "Le numéro de la position a été effacé avec succès."
 
 #. Default: "Valid from"
 #: ./opengever/repository/repositoryfolder.py:53
@@ -162,7 +162,7 @@ msgstr "Version"
 #. Default: "Warning"
 #: ./opengever/repository/browser/deletion_templates/deletion.pt:25
 msgid "label_warning"
-msgstr ""
+msgstr "Avertissement"
 
 #. Default: "State"
 #: ./opengever/repository/viewlets/byline.py:17
@@ -172,7 +172,7 @@ msgstr "Etat"
 #. Default: "Do you really want to delete the current repository?"
 #: ./opengever/repository/browser/deletion_templates/deletion.pt:26
 msgid "msg_delete_confirmation"
-msgstr ""
+msgstr "Voulez-vous vraiment effacer le numéro de la position actuel?"
 
 #. Default: "Name"
 #: ./opengever/repository/browser/referenceprefix_manager_templates/referenceprefixmanager.pt:24
@@ -192,7 +192,7 @@ msgstr "Gestionnaire de préfixes de référence"
 #. Default: "Responsible organisation unit"
 #: ./opengever/repository/behaviors/responsibleorg.py:16
 msgid "responsible_org_unit"
-msgstr ""
+msgstr "Service responsable"
 
 #. Default: "Reference prefix has been unlocked."
 #: ./opengever/repository/browser/referenceprefix_manager.py:25

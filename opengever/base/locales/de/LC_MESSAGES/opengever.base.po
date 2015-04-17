@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-04-10 07:35+0000\n"
+"POT-Creation-Date: 2015-04-16 17:18+0000\n"
 "PO-Revision-Date: 2014-09-04 01:03+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: opengever.repository\n"
+"Domain: DOMAIN\n"
 "X-Is-Fallback-For: de-at de-li de-lu de-ch de-de\n"
 
 #: ./opengever/base/profiles/default/actions.xml
@@ -69,7 +69,7 @@ msgid "confidential"
 msgstr "Vertraulich"
 
 #. Default: "Confirm that you'd like to perform this action."
-#: ./opengever/base/browser/confirm.pt:16
+#: ./opengever/base/browser/confirm.pt:20
 msgid "desc_confirm_action"
 msgstr "Bestätigen Sie bitte, dass Sie diese Aktion durchführen möchten."
 
@@ -193,7 +193,7 @@ msgid "label_comment"
 msgstr "Kommentar"
 
 #. Default: "Confirm action"
-#: ./opengever/base/browser/confirm.pt:37
+#: ./opengever/base/browser/confirm.pt:41
 msgid "label_confirm_action"
 msgstr "Aktion bestätigen"
 
@@ -298,7 +298,7 @@ msgid "limited-public"
 msgstr "Eingeschränkt öffentlich"
 
 #. Default: "Careful, it's possible someone is executing an exploit against you. Verify you just performed an action on this site and that you were not referred here by a different website or email."
-#: ./opengever/base/browser/confirm.pt:23
+#: ./opengever/base/browser/confirm.pt:27
 msgid "msg_verify_you_performed_this_action"
 msgstr "Bitte bestätigen Sie, dass Sie selbst diese Aktion durchgeführt haben und nicht durch einen Link in einem E-Mail oder von einer externen Website auf GEVER weitergeleitet wurden. Dies ist eine Sicherheitsmassnahme um sogenannte CSRF Angriffe zu verhindern. Falls Sie diese Meldung sehen, obwohl Sie eine Aktion innerhalb GEVER durchgeführt haben, teilen Sie dies bitte dem Support mit (inkl. einem Screenshot dieser Meldung und der untenstehenden URL)."
 
@@ -343,7 +343,7 @@ msgid "search_results_advanced_link"
 msgstr "erweiterte Suche"
 
 #. Default: "Confirming User Action."
-#: ./opengever/base/browser/confirm.pt:10
+#: ./opengever/base/browser/confirm.pt:14
 msgid "title_confirming_user_action"
 msgstr "Benutzer-Aktion bestätigen"
 

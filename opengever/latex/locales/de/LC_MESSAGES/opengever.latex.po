@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-11-19 15:23+0000\n"
+"POT-Creation-Date: 2015-04-16 17:18+0000\n"
 "PO-Revision-Date: 2013-11-19 16:25+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,22 +27,22 @@ msgid "Print selection (PDF)"
 msgstr "Auswahl drucken (PDF)"
 
 #. Default: "Deadline"
-#: ./opengever/latex/listing.py:268
+#: ./opengever/latex/listing.py:277
 msgid "label_deadline"
 msgstr "Zu erledigen bis"
 
 #. Default: "Delivery date"
-#: ./opengever/latex/listing.py:211
+#: ./opengever/latex/listing.py:230
 msgid "label_delivery_date"
 msgstr "Ausgangsdatum"
 
 #. Default: "Document author"
-#: ./opengever/latex/listing.py:217
+#: ./opengever/latex/listing.py:235
 msgid "label_document_author"
 msgstr "Autor"
 
 #. Default: "Document date"
-#: ./opengever/latex/listing.py:199
+#: ./opengever/latex/listing.py:220
 msgid "label_document_date"
 msgstr "Dokumentdatum"
 
@@ -52,12 +52,13 @@ msgid "label_documents"
 msgstr "Dokumente"
 
 #. Default: "End"
-#: ./opengever/latex/listing.py:146
+#: ./opengever/latex/dossierdetails.py:128
+#: ./opengever/latex/listing.py:186
 msgid "label_end"
 msgstr "Ende"
 
 #. Default: "Issuer"
-#: ./opengever/latex/listing.py:246
+#: ./opengever/latex/listing.py:257
 msgid "label_issuer"
 msgstr "Auftraggeber"
 
@@ -67,13 +68,13 @@ msgid "label_participants"
 msgstr "Beteiligung"
 
 #. Default: "Receipt date"
-#: ./opengever/latex/listing.py:205
+#: ./opengever/latex/listing.py:225
 msgid "label_receipt_date"
 msgstr "Eingangsdatum"
 
 #. Default: "Reference number"
 #: ./opengever/latex/dossierdetails.py:106
-#: ./opengever/latex/listing.py:109
+#: ./opengever/latex/listing.py:153
 msgid "label_reference_number"
 msgstr "Aktenzeichen"
 
@@ -83,19 +84,19 @@ msgid "label_repository"
 msgstr "Ordnungsposition"
 
 #. Default: "Repositoryfolder"
-#: ./opengever/latex/listing.py:119
+#: ./opengever/latex/listing.py:161
 msgid "label_repository_title"
 msgstr "Ordnungspos."
 
 #. Default: "Responsible"
 #: ./opengever/latex/dossierdetails.py:122
-#: ./opengever/latex/listing.py:129
+#: ./opengever/latex/listing.py:171
 msgid "label_responsible"
 msgstr "Federführend"
 
 #. Default: "State"
 #: ./opengever/latex/dossierdetails.py:135
-#: ./opengever/latex/listing.py:134
+#: ./opengever/latex/listing.py:176
 msgid "label_review_state"
 msgstr "Status"
 
@@ -106,7 +107,7 @@ msgstr "Laufnummer"
 
 #. Default: "Start"
 #: ./opengever/latex/dossierdetails.py:125
-#: ./opengever/latex/listing.py:140
+#: ./opengever/latex/listing.py:181
 msgid "label_start"
 msgstr "Beginn"
 
@@ -121,12 +122,12 @@ msgid "label_subdossiers"
 msgstr "Subdossiers"
 
 #. Default: "Responsible"
-#: ./opengever/latex/listing.py:252
+#: ./opengever/latex/listing.py:263
 msgid "label_task_responsible"
 msgstr "Auftragnehmer"
 
 #. Default: "Task type"
-#: ./opengever/latex/listing.py:241
+#: ./opengever/latex/listing.py:252
 msgid "label_task_type"
 msgstr "Art"
 
@@ -137,11 +138,12 @@ msgstr "Aufgaben"
 
 #. Default: "Title"
 #: ./opengever/latex/dossierdetails.py:116
-#: ./opengever/latex/listing.py:124
+#: ./opengever/latex/listing.py:166
 msgid "label_title"
 msgstr "Titel"
 
 #. Default: "No."
-#: ./opengever/latex/listing.py:114
+#: ./opengever/latex/listing.py:157
 msgid "short_label_sequence_number"
 msgstr "Nr."
+

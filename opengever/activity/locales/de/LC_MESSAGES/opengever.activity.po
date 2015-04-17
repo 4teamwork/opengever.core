@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-02-24 07:42+0000\n"
+"POT-Creation-Date: 2015-04-16 17:18+0000\n"
 "PO-Revision-Date: 2015-02-24 08:40+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,26 +15,31 @@ msgstr ""
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: opengever.activity\n"
+"Domain: DOMAIN\n"
 
-#: ./opengever/activity/mail_templates/notification.pt:28
-msgid "See on GEVER"
+#: ./opengever/activity/mail_templates/notification.pt:27
+msgid "View in GEVER"
 msgstr "In GEVER betrachten"
 
 #. Default: "Actor"
-#: ./opengever/activity/browser/listing.py:49
+#: ./opengever/activity/browser/listing.py:55
 msgid "column_Actor"
 msgstr "Akteur"
 
 #. Default: "Kind"
-#: ./opengever/activity/browser/listing.py:41
+#: ./opengever/activity/browser/listing.py:47
 msgid "column_kind"
 msgstr "Typ"
 
 #. Default: "Title"
-#: ./opengever/activity/browser/listing.py:45
+#: ./opengever/activity/browser/listing.py:51
 msgid "column_title"
 msgstr "Titel"
+
+#. Default: "Created"
+#: ./opengever/activity/browser/listing.py:59
+msgid "created"
+msgstr "Erstellt"
 
 #. Default: "Notifications"
 #: ./opengever/activity/viewlets/notification.pt:3
@@ -42,12 +47,6 @@ msgid "heading_notifications"
 msgstr "Benachrichtigungen"
 
 #. Default: "My notifications"
-#: ./opengever/activity/browser/views.py:32
+#: ./opengever/activity/browser/views.py:31
 msgid "label_my_notifications"
 msgstr "Meine Benachrichtigungen"
-
-#. Default: "${amount} matches."
-#: ./opengever/activity/browser/no_selection.pt:2
-msgid "tab_matches"
-msgstr "${amount} Treffer."
-

@@ -115,16 +115,16 @@ msgid "document-state-pending"
 msgstr "En suspend"
 
 msgid "document-state-removed"
-msgstr ""
+msgstr "Effacé"
 
 msgid "document-state-working_copy"
 msgstr "Copie de travail"
 
 msgid "document-transition-remove"
-msgstr ""
+msgstr "Effacer"
 
 msgid "document-transition-restore"
-msgstr ""
+msgstr "Récupérer"
 
 msgid "document_with_template"
 msgstr "Document à partir du modèle"
@@ -208,7 +208,7 @@ msgid "save attachments"
 msgstr "Sauvegarder les fichiers attachés"
 
 msgid "task-added"
-msgstr ""
+msgstr "Tâche ajoutée."
 
 msgid "task-state-cancelled"
 msgstr "Annulé"
