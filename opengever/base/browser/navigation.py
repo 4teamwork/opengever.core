@@ -1,4 +1,5 @@
 from AccessControl import getSecurityManager
+from opengever.base.utils import get_preferred_language_code
 from pkg_resources import get_distribution
 from Products.CMFCore.utils import getToolByName
 from Products.Five import BrowserView
@@ -58,6 +59,8 @@ class JSONNavigation(BrowserView):
 
         if self.request.getHeader('Cache-Control') == 'no-cache':
             params.append('nocache=true')
+
+        params.append('language={}'.format(get_preferred_language_code()))
 
         if params:
             url = '{0}?{1}'.format(url, '&'.join(params))

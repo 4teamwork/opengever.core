@@ -64,3 +64,11 @@ def ok_response(request=None):
 
 def disable_edit_bar():
     api.portal.get().REQUEST.set('disable_border', True)
+
+
+def get_preferred_language_code():
+    ltool = api.portal.get_tool('portal_languages')
+    language_code = ltool.getPreferredLanguage()
+
+    # Special handling for combined languages, but works for regular ones too.
+    return language_code.split('-')[0]
