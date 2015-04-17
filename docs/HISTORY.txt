@@ -5,6 +5,9 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Treeportlet: extend caching parameters with current language code.
+  [phgross]
+
 - Implement meeting closing:
 
   - Added automatic generation of excerpts for every scheduled proposal.

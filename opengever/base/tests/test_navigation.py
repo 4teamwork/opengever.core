@@ -21,6 +21,18 @@ class TestNavigation(FunctionalTestCase):
         with self.assert_changes(view.get_caching_url, msg):
             folder.reindexObject()  # changes the modified date
 
+    def test_caching_url_contains_current_language_code(self):
+        root = create(Builder('repository_root'))
+        view = root.restrictedTraverse('navigation.json')
+
+        msg = 'Cache URL did not change after changing language.'
+        with self.assert_changes(view.get_caching_url, msg):
+            root.REQUEST.get('LANGUAGE_TOOL').LANGUAGE = 'fr'
+
+        msg = 'Cache URL did not change after changing language.'
+        with self.assert_changes(view.get_caching_url, msg):
+            root.REQUEST.get('LANGUAGE_TOOL').LANGUAGE = 'de-ch'
+
     @browsing
     def test_json_is_valid(self, browser):
         root = create(Builder('repository_root'))
