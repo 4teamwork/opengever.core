@@ -170,11 +170,18 @@ class MeetingView(BrowserView):
     def url_update_agenda_item_order(self):
         return UpdateAgendaItemOrder.url_for(self.context, self.model)
 
+    def url_manually_generate_excerpt(self):
+        return GenerateExcerpt.url_for(self.context, self.model)
+
     def transitions(self):
         return self.model.get_state().get_transitions()
 
     def agenda_items(self):
         return self.model.agenda_items
+
+    def manually_generated_excerpts(self):
+        return [excerpt.resolve_document()
+                for excerpt in self.model.excerpt_documents]
 
     def msg_unexpected_error(self):
         return translate(_('An unexpected error has occurred',
