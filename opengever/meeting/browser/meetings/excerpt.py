@@ -9,6 +9,7 @@ from plone.directives import form
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import button
 from z3c.form.form import EditForm
+from z3c.form.interfaces import IDataConverter
 from z3c.relationfield.schema import RelationChoice
 from zope import schema
 from zope.interface import Invalid
@@ -21,14 +22,18 @@ class IGenerateExcerpt(form.Schema):
     """
 
     dossier = RelationChoice(
-        title=_(u'label_accept_select_dossier',
+        title=_(u'label_select_dossier',
                 default=u'Target dossier'),
-        description=_(u'help_accept_select_dossier',
+        description=_(u'help_select_dossier',
                       default=u'Select the target dossier where the '
-                               'excerpts should be created.'),
+                              'excerpts should be created.'),
         required=True,
-
         source=all_open_dossiers_source)
+
+    filename = schema.TextLine(
+        title=_(u"label_title", default=u"Title"),
+        required=True,
+        )
 
     include_initial_position = schema.Bool(
         title=_(u'Include initial position'),
@@ -84,6 +89,19 @@ class GenerateExcerpt(AutoExtensibleForm, EditForm):
         super(GenerateExcerpt, self).__init__(context, request)
         self.model = model
         self._excerpt_data = None
+
+    def updateWidgets(self):
+        super(GenerateExcerpt, self).updateWidgets()
+        self.inject_initial_data()
+
+    def inject_initial_data(self):
+        if self.request.method != 'GET':
+            return
+
+        initial_filename = self.model.get_excerpt_title()
+        widget = self.widgets['filename']
+        value = IDataConverter(widget).toWidgetValue(initial_filename)
+        widget.value = value
 
     def get_agenda_items(self):
         for agenda_item in self.model.agenda_items:
