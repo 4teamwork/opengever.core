@@ -108,10 +108,8 @@ class Meeting(Base):
         'GeneratedProtocol', uselist=False,
         backref=backref('meeting', uselist=False),
         primaryjoin="GeneratedProtocol.document_id==Meeting.protocol_document_id")
-
     excerpt_documents = relationship('GeneratedExcerpt',
-                                     secondary=meeting_excerpts,
-                                     backref='meetings')
+                                     secondary=meeting_excerpts,)
 
     def __repr__(self):
         return '<Meeting at "{}">'.format(self.start)

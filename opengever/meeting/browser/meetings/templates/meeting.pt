@@ -61,8 +61,8 @@
           <h2 i18n:translate="">Excerpts</h2>
 
           <tal:condition tal:condition="excerpts">
-            <ul>
-              <li tal:repeat="item excerpts">
+            <ul id="excerpts">
+              <li tal:repeat="item excerpts" class="excerpt">
                 <a href="" tal:attributes="href item/absolute_url;
                                            title python: getattr(item, 'document_date', None) and item.document_date.strftime('%d.%m.%Y') or '';
                                            class python:view.get_css_class(item)">

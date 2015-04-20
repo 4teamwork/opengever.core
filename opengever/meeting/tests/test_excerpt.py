@@ -1,7 +1,11 @@
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
+from opengever.meeting.browser.meetings.meetinglist import MeetingList
+from opengever.meeting.model import Meeting
 from opengever.testing import FunctionalTestCase
 
 
@@ -29,6 +33,32 @@ class TestExcerpt(FunctionalTestCase):
             excerpt_template=self.sablon_template))
 
         self.committee = create(Builder('committee').within(container))
+        self.proposal = create(Builder('proposal')
+                               .within(self.dossier)
+                               .having(title='Mach doch',
+                                       committee=self.committee.load_model(),
+                                       legal_basis=u'We may do it',
+                                       initial_position=u'We should do it.',
+                                       proposed_action=u'Do it.',
+                                       considerations=u'Uhm....',
+                                       )
+                               .as_submitted())
+
+        self.committee_model = self.committee.load_model()
+        self.meeting = create(Builder('meeting')
+                              .having(committee=self.committee_model,
+                                      start=datetime(2014, 3, 4),
+                                      location=u'B\xe4rn',))
+        self.meeting.execute_transition('pending-held')
+        self.proposal_model = self.proposal.load_model()
+
+        self.agenda_item = create(
+            Builder('agenda_item')
+            .having(meeting=self.meeting,
+                    proposal=self.proposal_model,
+                    discussion=u'I say Nay!',
+                    decision=u'We say yay.',
+                    number=u'1'))
 
     def test_default_excerpt_is_configured_on_commitee_container(self):
         self.assertEqual(self.sablon_template,
@@ -47,3 +77,30 @@ class TestExcerpt(FunctionalTestCase):
 
         self.assertEqual(custom_template,
                          self.committee.get_excerpt_template())
+
+    @browsing
+    def test_manual_excerpt_can_be_generated(self, browser):
+        browser.login().open(
+            MeetingList.url_for(self.committee, self.meeting))
+
+        browser.find('Generate excerpt').click()
+        browser.fill({'preprotocols.1.include:record': True,
+                      'Target dossier': self.dossier})
+        browser.find('Save').click()
+
+        self.assertEqual([u'Excerpt for meeting B\xe4rn, Mar 04, 2014 has '
+                          'been generated successfully'],
+                         info_messages())
+        # refresh
+        meeting = Meeting.get(self.meeting.meeting_id)
+        self.assertEqual(1, len(meeting.excerpt_documents))
+        document = meeting.excerpt_documents[0]
+        self.assertEqual(0, document.generated_version)
+
+        self.assertEqual(MeetingList.url_for(self.committee, self.meeting),
+                         browser.url,
+                         'should be on meeting view')
+
+        self.assertEqual(1, len(browser.css('#excerpts .excerpt')),
+                         'generated document should be linked')
+        self.assertIsNotNone(browser.find('protocol-excerpt-barn-mar-04-2014'))
