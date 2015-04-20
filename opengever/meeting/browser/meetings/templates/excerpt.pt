@@ -21,7 +21,7 @@
 
           <metal:block fill-slot="actions">
             <h2 i18n:translate="">Choose Agenda Items</h2>
-            <metal:block tal:repeat="protocol view/get_pre_protocols">
+            <metal:block tal:repeat="protocol view/get_agenda_items">
             <metal:block tal:define="name protocol/name">
 
               <p>

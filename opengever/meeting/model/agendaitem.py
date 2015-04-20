@@ -34,8 +34,59 @@ class AgendaItem(Base):
     discussion = Column(Text)
     decision = Column(Text)
 
+    def update(self, request):
+        """Update with changed data."""
+
+        data = request.get(self.name)
+        if not data:
+            return
+
+        if self.has_proposal:
+            self.proposal.legal_basis = data.get('legal_basis')
+            self.proposal.initial_position = data.get('initial_position')
+            self.proposal.considerations = data.get('considerations')
+            self.proposal.proposed_action = data.get('proposed_action')
+
+        self.discussion = data.get('discussion')
+        self.decision = data.get('decision')
+
+    def get_field_data(self, include_initial_position=True,
+                       include_legal_basis=True, include_considerations=True,
+                       include_proposed_action=True, include_discussion=True,
+                       include_decision=True):
+        data = {
+            'number': self.number,
+            'description': self.description,
+            'title': self.title,
+        }
+        if include_initial_position:
+            data['markdown:initial_position'] = self._sanitize_text(
+                self.initial_position)
+        if include_legal_basis:
+            data['markdown:legal_basis'] = self._sanitize_text(
+                self.legal_basis)
+        if include_considerations:
+            data['markdown:considerations'] = self._sanitize_text(
+                self.considerations)
+        if include_proposed_action:
+            data['markdown:proposed_action'] = self._sanitize_text(
+                self.proposed_action)
+        if include_discussion:
+            data['markdown:discussion'] = self._sanitize_text(self.discussion)
+        if include_decision:
+            data['markdown:decision'] = self._sanitize_text(self.decision)
+
+        return data
+
+    def _sanitize_text(self, text):
+        if not text:
+            return None
+
+        return text
+
     def get_title(self):
-        return self.proposal.title if self.proposal else self.title
+        title = self.proposal.title if self.has_proposal else self.title
+        return u"{} {}".format(self.number, title)
 
     def get_css_class(self):
         return "paragraph" if self.is_paragraph else ""
@@ -49,11 +100,36 @@ class AgendaItem(Base):
         session.delete(self)
         self.meeting.reorder_agenda_items()
 
-    def has_proposal(self):
-        return self.proposal is not None
-
     def get_proposal_link(self, include_icon=True):
-        if not self.has_proposal():
+        if not self.has_proposal:
             return self.get_title()
 
         return self.proposal.get_submitted_link(include_icon=include_icon)
+
+    @property
+    def has_proposal(self):
+        return self.proposal is not None
+
+    @property
+    def legal_basis(self):
+        return self.proposal.legal_basis if self.has_proposal else None
+
+    @property
+    def initial_position(self):
+        return self.proposal.initial_position if self.has_proposal else None
+
+    @property
+    def considerations(self):
+        return self.proposal.considerations if self.has_proposal else None
+
+    @property
+    def proposed_action(self):
+        return self.proposal.proposed_action if self.has_proposal else None
+
+    @property
+    def name(self):
+        return "preprotocols.{}".format(self.agenda_item_id)
+
+    @property
+    def description(self):
+        return self.get_title()

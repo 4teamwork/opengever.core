@@ -6,7 +6,6 @@ from opengever.meeting.command import ProtocolOperations
 from opengever.meeting.form import ModelProxyEditForm
 from opengever.meeting.model import Meeting
 from opengever.meeting.model import Member
-from opengever.meeting.protocol import PreProtocol
 from opengever.meeting.sablon import Sablon
 from opengever.meeting.vocabulary import get_committee_member_vocabulary
 from plone import api
@@ -100,8 +99,8 @@ class EditPreProtocol(AutoExtensibleForm, ModelProxyEditForm, EditForm):
 
     def applyChanges(self, data):
         ModelProxyEditForm.applyChanges(self, data)
-        for protocol in self.get_pre_protocols():
-            protocol.update(self.request)
+        for agenda_item in self.get_agenda_items():
+            agenda_item.update(self.request)
         # pretend to always change the underlying data
         return True
 
@@ -149,10 +148,10 @@ class EditPreProtocol(AutoExtensibleForm, ModelProxyEditForm, EditForm):
         ModelProxyEditForm.render(self)
         return self.template()
 
-    def get_pre_protocols(self):
+    def get_agenda_items(self):
         for agenda_item in self.model.agenda_items:
             if not agenda_item.is_paragraph:
-                yield PreProtocol(agenda_item)
+                yield agenda_item
 
     def redirect_to_meetinglist(self):
         return self.request.RESPONSE.redirect(

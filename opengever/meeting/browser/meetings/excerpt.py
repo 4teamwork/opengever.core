@@ -2,7 +2,6 @@ from opengever.meeting import _
 from opengever.meeting.browser.meetings.meetinglist import MeetingList
 from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.protocol import ExcerptProtocolData
-from opengever.meeting.protocol import PreProtocol
 from opengever.meeting.sablon import Sablon
 from opengever.meeting.sources import all_open_dossiers_source
 from plone.autoform.form import AutoExtensibleForm
@@ -85,10 +84,10 @@ class GenerateExcerpt(AutoExtensibleForm, EditForm):
         self.model = model
         self._excerpt_data = None
 
-    def get_pre_protocols(self):
+    def get_agenda_items(self):
         for agenda_item in self.model.agenda_items:
             if not agenda_item.is_paragraph:
-                yield PreProtocol(agenda_item)
+                yield agenda_item
 
     @button.buttonAndHandler(_('Save', default=u'Save'), name='save')
     def handleApply(self, action):
@@ -96,9 +95,9 @@ class GenerateExcerpt(AutoExtensibleForm, EditForm):
         if not errors:
 
             pre_protocols_to_include = []
-            for pre_protocol in self.get_pre_protocols():
-                if pre_protocol.name in self.request:
-                    pre_protocols_to_include.append(pre_protocol)
+            for agenda_item in self.get_agenda_items():
+                if agenda_item.name in self.request:
+                    pre_protocols_to_include.append(agenda_item)
 
             self._excerpt_data = ExcerptProtocolData(
                 self.model, pre_protocols_to_include,

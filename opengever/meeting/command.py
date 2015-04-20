@@ -372,7 +372,7 @@ class GenerateExcerptsCommand(object):
 
     def execute(self):
         for agenda_item in self.meeting.agenda_items:
-            if agenda_item.has_proposal():
+            if agenda_item.has_proposal:
                 self.generate_excerpt(agenda_item)
 
     def generate_excerpt(self, agenda_item):
@@ -390,7 +390,7 @@ class DecideProposalsCommand(object):
 
     def execute(self):
         for agenda_item in self.meeting.agenda_items:
-            if not agenda_item.has_proposal():
+            if not agenda_item.has_proposal:
                 continue
 
             self.decide_proposals(agenda_item.proposal)
