@@ -83,6 +83,8 @@ class DownloadGeneratedProtocol(DownloadGeneratedPreProtocol):
 
 class EditPreProtocol(AutoExtensibleForm, ModelProxyEditForm, EditForm):
 
+    is_model_view = True
+    is_model_edit_view = False
     ignoreContext = True
     schema = IParticipants
     content_type = Meeting

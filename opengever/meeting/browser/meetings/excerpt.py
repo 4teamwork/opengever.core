@@ -74,6 +74,8 @@ class IGenerateExcerpt(form.Schema):
 
 class GenerateExcerpt(AutoExtensibleForm, EditForm):
 
+    is_model_view = True
+    is_model_edit_view = False
     ignoreContext = True
     schema = IGenerateExcerpt
 
