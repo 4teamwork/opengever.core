@@ -5,6 +5,9 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Expanded/Collapsed triangle style for helptext-trigger.
+  [Kevin Bieri]
+
 - Add and update french and german translations.
   [phgross]
 
