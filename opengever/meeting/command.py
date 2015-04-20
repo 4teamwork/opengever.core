@@ -17,6 +17,8 @@ from opengever.meeting.protocol import PreProtocolData
 from opengever.meeting.protocol import ProtocolData
 from opengever.meeting.sablon import Sablon
 from plone import api
+from plone.i18n.normalizer.interfaces import IIDNormalizer
+from zope.component import getUtility
 import json
 
 
@@ -123,6 +125,47 @@ class ExcerptOperations(PreProtocolOperations):
 
     def get_filename(self, meeting):
         return meeting.get_excerpt_filename()
+
+
+class ManualExcerptOperations(ExcerptOperations):
+
+    def __init__(self, agenda_items, title,
+                 include_initial_position=True, include_legal_basis=True,
+                 include_considerations=True, include_proposed_action=True,
+                 include_discussion=True, include_decision=True):
+        super(ManualExcerptOperations, self).__init__(agenda_items)
+        self.title = title
+        self.include_initial_position = include_initial_position
+        self.include_legal_basis = include_legal_basis
+        self.include_considerations = include_considerations
+        self.include_proposed_action = include_proposed_action
+        self.include_discussion = include_discussion
+        self.include_decision = include_decision
+
+    def get_meeting_data(self, meeting):
+        return ExcerptProtocolData(
+            meeting, self.agenda_items,
+            include_initial_position=self.include_initial_position,
+            include_legal_basis=self.include_legal_basis,
+            include_considerations=self.include_considerations,
+            include_proposed_action=self.include_proposed_action,
+            include_discussion=self.include_discussion,
+            include_decision=self.include_decision)
+
+    def create_database_entry(self, meeting, document):
+        excerpt = GeneratedExcerpt(
+            oguid=Oguid.for_object(document),
+            generated_version=document.get_current_version())
+
+        meeting.excerpt_documents.append(excerpt)
+        return excerpt
+
+    def get_title(self, meeting):
+        return self.title
+
+    def get_filename(self, meeting):
+        normalizer = getUtility(IIDNormalizer)
+        return u"{}.docx".format(normalizer.normalize(self.get_title(meeting)))
 
 
 class CreateGeneratedDocumentCommand(CreateDocumentCommand):

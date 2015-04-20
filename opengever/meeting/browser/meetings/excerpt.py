@@ -1,20 +1,19 @@
 from opengever.meeting import _
 from opengever.meeting.browser.meetings.meetinglist import MeetingList
-from opengever.meeting.command import MIME_DOCX
-from opengever.meeting.protocol import ExcerptProtocolData
-from opengever.meeting.sablon import Sablon
+from opengever.meeting.command import CreateGeneratedDocumentCommand
+from opengever.meeting.command import ManualExcerptOperations
 from opengever.meeting.sources import all_open_dossiers_source
 from plone.autoform.form import AutoExtensibleForm
 from plone.directives import form
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import button
 from z3c.form.form import EditForm
+from z3c.form.interfaces import ActionExecutionError
 from z3c.form.interfaces import IDataConverter
 from z3c.relationfield.schema import RelationChoice
 from zope import schema
 from zope.interface import Invalid
 from zope.interface import invariant
-from z3c.form.interfaces import ActionExecutionError
 
 
 class IGenerateExcerpt(form.Schema):
@@ -30,7 +29,7 @@ class IGenerateExcerpt(form.Schema):
         required=True,
         source=all_open_dossiers_source)
 
-    filename = schema.TextLine(
+    title = schema.TextLine(
         title=_(u"label_title", default=u"Title"),
         required=True,
         )
@@ -99,7 +98,7 @@ class GenerateExcerpt(AutoExtensibleForm, EditForm):
             return
 
         initial_filename = self.model.get_excerpt_title()
-        widget = self.widgets['filename']
+        widget = self.widgets['title']
         value = IDataConverter(widget).toWidgetValue(initial_filename)
         widget.value = value
 
@@ -123,14 +122,19 @@ class GenerateExcerpt(AutoExtensibleForm, EditForm):
             raise(ActionExecutionError(
                 Invalid(_(u"Please select at least one agenda item."))))
 
-        self._excerpt_data = ExcerptProtocolData(
-            self.model, agenda_items_to_include,
+        operations = ManualExcerptOperations(
+            agenda_items_to_include, data['title'],
             include_initial_position=data['include_initial_position'],
             include_legal_basis=data['include_legal_basis'],
             include_considerations=data['include_considerations'],
             include_proposed_action=data['include_proposed_action'],
             include_discussion=data['include_discussion'],
             include_decision=data['include_decision'])
+        command = CreateGeneratedDocumentCommand(
+            data['dossier'], self.model, operations)
+        command.execute()
+        command.show_message()
+        return self.redirect_to_meetinglist()
 
     @button.buttonAndHandler(_('Cancel', default=u'Cancel'), name='cancel')
     def handleCancel(self, action):
@@ -139,20 +143,3 @@ class GenerateExcerpt(AutoExtensibleForm, EditForm):
     def redirect_to_meetinglist(self):
         return self.request.RESPONSE.redirect(
             MeetingList.url_for(self.context, self.model))
-
-    def render(self):
-        if self._excerpt_data:
-            sablon = Sablon(self.model.get_excerpt_template())
-            sablon.process(self._excerpt_data.as_json())
-
-            assert sablon.is_processed_successfully(), sablon.stderr
-            filename = self.model.get_pre_protocol_filename().encode('utf-8')
-            response = self.request.response
-            response.setHeader('X-Theme-Disabled', 'True')
-            response.setHeader('Content-Type', MIME_DOCX)
-            response.setHeader("Content-Disposition",
-                               'attachment; filename="{}"'.format(filename))
-            return sablon.file_data
-
-        else:
-            return super(GenerateExcerpt, self).render()

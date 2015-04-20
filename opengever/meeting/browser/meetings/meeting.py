@@ -1,3 +1,4 @@
+from opengever.base.browser.helper import get_css_class
 from opengever.meeting import _
 from opengever.meeting.browser.meetings.agendaitem import DeleteAgendaItem
 from opengever.meeting.browser.meetings.agendaitem import ScheduleSubmittedProposal
@@ -114,6 +115,10 @@ class MeetingView(BrowserView):
 
     def __call__(self):
         return self.template()
+
+    def get_css_class(self, document):
+        """used for display icons in the view"""
+        return get_css_class(document)
 
     def transition_url(self, transition):
         return MeetingTransitionController.url_for(
