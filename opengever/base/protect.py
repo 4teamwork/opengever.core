@@ -1,4 +1,5 @@
 from plone import api
+from plone.portlets.constants import CONTEXT_ASSIGNMENT_KEY
 from plone.protect.auto import ProtectTransform
 from plone.protect.interfaces import IDisableCSRFProtection
 from Products.CMFCore.utils import getToolByName
@@ -113,4 +114,8 @@ class OGProtectTransform(ProtectTransform):
         # always allow writes to context's annotations.
         context = self.request.PARENTS[0]
         if IAnnotatable.providedBy(context):
-            unprotected_write(IAnnotations(context))
+            annotations = IAnnotations(context)
+            unprotected_write(annotations)
+            if CONTEXT_ASSIGNMENT_KEY in annotations:
+                # also allow writes to context portlet assignments
+                unprotected_write(annotations[CONTEXT_ASSIGNMENT_KEY])
