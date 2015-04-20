@@ -1,3 +1,4 @@
+from plone import api
 from plone.protect.auto import ProtectTransform
 from plone.protect.interfaces import IDisableCSRFProtection
 from Products.CMFCore.utils import getToolByName
@@ -77,8 +78,25 @@ class OGProtectTransform(ProtectTransform):
                     "visiting @@confirm-action view. Transaction aborted!)")
                 return True
 
+    def _redirect_loop_detected(self):
+        # This should never happen: If the current view is @@confirm-action,
+        # AND the original_url points to the same view, we assume
+        # that there's a redirect loop.
+        # If this happened, the _abort_txn_on_confirm_action_view() safeguard
+        # above must have failed.
+        redirect_url = self.request.form.get('original_url', '')
+        return (self._get_current_view() == '@@confirm-action' and
+                '@@confirm-action' in redirect_url)
+
     def _check(self):
         self._abort_txn_on_confirm_action_view()
+
+        if self._redirect_loop_detected():
+            LOG.error("Detected redirect loop on @@confirm-action view! "
+                      "Breaking loop by redirecting to Plone site.")
+            site = api.portal.get()
+            return self.request.RESPONSE.redirect(site.absolute_url())
+
         return super(OGProtectTransform, self)._check()
 
     def _registered_objects(self):

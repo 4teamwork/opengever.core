@@ -5,6 +5,10 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- CSRF: Detect redirect loops on @@confirm-action view and
+  break them if necessary.
+  [lgraf]
+
 - CSRF: Rollback transaction on @@confirm-action view to avoid
   creating redirect loops.
   [lgraf]
