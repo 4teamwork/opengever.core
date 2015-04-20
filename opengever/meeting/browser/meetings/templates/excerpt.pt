@@ -27,9 +27,10 @@
               <p>
               <input type="checkbox"
                      tal:attributes="name string:${name}.include:record;
-                                     id string:${name}.include:record" />
+                                     id string:${name}.include:record;
+                                     checked python: request.get(name) is not None" />
               <label tal:attributes="for string:${name}.include:record"
-                     tal:content="protocol/title">
+                     tal:content="protocol/get_title">
               </label>
               </p>
 
