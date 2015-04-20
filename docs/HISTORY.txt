@@ -5,6 +5,10 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- CSRF: Rollback transaction on @@confirm-action view to avoid
+  creating redirect loops.
+  [lgraf]
+
 - Expanded/Collapsed triangle style for helptext-trigger.
   [Kevin Bieri]
 

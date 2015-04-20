@@ -1,4 +1,5 @@
 from plone.protect.auto import ProtectTransform
+from plone.protect.interfaces import IDisableCSRFProtection
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from zope.annotation.attribute import AttributeAnnotations
@@ -11,6 +12,7 @@ from zope.interface import Interface
 from zope.publisher.interfaces.browser import IBrowserRequest
 import logging
 import re
+import transaction
 
 
 LOG = logging.getLogger('opengever.base.protect')
@@ -61,6 +63,23 @@ class OGProtectTransform(ProtectTransform):
                          result)
 
         return super(OGProtectTransform, self).parseTree(result)
+
+    def _get_current_view(self):
+        return getattr(self.request, 'steps', [''])[-1]
+
+    def _abort_txn_on_confirm_action_view(self):
+        if self._get_current_view() == '@@confirm-action':
+            if len(self._registered_objects()) > 0 and \
+                    not IDisableCSRFProtection.providedBy(self.request):
+                transaction.abort()
+                LOG.error(
+                    "Error checking for CSRF. Transaction was modified when "
+                    "visiting @@confirm-action view. Transaction aborted!)")
+                return True
+
+    def _check(self):
+        self._abort_txn_on_confirm_action_view()
+        return super(OGProtectTransform, self)._check()
 
     def _registered_objects(self):
         self._global_unprotect()
