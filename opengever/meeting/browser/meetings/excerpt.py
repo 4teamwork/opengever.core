@@ -13,6 +13,7 @@ from z3c.relationfield.schema import RelationChoice
 from zope import schema
 from zope.interface import Invalid
 from zope.interface import invariant
+from z3c.form.interfaces import ActionExecutionError
 
 
 class IGenerateExcerpt(form.Schema):
@@ -92,21 +93,26 @@ class GenerateExcerpt(AutoExtensibleForm, EditForm):
     @button.buttonAndHandler(_('Save', default=u'Save'), name='save')
     def handleApply(self, action):
         data, errors = self.extractData()
-        if not errors:
+        if errors:
+            return
 
-            pre_protocols_to_include = []
-            for agenda_item in self.get_agenda_items():
-                if agenda_item.name in self.request:
-                    pre_protocols_to_include.append(agenda_item)
+        agenda_items_to_include = []
+        for agenda_item in self.get_agenda_items():
+            if agenda_item.name in self.request:
+                agenda_items_to_include.append(agenda_item)
 
-            self._excerpt_data = ExcerptProtocolData(
-                self.model, pre_protocols_to_include,
-                include_initial_position=data['include_initial_position'],
-                include_legal_basis=data['include_legal_basis'],
-                include_considerations=data['include_considerations'],
-                include_proposed_action=data['include_proposed_action'],
-                include_discussion=data['include_discussion'],
-                include_decision=data['include_decision'])
+        if not agenda_items_to_include:
+            raise(ActionExecutionError(
+                Invalid(_(u"Please select at least one agenda item."))))
+
+        self._excerpt_data = ExcerptProtocolData(
+            self.model, agenda_items_to_include,
+            include_initial_position=data['include_initial_position'],
+            include_legal_basis=data['include_legal_basis'],
+            include_considerations=data['include_considerations'],
+            include_proposed_action=data['include_proposed_action'],
+            include_discussion=data['include_discussion'],
+            include_decision=data['include_decision'])
 
     @button.buttonAndHandler(_('Cancel', default=u'Cancel'), name='cancel')
     def handleCancel(self, action):
