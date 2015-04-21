@@ -14,6 +14,7 @@
       policy_profile="opengever.examplecontent:default"
       additional_profiles="opengever.setup:default_content
                            opengever.setup:empty_templates
+                           opengever.examplecontent:repository_minimal
                            opengever.examplecontent:init"
       admin_unit_id="fd"
       />
@@ -44,6 +45,22 @@
       title="opengever.examplecontent: 4teamwork LDAP"
       directory="profiles/4teamwork-ldap"
       description="4teamwork LDAP configuration"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <genericsetup:registerProfile
+      name="repository_minimal"
+      title="opengever.examplecontent: repository_minimal"
+      directory="profiles/repository_minimal"
+      description="Minimal example repository"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <genericsetup:registerProfile
+      name="repository_municipality"
+      title="opengever.examplecontent: repository_municipality"
+      directory="profiles/repository_municipality"
+      description="Full municipality example repository"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
