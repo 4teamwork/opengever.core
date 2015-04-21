@@ -5,7 +5,12 @@ from opengever.activity.model import Resource
 from opengever.activity.model import Watcher
 from opengever.base.oguid import Oguid
 from opengever.ogds.models.tests.builders import SqlObjectBuilder
-from plone.app.testing import TEST_USER_ID
+
+
+try:
+    from plone.app.testing import TEST_USER_ID
+except ImportError:
+    TEST_USER_ID = 'ogadmin'
 
 
 class ResourceBuilder(SqlObjectBuilder):

@@ -16,9 +16,14 @@ from opengever.ogds.models.tests.builders import AdminUnitBuilder
 from opengever.ogds.models.tests.builders import OrgUnitBuilder
 from opengever.ogds.models.tests.builders import SqlObjectBuilder
 from opengever.ogds.models.tests.builders import UserBuilder
-from plone.app.testing import TEST_USER_ID
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
+
+
+try:
+    from plone.app.testing import TEST_USER_ID
+except ImportError:
+    TEST_USER_ID = 'ogadmin'
 
 
 class PloneAdminUnitBuilder(AdminUnitBuilder):
