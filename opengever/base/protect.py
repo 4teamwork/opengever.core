@@ -1,4 +1,7 @@
+from plone import api
+from plone.portlets.constants import CONTEXT_ASSIGNMENT_KEY
 from plone.protect.auto import ProtectTransform
+from plone.protect.interfaces import IDisableCSRFProtection
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from zope.annotation.attribute import AttributeAnnotations
@@ -11,6 +14,7 @@ from zope.interface import Interface
 from zope.publisher.interfaces.browser import IBrowserRequest
 import logging
 import re
+import transaction
 
 
 LOG = logging.getLogger('opengever.base.protect')
@@ -62,6 +66,40 @@ class OGProtectTransform(ProtectTransform):
 
         return super(OGProtectTransform, self).parseTree(result)
 
+    def _get_current_view(self):
+        return getattr(self.request, 'steps', [''])[-1]
+
+    def _abort_txn_on_confirm_action_view(self):
+        if self._get_current_view() == '@@confirm-action':
+            if len(self._registered_objects()) > 0 and \
+                    not IDisableCSRFProtection.providedBy(self.request):
+                transaction.abort()
+                LOG.error(
+                    "Error checking for CSRF. Transaction was modified when "
+                    "visiting @@confirm-action view. Transaction aborted!)")
+                return True
+
+    def _redirect_loop_detected(self):
+        # This should never happen: If the current view is @@confirm-action,
+        # AND the original_url points to the same view, we assume
+        # that there's a redirect loop.
+        # If this happened, the _abort_txn_on_confirm_action_view() safeguard
+        # above must have failed.
+        redirect_url = self.request.form.get('original_url', '')
+        return (self._get_current_view() == '@@confirm-action' and
+                '@@confirm-action' in redirect_url)
+
+    def _check(self):
+        self._abort_txn_on_confirm_action_view()
+
+        if self._redirect_loop_detected():
+            LOG.error("Detected redirect loop on @@confirm-action view! "
+                      "Breaking loop by redirecting to Plone site.")
+            site = api.portal.get()
+            return self.request.RESPONSE.redirect(site.absolute_url())
+
+        return super(OGProtectTransform, self)._check()
+
     def _registered_objects(self):
         self._global_unprotect()
         objects = super(OGProtectTransform, self)._registered_objects()
@@ -76,4 +114,8 @@ class OGProtectTransform(ProtectTransform):
         # always allow writes to context's annotations.
         context = self.request.PARENTS[0]
         if IAnnotatable.providedBy(context):
-            unprotected_write(IAnnotations(context))
+            annotations = IAnnotations(context)
+            unprotected_write(annotations)
+            if CONTEXT_ASSIGNMENT_KEY in annotations:
+                # also allow writes to context portlet assignments
+                unprotected_write(annotations[CONTEXT_ASSIGNMENT_KEY])
