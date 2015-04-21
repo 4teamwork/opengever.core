@@ -5,6 +5,12 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Remove outdated gever styles (moved to plonetheme.teamraum).
+  [Kevin Bieri]
+
+- Expanded/Collapsed triangle style for helptext-trigger.
+  [Kevin Bieri]
+
 - CSRF: Also allow writes to context portlet assignments.
   [lgraf]
 
@@ -15,9 +21,6 @@ Changelog
 - CSRF: Rollback transaction on @@confirm-action view to avoid
   creating redirect loops.
   [lgraf]
-
-- Expanded/Collapsed triangle style for helptext-trigger.
-  [Kevin Bieri]
 
 - Add and update french and german translations.
   [phgross]
