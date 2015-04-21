@@ -4,7 +4,7 @@
     xmlns:upgrade-step="http://namespaces.zope.org/ftw.upgrade"
     i18n_domain="opengever.advancedsearch">
 
-    <include package="ftw.upgrade" file="meta.zcml">
+    <include package="ftw.upgrade" file="meta.zcml" />
 
     <!-- ALL -> 2201 -->
     <genericsetup:upgradeStep

@@ -66,4 +66,13 @@
         profile="opengever.tabbedview:default"
         />
 
+    <!-- 4000 -> 4300 -->
+    <upgrade-step:importProfile
+        title="Remove outdated gever styles (moved to plonetheme.teamraum)."
+        profile="opengever.tabbedview:default"
+        source="4000"
+        destination="4300"
+        directory="profiles/4300"
+        />
+
 </configure>
