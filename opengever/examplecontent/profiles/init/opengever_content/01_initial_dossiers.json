@@ -16,5 +16,89 @@
         "file:file": "files/subdossier.docx"
       }
     ]
+  },
+  {
+    "_path": "/ordnungssystem/fuehrung/strategie-und-planung/dossier-2",
+    "_type": "opengever.dossier.businesscasedossier",
+    "title": "Sitzungen 2014"
+  },
+  {
+    "_path": "/ordnungssystem/fuehrung/strategie-und-planung/dossier-3",
+    "_type": "opengever.dossier.businesscasedossier",
+    "title": "Sitzungen 2015"
+  },
+  {
+    "_path": "/ordnungssystem/ressourcen/personal/personalplanung-und-entwicklung/dossier-4",
+    "_type": "opengever.dossier.businesscasedossier",
+    "title": "Pfarrer Res Rychener-Baumann",
+    "_children": [
+      {
+        "_id": "document-2",
+        "_type": "opengever.document.document",
+        "title": "Bewerbung Res Rychener-Baumann",
+        "file:file": "files/subdossier.docx"
+      },
+      {
+        "_id": "document-3",
+        "_type": "opengever.document.document",
+        "title": "Kurzinfo Res Rychner-Baumann",
+        "file:file": "files/subdossier.docx"
+      }
+    ]
+  },
+
+  {
+    "_path": "ordnungssystem/kernbereich-1/kernbereich-1a/dossier-5",
+    "_type": "opengever.dossier.businesscasedossier",
+    "title": "Finanzplanung 2015-1019",
+    "_children": [
+      {
+        "_id": "document-4",
+        "_type": "opengever.document.document",
+        "title": "Vorbericht Finanzplan",
+        "file:file": "files/subdossier.docx"
+      },
+      {
+        "_id": "document-5",
+        "_type": "opengever.document.document",
+        "title": "Bilanz",
+        "file:file": "files/bilanz.xlsx"
+      }
+    ]
+  },
+
+  {
+    "_path": "ordnungssystem/kernbereich-1/kernbereich-1a/dossier-6",
+    "_type": "opengever.dossier.businesscasedossier",
+    "title": "Voranschlag 2015",
+    "description": "Festsetzung der Kirchensteueranlage",
+    "_children": [
+      {
+        "_id": "document-6",
+        "_type": "opengever.document.document",
+        "title": "Budget 2015",
+        "file:file": "files/subdossier.docx"
+      }
+    ]
+  },
+
+  {
+    "_path": "ordnungssystem/kernbereich-2/kernbereich-2a/dossier-7",
+    "_type": "opengever.dossier.businesscasedossier",
+    "title": "Orgelrevision Thomaskirche, Liebefeld",
+    "_children": [
+      {
+        "_id": "document-7",
+        "_type": "opengever.document.document",
+        "title": "Rechnung Orgel Revision",
+        "file:file": "files/subdossier.docx"
+      },
+      {
+        "_id": "document-8",
+        "_type": "opengever.document.document",
+        "title": "Offerte Orgel Revision, Anbieter XY",
+        "file:file": "files/subdossier.docx"
+      }
+    ]
   }
 ]
