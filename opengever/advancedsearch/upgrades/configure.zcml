@@ -1,7 +1,10 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:upgrade-step="http://namespaces.zope.org/ftw.upgrade"
     i18n_domain="opengever.advancedsearch">
+
+    <include package="ftw.upgrade" file="meta.zcml" />
 
     <!-- ALL -> 2201 -->
     <genericsetup:upgradeStep
@@ -39,6 +42,15 @@
         directory="profiles/2202"
         for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
         provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+    <!-- 2202 -> 4300 -->
+    <upgrade-step:importProfile
+        title="Remove outdated gever styles (moved to plonetheme.teamraum)."
+        profile="opengever.advancedsearch:default"
+        source="2202"
+        destination="4300"
+        directory="profiles/4300"
         />
 
 </configure>

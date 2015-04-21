@@ -7,7 +7,7 @@
 	xmlns:five="http://namespaces.zope.org/five"
     xmlns:cmf="http://namespaces.zope.org/cmf"
 	i18n_domain="opengever.advancedsearch">
- 
+
     <grok:grok package="." />
 
     <i18n:registerTranslations directory="locales" />

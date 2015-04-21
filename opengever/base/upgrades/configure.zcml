@@ -267,4 +267,13 @@
         directory="profiles/4300"
         />
 
+    <!-- 4300 -> 4301 -->
+    <upgrade-step:importProfile
+        title="Remove outdated gever styles (moved to plonetheme.teamraum)."
+        profile="opengever.base:default"
+        source="4300"
+        destination="4301"
+        directory="profiles/4301"
+        />
+
 </configure>

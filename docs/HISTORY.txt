@@ -5,6 +5,9 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Remove outdated gever styles (moved to plonetheme.teamraum).
+  [Kevin Bieri]
+
 - CSRF: Also allow writes to context portlet assignments.
   [lgraf]
 
