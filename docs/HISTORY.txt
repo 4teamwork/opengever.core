@@ -5,6 +5,12 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Add form to manually generate custom excerpts and store them in a dossier.
+  [deiferni]
+
+- Add markdown support to sablon files, update dependecies to most recent sablon release.
+  [deiferni]
+
 - Remove outdated gever styles (moved to plonetheme.teamraum).
   [Kevin Bieri]
 
