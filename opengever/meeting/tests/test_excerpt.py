@@ -104,3 +104,33 @@ class TestExcerpt(FunctionalTestCase):
         self.assertEqual(1, len(browser.css('#excerpts .excerpt')),
                          'generated document should be linked')
         self.assertIsNotNone(browser.find('protocol-excerpt-barn-mar-04-2014'))
+
+    @browsing
+    def test_validator_excerpt_requires_at_least_one_field(self, browser):
+        browser.login().open(
+            MeetingList.url_for(self.committee, self.meeting))
+
+        browser.find('Generate excerpt').click()
+        # de-select pre-selected field-checkboxes
+        browser.fill({'form.widgets.include_initial_position:list': False,
+                      'form.widgets.include_decision:list': False,
+                      'preprotocols.1.include:record': True,
+                      'Target dossier': self.dossier})
+        browser.find('Save').click()
+
+        self.assertEqual(
+            'Please select at least one field for the excerpt.',
+            browser.css('#opengever_meeting_excerpt div.error').first.text)
+
+    @browsing
+    def test_validator_excerpt_requires_at_least_one_agenda_item(self, browser):
+        browser.login().open(
+            MeetingList.url_for(self.committee, self.meeting))
+
+        browser.find('Generate excerpt').click()
+        browser.fill({'Target dossier': self.dossier})
+        browser.find('Save').click()
+
+        self.assertEqual(
+            'Please select at least one agenda item.',
+            browser.css('#opengever_meeting_excerpt div.error').first.text)
