@@ -5,6 +5,10 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Display submitted-to proposals (and document version) on document overview.
+  Include a link that allows updating outdated documents.
+  [deiferni]
+
 - Add form to manually generate custom excerpts and store them in a dossier.
   [deiferni]
 

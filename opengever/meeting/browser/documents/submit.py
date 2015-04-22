@@ -2,6 +2,7 @@ from opengever.base.source import DossierPathSourceBinder
 from opengever.base.utils import disable_edit_bar
 from opengever.meeting import _
 from opengever.meeting import is_meeting_feature_enabled
+from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.proposal import IProposal
 from plone.autoform.form import AutoExtensibleForm
 from plone.directives import form
@@ -9,6 +10,7 @@ from plone.formwidget.contenttree.source import CustomFilter
 from z3c.form.button import buttonAndHandler
 from z3c.form.form import Form
 from z3c.relationfield.schema import RelationChoice
+from zExceptions import NotFound
 
 
 class SubmittableProposalFilter(CustomFilter):
@@ -47,6 +49,26 @@ class SubmitAdditionalDocument(AutoExtensibleForm, Form):
     ignoreContext = True
 
     schema = ISubmitAdditionalDocument
+
+    def update(self):
+        self._preselect_proposal()
+        return super(SubmitAdditionalDocument, self).update()
+
+    def _preselect_proposal(self):
+        if self.request.method != 'GET':
+            return
+
+        submitted_document_id = self.request.get('submitted_document_id')
+        if not submitted_document_id:
+            return
+
+        submitted_document = SubmittedDocument.query.get(submitted_document_id)
+        if not submitted_document:
+            raise NotFound
+
+        proposal = submitted_document.proposal.resolve_proposal()
+        value = '/'.join(proposal.getPhysicalPath())
+        self.request.set('form.widgets.proposal', value)
 
     def available(self):
         return is_meeting_feature_enabled() and \

@@ -1,8 +1,10 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.base.oguid import Oguid
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.dossier.interfaces import ITemplateDossierProperties
 from opengever.journal.tests.utils import get_journal_entry
+from opengever.meeting.model import SubmittedDocument
 from opengever.testing import builders  # keep!
 from opengever.testing.browser import OGBrowser
 from plone import api
@@ -134,3 +136,18 @@ class FunctionalTestCase(TestCase):
         browser.handleErrors = False
         browser.addHeader('Authorization', 'Basic %s:%s' % (TEST_USER_NAME, TEST_USER_PASSWORD,))
         return browser
+
+    def assertSubmittedDocumentCreated(self, proposal, document,
+                                       submitted_version=0):
+        portal = api.portal.get()
+        submitted_document_model = SubmittedDocument.query.get_by_source(
+            proposal, document)
+        submitted_document = portal.restrictedTraverse(
+            submitted_document_model.submitted_physical_path.encode('utf-8'))
+        self.assertIsNotNone(submitted_document_model)
+        self.assertEqual(Oguid.for_object(submitted_document),
+                         submitted_document_model.submitted_oguid)
+        self.assertEqual(submitted_version,
+                         submitted_document_model.submitted_version)
+        self.assertEqual(proposal.load_model(),
+                         submitted_document_model.proposal)

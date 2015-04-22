@@ -3,13 +3,46 @@
       xmlns:i18n="http://xml.zope.org/namespaces/i18n"
       i18n:domain="opengever.document">
 <body>
-    <table class="vertical listing">
+  <tal:block tal:define="css_width python:99/2;">
 
+    <div tal:attributes="class string:boxGroup; style string:width:${css_width}%">
+    <table class="vertical listing">
         <tr tal:repeat="row view/get_metadata_rows">
             <th tal:content="row/label">Label</th>
             <td tal:content="structure row/content">Content</td>
         </tr>
+      </table>
+    </div>
 
-    </table>
+    <div tal:attributes="class string:boxGroup; style string:width:${css_width}%">
+      <div id="proposals_box" class="box">
+        <tal:condition tal:condition="view/display_submitted_documents">
+          <h2 i18n:translate="">Submitted with</h2>
+
+          <tal:documents tal:repeat="submitted_document view/submitted_documents">
+            <tal:block tal:define="is_outdated python: view.is_outdated(submitted_document)">
+
+              <div class="proposal" tal:condition="not: is_outdated">
+                <span tal:content="structure python: submitted_document.proposal.get_link()"></span>
+              </div>
+              <div class="propsoal outdated" tal:condition="is_outdated">
+                <div tal:content="structure python: submitted_document.proposal.get_link()"></div>
+                <div tal:content="python: view.render_submitted_version(submitted_document)"></div>
+                <div tal:content="python: view.render_current_document_version()"></div>
+                <a tal:attributes="href python: view.get_update_document_url(submitted_document);
+                                   class python: 'overdue' if is_outdated else ''"
+                   i18n:translate=""
+                  >
+                  Update document in proposal
+                </a>
+              </div>
+
+            </tal:block>
+          </tal:documents>
+        </tal:condition>
+      </div>
+    </div>
+
+  </tal:block>
 </body>
 </html>

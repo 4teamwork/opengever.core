@@ -2,7 +2,6 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
-from opengever.base.oguid import Oguid
 from opengever.base.transport import Transporter
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.exceptions import NoSubmittedDocument
@@ -146,18 +145,3 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
         self.assertSequenceEqual(
             ['A new submitted version of document A Document has been created'],
             info_messages())
-
-    def assertSubmittedDocumentCreated(self, proposal, document,
-                                       submitted_version=0):
-        portal = api.portal.get()
-        submitted_document_model = SubmittedDocument.query.get_by_source(
-            proposal, document)
-        submitted_document = portal.restrictedTraverse(
-            submitted_document_model.submitted_physical_path.encode('utf-8'))
-        self.assertIsNotNone(submitted_document_model)
-        self.assertEqual(Oguid.for_object(submitted_document),
-                         submitted_document_model.submitted_oguid)
-        self.assertEqual(submitted_version,
-                         submitted_document_model.submitted_version)
-        self.assertEqual(proposal.load_model(),
-                         submitted_document_model.proposal)
