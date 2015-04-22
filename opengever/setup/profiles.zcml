@@ -32,12 +32,4 @@
       handler=".hooks.default_content_installed"
       />
 
-  <genericsetup:registerProfile
-      name="empty_templates"
-      title="opengever.setup: empty_templates"
-      directory="profiles/empty_templates"
-      description="Setup empty ms-office templates."
-      provides="Products.GenericSetup.interfaces.EXTENSION"
-      />
-
 </configure>
