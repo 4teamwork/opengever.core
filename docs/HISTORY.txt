@@ -5,6 +5,10 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Move empty template profiles from setup to examplecontent. Create reusable
+  Municipality content profile with initial meeting content.
+  [phgross, deiferni]
+
 - Include ftw.footer and add content for the examplecontent profile.
   [phgross]
 
