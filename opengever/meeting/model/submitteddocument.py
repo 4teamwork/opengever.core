@@ -51,3 +51,6 @@ class SubmittedDocument(Base):
         assert Oguid.for_object(document) == self.oguid, 'invalid document'
 
         return self.submitted_version == document.get_current_version()
+
+    def resolve_submitted(self):
+        return self.submitted_oguid.resolve_object()

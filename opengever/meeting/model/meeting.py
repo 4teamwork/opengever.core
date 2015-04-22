@@ -211,10 +211,13 @@ class Meeting(Base):
         return api.portal.get_localized_time(datetime=self.start)
 
     def get_start_time(self):
-        return self._get_localized_time(self.start)
+        return self.start.strftime('%H:%M')
 
     def get_end_time(self):
-        return self._get_localized_time(self.end)
+        if not self.end:
+            return ''
+
+        return self.end.strftime('%H:%M')
 
     def _get_localized_time(self, date):
         if not date:

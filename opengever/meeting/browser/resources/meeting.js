@@ -39,6 +39,10 @@
 
   };
 
+  var toggleAttachements = function(event) {
+    $(this).parents("tr").toggleClass("expanded");
+  };
+
   $(function() {
 
     $("#opengever_meeting_protocol textarea").autosize();
@@ -93,6 +97,8 @@
       };
 
     $("tbody", agendaItemTable).sortable(sortableSettings);
+
+    $(".toggle-attachements", agendaItemTable).click(toggleAttachements);
 
   });
 

@@ -175,10 +175,19 @@ class Proposal(Base):
     def resolve_sumitted_proposal(self):
         return self.submitted_oguid.resolve_object()
 
+    def resolve_submitted_documents(self):
+        return [doc.resolve_submitted() for doc in self.submitted_documents]
+
+    def has_submitted_documents(self):
+        return len(self.submitted_documents) > 0
+
     def resolve_excerpt_document(self):
         document = self.excerpt_document
         if document:
             return document.oguid.resolve_object()
+
+    def has_submitted_excerpt_document(self):
+        return self.submitted_excerpt_document is not None
 
     def resolve_submitted_excerpt_document(self):
         document = self.submitted_excerpt_document
