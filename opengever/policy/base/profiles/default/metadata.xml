@@ -32,5 +32,6 @@
     <dependency>profile-plone.formwidget.autocomplete:default</dependency>
     <dependency>profile-plone.formwidget.contenttree:default</dependency>
     <dependency>profile-collective.js.timeago:default</dependency>
+    <dependency>profile-ftw.footer:default</dependency>
   </dependencies>
 </metadata>

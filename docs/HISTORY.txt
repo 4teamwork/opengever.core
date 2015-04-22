@@ -5,6 +5,9 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Include ftw.footer and add content for the examplecontent profile.
+  [phgross]
+
 - Display submitted-to proposals (and document version) on document overview.
   Include a link that allows updating outdated documents.
   [deiferni]
