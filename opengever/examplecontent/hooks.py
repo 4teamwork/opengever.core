@@ -184,7 +184,7 @@ def block_portlets_for_meetings(site):
     assignable.setBlacklistStatus(CONTEXT_CATEGORY, True)
 
 
-def init_profile_installed(site):
+def municipality_content_profile_installed(site):
     creator = MeetingExampleContentCreator(site)
     creator.create_content()
 
