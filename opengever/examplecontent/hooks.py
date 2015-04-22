@@ -82,11 +82,11 @@ class MeetingExampleContentCreator(object):
         session.current_session.session = self.db_session
 
     def create_content(self):
-        self.create_members()
+        self.create_members_and_memberships()
         self.create_meetings()
         self.create_proposals()
 
-    def create_members(self):
+    def create_members_and_memberships(self):
         peter = create(Builder('member')
                        .having(firstname=u'Peter', lastname=u'M\xfcller'))
         hans = create(Builder('member')
