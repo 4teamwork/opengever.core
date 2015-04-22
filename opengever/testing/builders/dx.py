@@ -7,9 +7,9 @@ from opengever.mail.mail import OGMail
 from opengever.meeting.proposal import Proposal
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.testing import assets
+from opengever.testing.builders.base import TEST_USER_ID
 from opengever.trash.trash import ITrashable
 from plone import api
-from plone.app.testing import TEST_USER_ID
 from plone.namedfile.file import NamedBlobFile
 from Products.CMFCore.utils import getToolByName
 from z3c.relationfield.relation import RelationValue

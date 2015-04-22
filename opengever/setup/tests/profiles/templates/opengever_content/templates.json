@@ -4,5 +4,10 @@
         "_type": "opengever.document.document",
         "title": "Empty text file",
         "file:file": "file.txt"
+    }, {
+        "_path": "/vorlagen/sablon-template-1",
+        "_type": "opengever.meeting.sablontemplate",
+        "title": "Protokoll",
+        "file:file": "file.txt"
     }
 ]

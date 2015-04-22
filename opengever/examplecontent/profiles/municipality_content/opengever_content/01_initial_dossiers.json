@@ -1,0 +1,104 @@
+[
+  {
+    "_path": "/ordnungssystem/fuehrung/kommunikation/allgemeines/dossier-1",
+    "_type": "opengever.dossier.businesscasedossier",
+    "title": "Jahresdossier 2014",
+    "_children": [
+      {
+        "_id": "dossier-2",
+        "_type": "opengever.dossier.businesscasedossier",
+        "title": "Unterteilung in ein Subdossier"
+      },
+      {
+        "_id": "document-1",
+        "_type": "opengever.document.document",
+        "title": "Jahresdokument",
+        "file:file": "files/subdossier.docx"
+      }
+    ]
+  },
+  {
+    "_path": "/ordnungssystem/fuehrung/interne-organisation/planung-und-organisatorisches/dossier-2",
+    "_type": "opengever.dossier.businesscasedossier",
+    "title": "Sitzungen 2014"
+  },
+  {
+    "_path": "/ordnungssystem/fuehrung/interne-organisation/planung-und-organisatorisches/dossier-3",
+    "_type": "opengever.dossier.businesscasedossier",
+    "title": "Sitzungen 2015"
+  },
+  {
+    "_path": "/ordnungssystem/ressourcen-und-support/personal/personalrekrutierung/dossier-4",
+    "_type": "opengever.dossier.businesscasedossier",
+    "title": "Hans Baumann",
+    "_children": [
+      {
+        "_id": "document-2",
+        "_type": "opengever.document.document",
+        "title": "Bewerbung Hans Baumann",
+        "file:file": "files/subdossier.docx"
+      },
+      {
+        "_id": "document-3",
+        "_type": "opengever.document.document",
+        "title": "Kurzinfo Hans Baumann",
+        "file:file": "files/subdossier.docx"
+      }
+    ]
+  },
+
+  {
+    "_path": "/ordnungssystem/ressourcen-und-support/finanzen/planung/finanzplanung/dossier-5",
+    "_type": "opengever.dossier.businesscasedossier",
+    "title": "Finanzplanung 2015-1019",
+    "_children": [
+      {
+        "_id": "document-4",
+        "_type": "opengever.document.document",
+        "title": "Vorbericht Finanzplan",
+        "file:file": "files/subdossier.docx"
+      },
+      {
+        "_id": "document-5",
+        "_type": "opengever.document.document",
+        "title": "Bilanz",
+        "file:file": "files/bilanz.xlsx"
+      }
+    ]
+  },
+
+  {
+    "_path": "/ordnungssystem/ressourcen-und-support/finanzen/planung/finanzplanung/dossier-6",
+    "_type": "opengever.dossier.businesscasedossier",
+    "title": "Voranschlag 2015",
+    "description": "Festsetzung der Steueranlage",
+    "_children": [
+      {
+        "_id": "document-6",
+        "_type": "opengever.document.document",
+        "title": "Budget 2015",
+        "file:file": "files/subdossier.docx"
+      }
+    ]
+  },
+
+  {
+    "_path": "/ordnungssystem/ressourcen-und-support/finanzen/planung/investitionsplanung/dossier-7",
+    "_type": "opengever.dossier.businesscasedossier",
+    "title": "Revision Einrichtung, Liebefeld",
+    "_children": [
+      {
+        "_id": "document-7",
+        "_type": "opengever.document.document",
+        "title": "Rechnung Revision",
+        "file:file": "files/subdossier.docx"
+      },
+      {
+        "_id": "document-8",
+        "_type": "opengever.document.document",
+        "title": "Offerte Revision, Anbieter XY",
+        "file:file": "files/subdossier.docx"
+      }
+    ]
+  }
+]

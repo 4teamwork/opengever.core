@@ -13,7 +13,9 @@
       title="Development with examplecontent"
       policy_profile="opengever.examplecontent:default"
       additional_profiles="opengever.setup:default_content
-                           opengever.setup:empty_templates
+                           opengever.examplecontent:empty_templates
+                           opengever.examplecontent:repository_minimal
+                           opengever.examplecontent:municipality_content
                            opengever.examplecontent:init"
       admin_unit_id="fd"
       />
@@ -47,9 +49,41 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
+  <genericsetup:registerProfile
+      name="repository_minimal"
+      title="opengever.examplecontent: repository_minimal"
+      directory="profiles/repository_minimal"
+      description="Minimal example repository"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <genericsetup:registerProfile
+      name="repository_municipality"
+      title="opengever.examplecontent: repository_municipality"
+      directory="profiles/repository_municipality"
+      description="Full municipality example repository"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <genericsetup:registerProfile
+      name="municipality_content"
+      title="opengever.examplecontent: municipality_content"
+      directory="profiles/municipality_content"
+      description="Example municipality content"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <genericsetup:registerProfile
+      name="empty_templates"
+      title="opengever.examplecontent: empty_templates"
+      directory="profiles/empty_templates"
+      description="Setup empty ms-office templates."
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
   <profilehook:hook
-      profile="opengever.examplecontent:init"
-      handler=".hooks.init_profile_installed"
+      profile="opengever.examplecontent:municipality_content"
+      handler=".hooks.municipality_content_profile_installed"
       />
 
 </configure>

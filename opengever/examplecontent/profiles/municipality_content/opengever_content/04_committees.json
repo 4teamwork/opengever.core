@@ -16,8 +16,14 @@
             {
                 "_id": "committee-2",
                 "_type": "opengever.meeting.committee",
-                "title": "Wirtschaftsförderungskommission"
+                "title": "Rechnungsprüfungskommission"
+            },
+            {
+                "_id": "committee-3",
+                "_type": "opengever.meeting.committee",
+                "title": "Gemeindeversammlung"
             }
+
         ]
     }
 ]
