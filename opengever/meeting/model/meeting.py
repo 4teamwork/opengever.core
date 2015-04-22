@@ -108,6 +108,10 @@ class Meeting(Base):
         'GeneratedProtocol', uselist=False,
         backref=backref('meeting', uselist=False),
         primaryjoin="GeneratedProtocol.document_id==Meeting.protocol_document_id")
+
+    # define relationship here using a secondary table to keep
+    # GeneratedDocument as simple as possible and avoid that it actively
+    # knows about all its relationships
     excerpt_documents = relationship('GeneratedExcerpt',
                                      secondary=meeting_excerpts,)
 
