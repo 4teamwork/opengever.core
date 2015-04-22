@@ -128,7 +128,9 @@ class AgendaItem(Base):
 
     @property
     def name(self):
-        return "preprotocols.{}".format(self.agenda_item_id)
+        """Currently used as name for input tags in html."""
+
+        return "agenda_item.{}".format(self.agenda_item_id)
 
     @property
     def description(self):

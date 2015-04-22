@@ -84,7 +84,7 @@ class TestExcerpt(FunctionalTestCase):
             MeetingList.url_for(self.committee, self.meeting))
 
         browser.find('Generate excerpt').click()
-        browser.fill({'preprotocols.1.include:record': True,
+        browser.fill({'agenda_item.1.include:record': True,
                       'Target dossier': self.dossier})
         browser.find('Save').click()
 
@@ -114,7 +114,7 @@ class TestExcerpt(FunctionalTestCase):
         # de-select pre-selected field-checkboxes
         browser.fill({'form.widgets.include_initial_position:list': False,
                       'form.widgets.include_decision:list': False,
-                      'preprotocols.1.include:record': True,
+                      'agenda_item.1.include:record': True,
                       'Target dossier': self.dossier})
         browser.find('Save').click()
 
