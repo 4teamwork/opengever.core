@@ -7,6 +7,10 @@ from zope.interface import classProvides
 from zope.interface import implements
 
 
+SUPPORTED_TYPES = ['opengever.document.document',
+                   'opengever.meeting.sablontemplate']
+
+
 class DisabledInitialVersion(object):
     """Disable automatical creation of initial versions for documents."""
 
@@ -45,7 +49,7 @@ class ManualInitialVersion(object):
             pathkey = self.pathkey(*keys)[0]
             typekey = self.typekey(*keys)[0]
 
-            if item.get(typekey) != 'opengever.document.document':
+            if item.get(typekey) not in SUPPORTED_TYPES:
                 yield item
                 continue
 

@@ -13,8 +13,16 @@ class TestDocumentTemplates(FunctionalTestCase):
         self.dossier = create(Builder('templatedossier').titled(u'Vorlagen'))
         applyProfile(self.portal, 'opengever.setup.tests:templates')
 
-    def test_templates_are_loaded_with_working_initial_version(self):
+    def test_template_documents_are_loaded_with_working_initial_version(self):
         template = self.portal['vorlagen']['template-1']
+        rt = api.portal.get_tool('portal_repository')
+
+        self.assertIsNotNone(template.file)
+        version_0_template = rt.retrieve(template, 0).object
+        self.assertIsNotNone(version_0_template.file)
+
+    def test_sablon_templates_are_loaded_with_working_initial_version(self):
+        template = self.portal['vorlagen']['sablon-template-1']
         rt = api.portal.get_tool('portal_repository')
 
         self.assertIsNotNone(template.file)
