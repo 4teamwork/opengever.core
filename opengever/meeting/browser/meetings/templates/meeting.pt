@@ -56,6 +56,26 @@
           </table>
           </tal:block>
 
+          <tal:block tal:condition="view/is_protocol_editable"
+                     tal:define="excerpts view/manually_generated_excerpts">
+          <h2 i18n:translate="">Excerpts</h2>
+
+          <tal:condition tal:condition="excerpts">
+            <ul id="excerpts">
+              <li tal:repeat="item excerpts" class="excerpt">
+                <a href="" tal:attributes="href item/absolute_url;
+                                           title python: getattr(item, 'document_date', None) and item.document_date.strftime('%d.%m.%Y') or '';
+                                           class python:view.get_css_class(item)">
+                  <span class="document" tal:condition="item/absolute_url" tal:content="item/Title" />
+                </a>
+              </li>
+            </ul>
+          </tal:condition>
+
+          <a tal:attributes="href view/url_manually_generate_excerpt" i18n:translate="">Generate excerpt</a>
+
+          </tal:block>
+
           <fieldset class="proposal" tal:condition="meeting/is_editable">
             <legend i18n:translate="">Add Agenda Item</legend>
             <metal:block tal:condition="unscheduled_proposals">

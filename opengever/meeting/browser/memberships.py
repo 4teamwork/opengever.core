@@ -43,6 +43,7 @@ class IMembershipModel(form.Schema):
         max_length=256,
         required=False)
 
+
 class AddMembership(ModelAddForm):
 
     schema = IMembershipModel

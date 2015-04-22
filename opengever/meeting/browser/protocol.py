@@ -1,9 +1,7 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from five import grok
-from opengever.base.source import RepositoryPathSourceBinder
 from opengever.document.document import IDocumentSchema
-from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.meeting import _
 from opengever.meeting.command import CreateGeneratedDocumentCommand
@@ -14,6 +12,7 @@ from opengever.meeting.command import UpdateGeneratedDocumentCommand
 from opengever.meeting.model import GeneratedPreProtocol
 from opengever.meeting.model import GeneratedProtocol
 from opengever.meeting.model import Meeting
+from opengever.meeting.sources import all_open_dossiers_source
 from opengever.repository.repositoryroot import IRepositoryRoot
 from plone.directives import form
 from plone.directives.form import Schema
@@ -41,21 +40,7 @@ class IChooseDossierSchema(Schema):
                       default=u'Select the target dossier where the '
                                'pre-protocol should be created.'),
         required=True,
-
-        source=RepositoryPathSourceBinder(
-            object_provides='opengever.dossier.behaviors.dossier.IDossierMarker',
-            review_state=DOSSIER_STATES_OPEN,
-            navigation_tree_query={
-                'object_provides': [
-                    'opengever.repository.repositoryroot.IRepositoryRoot',
-                    'opengever.repository.repositoryfolder.'
-                    'IRepositoryFolderSchema',
-                    'opengever.dossier.behaviors.dossier.IDossierMarker',
-                    ],
-                'review_state': ['repositoryroot-state-active',
-                                 'repositoryfolder-state-active'] +
-                                 DOSSIER_STATES_OPEN,
-                }))
+        source=all_open_dossiers_source)
 
     # hidden field
     meeting_id = schema.Int(required=True)

@@ -30,6 +30,13 @@ meeting_participants = Table(
 )
 
 
+meeting_excerpts = Table(
+    'meeting_excerpts', Base.metadata,
+    Column('meeting_id', Integer, ForeignKey('meetings.id')),
+    Column('document_id', Integer, ForeignKey('generateddocuments.id'))
+)
+
+
 class HeldCloseTransition(Transition):
 
     def execute(self, obj, model):
@@ -101,6 +108,12 @@ class Meeting(Base):
         'GeneratedProtocol', uselist=False,
         backref=backref('meeting', uselist=False),
         primaryjoin="GeneratedProtocol.document_id==Meeting.protocol_document_id")
+
+    # define relationship here using a secondary table to keep
+    # GeneratedDocument as simple as possible and avoid that it actively
+    # knows about all its relationships
+    excerpt_documents = relationship('GeneratedExcerpt',
+                                     secondary=meeting_excerpts,)
 
     def __repr__(self):
         return '<Meeting at "{}">'.format(self.start)

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-04-16 17:18+0000\n"
+"POT-Creation-Date: 2015-04-20 16:56+0000\n"
 "PO-Revision-Date: 2015-04-10 09:01+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,16 +17,16 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./opengever/meeting/command.py:294
+#: ./opengever/meeting/command.py:337
 msgid "A new submitted version of document ${title} has been created"
 msgstr "Eine neu eingereichte Version des Dokuments ${title} wurde erstellt."
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:60
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:80
 msgid "Add Agenda Item"
 msgstr "Traktandum hinzufügen"
 
 #. Default: "Add Meeting"
-#: ./opengever/meeting/browser/meetings/meeting.py:60
+#: ./opengever/meeting/browser/meetings/meeting.py:61
 msgid "Add Meeting"
 msgstr "Sitzung hinzufügen"
 
@@ -36,37 +36,41 @@ msgid "Add Member"
 msgstr "Mitglied hinzufügen"
 
 #. Default: "Add Membership"
-#: ./opengever/meeting/browser/memberships.py:51
+#: ./opengever/meeting/browser/memberships.py:52
 msgid "Add Membership"
 msgstr "Mitgliedschaft hinzufügen"
 
-#: ./opengever/meeting/command.py:327
+#: ./opengever/meeting/command.py:370
 msgid "Additional document ${title} has been submitted successfully"
 msgstr "Das zusätzliche Dokument ${title} wurde erfolgreich eingereicht."
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:92
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:112
 msgid "Agenda Items"
 msgstr "Traktanden"
 
 #. Default: "An unexpected error has occurred"
-#: ./opengever/meeting/browser/meetings/meeting.py:180
+#: ./opengever/meeting/browser/meetings/meeting.py:192
 msgid "An unexpected error has occurred"
 msgstr "Ein unerwarteter Fehler ist aufgetreten"
 
-#: ./opengever/meeting/browser/memberships.py:59
+#: ./opengever/meeting/browser/memberships.py:60
 msgid "Can't add membership, it overlaps an existing membership from ${date_from} to ${date_to}"
 msgstr "Die Mitgliedschaft kann nicht erstellt werden, weil sie eine bestehende Mitgliedschaft vom ${date_from} bis ${date_to} überschneidet."
 
-#: ./opengever/meeting/browser/memberships.py:92
+#: ./opengever/meeting/browser/memberships.py:93
 msgid "Can't change membership, it overlaps an existing membership from ${date_from} to ${date_to}"
 msgstr "Die Mitgliedschaft kann nicht geändert werden, weil sie eine bestehende Mitgliedschaft vom ${date_from} bis zum ${date_to} überschneidet."
 
 #. Default: "Cancel"
-#: ./opengever/meeting/browser/meetings/excerpt.py:68
-#: ./opengever/meeting/browser/meetings/protocol.py:144
+#: ./opengever/meeting/browser/meetings/excerpt.py:141
+#: ./opengever/meeting/browser/meetings/protocol.py:145
 #: ./opengever/meeting/form.py:50
 msgid "Cancel"
 msgstr "Abbrechen"
+
+#: ./opengever/meeting/browser/meetings/templates/excerpt.pt:23
+msgid "Choose Agenda Items"
+msgstr "Traktanden auswählen"
 
 #: ./opengever/meeting/profiles/default/types/opengever.meeting.committee.xml
 msgid "Committee"
@@ -84,7 +88,7 @@ msgstr "Erwägungen"
 msgid "Discussion"
 msgstr "Diskussion"
 
-#: ./opengever/meeting/command.py:257
+#: ./opengever/meeting/command.py:300
 msgid "Document ${title} has already been submitted in that version"
 msgstr "Das Dokument ${title} wurde bereits in dieser Version eingereicht"
 
@@ -104,11 +108,11 @@ msgstr "Vorprotokoll bearbeiten"
 msgid "Edit protocol"
 msgstr "Protokoll bearbeiten"
 
-#: ./opengever/meeting/command.py:112
+#: ./opengever/meeting/command.py:114
 msgid "Excerpt for meeting ${title} has been generated successfully"
 msgstr "Protokollauszug für die Sitzung ${title} wurde erfolgreich erstellt."
 
-#: ./opengever/meeting/command.py:117
+#: ./opengever/meeting/command.py:119
 msgid "Excerpt for meeting ${title} has been updated successfully"
 msgstr "Protokollauszug für die Sitzung ${title} wurde erfolgreich aktualisiert."
 
@@ -116,6 +120,18 @@ msgstr "Protokollauszug für die Sitzung ${title} wurde erfolgreich aktualisiert
 #: ./opengever/meeting/committeecontainer.py:25
 msgid "Excerpt template"
 msgstr "Vorlage Protokollauszug"
+
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:61
+msgid "Excerpts"
+msgstr "Protokollauszüge"
+
+#: ./opengever/meeting/browser/meetings/templates/excerpt.pt:19
+msgid "Export settings"
+msgstr "Export-Einstellungen"
+
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:75
+msgid "Generate excerpt"
+msgstr "Protokollauszug generieren"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:45
 msgid "Generate pre-protocol"
@@ -128,6 +144,30 @@ msgstr "Protokoll generieren"
 #: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt:66
 msgid "History"
 msgstr "Verlauf"
+
+#: ./opengever/meeting/browser/meetings/excerpt.py:46
+msgid "Include considerations"
+msgstr "Überlegungen einfügen"
+
+#: ./opengever/meeting/browser/meetings/excerpt.py:58
+msgid "Include decision"
+msgstr "Entscheid einfügen"
+
+#: ./opengever/meeting/browser/meetings/excerpt.py:54
+msgid "Include discussion"
+msgstr "Diskussion einfügen"
+
+#: ./opengever/meeting/browser/meetings/excerpt.py:38
+msgid "Include initial position"
+msgstr "Ausgangslage einfügen"
+
+#: ./opengever/meeting/browser/meetings/excerpt.py:42
+msgid "Include legal basis"
+msgstr "Rechtsgrundlage einfügen"
+
+#: ./opengever/meeting/browser/meetings/excerpt.py:50
+msgid "Include proposed action"
+msgstr "Antrag einfügen"
 
 #: ./opengever/meeting/browser/meetings/templates/protocol.pt:32
 msgid "Initial position"
@@ -145,16 +185,24 @@ msgstr "Standort"
 msgid "Memberships"
 msgstr "Mitgliedschaften"
 
+#: ./opengever/meeting/browser/meetings/excerpt.py:125
+msgid "Please select at least one agenda item."
+msgstr "Bitte wählen Sie mindestens ein Traktandum aus."
+
+#: ./opengever/meeting/browser/meetings/excerpt.py:72
+msgid "Please select at least one field for the excerpt."
+msgstr "Bitte wählen Sie mindestens einen Feld für den Protokollauszug aus."
+
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:43
-#: ./opengever/meeting/model/meeting.py:138
+#: ./opengever/meeting/model/meeting.py:147
 msgid "Pre-Protocol"
 msgstr "Vorprotokoll"
 
-#: ./opengever/meeting/command.py:42
+#: ./opengever/meeting/command.py:44
 msgid "Pre-protocol for meeting ${title} has been generated successfully"
 msgstr "Vorprotokoll für die Sitzung ${title} wurde erfolgreich erstellt."
 
-#: ./opengever/meeting/command.py:47
+#: ./opengever/meeting/command.py:49
 msgid "Pre-protocol for meeting ${title} has been updated successfully"
 msgstr "Vorprotokoll für die Sitzung ${title} wurde erfolgreich aktualisiert."
 
@@ -179,19 +227,19 @@ msgid "Proposed action"
 msgstr "Antrag"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:50
-#: ./opengever/meeting/model/meeting.py:141
+#: ./opengever/meeting/model/meeting.py:150
 msgid "Protocol"
 msgstr "Protokoll"
 
-#: ./opengever/meeting/model/meeting.py:144
+#: ./opengever/meeting/model/meeting.py:153
 msgid "Protocol Excerpt"
 msgstr "Protokollauszug"
 
-#: ./opengever/meeting/command.py:74
+#: ./opengever/meeting/command.py:76
 msgid "Protocol for meeting ${title} has been generated successfully"
 msgstr "Protokoll für die Sitzung ${title} wurde erfolgreich erstellt."
 
-#: ./opengever/meeting/command.py:79
+#: ./opengever/meeting/command.py:81
 msgid "Protocol for meeting ${title} has been updated successfully"
 msgstr "Protokoll für die Sitzung ${title} wurde erfolgreich aktualisiert."
 
@@ -210,8 +258,8 @@ msgid "Sablon Template"
 msgstr "Sablon Vorlage"
 
 #. Default: "Save"
-#: ./opengever/meeting/browser/meetings/excerpt.py:46
-#: ./opengever/meeting/browser/meetings/protocol.py:135
+#: ./opengever/meeting/browser/meetings/excerpt.py:112
+#: ./opengever/meeting/browser/meetings/protocol.py:136
 #: ./opengever/meeting/form.py:42
 msgid "Save"
 msgstr "Speichern"
@@ -232,7 +280,7 @@ msgstr "Eingereichter Antrag"
 msgid "Updated with a newer docment version from proposal's dossier."
 msgstr "Das Dokument wurde durch eine neuere Version aus dem Antragsdossier überschrieben."
 
-#: ./opengever/meeting/command.py:210
+#: ./opengever/meeting/command.py:253
 msgid "Updated with a newer generated version from meeting ${title}."
 msgstr "Mit einer neuen Version der Sitzung ${title} aktualisiert."
 
@@ -241,23 +289,23 @@ msgstr "Mit einer neuen Version der Sitzung ${title} aktualisiert."
 msgid "agenda_item_order_updated"
 msgstr "Die Reihenfolge der Traktanden wurde aktualisiert."
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:85
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:105
 msgid "as free-text"
 msgstr "Als Traktandum"
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:83
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:103
 msgid "as paragraph"
 msgstr "Als Abschnitt"
 
 #. Default: "Cancel"
 #: ./opengever/meeting/browser/documents/submit.py:72
-#: ./opengever/meeting/browser/protocol.py:97
+#: ./opengever/meeting/browser/protocol.py:82
 #: ./opengever/meeting/browser/submitdocuments.py:81
 msgid "button_cancel"
 msgstr "Abbrechen"
 
 #. Default: "Generate"
-#: ./opengever/meeting/browser/protocol.py:80
+#: ./opengever/meeting/browser/protocol.py:65
 msgid "button_generate"
 msgstr "Erstellen"
 
@@ -272,12 +320,12 @@ msgid "button_submit_documents"
 msgstr "Dokumente einreichen"
 
 #. Default: "Close"
-#: ./opengever/meeting/model/meeting.py:65
+#: ./opengever/meeting/model/meeting.py:72
 msgid "close"
 msgstr "Schliessen"
 
 #. Default: "Closed"
-#: ./opengever/meeting/model/meeting.py:55
+#: ./opengever/meeting/model/meeting.py:62
 msgid "closed"
 msgstr "geschlossen"
 
@@ -374,22 +422,22 @@ msgid "decided"
 msgstr "Beschlossen"
 
 #. Default: "Generate pre-protocol"
-#: ./opengever/meeting/browser/protocol.py:67
+#: ./opengever/meeting/browser/protocol.py:52
 msgid "form_label_generate_preprotocol"
 msgstr "Vorprotokoll erstellen"
 
 #. Default: "Update pre-protocol"
-#: ./opengever/meeting/browser/protocol.py:193
+#: ./opengever/meeting/browser/protocol.py:178
 msgid "form_label_update_preprotocol"
 msgstr "Vorprotokoll aktualisieren"
 
 #. Default: "Held"
-#: ./opengever/meeting/model/meeting.py:54
+#: ./opengever/meeting/model/meeting.py:61
 msgid "held"
 msgstr "Durchgeführt"
 
 #. Default: "Select the target dossier where the pre-protocol should be created."
-#: ./opengever/meeting/browser/protocol.py:40
+#: ./opengever/meeting/browser/protocol.py:39
 msgid "help_accept_select_dossier"
 msgstr "Wählen Sie das Dossier aus, in welchem das Protokoll abgelegt werden soll."
 
@@ -405,22 +453,27 @@ msgstr ""
 msgid "help_proposed_action"
 msgstr ""
 
+#. Default: "Select the target dossier where the excerpts should be created."
+#: ./opengever/meeting/browser/meetings/excerpt.py:26
+msgid "help_select_dossier"
+msgstr "Wählen Sie das Dossier aus, in welchem der Protokollauszug abgelegt werden soll."
+
 #: ./opengever/meeting/proposal.py:60
 msgid "help_title"
 msgstr ""
 
 #. Default: "Hold meeting"
-#: ./opengever/meeting/model/meeting.py:63
+#: ./opengever/meeting/model/meeting.py:70
 msgid "hold meeting"
 msgstr "Sitzung durchführen"
 
 #. Default: "Target dossier"
-#: ./opengever/meeting/browser/protocol.py:38
+#: ./opengever/meeting/browser/protocol.py:37
 msgid "label_accept_select_dossier"
 msgstr "Zieldossier"
 
 #. Default: "Committee"
-#: ./opengever/meeting/browser/meetings/meeting.py:37
+#: ./opengever/meeting/browser/meetings/meeting.py:38
 #: ./opengever/meeting/browser/members_templates/member.pt:49
 #: ./opengever/meeting/proposal.py:34
 msgid "label_committee"
@@ -467,7 +520,7 @@ msgid "label_edit"
 msgstr "Bearbeiten"
 
 #. Default: "Edit Membership"
-#: ./opengever/meeting/browser/memberships.py:79
+#: ./opengever/meeting/browser/memberships.py:80
 msgid "label_edit_membership"
 msgstr "Mitgliedschaft bearbeiten"
 
@@ -478,7 +531,7 @@ msgid "label_email"
 msgstr "E-Mail"
 
 #. Default: "End"
-#: ./opengever/meeting/browser/meetings/meeting.py:51
+#: ./opengever/meeting/browser/meetings/meeting.py:52
 msgid "label_end"
 msgstr "Ende"
 
@@ -515,7 +568,7 @@ msgid "label_legal_basis"
 msgstr "Rechtsgrundlage"
 
 #. Default: "Location"
-#: ./opengever/meeting/browser/meetings/meeting.py:42
+#: ./opengever/meeting/browser/meetings/meeting.py:43
 msgid "label_location"
 msgstr "Standort"
 
@@ -535,17 +588,17 @@ msgid "label_next_meeting"
 msgstr "Nächste Sitzung:"
 
 #. Default: "Other Participants"
-#: ./opengever/meeting/browser/meetings/protocol.py:46
+#: ./opengever/meeting/browser/meetings/protocol.py:45
 msgid "label_other_participants"
 msgstr "Weitere Teilnehmende"
 
 #. Default: "Participants"
-#: ./opengever/meeting/browser/meetings/protocol.py:38
+#: ./opengever/meeting/browser/meetings/protocol.py:37
 msgid "label_participants"
 msgstr "Teilnehmende"
 
 #. Default: "Presidency"
-#: ./opengever/meeting/browser/meetings/protocol.py:27
+#: ./opengever/meeting/browser/meetings/protocol.py:26
 msgid "label_presidency"
 msgstr "Vorsitz"
 
@@ -576,16 +629,22 @@ msgid "label_sablon_template_file"
 msgstr "Vorlage-Datei"
 
 #. Default: "Secretary"
-#: ./opengever/meeting/browser/meetings/protocol.py:32
+#: ./opengever/meeting/browser/meetings/protocol.py:31
 msgid "label_secretary"
 msgstr "Sekretär"
 
+#. Default: "Target dossier"
+#: ./opengever/meeting/browser/meetings/excerpt.py:24
+msgid "label_select_dossier"
+msgstr "Zieldossier"
+
 #. Default: "Start"
-#: ./opengever/meeting/browser/meetings/meeting.py:47
+#: ./opengever/meeting/browser/meetings/meeting.py:48
 msgid "label_start"
 msgstr "Start"
 
 #. Default: "Title"
+#: ./opengever/meeting/browser/meetings/excerpt.py:33
 #: ./opengever/meeting/committee.py:44
 #: ./opengever/meeting/proposal.py:28
 msgid "label_title"
@@ -602,7 +661,7 @@ msgid "label_upcoming_meetings"
 msgstr "Kommende Sitzungen"
 
 #. Default: "Choose how to update an existing pre-protocol:"
-#: ./opengever/meeting/browser/protocol.py:175
+#: ./opengever/meeting/browser/protocol.py:160
 msgid "label_update_generated_pre_protocol_choose_method"
 msgstr "Wählen Sie wie ein bestehendes Vorprotokoll aktualisiert werden soll:"
 
@@ -612,7 +671,7 @@ msgid "label_workflow_state"
 msgstr "Status"
 
 #. Default: "Changes saved"
-#: ./opengever/meeting/browser/meetings/protocol.py:140
+#: ./opengever/meeting/browser/meetings/protocol.py:141
 #: ./opengever/meeting/form.py:116
 msgid "message_changes_saved"
 msgstr "Änderungen gespeichert"
@@ -623,12 +682,12 @@ msgid "message_record_created"
 msgstr "Eintrag erzeugt"
 
 #. Default: "The meeting ${title} has been successfully closed, the excerpts have been generated and sent back to the initial dossier."
-#: ./opengever/meeting/command.py:437
+#: ./opengever/meeting/command.py:480
 msgid "msg_meeting_successfully_closed"
 msgstr "Die Sitzung ${title} wurde erfolgreich abgeschlossen, die Protokollauszüge wurden generiert und an die Urprungsdossiers zurückgespielt."
 
 #. Default: "The membership was deleted successfully"
-#: ./opengever/meeting/browser/memberships.py:108
+#: ./opengever/meeting/browser/memberships.py:109
 msgid "msg_membership_deleted"
 msgstr "Die Mitgliedschaft wurde erfolgreich gelöscht"
 
@@ -638,12 +697,12 @@ msgid "msg_successfully_deleted"
 msgstr "Das Objekt wurde erfolgreich gelöscht"
 
 #. Default: "Create a new document in dossier ${title}"
-#: ./opengever/meeting/browser/protocol.py:166
+#: ./opengever/meeting/browser/protocol.py:151
 msgid "new_document"
 msgstr "Ein neues Dokument im Dossier ${title} erstellen"
 
 #. Default: "Create a new document version for document ${title}"
-#: ./opengever/meeting/browser/protocol.py:160
+#: ./opengever/meeting/browser/protocol.py:145
 msgid "new_document_version"
 msgstr "Eine neue Dokumentversion des Dokuments ${title} erstellen"
 
@@ -653,13 +712,13 @@ msgid "new_unscheduled_proposals"
 msgstr "Neu eingereichte Anträge"
 
 #. Default: "Pending"
-#: ./opengever/meeting/model/meeting.py:53
+#: ./opengever/meeting/model/meeting.py:60
 #: ./opengever/meeting/model/proposal.py:86
 msgid "pending"
 msgstr "In Bearbeitung"
 
 #. Default: "Pre-Protocol"
-#: ./opengever/meeting/protocol.py:121
+#: ./opengever/meeting/protocol.py:40
 msgid "pre_protocol"
 msgstr "Vorprotokoll"
 
@@ -699,17 +758,17 @@ msgid "proposal_history_label_submitted"
 msgstr "Eingereicht durch ${user}"
 
 #. Default: "Protocol"
-#: ./opengever/meeting/protocol.py:167
+#: ./opengever/meeting/protocol.py:92
 msgid "protocol"
 msgstr "Protokoll"
 
 #. Default: "Protocol-Excerpt"
-#: ./opengever/meeting/protocol.py:192
+#: ./opengever/meeting/protocol.py:102
 msgid "protocol_excerpt"
 msgstr "Protokollauszug"
 
 #. Default: "Schedule"
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:73
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:93
 #: ./opengever/meeting/model/proposal.py:102
 msgid "schedule"
 msgstr "traktandieren"

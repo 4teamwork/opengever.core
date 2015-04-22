@@ -237,4 +237,14 @@
         directory="profiles/4304"
         />
 
+    <!-- 4304 -> 4305 -->
+    <genericsetup:upgradeStep
+        title="Add generated excerpts secondary table."
+        description=""
+        source="4304"
+        destination="4305"
+        handler="opengever.meeting.upgrades.to4305.AddGeneratedExcerpts"
+        profile="opengever.meeting:default"
+        />
+
 </configure>

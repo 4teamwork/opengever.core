@@ -33,7 +33,8 @@ def get_css_class(item):
 
         return _get_task_css_class(item)
 
-    elif item.portal_type == 'opengever.document.document':
+    elif item.portal_type in ['opengever.document.document',
+                              'opengever.meeting.sablontemplate']:
         if getattr(item, '_v__is_relation', False):
             # Document was listed as a relation, so we use a special icon.
             css_class = "icon-dokument_verweis"
