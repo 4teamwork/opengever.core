@@ -202,7 +202,7 @@ class Proposal(Base):
 
         self.execute_transition('submitted-scheduled')
         session = create_session()
-        session.add(AgendaItem(meeting=meeting, proposal=self))
+        meeting.agenda_items.append(AgendaItem(proposal=self))
         session.add(proposalhistory.Scheduled(proposal=self, meeting=meeting))
 
     def remove_scheduled(self, meeting):
