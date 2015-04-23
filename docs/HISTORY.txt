@@ -5,6 +5,10 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Initalize annotations during object creation, to avoid CSRF messages on
+  first object access.
+  [phgross]
+
 - Move empty template profiles from setup to examplecontent. Create reusable
   Municipality content profile with initial meeting content.
   [phgross, deiferni]
