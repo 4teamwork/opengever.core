@@ -60,4 +60,14 @@
       profile="opengever.policy.base:default"
       />
 
+  <!-- 4201 -> 4300 -->
+  <genericsetup:upgradeStep
+      title="Install ftw.footer."
+      description=""
+      source="4201"
+      destination="4300"
+      handler="opengever.policy.base.upgrades.to4300.InstallFtwFooter"
+      profile="opengever.policy.base:default"
+      />
+
 </configure>
