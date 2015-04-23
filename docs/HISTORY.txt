@@ -5,6 +5,10 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Fix displaying agenda-item numbers. Make number optional and don't
+  display it when no number is set (i.e. for paragraphs).
+  [deiferni]
+
 - Initalize annotations during object creation, to avoid CSRF messages on
   first object access.
   [phgross]

@@ -84,9 +84,12 @@ class AgendaItem(Base):
 
         return text
 
-    def get_title(self):
+    def get_title(self, include_number=False):
         title = self.proposal.title if self.has_proposal else self.title
-        return u"{} {}".format(self.number, title)
+        if include_number and self.number:
+            title = u"{} {}".format(self.number, title)
+
+        return title
 
     def get_css_class(self):
         return "paragraph" if self.is_paragraph else ""

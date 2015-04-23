@@ -21,8 +21,8 @@
 
           <metal:block fill-slot="actions">
             <h2 i18n:translate="">Choose Agenda Items</h2>
-            <metal:block tal:repeat="protocol view/get_agenda_items">
-            <metal:block tal:define="name protocol/name">
+            <metal:block tal:repeat="agenda_item view/get_agenda_items">
+            <metal:block tal:define="name agenda_item/name">
 
               <p>
               <input type="checkbox"
@@ -30,7 +30,7 @@
                                      id string:${name}.include:record;
                                      checked python: request.get(name) is not None" />
               <label tal:attributes="for string:${name}.include:record"
-                     tal:content="protocol/get_title">
+                     tal:content="python: agenda_item.get_title(include_number=True)">
               </label>
               </p>
 
