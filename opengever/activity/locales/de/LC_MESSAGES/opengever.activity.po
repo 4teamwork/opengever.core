@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-04-16 17:18+0000\n"
+"POT-Creation-Date: 2015-04-28 07:32+0000\n"
 "PO-Revision-Date: 2015-02-24 08:40+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,7 +46,17 @@ msgstr "Erstellt"
 msgid "heading_notifications"
 msgstr "Benachrichtigungen"
 
+#. Default: "Description:"
+#: ./opengever/activity/mail_templates/notification.pt:21
+msgid "label_description"
+msgstr "Beschreibung:"
+
 #. Default: "My notifications"
 #: ./opengever/activity/browser/views.py:31
 msgid "label_my_notifications"
 msgstr "Meine Benachrichtigungen"
+
+#. Default: "All Notifications"
+#: ./opengever/activity/viewlets/notification.pt:46
+msgid "label_notifications_overview"
+msgstr "Alle Benachrichtigungen"

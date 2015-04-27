@@ -43,8 +43,9 @@
           </div>
         </li>
         <li class="notification-item">
-          <a href="#" class="all_link" tal:attributes="href view/overview_url">
-            Notifications Overview
+          <a href="#" class="all_link" tal:attributes="href view/overview_url"
+             i18n:translate="label_notifications_overview">
+            All Notifications
           </a>
         </li>
       </ul>
