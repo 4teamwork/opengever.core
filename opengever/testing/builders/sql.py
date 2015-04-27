@@ -1,6 +1,7 @@
 from datetime import date
 from datetime import timedelta
 from ftw.builder import builder_registry
+from opengever.base.oguid import Oguid
 from opengever.globalindex.model.task import Task
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import Committee
@@ -8,6 +9,9 @@ from opengever.meeting.model import Meeting
 from opengever.meeting.model import Member
 from opengever.meeting.model import Membership
 from opengever.meeting.model import Proposal as ProposalModel
+from opengever.meeting.model.generateddocument import GeneratedExcerpt
+from opengever.meeting.model.generateddocument import GeneratedPreProtocol
+from opengever.meeting.model.generateddocument import GeneratedProtocol
 from opengever.meeting.proposal import IProposal
 from opengever.meeting.proposal import Proposal
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
@@ -193,6 +197,32 @@ class MeetingBuilder(SqlObjectBuilder):
         return obj
 
 builder_registry.register('meeting', MeetingBuilder)
+
+
+class GeneratedProtocolBuilder(SqlObjectBuilder):
+
+    mapped_class = GeneratedProtocol
+
+    def for_document(self, document):
+        self.arguments['oguid'] = Oguid.for_object(document)
+        self.arguments['generated_version'] = document.get_current_version()
+        return self
+
+builder_registry.register('generated_protocol', GeneratedProtocolBuilder)
+
+
+class GeneratedPreProtocolBuilder(GeneratedProtocolBuilder):
+
+    mapped_class = GeneratedPreProtocol
+
+builder_registry.register('generated_preprotocol', GeneratedPreProtocolBuilder)
+
+
+class GeneratedExcerptBuilder(GeneratedProtocolBuilder):
+
+    mapped_class = GeneratedExcerpt
+
+builder_registry.register('generated_excerpt', GeneratedExcerptBuilder)
 
 
 class AgendaItemBuilder(SqlObjectBuilder):
