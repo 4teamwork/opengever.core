@@ -23,10 +23,6 @@
  <permission>opengever.meeting: Add Sablon Template</permission>
  <state state_id="templatedossier-state-active" title="Active">
   <description>Visible to everyone, editable by the owner.</description>
-  <permission-map name="opengever.meeting: Add Sablon Template" acquired="False">
-   <permission-role>Contributor</permission-role>
-   <permission-role>Manager</permission-role>
-  </permission-map>
   <permission-map name="Access contents information" acquired="False">
    <permission-role>Administrator</permission-role>
    <permission-role>Manager</permission-role>
@@ -50,9 +46,9 @@
   </permission-map>
   <permission-map name="Modify portal content" acquired="False">
    <permission-role>Administrator</permission-role>
-   <permission-role>Manager</permission-role>
    <permission-role>Contributor</permission-role>
    <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
   </permission-map>
   <permission-map name="Sharing page: Delegate Contributor role" acquired="False">
    <permission-role>Administrator</permission-role>
@@ -118,6 +114,10 @@
   </permission-map>
   <permission-map name="opengever.dossier: Add templatedossier" acquired="False">
    <permission-role>Administrator</permission-role>
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="opengever.meeting: Add Sablon Template" acquired="False">
+   <permission-role>Contributor</permission-role>
    <permission-role>Manager</permission-role>
   </permission-map>
   <permission-map name="opengever.trash: Trash content" acquired="False">
