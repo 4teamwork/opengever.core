@@ -62,7 +62,6 @@
               <ul>
                 <li tal:repeat="item excerpts">
                   <a href="" tal:attributes="href item/absolute_url;
-                                             title python: getattr(item, 'document_date', None) and item.document_date.strftime('%d.%m.%Y') or '';
                                              class python:view.get_css_class(item)">
                     <span class="document" tal:condition="item/absolute_url" tal:content="item/Title" />
                   </a>

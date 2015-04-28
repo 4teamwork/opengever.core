@@ -22,7 +22,10 @@ class TestMeetingView(FunctionalTestCase):
         self.dossier = create(Builder('dossier')
                               .within(self.repository_root))
 
-        self.attachement = create(Builder('document').attach_file_containing(u"attachement", u"attachement.docx").within(self.dossier))
+        self.attachement = create(Builder('document')
+                                  .attach_file_containing(u"attachement",
+                                                          u"attachement.docx")
+                                  .within(self.dossier))
 
         container = create(Builder('committee_container'))
         self.committee = create(Builder('committee').within(container))
@@ -31,32 +34,58 @@ class TestMeetingView(FunctionalTestCase):
             Builder('sablontemplate')
             .with_asset_file('excerpt_template.docx'))
 
-        self.preprotocol = create(Builder('document').attach_file_containing(u"preprotocol", u"preprotocol.docx").within(self.dossier))
-        self.protocol = create(Builder('document').attach_file_containing(u"protocol", u"protocol.docx").within(self.dossier))
-        self.excerpt = create(Builder('document').attach_file_containing(u"excerpt", u"excerpt.docx").within(self.dossier))
+        self.preprotocol = create(Builder('document')
+                                  .attach_file_containing(u"preprotocol",
+                                                          u"preprotocol.docx")
+                                  .within(self.dossier))
 
-        self.generated_excerpt = create(Builder('generated_excerpt').for_document(self.excerpt))
+        self.protocol = create(Builder('document')
+                               .attach_file_containing(u"protocol",
+                                                       u"protocol.docx")
+                               .within(self.dossier))
 
-        self.hugo = create(Builder('member').having(firstname=u'h\xfcgo', lastname="Boss"))
-        self.sile = create(Builder('member').having(firstname="Silvia", lastname="Pangani"))
-        self.peter = create(Builder('member').having(firstname="Peter", lastname="Meter"))
-        self.hans = create(Builder('member').having(firstname="Hans", lastname="Besen"))
-        self.roland = create(Builder('member').having(firstname="Roland", lastname="Kuppler"))
+        self.excerpt = create(Builder('document')
+                              .attach_file_containing(u"excerpt",
+                                                      u"excerpt.docx")
+                              .within(self.dossier))
+
+        self.generated_excerpt = create(Builder('generated_excerpt')
+                                        .for_document(self.excerpt))
+
+        self.hugo = create(Builder('member').having(firstname=u'h\xfcgo',
+                                                    lastname="Boss"))
+
+        self.sile = create(Builder('member').having(firstname="Silvia",
+                                                    lastname="Pangani"))
+
+        self.peter = create(Builder('member').having(firstname="Peter",
+                                                     lastname="Meter"))
+
+        self.hans = create(Builder('member').having(firstname="Hans",
+                                                    lastname="Besen"))
+
+        self.roland = create(Builder('member').having(firstname="Roland",
+                                                      lastname="Kuppler"))
 
         self.proposal_a = create(Builder('proposal')
                                  .titled(u'Proposal A')
                                  .within(self.dossier)
                                  .as_submitted()
                                  .having(committee=self.committee.load_model(),
-                                         submitted_excerpt_document=self.generated_excerpt,).relate_to(self.attachement))
+                                         submitted_excerpt_document=self.generated_excerpt,)
+                                 .relate_to(self.attachement))
+
         self.proposal_b = create(Builder('proposal')
                                  .titled(u'Proposal B')
                                  .within(self.dossier)
                                  .as_submitted()
                                  .having(committee=self.committee.load_model()))
 
-        self.generated_protocol = create(Builder('generated_protocol').for_document(self.protocol))
-        self.generated_preprotocol = create(Builder('generated_preprotocol').for_document(self.preprotocol))
+        self.generated_protocol = create(Builder('generated_protocol')
+                                         .for_document(self.protocol))
+
+        self.generated_preprotocol = create(Builder('generated_preprotocol')
+                                            .for_document(self.preprotocol))
 
         # restore session by refreshing instance
         self.generated_excerpt = GeneratedExcerpt.get(self.generated_excerpt.document_id)
@@ -67,7 +96,9 @@ class TestMeetingView(FunctionalTestCase):
                                       end=datetime(2013, 1, 1, 10, 30),
                                       location='There',
                                       presidency=self.hugo,
-                                      participants = [self.peter, self.hans, self.roland],
+                                      participants = [self.peter,
+                                                      self.hans,
+                                                      self.roland],
                                       secretary=self.sile,
                                       pre_protocol_document=self.generated_preprotocol,
                                       protocol_document=self.generated_protocol,
@@ -105,7 +136,8 @@ class TestMeetingView(FunctionalTestCase):
     @browsing
     def test_participants_listing_participants_is_existing(self, browser):
         browser.login().open(MeetingList.url_for(self.committee, self.meeting))
-        self.assertEquals(['Peter Meter Hans Besen Roland Kuppler'], browser.css("#meeting_participants").text)
+        self.assertEquals(['Peter Meter Hans Besen Roland Kuppler'],
+                          browser.css("#meeting_participants").text)
 
     @browsing
     def test_participants_listing_empty_participants_must_not_raise(self, browser):
@@ -117,12 +149,12 @@ class TestMeetingView(FunctionalTestCase):
     @browsing
     def test_metadata_starttime_is_existing(self, browser):
         browser.login().open(MeetingList.url_for(self.committee, self.meeting))
-        self.assertEquals('08:30', browser.css("#meeting_time span")[0].text)
+        self.assertEquals('08:30 AM', browser.css("#meeting_time span")[0].text)
 
     @browsing
     def test_metadata_endtime_is_existing(self, browser):
         browser.login().open(MeetingList.url_for(self.committee, self.meeting))
-        self.assertEquals('10:30', browser.css("#meeting_time span")[1].text)
+        self.assertEquals('10:30 AM', browser.css("#meeting_time span")[1].text)
 
     @browsing
     def test_metadata_no_endtime_must_not_raise(self, browser):
@@ -175,5 +207,7 @@ class TestMeetingView(FunctionalTestCase):
     @browsing
     def test_proposal_is_expandable(self, browser):
         browser.login().open(MeetingList.url_for(self.committee, self.meeting))
-        self.assertEquals('expandable', browser.css("#agenda_items tr")[1].get('class'))
-        self.assertEquals('', browser.css("#agenda_items tr")[0].get('class'))
+        self.assertEquals('expandable',
+                          browser.css("#agenda_items tr")[0].get('class'))
+
+        self.assertEquals('', browser.css("#agenda_items tr")[1].get('class'))

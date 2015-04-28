@@ -70,7 +70,7 @@ class TestProtocol(FunctionalTestCase):
 
     def setup_generated_protocol(self, browser):
         self.setup_protocol(browser)
-        browser.find('Generate protocol').click()
+        browser.css('a[href*="@@generate_protocol"]').first.click()
         browser.fill({'Target dossier': self.dossier})
         browser.find('Generate').click()
 
@@ -154,14 +154,14 @@ class TestProtocol(FunctionalTestCase):
     @browsing
     def test_protocol_can_be_downloaded(self, browser):
         self.setup_protocol(browser)
-        browser.find('Download protocol').click()
+        browser.css('a[href$="download_protocol"]').first.click()
         self.assertEqual(browser.headers['content-type'], MIME_DOCX)
         self.assertIsNotNone(browser.contents)
 
     @browsing
     def test_protocol_can_be_generated(self, browser):
         self.setup_protocol(browser)
-        browser.find('Generate protocol').click()
+        browser.css('a[href*="@@generate_protocol"]').first.click()
         browser.fill({'Target dossier': self.dossier})
         browser.find('Generate').click()
 
@@ -183,7 +183,7 @@ class TestProtocol(FunctionalTestCase):
         self.setup_generated_protocol(browser)
 
         browser.open(MeetingList.url_for(self.committee, self.meeting))
-        browser.find('Generate protocol').click()
+        browser.css('a[href*="@@update_protocol"]').first.click()
         browser.fill({'form.widgets.method:list': METHOD_NEW_VERSION}).submit()
 
         meeting = Meeting.get(self.meeting.meeting_id)  # refresh meeting
@@ -200,7 +200,7 @@ class TestProtocol(FunctionalTestCase):
         self.setup_generated_protocol(browser)
 
         browser.open(MeetingList.url_for(self.committee, self.meeting))
-        browser.find('Generate protocol').click()
+        browser.css('a[href*="@@update_protocol"]').first.click()
         browser.fill({'form.widgets.method:list': METHOD_NEW_DOCUMENT}).submit()
 
         meeting = Meeting.get(self.meeting.meeting_id)  # refresh meeting

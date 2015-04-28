@@ -179,7 +179,7 @@ class Proposal(Base):
         return [doc.resolve_submitted() for doc in self.submitted_documents]
 
     def has_submitted_documents(self):
-        return len(self.submitted_documents) > 0
+        return self.submitted_documents or self.submitted_excerpt_document
 
     def resolve_excerpt_document(self):
         document = self.excerpt_document
