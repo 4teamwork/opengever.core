@@ -5,6 +5,9 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- NotificationViewlet: Display message when no unread notifications exist.
+  [phgross]
+
 - Move MyNotifications listing to the PersonalOverview.
   [phgross]
 

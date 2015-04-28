@@ -3,9 +3,10 @@
   <h5 class="hiddenStructure" i18n:translate="heading_notifications">Notifications</h5>
 
   <dl class="notificationsMenu actionMenu deactivated" id="portal-notifications-selector-menu"
-      tal:attributes="data-read-url view/read_url">
+      tal:attributes="data-read-url view/read_url"
+      tal:define="num_unread view/num_unread">
 
-    <dt class="notificationsMenuHeader actionMenuHeader" tal:define="num_unread view/num_unread">
+    <dt class="notificationsMenuHeader actionMenuHeader">
 
       <a tal:attributes="href string:#"></a>
 
@@ -18,6 +19,12 @@
 
     <dd class="actionMenuContent notificationsMenuContent">
       <ul>
+        <li class="no-content" tal:condition="not: num_unread" >
+          <div class="item-content" i18n:translate="no_unread_notifications">
+            No unread notifications
+          </div>
+        </li>
+
         <li class="notification-item" tal:repeat="notification view/get_notifications"
             tal:attributes="data-notification-id notification/id">
 
@@ -42,6 +49,7 @@
             </div>
           </div>
         </li>
+
         <li class="notification-item">
           <a href="#" class="all_link" tal:attributes="href view/overview_url"
              i18n:translate="label_notifications_overview">
