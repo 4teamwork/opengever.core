@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-04-28 07:32+0000\n"
+"POT-Creation-Date: 2015-04-28 09:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,12 +51,12 @@ msgstr ""
 msgid "label_description"
 msgstr ""
 
-#. Default: "My notifications"
-#: ./opengever/activity/browser/views.py:31
-msgid "label_my_notifications"
+#. Default: "All Notifications"
+#: ./opengever/activity/viewlets/notification.pt:54
+msgid "label_notifications_overview"
 msgstr ""
 
-#. Default: "All Notifications"
-#: ./opengever/activity/viewlets/notification.pt:46
-msgid "label_notifications_overview"
+#. Default: "No unread notifications"
+#: ./opengever/activity/viewlets/notification.pt:23
+msgid "no_unread_notifications"
 msgstr ""
