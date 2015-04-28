@@ -12,80 +12,134 @@
         <div id="opengever_meeting_protocol">
           <metal:use use-macro="context/@@ploneform-macros/titlelessform">
 
-            <metal:block fill-slot="actions">
+            <metal:block fill-slot="fields">
+             <div class="agenda_items">
+                <metal:block tal:repeat="protocol view/get_agenda_items">
+                  <metal:block tal:define="name protocol/name">
 
-              <metal:block tal:repeat="protocol view/get_agenda_items">
-              <metal:block tal:define="name protocol/name">
+                    <h2 class="protocol_title" tal:content="protocol/get_title"></h2>
 
-                <h2 class="protocol_title" tal:content="protocol/get_title"></h2>
+                    <metal:block tal:condition="protocol/has_proposal">
+                        <label tal:attributes="for string:${name}.legal_basis:record"
+                               i18n:translate="">
+                               Legal basis
+                        </label>
+                        <textarea class="textarea-widget text-field"
+                                  tal:attributes="name string:${name}.legal_basis:record;
+                                                  id string:${name}.legal_basis:record"
+                                  tal:content="protocol/legal_basis"/>
 
-                <metal:block tal:condition="protocol/has_proposal">
-                    <label tal:attributes="for string:${name}.legal_basis:record"
+                        <label tal:attributes="for string:${name}.initial_position:record"
+                               i18n:translate="">
+                               Initial position
+                        </label>
+                        <textarea class="textarea-widget text-field"
+                                  tal:attributes="name string:${name}.initial_position:record;
+                                                  id string:${name}.initial_position:record"
+                                  tal:content="protocol/initial_position"/>
+
+                        <label tal:attributes="for string:${name}.proposed_action:record"
+                               i18n:translate="">
+                               Proposed action
+                        </label>
+                        <textarea class="textarea-widget text-field"
+                                  tal:attributes="name string:${name}.proposed_action:record;
+                                                  id string:${name}.proposed_action:record"
+                                  tal:content="protocol/proposed_action"/>
+
+                        <label tal:attributes="for string:${name}.considerations:record"
+                               i18n:translate="">
+                               Considerations
+                        </label>
+                        <textarea class="textarea-widget text-field"
+                                  tal:attributes="name string:${name}.considerations:record;
+                                                  id string:${name}.considerations:record"
+                                  tal:content="protocol/considerations"/>
+                    </metal:block>
+
+                    <label tal:attributes="for string:${name}.discussion:record"
                            i18n:translate="">
-                           Legal basis
+                           Discussion
                     </label>
                     <textarea class="textarea-widget text-field"
-                              tal:attributes="name string:${name}.legal_basis:record;
-                                              id string:${name}.legal_basis:record"
-                              tal:content="protocol/legal_basis"/>
+                              tal:attributes="name string:${name}.discussion:record;
+                                              id string:${name}.discussion:record"
+                              tal:content="protocol/discussion"/>
 
-                    <label tal:attributes="for string:${name}.initial_position:record"
-                           i18n:translate="">
-                           Initial position
+                    <label tal:attributes="for string:${name}.decision:record"
+                           i18n:translate="label_decision">
+                           Decision
                     </label>
                     <textarea class="textarea-widget text-field"
-                              tal:attributes="name string:${name}.initial_position:record;
-                                              id string:${name}.initial_position:record"
-                              tal:content="protocol/initial_position"/>
+                              tal:attributes="name string:${name}.decision:record;
+                                              id string:${name}.decision:record"
+                              tal:content="protocol/decision"/>
 
-                    <label tal:attributes="for string:${name}.proposed_action:record"
-                           i18n:translate="">
-                           Proposed action
-                    </label>
-                    <textarea class="textarea-widget text-field"
-                              tal:attributes="name string:${name}.proposed_action:record;
-                                              id string:${name}.proposed_action:record"
-                              tal:content="protocol/proposed_action"/>
-
-                    <label tal:attributes="for string:${name}.considerations:record"
-                           i18n:translate="">
-                           Considerations
-                    </label>
-                    <textarea class="textarea-widget text-field"
-                              tal:attributes="name string:${name}.considerations:record;
-                                              id string:${name}.considerations:record"
-                              tal:content="protocol/considerations"/>
+                  </metal:block>
                 </metal:block>
 
-                <label tal:attributes="for string:${name}.discussion:record"
-                       i18n:translate="">
-                       Discussion
-                </label>
-                <textarea class="textarea-widget text-field"
-                          tal:attributes="name string:${name}.discussion:record;
-                                          id string:${name}.discussion:record"
-                          tal:content="protocol/discussion"/>
+                <metal:use use-macro="context/@@ploneform-macros/actions" />
 
-                <label tal:attributes="for string:${name}.decision:record"
-                       i18n:translate="label_decision">
-                       Decision
-                </label>
-                <textarea class="textarea-widget text-field"
-                          tal:attributes="name string:${name}.decision:record;
-                                          id string:${name}.decision:record"
-                          tal:content="protocol/decision"/>
+                <metal:use use-macro="context/@@meeting-macros/disable_kss_inline_validation" />
+              </div>
+            </metal:block>
 
-              </metal:block>
-              </metal:block>
-
-            <metal:use use-macro="context/@@ploneform-macros/actions" />
-
-            <metal:use use-macro="context/@@meeting-macros/disable_kss_inline_validation" />
-
+            <metal:block fill-slot="actions">
+              <div class="metadata">
+                <metal:use use-macro="context/@@ploneform-macros/fields" />
+              </div>
+              <div class="protocol-navigation" id="protocol-navigation">
+                <ul id="scrollspy" class="nav">
+                    <li tal:repeat="protocol view/get_agenda_items">
+                      <metal:block tal:define="name protocol/name">
+                        <a tal:attributes="href string:#${name}" tal:content="protocol/get_title"></a>
+                          <ul class="nav">
+                            <metal:block tal:condition="protocol/has_proposal">
+                              <li>
+                                <a tal:attributes="href string:#${name}-legal_basis"
+                                   i18n:translate="">
+                                   Legal basis
+                                 </a>
+                              </li>
+                              <li>
+                                <a tal:attributes="href string:#${name}-initial_position"
+                                   i18n:translate="">
+                                   Initial position
+                                 </a>
+                              </li>
+                              <li>
+                                <a tal:attributes="href string:#${name}-proposed_action"
+                                   i18n:translate="">
+                                   Proposed action
+                                 </a>
+                              </li>
+                              <li>
+                                <a tal:attributes="href string:#${name}-considerations"
+                                   i18n:translate="">
+                                   Considerations
+                                 </a>
+                              </li>
+                            </metal:block>
+                            <li>
+                              <a tal:attributes="href string:#${name}-discussion"
+                                 i18n:translate="">
+                                 Discussion
+                               </a>
+                            </li>
+                            <li>
+                              <a tal:attributes="href string:#${name}-decision"
+                                 i18n:translate="">
+                                 Decision
+                               </a>
+                            </li>
+                          </ul>
+                        </metal:block>
+                    </li>
+                </ul>
+              </div>
             </metal:block>
 
           </metal:use>
-        </div>
       </metal:content-core>
     </metal:content-core>
 
