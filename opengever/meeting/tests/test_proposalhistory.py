@@ -15,6 +15,7 @@ class TestProposalHistory(FunctionalTestCase):
 
     def setUp(self):
         super(TestProposalHistory, self).setUp()
+        self.grant('Contributor')
         container = create(Builder('committee_container'))
         self.committee = create(Builder('committee').within(container))
         self.meeting = create(Builder('meeting')
