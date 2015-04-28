@@ -180,9 +180,6 @@ class MeetingView(BrowserView):
     def url_download_protocol(self):
         return DownloadGeneratedProtocol.url_for(self.context, self.model)
 
-    def url_update_agenda_item_order(self):
-        return UpdateAgendaItemOrder.url_for(self.context, self.model)
-
     def url_manually_generate_excerpt(self):
         return GenerateExcerpt.url_for(self.context, self.model)
 
@@ -196,6 +193,11 @@ class MeetingView(BrowserView):
         return [excerpt.resolve_document()
                 for excerpt in self.model.excerpt_documents]
 
+    @property
+    def url_update_agenda_item_order(self):
+        return UpdateAgendaItemOrder.url_for(self.context, self.model)
+
+    @property
     def msg_unexpected_error(self):
         return translate(_('An unexpected error has occurred',
                            default='An unexpected error has occurred'),

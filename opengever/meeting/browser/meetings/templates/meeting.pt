@@ -16,9 +16,9 @@
       <metal:content-core define-macro="content-core"
                           tal:define="meeting view/model;
                                       unscheduled_proposals view/unscheduled_proposals">
-      <div id="opengever_meeting_meeting">
-        <script tal:content="string:var js_update_order_url = '${view/url_update_agenda_item_order}'
-                             var msg_unexpected_error = '${view/msg_unexpected_error}';"></script>
+      <div id="opengever_meeting_meeting"
+           tal:attributes="data-unexpected-error view/msg_unexpected_error;
+                           data-update-agenda-item-order-url view/url_update_agenda_item_order">
 
         <div class="sidebar">
           <fieldset class="metadata">
