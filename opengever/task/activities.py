@@ -1,4 +1,5 @@
 from opengever.activity import notification_center
+from opengever.base.utils import get_preferred_language_code
 from opengever.ogds.base.actor import Actor
 from opengever.task import _
 from opengever.task.response_description import ResponseDescription
@@ -102,13 +103,13 @@ class TaskAddedActivity(TaskActivity):
             [self.translate(_('label_deadline', u'Deadline')),
              api.portal.get_localized_time(str(self.context.deadline))],
             [self.translate(_('label_task_type', u'Task Type')),
-             self.context.get_task_type_label()],
+             self.context.get_task_type_label(
+                 language=get_preferred_language_code())],
             [self.translate(_('label_dossier_title', u'Dossier title')),
              self.parent.title],
             [self.translate(_('label_text', u'Text')),
              self.context.text]
         ]
-
 
     def before_recording(self):
         self.center.add_watcher_to_resource(self.context,

@@ -5,6 +5,9 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Notifications: added some missing translations.
+  [phgross]
+
 - Fix displaying agenda-item numbers. Make number optional and don't
   display it when no number is set (i.e. for paragraphs).
   [deiferni]

@@ -18,7 +18,7 @@
     <a href="" tal:content="options/title" tal:attributes="href options/link"></a>
     <p tal:content="structure options/summary" />
 
-    <p>Description:</p>
+    <p i18n:translate="label_description">Description:</p>
     <span tal:replace="structure options/description" />
 
     <br />
