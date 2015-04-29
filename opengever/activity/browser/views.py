@@ -1,6 +1,4 @@
 from five import grok
-from ftw.tabbedview.browser.tabbed import TabbedView
-from opengever.activity import _
 from opengever.activity import notification_center
 from opengever.activity.browser.listing import NotificationListingTab
 from plone import api
@@ -18,21 +16,6 @@ class NotificationView(BrowserView):
         notification_id = self.request.get('notification_id')
         notification_center().mark_notification_as_read(notification_id)
         return True
-
-
-class NotificationOverview(TabbedView):
-
-    def get_tabs(self):
-        tabs = [
-            {'id': 'mynotifications',
-             'icon': None,
-             'url': '#',
-             'class': None,
-             'title': _('label_my_notifications',
-                        default=u'My notifications')},
-        ]
-
-        return tabs
 
 
 class MyNotifications(NotificationListingTab):

@@ -282,6 +282,11 @@ msgstr "Ende"
 msgid "label_issuer"
 msgstr "Auftraggeber"
 
+#. Default: "My notifications"
+#: ./opengever/tabbedview/browser/personal_overview.py:50
+msgid "label_my_notifications"
+msgstr "Meine Benachrichtigungen"
+
 #. Default: "Public Trial"
 #: ./opengever/tabbedview/browser/tabs.py:105
 msgid "label_public_trial"
@@ -369,7 +374,7 @@ msgid "participants"
 msgstr "Beteiligte"
 
 #. Default: "Personal Overview: ${user_name}"
-#: ./opengever/tabbedview/browser/personal_overview.py:79
+#: ./opengever/tabbedview/browser/personal_overview.py:82
 msgid "personal_overview_title"
 msgstr "Persönliche Übersicht: ${user_name}"
 
@@ -441,4 +446,3 @@ msgstr "Titel"
 
 msgid "trash"
 msgstr "Papierkorb"
-

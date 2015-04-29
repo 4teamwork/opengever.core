@@ -102,3 +102,15 @@ class TestNotificationViewlet(FunctionalTestCase):
         self.assertEquals(
             'http://nohost/plone/@@resolve_notification?notification_id=1',
             link.get('href'))
+
+    @browsing
+    def test_displays_message_when_no_unread_notifications(self, browser):
+        browser.login().open()
+
+        self.assertEquals(
+            ['No unread notifications', 'All Notifications'],
+            browser.css('dl.notificationsMenu li').text)
+
+        self.assertEquals(
+            'no-content',
+            browser.css('dl.notificationsMenu li').first.get('class'))

@@ -52,5 +52,4 @@ class NotificationViewlet(common.ViewletBase):
 
     @property
     def overview_url(self):
-        return '{}/notification_overview'.format(
-            api.portal.get().absolute_url())
+        return '{}/personal_overview#mynotifications'.format(api.portal.get().absolute_url())

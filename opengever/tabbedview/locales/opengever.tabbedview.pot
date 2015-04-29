@@ -275,6 +275,11 @@ msgstr ""
 msgid "label_issuer"
 msgstr ""
 
+#. Default: "My notifications"
+#: ./opengever/tabbedview/browser/personal_overview.py:50
+msgid "label_my_notifications"
+msgstr ""
+
 #. Default: "Public Trial"
 #: ./opengever/tabbedview/browser/tabs.py:105
 msgid "label_public_trial"
@@ -360,7 +365,7 @@ msgid "participants"
 msgstr ""
 
 #. Default: "Personal Overview: ${user_name}"
-#: ./opengever/tabbedview/browser/personal_overview.py:79
+#: ./opengever/tabbedview/browser/personal_overview.py:82
 msgid "personal_overview_title"
 msgstr ""
 
@@ -422,4 +427,3 @@ msgstr ""
 
 msgid "trash"
 msgstr ""
-

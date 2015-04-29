@@ -1,6 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.testing import create_plone_user
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import setRoles
@@ -76,6 +77,31 @@ class TestPersonalOverview(FunctionalTestCase):
             view='personal_overview')
         self.assertEqual(
             ['mydossiers', 'mydocuments', 'mytasks', 'myissuedtasks'],
+            browser.css('li.formTab a').text)
+
+    @browsing
+    def test_notification_tab_is_hidden_when_activity_feature_is_disabled(self, browser):
+        browser.login(username='hugo.boss', password='demo09').open(
+            view='personal_overview')
+        self.assertEqual(
+            ['mydossiers', 'mydocuments', 'mytasks', 'myissuedtasks'],
+            browser.css('li.formTab a').text)
+
+
+class TestPersonalOverviewActivitySupport(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
+
+    @browsing
+    def test_notification_tab_is_displayed_when_activity_feature_is_enabled(self, browser):
+        browser.login().open(view='personal_overview')
+        self.assertEqual(
+            ['mydossiers', 'mydocuments',
+             'mytasks',
+             'myissuedtasks',
+             'My notifications',
+             'alltasks',
+             'allissuedtasks'],
             browser.css('li.formTab a').text)
 
 
