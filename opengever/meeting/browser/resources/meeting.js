@@ -100,7 +100,7 @@
 
     $("tbody", agendaItemTable).sortable(sortableSettings);
 
-    $(".toggle-attachements", agendaItemTable).click(toggleAttachements);
+    $(".expandable .toggle-attachements", agendaItemTable).click(toggleAttachements);
 
   });
 
