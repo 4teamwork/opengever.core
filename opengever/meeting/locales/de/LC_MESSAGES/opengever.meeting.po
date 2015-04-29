@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-04-22 15:55+0000\n"
+"POT-Creation-Date: 2015-04-29 14:07+0000\n"
 "PO-Revision-Date: 2015-04-10 09:01+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -181,7 +181,7 @@ msgstr "Bitte wählen Sie mindestens ein Traktandum aus."
 msgid "Please select at least one field for the excerpt."
 msgstr "Bitte wählen Sie mindestens einen Feld für den Protokollauszug aus."
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:79
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:43
 #: ./opengever/meeting/model/meeting.py:151
 msgid "Pre-Protocol"
 msgstr "Vorprotokoll"
@@ -213,7 +213,7 @@ msgstr "Antrag"
 msgid "Proposed action"
 msgstr "Antrag"
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:90
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:50
 #: ./opengever/meeting/model/meeting.py:154
 msgid "Protocol"
 msgstr "Protokoll"
@@ -309,6 +309,7 @@ msgid "closed"
 msgstr "geschlossen"
 
 #. Default: "Comittee"
+#: ./opengever/meeting/browser/committeetabs.py:57
 #: ./opengever/meeting/tabs/proposallisting.py:41
 msgid "column_comittee"
 msgstr "Kommission"
@@ -328,6 +329,11 @@ msgstr "Von"
 msgid "column_date_to"
 msgstr "Bis"
 
+#. Default: "Decision"
+#: ./opengever/meeting/browser/committeetabs.py:69
+msgid "column_decision"
+msgstr "Beschluss"
+
 #. Default: "E-Mail"
 #: ./opengever/meeting/tabs/memberlisting.py:35
 msgid "column_email"
@@ -344,6 +350,7 @@ msgid "column_firstname"
 msgstr "Vorname"
 
 #. Default: "Initial Position"
+#: ./opengever/meeting/browser/committeetabs.py:61
 #: ./opengever/meeting/tabs/proposallisting.py:45
 msgid "column_initial_position"
 msgstr "Ausgangslage"
@@ -363,7 +370,13 @@ msgstr "Standort"
 msgid "column_member"
 msgstr "Mitglied"
 
+#. Default: "Nr."
+#: ./opengever/meeting/browser/committeetabs.py:46
+msgid "column_number"
+msgstr "Beschluss Nr."
+
 #. Default: "Proposed action"
+#: ./opengever/meeting/browser/committeetabs.py:65
 #: ./opengever/meeting/tabs/proposallisting.py:49
 msgid "column_proposed_action"
 msgstr "Antrag"
@@ -379,14 +392,15 @@ msgid "column_start_time"
 msgstr "Von (Uhrzeit)"
 
 #. Default: "State"
+#: ./opengever/meeting/browser/committeetabs.py:53
 #: ./opengever/meeting/tabs/proposallisting.py:37
 msgid "column_state"
 msgstr "Status"
 
 #. Default: "Title"
+#: ./opengever/meeting/browser/committeetabs.py:49
 #: ./opengever/meeting/tabs/committeelisting.py:24
 #: ./opengever/meeting/tabs/meetinglisting.py:23
-#: ./opengever/meeting/tabs/proposallisting.py:33
 msgid "column_title"
 msgstr "Titel"
 
@@ -776,4 +790,3 @@ msgstr "${amount} Treffer"
 #: ./opengever/meeting/model/proposal.py:104
 msgid "un-schedule"
 msgstr "Traktandum entfernen"
-

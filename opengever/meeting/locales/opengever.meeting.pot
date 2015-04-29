@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-04-22 15:55+0000\n"
+"POT-Creation-Date: 2015-04-29 14:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -213,7 +213,7 @@ msgstr ""
 msgid "Proposed action"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:90
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:50
 #: ./opengever/meeting/model/meeting.py:154
 msgid "Protocol"
 msgstr ""
@@ -309,6 +309,7 @@ msgid "closed"
 msgstr ""
 
 #. Default: "Comittee"
+#: ./opengever/meeting/browser/committeetabs.py:57
 #: ./opengever/meeting/tabs/proposallisting.py:41
 msgid "column_comittee"
 msgstr ""
@@ -328,6 +329,11 @@ msgstr ""
 msgid "column_date_to"
 msgstr ""
 
+#. Default: "Decision"
+#: ./opengever/meeting/browser/committeetabs.py:69
+msgid "column_decision"
+msgstr ""
+
 #. Default: "E-Mail"
 #: ./opengever/meeting/tabs/memberlisting.py:35
 msgid "column_email"
@@ -344,6 +350,7 @@ msgid "column_firstname"
 msgstr ""
 
 #. Default: "Initial Position"
+#: ./opengever/meeting/browser/committeetabs.py:61
 #: ./opengever/meeting/tabs/proposallisting.py:45
 msgid "column_initial_position"
 msgstr ""
@@ -363,7 +370,13 @@ msgstr ""
 msgid "column_member"
 msgstr ""
 
+#. Default: "Nr."
+#: ./opengever/meeting/browser/committeetabs.py:46
+msgid "column_number"
+msgstr ""
+
 #. Default: "Proposed action"
+#: ./opengever/meeting/browser/committeetabs.py:65
 #: ./opengever/meeting/tabs/proposallisting.py:49
 msgid "column_proposed_action"
 msgstr ""
@@ -379,14 +392,15 @@ msgid "column_start_time"
 msgstr ""
 
 #. Default: "State"
+#: ./opengever/meeting/browser/committeetabs.py:53
 #: ./opengever/meeting/tabs/proposallisting.py:37
 msgid "column_state"
 msgstr ""
 
 #. Default: "Title"
+#: ./opengever/meeting/browser/committeetabs.py:49
 #: ./opengever/meeting/tabs/committeelisting.py:24
 #: ./opengever/meeting/tabs/meetinglisting.py:23
-#: ./opengever/meeting/tabs/proposallisting.py:33
 msgid "column_title"
 msgstr ""
 
@@ -775,4 +789,3 @@ msgstr ""
 #: ./opengever/meeting/model/proposal.py:104
 msgid "un-schedule"
 msgstr ""
-

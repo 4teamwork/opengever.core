@@ -35,6 +35,11 @@ class ProposalQuery(BaseQuery):
         query = self.filter(self._attribute('workflow_state').in_(states))
         return query.filter(self._attribute('committee') == committee)
 
+    def decided_by_committee(self, committee):
+        states = ['decided']
+        query = self.filter(self._attribute('workflow_state').in_(states))
+        return query.filter(self._attribute('committee') == committee)
+
 
 class CommitteeQuery(BaseQuery):
 
