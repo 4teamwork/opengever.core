@@ -1,5 +1,8 @@
 from ftw.upgrade import UpgradeStep
-from opengever.base import model
+from opengever import meeting
+from opengever.base.model import Base
+from opengever.base.model import create_session
+from opengever.base.model import get_tables
 
 
 class InstallMeeting(UpgradeStep):
@@ -19,4 +22,7 @@ class InstallMeeting(UpgradeStep):
         care of that.
 
         """
-        model.Base.metadata.create_all(model.Session().bind, checkfirst=True)
+        Base.metadata.create_all(
+            create_session().bind,
+            get_tables(meeting.model.tables),
+            checkfirst=True)
