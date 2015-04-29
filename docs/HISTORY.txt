@@ -5,6 +5,15 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Fix upgrades for PostgreSQL/MySQL:
+
+  - Fix opengever.policy.base upgrades, limit created tables to installed package.
+  - Add idempotent MySQL implementations for creating/dropping indices and dropping tables.
+  - Drop unnecessary/broken statements from migrations.
+  - Drop a temporary table after the migration is finished.
+
+  [deiferni]
+
 - Fixed userdetails icons for group listings.
   [phgross]
 
