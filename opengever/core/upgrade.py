@@ -179,9 +179,14 @@ class IdempotentOperations(Operations):
             *args, **kwargs)
 
     @metadata_operation
-    def drop_table(self, *args, **kwargs):
-        return super(IdempotentOperations, self).drop_table(
-            *args, **kwargs)
+    def drop_table(self, name, **kw):
+        if self._get_table(name) is None:
+            logger.log(logging.INFO,
+                       "Skipping drop table '{0}', table no longer exist"
+                       .format(name))
+            return
+
+        return super(IdempotentOperations, self).drop_table(name, **kw)
 
     @metadata_operation
     def create_index(self, name, table_name, columns, schema=None,
