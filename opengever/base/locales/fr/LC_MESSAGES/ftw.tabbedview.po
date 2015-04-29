@@ -74,6 +74,9 @@ msgstr "Commissions"
 msgid "contacts"
 msgstr "Contacts"
 
+msgid "decidedproposals"
+msgstr ""
+
 msgid "documents"
 msgstr "Documents"
 
@@ -199,6 +202,9 @@ msgstr "Info"
 
 msgid "subdossiers"
 msgstr "Sous-dossiers"
+
+msgid "submittedproposals"
+msgstr ""
 
 msgid "tasks"
 msgstr "Tâches"

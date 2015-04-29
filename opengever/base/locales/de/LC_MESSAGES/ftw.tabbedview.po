@@ -74,6 +74,9 @@ msgstr "Kommissionen"
 msgid "contacts"
 msgstr "Kontakte"
 
+msgid "decidedproposals"
+msgstr "Beschlüsse"
+
 msgid "documents"
 msgstr "Dokumente"
 
@@ -200,6 +203,9 @@ msgstr "Info"
 msgid "subdossiers"
 msgstr "Subdossiers"
 
+msgid "submittedproposals"
+msgstr "Eingereichte Anträge"
+
 msgid "tasks"
 msgstr "Aufgaben"
 
@@ -223,4 +229,3 @@ msgstr "Papierkorb"
 
 msgid "users"
 msgstr "OGDS"
-
