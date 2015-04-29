@@ -134,7 +134,7 @@
           <table id="agenda_items">
               <tbody>
                   <tr tal:repeat="agenda_item view/agenda_items" tal:attributes="data-uid agenda_item/agenda_item_id; class python: agenda_item.get_css_class()">
-                      <td class="sortable_handle"></td>
+                      <td class="sortable_handle" tal:condition="not:meeting/is_protocol_editable"></td>
                       <td class="number" tal:content="agenda_item/number"></td>
                       <td class="title">
                         <span>
