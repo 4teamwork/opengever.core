@@ -163,12 +163,10 @@
                       <td class="toggle-attachements">
                         <a tal:condition="agenda_item/has_submitted_documents" class="toggle-attachements-btn"></a>
                       </td>
-                      <td class="actions">
-                        <a tal:condition="meeting/is_editable"
-                            class="edit_agenda_item"></a>
-                        <a tal:condition="meeting/is_editable"
-                          class="delete_agenda_item"
-                          tal:attributes="href python: view.url_delete_agenda_item(agenda_item)"></a>
+                      <td tal:condition="meeting/is_editable" class="actions">
+                        <a class="edit_agenda_item"></a>
+                        <a class="delete_agenda_item"
+                           tal:attributes="href python: view.url_delete_agenda_item(agenda_item)"></a>
                       </td>
                   </tr>
               </tbody>
