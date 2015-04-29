@@ -5,6 +5,9 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Re-designed meeting view.
+  [Kevin Bieri]
+
 - NotificationViewlet: Display message when no unread notifications exist.
   [phgross]
 
