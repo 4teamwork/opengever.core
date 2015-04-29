@@ -4,7 +4,6 @@ from sqlalchemy import Date
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
-from sqlalchemy.schema import CreateSequence
 from sqlalchemy.schema import Sequence
 from sqlalchemy.sql.expression import column
 from sqlalchemy.sql.expression import table
@@ -35,9 +34,6 @@ class AddMembershipIdColumn(SchemaMigration):
             Column("member_id", Integer, ForeignKey('members.id')),
             Column("role", String(256))
         )
-
-        if not self.is_mysql:
-            self.op.execute(CreateSequence(Sequence("membership_id_seq")))
 
         self.op.create_unique_constraint(
             'ix_membership_unique',
