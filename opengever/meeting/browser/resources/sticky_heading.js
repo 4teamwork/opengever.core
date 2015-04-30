@@ -20,10 +20,20 @@ stickyHeading = function($){
   }
 
   return function(selector) {
-    var headings = $(selector).map(function(i, e){
-      var el = $(e);
-      return { node: el, offset: el.offset().top, height: el.outerHeight()};
-    });
+
+    var didResize = false;
+
+    var headings;
+
+    function mapHeadings() {
+      headings = $(selector).map(function(i, e){
+        var el = $(e);
+        return { node: el, offset: el.offset().top, height: el.outerHeight()};
+      });
+    }
+
+    mapHeadings();
+
     if(headings.length < 1) { return false; }
 
     function findStickyHeading(scrollPositionTop){
@@ -36,7 +46,15 @@ stickyHeading = function($){
       return pastHeadings[pastHeadings.length - 1];
     }
 
+    function onResize() {
+      didResize = true;
+    }
+
     function onScroll() {
+      if(didResize) {
+        mapHeadings();
+        didResize = false;
+      }
       layouter.reset(headings);
       var scrollPositionTop = $(window).scrollTop();
       var stickyHeading = findStickyHeading(scrollPositionTop);
@@ -54,5 +72,6 @@ stickyHeading = function($){
     }
 
     $(window).scroll(onScroll);
+    $(window).resize(onResize);
   }
 }(jQuery);
