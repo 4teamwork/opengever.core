@@ -149,4 +149,23 @@
         profile="opengever.dossier:default"
         />
 
+    <!-- 4301 -> 4302 -->
+    <genericsetup:upgradeStep
+        title="Also manage meeting permission in dossiers."
+        description=""
+        source="4301"
+        destination="4302"
+        handler="opengever.dossier.upgrades.to4302.ManageMeetingPermission"
+        profile="opengever.dossier:default"
+        />
+
+    <genericsetup:registerProfile
+        name="4302"
+        title="opengever.dossier: upgrade profile 4302"
+        description=""
+        directory="profiles/4302"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
 </configure>

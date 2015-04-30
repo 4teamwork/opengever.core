@@ -21,6 +21,7 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
 
     def setUp(self):
         super(TestSubmitAdditionalDocuments, self).setUp()
+        self.grant('Contributor')
         root = create(Builder('repository_root'))
         folder = create(Builder('repository').within(root))
         self.dossier = create(Builder('dossier').within(folder))

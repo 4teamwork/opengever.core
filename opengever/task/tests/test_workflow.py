@@ -27,8 +27,6 @@ class TestTaskWorkflowAddingDocumentsAndMails(FunctionalTestCase):
                                    responsible=TEST_USER_ID,
                                    responsible_client='client1'))
 
-        self.grant(['Reader', 'Editor', 'Contributor'])
-
     def click_task_button(self, browser, button_class, save_and_reload=True):
         """Visits the overview view on `self.task`, clicks the button
         identified by the CSS class `button_class`, and, if `save_and_reload`
