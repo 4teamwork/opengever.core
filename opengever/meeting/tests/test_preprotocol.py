@@ -69,7 +69,7 @@ class TestPreProtocol(FunctionalTestCase):
 
     def setup_generated_pre_protocol(self, browser):
         self.setup_pre_protocol(browser)
-        browser.find('Generate pre-protocol').click()
+        browser.find('Generate').click()
         browser.fill({'Target dossier': self.dossier})
         browser.find('Generate').click()
 
@@ -153,14 +153,14 @@ class TestPreProtocol(FunctionalTestCase):
     @browsing
     def test_pre_protocol_can_be_downloaded(self, browser):
         self.setup_pre_protocol(browser)
-        browser.find('Download pre-protocol').click()
+        browser.find('Download preview').click()
         self.assertEqual(browser.headers['content-type'], MIME_DOCX)
         self.assertIsNotNone(browser.contents)
 
     @browsing
     def test_pre_protocol_can_be_generated(self, browser):
         self.setup_pre_protocol(browser)
-        browser.find('Generate pre-protocol').click()
+        browser.find('Generate').click()
         browser.fill({'Target dossier': self.dossier})
         browser.find('Generate').click()
 
@@ -182,7 +182,7 @@ class TestPreProtocol(FunctionalTestCase):
         self.setup_generated_pre_protocol(browser)
 
         browser.open(MeetingList.url_for(self.committee, self.meeting))
-        browser.find('Generate pre-protocol').click()
+        browser.find('Generate').click()
         browser.fill({'form.widgets.method:list': METHOD_NEW_VERSION}).submit()
 
         meeting = Meeting.get(self.meeting.meeting_id)  # refresh meeting
@@ -199,7 +199,7 @@ class TestPreProtocol(FunctionalTestCase):
         self.setup_generated_pre_protocol(browser)
 
         browser.open(MeetingList.url_for(self.committee, self.meeting))
-        browser.find('Generate pre-protocol').click()
+        browser.find('Generate').click()
         browser.fill({'form.widgets.method:list': METHOD_NEW_DOCUMENT}).submit()
 
         meeting = Meeting.get(self.meeting.meeting_id)  # refresh meeting

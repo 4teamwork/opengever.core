@@ -92,7 +92,12 @@ class AgendaItem(Base):
         return title
 
     def get_css_class(self):
-        return "paragraph" if self.is_paragraph else ""
+        css_classes = []
+        if self.is_paragraph:
+            css_classes.append("paragraph")
+        if self.has_submitted_documents():
+            css_classes.append("expandable")
+        return " ".join(css_classes)
 
     def remove(self):
         assert self.meeting.is_editable()
@@ -138,3 +143,9 @@ class AgendaItem(Base):
     @property
     def description(self):
         return self.get_title()
+
+    def has_submitted_documents(self):
+        return self.has_proposal and self.proposal.has_submitted_documents()
+
+    def has_submitted_excerpt_document(self):
+        return self.has_proposal and self.proposal.has_submitted_excerpt_document()

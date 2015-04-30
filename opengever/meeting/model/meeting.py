@@ -214,6 +214,9 @@ class Meeting(Base):
         return self._get_localized_time(self.start)
 
     def get_end_time(self):
+        if not self.end:
+            return ''
+
         return self._get_localized_time(self.end)
 
     def _get_localized_time(self, date):

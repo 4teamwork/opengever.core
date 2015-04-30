@@ -101,7 +101,7 @@ class TestExcerpt(FunctionalTestCase):
                          browser.url,
                          'should be on meeting view')
 
-        self.assertEqual(1, len(browser.css('#excerpts .excerpt')),
+        self.assertEqual(1, len(browser.css('.excerpts ul li a')),
                          'generated document should be linked')
         self.assertIsNotNone(browser.find('protocol-excerpt-barn-mar-04-2014'))
 

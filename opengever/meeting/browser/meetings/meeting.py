@@ -1,3 +1,5 @@
+from Products.Five.browser import BrowserView
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from opengever.base.browser.helper import get_css_class
 from opengever.meeting import _
 from opengever.meeting.browser.meetings.agendaitem import DeleteAgendaItem
@@ -19,8 +21,6 @@ from opengever.meeting.form import ModelAddForm
 from opengever.meeting.form import ModelEditForm
 from opengever.meeting.model import Meeting
 from plone.directives import form
-from Products.Five.browser import BrowserView
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import field
 from z3c.form.interfaces import HIDDEN_MODE
 from zExceptions import NotFound
@@ -148,6 +148,10 @@ class MeetingView(BrowserView):
     def is_protocol_editable(self):
         return self.model.is_protocol_editable()
 
+    def get_pre_protocol_document(self):
+        if self.model.pre_protocol_document:
+            return self.model.pre_protocol_document.resolve_document()
+
     def url_pre_protocol(self):
         return EditPreProtocol.url_for(self.context, self.model)
 
@@ -160,6 +164,10 @@ class MeetingView(BrowserView):
     def url_download_pre_protocol(self):
         return DownloadGeneratedPreProtocol.url_for(self.context, self.model)
 
+    def get_protocol_document(self):
+        if self.model.protocol_document:
+            return self.model.protocol_document.resolve_document()
+
     def url_protocol(self):
         return EditProtocol.url_for(self.context, self.model)
 
@@ -171,9 +179,6 @@ class MeetingView(BrowserView):
 
     def url_download_protocol(self):
         return DownloadGeneratedProtocol.url_for(self.context, self.model)
-
-    def url_update_agenda_item_order(self):
-        return UpdateAgendaItemOrder.url_for(self.context, self.model)
 
     def url_manually_generate_excerpt(self):
         return GenerateExcerpt.url_for(self.context, self.model)
@@ -188,6 +193,11 @@ class MeetingView(BrowserView):
         return [excerpt.resolve_document()
                 for excerpt in self.model.excerpt_documents]
 
+    @property
+    def url_update_agenda_item_order(self):
+        return UpdateAgendaItemOrder.url_for(self.context, self.model)
+
+    @property
     def msg_unexpected_error(self):
         return translate(_('An unexpected error has occurred',
                            default='An unexpected error has occurred'),

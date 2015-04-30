@@ -2,44 +2,50 @@
 
   "use strict";
 
-  var listMessages = function(messages) {
-
-    var lastPloneMessage = $(".portalMessage").last();
-    var messageTemplate = "<dl style='display:none'; class='portalMessage {{:messageClass}}'><dt>{{:messageTitle}}</dt><dd>{{:message}}</dd></dl>";
-    var defaultMessage = {
-      messageClass: "error",
-      messageTitle: "Fehler",
-      message: global.msg_unexpected_error
-    };
-    var currentMessages = $(".portalMessage:visible");
-
-    var clearMessages = function() {
-      currentMessages.delay(500).fadeOut("fast", function() {
-        $(this).remove();
-      });
-    };
-
-    var insertMessage = function(messageData) {
-      var message = messageTemplate;
-      message = message.replace("{{:messageClass}}", messageData.messageClass);
-      message = message.replace("{{:messageTitle}}", messageData.messageTitle);
-      message = message.replace("{{:message}}", messageData.message);
-      $(message).insertAfter(lastPloneMessage).fadeIn("fast");
-    };
-
-    if (!messages) {
-      insertMessage(defaultMessage);
-    } else {
-      $.each(messages, function(index, message) {
-        insertMessage(message);
-      });
-    }
-
-    clearMessages();
-
-  };
-
   $(function() {
+
+    var viewlet = $("#opengever_meeting_meeting");
+
+    var listMessages = function(messages) {
+
+      var lastPloneMessage = $(".portalMessage").last();
+      var messageTemplate = "<dl style='display:none'; class='portalMessage {{:messageClass}}'><dt>{{:messageTitle}}</dt><dd>{{:message}}</dd></dl>";
+      var defaultMessage = {
+        messageClass: "error",
+        messageTitle: "Fehler",
+        message: viewlet.data("msg_unexpected_error")
+      };
+      var currentMessages = $(".portalMessage:visible");
+
+      var clearMessages = function() {
+        currentMessages.delay(500).fadeOut("fast", function() {
+          $(this).remove();
+        });
+      };
+
+      var insertMessage = function(messageData) {
+        var message = messageTemplate;
+        message = message.replace("{{:messageClass}}", messageData.messageClass);
+        message = message.replace("{{:messageTitle}}", messageData.messageTitle);
+        message = message.replace("{{:message}}", messageData.message);
+        $(message).insertAfter(lastPloneMessage).fadeIn("fast");
+      };
+
+      if (!messages) {
+        insertMessage(defaultMessage);
+      } else {
+        $.each(messages, function(index, message) {
+          insertMessage(message);
+        });
+      }
+
+      clearMessages();
+
+    };
+
+    var toggleAttachements = function(event) {
+      $(this).parents("tr").toggleClass("expanded");
+    };
 
     $("#opengever_meeting_protocol textarea").autosize();
 
@@ -75,7 +81,7 @@
           type: "POST",
           dataType: "json",
           contentType: "application/json",
-          url: global.js_update_order_url, // this variable is set by the template
+          url: viewlet.data("update-agenda-item-order-url"),
           data: JSON.stringify(updatePayload),
           success: onOrderSuccess,
           error: onOrderFail
@@ -93,6 +99,8 @@
       };
 
     $("tbody", agendaItemTable).sortable(sortableSettings);
+
+    $(".expandable .toggle-attachements", agendaItemTable).click(toggleAttachements);
 
   });
 
