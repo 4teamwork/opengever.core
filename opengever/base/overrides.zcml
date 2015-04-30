@@ -10,4 +10,18 @@
       class=".menu.OGCombinedActionsWorkflowMenu"
       />
 
+  <!-- Fix for bug mentioned in Issue #934 Fehler bei den Falldossiers 1 und 2 BD.ARP
+       https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/934
+       Remove as soon as this has been fixed in plone.app.z3cform / plone.z3cform
+  -->
+  <browser:page
+      name="ploneform-macros"
+      for="*"
+      layer="plone.app.z3cform.interfaces.IPloneFormLayer"
+      class=".browser.ploneform_macros.Macros"
+      template="browser/templates/macros.pt"
+      allowed_interface="zope.interface.common.mapping.IItemMapping"
+      permission="zope.Public"
+      />
+
 </configure>
