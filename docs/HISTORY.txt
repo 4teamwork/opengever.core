@@ -5,6 +5,9 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Fixed userdetails icons for group listings.
+  [phgross]
+
 - Also manage meeting permissions in dossier workflows.
   [deiferni]
 
