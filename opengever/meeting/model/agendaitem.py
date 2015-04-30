@@ -57,7 +57,7 @@ class AgendaItem(Base):
         data = {
             'number': self.number,
             'description': self.description,
-            'title': self.title,
+            'title': self.get_title(),
         }
         if include_initial_position:
             data['markdown:initial_position'] = self._sanitize_text(
