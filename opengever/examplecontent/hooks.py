@@ -26,13 +26,12 @@ Der gro\u0308sste Aufwandposten ist wie in den vergangenen Jahren mit CHF 3,050 
 
 Es sind Investitionsvorhaben von CHF 1\u2018288\u2018700.00 geplant.'''
 
-PROPOSED_ACTION_3 = '''Der Kirchgemeinderat stellt der Kirchgemeindeversammlung den Antrag,
+PROPOSED_ACTION_3 = u'''Der Kirchgemeinderat stellt der Kirchgemeindeversammlung den Antrag,
 
 1. den Voranschlag 2015 mit einem Ausgabenu\u0308berschuss von CHF 613\u2018000.00 zu genehmigen.
-
 2. den Steuerfuss auf 0.210 Einheiten zu belassen.'''
 
-INITIAL_POSITION_4 = u'''Die Versammlung hat am 6. Juni 2012 einen Verpflichtungskredit von Fr. 144'600.00 fu\u0308r die Revision genehmigt. Nach mehr als 30 Jahren seit der letzten grossen Revision, wo in der Regel alle 20 Jahre sollte durchgefu\u0308hrt werden, hat sich diese aufgedra\u0308ngt.
+INITIAL_POSITION_4 = u'''Die Versammlung hat am 6. Juni 2012 einen Verpflichtungskredit von Fr. 144\u2018600.00 fu\u0308r die Revision genehmigt. Nach mehr als 30 Jahren seit der letzten grossen Revision, wo in der Regel alle 20 Jahre sollte durchgefu\u0308hrt werden, hat sich diese aufgedra\u0308ngt.
 
 Wa\u0308hrend den Revisionsarbeiten hat sich herausgestellt, dass zusa\u0308tzlich Arbeiten durchgef\xfchrt werden m\xfcssen.Diese zusa\u0308tzlichen Arbeiten gleichzeitig mit der Revision durchzufu\u0308hren, erschien als sinnvoll. Im letzten Jahr hat deshalb der Besondere Verwalter gestu\u0308tzt auf die einverlangten Offerten einen Nachkredit von rund Fr. 10'000.00 genehmigt. Dies lag betragsma\u0308ssig in seiner Kompetenz.
 
