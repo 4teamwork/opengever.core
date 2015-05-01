@@ -5,6 +5,9 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Fixed wrongly displayed document_actions in task overview.
+  [phgross]
+
 - Fix upgrades for PostgreSQL/MySQL:
 
   - Fix opengever.policy.base upgrades, limit created tables to installed package.
