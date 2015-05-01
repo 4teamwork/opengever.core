@@ -16,4 +16,9 @@
                 insert-after="++resource++plone.app.jquery.js"
                 />
 
+    <javascript cacheable="True" compression="safe" cookable="True" expression=""
+                enabled="True" id="++resource++opengever.meeting/protocol.js" inline="False"
+                insert-after="++resource++opengever.meeting/sticky_heading.js"
+                />
+
 </object>
