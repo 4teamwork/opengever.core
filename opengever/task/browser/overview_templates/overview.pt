@@ -82,7 +82,5 @@
     <div class="visualClear"><!----></div>
     <div tal:replace="structure provider:opengever.task.beneathTask" />
     <div class="visualClear"><!----></div>
-    <div tal:replace="structure provider:plone.belowcontentbody" />
-    <div class="visualClear"><!----></div>
   </tal:i18n>
 </html>
