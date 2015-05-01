@@ -17,68 +17,72 @@
                 <metal:block tal:repeat="protocol view/get_agenda_items">
                   <metal:block tal:define="name protocol/name">
 
-                    <h2 class="protocol_title" tal:content="protocol/get_title"></h2>
+                    <h2 class="protocol_title" tal:attributes="id name" tal:content="protocol/get_title"></h2>
 
                     <metal:block tal:condition="protocol/has_proposal">
-                        <label tal:attributes="for string:${name}.legal_basis:record"
+                        <label tal:attributes="for string:${name}-legal_basis;
+                                               id string:${name}-legal_basis-label"
                                i18n:translate="">
                                Legal basis
                         </label>
                         <textarea class="textarea-widget text-field"
                                   tal:attributes="name string:${name}.legal_basis:record;
-                                                  id string:${name}.legal_basis:record"
+                                                  id string:${name}-legal_basis"
                                   tal:content="protocol/legal_basis"/>
 
-                        <label tal:attributes="for string:${name}.initial_position:record"
+                        <label tal:attributes="for string:${name}-initial_position;
+                                               id string:${name}-initial_position-label"
                                i18n:translate="">
                                Initial position
                         </label>
                         <textarea class="textarea-widget text-field"
                                   tal:attributes="name string:${name}.initial_position:record;
-                                                  id string:${name}.initial_position:record"
+                                                  id string:${name}-initial_position"
                                   tal:content="protocol/initial_position"/>
 
-                        <label tal:attributes="for string:${name}.proposed_action:record"
+                        <label tal:attributes="for string:${name}-proposed_action;
+                                               id string:${name}-proposed_action-label"
                                i18n:translate="">
                                Proposed action
                         </label>
                         <textarea class="textarea-widget text-field"
                                   tal:attributes="name string:${name}.proposed_action:record;
-                                                  id string:${name}.proposed_action:record"
+                                                  id string:${name}-proposed_action"
                                   tal:content="protocol/proposed_action"/>
 
-                        <label tal:attributes="for string:${name}.considerations:record"
+                        <label tal:attributes="for string:${name}-considerations;
+                                               id string:${name}-considerations-label"
                                i18n:translate="">
                                Considerations
                         </label>
                         <textarea class="textarea-widget text-field"
                                   tal:attributes="name string:${name}.considerations:record;
-                                                  id string:${name}.considerations:record"
+                                                  id string:${name}-considerations"
                                   tal:content="protocol/considerations"/>
                     </metal:block>
 
-                    <label tal:attributes="for string:${name}.discussion:record"
+                    <label tal:attributes="for string:${name}-discussion;
+                                           id string:${name}-discussion-label"
                            i18n:translate="">
                            Discussion
                     </label>
                     <textarea class="textarea-widget text-field"
                               tal:attributes="name string:${name}.discussion:record;
-                                              id string:${name}.discussion:record"
+                                              id string:${name}-discussion"
                               tal:content="protocol/discussion"/>
 
-                    <label tal:attributes="for string:${name}.decision:record"
+                    <label tal:attributes="for string:${name}-decision;
+                                           id string:${name}-decision-label"
                            i18n:translate="label_decision">
                            Decision
                     </label>
                     <textarea class="textarea-widget text-field"
                               tal:attributes="name string:${name}.decision:record;
-                                              id string:${name}.decision:record"
+                                              id string:${name}-decision"
                               tal:content="protocol/decision"/>
 
                   </metal:block>
                 </metal:block>
-
-                <metal:use use-macro="context/@@ploneform-macros/actions" />
 
                 <metal:use use-macro="context/@@meeting-macros/disable_kss_inline_validation" />
               </div>
@@ -86,7 +90,10 @@
 
             <metal:block fill-slot="actions">
               <div class="metadata">
-                <metal:use use-macro="context/@@ploneform-macros/fields" />
+                <div class="fields">
+                  <metal:use use-macro="context/@@ploneform-macros/fields" />
+                  <metal:use use-macro="context/@@ploneform-macros/actions" />
+                </div>
               </div>
               <div class="protocol-navigation" id="protocol-navigation">
                 <ul id="scrollspy" class="nav">

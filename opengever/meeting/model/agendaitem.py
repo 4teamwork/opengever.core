@@ -138,7 +138,7 @@ class AgendaItem(Base):
     def name(self):
         """Currently used as name for input tags in html."""
 
-        return "agenda_item.{}".format(self.agenda_item_id)
+        return "agenda_item-{}".format(self.agenda_item_id)
 
     @property
     def description(self):
