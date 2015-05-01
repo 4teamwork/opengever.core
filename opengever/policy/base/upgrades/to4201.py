@@ -1,5 +1,8 @@
 from ftw.upgrade import UpgradeStep
-from opengever.base import model
+from opengever import activity
+from opengever.base.model import Base
+from opengever.base.model import create_session
+from opengever.base.model import get_tables
 
 
 class InstallActivity(UpgradeStep):
@@ -18,5 +21,7 @@ class InstallActivity(UpgradeStep):
         If it is installed on an new plone-site `opengever.base.hooks` takes
         care of that.
         """
-
-        model.Base.metadata.create_all(model.Session().bind, checkfirst=True)
+        Base.metadata.create_all(
+            create_session().bind,
+            tables=get_tables(activity.model.tables),
+            checkfirst=True)

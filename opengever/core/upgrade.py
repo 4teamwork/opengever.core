@@ -179,19 +179,40 @@ class IdempotentOperations(Operations):
             *args, **kwargs)
 
     @metadata_operation
-    def drop_table(self, *args, **kwargs):
-        return super(IdempotentOperations, self).drop_table(
-            *args, **kwargs)
+    def drop_table(self, name, **kw):
+        if self._get_table(name) is None:
+            logger.log(logging.INFO,
+                       "Skipping drop table '{0}', table no longer exist"
+                       .format(name))
+            return
+
+        return super(IdempotentOperations, self).drop_table(name, **kw)
 
     @metadata_operation
-    def create_index(self, *args, **kwargs):
+    def create_index(self, name, table_name, columns, schema=None,
+                     unique=False, quote=None, **kw):
+        if self._has_index(name, table_name):
+            logger.log(logging.INFO,
+                       "Skipping create index '{0}' for table '{1}', "
+                       "index already exists."
+                       .format(name, table_name))
+            return
+
         return super(IdempotentOperations, self).create_index(
-            *args, **kwargs)
+            name, table_name, columns,
+            schema=schema, unique=unique, quote=quote, **kw)
 
     @metadata_operation
-    def drop_index(self, *args, **kwargs):
+    def drop_index(self, name, table_name=None, schema=None):
+        if not self._has_index(name, table_name):
+            logger.log(logging.INFO,
+                       "Skipping drop index '{0}' for table '{1}', "
+                       "index no longer exists."
+                       .format(name, table_name))
+            return
+
         return super(IdempotentOperations, self).drop_index(
-            *args, **kwargs)
+            name, table_name=table_name, schema=schema)
 
 
 class DeactivatedFKConstraint(object):
