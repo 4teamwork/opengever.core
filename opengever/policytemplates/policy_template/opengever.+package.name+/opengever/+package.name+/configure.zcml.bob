@@ -1,0 +1,60 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:grok="http://namespaces.zope.org/grok"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:meta="http://namespaces.zope.org/meta"
+    xmlns:opengever="http://namespaces.zope.org/opengever"
+    xmlns:transmogrifier="http://namespaces.plone.org/transmogrifier"
+    xmlns:zcml="http://namespaces.zope.org/zcml">
+
+  <meta:provides feature="opengever.{{{package.name}}}" />
+
+  <grok:grok package="." />
+
+  <include package=".upgrades" />
+
+  <genericsetup:registerProfile
+      name="default"
+      title="opengever.{{{package.name}}}:default"
+      description="Policy for {{{package.title}}}"
+      directory="profiles/default"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <genericsetup:registerProfile
+      name="default_content"
+      title="opengever.{{{package.name}}}:default_content"
+      description="Default content for {{{package.title}}}."
+      directory="profiles/default_content"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <genericsetup:registerProfile
+      name="units"
+      title="opengever.{{{package.name}}}:units"
+      description="Units content for {{{package.title}}}."
+      directory="profiles/units"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <!-- deployments -->
+  <opengever:registerDeployment
+      title="OneGov GEVER {{{package.title}}}"
+      policy_profile="opengever.{{{package.name}}}:default"
+      additional_profiles="opengever.{{{package.name}}}:units
+                           opengever.{{{package.name}}}:default_content"
+      admin_unit_id="{{{adminunit.id}}}"
+      rolemanager_group="{{{deployment.rolemanager_group}}}"
+      is_default="True"
+      mail_domain="{{{deployment.mail_domain}}}"
+      mail_from_address="{{{deployment.mail_from_address}}}"
+      />
+
+  <opengever:registerLDAP
+      title="OneGov GEVER {{{package.title}}} LDAP"
+      ldap_profile="opengever.{{{package.name}}}:ldap"
+      is_default="True"
+      />
+
+</configure>

@@ -1,0 +1,10 @@
+<registry>
+
+  <records interface="opengever.ogds.base.interfaces.IAdminUnitConfiguration">
+    <value key="current_unit_id">{{{adminunit.id}}}</value>
+  </records>
+
+  <records interface="opengever.latex.interfaces.ILaTeXSettings">
+    <value key="location">{{{adminunit.title}}}</value>
+  </records>
+</registry>

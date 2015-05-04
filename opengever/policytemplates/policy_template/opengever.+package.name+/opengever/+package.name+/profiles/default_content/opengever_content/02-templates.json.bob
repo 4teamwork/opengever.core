@@ -1,0 +1,11 @@
+[
+{{% for template in range(setup.nof_templates) %}}
+    {
+        "_path": "/vorlagen/template-{{{loop.index}}}",
+        "_type": "opengever.document.document",
+        "title": "EDIT ME",
+        "file:file": "templates/EDIT ME"
+    }{{% if not loop.last %}}{,{{% endif %}}
+{{% endfor %}}
+
+]
