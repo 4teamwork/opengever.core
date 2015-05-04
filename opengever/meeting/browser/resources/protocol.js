@@ -8,6 +8,7 @@ $(document).ready(function() {
   var currentTarget;
 
   if(stickyHeadingInstance) {
+    stickyHeadingInstance.doUpdate(true);
     stickyHeadingInstance.onNoSticky(function() {
       scrollSpy.css("position", "static");
       $(".metadata .fields").css("position", "static");
@@ -17,7 +18,7 @@ $(document).ready(function() {
       scrollSpy.css("position", "fixed");
       $(".metadata .fields").css("position", "fixed");
       if(currentTarget && !currentTarget.hasClass("protocol_title")) {
-        $('html, body').scrollTop(currentTarget.offset().top - (heading.node.height() + 30));
+        $('html, body').scrollTop(currentTarget.offset().top - (heading.clone.height() + 30));
         currentTarget = null;
       }
     });
@@ -44,7 +45,7 @@ $(document).ready(function() {
     var target = $(anchor);
     moveCaretToEnd(target[0]);
     currentTarget = target;
-    $('html, body').scrollTop(target.offset().top);
+    $('html, body').scrollTop(target.offset().top + 1);
   });
 
 });
