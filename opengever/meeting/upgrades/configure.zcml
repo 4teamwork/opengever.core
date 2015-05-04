@@ -247,4 +247,13 @@
         profile="opengever.meeting:default"
         />
 
+    <!-- 4305 -> 4306 -->
+    <upgrade-step:importProfile
+        title="Add protocol javascript file."
+        source="4305"
+        destination="4306"
+        profile="opengever.meeting:default"
+        directory="profiles/4306"
+        />
+
 </configure>

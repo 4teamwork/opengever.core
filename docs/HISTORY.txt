@@ -5,6 +5,12 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Implement scrollspy.
+  [Kevin Bieri]
+
+- Re-designed protocol view.
+  [Kevin Bieri]
+
 - Fixed wrongly displayed document_actions in task overview.
   [phgross]
 
