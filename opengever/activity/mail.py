@@ -14,6 +14,8 @@ class PloneNotificationMailer(object):
     the corresponding watcher.
     """
 
+    _setting = 'mail_notification'
+
     def __init__(self):
         self.mailhost = api.portal.get_tool('MailHost')
 

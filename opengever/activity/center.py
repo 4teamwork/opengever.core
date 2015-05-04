@@ -1,4 +1,5 @@
 from opengever.activity.model import Activity
+from opengever.activity.model import DefaultSettings
 from opengever.activity.model import Notification
 from opengever.activity.model import Resource
 from opengever.activity.model import Watcher
@@ -73,6 +74,7 @@ class NotificationCenter(object):
 
     def add_activity(self, oguid, kind, title, summary, actor_id,
                      description=u''):
+
         resource = self.fetch_resource(oguid)
         if not resource:
             resource = self.add_resource(oguid)
@@ -89,7 +91,14 @@ class NotificationCenter(object):
     def create_notifications(self, activity):
         notifications = activity.create_notifications()
         for dispatcher in self.dispatchers:
-            dispatcher.dispatch_notifications(notifications)
+            if self.dispatcher_needed(dispatcher, activity.kind):
+                dispatcher.dispatch_notifications(notifications)
+
+    def dispatcher_needed(self, dispatcher, kind):
+        """Looksup in the settings table if the given dispatcher is needed for
+        the given kind.
+        """
+        return DefaultSettings.query.is_dispatch_needed(dispatcher._setting, kind)
 
     def get_users_notifications(self, userid, only_unread=False, limit=None):
         query = Notification.query.by_user(userid)

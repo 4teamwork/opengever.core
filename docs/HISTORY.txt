@@ -5,6 +5,9 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Made dispatchers configurable per installation.
+  [phgross]
+
 - Migrate templatedossiers classes from Container to custom DossierContainer subclass.
   [deiferni]
 
