@@ -8,6 +8,9 @@ _ = MessageFactory('opengever.meeting')
 
 
 def is_meeting_feature_enabled():
-    registry = getUtility(IRegistry)
-    settings = registry.forInterface(IMeetingSettings)
-    return settings.is_feature_enabled
+    try:
+        registry = getUtility(IRegistry)
+        return registry.forInterface(IMeetingSettings).is_feature_enabled
+
+    except KeyError, AttributeError:
+        return  False
