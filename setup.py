@@ -85,6 +85,7 @@ setup(name='opengever.core',
         'ftw.tooltip',
         'ftw.upgrade',
         'ftw.zipexport',
+        'mr.bob',
         'ooxml_docprops',
         'opengever.ogds.models',
         'ordereddict',
@@ -143,5 +144,8 @@ setup(name='opengever.core',
 
       [izug.basetheme]
       version = opengever.core
+
+      [console_scripts]
+      create-policy = opengever.policytemplates.cli:main
       """,
       )
