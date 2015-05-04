@@ -3,31 +3,48 @@ $(document).ready(function() {
 
   $("#opengever_meeting_protocol textarea").autosize();
 
-  var stickyHeadingInstance = stickyHeading("#opengever_meeting_protocol .protocol_title");
+  var scrollspy = new Scrollspy({ selectParent: true });
 
-  var currentTarget;
+  var headings = new StickyHeading({ selector: "#opengever_meeting_protocol .protocol_title" });
+  var labels = new StickyHeading({ selector: "#opengever_meeting_protocol .agenda_items label", fix: false, dependsOn: headings});
 
-  if(stickyHeadingInstance) {
-    stickyHeadingInstance.doUpdate(true);
-    stickyHeadingInstance.onNoSticky(function() {
-      scrollSpy.css("position", "static");
-      $(".metadata .fields").css("position", "static");
-    });
+  var currentOffset;
 
-    stickyHeadingInstance.onSticky(function(heading) {
-      scrollSpy.css("position", "fixed");
-      $(".metadata .fields").css("position", "fixed");
-      if(currentTarget && !currentTarget.hasClass("protocol_title")) {
-        $('html, body').scrollTop(currentTarget.offset().top - (heading.clone.height() + 30));
-        currentTarget = null;
-      }
-    });
+  headings.onNoSticky(function() {
+    scrollSpy.css("position", "static");
+    $(".metadata .fields").css("position", "static");
+  });
 
-    stickyHeadingInstance.onCollision(function() {
-      scrollSpy.css("position", "fixed");
-      $(".metadata .fields").css("position", "fixed");
-    });
-  }
+  headings.onSticky(function(heading) {
+    scrollSpy.css("position", "fixed");
+    currentOffset = heading.clone.outerHeight();
+    $(".metadata .fields").css("position", "fixed");
+    scrollspy.expand($("#" + heading.node.attr("id") + "-anchor"));
+    scrollspy.select($("#" + heading.node.attr("id") + "-anchor"));
+  });
+
+  headings.onCollision(function() {
+    scrollSpy.css("position", "fixed");
+    $(".metadata .fields").css("position", "fixed");
+  });
+
+  labels.onSticky(function(label) {
+    scrollspy.select($("#" + label.node.attr("for") + "-anchor"));
+  });
+  labels.onCollision(function(fadingIn, fadingOut) {
+    //Manual offset from sticky hading to label
+    scrollspy.offset(currentOffset + 20);
+    scrollspy.select($("#" + fadingOut.node.attr("for") + "-anchor"));
+  });
+
+  scrollspy.onScroll(function(target, toElement) {
+    if(target.hasClass("expandable")) {
+      scrollspy.expand(target);
+    }
+    moveCaretToEnd(toElement[0])
+    //Trigger Scrolltop event with 3 pixel more for triggering the first item to be selected
+    $(window).scrollTop($(window).scrollTop() + 3)
+  });
 
   function moveCaretToEnd(el) {
     if (typeof el.selectionStart == "number") {
@@ -38,14 +55,5 @@ $(document).ready(function() {
     }
     el.focus();
   }
-
-  $("#scrollspy a").click(function(event) {
-    event.preventDefault();
-    var anchor = $(this).attr("href");
-    var target = $(anchor);
-    moveCaretToEnd(target[0]);
-    currentTarget = target;
-    $('html, body').scrollTop(target.offset().top + 1);
-  });
 
 });
