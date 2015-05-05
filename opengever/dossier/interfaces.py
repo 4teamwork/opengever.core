@@ -4,6 +4,9 @@ from zope.component.interfaces import IObjectEvent
 from zope.interface import Interface
 
 
+DEFAULT_DOSSIER_DEPTH = 1
+
+
 class IDossierContainerTypes(Interface):
     """A type for collaborative spaces."""
 
@@ -19,7 +22,7 @@ class IDossierContainerTypes(Interface):
         title=u'Maximum dossier depth',
         description=u'Maximum nesting depth of dossiers and subdossiers.\
             If set to 0, no subdossiers can be created.',
-        default=1
+        default=DEFAULT_DOSSIER_DEPTH
     )
 
     type_prefixes = schema.List(

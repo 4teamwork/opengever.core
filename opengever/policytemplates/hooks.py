@@ -2,6 +2,7 @@ from mrbob.hooks import to_integer
 from mrbob.hooks import validate_choices
 from opengever.base.interfaces import DEFAULT_FORMATTER
 from opengever.base.interfaces import DEFAULT_PREFIX_STARTING_POINT
+from opengever.dossier.interfaces import DEFAULT_DOSSIER_DEPTH
 from opengever.repository.interfaces import DEFAULT_REPOSITORY_DEPTH
 import os
 
@@ -11,7 +12,10 @@ def init_defaults(configurator, question):
     question."""
 
     configurator.defaults.update({
-        'setup.maximum_repository_dept': DEFAULT_REPOSITORY_DEPTH,
+        'setup.maximum_dossier_depth': DEFAULT_DOSSIER_DEPTH,
+        'setup.maximum_repository_depth': DEFAULT_REPOSITORY_DEPTH,
+        'setup.reference_number_formatter': DEFAULT_FORMATTER,
+        'setup.reference_prefix_starting_point': DEFAULT_PREFIX_STARTING_POINT,
     })
 
 
@@ -63,30 +67,50 @@ def post_base_domain(configurator, question, answer):
 
 
 def post_nof_templates(configurator, question, answer):
+    if not answer:
+        return ''
+
     answer = to_integer(configurator, question, answer)
     configurator.variables['include_templates'] = bool(answer)
     return answer
 
 
 def post_maximum_repository_depth(configurator, question, answer):
+    if not answer:
+        return ''
+
     answer = to_integer(configurator, question, answer)
     if answer == DEFAULT_REPOSITORY_DEPTH:
-        return None
+        return ''
 
     return answer
 
 
 def post_reference_prefix_starting_point(configurator, question, answer):
     if answer == DEFAULT_PREFIX_STARTING_POINT:
-        return None
+        return ''
 
     return answer
 
 
 def post_reference_number_formatter(configurator, question, answer):
+    if not answer:
+        return ''
+
     answer = validate_choices(configurator, question, answer)
     if answer == DEFAULT_FORMATTER:
-        return None
+        return ''
+
+    return answer
+
+
+def post_maximum_dossier_depth(configurator, question, answer):
+    if not answer:
+        return ''
+
+    answer = to_integer(configurator, question, answer)
+    if answer == DEFAULT_DOSSIER_DEPTH:
+        return ''
 
     return answer
 

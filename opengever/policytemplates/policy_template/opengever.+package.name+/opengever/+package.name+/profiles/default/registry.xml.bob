@@ -25,4 +25,10 @@
   </records>
 {{% endif %}}
 
+{{% if setup.maximum_dossier_depth %}}
+  <records interface="opengever.dossier.interfaces.IDossierContainerTypes">
+    <value key="maximum_dossier_depth">{{{setup.maximum_dossier_depth}}}</value>
+  </records>
+{{% endif %}}
+
 </registry>
