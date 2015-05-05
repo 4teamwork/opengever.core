@@ -4,28 +4,28 @@
   <record name="opengever.portlets.tree.enable_favorites">
       <value>True</value>
   </record>
-{{% endif %}}
 
+{{% endif %}}
 {{% if setup.enable_activity_feature %}}
   <record interface="opengever.activity.interfaces.IActivitySettings" field="is_feature_enabled">
     <field type="plone.registry.field.Bool" />
     <value>True</value>
   </record>
-{{% endif %}}
 
+{{% endif %}}
 {{% if setup.enable_meeting_feature %}}
   <record interface="opengever.meeting.interfaces.IMeetingSettings" field="is_feature_enabled">
     <field type="plone.registry.field.Bool" />
     <value>True</value>
   </record>
-{{% endif %}}
 
+{{% endif %}}
 {{% if setup.enable_docproperty_feature %}}
   <records interface="opengever.dossier.interfaces.ITemplateDossierProperties">
     <value key="create_doc_properties">True</value>
   </records>
-{{% endif %}}
 
+{{% endif %}}
   <records interface="opengever.ogds.base.interfaces.IAdminUnitConfiguration">
     <value key="current_unit_id">{{{adminunit.id}}}</value>
   </records>
@@ -38,8 +38,8 @@
   <records interface="opengever.repository.interfaces.IRepositoryFolderRecords">
     <value key="maximum_repository_depth">{{setup.maximum_repository_depth}}</value>
   </records>
-{{% endif %}}
 
+{{% endif %}}
 {{% if setup.reference_number_formatter or setup.reference_prefix_starting_point %}}
   <records interface="opengever.base.interfaces.IReferenceNumberSettings">
   {{% if setup.reference_number_formatter %}}
@@ -49,18 +49,18 @@
     <value key="reference_prefix_starting_point">{{{setup.reference_prefix_starting_point}}}</value>
   {{% endif %}}
   </records>
-{{% endif %}}
 
+{{% endif %}}
 {{% if setup.maximum_dossier_depth %}}
   <records interface="opengever.dossier.interfaces.IDossierContainerTypes">
     <value key="maximum_dossier_depth">{{{setup.maximum_dossier_depth}}}</value>
   </records>
-{{% endif %}}
 
+{{% endif %}}
 {{% if setup.maximum_mail_size %}}
   <records interface="opengever.mail.interfaces.ISendDocumentConf">
     <value key="max_size">{{{setup.maximum_mail_size}}}</value>
   </records>
-{{% endif %}}
 
+{{% endif %}}
 </registry>
