@@ -1,4 +1,7 @@
 from mrbob.hooks import to_integer
+from mrbob.hooks import validate_choices
+from opengever.base.interfaces import DEFAULT_FORMATTER
+from opengever.base.interfaces import DEFAULT_PREFIX_STARTING_POINT
 from opengever.repository.interfaces import DEFAULT_REPOSITORY_DEPTH
 import os
 
@@ -68,6 +71,21 @@ def post_nof_templates(configurator, question, answer):
 def post_maximum_repository_depth(configurator, question, answer):
     answer = to_integer(configurator, question, answer)
     if answer == DEFAULT_REPOSITORY_DEPTH:
+        return None
+
+    return answer
+
+
+def post_reference_prefix_starting_point(configurator, question, answer):
+    if answer == DEFAULT_PREFIX_STARTING_POINT:
+        return None
+
+    return answer
+
+
+def post_reference_number_formatter(configurator, question, answer):
+    answer = validate_choices(configurator, question, answer)
+    if answer == DEFAULT_FORMATTER:
         return None
 
     return answer

@@ -14,5 +14,15 @@
   </records>
 {{% endif %}}
 
+{{% if setup.reference_number_formatter or setup.reference_prefix_starting_point %}}
+  <records interface="opengever.base.interfaces.IReferenceNumberSettings">
+  {{% if setup.reference_number_formatter %}}
+    <value key="formatter">{{{setup.reference_number_formatter}}}}</value>
+  {{% endif %}}
+  {{% if setup.setup.reference_prefix_starting_point %}}
+    <value key="reference_prefix_starting_point">{{{setup.reference_prefix_starting_point}}}</value>
+  {{% endif %}}
+  </records>
+{{% endif %}}
 
 </registry>
