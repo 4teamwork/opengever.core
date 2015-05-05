@@ -42,9 +42,31 @@ class TestDossierDeactivation(FunctionalTestCase):
             error_messages()[0])
 
     @browsing
+    def test_not_possible_with_not_closed_tasks(self, browser):
+        create(Builder('task')
+               .within(self.dossier)
+               .in_state('task-state-in-progress'))
+
+        browser.login().open(self.dossier,
+                             view='transition-deactivate',
+                             data={'_authenticator': createToken()})
+
+        self.assertEqual('dossier-state-active',
+                         api.content.get_state(self.dossier))
+
+        self.assertEqual(
+            u"The Dossier can't be deactivated, not all contained "
+            "tasks are in a closed state.",
+            error_messages()[0])
+
+    @browsing
     def test_recursively_deactivate_subdossier(self, browser):
         subdossier = create(Builder('dossier').within(self.dossier))
         subsubdossier = create(Builder('dossier').within(subdossier))
+        create(Builder('task')
+               .within(self.dossier)
+               .in_state('task-state-tested-and-closed'))
+
         browser.login().open(self.dossier, view='transition-deactivate',
                              data={'_authenticator': createToken()})
 

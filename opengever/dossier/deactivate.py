@@ -58,4 +58,10 @@ class DossierDeactivateView(grok.View):
                     type='error')
                 satisfied = False
 
+        if not self.context.is_all_closed():
+            satisfied = False
+            IStatusMessage(self.request).add(
+                _(u"The Dossier can't be deactivated, not all contained "
+                  "tasks are in a closed state."), type='error')
+
         return satisfied
