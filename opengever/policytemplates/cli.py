@@ -1,4 +1,5 @@
 import argparse
+import mrbob.cli
 import sys
 
 
@@ -14,19 +15,19 @@ class CreatePolicyCLI(object):
 
     def run(self):
         options = self._parse_args()
-        mrbob = 'bin/mrbob'
-        target_dir = 'src/'
 
-        cmdline = mrbob
+        args = []
         if options.verbose:
-            cmdline += ' -v'
-        cmdline += ' -O %s' % target_dir
-        cmdline += ' opengever.policytemplates:policy_template'
+            args.append('-v')
 
-        # os.system, because it's friday afternoon and I can't be bothered to
-        # figure out subprocess.call()'s usage for the 42nd time. IOW: Fuck it.
-        os.system(cmdline)
-        print "Done."
+        target_dir = 'src/'
+        args.append('-O')
+        args.append(target_dir)
+
+        template = 'opengever.policytemplates:policy_template'
+        args.append(template)
+
+        sys.exit(mrbob.cli.main(args=args))
 
     def _parse_args(self):
         prog = sys.argv[0]
@@ -45,9 +46,7 @@ class CreatePolicyCLI(object):
 
 
 def main():
-    args = sys.argv
-    cli = CreatePolicyCLI(args)
-    cli.run()
+    CreatePolicyCLI(sys.argv).run()
 
 
 if __name__ == '__main__':
