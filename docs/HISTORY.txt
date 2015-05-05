@@ -5,6 +5,9 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Add initial policy template support and a simple SAAS policy template.
+  [deiferni]
+
 - Made featureflags (activity, meeting) more robust.
   [phgross]
 
