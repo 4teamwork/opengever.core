@@ -1,5 +1,15 @@
 from mrbob.hooks import to_integer
+from opengever.repository.interfaces import DEFAULT_REPOSITORY_DEPTH
 import os
+
+
+def init_defaults(configurator, question):
+    """Could not find another hook to init stuff, so we abuse the first
+    question."""
+
+    configurator.defaults.update({
+        'setup.maximum_repository_dept': DEFAULT_REPOSITORY_DEPTH,
+    })
 
 
 def post_package_name(configurator, question, answer):
@@ -52,6 +62,14 @@ def post_base_domain(configurator, question, answer):
 def post_nof_templates(configurator, question, answer):
     answer = to_integer(configurator, question, answer)
     configurator.variables['include_templates'] = bool(answer)
+    return answer
+
+
+def post_maximum_repository_depth(configurator, question, answer):
+    answer = to_integer(configurator, question, answer)
+    if answer == DEFAULT_REPOSITORY_DEPTH:
+        return None
+
     return answer
 
 
