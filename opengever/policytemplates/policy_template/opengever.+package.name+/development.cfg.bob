@@ -2,7 +2,9 @@
 extends =
   test-plone-4-2-x.cfg
   https://raw.github.com/4teamwork/ftw-buildouts/master/plone-development.cfg
+{{% if setup.enable_meeting_feature %}}
   http://buildout-proxy.4teamwork.ch/4teamwork/opengever-buildouts/master/ruby-gems.cfg
+{{% endif %}}
 
 include-policy = opengever.{{{package.name}}}
 
@@ -39,4 +41,6 @@ zope-conf-additional =
 
 environment-vars +=
     IS_DEVELOPMENT_MODE True
+{{% if setup.enable_meeting_feature %}}
     SABLON_BIN ${buildout:sablon-executable}
+{{% endif %}}
