@@ -6,6 +6,7 @@ from opengever.globalindex.model.task import Task
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.testing import FunctionalTestCase
+from plone import api
 from plone.app.testing import TEST_USER_ID
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
@@ -92,3 +93,30 @@ class TestTaskSQLSyncer(FunctionalTestCase):
         self.assertEqual('Lorem ipsum dolor sit amet, consectetur', task.text)
         self.assertSequenceEqual(['admin', TEST_USER_ID], task.principals)
         self.assertIsNone(task.predecessor)
+
+    def test_sql_task_is_updated_when_task_is_moved(self):
+        dossier2 = create(Builder('dossier')
+                          .titled(u'Dossier 2'))
+        subdossier2 = create(Builder('dossier')
+                             .titled(u'Subdossier 2')
+                             .within(dossier2))
+
+        api.content.move(source=self.task, target=subdossier2)
+
+        task = Session.query(Task).one()
+        self.assertEqual('Subdossier 2', task.containing_subdossier)
+        self.assertEqual(u'dossier-3/dossier-4/task-1', task.physical_path)
+        self.assertEqual(4, task.dossier_sequence_number)
+        self.assertEqual(u'Client1 / 2.1', task.reference_number)
+
+    def test_sql_task_is_updated_when_container_is_moved(self):
+        dossier2 = create(Builder('dossier')
+                          .titled(u'Dossier 2'))
+
+        api.content.move(source=self.subdossier, target=dossier2)
+
+        task = Session.query(Task).one()
+        self.assertEqual('subdossier', task.containing_subdossier)
+        self.assertEqual(u'dossier-3/dossier-2/task-1', task.physical_path)
+        self.assertEqual(2, task.dossier_sequence_number)
+        self.assertEqual(u'Client1 / 2.1', task.reference_number)
