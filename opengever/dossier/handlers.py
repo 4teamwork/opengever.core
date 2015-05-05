@@ -53,6 +53,7 @@ def set_former_reference_after_moving(obj, event):
 
 
 @grok.subscribe(IDossierMarker, IObjectAddedEvent)
+@grok.subscribe(IDossierMarker, IObjectMovedEvent)
 def saveReferenceNumberPrefix(obj, event):
     parent = aq_parent(aq_inner(obj))
     prefix_adapter = IReferenceNumberPrefix(parent)
