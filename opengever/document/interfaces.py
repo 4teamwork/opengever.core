@@ -44,12 +44,15 @@ class IDocumentType(Interface):
     )
 
 
+PRESERVED_AS_PAPER_DEFAULT = True
+
+
 class IDocumentSettings(Interface):
     """Registry interface with general document settings."""
 
     preserved_as_paper_default = schema.Bool(
         title=u"Client default for preserved_as_paper",
-        default=True,
+        default=PRESERVED_AS_PAPER_DEFAULT,
     )
 
 
