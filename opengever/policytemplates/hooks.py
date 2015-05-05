@@ -135,7 +135,7 @@ def post_preserved_as_paper(configurator, question, answer):
     if not answer:
         return ''
 
-    answer = to_boolean(configurator, question, answer)
+    answer = to_boolean(configurator, question, str(answer))
     if answer == PRESERVED_AS_PAPER_DEFAULT:
         return ''
 
