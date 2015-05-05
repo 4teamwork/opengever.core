@@ -31,4 +31,10 @@
   </records>
 {{% endif %}}
 
+{{% if setup.maximum_mail_size %}}
+  <records interface="opengever.mail.interfaces.ISendDocumentConf">
+    <value key="max_size">{{{setup.maximum_mail_size}}}</value>
+  </records>
+{{% endif %}}
+
 </registry>
