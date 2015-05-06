@@ -307,6 +307,9 @@ class Task(Container):
         return IReferenceNumber(self).get_number()
 
     def get_containing_dossier(self):
+        return get_containing_dossier(self)
+
+    def get_containing_dossier_title(self):
         #get the containing_dossier value directly with the indexer
         catalog = getToolByName(self, 'portal_catalog')
         return getMultiAdapter(
@@ -319,7 +322,7 @@ class Task(Container):
             (self, catalog), IIndexer, name='containing_subdossier')()
 
     def get_dossier_sequence_number(self):
-        dossier = get_containing_dossier(self)
+        dossier = self.get_containing_dossier()
         if dossier:
             return dossier.get_sequence_number()
 

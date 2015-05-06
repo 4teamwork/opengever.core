@@ -139,7 +139,7 @@ class Task(Base):
         self.is_subtask = plone_task.get_is_subtask()
         self.sequence_number = plone_task.get_sequence_number()
         self.reference_number = plone_task.get_reference_number()
-        self.containing_dossier = plone_task.get_containing_dossier()
+        self.containing_dossier = plone_task.get_containing_dossier_title()
         self.dossier_sequence_number = plone_task.get_dossier_sequence_number()
         self.assigned_org_unit = plone_task.responsible_client
         self.principals = plone_task.get_principals()
