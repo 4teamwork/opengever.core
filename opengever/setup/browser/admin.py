@@ -76,11 +76,13 @@ class AddDeployment(AddPloneSite):
         """Returns a list of (name, profile) of ldap GS profiles.
         """
         ldap_registry = getUtility(ILDAPConfigurationRegistry)
-        return ldap_registry.list_ldaps()
+        return [(name.encode('utf-8'), key) for name, key in
+                ldap_registry.list_ldaps()]
 
     def get_deployment_profiles(self):
         deployment_registry = getUtility(IDeploymentConfigurationRegistry)
-        return deployment_registry.list_deployments()
+        return [name.encode('utf-8') for name in
+                deployment_registry.list_deployments()]
 
     def get_ogds_config(self):
         """Returns the DSN URL for the OGDS DB connection currently being
@@ -122,7 +124,7 @@ class CreateDeployment(BrowserView):
         self.form = self.request.form
         self.db_session = create_session()
 
-        policy_id = self.form['policy']
+        policy_id = self.form['policy'].decode('utf-8`')
         deployment_registry = getUtility(IDeploymentConfigurationRegistry)
         self.config = deployment_registry.get_deployment(policy_id)
         return self.install_with_ajax_stream()
@@ -172,7 +174,7 @@ class CreateDeployment(BrowserView):
             deployment = self._install()
 
         site_url = deployment.site.absolute_url()
-        site_title = self.config['title']
+        site_title = self.config['title'].encode('utf-8')
 
         response.write(
             '<script type="text/javascript">'
