@@ -6,8 +6,6 @@ extends =
   http://buildout-proxy.4teamwork.ch/4teamwork/opengever-buildouts/master/ruby-gems.cfg
 {{% endif %}}
 
-include-policy = opengever.{{{package.name}}}
-
 ogds-db-name = opengever{{{package.name}}}
 
 [instance]
@@ -21,8 +19,6 @@ zcml-additional =
     <configure
         xmlns="http://namespaces.zope.org/zope"
         xmlns:db="http://namespaces.zope.org/db">
-
-        <include package="${buildout:include-policy}" />
 
         <include package="z3c.saconfig" file="meta.zcml" />
 

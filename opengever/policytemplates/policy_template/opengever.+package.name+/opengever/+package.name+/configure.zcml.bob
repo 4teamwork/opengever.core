@@ -8,8 +8,6 @@
     xmlns:transmogrifier="http://namespaces.plone.org/transmogrifier"
     xmlns:zcml="http://namespaces.zope.org/zcml">
 
-  <meta:provides feature="opengever.{{{package.name}}}" />
-
   <grok:grok package="." />
 
   <include package=".upgrades" />
