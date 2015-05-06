@@ -1,72 +1,144 @@
+from ftw.builder import Builder
+from ftw.builder import create
+from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import error_messages
+from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.testing import FunctionalTestCase
+from opengever.testing import obj2brain
 from opengever.trash.trash import ITrashed
-from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
-from plone.dexterity.fti import DexterityFTI
-from plone.dexterity.utils import createContentInContainer
+from plone.protect import createToken
 
 
 class TestTrash(FunctionalTestCase):
 
     def setUp(self):
         super(TestTrash, self).setUp()
-        setRoles(self.portal, TEST_USER_ID, ['Member', 'Contributor', 'Manager'])
+        self.dossier = create(Builder('dossier'))
 
-        fti = DexterityFTI('TrashTestFTI',
-                           klass="plone.dexterity.content.Container",
-                           global_allow=True,
-                           filter_content_types=False)
-        fti.behaviors = ('plone.app.content.interfaces.INameFromTitle',
-                         'opengever.trash.trash.ITrashable')
-        self.portal.portal_types._setObject('TrashTestFTI', fti)
+    @browsing
+    def test_trash_items_mark_items_as_trashed(self, browser):
+        document_a = create(Builder('document')
+                            .within(self.dossier)
+                            .titled(u'Dokum\xe4nt A'))
+        document_b = create(Builder('document')
+                            .within(self.dossier)
+                            .titled(u'Dokum\xe4nt B'))
 
-    def restore_item(self, item):
-        self.portal.REQUEST['paths'] = ['/'.join(item.getPhysicalPath())]
-        current_url = item.restrictedTraverse('untrashed')()
-        self.assertFalse(ITrashed.providedBy(item),
-                        "The item %s should not be trashed" % item)
-        return current_url
+        data = {'paths:list': ['/'.join(document_b.getPhysicalPath())],
+                '_authenticator': createToken()}
+        browser.login().open(self.dossier, view="trashed", data=data)
 
-    def test_trashing_items(self):
-        item = self.create_item("item")
-        unicode_item = self.create_item(u'\xfctem')
+        self.assertFalse(ITrashed.providedBy(document_a))
+        self.assertFalse(obj2brain(document_a).trashed)
 
-        self.assertEquals('http://nohost/plone/item#trash',
-                          self.trash_item(item))
-        self.assert_trashed_item_count(1)
+        self.assertTrue(ITrashed.providedBy(document_b))
+        self.assertTrue(obj2brain(document_b, unrestricted=True).trashed)
 
-        self.assertEquals('http://nohost/plone/utem#trash',
-                          self.trash_item(unicode_item))
-        self.assert_trashed_item_count(2)
+    @browsing
+    def test_shows_statusmessage_and_redirects_to_trash_tab(self, browser):
+        document = create(Builder('document')
+                          .within(self.dossier)
+                          .titled(u'Dokum\xe4nt A'))
 
-    def test_trashing_trashed_items_will_result_in_the_fallback(self):
-        item = self.create_item("item")
-        self.trash_item(item)
-        url = self.trash_item(item)
-        self.assertEquals("http://nohost/plone/item#documents", url)
+        data = {'paths:list': ['/'.join(document.getPhysicalPath())],
+                '_authenticator': createToken()}
+        browser.login().open(self.dossier, view="trashed", data=data)
 
-    def test_restoring_items(self):
-        item = self.create_item("anotheritem")
-        self.trash_item(item)
-        self.assert_trashed_item_count(1)
+        self.assertEquals([u'the object Dokum\xe4nt A trashed'],
+                          info_messages())
+        self.assertEquals(
+            'http://nohost/plone/dossier-1#trash', browser.url)
 
-        url = self.restore_item(item)
-        self.assertEquals('http://nohost/plone/anotheritem#documents', url)
-        self.assert_trashed_item_count(0)
+    @browsing
+    def test_redirect_back_and_shows_message_when_no_items_is_selected(self, browser):
+        browser.login().open(self.dossier, view="trashed")
 
-    def assert_trashed_item_count(self, count):
-        trashed_items = list(self.portal.portal_catalog(portal_type="TrashTestFTI",
-                                                        trashed=True))
-        self.assertEquals(count, len(trashed_items))
+        self.assertEquals(['You have not selected any items'],
+                          error_messages())
+        self.assertEquals(
+            'http://nohost/plone/dossier-1#documents', browser.url)
 
-    def create_item(self, title):
-        return createContentInContainer(self.portal, 'TrashTestFTI',
-                                        checkConstraints=False,
-                                        title=title, checked_out=False)
+    @browsing
+    def test_trashing_already_trashed_items_is_not_possible(self, browser):
+        document = create(Builder('document')
+                          .within(self.dossier)
+                          .trashed()
+                          .titled(u'Dokum\xe4nt C'))
 
-    def trash_item(self, item):
-        self.portal.REQUEST['paths'] = ['/'.join(item.getPhysicalPath())]
-        current_url = item.restrictedTraverse('trashed')()
-        self.assertTrue(ITrashed.providedBy(item),
-                "The item %s should be trashed" % item)
-        return current_url
+        data = {'paths:list': ['/'.join(document.getPhysicalPath())],
+                '_authenticator': createToken()}
+        browser.login().open(self.dossier, view="trashed", data=data)
+
+        self.assertEquals(
+            [u'could not trash the object Dokum\xe4nt C, it is already trashed'],
+            error_messages())
+        self.assertEquals(
+            'http://nohost/plone/dossier-1#documents', browser.url)
+
+    @browsing
+    def test_trashing_checked_out_documents_is_not_possible(self, browser):
+        document = create(Builder('document')
+                          .within(self.dossier)
+                          .checked_out_by(TEST_USER_ID)
+                          .titled(u'Dokum\xe4nt C'))
+
+        data = {'paths:list': ['/'.join(document.getPhysicalPath())],
+                '_authenticator': createToken()}
+        browser.login().open(self.dossier, view="trashed", data=data)
+
+        self.assertEquals(
+            [u'could not trash the object Dokum\xe4nt C, it is checked out'],
+            error_messages())
+        self.assertEquals(
+            'http://nohost/plone/dossier-1#documents', browser.url)
+
+
+class TestUntrash(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestUntrash, self).setUp()
+        self.dossier = create(Builder('dossier'))
+
+    @browsing
+    def test_redirect_back_and_shows_message_when_no_items_is_selected(self, browser):
+        browser.login().open(self.dossier, view="untrashed")
+
+        self.assertEquals(['You have not selected any items'],
+                          error_messages())
+        self.assertEquals('http://nohost/plone/dossier-1#trash', browser.url)
+
+    @browsing
+    def test_untrash_unmark_document(self, browser):
+        document_a = create(Builder('document')
+                            .within(self.dossier)
+                            .trashed()
+                            .titled(u'Dokum\xe4nt A'))
+        document_b = create(Builder('document')
+                            .within(self.dossier)
+                            .trashed()
+                            .titled(u'Dokum\xe4nt B'))
+
+        data = {'paths:list': ['/'.join(document_a.getPhysicalPath())],
+                '_authenticator': createToken()}
+        browser.login().open(self.dossier, view="untrashed", data=data)
+
+        self.assertFalse(ITrashed.providedBy(document_a))
+        self.assertFalse(obj2brain(document_a).trashed)
+
+        self.assertTrue(ITrashed.providedBy(document_b))
+        self.assertTrue(obj2brain(document_b, unrestricted=True).trashed)
+
+    @browsing
+    def test_redirects_to_documents_tab(self, browser):
+        document = create(Builder('document')
+                          .within(self.dossier)
+                          .trashed()
+                          .titled(u'Dokum\xe4nt A'))
+
+        data = {'paths:list': ['/'.join(document.getPhysicalPath())],
+                '_authenticator': createToken()}
+        browser.login().open(self.dossier, view="untrashed", data=data)
+
+        self.assertEquals(
+            'http://nohost/plone/dossier-1#documents', browser.url)
