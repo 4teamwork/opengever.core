@@ -31,6 +31,8 @@ def post_package_name(configurator, question, answer):
         'adminunit.abbreviation': answer,
         'adminunit.id': answer,
     })
+    configurator.variables['package.name_capitalized'] = answer.capitalize()
+    configurator.variables['package.name_upper'] = answer.upper()
     return answer
 
 
