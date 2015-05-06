@@ -5,7 +5,7 @@
         "_type": "opengever.document.document",
         "title": "EDIT ME",
         "file:file": "templates/EDIT ME"
-    }{{% if not loop.last %}}{,{{% endif %}}
+    }{{% if not loop.last %}},{{% endif %}}
 {{% endfor %}}
 
 ]
