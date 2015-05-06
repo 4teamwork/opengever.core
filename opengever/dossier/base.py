@@ -2,6 +2,7 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from datetime import datetime
 from five import grok
+from opengever.base.interfaces import ISequenceNumber
 from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
@@ -15,6 +16,7 @@ from plone.dexterity.interfaces import IDexterityFTI
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from zope.component import getUtility
 from zope.component import queryMultiAdapter
 from zope.component import queryUtility
 from zope.interface import Interface
@@ -229,6 +231,9 @@ class DossierContainer(Container):
     @property
     def responsible_label(self):
         return self.get_responsible_actor().get_label()
+
+    def get_sequence_number(self):
+        return getUtility(ISequenceNumber).get_number(self)
 
 
 class DefaultConstrainTypeDecider(grok.MultiAdapter):

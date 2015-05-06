@@ -94,6 +94,15 @@ class TestDossierContainer(FunctionalTestCase):
             [subdossier],
             self.brains_to_objects(dossier.get_subdossiers(depth=1)))
 
+    def test_sequence_number(self):
+        dossier_1 = create(Builder("dossier"))
+        subdossier = create(Builder("dossier"))
+        dossier_2 = create(Builder("dossier"))
+
+        self.assertEquals(1, dossier_1.get_sequence_number())
+        self.assertEquals(2, subdossier.get_sequence_number())
+        self.assertEquals(3, dossier_2.get_sequence_number())
+
 
 class TestDossierChecks(FunctionalTestCase):
 

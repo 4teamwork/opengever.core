@@ -21,3 +21,8 @@ class TestInbox(FunctionalTestCase):
         inbox = create(Builder('inbox'))
 
         self.assertEqual(None, inbox.get_responsible_org_unit())
+
+    def test_get_sequence_number_returns_none(self):
+        inbox = create(Builder('inbox'))
+
+        self.assertEqual(None, inbox.get_sequence_number())

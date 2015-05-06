@@ -37,3 +37,8 @@ class Inbox(Container):
             return ogds_service().fetch_org_unit(org_unit_id)
 
         return None
+
+    def get_sequence_number(self):
+        """The Inbox does not have a sequence number."""
+
+        return None

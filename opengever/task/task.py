@@ -11,6 +11,7 @@ from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.oguid import Oguid
 from opengever.base.source import DossierPathSourceBinder
+from opengever.dossier.utils import get_containing_dossier
 from opengever.globalindex.model.task import Task as TaskModel
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
@@ -306,6 +307,9 @@ class Task(Container):
         return IReferenceNumber(self).get_number()
 
     def get_containing_dossier(self):
+        return get_containing_dossier(self)
+
+    def get_containing_dossier_title(self):
         #get the containing_dossier value directly with the indexer
         catalog = getToolByName(self, 'portal_catalog')
         return getMultiAdapter(
@@ -318,30 +322,9 @@ class Task(Container):
             (self, catalog), IIndexer, name='containing_subdossier')()
 
     def get_dossier_sequence_number(self):
-        # the dossier_sequence_number index is required for generating lists
-        # of tasks as PDFs (LaTeX) as defined by the customer.
-        dossier_marker = 'opengever.dossier.behaviors.dossier.IDossierMarker'
-
-        path = self.getPhysicalPath()[:-1]
-
-        portal = getToolByName(self, 'portal_url').getPortalObject()
-        portal_path = '/'.join(portal.getPhysicalPath())
-        catalog = getToolByName(self, 'portal_catalog')
-
-        while path and '/'.join(path) != portal_path:
-            brains = catalog({'path': {'query': '/'.join(path),
-                                       'depth': 0},
-                              'object_provides': dossier_marker})
-
-            if len(brains):
-                if brains[0].sequence_number:
-                    return brains[0].sequence_number
-                else:
-                    return None
-            else:
-                path = path[:-1]
-
-        return None
+        dossier = self.get_containing_dossier()
+        if dossier:
+            return dossier.get_sequence_number()
 
     def get_predecessor_ids(self):
         if self.predecessor:

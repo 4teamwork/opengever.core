@@ -1,11 +1,13 @@
 from Acquisition import aq_inner, aq_parent
-from OFS.interfaces import IObjectWillBeMovedEvent
-from Products.CMFCore.utils import getToolByName
 from five import grok
+from OFS.interfaces import IObjectWillBeMovedEvent
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
 from opengever.globalindex.handlers.task import sync_task
+from opengever.globalindex.handlers.task import TaskSqlSyncer
+from plone import api
+from Products.CMFCore.utils import getToolByName
 from zope.app.container.interfaces import IObjectAddedEvent
 from zope.app.container.interfaces import IObjectMovedEvent
 from zope.component import getAdapter
@@ -53,11 +55,23 @@ def set_former_reference_after_moving(obj, event):
 
 
 @grok.subscribe(IDossierMarker, IObjectAddedEvent)
+@grok.subscribe(IDossierMarker, IObjectMovedEvent)
 def saveReferenceNumberPrefix(obj, event):
     parent = aq_parent(aq_inner(obj))
     prefix_adapter = IReferenceNumberPrefix(parent)
     if not prefix_adapter.get_number(obj):
         prefix_adapter.set_number(obj)
+
+    # because we can't control the order of event handlers we have to sync
+    # all containing tasks manually
+    catalog = api.portal.get_tool('portal_catalog')
+    tasks = catalog({
+        'query':'/'.join(obj.getPhysicalPath()),
+        'object_provides': 'opengever.task.task.ITask',
+        'depth':-1})
+    for task in tasks:
+        TaskSqlSyncer(task.getObject(), None).sync()
+
     obj.reindexObject(idxs=['reference'])
 
 

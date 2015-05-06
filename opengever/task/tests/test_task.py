@@ -148,3 +148,39 @@ class TestTaskIntegration(FunctionalTestCase):
         maintask.REQUEST.set('X-CREATING-SUCCESSOR', True)
         create(Builder('task').within(maintask).titled('subtask'))
         self.assertEquals(0, len(IResponseContainer(maintask)))
+
+
+class TestDossierSequenceNumber(FunctionalTestCase):
+
+    def test_if_task_is_inside_a_maindossier_is_maindossier_number(self):
+        dossier = create(Builder('dossier'))
+        task = create(Builder('task').within(dossier))
+
+        self.assertEquals(
+            dossier.get_sequence_number(),
+            task.get_dossier_sequence_number())
+
+    def test_if_task_is_inside_a_subdossier_is_subdossiers_number(self):
+        dossier = create(Builder('dossier'))
+        subdossier = create(Builder('dossier').within(dossier))
+        task = create(Builder('task').within(subdossier))
+
+        self.assertEquals(
+            subdossier.get_sequence_number(),
+            task.get_dossier_sequence_number())
+
+    def test_handles_multiple_levels_of_subdossier_correctly(self):
+        dossier = create(Builder('dossier'))
+        subdossier = create(Builder('dossier').within(dossier))
+        subsubdossier = create(Builder('dossier').within(subdossier))
+        task = create(Builder('task').within(subsubdossier))
+
+        self.assertEquals(
+            subsubdossier.get_sequence_number(),
+            task.get_dossier_sequence_number())
+
+    def test_its_inboxs_number_for_forwardings(self):
+        inbox = create(Builder('inbox'))
+        task = create(Builder('task').within(inbox))
+
+        self.assertEquals(None, task.get_dossier_sequence_number())
