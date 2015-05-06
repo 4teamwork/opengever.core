@@ -119,12 +119,8 @@ class TrashView(grok.View):
             IStatusMessage(self.request).addStatusMessage(
                 msg, type='error')
 
-        if trashed:
-            return self.request.RESPONSE.redirect(
-                '%s#trash' % self.context.absolute_url())
-        else:
-            return self.request.RESPONSE.redirect(
-                '%s#documents' % self.context.absolute_url())
+        return self.request.RESPONSE.redirect(
+            '{}#documents'.format(self.context.absolute_url()))
 
     def render(self):
         super(TrashView).render()

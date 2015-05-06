@@ -5,6 +5,9 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Redirect to documents tab instead of trash tab, after trashing documents.
+  [phgross]
+
 - Disallow deactivating a dossier which contains not closed tasks.
   [phgross]
 

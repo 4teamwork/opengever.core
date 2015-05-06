@@ -36,7 +36,7 @@ class TestTrash(FunctionalTestCase):
         self.assertTrue(obj2brain(document_b, unrestricted=True).trashed)
 
     @browsing
-    def test_shows_statusmessage_and_redirects_to_trash_tab(self, browser):
+    def test_shows_statusmessage_and_redirects_to_documents_tab(self, browser):
         document = create(Builder('document')
                           .within(self.dossier)
                           .titled(u'Dokum\xe4nt A'))
@@ -48,7 +48,7 @@ class TestTrash(FunctionalTestCase):
         self.assertEquals([u'the object Dokum\xe4nt A trashed'],
                           info_messages())
         self.assertEquals(
-            'http://nohost/plone/dossier-1#trash', browser.url)
+            'http://nohost/plone/dossier-1#documents', browser.url)
 
     @browsing
     def test_redirect_back_and_shows_message_when_no_items_is_selected(self, browser):
