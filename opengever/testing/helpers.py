@@ -6,16 +6,19 @@ def create_plone_user(portal, userid, password='demo09'):
     acl_users.source_users.addUser(userid, userid, password)
 
 
-def obj2brain(obj):
+def obj2brain(obj, unrestricted=False):
     catalog = getToolByName(obj, 'portal_catalog')
-    query = {'path':
-             {'query': '/'.join(obj.getPhysicalPath()),
-              'depth': 0}}
-    brains = catalog(query)
+    query = {'path': {'query': '/'.join(obj.getPhysicalPath()), 'depth': 0}}
+
+    if unrestricted:
+        brains = catalog.unrestrictedSearchResults(query)
+    else:
+        brains = catalog(query)
+
     if len(brains) == 0:
         raise Exception('Not in catalog: %s' % obj)
-    else:
-        return brains[0]
+
+    return brains[0]
 
 
 def index_data_for(obj):
