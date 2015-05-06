@@ -5,6 +5,9 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Disallow deactivating a dossier which contains not closed tasks.
+  [phgross]
+
 - Implement scrollspy.
   [Kevin Bieri]
 
