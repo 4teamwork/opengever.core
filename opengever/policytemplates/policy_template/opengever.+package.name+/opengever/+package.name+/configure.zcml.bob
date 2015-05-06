@@ -38,6 +38,14 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
+  <genericsetup:registerProfile
+      name="ldap"
+      title="opengever.{{{package.name}}}:ldap"
+      description="LDAP profile for {{{package.title}}}."
+      directory="profiles/ldap"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
   <!-- deployments -->
   <opengever:registerDeployment
       title="OneGov GEVER {{{package.title}}}"
