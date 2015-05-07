@@ -1,0 +1,10 @@
+[
+  {
+    "unit_id": "{{{adminunit.id}}}",
+    "title": "{{{adminunit.title}}}",
+    "ip_address": "{{{adminunit.ip}}}",
+    "site_url": "{{{adminunit.site_url}}}",
+    "public_url": "{{{adminunit.public_url}}}",
+    "abbreviation": "{{{adminunit.abbreviation}}}"
+  }
+]

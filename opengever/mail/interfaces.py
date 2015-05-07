@@ -4,11 +4,14 @@ from zope.interface import Interface, Attribute
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 
+DEFAULT_MAIL_MAX_SIZE = 5
+
+
 class ISendDocumentConf(Interface):
     max_size = schema.Int(
         title=u'max_size',
         description=u'Maximal Size (MB) of the Attachment',
-        default=5,
+        default=DEFAULT_MAIL_MAX_SIZE,
     )
 
     documents_as_links_default = schema.Bool(

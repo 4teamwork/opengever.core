@@ -1,0 +1,42 @@
+[buildout]
+extends =
+  test-plone-4-2-x.cfg
+  https://raw.github.com/4teamwork/ftw-buildouts/master/plone-development.cfg
+{{% if setup.enable_meeting_feature %}}
+  http://buildout-proxy.4teamwork.ch/4teamwork/opengever-buildouts/master/ruby-gems.cfg
+{{% endif %}}
+
+ogds-db-name = opengever{{{package.name}}}
+
+[instance]
+zserver-threads = 4
+user = zopemaster:admin
+eggs +=
+    opengever.core
+    psycopg2
+
+zcml-additional =
+    <configure
+        xmlns="http://namespaces.zope.org/zope"
+        xmlns:db="http://namespaces.zope.org/db">
+
+        <include package="z3c.saconfig" file="meta.zcml" />
+
+        <db:engine name="opengever.db"
+          url="postgresql+psycopg2:///${buildout:ogds-db-name}" pool_recycle="3600" />
+        <db:session name="opengever" engine="opengever.db" />
+
+    </configure>
+
+zope-conf-additional =
+    datetime-format international
+
+    <product-config opengever.core>
+        ogds_log_file ${buildout:directory}/var/log/ogds-update.log
+    </product-config>
+
+environment-vars +=
+    IS_DEVELOPMENT_MODE True
+{{% if setup.enable_meeting_feature %}}
+    SABLON_BIN ${buildout:sablon-executable}
+{{% endif %}}

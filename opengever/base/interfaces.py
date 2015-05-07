@@ -129,6 +129,10 @@ class ReferenceFormatterVocabulary(grok.GlobalUtility):
         return SimpleVocabulary(terms)
 
 
+DEFAULT_FORMATTER = 'dotted'
+DEFAULT_PREFIX_STARTING_POINT = u'1'
+
+
 class IReferenceNumberSettings(Interface):
 
     formatter = schema.Choice(
@@ -136,12 +140,12 @@ class IReferenceNumberSettings(Interface):
         description=u'Select one of the registered'
         'IReferenceNumberFormatter adapter',
         source='opengever.base.ReferenceFormatterVocabulary',
-        default='dotted')
+        default=DEFAULT_FORMATTER)
 
     reference_prefix_starting_point = schema.TextLine(
         title=u"Starting Point for reference_number prefixs",
         description=u"Used as default when creating the first item on a level.",
-        default=u"1")
+        default=DEFAULT_PREFIX_STARTING_POINT)
 
 
 class ISequenceNumber(Interface):

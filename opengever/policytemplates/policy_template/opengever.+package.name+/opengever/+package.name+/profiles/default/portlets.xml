@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<portlets>
+  <assignment name="options" category="context" key="/"
+              manager="ftw.footer.column2" type="plone.portlet.static.Static"
+              visible="True">
+    <property
+        name="text">&lt;p&gt;&lt;a class="external-link" href="http://www.onegov.ch/gever/dokumentation/installation-des-external-editors-unter-windows"&gt;External Editor (Windows)&lt;/a&gt;&lt;br /&gt;&lt;span&gt;&lt;a class="external-link" href="http://www.onegov.ch/gever/die-wichtigsten-module-von-onegov-gever/direktes-bearbeiten/#external-editor-unter-os-x"&gt;External Editor (Mac)&lt;/a&gt;&lt;/span&gt;&lt;/p&gt;</property>
+    <property name="more_url"/>
+    <property name="omit_border">False</property>
+    <property name="header">Optionen</property>
+    <property name="footer"/>
+  </assignment>
+
+  <assignment name="documentation" category="context" key="/"
+              manager="ftw.footer.column3" type="plone.portlet.static.Static"
+              visible="True">
+    <property
+        name="text">&lt;p&gt;&lt;a class="external-link" href="http://www.onegov.ch/gever/dokumentation"&gt;Benutzerhandbuch&lt;/a&gt;&lt;br /&gt;&lt;a class="external-link" href="http://feedback.onegov.ch"&gt;Feedback Forum&lt;/a&gt;&lt;/p&gt;</property>
+    <property name="more_url"/>
+    <property name="omit_border">False</property>
+    <property name="header">Dokumentation</property>
+    <property name="footer"/>
+  </assignment>
+
+  <assignment name="about_gever" category="context" key="/"
+              manager="ftw.footer.column1" type="plone.portlet.static.Static"
+              visible="True">
+    <property
+        name="text">&lt;p&gt;&lt;a class="external-link" href="http://www.onegov.ch/gever/die-wichtigsten-module-von-onegov-gever"&gt;Funktionen&lt;/a&gt;&lt;/p&gt;
+    &lt;p&gt;&lt;a class="external-link" href="https://github.com/4teamwork/opengever.core"&gt;Quellcode&lt;/a&gt;&lt;/p&gt;
+    &lt;p&gt;&lt;a class="external-link" href="https://jenkins.4teamwork.ch"&gt;Software Tests&lt;/a&gt;&lt;/p&gt;
+    &lt;p&gt;&lt;a class="external-link" href="http://www.onegov.ch/gever/aktuell/onegov-gever-release-3.0"&gt;Release 3.0&lt;/a&gt;&lt;/p&gt;</property>
+    <property name="more_url"/>
+    <property name="omit_border">False</property>
+    <property name="header">Über OneGov GEVER</property>
+    <property name="footer"/>
+  </assignment>
+
+  <assignment name="contact" category="context" key="/"
+              manager="ftw.footer.column4" type="plone.portlet.static.Static"
+              visible="True">
+    <property
+        name="text">&lt;p&gt;&lt;strong&gt;4teamwork AG&lt;/strong&gt;&lt;br /&gt;Engehaldenstrasse 53&lt;br /&gt;3012 Bern&lt;br /&gt;&lt;a class="external-link" href="http://www.4teamwork.ch"&gt;www.4teamwork.ch&lt;/a&gt;&lt;/p&gt;
+    &lt;p&gt;&lt;span&gt;&lt;br /&gt;&lt;/span&gt;&lt;/p&gt;
+    &lt;p&gt;&lt;strong&gt;Support&lt;br /&gt;&lt;/strong&gt;&lt;span&gt;031 511 04 04&lt;br /&gt;&lt;a class="mail-link" href="mailto:support@4teamwork.ch"&gt;support@4temwork.ch&lt;/a&gt;&lt;/span&gt;&lt;/p&gt;</property>
+    <property name="more_url"/>
+    <property name="omit_border">False</property>
+    <property name="header">Kontakt</property>
+    <property name="footer"/>
+  </assignment>
+</portlets>

@@ -274,6 +274,19 @@ Converts repository configuration from old format (repository.csv) to new format
     bin/zopepy scripts/convert_csv_repository_to_xlsx.py <path to repository csv file> <path for new xlsx file>
 
 
+Creating policies
+-----------------
+A script to semi-automatically create policies is provided as ``bin/create-policy``. The script runs in interactive mode and generates policies based on the questions asked. Policies are stored in the source directory ``src``.
+
+Policy templates are avilable from the ``opengever.policytemplates`` package. At the time of writing there is only one policy template for simple SAAS policies.
+
+Once a new policy has been generated the following things need to be added manually:
+
+- an initial repository (as excel file)
+- initial template files, if required
+- initial sablon templates, if required
+- Some more complex confiuration options like retention periods and multiple inboxes/template folders
+
 
 Tests
 -----

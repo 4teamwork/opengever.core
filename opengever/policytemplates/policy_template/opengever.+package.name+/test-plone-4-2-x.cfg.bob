@@ -1,0 +1,21 @@
+[buildout]
+extends =
+    https://raw.github.com/4teamwork/ftw-buildouts/master/test-plone-4.2.x.cfg
+    https://raw.github.com/4teamwork/ftw-buildouts/master/authentication.cfg
+    https://raw.github.com/4teamwork/opengever.core/master/sources.cfg
+    https://raw.github.com/4teamwork/opengever.core/master/versions.cfg
+
+parts += test
+
+development-packages +=
+    opengever.core
+
+versions = versions
+
+package-name = opengever.{{{package.name}}}
+
+find-links +=
+    http://downloads.4teamwork.ch/simple
+
+[versions]
+opengever.{{{package.name}}} =
