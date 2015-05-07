@@ -168,4 +168,23 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <!-- 4302 -> 4303 -->
+    <genericsetup:upgradeStep
+        title="Migrate template dossier class."
+        description=""
+        source="4302"
+        destination="4303"
+        handler="opengever.dossier.upgrades.to4303.MigrateTemplateDossierClass"
+        profile="opengever.dossier:default"
+        />
+
+    <genericsetup:registerProfile
+        name="4303"
+        title="opengever.dossier: upgrade profile 4303"
+        description=""
+        directory="profiles/4303"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
 </configure>

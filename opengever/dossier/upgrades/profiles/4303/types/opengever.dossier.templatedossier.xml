@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<object name="opengever.dossier.templatedossier" meta_type="Dexterity FTI"
+        i18n:domain="opengever.dossier" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+    <property name="klass">opengever.dossier.templatedossier.TemplateDossier</property>
+
+</object>
