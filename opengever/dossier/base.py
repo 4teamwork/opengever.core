@@ -8,6 +8,7 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.interfaces import IConstrainTypeDecider
 from opengever.dossier.interfaces import IDossierContainerTypes
+from opengever.meeting import is_meeting_feature_enabled
 from opengever.ogds.base.actor import Actor
 from opengever.task import OPEN_TASK_STATES
 from opengever.task.task import ITask
@@ -262,6 +263,10 @@ class DefaultConstrainTypeDecider(grok.MultiAdapter):
         for const_ctype, const_depth, const_ftype in mapping:
             if const_ctype == container_type and const_ftype == factory_type:
                 return depth < const_depth or const_depth == 0
+
+        if factory_type in [u'opengever.meeting.proposal',
+                            u'opengever.meeting.sablontemplate']:
+            return is_meeting_feature_enabled()
         return True
 
     @property

@@ -1,11 +1,11 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.contentmenu.menu import FactoriesMenu
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.mail.behaviors import ISendableDocsContainer
 from opengever.testing import FunctionalTestCase
 from opengever.testing import index_data_for
 from Products.CMFCore.utils import getToolByName
-from Products.CMFCore.Expression import createExprContext
 
 
 class TestDossier(FunctionalTestCase):
@@ -94,3 +94,27 @@ class TestDossier(FunctionalTestCase):
     def get_factory_menu_items(self, obj):
         menu = FactoriesMenu(obj)
         return menu.getMenuItems(self.dossier, self.dossier.REQUEST)
+
+    def test_default_addable_types(self):
+        self.grant('Contributor')
+        self.assertItemsEqual(
+            ['opengever.document.document', 'ftw.mail.mail',
+             'opengever.dossier.businesscasedossier', 'opengever.task.task'],
+            [fti.id for fti in self.dossier.allowedContentTypes()])
+
+
+class TestMeetingFeatureTypes(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_MEETING_LAYER
+
+    def setUp(self):
+        super(TestMeetingFeatureTypes, self).setUp()
+        self.dossier = create(Builder('dossier'))
+
+    def test_meeting_feature_enabled_addable_types(self):
+        self.grant('Contributor')
+        self.assertItemsEqual(
+            ['opengever.document.document', 'ftw.mail.mail',
+             'opengever.dossier.businesscasedossier', 'opengever.task.task',
+             'opengever.meeting.proposal'],
+            [fti.id for fti in self.dossier.allowedContentTypes()])
