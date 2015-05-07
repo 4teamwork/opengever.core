@@ -17,4 +17,14 @@
         profile="opengever.activity:default"
         />
 
+    <!-- 4300 -> 4301 -->
+    <genericsetup:upgradeStep
+        title="Insert default notification settings"
+        description=""
+        source="4300"
+        destination="4301"
+        handler="opengever.activity.upgrades.to4301.InsertDefaultSettings"
+        profile="opengever.activity:default"
+        />
+
 </configure>
