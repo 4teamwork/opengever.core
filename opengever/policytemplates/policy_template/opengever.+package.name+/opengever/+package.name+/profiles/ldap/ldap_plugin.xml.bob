@@ -1,7 +1,7 @@
 <?xml version="1.0"  ?>
 <ldapplugins>
 
-        <ldapplugin title="{{{package.title}}} LDAP" id="ldap" meta_type="Plone LDAP plugin" update="False">
+        <ldapplugin title="{{{package.name}}} LDAP" id="ldap" meta_type="Plone LDAP plugin" update="False">
             <cache value="RAMCache"/>
             <interface value="IAuthenticationPlugin"/>
             <interface value="ICredentialsResetPlugin"/>
@@ -14,7 +14,7 @@
             <interface value="IUserEnumerationPlugin"/>
             <interface value="IUserManagement"/>
             <plugin_property id="prefix" type="string" mode="w" value=""/>
-            <plugin_property id="title" type="string" mode="wd" value="{{{package.title}}} LDAP"/>
+            <plugin_property id="title" type="string" mode="wd" value="{{{package.name}}} LDAP"/>
             <property id="_login_attr" type="str">
                 <item value="uid"/>
             </property>
