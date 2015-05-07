@@ -18,8 +18,14 @@ DEFAULT_SETTINGS = [
     {'kind':'task-transition-rejected-open', 'mail_notification': False},
     {'kind':'task-transition-resolved-in-progress', 'mail_notification': False},
     {'kind':'task-transition-resolved-tested-and-closed', 'mail_notification': False},
-]
 
+    {'kind':'forwarding-transition-accept', 'mail_notification': False},
+    {'kind':'forwarding-transition-assign-to-dossier', 'mail_notification': False},
+    {'kind':'forwarding-transition-close', 'mail_notification': False},
+    {'kind':'forwarding-transition-reassign', 'mail_notification': True},
+    {'kind':'forwarding-transition-reassign-refused', 'mail_notification': True},
+    {'kind':'forwarding-transition-refuse', 'mail_notification': False}
+]
 
 def insert_default_settings(site):
     session = create_session()
