@@ -8,6 +8,7 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.interfaces import IConstrainTypeDecider
 from opengever.dossier.interfaces import IDossierContainerTypes
+from opengever.meeting import is_meeting_feature_enabled
 from opengever.ogds.base.actor import Actor
 from opengever.task import OPEN_TASK_STATES
 from opengever.task.task import ITask
@@ -38,16 +39,8 @@ class DossierContainer(Container):
     def allowedContentTypes(self, *args, **kwargs):
         types = super(
             DossierContainer, self).allowedContentTypes(*args, **kwargs)
-        # calculate depth
-        depth = 0
-        obj = self
-        while IDossierMarker.providedBy(obj):
-            depth += 1
-            obj = aq_parent(aq_inner(obj))
-            if IPloneSiteRoot.providedBy(obj):
-                break
 
-        # the adapter decides
+        depth = self._get_dossier_depth()
         def filter_type(fti):
             # first we try the more specific one ...
             decider = queryMultiAdapter((self.REQUEST, self, fti),
@@ -61,12 +54,11 @@ class DossierContainer(Container):
                 return decider.addable(depth)
             # if we don't have an adapter, we just allow it
             return True
-        # filter
+
         return filter(filter_type, types)
 
-    def show_subdossier(self):
-        registry = queryUtility(IRegistry)
-        reg_proxy = registry.forInterface(IDossierContainerTypes)
+    def _get_dossier_depth(self):
+        # calculate depth
         depth = 0
         obj = self
         while IDossierMarker.providedBy(obj):
@@ -74,6 +66,13 @@ class DossierContainer(Container):
             obj = aq_parent(aq_inner(obj))
             if IPloneSiteRoot.providedBy(obj):
                 break
+        return depth
+
+    def show_subdossier(self):
+        registry = queryUtility(IRegistry)
+        reg_proxy = registry.forInterface(IDossierContainerTypes)
+        depth = self._get_dossier_depth()
+
         if depth > getattr(reg_proxy, 'maximum_dossier_depth', 100):
             return False
         else:
@@ -264,11 +263,15 @@ class DefaultConstrainTypeDecider(grok.MultiAdapter):
         for const_ctype, const_depth, const_ftype in mapping:
             if const_ctype == container_type and const_ftype == factory_type:
                 return depth < const_depth or const_depth == 0
+
+        if factory_type in [u'opengever.meeting.proposal',
+                            u'opengever.meeting.sablontemplate']:
+            return is_meeting_feature_enabled()
         return True
 
     @property
     def constrain_type_mapping(self):
-        conf = self.__class__.CONSTRAIN_CONFIGURATION
+        conf = self.CONSTRAIN_CONFIGURATION
         for container_type, type_constr in conf.items():
             for factory_type, max_depth in type_constr.items():
                 yield container_type, max_depth, factory_type

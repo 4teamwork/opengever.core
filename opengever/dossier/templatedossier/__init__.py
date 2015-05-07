@@ -1,4 +1,5 @@
-from opengever.dossier.templatedossier.interfaces import ITemplateDossier
+from opengever.dossier.templatedossier.interfaces import ITemplateDossier  # keep!
+from opengever.dossier.templatedossier.templatedossier import TemplateDossier  # keep!
 from plone import api
 
 

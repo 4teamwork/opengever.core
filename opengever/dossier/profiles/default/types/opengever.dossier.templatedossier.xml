@@ -20,7 +20,7 @@
     <property name="schema">opengever.dossier.templatedossier.ITemplateDossier</property>
 
     <!-- class used for content items -->
-    <property name="klass">plone.dexterity.content.Container</property>
+    <property name="klass">opengever.dossier.templatedossier.TemplateDossier</property>
 
     <!-- add permission -->
     <property name="add_permission">opengever.dossier.AddTemplateDossier</property>

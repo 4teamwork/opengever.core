@@ -5,6 +5,12 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Migrate templatedossiers classes from Container to custom DossierContainer subclass.
+  [deiferni]
+
+- Restrict allowed dossier meeting content in ConstrainTypesDecider.
+  [deiferni]
+
 - Add initial policy template support and a simple SAAS policy template.
   [deiferni]
 
