@@ -15,6 +15,9 @@ class DefaultSettingsQuery(BaseQuery):
 
         return getattr(setting, dispatch_setting, False)
 
+    def by_kind(self, kind):
+        return self.filter_by(kind=kind)
+
 
 class DefaultSettings(Base):
 
