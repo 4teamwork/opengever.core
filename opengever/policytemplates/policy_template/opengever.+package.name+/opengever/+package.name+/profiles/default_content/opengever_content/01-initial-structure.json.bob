@@ -24,11 +24,6 @@
                 "Contributor",
                 "Editor",
                 "Reader"
-            ],
-            "{{{deployment.rolemanager_group}}}": [
-                "Contributor",
-                "Editor",
-                "Reader"
             ]
         }
     },
@@ -42,11 +37,6 @@
                 "Reader"
             ],
             "{{{orgunit.inbox_group}}}": [
-                "Contributor",
-                "Editor",
-                "Reader"
-            ],
-            "{{{deployment.rolemanager_group}}}": [
                 "Contributor",
                 "Editor",
                 "Reader"
