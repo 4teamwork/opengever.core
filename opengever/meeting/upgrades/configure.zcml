@@ -256,4 +256,13 @@
         directory="profiles/4306"
         />
 
+    <!-- 4306 -> 4307 -->
+    <upgrade-step:importProfile
+        title="Add scrollspy javascript. Update javascript insertion order."
+        source="4306"
+        destination="4307"
+        profile="opengever.meeting:default"
+        directory="profiles/4307"
+        />
+
 </configure>
