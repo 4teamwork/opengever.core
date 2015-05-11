@@ -4,6 +4,7 @@ from opengever.contact import contact_service
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 
+
 class TestContactService(FunctionalTestCase):
 
     def test_all_contact_brains_returns_brains_of_all_contacts(self):
@@ -25,10 +26,11 @@ class TestContactService(FunctionalTestCase):
             [brain.getObject() for brain in brains])
 
     def test_all_contact_brains_ignores_security_by_default(self):
+        self.grant('Authenticated')
         jamesbond = create(Builder('contact')
-                           .having(**{'firstname': u'James',
-                                      'lastname': u'Bond',
-                                      'email': None}))
+                           .having(firstname=u'James',
+                                   lastname=u'Bond',
+                                   email=None))
         jamesbond.manage_delLocalRoles(TEST_USER_ID)
 
         brains = contact_service().all_contact_brains()
