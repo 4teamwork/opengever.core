@@ -111,4 +111,23 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <!-- 4200 -> 4300 -->
+    <genericsetup:upgradeStep
+        title="Drop owner from task workflow."
+        description=""
+        source="4200"
+        destination="4300"
+        handler="opengever.task.upgrades.to4300.DropOwner"
+        profile="opengever.task:default"
+        />
+
+    <genericsetup:registerProfile
+        name="4300"
+        title="opengever.task: upgrade profile 4300"
+        description=""
+        directory="profiles/4300"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
 </configure>
