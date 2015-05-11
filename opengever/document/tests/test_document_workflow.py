@@ -24,8 +24,8 @@ class TestDocumentWorkflow(FunctionalTestCase):
         transaction.commit()
 
     def test_document_can_be_removed_with_remove_gever_content_permission(self):
-        doc = create(Builder('document'))
         self.grant('Manager')
+        doc = create(Builder('document'))
         api.content.transition(obj=doc,
                                transition='document-transition-remove')
         self.assertEquals(Document.removed_state,
@@ -39,7 +39,6 @@ class TestDocumentWorkflow(FunctionalTestCase):
             api.content.transition(obj=doc, transition='document-transition-remove')
 
     def test_document_can_only_be_restored_with_manage_portal_permission(self):
-
         doc = create(Builder('document').removed())
 
         with self.assertRaises(InvalidParameterError):
@@ -54,11 +53,6 @@ class TestDocumentWorkflow(FunctionalTestCase):
 
     def test_deleting_document_is_only_allowed_for_managers(self):
         doc = create(Builder('document'))
-
-        acl_users = api.portal.get_tool('acl_users')
-        valid_roles = list(acl_users.portal_role_manager.valid_roles())
-        valid_roles.remove('Manager')
-        self.grant(*valid_roles)
 
         with self.assertRaises(Unauthorized):
             api.content.delete(obj=doc)

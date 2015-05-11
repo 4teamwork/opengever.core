@@ -9,7 +9,6 @@ class TestDocumentByline(TestBylineBase):
 
     def setUp(self):
         super(TestDocumentByline, self).setUp()
-        self.grant('Manager')
         create_ogds_user('hugo.boss')
 
         self.document = create(Builder('document')
