@@ -20,8 +20,6 @@ class TestReferenceBehavior(FunctionalTestCase):
         # the reference number validator again.
         provideAdapter(ReferenceNumberPrefixValidator)
 
-        self.grant('Manager')
-
         self.repo = create(Builder('repository'))
 
     def test_repositories_provided_referenceprefix_marker_interface(self):
@@ -68,6 +66,8 @@ class TestReferenceBehavior(FunctionalTestCase):
                .within(self.repo)
                .having(reference_number_prefix='9'))
 
+        self.grant('Administrator')
+
         self.browser.open(
             '%s/++add++opengever.repository.repositoryfolder' % (
                 self.repo.absolute_url()))
@@ -83,6 +83,8 @@ class TestReferenceBehavior(FunctionalTestCase):
         create(Builder('repository')
                .within(self.repo)
                .having(reference_number_prefix='5'))
+
+        self.grant('Administrator')
 
         self.browser.open(
             '%s/++add++opengever.repository.repositoryfolder' % (

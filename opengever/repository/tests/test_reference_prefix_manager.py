@@ -14,7 +14,8 @@ class TestReferencePrefixManager(FunctionalTestCase):
 
     def setUp(self):
         super(TestReferencePrefixManager, self).setUp()
-        self.grant('Manager')
+
+        self.grant('Administrator')
 
         self.root = create(Builder('repository_root'))
         self.repo = create(Builder('repository')
@@ -91,7 +92,7 @@ class TestReferencePrefixManager(FunctionalTestCase):
             browser.css('#reference_prefix_manager_table tbody').first.text)
 
     @browsing
-    def test_manager_is_hided_from_user_without_permission(self, browser):
+    def test_manager_is_hidden_from_user_without_permission(self, browser):
         self.grant('Contributor')
 
         with self.assertRaises(Unauthorized):
