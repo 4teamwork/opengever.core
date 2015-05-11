@@ -38,10 +38,6 @@ import transaction
 
 class TestDocumentConfiguration(FunctionalTestCase):
 
-    def setUp(self):
-        super(TestDocumentConfiguration, self).setUp()
-        self.grant('Contributor')
-
     def test_documents_provide_IDocumentSchema(self):
         document = create(Builder("document"))
         self.assertProvides(document, interface=IDocumentSchema)
@@ -67,10 +63,6 @@ class TestDocumentConfiguration(FunctionalTestCase):
 
 
 class TestDocument(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestDocument, self).setUp()
-        self.grant('Contributor')
 
     def test_upload_file(self):
         document = create(Builder("document"))
@@ -214,10 +206,6 @@ class TestDocument(FunctionalTestCase):
 
 class TestDocumentDefaultValues(FunctionalTestCase):
 
-    def setUp(self):
-        super(TestDocumentDefaultValues, self).setUp()
-        self.grant('Contributor')
-
     def test_default_document_date_is_today(self):
         self.assertEquals(date.today(), self.default_value_for('document_date'))
 
@@ -250,7 +238,6 @@ class TestDocumentNumbering(FunctionalTestCase):
 
     def setUp(self):
         super(TestDocumentNumbering, self).setUp()
-        self.grant('Contributor')
 
         fti = DexterityFTI('SimpleDocument')
         fti.klass = 'plone.dexterity.content.Container'
@@ -517,8 +504,6 @@ class TestPublicTrial(FunctionalTestCase):
 
     def setUp(self):
         super(TestPublicTrial, self).setUp()
-
-        self.grant('Reader', 'Contributor')
 
         self.document = create(Builder('document')
                                .having(public_trial='private'))
