@@ -12,7 +12,6 @@ class TestDossierDeactivation(FunctionalTestCase):
 
     def setUp(self):
         super(TestDossierDeactivation, self).setUp()
-        self.grant('Editor')
         self.dossier = create(Builder('dossier'))
 
     @browsing

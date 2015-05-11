@@ -34,7 +34,6 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
 
     def setUp(self):
         super(TestDocumentWithTemplateForm, self).setUp()
-        self.grant('Manager')
         self.setup_fullname(fullname='Peter')
 
         registry = getUtility(IRegistry)
@@ -223,10 +222,6 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
 
 class TestTemplateDossier(FunctionalTestCase):
 
-    def setUp(self):
-        super(TestTemplateDossier, self).setUp()
-        self.grant('Manager')
-
     @browsing
     def test_adding(self, browser):
         browser.login().open(self.portal)
@@ -237,7 +232,8 @@ class TestTemplateDossier(FunctionalTestCase):
         self.assertEquals('tabbed_view', plone.view())
 
     @browsing
-    def test_addable_types(self, browser):
+    def test_manager_addable_types(self, browser):
+        self.grant('Manager')
         templatedossier = create(Builder('templatedossier'))
         browser.login().open(templatedossier)
 
@@ -267,10 +263,6 @@ class TestTemplateDossierMeetingEnabled(FunctionalTestCase):
 
 class TestTemplateFolderUtility(FunctionalTestCase):
 
-    def setUp(self):
-        super(TestTemplateFolderUtility, self).setUp()
-        self.grant('Manager')
-
     def test_get_template_folder_returns_path_of_the_templatedossier(self):
         templatedossier = create(Builder('templatedossier'))
 
@@ -296,7 +288,6 @@ class TestTemplateDossierListings(FunctionalTestCase):
 
     def setUp(self):
         super(TestTemplateDossierListings, self).setUp()
-        self.grant('Manager')
 
         self.templatedossier = create(Builder('templatedossier'))
         self.dossier = create(Builder('dossier'))
@@ -399,7 +390,6 @@ class TestTemplateDocumentTabs(FunctionalTestCase):
         self.template = create(Builder('document')
                                .within(self.templatedossier)
                                .titled('My Document'))
-        self.grant('Manager')
 
     @browsing
     def test_template_overview_tab(self, browser):
@@ -418,6 +408,8 @@ class TestTemplateDocumentTabs(FunctionalTestCase):
 
     @browsing
     def test_template_info_tab(self, browser):
+        # we want to test authenticated user, which only a Manager can see
+        self.grant('Manager')
         browser.login()
 
         browser.open(self.template, view=INFO_TAB)

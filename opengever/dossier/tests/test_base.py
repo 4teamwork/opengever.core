@@ -10,7 +10,6 @@ class TestDossierContainer(FunctionalTestCase):
 
     def setUp(self):
         super(TestDossierContainer, self).setUp()
-        self.grant('Reader')
 
     def test_is_all_supplied_without_any_subdossiers(self):
         dossier = create(Builder("dossier"))

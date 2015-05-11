@@ -16,18 +16,21 @@ class TestIndexers(FunctionalTestCase):
 
     def setUp(self):
         super(TestIndexers, self).setUp()
-        self.grant('Contributor')
 
-        self.dossier = create(Builder("dossier").titled(u"Testd\xf6ssier XY"))
-        self.dossier.reindexObject()
+        self.repo = create(Builder('repository_root'))
+        self.repo_folder = create(Builder('repository')
+                                  .within(self.repo))
+
+        self.dossier = create(
+            Builder("dossier")
+            .titled(u"Testd\xf6ssier XY")
+            .within(self.repo_folder))
 
         self.subdossier = create(Builder("dossier")
                                  .within(self.dossier)
                                  .titled(u"Subd\xf6ssier XY"))
-        self.subdossier.reindexObject()
 
         self.document = create(Builder("document").within(self.subdossier))
-        self.document.reindexObject()
 
     def test_containing_dossier(self):
         self.assertEquals(

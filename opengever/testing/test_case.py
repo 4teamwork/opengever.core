@@ -43,7 +43,7 @@ class FunctionalTestCase(TestCase):
             self.user, self.org_unit, self.admin_unit = create(
                 Builder('fixture').with_all_unit_setup())
 
-        self.grant('Contributor', 'Editor')
+        self.grant('Contributor', 'Editor', 'Reader')
 
         # necessary to force tabbed-view into correct mode, otherwise it only
         # renders empty views/tabs.

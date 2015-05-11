@@ -8,10 +8,6 @@ import transaction
 class TestOpenDossiersJson(FunctionalTestCase):
     use_browser = True
 
-    def setUp(self):
-        super(TestOpenDossiersJson, self).setUp()
-        self.grant('Contributor')
-
     def test_renders_json_containing_all_open_dossiers(self):
         self.store_dossiers(2)
         transaction.commit()

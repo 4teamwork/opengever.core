@@ -24,11 +24,8 @@ class TestResolvingDossiers(FunctionalTestCase):
 
     use_browser = True
 
-    def setUp(self):
-        super(TestResolvingDossiers, self).setUp()
-        self.grant('Manager')
-
     def test_archive_form_is_omitted_for_sites_without_filing_number_support(self):
+        self.grant('Manager')
         dossier = create(Builder('dossier')
                          .having(start=date(2013, 11, 5)))
 
@@ -41,6 +38,7 @@ class TestResolvingDossiers(FunctionalTestCase):
             'The dossier has been succesfully resolved')
 
     def test_archive_form_is_omitted_when_resolving_subdossiers(self):
+        self.grant('Manager')
         dossier = create(Builder('dossier'))
         subdossier = create(Builder('dossier')
                             .within(dossier)
@@ -63,7 +61,6 @@ class TestResolvingDossiersWithFilingNumberSupport(FunctionalTestCase):
         super(TestResolvingDossiersWithFilingNumberSupport, self).setUp()
 
         applyProfile(self.portal, 'opengever.dossier:filing')
-        self.grant('Manager')
 
     def test_archive_form_is_displayed_for_sites_with_filing_number_support(self):
 

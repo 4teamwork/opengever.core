@@ -9,8 +9,6 @@ from zope.component import queryUtility
 class TestBusinessCaseDossierIntegration(FunctionalTestCase):
 
     def test_adding(self):
-        self.grant('Contributor')
-
         portal = self.layer['portal']
         portal.invokeFactory('opengever.dossier.businesscasedossier', 'dossier1')
         d1 = portal['dossier1']
@@ -26,8 +24,6 @@ class TestBusinessCaseDossierIntegration(FunctionalTestCase):
         self.assertEquals(IBusinessCaseDossier, schema)
 
     def test_factory(self):
-        self.grant('Contributor')
-
         fti = queryUtility(IDexterityFTI, name='opengever.dossier.businesscasedossier')
         factory = fti.factory
         new_object = createObject(factory)
@@ -35,8 +31,6 @@ class TestBusinessCaseDossierIntegration(FunctionalTestCase):
 
     def test_accessors(self):
         """Test title and descprition accessors."""
-        self.grant('Contributor')
-
         portal = self.layer['portal']
         d1 = createContentInContainer(
             portal, 'opengever.dossier.businesscasedossier',

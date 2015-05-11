@@ -27,7 +27,6 @@ class TestDocProperties(FunctionalTestCase):
 
     def setUp(self):
         super(TestDocProperties, self).setUp()
-        self.grant('Manager')
         self.setup_fullname(fullname='Peter')
         self.dossier = create(Builder('dossier').titled(u'My dossier'))
         self.document = create(Builder('document').within(self.dossier))
