@@ -10,13 +10,11 @@ from plone.app.testing import logout
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
-from plone.dexterity.utils import createContentInContainer
 from plone.locking.interfaces import IRefreshableLockable
 from plone.namedfile.file import NamedBlobFile
 from plone.protect import createToken
 from Products.CMFCore.utils import getToolByName
 from zope.component import getMultiAdapter
-import datetime
 import transaction
 
 
@@ -25,7 +23,22 @@ class TestCheckinCheckoutManager(FunctionalTestCase):
     def setUp(self):
         super(TestCheckinCheckoutManager, self).setUp()
         self.prepareSession()
-        self.grant('Manager', 'Editor', 'Contributor')
+
+        self.repo = create(Builder('repository_root'))
+        self.repo_folder = create(Builder('repository')
+                                  .within(self.repo))
+
+        self.dossier = create(Builder('dossier').within(self.repo_folder))
+        self.doc1 = create(
+            Builder('document')
+            .within(self.dossier)
+            .titled(u'Document1')
+            .with_dummy_content())
+        self.doc2 = create(
+            Builder('document')
+            .within(self.dossier)
+            .titled(u'Document2')
+            .with_dummy_content())
 
     def test_reverting(self):
         """Test that reverting to a version creates a new NamedBlobFile instance
@@ -33,91 +46,60 @@ class TestCheckinCheckoutManager(FunctionalTestCase):
         This avoids the version being reverted to being overwritte later.
         """
         pr = getToolByName(self.portal, 'portal_repository')
-        doc1 = createContentInContainer(self.portal,
-                                        'opengever.document.document',
-                                        title=u'Some Doc',
-                                        document_author=u'Hugo Boss',
-                                        document_date=datetime.date(2011, 1, 1),
-                                        file=NamedBlobFile('bla bla 0',
-                                                           filename=u'test.txt'))
-        manager = self.get_manager(doc1)
+        manager = self.get_manager(self.doc1)
 
         manager.checkout()
-        doc1.file = NamedBlobFile('bla bla 1', filename=u'test.txt')
+        self.doc1.file = NamedBlobFile('bla bla 1', filename=u'test.txt')
         manager.checkin(comment="Created Version 1")
 
         manager.checkout()
-        doc1.file = NamedBlobFile('bla bla 2', filename=u'test.txt')
+        self.doc1.file = NamedBlobFile('bla bla 2', filename=u'test.txt')
         manager.checkin(comment="Created Version 2")
 
         manager.checkout()
-        doc1.file = NamedBlobFile('bla bla 3', filename=u'test.txt')
+        self.doc1.file = NamedBlobFile('bla bla 3', filename=u'test.txt')
         manager.checkin(comment="Created Version 3")
 
         manager.revert_to_version(2)
 
-        version2 = pr.retrieve(doc1, 2)
-        self.assertTrue(doc1.file._blob != version2.object.file._blob)
-        self.assertTrue(doc1.file != version2.object.file)
+        version2 = pr.retrieve(self.doc1, 2)
+        self.assertTrue(self.doc1.file._blob != version2.object.file._blob)
+        self.assertTrue(self.doc1.file != version2.object.file)
 
     def test_checkout(self):
-        doc1 = createContentInContainer(
-            self.portal, 'opengever.document.document',
-            title=u'Doc \xf6ne', document_author=u'Hugo Boss',
-            document_date=datetime.date(2011, 1, 1),
-            file=NamedBlobFile('bla bla', filename=u'test.txt'))
+        view = self.doc1.restrictedTraverse('@@editing_document')()
 
-        transaction.commit()
-
-        view = doc1.restrictedTraverse('@@editing_document')()
-
-        self.assertEquals('http://nohost/plone/document-1', view)
-        self.assertEquals('http://nohost/plone/document-1/external_edit',
-                          IRedirector(doc1.REQUEST).get_redirects()[0].get('url'))
-        self.assertEquals(TEST_USER_ID, self.get_manager(doc1).get_checked_out_by())
+        self.assertEquals(self.doc1.absolute_url(), view)
+        self.assertEquals(
+            self.doc1.absolute_url() + '/external_edit',
+            IRedirector(self.doc1.REQUEST).get_redirects()[0].get('url'))
+        self.assertEquals(TEST_USER_ID,
+                          self.get_manager(self.doc1).get_checked_out_by())
 
     def test_cancel(self):
-        doc1 = createContentInContainer(
-            self.portal, 'opengever.document.document',
-            title=u'Doc \xf6ne', document_author=u'Hugo Boss',
-            document_date=datetime.date(2011, 1, 1),
-            file=NamedBlobFile('bla bla', filename=u'test.txt'))
-
-        manager = self.get_manager(doc1)
+        manager = self.get_manager(self.doc1)
         manager.checkout()
 
         transaction.commit()
-        self.portal.REQUEST['paths'] = [obj2brain(doc1).getPath(),]
-        view = doc1.restrictedTraverse('cancel_document_checkouts')()
+        self.portal.REQUEST['paths'] = [obj2brain(self.doc1).getPath(),]
+        view = self.doc1.restrictedTraverse('cancel_document_checkouts')()
 
-        self.assertEquals('http://nohost/plone/document-1', view)
+        self.assertEquals(self.doc1.absolute_url(), view)
         self.assertEquals(None, manager.get_checked_out_by())
 
     def test_bulk_checkout(self):
-        doc1 = createContentInContainer(
-            self.portal, 'opengever.document.document',
-            title=u'Document1', document_author=u'Hugo Boss',
-            document_date=datetime.date(2011, 1, 1),
-            file=NamedBlobFile('bla bla', filename=u'test.txt'))
-        doc2 = createContentInContainer(
-            self.portal, 'opengever.document.document',
-            title=u'Document2', document_author=u'Hugo Boss',
-            document_date=datetime.date(2011, 1, 1),
-            file=NamedBlobFile('bla bla', filename=u'test.txt'))
-
         self.portal.REQUEST['paths'] = [
-            obj2brain(doc1).getPath(),
-            obj2brain(doc2).getPath(),
+            obj2brain(self.doc1).getPath(),
+            obj2brain(self.doc2).getPath(),
         ]
         view = self.portal.restrictedTraverse(
             '@@checkout_documents').render()
         self.assertEquals('http://nohost/plone#documents', view)
 
-        self.assertEquals(TEST_USER_ID, self.get_manager(doc1).get_checked_out_by())
-        self.assertEquals(TEST_USER_ID, self.get_manager(doc2).get_checked_out_by())
-
-    def test_bluk_checkout_ignores_non_documents(self):
-        self.skipTest("Needs to be implemented")
+        self.assertEquals(
+            TEST_USER_ID, self.get_manager(self.doc1).get_checked_out_by())
+        self.assertEquals(
+            TEST_USER_ID, self.get_manager(self.doc2).get_checked_out_by())
 
     def get_manager(self, document):
         return getMultiAdapter(
@@ -227,27 +209,37 @@ class TestCheckinViews(FunctionalTestCase):
         self.assertEquals(None, last_entry.comment)
 
 
-
 # TODO: rewrite this test-case to express intent
 class TestCheckinCheckoutManagerAPI(FunctionalTestCase):
+
     def setUp(self):
         super(TestCheckinCheckoutManagerAPI, self).setUp()
-        self.grant('Manager','Editor','Contributor')
+
+        self.repo = create(Builder('repository_root'))
+        self.repo_folder = create(Builder('repository')
+                                  .within(self.repo))
+
+        self.dossier = create(Builder('dossier').within(self.repo_folder))
+        self.doc1 = create(
+            Builder('document')
+            .within(self.dossier)
+            .titled(u'Document1')
+            .with_dummy_content())
+        self.doc2 = create(
+            Builder('document')
+            .within(self.dossier)
+            .titled(u'Document2')
+            .with_dummy_content())
 
     def test_api(self):
         # create a defaultfolder
         pr = getToolByName(self.portal, 'portal_repository')
 
         # create a document, and get the CheckinCheckoutManager for the document
-        mok_file1 = NamedBlobFile('bla bla', filename=u'test.txt')
-        mok_file2 = NamedBlobFile('bla bla', filename=u'test.txt')
-        doc1 = createContentInContainer(self.portal, 'opengever.document.document',
-                                        title=u'Doc \xf6ne', document_author=u'Hugo Boss',
-                                        document_date=datetime.date(2011,1,1), file=mok_file1)
-        doc2 = createContentInContainer(self.portal, 'opengever.document.document',
-                                        title=u"Doc three", file=mok_file2)
-        manager = getMultiAdapter((doc1, self.portal.REQUEST), ICheckinCheckoutManager)
-        manager2 = getMultiAdapter((doc2, self.portal.REQUEST), ICheckinCheckoutManager)
+        manager = getMultiAdapter(
+            (self.doc1, self.portal.REQUEST), ICheckinCheckoutManager)
+        manager2 = getMultiAdapter(
+            (self.doc2, self.portal.REQUEST), ICheckinCheckoutManager)
 
         # Checkout:
         # checkout should now allowed, but just for a user with authorization
@@ -279,7 +271,7 @@ class TestCheckinCheckoutManagerAPI(FunctionalTestCase):
         logout()
         login(self.portal, 'other_user')
         setRoles(self.portal, 'other_user', ['Manager','Editor','Contributor'])
-        lockable = IRefreshableLockable(doc2)
+        lockable = IRefreshableLockable(self.doc2)
         lockable.lock()
 
         # Log back in as the regular test user
@@ -292,7 +284,7 @@ class TestCheckinCheckoutManagerAPI(FunctionalTestCase):
 
         # checkin and cancelling:
         mok_file2 = NamedBlobFile('blubb blubb', filename=u"blubb.txt")
-        doc1.file = mok_file2
+        self.doc1.file = mok_file2
         manager.checkin(comment="Test commit Nr. 1")
 
         transaction.commit()
@@ -300,14 +292,14 @@ class TestCheckinCheckoutManagerAPI(FunctionalTestCase):
         # document isn't checked out and the old object is in the history
         self.assertIsNone(manager.get_checked_out_by())
 
-        self.assertEquals(u'doc-one.txt',
-                          pr.retrieve(doc1, 0).object.file.filename)
-        self.assertEquals(u'blubb.txt', doc1.file.filename)
+        self.assertEquals(u'document1.doc',
+                          pr.retrieve(self.doc1, 0).object.file.filename)
+        self.assertEquals(u'blubb.txt', self.doc1.file.filename)
 
         manager.checkout()
         self.assertEquals('test_user_1_', manager.get_checked_out_by())
 
         manager.cancel()
-        pr.getHistoryMetadata(doc1).retrieve(2)
+        pr.getHistoryMetadata(self.doc1).retrieve(2)
 
         self.assertIsNone(manager.get_checked_out_by())
