@@ -128,4 +128,23 @@
         directory="profiles/4005"
         />
 
+    <!-- 4005 -> 4300 -->
+    <genericsetup:upgradeStep
+        title="Drop owner from inbox workflows."
+        description=""
+        source="4005"
+        destination="4300"
+        handler="opengever.inbox.upgrades.to4300.DropOwner"
+        profile="opengever.inbox:default"
+        />
+
+    <genericsetup:registerProfile
+        name="4300"
+        title="opengever.inbox: upgrade profile 4300"
+        description=""
+        directory="profiles/4300"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
 </configure>
