@@ -149,4 +149,23 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <!-- 4100 -> 4300 -->
+    <genericsetup:upgradeStep
+        title="Drop owner from mail workflow."
+        description=""
+        source="4100"
+        destination="4300"
+        handler="opengever.mail.upgrades.to4300.DropOwner"
+        profile="opengever.mail:default"
+        />
+
+    <genericsetup:registerProfile
+        name="4300"
+        title="opengever.mail: upgrade profile 4300"
+        description=""
+        directory="profiles/4300"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
 </configure>
