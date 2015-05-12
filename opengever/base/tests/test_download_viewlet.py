@@ -10,7 +10,6 @@ class TestDownloadViewlet(FunctionalTestCase):
 
     def setUp(self):
         super(TestDownloadViewlet, self).setUp()
-        self.grant('Contributor')
         self.ptool = getToolByName(self.portal, 'plone_utils')
 
     def test_without_file(self):

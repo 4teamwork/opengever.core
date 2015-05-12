@@ -20,7 +20,6 @@ class TestClassificationBehavior(FunctionalTestCase):
 
     def setUp(self):
         super(TestClassificationBehavior, self).setUp()
-        self.grant('Contributor')
 
         fti = DexterityFTI('ClassificationFTI',
                            klass="plone.dexterity.content.Container",
@@ -130,7 +129,7 @@ class TestClassificationBehavior(FunctionalTestCase):
 
     @browsing
     def test_public_trial_is_hidden_on_repository(self, browser):
-        self.grant('Manager')
+        self.grant('Administrator', 'Contributor', 'Editor', 'Reader')
         selector = ('#formfield-form-widgets-IClassification-public_trial '
                     '.hidden-widget')
         selector2 = ('#formfield-form-widgets-IClassification-public_trial_'
@@ -153,7 +152,6 @@ class TestChangesToPublicTrialAreJournalized(FunctionalTestCase):
 
     def setUp(self):
         super(TestChangesToPublicTrialAreJournalized, self).setUp()
-        self.grant('Contributor')
 
         self.dossier = create(Builder('dossier'))
         self.document = create(Builder('document')

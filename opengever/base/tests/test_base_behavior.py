@@ -2,12 +2,12 @@ from opengever.testing import FunctionalTestCase
 from plone.dexterity.fti import DexterityFTI
 import transaction
 
+
 class TestBaseBehavior(FunctionalTestCase):
     use_browser = True
 
     def setUp(self):
         super(TestBaseBehavior, self).setUp()
-        self.grant('Contributor')
 
         fti = DexterityFTI('OpenGeverBaseFTI')
         fti.schema = 'opengever.base.tests.emptyschema.IEmptySchema'

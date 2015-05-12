@@ -10,7 +10,6 @@ class TestOGQuickupload(FunctionalTestCase):
 
     def setUp(self):
         super(TestOGQuickupload, self).setUp()
-        self.grant('Manager')
         self.dossier = create(Builder('dossier'))
         self.adapter = IQuickUploadFileFactory(self.dossier)
 

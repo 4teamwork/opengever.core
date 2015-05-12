@@ -11,7 +11,6 @@ class TestReferencePrefixAdapter(FunctionalTestCase):
 
     def setUp(self):
         super(TestReferencePrefixAdapter, self).setUp()
-        self.grant('Contributor')
 
         self.repository = create(Builder('repository'))
         self.adapter = IReferenceNumberPrefix(self.repository)

@@ -11,7 +11,6 @@ class TestEditPublicTrialHelperFunction(FunctionalTestCase):
 
     def setUp(self):
         super(TestEditPublicTrialHelperFunction, self).setUp()
-        self.grant('Contributor')
 
         dossier = create(Builder('dossier').in_state('dossier-state-resolved'))
         self.document = create(Builder('document')
@@ -69,7 +68,6 @@ class TestEditPublicTrialForm(FunctionalTestCase):
 
     def setUp(self):
         super(TestEditPublicTrialForm, self).setUp()
-        self.grant('Contributor')
 
         dossier = create(Builder('dossier').in_state('dossier-state-resolved'))
         self.document = create(Builder('document')
