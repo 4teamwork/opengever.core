@@ -28,7 +28,7 @@ DEFAULT_SETTINGS = [
     {'kind':'forwarding-transition-refuse', 'mail_notification': False}
 ]
 
-def insert_default_settings(site):
+def insert_notification_defaults(site):
     session = create_session()
     for item in DEFAULT_SETTINGS:
         try:

@@ -23,7 +23,7 @@
         description=""
         source="4300"
         destination="4301"
-        handler="opengever.activity.upgrades.to4301.InsertDefaultSettings"
+        handler="opengever.activity.upgrades.to4301.InsertNotificationDefaults"
         profile="opengever.activity:default"
         />
 

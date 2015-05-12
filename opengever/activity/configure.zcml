@@ -24,7 +24,7 @@
 
   <profilehook:hook
       profile="opengever.activity:default"
-      handler=".hooks.insert_default_settings"
+      handler=".hooks.insert_notification_defaults"
       />
 
 </configure>
