@@ -126,27 +126,35 @@ class PloneNotificationCenter(NotificationCenter):
     which provides some helper methods for easier access directly from plone.
     """
 
+    def _get_oguid_for(self, item):
+        """Helper which returns a oguid for a given item. If the item is
+        already an oguid, this oguid is returned."""
+
+        if not isinstance(item, Oguid):
+            return Oguid.for_object(item)
+        return item
+
     def add_watcher_to_resource(self, obj, actorid):
         actor = Actor.lookup(actorid)
-        oguid = Oguid.for_object(obj)
+        oguid = self._get_oguid_for(obj)
         for representative in actor.representatives():
             super(PloneNotificationCenter, self).add_watcher_to_resource(
                 oguid, representative.userid)
 
     def remove_watcher_from_resource(self, obj, userid):
-        oguid = Oguid.for_object(obj)
+        oguid = self._get_oguid_for(obj)
         super(PloneNotificationCenter, self).remove_watcher_from_resource(
             oguid, userid)
 
     def add_activity(self, obj, kind, title, summary, actor_id,
                      description=u''):
-        oguid = Oguid.for_object(obj)
+        oguid = self._get_oguid_for(obj)
 
         return super(PloneNotificationCenter, self).add_activity(
             oguid, kind, title, summary, actor_id, description=description)
 
     def get_watchers(self, obj):
-        oguid = Oguid.for_object(obj)
+        oguid = self._get_oguid_for(obj)
         return super(PloneNotificationCenter, self).get_watchers(oguid)
 
     def get_current_users_notifications(self, only_unread=False, limit=None):
