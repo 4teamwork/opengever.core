@@ -11,10 +11,6 @@ MAIL_DATA = resource_string('opengever.mail.tests', 'mail.txt')
 class TestPreview(FunctionalTestCase):
     use_browser = True
 
-    def setUp(self):
-        super(TestPreview, self).setUp()
-        self.grant('Contributor', 'Editor', 'Member', 'Manager')
-
     @browsing
     def test_mail_preview_tab(self, browser):
         mail = create(Builder("mail").with_message(MAIL_DATA))

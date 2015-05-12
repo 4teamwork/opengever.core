@@ -19,10 +19,6 @@ MAIL_DATA = resource_string('opengever.mail.tests', 'mail.txt')
 class TestMailMetadata(FunctionalTestCase):
     use_browser = True
 
-    def setUp(self):
-        super(TestMailMetadata, self).setUp()
-        self.grant('Contributor', 'Editor', 'Member', 'Manager')
-
     def test_fill_classification_infos_of_new_mail(self):
         mail = create(Builder("mail").with_message(MAIL_DATA))
 

@@ -10,10 +10,6 @@ MAIL_DATA = resource_string('opengever.mail.tests', 'mail.txt')
 class TestGenerateMailIdAndSequentialNumber(FunctionalTestCase):
     use_browser = True
 
-    def setUp(self):
-        super(TestGenerateMailIdAndSequentialNumber, self).setUp()
-        self.grant('Contributor', 'Editor', 'Member', 'Manager')
-
     def test_generate_mail_id_with_sequencenumber(self):
         mail = create(Builder("mail").with_message(MAIL_DATA))
         document = create(Builder("document"))

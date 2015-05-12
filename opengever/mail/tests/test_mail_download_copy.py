@@ -16,10 +16,6 @@ MAIL_DATA_CRLF = resource_string('opengever.mail.tests', 'mail_crlf.txt')
 
 class TestMailDownloadCopy(FunctionalTestCase):
 
-    def setUp(self):
-        super(TestMailDownloadCopy, self).setUp()
-        self.grant('Manager')
-
     @browsing
     def test_mail_download_copy_yields_correct_headers(self, browser):
         mail = create(Builder("mail").with_message(MAIL_DATA))

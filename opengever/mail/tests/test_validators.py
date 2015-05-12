@@ -96,7 +96,6 @@ class TestFileOrPaperValidatorInEditForm(FunctionalTestCase):
 
     def setUp(self):
         super(TestFileOrPaperValidatorInEditForm, self).setUp()
-        self.grant('Manager')
 
         self.dossier = create(Builder('dossier'))
         self.mail = create(Builder('mail')

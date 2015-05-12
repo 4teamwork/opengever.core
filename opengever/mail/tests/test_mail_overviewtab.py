@@ -19,10 +19,6 @@ def date_format_helper(dateobj):
 class TestOverview(FunctionalTestCase):
     use_browser = True
 
-    def setUp(self):
-        super(TestOverview, self).setUp()
-        self.grant('Manager')
-
     @browsing
     def test_mail_overview_tab(self, browser):
         mail = create(Builder("mail").with_message(MAIL_DATA))
