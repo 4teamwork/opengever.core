@@ -1,5 +1,6 @@
+from opengever.activity.model import NotificationDefault
 from opengever.base.model import create_session
-from opengever.activity.model import DefaultSettings
+from sqlalchemy.orm.exc import NoResultFound
 
 
 DEFAULT_SETTINGS = [
@@ -30,9 +31,10 @@ DEFAULT_SETTINGS = [
 def insert_default_settings(site):
     session = create_session()
     for item in DEFAULT_SETTINGS:
-        setting = DefaultSettings.query.by_kind(item.get('kind')).first()
-        if not setting:
-            setting = DefaultSettings(kind=item.get('kind'))
+        try:
+            setting = NotificationDefault.query.by_kind(item.get('kind')).one()
+        except NoResultFound:
+            setting = NotificationDefault(kind=item.get('kind'))
             session.add(setting)
 
         setting.mail_notification = item.get('mail_notification')

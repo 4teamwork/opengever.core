@@ -6,7 +6,7 @@ from sqlalchemy import Integer
 from sqlalchemy import String
 
 
-class DefaultSettingsQuery(BaseQuery):
+class NotificationDefaultQuery(BaseQuery):
 
     def is_dispatch_needed(self, dispatch_setting, kind):
         setting = self.filter_by(kind=kind).first()
@@ -19,13 +19,13 @@ class DefaultSettingsQuery(BaseQuery):
         return self.filter_by(kind=kind)
 
 
-class DefaultSettings(Base):
+class NotificationDefault(Base):
 
-    query_cls = DefaultSettingsQuery
+    query_cls = NotificationDefaultQuery
 
-    __tablename__ = 'default_settings'
+    __tablename__ = 'notification_defaults'
 
-    default_setting_id = Column('id', Integer, primary_key=True)
+    notification_default_id = Column('id', Integer, primary_key=True)
 
     kind = Column(String(50), nullable=False, unique=True)
     mail_notification = Column(Boolean, nullable=False, default=False)

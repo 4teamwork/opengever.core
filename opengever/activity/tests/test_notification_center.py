@@ -329,8 +329,8 @@ class TestDispatchers(ActivityTestCase):
         self.resource = create(Builder('resource').oguid('fd:123')
                                .watchers([hugo, peter]))
 
-    def test_check_for_default_setting(self):
-        setting = create(Builder('default_setting')
+    def test_check_for_notification_default(self):
+        setting = create(Builder('notification_default_setting')
                          .having(kind='task-added',
                                  mail_notification=False))
         self.center.add_activity(

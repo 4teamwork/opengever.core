@@ -1,6 +1,6 @@
 from ftw.builder import builder_registry
 from opengever.activity.model import Activity
-from opengever.activity.model import DefaultSettings
+from opengever.activity.model import NotificationDefault
 from opengever.activity.model import Notification
 from opengever.activity.model import Resource
 from opengever.activity.model import Watcher
@@ -63,8 +63,9 @@ class NotificationBuilder(SqlObjectBuilder):
 builder_registry.register('notification', NotificationBuilder)
 
 
-class DefaultSettingsBuilder(SqlObjectBuilder):
+class NotificationDefaultBuilder(SqlObjectBuilder):
 
-    mapped_class = DefaultSettings
+    mapped_class = NotificationDefault
 
-builder_registry.register('default_setting', DefaultSettingsBuilder)
+builder_registry.register('notification_default_setting',
+                          NotificationDefaultBuilder)

@@ -1,6 +1,6 @@
 from opengever.activity.model import Activity
-from opengever.activity.model import DefaultSettings
 from opengever.activity.model import Notification
+from opengever.activity.model import NotificationDefault
 from opengever.activity.model import Resource
 from opengever.activity.model import Watcher
 from opengever.base.model import create_session
@@ -98,7 +98,8 @@ class NotificationCenter(object):
         """Looksup in the settings table if the given dispatcher is needed for
         the given kind.
         """
-        return DefaultSettings.query.is_dispatch_needed(dispatcher._setting, kind)
+        return NotificationDefault.query.is_dispatch_needed(
+            dispatcher._setting, kind)
 
     def get_users_notifications(self, userid, only_unread=False, limit=None):
         query = Notification.query.by_user(userid)

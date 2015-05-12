@@ -1,7 +1,7 @@
 from opengever.activity.model.activity import Activity
 from opengever.activity.model.notification import Notification
 from opengever.activity.model.resource import Resource
-from opengever.activity.model.settings import DefaultSettings
+from opengever.activity.model.settings import NotificationDefault
 from opengever.activity.model.watcher import Watcher
 
 
@@ -11,5 +11,5 @@ tables = [
     'resource_watchers',
     'resources',
     'watchers',
-    'default_settings',
+    'notification_defaults',
 ]
