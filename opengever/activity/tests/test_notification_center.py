@@ -302,3 +302,55 @@ class TestNotificationHandling(ActivityTestCase):
         self.assertEquals(
             ['task-added', 'task-added'],
             [notification.activity.kind for notification in notifications])
+
+
+class FakeDispatcher(object):
+
+    setting_key = 'mail_notification'
+
+    def __init__(self):
+        self.notified = []
+
+    def dispatch_notifications(self, notifications):
+        for notification in notifications:
+            notification.dispatch(self)
+
+    def dispatch_notification(self, notification):
+        self.notified.append(notification)
+
+
+class TestDispatchers(ActivityTestCase):
+
+    def setUp(self):
+        super(TestDispatchers, self).setUp()
+
+        self.dispatcher = FakeDispatcher()
+        self.center = NotificationCenter([self.dispatcher])
+
+        hugo = create(Builder('watcher').having(user_id='hugo'))
+        peter = create(Builder('watcher').having(user_id='peter'))
+
+        self.resource = create(Builder('resource').oguid('fd:123')
+                               .watchers([hugo, peter]))
+
+    def test_check_for_notification_default(self):
+        setting = create(Builder('notification_default_setting')
+                         .having(kind='task-added',
+                                 mail_notification=False))
+        self.center.add_activity(
+            Oguid('fd', '123'), 'task-added',
+            'Kennzahlen 2014', 'Task bla added', 'hugo.boss')
+        self.assertEquals(0, len(self.dispatcher.notified))
+
+        setting.mail_notification = True
+        self.center.add_activity(
+            Oguid('fd', '123'), 'task-added',
+            'Kennzahlen 2014', 'Task bla added', 'hugo.boss')
+        self.assertEquals(2, len(self.dispatcher.notified))
+
+    def test_if_setting_for_kind_does_not_exist_dispatcher_is_ignored(self):
+        self.center.add_activity(
+            Oguid('fd', '123'), 'task-added',
+            'Kennzahlen 2014', 'Task bla added', 'hugo.boss')
+
+        self.assertEquals(0, len(self.dispatcher.notified))

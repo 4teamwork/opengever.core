@@ -34,6 +34,9 @@ class TestEmailNotification(FunctionalTestCase):
 
         self.dossier = create(Builder('dossier').titled(u'Dossier A'))
 
+        create(Builder('notification_default_setting')
+               .having(kind='task-added', mail_notification=True))
+
     def tearDown(self):
         super(TestEmailNotification, self).tearDown()
         Mailing(self.layer['portal']).tear_down()

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:upgrade-step="http://namespaces.zope.org/ftw.upgrade"
+    i18n_domain="opengever.activity">
+
+    <include package="ftw.upgrade" file="meta.zcml" />
+
+    <!-- 1 -> 4300 -->
+    <genericsetup:upgradeStep
+        title="Add default settings table"
+        description=""
+        source="1"
+        destination="4300"
+        handler="opengever.activity.upgrades.to4300.AddDefaultSettingsTable"
+        profile="opengever.activity:default"
+        />
+
+    <!-- 4300 -> 4301 -->
+    <genericsetup:upgradeStep
+        title="Insert default notification settings"
+        description=""
+        source="4300"
+        destination="4301"
+        handler="opengever.activity.upgrades.to4301.InsertNotificationDefaults"
+        profile="opengever.activity:default"
+        />
+
+</configure>

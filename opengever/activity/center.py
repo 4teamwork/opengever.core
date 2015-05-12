@@ -73,6 +73,7 @@ class NotificationCenter(object):
 
     def add_activity(self, oguid, kind, title, summary, actor_id,
                      description=u''):
+
         resource = self.fetch_resource(oguid)
         if not resource:
             resource = self.add_resource(oguid)
