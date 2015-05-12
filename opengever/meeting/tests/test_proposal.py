@@ -41,7 +41,6 @@ class TestProposal(FunctionalTestCase):
 
     def setUp(self):
         super(TestProposal, self).setUp()
-        self.grant('Contributor')
         root = create(Builder('repository_root'))
         folder = create(Builder('repository').within(root))
         self.dossier = create(Builder('dossier').within(folder))
@@ -192,8 +191,6 @@ class TestProposal(FunctionalTestCase):
 
     @browsing
     def test_regression_proposal_submission_with_mails(self, browser):
-        self.grant('Contributor', 'Reader')
-
         committee = create(Builder('committee').titled('My committee'))
         mail = create(Builder('mail')
                       .within(self.dossier)
