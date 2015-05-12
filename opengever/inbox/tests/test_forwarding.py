@@ -10,8 +10,6 @@ class TestForwarding(FunctionalTestCase):
 
     def setUp(self):
         super(TestForwarding, self).setUp()
-        self.grant('Owner', 'Editor', 'Contributor')
-
         self.inbox = create(Builder('inbox'))
 
     @browsing
