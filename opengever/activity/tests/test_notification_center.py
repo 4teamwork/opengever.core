@@ -306,13 +306,17 @@ class TestNotificationHandling(ActivityTestCase):
 
 class FakeDispatcher(object):
 
-    _setting = 'mail_notification'
+    setting_key = 'mail_notification'
 
     def __init__(self):
         self.notified = []
 
     def dispatch_notifications(self, notifications):
-        self.notified += notifications
+        for notification in notifications:
+            notification.dispatch(self)
+
+    def dispatch_notification(self, notification):
+        self.notified.append(notification)
 
 
 class TestDispatchers(ActivityTestCase):

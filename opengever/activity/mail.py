@@ -14,7 +14,7 @@ class PloneNotificationMailer(object):
     the corresponding watcher.
     """
 
-    _setting = 'mail_notification'
+    setting_key = 'mail_notification'
 
     def __init__(self):
         self.mailhost = api.portal.get_tool('MailHost')
@@ -26,7 +26,7 @@ class PloneNotificationMailer(object):
 
     def dispatch_notifications(self, notifications):
         for notification in notifications:
-            self.dispatch_notification(notification)
+            notification.dispatch(self)
 
     def dispatch_notification(self, notification):
         msg = self.prepare_mail(notification)

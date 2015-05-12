@@ -1,3 +1,4 @@
+from opengever.activity.model.settings import NotificationDefault
 from opengever.base.model import Base
 from opengever.ogds.models.query import BaseQuery
 from sqlalchemy import Boolean
@@ -34,3 +35,13 @@ class Notification(Base):
             self.notification_id,
             repr(self.watcher),
             repr(self.activity.resource))
+
+    def dispatch(self, dispatcher):
+        if self.is_dispatch_needed(dispatcher):
+            dispatcher.dispatch_notification(self)
+
+    def is_dispatch_needed(self, dispatcher):
+        """Lookup if the given dispatcher is needed for the given kind.
+        """
+        return NotificationDefault.query.is_dispatch_needed(
+            dispatcher.setting_key, self.activity.kind)
