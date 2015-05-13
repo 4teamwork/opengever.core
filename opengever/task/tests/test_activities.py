@@ -144,6 +144,40 @@ class TestTaskActivites(FunctionalTestCase):
             'Test User (test_user_1_)</a>', activity.summary)
         self.assertEquals(u'nicht dring\xe4nd', activity.description)
 
+    @browsing
+    def test_adding_a_subtask_notifies_watchers(self, browser):
+        task = create(Builder('task')
+                      .titled(u'Abkl\xe4rung Fall Meier')
+                      .having(responsible=u'hugo.boss',
+                              deadline=date(2015, 03, 01))
+                      .in_state('task-state-in-progress'))
+
+        browser.login().open(task, view='++add++opengever.task.task')
+        browser.fill({'Title': u'Abkl\xe4rung Fall Meier',
+                      'Responsible': 'hugo.boss',
+                      'Issuer': u'hugo.boss',
+                      'Task Type': 'comment',
+                      'Text': 'Lorem ipsum'})
+        browser.css('#form-buttons-save').first.click()
+
+        activity = Activity.query.first()
+        self.assertEquals(u'transition-add-subtask', activity.kind)
+
+    @browsing
+    def test_adding_a_document_notifies_watchers(self, browser):
+        task = create(Builder('task')
+                      .titled(u'Abkl\xe4rung Fall Meier')
+                      .having(responsible=u'hugo.boss',
+                              deadline=date(2015, 03, 01))
+                      .in_state('task-state-in-progress'))
+
+        browser.login().open(task, view='++add++opengever.document.document')
+        browser.fill({'Title': u'Letter to peter'})
+        browser.css('#form-buttons-save').first.click()
+
+        activity = Activity.query.first()
+        self.assertEquals(u'transition-add-document', activity.kind)
+
 
 class TestTaskReassignActivity(TestTaskActivites):
 

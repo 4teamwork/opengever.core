@@ -1,6 +1,7 @@
 from collective.elephantvocabulary import wrap_vocabulary
 from five import grok
 from opengever.task import _
+from opengever.task.activities import TaskTransitionActivity
 from persistent.list import PersistentList
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import PloneMessageFactory as PMF
@@ -15,7 +16,6 @@ from zope.schema.vocabulary import SimpleVocabulary
 import AccessControl
 import opengever.task
 import types
-
 
 CUSTOM_INITIAL_VERSION_MESSAGE = 'custom_inital_version_message'
 TASK_TYPE_CATEGORIES = ['unidirectional_by_reference',
@@ -137,6 +137,7 @@ def add_simple_response(task, text='', field_changes=None, added_object=None,
 
     notify(ObjectModifiedEvent(task))
 
+    TaskTransitionActivity(task, response).record()
     return response
 
 
