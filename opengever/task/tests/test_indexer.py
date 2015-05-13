@@ -5,33 +5,21 @@ from opengever.testing import create_ogds_user
 from opengever.testing import FunctionalTestCase
 from opengever.testing import index_data_for
 from opengever.testing import obj2brain
-from plone.app.testing import login
-from plone.app.testing import TEST_USER_NAME
 
 
 class TestTaskIndexers(FunctionalTestCase):
 
     def setUp(self):
         super(TestTaskIndexers, self).setUp()
-        self.portal.portal_types['opengever.task.task'].global_allow = True
 
         create(Builder('org_unit')
                .with_default_groups()
                .id('client2')
                .having(title='Client2', admin_unit=self.admin_unit))
 
-        self.grant('Contributor', 'Editor', 'Manager')
-        login(self.portal, TEST_USER_NAME)
-
         self.task = create(Builder("task")
                            .titled("Test task 1")
                            .having(task_type='comment'))
-
-        self.subtask = create(Builder("task").within(self.task)
-                                             .titled("Test task 1")
-                                             .having(task_type='comment'))
-        self.doc1 = create(Builder("document").titled(u"Doc One"))
-        self.doc2 = create(Builder("document").titled(u"Doc Two"))
 
     def test_date_of_completion(self):
         self.assertEquals(
@@ -57,6 +45,10 @@ class TestTaskIndexers(FunctionalTestCase):
             obj2brain(self.task).assigned_client, 'client2')
 
     def test_is_subtask(self):
+        self.subtask = create(Builder("task").within(self.task)
+                                             .titled("Test task 1")
+                                             .having(task_type='comment'))
+
         self.assertFalse(obj2brain(self.task).is_subtask)
 
         self.assertTrue(obj2brain(self.subtask).is_subtask)
