@@ -1,4 +1,6 @@
 from five import grok
+from opengever.activity import notification_center
+from opengever.base.oguid import Oguid
 from opengever.base.request import dispatch_request
 from opengever.base.transport import Transporter
 from opengever.base.utils import ok_response
@@ -236,6 +238,12 @@ def accept_task_with_successor(dossier, predecessor_oguid, response_text):
     response_transporter.get_responses(predecessor.admin_unit_id,
                                        predecessor.physical_path,
                                        intids_mapping=intids_mapping)
+
+    # Move current responsible from predecessor task to successor
+    center = notification_center()
+    center.remove_watcher_from_resource(Oguid.parse(predecessor_oguid),
+                                        successor.responsible)
+    center.add_watcher_to_resource(successor, successor.responsible)
 
     # First "accept" the successor task..
     accept_task_with_response(successor, response_text)
