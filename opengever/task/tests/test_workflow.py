@@ -107,6 +107,7 @@ class TestTaskWorkflow(FunctionalTestCase):
                       .in_state('task-state-tested-and-closed'))
 
         document = create(Builder('document')
+                          .titled(u'Letter for Peter')
                           .within(task))
 
         self.browser.open('%s/edit' % (document.absolute_url()))
@@ -124,7 +125,9 @@ class TestTaskWorkflow(FunctionalTestCase):
                       .having(issuer=TEST_USER_ID, responsible=TEST_USER_ID)
                       .in_state('task-state-tested-and-closed'))
 
-        document = create(Builder('document').within(task))
+        document = create(Builder('document')
+                          .titled(u'Letter for Peter')
+                          .within(task))
 
         self.wf_tool.doActionFor(dossier, 'dossier-transition-resolve')
         transaction.commit()

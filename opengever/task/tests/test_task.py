@@ -126,9 +126,9 @@ class TestTaskIntegration(FunctionalTestCase):
                          .within(maintask)
                          .titled('maintask'))
 
-        responses = IResponseContainer(maintask)
-        self.assertEquals(
-            responses[-1].added_object.to_id, intids.getId(subtask))
+        response = IResponseContainer(maintask)[-1]
+        self.assertEquals(intids.getId(subtask), response.added_object.to_id)
+        self.assertEquals('transition-add-subtask', response.transition)
 
     def test_adding_a_subtask_via_remote_request_does_not_add_response_to_main_task(self):
         maintask = create(Builder('task').titled('maintask'))
@@ -148,6 +148,17 @@ class TestTaskIntegration(FunctionalTestCase):
         maintask.REQUEST.set('X-CREATING-SUCCESSOR', True)
         create(Builder('task').within(maintask).titled('subtask'))
         self.assertEquals(0, len(IResponseContainer(maintask)))
+
+    def test_adding_a_document_add_response_on_main_task(self):
+        intids = getUtility(IIntIds)
+        maintask = create(Builder('task').titled('maintask'))
+        document = create(Builder('document')
+                          .within(maintask)
+                          .titled('Letter to Peter'))
+
+        response = IResponseContainer(maintask)[-1]
+        self.assertEquals(intids.getId(document), response.added_object.to_id)
+        self.assertEquals('transition-add-document', response.transition)
 
 
 class TestDossierSequenceNumber(FunctionalTestCase):
