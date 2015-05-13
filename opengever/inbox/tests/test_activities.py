@@ -1,9 +1,12 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.activity import notification_center
 from opengever.activity.model import Activity
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
+from opengever.task.browser.accept.utils import assign_forwarding_to_dossier
 from opengever.testing import FunctionalTestCase
+from plone.app.testing import TEST_USER_ID
 
 
 class TestForwardingActivites(FunctionalTestCase):
@@ -42,3 +45,22 @@ class TestForwardingActivites(FunctionalTestCase):
         self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(u'New forwarding added by Test User',
                           activity.summary)
+
+    @browsing
+    def test_assign_forwarding_to_dossier_add_responsible_and_issuer_to_successors_watcherlist(self, browser):
+        dossier = create(Builder('dossier').titled(u'Dossier A'))
+        inbox = create(Builder('inbox').titled(u'Inbox'))
+        forwarding = create(Builder('forwarding')
+                            .within(inbox)
+                            .having(issuer='inbox:client2',
+                                    responsible='hugo.boss')
+                            .titled(u'Anfrage XY'))
+
+        task = assign_forwarding_to_dossier(self.portal, forwarding.oguid.id,
+                                            dossier, "Ok!")
+
+        # The responsible of the task is the `inbox:client1`,
+        # but the PloneNotificationCenter adds every actor representative.
+        self.assertEquals(
+            [TEST_USER_ID, 'hugo.boss'],
+            [watcher.user_id for watcher in notification_center().get_watchers(task)])

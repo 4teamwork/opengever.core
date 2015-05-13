@@ -183,6 +183,11 @@ def assign_forwarding_to_dossier(
 
     successor_tc_task = ISuccessorTaskController(task)
 
+    # Add issuer and responsible to the watchers of the newly created task
+    center = notification_center()
+    center.add_watcher_to_resource(task, task.responsible)
+    center.add_watcher_to_resource(task, task.issuer)
+
     # copy documents and map the intids
     intids_mapping = _copy_documents_from_forwarding(forwarding_obj, task)
 
