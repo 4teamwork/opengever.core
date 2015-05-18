@@ -80,7 +80,10 @@ class TestSendDocument(FunctionalTestCase):
 
     def test_send_documents(self):
         dossier = create(Builder("dossier"))
-        documents = [create(Builder("document").within(dossier).with_dummy_content()), ]
+        documents = [create(Builder("document")
+                            .within(dossier)
+                            .without_default_title()
+                            .with_dummy_content()), ]
         mail = self.send_documents(dossier, documents)
 
         self.assertEquals(TEST_FORM_DATA.get('subject'), mail.get('Subject'),

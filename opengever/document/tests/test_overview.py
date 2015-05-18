@@ -263,7 +263,7 @@ class TestOverviewMeetingFeatures(FunctionalTestCase):
         browser.find('Submit Document').click()
 
         self.assertEqual(
-            ['A new submitted version of document None has been created'],
+            [u'A new submitted version of document Testdokum\xe4nt has been created'],
             info_messages())
         self.assertSubmittedDocumentCreated(
             self.proposal, self.document, submitted_version=1)

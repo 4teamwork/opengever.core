@@ -1,10 +1,12 @@
 from Acquisition import aq_inner, aq_parent
-from Products.CMFCore.interfaces import IActionSucceededEvent
 from datetime import date
 from five import grok
+from opengever.document.document import IDocumentSchema
+from opengever.globalindex.handlers.task import TaskSqlSyncer
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
 from plone.dexterity.interfaces import IDexterityContent
+from Products.CMFCore.interfaces import IActionSucceededEvent
 from zope.app.container.interfaces import IObjectAddedEvent
 
 
@@ -23,10 +25,21 @@ def create_subtask_response(context, event):
         return
 
     parent = aq_parent(aq_inner(context))
-
     if ITask.providedBy(parent):
+        if ITask.providedBy(context):
+            transition = 'transition-add-subtask'
+
+            # If the the added object is a subtask we have to make sure
+            # that the subtask is already synced to the globalindex
+            if not context.get_sql_object():
+                TaskSqlSyncer(context, event).sync()
+
+        elif IDocumentSchema.providedBy(context):
+            transition = 'transition-add-document'
+
         # add a response with a link to the object
-        add_simple_response(parent, added_object=context)
+        add_simple_response(parent, added_object=context,
+                            transition=transition)
 
 
 @grok.subscribe(ITask, IActionSucceededEvent)

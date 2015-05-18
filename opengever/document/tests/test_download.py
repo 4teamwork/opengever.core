@@ -94,7 +94,7 @@ class TestDocumentDownloadConfirmation(FunctionalTestCase):
         super(TestDocumentDownloadConfirmation, self).setUp()
         self.grant('Manager')
         login(self.portal, TEST_USER_NAME)
-        self.document = create(Builder("document"))
+        self.document = create(Builder("document").titled(u'A letter for you'))
 
         file_ = NamedBlobFile('bla bla', filename=u'test.txt')
         self.document.file = file_
@@ -113,8 +113,7 @@ class TestDocumentDownloadConfirmation(FunctionalTestCase):
 
         browser.login().open(self.document, view='file_download_confirmation')
         self.assertIn(
-            u'The Document {0} has no File'.format(self.document.Title()),
-            browser.contents)
+            u'The Document A letter for you has no File', browser.contents)
 
     def test_download_confirmation_view_for_download(self):
         self.browser.open(

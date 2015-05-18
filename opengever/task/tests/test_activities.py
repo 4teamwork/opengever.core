@@ -2,9 +2,11 @@ from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testing.mailing import Mailing
 from opengever.activity import notification_center
 from opengever.activity.model import Activity
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
+from opengever.task.browser.accept.utils import accept_task_with_successor
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 
@@ -144,6 +146,40 @@ class TestTaskActivites(FunctionalTestCase):
             'Test User (test_user_1_)</a>', activity.summary)
         self.assertEquals(u'nicht dring\xe4nd', activity.description)
 
+    @browsing
+    def test_adding_a_subtask_notifies_watchers(self, browser):
+        task = create(Builder('task')
+                      .titled(u'Abkl\xe4rung Fall Meier')
+                      .having(responsible=u'hugo.boss',
+                              deadline=date(2015, 03, 01))
+                      .in_state('task-state-in-progress'))
+
+        browser.login().open(task, view='++add++opengever.task.task')
+        browser.fill({'Title': u'Abkl\xe4rung Fall Meier',
+                      'Responsible': 'hugo.boss',
+                      'Issuer': u'hugo.boss',
+                      'Task Type': 'comment',
+                      'Text': 'Lorem ipsum'})
+        browser.css('#form-buttons-save').first.click()
+
+        activity = Activity.query.first()
+        self.assertEquals(u'transition-add-subtask', activity.kind)
+
+    @browsing
+    def test_adding_a_document_notifies_watchers(self, browser):
+        task = create(Builder('task')
+                      .titled(u'Abkl\xe4rung Fall Meier')
+                      .having(responsible=u'hugo.boss',
+                              deadline=date(2015, 03, 01))
+                      .in_state('task-state-in-progress'))
+
+        browser.login().open(task, view='++add++opengever.document.document')
+        browser.fill({'Title': u'Letter to peter'})
+        browser.css('#form-buttons-save').first.click()
+
+        activity = Activity.query.first()
+        self.assertEquals(u'transition-add-document', activity.kind)
+
 
 class TestTaskReassignActivity(TestTaskActivites):
 
@@ -208,3 +244,50 @@ class TestTaskReassignActivity(TestTaskActivites):
         self.assertItemsEqual(
             ['peter.meier', 'hugo.boss'],
             [watcher.user_id for watcher in watchers])
+
+
+class TestSuccesssorHandling(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
+
+    def setUp(self):
+        super(TestSuccesssorHandling, self).setUp()
+
+        # we need to setup the mock mailhost to avoid problems when using
+        # transaction savepoints
+        Mailing(self.portal).set_up()
+
+        create(Builder('ogds_user')
+               .id('peter.meier')
+               .assign_to_org_units([self.org_unit]))
+        create(Builder('ogds_user')
+               .id('james.meier')
+               .assign_to_org_units([self.org_unit]))
+        create(Builder('ogds_user')
+               .id('hugo.boss')
+               .assign_to_org_units([self.org_unit]))
+
+        self.center = notification_center()
+        self.dossier = create(Builder('dossier').titled(u'Dosssier A'))
+        self.predecessor = create(Builder('task')
+                                  .having(responsible='peter.meier',
+                                          issuer='james.meier'))
+
+        self.center.add_watcher_to_resource(self.predecessor, 'peter.meier')
+        self.center.add_watcher_to_resource(self.predecessor, 'hugo.boss')
+        self.center.add_watcher_to_resource(self.predecessor, 'james.meier')
+
+    def tearDown(self):
+        super(TestSuccesssorHandling, self).tearDown()
+        Mailing(self.layer['portal']).tear_down()
+
+    def test_when_accepting_task_with_successor_responsible_watcher_gets_moved_from_predecessor_to_successsor(self):
+        successor = accept_task_with_successor(
+            self.dossier, self.predecessor.oguid.id, 'Ok.')
+
+        predecessors_watcher = [watcher.user_id for watcher in
+                                self.center.get_watchers(self.predecessor)]
+        successors_watcher = [watcher.user_id for watcher in
+                              self.center.get_watchers(successor)]
+        self.assertItemsEqual(['hugo.boss', 'james.meier'], predecessors_watcher)
+        self.assertEquals(['peter.meier'], successors_watcher)

@@ -24,6 +24,7 @@ class TestDownloadViewlet(FunctionalTestCase):
 
     def test_with_file(self):
         test_doc = create(Builder("document")
+                          .without_default_title()
                           .attach_file_containing("lorem ipsum", name=u"foobar.txt"))
 
         response = self.download(test_doc)

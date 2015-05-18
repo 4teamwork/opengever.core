@@ -1,4 +1,6 @@
 from five import grok
+from opengever.activity import notification_center
+from opengever.base.oguid import Oguid
 from opengever.base.request import dispatch_request
 from opengever.base.transport import Transporter
 from opengever.base.utils import ok_response
@@ -96,6 +98,16 @@ def accept_forwarding_with_successor(
                                        predecessor.physical_path,
                                        intids_mapping=intids_mapping)
 
+    # Remove current responsible from predecessor and add issuer
+    # and responsible to successor's watcher.
+    center = notification_center()
+    center.remove_watcher_from_resource(Oguid.parse(predecessor_oguid),
+                                        successor_forwarding.responsible)
+    center.add_watcher_to_resource(successor_forwarding,
+                                   successor_forwarding.responsible)
+    center.add_watcher_to_resource(successor_forwarding,
+                                   successor_forwarding.issuer)
+
     # if a dossier is given means that a successor task must
     # be created in a new or a existing dossier
     if dossier:
@@ -143,7 +155,12 @@ def accept_forwarding_with_successor(
                         'failed.')
 
     if dossier:
-        # when a successor task exists, we close also the successor forwarding
+        # Update watchers for created successor forwarding and task
+        center = notification_center()
+        center.remove_watcher_from_resource(successor_forwarding, task.responsible)
+        center.add_watcher_to_resource(task, task.responsible)
+
+        # When a successor task exists, we close also the successor forwarding
         change_task_workflow_state(
             successor_forwarding,
             'forwarding-transition-accept',
@@ -180,6 +197,11 @@ def assign_forwarding_to_dossier(
         dossier, 'opengever.task.task', **fielddata)
 
     successor_tc_task = ISuccessorTaskController(task)
+
+    # Add issuer and responsible to the watchers of the newly created task
+    center = notification_center()
+    center.add_watcher_to_resource(task, task.responsible)
+    center.add_watcher_to_resource(task, task.issuer)
 
     # copy documents and map the intids
     intids_mapping = _copy_documents_from_forwarding(forwarding_obj, task)
@@ -236,6 +258,12 @@ def accept_task_with_successor(dossier, predecessor_oguid, response_text):
     response_transporter.get_responses(predecessor.admin_unit_id,
                                        predecessor.physical_path,
                                        intids_mapping=intids_mapping)
+
+    # Move current responsible from predecessor task to successor
+    center = notification_center()
+    center.remove_watcher_from_resource(Oguid.parse(predecessor_oguid),
+                                        successor.responsible)
+    center.add_watcher_to_resource(successor, successor.responsible)
 
     # First "accept" the successor task..
     accept_task_with_response(successor, response_text)
