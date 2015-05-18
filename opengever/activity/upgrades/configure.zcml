@@ -27,4 +27,14 @@
         profile="opengever.activity:default"
         />
 
+    <!-- 4301 -> 4302 -->
+    <genericsetup:upgradeStep
+        title="Use timezone aware datetimes in activity model"
+        description=""
+        source="4301"
+        destination="4302"
+        handler="opengever.activity.upgrades.to4302.AlterActivityCreatedColumn"
+        profile="opengever.activity:default"
+        />
+
 </configure>
