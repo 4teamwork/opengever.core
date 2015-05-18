@@ -14,6 +14,7 @@
 
             <metal:block fill-slot="fields">
              <div class="agenda_items">
+                <label id="dummy"></label>
                 <metal:block tal:repeat="protocol view/get_agenda_items">
                   <metal:block tal:define="name protocol/name">
 
@@ -99,42 +100,48 @@
                 <ul id="scrollspy" class="nav">
                     <li tal:repeat="protocol view/get_agenda_items">
                       <metal:block tal:define="name protocol/name">
-                        <a tal:attributes="href string:#${name}" tal:content="protocol/get_title"></a>
+                        <a tal:attributes="href string:#${name}; id string:${name}-anchor" tal:content="protocol/get_title" class="expandable"></a>
                           <ul class="nav">
                             <metal:block tal:condition="protocol/has_proposal">
                               <li>
-                                <a tal:attributes="href string:#${name}-legal_basis"
+                                <a tal:attributes="href string:#${name}-legal_basis;
+                                                   id string:${name}-legal_basis-anchor"
                                    i18n:translate="">
                                    Legal basis
                                  </a>
                               </li>
                               <li>
-                                <a tal:attributes="href string:#${name}-initial_position"
+                                <a tal:attributes="href string:#${name}-initial_position;
+                                                   id string:${name}-initial_position-anchor"
                                    i18n:translate="">
                                    Initial position
                                  </a>
                               </li>
                               <li>
-                                <a tal:attributes="href string:#${name}-proposed_action"
+                                <a tal:attributes="href string:#${name}-proposed_action;
+                                                   id string:${name}-proposed_action-anchor"
                                    i18n:translate="">
                                    Proposed action
                                  </a>
                               </li>
                               <li>
-                                <a tal:attributes="href string:#${name}-considerations"
+                                <a tal:attributes="href string:#${name}-considerations;
+                                                   id string:${name}-considerations-anchor"
                                    i18n:translate="">
                                    Considerations
                                  </a>
                               </li>
                             </metal:block>
                             <li>
-                              <a tal:attributes="href string:#${name}-discussion"
+                              <a tal:attributes="href string:#${name}-discussion;
+                                                   id string:${name}-discussion-anchor"
                                  i18n:translate="">
                                  Discussion
                                </a>
                             </li>
                             <li>
-                              <a tal:attributes="href string:#${name}-decision"
+                              <a tal:attributes="href string:#${name}-decision;
+                                                   id string:${name}-decision-anchor"
                                  i18n:translate="">
                                  Decision
                                </a>

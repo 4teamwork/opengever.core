@@ -1,120 +1,130 @@
-stickyHeading = function($){
+(function($){
 
-  var onStickyCallback = function() {};
-  var onNoStickyCallback = function() {};
-  var onCollisionCallback = function() {};
+  "use strict";
 
-  var clones = [];
-  var headings;
-  var doUpdate = false;
+  function StickyHeading(_options) {
 
-  var layouter = {
-    reset: function(headings){
-      $.each(headings, function(i, heading) { heading.clone.removeClass('sticky').css('top', 0); });
-    },
+    var onStickyCallback = function() {};
+    var onNoStickyCallback = function() {};
+    var onCollisionCallback = function() {};
 
-    noSticky: function(scrollPositionTop){
-      onNoStickyCallback(scrollPositionTop);
-    },
+    var options = $.extend({ refresh: true, fix: true }, _options || {});
 
-    sticky: function(heading, pastHeading, scrollPositionTop){
-      heading.clone.addClass('sticky');
-      heading.clone.css('top', scrollPositionTop - heading.offset);
-      if(pastHeading) {
-        this.reset([pastHeading]);
-      }
-      onStickyCallback(heading, scrollPositionTop);
-    },
+    var currentSticky;
 
-    collision: function(fadeOutHeading, fadeInHeading, scrollPositionTop) {
-      fadeOutHeading.clone.addClass('sticky').css('top', fadeInHeading.offset - fadeOutHeading.offset - fadeOutHeading.height);
-      fadeInHeading.clone.addClass('sticky');
-      onCollisionCallback(fadeOutHeading, fadeInHeading, scrollPositionTop);
-    }
-  }
+    var currentHeadings;
 
-  return function(selector) {
+    var layouter = {
 
-    var didResize = false;
+      initHeadings: function(selector) {
+        return $(selector).map(function(i, e) {
+          var el = $(e);
+          var clone = el.clone();
+          clone.attr("id", el.attr("id") + "_clone");
+          clone.insertAfter(el);
+          clone.addClass("clone");
+          var heading = { node: el, offset: el.offset().top, height: el.outerHeight(), clone: clone }
+          el.addClass("original");
+          return heading;
+        });
+      },
 
-    function init() {
-      headings = $(selector).map(function(i, e){
-        var el = $(e);
-        var clone = el.clone();
-        var height = el.outerHeight();
-        var offset = el.offset().top;
-        clone.attr("id", el.attr("id") + "_clone");
-        el.addClass("original");
-        clone.insertAfter(el);
-        return { node: el, offset: offset, height: height, clone: clone};
-      });
-    }
+      updateOffsets: function(headings) {
+        return $.each(headings, function(i, e){
+          e.offset = e.node.offset().top;
+        });
+      },
 
-    function update() {
-      headings.each(function(i, e){
-        e.offset = e.node.offset().top;
-      });
-    }
+      findPastHeadings: function(headings, scrollPositionTop) {
+        return $.grep(headings, function(heading) {
+          return scrollPositionTop >= heading.offset;
+        });
+      },
 
-    init();
+      observe: function(selector) {
+        var self = this;
+        var currentHeadings = this.initHeadings(selector);
+        $(window).scroll(function() { self.onScroll(currentHeadings) });
+      },
 
-    if(headings.length < 1) { return false; }
-
-    function findPastHeadings(scrollPositionTop){
-      var pastHeadings = [];
-      $.each(headings, function(i, heading) {
-        if (scrollPositionTop >= heading.offset) {
-          pastHeadings.push(heading);
+      onScroll: function(headings) {
+        if(options.refresh) {
+          headings = this.updateOffsets(headings);
         }
-      });
-      return pastHeadings;
-    }
-
-    function onScroll() {
-      if(update) {
-        update();
-      }
-      layouter.reset(headings);
-      var scrollPositionTop = $(window).scrollTop();
-      var pastHeadings = findPastHeadings(scrollPositionTop);
-
-      if (pastHeadings.length > 0) {
-        var stickyHeading = pastHeadings[pastHeadings.length - 1];
-        var nextHeading = headings[headings.index(stickyHeading) + 1];
-        var pastHeading = null;
-        if(pastHeadings.length > 1) {
-          pastHeading = pastHeadings[pastHeadings.length - 2];
+        if(options.fix) {
+          this.reset(headings);
         }
-        if (nextHeading && scrollPositionTop >= nextHeading.offset - stickyHeading.height) {
-          layouter.collision(stickyHeading, nextHeading, scrollPositionTop);
+        var scrollPositionTop = $(window).scrollTop();
+        var pastHeadings = this.findPastHeadings(headings, scrollPositionTop);
+        var offsetHeight = 0;
+
+        if(options.dependsOn && options.dependsOn.getSticky()) {
+          offsetHeight = options.dependsOn.getSticky().clone.outerHeight();
+        }
+
+        if (pastHeadings.length > 0) {
+          var sticky = pastHeadings[pastHeadings.length - 1];
+          var nextHeading = headings[headings.index(sticky) + 1];
+          if (nextHeading && scrollPositionTop >= nextHeading.offset - (sticky.height + offsetHeight)) {
+            this.collision(sticky, nextHeading, scrollPositionTop);
+          } else {
+            this.sticky(sticky, scrollPositionTop);
+          }
         } else {
-          layouter.sticky(stickyHeading, pastHeading, scrollPositionTop);
+          this.noSticky(scrollPositionTop);
         }
-      } else {
-        layouter.noSticky(scrollPositionTop);
+      },
+
+      reset: function(headings){
+        $.each(headings, function(i, heading) { heading.clone.removeClass('sticky').css('top', 0); });
+      },
+
+      noSticky: function(scrollPositionTop){
+        onNoStickyCallback(scrollPositionTop);
+      },
+
+      sticky: function(heading, scrollPositionTop){
+        if(options.fix) {
+          heading.clone.addClass('sticky');
+          heading.clone.css('top', scrollPositionTop - heading.offset);
+        }
+        currentSticky = heading;
+        onStickyCallback(heading, scrollPositionTop);
+      },
+
+      collision: function(fadeOutHeading, fadeInHeading, scrollPositionTop) {
+        if(options.fix) {
+          fadeOutHeading.clone.addClass('sticky').css('top', fadeInHeading.offset - fadeOutHeading.offset - fadeOutHeading.height);
+          fadeInHeading.clone.addClass('sticky');
+        }
+        onCollisionCallback(fadeOutHeading, fadeInHeading, scrollPositionTop);
       }
-    }
+    };
 
-    $(window).scroll(onScroll);
+    layouter.observe(options.selector);
 
-    return {
+    var app = {};
 
-      onSticky: function(callback) {
+    app.onSticky = function(callback) {
         onStickyCallback = callback;
-      },
+    };
 
-      onNoSticky: function(callback) {
-        onNoStickyCallback = callback;
-      },
+    app.onNoSticky = function(callback) {
+      onNoStickyCallback = callback;
+    };
 
-      onCollision: function(callback) {
-        onCollisionCallback = callback;
-      },
+    app.onCollision = function(callback) {
+      onCollisionCallback = callback;
+    };
 
-      doUpdate: function(value) {
-        doUpdate = value;
-      }
+    app.getSticky = function() {
+      return currentSticky;
+    };
 
-    }
+    return app;
+
   }
-}(jQuery);
+
+  window.StickyHeading = StickyHeading;
+
+}(jQuery));

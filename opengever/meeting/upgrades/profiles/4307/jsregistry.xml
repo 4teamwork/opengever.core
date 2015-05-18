@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<object name="portal_javascripts" meta_type="JavaScripts Registry">
+
+    <javascript cacheable="True" compression="safe" cookable="True" expression=""
+                enabled="True" id="++resource++opengever.meeting/Scrollspy.js" inline="False"
+                insert-after="++resource++opengever.meeting/jquery.autosize.js"
+                />
+
+    <javascript id="++resource++opengever.meeting/sticky_heading.js"
+                insert-after="++resource++opengever.meeting/Scrollspy.js"
+                />
+
+    <javascript id="++resource++opengever.meeting/protocol.js"
+                insert-after="++resource++opengever.meeting/sticky_heading.js"
+                />
+
+</object>
