@@ -12,6 +12,7 @@ class TestSablonTemplateDownloadView(FunctionalTestCase):
         self.dossier = create(Builder('templatedossier'))
         self.template = create(
             Builder('sablontemplate')
+            .without_default_title()
             .attach_file_containing("blub blub", name=u't\xf6st.txt')
             .within(self.dossier))
 

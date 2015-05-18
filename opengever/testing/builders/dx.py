@@ -41,8 +41,16 @@ class DocumentBuilder(DexterityBuilder):
     checked_out = None
     _trashed = False
 
+    def __init__(self, session):
+        super(DocumentBuilder, self).__init__(session)
+        self.arguments['title'] = u'Testdokum\xe4nt'
+
     def with_dummy_content(self):
         self.attach_file_containing("Test data")
+        return self
+
+    def without_default_title(self):
+        self.arguments.pop('title')
         return self
 
     def with_asset_file(self, filename):

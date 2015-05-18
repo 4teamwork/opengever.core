@@ -9,6 +9,7 @@ class TestTitleFilenameSyncer(FunctionalTestCase):
 
     def test_infer_title_from_filename(self):
         document = create(Builder("document")
+                          .without_default_title()
                           .attach_file_containing(u"blup", name=u'T\xf6st.txt'))
         self.assertEqual(document.title, u'T\xf6st')
         self.assertEqual(document.file.filename, u'tost.txt')

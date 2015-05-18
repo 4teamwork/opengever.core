@@ -35,16 +35,19 @@ class TestMeetingView(FunctionalTestCase):
             .with_asset_file('excerpt_template.docx'))
 
         self.preprotocol = create(Builder('document')
+                                  .titled(u'Pre protocol')
                                   .attach_file_containing(u"preprotocol",
                                                           u"preprotocol.docx")
                                   .within(self.dossier))
 
         self.protocol = create(Builder('document')
+                               .titled(u'Protocol')
                                .attach_file_containing(u"protocol",
                                                        u"protocol.docx")
                                .within(self.dossier))
 
         self.excerpt = create(Builder('document')
+                              .titled(u'Excerpt')
                               .attach_file_containing(u"excerpt",
                                                       u"excerpt.docx")
                               .within(self.dossier))
@@ -171,31 +174,31 @@ class TestMeetingView(FunctionalTestCase):
     @browsing
     def test_generated_preprotocol_exists(self, browser):
         browser.login().open(MeetingList.url_for(self.committee, self.meeting))
-        self.assertEquals('preprotocol', browser.css(".protocol > a")[0].text)
+        self.assertEquals('Pre protocol', browser.css(".protocol > a")[0].text)
         self.assertEquals(self.preprotocol.absolute_url(), browser.css(".protocol > a")[0].get('href'))
 
     @browsing
     def test_generated_protocol_exists(self, browser):
         browser.login().open(MeetingList.url_for(self.committee, self.meeting))
-        self.assertEquals('protocol', browser.css(".protocol > a")[1].text)
+        self.assertEquals('Protocol', browser.css(".protocol > a")[1].text)
         self.assertEquals(self.protocol.absolute_url(), browser.css(".protocol > a")[1].get('href'))
 
     @browsing
     def test_generated_exceprts_exists(self, browser):
         browser.login().open(MeetingList.url_for(self.committee, self.meeting))
-        self.assertEquals('excerpt', browser.css(".excerpts a").first.text)
+        self.assertEquals('Excerpt', browser.css(".excerpts a").first.text)
         self.assertEquals(self.excerpt.absolute_url(), browser.css(".excerpts a").first.get('href'))
 
     @browsing
     def test_generated_proposal_exceprt_exists(self, browser):
         browser.login().open(MeetingList.url_for(self.committee, self.meeting))
-        self.assertEquals('excerpt', browser.css(".summary > a").first.text)
+        self.assertEquals('Excerpt', browser.css(".summary > a").first.text)
         self.assertEquals(self.excerpt.absolute_url(), browser.css(".summary > a").first.get('href'))
 
     @browsing
     def test_proposal_attachement_exists(self, browser):
         browser.login().open(MeetingList.url_for(self.committee, self.meeting))
-        self.assertEquals('attachement', browser.css(".attachements a").first.text)
+        self.assertEquals(u'Testdokum\xe4nt', browser.css(".attachements a").first.text)
 
     @browsing
     def test_proposal_attachement_link_exists(self, browser):

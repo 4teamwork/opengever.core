@@ -17,6 +17,7 @@ class TestDocumentIntegration(FunctionalTestCase):
         login(self.portal, TEST_USER_NAME)
         self.document = create(Builder("document")
                                .attach_file_containing(u"bla bla", name=u"test.txt")
+                               .without_default_title()
                                .having(digitally_available=True,
                                        keywords=()))
 
