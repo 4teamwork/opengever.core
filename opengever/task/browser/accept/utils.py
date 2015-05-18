@@ -98,6 +98,16 @@ def accept_forwarding_with_successor(
                                        predecessor.physical_path,
                                        intids_mapping=intids_mapping)
 
+    # Remove current responsible from predecessor and add issuer
+    # and responsible to successor's watcher.
+    center = notification_center()
+    center.remove_watcher_from_resource(Oguid.parse(predecessor_oguid),
+                                        successor_forwarding.responsible)
+    center.add_watcher_to_resource(successor_forwarding,
+                                   successor_forwarding.responsible)
+    center.add_watcher_to_resource(successor_forwarding,
+                                   successor_forwarding.issuer)
+
     # if a dossier is given means that a successor task must
     # be created in a new or a existing dossier
     if dossier:
@@ -145,7 +155,12 @@ def accept_forwarding_with_successor(
                         'failed.')
 
     if dossier:
-        # when a successor task exists, we close also the successor forwarding
+        # Update watchers for created successor forwarding and task
+        center = notification_center()
+        center.remove_watcher_from_resource(successor_forwarding, task.responsible)
+        center.add_watcher_to_resource(task, task.responsible)
+
+        # When a successor task exists, we close also the successor forwarding
         change_task_workflow_state(
             successor_forwarding,
             'forwarding-transition-accept',

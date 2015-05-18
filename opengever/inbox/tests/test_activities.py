@@ -4,6 +4,7 @@ from ftw.testbrowser import browsing
 from opengever.activity import notification_center
 from opengever.activity.model import Activity
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
+from opengever.task.browser.accept.utils import accept_forwarding_with_successor
 from opengever.task.browser.accept.utils import assign_forwarding_to_dossier
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
@@ -15,8 +16,9 @@ class TestForwardingActivites(FunctionalTestCase):
 
     def setUp(self):
         super(TestForwardingActivites, self).setUp()
+        self.center = notification_center()
         self.inbox = create(Builder('inbox').titled(u'Inbox'))
-        self.document = create(Builder('dossier').titled(u'Document'))
+        self.document = create(Builder('document').titled(u'Document'))
 
         self.hugo = create(Builder('ogds_user')
                            .id('hugo.boss')
@@ -26,6 +28,7 @@ class TestForwardingActivites(FunctionalTestCase):
         create(Builder('ogds_user')
                .id('peter.mueller')
                .assign_to_org_units([self.org_unit])
+               .in_group(self.org_unit.inbox_group)
                .having(firstname=u'Peter', lastname=u'M\xfcller'))
 
     @browsing
@@ -61,6 +64,49 @@ class TestForwardingActivites(FunctionalTestCase):
 
         # The responsible of the task is the `inbox:client1`,
         # but the PloneNotificationCenter adds every actor representative.
-        self.assertEquals(
-            [TEST_USER_ID, 'hugo.boss'],
-            [watcher.user_id for watcher in notification_center().get_watchers(task)])
+        self.assertItemsEqual(
+            [TEST_USER_ID, 'hugo.boss', 'peter.mueller'],
+            [watcher.user_id for watcher in self.center.get_watchers(task)])
+
+    @browsing
+    def test_accepting_forwarding_with_successor_updated_responsibles(self, browser):
+        inbox = create(Builder('inbox'))
+        forwarding = create(Builder('forwarding')
+                            .having(responsible=TEST_USER_ID,
+                                    issuer='hugo.boss')
+                            .within(inbox))
+        self.center.add_watcher_to_resource(forwarding, TEST_USER_ID)
+        self.center.add_watcher_to_resource(forwarding, 'hugo.boss')
+
+        successor = accept_forwarding_with_successor(
+            self.portal, forwarding.oguid.id,
+            'OK. That is something for me.', dossier=None)
+
+        self.assertItemsEqual(
+            ['hugo.boss'],
+            [watcher.user_id for watcher in self.center.get_watchers(forwarding)])
+        self.assertItemsEqual(
+            [TEST_USER_ID, 'peter.mueller'],
+            [watcher.user_id for watcher in self.center.get_watchers(successor)])
+
+    @browsing
+    def test_accepting_and_assign_forwarding_with_successor_and__updated_responsibles(self, browser):
+        inbox = create(Builder('inbox'))
+        dossier = create(Builder('dossier'))
+        forwarding = create(Builder('forwarding')
+                            .having(responsible=TEST_USER_ID,
+                                    issuer='hugo.boss')
+                            .within(inbox))
+        self.center.add_watcher_to_resource(forwarding, TEST_USER_ID)
+        self.center.add_watcher_to_resource(forwarding, 'hugo.boss')
+
+        task = accept_forwarding_with_successor(
+            self.portal, forwarding.oguid.id,
+            'OK. That is something for me.', dossier=dossier)
+
+        self.assertItemsEqual(
+            ['hugo.boss'],
+            [watcher.user_id for watcher in self.center.get_watchers(forwarding)])
+        self.assertItemsEqual(
+            [TEST_USER_ID],
+            [watcher.user_id for watcher in self.center.get_watchers(task)])
