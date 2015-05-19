@@ -1,8 +1,8 @@
 from opengever.activity.model.notification import Notification
+from opengever.activity.model.utcdatetime import UTCDateTime
 from opengever.base.model import Base
 from opengever.ogds.models.query import BaseQuery
 from sqlalchemy import Column
-from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
@@ -33,7 +33,7 @@ class Activity(Base):
     title = Column(String(512), nullable=False)
     summary = Column(String(512), nullable=False)
     description = Column(Text)
-    created = Column(DateTime(timezone=True), default=utcnow_tz_aware)
+    created = Column(UTCDateTime(timezone=True), default=utcnow_tz_aware)
     resource_id = Column(Integer, ForeignKey('resources.id'), nullable=False)
     resource = relationship("Resource", backref="activities")
 
