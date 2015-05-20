@@ -6,7 +6,6 @@ from opengever.base.behaviors.classification import PUBLIC_TRIAL_PRIVATE
 from opengever.journal.handlers import DOCUMENT_MODIIFED_ACTION
 from opengever.journal.handlers import PUBLIC_TRIAL_MODIFIED_ACTION
 from opengever.testing import FunctionalTestCase
-from plone.app.testing import TEST_USER_ID
 from zope.annotation.interfaces import IAnnotations
 from zope.i18n import translate
 
@@ -19,7 +18,7 @@ class TestDocumentEventJournalizations(FunctionalTestCase):
         self.document = create(Builder('document')
                                .titled(u'Testdocument')
                                .having(preserved_as_paper=True)
-                               .checked_out_by(TEST_USER_ID)
+                               .checked_out()
                                .with_dummy_content())
 
     def get_journal_entries(self):

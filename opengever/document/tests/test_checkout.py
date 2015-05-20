@@ -112,7 +112,7 @@ class TestCheckinViews(FunctionalTestCase):
 
         self.dossier = create(Builder("dossier"))
         self.document = create(Builder("document")
-                               .checked_out_by(TEST_USER_ID)
+                               .checked_out()
                                .within(self.dossier))
 
     @browsing
@@ -139,7 +139,7 @@ class TestCheckinViews(FunctionalTestCase):
     @browsing
     def test_multi_checkin_from_tabbedview_with_comment(self, browser):
         document2 = create(Builder("document")
-                           .checked_out_by(TEST_USER_ID)
+                           .checked_out()
                            .within(self.dossier))
 
         browser.login().open(

@@ -1,9 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
-from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import FunctionalTestCase
-from zope.component import getMultiAdapter
 import transaction
 
 
@@ -36,18 +34,15 @@ class TestLogoutOverlayWithCheckouts(FunctionalTestCase):
         self.dossier = create(Builder('dossier').within(self.repo_folder))
 
         self.checkout1 = create(
-            Builder("document").titled("About Plone").within(self.dossier))
+            Builder("document").titled("About Plone")
+                               .within(self.dossier)
+                               .checked_out())
         self.document = create(
             Builder("document").titled("NOT checkedout").within(self.dossier))
         self.checkout2 = create(
-            Builder("document").titled("About Python").within(self.dossier))
-        getMultiAdapter(
-            (self.checkout1, self.portal.REQUEST),
-            ICheckinCheckoutManager).checkout()
-
-        getMultiAdapter(
-            (self.checkout2, self.portal.REQUEST),
-            ICheckinCheckoutManager).checkout()
+            Builder("document").titled("About Python")
+                               .within(self.dossier)
+                               .checked_out())
 
         transaction.commit()
 

@@ -38,7 +38,7 @@ builder_registry.register('inbox', InboxBuilder)
 
 class DocumentBuilder(DexterityBuilder):
     portal_type = 'opengever.document.document'
-    checked_out = None
+    _checked_out = None
     _trashed = False
 
     def __init__(self, session):
@@ -57,8 +57,11 @@ class DocumentBuilder(DexterityBuilder):
         self.attach_file_containing(assets.load(filename), unicode(filename))
         return self
 
+    def checked_out(self):
+        return self.checked_out_by(TEST_USER_ID)
+
     def checked_out_by(self, userid):
-        self.checked_out = userid
+        self._checked_out = userid
         return self
 
     def trashed(self):
@@ -70,8 +73,8 @@ class DocumentBuilder(DexterityBuilder):
         return self
 
     def after_create(self, obj):
-        if self.checked_out:
-            IAnnotations(obj)[CHECKIN_CHECKOUT_ANNOTATIONS_KEY] = self.checked_out
+        if self._checked_out:
+            IAnnotations(obj)[CHECKIN_CHECKOUT_ANNOTATIONS_KEY] = self._checked_out
             obj.reindexObject()
 
         if self._trashed:

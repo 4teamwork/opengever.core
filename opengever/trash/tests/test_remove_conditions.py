@@ -2,7 +2,6 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.testing import FunctionalTestCase
 from opengever.trash.remover import RemoveConditionsChecker
-from plone.app.testing import TEST_USER_ID
 from zope.event import notify
 from zope.i18n import translate
 from zope.lifecycleevent import ObjectModifiedEvent
@@ -21,7 +20,7 @@ class TestRemoveConditionsChecker(FunctionalTestCase):
     def test_document_has_to_be_checked_in(self):
         document = create(Builder('document')
                           .trashed()
-                          .checked_out_by(TEST_USER_ID))
+                          .checked_out())
         checker = RemoveConditionsChecker(document)
 
         self.assertFalse(checker.removal_allowed())
