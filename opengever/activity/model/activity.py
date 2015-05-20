@@ -1,6 +1,6 @@
 from opengever.activity.model.notification import Notification
-from opengever.activity.model.utcdatetime import UTCDateTime
 from opengever.base.model import Base
+from opengever.base.model import UTCDateTime
 from opengever.ogds.models.query import BaseQuery
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
