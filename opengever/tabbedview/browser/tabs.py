@@ -257,7 +257,6 @@ class Tasks(GlobalTaskListingTab):
         'change_state',
         'pdf_taskslisting',
         'move_items',
-        'copy_items',
         'export_tasks',
     ]
 
