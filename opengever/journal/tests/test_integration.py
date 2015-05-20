@@ -44,8 +44,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         """ Trigger every event of a repo at least one times
         and check the journalentries.
         """
-        repo_root = create(Builder('repository_root'))
-        repo = create(Builder('repository').within(repo_root))
+        repo_root, repo = create(Builder('repository_tree'))
 
         # Local roles Aquisition Blocked-Event
         notify(

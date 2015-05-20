@@ -8,8 +8,7 @@ from zExceptions import Unauthorized
 class TestDossierWorkflow(FunctionalTestCase):
 
     def test_deleting_dossier_is_only_allowed_for_managers(self):
-        repository_root = create(Builder('repository_root'))
-        repository = create(Builder('repository').within(repository_root))
+        repository_root, repository = create(Builder('repository_tree'))
         dossier = create(Builder('dossier').within(repository))
 
         acl_users = api.portal.get_tool('acl_users')

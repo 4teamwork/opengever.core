@@ -9,9 +9,7 @@ class TestLogoutOverlayWithoutCheckouts(FunctionalTestCase):
 
     def setUp(self):
         super(TestLogoutOverlayWithoutCheckouts, self).setUp()
-        self.repo = create(Builder('repository_root'))
-        self.repo_folder = create(Builder('repository')
-                                  .within(self.repo))
+        self.repo, self.repo_folder = create(Builder('repository_tree'))
 
         self.dossier = create(Builder('dossier').within(self.repo_folder))
         self.document = create(Builder("document").within(self.dossier))
@@ -26,11 +24,7 @@ class TestLogoutOverlayWithCheckouts(FunctionalTestCase):
 
     def setUp(self):
         super(TestLogoutOverlayWithCheckouts, self).setUp()
-
-        self.repo = create(Builder('repository_root'))
-        self.repo_folder = create(Builder('repository')
-                                  .within(self.repo))
-
+        self.repo, self.repo_folder = create(Builder('repository_tree'))
         self.dossier = create(Builder('dossier').within(self.repo_folder))
 
         self.checkout1 = create(

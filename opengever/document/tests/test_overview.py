@@ -22,9 +22,7 @@ class TestDocumentOverview(FunctionalTestCase):
 
     def setUp(self):
         super(TestDocumentOverview, self).setUp()
-        self.repo = create(Builder('repository_root'))
-        self.repo_folder = create(Builder('repository')
-                                  .within(self.repo))
+        self.repo, self.repo_folder = create(Builder('repository_tree'))
 
         self.dossier = create(Builder('dossier').within(self.repo_folder))
         self.document = create(
@@ -219,10 +217,8 @@ class TestOverviewMeetingFeatures(FunctionalTestCase):
 
     def setUp(self):
         super(TestOverviewMeetingFeatures, self).setUp()
+        self.repo_root, self.repo_folder = create(Builder('repository_tree'))
 
-        self.repo_root = create(Builder('repository_root'))
-        self.repo_folder = create(
-            Builder('repository').within(self.repo_root))
         self.dossier = create(
             Builder('dossier').within(self.repo_folder))
         self.document = create(Builder('document').within(self.dossier))

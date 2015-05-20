@@ -19,14 +19,14 @@ class TestReferencePrefixManager(FunctionalTestCase):
 
         self.root = create(Builder('repository_root'))
         self.repo = create(Builder('repository')
-            .titled(u'Weiterbildung')
-            .within(self.root))
+                           .titled(u'Weiterbildung')
+                           .within(self.root))
         self.repo1 = create(Builder('repository')
-                        .titled("One")
-                        .within(self.repo))
+                            .titled("One")
+                            .within(self.repo))
         self.repo2 = create(Builder('repository')
-                        .titled("Two")
-                        .within(self.repo))
+                            .titled("Two")
+                            .within(self.repo))
 
         self.reference_manager = ReferenceNumberPrefixAdpater(self.repo)
         # move repo1 to prefix 3 which leaves prefix 1 unused

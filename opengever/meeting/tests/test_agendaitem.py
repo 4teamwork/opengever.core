@@ -21,6 +21,7 @@ class TestAgendaItem(FunctionalTestCase):
 
     def setUp(self):
         super(TestAgendaItem, self).setUp()
+
         self.repo = create(Builder('repository_root'))
         container = create(Builder('committee_container'))
         self.committee = create(Builder('committee').within(container))
@@ -30,8 +31,7 @@ class TestAgendaItem(FunctionalTestCase):
                                       location='There',))
 
     def setup_proposal(self):
-        root = create(Builder('repository_root'))
-        folder = create(Builder('repository').within(root))
+        root, folder = create(Builder('repository_tree'))
         dossier = create(Builder('dossier').within(folder))
         proposal = create(Builder('proposal')
                           .within(dossier)

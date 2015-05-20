@@ -24,9 +24,8 @@ class TestProtocol(FunctionalTestCase):
     def setUp(self):
         super(TestProtocol, self).setUp()
 
-        self.repository_root = create(Builder('repository_root'))
-        self.repository_folder = create(
-            Builder('repository').within(self.repository_root))
+        self.repository_root, self.repository_folder = create(
+            Builder('repository_tree'))
         self.dossier = create(
             Builder('dossier').within(self.repository_folder))
 

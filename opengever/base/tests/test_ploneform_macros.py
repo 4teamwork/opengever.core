@@ -11,9 +11,8 @@ class TestRegressionPloneformMacros(FunctionalTestCase):
     def setUp(self):
         super(TestRegressionPloneformMacros, self).setUp()
 
-        self.repository_root = create(Builder('repository_root'))
-        self.repository_folder = create(
-            Builder('repository').within(self.repository_root))
+        self.repository_root, self.repository_folder = create(
+            Builder('repository_tree'))
 
     @browsing
     def test_error_messages_are_displayed_for_form_groups(self, browser):

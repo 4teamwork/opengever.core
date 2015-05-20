@@ -10,8 +10,8 @@ class TestRepositoryWorkflow(FunctionalTestCase):
     def setUp(self):
         super(TestRepositoryWorkflow, self).setUp()
 
-        self.repository_root = create(Builder('repository_root'))
-        self.repository = create(Builder('repository').within(self.repository_root))
+        self.repository_root, self.repository = create(
+            Builder('repository_tree'))
 
     @browsing
     def test_list_folder_contents_on_repository_is_not_available_for_adminstrators(self, browser):

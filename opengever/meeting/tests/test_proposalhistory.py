@@ -21,9 +21,9 @@ class TestProposalHistory(FunctionalTestCase):
                               .having(committee=self.committee.load_model(),
                                       start=datetime(2013, 1, 1),
                                       location='There',))
-        root = create(Builder('repository_root'))
-        folder = create(Builder('repository').within(root))
-        self.dossier = create(Builder('dossier').within(folder))
+
+        self.repo, self.repo_folder = create(Builder('repository_tree'))
+        self.dossier = create(Builder('dossier').within(self.repo_folder))
         self.document = create(Builder('document')
                                .within(self.dossier)
                                .titled('A Document'))

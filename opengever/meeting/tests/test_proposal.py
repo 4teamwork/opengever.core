@@ -16,9 +16,8 @@ class TestProposalViewsDisabled(FunctionalTestCase):
 
     def setUp(self):
         super(TestProposalViewsDisabled, self).setUp()
-        root = create(Builder('repository_root'))
-        folder = create(Builder('repository').within(root))
-        self.dossier = create(Builder('dossier').within(folder))
+        self.repo, self.repo_folder = create(Builder('repository_tree'))
+        self.dossier = create(Builder('dossier').within(self.repo_folder))
 
     @browsing
     def test_add_form_is_disabled(self, browser):
@@ -41,9 +40,8 @@ class TestProposal(FunctionalTestCase):
 
     def setUp(self):
         super(TestProposal, self).setUp()
-        root = create(Builder('repository_root'))
-        folder = create(Builder('repository').within(root))
-        self.dossier = create(Builder('dossier').within(folder))
+        self.repo, self.repo_folder = create(Builder('repository_tree'))
+        self.dossier = create(Builder('dossier').within(self.repo_folder))
 
     def test_proposal_can_be_added(self):
         proposal = create(Builder('proposal').within(self.dossier))

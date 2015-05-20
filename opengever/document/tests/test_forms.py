@@ -16,9 +16,7 @@ class TestDocumentIntegration(FunctionalTestCase):
         super(TestDocumentIntegration, self).setUp()
         login(self.portal, TEST_USER_NAME)
 
-        self.repo = create(Builder('repository_root'))
-        self.repo_folder = create(Builder('repository')
-                                  .within(self.repo))
+        self.repo, self.repo_folder = create(Builder('repository_tree'))
 
         self.dossier = create(Builder('dossier').within(self.repo_folder))
         self.document = create(
