@@ -109,6 +109,22 @@ class TestCopyPaste(FunctionalTestCase):
         self.assertEquals(4, len(dossier.getFolderContents()))
 
     @browsing
+    def test_id_of_nested_objects_have_correct_format(self, browser):
+        dossier_a = create(Builder('dossier'))
+        dossier_b = create(Builder('dossier'))
+        subdossier = create(Builder('dossier').within(dossier_a))
+        create(Builder('document').within(subdossier))
+
+        paths = ['/'.join(subdossier.getPhysicalPath())]
+        browser.login().open(dossier_a, view="copy_items", data={'paths:list': paths})
+        browser.open(dossier_b)
+        browser.css('#contentActionMenus a#paste').first.click()
+
+        subdossier_copy = dossier_b.get('dossier-4')
+        document_copy = subdossier_copy.listFolderContents()[0]
+        self.assertEquals('document-2', document_copy.id)
+
+    @browsing
     def test_copy_document_into_dossier_succeeds(self, browser):
         dossier = create(Builder('dossier'))
         document = create(Builder('document').within(dossier))

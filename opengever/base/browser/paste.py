@@ -42,7 +42,13 @@ class PasteClipboardView(grok.View):
             self.rename_object(self.context[new_id])
 
     def rename_object(self, copy):
-        return api.content.rename(copy, new_id=self.get_new_id(copy))
+        return self._recursive_rename(copy)
+
+    def _recursive_rename(self, obj):
+        renamed = api.content.rename(obj, new_id=self.get_new_id(obj))
+        for child in renamed.getFolderContents():
+            self._recursive_rename(child.getObject())
+        return renamed
 
     def get_new_id(self, obj):
         return INameChooser(self.context).chooseName(None, obj)
