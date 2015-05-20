@@ -5,6 +5,13 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Reworked object copy and paste functionality.
+
+  - Made paste action CSRF safe.
+  - Use default id format for copied objects.
+
+  [phgross]
+
 - Fixed activity timestamps(created) storing/using timezone aware datetime's.
   [phgross]
 

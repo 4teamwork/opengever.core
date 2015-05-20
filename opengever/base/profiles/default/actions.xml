@@ -39,7 +39,7 @@
             <property name="title" i18n:translate="">Paste</property>
             <property name="description" i18n:translate=""></property>
             <property
-                  name="url_expr">string:${globals_view/getCurrentFolderUrl}/object_paste</property>
+                name="url_expr">string:${globals_view/getCurrentFolderUrl}/paste_clipboard?_authenticator=${object/@@authenticator/token}</property>
             <property name="icon_expr"></property>
             <property name="available_expr">object/is_pasting_allowed</property>
             <property name="permissions">

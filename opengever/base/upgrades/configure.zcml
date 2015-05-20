@@ -276,4 +276,13 @@
         directory="profiles/4301"
         />
 
+    <!-- 4301 -> 4302 -->
+    <upgrade-step:importProfile
+        title="Update paste url expression, use our own paste view."
+        profile="opengever.base:default"
+        source="4301"
+        destination="4302"
+        directory="profiles/4302"
+        />
+
 </configure>
