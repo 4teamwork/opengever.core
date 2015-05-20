@@ -5,6 +5,9 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Disable CSRF protection for remote requests.
+  [phgross]
+
 - Made dispatchers configurable per installation.
   [phgross]
 
