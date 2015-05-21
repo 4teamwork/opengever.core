@@ -11,6 +11,7 @@ from Products.CMFCore.utils import getToolByName
 from zope.app.container.interfaces import IObjectAddedEvent
 from zope.app.container.interfaces import IObjectMovedEvent
 from zope.component import getAdapter
+from zope.lifecycleevent import IObjectRemovedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 
@@ -57,6 +58,9 @@ def set_former_reference_after_moving(obj, event):
 @grok.subscribe(IDossierMarker, IObjectAddedEvent)
 @grok.subscribe(IDossierMarker, IObjectMovedEvent)
 def saveReferenceNumberPrefix(obj, event):
+    if IObjectRemovedEvent.providedBy(event):
+        return
+
     parent = aq_parent(aq_inner(obj))
     prefix_adapter = IReferenceNumberPrefix(parent)
     if not prefix_adapter.get_number(obj):
