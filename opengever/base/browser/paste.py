@@ -1,6 +1,6 @@
 from five import grok
 from opengever.base import _
-from opengever.base.browser.copy_items import Clipboard
+from opengever.base.clipboard import Clipboard
 from plone import api
 from zope.container.interfaces import INameChooser
 from zope.interface import Interface

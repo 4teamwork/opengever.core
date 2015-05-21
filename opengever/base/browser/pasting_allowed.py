@@ -1,5 +1,5 @@
 from five import grok
-from opengever.base.browser.copy_items import Clipboard
+from opengever.base.clipboard import Clipboard
 from ZODB.POSException import ConflictError
 from zope.interface import Interface
 
