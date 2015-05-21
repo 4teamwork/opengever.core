@@ -16,5 +16,11 @@
         "_type": "opengever.document.document",
         "title": "Leere Powerpoint Präsentation",
         "file:file": "templates/powerpoint.pptx"
+    },
+    {
+        "_path": "/vorlagen/template-4",
+        "_type": "opengever.document.document",
+        "title": "Allgemeine Word-Vorlage mit Metadaten",
+        "file:file": "templates/allgemeine-word-vorlage-mit-metadaten.docx"
     }
 ]
