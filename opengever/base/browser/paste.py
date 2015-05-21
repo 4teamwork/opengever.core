@@ -1,14 +1,16 @@
 from five import grok
 from opengever.base import _
+from opengever.base.browser.copy_items import Clipboard
 from plone import api
 from zope.container.interfaces import INameChooser
 from zope.interface import Interface
 
 
 class PasteClipboardView(grok.View):
-    """A view wich paste object from the cliboard to the current context.
-    It replace the default plone `objectPaste.cpy`. This allow us to use our
-    own id format, than the default plone format (`copy_of_dossier-19`).
+    """A view that pastes objects from our own clipboard to the current context.
+    It replaces the default Plone `objectPaste.cpy`. This allows us to use
+    our own ID format for pasted objects instead of the default Plone
+    (`copy_of_dossier-19`).
     """
 
     grok.name('paste_clipboard')
@@ -16,29 +18,32 @@ class PasteClipboardView(grok.View):
     grok.require('zope2.View')
 
     def render(self):
-        clipboard = self.request.get('__cp')
-        if not clipboard:
-            msg = _(u"msg_empty_cliboard",
+        objs = Clipboard(self.request).get_objs()
+        if not objs:
+            msg = _(u"msg_empty_clipboard",
                     default=u"Can't paste items, the clipboard is emtpy")
             api.portal.show_message(message=msg,
                                     request=self.request, type='error')
             return self.redirect()
 
-        for item in clipboard.split(':'):
-            self.copy_objects(item)
-
+        self.copy_objects(objs)
         msg = _(u"msg_successfuly_pasted",
                 default=u"Objects from clipboard successfully pasted.")
         api.portal.show_message(message=msg, request=self.request, type='info')
         return self.redirect()
 
-    def copy_objects(self, clipboard):
+    def copy_objects(self, objs):
         """Copy objects but change id afterwards, generating an id with the
         INameChooser adapter.
         """
-        result = self.context.manage_pasteObjects(clipboard)
-        for item in result:
-            new_id = result[0]['new_id']
+        for obj in objs:
+            # Using the plone.api does not work because we need the fix from
+            # https://github.com/plone/plone.api/commit/79bec69932ca87a4a5cd675db8b0bd9437dddcdf
+            # the following code should be replaced with plone.api after the
+            # plone update.
+            copy_info = self.context.manage_pasteObjects(
+                obj.aq_parent.manage_copyObjects(obj.getId()))
+            new_id = copy_info[0]['new_id']
             self.rename_object(self.context[new_id])
 
     def rename_object(self, copy):
