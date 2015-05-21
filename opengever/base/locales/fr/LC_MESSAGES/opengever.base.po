@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-04-16 17:18+0000\n"
+"POT-Creation-Date: 2015-05-22 08:24+0000\n"
 "PO-Revision-Date: 2012-08-30 15:34+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -72,13 +72,13 @@ msgstr "Confidentiel"
 msgid "desc_confirm_action"
 msgstr "Veuillez confirmer que vous souhaitez effectuer cette action."
 
-#. Default: "You have not selected any Items"
-#: ./opengever/base/browser/copy_items.py:47
+#. Default: "You have not selected any Items."
+#: ./opengever/base/browser/copy_items.py:22
 msgid "error_no_items"
 msgstr "Aucun élément sélectionné"
 
-#. Default: "The item you selected cannot be copied"
-#: ./opengever/base/browser/copy_items.py:30
+#. Default: "The item you selected cannot be copied."
+#: ./opengever/base/browser/copy_items.py:29
 msgid "error_not_copyable"
 msgstr "Le contenu choisi ne peut être copié"
 
@@ -235,7 +235,7 @@ msgid "label_history"
 msgstr "Versions"
 
 #. Default: "Initial version (document copied)"
-#: ./opengever/base/subscribers.py:23
+#: ./opengever/base/subscribers.py:26
 msgid "label_initial_version_copied"
 msgstr "Version initiale (documents copiés)"
 
@@ -293,6 +293,21 @@ msgstr "Version"
 #: opengever/repository/classification.py
 msgid "limited-public"
 msgstr "Accès public restreint"
+
+#. Default: "Can't paste items, the clipboard is emtpy"
+#: ./opengever/base/browser/paste.py:29
+msgid "msg_empty_clipboard"
+msgstr ""
+
+#. Default: "Selected objects successfully copied."
+#: ./opengever/base/browser/copy_items.py:36
+msgid "msg_successfuly_copied"
+msgstr ""
+
+#. Default: "Objects from clipboard successfully pasted."
+#: ./opengever/base/browser/paste.py:37
+msgid "msg_successfuly_pasted"
+msgstr ""
 
 #. Default: "Careful, it's possible someone is executing an exploit against you. Verify you just performed an action on this site and that you were not referred here by a different website or email."
 #: ./opengever/base/browser/confirm.pt:27
@@ -353,3 +368,4 @@ msgstr "Non contrôlé"
 #: opengever/repository/classification.py
 msgid "unprotected"
 msgstr "Non classé"
+
