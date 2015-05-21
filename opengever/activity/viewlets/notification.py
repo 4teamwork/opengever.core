@@ -4,6 +4,7 @@ from opengever.activity.browser import resolve_notification_url
 from plone import api
 from plone.app.layout.viewlets import common
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+import pytz
 
 
 class NotificationViewlet(common.ViewletBase):
@@ -33,13 +34,13 @@ class NotificationViewlet(common.ViewletBase):
 
     def get_notifications(self):
         notifications = []
-
         for notification in self.fetch_notifications():
             notifications.append({
                 'kind': notification.activity.kind,
                 'title': notification.activity.title,
                 'summary': notification.activity.summary,
-                'created': notification.activity.created,
+                'created': notification.activity.created.astimezone(
+                    pytz.UTC).isoformat(),
                 'link': resolve_notification_url(notification),
                 'read': notification.read,
                 'id': notification.notification_id})

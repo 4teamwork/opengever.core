@@ -1,14 +1,20 @@
 from opengever.activity.model.notification import Notification
 from opengever.base.model import Base
+from opengever.base.model import UTCDateTime
 from opengever.ogds.models.query import BaseQuery
 from sqlalchemy import Column
-from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy import Text
 from sqlalchemy.orm import relationship
 import datetime
+import pytz
+
+
+def utcnow_tz_aware():
+    """Returns the utc now datetime timezone aware."""
+    return datetime.datetime.now(pytz.utc)
 
 
 class ActivityQuery(BaseQuery):
@@ -27,8 +33,7 @@ class Activity(Base):
     title = Column(String(512), nullable=False)
     summary = Column(String(512), nullable=False)
     description = Column(Text)
-    created = Column(DateTime, default=datetime.datetime.utcnow)
-
+    created = Column(UTCDateTime(timezone=True), default=utcnow_tz_aware)
     resource_id = Column(Integer, ForeignKey('resources.id'), nullable=False)
     resource = relationship("Resource", backref="activities")
 

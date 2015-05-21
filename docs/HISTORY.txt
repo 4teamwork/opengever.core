@@ -5,6 +5,9 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Fixed activity timestamps(created) storing/using timezone aware datetime's.
+  [phgross]
+
 - Disable copy action in task listings.
   [phgross]
 
