@@ -10,6 +10,7 @@ Changelog
   - Made paste action CSRF safe.
   - Use default id format for copied objects.
   - Replaced existing plone clipboard functionality with our own implementation.
+  - Also prefix copied mails with "copy of" (same as documents).
 
   [phgross]
 

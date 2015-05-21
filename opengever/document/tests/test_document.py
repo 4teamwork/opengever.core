@@ -99,14 +99,26 @@ class TestDocument(FunctionalTestCase):
         tabbed_view = document.restrictedTraverse('@@tabbed_view')
         self.failUnless(tabbed_view())
 
-    def test_copying_a_document_modifies_the_title(self):
-        document = create(Builder("document").titled("Testdocument"))
+    def test_copying_a_document_prefixes_title_with_copy_of(self):
+        dossier_a = create(Builder('dossier').titled(u'Dossier A'))
+        dossier_b = create(Builder('dossier').titled(u'Dossier B'))
+        document = create(Builder('document')
+                          .within(dossier_a)
+                          .titled(u'Testdocument'))
 
-        cb = self.portal.manage_copyObjects(document.id)
-        self.portal.manage_pasteObjects(cb)
+        copy = api.content.copy(source=document, target=dossier_b)
+        self.assertEquals(u'copy of Testdocument', copy.title)
 
-        self.assertEquals(u'copy of Testdocument',
-                          self.portal['copy_of_document-1'].title)
+    def test_copying_a_mail_prefixes_title_with_copy_of(self):
+        self.grant('Reader', 'Contributor', 'Editor')
+        dossier_a = create(Builder('dossier').titled(u'Dossier A'))
+        dossier_b = create(Builder('dossier').titled(u'Dossier B'))
+        mail = create(Builder('mail')
+                      .within(dossier_a)
+                      .titled('Testmail'))
+
+        copy = api.content.copy(source=mail, target=dossier_b)
+        self.assertEquals(u'copy of Testmail', copy.title)
 
     def test_copying_a_document_does_not_copy_its_versions(self):
         orig_doc = create(Builder("document").having(preserved_as_paper=False))
