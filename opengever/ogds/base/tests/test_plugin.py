@@ -1,9 +1,10 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.ogds.base.Extensions.plugins import authenticate_credentials
 from opengever.ogds.base.Extensions.plugins import extract_user
 from opengever.ogds.base.interfaces import IInternalOpengeverRequestLayer
 from opengever.testing import FunctionalTestCase
-from ftw.builder import create
-from ftw.builder import Builder
+from plone.protect.interfaces import IDisableCSRFProtection
 
 
 class TestRemoteAuthenticationPlugin(FunctionalTestCase):
@@ -51,6 +52,19 @@ class TestRemoteAuthenticationPlugin(FunctionalTestCase):
 
         self.assertTrue(
             IInternalOpengeverRequestLayer.providedBy(self.portal.REQUEST))
+
+    def test_after_successfully_credentials_authentication_the_request_provides_the_disable_csrf_protection_layer(self):
+        ip = '192.168.1.233'
+        create(Builder('admin_unit')
+               .id('client1')
+               .having(title=u'Client1', ip_address=ip))
+
+        self.set_params_for_remote_request(client_ip=ip)
+
+        creds = extract_user(self.portal, self.portal.REQUEST)
+        authenticate_credentials(self.portal, creds)
+
+        self.assertTrue(IDisableCSRFProtection.providedBy(self.portal.REQUEST))
 
     def test_credentials_authentication_works_also_with_a_coma_sepereted_list(self):
         """The plugin should also work with a client with a comma
