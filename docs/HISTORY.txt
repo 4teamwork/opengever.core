@@ -5,6 +5,9 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Enable doc-properties for examplecontent and add example template file with doc-properties.
+  [deiferni]
+
 - Disable CSRF protection for remote requests.
   [phgross]
 
