@@ -4,7 +4,6 @@ from opengever.base.clipboard import Clipboard
 from plone import api
 from plone.dexterity.interfaces import IDexterityContainer
 from plone.z3cform import layout
-from Products.statusmessages.interfaces import IStatusMessage
 
 
 class CopyItemsFormView(layout.FormWrapper, grok.View):
@@ -22,21 +21,21 @@ class CopyItemsFormView(layout.FormWrapper, grok.View):
         if not objs:
             msg = _(
                 u'error_no_items', default=u'You have not selected any Items.')
-            IStatusMessage(self.request).addStatusMessage(msg, type='error')
+            api.portal.show_message(
+                message=msg, request=self.request, type='error')
             return self.redirect()
 
         if not self.are_copyable(objs):
             msg = _(u'error_not_copyable',
                     default=u"The item you selected cannot be copied.")
-            IStatusMessage(
-                self.request).addStatusMessage(msg, type='error')
+            api.portal.show_message(
+                message=msg, request=self.request, type='error')
             return self.redirect()
 
         Clipboard(self.request).set_objs(objs)
         msg = _(u'msg_successfuly_copied',
                 default=u"Selected objects successfully copied.")
-        IStatusMessage(self.request).addStatusMessage(msg, type='info')
-
+        api.portal.show_message(message=msg, request=self.request, type='info')
         return self.redirect()
 
     def redirect(self):
