@@ -5,6 +5,7 @@ from ftw.journal.interfaces import IJournalizable
 from ftw.mail.mail import IMail
 from OFS.interfaces import IObjectWillBeMovedEvent, IObjectWillBeAddedEvent
 from opengever.base.behaviors import classification
+from opengever.base.browser.paste import ICopyPasteRequestLayer
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.interfaces import IFileCopyDownloadedEvent
 from opengever.document.interfaces import IObjectCheckedInEvent
@@ -694,6 +695,10 @@ def object_moved(context, event):
     if IObjectAddedEvent.providedBy(event):
         return
 
+    # Skip automatically renamed objects during copy & paste process.
+    if ICopyPasteRequestLayer.providedBy(context.REQUEST):
+        return
+
     title = _(u'label_object_moved',
               default=u'Object moved: ${title}',
               mapping={'title': context.title_or_id()}
@@ -709,12 +714,18 @@ OBJECT_WILL_BE_MOVED_EVENT = 'Object cut'
 
 @grok.subscribe(IDexterityContent, IObjectWillBeMovedEvent)
 def object_will_be_moved(context, event):
-    if not IObjectWillBeAddedEvent.providedBy(event):
-        title = _(u'label_object_cut',
-                  default=u'Object cut: ${title}',
-                  mapping={'title': context.title_or_id()}
-                  )
+    if IObjectWillBeAddedEvent.providedBy(event):
+        return
 
-        journal_entry_factory(
-            context.aq_inner.aq_parent, OBJECT_WILL_BE_MOVED_EVENT, title)
+    # Skip automatically renamed objects during copy & paste process.
+    if ICopyPasteRequestLayer.providedBy(context.REQUEST):
+        return
+
+    title = _(u'label_object_cut',
+              default=u'Object cut: ${title}',
+              mapping={'title': context.title_or_id()}
+              )
+
+    journal_entry_factory(
+        context.aq_inner.aq_parent, OBJECT_WILL_BE_MOVED_EVENT, title)
     return

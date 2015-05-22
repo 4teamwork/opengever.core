@@ -5,6 +5,16 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Reworked object copy and paste functionality.
+
+  - Made paste action CSRF safe.
+  - Use default id format for copied objects.
+  - Don't journalize automatically renamed objects during copy & paste process.
+  - Replaced existing plone clipboard functionality with our own implementation.
+  - Also prefix copied mails with "copy of" (same as documents).
+
+  [phgross]
+
 - Fixed activity timestamps(created) storing/using timezone aware datetime's.
   [phgross]
 

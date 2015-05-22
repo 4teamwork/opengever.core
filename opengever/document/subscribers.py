@@ -1,5 +1,6 @@
 from five import grok
 from opengever.document import _
+from opengever.document.behaviors import IBaseDocument
 from opengever.document.document import IDocumentSchema
 from opengever.ogds.base.utils import ogds_service
 from plone.i18n.normalizer.interfaces import IIDNormalizer
@@ -61,7 +62,7 @@ def sync_title_and_filename_handler(doc, event):
             [normalizer.normalize(doc.title), ext])
 
 
-@grok.subscribe(IDocumentSchema, IObjectCopiedEvent)
+@grok.subscribe(IBaseDocument, IObjectCopiedEvent)
 def set_copyname(doc, event):
     """Documents wich are copied, should be renamed to copy of filename
     """

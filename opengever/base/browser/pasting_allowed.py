@@ -1,6 +1,7 @@
 from five import grok
-from zope.interface import Interface
+from opengever.base.clipboard import Clipboard
 from ZODB.POSException import ConflictError
+from zope.interface import Interface
 
 
 class IsPastingAllowedView(grok.View):
@@ -38,14 +39,14 @@ class IsPastingAllowedView(grok.View):
         if self.context.portal_type in self.disabled_types:
             return False
 
-        obj_list = self.context.cb_dataItems()
-        if not obj_list:
-            # Clipboard empty or not valid
+        objs = Clipboard(self.request).get_objs()
+        if not objs:
+            # Clipboard empty
             return False
 
         # Check whether there's an object in the clipboard whose type
         # is not allowed to be added to the container
-        for obj in obj_list:
+        for obj in objs:
             if obj.portal_type not in self.allowed_content_types:
                 return False
 

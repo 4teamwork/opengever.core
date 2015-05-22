@@ -4,10 +4,10 @@ from ftw.testbrowser import browsing
 from opengever.testing import FunctionalTestCase
 
 
-class TestPasteItems(FunctionalTestCase):
+class TestPastingAllowed(FunctionalTestCase):
 
     def setUp(self):
-        super(TestPasteItems, self).setUp()
+        super(TestPastingAllowed, self).setUp()
         self.grant('Manager')
 
     @browsing
@@ -52,39 +52,6 @@ class TestPasteItems(FunctionalTestCase):
         actions = browser.css('#plone-contentmenu-actions li').text
         self.assertSequenceEqual(
             ['Export as Zip', 'Properties', 'save attachments'], actions)
-
-    def test_pasting_copied_document_into_dossier_succeeds(self):
-        dossier = create(Builder('dossier'))
-        document = create(Builder('document')
-                          .within(dossier))
-
-        cb = dossier.manage_copyObjects(document.id)
-        dossier.manage_pasteObjects(cb)
-        self.assertIn("copy_of_%s" % document.id, dossier.objectIds())
-
-    def test_pasting_copied_dossier_into_repository_folder_succeeds(self):
-        repofolder = create(Builder('repository'))
-        dossier = create(Builder('dossier')
-                         .within(repofolder))
-
-        cb = repofolder.manage_copyObjects(dossier.id)
-        repofolder.manage_pasteObjects(cb)
-        self.assertIn("copy_of_%s" % dossier.id, repofolder.objectIds())
-
-    def test_pasting_dossier_with_docs_into_repository_folder_succeeds(self):
-        repofolder = create(Builder('repository'))
-        dossier = create(Builder('dossier')
-                         .within(repofolder))
-        document = create(Builder('document')
-                          .within(dossier))
-
-        cb = repofolder.manage_copyObjects(dossier.id)
-        repofolder.manage_pasteObjects(cb)
-
-        copied_dossier_id = "copy_of_%s" % dossier.id
-
-        self.assertIn(copied_dossier_id, repofolder.objectIds())
-        self.assertIn(document.id, repofolder["copy_of_%s" % dossier.id])
 
     def test_pasting_not_allowed_if_disallowed_subobject_type(self):
         repofolder = create(Builder('repository'))
