@@ -126,3 +126,36 @@ class TestCopyPaste(FunctionalTestCase):
         dossiers = repofolder_2.listFolderContents()
         self.assertEqual(1, len(dossiers))
         self.assertEqual(1, len(dossiers[0].listFolderContents()))
+
+    @browsing
+    def test_object_renaming_is_not_journalized(self, browser):
+        """When a object gets copied, it has to be renamed after the creation,
+        to use the correct format, but this shouldn't add additional journal
+        entries.
+        """
+        repo_1 = create(Builder('repository'))
+        repo_2 = create(Builder('repository'))
+        dossier = create(Builder('dossier').within(repo_1))
+        create(Builder('document').within(dossier))
+
+        paths = {'paths:list': ['/'.join(dossier.getPhysicalPath())]}
+        browser.login().open(repo_2, view="copy_items", data=paths)
+        browser.css('#contentActionMenus a#paste').first.click()
+
+        copy = repo_2.listFolderContents()[-1]
+
+        browser.open(copy, view='tabbedview_view-journal')
+        listing = browser.css('.listing').first
+        titles = [row.get('Title') for row in listing.dicts()]
+
+        self.assertNotIn(u'Object moved: copy of Testdokum\xe4nt',
+                         titles, '"Object moved" unexpectedly journalized')
+        self.assertNotIn(u'Object cut: copy of Testdokum\xe4nt', titles,
+                         '"Object cut" unexpectedly journalized')
+
+        self.assertEqual(['Dossier modified: dossier-2',
+                          'Dossier added: dossier-1',
+                          u'Document added: copy of Testdokum\xe4nt',
+                          'Dossier modified: dossier-1',
+                          u'Document added: Testdokum\xe4nt',
+                          'Dossier added: dossier-1'], titles)

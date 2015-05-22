@@ -3,7 +3,13 @@ from opengever.base import _
 from opengever.base.clipboard import Clipboard
 from plone import api
 from zope.container.interfaces import INameChooser
+from zope.interface import alsoProvides
 from zope.interface import Interface
+
+
+class ICopyPasteRequestLayer(Interface):
+    """This request layer is activiated during the copy & paste process.
+    This allow us to skip automatic renames etc. in the journal."""
 
 
 class PasteClipboardView(grok.View):
@@ -26,11 +32,15 @@ class PasteClipboardView(grok.View):
                                     request=self.request, type='error')
             return self.redirect()
 
+        self.activate_request_layer()
         self.copy_objects(objs)
         msg = _(u"msg_successfuly_pasted",
                 default=u"Objects from clipboard successfully pasted.")
         api.portal.show_message(message=msg, request=self.request, type='info')
         return self.redirect()
+
+    def activate_request_layer(self):
+        alsoProvides(self.request, ICopyPasteRequestLayer)
 
     def copy_objects(self, objs):
         """Copy objects but change id afterwards, generating an id with the
