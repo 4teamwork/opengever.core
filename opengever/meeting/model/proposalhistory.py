@@ -28,7 +28,7 @@ class ProposalHistory(Base):
     proposal_id = Column(Integer, ForeignKey('proposals.id'), nullable=False)
     proposal = relationship('Proposal')
     created = Column(DateTime, default=datetime.now, nullable=False)
-    userid = Column(String(256), default=get_current_user_id, nullable=False)
+    userid = Column(String(255), default=get_current_user_id, nullable=False)
 
     # intended to be used only by DocumentSubmitted/DocumentUpdated
     submitted_document_id = Column(Integer, ForeignKey('submitteddocuments.id'))

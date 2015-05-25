@@ -81,7 +81,7 @@ class Meeting(Base):
     location = Column(String(256))
     start = Column(DateTime, nullable=False)
     end = Column(DateTime)
-    workflow_state = Column(String(256), nullable=False,
+    workflow_state = Column(String(255), nullable=False,
                             default=workflow.default_state.name)
 
     presidency = relationship(

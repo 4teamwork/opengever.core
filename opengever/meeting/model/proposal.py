@@ -68,7 +68,7 @@ class Proposal(Base):
         primaryjoin="GeneratedExcerpt.document_id==Proposal.submitted_excerpt_document_id")
 
     title = Column(String(256), nullable=False)
-    workflow_state = Column(String(256), nullable=False)
+    workflow_state = Column(String(255), nullable=False)
     legal_basis = Column(Text)
     initial_position = Column(Text)
     proposed_action = Column(Text)

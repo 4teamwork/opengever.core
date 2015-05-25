@@ -13,10 +13,10 @@ class Member(Base):
 
     member_id = Column("id", Integer, Sequence("member_id_seq"),
                        primary_key=True)
-    firstname = Column(String(256), nullable=False)
-    lastname = Column(String(256), nullable=False)
+    firstname = Column(String(255), nullable=False)
+    lastname = Column(String(255), nullable=False)
     fullname = column_property(firstname + " " + lastname)
-    email = Column(String(256))
+    email = Column(String(255))
 
     def __repr__(self):
         return '<Member {}>'.format(repr(self.fullname))
