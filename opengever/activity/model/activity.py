@@ -30,7 +30,7 @@ class Activity(Base):
 
     activity_id = Column('id', Integer, Sequence("activities_id_seq"),
                          primary_key=True)
-    kind = Column(String(50), nullable=False)
+    kind = Column(String(255), nullable=False)
     actor_id = Column(String(255), nullable=False)
     title = Column(String(512), nullable=False)
     summary = Column(String(512), nullable=False)
