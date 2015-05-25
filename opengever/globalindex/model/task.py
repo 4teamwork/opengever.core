@@ -55,11 +55,11 @@ class Task(Base):
     text = Column(Text)
     breadcrumb_title = Column(String(MAX_BREADCRUMB_LENGTH))
     physical_path = Column(String(256))
-    review_state = Column(String(50))
+    review_state = Column(String(255))
     icon = Column(String(50))
 
-    responsible = Column(String(32), index=True)
-    issuer = Column(String(32), index=True)
+    responsible = Column(String(255), index=True)
+    issuer = Column(String(255), index=True)
 
     task_type = Column(String(50), index=True)
     is_subtask = Column(Boolean(), default=False)
