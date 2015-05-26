@@ -3,6 +3,7 @@ from opengever.meeting import _
 from opengever.meeting.form import ModelAddForm
 from opengever.meeting.form import ModelEditForm
 from opengever.meeting.model import Member
+from opengever.ogds.models import EMAIL_LENGTH
 from opengever.ogds.models import FIRSTNAME_LENGTH
 from opengever.ogds.models import LASTNAME_LENGTH
 from plone.directives import form
@@ -32,7 +33,7 @@ class IMemberModel(form.Schema):
 
     email = schema.TextLine(
         title=_(u"label_email", default=u"E-Mail"),
-        max_length=256,
+        max_length=EMAIL_LENGTH,
         required=False)
 
 

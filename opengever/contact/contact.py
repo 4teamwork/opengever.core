@@ -1,6 +1,7 @@
 from collective import dexteritytextindexer
 from five import grok
 from opengever.contact import _
+from opengever.ogds.models import EMAIL_LENGTH
 from opengever.ogds.models import FIRSTNAME_LENGTH
 from opengever.ogds.models import LASTNAME_LENGTH
 from plone.dexterity.content import Item
@@ -109,12 +110,14 @@ class IContact(form.Schema):
         title = _(u'label_email', default=u'email'),
         description = _(u'help_email', default=u''),
         required = False,
+        max_length=EMAIL_LENGTH,
         )
 
     email2 = schema.TextLine(
         title = _(u'label_email2', default=u'Email 2'),
         description = _('help_email2', default=u''),
         required = False,
+        max_length=EMAIL_LENGTH,
         )
 
     url = schema.URI(
