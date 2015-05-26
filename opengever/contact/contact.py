@@ -2,6 +2,7 @@ from collective import dexteritytextindexer
 from five import grok
 from opengever.contact import _
 from opengever.ogds.models import FIRSTNAME_LENGTH
+from opengever.ogds.models import LASTNAME_LENGTH
 from plone.dexterity.content import Item
 from plone.directives import dexterity
 from plone.directives import form
@@ -75,6 +76,7 @@ class IContact(form.Schema):
         title = _(u'label_lastname', default=u'Lastname'),
         description = _(u'help_lastname', default=u''),
         required = True,
+        max_length=LASTNAME_LENGTH,
         )
 
     dexteritytextindexer.searchable('firstname')
