@@ -9,6 +9,7 @@ from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
 from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models import UNIT_ID_LENGTH
 from plone import api
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
@@ -43,12 +44,12 @@ class Proposal(Base):
 
     proposal_id = Column("id", Integer, Sequence("proposal_id_seq"),
                          primary_key=True)
-    admin_unit_id = Column(String(30), nullable=False)
+    admin_unit_id = Column(String(UNIT_ID_LENGTH), nullable=False)
     int_id = Column(Integer, nullable=False)
     oguid = composite(Oguid, admin_unit_id, int_id)
     physical_path = Column(String(256), nullable=False)
 
-    submitted_admin_unit_id = Column(String(30))
+    submitted_admin_unit_id = Column(String(UNIT_ID_LENGTH))
     submitted_int_id = Column(Integer)
     submitted_oguid = composite(
         Oguid, submitted_admin_unit_id, submitted_int_id)

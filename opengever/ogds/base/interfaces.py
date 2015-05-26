@@ -1,3 +1,4 @@
+from opengever.ogds.models import UNIT_ID_LENGTH
 from zope import schema
 from zope.interface import Attribute
 from zope.interface import Interface
@@ -107,7 +108,9 @@ class IAdminUnitConfiguration(Interface):
         title=u'Id of the current Administrative Unit',
         description=u'The id of this administrative unit. It will be \
         mapped to the corresponding adminstrative unit configuration \
-        in the OGDS (Opengever Global Directory Service).', )
+        in the OGDS (Opengever Global Directory Service).',
+        max_length=UNIT_ID_LENGTH,
+    )
 
 
 class ISyncStamp(Interface):

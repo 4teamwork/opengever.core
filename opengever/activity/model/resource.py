@@ -2,6 +2,7 @@ from opengever.activity.model.watcher import Watcher
 from opengever.base.model import Base
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
+from opengever.ogds.models import UNIT_ID_LENGTH
 from opengever.ogds.models.query import BaseQuery
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
@@ -38,7 +39,7 @@ class Resource(Base):
     resource_id = Column('id', Integer, Sequence('resources_id_seq'),
                          primary_key=True)
 
-    admin_unit_id = Column(String(30), index=True, nullable=False)
+    admin_unit_id = Column(String(UNIT_ID_LENGTH), index=True, nullable=False)
     int_id = Column(Integer, index=True, nullable=False)
     oguid = composite(Oguid, admin_unit_id, int_id)
 

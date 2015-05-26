@@ -7,6 +7,7 @@ from opengever.globalindex.model.query import TaskQuery
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models import UNIT_ID_LENGTH
 from plone import api
 from sqlalchemy import Boolean
 from sqlalchemy import Column
@@ -46,7 +47,7 @@ class Task(Base):
 
     task_id = Column("id", Integer, Sequence("task_id_seq"), primary_key=True)
 
-    admin_unit_id = Column(String(30), index=True, nullable=False)
+    admin_unit_id = Column(String(UNIT_ID_LENGTH), index=True, nullable=False)
     int_id = Column(Integer, index=True, nullable=False)
 
     oguid = composite(Oguid, admin_unit_id, int_id)
@@ -76,8 +77,10 @@ class Task(Base):
     completed = Column(Date)
 
     # XXX shit, this should be ...org_unit_ID
-    issuing_org_unit = Column(String(30), index=True, nullable=False)
-    assigned_org_unit = Column(String(30), index=True, nullable=False)
+    issuing_org_unit = Column(
+        String(UNIT_ID_LENGTH), index=True, nullable=False)
+    assigned_org_unit = Column(
+        String(UNIT_ID_LENGTH), index=True, nullable=False)
 
     predecessor_id = Column(Integer, ForeignKey('tasks.id'))
     successors = relationship(
