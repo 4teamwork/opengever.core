@@ -288,3 +288,8 @@ msgstr "Deaktivieren"
 msgid "tasktemplatefolder-transition-inactiv-activ"
 msgstr "Aktivieren"
 
+msgid "Meeting"
+msgstr "Sitzung"
+
+msgid "Membership"
+msgstr "Mitgliedschaft"

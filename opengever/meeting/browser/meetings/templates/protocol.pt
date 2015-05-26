@@ -74,7 +74,7 @@
 
                     <label tal:attributes="for string:${name}-decision;
                                            id string:${name}-decision-label"
-                           i18n:translate="label_decision">
+                           i18n:translate="">
                            Decision
                     </label>
                     <textarea class="textarea-widget text-field"
