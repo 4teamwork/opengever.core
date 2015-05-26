@@ -5,6 +5,12 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Unify definition of of auto-incrementing SQL columns.
+  Add explicit Sequence to enable of auto-increment for oracle. Also make
+  server-side tables/sequences consistent with other model definitions for
+  Postgres.
+  [deiferni]
+
 - Drop Owner from the workflows of the following content-types: document, contact, dossier,
   templatedossier, forwarding, inbox, mail, repository, repositoryroot, task.
   [deiferni]

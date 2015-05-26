@@ -8,6 +8,7 @@ from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy import Text
 from sqlalchemy.orm import relationship
+from sqlalchemy.schema import Sequence
 import datetime
 import pytz
 
@@ -27,7 +28,8 @@ class Activity(Base):
 
     __tablename__ = 'activities'
 
-    activity_id = Column('id', Integer, primary_key=True)
+    activity_id = Column('id', Integer, Sequence("activities_id_seq"),
+                         primary_key=True)
     kind = Column(String(50), nullable=False)
     actor_id = Column(String(255), nullable=False)
     title = Column(String(512), nullable=False)

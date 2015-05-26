@@ -6,6 +6,7 @@ from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy.orm import relationship
+from sqlalchemy.schema import Sequence
 
 
 class NotificationQuery(BaseQuery):
@@ -20,7 +21,8 @@ class Notification(Base):
 
     __tablename__ = 'notifications'
 
-    notification_id = Column('id', Integer, primary_key=True)
+    notification_id = Column('id', Integer, Sequence('notifications_id_seq'),
+                             primary_key=True)
 
     watcher_id = Column(Integer, ForeignKey('watchers.id'))
     watcher = relationship("Watcher", backref="notifications")

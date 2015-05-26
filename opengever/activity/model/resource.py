@@ -11,6 +11,7 @@ from sqlalchemy import Table
 from sqlalchemy import UniqueConstraint
 from sqlalchemy.orm import composite
 from sqlalchemy.orm import relationship
+from sqlalchemy.schema import Sequence
 
 
 class ResourceQuery(BaseQuery):
@@ -34,7 +35,8 @@ class Resource(Base):
     __tablename__ = 'resources'
     __table_args__ = (UniqueConstraint('admin_unit_id', 'int_id'), {})
 
-    resource_id = Column('id', Integer, primary_key=True)
+    resource_id = Column('id', Integer, Sequence('resources_id_seq'),
+                         primary_key=True)
 
     admin_unit_id = Column(String(30), index=True, nullable=False)
     int_id = Column(Integer, index=True, nullable=False)
