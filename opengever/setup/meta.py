@@ -1,3 +1,4 @@
+from opengever.ogds.models import GROUP_ID_LENGTH
 from opengever.ogds.models import UNIT_ID_LENGTH
 from opengever.setup.directives import deployment_directive
 from opengever.setup.directives import ldap_directive
@@ -61,15 +62,18 @@ class IDeploymentDirective(Interface):
 
     reader_group = TextLine(
         title=u'Reader group',
-        required=False)
+        required=False,
+        max_length=GROUP_ID_LENGTH)
 
     rolemanager_group = TextLine(
         title=u'Rolemanager group',
-        required=False)
+        required=False,
+        max_length=GROUP_ID_LENGTH)
 
     administrator_group = TextLine(
         title=u'Administrator group',
-        required=False)
+        required=False,
+        max_length=GROUP_ID_LENGTH)
 
 
 def register_ldap(context, **kwargs):
