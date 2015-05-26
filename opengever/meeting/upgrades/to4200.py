@@ -3,6 +3,7 @@ from opengever.ogds.base.utils import get_current_admin_unit
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import Date
+from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
@@ -21,7 +22,11 @@ class AddMeetingTable(SchemaMigration):
     upgradeid = 4200
 
     def migrate(self):
-        self.create_meeting_table()
+        if self.is_oracle:
+            self.create_meeting_table_oracle()
+        else:
+           self.create_meeting_table()
+
         self.create_agenda_item_table()
         self.add_proposal_columns()
         self.add_committee_columns()
@@ -35,6 +40,25 @@ class AddMeetingTable(SchemaMigration):
             Column("date", Date, nullable=False),
             Column("start_time", Time),
             Column("end_time", Time),
+            Column("workflow_state", String(256), nullable=False, default='pending')
+        )
+
+    def create_meeting_table_oracle(self):
+        """Because oracle does not support the Time datatype. We add the time
+        columns `start` and `end_time` as DateTime Columns.
+        The 4200 upgradestep (AddMeetingTable), which creates Datetime fields
+        instead of Time fields, will handle the oracle specific columns
+        separately.
+        """
+
+        self.op.create_table(
+            'meetings',
+            Column("id", Integer, Sequence("meeting_id_seq"), primary_key=True),
+            Column("committee_id", Integer, ForeignKey('committees.id'), nullable=False),
+            Column("location", String(256)),
+            Column("date", DateTime, nullable=False),
+            Column("start_time", DateTime),
+            Column("end_time", DateTime),
             Column("workflow_state", String(256), nullable=False, default='pending')
         )
 
