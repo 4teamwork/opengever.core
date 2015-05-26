@@ -28,10 +28,10 @@ class AddMembershipRole(SchemaMigration):
 
     def make_start_date_primary_oracle(self):
         self.op.execute(
-            "ALTER TABLE MEMBERSHIPS DROP PRIMARY KEY;")
+            "ALTER TABLE MEMBERSHIPS DROP PRIMARY KEY")
         self.op.execute(
             "ALTER TABLE MEMBERSHIPS ADD PRIMARY KEY "
-            "(COMMITTEE_ID, MEMBER_ID, DATE_FROM);")
+            "(COMMITTEE_ID, MEMBER_ID, DATE_FROM)")
 
     def make_start_date_primary(self):
         if self.is_postgres:
