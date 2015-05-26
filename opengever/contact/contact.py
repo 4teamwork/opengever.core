@@ -1,16 +1,13 @@
-from five import grok
-
-from zope import schema
 from collective import dexteritytextindexer
+from five import grok
+from opengever.contact import _
+from opengever.ogds.models import FIRSTNAME_LENGTH
 from plone.dexterity.content import Item
+from plone.directives import dexterity
 from plone.directives import form
 from plone.indexer import indexer
 from plone.namedfile.field import NamedImage
-
-
-from opengever.contact import _
-
-from plone.directives import dexterity
+from zope import schema
 
 
 class IContact(form.Schema):
@@ -85,6 +82,7 @@ class IContact(form.Schema):
         title = _(u'label_firstname', default=u'Firstname'),
         description = _(u'help_firstname', default=u''),
         required = True,
+        max_length=FIRSTNAME_LENGTH,
         )
 
     company = schema.TextLine(
