@@ -8,6 +8,7 @@ from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models import UNIT_ID_LENGTH
+from opengever.ogds.models import USER_ID_LENGTH
 from plone import api
 from sqlalchemy import Boolean
 from sqlalchemy import Column
@@ -59,8 +60,8 @@ class Task(Base):
     review_state = Column(String(255))
     icon = Column(String(50))
 
-    responsible = Column(String(255), index=True)
-    issuer = Column(String(255), index=True)
+    responsible = Column(String(USER_ID_LENGTH), index=True)
+    issuer = Column(String(USER_ID_LENGTH), index=True)
 
     task_type = Column(String(50), index=True)
     is_subtask = Column(Boolean(), default=False)
@@ -306,7 +307,7 @@ class Task(Base):
 class TaskPrincipal(Base):
     __tablename__ = 'task_principals'
 
-    principal = Column(String(255), primary_key=True)
+    principal = Column(String(USER_ID_LENGTH), primary_key=True)
     task_id = Column(Integer, ForeignKey('tasks.id'),
                      primary_key=True)
 

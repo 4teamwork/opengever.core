@@ -1,6 +1,7 @@
 from opengever.activity.model.notification import Notification
 from opengever.base.model import Base
 from opengever.base.model import UTCDateTime
+from opengever.ogds.models import USER_ID_LENGTH
 from opengever.ogds.models.query import BaseQuery
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
@@ -31,7 +32,7 @@ class Activity(Base):
     activity_id = Column('id', Integer, Sequence("activities_id_seq"),
                          primary_key=True)
     kind = Column(String(255), nullable=False)
-    actor_id = Column(String(255), nullable=False)
+    actor_id = Column(String(USER_ID_LENGTH), nullable=False)
     title = Column(String(512), nullable=False)
     summary = Column(String(512), nullable=False)
     description = Column(Text)
