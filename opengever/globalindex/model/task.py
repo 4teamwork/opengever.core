@@ -3,6 +3,7 @@ from DateTime import DateTime as ZopeDateTime
 from opengever.base.model import Base
 from opengever.base.model import Session
 from opengever.base.oguid import Oguid
+from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.globalindex.model.query import TaskQuery
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -54,10 +55,10 @@ class Task(Base):
     oguid = composite(Oguid, admin_unit_id, int_id)
 
     title = Column(String(MAX_TITLE_LENGTH))
-    text = Column(Text)
+    text = Column(Text())
     breadcrumb_title = Column(String(MAX_BREADCRUMB_LENGTH))
     physical_path = Column(String(256))
-    review_state = Column(String(255))
+    review_state = Column(String(WORKFLOW_STATE_LENGTH))
     icon = Column(String(50))
 
     responsible = Column(String(USER_ID_LENGTH), index=True)

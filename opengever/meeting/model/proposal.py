@@ -1,6 +1,7 @@
 from opengever.base.model import Base
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
+from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import proposalhistory
@@ -69,7 +70,7 @@ class Proposal(Base):
         primaryjoin="GeneratedExcerpt.document_id==Proposal.submitted_excerpt_document_id")
 
     title = Column(String(256), nullable=False)
-    workflow_state = Column(String(255), nullable=False)
+    workflow_state = Column(String(WORKFLOW_STATE_LENGTH), nullable=False)
     legal_basis = Column(Text)
     initial_position = Column(Text)
     proposed_action = Column(Text)
