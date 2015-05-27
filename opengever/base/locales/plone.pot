@@ -296,3 +296,9 @@ msgstr ""
 
 msgid "Search OneGov Gever"
 msgstr ""
+
+msgid "Meeting"
+msgstr ""
+
+msgid "Membership"
+msgstr ""

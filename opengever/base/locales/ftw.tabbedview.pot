@@ -223,3 +223,6 @@ msgstr ""
 
 msgid "sablontemplates"
 msgstr ""
+
+msgid "submittedproposals"
+msgstr ""

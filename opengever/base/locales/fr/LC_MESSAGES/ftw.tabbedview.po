@@ -224,3 +224,6 @@ msgstr "Corbeille"
 msgid "users"
 msgstr "OGDS"
 
+msgid "submittedproposals"
+msgstr "Propositions"
+
