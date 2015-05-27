@@ -1,6 +1,7 @@
 from Acquisition import aq_inner, aq_parent
 from datetime import date
 from five import grok
+from opengever.document.behaviors import IBaseDocument
 from opengever.document.document import IDocumentSchema
 from opengever.globalindex.handlers.task import TaskSqlSyncer
 from opengever.task.task import ITask
@@ -34,7 +35,7 @@ def create_subtask_response(context, event):
             if not context.get_sql_object():
                 TaskSqlSyncer(context, event).sync()
 
-        elif IDocumentSchema.providedBy(context):
+        elif IBaseDocument.providedBy(context):
             transition = 'transition-add-document'
 
         # add a response with a link to the object
