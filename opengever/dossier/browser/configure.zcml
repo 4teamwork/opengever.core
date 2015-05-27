@@ -18,4 +18,11 @@
       layer="opengever.base.interfaces.IOpengeverBaseLayer"
       />
 
+  <browser:page
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      name="dossier_navigation.json"
+      class=".navigation.JSONNavigation"
+      permission="zope2.View"
+      />
+
 </configure>

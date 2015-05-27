@@ -1,5 +1,20 @@
 <!--TODO: refactor using viewlets-->
 <tal:block i18n:domain="opengever.dossier" tal:define="groups view/boxes; css_width python:99/len(groups)">
+
+    <div id="dossier-tree"
+      tal:define="context_url context/absolute_url"
+      tal:attributes="data-dossier-navigation-url python:context_url + '/dossier_navigation.json';
+                      data-context-url context_url;">
+        <ul class="filetree">
+            <img src="spinner.gif" class="spinner"/>
+        </ul>
+    </div>
+
+    <script type="text/javascript"
+      tal:define="navroot context/@@plone_portal_state/navigation_root_url"
+      tal:attributes="src string:${navroot}/++resource++opengever.dossier.resources/init_tree.js">
+    </script>
+
   <div tal:repeat="boxes groups" tal:attributes="class string:boxGroup boxGroup${repeat/boxes/index}; style string:width:${css_width}%">
     <div tal:repeat="box boxes" class="box" tal:attributes="id string:${box/id}Box">
       <h2 i18n:translate="" tal:content="box/label|box/id"></h2>
