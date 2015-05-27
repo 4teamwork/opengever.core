@@ -50,6 +50,10 @@ class DossierOverview(grok.View, OpengeverTab):
                  dict(id='description', content=self.description), ], ]
         return items
 
+    def navigation_json_url(self):
+        root_dossier = self.context.get_root_dossier()
+        return root_dossier.absolute_url() + '/dossier_navigation.json'
+
     def subdossiers(self):
         return self.context.get_subdossiers(
             sort_on='modified', sort_order='reverse',

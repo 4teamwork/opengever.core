@@ -20,6 +20,16 @@ class TestDossier(FunctionalTestCase):
     def create_test_dossier(self):
         return create(Builder(self.builder_id))
 
+    def test_get_root_dossier_returns_self_when_is_already_root(self):
+        self.assertEqual(self.dossier, self.dossier.get_root_dossier())
+
+    def test_get_root_dossier_returns_root_for_nested_dossiers(self):
+        sub1 = create(Builder(self.builder_id).within(self.dossier))
+        sub2 = create(Builder(self.builder_id).within(sub1))
+
+        self.assertEqual(self.dossier, sub1.get_root_dossier())
+        self.assertEqual(self.dossier, sub2.get_root_dossier())
+
     def _get_active_tabbedview_tab_titles(self, obj):
         types_tool = getToolByName(self.portal, 'portal_types')
         actions = types_tool.listActionInfos(
