@@ -253,6 +253,19 @@ class TestResponseDescriptions(FunctionalTestCase):
             u'M\xfcller Hans (test_user_1_)',
             self.get_latest_answer(browser))
 
+    @browsing
+    def test_adding_mail_creates_response(self, browser):
+        create(Builder('mail')
+               .with_dummy_message()
+               .within(self.task))
+
+        browser.login()
+        self.visit_overview(browser)
+
+        self.assertEqual(
+            u'Document [No Subject] added by M\xfcller Hans (test_user_1_)',
+            self.get_latest_answer(browser))
+
     # TODO:
     # - Test assigning forwarding to dossier
     # - Test refusing a forwarding

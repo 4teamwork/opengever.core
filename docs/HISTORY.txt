@@ -5,6 +5,9 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Fixed ResponseDescription when adding mails to a task.
+  [phgross]
+
 - Reworked object copy and paste functionality.
 
   - Made paste action CSRF safe.
