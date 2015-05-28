@@ -36,32 +36,32 @@
     </div>
 
     <div id="content-core">
-        <form method="post" 
+        <form method="post"
               tal:attributes="action string:${context/absolute_url}/@@sharing">
-      
+
             <input type="hidden" name="form.submitted:boolean" value="True" />
 
             <div class="field">
-                <input type="text" 
+                <input type="text"
                        id="sharing-user-group-search"
-                       size="30" 
+                       size="30"
                        name="search_term"
-                       title="Search for user or group" 
+                       title="Search for user or group"
                        i18n:attributes="title"
                        class="searchField inputLabel"
-                       value="" 
+                       value=""
                        />
                 <input type="submit"
-                       id="sharing-save-button" 
+                       id="sharing-save-button"
                        name="form.button.Search"
                        value="Search"
-                       class="searchButton allowMultiSubmit" 
+                       class="searchButton allowMultiSubmit"
                        i18n:attributes="value label_search"
                        />
             </div>
         <table metal:define-macro="user-group-sharing" id="user-group-sharing"
-               class="listing" 
-               summary="Current sharing permissions" 
+               class="listing"
+               summary="Current sharing permissions"
                tal:define="available_roles view/available_roles;
                            num_columns python:len(available_roles) + 1;
                            role_settings view/role_settings"
@@ -131,7 +131,7 @@
                     </tr>
                 </tal:entries>
             </tbody>
-    
+
         </table>
 
         <div class="field">
@@ -142,7 +142,7 @@
                    checked="checked"
                    id="inherit"
                    tal:attributes="checked python:view.inherited() and 'checked' or None"
-                   /> 
+                   />
             <label for="inherit" i18n:translate="label_inherit_local_roles">
             Inherit permissions from higher levels
             </label>
