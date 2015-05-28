@@ -16,7 +16,12 @@ class ReplaceTimeFields(SchemaMigration):
 
     def migrate(self):
         self.add_datetime_columns()
-        self.migrate_data()
+
+        if self.is_oracle:
+            self.migrate_data_oracle()
+        else:
+            self.migrate_data()
+
         self.drop_date_and_time_columns()
         self.make_start_column_required()
 
@@ -51,6 +56,18 @@ class ReplaceTimeFields(SchemaMigration):
                 .values(start=start, end=end)
                 .where(meeting_table.columns.id == meeting.id)
             )
+
+    def migrate_data_oracle(self):
+        """Because oracle does not support the Time datatype.
+        We add a special handling to the 4200 upgradestep (AddMeetingTable)
+        which creates Datetime fields instead of Time,
+        therefore it's not possible to migrate date from the existing table.
+        But we could presume, that there is not content created since then.
+        """
+
+        meeting_table = table("meetings", column("id"))
+        meetings = self.connection.execute(meeting_table.select()).fetchall()
+        assert len(meetings) == 0
 
     def drop_date_and_time_columns(self):
         self.op.drop_column('meetings', 'date')

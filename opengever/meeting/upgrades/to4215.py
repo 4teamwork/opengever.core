@@ -9,7 +9,11 @@ class RenameUniqueConstraints(SchemaMigration):
     upgradeid = 4215
 
     def migrate(self):
-        self.remove_old_constraints()
+        # If the OGDS backend is oracle, the constraints creation in 4208
+        # has been skipped. See 4208.py for more details.
+        if not self.is_oracle:
+            self.remove_old_constraints()
+
         self.add_new_constraints()
 
     def remove_old_constraints(self):

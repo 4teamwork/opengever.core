@@ -29,11 +29,16 @@ class AddSubmittedDocumentsTable(SchemaMigration):
             Column("submitted_physical_path", String(256))
         )
 
-        self.op.create_unique_constraint(
-            'ix_submitted_document_unique_source',
-            'submitteddocuments',
-            ['admin_unit_id', 'int_id', 'proposal_id'])
-        self.op.create_unique_constraint(
-            'ix_submitted_document_unique_target',
-            'submitteddocuments',
-            ['submitted_admin_unit_id', 'submitted_int_id'])
+        # For Oracle compatibility the names of UniqueConstraints have to be
+        # limited to max. 30 chars (see ORA-00972). the constraint will be
+        # added with an valid name in the 4215 Schemamigration
+        # (RenameUniqueConstraints)
+        if not self.is_oracle:
+            self.op.create_unique_constraint(
+                'ix_submitted_document_unique_source',
+                'submitteddocuments',
+                ['admin_unit_id', 'int_id', 'proposal_id'])
+            self.op.create_unique_constraint(
+                'ix_submitted_document_unique_target',
+                'submitteddocuments',
+                ['submitted_admin_unit_id', 'submitted_int_id'])

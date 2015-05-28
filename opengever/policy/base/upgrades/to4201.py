@@ -8,11 +8,11 @@ from opengever.base.model import get_tables
 class InstallActivity(UpgradeStep):
 
     def __call__(self):
+        self.create_activity_tables()
         self.setup_install_profile(
             'profile-opengever.activity:default')
         self.setup_install_profile(
             'profile-collective.js.timeago:default')
-        self.create_activity_tables()
 
     def create_activity_tables(self):
         """When installing the activity suppackage via upgrade-step we need
