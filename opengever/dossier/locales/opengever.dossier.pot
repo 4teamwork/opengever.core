@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-04-16 17:18+0000\n"
+"POT-Creation-Date: 2015-05-28 10:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,6 +46,10 @@ msgstr ""
 
 #: ./opengever/dossier/move_items.py:96
 msgid "Document ${name} is connected to a Task. Please move the Task."
+msgstr ""
+
+#: ./opengever/dossier/browser/overview_templates/overview.pt:8
+msgid "Dossier structure"
 msgstr ""
 
 #: ./opengever/dossier/resolve.py:80
@@ -93,7 +97,7 @@ msgstr ""
 msgid "Project Dossier"
 msgstr ""
 
-#: ./opengever/dossier/menu.py:26
+#: ./opengever/dossier/menu.py:22
 msgid "Subdossier"
 msgstr ""
 
@@ -102,6 +106,10 @@ msgid "Template Dossier"
 msgstr ""
 
 msgid "Templates"
+msgstr ""
+
+#: ./opengever/dossier/deactivate.py:64
+msgid "The Dossier can't be deactivated, not all contained tasks are in a closed state."
 msgstr ""
 
 #: ./opengever/dossier/deactivate.py:46
@@ -544,7 +552,7 @@ msgstr ""
 msgid "newest_tasks"
 msgstr ""
 
-#: ./opengever/dossier/browser/overview_templates/overview.pt:12
+#: ./opengever/dossier/browser/overview_templates/overview.pt:38
 msgid "no_content"
 msgstr ""
 
@@ -590,7 +598,7 @@ msgstr ""
 msgid "sharing"
 msgstr ""
 
-#: ./opengever/dossier/browser/overview_templates/overview.pt:46
+#: ./opengever/dossier/browser/overview_templates/overview.pt:72
 msgid "show all"
 msgstr ""
 

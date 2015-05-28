@@ -5,7 +5,7 @@
   <div class="boxGroup boxGroup0" tal:attributes="style string:width:${css_width}%">
 
     <div class="box" id="subdossiersBox">
-      <h2 i18n:translate="">Dossier-Struktur</h2>
+      <h2 i18n:translate="">Dossier structure</h2>
       <div id="dossier-tree"
            tal:attributes="data-dossier-navigation-url view/navigation_json_url;
                            data-context-url context_url;"

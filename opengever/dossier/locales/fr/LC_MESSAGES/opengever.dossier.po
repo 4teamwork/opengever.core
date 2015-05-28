@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-04-16 17:18+0000\n"
+"POT-Creation-Date: 2015-05-28 10:28+0000\n"
 "PO-Revision-Date: 2012-09-10 10:17+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,6 +44,10 @@ msgstr "Effacer la participation"
 #: ./opengever/dossier/move_items.py:96
 msgid "Document ${name} is connected to a Task. Please move the Task."
 msgstr "Document ${name} est lié avec une tâche, déplacer la tâche, svp."
+
+#: ./opengever/dossier/browser/overview_templates/overview.pt:8
+msgid "Dossier structure"
+msgstr ""
 
 #: ./opengever/dossier/resolve.py:80
 msgid "Dossiers successfully reactivated."
@@ -90,7 +94,7 @@ msgstr "Pas de modèles disponible"
 msgid "Project Dossier"
 msgstr "Dossier du projet"
 
-#: ./opengever/dossier/menu.py:26
+#: ./opengever/dossier/menu.py:22
 msgid "Subdossier"
 msgstr "Sous-dossier"
 
@@ -100,6 +104,10 @@ msgstr "Dossier des modèles"
 
 msgid "Templates"
 msgstr "Modèles"
+
+#: ./opengever/dossier/deactivate.py:64
+msgid "The Dossier can't be deactivated, not all contained tasks are in a closed state."
+msgstr ""
 
 #: ./opengever/dossier/deactivate.py:46
 msgid "The Dossier can't be deactivated, not all containeddocuments are checked in."
@@ -542,7 +550,7 @@ msgstr "Derniers documents"
 msgid "newest_tasks"
 msgstr "Dernières tâches"
 
-#: ./opengever/dossier/browser/overview_templates/overview.pt:12
+#: ./opengever/dossier/browser/overview_templates/overview.pt:38
 msgid "no_content"
 msgstr "Pas de contenu"
 
@@ -588,7 +596,7 @@ msgstr "Attribuer numéro d'inventaire"
 msgid "sharing"
 msgstr "Participations enlevées"
 
-#: ./opengever/dossier/browser/overview_templates/overview.pt:46
+#: ./opengever/dossier/browser/overview_templates/overview.pt:72
 msgid "show all"
 msgstr "Tout afficher"
 
@@ -616,3 +624,4 @@ msgstr "Périmé"
 #: ./opengever/dossier/behaviors/participation.py:197
 msgid "warning_no_participants_selected"
 msgstr "Vous n'avez sélectionné aucune participation"
+
