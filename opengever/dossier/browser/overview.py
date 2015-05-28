@@ -31,24 +31,15 @@ class DossierOverview(grok.View, OpengeverTab):
             sort_order='reverse')
 
     def boxes(self):
-        if not self.context.show_subdossier():
-            items = [
-                [dict(id='newest_tasks', content=self.tasks(), href='tasks'),
-                 ],
-                [dict(id='participants', content=self.sharing()), ],
-                [dict(id='newest_documents', content=self.documents(),
-                      href='documents'),
-                 dict(id='description', content=self.description), ]
-                ]
-        else:
-            items = [
-                [dict(id='subdossiers', content=self.subdossiers()),
-                 dict(id='participants', content=self.sharing()), ],
-                [dict(id='newest_tasks', content=self.tasks(), href='tasks')],
-                [dict(id='newest_documents', content=self.documents(),
-                      href='documents'),
-                 dict(id='description', content=self.description), ], ]
-        return items
+        return [
+            [
+                dict(id='newest_tasks', content=self.tasks(), href='tasks'),
+                dict(id='participants', content=self.sharing()), ],
+            [
+                dict(id='newest_documents', content=self.documents(),
+                     href='documents'),
+                dict(id='description', content=self.description), ]
+            ]
 
     def navigation_json_url(self):
         root_dossier = self.context.get_root_dossier()
