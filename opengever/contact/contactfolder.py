@@ -3,7 +3,7 @@ from opengever.contact import _
 from opengever.tabbedview.browser.tabs import OpengeverCatalogListingTab
 from opengever.tabbedview.helper import email_helper
 from plone.dexterity.interfaces import IDexterityContainer
-from zope.app.pagetemplate import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 
 
 def authenticated_member(context):

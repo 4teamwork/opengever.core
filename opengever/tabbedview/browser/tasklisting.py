@@ -17,7 +17,7 @@ from opengever.tabbedview.helper import task_id_checkbox_helper
 from opengever.tabbedview.helper import workflow_state
 from opengever.task.helper import task_type_helper
 from sqlalchemy import and_, or_
-from zope.app.pagetemplate import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.interface import implements
 from zope.interface import Interface
 

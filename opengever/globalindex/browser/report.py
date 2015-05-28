@@ -11,7 +11,7 @@ from opengever.globalindex.utils import get_selected_items
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.task.util import getTaskTypeVocabulary
 from Products.statusmessages.interfaces import IStatusMessage
-from zope.app.component.hooks import getSite
+from zope.component.hooks import getSite
 from zope.i18n import translate
 from zope.interface import Interface
 

@@ -8,8 +8,8 @@ from opengever.base.request import dispatch_request
 from opengever.base.utils import ok_response
 from persistent.dict import PersistentDict
 from zope.annotation.interfaces import IAnnotations
-from zope.app.component.hooks import getSite
 from zope.component import getUtility
+from zope.component.hooks import getSite
 from zope.interface import Interface
 import json
 

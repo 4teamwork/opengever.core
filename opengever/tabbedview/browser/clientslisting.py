@@ -11,7 +11,7 @@ from opengever.tabbedview.browser.listing import ListingView
 from sqlalchemy import or_
 from sqlalchemy.orm.query import Query
 from sqlalchemy.sql.expression import asc, desc
-from zope.app.pagetemplate import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.interface import implements
 from zope.interface import Interface
 

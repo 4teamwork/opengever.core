@@ -22,7 +22,7 @@ from plone.supermodel.model import Fieldset
 from sqlalchemy import func
 from z3c.form.interfaces import DISPLAY_MODE
 from zope import schema
-from zope.app.component.hooks import getSite
+from zope.component.hooks import getSite
 from zope.i18n import translate
 from zope.interface import Interface, alsoProvides
 from zope.lifecycleevent.interfaces import IObjectAddedEvent

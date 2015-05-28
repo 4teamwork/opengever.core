@@ -13,9 +13,9 @@ from Products.CMFCore.interfaces import IActionSucceededEvent
 from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.interfaces import HIDDEN_MODE
 from zope import schema
-from zope.app.container.interfaces import IObjectAddedEvent
 from zope.i18n import translate
 from zope.interface import implements
+from zope.lifecycleevent.interfaces import IObjectAddedEvent
 
 
 class IForwarding(ITask):

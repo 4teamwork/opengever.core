@@ -13,7 +13,7 @@ from opengever.tabbedview.browser.base import OpengeverTab
 from opengever.tabbedview.browser.listing import ListingView
 from opengever.tabbedview.helper import linked_ogds_author
 from zope.annotation.interfaces import IAnnotations
-from zope.app.pagetemplate import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import implements, Interface

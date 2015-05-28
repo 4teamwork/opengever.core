@@ -17,7 +17,7 @@ from opengever.tabbedview.browser.base import OpengeverTab
 from plone.directives.dexterity import DisplayForm
 from Products.CMFCore.utils import getToolByName
 from z3c.form.browser.checkbox import SingleCheckBoxWidget
-from zope.app.pagetemplate import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import queryMultiAdapter
 
 try:

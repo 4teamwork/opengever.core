@@ -4,7 +4,7 @@ from opengever.task.browser.transitioncontroller import TaskTransitionController
 from opengever.task.interfaces import ISuccessorTaskController
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from xml.dom.minidom import parse
-from zope.app.component.hooks import setSite
+from zope.component.hooks import setSite
 from zope.component import getSiteManager
 from zope.interface import alsoProvides
 from zope.interface import Interface

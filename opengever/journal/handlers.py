@@ -35,8 +35,6 @@ from plone.app.versioningbehavior.utils import get_change_note
 from plone.dexterity.interfaces import IDexterityContent
 from Products.CMFCore.interfaces import IActionSucceededEvent
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
-from zope.app.container.interfaces import IObjectAddedEvent
-from zope.app.container.interfaces import IObjectMovedEvent
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.event import notify
@@ -44,7 +42,9 @@ from zope.i18n import translate
 from zope.i18nmessageid import MessageFactory
 from zope.i18nmessageid.message import Message
 from zope.intid.interfaces import IIntIds
+from zope.lifecycleevent.interfaces import IObjectAddedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
+from zope.lifecycleevent.interfaces import IObjectMovedEvent
 
 
 pmf = MessageFactory('plone')

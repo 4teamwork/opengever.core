@@ -1,7 +1,7 @@
 from opengever.task import _
 from opengever.task.util import getTaskTypeVocabulary
 from plone.memoize import ram
-from zope.app.component.hooks import getSite
+from zope.component.hooks import getSite
 
 #XXX remove me
 @ram.cache(lambda m, i, value: value)

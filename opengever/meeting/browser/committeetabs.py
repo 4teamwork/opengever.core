@@ -3,7 +3,7 @@ from opengever.meeting.committee import ICommittee
 from opengever.meeting.tabs.meetinglisting import MeetingListingTab
 from opengever.meeting.tabs.membershiplisting import MembershipListingTab
 from opengever.meeting.tabs.submittedproposallisting import SubmittedProposalListingTab
-from zope.app.pagetemplate import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 
 
 class Meetings(MeetingListingTab):

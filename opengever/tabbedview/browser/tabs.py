@@ -20,7 +20,7 @@ from opengever.tabbedview.helper import readable_ogds_user
 from opengever.tabbedview.helper import workflow_state
 from opengever.tabbedview.interfaces import IStateFilterTableSourceConfig
 from plone.dexterity.interfaces import IDexterityContainer
-from zope.app.pagetemplate import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapts
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest

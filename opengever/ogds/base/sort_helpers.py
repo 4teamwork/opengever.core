@@ -6,7 +6,7 @@ from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models.user import User
 from plone.memoize import ram
 from Products.CMFCore.utils import getToolByName
-from zope.app.component.hooks import getSite
+from zope.component.hooks import getSite
 from zope.component import getUtility
 
 

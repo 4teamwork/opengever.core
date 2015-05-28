@@ -1,7 +1,7 @@
 from AccessControl.SecurityManagement import newSecurityManager
 from Products.CMFPlone.Portal import PloneSite
 from Testing.makerequest import makerequest
-from zope.app.component.hooks import setSite
+from zope.component.hooks import setSite
 import AccessControl
 
 

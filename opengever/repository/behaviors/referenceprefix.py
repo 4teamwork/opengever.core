@@ -1,17 +1,15 @@
 from Acquisition import aq_parent, aq_inner
 from five import grok
-
-from zope.interface import Interface, alsoProvides
-from zope import schema
-from zope.component import provideAdapter
-from zope.lifecycleevent.interfaces import IObjectModifiedEvent
-from zope.app.container.interfaces import IObjectAddedEvent
-
+from opengever.base.interfaces import IReferenceNumberPrefix as PrefixAdapter
+from opengever.repository import _
 from plone.directives import form
 from z3c.form import validator, error
 from z3c.form.interfaces import IAddForm
-from opengever.repository import _
-from opengever.base.interfaces import IReferenceNumberPrefix as PrefixAdapter
+from zope import schema
+from zope.component import provideAdapter
+from zope.interface import Interface, alsoProvides
+from zope.lifecycleevent.interfaces import IObjectAddedEvent
+from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 
 class IReferenceNumberPrefix(form.Schema):

@@ -1,11 +1,9 @@
 from five import grok
-from zope import schema
-from zope.app.container.interfaces import IObjectAddedEvent
-from zope.interface import Interface, alsoProvides
-
-from plone.directives import form
-
 from opengever.base import _
+from plone.directives import form
+from zope import schema
+from zope.interface import Interface, alsoProvides
+from zope.lifecycleevent.interfaces import IObjectAddedEvent
 
 
 class ICreatorAware(Interface):

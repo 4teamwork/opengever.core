@@ -8,7 +8,7 @@ from opengever.tasktemplates import _
 from opengever.tasktemplates.browser.helper import interactive_user_helper
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
 from plone.directives import dexterity
-from zope.app.component.hooks import getSite
+from zope.component.hooks import getSite
 from zope.i18n import translate
 from zope.interface import implements, Interface
 

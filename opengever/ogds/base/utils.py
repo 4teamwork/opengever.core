@@ -11,7 +11,7 @@ from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from UserDict import DictMixin
-from zope.app.component.hooks import getSite
+from zope.component.hooks import getSite
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 

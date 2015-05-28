@@ -8,11 +8,11 @@ from opengever.globalindex.handlers.task import sync_task
 from opengever.globalindex.handlers.task import TaskSqlSyncer
 from plone import api
 from Products.CMFCore.utils import getToolByName
-from zope.app.container.interfaces import IObjectAddedEvent
-from zope.app.container.interfaces import IObjectMovedEvent
 from zope.component import getAdapter
 from zope.lifecycleevent import IObjectRemovedEvent
+from zope.lifecycleevent.interfaces import IObjectAddedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
+from zope.lifecycleevent.interfaces import IObjectMovedEvent
 
 
 @grok.subscribe(IDossierMarker, IObjectWillBeMovedEvent)

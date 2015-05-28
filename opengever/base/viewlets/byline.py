@@ -3,7 +3,7 @@ from opengever.base.browser.helper import get_css_class
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from plone.app.layout.viewlets import content
 from plone.memoize.instance import memoize
-from zope.app.pagetemplate import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import getMultiAdapter
 from zope.component import getUtility, getAdapter
 from zope.i18nmessageid import MessageFactory
