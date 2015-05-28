@@ -70,4 +70,14 @@
       profile="opengever.policy.base:default"
       />
 
+  <!-- 4300 -> 4500 -->
+  <genericsetup:upgradeStep
+      title="Install plone.app.relationfield (used for Plone 4.3 update)."
+      description=""
+      source="4300"
+      destination="4500"
+      handler="opengever.policy.base.upgrades.to4500.InstallPloneAppRelationfield"
+      profile="opengever.policy.base:default"
+      />
+
 </configure>

@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '4.4.2.dev0'
+version = '4.5.0.dev0'
 maintainer = '4teamwork AG'
 
 tests_require = [
@@ -95,6 +95,7 @@ setup(name='opengever.core',
         'plone.app.dexterity [grok, relations]',
         'plone.app.lockingbehavior',
         'plone.app.registry',
+        'plone.app.relationfield',
         'plone.app.transmogrifier',
         'plone.app.versioningbehavior',
         'plone.autoform',
