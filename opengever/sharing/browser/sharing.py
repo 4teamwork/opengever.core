@@ -43,7 +43,7 @@ class OpengeverSharingView(SharingView):
     """Special Opengever Sharing View, which display different roles
     depending on the sharing behavior which is context"""
 
-    template = ViewPageTemplateFile('sharing.pt')
+    index = ViewPageTemplateFile('sharing.pt')
 
     @memoize
     def roles(self, check_permission=True):
@@ -215,7 +215,7 @@ class SharingTab(OpengeverSharingView):
     """The sharing tab view, which show the standard sharin view,
     but wihtout the form."""
 
-    template = ViewPageTemplateFile('sharing_tab.pt')
+    index = ViewPageTemplateFile('sharing_tab.pt')
 
     @memoize
     def roles(self):
