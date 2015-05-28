@@ -91,4 +91,14 @@
         profile="opengever.ogds.base:default"
         />
 
+    <!-- 4006 -> 4301 -->
+    <genericsetup:upgradeStep
+        title="Increase lengths for several VARCHAR columns in OGDS"
+        description=""
+        source="4006"
+        destination="4301"
+        handler="opengever.ogds.base.upgrades.to4301.IncreaseOGDSColumnLengths"
+        profile="opengever.ogds.base:default"
+        />
+
 </configure>

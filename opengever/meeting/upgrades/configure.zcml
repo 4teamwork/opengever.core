@@ -265,4 +265,14 @@
         directory="profiles/4307"
         />
 
+    <!-- 4307 -> 4308 -->
+    <genericsetup:upgradeStep
+        title="Decrease lengths for several VARCHAR columns in 'meeting' models"
+        description=""
+        source="4307"
+        destination="4308"
+        handler="opengever.meeting.upgrades.to4308.DecreaseMeetingColumnLengths"
+        profile="opengever.meeting:default"
+        />
+
 </configure>

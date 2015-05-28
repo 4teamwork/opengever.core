@@ -1,4 +1,7 @@
 from opengever.base.model import Base
+from opengever.ogds.models import EMAIL_LENGTH
+from opengever.ogds.models import FIRSTNAME_LENGTH
+from opengever.ogds.models import LASTNAME_LENGTH
 from plone import api
 from sqlalchemy import Column
 from sqlalchemy import Integer
@@ -13,10 +16,10 @@ class Member(Base):
 
     member_id = Column("id", Integer, Sequence("member_id_seq"),
                        primary_key=True)
-    firstname = Column(String(256), nullable=False)
-    lastname = Column(String(256), nullable=False)
+    firstname = Column(String(FIRSTNAME_LENGTH), nullable=False)
+    lastname = Column(String(LASTNAME_LENGTH), nullable=False)
     fullname = column_property(firstname + " " + lastname)
-    email = Column(String(256))
+    email = Column(String(EMAIL_LENGTH))
 
     def __repr__(self):
         return '<Member {}>'.format(repr(self.fullname))

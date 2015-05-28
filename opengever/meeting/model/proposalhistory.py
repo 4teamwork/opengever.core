@@ -2,6 +2,7 @@ from datetime import datetime
 from opengever.base.model import Base
 from opengever.meeting import _
 from opengever.ogds.base.actor import Actor
+from opengever.ogds.models import USER_ID_LENGTH
 from plone import api
 from sqlalchemy import Column
 from sqlalchemy import DateTime
@@ -28,7 +29,7 @@ class ProposalHistory(Base):
     proposal_id = Column(Integer, ForeignKey('proposals.id'), nullable=False)
     proposal = relationship('Proposal')
     created = Column(DateTime, default=datetime.now, nullable=False)
-    userid = Column(String(256), default=get_current_user_id, nullable=False)
+    userid = Column(String(USER_ID_LENGTH), default=get_current_user_id, nullable=False)
 
     # intended to be used only by DocumentSubmitted/DocumentUpdated
     submitted_document_id = Column(Integer, ForeignKey('submitteddocuments.id'))

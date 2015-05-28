@@ -3,10 +3,13 @@ from DateTime import DateTime as ZopeDateTime
 from opengever.base.model import Base
 from opengever.base.model import Session
 from opengever.base.oguid import Oguid
+from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.globalindex.model.query import TaskQuery
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models import UNIT_ID_LENGTH
+from opengever.ogds.models import USER_ID_LENGTH
 from plone import api
 from sqlalchemy import Boolean
 from sqlalchemy import Column
@@ -46,20 +49,20 @@ class Task(Base):
 
     task_id = Column("id", Integer, Sequence("task_id_seq"), primary_key=True)
 
-    admin_unit_id = Column(String(30), index=True, nullable=False)
+    admin_unit_id = Column(String(UNIT_ID_LENGTH), index=True, nullable=False)
     int_id = Column(Integer, index=True, nullable=False)
 
     oguid = composite(Oguid, admin_unit_id, int_id)
 
     title = Column(String(MAX_TITLE_LENGTH))
-    text = Column(Text)
+    text = Column(Text())
     breadcrumb_title = Column(String(MAX_BREADCRUMB_LENGTH))
     physical_path = Column(String(256))
-    review_state = Column(String(50))
+    review_state = Column(String(WORKFLOW_STATE_LENGTH))
     icon = Column(String(50))
 
-    responsible = Column(String(32), index=True)
-    issuer = Column(String(32), index=True)
+    responsible = Column(String(USER_ID_LENGTH), index=True)
+    issuer = Column(String(USER_ID_LENGTH), index=True)
 
     task_type = Column(String(50), index=True)
     is_subtask = Column(Boolean(), default=False)
@@ -76,8 +79,10 @@ class Task(Base):
     completed = Column(Date)
 
     # XXX shit, this should be ...org_unit_ID
-    issuing_org_unit = Column(String(30), index=True, nullable=False)
-    assigned_org_unit = Column(String(30), index=True, nullable=False)
+    issuing_org_unit = Column(
+        String(UNIT_ID_LENGTH), index=True, nullable=False)
+    assigned_org_unit = Column(
+        String(UNIT_ID_LENGTH), index=True, nullable=False)
 
     predecessor_id = Column(Integer, ForeignKey('tasks.id'))
     successors = relationship(
@@ -303,7 +308,7 @@ class Task(Base):
 class TaskPrincipal(Base):
     __tablename__ = 'task_principals'
 
-    principal = Column(String(255), primary_key=True)
+    principal = Column(String(USER_ID_LENGTH), primary_key=True)
     task_id = Column(Integer, ForeignKey('tasks.id'),
                      primary_key=True)
 

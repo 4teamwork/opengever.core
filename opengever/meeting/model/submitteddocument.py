@@ -1,6 +1,7 @@
 from opengever.base.model import Base
 from opengever.base.oguid import Oguid
 from opengever.meeting.model.query import SubmittedDocumentQuery
+from opengever.ogds.models import UNIT_ID_LENGTH
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
@@ -30,14 +31,14 @@ class SubmittedDocument(Base):
 
     document_id = Column("id", Integer, Sequence("submitteddocument_id_seq"),
                          primary_key=True)
-    admin_unit_id = Column(String(30), nullable=False)
+    admin_unit_id = Column(String(UNIT_ID_LENGTH), nullable=False)
     int_id = Column(Integer, nullable=False)
     oguid = composite(Oguid, admin_unit_id, int_id)
     proposal_id = Column(Integer, ForeignKey('proposals.id'), nullable=False)
     proposal = relationship("Proposal", backref='submitted_documents')
     submitted_version = Column(Integer, nullable=False)
 
-    submitted_admin_unit_id = Column(String(30))
+    submitted_admin_unit_id = Column(String(UNIT_ID_LENGTH))
     submitted_int_id = Column(Integer)
     submitted_oguid = composite(
         Oguid, submitted_admin_unit_id, submitted_int_id)

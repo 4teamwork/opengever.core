@@ -1,3 +1,4 @@
+from opengever.ogds.models import UNIT_ID_LENGTH
 from opengever.repository import _
 from plone.directives import form
 from zope import schema
@@ -17,6 +18,7 @@ class IResponsibleOrgUnit(form.Schema):
             u'responsible_org_unit',
             default=u'Responsible organisation unit'),
         description=u'',
+        max_length=UNIT_ID_LENGTH,
         required=False,
         )
 

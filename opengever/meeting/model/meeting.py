@@ -1,5 +1,6 @@
 from collections import OrderedDict
 from opengever.base.model import Base
+from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model.query import MeetingQuery
@@ -81,7 +82,7 @@ class Meeting(Base):
     location = Column(String(256))
     start = Column(DateTime, nullable=False)
     end = Column(DateTime)
-    workflow_state = Column(String(256), nullable=False,
+    workflow_state = Column(String(WORKFLOW_STATE_LENGTH), nullable=False,
                             default=workflow.default_state.name)
 
     presidency = relationship(

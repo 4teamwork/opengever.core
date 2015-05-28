@@ -1,6 +1,7 @@
 from opengever.base.model import Base
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
+from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import proposalhistory
@@ -9,6 +10,7 @@ from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
 from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models import UNIT_ID_LENGTH
 from plone import api
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
@@ -43,12 +45,12 @@ class Proposal(Base):
 
     proposal_id = Column("id", Integer, Sequence("proposal_id_seq"),
                          primary_key=True)
-    admin_unit_id = Column(String(30), nullable=False)
+    admin_unit_id = Column(String(UNIT_ID_LENGTH), nullable=False)
     int_id = Column(Integer, nullable=False)
     oguid = composite(Oguid, admin_unit_id, int_id)
     physical_path = Column(String(256), nullable=False)
 
-    submitted_admin_unit_id = Column(String(30))
+    submitted_admin_unit_id = Column(String(UNIT_ID_LENGTH))
     submitted_int_id = Column(Integer)
     submitted_oguid = composite(
         Oguid, submitted_admin_unit_id, submitted_int_id)
@@ -68,7 +70,7 @@ class Proposal(Base):
         primaryjoin="GeneratedExcerpt.document_id==Proposal.submitted_excerpt_document_id")
 
     title = Column(String(256), nullable=False)
-    workflow_state = Column(String(256), nullable=False)
+    workflow_state = Column(String(WORKFLOW_STATE_LENGTH), nullable=False)
     legal_basis = Column(Text)
     initial_position = Column(Text)
     proposed_action = Column(Text)

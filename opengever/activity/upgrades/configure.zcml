@@ -47,4 +47,14 @@
         profile="opengever.activity:default"
         />
 
+    <!-- 4303 -> 4304 -->
+    <genericsetup:upgradeStep
+        title="Increase lengths for several VARCHAR columns in 'activity' models"
+        description=""
+        source="4303"
+        destination="4304"
+        handler="opengever.activity.upgrades.to4304.IncreaseActivityColumnLengths"
+        profile="opengever.activity:default"
+        />
+
 </configure>

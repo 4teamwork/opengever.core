@@ -2,6 +2,7 @@ from opengever.base.model import Base
 from opengever.base.oguid import Oguid
 from opengever.meeting.model.query import CommitteeQuery
 from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models import UNIT_ID_LENGTH
 from plone import api
 from sqlalchemy import Column
 from sqlalchemy import Integer
@@ -21,7 +22,7 @@ class Committee(Base):
     committee_id = Column("id", Integer, Sequence("committee_id_seq"),
                           primary_key=True)
 
-    admin_unit_id = Column(String(30), nullable=False)
+    admin_unit_id = Column(String(UNIT_ID_LENGTH), nullable=False)
     int_id = Column(Integer, nullable=False)
     oguid = composite(Oguid, admin_unit_id, int_id)
     title = Column(String(256))

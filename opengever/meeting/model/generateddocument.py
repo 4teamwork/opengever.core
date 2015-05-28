@@ -1,6 +1,7 @@
 from opengever.base.model import Base
 from opengever.base.oguid import Oguid
 from opengever.meeting.model.query import GeneratedDocumentQuery
+from opengever.ogds.models import UNIT_ID_LENGTH
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import String
@@ -25,7 +26,7 @@ class GeneratedDocument(Base):
 
     document_id = Column("id", Integer, Sequence("generateddocument_id_seq"),
                          primary_key=True)
-    admin_unit_id = Column(String(30), nullable=False)
+    admin_unit_id = Column(String(UNIT_ID_LENGTH), nullable=False)
     int_id = Column(Integer, nullable=False)
     oguid = composite(Oguid, admin_unit_id, int_id)
     generated_version = Column(Integer, nullable=False)

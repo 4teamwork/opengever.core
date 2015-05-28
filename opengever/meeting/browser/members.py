@@ -3,6 +3,9 @@ from opengever.meeting import _
 from opengever.meeting.form import ModelAddForm
 from opengever.meeting.form import ModelEditForm
 from opengever.meeting.model import Member
+from opengever.ogds.models import EMAIL_LENGTH
+from opengever.ogds.models import FIRSTNAME_LENGTH
+from opengever.ogds.models import LASTNAME_LENGTH
 from plone.directives import form
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
@@ -20,17 +23,17 @@ class IMemberModel(form.Schema):
 
     firstname = schema.TextLine(
         title=_(u"label_firstname", default=u"Firstname"),
-        max_length=256,
+        max_length=FIRSTNAME_LENGTH,
         required=True)
 
     lastname = schema.TextLine(
         title=_(u"label_lastname", default=u"Lastname"),
-        max_length=256,
+        max_length=LASTNAME_LENGTH,
         required=True)
 
     email = schema.TextLine(
         title=_(u"label_email", default=u"E-Mail"),
-        max_length=256,
+        max_length=EMAIL_LENGTH,
         required=False)
 
 
