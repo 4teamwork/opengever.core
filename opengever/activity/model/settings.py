@@ -4,6 +4,7 @@ from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import String
+from sqlalchemy.schema import Sequence
 
 
 class NotificationDefaultQuery(BaseQuery):
@@ -25,7 +26,9 @@ class NotificationDefault(Base):
 
     __tablename__ = 'notification_defaults'
 
-    notification_default_id = Column('id', Integer, primary_key=True)
+    notification_default_id = Column('id', Integer,
+                                     Sequence('notification_defaults_id_seq'),
+                                     primary_key=True)
 
     kind = Column(String(50), nullable=False, unique=True)
     mail_notification = Column(Boolean, nullable=False, default=False)

@@ -37,4 +37,14 @@
         profile="opengever.activity:default"
         />
 
+    <!-- 4302 -> 4303 -->
+    <genericsetup:upgradeStep
+        title="Use correct sequence declarations for auto-increment primary keys."
+        description=""
+        source="4302"
+        destination="4303"
+        handler="opengever.activity.upgrades.to4303.DropPsqlServerDefaults"
+        profile="opengever.activity:default"
+        />
+
 </configure>
