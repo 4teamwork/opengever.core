@@ -6,10 +6,6 @@ from opengever.testing import FunctionalTestCase
 
 class TestPastingAllowed(FunctionalTestCase):
 
-    def setUp(self):
-        super(TestPastingAllowed, self).setUp()
-        self.grant('Manager')
-
     @browsing
     def test_paste_action_not_displayed_for_contactfolder(self, browser):
         contactfolder = create(Builder('contactfolder'))
@@ -22,7 +18,7 @@ class TestPastingAllowed(FunctionalTestCase):
 
         browser.open(contactfolder)
         actions = browser.css('#plone-contentmenu-actions li').text
-        self.assertSequenceEqual(['Export as Zip', 'Sharing'], actions)
+        self.assertSequenceEqual(['Export as Zip'], actions)
 
     @browsing
     def test_paste_action_not_displayed_for_templatedossier(self, browser):
@@ -37,7 +33,7 @@ class TestPastingAllowed(FunctionalTestCase):
         browser.open(templatedossier)
         actions = browser.css('#plone-contentmenu-actions li').text
         self.assertSequenceEqual(
-            ['Export as Zip', 'Properties', 'Sharing'], actions)
+            ['Export as Zip', 'Properties'], actions)
 
     @browsing
     def test_paste_action_not_displayed_for_mails(self, browser):

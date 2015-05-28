@@ -34,10 +34,6 @@ class TestMailMetadataWithBuilder(FunctionalTestCase):
 
     use_browser = True
 
-    def setUp(self):
-        super(TestMailMetadataWithBuilder, self).setUp()
-        self.grant('Contributor', 'Editor', 'Member', 'Manager')
-
     def create_mail(self):
         mail = create(Builder("mail").with_message(MAIL_DATA))
         return mail

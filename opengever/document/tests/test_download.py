@@ -92,7 +92,6 @@ class TestDocumentDownloadConfirmation(FunctionalTestCase):
 
     def setUp(self):
         super(TestDocumentDownloadConfirmation, self).setUp()
-        self.grant('Manager')
         login(self.portal, TEST_USER_NAME)
         self.document = create(Builder("document").titled(u'A letter for you'))
 

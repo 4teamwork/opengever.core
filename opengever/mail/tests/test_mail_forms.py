@@ -10,7 +10,6 @@ class TestMailForms(FunctionalTestCase):
 
     def setUp(self):
         super(TestMailForms, self).setUp()
-        self.grant('Manager')
         login(self.portal, TEST_USER_NAME)
         self.mail = create(Builder("mail"))
 

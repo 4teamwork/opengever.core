@@ -38,7 +38,6 @@ class TestSendDocument(FunctionalTestCase):
 
     def setUp(self):
         super(TestSendDocument, self).setUp()
-        self.grant('Member', 'Contributor', 'Manager')
 
         create(Builder('fixture')
                .with_user(firstname="Test", lastname="User")

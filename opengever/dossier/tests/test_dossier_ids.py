@@ -5,10 +5,6 @@ from opengever.testing import FunctionalTestCase
 
 class DossierIdsTestCase(FunctionalTestCase):
 
-    def setUp(self):
-        super(DossierIdsTestCase, self).setUp()
-        self.grant('Contributor')
-
     def test_dossier_id_format(self):
         dossier1 = create(Builder("dossier"))
         dossier2 = create(Builder("dossier"))

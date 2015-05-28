@@ -13,7 +13,6 @@ class TestMoveItems(FunctionalTestCase):
 
     def setUp(self):
         super(TestMoveItems, self).setUp()
-        self.grant('Contributor')
         self.request = self.layer['request']
 
         self.source_repo = create(Builder("repository"))

@@ -3,42 +3,12 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages import plone
-from opengever.base.adapters import ReferenceNumberPrefixAdpater
 from opengever.base.interfaces import IReferenceNumberSettings
 from opengever.repository.behaviors.referenceprefix import IReferenceNumberPrefix
-from opengever.repository.repositoryfolder import IRepositoryFolderSchema
 from opengever.testing import FunctionalTestCase
-from plone.dexterity.interfaces import IDexterityFTI
 from plone.protect import createToken
 from plone.registry.interfaces import IRegistry
-from zope.component import createObject
 from zope.component import getUtility
-from zope.component import queryUtility
-import transaction
-
-
-class TestRepositoryFolder(FunctionalTestCase):
-
-    def test_adding(self):
-        self.grant('Reviewer', 'Manager')
-        self.portal.invokeFactory('opengever.repository.repositoryfolder', 'repository1')
-        r1 = self.portal['repository1']
-        self.failUnless(IRepositoryFolderSchema.providedBy(r1))
-
-    def test_fti(self):
-        fti = queryUtility(IDexterityFTI, name='opengever.repository.repositoryfolder')
-        self.assertNotEquals(None, fti)
-
-    def test_schema(self):
-        fti = queryUtility(IDexterityFTI, name='opengever.repository.repositoryfolder')
-        schema = fti.lookupSchema()
-        self.assertEquals(IRepositoryFolderSchema, schema)
-
-    def test_factory(self):
-        fti = queryUtility(IDexterityFTI, name='opengever.repository.repositoryfolder')
-        factory = fti.factory
-        new_object = createObject(factory)
-        self.failUnless(IRepositoryFolderSchema.providedBy(new_object))
 
 
 class TestRepositoryFolderTitleAccessor(FunctionalTestCase):
@@ -72,12 +42,10 @@ class TestRepositoryFolderTitleAccessor(FunctionalTestCase):
 
 class TestRepositoryFolderWithBrowser(FunctionalTestCase):
 
-    def setUp(self):
-        super(TestRepositoryFolderWithBrowser, self).setUp()
-        self.grant('Manager')
-
     @browsing
     def test_repository_folder(self, browser):
+        self.grant('Manager')
+
         browser.login().open()
         factoriesmenu.add('RepositoryRoot')
         browser.fill({'Title': 'Registraturplan'}).save()

@@ -11,7 +11,6 @@ class TestBaseInboxOverview(FunctionalTestCase):
 
     def setUp(self):
         super(TestBaseInboxOverview, self).setUp()
-        self.grant('Owner', 'Editor', 'Contributor')
 
         self.user2, self.org_unit2, self.admin_unit2 = create(
             Builder('fixture')
@@ -59,9 +58,9 @@ class TestInboxOverviewDocumentBox(TestBaseInboxOverview):
                              .having(responsible_org_unit='client2'))
 
         doc1 = create(Builder('document')
-                       .titled('Doc 1').within(sub_inbox_1))
+                      .titled('Doc 1').within(sub_inbox_1))
         create(Builder('document')
-                       .titled('Doc 2').within(sub_inbox_2))
+               .titled('Doc 2').within(sub_inbox_2))
 
         sub_inbox_1_view = sub_inbox_1.restrictedTraverse(
             'tabbedview_view-overview')
@@ -136,8 +135,8 @@ class TestInboxOverviewAssignedInboxTasks(TestBaseInboxOverview):
                        .having(responsible='inbox:client1'))
 
         task3 = create(Builder('task')
-                      .with_modification_date(DateTime(2014, 1, 3))
-                      .having(responsible='inbox:client1'))
+                       .with_modification_date(DateTime(2014, 1, 3))
+                       .having(responsible='inbox:client1'))
 
         self.assertEquals(
             [task.get_sql_object() for task in [task3, task1, task2]],
@@ -193,8 +192,8 @@ class TestInboxOverviewIssuedInboxTasks(TestBaseInboxOverview):
                        .having(issuer='inbox:client1'))
 
         task3 = create(Builder('task')
-                      .with_modification_date(DateTime(2014, 1, 3))
-                      .having(issuer='inbox:client1'))
+                       .with_modification_date(DateTime(2014, 1, 3))
+                       .having(issuer='inbox:client1'))
 
         self.assertEquals(
             [task.get_sql_object() for task in [task3, task1, task2]],

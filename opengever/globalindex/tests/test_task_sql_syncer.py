@@ -58,7 +58,7 @@ class TestTaskSQLSyncer(FunctionalTestCase):
         self.assertEqual('subdossier', task.containing_subdossier)
         self.assertEqual(2, task.dossier_sequence_number)
         self.assertEqual('Lorem ipsum dolor sit amet, consectetur', task.text)
-        self.assertSequenceEqual(['admin', TEST_USER_ID], task.principals)
+        self.assertSequenceEqual([TEST_USER_ID], task.principals)
         self.assertIsNone(task.predecessor)
 
     def test_sql_task_is_updated_on_plone_object_update(self):
@@ -91,7 +91,7 @@ class TestTaskSQLSyncer(FunctionalTestCase):
         self.assertEqual('subdossier', task.containing_subdossier)
         self.assertEqual(2, task.dossier_sequence_number)
         self.assertEqual('Lorem ipsum dolor sit amet, consectetur', task.text)
-        self.assertSequenceEqual(['admin', TEST_USER_ID], task.principals)
+        self.assertSequenceEqual([TEST_USER_ID], task.principals)
         self.assertIsNone(task.predecessor)
 
     def test_sql_task_is_updated_when_task_is_moved(self):

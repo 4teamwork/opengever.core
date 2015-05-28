@@ -5,6 +5,10 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Drop Owner from the workflows of the following content-types: document, contact, dossier,
+  templatedossier, forwarding, inbox, mail, repository, repositoryroot, task.
+  [deiferni]
+
 - Fixed ResponseDescription when adding mails to a task.
   [phgross]
 

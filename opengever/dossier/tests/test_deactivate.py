@@ -4,7 +4,6 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import error_messages
 from opengever.testing import FunctionalTestCase
 from plone import api
-from plone.app.testing import TEST_USER_ID
 from plone.protect import createToken
 
 
@@ -12,7 +11,6 @@ class TestDossierDeactivation(FunctionalTestCase):
 
     def setUp(self):
         super(TestDossierDeactivation, self).setUp()
-        self.grant('Editor')
         self.dossier = create(Builder('dossier'))
 
     @browsing
@@ -32,7 +30,7 @@ class TestDossierDeactivation(FunctionalTestCase):
     def test_fails_with_checked_out_documents(self, browser):
         create(Builder('document')
                .within(self.dossier)
-               .checked_out_by(TEST_USER_ID))
+               .checked_out())
 
         browser.login().open(self.dossier, view='transition-deactivate',
                              data={'_authenticator': createToken()})

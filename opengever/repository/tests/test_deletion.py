@@ -13,9 +13,8 @@ class TestRepositoryDeleter(FunctionalTestCase):
     def setUp(self):
         super(TestRepositoryDeleter, self).setUp()
 
-        self.repository_root = create(Builder('repository_root'))
-        self.repository = create(Builder('repository')
-                                 .within(self.repository_root))
+        self.repository_root, self.repository = create(
+            Builder('repository_tree'))
 
         self.grant('Administrator')
 
@@ -49,9 +48,8 @@ class TestRepositoryDeletion(FunctionalTestCase):
     def setUp(self):
         super(TestRepositoryDeletion, self).setUp()
 
-        self.repository_root = create(Builder('repository_root'))
-        self.repository = create(Builder('repository')
-                                 .within(self.repository_root))
+        self.repository_root, self.repository = create(
+            Builder('repository_tree'))
 
         self.grant('Administrator')
 

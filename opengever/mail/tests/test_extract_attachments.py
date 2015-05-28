@@ -44,9 +44,6 @@ class TestAttachmentExtraction(FunctionalTestCase):
 
     def setUp(self):
         super(TestAttachmentExtraction, self).setUp()
-
-        self.grant('Owner', 'Editor', 'Contributor', 'Manager')
-
         self.dossier = create(Builder('dossier'))
         self.mail = create(Builder('mail')
                            .within(self.dossier)

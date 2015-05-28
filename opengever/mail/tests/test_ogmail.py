@@ -11,10 +11,6 @@ MAIL_DATA = resource_string('opengever.mail.tests', 'mail.txt')
 class TestOGMailAddition(FunctionalTestCase):
     use_browser = True
 
-    def setUp(self):
-        super(TestOGMailAddition, self).setUp()
-        self.grant('Contributor', 'Editor', 'Member', 'Manager')
-
     def test_og_mail_behavior(self):
         mail = create(Builder("mail"))
         self.assertTrue(

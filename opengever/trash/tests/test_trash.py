@@ -6,7 +6,6 @@ from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
 from opengever.trash.trash import ITrashed
-from plone.app.testing import TEST_USER_ID
 from plone.protect import createToken
 
 
@@ -80,7 +79,7 @@ class TestTrash(FunctionalTestCase):
     def test_trashing_checked_out_documents_is_not_possible(self, browser):
         document = create(Builder('document')
                           .within(self.dossier)
-                          .checked_out_by(TEST_USER_ID)
+                          .checked_out()
                           .titled(u'Dokum\xe4nt C'))
 
         data = {'paths:list': ['/'.join(document.getPhysicalPath())],

@@ -14,18 +14,19 @@ class TestReferencePrefixManager(FunctionalTestCase):
 
     def setUp(self):
         super(TestReferencePrefixManager, self).setUp()
-        self.grant('Manager')
+
+        self.grant('Administrator')
 
         self.root = create(Builder('repository_root'))
         self.repo = create(Builder('repository')
-            .titled(u'Weiterbildung')
-            .within(self.root))
+                           .titled(u'Weiterbildung')
+                           .within(self.root))
         self.repo1 = create(Builder('repository')
-                        .titled("One")
-                        .within(self.repo))
+                            .titled("One")
+                            .within(self.repo))
         self.repo2 = create(Builder('repository')
-                        .titled("Two")
-                        .within(self.repo))
+                            .titled("Two")
+                            .within(self.repo))
 
         self.reference_manager = ReferenceNumberPrefixAdpater(self.repo)
         # move repo1 to prefix 3 which leaves prefix 1 unused
@@ -91,7 +92,7 @@ class TestReferencePrefixManager(FunctionalTestCase):
             browser.css('#reference_prefix_manager_table tbody').first.text)
 
     @browsing
-    def test_manager_is_hided_from_user_without_permission(self, browser):
+    def test_manager_is_hidden_from_user_without_permission(self, browser):
         self.grant('Contributor')
 
         with self.assertRaises(Unauthorized):

@@ -100,7 +100,6 @@ class TestTaskWorkflow(FunctionalTestCase):
         self.wf_tool = getToolByName(self.portal, 'portal_workflow')
 
     def test_document_in_a_closed_tasks_are_still_editable(self):
-        self.grant('Editor')
         task = create(Builder('task')
                       .having(issuer=TEST_USER_ID,
                               responsible=TEST_USER_ID)
@@ -117,7 +116,7 @@ class TestTaskWorkflow(FunctionalTestCase):
         self.browser.assert_portal_message('Changes saved')
 
     def test_editing_document_inside_a_task_inside_a_closed_dossier_raise_unauthorized(self):
-        self.grant('Editor', 'Reviewer')
+        self.grant('Administrator')
         dossier = create(Builder('dossier'))
 
         task = create(Builder('task')

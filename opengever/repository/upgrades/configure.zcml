@@ -3,60 +3,60 @@
     xmlns:upgrade-step="http://namespaces.zope.org/ftw.upgrade"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
 
-	<genericsetup:upgradeStep
-	    title="Add reference prefix manager."
-	    description=""
-	    source="1"
-	    destination="2601"
-	    handler="opengever.repository.upgrades.to2601.ActivatePrefixManager"
-	    profile="opengever.repository:default"
-	    />
+  <genericsetup:upgradeStep
+      title="Add reference prefix manager."
+      description=""
+      source="1"
+      destination="2601"
+      handler="opengever.repository.upgrades.to2601.ActivatePrefixManager"
+      profile="opengever.repository:default"
+      />
 
-	<genericsetup:registerProfile
-	    name="2601"
-	    title="opengever.repository: upgrade profile 2601"
-	    description=""
-	    directory="profiles/2601"
-	    for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
-	    provides="Products.GenericSetup.interfaces.EXTENSION"
-	    />
+  <genericsetup:registerProfile
+      name="2601"
+      title="opengever.repository: upgrade profile 2601"
+      description=""
+      directory="profiles/2601"
+      for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
 
-	<genericsetup:upgradeStep
-	    title="Restrict reference prefix manager to repository and repositoryroot."
-	    description=""
-	    source="2601"
-	    destination="2602"
-	    handler="opengever.repository.upgrades.to2602.RestrictPrefixManager"
-	    profile="opengever.repository:default"
-	    />
+  <genericsetup:upgradeStep
+      title="Restrict reference prefix manager to repository and repositoryroot."
+      description=""
+      source="2601"
+      destination="2602"
+      handler="opengever.repository.upgrades.to2602.RestrictPrefixManager"
+      profile="opengever.repository:default"
+      />
 
-	<genericsetup:registerProfile
-	    name="2602"
-	    title="opengever.repository: upgrade profile 2602"
-	    description=""
-	    directory="profiles/2602"
-	    for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
-	    provides="Products.GenericSetup.interfaces.EXTENSION"
-	    />
+  <genericsetup:registerProfile
+      name="2602"
+      title="opengever.repository: upgrade profile 2602"
+      description=""
+      directory="profiles/2602"
+      for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
 
   <!-- 2602 -> 4100 -->
-	<genericsetup:upgradeStep
-	    title="Adjust permissions for repository and repositoryroot"
-	    description=""
-	    source="2602"
-	    destination="4100"
-	    handler="opengever.repository.upgrades.to4100.AdjustRepositoryPermissions"
-	    profile="opengever.repository:default"
-	    />
+  <genericsetup:upgradeStep
+      title="Adjust permissions for repository and repositoryroot"
+      description=""
+      source="2602"
+      destination="4100"
+      handler="opengever.repository.upgrades.to4100.AdjustRepositoryPermissions"
+      profile="opengever.repository:default"
+      />
 
-	<genericsetup:registerProfile
-	    name="4100"
-	    title="opengever.repository: upgrade profile 4100"
-	    description=""
-	    directory="profiles/4100"
-	    for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
-	    provides="Products.GenericSetup.interfaces.EXTENSION"
-	    />
+  <genericsetup:registerProfile
+      name="4100"
+      title="opengever.repository: upgrade profile 4100"
+      description=""
+      directory="profiles/4100"
+      for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
 
   <!-- 4100 -> 4101 -->
   <upgrade-step:importProfile
@@ -66,5 +66,24 @@
       destination="4101"
       directory="profiles/4101"
       />
+
+  <!-- 4101 -> 4300 -->
+  <genericsetup:upgradeStep
+      title="Drop owner from repository workflows."
+      description=""
+      source="4101"
+      destination="4300"
+      handler="opengever.repository.upgrades.to4300.DropOwner"
+      profile="opengever.repository:default"
+      />
+
+  <genericsetup:registerProfile
+      name="4300"
+      title="opengever.repository: upgrade profile 4300"
+      description=""
+      directory="profiles/4300"
+      for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
 
 </configure>

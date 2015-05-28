@@ -3,6 +3,7 @@ from plone.dexterity.fti import DexterityFTI
 from opengever.testing import FunctionalTestCase
 import transaction
 
+
 class TestCreatorBehavior(FunctionalTestCase):
     """
     The Creator behavior sets the creator an content creation.
@@ -13,7 +14,6 @@ class TestCreatorBehavior(FunctionalTestCase):
 
     def setUp(self):
         super(TestCreatorBehavior, self).setUp()
-        self.grant('Contributor')
 
         fti = DexterityFTI('ReferenceFTI')
         fti.behaviors = ('opengever.base.behaviors.creator.ICreator',)

@@ -27,7 +27,6 @@ class TestDocPropertyWriter(FunctionalTestCase):
 
     def setUp(self):
         super(TestDocPropertyWriter, self).setUp()
-        self.grant('Manager')
         self.setup_fullname(fullname='Peter')
         self.set_docproperty_export_enabled(True)
 

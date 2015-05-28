@@ -187,4 +187,23 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <!-- 4303 -> 4304 -->
+    <genericsetup:upgradeStep
+        title="Drop owner from dossier workflows."
+        description=""
+        source="4303"
+        destination="4304"
+        handler="opengever.dossier.upgrades.to4304.DropOwner"
+        profile="opengever.dossier:default"
+        />
+
+    <genericsetup:registerProfile
+        name="4304"
+        title="opengever.dossier: upgrade profile 4304"
+        description=""
+        directory="profiles/4304"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
 </configure>

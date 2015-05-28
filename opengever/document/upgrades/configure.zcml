@@ -175,4 +175,23 @@
         directory="profiles/4300"
         />
 
+    <!-- 4300 -> 4301 -->
+    <genericsetup:upgradeStep
+        title="Drop owner from document workflow."
+        description=""
+        source="4300"
+        destination="4301"
+        handler="opengever.document.upgrades.to4301.DropOwner"
+        profile="opengever.document:default"
+        />
+
+    <genericsetup:registerProfile
+        name="4301"
+        title="opengever.document: upgrade profile 4301"
+        description=""
+        directory="profiles/4301"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
 </configure>

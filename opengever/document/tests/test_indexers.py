@@ -16,10 +16,6 @@ import datetime
 
 class TestDocumentIndexers(FunctionalTestCase):
 
-    def setUp(self):
-        super(TestDocumentIndexers, self).setUp()
-        self.grant('Manager')
-
     def test_author_indexers(self):
         """check the author indexers."""
 

@@ -50,7 +50,6 @@ class TestTaskIntegration(FunctionalTestCase):
         self.assertEquals([t2.get_sql_object()], view.get_sub_tasks())
 
     def test_relateddocuments(self):
-        self.grant('Manager')
         # create document and append it to the relatedItems of the task
         doc3 = create(Builder("document").titled("a-testthree"))
         intids = getUtility(IIntIds)

@@ -38,10 +38,6 @@ import transaction
 
 class TestDocumentConfiguration(FunctionalTestCase):
 
-    def setUp(self):
-        super(TestDocumentConfiguration, self).setUp()
-        self.grant('Contributor')
-
     def test_documents_provide_IDocumentSchema(self):
         document = create(Builder("document"))
         self.assertProvides(document, interface=IDocumentSchema)
@@ -67,10 +63,6 @@ class TestDocumentConfiguration(FunctionalTestCase):
 
 
 class TestDocument(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestDocument, self).setUp()
-        self.grant('Contributor')
 
     def test_upload_file(self):
         document = create(Builder("document"))
@@ -143,7 +135,7 @@ class TestDocument(FunctionalTestCase):
 
     def test_checked_out_by_returns_userid(self):
         document_a = create(Builder('document')
-                            .checked_out_by(TEST_USER_ID))
+                            .checked_out())
         document_b = create(Builder('document'))
 
         self.assertEquals(TEST_USER_ID, document_a.checked_out_by())
@@ -151,7 +143,7 @@ class TestDocument(FunctionalTestCase):
 
     def test_is_checked_in(self):
         document_a = create(Builder('document')
-                            .checked_out_by(TEST_USER_ID))
+                            .checked_out())
         document_b = create(Builder('document'))
 
         self.assertTrue(document_a.is_checked_out())
@@ -214,10 +206,6 @@ class TestDocument(FunctionalTestCase):
 
 class TestDocumentDefaultValues(FunctionalTestCase):
 
-    def setUp(self):
-        super(TestDocumentDefaultValues, self).setUp()
-        self.grant('Contributor')
-
     def test_default_document_date_is_today(self):
         self.assertEquals(date.today(), self.default_value_for('document_date'))
 
@@ -250,7 +238,6 @@ class TestDocumentNumbering(FunctionalTestCase):
 
     def setUp(self):
         super(TestDocumentNumbering, self).setUp()
-        self.grant('Contributor')
 
         fti = DexterityFTI('SimpleDocument')
         fti.klass = 'plone.dexterity.content.Container'
@@ -463,17 +450,17 @@ class TestDocumentValidatorsInEditFormForCheckedOutDoc(FunctionalTestCase):
         super(TestDocumentValidatorsInEditFormForCheckedOutDoc, self).setUp()
         self.dossier = create(Builder('dossier'))
         self.doc_with_file = create(Builder('document')
-                                   .within(self.dossier)
-                                   .titled("Document with file")
-                                   .having(preserved_as_paper=True)
-                                   .with_dummy_content()
-                                   .checked_out_by(TEST_USER_ID))
+                                    .within(self.dossier)
+                                    .titled("Document with file")
+                                    .having(preserved_as_paper=True)
+                                    .with_dummy_content()
+                                    .checked_out())
 
         self.doc_without_file = create(Builder('document')
                                        .within(self.dossier)
                                        .titled("Document without file")
                                        .having(preserved_as_paper=True)
-                                       .checked_out_by(TEST_USER_ID))
+                                       .checked_out())
 
     @browsing
     def test_editing_and_saving_valid_documents_works(self, browser):
@@ -517,8 +504,6 @@ class TestPublicTrial(FunctionalTestCase):
 
     def setUp(self):
         super(TestPublicTrial, self).setUp()
-
-        self.grant('Reader', 'Contributor')
 
         self.document = create(Builder('document')
                                .having(public_trial='private'))

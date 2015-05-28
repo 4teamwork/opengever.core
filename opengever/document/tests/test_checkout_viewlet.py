@@ -2,7 +2,6 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.testing import FunctionalTestCase
-from plone.app.testing import TEST_USER_ID
 
 
 class TestCheckedOutViewlet(FunctionalTestCase):
@@ -11,7 +10,7 @@ class TestCheckedOutViewlet(FunctionalTestCase):
     def test_viewlet_show_msg_when_document_is_checked_out(self, browser):
         document = create(Builder('document')
                           .titled(u'TestDocument')
-                          .checked_out_by(TEST_USER_ID))
+                          .checked_out())
 
         browser.login().open(document)
 

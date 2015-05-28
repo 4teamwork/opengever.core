@@ -1,0 +1,25 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:upgrade-step="http://namespaces.zope.org/ftw.upgrade">
+
+    <!-- 1 -> 4300 -->
+    <genericsetup:upgradeStep
+        title="Drop owner from contact workflow."
+        description=""
+        source="1"
+        destination="4300"
+        handler="opengever.contact.upgrades.to4300.DropOwner"
+        profile="opengever.contact:default"
+        />
+
+    <genericsetup:registerProfile
+        name="4300"
+        title="opengever.contact: upgrade profile 4300"
+        description=""
+        directory="profiles/4300"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+</configure>

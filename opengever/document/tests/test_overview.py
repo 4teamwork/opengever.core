@@ -22,8 +22,11 @@ class TestDocumentOverview(FunctionalTestCase):
 
     def setUp(self):
         super(TestDocumentOverview, self).setUp()
-        self.grant('Manager')
-        self.document = create(Builder('document').with_dummy_content())
+        self.repo, self.repo_folder = create(Builder('repository_tree'))
+
+        self.dossier = create(Builder('dossier').within(self.repo_folder))
+        self.document = create(
+            Builder('document').within(self.dossier).with_dummy_content())
 
         transaction.commit()
 
@@ -33,7 +36,6 @@ class TestDocumentOverview(FunctionalTestCase):
 
     @browsing
     def test_overview_has_edit_link(self, browser):
-
         browser.login().open(self.document, view='tabbedview_view-overview')
         self.assertEquals('Edit Document',
                           browser.css('a.function-edit').first.text)
@@ -44,7 +46,6 @@ class TestDocumentOverview(FunctionalTestCase):
 
     @browsing
     def test_overview_has_creator_link(self, browser):
-
         browser.login().open(self.document, view='tabbedview_view-overview')
         self.assertEquals('Test User (test_user_1_)',
                           browser.css('td [href*="user-details"]').first.text)
@@ -55,7 +56,6 @@ class TestDocumentOverview(FunctionalTestCase):
 
     @browsing
     def test_overview_has_copy_link(self, browser):
-
         browser.login().open(self.document, view='tabbedview_view-overview')
         self.assertEquals('Download copy',
                           browser.css('a.function-download-copy').first.text)
@@ -71,12 +71,11 @@ class TestDocumentOverview(FunctionalTestCase):
          - checked out by information
          - edit link is still available"""
 
-        document = create(Builder('document').with_dummy_content())
         manager = queryMultiAdapter(
-            (document, self.portal.REQUEST), ICheckinCheckoutManager)
+            (self.document, self.portal.REQUEST), ICheckinCheckoutManager)
         manager.checkout()
 
-        browser.login().visit(document, view='tabbedview_view-overview')
+        browser.login().visit(self.document, view='tabbedview_view-overview')
 
         self.assertEquals('Test User (test_user_1_)',
                           browser.css('[href*="user-details"]').first.text)
@@ -88,18 +87,17 @@ class TestDocumentOverview(FunctionalTestCase):
 
     @browsing
     def test_checkout_and_edit(self, browser):
-        document = create(Builder('document').with_dummy_content())
         manager = queryMultiAdapter(
-            (document, self.portal.REQUEST), ICheckinCheckoutManager)
+            (self.document, self.portal.REQUEST), ICheckinCheckoutManager)
 
         self.assertEquals(
             None, manager.get_checked_out_by(),
             'Didn\'t expect the document to be checked out yet.')
 
-        browser.login().open(document, view='tabbedview_view-overview')
+        browser.login().open(self.document, view='tabbedview_view-overview')
         browser.find('Edit Document').click()
 
-        self.assertEquals('http://nohost/plone/document-2', browser.url,
+        self.assertEquals(self.document.absolute_url(), browser.url,
                           'editing_document should redirect back to document')
 
         self.assertEquals(
@@ -107,7 +105,7 @@ class TestDocumentOverview(FunctionalTestCase):
             'The document should be checked out by the test user now.')
 
         self.assertIn(
-            'http://nohost/plone/document-2/external_edit',
+            self.document.absolute_url() + '/external_edit',
             browser.css('script.redirector').first.text,
             'Redirector should open external_edit.')
 
@@ -118,13 +116,12 @@ class TestDocumentOverview(FunctionalTestCase):
          - checked out information
          - edit link is inactive"""
 
-        document = create(Builder('document').with_dummy_content())
-        IAnnotations(document)[
+        IAnnotations(self.document)[
             CHECKIN_CHECKOUT_ANNOTATIONS_KEY] = 'hugo.boss'
 
         transaction.commit()
 
-        browser.login().visit(document, view='tabbedview_view-overview')
+        browser.login().visit(self.document, view='tabbedview_view-overview')
 
         self.assertEquals('Edit Document',
                           browser.css('.function-edit-inactive').first.text)
@@ -135,25 +132,22 @@ class TestDocumentOverview(FunctionalTestCase):
     @browsing
     def test_checkout_not_possible_if_locked_by_another_user(self, browser):
         second_user = create(Builder('user').with_roles('Member'))
-        document = create(Builder('document').with_dummy_content())
 
         login(self.portal, second_user.getId())
-        lockable = IRefreshableLockable(document)
+        lockable = IRefreshableLockable(self.document)
         lockable.lock()
 
         logout()
         login(self.portal, TEST_USER_NAME)
         transaction.commit()
 
-        browser.login().visit(document, view='tabbedview_view-overview')
+        browser.login().visit(self.document, view='tabbedview_view-overview')
         self.assertFalse(browser.css('a.function-edit'),
                          'There should be no edit link')
 
     @browsing
     def test_classification_fields_are_shown(self, browser):
-
-        document = create(Builder('document'))
-        browser.login().visit(document, view='tabbedview_view-overview')
+        browser.login().visit(self.document, view='tabbedview_view-overview')
 
         self.assertEquals(
             'unprotected',
@@ -177,7 +171,7 @@ class TestDocumentOverview(FunctionalTestCase):
 
     @browsing
     def test_modify_public_trial_link_NOT_shown_on_open_dossier(self, browser):
-        dossier = create(Builder('dossier'))
+        dossier = create(Builder('dossier').within(self.repo_folder))
         document = create(Builder('document')
                           .within(dossier)
                           .with_dummy_content())
@@ -190,7 +184,8 @@ class TestDocumentOverview(FunctionalTestCase):
 
     @browsing
     def test_modify_public_trial_is_visible_on_closed_dossier(self, browser):
-        dossier = create(Builder('dossier').in_state('dossier-state-resolved'))
+        dossier = create(
+            Builder('dossier').within(self.repo_folder).in_state('dossier-state-resolved'))
         document = create(Builder('document')
                           .within(dossier)
                           .with_dummy_content())
@@ -222,12 +217,10 @@ class TestOverviewMeetingFeatures(FunctionalTestCase):
 
     def setUp(self):
         super(TestOverviewMeetingFeatures, self).setUp()
+        self.repo_root, self.repo_folder = create(Builder('repository_tree'))
 
-        self.repository_root = create(Builder('repository_root'))
-        self.repository_folder = create(
-            Builder('repository').within(self.repository_root))
         self.dossier = create(
-            Builder('dossier').within(self.repository_folder))
+            Builder('dossier').within(self.repo_folder))
         self.document = create(Builder('document').within(self.dossier))
 
         container = create(Builder('committee_container'))

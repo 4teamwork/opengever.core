@@ -1,9 +1,10 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import FunctionalTestCase
-from plone.app.testing import TEST_USER_NAME
 from plone.app.testing import login
+from plone.app.testing import TEST_USER_NAME
 from zope.component import queryMultiAdapter
 import transaction
 
@@ -13,54 +14,53 @@ class TestDocumentIntegration(FunctionalTestCase):
 
     def setUp(self):
         super(TestDocumentIntegration, self).setUp()
-        self.grant('Manager')
         login(self.portal, TEST_USER_NAME)
-        self.document = create(Builder("document")
-                               .attach_file_containing(u"bla bla", name=u"test.txt")
-                               .without_default_title()
-                               .having(digitally_available=True,
-                                       keywords=()))
 
-    def test_edit_form_document_not_checked_out(self):
-        self.browser.open('%s/edit' % self.document.absolute_url())
+        self.repo, self.repo_folder = create(Builder('repository_tree'))
 
-        filename_display = '''
-    <span id="form-widgets-file" class="named-file-widget namedblobfile-field">
-    <span>
-        <span>test.txt</span>'''
+        self.dossier = create(Builder('dossier').within(self.repo_folder))
+        self.document = create(
+            Builder('document')
+            .within(self.dossier)
+            .titled(u'Document1')
+            .having(digitally_available=True)
+            .with_dummy_content())
 
-        self.assertTrue(filename_display in self.browser.contents)
+    @browsing
+    def test_edit_form_document_not_checked_out(self, browser):
+        browser.login().open(self.document, view='edit')
+
+        self.assertEqual(
+            u'document1.doc \u2014 0 KB',
+            browser.css('.named-file-widget.namedblobfile-field').first.text)
 
         # edit should not be posssible
-        self.assertPageContainsNot('Keep existing file')
-        self.assertPageContainsNot('Remove existing file')
-        self.assertPageContainsNot('Replace with new file')
+        self.assertEqual([], browser.css('#form-widgets-file label').text)
 
         # save should not adjust the file
-        self.browser.getControl(name="form.widgets.title").value = 'Other title'
-        self.browser.getControl(name="form.buttons.save").click()
+        browser.fill({'Title': 'foo'})
+        browser.find('Save').click()
         self.assertTrue(self.document.file)
 
-
-    def test_edit_form_document_is_checked_out(self):
+    @browsing
+    def test_edit_form_document_is_checked_out(self, browser):
         # checkout the document
         manager = queryMultiAdapter((self.document, self.document.REQUEST),
                                     ICheckinCheckoutManager)
         manager.checkout()
         transaction.commit()
 
-        self.browser.open('%s/edit' % self.document.absolute_url())
+        browser.login().open(self.document, view='edit')
 
-        filename_display = '''<span class="named-file-widget namedblobfile-field" id="form-widgets-file">
-    <span>
-        <a class="link-overlay" href="http://nohost/plone/document-1/file_download_confirmation">test.txt</a>'''
-
-        self.assertPageContains(filename_display)
+        self.assertEqual(
+            '{}/file_download_confirmation'.format(self.document.absolute_url()),
+            browser.css('#form-widgets-file a.link-overlay').first.get('href'))
 
         # edit should be posssible
-        self.assertPageContains('Keep existing file')
-        self.assertPageContains('Remove existing file')
-        self.assertPageContains('Replace with new file')
+        self.assertEqual(
+            ['Keep existing file', 'Remove existing file', 'Replace with new file'],
+            browser.css('#form-widgets-file label').text)
+
         manager.cancel()
 
     def test_edit_form_without_document(self):

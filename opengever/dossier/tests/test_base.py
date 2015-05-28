@@ -10,7 +10,6 @@ class TestDossierContainer(FunctionalTestCase):
 
     def setUp(self):
         super(TestDossierContainer, self).setUp()
-        self.grant('Reader')
 
     def test_is_all_supplied_without_any_subdossiers(self):
         dossier = create(Builder("dossier"))
@@ -152,7 +151,7 @@ class TestDossierChecks(FunctionalTestCase):
         dossier = create(Builder("dossier"))
         create(Builder('document')
                .within(dossier)
-               .checked_out_by(TEST_USER_ID))
+               .checked_out())
         self.assertFalse(dossier.is_all_checked_in())
 
     def test_its_not_all_checked_in_when_a_document_inside_the_subdossier_is_checked_out(self):
@@ -160,7 +159,7 @@ class TestDossierChecks(FunctionalTestCase):
         subdossier = create(Builder("dossier").within(dossier))
         create(Builder('document')
                .within(subdossier)
-               .checked_out_by(TEST_USER_ID))
+               .checked_out())
 
         self.assertFalse(dossier.is_all_checked_in())
 

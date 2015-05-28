@@ -12,7 +12,6 @@ class TestMailByline(TestBylineBase):
 
     def setUp(self):
         super(TestMailByline, self).setUp()
-        self.grant('Manager')
 
         create(Builder('fixture').with_hugo_boss(email='from@example.org'))
 

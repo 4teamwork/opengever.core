@@ -7,7 +7,7 @@ class TestSourceBinder(FunctionalTestCase):
 
     def setUp(self):
         super(TestSourceBinder, self).setUp()
-        self.grant('Reviewer', 'Manager')
+        self.grant('Administrator', 'Contributor', 'Editor', 'Reader')
 
         # Repository 1
         reporoot1 = createContentInContainer(self.portal, 'opengever.repository.repositoryroot', title="Ordnungssystem1")
@@ -20,7 +20,6 @@ class TestSourceBinder(FunctionalTestCase):
         createContentInContainer(reporoot2, 'opengever.repository.repositoryfolder', title="Ordnungsposition4")
         createContentInContainer(reporoot2, 'opengever.repository.repositoryfolder', title="Ordnungsposition5")
         createContentInContainer(reporoot2, 'opengever.repository.repositoryfolder', title="Ordnungsposition6")
-
 
     def test_sourcebinder(self):
         """
