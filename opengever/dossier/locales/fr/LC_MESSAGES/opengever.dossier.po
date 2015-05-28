@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-05-28 10:28+0000\n"
+"POT-Creation-Date: 2015-05-28 12:08+0000\n"
 "PO-Revision-Date: 2012-09-10 10:17+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,7 +45,7 @@ msgstr "Effacer la participation"
 msgid "Document ${name} is connected to a Task. Please move the Task."
 msgstr "Document ${name} est lié avec une tâche, déplacer la tâche, svp."
 
-#: ./opengever/dossier/browser/overview_templates/overview.pt:8
+#: ./opengever/dossier/browser/overview_templates/overview.pt:7
 msgid "Dossier structure"
 msgstr ""
 
@@ -81,6 +81,10 @@ msgstr "Il n'est pas possible d'ouvrir un sous-dossier, le dossier principale do
 #: ./opengever/dossier/profiles/default/actions.xml
 msgid "Move Items"
 msgstr "Déplacer l'élément"
+
+#: ./opengever/dossier/browser/overview_templates/overview.pt:26
+msgid "No Subdossiers"
+msgstr ""
 
 #: ./opengever/dossier/archive.py:53
 msgid "Not all required fields are filled"
@@ -550,7 +554,7 @@ msgstr "Derniers documents"
 msgid "newest_tasks"
 msgstr "Dernières tâches"
 
-#: ./opengever/dossier/browser/overview_templates/overview.pt:38
+#: ./opengever/dossier/browser/overview_templates/overview.pt:45
 msgid "no_content"
 msgstr "Pas de contenu"
 
@@ -596,7 +600,7 @@ msgstr "Attribuer numéro d'inventaire"
 msgid "sharing"
 msgstr "Participations enlevées"
 
-#: ./opengever/dossier/browser/overview_templates/overview.pt:72
+#: ./opengever/dossier/browser/overview_templates/overview.pt:79
 msgid "show all"
 msgstr "Tout afficher"
 

@@ -3,24 +3,31 @@
            tal:define="groups view/boxes; css_width python:99/3">
 
   <div class="boxGroup boxGroup0" tal:attributes="style string:width:${css_width}%">
-
     <div class="box" id="subdossiersBox">
       <h2 i18n:translate="">Dossier structure</h2>
-      <div id="dossier-tree"
-           tal:attributes="data-dossier-navigation-url view/navigation_json_url;
-                           data-context-url context_url;"
-           tal:define="context_url context/absolute_url">
-        <ul class="filetree">
-          <img src="spinner.gif" class="spinner"/>
-        </ul>
-      </div>
+
+      <tal:block tal:condition="view/is_subdossier_navigation_available">
+        <div id="dossier-tree"
+             tal:attributes="data-dossier-navigation-url view/navigation_json_url;
+                             data-context-url context_url;"
+             tal:define="context_url context/absolute_url">
+          <ul class="filetree">
+            <img src="spinner.gif" class="spinner"/>
+          </ul>
+        </div>
+
+        <script type="text/javascript"
+          tal:define="navroot context/@@plone_portal_state/navigation_root_url"
+          tal:attributes="src string:${navroot}/++resource++opengever.dossier.resources/init_tree.js">
+        </script>
+      </tal:block>
+
+      <tal:block tal:condition="not: view/is_subdossier_navigation_available">
+        <span i18n:translate="" >No Subdossiers</span>
+      </tal:block>
+
     </div>
   </div>
-
-  <script type="text/javascript"
-    tal:define="navroot context/@@plone_portal_state/navigation_root_url"
-    tal:attributes="src string:${navroot}/++resource++opengever.dossier.resources/init_tree.js">
-  </script>
 
   <tal:block tal:repeat="boxes groups">
   <div tal:define="repeat_index repeat/boxes/index;

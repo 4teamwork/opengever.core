@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2015-05-28 10:28+0000\n"
+"POT-Creation-Date: 2015-05-28 12:08+0000\n"
 "PO-Revision-Date: 2015-01-22 17:49+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -47,7 +47,7 @@ msgstr "Beteiligung löschen"
 msgid "Document ${name} is connected to a Task. Please move the Task."
 msgstr "Dokument ${name} ist mit einer Aufgabe verbunden, bitte Aufgabe verschieben."
 
-#: ./opengever/dossier/browser/overview_templates/overview.pt:8
+#: ./opengever/dossier/browser/overview_templates/overview.pt:7
 msgid "Dossier structure"
 msgstr "Dossier-Struktur"
 
@@ -83,6 +83,10 @@ msgstr "Es ist nicht möglich das Subdossier wieder zu eröffnen, das Hauptdossi
 #: ./opengever/dossier/profiles/default/actions.xml
 msgid "Move Items"
 msgstr "Elemente verschieben"
+
+#: ./opengever/dossier/browser/overview_templates/overview.pt:26
+msgid "No Subdossiers"
+msgstr "Keine Subdossiers"
 
 #: ./opengever/dossier/archive.py:53
 msgid "Not all required fields are filled"
@@ -554,7 +558,7 @@ msgstr "Neuste Dokumente"
 msgid "newest_tasks"
 msgstr "Neuste Aufgaben"
 
-#: ./opengever/dossier/browser/overview_templates/overview.pt:38
+#: ./opengever/dossier/browser/overview_templates/overview.pt:45
 msgid "no_content"
 msgstr "Keine Inhalte"
 
@@ -600,7 +604,7 @@ msgstr "Ablagenummer vergeben"
 msgid "sharing"
 msgstr "Beteiligungen"
 
-#: ./opengever/dossier/browser/overview_templates/overview.pt:72
+#: ./opengever/dossier/browser/overview_templates/overview.pt:79
 msgid "show all"
 msgstr "Alle anzeigen"
 

@@ -94,6 +94,9 @@ class DossierContainer(Container):
         else:
             return True
 
+    def has_subdossiers(self):
+        return len(self.get_subdossiers()) > 0
+
     def get_subdossiers(self, sort_on='created',
                         sort_order='ascending',
                         review_state=None,

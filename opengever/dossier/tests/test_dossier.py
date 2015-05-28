@@ -30,6 +30,19 @@ class TestDossier(FunctionalTestCase):
         self.assertEqual(self.dossier, sub1.get_root_dossier())
         self.assertEqual(self.dossier, sub2.get_root_dossier())
 
+    def test_falsy_has_subdossiers(self):
+        self.assertFalse(self.dossier.has_subdossiers())
+
+    def test_truthy_has_subdossiers(self):
+        create(Builder(self.builder_id).within(self.dossier))
+        self.assertTrue(self.dossier.has_subdossiers())
+
+    def test_truthy_has_subdossiers_closed_dossiers(self):
+        create(Builder(self.builder_id)
+               .within(self.dossier)
+               .in_state('dossier-state-resolved'))
+        self.assertTrue(self.dossier.has_subdossiers())
+
     def _get_active_tabbedview_tab_titles(self, obj):
         types_tool = getToolByName(self.portal, 'portal_types')
         actions = types_tool.listActionInfos(
