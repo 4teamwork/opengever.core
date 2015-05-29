@@ -5,6 +5,11 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- SqlTableSource: Wrap `sort_on` with a ColumnClause when extending
+  query with ordering in order to allow SQLAlchemy to properly
+  quote column identifiers depending on the dialect (see #957).
+  [lgraf]
+
 - Meeting SchemaMigrations: Made some upgrades Oracle compatible.
   [phgross]
 

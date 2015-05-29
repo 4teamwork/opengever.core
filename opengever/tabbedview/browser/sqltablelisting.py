@@ -4,6 +4,7 @@ from ftw.table.interfaces import ITableSource, ITableSourceConfig
 from sqlalchemy import or_
 from sqlalchemy.orm.query import Query
 from sqlalchemy.sql.expression import asc, desc
+from sqlalchemy.sql.expression import column
 from zope.interface import Interface
 
 
@@ -34,9 +35,16 @@ class SqlTableSource(grok.MultiAdapter, BaseTableSource):
         """
 
         if self.config.sort_on:
+            sort_on = self.config.sort_on
+            # Don't plug column names as literal strings into an order_by
+            # clause, but use a ColumnClause instead to allow SQLAlchemy to
+            # properly quote the identifier name depending on the dialect
+            if isinstance(sort_on, basestring):
+                sort_on = column(sort_on)
+
             order_f = self.config.sort_reverse and desc or asc
 
-            query = query.order_by(order_f(self.config.sort_on))
+            query = query.order_by(order_f(sort_on))
 
         return query
 
