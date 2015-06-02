@@ -71,7 +71,7 @@ class TestSearchWithContent(FunctionalTestCase):
     def test_search_dossiers(self):
         self.browser.open('%s/advanced_search' % self.dossier1.absolute_url())
         self.browser.fill({'form.widgets.searchableText': "dossier1",
-                           'form.widgets.object_provides:list': ['opengever.dossier.behaviors.dossier.IDossierMarker']})
+                           'form.widgets.object_provides': ['opengever.dossier.behaviors.dossier.IDossierMarker']})
         self.browser.click('form.buttons.button_search')
         self.assertSearchResultCount(1)
 
@@ -84,7 +84,7 @@ class TestSearchWithContent(FunctionalTestCase):
         # search documents (we can't find the document because we must change the content-type)
         self.browser.open('%s/advanced_search' % self.dossier1.absolute_url())
         self.browser.fill({'form.widgets.searchableText': "document1",
-                           'form.widgets.object_provides:list': ['opengever.dossier.behaviors.dossier.IDossierMarker']})
+                           'form.widgets.object_provides': ['opengever.dossier.behaviors.dossier.IDossierMarker']})
         self.browser.click('form.buttons.button_search')
         self.assertSearchResultCount(0)
         self.browser.open('http://nohost/plone/@@search?object_provides=opengever.dossier.behaviors.dossier.IDossierMarker&SearchableText=document1')
@@ -92,7 +92,7 @@ class TestSearchWithContent(FunctionalTestCase):
         # search documents with the right content-type
         self.browser.open('%s/advanced_search' % self.dossier1.absolute_url())
         self.browser.fill({'form.widgets.searchableText': "(document1)",
-                          'form.widgets.object_provides:list': ['opengever.document.behaviors.IBaseDocument']})
+                          'form.widgets.object_provides': ['opengever.document.behaviors.IBaseDocument']})
         self.browser.click('form.buttons.button_search')
         self.browser.open('http://nohost/plone/@@search?object_provides=opengever.document.behaviors.IBaseDocument&SearchableText=document1')
         self.assertSearchResultCount(1)
@@ -104,7 +104,7 @@ class TestSearchWithContent(FunctionalTestCase):
         # search tasks (we can't find the task because we must change the content-type)
         self.browser.open('%s/advanced_search' % self.dossier1.absolute_url())
         self.browser.fill({'form.widgets.searchableText': "task1",
-                           'form.widgets.object_provides:list': ['opengever.document.behaviors.IBaseDocument']})
+                           'form.widgets.object_provides': ['opengever.document.behaviors.IBaseDocument']})
         self.browser.click('form.buttons.button_search')
         self.assertSearchResultCount(0)
         self.browser.open('http://nohost/plone/@@search?object_provides=opengever.document.behaviors.IBaseDocument&SearchableText=task1')
@@ -113,7 +113,7 @@ class TestSearchWithContent(FunctionalTestCase):
         # search tasks with the right content-type
         self.browser.open('%s/advanced_search' % self.dossier1.absolute_url())
         self.browser.fill({'form.widgets.searchableText': "task1",
-                          'form.widgets.object_provides:list': ['opengever.task.task.ITask']})
+                          'form.widgets.object_provides': ['opengever.task.task.ITask']})
         self.browser.click('form.buttons.button_search')
         self.assertSearchResultCount(1)
         self.browser.open('http://nohost/plone/@@search?object_provides=opengever.task.task.ITask&SearchableText=task1')
@@ -144,7 +144,7 @@ class TestSearchWithoutContent(FunctionalTestCase):
     def test_date_min_or_max_range_is_queried(self, browser):
         browser.login()
         browser.open(view='advanced_search')
-        browser.fill({'form.widgets.object_provides:list': 'opengever.dossier.behaviors.dossier.IDossierMarker',
+        browser.fill({'form.widgets.object_provides': 'opengever.dossier.behaviors.dossier.IDossierMarker',
                       'form.widgets.start_1': "1/1/10",
                       'form.widgets.end_2': "4/1/10"})
         browser.css('#form-buttons-button_search').first.click()
@@ -161,7 +161,7 @@ class TestSearchWithoutContent(FunctionalTestCase):
     def test_validate_searchstring_for_dossiers(self, browser):
         browser.open(view='advanced_search')
         browser.fill({'form.widgets.searchableText': "dossier1",
-                      'form.widgets.object_provides:list': ['opengever.dossier.behaviors.dossier.IDossierMarker'],
+                      'form.widgets.object_provides': ['opengever.dossier.behaviors.dossier.IDossierMarker'],
                       'form.widgets.start_1': "1/1/10",
                       'form.widgets.start_2': "2/1/10",
                       'form.widgets.end_1': "3/1/10",
@@ -191,7 +191,7 @@ class TestSearchWithoutContent(FunctionalTestCase):
     def test_validate_searchstring_for_documents(self, browser):
         browser.open(view='advanced_search')
         browser.fill({'form.widgets.searchableText': "document1",
-                      'form.widgets.object_provides:list': 'opengever.document.behaviors.IBaseDocument',
+                      'form.widgets.object_provides': 'opengever.document.behaviors.IBaseDocument',
                       'form.widgets.receipt_date_1': "1/1/10",
                       'form.widgets.receipt_date_2': "2/1/10",
                       'form.widgets.delivery_date_1': "3/1/10",
@@ -219,7 +219,7 @@ class TestSearchWithoutContent(FunctionalTestCase):
     def test_validate_searchstring_for_tasks(self, browser):
         browser.open(view='advanced_search')
         browser.fill({'form.widgets.searchableText': "task1",
-                      'form.widgets.object_provides:list': 'opengever.task.task.ITask',
+                      'form.widgets.object_provides': 'opengever.task.task.ITask',
                       'form.widgets.deadline_1': "1/1/10",
                       'form.widgets.deadline_2': "2/1/10",
                       'form.widgets.task_type:list': 'information',
