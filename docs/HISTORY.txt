@@ -5,7 +5,10 @@ Changelog
 4.4.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Display a nested dossier-navigation on the dossier overview page. Display the navigation
+  starting at the current dossier's root dossier. Don't display the navigation when no
+  subdossiers are available.
+  [deiferni]
 
 
 4.4.0 (2015-06-01)
