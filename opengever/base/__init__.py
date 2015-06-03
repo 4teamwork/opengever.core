@@ -1,5 +1,7 @@
+from plone.i18n.locales import languages
 from zope.i18nmessageid import MessageFactory
 import csv
+
 
 _ = MessageFactory('opengever.base')
 
@@ -14,3 +16,9 @@ class OpenGeverCSVDialect(csv.excel):
 
 
 csv.register_dialect(u'OpenGeverCSV', OpenGeverCSVDialect)
+
+
+# configure visible language codes. Unfortunately this cannot be done in a .po
+# file.
+languages._combinedlanguagelist['de-ch']['native'] = u'DE'
+languages._combinedlanguagelist['fr-ch']['native'] = u'FR'
