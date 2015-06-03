@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+        name="opengever.contact.contactfolder" meta_type="Dexterity FTI">
+
+  <property name="behaviors" purge="False">
+    <element value="plone.app.dexterity.behaviors.metadata.IBasic" />
+  </property>
+
+</object>
