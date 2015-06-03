@@ -11,9 +11,9 @@ class TestNavigation(FunctionalTestCase):
         super(TestNavigation, self).setUp()
         self.root = create(Builder('repository_root'))
         self.folder = create(Builder('repository').within(self.root))
-        self.root_dossier = create(Builder('dossier')
-                                   .titled(u'Root')
-                                   .having(description=u'The root dossier')
+        self.main_dossier = create(Builder('dossier')
+                                   .titled(u'Main')
+                                   .having(description=u'The main dossier')
                                    .within(self.folder))
 
     @browsing
@@ -21,15 +21,15 @@ class TestNavigation(FunctionalTestCase):
         subdossier = create(Builder('dossier')
                             .titled(u'Subdossier')
                             .having(description=u'The sub-dossier')
-                            .within(self.root_dossier))
+                            .within(self.main_dossier))
 
-        browser.login().visit(self.root_dossier,
+        browser.login().visit(self.main_dossier,
                               view='dossier_navigation.json')
         self.assert_json_equal(
-            [{"text": "Root",
-              "description": "The root dossier",
-              "uid": IUUID(self.root_dossier),
-              "url": self.root_dossier.absolute_url(),
+            [{"text": "Main",
+              "description": "The main dossier",
+              "uid": IUUID(self.main_dossier),
+              "url": self.main_dossier.absolute_url(),
               "nodes": [{"text": "Subdossier",
                          "description": "The sub-dossier",
                          "nodes": [],
@@ -44,20 +44,20 @@ class TestNavigation(FunctionalTestCase):
         sub1 = create(Builder('dossier')
                       .titled(u'XXX')
                       .having(description=u'The XXX sub-dossier')
-                      .within(self.root_dossier))
+                      .within(self.main_dossier))
 
         sub2 = create(Builder('dossier')
                       .titled(u'AAA')
                       .having(description=u'The AAA sub-dossier')
-                      .within(self.root_dossier))
+                      .within(self.main_dossier))
 
-        browser.login().visit(self.root_dossier,
+        browser.login().visit(self.main_dossier,
                               view='dossier_navigation.json')
         self.assert_json_equal(
-            [{"text": "Root",
-              "description": "The root dossier",
-              "uid": IUUID(self.root_dossier),
-              "url": self.root_dossier.absolute_url(),
+            [{"text": "Main",
+              "description": "The main dossier",
+              "uid": IUUID(self.main_dossier),
+              "url": self.main_dossier.absolute_url(),
               "nodes": [{"text": "AAA",
                          "description": "The AAA sub-dossier",
                          "nodes": [],

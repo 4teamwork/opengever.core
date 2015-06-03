@@ -20,15 +20,15 @@ class TestDossier(FunctionalTestCase):
     def create_test_dossier(self):
         return create(Builder(self.builder_id))
 
-    def test_get_root_dossier_returns_self_when_is_already_root(self):
-        self.assertEqual(self.dossier, self.dossier.get_root_dossier())
+    def test_get_main_dossier_returns_self_when_is_already_root(self):
+        self.assertEqual(self.dossier, self.dossier.get_main_dossier())
 
-    def test_get_root_dossier_returns_root_for_nested_dossiers(self):
+    def test_get_main_dossier_returns_main_for_nested_dossiers(self):
         sub1 = create(Builder(self.builder_id).within(self.dossier))
         sub2 = create(Builder(self.builder_id).within(sub1))
 
-        self.assertEqual(self.dossier, sub1.get_root_dossier())
-        self.assertEqual(self.dossier, sub2.get_root_dossier())
+        self.assertEqual(self.dossier, sub1.get_main_dossier())
+        self.assertEqual(self.dossier, sub2.get_main_dossier())
 
     def test_falsy_has_subdossiers(self):
         self.assertFalse(self.dossier.has_subdossiers())

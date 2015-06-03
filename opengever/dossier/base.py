@@ -68,7 +68,7 @@ class DossierContainer(Container):
                 break
         return depth
 
-    def get_root_dossier(self):
+    def get_main_dossier(self):
         """Return the root dossier for the current dossier.
 
         The root dossier is the dossier that has a repo-folder as its parent
