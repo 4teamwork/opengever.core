@@ -182,7 +182,7 @@ class TestPreProtocol(FunctionalTestCase):
 
         browser.open(MeetingList.url_for(self.committee, self.meeting))
         browser.find('Generate').click()
-        browser.fill({'form.widgets.method:list': METHOD_NEW_VERSION}).submit()
+        browser.fill({'form.widgets.method': METHOD_NEW_VERSION}).submit()
 
         meeting = Meeting.get(self.meeting.meeting_id)  # refresh meeting
         document = browser.context
@@ -199,7 +199,7 @@ class TestPreProtocol(FunctionalTestCase):
 
         browser.open(MeetingList.url_for(self.committee, self.meeting))
         browser.find('Generate').click()
-        browser.fill({'form.widgets.method:list': METHOD_NEW_DOCUMENT}).submit()
+        browser.fill({'form.widgets.method': METHOD_NEW_DOCUMENT}).submit()
 
         meeting = Meeting.get(self.meeting.meeting_id)  # refresh meeting
         document = browser.context

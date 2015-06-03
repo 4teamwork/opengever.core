@@ -44,5 +44,5 @@ class TestTaskRedirector(FunctionalTestCase):
             name='form.widgets.responsible.widgets.query').value = responsible_name
         self.browser.click('form.widgets.responsible.buttons.search')
         self.browser.getControl(
-            name='form.widgets.responsible:list').value = [responsible_id]
+            name='form.widgets.responsible').value = [responsible_id]
         self.browser.click('Save')

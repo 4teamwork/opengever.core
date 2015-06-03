@@ -183,7 +183,7 @@ class TestProtocol(FunctionalTestCase):
 
         browser.open(MeetingList.url_for(self.committee, self.meeting))
         browser.css('a[href*="@@update_protocol"]').first.click()
-        browser.fill({'form.widgets.method:list': METHOD_NEW_VERSION}).submit()
+        browser.fill({'form.widgets.method': METHOD_NEW_VERSION}).submit()
 
         meeting = Meeting.get(self.meeting.meeting_id)  # refresh meeting
         document = browser.context
@@ -200,7 +200,7 @@ class TestProtocol(FunctionalTestCase):
 
         browser.open(MeetingList.url_for(self.committee, self.meeting))
         browser.css('a[href*="@@update_protocol"]').first.click()
-        browser.fill({'form.widgets.method:list': METHOD_NEW_DOCUMENT}).submit()
+        browser.fill({'form.widgets.method': METHOD_NEW_DOCUMENT}).submit()
 
         meeting = Meeting.get(self.meeting.meeting_id)  # refresh meeting
         document = browser.context
