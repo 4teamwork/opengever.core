@@ -68,6 +68,22 @@ class DossierContainer(Container):
                 break
         return depth
 
+    def get_main_dossier(self):
+        """Return the root dossier for the current dossier.
+
+        The root dossier is the dossier that has a repo-folder as its parent
+        and thus forms the root of the local dossier hierarchy.
+
+        """
+        obj = self
+        prev = self
+        while IDossierMarker.providedBy(obj):
+            prev = obj
+            obj = aq_parent(aq_inner(obj))
+            if IPloneSiteRoot.providedBy(obj):
+                break
+        return prev
+
     def show_subdossier(self):
         registry = queryUtility(IRegistry)
         reg_proxy = registry.forInterface(IDossierContainerTypes)
@@ -77,6 +93,9 @@ class DossierContainer(Container):
             return False
         else:
             return True
+
+    def has_subdossiers(self):
+        return len(self.get_subdossiers()) > 0
 
     def get_subdossiers(self, sort_on='created',
                         sort_order='ascending',

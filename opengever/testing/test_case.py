@@ -17,6 +17,7 @@ from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from zope.component import getUtility
 from zope.i18n import translate
+import json
 import transaction
 import unittest2
 
@@ -153,3 +154,10 @@ class FunctionalTestCase(TestCase):
                          submitted_document_model.submitted_version)
         self.assertEqual(proposal.load_model(),
                          submitted_document_model.proposal)
+
+    def assert_json_equal(self, expected, got, msg=None):
+        pretty = {'sort_keys': True, 'indent': 4, 'separators': (',', ': ')}
+        expected_json = json.dumps(expected, **pretty)
+        got_json = json.dumps(got, **pretty)
+        self.maxDiff = None
+        self.assertMultiLineEqual(expected_json, got_json, msg)

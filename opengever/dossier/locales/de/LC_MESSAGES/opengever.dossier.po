@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2015-04-16 17:18+0000\n"
+"POT-Creation-Date: 2015-05-28 12:08+0000\n"
 "PO-Revision-Date: 2015-01-22 17:49+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -47,6 +47,10 @@ msgstr "Beteiligung löschen"
 msgid "Document ${name} is connected to a Task. Please move the Task."
 msgstr "Dokument ${name} ist mit einer Aufgabe verbunden, bitte Aufgabe verschieben."
 
+#: ./opengever/dossier/browser/overview_templates/overview.pt:7
+msgid "Dossier structure"
+msgstr "Dossier-Struktur"
+
 #: ./opengever/dossier/resolve.py:80
 msgid "Dossiers successfully reactivated."
 msgstr "Das Dossier wurde erfolgreich wieder eröffnet."
@@ -80,6 +84,10 @@ msgstr "Es ist nicht möglich das Subdossier wieder zu eröffnen, das Hauptdossi
 msgid "Move Items"
 msgstr "Elemente verschieben"
 
+#: ./opengever/dossier/browser/overview_templates/overview.pt:26
+msgid "No Subdossiers"
+msgstr "Keine Subdossiers"
+
 #: ./opengever/dossier/archive.py:53
 msgid "Not all required fields are filled"
 msgstr "Nicht alle benötigten Felder wurden ausgefüllt."
@@ -93,7 +101,7 @@ msgstr "Es sind keine Vorlagen vorhanden."
 msgid "Project Dossier"
 msgstr "Projektdossier"
 
-#: ./opengever/dossier/menu.py:26
+#: ./opengever/dossier/menu.py:22
 msgid "Subdossier"
 msgstr "Subdossier"
 
@@ -104,6 +112,10 @@ msgstr "Vorlagendossier"
 #. Default: "expired"
 msgid "Templates"
 msgstr "Vorlagen"
+
+#: ./opengever/dossier/deactivate.py:64
+msgid "The Dossier can't be deactivated, not all contained tasks are in a closed state."
+msgstr "Das Dossier kann nicht storniert werden, da nicht alle enthaltenen Aufgaben abgeschlossen sind."
 
 #: ./opengever/dossier/deactivate.py:46
 msgid "The Dossier can't be deactivated, not all containeddocuments are checked in."
@@ -546,7 +558,7 @@ msgstr "Neuste Dokumente"
 msgid "newest_tasks"
 msgstr "Neuste Aufgaben"
 
-#: ./opengever/dossier/browser/overview_templates/overview.pt:12
+#: ./opengever/dossier/browser/overview_templates/overview.pt:45
 msgid "no_content"
 msgstr "Keine Inhalte"
 
@@ -592,7 +604,7 @@ msgstr "Ablagenummer vergeben"
 msgid "sharing"
 msgstr "Beteiligungen"
 
-#: ./opengever/dossier/browser/overview_templates/overview.pt:46
+#: ./opengever/dossier/browser/overview_templates/overview.pt:79
 msgid "show all"
 msgstr "Alle anzeigen"
 
@@ -620,3 +632,4 @@ msgstr "abgelaufen"
 #: ./opengever/dossier/behaviors/participation.py:197
 msgid "warning_no_participants_selected"
 msgstr "Sie haben keine Beteiligungen ausgewählt."
+

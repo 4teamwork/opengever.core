@@ -80,10 +80,3 @@ class TestNavigation(FunctionalTestCase):
         yield
         after = value_callback()
         self.assertNotEqual(before, after, msg)
-
-    def assert_json_equal(self, expected, got, msg=None):
-        pretty = {'sort_keys': True, 'indent': 4, 'separators': (',', ': ')}
-        expected_json = json.dumps(expected, **pretty)
-        got_json = json.dumps(got, **pretty)
-        self.maxDiff = None
-        self.assertMultiLineEqual(expected_json, got_json, msg)

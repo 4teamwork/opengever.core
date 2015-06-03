@@ -20,60 +20,6 @@ class TestOverview(FunctionalTestCase):
                                       responsible='hugo.boss'))
 
     @browsing
-    def test_subdossier_box_items_are_limited_to_five_sort_by_modified(self, browser):
-        for i in range(1, 6):
-            create(Builder('dossier')
-                   .within(self.dossier)
-                   .with_modification_date(DateTime(2012, 3, 7) + i)
-                   .titled(u'Dossier %s' % i))
-        create(Builder('dossier')
-               .within(self.dossier)
-               .with_modification_date(DateTime(2010, 1, 1))
-               .titled(u'Dossier 6'))
-
-        browser.login().open(self.dossier, view='tabbedview_view-overview')
-        self.assertSequenceEqual(
-            ['Dossier 5', 'Dossier 4', 'Dossier 3', 'Dossier 2', 'Dossier 1'],
-            browser.css('#subdossiersBox li:not(.moreLink) a').text)
-
-    @browsing
-    def test_subdossier_box_only_list_open_dossiers(self, browser):
-        create(Builder('dossier').within(self.dossier)
-               .titled(u'Dossier Open')
-               .in_state('dossier-state-active'))
-
-        create(Builder('dossier').within(self.dossier)
-               .titled(u'Dossier Inactive')
-               .in_state('dossier-state-inactive'))
-
-        create(Builder('dossier').within(self.dossier)
-               .titled(u'Dossier Resolved')
-               .in_state('dossier-state-resolved'))
-
-        browser.login().open(self.dossier, view='tabbedview_view-overview')
-        self.assertItemsEqual(
-            ['Dossier Open'],
-            browser.css('#subdossiersBox li:not(.moreLink) a').text)
-
-    @browsing
-    def test_main_dossier_displays_subdossier_box_but_subdossier_does_not(self, browser):
-        subdossier = create(Builder('dossier')
-                            .within(self.dossier)
-                            .titled(u'Subdossier'))
-
-        browser.login().open(self.dossier, view='tabbedview_view-overview')
-        box_titles = browser.css('div.box h2').text
-        self.assertItemsEqual(['subdossiers', 'participants', 'newest_tasks',
-                               'newest_documents', 'description'],
-                              box_titles)
-
-        browser.open(subdossier, view='tabbedview_view-overview')
-        box_titles = browser.css('div.box h2').text
-        self.assertItemsEqual(['participants', 'newest_tasks',
-                               'newest_documents', 'description'],
-                              box_titles)
-
-    @browsing
     def test_description_box_is_displayed(self, browser):
         browser.login().open(self.dossier, view='tabbedview_view-overview')
         self.assertEqual(u'Hie hesch e beschribig',
