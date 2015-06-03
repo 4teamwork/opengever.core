@@ -95,7 +95,7 @@ class TestProposal(FunctionalTestCase):
         self.assertEqual(u'Lorem ips\xfcm', model.proposed_action)
         self.assertEqual(u'My pr\xf6posal', model.initial_position)
 
-        self.assertEqual(['a', 'pr\xc3\xb6posal', 'my', 'pr\xc3\xb6posal'],
+        self.assertEqual(['a', 'proposal', 'my', 'proposal'],
                          index_data_for(proposal)['SearchableText'])
 
     @browsing

@@ -64,6 +64,6 @@ class TestTaskIndexers(FunctionalTestCase):
         self.task.reindexObject()
 
         self.assertEquals(
-            index_data_for(self.task).get('SearchableText'),
             ['test', 'aufgabe', 'lorem', 'ipsum', 'olor', 'sit',
-             'amet', 'to', 'comment', '1', 'b\xc3\xb6ss', 'hugo', 'hboss'])
+             'amet', 'to', 'comment', '1', 'boss', 'hugo', 'hboss'],
+            index_data_for(self.task).get('SearchableText'))
