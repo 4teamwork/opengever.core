@@ -9,29 +9,30 @@ class TestLanguageSelectorMenu(FunctionalTestCase):
     def setUp(self):
         super(TestLanguageSelectorMenu, self).setUp()
         tool = api.portal.get_tool('portal_languages')
-        tool.addSupportedLanguage('de')
-        tool.addSupportedLanguage('fr')
-        tool.setDefaultLanguage('de')
+        tool.use_combined_language_codes = True
+        tool.addSupportedLanguage('de-ch')
+        tool.addSupportedLanguage('fr-ch')
+        tool.setDefaultLanguage('de-ch')
 
         transaction.commit()
 
     @browsing
     def test_list_all_available_languages(self, browser):
         browser.login().open(self.portal)
-        self.assertEquals(['English', 'Deutsch', u'Fran\xe7ais'],
+        self.assertEquals(['English', 'DE', 'FR'],
                           browser.css('dl#portal-languageselector dd li').text)
 
     @browsing
     def test_title_contains_current_language(self, browser):
         browser.login().open(self.portal)
         title = browser.css('dl#portal-languageselector dt').first
-        self.assertEquals('Deutsch', title.text)
+        self.assertEquals('DE', title.text)
 
     @browsing
     def test_current_language_is_marked_as_currentLanguage(self, browser):
         browser.login().open(self.portal)
         self.assertEquals(
-            ['Deutsch'],
+            ['DE'],
             browser.css('dl#portal-languageselector dd li.currentLanguage').text)
 
     @browsing
