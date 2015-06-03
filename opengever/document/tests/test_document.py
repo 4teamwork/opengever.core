@@ -79,17 +79,27 @@ class TestDocument(FunctionalTestCase):
         document_without_file = create(Builder("document"))
         self.assertFalse(document_without_file.digitally_available)
 
-    # TODO: split this and assert something useful ;)
-    def test_views(self):
-        document = create(Builder("document"))
-        document.keywords = ()
+    @browsing
+    def test_documents_tabbedview(self, browser):
+        doc = create(Builder('document').with_dummy_content())
+        browser.login().open(doc, view='@@tabbed_view')
 
-        self.portal.REQUEST['ACTUAL_URL'] = document.absolute_url()
+        self.assertEquals(
+            ['overview', 'journal', 'sharing'],
+            browser.css('.formTabs .formTab').text)
 
-        view = document.restrictedTraverse('@@view')
-        self.failUnless(view())
-        tabbed_view = document.restrictedTraverse('@@tabbed_view')
-        self.failUnless(tabbed_view())
+    @browsing
+    def test_documents_properties_view(self, browser):
+        doc = create(Builder('document').with_dummy_content())
+        browser.login().open(doc, view='@@view')
+
+        self.assertEquals(
+            u'Testdokum\xe4nt',
+            browser.css('.documentFirstHeading').first.text)
+
+        self.assertEquals(
+            ['Common', 'Classification'],
+            browser.css('#content-core fieldset legend').text)
 
     def test_copying_a_document_prefixes_title_with_copy_of(self):
         dossier_a = create(Builder('dossier').titled(u'Dossier A'))
