@@ -22,15 +22,13 @@ class TestDocumentishLayout(FunctionalTestCase):
             Builder('document').within(self.dossier).removed())
 
         browser.login().open(document)
-        self.assertEquals(
-            'template-tabbed_view portaltype-opengever-document-document site-plone section-opengever-repository-repositoryroot icons-on',
-            browser.css('body').first.get('class'))
+        self.assertNotIn('removed',
+                         browser.css('body').first.get('class').split(' '))
 
         self.grant('Manager')
         browser.login().open(removed_document)
-        self.assertEquals(
-            'template-tabbed_view portaltype-opengever-document-document site-plone section-opengever-repository-repositoryroot icons-on removed',
-            browser.css('body').first.get('class'))
+        self.assertIn('removed',
+                      browser.css('body').first.get('class').split(' '))
 
     @browsing
     def test_mail_documents_body_class_is_suffixed_with_removed_class(self, browser):
@@ -39,11 +37,10 @@ class TestDocumentishLayout(FunctionalTestCase):
         self.grant('Manager')
 
         browser.login().open(mail)
-        self.assertEquals(
-            'template-tabbed_view portaltype-ftw-mail-mail site-plone section-opengever-repository-repositoryroot icons-on',
-            browser.css('body').first.get('class'))
+        self.assertNotIn('removed',
+                         browser.css('body').first.get('class').split(' '))
 
+        self.grant('Manager')
         browser.login().open(removed_mail)
-        self.assertEquals(
-            'template-tabbed_view portaltype-ftw-mail-mail site-plone section-opengever-repository-repositoryroot icons-on removed',
-            browser.css('body').first.get('class'))
+        self.assertIn('removed',
+                      browser.css('body').first.get('class').split(' '))
