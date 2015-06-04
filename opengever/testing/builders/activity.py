@@ -57,7 +57,7 @@ class NotificationBuilder(SqlObjectBuilder):
     id_argument_name = 'notification_id'
 
     def as_read(self):
-        self.arguments['read'] = True
+        self.arguments['is_read'] = True
         return self
 
 builder_registry.register('notification', NotificationBuilder)

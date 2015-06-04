@@ -42,7 +42,7 @@ class NotificationViewlet(common.ViewletBase):
                 'created': notification.activity.created.astimezone(
                     pytz.UTC).isoformat(),
                 'link': resolve_notification_url(notification),
-                'read': notification.read,
+                'read': notification.is_read,
                 'id': notification.notification_id})
 
         return notifications

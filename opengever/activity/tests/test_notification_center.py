@@ -171,12 +171,12 @@ class TestAddActivity(ActivityTestCase):
         notification = peter.notifications[0]
         self.assertEquals(activity, notification.activity)
         self.assertEquals(resource_a, notification.activity.resource)
-        self.assertFalse(notification.read)
+        self.assertFalse(notification.is_read)
 
         notification = hugo.notifications[0]
         self.assertEquals(activity, notification.activity)
         self.assertEquals(resource_a, notification.activity.resource)
-        self.assertFalse(notification.read)
+        self.assertFalse(notification.is_read)
 
     def test_does_not_create_an_notification_for_the_actor(self):
         peter = create(Builder('watcher').having(user_id='peter'))
@@ -255,16 +255,16 @@ class TestNotificationHandling(ActivityTestCase):
 
         self.center.mark_notification_as_read(notification_id)
 
-        self.assertTrue(Notification.get(notification_id).read)
+        self.assertTrue(Notification.get(notification_id).is_read)
 
     def test_mark_an_already_read_notification_is_ignored(self):
         notification_id = self.peter.notifications[0].notification_id
 
         self.center.mark_notification_as_read(notification_id)
-        self.assertTrue(Notification.get(notification_id).read)
+        self.assertTrue(Notification.get(notification_id).is_read)
 
         self.center.mark_notification_as_read(notification_id)
-        self.assertTrue(Notification.get(notification_id).read)
+        self.assertTrue(Notification.get(notification_id).is_read)
 
     def test_list_notifications_by_userid(self):
         notifications = self.center.list_notifications(userid='peter')

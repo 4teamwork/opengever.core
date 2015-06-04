@@ -67,4 +67,14 @@
         profile="opengever.activity:default"
         />
 
+    <!-- 4400 -> 4401 -->
+    <genericsetup:upgradeStep
+        title="Avoid using reserved names as column names."
+        description=""
+        source="4400"
+        destination="4401"
+        handler="opengever.activity.upgrades.to4401.RenameActivityAvoidReservedNames"
+        profile="opengever.activity:default"
+        />
+
 </configure>

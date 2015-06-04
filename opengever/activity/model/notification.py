@@ -30,7 +30,7 @@ class Notification(Base):
     activity_id = Column(Integer, ForeignKey('activities.id'))
     activity = relationship("Activity", backref="notifications")
 
-    read = Column(Boolean(), default=False, nullable=False)
+    is_read = Column(Boolean, default=False, nullable=False)
 
     def __repr__(self):
         return u'<Notification {} for {} on {} >'.format(

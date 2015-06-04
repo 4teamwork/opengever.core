@@ -95,13 +95,13 @@ class NotificationCenter(object):
     def get_users_notifications(self, userid, only_unread=False, limit=None):
         query = Notification.query.by_user(userid)
         if only_unread:
-            query = query.filter(Notification.read == False)
+            query = query.filter(Notification.is_read == False)
 
         return query.limit(limit).all()
 
     def mark_notification_as_read(self, notification_id):
         notification = self.get_notification(notification_id)
-        notification.read = True
+        notification.is_read = True
 
     def get_notification(self, notification_id):
         return Notification.get(notification_id)

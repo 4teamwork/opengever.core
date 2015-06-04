@@ -35,7 +35,7 @@ class ResolveNotificationView(ResolveOGUIDView):
         return self.notification.watcher.user_id == current_user.getId()
 
     def mark_as_read(self):
-        self.notification.read = True
+        self.notification.is_read = True
 
     def redirect(self):
         """Redirect to the affected resource. If the resource is stored
