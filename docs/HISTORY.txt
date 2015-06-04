@@ -5,6 +5,9 @@ Changelog
 4.4.1 (unreleased)
 ------------------
 
+- Fix a typo in an opengever.activity models column name.
+  [deiferni]
+
 - Use short language codes "DE" and "FR" in language selector.
   [deiferni]
 

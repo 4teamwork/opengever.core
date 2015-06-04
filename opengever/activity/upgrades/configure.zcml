@@ -57,4 +57,14 @@
         profile="opengever.activity:default"
         />
 
+    <!-- 4304 -> 4400 -->
+    <genericsetup:upgradeStep
+        title="Fix typo in column name."
+        description=""
+        source="4304"
+        destination="4400"
+        handler="opengever.activity.upgrades.to4400.RenameActivityForeignKey"
+        profile="opengever.activity:default"
+        />
+
 </configure>
