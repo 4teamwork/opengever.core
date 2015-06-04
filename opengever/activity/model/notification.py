@@ -27,7 +27,7 @@ class Notification(Base):
     watcher_id = Column(Integer, ForeignKey('watchers.id'))
     watcher = relationship("Watcher", backref="notifications")
 
-    activiy_id = Column(Integer, ForeignKey('activities.id'))
+    activity_id = Column(Integer, ForeignKey('activities.id'))
     activity = relationship("Activity", backref="notifications")
 
     read = Column(Boolean(), default=False, nullable=False)
