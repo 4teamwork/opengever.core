@@ -1,5 +1,6 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
+    xmlns:upgrade-step="http://namespaces.zope.org/ftw.upgrade"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
 
   <!-- 3000 -> 3100 -->
@@ -78,6 +79,15 @@
       destination="4500"
       handler="opengever.policy.base.upgrades.to4500.InstallPloneAppRelationfield"
       profile="opengever.policy.base:default"
+      />
+
+  <!-- 4500 -> 4501 -->
+  <upgrade-step:importProfile
+      title="Clean up jsregistry: Remove all old jquery-ui entries."
+      profile="opengever.policy.base:default"
+      source="4500"
+      destination="4501"
+      directory="profiles/4501"
       />
 
 </configure>
