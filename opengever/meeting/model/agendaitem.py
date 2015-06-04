@@ -24,7 +24,7 @@ class AgendaItem(Base):
                             backref=backref('agenda_item', uselist=False))
 
     title = Column(Text)
-    number = Column(String(16))
+    number = Column('item_number', String(16))
     is_paragraph = Column(Boolean, nullable=False, default=False)
     sort_order = Column(Integer, nullable=False, default=0)
 
