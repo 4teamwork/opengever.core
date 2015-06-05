@@ -52,7 +52,7 @@ class PloneNotificationMailer(object):
         return msg
 
     def prepare_html(self, notification):
-        template = ViewPageTemplateFile("mail_templates/notification.pt")
+        template = ViewPageTemplateFile("templates/notification.pt")
         options = {
             'subject': notification.activity.title,
             'title': notification.activity.title,

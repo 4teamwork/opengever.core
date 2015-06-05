@@ -171,7 +171,7 @@ class Overview(DisplayForm, OpengeverTab):
                  mapping={'version': self.context.get_current_version()})
 
     def render_file_widget(self):
-        template = ViewPageTemplateFile('overview_templates/file.pt')
+        template = ViewPageTemplateFile('templates/file.pt')
         return template(self)
 
     def render_creator_link(self):
@@ -225,7 +225,7 @@ class Overview(DisplayForm, OpengeverTab):
         return True
 
     def render_public_trial_with_edit_link(self):
-        template = ViewPageTemplateFile('overview_templates/public_trial.pt')
+        template = ViewPageTemplateFile('templates/public_trial.pt')
         return template(self)
 
     def show_modfiy_public_trial_link(self):

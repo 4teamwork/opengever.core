@@ -19,7 +19,7 @@ from zope.component import getUtility
 
 class PreviewTab(ftwView):
 
-    template = ViewPageTemplateFile('mail_templates/previewtab.pt')
+    template = ViewPageTemplateFile('templates/previewtab.pt')
 
     def __call__(self):
         self.normalizer = getUtility(IIDNormalizer)
@@ -91,5 +91,5 @@ class OverviewTab(Overview):
         ]
 
     def render_file_widget(self):
-        template = ViewPageTemplateFile('mail_templates/file.pt')
+        template = ViewPageTemplateFile('templates/file.pt')
         return template(self)
