@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <metadata>
-  <version>4501</version>
+  <version>4502</version>
   <dependencies>
     <dependency>profile-plone.app.dexterity:default</dependency>
     <dependency>profile-plone.app.registry:default</dependency>

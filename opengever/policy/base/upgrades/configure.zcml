@@ -90,4 +90,13 @@
       directory="profiles/4501"
       />
 
+  <!-- 4501 -> 4502 -->
+  <upgrade-step:importProfile
+      title="Clean up plone.app.dexterity's overlays.css."
+      profile="opengever.policy.base:default"
+      source="4501"
+      destination="4502"
+      directory="profiles/4502"
+      />
+
 </configure>
