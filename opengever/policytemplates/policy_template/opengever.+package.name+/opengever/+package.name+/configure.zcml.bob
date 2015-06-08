@@ -5,6 +5,7 @@
     xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:meta="http://namespaces.zope.org/meta"
     xmlns:opengever="http://namespaces.zope.org/opengever"
+    xmlns:profilehook="http://namespaces.zope.org/profilehook"
     xmlns:transmogrifier="http://namespaces.plone.org/transmogrifier"
     xmlns:zcml="http://namespaces.zope.org/zcml">
 
@@ -26,6 +27,11 @@
       description="Default content for {{{package.title}}}."
       directory="profiles/default_content"
       provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <profilehook:hook
+      profile="opengever.{{{package.name}}}:default_content"
+      handler=".hooks.default_content_installed"
       />
 
   <genericsetup:registerProfile
