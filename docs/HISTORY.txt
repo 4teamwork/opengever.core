@@ -5,6 +5,9 @@ Changelog
 4.4.1 (unreleased)
 ------------------
 
+- Made reverting files to version link CSRF safe, adding the authentication token.
+  [phgross]
+
 - Only display the org-unit selector when multiple org-units are available.
   [deiferni]
 

@@ -46,7 +46,7 @@
                 </td>
                 <td>
                   <a href="" class="standalone function-revert"
-                     tal:attributes="href string:${here/absolute_url}/revert-file-to-version?version_id=${item/version_id}"
+                     tal:attributes="href string:${here/absolute_url}/revert-file-to-version?version_id=${item/version_id}&_authenticator=${context/@@authenticator/token}"
                      i18n:translate="label_reset">reset</a>
                 </td>
               </tal:cond>
