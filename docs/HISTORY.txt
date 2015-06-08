@@ -5,6 +5,9 @@ Changelog
 4.4.1 (unreleased)
 ------------------
 
+- Only display the org-unit selector when multiple org-units are available.
+  [deiferni]
+
 - No longer use reserved names as column names. Also make sure this does not happen
   again in the future.
   [deiferni]

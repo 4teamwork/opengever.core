@@ -1,5 +1,6 @@
 from five import grok
 from opengever.ogds.base.utils import get_ou_selector
+from opengever.ogds.base.utils import ogds_service
 from plone.app.layout.viewlets import common
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from sqlalchemy.exc import OperationalError
@@ -18,6 +19,9 @@ class OrgUnitSelectorViewlet(common.ViewletBase):
             context, request, view, manager)
 
         self.current_unit = None
+
+    def is_available(self):
+        return ogds_service().has_multiple_org_units()
 
     def get_active_unit(self):
         try:
