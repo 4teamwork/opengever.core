@@ -46,7 +46,7 @@ class DossierOverview(grok.View, OpengeverTab):
         return main_dossier.has_subdossiers()
 
     def navigation_json_url(self):
-        return '/dossier_navigation.json'.format(
+        return '{}/dossier_navigation.json'.format(
             self.context.get_main_dossier().absolute_url())
 
     def subdossiers(self):
