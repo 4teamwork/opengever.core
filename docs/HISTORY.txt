@@ -11,6 +11,11 @@ Changelog
 4.4.1 (2015-06-09)
 ------------------
 
+- Remove DexterityContent.__getattr__ monkey patch - this was a backport
+  from Dexterity 2.x and has now been addressed with the upgrade to DX 2.
+  (Includes regression test)
+  [lgraf]
+
 - CSRF: Allow _dav_writelocks to be initialized on context.
   [lgraf]
 
