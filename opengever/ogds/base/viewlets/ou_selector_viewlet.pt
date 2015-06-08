@@ -1,4 +1,6 @@
-<div id="portal-orgunit-selector" i18n:domain="plone" tal:define="active_unit view/get_active_unit">
+<div id="portal-orgunit-selector" i18n:domain="plone"
+     tal:define="active_unit view/get_active_unit"
+     tal:condition="view/is_available">
 
   <h5 class="hiddenStructure" i18n:translate="heading_client_selector">OrgUnit Selector</h5>
 

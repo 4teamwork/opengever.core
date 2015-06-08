@@ -5,7 +5,46 @@ from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 
 
+class TestOrgUnitSelectorViewletIsAvailable(FunctionalTestCase):
+
+    use_default_fixture = False
+
+    def setUp(self):
+        super(TestOrgUnitSelectorViewletIsAvailable, self).setUp()
+
+        test_user = create(Builder('ogds_user').id(TEST_USER_ID))
+
+        self.admin_unit = create(Builder('admin_unit')
+                                 .as_current_admin_unit()
+                                 .having(public_url='http://nohost/plone'))
+
+        self.org_unit = create(Builder('org_unit')
+                               .id(u'unit 1')
+                               .as_current_org_unit()
+                               .having(title=u'Unit 1',
+                                       admin_unit=self.admin_unit)
+                               .assign_users([test_user]))
+
+        self.repo_root = create(Builder('repository_root'))
+
+    @browsing
+    def test_org_unit_selector_not_visible_for_lone_org_unit(self, browser):
+        browser.login().open(self.repo_root)
+        self.assertEqual([], browser.css('#portal-orgunit-selector'))
+
+    @browsing
+    def test_org_unit_selector_visible_for_multiple_org_units(self, browser):
+        create(Builder('org_unit')
+               .id(u'unit 2')
+               .as_current_org_unit()
+               .having(title=u'Unit 2', admin_unit=self.admin_unit))
+
+        browser.login().open(self.repo_root)
+        self.assertEqual(1, len(browser.css('#portal-orgunit-selector')))
+
+
 class TestOrgUnitSelectorViewlet(FunctionalTestCase):
+
     use_default_fixture = False
 
     def setUp(self):
