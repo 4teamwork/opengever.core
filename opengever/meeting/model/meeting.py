@@ -80,8 +80,8 @@ class Meeting(Base):
     committee_id = Column(Integer, ForeignKey('committees.id'), nullable=False)
     committee = relationship("Committee", backref='meetings')
     location = Column(String(256))
-    start = Column(DateTime, nullable=False)
-    end = Column(DateTime)
+    start = Column('start_datetime', DateTime, nullable=False)
+    end = Column('end_datetime', DateTime)
     workflow_state = Column(String(WORKFLOW_STATE_LENGTH), nullable=False,
                             default=workflow.default_state.name)
 

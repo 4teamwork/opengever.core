@@ -275,4 +275,14 @@
         profile="opengever.meeting:default"
         />
 
+    <!-- 4308 -> 4400 -->
+    <genericsetup:upgradeStep
+        title="Avoid using reserved names as column names."
+        description=""
+        source="4308"
+        destination="4400"
+        handler="opengever.meeting.upgrades.to4400.RenameMeetingAvoidReservedNames"
+        profile="opengever.meeting:default"
+        />
+
 </configure>

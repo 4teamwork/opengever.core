@@ -63,7 +63,7 @@ class TestResolveNotificationView(FunctionalTestCase):
         notification = notification_center().get_notification(
             notification.notification_id)
 
-        self.assertTrue(notification.read)
+        self.assertTrue(notification.is_read)
 
     @browsing
     def test_redirects_to_the_object_if_its_on_the_current_admin_unit(self, browser):

@@ -40,8 +40,8 @@ class TestNotificationView(FunctionalTestCase):
                              data={'notification_id': notification_id})
 
         notifications = self.center.get_users_notifications(TEST_USER_ID)
-        self.assertTrue(notifications[0].read)
-        self.assertFalse(notifications[1].read)
+        self.assertTrue(notifications[0].is_read)
+        self.assertFalse(notifications[1].is_read)
 
     @browsing
     def test_mark_invalid_notification_as_read_raise_attribute_error(self, browser):
