@@ -1,6 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.interfaces import IRedirector
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import FunctionalTestCase
@@ -205,6 +206,18 @@ class TestCheckinViews(FunctionalTestCase):
         history = repository_tool.getHistory(document2)
         last_entry = repository_tool.retrieve(document2, len(history)-1)
         self.assertEquals(None, last_entry.comment)
+
+    @browsing
+    def test_reverting_with_revert_link_in_history_viewlet(self, browser):
+        document = create(Builder("document")
+                          .checked_out_by(TEST_USER_ID)
+                          .within(self.dossier))
+
+        browser.login().open(document)
+        browser.css('#checkin_without_comment').first.click()
+
+        browser.css('a.function-revert')[-1].click()
+        self.assertEquals(['Reverted file to version 0'], info_messages())
 
 
 # TODO: rewrite this test-case to express intent
