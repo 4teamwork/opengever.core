@@ -33,6 +33,7 @@ from zope.component import queryMultiAdapter, getAdapter
 from zope.component import queryUtility, getUtility
 from zope.interface import Invalid
 from zope.schema import getFields
+import mimetypes
 import transaction
 
 
@@ -311,6 +312,38 @@ class TestUploadValidator(FunctionalTestCase):
         field = getFields(IDocumentSchema).get('file')
 
         return (document, document.REQUEST, None, field, None)
+
+
+class TestDocumentMimetype(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestDocumentMimetype, self).setUp()
+        self.dossier = create(Builder("dossier"))
+        transaction.commit()
+
+    @browsing
+    def test_mimetype_sent_by_browser_is_ignored_on_upload(self, browser):
+        browser.login().open(self.dossier.absolute_url())
+        factoriesmenu.add('Document')
+
+        browser.fill({'File': (
+            'File data', 'file.txt', 'application/i-dont-know')}).save()
+        assert_message('Item created')
+        doc = browser.context.restrictedTraverse('document-1')
+        self.assertEquals('text/plain', doc.file.contentType)
+
+    @browsing
+    def test_mimetype_is_determined_by_using_python_mtr(self, browser):
+        mimetypes.add_type('application/foobar', '.foo')
+
+        browser.login().open(self.dossier.absolute_url())
+        factoriesmenu.add('Document')
+
+        browser.fill({'File': (
+            'File data', 'file.foo', 'application/i-dont-know')}).save()
+        assert_message('Item created')
+        doc = browser.context.restrictedTraverse('document-1')
+        self.assertEquals('application/foobar', doc.file.contentType)
 
 
 class TestDocumentAuthorResolving(FunctionalTestCase):
