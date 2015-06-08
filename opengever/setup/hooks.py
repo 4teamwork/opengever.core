@@ -17,6 +17,7 @@ def default_installed(site):
 def default_content_installed(site):
     assign_default_navigation_portlet(site, 'eingangskorb')
     assign_default_navigation_portlet(site, 'vorlagen')
+    assign_default_navigation_portlet(site, 'kontakte')
 
 
 def set_global_roles(site):
@@ -63,7 +64,7 @@ def assign_default_navigation_portlet(context, content_id):
             root=None,
             currentFolderOnly=False,
             includeTop=False,
-            topLevel=0,
+            topLevel=1,
             bottomLevel=0)
 
     # Block inherited context portlets on content
