@@ -111,11 +111,17 @@ class OGProtectTransform(ProtectTransform):
         if IPloneSiteRoot.providedBy(getSite()):
             unprotected_write(getToolByName(getSite(), 'portal_memberdata')._members)
 
+        context = self.getContext()
+
         # always allow writes to context's annotations.
-        context = self.request.PARENTS[0]
         if IAnnotatable.providedBy(context):
             annotations = IAnnotations(context)
             unprotected_write(annotations)
             if CONTEXT_ASSIGNMENT_KEY in annotations:
                 # also allow writes to context portlet assignments
                 unprotected_write(annotations[CONTEXT_ASSIGNMENT_KEY])
+
+        # Allow _dav_writelocks to be initialized
+        # see webdav/Lockable.py:64
+        if hasattr(context, '_dav_writelocks'):
+            unprotected_write(context._dav_writelocks)
