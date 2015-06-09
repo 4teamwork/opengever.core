@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.4.1 (unreleased)
+4.4.1 (2015-06-09)
 ------------------
 
 - CSRF: Allow _dav_writelocks to be initialized on context.
