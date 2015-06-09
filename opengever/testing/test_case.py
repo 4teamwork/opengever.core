@@ -5,6 +5,9 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.dossier.interfaces import ITemplateDossierProperties
 from opengever.journal.tests.utils import get_journal_entry
 from opengever.meeting.model import SubmittedDocument
+from opengever.ogds.models.admin_unit import AdminUnit
+from opengever.ogds.models.org_unit import OrgUnit
+from opengever.ogds.models.user import User
 from opengever.testing import builders  # keep!
 from opengever.testing.browser import OGBrowser
 from plone import api
@@ -41,8 +44,13 @@ class FunctionalTestCase(TestCase):
             self.browser = self._setup_browser()
 
         if self.use_default_fixture:
-            self.user, self.org_unit, self.admin_unit = create(
+            user, org_unit, admin_unit = create(
                 Builder('fixture').with_all_unit_setup())
+
+            # Used in the properties below to facilitate lazy access
+            self._user_id = user.userid
+            self._org_unit_id = org_unit.unit_id
+            self._admin_unit_id = admin_unit.unit_id
 
         self.grant('Contributor', 'Editor', 'Reader')
 
@@ -53,6 +61,37 @@ class FunctionalTestCase(TestCase):
 
         # currently necessary to have persistent SQL data
         transaction.commit()
+
+    """
+    These properties enforce lazy access to mapped objects, in oder to avoid
+    keeping around objects from an expired session when the transaction is
+    committed. That way we make sure to always get a fresh object
+    when a test case uses self.user, self.org_unit etc...
+    """
+
+    def get_user(self):
+        return User.get(self._user_id)
+
+    def set_user(self, value):
+        self._user_id = value.userid
+
+    user = property(get_user, set_user)
+
+    def get_org_unit(self):
+        return OrgUnit.get(self._org_unit_id)
+
+    def set_org_unit(self, value):
+        self._org_unit_id = value.unit_id
+
+    org_unit = property(get_org_unit, set_org_unit)
+
+    def get_admin_unit(self):
+        return AdminUnit.get(self._admin_unit_id)
+
+    def set_admin_unit(self, value):
+        self._admin_unit_id = value.unit_id
+
+    admin_unit = property(get_admin_unit, set_admin_unit)
 
     def setup_fullname(self, user_id=TEST_USER_ID, fullname=None):
         member = self.membership_tool.getMemberById(user_id)
