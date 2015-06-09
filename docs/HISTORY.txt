@@ -2,19 +2,29 @@
 Changelog
 =========
 
-4.4.2 (unreleased)
+4.5.0 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Update to Plone 4.3.2 and Dexterity 2.x.
+
+  - Update imports for Plone 4.3.x compatibility.
+  - Include dexterity extra requires (grok, relations).
+  - Upate or rework views and javascript for Plone 4.3.x compatibility.
+  - Fix CSRF protection exception for context annotations.
+  - Replace test.cfg with 4.3 cfg.
+  - Add plone.app.dexterity behavior IBasic to contactfolder.
+  - Cleanup collective.js.jqueryui javascripts in registry, because upgradestep does not work correctly.
+  - Cleanup no longer existing css files in css_registry.
+  - Don't use grok-style template dir conventions for non grok templates.
+  - Remove DexterityContent.__getattr__ monkey patch, this was a backport
+    from Dexterity 2.x and has now been addressed with the upgrade to DX 2.
+    (Includes regression test)
+
+  [lgraf, phgross]
 
 
 4.4.1 (2015-06-09)
 ------------------
-
-- Remove DexterityContent.__getattr__ monkey patch - this was a backport
-  from Dexterity 2.x and has now been addressed with the upgrade to DX 2.
-  (Includes regression test)
-  [lgraf]
 
 - CSRF: Allow _dav_writelocks to be initialized on context.
   [lgraf]
