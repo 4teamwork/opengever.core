@@ -1,6 +1,7 @@
 from DateTime import DateTime
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
 from opengever.globalindex.handlers.task import sync_task
 from opengever.testing import FunctionalTestCase
 
@@ -26,6 +27,10 @@ class TestBaseInboxOverview(FunctionalTestCase):
 
 
 class TestInboxOverviewDocumentBox(TestBaseInboxOverview):
+
+    @browsing
+    def test_overview(self, browser):
+        browser.login().open(self.inbox, view='tabbedview_view-overview')
 
     def list_documents_from_the_inbox(self):
         inbox_document = create(Builder('document')

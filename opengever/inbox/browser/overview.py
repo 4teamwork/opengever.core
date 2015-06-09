@@ -16,6 +16,9 @@ class InboxOverview(DossierOverview):
     grok.context(IInbox)
     grok.name('tabbedview_view-overview')
 
+    def is_subdossier_navigation_available(self):
+        return False
+
     def boxes(self):
         """Defines the boxes wich are Displayed at the Overview tab"""
 

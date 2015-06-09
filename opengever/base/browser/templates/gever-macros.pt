@@ -1,0 +1,86 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      i18n:domain="opengever.base"
+      tal:omit-tag="">
+  <head>
+  </head>
+
+  <body>
+
+    <tal:comment replace="nothing">
+    Render overview boxes in a generic way. Can display brains, dicts or sqlalchemy objects.
+    Currently will assume than an sqlalchemy-object is a task.
+
+    css_width: a number indicating the width percentage.
+    base_index: optional, it not defined will take 0 as default.
+    </tal:comment>
+
+    <metal:define define-macro="overview_boxes">
+
+      <tal:block tal:repeat="boxes groups" tal:define="base_index base_index | python: 0">
+      <div tal:define="repeat_index repeat/boxes/index;
+                       box_id python: base_index + repeat_index;"
+           tal:attributes="class string:boxGroup boxGroup${box_id};
+                           style string:width:${css_width}%">
+        <div tal:repeat="box boxes" class="box" tal:attributes="id string:${box/id}Box">
+          <h2 i18n:translate="" tal:content="box/label|box/id"></h2>
+
+          <tal:box tal:condition="python: not hasattr(box.get('content'), '__iter__')">
+            <tal:item  tal:condition="box/content">
+              <span tal:content="box/content" />
+            </tal:item>
+            <tal:item tal:condition="not: box/content">
+              <span i18n:translate="" >No content</span>
+            </tal:item>
+          </tal:box>
+
+          <tal:box tal:condition="python: hasattr(box.get('content'), '__iter__')">
+            <tal:items define="items box/content">
+              <ul tal:condition="items">
+                <li tal:repeat="item items">
+
+                  <!-- item is a brain -->
+                  <tal:brain tal:condition="python: view.get_type(item) == 'brain'">
+                    <a href="" tal:attributes="href item/getURL|nothing;
+                                               title item/alt|nothing;
+                                               class python:view.get_item_css_classes(item)" tal:omit-tag="not: item/getURL|nothing">
+                    <span tal:content="item/Title" /></a>
+                  </tal:brain>
+
+                  <!-- item is a dict (Documents and participants) -->
+                  <tal:dict tal:condition="python: view.get_type(item) == 'dict'">
+                    <a href=""
+                       tal:attributes="href item/getURL|nothing;
+                                       title item/alt|nothing;
+                                       class python:'rollover-breadcrumb %s' % (item.get('css_class'))"
+                       tal:omit-tag="not: item/getURL|nothing">
+                    <span tal:content="item/Title" /></a>
+                  </tal:dict>
+
+                  <!-- SQLAlchemy Objects (Tasks from GlobalIndex)-->
+                  <tal:sql tal:condition="python: view.get_type(item) == 'sqlalchemy_object'">
+                    <div tal:replace="structure python:view.render_globalindex_task(item)" />
+                  </tal:sql>
+                </li>
+
+                <li class="moreLink">
+                  <a
+                      tal:attributes="href python: box.get('href', None) and '#%s' % box.get('href') or '#%s' % box.get('id')"
+                      i18n:translate="">
+                  show all</a>
+                </li>
+              </ul>
+              <span tal:condition="not: items" i18n:translate="">No content</span>
+            </tal:items>
+          </tal:box>
+
+        </div>
+      </div>
+      </tal:block>
+
+    </metal:define>
+
+  </body>
+</html>
