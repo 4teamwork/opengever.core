@@ -10,7 +10,7 @@ class TestFunctionalTemplates(MockTestCase):
 
         # Context
         mock_context = self.mocker.mock()
-        get_site = self.mocker.replace('zope.app.component.hooks.getSite')
+        get_site = self.mocker.replace('zope.component.hooks.getSite')
         self.expect(get_site()).result(mock_context)
         self.expect(mock_context.REQUEST).result(mock_context)
 

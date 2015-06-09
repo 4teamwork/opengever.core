@@ -2,6 +2,7 @@ from collective.quickupload.interfaces import IQuickUploadFileFactory
 from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.mail import inbound
 from opengever.document.behaviors import metadata
 from opengever.document.interfaces import IDocumentSettings
 from opengever.mail.mail import extract_email
@@ -136,6 +137,45 @@ class TestMailMetadataWithQuickupload(TestMailMetadataWithBuilder):
                          portal_type='ftw.mail.mail')
         mail = result['success']
         return mail
+
+
+class TestMailPreservedAsPaperDefault(FunctionalTestCase):
+
+    def create_mail_quickupload(self):
+        dossier = create(Builder("dossier"))
+        factory = IQuickUploadFileFactory(dossier)
+
+        result = factory(filename='mail.eml',
+                         title='',  # ignored by adapter
+                         description='Description',  # ignored by adapter
+                         content_type='message/rfc822',
+                         data=MAIL_DATA,
+                         portal_type='ftw.mail.mail')
+        mail = result['success']
+        return mail
+
+    def create_mail_inbound(self):
+        dossier = create(Builder("dossier"))
+        mail = inbound.createMailInContainer(dossier, MAIL_DATA)
+        return mail
+
+    def test_value_if_default_is_true(self):
+        set_preserved_as_paper_default(True)
+
+        quickuploaded_mail = self.create_mail_quickupload()
+        self.assertEquals(True, quickuploaded_mail.preserved_as_paper)
+
+        inbound_mail = self.create_mail_inbound()
+        self.assertEquals(True, inbound_mail.preserved_as_paper)
+
+    def test_value_if_default_is_false(self):
+        set_preserved_as_paper_default(False)
+
+        quickuploaded_mail = self.create_mail_quickupload()
+        self.assertEquals(False, quickuploaded_mail.preserved_as_paper)
+
+        inbound_mail = self.create_mail_inbound()
+        self.assertEquals(False, inbound_mail.preserved_as_paper)
 
 
 class TestMailUpgradeStep(FunctionalTestCase):

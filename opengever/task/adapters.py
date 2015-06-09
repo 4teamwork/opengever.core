@@ -9,9 +9,9 @@ from opengever.task.task import ITask
 from persistent import Persistent
 from persistent.list import PersistentList
 from zope.annotation.interfaces import IAnnotations
-from zope.app.container.contained import ObjectAddedEvent
-from zope.app.container.contained import ObjectRemovedEvent
-from zope.app.container.interfaces import UnaddableError
+from zope.container.contained import ObjectAddedEvent
+from zope.container.contained import ObjectRemovedEvent
+from zope.container.interfaces import UnaddableError
 from zope.event import notify
 from zope.interface import Attribute
 from zope.interface import implements

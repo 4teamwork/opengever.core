@@ -5,7 +5,7 @@ from opengever.meeting.model import Meeting
 from opengever.meeting.service import meeting_service
 from opengever.meeting.tabs.memberlisting import MemberListingTab
 from opengever.tabbedview.browser.base import OpengeverTab
-from zope.app.pagetemplate import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 
 
 class Committees(grok.View, OpengeverTab):

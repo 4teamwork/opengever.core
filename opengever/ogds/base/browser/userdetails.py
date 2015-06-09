@@ -2,7 +2,7 @@ from five import grok
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models.exceptions import RecordNotFound
 from zExceptions import NotFound
-from zope.app.component.hooks import getSite
+from zope.component.hooks import getSite
 from zope.interface import Interface
 from zope.publisher.interfaces import IPublishTraverse
 

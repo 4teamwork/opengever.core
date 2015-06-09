@@ -86,7 +86,7 @@ class TestAssingForwarding(FunctionalTestCase):
 
         self.browser.getControl('Responsible Client').value = [new_client]
         self.browser.getControl(
-            name='form.widgets.responsible:list').value = ['inbox:client2']
+            name='form.widgets.responsible').value = ['inbox:client2']
 
         self.browser.fill({'Response': 'Fake response'})
         self.browser.click('Assign')

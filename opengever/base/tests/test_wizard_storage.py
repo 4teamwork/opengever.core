@@ -6,8 +6,8 @@ from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.core.testing import ANNOTATION_LAYER
 from persistent.dict import PersistentDict
 from zope.annotation.interfaces import IAttributeAnnotatable
-from zope.app.component.hooks import setSite
 from zope.component import getSiteManager
+from zope.component.hooks import setSite
 from zope.interface import alsoProvides
 from zope.interface.verify import verifyClass
 import AccessControl

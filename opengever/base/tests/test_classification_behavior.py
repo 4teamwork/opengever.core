@@ -39,7 +39,6 @@ class TestClassificationBehavior(FunctionalTestCase):
         factoriesmenu.add('ClassificationFTI')
 
         browser.fill({
-            'Title': u'My Object',
             'Classification': classification.CLASSIFICATION_CONFIDENTIAL,
             'Privacy layer': classification.PRIVACY_LAYER_YES,
             'Public Trial': classification.PUBLIC_TRIAL_PRIVATE,

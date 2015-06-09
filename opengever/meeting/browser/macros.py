@@ -7,7 +7,7 @@ class View(grok.View):
     grok.require('zope2.View')
     grok.name('meeting-macros')
 
-    template = grok.PageTemplateFile('macros_templates/macros.pt')
+    template = grok.PageTemplateFile('templates/macros.pt')
 
     def __getitem__(self, key):
         return self.template._template.macros[key]

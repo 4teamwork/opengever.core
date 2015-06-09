@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<object name="portal_javascripts" meta_type="JavaScripts Registry">
+
+  <javascript id="++resource++jquery-ui.min.js" remove="True"/>
+  <javascript id="++resource++jquery-ui-i18n.js" remove="True"/>
+
+</object>

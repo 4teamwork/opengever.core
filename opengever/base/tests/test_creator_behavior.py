@@ -1,7 +1,10 @@
-from opengever.base.behaviors import creator
-from plone.dexterity.fti import DexterityFTI
+from ftw.builder import Builder
+from ftw.builder import create
+from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import factoriesmenu
+from opengever.base.behaviors.creator import ICreatorAware
 from opengever.testing import FunctionalTestCase
-import transaction
+from plone.app.testing import TEST_USER_ID
 
 
 class TestCreatorBehavior(FunctionalTestCase):
@@ -10,36 +13,31 @@ class TestCreatorBehavior(FunctionalTestCase):
     It also adds a creators field with listCreators() and setCreators()
     methods. The field is hidden by default.
     """
-    use_browser = True
 
     def setUp(self):
         super(TestCreatorBehavior, self).setUp()
+        self.dossier = create(Builder('dossier'))
 
-        fti = DexterityFTI('ReferenceFTI')
-        fti.behaviors = ('opengever.base.behaviors.creator.ICreator',)
-        self.portal.portal_types._setObject('ReferenceFTI', fti)
-        fti.lookupSchema()
-        transaction.commit()
+    @browsing
+    def test_creator_field_is_hidden_by_default(self, browser):
+        browser.login().open(self.dossier)
+        factoriesmenu.add('Document')
+        self.assertNotIn('Creators', browser.forms.get('form').field_labels)
 
-    def test_creator(self):
-        self.browser.open('http://nohost/plone/folder_factories')
-        self.assertPageContains('ReferenceFTI')
-        self.browser.getControl('ReferenceFTI').click()
-        self.browser.getControl('Add').click()
-        self.browser.assert_url('http://nohost/plone/++add++ReferenceFTI')
-        self.assertPageContainsNot('creators')
-        self.browser.getControl('Title').value = 'Hallo Hugo'
-        self.browser.getControl('Save').click()
-        self.browser.assert_url('http://nohost/plone/referencefti/view')
+    def test_creator_is_set_when_creating_objects(self):
+        document = create(Builder('document').within(self.dossier))
+        self.assertEquals((TEST_USER_ID,), document.listCreators())
+        self.assertEquals(TEST_USER_ID, document.Creator())
 
-        obj = self.portal.get('referencefti')
-        self.assertTrue(creator.ICreatorAware.providedBy( obj ))
+    def test_marker_interface_is_provided_by_objects_with_behavior(self):
+        document = create(Builder('document').within(self.dossier))
+        self.assertTrue(ICreatorAware.providedBy(document))
 
-        self.assertEquals(('test_user_1_',), obj.listCreators())
-        self.assertEquals('test_user_1_', obj.Creator())
+    def test_creator_setter(self):
+        document = create(Builder('document').within(self.dossier))
 
-        obj.setCreators(('foo',))
-        self.assertEquals(('foo',), obj.listCreators())
+        document.setCreators(('foo',))
+        self.assertEquals(('foo',), document.listCreators())
 
-        obj.addCreator('bar')
-        self.assertEquals(('foo', 'bar'), obj.listCreators())
+        document.addCreator('bar')
+        self.assertEquals(('foo', 'bar'), document.listCreators())

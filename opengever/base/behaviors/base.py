@@ -44,10 +44,15 @@ class IOpenGeverBaseMarker(Interface):
 
 class OpenGeverBase(metadata.MetadataBase):
 
-    title = metadata.DCFieldProperty(
-        metadata.IBasic['title'],
-        get_name='title',
-        set_name='setTitle')
+    def _get_title(self):
+        return self.context.title
+
+    def _set_title(self, value):
+        if isinstance(value, str):
+            raise ValueError('Title must be unicode.')
+        self.context.title = value
+
+    title = property(_get_title, _set_title)
 
     def _get_description(self):
         return self.context.description
@@ -56,4 +61,5 @@ class OpenGeverBase(metadata.MetadataBase):
         if isinstance(value, str):
             raise ValueError('Description must be unicode.')
         self.context.description = value
+
     description = property(_get_description, _set_description)

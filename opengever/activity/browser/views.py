@@ -3,7 +3,7 @@ from opengever.activity import notification_center
 from opengever.activity.browser.listing import NotificationListingTab
 from plone import api
 from Products.Five import BrowserView
-from zope.app.pagetemplate import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.interface import Interface
 
 

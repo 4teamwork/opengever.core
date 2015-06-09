@@ -4,7 +4,7 @@ from five.grok import subscribe
 from opengever.globalindex.handlers.task import sync_task
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task.task import ITask
-from zope.app.container.interfaces import IObjectAddedEvent
+from zope.lifecycleevent.interfaces import IObjectAddedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 

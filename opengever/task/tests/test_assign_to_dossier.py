@@ -46,7 +46,7 @@ class TestAssignForwardignToDossier(FunctionalTestCase):
         # Step 2 - choose repository
         browser.fill(
             {'form.widgets.repositoryfolder.widgets.query': 'Repo A'}).submit()
-        browser.fill({'form.widgets.repositoryfolder:list':
+        browser.fill({'form.widgets.repositoryfolder':
                       '/plone/opengever-repository-repositoryroot/repo-a'})
         browser.css('#form-buttons-save').first.click()
 
@@ -93,7 +93,7 @@ class TestAssignForwardignToDossier(FunctionalTestCase):
         # Step 2 - choose dossier
         browser.fill(
             {'form.widgets.dossier.widgets.query': 'Dossier A'}).submit()
-        browser.fill({'form.widgets.dossier:list': '/plone/dossier-1'})
+        browser.fill({'form.widgets.dossier': '/plone/dossier-1'})
         browser.css('#form-buttons-save').first.click()
 
         # Step 3 - edit task form

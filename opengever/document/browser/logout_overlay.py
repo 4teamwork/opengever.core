@@ -32,5 +32,4 @@ class LogoutOverlay(grok.View):
         if not self.items:
             return "empty:%s" % self.redirect_url
 
-        return ViewPageTemplateFile(
-            './logout_overlay_templates/logout_overlay.pt')(self)
+        return ViewPageTemplateFile('templates/logout_overlay.pt')(self)

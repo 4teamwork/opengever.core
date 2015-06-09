@@ -119,6 +119,7 @@ class OpengeverFixture(PloneSandboxLayer):
             '  <includePluginsOverrides package="plone" />'
 
             '  <include package="opengever.ogds.base" file="tests.zcml" />'
+            '  <include package="opengever.base.tests" file="tests.zcml" />'
             '  <include package="opengever.setup.tests" />'
 
             '</configure>',
@@ -148,6 +149,7 @@ class OpengeverFixture(PloneSandboxLayer):
         # lots of failing tests.
         applyProfile(portal, 'plone.app.dexterity:default')
         applyProfile(portal, 'plone.app.registry:default')
+        applyProfile(portal, 'plone.app.relationfield:default')
         applyProfile(portal, 'opengever.globalindex:default')
         applyProfile(portal, 'opengever.ogds.base:default')
         applyProfile(portal, 'opengever.base:default')

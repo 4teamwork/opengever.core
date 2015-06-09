@@ -1,8 +1,8 @@
 $(function(){
 
   // initalize
-  if($('input[name=form.widgets.object_provides:list]:checked').length === 0){
-    $('input[name=form.widgets.object_provides:list]:first').click();
+  if($("input[name='form.widgets.object_provides']:checked").length === 0){
+    $("input[name='form.widgets.object_provides']:first").click();
   }
 
   // add manually the class for some fields, where the addClass function not work (autocomplete widget ect.)
@@ -12,9 +12,9 @@ $(function(){
   $('#form-widgets-trashed-0').addClass('opengever-document-behaviors-IBaseDocument');
   $('#form-widgets-issuer-autocomplete').addClass('opengever-task-task-ITask');
 
-  $('input[name=form.widgets.object_provides:list]').change(function(){
+  $("input[name='form.widgets.object_provides']").change(function(){
     var types = ['opengever-dossier-behaviors-dossier-IDossierMarker', 'opengever-task-task-ITask', 'opengever-document-behaviors-IBaseDocument'];
-    selected = $('input[name=form.widgets.object_provides:list]:checked').attr('value').replace(/\./g, '-');
+    selected = $("input[name='form.widgets.object_provides']:checked").attr('value').replace(/\./g, '-');
     types.splice(types.indexOf(selected),1)
 
     // show current

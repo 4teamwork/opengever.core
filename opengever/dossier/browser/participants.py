@@ -12,8 +12,8 @@ from opengever.tabbedview.helper import linked_ogds_author
 from opengever.tabbedview.helper import readable_ogds_author
 from persistent.list import PersistentList
 from plone.memoize import ram
-from zope.app.component.hooks import getSite
-from zope.app.pagetemplate import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
+from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.i18nmessageid.message import Message

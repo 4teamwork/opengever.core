@@ -91,7 +91,7 @@ class MemberTraverser(grok.View):
 
 class MemberView(BrowserView):
 
-    template = ViewPageTemplateFile('members_templates/member.pt')
+    template = ViewPageTemplateFile('templates/member.pt')
     implements(IBrowserView, IPublishTraverse)
 
     is_model_view = True

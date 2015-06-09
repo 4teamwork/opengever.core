@@ -9,7 +9,7 @@ from opengever.tabbedview.browser.listing import ListingView
 from opengever.tabbedview.browser.sqltablelisting import SqlTableSource
 from opengever.tabbedview.helper import boolean_helper
 from opengever.tabbedview.helper import email_helper
-from zope.app.pagetemplate import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.interface import implements
 from zope.interface import Interface
 

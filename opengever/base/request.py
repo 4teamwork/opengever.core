@@ -3,8 +3,8 @@ from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from Products.CMFCore.utils import getToolByName
 from StringIO import StringIO
-from zope.app.component.hooks import getSite
-from zope.app.component.hooks import setSite
+from zope.component.hooks import getSite
+from zope.component.hooks import setSite
 from zope.globalrequest import getRequest
 import json
 import os.path

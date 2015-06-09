@@ -33,6 +33,7 @@ from zope.component import queryMultiAdapter, getAdapter
 from zope.component import queryUtility, getUtility
 from zope.interface import Invalid
 from zope.schema import getFields
+import mimetypes
 import transaction
 
 
@@ -79,17 +80,27 @@ class TestDocument(FunctionalTestCase):
         document_without_file = create(Builder("document"))
         self.assertFalse(document_without_file.digitally_available)
 
-    # TODO: split this and assert something useful ;)
-    def test_views(self):
-        document = create(Builder("document"))
-        document.keywords = ()
+    @browsing
+    def test_documents_tabbedview(self, browser):
+        doc = create(Builder('document').with_dummy_content())
+        browser.login().open(doc, view='@@tabbed_view')
 
-        self.portal.REQUEST['ACTUAL_URL'] = document.absolute_url()
+        self.assertEquals(
+            ['overview', 'journal', 'sharing'],
+            browser.css('.formTabs .formTab').text)
 
-        view = document.restrictedTraverse('@@view')
-        self.failUnless(view())
-        tabbed_view = document.restrictedTraverse('@@tabbed_view')
-        self.failUnless(tabbed_view())
+    @browsing
+    def test_documents_properties_view(self, browser):
+        doc = create(Builder('document').with_dummy_content())
+        browser.login().open(doc, view='@@view')
+
+        self.assertEquals(
+            u'Testdokum\xe4nt',
+            browser.css('.documentFirstHeading').first.text)
+
+        self.assertEquals(
+            ['Common', 'Classification'],
+            browser.css('#content-core fieldset legend').text)
 
     def test_copying_a_document_prefixes_title_with_copy_of(self):
         dossier_a = create(Builder('dossier').titled(u'Dossier A'))
@@ -301,6 +312,38 @@ class TestUploadValidator(FunctionalTestCase):
         field = getFields(IDocumentSchema).get('file')
 
         return (document, document.REQUEST, None, field, None)
+
+
+class TestDocumentMimetype(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestDocumentMimetype, self).setUp()
+        self.dossier = create(Builder("dossier"))
+        transaction.commit()
+
+    @browsing
+    def test_mimetype_sent_by_browser_is_ignored_on_upload(self, browser):
+        browser.login().open(self.dossier.absolute_url())
+        factoriesmenu.add('Document')
+
+        browser.fill({'File': (
+            'File data', 'file.txt', 'application/i-dont-know')}).save()
+        assert_message('Item created')
+        doc = browser.context.restrictedTraverse('document-1')
+        self.assertEquals('text/plain', doc.file.contentType)
+
+    @browsing
+    def test_mimetype_is_determined_by_using_python_mtr(self, browser):
+        mimetypes.add_type('application/foobar', '.foo')
+
+        browser.login().open(self.dossier.absolute_url())
+        factoriesmenu.add('Document')
+
+        browser.fill({'File': (
+            'File data', 'file.foo', 'application/i-dont-know')}).save()
+        assert_message('Item created')
+        doc = browser.context.restrictedTraverse('document-1')
+        self.assertEquals('application/foobar', doc.file.contentType)
 
 
 class TestDocumentAuthorResolving(FunctionalTestCase):

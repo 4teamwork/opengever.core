@@ -11,9 +11,11 @@
 
       <ul class="subContents">
         <li tal:repeat="item view/items">
-            <a target="_blank" tal:attributes="href item/getURL" tal:content="item/pretty_title_or_id"/>
+          <a target="_blank" tal:attributes="href item/getURL" tal:content="item/pretty_title_or_id"/>
         </li>
       </ul>
-      <input type="hidden" name="form.redirect.url" tal:attributes="value view/redirect_url" />
-      <input type="submit" name="form.submitted" value="Logout" class="destructive" i18n:attributes="value"/>
+      <input type="hidden" class="logout_overlay_redirect" name="form.redirect.url"
+             tal:attributes="value view/redirect_url" />
+      <input type="submit" class="logout_overlay_submit" name="form.submitted"
+             value="Logout" class="destructive" i18n:attributes="value"/>
 </form>

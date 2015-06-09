@@ -65,6 +65,6 @@ class TestAssignTask(FunctionalTestCase):
         self.browser.getControl(
             name='form.widgets.responsible.widgets.query').value = name
         self.browser.click('form.widgets.responsible.buttons.search')
-        self.browser.getControl(name='form.widgets.responsible:list').value=[userid]
+        self.browser.getControl(name='form.widgets.responsible').value=[userid]
         self.browser.fill({'Response': response})
         self.browser.click('Assign')

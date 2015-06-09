@@ -22,4 +22,13 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <!-- 4300 -> 4500 -->
+    <upgrade-step:importProfile
+        title="Add plone.app.dexterity IBasic behavior to contactfolder"
+        profile="opengever.contact:default"
+        source="4300"
+        destination="4500"
+        directory="profiles/4500"
+        />
+
 </configure>

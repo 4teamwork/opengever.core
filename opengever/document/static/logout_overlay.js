@@ -16,11 +16,8 @@ function initLogoutOverlay(){
             subtype:'ajax',
             formselector:'form[name="logout_overlay"]',
             config: {
-                onBeforeLoad : function (e) {
-
-                    $overlay = e.target.getOverlay();
-                    $html = $overlay.find('.pb-ajax > div').html();
-
+              onBeforeLoad : function (e) {
+                    $html = $(e.target).find('.pb-ajax > div').html();
                     if ($html.search('empty:') >= 0){
                         /* The user has no checked out documents. So
                         we can logout him directly.
@@ -30,9 +27,9 @@ function initLogoutOverlay(){
                         return false;
                     }
 
-                    $('input[name=form.submitted]').click(function(e){
+                    $('.logout_overlay_submit').click(function(e){
                         e.preventDefault();
-                        $url = $('input[name=form.redirect.url]').val();
+                        $url = $('.logout_overlay_redirect').val();
                         window.open($url, target='_self');
                         return false;
                     });

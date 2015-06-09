@@ -12,8 +12,8 @@ from plone.memoize.interfaces import ICacheChooser
 from plone.namedfile.browser import Download
 from plone.namedfile.utils import stream_data
 from Products.CMFCore.utils import getToolByName
-from zope.app.component.hooks import getSite
 from zope.component import queryUtility
+from zope.component.hooks import getSite
 from zope.event import notify
 from zope.globalrequest import getRequest
 from zope.i18n import translate
