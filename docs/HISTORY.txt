@@ -5,6 +5,9 @@ Changelog
 4.4.1 (unreleased)
 ------------------
 
+- CSRF: Allow _dav_writelocks to be initialized on context.
+  [lgraf]
+
 - Also assign navigation portlet to 'kontakte' in example content.
   Change navigation toplevel to 1. Also include hooks to setup navigation in policy template.
   [deiferni]
