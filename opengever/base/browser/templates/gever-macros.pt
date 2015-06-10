@@ -88,10 +88,9 @@
                   </tal:sql>
                 </li>
 
-                <li class="moreLink">
-                  <a
-                      tal:attributes="href python: box.get('href', None) and '#%s' % box.get('href') or '#%s' % box.get('id')"
-                      i18n:translate="">
+                <li class="moreLink" tal:condition="python: box.get('href', None)">
+                  <a tal:attributes="href python: '#{}'.format(box.get('href'))"
+                     i18n:translate="">
                   show all</a>
                 </li>
               </ul>

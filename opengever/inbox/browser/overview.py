@@ -27,14 +27,17 @@ class InboxOverview(BoxesViewMixin, grok.View, OpengeverTab):
             [
                 dict(id='assigned_inbox_tasks',
                      content=self.assigned_tasks(),
+                     href='assigned_inbox_tasks',
                      label=_(u'label_assigned_inbox_tasks',
                              default='Assigned tasks')),
                 dict(id='issued_inbox_tasks',
+                     href='issued_inbox_tasks',
                      content=self.issued_tasks(),
                      label=_(u'label_issued_inbox_tasks',
                              default='Issued tasks')),
             ], [
                 dict(id='documents',
+                     href='documents',
                      label=_("Documents"),
                      content=self.documents()),
             ]

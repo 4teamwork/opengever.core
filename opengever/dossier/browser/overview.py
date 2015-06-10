@@ -36,7 +36,7 @@ class DossierOverview(BoxesViewMixin, grok.View, OpengeverTab):
                 dict(id='newest_tasks', content=self.tasks(),
                      href='tasks', label=_("Newest tasks")),
                 dict(id='participants', content=self.sharing(),
-                     label=_("Participants")),
+                     href='participants', label=_("Participants")),
             ], [
                 dict(id='newest_documents', content=self.documents(),
                      href='documents', label=_("Newest documents")),
