@@ -35,7 +35,7 @@ class InboxOverview(BoxesViewMixin, grok.View, OpengeverTab):
                              default='Issued tasks')),
             ], [
                 dict(id='documents',
-                     label=_("documents"),
+                     label=_("Documents"),
                      content=self.documents()),
             ]
         ]
@@ -73,8 +73,10 @@ class InboxOverview(BoxesViewMixin, grok.View, OpengeverTab):
         query = {'isWorkingCopy': 0,
                  'path': {'depth': 1,
                           'query': '/'.join(self.context.getPhysicalPath())},
-                 'portal_type': ['opengever.document.document',
-                                 'ftw.mail.mail']}
+                 'object_provides': [
+                     'opengever.document.behaviors.IBaseDocument', ],
+                 'sort_on': 'modified',
+                 'sort_order': 'reverse'}
 
         documents = catalog(query)[:10]
         document_list = [{
