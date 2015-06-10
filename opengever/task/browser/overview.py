@@ -148,4 +148,4 @@ class Overview(DisplayForm, OpengeverTab):
         if not item:
             return None
 
-        return item.get_link()
+        return item.get_link(with_responsible_info=False)

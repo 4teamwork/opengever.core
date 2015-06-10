@@ -137,12 +137,8 @@ class TestTaskOverview(FunctionalTestCase):
                        responsible=TEST_USER_ID))
 
         browser.login().open(task, view='tabbedview_view-overview')
-        task_list = browser.css('#sub_taskBox div.task').text
-        self.assertSequenceEqual(
-            ['Subtask 1 ({})'.format(self.user.label()),
-             'Subtask 2 ({})'.format(self.user.label())],
-            task_list
-        )
+        self.assertSequenceEqual(['Subtask 1', 'Subtask 2'],
+                                 browser.css('#sub_taskBox div.task').text)
         self.assertSequenceEqual(
             [], browser.css('#containing_taskBox div.task').text)
 
@@ -165,9 +161,8 @@ class TestTaskOverview(FunctionalTestCase):
                              responsible=TEST_USER_ID))
 
         browser.login().open(sub, view='tabbedview_view-overview')
-        task_list = browser.css('#containing_taskBox div.task').text
         self.assertSequenceEqual(
-            ['Parent ({})'.format(self.user.label())], task_list)
+            ['Parent'], browser.css('#containing_taskBox div.task').text)
 
         self.assertSequenceEqual(
             [], browser.css('#sub_taskBox div.task').text)
@@ -193,36 +188,12 @@ class TestTaskOverview(FunctionalTestCase):
 
         browser.login().open(predecessor, view='tabbedview_view-overview')
         self.assertSequenceEqual(
-            ['Successor ({})'.format(self.user.label())],
-            browser.css("#successor_tasksBox div.task").text)
+            ['Successor'], browser.css("#successor_tasksBox div.task").text)
         self.assertSequenceEqual(
             [], browser.css("predecessor_taskBox div.task").text)
 
         browser.login().open(successor, view='tabbedview_view-overview')
         self.assertSequenceEqual(
-            ['Predecessor ({})'.format(self.user.label())],
-            browser.css("#predecessor_taskBox div.task").text)
+            ['Predecessor'], browser.css("#predecessor_taskBox div.task").text)
         self.assertSequenceEqual(
             [], browser.css("#successor_tasksBox div.task").text)
-
-    # XXX: Not sure if that behavior is really a use case
-    # has to be defined after the inbox and forwarding rework
-
-    # @browsing
-    # def test_issuer_is_prefixed_by_predecessor_org_unit_on_a_forwarding_successor(self, browser):
-    #     create(Builder('org_unit')
-    #            .id('client2')
-    #            .having(title="Client 2")
-    #            .assign_users([self.user]))
-
-    #     forwarding = create(Builder('forwarding').having(issuer=TEST_USER_ID))
-    #     successor = create(Builder('task')
-    #                        .having(issuer=TEST_USER_ID,
-    #                                responsible_client='client2')
-    #                        .successor_from(forwarding))
-
-    #     browser.login().open(successor, view='tabbedview_view-overview')
-
-    #     self.assertEquals(
-    #         'Client2 / test_user_1_ (test_user_1_)',
-    #         browser.css('.issuer').first.text)
