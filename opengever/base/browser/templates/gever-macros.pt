@@ -42,7 +42,23 @@
               <ul tal:condition="items">
                 <li tal:repeat="item items">
 
-                  <!-- item is a brain -->
+                  <tal:comment replace="nothing">
+                    Item is a widget:
+                  </tal:comment>
+                  <tal:brain tal:condition="python: view.get_type(item) == 'widget'">
+                    <tal:cond tal:condition="item/label">
+                      <span tal:content="structure item/label" />
+                      <span>: </span>
+                      <span tal:content="structure item/render" />
+                    </tal:cond>
+                    <tal:cond tal:condition="not: item/label">
+                      <span tal:content="structure item/render" />
+                    </tal:cond>
+                  </tal:brain>
+
+                  <tal:comment replace="nothing">
+                    Item is a brain:
+                  </tal:comment>
                   <tal:brain tal:condition="python: view.get_type(item) == 'brain'">
                     <a href="" tal:attributes="href item/getURL|nothing;
                                                title item/alt|nothing;
@@ -50,7 +66,10 @@
                     <span tal:content="item/Title" /></a>
                   </tal:brain>
 
-                  <!-- item is a dict (Documents and participants) -->
+
+                  <tal:comment replace="nothing">
+                    Item is a dict (Documents and participants):
+                  </tal:comment>
                   <tal:dict tal:condition="python: view.get_type(item) == 'dict'">
                     <a href=""
                        tal:attributes="href item/getURL|nothing;
@@ -60,7 +79,10 @@
                     <span tal:content="item/Title" /></a>
                   </tal:dict>
 
-                  <!-- SQLAlchemy Objects (Tasks from GlobalIndex)-->
+
+                  <tal:comment replace="nothing">
+                    SQLAlchemy Objects (Tasks from GlobalIndex):
+                  </tal:comment>
                   <tal:sql tal:condition="python: view.get_type(item) == 'sqlalchemy_object'">
                     <div tal:replace="structure python:view.render_globalindex_task(item)" />
                   </tal:sql>

@@ -1,6 +1,7 @@
 from opengever.base.browser.helper import get_css_class
 from opengever.globalindex.utils import indexed_task_link_helper
 from Products.ZCatalog.interfaces import ICatalogBrain
+from z3c.form.interfaces import IFieldWidget
 
 
 class BoxesViewMixin(object):
@@ -19,5 +20,7 @@ class BoxesViewMixin(object):
             return 'dict'
         elif ICatalogBrain.providedBy(item):
             return 'brain'
+        elif IFieldWidget.providedBy(item):
+            return 'widget'
         else:
             return 'sqlalchemy_object'
