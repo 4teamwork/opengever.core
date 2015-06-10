@@ -200,6 +200,9 @@ msgstr "Info"
 msgid "subdossiers"
 msgstr "Subdossiers"
 
+msgid "submittedproposals"
+msgstr "Anträge"
+
 msgid "tasks"
 msgstr "Aufgaben"
 
@@ -223,7 +226,4 @@ msgstr "Papierkorb"
 
 msgid "users"
 msgstr "OGDS"
-
-msgid "submittedproposals"
-msgstr "Anträge"
 

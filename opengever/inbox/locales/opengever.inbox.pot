@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-04-16 17:18+0000\n"
+"POT-Creation-Date: 2015-06-10 10:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,10 @@ msgstr ""
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.inbox\n"
+
+#: ./opengever/inbox/browser/overview.py:38
+msgid "Documents"
+msgstr ""
 
 #: ./opengever/inbox/profiles/default/actions.xml
 msgid "Forward"
@@ -73,7 +77,7 @@ msgid "help_responsible"
 msgstr ""
 
 #. Default: "Assigned tasks"
-#: ./opengever/inbox/browser/overview.py:24
+#: ./opengever/inbox/browser/overview.py:30
 msgid "label_assigned_inbox_tasks"
 msgstr ""
 
@@ -93,7 +97,7 @@ msgid "label_inbox_group"
 msgstr ""
 
 #. Default: "Issued tasks"
-#: ./opengever/inbox/browser/overview.py:28
+#: ./opengever/inbox/browser/overview.py:34
 msgid "label_issued_inbox_tasks"
 msgstr ""
 
