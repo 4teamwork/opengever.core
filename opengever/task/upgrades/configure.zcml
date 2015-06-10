@@ -130,4 +130,13 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <!-- 4300 -> 4500 -->
+    <upgrade-step:importProfile
+        title="Add ITaskSetting.deadline_timedelta record to registry."
+        profile="opengever.task:default"
+        source="4300"
+        destination="4500"
+        directory="profiles/4500"
+        />
+
 </configure>

@@ -5,6 +5,9 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Make task default deadline timedelta configurable per installation.
+  [phgross]
+
 - Remove unused copy-related-documents-to-inbox view.
   [deiferni]
 

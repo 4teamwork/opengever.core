@@ -1,0 +1,5 @@
+<registry>
+  <record interface="opengever.task.interfaces.ITaskSettings" field="deadline_timedelta">
+    <value>5</value>
+  </record>
+</registry>
