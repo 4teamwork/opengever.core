@@ -19,7 +19,8 @@
 
     <metal:define define-macro="overview_boxes">
 
-      <tal:block tal:repeat="boxes groups" tal:define="base_index base_index | python: 0">
+      <tal:block tal:repeat="boxes view/boxes"
+                 tal:define="base_index base_index | python: 0">
       <div tal:define="repeat_index repeat/boxes/index;
                        box_id python: base_index + repeat_index;"
            tal:attributes="class string:boxGroup boxGroup${box_id};

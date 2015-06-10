@@ -1,7 +1,6 @@
 <!--TODO: refactor using viewlets-->
 <tal:block i18n:domain="opengever.dossier"
-           tal:define="groups view/boxes;
-                       css_width python:99/3;
+           tal:define="css_width python:99/3;
                        base_index python: 1">
 
   <div class="boxGroup boxGroup0" tal:attributes="style string:width:${css_width}%">
