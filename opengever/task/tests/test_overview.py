@@ -197,25 +197,3 @@ class TestTaskOverview(FunctionalTestCase):
             ['Predecessor'], browser.css("#predecessor_taskBox div.task").text)
         self.assertSequenceEqual(
             [], browser.css("#successor_tasksBox div.task").text)
-
-    # XXX: Not sure if that behavior is really a use case
-    # has to be defined after the inbox and forwarding rework
-
-    # @browsing
-    # def test_issuer_is_prefixed_by_predecessor_org_unit_on_a_forwarding_successor(self, browser):
-    #     create(Builder('org_unit')
-    #            .id('client2')
-    #            .having(title="Client 2")
-    #            .assign_users([self.user]))
-
-    #     forwarding = create(Builder('forwarding').having(issuer=TEST_USER_ID))
-    #     successor = create(Builder('task')
-    #                        .having(issuer=TEST_USER_ID,
-    #                                responsible_client='client2')
-    #                        .successor_from(forwarding))
-
-    #     browser.login().open(successor, view='tabbedview_view-overview')
-
-    #     self.assertEquals(
-    #         'Client2 / test_user_1_ (test_user_1_)',
-    #         browser.css('.issuer').first.text)
