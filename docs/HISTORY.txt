@@ -5,6 +5,10 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Task overview: Hide responsible info in subtask, maintask, successor and predecessor
+  listing.
+  [phgross]
+
 - Update to Plone 4.3.2 and Dexterity 2.x.
 
   - Update imports for Plone 4.3.x compatibility.
