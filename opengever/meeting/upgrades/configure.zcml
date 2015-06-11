@@ -285,4 +285,23 @@
         profile="opengever.meeting:default"
         />
 
+  <!-- 4400 -> 4500 -->
+  <genericsetup:upgradeStep
+      title="Add TranslatedTitle behavior to committeecontainer."
+      description=""
+      source="4400"
+      destination="4500"
+      handler="opengever.meeting.upgrades.to4500.ActivateTranslatedTitle"
+      profile="opengever.meeting:default"
+      />
+
+  <genericsetup:registerProfile
+      name="4500"
+      title="opengever.meeting: upgrade profile 4500"
+      description=""
+      directory="profiles/4500"
+      for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
 </configure>
