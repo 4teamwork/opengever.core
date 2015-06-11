@@ -182,6 +182,9 @@ msgstr "Info"
 msgid "subdossiers"
 msgstr "Subdossiers"
 
+msgid "submittedproposals"
+msgstr "Anträge"
+
 msgid "tasks"
 msgstr "Aufgaben"
 
@@ -206,20 +209,3 @@ msgstr "Papierkorb"
 msgid "users"
 msgstr "OGDS"
 
-msgid "proposals"
-msgstr "Anträge"
-
-msgid "committees"
-msgstr "Kommissionen"
-
-msgid "members"
-msgstr "Mitglieder"
-
-msgid "meetings"
-msgstr "Sitzungen"
-
-msgid "submittedproposals"
-msgstr "Anträge"
-
-msgid "memberships"
-msgstr "Mitgliedschaften"

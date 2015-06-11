@@ -182,6 +182,9 @@ msgstr "Info"
 msgid "subdossiers"
 msgstr "Sous-dossiers"
 
+msgid "submittedproposals"
+msgstr "Propositions"
+
 msgid "tasks"
 msgstr "Tâches"
 

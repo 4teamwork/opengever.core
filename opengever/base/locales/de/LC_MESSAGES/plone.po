@@ -77,6 +77,12 @@ msgstr "Metadaten bearbeiten"
 msgid "Give Filing Number"
 msgstr "Ablagenummer vergeben"
 
+msgid "Meeting"
+msgstr "Sitzung"
+
+msgid "Membership"
+msgstr "Mitgliedschaft"
+
 msgid "Modify deadline"
 msgstr "Frist ändern"
 
@@ -281,3 +287,4 @@ msgstr "Deaktivieren"
 
 msgid "tasktemplatefolder-transition-inactiv-activ"
 msgstr "Aktivieren"
+
