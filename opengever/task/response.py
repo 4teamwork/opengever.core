@@ -38,7 +38,6 @@ from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import modified
 from zope.lifecycleevent import ObjectModifiedEvent
 import datetime
-import os
 
 
 class IResponse(Interface):
@@ -265,13 +264,7 @@ class AddForm(form.AddForm, AutoExtensibleForm):
                 syncer.change_remote_tasks_workflow_state(
                     data.get('transition'), text=data.get('text'))
 
-            copy_related_documents_view = self.context.restrictedTraverse(
-                '@@copy-related-documents-to-inbox')
-            if copy_related_documents_view.available():
-                url = os.path.join(self.context.absolute_url(),
-                                   '@@copy-related-documents-to-inbox')
-            else:
-                url = self.context.absolute_url()
+            url = self.context.absolute_url()
             self.request.RESPONSE.redirect(url)
             return new_response
 
