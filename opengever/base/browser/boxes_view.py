@@ -1,4 +1,5 @@
 from opengever.base.browser.helper import get_css_class
+from opengever.globalindex.model.task import Task
 from opengever.globalindex.utils import indexed_task_link_helper
 from Products.ZCatalog.interfaces import ICatalogBrain
 from z3c.form.interfaces import IFieldWidget
@@ -16,11 +17,14 @@ class BoxesViewMixin(object):
 
     def get_type(self, item):
         """differ the object typ and return the type as string"""
+
         if isinstance(item, dict):
             return 'dict'
         elif ICatalogBrain.providedBy(item):
             return 'brain'
         elif IFieldWidget.providedBy(item):
             return 'widget'
+        elif isinstance(item, Task):
+            return 'globalindex_task'
         else:
-            return 'sqlalchemy_object'
+            raise ValueError("Unknown item type: {!r}".format(item))

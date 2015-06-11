@@ -83,7 +83,7 @@
                   <tal:comment replace="nothing">
                     SQLAlchemy Objects (Tasks from GlobalIndex):
                   </tal:comment>
-                  <tal:sql tal:condition="python: view.get_type(item) == 'sqlalchemy_object'">
+                  <tal:sql tal:condition="python: view.get_type(item) == 'globalindex_task'">
                     <div tal:replace="structure python:view.render_globalindex_task(item)" />
                   </tal:sql>
                 </li>
