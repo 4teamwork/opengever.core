@@ -21,6 +21,8 @@ class ActivateTranslatedTitle(UpgradeStep):
         for repository in self.objects(query, msg, savepoints=500):
             self.migrate_repositoryroot_titles(repository)
 
+        self.remove_basic_behavior()
+
     def migrate_repositoryroot_titles(self, repositoryroot):
         ITranslatedTitle(repositoryroot).title_de = IBasic(repositoryroot).title
         repositoryroot.reindexObject()
