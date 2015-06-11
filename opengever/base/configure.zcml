@@ -83,4 +83,13 @@
       factory=".protect.OGProtectTransform"
       />
 
+  <include package="collective.monkeypatcher" />
+  <monkey:patch
+      description="Make brain.Title use the right language."
+      class="Products.ZCatalog.Catalog.Catalog"
+      original="useBrains"
+      replacement=".brain.useBrains"
+      preserveOriginal="True"
+      />
+
 </configure>
