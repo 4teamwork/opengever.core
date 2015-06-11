@@ -39,12 +39,15 @@ class TestInboxOverviewDocumentBox(TestBaseInboxOverview):
         create(Builder('document')
                .titled('portal document')
                .within(self.portal))
+        create(Builder('mail')
+               .titled('A mail')
+               .within(self.inbox))
 
         browser.login().open(self.inbox, view='tabbedview_view-overview')
 
         self.assertSequenceEqual(
             browser.css('#documentsBox li:not(.moreLink) a').text,
-            ['inbox document'])
+            ['inbox document', 'A mail'])
 
     @browsing
     def test_list_only_documents_directly_inside_the_current_inbox(self, browser):
@@ -61,26 +64,6 @@ class TestInboxOverviewDocumentBox(TestBaseInboxOverview):
         self.assertSequenceEqual(
             browser.css('#documentsBox li:not(.moreLink) a').text,
             ['inbox document'])
-
-    @browsing
-    def test_list_only_documents_in_the_current_inbox(self, browser):
-        sub_inbox_1 = create(Builder('inbox')
-                             .within(self.inbox)
-                             .having(responsible_org_unit='client1'))
-
-        sub_inbox_2 = create(Builder('inbox')
-                             .within(self.inbox)
-                             .having(responsible_org_unit='client2'))
-
-        create(Builder('document')
-               .titled('Doc 1').within(sub_inbox_1))
-        create(Builder('document')
-               .titled('Doc 2').within(sub_inbox_2))
-
-        browser.login().open(sub_inbox_1, view='tabbedview_view-overview')
-        self.assertSequenceEqual(
-            browser.css('#documentsBox li:not(.moreLink) a').text,
-            ['Doc 1'])
 
     @browsing
     def test_document_box_items_are_limited_to_ten_and_sorted_by_modified(self, browser):
