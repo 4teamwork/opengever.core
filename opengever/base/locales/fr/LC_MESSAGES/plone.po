@@ -77,6 +77,12 @@ msgstr "Modifier les méta-données"
 msgid "Give Filing Number"
 msgstr "Attribuer un numéro d'inventaire"
 
+msgid "Meeting"
+msgstr "Séance"
+
+msgid "Membership"
+msgstr ""
+
 msgid "Modify deadline"
 msgstr "Changer le délai"
 
@@ -288,8 +294,3 @@ msgstr "Déactiver"
 msgid "tasktemplatefolder-transition-inactiv-activ"
 msgstr "Activer"
 
-msgid "Meeting"
-msgstr "Séance"
-
-msgid "Membership"
-msgstr ""

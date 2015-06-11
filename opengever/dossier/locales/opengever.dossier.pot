@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-05-28 12:08+0000\n"
+"POT-Creation-Date: 2015-06-10 10:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,11 +44,15 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
+#: ./opengever/dossier/browser/overview.py:44
+msgid "Description"
+msgstr ""
+
 #: ./opengever/dossier/move_items.py:96
 msgid "Document ${name} is connected to a Task. Please move the Task."
 msgstr ""
 
-#: ./opengever/dossier/browser/overview_templates/overview.pt:7
+#: ./opengever/dossier/browser/overview_templates/overview.pt:8
 msgid "Dossier structure"
 msgstr ""
 
@@ -85,7 +89,15 @@ msgstr ""
 msgid "Move Items"
 msgstr ""
 
-#: ./opengever/dossier/browser/overview_templates/overview.pt:26
+#: ./opengever/dossier/browser/overview.py:42
+msgid "Newest documents"
+msgstr ""
+
+#: ./opengever/dossier/browser/overview.py:37
+msgid "Newest tasks"
+msgstr ""
+
+#: ./opengever/dossier/browser/overview_templates/overview.pt:27
 msgid "No Subdossiers"
 msgstr ""
 
@@ -95,6 +107,10 @@ msgstr ""
 
 #: ./opengever/dossier/templatedossier/form.py:103
 msgid "Not found the templatedossier"
+msgstr ""
+
+#: ./opengever/dossier/browser/overview.py:39
+msgid "Participants"
 msgstr ""
 
 #: ./opengever/dossier/profiles/default/types/opengever.dossier.projectdossier.xml
@@ -222,9 +238,6 @@ msgstr ""
 #. Default: "create document with template"
 #: ./opengever/dossier/templatedossier/form.py:28
 msgid "create_document_with_template"
-msgstr ""
-
-msgid "description"
 msgstr ""
 
 msgid "documents"
@@ -550,16 +563,6 @@ msgstr ""
 msgid "label_workflow_state"
 msgstr ""
 
-msgid "newest_documents"
-msgstr ""
-
-msgid "newest_tasks"
-msgstr ""
-
-#: ./opengever/dossier/browser/overview_templates/overview.pt:45
-msgid "no_content"
-msgstr ""
-
 #: ./opengever/dossier/resolve.py:11
 msgid "not all documents and tasks are stored in a subdossier"
 msgstr ""
@@ -574,9 +577,6 @@ msgstr ""
 
 #: ./opengever/dossier/archive.py:33
 msgid "only resolve, set filing no later"
-msgstr ""
-
-msgid "participants"
 msgstr ""
 
 #: ./opengever/dossier/templatedossier/form_templates/template_form.pt:23
@@ -600,10 +600,6 @@ msgid "set a filing no"
 msgstr ""
 
 msgid "sharing"
-msgstr ""
-
-#: ./opengever/dossier/browser/overview_templates/overview.pt:79
-msgid "show all"
 msgstr ""
 
 msgid "subdossiers"

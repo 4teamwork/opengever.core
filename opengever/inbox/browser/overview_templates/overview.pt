@@ -1,0 +1,7 @@
+<!--TODO: refactor using viewlets-->
+<tal:block i18n:domain="opengever.inbox"
+           tal:define="css_width python:99/2">
+
+  <metal:use use-macro="context/@@gever-macros/overview_boxes" />
+
+</tal:block>

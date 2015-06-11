@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2015-05-28 12:08+0000\n"
+"POT-Creation-Date: 2015-06-10 10:11+0000\n"
 "PO-Revision-Date: 2015-01-22 17:49+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -43,11 +43,15 @@ msgstr "Report konnte nicht generiert werden."
 msgid "Delete"
 msgstr "Beteiligung löschen"
 
+#: ./opengever/dossier/browser/overview.py:44
+msgid "Description"
+msgstr "Beschreibung"
+
 #: ./opengever/dossier/move_items.py:96
 msgid "Document ${name} is connected to a Task. Please move the Task."
 msgstr "Dokument ${name} ist mit einer Aufgabe verbunden, bitte Aufgabe verschieben."
 
-#: ./opengever/dossier/browser/overview_templates/overview.pt:7
+#: ./opengever/dossier/browser/overview_templates/overview.pt:8
 msgid "Dossier structure"
 msgstr "Dossier-Struktur"
 
@@ -84,7 +88,15 @@ msgstr "Es ist nicht möglich das Subdossier wieder zu eröffnen, das Hauptdossi
 msgid "Move Items"
 msgstr "Elemente verschieben"
 
-#: ./opengever/dossier/browser/overview_templates/overview.pt:26
+#: ./opengever/dossier/browser/overview.py:42
+msgid "Newest documents"
+msgstr "Neuste Dokumente"
+
+#: ./opengever/dossier/browser/overview.py:37
+msgid "Newest tasks"
+msgstr "Neuste Aufgaben"
+
+#: ./opengever/dossier/browser/overview_templates/overview.pt:27
 msgid "No Subdossiers"
 msgstr "Keine Subdossiers"
 
@@ -95,6 +107,10 @@ msgstr "Nicht alle benötigten Felder wurden ausgefüllt."
 #: ./opengever/dossier/templatedossier/form.py:103
 msgid "Not found the templatedossier"
 msgstr "Es sind keine Vorlagen vorhanden."
+
+#: ./opengever/dossier/browser/overview.py:39
+msgid "Participants"
+msgstr "Beteiligte"
 
 #. Default: "Project Dossier"
 #: ./opengever/dossier/profiles/default/types/opengever.dossier.projectdossier.xml
@@ -224,9 +240,6 @@ msgstr "Rolle"
 #: ./opengever/dossier/templatedossier/form.py:28
 msgid "create_document_with_template"
 msgstr "Dokument aus Vorlage erstellen"
-
-msgid "description"
-msgstr "Beschreibung"
 
 msgid "documents"
 msgstr "Dokumente"
@@ -552,16 +565,6 @@ msgstr "Titel"
 msgid "label_workflow_state"
 msgstr "Status"
 
-msgid "newest_documents"
-msgstr "Neuste Dokumente"
-
-msgid "newest_tasks"
-msgstr "Neuste Aufgaben"
-
-#: ./opengever/dossier/browser/overview_templates/overview.pt:45
-msgid "no_content"
-msgstr "Keine Inhalte"
-
 #: ./opengever/dossier/resolve.py:11
 msgid "not all documents and tasks are stored in a subdossier"
 msgstr "Es sind nicht alle Dokumente und Aufgaben in Subdossiers abgelegt."
@@ -577,9 +580,6 @@ msgstr "Es sind nicht alle Aufgaben abgeschlossen"
 #: ./opengever/dossier/archive.py:33
 msgid "only resolve, set filing no later"
 msgstr "Nur abschliessen (keine Ablagenummer vergeben)"
-
-msgid "participants"
-msgstr "Beteiligte"
 
 #: ./opengever/dossier/templatedossier/form_templates/template_form.pt:23
 msgid "required"
@@ -603,10 +603,6 @@ msgstr "Ablagenummer vergeben"
 
 msgid "sharing"
 msgstr "Beteiligungen"
-
-#: ./opengever/dossier/browser/overview_templates/overview.pt:79
-msgid "show all"
-msgstr "Alle anzeigen"
 
 msgid "subdossiers"
 msgstr "Subdossiers"

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-05-28 12:08+0000\n"
+"POT-Creation-Date: 2015-06-10 10:11+0000\n"
 "PO-Revision-Date: 2012-09-10 10:17+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,11 +41,15 @@ msgstr "Impossible de générer l'affichage"
 msgid "Delete"
 msgstr "Effacer la participation"
 
+#: ./opengever/dossier/browser/overview.py:44
+msgid "Description"
+msgstr "Description"
+
 #: ./opengever/dossier/move_items.py:96
 msgid "Document ${name} is connected to a Task. Please move the Task."
 msgstr "Document ${name} est lié avec une tâche, déplacer la tâche, svp."
 
-#: ./opengever/dossier/browser/overview_templates/overview.pt:7
+#: ./opengever/dossier/browser/overview_templates/overview.pt:8
 msgid "Dossier structure"
 msgstr ""
 
@@ -82,7 +86,15 @@ msgstr "Il n'est pas possible d'ouvrir un sous-dossier, le dossier principale do
 msgid "Move Items"
 msgstr "Déplacer l'élément"
 
-#: ./opengever/dossier/browser/overview_templates/overview.pt:26
+#: ./opengever/dossier/browser/overview.py:42
+msgid "Newest documents"
+msgstr "Derniers documents"
+
+#: ./opengever/dossier/browser/overview.py:37
+msgid "Newest tasks"
+msgstr "Dernières tâches"
+
+#: ./opengever/dossier/browser/overview_templates/overview.pt:27
 msgid "No Subdossiers"
 msgstr ""
 
@@ -93,6 +105,10 @@ msgstr "Manque des champs obligatoires"
 #: ./opengever/dossier/templatedossier/form.py:103
 msgid "Not found the templatedossier"
 msgstr "Pas de modèles disponible"
+
+#: ./opengever/dossier/browser/overview.py:39
+msgid "Participants"
+msgstr "Participants"
 
 #: ./opengever/dossier/profiles/default/types/opengever.dossier.projectdossier.xml
 msgid "Project Dossier"
@@ -220,9 +236,6 @@ msgstr "Rôle"
 #: ./opengever/dossier/templatedossier/form.py:28
 msgid "create_document_with_template"
 msgstr "Créer un document à partir d'un modèle"
-
-msgid "description"
-msgstr "Description"
 
 msgid "documents"
 msgstr "Documents"
@@ -548,16 +561,6 @@ msgstr "Titre"
 msgid "label_workflow_state"
 msgstr "Etat"
 
-msgid "newest_documents"
-msgstr "Derniers documents"
-
-msgid "newest_tasks"
-msgstr "Dernières tâches"
-
-#: ./opengever/dossier/browser/overview_templates/overview.pt:45
-msgid "no_content"
-msgstr "Pas de contenu"
-
 #: ./opengever/dossier/resolve.py:11
 msgid "not all documents and tasks are stored in a subdossier"
 msgstr "Pas de document ni de tâche classés dans le sous-dossier"
@@ -573,9 +576,6 @@ msgstr "Toutes les tâches ne sont pas fermées"
 #: ./opengever/dossier/archive.py:33
 msgid "only resolve, set filing no later"
 msgstr "Uniquement fermé (numéro d'inventaire non attribué)"
-
-msgid "participants"
-msgstr "Participants"
 
 #: ./opengever/dossier/templatedossier/form_templates/template_form.pt:23
 msgid "required"
@@ -599,10 +599,6 @@ msgstr "Attribuer numéro d'inventaire"
 
 msgid "sharing"
 msgstr "Participations enlevées"
-
-#: ./opengever/dossier/browser/overview_templates/overview.pt:79
-msgid "show all"
-msgstr "Tout afficher"
 
 msgid "subdossiers"
 msgstr "Sous-dossier"
