@@ -39,15 +39,15 @@ class ITranslatedTitle(Schema):
 
     directives.order_before(title_de='*')
     searchable('title_de')
-    title_de = TextLine(title=_(u'label_title_de',
-                                default=u'Title (German)'),
-                        required=True)
+    title_de = TextLine(
+        title=_(u'label_title_de', default=u'Title (German)'),
+        required=True)
 
     directives.order_before(title_fr='*')
     searchable('title_fr')
-    title_fr = TextLine(title=_(u'label_title_fr',
-                                default=u'Title (French)'),
-                        required=False)
+    title_fr = TextLine(
+        title=_(u'label_title_fr', default=u'Title (French)'),
+        required=False)
 
 
 alsoProvides(ITranslatedTitle, IFormFieldProvider)
