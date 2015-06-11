@@ -1,5 +1,7 @@
 from Acquisition import aq_inner, aq_parent
 from five import grok
+from opengever.base.behaviors.translated_title import ITranslatedTitle
+from opengever.base.behaviors.translated_title import TranslatedTitleMixin
 from opengever.base.behaviors.utils import hide_fields_from_behavior
 from opengever.base.interfaces import IReferenceNumber
 from opengever.repository import _
@@ -24,7 +26,6 @@ class IRepositoryFolderSchema(form.Schema):
         u'common',
         label=_(u'fieldset_common', default=u'Common'),
         fields=[
-            u'effective_title',
             u'description',
             u'valid_from',
             u'valid_until',
@@ -32,13 +33,6 @@ class IRepositoryFolderSchema(form.Schema):
             u'referenced_activity',
             u'former_reference',
             ],
-        )
-
-    #form.omitted('title')
-    form.order_before(effective_title='*')
-    effective_title = schema.TextLine(
-        title=_(u'Title'),
-        required=True,
         )
 
     description = schema.Text(
@@ -92,18 +86,16 @@ class IRepositoryFolderSchema(form.Schema):
         required=False)
 
 
-class RepositoryFolder(content.Container):
+class RepositoryFolder(content.Container, TranslatedTitleMixin):
 
     implements(IRepositoryFolder)
 
     def Title(self):
-
         reference_adapter = IReferenceNumber(self)
-
         title = u'{number}{sep} {title}'.format(
             number=reference_adapter.get_repository_number(),
             sep=reference_adapter.get_active_formatter().repository_title_seperator,
-            title=self.effective_title)
+            title=ITranslatedTitle(self).translated_title())
 
         return title.encode('utf-8')
 
@@ -211,4 +203,4 @@ class NameFromTitle(grok.Adapter):
 
     @property
     def title(self):
-        return self.context.effective_title
+        return ITranslatedTitle(self.context).translated_title

@@ -207,7 +207,7 @@ class RepositoryBuilder(DexterityBuilder):
     portal_type = 'opengever.repository.repositoryfolder'
 
     def titled(self, title):
-        self.arguments["effective_title"] = title
+        self.arguments["title_de"] = title
         return self
 
 builder_registry.register('repository', RepositoryBuilder)

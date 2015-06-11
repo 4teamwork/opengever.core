@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<object name="opengever.repository.repositoryroot" meta_type="Dexterity FTI"
+        xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+  <!-- enabled behaviors -->
+  <property name="behaviors" purge="False">
+    <element value="opengever.base.behaviors.translated_title.ITranslatedTitle" />
+  </property>
+
+</object>
