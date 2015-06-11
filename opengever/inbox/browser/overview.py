@@ -1,35 +1,47 @@
 from five import grok
+from opengever.base.browser.boxes_view import BoxesViewMixin
 from opengever.base.browser.helper import get_css_class
-from opengever.dossier.browser.overview import DossierOverview
 from opengever.globalindex.model.task import Task
 from opengever.inbox import _
 from opengever.inbox.inbox import IInbox
 from opengever.ogds.base.utils import get_current_org_unit
+from opengever.tabbedview.browser.base import OpengeverTab
 from opengever.task import OPEN_TASK_STATES
 from plone import api
 from sqlalchemy import desc
 
 
-class InboxOverview(DossierOverview):
-    """Displayes the Inbox Overview
-    """
+class InboxOverview(BoxesViewMixin, grok.View, OpengeverTab):
+
+    show_searchform = False
+
     grok.context(IInbox)
     grok.name('tabbedview_view-overview')
+    grok.require('zope2.View')
+    grok.template('overview')
 
     def boxes(self):
         """Defines the boxes wich are Displayed at the Overview tab"""
 
-        items = [[dict(id='assigned_inbox_tasks',
-                       content=self.assigned_tasks(),
-                       label=_(u'label_assigned_inbox_tasks',
-                               default='Assigned tasks')),
-                  dict(id='issued_inbox_tasks',
-                       content=self.issued_tasks(),
-                       label=_(u'label_issued_inbox_tasks',
-                               default='Issued tasks')), ],
-                 [dict(id='documents',
-                       content=self.documents()), ]]
-        return items
+        return [
+            [
+                dict(id='assigned_inbox_tasks',
+                     content=self.assigned_tasks(),
+                     href='assigned_inbox_tasks',
+                     label=_(u'label_assigned_inbox_tasks',
+                             default='Assigned tasks')),
+                dict(id='issued_inbox_tasks',
+                     href='issued_inbox_tasks',
+                     content=self.issued_tasks(),
+                     label=_(u'label_issued_inbox_tasks',
+                             default='Issued tasks')),
+            ], [
+                dict(id='documents',
+                     href='documents',
+                     label=_("Documents"),
+                     content=self.documents()),
+            ]
+        ]
 
     def assigned_tasks(self):
         """Returns the 5 last modified open task which are assigned
@@ -64,8 +76,10 @@ class InboxOverview(DossierOverview):
         query = {'isWorkingCopy': 0,
                  'path': {'depth': 1,
                           'query': '/'.join(self.context.getPhysicalPath())},
-                 'portal_type': ['opengever.document.document',
-                                 'ftw.mail.mail']}
+                 'object_provides': [
+                     'opengever.document.behaviors.IBaseDocument', ],
+                 'sort_on': 'modified',
+                 'sort_order': 'reverse'}
 
         documents = catalog(query)[:10]
         document_list = [{

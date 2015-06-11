@@ -5,6 +5,10 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Fix Inbox Overview: Fix error while rendering overview. Also refactor
+  boxes for inbox/dossier overview, introduce generic macro and mixin, remove inheritance.
+  [deiferni]
+
 - Task overview: Hide responsible info in subtask, maintask, successor and predecessor
   listing.
   [phgross]
