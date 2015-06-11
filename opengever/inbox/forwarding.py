@@ -36,8 +36,11 @@ class IForwarding(ITask):
     form.omitted('effectiveDuration')
     form.omitted('effectiveCost')
 
-    #only hide date_of_completion, it's used
+    # only hide date_of_completion, it's used
     form.mode(date_of_completion=HIDDEN_MODE)
+    # make sure hidden field is not rendered in its own empty fieldset by
+    # moving it to the form's first position before title
+    form.order_before(date_of_completion='title')
 
     # deadline is not required
     deadline = schema.Date(
@@ -132,6 +135,23 @@ class ForwardingAddForm(AddForm):
                              [org_unit.inbox().id()])
 
         super(ForwardingAddForm, self).update()
+
+    def updateFieldsFromSchemata(self):
+        super(ForwardingAddForm, self).updateFieldsFromSchemata()
+
+        # make sure empty 'additional' fieldset is not displayed
+        #
+        # plone.autoform.base.AutoFields.updateFieldsFromSchemata initializes
+        # fields and groups and moves fields. However it moves fields only
+        # after initializing groups. Thus an empty group is left after we
+        # move the field (see IForwarding). The empty group renders
+        # a completely empty fieldset (i.e. tab in our case).
+        #
+        # This code performs cleanup to remove that empty group.
+        assert len(self.groups[1].fields.keys()) == 0, \
+            "expecting empty group, please check field definitions in "\
+            "IForwarding and ITask"
+        self.groups.pop(1)
 
     def createAndAdd(self, data):
         forwarding = super(AddForm, self).createAndAdd(data=data)
