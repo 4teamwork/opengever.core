@@ -31,4 +31,23 @@
         directory="profiles/4500"
         />
 
+    <!-- 4500 -> 4600 -->
+    <genericsetup:upgradeStep
+        title="Change contactfolder class."
+        description=""
+        source="4500"
+        destination="4600"
+        handler="opengever.contact.upgrades.to4600.ChangeContactFolderClass"
+        profile="opengever.contact:default"
+        />
+
+    <genericsetup:registerProfile
+        name="4600"
+        title="opengever.contact: upgrade profile 4600"
+        description=""
+        directory="profiles/4600"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
 </configure>
