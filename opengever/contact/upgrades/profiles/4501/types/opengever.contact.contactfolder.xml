@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+        name="opengever.contact.contactfolder" meta_type="Dexterity FTI">
+
+  <property name="klass">opengever.contact.contactfolder.ContactFolder</property>
+
+</object>

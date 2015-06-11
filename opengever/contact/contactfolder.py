@@ -4,6 +4,15 @@ from opengever.tabbedview.browser.tabs import OpengeverCatalogListingTab
 from opengever.tabbedview.helper import email_helper
 from plone.dexterity.interfaces import IDexterityContainer
 from zope.app.pagetemplate import ViewPageTemplateFile
+from plone.dexterity.content import Container
+from opengever.base.behaviors.translated_title import TranslatedTitleMixin
+
+
+class ContactFolder(Container, TranslatedTitleMixin):
+    """Container which contains all contacts.
+    """
+
+    Title = TranslatedTitleMixin.Title
 
 
 def authenticated_member(context):
