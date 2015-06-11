@@ -105,4 +105,23 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
+  <!-- 4500 -> 4501 -->
+  <genericsetup:upgradeStep
+      title="Change RepositoryRoot class."
+      description=""
+      source="4500"
+      destination="4501"
+      handler="opengever.repository.upgrades.to4501.ChangeRepositoryRootClass"
+      profile="opengever.repository:default"
+      />
+
+  <genericsetup:registerProfile
+      name="4501"
+      title="opengever.repository: upgrade profile 4501"
+      description=""
+      directory="profiles/4501"
+      for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
 </configure>

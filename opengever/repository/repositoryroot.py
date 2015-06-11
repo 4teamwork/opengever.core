@@ -1,5 +1,7 @@
 from five import grok
+from opengever.base.behaviors.translated_title import TranslatedTitleMixin
 from opengever.repository import _
+from plone.dexterity.content import Container
 from plone.directives import form
 from Products.CMFCore.utils import getToolByName
 from zope import schema
@@ -29,6 +31,11 @@ class IRepositoryRoot(form.Schema):
         description=_(u'help_version', default=''),
         required=False,
         )
+
+
+class RepositoryRoot(Container, TranslatedTitleMixin):
+    """A RepositoryRoot (main part of a repository).
+    """
 
 
 def zero_fill(matchobj):
