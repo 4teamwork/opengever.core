@@ -4,6 +4,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
+from opengever.testing import set_preferred_language
 from plone import api
 import transaction
 
@@ -97,3 +98,32 @@ class TestTranslatedTitle(FunctionalTestCase):
         brain = obj2brain(dossier)
         self.assertEquals(None, brain.title_de)
         self.assertEquals(None, brain.title_fr)
+
+    @browsing
+    def test_Title_on_brains_returns_title_in_preferred_language(self, browser):
+        repository_root = create(Builder('repository_root')
+                                 .having(title_de=u"Ablage",
+                                         title_fr=u"syst\xe8me d'ordre"))
+
+        set_preferred_language(self.portal.REQUEST, 'fr-ch')
+
+        self.assertEquals(u"syst\xe8me d'ordre",
+                          obj2brain(repository_root).Title)
+
+    @browsing
+    def test_Title_on_brains_use_german_title_as_fallback(self, browser):
+        repository_root = create(Builder('repository_root')
+                                 .having(title_de=u"Ablage"))
+
+        set_preferred_language(self.portal.REQUEST, 'fr-ch')
+
+        self.assertEquals(u"Ablage", obj2brain(repository_root).Title)
+
+    @browsing
+    def test_Title_on_brains_use_Title_as_fallback_when_no_language_title_exists(self, browser):
+        dossier = create(Builder('dossier').titled(u"Ablage"))
+        set_preferred_language(self.portal.REQUEST, 'de')
+        self.assertEquals(u"Ablage", obj2brain(dossier).Title)
+
+        set_preferred_language(self.portal.REQUEST, 'fr')
+        self.assertEquals(u"Ablage", obj2brain(dossier).Title)
