@@ -5,7 +5,9 @@ Changelog
 4.3.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix Inbox Overview: Fix error while rendering overview. Also refactor
+  boxes for inbox/dossier overview, introduce generic macro and mixin, remove inheritance.
+  [deiferni]
 
 
 4.3.1 (2015-04-07)

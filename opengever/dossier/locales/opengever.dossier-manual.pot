@@ -32,22 +32,10 @@ msgstr ""
 msgid "documents"
 msgstr ""
 
-msgid "newest_documents"
-msgstr ""
-
-msgid "newest_tasks"
-msgstr ""
-
 msgid "sharing"
 msgstr ""
 
-msgid "participants"
-msgstr ""
-
 msgid "Add Business Case Dossier"
-msgstr ""
-
-msgid "description"
 msgstr ""
 
 msgid "additional_attributes"

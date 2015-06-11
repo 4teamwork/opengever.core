@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-11-11 17:11+0000\n"
+"POT-Creation-Date: 2015-06-10 10:11+0000\n"
 "PO-Revision-Date: 2014-09-04 01:03+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -21,6 +21,10 @@ msgstr ""
 #: ./opengever/base/profiles/default/actions.xml
 msgid "Copy Items"
 msgstr "Kopieren"
+
+#: ./opengever/base/browser/templates/gever-macros.pt:36
+msgid "No content"
+msgstr "Keine Inhalte"
 
 #: ./opengever/base/viewlets/download.py:26
 msgid "No file in in this version"
@@ -326,6 +330,15 @@ msgstr "Haben Sie nicht gefunden, wonach Sie gesucht haben? Die ${advanced_searc
 #: ./opengever/base/browser/search.pt:61
 msgid "search_results_advanced_link"
 msgstr "erweiterte Suche"
+
+#: ./opengever/base/browser/templates/gever-macros.pt:70
+msgid "show all"
+msgstr "Alle anzeigen"
+
+#. Default: "Confirming User Action."
+#: ./opengever/base/browser/confirm.pt:14
+msgid "title_confirming_user_action"
+msgstr "Benutzer-Aktion bestätigen"
 
 #. Default: "unchecked"
 #. Default ""

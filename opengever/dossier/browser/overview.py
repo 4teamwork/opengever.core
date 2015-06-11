@@ -1,19 +1,19 @@
 from five import grok
+from opengever.base.browser.boxes_view import BoxesViewMixin
 from opengever.base.browser.helper import get_css_class
+from opengever.dossier import _
 from opengever.dossier import _ as _dossier
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.globalindex.model.task import Task
-from opengever.globalindex.utils import indexed_task_link_helper
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.tabbedview.browser.base import OpengeverTab
-from Products.ZCatalog.interfaces import ICatalogBrain
 from sqlalchemy import desc
 
 
-class DossierOverview(grok.View, OpengeverTab):
+class DossierOverview(BoxesViewMixin, grok.View, OpengeverTab):
 
     show_searchform = False
 
@@ -31,24 +31,19 @@ class DossierOverview(grok.View, OpengeverTab):
             sort_order='reverse')
 
     def boxes(self):
-        if not self.context.show_subdossier():
-            items = [
-                [dict(id='newest_tasks', content=self.tasks(), href='tasks'),
-                 ],
-                [dict(id='participants', content=self.sharing()), ],
-                [dict(id='newest_documents', content=self.documents(),
-                      href='documents'),
-                 dict(id='description', content=self.description), ]
-                ]
-        else:
-            items = [
-                [dict(id='subdossiers', content=self.subdossiers()),
-                 dict(id='participants', content=self.sharing()), ],
-                [dict(id='newest_tasks', content=self.tasks(), href='tasks')],
-                [dict(id='newest_documents', content=self.documents(),
-                      href='documents'),
-                 dict(id='description', content=self.description), ], ]
-        return items
+        return [
+            [
+                dict(id='newest_tasks', content=self.tasks(),
+                     href='tasks', label=_("Newest tasks")),
+                dict(id='participants', content=self.sharing(),
+                     href='participants', label=_("Participants")),
+            ], [
+                dict(id='newest_documents', content=self.documents(),
+                     href='documents', label=_("Newest documents")),
+                dict(id='description', content=self.description,
+                     label=_("Description")),
+            ]
+        ]
 
     def subdossiers(self):
         return self.context.get_subdossiers(
@@ -102,26 +97,3 @@ class DossierOverview(grok.View, OpengeverTab):
 
     def description(self):
         return self.context.description
-
-    def render_globalindex_task(self, item):
-        return indexed_task_link_helper(item, item.title)
-
-    def get_css_class(self, item):
-        """Return the css classes
-        """
-        return "%s %s" % (
-            "rollover-breadcrumb", self._get_css_icon_class(item))
-
-    def _get_css_icon_class(self, item):
-        """Return the rigth css-class for the icon.
-        """
-        return get_css_class(item)
-
-    def get_type(self, item):
-        """differ the object typ and return the type as string"""
-        if isinstance(item, dict):
-            return 'dict'
-        elif ICatalogBrain.providedBy(item):
-            return 'brain'
-        else:
-            return 'sqlalchemy_object'

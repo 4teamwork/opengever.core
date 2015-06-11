@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-11-11 17:11+0000\n"
+"POT-Creation-Date: 2015-06-10 10:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,6 +19,10 @@ msgstr ""
 
 #: ./opengever/base/profiles/default/actions.xml
 msgid "Copy Items"
+msgstr ""
+
+#: ./opengever/base/browser/templates/gever-macros.pt:36
+msgid "No content"
 msgstr ""
 
 #: ./opengever/base/viewlets/download.py:26
@@ -321,6 +325,15 @@ msgstr ""
 #. Default: "Advanced Search"
 #: ./opengever/base/browser/search.pt:61
 msgid "search_results_advanced_link"
+msgstr ""
+
+#: ./opengever/base/browser/templates/gever-macros.pt:70
+msgid "show all"
+msgstr ""
+
+#. Default: "Confirming User Action."
+#: ./opengever/base/browser/confirm.pt:14
+msgid "title_confirming_user_action"
 msgstr ""
 
 #. Default ""
