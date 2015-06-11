@@ -1,3 +1,4 @@
+from opengever.base.behaviors.translated_title import TranslatedTitleMixin
 from opengever.ogds.base.utils import get_current_org_unit
 from plone.dexterity.content import Container
 from plone.directives import form
@@ -13,6 +14,8 @@ class InboxContainer(Container):
     This is used for installations with admin units containing
     multiple org_units. Because every org_unit has an inbox.
     """
+
+    Title = TranslatedTitleMixin.Title
 
     def get_current_inbox(self):
         """Returns the subinbox of the current orgUnit if exists,
