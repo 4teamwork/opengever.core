@@ -285,4 +285,13 @@
         directory="profiles/4302"
         />
 
+    <!-- 4302 -> 4500 -->
+    <upgrade-step:importProfile
+        title="Add title_de and tite_fr catalog meta."
+        profile="opengever.base:default"
+        source="4302"
+        destination="4500"
+        directory="profiles/4500"
+        />
+
 </configure>

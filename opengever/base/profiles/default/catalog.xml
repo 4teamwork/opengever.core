@@ -6,4 +6,6 @@
         <indexed_attr value="reference"/>
     </index>
     <column value="reference"/>
+    <column value="title_de"/>
+    <column value="title_fr"/>
 </object>
