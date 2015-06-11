@@ -20,10 +20,53 @@ from Products.Five.browser import decode
 from ZPublisher.HTTPRequest import FileUpload
 from ZPublisher.HTTPRequest import isCGI_NAMEs
 import logging
+import time
 import urllib
 
 
 LOGGER = logging.getLogger('opengever.base')
+
+
+def compute_timezone_for_log():
+    """Patched version of http_server's compute_timezone_for_log
+    that correctly determines whether it's currently daylight savings time
+    or not.
+    """
+
+    def is_dst():
+        return time.localtime().tm_isdst
+
+    if is_dst():
+        tz = time.altzone
+    else:
+        tz = time.timezone
+    if tz > 0:
+        neg = 1
+    else:
+        neg = 0
+        tz = -tz
+    h, rem = divmod (tz, 3600)
+    m, rem = divmod (rem, 60)
+
+    if neg:
+        return '-%02d%02d' % (h, m)
+    else:
+        return '+%02d%02d' % (h, m)
+
+# Patch both the ZServer.medusa.http_server.compute_timezone_for_log
+# function and the `tz_for_log` module global to fix the timezone
+# used in Z2 logs.
+
+from ZServer.medusa import http_server
+
+http_server.compute_timezone_for_log = compute_timezone_for_log
+LOGGER.info('Monkey patched ZServer.medusa.http_server.compute_timezone_for_log')
+
+http_server.tz_for_log = compute_timezone_for_log()
+LOGGER.info('Monkey patched ZServer.medusa.http_server.tz_for_log')
+
+
+# --------
 
 
 def processInputs(request, charsets=None):
