@@ -12,7 +12,7 @@ class Meetings(MeetingListingTab):
 
     selection = ViewPageTemplateFile("templates/no_selection.pt")
 
-    sort_on = 'start'
+    sort_on = 'start_datetime'
 
     enabled_actions = []
     major_actions = []
