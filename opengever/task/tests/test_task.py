@@ -1,16 +1,22 @@
 from datetime import date
+from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
 from opengever.task.adapters import IResponseContainer
+from opengever.task.interfaces import ITaskSettings
 from opengever.task.response import Response
 from opengever.task.task import ITask
 from opengever.testing import FunctionalTestCase
+from plone.app.testing import TEST_USER_ID
 from plone.dexterity.interfaces import IDexterityFTI
+from plone.registry.interfaces import IRegistry
 from z3c.relationfield.relation import RelationValue
 from zope.component import createObject
 from zope.component import getUtility
 from zope.component import queryUtility
 from zope.intid.interfaces import IIntIds
+import transaction
 
 
 class TestTaskIntegration(FunctionalTestCase):
@@ -194,3 +200,36 @@ class TestDossierSequenceNumber(FunctionalTestCase):
         task = create(Builder('task').within(inbox))
 
         self.assertEquals(None, task.get_dossier_sequence_number())
+
+
+class TestDeadlineDefaultValue(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestDeadlineDefaultValue, self).setUp()
+        self.dossier = create(Builder('dossier'))
+
+    @browsing
+    def test_deadline_is_today_plus_five_days_by_default(self, browser):
+        browser.login().open(self.dossier, view='++add++opengever.task.task')
+        browser.fill({'Title': 'Test task',
+                      'Responsible': TEST_USER_ID,
+                      'Task Type': 'comment'})
+        browser.css('#form-buttons-save').first.click()
+
+        expected = date.today() + timedelta(days=5)
+        self.assertEquals(expected, self.dossier.get('task-1').deadline)
+
+    @browsing
+    def test_deadline_use_registry_entry_to_calculate_timedelta(self, browser):
+        registry = getUtility(IRegistry)
+        registry.forInterface(ITaskSettings).deadline_timedelta = 12
+        transaction.commit()
+
+        browser.login().open(self.dossier, view='++add++opengever.task.task')
+        browser.fill({'Title': 'Test task',
+                      'Responsible': TEST_USER_ID,
+                      'Task Type': 'comment'})
+        browser.css('#form-buttons-save').first.click()
+
+        expected = date.today() + timedelta(days=12)
+        self.assertEquals(expected, self.dossier.get('task-1').deadline)

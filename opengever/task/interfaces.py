@@ -38,6 +38,10 @@ class ITaskSettings(Interface):
 
     crop_length = schema.Int(title=u"Crop length", default=20)
 
+    deadline_timedelta = schema.Int(
+        title=u'Default timedelta in days for the deadline offset.',
+        default=5)
+
     unidirectional_by_reference = schema.List(
         title=u'Task Types Unidirectional by Reference',
         description=u'',

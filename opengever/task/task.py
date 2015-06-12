@@ -21,11 +21,13 @@ from opengever.ogds.base.utils import ogds_service
 from opengever.task import _
 from opengever.task import util
 from opengever.task.activities import TaskAddedActivity
+from opengever.task.interfaces import ITaskSettings
 from opengever.task.validators import NoCheckedoutDocsValidator
 from plone import api
 from plone.dexterity.content import Container
 from plone.directives import form, dexterity
 from plone.indexer.interfaces import IIndexer
+from plone.registry.interfaces import IRegistry
 from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import _mergedLocalRoles
 from Products.CMFCore.utils import getToolByName
@@ -310,13 +312,13 @@ class Task(Container):
         return get_containing_dossier(self)
 
     def get_containing_dossier_title(self):
-        #get the containing_dossier value directly with the indexer
+        # get the containing_dossier value directly with the indexer
         catalog = getToolByName(self, 'portal_catalog')
         return getMultiAdapter(
             (self, catalog), IIndexer, name='containing_dossier')()
 
     def get_containing_subdossier(self):
-        #get the containing_dossier value directly with the indexer
+        # get the containing_dossier value directly with the indexer
         catalog = getToolByName(self, 'portal_catalog')
         return getMultiAdapter(
             (self, catalog), IIndexer, name='containing_subdossier')()
@@ -333,8 +335,8 @@ class Task(Container):
             return (None, None,)
 
     def get_principals(self):
-        # index the principal which have View permission. This is according to the
-        # allowedRolesAndUsers index but it does not car of global roles.
+        # index the principal which have View permission. This is according to
+        # the allowedRolesAndUsers index but it does not car of global roles.
         allowed_roles = rolesForPermissionOn(View, self)
         principals = []
         for principal, roles in _mergedLocalRoles(self).items():
@@ -358,9 +360,10 @@ class Task(Container):
 
 
 @form.default_value(field=ITask['deadline'])
-def deadlineDefaultValue(data):
-    # To get hold of the folder, do: context = data.context
-    return datetime.today() + timedelta(5)
+def deadline_default_value(data):
+    registry = getUtility(IRegistry)
+    proxy = registry.forInterface(ITaskSettings)
+    return datetime.today() + timedelta(days=proxy.deadline_timedelta)
 
 
 @form.default_value(field=ITask['responsible_client'])
