@@ -35,12 +35,14 @@ class TestInboxOverviewDocumentBox(TestBaseInboxOverview):
     def test_inbox_documents_are_listed(self, browser):
         create(Builder('document')
                .titled('inbox document')
+               .with_modification_date(DateTime(2015, 6, 12))
                .within(self.inbox))
         create(Builder('document')
                .titled('portal document')
                .within(self.portal))
         create(Builder('mail')
                .titled('A mail')
+               .with_modification_date(DateTime(2015, 6, 10))
                .within(self.inbox))
 
         browser.login().open(self.inbox, view='tabbedview_view-overview')
