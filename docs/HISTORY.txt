@@ -5,6 +5,9 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Remove unused copy-related-documents-to-inbox view.
+  [deiferni]
+
 - Fix Inbox Overview: Fix error while rendering overview. Also refactor
   boxes for inbox/dossier overview, introduce generic macro and mixin, remove inheritance.
   [deiferni]
