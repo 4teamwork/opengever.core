@@ -5,6 +5,9 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Fix MeetingListing: default sort_index, disalbe sorting for time columns.
+  [phgross]
+
 - Include collective.usernamelogger in core dependencies.
   [lgraf]
 
