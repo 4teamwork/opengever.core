@@ -5,6 +5,9 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Include collective.usernamelogger in core dependencies.
+  [lgraf]
+
 - Make task default deadline timedelta configurable per installation.
   [phgross]
 
