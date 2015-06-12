@@ -78,6 +78,11 @@ class NotificationCenter(object):
         if not resource:
             resource = self.add_resource(oguid)
 
+        if len(summary) >= 512:
+            if not isinstance(summary, unicode):
+                summary = summary.decode('utf-8')
+            summary = summary[:512]
+
         activity = Activity(resource=resource, kind=kind, title=title,
                             summary=summary, actor_id=actor_id,
                             description=description)
