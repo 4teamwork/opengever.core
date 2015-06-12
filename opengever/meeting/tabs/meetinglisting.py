@@ -23,21 +23,23 @@ class MeetingListingTab(BaseListingTab):
          'column_title': _(u'column_title', default=u'Title'),
          'transform': lambda item, value: item.get_link()},
 
-        {'column': 'date',
-         'column_title': _(u'column_date', default=u'Date'),
-         'transform': lambda item, value: item.get_date()},
-
         {'column': 'location',
          'column_title': _(u'column_location', default=u'Location')},
 
-        {'column': 'start',
-         'column_title': _(u'column_start_time', default=u'Start Time'),
-         'transform': lambda item, value: item.get_start_time()},
+        {'column': 'start_datetime',
+         'column_title': _(u'column_date', default=u'Date'),
+         'transform': lambda item, value: item.get_date()},
 
-        {'column': 'end',
-         'column_title': _(u'column_end_time', default=u'End Time'),
-         'transform': lambda item, value: item.get_end_time()},
-        )
+        {'column': 'start_time',
+         'column_title': _(u'column_from', default=u'From'),
+         'transform': lambda item, value: item.get_start_time(),
+         'sortable': False},
+
+        {'column': 'end_time',
+         'column_title': _(u'column_to', default=u'To'),
+         'transform': lambda item, value: item.get_end_time(),
+         'sortable': False},
+    )
 
     def get_base_query(self):
         return Meeting.query.filter_by(committee=self.context.load_model())

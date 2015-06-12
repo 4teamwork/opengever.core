@@ -211,6 +211,21 @@ class Meeting(Base):
     def get_date(self):
         return api.portal.get_localized_time(datetime=self.start)
 
+    def get_start(self):
+        """Returns the start datetime in localized format.
+        """
+        return api.portal.get_localized_time(
+            datetime=self.start, long_format=True)
+
+    def get_end(self):
+        """Returns the end datetime in localized format.
+        """
+        if self.end:
+            return api.portal.get_localized_time(
+                datetime=self.end, long_format=True)
+
+        return None
+
     def get_start_time(self):
         return self._get_localized_time(self.start)
 
