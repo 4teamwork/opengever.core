@@ -5,6 +5,9 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- No longer display emtpy tab 'additional' on forwarding add page.
+  [deiferni]
+
 - Fix MeetingListing: default sort_index, disalbe sorting for time columns.
   [phgross]
 
