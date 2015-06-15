@@ -50,20 +50,6 @@ class TestDossier(FunctionalTestCase):
         tabs = [action['title'] for action in actions]
         return tabs
 
-    def assert_additional_attributes_overview_box_labels(self, expected, obj):
-        overview = obj.restrictedTraverse('tabbedview_view-overview')
-        additional_widgets = overview.additional_attributes()
-
-        self.assertEquals(
-            expected, [widget.label for widget in additional_widgets])
-
-    def assert_additional_attributes_overview_box_values(self, expected, obj):
-        overview = obj.restrictedTraverse('tabbedview_view-overview')
-        additional_widgets = overview.additional_attributes()
-
-        self.assertEquals(
-            expected, [widget.value for widget in additional_widgets])
-
     def assert_tabbedview_tabs_for_obj(self, expected_tabs, obj):
         self.assertEquals(expected_tabs,
                           self._get_active_tabbedview_tab_titles(obj))
