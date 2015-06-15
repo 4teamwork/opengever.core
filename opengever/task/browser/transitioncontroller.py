@@ -8,6 +8,7 @@ from opengever.task.browser.modify_deadline import ModifyDeadlineFormView
 from opengever.task.interfaces import IDeadlineModifier
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.util import get_documents_of_task
+from plone import api
 from plone.protect.utils import addTokenToUrl
 from Products.CMFCore.utils import getToolByName
 from Products.Five import BrowserView
@@ -609,6 +610,12 @@ class Conditions(object):
     @property
     def is_responsible(self):
         return self.task.responsible_actor.corresponds_to(self.current_user)
+
+    @property
+    def is_administrator(self):
+        current = api.user.get_current()
+        return bool(current.has_role('Administrator') or
+                    current.has_role('Manager'))
 
     @property
     def is_issuing_orgunit_agency_member(self):

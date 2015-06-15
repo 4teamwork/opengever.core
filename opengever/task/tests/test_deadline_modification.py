@@ -5,6 +5,7 @@ from opengever.task.browser.modify_deadline import ModifyDeadlineFormView
 from opengever.task.interfaces import IDeadlineModifier
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.testing import FunctionalTestCase
+from plone.app.testing import login
 from plone.app.testing import TEST_USER_ID
 from zExceptions import Unauthorized
 import datetime
@@ -100,45 +101,66 @@ class TestDeadlineModificationForm(FunctionalTestCase):
 
 class TestDeadlineModifierController(FunctionalTestCase):
 
-    def test_modify_is_allowed_for_issuer_on_a_open_task(self):
-        task = create(Builder('task').having(issuer=TEST_USER_ID))
+    def setUp(self):
+        super(TestDeadlineModifierController, self).setUp()
 
-        self.assertTrue(
-            task.restrictedTraverse('is_deadline_modification_allowed')())
+        create(Builder('user')
+               .having(firstname='Hugo', lastname='Boss')
+               .with_userid('hugo.boss'))
+
+        create(Builder('ogds_user')
+               .having(userid='hugo.boss'))
+
+    def test_modify_is_allowed_for_issuer_on_a_open_task(self):
+        task = create(Builder('task').having(issuer='hugo.boss'))
+
+        login(self.portal, 'hugo.boss')
+        self.assertTrue(IDeadlineModifier(task).is_modify_allowed())
 
     def test_modify_is_allowed_for_issuer_on_a_in_progress_task(self):
         task = create(Builder('task')
-                      .having(issuer=TEST_USER_ID, responsible=TEST_USER_ID)
+                      .having(issuer='hugo.boss', responsible=TEST_USER_ID)
                       .in_progress())
 
-        self.assertTrue(
-            task.restrictedTraverse('is_deadline_modification_allowed')())
+        login(self.portal, 'hugo.boss')
+        self.assertTrue(IDeadlineModifier(task).is_modify_allowed())
 
     def test_modify_is_allowed_for_a_inbox_group_user_when_inbox_is_issuer(self):
         task = create(Builder('task')
                       .having(issuer='inbox:client1', responsible=TEST_USER_ID)
                       .in_progress())
 
-        self.assertTrue(
-            task.restrictedTraverse('is_deadline_modification_allowed')())
+        modifier = IDeadlineModifier(task)
+        self.assertTrue(modifier.is_modify_allowed(include_agency=False))
+        self.assertTrue(modifier.is_modify_allowed(include_agency=True))
 
-    def test_modify_is_allowed_for_admin_on_a_open_task(self):
-        self.grant('Administrator')
-
+    def test_modify_is_allowed_for_admin_on_a_open_task_as_agency(self):
         task = create(Builder('task')
                       .having(issuer='hugo.boss'))
 
-        self.assertTrue(
-            task.restrictedTraverse('is_deadline_modification_allowed')())
-
-    def test_modify_is_allowed_for_admin_on_a_in_progress_task(self):
         self.grant('Administrator')
+        modifier = IDeadlineModifier(task)
+        self.assertFalse(modifier.is_modify_allowed(include_agency=False))
+        self.assertTrue(modifier.is_modify_allowed(include_agency=True))
 
+    def test_modify_is_allowed_for_admin_on_a_in_progress_task_as_agency(self):
         task = create(Builder('task')
                       .having(issuer='hugo.boss')
                       .in_progress())
-        self.assertTrue(
-            task.restrictedTraverse('is_deadline_modification_allowed')())
+
+        self.grant('Administrator')
+        modifier = IDeadlineModifier(task)
+        self.assertFalse(modifier.is_modify_allowed(include_agency=False))
+        self.assertTrue(modifier.is_modify_allowed(include_agency=True))
+
+    def test_modify_is_allowed_for_issuing_org_unit_agency_member_as_agency(self):
+        task = create(Builder('task')
+                      .having(issuer=u'hugo.boss')
+                      .in_progress())
+
+        modifier = IDeadlineModifier(task)
+        self.assertFalse(modifier.is_modify_allowed(include_agency=False))
+        self.assertTrue(modifier.is_modify_allowed(include_agency=True))
 
 
 class RemoteDeadlineModifier(FunctionalTestCase):
@@ -195,7 +217,8 @@ class TestDeadlineModifier(FunctionalTestCase):
     def test_raise_unauthorized_when_mofication_is_not_allowed(self):
         task = create(Builder('task')
                       .having(issuer='hugo.boss',
-                              deadline=datetime.date(2013, 1, 1)))
+                              deadline=datetime.date(2013, 1, 1))
+                      .in_state('task-state-resolved'))
 
         with self.assertRaises(Unauthorized):
             IDeadlineModifier(task).modify_deadline(

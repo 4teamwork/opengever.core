@@ -242,6 +242,11 @@ class Task(Container):
     def oguid(self):
         return Oguid(get_current_admin_unit().id(), self.int_id)
 
+    @property
+    def is_editable(self):
+        current_state = api.content.get_state(self)
+        return current_state in ['task-state-open', 'task-state-in-progress']
+
     def get_issuer_label(self):
         return self.get_sql_object().get_issuer_label()
 
