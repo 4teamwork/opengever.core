@@ -104,15 +104,6 @@ class ModifyDeadlineFormView(layout.FormWrapper, grok.View):
     __call__ = layout.FormWrapper.__call__
 
 
-class DeadlineModifierController(grok.View):
-    grok.context(ITask)
-    grok.name('is_deadline_modification_allowed')
-    # grok.require('zope.Public')
-
-    def render(self):
-        return IDeadlineModifier(self.context).is_modify_allowed()
-
-
 class RemoteDeadlineModifier(grok.View):
     grok.context(ITask)
     grok.name('remote_deadline_modifier')
