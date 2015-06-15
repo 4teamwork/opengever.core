@@ -5,6 +5,10 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Monkey patch http_server.compute_timezone_for_log in order to fix
+  DST bug in timezone calculation for Z2 logs.
+  [lgraf]
+
 - No longer display emtpy tab 'additional' on forwarding add page.
   [deiferni]
 
