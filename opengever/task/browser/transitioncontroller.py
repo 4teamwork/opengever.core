@@ -151,7 +151,8 @@ class TaskTransitionController(BrowserView):
 
     @guard('task-transition-modify-deadline')
     def modify_deadline_guard(self, conditions, include_agency):
-        return IDeadlineModifier(self.context).is_modify_allowed()
+        return IDeadlineModifier(self.context).is_modify_allowed(
+            include_agency=include_agency)
 
     @action('task-transition-modify-deadline')
     def modify_deadline_action(self, transition):
