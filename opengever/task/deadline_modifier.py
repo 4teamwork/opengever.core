@@ -7,7 +7,6 @@ from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
 from plone import api
-from Products.CMFCore.utils import getToolByName
 from Products.CMFDiffTool.utils import safe_utf8
 from zExceptions import Unauthorized
 from zope.event import notify
@@ -18,39 +17,25 @@ class DeadlineModifier(grok.Adapter):
     grok.context(ITask)
     grok.implements(IDeadlineModifier)
 
-    def is_modify_allowed(self):
+    def is_modify_allowed(self, include_agency=True):
         """Check if the current user is allowed to modify the deadline:
         - state is `in-progress` or `open`
-        - AND is issuer or is admin
+        - and is issuer or agency member (adminstrator or issuing
+        orgunit agency member).
         """
-
         # TODO: should be solved by a own permission 'modify_deadline'
         # but right now the issuer has not a sperate role.
-        wft = getToolByName(self.context, 'portal_workflow')
-        current_state = wft.getInfoFor(self.context, 'review_state')
 
-        if current_state in ['task-state-open', 'task-state-in-progress']:
-            return self._is_issuer_or_admin()
-        return False
+        if not self.context.is_editable:
+            return False
 
-    def _is_issuer_or_admin(self):
         conditions = get_conditions(self.context)
-        if conditions.is_issuer:
-            return True
-        elif self._is_administrator():
-            return True
-
-        return False
-
-    def _is_administrator(self):
-        """check if the user is a adminstrator or a manager"""
-
-        current_user = api.user.get_current()
-        if current_user.has_role('Administrator') or \
-           current_user.has_role('Manager'):
-            return True
-
-        return False
+        if not include_agency:
+            return conditions.is_issuer
+        else:
+            return (conditions.is_issuer or
+                    conditions.is_issuing_orgunit_agency_member or
+                    conditions.is_administrator)
 
     def modify_deadline(self, new_deadline, text, transition):
         """Handles the whole deadline mofication process:

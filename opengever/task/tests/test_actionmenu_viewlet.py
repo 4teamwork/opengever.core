@@ -35,7 +35,8 @@ class TestActionmenuViewlet(FunctionalTestCase):
             browser.css('ul.regular_buttons a').text)
 
         self.assertEquals(
-            ['task-transition-open-cancelled',
+            ['task-transition-modify-deadline',
+             'task-transition-open-cancelled',
              'task-transition-open-tested-and-closed'],
             browser.css('dl.agency_buttons ul a').text)
 

@@ -5,6 +5,9 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Allow deadline modification also for issuing_org_unit agency members.
+  [phgross]
+
 - Monkey patch http_server.compute_timezone_for_log in order to fix
   DST bug in timezone calculation for Z2 logs.
   [lgraf]
