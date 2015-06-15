@@ -88,7 +88,7 @@
                   </tal:sql>
                 </li>
 
-                <li class="moreLink" tal:condition="box/href">
+                <li class="moreLink" tal:condition="exists: box/href">
                   <a tal:attributes="href string:#${box/href}"
                      i18n:translate="">
                   show all</a>
