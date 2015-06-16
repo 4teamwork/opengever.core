@@ -108,7 +108,7 @@ class Task(Base):
     def id(self):
         return self.task_id
 
-    def can_be_accepted(self):
+    def is_open(self):
         return self.review_state in self.OPEN_STATES
 
     @property

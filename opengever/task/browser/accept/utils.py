@@ -65,7 +65,7 @@ def accept_forwarding_with_successor(
 
     # the predessecor (the forwarding on the remote client)
     predecessor = Task.query.by_oguid(predecessor_oguid)
-    if not predecessor.can_be_accepted():
+    if not predecessor.is_open():
         raise CannotAcceptTaskException('Forwarding has already been accepted')
 
     # transport the remote forwarding to the inbox or actual yearfolder
@@ -184,7 +184,7 @@ def assign_forwarding_to_dossier(
         context, forwarding_oguid, dossier, response_text):
 
     forwarding = Task.query.by_oguid(forwarding_oguid)
-    if not forwarding.can_be_accepted():
+    if not forwarding.is_open():
         raise CannotAssignForwardingException(
             'Forwarding has already been accepted')
 
@@ -238,7 +238,7 @@ def assign_forwarding_to_dossier(
 
 def accept_task_with_successor(dossier, predecessor_oguid, response_text):
     predecessor = Task.query.by_oguid(predecessor_oguid)
-    if not predecessor.can_be_accepted():
+    if not predecessor.is_open():
         raise CannotAcceptTaskException('Task has already been accepted')
 
     # Transport the original task (predecessor) to this dossier. The new
