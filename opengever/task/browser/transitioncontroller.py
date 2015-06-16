@@ -10,7 +10,6 @@ from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.util import get_documents_of_task
 from plone import api
 from plone.protect.utils import addTokenToUrl
-from Products.CMFCore.utils import getToolByName
 from Products.Five import BrowserView
 from zExceptions import NotFound
 from zope.component import getMultiAdapter
@@ -116,10 +115,6 @@ class TaskTransitionController(BrowserView):
         """Returns `True` if the current user can execute the
         `transition` on the current task.
         """
-        # do not check the guards for adminstrators
-        if self._is_administrator():
-            return True
-
         condition = get_conditions(self.context)
         return self._is_transition_possible(
             transition, include_agency, condition)
@@ -587,14 +582,6 @@ class TaskTransitionController(BrowserView):
 
         else:
             return True
-
-    def _is_administrator(self):
-        """check if the user is a adminstrator"""
-
-        member = getToolByName(
-            self.context, 'portal_membership').getAuthenticatedMember()
-
-        return member.has_role('Administrator') or member.has_role('Manager')
 
 
 class Conditions(object):

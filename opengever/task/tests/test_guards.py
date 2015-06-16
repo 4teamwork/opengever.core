@@ -53,30 +53,6 @@ class TestTaskTransitionController(MockTestCase):
                 "python: here.restrictedTraverse('@@task_transition_" + \
                     "controller').is_transition_possible('%s')" % transition)
 
-    def test_is_administrator(self):
-        task1 = self.stub()
-        mock = self.stub()
-        self.mock_tool(mock, 'portal_membership')
-        self.expect(mock.getAuthenticatedMember()).result(mock)
-
-        with self.mocker.order():
-            self.expect(mock.has_role('Administrator')).result(0)
-            self.expect(mock.has_role('Manager')).result(0)
-
-            self.expect(mock.has_role('Administrator')).result(0)
-            self.expect(mock.has_role('Manager')).result(1)
-
-            self.expect(mock.has_role('Administrator')).result(1)
-
-        self.replay()
-
-        self.assertFalse(
-            TaskTransitionController(task1, {})._is_administrator())
-        self.assertTrue(
-            TaskTransitionController(task1, {})._is_administrator())
-        self.assertTrue(
-            TaskTransitionController(task1, {})._is_administrator())
-
     def test_cancelled_to_open_actions(self):
         transition = 'task-transition-cancelled-open'
         controller, controller_mock, task = self._create_task_controller()
@@ -412,7 +388,5 @@ class TestTaskTransitionController(MockTestCase):
 
         controller = TaskTransitionController(task1, {})
         controller_mock = self.mocker.patch(controller)
-
-        self.expect(controller_mock._is_administrator()).result(False).count(0, None)
 
         return controller, controller_mock, task1
