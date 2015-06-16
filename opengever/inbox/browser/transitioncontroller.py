@@ -18,6 +18,9 @@ class ForwardingTransitionController(TaskTransitionController):
            not conditions.is_successor_process:
             return False
 
+        if include_agency:
+            return conditions.is_responsible or conditions.is_administrator
+
         return conditions.is_responsible
 
     def _is_task_assigned_to_current_admin_unit(self):
@@ -41,7 +44,8 @@ class ForwardingTransitionController(TaskTransitionController):
         if conditions.is_assigned_to_current_admin_unit:
             if include_agency:
                 return (conditions.is_responsible or
-                        conditions.is_responsible_orgunit_agency_member)
+                        conditions.is_responsible_orgunit_agency_member or
+                        conditions.is_administrator)
 
             return conditions.is_responsible
 

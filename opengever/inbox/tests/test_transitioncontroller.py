@@ -29,7 +29,8 @@ class TestAcceptGuard(InboxBaseTransitionGuardTests):
             self.transition, False, conditions))
 
     def test_is_not_available_for_admin_unit_intern_forwardings(self):
-        conditions = FakeConditions(current_admin_unit_assigned=True)
+        conditions = FakeConditions(current_admin_unit_assigned=True,
+                                    is_responsible=True)
 
         self.assertFalse(self.controller._is_transition_possible(
             self.transition, False, conditions))
@@ -42,6 +43,15 @@ class TestAcceptGuard(InboxBaseTransitionGuardTests):
 
         self.assertTrue(self.controller._is_transition_possible(
             self.transition, False, conditions))
+
+    def test_fallback_agency_for_administrators(self):
+        conditions = FakeConditions(current_admin_unit_assigned=False,
+                                    is_responsible=False, is_administrator=True)
+
+        self.assertFalse(self.controller._is_transition_possible(
+            self.transition, False, conditions))
+        self.assertTrue(self.controller._is_transition_possible(
+            self.transition, True, conditions))
 
 
 class TestRefuseGuard(TestAcceptGuard):
@@ -66,9 +76,19 @@ class TestAssignToDossierGuard(InboxBaseTransitionGuardTests):
 
         self.assertTrue(self.controller._is_transition_possible(
             self.transition, True, conditions))
-        
+
         conditions.is_responsible = False
         conditions.is_responsible_orgunit_agency_member = True
+        self.assertTrue(self.controller._is_transition_possible(
+            self.transition, True, conditions))
+
+    def test_fallback_agency_for_administrators(self):
+        conditions = FakeConditions(
+            current_admin_unit_assigned=True, is_responsible=False,
+            responsible_agency=False, is_administrator=True)
+
+        self.assertFalse(self.controller._is_transition_possible(
+            self.transition, False, conditions))
         self.assertTrue(self.controller._is_transition_possible(
             self.transition, True, conditions))
 
