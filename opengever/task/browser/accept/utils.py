@@ -11,6 +11,7 @@ from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import _
 from opengever.task.adapters import IResponseContainer
+from opengever.task.exceptions import CannotAcceptTaskException
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.interfaces import ITaskDocumentsTransporter
 from opengever.task.interfaces import IYearfolderStorer
@@ -62,6 +63,8 @@ def accept_forwarding_with_successor(
 
     # the predessecor (the forwarding on the remote client)
     predecessor = Task.query.by_oguid(predecessor_oguid)
+    if not predecessor.can_be_accepted():
+        raise CannotAcceptTaskException('Forwarding has already been accepted')
 
     # transport the remote forwarding to the inbox or actual yearfolder
     transporter = Transporter()
@@ -229,8 +232,9 @@ def assign_forwarding_to_dossier(
 
 
 def accept_task_with_successor(dossier, predecessor_oguid, response_text):
-
     predecessor = Task.query.by_oguid(predecessor_oguid)
+    if not predecessor.can_be_accepted():
+        raise CannotAcceptTaskException('Task has already been accepted')
 
     # Transport the original task (predecessor) to this dossier. The new
     # response and task change is not yet done and will be done later. This

@@ -44,6 +44,8 @@ class Task(Base):
                                   'task-state-resolved',
                                   'forwarding-state-closed']
 
+    OPEN_STATES = ['task-state-open', 'forwarding-state-open']
+
     __tablename__ = 'tasks'
     __table_args__ = (UniqueConstraint('admin_unit_id', 'int_id'), {})
 
@@ -105,6 +107,9 @@ class Task(Base):
     @property
     def id(self):
         return self.task_id
+
+    def can_be_accepted(self):
+        return self.review_state in self.OPEN_STATES
 
     @property
     def issuer_actor(self):
