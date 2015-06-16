@@ -1,16 +1,16 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from opengever.task.browser.transitioncontroller import Conditions
-from opengever.task.browser.transitioncontroller import get_conditions
+from opengever.task.browser.transitioncontroller import Checker
+from opengever.task.browser.transitioncontroller import get_checker
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 import transaction
 
 
-class TestTaskControllerConditions(FunctionalTestCase):
+class TestTaskControllerChecker(FunctionalTestCase):
 
     def setUp(self):
-        super(TestTaskControllerConditions, self).setUp()
+        super(TestTaskControllerChecker, self).setUp()
 
         self.hugo = create(Builder('ogds_user')
                            .having(userid='hugo.boss',
@@ -24,33 +24,33 @@ class TestTaskControllerConditions(FunctionalTestCase):
         task1 = create(Builder('task').having(issuer=TEST_USER_ID))
         task2 = create(Builder('task').having(issuer='hugo.boss'))
 
-        self.assertTrue(get_conditions(task1).is_issuer)
-        self.assertFalse(get_conditions(task2).is_issuer)
+        self.assertTrue(get_checker(task1).current_user.is_issuer)
+        self.assertFalse(get_checker(task2).current_user.is_issuer)
 
     def test_is_issuer_checks_inbox_members_if_issuer_is_a_inbox(self):
         task1 = create(Builder('task')
                        .having(issuer=self.org_unit.inbox().id()))
 
-        self.assertTrue(get_conditions(task1).is_issuer)
+        self.assertTrue(get_checker(task1).current_user.is_issuer)
 
-        conditions = Conditions(task1.get_sql_object(), self.request, self.hugo)
-        self.assertFalse(conditions.is_issuer)
+        checker = Checker(task1.get_sql_object(), self.request, self.hugo)
+        self.assertFalse(checker.current_user.is_issuer)
 
     def test_is_responsible(self):
         task1 = create(Builder('task').having(responsible=TEST_USER_ID))
         task2 = create(Builder('task').having(responsible='hugo.boss'))
 
-        self.assertTrue(get_conditions(task1).is_responsible)
-        self.assertFalse(get_conditions(task2).is_responsible)
+        self.assertTrue(get_checker(task1).current_user.is_responsible)
+        self.assertFalse(get_checker(task2).current_user.is_responsible)
 
     def test_is_responsible_checks_inbox_members_if_issuer_is_a_inbox(self):
         task1 = create(Builder('task')
                        .having(responsible=self.org_unit.inbox().id()))
 
-        self.assertTrue(get_conditions(task1).is_responsible)
+        self.assertTrue(get_checker(task1).current_user.is_responsible)
 
-        conditions = Conditions(task1.get_sql_object(), self.request, self.hugo)
-        self.assertFalse(conditions.is_responsible)
+        checker = Checker(task1.get_sql_object(), self.request, self.hugo)
+        self.assertFalse(checker.current_user.is_responsible)
 
     def test_issuing_orgunit_agency_member(self):
         """Checks if the current user is member of the issuing
@@ -59,10 +59,10 @@ class TestTaskControllerConditions(FunctionalTestCase):
         task1 = create(Builder('task').having(issuer=TEST_USER_ID))
 
         self.assertTrue(
-            get_conditions(task1).is_issuing_orgunit_agency_member)
+            get_checker(task1).current_user.in_issuing_orgunits_inbox_group)
 
-        condition = Conditions(task1.get_sql_object(), self.request, self.hugo)
-        self.assertFalse(condition.is_issuing_orgunit_agency_member)
+        checker = Checker(task1.get_sql_object(), self.request, self.hugo)
+        self.assertFalse(checker.current_user.in_issuing_orgunits_inbox_group)
 
     def test_responsible_orgunit_agency_member(self):
         """Checks if the current user is member of the responsible
@@ -71,10 +71,11 @@ class TestTaskControllerConditions(FunctionalTestCase):
         task1 = create(Builder('task').having(responsible_client='client1'))
 
         self.assertTrue(
-            get_conditions(task1).is_responsible_orgunit_agency_member)
+            get_checker(task1).current_user.in_responsible_orgunits_inbox_group)
 
-        condition = Conditions(task1.get_sql_object(), self.request, self.hugo)
-        self.assertFalse(condition.is_responsible_orgunit_agency_member)
+        checker = Checker(task1.get_sql_object(), self.request, self.hugo)
+        self.assertFalse(
+            checker.current_user.in_responsible_orgunits_inbox_group)
 
     def test_all_subtasks_finished(self):
         task = create(Builder('task').in_state('task-state-in-progress'))
@@ -88,7 +89,7 @@ class TestTaskControllerConditions(FunctionalTestCase):
                .within(task)
                .in_state('task-state-cancelled'))
 
-        self.assertTrue(get_conditions(task).all_subtasks_finished)
+        self.assertTrue(get_checker(task).task.all_subtasks_finished)
 
     def test_all_subtasks_is_NOT_finished_when_cancelled_or_resolved(self):
         task = create(Builder('task').in_state('task-state-in-progress'))
@@ -99,38 +100,38 @@ class TestTaskControllerConditions(FunctionalTestCase):
                .within(task)
                .in_state('task-state-cancelled'))
 
-        self.assertFalse(get_conditions(task).all_subtasks_finished)
+        self.assertFalse(get_checker(task).task.all_subtasks_finished)
 
     def test_all_subtasks_finished_is_allways_true_when_no_subtask_exists(self):
         task = create(Builder('task').in_state('task-state-in-progress'))
 
-        self.assertTrue(get_conditions(task).all_subtasks_finished)
+        self.assertTrue(get_checker(task).task.all_subtasks_finished)
 
     def test_has_successors(self):
         task_with_successor = create(Builder('task'))
         task_without_successor = create(Builder('task'))
         create(Builder('task').successor_from(task_with_successor))
 
-        self.assertTrue(get_conditions(task_with_successor).has_successors)
-        self.assertFalse(get_conditions(task_without_successor).has_successors)
+        self.assertTrue(get_checker(task_with_successor).task.has_successors)
+        self.assertFalse(get_checker(task_without_successor).task.has_successors)
 
     def test_is_remote_request_checks_ogds_plugin_flag(self):
         task = create(Builder('task').in_state('task-state-in-progress'))
 
-        self.assertFalse(get_conditions(task).is_remote_request)
+        self.assertFalse(get_checker(task).request.is_remote)
 
         task.REQUEST.environ['X_OGDS_AUID'] = 'rr'
 
-        self.assertTrue(get_conditions(task).is_remote_request)
+        self.assertTrue(get_checker(task).request.is_remote)
 
     def test_is_successor_process_checks_request_for_succesor_flag(self):
         task = create(Builder('task').in_state('task-state-in-progress'))
 
-        self.assertFalse(get_conditions(task).is_successor_process)
+        self.assertFalse(get_checker(task).request.is_successor_process)
 
         task.REQUEST.set('X-CREATING-SUCCESSOR', True)
 
-        self.assertTrue(get_conditions(task).is_successor_process)
+        self.assertTrue(get_checker(task).request.is_successor_process)
 
     def test_is_assigned_to_current_admin_unit(self):
         admin_unit = create(Builder('admin_unit')
@@ -148,5 +149,5 @@ class TestTaskControllerConditions(FunctionalTestCase):
                                issuer=TEST_USER_ID,
                                responsible_client='additional'))
 
-        self.assertTrue(get_conditions(task1).is_assigned_to_current_admin_unit)
-        self.assertFalse(get_conditions(task2).is_assigned_to_current_admin_unit)
+        self.assertTrue(get_checker(task1).task.is_assigned_to_current_admin_unit)
+        self.assertFalse(get_checker(task2).task.is_assigned_to_current_admin_unit)

@@ -10,18 +10,19 @@ class ForwardingTransitionController(TaskTransitionController):
 
     @guard('forwarding-transition-accept')
     @guard('forwarding-transition-refuse')
-    def is_accept_possible(self, conditions, include_agency):
+    def is_accept_possible(self, c, include_agency):
         """Check if the user is in the inbox group of the responsible client.
         """
 
-        if conditions.is_assigned_to_current_admin_unit and \
-           not conditions.is_successor_process:
+        if c.task.is_assigned_to_current_admin_unit and \
+           not c.request.is_successor_process:
             return False
 
         if include_agency:
-            return conditions.is_responsible or conditions.is_administrator
+            return (c.current_user.is_responsible or
+                    c.current_user.is_administrator)
 
-        return conditions.is_responsible
+        return c.current_user.is_responsible
 
     @action('forwarding-transition-accept')
     def accept_action(self, transition):
@@ -34,17 +35,17 @@ class ForwardingTransitionController(TaskTransitionController):
     @guard('forwarding-transition-reassign')
     @guard('forwarding-transition-close')
     @guard('forwarding-transition-reassign-refused')
-    def is_assign_to_dossier_or_reassign_possible(self, conditions, include_agency):
+    def is_assign_to_dossier_or_reassign_possible(self, c, include_agency):
         """Check it the user is in the inbox group of the current client.
         """
 
-        if conditions.is_assigned_to_current_admin_unit:
+        if c.task.is_assigned_to_current_admin_unit:
             if include_agency:
-                return (conditions.is_responsible or
-                        conditions.is_responsible_orgunit_agency_member or
-                        conditions.is_administrator)
+                return (c.current_user.is_responsible or
+                        c.current_user.in_responsible_orgunits_inbox_group or
+                        c.current_user.is_administrator)
 
-            return conditions.is_responsible
+            return c.current_user.is_responsible
 
         return False
 
