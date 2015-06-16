@@ -160,7 +160,8 @@ class TaskTransitionController(BrowserView):
 
         if include_agency:
             return (conditions.is_issuer or
-                    conditions.is_issuing_orgunit_agency_member)
+                    conditions.is_issuing_orgunit_agency_member or
+                    conditions.is_administrator)
 
         return conditions.is_issuer
 
@@ -179,19 +180,18 @@ class TaskTransitionController(BrowserView):
          - The task can also be resolved when user is not the responsible
         but in the responsible_org_unit's inbox group.
         """
-
-        if not conditions.is_responsible:
-            if not include_agency or \
-               not conditions.is_responsible_orgunit_agency_member:
-                return False
-
         if not conditions.all_subtasks_finished:
             return False
 
         if conditions.has_successors and not conditions.is_remote_request:
             return False
 
-        return True
+        if include_agency:
+            return (conditions.is_responsible or
+                    conditions.is_responsible_orgunit_agency_member or
+                    conditions.is_administrator)
+        else:
+            return conditions.is_responsible
 
     @guard('task-transition-in-progress-resolved')
     @task_type_category('unidirectional_by_value')
@@ -229,18 +229,18 @@ class TaskTransitionController(BrowserView):
         - The task has no successors or is a remote request
         """
 
-        if not conditions.is_responsible:
-            if not include_agency or \
-               not conditions.is_responsible_orgunit_agency_member:
-                return False
-
         if not conditions.all_subtasks_finished:
             return False
 
         if conditions.has_successors and not conditions.is_remote_request:
             return False
 
-        return True
+        if include_agency:
+            return (conditions.is_responsible or
+                    conditions.is_responsible_orgunit_agency_member or
+                    conditions.is_administrator)
+        else:
+            return conditions.is_responsible
 
     @action('task-transition-in-progress-tested-and-closed')
     def progress_to_closed_action(self, transition):
@@ -264,7 +264,8 @@ class TaskTransitionController(BrowserView):
 
         if include_agency:
             return (conditions.is_issuer or
-                    conditions.is_issuing_orgunit_agency_member)
+                    conditions.is_issuing_orgunit_agency_member or
+                    conditions.is_administrator)
 
         return conditions.is_issuer
 
@@ -279,7 +280,8 @@ class TaskTransitionController(BrowserView):
         """
         if include_agency:
             return (conditions.is_responsible or
-                    conditions.is_responsible_orgunit_agency_member)
+                    conditions.is_responsible_orgunit_agency_member or
+                    conditions.is_administrator)
 
         return conditions.is_responsible
 
@@ -307,7 +309,8 @@ class TaskTransitionController(BrowserView):
 
         if include_agency:
             return (conditions.is_responsible or
-                    conditions.is_responsible_orgunit_agency_member)
+                    conditions.is_responsible_orgunit_agency_member or
+                    conditions.is_administrator)
 
         return conditions.is_responsible
 
@@ -324,7 +327,8 @@ class TaskTransitionController(BrowserView):
 
         if include_agency:
             return (conditions.is_responsible or
-                    conditions.is_responsible_orgunit_agency_member)
+                    conditions.is_responsible_orgunit_agency_member or
+                    conditions.is_administrator)
 
         return conditions.is_responsible
 
@@ -359,7 +363,8 @@ class TaskTransitionController(BrowserView):
 
         if include_agency:
             return (conditions.is_issuer or
-                    conditions.is_issuing_orgunit_agency_member)
+                    conditions.is_issuing_orgunit_agency_member or
+                    conditions.is_administrator)
 
         return conditions.is_issuer
 
@@ -376,7 +381,8 @@ class TaskTransitionController(BrowserView):
         """
         if include_agency:
             return (conditions.is_responsible or
-                    conditions.is_responsible_orgunit_agency_member)
+                    conditions.is_responsible_orgunit_agency_member or
+                    conditions.is_administrator)
 
         return conditions.is_responsible
 
@@ -412,6 +418,9 @@ class TaskTransitionController(BrowserView):
         """Checks if:
         - The current user is the issuer of the task"""
 
+        if include_agency:
+            return conditions.is_issuer or conditions.is_administrator
+
         return conditions.is_issuer
 
     @action('task-transition-rejected-open')
@@ -424,8 +433,9 @@ class TaskTransitionController(BrowserView):
         - The current user is the issuer of the task"""
 
         if include_agency:
-            return (conditions.is_issuer
-                    or conditions.is_issuing_orgunit_agency_member)
+            return (conditions.is_issuer or
+                    conditions.is_issuing_orgunit_agency_member or
+                    conditions.is_administrator)
 
         return conditions.is_issuer
 
@@ -443,7 +453,8 @@ class TaskTransitionController(BrowserView):
 
         if include_agency:
             return (conditions.is_responsible or
-                    conditions.is_responsible_orgunit_agency_member)
+                    conditions.is_responsible_orgunit_agency_member or
+                    conditions.is_administrator)
 
         return conditions.is_responsible
 

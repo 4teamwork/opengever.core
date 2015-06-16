@@ -8,7 +8,8 @@ class FakeConditions(object):
                  all_subtasks_finished=False, has_successors=False,
                  is_remote_request=False,
                  issuing_agency=False, responsible_agency=False,
-                 successor_process=False, current_admin_unit_assigned=False):
+                 successor_process=False, current_admin_unit_assigned=False,
+                 is_administrator=False):
 
         self.is_issuer = is_issuer
         self.is_responsible = is_responsible
@@ -20,6 +21,7 @@ class FakeConditions(object):
         self.is_responsible_orgunit_agency_member = responsible_agency
         self.is_assigned_to_current_admin_unit = current_admin_unit_assigned
         self.is_successor_process = successor_process
+        self.is_administrator = is_administrator
 
 
 class FakeTask(object):
@@ -61,6 +63,12 @@ class TestCancelledOpenGuard(BaseTransitionGuardTests):
             self.controller._is_transition_possible(
                 self.transition, True, conditions))
 
+    def test_administrator_has_agency_permission(self):
+        conditions = FakeConditions(
+            is_issuer=False, issuing_agency=False, is_administrator=True)
+
+        self.assertTrue(self.controller._is_transition_possible(
+            self.transition, True, conditions))
 
 class TestOpenCancelledGuard(BaseTransitionGuardTests):
     transition = 'task-transition-open-cancelled'
@@ -81,15 +89,24 @@ class TestOpenCancelledGuard(BaseTransitionGuardTests):
         self.assertTrue(self.controller._is_transition_possible(
             self.transition, True, conditions))
 
+    def test_issuing_inbox_group_has_agency_permission(self):
+        conditions = FakeConditions(
+            is_issuer=False, issuing_agency=False, is_administrator=True)
+
+        self.assertFalse(self.controller._is_transition_possible(
+            self.transition, False, conditions))
+        self.assertTrue(self.controller._is_transition_possible(
+            self.transition, True, conditions))
+
 
 class TestInProgressResolvedGuard(BaseTransitionGuardTests):
     transition = 'task-transition-in-progress-resolved'
 
     def test_never_available_for_unidirectional_by_value(self):
-        conditions = FakeConditions()
+        conditions = FakeConditions(is_administrator=True)
         self.task_type_category = 'unidirectional_by_value'
         self.assertFalse(self.controller._is_transition_possible(
-            self.transition, False, conditions))
+            self.transition, True, conditions))
 
     def test_default_allowed(self):
         conditions = FakeConditions(is_responsible=True,
@@ -111,7 +128,7 @@ class TestInProgressResolvedGuard(BaseTransitionGuardTests):
         self.assertTrue(self.controller._is_transition_possible(
             self.transition, False, conditions))
 
-    def test_subtas_has_to_be_finished(self):
+    def test_subtasks_has_to_be_finished(self):
         conditions = FakeConditions(is_responsible=True,
                                     all_subtasks_finished=False,
                                     has_successors=False)
@@ -127,7 +144,7 @@ class TestInProgressResolvedGuard(BaseTransitionGuardTests):
         self.assertFalse(self.controller._is_transition_possible(
             self.transition, False, conditions))
 
-    def test_agency_fallback_for_responsible(self):
+    def test_agency_fallback_for_responsible_orgunit_agency(self):
         conditions = FakeConditions(is_responsible=False,
                                     all_subtasks_finished=True,
                                     has_successors=False,
@@ -141,6 +158,19 @@ class TestInProgressResolvedGuard(BaseTransitionGuardTests):
             self.controller._is_transition_possible(
                 self.transition, True, conditions))
 
+    def test_agency_fallback_for_administrator(self):
+        conditions = FakeConditions(is_responsible=False,
+                                    all_subtasks_finished=True,
+                                    has_successors=False,
+                                    responsible_agency=False,
+                                    is_administrator=True)
+
+        self.assertFalse(self.controller._is_transition_possible(
+            self.transition, False, conditions))
+
+        self.assertTrue(self.controller._is_transition_possible(
+            self.transition, True, conditions))
+
 
 class TestInProgressClosed(BaseTransitionGuardTests):
 
@@ -149,7 +179,7 @@ class TestInProgressClosed(BaseTransitionGuardTests):
 
     def test_never_available_for_bidirectional_tasks(self):
         self.task_type_category = 'directional_by_value'
-        conditions = FakeConditions()
+        conditions = FakeConditions(is_administrator=True)
 
         self.assertFalse(self.controller._is_transition_possible(
             self.transition, True, conditions))
@@ -190,7 +220,7 @@ class TestInProgressClosed(BaseTransitionGuardTests):
         self.assertFalse(self.controller._is_transition_possible(
             self.transition, False, conditions))
 
-    def test_agency_fallback_for_responsible(self):
+    def test_agency_fallback_for_responsible_agency(self):
         conditions = FakeConditions(is_responsible=False,
                                     all_subtasks_finished=True,
                                     has_successors=False,
@@ -204,6 +234,19 @@ class TestInProgressClosed(BaseTransitionGuardTests):
             self.controller._is_transition_possible(
                 self.transition, True, conditions))
 
+    def test_agency_fallback_for_administrator(self):
+        conditions = FakeConditions(is_responsible=False,
+                                    all_subtasks_finished=True,
+                                    has_successors=False,
+                                    responsible_agency=False,
+                                    is_administrator=True)
+
+        self.assertFalse(self.controller._is_transition_possible(
+            self.transition, False, conditions))
+
+        self.assertTrue(self.controller._is_transition_possible(
+            self.transition, True, conditions))
+
 
 class TestOpenInProgress(BaseTransitionGuardTests):
 
@@ -212,7 +255,7 @@ class TestOpenInProgress(BaseTransitionGuardTests):
 
     def test_never_available_for_unidirectional_by_refernce_tasks(self):
         self.task_type_category = 'unidirectional_by_reference'
-        conditions = FakeConditions(is_responsible=True)
+        conditions = FakeConditions(is_responsible=True, is_administrator=True)
 
         self.assertFalse(self.controller._is_transition_possible(
             self.transition, False, conditions))
@@ -230,6 +273,16 @@ class TestOpenInProgress(BaseTransitionGuardTests):
         self.assertFalse(self.controller._is_transition_possible(
             self.transition, False, conditions))
 
+        self.assertTrue(self.controller._is_transition_possible(
+            self.transition, True, conditions))
+
+    def test_agency_fallback_for_administrators(self):
+        conditions = FakeConditions(is_responsible=False,
+                                    responsible_agency=False,
+                                    is_administrator=True)
+
+        self.assertFalse(self.controller._is_transition_possible(
+            self.transition, False, conditions))
         self.assertTrue(self.controller._is_transition_possible(
             self.transition, True, conditions))
 
@@ -253,13 +306,23 @@ class TestOpenRejected(BaseTransitionGuardTests):
         self.assertTrue(self.controller._is_transition_possible(
             self.transition, True, conditions))
 
+    def test_agency_fallback_for_administrators(self):
+        conditions = FakeConditions(is_responsible=False,
+                                    responsible_agency=False,
+                                    is_administrator=True)
+
+        self.assertFalse(self.controller._is_transition_possible(
+            self.transition, False, conditions))
+        self.assertTrue(self.controller._is_transition_possible(
+            self.transition, True, conditions))
+
 
 class TestOpenResolved(BaseTransitionGuardTests):
     transition = 'task-transition-open-resolved'
     task_type_category = 'bidirectional_by_value'
 
     def test_only_available_for_bidrectional_tasks(self):
-        conditions = FakeConditions(is_responsible=True)
+        conditions = FakeConditions(is_responsible=True, is_administrator=True)
 
         self.task_type_category = 'unidirectional_by_reference'
         self.assertFalse(self.controller._is_transition_possible(
@@ -285,6 +348,16 @@ class TestOpenResolved(BaseTransitionGuardTests):
         self.assertTrue(self.controller._is_transition_possible(
             self.transition, True, conditions))
 
+    def test_agency_fallback_for_administrators(self):
+        conditions = FakeConditions(is_responsible=False,
+                                    responsible_agency=False,
+                                    is_administrator=True)
+
+        self.assertFalse(self.controller._is_transition_possible(
+            self.transition, False, conditions))
+        self.assertTrue(self.controller._is_transition_possible(
+            self.transition, True, conditions))
+
 
 class TestOpenClosed(BaseTransitionGuardTests):
     transition = 'task-transition-open-tested-and-closed'
@@ -307,6 +380,16 @@ class TestOpenClosed(BaseTransitionGuardTests):
         self.assertTrue(self.controller._is_transition_possible(
             self.transition, True, conditions))
 
+    def test_agency_fallback_for_administrator_on_unidirectional_by_reference_tasks(self):
+        self.task_type_category = 'unidirectional_by_reference'
+        conditions = FakeConditions(
+            is_responsible=False, responsible_agency=False, is_administrator=True)
+
+        self.assertFalse(self.controller._is_transition_possible(
+            self.transition, False, conditions))
+        self.assertTrue(self.controller._is_transition_possible(
+            self.transition, True, conditions))
+
     def test_available_for_issuer_for_bidirectional_tasks(self):
         conditions = FakeConditions(is_issuer=True)
 
@@ -315,6 +398,16 @@ class TestOpenClosed(BaseTransitionGuardTests):
 
     def test_issuer_agency_for_bidirectional_tasks(self):
         conditions = FakeConditions(is_issuer=False, issuing_agency=True)
+
+        self.assertFalse(self.controller._is_transition_possible(
+            self.transition, False, conditions))
+
+        self.assertTrue(self.controller._is_transition_possible(
+            self.transition, True, conditions))
+
+    def test_agency_fallback_for_administrators_on_bidirectional_tasks(self):
+        conditions = FakeConditions(
+            is_issuer=False, issuing_agency=False, is_administrator=True)
 
         self.assertFalse(self.controller._is_transition_possible(
             self.transition, False, conditions))
@@ -346,6 +439,14 @@ class TestRejectedOpen(BaseTransitionGuardTests):
         self.assertTrue(self.controller._is_transition_possible(
             self.transition, False, conditions))
 
+    def test_agency_fallback_for_administrators(self):
+        conditions = FakeConditions(is_issuer=False, is_administrator=True)
+
+        self.assertFalse(self.controller._is_transition_possible(
+            self.transition, False, conditions))
+        self.assertTrue(self.controller._is_transition_possible(
+            self.transition, True, conditions))
+
 
 class TestResolvedClosed(BaseTransitionGuardTests):
     transition = 'task-transition-resolved-tested-and-closed'
@@ -363,6 +464,16 @@ class TestResolvedClosed(BaseTransitionGuardTests):
 
     def test_issuing_agency(self):
         conditions = FakeConditions(is_issuer=False, issuing_agency=True)
+
+        self.assertFalse(self.controller._is_transition_possible(
+            self.transition, False, conditions))
+
+        self.assertTrue(self.controller._is_transition_possible(
+            self.transition, True, conditions))
+
+    def test_agency_fallback_for_administrators(self):
+        conditions = FakeConditions(
+            is_issuer=False, issuing_agency=False, is_administrator=True)
 
         self.assertFalse(self.controller._is_transition_possible(
             self.transition, False, conditions))
@@ -388,6 +499,17 @@ class ResolvedInProgress(BaseTransitionGuardTests):
     def test_responsible_agency(self):
         conditions = FakeConditions(
             is_issuer=False, is_responsible=False, responsible_agency=True)
+
+        self.assertFalse(self.controller._is_transition_possible(
+            self.transition, False, conditions))
+
+        self.assertTrue(self.controller._is_transition_possible(
+            self.transition, True, conditions))
+
+    def test_agency_fallback_for_administrators(self):
+        conditions = FakeConditions(
+            is_issuer=False, is_responsible=False,
+            responsible_agency=False, is_administrator=True)
 
         self.assertFalse(self.controller._is_transition_possible(
             self.transition, False, conditions))
