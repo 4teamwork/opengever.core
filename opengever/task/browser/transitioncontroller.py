@@ -538,22 +538,6 @@ class TaskTransitionController(BrowserView):
 
         return self._is_responsible() or self._is_inbox_group_user()
 
-    def _is_remote_request(self):
-        """checks if the current request cames from a remote client.
-        For example a task over a mutliple clients."""
-
-        if self.request.get_header('X-OGDS-AUID', None):
-            return True
-        else:
-            return False
-
-    def _has_successors(self):
-        """checks is the task has some successors
-        """
-        if ISuccessorTaskController(self.context).get_successors():
-            return True
-        return False
-
     def _is_multiclient_setup(self):
         return ogds_service().has_multiple_admin_units()
 
@@ -563,12 +547,6 @@ class TaskTransitionController(BrowserView):
         """
         responsible_unit = self.context.get_responsible_org_unit()
         return responsible_unit.admin_unit == get_current_admin_unit()
-
-    def _is_task_on_responsible_client(self):
-        """Returns true if the current client is the responsible-client of
-        the task.
-        """
-        return get_current_org_unit().id() == self.context.responsible_client
 
     def _addresponse_form_url(self, transition):
         """Returns the redirect url to the addresponse, passing `transition`.
