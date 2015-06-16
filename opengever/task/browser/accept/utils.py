@@ -12,6 +12,7 @@ from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import _
 from opengever.task.adapters import IResponseContainer
 from opengever.task.exceptions import CannotAcceptTaskException
+from opengever.task.exceptions import TaskRemoteRequestError
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.interfaces import ITaskDocumentsTransporter
 from opengever.task.interfaces import IYearfolderStorer
@@ -153,9 +154,9 @@ def accept_forwarding_with_successor(
                                 data=request_data)
 
     if response.read().strip() != 'OK':
-        raise Exception('Adding the response and changing the '
-                        'workflow state on the predecessor forwarding '
-                        'failed.')
+        raise TaskRemoteRequestError(
+            'Adding the response and changing the workflow state on the '
+            'predecessor forwarding failed.')
 
     if dossier:
         # Update watchers for created successor forwarding and task
@@ -283,9 +284,9 @@ def accept_task_with_successor(dossier, predecessor_oguid, response_text):
                                 data=request_data)
 
     if response.read().strip() != 'OK':
-        raise Exception('Adding the response and changing the '
-                        'workflow state on the predecessor task '
-                        'failed.')
+        raise TaskRemoteRequestError(
+            'Adding the response and changing the workflow state on the '
+            'predecessor task failed.')
 
     # Connect the predecessor and the successor task. This needs to be done
     # that late for preventing a deadlock because of the locked tasks table.

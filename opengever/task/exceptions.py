@@ -4,3 +4,7 @@ class TaskException(Exception):
 
 class CannotAcceptTaskException(TaskException):
     pass
+
+
+class TaskRemoteRequestError(TaskException):
+    pass
