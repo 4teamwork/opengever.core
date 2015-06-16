@@ -12,6 +12,7 @@ from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import _
 from opengever.task.adapters import IResponseContainer
 from opengever.task.exceptions import CannotAcceptTaskException
+from opengever.task.exceptions import CannotAssignForwardingException
 from opengever.task.exceptions import TaskRemoteRequestError
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.interfaces import ITaskDocumentsTransporter
@@ -180,9 +181,12 @@ def accept_forwarding_with_successor(
 
 
 def assign_forwarding_to_dossier(
-    context, forwarding_oguid, dossier, response_text):
+        context, forwarding_oguid, dossier, response_text):
 
     forwarding = Task.query.by_oguid(forwarding_oguid)
+    if not forwarding.can_be_accepted():
+        raise CannotAssignForwardingException(
+            'Forwarding has already been accepted')
 
     forwarding_obj = context.unrestrictedTraverse(
         forwarding.physical_path.encode('utf-8'))

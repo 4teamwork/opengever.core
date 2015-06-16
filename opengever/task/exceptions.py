@@ -6,5 +6,9 @@ class CannotAcceptTaskException(TaskException):
     pass
 
 
+class CannotAssignForwardingException(TaskException):
+    pass
+
+
 class TaskRemoteRequestError(TaskException):
     pass
