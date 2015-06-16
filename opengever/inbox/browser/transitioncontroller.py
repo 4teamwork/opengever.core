@@ -1,6 +1,6 @@
 """Contains a Controller wich checks the Transitions"""
-from opengever.ogds.base.utils import get_current_admin_unit
-from opengever.task.browser.transitioncontroller import guard, action
+from opengever.task.browser.transitioncontroller import action
+from opengever.task.browser.transitioncontroller import guard
 from opengever.task.browser.transitioncontroller import TaskTransitionController
 
 
@@ -22,9 +22,6 @@ class ForwardingTransitionController(TaskTransitionController):
             return conditions.is_responsible or conditions.is_administrator
 
         return conditions.is_responsible
-
-    def _is_task_assigned_to_current_admin_unit(self):
-        return self.context.get_responsible_admin_unit() == get_current_admin_unit()
 
     @action('forwarding-transition-accept')
     def accept_action(self, transition):
@@ -91,9 +88,3 @@ class ForwardingTransitionController(TaskTransitionController):
         closing mechanism (storing in a yearfolder).
         """
         return '%s/@@close-forwarding' % (self.context.absolute_url())
-
-    def _is_successor_forwarding_process(self):
-        """Check if the request is directly from
-        the forwarding successor handler."""
-
-        return bool(self.request.get('X-CREATING-SUCCESSOR', False))
