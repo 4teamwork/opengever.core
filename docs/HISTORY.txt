@@ -5,6 +5,15 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Activity: Prevent generating duplicated activities when:
+
+  - Reassigning tasks
+  - Adding subtasks (Plone action-menu)
+  - Delegating tasks (Workflow)
+  - Modifying a deadline
+
+  [deiferni]
+
 - Migrate activity schema, use text for summary column.
   [deiferni]
 
