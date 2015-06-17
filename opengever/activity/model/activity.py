@@ -34,7 +34,7 @@ class Activity(Base):
     kind = Column(String(255), nullable=False)
     actor_id = Column(String(USER_ID_LENGTH), nullable=False)
     title = Column(String(512), nullable=False)
-    summary = Column(String(512), nullable=False)
+    summary = Column(Text, nullable=False)
     description = Column(Text)
     created = Column(UTCDateTime(timezone=True), default=utcnow_tz_aware)
     resource_id = Column(Integer, ForeignKey('resources.id'), nullable=False)

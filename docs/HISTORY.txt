@@ -5,6 +5,9 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Migrate activity schema, use text for summary column.
+  [deiferni]
+
 - Prevent that tasks/forwardings can be accepted/assigned twice.
   This problem occurred with tasks/forwardings distributed over two (or more) admin-units.
   [deiferni]

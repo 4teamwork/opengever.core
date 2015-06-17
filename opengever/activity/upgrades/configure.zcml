@@ -77,4 +77,14 @@
         profile="opengever.activity:default"
         />
 
+    <!-- 4401 -> 4500 -->
+    <genericsetup:upgradeStep
+        title="Convert activity summary from string to text."
+        description=""
+        source="4401"
+        destination="4500"
+        handler="opengever.activity.upgrades.to4500.ConvertActivitySummaryToText"
+        profile="opengever.activity:default"
+        />
+
 </configure>
