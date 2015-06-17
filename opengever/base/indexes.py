@@ -65,4 +65,4 @@ def title_fr_indexer(obj):
         return ITranslatedTitle(obj).title_fr
     return None
 
-grok.global_adapter(title_de_indexer, name="title_fr")
+grok.global_adapter(title_fr_indexer, name="title_fr")
