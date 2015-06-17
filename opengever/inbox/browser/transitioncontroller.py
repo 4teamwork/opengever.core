@@ -25,7 +25,7 @@ class ForwardingTransitionController(TaskTransitionController):
         return c.current_user.is_responsible
 
     @action('forwarding-transition-accept')
-    def accept_action(self, transition):
+    def accept_action(self, transition, c):
         """redirect to the accept_choose_method Wizzard"""
 
         return '%s/@@accept_choose_method' % (
@@ -50,14 +50,14 @@ class ForwardingTransitionController(TaskTransitionController):
         return False
 
     @action('forwarding-transition-assign-to-dossier')
-    def assign_to_dossier_action(self, transition):
+    def assign_to_dossier_action(self, transition, c):
         """redirect to the choose method view
         """
         return '%s/@@assign_choose_method' % (
             self.context.absolute_url())
 
     @action('forwarding-transition-reassign')
-    def reassign_action(self, transition):
+    def reassign_action(self, transition, c):
         """redirect to the assign task form,
         which allows to set a new responsible.
         """
@@ -66,7 +66,7 @@ class ForwardingTransitionController(TaskTransitionController):
             transition)
 
     @action('forwarding-transition-reassign-refused')
-    def reassign_refused_action(self, transition):
+    def reassign_refused_action(self, transition, c):
         """redirect to the assign refused forwarding form,
         which allows to set a new responsible and responsible_client."""
 
@@ -75,7 +75,7 @@ class ForwardingTransitionController(TaskTransitionController):
             transition)
 
     @action('forwarding-transition-refuse')
-    def refuse_action(self, transition):
+    def refuse_action(self, transition, c):
         """redirect to the assign task form,
         so that it automaticly set the home inbox as responsible
         """
@@ -84,7 +84,7 @@ class ForwardingTransitionController(TaskTransitionController):
             transition)
 
     @action('forwarding-transition-close')
-    def close_action(self, transition):
+    def close_action(self, transition, c):
         """redirect to the close-forwarding form, which handle the whole
         closing mechanism (storing in a yearfolder).
         """

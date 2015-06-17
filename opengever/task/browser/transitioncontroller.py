@@ -1,18 +1,15 @@
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.utils import get_current_admin_unit
-from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.task import FINISHED_TASK_STATES
 from opengever.task.browser.delegate.main import DelegateTask
 from opengever.task.browser.modify_deadline import ModifyDeadlineFormView
 from opengever.task.interfaces import IDeadlineModifier
-from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.util import get_documents_of_task
 from plone import api
 from plone.protect.utils import addTokenToUrl
 from Products.Five import BrowserView
 from zExceptions import NotFound
-from zope.component import getMultiAdapter
 from zope.interface import implements
 from zope.interface import Interface
 
@@ -129,8 +126,8 @@ class TaskTransitionController(BrowserView):
         if not action_url_generator:
             return ''
 
-        # this is an unbound method
-        return action_url_generator(self, transition)
+        return action_url_generator(
+            self, transition, get_checker(self.context))
 
     # ------------ workflow implementation --------------
 
@@ -139,7 +136,7 @@ class TaskTransitionController(BrowserView):
         return True
 
     @action('task-transition-delegate')
-    def delegate_action(self, transition):
+    def delegate_action(self, transition, c):
         # drop transition, it is not relevant here.
         return DelegateTask.url_for(self.context)
 
@@ -149,7 +146,7 @@ class TaskTransitionController(BrowserView):
             include_agency=include_agency)
 
     @action('task-transition-modify-deadline')
-    def modify_deadline_action(self, transition):
+    def modify_deadline_action(self, transition, c):
         return ModifyDeadlineFormView.url_for(self.context, transition)
 
     @guard('task-transition-cancelled-open')
@@ -165,7 +162,7 @@ class TaskTransitionController(BrowserView):
         return c.current_user.is_issuer
 
     @action('task-transition-cancelled-open')
-    def cancelled_to_open_action(self, transition):
+    def cancelled_to_open_action(self, transition, c):
         return self._addresponse_form_url(transition)
 
     @guard('task-transition-in-progress-resolved')
@@ -198,17 +195,16 @@ class TaskTransitionController(BrowserView):
         return False
 
     @action('task-transition-in-progress-resolved')
-    def progress_to_resolved_action(self, transition):
+    def progress_to_resolved_action(self, transition, c):
         return self._addresponse_form_url(transition)
 
     @action('task-transition-in-progress-resolved')
     @task_type_category('bidirectional_by_reference')
     @task_type_category('bidirectional_by_value')
-    def bi_progress_to_resolved_action(self, transition):
-        if self._is_close_successor_wizard_possible(transition):
+    def bi_progress_to_resolved_action(self, transition, c):
+        if c.task.is_successor and not c.task.is_forwarding_successor:
             return '%s/@@complete_successor_task?transition=%s' % (
-                self.context.absolute_url(),
-                transition)
+                self.context.absolute_url(), transition)
         else:
             return self._addresponse_form_url(transition)
 
@@ -242,14 +238,14 @@ class TaskTransitionController(BrowserView):
             return c.current_user.is_responsible
 
     @action('task-transition-in-progress-tested-and-closed')
-    def progress_to_closed_action(self, transition):
+    def progress_to_closed_action(self, transition, c):
         return self._addresponse_form_url(transition)
 
     @action('task-transition-in-progress-tested-and-closed')
     @task_type_category('unidirectional_by_reference')
     @task_type_category('unidirectional_by_value')
-    def uni_progress_to_closed_action(self, transition):
-        if self._is_close_successor_wizard_possible(transition):
+    def uni_progress_to_closed_action(self, transition, c):
+        if c.task.is_successor and not c.task.is_forwarding_successor:
             return '%s/@@complete_successor_task?transition=%s' % (
                 self.context.absolute_url(),
                 transition)
@@ -269,7 +265,7 @@ class TaskTransitionController(BrowserView):
         return c.current_user.is_issuer
 
     @action('task-transition-open-cancelled')
-    def open_to_cancelled_action(self, transition):
+    def open_to_cancelled_action(self, transition, c):
         return self._addresponse_form_url(transition)
 
     @guard('task-transition-open-in-progress')
@@ -285,13 +281,9 @@ class TaskTransitionController(BrowserView):
         return c.current_user.is_responsible
 
     @action('task-transition-open-in-progress')
-    def open_to_progress_action(self, transition):
-        if not self._is_multiclient_setup():
+    def open_to_progress_action(self, transition, c):
+        if c.task.is_assigned_to_current_admin_unit:
             return self._addresponse_form_url(transition)
-
-        elif self._is_responsible_org_unit_part_of_current_admin_unit():
-            return self._addresponse_form_url(transition)
-
         else:
             return '%s/@@accept_choose_method' % self.context.absolute_url()
 
@@ -314,7 +306,7 @@ class TaskTransitionController(BrowserView):
         return c.current_user.is_responsible
 
     @action('task-transition-open-rejected')
-    def open_to_rejected_action(self, transition):
+    def open_to_rejected_action(self, transition, c):
         return self._addresponse_form_url(transition)
 
     @guard('task-transition-open-resolved')
@@ -340,7 +332,7 @@ class TaskTransitionController(BrowserView):
         return False
 
     @action('task-transition-open-resolved')
-    def open_to_resolved_action(self, transition):
+    def open_to_resolved_action(self, transition, c):
         return self._addresponse_form_url(transition)
 
     @action('task-transition-open-resolved')
@@ -353,7 +345,6 @@ class TaskTransitionController(BrowserView):
                 transition)
         else:
             return self._addresponse_form_url(transition)
-
     @guard('task-transition-open-tested-and-closed')
     def open_to_closed_guard(self, c, include_agency):
         """Checks if:
@@ -368,7 +359,7 @@ class TaskTransitionController(BrowserView):
         return c.current_user.is_issuer
 
     @action('task-transition-open-tested-and-closed')
-    def open_to_closed_action(self, transition):
+    def open_to_closed_action(self, transition, c):
         return self._addresponse_form_url(transition)
 
     @guard('task-transition-open-tested-and-closed')
@@ -387,11 +378,8 @@ class TaskTransitionController(BrowserView):
 
     @action('task-transition-open-tested-and-closed')
     @task_type_category('unidirectional_by_reference')
-    def uniref_open_to_closed_action(self, transition):
-        if not self._is_multiclient_setup():
-            return self._addresponse_form_url(transition)
-
-        elif self._is_responsible_org_unit_part_of_current_admin_unit():
+    def uniref_open_to_closed_action(self, transition, c):
+        if c.task.is_assigned_to_current_admin_unit:
             return self._addresponse_form_url(transition)
 
         elif len(get_documents_of_task(
@@ -407,7 +395,7 @@ class TaskTransitionController(BrowserView):
         return True
 
     @action('task-transition-reassign')
-    def reassign_action(self, transition):
+    def reassign_action(self, transition, c):
         return '%s/@@assign-task?form.widgets.transition=%s' % (
             self.context.absolute_url(),
             transition)
@@ -423,7 +411,7 @@ class TaskTransitionController(BrowserView):
         return c.current_user.is_issuer
 
     @action('task-transition-rejected-open')
-    def rejected_to_open_action(self, transition):
+    def rejected_to_open_action(self, transition, c):
         return self._addresponse_form_url(transition)
 
     @guard('task-transition-resolved-tested-and-closed')
@@ -439,7 +427,7 @@ class TaskTransitionController(BrowserView):
         return c.current_user.is_issuer
 
     @action('task-transition-resolved-tested-and-closed')
-    def resolved_to_closed_action(self, transition):
+    def resolved_to_closed_action(self, transition, c):
         return self._addresponse_form_url(transition)
 
     @guard('task-transition-resolved-in-progress')
@@ -458,7 +446,7 @@ class TaskTransitionController(BrowserView):
         return c.current_user.is_responsible
 
     @action('task-transition-resolved-in-progress')
-    def resolved_to_progress_action(self, transition):
+    def resolved_to_progress_action(self, transition, c):
         return self._addresponse_form_url(transition)
 
     # ------------ helper functions --------------
@@ -519,57 +507,12 @@ class TaskTransitionController(BrowserView):
 
         return functions
 
-    def _is_responsible(self):
-        """Checks if the current user is the issuer of the
-        current task(current context)"""
-
-        return getMultiAdapter((self.context, self.request),
-            name='plone_portal_state').member().id == self.context.responsible
-
-    def _is_inbox_group_user(self):
-        """Checks if the current user is assigned to the current inbox"""
-
-        inbox = get_current_org_unit().inbox()
-        return ogds_service().fetch_current_user() in inbox.assigned_users()
-
-    def _is_responsible_or_inbox_group_user(self):
-        """Checks if the current user is the responsible
-        or in the inbox_group"""
-
-        return self._is_responsible() or self._is_inbox_group_user()
-
-    def _is_multiclient_setup(self):
-        return ogds_service().has_multiple_admin_units()
-
-    def _is_responsible_org_unit_part_of_current_admin_unit(self):
-        """Returns true if the responsible org_unit is a
-        part of the current admin unit.
-        """
-        responsible_unit = self.context.get_responsible_org_unit()
-        return responsible_unit.admin_unit == get_current_admin_unit()
-
     def _addresponse_form_url(self, transition):
         """Returns the redirect url to the addresponse, passing `transition`.
         """
         return '%s/addresponse?form.widgets.transition=%s' % (
             self.context.absolute_url(),
             transition)
-
-    def _is_close_successor_wizard_possible(self, transition):
-        if not self._is_responsible_or_inbox_group_user():
-            return False
-
-        elif not self.context.predecessor:
-            return False
-
-        # check if the predessecor is a forwarding
-        # in this case the successor wizard isn't possible and necessary
-        elif ISuccessorTaskController(self.context).get_predecessor(
-                ).task_type == u'forwarding_task_type':
-            return False
-
-        else:
-            return True
 
 
 class Checker(object):
@@ -641,6 +584,14 @@ class TaskChecker(object):
     @property
     def has_successors(self):
         return bool(self.task.successors)
+
+    @property
+    def is_successor(self):
+        return self.task.is_successor
+
+    @property
+    def is_forwarding_successor(self):
+        return self.task.predecessor.is_forwarding
 
     @property
     def is_assigned_to_current_admin_unit(self):
