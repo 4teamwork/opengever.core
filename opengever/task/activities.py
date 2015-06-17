@@ -122,6 +122,8 @@ class TaskTransitionActivity(TaskActivity):
     """Activity which represents a transition task transition change.
     """
 
+    IGNORED_TRANSITIONS = ['transition-add-subtask']
+
     def __init__(self, context, response):
         self.context = context
         self.request = self.context.REQUEST
@@ -145,6 +147,12 @@ class TaskTransitionActivity(TaskActivity):
     @property
     def description(self):
         return self.response.text
+
+    def record(self):
+        if self.transition in self.IGNORED_TRANSITIONS:
+            return
+
+        return super(TaskTransitionActivity, self).record()
 
 
 class TaskReassignActivity(TaskTransitionActivity):

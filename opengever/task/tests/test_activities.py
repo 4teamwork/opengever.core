@@ -147,7 +147,7 @@ class TestTaskActivites(FunctionalTestCase):
         self.assertEquals(u'nicht dring\xe4nd', activity.description)
 
     @browsing
-    def test_adding_a_subtask_notifies_watchers(self, browser):
+    def test_adding_a_subtask_creates_activity(self, browser):
         task = create(Builder('task')
                       .titled(u'Abkl\xe4rung Fall Meier')
                       .having(responsible=u'hugo.boss',
@@ -162,8 +162,10 @@ class TestTaskActivites(FunctionalTestCase):
                       'Text': 'Lorem ipsum'})
         browser.css('#form-buttons-save').first.click()
 
-        activity = Activity.query.first()
-        self.assertEquals(u'transition-add-subtask', activity.kind)
+        activity = Activity.query.one()
+        self.assertEquals('task-added', activity.kind)
+        self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
+        self.assertEquals(u'New task added by Test User', activity.summary)
 
     @browsing
     def test_adding_a_document_notifies_watchers(self, browser):
