@@ -294,3 +294,6 @@ msgstr "Déactiver"
 msgid "tasktemplatefolder-transition-inactiv-activ"
 msgstr "Activer"
 
+msgid "transition-add-document"
+msgstr ""
+
