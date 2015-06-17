@@ -34,7 +34,7 @@ class TestTaskActivites(FunctionalTestCase):
                       'Text': 'Lorem ipsum'})
         browser.css('#form-buttons-save').first.click()
 
-        activity = Activity.query.first()
+        activity = Activity.query.one()
         self.assertEquals('task-added', activity.kind)
         self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(u'New task added by Test User', activity.summary)
@@ -76,7 +76,7 @@ class TestTaskActivites(FunctionalTestCase):
         browser.fill({'Response': u'Wird n\xe4chste Woche erledigt.'})
         browser.css('#form-buttons-save').first.click()
 
-        activity = Activity.query.first()
+        activity = Activity.query.one()
         self.assertEquals(u'task-transition-open-in-progress', activity.kind)
         self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(
@@ -98,7 +98,7 @@ class TestTaskActivites(FunctionalTestCase):
         browser.fill({'Response': u'Wird n\xe4chste Woche erledigt.'})
         browser.css('#form-buttons-save').first.click()
 
-        activity = Activity.query.first()
+        activity = Activity.query.one()
         self.assertEquals(u'task-transition-open-in-progress', activity.kind)
         self.assertEquals('hugo.boss', activity.actor_id)
 
@@ -114,7 +114,7 @@ class TestTaskActivites(FunctionalTestCase):
         browser.fill({'Response': u'Ist erledigt.'})
         browser.css('#form-buttons-save').first.click()
 
-        activity = Activity.query.first()
+        activity = Activity.query.one()
         self.assertEquals(u'task-transition-in-progress-resolved', activity.kind)
         self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(
@@ -137,7 +137,7 @@ class TestTaskActivites(FunctionalTestCase):
             'New Deadline': '03/20/16',
             'Response': u'nicht dring\xe4nd'}).save()
 
-        activity = Activity.query.first()
+        activity = Activity.query.one()
         self.assertEquals(u'task-transition-modify-deadline', activity.kind)
         self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(
@@ -177,14 +177,21 @@ class TestTaskActivites(FunctionalTestCase):
         browser.fill({'Title': u'Letter to peter'})
         browser.css('#form-buttons-save').first.click()
 
-        activity = Activity.query.first()
+        activity = Activity.query.one()
         self.assertEquals(u'transition-add-document', activity.kind)
 
 
-class TestTaskReassignActivity(TestTaskActivites):
+class TestTaskReassignActivity(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 
     def setUp(self):
         super(TestTaskReassignActivity, self).setUp()
+        self.dossier = create(Builder('dossier').titled(u'Dossier XY'))
+        self.hugo = create(Builder('ogds_user')
+                           .id('hugo.boss')
+                           .assign_to_org_units([self.org_unit])
+                           .having(firstname=u'Hugo', lastname=u'Boss'))
 
         create(Builder('ogds_user')
                .id('peter.meier')

@@ -1,12 +1,10 @@
 from five import grok
 from opengever.base.request import dispatch_request
-from opengever.task.activities import TaskTransitionActivity
 from opengever.task.browser.transitioncontroller import get_conditions
 from opengever.task.interfaces import IDeadlineModifier
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
-from plone import api
 from Products.CMFDiffTool.utils import safe_utf8
 from zExceptions import Unauthorized
 from zope.event import notify
@@ -51,7 +49,7 @@ class DeadlineModifier(grok.Adapter):
         self.sync_deadline(new_deadline, text, transition)
 
     def update_deadline(self, new_deadline, text, transition):
-        response = add_simple_response(
+        add_simple_response(
             self.context, text=text,
             field_changes=(
                 (ITask['deadline'], new_deadline),
@@ -59,13 +57,8 @@ class DeadlineModifier(grok.Adapter):
             transition=transition
         )
 
-        self.record_activity(response)
-
         self.context.deadline = new_deadline
         notify(ObjectModifiedEvent(self.context))
-
-    def record_activity(self, response):
-        TaskTransitionActivity(self.context, response).record()
 
     def sync_deadline(self, new_deadline, text, transition):
         sct = ISuccessorTaskController(self.context)
