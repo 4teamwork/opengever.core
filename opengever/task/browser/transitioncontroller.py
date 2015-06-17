@@ -335,16 +335,6 @@ class TaskTransitionController(BrowserView):
     def open_to_resolved_action(self, transition, c):
         return self._addresponse_form_url(transition)
 
-    @action('task-transition-open-resolved')
-    @task_type_category('bidirectional_by_reference')
-    @task_type_category('bidirectional_by_value')
-    def bi_open_to_resolved_action(self, transition):
-        if self._is_close_successor_wizard_possible(transition):
-            return '%s/@@complete_successor_task?transition=%s' % (
-                self.context.absolute_url(),
-                transition)
-        else:
-            return self._addresponse_form_url(transition)
     @guard('task-transition-open-tested-and-closed')
     def open_to_closed_guard(self, c, include_agency):
         """Checks if:
