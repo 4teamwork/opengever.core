@@ -247,23 +247,27 @@ class TestTaskReassignActivity(FunctionalTestCase):
         self.task = self.add_task(browser)
         self.reassign(browser, 'hugo.boss', u'Bitte Abkl\xe4rungen erledigen.')
 
-        activity = Activity.query.all()[-1]
+        activities = Activity.query.all()
+        self.assertEqual(2, len(activities))
 
-        self.assertEquals(u'task-transition-reassign', activity.kind)
-        self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
-        self.assertEquals(u'Reassigned from <a href="http://nohost/plone/@@user-details/james.meier">Meier James (james.meier)</a> to <a href="http://nohost/plone/@@user-details/hugo.boss">Boss Hugo (hugo.boss)</a> by <a href="http://nohost/plone/@@user-details/test_user_1_">Test User (test_user_1_)</a>', activity.summary)
-        self.assertEquals(u'Bitte Abkl\xe4rungen erledigen.', activity.description)
+        reassign_activity = activities[-1]
+        self.assertEquals(u'task-transition-reassign', reassign_activity.kind)
+        self.assertEquals(u'Abkl\xe4rung Fall Meier', reassign_activity.title)
+        self.assertEquals(u'Reassigned from <a href="http://nohost/plone/@@user-details/james.meier">Meier James (james.meier)</a> to <a href="http://nohost/plone/@@user-details/hugo.boss">Boss Hugo (hugo.boss)</a> by <a href="http://nohost/plone/@@user-details/test_user_1_">Test User (test_user_1_)</a>', reassign_activity.summary)
+        self.assertEquals(u'Bitte Abkl\xe4rungen erledigen.', reassign_activity.description)
 
     @browsing
     def test_notifies_old_and_new_responsible(self, browser):
         self.task = self.add_task(browser)
         self.reassign(browser, 'hugo.boss', u'Bitte Abkl\xe4rungen erledigen.')
 
-        activity = Activity.query.all()[-1]
+        activities = Activity.query.all()
+        self.assertEqual(2, len(activities))
 
+        reassign_activity = activities[-1]
         self.assertItemsEqual(
             [u'james.meier', u'peter.meier', u'hugo.boss'],
-            [notes.watcher.user_id for notes in activity.notifications])
+            [notes.watcher.user_id for notes in reassign_activity.notifications])
 
     @browsing
     def test_removes_old_responsible_from_watchers_list(self, browser):
