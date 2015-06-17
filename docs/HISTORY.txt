@@ -5,6 +5,10 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Prevent that tasks/forwardings can be accepted/assigned twice.
+  This problem occurred with tasks/forwardings distributed over two (or more) admin-units.
+  [deiferni]
+
 - Allow deadline modification also for issuing_org_unit agency members.
   [phgross]
 

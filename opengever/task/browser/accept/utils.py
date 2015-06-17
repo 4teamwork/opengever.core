@@ -11,6 +11,9 @@ from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import _
 from opengever.task.adapters import IResponseContainer
+from opengever.task.exceptions import CannotAcceptTaskException
+from opengever.task.exceptions import CannotAssignForwardingException
+from opengever.task.exceptions import TaskRemoteRequestError
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.interfaces import ITaskDocumentsTransporter
 from opengever.task.interfaces import IYearfolderStorer
@@ -62,6 +65,8 @@ def accept_forwarding_with_successor(
 
     # the predessecor (the forwarding on the remote client)
     predecessor = Task.query.by_oguid(predecessor_oguid)
+    if not predecessor.is_open():
+        raise CannotAcceptTaskException('Forwarding has already been accepted')
 
     # transport the remote forwarding to the inbox or actual yearfolder
     transporter = Transporter()
@@ -150,9 +155,9 @@ def accept_forwarding_with_successor(
                                 data=request_data)
 
     if response.read().strip() != 'OK':
-        raise Exception('Adding the response and changing the '
-                        'workflow state on the predecessor forwarding '
-                        'failed.')
+        raise TaskRemoteRequestError(
+            'Adding the response and changing the workflow state on the '
+            'predecessor forwarding failed.')
 
     if dossier:
         # Update watchers for created successor forwarding and task
@@ -176,9 +181,12 @@ def accept_forwarding_with_successor(
 
 
 def assign_forwarding_to_dossier(
-    context, forwarding_oguid, dossier, response_text):
+        context, forwarding_oguid, dossier, response_text):
 
     forwarding = Task.query.by_oguid(forwarding_oguid)
+    if not forwarding.is_open():
+        raise CannotAssignForwardingException(
+            'Forwarding has already been accepted')
 
     forwarding_obj = context.unrestrictedTraverse(
         forwarding.physical_path.encode('utf-8'))
@@ -229,8 +237,9 @@ def assign_forwarding_to_dossier(
 
 
 def accept_task_with_successor(dossier, predecessor_oguid, response_text):
-
     predecessor = Task.query.by_oguid(predecessor_oguid)
+    if not predecessor.is_open():
+        raise CannotAcceptTaskException('Task has already been accepted')
 
     # Transport the original task (predecessor) to this dossier. The new
     # response and task change is not yet done and will be done later. This
@@ -279,9 +288,9 @@ def accept_task_with_successor(dossier, predecessor_oguid, response_text):
                                 data=request_data)
 
     if response.read().strip() != 'OK':
-        raise Exception('Adding the response and changing the '
-                        'workflow state on the predecessor task '
-                        'failed.')
+        raise TaskRemoteRequestError(
+            'Adding the response and changing the workflow state on the '
+            'predecessor task failed.')
 
     # Connect the predecessor and the successor task. This needs to be done
     # that late for preventing a deadlock because of the locked tasks table.
