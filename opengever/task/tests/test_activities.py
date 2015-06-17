@@ -182,6 +182,27 @@ class TestTaskActivites(FunctionalTestCase):
         activity = Activity.query.one()
         self.assertEquals(u'transition-add-document', activity.kind)
 
+    @browsing
+    def test_delegate_activity(self, browser):
+        task = create(Builder('task')
+                      .titled(u'Abkl\xe4rung Fall Huber')
+                      .having(responsible=u'hugo.boss',
+                              deadline=date(2015, 07, 01))
+                      .in_state('task-state-in-progress'))
+
+        browser.login().open(task)
+        browser.find('task-transition-delegate').click()
+        # fill responsibles step
+        browser.fill({'Responsibles': ['client1:hugo.boss']})
+        browser.find('Continue').click()
+        # fill medatata step and submit
+        browser.find('Save').click()
+
+        activity = Activity.query.one()
+        self.assertEquals('task-added', activity.kind)
+        self.assertEquals(u'Abkl\xe4rung Fall Huber', activity.title)
+        self.assertEquals(u'New task added by Test User', activity.summary)
+
 
 class TestTaskReassignActivity(FunctionalTestCase):
 
