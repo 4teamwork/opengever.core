@@ -8,6 +8,7 @@ from opengever.task.interfaces import ITaskSettings
 from opengever.task.response import Response
 from opengever.task.task import ITask
 from opengever.testing import FunctionalTestCase
+from plone import api
 from plone.app.testing import TEST_USER_ID
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.registry.interfaces import IRegistry
@@ -233,3 +234,28 @@ class TestDeadlineDefaultValue(FunctionalTestCase):
 
         expected = date.today() + timedelta(days=12)
         self.assertEquals(expected, self.dossier.get('task-1').deadline)
+
+
+class TestTaskTypeTranslations(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestTaskTypeTranslations, self).setUp()
+        self.dossier = create(Builder('dossier'))
+        lang_tool = api.portal.get_tool('portal_languages')
+        lang_tool.addSupportedLanguage('de-ch')
+        lang_tool.setDefaultLanguage('de-ch')
+        transaction.commit()
+
+    @browsing
+    def test_task_types_are_translated(self, browser):
+        browser.login().open(self.dossier, view='++add++opengever.task.task')
+        task_type_widget = browser.forms['form'].find_widget('Auftragstyp')
+        task_type_labels = task_type_widget.inputs_by_label.keys()
+        self.assertEquals([
+            'Zur Genehmigung',
+            'Zur Stellungnahme',
+            u'Zur Pr\xfcfung / Korrektur',
+            'Zur direkten Erledigung',
+            'Zum Bericht / Antrag',
+            'Zur Kenntnisnahme'],
+            task_type_labels)
