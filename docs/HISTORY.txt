@@ -5,6 +5,9 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Add regression test for task type translations.
+  [lgraf]
+
 - Activity: Prevent generating duplicated activities when:
 
   - Reassigning tasks
