@@ -91,13 +91,26 @@ class RepositoryFolder(content.Container, TranslatedTitleMixin):
     implements(IRepositoryFolder)
 
     def Title(self):
+        title = self._prefix_with_reference_number(
+            ITranslatedTitle(self).translated_title())
+        return title.encode('utf-8')
+
+    def get_prefixed_title_de(self):
+        title = self.title_de
+        if title:
+            return self._prefix_with_reference_number(title)
+
+    def get_prefixed_title_fr(self):
+        title = self.title_fr
+        if title:
+            return self._prefix_with_reference_number(title)
+
+    def _prefix_with_reference_number(self, title):
         reference_adapter = IReferenceNumber(self)
-        title = u'{number}{sep} {title}'.format(
+        return u'{number}{sep} {title}'.format(
             number=reference_adapter.get_repository_number(),
             sep=reference_adapter.get_active_formatter().repository_title_seperator,
-            title=ITranslatedTitle(self).translated_title())
-
-        return title.encode('utf-8')
+            title=title)
 
     def allowedContentTypes(self, *args, **kwargs):
         """
