@@ -10,6 +10,14 @@ from plone import api
 from sqlalchemy.orm import contains_eager
 from sqlalchemy.sql.expression import asc
 from sqlalchemy.sql.expression import desc
+from ZODB.POSException import ConflictError
+from zope.globalrequest import getRequest
+from zope.i18nmessageid import MessageFactory
+import logging
+
+
+_ = MessageFactory("opengever.activity")
+logger = logging.getLogger('opengever.activity')
 
 
 class NotificationCenter(object):
@@ -150,9 +158,22 @@ class PloneNotificationCenter(NotificationCenter):
     def add_activity(self, obj, kind, title, summary, actor_id,
                      description=u''):
         oguid = self._get_oguid_for(obj)
+        try:
+            activity = super(PloneNotificationCenter, self).add_activity(
+                oguid, kind, title, summary, actor_id, description=description)
+            return activity
 
-        return super(PloneNotificationCenter, self).add_activity(
-            oguid, kind, title, summary, actor_id, description=description)
+        except ConflictError:
+            raise
+        
+        except Exception as exc:
+            msg = _(u'msg_error_not_notified',
+                    default=u'A problem has occurred during the notification'
+                    ' creation. Notification could not be produced.')
+            api.portal.show_message(msg, getRequest(), type='warning')
+            logging.error(exc)
+
+        return
 
     def get_watchers(self, obj):
         oguid = self._get_oguid_for(obj)
