@@ -34,7 +34,7 @@ class TestTaskActivites(FunctionalTestCase):
                       'Text': 'Lorem ipsum'})
         browser.css('#form-buttons-save').first.click()
 
-        activity = Activity.query.first()
+        activity = Activity.query.one()
         self.assertEquals('task-added', activity.kind)
         self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(u'New task added by Test User', activity.summary)
@@ -76,7 +76,7 @@ class TestTaskActivites(FunctionalTestCase):
         browser.fill({'Response': u'Wird n\xe4chste Woche erledigt.'})
         browser.css('#form-buttons-save').first.click()
 
-        activity = Activity.query.first()
+        activity = Activity.query.one()
         self.assertEquals(u'task-transition-open-in-progress', activity.kind)
         self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(
@@ -98,7 +98,7 @@ class TestTaskActivites(FunctionalTestCase):
         browser.fill({'Response': u'Wird n\xe4chste Woche erledigt.'})
         browser.css('#form-buttons-save').first.click()
 
-        activity = Activity.query.first()
+        activity = Activity.query.one()
         self.assertEquals(u'task-transition-open-in-progress', activity.kind)
         self.assertEquals('hugo.boss', activity.actor_id)
 
@@ -114,7 +114,7 @@ class TestTaskActivites(FunctionalTestCase):
         browser.fill({'Response': u'Ist erledigt.'})
         browser.css('#form-buttons-save').first.click()
 
-        activity = Activity.query.first()
+        activity = Activity.query.one()
         self.assertEquals(u'task-transition-in-progress-resolved', activity.kind)
         self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(
@@ -137,7 +137,7 @@ class TestTaskActivites(FunctionalTestCase):
             'New Deadline': '03/20/16',
             'Response': u'nicht dring\xe4nd'}).save()
 
-        activity = Activity.query.first()
+        activity = Activity.query.one()
         self.assertEquals(u'task-transition-modify-deadline', activity.kind)
         self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(
@@ -147,7 +147,7 @@ class TestTaskActivites(FunctionalTestCase):
         self.assertEquals(u'nicht dring\xe4nd', activity.description)
 
     @browsing
-    def test_adding_a_subtask_notifies_watchers(self, browser):
+    def test_adding_a_subtask_creates_activity(self, browser):
         task = create(Builder('task')
                       .titled(u'Abkl\xe4rung Fall Meier')
                       .having(responsible=u'hugo.boss',
@@ -162,8 +162,10 @@ class TestTaskActivites(FunctionalTestCase):
                       'Text': 'Lorem ipsum'})
         browser.css('#form-buttons-save').first.click()
 
-        activity = Activity.query.first()
-        self.assertEquals(u'transition-add-subtask', activity.kind)
+        activity = Activity.query.one()
+        self.assertEquals('task-added', activity.kind)
+        self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
+        self.assertEquals(u'New task added by Test User', activity.summary)
 
     @browsing
     def test_adding_a_document_notifies_watchers(self, browser):
@@ -177,14 +179,42 @@ class TestTaskActivites(FunctionalTestCase):
         browser.fill({'Title': u'Letter to peter'})
         browser.css('#form-buttons-save').first.click()
 
-        activity = Activity.query.first()
+        activity = Activity.query.one()
         self.assertEquals(u'transition-add-document', activity.kind)
 
+    @browsing
+    def test_delegate_activity(self, browser):
+        task = create(Builder('task')
+                      .titled(u'Abkl\xe4rung Fall Huber')
+                      .having(responsible=u'hugo.boss',
+                              deadline=date(2015, 07, 01))
+                      .in_state('task-state-in-progress'))
 
-class TestTaskReassignActivity(TestTaskActivites):
+        browser.login().open(task)
+        browser.find('task-transition-delegate').click()
+        # fill responsibles step
+        browser.fill({'Responsibles': ['client1:hugo.boss']})
+        browser.find('Continue').click()
+        # fill medatata step and submit
+        browser.find('Save').click()
+
+        activity = Activity.query.one()
+        self.assertEquals('task-added', activity.kind)
+        self.assertEquals(u'Abkl\xe4rung Fall Huber', activity.title)
+        self.assertEquals(u'New task added by Test User', activity.summary)
+
+
+class TestTaskReassignActivity(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 
     def setUp(self):
         super(TestTaskReassignActivity, self).setUp()
+        self.dossier = create(Builder('dossier').titled(u'Dossier XY'))
+        self.hugo = create(Builder('ogds_user')
+                           .id('hugo.boss')
+                           .assign_to_org_units([self.org_unit])
+                           .having(firstname=u'Hugo', lastname=u'Boss'))
 
         create(Builder('ogds_user')
                .id('peter.meier')
@@ -217,23 +247,27 @@ class TestTaskReassignActivity(TestTaskActivites):
         self.task = self.add_task(browser)
         self.reassign(browser, 'hugo.boss', u'Bitte Abkl\xe4rungen erledigen.')
 
-        activity = Activity.query.all()[-1]
+        activities = Activity.query.all()
+        self.assertEqual(2, len(activities))
 
-        self.assertEquals(u'task-transition-reassign', activity.kind)
-        self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
-        self.assertEquals(u'Reassigned from <a href="http://nohost/plone/@@user-details/james.meier">Meier James (james.meier)</a> to <a href="http://nohost/plone/@@user-details/hugo.boss">Boss Hugo (hugo.boss)</a> by <a href="http://nohost/plone/@@user-details/test_user_1_">Test User (test_user_1_)</a>', activity.summary)
-        self.assertEquals(u'Bitte Abkl\xe4rungen erledigen.', activity.description)
+        reassign_activity = activities[-1]
+        self.assertEquals(u'task-transition-reassign', reassign_activity.kind)
+        self.assertEquals(u'Abkl\xe4rung Fall Meier', reassign_activity.title)
+        self.assertEquals(u'Reassigned from <a href="http://nohost/plone/@@user-details/james.meier">Meier James (james.meier)</a> to <a href="http://nohost/plone/@@user-details/hugo.boss">Boss Hugo (hugo.boss)</a> by <a href="http://nohost/plone/@@user-details/test_user_1_">Test User (test_user_1_)</a>', reassign_activity.summary)
+        self.assertEquals(u'Bitte Abkl\xe4rungen erledigen.', reassign_activity.description)
 
     @browsing
     def test_notifies_old_and_new_responsible(self, browser):
         self.task = self.add_task(browser)
         self.reassign(browser, 'hugo.boss', u'Bitte Abkl\xe4rungen erledigen.')
 
-        activity = Activity.query.all()[-1]
+        activities = Activity.query.all()
+        self.assertEqual(2, len(activities))
 
+        reassign_activity = activities[-1]
         self.assertItemsEqual(
             [u'james.meier', u'peter.meier', u'hugo.boss'],
-            [notes.watcher.user_id for notes in activity.notifications])
+            [notes.watcher.user_id for notes in reassign_activity.notifications])
 
     @browsing
     def test_removes_old_responsible_from_watchers_list(self, browser):

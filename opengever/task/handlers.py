@@ -2,7 +2,6 @@ from Acquisition import aq_inner, aq_parent
 from datetime import date
 from five import grok
 from opengever.document.behaviors import IBaseDocument
-from opengever.document.document import IDocumentSchema
 from opengever.globalindex.handlers.task import TaskSqlSyncer
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response

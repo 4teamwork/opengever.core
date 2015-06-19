@@ -9,11 +9,13 @@ from zope.i18n import translate
 
 
 class TaskActivity(object):
-    """The TaskActivity class is a representation for every activity which can be done with or
-    on a task. It provides every needed attribute/methods to record the activity
-    in the notification center.
-    """
+    """Abstract base class for all task-related activities.
 
+    The TaskActivity class is a representation for every activity which can
+    be done with or on a task. It provides every needed attribute/methods to
+    record the activity in the notification center.
+
+    """
     def __init__(self, context, request, parent):
         self.context = context
         self.request = request
@@ -122,6 +124,11 @@ class TaskTransitionActivity(TaskActivity):
     """Activity which represents a transition task transition change.
     """
 
+    IGNORED_TRANSITIONS = [
+        'transition-add-subtask',
+        'task-transition-reassign'
+    ]
+
     def __init__(self, context, response):
         self.context = context
         self.request = self.context.REQUEST
@@ -146,6 +153,15 @@ class TaskTransitionActivity(TaskActivity):
     def description(self):
         return self.response.text
 
+    def record(self):
+        if self._is_ignored_transition():
+            return
+
+        return super(TaskTransitionActivity, self).record()
+
+    def _is_ignored_transition(self):
+        return self.transition in self.IGNORED_TRANSITIONS
+
 
 class TaskReassignActivity(TaskTransitionActivity):
     """Updates the watcherlist for the current task because of the responsible
@@ -168,3 +184,6 @@ class TaskReassignActivity(TaskTransitionActivity):
         change = self.response.get_change('responsible')
         self.center.remove_watcher_from_resource(self.context,
                                                  change.get('before'))
+
+    def _is_ignored_transition(self):
+        return False

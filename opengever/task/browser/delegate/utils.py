@@ -1,3 +1,4 @@
+from opengever.task.activities import TaskAddedActivity
 from plone.dexterity.utils import addContentToContainer
 from plone.dexterity.utils import createContent
 from plone.dexterity.utils import iterSchemata
@@ -72,4 +73,8 @@ def create_subtask(task, data):
 
             setattr(repr, name, value)
 
-    return notify(ObjectModifiedEvent(subtask))
+    activity = TaskAddedActivity(subtask, task.REQUEST, task)
+    activity.record()
+
+    notify(ObjectModifiedEvent(subtask))
+    return subtask
