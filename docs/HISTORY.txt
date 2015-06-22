@@ -5,6 +5,9 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Update versions of opengever.core dependencies.
+  [lgraf]
+
 - TransitionControllers: Rebuild special handling for administrators,
   move agency check for administrators to each transition guard.
   [phgross]
