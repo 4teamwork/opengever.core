@@ -47,6 +47,16 @@ class TestGlobalindexTask(TestCase):
         self.assertEquals([task2], task1.successors)
         self.assertEquals([task3], task2.successors)
 
+    def test_is_successor(self):
+        predecessor = create(Builder('globalindex_task').having(int_id=1))
+
+        task_without_pred = create(Builder('globalindex_task').having(int_id=3))
+        self.assertFalse(task_without_pred.is_successor)
+
+        task_with_pred = create(Builder('globalindex_task').having(int_id=2))
+        task_with_pred.predecessor = predecessor
+        self.assertTrue(task_with_pred.is_successor)
+
     def test_unique_id(self):
         create(Builder('globalindex_task')
                .having(admin_unit_id='afi', int_id=1234))

@@ -1,6 +1,6 @@
 from five import grok
 from opengever.base.request import dispatch_request
-from opengever.task.browser.transitioncontroller import get_conditions
+from opengever.task.browser.transitioncontroller import get_checker
 from opengever.task.interfaces import IDeadlineModifier
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
@@ -27,13 +27,13 @@ class DeadlineModifier(grok.Adapter):
         if not self.context.is_editable:
             return False
 
-        conditions = get_conditions(self.context)
+        checker = get_checker(self.context)
         if not include_agency:
-            return conditions.is_issuer
+            return checker.current_user.is_issuer
         else:
-            return (conditions.is_issuer or
-                    conditions.is_issuing_orgunit_agency_member or
-                    conditions.is_administrator)
+            return (checker.current_user.is_issuer or
+                    checker.current_user.in_issuing_orgunits_inbox_group or
+                    checker.current_user.is_administrator)
 
     def modify_deadline(self, new_deadline, text, transition):
         """Handles the whole deadline mofication process:

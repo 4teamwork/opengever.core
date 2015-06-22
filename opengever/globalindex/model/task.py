@@ -119,6 +119,10 @@ class Task(Base):
     def responsible_actor(self):
         return Actor.lookup(self.responsible)
 
+    @property
+    def is_successor(self):
+        return bool(self.predecessor)
+
     def get_admin_unit(self):
         return ogds_service().fetch_admin_unit(self.admin_unit_id)
 

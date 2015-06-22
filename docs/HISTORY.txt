@@ -5,6 +5,10 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- TransitionControllers: Rebuild special handling for administrators,
+  move agency check for administrators to each transition guard.
+  [phgross]
+
 - Add regression test for task type translations.
   [lgraf]
 
