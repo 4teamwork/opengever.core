@@ -12,8 +12,7 @@
         <span tal:define="filename view/w/file/filename">
             <span class="filename" tal:content="filename">Filename</span>
             <span class="discreet">
-              &mdash; <span tal:define="sizekb view/w/file/file_size" tal:replace="sizekb">100</span>
-              KB
+              &mdash; <span tal:define="sizekb view/w/file/file_size" tal:replace="sizekb">100 KB</span>
             </span>
         </span>
 
