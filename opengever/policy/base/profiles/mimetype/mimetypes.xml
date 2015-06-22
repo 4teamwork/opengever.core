@@ -76,6 +76,27 @@
            icon_path="icon_dokument_excel.gif"
            mimetypes="application/vnd.openxmlformats-officedocument.spreadsheetml.template" />
 
+ <mimetype name="Microsoft Excel Spreadsheet (Macro Enabled)"
+           binary="True"
+           extensions="xlsm"
+           globs="*.xlsm"
+           icon_path="icon_dokument_excel.gif"
+           mimetypes="application/vnd.ms-excel.sheet.macroEnabled.12" />
+
+ <mimetype name="Microsoft Excel Template (Macro Enabled)"
+           binary="True"
+           extensions="xltm"
+           globs="*.xltm"
+           icon_path="icon_dokument_excel.gif"
+           mimetypes="application/vnd.ms-excel.template.macroEnabled.12" />
+
+ <mimetype name="Microsoft Excel Addin (Macro Enabled)"
+           binary="True"
+           extensions="xlam"
+           globs="*.xlam"
+           icon_path="icon_dokument_excel.gif"
+           mimetypes="application/vnd.ms-excel.addin.macroEnabled.12" />
+
  <!-- MS Word -->
  <mimetype name="Microsoft Word Document"
            binary="True"
@@ -97,6 +118,20 @@
            globs="*.dotx"
            icon_path="icon_dokument_word.gif"
            mimetypes="application/vnd.openxmlformats-officedocument.wordprocessingml.template" />
+
+ <mimetype name="Microsoft Word Document (Macro Enabled)"
+           binary="True"
+           extensions="docm"
+           globs="*.docm"
+           icon_path="icon_dokument_word.gif"
+           mimetypes="application/vnd.ms-word.document.macroEnabled.12" />
+
+ <mimetype name="Microsoft Word Template (Macro Enabled)"
+           binary="True"
+           extensions="dotm"
+           globs="*.dotm"
+           icon_path="icon_dokument_word.gif"
+           mimetypes="application/vnd.ms-word.template.macroEnabled.12" />
 
 
  <!-- MS Powerpoint -->
@@ -123,6 +158,41 @@
            globs="*.potx"
            icon_path="icon_dokument_powerpoint.gif"
            mimetypes="application/vnd.openxmlformats-officedocument.presentationml.template" />
+
+ <mimetype name="Microsoft PowerPoint Slideshow (OOXML)"
+           binary="True"
+           extensions="ppsx"
+           globs="*.ppsx"
+           icon_path="icon_dokument_powerpoint.gif"
+           mimetypes="application/vnd.openxmlformats-officedocument.presentationml.slideshow" />
+
+ <mimetype name="Microsoft PowerPoint Addin (Macro Enabled)"
+           binary="True"
+           extensions="ppam"
+           globs="*.ppam"
+           icon_path="icon_dokument_powerpoint.gif"
+           mimetypes="application/vnd.ms-powerpoint.addin.macroEnabled.12" />
+
+ <mimetype name="Microsoft PowerPoint Presentation (Macro Enabled)"
+           binary="True"
+           extensions="pptm"
+           globs="*.pptm"
+           icon_path="icon_dokument_powerpoint.gif"
+           mimetypes="application/vnd.ms-powerpoint.presentation.macroEnabled.12" />
+
+ <mimetype name="Microsoft PowerPoint Template (Macro Enabled)"
+           binary="True"
+           extensions="potm"
+           globs="*.potm"
+           icon_path="icon_dokument_powerpoint.gif"
+           mimetypes="application/vnd.ms-powerpoint.presentation.macroEnabled.12" />
+
+ <mimetype name="Microsoft PowerPoint Slideshow (Macro Enabled)"
+           binary="True"
+           extensions="ppsm"
+           globs="*.ppsm"
+           icon_path="icon_dokument_powerpoint.gif"
+           mimetypes="application/vnd.ms-powerpoint.slideshow.macroEnabled.12" />
 
  <!-- MS Visio -->
  <mimetype name="Microsoft Visio document"

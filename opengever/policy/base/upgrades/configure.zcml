@@ -99,4 +99,14 @@
       directory="profiles/4502"
       />
 
+  <!-- 4502 -> 4503 -->
+  <genericsetup:upgradeStep
+      title="Add macro enabled office mimetypes to MTR, update getIcon metadata of affected documents"
+      description="Initialize opengever.policy.base:mimetype profile version, add macro enabled office mimetypes to MTR and upgrade getIcon metadata"
+      source="4502"
+      destination="4503"
+      handler="opengever.policy.base.upgrades.to4503.AddMacroEnabledOfficeMimetypes"
+      profile="opengever.policy.base:default"
+      />
+
 </configure>
