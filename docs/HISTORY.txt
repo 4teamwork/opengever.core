@@ -5,6 +5,10 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Bump plone.formwidget.namedfile and remove corresponding monkeypatch in order
+  to get changes from https://github.com/plone/plone.formwidget.namedfile/pull/9
+  [lgraf]
+
 - Update versions of opengever.core dependencies.
   [lgraf]
 

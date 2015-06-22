@@ -28,7 +28,7 @@
     <span tal:condition="python: exists and action=='nochange'">
         <a class="link-overlay" tal:content="view/filename" tal:attributes="href download_url">Filename</a>
         <span class="discreet"> &mdash;
-            <span tal:define="sizekb view/file_size" tal:replace="sizekb">100</span> KB
+            <span tal:define="sizekb view/file_size" tal:replace="sizekb">100 KB</span>
         </span>
     </span>
     <div tal:condition="allow_nochange" style="padding-top: 1em;">
