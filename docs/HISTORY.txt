@@ -9,6 +9,9 @@ Changelog
   to get changes from https://github.com/plone/plone.formwidget.namedfile/pull/9
   [lgraf]
 
+- Add macro enabled office mimetypes to MTR.
+  [lgraf]
+
 - Update versions of opengever.core dependencies.
   [lgraf]
 

@@ -3,6 +3,9 @@ import mimetypes
 
 _ = MessageFactory('opengever.document')
 
+# For the common MS office formats, see
+# http://blogs.msdn.com/b/vsofficedeveloper/archive/2008/05/08/office-2007-open-xml-mime-types.aspx
+
 # MindJet MindManager
 mimetypes.add_type('application/vnd.mindjet.mindmanager', '.mmap')
 
@@ -48,8 +51,21 @@ mimetypes.add_type('application/vnd.ms-excel', '.xlw')
 # MS Excel Spreadsheet (OOXML)
 mimetypes.add_type('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', '.xlsx')
 
+# MS Excel Spreadsheet (Macro Enabled)
+mimetypes.add_type('application/vnd.ms-excel.sheet.macroEnabled.12', '.xlsm')
+
 # MS Excel Template (OOXML)
 mimetypes.add_type('application/vnd.openxmlformats-officedocument.spreadsheetml.template', '.xltx')
+
+# MS Excel Template (Macro Enabled)
+mimetypes.add_type('application/vnd.ms-excel.template.macroEnabled.12', '.xltm')
+
+# MS Excel Addin (Macro Enabled)
+mimetypes.add_type('application/vnd.ms-excel.addin.macroEnabled.12', '.xlam')
+
+# MS Excel Spreadsheet (Binary, Macro Enabled)
+mimetypes.add_type('application/vnd.ms-excel.sheet.binary.macroEnabled.12', '.xlsb')
+
 
 # MS Word
 mimetypes.add_type('application/msword', '.doc')
@@ -59,8 +75,14 @@ mimetypes.add_type('application/msword', '.dot')
 # MS Word Document (OOXML)
 mimetypes.add_type('application/vnd.openxmlformats-officedocument.wordprocessingml.document', '.docx')
 
+# MS Word Document (Macro Enabled)
+mimetypes.add_type('application/vnd.ms-word.document.macroEnabled.12', '.docm')
+
 # MS Word Template (OOXML)
 mimetypes.add_type('application/vnd.openxmlformats-officedocument.wordprocessingml.template', '.dotx')
+
+# MS Word Template (Macro Enabled)
+mimetypes.add_type('application/vnd.ms-word.template.macroEnabled.12', '.dotm')
 
 # MS Powerpoint
 mimetypes.add_type('application/vnd.ms-powerpoint', '.ppt')
@@ -76,3 +98,17 @@ mimetypes.add_type('application/vnd.openxmlformats-officedocument.presentationml
 # MS Powerpoint Template (OOXML)
 mimetypes.add_type('application/vnd.openxmlformats-officedocument.presentationml.template', '.potx')
 
+# MS Powerpoint Slideshow (OOXML)
+mimetypes.add_type('application/vnd.openxmlformats-officedocument.presentationml.slideshow', '.ppsx')
+
+# MS Powerpoint Addin (Macro Enabled)
+mimetypes.add_type('application/vnd.ms-powerpoint.addin.macroEnabled.12', '.ppam')
+
+# MS Powerpoint Presentation (Macro Enabled)
+mimetypes.add_type('application/vnd.ms-powerpoint.presentation.macroEnabled.12', '.pptm')
+
+# MS Powerpoint Template (Macro Enabled)
+mimetypes.add_type('application/vnd.ms-powerpoint.presentation.macroEnabled.12', '.potm')
+
+# MS Powerpoint Slideshow (Macro Enabled)
+mimetypes.add_type('application/vnd.ms-powerpoint.slideshow.macroEnabled.12', '.ppsm')
