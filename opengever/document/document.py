@@ -4,6 +4,7 @@ from five import grok
 from ftw.mail.interfaces import IEmailAddress
 from opengever.base.browser.helper import get_css_class
 from opengever.document import _
+from opengever.document.base import BaseDocument
 from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.behaviors.dossier import IDossierMarker
@@ -11,7 +12,6 @@ from opengever.meeting.proposal import ISubmittedProposal
 from opengever.task.task import ITask
 from plone import api
 from plone.autoform import directives as form_directives
-from plone.dexterity.content import Item
 from plone.directives import form
 from plone.namedfile.field import NamedBlobFile
 from Products.CMFCore.utils import getToolByName
@@ -105,7 +105,7 @@ validator.WidgetValidatorDiscriminators(
 grok.global_adapter(UploadValidator)
 
 
-class Document(Item):
+class Document(BaseDocument):
 
     # document state's
     removed_state = 'document-state-removed'

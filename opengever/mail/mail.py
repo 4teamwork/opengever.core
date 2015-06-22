@@ -9,13 +9,13 @@ from ftw.mail.mail import IMail
 from opengever.base import _ as base_mf
 from opengever.base.browser.helper import get_css_class
 from opengever.base.model import create_session
+from opengever.document.base import BaseDocument
 from opengever.document.behaviors import metadata as ogmetadata
 from opengever.dossier import _
 from opengever.ogds.models.user import User
 from plone import api
 from plone.app.dexterity.behaviors import metadata
 from plone.autoform.interfaces import IFormFieldProvider
-from plone.dexterity.content import Item
 from plone.directives import form, dexterity
 from plone.supermodel.interfaces import FIELDSETS_KEY
 from plone.supermodel.model import Fieldset
@@ -62,7 +62,7 @@ class IOGMail(form.Schema):
 alsoProvides(IOGMail, IFormFieldProvider)
 
 
-class OGMail(Item):
+class OGMail(BaseDocument):
     """Opengever specific mail class."""
 
     # mail state's

@@ -1,5 +1,3 @@
-from Acquisition import aq_inner
-from Acquisition import aq_parent
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.inbox import _
 from opengever.ogds.base.utils import ogds_service
