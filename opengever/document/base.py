@@ -1,11 +1,23 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
+from opengever.base.browser.helper import get_css_class
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.task.task import ITask
+from plone import api
 from plone.dexterity.content import Item
 
 
 class BaseDocument(Item):
+    """Abstract base class for document-ish content types."""
+
+    removed_state = None
+    active_state = None
+
+    remove_transition = None
+    restore_transition = None
+
+    def css_class(self):
+        return get_css_class(self)
 
     def get_parent_dossier(self):
         """Return the document's parent dossier.
@@ -24,3 +36,19 @@ class BaseDocument(Item):
             return parent.get_containing_dossier()
 
         return None
+
+    @property
+    def is_removed(self):
+        return api.content.get_state(obj=self) == self.removed_state
+
+    def related_items(self):
+        raise NotImplementedError
+
+    def checked_out_by(self):
+        raise NotImplementedError
+
+    def is_checked_out(self):
+        raise NotImplementedError
+
+    def get_current_version(self):
+        raise NotImplementedError

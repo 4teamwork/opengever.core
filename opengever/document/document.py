@@ -2,7 +2,6 @@ from Acquisition import aq_inner, aq_parent
 from collective import dexteritytextindexer
 from five import grok
 from ftw.mail.interfaces import IEmailAddress
-from opengever.base.browser.helper import get_css_class
 from opengever.document import _
 from opengever.document.base import BaseDocument
 from opengever.document.behaviors.related_docs import IRelatedDocuments
@@ -111,27 +110,15 @@ class Document(BaseDocument):
     removed_state = 'document-state-removed'
     active_state = 'document-state-draft'
 
+    remove_transition = 'document-transition-remove'
+    restore_transition = 'document-transition-restore'
+
     # disable file preview creation when modifying or creating document
     buildPreview = False
 
     def surrender(self, relative_to_portal=1):
         return super(Document, self).getIcon(
             relative_to_portal=relative_to_portal)
-
-    def css_class(self):
-        return get_css_class(self)
-
-    @property
-    def remove_transition(self):
-        return 'document-transition-remove'
-
-    @property
-    def restore_transition(self):
-        return 'document-transition-restore'
-
-    @property
-    def is_removed(self):
-        return api.content.get_state(obj=self) == Document.removed_state
 
     def related_items(self):
         relations = IRelatedDocuments(self).relatedItems
