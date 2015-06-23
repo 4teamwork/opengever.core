@@ -214,6 +214,23 @@ class TestDocument(FunctionalTestCase):
 
         self.assertEqual(1, document.get_current_version())
 
+    def test_get_parent_dossier_returns_direct_parent_for_dossiers(self):
+        dossier = create(Builder('dossier'))
+        subdossier = create(Builder('dossier').within(dossier))
+        document = create(Builder('document').within(dossier))
+        document_sub = create(Builder('document').within(subdossier))
+
+        self.assertEqual(dossier, document.get_parent_dossier())
+        self.assertEqual(subdossier, document_sub.get_parent_dossier())
+
+    def test_get_parent_dossier_returns_tasks_dossier(self):
+        dossier = create(Builder('dossier'))
+        task = create(Builder('task').within(dossier))
+        subtask = create(Builder('task').within(task))
+        document = create(Builder('document').within(subtask))
+
+        self.assertEqual(dossier, document.get_parent_dossier())
+
 
 class TestDocumentDefaultValues(FunctionalTestCase):
 

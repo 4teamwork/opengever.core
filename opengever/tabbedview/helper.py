@@ -1,3 +1,5 @@
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from ftw.mail.utils import get_header
 from opengever.base import _ as base_mf
 from opengever.base.browser.helper import get_css_class
@@ -6,14 +8,16 @@ from opengever.document.document import Document
 from opengever.mail.mail import OGMail
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import ogds_service
+from plone import api
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize import ram
+from plone.uuid.interfaces import IUUID
 from Products.CMFCore.interfaces._tools import IMemberData
 from Products.CMFPlone import PloneMessageFactory as pmf
 from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
-from zope.component.hooks import getSite
 from zope.component import getMultiAdapter
 from zope.component import getUtility
+from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 import cgi
@@ -118,6 +122,21 @@ def _breadcrumbs_from_item(item):
         breadcrumb_titles.append(title)
 
     return breadcrumb_titles
+
+
+def linked_document_subdossier(item, value):
+    subdossier_title = item.containing_subdossier
+    if not subdossier_title:
+        return ''
+
+    url = "{}/redirect_to_parent_dossier".format(item.getURL())
+    link_title = cgi.escape(subdossier_title, quote=True)
+
+    link = '<a href="{}" title="{}" class="subdossierLink">{}</a>'.format(
+        url, link_title, subdossier_title)
+
+    transforms = api.portal.get_tool('portal_transforms')
+    return transforms.convertTo('text/x-html-safe', link).getData()
 
 
 def linked(item, value):

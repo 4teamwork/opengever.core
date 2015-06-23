@@ -5,6 +5,9 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Display a link to the containing subdossier on a dossier's document tab.
+  [deiferni]
+
 - Bump plone.formwidget.namedfile and remove corresponding monkeypatch in order
   to get changes from https://github.com/plone/plone.formwidget.namedfile/pull/9
   [lgraf]
