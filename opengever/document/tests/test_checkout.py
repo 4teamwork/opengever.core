@@ -17,7 +17,6 @@ from plone.protect import createToken
 from Products.CMFCore.utils import getToolByName
 from zope.component import getMultiAdapter
 import transaction
-import unittest
 
 
 class TestCheckinCheckoutManager(FunctionalTestCase):
@@ -208,9 +207,8 @@ class TestCheckinViews(FunctionalTestCase):
         last_entry = repository_tool.retrieve(document2, len(history)-1)
         self.assertEquals(None, last_entry.comment)
 
-    @unittest.skip("Switching to new implementation")
     @browsing
-    def test_reverting_with_revert_link_in_history_viewlet(self, browser):
+    def test_reverting_with_revert_link_in_versions_tab(self, browser):
         document = create(Builder("document")
                           .checked_out_by(TEST_USER_ID)
                           .within(self.dossier))
@@ -218,7 +216,12 @@ class TestCheckinViews(FunctionalTestCase):
         browser.login().open(document)
         browser.css('#checkin_without_comment').first.click()
 
-        browser.css('a.function-revert')[-1].click()
+        browser.login().open(document, view='tabbedview_view-versions')
+        listing = browser.css('.listing').first
+        last_row = listing.css('tr')[-1]
+        revert_link = last_row.css('td a')[-1]
+        revert_link.click()
+
         self.assertEquals(['Reverted file to version 0'], info_messages())
 
 
