@@ -184,7 +184,8 @@ def initialize_metadata(mail, event):
 
     mail_metadata.receipt_date = date.today()
 
-    mail_metadata.document_author = get_author_by_email(mail)
+    if not mail_metadata.document_author:
+        mail_metadata.document_author = get_author_by_email(mail)
     mail.reindexObject(idxs=['document_date',
                              'document_author',
                              'receipt_date'])
