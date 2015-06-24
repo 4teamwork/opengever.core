@@ -5,6 +5,9 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Use checkbox widget to select addable dossier types on a repository folder.
+  [deiferni]
+
 - Display a link to the containing subdossier on a dossier's document tab.
   [deiferni]
 

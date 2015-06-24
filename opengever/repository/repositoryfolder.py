@@ -11,6 +11,7 @@ from plone.directives import dexterity
 from plone.directives import form
 from plone.registry.interfaces import IRegistry
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from zope import schema
 from zope.component import queryUtility
 from zope.interface import implements
@@ -80,14 +81,15 @@ class IRepositoryFolderSchema(form.Schema):
         required=False,
         )
 
+    form.widget(addable_dossier_types=CheckBoxFieldWidget)
     addable_dossier_types = schema.List(
         title=_(u'label_addable_dossier_types',
                 default=u'Addable dossier types'),
         description=_(u'help_addable_dossier_types',
                       default=u'Select all additional dossier types which '
                       'should be addable in this repository folder.'),
-        value_type=schema.Choice(vocabulary=u'opengever.repository.'
-                                 u'RestrictedAddableDossiersVocabulary'),
+        value_type=schema.Choice(
+            vocabulary=u'opengever.repository.RestrictedAddableDossiersVocabulary'),
         required=False)
 
 
