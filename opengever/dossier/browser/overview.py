@@ -1,3 +1,4 @@
+from Acquisition import aq_inner
 from five import grok
 from opengever.base.browser.boxes_view import BoxesViewMixin
 from opengever.base.browser.helper import get_css_class
@@ -11,6 +12,10 @@ from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.tabbedview.browser.base import OpengeverTab
 from sqlalchemy import desc
+from zc.relation.interfaces import ICatalog
+from zope.component import getUtility
+from zope.intid.interfaces import IIntIds
+from zope.security import checkPermission
 
 
 class DossierOverview(BoxesViewMixin, grok.View, OpengeverTab):
@@ -37,6 +42,9 @@ class DossierOverview(BoxesViewMixin, grok.View, OpengeverTab):
                      href='tasks', label=_("Newest tasks")),
                 dict(id='participants', content=self.sharing(),
                      href='participants', label=_("Participants")),
+                dict(id='references', content=self.linked_dossiers(),
+                     label=_('label_linked_dossiers',
+                             default='Linked Dossiers')),
             ], [
                 dict(id='newest_documents', content=self.documents(),
                      href='documents', label=_("Newest documents")),
@@ -105,3 +113,38 @@ class DossierOverview(BoxesViewMixin, grok.View, OpengeverTab):
 
     def description(self):
         return self.context.description
+
+    def linked_dossiers(self):
+        """Returns a list of dicts representing incoming and outgoing
+        references to/from other dossiers.
+        """
+
+        references = []
+        intids = getUtility(IIntIds)
+
+        ids = self.get_dossier_back_relations()
+        if IDossier(self.context).relatedDossier:
+            for rel in IDossier(self.context).relatedDossier:
+                ids.append(rel.to_id)
+
+        for iid in ids:
+            obj = intids.queryObject(iid)
+            if obj is not None and checkPermission('zope2.View', obj):
+                references.append(
+                    {'Title': obj.Title,
+                     'getURL': obj.absolute_url(),
+                     'css_class': get_css_class(obj)})
+
+        return references
+
+    def get_dossier_back_relations(self):
+        """Returns a list of intids form all dossiers which relates to the
+        current dossier.
+        """
+
+        catalog = getUtility(ICatalog)
+        intids = getUtility(IIntIds)
+        relations = catalog.findRelations(
+            {'to_id': intids.getId(aq_inner(self.context)),
+             'from_attribute': 'relatedDossier'})
+        return [relation.from_id for relation in relations]
