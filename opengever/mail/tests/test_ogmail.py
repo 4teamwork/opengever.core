@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
 from opengever.mail.mail import IOGMailMarker
 from opengever.testing import FunctionalTestCase
 from pkg_resources import resource_string
@@ -9,7 +10,6 @@ MAIL_DATA = resource_string('opengever.mail.tests', 'mail.txt')
 
 
 class TestOGMailAddition(FunctionalTestCase):
-    use_browser = True
 
     def test_og_mail_behavior(self):
         mail = create(Builder("mail"))
@@ -27,13 +27,12 @@ class TestOGMailAddition(FunctionalTestCase):
         self.assertEquals(u'Die B\xfcrgschaft', mail.title)
         self.assertEquals('Die B\xc3\xbcrgschaft', mail.Title())
 
-    def test_mail_behavior(self):
+    @browsing
+    def test_mail_behavior(self, browser):
         mail = create(Builder("mail").with_message(MAIL_DATA))
 
-        self.browser.open('%s/edit' % mail.absolute_url())
-        self.browser.getControl(
-            name='form.widgets.IOGMail.title').value = 'hanspeter'
-        self.browser.getControl(name='form.buttons.save').click()
+        browser.login().open(mail, view='edit')
+        browser.fill({'Title': u'hanspeter'}).submit()
 
         self.assertEquals(u'hanspeter', mail.title)
         self.assertEquals('hanspeter', mail.Title())
