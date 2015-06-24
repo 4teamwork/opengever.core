@@ -11,7 +11,7 @@ class RedirectToParentDossier(grok.View):
 
     def render(self):
         dossier = self.context.get_parent_dossier()
-        if not dossier:
-            return ''
+        assert dossier, ('the redirect view should only be called when a '
+                         'parent dossier is available')
 
         return self.request.RESPONSE.redirect(dossier.absolute_url())
