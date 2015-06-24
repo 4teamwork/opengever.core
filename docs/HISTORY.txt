@@ -5,6 +5,9 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- No longer overwrite mail metadata when it is already set.
+  [deiferni]
+
 - Fixed message type (warning) when resubmitting an already submitted document.
   [phgross]
 
