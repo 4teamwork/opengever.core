@@ -7,17 +7,14 @@ from opengever.document.behaviors import metadata
 from opengever.document.interfaces import IDocumentSettings
 from opengever.mail.mail import extract_email
 from opengever.mail.mail import get_author_by_email
+from opengever.mail.tests import MAIL_DATA
 from opengever.mail.tests.utils import get_header_date
 from opengever.testing import FunctionalTestCase
 from opengever.testing.sql import create_ogds_user
-from pkg_resources import resource_string
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.registry.interfaces import IRegistry
 from unittest2 import TestCase
 from zope.component import getUtility
-
-
-MAIL_DATA = resource_string('opengever.mail.tests', 'mail.txt')
 
 
 def get_preserved_as_paper_default():

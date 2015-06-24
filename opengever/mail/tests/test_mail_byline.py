@@ -2,10 +2,7 @@ from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.tests.byline_base_test import TestBylineBase
-from pkg_resources import resource_string
-
-
-MAIL_DATA = resource_string('opengever.mail.tests', 'mail.txt')
+from opengever.mail.tests import MAIL_DATA
 
 
 class TestMailByline(TestBylineBase):

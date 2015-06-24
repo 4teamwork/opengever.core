@@ -6,14 +6,11 @@ from opengever.base.behaviors.classification import IClassificationSettings
 from opengever.base.behaviors.classification import PRIVACY_LAYER_NO
 from opengever.base.behaviors.classification import PUBLIC_TRIAL_PRIVATE
 from opengever.base.behaviors.classification import PUBLIC_TRIAL_UNCHECKED
+from opengever.mail.tests import MAIL_DATA
 from opengever.testing import FunctionalTestCase
-from pkg_resources import resource_string
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
-
-
-MAIL_DATA = resource_string('opengever.mail.tests', 'mail.txt')
 
 
 class TestMailMetadata(FunctionalTestCase):
