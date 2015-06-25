@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-04-28 09:29+0000\n"
+"POT-Creation-Date: 2015-06-23 18:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.activity\n"
 
-#: ./opengever/activity/mail_templates/notification.pt:27
+#: ./opengever/activity/templates/notification.pt:27
 msgid "View in GEVER"
 msgstr ""
 
@@ -47,7 +47,7 @@ msgid "heading_notifications"
 msgstr ""
 
 #. Default: "Description:"
-#: ./opengever/activity/mail_templates/notification.pt:21
+#: ./opengever/activity/templates/notification.pt:21
 msgid "label_description"
 msgstr ""
 
@@ -56,7 +56,13 @@ msgstr ""
 msgid "label_notifications_overview"
 msgstr ""
 
+#. Default: "A problem has occurred during the notification creation. Notification could not be produced."
+#: ./opengever/activity/center.py:166
+msgid "msg_error_not_notified"
+msgstr ""
+
 #. Default: "No unread notifications"
 #: ./opengever/activity/viewlets/notification.pt:23
 msgid "no_unread_notifications"
 msgstr ""
+

@@ -2,11 +2,16 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browser
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import info_messages
+from ftw.testbrowser.pages.statusmessages import warning_messages
 from opengever.activity import notification_center
+from opengever.activity.hooks import insert_notification_defaults
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.ogds.base.utils import ogds_service
 from opengever.testing import FunctionalTestCase
+from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
+import transaction
 
 
 class TestPloneNotificationCenter(FunctionalTestCase):
@@ -50,3 +55,54 @@ class TestPloneNotificationCenter(FunctionalTestCase):
         self.assertItemsEqual(
             [TEST_USER_ID, 'hugo.boss', 'franz.michel'],
             [watcher.user_id for watcher in watchers])
+
+
+class TestNotifactionCenterErrorHandling(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
+
+    def setUp(self):
+        super(TestNotifactionCenterErrorHandling, self).setUp()
+        insert_notification_defaults(self.portal)
+        create(Builder('user')
+               .having(firstname='Hugo', lastname='Boss')
+               .with_userid('hugo.boss'))
+
+        setRoles(self.portal, 'hugo.boss',
+                 ['Contributor', 'Editor', 'Reader'])
+        transaction.commit()
+
+        self.dossier = create(Builder('dossier').titled(u'Dossier A'))
+
+    @browsing
+    def test_shows_message_when_error_happen_during_activity_creation(self, member):
+        # Because there exists no OGDS user for the plone user hugo.boss,
+        # the notification creation fails.
+
+        browser.login('hugo.boss').open(self.dossier, view='++add++opengever.task.task')
+        browser.fill({'Title': 'Test Task',
+                      'Issuer': TEST_USER_ID,
+                      'Responsible': 'inbox:client1',
+                      'Task Type': 'comment'})
+        browser.css('#form-buttons-save').first.click()
+
+        self.assertEquals(
+            [u'A problem has occurred during the notification creation. '
+             'Notification could not be produced.'],
+            warning_messages())
+        self.assertEquals(['Item created'], info_messages())
+
+    @browsing
+    def test_successfully_add_activity(self, member):
+        create(Builder('ogds_user')
+               .having(userid='hugo.boss'))
+
+        browser.login('hugo.boss').open(self.dossier, view='++add++opengever.task.task')
+        browser.fill({'Title': 'Test Task',
+                      'Issuer': TEST_USER_ID,
+                      'Responsible': 'inbox:client1',
+                      'Task Type': 'comment'})
+        browser.css('#form-buttons-save').first.click()
+
+        self.assertEquals([], warning_messages())
+        self.assertEquals(['Item created'], info_messages())

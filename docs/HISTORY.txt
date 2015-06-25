@@ -4,6 +4,10 @@ Changelog
 
 4.5.0 (unreleased)
 ------------------
+  
+- Optimize error handling of the NotificationCenter, show statusmessage
+  instead of abort request.
+  [phgross]
 
 - Sort available templates alphabetically when creating a document from template.
   [deiferni]
