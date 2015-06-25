@@ -64,6 +64,32 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
         self.assertEqual('', entry['comments'])
 
     @browsing
+    def test_templates_are_sorted_alphabetically_ascending(self, browser):
+        create(Builder('document')
+               .titled('AAA Template')
+               .within(self.templatedossier)
+               .with_dummy_content()
+               .with_modification_date(datetime(2010, 12, 28)))
+
+        browser.login().open(self.dossier, view='document_with_template')
+        self.assertEquals(
+            [{'': '',
+              'Creator': 'test_user_1_',
+              'Modified': '28.12.2010',
+              'title': 'AAA Template'},
+
+             {'': '',
+              'Creator': 'test_user_1_',
+              'Modified': '28.12.2012',
+              'title': 'Template A'},
+
+             {'': '',
+              'Creator': 'test_user_1_',
+              'Modified': '28.12.2012',
+              'title': 'Template B'}],
+            browser.css('table.listing').first.dicts())
+
+    @browsing
     def test_form_list_all_templates(self, browser):
         browser.login().open(self.dossier, view='document_with_template')
         self.assertEquals(

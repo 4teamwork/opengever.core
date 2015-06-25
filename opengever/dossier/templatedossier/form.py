@@ -116,7 +116,9 @@ class TemplateDocumentFormView(grok.View):
         templates = catalog(
             path=dict(
                 depth=-1, query=self.templatedossier_path),
-            portal_type="opengever.document.document")
+            portal_type="opengever.document.document",
+            sort_on='sortable_title',
+            sort_order='ascending')
 
         generator = getUtility(ITableGenerator, 'ftw.tablegenerator')
         columns = (
