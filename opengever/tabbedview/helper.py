@@ -172,6 +172,14 @@ def linked(item, value):
     return wrapper
 
 
+def document_with_icon(item, value):
+    icon = '<span class="{}"></span><span>{}</span>'.format(
+        get_css_class(item), value)
+
+    transforms = api.portal.get_tool('portal_transforms')
+    return transforms.convertTo('text/x-html-safe', icon).getData()
+
+
 def linked_document_with_tooltip(item, value):
     """Wrapper method for the _linked_document_with_tooltip method
     for normal not trashed documents and mails."""

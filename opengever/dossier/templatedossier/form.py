@@ -5,7 +5,7 @@ from opengever.base.interfaces import IRedirector
 from opengever.dossier import _
 from opengever.dossier.command import CreateDocumentFromTemplateCommand
 from opengever.dossier.templatedossier import get_template_dossier
-from opengever.tabbedview.helper import linked
+from opengever.tabbedview.helper import document_with_icon
 from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
 from zope.component import getUtility
@@ -125,7 +125,7 @@ class TemplateDocumentFormView(grok.View):
             {'column': 'Title',
              'column_title': _(u'label_title', default=u'title'),
              'sort_index': 'sortable_title',
-             'transform': linked},
+             'transform': document_with_icon},
             {'column': 'Creator',
              'column_title': _(u'label_creator', default=u'Creator'),
              'sort_index': 'document_author'},
