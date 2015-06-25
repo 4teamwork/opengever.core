@@ -107,12 +107,6 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
             browser.css('table.listing').first.dicts())
 
     @browsing
-    def test_template_titles_are_linked(self, browser):
-        browser.login().open(self.dossier, view='document_with_template')
-        browser.find('Template B').click()
-        self.assertEquals(self.template_b, browser.context)
-
-    @browsing
     def test_cancel_redirects_to_the_dossier(self, browser):
         browser.login().open(self.dossier, view='document_with_template')
         browser.find('Cancel').click()

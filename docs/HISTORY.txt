@@ -5,6 +5,9 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- No longer link templates on the view that creates documents from templates.
+  [deiferni]
+
 - Use checkbox widget to select addable dossier types on a repository folder.
   [deiferni]
 
