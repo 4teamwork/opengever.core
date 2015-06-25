@@ -371,7 +371,7 @@ mail:
 
 ``cat testmail.eml | bin/test-inbound-mail``
 
-The script assumes you got an instance running on port ``${instance:http-address}``, a GEVER client called ``mandant1`` and an omelette with ``ftw.mail`` in it installed. It will then feed the mail from stdin to
+The script assumes you got an instance running on port ``${instance:http-address}``, a GEVER client called ``fd`` and an omelette with ``ftw.mail`` in it installed. It will then feed the mail from stdin to
 the ``ftw.mail`` inbound view, like Postfix would.
 
 
