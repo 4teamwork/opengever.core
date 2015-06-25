@@ -1,3 +1,4 @@
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -35,18 +36,28 @@ class TestOGMailAddition(FunctionalTestCase):
         self.assertEquals(u'hanspeter', mail.title)
         self.assertEquals('hanspeter', mail.Title())
 
-    def test_copy_mail_preserves_author(self):
+    def test_copy_mail_preserves_metadata(self):
         dossier_1 = create(Builder('dossier'))
         dossier_2 = create(Builder('dossier'))
         mail = create(Builder('mail')
                       .within(dossier_1)
-                      .with_message(MAIL_DATA)
-                      .having(document_author='Hanspeter'))
+                      .with_message(MAIL_DATA))
 
+        # can't set this with `having` as it is overwritten by an event handler
+        mail.document_author = 'Hanspeter'
+        mail.document_date = date(2014, 1, 5)
+        mail.receipt_date = date(2014, 10, 1)
+
+        # preserved on initial creation
         self.assertEqual('Hanspeter', mail.document_author)
+        self.assertEqual(date(2014, 1, 5), mail.document_date)
+        self.assertEqual(date(2014, 10, 1), mail.receipt_date)
 
         copy = api.content.copy(source=mail, target=dossier_2)
+        # preserved on copy
         self.assertEqual('Hanspeter', copy.document_author)
+        self.assertEqual(date(2014, 1, 5), copy.document_date)
+        self.assertEqual(date(2014, 10, 1), copy.receipt_date)
 
     def test_mail_is_never_checked_out(self):
         mail = create(Builder("mail").with_dummy_message())

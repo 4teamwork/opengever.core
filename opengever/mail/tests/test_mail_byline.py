@@ -14,8 +14,7 @@ class TestMailByline(TestBylineBase):
 
         self.mail = create(Builder('mail')
                            .with_message(MAIL_DATA)
-                           .having(start=date(2013, 11, 6),
-                                   document_date=date(2013, 11, 5)))
+                           .having(start=date(2013, 11, 6)))
         self.browser.open(self.mail.absolute_url())
 
     def test_document_byline_start_date(self):

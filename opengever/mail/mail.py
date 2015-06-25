@@ -25,6 +25,7 @@ from zope.i18n import translate
 from zope.interface import Interface, alsoProvides
 from zope.lifecycleevent.interfaces import IObjectAddedEvent
 from zope.lifecycleevent.interfaces import IObjectCreatedEvent
+from zope.lifecycleevent.interfaces import IObjectCopiedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 import email
 import re
@@ -172,23 +173,20 @@ def get_author_by_email(mail):
     return u'{0} {1}'.format(principal.lastname, principal.firstname)
 
 
-@grok.subscribe(IOGMailMarker, IObjectAddedEvent)
+@grok.subscribe(IOGMailMarker, IObjectCreatedEvent)
 def initialize_metadata(mail, event):
     if not ogmetadata.IDocumentMetadata.providedBy(mail):
         return
 
+    if IObjectCopiedEvent.providedBy(event):
+        return
+
     mail_metadata = ogmetadata.IDocumentMetadata(mail)
-
     date_time = datetime.fromtimestamp(utils.get_date_header(mail.msg, 'Date'))
+
     mail_metadata.document_date = date_time.date()
-
     mail_metadata.receipt_date = date.today()
-
-    if not mail_metadata.document_author:
-        mail_metadata.document_author = get_author_by_email(mail)
-    mail.reindexObject(idxs=['document_date',
-                             'document_author',
-                             'receipt_date'])
+    mail_metadata.document_author = get_author_by_email(mail)
 
 
 class OGMailEditForm(dexterity.EditForm):
