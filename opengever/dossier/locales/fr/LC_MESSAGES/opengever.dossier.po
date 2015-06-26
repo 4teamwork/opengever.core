@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-06-10 10:11+0000\n"
+"POT-Creation-Date: 2015-06-26 08:35+0000\n"
 "PO-Revision-Date: 2012-09-10 10:17+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,7 +41,7 @@ msgstr "Impossible de générer l'affichage"
 msgid "Delete"
 msgstr "Effacer la participation"
 
-#: ./opengever/dossier/browser/overview.py:44
+#: ./opengever/dossier/browser/overview.py:52
 msgid "Description"
 msgstr "Description"
 
@@ -86,11 +86,11 @@ msgstr "Il n'est pas possible d'ouvrir un sous-dossier, le dossier principale do
 msgid "Move Items"
 msgstr "Déplacer l'élément"
 
-#: ./opengever/dossier/browser/overview.py:42
+#: ./opengever/dossier/browser/overview.py:50
 msgid "Newest documents"
 msgstr "Derniers documents"
 
-#: ./opengever/dossier/browser/overview.py:37
+#: ./opengever/dossier/browser/overview.py:42
 msgid "Newest tasks"
 msgstr "Dernières tâches"
 
@@ -106,7 +106,7 @@ msgstr "Manque des champs obligatoires"
 msgid "Not found the templatedossier"
 msgstr "Pas de modèles disponible"
 
-#: ./opengever/dossier/browser/overview.py:39
+#: ./opengever/dossier/browser/overview.py:44
 msgid "Participants"
 msgstr "Participants"
 
@@ -425,7 +425,7 @@ msgid "label_container_type"
 msgstr "Type de conteneur"
 
 #. Default: "Creator"
-#: ./opengever/dossier/templatedossier/form.py:130
+#: ./opengever/dossier/templatedossier/form.py:132
 msgid "label_creator"
 msgstr "Créé par"
 
@@ -477,8 +477,13 @@ msgstr "Ancienne numéro référence"
 msgid "label_keywords"
 msgstr "Mots-clés"
 
+#. Default: "Linked Dossiers"
+#: ./opengever/dossier/browser/overview.py:46
+msgid "label_linked_dossiers"
+msgstr ""
+
 #. Default: "Modified"
-#: ./opengever/dossier/templatedossier/form.py:133
+#: ./opengever/dossier/templatedossier/form.py:135
 msgid "label_modified"
 msgstr "Modifié"
 
@@ -550,7 +555,7 @@ msgstr "Modèle"
 
 #. Default: "title"
 #: ./opengever/dossier/browser/report.py:33
-#: ./opengever/dossier/templatedossier/form.py:126
+#: ./opengever/dossier/templatedossier/form.py:128
 #: ./opengever/dossier/templatedossier/form_templates/template_form.pt:30
 msgid "label_title"
 msgstr "Titre"

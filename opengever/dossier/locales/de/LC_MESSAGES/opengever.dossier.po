@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2015-06-10 10:11+0000\n"
+"POT-Creation-Date: 2015-06-26 08:35+0000\n"
 "PO-Revision-Date: 2015-01-22 17:49+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -43,7 +43,7 @@ msgstr "Report konnte nicht generiert werden."
 msgid "Delete"
 msgstr "Beteiligung löschen"
 
-#: ./opengever/dossier/browser/overview.py:44
+#: ./opengever/dossier/browser/overview.py:52
 msgid "Description"
 msgstr "Beschreibung"
 
@@ -88,11 +88,11 @@ msgstr "Es ist nicht möglich das Subdossier wieder zu eröffnen, das Hauptdossi
 msgid "Move Items"
 msgstr "Elemente verschieben"
 
-#: ./opengever/dossier/browser/overview.py:42
+#: ./opengever/dossier/browser/overview.py:50
 msgid "Newest documents"
 msgstr "Neuste Dokumente"
 
-#: ./opengever/dossier/browser/overview.py:37
+#: ./opengever/dossier/browser/overview.py:42
 msgid "Newest tasks"
 msgstr "Neuste Aufgaben"
 
@@ -108,7 +108,7 @@ msgstr "Nicht alle benötigten Felder wurden ausgefüllt."
 msgid "Not found the templatedossier"
 msgstr "Es sind keine Vorlagen vorhanden."
 
-#: ./opengever/dossier/browser/overview.py:39
+#: ./opengever/dossier/browser/overview.py:44
 msgid "Participants"
 msgstr "Beteiligte"
 
@@ -429,7 +429,7 @@ msgid "label_container_type"
 msgstr "Behältnis-Art"
 
 #. Default: "Creator"
-#: ./opengever/dossier/templatedossier/form.py:130
+#: ./opengever/dossier/templatedossier/form.py:132
 msgid "label_creator"
 msgstr "Erstellt von"
 
@@ -481,8 +481,13 @@ msgstr "Früheres Aktenzeichen"
 msgid "label_keywords"
 msgstr "Schlagworte"
 
+#. Default: "Linked Dossiers"
+#: ./opengever/dossier/browser/overview.py:46
+msgid "label_linked_dossiers"
+msgstr "Verlinkte Dossiers"
+
 #. Default: "Modified"
-#: ./opengever/dossier/templatedossier/form.py:133
+#: ./opengever/dossier/templatedossier/form.py:135
 msgid "label_modified"
 msgstr "Zuletzt Bearbeitet"
 
@@ -554,7 +559,7 @@ msgstr "Vorlage"
 
 #. Default: "title"
 #: ./opengever/dossier/browser/report.py:33
-#: ./opengever/dossier/templatedossier/form.py:126
+#: ./opengever/dossier/templatedossier/form.py:128
 #: ./opengever/dossier/templatedossier/form_templates/template_form.pt:30
 msgid "label_title"
 msgstr "Titel"
