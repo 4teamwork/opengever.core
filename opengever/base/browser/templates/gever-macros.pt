@@ -62,10 +62,10 @@
                   <tal:brain tal:condition="python: view.get_type(item) == 'brain'">
                     <a href="" tal:attributes="href item/getURL|nothing;
                                                title item/alt|nothing;
-                                               class python:view.get_item_css_classes(item)" tal:omit-tag="not: item/getURL|nothing">
-                    <span tal:content="item/Title" /></a>
+                                               class python:view.get_item_css_classes(item)" tal:omit-tag="not: item/getURL|nothing"
+                       tal:content="item/Title">
+                    </a>
                   </tal:brain>
-
 
                   <tal:comment replace="nothing">
                     Item is a dict (Documents and participants):
