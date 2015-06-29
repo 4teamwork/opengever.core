@@ -5,6 +5,10 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Set mail filename from title when creating/updating mails.
+  The mail filename is now always set automatically as a normalized form of title.
+  [deiferni]
+
 - Set focus on first form field.
   [phgross]
 
