@@ -197,6 +197,24 @@ class TestDocumentOverview(FunctionalTestCase):
             'Public trial edit link should be visible.')
 
     @browsing
+    def test_modify_public_trial_is_visible_on_closed_dossier_inside_a_task(self, browser):
+        dossier = create(Builder('dossier')
+                         .within(self.repo_folder)
+                         .in_state('dossier-state-resolved'))
+        task = create(Builder('task')
+                      .within(dossier)
+                      .in_state('task-state-tested-and-closed'))
+        document = create(Builder('document')
+                          .within(task)
+                          .with_dummy_content())
+
+        browser.login().visit(document, view='tabbedview_view-overview')
+
+        self.assertTrue(
+            browser.css('#form-widgets-IClassification-public_trial-edit-link'),
+            'Public trial edit link should be visible.')
+
+    @browsing
     def test_submitted_documents_hidden_when_feature_disabled(self, browser):
         container = create(Builder('committee_container'))
         self.committee = create(Builder('committee').within(container))
