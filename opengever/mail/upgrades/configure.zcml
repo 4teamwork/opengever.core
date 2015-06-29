@@ -168,4 +168,14 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <!-- 4300 -> 4500 -->
+    <genericsetup:upgradeStep
+        title="Update message filename from title."
+        description=""
+        source="4300"
+        destination="4500"
+        handler="opengever.mail.upgrades.to4500.UpgradeMailMessageFilename"
+        profile="opengever.mail:default"
+        />
+
 </configure>
