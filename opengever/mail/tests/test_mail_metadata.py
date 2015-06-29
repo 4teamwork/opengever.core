@@ -3,6 +3,7 @@ from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.mail import inbound
+from ftw.testbrowser import browser
 from opengever.document.behaviors import metadata
 from opengever.document.interfaces import IDocumentSettings
 from opengever.mail.mail import extract_email
@@ -134,6 +135,24 @@ class TestMailMetadataWithQuickupload(TestMailMetadataWithBuilder):
                          portal_type='ftw.mail.mail')
         mail = result['success']
         return mail
+
+
+class TestMailMetadataWithAddView(TestMailMetadataWithBuilder):
+
+    def create_mail(self):
+        """Add mails over a plone view since builders implement their own
+        instance construction.
+        """
+
+        with browser(self.app):
+            dossier = create(Builder("dossier"))
+            browser.login().open(dossier, view='++add++ftw.mail.mail')
+            browser.fill({
+                'Raw Message': (MAIL_DATA, 'mail.eml', 'message/rfc822')
+            }).submit()
+
+            mail = browser.context
+            return mail
 
 
 class TestMailPreservedAsPaperDefault(FunctionalTestCase):
