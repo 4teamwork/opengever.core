@@ -4,7 +4,10 @@ Changelog
 
 4.5.0 (unreleased)
 ------------------
-  
+
+- Fixed message type (warning) when resubmitting an already submitted document.
+  [phgross]
+
 - Optimize error handling of the NotificationCenter, show statusmessage
   instead of abort request.
   [phgross]
