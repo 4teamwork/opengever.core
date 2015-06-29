@@ -17,6 +17,7 @@ from plone.protect import createToken
 from Products.CMFCore.utils import getToolByName
 from zope.component import getMultiAdapter
 import transaction
+import unittest
 
 
 class TestCheckinCheckoutManager(FunctionalTestCase):
@@ -207,6 +208,7 @@ class TestCheckinViews(FunctionalTestCase):
         last_entry = repository_tool.retrieve(document2, len(history)-1)
         self.assertEquals(None, last_entry.comment)
 
+    @unittest.skip("Switching to new implementation")
     @browsing
     def test_reverting_with_revert_link_in_history_viewlet(self, browser):
         document = create(Builder("document")
