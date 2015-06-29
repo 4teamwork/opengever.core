@@ -1,12 +1,13 @@
-from collective.dexteritytextindexer.interfaces import \
-    IDynamicTextIndexExtender
+from collective.dexteritytextindexer.interfaces import IDynamicTextIndexExtender
 from ftw.mail.mail import IMail
 from ftw.testing import MockTestCase
-from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
-from opengever.mail.indexer import checked_out
-from zope.component import getAdapters, getAdapter
-from zope.interface import Interface
 from grokcore.component.testing import grok
+from opengever.base.interfaces import IReferenceNumber
+from opengever.base.interfaces import ISequenceNumber
+from opengever.mail.indexer import checked_out
+from zope.component import getAdapter
+from zope.component import getAdapters
+from zope.interface import Interface
 
 
 class TestMailIndexers(MockTestCase):
