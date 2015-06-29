@@ -17,4 +17,8 @@
                 expression="" id="++resource++opengever.base/livesearch.js"
                 inline="False"/>
 
+    <javascript cacheable="True" compression="safe" cookable="True" expression=""
+                enabled="True" id="++resource++opengever.base/base.js" inline="False"
+                />
+
 </object>
