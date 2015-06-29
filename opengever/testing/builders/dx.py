@@ -200,6 +200,7 @@ class MailBuilder(DexterityBuilder):
             trasher = ITrashable(obj)
             trasher.trash()
 
+        obj.update_filename()
         super(MailBuilder, self).after_create(obj)
 
     def set_missing_values_for_empty_fields(self, obj):

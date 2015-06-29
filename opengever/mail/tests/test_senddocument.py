@@ -132,7 +132,7 @@ f\xc3\xbcr Ernst Franz\r\n\r\nBesten Dank im Voraus"""
         mails = [create(Builder("mail").within(dossier).with_dummy_message()), ]
 
         mail = self.send_documents(dossier, mails)
-        self.assert_attachment(mail, 'testmail.eml', 'message/rfc822')
+        self.assert_attachment(mail, 'no-subject.eml', 'message/rfc822')
 
         attachment = mail.get_payload()[1].get_payload()[0]
         self.assertIn(
