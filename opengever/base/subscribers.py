@@ -1,16 +1,18 @@
 from five import grok
 from OFS.interfaces import IObjectClonedEvent
 from opengever.base import _
-from persistent.mapping import PersistentMapping
 from plone.app.lockingbehavior.behaviors import ILocking
+from plone.app.relationfield.event import extract_relations
 from plone.dexterity.interfaces import IDexterityContent
 from plone.dexterity.interfaces import IEditBegunEvent
 from plone.protect.interfaces import IDisableCSRFProtection
 from Products.PluggableAuthService.interfaces.events import IUserLoggedOutEvent
+from z3c.relationfield.event import _setRelation
 from zope.annotation import IAnnotations
 from zope.component.hooks import getSite
 from zope.interface import alsoProvides
 from zope.interface import Interface
+from zope.lifecycleevent.interfaces import IObjectAddedEvent
 from zope.lifecycleevent.interfaces import IObjectCreatedEvent
 
 
@@ -68,3 +70,15 @@ def initialize_annotations(obj, event):
     annotations = IAnnotations(obj)
     annotations['initialized'] = True
     del annotations['initialized']
+
+
+@grok.subscribe(IDexterityContent, IObjectAddedEvent)
+def add_behavior_relations(obj, event):
+    """Register relations in behaviors.
+
+    This event handler fixes a bug in plone.app.relationfield, which only
+    updates the zc.catalog when an object gets modified, but not when it gets
+    added.
+    """
+    for behavior_interface, name, relation in extract_relations(obj):
+        _setRelation(obj, name, relation)

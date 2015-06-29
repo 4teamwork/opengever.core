@@ -99,3 +99,32 @@ class TestOverview(FunctionalTestCase):
         self.assertEquals(
             ['Foo'],
             browser.css('span.contenttype-opengever-task-task').text)
+
+    @browsing
+    def test_references_box_lists_regular_references(self, browser):
+        browser.login().open(
+            self.portal, view='++add++opengever.dossier.businesscasedossier')
+        browser.fill({'Title': 'Dossier B', 'Related Dossier': [self.dossier]})
+        browser.find('Save').click()
+        dossier_b = browser.context
+
+        browser.open(browser.context, view='tabbedview_view-overview')
+        references = browser.css('#referencesBox a')
+        self.assertEquals(['Testdossier'], references.text)
+        self.assertEquals([self.dossier.absolute_url()],
+                          [link.get('href') for link in references])
+
+
+    @browsing
+    def test_references_box_lists_back_references(self, browser):
+        browser.login().open(
+            self.portal, view='++add++opengever.dossier.businesscasedossier')
+        browser.fill({'Title': 'Dossier B', 'Related Dossier': [self.dossier]})
+        browser.find('Save').click()
+        dossier_b = browser.context
+
+        browser.open(self.dossier, view='tabbedview_view-overview')
+        references = browser.css('#referencesBox a')
+        self.assertEquals(['Dossier B'], references.text)
+        self.assertEquals([dossier_b.absolute_url()],
+                          [link.get('href') for link in references])

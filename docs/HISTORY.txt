@@ -5,6 +5,9 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Add additional reference box in the dossier overview.
+  [phgross]
+
 - No longer overwrite mail metadata when it is already set.
   [deiferni]
 
