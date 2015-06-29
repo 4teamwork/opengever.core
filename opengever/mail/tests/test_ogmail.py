@@ -1,15 +1,14 @@
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
 from opengever.mail.mail import IOGMailMarker
+from opengever.mail.tests import MAIL_DATA
 from opengever.testing import FunctionalTestCase
-from pkg_resources import resource_string
-
-
-MAIL_DATA = resource_string('opengever.mail.tests', 'mail.txt')
+from plone import api
 
 
 class TestOGMailAddition(FunctionalTestCase):
-    use_browser = True
 
     def test_og_mail_behavior(self):
         mail = create(Builder("mail"))
@@ -27,16 +26,38 @@ class TestOGMailAddition(FunctionalTestCase):
         self.assertEquals(u'Die B\xfcrgschaft', mail.title)
         self.assertEquals('Die B\xc3\xbcrgschaft', mail.Title())
 
-    def test_mail_behavior(self):
+    @browsing
+    def test_mail_behavior(self, browser):
         mail = create(Builder("mail").with_message(MAIL_DATA))
 
-        self.browser.open('%s/edit' % mail.absolute_url())
-        self.browser.getControl(
-            name='form.widgets.IOGMail.title').value = 'hanspeter'
-        self.browser.getControl(name='form.buttons.save').click()
+        browser.login().open(mail, view='edit')
+        browser.fill({'Title': u'hanspeter'}).submit()
 
         self.assertEquals(u'hanspeter', mail.title)
         self.assertEquals('hanspeter', mail.Title())
+
+    def test_copy_mail_preserves_metadata(self):
+        dossier_1 = create(Builder('dossier'))
+        dossier_2 = create(Builder('dossier'))
+        mail = create(Builder('mail')
+                      .within(dossier_1)
+                      .with_message(MAIL_DATA))
+
+        # can't set this with `having` as it is overwritten by an event handler
+        mail.document_author = 'Hanspeter'
+        mail.document_date = date(2014, 1, 5)
+        mail.receipt_date = date(2014, 10, 1)
+
+        # preserved on initial creation
+        self.assertEqual('Hanspeter', mail.document_author)
+        self.assertEqual(date(2014, 1, 5), mail.document_date)
+        self.assertEqual(date(2014, 10, 1), mail.receipt_date)
+
+        copy = api.content.copy(source=mail, target=dossier_2)
+        # preserved on copy
+        self.assertEqual('Hanspeter', copy.document_author)
+        self.assertEqual(date(2014, 1, 5), copy.document_date)
+        self.assertEqual(date(2014, 10, 1), copy.receipt_date)
 
     def test_mail_is_never_checked_out(self):
         mail = create(Builder("mail").with_dummy_message())

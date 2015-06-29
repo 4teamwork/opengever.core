@@ -15,7 +15,9 @@ from Products.CMFCore.utils import getToolByName
 from z3c.relationfield.relation import RelationValue
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
+from zope.event import notify
 from zope.intid.interfaces import IIntIds
+from zope.lifecycleevent import ObjectCreatedEvent
 
 
 class DossierBuilder(DexterityBuilder):
@@ -199,6 +201,15 @@ class MailBuilder(DexterityBuilder):
             trasher.trash()
 
         super(MailBuilder, self).after_create(obj)
+
+    def set_missing_values_for_empty_fields(self, obj):
+        """Fire ObjectCreatedEvent (again) to trigger setting of initial
+        attribute values extracted from the message.
+        """
+
+        super(MailBuilder, self).set_missing_values_for_empty_fields(obj)
+
+        notify(ObjectCreatedEvent(obj))
 
 builder_registry.register('mail', MailBuilder)
 

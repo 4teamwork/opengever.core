@@ -3,21 +3,19 @@ from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.mail import inbound
+from ftw.testbrowser import browser
 from opengever.document.behaviors import metadata
 from opengever.document.interfaces import IDocumentSettings
 from opengever.mail.mail import extract_email
 from opengever.mail.mail import get_author_by_email
+from opengever.mail.tests import MAIL_DATA
 from opengever.mail.tests.utils import get_header_date
 from opengever.testing import FunctionalTestCase
 from opengever.testing.sql import create_ogds_user
-from pkg_resources import resource_string
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.registry.interfaces import IRegistry
 from unittest2 import TestCase
 from zope.component import getUtility
-
-
-MAIL_DATA = resource_string('opengever.mail.tests', 'mail.txt')
 
 
 def get_preserved_as_paper_default():
@@ -137,6 +135,24 @@ class TestMailMetadataWithQuickupload(TestMailMetadataWithBuilder):
                          portal_type='ftw.mail.mail')
         mail = result['success']
         return mail
+
+
+class TestMailMetadataWithAddView(TestMailMetadataWithBuilder):
+
+    def create_mail(self):
+        """Add mails over a plone view since builders implement their own
+        instance construction.
+        """
+
+        with browser(self.app):
+            dossier = create(Builder("dossier"))
+            browser.login().open(dossier, view='++add++ftw.mail.mail')
+            browser.fill({
+                'Raw Message': (MAIL_DATA, 'mail.eml', 'message/rfc822')
+            }).submit()
+
+            mail = browser.context
+            return mail
 
 
 class TestMailPreservedAsPaperDefault(FunctionalTestCase):

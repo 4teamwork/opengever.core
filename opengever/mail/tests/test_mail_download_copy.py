@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.testbrowser import browsing
+from opengever.mail.tests import MAIL_DATA
 from opengever.testing import FunctionalTestCase
 from pkg_resources import resource_string
 from plone.app.testing import TEST_USER_ID
@@ -9,7 +10,6 @@ from zope.annotation import IAnnotations
 from zope.i18n import translate
 
 
-MAIL_DATA = resource_string('opengever.mail.tests', 'mail.txt')
 MAIL_DATA_LF = resource_string('opengever.mail.tests', 'mail_lf.txt')
 MAIL_DATA_CRLF = resource_string('opengever.mail.tests', 'mail_crlf.txt')
 
