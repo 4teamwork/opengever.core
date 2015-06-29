@@ -300,7 +300,7 @@ class NullUpdateSubmittedDocumentCommand(object):
             _(u'Document ${title} has already been submitted in that version',
               mapping=dict(title=self.document.title)),
             portal.REQUEST,
-            type='warn')
+            type='warning')
 
 
 class UpdateSubmittedDocumentCommand(object):
