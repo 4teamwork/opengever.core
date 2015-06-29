@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<object name="portal_javascripts" meta_type="JavaScripts Registry">
+
+  <javascript compression="safe" id="++resource++opengever.base/prepoverlay.js" />
+  <javascript compression="safe" id="++resource++opengever.base/quickupload.js" />
+
+</object>

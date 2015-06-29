@@ -294,4 +294,13 @@
         directory="profiles/4500"
         />
 
+    <!-- 4500 -> 4501 -->
+    <upgrade-step:importProfile
+        title="Fixed compression type of some opengever.base javascripts."
+        profile="opengever.base:default"
+        source="4500"
+        destination="4501"
+        directory="profiles/4501"
+        />
+
 </configure>
