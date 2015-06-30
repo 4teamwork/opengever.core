@@ -5,6 +5,9 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Set focus on first form field.
+  [phgross]
+
 - Add additional reference box in the dossier overview.
   [phgross]
 

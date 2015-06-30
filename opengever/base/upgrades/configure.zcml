@@ -285,4 +285,22 @@
         directory="profiles/4302"
         />
 
+    <!-- 4302 -> 4500 -->
+    <upgrade-step:importProfile
+        title="Register base.js, wich includes a script which set focus on first form field."
+        profile="opengever.base:default"
+        source="4302"
+        destination="4500"
+        directory="profiles/4500"
+        />
+
+    <!-- 4500 -> 4501 -->
+    <upgrade-step:importProfile
+        title="Fixed compression type of some opengever.base javascripts."
+        profile="opengever.base:default"
+        source="4500"
+        destination="4501"
+        directory="profiles/4501"
+        />
+
 </configure>
