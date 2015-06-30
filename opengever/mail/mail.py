@@ -15,11 +15,13 @@ from opengever.ogds.models.user import User
 from plone.app.dexterity.behaviors import metadata
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.directives import form, dexterity
+from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.supermodel.interfaces import FIELDSETS_KEY
 from plone.supermodel.model import Fieldset
 from sqlalchemy import func
 from z3c.form.interfaces import DISPLAY_MODE
 from zope import schema
+from zope.component import getUtility
 from zope.component.hooks import getSite
 from zope.i18n import translate
 from zope.interface import Interface, alsoProvides
@@ -106,6 +108,14 @@ class OGMail(BaseDocument):
 
         return 0
 
+    def update_filename(self):
+        if not self.message:
+            return
+
+        normalizer = getUtility(IIDNormalizer)
+        normalized_subject = normalizer.normalize(self.title)
+        self.message.filename = u'{}.eml'.format(normalized_subject)
+
 
 class OGMailBase(metadata.MetadataBase):
 
@@ -139,6 +149,8 @@ def initalize_title(mail, event):
 
         IOGMail(mail).title = value
         mail.title = value
+
+    mail.update_filename()
 
 
 # XXX: The following two methods will be obselet if the ContactInformation

@@ -27,7 +27,7 @@ class TestOverview(FunctionalTestCase):
                   ['creator', 'Test User (test_user_1_)'],
                   ['Description', ''],
                   ['Foreign Reference', ''],
-                  ['Original message', u'testmail.eml \u2014 1 KB Download copy'],
+                  ['Original message', u'die-burgschaft.eml \u2014 1 KB Download copy'],
                   ['Digital Available', 'yes'],
                   ['Preserved as paper', 'yes'],
                   ['Date of receipt', date_format_helper(date.today())],

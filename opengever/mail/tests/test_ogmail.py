@@ -76,3 +76,14 @@ class TestOGMailAddition(FunctionalTestCase):
 
         self.assertFalse(mail_a.is_removed)
         self.assertTrue(mail_b.is_removed)
+
+    def test_update_filename_does_not_fail_for_mails_without_message(self):
+        mail = create(Builder("mail").titled('Foo'))
+        mail.title = u'Foo B\xe4r'
+        mail.update_filename()
+
+    def test_update_filename_sets_normalized_filename(self):
+        mail = create(Builder('mail').with_dummy_message())
+        mail.title = u'Foo B\xe4r'
+        mail.update_filename()
+        self.assertEqual(u'foo-bar.eml', mail.message.filename)
