@@ -5,6 +5,9 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Show public_trial edit-form link also for documents inside tasks.
+  [phgross]
+
 - Set mail filename from title when creating/updating mails.
   The mail filename is now always set automatically as a normalized form of title.
   [deiferni]

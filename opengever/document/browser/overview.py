@@ -1,6 +1,4 @@
 from AccessControl import getSecurityManager
-from Acquisition import aq_inner
-from Acquisition import aq_parent
 from five import grok
 from opengever.base import _ as ogbmf
 from opengever.base.browser import edit_public_trial
@@ -14,11 +12,12 @@ from opengever.meeting import is_meeting_feature_enabled
 from opengever.meeting.model import SubmittedDocument
 from opengever.ogds.base.actor import Actor
 from opengever.tabbedview.browser.base import OpengeverTab
+from plone import api
 from plone.directives.dexterity import DisplayForm
-from Products.CMFCore.utils import getToolByName
 from z3c.form.browser.checkbox import SingleCheckBoxWidget
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import queryMultiAdapter
+
 
 try:
     from opengever.pdfconverter.behaviors.preview import IPreviewMarker
@@ -236,10 +235,7 @@ class Overview(DisplayForm, OpengeverTab):
         except (AssertionError, ValueError):
             return False
 
-        wftool = getToolByName(self.context, 'portal_workflow')
-        state = wftool.getInfoFor(aq_parent(aq_inner(self.context)),
-                                  'review_state')
-
+        state = api.content.get_state(self.context.get_parent_dossier())
         return can_edit and state in DOSSIER_STATES_CLOSED
 
     def get_download_copy_tag(self):
