@@ -187,6 +187,10 @@ class MailBuilder(DexterityBuilder):
         self.arguments["message"] = file_
         return self
 
+    def with_asset_message(self, filename):
+        self.with_message(assets.load(filename), unicode(filename))
+        return self
+
     def trashed(self):
         self._trashed = True
         return self

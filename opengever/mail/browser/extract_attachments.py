@@ -5,6 +5,7 @@ from ftw.mail.utils import get_filename
 from ftw.mail.utils import remove_attachments
 from ftw.table.interfaces import ITableGenerator
 from opengever.base.command import CreateDocumentCommand
+from opengever.base.command import CreateEmailCommand
 from opengever.base.utils import disable_edit_bar
 from opengever.base.utils import find_parent_dossier
 from opengever.mail import _
@@ -187,19 +188,26 @@ class ExtractAttachments(grok.View):
 
             data, content_type, filename = self.get_attachment_data(pos)
 
-            doc = CreateDocumentCommand(
-                dossier, filename, data,
-                title=title,
-                content_type=content_type,
-                digitally_available=True).execute()
+            if content_type == 'message/rfc822':
+                doc = CreateEmailCommand(
+                    dossier, filename, data,
+                    title=title,
+                    content_type=content_type,
+                    digitally_available=True).execute()
+            else:
+                doc = CreateDocumentCommand(
+                    dossier, filename, data,
+                    title=title,
+                    content_type=content_type,
+                    digitally_available=True).execute()
 
-            # add a reference from the attachment to the mail
-            intids = getUtility(IIntIds)
-            iid = intids.getId(self.context)
+                # add a reference from the attachment to the mail
+                intids = getUtility(IIntIds)
+                iid = intids.getId(self.context)
 
-            # prevent circular dependencies
-            from opengever.document.behaviors.related_docs import IRelatedDocuments
-            IRelatedDocuments(doc).relatedItems = [RelationValue(iid)]
+                # prevent circular dependencies
+                from opengever.document.behaviors.related_docs import IRelatedDocuments
+                IRelatedDocuments(doc).relatedItems = [RelationValue(iid)]
 
             msg = _(u'info_extracted_document',
                     default=u'Created document ${title}',
@@ -256,7 +264,14 @@ class ExtractAttachments(grok.View):
         # remove line breaks from the filename
         filename = re.sub('\s{1,}', ' ', filename)
 
-        data = attachment.get_payload(decode=1)
         content_type = attachment.get_content_type()
+        if content_type == 'message/rfc822':
+            nested_messages = attachment.get_payload()
+            assert len(nested_messages) == 1, (
+                'we expect that attachments with messages only contain one '
+                'message per attachment.')
+            data = nested_messages[0].as_string()
+        else:
+            data = attachment.get_payload(decode=1)
 
         return data, content_type, filename

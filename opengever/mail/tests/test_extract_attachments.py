@@ -98,6 +98,20 @@ class TestAttachmentExtraction(FunctionalTestCase):
         self.assertTrue(doc.digitally_available)
 
     @browsing
+    def test_extract_nested_mail_from_mail_with_one_attachment(self, browser):
+        mail = create(Builder('mail')
+                      .within(self.dossier)
+                      .with_asset_message('mail_with_one_mail_attachment.eml'))
+
+        browser.login().open(mail, view='extract_attachments')
+        browser.fill({'attachments:list': ['2']}).submit()
+
+        mail = self.dossier.listFolderContents(
+            {'portal_type': 'ftw.mail.mail'})[-1]
+        self.assertEquals(u'Inneres Testm\xe4il ohne Attachments',
+                          mail.Title().decode('utf-8'))
+
+    @browsing
     def test_extracting_line_break_mail(self, browser):
         mail = create(Builder('mail')
                       .within(self.dossier)
