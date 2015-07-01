@@ -13,7 +13,9 @@ class TestCancelDocuments(FunctionalTestCase):
 
     def setUp(self):
         super(TestCancelDocuments, self).setUp()
-        self.dossier = create(Builder('dossier'))
+        repo_root = create(Builder('repository_root'))
+        repo_folder = create(Builder('repository').within(repo_root))
+        self.dossier = create(Builder('dossier').within(repo_folder))
 
     def obj2paths(self, objs):
         return ['/'.join(obj.getPhysicalPath()) for obj in objs]
@@ -87,3 +89,18 @@ class TestCancelDocuments(FunctionalTestCase):
         self.assertEquals(
             [u'Could not cancel checkout on document Testdokum\xe4nt'],
             error_messages())
+
+    @browsing
+    def test_shows_message_when_mails_are_selected(self, browser):
+        doc = create(Builder('document').within(self.dossier).checked_out())
+        mail = create(Builder('mail').with_dummy_message().within(self.dossier))
+
+        browser.login().open(self.dossier,
+                             {'paths': self.obj2paths([doc, mail]),
+                              '_authenticator': createToken()},
+                             view='cancel_document_checkouts', )
+
+        self.assertEquals(self.dossier, browser.context)
+        self.assertEquals([u'Could not cancel checkout on document [No Subject], '
+                           'mails does not support the checkin checkout process.'],
+                          error_messages())

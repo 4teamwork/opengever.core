@@ -1,9 +1,11 @@
-from Products.CMFCore.utils import getToolByName
-from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
+from ftw.mail.mail import IMail
 from opengever.document import _
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
+from plone import api
+from Products.CMFCore.utils import getToolByName
+from Products.statusmessages.interfaces import IStatusMessage
 from zope.component import getMultiAdapter
 from zope.interface import Interface
 
@@ -20,7 +22,6 @@ class CancelDocuments(grok.View):
     grok.name('cancel_document_checkouts')
 
     def render(self):
-
         # check whether we have paths or not
         paths = self.request.get('paths')
 
@@ -64,6 +65,14 @@ class CancelDocuments(grok.View):
     def cancel(self, obj):
         """Cancels a single document checkout.
         """
+        if IMail.providedBy(obj):
+            msg = _(u'msg_cancel_checkout_on_mail_not_possible',
+                    default=u'Could not cancel checkout on document ${title}, '
+                    'mails does not support the checkin checkout process.',
+                    mapping={'title': obj.Title().decode('utf-8')})
+            api.portal.show_message(
+                message=msg, request=self.request, type='error')
+            return
 
         # check out the document
         manager = getMultiAdapter((obj, self.request),
