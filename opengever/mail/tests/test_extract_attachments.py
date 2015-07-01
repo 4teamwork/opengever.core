@@ -5,45 +5,21 @@ from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.mail.utils import get_attachments
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import statusmessages
-from opengever.document.interfaces import IDocumentSettings
 from opengever.mail.browser.extract_attachments import content_type_helper
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
 from plone.app.testing import TEST_USER_ID
-from plone.registry.interfaces import IRegistry
 from zope.annotation import IAnnotations
-from zope.component import getUtility
 from zope.i18n import translate
-import transaction
 
 
 MESSAGE_TEXT = 'Mime-Version: 1.0\nContent-Type: multipart/mixed; boundary=908752978\nTo: to@example.org\nFrom: from@example.org\nSubject: Attachment Test\nDate: Thu, 01 Jan 1970 01:00:00 +0100\nMessage-Id: <1>\n\n\n--908752978\nContent-Disposition: attachment;\n	filename*=iso-8859-1\'\'B%FCcher.txt\nContent-Type: text/plain;\n	name="=?iso-8859-1?Q?B=FCcher.txt?="\nContent-Transfer-Encoding: base64\n\nw6TDtsOcCg==\n\n--908752978--\n'
 
-LINEBREAK_MESSAGETEXT = """Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary=908752978
-To: to@example.org\nFrom: from@example.org
-Subject: Attachment Test
-Date: Thu, 01 Jan 1970 01:00:00 +0100\nMessage-Id: <1>
 
-
---908752978
-Content-Disposition: attachment;
-	filename=Projekt Test Inputvorschlag.doc
-Content-Type: text/plain;
-	name="Projekt Test Input
-        vorschlag.doc"
-Content-Transfer-Encoding: base64
-
-w6TDtsOcCg==
-
---908752978--
-"""
-
-
-class TestAttachmentExtraction(FunctionalTestCase):
+class TestExtractAttachmentView(FunctionalTestCase):
 
     def setUp(self):
-        super(TestAttachmentExtraction, self).setUp()
+        super(TestExtractAttachmentView, self).setUp()
         self.dossier = create(Builder('dossier'))
         self.mail = create(Builder('mail')
                            .within(self.dossier)
@@ -55,7 +31,7 @@ class TestAttachmentExtraction(FunctionalTestCase):
         browser.forms.get('form').submit()
 
         self.assertEquals(['You have not selected any attachments.'],
-                         statusmessages.messages().get('error'))
+                          statusmessages.messages().get('error'))
         self.assertEquals(
             'http://nohost/plone/dossier-1/document-1/extract_attachments',
             browser.url)
@@ -66,9 +42,10 @@ class TestAttachmentExtraction(FunctionalTestCase):
         browser.fill({'attachments:list': ['1']}).submit()
 
         self.assertEquals([u'Created document B\xfccher'],
-                         statusmessages.messages().get('info'))
+                          statusmessages.messages().get('info'))
         self.assertEquals('http://nohost/plone/dossier-1/#documents',
-                         browser.url)
+                          browser.url)
+
     @browsing
     def test_creates_document_in_parent_dossier(self, browser):
         browser.login().open(self.mail, view='extract_attachments')
@@ -81,48 +58,6 @@ class TestAttachmentExtraction(FunctionalTestCase):
         self.assertEquals(doc.document_date, date.today())
 
         self.assertEquals(obj2brain(doc).document_date, date.today())
-
-    @browsing
-    def test_sets_default_values_correctly_on_document(self, browser):
-        registry = getUtility(IRegistry)
-        proxy = registry.forInterface(IDocumentSettings)
-        proxy.preserved_as_paper_default = False
-        transaction.commit()
-
-        browser.login().open(self.mail, view='extract_attachments')
-        browser.fill({'attachments:list': ['1']}).submit()
-
-        doc = self.dossier.listFolderContents(
-            {'portal_type': 'opengever.document.document'})[0]
-        self.assertFalse(doc.preserved_as_paper)
-        self.assertTrue(doc.digitally_available)
-
-    @browsing
-    def test_extract_nested_mail_from_mail_with_one_attachment(self, browser):
-        mail = create(Builder('mail')
-                      .within(self.dossier)
-                      .with_asset_message('mail_with_one_mail_attachment.eml'))
-
-        browser.login().open(mail, view='extract_attachments')
-        browser.fill({'attachments:list': ['2']}).submit()
-
-        mail = self.dossier.listFolderContents(
-            {'portal_type': 'ftw.mail.mail'})[-1]
-        self.assertEquals(u'Inneres Testm\xe4il ohne Attachments',
-                          mail.Title().decode('utf-8'))
-
-    @browsing
-    def test_extracting_line_break_mail(self, browser):
-        mail = create(Builder('mail')
-                      .within(self.dossier)
-                      .with_message(LINEBREAK_MESSAGETEXT))
-
-        browser.login().open(mail, view='extract_attachments')
-        browser.fill({'attachments:list': ['1']}).submit()
-
-        doc = self.dossier.listFolderContents(
-            {'portal_type': 'opengever.document.document'})[0]
-        self.assertEquals('Projekt Test Inputvorschlag', doc.Title())
 
     @browsing
     def test_deleting_after_extracting(self, browser):
@@ -154,7 +89,7 @@ class TestAttachmentExtraction(FunctionalTestCase):
                           translate(last_entry['action']['title']))
 
     @browsing
-    def test_extract_attachment_without_docs_shows_waring_statusmessage(self, browser):
+    def test_extract_attachment_without_docs_shows_warning_message(self, browser):
         mail = create(Builder('mail').within(self.dossier))
         browser.login().open(mail, view='extract_attachments')
 
