@@ -43,7 +43,11 @@ class ResponseDescription(object):
         self.response = response
 
     def msg(self):
-        return _('transition_label_default', u'Response added')
+        return _('transition_msg_default', u'Response added')
+
+    def label(self):
+        """Returns a short description of the executed transition.
+        """
 
     @property
     def _msg_mapping(self):
@@ -58,8 +62,9 @@ class Reactivate(ResponseDescription):
     css_class = 'reactivate'
 
     def msg(self):
-        return _('transition_label_reactivate', u'Reactivate by ${user}',
+        return _('transition_msg_reactivate', u'Reactivate by ${user}',
                  mapping=self._msg_mapping)
+
 
 ResponseDescription.add_description(Reactivate)
 
@@ -69,7 +74,7 @@ class Reject(ResponseDescription):
     css_class = 'refuse'
 
     def msg(self):
-        return _('transition_label_reject', u'Rejected by ${user}',
+        return _('transition_msg_reject', u'Rejected by ${user}',
                  mapping=self._msg_mapping)
 
 ResponseDescription.add_description(Reject)
@@ -82,7 +87,7 @@ class Resolve(ResponseDescription):
     css_class = 'complete'
 
     def msg(self):
-        return _('transition_label_resolve', u'Resolved by ${user}',
+        return _('transition_msg_resolve', u'Resolved by ${user}',
                  mapping=self._msg_mapping)
 
 ResponseDescription.add_description(Resolve)
@@ -97,7 +102,7 @@ class Close(ResponseDescription):
     css_class = 'close'
 
     def msg(self):
-        return _('transition_label_close', u'Closed by ${user}',
+        return _('transition_msg_close', u'Closed by ${user}',
                  mapping=self._msg_mapping)
 
 ResponseDescription.add_description(Close)
@@ -108,7 +113,7 @@ class Cancel(ResponseDescription):
     css_class = 'cancelled'
 
     def msg(self):
-        return _('transition_label_cancel', u'Cancelled by ${user}',
+        return _('transition_msg_cancel', u'Cancelled by ${user}',
                  mapping=self._msg_mapping)
 
 ResponseDescription.add_description(Cancel)
@@ -121,8 +126,9 @@ class Accept(ResponseDescription):
     css_class = 'accept'
 
     def msg(self):
-        return _('transition_label_accept', u'Accepted by ${user}',
+        return _('transition_msg_accept', u'Accepted by ${user}',
                  mapping=self._msg_mapping)
+
 
 ResponseDescription.add_description(Accept)
 
@@ -132,7 +138,7 @@ class Reopen(ResponseDescription):
     css_class = 'reopen'
 
     def msg(self):
-        return _('transition_label_reopen', u'Reopened by ${user}',
+        return _('transition_msg_reopen', u'Reopened by ${user}',
                  mapping=self._msg_mapping)
 
 ResponseDescription.add_description(Reopen)
@@ -144,7 +150,7 @@ class Revise(ResponseDescription):
     css_class = 'revise'
 
     def msg(self):
-        return _('transition_label_revise', u'Revised by ${user}',
+        return _('transition_msg_revise', u'Revised by ${user}',
                  mapping=self._msg_mapping)
 
 ResponseDescription.add_description(Revise)
@@ -160,7 +166,7 @@ class Reassign(ResponseDescription):
         change = self.response.get_change('responsible')
         responsible_new = Actor.lookup(change.get('after')).get_link()
         responsible_old = Actor.lookup(change.get('before')).get_link()
-        return _('transition_label_reassign',
+        return _('transition_msg_reassign',
                  u'Reassigned from ${responsible_old} to '
                  u'${responsible_new} by ${user}',
                  mapping={'user': self.response.creator_link(),
@@ -182,7 +188,7 @@ class ModifyDeadline(ResponseDescription):
         change = self.response.get_change('deadline')
         new_deadline = change.get('after')
         old_deadline = change.get('before')
-        return _('transition_label_modify_deadline',
+        return _('transition_msg_modify_deadline',
                  u'Deadline modified from ${deadline_old} to ${deadline_new} '
                  u'by ${user}',
                  mapping={'user': self.response.creator_link(),
@@ -212,7 +218,7 @@ class Refuse(ResponseDescription):
     css_class = 'refuse'
 
     def msg(self):
-        return _('transition_label_refuse', u'Refused by ${user}',
+        return _('transition_msg_refuse', u'Refused by ${user}',
                  mapping=self._msg_mapping)
 
 ResponseDescription.add_description(Refuse)
@@ -226,7 +232,7 @@ class AssignToDossier(ResponseDescription):
     def msg(self):
 
         successor = self.response.get_succesor()
-        return _('transition_label_assign_to_dossier',
+        return _('transition_msg_assign_to_dossier',
                  u'Assigned to dossier by ${user} successor=${successor}',
                  mapping={'user': self.response.creator_link(),
                           'successor': successor.get_link()})
