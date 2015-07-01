@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-04-20 09:47+0000\n"
+"POT-Creation-Date: 2015-07-01 11:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,7 +25,7 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: ./opengever/document/checkout/cancel.py:82
+#: ./opengever/document/checkout/cancel.py:88
 msgid "Cancel checkout: ${title}"
 msgstr ""
 
@@ -52,7 +52,7 @@ msgstr ""
 msgid "Checkout"
 msgstr ""
 
-#: ./opengever/document/checkout/cancel.py:74
+#: ./opengever/document/checkout/cancel.py:80
 msgid "Could not cancel checkout on document ${title}"
 msgstr ""
 
@@ -89,7 +89,7 @@ msgstr ""
 msgid "Don't show this message again."
 msgstr ""
 
-#: ./opengever/document/browser/logout_overlay_templates/logout_overlay.pt:18
+#: ./opengever/document/browser/templates/logout_overlay.pt:19
 msgid "Logout"
 msgstr ""
 
@@ -132,14 +132,14 @@ msgstr ""
 msgid "You are not authorized to edit the document ${title}"
 msgstr ""
 
-#: ./opengever/document/checkout/cancel.py:29
+#: ./opengever/document/checkout/cancel.py:28
 #: ./opengever/document/checkout/checkin.py:197
 #: ./opengever/document/checkout/checkout.py:33
 msgid "You have not selected any documents"
 msgstr ""
 
 #. Default: "You have not checked in documents. Do you realy want to logout?"
-#: ./opengever/document/browser/logout_overlay_templates/logout_overlay.pt:3
+#: ./opengever/document/browser/templates/logout_overlay.pt:3
 msgid "alert_not_checked_in_documents"
 msgstr ""
 
@@ -154,7 +154,7 @@ msgid "button_checkin"
 msgstr ""
 
 #. Default: "copy of"
-#: ./opengever/document/subscribers.py:75
+#: ./opengever/document/subscribers.py:76
 msgid "copy_of"
 msgstr ""
 
@@ -169,19 +169,19 @@ msgid "error_file_and_preserved_as_paper"
 msgstr ""
 
 #. Default: "It's not possible to add E-mails here, please '                    'send it to ${mailaddress} or drag it to the dossier '                    ' (Dragn'n'Drop)."
-#: ./opengever/document/document.py:91
+#: ./opengever/document/document.py:90
 msgid "error_mail_upload"
 msgstr ""
 
 #. Default: "Either the title or the file is required."
-#: ./opengever/document/document.py:68
+#: ./opengever/document/document.py:67
 msgid "error_title_or_file_required"
 msgstr ""
 
 #. Default: "Common"
 #: ./opengever/document/behaviors/metadata.py:27
 #: ./opengever/document/behaviors/related_docs.py:38
-#: ./opengever/document/document.py:44
+#: ./opengever/document/document.py:43
 msgid "fieldset_common"
 msgstr ""
 
@@ -240,7 +240,7 @@ msgstr ""
 msgid "help_document_type"
 msgstr ""
 
-#: ./opengever/document/document.py:61
+#: ./opengever/document/document.py:60
 msgid "help_file"
 msgstr ""
 
@@ -304,7 +304,7 @@ msgid "label_checkin_journal_comment"
 msgstr ""
 
 #. Default: "Edit Document"
-#: ./opengever/document/browser/overview_templates/file.pt:37
+#: ./opengever/document/browser/templates/file.pt:36
 msgid "label_checkout_and_edit"
 msgstr ""
 
@@ -345,13 +345,13 @@ msgstr ""
 #. Default: "Download copy"
 #: ./opengever/document/browser/download.py:134
 #: ./opengever/document/browser/download_templates/downloadconfirmation.pt:4
-#: ./opengever/document/browser/overview_templates/file.pt:53
+#: ./opengever/document/browser/templates/file.pt:52
 msgid "label_download_copy"
 msgstr ""
 
 #. Default: "File"
 #: ./opengever/document/browser/overview.py:127
-#: ./opengever/document/document.py:60
+#: ./opengever/document/document.py:59
 msgid "label_file"
 msgstr ""
 
@@ -375,7 +375,7 @@ msgid "label_ok"
 msgstr ""
 
 #. Default: "PDF Preview"
-#: ./opengever/document/browser/overview_templates/file.pt:23
+#: ./opengever/document/browser/templates/file.pt:22
 msgid "label_pdf_preview"
 msgstr ""
 
@@ -420,7 +420,7 @@ msgid "label_thumbnail"
 msgstr ""
 
 #. Default: "Title"
-#: ./opengever/document/document.py:54
+#: ./opengever/document/document.py:53
 msgid "label_title"
 msgstr ""
 
@@ -434,13 +434,18 @@ msgstr ""
 msgid "message_checkout_info"
 msgstr ""
 
+#. Default: "Could not cancel checkout on document ${title}, mails does not support the checkin checkout process."
+#: ./opengever/document/checkout/cancel.py:67
+msgid "msg_cancel_checkout_on_mail_not_possible"
+msgstr ""
+
 #. Default: "No file"
-#: ./opengever/document/browser/overview_templates/file.pt:60
+#: ./opengever/document/browser/templates/file.pt:59
 msgid "no_file"
 msgstr ""
 
 #. Default: "Following documents are checked out:"
-#: ./opengever/document/browser/logout_overlay_templates/logout_overlay.pt:8
+#: ./opengever/document/browser/templates/logout_overlay.pt:8
 msgid "overview_not_checked_in_documents"
 msgstr ""
 

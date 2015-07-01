@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2015-04-20 09:47+0000\n"
+"POT-Creation-Date: 2015-07-01 11:57+0000\n"
 "PO-Revision-Date: 2013-03-27 10:44+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -23,7 +23,7 @@ msgstr "Das Dokument kann momentan nicht bearbeitet werden, es ist gesperrt."
 msgid "Cancel"
 msgstr "Widerrufen"
 
-#: ./opengever/document/checkout/cancel.py:82
+#: ./opengever/document/checkout/cancel.py:88
 msgid "Cancel checkout: ${title}"
 msgstr "Checkout abgebrochen für ${title}"
 
@@ -51,7 +51,7 @@ msgstr "Ohne Kommentar einchecken"
 msgid "Checkout"
 msgstr "Auschecken"
 
-#: ./opengever/document/checkout/cancel.py:74
+#: ./opengever/document/checkout/cancel.py:80
 msgid "Could not cancel checkout on document ${title}"
 msgstr "Das Auschecken des Dokuments ${title} konnte nicht widerrufen werden."
 
@@ -88,7 +88,7 @@ msgstr "Dokument"
 msgid "Don't show this message again."
 msgstr "Diese Meldung nicht mehr anzeigen."
 
-#: ./opengever/document/browser/logout_overlay_templates/logout_overlay.pt:18
+#: ./opengever/document/browser/templates/logout_overlay.pt:19
 msgid "Logout"
 msgstr "GEVER verlassen"
 
@@ -132,14 +132,14 @@ msgstr "Eingereichte Version aktualisieren"
 msgid "You are not authorized to edit the document ${title}"
 msgstr "Sie sind nicht berechtigt, das Dokument ${title} zu bearbeiten."
 
-#: ./opengever/document/checkout/cancel.py:29
+#: ./opengever/document/checkout/cancel.py:28
 #: ./opengever/document/checkout/checkin.py:197
 #: ./opengever/document/checkout/checkout.py:33
 msgid "You have not selected any documents"
 msgstr "Sie haben keine Dokumente ausgewählt."
 
 #. Default: "You have not checked in documents. Do you realy want to logout?"
-#: ./opengever/document/browser/logout_overlay_templates/logout_overlay.pt:3
+#: ./opengever/document/browser/templates/logout_overlay.pt:3
 msgid "alert_not_checked_in_documents"
 msgstr "Sie haben noch ausgecheckte Dokumente. Wollen Sie OneGov GEVER wirklich verlassen?"
 
@@ -154,7 +154,7 @@ msgid "button_checkin"
 msgstr "Einchecken"
 
 #. Default: "copy of"
-#: ./opengever/document/subscribers.py:75
+#: ./opengever/document/subscribers.py:76
 msgid "copy_of"
 msgstr "Kopie von"
 
@@ -169,19 +169,19 @@ msgid "error_file_and_preserved_as_paper"
 msgstr "Sie haben weder eine Datei ausgewählt noch ist das Dokument in Papierform aufbewahrt, bitte korrigieren."
 
 #. Default: "It's not possible to add E-mails here, please '                    'send it to ${mailaddress} or drag it to the dossier '                    ' (Dragn'n'Drop)."
-#: ./opengever/document/document.py:91
+#: ./opengever/document/document.py:90
 msgid "error_mail_upload"
 msgstr "Es ist nicht erlaubt hier E-Mails anzufügen. Bitte senden Sie das E-Mail an die Addresse ${mailaddress} oder ziehen Sie es in das Dossier (Drag'n'Drop)."
 
 #. Default: "Either the title or the file is required."
-#: ./opengever/document/document.py:68
+#: ./opengever/document/document.py:67
 msgid "error_title_or_file_required"
 msgstr "Ein Titel oder eine Datei muss angegeben werden."
 
 #. Default: "Common"
 #: ./opengever/document/behaviors/metadata.py:27
 #: ./opengever/document/behaviors/related_docs.py:38
-#: ./opengever/document/document.py:44
+#: ./opengever/document/document.py:43
 msgid "fieldset_common"
 msgstr "Allgemein"
 
@@ -243,7 +243,7 @@ msgid "help_document_type"
 msgstr ""
 
 #. Default: ""
-#: ./opengever/document/document.py:61
+#: ./opengever/document/document.py:60
 msgid "help_file"
 msgstr "Datei, die zu einem Dossier hinzugefügt wird"
 
@@ -311,7 +311,7 @@ msgid "label_checkin_journal_comment"
 msgstr "Journal-Kommentar"
 
 #. Default: "Edit Document"
-#: ./opengever/document/browser/overview_templates/file.pt:37
+#: ./opengever/document/browser/templates/file.pt:36
 msgid "label_checkout_and_edit"
 msgstr "Auschecken / Bearbeiten"
 
@@ -352,13 +352,13 @@ msgstr "Herunterladen"
 #. Default: "Download copy"
 #: ./opengever/document/browser/download.py:134
 #: ./opengever/document/browser/download_templates/downloadconfirmation.pt:4
-#: ./opengever/document/browser/overview_templates/file.pt:53
+#: ./opengever/document/browser/templates/file.pt:52
 msgid "label_download_copy"
 msgstr "Kopie herunterladen"
 
 #. Default: "File"
 #: ./opengever/document/browser/overview.py:127
-#: ./opengever/document/document.py:60
+#: ./opengever/document/document.py:59
 msgid "label_file"
 msgstr "Datei"
 
@@ -382,7 +382,7 @@ msgid "label_ok"
 msgstr "OK"
 
 #. Default: "PDF Preview"
-#: ./opengever/document/browser/overview_templates/file.pt:23
+#: ./opengever/document/browser/templates/file.pt:22
 msgid "label_pdf_preview"
 msgstr "PDF Vorschau"
 
@@ -427,7 +427,7 @@ msgid "label_thumbnail"
 msgstr "Kurzbild"
 
 #. Default: "Title"
-#: ./opengever/document/document.py:54
+#: ./opengever/document/document.py:53
 msgid "label_title"
 msgstr "Titel"
 
@@ -441,13 +441,18 @@ msgstr "Ja"
 msgid "message_checkout_info"
 msgstr "Dieses Dokument wurde von ${creator} ausgecheckt."
 
+#. Default: "Could not cancel checkout on document ${title}, mails does not support the checkin checkout process."
+#: ./opengever/document/checkout/cancel.py:67
+msgid "msg_cancel_checkout_on_mail_not_possible"
+msgstr "Das Dokument `${title}` konnte nicht ausgecheckt werden, da Mails den Checkin/Checkout Prozess nicht unterstützen."
+
 #. Default: "No file"
-#: ./opengever/document/browser/overview_templates/file.pt:60
+#: ./opengever/document/browser/templates/file.pt:59
 msgid "no_file"
 msgstr "Keine Datei"
 
 #. Default: "Following documents are checked out:"
-#: ./opengever/document/browser/logout_overlay_templates/logout_overlay.pt:8
+#: ./opengever/document/browser/templates/logout_overlay.pt:8
 msgid "overview_not_checked_in_documents"
 msgstr "Folgende Dokumente sind ausgecheckt:"
 
@@ -465,4 +470,3 @@ msgstr "Mit Kommentar"
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "without comment"
 msgstr "Ohne Kommentar"
-
