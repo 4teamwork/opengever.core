@@ -4,8 +4,6 @@ from opengever.document import _
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from plone import api
-from Products.CMFCore.utils import getToolByName
-from Products.statusmessages.interfaces import IStatusMessage
 from zope.component import getMultiAdapter
 from zope.interface import Interface
 
@@ -28,8 +26,8 @@ class CancelDocuments(grok.View):
         # using "paths" is mandantory on any objects except for a document
         if not paths and not IDocumentSchema.providedBy(self.context):
             msg = _(u'You have not selected any documents')
-            IStatusMessage(self.request).addStatusMessage(
-                msg, type='error')
+            api.portal.show_message(
+                message=msg, request=self.request, type='error')
 
             # we assume the request came from the tabbed_view "documents"
             # tab on the dossier
@@ -38,7 +36,7 @@ class CancelDocuments(grok.View):
 
         elif paths:
             # lookup the objects to be handled using the catalog
-            catalog = getToolByName(self.context, 'portal_catalog')
+            catalog = api.portal.get_tool('portal_catalog')
             objects = []
             for path in paths:
                 query = dict(path={'query': path, 'depth': 0})
@@ -82,12 +80,13 @@ class CancelDocuments(grok.View):
         if not manager.is_cancel_allowed():
             msg = _(u'Could not cancel checkout on document ${title}',
                     mapping=dict(title=obj.Title().decode('utf-8')))
-            IStatusMessage(self.request).addStatusMessage(msg, type='error')
+            api.portal.show_message(
+                message=msg, request=self.request, type='error')
 
         else:
             manager.cancel()
-
             # notify the user
             msg = _(u'Cancel checkout: ${title}',
                     mapping={'title': obj.Title().decode('utf-8')})
-            IStatusMessage(self.request).addStatusMessage(msg, type='info')
+            api.portal.show_message(
+                message=msg, request=self.request, type='info')
