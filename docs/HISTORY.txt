@@ -5,6 +5,13 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Add support for extracting nested mails.
+  Also refactor extraction of attachments from mails.
+  [deiferni]
+
+- Fix an issue with journal entries when deleting attachments from mails.
+  [deiferni]
+
 - Fixed ComponentLookupError in CancelDocument view, when mails are selected,
   show error statusmessage instead.
   [phgross]
