@@ -48,6 +48,7 @@ class ResponseDescription(object):
     def label(self):
         """Returns a short description of the executed transition.
         """
+        return _('transition_label_default', u'Task added')
 
     @property
     def _msg_mapping(self):
@@ -65,6 +66,8 @@ class Reactivate(ResponseDescription):
         return _('transition_msg_reactivate', u'Reactivate by ${user}',
                  mapping=self._msg_mapping)
 
+    def label(self):
+        return _('transition_label_reactivate', u'Task reactivated')
 
 ResponseDescription.add_description(Reactivate)
 
@@ -76,6 +79,9 @@ class Reject(ResponseDescription):
     def msg(self):
         return _('transition_msg_reject', u'Rejected by ${user}',
                  mapping=self._msg_mapping)
+
+    def label(self):
+        return _('transition_label_reject', u'Task rejected')
 
 ResponseDescription.add_description(Reject)
 
@@ -89,6 +95,9 @@ class Resolve(ResponseDescription):
     def msg(self):
         return _('transition_msg_resolve', u'Resolved by ${user}',
                  mapping=self._msg_mapping)
+
+    def label(self):
+        return _('transition_label_resolve', u'Task resolved')
 
 ResponseDescription.add_description(Resolve)
 
@@ -105,6 +114,9 @@ class Close(ResponseDescription):
         return _('transition_msg_close', u'Closed by ${user}',
                  mapping=self._msg_mapping)
 
+    def label(self):
+        return _('transition_label_close', u'Task closed')
+
 ResponseDescription.add_description(Close)
 
 
@@ -115,6 +127,9 @@ class Cancel(ResponseDescription):
     def msg(self):
         return _('transition_msg_cancel', u'Cancelled by ${user}',
                  mapping=self._msg_mapping)
+
+    def label(self):
+        return _('transition_label_cancelled', u'Task cancelled')
 
 ResponseDescription.add_description(Cancel)
 
@@ -129,6 +144,9 @@ class Accept(ResponseDescription):
         return _('transition_msg_accept', u'Accepted by ${user}',
                  mapping=self._msg_mapping)
 
+    def label(self):
+        return _('transition_label_accept', u'Task accepted')
+
 
 ResponseDescription.add_description(Accept)
 
@@ -141,6 +159,9 @@ class Reopen(ResponseDescription):
         return _('transition_msg_reopen', u'Reopened by ${user}',
                  mapping=self._msg_mapping)
 
+    def label(self):
+        return _('transition_label_reopen', u'Task reopened')
+
 ResponseDescription.add_description(Reopen)
 
 
@@ -152,6 +173,9 @@ class Revise(ResponseDescription):
     def msg(self):
         return _('transition_msg_revise', u'Revised by ${user}',
                  mapping=self._msg_mapping)
+
+    def label(self):
+        return _('transition_label_revise', u'Task revised')
 
 ResponseDescription.add_description(Revise)
 
@@ -172,6 +196,9 @@ class Reassign(ResponseDescription):
                  mapping={'user': self.response.creator_link(),
                           'responsible_new': responsible_new,
                           'responsible_old': responsible_old})
+
+    def label(self):
+        return _('transition_label_reassign', u'Task reassigned')
 
 ResponseDescription.add_description(Reassign)
 
@@ -195,6 +222,9 @@ class ModifyDeadline(ResponseDescription):
                           'deadline_old': self._format_date(old_deadline),
                           'deadline_new': self._format_date(new_deadline)})
 
+    def label(self):
+        return _('transition_label_modify_deadline', u'Task deadline modified')
+
 ResponseDescription.add_description(ModifyDeadline)
 
 
@@ -209,6 +239,7 @@ class Delegate(ResponseDescription):
     def msg(self):
         return u''
 
+
 ResponseDescription.add_description(Delegate)
 
 
@@ -220,6 +251,10 @@ class Refuse(ResponseDescription):
     def msg(self):
         return _('transition_msg_refuse', u'Refused by ${user}',
                  mapping=self._msg_mapping)
+
+    def label(self):
+        return _('transition_label_refuse', u'Forwarding refused')
+
 
 ResponseDescription.add_description(Refuse)
 
@@ -236,6 +271,10 @@ class AssignToDossier(ResponseDescription):
                  u'Assigned to dossier by ${user} successor=${successor}',
                  mapping={'user': self.response.creator_link(),
                           'successor': successor.get_link()})
+
+    def label(self):
+        return _('transition_label_assign_to_dossier',
+                 u'Forwarding assigned to Dossier')
 
 ResponseDescription.add_description(AssignToDossier)
 
@@ -256,6 +295,9 @@ class SubTaskAdded(ResponseDescription):
                  mapping={'user': self.response.creator_link(),
                           'task': label})
 
+    def label(self):
+        return _('transition_label_add_subtask', u'Subtask added to task')
+
 ResponseDescription.add_description(SubTaskAdded)
 
 
@@ -272,5 +314,9 @@ class DocumentAdded(ResponseDescription):
                  u'Document ${doc} added by ${user}',
                  mapping={'user': self.response.creator_link(),
                           'doc': label})
+
+    def label(self):
+        return _('transition_label_add_document',
+                 u'Document added to Task')
 
 ResponseDescription.add_description(DocumentAdded)

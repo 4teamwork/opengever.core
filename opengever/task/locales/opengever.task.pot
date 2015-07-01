@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2015-07-01 13:06+0000\n"
+"POT-Creation-Date: 2015-07-01 14:17+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -743,13 +743,43 @@ msgid "title_modify_deadline"
 msgstr ""
 
 #. Default: "Document ${doc} added by ${user}"
-#: ./opengever/task/response_description.py:271
+#: ./opengever/task/response_description.py:313
 msgid "transition_add_document"
 msgstr ""
 
 #. Default: "Subtask ${task} added by ${user}"
-#: ./opengever/task/response_description.py:254
+#: ./opengever/task/response_description.py:293
 msgid "transition_add_subtask"
+msgstr ""
+
+#. Default: "Task accepted"
+#: ./opengever/task/response_description.py:148
+msgid "transition_label_accept"
+msgstr ""
+
+#. Default: "Document added to Task"
+#: ./opengever/task/response_description.py:319
+msgid "transition_label_add_document"
+msgstr ""
+
+#. Default: "Subtask added to task"
+#: ./opengever/task/response_description.py:299
+msgid "transition_label_add_subtask"
+msgstr ""
+
+#. Default: "Forwarding assigned to Dossier"
+#: ./opengever/task/response_description.py:276
+msgid "transition_label_assign_to_dossier"
+msgstr ""
+
+#. Default: "Task cancelled"
+#: ./opengever/task/response_description.py:132
+msgid "transition_label_cancelled"
+msgstr ""
+
+#. Default: "Task closed"
+#: ./opengever/task/response_description.py:118
+msgid "transition_label_close"
 msgstr ""
 
 #. Default: "Created by ${user}"
@@ -757,23 +787,68 @@ msgstr ""
 msgid "transition_label_created"
 msgstr ""
 
+#. Default: "Task added"
+#: ./opengever/task/response_description.py:51
+msgid "transition_label_default"
+msgstr ""
+
+#. Default: "Task deadline modified"
+#: ./opengever/task/response_description.py:226
+msgid "transition_label_modify_deadline"
+msgstr ""
+
+#. Default: "Task reactivated"
+#: ./opengever/task/response_description.py:70
+msgid "transition_label_reactivate"
+msgstr ""
+
+#. Default: "Task reassigned"
+#: ./opengever/task/response_description.py:201
+msgid "transition_label_reassign"
+msgstr ""
+
+#. Default: "Forwarding refused"
+#: ./opengever/task/response_description.py:256
+msgid "transition_label_refuse"
+msgstr ""
+
+#. Default: "Task rejected"
+#: ./opengever/task/response_description.py:84
+msgid "transition_label_reject"
+msgstr ""
+
+#. Default: "Task reopened"
+#: ./opengever/task/response_description.py:163
+msgid "transition_label_reopen"
+msgstr ""
+
+#. Default: "Task resolved"
+#: ./opengever/task/response_description.py:100
+msgid "transition_label_resolve"
+msgstr ""
+
+#. Default: "Task revised"
+#: ./opengever/task/response_description.py:178
+msgid "transition_label_revise"
+msgstr ""
+
 #. Default: "Accepted by ${user}"
-#: ./opengever/task/response_description.py:129
+#: ./opengever/task/response_description.py:144
 msgid "transition_msg_accept"
 msgstr ""
 
 #. Default: "Assigned to dossier by ${user} successor=${successor}"
-#: ./opengever/task/response_description.py:235
+#: ./opengever/task/response_description.py:270
 msgid "transition_msg_assign_to_dossier"
 msgstr ""
 
 #. Default: "Cancelled by ${user}"
-#: ./opengever/task/response_description.py:116
+#: ./opengever/task/response_description.py:128
 msgid "transition_msg_cancel"
 msgstr ""
 
 #. Default: "Closed by ${user}"
-#: ./opengever/task/response_description.py:105
+#: ./opengever/task/response_description.py:114
 msgid "transition_msg_close"
 msgstr ""
 
@@ -783,42 +858,42 @@ msgid "transition_msg_default"
 msgstr ""
 
 #. Default: "Deadline modified from ${deadline_old} to ${deadline_new} by ${user}"
-#: ./opengever/task/response_description.py:191
+#: ./opengever/task/response_description.py:218
 msgid "transition_msg_modify_deadline"
 msgstr ""
 
 #. Default: "Reactivate by ${user}"
-#: ./opengever/task/response_description.py:65
+#: ./opengever/task/response_description.py:66
 msgid "transition_msg_reactivate"
 msgstr ""
 
 #. Default: "Reassigned from ${responsible_old} to ${responsible_new} by ${user}"
-#: ./opengever/task/response_description.py:169
+#: ./opengever/task/response_description.py:193
 msgid "transition_msg_reassign"
 msgstr ""
 
 #. Default: "Refused by ${user}"
-#: ./opengever/task/response_description.py:221
+#: ./opengever/task/response_description.py:252
 msgid "transition_msg_refuse"
 msgstr ""
 
 #. Default: "Rejected by ${user}"
-#: ./opengever/task/response_description.py:77
+#: ./opengever/task/response_description.py:80
 msgid "transition_msg_reject"
 msgstr ""
 
 #. Default: "Reopened by ${user}"
-#: ./opengever/task/response_description.py:141
+#: ./opengever/task/response_description.py:159
 msgid "transition_msg_reopen"
 msgstr ""
 
 #. Default: "Resolved by ${user}"
-#: ./opengever/task/response_description.py:90
+#: ./opengever/task/response_description.py:96
 msgid "transition_msg_resolve"
 msgstr ""
 
 #. Default: "Revised by ${user}"
-#: ./opengever/task/response_description.py:153
+#: ./opengever/task/response_description.py:174
 msgid "transition_msg_revise"
 msgstr ""
 
