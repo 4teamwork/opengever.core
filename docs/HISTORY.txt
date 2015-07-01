@@ -5,6 +5,10 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Fixed ComponentLookupError in CancelDocument view, when mails are selected,
+  show error statusmessage instead.
+  [phgross]
+
 - Show public_trial edit-form link also for documents inside tasks.
   [phgross]
 
