@@ -17,6 +17,7 @@ from z3c.form import button, field
 from z3c.form import validator
 from z3c.form.browser import radio
 from z3c.form.interfaces import INPUT_MODE
+from ZODB.POSException import ConflictError
 from zope import schema
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility, provideAdapter
@@ -74,7 +75,9 @@ def tryint(i):
     try:
         int(i)
         return True
-    except:
+    except ConflictError:
+        raise
+    except Exception:
         return False
 
 

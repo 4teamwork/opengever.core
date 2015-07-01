@@ -61,7 +61,7 @@ class IsPastingAllowedView(grok.View):
         # is then moved, and the restrictedTraverse fails)
         try:
             allowed = self.is_allowed()
-        except (ConflictError, KeyboardInterrupt, SystemExit):
+        except ConflictError:
             raise
         except Exception:
             pass

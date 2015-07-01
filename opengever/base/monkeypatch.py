@@ -17,6 +17,7 @@ For further details see:
 from AccessControl import ClassSecurityInfo
 from AccessControl.class_init import InitializeClass
 from Products.Five.browser import decode
+from ZODB.POSException import ConflictError
 from ZPublisher.HTTPRequest import FileUpload
 from ZPublisher.HTTPRequest import isCGI_NAMEs
 import logging
@@ -302,7 +303,9 @@ def _verifyObjectPaste(self, object, validate_src=1):
                 # clipboard.
                 try:
                     parent = aq_parent(aq_inner(object))
-                except:
+                except ConflictError:
+                    raise
+                except Exception:
                     parent = None
 
                 if not sm.validate(None, parent, None, object):
