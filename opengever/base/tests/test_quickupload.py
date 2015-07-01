@@ -16,7 +16,6 @@ class TestOGQuickupload(FunctionalTestCase):
     def test_get_mimetype(self):
         self.assertEqual('application/msword',
                          self.adapter._get_mimetype('.doc'))
-
         self.assertEqual('image/jpeg',
                          self.adapter._get_mimetype('.jpeg'))
 
@@ -28,26 +27,18 @@ class TestOGQuickupload(FunctionalTestCase):
         self.assertFalse(self.adapter.is_email_upload('test.doc'))
 
     def test_set_default_values(self):
-        result = self.adapter(filename='document.txt',
-                              title='',  # ignored by adapter
-                              description='Description',  # ignored by adapter
-                              content_type='text/plain',
-                              data='text',
-                              portal_type='opengever.document.document')
-        content = result['success']
+        content = create(Builder('quickuploaded_document')
+                         .within(self.dossier)
+                         .with_data('text'))
 
         self.assertEquals('document', content.Title())
         self.assertEquals('text', content.file.data)
         self.assertIsNone(content.description)
 
     def test_expect_one_journal_entry_after_upload(self):
-        result = self.adapter(filename='document.txt',
-                              title='Title of document',
-                              description='',
-                              content_type='text/plain',
-                              data='text',
-                              portal_type='opengever.document.document')
-        content = result['success']
+        content = create(Builder('quickuploaded_document')
+                         .within(self.dossier)
+                         .with_asset_data('text.txt'))
         history = JournalHistory(content, content.REQUEST)
 
         self.assertEquals(1,
@@ -55,13 +46,9 @@ class TestOGQuickupload(FunctionalTestCase):
                           'Expect exactly one journal entry after upload')
 
     def test_title_is_used_as_default_title_for_journal_entry(self):
-        result = self.adapter(filename='document.txt',
-                              title='',
-                              description='',
-                              content_type='text/plain',
-                              data='text',
-                              portal_type='opengever.document.document')
-        content = result['success']
+        content = create(Builder('quickuploaded_document')
+                         .within(self.dossier)
+                         .with_data('text'))
         history = JournalHistory(content, content.REQUEST)
 
         self.assertEquals(u'Document added: document',
