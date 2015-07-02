@@ -5,6 +5,9 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Add debug helpers to assist in debugging plone.protect issues.
+  [lgraf]
+
 - Improve exception handling.
   Remove bare excepts and only catch Exception when possible. Also make sure to
   always re-raise ConflictError.
