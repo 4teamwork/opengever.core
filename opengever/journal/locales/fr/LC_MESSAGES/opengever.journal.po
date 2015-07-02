@@ -27,7 +27,7 @@ msgstr "Modifier le"
 #. Default: "Attachments deleted: ${filenames}"
 #: ./opengever/journal/handlers.py:316
 msgid "label_attachments_deleted"
-msgstr "Fichiers attachés effacés: ${titles}"
+msgstr "Fichiers attachés effacés: ${filenames}"
 
 #. Default: "Comments"
 #: ./opengever/journal/tab.py:73

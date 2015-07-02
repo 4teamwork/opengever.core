@@ -27,7 +27,7 @@ msgstr "Geändert von"
 #. Default: "Attachments deleted: ${filenames}"
 #: ./opengever/journal/handlers.py:316
 msgid "label_attachments_deleted"
-msgstr "Attachments gelöscht: ${titles}"
+msgstr "Attachments gelöscht: ${filenames}"
 
 #. Default: "Comments"
 #: ./opengever/journal/tab.py:73

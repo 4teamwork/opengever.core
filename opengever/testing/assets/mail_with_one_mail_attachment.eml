@@ -1,0 +1,50 @@
+Return-Path: <foo@example.com>
+Received: from [1.2.3.4] (mail.example.com. [1.2.3.4])
+        by mx.example.com with ESMTPSA id ei8sm68862854wjd.32.2015.06.30.05.59.07
+        for <foo@example.com>
+        (version=TLSv1 cipher=ECDHE-RSA-RC4-SHA bits=128/128);
+        Tue, 30 Jun 2015 05:59:07 -0700 (PDT)
+From: Somebody <foo@example.com>
+Content-Type: multipart/mixed; boundary="Apple-Mail=_128924F8-3F55-4C77-A678-0691ABDF392C"
+Subject: =?utf-8?Q?=C3=84usseres_Testm=C3=A4il?=
+Message-Id: <53417074-8D58-4EFE-A94B-637822DB675D@example.com>
+Date: Tue, 30 Jun 2015 14:59:05 +0200
+To: Somebody <foo@example.com>
+Mime-Version: 1.0 (Mac OS X Mail 8.2 \(2098\))
+X-Mailer: Apple Mail (2.2098)
+
+
+--Apple-Mail=_128924F8-3F55-4C77-A678-0691ABDF392C
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain;
+	charset=utf-8
+
+=C3=84usseres Testm=C3=A4il hat ein M=C3=A4il Attachment:
+
+
+--Apple-Mail=_128924F8-3F55-4C77-A678-0691ABDF392C
+Content-Disposition: attachment;
+	filename*=utf-8''Inneres%20Testma%CC%88il%20ohne%20Attachments.eml
+Content-Type: message/rfc822;
+	name="=?utf-8?Q?Inneres_Testma=CC=88il_ohne_Attachments=2Eeml?="
+Content-Transfer-Encoding: binary
+
+Return-Path: <foo@example.com>
+Received: from [1.2.3.4] (mail.example.com. [1.2.3.4])
+        by mx.example.com with ESMTPSA id z9sm16953816wiv.9.2015.06.30.05.57.43
+        for <foo@example.com>
+        (version=TLSv1 cipher=ECDHE-RSA-RC4-SHA bits=128/128);
+        Tue, 30 Jun 2015 05:57:44 -0700 (PDT)
+From: Somebody <foo@example.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Subject: =?utf-8?Q?Inneres_Testm=C3=A4il_ohne_Attachments?=
+Message-Id: <04A8675A-22DC-47C2-AB6A-FF5B32F1748B@example.com>
+Date: Tue, 30 Jun 2015 14:57:43 +0200
+To: Somebody <foo@example.com>
+Mime-Version: 1.0 (Mac OS X Mail 8.2 \(2098\))
+X-Mailer: Apple Mail (2.2098)
+
+Testm=C3=A4il mit =C3=9Cmlauten!=
+
+--Apple-Mail=_128924F8-3F55-4C77-A678-0691ABDF392C--

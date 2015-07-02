@@ -6,11 +6,19 @@ from five import grok
 from ftw.mail import _ as ftw_mf
 from ftw.mail import utils
 from ftw.mail.mail import IMail
+from ftw.mail.utils import get_attachments
+from ftw.mail.utils import get_filename
+from ftw.mail.utils import remove_attachments
 from opengever.base import _ as base_mf
+from opengever.base.command import CreateDocumentCommand
+from opengever.base.command import CreateEmailCommand
 from opengever.base.model import create_session
 from opengever.document.base import BaseDocument
 from opengever.document.behaviors import metadata as ogmetadata
+from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.dossier import _
+from opengever.mail.events import AttachmentsDeleted
+from opengever.mail.interfaces import IAttachmentsDeletedEvent
 from opengever.ogds.models.user import User
 from plone.app.dexterity.behaviors import metadata
 from plone.autoform.interfaces import IFormFieldProvider
@@ -20,17 +28,28 @@ from plone.supermodel.interfaces import FIELDSETS_KEY
 from plone.supermodel.model import Fieldset
 from sqlalchemy import func
 from z3c.form.interfaces import DISPLAY_MODE
+from z3c.relationfield.relation import RelationValue
 from zope import schema
 from zope.component import getUtility
 from zope.component.hooks import getSite
+from zope.event import notify
 from zope.i18n import translate
 from zope.interface import Interface, alsoProvides
-from zope.lifecycleevent.interfaces import IObjectAddedEvent
-from zope.lifecycleevent.interfaces import IObjectCreatedEvent
+from zope.intid.interfaces import IIntIds
+from zope.lifecycleevent import Attributes
 from zope.lifecycleevent.interfaces import IObjectCopiedEvent
+from zope.lifecycleevent.interfaces import IObjectCreatedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 import email
+import os
 import re
+
+
+from plone.namedfile.interfaces import HAVE_BLOBS
+if HAVE_BLOBS:
+    from plone.namedfile import NamedBlobFile as NamedFile
+else:
+    from plone.namedfile import NamedFile
 
 
 IMail.setTaggedValue(FIELDSETS_KEY, [
@@ -88,6 +107,145 @@ class OGMail(BaseDocument):
                 data = data.replace(temp_msg['Subject'], fixed_subject)
             return email.message_from_string(data)
         return MIMEText('')
+
+    def get_attachments(self):
+        """ Returns a list of dicts describing the attachements.
+
+        Only attachments with a filename are returned.
+        """
+
+        return get_attachments(self.msg)
+
+    def has_attachments(self):
+        """ Return whether this mail has attachments."""
+
+        return len(self.get_attachments()) > 0
+
+    def extract_attachments_into_parent_dossier(self, positions):
+        """Extract all specified attachments into the mails parent dossier.
+
+        Also add a reference from all attached documents (*not* mails) to self.
+
+        Positions must be a list of integer attachment positions. The position
+        can be obtained from the attachment description returned by
+        `get_attachments`.
+        """
+
+        docs = []
+        for position in positions:
+            docs.append(self.extract_attachment_into_parent_dossier(position))
+        return docs
+
+    def extract_attachment_into_parent_dossier(self, position):
+        """Extract one specified attachment into the mails parent dossier.
+
+        Also add a reference from all attached documents (*not* mails) to self.
+
+        Position must be an integer attachment positions. The position
+        can be obtained from the attachment description returned by
+        `get_attachments`.
+        """
+
+        dossier = self.get_parent_dossier()
+
+        data, content_type, filename = self._get_attachment_data(position)
+        title = os.path.splitext(filename)[0]
+
+        if content_type == 'message/rfc822':
+            doc = CreateEmailCommand(
+                dossier, filename, data,
+                title=title,
+                content_type=content_type,
+                digitally_available=True).execute()
+        else:
+            doc = CreateDocumentCommand(
+                dossier, filename, data,
+                title=title,
+                content_type=content_type,
+                digitally_available=True).execute()
+
+            # add a reference from the attachment to the mail
+            intids = getUtility(IIntIds)
+            iid = intids.getId(self)
+
+            IRelatedDocuments(doc).relatedItems = [RelationValue(iid)]
+            doc.reindexObject()
+
+        return doc
+
+    def delete_all_attachments(self):
+        """Delete all of mail's attachments.
+
+        The attachments will be removed from the attached message.
+        """
+
+        self._delete_attachments(self.get_attachments())
+
+    def delete_attachments(self, positions):
+        """Delete all specified attachments from the mails message.
+
+        Positions must be a list of integer attachment positions. The position
+        can be obtained from the attachment description returned by
+        `get_attachments`.
+        """
+
+        attachments = [attachment for attachment in self.get_attachments()
+                       if attachment.get('position') in positions]
+        self._delete_attachments(attachments)
+
+    def _delete_attachments(self, attachments):
+        if not attachments:
+            return
+
+        attachment_names = [
+            attachment.get('filename', '[no filename]').decode('utf-8')
+            for attachment in attachments]
+        positions = [attachment['position'] for attachment in attachments]
+
+        # Flag the `message` attribute as having changed
+        desc = Attributes(IAttachmentsDeletedEvent, "message")
+        notify(AttachmentsDeleted(self, attachment_names, desc))
+
+        # set the new message file
+        msg = remove_attachments(self.msg, positions)
+        self.message = NamedFile(
+            data=msg.as_string(),
+            contentType=self.message.contentType,
+            filename=self.message.filename)
+
+    def _get_attachment_data(self, pos):
+        """Return a tuple: file-data, content-type and filename extracted from
+        the attachment at position `pos`.
+        """
+
+        # get attachment at position pos
+        attachment = None
+        for i, part in enumerate(self.msg.walk()):
+            if i == pos:
+                attachment = part
+                continue
+
+        if not attachment:
+            return None, '', ''
+
+        # decode when it's necessary
+        filename = get_filename(attachment)
+        if not isinstance(filename, unicode):
+            filename = filename.decode('utf-8')
+        # remove line breaks from the filename
+        filename = re.sub('\s{1,}', ' ', filename)
+
+        content_type = attachment.get_content_type()
+        if content_type == 'message/rfc822':
+            nested_messages = attachment.get_payload()
+            assert len(nested_messages) == 1, (
+                'we expect that attachments with messages only contain one '
+                'message per attachment.')
+            data = nested_messages[0].as_string()
+        else:
+            data = attachment.get_payload(decode=1)
+
+        return data, content_type, filename
 
     def related_items(self):
         """Mail does not support relatedItems"""
