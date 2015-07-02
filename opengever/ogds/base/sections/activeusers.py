@@ -65,7 +65,7 @@ class ActiveUsersSection(object):
             except OperationalError, e:
                 transaction.abort()
                 self.logger.warn("SQL operational error: %s" % e)
-            except:
+            except Exception:
                 transaction.abort()
                 raise
 

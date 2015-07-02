@@ -3,6 +3,7 @@ from ftw.mail.attachment import AttachmentView as FtwAtachmentView
 from opengever.base.behaviors.utils import set_attachment_content_disposition
 from Products.CMFCore.utils import getToolByName
 from zExceptions import NotFound
+from ZODB.POSException import ConflictError
 import email
 
 
@@ -54,7 +55,9 @@ class AttachmentView(FtwAtachmentView):
             # therefore we first try to encode the filename in iso-8859-1
             try:
                 filename = filename.encode('iso-8859-1')
-            except:
+            except ConflictError:
+                raise
+            except Exception:
                 filename = filename.encode('utf-8', 'ignore')
 
             self.request.response.setHeader('Content-Type', content_type)

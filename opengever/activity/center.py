@@ -165,7 +165,7 @@ class PloneNotificationCenter(NotificationCenter):
 
         except ConflictError:
             raise
-        
+
         except Exception as exc:
             msg = _(u'msg_error_not_notified',
                     default=u'A problem has occurred during the notification'

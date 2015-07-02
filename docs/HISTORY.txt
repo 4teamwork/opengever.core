@@ -5,6 +5,11 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Improve exception handling.
+  Remove bare excepts and only catch Exception when possible. Also make sure to
+  always re-raise ConflictError.
+  [deiferni]
+
 - Add support for extracting nested mails.
   Also refactor extraction of attachments from mails.
   [deiferni]

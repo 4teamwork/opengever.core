@@ -41,7 +41,7 @@ class DefaultDocumentIndexer(grok.Adapter):
                     mimetype=self.context.file.contentType,
                     filename=filename,
                     object=self.context.file._blob)
-            except (ConflictError, KeyboardInterrupt):
+            except ConflictError:
                 raise
             except Exception, e:
                 logger.warn("Transforming document '%s' to 'text/plain'"
