@@ -459,5 +459,4 @@ msgstr "Avec commentaire"
 #: ./opengever/document/profiles/default/actions.xml
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "without comment"
-msgstr ""
-
+msgstr "Sans commentaire"
