@@ -4,7 +4,9 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.testing import FunctionalTestCase
+from plone import api
 from plone.app.testing import TEST_USER_ID
+import transaction
 
 
 class TestTaskOverview(FunctionalTestCase):
@@ -226,3 +228,18 @@ class TestTaskOverview(FunctionalTestCase):
     #     self.assertEquals(
     #         'Client2 / test_user_1_ (test_user_1_)',
     #         browser.css('.issuer').first.text)
+
+    @browsing
+    def test_state_is_translated_state_label(self, browser):
+        self.task = create(Builder('task').in_state('task-state-tested-and-closed'))
+
+        # set french as preferred language
+        lang_tool = api.portal.get_tool('portal_languages')
+        lang_tool.addSupportedLanguage('fr-ch')
+        lang_tool.setDefaultLanguage('fr-ch')
+        transaction.commit()
+
+        browser.login().open(self.task, view='tabbedview_view-overview')
+
+        self.assertIn(['Etat', u'Ferm\xe9'],
+                      browser.css('table.listing').first.lists())
