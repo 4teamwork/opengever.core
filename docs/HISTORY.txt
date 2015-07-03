@@ -5,6 +5,9 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Fixed UnicodeEncodeError in state_label getter of tasks.
+  [phgross]
+
 - Add debug helpers to assist in debugging plone.protect issues.
   [lgraf]
 

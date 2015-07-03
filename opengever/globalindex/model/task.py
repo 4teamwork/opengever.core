@@ -196,7 +196,7 @@ class Task(Base):
         return org_unit.prefix_label(actor.get_link())
 
     def get_state_label(self):
-        return "<span class=wf-{}>{}</span>".format(
+        return u"<span class=wf-{}>{}</span>".format(
             self.review_state,
             translate(self.review_state, domain='plone',
                       context=api.portal.get().REQUEST))
