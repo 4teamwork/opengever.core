@@ -298,12 +298,14 @@
                                                          class string:state-${item/review_state};
                                                          title item/Title"
                                          tal:content="item/CroppedTitle" />
-                                      <span href="#" class="containing_dossier" tal:content="item/containing_dossier">
-                                        Containing dossier
-                                      </span>
 
                                     </dt>
                                     <dd>
+                                      <a href="#" class="main_dossier" tal:content="item/containing_dossier"
+                                         tal:attributes="href item/main_dossier_link">
+                                        Main dossier
+                                      </a>
+
                                       <div class="description" tal:content="item/CroppedDescription">
                                         Cropped description
                                       </div>
