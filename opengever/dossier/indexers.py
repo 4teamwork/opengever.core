@@ -5,10 +5,10 @@ from five import grok
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.utils import get_main_dossier
 from plone.dexterity.interfaces import IDexterityContent
 from plone.indexer import indexer
 from Products.CMFCore.interfaces import ISiteRoot
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from zope.component import getAdapter
 from zope.component import getUtility
 
@@ -52,16 +52,14 @@ grok.global_adapter(isSubdossierIndexer, name="is_subdossier")
 
 
 @indexer(IDexterityContent)
-def top_dossier_title(obj):
-    """return the tilte of the top containing dossier."""
-    dossier_title = ''
-    while not IPloneSiteRoot.providedBy(obj):
-        if IDossierMarker.providedBy(
-            obj) or obj.portal_type == 'opengever.inbox.inbox':
-            dossier_title = obj.Title()
-        obj = aq_parent(aq_inner(obj))
-    return dossier_title
-grok.global_adapter(top_dossier_title, name="containing_dossier")
+def main_dossier_title(obj):
+    """Return the title of the main dossier."""
+
+    dossier = get_main_dossier(obj)
+    if not dossier:
+        return None
+    return dossier.Title()
+grok.global_adapter(main_dossier_title, name="containing_dossier")
 
 
 @indexer(IDexterityContent)
