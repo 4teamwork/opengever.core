@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.testing import FunctionalTestCase
 from zope.interface import alsoProvides
@@ -28,3 +29,11 @@ class TestOpengeverSearch(FunctionalTestCase):
              'opengever.document.document', 'opengever.inbox.forwarding',
              'opengever.dossier.businesscasedossier'],
             self.portal.unrestrictedTraverse('@@search').types_list())
+
+    @browsing
+    def test_batch_size_is_set_to_25(self, browser):
+        for i in range(0, 30):
+            create(Builder('dossier').titled(u'Test'))
+
+        browser.login().open(self.portal, view='search')
+        self.assertEqual(25, len(browser.css('dl.searchResults dt')))

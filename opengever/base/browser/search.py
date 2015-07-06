@@ -25,6 +25,14 @@ class OpengeverSearch(Search):
         catalog = api.portal.get_tool('portal_catalog')
         self.valid_keys = self.valid_keys + tuple(catalog.indexes())
 
+    def results(self, query=None, batch=True, b_size=10, b_start=0):
+        """Overwrite this method to adjust the default batch size from
+        10 to 25.
+        """
+        b_size = 25
+        return super(OpengeverSearch, self).results(
+            query=query, batch=batch, b_size=b_size, b_start=b_start)
+
     def breadcrumbs(self, item):
         obj = item.getObject()
         view = getMultiAdapter((obj, self.request), name='breadcrumbs_view')

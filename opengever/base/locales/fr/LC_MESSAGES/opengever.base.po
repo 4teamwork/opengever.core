@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-06-10 10:11+0000\n"
+"POT-Creation-Date: 2015-07-06 08:25+0000\n"
 "PO-Revision-Date: 2012-08-30 15:34+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -114,7 +114,7 @@ msgstr ""
 msgid "help_classification"
 msgstr "Classification permettant la protection des documents contre la consultation non-autorisée "
 
-#: ./opengever/base/behaviors/creator.py:21
+#: ./opengever/base/behaviors/creator.py:19
 msgid "help_creators"
 msgstr ""
 
@@ -204,7 +204,7 @@ msgid "label_created"
 msgstr "Créé le"
 
 #. Default: "Creators"
-#: ./opengever/base/behaviors/creator.py:20
+#: ./opengever/base/behaviors/creator.py:18
 msgid "label_creators"
 msgstr "Auteurs"
 
@@ -233,13 +233,18 @@ msgstr "Date de proposition (des documents)"
 msgid "label_description"
 msgstr "Description"
 
+#. Default: "Dossier:"
+#: ./opengever/base/browser/search.pt:309
+msgid "label_dossier"
+msgstr ""
+
 #. Default: "History"
 #: ./opengever/base/viewlets/history.pt:12
 msgid "label_history"
 msgstr "Versions"
 
 #. Default: "Initial version (document copied)"
-#: ./opengever/base/subscribers.py:26
+#: ./opengever/base/subscribers.py:28
 msgid "label_initial_version_copied"
 msgstr "Version initiale (documents copiés)"
 
@@ -282,6 +287,11 @@ msgstr "Délai de conservation"
 #: ./opengever/base/behaviors/lifecycle.py:49
 msgid "label_retention_period_annotation"
 msgstr "Commentaire concernant le délai de protection"
+
+#. Default: "Search"
+#: ./opengever/base/browser/search.pt:39
+msgid "label_search"
+msgstr "Recherche"
 
 #. Default: "Title"
 #: ./opengever/base/behaviors/base.py:24
@@ -349,16 +359,16 @@ msgid "public"
 msgstr "Public"
 
 #. Default: "Did you not find what you were looking for? Try the ${advanced_search} to refine your search."
-#: ./opengever/base/browser/search.pt:60
+#: ./opengever/base/browser/search.pt:63
 msgid "search_results_advanced"
 msgstr "Vous n'avez pas trouvé ce que vous avez cherché? La ${advanced_search} vous offre des possibilités de recherche précises"
 
 #. Default: "Advanced Search"
-#: ./opengever/base/browser/search.pt:61
+#: ./opengever/base/browser/search.pt:64
 msgid "search_results_advanced_link"
 msgstr "Recherche avancée"
 
-#: ./opengever/base/browser/templates/gever-macros.pt:70
+#: ./opengever/base/browser/templates/gever-macros.pt:92
 msgid "show all"
 msgstr "Tout afficher"
 
@@ -376,4 +386,3 @@ msgstr "Non contrôlé"
 #: opengever/repository/classification.py
 msgid "unprotected"
 msgstr "Non classé"
-

@@ -36,6 +36,9 @@ class OpengeverCatalogContentListingObject(CoreListingObject):
 
         return self._crop_text(self._brain.containing_dossier, 200)
 
+    def main_dossier_link(self):
+        return '{}/redirect_to_main_dossier'.format(self.getURL())
+
     def CroppedTitle(self):
         """Returns the title cropped to 200 characters"""
 

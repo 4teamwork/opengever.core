@@ -5,6 +5,9 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Improve the representation of the searchresults and the searchform.
+  [phgross]
+
 - Fixed UnicodeEncodeError in state_label getter of tasks.
   [phgross]
 
