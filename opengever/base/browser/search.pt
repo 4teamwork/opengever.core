@@ -301,10 +301,14 @@
 
                                     </dt>
                                     <dd>
-                                      <a href="#" class="main_dossier" tal:content="item/containing_dossier"
-                                         tal:attributes="href item/main_dossier_link">
-                                        Main dossier
-                                      </a>
+                                      <div class="main_dossier">
+                                        <span i18n:domain="opengever.base" i18n:translate="label_dossier">Dossier:</span>
+                                        <a href="#" tal:content="item/containing_dossier"
+                                           tal:attributes="href item/main_dossier_link">
+                                          Main dossier link
+                                        </a>
+
+                                      </div>
 
                                       <div class="description" tal:content="item/CroppedDescription">
                                         Cropped description
