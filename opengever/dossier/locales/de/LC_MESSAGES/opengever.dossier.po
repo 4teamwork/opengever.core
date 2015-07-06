@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2015-06-26 08:35+0000\n"
+"POT-Creation-Date: 2015-07-06 06:40+0000\n"
 "PO-Revision-Date: 2015-01-22 17:49+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -570,6 +570,11 @@ msgstr "Titel"
 msgid "label_workflow_state"
 msgstr "Status"
 
+#. Default: "The object `${title}` is not stored inside a dossier."
+#: ./opengever/dossier/browser/redirect_to_maindossier.py:16
+msgid "msg_main_dossier_not_found"
+msgstr "Das Object `${title}` ist nicht in einem Dossier abgelegt."
+
 #: ./opengever/dossier/resolve.py:11
 msgid "not all documents and tasks are stored in a subdossier"
 msgstr "Es sind nicht alle Dokumente und Aufgaben in Subdossiers abgelegt."
@@ -633,4 +638,3 @@ msgstr "abgelaufen"
 #: ./opengever/dossier/behaviors/participation.py:197
 msgid "warning_no_participants_selected"
 msgstr "Sie haben keine Beteiligungen ausgewählt."
-

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-06-10 10:11+0000\n"
+"POT-Creation-Date: 2015-07-06 08:25+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -114,7 +114,7 @@ msgstr ""
 msgid "help_classification"
 msgstr ""
 
-#: ./opengever/base/behaviors/creator.py:21
+#: ./opengever/base/behaviors/creator.py:19
 msgid "help_creators"
 msgstr ""
 
@@ -204,7 +204,7 @@ msgid "label_created"
 msgstr ""
 
 #. Default: "Creators"
-#: ./opengever/base/behaviors/creator.py:20
+#: ./opengever/base/behaviors/creator.py:18
 msgid "label_creators"
 msgstr ""
 
@@ -233,13 +233,18 @@ msgstr ""
 msgid "label_description"
 msgstr ""
 
+#. Default: "Dossier:"
+#: ./opengever/base/browser/search.pt:309
+msgid "label_dossier"
+msgstr ""
+
 #. Default: "History"
 #: ./opengever/base/viewlets/history.pt:12
 msgid "label_history"
 msgstr ""
 
 #. Default: "Initial version (document copied)"
-#: ./opengever/base/subscribers.py:26
+#: ./opengever/base/subscribers.py:28
 msgid "label_initial_version_copied"
 msgstr ""
 
@@ -281,6 +286,11 @@ msgstr ""
 #. Default: "retentionPeriodAnnotation"
 #: ./opengever/base/behaviors/lifecycle.py:49
 msgid "label_retention_period_annotation"
+msgstr ""
+
+#. Default: "Search"
+#: ./opengever/base/browser/search.pt:39
+msgid "label_search"
 msgstr ""
 
 #. Default: "Title"
@@ -348,16 +358,16 @@ msgid "public"
 msgstr ""
 
 #. Default: "Did you not find what you were looking for? Try the ${advanced_search} to refine your search."
-#: ./opengever/base/browser/search.pt:60
+#: ./opengever/base/browser/search.pt:63
 msgid "search_results_advanced"
 msgstr ""
 
 #. Default: "Advanced Search"
-#: ./opengever/base/browser/search.pt:61
+#: ./opengever/base/browser/search.pt:64
 msgid "search_results_advanced_link"
 msgstr ""
 
-#: ./opengever/base/browser/templates/gever-macros.pt:70
+#: ./opengever/base/browser/templates/gever-macros.pt:92
 msgid "show all"
 msgstr ""
 

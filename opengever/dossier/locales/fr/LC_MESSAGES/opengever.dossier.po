@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-06-26 08:35+0000\n"
+"POT-Creation-Date: 2015-07-06 06:40+0000\n"
 "PO-Revision-Date: 2012-09-10 10:17+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -566,6 +566,11 @@ msgstr "Titre"
 msgid "label_workflow_state"
 msgstr "Etat"
 
+#. Default: "The object `${title}` is not stored inside a dossier."
+#: ./opengever/dossier/browser/redirect_to_maindossier.py:16
+msgid "msg_main_dossier_not_found"
+msgstr ""
+
 #: ./opengever/dossier/resolve.py:11
 msgid "not all documents and tasks are stored in a subdossier"
 msgstr "Pas de document ni de tâche classés dans le sous-dossier"
@@ -629,4 +634,3 @@ msgstr "Périmé"
 #: ./opengever/dossier/behaviors/participation.py:197
 msgid "warning_no_participants_selected"
 msgstr "Vous n'avez sélectionné aucune participation"
-
