@@ -10,6 +10,7 @@ from sqlalchemy import String
 from sqlalchemy import Text
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
+from sqlalchemy_i18n import Translatable, translation_base
 import datetime
 import pytz
 
@@ -23,19 +24,19 @@ class ActivityQuery(BaseQuery):
     pass
 
 
-class Activity(Base):
+class Activity(Base, Translatable):
 
     query_cls = ActivityQuery
 
     __tablename__ = 'activities'
+    __translatable__ = {'locales': ['de', 'fr']}
 
-    activity_id = Column('id', Integer, Sequence("activities_id_seq"),
+    locale = 'de'
+
+    id = Column('id', Integer, Sequence("activities_id_seq"),
                          primary_key=True)
     kind = Column(String(255), nullable=False)
     actor_id = Column(String(USER_ID_LENGTH), nullable=False)
-    title = Column(String(512), nullable=False)
-    summary = Column(Text, nullable=False)
-    description = Column(Text)
     created = Column(UTCDateTime(timezone=True), default=utcnow_tz_aware)
     resource_id = Column(Integer, ForeignKey('resources.id'), nullable=False)
     resource = relationship("Resource", backref="activities")
@@ -59,3 +60,13 @@ class Activity(Base):
 
     def is_current_user(self, watcher):
         return watcher.user_id == self.actor_id
+
+
+class ActivityTranslation(translation_base(Activity)):
+
+    __tablename__ = 'activities_translation'
+
+    title = Column(String(512), nullable=False)
+    label = Column(Text, nullable=False)
+    summary = Column(Text, nullable=False)
+    description = Column(Text)
