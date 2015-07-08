@@ -1,14 +1,27 @@
 from opengever.ogds.models import BASE
 from opengever.ogds.models.declarative import query_base
+from plone import api
 from sqlalchemy import types
+from sqlalchemy_i18n import make_translatable
 from z3c.saconfig import named_scoped_session
 import pytz
+import sqlalchemy_utils
+
+
+def get_locale():
+    ltool = api.portal.get_tool('portal_languages')
+    language_code = ltool.getPreferredLanguage()
+
+    return language_code.split('-')[0]
 
 
 Session = named_scoped_session('opengever')
 
 BASE.session = Session
 Base = query_base(Session)
+
+make_translatable(options={'locales': ['de', 'fr']})
+sqlalchemy_utils.i18n.get_locale = get_locale
 
 
 def get_tables(table_names):
