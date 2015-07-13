@@ -5,6 +5,10 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Fix invalid variable name in policy template.
+  (Reference to setup.setup....)
+  [lgraf]
+
 - Improve the representation of the searchresults and the searchform.
   [phgross]
 
