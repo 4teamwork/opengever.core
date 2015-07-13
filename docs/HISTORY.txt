@@ -8,9 +8,6 @@ Changelog
 - Improve the representation of the searchresults and the searchform.
   [phgross]
 
-- Fixed UnicodeEncodeError in state_label getter of tasks.
-  [phgross]
-
 - Add debug helpers to assist in debugging plone.protect issues.
   [lgraf]
 
@@ -120,10 +117,6 @@ Changelog
 - Remove unused copy-related-documents-to-inbox view.
   [deiferni]
 
-- Fix Inbox Overview: Fix error while rendering overview. Also refactor
-  boxes for inbox/dossier overview, introduce generic macro and mixin, remove inheritance.
-  [deiferni]
-
 - Task overview: Hide responsible info in subtask, maintask, successor and predecessor
   listing.
   [phgross]
@@ -144,6 +137,17 @@ Changelog
     (Includes regression test)
 
   [lgraf, phgross]
+
+
+4.4.2 (2015-07-08)
+------------------
+
+- Fixed UnicodeEncodeError in state_label getter of tasks.
+  [phgross]
+
+- Fix Inbox Overview: Fix error while rendering overview. Also refactor
+  boxes for inbox/dossier overview, introduce generic macro and mixin, remove inheritance.
+  [deiferni]
 
 
 4.4.1 (2015-06-09)
