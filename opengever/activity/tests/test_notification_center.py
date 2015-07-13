@@ -148,8 +148,14 @@ class TestAddActivity(ActivityTestCase):
 
     def test_add_resource_if_not_exists(self):
         self.center.add_activity(
-            Oguid('fd', '123'), 'task_added', 'Kennzahlen 2014',
-            'Task bla added', 'hugo.boss')
+            Oguid('fd', '123'),
+            'task_added',
+            {'en': 'Kennzahlen 2014 erfassen'},
+            {'en': 'Task added'},
+            {'en': 'Task bla added by Hugo'},
+            'hugo.boss',
+            {'en': None})
+
 
         resource = self.center.fetch_resource(Oguid('fd', '123'))
         self.assertEquals('fd', resource.admin_unit_id)
@@ -162,11 +168,14 @@ class TestAddActivity(ActivityTestCase):
         resource_a = create(Builder('resource').oguid('fd:123')
                             .watchers([hugo, peter]))
 
-        activity = self.center.add_activity(Oguid('fd', '123'),
-                                             'TASK_ADDED',
-                                             'Kennzahlen 2014',
-                                             'Task bla added',
-                                             'hugo.boss')
+        activity = self.center.add_activity(
+            Oguid('fd', '123'),
+            'TASK_ADDED',
+            {'en': 'Kennzahlen 2014 erfassen'},
+            {'en': 'Task bla added'},
+            {'en': 'Task bla added by Hugo'},
+            'hugo.boss',
+            {'en': None})
 
         notification = peter.notifications[0]
         self.assertEquals(activity, notification.activity)
@@ -184,9 +193,15 @@ class TestAddActivity(ActivityTestCase):
 
         create(Builder('resource').oguid('fd:123').watchers([hugo, peter]))
 
-        self.center.add_activity(Oguid('fd', '123'), 'TASK_ADDED',
-                                 'Kennzahlen 2014', 'Task bla added',
-                                 'peter')
+        self.center.add_activity(
+            Oguid('fd', '123'),
+            'TASK_ADDED',
+            {'en': 'Kennzahlen 2014 erfassen'},
+            {'en': 'Task accepted'},
+            {'en': 'Task bla added by Peter'},
+            'peter',
+            {'en': None})
+
 
         self.assertEquals(1, len(hugo.notifications))
         self.assertEquals(0, len(peter.notifications))
@@ -213,17 +228,39 @@ class TestNotificationHandling(ActivityTestCase):
                                  .watchers([self.peter]))
 
         self.activity_1 = self.center.add_activity(
-            Oguid('fd', '123'), 'task-added', 'Kennzahlen 2014 erfassen',
-            'Task bla added', 'hugo.boss')
+            Oguid('fd', '123'),
+            'task-added',
+            {'en': 'Kennzahlen 2014 erfassen'},
+            {'en': 'Task added'},
+            {'en': 'Task bla added by Peter'},
+            'hugo.boss',
+            {'en': None})
         self.activity_2 = self.center.add_activity(
-            Oguid('fd', '123'), 'task-transition-open-in-progress',
-            'Kennzahlen 2015 erfassen', 'Task bla accepted', 'peter.mueller')
+            Oguid('fd', '123'),
+            'task-transition-open-in-progress',
+            {'en': 'Kennzahlen 2015 erfassen'},
+            {'en': 'Task accepted'},
+            {'en': 'Task bla accepted by Peter'},
+            'peter.mueller',
+            {'en': None})
+
         self.activity_3 = self.center.add_activity(
-            Oguid('fd', '456'), 'task-added', 'Besprechung Gesuch',
-            'Task foo added', 'peter.mueller')
+            Oguid('fd', '456'),
+            'task-added',
+            {'en': 'Besprechung Gesuch'},
+            {'en': 'Task added'},
+            {'en': 'Task for added by Peter'},
+            'peter.mueller',
+            {'en': None})
+
         self.activity_4 = self.center.add_activity(
-            Oguid('fd', '789'), 'task-added', 'Vorbereitung Besprechung',
-            'Task Test added', 'franz.meier')
+            Oguid('fd', '789'),
+            'task-added',
+            {'en': 'Vorbereitung Besprechung'},
+            {'en': 'Task added'},
+            {'en': 'Task bla accepted by Franz'},
+            'franz.meier',
+            {'en': None})
 
     def test_get_users_notifications_lists_only_users_notifications(self):
         peters_notifications = self.center.get_users_notifications('peter')
@@ -297,7 +334,7 @@ class TestNotificationHandling(ActivityTestCase):
 
     def test_list_notifications_with_text_filter_on_kind(self):
         notifications = self.center.list_notifications(
-            userid='peter', sort_on='kind', filters=['task', 'added'])
+            userid='peter', sort_on='kind', filters=['Task', 'added'])
 
         self.assertEquals(
             ['task-added', 'task-added'],
@@ -338,19 +375,37 @@ class TestDispatchers(ActivityTestCase):
                          .having(kind='task-added',
                                  mail_notification=False))
         self.center.add_activity(
-            Oguid('fd', '123'), 'task-added',
-            'Kennzahlen 2014', 'Task bla added', 'hugo.boss')
+            Oguid('fd', '123'),
+            'task-added',
+            {'en': 'Kennzahlen 2014 erfassen'},
+            {'en': 'Task added'},
+            {'en': 'Task bla accepted by Peter'},
+            'hugo.boss',
+            {'en': None})
+
         self.assertEquals(0, len(self.dispatcher.notified))
 
         setting.mail_notification = True
         self.center.add_activity(
-            Oguid('fd', '123'), 'task-added',
-            'Kennzahlen 2014', 'Task bla added', 'hugo.boss')
+            Oguid('fd', '123'),
+            'task-added',
+            {'en': 'Kennzahlen 2014 erfassen'},
+            {'en': 'Task added'},
+            {'en': 'Task bla accepted by Peter'},
+            'hugo.boss',
+            {'en': None})
+
         self.assertEquals(2, len(self.dispatcher.notified))
 
     def test_if_setting_for_kind_does_not_exist_dispatcher_is_ignored(self):
         self.center.add_activity(
-            Oguid('fd', '123'), 'task-added',
-            'Kennzahlen 2014', 'Task bla added', 'hugo.boss')
+            Oguid('fd', '123'),
+            'task-added',
+            {'en': 'Kennzahlen 2014 erfassen'},
+            {'en': 'Task added'},
+            {'en': 'Task bla accepted by Peter'},
+            'hugo.boss',
+            {'en': None})
+
 
         self.assertEquals(0, len(self.dispatcher.notified))

@@ -29,7 +29,7 @@ class Activity(Base, Translatable):
     query_cls = ActivityQuery
 
     __tablename__ = 'activities'
-    __translatable__ = {'locales': ['de', 'fr']}
+    __translatable__ = {'locales': ['de', 'fr', 'en']}
 
     locale = 'de'
 

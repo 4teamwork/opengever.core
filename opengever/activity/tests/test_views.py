@@ -24,12 +24,23 @@ class TestNotificationView(FunctionalTestCase):
                                  .watchers([self.test_user]))
 
         self.activity_1 = self.center.add_activity(
-            Oguid('fd', '123'), 'task-added', 'Kennzahlen 2014 erfassen',
-            'Task bla added', 'hugo.boss')
+            Oguid('fd', '123'),
+            'task-added',
+            {'en': 'Kennzahlen 2014 erfassen'},
+            {'en': 'Task added'},
+            {'en': 'Task bla added by Hugo'},
+            'hugo.boss',
+            {'en': None})
+
 
         self.activity_2 = self.center.add_activity(
-            Oguid('fd', '123'), 'task-transition-open-in-progress',
-            'Kennzahlen 2014 erfassen', 'Task bla added', 'hugo.boss')
+            Oguid('fd', '123'),
+            'task-transition-open-in-progress',
+            {'en': 'Kennzahlen 2014 erfassen'},
+            {'en': 'Task accepted'},
+            {'en': 'Task bla accepted'},
+            'hugo.boss',
+            {'en': None})
 
         self.notifications = self.center.get_users_notifications(TEST_USER_ID)
 
