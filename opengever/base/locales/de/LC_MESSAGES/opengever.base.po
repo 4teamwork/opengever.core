@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-07-06 08:25+0000\n"
+"POT-Creation-Date: 2015-07-10 12:43+0000\n"
 "PO-Revision-Date: 2014-09-04 01:03+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -51,16 +51,6 @@ msgstr "Archivwürdig"
 #: opengever/repository/classification.py
 msgid "archival worthy with sampling"
 msgstr "Sampling"
-
-#. Default: "PDF"
-#: ./opengever/base/viewlets/history.pt:44
-msgid "button_pdf"
-msgstr "PDF Vorschau"
-
-#. Default: "Show"
-#: ./opengever/base/viewlets/history.pt:40
-msgid "button_show"
-msgstr "Anzeigen"
 
 #. Default: "classified"
 #: opengever/repository/classification.py
@@ -161,11 +151,6 @@ msgstr "Zeitraum zwischen dem jüngsten Dokumentdatum eines in einem Dossier ent
 msgid "help_retention_period_annotation"
 msgstr ""
 
-#. Default: "Actor"
-#: ./opengever/base/viewlets/history.pt:17
-msgid "label_actor"
-msgstr "Geändert von"
-
 #. Default: "-- Already removed object --"
 #: ./opengever/base/adapters.py:192
 msgid "label_already_removed"
@@ -191,11 +176,6 @@ msgstr "Öffentlichkeitsstatus ändern"
 msgid "label_classification"
 msgstr "Klassifikation"
 
-#. Default: "Comment"
-#: ./opengever/base/viewlets/history.pt:19
-msgid "label_comment"
-msgstr "Kommentar"
-
 #. Default: "Confirm action"
 #: ./opengever/base/browser/confirm.pt:41
 msgid "label_confirm_action"
@@ -216,11 +196,6 @@ msgstr "Autoren"
 msgid "label_custody_period"
 msgstr "Archivische Schutzfrist (Jahre)"
 
-#. Default: "Date"
-#: ./opengever/base/viewlets/history.pt:18
-msgid "label_date"
-msgstr "Datum"
-
 #. Default: "Date of cassation"
 #: ./opengever/base/behaviors/lifecycle.py:82
 msgid "label_dateofcassation"
@@ -240,11 +215,6 @@ msgstr "Beschreibung"
 #: ./opengever/base/browser/search.pt:309
 msgid "label_dossier"
 msgstr "Dossier:"
-
-#. Default: "History"
-#: ./opengever/base/viewlets/history.pt:12
-msgid "label_history"
-msgstr "Versionen"
 
 #. Default: "Initial version (document copied)"
 #: ./opengever/base/subscribers.py:28
@@ -276,11 +246,6 @@ msgstr ""
 msgid "label_public_trial_statement"
 msgstr "Bearbeitungsinformation"
 
-#. Default: "reset"
-#: ./opengever/base/viewlets/history.pt:48
-msgid "label_reset"
-msgstr "Zurücksetzen"
-
 #. Default: "Retention period (years)"
 #: ./opengever/base/behaviors/lifecycle.py:41
 msgid "label_retention_period"
@@ -300,11 +265,6 @@ msgstr "Suche"
 #: ./opengever/base/behaviors/base.py:24
 msgid "label_title"
 msgstr "Titel"
-
-#. Default: "Version"
-#: ./opengever/base/viewlets/history.pt:16
-msgid "label_version"
-msgstr "Version"
 
 #. Default: "limited-public"
 #: opengever/repository/classification.py
@@ -390,3 +350,4 @@ msgstr "Nicht geprüft"
 #: opengever/repository/classification.py
 msgid "unprotected"
 msgstr "Nicht klassifiziert"
+

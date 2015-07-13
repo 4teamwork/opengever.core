@@ -226,3 +226,6 @@ msgstr ""
 
 msgid "submittedproposals"
 msgstr ""
+
+msgid "versions"
+msgstr ""

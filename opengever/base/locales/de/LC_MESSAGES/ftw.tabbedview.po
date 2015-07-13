@@ -227,3 +227,6 @@ msgstr "Papierkorb"
 msgid "users"
 msgstr "OGDS"
 
+msgid "versions"
+msgstr "Versionen"
+

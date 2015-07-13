@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2015-07-01 11:57+0000\n"
+"POT-Creation-Date: 2015-07-14 09:14+0000\n"
 "PO-Revision-Date: 2013-03-27 10:44+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -23,7 +23,7 @@ msgstr "Das Dokument kann momentan nicht bearbeitet werden, es ist gesperrt."
 msgid "Cancel"
 msgstr "Widerrufen"
 
-#: ./opengever/document/checkout/cancel.py:88
+#: ./opengever/document/checkout/cancel.py:89
 msgid "Cancel checkout: ${title}"
 msgstr "Checkout abgebrochen für ${title}"
 
@@ -51,7 +51,7 @@ msgstr "Ohne Kommentar einchecken"
 msgid "Checkout"
 msgstr "Auschecken"
 
-#: ./opengever/document/checkout/cancel.py:80
+#: ./opengever/document/checkout/cancel.py:81
 msgid "Could not cancel checkout on document ${title}"
 msgstr "Das Auschecken des Dokuments ${title} konnte nicht widerrufen werden."
 
@@ -76,7 +76,7 @@ msgstr "${title} ist kein Dokument und konnte deshalb nicht ausgecheckt werden."
 msgid "Create Task"
 msgstr "Aufgabe erstellen"
 
-#: ./opengever/document/browser/overview.py:170
+#: ./opengever/document/browser/overview.py:169
 msgid "Current version: ${version}"
 msgstr "Aktuelle Version: ${version}"
 
@@ -107,7 +107,7 @@ msgstr "Als E-Mail versenden"
 msgid "Submit additional documents"
 msgstr "Dokumente nachreichen"
 
-#: ./opengever/document/browser/overview.py:166
+#: ./opengever/document/browser/overview.py:165
 msgid "Submitted version: ${version}"
 msgstr "Eingereichte Version: ${version}"
 
@@ -152,6 +152,11 @@ msgstr "Abbrechen"
 #: ./opengever/document/checkout/checkin.py:103
 msgid "button_checkin"
 msgstr "Einchecken"
+
+#. Default: "PDF"
+#: ./opengever/document/browser/versions_tab.py:99
+msgid "button_pdf"
+msgstr "PDF Vorschau"
 
 #. Default: "copy of"
 #: ./opengever/document/subscribers.py:76
@@ -280,6 +285,11 @@ msgstr ""
 msgid "initial_document_version_change_note"
 msgstr "Dokument erstellt (Initialversion)"
 
+#. Default: "Actor"
+#: ./opengever/document/browser/versions_tab.py:178
+msgid "label_actor"
+msgstr "Geändert von"
+
 #. Default: "Archival File"
 #: ./opengever/document/behaviors/metadata.py:129
 msgid "label_archival_file"
@@ -300,7 +310,7 @@ msgid "label_cancel"
 msgstr "Abbrechen"
 
 #. Default: "Checked out"
-#: ./opengever/document/browser/overview.py:125
+#: ./opengever/document/browser/overview.py:124
 #: ./opengever/document/checkout/viewlets_templates/checkedoutviewlet.pt:5
 msgid "label_checked_out"
 msgstr "Ausgecheckt"
@@ -315,10 +325,20 @@ msgstr "Journal-Kommentar"
 msgid "label_checkout_and_edit"
 msgstr "Auschecken / Bearbeiten"
 
+#. Default: "Comment"
+#: ./opengever/document/browser/versions_tab.py:186
+msgid "label_comment"
+msgstr "Kommentar"
+
 #. Default: "creator"
-#: ./opengever/document/browser/overview.py:121
+#: ./opengever/document/browser/overview.py:120
 msgid "label_creator"
 msgstr "Ersteller"
+
+#. Default: "Date"
+#: ./opengever/document/browser/versions_tab.py:182
+msgid "label_date"
+msgstr "Datum"
 
 #. Default: "Date of delivery"
 #: ./opengever/document/behaviors/metadata.py:88
@@ -357,7 +377,7 @@ msgid "label_download_copy"
 msgstr "Kopie herunterladen"
 
 #. Default: "File"
-#: ./opengever/document/browser/overview.py:127
+#: ./opengever/document/browser/overview.py:126
 #: ./opengever/document/document.py:59
 msgid "label_file"
 msgstr "Datei"
@@ -373,7 +393,7 @@ msgid "label_keywords"
 msgstr "Schlagworte"
 
 #. Default: "no"
-#: ./opengever/document/browser/overview.py:84
+#: ./opengever/document/browser/overview.py:83
 msgid "label_no"
 msgstr "Nein"
 
@@ -411,6 +431,11 @@ msgstr "Aktenzeichen"
 msgid "label_related_documents"
 msgstr "Verwandte Dokumente"
 
+#. Default: "reset"
+#: ./opengever/document/browser/versions_tab.py:108
+msgid "label_reset"
+msgstr "Zurücksetzen"
+
 #. Default: "Sequence Number"
 #: ./opengever/document/viewlets/byline.py:29
 msgid "label_sequence_number"
@@ -431,8 +456,13 @@ msgstr "Kurzbild"
 msgid "label_title"
 msgstr "Titel"
 
+#. Default: "Version"
+#: ./opengever/document/browser/versions_tab.py:174
+msgid "label_version"
+msgstr "Version"
+
 #. Default: "yes"
-#: ./opengever/document/browser/overview.py:83
+#: ./opengever/document/browser/overview.py:82
 msgid "label_yes"
 msgstr "Ja"
 
@@ -470,3 +500,4 @@ msgstr "Mit Kommentar"
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "without comment"
 msgstr "Ohne Kommentar"
+
