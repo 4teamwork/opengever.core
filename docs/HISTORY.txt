@@ -5,6 +5,9 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Fixed path limitation of the catalog query in save_reference_number_prefix subscriber.
+  [phgross]
+
 - Fix invalid variable name in policy template.
   (Reference to setup.setup....)
   [lgraf]
