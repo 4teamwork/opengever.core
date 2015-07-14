@@ -14,7 +14,7 @@
   </head>
 
   <body>
-    <p><b tal:content="options/kind"></b></p>
+    <p><b tal:content="options/label"></b></p>
     <a href="" tal:content="options/title" tal:attributes="href options/link"></a>
     <p tal:content="structure options/summary" />
 
