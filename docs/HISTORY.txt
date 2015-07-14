@@ -5,6 +5,10 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Implement a versions tab for documents.
+  (Superseeds the previously used history viewlet)
+  [lgraf]
+
 - Fixed path limitation of the catalog query in save_reference_number_prefix subscriber.
   [phgross]
 

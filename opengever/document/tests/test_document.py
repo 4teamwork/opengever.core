@@ -86,7 +86,7 @@ class TestDocument(FunctionalTestCase):
         browser.login().open(doc, view='@@tabbed_view')
 
         self.assertEquals(
-            ['overview', 'journal', 'sharing'],
+            ['overview', 'versions', 'journal', 'sharing'],
             browser.css('.formTabs .formTab').text)
 
     @browsing

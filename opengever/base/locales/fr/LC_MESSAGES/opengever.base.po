@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-07-06 08:25+0000\n"
+"POT-Creation-Date: 2015-07-10 12:43+0000\n"
 "PO-Revision-Date: 2012-08-30 15:34+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -50,16 +50,6 @@ msgstr "Valeur archivistique"
 #: opengever/repository/classification.py
 msgid "archival worthy with sampling"
 msgstr "Echantillon"
-
-#. Default: "PDF"
-#: ./opengever/base/viewlets/history.pt:44
-msgid "button_pdf"
-msgstr "Aperçu pdf"
-
-#. Default: "Show"
-#: ./opengever/base/viewlets/history.pt:40
-msgid "button_show"
-msgstr "Afficher"
 
 #. Default: "classified"
 #: opengever/repository/classification.py
@@ -158,11 +148,6 @@ msgstr "Durée entre la date du document plus récent contenu dans un dossier et
 msgid "help_retention_period_annotation"
 msgstr ""
 
-#. Default: "Actor"
-#: ./opengever/base/viewlets/history.pt:17
-msgid "label_actor"
-msgstr "Modifier par"
-
 #. Default: "-- Already removed object --"
 #: ./opengever/base/adapters.py:192
 msgid "label_already_removed"
@@ -188,11 +173,6 @@ msgstr "Modifier 'Statut public'"
 msgid "label_classification"
 msgstr "Classification"
 
-#. Default: "Comment"
-#: ./opengever/base/viewlets/history.pt:19
-msgid "label_comment"
-msgstr "commentaire"
-
 #. Default: "Confirm action"
 #: ./opengever/base/browser/confirm.pt:41
 msgid "label_confirm_action"
@@ -213,11 +193,6 @@ msgstr "Auteurs"
 msgid "label_custody_period"
 msgstr "Délai de protection archivistique"
 
-#. Default: "Date"
-#: ./opengever/base/viewlets/history.pt:18
-msgid "label_date"
-msgstr "Date"
-
 #. Default: "Date of cassation"
 #: ./opengever/base/behaviors/lifecycle.py:82
 msgid "label_dateofcassation"
@@ -237,11 +212,6 @@ msgstr "Description"
 #: ./opengever/base/browser/search.pt:309
 msgid "label_dossier"
 msgstr ""
-
-#. Default: "History"
-#: ./opengever/base/viewlets/history.pt:12
-msgid "label_history"
-msgstr "Versions"
 
 #. Default: "Initial version (document copied)"
 #: ./opengever/base/subscribers.py:28
@@ -273,11 +243,6 @@ msgstr ""
 msgid "label_public_trial_statement"
 msgstr "Jusitificaton pour le retrait du status public"
 
-#. Default: "reset"
-#: ./opengever/base/viewlets/history.pt:48
-msgid "label_reset"
-msgstr "Remettre"
-
 #. Default: "Retention period (years)"
 #: ./opengever/base/behaviors/lifecycle.py:41
 msgid "label_retention_period"
@@ -297,11 +262,6 @@ msgstr "Recherche"
 #: ./opengever/base/behaviors/base.py:24
 msgid "label_title"
 msgstr "Titre"
-
-#. Default: "Version"
-#: ./opengever/base/viewlets/history.pt:16
-msgid "label_version"
-msgstr "Version"
 
 #. Default: "limited-public"
 #: opengever/repository/classification.py
@@ -386,3 +346,4 @@ msgstr "Non contrôlé"
 #: opengever/repository/classification.py
 msgid "unprotected"
 msgstr "Non classé"
+

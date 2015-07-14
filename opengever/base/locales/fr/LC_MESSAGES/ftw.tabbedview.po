@@ -227,3 +227,5 @@ msgstr "Corbeille"
 msgid "users"
 msgstr "OGDS"
 
+msgid "versions"
+msgstr "Versions"

@@ -422,7 +422,7 @@ class TestTemplateDocumentTabs(FunctionalTestCase):
         browser.login().open(self.template, view=JOURNAL_TAB)
         journal_entries = browser.css('table.listing').first.dicts()
         self.assertEqual(Actor.lookup(TEST_USER_ID).get_label(),
-                         journal_entries[0]['Actor'])
+                         journal_entries[0]['Changed by'])
         self.assertEqual('Document added: My Document',
                          journal_entries[0]['Title'])
 

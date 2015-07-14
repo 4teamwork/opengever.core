@@ -194,4 +194,14 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <!-- 4301 -> 4302 -->
+    <genericsetup:upgradeStep
+        title="Add versions tab action for documents"
+        description=""
+        source="4301"
+        destination="4302"
+        handler="opengever.document.upgrades.to4302.AddVersionsTab"
+        profile="opengever.document:default"
+        />
+
 </configure>

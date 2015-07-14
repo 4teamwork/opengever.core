@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-07-01 11:57+0000\n"
+"POT-Creation-Date: 2015-07-14 09:14+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,7 +25,7 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: ./opengever/document/checkout/cancel.py:88
+#: ./opengever/document/checkout/cancel.py:89
 msgid "Cancel checkout: ${title}"
 msgstr ""
 
@@ -52,7 +52,7 @@ msgstr ""
 msgid "Checkout"
 msgstr ""
 
-#: ./opengever/document/checkout/cancel.py:80
+#: ./opengever/document/checkout/cancel.py:81
 msgid "Could not cancel checkout on document ${title}"
 msgstr ""
 
@@ -77,7 +77,7 @@ msgstr ""
 msgid "Create Task"
 msgstr ""
 
-#: ./opengever/document/browser/overview.py:170
+#: ./opengever/document/browser/overview.py:169
 msgid "Current version: ${version}"
 msgstr ""
 
@@ -107,7 +107,7 @@ msgstr ""
 msgid "Submit additional documents"
 msgstr ""
 
-#: ./opengever/document/browser/overview.py:166
+#: ./opengever/document/browser/overview.py:165
 msgid "Submitted version: ${version}"
 msgstr ""
 
@@ -151,6 +151,11 @@ msgstr ""
 #. Default: "Checkin"
 #: ./opengever/document/checkout/checkin.py:103
 msgid "button_checkin"
+msgstr ""
+
+#. Default: "PDF"
+#: ./opengever/document/browser/versions_tab.py:99
+msgid "button_pdf"
 msgstr ""
 
 #. Default: "copy of"
@@ -273,6 +278,11 @@ msgstr ""
 msgid "initial_document_version_change_note"
 msgstr ""
 
+#. Default: "Changed by"
+#: ./opengever/document/browser/versions_tab.py:178
+msgid "label_actor"
+msgstr ""
+
 #. Default: "Archival File"
 #: ./opengever/document/behaviors/metadata.py:129
 msgid "label_archival_file"
@@ -293,7 +303,7 @@ msgid "label_cancel"
 msgstr ""
 
 #. Default: "Checked out"
-#: ./opengever/document/browser/overview.py:125
+#: ./opengever/document/browser/overview.py:124
 #: ./opengever/document/checkout/viewlets_templates/checkedoutviewlet.pt:5
 msgid "label_checked_out"
 msgstr ""
@@ -308,9 +318,19 @@ msgstr ""
 msgid "label_checkout_and_edit"
 msgstr ""
 
+#. Default: "Comment"
+#: ./opengever/document/browser/versions_tab.py:186
+msgid "label_comment"
+msgstr ""
+
 #. Default: "creator"
-#: ./opengever/document/browser/overview.py:121
+#: ./opengever/document/browser/overview.py:120
 msgid "label_creator"
+msgstr ""
+
+#. Default: "Date"
+#: ./opengever/document/browser/versions_tab.py:182
+msgid "label_date"
 msgstr ""
 
 #. Default: "Date of delivery"
@@ -350,7 +370,7 @@ msgid "label_download_copy"
 msgstr ""
 
 #. Default: "File"
-#: ./opengever/document/browser/overview.py:127
+#: ./opengever/document/browser/overview.py:126
 #: ./opengever/document/document.py:59
 msgid "label_file"
 msgstr ""
@@ -366,7 +386,7 @@ msgid "label_keywords"
 msgstr ""
 
 #. Default: "no"
-#: ./opengever/document/browser/overview.py:84
+#: ./opengever/document/browser/overview.py:83
 msgid "label_no"
 msgstr ""
 
@@ -404,6 +424,11 @@ msgstr ""
 msgid "label_related_documents"
 msgstr ""
 
+#. Default: "reset"
+#: ./opengever/document/browser/versions_tab.py:108
+msgid "label_reset"
+msgstr ""
+
 #. Default: "Sequence Number"
 #: ./opengever/document/viewlets/byline.py:29
 msgid "label_sequence_number"
@@ -424,8 +449,13 @@ msgstr ""
 msgid "label_title"
 msgstr ""
 
+#. Default: "Version"
+#: ./opengever/document/browser/versions_tab.py:174
+msgid "label_version"
+msgstr ""
+
 #. Default: "yes"
-#: ./opengever/document/browser/overview.py:83
+#: ./opengever/document/browser/overview.py:82
 msgid "label_yes"
 msgstr ""
 

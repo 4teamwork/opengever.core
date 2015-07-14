@@ -66,7 +66,7 @@ class JournalTab(grok.View, OpengeverTab, ListingView):
          'transform': title_helper},
 
         {'column': 'actor',
-         'column_title': _(u'label_actor', default=u'Actor'),
+         'column_title': _(u'label_actor', default=u'Changed by'),
          'transform': linked_ogds_author},
 
         {'column': 'comments',

@@ -19,7 +19,7 @@ msgstr ""
 msgid "heading_journal"
 msgstr "Journal"
 
-#. Default: "Actor"
+#. Default: "Changed by"
 #: ./opengever/journal/tab.py:69
 msgid "label_actor"
 msgstr "Geändert von"
