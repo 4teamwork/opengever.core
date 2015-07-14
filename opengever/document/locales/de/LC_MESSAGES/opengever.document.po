@@ -285,7 +285,7 @@ msgstr ""
 msgid "initial_document_version_change_note"
 msgstr "Dokument erstellt (Initialversion)"
 
-#. Default: "Actor"
+#. Default: "Changed by"
 #: ./opengever/document/browser/versions_tab.py:178
 msgid "label_actor"
 msgstr "Geändert von"

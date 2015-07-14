@@ -214,7 +214,7 @@ class VersionsTab(BaseListingTab):
          },
 
         {'column': 'actor',
-         'column_title': _(u'label_actor', 'Actor'),
+         'column_title': _(u'label_actor', 'Changed by'),
          },
 
         {'column': 'timestamp',
