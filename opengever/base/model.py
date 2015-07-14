@@ -1,6 +1,7 @@
 from opengever.ogds.models import BASE
 from opengever.ogds.models.declarative import query_base
 from plone import api
+from plone.api.exc import CannotGetPortalError
 from sqlalchemy import types
 from sqlalchemy_i18n import make_translatable
 from z3c.saconfig import named_scoped_session
@@ -9,9 +10,12 @@ import sqlalchemy_utils
 
 
 def get_locale():
-    ltool = api.portal.get_tool('portal_languages')
-    language_code = ltool.getPreferredLanguage()
+    try:
+        ltool = api.portal.get_tool('portal_languages')
+    except CannotGetPortalError:
+        return 'de'
 
+    language_code = ltool.getPreferredLanguage()
     return language_code.split('-')[0]
 
 
