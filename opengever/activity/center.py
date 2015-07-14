@@ -5,7 +5,6 @@ from opengever.activity.model import Watcher
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.ogds.base.actor import Actor
-from opengever.ogds.models.query import extend_query_with_textfilter
 from plone import api
 from sqlalchemy.orm import contains_eager
 from sqlalchemy.sql.expression import asc
@@ -131,13 +130,10 @@ class NotificationCenter(object):
                                      sort_reverse=False, offset=0, limit=None):
 
         order = desc if sort_reverse else asc
-        fields = [Activity.kind, Activity.title, Activity.actor_id]
-
         query = Notification.query.join(Notification.activity)
         if userid:
             query = query.by_user(userid)
 
-        query = extend_query_with_textfilter(query, fields, filters)
         query = query.order_by(order(sort_on))
         query = query.offset(offset).limit(limit)
         return query.options(contains_eager(Notification.activity)).all()

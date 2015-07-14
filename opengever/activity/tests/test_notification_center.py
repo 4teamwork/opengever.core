@@ -8,6 +8,7 @@ from opengever.activity.tests.base import ActivityTestCase
 from opengever.base.oguid import Oguid
 from sqlalchemy.exc import IntegrityError
 import transaction
+import unittest
 
 
 class TestResourceHandling(ActivityTestCase):
@@ -324,6 +325,7 @@ class TestNotificationHandling(ActivityTestCase):
             ['task-transition-open-in-progress', 'task-added', 'task-added'],
             [notification.activity.kind for notification in notifications])
 
+    @unittest.skip('Textfilter not implemented yet')
     def test_list_notifications_with_text_filter_on_title(self):
         notifications = self.center.list_notifications(
             userid='peter', sort_on='kind', filters=['kennzahlen'])
@@ -332,6 +334,7 @@ class TestNotificationHandling(ActivityTestCase):
             [self.activity_1, self.activity_2],
             [notification.activity for notification in notifications])
 
+    @unittest.skip('Textfilter not implemented yet')
     def test_list_notifications_with_text_filter_on_kind(self):
         notifications = self.center.list_notifications(
             userid='peter', sort_on='kind', filters=['Task', 'added'])
