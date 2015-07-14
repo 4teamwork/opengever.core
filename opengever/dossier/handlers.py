@@ -57,7 +57,7 @@ def set_former_reference_after_moving(obj, event):
 
 @grok.subscribe(IDossierMarker, IObjectAddedEvent)
 @grok.subscribe(IDossierMarker, IObjectMovedEvent)
-def saveReferenceNumberPrefix(obj, event):
+def save_reference_number_prefix(obj, event):
     if IObjectRemovedEvent.providedBy(event):
         return
 
@@ -70,7 +70,7 @@ def saveReferenceNumberPrefix(obj, event):
     # all containing tasks manually
     catalog = api.portal.get_tool('portal_catalog')
     tasks = catalog({
-        'query':'/'.join(obj.getPhysicalPath()),
+        'path':'/'.join(obj.getPhysicalPath()),
         'object_provides': 'opengever.task.task.ITask',
         'depth':-1})
     for task in tasks:

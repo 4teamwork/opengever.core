@@ -5,7 +5,8 @@ Changelog
 4.4.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fixed path limitation of the catalog query in save_reference_number_prefix subscriber.
+  [phgross]
 
 
 4.4.2 (2015-07-08)
