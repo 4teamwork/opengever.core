@@ -17,14 +17,17 @@ class TestNotificationEventHandler(FunctionalTestCase):
         task = create(Builder('task'))
         event = NotificationEvent(task,
                                   'task-transition-open-in-progress',
-                                  'Task accepted.',
+                                  {'en': 'Task accepted'},
+                                  {'en': 'Task accepted by Test user.'},
                                   api.user.get_current(),
-                                  'Lorem ipsum')
+                                  {'en': 'Lorem ipsum'})
         notify(event)
 
         activity = Activity.query.first()
         self.assertEquals(task, activity.resource.oguid.resolve_object())
         self.assertEquals('task-transition-open-in-progress', activity.kind)
+        self.assertEquals('Task accepted by Test user.', activity.summary)
+        self.assertEquals('Task accepted', activity.label)
         self.assertEquals(TEST_USER_ID, activity.actor_id)
         self.assertEquals('Lorem ipsum', activity.description)
 

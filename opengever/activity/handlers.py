@@ -15,6 +15,7 @@ def log_activity(task, event):
         event.object,
         event.kind,
         event.object.title,
+        event.label,
         event.summary,
         event.actor.getId(),
         description=event.description)
