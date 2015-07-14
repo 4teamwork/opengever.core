@@ -6,6 +6,7 @@ from opengever.base.interfaces import IRedirector
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
+from plone import api
 from plone.app.testing import login
 from plone.app.testing import logout
 from plone.app.testing import setRoles
@@ -114,6 +115,12 @@ class TestCheckinViews(FunctionalTestCase):
                                .checked_out()
                                .within(self.dossier))
 
+    def _create_version(self, doc, version_id):
+        repo = api.portal.get_tool('portal_repository')
+        vdata = 'VERSION {} DATA'.format(version_id)
+        doc.file.data = vdata
+        repo.save(obj=doc, comment="This is Version %s" % version_id)
+
     @browsing
     def test_single_checkin_with_comment(self, browser):
         browser.login().open(self.document)
@@ -211,18 +218,28 @@ class TestCheckinViews(FunctionalTestCase):
     def test_reverting_with_revert_link_in_versions_tab(self, browser):
         document = create(Builder("document")
                           .checked_out_by(TEST_USER_ID)
-                          .within(self.dossier))
+                          .within(self.dossier)
+                          .attach_file_containing(
+            u"INITIAL VERSION DATA", u"somefile.txt"))
 
         browser.login().open(document)
         browser.css('#checkin_without_comment').first.click()
 
+        self._create_version(document, 2)
+        self._create_version(document, 3)
+        transaction.commit()
+
         browser.login().open(document, view='tabbedview_view-versions')
         listing = browser.css('.listing').first
-        last_row = listing.css('tr')[-1]
-        revert_link = last_row.css('td a')[-1]
+
+        second_row = listing.css('tr')[2]
+        self.assertIn('This is Version 2', second_row.text)
+
+        revert_link = second_row.css('td a')[-1]
         revert_link.click()
 
-        self.assertEquals(['Reverted file to version 0'], info_messages())
+        self.assertEquals(['Reverted file to version 2'], info_messages())
+        self.assertEquals('VERSION 2 DATA', document.file.data)
 
 
 # TODO: rewrite this test-case to express intent
