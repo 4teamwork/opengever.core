@@ -40,7 +40,7 @@
                         tal:attributes="title notification/created"
                         tal:content="notification/created" />
                 </span>
-                <span class="item-type" i18n:domain="plone" i18n:translate="" tal:content="notification/kind" />
+                <span class="item-type" tal:content="notification/label" />
               </div>
               <a class="item-location" href="#"
                  tal:attributes="href notification/link"

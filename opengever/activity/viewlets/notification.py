@@ -38,6 +38,7 @@ class NotificationViewlet(common.ViewletBase):
             notifications.append({
                 'kind': notification.activity.kind,
                 'title': notification.activity.title,
+                'label': notification.activity.label,
                 'summary': notification.activity.summary,
                 'created': notification.activity.created.astimezone(
                     pytz.UTC).isoformat(),
