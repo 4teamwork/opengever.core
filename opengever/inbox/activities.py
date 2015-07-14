@@ -18,16 +18,14 @@ class ForwardingAddedActivity(TaskAddedActivity):
         actor = Actor.lookup(self.context.Creator())
         msg = _('label_forwarding_added', u'New forwarding added by ${user}',
                 mapping={'user': actor.get_label(with_principal=False)})
-        return self.translate(msg)
+        return self.translate_to_all_languages(msg)
 
-    def collects_description_data(self):
+    def collects_description_data(self, language):
         """Returns a list with [label, value] pairs.
         """
         return [
-            [self.translate(_('label_task_title', u'Task title')),
-             self.title],
-            [self.translate(_('label_deadline', u'Deadline')),
+            [_('label_task_title', u'Task title'), self.context.title],
+            [_('label_deadline', u'Deadline'),
              api.portal.get_localized_time(str(self.context.deadline))],
-            [self.translate(_('label_text', u'Text')),
-             self.context.text]
+            [_('label_text', u'Text'), self.context.text]
         ]
