@@ -20,7 +20,7 @@ Session = named_scoped_session('opengever')
 BASE.session = Session
 Base = query_base(Session)
 
-make_translatable(options={'locales': ['de', 'fr']})
+make_translatable(options={'locales': ['de', 'fr', 'en']})
 sqlalchemy_utils.i18n.get_locale = get_locale
 
 
