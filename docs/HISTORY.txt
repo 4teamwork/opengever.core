@@ -5,7 +5,11 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
-- Update document_date to to actual date during checkin.
+- Adjust document_date handling:
+
+  - Update document_date to current date during checkin
+  - Update document_date to version's creation_date when reverting to a version.
+
   [phgross]
 
 - Make sure OGDS sync doesn't fail on user- or group IDs that are too long.

@@ -1,5 +1,6 @@
 from AccessControl import getSecurityManager, Unauthorized
 from datetime import date
+from datetime import datetime
 from five import grok
 from opengever.document import _
 from opengever.document.document import IDocumentSchema
@@ -241,6 +242,10 @@ class CheckinCheckoutManager(grok.MultiAdapter):
             self.context.file = old_file_copy
         else:
             self.context.file = None
+
+        # update document_date to specific version creation date
+        ts = version.sys_metadata['timestamp']
+        self.context.document_date = datetime.fromtimestamp(ts).date()
 
         if create_version:
             # let's create a version

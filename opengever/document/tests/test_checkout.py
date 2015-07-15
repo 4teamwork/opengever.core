@@ -1,8 +1,10 @@
 from datetime import date
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
+from ftw.testing import freeze
 from opengever.base.interfaces import IRedirector
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.interfaces import ICheckinCheckoutManager
@@ -114,6 +116,14 @@ class TestReverting(FunctionalTestCase):
         self.assertNotEqual(
             self.document.file._blob, version2.object.file._blob)
         self.assertNotEqual(self.document.file, version2.object.file)
+
+    def test_resets_document_date_to_reverted_version(self):
+        with freeze(datetime(2015, 01, 28, 12, 00)):
+            self._create_version(self.document, 3)
+
+        self.document.document_date = date(2015, 5, 15)
+        self.manager.revert_to_version(3)
+        self.assertEquals(date(2015, 01, 28), self.document.document_date)
 
     @browsing
     def test_reverting_with_revert_link_in_versions_tab(self, browser):
