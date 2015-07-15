@@ -8,6 +8,7 @@ from opengever.activity.model.watcher import Watcher
 
 tables = [
     'activities',
+    'activities_translation',
     'notifications',
     'resource_watchers',
     'resources',
