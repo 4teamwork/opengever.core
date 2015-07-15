@@ -1,5 +1,7 @@
 from opengever.activity.model.notification import Notification
 from opengever.base.model import Base
+from opengever.base.model import DEFAULT_LOCALE
+from opengever.base.model import SUPPORTED_LOCALES
 from opengever.base.model import UTCDateTime
 from opengever.ogds.models import USER_ID_LENGTH
 from opengever.ogds.models.query import BaseQuery
@@ -29,10 +31,10 @@ class Activity(Base, Translatable):
     query_cls = ActivityQuery
 
     __tablename__ = 'activities'
-    __translatable__ = {'locales': ['de', 'fr', 'en'],
-                        'fallback_locale': 'de'}
+    __translatable__ = {'locales': SUPPORTED_LOCALES,
+                        'fallback_locale': DEFAULT_LOCALE}
 
-    locale = 'de'
+    locale = DEFAULT_LOCALE
 
     id = Column('id', Integer, Sequence("activities_id_seq"),
                          primary_key=True)

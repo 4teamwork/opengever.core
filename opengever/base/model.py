@@ -9,11 +9,15 @@ import pytz
 import sqlalchemy_utils
 
 
+DEFAULT_LOCALE = 'de'
+SUPPORTED_LOCALES = ['de', 'fr', 'en']
+
+
 def get_locale():
     try:
         ltool = api.portal.get_tool('portal_languages')
     except CannotGetPortalError:
-        return 'de'
+        return DEFAULT_LOCALE
 
     language_code = ltool.getPreferredLanguage()
     return language_code.split('-')[0]
@@ -24,8 +28,7 @@ Session = named_scoped_session('opengever')
 BASE.session = Session
 Base = query_base(Session)
 
-make_translatable(options={
-    'locales': ['de', 'fr', 'en']})
+make_translatable(options={'locales': SUPPORTED_LOCALES})
 sqlalchemy_utils.i18n.get_locale = get_locale
 
 
