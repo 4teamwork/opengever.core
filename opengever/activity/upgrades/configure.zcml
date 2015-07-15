@@ -87,4 +87,14 @@
         profile="opengever.activity:default"
         />
 
+    <!-- 4500 -> 4501 -->
+    <genericsetup:upgradeStep
+        title="Add i18n support to the activities table."
+        description=""
+        source="4500"
+        destination="4501"
+        handler="opengever.activity.upgrades.to4501.AddI18nSupportForActivities"
+        profile="opengever.activity:default"
+        />
+
 </configure>
