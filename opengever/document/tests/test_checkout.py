@@ -69,6 +69,65 @@ class TestCheckin(FunctionalTestCase):
 
         self.assertEquals(date.today(), self.document.document_date)
 
+
+class TestReverting(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestReverting, self).setUp()
+        self.dossier = create(Builder('dossier'))
+        self.document = create(Builder('document')
+                               .having(document_date=date(2014, 1, 1))
+                               .within(self.dossier)
+                               .attach_file_containing(
+                                   u"INITIAL VERSION DATA", u"somefile.txt"))
+
+        self._create_version(self.document, 1)
+        self._create_version(self.document, 2)
+        transaction.commit()
+
+        self.manager = getMultiAdapter(
+            (self.document, self.portal.REQUEST), ICheckinCheckoutManager)
+
+    def _create_version(self, doc, version_id):
+        repo_tool = api.portal.get_tool('portal_repository')
+        vdata = 'VERSION {} DATA'.format(version_id)
+        doc.file.data = vdata
+        repo_tool.save(obj=doc, comment="This is Version %s" % version_id)
+
+    def test_creates_new_version_with_same_data(self):
+        self.manager.revert_to_version(2)
+
+        repo_tool = api.portal.get_tool('portal_repository')
+        version2 = repo_tool.retrieve(self.document, 2)
+
+        self.assertEquals(4, len(repo_tool.getHistory(self.document)))
+        self.assertEqual(self.document.file.data, version2.object.file.data)
+
+    def test_creates_a_new_blob_instance(self):
+        self.manager.revert_to_version(2)
+
+        repo_tool = api.portal.get_tool('portal_repository')
+        version2 = repo_tool.retrieve(self.document, 2)
+
+        self.assertNotEqual(
+            self.document.file._blob, version2.object.file._blob)
+        self.assertNotEqual(self.document.file, version2.object.file)
+
+    @browsing
+    def test_reverting_with_revert_link_in_versions_tab(self, browser):
+        browser.login().open(self.document, view='tabbedview_view-versions')
+        listing = browser.css('.listing').first
+
+        second_row = listing.css('tr')[2]
+        self.assertIn('This is Version 1', second_row.text)
+
+        revert_link = second_row.css('td a')[-1]
+        revert_link.click()
+
+        self.assertEquals(['Reverted file to version 1'], info_messages())
+        self.assertEquals('VERSION 1 DATA', self.document.file.data)
+
+
 class TestCheckinCheckoutManager(FunctionalTestCase):
 
     def setUp(self):
@@ -88,32 +147,6 @@ class TestCheckinCheckoutManager(FunctionalTestCase):
             .within(self.dossier)
             .titled(u'Document2')
             .with_dummy_content())
-
-    def test_reverting(self):
-        """Test that reverting to a version creates a new NamedBlobFile instance
-        instead of using a reference.
-        This avoids the version being reverted to being overwritte later.
-        """
-        pr = getToolByName(self.portal, 'portal_repository')
-        manager = self.get_manager(self.doc1)
-
-        manager.checkout()
-        self.doc1.file = NamedBlobFile('bla bla 1', filename=u'test.txt')
-        manager.checkin(comment="Created Version 1")
-
-        manager.checkout()
-        self.doc1.file = NamedBlobFile('bla bla 2', filename=u'test.txt')
-        manager.checkin(comment="Created Version 2")
-
-        manager.checkout()
-        self.doc1.file = NamedBlobFile('bla bla 3', filename=u'test.txt')
-        manager.checkin(comment="Created Version 3")
-
-        manager.revert_to_version(2)
-
-        version2 = pr.retrieve(self.doc1, 2)
-        self.assertTrue(self.doc1.file._blob != version2.object.file._blob)
-        self.assertTrue(self.doc1.file != version2.object.file)
 
     def test_checkout(self):
         view = self.doc1.restrictedTraverse('@@editing_document')()
@@ -262,33 +295,6 @@ class TestCheckinViews(FunctionalTestCase):
         history = repository_tool.getHistory(document2)
         last_entry = repository_tool.retrieve(document2, len(history)-1)
         self.assertEquals(None, last_entry.comment)
-
-    @browsing
-    def test_reverting_with_revert_link_in_versions_tab(self, browser):
-        document = create(Builder("document")
-                          .checked_out_by(TEST_USER_ID)
-                          .within(self.dossier)
-                          .attach_file_containing(
-            u"INITIAL VERSION DATA", u"somefile.txt"))
-
-        browser.login().open(document)
-        browser.css('#checkin_without_comment').first.click()
-
-        self._create_version(document, 2)
-        self._create_version(document, 3)
-        transaction.commit()
-
-        browser.login().open(document, view='tabbedview_view-versions')
-        listing = browser.css('.listing').first
-
-        second_row = listing.css('tr')[2]
-        self.assertIn('This is Version 2', second_row.text)
-
-        revert_link = second_row.css('td a')[-1]
-        revert_link.click()
-
-        self.assertEquals(['Reverted file to version 2'], info_messages())
-        self.assertEquals('VERSION 2 DATA', document.file.data)
 
 
 # TODO: rewrite this test-case to express intent
