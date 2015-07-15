@@ -1,8 +1,10 @@
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.interfaces import IRedirector
+from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
@@ -16,9 +18,51 @@ from plone.locking.interfaces import IRefreshableLockable
 from plone.namedfile.file import NamedBlobFile
 from plone.protect import createToken
 from Products.CMFCore.utils import getToolByName
+from zope.annotation.interfaces import IAnnotations
 from zope.component import getMultiAdapter
 import transaction
 
+
+class TestCheckin(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestCheckin, self).setUp()
+        self.dossier = create(Builder('dossier'))
+
+        self.document = create(Builder('document')
+                          .having(document_date=date(2014, 1, 1))
+                          .within(self.dossier)
+                          .checked_out())
+
+        self.manager = self.get_manager(self.document)
+
+    def get_manager(self, document):
+        return getMultiAdapter(
+            (document, self.portal.REQUEST), ICheckinCheckoutManager)
+
+    def test_annotations_key_is_cleared(self):
+        annotations = IAnnotations(self.document)
+        self.assertEquals(
+            TEST_USER_ID, annotations.get(CHECKIN_CHECKOUT_ANNOTATIONS_KEY))
+
+        self.manager.checkin()
+
+        self.assertEquals(
+            None, annotations.get(CHECKIN_CHECKOUT_ANNOTATIONS_KEY))
+
+    def test_new_version_is_created(self):
+        self.manager.checkin()
+
+        repo_tool = api.portal.get_tool('portal_repository')
+        history = repo_tool.getHistory(self.document)
+        self.assertEquals(2, len(history))
+
+    def test_clear_locks(self):
+        IRefreshableLockable(self.document).lock()
+        self.assertTrue(IRefreshableLockable(self.document).locked())
+
+        self.manager.checkin()
+        self.assertFalse(IRefreshableLockable(self.document).locked())
 
 class TestCheckinCheckoutManager(FunctionalTestCase):
 
