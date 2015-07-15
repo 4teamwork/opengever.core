@@ -102,6 +102,8 @@ class TestReverting(FunctionalTestCase):
 
         self.assertEquals(4, len(repo_tool.getHistory(self.document)))
         self.assertEqual(self.document.file.data, version2.object.file.data)
+        self.assertEquals(u'Reverted file to version 2',
+                          repo_tool.retrieve(self.document, 3).comment)
 
     def test_creates_a_new_blob_instance(self):
         self.manager.revert_to_version(2)

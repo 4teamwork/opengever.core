@@ -14,6 +14,7 @@ from plone.namedfile.file import NamedBlobFile
 from Products.CMFCore.utils import getToolByName
 from zope.annotation.interfaces import IAnnotations
 from zope.event import notify
+from zope.i18n import translate
 from zope.publisher.interfaces.browser import IBrowserRequest
 
 
@@ -243,8 +244,9 @@ class CheckinCheckoutManager(grok.MultiAdapter):
 
         if create_version:
             # let's create a version
-            comment = _(u'Reverted file to version ${version_id}',
-                        mapping=dict(version_id=version_id))
+            msg = _(u'Reverted file to version ${version_id}',
+                    mapping=dict(version_id=version_id))
+            comment = translate(msg, context=self.request)
             self.repository.save(obj=self.context, comment=comment)
 
         # event
