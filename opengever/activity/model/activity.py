@@ -66,7 +66,7 @@ class ActivityTranslation(translation_base(Activity)):
 
     __tablename__ = 'activities_translation'
 
-    title = Column(String(512), nullable=False)
-    label = Column(Text, nullable=False)
-    summary = Column(Text, nullable=False)
-    description = Column(Text)
+    title = Column('title', Text)
+    label = Column('label', Text)
+    summary = Column('summary', Text)
+    description = Column('description', Text)
