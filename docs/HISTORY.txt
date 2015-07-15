@@ -5,6 +5,9 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Update document_date to to actual date during checkin.
+  [phgross]
+
 - Make sure OGDS sync doesn't fail on user- or group IDs that are too long.
   Simply skip them and log a warning.
   [lgraf]

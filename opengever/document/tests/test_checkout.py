@@ -64,6 +64,11 @@ class TestCheckin(FunctionalTestCase):
         self.manager.checkin()
         self.assertFalse(IRefreshableLockable(self.document).locked())
 
+    def test_document_date_is_updated_to_current_date(self):
+        self.manager.checkin()
+
+        self.assertEquals(date.today(), self.document.document_date)
+
 class TestCheckinCheckoutManager(FunctionalTestCase):
 
     def setUp(self):

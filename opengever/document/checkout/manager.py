@@ -1,4 +1,5 @@
 from AccessControl import getSecurityManager, Unauthorized
+from datetime import date
 from five import grok
 from opengever.document import _
 from opengever.document.document import IDocumentSchema
@@ -9,12 +10,12 @@ from opengever.document.events import ObjectRevertedToVersion
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.trash.trash import ITrashed
 from plone.locking.interfaces import IRefreshableLockable
+from plone.namedfile.file import NamedBlobFile
 from Products.CMFCore.utils import getToolByName
 from zope.annotation.interfaces import IAnnotations
 from zope.event import notify
 from zope.publisher.interfaces.browser import IBrowserRequest
 
-from plone.namedfile.file import NamedBlobFile
 
 CHECKIN_CHECKOUT_ANNOTATIONS_KEY = 'opengever.document.checked_out_by'
 
@@ -122,6 +123,9 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         # is the user allowed to checkin?
         if not self.is_checkin_allowed():
             raise Unauthorized
+
+        # update document_date to current date
+        self.context.document_date = date.today()
 
         # create new version in CMFEditions
         self.repository.save(obj=self.context, comment=comment)
