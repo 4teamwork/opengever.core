@@ -136,7 +136,7 @@ class OGDSUpdater(grok.Adapter):
                 dn, info = ldap_user
 
                 # Ignore users without an UID in LDAP
-                if not uid_attr in info:
+                if uid_attr not in info:
                     continue
 
                 userid = info[uid_attr]
@@ -252,7 +252,7 @@ class OGDSUpdater(grok.Adapter):
                             user_dn = user_dn.decode('utf-8')
 
                         if not ldap_util.is_ad:
-                            if not 'userid' in user_info:
+                            if 'userid' not in user_info:
                                 logger.warn(NO_UID_MSG % user_dn)
                                 continue
                             userid = user_info['userid']
