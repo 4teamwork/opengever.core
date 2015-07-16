@@ -85,6 +85,12 @@ class OGDSUpdater(grok.Adapter):
         session = create_session()
         return session.query(User).filter_by(userid=userid).first()
 
+    def get_sql_group(self, groupid):
+        """Returns the OGDS group object identified by `groupid`.
+        """
+        session = create_session()
+        return session.query(Group).filter_by(groupid=groupid).first()
+
     def user_exists(self, userid):
         """Checks whether the OGDS user identified by `userid` exists or not.
         """
@@ -154,7 +160,7 @@ class OGDSUpdater(grok.Adapter):
                     session.add(user)
                 else:
                     # Get the existing user
-                    user = session.query(User).filter_by(userid=userid).first()
+                    user = self.get_sql_user(userid)
 
                 # Iterate over all SQL columns and update their values
                 columns = User.__table__.columns
@@ -220,8 +226,7 @@ class OGDSUpdater(grok.Adapter):
                     session.add(group)
                 else:
                     # Get the existing group
-                    group = session.query(Group).filter_by(
-                        groupid=groupid).first()
+                    group = self.get_sql_group(groupid)
 
                 # Iterate over all SQL columns and update their values
                 columns = Group.__table__.columns
