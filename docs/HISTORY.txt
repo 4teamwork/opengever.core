@@ -5,6 +5,10 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Make sure OGDS sync doesn't fail on user- or group IDs that are too long.
+  Simply skip them and log a warning.
+  [lgraf]
+
 - Implement a versions tab for documents.
   (Superseeds the previously used history viewlet)
   [lgraf]

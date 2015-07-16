@@ -5,6 +5,8 @@ from opengever.base.model import create_session
 from opengever.ogds.base.interfaces import ILDAPSearch
 from opengever.ogds.base.interfaces import IOGDSUpdater
 from opengever.ogds.base.sync.import_stamp import set_remote_import_stamp
+from opengever.ogds.models import GROUP_ID_LENGTH
+from opengever.ogds.models import USER_ID_LENGTH
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.user import User
 from Products.CMFPlone.interfaces import IPloneSiteRoot
@@ -134,15 +136,16 @@ class OGDSUpdater(grok.Adapter):
                 dn, info = ldap_user
 
                 # Ignore users without an UID in LDAP
-                if not uid_attr in info:
+                if uid_attr not in info:
                     continue
 
                 userid = info[uid_attr]
                 userid = userid.decode('utf-8')
 
                 # Skip users with uid longer than SQL 'userid' column
-                # FIXME: Increase size of SQL column to 64
-                if len(userid) > 30:
+                if len(userid) > USER_ID_LENGTH:
+                    logger.warn("Skipping user '%s' - "
+                                "userid too long!" % userid)
                     continue
 
                 if not self.user_exists(userid):
@@ -205,6 +208,12 @@ class OGDSUpdater(grok.Adapter):
                 groupid = groupid.decode('utf-8')
                 info['groupid'] = groupid
 
+                # Skip groups with groupid longer than SQL 'groupid' column
+                if len(groupid) > GROUP_ID_LENGTH:
+                    logger.warn("Skipping group '%s' - "
+                                "groupid too long!" % groupid)
+                    continue
+
                 if not self.group_exists(groupid):
                     # Create the new group
                     group = Group(groupid)
@@ -243,7 +252,7 @@ class OGDSUpdater(grok.Adapter):
                             user_dn = user_dn.decode('utf-8')
 
                         if not ldap_util.is_ad:
-                            if not 'userid' in user_info:
+                            if 'userid' not in user_info:
                                 logger.warn(NO_UID_MSG % user_dn)
                                 continue
                             userid = user_info['userid']
