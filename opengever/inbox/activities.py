@@ -20,7 +20,7 @@ class ForwardingAddedActivity(TaskAddedActivity):
                 mapping={'user': actor.get_label(with_principal=False)})
         return self.translate_to_all_languages(msg)
 
-    def collects_description_data(self, language):
+    def collect_description_data(self, language):
         """Returns a list with [label, value] pairs.
         """
         return [

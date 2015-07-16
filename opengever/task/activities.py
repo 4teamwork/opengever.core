@@ -113,7 +113,7 @@ class TaskAddedActivity(TaskActivity):
         descriptions = {}
         for code in self._get_supported_languages():
             descriptions[code] = self.render_description_markup(
-                self.collects_description_data(code), code)
+                self.collect_description_data(code), code)
 
         return descriptions
 
@@ -125,7 +125,7 @@ class TaskAddedActivity(TaskActivity):
 
         return u'{}</tbody></table>'.format(msg)
 
-    def collects_description_data(self, language):
+    def collect_description_data(self, language):
         """Returns a list with [label, value] pairs.
         """
         return [
