@@ -11,6 +11,8 @@ from opengever.ogds.models.group import Group
 from opengever.ogds.models.user import User
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Products.LDAPMultiPlugins.interfaces import ILDAPMultiPlugin
+from sqlalchemy.orm.exc import MultipleResultsFound
+from sqlalchemy.orm.exc import NoResultFound
 import logging
 import time
 
@@ -83,13 +85,13 @@ class OGDSUpdater(grok.Adapter):
         """Returns the OGDS user object identified by `userid`.
         """
         session = create_session()
-        return session.query(User).filter_by(userid=userid).first()
+        return session.query(User).filter_by(userid=userid).one()
 
     def get_sql_group(self, groupid):
         """Returns the OGDS group object identified by `groupid`.
         """
         session = create_session()
-        return session.query(Group).filter_by(groupid=groupid).first()
+        return session.query(Group).filter_by(groupid=groupid).one()
 
     def user_exists(self, userid):
         """Checks whether the OGDS user identified by `userid` exists or not.
@@ -160,7 +162,15 @@ class OGDSUpdater(grok.Adapter):
                     session.add(user)
                 else:
                     # Get the existing user
-                    user = self.get_sql_user(userid)
+                    try:
+                        user = self.get_sql_user(userid)
+                    except MultipleResultsFound:
+                        # Duplicate user with slightly different spelling
+                        # (casing, whitespace, ...) that may not be considered
+                        # different by the SQL backend's unique constraint.
+                        # We therefore enforce uniqueness ourselves.
+                        logger.warn("Skipping duplicate user '%s'..." % userid)
+                        continue
 
                 # Iterate over all SQL columns and update their values
                 columns = User.__table__.columns
@@ -226,7 +236,15 @@ class OGDSUpdater(grok.Adapter):
                     session.add(group)
                 else:
                     # Get the existing group
-                    group = self.get_sql_group(groupid)
+                    try:
+                        group = self.get_sql_group(groupid)
+                    except MultipleResultsFound:
+                        # Duplicate group with slightly different spelling
+                        # (casing, whitespace, ...) that may not be considered
+                        # different by the SQL backend's unique constraint.
+                        # We therefore enforce uniqueness ourselves.
+                        logger.warn("Skipping duplicate group '%s'..." % groupid)
+                        continue
 
                 # Iterate over all SQL columns and update their values
                 columns = Group.__table__.columns
@@ -281,9 +299,14 @@ class OGDSUpdater(grok.Adapter):
                         if isinstance(userid, str):
                             userid = userid.decode('utf-8')
 
-                        user = self.get_sql_user(userid)
-                        if user is None:
+                        try:
+                            user = self.get_sql_user(userid)
+                        except NoResultFound:
                             logger.warn(USER_NOT_FOUND_SQL % userid)
+                            continue
+                        except MultipleResultsFound:
+                            # Duplicate user - skip (see above).
+                            logger.warn("Skipping duplicate user '%s'..." % userid)
                             continue
 
                         contained_users.append(user)

@@ -5,6 +5,9 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- OGDSUpdater: Enforce uniqueness of user and group IDs on application side.
+  [lgraf]
+
 - Add internationalization support to the activity model.
 
   - Implement translatable activity columns with the help of SQLAlchemy i18n.
