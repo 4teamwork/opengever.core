@@ -62,7 +62,6 @@ class PloneNotificationMailer(object):
         template = ViewPageTemplateFile("templates/notification.pt")
         language = self.get_users_language()
         options = {
-            'subject': notification.activity.translations[language].title,
             'title': notification.activity.translations[language].title,
             'label': notification.activity.translations[language].label,
             'summary': notification.activity.translations[language].summary,
