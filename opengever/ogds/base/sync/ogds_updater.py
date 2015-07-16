@@ -5,6 +5,8 @@ from opengever.base.model import create_session
 from opengever.ogds.base.interfaces import ILDAPSearch
 from opengever.ogds.base.interfaces import IOGDSUpdater
 from opengever.ogds.base.sync.import_stamp import set_remote_import_stamp
+from opengever.ogds.models import GROUP_ID_LENGTH
+from opengever.ogds.models import USER_ID_LENGTH
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.user import User
 from Products.CMFPlone.interfaces import IPloneSiteRoot
@@ -141,8 +143,9 @@ class OGDSUpdater(grok.Adapter):
                 userid = userid.decode('utf-8')
 
                 # Skip users with uid longer than SQL 'userid' column
-                # FIXME: Increase size of SQL column to 64
-                if len(userid) > 30:
+                if len(userid) > USER_ID_LENGTH:
+                    logger.warn("Skipping user '%s' - "
+                                "userid too long!" % userid)
                     continue
 
                 if not self.user_exists(userid):
@@ -204,6 +207,12 @@ class OGDSUpdater(grok.Adapter):
 
                 groupid = groupid.decode('utf-8')
                 info['groupid'] = groupid
+
+                # Skip groups with groupid longer than SQL 'groupid' column
+                if len(groupid) > GROUP_ID_LENGTH:
+                    logger.warn("Skipping group '%s' - "
+                                "groupid too long!" % groupid)
+                    continue
 
                 if not self.group_exists(groupid):
                     # Create the new group
