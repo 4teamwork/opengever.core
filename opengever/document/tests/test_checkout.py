@@ -1,8 +1,12 @@
+from datetime import date
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
+from ftw.testing import freeze
 from opengever.base.interfaces import IRedirector
+from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
@@ -16,8 +20,124 @@ from plone.locking.interfaces import IRefreshableLockable
 from plone.namedfile.file import NamedBlobFile
 from plone.protect import createToken
 from Products.CMFCore.utils import getToolByName
+from zope.annotation.interfaces import IAnnotations
 from zope.component import getMultiAdapter
 import transaction
+
+
+class TestCheckin(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestCheckin, self).setUp()
+        self.dossier = create(Builder('dossier'))
+
+        self.document = create(Builder('document')
+                          .having(document_date=date(2014, 1, 1))
+                          .within(self.dossier)
+                          .checked_out())
+
+        self.manager = self.get_manager(self.document)
+
+    def get_manager(self, document):
+        return getMultiAdapter(
+            (document, self.portal.REQUEST), ICheckinCheckoutManager)
+
+    def test_annotations_key_is_cleared(self):
+        annotations = IAnnotations(self.document)
+        self.assertEquals(
+            TEST_USER_ID, annotations.get(CHECKIN_CHECKOUT_ANNOTATIONS_KEY))
+
+        self.manager.checkin()
+
+        self.assertEquals(
+            None, annotations.get(CHECKIN_CHECKOUT_ANNOTATIONS_KEY))
+
+    def test_new_version_is_created(self):
+        self.manager.checkin()
+
+        repo_tool = api.portal.get_tool('portal_repository')
+        history = repo_tool.getHistory(self.document)
+        self.assertEquals(2, len(history))
+
+    def test_clear_locks(self):
+        IRefreshableLockable(self.document).lock()
+        self.assertTrue(IRefreshableLockable(self.document).locked())
+
+        self.manager.checkin()
+        self.assertFalse(IRefreshableLockable(self.document).locked())
+
+    def test_document_date_is_updated_to_current_date(self):
+        self.manager.checkin()
+
+        self.assertEquals(date.today(), self.document.document_date)
+
+
+class TestReverting(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestReverting, self).setUp()
+        self.dossier = create(Builder('dossier'))
+        self.document = create(Builder('document')
+                               .having(document_date=date(2014, 1, 1))
+                               .within(self.dossier)
+                               .attach_file_containing(
+                                   u"INITIAL VERSION DATA", u"somefile.txt"))
+
+        self._create_version(self.document, 1)
+        self._create_version(self.document, 2)
+        transaction.commit()
+
+        self.manager = getMultiAdapter(
+            (self.document, self.portal.REQUEST), ICheckinCheckoutManager)
+
+    def _create_version(self, doc, version_id):
+        repo_tool = api.portal.get_tool('portal_repository')
+        vdata = 'VERSION {} DATA'.format(version_id)
+        doc.file.data = vdata
+        repo_tool.save(obj=doc, comment="This is Version %s" % version_id)
+
+    def test_creates_new_version_with_same_data(self):
+        self.manager.revert_to_version(2)
+
+        repo_tool = api.portal.get_tool('portal_repository')
+        version2 = repo_tool.retrieve(self.document, 2)
+
+        self.assertEquals(4, len(repo_tool.getHistory(self.document)))
+        self.assertEqual(self.document.file.data, version2.object.file.data)
+        self.assertEquals(u'Reverted file to version 2',
+                          repo_tool.retrieve(self.document, 3).comment)
+
+    def test_creates_a_new_blob_instance(self):
+        self.manager.revert_to_version(2)
+
+        repo_tool = api.portal.get_tool('portal_repository')
+        version2 = repo_tool.retrieve(self.document, 2)
+
+        self.assertNotEqual(
+            self.document.file._blob, version2.object.file._blob)
+        self.assertNotEqual(self.document.file, version2.object.file)
+
+    def test_resets_document_date_to_reverted_version(self):
+        with freeze(datetime(2015, 01, 28, 12, 00)):
+            self._create_version(self.document, 3)
+
+        self.document.document_date = date(2015, 5, 15)
+        self.manager.revert_to_version(3)
+        self.assertEquals(date(2015, 01, 28), self.document.document_date)
+
+    @browsing
+    def test_reverting_with_revert_link_in_versions_tab(self, browser):
+        browser.login().open(self.document, view='tabbedview_view-versions')
+        listing = browser.css('.listing').first
+
+        second_row = listing.css('tr')[2]
+        self.assertIn('This is Version 1', second_row.text)
+
+        revert_link = second_row.css('td a')[-1]
+        revert_link.click()
+
+        self.assertEquals(['Reverted file to version 1'], info_messages())
+        self.assertEquals('VERSION 1 DATA', self.document.file.data)
 
 
 class TestCheckinCheckoutManager(FunctionalTestCase):
@@ -39,32 +159,6 @@ class TestCheckinCheckoutManager(FunctionalTestCase):
             .within(self.dossier)
             .titled(u'Document2')
             .with_dummy_content())
-
-    def test_reverting(self):
-        """Test that reverting to a version creates a new NamedBlobFile instance
-        instead of using a reference.
-        This avoids the version being reverted to being overwritte later.
-        """
-        pr = getToolByName(self.portal, 'portal_repository')
-        manager = self.get_manager(self.doc1)
-
-        manager.checkout()
-        self.doc1.file = NamedBlobFile('bla bla 1', filename=u'test.txt')
-        manager.checkin(comment="Created Version 1")
-
-        manager.checkout()
-        self.doc1.file = NamedBlobFile('bla bla 2', filename=u'test.txt')
-        manager.checkin(comment="Created Version 2")
-
-        manager.checkout()
-        self.doc1.file = NamedBlobFile('bla bla 3', filename=u'test.txt')
-        manager.checkin(comment="Created Version 3")
-
-        manager.revert_to_version(2)
-
-        version2 = pr.retrieve(self.doc1, 2)
-        self.assertTrue(self.doc1.file._blob != version2.object.file._blob)
-        self.assertTrue(self.doc1.file != version2.object.file)
 
     def test_checkout(self):
         view = self.doc1.restrictedTraverse('@@editing_document')()
@@ -213,33 +307,6 @@ class TestCheckinViews(FunctionalTestCase):
         history = repository_tool.getHistory(document2)
         last_entry = repository_tool.retrieve(document2, len(history)-1)
         self.assertEquals(None, last_entry.comment)
-
-    @browsing
-    def test_reverting_with_revert_link_in_versions_tab(self, browser):
-        document = create(Builder("document")
-                          .checked_out_by(TEST_USER_ID)
-                          .within(self.dossier)
-                          .attach_file_containing(
-            u"INITIAL VERSION DATA", u"somefile.txt"))
-
-        browser.login().open(document)
-        browser.css('#checkin_without_comment').first.click()
-
-        self._create_version(document, 2)
-        self._create_version(document, 3)
-        transaction.commit()
-
-        browser.login().open(document, view='tabbedview_view-versions')
-        listing = browser.css('.listing').first
-
-        second_row = listing.css('tr')[2]
-        self.assertIn('This is Version 2', second_row.text)
-
-        revert_link = second_row.css('td a')[-1]
-        revert_link.click()
-
-        self.assertEquals(['Reverted file to version 2'], info_messages())
-        self.assertEquals('VERSION 2 DATA', document.file.data)
 
 
 # TODO: rewrite this test-case to express intent
