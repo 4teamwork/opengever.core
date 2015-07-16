@@ -5,6 +5,14 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Add internationalization support to the activity model.
+
+  - Implement translatable activity columns with the help of SQLAlchemy i18n.
+  - Added new attribute label to the Activity Model.
+  - Correclty translate the tasktype in activity description.
+
+  [phgross]
+
 - Adjust document_date handling:
 
   - Update document_date to current date during checkin
