@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-07-16 16:16+0000\n"
+"POT-Creation-Date: 2015-07-17 11:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,10 +16,6 @@ msgstr ""
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.activity\n"
-
-#: ./opengever/activity/templates/notification.pt:29
-msgid "View in GEVER"
-msgstr ""
 
 #. Default: "Actor"
 #: ./opengever/activity/browser/listing.py:56
@@ -47,7 +43,7 @@ msgid "heading_notifications"
 msgstr ""
 
 #. Default: "Details:"
-#: ./opengever/activity/templates/notification.pt:21
+#: ./opengever/activity/templates/notification.pt:19
 msgid "label_details"
 msgstr ""
 
@@ -64,5 +60,10 @@ msgstr ""
 #. Default: "No unread notifications"
 #: ./opengever/activity/viewlets/notification.pt:23
 msgid "no_unread_notifications"
+msgstr ""
+
+#. Default: "GEVER Task"
+#: ./opengever/activity/mail.py:60
+msgid "subject_prefix"
 msgstr ""
 
