@@ -136,7 +136,8 @@ class TaskAddedActivity(TaskActivity):
              self.context.get_task_type_label(language=language)],
             [_('label_dossier_title', u'Dossier title'),
              self.parent.title],
-            [_('label_text', u'Text'), self.context.text]
+            [_('label_text', u'Text'),
+             self.context.text if self.context.text else u'-' ]
         ]
 
     def before_recording(self):
