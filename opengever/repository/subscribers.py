@@ -20,6 +20,7 @@ def update_reference_prefixes(obj, event):
 
     if is_reference_number_prefix_changed(event.descriptions):
         catalog = api.portal.get_tool('portal_catalog')
-        children = catalog(path='/'.join(obj.getPhysicalPath()))
+        children = catalog.unrestrictedSearchResults(
+            path='/'.join(obj.getPhysicalPath()))
         for child in children:
             child.getObject().reindexObject(idxs=['reference'])

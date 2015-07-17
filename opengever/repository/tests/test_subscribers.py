@@ -20,6 +20,9 @@ class TestReferencePrefixUpdating(FunctionalTestCase):
                               .within(self.repository_1_1))
         self.subdossier = create(Builder('dossier').within(self.dossier))
         self.document = create(Builder('document').within(self.subdossier))
+        self.trashed_document = create(Builder('document')
+                                       .trashed()
+                                       .within(self.subdossier))
 
     @browsing
     def test_reference_number_is_updated_in_catalog(self, browser):
@@ -45,3 +48,6 @@ class TestReferencePrefixUpdating(FunctionalTestCase):
                           obj2brain(self.subdossier).reference)
         self.assertEquals('Client1 6.1 / 1.1 / 1',
                           obj2brain(self.document).reference)
+        self.assertEquals(
+            'Client1 6.1 / 1.1 / 2',
+            obj2brain(self.trashed_document, unrestricted=True).reference)
