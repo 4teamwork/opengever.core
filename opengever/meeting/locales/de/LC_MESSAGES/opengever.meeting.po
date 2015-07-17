@@ -643,7 +643,7 @@ msgstr "Titel"
 #. Default: "Unscheduled proposals"
 #: ./opengever/meeting/browser/committee.py:25
 msgid "label_unscheduled_proposals"
-msgstr "Nicht geplante Anträge"
+msgstr "Nicht traktandierte Anträge"
 
 #. Default: "Upcoming meetings"
 #: ./opengever/meeting/browser/committee.py:20
