@@ -51,7 +51,7 @@ class TestEmailNotification(FunctionalTestCase):
 
         mail = email.message_from_string(Mailing(self.portal).pop())
 
-        self.assertEquals('Test Task', mail.get('Subject'))
+        self.assertEquals('GEVER Task: Test Task', mail.get('Subject'))
 
     @browsing
     def test_from_and_to_addresses(self, browser):
