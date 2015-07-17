@@ -11,14 +11,16 @@ from opengever.ogds.models.group import Group
 from opengever.ogds.models.user import User
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Products.LDAPMultiPlugins.interfaces import ILDAPMultiPlugin
+from sqlalchemy.orm.exc import MultipleResultsFound
+from sqlalchemy.orm.exc import NoResultFound
 import logging
 import time
 
 
-NO_UID_MSG = "User '%s' has no 'uid' attribute."
-NO_UID_AD_MSG = "User '%s' has none of the attributes %s - skipping."
-USER_NOT_FOUND_LDAP = "Referenced user %s not found in LDAP, ignoring!"
-USER_NOT_FOUND_SQL = "Referenced user %s not found in SQL, ignoring!"
+NO_UID_MSG = "User '{}' has no 'uid' attribute."
+NO_UID_AD_MSG = "User '{}' has none of the attributes {} - skipping."
+USER_NOT_FOUND_LDAP = "Referenced user {} not found in LDAP, ignoring!"
+USER_NOT_FOUND_SQL = "Referenced user {} not found in SQL, ignoring!"
 
 AD_UID_KEYS = ['userid', 'sAMAccountName', 'windows_login_name']
 
@@ -62,7 +64,7 @@ def sync_ogds(plone, users=True, groups=True):
         updater.import_groups()
 
     elapsed = time.clock() - start
-    logger.info("Done in %.0f seconds." % elapsed)
+    logger.info("Done in {:0.1f} seconds.".format(elapsed))
 
     logger.info("Updating LDAP SYNC importstamp...")
     set_remote_import_stamp(plone)
@@ -83,7 +85,13 @@ class OGDSUpdater(grok.Adapter):
         """Returns the OGDS user object identified by `userid`.
         """
         session = create_session()
-        return session.query(User).filter_by(userid=userid).first()
+        return session.query(User).filter_by(userid=userid).one()
+
+    def get_sql_group(self, groupid):
+        """Returns the OGDS group object identified by `groupid`.
+        """
+        session = create_session()
+        return session.query(Group).filter_by(groupid=groupid).one()
 
     def user_exists(self, userid):
         """Checks whether the OGDS user identified by `userid` exists or not.
@@ -144,8 +152,8 @@ class OGDSUpdater(grok.Adapter):
 
                 # Skip users with uid longer than SQL 'userid' column
                 if len(userid) > USER_ID_LENGTH:
-                    logger.warn("Skipping user '%s' - "
-                                "userid too long!" % userid)
+                    logger.warn("Skipping user '{}' - "
+                                "userid too long!".format(userid))
                     continue
 
                 if not self.user_exists(userid):
@@ -154,7 +162,16 @@ class OGDSUpdater(grok.Adapter):
                     session.add(user)
                 else:
                     # Get the existing user
-                    user = session.query(User).filter_by(userid=userid).first()
+                    try:
+                        user = self.get_sql_user(userid)
+                    except MultipleResultsFound:
+                        # Duplicate user with slightly different spelling
+                        # (casing, whitespace, ...) that may not be considered
+                        # different by the SQL backend's unique constraint.
+                        # We therefore enforce uniqueness ourselves.
+                        logger.warn(
+                            "Skipping duplicate user '{}'!".format(userid))
+                        continue
 
                 # Iterate over all SQL columns and update their values
                 columns = User.__table__.columns
@@ -179,7 +196,7 @@ class OGDSUpdater(grok.Adapter):
 
                 # Set the user active
                 user.active = True
-                logger.info("Imported user '%s'" % userid)
+                logger.info("Imported user '{}'".format(userid))
             session.flush()
 
     def import_groups(self):
@@ -210,8 +227,8 @@ class OGDSUpdater(grok.Adapter):
 
                 # Skip groups with groupid longer than SQL 'groupid' column
                 if len(groupid) > GROUP_ID_LENGTH:
-                    logger.warn("Skipping group '%s' - "
-                                "groupid too long!" % groupid)
+                    logger.warn("Skipping group '{}' - "
+                                "groupid too long!".format(groupid))
                     continue
 
                 if not self.group_exists(groupid):
@@ -220,8 +237,16 @@ class OGDSUpdater(grok.Adapter):
                     session.add(group)
                 else:
                     # Get the existing group
-                    group = session.query(Group).filter_by(
-                        groupid=groupid).first()
+                    try:
+                        group = self.get_sql_group(groupid)
+                    except MultipleResultsFound:
+                        # Duplicate group with slightly different spelling
+                        # (casing, whitespace, ...) that may not be considered
+                        # different by the SQL backend's unique constraint.
+                        # We therefore enforce uniqueness ourselves.
+                        logger.warn(
+                            "Skipping duplicate group '{}'!".format(groupid))
+                        continue
 
                 # Iterate over all SQL columns and update their values
                 columns = Group.__table__.columns
@@ -242,7 +267,7 @@ class OGDSUpdater(grok.Adapter):
                 contained_users = []
                 group_members = ldap_util.get_group_members(info)
 
-                logger.info("Importing group '%s'..." % groupid)
+                logger.info("Importing group '{}'...".format(groupid))
                 for user_dn in group_members:
                     try:
                         ldap_user = ldap_util.entry_by_dn(user_dn)
@@ -253,7 +278,7 @@ class OGDSUpdater(grok.Adapter):
 
                         if not ldap_util.is_ad:
                             if 'userid' not in user_info:
-                                logger.warn(NO_UID_MSG % user_dn)
+                                logger.warn(NO_UID_MSG.format(user_dn))
                                 continue
                             userid = user_info['userid']
                         else:
@@ -266,8 +291,8 @@ class OGDSUpdater(grok.Adapter):
                                     break
                             if not uid_found:
                                 # No suitable UID found, skip this user
-                                logger.warn(NO_UID_AD_MSG % (user_dn,
-                                                             AD_UID_KEYS))
+                                logger.warn(NO_UID_AD_MSG.format(
+                                    user_dn, AD_UID_KEYS))
                                 continue
 
                         if isinstance(userid, list):
@@ -276,16 +301,23 @@ class OGDSUpdater(grok.Adapter):
                         if isinstance(userid, str):
                             userid = userid.decode('utf-8')
 
-                        user = self.get_sql_user(userid)
-                        if user is None:
-                            logger.warn(USER_NOT_FOUND_SQL % userid)
+                        try:
+                            user = self.get_sql_user(userid)
+                        except NoResultFound:
+                            logger.warn(USER_NOT_FOUND_SQL.format(userid))
+                            continue
+                        except MultipleResultsFound:
+                            # Duplicate user - skip (see above).
+                            logger.warn(
+                                "Skipping duplicate user '{}'!".format(userid))
                             continue
 
                         contained_users.append(user)
-                        logger.info("Importing user '%s' "
-                                    "into group '%s'..." % (userid, groupid))
+                        logger.info(
+                            "Importing user '{}' into group '{}'...".format(
+                                userid, groupid))
                     except NO_SUCH_OBJECT:
-                        logger.warn(USER_NOT_FOUND_LDAP % user_dn)
+                        logger.warn(USER_NOT_FOUND_LDAP.format(user_dn))
                 group.users = contained_users
                 session.flush()
                 logger.info("Done.")
