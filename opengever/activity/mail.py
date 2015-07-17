@@ -2,10 +2,10 @@ from email.header import Header
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from opengever.activity.browser import resolve_notification_url
+from opengever.base.model import get_locale
 from opengever.ogds.base.utils import ogds_service
 from plone import api
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from zope.i18n import translate
 
 
 class PloneNotificationMailer(object):
@@ -44,22 +44,29 @@ class PloneNotificationMailer(object):
 
         recipient = ogds_service().fetch_user(notification.watcher.user_id)
         msg['To'] = recipient.email
-        msg['Subject'] = Header(notification.activity.title, 'utf-8')
+        msg['Subject'] = Header(
+            notification.activity.translations[self.get_users_language()].title, 'utf-8')
 
         html = self.prepare_html(notification)
         msg.attach(MIMEText(html.encode('utf-8'), 'html', 'utf-8'))
 
         return msg
 
+    def get_users_language(self):
+        # XXX TODO Right now there is no support to store users preferred
+        # language. Therefore we send the mails always in the current selected
+        # language.
+        return get_locale()
+
     def prepare_html(self, notification):
         template = ViewPageTemplateFile("templates/notification.pt")
+        language = self.get_users_language()
         options = {
-            'subject': notification.activity.title,
-            'title': notification.activity.title,
-            'kind': translate(notification.activity.kind,
-                              context=self.request, domain="plone"),
-            'summary': notification.activity.summary,
-            'description': notification.activity.description,
+            'subject': notification.activity.translations[language].title,
+            'title': notification.activity.translations[language].title,
+            'label': notification.activity.translations[language].label,
+            'summary': notification.activity.translations[language].summary,
+            'description': notification.activity.translations[language].description,
             'link': resolve_notification_url(notification)
         }
 

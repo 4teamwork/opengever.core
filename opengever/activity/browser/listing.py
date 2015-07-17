@@ -41,6 +41,7 @@ class NotificationListingTab(BaseListingTab):
     implements(INotificationTableSourceConfig)
 
     sort_on = 'created'
+    show_searchform = False
 
     columns = (
         {'column': 'kind',

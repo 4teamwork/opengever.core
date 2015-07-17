@@ -1,5 +1,7 @@
 from opengever.activity.model.notification import Notification
 from opengever.base.model import Base
+from opengever.base.model import DEFAULT_LOCALE
+from opengever.base.model import SUPPORTED_LOCALES
 from opengever.base.model import UTCDateTime
 from opengever.ogds.models import USER_ID_LENGTH
 from opengever.ogds.models.query import BaseQuery
@@ -10,6 +12,7 @@ from sqlalchemy import String
 from sqlalchemy import Text
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
+from sqlalchemy_i18n import Translatable, translation_base
 import datetime
 import pytz
 
@@ -23,19 +26,20 @@ class ActivityQuery(BaseQuery):
     pass
 
 
-class Activity(Base):
+class Activity(Base, Translatable):
 
     query_cls = ActivityQuery
 
     __tablename__ = 'activities'
+    __translatable__ = {'locales': SUPPORTED_LOCALES,
+                        'fallback_locale': DEFAULT_LOCALE}
 
-    activity_id = Column('id', Integer, Sequence("activities_id_seq"),
+    locale = DEFAULT_LOCALE
+
+    id = Column('id', Integer, Sequence("activities_id_seq"),
                          primary_key=True)
     kind = Column(String(255), nullable=False)
     actor_id = Column(String(USER_ID_LENGTH), nullable=False)
-    title = Column(String(512), nullable=False)
-    summary = Column(Text, nullable=False)
-    description = Column(Text)
     created = Column(UTCDateTime(timezone=True), default=utcnow_tz_aware)
     resource_id = Column(Integer, ForeignKey('resources.id'), nullable=False)
     resource = relationship("Resource", backref="activities")
@@ -59,3 +63,13 @@ class Activity(Base):
 
     def is_current_user(self, watcher):
         return watcher.user_id == self.actor_id
+
+
+class ActivityTranslation(translation_base(Activity)):
+
+    __tablename__ = 'activities_translation'
+
+    title = Column('title', Text)
+    label = Column('label', Text)
+    summary = Column('summary', Text)
+    description = Column('description', Text)

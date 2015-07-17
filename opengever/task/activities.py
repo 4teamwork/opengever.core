@@ -1,5 +1,5 @@
 from opengever.activity import notification_center
-from opengever.base.utils import get_preferred_language_code
+from opengever.base.model import get_locale
 from opengever.ogds.base.actor import Actor
 from opengever.task import _
 from opengever.task.response_description import ResponseDescription
@@ -28,7 +28,7 @@ class TaskActivity(object):
 
     @property
     def title(self):
-        return self.context.title
+        return self.translate_to_all_languages(self.context.title)
 
     @property
     def actor_id(self):
@@ -62,13 +62,31 @@ class TaskActivity(object):
         self.before_recording()
 
         self.center.add_activity(
-            self.context, self.kind, self.title, self.summary,
-            self.actor_id, description=self.description)
+            self.context,
+            self.kind,
+            self.title,
+            self.label,
+            self.summary,
+            self.actor_id,
+            self.description)
 
         self.after_recording()
 
-    def translate(self, msg):
-        return translate(msg, context=self.request)
+    def translate_to_all_languages(self, msg):
+        values = {}
+        for code in self._get_supported_languages():
+            values[code] = translate(msg, context=self.request, target_language=code)
+
+        return values
+
+    def translate(self, msg, language):
+        return translate(msg, context=self.request, target_language=language)
+
+    def _get_supported_languages(self):
+        """Returns a list of codes of all supported language.
+        """
+        lang_tool = api.portal.get_tool('portal_languages')
+        return [code.split('-')[0] for code in lang_tool.getSupportedLanguages()]
 
 
 class TaskAddedActivity(TaskActivity):
@@ -79,38 +97,46 @@ class TaskAddedActivity(TaskActivity):
         return PloneMessageFactory(u'task-added', default=u'Task added')
 
     @property
+    def label(self):
+        return self.translate_to_all_languages(
+            _('transition_label_default', u'Task added'))
+
+    @property
     def summary(self):
         actor = Actor.lookup(self.context.Creator())
         msg = _('label_task_added', u'New task added by ${user}',
                 mapping={'user': actor.get_label(with_principal=False)})
-        return self.translate(msg)
+        return self.translate_to_all_languages(msg)
 
     @property
     def description(self):
-        return self.render_description_markup(self.collects_description_data())
+        descriptions = {}
+        for code in self._get_supported_languages():
+            descriptions[code] = self.render_description_markup(
+                self.collect_description_data(code), code)
 
-    def render_description_markup(self, data):
+        return descriptions
+
+    def render_description_markup(self, data, language):
         msg = u'<table><tbody>'
         for label, value in data:
-            msg = u'{}<tr><th>{}</th><td>{}</td></tr>'.format(msg, label, value)
+            msg = u'{}<tr><th>{}</th><td>{}</td></tr>'.format(
+                msg, self.translate(label, language), value)
 
         return u'{}</tbody></table>'.format(msg)
 
-    def collects_description_data(self):
+    def collect_description_data(self, language):
         """Returns a list with [label, value] pairs.
         """
         return [
-            [self.translate(_('label_task_title', u'Task title')),
-             self.title],
-            [self.translate(_('label_deadline', u'Deadline')),
+            [_('label_task_title', u'Task title'), self.context.title],
+            [_('label_deadline', u'Deadline'),
              api.portal.get_localized_time(str(self.context.deadline))],
-            [self.translate(_('label_task_type', u'Task Type')),
-             self.context.get_task_type_label(
-                 language=get_preferred_language_code())],
-            [self.translate(_('label_dossier_title', u'Dossier title')),
+            [_('label_task_type', u'Task Type'),
+             self.context.get_task_type_label(language=language)],
+            [_('label_dossier_title', u'Dossier title'),
              self.parent.title],
-            [self.translate(_('label_text', u'Text')),
-             self.context.text]
+            [_('label_text', u'Text'), self.context.text]
         ]
 
     def before_recording(self):
@@ -142,8 +168,13 @@ class TaskTransitionActivity(TaskActivity):
 
     @property
     def summary(self):
-        msg = ResponseDescription.get(response=self.response).msg()
-        return self.translate(msg)
+        return self.translate_to_all_languages(
+            ResponseDescription.get(response=self.response).msg())
+
+    @property
+    def label(self):
+        return self.translate_to_all_languages(
+            ResponseDescription.get(response=self.response).label())
 
     @property
     def actor(self):
@@ -151,7 +182,7 @@ class TaskTransitionActivity(TaskActivity):
 
     @property
     def description(self):
-        return self.response.text
+        return {get_locale(): self.response.text}
 
     def record(self):
         if self._is_ignored_transition():

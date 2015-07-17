@@ -5,7 +5,6 @@ from opengever.activity.model import Watcher
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.ogds.base.actor import Actor
-from opengever.ogds.models.query import extend_query_with_textfilter
 from plone import api
 from sqlalchemy.orm import contains_eager
 from sqlalchemy.sql.expression import asc
@@ -79,16 +78,29 @@ class NotificationCenter(object):
 
         return resource.watchers
 
-    def add_activity(self, oguid, kind, title, summary, actor_id,
-                     description=u''):
+    def add_activity(self, oguid, kind, title, label, summary, actor_id, description):
+        if description is None:
+            description = {}
 
         resource = self.fetch_resource(oguid)
         if not resource:
             resource = self.add_resource(oguid)
 
-        activity = Activity(resource=resource, kind=kind, title=title,
-                            summary=summary, actor_id=actor_id,
-                            description=description)
+        activity = Activity(resource=resource, kind=kind, actor_id=actor_id)
+
+        # language dependent attributes
+        for language, value in label.items():
+            activity.translations[language].label = value
+
+        for language, value in summary.items():
+            activity.translations[language].summary = value
+
+        for language, value in description.items():
+            activity.translations[language].description = value
+
+        for language, value in title.items():
+            activity.translations[language].title = value
+
         self.session.add(activity)
 
         self.create_notifications(activity)
@@ -114,17 +126,14 @@ class NotificationCenter(object):
     def get_notification(self, notification_id):
         return Notification.get(notification_id)
 
-    def list_notifications(self, userid=None, sort_on='title', filters=[],
+    def list_notifications(self, userid=None, sort_on='created', filters=[],
                                      sort_reverse=False, offset=0, limit=None):
 
         order = desc if sort_reverse else asc
-        fields = [Activity.kind, Activity.title, Activity.actor_id]
-
         query = Notification.query.join(Notification.activity)
         if userid:
             query = query.by_user(userid)
 
-        query = extend_query_with_textfilter(query, fields, filters)
         query = query.order_by(order(sort_on))
         query = query.offset(offset).limit(limit)
         return query.options(contains_eager(Notification.activity)).all()
@@ -155,12 +164,12 @@ class PloneNotificationCenter(NotificationCenter):
         super(PloneNotificationCenter, self).remove_watcher_from_resource(
             oguid, userid)
 
-    def add_activity(self, obj, kind, title, summary, actor_id,
-                     description=u''):
+    def add_activity(self, obj, kind, title, label, summary, actor_id, description):
+
         oguid = self._get_oguid_for(obj)
         try:
             activity = super(PloneNotificationCenter, self).add_activity(
-                oguid, kind, title, summary, actor_id, description=description)
+                oguid, kind, title, label, summary, actor_id, description)
             return activity
 
         except ConflictError:
@@ -212,8 +221,7 @@ class DisabledNotificationCenter(NotificationCenter):
     def get_watchers(self, obj):
         return []
 
-    def add_activity(self, obj, kind, title, summary, actor_id,
-                     description=u''):
+    def add_activity(self, obj, kind, title, label, summary, actor_id, description):
         pass
 
     def get_users_notifications(self, userid, only_unread=False, limit=None):
