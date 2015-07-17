@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-06-23 18:19+0000\n"
+"POT-Creation-Date: 2015-07-17 11:04+0000\n"
 "PO-Revision-Date: 2015-02-24 08:40+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,27 +17,23 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./opengever/activity/templates/notification.pt:27
-msgid "View in GEVER"
-msgstr "In GEVER betrachten"
-
 #. Default: "Actor"
-#: ./opengever/activity/browser/listing.py:55
+#: ./opengever/activity/browser/listing.py:56
 msgid "column_Actor"
 msgstr "Akteur"
 
 #. Default: "Kind"
-#: ./opengever/activity/browser/listing.py:47
+#: ./opengever/activity/browser/listing.py:48
 msgid "column_kind"
 msgstr "Typ"
 
 #. Default: "Title"
-#: ./opengever/activity/browser/listing.py:51
+#: ./opengever/activity/browser/listing.py:52
 msgid "column_title"
 msgstr "Titel"
 
 #. Default: "Created"
-#: ./opengever/activity/browser/listing.py:59
+#: ./opengever/activity/browser/listing.py:60
 msgid "created"
 msgstr "Erstellt"
 
@@ -46,10 +42,10 @@ msgstr "Erstellt"
 msgid "heading_notifications"
 msgstr "Benachrichtigungen"
 
-#. Default: "Description:"
-#: ./opengever/activity/templates/notification.pt:21
-msgid "label_description"
-msgstr "Beschreibung:"
+#. Default: "Details:"
+#: ./opengever/activity/templates/notification.pt:19
+msgid "label_details"
+msgstr "Details:"
 
 #. Default: "All Notifications"
 #: ./opengever/activity/viewlets/notification.pt:54
@@ -57,7 +53,7 @@ msgid "label_notifications_overview"
 msgstr "Alle Benachrichtigungen"
 
 #. Default: "A problem has occurred during the notification creation. Notification could not be produced."
-#: ./opengever/activity/center.py:166
+#: ./opengever/activity/center.py:179
 msgid "msg_error_not_notified"
 msgstr "Während dem Erzeugen der Benachrichtigung ist ein Fehler aufgetreten. Die Benachrichtigung wurde deshalb nicht ausgelöst."
 
@@ -65,3 +61,8 @@ msgstr "Während dem Erzeugen der Benachrichtigung ist ein Fehler aufgetreten. D
 #: ./opengever/activity/viewlets/notification.pt:23
 msgid "no_unread_notifications"
 msgstr "Keine ungelesenen Benachrichtigungen"
+
+#. Default: "GEVER Task"
+#: ./opengever/activity/mail.py:60
+msgid "subject_prefix"
+msgstr "GEVER Aufgabe"

@@ -51,7 +51,7 @@ class TestEmailNotification(FunctionalTestCase):
 
         mail = email.message_from_string(Mailing(self.portal).pop())
 
-        self.assertEquals('Test Task', mail.get('Subject'))
+        self.assertEquals('GEVER Task: Test Task', mail.get('Subject'))
 
     @browsing
     def test_from_and_to_addresses(self, browser):
@@ -66,7 +66,7 @@ class TestEmailNotification(FunctionalTestCase):
         self.assertEquals('Test User <test@example.org>', mail.get('From'))
 
     @browsing
-    def test_see_on_gever_is_linked_to_resolve_notification_view(self, browser):
+    def test_task_title_is_linked_to_resolve_notification_view(self, browser):
         browser.login().open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': 'Test Task',
                       'Responsible': 'hugo.boss',
@@ -76,7 +76,6 @@ class TestEmailNotification(FunctionalTestCase):
         mail = email.message_from_string(Mailing(self.portal).pop())
         html_part = mail.get_payload()[0].as_string()
 
-        # TODO: better assertion ...
-        expected = '<a href=3D"http://nohost/plone/@@resolve_notification?notification_id=\n=3D1">View in GEVER</a>'
+        link = '<a href=3D"http://nohost/plone/@@resolve_notification?notification_id=\n=3D1">Test Task</a>'
 
-        self.assertIn(expected, html_part)
+        self.assertIn(link, html_part)

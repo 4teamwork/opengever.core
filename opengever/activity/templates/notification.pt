@@ -8,23 +8,19 @@
 
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title tal:content="options/subject">
-    </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   </head>
 
   <body>
-    <p><b tal:content="options/label"></b></p>
+    <p <p style="padding-bottom: 5px;" tal:content="structure options/summary" />
+
     <a href="" tal:content="options/title" tal:attributes="href options/link"></a>
-    <p tal:content="structure options/summary" />
 
-    <p i18n:translate="label_description">Description:</p>
-    <span tal:replace="structure options/description" />
+    <p style="padding-top: 15px;" i18n:translate="label_details">Details:</p>
+    <div style="text-align: left;">
+      <span tal:replace="structure options/description" />
+    </div>
 
-    <br />
-    <hr />
-    <br />
-    <a href="" i18n:translate="" tal:attributes="href options/link">View in GEVER</a>
   </body>
 
 </html>

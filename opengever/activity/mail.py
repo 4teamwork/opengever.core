@@ -6,6 +6,11 @@ from opengever.base.model import get_locale
 from opengever.ogds.base.utils import ogds_service
 from plone import api
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from zope.i18n import translate
+from zope.i18nmessageid import MessageFactory
+
+# because of circular imports, we can't import from opengever.activity
+_ = MessageFactory("opengever.activity")
 
 
 class PloneNotificationMailer(object):
@@ -44,13 +49,18 @@ class PloneNotificationMailer(object):
 
         recipient = ogds_service().fetch_user(notification.watcher.user_id)
         msg['To'] = recipient.email
-        msg['Subject'] = Header(
-            notification.activity.translations[self.get_users_language()].title, 'utf-8')
+        msg['Subject'] = self.get_subject(notification)
 
         html = self.prepare_html(notification)
         msg.attach(MIMEText(html.encode('utf-8'), 'html', 'utf-8'))
 
         return msg
+
+    def get_subject(self, notification):
+        prefix = translate(_(u'subject_prefix', default=u'GEVER Task'),
+                           context=self.request)
+        title = notification.activity.translations[self.get_users_language()].title
+        return Header(u'{}: {}'.format(prefix, title), 'utf-8')
 
     def get_users_language(self):
         # XXX TODO Right now there is no support to store users preferred
@@ -62,7 +72,6 @@ class PloneNotificationMailer(object):
         template = ViewPageTemplateFile("templates/notification.pt")
         language = self.get_users_language()
         options = {
-            'subject': notification.activity.translations[language].title,
             'title': notification.activity.translations[language].title,
             'label': notification.activity.translations[language].label,
             'summary': notification.activity.translations[language].summary,
