@@ -27,6 +27,7 @@ AD_UID_KEYS = ['userid', 'sAMAccountName', 'windows_login_name']
 LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 
 logger = logging.getLogger('opengever.ogds.base')
+logger.setLevel(logging.INFO)
 
 
 def sync_ogds(plone, users=True, groups=True):
@@ -50,7 +51,6 @@ def sync_ogds(plone, users=True, groups=True):
         file_handler = logging.FileHandler(log_file)
         file_handler.setFormatter(logging.Formatter(LOG_FORMAT))
         logger.addHandler(file_handler)
-        logger.setLevel(logging.INFO)
 
     updater = IOGDSUpdater(plone)
     start = time.clock()

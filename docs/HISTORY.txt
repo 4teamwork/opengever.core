@@ -5,6 +5,11 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Make sure to always set OGDS sync logger to INFO level.
+  Previously this was only guaranteed if product-config entry
+  for the `ogds_log_file` was present in zope.conf.
+  [lgraf]
+
 - Drop unused opengever.ogds.base.sections.
   (Legacy transmogrifier-based OGDS synchronization).
   [lgraf]
