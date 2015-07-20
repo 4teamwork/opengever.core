@@ -211,6 +211,11 @@ class OGDSUpdater(grok.Adapter):
         """
         session = create_session()
 
+        # Set all SQL groups inactive first - the ones still contained in the
+        # LDAP will be set active again below (in the same transaction).
+        for group in session.query(Group):
+            group.active = False
+
         for plugin in self._ldap_plugins():
             ldap_userfolder = plugin._getLDAPUserFolder()
 
@@ -325,6 +330,8 @@ class OGDSUpdater(grok.Adapter):
                                 userid, groupid))
                     except NO_SUCH_OBJECT:
                         logger.warn(USER_NOT_FOUND_LDAP.format(user_dn))
+
                 group.users = contained_users
+                group.active = True
                 session.flush()
                 logger.info("Done.")

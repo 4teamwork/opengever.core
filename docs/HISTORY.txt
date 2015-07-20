@@ -5,6 +5,9 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- OGDS Sync: Set groups that have been removed from LDAP to inactive in OGDS.
+  [lgraf]
+
 - Upgrade-Step: Add `active` column to OGDS `Group` model.
   (Upgrade-step for corresponding change in opengever.ogds.models)
   [lgraf]
