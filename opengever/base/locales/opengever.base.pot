@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-07-10 12:43+0000\n"
+"POT-Creation-Date: 2015-07-20 13:12+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,10 @@ msgstr ""
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.repository\n"
+
+#: ./opengever/base/browser/list_groupmembers.pt:5
+msgid "(INACTIVE)"
+msgstr ""
 
 #: ./opengever/base/profiles/default/actions.xml
 msgid "Copy Items"
@@ -33,7 +37,7 @@ msgstr ""
 msgid "Properties"
 msgstr ""
 
-#: ./opengever/base/browser/list_groupmembers.pt:13
+#: ./opengever/base/browser/list_groupmembers.pt:14
 msgid "There are no members in this group."
 msgstr ""
 

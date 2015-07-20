@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-07-10 12:43+0000\n"
+"POT-Creation-Date: 2015-07-20 13:12+0000\n"
 "PO-Revision-Date: 2014-09-04 01:03+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -17,6 +17,10 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 "X-Is-Fallback-For: de-at de-li de-lu de-ch de-de\n"
+
+#: ./opengever/base/browser/list_groupmembers.pt:5
+msgid "(INACTIVE)"
+msgstr "(INAKTIV)"
 
 #: ./opengever/base/profiles/default/actions.xml
 msgid "Copy Items"
@@ -34,7 +38,7 @@ msgstr "In dieser Version ist keine Datei vorhanden"
 msgid "Properties"
 msgstr "Eigenschaften anzeigen"
 
-#: ./opengever/base/browser/list_groupmembers.pt:13
+#: ./opengever/base/browser/list_groupmembers.pt:14
 msgid "There are no members in this group."
 msgstr "In dieser Gruppe befinden sich keine Benutzer."
 
