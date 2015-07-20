@@ -17,7 +17,7 @@ class UserDetails(grok.View):
     grok.implements(IPublishTraverse)
 
     @classmethod
-    def url_for(self, userid):
+    def url_for(cls, userid):
         portal = getSite()
         return '/'.join((portal.portal_url(), '@@user-details',
                          userid))
