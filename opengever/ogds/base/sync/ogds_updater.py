@@ -1,7 +1,8 @@
-from App.config import getConfiguration
 from five import grok
 from ldap import NO_SUCH_OBJECT
+from logging.handlers import TimedRotatingFileHandler
 from opengever.base.model import create_session
+from opengever.base.utils import PathFinder
 from opengever.ogds.base.interfaces import ILDAPSearch
 from opengever.ogds.base.interfaces import IOGDSUpdater
 from opengever.ogds.base.sync.import_stamp import set_remote_import_stamp
@@ -14,6 +15,7 @@ from Products.LDAPMultiPlugins.interfaces import ILDAPMultiPlugin
 from sqlalchemy.orm.exc import MultipleResultsFound
 from sqlalchemy.orm.exc import NoResultFound
 import logging
+import os
 import time
 
 
@@ -42,15 +44,8 @@ def sync_ogds(plone, users=True, groups=True):
     where you use it, you'll need to take care of that yourself, if necessary.
     """
 
-    # Set up log handler for logging to ogds_log_file
-    config = getConfiguration()
-    ogds_conf = config.product_config.get('opengever.core', dict())
-    log_file = ogds_conf.get('ogds_log_file')
-
-    if log_file:
-        file_handler = logging.FileHandler(log_file)
-        file_handler.setFormatter(logging.Formatter(LOG_FORMAT))
-        logger.addHandler(file_handler)
+    # Set up logging to a rotating ogds-update.log
+    setup_ogds_sync_logfile(logger)
 
     updater = IOGDSUpdater(plone)
     start = time.clock()
@@ -70,6 +65,18 @@ def sync_ogds(plone, users=True, groups=True):
     set_remote_import_stamp(plone)
 
     logger.info("Synchronization Done.")
+
+
+def setup_ogds_sync_logfile(logger):
+    """Sets up logging to a rotating var/log/ogds-update.log.
+    """
+    log_dir = PathFinder().var_log
+    file_handler = TimedRotatingFileHandler(
+        os.path.join(log_dir, 'ogds-update.log'),
+        when='midnight', backupCount=7)
+    file_handler.setLevel(logging.INFO)
+    file_handler.setFormatter(logging.Formatter(LOG_FORMAT))
+    logger.addHandler(file_handler)
 
 
 class OGDSUpdater(grok.Adapter):

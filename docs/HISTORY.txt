@@ -5,6 +5,11 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Drop `ogds_log_file` product config option and instead log
+  to a file with a fixed path in var/log/ogds-update.log, and
+  make sure that file is rotated.
+  [lgraf]
+
 - Add `PathFinder` helper class to provide various Zope2 Instance
   related paths that are otherwise cumbersone to access.
   [lgraf]
