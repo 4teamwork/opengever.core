@@ -15,6 +15,9 @@
     <!-- Register locales translations -->
     <i18n:registerTranslations directory="locales" />
 
+    <adapter factory=".model.lockable.SQLLockable" />
+
+
     <!-- Register an extension profile to make the product installable -->
     <genericsetup:registerProfile
         name="default"

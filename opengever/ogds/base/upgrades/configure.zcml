@@ -111,4 +111,14 @@
         profile="opengever.ogds.base:default"
         />
 
+    <!-- 4302 -> 4500 -->
+    <genericsetup:upgradeStep
+        title="Add locks table."
+        description=""
+        source="4302"
+        destination="4500"
+        handler="opengever.ogds.base.upgrades.to4500.AddLocksTable"
+        profile="opengever.ogds.base:default"
+        />
+
 </configure>
