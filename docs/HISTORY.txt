@@ -5,6 +5,9 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Show statusmessage after successfully submitting a proposal.
+  [phgross]
+
 - Autosizing textareas in the add and edit form of proposals.
   [phgross]
 

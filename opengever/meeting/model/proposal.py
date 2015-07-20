@@ -22,6 +22,7 @@ from sqlalchemy.orm import backref
 from sqlalchemy.orm import composite
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
+from zope.globalrequest import getRequest
 
 
 class Submit(Transition):
@@ -30,6 +31,10 @@ class Submit(Transition):
         super(Submit, self).execute(obj, model)
         assert obj, 'submitting requires a plone context object.'
         obj.submit()
+
+        msg = _(u'msg_proposal_submitted',
+                default=u'Proposal successfully submitted.')
+        api.portal.show_message(msg, request=getRequest(), type='info')
 
 
 class Proposal(Base):

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-06-12 12:53+0000\n"
+"POT-Creation-Date: 2015-07-20 15:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -403,12 +403,12 @@ msgid "column_to"
 msgstr "Jusqu'à"
 
 #. Default: "Decide"
-#: ./opengever/meeting/model/proposal.py:108
+#: ./opengever/meeting/model/proposal.py:113
 msgid "decide"
 msgstr "Décider"
 
 #. Default: "Decided"
-#: ./opengever/meeting/model/proposal.py:93
+#: ./opengever/meeting/model/proposal.py:98
 msgid "decided"
 msgstr "Décidé"
 
@@ -681,6 +681,11 @@ msgstr ""
 msgid "msg_membership_deleted"
 msgstr ""
 
+#. Default: "Proposal successfully submitted."
+#: ./opengever/meeting/model/proposal.py:35
+msgid "msg_proposal_submitted"
+msgstr ""
+
 #. Default: "The object was deleted successfully"
 #: ./opengever/meeting/browser/views.py:21
 msgid "msg_successfully_deleted"
@@ -703,7 +708,7 @@ msgstr "Nouvelles propositions soumises"
 
 #. Default: "Pending"
 #: ./opengever/meeting/model/meeting.py:61
-#: ./opengever/meeting/model/proposal.py:88
+#: ./opengever/meeting/model/proposal.py:93
 msgid "pending"
 msgstr "En modification"
 
@@ -759,22 +764,22 @@ msgstr ""
 
 #. Default: "Schedule"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:114
-#: ./opengever/meeting/model/proposal.py:104
+#: ./opengever/meeting/model/proposal.py:109
 msgid "schedule"
 msgstr "Mettre à l`ordre du jour"
 
 #. Default: "Scheduled"
-#: ./opengever/meeting/model/proposal.py:92
+#: ./opengever/meeting/model/proposal.py:97
 msgid "scheduled"
 msgstr "Mis à l'ordre du jour"
 
 #. Default: "Submit"
-#: ./opengever/meeting/model/proposal.py:102
+#: ./opengever/meeting/model/proposal.py:107
 msgid "submit"
 msgstr "soumettre"
 
 #. Default: "Submitted"
-#: ./opengever/meeting/model/proposal.py:90
+#: ./opengever/meeting/model/proposal.py:95
 msgid "submitted"
 msgstr "Soumis"
 
@@ -784,6 +789,7 @@ msgid "tab_matches"
 msgstr "${amount} résultats"
 
 #. Default: "Remove from schedule"
-#: ./opengever/meeting/model/proposal.py:106
+#: ./opengever/meeting/model/proposal.py:111
 msgid "un-schedule"
 msgstr "Enlever le point de l'ordre du jour"
+
