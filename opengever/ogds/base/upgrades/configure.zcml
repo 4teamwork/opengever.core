@@ -101,4 +101,14 @@
         profile="opengever.ogds.base:default"
         />
 
+    <!-- 4301 -> 4302 -->
+    <genericsetup:upgradeStep
+        title="Add `active` column to OGDS `Group` model"
+        description=""
+        source="4301"
+        destination="4302"
+        handler="opengever.ogds.base.upgrades.to4302.AddActiveColumnToGroup"
+        profile="opengever.ogds.base:default"
+        />
+
 </configure>

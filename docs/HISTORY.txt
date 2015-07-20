@@ -5,6 +5,10 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Upgrade-Step: Add `active` column to OGDS `Group` model.
+  (Upgrade-step for corresponding change in opengever.ogds.models)
+  [lgraf]
+
 - Drop `ogds_log_file` product config option and instead log
   to a file with a fixed path in var/log/ogds-update.log, and
   make sure that file is rotated.
