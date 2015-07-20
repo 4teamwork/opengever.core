@@ -10,11 +10,13 @@ from opengever.meeting.vocabulary import get_committee_member_vocabulary
 from plone import api
 from plone.autoform.form import AutoExtensibleForm
 from plone.directives import form
+from plone.locking.interfaces import ILockable
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import button
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form.form import EditForm
+from zExceptions import Redirect
 from zope import schema
 
 
@@ -85,9 +87,38 @@ class EditProtocol(AutoExtensibleForm, ModelProxyEditForm, EditForm):
     def url_for(cls, context, meeting):
         return "{}/protocol".format(MeetingList.url_for(context, meeting))
 
+    def update(self):
+        super(EditProtocol, self).update()
+
+        if self.actions.executedActions:
+            return
+        if not self.is_available_for_current_user():
+            raise Redirect(self.context.absolute_url())
+
+        self.lock()
+
     def __init__(self, context, request, model):
         super(EditProtocol, self).__init__(context, request)
         self.model = model
+
+    def is_available_for_current_user(self):
+        """Check whether the current meeting can be safely unlocked.
+
+        This means the current meeting is not locked by another user.
+        """
+
+        lockable = ILockable(self.context)
+        return lockable.can_safely_unlock()
+
+    def lock(self):
+        lockable = ILockable(self.context)
+        if not lockable.locked():
+            lockable.lock()
+
+    def unlock(self):
+        lockable = ILockable(self.model)
+        if lockable.can_safely_unlock():
+            lockable.unlock()
 
     def applyChanges(self, data):
         ModelProxyEditForm.applyChanges(self, data)
@@ -130,10 +161,13 @@ class EditProtocol(AutoExtensibleForm, ModelProxyEditForm, EditForm):
         api.portal.show_message(
             _(u'message_changes_saved', default='Changes saved'),
             self.request)
+
+        self.unlock()
         return self.redirect_to_meetinglist()
 
     @button.buttonAndHandler(_('Cancel', default=u'Cancel'), name='cancel')
     def handleCancel(self, action):
+        self.unlock()
         return self.redirect_to_meetinglist()
 
     def render(self):
