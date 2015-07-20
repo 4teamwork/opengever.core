@@ -5,6 +5,9 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Update reference number of contained objects when referencenumber prefix changes.
+  [phgross]
+
 - Improve content and styling of the notification mail.
   [phgross]
 
