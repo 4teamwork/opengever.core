@@ -5,6 +5,10 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Drop unused opengever.ogds.base.sections.
+  (Legacy transmogrifier-based OGDS synchronization).
+  [lgraf]
+
 - Update reference number of contained objects when referencenumber prefix changes.
   [phgross]
 
