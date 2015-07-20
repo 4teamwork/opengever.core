@@ -213,8 +213,14 @@ class OGDSUpdater(grok.Adapter):
 
         # Set all SQL groups inactive first - the ones still contained in the
         # LDAP will be set active again below (in the same transaction).
+        #
+        # Also set their `users` attribute to an empty collection in order
+        # to clear out memberships from the `groups_users` association table
+        # before importing them, so that memberships from groups that have
+        # been deleted in LDAP get removed from OGDS.
         for group in session.query(Group):
             group.active = False
+            group.users = []
 
         for plugin in self._ldap_plugins():
             ldap_userfolder = plugin._getLDAPUserFolder()

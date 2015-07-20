@@ -5,6 +5,11 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- OGDS Sync: Clear memberships from groups_users association table before
+  importing them, so that memberships from groups that have been deleted in
+  LDAP get removed from OGDS.
+  [lgraf]
+
 - OGDS Sync: Set groups that have been removed from LDAP to inactive in OGDS.
   [lgraf]
 
