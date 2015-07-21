@@ -2,6 +2,7 @@
     <h1>
         <span i18n:translate="">Users of group:</span>
         &quot;<span tal:content="view/group_id" />&quot;
+        <span tal:condition="not: view/active" i18n:translate="">(INACTIVE)</span>
     </h1>
     <br />
     <ul class="member_listing" tal:condition="view/members">

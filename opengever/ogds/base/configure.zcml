@@ -9,7 +9,6 @@
     package="opengever.ogds.base">
 
   <include package=".browser" />
-  <include package=".sections" />
   <include package=".viewlets" />
   <include package=".upgrades" />
 
