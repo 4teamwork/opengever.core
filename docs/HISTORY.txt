@@ -7,14 +7,9 @@ Changelog
 
 - OGDS Sync: Clear memberships from groups_users association table before
   importing them, so that memberships from groups that have been deleted in
-  LDAP get removed from OGDS.
-  [lgraf]
-
-- OGDS Sync: Set groups that have been removed from LDAP to inactive in OGDS.
-  [lgraf]
-
-- Upgrade-Step: Add `active` column to OGDS `Group` model.
-  (Upgrade-step for corresponding change in opengever.ogds.models)
+  LDAP get removed from OGDS. Also deactivate groups that have been removed
+  from LDAP (includes upgrade-step for new `active` column on `Group` model
+  in og.ogds.models).
   [lgraf]
 
 - Drop `ogds_log_file` product config option and instead log
