@@ -1,6 +1,7 @@
 from ftw.mail.utils import get_header
 from opengever.base import _ as base_mf
 from opengever.base.browser.helper import get_css_class
+from opengever.base.utils import get_hostname
 from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.document.document import Document
 from opengever.mail.mail import OGMail
@@ -58,10 +59,19 @@ def task_id_checkbox_helper(item, value):
 
 
 def author_cache_key(m, i, author):
+    """Cache key that discriminates on the user ID of the provided user
+    (Plone user or string), and the hostname.
+
+    The hostname is required because this cache key is used to cache generated
+    URLs, which are dependent on the hostname that is used to access the
+    system (might be localhost + SSH tunnel).
+    """
+    hostname = get_hostname(getRequest())
     if IPropertiedUser.providedBy(author) or IMemberData.providedBy(author):
-        return author.getId()
+        userid = author.getId()
     else:
-        return author
+        userid = author
+    return (userid, hostname)
 
 
 @ram.cache(author_cache_key)
