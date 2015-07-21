@@ -147,10 +147,10 @@ class Overview(DisplayForm, OpengeverTab):
             yield data
 
     def display_submitted_documents(self):
-        return is_meeting_feature_enabled() and self.submitted_documents
+        return is_meeting_feature_enabled() and self.submitted_documents()
 
     def submitted_documents(self):
-        return SubmittedDocument.query.by_document(self.context).all()
+        return SubmittedDocument.query.by_source(self.context).all()
 
     def get_update_document_url(self, submitted_document):
         return '{}/@@submit_additional_document?submitted_document_id={}'.format(

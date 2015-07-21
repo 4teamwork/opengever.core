@@ -5,6 +5,9 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Only display link to proposal for documents in repositories.
+  [deiferni]
+
 - Show statusmessage after successfully submitting a proposal.
   [phgross]
 
