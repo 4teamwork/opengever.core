@@ -1,5 +1,3 @@
-from Acquisition import aq_inner
-from Acquisition import aq_parent
 from ftw.mail.utils import get_header
 from opengever.base import _ as base_mf
 from opengever.base.browser.helper import get_css_class
@@ -11,7 +9,6 @@ from opengever.ogds.base.utils import ogds_service
 from plone import api
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize import ram
-from plone.uuid.interfaces import IUUID
 from Products.CMFCore.interfaces._tools import IMemberData
 from Products.CMFPlone import PloneMessageFactory as pmf
 from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
@@ -54,7 +51,7 @@ def task_id_checkbox_helper(item, value):
         'id': item.task_id,
         'value': item.task_id,
         'title': 'Select %s' % item.title,
-        }
+    }
 
     return '<input %s />' % ' '.join(['%s="%s"' % (k, v)
                                       for k, v in sorted(attrs.items())])
@@ -344,7 +341,6 @@ def external_edit_link(item, value):
     with the external_edit mode selected """
     if item.portal_type != 'opengever.document.document':
         return ''
-    #item = hasattr(item, 'aq_explicit') and item.aq_explicit or item
     if hasattr(item, 'getURL'):
         url = item.getURL()
     elif hasattr(item, 'absolute_url'):
