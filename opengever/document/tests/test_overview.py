@@ -263,6 +263,21 @@ class TestOverviewMeetingFeatures(FunctionalTestCase):
                          proposal.css('a').first.get('href'))
 
     @browsing
+    def test_submitted_proposal_link_is_not_shown_for_submitted_documents(self, browser):
+        committee = create(Builder('committee'))
+        proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .having(title='Mach doch',
+                                  committee=committee.load_model())
+                          .relate_to(self.document)
+                          .as_submitted())
+        submitted_document = proposal.load_model().submitted_documents[0].resolve_submitted()
+
+        browser.login().open(submitted_document, view='tabbedview_view-overview')
+        proposals = browser.css('#proposals_box .proposal')
+        self.assertEqual(0, len(proposals))
+
+    @browsing
     def test_outdated_document_can_be_updated(self, browser):
         # create a new document version
         repository = api.portal.get_tool('portal_repository')

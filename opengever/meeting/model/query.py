@@ -72,6 +72,9 @@ class MembershipQuery(BaseQuery):
 class SubmittedDocumentQuery(BaseQuery):
 
     def get_by_source(self, proposal, document):
+        """Get the one submitted document for proposal and document.
+        """
+
         oguid = Oguid.for_object(document)
         proposal_model = proposal.load_model()
         return self.filter(self._attribute('oguid') == oguid)\
@@ -81,6 +84,14 @@ class SubmittedDocumentQuery(BaseQuery):
     def get_by_target(self, document):
         oguid = Oguid.for_object(document)
         return self.filter(self._attribute('submitted_oguid') == oguid).first()
+
+    def by_source(self, document):
+        """Return all submitted documents where document is on the source
+        side.
+        """
+
+        oguid = Oguid.for_object(document)
+        return self.filter(self._attribute('oguid') == oguid)
 
     def by_document(self, document):
         """Filter by document's oguid on source or target side of a submitted
