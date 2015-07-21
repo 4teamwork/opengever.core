@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Let OGMail inherit from ftw.mail.mail.Mail.
+  [deiferni]
+
 - Also provide information to sablon templater whether an agenda item
   is a paragraph.
   [deiferni]
