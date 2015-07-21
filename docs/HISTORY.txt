@@ -5,6 +5,9 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Autosizing textareas in the add and edit form of proposals.
+  [phgross]
+
 - OGDS Sync: Clear memberships from groups_users association table before
   importing them, so that memberships from groups that have been deleted in
   LDAP get removed from OGDS. Also deactivate groups that have been removed
