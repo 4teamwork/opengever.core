@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-06-12 12:53+0000\n"
+"POT-Creation-Date: 2015-07-20 15:11+0000\n"
 "PO-Revision-Date: 2015-04-10 09:01+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -403,12 +403,12 @@ msgid "column_to"
 msgstr "Von"
 
 #. Default: "Decide"
-#: ./opengever/meeting/model/proposal.py:108
+#: ./opengever/meeting/model/proposal.py:113
 msgid "decide"
 msgstr "Beschliessen"
 
 #. Default: "Decided"
-#: ./opengever/meeting/model/proposal.py:93
+#: ./opengever/meeting/model/proposal.py:98
 msgid "decided"
 msgstr "Beschlossen"
 
@@ -681,6 +681,11 @@ msgstr "Die Sitzung ${title} wurde erfolgreich abgeschlossen, die Protokollausz�
 msgid "msg_membership_deleted"
 msgstr "Die Mitgliedschaft wurde erfolgreich gelöscht"
 
+#. Default: "Proposal successfully submitted."
+#: ./opengever/meeting/model/proposal.py:35
+msgid "msg_proposal_submitted"
+msgstr "Antrag erfolgreich eingereicht."
+
 #. Default: "The object was deleted successfully"
 #: ./opengever/meeting/browser/views.py:21
 msgid "msg_successfully_deleted"
@@ -703,7 +708,7 @@ msgstr "Neu eingereichte Anträge"
 
 #. Default: "Pending"
 #: ./opengever/meeting/model/meeting.py:61
-#: ./opengever/meeting/model/proposal.py:88
+#: ./opengever/meeting/model/proposal.py:93
 msgid "pending"
 msgstr "In Bearbeitung"
 
@@ -759,22 +764,22 @@ msgstr "Protokollauszug"
 
 #. Default: "Schedule"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:114
-#: ./opengever/meeting/model/proposal.py:104
+#: ./opengever/meeting/model/proposal.py:109
 msgid "schedule"
 msgstr "traktandieren"
 
 #. Default: "Scheduled"
-#: ./opengever/meeting/model/proposal.py:92
+#: ./opengever/meeting/model/proposal.py:97
 msgid "scheduled"
 msgstr "Traktandiert"
 
 #. Default: "Submit"
-#: ./opengever/meeting/model/proposal.py:102
+#: ./opengever/meeting/model/proposal.py:107
 msgid "submit"
 msgstr "einreichen"
 
 #. Default: "Submitted"
-#: ./opengever/meeting/model/proposal.py:90
+#: ./opengever/meeting/model/proposal.py:95
 msgid "submitted"
 msgstr "Eingereicht"
 
@@ -784,6 +789,6 @@ msgid "tab_matches"
 msgstr "${amount} Treffer"
 
 #. Default: "Remove from schedule"
-#: ./opengever/meeting/model/proposal.py:106
+#: ./opengever/meeting/model/proposal.py:111
 msgid "un-schedule"
 msgstr "Traktandum entfernen"
