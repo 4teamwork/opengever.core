@@ -1,8 +1,7 @@
-from Acquisition import aq_inner
-from Acquisition import aq_parent
 from ftw.mail.utils import get_header
 from opengever.base import _ as base_mf
 from opengever.base.browser.helper import get_css_class
+from opengever.base.utils import get_hostname
 from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.document.document import Document
 from opengever.mail.mail import OGMail
@@ -11,7 +10,6 @@ from opengever.ogds.base.utils import ogds_service
 from plone import api
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize import ram
-from plone.uuid.interfaces import IUUID
 from Products.CMFCore.interfaces._tools import IMemberData
 from Products.CMFPlone import PloneMessageFactory as pmf
 from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
@@ -54,17 +52,26 @@ def task_id_checkbox_helper(item, value):
         'id': item.task_id,
         'value': item.task_id,
         'title': 'Select %s' % item.title,
-        }
+    }
 
     return '<input %s />' % ' '.join(['%s="%s"' % (k, v)
                                       for k, v in sorted(attrs.items())])
 
 
 def author_cache_key(m, i, author):
+    """Cache key that discriminates on the user ID of the provided user
+    (Plone user or string), and the hostname.
+
+    The hostname is required because this cache key is used to cache generated
+    URLs, which are dependent on the hostname that is used to access the
+    system (might be localhost + SSH tunnel).
+    """
+    hostname = get_hostname(getRequest())
     if IPropertiedUser.providedBy(author) or IMemberData.providedBy(author):
-        return author.getId()
+        userid = author.getId()
     else:
-        return author
+        userid = author
+    return (userid, hostname)
 
 
 @ram.cache(author_cache_key)
@@ -344,7 +351,6 @@ def external_edit_link(item, value):
     with the external_edit mode selected """
     if item.portal_type != 'opengever.document.document':
         return ''
-    #item = hasattr(item, 'aq_explicit') and item.aq_explicit or item
     if hasattr(item, 'getURL'):
         url = item.getURL()
     elif hasattr(item, 'absolute_url'):
