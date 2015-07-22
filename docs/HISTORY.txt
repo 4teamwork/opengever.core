@@ -5,6 +5,10 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Also provide information to sablon templater whether an agenda item
+  is a paragraph.
+  [deiferni]
+
 - Remove edit restrictions, let meetings be editable until they are closed.
   [deiferni]
 
