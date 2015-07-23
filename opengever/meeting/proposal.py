@@ -19,6 +19,13 @@ from z3c.relationfield.schema import RelationList
 from zope import schema
 from zope.interface import implements
 from zope.interface import Interface
+from zope.interface import provider
+from zope.schema.interfaces import IContextAwareDefaultFactory
+
+
+@provider(IContextAwareDefaultFactory)
+def default_title(context):
+    return context.title
 
 
 class IProposalModel(Interface):
@@ -28,6 +35,7 @@ class IProposalModel(Interface):
         title=_(u"label_title", default=u"Title"),
         required=True,
         max_length=256,
+        defaultFactory=default_title
         )
 
     committee = schema.Choice(
