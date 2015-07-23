@@ -73,8 +73,9 @@ class TestAgendaItem(FunctionalTestCase):
         self.assertTrue(agenda_item.is_paragraph)
 
     @browsing
-    def test_text_and_paragraph_agenda_item_disabled_for_held_meetings(self, browser):
+    def test_text_and_paragraph_agenda_item_disabled_for_closed_meetings(self, browser):
         self.meeting.execute_transition('pending-held')
+        self.meeting.execute_transition('held-closed')
         transaction.commit()
 
         url = ScheduleText.url_for(self.committee, self.meeting)
@@ -102,8 +103,9 @@ class TestAgendaItem(FunctionalTestCase):
         self.assertFalse(agenda_item.is_paragraph)
 
     @browsing
-    def test_proposal_agenda_item_disabled_for_held_meetings(self, browser):
+    def test_proposal_agenda_item_disabled_for_closed_meetings(self, browser):
         self.meeting.execute_transition('pending-held')
+        self.meeting.execute_transition('held-closed')
         proposal = self.setup_proposal()
         proposal_model = proposal.load_model()
         transaction.commit()
@@ -127,10 +129,11 @@ class TestAgendaItem(FunctionalTestCase):
         self.assertEqual(0, len(meeting.agenda_items))
 
     @browsing
-    def test_agenda_item_deletion_disabled_for_held_meetings(self, browser):
+    def test_agenda_item_deletion_disabled_for_closed_meetings(self, browser):
         agenda_item = create(Builder('agenda_item').having(
             meeting=self.meeting))
         self.meeting.execute_transition('pending-held')
+        self.meeting.execute_transition('held-closed')
         transaction.commit()
 
         url = DeleteAgendaItem.url_for(

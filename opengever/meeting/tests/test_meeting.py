@@ -92,6 +92,7 @@ class TestMeeting(FunctionalTestCase):
                                  start=datetime(2013, 1, 1),
                                  location='There',))
         meeting.execute_transition('pending-held')
+        meeting.execute_transition('held-closed')
         transaction.commit()
 
         with self.assertRaises(Unauthorized):
