@@ -5,7 +5,7 @@ from zope.i18n import translate
 import json
 
 
-class PreProtocolData(object):
+class ProtocolData(object):
 
     def __init__(self, meeting, agenda_items=None,
                  include_initial_position=True, include_legal_basis=True,
@@ -37,7 +37,7 @@ class PreProtocolData(object):
     def add_protocol_type(self):
         self.data['protocol'] = {
             'type': translate(
-                _(u'pre_protocol', default=u'Pre-Protocol'),
+                _(u'protocol', default=u'Protocol'),
                 context=getRequest())
         }
 
@@ -84,17 +84,7 @@ class PreProtocolData(object):
         return json.dumps(self.data)
 
 
-class ProtocolData(PreProtocolData):
-
-    def add_protocol_type(self):
-        self.data['protocol'] = {
-            'type': translate(
-                _(u'protocol', default=u'Protocol'),
-                context=getRequest())
-        }
-
-
-class ExcerptProtocolData(PreProtocolData):
+class ExcerptProtocolData(ProtocolData):
 
     def add_protocol_type(self):
         self.data['protocol'] = {

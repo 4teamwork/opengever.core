@@ -27,7 +27,6 @@ class TestExcerpt(FunctionalTestCase):
             .within(self.templates)
             .with_asset_file('sablon_template.docx'))
         container = create(Builder('committee_container').having(
-            pre_protocol_template=self.sablon_template,
             protocol_template=self.sablon_template,
             excerpt_template=self.sablon_template))
 

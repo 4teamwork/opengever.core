@@ -47,11 +47,6 @@ class GeneratedDocument(Base):
         return self.oguid.resolve_object()
 
 
-class GeneratedPreProtocol(GeneratedDocument):
-
-    __mapper_args__ = {'polymorphic_identity': 'generated_pre_protocol'}
-
-
 class GeneratedProtocol(GeneratedDocument):
 
     __mapper_args__ = {'polymorphic_identity': 'generated_protocol'}

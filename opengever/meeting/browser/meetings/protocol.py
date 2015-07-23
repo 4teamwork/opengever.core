@@ -1,7 +1,6 @@
 from opengever.meeting import _
 from opengever.meeting.browser.meetings.meetinglist import MeetingList
 from opengever.meeting.command import MIME_DOCX
-from opengever.meeting.command import PreProtocolOperations
 from opengever.meeting.command import ProtocolOperations
 from opengever.meeting.form import ModelProxyEditForm
 from opengever.meeting.model import Meeting
@@ -46,16 +45,16 @@ class IParticipants(form.Schema):
         required=False)
 
 
-class DownloadGeneratedPreProtocol(BrowserView):
+class DownloadGeneratedProtocol(BrowserView):
 
-    operations = PreProtocolOperations()
+    operations = ProtocolOperations()
 
     @classmethod
     def url_for(cls, context, meeting):
-        return "{}/download_pre_protocol".format(MeetingList.url_for(context, meeting))
+        return "{}/download_protocol".format(MeetingList.url_for(context, meeting))
 
     def __init__(self, context, request, model):
-        super(DownloadGeneratedPreProtocol, self).__init__(context, request)
+        super(DownloadGeneratedProtocol, self).__init__(context, request)
         self.model = model
 
     def __call__(self):
@@ -72,16 +71,7 @@ class DownloadGeneratedPreProtocol(BrowserView):
         return sablon.file_data
 
 
-class DownloadGeneratedProtocol(DownloadGeneratedPreProtocol):
-
-    operations = ProtocolOperations()
-
-    @classmethod
-    def url_for(cls, context, meeting):
-        return "{}/download_protocol".format(MeetingList.url_for(context, meeting))
-
-
-class EditPreProtocol(AutoExtensibleForm, ModelProxyEditForm, EditForm):
+class EditProtocol(AutoExtensibleForm, ModelProxyEditForm, EditForm):
 
     is_model_view = True
     is_model_edit_view = False
@@ -93,10 +83,10 @@ class EditPreProtocol(AutoExtensibleForm, ModelProxyEditForm, EditForm):
 
     @classmethod
     def url_for(cls, context, meeting):
-        return "{}/pre_protocol".format(MeetingList.url_for(context, meeting))
+        return "{}/protocol".format(MeetingList.url_for(context, meeting))
 
     def __init__(self, context, request, model):
-        super(EditPreProtocol, self).__init__(context, request)
+        super(EditProtocol, self).__init__(context, request)
         self.model = model
 
     def applyChanges(self, data):
@@ -136,7 +126,7 @@ class EditPreProtocol(AutoExtensibleForm, ModelProxyEditForm, EditForm):
     @button.buttonAndHandler(_('Save', default=u'Save'), name='save')
     def handleApply(self, action):
         # self as first argument is required by to the decorator
-        super(EditPreProtocol, self).handleApply(self, action)
+        super(EditProtocol, self).handleApply(self, action)
         api.portal.show_message(
             _(u'message_changes_saved', default='Changes saved'),
             self.request)
@@ -158,10 +148,3 @@ class EditPreProtocol(AutoExtensibleForm, ModelProxyEditForm, EditForm):
     def redirect_to_meetinglist(self):
         return self.request.RESPONSE.redirect(
             MeetingList.url_for(self.context, self.model))
-
-
-class EditProtocol(EditPreProtocol):
-
-    @classmethod
-    def url_for(cls, context, meeting):
-        return "{}/protocol".format(MeetingList.url_for(context, meeting))

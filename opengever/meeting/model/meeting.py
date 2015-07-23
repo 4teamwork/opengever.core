@@ -98,12 +98,6 @@ class Meeting(Base):
 
     agenda_items = relationship("AgendaItem", order_by='AgendaItem.sort_order')
 
-    pre_protocol_document_id = Column(
-        Integer, ForeignKey('generateddocuments.id'))
-    pre_protocol_document = relationship(
-        'GeneratedPreProtocol', uselist=False,
-        backref=backref('meeting', uselist=False),
-        primaryjoin="GeneratedPreProtocol.document_id==Meeting.pre_protocol_document_id")
     protocol_document_id = Column(Integer, ForeignKey('generateddocuments.id'))
     protocol_document = relationship(
         'GeneratedProtocol', uselist=False,
@@ -126,14 +120,8 @@ class Meeting(Base):
     def is_editable(self):
         return self.get_state() == self.STATE_PENDING
 
-    def is_pre_protocol_editable(self):
-        return self.get_state() == self.STATE_PENDING
-
     def is_protocol_editable(self):
         return self.get_state() == self.STATE_HELD
-
-    def has_pre_protocol_document(self):
-        return self.pre_protocol_document is not None
 
     def has_protocol_document(self):
         return self.protocol_document is not None
@@ -148,26 +136,17 @@ class Meeting(Base):
             translate(prefix, context=getRequest()),
             normalizer.normalize(self.get_title()))
 
-    def get_pre_protocol_title(self):
-        return self._get_title(_("Pre-Protocol"))
-
     def get_protocol_title(self):
         return self._get_title(_("Protocol"))
 
     def get_excerpt_title(self):
         return self._get_title(_("Protocol Excerpt"))
 
-    def get_pre_protocol_filename(self):
-        return self._get_filename(_("Pre-Protocol"))
-
     def get_protocol_filename(self):
         return self._get_filename(_("Protocol"))
 
     def get_excerpt_filename(self):
         return self._get_filename(_("Protocol Excerpt"))
-
-    def get_pre_protocol_template(self):
-        return self.committee.get_pre_protocol_template()
 
     def get_protocol_template(self):
         return self.committee.get_protocol_template()

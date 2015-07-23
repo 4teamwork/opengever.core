@@ -8,12 +8,10 @@ from opengever.base.transport import REQUEST_KEY
 from opengever.base.transport import Transporter
 from opengever.meeting import _
 from opengever.meeting.model import GeneratedExcerpt
-from opengever.meeting.model import GeneratedPreProtocol
 from opengever.meeting.model import GeneratedProtocol
 from opengever.meeting.model import proposalhistory
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.protocol import ExcerptProtocolData
-from opengever.meeting.protocol import PreProtocolData
 from opengever.meeting.protocol import ProtocolData
 from opengever.meeting.sablon import Sablon
 from plone import api
@@ -25,39 +23,7 @@ import json
 MIME_DOCX = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 
 
-class PreProtocolOperations(object):
-
-    def get_sablon_template(self, meeting):
-        return meeting.get_pre_protocol_template()
-
-    def get_meeting_data(self, meeting):
-        return PreProtocolData(meeting)
-
-    def create_database_entry(self, meeting, document):
-        pre_protocol_document = GeneratedPreProtocol(
-            oguid=Oguid.for_object(document),
-            generated_version=document.get_current_version())
-        meeting.pre_protocol_document = pre_protocol_document
-        return pre_protocol_document
-
-    def get_generated_message(self, meeting):
-        return _(u'Pre-protocol for meeting ${title} has been generated '
-                 'successfully',
-                 mapping=dict(title=meeting.get_title()))
-
-    def get_updated_message(self, meeting):
-        return _(u'Pre-protocol for meeting ${title} has been updated '
-                 'successfully',
-                 mapping=dict(title=meeting.get_title()))
-
-    def get_title(self, meeting):
-        return meeting.get_pre_protocol_title()
-
-    def get_filename(self, meeting):
-        return meeting.get_pre_protocol_filename()
-
-
-class ProtocolOperations(PreProtocolOperations):
+class ProtocolOperations(object):
 
     def get_sablon_template(self, meeting):
         return meeting.get_protocol_template()
@@ -89,7 +55,7 @@ class ProtocolOperations(PreProtocolOperations):
         return meeting.get_protocol_filename()
 
 
-class ExcerptOperations(PreProtocolOperations):
+class ExcerptOperations(ProtocolOperations):
 
     def __init__(self, agenda_items):
         self.agenda_items = agenda_items

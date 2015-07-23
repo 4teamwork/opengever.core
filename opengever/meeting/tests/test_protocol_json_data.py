@@ -1,11 +1,13 @@
 from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
-from opengever.meeting.protocol import PreProtocolData
+from opengever.meeting.protocol import ProtocolData
 from opengever.testing import FunctionalTestCase
 
 
 class TestProtocolJsonData(FunctionalTestCase):
+
+    maxDiff = None
 
     def setUp(self):
         super(TestProtocolJsonData, self).setUp()
@@ -35,7 +37,7 @@ class TestProtocolJsonData(FunctionalTestCase):
                 decision=u'Done',))
 
     def test_protocol_json(self):
-        data = PreProtocolData(self.meeting).data
+        data = ProtocolData(self.meeting).data
         self.assertEqual(
             {'agenda_items': [
                 {'description': u'Proposal',
@@ -61,6 +63,6 @@ class TestProtocolJsonData(FunctionalTestCase):
                          'end_time': '',
                          'start_time': u'12:00 AM'},
              'participants': {'members': [], 'other': []},
-             'protocol': {'type': u'Pre-Protocol'}},
+             'protocol': {'type': u'Protocol'}},
             data
          )

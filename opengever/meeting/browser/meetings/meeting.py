@@ -1,5 +1,3 @@
-from Products.Five.browser import BrowserView
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from opengever.base.browser.helper import get_css_class
 from opengever.meeting import _
 from opengever.meeting.browser.meetings.agendaitem import DeleteAgendaItem
@@ -8,19 +6,17 @@ from opengever.meeting.browser.meetings.agendaitem import ScheduleText
 from opengever.meeting.browser.meetings.agendaitem import UpdateAgendaItemOrder
 from opengever.meeting.browser.meetings.excerpt import GenerateExcerpt
 from opengever.meeting.browser.meetings.meetinglist import MeetingList
-from opengever.meeting.browser.meetings.protocol import DownloadGeneratedPreProtocol
 from opengever.meeting.browser.meetings.protocol import DownloadGeneratedProtocol
-from opengever.meeting.browser.meetings.protocol import EditPreProtocol
 from opengever.meeting.browser.meetings.protocol import EditProtocol
 from opengever.meeting.browser.meetings.transitions import MeetingTransitionController
-from opengever.meeting.browser.protocol import GeneratePreProtocol
 from opengever.meeting.browser.protocol import GenerateProtocol
-from opengever.meeting.browser.protocol import UpdatePreProtocol
 from opengever.meeting.browser.protocol import UpdateProtocol
 from opengever.meeting.form import ModelAddForm
 from opengever.meeting.form import ModelEditForm
 from opengever.meeting.model import Meeting
 from plone.directives import form
+from Products.Five.browser import BrowserView
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import field
 from z3c.form.interfaces import HIDDEN_MODE
 from zExceptions import NotFound
@@ -97,12 +93,10 @@ class MeetingView(BrowserView):
 
     mapped_actions = {
         'delete_agenda_item': DeleteAgendaItem,
-        'download_pre_protocol': DownloadGeneratedPreProtocol,
         'download_protocol': DownloadGeneratedProtocol,
         'edit': EditMeeting,
         'generate_excerpt': GenerateExcerpt,
         'meetingtransitioncontroller': MeetingTransitionController,
-        'pre_protocol': EditPreProtocol,
         'protocol': EditProtocol,
         'schedule_proposal': ScheduleSubmittedProposal,
         'schedule_text': ScheduleText,
@@ -142,27 +136,8 @@ class MeetingView(BrowserView):
     def url_delete_agenda_item(self, agenda_item):
         return DeleteAgendaItem.url_for(self.context, self.model, agenda_item)
 
-    def is_pre_protocol_editable(self):
-        return self.model.is_pre_protocol_editable()
-
     def is_protocol_editable(self):
         return self.model.is_protocol_editable()
-
-    def get_pre_protocol_document(self):
-        if self.model.pre_protocol_document:
-            return self.model.pre_protocol_document.resolve_document()
-
-    def url_pre_protocol(self):
-        return EditPreProtocol.url_for(self.context, self.model)
-
-    def url_generate_pre_protocol(self):
-        if not self.model.has_pre_protocol_document():
-            return GeneratePreProtocol.url_for(self.context, self.model)
-        else:
-            return UpdatePreProtocol.url_for(self.model.pre_protocol_document)
-
-    def url_download_pre_protocol(self):
-        return DownloadGeneratedPreProtocol.url_for(self.context, self.model)
 
     def get_protocol_document(self):
         if self.model.protocol_document:
