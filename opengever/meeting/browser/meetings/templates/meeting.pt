@@ -56,6 +56,19 @@
             </table>
             <metal:use use-macro="context/@@meeting-macros/workflow_actions" />
           </fieldset>
+
+          <fieldset class="protocol" tal:define="protocol_document view/get_protocol_document">
+            <legend i18n:translate="">Protocol</legend>
+            <a tal:condition="protocol_document"
+               tal:attributes="href protocol_document/absolute_url; class python: view.get_css_class(protocol_document)"
+               tal:content="protocol_document/Title"></a>
+            <div class="button_group">
+              <a class="button" tal:attributes="href view/url_protocol" i18n:translate="">Edit</a>
+              <a class="button" tal:attributes="href view/url_generate_protocol" i18n:translate="">Generate</a>
+              <a class="button" tal:attributes="href view/url_download_protocol" i18n:translate="">Download preview</a>
+            </div>
+          </fieldset>
+
           <fieldset class="excerpts" tal:define="excerpts view/manually_generated_excerpts">
             <legend i18n:translate="">Excerpts</legend>
             <tal:condition tal:condition="excerpts">
@@ -74,18 +87,6 @@
           </fieldset>
         </div>
         <div class="content">
-          <fieldset class="protocol" tal:define="protocol_document view/get_protocol_document">
-            <legend i18n:translate="">Protocol</legend>
-            <a tal:condition="protocol_document"
-               tal:attributes="href protocol_document/absolute_url; class python: view.get_css_class(protocol_document)"
-               tal:content="protocol_document/Title"></a>
-            <div class="button_group">
-              <a class="button" tal:attributes="href view/url_protocol" i18n:translate="">Edit</a>
-              <a class="button" tal:attributes="href view/url_generate_protocol" i18n:translate="">Generate</a>
-              <a class="button" tal:attributes="href view/url_download_protocol" i18n:translate="">Download preview</a>
-            </div>
-          </fieldset>
-
           <fieldset class="proposal" tal:condition="meeting/is_editable">
             <legend i18n:translate="">Add Agenda Item</legend>
             <metal:block tal:condition="unscheduled_proposals">
