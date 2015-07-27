@@ -12,7 +12,8 @@ from sqlalchemy import String
 from sqlalchemy import Text
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
-from sqlalchemy_i18n import Translatable, translation_base
+from sqlalchemy_i18n import Translatable
+from sqlalchemy_i18n import translation_base
 import datetime
 import pytz
 
@@ -37,7 +38,7 @@ class Activity(Base, Translatable):
     locale = DEFAULT_LOCALE
 
     id = Column('id', Integer, Sequence("activities_id_seq"),
-                         primary_key=True)
+                primary_key=True)
     kind = Column(String(255), nullable=False)
     actor_id = Column(String(USER_ID_LENGTH), nullable=False)
     created = Column(UTCDateTime(timezone=True), default=utcnow_tz_aware)
@@ -69,7 +70,7 @@ class ActivityTranslation(translation_base(Activity)):
 
     __tablename__ = 'activities_translation'
 
-    title = Column('title', Text)
-    label = Column('label', Text)
-    summary = Column('summary', Text)
-    description = Column('description', Text)
+    title = Column(Text)
+    label = Column(Text)
+    summary = Column(Text)
+    description = Column(Text)
