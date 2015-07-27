@@ -36,7 +36,8 @@ class MemberVocabulary(grok.GlobalUtility):
 
 
 @grok.provider(IContextSourceBinder)
-def get_committee_member_vocabulary(committee):
+def get_committee_member_vocabulary(meetingwrapper):
+    committee = meetingwrapper.model.committee.resolve_committee()
     members = []
     for membership in committee.get_active_memberships():
         member = membership.member
