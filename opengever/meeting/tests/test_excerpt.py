@@ -4,7 +4,6 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
-from opengever.meeting.browser.meetings.meetinglist import MeetingList
 from opengever.meeting.model import Meeting
 from opengever.testing import FunctionalTestCase
 
@@ -15,6 +14,7 @@ class TestExcerpt(FunctionalTestCase):
 
     def setUp(self):
         super(TestExcerpt, self).setUp()
+        self.admin_unit.public_url = 'http://nohost/plone'
 
         self.repository_root, self.repository_folder = create(
             Builder('repository_tree'))
@@ -78,8 +78,7 @@ class TestExcerpt(FunctionalTestCase):
 
     @browsing
     def test_manual_excerpt_can_be_generated(self, browser):
-        browser.login().open(
-            MeetingList.url_for(self.committee, self.meeting))
+        browser.login().open(self.meeting.get_url())
 
         browser.find('Generate excerpt').click()
         browser.fill({'agenda_item-1.include:record': True,
@@ -95,8 +94,7 @@ class TestExcerpt(FunctionalTestCase):
         document = meeting.excerpt_documents[0]
         self.assertEqual(0, document.generated_version)
 
-        self.assertEqual(MeetingList.url_for(self.committee, self.meeting),
-                         browser.url,
+        self.assertEqual(self.meeting.get_url(), browser.url,
                          'should be on meeting view')
 
         self.assertEqual(1, len(browser.css('.excerpts ul li a')),
@@ -105,8 +103,7 @@ class TestExcerpt(FunctionalTestCase):
 
     @browsing
     def test_validator_excerpt_requires_at_least_one_field(self, browser):
-        browser.login().open(
-            MeetingList.url_for(self.committee, self.meeting))
+        browser.login().open(self.meeting.get_url())
 
         browser.find('Generate excerpt').click()
         # de-select pre-selected field-checkboxes
@@ -122,8 +119,7 @@ class TestExcerpt(FunctionalTestCase):
 
     @browsing
     def test_validator_excerpt_requires_at_least_one_agenda_item(self, browser):
-        browser.login().open(
-            MeetingList.url_for(self.committee, self.meeting))
+        browser.login().open(self.meeting.get_url())
 
         browser.find('Generate excerpt').click()
         browser.fill({'Target dossier': self.dossier})

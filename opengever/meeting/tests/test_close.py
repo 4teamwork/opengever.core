@@ -3,7 +3,6 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
-from opengever.meeting.browser.meetings.meetinglist import MeetingList
 from opengever.meeting.model import Meeting
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.testing import FunctionalTestCase
@@ -49,7 +48,7 @@ class TestCloseMeeting(FunctionalTestCase):
 
     @browsing
     def test_generate_excerpt_and_add_it_to_submittedproposal(self, browser):
-        browser.login().open(MeetingList.url_for(self.committee, self.meeting))
+        browser.login().open(self.meeting.get_url())
         browser.css('#held-closed').first.click()
 
         submitted_proposal = self.proposal_a.load_model().resolve_sumitted_proposal()
@@ -64,7 +63,7 @@ class TestCloseMeeting(FunctionalTestCase):
 
     @browsing
     def test_excerpt_is_copied_to_proposal(self, browser):
-        browser.login().open(MeetingList.url_for(self.committee, self.meeting))
+        browser.login().open(self.meeting.get_url())
         browser.css('#held-closed').first.click()
 
         excerpt = self.proposal_a.listFolderContents()[0]
@@ -78,7 +77,7 @@ class TestCloseMeeting(FunctionalTestCase):
 
     @browsing
     def test_proposalhistory_is_added(self, browser):
-        browser.login().open(MeetingList.url_for(self.committee, self.meeting))
+        browser.login().open(self.meeting.get_url())
         browser.css('#held-closed').first.click()
 
         browser.open(self.proposal_a, view=u'tabbedview_view-overview')
@@ -90,7 +89,7 @@ class TestCloseMeeting(FunctionalTestCase):
 
     @browsing
     def test_excerpt_is_displayed_in_proposal_view(self, browser):
-        browser.login().open(MeetingList.url_for(self.committee, self.meeting))
+        browser.login().open(self.meeting.get_url())
         browser.css('#held-closed').first.click()
 
         generated_document = self.proposal_a.load_model().excerpt_document
@@ -103,14 +102,14 @@ class TestCloseMeeting(FunctionalTestCase):
 
     @browsing
     def test_states_are_updated(self, browser):
-        browser.login().open(MeetingList.url_for(self.committee, self.meeting))
+        browser.login().open(self.meeting.get_url())
         browser.css('#held-closed').first.click()
         self.assertEquals('closed', Meeting.query.first().get_state().name)
         self.assertEquals('decided', self.proposal_a.get_state().name)
 
     @browsing
     def test_redirects_to_meeting_and_show_statusmessage(self, browser):
-        browser.login().open(MeetingList.url_for(self.committee, self.meeting))
+        browser.login().open(self.meeting.get_url())
         browser.css('#held-closed').first.click()
 
         self.assertEquals(

@@ -10,4 +10,88 @@
       permission="zope2.View"
     />
 
+  <browser:page
+      for="opengever.meeting.interfaces.IMeetingWrapper"
+      name="view"
+      class=".meeting.MeetingView"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.meeting.interfaces.IMeetingWrapper"
+      name="edit"
+      class=".meeting.EditMeeting"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.meeting.interfaces.IMeetingWrapper"
+      name="meetingtransitioncontroller"
+      class=".transitions.MeetingTransitionController"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.meeting.interfaces.IMeetingWrapper"
+      name="protocol"
+      class=".protocol.EditProtocol"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.meeting.interfaces.IMeetingWrapper"
+      name="pre_protocol"
+      class=".protocol.EditPreProtocol"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.meeting.interfaces.IMeetingWrapper"
+      name="download_protocol"
+      class=".protocol.DownloadGeneratedProtocol"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.meeting.interfaces.IMeetingWrapper"
+      name="download_pre_protocol"
+      class=".protocol.DownloadGeneratedProtocol"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.meeting.interfaces.IMeetingWrapper"
+      name="generate_excerpt"
+      class=".excerpt.GenerateExcerpt"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.meeting.interfaces.IMeetingWrapper"
+      name="schedule_proposal"
+      class=".agendaitem.ScheduleSubmittedProposal"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.meeting.interfaces.IMeetingWrapper"
+      name="schedule_text"
+      class=".agendaitem.ScheduleText"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.meeting.interfaces.IMeetingWrapper"
+      name="update_agenda_item_order"
+      class=".agendaitem.UpdateAgendaItemOrder"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.meeting.interfaces.IMeetingWrapper"
+      name="delete_agenda_item"
+      class=".agendaitem.DeleteAgendaItem"
+      permission="zope2.View"
+      />
+
 </configure>

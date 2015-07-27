@@ -3,7 +3,6 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
-from opengever.meeting.browser.meetings.meetinglist import MeetingList
 from opengever.testing import FunctionalTestCase
 from plone import api
 import transaction
@@ -15,6 +14,8 @@ class TestProposalHistory(FunctionalTestCase):
 
     def setUp(self):
         super(TestProposalHistory, self).setUp()
+        self.admin_unit.public_url = 'http://nohost/plone'
+
         container = create(Builder('committee_container'))
         self.committee = create(Builder('committee').within(container))
         self.meeting = create(Builder('meeting')
@@ -105,7 +106,7 @@ class TestProposalHistory(FunctionalTestCase):
     @browsing
     def test_scheduling_creates_history_entry(self, browser):
         self.submit_proposal()
-        browser.login().open(MeetingList.url_for(self.committee, self.meeting))
+        browser.login().open(self.meeting.get_url())
         form = browser.css('#schedule_proposal').first
         form.fill(
             {'proposal_id': str(self.proposal.load_model().proposal_id)}
@@ -120,7 +121,7 @@ class TestProposalHistory(FunctionalTestCase):
     def test_removing_from_schedule_creates_history_entry(self, browser):
         self.submit_proposal()
         # schedule proposal
-        browser.login().open(MeetingList.url_for(self.committee, self.meeting))
+        browser.login().open(self.meeting.get_url())
         form = browser.css('#schedule_proposal').first
         form.fill(
             {'proposal_id': str(self.proposal.load_model().proposal_id)}

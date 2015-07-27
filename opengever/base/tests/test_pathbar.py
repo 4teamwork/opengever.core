@@ -9,6 +9,7 @@ class TestPathBar(FunctionalTestCase):
 
     def setUp(self):
         super(TestPathBar, self).setUp()
+        self.admin_unit.public_url = 'http://nohost/plone'
 
         root = create(Builder('repository_root').titled(u'Repository'))
         repo = create(Builder('repository')
@@ -55,7 +56,7 @@ class TestPathBar(FunctionalTestCase):
                          .having(committee=committee.load_model(),
                                  start=datetime(2010, 1, 1)))
 
-        browser.login().open(view=meeting.physical_path)
+        browser.login().open(meeting.get_url())
         last_link = browser.css('#portal-breadcrumbs a')[-1]
         self.assertEqual(meeting.get_url(), last_link.node.attrib['href'])
         self.assertEqual(meeting.get_title(), last_link.node.text)

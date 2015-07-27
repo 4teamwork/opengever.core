@@ -4,7 +4,6 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
-from opengever.meeting.browser.meetings.meetinglist import MeetingList
 from opengever.meeting.browser.meetings.protocol import EditProtocol
 from opengever.meeting.browser.protocol import METHOD_NEW_DOCUMENT
 from opengever.meeting.browser.protocol import METHOD_NEW_VERSION
@@ -23,6 +22,7 @@ class TestProtocol(FunctionalTestCase):
 
     def setUp(self):
         super(TestProtocol, self).setUp()
+        self.admin_unit.public_url = 'http://nohost/plone'
 
         self.repository_root, self.repository_folder = create(
             Builder('repository_tree'))
@@ -120,8 +120,7 @@ class TestProtocol(FunctionalTestCase):
         self.assertEqual('We should accept it', agenda_item.discussion)
         self.assertEqual('Accepted', agenda_item.decision)
 
-        self.assertEqual(MeetingList.url_for(self.committee, self.meeting),
-                         browser.url)
+        self.assertEqual(self.meeting.get_url(), browser.url)
 
     @browsing
     def test_protocol_participants_can_be_edited(self, browser):
@@ -186,7 +185,7 @@ class TestProtocol(FunctionalTestCase):
     def test_generated_protocol_can_be_updated(self, browser):
         self.setup_generated_protocol(browser)
 
-        browser.open(MeetingList.url_for(self.committee, self.meeting))
+        browser.open(self.meeting.get_url())
         browser.css('a[href*="@@update_protocol"]').first.click()
         browser.fill({'form.widgets.method': METHOD_NEW_VERSION}).submit()
 
@@ -203,7 +202,7 @@ class TestProtocol(FunctionalTestCase):
     def test_new_generated_protocol_can_be_created(self, browser):
         self.setup_generated_protocol(browser)
 
-        browser.open(MeetingList.url_for(self.committee, self.meeting))
+        browser.open(self.meeting.get_url())
         browser.css('a[href*="@@update_protocol"]').first.click()
         browser.fill({'form.widgets.method': METHOD_NEW_DOCUMENT}).submit()
 

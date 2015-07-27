@@ -3,7 +3,6 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
-from opengever.meeting.browser.meetings.meetinglist import MeetingList
 from opengever.meeting.model.generateddocument import GeneratedExcerpt
 from opengever.meeting.model.meeting import Meeting
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -17,6 +16,7 @@ class TestMeetingView(FunctionalTestCase):
 
     def setUp(self):
         super(TestMeetingView, self).setUp()
+        self.admin_unit.public_url = 'http://nohost/plone'
 
         self.repository_root = create(Builder('repository_root'))
         self.dossier = create(Builder('dossier')
@@ -104,31 +104,31 @@ class TestMeetingView(FunctionalTestCase):
 
     @browsing
     def test_participants_listing_precidency_is_existing(self, browser):
-        browser.login().open(MeetingList.url_for(self.committee, self.meeting))
+        browser.login().open(self.meeting.get_url())
         self.assertEquals([u'h\xfcgo Boss'], browser.css("#meeting_presidency").text)
 
     @browsing
     def test_participants_listing_no_precidency_must_not_raise(self, browser):
         Meeting.query.all()[0].presidency = None
         transaction.commit()
-        browser.login().open(MeetingList.url_for(self.committee, self.meeting))
+        browser.login().open(self.meeting.get_url())
         self.assertEquals([''], browser.css("#meeting_presidency").text)
 
     @browsing
     def test_participants_listing_secretary_is_existing(self, browser):
-        browser.login().open(MeetingList.url_for(self.committee, self.meeting))
+        browser.login().open(self.meeting.get_url())
         self.assertEquals(['Silvia Pangani'], browser.css("#meeting_secretary").text)
 
     @browsing
     def test_participants_listing_no_secretary_must_not_raise(self, browser):
         Meeting.query.all()[0].secretary = None
         transaction.commit()
-        browser.login().open(MeetingList.url_for(self.committee, self.meeting))
+        browser.login().open(self.meeting.get_url())
         self.assertEquals([''], browser.css("#meeting_secretary").text)
 
     @browsing
     def test_participants_listing_participants_is_existing(self, browser):
-        browser.login().open(MeetingList.url_for(self.committee, self.meeting))
+        browser.login().open(self.meeting.get_url())
         self.assertEquals(['Peter Meter Hans Besen Roland Kuppler'],
                           browser.css("#meeting_participants").text)
 
@@ -136,64 +136,64 @@ class TestMeetingView(FunctionalTestCase):
     def test_participants_listing_empty_participants_must_not_raise(self, browser):
         Meeting.query.all()[0].participants = []
         transaction.commit()
-        browser.login().open(MeetingList.url_for(self.committee, self.meeting))
+        browser.login().open(self.meeting.get_url())
         self.assertEquals([''], browser.css("#meeting_participants").text)
 
     @browsing
     def test_metadata_starttime_is_existing(self, browser):
-        browser.login().open(MeetingList.url_for(self.committee, self.meeting))
+        browser.login().open(self.meeting.get_url())
         self.assertEquals('08:30 AM', browser.css("#meeting_time span")[0].text)
 
     @browsing
     def test_metadata_endtime_is_existing(self, browser):
-        browser.login().open(MeetingList.url_for(self.committee, self.meeting))
+        browser.login().open(self.meeting.get_url())
         self.assertEquals('10:30 AM', browser.css("#meeting_time span")[1].text)
 
     @browsing
     def test_metadata_no_endtime_must_not_raise(self, browser):
         Meeting.query.all()[0].end = None
         transaction.commit()
-        browser.login().open(MeetingList.url_for(self.committee, self.meeting))
+        browser.login().open(self.meeting.get_url())
         self.assertEquals('', browser.css("#meeting_time span")[1].text)
 
     @browsing
     def test_metadata_state_pending_exists(self, browser):
-        browser.login().open(MeetingList.url_for(self.committee, self.meeting))
+        browser.login().open(self.meeting.get_url())
         self.assertEquals('Pending', browser.css(".state").first.text)
 
     @browsing
     def test_generated_protocol_exists(self, browser):
-        browser.login().open(MeetingList.url_for(self.committee, self.meeting))
+        browser.login().open(self.meeting.get_url())
         self.assertEquals('Protocol', browser.css(".protocol > a").first.text)
         self.assertEquals(self.protocol.absolute_url(), browser.css(".protocol > a").first.get('href'))
 
     @browsing
     def test_generated_exceprts_exists(self, browser):
-        browser.login().open(MeetingList.url_for(self.committee, self.meeting))
+        browser.login().open(self.meeting.get_url())
         self.assertEquals('Excerpt', browser.css(".excerpts a").first.text)
         self.assertEquals(self.excerpt.absolute_url(), browser.css(".excerpts a").first.get('href'))
 
     @browsing
     def test_generated_proposal_exceprt_exists(self, browser):
-        browser.login().open(MeetingList.url_for(self.committee, self.meeting))
+        browser.login().open(self.meeting.get_url())
         self.assertEquals('Excerpt', browser.css(".summary > a").first.text)
         self.assertEquals(self.excerpt.absolute_url(), browser.css(".summary > a").first.get('href'))
 
     @browsing
     def test_proposal_attachement_exists(self, browser):
-        browser.login().open(MeetingList.url_for(self.committee, self.meeting))
+        browser.login().open(self.meeting.get_url())
         self.assertEquals(u'Testdokum\xe4nt', browser.css(".attachements a").first.text)
 
     @browsing
     def test_proposal_attachement_link_exists(self, browser):
-        browser.login().open(MeetingList.url_for(self.committee, self.meeting))
+        browser.login().open(self.meeting.get_url())
         self.assertEquals(
             self.proposal_a.load_model().resolve_submitted_documents()[0].absolute_url(),
             browser.css(".attachements a").first.get('href'))
 
     @browsing
     def test_proposal_is_expandable(self, browser):
-        browser.login().open(MeetingList.url_for(self.committee, self.meeting))
+        browser.login().open(self.meeting.get_url())
         self.assertEquals('expandable',
                           browser.css("#agenda_items tr")[0].get('class'))
 

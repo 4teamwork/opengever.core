@@ -5,7 +5,6 @@ from opengever.meeting.browser.meetings.agendaitem import ScheduleSubmittedPropo
 from opengever.meeting.browser.meetings.agendaitem import ScheduleText
 from opengever.meeting.browser.meetings.agendaitem import UpdateAgendaItemOrder
 from opengever.meeting.browser.meetings.excerpt import GenerateExcerpt
-from opengever.meeting.browser.meetings.meetinglist import MeetingList
 from opengever.meeting.browser.meetings.protocol import DownloadGeneratedProtocol
 from opengever.meeting.browser.meetings.protocol import EditProtocol
 from opengever.meeting.browser.meetings.transitions import MeetingTransitionController
@@ -64,12 +63,16 @@ class AddMeeting(ModelAddForm):
         self.widgets['committee'].value = (str(committee_id), )
 
     def nextURL(self):
-        return MeetingList.url_for(self.context, self._created_object)
+        return self._created_object.get_url()
 
 
 class EditMeeting(ModelEditForm):
 
     fields = field.Fields(IMeetingModel)
+
+    def __init__(self, context, request):
+        super(EditMeeting, self).__init__(context, request)
+        self.model = self.context.model
 
     def updateWidgets(self):
         super(EditMeeting, self).updateWidgets()
@@ -80,7 +83,7 @@ class EditMeeting(ModelEditForm):
         self.widgets['committee'].value = (str(committee_id), )
 
     def nextURL(self):
-        return MeetingList.url_for(self.context, self.model)
+        return self.model.get_url()
 
 
 class MeetingView(BrowserView):
@@ -103,9 +106,9 @@ class MeetingView(BrowserView):
         'update_agenda_item_order': UpdateAgendaItemOrder,
     }
 
-    def __init__(self, context, request, meeting):
+    def __init__(self, context, request):
         super(MeetingView, self).__init__(context, request)
-        self.model = meeting
+        self.model = self.context.model
 
     def __call__(self):
         return self.template()
