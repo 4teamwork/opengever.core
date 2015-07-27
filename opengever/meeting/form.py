@@ -46,6 +46,7 @@ class ModelAddForm(AutoExtensibleForm, AddForm):
         api.portal.show_message(
             _(u'message_record_created', default='Record created'),
             api.portal.get().REQUEST)
+        return self.request.RESPONSE.redirect(self.nextURL())
 
     @button.buttonAndHandler(_(u'Cancel', default=u'Cancel'), name='cancel')
     def cancel(self, action):
