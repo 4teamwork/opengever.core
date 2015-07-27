@@ -1,7 +1,8 @@
-from opengever.base.model import Base
-from opengever.base.model import create_session
-from opengever.base.model import get_tables
 from opengever.core.upgrade import SchemaMigration
+from sqlalchemy import Column
+from sqlalchemy import Integer
+from sqlalchemy import String
+from sqlalchemy import Text
 from sqlalchemy.sql.expression import column
 from sqlalchemy.sql.expression import table
 
@@ -20,10 +21,20 @@ class AddI18nSupportForActivities(SchemaMigration):
         self.remove_non_translated_columns()
 
     def add_activity_translations_table(self):
-        Base.metadata.create_all(
-            create_session().bind,
-            tables=get_tables(['activities_translation']),
-            checkfirst=True)
+        self.op.create_table(
+            'activities_translation',
+            Column("id", Integer, primary_key=True, autoincrement=False),
+            Column("locale", String(10), primary_key=True),
+            Column('title', Text),
+            Column('label', Text),
+            Column('summary', Text),
+            Column('description', Text),
+        )
+        self.op.create_foreign_key(
+            'activities_trnsltn_id_fkey',
+            'activities_translation', 'activities',
+            ['id'], ['id'],
+            ondelete='CASCADE')
 
     def migrate_data(self):
         activities_table = table(
