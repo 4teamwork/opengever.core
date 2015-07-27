@@ -109,4 +109,14 @@
       profile="opengever.policy.base:default"
       />
 
+  <!-- 4503 -> 4504 -->
+  <genericsetup:upgradeStep
+      title="Execute delayed Upgrade: plone lexicon using I18N Case normalizer."
+      description=""
+      source="4503"
+      destination="4504"
+      handler="opengever.policy.base.upgrades.to4504.ExecuteDelayedPloneUpgrade"
+      profile="opengever.policy.base:default"
+      />
+
 </configure>

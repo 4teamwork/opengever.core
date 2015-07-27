@@ -5,6 +5,10 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Delay expensive plone upgrade that installs plone lexicon using I18N
+  Case normalizer.
+  [deiferni]
+
 - Fix activity upgrade steps, don't rely on potentially dangerous imports
   from model but duplicate necessary information.
   [deiferni]

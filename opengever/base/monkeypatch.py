@@ -16,6 +16,7 @@ For further details see:
 
 from AccessControl import ClassSecurityInfo
 from AccessControl.class_init import InitializeClass
+from opengever.base.marmoset_patch import marmoset_patch
 from Products.Five.browser import decode
 from ZODB.POSException import ConflictError
 from ZPublisher.HTTPRequest import FileUpload
@@ -336,3 +337,18 @@ def _verifyObjectPaste(self, object, validate_src=1):
 
 CopyContainer._verifyObjectPaste = _verifyObjectPaste
 LOGGER.info('Monkey patched OFS.CopySupport.CopyContainer._verifyObjectPaste')
+
+
+# --------
+# Marmoset patch `plone.app.upgrade.v43.betas.to43rc1` to delay an expensive
+# upgrade. The upgrade is re-defined as opengever.policy.base.to4504.
+
+
+from plone.app.upgrade.v43 import betas
+
+
+def nullupgrade(context):
+    pass
+
+marmoset_patch(betas.to43rc1, nullupgrade)
+LOGGER.info('Marmoset patched plone.app.upgrade.v43.betas.to43rc1')
