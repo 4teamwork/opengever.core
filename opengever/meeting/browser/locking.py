@@ -14,17 +14,7 @@ class SQLRepresenterLockingOperations(LockingOperations):
     """
 
     @property
-    def model(self):
-        view = self.request['PUBLISHED']
-        if hasattr(view, 'model'):
-            return view.model
-        return None
-
-    @property
     def lockable(self):
-        model = self.model
-        if self.model:
-            return ILockable(model)
         return ILockable(self.context)
 
     @property
@@ -68,17 +58,7 @@ class SQLRepresenterLockingOperations(LockingOperations):
 class SQLRepresenterLockingInformation(LockingInformation):
 
     @property
-    def model(self):
-        view = self.request['PUBLISHED']
-        if hasattr(view, 'model'):
-            return view.model
-        return None
-
-    @property
     def lockable(self):
-        model = self.model
-        if self.model:
-            return ILockable(model)
         return ILockable(self.context)
 
     def is_locked(self):
@@ -132,11 +112,11 @@ class SQLRepresenterLockingInformation(LockingInformation):
             time_difference = self._getNiceTimeDifference(time)
 
             return {
-                'creator'         : creator,
-                'fullname'        : fullname,
-                'author_page'     : author_page,
-                'time'            : time,
-                'time_difference' : time_difference,
-                'token'           : token,
-                'type'            : lock_type,
+                'creator': creator,
+                'fullname': fullname,
+                'author_page': author_page,
+                'time': time,
+                'time_difference': time_difference,
+                'token': token,
+                'type': lock_type,
             }

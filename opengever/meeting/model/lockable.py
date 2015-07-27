@@ -1,11 +1,12 @@
+from opengever.base.model import create_session
+from opengever.meeting.interfaces import ISQLLockable
 from opengever.ogds.models.locks import Lock
+from opengever.ogds.models.locks import utcnow_tz_aware
 from plone import api
 from plone.locking.interfaces import IRefreshableLockable
 from plone.locking.interfaces import STEALABLE_LOCK
 from zope.component import adapts
 from zope.interface import implements
-from zope.interface import Interface
-from opengever.base.model import create_session
 
 
 class SQLLockable(object):
@@ -13,6 +14,7 @@ class SQLLockable(object):
     """
 
     implements(IRefreshableLockable)
+    adapts(ISQLLockable)
 
     def __init__(self, context):
         self.context = context
@@ -21,12 +23,12 @@ class SQLLockable(object):
 
     @property
     def object_type(self):
-        return 'meeting'
+        return self.model.__class__.__name__
 
     @property
     def object_id(self):
         # XXX should use a general id getter (via primary key)
-        return self.meeting.meeting_id
+        return self.model.meeting_id
 
     @property
     def is_stealable(self):
@@ -47,6 +49,13 @@ class SQLLockable(object):
                     lock_type=self.searialize_lock_type(lock_type))
 
         self.session.add(lock)
+
+    def refresh_lock(self, lock_type=STEALABLE_LOCK):
+        if not self.locked():
+            return
+
+        lock = self._get_lock(lock_type)
+        lock.time = utcnow_tz_aware()
 
     def unlock(self, lock_type=STEALABLE_LOCK, stealable_only=True):
         """Unlock the object using the given key.
@@ -133,6 +142,9 @@ class SQLLockable(object):
             object_id=self.object_id)
 
         for lock in locks:
+            if lock.is_valid():
+                continue
+
             infos.append({'creator': lock.creator,
                           'time': lock.time,
                           'token': lock.token,
