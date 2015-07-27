@@ -5,6 +5,10 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Fix activity upgrade steps, don't rely on potentially dangerous imports
+  from model but duplicate necessary information.
+  [deiferni]
+
 - Make `author_cache_key` also discriminate on hostname.
   This is required because this cache key is used to cache generated
   URLs, which are dependent on the hostname that is used to access the
