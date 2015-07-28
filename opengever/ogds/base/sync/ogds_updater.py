@@ -19,12 +19,12 @@ import os
 import time
 
 
-NO_UID_MSG = "User '{}' has no 'uid' attribute."
-NO_UID_AD_MSG = "User '{}' has none of the attributes {} - skipping."
-USER_NOT_FOUND_LDAP = "Referenced user {} not found in LDAP, ignoring!"
-USER_NOT_FOUND_SQL = "Referenced user {} not found in SQL, ignoring!"
+NO_UID_MSG = u"User '{}' has no 'uid' attribute."
+NO_UID_AD_MSG = u"User '{}' has none of the attributes {} - skipping."
+USER_NOT_FOUND_LDAP = u"Referenced user {} not found in LDAP, ignoring!"
+USER_NOT_FOUND_SQL = u"Referenced user {} not found in SQL, ignoring!"
 
-AD_UID_KEYS = ['userid', 'sAMAccountName', 'windows_login_name']
+AD_UID_KEYS = [u'userid', u'sAMAccountName', u'windows_login_name']
 
 LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 
@@ -51,20 +51,20 @@ def sync_ogds(plone, users=True, groups=True):
     start = time.clock()
 
     if users:
-        logger.info("Importing users...")
+        logger.info(u"Importing users...")
         updater.import_users()
 
     if groups:
-        logger.info("Importing groups...")
+        logger.info(u"Importing groups...")
         updater.import_groups()
 
     elapsed = time.clock() - start
-    logger.info("Done in {:0.1f} seconds.".format(elapsed))
+    logger.info(u"Done in {:0.1f} seconds.".format(elapsed))
 
-    logger.info("Updating LDAP SYNC importstamp...")
+    logger.info(u"Updating LDAP SYNC importstamp...")
     set_remote_import_stamp(plone)
 
-    logger.info("Synchronization Done.")
+    logger.info(u"Synchronization Done.")
 
 
 def setup_ogds_sync_logfile(logger):
@@ -159,8 +159,8 @@ class OGDSUpdater(grok.Adapter):
 
                 # Skip users with uid longer than SQL 'userid' column
                 if len(userid) > USER_ID_LENGTH:
-                    logger.warn("Skipping user '{}' - "
-                                "userid too long!".format(userid))
+                    logger.warn(u"Skipping user '{}' - "
+                                u"userid too long!".format(userid))
                     continue
 
                 if not self.user_exists(userid):
@@ -177,7 +177,7 @@ class OGDSUpdater(grok.Adapter):
                         # different by the SQL backend's unique constraint.
                         # We therefore enforce uniqueness ourselves.
                         logger.warn(
-                            "Skipping duplicate user '{}'!".format(userid))
+                            u"Skipping duplicate user '{}'!".format(userid))
                         continue
 
                 # Iterate over all SQL columns and update their values
@@ -203,7 +203,7 @@ class OGDSUpdater(grok.Adapter):
 
                 # Set the user active
                 user.active = True
-                logger.info("Imported user '{}'".format(userid))
+                logger.info(u"Imported user '{}'".format(userid))
             session.flush()
 
     def import_groups(self):
@@ -245,8 +245,8 @@ class OGDSUpdater(grok.Adapter):
 
                 # Skip groups with groupid longer than SQL 'groupid' column
                 if len(groupid) > GROUP_ID_LENGTH:
-                    logger.warn("Skipping group '{}' - "
-                                "groupid too long!".format(groupid))
+                    logger.warn(u"Skipping group '{}' - "
+                                u"groupid too long!".format(groupid))
                     continue
 
                 if not self.group_exists(groupid):
@@ -263,7 +263,7 @@ class OGDSUpdater(grok.Adapter):
                         # different by the SQL backend's unique constraint.
                         # We therefore enforce uniqueness ourselves.
                         logger.warn(
-                            "Skipping duplicate group '{}'!".format(groupid))
+                            u"Skipping duplicate group '{}'!".format(groupid))
                         continue
 
                 # Iterate over all SQL columns and update their values
@@ -285,7 +285,7 @@ class OGDSUpdater(grok.Adapter):
                 contained_users = []
                 group_members = ldap_util.get_group_members(info)
 
-                logger.info("Importing group '{}'...".format(groupid))
+                logger.info(u"Importing group '{}'...".format(groupid))
                 for user_dn in group_members:
                     try:
                         ldap_user = ldap_util.entry_by_dn(user_dn)
@@ -327,12 +327,12 @@ class OGDSUpdater(grok.Adapter):
                         except MultipleResultsFound:
                             # Duplicate user - skip (see above).
                             logger.warn(
-                                "Skipping duplicate user '{}'!".format(userid))
+                                u"Skipping duplicate user '{}'!".format(userid))
                             continue
 
                         contained_users.append(user)
                         logger.info(
-                            "Importing user '{}' into group '{}'...".format(
+                            u"Importing user '{}' into group '{}'...".format(
                                 userid, groupid))
                     except NO_SUCH_OBJECT:
                         logger.warn(USER_NOT_FOUND_LDAP.format(user_dn))
@@ -340,4 +340,4 @@ class OGDSUpdater(grok.Adapter):
                 group.users = contained_users
                 group.active = True
                 session.flush()
-                logger.info("Done.")
+                logger.info(u"Done.")

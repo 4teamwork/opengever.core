@@ -5,6 +5,9 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- OGDS Updater: Fix some unicode errors while logging.
+  [lgraf]
+
 - Delay expensive plone upgrade that installs plone lexicon using I18N
   Case normalizer.
   [deiferni]
