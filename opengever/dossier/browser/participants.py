@@ -106,8 +106,9 @@ class Participants(grok.View, OpengeverTab, ListingView):
 
     columns = (
 
-        ('', base64_oid_checkbox_helper, ),
-        ('', icon_helper, ),
+        {'column': '',
+         'transform': base64_oid_checkbox_helper,
+         'width': 25},
 
         {'column': 'contact',
          'column_title': _(u'column_contact', default=u'Contact'),
