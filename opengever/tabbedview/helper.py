@@ -1,6 +1,7 @@
 from ftw.mail.utils import get_header
 from opengever.base import _ as base_mf
 from opengever.base.browser.helper import get_css_class
+from opengever.base.utils import escape_html
 from opengever.base.utils import get_hostname
 from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.document.document import Document
@@ -18,9 +19,7 @@ from zope.component import getUtility
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
 from zope.i18n import translate
-import cgi
 import pkg_resources
-
 
 try:
     pkg_resources.get_distribution('opengever.pdfconverter')
@@ -137,10 +136,10 @@ def linked_document_subdossier(item, value):
         return ''
 
     url = "{}/redirect_to_parent_dossier".format(item.getURL())
-    link_title = cgi.escape(subdossier_title, quote=True)
+    title = escape_html(subdossier_title)
 
     link = '<a href="{}" title="{}" class="subdossierLink">{}</a>'.format(
-        url, link_title, subdossier_title)
+        url, title, title)
 
     transforms = api.portal.get_tool('portal_transforms')
     return transforms.convertTo('text/x-html-safe', link).getData()
@@ -169,8 +168,8 @@ def linked(item, value):
     link_title = " > ".join(t for t in breadcrumb_titles)
 
     # Make sure all data used in the HTML snippet is properly escaped
-    link_title = cgi.escape(link_title, quote=True)
-    value = cgi.escape(value, quote=True)
+    link_title = escape_html(link_title)
+    value = escape_html(value)
 
     link = '<a class="rollover-breadcrumb %s" href="%s" title="%s">%s</a>' % (
         css_class, url_method(), link_title, value)
@@ -243,7 +242,7 @@ def _linked_document_with_tooltip(item, value, trashed=False, removed=False):
 
     # Make sure all data used in the HTML snippet is properly escaped
     for k, v in data.items():
-        data[k] = cgi.escape(v, quote=True)
+        data[k] = escape_html(v)
 
     tooltip_links = []
 
@@ -374,3 +373,9 @@ def translated_string(domain='plone'):
         return translate(
             value, context=getRequest(), domain=domain)
     return _translate
+
+
+def escape_html_transform(item, value):
+    if value is None:
+        return value
+    return escape_html(value)

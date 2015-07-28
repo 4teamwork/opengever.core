@@ -2,12 +2,12 @@ from ftw.dictstorage.interfaces import IDictStorage
 from ftw.testing import MockTestCase
 from lxml import etree
 from mocker import ANY
+from opengever.base.utils import escape_html
 from opengever.document.document import Document
 from opengever.tabbedview.helper import linked_document_with_tooltip
 from opengever.tabbedview.helper import linked_trashed_document_with_tooltip
 from pyquery import PyQuery
 from zope.interface import Interface
-import cgi
 
 
 ITEM_TITLE = u'lorem ipsum <with tags>'
@@ -16,7 +16,7 @@ ITEM_TITLE = u'lorem ipsum <with tags>'
 def link(href='#', text=''):
     """Helper method to create a link element to be used in tests.
     """
-    text = cgi.escape(text)
+    text = escape_html(text)
     lnk = PyQuery('<a href="%s">%s</a>' % (href, text))[0]
     return lnk
 

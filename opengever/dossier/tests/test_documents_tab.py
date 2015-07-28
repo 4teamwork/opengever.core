@@ -16,7 +16,7 @@ class TestDocumentsTab(FunctionalTestCase):
         self.subdossier = create(
             Builder('dossier')
             .within(self.dossier)
-            .titled(u'S\xfcbdossier'))
+            .titled(u'S\xfcbdossier <Foo> Bar'))
         self.document = create(Builder('document').within(self.subdossier))
 
     @browsing
@@ -25,7 +25,8 @@ class TestDocumentsTab(FunctionalTestCase):
 
         browser.css('table.listing').first.css('a.subdossierLink')
         link = browser.css('table.listing').first.css('a.subdossierLink').first
-        self.assertEqual(u'S\xfcbdossier', link.text)
+        # Title should be HTML escaped and encoded properly
+        self.assertEqual(u'S\xfcbdossier &lt;Foo&gt; Bar', link.innerHTML)
 
         link.click()
         self.assertEqual(browser.url, self.subdossier.absolute_url())

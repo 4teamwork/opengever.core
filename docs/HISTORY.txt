@@ -5,6 +5,13 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Documents Tab: Make sure link text in "containing subdossier" column
+  is HTML escaped.
+  [lgraf]
+
+- Documents Tab: Make sure document_author is HTML escaped.
+  [lgraf]
+
 - Added upgradestep wich cleanup no longer existing interfaces from the zc.relation
   catalog's interfaces_flattened mapping, to avoid pickling erros (see #1091).
   [phgross]
