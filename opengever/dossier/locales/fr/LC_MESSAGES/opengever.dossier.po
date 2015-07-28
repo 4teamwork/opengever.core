@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-07-06 06:40+0000\n"
+"POT-Creation-Date: 2015-07-28 16:13+0000\n"
 "PO-Revision-Date: 2012-09-10 10:17+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -98,7 +98,7 @@ msgstr "Dernières tâches"
 msgid "No Subdossiers"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:53
+#: ./opengever/dossier/archive.py:54
 msgid "Not all required fields are filled"
 msgstr "Manque des champs obligatoires"
 
@@ -145,7 +145,7 @@ msgstr "Le dossier a été activé."
 msgid "The Dossier has been deactivated"
 msgstr "Le dossier a été annulé."
 
-#: ./opengever/dossier/archive.py:268
+#: ./opengever/dossier/archive.py:271
 msgid "The Dossier has been resolved"
 msgstr "Dossier a été fermé avec succès"
 
@@ -157,15 +157,15 @@ msgstr "La date du dossier ${dossier} n'est pas valable."
 msgid "The dossier has been succesfully resolved"
 msgstr "Le dossier a été fermé avec succès"
 
-#: ./opengever/dossier/archive.py:239
+#: ./opengever/dossier/archive.py:242
 msgid "The filing number has been given"
 msgstr "Le numéro d'inventaire va être attribué"
 
-#: ./opengever/dossier/archive.py:68
+#: ./opengever/dossier/archive.py:69
 msgid "The given end date is not valid, it needs to be younger or                  equal than ${date} (the youngest contained object)."
 msgstr "La date de clôture n'est pas valable. Elle doit être plus récente ou égale à la date la plus récente de l'objet contenu."
 
-#: ./opengever/dossier/archive.py:86
+#: ./opengever/dossier/archive.py:89
 msgid "The given value is not a valid Year"
 msgstr "L'année de dépôt attribuée n'est pas valable"
 
@@ -189,7 +189,7 @@ msgstr "Le sous-dossier a été fermé avec succès"
 msgid "This subdossier can't be activated,because the main dossiers is inactive"
 msgstr "Ce sous-dossier ne peut pas être réactivé parce que le dossier prinicipal a été annulé."
 
-#: ./opengever/dossier/archive.py:168
+#: ./opengever/dossier/archive.py:171
 msgid "When the Action give filing number is selected,                         all fields are required."
 msgstr "Pour l'attribution de numéro d'inventaire, tous les champs sont obligatoires"
 
@@ -206,12 +206,12 @@ msgid "button_add"
 msgstr "Etablir"
 
 #. Default: "Archive"
-#: ./opengever/dossier/archive.py:212
+#: ./opengever/dossier/archive.py:215
 msgid "button_archive"
 msgstr "Enregistrer"
 
 #. Default: "Cancel"
-#: ./opengever/dossier/archive.py:271
+#: ./opengever/dossier/archive.py:274
 #: ./opengever/dossier/behaviors/participation.py:167
 #: ./opengever/dossier/move_items.py:125
 msgid "button_cancel"
@@ -246,7 +246,7 @@ msgid "error_NotInContentTypes ${failed_objects}"
 msgstr "Pas d'objet déplacé. Les objets suivants ne peuvent être insérés dans le classeur choisi : ${failed_objects}"
 
 #. Default: "The enddate is required."
-#: ./opengever/dossier/archive.py:63
+#: ./opengever/dossier/archive.py:64
 msgid "error_enddate"
 msgstr "Date de clôture obligatoire"
 
@@ -262,7 +262,7 @@ msgid "fieldset_filing"
 msgstr "Classeur"
 
 #. Default: "Action"
-#: ./opengever/dossier/archive.py:155
+#: ./opengever/dossier/archive.py:158
 msgid "filing_action"
 msgstr "Action"
 
@@ -293,18 +293,18 @@ msgid "filing_number"
 msgstr "Numéro d'inventaire"
 
 #. Default: "filing prefix"
-#: ./opengever/dossier/archive.py:134
+#: ./opengever/dossier/archive.py:137
 #: ./opengever/dossier/behaviors/dossier.py:106
 msgid "filing_prefix"
 msgstr "Préfixe du lieu de dépôt"
 
 #. Default: "filing Year"
-#: ./opengever/dossier/archive.py:149
+#: ./opengever/dossier/archive.py:152
 msgid "filing_year"
 msgstr "Année de dépôt"
 
 #. Default: "Archive Dossier"
-#: ./opengever/dossier/archive.py:204
+#: ./opengever/dossier/archive.py:207
 msgid "heading_archive_form"
 msgstr "Classer le dossier"
 
@@ -334,7 +334,7 @@ msgstr "Type de conteneur du dossier imprimé"
 msgid "help_destination"
 msgstr "Recherche en direct: Recherche de ce client"
 
-#: ./opengever/dossier/archive.py:144
+#: ./opengever/dossier/archive.py:147
 #: ./opengever/dossier/behaviors/dossier.py:74
 msgid "help_end"
 msgstr ""
@@ -445,7 +445,7 @@ msgid "label_email_address"
 msgstr "Email"
 
 #. Default: "Closing Date"
-#: ./opengever/dossier/archive.py:143
+#: ./opengever/dossier/archive.py:146
 #: ./opengever/dossier/behaviors/dossier.py:73
 #: ./opengever/dossier/browser/report.py:40
 msgid "label_end"
@@ -465,7 +465,7 @@ msgstr "Numéro d'inventaire"
 #. Default: "Filing number"
 #: ./opengever/dossier/filing/advanced_search.py:15
 msgid "label_filing_number"
-msgstr ""
+msgstr "Numéro d'inventaire"
 
 #. Default: "Reference Number"
 #: ./opengever/dossier/behaviors/dossier.py:170
@@ -583,7 +583,7 @@ msgstr "Tous les documents n'ont pas le statut checkin"
 msgid "not all task are closed"
 msgstr "Toutes les tâches ne sont pas fermées"
 
-#: ./opengever/dossier/archive.py:33
+#: ./opengever/dossier/archive.py:34
 msgid "only resolve, set filing no later"
 msgstr "Uniquement fermé (numéro d'inventaire non attribué)"
 
@@ -591,19 +591,19 @@ msgstr "Uniquement fermé (numéro d'inventaire non attribué)"
 msgid "required"
 msgstr "Obligatoire"
 
-#: ./opengever/dossier/archive.py:35
+#: ./opengever/dossier/archive.py:36
 msgid "resolve and set a new filing no"
 msgstr "Fermer et attribuer un nouveau numéro d'inventaire"
 
-#: ./opengever/dossier/archive.py:32
+#: ./opengever/dossier/archive.py:33
 msgid "resolve and set filing no"
 msgstr "Fermer et attribuer un numéro d'inventaire"
 
-#: ./opengever/dossier/archive.py:34
+#: ./opengever/dossier/archive.py:35
 msgid "resolve and take the existing filing no"
 msgstr "Fermer et utiliser un numéro d'inventaire existant"
 
-#: ./opengever/dossier/archive.py:36
+#: ./opengever/dossier/archive.py:37
 msgid "set a filing no"
 msgstr "Attribuer numéro d'inventaire"
 
