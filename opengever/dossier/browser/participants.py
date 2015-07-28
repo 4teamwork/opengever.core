@@ -6,6 +6,7 @@ from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.behaviors.participation import IParticipationAwareMarker
+from opengever.ogds.base.actor import Actor
 from opengever.tabbedview.browser.base import OpengeverTab
 from opengever.tabbedview.browser.listing import ListingView
 from opengever.tabbedview.helper import linked_ogds_author
@@ -60,9 +61,8 @@ def role_list_helper(item, value):
     else:
         return value
 
-
-def icon_helper(item, value):
-    return "<span class='function-user'>&nbsp;</span>"
+def linked_ogds_author_with_icon(item, author):
+    return Actor.lookup(author).get_link(with_icon=True)
 
 
 def base64_oid_checkbox_helper(item, value):
@@ -111,7 +111,7 @@ class Participants(grok.View, OpengeverTab, ListingView):
 
         {'column': 'contact',
          'column_title': _(u'column_contact', default=u'Contact'),
-         'transform': linked_ogds_author},
+         'transform': linked_ogds_author_with_icon},
 
         {'column': 'roles',
          'column_title': _(u'column_rolelist', default=u'role_list'),
