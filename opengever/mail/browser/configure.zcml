@@ -21,10 +21,17 @@
     <browser:page
         name="view"
         for="ftw.mail.mail.IMail"
-        class="opengever.base.browser.default_view.OGDefaultView"
+        class=".default_view.MailDefaultView"
         permission="zope2.View"
         layer="opengever.base.interfaces.IOpengeverBaseLayer"
         />
+
+    <browser:page
+          name="edit"
+          for="ftw.mail.mail.IMail"
+          class=".edit.MailEditView"
+          permission="cmf.ModifyPortalContent"
+          />
 
     <browser:page
         for="ftw.mail.mail.IMail"
