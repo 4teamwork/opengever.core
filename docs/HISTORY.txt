@@ -5,6 +5,10 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Adapt SchemaMigration.is_oracle() check so it also recognizes the
+  'oracle+cx_oracle' dialect.
+  [lgraf]
+
 - Make sure we always get unicode from SQLAlchemy for columns values by
   setting the `coerce_to_unicode` parameter for the cx_Oracle dialect.
   Necessary for SQLAlchemy >= 0.9.2
