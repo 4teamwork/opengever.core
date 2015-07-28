@@ -136,10 +136,10 @@ def linked_document_subdossier(item, value):
         return ''
 
     url = "{}/redirect_to_parent_dossier".format(item.getURL())
-    link_title = escape_html(subdossier_title)
+    title = escape_html(subdossier_title)
 
     link = '<a href="{}" title="{}" class="subdossierLink">{}</a>'.format(
-        url, link_title, subdossier_title)
+        url, title, title)
 
     transforms = api.portal.get_tool('portal_transforms')
     return transforms.convertTo('text/x-html-safe', link).getData()
