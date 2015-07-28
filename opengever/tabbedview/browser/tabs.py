@@ -12,6 +12,7 @@ from opengever.tabbedview import _
 from opengever.tabbedview.browser.base import OpengeverTab
 from opengever.tabbedview.browser.listing import CatalogListingView
 from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
+from opengever.tabbedview.helper import escape_html_transform
 from opengever.tabbedview.helper import external_edit_link
 from opengever.tabbedview.helper import linked
 from opengever.tabbedview.helper import linked_document_subdossier
@@ -82,7 +83,8 @@ class Documents(OpengeverCatalogListingTab):
 
         {'column': 'document_author',
          'column_title': _('label_document_author', default="Document Author"),
-         'sort_index': 'sortable_author'},
+         'sort_index': 'sortable_author',
+         'transform': escape_html_transform},
 
         {'column': 'document_date',
          'column_title': _('label_document_date', default="Document Date"),

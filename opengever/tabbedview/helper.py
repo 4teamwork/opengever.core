@@ -373,3 +373,9 @@ def translated_string(domain='plone'):
         return translate(
             value, context=getRequest(), domain=domain)
     return _translate
+
+
+def escape_html_transform(item, value):
+    if value is None:
+        return value
+    return escape_html(value)
