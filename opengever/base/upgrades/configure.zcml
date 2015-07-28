@@ -303,4 +303,14 @@
         directory="profiles/4501"
         />
 
+    <!-- 4501 -> 4502 -->
+    <genericsetup:upgradeStep
+        title="Remove no longer existing interfaces from relations catalog interface mapping."
+        source="4501"
+        destination="4502"
+        handler="opengever.base.upgrades.to4502.CleanupRelationsCatalog"
+        profile="opengever.base:default"
+        />
+
+
 </configure>
