@@ -74,14 +74,17 @@ class Actor(object):
         return admin_unit.prefix_label(
             self.get_label(with_principal=with_principal))
 
-    def get_link(self):
+    def get_link(self, with_icon=False):
         url = self.get_profile_url()
         label = self.get_label()
 
         if not url:
             return label
 
-        link = u'<a href="{}">{}</a>'.format(url, label)
+        if with_icon:
+            link = u'<a href="{}" class="contenttype-opengever-actor">{}</a>'.format(url, label)
+        else:
+            link = u'<a href="{}">{}</a>'.format(url, label)
 
         transformer = api.portal.get_tool('portal_transforms')
         link = transformer.convertTo('text/x-html-safe', link).getData()
@@ -115,7 +118,7 @@ class NullActor(object):
     def get_label(self, with_principal=True):
         return self.identifier or u''
 
-    def get_link(self):
+    def get_link(self, with_icon=False):
         return self.identifier or u''
 
     def representatives(self):
