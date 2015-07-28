@@ -5,6 +5,12 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Make sure we always get unicode from SQLAlchemy for columns values by
+  setting the `coerce_to_unicode` parameter for the cx_Oracle dialect.
+  Necessary for SQLAlchemy >= 0.9.2
+  See http://docs.sqlalchemy.org/en/latest/dialects/oracle.html#unicode)
+  [lgraf]
+
 - OGDS Updater: Fix some unicode errors while logging.
   [lgraf]
 
