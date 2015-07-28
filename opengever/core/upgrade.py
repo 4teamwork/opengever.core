@@ -296,7 +296,8 @@ class SchemaMigration(UpgradeStep):
 
     @property
     def is_oracle(self):
-        return self.dialect_name == 'oracle'
+        # Could be 'oracle' or 'oracle+cx_oracle'
+        return 'oracle' in self.dialect_name
 
     @property
     def is_postgres(self):

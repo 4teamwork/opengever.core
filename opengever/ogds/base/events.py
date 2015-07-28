@@ -42,8 +42,13 @@ def setup_engine_options(event):
     """
     engine = event.engine
     if engine.name == 'oracle':
-        # the sqlalchemy 0.7 way:
         listen(engine, 'connect', alter_session_on_connect)
+
+        # Make sure we always get unicode from SQLAlchemy for columns values.
+        # Necessary for SQLAlchemy >= 0.9.2. See:
+        # http://docs.sqlalchemy.org/en/latest/dialects/oracle.html#unicode
+        if hasattr(engine.dialect, 'coerce_to_unicode'):
+            engine.dialect.coerce_to_unicode = True
 
     elif engine.name == 'sqlite':
         listen(engine, 'connect', setup_isolation_level_on_connect)
