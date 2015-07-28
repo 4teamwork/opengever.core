@@ -3,9 +3,11 @@ from ftw.builder import create
 from ftw.testing import MockTestCase
 from mocker import ANY
 from opengever.base.behaviors.utils import set_attachment_content_disposition
+from opengever.base.utils import escape_html
 from opengever.base.utils import find_parent_dossier
 from opengever.testing import FunctionalTestCase
 from plone.namedfile.file import NamedFile
+from unittest2 import TestCase
 from urllib import quote
 
 
@@ -107,3 +109,22 @@ class TestFindParentDossier(FunctionalTestCase):
         document = create(Builder('document'))
         with self.assertRaises(ValueError):
             find_parent_dossier(document)
+
+
+class TestEscapeHTML(TestCase):
+
+    def test_escapes_lt_and_gt(self):
+        text = 'Foo <Bar> Baz'
+        self.assertEquals('Foo &lt;Bar&gt; Baz', escape_html(text))
+
+    def test_escapes_double_quotes(self):
+        text = 'Foo "Bar" Baz'
+        self.assertEquals('Foo &quot;Bar&quot; Baz', escape_html(text))
+
+    def test_escapes_apostrophes(self):
+        text = "Foo 'Bar' Baz"
+        self.assertEquals('Foo &apos;Bar&apos; Baz', escape_html(text))
+
+    def test_escapes_ampersand(self):
+        text = "Foo &Bar& Baz"
+        self.assertEquals('Foo &amp;Bar&amp; Baz', escape_html(text))

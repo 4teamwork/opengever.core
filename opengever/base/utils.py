@@ -5,6 +5,7 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from plone import api
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from xml.sax.saxutils import escape
 from zope.component import getMultiAdapter
 import App.config
 import os
@@ -138,3 +139,16 @@ def get_hostname(request):
     host = host.split(":")[0].lower()
 
     return host
+
+
+def escape_html(text):
+    """HTML escape a given string.
+
+    See: https://wiki.python.org/moin/EscapingHtml
+    """
+    # escape() and unescape() takes care of &, < and >, but not quotes
+    html_escape_table = {
+        '"': "&quot;",
+        "'": "&apos;"
+    }
+    return escape(text, html_escape_table)
