@@ -11,6 +11,7 @@ from plone.memoize import ram
 from plone.memoize.interfaces import ICacheChooser
 from plone.namedfile.browser import Download
 from plone.namedfile.utils import stream_data
+from plone.protect.utils import addTokenToUrl
 from Products.CMFCore.utils import getToolByName
 from zope.component import queryUtility
 from zope.component.hooks import getSite
@@ -123,14 +124,17 @@ class DownloadConfirmationHelper(object):
         self.invalidate_is_active()
 
     def get_html_tag(self, file_url, additional_classes=[], url_extension='',
-                     viewname='download'):
+                     viewname='download', include_token=False):
         if self.is_active():
-            viewname ='file_download_confirmation'
+            viewname = 'file_download_confirmation'
             clazz = 'link-overlay {0}'.format(' '.join(additional_classes))
         else:
             clazz = ' '.join(additional_classes)
 
         url = '{0}/{1}{2}'.format(file_url, viewname, url_extension)
+        if include_token:
+            url = addTokenToUrl(url)
+
         label = translate(_(u'label_download_copy', default='Download copy'),
                           context=self.request).encode('utf-8')
 

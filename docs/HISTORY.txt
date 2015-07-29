@@ -5,6 +5,9 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Add authentication token also to the file and pdf version download link.
+  [phgross]
+
 - Prefix actor link with an icon in the participants listing.
   [phgross]
 

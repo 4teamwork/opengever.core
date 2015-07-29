@@ -115,6 +115,7 @@ class TestVersionsTabWithoutPDFConverter(TestVersionsTab):
 
         self.assertEquals('Kopie herunterladen', download_link.text)
         self.assertEquals(['3'], query['version_id'])
+        self.assertIn('_authenticator', query)
         self.assertEquals(
             '/plone/dossier-1/document-1/file_download_confirmation', url.path)
 
@@ -143,5 +144,6 @@ class TestVersionsTabWithPDFConverter(TestVersionsTab):
 
         self.assertEquals('PDF Vorschau', pdf_download_link.text)
         self.assertEquals(['3'], query['version_id'])
+        self.assertIn('_authenticator', query)
         self.assertEquals(
             '/plone/dossier-1/document-1/download_pdf_version', url.path)

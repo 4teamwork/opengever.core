@@ -107,7 +107,8 @@ class VersionDataProxy(object):
             self.url,
             url_extension="?version_id=%s" % self.version_id,
             additional_classes=['standalone', 'function-download-copy'],
-            viewname='download_file_version')
+            viewname='download_file_version',
+            include_token=True)
         return link
 
     @property
@@ -117,6 +118,7 @@ class VersionDataProxy(object):
         """
         url = '{}/download_pdf_version?version_id={}'
         url = url.format(self.url, self.version_id)
+        url = addTokenToUrl(url)
         link = translate_link(
             url, _(u'button_pdf', default=u'PDF'),
             css_class='standalone function-download-pdf')
