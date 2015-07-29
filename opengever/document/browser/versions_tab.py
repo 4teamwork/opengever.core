@@ -208,7 +208,7 @@ class VersionsTab(BaseListingTab):
     batching_enabled = True
     lazy = True
 
-    columns = (
+    _columns = (
         {'column': 'version',
          'column_title': _(u'label_version', default=u'Version'),
          },
@@ -239,8 +239,15 @@ class VersionsTab(BaseListingTab):
          },
     )
 
-    if not PDFCONVERTER_AVAILABLE:
-        columns = filter(lambda c: c['column'] != 'pdf_preview_link', columns)
+    @property
+    def columns(self):
+        """Disable pdf_preview link in deployments without pdfconverter.
+        """
+        if not PDFCONVERTER_AVAILABLE:
+            return filter(
+                lambda c: c['column'] != 'pdf_preview_link', self._columns)
+
+        return self._columns
 
     def get_base_query(self):
         return self.context
