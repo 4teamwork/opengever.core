@@ -5,6 +5,13 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Fix missing mail icon in mail edit view/properties view.
+  [deiferni]
+
+- Show context mimetype icon in custom no_download namedfile widget
+  mode templates.
+  [deiferni]
+
 - Documents Tab: Make sure link text in "containing subdossier" column
   is HTML escaped.
   [lgraf]

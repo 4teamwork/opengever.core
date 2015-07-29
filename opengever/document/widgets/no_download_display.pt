@@ -20,6 +20,7 @@
                       filename view/filename;
                       filename_encoded view/filename_encoded;"
             tal:condition="python: exists and fieldname">
+        <span tal:attributes="class context/css_class"></span>
         <span tal:content="filename">Filename</span>
         <span class="discreet"> &mdash; <span tal:define="sizekb view/file_size" tal:replace="sizekb">100 KB</span></span>
     </span>
