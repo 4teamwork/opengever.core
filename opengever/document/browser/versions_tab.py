@@ -11,7 +11,7 @@ from opengever.document.document import IDocumentSchema
 from opengever.ogds.base.actor import Actor
 from opengever.tabbedview.browser.base import BaseListingTab
 from plone import api
-from plone.protect import createToken
+from plone.protect.utils import addTokenToUrl
 from Products.CMFPlone.utils import safe_unicode
 from zope.globalrequest import getRequest
 from zope.i18n import translate
@@ -70,12 +70,6 @@ class VersionDataProxy(object):
         return self._url
 
     @property
-    def token(self):
-        """CSRF authentication token.
-        """
-        return createToken()
-
-    @property
     def version(self):
         """The ID ("number") of this version.
         """
@@ -132,8 +126,9 @@ class VersionDataProxy(object):
     def revert_link(self):
         """Returns a formatted link to revert to this particular version.
         """
-        url = '{}/revert-file-to-version?version_id={}&_authenticator={}'
-        url = url.format(self.url, self.version_id, self.token)
+        url = '{}/revert-file-to-version?version_id={}'
+        url = url.format(self.url, self.version_id)
+        url = addTokenToUrl(url)
         link = translate_link(
             url, _(u'label_reset', default=u'reset'),
             css_class='standalone function-revert')
