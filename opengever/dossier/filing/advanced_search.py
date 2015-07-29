@@ -1,5 +1,5 @@
 from five import grok
-from opengever.advancedsearch import _
+from opengever.dossier import _
 from opengever.advancedsearch.advanced_search import AdvancedSearchForm
 from opengever.advancedsearch.advanced_search import IAdvancedSearch
 from opengever.dossier.filing.interfaces import IFilingNumberActivatedLayer
