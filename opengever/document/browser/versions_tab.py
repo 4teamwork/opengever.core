@@ -11,7 +11,7 @@ from opengever.document.document import IDocumentSchema
 from opengever.ogds.base.actor import Actor
 from opengever.tabbedview.browser.base import BaseListingTab
 from plone import api
-from plone.protect import createToken
+from plone.protect.utils import addTokenToUrl
 from Products.CMFPlone.utils import safe_unicode
 from zope.globalrequest import getRequest
 from zope.i18n import translate
@@ -70,12 +70,6 @@ class VersionDataProxy(object):
         return self._url
 
     @property
-    def token(self):
-        """CSRF authentication token.
-        """
-        return createToken()
-
-    @property
     def version(self):
         """The ID ("number") of this version.
         """
@@ -113,7 +107,8 @@ class VersionDataProxy(object):
             self.url,
             url_extension="?version_id=%s" % self.version_id,
             additional_classes=['standalone', 'function-download-copy'],
-            viewname='download_file_version')
+            viewname='download_file_version',
+            include_token=True)
         return link
 
     @property
@@ -123,6 +118,7 @@ class VersionDataProxy(object):
         """
         url = '{}/download_pdf_version?version_id={}'
         url = url.format(self.url, self.version_id)
+        url = addTokenToUrl(url)
         link = translate_link(
             url, _(u'button_pdf', default=u'PDF'),
             css_class='standalone function-download-pdf')
@@ -132,8 +128,9 @@ class VersionDataProxy(object):
     def revert_link(self):
         """Returns a formatted link to revert to this particular version.
         """
-        url = '{}/revert-file-to-version?version_id={}&_authenticator={}'
-        url = url.format(self.url, self.version_id, self.token)
+        url = '{}/revert-file-to-version?version_id={}'
+        url = url.format(self.url, self.version_id)
+        url = addTokenToUrl(url)
         link = translate_link(
             url, _(u'label_reset', default=u'reset'),
             css_class='standalone function-revert')
@@ -208,7 +205,7 @@ class VersionsTab(BaseListingTab):
     batching_enabled = True
     lazy = True
 
-    columns = (
+    _columns = (
         {'column': 'version',
          'column_title': _(u'label_version', default=u'Version'),
          },
@@ -239,8 +236,15 @@ class VersionsTab(BaseListingTab):
          },
     )
 
-    if not PDFCONVERTER_AVAILABLE:
-        columns = filter(lambda c: c['column'] != 'pdf_preview_link', columns)
+    @property
+    def columns(self):
+        """Disable pdf_preview link in deployments without pdfconverter.
+        """
+        if not PDFCONVERTER_AVAILABLE:
+            return filter(
+                lambda c: c['column'] != 'pdf_preview_link', self._columns)
+
+        return self._columns
 
     def get_base_query(self):
         return self.context

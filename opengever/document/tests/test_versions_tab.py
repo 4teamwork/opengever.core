@@ -46,6 +46,9 @@ class TestVersionsTab(FunctionalTestCase):
         doc.file.data = vdata
         repo.save(obj=doc, comment="This is Version %s" % version_id)
 
+
+class TestVersionsTabWithoutPDFConverter(TestVersionsTab):
+
     @browsing
     def test_dates_are_formatted_correctly(self, browser):
         with freeze(datetime(2015, 01, 28, 12, 00)):
@@ -112,5 +115,35 @@ class TestVersionsTab(FunctionalTestCase):
 
         self.assertEquals('Kopie herunterladen', download_link.text)
         self.assertEquals(['3'], query['version_id'])
+        self.assertIn('_authenticator', query)
         self.assertEquals(
             '/plone/dossier-1/document-1/file_download_confirmation', url.path)
+
+
+class TestVersionsTabWithPDFConverter(TestVersionsTab):
+
+    def setUp(self):
+        super(TestVersionsTabWithPDFConverter, self).setUp()
+        import opengever.document
+        opengever.document.browser.versions_tab.PDFCONVERTER_AVAILABLE = True
+
+    def tearDown(self):
+        super(TestVersionsTabWithPDFConverter, self).tearDown()
+        import opengever.document
+        opengever.document.browser.versions_tab.PDFCONVERTER_AVAILABLE = False
+
+    @browsing
+    def test_download_pdf_link_is_properly_constructed(self, browser):
+        browser.login().open(self.document, view='tabbedview_view-versions')
+
+        listing = browser.css('.listing').first
+        first_row = listing.css('tr')[1]
+        pdf_download_link = first_row.css('td a')[-2]
+        url = urlparse(pdf_download_link.attrib['href'])
+        query = parse_qs(url.query)
+
+        self.assertEquals('PDF Vorschau', pdf_download_link.text)
+        self.assertEquals(['3'], query['version_id'])
+        self.assertIn('_authenticator', query)
+        self.assertEquals(
+            '/plone/dossier-1/document-1/download_pdf_version', url.path)
