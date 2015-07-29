@@ -5,6 +5,10 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Move submitted with proposals list to its own document overview
+  table row.
+  [deiferni]
+
 - Add authentication token also to the file and pdf version download link.
   [phgross]
 

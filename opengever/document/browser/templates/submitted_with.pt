@@ -1,0 +1,30 @@
+<div i18n:domain="opengever.document" id="proposals_box">
+  <tal:documents tal:repeat="submitted_document view/submitted_documents">
+    <tal:block tal:define="is_outdated python: view.is_outdated(submitted_document)">
+
+      <div class="proposal" tal:condition="not: is_outdated">
+        <span tal:content="structure python: submitted_document.proposal.get_link()"></span>
+      </div>
+      <div class="propsoal" tal:condition="is_outdated">
+        <div>
+          <span tal:content="structure python: submitted_document.proposal.get_link()"></span>
+          <span class="discreet">
+            —
+            <div tal:replace="python: view.render_submitted_version(submitted_document)"></div>
+            —
+            <div tal:replace="python: view.render_current_document_version()"></div>
+          </span>
+        </div>
+        <div class="updateActions">
+          <a tal:attributes="href python: view.get_update_document_url(submitted_document);
+                             class python: 'outdated' if is_outdated else ''"
+             i18n:translate=""
+            >
+            Update document in proposal
+          </a>
+        </div>
+      </div>
+
+    </tal:block>
+  </tal:documents>
+</div>
