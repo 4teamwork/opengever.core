@@ -5,6 +5,9 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Prefix actor link with an icon in the participants listing.
+  [phgross]
+
 - Fix missing mail icon in mail edit view/properties view.
   [deiferni]
 

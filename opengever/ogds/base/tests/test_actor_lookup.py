@@ -65,6 +65,10 @@ class TestActorLookup(FunctionalTestCase):
             u'<a href="http://nohost/plone/@@user-details/hugo.boss">Boss H\xfcgo (hugo.boss)</a>',
             actor.get_link())
 
+        self.assertEqual(
+            u'<a href="http://nohost/plone/@@user-details/hugo.boss" class="contenttype-opengever-actor">Boss H\xfcgo (hugo.boss)</a>',
+            actor.get_link(with_icon=True))
+
     def test_get_link_returns_safe_html(self):
         contact = create(Builder('contact')
                          .having(firstname=u"Foo <b onmouseover=alert('Foo!')>click me!</b>",
