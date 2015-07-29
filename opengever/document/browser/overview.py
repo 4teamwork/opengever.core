@@ -103,6 +103,21 @@ class CustomRow(BaseRow):
         return self.renderer()
 
 
+class TemplateRow(CustomRow):
+    """Row that renders a template.
+
+    The parameter template_name should be the filename (without extension) of
+    a template from the templates folder.
+    """
+
+    def __init__(self, template, label):
+        self.template = template
+        super(TemplateRow, self).__init__(self.template, label)
+
+    def get_content(self):
+        return self.renderer(self.view)
+
+
 class Overview(DisplayForm, OpengeverTab):
     grok.context(IDocumentSchema)
     grok.name('tabbedview_view-overview')
@@ -110,8 +125,12 @@ class Overview(DisplayForm, OpengeverTab):
 
     show_searchform = False
 
+    file_template = ViewPageTemplateFile('templates/file.pt')
+    public_trial_template = ViewPageTemplateFile('templates/public_trial.pt')
+    submitted_with_template = ViewPageTemplateFile('templates/submitted_with.pt')
+
     def get_metadata_config(self):
-        return [
+        rows = [
             FieldRow('title'),
             FieldRow('IDocumentMetadata.document_date'),
             FieldRow('IDocumentMetadata.document_type'),
@@ -122,8 +141,8 @@ class Overview(DisplayForm, OpengeverTab):
             FieldRow('IDocumentMetadata.foreign_reference'),
             CustomRow(self.render_checked_out_link,
                       label=_('label_checked_out', default='Checked out')),
-            CustomRow(self.render_file_widget,
-                      label=_('label_file', default='File')),
+            TemplateRow(self.file_template,
+                        label=_('label_file', default='File')),
             FieldRow('IDocumentMetadata.digitally_available'),
             FieldRow('IDocumentMetadata.preserved_as_paper'),
             FieldRow('IDocumentMetadata.receipt_date'),
@@ -131,11 +150,15 @@ class Overview(DisplayForm, OpengeverTab):
             FieldRow('IRelatedDocuments.relatedItems'),
             FieldRow('IClassification.classification'),
             FieldRow('IClassification.privacy_layer'),
-            CustomRow(self.render_public_trial_with_edit_link,
-                      label=ogbmf('label_public_trial',
-                                  default='Public Trial')),
+            TemplateRow(self.public_trial_template,
+                        label=ogbmf('label_public_trial',
+                                    default='Public Trial')),
             FieldRow('IClassification.public_trial_statement'),
         ]
+        if is_meeting_feature_enabled():
+            rows.append(TemplateRow(self.submitted_with_template,
+                                    label=_('Submitted with')))
+        return rows
 
     def get_metadata_rows(self):
         for row in self.get_metadata_config():
@@ -145,9 +168,6 @@ class Overview(DisplayForm, OpengeverTab):
             data = dict(label=row.get_label(),
                         content=row.get_content())
             yield data
-
-    def display_submitted_documents(self):
-        return is_meeting_feature_enabled() and self.submitted_documents()
 
     def submitted_documents(self):
         return SubmittedDocument.query.by_source(self.context).all()
@@ -168,10 +188,6 @@ class Overview(DisplayForm, OpengeverTab):
     def render_current_document_version(self):
         return _(u"Current version: ${version}",
                  mapping={'version': self.context.get_current_version()})
-
-    def render_file_widget(self):
-        template = ViewPageTemplateFile('templates/file.pt')
-        return template(self)
 
     def render_creator_link(self):
         return Actor.user(self.context.Creator()).get_link()
@@ -222,10 +238,6 @@ class Overview(DisplayForm, OpengeverTab):
             if manager.get_checked_out_by() != getSecurityManager().getUser().getId():
                 return False
         return True
-
-    def render_public_trial_with_edit_link(self):
-        template = ViewPageTemplateFile('templates/public_trial.pt')
-        return template(self)
 
     def show_modfiy_public_trial_link(self):
         try:
