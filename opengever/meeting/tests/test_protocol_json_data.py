@@ -47,6 +47,9 @@ class TestProtocolJsonData(FunctionalTestCase):
                  'markdown:initial_position': u'Initial',
                  'markdown:legal_basis': u'Legal!',
                  'markdown:proposed_action': u'Yep',
+                 'markdown:copy_for_attention': None,
+                 'markdown:disclose_to': None,
+                 'markdown:publish_in': None,
                  'number': None,
                  'title': u'Proposal',
                  'is_paragraph': False,},
@@ -57,6 +60,9 @@ class TestProtocolJsonData(FunctionalTestCase):
                  'markdown:initial_position': None,
                  'markdown:legal_basis': None,
                  'markdown:proposed_action': None,
+                 'markdown:copy_for_attention': None,
+                 'markdown:disclose_to': None,
+                 'markdown:publish_in': None,
                  'number': None,
                  'title': u'Free Text',
                  'is_paragraph': False,}],
@@ -67,4 +73,4 @@ class TestProtocolJsonData(FunctionalTestCase):
              'participants': {'members': [], 'other': []},
              'protocol': {'type': u'Protocol'}},
             data
-         )
+        )

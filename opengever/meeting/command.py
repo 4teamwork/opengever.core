@@ -98,7 +98,9 @@ class ManualExcerptOperations(ExcerptOperations):
     def __init__(self, agenda_items, title,
                  include_initial_position=True, include_legal_basis=True,
                  include_considerations=True, include_proposed_action=True,
-                 include_discussion=True, include_decision=True):
+                 include_discussion=True, include_decision=True,
+                 include_publish_in=True, include_disclose_to=True,
+                 include_copy_for_attention=True):
         super(ManualExcerptOperations, self).__init__(agenda_items)
         self.title = title
         self.include_initial_position = include_initial_position
@@ -107,6 +109,9 @@ class ManualExcerptOperations(ExcerptOperations):
         self.include_proposed_action = include_proposed_action
         self.include_discussion = include_discussion
         self.include_decision = include_decision
+        self.include_publish_in = include_publish_in
+        self.include_disclose_to = include_disclose_to
+        self.include_copy_for_attention = include_copy_for_attention
 
     def get_meeting_data(self, meeting):
         return ExcerptProtocolData(
@@ -116,7 +121,10 @@ class ManualExcerptOperations(ExcerptOperations):
             include_considerations=self.include_considerations,
             include_proposed_action=self.include_proposed_action,
             include_discussion=self.include_discussion,
-            include_decision=self.include_decision)
+            include_decision=self.include_decision,
+            include_publish_in=self.include_publish_in,
+            include_disclose_to=self.include_disclose_to,
+            include_copy_for_attention=self.include_copy_for_attention)
 
     def create_database_entry(self, meeting, document):
         excerpt = GeneratedExcerpt(

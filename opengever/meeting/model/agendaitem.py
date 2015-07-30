@@ -46,6 +46,9 @@ class AgendaItem(Base):
             self.proposal.initial_position = data.get('initial_position')
             self.proposal.considerations = data.get('considerations')
             self.proposal.proposed_action = data.get('proposed_action')
+            self.proposal.publish_in = data.get('publish_in')
+            self.proposal.disclose_to = data.get('disclose_to')
+            self.proposal.copy_for_attention = data.get('copy_for_attention')
 
         self.discussion = data.get('discussion')
         self.decision = data.get('decision')
@@ -53,7 +56,9 @@ class AgendaItem(Base):
     def get_field_data(self, include_initial_position=True,
                        include_legal_basis=True, include_considerations=True,
                        include_proposed_action=True, include_discussion=True,
-                       include_decision=True):
+                       include_decision=True, include_publish_in=True,
+                       include_disclose_to=True,
+                       include_copy_for_attention=True):
         data = {
             'number': self.number,
             'description': self.description,
@@ -76,6 +81,14 @@ class AgendaItem(Base):
             data['markdown:discussion'] = self._sanitize_text(self.discussion)
         if include_decision:
             data['markdown:decision'] = self._sanitize_text(self.decision)
+        if include_publish_in:
+            data['markdown:publish_in'] = self._sanitize_text(self.publish_in)
+        if include_disclose_to:
+            data['markdown:disclose_to'] = self._sanitize_text(
+                self.disclose_to)
+        if include_copy_for_attention:
+            data['markdown:copy_for_attention'] = self._sanitize_text(
+                self.copy_for_attention)
 
         return data
 
@@ -134,6 +147,18 @@ class AgendaItem(Base):
     @property
     def proposed_action(self):
         return self.proposal.proposed_action if self.has_proposal else None
+
+    @property
+    def publish_in(self):
+        return self.proposal.publish_in if self.has_proposal else None
+
+    @property
+    def disclose_to(self):
+        return self.proposal.disclose_to if self.has_proposal else None
+
+    @property
+    def copy_for_attention(self):
+        return self.proposal.copy_for_attention if self.has_proposal else None
 
     @property
     def name(self):

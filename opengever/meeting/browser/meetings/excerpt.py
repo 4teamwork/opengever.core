@@ -58,6 +58,18 @@ class IGenerateExcerpt(form.Schema):
         title=_(u'Include decision'),
         required=True, default=True)
 
+    include_publish_in = schema.Bool(
+        title=_(u'Include publish in'),
+        required=True, default=False)
+
+    include_disclose_to = schema.Bool(
+        title=_(u'Include disclose to'),
+        required=True, default=False)
+
+    include_copy_for_attention = schema.Bool(
+        title=_(u'Include copy for attention'),
+        required=True, default=False)
+
     @invariant
     def validate_at_least_one_selected(data):
         """Validate that at least one field is selected."""
@@ -67,7 +79,10 @@ class IGenerateExcerpt(form.Schema):
                 data.include_considerations or
                 data.include_proposed_action or
                 data.include_discussion or
-                data.include_decision):
+                data.include_decision or
+                data.include_publish_in or
+                data.include_disclose_to or
+                data.include_copy_for_attention):
             raise Invalid(
                 _(u'Please select at least one field for the excerpt.'))
 
@@ -131,7 +146,10 @@ class GenerateExcerpt(AutoExtensibleForm, EditForm):
             include_considerations=data['include_considerations'],
             include_proposed_action=data['include_proposed_action'],
             include_discussion=data['include_discussion'],
-            include_decision=data['include_decision'])
+            include_decision=data['include_decision'],
+            include_publish_in=data['include_publish_in'],
+            include_disclose_to=data['include_disclose_to'],
+            include_copy_for_attention=data['include_copy_for_attention'])
         command = CreateGeneratedDocumentCommand(
             data['dossier'], self.model, operations)
         command.execute()
