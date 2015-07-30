@@ -100,7 +100,10 @@ class TestProtocol(FunctionalTestCase):
                       'Considerations': 'It is important',
                       'Proposed action': 'Accept it',
                       'Discussion': 'We should accept it',
-                      'Decision': 'Accepted'}).submit()
+                      'Decision': 'Accepted',
+                      'Publish in': 'There',
+                      'Disclose to': 'Nobody',
+                      'Copy for attention': 'Hanspeter'}).submit()
 
         self.assertEquals(['Changes saved'], info_messages())
 
@@ -109,6 +112,9 @@ class TestProtocol(FunctionalTestCase):
         self.assertEqual('Still the same', proposal.initial_position)
         self.assertEqual('It is important', proposal.considerations)
         self.assertEqual('Accept it', proposal.proposed_action)
+        self.assertEqual('There', proposal.publish_in)
+        self.assertEqual('Nobody', proposal.disclose_to)
+        self.assertEqual('Hanspeter', proposal.copy_for_attention)
 
         agenda_item = AgendaItem.get(self.agenda_item.agenda_item_id)
         self.assertEqual('We should accept it', agenda_item.discussion)

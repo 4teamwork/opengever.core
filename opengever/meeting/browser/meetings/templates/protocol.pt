@@ -82,6 +82,36 @@
                                               id string:${name}-decision"
                               tal:content="protocol/decision"/>
 
+                    <label tal:attributes="for string:${name}-publish_in;
+                                           id string:${name}-publish_in-label"
+                           i18n:translate="label_publish_in">
+                           Publish in
+                    </label>
+                    <textarea class="textarea-widget text-field"
+                              tal:attributes="name string:${name}.publish_in:record;
+                                              id string:${name}-publish_in"
+                              tal:content="protocol/publish_in"/>
+
+                    <label tal:attributes="for string:${name}-disclose_to;
+                                           id string:${name}-disclose_to-label"
+                           i18n:translate="label_disclose_to">
+                           Disclose to
+                    </label>
+                    <textarea class="textarea-widget text-field"
+                              tal:attributes="name string:${name}.disclose_to:record;
+                                              id string:${name}-disclose_to"
+                              tal:content="protocol/disclose_to"/>
+
+                    <label tal:attributes="for string:${name}-copy_for_attention;
+                                           id string:${name}-copy_for_attention-label"
+                           i18n:translate="label_copy_for_attention">
+                           Copy for attention
+                    </label>
+                    <textarea class="textarea-widget text-field"
+                              tal:attributes="name string:${name}.copy_for_attention:record;
+                                              id string:${name}-copy_for_attention"
+                              tal:content="protocol/copy_for_attention"/>
+
                   </metal:block>
                 </metal:block>
 
