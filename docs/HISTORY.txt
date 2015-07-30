@@ -5,6 +5,10 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Add upgrade-step to fix 'document_author' and 'title' for mails with
+  incorrectly decoded header values.
+  [lgraf]
+
 - Move submitted with proposals list to its own document overview
   table row.
   [deiferni]
