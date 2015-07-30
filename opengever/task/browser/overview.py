@@ -85,7 +85,7 @@ class Overview(DisplayForm, OpengeverTab):
             },
             {
                 'label': _(u"label_deadline", default=u"Deadline"),
-                'value': task.get_deadline_label(),
+                'value': task.get_deadline_label(format="long"),
                 'is_html': True,
             },
             {
