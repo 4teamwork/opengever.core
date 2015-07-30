@@ -178,4 +178,14 @@
         profile="opengever.mail:default"
         />
 
+    <!-- 4500 -> 4501 -->
+    <genericsetup:upgradeStep
+        title="Fix 'document_author' and 'title' for mails with incorrectly decoded header values"
+        description=""
+        source="4500"
+        destination="4501"
+        handler="opengever.mail.upgrades.to4501.FixMailsWithIncorrectlyDecodedHeaderValues"
+        profile="opengever.mail:default"
+        />
+
 </configure>
