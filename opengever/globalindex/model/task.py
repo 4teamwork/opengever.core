@@ -27,6 +27,7 @@ from sqlalchemy.orm import relation
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
 from sqlalchemy.sql import functions
+from zope.globalrequest import getRequest
 from zope.i18n import translate
 
 
@@ -201,17 +202,18 @@ class Task(Base):
             translate(self.review_state, domain='plone',
                       context=api.portal.get().REQUEST))
 
-    def get_deadline_label(self):
+    def get_deadline_label(self, format="medium"):
         if not self.deadline:
             return u''
 
         if self.is_overdue:
-            label = '<span class="overdue">{}</span>'
+            label = u'<span class="overdue">{}</span>'
         else:
-            label = '<span>{}</span>'
+            label = u'<span>{}</span>'
 
-        return label.format(
-            self.deadline.strftime('%d.%m.%Y'))
+        formatter = getRequest().locale.dates.getFormatter("date", format)
+        formatted_date = formatter.format(self.deadline)
+        return label.format(formatted_date.strip())
 
     def _date_to_zope_datetime(self, date):
         if not date:

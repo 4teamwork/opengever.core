@@ -109,7 +109,7 @@ class TestTaskOverview(FunctionalTestCase):
 
         self.assertSequenceEqual(
             ['Aufgabe', 'Dossier', 'Text blabla', 'To comment',
-             'task-state-open', '01.01.2010', self.user.label(),
+             'task-state-open', 'January 1, 2010', self.user.label(),
              self.user.label(), ''],
             table_data
         )

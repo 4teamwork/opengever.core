@@ -5,6 +5,9 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Use datetime formatter to display deadline label.
+  [deiferni]
+
 - Add upgrade-step to fix 'document_author' and 'title' for mails with
   incorrectly decoded header values.
   [lgraf]
