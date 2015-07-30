@@ -295,4 +295,14 @@
         profile="opengever.meeting:default"
         />
 
+    <!-- 4600 -> 4601 -->
+    <genericsetup:upgradeStep
+        title="Add proposal columns."
+        description=""
+        source="4600"
+        destination="4601"
+        handler="opengever.meeting.upgrades.to4601.AddProposalColumns"
+        profile="opengever.meeting:default"
+        />
+
 </configure>

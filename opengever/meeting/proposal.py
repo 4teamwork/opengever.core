@@ -55,9 +55,23 @@ class IProposalModel(Interface):
 
     proposed_action = schema.Text(
         title=_('label_proposed_action', default=u"Proposed action"),
-        description=_("help_proposed_action", default=u""),
         required=False,
-    )
+        )
+
+    publish_in = schema.Text(
+        title=_('label_publish_in', default=u"Publish in"),
+        required=False,
+        )
+
+    disclose_to = schema.Text(
+        title=_('label_disclose_to', default=u"Disclose to"),
+        required=False,
+        )
+
+    copy_for_attention = schema.Text(
+        title=_('label_copy_for_attention', default=u"Copy for attention"),
+        required=False,
+        )
 
 
 class ISubmittedProposalModel(Interface):
@@ -85,11 +99,26 @@ class ISubmittedProposalModel(Interface):
         title=_('label_proposed_action', default=u"Proposed action"),
         description=_("help_proposed_action", default=u""),
         required=False,
-    )
+        )
 
     considerations = schema.Text(
         title=_('label_considerations', default=u"Considerations"),
         description=_("help_considerations", default=u""),
+        required=False,
+        )
+
+    publish_in = schema.Text(
+        title=_('label_publish_in', default=u"Publish in"),
+        required=False,
+        )
+
+    disclose_to = schema.Text(
+        title=_('label_disclose_to', default=u"Disclose to"),
+        required=False,
+        )
+
+    copy_for_attention = schema.Text(
+        title=_('label_copy_for_attention', default=u"Copy for attention"),
         required=False,
         )
 

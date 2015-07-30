@@ -81,6 +81,9 @@ class Proposal(Base):
     proposed_action = Column(Text)
 
     considerations = Column(Text)
+    publish_in = Column(Text)
+    disclose_to = Column(Text)
+    copy_for_attention = Column(Text)
 
     committee_id = Column(Integer, ForeignKey('committees.id'))
     committee = relationship('Committee', backref='proposals')

@@ -85,6 +85,9 @@ class TestProposal(FunctionalTestCase):
             'Initial position': u'My pr\xf6posal',
             'Proposed action': u'Lorem ips\xfcm',
             'Committee': str(committee.committee_id),
+            'Publish in': u'B\xe4rner Zeitung',
+            'Disclose to': u'Hansj\xf6rg',
+            'Copy for attention': u'P\xe4tra',
             'form.widgets.relatedItems:list': True,
         })
         browser.css('#form-buttons-save').first.click()
@@ -103,6 +106,9 @@ class TestProposal(FunctionalTestCase):
         self.assertEqual(u'possible', model.legal_basis)
         self.assertEqual(u'Lorem ips\xfcm', model.proposed_action)
         self.assertEqual(u'My pr\xf6posal', model.initial_position)
+        self.assertEqual(u'B\xe4rner Zeitung', model.publish_in)
+        self.assertEqual(u'Hansj\xf6rg', model.disclose_to)
+        self.assertEqual(u'P\xe4tra', model.copy_for_attention)
 
         self.assertEqual(['a', 'proposal', 'my', 'proposal'],
                          index_data_for(proposal)['SearchableText'])
@@ -129,6 +135,9 @@ class TestProposal(FunctionalTestCase):
             'Initial position': u'My pr\xf6posal',
             'Proposed action': u'Lorem ips\xfcm',
             'Committee': str(committee.committee_id),
+            'Publish in': u'B\xe4rner Zeitung',
+            'Disclose to': u'Hansj\xf6rg',
+            'Copy for attention': u'P\xe4tra',
             'form.widgets.relatedItems:list': True,
             })
 
