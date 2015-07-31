@@ -128,4 +128,14 @@
       directory="profiles/4505"
       />
 
+  <!-- 4505 -> 4600 -->
+  <genericsetup:upgradeStep
+      title="Install the opengever.locking sub-package."
+      description=""
+      source="4505"
+      destination="4600"
+      handler="opengever.policy.base.upgrades.to4600.InstallOpengeverLocking"
+      profile="opengever.policy.base:default"
+      />
+
 </configure>
