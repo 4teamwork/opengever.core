@@ -7,6 +7,7 @@ from ftw.table.interfaces import ITableGenerator
 from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
+from opengever.task.activities import TaskAddedActivity
 from opengever.tasktemplates import _
 from opengever.tasktemplates.content.tasktemplate import MAIN_TASK_DEADLINE_DELTA
 from opengever.tasktemplates.interfaces import IFromTasktemplateGenerated
@@ -272,6 +273,14 @@ class AddForm(BrowserView):
                                          checkConstraints=True)
             alsoProvides(task, IFromTasktemplateGenerated)
             task.reindexObject()
+
+            # add activity record for subtask
+            activity = TaskAddedActivity(task, self.request, self.context)
+            activity.record()
+
+        # add activity record for the main task
+        activity = TaskAddedActivity(main_task, self.request, self.context)
+        activity.record()
 
         IStatusMessage(self.request).addStatusMessage(
             _(u'message_tasks_created', default=u'tasks created'), type="info")

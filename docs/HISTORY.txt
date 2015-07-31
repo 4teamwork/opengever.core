@@ -5,6 +5,9 @@ Changelog
 4.5.0 (unreleased)
 ------------------
 
+- Added activity support for tasktemplates.
+  [phgross]
+
 - Use datetime formatter to display deadline label.
   [deiferni]
 
