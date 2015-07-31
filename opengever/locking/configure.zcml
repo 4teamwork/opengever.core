@@ -1,0 +1,44 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:grok="http://namespaces.zope.org/grok"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="opengever.locking">
+
+  <grok:grok package="." />
+
+  <adapter factory=".lockable.SQLLockable" />
+
+  <genericsetup:registerProfile
+      name="default"
+      title="opengever.locking"
+      description="the opengever.locking profile"
+      directory="profiles/default"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <browser:viewlet
+      name="plone.lockinfo"
+      manager="plone.app.layout.viewlets.interfaces.IAboveContent"
+      class="plone.locking.browser.info.LockInfoViewlet"
+      permission="cmf.ModifyPortalContent"
+      for="opengever.locking.interfaces.ISQLLockable"
+      />
+
+  <browser:page
+      for="opengever.locking.interfaces.ISQLLockable"
+      name="plone_lock_operations"
+      class="plone.locking.browser.locking.LockingOperations"
+      permission="cmf.ModifyPortalContent"
+      allowed_attributes="safe_unlock force_unlock refresh_lock"
+      />
+
+  <browser:page
+      for="opengever.locking.interfaces.ISQLLockable"
+      name="plone_lock_info"
+      class="plone.locking.browser.locking.LockingInformation"
+      permission="zope2.View"
+      allowed_attributes="is_locked is_locked_for_current_user lock_is_stealable lock_info"
+      />
+
+</configure>

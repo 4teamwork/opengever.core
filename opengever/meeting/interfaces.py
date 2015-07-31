@@ -10,9 +10,5 @@ class IMeetingSettings(Interface):
         default=False)
 
 
-class ISQLLockable(Interface):
-    """Marker interface for lockable sql objects or wrapper(objects)."""
-
-
 class IMeetingWrapper(Interface):
     """Marker interface for meeting object wrappers."""

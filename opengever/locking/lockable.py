@@ -1,8 +1,9 @@
 from opengever.base.model import create_session
-from opengever.meeting.interfaces import ISQLLockable
-from opengever.ogds.models.locks import Lock
-from opengever.ogds.models.locks import utcnow_tz_aware
+from opengever.locking.interfaces import ISQLLockable
+from opengever.locking.model import Lock
+from opengever.locking.model.locks import utcnow_tz_aware
 from plone import api
+from plone.locking.interfaces import INonStealableLock
 from plone.locking.interfaces import IRefreshableLockable
 from plone.locking.interfaces import STEALABLE_LOCK
 from zope.component import adapts
@@ -64,30 +65,27 @@ class SQLLockable(object):
         objects that are stealable(). Thus, non-stealable locks will need
         to pass stealable_only=False to actually get unlocked.
         """
+        if not self.locked():
+            return
 
-        # XXX stealable
-        Lock.query.filter_by(
-            object_type=self.object_type,
-            object_id=self.object_id,
-            lock_type=self.searialize_lock_type(lock_type)).delete()
+        if not stealable_only or self.stealable(lock_type):
+            Lock.query.filter_by(
+                object_type=self.object_type,
+                object_id=self.object_id,
+                lock_type=self.searialize_lock_type(lock_type)).delete()
 
     def clear_locks(self):
         """Clear all locks on the object
         """
         locks = Lock.query.filter_by(object_type=self.object_type,
                                      object_id=self.object_id)
-
-        for lock in locks:
-            lock.delete()
+        locks.delete()
 
     def locked(self):
-        """True if the object is locked with any lock.
+        """It's True if the object is locked with any valid lock.
         """
-
-        count = Lock.query.filter_by(
-            object_type=self.object_type,
-            object_id=self.object_id).count()
-        return count > 0
+        return Lock.query.valid_locks(
+            self.object_type, self.object_id).count() > 0
 
     def can_safely_unlock(self, lock_type=STEALABLE_LOCK):
         """Determine if the current user can safely attempt to unlock the
@@ -122,8 +120,13 @@ class SQLLockable(object):
          - can_safely_unlock() is true.
 
         """
-        # XXX
-        return True
+
+        if not lock_type.stealable:
+            return False
+        if not INonStealableLock.providedBy(self.context):
+            return True
+
+        return self.can_safely_unlock(lock_type)
 
     def lock_info(self):
         """Get information about locks on object.
@@ -137,14 +140,8 @@ class SQLLockable(object):
         """
         infos = []
 
-        locks = Lock.query.filter_by(
-            object_type=self.object_type,
-            object_id=self.object_id)
-
+        locks = Lock.query.valid_locks(self.object_type, self.object_id)
         for lock in locks:
-            if lock.is_valid():
-                continue
-
             infos.append({'creator': lock.creator,
                           'time': lock.time,
                           'token': lock.token,
@@ -153,7 +150,6 @@ class SQLLockable(object):
         return infos
 
     def _get_lock(self, lock_type):
-        return Lock.query.filter_by(
-            object_type=self.object_type,
-            object_id=self.object_id,
-            lock_type=self.searialize_lock_type(lock_type)).one()
+        query = Lock.query.valid_locks(self.object_type, self.object_id)
+        query = query.filter_by(lock_type=self.searialize_lock_type(lock_type))
+        return query.first()

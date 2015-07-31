@@ -1,6 +1,7 @@
 from opengever.activity.model import tables as activity_tables
 from opengever.base.model import Base
 from opengever.globalindex.model import tables as globalindex_tables
+from opengever.locking.model import tables as lock_tables
 from opengever.meeting.model import tables as meeting_tables
 from unittest2 import TestCase
 
@@ -17,5 +18,6 @@ class TestDatabaseTableDeclarations(TestCase):
 
     """
     def test_package_table_definitions_are_correct(self):
-        expected_tables = meeting_tables + activity_tables + globalindex_tables
+        expected_tables = meeting_tables + activity_tables \
+                          + globalindex_tables + lock_tables
         self.assertItemsEqual(expected_tables, Base.metadata.tables.keys())

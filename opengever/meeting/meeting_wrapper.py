@@ -1,7 +1,7 @@
 from Acquisition import Implicit
 from OFS.Traversable import Traversable
+from opengever.locking.interfaces import ISQLLockable
 from opengever.meeting.interfaces import IMeetingWrapper
-from opengever.meeting.interfaces import ISQLLockable
 from zope.interface import implements
 import ExtensionClass
 

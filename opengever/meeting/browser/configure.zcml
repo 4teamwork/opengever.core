@@ -71,29 +71,4 @@
       allowed_interface="plone.app.layout.globals.interfaces.ILayoutPolicy"
       />
 
-  <!-- locking stuff -->
-  <browser:viewlet
-      name="plone.lockinfo"
-      manager="plone.app.layout.viewlets.interfaces.IAboveContent"
-      class="plone.locking.browser.info.LockInfoViewlet"
-      permission="cmf.ModifyPortalContent"
-      for="opengever.meeting.interfaces.ISQLLockable"
-      />
-
-  <browser:page
-      for="opengever.meeting.interfaces.ISQLLockable"
-      name="plone_lock_operations"
-      class="plone.locking.browser.locking.LockingOperations"
-      permission="cmf.ModifyPortalContent"
-      allowed_attributes="safe_unlock force_unlock refresh_lock"
-      />
-
-  <browser:page
-      for="opengever.meeting.interfaces.ISQLLockable"
-      name="plone_lock_info"
-      class="plone.locking.browser.locking.LockingInformation"
-      permission="zope2.View"
-      allowed_attributes="is_locked is_locked_for_current_user lock_is_stealable lock_info"
-      />
-
 </configure>
