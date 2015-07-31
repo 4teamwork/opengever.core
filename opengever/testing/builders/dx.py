@@ -346,3 +346,26 @@ class CommitteeBuilder(DexterityBuilder):
         super(CommitteeBuilder, self).after_create(obj)
 
 builder_registry.register('committee', CommitteeBuilder)
+
+
+class TaskTemplateFolderBuilder(DexterityBuilder):
+    portal_type = 'opengever.tasktemplates.tasktemplatefolder'
+
+
+builder_registry.register('tasktemplatefolder', TaskTemplateFolderBuilder)
+
+
+class TaskTemplateBuilder(DexterityBuilder):
+    portal_type = 'opengever.tasktemplates.tasktemplate'
+
+    def __init__(self, session):
+        super(TaskTemplateBuilder, self).__init__(session)
+
+        self.arguments = {
+            'responsible_client': 'interactive_users',
+            'responsible': 'current_user',
+            'deadline': 5,
+            'issuer': TEST_USER_ID}
+
+
+builder_registry.register('tasktemplate', TaskTemplateBuilder)
