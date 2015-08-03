@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Remove edit restrictions, let meetings be editable until they are closed.
+  [deiferni]
+
 - Remove pre-protocols, they are now the same as protocols.
   [deiferni]
 

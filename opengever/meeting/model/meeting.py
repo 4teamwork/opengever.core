@@ -118,10 +118,7 @@ class Meeting(Base):
         return 'contenttype-opengever-meeting-meeting'
 
     def is_editable(self):
-        return self.get_state() == self.STATE_PENDING
-
-    def is_protocol_editable(self):
-        return self.get_state() == self.STATE_HELD
+        return self.get_state() in (self.STATE_PENDING, self.STATE_HELD)
 
     def has_protocol_document(self):
         return self.protocol_document is not None
