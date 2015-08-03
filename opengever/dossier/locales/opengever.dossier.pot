@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-07-28 16:13+0000\n"
+"POT-Creation-Date: 2015-08-03 14:02+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -226,12 +226,12 @@ msgid "button_submit"
 msgstr ""
 
 #. Default: "Contact"
-#: ./opengever/dossier/browser/participants.py:113
+#: ./opengever/dossier/browser/participants.py:114
 msgid "column_contact"
 msgstr ""
 
 #. Default: "role_list"
-#: ./opengever/dossier/browser/participants.py:117
+#: ./opengever/dossier/browser/participants.py:118
 msgid "column_rolelist"
 msgstr ""
 
@@ -518,7 +518,7 @@ msgstr ""
 
 #. Default: "Responsible"
 #: ./opengever/dossier/behaviors/dossier.py:86
-#: ./opengever/dossier/browser/participants.py:174
+#: ./opengever/dossier/browser/participants.py:175
 #: ./opengever/dossier/browser/report.py:44
 msgid "label_responsible"
 msgstr ""
