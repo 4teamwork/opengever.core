@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2015-07-28 16:13+0000\n"
+"POT-Creation-Date: 2015-08-03 14:02+0000\n"
 "PO-Revision-Date: 2015-01-22 17:49+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -227,12 +227,12 @@ msgid "button_submit"
 msgstr "Verschieben"
 
 #. Default: "Contact"
-#: ./opengever/dossier/browser/participants.py:113
+#: ./opengever/dossier/browser/participants.py:114
 msgid "column_contact"
 msgstr "Kontakt"
 
 #. Default: "role_list"
-#: ./opengever/dossier/browser/participants.py:117
+#: ./opengever/dossier/browser/participants.py:118
 msgid "column_rolelist"
 msgstr "Rolle"
 
@@ -349,7 +349,7 @@ msgstr ""
 
 #: ./opengever/dossier/filing/advanced_search.py:16
 msgid "help_filing_number"
-msgstr ""
+msgstr "Geben Sie die vollständige Ablagenummer an."
 
 #: ./opengever/dossier/behaviors/dossier.py:107
 msgid "help_filing_prefix"
@@ -520,7 +520,7 @@ msgstr "Verwandte Dossiers"
 
 #. Default: "Responsible"
 #: ./opengever/dossier/behaviors/dossier.py:86
-#: ./opengever/dossier/browser/participants.py:174
+#: ./opengever/dossier/browser/participants.py:175
 #: ./opengever/dossier/browser/report.py:44
 msgid "label_responsible"
 msgstr "Federführend"
@@ -638,3 +638,4 @@ msgstr "abgelaufen"
 #: ./opengever/dossier/behaviors/participation.py:197
 msgid "warning_no_participants_selected"
 msgstr "Sie haben keine Beteiligungen ausgewählt."
+

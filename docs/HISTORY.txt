@@ -5,6 +5,9 @@ Changelog
 4.5.1 (unreleased)
 ------------------
 
+- Advanced search: Fix translation for filing no help text.
+  [lgraf]
+
 - Only show pending states on dossier overview.
   [deiferni]
 
