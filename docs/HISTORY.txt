@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Advanced search: Fix translation for filing no help text.
+  [lgraf]
+
 - Let OGMail inherit from ftw.mail.mail.Mail.
   [deiferni]
 
