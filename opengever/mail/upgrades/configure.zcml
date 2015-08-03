@@ -188,4 +188,14 @@
         profile="opengever.mail:default"
         />
 
+    <!-- 4501 -> 4600 -->
+    <genericsetup:upgradeStep
+        title="Initialize ftw.mail caches."
+        description=""
+        source="4501"
+        destination="4600"
+        handler="opengever.mail.upgrades.to4600.InitializeFtwMailCaches"
+        profile="opengever.mail:default"
+        />
+
 </configure>

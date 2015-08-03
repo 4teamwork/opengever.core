@@ -6,14 +6,14 @@ from five import grok
 from ftw.mail import _ as ftw_mf
 from ftw.mail import utils
 from ftw.mail.mail import IMail
-from ftw.mail.utils import get_attachments
+from ftw.mail.mail import Mail
 from ftw.mail.utils import get_filename
 from ftw.mail.utils import remove_attachments
 from opengever.base import _ as base_mf
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.command import CreateEmailCommand
 from opengever.base.model import create_session
-from opengever.document.base import BaseDocument
+from opengever.document.base import BaseDocumentMixin
 from opengever.document.behaviors import metadata as ogmetadata
 from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.dossier import _
@@ -40,7 +40,6 @@ from zope.lifecycleevent import Attributes
 from zope.lifecycleevent.interfaces import IObjectCopiedEvent
 from zope.lifecycleevent.interfaces import IObjectCreatedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
-import email
 import os
 import re
 
@@ -82,7 +81,7 @@ class IOGMail(form.Schema):
 alsoProvides(IOGMail, IFormFieldProvider)
 
 
-class OGMail(BaseDocument):
+class OGMail(Mail, BaseDocumentMixin):
     """Opengever specific mail class."""
 
     # mail state's
@@ -92,29 +91,34 @@ class OGMail(BaseDocument):
     remove_transition = 'mail-transition-remove'
     restore_transition = 'mail-transition-restore'
 
-    @property
-    def msg(self):
-        """ returns an email.Message instance
-        (copied from ftw.mail inheritance hasn't worked)
+    @Mail.title.setter
+    def title(self, value):
+        """Set mail title.
+
+        Gever adds a title field for mails, so we need to override
+        the setter of ftw.mail.mail.Mail and allow changing mail titles.
         """
-        if self.message is not None:
-            data = self.message.data
-            temp_msg = email.message_from_string(data)
-            if temp_msg.get('Subject') and '\n\t' in temp_msg['Subject']:
-                # It's a long subject header than has been separated by
-                # line break and tab - fix it
-                fixed_subject = temp_msg['Subject'].replace('\n\t', ' ')
-                data = data.replace(temp_msg['Subject'], fixed_subject)
-            return email.message_from_string(data)
-        return MIMEText('')
+
+        self._title = value
+
+    @Mail.message.setter
+    def message(self, message):
+        """Override parent setter and avoid updating title.
+
+        THe title is initialized with an event handler on object creation and
+        must not be overwritten later since the user might change it.
+        """
+
+        self._message = message
+        self._update_attachment_infos()
+        self._reset_header_cache()
 
     def get_attachments(self):
         """ Returns a list of dicts describing the attachements.
 
         Only attachments with a filename are returned.
         """
-
-        return get_attachments(self.msg)
+        return self.attachment_infos
 
     def has_attachments(self):
         """ Return whether this mail has attachments."""
@@ -276,14 +280,15 @@ class OGMail(BaseDocument):
 
 
 class OGMailBase(metadata.MetadataBase):
+    """Behavior that adds a title field.
+
+    The field value is stored on the Mail instannce.
+    """
 
     def _get_title(self):
         return self.context.title
 
     def _set_title(self, value):
-        """If no value is given,
-        set the subject of the mail object instead."""
-
         self.context.title = value
 
     title = property(_get_title, _set_title)
@@ -306,7 +311,6 @@ def initalize_title(mail, event):
                 context=getSite().REQUEST)
 
         IOGMail(mail).title = value
-        mail.title = value
 
     mail.update_filename()
 

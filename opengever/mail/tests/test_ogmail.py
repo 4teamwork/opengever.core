@@ -123,19 +123,19 @@ class TestOGMailAddition(FunctionalTestCase):
                       .within(self.dossier)
                       .with_asset_message('mail_with_one_mail_attachment.eml'))
 
-        expected_description = {
+        expected_description = ({
             'content-type': 'message/rfc822',
             'filename': 'Inneres Testma\xcc\x88il ohne Attachments.eml',
             'position': 2,
             'size': 930,
-        }
-        self.assertEqual([expected_description], mail.get_attachments())
+        },)
+        self.assertEqual(expected_description, mail.get_attachments())
 
     def test_get_attachments_returns_empty_list_for_mails_without_attachments(self):
         mail = create(Builder('mail')
                       .within(self.dossier)
                       .with_message(MAIL_DATA))
-        self.assertEqual([], mail.get_attachments())
+        self.assertEqual(tuple(), mail.get_attachments())
 
     def test_truthy_has_attachmentes(self):
         mail = create(Builder('mail')

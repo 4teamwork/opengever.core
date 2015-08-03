@@ -4,10 +4,9 @@ from opengever.base.browser.helper import get_css_class
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.task.task import ITask
 from plone import api
-from plone.dexterity.content import Item
 
 
-class BaseDocument(Item):
+class BaseDocumentMixin(object):
     """Abstract base class for document-ish content types."""
 
     removed_state = None
