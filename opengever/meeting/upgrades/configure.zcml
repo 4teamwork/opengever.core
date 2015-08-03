@@ -285,4 +285,14 @@
         profile="opengever.meeting:default"
         />
 
+    <!-- 4400 -> 4600 -->
+    <genericsetup:upgradeStep
+        title="Drop pre-protocols."
+        description=""
+        source="4400"
+        destination="4600"
+        handler="opengever.meeting.upgrades.to4600.DropPreProtocol"
+        profile="opengever.meeting:default"
+        />
+
 </configure>

@@ -5,11 +5,9 @@ from opengever.document.document import IDocumentSchema
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.meeting import _
 from opengever.meeting.command import CreateGeneratedDocumentCommand
-from opengever.meeting.command import PreProtocolOperations
 from opengever.meeting.command import ProtocolOperations
 from opengever.meeting.command import ReplaceGeneratedDocumentCommand
 from opengever.meeting.command import UpdateGeneratedDocumentCommand
-from opengever.meeting.model import GeneratedPreProtocol
 from opengever.meeting.model import GeneratedProtocol
 from opengever.meeting.model import Meeting
 from opengever.meeting.sources import all_open_dossiers_source
@@ -46,16 +44,16 @@ class IChooseDossierSchema(Schema):
     meeting_id = schema.Int(required=True)
 
 
-class ChoosePreProtocolDossierForm(Form):
+class ChooseProtocolDossierForm(Form):
     fields = Fields(IChooseDossierSchema)
     ignoreContext = True
-    label = _(u'form_label_generate_preprotocol',
-              default=u'Generate pre-protocol')
+    label = _(u'form_label_generate_protocol',
+              default=u'Generate protocol')
 
-    operations = PreProtocolOperations()
+    operations = ProtocolOperations()
 
     def updateWidgets(self):
-        super(ChoosePreProtocolDossierForm, self).updateWidgets()
+        super(ChooseProtocolDossierForm, self).updateWidgets()
 
         self.widgets['meeting_id'].mode = HIDDEN_MODE
         if not self.widgets['meeting_id'].value:
@@ -88,36 +86,16 @@ class ChoosePreProtocolDossierForm(Form):
         return self.request.RESPONSE.redirect(meeting.get_url())
 
 
-class GeneratePreProtocol(FormWrapper, grok.View):
+class GenerateProtocol(FormWrapper, grok.View):
     grok.context(IRepositoryRoot)
-    grok.name('generate_pre_protocol')
+    grok.name('generate_protocol')
     grok.require('zope2.View')
 
-    form = ChoosePreProtocolDossierForm
+    form = ChooseProtocolDossierForm
 
     def __init__(self, *args, **kwargs):
         FormWrapper.__init__(self, *args, **kwargs)
         grok.View.__init__(self, *args, **kwargs)
-
-    @classmethod
-    def url_for(cls, context, meeting):
-        root = context.restrictedTraverse(
-            '@@primary_repository_root').get_primary_repository_root()
-
-        return '{}/@@generate_pre_protocol?meeting_id={}'.format(
-            root.absolute_url(), meeting.meeting_id)
-
-
-class ChooseProtocolDossierForm(ChoosePreProtocolDossierForm):
-
-    operations = ProtocolOperations()
-
-
-class GenerateProtocol(GeneratePreProtocol):
-
-    grok.name('generate_protocol')
-
-    form = ChooseProtocolDossierForm
 
     @classmethod
     def url_for(cls, context, meeting):
@@ -157,8 +135,8 @@ def method_vocabulary_factory(document):
 class IChooseUpdateMethod(Schema):
 
     method = schema.Choice(
-        title=_('label_update_generated_pre_protocol_choose_method',
-                default=u'Choose how to update an existing pre-protocol:'),
+        title=_('label_update_generated_protocol_choose_method',
+                default=u'Choose how to update an existing protocol:'),
         source=method_vocabulary_factory,
         required=True)
 
@@ -171,17 +149,17 @@ def default_method(data):
     return METHOD_NEW_VERSION
 
 
-class ChoosePreProtocolUpdateMethod(Form):
+class ChooseProtocolUpdateMethod(Form):
     fields = Fields(IChooseUpdateMethod)
     fields['method'].widgetFactory[INPUT_MODE] = RadioFieldWidget
     ignoreContext = True
-    label = _(u'form_label_update_preprotocol',
-              default=u'Update pre-protocol')
+    label = _(u'form_label_update_protocol',
+              default=u'Update protocol')
 
-    operations = PreProtocolOperations()
+    operations = ProtocolOperations()
 
     def updateWidgets(self):
-        super(ChoosePreProtocolUpdateMethod, self).updateWidgets()
+        super(ChooseProtocolUpdateMethod, self).updateWidgets()
 
         self.widgets['document_id'].mode = HIDDEN_MODE
         if not self.widgets['document_id'].value:
@@ -212,47 +190,27 @@ class ChoosePreProtocolUpdateMethod(Form):
             return self.request.RESPONSE.redirect(document.absolute_url())
 
     def get_generated_document(self, document_id):
-        return GeneratedPreProtocol.get(document_id)
+        return GeneratedProtocol.get(document_id)
 
     @buttonAndHandler(_(u'button_cancel', default=u'Cancel'), name='cancel')
     def handle_cancel(self, action):
         data, errors = self.extractData()
-        meeting = GeneratedPreProtocol.get(data['document_id']).meeting
+        meeting = GeneratedProtocol.get(data['document_id']).meeting
 
         assert meeting, 'invalid form state, missing meeting'
         return self.request.RESPONSE.redirect(meeting.get_url())
 
 
-class UpdatePreProtocol(FormWrapper, grok.View):
+class UpdateProtocol(FormWrapper, grok.View):
     grok.context(IDocumentSchema)
-    grok.name('update_pre_protocol')
+    grok.name('update_protocol')
     grok.require('zope2.View')
 
-    form = ChoosePreProtocolUpdateMethod
+    form = ChooseProtocolUpdateMethod
 
     def __init__(self, *args, **kwargs):
         FormWrapper.__init__(self, *args, **kwargs)
         grok.View.__init__(self, *args, **kwargs)
-
-    @classmethod
-    def url_for(cls, generated_document):
-        document = generated_document.resolve_document()
-        return '{}/@@update_pre_protocol?document_id={}'.format(
-            document.absolute_url(), generated_document.document_id)
-
-
-class ChooseProtocolUpdateMethod(ChoosePreProtocolUpdateMethod):
-
-    operations = ProtocolOperations()
-
-    def get_generated_document(self, document_id):
-        return GeneratedProtocol.get(document_id)
-
-
-class UpdateProtocol(UpdatePreProtocol):
-    grok.name('update_protocol')
-
-    form = ChooseProtocolUpdateMethod
 
     @classmethod
     def url_for(cls, generated_document):

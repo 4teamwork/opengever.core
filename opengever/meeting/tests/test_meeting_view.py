@@ -34,12 +34,6 @@ class TestMeetingView(FunctionalTestCase):
             Builder('sablontemplate')
             .with_asset_file('excerpt_template.docx'))
 
-        self.preprotocol = create(Builder('document')
-                                  .titled(u'Pre protocol')
-                                  .attach_file_containing(u"preprotocol",
-                                                          u"preprotocol.docx")
-                                  .within(self.dossier))
-
         self.protocol = create(Builder('document')
                                .titled(u'Protocol')
                                .attach_file_containing(u"protocol",
@@ -87,9 +81,6 @@ class TestMeetingView(FunctionalTestCase):
         self.generated_protocol = create(Builder('generated_protocol')
                                          .for_document(self.protocol))
 
-        self.generated_preprotocol = create(Builder('generated_preprotocol')
-                                            .for_document(self.preprotocol))
-
         # restore session by refreshing instance
         self.generated_excerpt = GeneratedExcerpt.get(self.generated_excerpt.document_id)
 
@@ -103,7 +94,6 @@ class TestMeetingView(FunctionalTestCase):
                                                       self.hans,
                                                       self.roland],
                                       secretary=self.sile,
-                                      pre_protocol_document=self.generated_preprotocol,
                                       protocol_document=self.generated_protocol,
                                       excerpt_documents=[self.generated_excerpt],)
                               .scheduled_proposals([self.proposal_a, self.proposal_b]))
@@ -172,16 +162,10 @@ class TestMeetingView(FunctionalTestCase):
         self.assertEquals('Pending', browser.css(".state").first.text)
 
     @browsing
-    def test_generated_preprotocol_exists(self, browser):
-        browser.login().open(MeetingList.url_for(self.committee, self.meeting))
-        self.assertEquals('Pre protocol', browser.css(".protocol > a")[0].text)
-        self.assertEquals(self.preprotocol.absolute_url(), browser.css(".protocol > a")[0].get('href'))
-
-    @browsing
     def test_generated_protocol_exists(self, browser):
         browser.login().open(MeetingList.url_for(self.committee, self.meeting))
-        self.assertEquals('Protocol', browser.css(".protocol > a")[1].text)
-        self.assertEquals(self.protocol.absolute_url(), browser.css(".protocol > a")[1].get('href'))
+        self.assertEquals('Protocol', browser.css(".protocol > a").first.text)
+        self.assertEquals(self.protocol.absolute_url(), browser.css(".protocol > a").first.get('href'))
 
     @browsing
     def test_generated_exceprts_exists(self, browser):

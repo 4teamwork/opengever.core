@@ -10,7 +10,6 @@ from opengever.meeting.model import Member
 from opengever.meeting.model import Membership
 from opengever.meeting.model import Proposal as ProposalModel
 from opengever.meeting.model.generateddocument import GeneratedExcerpt
-from opengever.meeting.model.generateddocument import GeneratedPreProtocol
 from opengever.meeting.model.generateddocument import GeneratedProtocol
 from opengever.meeting.proposal import IProposal
 from opengever.meeting.proposal import Proposal
@@ -209,13 +208,6 @@ class GeneratedProtocolBuilder(SqlObjectBuilder):
         return self
 
 builder_registry.register('generated_protocol', GeneratedProtocolBuilder)
-
-
-class GeneratedPreProtocolBuilder(GeneratedProtocolBuilder):
-
-    mapped_class = GeneratedPreProtocol
-
-builder_registry.register('generated_preprotocol', GeneratedPreProtocolBuilder)
 
 
 class GeneratedExcerptBuilder(GeneratedProtocolBuilder):

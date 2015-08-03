@@ -18,12 +18,6 @@ class ICommittee(form.Schema):
     """Base schema for the committee.
     """
 
-    pre_protocol_template = RelationChoice(
-        title=_('Pre-protocol template'),
-        source=sablon_template_source,
-        required=False,
-    )
-
     protocol_template = RelationChoice(
         title=_('Protocol template'),
         source=sablon_template_source,
@@ -91,12 +85,6 @@ class Committee(ModelContainer):
 
     def get_committee_container(self):
         return aq_parent(aq_inner(self))
-
-    def get_pre_protocol_template(self):
-        if self.pre_protocol_template:
-            return self.pre_protocol_template.to_object
-
-        return self.get_committee_container().get_pre_protocol_template()
 
     def get_protocol_template(self):
         if self.protocol_template:

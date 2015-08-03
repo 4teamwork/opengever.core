@@ -2,10 +2,11 @@
 Changelog
 =========
 
-4.5.1 (unreleased)
+4.6.0 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Remove pre-protocols, they are now the same as protocols.
+  [deiferni]
 
 
 4.5.0 (2015-08-03)
