@@ -41,7 +41,9 @@ class TestProposal(FunctionalTestCase):
     def setUp(self):
         super(TestProposal, self).setUp()
         self.repo, self.repo_folder = create(Builder('repository_tree'))
-        self.dossier = create(Builder('dossier').within(self.repo_folder))
+        self.dossier = create(Builder('dossier')
+                              .within(self.repo_folder)
+                              .titled(u'D\xf6ssier'))
 
     def test_proposal_can_be_added(self):
         proposal = create(Builder('proposal').within(self.dossier))
@@ -57,6 +59,13 @@ class TestProposal(FunctionalTestCase):
         title = document.Title()
         browser.fill(
             {'form.widgets.relatedItems.widgets.query': title}).submit()
+
+    @browsing
+    def test_dossier_title_is_default_value_for_proposal_title(self, browser):
+        browser.login()
+        browser.open(self.dossier, view='++add++opengever.meeting.proposal')
+
+        self.assertEqual(u'D\xf6ssier', browser.find('Title').value)
 
     @browsing
     def test_proposal_can_be_created_in_browser(self, browser):
