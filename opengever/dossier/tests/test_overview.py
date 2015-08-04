@@ -59,6 +59,22 @@ class TestOverview(FunctionalTestCase):
             ['Task x'])
 
     @browsing
+    def test_task_box_items_are_filtered_by_pending_state(self, browser):
+        create(Builder('task')
+               .within(self.dossier)
+               .in_state('task-state-open')
+               .titled(u'Task open'))
+        create(Builder('task')
+               .within(self.dossier)
+               .in_state('task-state-tested-and-closed')
+               .titled(u'Task closed'))
+
+        browser.login().open(self.dossier, view='tabbedview_view-overview')
+        self.assertSequenceEqual(
+            browser.css('#newest_tasksBox li:not(.moreLink) a').text,
+            ['Task open'])
+
+    @browsing
     def test_participant_labels_are_displayed(self, browser):
         browser.login().open(self.dossier, view='tabbedview_view-overview')
         self.assertEqual(

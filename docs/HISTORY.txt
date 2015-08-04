@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Only show pending states on dossier overview.
+  [deiferni]
+
 - Tasktemplate form: Redirects back to dossier and show statusmessage
   if no active tasktemplatefolders are registered.
   [phgross]

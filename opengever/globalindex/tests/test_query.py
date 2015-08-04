@@ -38,6 +38,14 @@ class TestTaskQueries(TestCase):
         self.session.add(task)
         return task
 
+    def test_in_pending_state_returns_only_pending_tasks(self):
+        task1 = self.task(1, 'xx', review_state='task-state-open')
+        task2 = self.task(2, 'yy', review_state='task-state-resolved')
+        task3 = self.task(3, 'zz', review_state='task-state-cancelled')
+
+        self.assertItemsEqual(
+            [task1, task2], Task.query.in_pending_state().all())
+
     def test_users_tasks_lists_only_tasks_assigned_to_current_user(self):
         task1 = self.task(1, 'rr', responsible='hugo.boss')
         task2 = self.task(2, 'bd', responsible='tommy.hilfiger')
