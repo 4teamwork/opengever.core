@@ -3,8 +3,7 @@
 
   <tal:file tal:condition="context/message">
     <!-- icon, filename, size -->
-    <span tal:attributes="class view/get_css_class"></span>
-    <span tal:define="filename view/w/message/filename">
+    <span tal:attributes="class view/get_css_class" tal:define="filename view/w/message/filename">
       <span class="filename" tal:content="filename">Filename</span>
       <span class="discreet">
         &mdash; <span tal:define="sizekb view/w/message/file_size" tal:replace="sizekb">100 KB</span>
