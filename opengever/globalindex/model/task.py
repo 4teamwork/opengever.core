@@ -44,6 +44,13 @@ class Task(Base):
 
     OPEN_STATES = ['task-state-open', 'forwarding-state-open']
 
+    PENDING_STATES = ['task-state-open',
+                      'task-state-in-progress',
+                      'task-state-resolved',
+                      'task-state-rejected',
+                      'forwarding-state-open',
+                      'forwarding-state-refused']
+
     __tablename__ = 'tasks'
     __table_args__ = (UniqueConstraint('admin_unit_id', 'int_id'), {})
 

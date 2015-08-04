@@ -81,5 +81,8 @@ class TaskQuery(BaseQuery):
             '{}/'.format(task.physical_path)))
         return query
 
+    def in_pending_state(self):
+        return self.filter(Task.review_state.in_(Task.PENDING_STATES))
+
 
 Task.query_cls = TaskQuery
