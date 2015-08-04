@@ -1,4 +1,5 @@
 from opengever.base.oguid import Oguid
+from opengever.globalindex.model.task import Task
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models.query import BaseQuery
 from plone import api
@@ -10,26 +11,26 @@ class TaskQuery(BaseQuery):
         """Returns query which List all tasks where the given user,
         his userid, is responsible. It queries all admin units.
         """
-        return self.filter(self._attribute('responsible') == userid)
+        return self.filter(Task.responsible == userid)
 
     def users_issued_tasks(self, userid):
         """Returns query which list all tasks where the given user
         is the issuer. It queries all admin units.
         """
-        return self.filter(self._attribute('issuer') == userid)
+        return self.filter(Task.issuer == userid)
 
     def by_assigned_org_unit(self, org_unit):
         """Returns all tasks assigned to the given orgunit."""
-        return self.filter(self._attribute('assigned_org_unit') == org_unit.id())
+        return self.filter(Task.assigned_org_unit == org_unit.id())
 
     def by_issuing_org_unit(self, org_unit):
         """Returns all tasks issued by the given orgunit."""
-        return self.filter(self._attribute('issuing_org_unit') == org_unit.id())
+        return self.filter(Task.issuing_org_unit == org_unit.id())
 
     def all_issued_tasks(self, admin_unit):
         """List all tasks from the current_admin_unit.
         """
-        return self.filter(self._attribute('admin_unit_id') == admin_unit.id())
+        return self.filter(Task.admin_unit_id == admin_unit.id())
 
     by_admin_unit = all_issued_tasks
 
@@ -58,24 +59,27 @@ class TaskQuery(BaseQuery):
     def by_ids(self, task_ids):
         """Returns all tasks whos task_ids are listed in `task_ids`.
         """
-        return self.filter(self._attribute('task_id').in_(task_ids)).all()
+        return self.filter(Task.task_id.in_(task_ids)).all()
 
     def by_container(self, container, admin_unit):
         url_tool = api.portal.get_tool(name='portal_url')
         path = '/'.join(url_tool.getRelativeContentPath(container))
 
         return self.by_admin_unit(admin_unit)\
-                   .filter(self._attribute('physical_path').like(path + '%'))
+                   .filter(Task.physical_path.like(path + '%'))
 
     def by_brain(self, brain):
         relative_content_path = '/'.join(brain.getPath().split('/')[2:])
         return self.by_admin_unit(get_current_admin_unit())\
-                   .filter(self._attribute('physical_path')==relative_content_path).one()
+                   .filter(Task.physical_path==relative_content_path).one()
 
     def subtasks_by_task(self, task):
         """Queries all subtask of the given task sql object."""
         query = self.filter(
-            self._attribute('admin_unit_id') == task.admin_unit_id)
-        query = query.filter(self._attribute('physical_path').startswith(
+            Task.admin_unit_id == task.admin_unit_id)
+        query = query.filter(Task.physical_path.startswith(
             '{}/'.format(task.physical_path)))
         return query
+
+
+Task.query_cls = TaskQuery
