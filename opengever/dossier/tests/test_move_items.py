@@ -97,6 +97,43 @@ class TestMoveItems(FunctionalTestCase):
                       uids,
                       "Active dossier not found as target in move items")
 
+    def get_uids_from_tree_widget(self):
+        view = self.source_repo.restrictedTraverse('move_items')
+        form = view.form(self.source_repo, self.request)
+        form.updateWidgets()
+
+        catalog = getToolByName(self.portal, 'portal_catalog')
+        widget = form.widgets['destination_folder']
+        query_result = catalog(widget.bound_source.navigation_tree_query)
+
+        return [item.UID for item in query_result]
+
+    def move_items(self, items, source=None, target=None):
+        paths = u";;".join(["/".join(i.getPhysicalPath()) for i in items])
+        self.request['paths'] = paths
+        self.request['form.widgets.request_paths'] = paths
+        self.request['form.widgets.destination_folder'] = "/".join(
+            target.getPhysicalPath())
+
+        view = source.restrictedTraverse('move_items')
+        form = view.form(source, self.request)
+        form.updateWidgets()
+        form.widgets['destination_folder'].value = target
+        form.widgets['request_paths'].value = paths
+
+        form.handle_submit(form, object)
+
+    def assert_contains(self, container, items):
+        self.assertEquals(items,
+                          [a.Title for a in container.getFolderContents()])
+
+
+class TestMoveItemsWithTestbrowser(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestMoveItemsWithTestbrowser, self).setUp()
+        self.request = self.layer['request']
+
     @browsing
     def test_redirects_to_context_and_show_statusmessage_when_obj_cant_be_found(self, browser):
         dossier = create(Builder('dossier').titled(u'Maindossier'))
@@ -166,33 +203,3 @@ class TestMoveItems(FunctionalTestCase):
 
         # Should not cause our check in is_pasting_allowed view to fail
         browser.css('#form-buttons-button_submit').first.click()
-
-    def get_uids_from_tree_widget(self):
-        view = self.source_repo.restrictedTraverse('move_items')
-        form = view.form(self.source_repo, self.request)
-        form.updateWidgets()
-
-        catalog = getToolByName(self.portal, 'portal_catalog')
-        widget = form.widgets['destination_folder']
-        query_result = catalog(widget.bound_source.navigation_tree_query)
-
-        return [item.UID for item in query_result]
-
-    def move_items(self, items, source=None, target=None):
-        paths = u";;".join(["/".join(i.getPhysicalPath()) for i in items])
-        self.request['paths'] = paths
-        self.request['form.widgets.request_paths'] = paths
-        self.request['form.widgets.destination_folder'] = "/".join(
-            target.getPhysicalPath())
-
-        view = source.restrictedTraverse('move_items')
-        form = view.form(source, self.request)
-        form.updateWidgets()
-        form.widgets['destination_folder'].value = target
-        form.widgets['request_paths'].value = paths
-
-        form.handle_submit(form, object)
-
-    def assert_contains(self, container, items):
-        self.assertEquals(items,
-                          [a.Title for a in container.getFolderContents()])
