@@ -132,38 +132,56 @@ class TestMoveItemsWithTestbrowser(FunctionalTestCase):
 
     def setUp(self):
         super(TestMoveItemsWithTestbrowser, self).setUp()
-        self.request = self.layer['request']
+
+        self.source_repo = create(Builder("repository"))
+        self.source_dossier = create(Builder("dossier")
+                                     .within(self.source_repo))
+        self.target_dossier = create(Builder("dossier"))
+
+    def move_items(self, browser, src, obj=None, task=None, target=None):
+        path = None
+        task_ids = None
+
+        if isinstance(obj, basestring):
+            path = obj
+        elif obj is not None:
+            path = '/'.join(obj.getPhysicalPath())
+
+        if task:
+            task_ids = task.get_sql_object().task_id
+
+        payload = {}
+        if task_ids:
+            payload['task_ids'] = task_ids
+        if path:
+            payload['paths:list'] = [path]
+
+        browser.login().open(src, payload, view='move_items')
+        browser.fill({'Destination': target})
+        browser.css('#form-buttons-button_submit').first.click()
 
     @browsing
     def test_redirects_to_context_and_show_statusmessage_when_obj_cant_be_found(self, browser):
-        dossier = create(Builder('dossier').titled(u'Maindossier'))
-        subdossier = create(Builder('dossier')
-                            .titled(u'Subdossier')
-                            .within(dossier))
+        self.move_items(
+            browser, src=self.source_dossier,
+            obj='/invalid/path', target=self.target_dossier)
 
-        browser.login().open(dossier,
-                             {'paths:list': ['/invalid/path']},
-                             view='move_items')
-        browser.fill({'Destination': subdossier})
-        browser.css('#form-buttons-button_submit').first.click()
-
-        self.assertEqual(dossier.absolute_url(), browser.url)
+        self.assertEqual(self.source_dossier.absolute_url(), browser.url)
         self.assertEqual(
             "The selected objects can't be found, please try it again.",
             error_messages()[0])
 
     @browsing
     def test_document_inside_a_task_is_not_movable(self, browser):
-        dossier = create(Builder('dossier').titled(u'Maindossier'))
-        task = create(Builder('task').titled('Doc A').within(dossier))
-        document = create(Builder('document').titled(u'Doc A').within(task))
-        subdossier = create(Builder('dossier').titled(u'Sub').within(dossier))
+        task = create(Builder('task')
+                      .titled('Task A')
+                      .within(self.source_dossier))
+        document = create(Builder('document')
+                          .titled(u'Doc A').within(task))
 
-        browser.login().open(dossier,
-                             {'paths:list': ['/'.join(document.getPhysicalPath())]},
-                             view='move_items')
-        browser.fill({'Destination': subdossier})
-        browser.css('#form-buttons-button_submit').first.click()
+        self.move_items(
+            browser, src=self.source_dossier,
+            obj=document, target=self.target_dossier)
 
         self.assertEqual(
             'Document Doc A is connected to a Task. Please move the Task.',
@@ -171,34 +189,30 @@ class TestMoveItemsWithTestbrowser(FunctionalTestCase):
 
     @browsing
     def test_task_are_handled_correctly(self, browser):
-        dossier = create(Builder('dossier').titled(u'Maindossier'))
-        subdossier = create(Builder('dossier')
-                            .titled(u'Subdossier')
-                            .within(dossier))
         task = create(Builder('task')
                       .titled(u'Task')
-                      .within(dossier))
+                      .within(self.source_dossier))
 
-        browser.login().open(dossier,
-                             {'task_ids': task.get_sql_object().task_id},
-                             view='move_items')
-        browser.fill({'Destination': subdossier})
-        browser.css('#form-buttons-button_submit').first.click()
+        self.move_items(
+            browser, src=self.source_dossier,
+            task=task, target=self.target_dossier)
+        self.assertIn(task, self.target_dossier.objectValues())
 
     @browsing
     def test_copy_then_move(self, browser):
-        dossier = create(Builder('dossier').titled(u'Dossier'))
-        subdossier = create(Builder('dossier').within(dossier))
-        document = create(Builder('document').within(dossier))
+        subdossier = create(Builder('dossier').within(self.source_dossier))
+        document = create(Builder('document').within(self.source_dossier))
 
         browser.login()
 
         # Copy the document
         paths = ['/'.join(document.getPhysicalPath())]
-        browser.open(dossier, {'paths:list': paths}, view='copy_items')
+        browser.open(
+            self.source_dossier, {'paths:list': paths}, view='copy_items')
 
         # Move the same document we copied before
-        browser.open(dossier, {'paths:list': paths}, view='move_items')
+        browser.open(
+            self.source_dossier, {'paths:list': paths}, view='move_items')
         browser.fill({'Destination': subdossier})
 
         # Should not cause our check in is_pasting_allowed view to fail
