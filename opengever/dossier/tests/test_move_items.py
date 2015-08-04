@@ -180,12 +180,84 @@ class TestMoveItemsWithTestbrowser(FunctionalTestCase):
                           .titled(u'Doc A').within(task))
 
         self.move_items(
-            browser, src=self.source_dossier,
+            browser, src=task,
             obj=document, target=self.target_dossier)
 
+        self.assertIn(document, task.objectValues())
+        self.assertNotIn(document, self.target_dossier.objectValues())
         self.assertEqual(
             'Document Doc A is connected to a Task. Please move the Task.',
             error_messages()[0])
+
+    @browsing
+    def test_document_inside_closed_dossier_is_not_movable(self, browser):
+        dossier = create(Builder('dossier')
+                         .in_state('dossier-state-resolved'))
+        document = create(Builder('document')
+                          .within(dossier))
+
+        self.move_items(
+            browser, src=dossier,
+            obj=document, target=self.target_dossier)
+
+        self.assertIn(document, dossier.objectValues())
+        self.assertNotIn(document, self.target_dossier.objectValues())
+        self.assertEqual(
+            [u'Failed to copy following objects: Testdokum\xe4nt'],
+            error_messages())
+
+    @browsing
+    def test_document_inside_inactive_dossier_is_not_movable(self, browser):
+        dossier = create(Builder('dossier')
+                         .in_state('dossier-state-inactive'))
+        document = create(Builder('document')
+                          .within(dossier))
+
+        self.move_items(
+            browser, src=dossier,
+            obj=document, target=self.target_dossier)
+
+        self.assertIn(document, dossier.objectValues())
+        self.assertNotIn(document, self.target_dossier.objectValues())
+        self.assertEqual(
+            [u'Failed to copy following objects: Testdokum\xe4nt'],
+            error_messages())
+
+    @browsing
+    def test_task_inside_closed_dossier_is_not_movable(self, browser):
+        dossier = create(Builder('dossier')
+                         .in_state('dossier-state-resolved'))
+        task = create(Builder('task')
+                      .within(dossier)
+                      .titled(u'My task'))
+
+        self.move_items(
+            browser, src=dossier,
+            task=task, target=self.target_dossier)
+
+        self.assertIn(task, dossier.objectValues())
+        self.assertNotIn(task, self.target_dossier.objectValues())
+        self.assertEqual(
+            [u'Failed to copy following objects: My task'],
+            error_messages())
+
+    @browsing
+    def test_mail_inside_closed_dossier_is_not_movable(self, browser):
+        dossier = create(Builder('dossier')
+                         .in_state('dossier-state-resolved'))
+        mail = create(Builder('mail')
+                      .within(dossier)
+                      .titled(u'My mail'))
+
+        self.move_items(
+            browser, src=dossier,
+            obj=mail, target=self.target_dossier)
+
+        self.assertIn(mail, dossier.objectValues())
+        self.assertNotIn(mail, self.target_dossier.objectValues())
+        self.assertEqual(
+            [u'Failed to copy following objects: My mail'],
+            error_messages())
 
     @browsing
     def test_task_are_handled_correctly(self, browser):
@@ -196,6 +268,7 @@ class TestMoveItemsWithTestbrowser(FunctionalTestCase):
         self.move_items(
             browser, src=self.source_dossier,
             task=task, target=self.target_dossier)
+
         self.assertIn(task, self.target_dossier.objectValues())
 
     @browsing
