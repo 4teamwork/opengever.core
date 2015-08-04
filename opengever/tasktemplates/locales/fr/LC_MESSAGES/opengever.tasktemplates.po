@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-04-16 17:18+0000\n"
+"POT-Creation-Date: 2015-08-04 11:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -94,7 +94,7 @@ msgid "label_continue"
 msgstr "Continuer"
 
 #. Default: "Created"
-#: ./opengever/tasktemplates/browser/form.py:119
+#: ./opengever/tasktemplates/browser/form.py:121
 msgid "label_created"
 msgstr "Date de création"
 
@@ -147,7 +147,7 @@ msgid "label_text"
 msgstr "commentaire"
 
 #. Default: "Title"
-#: ./opengever/tasktemplates/browser/form.py:117
+#: ./opengever/tasktemplates/browser/form.py:119
 #: ./opengever/tasktemplates/browser/tasktemplates.py:41
 #: ./opengever/tasktemplates/browser/templatefolders.py:29
 msgid "label_title"
@@ -159,14 +159,19 @@ msgid "label_yes"
 msgstr "Oui"
 
 #. Default: "You have not selected any templates"
-#: ./opengever/tasktemplates/browser/form.py:208
+#: ./opengever/tasktemplates/browser/form.py:230
 msgid "message_no_templates_selected"
 msgstr "Vous n'avez sélectionné aucun modèle."
 
 #. Default: "tasks created"
-#: ./opengever/tasktemplates/browser/form.py:277
+#: ./opengever/tasktemplates/browser/form.py:307
 msgid "message_tasks_created"
 msgstr "Toutes les tâches du procédé standard ont été créées"
+
+#. Default: "Currently there are no activetask template folders registered."
+#: ./opengever/tasktemplates/browser/form.py:144
+msgid "msg_no_active_tasktemplatefolders"
+msgstr ""
 
 #. Default: "Yes"
 #: ./opengever/tasktemplates/browser/tasktemplates.py:19

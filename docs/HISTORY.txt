@@ -5,6 +5,10 @@ Changelog
 4.5.1 (unreleased)
 ------------------
 
+- Tasktemplate form: Redirects back to dossier and show statusmessage
+  if no active tasktemplatefolders are registered.
+  [phgross]
+
 - Advanced search: Fix translation for filing no help text.
   [lgraf]
 

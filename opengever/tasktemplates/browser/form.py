@@ -11,6 +11,7 @@ from opengever.task.activities import TaskAddedActivity
 from opengever.tasktemplates import _
 from opengever.tasktemplates.content.tasktemplate import MAIN_TASK_DEADLINE_DELTA
 from opengever.tasktemplates.interfaces import IFromTasktemplateGenerated
+from plone import api
 from plone.dexterity.utils import createContent, addContentToContainer
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from Products.CMFPlone.utils import getToolByName
@@ -108,7 +109,7 @@ def path_checkbox(item, value):
 
 class AddForm(BrowserView):
 
-    __call__ = ViewPageTemplateFile("form.pt")
+    template = ViewPageTemplateFile("form.pt")
 
     steps = {
         'templates': {
@@ -136,6 +137,26 @@ class AddForm(BrowserView):
 
             }
         }
+
+    def __call__(self):
+        if not self.has_active_tasktemplatefolders():
+            api.portal.show_message(
+                _(u'msg_no_active_tasktemplatefolders',
+                  default=u'Currently there are no active'
+                  'task template folders registered.'),
+                request=self.request,
+                type='error')
+            return self.request.RESPONSE.redirect(self.context.absolute_url())
+
+        return self.template()
+
+    def has_active_tasktemplatefolders(self):
+        catalog = api.portal.get_tool('portal_catalog')
+        brains = catalog(
+            review_state=('tasktemplatefolder-state-active'),
+            portal_type='opengever.tasktemplates.tasktemplatefolder')
+
+        return bool(brains)
 
     def listing(self, show='templates', path='/'):
         """returns a listing of either TaskTemplateFolders or TaskTemplates"""
