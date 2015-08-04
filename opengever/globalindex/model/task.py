@@ -4,7 +4,6 @@ from opengever.base.model import Base
 from opengever.base.model import Session
 from opengever.base.oguid import Oguid
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
-from opengever.globalindex.model.query import TaskQuery
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
@@ -34,8 +33,6 @@ from zope.i18n import translate
 class Task(Base):
     """docstring for Task"""
 
-    query_cls = TaskQuery
-
     MAX_TITLE_LENGTH = 256
     MAX_BREADCRUMB_LENGTH = 512
 
@@ -46,6 +43,13 @@ class Task(Base):
                                   'forwarding-state-closed']
 
     OPEN_STATES = ['task-state-open', 'forwarding-state-open']
+
+    PENDING_STATES = ['task-state-open',
+                      'task-state-in-progress',
+                      'task-state-resolved',
+                      'task-state-rejected',
+                      'forwarding-state-open',
+                      'forwarding-state-refused']
 
     __tablename__ = 'tasks'
     __table_args__ = (UniqueConstraint('admin_unit_id', 'int_id'), {})

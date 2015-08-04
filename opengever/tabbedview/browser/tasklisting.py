@@ -56,15 +56,6 @@ class GlobalTaskListingTab(grok.View, OpengeverTab,
     select_all_template = ViewPageTemplateFile('select_all_globaltasks.pt')
     selection = ViewPageTemplateFile("selection_tasks.pt")
 
-    open_states = [
-            'task-state-open',
-            'task-state-in-progress',
-            'task-state-resolved',
-            'task-state-rejected',
-            'forwarding-state-open',
-            'forwarding-state-refused',
-        ]
-
     state_filter_name = 'task_state_filter'
     state_filter_available = True
 
@@ -178,9 +169,6 @@ class GlobalTaskTableSource(SqlTableSource):
 
     def extend_query_with_statefilter(self, query):
         """When a state filter is active,
-        we add a filter which select just the open tasks"""
+        we add a filter which selects just the pending tasks"""
 
-        query = query.filter(
-            Task.review_state.in_(self.config.open_states))
-
-        return query
+        return query.in_pending_state()

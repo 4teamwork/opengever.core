@@ -5,7 +5,8 @@ Changelog
 4.5.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Only show pending states on dossier overview.
+  [deiferni]
 
 
 4.5.0 (2015-08-03)

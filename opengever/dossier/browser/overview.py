@@ -68,6 +68,7 @@ class DossierOverview(BoxesViewMixin, grok.View, OpengeverTab):
 
     def tasks(self):
         return Task.query.by_container(self.context, get_current_admin_unit())\
+                         .in_pending_state()\
                          .order_by(desc('modified')).limit(5).all()
 
     def documents(self):
