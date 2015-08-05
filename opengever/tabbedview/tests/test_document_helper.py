@@ -7,6 +7,7 @@ from opengever.document.document import Document
 from opengever.tabbedview.helper import linked_document_with_tooltip
 from opengever.tabbedview.helper import linked_trashed_document_with_tooltip
 from pyquery import PyQuery
+from zope.globalrequest import setRequest
 from zope.interface import Interface
 
 
@@ -50,6 +51,10 @@ class LinkTestCase(MockTestCase):
     def setUp(self):
         super(LinkTestCase, self).setUp()
         self.request = self.stub_request()
+        self.expect(self.request.SERVER_URL).result('http://nohost/plone')
+        self.expect(self.request.environ).result({'_auth_token': '123456'})
+        setRequest(self.request)
+
         self.doc_brain = MockBrain(self.request, 'opengever.document.document')
         self.mail_brain = MockBrain(self.request, 'ftw.mail.mail')
         self.user_mock = self.stub()
@@ -171,7 +176,7 @@ class TestTooltipLinkedHelperWithDocuments(TestWithPDFConverter):
     def test_tooltip_link_to_checkout_and_edit_is_available(self):
         self.replay()
         checkout_link = link(
-            href="%s/editing_document" % self.doc_brain.getURL(),
+            href="%s/editing_document?_authenticator=123456" % self.doc_brain.getURL(),
             text="Checkout and edit")
         self.assertTooltipLinkIn(checkout_link, self.markup())
 
