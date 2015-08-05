@@ -5,6 +5,9 @@ Changelog
 4.5.1 (unreleased)
 ------------------
 
+- Fixed gever customization of sharing view, for updateSharingInfo.
+  [phgross]
+
 - Tasktemplate form: Redirects back to dossier and show statusmessage
   if no active tasktemplatefolders are registered.
   [phgross]
