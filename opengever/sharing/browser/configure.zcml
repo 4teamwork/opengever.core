@@ -11,6 +11,15 @@
         />
 
     <browser:page
+        name="updateSharingInfo"
+        for="*"
+        class=".sharing.OpengeverSharingView"
+        attribute="updateSharingInfo"
+        permission="plone.DelegateRoles"
+        layer="opengever.sharing.interfaces.IOpengeverSharing"
+        />
+
+    <browser:page
         name="tabbedview_view-sharing"
         for="*"
         class=".sharing.SharingTab"
