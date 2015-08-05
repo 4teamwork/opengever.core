@@ -1,5 +1,4 @@
 from ftw.mail.utils import get_header
-from opengever.base import _ as base_mf
 from opengever.base.browser.helper import get_css_class
 from opengever.base.utils import escape_html
 from opengever.base.utils import get_hostname
@@ -8,6 +7,7 @@ from opengever.document.document import Document
 from opengever.mail.mail import OGMail
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import ogds_service
+from opengever.tabbedview import _
 from plone import api
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize import ram
@@ -224,7 +224,8 @@ def _linked_document_with_tooltip(item, value, trashed=False, removed=False):
     # tooltip links
     data['preview_link'] = '%s/@@download_pdfpreview' % (data['url'])
     data['preview_label'] = translate(
-        base_mf(u'button_pdf', 'PDF'), context=item.REQUEST).encode('utf-8')
+        _(u'button_pdf_preview', 'PDF Preview'),
+        context=item.REQUEST).encode('utf-8')
 
     data['edit_metadata_link'] = '%s/edit_checker' % (data['url'])
     data['edit_metadata_label'] = translate(
