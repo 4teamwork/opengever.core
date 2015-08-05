@@ -206,4 +206,23 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <!-- 4304 -> 4501 -->
+    <genericsetup:upgradeStep
+        title="WF: Allow 'Copy or Move' for Dossier in closed states"
+        description=""
+        source="4304"
+        destination="4501"
+        handler="opengever.dossier.upgrades.to4501.AllowCopyOrMoveForClosedDossierStates"
+        profile="opengever.dossier:default"
+        />
+
+    <genericsetup:registerProfile
+        name="4501"
+        title="opengever.dossier: upgrade profile 4501"
+        description=""
+        directory="profiles/4501"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
 </configure>
