@@ -173,5 +173,9 @@ class OpenTaskReportPDFAllowed(grok.View):
     grok.require('zope2.View')
 
     def render(self):
-        inbox = get_current_org_unit().inbox()
-        return ogds_service().fetch_current_user() in inbox.assigned_users()
+        return is_open_task_report_allowed()
+
+
+def is_open_task_report_allowed():
+    inbox = get_current_org_unit().inbox()
+    return ogds_service().fetch_current_user() in inbox.assigned_users()

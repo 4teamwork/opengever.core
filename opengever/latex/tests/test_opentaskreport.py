@@ -96,6 +96,7 @@ class TestOpenTaskReport(FunctionalTestCase):
                                    firstname='Hans',
                                    lastname='Meier')
                            .assign_to_org_units([self.org_unit]))
+        create(Builder('user').with_userid('hans.meier'))
 
         self.peter = create(Builder('ogds_user')
                             .having(userid='peter.peter',
@@ -112,20 +113,29 @@ class TestOpenTaskReport(FunctionalTestCase):
         self.opentaskreport = getMultiAdapter(
             (self.task, self.task.REQUEST, layout), ILaTeXView)
 
+    @browsing
+    def test_open_task_report_action_visible_for_user_with_correct_group(self, browser):
+        browser.login().open()
+        self.assertIsNotNone(browser.find('Open tasks report'))
+
+    @browsing
+    def test_open_task_report_action_not_visible_for_user_with_wrong_group(self, browser):
+        browser.login('hans.meier').open()
+        self.assertIsNone(browser.find('Open tasks report'))
+
     def test_actor_labels_are_visible_in_task_listing(self):
         row = self.opentaskreport.get_data_for_item(self.task.get_sql_object())
         self.assertIn(self.peter.label(with_principal=False), row)
         self.assertIn(self.hans.label(with_principal=False), row)
 
     @browsing
-    def test_smoke_open_task_report_view(self, browser):
+    def test_smoke_open_task_report_view_allowed(self, browser):
         browser.login().open(view='pdf-open-task-report')
 
     def test_task_report_is_only_available_for_current_inbox_users(self):
         self.assertTrue(
             self.portal.unrestrictedTraverse('pdf-open-task-report-allowed')())
 
-        create_plone_user(self.portal, 'hans.meier')
         login(self.portal, 'hans.meier')
         self.assertFalse(
             self.portal.unrestrictedTraverse('pdf-open-task-report-allowed')())
