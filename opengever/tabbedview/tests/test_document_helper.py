@@ -266,7 +266,7 @@ class TestTooltipLinkedHelperWithPDFConverter(TestWithPDFConverter):
     def test_pdf_link_available_for_documents(self):
         self.replay()
         markup = linked_document_with_tooltip(self.doc_brain, ITEM_TITLE)
-        pdf_link = link(href="%s/@@download_pdfpreview" % self.doc_brain.getURL(), text="PDF")
+        pdf_link = link(href="%s/@@download_pdfpreview" % self.doc_brain.getURL(), text="PDF Preview")
         self.assertTooltipLinkIn(pdf_link, markup)
 
     def test_no_pdf_link_for_mails(self):
@@ -279,7 +279,7 @@ class TestTooltipLinkedHelperWithPDFConverter(TestWithPDFConverter):
     def test_pdf_link_available_for_trashed_docs(self):
         self.replay()
         markup = linked_trashed_document_with_tooltip(self.doc_brain, ITEM_TITLE)
-        pdf_link = link(href="%s/@@download_pdfpreview" % self.doc_brain.getURL(), text="PDF")
+        pdf_link = link(href="%s/@@download_pdfpreview" % self.doc_brain.getURL(), text="PDF Preview")
         self.assertTooltipLinkIn(pdf_link, markup)
 
 

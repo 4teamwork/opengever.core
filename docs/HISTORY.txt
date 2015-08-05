@@ -5,6 +5,9 @@ Changelog
 4.5.1 (unreleased)
 ------------------
 
+- Fixed translation of PDF Preview button in document's tooltip.
+  [phgross]
+
 - Made Document's tooltip edit_direct link CSRF safe, adding the authentication token.
   [phgross]
 
