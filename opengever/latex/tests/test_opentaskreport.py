@@ -14,6 +14,7 @@ from opengever.latex.testing import LATEX_ZCML_LAYER
 from opengever.testing import create_plone_user
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import login
+from zExceptions import Unauthorized
 from zope.component import adaptedBy
 from zope.component import getMultiAdapter
 from zope.interface.verify import verifyClass
@@ -131,6 +132,11 @@ class TestOpenTaskReport(FunctionalTestCase):
     @browsing
     def test_smoke_open_task_report_view_allowed(self, browser):
         browser.login().open(view='pdf-open-task-report')
+
+    @browsing
+    def test_open_task_report_view_not_allowed_raises_unauthorized(self, browser):
+        with self.assertRaises(Unauthorized):
+            browser.login('hans.meier').open(view='pdf-open-task-report')
 
     def test_task_report_is_only_available_for_current_inbox_users(self):
         self.assertTrue(
