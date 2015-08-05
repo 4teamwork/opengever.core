@@ -5,6 +5,9 @@ Changelog
 4.5.1 (unreleased)
 ------------------
 
+- Made Document's tooltip edit_direct link CSRF safe, adding the authentication token.
+  [phgross]
+
 - Fixed gever customization of sharing view, for updateSharingInfo.
   [phgross]
 
