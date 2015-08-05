@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Fixed gever customization of sharing view, for updateSharingInfo.
+  [phgross]
+
 - Add additional columns publish_in, disclose_to and copy_for_attention
   to proposals, protocols and protocol excerpts.
   [deiferni]
