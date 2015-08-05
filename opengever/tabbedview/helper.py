@@ -11,6 +11,7 @@ from opengever.ogds.base.utils import ogds_service
 from plone import api
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize import ram
+from plone.protect.utils import addTokenToUrl
 from Products.CMFCore.interfaces._tools import IMemberData
 from Products.CMFPlone import PloneMessageFactory as pmf
 from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
@@ -229,7 +230,7 @@ def _linked_document_with_tooltip(item, value, trashed=False, removed=False):
     data['edit_metadata_label'] = translate(
         pmf(u'Edit metadata'), context=item.REQUEST).encode('utf-8')
 
-    data['edit_direct_link'] = '%s/editing_document' % (data['url'])
+    data['edit_direct_link'] = addTokenToUrl('%s/editing_document' % (data['url']))
     data['edit_direct_label'] = translate(
         pmf(u'Checkout and edit'), context=item.REQUEST).encode('utf-8')
 
