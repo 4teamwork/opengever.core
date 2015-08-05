@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Use correct geometry setup for landscape pdfs.
+  [deiferni]
+
 - Fixed translation of PDF Preview button in document's tooltip.
   [phgross]
 
