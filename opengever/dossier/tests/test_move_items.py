@@ -157,6 +157,11 @@ class TestMoveItemsWithTestbrowser(FunctionalTestCase):
             payload['paths:list'] = [path]
 
         browser.login().open(src, payload, view='move_items')
+
+        if not browser.url.endswith('move_items'):
+            # Might have been redirected because of an error
+            return
+
         browser.fill({'Destination': target})
         browser.css('#form-buttons-button_submit').first.click()
 
@@ -203,7 +208,7 @@ class TestMoveItemsWithTestbrowser(FunctionalTestCase):
         self.assertIn(document, dossier.objectValues())
         self.assertNotIn(document, self.target_dossier.objectValues())
         self.assertEqual(
-            [u'Failed to copy following objects: Testdokum\xe4nt'],
+            ['Can only move objects from open dossiers!'],
             error_messages())
 
     @browsing
@@ -220,7 +225,7 @@ class TestMoveItemsWithTestbrowser(FunctionalTestCase):
         self.assertIn(document, dossier.objectValues())
         self.assertNotIn(document, self.target_dossier.objectValues())
         self.assertEqual(
-            [u'Failed to copy following objects: Testdokum\xe4nt'],
+            ['Can only move objects from open dossiers!'],
             error_messages())
 
     @browsing
@@ -238,7 +243,7 @@ class TestMoveItemsWithTestbrowser(FunctionalTestCase):
         self.assertIn(task, dossier.objectValues())
         self.assertNotIn(task, self.target_dossier.objectValues())
         self.assertEqual(
-            [u'Failed to copy following objects: My task'],
+            ['Can only move objects from open dossiers!'],
             error_messages())
 
     @browsing
@@ -256,7 +261,7 @@ class TestMoveItemsWithTestbrowser(FunctionalTestCase):
         self.assertIn(mail, dossier.objectValues())
         self.assertNotIn(mail, self.target_dossier.objectValues())
         self.assertEqual(
-            [u'Failed to copy following objects: My mail'],
+            ['Can only move objects from open dossiers!'],
             error_messages())
 
     @browsing

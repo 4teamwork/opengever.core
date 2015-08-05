@@ -5,6 +5,7 @@ from opengever.base.source import RepositoryPathSourceBinder
 from opengever.document.document import IDocumentSchema
 from opengever.dossier import _
 from opengever.dossier.base import DOSSIER_STATES_OPEN
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.globalindex.model.task import Task
 from plone.dexterity.interfaces import IDexterityContainer
 from plone.z3cform import layout
@@ -178,7 +179,17 @@ class MoveItemsFormView(layout.FormWrapper, grok.View):
         layout.FormWrapper.__init__(self, context, request)
         grok.View.__init__(self, context, request)
 
+    def assert_valid_container_state(self):
+        container = self.context
+        if IDossierMarker.providedBy(container) and not container.is_open():
+            msg = _(u'Can only move objects from open dossiers!')
+            IStatusMessage(self.request).addStatusMessage(
+                msg, type='error')
+            self.request.RESPONSE.redirect(
+                '%s#documents' % container.absolute_url())
+
     def render(self):
+        self.assert_valid_container_state()
         if not self.request.get('paths') and not \
                 self.form_instance.widgets['request_paths'].value:
             msg = _(u'You have not selected any items')
