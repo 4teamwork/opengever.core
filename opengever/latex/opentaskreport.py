@@ -17,6 +17,7 @@ from opengever.task.helper import task_type_helper
 from sqlalchemy import and_
 from sqlalchemy import or_
 from sqlalchemy.sql.expression import asc
+from zExceptions import Unauthorized
 from zope.interface import Interface
 
 
@@ -40,8 +41,10 @@ class OpenTaskReportPDFView(grok.View, ExportPDFView):
     grok.require('zope2.View')
 
     def render(self):
-        provide_request_layer(self.request, IOpenTaskReportLayer)
+        if not is_open_task_report_allowed():
+            raise Unauthorized()
 
+        provide_request_layer(self.request, IOpenTaskReportLayer)
         return ExportPDFView.__call__(self)
 
 
@@ -173,5 +176,9 @@ class OpenTaskReportPDFAllowed(grok.View):
     grok.require('zope2.View')
 
     def render(self):
-        inbox = get_current_org_unit().inbox()
-        return ogds_service().fetch_current_user() in inbox.assigned_users()
+        return is_open_task_report_allowed()
+
+
+def is_open_task_report_allowed():
+    inbox = get_current_org_unit().inbox()
+    return ogds_service().fetch_current_user() in inbox.assigned_users()
