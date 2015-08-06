@@ -27,6 +27,13 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
+  <browser:page
+      for="opengever.inbox.forwarding.IForwarding"
+      name="edit"
+      class=".forwarding.ForwardingEditForm"
+      permission="cmf.ModifyPortalContent"
+      />
+
   <profilehook:hook
       profile="opengever.inbox:default"
       handler=".hooks.installed"
