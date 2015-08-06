@@ -56,7 +56,6 @@ class TestMyNotifications(FunctionalTestCase):
             'peter.mueller',
             {'en': None})
 
-
     @browsing
     def test_lists_only_notifications_of_current_user(self, browser):
         browser.login().open(self.portal,
@@ -81,7 +80,7 @@ class TestMyNotifications(FunctionalTestCase):
               'Title': 'Kennzahlen 2014 erfassen'},
              {'Actor': 'Mueller Peter (peter.mueller)',
               'Created': api.portal.get_localized_time(
-                  self.activity_1.created, long_format=True),
+                  self.activity_2.created, long_format=True),
               'Kind': 'task-transition-open-in-progress',
               'Title': 'Kennzahlen 2014 erfassen'}],
             browser.css('.listing').first.dicts())
