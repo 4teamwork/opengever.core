@@ -11,7 +11,6 @@ from opengever.latex import opentaskreport
 from opengever.latex.layouts.default import DefaultLayout
 from opengever.latex.opentaskreport import IOpenTaskReportLayer
 from opengever.latex.testing import LATEX_ZCML_LAYER
-from opengever.testing import create_plone_user
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import login
 from zExceptions import Unauthorized
@@ -35,21 +34,6 @@ class TestOpenTaskReportPDFView(MockTestCase):
 
         self.assertTrue(isinstance(
                         view, opentaskreport.OpenTaskReportPDFView))
-
-    def test_render_adds_browser_layer(self):
-        context = request = self.create_dummy()
-
-        view = self.mocker.patch(
-            opentaskreport.OpenTaskReportPDFView(context, request))
-
-        self.expect(view.allow_alternate_output()).result(False)
-        self.expect(view.export())
-
-        self.replay()
-
-        view.render()
-        self.assertTrue(opentaskreport.IOpenTaskReportLayer.providedBy(
-                        request))
 
 
 class TestOpenTaskReportLaTeXView(MockTestCase):
@@ -113,6 +97,11 @@ class TestOpenTaskReport(FunctionalTestCase):
         layout = DefaultLayout(self.task, self.task.REQUEST, PDFBuilder())
         self.opentaskreport = getMultiAdapter(
             (self.task, self.task.REQUEST, layout), ILaTeXView)
+
+    @browsing
+    def test_render_adds_browser_layer(self, browser):
+        browser.login().open(view='pdf-open-task-report')
+        self.assertTrue(IOpenTaskReportLayer.providedBy(self.request))
 
     @browsing
     def test_open_task_report_action_visible_for_user_with_correct_group(self, browser):
