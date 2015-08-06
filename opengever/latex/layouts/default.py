@@ -31,10 +31,7 @@ class DefaultLayout(CustomizableLayout, grok.MultiAdapter):
         self.use_package('babel', 'ngerman', append_options=False)
         self.use_package('fancyhdr')
 
-        self.use_package('geometry', 'left=35mm')
-        self.use_package('geometry', 'right=10mm')
-        self.use_package('geometry', 'top=55mm')
-        self.use_package('geometry', 'bottom=10.5mm')
+        self.use_package_geometry()
 
         self.use_package('graphicx')
         self.use_package('lastpage')
@@ -50,6 +47,12 @@ class DefaultLayout(CustomizableLayout, grok.MultiAdapter):
 
         if self.show_logo:
             self.add_raw_template_file('gever_logo.jpeg')
+
+    def use_package_geometry(self):
+        self.use_package('geometry', 'left=35mm')
+        self.use_package('geometry', 'right=10mm')
+        self.use_package('geometry', 'top=55mm')
+        self.use_package('geometry', 'bottom=10.5mm')
 
     def get_render_arguments(self):
         owner = self.get_owner()

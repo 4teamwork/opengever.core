@@ -13,3 +13,9 @@ class LandscapeLayout(DefaultLayout):
     def __init__(self, context, request, builder):
         super(LandscapeLayout, self).__init__(context, request, builder)
         self.show_contact = False
+
+    def use_package_geometry(self):
+        self.use_package('geometry', 'top=35mm')
+        self.use_package('geometry', 'right=10.5mm')
+        self.use_package('geometry', 'bottom=10.5mm')
+        self.use_package('geometry', 'left=10.5mm')
