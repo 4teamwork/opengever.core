@@ -5,6 +5,9 @@ Changelog
 4.5.1 (unreleased)
 ------------------
 
+- Disable inline validation.
+  [phgross]
+
 - Use correct geometry setup for landscape pdfs.
   [deiferni]
 

@@ -119,4 +119,13 @@
       profile="opengever.policy.base:default"
       />
 
+  <!-- 4504 -> 4505 -->
+  <upgrade-step:importProfile
+      title="Disable inline validation."
+      profile="opengever.policy.base:default"
+      source="4504"
+      destination="4505"
+      directory="profiles/4505"
+      />
+
 </configure>
