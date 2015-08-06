@@ -13,7 +13,8 @@ from ZODB.POSException import ConflictError
 from zope.globalrequest import getRequest
 from zope.i18nmessageid import MessageFactory
 import logging
-
+import sys
+import traceback
 
 _ = MessageFactory("opengever.activity")
 logger = logging.getLogger('opengever.activity')
@@ -175,12 +176,14 @@ class PloneNotificationCenter(NotificationCenter):
         except ConflictError:
             raise
 
-        except Exception as exc:
+        except Exception:
             msg = _(u'msg_error_not_notified',
                     default=u'A problem has occurred during the notification'
                     ' creation. Notification could not be produced.')
             api.portal.show_message(msg, getRequest(), type='warning')
-            logging.error(exc)
+
+            tcb = ''.join(traceback.format_exception(*sys.exc_info()))
+            logger.error('Exception while adding an activity:\n{}'.format(tcb))
 
         return
 
