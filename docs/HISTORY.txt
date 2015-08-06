@@ -5,6 +5,10 @@ Changelog
 4.5.1 (unreleased)
 ------------------
 
+- Dossier WF: Allow 'Copy or Move' for Dossiers in closed states:
+  This is necessary to be able to copy documents from closed dossiers.
+  [lgraf]
+
 - Fixed translation of PDF Preview button in document's tooltip.
   [phgross]
 

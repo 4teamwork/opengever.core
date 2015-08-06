@@ -12,6 +12,7 @@ from opengever.meeting import is_meeting_feature_enabled
 from opengever.ogds.base.actor import Actor
 from opengever.task import OPEN_TASK_STATES
 from opengever.task.task import ITask
+from plone import api
 from plone.dexterity.content import Container
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.registry.interfaces import IRegistry
@@ -67,6 +68,10 @@ class DossierContainer(Container):
             if IPloneSiteRoot.providedBy(obj):
                 break
         return depth
+
+    def is_open(self):
+        wf_state = api.content.get_state(obj=self)
+        return wf_state in DOSSIER_STATES_OPEN
 
     def get_main_dossier(self):
         """Return the root dossier for the current dossier.
