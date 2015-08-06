@@ -3,6 +3,7 @@ from five import grok
 from ftw.tabbedview.browser.tabbed import TabbedView
 from opengever.activity import is_activity_feature_enabled
 from opengever.globalindex.model.task import Task
+from opengever.latex.opentaskreport import is_open_task_report_allowed
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
@@ -68,6 +69,13 @@ class PersonalOverview(TabbedView):
             repo_url = repos[0].getURL()
             return self.request.RESPONSE.redirect(repo_url)
         else:
+            if is_open_task_report_allowed():
+                # Somehow if only the pdf-open-task-report action is available
+                # plone's `showEditableBorder` assumes that the edit-bar should
+                # be hidden.
+                # So we have to force the edit bar if the user can generate an
+                # open task report.
+                api.portal.get().REQUEST.set('enable_border', True)
             return self.template(self)
 
     def personal_overview_title(self):
