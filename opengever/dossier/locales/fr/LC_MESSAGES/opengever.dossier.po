@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-08-03 14:02+0000\n"
+"POT-Creation-Date: 2015-08-05 10:00+0000\n"
 "PO-Revision-Date: 2012-09-10 10:17+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./opengever/dossier/move_items.py:148
+#: ./opengever/dossier/move_items.py:150
 msgid "${copied_items} Elements were moved successfully"
 msgstr "${copied_items} éléments déplacés avec succès"
 
@@ -33,6 +33,10 @@ msgstr "Insérer un sous-dossier"
 msgid "Business Case Dossier"
 msgstr "Dossier"
 
+#: ./opengever/dossier/move_items.py:188
+msgid "Can only move objects from open dossiers!"
+msgstr ""
+
 #: ./opengever/dossier/browser/report.py:84
 msgid "Could not generate the report"
 msgstr "Impossible de générer l'affichage"
@@ -45,7 +49,7 @@ msgstr "Effacer la participation"
 msgid "Description"
 msgstr "Description"
 
-#: ./opengever/dossier/move_items.py:96
+#: ./opengever/dossier/move_items.py:98
 msgid "Document ${name} is connected to a Task. Please move the Task."
 msgstr "Document ${name} est lié avec une tâche, déplacer la tâche, svp."
 
@@ -66,15 +70,15 @@ msgstr "Modifier le sous-dossier"
 msgid "Export selection"
 msgstr "Exporter le choix"
 
-#: ./opengever/dossier/move_items.py:154
+#: ./opengever/dossier/move_items.py:156
 msgid "Failed to copy following objects: ${failed_objects}"
 msgstr "Impossible de déplacer les éléments suivants: ${failed_objects}"
 
-#: ./opengever/dossier/move_items.py:160
+#: ./opengever/dossier/move_items.py:162
 msgid "Failed to copy following objects: ${failed_objects}                    . Locked via WebDAV"
 msgstr ""
 
-#: ./opengever/dossier/move_items.py:201
+#: ./opengever/dossier/move_items.py:215
 msgid "It isn't allowed to add such items there"
 msgstr "Cet élément ne peut être déplacé ici."
 
@@ -169,7 +173,7 @@ msgstr "La date de clôture n'est pas valable. Elle doit être plus récente ou 
 msgid "The given value is not a valid Year"
 msgstr "L'année de dépôt attribuée n'est pas valable"
 
-#: ./opengever/dossier/move_items.py:88
+#: ./opengever/dossier/move_items.py:90
 msgid "The selected objects can't be found, please try it again."
 msgstr "Impossible de trouver les objets sélectionnés, merci de réessayer."
 
@@ -193,7 +197,7 @@ msgstr "Ce sous-dossier ne peut pas être réactivé parce que le dossier prinic
 msgid "When the Action give filing number is selected,                         all fields are required."
 msgstr "Pour l'attribution de numéro d'inventaire, tous les champs sont obligatoires"
 
-#: ./opengever/dossier/move_items.py:184
+#: ./opengever/dossier/move_items.py:198
 msgid "You have not selected any items"
 msgstr "Pas d'élément sélectionné"
 
@@ -213,12 +217,12 @@ msgstr "Enregistrer"
 #. Default: "Cancel"
 #: ./opengever/dossier/archive.py:274
 #: ./opengever/dossier/behaviors/participation.py:167
-#: ./opengever/dossier/move_items.py:125
+#: ./opengever/dossier/move_items.py:127
 msgid "button_cancel"
 msgstr "Annuler"
 
 #. Default: "Move"
-#: ./opengever/dossier/move_items.py:73
+#: ./opengever/dossier/move_items.py:75
 msgid "button_submit"
 msgstr "Déplacer"
 
@@ -241,7 +245,7 @@ msgid "documents"
 msgstr "Documents"
 
 #. Default: "It isn't allowed to add such items there: ${failed_objects}"
-#: ./opengever/dossier/move_items.py:232
+#: ./opengever/dossier/move_items.py:246
 msgid "error_NotInContentTypes ${failed_objects}"
 msgstr "Pas d'objet déplacé. Les objets suivants ne peuvent être insérés dans le classeur choisi : ${failed_objects}"
 
@@ -309,7 +313,7 @@ msgid "heading_archive_form"
 msgstr "Classer le dossier"
 
 #. Default: "Move Items"
-#: ./opengever/dossier/move_items.py:55
+#: ./opengever/dossier/move_items.py:57
 msgid "heading_move_items"
 msgstr "Déplacer des éléments"
 
@@ -330,7 +334,7 @@ msgid "help_container_type"
 msgstr "Type de conteneur du dossier imprimé"
 
 #. Default: "Live Search: search the Plone Site"
-#: ./opengever/dossier/move_items.py:26
+#: ./opengever/dossier/move_items.py:28
 msgid "help_destination"
 msgstr "Recherche en direct: Recherche de ce client"
 
@@ -430,7 +434,7 @@ msgid "label_creator"
 msgstr "Créé par"
 
 #. Default: "Destination"
-#: ./opengever/dossier/move_items.py:25
+#: ./opengever/dossier/move_items.py:27
 msgid "label_destination"
 msgstr "Destination"
 
