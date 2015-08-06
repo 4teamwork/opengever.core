@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Fix an issue with the open taks report action, make sure it displayed again.
+  [deiferni]
+
 - Disable inline validation.
   [phgross]
 
