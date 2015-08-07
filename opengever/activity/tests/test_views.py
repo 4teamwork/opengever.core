@@ -30,7 +30,7 @@ class TestNotificationView(FunctionalTestCase):
             {'en': 'Task added'},
             {'en': 'Task bla added by Hugo'},
             'hugo.boss',
-            {'en': None})
+            {'en': None}).get('activity')
 
 
         self.activity_2 = self.center.add_activity(
@@ -40,7 +40,7 @@ class TestNotificationView(FunctionalTestCase):
             {'en': 'Task accepted'},
             {'en': 'Task bla accepted'},
             'hugo.boss',
-            {'en': None})
+            {'en': None}).get('activity')
 
         self.notifications = self.center.get_users_notifications(TEST_USER_ID)
 
