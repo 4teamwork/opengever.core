@@ -5,6 +5,10 @@ Changelog
 4.5.1 (unreleased)
 ------------------
 
+- No longer generate reference numbers for templatedossiers.
+  Also Cleanup old generated reference numbers.
+  [deiferni]
+
 - No longer display an empty tab 'additional' on the forwarding edit page.
   [deiferni]
 
