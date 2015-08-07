@@ -225,4 +225,14 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <!-- 4501 -> 4502 -->
+    <genericsetup:upgradeStep
+        title="No longer generate reference numbers for template dossiers."
+        description=""
+        source="4501"
+        destination="4502"
+        handler="opengever.dossier.upgrades.to4502.DropTemplateDossierReferenceNumber"
+        profile="opengever.dossier:default"
+        />
+
 </configure>
