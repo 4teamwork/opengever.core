@@ -6,11 +6,17 @@ from opengever.base.model import get_locale
 from opengever.ogds.base.utils import ogds_service
 from plone import api
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from ZODB.POSException import ConflictError
 from zope.i18n import translate
 from zope.i18nmessageid import MessageFactory
+import traceback
+import logging
+import sys
 
 # because of circular imports, we can't import from opengever.activity
 _ = MessageFactory("opengever.activity")
+
+logger = logging.getLogger('opengever.activity')
 
 
 class PloneNotificationMailer(object):
@@ -30,8 +36,20 @@ class PloneNotificationMailer(object):
         self.request = self.context.REQUEST
 
     def dispatch_notifications(self, notifications):
+        not_dispatched = []
         for notification in notifications:
-            notification.dispatch(self)
+            try:
+                notification.dispatch(self)
+            except ConflictError:
+                raise
+
+            except Exception:
+                not_dispatched.append(notifications)
+                tcb = ''.join(traceback.format_exception(*sys.exc_info()))
+                logger.error('Exception while dispatch activity '
+                             '(MailDispatcher):\n{}'.format(tcb))
+
+        return not_dispatched
 
     def dispatch_notification(self, notification):
         msg = self.prepare_mail(notification)

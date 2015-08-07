@@ -87,8 +87,8 @@ class TestNotifactionCenterErrorHandling(FunctionalTestCase):
         browser.css('#form-buttons-save').first.click()
 
         self.assertEquals(
-            [u'A problem has occurred during the notification creation. '
-             'Notification could not be produced.'],
+            ['A problem has occurred during the notification creation. '
+             'Notification could not or only partially produced.'],
             warning_messages())
         self.assertEquals(['Item created'], info_messages())
 
@@ -105,4 +105,23 @@ class TestNotifactionCenterErrorHandling(FunctionalTestCase):
         browser.css('#form-buttons-save').first.click()
 
         self.assertEquals([], warning_messages())
+        self.assertEquals(['Item created'], info_messages())
+
+    @browsing
+    def test_shows_message_if_dispatchers_raise_an_exception(self, member):
+        create(Builder('ogds_user')
+               .having(userid='hugo.boss', email=None)
+               .in_group(self.org_unit.users_group))
+
+        browser.login().open(self.dossier, view='++add++opengever.task.task')
+        browser.fill({'Title': 'Test Task',
+                      'Issuer': TEST_USER_ID,
+                      'Responsible': u'hugo.boss',
+                      'Task Type': 'comment'})
+        browser.css('#form-buttons-save').first.click()
+
+        self.assertEquals(
+            ['A problem has occurred during the notification creation. '
+             'Notification could not or only partially produced.'],
+            warning_messages())
         self.assertEquals(['Item created'], info_messages())

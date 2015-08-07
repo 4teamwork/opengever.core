@@ -104,14 +104,17 @@ class NotificationCenter(object):
 
         self.session.add(activity)
 
-        self.create_notifications(activity)
-
-        return activity
+        errors = self.create_notifications(activity)
+        return {'activity': activity, 'errors': errors}
 
     def create_notifications(self, activity):
         notifications = activity.create_notifications()
+        errors = []
         for dispatcher in self.dispatchers:
-            dispatcher.dispatch_notifications(notifications)
+            result = dispatcher.dispatch_notifications(notifications)
+            errors += result
+
+        return errors
 
     def get_users_notifications(self, userid, only_unread=False, limit=None):
         query = Notification.query.by_user(userid)
@@ -166,26 +169,29 @@ class PloneNotificationCenter(NotificationCenter):
             oguid, userid)
 
     def add_activity(self, obj, kind, title, label, summary, actor_id, description):
-
         oguid = self._get_oguid_for(obj)
         try:
-            activity = super(PloneNotificationCenter, self).add_activity(
+            result = super(PloneNotificationCenter, self).add_activity(
                 oguid, kind, title, label, summary, actor_id, description)
-            return activity
+            if result.get('errors'):
+                self.show_not_notified_message()
 
         except ConflictError:
             raise
 
         except Exception:
-            msg = _(u'msg_error_not_notified',
-                    default=u'A problem has occurred during the notification'
-                    ' creation. Notification could not be produced.')
-            api.portal.show_message(msg, getRequest(), type='warning')
-
+            self.show_not_notified_message()
             tcb = ''.join(traceback.format_exception(*sys.exc_info()))
             logger.error('Exception while adding an activity:\n{}'.format(tcb))
 
         return
+
+    def show_not_notified_message(self):
+        msg = _(u'msg_error_not_notified',
+                default=u'A problem has occurred during the notification '
+                'creation. Notification could not or only partially '
+                'produced.')
+        api.portal.show_message(msg, getRequest(), type='warning')
 
     def get_watchers(self, obj):
         oguid = self._get_oguid_for(obj)

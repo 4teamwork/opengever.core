@@ -176,7 +176,7 @@ class TestAddActivity(ActivityTestCase):
             {'en': 'Task bla added'},
             {'en': 'Task bla added by Hugo'},
             'hugo.boss',
-            {'en': None})
+            {'en': None}).get('activity')
 
         notification = peter.notifications[0]
         self.assertEquals(activity, notification.activity)
@@ -235,7 +235,7 @@ class TestNotificationHandling(ActivityTestCase):
             {'en': 'Task added'},
             {'en': 'Task bla added by Peter'},
             'hugo.boss',
-            {'en': None})
+            {'en': None}).get('activity')
         self.activity_2 = self.center.add_activity(
             Oguid('fd', '123'),
             'task-transition-open-in-progress',
@@ -243,7 +243,7 @@ class TestNotificationHandling(ActivityTestCase):
             {'en': 'Task accepted'},
             {'en': 'Task bla accepted by Peter'},
             'peter.mueller',
-            {'en': None})
+            {'en': None}).get('activity')
 
         self.activity_3 = self.center.add_activity(
             Oguid('fd', '456'),
@@ -252,7 +252,7 @@ class TestNotificationHandling(ActivityTestCase):
             {'en': 'Task added'},
             {'en': 'Task for added by Peter'},
             'peter.mueller',
-            {'en': None})
+            {'en': None}).get('activity')
 
         self.activity_4 = self.center.add_activity(
             Oguid('fd', '789'),
@@ -261,7 +261,7 @@ class TestNotificationHandling(ActivityTestCase):
             {'en': 'Task added'},
             {'en': 'Task bla accepted by Franz'},
             'franz.meier',
-            {'en': None})
+            {'en': None}).get('activity')
 
     def test_get_users_notifications_lists_only_users_notifications(self):
         peters_notifications = self.center.get_users_notifications('peter')
@@ -355,6 +355,8 @@ class FakeDispatcher(object):
         for notification in notifications:
             notification.dispatch(self)
 
+        return []
+
     def dispatch_notification(self, notification):
         self.notified.append(notification)
 
@@ -377,6 +379,7 @@ class TestDispatchers(ActivityTestCase):
         setting = create(Builder('notification_default_setting')
                          .having(kind='task-added',
                                  mail_notification=False))
+
         self.center.add_activity(
             Oguid('fd', '123'),
             'task-added',
