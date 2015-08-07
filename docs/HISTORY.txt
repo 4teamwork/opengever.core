@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- No longer display an empty tab 'additional' on the forwarding edit page.
+  [deiferni]
+
 - Fix an issue with the open taks report action, make sure it displayed again.
   [deiferni]
 

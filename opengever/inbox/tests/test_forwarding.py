@@ -65,3 +65,14 @@ class TestForwarding(FunctionalTestCase):
         fieldsets = browser.css('form#form fieldset')
         self.assertEqual(1, len(fieldsets))
         self.assertEqual('Common', fieldsets.first.css('legend').first.text)
+
+    @browsing
+    def test_forwarding_edit_form_does_not_render_empty_fieldset_additional(self, browser):
+        forwarding = create(Builder('forwarding').within(self.inbox))
+
+        self.grant('Manager')
+        browser.login().open(forwarding, view='edit')
+
+        fieldsets = browser.css('form#form fieldset')
+        self.assertEqual(1, len(fieldsets))
+        self.assertEqual('Common', fieldsets.first.css('legend').first.text)

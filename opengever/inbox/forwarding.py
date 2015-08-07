@@ -7,6 +7,7 @@ from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import _ as task_mf
 from opengever.task.task import ITask, Task
+from plone.dexterity.browser.edit import DefaultEditForm
 from plone.directives import form
 from plone.directives.dexterity import AddForm
 from Products.CMFCore.interfaces import IActionSucceededEvent
@@ -138,26 +139,37 @@ class ForwardingAddForm(AddForm):
 
     def updateFieldsFromSchemata(self):
         super(ForwardingAddForm, self).updateFieldsFromSchemata()
-
-        # make sure empty 'additional' fieldset is not displayed
-        #
-        # plone.autoform.base.AutoFields.updateFieldsFromSchemata initializes
-        # fields and groups and moves fields. However it moves fields only
-        # after initializing groups. Thus an empty group is left after we
-        # move the field (see IForwarding). The empty group renders
-        # a completely empty fieldset (i.e. tab in our case).
-        #
-        # This code performs cleanup to remove that empty group.
-        assert len(self.groups[1].fields.keys()) == 0, \
-            "expecting empty group, please check field definitions in "\
-            "IForwarding and ITask"
-        self.groups.pop(1)
+        _drop_empty_additional_fieldset(self.groups)
 
     def createAndAdd(self, data):
         forwarding = super(AddForm, self).createAndAdd(data=data)
         ForwardingAddedActivity(
             forwarding, self.request, self.context).record()
         return forwarding
+
+
+class ForwardingEditForm(DefaultEditForm):
+
+    def updateFieldsFromSchemata(self):
+        super(ForwardingEditForm, self).updateFieldsFromSchemata()
+        _drop_empty_additional_fieldset(self.groups)
+
+
+def _drop_empty_additional_fieldset(groups):
+    """make sure empty 'additional' fieldset is not displayed
+
+     plone.autoform.base.AutoFields.updateFieldsFromSchemata initializes
+     fields and groups and moves fields. However it moves fields only
+     after initializing groups. Thus an empty group is left after we
+     move the field (see IForwarding). The empty group renders
+     a completely empty fieldset (i.e. tab in our case).
+
+     This code performs cleanup to remove that empty group.
+     """
+    assert len(groups[1].fields.keys()) == 0, \
+        "expecting empty group, please check field definitions in "\
+        "IForwarding and ITask"
+    groups.pop(1)
 
 
 @grok.subscribe(IForwarding, IObjectAddedEvent)
