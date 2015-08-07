@@ -38,7 +38,7 @@ class TestMyNotifications(FunctionalTestCase):
             {'en': 'Task added'},
             {'en': 'Task bla added by Hugo'},
             'hugo.boss',
-            {'en': None})
+            {'en': None}).get('activity')
         self.activity_2 = self.center.add_activity(
             Oguid('fd', '123'),
             'task-transition-open-in-progress',
@@ -46,7 +46,7 @@ class TestMyNotifications(FunctionalTestCase):
             {'en': 'Task accepted'},
             {'en': 'Task bla accepted by Peter'},
             'peter.mueller',
-            {'en': None})
+            {'en': None}).get('activity')
         self.activity_3 = self.center.add_activity(
             Oguid('fd', '456'),
             'task-added',
@@ -54,7 +54,7 @@ class TestMyNotifications(FunctionalTestCase):
             {'en': 'Task added'},
             {'en': 'Task foo added by peter'},
             'peter.mueller',
-            {'en': None})
+            {'en': None}).get('activity')
 
     @browsing
     def test_lists_only_notifications_of_current_user(self, browser):

@@ -5,6 +5,10 @@ Changelog
 4.5.1 (unreleased)
 ------------------
 
+- Improve notification center's error_handling.
+  Catch exception during dispatching a notification separately.
+  [phgross]
+
 - No longer generate reference numbers for templatedossiers.
   Also Cleanup old generated reference numbers.
   [deiferni]

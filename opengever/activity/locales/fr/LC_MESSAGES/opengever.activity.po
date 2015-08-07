@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-07-17 11:04+0000\n"
+"POT-Creation-Date: 2015-08-07 08:37+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,8 +52,8 @@ msgstr ""
 msgid "label_notifications_overview"
 msgstr ""
 
-#. Default: "A problem has occurred during the notification creation. Notification could not be produced."
-#: ./opengever/activity/center.py:179
+#. Default: "A problem has occurred during the notification creation. Notification could not or only partially produced."
+#: ./opengever/activity/center.py:190
 msgid "msg_error_not_notified"
 msgstr ""
 
@@ -63,7 +63,7 @@ msgid "no_unread_notifications"
 msgstr ""
 
 #. Default: "GEVER Task"
-#: ./opengever/activity/mail.py:60
+#: ./opengever/activity/mail.py:78
 msgid "subject_prefix"
 msgstr ""
 
