@@ -277,6 +277,28 @@ class TestMoveItemsWithTestbrowser(FunctionalTestCase):
         self.assertIn(task, self.target_dossier.objectValues())
 
     @browsing
+    def test_paste_action_not_visible_for_closed_dossiers(self, browser):
+        resolved_dossier = create(Builder('dossier')
+                                  .in_state('dossier-state-resolved'))
+        document = create(Builder('document').within(self.source_dossier))
+
+        browser.login()
+        # Copy the document
+        paths = ['/'.join(document.getPhysicalPath())]
+        browser.open(
+            self.source_dossier, {'paths:list': paths}, view='copy_items')
+
+        browser.open(self.source_dossier)
+        self.assertIsNotNone(
+            browser.find('Paste'),
+            'Paste should be visible for open dossiers')
+
+        browser.open(resolved_dossier)
+        self.assertIsNone(
+            browser.find('Paste'),
+            'Paste should not be visible for resolved dossiers')
+
+    @browsing
     def test_copy_then_move(self, browser):
         subdossier = create(Builder('dossier').within(self.source_dossier))
         document = create(Builder('document').within(self.source_dossier))
