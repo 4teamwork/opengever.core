@@ -199,7 +199,7 @@ def createMailInContainer(container, message):
     schema = fti.lookupSchema()
     field_type = getFields(schema)['message']._type
     message_value = field_type(data=message,
-                       contentType=u'message/rfc822', filename=u'message.eml')
+                       contentType='message/rfc822', filename=u'message.eml')
     # create mail object
     content = createContent('ftw.mail.mail', message=message_value)
 
