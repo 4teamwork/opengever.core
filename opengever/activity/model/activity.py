@@ -5,11 +5,11 @@ from opengever.base.model import SUPPORTED_LOCALES
 from opengever.base.model import UTCDateTime
 from opengever.ogds.models import USER_ID_LENGTH
 from opengever.ogds.models.query import BaseQuery
+from opengever.ogds.models.types import UnicodeCoercingText
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
-from sqlalchemy import Text
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
 from sqlalchemy_i18n import Translatable
@@ -70,7 +70,7 @@ class ActivityTranslation(translation_base(Activity)):
 
     __tablename__ = 'activities_translation'
 
-    title = Column(Text)
-    label = Column(Text)
-    summary = Column(Text)
-    description = Column(Text)
+    title = Column(UnicodeCoercingText)
+    label = Column(UnicodeCoercingText)
+    summary = Column(UnicodeCoercingText)
+    description = Column(UnicodeCoercingText)

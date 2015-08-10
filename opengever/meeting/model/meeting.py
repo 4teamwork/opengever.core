@@ -7,6 +7,7 @@ from opengever.meeting.model.query import MeetingQuery
 from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
+from opengever.ogds.models.types import UnicodeCoercingText
 from plone import api
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from sqlalchemy import Column
@@ -15,7 +16,6 @@ from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy import Table
-from sqlalchemy import Text
 from sqlalchemy.orm import backref
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
@@ -91,7 +91,7 @@ class Meeting(Base):
     secretary = relationship(
         'Member', primaryjoin="Member.member_id==Meeting.secretary_id")
     secretary_id = Column(Integer, ForeignKey('members.id'))
-    other_participants = Column(Text)
+    other_participants = Column(UnicodeCoercingText)
     participants = relationship('Member',
                                 secondary=meeting_participants,
                                 backref='meetings')
