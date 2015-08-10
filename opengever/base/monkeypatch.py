@@ -251,7 +251,8 @@ LOGGER.info('Monkey patched ftw.mail.inbound.createMailInContainer')
 # To include the fix https://github.com/plone/plone.formwidget.namedfile/pull/9
 # which involves in broken files, when uploading documents with firefox.
 
-# Monkeypath should be removed after updating opengever to plone 4.3.
+# This monkeypatch should be removed after updating to
+# plone.formwidget.namedfile 1.0.11
 from plone.formwidget.namedfile.converter import NamedDataConverter
 from plone.namedfile.interfaces import INamed
 from plone.namedfile.utils import safe_basename
@@ -284,8 +285,9 @@ def toFieldValue(self, value):
 
 
 NamedDataConverter.toFieldValue = toFieldValue
-LOGGER.info('Monkey patched '
-            'plone.formwidget.namedfile.converter.NamedDataConverter.toFieldValue')
+LOGGER.info(
+    'Monkey patched '
+    'plone.formwidget.namedfile.converter.NamedDataConverter.toFieldValue')
 
 
 # --------
