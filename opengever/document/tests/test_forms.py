@@ -31,7 +31,7 @@ class TestDocumentIntegration(FunctionalTestCase):
         browser.login().open(self.document, view='edit')
 
         self.assertEqual(
-            u'document1.doc \u2014 1 KB',
+            u'document1.doc \u2014 0 KB',
             browser.css('.named-file-widget.namedblobfile-field').first.text)
 
         # edit should not be posssible
