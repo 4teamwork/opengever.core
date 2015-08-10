@@ -5,6 +5,10 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Fix ftw.mail.inbound.createMailInContainer monkey patch so it
+  sets message.contentType to unicode, not str (see ftw.mail#33).
+  [lgraf]
+
 - Reintroduce a monkey patch for NamedDataConverter.toFieldValue after
   pinning down plone.formwidget.namedfile back to 1.0.7. The patch ensures
   hat mime-types sent by the browser are ignored.
