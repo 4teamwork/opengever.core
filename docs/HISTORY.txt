@@ -5,6 +5,10 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Monkey patch NamedDataConverter.toFieldValue to make sure that mime-types
+  sent by the browser are ignored.
+  [deiferni]
+
 - Improve notification center's error_handling.
   Catch exception during dispatching a notification separately.
   [phgross]
