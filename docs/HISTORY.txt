@@ -5,6 +5,9 @@ Changelog
 4.5.1 (unreleased)
 ------------------
 
+- Use an admin-unit's public url to generate urls to resolve notifications.
+  [deiferni]
+
 - Reintroduce a monkey patch for NamedDataConverter.toFieldValue after
   pinning down plone.formwidget.namedfile back to 1.0.7. The patch ensures
   hat mime-types sent by the browser are ignored.
