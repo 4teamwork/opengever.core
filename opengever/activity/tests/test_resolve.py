@@ -16,7 +16,7 @@ class TestResolveNotificationView(FunctionalTestCase):
         notification = create(Builder('notification').id('123'))
         url = resolve_notification_url(notification)
         self.assertEquals(
-            'http://nohost/plone/@@resolve_notification?notification_id=123',
+            'http://example.com/@@resolve_notification?notification_id=123',
             url)
 
     @browsing

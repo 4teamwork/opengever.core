@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Use an admin-unit's public url to generate urls to resolve notifications.
+  [deiferni]
+
 - Fix ftw.mail.inbound.createMailInContainer monkey patch so it
   sets message.contentType to unicode, not str (see ftw.mail#33).
   [lgraf]

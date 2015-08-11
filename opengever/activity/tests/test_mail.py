@@ -76,6 +76,6 @@ class TestEmailNotification(FunctionalTestCase):
         mail = email.message_from_string(Mailing(self.portal).pop())
         html_part = mail.get_payload()[0].as_string()
 
-        link = '<a href=3D"http://nohost/plone/@@resolve_notification?notification_id=\n=3D1">Test Task</a>'
+        link = '<a href=3D"http://example.com/@@resolve_notification?notification_id=3D=\n1">Test Task</a>'
 
         self.assertIn(link, html_part)
