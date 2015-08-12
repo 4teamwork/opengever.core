@@ -9,6 +9,7 @@ from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models import UNIT_ID_LENGTH
 from opengever.ogds.models import USER_ID_LENGTH
+from opengever.ogds.models.types import UnicodeCoercingText
 from plone import api
 from sqlalchemy import Boolean
 from sqlalchemy import Column
@@ -17,7 +18,6 @@ from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
-from sqlalchemy import Text
 from sqlalchemy import UniqueConstraint
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import backref
@@ -62,7 +62,7 @@ class Task(Base):
     oguid = composite(Oguid, admin_unit_id, int_id)
 
     title = Column(String(MAX_TITLE_LENGTH))
-    text = Column(Text())
+    text = Column(UnicodeCoercingText())
     breadcrumb_title = Column(String(MAX_BREADCRUMB_LENGTH))
     physical_path = Column(String(256))
     review_state = Column(String(WORKFLOW_STATE_LENGTH))

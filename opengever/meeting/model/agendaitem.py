@@ -1,11 +1,11 @@
 from opengever.base.model import Base
 from opengever.base.model import create_session
+from opengever.ogds.models.types import UnicodeCoercingText
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
-from sqlalchemy import Text
 from sqlalchemy.orm import backref
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
@@ -23,7 +23,7 @@ class AgendaItem(Base):
     proposal = relationship("Proposal", uselist=False,
                             backref=backref('agenda_item', uselist=False))
 
-    title = Column(Text)
+    title = Column(UnicodeCoercingText)
     number = Column('item_number', String(16))
     is_paragraph = Column(Boolean, nullable=False, default=False)
     sort_order = Column(Integer, nullable=False, default=0)
@@ -31,8 +31,8 @@ class AgendaItem(Base):
     meeting_id = Column(Integer, ForeignKey('meetings.id'), nullable=False)
     meeting = relationship("Meeting")
 
-    discussion = Column(Text)
-    decision = Column(Text)
+    discussion = Column(UnicodeCoercingText)
+    decision = Column(UnicodeCoercingText)
 
     def update(self, request):
         """Update with changed data."""

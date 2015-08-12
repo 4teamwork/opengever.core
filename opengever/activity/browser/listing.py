@@ -16,7 +16,7 @@ from zope.interface import Interface
 
 def resolve_notification_link(item, value):
     return u'<a href="{}">{}</a>'.format(
-        resolve_notification_url(item),
+        resolve_notification_url(item).decode('ascii'),
         item.activity.title)
 
 

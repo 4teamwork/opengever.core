@@ -11,12 +11,12 @@ from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models import UNIT_ID_LENGTH
+from opengever.ogds.models.types import UnicodeCoercingText
 from plone import api
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
-from sqlalchemy import Text
 from sqlalchemy import UniqueConstraint
 from sqlalchemy.orm import backref
 from sqlalchemy.orm import composite
@@ -76,14 +76,14 @@ class Proposal(Base):
 
     title = Column(String(256), nullable=False)
     workflow_state = Column(String(WORKFLOW_STATE_LENGTH), nullable=False)
-    legal_basis = Column(Text)
-    initial_position = Column(Text)
-    proposed_action = Column(Text)
+    legal_basis = Column(UnicodeCoercingText)
+    initial_position = Column(UnicodeCoercingText)
+    proposed_action = Column(UnicodeCoercingText)
 
-    considerations = Column(Text)
-    publish_in = Column(Text)
-    disclose_to = Column(Text)
-    copy_for_attention = Column(Text)
+    considerations = Column(UnicodeCoercingText)
+    publish_in = Column(UnicodeCoercingText)
+    disclose_to = Column(UnicodeCoercingText)
+    copy_for_attention = Column(UnicodeCoercingText)
 
     committee_id = Column(Integer, ForeignKey('committees.id'))
     committee = relationship('Committee', backref='proposals')
