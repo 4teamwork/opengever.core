@@ -5,6 +5,16 @@ Changelog
 4.5.1 (unreleased)
 ------------------
 
+- MyNotifications: Make `resolve_notification_link` not mix unicode and str
+  in string formatting by explicitly decoding the URL from ascii.
+  [lgraf]
+
+- Use `UnicodeCoercingText` type for all previous `Text` columns.
+  This makes sure we always get `unicode` back from Text columns,
+  whether the backend is Oracle, PostgreSQL or MySQL.
+  Depends on opengever.ogds.models >= 2.3.1.
+  [lgraf]
+
 - Use an admin-unit's public url to generate urls to resolve notifications.
   [deiferni]
 
