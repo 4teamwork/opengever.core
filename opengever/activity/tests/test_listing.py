@@ -13,12 +13,12 @@ class TestMyNotifications(FunctionalTestCase):
     def setUp(self):
         super(TestMyNotifications, self).setUp()
 
-        create(Builder('ogds_user').having(userid='peter.mueller',
-                                           firstname='Peter',
-                                           lastname='Mueller'))
-        create(Builder('ogds_user').having(userid='hugo.boss',
-                                           firstname='Hugo',
-                                           lastname='Boss'))
+        create(Builder('ogds_user').having(userid=u'peter.mueller',
+                                           firstname=u'Peter',
+                                           lastname=u'M\xfcller'))
+        create(Builder('ogds_user').having(userid=u'hugo.boss',
+                                           firstname=u'Hugo',
+                                           lastname=u'B\xf6ss'))
 
         self.center = NotificationCenter()
         self.test_user = create(Builder('watcher')
@@ -33,28 +33,28 @@ class TestMyNotifications(FunctionalTestCase):
 
         self.activity_1 = self.center.add_activity(
             Oguid('fd', '123'),
-            'task-added',
-            {'en': 'Kennzahlen 2014 erfassen'},
-            {'en': 'Task added'},
-            {'en': 'Task bla added by Hugo'},
+            u'task-added',
+            {'de': u'Kennzahlen 2014 \xfcbertragen'},
+            {'de': u'Aufgabe hinzugef\xfcgt'},
+            {'de': u'Neue Aufgabe hinzugef\xfcgt durch Hugo B\xf6ss'},
             'hugo.boss',
-            {'en': None}).get('activity')
+            {'de': None}).get('activity')
         self.activity_2 = self.center.add_activity(
             Oguid('fd', '123'),
-            'task-transition-open-in-progress',
-            {'en': 'Kennzahlen 2014 erfassen'},
-            {'en': 'Task accepted'},
-            {'en': 'Task bla accepted by Peter'},
+            u'task-transition-open-in-progress',
+            {'de': u'Kennzahlen 2014 \xfcbertragen'},
+            {'de': u'Aufgabe akzeptiert'},
+            {'de': u'Aufgabe akzeptiert durch Hugo B\xf6ss'},
             'peter.mueller',
-            {'en': None}).get('activity')
+            {'de': None}).get('activity')
         self.activity_3 = self.center.add_activity(
             Oguid('fd', '456'),
-            'task-added',
-            {'en': 'Kennzahlen 2014 erfassen'},
-            {'en': 'Task added'},
-            {'en': 'Task foo added by peter'},
+            u'task-added',
+            {'de': u'Kennzahlen 2014 \xfcbertragen'},
+            {'de': u'Aufgabe hinzugef\xfcgt'},
+            {'de': u'Neue Aufgabe hinzugef\xfcgt durch Peter M\xfcller'},
             'peter.mueller',
-            {'en': None}).get('activity')
+            {'de': None}).get('activity')
 
     @browsing
     def test_lists_only_notifications_of_current_user(self, browser):
@@ -73,16 +73,16 @@ class TestMyNotifications(FunctionalTestCase):
                              view='tabbedview_view-mynotifications')
 
         self.assertEquals(
-            [{'Actor': 'Boss Hugo (hugo.boss)',
+            [{'Actor': u'B\xf6ss Hugo (hugo.boss)',
               'Created': api.portal.get_localized_time(
                   self.activity_1.created, long_format=True),
-              'Kind': 'task-added',
-              'Title': 'Kennzahlen 2014 erfassen'},
-             {'Actor': 'Mueller Peter (peter.mueller)',
+              'Kind': u'task-added',
+              'Title': u'Kennzahlen 2014 \xfcbertragen'},
+             {'Actor': u'M\xfcller Peter (peter.mueller)',
               'Created': api.portal.get_localized_time(
                   self.activity_2.created, long_format=True),
-              'Kind': 'task-transition-open-in-progress',
-              'Title': 'Kennzahlen 2014 erfassen'}],
+              'Kind': u'task-transition-open-in-progress',
+              'Title': u'Kennzahlen 2014 \xfcbertragen'}],
             browser.css('.listing').first.dicts())
 
     @browsing
@@ -93,7 +93,7 @@ class TestMyNotifications(FunctionalTestCase):
         row = browser.css('.listing tr')[1]
         link = row.css('a').first
 
-        self.assertEquals('Kennzahlen 2014 erfassen', link.text)
+        self.assertEquals(u'Kennzahlen 2014 \xfcbertragen', link.text)
         self.assertEquals(
             'http://example.com/@@resolve_notification?notification_id=1',
             link.get('href'))
