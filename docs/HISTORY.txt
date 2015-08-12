@@ -5,6 +5,9 @@ Changelog
 4.5.1 (unreleased)
 ------------------
 
+- Don't show paste action for closed dossiers.
+  [deiferni]
+
 - MyNotifications: Make `resolve_notification_link` not mix unicode and str
   in string formatting by explicitly decoding the URL from ascii.
   [lgraf]

@@ -1,5 +1,6 @@
 from five import grok
 from opengever.base.clipboard import Clipboard
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from ZODB.POSException import ConflictError
 from zope.interface import Interface
 
@@ -38,6 +39,12 @@ class IsPastingAllowedView(grok.View):
         # Check whether pasting is allowed at all for the container type
         if self.context.portal_type in self.disabled_types:
             return False
+
+        # XXX implement me in a more object oriented manner, i.e. by
+        # implementing `is_pasting_allowed` for all our content types.
+        if IDossierMarker.providedBy(self.context):
+            if not self.context.is_open():
+                return False
 
         objs = Clipboard(self.request).get_objs()
         if not objs:
