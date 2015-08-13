@@ -2,6 +2,7 @@ from five import grok
 from ftw.mail.mail import IMail
 from ftw.table.interfaces import ITableGenerator
 from opengever.base.utils import disable_edit_bar
+from opengever.base.utils import escape_html
 from opengever.mail import _
 from plone import api
 from plone.i18n.normalizer.interfaces import IIDNormalizer
@@ -51,10 +52,7 @@ def downloadable_filename_helper(context):
         link = '<a href="%s/get_attachment?position=%s">%s</a>' % (
             context.absolute_url(),
             item.get('position'),
-            filename)
-
-        transformer = api.portal.get_tool('portal_transforms')
-        link = transformer.convertTo('text/x-html-safe', link).getData()
+            escape_html(filename))
         return link
 
     return _helper

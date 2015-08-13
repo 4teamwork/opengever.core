@@ -3,6 +3,7 @@ from DateTime import DateTime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from lxml.etree import tostring
 from opengever.testing import FunctionalTestCase
 
 
@@ -112,9 +113,10 @@ class TestOverview(FunctionalTestCase):
             [],
             browser.css('span.contenttype-opengever-task-task script'))
 
+        node = browser.css('span.contenttype-opengever-task-task').first
         self.assertEquals(
-            ['Foo'],
-            browser.css('span.contenttype-opengever-task-task').text)
+            '<span class="contenttype-opengever-task-task">Foo &lt;script&gt;alert(\'foo\')&lt;/script&gt;</span>',
+            tostring(node.node))
 
     @browsing
     def test_references_box_lists_regular_references(self, browser):

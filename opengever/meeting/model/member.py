@@ -1,8 +1,8 @@
 from opengever.base.model import Base
+from opengever.base.utils import escape_html
 from opengever.ogds.models import EMAIL_LENGTH
 from opengever.ogds.models import FIRSTNAME_LENGTH
 from opengever.ogds.models import LASTNAME_LENGTH
-from plone import api
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import String
@@ -35,10 +35,8 @@ class Member(Base):
         title = title or self.fullname
         url = self.get_url(context)
         link = u'<a href="{0}" title="{1}" class="{2}">{1}</a>'.format(
-            url, title, self.css_class)
-
-        transformer = api.portal.get_tool('portal_transforms')
-        return transformer.convertTo('text/x-html-safe', link).getData()
+            url, escape_html(title), self.css_class)
+        return link
 
     def get_firstname_link(self, context):
         return self.get_link(context, title=self.firstname)
