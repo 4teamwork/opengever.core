@@ -8,7 +8,6 @@ from opengever.mail.mail import OGMail
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import ogds_service
 from opengever.tabbedview import _
-from plone import api
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize import ram
 from plone.protect.utils import addTokenToUrl
@@ -141,9 +140,7 @@ def linked_document_subdossier(item, value):
 
     link = '<a href="{}" title="{}" class="subdossierLink">{}</a>'.format(
         url, title, title)
-
-    transforms = api.portal.get_tool('portal_transforms')
-    return transforms.convertTo('text/x-html-safe', link).getData()
+    return link
 
 
 def linked(item, value):
@@ -180,11 +177,10 @@ def linked(item, value):
 
 
 def document_with_icon(item, value):
+    value = escape_html(value)
     icon = '<span class="{}"></span><span>{}</span>'.format(
         get_css_class(item), value)
-
-    transforms = api.portal.get_tool('portal_transforms')
-    return transforms.convertTo('text/x-html-safe', icon).getData()
+    return icon
 
 
 def linked_document_with_tooltip(item, value):

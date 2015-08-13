@@ -3,6 +3,7 @@ from DateTime import DateTime as ZopeDateTime
 from opengever.base.model import Base
 from opengever.base.model import Session
 from opengever.base.oguid import Oguid
+from opengever.base.utils import escape_html
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -274,10 +275,12 @@ class Task(Base):
         return len(principals & allowed_principals) > 0
 
     def get_link(self, with_state_icon=True, with_responsible_info=True):
+        title = escape_html(self.title)
         admin_unit = self.get_admin_unit()
+
         if not admin_unit:
             return u'<span class="{}">{}</span>'.format(
-                self.get_css_class(), self.title)
+                self.get_css_class(), title)
 
         url = '/'.join((admin_unit.public_url, self.physical_path))
         breadcrumb_titles = u"[{}] > {}".format(
@@ -285,7 +288,7 @@ class Task(Base):
         responsible_info = u' <span class="discreet">({})</span>'.format(
             self.get_responsible_label(linked=False))
         link_content = u'<span class="{}">{}</span>'.format(
-            self.get_css_class(), self.title)
+            self.get_css_class(), title)
 
         # If the target is on a different client we need to make a popup
         if self.admin_unit_id != get_current_admin_unit().id():
@@ -308,9 +311,6 @@ class Task(Base):
             link = self._task_state_wrapper(link)
         else:
             link = u'<span>%s</span>' % (link)
-
-        transformer = api.portal.get_tool('portal_transforms')
-        link = transformer.convertTo('text/x-html-safe', link).getData()
 
         return link
 

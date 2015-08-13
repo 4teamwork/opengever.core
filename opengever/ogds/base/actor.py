@@ -21,6 +21,7 @@ For known actor types use:
 
 """
 
+from opengever.base.utils import escape_html
 from opengever.ogds.base import _
 from opengever.ogds.base.browser.userdetails import UserDetails
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -76,7 +77,7 @@ class Actor(object):
 
     def get_link(self, with_icon=False):
         url = self.get_profile_url()
-        label = self.get_label()
+        label = escape_html(self.get_label())
 
         if not url:
             return label
@@ -86,8 +87,6 @@ class Actor(object):
         else:
             link = u'<a href="{}">{}</a>'.format(url, label)
 
-        transformer = api.portal.get_tool('portal_transforms')
-        link = transformer.convertTo('text/x-html-safe', link).getData()
         return link
 
     def corresponds_to(self, user):
