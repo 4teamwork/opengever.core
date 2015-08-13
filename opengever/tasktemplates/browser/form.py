@@ -153,7 +153,7 @@ class AddForm(BrowserView):
     def has_active_tasktemplatefolders(self):
         catalog = api.portal.get_tool('portal_catalog')
         brains = catalog(
-            review_state=('tasktemplatefolder-state-active'),
+            review_state=('tasktemplatefolder-state-activ'),
             portal_type='opengever.tasktemplates.tasktemplatefolder')
 
         return bool(brains)

@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Fixed lookup for active TaskTemplateFolders.
+  [phgross]
+
 - Display my notification tab also for regular users.
   [phgross]
 
