@@ -110,12 +110,9 @@ class PersonalOverview(TabbedView):
         return tabs
 
     def get_tabs(self):
-        tabs = []
-
+        tabs = self.default_tabs + self.notification_tabs
         if self.is_user_allowed_to_view_additional_tabs():
-            tabs = self.default_tabs + self.notification_tabs + self.admin_tabs
-        else:
-            tabs = self.default_tabs
+            tabs += self.admin_tabs
 
         return tabs
 
