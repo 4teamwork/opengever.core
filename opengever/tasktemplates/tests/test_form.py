@@ -25,7 +25,7 @@ class TestAddTaskTemplateForm(FunctionalTestCase):
     @browsing
     def test_stay_on_view_if_active_tasktemplatefolders_exists(self, browser):
         tasktemplatefolder = create(Builder('tasktemplatefolder')
-                                    .in_state('tasktemplatefolder-state-active'))
+                                    .in_state('tasktemplatefolder-state-activ'))
 
         browser.login().open(self.dossier, view='add-tasktemplate')
         self.assertEquals(
