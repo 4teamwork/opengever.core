@@ -5,6 +5,11 @@ Changelog
 4.5.1 (unreleased)
 ------------------
 
+- No longer use plone's text/x-html-safe for simple markup fragments, use
+  escape_html instead.
+  No longer inherit from DisplayForm in task-overview, use grok.View instead.
+  [deiferni]
+
 - Fixed lookup for active TaskTemplateFolders.
   [phgross]
 

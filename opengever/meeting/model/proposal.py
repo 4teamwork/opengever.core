@@ -1,6 +1,7 @@
 from opengever.base.model import Base
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
+from opengever.base.utils import escape_html
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
 from opengever.meeting.model import AgendaItem
@@ -165,14 +166,13 @@ class Proposal(Base):
                               include_icon=include_icon)
 
     def _get_link(self, url, include_icon=True):
+        title = escape_html(self.title)
         if include_icon:
             link = u'<a href="{0}" title="{1}" class="{2}">{1}</a>'.format(
-                url, self.title, self.css_class)
+                url, title, self.css_class)
         else:
-            link = u'<a href="{0}" title="{1}">{1}</a>'.format(url, self.title)
-
-        transformer = api.portal.get_tool('portal_transforms')
-        return transformer.convertTo('text/x-html-safe', link).getData()
+            link = u'<a href="{0}" title="{1}">{1}</a>'.format(url, title)
+        return link
 
     def getPath(self):
         """This method is required by a tabbedview."""

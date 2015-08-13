@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from lxml.cssselect import css_to_xpath
 from lxml.etree import fromstring
+from lxml.etree import tostring
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 
@@ -122,7 +123,9 @@ class TestTaskLinkGeneration(FunctionalTestCase):
             title="Foo <b onmouseover=alert('Wufff!')>click me!</b>")
 
         link_tag = link.xpath(css_to_xpath('a span'))[0]
-        self.assertEquals('Foo ', link_tag.text)
+        self.assertEquals(
+            '<span class="contenttype-opengever-task-task">Foo &lt;b onmouseover=alert(\'Wufff!\')&gt;click me!&lt;/b&gt;</span>',
+            tostring(link_tag))
 
     def test_handles_non_ascii_characters_correctly(self):
         link = self.add_task_and_get_link(title=u'D\xfc it')

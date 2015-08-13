@@ -1,5 +1,6 @@
 from collections import OrderedDict
 from opengever.base.model import Base
+from opengever.base.utils import escape_html
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
 from opengever.meeting.model import AgendaItem
@@ -284,10 +285,8 @@ class Meeting(Base):
     def get_link(self):
         url = self.get_url()
         link = u'<a href="{0}" title="{1}" class="{2}">{1}</a>'.format(
-            url, self.get_title(), self.css_class)
-
-        transformer = api.portal.get_tool('portal_transforms')
-        return transformer.convertTo('text/x-html-safe', link).getData()
+            url, escape_html(self.get_title()), self.css_class)
+        return link
 
     def get_url(self):
         admin_unit = self.committee.get_admin_unit()

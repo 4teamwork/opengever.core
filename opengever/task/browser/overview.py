@@ -6,11 +6,10 @@ from opengever.tabbedview.browser.base import OpengeverTab
 from opengever.task import _
 from opengever.task.task import ITask
 from plone import api
-from plone.directives.dexterity import DisplayForm
 from Products.CMFCore.utils import getToolByName
 
 
-class Overview(DisplayForm, OpengeverTab):
+class Overview(grok.View, OpengeverTab):
     grok.context(ITask)
     grok.name('tabbedview_view-overview')
     grok.template('overview')

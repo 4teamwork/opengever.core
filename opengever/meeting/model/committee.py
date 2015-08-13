@@ -1,9 +1,9 @@
 from opengever.base.model import Base
 from opengever.base.oguid import Oguid
+from opengever.base.utils import escape_html
 from opengever.meeting.model.query import CommitteeQuery
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models import UNIT_ID_LENGTH
-from plone import api
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import String
@@ -39,9 +39,9 @@ class Committee(Base):
         if not url:
             return ''
 
-        link = u'<a href="{0}" title="{1}">{1}</a>'.format(url, self.title)
-        transformer = api.portal.get_tool('portal_transforms')
-        return transformer.convertTo('text/x-html-safe', link).getData()
+        link = u'<a href="{0}" title="{1}">{1}</a>'.format(
+            url, escape_html(self.title))
+        return link
 
     def get_url(self, admin_unit=None):
         admin_unit = admin_unit or self.get_admin_unit()
