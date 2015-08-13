@@ -92,6 +92,18 @@ class TestPersonalOverviewActivitySupport(FunctionalTestCase):
 
     layer = OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 
+
+    def setUp(self):
+        super(TestPersonalOverviewActivitySupport, self).setUp()
+
+        create_plone_user(self.portal, 'hugo.boss')
+        self.hugo = create(Builder('ogds_user')
+                           .having(userid='hugo.boss',
+                                   firstname='Hugo',
+                                   lastname='Boss')
+                           .assign_to_org_units([self.org_unit]))
+        transaction.commit()
+
     @browsing
     def test_notification_tab_is_displayed_when_activity_feature_is_enabled(self, browser):
         browser.login().open(view='personal_overview')
@@ -102,6 +114,13 @@ class TestPersonalOverviewActivitySupport(FunctionalTestCase):
              'My notifications',
              'alltasks',
              'allissuedtasks'],
+            browser.css('li.formTab a').text)
+
+        browser.login(username='hugo.boss', password='demo09').open(
+            view='personal_overview')
+        self.assertEqual(
+            ['mydossiers', 'mydocuments', 'mytasks',
+             'myissuedtasks', 'My notifications'],
             browser.css('li.formTab a').text)
 
 
