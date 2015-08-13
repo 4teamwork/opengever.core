@@ -151,3 +151,26 @@ class TestSQLLockable(FunctionalTestCase):
         # invalid
         lock1.time = utcnow_tz_aware() - timedelta(seconds=800)
         self.assertEquals([], ILockable(self.wrapper).lock_info())
+
+    def test_during_lock_creation_the_expired_locks_gets_cleared(self):
+        lock_1 = Lock(object_type='Meeting',
+                      object_id=12345,
+                      creator=TEST_USER_ID,
+                      lock_type=u'plone.locking.stealable',
+                      time=utcnow_tz_aware() - timedelta(seconds=1000))
+        self.session.add(lock_1)
+
+        lock_2 = Lock(object_type='Meeting',
+                      object_id=56789,
+                      creator=TEST_USER_ID,
+                      lock_type=u'plone.locking.stealable',
+                      time=utcnow_tz_aware() - timedelta(seconds=800))
+        self.session.add(lock_2)
+
+        ILockable(self.wrapper).lock()
+
+        locks = Lock.query.all()
+
+        self.assertEquals(1, len(locks))
+        self.assertNotIn(lock_1, locks)
+        self.assertNotIn(lock_2, locks)

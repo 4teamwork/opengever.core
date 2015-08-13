@@ -51,6 +51,8 @@ class SQLLockable(object):
 
         self.session.add(lock)
 
+        self.clear_expired_locks()
+
     def refresh_lock(self, lock_type=STEALABLE_LOCK):
         if not self.locked():
             return
@@ -73,6 +75,10 @@ class SQLLockable(object):
                 object_type=self.object_type,
                 object_id=self.object_id,
                 lock_type=self.searialize_lock_type(lock_type)).delete()
+
+    def clear_expired_locks(self):
+        locks = Lock.query.invalid_locks()
+        locks.delete()
 
     def clear_locks(self):
         """Clear all locks on the object

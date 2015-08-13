@@ -30,6 +30,9 @@ class LockQuery(BaseQuery):
                                      object_id=object_id)
         return query.filter(Lock.time >= lowest_valid())
 
+    def invalid_locks(self):
+        return Lock.query.filter(Lock.time < lowest_valid())
+
 
 class Lock(Base):
 
