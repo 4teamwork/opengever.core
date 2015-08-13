@@ -5,6 +5,9 @@ Changelog
 4.5.1 (unreleased)
 ------------------
 
+- Display my notification tab also for regular users.
+  [phgross]
+
 - Don't show paste action for closed dossiers.
   [deiferni]
 
