@@ -83,6 +83,19 @@ class TestDossier(FunctionalTestCase):
         self.assertNotIn('ftw.mail.mail',
                          [item.get('id') for item in menu_items])
 
+    def test_factory_menu_sorting(self):
+        menu = FactoriesMenu(self.dossier)
+        menu_items = menu.getMenuItems(self.dossier, self.dossier.REQUEST)
+
+        self.assertEquals(
+            [u'Document',
+             'document_with_template',
+             u'Task',
+             'Add task from template',
+             u'Subdossier',
+             u'Add Participant'],
+            [item.get('title') for item in menu_items])
+
     def test_subdossier_add_form_is_called_add_subdossier(self):
         add_form = self.dossier.unrestrictedTraverse(
             '++add++{}'.format(self.portal_type))
