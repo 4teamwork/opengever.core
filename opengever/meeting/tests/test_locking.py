@@ -67,6 +67,11 @@ class TestMeetingLocking(FunctionalTestCase):
         self.assertEquals(TEST_USER_ID, lock.get('creator'))
 
     @browsing
+    def test_lock_refreshing_is_enabled(self, browser):
+        browser.login().open(self.meeting.get_url('protocol'))
+        self.assertIn('enableUnlockProtection', browser.css('#form').first.get('class'))
+
+    @browsing
     def test_saving_protocol_unlock_meeting(self, browser):
         browser.login().open(self.meeting.get_url('protocol'))
         lock_infos = ILockable(MeetingWrapper(self.meeting)).lock_info()

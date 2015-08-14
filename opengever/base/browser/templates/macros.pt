@@ -49,7 +49,7 @@
                   </p>
                 </metal:description-slot>
 
-                <form class="rowlike enableUnloadProtection" action="." method="post"
+                <form class="hans" action="." method="post"
                       tal:define="groups view/groups | nothing;
                                   form_name view/form_name | nothing;
                                   default_fieldset_label view/default_fieldset_label | form_name;
@@ -57,13 +57,16 @@
                                   has_groups python:bool(groups);
                                   form_tabbing python:(has_groups and enable_form_tabbing) and 'enableFormTabbing' or '';
                                   show_default_label python:has_groups and default_fieldset_label and len(view.widgets);
+                                  enable_refreshable_locks context/@@ploneform-macros/enable_refreshable_locks;
+                                  lock_class python: enable_refreshable_locks and 'enableUnlockProtection' or '';
+                                  kss_class python: 'kssattr-formname-{}'.format(request.getURL().split('/')[-1])
                                   "
-                      tal:attributes="action view/action|request/getURL; 
+                      tal:attributes="action view/action|request/getURL;
                                       enctype view/enctype;
-                                      class python:'rowlike enableUnloadProtection %s kssattr-formname-%s' % (form_tabbing, request.getURL().split('/')[-1]);
                                       id view/id;
-                                      method view/method|string:'post'
-                                      ">
+                                      method view/method|string:'post';
+                                      class python:' '.join(['rowlike', 'enableUnloadProtection', kss_class, form_tabbing, lock_class])"
+                      >
 
                     <metal:block define-slot="formtop" />
 
