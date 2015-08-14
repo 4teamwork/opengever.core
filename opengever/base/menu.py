@@ -38,9 +38,10 @@ def order_factories(context, factories):
 
 
 class FilteredPostFactoryMenu(grok.MultiAdapter):
-    """Build a filtered factory menu.
+    """Build a customized factory menu by allowing factories to be filtered and
+    renamed.
 
-    Concrete filtering can be implemented by subclasses.
+    Concrete filtering / renaming can be implemented by subclasses.
     """
 
     grok.adapts(Interface, Interface)
@@ -51,11 +52,22 @@ class FilteredPostFactoryMenu(grok.MultiAdapter):
         self.request = request
 
     def is_filtered(self, factory):
+        """Allows a subclass to determine whether a factory should be filtered
+        (omitted) or not.
+        """
         return False
+
+    def rename(self, factory):
+        """Lets a subclass rename a factory entry if necessary, and return the
+        modified factory.
+        """
+        return factory
 
     def __call__(self, factories):
         filtered_factories = []
         for factory in factories:
+            factory = self.rename(factory)
+
             if not self.is_filtered(factory):
                 filtered_factories.append(factory)
 
