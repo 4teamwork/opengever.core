@@ -8,17 +8,16 @@ from zope.interface import Interface
 class DossierPostFactoryMenu(FilteredPostFactoryMenu):
     grok.adapts(IDossierMarker, Interface)
 
+    def __init__(self, context, request):
+        super(DossierPostFactoryMenu, self).__init__(context, request)
+
+    def rename(self, factory):
+        if factory.get('id') == u'opengever.dossier.businesscasedossier':
+            factory['title'] = _(u'Subdossier')
+
+        return factory
+
     def is_filtered(self, factory):
         factory_id = factory.get('id')
         if factory_id == u'ftw.mail.mail':
             return True
-
-        return False
-
-    def __call__(self, factories):
-        factories = super(DossierPostFactoryMenu, self).__call__(factories)
-        for factory in factories:
-            if factory.get('id') == u'opengever.dossier.businesscasedossier':
-                factory['title'] = _(u'Subdossier')
-
-        return factories
