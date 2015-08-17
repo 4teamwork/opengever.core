@@ -6,7 +6,6 @@ from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import proposalhistory
-from opengever.meeting.model.query import ProposalQuery
 from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
@@ -40,8 +39,6 @@ class Submit(Transition):
 
 class Proposal(Base):
     """Sql representation of a proposal."""
-
-    query_cls = ProposalQuery
 
     __tablename__ = 'proposals'
     __table_args__ = (

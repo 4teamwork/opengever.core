@@ -1,6 +1,5 @@
 from opengever.base.model import Base
 from opengever.base.oguid import Oguid
-from opengever.meeting.model.query import GeneratedDocumentQuery
 from opengever.ogds.models import UNIT_ID_LENGTH
 from sqlalchemy import Column
 from sqlalchemy import Integer
@@ -16,8 +15,6 @@ class GeneratedDocument(Base):
     Keeps a reference to the created document by storing it's oguid.
 
     """
-    query_cls = GeneratedDocumentQuery
-
     __tablename__ = 'generateddocuments'
     __table_args__ = (
         UniqueConstraint('admin_unit_id', 'int_id',

@@ -1,7 +1,6 @@
 from datetime import datetime
 from datetime import time
 from opengever.base.model import Base
-from opengever.meeting.model.query import MembershipQuery
 from plone import api
 from sqlalchemy import Column
 from sqlalchemy import Date
@@ -17,8 +16,6 @@ class Membership(Base):
     """Associate members with their commmission for a certain timespan.
 
     """
-    query_cls = MembershipQuery
-
     __tablename__ = 'memberships'
     __mapper_args__= {'order_by': 'date_from'}
     __table_args__ = (UniqueConstraint('committee_id',
