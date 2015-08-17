@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Notification viewlet: sort notification chronologic, newest at the top.
+  [phgross]
+
 - My Notification: disable sorting for type, title and actor column.
   [phgross]
 

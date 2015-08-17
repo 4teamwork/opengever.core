@@ -121,6 +121,8 @@ class NotificationCenter(object):
         if only_unread:
             query = query.filter(Notification.is_read == False)
 
+        query = query.join(
+            Notification.activity).order_by(desc(Activity.created))
         return query.limit(limit).all()
 
     def mark_notification_as_read(self, notification_id):

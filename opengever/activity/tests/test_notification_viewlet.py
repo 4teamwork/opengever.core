@@ -1,9 +1,11 @@
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
+import pytz
 
 
 class TestViewletAvailability(FunctionalTestCase):
@@ -32,13 +34,16 @@ class TestNotificationViewlet(FunctionalTestCase):
 
         self.activity_a = create(Builder('activity')
                                  .having(resource=self.resource_a,
-                                         summary='Task added'))
+                                         summary='Task accepted',
+                                         created=datetime(2015, 8, 17, 9, 0, tzinfo=pytz.UTC)))
         self.activity_b = create(Builder('activity')
                                  .having(resource=self.resource_a,
-                                         summary='Task accepted'))
+                                         summary='Task added',
+                                         created=datetime(2015, 8, 17, 7, 0, tzinfo=pytz.UTC)))
         self.activity_c = create(Builder('activity')
                                  .having(resource=self.resource_a,
-                                         summary='Task resolved'))
+                                         summary='Task resolved',
+                                         created=datetime(2015, 8, 17, 12, 0, tzinfo=pytz.UTC)))
 
     @browsing
     def test_header_contains_number_of_unread_messages(self, browser):
@@ -79,7 +84,22 @@ class TestNotificationViewlet(FunctionalTestCase):
         browser.login().open()
 
         self.assertEquals(
-            ['Task added', 'Task resolved'],
+            ['Task resolved', 'Task accepted'],
+            browser.css('.item-content .item-summary').text)
+
+    @browsing
+    def test_lists_notification_chronologic_newest_at_the_top(self, browser):
+        create(Builder('notification')
+               .having(activity=self.activity_a, watcher=self.test_watcher))
+        create(Builder('notification')
+               .having(activity=self.activity_b, watcher=self.test_watcher))
+        create(Builder('notification')
+               .having(activity=self.activity_c, watcher=self.test_watcher))
+
+        browser.login().open()
+
+        self.assertEquals(
+            ['Task resolved', 'Task accepted', 'Task added'],
             browser.css('.item-content .item-summary').text)
 
     @browsing
