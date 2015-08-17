@@ -35,12 +35,12 @@
           <div class="item-content">
             <div>
               <div class="item-header">
+                <span class="item-type" tal:content="notification/label" />
                 <span class="item-creation">
                   <span class="timeago relativetime"
                         tal:attributes="title notification/created"
                         tal:content="notification/created" />
                 </span>
-                <span class="item-type" tal:content="notification/label" />
               </div>
               <a class="item-location" href="#"
                  tal:attributes="href notification/link"
@@ -50,7 +50,7 @@
           </div>
         </li>
 
-        <li class="notification-item">
+        <li class="notification-item show_all">
           <a href="#" class="all_link" tal:attributes="href view/overview_url"
              i18n:translate="label_notifications_overview">
             All Notifications
