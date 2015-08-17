@@ -29,7 +29,8 @@
             tal:attributes="data-notification-id notification/id">
 
           <div class="buttons">
-            <a href="#" class="mark_as_read" tal:condition="not: notification/read"></a>
+            <a href="#" class="mark_as_read" title="Mark as read"
+               tal:condition="not: notification/read" i18n:attributes="title label_mark_as_read"></a>
           </div>
 
           <div class="item-content">
