@@ -1,3 +1,4 @@
+from datetime import date
 from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
@@ -19,9 +20,18 @@ class TestProtocolJsonData(FunctionalTestCase):
                     proposed_action=u'Yep',
                     considerations=u'We should think about it'))
         self.committee = create(Builder('committee_model'))
+        self.member = create(Builder('member'))
+        self.membership = create(Builder('membership').having(
+            member=self.member,
+            committee=self.committee,
+            date_from=date(2009, 1, 1),
+            date_to=date(2011, 1, 1),
+            role=u'F\xfcrst'))
         self.meeting = create(Builder('meeting').having(
             committee=self.committee,
-            start=datetime(2010, 1, 1)))
+            start=datetime(2010, 1, 1),
+            participants=[self.member],
+            other_participants=u'Hans M\xfcller\nHeidi Muster'))
 
         self.agenda_item_proposal = create(
             Builder('agenda_item').having(
@@ -70,7 +80,9 @@ class TestProtocolJsonData(FunctionalTestCase):
              'meeting': {'date': u'Jan 01, 2010',
                          'end_time': '',
                          'start_time': u'12:00 AM'},
-             'participants': {'members': [], 'other': []},
+             'participants': {
+                'members': [u'Peter Meier, F\xfcrst'],
+                'other': [u'Hans M\xfcller', 'Heidi Muster']},
              'protocol': {'type': u'Protocol'}},
             data
         )
