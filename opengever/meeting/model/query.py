@@ -80,6 +80,11 @@ class MembershipQuery(BaseQuery):
 
         return query.first()
 
+    def fetch_for_meeting(self, meeting, member):
+        end = meeting.end if meeting.end else meeting.start
+        return self.fetch_overlapping(
+            meeting.start, end, member, meeting.committee)
+
 
 Membership.query_cls = MembershipQuery
 

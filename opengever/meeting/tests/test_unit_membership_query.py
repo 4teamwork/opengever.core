@@ -24,6 +24,29 @@ class TestUnitMembershipQuery(TestCase):
             committee=self.committee, member=self.member,
             date_from=date_from, date_to=date_to))
 
+    def test_fetch_for_meeting(self):
+        meeting = create(Builder('meeting').having(
+            committee=self.committee, start=date(2014, 7, 1)))
+        membership_before = create(Builder('membership').having(
+            date_from=date(2013, 1, 1),
+            date_to=date(2013, 12, 31),
+            member=self.member,
+            committee=self.committee))
+        membership = create(Builder('membership').having(
+            date_from=date(2014, 1, 1),
+            date_to=date(2014, 12, 31),
+            member=self.member,
+            committee=self.committee))
+        membership_after = create(Builder('membership').having(
+            date_from=date(2015, 1, 1),
+            date_to=date(2015, 12, 31),
+            member=self.member,
+            committee=self.committee))
+
+        self.assertEqual(
+            membership,
+            Membership.query.fetch_for_meeting(meeting, self.member))
+
     def test_only_active(self):
         yesterday = date.today() - timedelta(days=1)
         tomorrow = date.today() + timedelta(days=1)
