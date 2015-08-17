@@ -46,15 +46,18 @@ class NotificationListingTab(BaseListingTab):
     columns = (
         {'column': 'kind',
          'column_title': _(u'column_kind', default=u'Kind'),
-         'transform': translated_kind},
+         'transform': translated_kind,
+         'sortable': False},
 
         {'column': 'title',
          'column_title': _(u'column_title', default=u'Title'),
-         'transform': resolve_notification_link},
+         'transform': resolve_notification_link,
+         'sortable': False},
 
         {'column': 'actor_id',
          'column_title': _(u'column_Actor', default=u'Actor'),
-         'transform': readable_actor},
+         'transform': readable_actor,
+         'sortable': False},
 
         {'column': 'created',
          'column_title': _(u'created', default=u'Created'),

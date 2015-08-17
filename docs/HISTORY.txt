@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- My Notification: disable sorting for type, title and actor column.
+  [phgross]
+
 - Fixed order in dossiers factory menu.
   [phgross]
 
