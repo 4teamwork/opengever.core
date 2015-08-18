@@ -5,7 +5,10 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
-- Disable csrf protection for CreateSuccesorForwardingView.
+- Also display a members role in a meeting's protocol.
+  [deiferni]
+
+- Disable CSRF protection for CreateSuccesorForwardingView.
   [phgross]
 
 - Add locking support for meetings.
