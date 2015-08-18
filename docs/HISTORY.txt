@@ -5,6 +5,15 @@ Changelog
 4.5.1 (unreleased)
 ------------------
 
+- Notification viewlet: added tooltip to the "mark as read" link.
+  [phgross]
+
+- Notification viewlet: sort notification chronologic, newest at the top.
+  [phgross]
+
+- My Notification: disable sorting for type, title and actor column.
+  [phgross]
+
 - Fixed order in dossiers factory menu.
   [phgross]
 

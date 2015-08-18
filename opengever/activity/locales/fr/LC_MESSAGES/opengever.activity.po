@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-08-07 08:37+0000\n"
+"POT-Creation-Date: 2015-08-17 14:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Domain: DOMAIN\n"
 
 #. Default: "Actor"
-#: ./opengever/activity/browser/listing.py:56
+#: ./opengever/activity/browser/listing.py:58
 msgid "column_Actor"
 msgstr "Acteur"
 
@@ -28,12 +28,12 @@ msgid "column_kind"
 msgstr "Type"
 
 #. Default: "Title"
-#: ./opengever/activity/browser/listing.py:52
+#: ./opengever/activity/browser/listing.py:53
 msgid "column_title"
 msgstr "Titre"
 
 #. Default: "Created"
-#: ./opengever/activity/browser/listing.py:60
+#: ./opengever/activity/browser/listing.py:63
 msgid "created"
 msgstr ""
 
@@ -47,13 +47,18 @@ msgstr "Notifications"
 msgid "label_details"
 msgstr ""
 
+#. Default: "Mark as read"
+#: ./opengever/activity/viewlets/notification.pt:32
+msgid "label_mark_as_read"
+msgstr ""
+
 #. Default: "All Notifications"
-#: ./opengever/activity/viewlets/notification.pt:54
+#: ./opengever/activity/viewlets/notification.pt:55
 msgid "label_notifications_overview"
 msgstr ""
 
 #. Default: "A problem has occurred during the notification creation. Notification could not or only partially produced."
-#: ./opengever/activity/center.py:190
+#: ./opengever/activity/center.py:192
 msgid "msg_error_not_notified"
 msgstr ""
 

@@ -8,8 +8,6 @@ from opengever.activity.browser import resolve_notification_url
 from opengever.ogds.base.actor import Actor
 from opengever.tabbedview.browser.base import BaseListingTab
 from plone import api
-from zope.globalrequest import getRequest
-from zope.i18n import translate
 from zope.interface import implements
 from zope.interface import Interface
 
@@ -29,10 +27,6 @@ def readable_date(item, date):
         item.activity.created, long_format=True)
 
 
-def translated_kind(item, value):
-    return translate(item.activity.kind, domain='plone', context=getRequest())
-
-
 class INotificationTableSourceConfig(ITableSourceConfig):
     """Marker interface for notification table source configs."""
 
@@ -46,15 +40,18 @@ class NotificationListingTab(BaseListingTab):
     columns = (
         {'column': 'kind',
          'column_title': _(u'column_kind', default=u'Kind'),
-         'transform': translated_kind},
+         'transform': lambda item, value: item.activity.label,
+         'sortable': False},
 
         {'column': 'title',
          'column_title': _(u'column_title', default=u'Title'),
-         'transform': resolve_notification_link},
+         'transform': resolve_notification_link,
+         'sortable': False},
 
         {'column': 'actor_id',
          'column_title': _(u'column_Actor', default=u'Actor'),
-         'transform': readable_actor},
+         'transform': readable_actor,
+         'sortable': False},
 
         {'column': 'created',
          'column_title': _(u'created', default=u'Created'),

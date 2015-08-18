@@ -268,11 +268,11 @@ class TestNotificationHandling(ActivityTestCase):
         hugos_notifications = self.center.get_users_notifications('hugo')
 
         self.assertEquals(
-            [self.activity_1, self.activity_2, self.activity_4],
+            [self.activity_4, self.activity_2, self.activity_1],
             [notification.activity for notification in peters_notifications])
 
         self.assertEquals(
-            [self.activity_1, self.activity_2, self.activity_3],
+            [self.activity_3, self.activity_2, self.activity_1],
             [notification.activity for notification in hugos_notifications])
 
     def test_get_users_notifications_only_unread_parameter(self):
