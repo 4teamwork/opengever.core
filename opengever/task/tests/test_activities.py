@@ -43,11 +43,11 @@ class TestTaskActivites(FunctionalTestCase):
         # dict representation
         self.maxDiff = None
         expected = (u'<table><tbody>'
-                    u'<tr><th>Task title</th><td>Abkl\xe4rung Fall Meier</td></tr>'
-                    u'<tr><th>Deadline</th><td>Feb 13, 2015</td></tr>'
-                    u'<tr><th>Task Type</th><td>To comment</td></tr>'
-                    u'<tr><th>Dossier title</th><td>Dossier XY</td></tr>'
-                    u'<tr><th>Text</th><td>Lorem ipsum</td></tr></tbody></table>')
+                    u'<tr><td class="label">Task title</td><td>Abkl\xe4rung Fall Meier</td></tr>'
+                    u'<tr><td class="label">Deadline</td><td>Feb 13, 2015</td></tr>'
+                    u'<tr><td class="label">Task Type</td><td>To comment</td></tr>'
+                    u'<tr><td class="label">Dossier title</td><td>Dossier XY</td></tr>'
+                    u'<tr><td class="label">Text</td><td>Lorem ipsum</td></tr></tbody></table>')
         self.assertEquals(expected, activity.description)
 
     @browsing
