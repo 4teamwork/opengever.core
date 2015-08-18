@@ -76,12 +76,12 @@ class TestMyNotifications(FunctionalTestCase):
             [{'Actor': u'B\xf6ss Hugo (hugo.boss)',
               'Created': api.portal.get_localized_time(
                   self.activity_1.created, long_format=True),
-              'Kind': u'task-added',
+              'Kind': u'Aufgabe hinzugef\xfcgt',
               'Title': u'Kennzahlen 2014 \xfcbertragen'},
              {'Actor': u'M\xfcller Peter (peter.mueller)',
               'Created': api.portal.get_localized_time(
                   self.activity_2.created, long_format=True),
-              'Kind': u'task-transition-open-in-progress',
+              'Kind': u'Aufgabe akzeptiert',
               'Title': u'Kennzahlen 2014 \xfcbertragen'}],
             browser.css('.listing').first.dicts())
 
