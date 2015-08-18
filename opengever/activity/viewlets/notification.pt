@@ -18,7 +18,7 @@
     </dt>
 
     <dd class="actionMenuContent notificationsMenuContent">
-      <ul>
+      <ul class="notifications">
         <li class="no-content" tal:condition="not: num_unread" >
           <div class="item-content" i18n:translate="no_unread_notifications">
             No unread notifications
@@ -51,6 +51,8 @@
           </div>
         </li>
 
+      </ul>
+      <ul>
         <li class="notification-item show_all">
           <a href="#" class="all_link" tal:attributes="href view/overview_url"
              i18n:translate="label_notifications_overview">
