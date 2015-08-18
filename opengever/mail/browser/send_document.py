@@ -1,3 +1,4 @@
+from datetime import date
 from email import Encoders
 from email.Header import Header
 from email.MIMEBase import MIMEBase
@@ -12,6 +13,7 @@ from opengever.mail import _
 from opengever.mail.behaviors import ISendableDocsContainer
 from opengever.mail.events import DocumentSent
 from opengever.mail.interfaces import ISendDocumentConf
+from opengever.mail.utils import make_addr_header
 from opengever.mail.validators import AddressValidator
 from opengever.mail.validators import DocumentSizeValidator
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -36,7 +38,6 @@ from zope.i18n import translate
 from zope.interface import Interface
 from zope.interface import Invalid
 from zope.interface import invariant
-from datetime import date
 
 
 CHARSET = 'utf-8'
@@ -204,17 +205,16 @@ class SendDocumentForm(form.Form):
                 portal = self.context.portal_url.getPortalObject()
                 sender_address = portal.email_from_address
 
-            mail_from = '%s <%s>' % (
-                    user.label().encode(CHARSET),
-                    sender_address.encode(CHARSET))
-
-            msg['From'] = Header(mail_from, CHARSET)
+            msg['From'] = make_addr_header(
+                user.label(), sender_address, CHARSET)
 
             header_to = Header(','.join(addresses), CHARSET)
             msg['To'] = header_to
 
             # send it
-            mh.send(msg, mfrom=mail_from, mto=','.join(addresses))
+            mfrom = u'{} <{}>'.format(
+                user.label(), sender_address).encode(CHARSET)
+            mh.send(msg, mfrom=mfrom, mto=','.join(addresses))
 
             # Store a copy of the sent mail in dossier
             if data.get('file_copy_in_dossier', False):

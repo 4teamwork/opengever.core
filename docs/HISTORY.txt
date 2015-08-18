@@ -5,6 +5,10 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Make sure to create an RFC2047 compliant From: or To: header when sending mails.
+  (By avoiding encoded-words in angle-addr or addr-spec).
+  [lgraf
+
 - Fix layout and styling in notification mail also for microsoft outlook.
   [phgross]
 
