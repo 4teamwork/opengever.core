@@ -28,7 +28,7 @@ class NotificationViewlet(common.ViewletBase):
         if not self.notifications:
             center = notification_center()
             self.notifications = center.get_current_users_notifications(
-                only_unread=True, limit=10)
+                only_unread=True)
 
         return self.notifications
 
