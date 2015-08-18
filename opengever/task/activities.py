@@ -120,7 +120,7 @@ class TaskAddedActivity(TaskActivity):
     def render_description_markup(self, data, language):
         msg = u'<table><tbody>'
         for label, value in data:
-            msg = u'{}<tr><th>{}</th><td>{}</td></tr>'.format(
+            msg = u'{}<tr><td class="label">{}</td><td>{}</td></tr>'.format(
                 msg, self.translate(label, language), value)
 
         return u'{}</tbody></table>'.format(msg)
