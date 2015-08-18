@@ -101,8 +101,9 @@ class ProtocolData(object):
                     include_copy_for_attention=self.include_copy_for_attention
                 ))
 
-    def as_json(self):
-        return json.dumps(self.data)
+    def as_json(self, pretty=False):
+        indent = 4 if pretty else None
+        return json.dumps(self.data, indent=indent)
 
 
 class ExcerptProtocolData(ProtocolData):

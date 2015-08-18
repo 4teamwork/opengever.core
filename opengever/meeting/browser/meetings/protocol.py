@@ -54,9 +54,13 @@ class DownloadGeneratedProtocol(BrowserView):
         super(DownloadGeneratedProtocol, self).__init__(context, request)
         self.model = context.model
 
+    def get_protocol_json(self, pretty=False):
+        return self.operations.get_meeting_data(
+            self.model).as_json(pretty=pretty)
+
     def __call__(self):
         sablon = Sablon(self.operations.get_sablon_template(self.model))
-        sablon.process(self.operations.get_meeting_data(self.model).as_json())
+        sablon.process(self.get_protocol_json())
 
         assert sablon.is_processed_successfully(), sablon.stderr
         filename = self.operations.get_filename(self.model).encode('utf-8')
@@ -66,6 +70,18 @@ class DownloadGeneratedProtocol(BrowserView):
         response.setHeader("Content-Disposition",
                            'attachment; filename="{}"'.format(filename))
         return sablon.file_data
+
+
+class DownloadProtocolJson(DownloadGeneratedProtocol):
+
+    def __call__(self):
+        response = self.request.response
+        response.setHeader('X-Theme-Disabled', 'True')
+        response.setHeader('Content-Type', 'application/json')
+        response.setHeader("Content-Disposition",
+                           'attachment; filename="{}"'.format('protocol.json'))
+
+        return self.get_protocol_json(pretty=True)
 
 
 class EditProtocol(AutoExtensibleForm, ModelProxyEditForm, EditForm):
