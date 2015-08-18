@@ -103,16 +103,6 @@ class TestNotificationViewlet(FunctionalTestCase):
             browser.css('.item-content .item-summary').text)
 
     @browsing
-    def test_notifications_is_limited_to_ten_latest(self, browser):
-        for i in range(13):
-            create(Builder('notification')
-                   .having(activity=self.activity_a, watcher=self.test_watcher))
-
-        browser.login().open()
-        notifications = browser.css('.notification-item a.item-location')
-        self.assertEquals(10, len(notifications))
-
-    @browsing
     def test_notifications_are_linked_to_resolve_notification_view(self, browser):
         create(Builder('notification')
                .having(activity=self.activity_c, watcher=self.test_watcher))

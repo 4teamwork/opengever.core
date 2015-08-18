@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Drop limitation of notifications and make notification viewlet scrollable instead.
+  [phgross]
+
 - Notification viewlet: added tooltip to the "mark as read" link.
   [phgross]
 
