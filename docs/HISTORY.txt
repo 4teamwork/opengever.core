@@ -5,6 +5,29 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Add additional columns publish_in, disclose_to and copy_for_attention
+  to proposals, protocols and protocol excerpts.
+  [deiferni]
+
+- Let OGMail inherit from ftw.mail.mail.Mail.
+  [deiferni]
+
+- Also provide information to sablon templater whether an agenda item
+  is a paragraph.
+  [deiferni]
+
+- Remove edit restrictions, let meetings be editable until they are closed.
+  [deiferni]
+
+- Remove pre-protocols, they are now the same as protocols.
+  [deiferni]
+
+- Use dossier title as default title for new proposals.
+  [deiferni]
+
+4.5.1 (2015-08-19)
+------------------
+
 - Notification mail: hide "display" label for activities without a description.
   [phgross]
 
@@ -57,14 +80,14 @@ Changelog
 - Use an admin-unit's public url to generate urls to resolve notifications.
   [deiferni]
 
-- Fix ftw.mail.inbound.createMailInContainer monkey patch so it
-  sets message.contentType to unicode, not str (see ftw.mail#33).
-  [lgraf]
-
 - Reintroduce a monkey patch for NamedDataConverter.toFieldValue after
   pinning down plone.formwidget.namedfile back to 1.0.7. The patch ensures
   hat mime-types sent by the browser are ignored.
   [deiferni]
+
+- Fix ftw.mail.inbound.createMailInContainer monkey patch so it
+  sets message.contentType to unicode, not str (see ftw.mail#33).
+  [lgraf]
 
 - Improve notification center's error_handling.
   Catch exception during dispatching a notification separately.
@@ -83,12 +106,12 @@ Changelog
 - Disable inline validation.
   [phgross]
 
+- Use correct geometry setup for landscape pdfs.
+  [deiferni]
+
 - Dossier WF: Allow 'Copy or Move' for Dossiers in closed states:
   This is necessary to be able to copy documents from closed dossiers.
   [lgraf]
-
-- Use correct geometry setup for landscape pdfs.
-  [deiferni]
 
 - Fixed translation of PDF Preview button in document's tooltip.
   [phgross]
@@ -99,13 +122,6 @@ Changelog
 - Fixed gever customization of sharing view, for updateSharingInfo.
   [phgross]
 
-- Add additional columns publish_in, disclose_to and copy_for_attention
-  to proposals, protocols and protocol excerpts.
-  [deiferni]
-
-- Only show pending states on dossier overview.
-  [deiferni]
-
 - Tasktemplate form: Redirects back to dossier and show statusmessage
   if no active tasktemplatefolders are registered.
   [phgross]
@@ -113,20 +129,7 @@ Changelog
 - Advanced search: Fix translation for filing no help text.
   [lgraf]
 
-- Let OGMail inherit from ftw.mail.mail.Mail.
-  [deiferni]
-
-- Also provide information to sablon templater whether an agenda item
-  is a paragraph.
-  [deiferni]
-
-- Remove edit restrictions, let meetings be editable until they are closed.
-  [deiferni]
-
-- Remove pre-protocols, they are now the same as protocols.
-  [deiferni]
-
-- Use dossier title as default title for new proposals.
+- Only show pending states on dossier overview.
   [deiferni]
 
 
