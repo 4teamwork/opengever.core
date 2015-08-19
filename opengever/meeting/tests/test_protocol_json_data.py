@@ -81,7 +81,8 @@ class TestProtocolJsonData(FunctionalTestCase):
                          'end_time': '',
                          'start_time': u'12:00 AM'},
              'participants': {
-                'members': [u'Peter Meier, F\xfcrst'],
+                'members': [{'fullname': u'Peter Meier',
+                             'role': u'F\xfcrst'}],
                 'other': [u'Hans M\xfcller', 'Heidi Muster']},
              'protocol': {'type': u'Protocol'}},
             data

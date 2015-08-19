@@ -52,11 +52,10 @@ class ProtocolData(object):
         for participant in self.meeting.participants:
             membership = Membership.query.fetch_for_meeting(
                 self.meeting, participant)
-            if membership.role:
-                members.append(u"{}, {}".format(
-                    participant.fullname, membership.role))
-            else:
-                members.append(participant.fullname)
+            members.append({
+                "fullname": participant.fullname,
+                "role": membership.role
+                })
 
         participants = {
             'members': members
