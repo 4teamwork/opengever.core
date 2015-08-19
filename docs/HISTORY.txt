@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.5.1 (unreleased)
+4.5.1 (2015-08-19)
 ------------------
 
 - Notification mail: hide "display" label for activities without a description.
