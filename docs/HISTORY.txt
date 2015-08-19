@@ -5,6 +5,9 @@ Changelog
 4.5.1 (unreleased)
 ------------------
 
+- Notification mail: hide "display" label for activities without a description.
+  [phgross]
+
 - Make sure to create an RFC2047 compliant From: or To: header when sending mails.
   (By avoiding encoded-words in angle-addr or addr-spec).
   [lgraf
