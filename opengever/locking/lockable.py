@@ -6,6 +6,7 @@ from plone import api
 from plone.locking.interfaces import INonStealableLock
 from plone.locking.interfaces import IRefreshableLockable
 from plone.locking.interfaces import STEALABLE_LOCK
+from sqlalchemy import inspect
 from zope.component import adapts
 from zope.interface import implements
 
@@ -28,8 +29,7 @@ class SQLLockable(object):
 
     @property
     def object_id(self):
-        # XXX should use a general id getter (via primary key)
-        return self.model.meeting_id
+        return '-'.join([str(_id) for _id in inspect(self.model).identity])
 
     @property
     def is_stealable(self):
@@ -105,6 +105,9 @@ class SQLLockable(object):
          - the object is only locked with the given lock_type, for the
            current user;
         """
+
+        if not lock_type.user_unlockable:
+            return False
 
         if not self.locked():
             return True
