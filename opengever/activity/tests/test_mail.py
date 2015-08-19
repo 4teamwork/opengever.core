@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.mail.utils import get_header
 from ftw.testbrowser import browsing
 from ftw.testing.mailing import Mailing
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
@@ -63,7 +64,8 @@ class TestEmailNotification(FunctionalTestCase):
 
         mail = email.message_from_string(Mailing(self.portal).pop())
         self.assertEquals('hugo.boss@example.org', mail.get('To'))
-        self.assertEquals('Test User <test@example.org>', mail.get('From'))
+        self.assertEquals(
+            'Test User <test@example.org>', get_header(mail, 'From'))
 
     @browsing
     def test_task_title_is_linked_to_resolve_notification_view(self, browser):

@@ -3,15 +3,17 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from opengever.activity.browser import resolve_notification_url
 from opengever.base.model import get_locale
+from opengever.mail.utils import make_addr_header
 from opengever.ogds.base.utils import ogds_service
 from plone import api
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from ZODB.POSException import ConflictError
 from zope.i18n import translate
 from zope.i18nmessageid import MessageFactory
-import traceback
 import logging
 import sys
+import traceback
+
 
 # because of circular imports, we can't import from opengever.activity
 _ = MessageFactory("opengever.activity")
@@ -62,8 +64,7 @@ class PloneNotificationMailer(object):
         msg = MIMEMultipart('alternative')
 
         actor = ogds_service().fetch_user(notification.activity.actor_id)
-        msg['From'] = Header(u'{} <{}>'.format(actor.fullname(), actor.email),
-                             'utf-8')
+        msg['From'] = make_addr_header(actor.fullname(), actor.email, 'utf-8')
 
         recipient = ogds_service().fetch_user(notification.watcher.user_id)
         msg['To'] = recipient.email
