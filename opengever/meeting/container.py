@@ -47,7 +47,7 @@ class ModelContainer(Container):
         # some plone-integration relies on acquisition, thus we need to wrap
         # the just created plone content now.
         aq_wrapped_self = self.__of__(context)
-        data.update(self.get_model_create_arguments(context))
+        self.update_model_create_arguments(data, context)
         model_instance = self.model_class(oguid=oguid, **data)
         session.add(model_instance)
         self._after_model_created(model_instance)
@@ -74,5 +74,5 @@ class ModelContainer(Container):
         notify(ObjectModifiedEvent(self))
         return True
 
-    def get_model_create_arguments(self, context):
-        return {}
+    def update_model_create_arguments(self, data, context):
+        return data

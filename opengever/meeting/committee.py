@@ -81,10 +81,9 @@ class Committee(ModelContainer):
         committee_model = self.load_model()
         return meeting_service().get_submitted_proposals(committee_model)
 
-    def get_model_create_arguments(self, context):
+    def update_model_create_arguments(self, data, context):
         aq_wrapped_self = self.__of__(context)
-
-        return dict(physical_path=aq_wrapped_self.get_physical_path())
+        data['physical_path'] = aq_wrapped_self.get_physical_path()
 
     def get_physical_path(self):
         url_tool = api.portal.get_tool(name='portal_url')
