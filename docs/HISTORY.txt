@@ -12,7 +12,7 @@ Changelog
 - Let OGMail inherit from ftw.mail.mail.Mail.
   [deiferni]
 
-- Also provide information to sablon templater whether an agenda item
+- Also provide information to sablon templates whether an agenda item
   is a paragraph.
   [deiferni]
 
