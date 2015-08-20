@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- No longer create RelationValue manually, this is now done by ftw.builder.
+  [deiferni]
+
 - Notifications: Store subscription role, on each resource <-> watcher relation.
   Do allow a fine-grained configuration for the dispatchers.
   [phgross]
