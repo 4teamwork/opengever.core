@@ -2,6 +2,7 @@ from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.model import Meeting
@@ -26,11 +27,13 @@ class TestExcerpt(FunctionalTestCase):
             Builder('sablontemplate')
             .within(self.templates)
             .with_asset_file('sablon_template.docx'))
-        container = create(Builder('committee_container').having(
-            protocol_template=self.sablon_template,
-            excerpt_template=self.sablon_template))
+        container = create(
+            Builder('committee_container').having(
+                protocol_template=self.sablon_template,
+                excerpt_template=self.sablon_template))
 
-        self.committee = create(Builder('committee').within(container))
+        self.committee = create(Builder('committee').within(container).having(
+            repository_folder=self.repository_folder))
         self.proposal = create(Builder('proposal')
                                .within(self.dossier)
                                .having(title='Mach doch',
@@ -72,6 +75,7 @@ class TestExcerpt(FunctionalTestCase):
         browser.login().open(self.committee, view='edit')
         browser.fill({'Excerpt template': custom_template})
         browser.css('#form-buttons-save').first.click()
+        self.assertEqual([], error_messages())
 
         self.assertEqual(custom_template,
                          self.committee.get_excerpt_template())

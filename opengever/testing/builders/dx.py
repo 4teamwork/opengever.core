@@ -315,9 +315,19 @@ class CommitteeBuilder(DexterityBuilder):
 
     def __init__(self, session):
         super(CommitteeBuilder, self).__init__(session)
-        self.arguments = {'title': 'My Committee'}
+        self.arguments = {
+            'title': 'My Committee',
+        }
+
+    def link_with(self, repository_folder):
+        self.arguments['repository_folder'] = repository_folder
+        return self
 
     def after_create(self, obj):
+        self.arguments.pop('repository_folder', None)
+        self.arguments.pop('excerpt_template', None)
+        self.arguments.pop('protocol_template', None)
+
         obj.create_model(self.arguments, self.container)
         super(CommitteeBuilder, self).after_create(obj)
 

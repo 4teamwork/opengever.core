@@ -12,6 +12,10 @@ class TestCommittee(FunctionalTestCase):
 
     def setUp(self):
         super(TestCommittee, self).setUp()
+        self.repo_root = create(Builder('repository_root'))
+        self.repository_folder = create(Builder('repository')
+                                        .within(self.repo_root)
+                                        .titled('Repo'))
         self.container = create(Builder('committee_container'))
 
     def test_committee_can_be_added(self):
@@ -27,7 +31,9 @@ class TestCommittee(FunctionalTestCase):
         browser.login()
         browser.open(self.container, view='++add++opengever.meeting.committee')
 
-        browser.fill({'Title': u'A c\xf6mmittee'})
+        browser.fill(
+            {'Title': u'A c\xf6mmittee',
+             'Linked repository folder': self.repository_folder})
         browser.css('#form-buttons-save').first.click()
         self.assertIn('Item created',
                       browser.css('.portalMessage.info dd').text)
@@ -44,12 +50,13 @@ class TestCommittee(FunctionalTestCase):
     def test_committee_can_be_edited_in_browser(self, browser):
         committee = create(Builder('committee')
                            .within(self.container)
-                           .titled(u'My Committee'))
+                           .titled(u'My Committee')
+                           .link_with(self.repository_folder))
 
         browser.login().visit(committee, view='edit')
         form = browser.css('#content-core form').first
-        self.assertEqual(u'My Committee', form.find_field('Title').value)
 
+        self.assertEqual(u'My Committee', form.find_field('Title').value)
         browser.fill({'Title': u'A c\xf6mmittee'})
         browser.css('#form-buttons-save').first.click()
         self.assertIn('Changes saved',

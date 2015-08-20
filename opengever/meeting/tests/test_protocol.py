@@ -2,6 +2,7 @@ from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.browser.protocol import METHOD_NEW_DOCUMENT
@@ -37,7 +38,10 @@ class TestProtocol(FunctionalTestCase):
             protocol_template=self.sablon_template,
             excerpt_template=self.sablon_template))
 
-        self.committee = create(Builder('committee').within(container))
+        self.committee = create(
+            Builder('committee')
+            .within(container)
+            .having(repository_folder=self.repository_folder))
         self.proposal = create(Builder('proposal')
                                .within(self.dossier)
                                .having(title='Mach doch',
@@ -85,6 +89,7 @@ class TestProtocol(FunctionalTestCase):
         browser.login().open(self.committee, view='edit')
         browser.fill({'Protocol template': custom_template})
         browser.css('#form-buttons-save').first.click()
+        self.assertEqual([], error_messages())
 
         self.assertEqual(custom_template,
                          self.committee.get_protocol_template())
