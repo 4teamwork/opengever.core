@@ -3,7 +3,7 @@
 # Runs the tests in multiple threads.
 
 from collections import defaultdict
-from glob import glob
+from fnmatch import fnmatch
 from itertools import groupby
 from operator import itemgetter
 from operator import methodcaller
@@ -16,7 +16,6 @@ import subprocess
 import sys
 import tempfile
 import time
-
 
 os.environ['PYTHONDONTWRITEBYTECODE'] = '1'
 
@@ -124,10 +123,15 @@ def packages_by_size():
                           test_suites_by_packages()),
                       reverse=True))
 
+def test_suites():
+    for dirpath, dirnames, filenames in os.walk(OPENGEVER_PATH):
+        for filename in filenames:
+            filepath = os.path.join(dirpath, filename)
+            if fnmatch(filepath, '**/tests/test*.py'):
+                yield filepath
+
 def test_suites_by_packages():
-    path_glob = os.path.join(OPENGEVER_PATH, '**/tests/test*.py')
-    return groupby(map(split_suite_path, glob(path_glob)),
-                   itemgetter(0))
+    return groupby(map(split_suite_path, test_suites()), itemgetter(0))
 
 def split_suite_path(path):
     pkg, fname = (path.replace(BUILDOUT_PATH + '/', '')
