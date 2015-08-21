@@ -1,0 +1,20 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser">
+
+    <include package="Products.CMFCore"/>
+
+    <browser:page
+        name="test-user-selection"
+        class=".z3cform.UserSelectionView"
+        for="*"
+        permission="cmf.ModifyPortalContent"
+        />
+
+    <utility
+        factory=".z3cform.TestUsersVocabulary"
+        provides="zope.schema.interfaces.IVocabularyFactory"
+        name="test-users-vocabulary"
+        />
+
+</configure>
