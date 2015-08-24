@@ -79,8 +79,7 @@ class TestActorLookup(FunctionalTestCase):
 
         self.assertEquals(
             u'<a href="http://nohost/plone/blahbla-foo-b-onmouseover-alert-foo-click-me-b">'
-            'Blahbla Foo <b>click me!</b> (h@example.com)'
-            '</a>',
+            'Blahbla Foo &lt;b onmouseover=alert(&apos;Foo!&apos;)&gt;click me!&lt;/b&gt; (h@example.com)</a>',
             actor.get_link())
 
 
