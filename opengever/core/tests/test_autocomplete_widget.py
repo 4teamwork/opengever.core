@@ -1,8 +1,7 @@
 from ftw.testbrowser import browsing
-from ftw.testbrowser.testing import BROWSER_FUNCTIONAL_TESTING
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
 from plone.app.testing import SITE_OWNER_NAME
 from unittest2 import TestCase
-import os
 import plone.protect.auto
 
 
@@ -12,7 +11,7 @@ class TestOpengeverAutocompleteWidgetForTestbrowser(TestCase):
     of "q" as query parameter and returns different results.
     """
 
-    layer = BROWSER_FUNCTIONAL_TESTING
+    layer = OPENGEVER_FUNCTIONAL_TESTING
 
     def setUp(self):
         plone.protect.auto.CSRF_DISABLED = True
@@ -22,15 +21,15 @@ class TestOpengeverAutocompleteWidgetForTestbrowser(TestCase):
 
     @browsing
     def test_autocomplete_form_fill(self, browser):
-        browser.login(SITE_OWNER_NAME).visit(view='test-z3cform-shopping')
-        browser.fill({'Payment': 'mastercard'})
+        browser.login(SITE_OWNER_NAME).visit(view='test-user-selection')
+        browser.fill({'Select users': 'hans'})
         browser.find('Submit').click()
-        self.assertEquals({u'payment': [u'mastercard']}, browser.json)
+        self.assertEquals({u'users': [u'hans']}, browser.json)
 
     @browsing
     def test_autocomplete_query(self, browser):
-        browser.login(SITE_OWNER_NAME).visit(view='test-z3cform-shopping')
+        browser.login(SITE_OWNER_NAME).visit(view='test-user-selection')
 
-        self.assertEquals([['cash', 'Cash'],
-                           ['mastercard', 'MasterCard']],
-                          browser.find('Payment').query('ca'))
+        self.assertEquals([[u'hans', u'Hans M\xfcller'],
+                           [u'hugo', u'Hugo Boss']],
+                          browser.find('Select users').query('h'))
