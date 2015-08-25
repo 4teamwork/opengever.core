@@ -10,17 +10,20 @@
             {
                 "_id": "committee-1",
                 "_type": "opengever.meeting.committee",
-                "title": "Kommission für Rechtsfragen"
+                "title": "Kommission für Rechtsfragen",
+                "repository_folder": "resolvePath::/ordnungssystem/fuehrung/kommissionen-mit-selbstaendigen-verwaltungsbefugnissen/kommission-fuer-rechtsfragen"
             },
             {
                 "_id": "committee-2",
                 "_type": "opengever.meeting.committee",
-                "title": "Rechnungsprüfungskommission"
+                "title": "Rechnungsprüfungskommission",
+                "repository_folder": "resolvePath::/ordnungssystem/fuehrung/kommissionen-mit-selbstaendigen-verwaltungsbefugnissen/rechnungspruefungskommission"
             },
             {
                 "_id": "committee-3",
                 "_type": "opengever.meeting.committee",
-                "title": "Gemeindeversammlung"
+                "title": "Gemeindeversammlung",
+                "repository_folder": "resolvePath::/ordnungssystem/fuehrung/gemeindeversammlung-gemeindeparlament-legislative/versammlungen-sitzungen"
             }
 
         ]
