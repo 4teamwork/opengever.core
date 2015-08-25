@@ -35,19 +35,19 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
         type_key = self.get_type_key(obj)
         annotations = unprotected_write(IAnnotations(self.context))
 
-        if not annotations.get(type_key):
+        if not type_key in annotations:
             annotations[type_key] = PersistentDict()
         return annotations[type_key]
 
     def get_child_mapping(self, obj=None):
         reference_mapping = self.get_reference_mapping(obj)
-        if not reference_mapping.get(CHILD_REF_KEY, None):
+        if CHILD_REF_KEY not in reference_mapping:
             reference_mapping[CHILD_REF_KEY] = PersistentDict()
         return reference_mapping.get(CHILD_REF_KEY, None)
 
     def get_prefix_mapping(self, obj=None):
         reference_mapping = self.get_reference_mapping(obj)
-        if not reference_mapping.get(PREFIX_REF_KEY, None):
+        if PREFIX_REF_KEY not in reference_mapping:
             reference_mapping[PREFIX_REF_KEY] = PersistentDict()
         return reference_mapping.get(PREFIX_REF_KEY, None)
 

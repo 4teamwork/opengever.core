@@ -5,6 +5,10 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- ReferenceNumberPrefixAdpater: Fix conditions for lazily initialising
+  PersistentMappings in annotations.
+  [lgraf]
+
 - Add additional columns publish_in, disclose_to and copy_for_attention
   to proposals, protocols and protocol excerpts.
   [deiferni]
