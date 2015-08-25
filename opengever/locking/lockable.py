@@ -38,6 +38,12 @@ class SQLLockable(object):
     def searialize_lock_type(self, lock_type):
         return lock_type.__name__
 
+    def desearialize_lock_type(self, lock_type):
+        if lock_type != STEALABLE_LOCK.__name__:
+            raise NotImplementedError
+
+        return STEALABLE_LOCK
+
     def lock(self, lock_type=STEALABLE_LOCK, children=False):
         """Lock the object using the given key.
 
@@ -119,22 +125,31 @@ class SQLLockable(object):
         return False
 
     def stealable(self, lock_type=STEALABLE_LOCK):
-        """Find out if the lock can be stolen.
+        """Copied from plone.locking.lockable.TTWLockable
 
+        Find out if the lock can be stolen.
         This means:
 
          - the lock type is stealable; and
 
          - the object is not marked with INonStealableLock; or
          - can_safely_unlock() is true.
-
         """
 
+        # If the lock type is not stealable ever, return False
         if not lock_type.stealable:
             return False
+        # Can't steal locks of a different type
+        for l in self.lock_info():
+            if not hasattr(l['type'], '__name__') or \
+               l['type'].__name__ != lock_type.__name__:
+                return False
+        # The lock type is stealable, and the object is not marked as
+        # non-stelaable, so return True
         if not INonStealableLock.providedBy(self.context):
             return True
-
+        # Lock type is stealable, object is not stealable, but return True
+        # anyway if we can safely unlock this object (e.g. we are the owner)
         return self.can_safely_unlock(lock_type)
 
     def lock_info(self):
@@ -154,7 +169,7 @@ class SQLLockable(object):
             infos.append({'creator': lock.creator,
                           'time': lock.time,
                           'token': lock.token,
-                          'type': lock.lock_type})
+                          'type': self.desearialize_lock_type(lock.lock_type)})
 
         return infos
 

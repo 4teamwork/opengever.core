@@ -10,6 +10,7 @@ from opengever.meeting.meeting_wrapper import MeetingWrapper
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 from plone.locking.interfaces import ILockable
+from plone.locking.interfaces import STEALABLE_LOCK
 import pytz
 
 
@@ -132,7 +133,7 @@ class TestSQLLockable(FunctionalTestCase):
             [{'creator': TEST_USER_ID,
               'time': lock1.time,
               'token': 'Meeting:1',
-              'type': u'plone.locking.stealable'}],
+              'type': STEALABLE_LOCK}],
             ILockable(self.wrapper).lock_info())
 
         # invalid
