@@ -70,22 +70,27 @@ class TestAcceptTaskStorageManager(MockTestCase):
         else:
             AccessControl.SecurityManagement.noSecurityManager()
 
-    def test_get_data(self):
-
+    def test_protected_get_data_initializes_empty_dict(self):
         manager = storage.WizardDataStorage()
-        data = manager.get_data('data-set-key')
-        data['foo'] = 'bar'
-        self.assertEqual(manager.get_data('data-set-key'), data)
-
-        data2 = manager.get_data('other-data-set-key')
-        data2['task2'] = 'bar'
-        self.assertEqual(manager.get_data('other-data-set-key'), data2)
-
-        self.assertNotEqual(manager.get_data('data-set-key'),
-                            manager.get_data('other-data-set-key'))
+        manager.get_data('data-set-key')
+        self.assertEqual({}, manager.get_data('data-set-key'))
 
         self.assertEqual(set(manager._get_user_storage().keys()),
-                         set(['data-set-key', 'other-data-set-key']))
+                         set(['data-set-key']))
+
+    def test_protected_get_data_contains_created_timestamp(self):
+        manager = storage.WizardDataStorage()
+        data = manager._get_data('something')
+        self.assertEqual(['__created'], data.keys())
+        self.assertIsNotNone(data['__created'])
+        self.assertIsInstance(data['__created'], datetime)
+
+    def test_public_get_data_returns_copy(self):
+        manager = storage.WizardDataStorage()
+        manager.get_data('something')
+
+        self.assertIsNot(manager.get_data('something'),
+                         manager._get_data('something'))
 
     def test_data_expires(self):
         manager = storage.WizardDataStorage()
@@ -96,22 +101,21 @@ class TestAcceptTaskStorageManager(MockTestCase):
         self.assertEqual(set(manager._get_user_storage().keys()),
                          set(['one', 'two']))
 
-        manager.get_data('one')['__created'] = veryold
+        manager._get_data('one')['__created'] = veryold
+
         manager.get_data('two')
         self.assertEqual(manager._get_user_storage().keys(), ['two'])
 
     def test_update(self):
         manager = storage.WizardDataStorage()
 
-        manager.get_data('one')
-        self.assertEqual(set(manager.get_data('one').keys()),
-                         set(['__created']))
+        manager.set('one', 'foo', 'qux')
+        self.assertEqual({'foo': 'qux'}, manager.get_data('one'))
 
         manager.update('one', {'foo': 'bar',
                                'foobar': 'baz'})
-        self.assertEqual(set(manager.get_data('one').keys()),
-                         set(['__created', 'foo', 'foobar']))
-
+        self.assertEqual({'foo': 'bar',
+                          'foobar': 'baz'}, manager.get_data('one'), )
         self.assertEqual(manager.get_data('one')['foo'], 'bar')
 
     def test_set_and_get(self):
