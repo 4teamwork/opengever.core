@@ -86,21 +86,16 @@ class TestSQLLockable(FunctionalTestCase):
         self.assertFalse(lockable.locked())
 
     def test_locked_is_true_if_a_valid_lock_exists(self):
-        lock = Lock(object_type='Meeting',
-                     object_id=1,
-                     creator=TEST_USER_ID,
-                     time=utcnow_tz_aware() - timedelta(seconds=100))
-        self.session.add(lock)
-
+        lock = create(Builder('lock')
+                      .of_obj(self.wrapper)
+                      .having(time=utcnow_tz_aware() - timedelta(seconds=100)))
         lockable = ILockable(self.wrapper)
         self.assertTrue(lockable.locked())
 
     def test_locked_is_false_if_lock_is_invalid(self):
-        lock = Lock(object_type='Meeting',
-                     object_id=1,
-                     creator=TEST_USER_ID,
-                     time=utcnow_tz_aware() - timedelta(seconds=800))
-        self.session.add(lock)
+        lock = create(Builder('lock')
+                      .of_obj(self.wrapper)
+                      .having(time=utcnow_tz_aware() - timedelta(seconds=800)))
 
         lockable = ILockable(self.wrapper)
         self.assertFalse(lockable.locked())
@@ -114,33 +109,25 @@ class TestSQLLockable(FunctionalTestCase):
         self.assertTrue(lockable.can_safely_unlock())
 
     def test_can_safely_unlock_is_true_if_a_lock_of_the_current_user_exists(self):
-        lock = Lock(object_type='Meeting',
-                    object_id=1,
-                    creator=TEST_USER_ID,
-                    lock_type=u'plone.locking.stealable',
-                    time=utcnow_tz_aware())
-        self.session.add(lock)
+        lock = create(Builder('lock')
+                      .of_obj(self.wrapper)
+                      .having(lock_type=u'plone.locking.stealable'))
 
         self.assertTrue(ILockable(self.wrapper).can_safely_unlock())
 
     def test_can_safely_unlock_is_false_if_item_is_locked_by_an_other_user(self):
-        lock = Lock(object_type='Meeting',
-                    object_id=1,
-                    creator=u'hugo.boss',
-                    lock_type=u'plone.locking.stealable',
-                    time=utcnow_tz_aware())
-        self.session.add(lock)
+        lock = create(Builder('lock')
+                      .of_obj(self.wrapper)
+                      .having(creator=u'hugo.boss'))
 
         self.assertFalse(ILockable(self.wrapper).can_safely_unlock())
 
     def test_lock_info_returns_an_list_of_dicts_of_all_valid_locks(self):
         # valid
-        lock1 = Lock(object_type='Meeting',
-                     object_id=1,
-                     creator=TEST_USER_ID,
-                     lock_type=u'plone.locking.stealable',
-                     time=utcnow_tz_aware() - timedelta(seconds=100))
-        self.session.add(lock1)
+        lock1 = create(Builder('lock')
+                      .of_obj(self.wrapper)
+                      .having(time=utcnow_tz_aware() - timedelta(seconds=100)))
+
         self.assertEquals(
             [{'creator': TEST_USER_ID,
               'time': lock1.time,
@@ -153,19 +140,15 @@ class TestSQLLockable(FunctionalTestCase):
         self.assertEquals([], ILockable(self.wrapper).lock_info())
 
     def test_during_lock_creation_the_expired_locks_gets_cleared(self):
-        lock_1 = Lock(object_type='Meeting',
-                      object_id=12345,
-                      creator=TEST_USER_ID,
-                      lock_type=u'plone.locking.stealable',
-                      time=utcnow_tz_aware() - timedelta(seconds=1000))
-        self.session.add(lock_1)
+        lock_1 = create(Builder('lock')
+                       .having(object_type='Meeting',
+                               object_id=12345,
+                               time=utcnow_tz_aware() - timedelta(seconds=1000)))
 
-        lock_2 = Lock(object_type='Meeting',
-                      object_id=56789,
-                      creator=TEST_USER_ID,
-                      lock_type=u'plone.locking.stealable',
-                      time=utcnow_tz_aware() - timedelta(seconds=800))
-        self.session.add(lock_2)
+        lock_2 = create(Builder('lock')
+                        .having(object_type='Meeting',
+                                object_id=56789,
+                                time=utcnow_tz_aware() - timedelta(seconds=800)))
 
         ILockable(self.wrapper).lock()
 
