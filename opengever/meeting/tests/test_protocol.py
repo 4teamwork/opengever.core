@@ -4,7 +4,6 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
-from opengever.meeting.browser.meetings.protocol import EditProtocol
 from opengever.meeting.browser.protocol import METHOD_NEW_DOCUMENT
 from opengever.meeting.browser.protocol import METHOD_NEW_VERSION
 from opengever.meeting.command import MIME_DOCX
@@ -60,7 +59,7 @@ class TestProtocol(FunctionalTestCase):
 
     def setup_protocol(self, browser):
         browser.login()
-        browser.open(EditProtocol.url_for(self.committee, self.meeting))
+        browser.open(self.meeting.get_url(view='protocol'))
         browser.fill({'Considerations': 'It is important',
                       'Proposed action': 'Accept it',
                       'Discussion': 'We should accept it',
@@ -93,7 +92,7 @@ class TestProtocol(FunctionalTestCase):
     @browsing
     def test_protocol_can_be_edited(self, browser):
         browser.login()
-        browser.open(EditProtocol.url_for(self.committee, self.meeting))
+        browser.open(self.meeting.get_url(view='protocol'))
 
         browser.fill({'Legal basis': 'Yes we can',
                       'Initial position': 'Still the same',
@@ -135,7 +134,7 @@ class TestProtocol(FunctionalTestCase):
             committee=self.committee_model).as_active())
 
         browser.login()
-        browser.open(EditProtocol.url_for(self.committee, self.meeting))
+        browser.open(self.meeting.get_url(view='protocol'))
 
         browser.fill({'Presidency': str(peter.member_id),
                       'Secretary': str(hans.member_id),

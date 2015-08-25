@@ -50,10 +50,6 @@ class DownloadGeneratedProtocol(BrowserView):
 
     operations = ProtocolOperations()
 
-    @classmethod
-    def url_for(cls, context, meeting):
-        return meeting.get_url(view='download_protocol')
-
     def __init__(self, context, request):
         super(DownloadGeneratedProtocol, self).__init__(context, request)
         self.model = context.model
@@ -81,10 +77,6 @@ class EditProtocol(AutoExtensibleForm, ModelProxyEditForm, EditForm):
     content_type = Meeting
 
     template = ViewPageTemplateFile('templates/protocol.pt')
-
-    @classmethod
-    def url_for(cls, context, meeting):
-        return meeting.get_url(view='protocol')
 
     def update(self):
         super(EditProtocol, self).update()

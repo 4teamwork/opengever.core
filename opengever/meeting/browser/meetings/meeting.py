@@ -4,9 +4,6 @@ from opengever.meeting.browser.meetings.agendaitem import DeleteAgendaItem
 from opengever.meeting.browser.meetings.agendaitem import ScheduleSubmittedProposal
 from opengever.meeting.browser.meetings.agendaitem import ScheduleText
 from opengever.meeting.browser.meetings.agendaitem import UpdateAgendaItemOrder
-from opengever.meeting.browser.meetings.excerpt import GenerateExcerpt
-from opengever.meeting.browser.meetings.protocol import DownloadGeneratedProtocol
-from opengever.meeting.browser.meetings.protocol import EditProtocol
 from opengever.meeting.browser.meetings.transitions import MeetingTransitionController
 from opengever.meeting.browser.protocol import GenerateProtocol
 from opengever.meeting.browser.protocol import UpdateProtocol
@@ -121,7 +118,7 @@ class MeetingView(BrowserView):
             return self.model.protocol_document.resolve_document()
 
     def url_protocol(self):
-        return EditProtocol.url_for(self.context, self.model)
+        return self.model.get_url(view='protocol')
 
     def url_generate_protocol(self):
         if not self.model.has_protocol_document():
@@ -130,10 +127,10 @@ class MeetingView(BrowserView):
             return UpdateProtocol.url_for(self.model.protocol_document)
 
     def url_download_protocol(self):
-        return DownloadGeneratedProtocol.url_for(self.context, self.model)
+        return self.model.get_url(view='download_protocol')
 
     def url_manually_generate_excerpt(self):
-        return GenerateExcerpt.url_for(self.context, self.model)
+        return self.model.get_url(view='generate_excerpt')
 
     def transitions(self):
         return self.model.get_state().get_transitions()

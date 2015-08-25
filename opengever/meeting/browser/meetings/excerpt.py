@@ -95,10 +95,6 @@ class GenerateExcerpt(AutoExtensibleForm, EditForm):
 
     template = ViewPageTemplateFile('templates/excerpt.pt')
 
-    @classmethod
-    def url_for(cls, context, meeting):
-        return meeting.get_url(view='generate_excerpt')
-
     def __init__(self, context, request):
         super(GenerateExcerpt, self).__init__(context, request)
         self.model = self.context.model
