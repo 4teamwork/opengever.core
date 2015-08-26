@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Disable csrf protection for CreateSuccesorForwardingView.
+  [phgross]
+
 - Add locking support for meetings.
   [phgross]
 
