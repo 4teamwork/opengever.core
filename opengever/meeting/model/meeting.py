@@ -275,7 +275,7 @@ class Meeting(Base):
         return '/'.join(elements)
 
     def get_edit_url(self, context):
-        return '/'.join((self.get_url(), 'edit'))
+        return self.get_url(view='edit')
 
     def get_breadcrumbs(self, context):
         return {'absolute_url': self.get_url(), 'Title': self.get_title()}
