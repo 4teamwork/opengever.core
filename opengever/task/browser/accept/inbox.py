@@ -1,11 +1,14 @@
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
-from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
+from opengever.base.protect import unprotected_write
+from opengever.debug.protect import TraceObjectRegistrations
 from opengever.task import _
-from opengever.task.browser.accept.utils import \
-    accept_forwarding_with_successor
+from opengever.task.browser.accept.utils import accept_forwarding_with_successor
+from plone.protect.interfaces import IDisableCSRFProtection
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from Products.statusmessages.interfaces import IStatusMessage
 from zope.component import getUtility
+from zope.interface import alsoProvides
 
 
 class CreateSuccesorForwardingView(grok.View):
@@ -18,6 +21,7 @@ class CreateSuccesorForwardingView(grok.View):
     grok.require('zope2.View')
 
     def render(self):
+        alsoProvides(self.request, IDisableCSRFProtection)
         oguid = self.request.get('oguid')
         key = 'accept:%s' % oguid
         dm = getUtility(IWizardDataStorage)
