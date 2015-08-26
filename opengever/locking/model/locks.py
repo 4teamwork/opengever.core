@@ -7,6 +7,7 @@ from opengever.ogds.models.query import BaseQuery
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import String
+from sqlalchemy import UniqueConstraint
 from sqlalchemy.schema import Sequence
 import pytz
 
@@ -37,6 +38,7 @@ class LockQuery(BaseQuery):
 class Lock(Base):
 
     __tablename__ = 'locks'
+    __table_args__ = (UniqueConstraint('object_id', 'object_type', 'lock_type'), {})
 
     query_cls = LockQuery
 

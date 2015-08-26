@@ -3,8 +3,9 @@ from opengever.core.testing import MEMORY_DB_LAYER
 from opengever.locking.model import Lock
 from opengever.locking.model.locks import utcnow_tz_aware
 from plone.app.testing import TEST_USER_ID
+from sqlalchemy.exc import IntegrityError
 from unittest2 import TestCase
-import pytz
+import transaction
 
 
 class TestUnitLocks(TestCase):
@@ -47,3 +48,22 @@ class TestUnitLocks(TestCase):
 
         self.assertTrue(lock1.is_valid())
         self.assertFalse(lock2.is_valid())
+
+    def test_unique_constraint_on_type_id_and_locktype(self):
+        lock1 = Lock(object_type='Meeting',
+                     object_id=1,
+                     creator=TEST_USER_ID,
+                     lock_type=u'plone.locking.stealable',
+                     time=utcnow_tz_aware() - timedelta(seconds=300))
+        self.session.add(lock1)
+
+        with self.assertRaises(IntegrityError):
+            lock2 = Lock(object_type='Meeting',
+                         object_id=1,
+                         creator=TEST_USER_ID,
+                         lock_type=u'plone.locking.stealable',
+                         time=utcnow_tz_aware())
+            self.session.add(lock2)
+            transaction.commit()
+
+        transaction.abort()
