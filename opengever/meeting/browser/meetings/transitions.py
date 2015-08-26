@@ -1,4 +1,3 @@
-from opengever.meeting.browser.meetings.meetinglist import MeetingList
 from plone.protect.utils import addTokenToUrl
 from Products.Five.browser import BrowserView
 from zExceptions import NotFound
@@ -10,9 +9,9 @@ class MeetingTransitionController(BrowserView):
 
     implements(IBrowserView)
 
-    def __init__(self, context, request, model):
+    def __init__(self, context, request):
         super(MeetingTransitionController, self).__init__(context, request)
-        self.model = model
+        self.model = self.context.model
 
     def __call__(self):
         transition = self.request.get('transition')
@@ -24,8 +23,8 @@ class MeetingTransitionController(BrowserView):
 
     @classmethod
     def url_for(cls, context, meeting, transition):
-        url = "{}/meetingtransitioncontroller?transition={}".format(
-            MeetingList.url_for(context, meeting), transition)
+        url = "{}?transition={}".format(
+            meeting.get_url(view='meetingtransitioncontroller'), transition)
         return addTokenToUrl(url)
 
     def is_valid_transition(self, transition_name):

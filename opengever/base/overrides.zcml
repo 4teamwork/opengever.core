@@ -12,8 +12,13 @@
 
   <!-- Fix for bug mentioned in Issue #934 Fehler bei den Falldossiers 1 und 2 BD.ARP
        https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/934
-       Remove as soon as this has been fixed in plone.app.z3cform / plone.z3cform
+       Remove as soon as this has been fixed in plone.app.z3cform / plone.z3cform.
+
+       Additionally I've added lock refreshing support for z3c forms. Adding
+       the `enableUnlockProtection` class to the form if the current context
+       supports refreshable locks.
   -->
+
   <browser:page
       name="ploneform-macros"
       for="*"

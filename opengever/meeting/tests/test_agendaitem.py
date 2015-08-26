@@ -7,7 +7,7 @@ from opengever.meeting.browser.meetings.agendaitem import DeleteAgendaItem
 from opengever.meeting.browser.meetings.agendaitem import ScheduleSubmittedProposal
 from opengever.meeting.browser.meetings.agendaitem import ScheduleText
 from opengever.meeting.browser.meetings.agendaitem import UpdateAgendaItemOrder
-from opengever.meeting.browser.meetings.meetinglist import MeetingList
+from opengever.meeting.meeting_wrapper import MeetingWrapper
 from opengever.meeting.model import Meeting
 from opengever.meeting.model import Proposal
 from opengever.testing import FunctionalTestCase
@@ -21,6 +21,7 @@ class TestAgendaItem(FunctionalTestCase):
 
     def setUp(self):
         super(TestAgendaItem, self).setUp()
+        self.admin_unit.public_url = 'http://nohost/plone'
 
         self.repo = create(Builder('repository_root'))
         container = create(Builder('committee_container'))
@@ -42,8 +43,7 @@ class TestAgendaItem(FunctionalTestCase):
 
     @browsing
     def test_free_text_agend_item_can_be_added(self, browser):
-        browser.login()
-        browser.open(MeetingList.url_for(self.committee, self.meeting))
+        browser.login().open(self.meeting.get_url())
 
         form = browser.css('#schedule_text').first
         form.fill({'title': 'My Agenda Item'})
@@ -58,8 +58,7 @@ class TestAgendaItem(FunctionalTestCase):
 
     @browsing
     def test_paragraph_agenda_item_can_be_added(self, browser):
-        browser.login()
-        browser.open(MeetingList.url_for(self.committee, self.meeting))
+        browser.login().open(self.meeting.get_url())
 
         form = browser.css('#schedule_text').first
         form.fill({'title': 'My Paragraph'})
@@ -77,7 +76,6 @@ class TestAgendaItem(FunctionalTestCase):
         self.meeting.execute_transition('pending-held')
         self.meeting.execute_transition('held-closed')
         transaction.commit()
-
         url = ScheduleText.url_for(self.committee, self.meeting)
         with self.assertRaises(Unauthorized):
             browser.login().open(url, data=dict(title='foo'))
@@ -87,8 +85,8 @@ class TestAgendaItem(FunctionalTestCase):
         proposal = self.setup_proposal()
         proposal_model = proposal.load_model()
 
-        browser.login()
-        browser.open(MeetingList.url_for(self.committee, self.meeting))
+        browser.login().open(self.meeting.get_url())
+
         form = browser.css('#schedule_proposal').first
         form.fill({'proposal_id': str(proposal_model.proposal_id)}).submit()
 
@@ -120,8 +118,7 @@ class TestAgendaItem(FunctionalTestCase):
         create(Builder('agenda_item').having(meeting=self.meeting))
         self.assertEqual(1, len(self.meeting.agenda_items))
 
-        browser.login()
-        browser.open(MeetingList.url_for(self.committee, self.meeting))
+        browser.login().open(self.meeting.get_url())
         browser.css('.delete_agenda_item').first.click()
 
         # refresh model instances
@@ -150,8 +147,7 @@ class TestAgendaItem(FunctionalTestCase):
         self.assertEqual(1, item1.sort_order)
         self.assertEqual(2, item2.sort_order)
 
-        view = UpdateAgendaItemOrder(
-            self.committee, self.request, self.meeting)
+        view = UpdateAgendaItemOrder(MeetingWrapper(self.meeting), self.request)
         view.update_sortorder({"sortOrder": [2, 1]})
 
         self.assertEqual(2, item1.sort_order)

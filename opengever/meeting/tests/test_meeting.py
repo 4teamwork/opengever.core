@@ -4,7 +4,6 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
-from opengever.meeting.browser.meetings.meetinglist import MeetingList
 from opengever.meeting.model import Meeting
 from opengever.testing import FunctionalTestCase
 from pyquery import PyQuery
@@ -18,6 +17,8 @@ class TestMeeting(FunctionalTestCase):
 
     def setUp(self):
         super(TestMeeting, self).setUp()
+        self.admin_unit.public_url = 'http://nohost/plone'
+
         self.repo = create(Builder('repository_root'))
         container = create(Builder('committee_container'))
         self.committee = create(Builder('committee').within(container))
@@ -39,7 +40,7 @@ class TestMeeting(FunctionalTestCase):
         link = PyQuery(meeting.get_link())[0]
 
         self.assertEqual(
-            'http://example.com/opengever-meeting-committeecontainer/committee-1/meeting/1',
+            'http://nohost/plone/opengever-meeting-committeecontainer/committee-1/meeting-1/view',
             link.get('href'))
         self.assertEqual('contenttype-opengever-meeting-meeting', link.get('class'))
         self.assertEqual('Bern, Oct 18, 2013', link.get('title'))
@@ -73,7 +74,7 @@ class TestMeeting(FunctionalTestCase):
                                  location='There',))
 
         browser.login()
-        browser.open(MeetingList.url_for(self.committee, meeting) + '/edit')
+        browser.open(meeting.get_url(view='edit'))
         browser.fill({'Start': datetime(2012, 5, 5, 15)}).submit()
 
         self.assertEquals([u'Changes saved'], info_messages())
@@ -96,5 +97,4 @@ class TestMeeting(FunctionalTestCase):
         transaction.commit()
 
         with self.assertRaises(Unauthorized):
-            browser.open(
-                MeetingList.url_for(self.committee, meeting) + '/edit')
+            browser.open(meeting.get_url(view='edit'))

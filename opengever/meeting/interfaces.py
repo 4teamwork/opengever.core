@@ -8,3 +8,7 @@ class IMeetingSettings(Interface):
         title=u'Enable meeting feature',
         description=u'Whether features from opengever.meeting are enabled',
         default=False)
+
+
+class IMeetingWrapper(Interface):
+    """Marker interface for meeting object wrappers."""

@@ -124,6 +124,10 @@ class Meeting(Base):
     def has_protocol_document(self):
         return self.protocol_document is not None
 
+    @property
+    def wrapper_id(self):
+        return 'meeting-{}'.format(self.meeting_id)
+
     def _get_title(self, prefix):
         return u"{}-{}".format(
             translate(prefix, context=getRequest()), self.get_title())
@@ -154,8 +158,7 @@ class Meeting(Base):
 
     @property
     def physical_path(self):
-        return '/'.join(
-            (self.committee.physical_path, 'meeting', str(self.meeting_id)))
+        return '/'.join((self.committee.physical_path, self.wrapper_id))
 
     def execute_transition(self, name):
         self.workflow.execute_transition(self, self, name)
@@ -264,12 +267,15 @@ class Meeting(Base):
             url, escape_html(self.get_title()), self.css_class)
         return link
 
-    def get_url(self):
-        admin_unit = self.committee.get_admin_unit()
-        return '/'.join((admin_unit.public_url, self.physical_path))
+    def get_url(self, view='view'):
+        elements = [self.committee.get_admin_unit().public_url, self.physical_path]
+        if view:
+            elements.append(view)
+
+        return '/'.join(elements)
 
     def get_edit_url(self, context):
-        return '/'.join((self.get_url(), 'edit'))
+        return self.get_url(view='edit')
 
     def get_breadcrumbs(self, context):
         return {'absolute_url': self.get_url(), 'Title': self.get_title()}

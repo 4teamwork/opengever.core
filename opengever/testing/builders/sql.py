@@ -3,6 +3,8 @@ from datetime import timedelta
 from ftw.builder import builder_registry
 from opengever.base.oguid import Oguid
 from opengever.globalindex.model.task import Task
+from opengever.locking.interfaces import ISQLLockable
+from opengever.locking.model import Lock
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import Committee
 from opengever.meeting.model import Meeting
@@ -20,6 +22,7 @@ from opengever.ogds.models.tests.builders import OrgUnitBuilder
 from opengever.ogds.models.tests.builders import SqlObjectBuilder
 from opengever.ogds.models.tests.builders import UserBuilder
 from opengever.testing.builders.base import TEST_USER_ID
+from plone.locking.interfaces import ILockable
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 
@@ -222,3 +225,21 @@ class AgendaItemBuilder(SqlObjectBuilder):
     mapped_class = AgendaItem
 
 builder_registry.register('agenda_item', AgendaItemBuilder)
+
+
+class LockBuilder(SqlObjectBuilder):
+
+    mapped_class = Lock
+
+    def __init__(self, session):
+        super(LockBuilder, self).__init__(session)
+        self.arguments['creator'] = TEST_USER_ID
+        self.arguments['lock_type'] = u'plone.locking.stealable'
+
+    def of_obj(self, sqlobj):
+        lockable = ILockable(sqlobj)
+        self.arguments['object_type'] = lockable.object_type
+        self.arguments['object_id'] = lockable.object_id
+        return self
+
+builder_registry.register('lock', LockBuilder)

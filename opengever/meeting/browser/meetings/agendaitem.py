@@ -1,5 +1,4 @@
 from opengever.meeting import _
-from opengever.meeting.browser.meetings.meetinglist import MeetingList
 from opengever.meeting.service import meeting_service
 from Products.Five.browser import BrowserView
 from zExceptions import NotFound
@@ -17,15 +16,14 @@ class ScheduleSubmittedProposal(BrowserView):
 
     @classmethod
     def url_for(cls, context, meeting):
-        return "{}/{}".format(MeetingList.url_for(context, meeting),
-                              'schedule_proposal')
+        return meeting.get_url(view='schedule_proposal')
 
-    def __init__(self, context, request, meeting):
+    def __init__(self, context, request):
         super(ScheduleSubmittedProposal, self).__init__(context, request)
-        self.meeting = meeting
+        self.meeting = self.context.model
 
     def nextURL(self):
-        return MeetingList.url_for(self.context, self.meeting)
+        return self.meeting.get_url()
 
     def extract_proposal(self):
         if self.request.method != 'POST':
@@ -59,15 +57,10 @@ class ScheduleText(ScheduleSubmittedProposal):
 
     @classmethod
     def url_for(cls, context, meeting):
-        return "{}/{}".format(MeetingList.url_for(context, meeting),
-                              'schedule_text')
-
-    def __init__(self, context, request, meeting):
-        super(ScheduleSubmittedProposal, self).__init__(context, request)
-        self.meeting = meeting
+        return meeting.get_url(view='schedule_text')
 
     def nextURL(self):
-        return MeetingList.url_for(self.context, self.meeting)
+        return self.meeting.get_url()
 
     def extract_title(self):
         if self.request.method != 'POST':
@@ -100,12 +93,11 @@ class UpdateAgendaItemOrder(BrowserView):
 
     @classmethod
     def url_for(cls, context, meeting):
-        return "{}/{}".format(MeetingList.url_for(context, meeting),
-                              'update_agenda_item_order')
+        return meeting.get_url(view='update_agenda_item_order')
 
-    def __init__(self, context, request, model):
+    def __init__(self, context, request):
         super(UpdateAgendaItemOrder, self).__init__(context, request)
-        self.model = model
+        self.model = self.context.model
 
     def __call__(self):
         if not self.model.is_editable():
@@ -139,17 +131,18 @@ class DeleteAgendaItem(BrowserView):
 
     @classmethod
     def url_for(cls, context, meeting, agend_item):
-        return "{}/delete_agenda_item/{}".format(
-            MeetingList.url_for(context, meeting),
+
+        return "{}/{}".format(
+            meeting.get_url('delete_agenda_item'),
             agend_item.agenda_item_id)
 
-    def __init__(self, context, request, model):
+    def __init__(self, context, request):
         super(DeleteAgendaItem, self).__init__(context, request)
-        self.model = model
+        self.model = self.context.model
         self.item_id = None
 
     def nextURL(self):
-        return MeetingList.url_for(self.context, self.model)
+        return self.model.get_url()
 
     def publishTraverse(self, request, name):
         # we only support exactly one id

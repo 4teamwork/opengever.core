@@ -1,5 +1,4 @@
 from opengever.meeting import _
-from opengever.meeting.browser.meetings.meetinglist import MeetingList
 from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.command import ProtocolOperations
 from opengever.meeting.form import ModelProxyEditForm
@@ -10,11 +9,13 @@ from opengever.meeting.vocabulary import get_committee_member_vocabulary
 from plone import api
 from plone.autoform.form import AutoExtensibleForm
 from plone.directives import form
+from plone.locking.interfaces import ILockable
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import button
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form.form import EditForm
+from zExceptions import Redirect
 from zope import schema
 
 
@@ -49,13 +50,9 @@ class DownloadGeneratedProtocol(BrowserView):
 
     operations = ProtocolOperations()
 
-    @classmethod
-    def url_for(cls, context, meeting):
-        return "{}/download_protocol".format(MeetingList.url_for(context, meeting))
-
-    def __init__(self, context, request, model):
+    def __init__(self, context, request):
         super(DownloadGeneratedProtocol, self).__init__(context, request)
-        self.model = model
+        self.model = context.model
 
     def __call__(self):
         sablon = Sablon(self.operations.get_sablon_template(self.model))
@@ -81,13 +78,38 @@ class EditProtocol(AutoExtensibleForm, ModelProxyEditForm, EditForm):
 
     template = ViewPageTemplateFile('templates/protocol.pt')
 
-    @classmethod
-    def url_for(cls, context, meeting):
-        return "{}/protocol".format(MeetingList.url_for(context, meeting))
+    def update(self):
+        super(EditProtocol, self).update()
 
-    def __init__(self, context, request, model):
+        if self.actions.executedActions:
+            return
+        if not self.is_available_for_current_user():
+            raise Redirect(self.context.absolute_url())
+
+        self.lock()
+
+    def __init__(self, context, request):
         super(EditProtocol, self).__init__(context, request)
-        self.model = model
+        self.model = context.model
+
+    def is_available_for_current_user(self):
+        """Check whether the current meeting can be safely unlocked.
+
+        This means the current meeting is not locked by another user.
+        """
+
+        lockable = ILockable(self.context)
+        return lockable.can_safely_unlock()
+
+    def lock(self):
+        lockable = ILockable(self.context)
+        if not lockable.locked():
+            lockable.lock()
+
+    def unlock(self):
+        lockable = ILockable(self.context)
+        if lockable.can_safely_unlock():
+            lockable.unlock()
 
     def applyChanges(self, data):
         ModelProxyEditForm.applyChanges(self, data)
@@ -130,11 +152,14 @@ class EditProtocol(AutoExtensibleForm, ModelProxyEditForm, EditForm):
         api.portal.show_message(
             _(u'message_changes_saved', default='Changes saved'),
             self.request)
-        return self.redirect_to_meetinglist()
+
+        self.unlock()
+        return self.redirect_to_meeting()
 
     @button.buttonAndHandler(_('Cancel', default=u'Cancel'), name='cancel')
     def handleCancel(self, action):
-        return self.redirect_to_meetinglist()
+        self.unlock()
+        return self.redirect_to_meeting()
 
     def render(self):
         ModelProxyEditForm.render(self)
@@ -145,6 +170,5 @@ class EditProtocol(AutoExtensibleForm, ModelProxyEditForm, EditForm):
             if not agenda_item.is_paragraph:
                 yield agenda_item
 
-    def redirect_to_meetinglist(self):
-        return self.request.RESPONSE.redirect(
-            MeetingList.url_for(self.context, self.model))
+    def redirect_to_meeting(self):
+        return self.request.RESPONSE.redirect(self.model.get_url())

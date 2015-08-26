@@ -1,5 +1,4 @@
 from opengever.meeting import _
-from opengever.meeting.browser.meetings.meetinglist import MeetingList
 from opengever.meeting.command import CreateGeneratedDocumentCommand
 from opengever.meeting.command import ManualExcerptOperations
 from opengever.meeting.sources import all_open_dossiers_source
@@ -96,14 +95,9 @@ class GenerateExcerpt(AutoExtensibleForm, EditForm):
 
     template = ViewPageTemplateFile('templates/excerpt.pt')
 
-    @classmethod
-    def url_for(cls, context, meeting):
-        return "{}/generate_excerpt".format(
-            MeetingList.url_for(context, meeting))
-
-    def __init__(self, context, request, model):
+    def __init__(self, context, request):
         super(GenerateExcerpt, self).__init__(context, request)
-        self.model = model
+        self.model = self.context.model
         self._excerpt_data = None
 
     def updateWidgets(self):
@@ -154,12 +148,11 @@ class GenerateExcerpt(AutoExtensibleForm, EditForm):
             data['dossier'], self.model, operations)
         command.execute()
         command.show_message()
-        return self.redirect_to_meetinglist()
+        return self.redirect_to_meeting()
 
     @button.buttonAndHandler(_('Cancel', default=u'Cancel'), name='cancel')
     def handleCancel(self, action):
         return self.redirect_to_meetinglist()
 
-    def redirect_to_meetinglist(self):
-        return self.request.RESPONSE.redirect(
-            MeetingList.url_for(self.context, self.model))
+    def redirect_to_meeting(self):
+        return self.request.RESPONSE.redirect(self.model.get_url())

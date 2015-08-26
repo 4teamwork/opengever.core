@@ -2,6 +2,7 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from opengever.meeting import _
 from opengever.meeting.container import ModelContainer
+from opengever.meeting.meeting_wrapper import MeetingWrapper
 from opengever.meeting.model import Committee as CommitteeModel
 from opengever.meeting.model import Meeting
 from opengever.meeting.model import Membership
@@ -41,12 +42,34 @@ class ICommitteeModel(Interface):
         )
 
 
+_marker = object()
+
 class Committee(ModelContainer):
     """Plone Proxy for a Committe."""
 
     content_schema = ICommittee
     model_schema = ICommitteeModel
     model_class = CommitteeModel
+
+    def _getOb(self, id_, default=_marker):
+        """We extend `_getObj` in order to change the context for meeting
+        objects to the `MeetingWrapper`. That allows us to register the
+        meetings view as regular Browser view without any traversal hacks."""
+
+        obj = super(Committee, self)._getOb(id_, default)
+        if obj is not default:
+            return obj
+
+        if id_.startswith('meeting'):
+            meeting_id = int(id_.split('-')[-1])
+            meeting = Meeting.query.get(meeting_id)
+            if meeting:
+                wrapper = MeetingWrapper(meeting)
+                return wrapper.__of__(self)
+
+        if default is _marker:
+            raise KeyError(id_)
+        return default
 
     def Title(self):
         model = self.load_model()
