@@ -5,7 +5,9 @@ Changelog
 4.5.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- ReferenceNumberPrefixAdpater: Fix conditions for lazily initialising
+  PersistentMappings in annotations.
+  [lgraf]
 
 
 4.5.1 (2015-08-19)
