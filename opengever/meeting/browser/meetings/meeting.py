@@ -64,8 +64,7 @@ class EditMeeting(ModelEditForm):
     fields = field.Fields(IMeetingModel)
 
     def __init__(self, context, request):
-        super(EditMeeting, self).__init__(context, request)
-        self.model = self.context.model
+        super(EditMeeting, self).__init__(context, request, context.model)
 
     def updateWidgets(self):
         super(EditMeeting, self).updateWidgets()
