@@ -1,4 +1,5 @@
 from opengever.meeting import _
+from opengever.meeting.model import Membership
 from opengever.ogds.base.utils import get_current_admin_unit
 from zope.globalrequest import getRequest
 from zope.i18n import translate
@@ -46,13 +47,23 @@ class ProtocolData(object):
                 context=getRequest())
         }
 
-    def add_participants(self):
+    def add_members(self):
+        members = []
+        for participant in self.meeting.participants:
+            membership = Membership.query.fetch_for_meeting(
+                self.meeting, participant)
+            members.append({
+                "fullname": participant.fullname,
+                "role": membership.role
+                })
+
         participants = {
-            'members': [
-                participant.fullname for participant in
-                self.meeting.participants
-            ]
+            'members': members
         }
+        return participants
+
+    def add_participants(self):
+        participants = self.add_members()
         if self.meeting.other_participants:
             other_participants = self.meeting.other_participants.split('\n')
         else:
@@ -89,8 +100,9 @@ class ProtocolData(object):
                     include_copy_for_attention=self.include_copy_for_attention
                 ))
 
-    def as_json(self):
-        return json.dumps(self.data)
+    def as_json(self, pretty=False):
+        indent = 4 if pretty else None
+        return json.dumps(self.data, indent=indent)
 
 
 class ExcerptProtocolData(ProtocolData):

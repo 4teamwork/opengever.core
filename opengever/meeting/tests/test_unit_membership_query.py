@@ -1,4 +1,5 @@
 from datetime import date
+from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.meeting.model import Membership
@@ -6,22 +7,64 @@ from opengever.testing import MEMORY_DB_LAYER
 from unittest2 import TestCase
 
 
-class TestUnitMembership(TestCase):
+class TestUnitMembershipQuery(TestCase):
 
     layer = MEMORY_DB_LAYER
 
     def setUp(self):
-        super(TestUnitMembership, self).setUp()
+        super(TestUnitMembershipQuery, self).setUp()
         self.session = self.layer.session
 
         self.member = create(Builder('member').having(lastname=u'M\xfcller'))
         self.committee = create(Builder('committee_model')
                                 .having(title=u'\xdcbungskommission'))
 
-    def setup_membership(self, date_from, date_to):
+    def setup_membership(self, date_from, date_to,):
         return create(Builder('membership').having(
             committee=self.committee, member=self.member,
             date_from=date_from, date_to=date_to))
+
+    def test_fetch_for_meeting(self):
+        meeting = create(Builder('meeting').having(
+            committee=self.committee, start=date(2014, 7, 1)))
+        membership_before = create(Builder('membership').having(
+            date_from=date(2013, 1, 1),
+            date_to=date(2013, 12, 31),
+            member=self.member,
+            committee=self.committee))
+        membership = create(Builder('membership').having(
+            date_from=date(2014, 1, 1),
+            date_to=date(2014, 12, 31),
+            member=self.member,
+            committee=self.committee))
+        membership_after = create(Builder('membership').having(
+            date_from=date(2015, 1, 1),
+            date_to=date(2015, 12, 31),
+            member=self.member,
+            committee=self.committee))
+
+        self.assertEqual(
+            membership,
+            Membership.query.fetch_for_meeting(meeting, self.member))
+
+    def test_only_active(self):
+        yesterday = date.today() - timedelta(days=1)
+        tomorrow = date.today() + timedelta(days=1)
+        inactive = self.setup_membership(date(2010, 1, 1), yesterday)
+        active = self.setup_membership(yesterday, tomorrow)
+        self.assertEqual([active], Membership.query.only_active().all())
+
+    def test_fetch_overlapping(self):
+        membership = self.setup_membership(date(2012, 5, 1), date(2012, 7, 10))
+        self.assertEqual(membership, Membership.query.fetch_overlapping(
+            date(2012, 5, 10), date(2012, 7, 2), self.member, self.committee))
+
+    def test_fetch_overlapping_ignore_id(self):
+        membership = self.setup_membership(date(2012, 5, 1), date(2012, 7, 10))
+        self.assertEqual(None, Membership.query.fetch_overlapping(
+            date(2012, 5, 10), date(2012, 7, 2),
+            self.member, self.committee,
+            ignore_id=membership.membership_id))
 
     def test_query_contained_within(self):
         membership = self.setup_membership(date(2012, 5, 1), date(2012, 7, 10))

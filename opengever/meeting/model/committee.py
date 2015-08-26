@@ -1,7 +1,6 @@
 from opengever.base.model import Base
 from opengever.base.oguid import Oguid
 from opengever.base.utils import escape_html
-from opengever.meeting.model.query import CommitteeQuery
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models import UNIT_ID_LENGTH
 from sqlalchemy import Column
@@ -13,8 +12,6 @@ from sqlalchemy.schema import Sequence
 
 
 class Committee(Base):
-
-    query_cls = CommitteeQuery
 
     __tablename__ = 'committees'
     __table_args__ = (UniqueConstraint('admin_unit_id', 'int_id'), {})

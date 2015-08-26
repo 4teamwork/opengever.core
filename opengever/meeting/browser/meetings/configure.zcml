@@ -47,6 +47,13 @@
 
   <browser:page
       for="opengever.meeting.interfaces.IMeetingWrapper"
+      name="download_protocol_json"
+      class=".protocol.DownloadProtocolJson"
+      permission="cmf.ManagePortal"
+      />
+
+  <browser:page
+      for="opengever.meeting.interfaces.IMeetingWrapper"
       name="generate_excerpt"
       class=".excerpt.GenerateExcerpt"
       permission="zope2.View"

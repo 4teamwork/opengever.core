@@ -1,6 +1,5 @@
 from opengever.base.model import Base
 from opengever.base.oguid import Oguid
-from opengever.meeting.model.query import SubmittedDocumentQuery
 from opengever.ogds.models import UNIT_ID_LENGTH
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
@@ -19,8 +18,6 @@ class SubmittedDocument(Base):
     submitted proposal.
 
     """
-    query_cls = SubmittedDocumentQuery
-
     __tablename__ = 'submitteddocuments'
     __table_args__ = (
         UniqueConstraint('admin_unit_id', 'int_id', 'proposal_id',

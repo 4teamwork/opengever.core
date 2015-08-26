@@ -4,7 +4,6 @@ from opengever.base.utils import escape_html
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
 from opengever.meeting.model import AgendaItem
-from opengever.meeting.model.query import MeetingQuery
 from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
@@ -55,8 +54,6 @@ class HeldCloseTransition(Transition):
 
 
 class Meeting(Base):
-
-    query_cls = MeetingQuery
 
     STATE_PENDING = State('pending', is_default=True,
                           title=_('pending', default='Pending'))
