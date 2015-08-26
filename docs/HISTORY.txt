@@ -5,6 +5,16 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Add locking support for meetings.
+  [phgross]
+
+- Introduce a wrapper object for meetings and use it as context. So the
+  traversal-hack on every meeting view can be eliminated.
+  [phgross]
+
+- Add submodule opengever.locking which add locking support for sqlobjects.
+  [phgross]
+
 - Make mail upgradesteps (to4500, to4501) more defensive.
   [phgross]
 
