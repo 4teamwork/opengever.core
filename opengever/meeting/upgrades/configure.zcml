@@ -325,4 +325,13 @@
         profile="opengever.meeting:default"
         />
 
+    <!-- 4603 -> 4604 -->
+    <upgrade-step:importProfile
+        title="Add Meeting-Dossier content type."
+        source="4603"
+        destination="4604"
+        profile="opengever.meeting:default"
+        directory="profiles/4604"
+        />
+
 </configure>

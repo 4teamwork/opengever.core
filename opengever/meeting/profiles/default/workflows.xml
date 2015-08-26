@@ -22,6 +22,11 @@
     <type type_id="opengever.meeting.sablontemplate">
       <bound-workflow workflow_id="opengever_document_workflow"/>
     </type>
+        <type type_id="opengever.meeting.meetingdossier">
+      <bound-workflow workflow_id="opengever_dossier_workflow"/>
+    </type>
   </bindings>
 
 </object>
+
+

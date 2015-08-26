@@ -1,5 +1,6 @@
 from zope import schema
 from zope.interface import Interface
+from plone.directives import form
 
 
 class IMeetingSettings(Interface):
@@ -12,3 +13,7 @@ class IMeetingSettings(Interface):
 
 class IMeetingWrapper(Interface):
     """Marker interface for meeting object wrappers."""
+
+
+class IMeetingDossier(form.Schema):
+    """Marker interface for MeetingDossier"""
