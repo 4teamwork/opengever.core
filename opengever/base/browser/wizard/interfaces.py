@@ -22,6 +22,14 @@ class IWizardDataStorage(Interface):
         key -- String key to identify the data set.
         """
 
+    def drop_data(key):
+        """Delete data set (dict) stored under `key` in the storage. If
+        there is no such data set, nothing happens.
+
+        Arguments:
+        key -- String key to identify the data set.
+        """
+
     def update(key, data):
         """Updates the data set stored under `key` with `data` (dict).
 

@@ -40,6 +40,14 @@ class TestAcceptTaskStorageManager(MockTestCase):
         data['foo'] = 'bar'
         self.assertEqual(manager._get_user_storage(), data)
 
+    def test_drop_data(self):
+        manager = storage.WizardDataStorage()
+        manager.get_data('somekey')
+        self.assertTrue('somekey' in manager._get_user_storage())
+
+        manager.drop_data('somekey')
+        self.assertFalse('somekey' in manager._get_user_storage())
+
     def test_get_user_storage_is_per_user(self):
         request = object()
 

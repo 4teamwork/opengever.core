@@ -65,6 +65,11 @@ class WizardDataStorage(grok.GlobalUtility):
         del data['__created']
         return data
 
+    def drop_data(self, key):
+        storage = self._get_user_storage()
+        if key in storage:
+            del storage[key]
+
     def update(self, key, data):
         self._get_data(key).update(data)
 
