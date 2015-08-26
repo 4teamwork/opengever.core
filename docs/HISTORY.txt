@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Make mail upgradesteps (to4500, to4501) more defensive.
+  [phgross]
+
 - ReferenceNumberPrefixAdpater: Fix conditions for lazily initialising
   PersistentMappings in annotations.
   [lgraf]

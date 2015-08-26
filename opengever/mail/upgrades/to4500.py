@@ -1,5 +1,9 @@
 from ftw.upgrade import ProgressLogger
 from ftw.upgrade import UpgradeStep
+from ZODB.POSException import ConflictError
+import logging
+
+logger = logging.getLogger('ftw.upgrade')
 
 
 class UpgradeMailMessageFilename(UpgradeStep):
@@ -9,4 +13,10 @@ class UpgradeMailMessageFilename(UpgradeStep):
             {'portal_type': 'ftw.mail.mail'}, full_objects=True)
 
         for mail in ProgressLogger('Migrate mail message filename', objects):
-            mail.update_filename()
+            try:
+                mail.update_filename()
+            except ConflictError:
+                raise
+            except Exception, e:
+                logger.warn("Updating object {0} failed: {1}".format(
+                    mail.absolute_url(), str(e)))

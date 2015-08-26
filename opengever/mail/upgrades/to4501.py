@@ -4,7 +4,7 @@ from ftw.upgrade import ProgressLogger
 from ftw.upgrade import UpgradeStep
 from plone import api
 import logging
-
+from ZODB.POSException import ConflictError
 
 log = logging.getLogger('ftw.upgrade')
 
@@ -74,10 +74,15 @@ class FixMailsWithIncorrectlyDecodedHeaderValues(UpgradeStep):
 
         info = 'Fixing mails with incorrectly decoded text'
         for mail in ProgressLogger(info, objects):
+            try:
+                need_reindexing = set()
+                need_reindexing.update(fix_document_author(mail))
+                need_reindexing.update(fix_title(mail))
 
-            need_reindexing = set()
-            need_reindexing.update(fix_document_author(mail))
-            need_reindexing.update(fix_title(mail))
-
-            if need_reindexing:
-                catalog.reindexObject(mail, idxs=need_reindexing)
+                if need_reindexing:
+                    catalog.reindexObject(mail, idxs=need_reindexing)
+            except ConflictError:
+                raise
+            except Exception, e:
+                log.warn("Updating object {0} failed: {1}".format(
+                    mail.absolute_url(), str(e)))
