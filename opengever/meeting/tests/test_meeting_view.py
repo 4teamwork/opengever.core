@@ -103,6 +103,12 @@ class TestMeetingView(FunctionalTestCase):
         transaction.commit()
 
     @browsing
+    def test_accessing_the_meeting_directly_shows_meeting_view(self, browser):
+        browser.login().open(self.meeting.get_url(view=None))
+
+        self.assertEquals(['There, Jan 01, 2013'], browser.css('h1').text)
+
+    @browsing
     def test_participants_listing_precidency_is_existing(self, browser):
         browser.login().open(self.meeting.get_url())
         self.assertEquals([u'h\xfcgo Boss'], browser.css("#meeting_presidency").text)
