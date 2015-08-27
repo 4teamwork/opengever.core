@@ -70,7 +70,7 @@ class TestMeeting(FunctionalTestCase):
             [u'The meeting and its dossier were created successfully'],
             info_messages())
         self.assertEqual(
-            'http://nohost/plone/opengever-meeting-committeecontainer/committee-1/meeting/1',
+            'http://nohost/plone/opengever-meeting-committeecontainer/committee-1/meeting-1/view',
             browser.url)
 
         committee_model = self.committee.load_model()

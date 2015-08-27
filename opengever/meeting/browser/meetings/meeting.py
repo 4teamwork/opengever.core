@@ -127,7 +127,7 @@ class AddMeetingDossierView(FormWrapper, grok.View):
     grok.name('add-meeting-dossier')
     grok.require('cmf.AddPortalContent')
 
-    typename = 'opengever.dossier.businesscasedossier'
+    typename = 'opengever.meeting.meetingdossier'
 
     def __init__(self, context, request):
         ttool = api.portal.get_tool('portal_types')
