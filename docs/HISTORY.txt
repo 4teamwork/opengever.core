@@ -8,9 +8,6 @@ Changelog
 - Also display a members role in a meeting's protocol.
   [deiferni]
 
-- Disable CSRF protection for CreateSuccesorForwardingView.
-  [phgross]
-
 - Add locking support for meetings.
   [phgross]
 
@@ -20,13 +17,6 @@ Changelog
 
 - Add submodule opengever.locking which add locking support for sqlobjects.
   [phgross]
-
-- Make mail upgradesteps (to4500, to4501) more defensive.
-  [phgross]
-
-- ReferenceNumberPrefixAdpater: Fix conditions for lazily initialising
-  PersistentMappings in annotations.
-  [lgraf]
 
 - Add additional columns publish_in, disclose_to and copy_for_attention
   to proposals, protocols and protocol excerpts.
@@ -47,6 +37,21 @@ Changelog
 
 - Use dossier title as default title for new proposals.
   [deiferni]
+
+
+4.5.2 (2015-08-27)
+------------------
+
+- Disable csrf protection for CreateSuccesorForwardingView.
+  [phgross]
+
+- Make mail upgradesteps (to4500, to4501) more defensive.
+  [phgross]
+
+- ReferenceNumberPrefixAdpater: Fix conditions for lazily initialising
+  PersistentMappings in annotations.
+  [lgraf]
+
 
 4.5.1 (2015-08-19)
 ------------------
