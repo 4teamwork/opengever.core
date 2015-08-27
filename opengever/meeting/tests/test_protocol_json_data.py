@@ -18,6 +18,7 @@ class TestProtocolJsonData(FunctionalTestCase):
                     initial_position=u'Initial',
                     legal_basis=u'Legal!',
                     proposed_action=u'Yep',
+                    dossier_reference_number='FD 2.6.8/1',
                     considerations=u'We should think about it'))
         self.committee = create(Builder('committee_model'))
         self.member_peter = create(Builder('member'))
@@ -60,6 +61,7 @@ class TestProtocolJsonData(FunctionalTestCase):
         self.assertEqual(
             {'agenda_items': [
                 {'description': u'Proposal',
+                 'dossier_reference_number': 'FD 2.6.8/1',
                  'markdown:considerations': u'We should think about it',
                  'markdown:decision': u'Do it',
                  'markdown:discussion': u'Hmm',
@@ -73,6 +75,7 @@ class TestProtocolJsonData(FunctionalTestCase):
                  'title': u'Proposal',
                  'is_paragraph': False,},
                 {'description': u'Free Text',
+                 'dossier_reference_number': None,
                  'markdown:considerations': None,
                  'markdown:decision': u'Done',
                  'markdown:discussion': u'Blah',

@@ -11,6 +11,10 @@ Changelog
 - CSRF: unprotect initializing annotations and sequence numbers.
   [deiferni]
 
+- Save dossier's reference number on proposal and display it on protocol
+  form and protocol word.
+  [phgross]
+
 - Fixed bug in retention_period:
   The RetentionPeriodValidator respect the is_restricted flag now.
   [phgross]

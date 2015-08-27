@@ -63,6 +63,7 @@ class AgendaItem(Base):
             'number': self.number,
             'description': self.description,
             'title': self.get_title(),
+            'dossier_reference_number': self.get_dossier_reference_number(),
             'is_paragraph': self.is_paragraph,
         }
         if include_initial_position:
