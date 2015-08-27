@@ -1,5 +1,6 @@
 from collections import OrderedDict
 from opengever.base.model import Base
+from opengever.base.oguid import Oguid
 from opengever.base.utils import escape_html
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
@@ -7,6 +8,7 @@ from opengever.meeting.model import AgendaItem
 from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
+from opengever.ogds.models import UNIT_ID_LENGTH
 from opengever.ogds.models.types import UnicodeCoercingText
 from plone import api
 from plone.i18n.normalizer.interfaces import IIDNormalizer
@@ -17,6 +19,7 @@ from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy import Table
 from sqlalchemy.orm import backref
+from sqlalchemy.orm import composite
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
 from zope.component import getUtility
@@ -93,6 +96,10 @@ class Meeting(Base):
     participants = relationship('Member',
                                 secondary=meeting_participants,
                                 backref='meetings')
+
+    dossier_admin_unit_id = Column(String(UNIT_ID_LENGTH), nullable=False)
+    dossier_int_id = Column(Integer, nullable=False)
+    dossier_oguid = composite(Oguid, dossier_admin_unit_id, dossier_int_id)
 
     agenda_items = relationship("AgendaItem", order_by='AgendaItem.sort_order',
                                 backref='meeting')

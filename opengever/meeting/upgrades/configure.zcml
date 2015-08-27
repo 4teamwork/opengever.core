@@ -334,4 +334,14 @@
         directory="profiles/4604"
         />
 
+    <!-- 4604 -> 4605 -->
+    <genericsetup:upgradeStep
+        title="Link meeting and dossier"
+        description=""
+        source="4604"
+        destination="4605"
+        handler="opengever.meeting.upgrades.to4605.LinkMeetingToDossier"
+        profile="opengever.meeting:default"
+        />
+
 </configure>

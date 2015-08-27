@@ -181,6 +181,8 @@ class MeetingBuilder(SqlObjectBuilder):
     def __init__(self, session):
         super(MeetingBuilder, self).__init__(session)
         self._scheduled_proposals = []
+        self.arguments['dossier_admin_unit_id'] = 'foo'
+        self.arguments['dossier_int_id'] = 1234
 
     def scheduled_proposals(self, proposals):
         for proposal in proposals:

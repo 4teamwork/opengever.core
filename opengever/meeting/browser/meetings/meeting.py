@@ -190,8 +190,8 @@ class AddMeetingDossierView(FormWrapper, grok.View):
                     self.status = self.formErrorsMessage
                     return
 
-                self.create_meeting_dossier(data)
-                meeting = self.create_meeting(get_committee_oguid())
+                dossier = self.create_meeting_dossier(data)
+                meeting = self.create_meeting(dossier, get_committee_oguid())
 
                 api.portal.show_message(
                     u"The meeting and its dossier were created successfully",
@@ -217,10 +217,11 @@ class AddMeetingDossierView(FormWrapper, grok.View):
                     self._finishedAdd = True
                 return obj
 
-            def create_meeting(self, committee_oguid):
+            def create_meeting(self, dossier, committee_oguid):
                 dm = getUtility(IWizardDataStorage)
                 data = dm.get_data(get_dm_key())
 
+                data['dossier_oguid'] = Oguid.for_object(dossier)
                 meeting = Meeting(**data)
                 session = create_session()
                 session.add(meeting)

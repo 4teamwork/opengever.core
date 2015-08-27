@@ -80,6 +80,9 @@ class TestMeeting(FunctionalTestCase):
         self.assertEqual(datetime(2010, 1, 1, 10), meeting.start)
         self.assertEqual(datetime(2010, 1, 1, 11), meeting.end)
         self.assertEqual('Somewhere', meeting.location)
+        dossier = meeting.dossier_oguid.resolve_object()
+        self.assertIsNotNone(dossier)
+        self.assertEquals(u'Meeting on Jan 01, 2010', dossier.title)
 
     @browsing
     def test_edit_meeting(self, browser):
