@@ -270,6 +270,55 @@ class TestProposal(FunctionalTestCase):
         self.assertSubmittedDocumentCreated(proposal, document, submitted_document)
 
     @browsing
+    def test_dossier_reference_number_is_set_on_creation(self, browser):
+        committee = create(Builder('committee_model'))
+        document = create(Builder('document')
+                          .within(self.dossier)
+                          .titled('A Document'))
+
+        browser.login()
+        browser.open(self.dossier, view='++add++opengever.meeting.proposal')
+        self.search_for_document(browser, document)
+        browser.fill({
+            'Title': u'A pr\xf6posal',
+            'Legal basis': u'possible',
+            'Initial position': u'My pr\xf6posal',
+            'Proposed action': u'Lorem ips\xfcm',
+            'Committee': str(committee.committee_id),
+            'form.widgets.relatedItems:list': True,
+        })
+        browser.find('Save').click()
+
+        self.assertEqual(
+            u'Client1 1 / 1',
+            browser.context.load_model().dossier_reference_number)
+
+    @browsing
+    def test_proposal_stores_reference_number_of_main_dossier(self, browser):
+        committee = create(Builder('committee_model'))
+        subdossier = create(Builder('dossier').within(self.dossier))
+        document = create(Builder('document')
+                          .within(subdossier)
+                          .titled('A Document'))
+
+        browser.login()
+        browser.open(subdossier, view='++add++opengever.meeting.proposal')
+        self.search_for_document(browser, document)
+        browser.fill({
+            'Title': u'A pr\xf6posal',
+            'Legal basis': u'possible',
+            'Initial position': u'My pr\xf6posal',
+            'Proposed action': u'Lorem ips\xfcm',
+            'Committee': str(committee.committee_id),
+            'form.widgets.relatedItems:list': True,
+        })
+        browser.find('Save').click()
+
+        self.assertEqual(
+            u'Client1 1 / 1',
+            browser.context.load_model().dossier_reference_number)
+
+    @browsing
     def test_proposal_can_be_submitted(self, browser):
         committee = create(Builder('committee'))
         proposal = create(Builder('proposal')

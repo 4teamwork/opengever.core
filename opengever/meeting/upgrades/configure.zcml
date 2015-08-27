@@ -305,4 +305,24 @@
         profile="opengever.meeting:default"
         />
 
+    <!-- 4601 -> 4602 -->
+    <genericsetup:upgradeStep
+        title="Add dossier_reference_number column to proposal table."
+        description=""
+        source="4601"
+        destination="4602"
+        handler="opengever.meeting.upgrades.to4602.AddDossierReferenceNumberColumn"
+        profile="opengever.meeting:default"
+        />
+
+    <!-- 4602 -> 4603 -->
+    <genericsetup:upgradeStep
+        title="Update dossier_reference_number for all proposals."
+        description=""
+        source="4602"
+        destination="4603"
+        handler="opengever.meeting.upgrades.to4603.UpdateProposalDossierReferenceNumber"
+        profile="opengever.meeting:default"
+        />
+
 </configure>

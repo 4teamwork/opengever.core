@@ -85,6 +85,7 @@ class Proposal(Base):
 
     committee_id = Column(Integer, ForeignKey('committees.id'))
     committee = relationship('Committee', backref='proposals')
+    dossier_reference_number = Column(UnicodeCoercingText, nullable=False)
 
     history_records = relationship('ProposalHistory',
                                    order_by="desc(ProposalHistory.created)")
