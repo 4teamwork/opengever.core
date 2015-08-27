@@ -105,6 +105,11 @@ class AgendaItem(Base):
 
         return title
 
+    def get_dossier_reference_number(self):
+        if self.has_proposal:
+            return self.proposal.dossier_reference_number
+        return None
+
     def get_css_class(self):
         css_classes = []
         if self.is_paragraph:

@@ -18,7 +18,10 @@
                 <metal:block tal:repeat="protocol view/get_agenda_items">
                   <metal:block tal:define="name protocol/name">
 
-                    <h2 class="protocol_title" tal:attributes="id name" tal:content="protocol/get_title"></h2>
+                    <h2 class="protocol_title" tal:attributes="id name">
+                      <span tal:content="protocol/get_title"></span>
+                      <span class="dossier_reference_number" tal:content="protocol/get_dossier_reference_number"></span>
+                    </h2>
 
                     <metal:block tal:condition="protocol/has_proposal">
                         <label tal:attributes="for string:${name}-legal_basis;
