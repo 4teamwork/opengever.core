@@ -23,13 +23,17 @@ class TestAgendaItem(FunctionalTestCase):
         super(TestAgendaItem, self).setUp()
         self.admin_unit.public_url = 'http://nohost/plone'
 
-        self.repo = create(Builder('repository_root'))
+        self.repository_root, self.repository_folder = create(
+            Builder('repository_tree'))
+        self.dossier = create(
+            Builder('dossier').within(self.repository_folder))
         container = create(Builder('committee_container'))
         self.committee = create(Builder('committee').within(container))
         self.meeting = create(Builder('meeting')
                               .having(committee=self.committee.load_model(),
                                       start=datetime(2013, 1, 1),
-                                      location='There',))
+                                      location='There',)
+                              .link_with(self.dossier))
 
     def setup_proposal(self):
         root, folder = create(Builder('repository_tree'))

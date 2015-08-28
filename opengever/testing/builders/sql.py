@@ -184,6 +184,12 @@ class MeetingBuilder(SqlObjectBuilder):
         self.arguments['dossier_admin_unit_id'] = 'foo'
         self.arguments['dossier_int_id'] = 1234
 
+    def link_with(self, dossier):
+        del self.arguments['dossier_admin_unit_id']
+        del self.arguments['dossier_int_id']
+        self.arguments['dossier_oguid'] = Oguid.for_object(dossier)
+        return self
+
     def scheduled_proposals(self, proposals):
         for proposal in proposals:
             if IProposal.providedBy(proposal):

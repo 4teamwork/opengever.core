@@ -45,7 +45,8 @@ class TestMeetingLocking(FunctionalTestCase):
         self.meeting = create(Builder('meeting')
                               .having(committee=self.committee_model,
                                       start=datetime(2013, 1, 1),
-                                      location='There',))
+                                      location='There',)
+                              .link_with(self.dossier))
         self.meeting.execute_transition('pending-held')
         self.proposal_model = self.proposal.load_model()
 

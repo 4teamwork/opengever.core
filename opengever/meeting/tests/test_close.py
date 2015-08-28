@@ -39,7 +39,8 @@ class TestCloseMeeting(FunctionalTestCase):
                               .having(committee=self.committee.load_model(),
                                       start=datetime(2013, 1, 1),
                                       location='There')
-                              .scheduled_proposals([self.proposal_a, self.proposal_b]))
+                              .scheduled_proposals([self.proposal_a, self.proposal_b])
+                              .link_with(self.dossier))
         self.meeting.execute_transition('pending-held')
 
         # set correct public url, used for generated meeting urls

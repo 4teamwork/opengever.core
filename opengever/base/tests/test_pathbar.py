@@ -54,7 +54,8 @@ class TestPathBar(FunctionalTestCase):
         committee = create(Builder('committee').within(container))
         meeting = create(Builder('meeting')
                          .having(committee=committee.load_model(),
-                                 start=datetime(2010, 1, 1)))
+                                 start=datetime(2010, 1, 1))
+                         .link_with(self.dossier))
 
         browser.login().open(meeting.get_url())
         last_link = browser.css('#portal-breadcrumbs a')[-1]

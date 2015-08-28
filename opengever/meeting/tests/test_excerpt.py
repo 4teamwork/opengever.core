@@ -49,7 +49,8 @@ class TestExcerpt(FunctionalTestCase):
         self.meeting = create(Builder('meeting')
                               .having(committee=self.committee_model,
                                       start=datetime(2014, 3, 4),
-                                      location=u'B\xe4rn',))
+                                      location=u'B\xe4rn',)
+                              .link_with(self.dossier))
         self.meeting.execute_transition('pending-held')
         self.proposal_model = self.proposal.load_model()
 

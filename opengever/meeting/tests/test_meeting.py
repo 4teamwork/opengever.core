@@ -22,6 +22,8 @@ class TestMeeting(FunctionalTestCase):
         self.repo = create(Builder('repository_root'))
         self.repository_folder = create(Builder('repository')
                                         .within(self.repo))
+        self.dossier = create(
+            Builder('dossier').within(self.repository_folder))
         container = create(Builder('committee_container'))
         self.committee = create(Builder('committee')
                                 .within(container)
@@ -37,9 +39,10 @@ class TestMeeting(FunctionalTestCase):
             Meeting(start=datetime(2013, 10, 18)).get_title())
 
     def test_meeting_link(self):
-        meeting = Meeting(location=u'Bern',
-                          start=datetime(2013, 10, 18),
-                          committee=self.committee.load_model())
+        meeting = create(Builder('meeting').having(
+            location=u'Bern',
+            start=datetime(2013, 10, 18),
+            committee=self.committee.load_model()))
 
         link = PyQuery(meeting.get_link())[0]
 
@@ -90,7 +93,8 @@ class TestMeeting(FunctionalTestCase):
         meeting = create(Builder('meeting')
                          .having(committee=committee_model,
                                  start=datetime(2013, 1, 1),
-                                 location='There',))
+                                 location='There',)
+                         .link_with(self.dossier))
 
         browser.login()
         browser.open(meeting.get_url(view='edit'))

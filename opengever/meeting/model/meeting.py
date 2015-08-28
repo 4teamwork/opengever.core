@@ -279,6 +279,12 @@ class Meeting(Base):
 
         return '/'.join(elements)
 
+    def get_dossier_url(self):
+        return self.dossier_oguid.get_url()
+
+    def get_dossier(self):
+        return self.dossier_oguid.resolve_object()
+
     def get_edit_url(self, context):
         return self.get_url(view='edit')
 
