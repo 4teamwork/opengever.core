@@ -3,6 +3,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import warning_messages
+from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import login
 from plone.app.testing import TEST_USER_NAME
@@ -27,6 +28,24 @@ class TestDocumentDownloadConfirmation(FunctionalTestCase):
                                  repo_tool._prepareSysMetadata('mock'),
                                  autoapply=repo_tool.autoapply)
         transaction.commit()
+
+    def tearDown(self):
+        DownloadConfirmationHelper().activate()
+        super(TestDocumentDownloadConfirmation, self).tearDown()
+
+    @browsing
+    def test_disable_copy_download_overlay(self, browser):
+        browser.login().open(self.document,
+                             view='tabbed_view/listing',
+                             data={'view_name': 'overview'})
+        overview_link_selector = '.function-download-copy.link-overlay'
+        self.assertEquals(1, len(browser.css('.link-overlay')))
+
+        browser.css(overview_link_selector).first.click()
+        browser.fill({"disable_download_confirmation": "on"}).submit()
+
+        self.assertEquals(0, len(browser.css('.link-overlay')))
+        self.assertFalse('file_download_confirmation' in browser.contents)
 
     @browsing
     def test_download_confirmation_for_empty_file(self, browser):
