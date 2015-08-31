@@ -4,11 +4,14 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import warning_messages
 from opengever.document.browser.download import DownloadConfirmationHelper
+from opengever.journal.browser import JournalHistory
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import login
+from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
 from plone.namedfile.file import NamedBlobFile
 from Products.CMFCore.utils import getToolByName
+from zope.i18n import translate
 import transaction
 
 
@@ -32,6 +35,43 @@ class TestDocumentDownloadConfirmation(FunctionalTestCase):
     def tearDown(self):
         DownloadConfirmationHelper().activate()
         super(TestDocumentDownloadConfirmation, self).tearDown()
+
+    def assert_download_journal_entry_created(self, document):
+        request = self.layer['request']
+
+        journal = JournalHistory(document, request)
+        entry = journal.data()[-1]
+        translated_action_title = translate(entry['action']['title'],
+                                            context=request)
+        self.assertEqual(u'Download copy', translated_action_title)
+        self.assertEquals(TEST_USER_ID, entry['actor'])
+        self.assertDictContainsSubset({'type': 'File copy downloaded',
+                                       'visible': True},
+                                      entry['action'])
+
+    @browsing
+    def test_download_copy_with_overlay_creates_journal_entry(self, browser):
+        browser.login().open(self.document,
+                             view='tabbed_view/listing',
+                             data={'view_name': 'overview'})
+
+        browser.find('Download copy').click()
+        browser.find('label_download').click()
+
+        self.assert_download_journal_entry_created(self.document)
+
+    @browsing
+    def test_download_copy_without_overlay_creates_journal_entry(self, browser):
+        DownloadConfirmationHelper().deactivate()
+        transaction.commit()
+
+        browser.login().open(self.document,
+                             view='tabbed_view/listing',
+                             data={'view_name': 'overview'})
+
+        browser.find('Download copy').click()
+
+        self.assert_download_journal_entry_created(self.document)
 
     @browsing
     def test_disable_copy_download_overlay(self, browser):
