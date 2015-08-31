@@ -2,6 +2,8 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.builder import session
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import error_messages
+from ftw.testbrowser.pages.statusmessages import warning_messages
 from ftw.testing import MockTestCase
 from mocker import ANY
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
@@ -9,7 +11,8 @@ from opengever.document.interfaces import IFileCopyDownloadedEvent
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import login
 from plone.app.testing import setRoles
-from plone.app.testing import TEST_USER_ID, TEST_USER_NAME
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import TEST_USER_NAME
 from plone.namedfile.file import NamedBlobFile
 from Products.CMFCore.utils import getToolByName
 import transaction
@@ -88,7 +91,6 @@ class TestDocumentDownloadView(MockTestCase):
 
 
 class TestDocumentDownloadConfirmation(FunctionalTestCase):
-    use_browser = True
 
     def setUp(self):
         super(TestDocumentDownloadConfirmation, self).setUp()
@@ -111,41 +113,38 @@ class TestDocumentDownloadConfirmation(FunctionalTestCase):
         transaction.commit()
 
         browser.login().open(self.document, view='file_download_confirmation')
-        self.assertIn(
-            u'The Document A letter for you has no File', browser.contents)
+        self.assertEqual(['The Document A letter for you has no File'],
+                         warning_messages())
 
-    def test_download_confirmation_view_for_download(self):
-        self.browser.open(
-            '%s/file_download_confirmation' % self.document.absolute_url())
+    @browsing
+    def test_download_confirmation_view_for_download(self, browser):
+        browser.login().open(self.document, view='file_download_confirmation')
+        self.assertEqual("You're downloading a copy of the document test.txt",
+                         browser.css(".details > p").first.text)
 
-        self.assertIn("You\'re downloading a copy of the document",
-                      self.browser.locate(".details > p").text)
+        browser.find('label_download').click()
+        self.assertEqual("{}/download".format(self.document.absolute_url()),
+                         browser.url)
+        self.assertEqual('bla bla', browser.contents)
 
-        # submit
-        self.browser.getControl('label_download').click()
-        self.assertEquals(
-            self.browser.url, '%s/download' % (self.document.absolute_url()))
+    @browsing
+    def test_download_confirmation_view_for_version_download(self, browser):
+        browser.login().open(self.document, view='file_download_confirmation',
+                             data={'version_id': 1})
 
-    def test_download_confirmation_view_for_version_download(self):
-        self.browser.open(
-            '%s/file_download_confirmation?version_id=1' % (
-                self.document.absolute_url()))
+        self.assertEqual("You're downloading a copy of the document test.txt",
+                         browser.css(".details > p").first.text)
 
-        self.assertIn("You're downloading a copy of the document",
-                      self.browser.locate(".details > p").text)
-
-        # submit
-        self.browser.getControl('label_download').click()
-
-        self.assertEquals(
-            self.browser.url,
-            '%s/download_file_version?version_id=1' % (
-                self.document.absolute_url()))
+        browser.find('label_download').click()
+        expected_url = "{}/download_file_version?version_id=1".format(
+            self.document.absolute_url())
+        self.assertEqual(expected_url, browser.url)
+        self.assertEqual('bla bla', browser.contents)
 
     @browsing
     def test_download_view_redirects_to_listing_for_missing_files(self, browser):
         document = create(Builder('document').titled('No Document'))
 
         browser.login().open(document, view='download')
-        self.assertEqual('Error The Document No Document has no File',
-                         browser.css('.portalMessage.error').first.text)
+        self.assertEqual(['The Document No Document has no File'],
+                         error_messages())
