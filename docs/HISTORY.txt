@@ -5,6 +5,10 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Fix missing journal entry due to CSRF when downloading copy or
+  pdf-preview of a document from document overview.
+  [deiferni]
+
 - Add debug view to trigger a plone.protect confirmation dialog.
   [lgraf]
 
