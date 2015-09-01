@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.5.3 (unreleased)
+4.5.3 (2015-09-01)
 ------------------
 
 - Add detailed logging for CSRF incidents.
