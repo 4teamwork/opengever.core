@@ -5,7 +5,8 @@ Changelog
 4.5.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add debug view to trigger a plone.protect confirmation dialog.
+  [lgraf]
 
 
 4.5.3 (2015-09-01)
