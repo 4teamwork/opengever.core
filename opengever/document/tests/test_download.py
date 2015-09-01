@@ -1,94 +1,21 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from ftw.builder import session
 from ftw.testbrowser import browsing
-from ftw.testing import MockTestCase
-from mocker import ANY
-from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
-from opengever.document.interfaces import IFileCopyDownloadedEvent
+from ftw.testbrowser.pages.statusmessages import error_messages
+from ftw.testbrowser.pages.statusmessages import warning_messages
+from opengever.document.browser.download import DownloadConfirmationHelper
+from opengever.journal.browser import JournalHistory
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import login
-from plone.app.testing import setRoles
-from plone.app.testing import TEST_USER_ID, TEST_USER_NAME
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import TEST_USER_NAME
 from plone.namedfile.file import NamedBlobFile
 from Products.CMFCore.utils import getToolByName
+from zope.i18n import translate
 import transaction
 
 
-class TestDocumentDownloadView(MockTestCase):
-
-    layer = OPENGEVER_FUNCTIONAL_TESTING
-
-    def setUp(self):
-        super(TestDocumentDownloadView, self).setUp()
-        self.portal = self.layer['portal']
-
-        create(Builder('fixture').with_admin_unit())
-
-        setRoles(self.portal, TEST_USER_ID, ['Manager'])
-        session.current_session = session.factory()
-        session.current_session.portal = self.portal
-
-    def tearDown(self):
-        super(TestDocumentDownloadView, self).tearDown()
-        session.current_session = None
-
-    def test_download_view(self):
-        doc1 = create(Builder("document").attach_file_containing("bla bla"))
-        doc2 = create(Builder("document")
-                      .attach_file_containing("blub blub", name=u't\xf6st.txt'))
-
-        downloaded_handler = self.mocker.mock()
-        self.mock_handler(downloaded_handler, [IFileCopyDownloadedEvent, ])
-        self.expect(downloaded_handler(ANY)).count(2).result(True)
-
-        self.replay()
-
-        result = doc1.unrestrictedTraverse('download')()
-        result.seek(0)
-        self.assertEquals(result.read(), 'bla bla')
-
-        result = doc2.unrestrictedTraverse('download')()
-        result.seek(0)
-        self.assertEquals(result.read(), 'blub blub')
-
-    def test_download_file_version_view(self):
-        doc1 = create(Builder("document"))
-
-        repo_tool = getToolByName(self.portal, 'portal_repository')
-        repo_tool._recursiveSave(doc1, {},
-                                 repo_tool._prepareSysMetadata('mock'),
-                                 autoapply=repo_tool.autoapply)
-
-        monk_file = NamedBlobFile('bla bla', filename=u'test.txt')
-        doc1.file = monk_file
-
-        # create version
-        repo_tool = getToolByName(self.portal, 'portal_repository')
-        repo_tool._recursiveSave(doc1, {},
-                                 repo_tool._prepareSysMetadata('mock'),
-                                 autoapply=repo_tool.autoapply)
-
-        downloaded_handler = self.mocker.mock()
-        self.mock_handler(downloaded_handler, [IFileCopyDownloadedEvent, ])
-        self.expect(downloaded_handler(ANY)).result(True)
-
-        self.replay()
-
-        # second version with a document
-        doc1.REQUEST['version_id'] = '2'
-        result = doc1.unrestrictedTraverse('download_file_version')()
-        self.assertEquals(result, 'bla bla')
-
-        # first version with a document
-        self.portal.REQUEST['version_id'] = '1'
-        result = doc1.unrestrictedTraverse('download_file_version')()
-        # result should be a redirect back to the document
-        self.assertEquals(result, 'http://nohost/plone/document-1')
-
-
 class TestDocumentDownloadConfirmation(FunctionalTestCase):
-    use_browser = True
 
     def setUp(self):
         super(TestDocumentDownloadConfirmation, self).setUp()
@@ -105,47 +32,99 @@ class TestDocumentDownloadConfirmation(FunctionalTestCase):
                                  autoapply=repo_tool.autoapply)
         transaction.commit()
 
+    def tearDown(self):
+        DownloadConfirmationHelper().activate()
+        super(TestDocumentDownloadConfirmation, self).tearDown()
+
+    def assert_download_journal_entry_created(self, document):
+        request = self.layer['request']
+
+        journal = JournalHistory(document, request)
+        entry = journal.data()[-1]
+        translated_action_title = translate(entry['action']['title'],
+                                            context=request)
+        self.assertEqual(u'Download copy', translated_action_title)
+        self.assertEquals(TEST_USER_ID, entry['actor'])
+        self.assertDictContainsSubset({'type': 'File copy downloaded',
+                                       'visible': True},
+                                      entry['action'])
+
+    @browsing
+    def test_download_copy_with_overlay_creates_journal_entry(self, browser):
+        browser.login().open(self.document,
+                             view='tabbed_view/listing',
+                             data={'view_name': 'overview'})
+
+        browser.find('Download copy').click()
+        browser.find('label_download').click()
+
+        self.assert_download_journal_entry_created(self.document)
+
+    @browsing
+    def test_download_copy_without_overlay_creates_journal_entry(self, browser):
+        DownloadConfirmationHelper().deactivate()
+        transaction.commit()
+
+        browser.login().open(self.document,
+                             view='tabbed_view/listing',
+                             data={'view_name': 'overview'})
+
+        browser.find('Download copy').click()
+
+        self.assert_download_journal_entry_created(self.document)
+
+    @browsing
+    def test_disable_copy_download_overlay(self, browser):
+        browser.login().open(self.document,
+                             view='tabbed_view/listing',
+                             data={'view_name': 'overview'})
+        overview_link_selector = '.function-download-copy.link-overlay'
+        self.assertEquals(1, len(browser.css('.link-overlay')))
+
+        browser.css(overview_link_selector).first.click()
+        browser.fill({"disable_download_confirmation": "on"}).submit()
+
+        self.assertEquals(0, len(browser.css('.link-overlay')))
+        self.assertFalse('file_download_confirmation' in browser.contents)
+
     @browsing
     def test_download_confirmation_for_empty_file(self, browser):
         self.document.file = None
         transaction.commit()
 
         browser.login().open(self.document, view='file_download_confirmation')
-        self.assertIn(
-            u'The Document A letter for you has no File', browser.contents)
+        self.assertEqual(['The Document A letter for you has no File'],
+                         warning_messages())
 
-    def test_download_confirmation_view_for_download(self):
-        self.browser.open(
-            '%s/file_download_confirmation' % self.document.absolute_url())
+    @browsing
+    def test_download_confirmation_view_for_download(self, browser):
+        browser.login().open(self.document, view='file_download_confirmation')
+        self.assertEqual("You're downloading a copy of the document test.txt",
+                         browser.css(".details > p").first.text)
 
-        self.assertIn("You\'re downloading a copy of the document",
-                      self.browser.locate(".details > p").text)
+        browser.find('label_download').click()
+        self.assertEqual("{}/download".format(self.document.absolute_url()),
+                         browser.url)
+        self.assertEqual('bla bla', browser.contents)
 
-        # submit
-        self.browser.getControl('label_download').click()
-        self.assertEquals(
-            self.browser.url, '%s/download' % (self.document.absolute_url()))
+    @browsing
+    def test_download_confirmation_view_for_version_download(self, browser):
+        browser.login().open(self.document, view='file_download_confirmation',
+                             data={'version_id': 1})
 
-    def test_download_confirmation_view_for_version_download(self):
-        self.browser.open(
-            '%s/file_download_confirmation?version_id=1' % (
-                self.document.absolute_url()))
+        self.assertEqual("You're downloading a copy of the document test.txt",
+                         browser.css(".details > p").first.text)
 
-        self.assertIn("You're downloading a copy of the document",
-                      self.browser.locate(".details > p").text)
-
-        # submit
-        self.browser.getControl('label_download').click()
-
-        self.assertEquals(
-            self.browser.url,
-            '%s/download_file_version?version_id=1' % (
-                self.document.absolute_url()))
+        browser.find('label_download').click()
+        expected_url = "{}/download_file_version?version_id=1".format(
+            self.document.absolute_url())
+        self.assertEqual(expected_url, browser.url)
+        self.assertEqual('bla bla', browser.contents)
 
     @browsing
     def test_download_view_redirects_to_listing_for_missing_files(self, browser):
         document = create(Builder('document').titled('No Document'))
 
         browser.login().open(document, view='download')
-        self.assertEqual('Error The Document No Document has no File',
-                         browser.css('.portalMessage.error').first.text)
+        self.assertEqual(['The Document No Document has no File'],
+                         error_messages())

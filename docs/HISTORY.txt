@@ -5,7 +5,9 @@ Changelog
 4.4.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix missing journal entry due to CSRF when downloading copy or
+  pdf-preview of a document from document overview.
+  [deiferni]
 
 
 4.4.3 (2015-07-16)
