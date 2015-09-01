@@ -1,7 +1,11 @@
+from copy import copy
+from datetime import datetime
+from opengever.base.utils import PathFinder
 from plone import api
 from plone.portlets.constants import CONTEXT_ASSIGNMENT_KEY
 from plone.protect.auto import ProtectTransform
 from plone.protect.interfaces import IDisableCSRFProtection
+from pprint import pformat
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from zope.annotation.attribute import AttributeAnnotations
@@ -12,8 +16,11 @@ from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
 from zope.interface import Interface
 from zope.publisher.interfaces.browser import IBrowserRequest
+import gc
 import logging
+import os
 import re
+import subprocess
 import transaction
 
 
@@ -90,6 +97,14 @@ class OGProtectTransform(ProtectTransform):
                 '@@confirm-action' in redirect_url)
 
     def _check(self):
+        should_log_csrf = bool(os.environ.get('CSRF_LOG_ENABLED', True))
+
+        if should_log_csrf:
+            # Create a (shallow) copy of _registered_objects and
+            # request.__dict__ if we want to log the incident later
+            registered_objects_before_check = self._registered_objects()[:]
+            request_dict_before_check = copy(self.request.__dict__)
+
         self._abort_txn_on_confirm_action_view()
 
         if self._redirect_loop_detected():
@@ -98,7 +113,91 @@ class OGProtectTransform(ProtectTransform):
             site = api.portal.get()
             return self.request.RESPONSE.redirect(site.absolute_url())
 
-        return super(OGProtectTransform, self)._check()
+        is_safe = super(OGProtectTransform, self)._check()
+
+        if not is_safe and should_log_csrf:
+            user = api.user.get_current()
+            env = {
+                'username': user.getUserName() if user else 'unknown-user',
+                'url': self.request.getURL(),
+                '_registered_objects': registered_objects_before_check,
+                'request_dict': request_dict_before_check,
+            }
+            self._log_csrf_incident(env)
+
+        return is_safe
+
+    def _log_csrf_incident(self, env):
+        """Log a CSRF incident to a file.
+        """
+        max_age = int(os.environ.get('CSRF_LOG_MAX_AGE', 7 * 24 * 60))
+        ts = datetime.now()
+
+        log_dir = PathFinder().var_log
+        log_filename = 'csrf-{}-{}.log'.format(
+            ts.strftime('%Y-%m-%d_%H-%M-%S'), env['username'])
+        logfile_path = os.path.join(log_dir, log_filename)
+
+        with open(logfile_path, 'w') as logfile:
+            for line in self._build_csrf_report(env):
+                log_message = '{}   {}\n'.format(ts.isoformat(), line)
+                logfile.write(log_message)
+
+        LOG.warn('CSRF incident has been logged to {}'.format(logfile_path))
+
+        # Remove old incident logs
+        subprocess.check_call(
+            "find {} -name 'csrf-*.log' -type f -mmin +{} -delete".format(
+                log_dir, max_age), shell=True)
+
+    def _build_csrf_report(self, env):
+        """Generator that produces a sequence of lines to be logged to a file
+        as the CSRF incident report.
+        """
+        _registered_objects = env['_registered_objects']
+        request_dict = env['request_dict']
+
+        # Drop response from request dict - we know what we're gonna send
+        request_dict.pop('response', None)
+        request_dict.get('other', {}).pop('RESPONSE', None)
+
+        # Remove basic auth header before logging
+        request_dict.pop('_auth', {})
+        request_dict.get('_orig_env', {}).pop('HTTP_AUTHORIZATION', None)
+
+        yield 'CSRF incident at {}'.format(env['url'])
+        yield '=' * 80
+        yield '\n'
+
+        yield 'User:'
+        yield '-' * 80
+        yield env['username']
+        yield '\n'
+
+        yield 'HTTP_REFERER:'
+        yield '-' * 80
+        yield request_dict.get('environ', {}).get('HTTP_REFERER', '')
+        yield '\n'
+
+        yield '_registered_objects:'
+        yield '-' * 80
+        yield pformat(_registered_objects)
+        yield '\n'
+
+        yield 'References to registered objects:'
+        yield '-' * 80
+
+        for obj in _registered_objects:
+            yield "Object: {}".format(obj)
+            referrers = gc.get_referrers(obj)
+            yield "Referrers:\n{}".format(pformat(referrers))
+            yield '\n' * 10
+
+            # Avoid creating reference cycles!
+            del referrers
+
+        yield 'Request:\n{}'.format(pformat(request_dict))
+        yield '-' * 80
 
     def _registered_objects(self):
         self._global_unprotect()
