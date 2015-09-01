@@ -254,4 +254,6 @@ class Overview(DisplayForm, OpengeverTab):
         dc_helper = DownloadConfirmationHelper()
         return dc_helper.get_html_tag(
             self.context.absolute_url(),
-            additional_classes=['function-download-copy'])
+            additional_classes=['function-download-copy'],
+            include_token=True
+            )

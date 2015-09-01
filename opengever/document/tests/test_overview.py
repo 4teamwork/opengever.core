@@ -59,10 +59,12 @@ class TestDocumentOverview(FunctionalTestCase):
         browser.login().open(self.document, view='tabbedview_view-overview')
         self.assertEquals('Download copy',
                           browser.css('a.function-download-copy').first.text)
-        self.assertEquals(
+
+        url = browser.css('a.function-download-copy').first.attrib['href']
+        self.assertTrue(url.startswith(
             '{0}/file_download_confirmation'.format(
-                self.document.absolute_url()),
-            browser.css('a.function-download-copy').first.attrib['href'])
+                self.document.absolute_url())),
+            'unexpected url {}'.format(url))
 
     @browsing
     def test_overview_self_checked_out(self, browser):
