@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Add debug view to trigger a plone.protect confirmation dialog.
+  [lgraf]
+
 - Also display a members role in a meeting's protocol.
   [deiferni]
 
