@@ -79,7 +79,7 @@ class OpenTaskReportLaTeXView(grok.MultiAdapter, MakoLaTeXView):
         query = query.filter(
             or_(
                 and_(Task.predecessor == None, Task.successors == None),
-                Task.assigned_org_unit == get_current_org_unit().id()))
+                Task.admin_unit_id == get_current_org_unit().id()))
 
         return query
 
