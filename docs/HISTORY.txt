@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Validate task title length.
+  [deiferni]
+
 - Add detailed logging for CSRF incidents.
   [lgraf]
 
