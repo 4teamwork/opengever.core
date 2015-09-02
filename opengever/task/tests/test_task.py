@@ -3,6 +3,7 @@ from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.dexterity import erroneous_fields
 from opengever.task.adapters import IResponseContainer
 from opengever.task.interfaces import ITaskSettings
 from opengever.task.response import Response
@@ -55,6 +56,19 @@ class TestTaskIntegration(FunctionalTestCase):
                     .titled('Task 2'))
 
         self.assertEquals([t2.get_sql_object()], view.get_sub_tasks())
+
+    @browsing
+    def test_task_title_length_is_validated(self, browser):
+        dossier = create(Builder('dossier'))
+        browser.login().open(dossier, view='++add++opengever.task.task')
+
+        browser.fill({'Title': 300*'x',
+                      'Task Type': 'To comment',
+                      'Responsible': TEST_USER_ID})
+        browser.find('Save').click()
+
+        self.assertEquals({u'Title': ['Value is too long']},
+                          erroneous_fields())
 
     def test_relateddocuments(self):
         # create document and append it to the relatedItems of the task
