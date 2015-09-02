@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Fix duplicate activity recordings when a forwarding gets reassigned.
+  [phgross]
+
 - Fix Upgrade-Step that updates lexicon: The affected indexes need to be
   cleared first before rebuilding them, otherwise the lexicon might not get
   updated properly.

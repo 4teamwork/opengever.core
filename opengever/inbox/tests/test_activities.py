@@ -110,3 +110,25 @@ class TestForwardingActivites(FunctionalTestCase):
         self.assertItemsEqual(
             [TEST_USER_ID],
             [watcher.user_id for watcher in self.center.get_watchers(task)])
+
+    @browsing
+    def test_reassing_forwarding_create_notifications_for_all_participants(self, browser):
+        inbox = create(Builder('inbox'))
+        dossier = create(Builder('dossier'))
+        forwarding = create(Builder('forwarding')
+                            .having(issuer='hugo.boss',
+                                    responsible=TEST_USER_ID)
+                            .within(inbox))
+
+        self.center.add_watcher_to_resource(forwarding, TEST_USER_ID)
+        self.center.add_watcher_to_resource(forwarding, u'hugo.boss')
+
+        browser.login().open(forwarding)
+        browser.find('forwarding-transition-reassign').click()
+        browser.fill({'Responsible': 'peter.mueller',
+                      'Response': u'Peter k\xf6nntest du das \xfcbernehmen.'})
+        browser.find('Assign').click()
+
+        self.assertEquals(1, len(Activity.query.all()))
+        self.assertEquals(u'forwarding-transition-reassign',
+                          Activity.query.all()[0].kind)
