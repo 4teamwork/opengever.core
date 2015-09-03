@@ -10,6 +10,7 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.latex import opentaskreport
 from opengever.latex.layouts.default import DefaultLayout
 from opengever.latex.opentaskreport import IOpenTaskReportLayer
+from opengever.latex.opentaskreport import OpenTaskReportLaTeXView
 from opengever.latex.testing import LATEX_ZCML_LAYER
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import login
@@ -89,6 +90,7 @@ class TestOpenTaskReport(FunctionalTestCase):
                                     lastname='Peter'))
 
         self.task = create(Builder("task")
+                           .titled(u'Task 1')
                            .having(task_type='comment',
                                    issuer='peter.peter',
                                    responsible='hans.meier'))
@@ -134,3 +136,30 @@ class TestOpenTaskReport(FunctionalTestCase):
         login(self.portal, 'hans.meier')
         self.assertFalse(
             self.portal.unrestrictedTraverse('pdf-open-task-report-allowed')())
+
+    def test_shows_only_task_on_admin_unit(self):
+        additional_admin_unit = create(Builder('admin_unit').id(u'additional'))
+        create(Builder('org_unit').id(u'additional')
+               .having(admin_unit=additional_admin_unit))
+
+        successor = create(Builder('task')
+                           .titled(u'Successor')
+                           .successor_from(self.task)
+                           .having(task_type='comment',
+                                   issuer='peter.peter',
+                                   responsible='hans.meier'))
+        successor.get_sql_object().admin_unit_id = 'additional'
+
+        layout = DefaultLayout(self.portal, self.request, None)
+        view = OpenTaskReportLaTeXView(self.portal, self.request, layout)
+        arguments = view.get_render_arguments()
+
+        self.assertEqual(
+            ['1 & Task 1 & To comment &  & Client1 & Peter Peter & '
+             'Client1 / Meier Hans & 07.09.2015 & task"=state"=open'],
+            arguments['outgoing'])
+
+        self.assertEqual(
+            ['1 & Task 1 & To comment &  & Client1 & Client1 / Peter '
+             'Peter & Meier Hans & 07.09.2015 & task"=state"=open'],
+            arguments['incoming'], )
