@@ -5,6 +5,10 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Use supertabular* to render multi-page tables instead of longtable to
+  fix an issue with tables breaking pages too late.
+  [deiferni]
+
 - Hide foreign part of predecessor/successor pairs in the opentaskreport listings.
   [phgross]
 
