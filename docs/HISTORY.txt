@@ -8,13 +8,6 @@ Changelog
 - Validate task title length.
   [deiferni]
 
-- Add detailed logging for CSRF incidents.
-  [lgraf]
-
-- Fix missing journal entry due to CSRF when downloading copy or
-  pdf-preview of a document from document overview.
-  [deiferni]
-
 - Add debug view to trigger a plone.protect confirmation dialog.
   [lgraf]
 
@@ -49,6 +42,16 @@ Changelog
   [deiferni]
 
 - Use dossier title as default title for new proposals.
+  [deiferni]
+
+4.5.3 (2015-09-01)
+------------------
+
+- Add detailed logging for CSRF incidents.
+  [lgraf]
+
+- Fix missing journal entry due to CSRF when downloading copy or
+  pdf-preview of a document from document overview.
   [deiferni]
 
 
