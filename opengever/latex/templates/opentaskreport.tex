@@ -6,21 +6,22 @@
 
 % if incoming:
 {
-    \vspace{5mm}
+  \vspace{5mm}
   {\bf Pendenzenkontrolle ${client}: erhaltene Aufgaben}\\%%
   \vspace{\baselineskip}
   \scriptsize
   \noindent
-  \addtolength{\tablewidth}{-20\tabcolsep}
-  \begin{longtable}{p{.01\tablewidth}p{.20\tablewidth}p{.12\tablewidth}p{.23\tablewidth}p{.1\tablewidth}p{.1\tablewidth}p{.1\tablewidth}p{.09\tablewidth}p{.05\tablewidth}}
-    \bfseries Nr & \bfseries Aufgabentitel & \bfseries Aufgabentyp & \bfseries Dossiertitel & \bfseries Aktenzeichen & \bfseries Auftraggeber & \bfseries Auftragnehmer & \bfseries Zu erledigen bis & \bfseries Status \\%%
-    \endhead\hline
+
+  \setlength\extrarowheight{1pt}
+  \tablehead{\bfseries Nr & \bfseries Aufgabentitel & \bfseries Aufgabentyp & \bfseries Dossiertitel & \bfseries Aktenzeichen & \bfseries Auftraggeber & \bfseries Auftragnehmer & \bfseries Zu erledigen bis & \bfseries Status \\ \hline}
+  \begin{supertabular*}{\textwidth}{lp{50mm}p{17mm}p{50mm}lp{25mm}p{25mm}ll}
+  \shrinkheight{20mm}
 
   % for row in incoming:
-    ${row} \\%%
-    \hline
+    ${row} \\ \hline
   % endfor
-  \end{longtable}
+
+  \end{supertabular*}
 }
 % endif
 
@@ -32,15 +33,17 @@
   \vspace{\baselineskip}
   \scriptsize
   \noindent
-  \addtolength{\tablewidth}{-20\tabcolsep}
-  \begin{longtable}{p{.01\tablewidth}p{.20\tablewidth}p{.12\tablewidth}p{.23\tablewidth}p{.1\tablewidth}p{.1\tablewidth}p{.1\tablewidth}p{.09\tablewidth}p{.05\tablewidth}}
-    \bfseries Nr & \bfseries Aufgabentitel & \bfseries Aufgabentyp & \bfseries Dossiertitel & \bfseries Aktenzeichen & \bfseries Auftraggeber & \bfseries Auftragnehmer & \bfseries Zu erledigen bis & \bfseries Status \\%%
-    \endhead\hline
+
+  \setlength\extrarowheight{1pt}
+  \tablehead{\bfseries Nr & \bfseries Aufgabentitel & \bfseries Aufgabentyp & \bfseries Dossiertitel & \bfseries Aktenzeichen & \bfseries Auftraggeber & \bfseries Auftragnehmer & \bfseries Zu erledigen bis & \bfseries Status \\ \hline}
+  \begin{supertabular*}{\textwidth}{lp{50mm}p{17mm}p{50mm}lp{25mm}p{25mm}ll}
+  \shrinkheight{20mm}
+
 
   % for row in outgoing:
-    ${row} \\%%
-    \hline
+    ${row} \\ \hline
   % endfor
-  \end{longtable}
+
+  \end{supertabular*}
 }
 % endif
