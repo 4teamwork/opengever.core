@@ -111,24 +111,78 @@ class TestForwardingActivites(FunctionalTestCase):
             [TEST_USER_ID],
             [watcher.user_id for watcher in self.center.get_watchers(task)])
 
-    @browsing
-    def test_reassing_forwarding_create_notifications_for_all_participants(self, browser):
-        inbox = create(Builder('inbox'))
-        dossier = create(Builder('dossier'))
-        forwarding = create(Builder('forwarding')
-                            .having(issuer='hugo.boss',
-                                    responsible=TEST_USER_ID)
-                            .within(inbox))
 
-        self.center.add_watcher_to_resource(forwarding, TEST_USER_ID)
-        self.center.add_watcher_to_resource(forwarding, u'hugo.boss')
+class TestForwardingReassignActivity(FunctionalTestCase):
 
+    layer = OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
+
+    def setUp(self):
+        super(TestForwardingReassignActivity, self).setUp()
+        self.center = notification_center()
+        self.inbox = create(Builder('inbox').titled(u'Inbox'))
+        self.document = create(Builder('document')
+                               .within(self.inbox)
+                               .titled(u'Document'))
+
+        self.hugo = create(Builder('ogds_user')
+                           .id('hugo.boss')
+                           .assign_to_org_units([self.org_unit])
+                           .having(firstname=u'Hugo', lastname=u'Boss'))
+        self.jon = create(Builder('ogds_user')
+                          .id('jon.meier')
+                          .assign_to_org_units([self.org_unit])
+                          .having(firstname=u'Jon', lastname=u'Meier'))
+        self.peter = create(Builder('ogds_user')
+                            .id('peter.mueller')
+                            .assign_to_org_units([self.org_unit])
+                            .in_group(self.org_unit.inbox_group)
+                            .having(firstname=u'Peter', lastname=u'M\xfcller'))
+
+    def add_forwarding(self, browser):
+        data = {'paths:list': ['/'.join(self.document.getPhysicalPath())]}
+        browser.login().open(self.inbox, data,
+                             view='++add++opengever.inbox.forwarding')
+        browser.fill({'Title': u'Abkl\xe4rung Fall Meier',
+                      'Responsible': 'jon.meier',
+                      'Issuer': u'hugo.boss'})
+        browser.css('#form-buttons-save').first.click()
+        return self.inbox.get('forwarding-1')
+
+    def reassign(self, browser, forwarding, responsible):
         browser.login().open(forwarding)
         browser.find('forwarding-transition-reassign').click()
-        browser.fill({'Responsible': 'peter.mueller',
+        browser.fill({'Responsible': responsible,
                       'Response': u'Peter k\xf6nntest du das \xfcbernehmen.'})
         browser.find('Assign').click()
 
-        self.assertEquals(1, len(Activity.query.all()))
-        self.assertEquals(u'forwarding-transition-reassign',
+    @browsing
+    def test_reassing_forwarding_create_notifications_for_all_participants(self, browser):
+        forwarding = self.add_forwarding(browser)
+        self.reassign(browser, forwarding, responsible='peter.mueller')
+
+        self.assertEquals(2, len(Activity.query.all()))
+        self.assertEquals(u'forwarding-added',
                           Activity.query.all()[0].kind)
+        self.assertEquals(u'forwarding-transition-reassign',
+                          Activity.query.all()[1].kind)
+
+    @browsing
+    def test_notifies_old_and_new_responsible(self, browser):
+        forwarding = self.add_forwarding(browser)
+        self.reassign(browser, forwarding, responsible='peter.mueller')
+
+        activities = Activity.query.all()
+        reassign_activity = activities[-1]
+        self.assertItemsEqual(
+            [u'jon.meier', u'peter.mueller', u'hugo.boss'],
+            [notes.watcher.user_id for notes in reassign_activity.notifications])
+
+    @browsing
+    def test_removes_old_responsible_from_watchers_list(self, browser):
+        forwarding = self.add_forwarding(browser)
+        self.reassign(browser, forwarding, responsible='peter.mueller')
+
+        watchers = notification_center().get_watchers(forwarding)
+        self.assertItemsEqual(
+            ['peter.mueller', u'hugo.boss'],
+            [watcher.user_id for watcher in watchers])
