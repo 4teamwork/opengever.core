@@ -1,3 +1,4 @@
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.pdfgenerator.builder import Builder as PDFBuilder
@@ -93,7 +94,8 @@ class TestOpenTaskReport(FunctionalTestCase):
                            .titled(u'Task 1')
                            .having(task_type='comment',
                                    issuer='peter.peter',
-                                   responsible='hans.meier'))
+                                   responsible='hans.meier',
+                                   deadline=date(2014, 07, 01)))
 
         provide_request_layer(self.task.REQUEST, IOpenTaskReportLayer)
         layout = DefaultLayout(self.task, self.task.REQUEST, PDFBuilder())
@@ -147,7 +149,8 @@ class TestOpenTaskReport(FunctionalTestCase):
                            .successor_from(self.task)
                            .having(task_type='comment',
                                    issuer='peter.peter',
-                                   responsible='hans.meier'))
+                                   responsible='hans.meier',
+                                   deadline=date(2014, 07, 01)))
         successor.get_sql_object().admin_unit_id = 'additional'
 
         layout = DefaultLayout(self.portal, self.request, None)
@@ -156,10 +159,10 @@ class TestOpenTaskReport(FunctionalTestCase):
 
         self.assertEqual(
             ['1 & Task 1 & To comment &  & Client1 & Peter Peter & '
-             'Client1 / Meier Hans & 07.09.2015 & task"=state"=open'],
+             'Client1 / Meier Hans & 01.07.2014 & task"=state"=open'],
             arguments['outgoing'])
 
         self.assertEqual(
             ['1 & Task 1 & To comment &  & Client1 & Client1 / Peter '
-             'Peter & Meier Hans & 07.09.2015 & task"=state"=open'],
+             'Peter & Meier Hans & 01.07.2014 & task"=state"=open'],
             arguments['incoming'], )
