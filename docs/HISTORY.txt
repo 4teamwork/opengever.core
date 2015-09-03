@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Hide foreign part of predecessor/successor pairs in the opentaskreport listings.
+  [phgross]
+
 - Validate task title length.
   [deiferni]
 
