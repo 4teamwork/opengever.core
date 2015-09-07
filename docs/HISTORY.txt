@@ -5,6 +5,9 @@ Changelog
 4.5.4 (unreleased)
 ------------------
 
+- CSRF: Add view to enable and disable CSRF tracing monkey patches.
+  [lgraf]
+
 - Add debug view to trigger a plone.protect confirmation dialog.
   [lgraf]
 
