@@ -50,14 +50,14 @@ class SQLLockable(object):
         If children is True, child objects will be locked as well.
         """
 
+        self.clear_expired_locks()
+
         lock = Lock(object_id=self.object_id,
                     object_type=self.object_type,
                     creator=api.user.get_current().getId(),
                     lock_type=self.searialize_lock_type(lock_type))
-
         self.session.add(lock)
 
-        self.clear_expired_locks()
 
     def refresh_lock(self, lock_type=STEALABLE_LOCK):
         if not self.locked():
