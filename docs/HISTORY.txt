@@ -5,6 +5,10 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Remove expired locks before creating new locks to avoid integrity-errors
+  during database flushes.
+  [deiferni]
+
 - CSRF: Add view to enable and disable CSRF tracing monkey patches.
   [lgraf]
 

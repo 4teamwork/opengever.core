@@ -158,3 +158,15 @@ class TestSQLLockable(FunctionalTestCase):
         self.assertEquals(1, len(locks))
         self.assertNotIn(lock_1, locks)
         self.assertNotIn(lock_2, locks)
+
+    def test_lock_creation_removes_expired_locks_for_same_object(self):
+        expired_lock = create(
+            Builder('lock')
+            .of_obj(self.wrapper)
+            .having(time=utcnow_tz_aware() - timedelta(seconds=1000)))
+
+        ILockable(self.wrapper).lock()
+
+        locks = Lock.query.all()
+        self.assertEquals(1, len(locks))
+        self.assertNotIn(expired_lock, locks)
