@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- CSRF: Add view to enable and disable CSRF tracing monkey patches.
+  [lgraf]
+
 - Use supertabular* to render multi-page tables instead of longtable to
   fix an issue with tables breaking pages too late.
   [deiferni]

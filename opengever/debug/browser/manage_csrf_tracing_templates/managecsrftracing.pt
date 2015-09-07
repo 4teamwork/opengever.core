@@ -1,0 +1,79 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="opengever.debug">
+<head>
+  <metal:head metal:fill-slot="head_slot">
+  <title>Manage CSRF Tracing</title>
+  <style>
+    td.patched {background-color: DarkOrange;}
+    td.not-patched {background-color: LimeGreen;}
+    blockquote {max-width: 45em}
+  </style>
+  </metal:head>
+</head>
+
+<body>
+  <metal:block fill-slot="top_slot" tal:define="dummy python:request.set('disable_border',1)" />
+
+  <metal:main fill-slot="main">
+
+    <tal:main-macro metal:define-macro="main">
+
+      <div tal:replace="structure provider:plone.abovecontenttitle" />
+      <h1 class="documentFirstHeading">Manage CSRF tracing</h1>
+
+      <div tal:replace="structure provider:plone.abovecontentbody" />
+
+        <h2>Current Status</h2>
+
+        <table class="listing">
+          <tr tal:repeat="status view/patching_status">
+            <td><pre tal:content="status/name"></pre></td>
+            <td tal:content="python: status['patched'] and 'patched' or 'not patched'"
+                tal:attributes="class python: status['patched'] and 'patched' or 'not-patched'"></td>
+          </tr>
+        </table>
+
+        <tal:expires tal:condition="view/is_patched">
+          <br />
+          <strong>Current patches will expire at:</strong>
+          <span tal:content="view/current_expires"></span>
+          <br />
+        </tal:expires>
+        <br />
+
+      <form method="post" class="rowlike" id="form">
+
+        <tal:activate tal:condition="not:view/is_patched">
+          <div class="field">
+            <label for="timeout" class="horizontal">Timeout (minutes)
+              <span class="required horizontal">&nbsp;</span>
+            </label>
+            <span class="formHelp">Timeout after which monkey patches will expire and remove themselves (in minutes)</span>
+            <input name="timeout" type="text" value="60" class="text-widget required int-field" tal:attributes="value view/default_timeout"/>
+          </div>
+          <input name="submit" type="submit" value="Activate" />
+        </tal:activate>
+
+        <tal:deactivate tal:condition="view/is_patched">
+          <input name="submit" type="submit" value="Deactivate" />
+        </tal:deactivate>
+
+      </form>
+
+      <br />
+      <blockquote class="discreet" tal:content="structure view/documentation"></blockquote>
+
+      <div class="visualClear"><!----></div>
+      <div tal:replace="structure provider:plone.belowcontentbody" />
+      <div class="visualClear"><!----></div>
+    </tal:main-macro>
+
+  </metal:main>
+
+</body>
+</html>
