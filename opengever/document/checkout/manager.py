@@ -179,7 +179,8 @@ class CheckinCheckoutManager(grok.MultiAdapter):
 
         # revert to prior version (baseline)
         baseline = self.repository.getHistory(self.context)[0]
-        self.revert_to_version(baseline.version_id, create_version=False)
+        self.revert_to_version(baseline.version_id,
+                               create_version=False, force=True)
 
         # remember that we canceled in
         self.annotations[CHECKIN_CHECKOUT_ANNOTATIONS_KEY] = None
@@ -221,13 +222,42 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         return getSecurityManager().checkPermission(permission,
                                                     self.context)
 
-    def revert_to_version(self, version_id, create_version=True):
+    def is_revert_allowed(self):
+        """Return wheter reverting a the document to a previous version is
+        allowed.
+        """
+
+        # is it already checked out?
+        if self.get_checked_out_by():
+            return False
+
+        # does a user hold a lock?
+        if self.is_locked():
+            return False
+
+        # is it versionable?
+        if not self.repository.isVersionable(self.context):
+            return False
+
+        if not self.check_permission('Modify portal content'):
+            return False
+
+        # is it not trashed
+        if ITrashed.providedBy(self.context):
+            return False
+
+        return True
+
+    def revert_to_version(self, version_id, create_version=True, force=False):
         """Reverts the adapted document to a specific version. We only revert
         the file field, since we do not wan't to version the metadata on the
         document.
         If `create_version` is set to `True`, a new version is created after
         reverting.
         """
+        if not force and not self.is_revert_allowed():
+            raise Unauthorized()
+
         version = self.repository.retrieve(self.context, version_id)
         old_obj = version.object
 
