@@ -5,15 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
-- No longer allow reverting document versions while documents are checked out.
-  [deiferni]
-
 - Remove expired locks before creating new locks to avoid integrity-errors
   during database flushes.
   [deiferni]
-
-- CSRF: Add view to enable and disable CSRF tracing monkey patches.
-  [lgraf]
 
 - Use supertabular* to render multi-page tables instead of longtable to
   fix an issue with tables breaking pages too late.
@@ -24,9 +18,6 @@ Changelog
 
 - Validate task title length.
   [deiferni]
-
-- Add debug view to trigger a plone.protect confirmation dialog.
-  [lgraf]
 
 - Also display a members role in a meeting's protocol.
   [deiferni]
@@ -60,6 +51,19 @@ Changelog
 
 - Use dossier title as default title for new proposals.
   [deiferni]
+
+4.5.4 (2015-09-08)
+------------------
+
+- No longer allow reverting document versions while documents are checked out.
+  [deiferni]
+
+- CSRF: Add view to enable and disable CSRF tracing monkey patches.
+  [lgraf]
+
+- Add debug view to trigger a plone.protect confirmation dialog.
+  [lgraf]
+
 
 4.5.3 (2015-09-01)
 ------------------
