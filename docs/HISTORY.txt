@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.5.4 (unreleased)
+4.5.4 (2015-09-08)
 ------------------
 
 - No longer allow reverting document versions while documents are checked out.
