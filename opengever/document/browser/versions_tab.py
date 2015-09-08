@@ -8,11 +8,13 @@ from opengever.base.protect import unprotected_write
 from opengever.document import _
 from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.document.document import IDocumentSchema
+from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.ogds.base.actor import Actor
 from opengever.tabbedview.browser.base import BaseListingTab
 from plone import api
 from plone.protect.utils import addTokenToUrl
 from Products.CMFPlone.utils import safe_unicode
+from zope.component import getMultiAdapter
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import implements
@@ -31,9 +33,7 @@ def translate_link(url, label, css_class=None):
     """Create a formatted link with the link text translated into the current
     user's language, and optional CSS classes.
     """
-    link_text = translate(
-        label,
-        domain='opengever.document', context=getRequest())
+    link_text = translate_text(label)
 
     klass = u''
     if css_class:
@@ -42,6 +42,10 @@ def translate_link(url, label, css_class=None):
     link = u'<a href="{}" {}>{}</a>'.format(
         safe_unicode(url), klass, link_text)
     return link
+
+
+def translate_text(text):
+    return translate(text, domain='opengever.document', context=getRequest())
 
 
 class VersionDataProxy(object):
@@ -56,12 +60,17 @@ class VersionDataProxy(object):
     the columns but isn't directly accessible.
     """
 
-    def __init__(self, version_data, url):
+    def __init__(self, version_data, url, is_revert_allowed):
         self._version_data = version_data
         self._url = url
+        self._is_revert_allowed = is_revert_allowed
 
     def __getattr__(self, name):
         return getattr(self._version_data, name)
+
+    @property
+    def is_revert_allowed(self):
+        return self._is_revert_allowed
 
     @property
     def url(self):
@@ -126,15 +135,21 @@ class VersionDataProxy(object):
 
     @property
     def revert_link(self):
-        """Returns a formatted link to revert to this particular version.
+        """Returns a formatted link to revert to this particular version if
+        reverting is allowed, an inactive label otherwise.
         """
-        url = '{}/revert-file-to-version?version_id={}'
-        url = url.format(self.url, self.version_id)
-        url = addTokenToUrl(url)
-        link = translate_link(
-            url, _(u'label_reset', default=u'reset'),
-            css_class='standalone function-revert')
-        return link
+
+        if self.is_revert_allowed:
+            url = '{}/revert-file-to-version?version_id={}'
+            url = url.format(self.url, self.version_id)
+            url = addTokenToUrl(url)
+            link = translate_link(
+                url, _(u'label_reset', default=u'reset'),
+                css_class='standalone function-revert')
+            return link
+        else:
+            label = translate_text(_(u'label_reset', default=u'reset'))
+            return u'<span class="discreet">{}</span>'.format(label)
 
 
 class LazyHistoryProxy(object):
@@ -142,16 +157,17 @@ class LazyHistoryProxy(object):
     properties, but returns `VersionDataProxy` objects instead.
     """
 
-    def __init__(self, history, url):
+    def __init__(self, history, url, is_revert_allowed=False):
         self._history = history
         self._url = url
+        self._is_revert_allowed = is_revert_allowed
 
     def __len__(self):
         return self._history.__len__()
 
     def __getitem__(self, idx):
         item = self._history.__getitem__(idx)
-        return VersionDataProxy(item, self._url)
+        return VersionDataProxy(item, self._url, self._is_revert_allowed)
 
     def __iter__(self):
         return self._history.__iter__()
@@ -180,7 +196,11 @@ class VersionsTableSource(grok.MultiAdapter, BaseTableSource):
 
         repo_tool = api.portal.get_tool('portal_repository')
         history = repo_tool.getHistory(obj)
-        return LazyHistoryProxy(history, obj.absolute_url())
+
+        manager = getMultiAdapter((obj, self.request), ICheckinCheckoutManager)
+
+        return LazyHistoryProxy(history, obj.absolute_url(),
+                                is_revert_allowed=manager.is_revert_allowed())
 
 
 class VersionsTab(BaseListingTab):

@@ -5,6 +5,9 @@ Changelog
 4.5.4 (unreleased)
 ------------------
 
+- No longer allow reverting document versions while documents are checked out.
+  [deiferni]
+
 - CSRF: Add view to enable and disable CSRF tracing monkey patches.
   [lgraf]
 
