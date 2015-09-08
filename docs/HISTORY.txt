@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- No longer allow reverting document versions while documents are checked out.
+  [deiferni]
+
 - Remove expired locks before creating new locks to avoid integrity-errors
   during database flushes.
   [deiferni]

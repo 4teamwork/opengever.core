@@ -1,3 +1,4 @@
+from AccessControl import Unauthorized
 from datetime import date
 from datetime import datetime
 from ftw.builder import Builder
@@ -10,6 +11,7 @@ from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
+from opengever.trash.trash import Trasher
 from plone import api
 from plone.app.testing import login
 from plone.app.testing import logout
@@ -125,6 +127,28 @@ class TestReverting(FunctionalTestCase):
         self.manager.revert_to_version(3)
         self.assertEquals(date(2015, 01, 28), self.document.document_date)
 
+    def test_revert_disallowed_for_unprivileded_user(self):
+        self.grant('Authenticated')
+        self.assertFalse(self.manager.is_revert_allowed())
+
+    def test_revert_disallowed_when_checked_out(self):
+        self.manager.checkout()
+        self.assertFalse(self.manager.is_revert_allowed())
+
+    def test_revert_disallowed_when_locked(self):
+        IRefreshableLockable(self.document).lock()
+        self.assertFalse(self.manager.is_revert_allowed())
+
+    def test_revert_disallowed_when_trashed(self):
+        Trasher(self.document).trash()
+        self.assertFalse(self.manager.is_revert_allowed())
+
+    def test_manager_raises_unauthorized_when_reverting_disallowed(self):
+        self.manager.checkout()
+
+        with self.assertRaises(Unauthorized):
+            self.manager.revert_to_version(2)
+
     @browsing
     def test_reverting_with_revert_link_in_versions_tab(self, browser):
         browser.login().open(self.document, view='tabbedview_view-versions')
@@ -138,6 +162,24 @@ class TestReverting(FunctionalTestCase):
 
         self.assertEquals(['Reverted file to version 1'], info_messages())
         self.assertEquals('VERSION 1 DATA', self.document.file.data)
+
+    @browsing
+    def test_reset_link_discreet_when_reverting_disallowed(self, browser):
+        self.manager.checkout()
+        transaction.commit()
+
+        browser.login().open(self.document, view='tabbedview_view-versions')
+        self.assertEqual('reset', browser.css('span.discreet').first.text)
+
+    @browsing
+    def test_browser_revert_view_raises_unauthorized_when_revert_disallowed(self, browser):
+        self.manager.checkout()
+        transaction.commit()
+
+        with self.assertRaises(Unauthorized):
+            browser.login().open(self.document, view='revert-file-to-version',
+                                 data={'version_id': 2,
+                                       '_authenticator': createToken()})
 
 
 class TestCheckinCheckoutManager(FunctionalTestCase):
