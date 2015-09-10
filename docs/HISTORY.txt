@@ -5,6 +5,9 @@ Changelog
 4.5.5 (unreleased)
 ------------------
 
+- Also log object oids in csrf logs.
+  [deiferni]
+
 - Use supertabular* to render multi-page tables instead of longtable to
   fix an issue with tables breaking pages too late.
   [deiferni]
