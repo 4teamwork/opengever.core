@@ -8,6 +8,7 @@ from plone.protect.interfaces import IDisableCSRFProtection
 from pprint import pformat
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces import IPloneSiteRoot
+from ZODB.utils import u64
 from zope.annotation.attribute import AttributeAnnotations
 from zope.annotation.interfaces import IAnnotatable
 from zope.annotation.interfaces import IAnnotations
@@ -155,6 +156,8 @@ class OGProtectTransform(ProtectTransform):
         as the CSRF incident report.
         """
         _registered_objects = env['_registered_objects']
+        _registered_object_oids = [
+            hex(u64(obj._p_oid)) for obj in _registered_objects]
         request_dict = env['request_dict']
 
         # Drop response from request dict - we know what we're gonna send
@@ -177,6 +180,11 @@ class OGProtectTransform(ProtectTransform):
         yield 'HTTP_REFERER:'
         yield '-' * 80
         yield request_dict.get('environ', {}).get('HTTP_REFERER', '')
+        yield '\n'
+
+        yield '_registered_object_oids:'
+        yield '-' * 80
+        yield pformat(_registered_object_oids)
         yield '\n'
 
         yield '_registered_objects:'

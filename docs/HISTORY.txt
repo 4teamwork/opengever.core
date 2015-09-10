@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Also log object oids in csrf logs.
+  [deiferni]
+
 - Remove expired locks before creating new locks to avoid integrity-errors
   during database flushes.
   [deiferni]
