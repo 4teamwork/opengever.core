@@ -1,5 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.activity.model import Activity
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.task.adapters import IResponseContainer
 from opengever.testing import FunctionalTestCase
 from Products.CMFCore.utils import getToolByName
@@ -8,6 +10,7 @@ from Products.CMFCore.utils import getToolByName
 class TestAssingForwarding(FunctionalTestCase):
 
     use_browser = True
+    layer = OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 
     def setUp(self):
         super(TestAssingForwarding, self).setUp()
@@ -71,6 +74,21 @@ class TestAssingForwarding(FunctionalTestCase):
 
         self.assertEquals([responsible_change, responsible_client_change],
                           response.changes)
+
+    def test_activity_is_recorded_correctly(self):
+        self.assign_forwarding('client2', 'Fake Response')
+
+        self.assertEquals('client2', self.forwarding.responsible_client)
+        self.assertEquals('client2',
+                          self.forwarding.get_sql_object().assigned_org_unit)
+
+        self.assertEquals('inbox:client2', self.forwarding.responsible)
+        self.assertEquals('inbox:client2',
+                          self.forwarding.get_sql_object().responsible)
+
+        self.assertEquals(1, len(Activity.query.all()))
+        self.assertEquals('forwarding-transition-reassign-refused',
+                          Activity.query.all()[0].kind)
 
     def assign_forwarding(self, new_client, response):
         self.browser.open(self.forwarding.absolute_url())
