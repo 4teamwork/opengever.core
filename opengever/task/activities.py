@@ -153,7 +153,9 @@ class TaskTransitionActivity(TaskActivity):
 
     IGNORED_TRANSITIONS = [
         'transition-add-subtask',
-        'task-transition-reassign'
+        'task-transition-reassign',
+        'forwarding-transition-reassign',
+        'forwarding-transition-reassign-refused',
     ]
 
     def __init__(self, context, response):
