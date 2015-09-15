@@ -30,4 +30,7 @@ class ExecuteDelayedPloneUpgrade(UpgradeStep):
         catalog = api.portal.get_tool('portal_catalog')
         for index in catalog.Indexes.objectValues():
             if IZCTextIndex.providedBy(index):
-                self.catalog_rebuild_index(index.getId())
+                index_id = index.getId()
+                # Clear index first to make sure lexicon gets updated properly
+                catalog.manage_clearIndex([index_id])
+                self.catalog_rebuild_index(index_id)
