@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Add logging to the task SQL synchronisation.
+  [phgross]
+
 - Also log object oids in csrf logs.
   [deiferni]
 
