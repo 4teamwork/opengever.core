@@ -56,11 +56,11 @@ class DefaultSequenceNumberGenerator(grok.Adapter):
         ann = unprotected_write(IAnnotations(portal))
         if SEQUENCE_NUMBER_ANNOTATION_KEY not in ann.keys():
             ann[SEQUENCE_NUMBER_ANNOTATION_KEY] = unprotected_write(PersistentDict())
-        map = unprotected_write(ann.get(SEQUENCE_NUMBER_ANNOTATION_KEY))
-        if key not in map:
-            map[key] = Increaser(0)
+        mapping = unprotected_write(ann.get(SEQUENCE_NUMBER_ANNOTATION_KEY))
+        if key not in mapping:
+            mapping[key] = Increaser(0)
         # increase
-        inc = map[key]
+        inc = mapping[key]
         unprotected_write(inc).set(inc() + 1)
-        map[key] = inc
+        mapping[key] = inc
         return inc()
