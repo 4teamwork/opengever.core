@@ -42,7 +42,6 @@ def unprotected_write(obj):
         unprotected_write(getattr(obj.obj, '__annotations__', None))
         return obj
 
-    LOG.debug('Disable CSRF protection for {}'.format(repr(obj)))
     _get_unprotected_objects().append(obj)
     return obj
 
