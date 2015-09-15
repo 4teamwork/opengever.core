@@ -33,9 +33,7 @@ class ResponseDescription(object):
         description = cls.registry.get(transition)
 
         if not description:
-            raise ValueError(
-                'No response description configured for'
-                'transition {}'.format(transition))
+            description = NullResponseDescription
 
         return description(response)
 
@@ -320,3 +318,17 @@ class DocumentAdded(ResponseDescription):
                  u'Document added to Task')
 
 ResponseDescription.add_description(DocumentAdded)
+
+
+class NullResponseDescription(ResponseDescription):
+    """Fallback description for responses without any transition information.
+    """
+
+    transition = None
+    css_class = 'null-transition'
+
+    def msg(self):
+        return ''
+
+    def label(self):
+        return ''
