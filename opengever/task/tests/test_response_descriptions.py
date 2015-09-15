@@ -2,8 +2,11 @@ from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.task.adapters import IResponseContainer
+from opengever.task.adapters import Response
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
+import transaction
 
 
 class TestResponseDescriptions(FunctionalTestCase):
@@ -265,6 +268,21 @@ class TestResponseDescriptions(FunctionalTestCase):
         self.assertEqual(
             u'Document [No Subject] added by M\xfcller Hans (test_user_1_)',
             self.get_latest_answer(browser))
+
+    @browsing
+    def test_null_fallback(self, browser):
+        # add null response
+        null_response = Response(None)
+        IResponseContainer(self.task).add(null_response)
+        transaction.commit()
+
+        browser.login()
+        self.visit_overview(browser)
+
+        self.assertEqual('answer null-transition',
+                         browser.css('div.answer')[0].get('class'))
+        self.assertEqual('', self.get_latest_answer(browser))
+
 
     # TODO:
     # - Test assigning forwarding to dossier

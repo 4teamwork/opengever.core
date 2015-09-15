@@ -5,6 +5,10 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Add NullResponseDescription fallback for responses without a transition.
+  This makes the use of the ResponseDescriptions (ResponseViewlet etc.) more robust.
+  [phgross]
+
 - Fix duplicate activity recordings when a forwarding gets reassigned.
   [phgross]
 
