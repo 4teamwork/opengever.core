@@ -7,6 +7,10 @@ from Products.CMFPlone.interfaces import IPloneSiteRoot
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent.interfaces import IObjectRemovedEvent
+import logging
+
+
+logger = logging.getLogger('opengever.globalindex')
 
 
 class TaskSqlSyncer(object):
@@ -37,6 +41,7 @@ class TaskSqlSyncer(object):
                 # In some case (remote task updating etc)
                 # only the base_object provides an intid.
                 int_id = intids.getId(aq_base(self.obj))
+                logger.info('Used aq_base(obj) fallback to get intid.')
             except KeyError:
                 # The intid event handler didn' create a intid for this object
                 # yet. The event will be fired again after creating the id.
@@ -55,13 +60,20 @@ class TaskSqlSyncer(object):
 
     def sync(self):
         if self.is_uninstalling_plone():
+            logger.warn(
+                'Globalindex synchronisation of task {!r} skipped, '
+                'because plone site gets uninstalled.'.format(self.obj))
             return
 
         if self.obj_id is None:
+            logger.warn('Globalindex synchronisation of task {!r} skipped, '
+                        'because no intid exists.'.format(self.obj))
             return
 
         task = self.get_sql_task()
         task.sync_with(self.obj)
+        logger.info('Task {!r} has been successfully synchronized '
+                    'to globalindex ({!r}).'.format(self.obj, task))
 
 
 def sync_task(obj, event):
