@@ -5,36 +5,8 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
-- Add NullResponseDescription fallback for responses without a transition.
-  This makes the use of the ResponseDescriptions (ResponseViewlet etc.) more robust.
-  [phgross]
-
-- Fix duplicate activity recordings when a forwarding gets reassigned.
-  [phgross]
-
-- Fix Upgrade-Step that updates lexicon: The affected indexes need to be
-  cleared first before rebuilding them, otherwise the lexicon might not get
-  updated properly.
-  [lgraf]
-
-- Add logging to the task SQL synchronisation.
-  [phgross]
-
-- Also log object oids in csrf logs.
-  [deiferni]
-
 - Remove expired locks before creating new locks to avoid integrity-errors
   during database flushes.
-  [deiferni]
-
-- Use supertabular* to render multi-page tables instead of longtable to
-  fix an issue with tables breaking pages too late.
-  [deiferni]
-
-- Hide foreign part of predecessor/successor pairs in the opentaskreport listings.
-  [phgross]
-
-- Validate task title length.
   [deiferni]
 
 - Also display a members role in a meeting's protocol.
@@ -69,6 +41,39 @@ Changelog
 
 - Use dossier title as default title for new proposals.
   [deiferni]
+
+
+4.5.5 (2015-09-15)
+------------------
+
+- Add NullResponseDescription fallback for responses without a transition.
+  This makes the use of the ResponseDescriptions (ResponseViewlet etc.) more robust.
+  [phgross]
+
+- Fix duplicate activity recordings when a forwarding gets reassigned.
+  [phgross]
+
+- Fix Upgrade-Step that updates lexicon: The affected indexes need to be
+  cleared first before rebuilding them, otherwise the lexicon might not get
+  updated properly.
+  [lgraf]
+
+- Add logging to the task SQL synchronisation.
+  [phgross]
+
+- Also log object oids in csrf logs.
+  [deiferni]
+
+- Use supertabular* to render multi-page tables instead of longtable to
+  fix an issue with tables breaking pages too late.
+  [deiferni]
+
+- Hide foreign part of predecessor/successor pairs in the opentaskreport listings.
+  [phgross]
+
+- Validate task title length.
+  [deiferni]
+
 
 4.5.4 (2015-09-08)
 ------------------
