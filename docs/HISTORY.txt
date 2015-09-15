@@ -5,6 +5,11 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Fix Upgrade-Step that updates lexicon: The affected indexes need to be
+  cleared first before rebuilding them, otherwise the lexicon might not get
+  updated properly.
+  [lgraf]
+
 - Add logging to the task SQL synchronisation.
   [phgross]
 
