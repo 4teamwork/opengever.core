@@ -105,52 +105,6 @@ def validate_children(folder, event):
     utils.overrides_child(folder, event, aq_fields, ILifeCycleMarker)
 
 
-class RetentionPeriodValidator(validator.SimpleFieldValidator):
-
-    def is_restricted(self):
-        return _is_retention_period_restricted()
-
-    def validate(self, value):
-        super(RetentionPeriodValidator, self).validate(value)
-
-        # should not be negative
-        if int(value) < 0:
-            raise schema.interfaces.TooSmall()
-
-        if not self.is_restricted():
-            return
-
-        # get parent value
-        #XXX CHANGED FROM PATH_TRANSLATED TO PATH_INFO because the test
-        # don't work
-        if '++add++' in self.request.get('PATH_INFO', object()):
-            obj = self.context
-        else:
-            obj = self.context.aq_inner.aq_parent
-
-        parent_value = -1
-        while parent_value < 0 and not ISiteRoot.providedBy(obj):
-            cf_obj = queryAdapter(obj, ILifeCycle)
-
-            if cf_obj:
-                try:
-                    parent_value = int(self.field.get(cf_obj))
-                except AttributeError:
-                    pass
-                except TypeError:
-                    parent_value = 0
-
-            try:
-                obj = obj.aq_inner.aq_parent
-
-            except AttributeError:
-                return
-
-        # should not be bigger than parent
-        if parent_value > - 1 and int(value) > parent_value:
-            raise schema.interfaces.TooBig()
-
-
 class IntGreaterEqualThanParentValidator(validator.SimpleFieldValidator):
 
     def validate(self, value):
@@ -275,6 +229,52 @@ form.default_value(field=ILifeCycle['custody_period'])(
         default=30,
     )
 )
+
+
+class RetentionPeriodValidator(validator.SimpleFieldValidator):
+
+    def is_restricted(self):
+        return _is_retention_period_restricted()
+
+    def validate(self, value):
+        super(RetentionPeriodValidator, self).validate(value)
+
+        # should not be negative
+        if int(value) < 0:
+            raise schema.interfaces.TooSmall()
+
+        if not self.is_restricted():
+            return
+
+        # get parent value
+        #XXX CHANGED FROM PATH_TRANSLATED TO PATH_INFO because the test
+        # don't work
+        if '++add++' in self.request.get('PATH_INFO', object()):
+            obj = self.context
+        else:
+            obj = self.context.aq_inner.aq_parent
+
+        parent_value = -1
+        while parent_value < 0 and not ISiteRoot.providedBy(obj):
+            cf_obj = queryAdapter(obj, ILifeCycle)
+
+            if cf_obj:
+                try:
+                    parent_value = int(self.field.get(cf_obj))
+                except AttributeError:
+                    pass
+                except TypeError:
+                    parent_value = 0
+
+            try:
+                obj = obj.aq_inner.aq_parent
+
+            except AttributeError:
+                return
+
+        # should not be bigger than parent
+        if parent_value > - 1 and int(value) > parent_value:
+            raise schema.interfaces.TooBig()
 
 
 validator.WidgetValidatorDiscriminators(
