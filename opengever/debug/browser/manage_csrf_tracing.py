@@ -190,7 +190,7 @@ class ManageCSRFTracing(grok.View):
 
         # Allow for suggesting a timeout value via query string
         self._suggested_timeout = None
-        suggested_timeout = self.request.form.get('timeout')
+        suggested_timeout = self.request.form.get('suggested_timeout')
         if suggested_timeout is not None:
             self._suggested_timeout = int(suggested_timeout)
 
