@@ -5,6 +5,10 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Fixed bug in retention_period:
+  The RetentionPeriodValidator respect the is_restricted flag now.
+  [phgross]
+
 - Remove expired locks before creating new locks to avoid integrity-errors
   during database flushes.
   [deiferni]
