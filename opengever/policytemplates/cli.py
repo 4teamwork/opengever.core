@@ -14,11 +14,8 @@ class CreatePolicyCLI(object):
         self.args = args
 
     def run(self):
-        options = self._parse_args()
-
+        options, remainder = self._parse_args()
         args = []
-        if options.verbose:
-            args.append('-v')
 
         target_dir = 'src/'
         args.append('-O')
@@ -27,22 +24,18 @@ class CreatePolicyCLI(object):
         template = 'opengever.policytemplates:policy_template'
         args.append(template)
 
+        if remainder:
+            args.extend(remainder)
+
         sys.exit(mrbob.cli.main(args=args))
 
     def _parse_args(self):
-        prog = sys.argv[0]
+        prog = self.args.pop(0)
 
         # Top level parser
         parser = argparse.ArgumentParser(prog=prog)
 
-        # Global arguments
-        parser.add_argument(
-            '-v',
-            '--verbose',
-            action='store_true',
-            help='Be very verbose.')
-
-        return parser.parse_args()
+        return parser.parse_known_args(args=self.args)
 
 
 def main():
