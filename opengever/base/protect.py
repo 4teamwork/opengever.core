@@ -1,6 +1,6 @@
 from copy import copy
 from datetime import datetime
-from opengever.base.utils import PathFinder
+from opengever.base.pathfinder import PathFinder
 from plone import api
 from plone.portlets.constants import CONTEXT_ASSIGNMENT_KEY
 from plone.protect.auto import ProtectTransform
