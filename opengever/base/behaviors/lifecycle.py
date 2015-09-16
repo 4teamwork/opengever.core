@@ -105,15 +105,20 @@ def validate_children(folder, event):
     utils.overrides_child(folder, event, aq_fields, ILifeCycleMarker)
 
 
-# RETENTION PERIOD
-class IntLowerEqualThanParentValidator(validator.SimpleFieldValidator):
+class RetentionPeriodValidator(validator.SimpleFieldValidator):
+
+    def is_restricted(self):
+        return _is_retention_period_restricted()
 
     def validate(self, value):
-        super(IntLowerEqualThanParentValidator, self).validate(value)
+        super(RetentionPeriodValidator, self).validate(value)
 
         # should not be negative
         if int(value) < 0:
             raise schema.interfaces.TooSmall()
+
+        if not self.is_restricted():
+            return
 
         # get parent value
         #XXX CHANGED FROM PATH_TRANSLATED TO PATH_INFO because the test
@@ -146,7 +151,6 @@ class IntLowerEqualThanParentValidator(validator.SimpleFieldValidator):
             raise schema.interfaces.TooBig()
 
 
-# RETENTION PERIOD
 class IntGreaterEqualThanParentValidator(validator.SimpleFieldValidator):
 
     def validate(self, value):
@@ -203,7 +207,7 @@ def _get_retention_period_options(vocabulary):
     return options
 
 
-def _is_retention_period_restricted(vocabulary):
+def _is_retention_period_restricted(*args, **kwargs):
     registry = getUtility(IRegistry)
     retention_period_settings = registry.forInterface(IRetentionPeriodRegister)
     return retention_period_settings.is_restricted
@@ -271,11 +275,6 @@ form.default_value(field=ILifeCycle['custody_period'])(
         default=30,
     )
 )
-
-
-# Validator
-class RetentionPeriodValidator(IntLowerEqualThanParentValidator):
-    pass
 
 
 validator.WidgetValidatorDiscriminators(
