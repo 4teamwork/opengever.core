@@ -1,11 +1,16 @@
-from Products.CMFCore.interfaces import ISiteRoot
+from ftw.builder import Builder
+from ftw.builder import create
+from ftw.testbrowser import browsing
 from grokcore.component.testing import grok
 from mocker import ANY
 from mocker import Mocker
 from opengever.base.behaviors import lifecycle
 from opengever.base.interfaces import IBaseCustodyPeriods
+from opengever.base.interfaces import IRetentionPeriodRegister
+from opengever.testing import FunctionalTestCase
 from plone.mocktestcase import MockTestCase
 from plone.registry.interfaces import IRegistry
+from Products.CMFCore.interfaces import ISiteRoot
 from unittest2 import TestCase
 from z3c.form.interfaces import IValidator
 from z3c.form.interfaces import IValue
@@ -16,8 +21,9 @@ from zope.component import provideUtility
 from zope.interface import directlyProvides
 from zope.schema.interfaces import ConstraintNotSatisfied
 from zope.schema.interfaces import IVocabularyFactory
-from zope.schema.vocabulary import VocabularyRegistryError
 from zope.schema.vocabulary import getVocabularyRegistry
+from zope.schema.vocabulary import VocabularyRegistryError
+import transaction
 
 
 class TestCustodyPeriod(MockTestCase, TestCase):
@@ -174,3 +180,59 @@ class TestCustodyPeriod(MockTestCase, TestCase):
             IValue,
             name='default')
         self.assertEqual(default_value.get(), 10)
+
+
+class TestRetentionPeriod(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestRetentionPeriod, self).setUp()
+        self.grant('Administrator')
+        self.repo = create(Builder('repository')
+                           .having(retention_period=15))
+
+    def tearDown(self):
+        super(TestRetentionPeriod, self).tearDown()
+        registry = getUtility(IRegistry)
+        proxy = registry.forInterface(IRetentionPeriodRegister)
+        proxy.is_restricted = False
+
+    @browsing
+    def test_values_are_not_restricted_by_default(self, browser):
+        browser.login().open(self.repo,
+                     view='++add++opengever.repository.repositoryfolder')
+
+        field = browser.css('#form-widgets-ILifeCycle-retention_period').first
+        self.assertEqual(['5', '10', '15', '20', '25'], field.options_values)
+
+    @browsing
+    def test_default_value_is_value_of_the_parent(self, browser):
+        browser.login().open(self.repo,
+                     view='++add++opengever.repository.repositoryfolder')
+
+        field = browser.css('#form-widgets-ILifeCycle-retention_period').first
+        self.assertEqual(u'15', field.value)
+
+    @browsing
+    def test_restricted_can_be_activated_via_registry_setting(self, browser):
+        # restrict retention_period
+        registry = getUtility(IRegistry)
+        proxy = registry.forInterface(IRetentionPeriodRegister)
+        proxy.is_restricted = True
+        transaction.commit()
+
+        browser.login().open(self.repo,
+                     view='++add++opengever.repository.repositoryfolder')
+
+        field = browser.css('#form-widgets-ILifeCycle-retention_period').first
+        self.assertEqual(['15', '5', '10'], field.options_values)
+
+    @browsing
+    def test_validator_respect_restriction_disabling(self, browser):
+        browser.login().open(self.repo,
+                             view='++add++opengever.repository.repositoryfolder')
+
+        browser.fill({'Title': 'SubRepo', 'Retention period (years)': u'20'})
+        browser.find('Save').click()
+
+        sub_repo = browser.context
+        self.assertEqual(20, lifecycle.ILifeCycle(sub_repo).retention_period)
