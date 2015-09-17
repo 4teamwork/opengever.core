@@ -24,4 +24,10 @@
       permission="zope.Public"
       />
 
+<adapter
+    for="zope.annotation.interfaces.IAttributeAnnotatable"
+    provides="zope.annotation.interfaces.IAnnotations"
+    factory=".protect.ProtectAwareAttributeAnnotations"
+    />
+
 </configure>

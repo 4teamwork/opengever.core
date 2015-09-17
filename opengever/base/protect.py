@@ -1,3 +1,4 @@
+from BTrees.OOBTree import OOBTree
 from copy import copy
 from datetime import datetime
 from opengever.base.utils import PathFinder
@@ -41,7 +42,6 @@ def unprotected_write(obj):
         unprotected_write(getattr(obj.obj, '__annotations__', None))
         return obj
 
-    LOG.debug('Disable CSRF protection for {}'.format(repr(obj)))
     _get_unprotected_objects().append(obj)
     return obj
 
@@ -232,3 +232,22 @@ class OGProtectTransform(ProtectTransform):
         # see webdav/Lockable.py:64
         if hasattr(context, '_dav_writelocks'):
             unprotected_write(context._dav_writelocks)
+
+
+class ProtectAwareAttributeAnnotations(AttributeAnnotations):
+    """Zope AttributeAnnotations lazily intializes annotations.
+
+    When annotations are initialized on an object we need to unprotect that
+    object.
+    """
+
+    def __setitem__(self, key, value):
+        try:
+            annotations = self.obj.__annotations__
+        except AttributeError:
+            # unprotect new annotations since they will be written
+            annotations = unprotected_write(OOBTree())
+            # unprotect obj for which we initialize annotations
+            unprotected_write(self.obj).__annotations__ = annotations
+
+        annotations[key] = value
