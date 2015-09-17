@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.5.6 (unreleased)
+4.5.6 (2015-09-17)
 ------------------
 
 - CSRF: unprotect initializing annotations and sequence numbers.
