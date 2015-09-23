@@ -2,7 +2,7 @@ from five import grok
 from ldap import NO_SUCH_OBJECT
 from logging.handlers import TimedRotatingFileHandler
 from opengever.base.model import create_session
-from opengever.base.utils import PathFinder
+from opengever.base.pathfinder import PathFinder
 from opengever.ogds.base.interfaces import ILDAPSearch
 from opengever.ogds.base.interfaces import IOGDSUpdater
 from opengever.ogds.base.sync.import_stamp import set_remote_import_stamp
