@@ -113,14 +113,17 @@ class TestCommitteeOverview(FunctionalTestCase):
 
     @browsing
     def test_proposal_box_only_lists_unscheduled_proposals(self, browser):
+        dossier = create(Builder('dossier'))
         proposal_a = create(Builder('proposal')
+                            .within(dossier)
                             .having(title=u'Proposal A',
                                     committee=self.committee_model))
         create(Builder('submitted_proposal').submitting(proposal_a))
 
-        proposal_b = create(Builder('proposal')
-                            .having(title=u'Proposal B',
-                                    committee=self.committee_model))
+        create(Builder('proposal')
+               .within(dossier)
+               .having(title=u'Proposal B',
+                       committee=self.committee_model))
 
         browser.login().open(self.committee, view='tabbedview_view-overview')
 
@@ -130,7 +133,9 @@ class TestCommitteeOverview(FunctionalTestCase):
 
     @browsing
     def test_proposals_are_linked_correctly(self, browser):
+        dossier = create(Builder('dossier'))
         proposal_a = create(Builder('proposal')
+                            .within(dossier)
                             .having(title=u'Mach doch',
                                     committee=self.committee_model))
         create(Builder('submitted_proposal').submitting(proposal_a))

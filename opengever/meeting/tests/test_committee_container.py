@@ -81,8 +81,11 @@ class TestCommitteesTab(FunctionalTestCase):
 
     @browsing
     def test_unscheduled_proposal_number(self, browser):
+        dossier = create(Builder('dossier'))
+
         for i in range(0, 5):
             proposal_a = create(Builder('proposal')
+                                .within(dossier)
                                 .having(committee=self.committee_model))
             create(Builder('submitted_proposal').submitting(proposal_a))
 
@@ -94,7 +97,10 @@ class TestCommitteesTab(FunctionalTestCase):
 
     @browsing
     def test_unscheduled_proposal_number_link(self, browser):
+        dossier = create(Builder('dossier'))
+
         proposal_a = create(Builder('proposal')
+                            .within(dossier)
                             .having(committee=self.committee_model))
         create(Builder('submitted_proposal').submitting(proposal_a))
 
@@ -108,7 +114,10 @@ class TestCommitteesTab(FunctionalTestCase):
 
     @browsing
     def test_unscheduled_proposal_number_class(self, browser):
-        proposal_a = create(Builder('proposal').having(committee=self.committee_model))
+        dossier = create(Builder('dossier'))
+        proposal_a = create(Builder('proposal')
+                            .within(dossier)
+                            .having(committee=self.committee_model))
         create(Builder('submitted_proposal').submitting(proposal_a))
 
         create(Builder('committee').within(self.container)
