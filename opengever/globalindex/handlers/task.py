@@ -72,8 +72,11 @@ class TaskSqlSyncer(object):
 
         task = self.get_sql_task()
         task.sync_with(self.obj)
-        logger.info('Task {!r} has been successfully synchronized '
-                    'to globalindex ({!r}).'.format(self.obj, task))
+        logger.info('Task {!r} (modified:{}) has been successfully synchronized '
+                    'to globalindex ({!r}).'.format(
+                        self.obj,
+                        self.obj.modified().asdatetime().replace(tzinfo=None),
+                        task))
 
 
 def sync_task(obj, event):

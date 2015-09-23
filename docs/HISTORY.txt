@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Extend logging of task SQL synchronisation, with tasks modification date.
+  [phgross]
+
 - CSRF: unprotect initializing annotations and sequence numbers.
   [deiferni]
 
