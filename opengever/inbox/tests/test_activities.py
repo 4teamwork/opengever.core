@@ -2,6 +2,8 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.activity import notification_center
+from opengever.activity.center import TASK_ISSUER_ROLE
+from opengever.activity.center import TASK_RESPONSIBLE_ROLE
 from opengever.activity.model import Activity
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.task.browser.accept.utils import accept_forwarding_with_successor
@@ -62,11 +64,12 @@ class TestForwardingActivites(FunctionalTestCase):
         task = assign_forwarding_to_dossier(self.portal, forwarding.oguid.id,
                                             dossier, "Ok!")
 
+        resource = notification_center().fetch_resource(task)
         # The responsible of the task is the `inbox:client1`,
         # but the PloneNotificationCenter adds every actor representative.
         self.assertItemsEqual(
             [TEST_USER_ID, 'hugo.boss', 'peter.mueller'],
-            [watcher.user_id for watcher in self.center.get_watchers(task)])
+            [watcher.user_id for watcher in resource.watchers])
 
     @browsing
     def test_accepting_forwarding_with_successor_updated_responsibles(self, browser):
@@ -75,19 +78,23 @@ class TestForwardingActivites(FunctionalTestCase):
                             .having(responsible=TEST_USER_ID,
                                     issuer='hugo.boss')
                             .within(inbox))
-        self.center.add_watcher_to_resource(forwarding, TEST_USER_ID)
-        self.center.add_watcher_to_resource(forwarding, 'hugo.boss')
+        self.center.add_watcher_to_resource(
+            forwarding, TEST_USER_ID, TASK_RESPONSIBLE_ROLE)
+        self.center.add_watcher_to_resource(
+            forwarding, 'hugo.boss', TASK_ISSUER_ROLE)
 
         successor = accept_forwarding_with_successor(
             self.portal, forwarding.oguid.id,
             'OK. That is something for me.', dossier=None)
 
+        forwarding_resource = self.center.fetch_resource(forwarding)
+        successor_resource = self.center.fetch_resource(successor)
         self.assertItemsEqual(
             ['hugo.boss'],
-            [watcher.user_id for watcher in self.center.get_watchers(forwarding)])
+            [watcher.user_id for watcher in forwarding_resource.watchers])
         self.assertItemsEqual(
             [TEST_USER_ID, 'peter.mueller'],
-            [watcher.user_id for watcher in self.center.get_watchers(successor)])
+            [watcher.user_id for watcher in successor_resource.watchers])
 
     @browsing
     def test_accepting_and_assign_forwarding_with_successor_and__updated_responsibles(self, browser):
@@ -97,19 +104,23 @@ class TestForwardingActivites(FunctionalTestCase):
                             .having(responsible=TEST_USER_ID,
                                     issuer='hugo.boss')
                             .within(inbox))
-        self.center.add_watcher_to_resource(forwarding, TEST_USER_ID)
-        self.center.add_watcher_to_resource(forwarding, 'hugo.boss')
+        self.center.add_watcher_to_resource(
+            forwarding, TEST_USER_ID, TASK_RESPONSIBLE_ROLE)
+        self.center.add_watcher_to_resource(
+            forwarding, 'hugo.boss', TASK_ISSUER_ROLE)
 
         task = accept_forwarding_with_successor(
             self.portal, forwarding.oguid.id,
             'OK. That is something for me.', dossier=dossier)
 
+        forwarding_resource = self.center.fetch_resource(forwarding)
+        task_resource = self.center.fetch_resource(task)
         self.assertItemsEqual(
             ['hugo.boss'],
-            [watcher.user_id for watcher in self.center.get_watchers(forwarding)])
+            [watcher.user_id for watcher in forwarding_resource.watchers])
         self.assertItemsEqual(
             [TEST_USER_ID],
-            [watcher.user_id for watcher in self.center.get_watchers(task)])
+            [watcher.user_id for watcher in task_resource.watchers])
 
 
 class TestForwardingReassignActivity(FunctionalTestCase):
@@ -182,7 +193,7 @@ class TestForwardingReassignActivity(FunctionalTestCase):
         forwarding = self.add_forwarding(browser)
         self.reassign(browser, forwarding, responsible='peter.mueller')
 
-        watchers = notification_center().get_watchers(forwarding)
+        resource = notification_center().fetch_resource(forwarding)
         self.assertItemsEqual(
             ['peter.mueller', u'hugo.boss'],
-            [watcher.user_id for watcher in watchers])
+            [watcher.user_id for watcher in resource.watchers])

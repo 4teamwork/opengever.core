@@ -50,11 +50,11 @@ class TestPloneNotificationCenter(FunctionalTestCase):
         browser.css('#form-buttons-save').first.click()
 
         task = self.dossier.get('task-1')
-        watchers = notification_center().get_watchers(task)
+        resource = notification_center().fetch_resource(task)
 
         self.assertItemsEqual(
             [TEST_USER_ID, 'hugo.boss', 'franz.michel'],
-            [watcher.user_id for watcher in watchers])
+            [watcher.user_id for watcher in resource.watchers])
 
 
 class TestNotifactionCenterErrorHandling(FunctionalTestCase):

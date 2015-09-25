@@ -1,6 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.activity.center import NotificationCenter
+from opengever.activity.center import WATCHER_ROLE
 from opengever.activity.model import Notification
 from opengever.activity.model import Resource
 from opengever.activity.model import Watcher
@@ -16,6 +17,14 @@ class TestResourceHandling(ActivityTestCase):
     def setUp(self):
         super(TestResourceHandling, self).setUp()
         self.center = NotificationCenter()
+
+    def test_add_watcher_to_a_resource(self):
+        hugo = create(Builder('watcher').having(user_id='hugo'))
+        peter = create(Builder('watcher').having(user_id='peter'))
+        res = create(Builder('resource').oguid('fd:1234'))
+
+        res.add_watcher('hugo', 'issuer')
+        self.assertEquals([hugo], res.watchers)
 
     def test_fetch_return_resource_by_means_of_oguid(self):
         resource_a = create(Builder('resource').oguid('fd:123'))
@@ -108,12 +117,13 @@ class TestWatcherHandling(ActivityTestCase):
         hugo = create(Builder('watcher').having(user_id='hugo'))
         fritz = create(Builder('watcher').having(user_id='fritz'))
 
-        create(Builder('resource').oguid('fd:123').watchers([hugo, fritz]))
-        create(Builder('resource').oguid('fd:456').watchers([peter]))
+        resource_1 = create(Builder('resource')
+                            .oguid('fd:123').watchers([hugo, fritz]))
+        resource_2 = create(Builder('resource')
+                            .oguid('fd:456').watchers([peter]))
 
-        self.assertEquals(set([hugo, fritz]),
-                          self.center.get_watchers(Oguid('fd', '123')))
-        self.assertEquals(set([peter]),
+        self.assertEquals([hugo, fritz], self.center.get_watchers(Oguid('fd', '123')))
+        self.assertEquals([peter],
                           self.center.get_watchers(Oguid('fd', '456')))
 
     def test_get_watchers_returns_empty_list_when_resource_not_exists(self):
@@ -122,12 +132,25 @@ class TestWatcherHandling(ActivityTestCase):
     def test_remove_watcher_from_resource_will_be_ignored_when_watcher_not_exists(self):
         create(Builder('resource').oguid('fd:123'))
 
-        self.center.remove_watcher_from_resource(Oguid('fd', '123'), 'peter')
+        self.center.remove_watcher_from_resource(
+            Oguid('fd', '123'), 'peter', WATCHER_ROLE)
+
+    def test_remove_watcher_from_resource_will_remove_watching_if_no_roles_left(self):
+        resource = create(Builder('resource').oguid('fd:123'))
+        watcher = create(Builder('watcher').having(user_id=u'peter'))
+        create(Builder('watching')
+               .having(resource=resource, watcher=watcher, roles=[WATCHER_ROLE]))
+
+        self.center.remove_watcher_from_resource(
+            Oguid('fd', '123'), 'peter', WATCHER_ROLE)
+
+        self.assertEquals([], resource.watchers)
 
     def test_remove_watcher_from_resource_will_be_ignored_when_resource_not_exists(self):
         create(Builder('watcher').having(user_id='peter'))
 
-        self.center.remove_watcher_from_resource(Oguid('fd', '123'), 'peter')
+        self.center.remove_watcher_from_resource(
+            Oguid('fd', '123'), 'peter', WATCHER_ROLE)
 
     def test_remove_watcher_from_resource(self):
         peter = create(Builder('watcher').having(user_id='peter'))
@@ -136,9 +159,10 @@ class TestWatcherHandling(ActivityTestCase):
                           .oguid('fd:123')
                           .watchers([hugo, peter]))
 
-        self.center.remove_watcher_from_resource(Oguid('fd', '123'), 'peter')
+        self.center.remove_watcher_from_resource(
+            Oguid('fd', '123'), 'peter', WATCHER_ROLE)
 
-        self.assertEquals(set([hugo]), resource.watchers)
+        self.assertEquals([hugo], resource.watchers)
 
 
 class TestAddActivity(ActivityTestCase):

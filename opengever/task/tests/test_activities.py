@@ -4,6 +4,9 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing.mailing import Mailing
 from opengever.activity import notification_center
+from opengever.activity.center import TASK_ISSUER_ROLE
+from opengever.activity.center import TASK_RESPONSIBLE_ROLE
+from opengever.activity.center import WATCHER_ROLE
 from opengever.activity.model import Activity
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.task.browser.accept.utils import accept_task_with_successor
@@ -60,10 +63,11 @@ class TestTaskActivites(FunctionalTestCase):
         browser.css('#form-buttons-save').first.click()
 
         center = notification_center()
-        watchers = center.get_watchers(self.dossier.listFolderContents()[0])
+        resource = center.fetch_resource(self.dossier.listFolderContents()[0])
+
         self.assertItemsEqual(
             ['hugo.boss', TEST_USER_ID],
-            [watcher.user_id for watcher in watchers])
+            [watcher.user_id for watcher in resource.watchers])
 
     @browsing
     def test_task_accepted(self, browser):
@@ -274,10 +278,10 @@ class TestTaskReassignActivity(FunctionalTestCase):
         self.task = self.add_task(browser)
         self.reassign(browser, 'hugo.boss', u'Bitte Abkl\xe4rungen erledigen.')
 
-        watchers = notification_center().get_watchers(self.task)
+        resource = notification_center().fetch_resource(self.task)
         self.assertItemsEqual(
             ['peter.meier', 'hugo.boss'],
-            [watcher.user_id for watcher in watchers])
+            [watcher.user_id for watcher in resource.watchers])
 
 
 class TestSuccesssorHandling(FunctionalTestCase):
@@ -307,9 +311,12 @@ class TestSuccesssorHandling(FunctionalTestCase):
                                   .having(responsible='peter.meier',
                                           issuer='james.meier'))
 
-        self.center.add_watcher_to_resource(self.predecessor, 'peter.meier')
-        self.center.add_watcher_to_resource(self.predecessor, 'hugo.boss')
-        self.center.add_watcher_to_resource(self.predecessor, 'james.meier')
+        self.center.add_watcher_to_resource(
+            self.predecessor, 'peter.meier', TASK_RESPONSIBLE_ROLE)
+        self.center.add_watcher_to_resource(
+            self.predecessor, 'james.meier', TASK_ISSUER_ROLE)
+        self.center.add_watcher_to_resource(
+            self.predecessor, 'hugo.boss', WATCHER_ROLE)
 
     def tearDown(self):
         super(TestSuccesssorHandling, self).tearDown()
@@ -319,9 +326,12 @@ class TestSuccesssorHandling(FunctionalTestCase):
         successor = accept_task_with_successor(
             self.dossier, self.predecessor.oguid.id, 'Ok.')
 
-        predecessors_watcher = [watcher.user_id for watcher in
-                                self.center.get_watchers(self.predecessor)]
-        successors_watcher = [watcher.user_id for watcher in
-                              self.center.get_watchers(successor)]
-        self.assertItemsEqual(['hugo.boss', 'james.meier'], predecessors_watcher)
-        self.assertEquals(['peter.meier'], successors_watcher)
+        predecessor_resource = self.center.fetch_resource(self.predecessor)
+        successor_resource = self.center.fetch_resource(successor)
+
+        self.assertItemsEqual(
+            ['hugo.boss', 'james.meier'],
+            [watcher.user_id for watcher in predecessor_resource.watchers])
+        self.assertItemsEqual(
+            ['peter.meier'],
+            [watcher.user_id for watcher in successor_resource.watchers])
