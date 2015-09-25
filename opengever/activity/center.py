@@ -19,6 +19,11 @@ import traceback
 _ = MessageFactory("opengever.activity")
 logger = logging.getLogger('opengever.activity')
 
+# WATCHER ROLES
+TASK_ISSUER_ROLE = 'task_issuer'
+TASK_RESPONSIBLE_ROLE = 'task_responsible'
+WATCHER_ROLE = 'regular_watcher'
+
 
 class NotificationCenter(object):
     """
@@ -58,12 +63,12 @@ class NotificationCenter(object):
     def fetch_watcher(self, user_id):
         return Watcher.query.get_by_userid(user_id)
 
-    def add_watcher_to_resource(self, oguid, userid):
+    def add_watcher_to_resource(self, oguid, userid, role=WATCHER_ROLE):
         resource = self.fetch_resource(oguid)
         if not resource:
             resource = self.add_resource(oguid)
 
-        resource.add_watcher(userid)
+        resource.add_watcher(userid, role)
 
     def remove_watcher_from_resource(self, oguid, userid):
         watcher = self.fetch_watcher(userid)
@@ -158,12 +163,12 @@ class PloneNotificationCenter(NotificationCenter):
             return Oguid.for_object(item)
         return item
 
-    def add_watcher_to_resource(self, obj, actorid):
+    def add_watcher_to_resource(self, obj, actorid, role):
         actor = Actor.lookup(actorid)
         oguid = self._get_oguid_for(obj)
         for representative in actor.representatives():
             super(PloneNotificationCenter, self).add_watcher_to_resource(
-                oguid, representative.userid)
+                oguid, representative.userid, role)
 
     def remove_watcher_from_resource(self, obj, userid):
         oguid = self._get_oguid_for(obj)
@@ -199,6 +204,10 @@ class PloneNotificationCenter(NotificationCenter):
         oguid = self._get_oguid_for(obj)
         return super(PloneNotificationCenter, self).get_watchers(oguid)
 
+    def fetch_resource(self, obj):
+        oguid = self._get_oguid_for(obj)
+        return super(PloneNotificationCenter, self).fetch_resource(oguid)
+
     def get_current_users_notifications(self, only_unread=False, limit=None):
         return super(PloneNotificationCenter, self).get_users_notifications(
             api.user.get_current().getId(),
@@ -223,7 +232,7 @@ class DisabledNotificationCenter(NotificationCenter):
     def fetch_watcher(self, user_id):
         return None
 
-    def add_watcher_to_resource(self, obj, userid):
+    def add_watcher_to_resource(self, obj, userid, role):
         pass
 
     def remove_watcher_from_resource(self, obj, userid):
