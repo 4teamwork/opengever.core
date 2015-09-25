@@ -22,7 +22,7 @@ class WatchingQuery(BaseQuery):
 
     def get_by_watcher_resource(self, resource, watcher):
         return self.filter_by(resource=resource, watcher=watcher).first()
-    
+
 
 class Watching(Base):
     query_cls = WatchingQuery
@@ -43,7 +43,7 @@ class Watching(Base):
 
     def __repr__(self):
         return '<Watching {!r} @ {!r}>'.format(self.watcher, self.resource)
-        
+
     @property
     def roles(self):
         return json.loads(self._roles)
@@ -51,7 +51,7 @@ class Watching(Base):
     @roles.setter
     def roles(self, roles):
         self._roles = json.dumps(roles)
-        
+
     def add_role(self, role):
         roles = self.roles
         if role not in roles:
@@ -59,12 +59,18 @@ class Watching(Base):
 
         self.roles = roles
 
-        
+    def remove_role(self, role):
+        roles = self.roles
+        if role in roles:
+            roles.remove(role)
+            self.roles = roles
+
+
 class ResourceQuery(BaseQuery):
-    
+
     def get_by_oguid(self, oguid):
         return self.filter_by(oguid=oguid).first()
-    
+
 
 class Resource(Base):
 
@@ -81,10 +87,10 @@ class Resource(Base):
     oguid = composite(Oguid, admin_unit_id, int_id)
 
     watchers = association_proxy('watchings', 'watcher')
-    
+
     def __repr__(self):
         return '<Resource {}:{}>'.format(self.admin_unit_id, self.int_id)
-    
+
     def add_watcher(self, user_id, role):
         watcher = Watcher.query.get_by_userid(user_id)
         if not watcher:
@@ -97,7 +103,7 @@ class Resource(Base):
             create_session().add(watching)
         else:
             watching.add_role(role)
-            
+
         return watcher
 
     def remove_watcher(self, watcher):

@@ -2,6 +2,7 @@ from opengever.activity.model import Activity
 from opengever.activity.model import Notification
 from opengever.activity.model import Resource
 from opengever.activity.model import Watcher
+from opengever.activity.model import Watching
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.ogds.base.actor import Actor
@@ -15,6 +16,7 @@ from zope.i18nmessageid import MessageFactory
 import logging
 import sys
 import traceback
+
 
 _ = MessageFactory("opengever.activity")
 logger = logging.getLogger('opengever.activity')
@@ -53,7 +55,8 @@ class NotificationCenter(object):
         """Returns a resource by it's Oguid object or None when it does
         not exist.
         """
-        return Resource.query.get_by_oguid(oguid)
+        resource = Resource.query.get_by_oguid(oguid)
+        return resource
 
     def add_watcher(self, user_id):
         watcher = Watcher(user_id=user_id)
@@ -70,12 +73,15 @@ class NotificationCenter(object):
 
         resource.add_watcher(userid, role)
 
-    def remove_watcher_from_resource(self, oguid, userid):
+    def remove_watcher_from_resource(self, oguid, userid, role):
         watcher = self.fetch_watcher(userid)
         resource = self.fetch_resource(oguid)
 
         if watcher and resource:
-            resource.remove_watcher(watcher)
+            watching = Watching.query.get_by_watcher_resource(resource, watcher)
+            watching.remove_role(role)
+            if not watching.roles:
+                self.session.delete(watching)
 
     def get_watchers(self, oguid):
         resource = Resource.query.get_by_oguid(oguid)
@@ -170,10 +176,10 @@ class PloneNotificationCenter(NotificationCenter):
             super(PloneNotificationCenter, self).add_watcher_to_resource(
                 oguid, representative.userid, role)
 
-    def remove_watcher_from_resource(self, obj, userid):
+    def remove_watcher_from_resource(self, obj, userid, role):
         oguid = self._get_oguid_for(obj)
         super(PloneNotificationCenter, self).remove_watcher_from_resource(
-            oguid, userid)
+            oguid, userid, role)
 
     def add_activity(self, obj, kind, title, label, summary, actor_id, description):
         oguid = self._get_oguid_for(obj)
@@ -235,7 +241,7 @@ class DisabledNotificationCenter(NotificationCenter):
     def add_watcher_to_resource(self, obj, userid, role):
         pass
 
-    def remove_watcher_from_resource(self, obj, userid):
+    def remove_watcher_from_resource(self, obj, userid, role):
         pass
 
     def get_watchers(self, obj):

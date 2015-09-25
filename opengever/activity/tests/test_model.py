@@ -53,3 +53,40 @@ class TestActivity(ActivityTestCase):
                          str(activity))
         self.assertEqual("<Activity task-added on <Resource fd:123> >",
                          repr(activity))
+
+
+class TestWatching(ActivityTestCase):
+
+    def test_string_representation(self):
+        resource = create(Builder('resource').oguid('fd:123'))
+        watcher = create(Builder('watcher').having(user_id=u'h\xfcgo.boss'))
+        watching = create(Builder('watching')
+                          .having(resource=resource, watcher=watcher))
+
+        self.assertEqual(
+            "<Watching <Watcher u'h\\xfcgo.boss'> @ <Resource fd:123>>",
+            str(watching))
+        self.assertEqual(
+            "<Watching <Watcher u'h\\xfcgo.boss'> @ <Resource fd:123>>",
+            repr(watching))
+
+    def test_remove_role(self):
+        resource = create(Builder('resource').oguid('fd:123'))
+        watcher = create(Builder('watcher').having(user_id=u'h\xfcgo.boss'))
+        watching = create(Builder('watching')
+                          .having(resource=resource, watcher=watcher,
+                                  roles=['watcher', 'issuer']))
+
+        watching.remove_role('watcher')
+
+        self.assertEqual(['issuer'], watching.roles)
+
+    def test_remove_not_stored_role_is_ignored(self):
+        resource = create(Builder('resource').oguid('fd:123'))
+        watcher = create(Builder('watcher').having(user_id=u'h\xfcgo.boss'))
+        watching = create(Builder('watching')
+                          .having(resource=resource, watcher=watcher,
+                                  roles=['watcher']))
+
+        watching.remove_role('issuer')
+        self.assertEqual(['watcher'], watching.roles)
