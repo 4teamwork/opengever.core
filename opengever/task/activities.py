@@ -1,4 +1,6 @@
 from opengever.activity import notification_center
+from opengever.activity.center import TASK_ISSUER_ROLE
+from opengever.activity.center import TASK_RESPONSIBLE_ROLE
 from opengever.base.model import get_locale
 from opengever.ogds.base.actor import Actor
 from opengever.task import _
@@ -142,9 +144,11 @@ class TaskAddedActivity(TaskActivity):
 
     def before_recording(self):
         self.center.add_watcher_to_resource(self.context,
-                                            self.context.responsible)
+                                            self.context.responsible,
+                                            TASK_RESPONSIBLE_ROLE)
         self.center.add_watcher_to_resource(self.context,
-                                            self.context.issuer)
+                                            self.context.issuer,
+                                            TASK_ISSUER_ROLE)
 
 
 class TaskTransitionActivity(TaskActivity):
@@ -210,14 +214,15 @@ class TaskReassignActivity(TaskTransitionActivity):
         """Adds new responsible to watchers list.
         """
         self.center.add_watcher_to_resource(self.context,
-                                            self.context.responsible)
+                                            self.context.responsible,
+                                            TASK_RESPONSIBLE_ROLE)
 
     def after_recording(self):
         """Remove old responsible from watchers list.
         """
         change = self.response.get_change('responsible')
-        self.center.remove_watcher_from_resource(self.context,
-                                                 change.get('before'))
+        self.center.remove_watcher_from_resource(
+            self.context, change.get('before'), TASK_RESPONSIBLE_ROLE)
 
     def _is_ignored_transition(self):
         return False
