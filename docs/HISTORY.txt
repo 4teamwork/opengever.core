@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Fixed get_parent_dossier getter for document inside a proposal.
+  [phgross]
+
 - Extend logging of task SQL synchronisation, with tasks modification date.
   [phgross]
 

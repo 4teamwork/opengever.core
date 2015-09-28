@@ -1,6 +1,7 @@
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.base.source import DossierPathSourceBinder
+from opengever.dossier.utils import get_containing_dossier
 from opengever.meeting import _
 from opengever.meeting.command import CopyProposalDocumentCommand
 from opengever.meeting.command import CreateSubmittedProposalCommand
@@ -328,6 +329,9 @@ class Proposal(ProposalBase):
 
         """
         return self.load_model().is_editable_in_dossier()
+
+    def get_containing_dossier(self):
+        return get_containing_dossier(self)
 
     def get_documents(self):
         documents = [relation.to_object for relation in self.relatedItems]
