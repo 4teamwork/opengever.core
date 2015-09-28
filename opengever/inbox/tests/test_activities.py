@@ -68,8 +68,11 @@ class TestForwardingActivites(FunctionalTestCase):
         # The responsible of the task is the `inbox:client1`,
         # but the PloneNotificationCenter adds every actor representative.
         self.assertItemsEqual(
-            [TEST_USER_ID, 'hugo.boss', 'peter.mueller'],
-            [watcher.user_id for watcher in resource.watchers])
+            [(u'hugo.boss', [u'task_responsible']),
+             (u'peter.mueller', [u'task_issuer']),
+             (u'test_user_1_', [u'task_issuer'])],
+            [(watching.watcher.user_id, watching.roles)
+             for watching in resource.watchings])
 
     @browsing
     def test_accepting_forwarding_with_successor_updated_responsibles(self, browser):
@@ -89,12 +92,17 @@ class TestForwardingActivites(FunctionalTestCase):
 
         forwarding_resource = self.center.fetch_resource(forwarding)
         successor_resource = self.center.fetch_resource(successor)
+
         self.assertItemsEqual(
-            ['hugo.boss'],
-            [watcher.user_id for watcher in forwarding_resource.watchers])
+            [(u'hugo.boss', [u'task_issuer'])],
+            [(watching.watcher.user_id, watching.roles)
+             for watching in forwarding_resource.watchings])
+
         self.assertItemsEqual(
-            [TEST_USER_ID, 'peter.mueller'],
-            [watcher.user_id for watcher in successor_resource.watchers])
+            [(u'test_user_1_', [u'task_responsible', u'task_issuer']),
+             (u'peter.mueller', [u'task_issuer'])],
+            [(watching.watcher.user_id, watching.roles)
+             for watching in successor_resource.watchings])
 
     @browsing
     def test_accepting_and_assign_forwarding_with_successor_and__updated_responsibles(self, browser):

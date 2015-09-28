@@ -64,10 +64,12 @@ class TestTaskActivites(FunctionalTestCase):
 
         center = notification_center()
         resource = center.fetch_resource(self.dossier.listFolderContents()[0])
+        watchings = resource.watchings
 
         self.assertItemsEqual(
-            ['hugo.boss', TEST_USER_ID],
-            [watcher.user_id for watcher in resource.watchers])
+            [(u'hugo.boss', [TASK_RESPONSIBLE_ROLE]),
+             (u'test_user_1_', [TASK_ISSUER_ROLE])],
+            [(watching.watcher.user_id, watching.roles) for watching in watchings])
 
     @browsing
     def test_task_accepted(self, browser):
@@ -279,9 +281,11 @@ class TestTaskReassignActivity(FunctionalTestCase):
         self.reassign(browser, 'hugo.boss', u'Bitte Abkl\xe4rungen erledigen.')
 
         resource = notification_center().fetch_resource(self.task)
+        watchings = resource.watchings
+
         self.assertItemsEqual(
-            ['peter.meier', 'hugo.boss'],
-            [watcher.user_id for watcher in resource.watchers])
+            [(u'hugo.boss', [TASK_RESPONSIBLE_ROLE]), (u'peter.meier', [TASK_ISSUER_ROLE])],
+            [(watching.watcher.user_id, watching.roles) for watching in watchings])
 
 
 class TestSuccesssorHandling(FunctionalTestCase):
@@ -330,8 +334,12 @@ class TestSuccesssorHandling(FunctionalTestCase):
         successor_resource = self.center.fetch_resource(successor)
 
         self.assertItemsEqual(
-            ['hugo.boss', 'james.meier'],
-            [watcher.user_id for watcher in predecessor_resource.watchers])
+            [(u'james.meier', [u'task_issuer']),
+             (u'hugo.boss', [u'regular_watcher'])],
+            [(watching.watcher.user_id, watching.roles)
+             for watching in predecessor_resource.watchings])
+
         self.assertItemsEqual(
-            ['peter.meier'],
-            [watcher.user_id for watcher in successor_resource.watchers])
+            [(u'peter.meier', [u'task_responsible'])],
+            [(watching.watcher.user_id, watching.roles)
+             for watching in successor_resource.watchings])
