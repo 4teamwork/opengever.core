@@ -2,6 +2,7 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from opengever.base.browser.helper import get_css_class
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.meeting.proposal import IProposal
 from opengever.task.task import ITask
 from plone import api
 
@@ -32,6 +33,8 @@ class BaseDocumentMixin(object):
         if IDossierMarker.providedBy(parent):
             return parent
         if ITask.providedBy(parent):
+            return parent.get_containing_dossier()
+        if IProposal.providedBy(parent):
             return parent.get_containing_dossier()
 
         return None
