@@ -19,8 +19,7 @@ class TestUnitAgendaItem(TestCase):
             start=datetime(2010, 1, 1)))
 
         self.proposal = create(
-            Builder('proposal_model')
-            .having(title=u'Pr\xf6posal'))
+            Builder('proposal_model').having(title=u'Pr\xf6posal'))
         self.proposal_agenda_item = create(
             Builder('agenda_item')
             .having(proposal=self.proposal,

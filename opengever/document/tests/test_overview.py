@@ -221,6 +221,7 @@ class TestDocumentOverview(FunctionalTestCase):
         container = create(Builder('committee_container'))
         self.committee = create(Builder('committee').within(container))
         self.proposal = create(Builder('proposal')
+                               .within(self.dossier)
                                .having(title=u'Pr\xf6posal',
                                        committee=self.committee.load_model())
                                .relate_to(self.document)

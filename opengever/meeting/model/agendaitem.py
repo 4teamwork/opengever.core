@@ -63,6 +63,7 @@ class AgendaItem(Base):
             'number': self.number,
             'description': self.description,
             'title': self.get_title(),
+            'dossier_reference_number': self.get_dossier_reference_number(),
             'is_paragraph': self.is_paragraph,
         }
         if include_initial_position:
@@ -104,6 +105,11 @@ class AgendaItem(Base):
             title = u"{} {}".format(self.number, title)
 
         return title
+
+    def get_dossier_reference_number(self):
+        if self.has_proposal:
+            return self.proposal.dossier_reference_number
+        return None
 
     def get_css_class(self):
         css_classes = []

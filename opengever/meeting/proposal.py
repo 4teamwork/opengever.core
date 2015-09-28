@@ -1,3 +1,4 @@
+from opengever.base.interfaces import IReferenceNumber
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.base.source import DossierPathSourceBinder
@@ -349,8 +350,12 @@ class Proposal(ProposalBase):
         aq_wrapped_self = self.__of__(context)
 
         workflow_state = self.workflow.default_state.name
+        reference_number = IReferenceNumber(
+            context.get_main_dossier()).get_number()
+
         return dict(workflow_state=workflow_state,
-                    physical_path=aq_wrapped_self.get_physical_path())
+                    physical_path=aq_wrapped_self.get_physical_path(),
+                    dossier_reference_number=reference_number)
 
     def get_edit_values(self, fieldnames):
         values = super(Proposal, self).get_edit_values(fieldnames)

@@ -113,6 +113,7 @@ class ProposalModelBuilder(SqlObjectBuilder):
         self.arguments['physical_path'] = '/bar'
         self.arguments['title'] = 'Bar'
         self.arguments['workflow_state'] = Proposal.workflow.default_state.name
+        self.arguments['dossier_reference_number'] = 'FD 1.2.3 / 1'
 
     def id(self, identifier):
         """Proposals have a composite primary key, admin_unit_id and int_id.
