@@ -2,6 +2,7 @@ from email.header import Header
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from opengever.activity.browser import resolve_notification_url
+from opengever.activity.model import NotificationDefault
 from opengever.base.model import get_locale
 from opengever.mail.utils import make_addr_header
 from opengever.ogds.base.utils import ogds_service
@@ -21,27 +22,35 @@ _ = MessageFactory("opengever.activity")
 logger = logging.getLogger('opengever.activity')
 
 
-class PloneNotificationMailer(object):
-    """The PloneNotificationMailer is a notification dispatcher,
-    which generates mail(s) for passed notification(s) and send them to
-    the corresponding watcher.
-    """
+class NotificationDispatcher(object):
 
-    setting_key = 'mail_notification'
+    enabled_key = None
+    roles_key = None
 
-    def __init__(self):
-        self.mailhost = api.portal.get_tool('MailHost')
+    def get_setting(self, kind):
+        return NotificationDefault.query.by_kind(kind=kind).first()
 
-        # This is required by ViewPageTemplateFile for
-        # the html mail-template
-        self.context = api.portal.get()
-        self.request = self.context.REQUEST
+    def is_dispatcher_enabled(self, kind):
+        setting = self.get_setting(kind)
+        if setting:
+            return getattr(setting, self.enabled_key)
+        return False
 
-    def dispatch_notifications(self, notifications):
+    def roles_to_dispatch(self, kind):
+        setting = self.get_setting(kind)
+        return getattr(setting, self.roles_key)
+
+    def dispatch_notifications(self, activity):
+        if not self.is_dispatcher_enabled(activity.kind):
+            return []
+
         not_dispatched = []
+        notifications = activity.get_notification_for_watcher_roles(
+            self.roles_to_dispatch(activity.kind))
+
         for notification in notifications:
             try:
-                notification.dispatch(self)
+                self.dispatch_notification(notification)
             except ConflictError:
                 raise
 
@@ -52,6 +61,27 @@ class PloneNotificationMailer(object):
                              '(MailDispatcher):\n{}'.format(tcb))
 
         return not_dispatched
+
+    def dispatch_notification(self, notification):
+        raise NotImplementedError
+
+
+class PloneNotificationMailer(NotificationDispatcher):
+    """The PloneNotificationMailer is a notification dispatcher,
+    which generates mail(s) for passed notification(s) and send them to
+    the corresponding watcher.
+    """
+
+    enabled_key = 'mail_notification'
+    roles_key = 'mail_notification_roles'
+
+    def __init__(self):
+        self.mailhost = api.portal.get_tool('MailHost')
+
+        # This is required by ViewPageTemplateFile for
+        # the html mail-template
+        self.context = api.portal.get()
+        self.request = self.context.REQUEST
 
     def dispatch_notification(self, notification):
         msg = self.prepare_mail(notification)

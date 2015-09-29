@@ -3,6 +3,7 @@ from ftw.builder import create
 from ftw.mail.utils import get_header
 from ftw.testbrowser import browsing
 from ftw.testing.mailing import Mailing
+from opengever.activity.hooks import insert_notification_defaults
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.testing import FunctionalTestCase
 import email
@@ -35,8 +36,7 @@ class TestEmailNotification(FunctionalTestCase):
 
         self.dossier = create(Builder('dossier').titled(u'Dossier A'))
 
-        create(Builder('notification_default_setting')
-               .having(kind='task-added', mail_notification=True))
+        insert_notification_defaults(self.portal)
 
     def tearDown(self):
         super(TestEmailNotification, self).tearDown()
@@ -82,3 +82,19 @@ class TestEmailNotification(FunctionalTestCase):
                '?notification_id=\n=3D1">Test Task</a></p>'
 
         self.assertIn(link, html_part)
+
+    @browsing
+    def test_mail_dispatcher_respects_dispatcher_roles(self, browser):
+        """By default only the responsible should be notified by mail, when
+        a task gets added.
+        """
+        browser.login().open(self.dossier, view='++add++opengever.task.task')
+        browser.fill({'Title': 'Test Task',
+                      'Responsible': 'hugo.boss',
+                      'Task Type': 'comment'})
+        browser.css('#form-buttons-save').first.click()
+
+        self.assertEquals(1, len(Mailing(self.portal).get_messages()))
+        mail = email.message_from_string(Mailing(self.portal).pop())
+        self.assertEquals(
+            'hugo.boss@example.org', get_header(mail, 'To'))

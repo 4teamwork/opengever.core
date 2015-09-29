@@ -119,10 +119,10 @@ class NotificationCenter(object):
         return {'activity': activity, 'errors': errors}
 
     def create_notifications(self, activity):
-        notifications = activity.create_notifications()
+        activity.create_notifications()
         errors = []
         for dispatcher in self.dispatchers:
-            result = dispatcher.dispatch_notifications(notifications)
+            result = dispatcher.dispatch_notifications(activity)
             errors += result
 
         return errors
