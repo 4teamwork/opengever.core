@@ -97,4 +97,14 @@
         profile="opengever.activity:default"
         />
 
+    <!-- 4501 -> 4502 -->
+    <genericsetup:upgradeStep
+        title="Add mail_notification_roles column to NotificationDefault table."
+        description=""
+        source="4501"
+        destination="4502"
+        handler="opengever.activity.upgrades.to4502.AddRolesColumn"
+        profile="opengever.activity:default"
+        />
+
 </configure>
