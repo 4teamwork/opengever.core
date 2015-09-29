@@ -27,7 +27,10 @@ def extract_user(self, request):
 
 # IAuthenticationPlugin.authenticateCredentials
 def authenticate_credentials(self, credentials):
-    uid = credentials['id']
+    uid = credentials.get('id')
+    if uid is None:
+        # Not one of our internal requests
+        return None
     login = credentials['login']
     auid = credentials['auid'].strip()
     ip = credentials['remote_address'].strip()

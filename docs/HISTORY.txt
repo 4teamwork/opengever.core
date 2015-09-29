@@ -5,6 +5,10 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Prevent a silently ignored key error in our PAS IAuthenticationPlugin
+  for internal requests.
+  [lgraf]
+
 - Fixed get_parent_dossier getter for document inside a proposal.
   [phgross]
 
