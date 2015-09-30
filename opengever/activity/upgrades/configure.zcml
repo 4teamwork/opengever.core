@@ -107,4 +107,24 @@
         profile="opengever.activity:default"
         />
 
+    <!-- 4502 -> 4503 -->
+    <genericsetup:upgradeStep
+        title="Add new relation-table Watchings."
+        description=""
+        source="4502"
+        destination="4503"
+        handler="opengever.activity.upgrades.to4503.AddTableWatchings"
+        profile="opengever.activity:default"
+        />
+
+    <!-- 4503 -> 4504 -->
+    <genericsetup:upgradeStep
+        title="Re-register watchers for each task."
+        description=""
+        source="4503"
+        destination="4504"
+        handler="opengever.activity.upgrades.to4504.ReRegisterWatchers"
+        profile="opengever.activity:default"
+        />
+
 </configure>
