@@ -18,23 +18,23 @@ from sqlalchemy.schema import Sequence
 import json
 
 
-class WatchingQuery(BaseQuery):
+class SubscriptionQuery(BaseQuery):
 
     def get_by_watcher_resource(self, resource, watcher):
         return self.filter_by(resource=resource, watcher=watcher).first()
 
 
-class Watching(Base):
-    query_cls = WatchingQuery
-    __tablename__ = 'watchings'
+class Subscription(Base):
+    query_cls = SubscriptionQuery
+    __tablename__ = 'subscriptions'
     __table_args__ = (PrimaryKeyConstraint('resource_id', 'watcher_id'),)
 
     resource_id = Column(Integer, ForeignKey('resources.id'))
     watcher_id = Column(Integer, ForeignKey('watchers.id'))
     _roles = Column('roles', Text)
 
-    resource = relationship('Resource', backref="watchings")
-    watcher = relationship('Watcher', backref="watchings")
+    resource = relationship('Resource', backref="subscriptions")
+    watcher = relationship('Watcher', backref="subscriptions")
 
     def __init__(self, resource=None, watcher=None, roles=[]):
         self.resource = resource
@@ -42,7 +42,7 @@ class Watching(Base):
         self.roles = roles
 
     def __repr__(self):
-        return '<Watching {!r} @ {!r}>'.format(self.watcher, self.resource)
+        return '<Subscription {!r} @ {!r}>'.format(self.watcher, self.resource)
 
     @property
     def roles(self):
@@ -86,7 +86,7 @@ class Resource(Base):
     int_id = Column(Integer, index=True, nullable=False)
     oguid = composite(Oguid, admin_unit_id, int_id)
 
-    watchers = association_proxy('watchings', 'watcher')
+    watchers = association_proxy('subscriptions', 'watcher')
 
     def __repr__(self):
         return '<Resource {}:{}>'.format(self.admin_unit_id, self.int_id)
@@ -97,12 +97,12 @@ class Resource(Base):
             watcher = Watcher(user_id=user_id)
             create_session().add(watcher)
 
-        watching = Watching.query.get_by_watcher_resource(self, watcher)
-        if not watching:
-            watching = Watching(resource=self, watcher=watcher, roles=[role])
-            create_session().add(watching)
+        subscription = Subscription.query.get_by_watcher_resource(self, watcher)
+        if not subscription:
+            subscription = Subscription(resource=self, watcher=watcher, roles=[role])
+            create_session().add(subscription)
         else:
-            watching.add_role(role)
+            subscription.add_role(role)
 
         return watcher
 

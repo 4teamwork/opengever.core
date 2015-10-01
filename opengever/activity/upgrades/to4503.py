@@ -12,27 +12,27 @@ DEFAULT_SETTINGS = {
 }
 
 
-class AddTableWatchings(SchemaMigration):
+class AddTableSubscriptions(SchemaMigration):
     """The n-n relationtable resources_watchers is replaced by an a new table
-    `watchings` wich provides the additional attribute roles.
+    `subscriptions` wich provides the additional attribute roles.
 
-    The existing data in the `resource_watchers` table and will be removed
-    completly. The new table will be filled with an separate Upgradestep.
+    The existing data in the `resource_watchers` table will be removed
+    completly. The new table will be filled with a separate Upgradestep.
 
-    This introcued in during Release 4.6. development, but will be
-    backported to 4.5 Release.
+    This adjustment is introcued during the Release 4.6. development, but will
+    be backported to 4.5 Release.
     """
 
     profileid = 'opengever.activity'
     upgradeid = 4503
 
     def migrate(self):
-        self.add_watchings_table()
+        self.add_subscriptions_table()
         self.remove_resource_watchers_table()
 
-    def add_watchings_table(self):
+    def add_subscriptions_table(self):
         self.op.create_table(
-            'watchings',
+            'subscriptions',
             Column('resource_id', Integer),
             Column('watcher_id', Integer),
             Column('roles', Text),

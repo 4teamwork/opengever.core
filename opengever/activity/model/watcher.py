@@ -24,8 +24,8 @@ class Watcher(Base):
     watcher_id = Column('id', Integer, Sequence('watchers_id_seq'),
                         primary_key=True)
     user_id = Column(String(USER_ID_LENGTH), nullable=False, unique=True)
-    
-    resources = association_proxy('watchings', 'resource')
+
+    resources = association_proxy('subscriptions', 'resource')
 
     def __repr__(self):
         return '<Watcher {}>'.format(repr(self.user_id))

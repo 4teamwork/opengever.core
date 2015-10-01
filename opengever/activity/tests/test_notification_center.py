@@ -136,10 +136,10 @@ class TestWatcherHandling(ActivityTestCase):
         self.center.remove_watcher_from_resource(
             Oguid('fd', '123'), 'peter', WATCHER_ROLE)
 
-    def test_remove_watcher_from_resource_will_remove_watching_if_no_roles_left(self):
+    def test_remove_watcher_from_resource_will_remove_subscription_if_no_roles_left(self):
         resource = create(Builder('resource').oguid('fd:123'))
         watcher = create(Builder('watcher').having(user_id=u'peter'))
-        create(Builder('watching')
+        create(Builder('subscription')
                .having(resource=resource, watcher=watcher, roles=[WATCHER_ROLE]))
 
         self.center.remove_watcher_from_resource(
@@ -392,9 +392,9 @@ class TestDispatchers(ActivityTestCase):
         hugo = create(Builder('watcher').having(user_id='hugo'))
         peter = create(Builder('watcher').having(user_id='peter'))
         resource = create(Builder('resource').oguid('fd:123'))
-        create(Builder('watching')
+        create(Builder('subscription')
                .having(resource=resource, watcher=hugo, roles=['watcher']))
-        create(Builder('watching')
+        create(Builder('subscription')
                .having(resource=resource, watcher=peter, roles=['responsible']))
 
     def test_check_for_notification_default(self):

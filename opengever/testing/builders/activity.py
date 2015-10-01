@@ -4,7 +4,7 @@ from opengever.activity.model import Activity
 from opengever.activity.model import Notification
 from opengever.activity.model import NotificationDefault
 from opengever.activity.model import Resource
-from opengever.activity.model import Watching
+from opengever.activity.model import Subscription
 from opengever.activity.model import Watcher
 from opengever.base.oguid import Oguid
 from opengever.ogds.models.tests.builders import SqlObjectBuilder
@@ -48,11 +48,11 @@ class WatcherBuilder(SqlObjectBuilder):
 builder_registry.register('watcher', WatcherBuilder)
 
 
-class WatchingBuilder(SqlObjectBuilder):
+class SubscriptionBuilder(SqlObjectBuilder):
 
-    mapped_class = Watching
+    mapped_class = Subscription
 
-builder_registry.register('watching', WatchingBuilder)
+builder_registry.register('subscription', SubscriptionBuilder)
 
 
 class ActivityBuilder(SqlObjectBuilder):

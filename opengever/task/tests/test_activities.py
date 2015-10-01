@@ -64,12 +64,13 @@ class TestTaskActivites(FunctionalTestCase):
 
         center = notification_center()
         resource = center.fetch_resource(self.dossier.listFolderContents()[0])
-        watchings = resource.watchings
+        subscriptions = resource.subscriptions
 
         self.assertItemsEqual(
             [(u'hugo.boss', [TASK_RESPONSIBLE_ROLE]),
              (u'test_user_1_', [TASK_ISSUER_ROLE])],
-            [(watching.watcher.user_id, watching.roles) for watching in watchings])
+            [(subscription.watcher.user_id, subscription.roles)
+             for subscription in subscriptions])
 
     @browsing
     def test_task_accepted(self, browser):
@@ -281,11 +282,13 @@ class TestTaskReassignActivity(FunctionalTestCase):
         self.reassign(browser, 'hugo.boss', u'Bitte Abkl\xe4rungen erledigen.')
 
         resource = notification_center().fetch_resource(self.task)
-        watchings = resource.watchings
+        subscriptions = resource.subscriptions
 
         self.assertItemsEqual(
-            [(u'hugo.boss', [TASK_RESPONSIBLE_ROLE]), (u'peter.meier', [TASK_ISSUER_ROLE])],
-            [(watching.watcher.user_id, watching.roles) for watching in watchings])
+            [(u'hugo.boss', [TASK_RESPONSIBLE_ROLE]),
+             (u'peter.meier', [TASK_ISSUER_ROLE])],
+            [(subscription.watcher.user_id, subscription.roles)
+             for subscription in subscriptions])
 
 
 class TestSuccesssorHandling(FunctionalTestCase):
@@ -336,10 +339,10 @@ class TestSuccesssorHandling(FunctionalTestCase):
         self.assertItemsEqual(
             [(u'james.meier', [u'task_issuer']),
              (u'hugo.boss', [u'regular_watcher'])],
-            [(watching.watcher.user_id, watching.roles)
-             for watching in predecessor_resource.watchings])
+            [(subscription.watcher.user_id, subscription.roles)
+             for subscription in predecessor_resource.subscriptions])
 
         self.assertItemsEqual(
             [(u'peter.meier', [u'task_responsible'])],
-            [(watching.watcher.user_id, watching.roles)
-             for watching in successor_resource.watchings])
+            [(subscription.watcher.user_id, subscription.roles)
+             for subscription in successor_resource.subscriptions])

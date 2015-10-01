@@ -55,38 +55,38 @@ class TestActivity(ActivityTestCase):
                          repr(activity))
 
 
-class TestWatching(ActivityTestCase):
+class TestSubscription(ActivityTestCase):
 
     def test_string_representation(self):
         resource = create(Builder('resource').oguid('fd:123'))
         watcher = create(Builder('watcher').having(user_id=u'h\xfcgo.boss'))
-        watching = create(Builder('watching')
+        subscription = create(Builder('subscription')
                           .having(resource=resource, watcher=watcher))
 
         self.assertEqual(
-            "<Watching <Watcher u'h\\xfcgo.boss'> @ <Resource fd:123>>",
-            str(watching))
+            "<Subscription <Watcher u'h\\xfcgo.boss'> @ <Resource fd:123>>",
+            str(subscription))
         self.assertEqual(
-            "<Watching <Watcher u'h\\xfcgo.boss'> @ <Resource fd:123>>",
-            repr(watching))
+            "<Subscription <Watcher u'h\\xfcgo.boss'> @ <Resource fd:123>>",
+            repr(subscription))
 
     def test_remove_role(self):
         resource = create(Builder('resource').oguid('fd:123'))
         watcher = create(Builder('watcher').having(user_id=u'h\xfcgo.boss'))
-        watching = create(Builder('watching')
+        subscription = create(Builder('subscription')
                           .having(resource=resource, watcher=watcher,
                                   roles=['watcher', 'issuer']))
 
-        watching.remove_role('watcher')
+        subscription.remove_role('watcher')
 
-        self.assertEqual(['issuer'], watching.roles)
+        self.assertEqual(['issuer'], subscription.roles)
 
     def test_remove_not_stored_role_is_ignored(self):
         resource = create(Builder('resource').oguid('fd:123'))
         watcher = create(Builder('watcher').having(user_id=u'h\xfcgo.boss'))
-        watching = create(Builder('watching')
+        subscription = create(Builder('subscription')
                           .having(resource=resource, watcher=watcher,
                                   roles=['watcher']))
 
-        watching.remove_role('issuer')
-        self.assertEqual(['watcher'], watching.roles)
+        subscription.remove_role('issuer')
+        self.assertEqual(['watcher'], subscription.roles)

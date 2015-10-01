@@ -109,11 +109,11 @@
 
     <!-- 4502 -> 4503 -->
     <genericsetup:upgradeStep
-        title="Add new relation-table Watchings."
+        title="Add new relation-table Subscriptions."
         description=""
         source="4502"
         destination="4503"
-        handler="opengever.activity.upgrades.to4503.AddTableWatchings"
+        handler="opengever.activity.upgrades.to4503.AddTableSubscriptions"
         profile="opengever.activity:default"
         />
 

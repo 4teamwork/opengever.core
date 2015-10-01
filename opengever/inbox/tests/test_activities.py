@@ -71,8 +71,8 @@ class TestForwardingActivites(FunctionalTestCase):
             [(u'hugo.boss', [u'task_responsible']),
              (u'peter.mueller', [u'task_issuer']),
              (u'test_user_1_', [u'task_issuer'])],
-            [(watching.watcher.user_id, watching.roles)
-             for watching in resource.watchings])
+            [(subscription.watcher.user_id, subscription.roles)
+             for subscription in resource.subscriptions])
 
     @browsing
     def test_accepting_forwarding_with_successor_updated_responsibles(self, browser):
@@ -95,14 +95,14 @@ class TestForwardingActivites(FunctionalTestCase):
 
         self.assertItemsEqual(
             [(u'hugo.boss', [u'task_issuer'])],
-            [(watching.watcher.user_id, watching.roles)
-             for watching in forwarding_resource.watchings])
+            [(subscription.watcher.user_id, subscription.roles)
+             for subscription in forwarding_resource.subscriptions])
 
         self.assertItemsEqual(
             [(u'test_user_1_', [u'task_responsible', u'task_issuer']),
              (u'peter.mueller', [u'task_issuer'])],
-            [(watching.watcher.user_id, watching.roles)
-             for watching in successor_resource.watchings])
+            [(subscription.watcher.user_id, subscription.roles)
+             for subscription in successor_resource.subscriptions])
 
     @browsing
     def test_accepting_and_assign_forwarding_with_successor_and__updated_responsibles(self, browser):

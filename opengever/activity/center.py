@@ -2,7 +2,7 @@ from opengever.activity.model import Activity
 from opengever.activity.model import Notification
 from opengever.activity.model import Resource
 from opengever.activity.model import Watcher
-from opengever.activity.model import Watching
+from opengever.activity.model import Subscription
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.ogds.base.actor import Actor
@@ -78,10 +78,10 @@ class NotificationCenter(object):
         resource = self.fetch_resource(oguid)
 
         if watcher and resource:
-            watching = Watching.query.get_by_watcher_resource(resource, watcher)
-            watching.remove_role(role)
-            if not watching.roles:
-                self.session.delete(watching)
+            subscription = Subscription.query.get_by_watcher_resource(resource, watcher)
+            subscription.remove_role(role)
+            if not subscription.roles:
+                self.session.delete(subscription)
 
     def get_watchers(self, oguid):
         resource = Resource.query.get_by_oguid(oguid)

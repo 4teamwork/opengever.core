@@ -68,9 +68,9 @@ class Activity(Base, Translatable):
         """
         roles = set(roles)
         watchers = []
-        for watching in self.resource.watchings:
-            if roles.intersection(watching.roles):
-                watchers.append(watching.watcher)
+        for subscription in self.resource.subscriptions:
+            if roles.intersection(subscription.roles):
+                watchers.append(subscription.watcher)
 
         return [notification for notification in self.notifications
                 if notification.watcher in watchers]
