@@ -204,11 +204,17 @@ class SelectRepositoryfolderStepRedirector(grok.View):
 
 @grok.provider(IContextSourceBinder)
 def allowed_dossier_types_vocabulary(context):
+    """Return the dossier types that are visible in the task accept form."""
+
     dossier_behavior = 'opengever.dossier.behaviors.dossier.IDossier'
 
     terms = []
     for fti in context.allowedContentTypes():
         if dossier_behavior not in getattr(fti, 'behaviors', ()):
+            continue
+
+        # XXX refactor as soon as content types know their visible types
+        if fti.id == 'opengever.meeting.meetingdossier':
             continue
 
         title = MessageFactory(fti.i18n_domain)(fti.title)
