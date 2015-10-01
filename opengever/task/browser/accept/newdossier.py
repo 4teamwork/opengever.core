@@ -5,6 +5,7 @@ dossier where the task is then filed.
 
 from five import grok
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
+from opengever.base.form import WizzardWrappedAddForm
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.globalindex.model.task import Task
 from opengever.repository.interfaces import IRepositoryFolder
@@ -276,59 +277,16 @@ class SelectDossierTypeStepView(FormWrapper, grok.View):
 
 
 # ------------------- DOSSIER ADD FORM --------------------------
-class DossierAddFormView(FormWrapper, grok.View):
+class DossierAddFormView(WizzardWrappedAddForm):
     grok.context(IRepositoryFolder)
     grok.name('accept_dossier_add_form')
-    grok.require('cmf.AddPortalContent')
-
-    def __init__(self, context, request):
-        typename = request.get('dossier_type')
-
-        ttool = getToolByName(context, 'portal_types')
-        self.ti = ttool.getTypeInfo(typename)
-
-        FormWrapper.__init__(self, context, request)
-        grok.View.__init__(self, context, request)
-
-        # Set portal_type name on newly created form instance
-        if self.form_instance is not None and \
-                not getattr(self.form_instance, 'portal_type', None):
-            self.form_instance.portal_type = self.ti.getId()
 
     @property
-    def form(self):
-        # This form wraps the dossier add form into the wizard. It is
-        # important that the original dossier add form is used, since there
-        # may be custom things like hidden widgets in updateWidgets(). There
-        # are also several ways how a dexterity add form can be customized.
-        # Therefor we just get the original add form from the add-view and
-        # wrap it with our wizard stuff. See _wrap_form()
+    def typename(self):
+        return self.request.get('dossier_type')
 
-        if getattr(self, '_form', None) is not None:
-            return self._form
-
-        add_view = queryMultiAdapter((self.context, self.request, self.ti),
-                                     name=self.ti.factory)
-        if add_view is None:
-            add_view = queryMultiAdapter((self.context, self.request,
-                                          self.ti))
-
-        self._form = self._wrap_form(add_view.form)
-
-        return self._form
-
-    def _wrap_form(self, formclass):
-        # The original form is passed as `formclass` here and is "extended"
-        # with the wizard stuff (different template, passing of values from
-        # earlier steps, step configuration etc.). This is done by
-        # subclassing the original form and overwriting the buttons, since
-        # we need to do our custom stuff instead of the default dossier
-        # creation.
-
-        steptitle = pd_mf(u'Add ${name}',
-                          mapping={'name': self.ti.Title()})
-
-        class WrappedForm(AcceptWizardNewDossierFormMixin, formclass):
+    def _create_form_class(self, parent_form_class, steptitle):
+        class WrappedForm(AcceptWizardNewDossierFormMixin, parent_form_class):
             step_name = 'accept_dossier_add_form'
             passed_data = ['oguid', 'dossier_type']
             step_title = steptitle
@@ -403,7 +361,6 @@ class DossierAddFormView(FormWrapper, grok.View):
                     portal_url(), self.request.get('oguid'))
                 return self.request.RESPONSE.redirect(url)
 
-        WrappedForm.__name__ = 'WizardForm: %s' % formclass.__name__
         return WrappedForm
 
     def __call__(self):
@@ -423,4 +380,4 @@ class DossierAddFormView(FormWrapper, grok.View):
                     title = title.decode('utf-8')
                 self.request.set(title_key, title)
 
-        return FormWrapper.__call__(self)
+        return super(DossierAddFormView, self).__call__()
