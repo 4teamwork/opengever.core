@@ -73,8 +73,6 @@ class TestProtocol(FunctionalTestCase):
     def setup_generated_protocol(self, browser):
         self.setup_protocol(browser)
         browser.css('a[href*="@@generate_protocol"]').first.click()
-        browser.fill({'Target dossier': self.dossier})
-        browser.find('Generate').click()
 
     def test_default_protocol_is_configured_on_commitee_container(self):
         self.assertEqual(self.sablon_template,
@@ -170,8 +168,6 @@ class TestProtocol(FunctionalTestCase):
     def test_protocol_can_be_generated(self, browser):
         self.setup_protocol(browser)
         browser.css('a[href*="@@generate_protocol"]').first.click()
-        browser.fill({'Target dossier': self.dossier})
-        browser.find('Generate').click()
 
         self.assertEquals(
             ['Protocol for meeting There, Jan 01, 2013 '
@@ -179,9 +175,8 @@ class TestProtocol(FunctionalTestCase):
             info_messages())
 
         meeting = Meeting.get(self.meeting.meeting_id)  # refresh meeting
-        document = browser.context
-        generated_document = GeneratedProtocol.query.by_document(
-            document).first()
+        self.assertIsNotNone(meeting.protocol_document)
+        generated_document = meeting.protocol_document
         self.assertIsNotNone(generated_document)
         self.assertEqual(0, generated_document.generated_version)
         self.assertEqual(meeting, generated_document.meeting)
