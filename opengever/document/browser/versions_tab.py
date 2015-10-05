@@ -49,8 +49,10 @@ def translate_text(text):
 
 
 class VersionDataProxy(object):
-    """A proxy for CMFEditions `VersionData` objects (representing a single
-    version of a particular object).
+    """A proxy for CMFEditions `VersionData` dicts as returned by
+    ShadowHistory.retrieve().
+
+    This represents the metadata for a single version of a particular object.
 
     This proxy object provides easier attribute access to some of the
     VersionData's metadata, so we can use decent column names in the
@@ -66,7 +68,20 @@ class VersionDataProxy(object):
         self._is_revert_allowed = is_revert_allowed
 
     def __getattr__(self, name):
-        return getattr(self._version_data, name)
+        """Proxy dotted attribute access to the corresponding value in the
+        wrapped _version_data dictionary
+        """
+        if name in ('__iter__', '__contains__', '__getitem__'):
+            # We're wrapping a dict, but we want to provide dotted attribute
+            # access instead of exposing the dict interface - we therefore
+            # don't support iteration, membership testing or subscription.
+            raise AttributeError(name)
+
+        return self._version_data.get(name)
+
+    @property
+    def sys_metadata(self):
+        return self._version_data['metadata']['sys_metadata']
 
     @property
     def is_revert_allowed(self):
@@ -82,13 +97,13 @@ class VersionDataProxy(object):
     def version(self):
         """The ID ("number") of this version.
         """
-        return self._version_data.version_id
+        return self._version_data['version_id']
 
     @property
     def actor(self):
         """Returns a formatted link to the actor that created this version.
         """
-        principal = self._version_data.sys_metadata['principal']
+        principal = self.sys_metadata['principal']
         actor = Actor.user(principal)
         return actor.get_link()
 
@@ -96,7 +111,7 @@ class VersionDataProxy(object):
     def timestamp(self):
         """Creation timestamp of this version, formatted as localized time.
         """
-        ts = self._version_data.sys_metadata['timestamp']
+        ts = self.sys_metadata['timestamp']
         dt = datetime.fromtimestamp(ts)
         return api.portal.get_localized_time(datetime=dt, long_format=True)
 
@@ -104,7 +119,7 @@ class VersionDataProxy(object):
     def comment(self):
         """Comment for this version.
         """
-        return self._version_data.sys_metadata['comment']
+        return self.sys_metadata['comment']
 
     @property
     def download_link(self):
@@ -114,7 +129,7 @@ class VersionDataProxy(object):
         dc_helper = DownloadConfirmationHelper()
         link = dc_helper.get_html_tag(
             self.url,
-            url_extension="?version_id=%s" % self.version_id,
+            url_extension="?version_id=%s" % self.version,
             additional_classes=['standalone', 'function-download-copy'],
             viewname='download_file_version',
             include_token=True)
@@ -152,25 +167,59 @@ class VersionDataProxy(object):
             return u'<span class="discreet">{}</span>'.format(label)
 
 
-class LazyHistoryProxy(object):
-    """A proxy for CMFEditions `LazyHistory` that preserves its lazy iteration
-    properties, but returns `VersionDataProxy` objects instead.
+class LazyHistoryMetadataProxy(object):
+    """A proxy for CMFEditions `ShadowHistory` objects as returned by
+    getHistoryMetadata().
+
+    This proxy wraps a ShadowHistory and provides lazy access to the
+    underlying version datas. Returned version datas are wrapped in a
+    VersionDataProxy for easier use in table columns.
+
+    All we need to do here to ensure lazy access and batching is to provide
+    two interfaces:
+
+    - __len__() to get the total length of the version history and caluclate
+      number of batch pages etc.
+    - __getitem__() to access version data for a specific version
+
+    There's no need for iteration. Given those two interfaces, plone.batching
+    is able to do the rest and provide lazy batched access.
+
+    See plone.batching.batch.BaseBatch.__getitem__() for details.
     """
 
     def __init__(self, history, url, is_revert_allowed=False):
         self._history = history
+        self._length = history.getLength(countPurged=False)
+
         self._url = url
         self._is_revert_allowed = is_revert_allowed
 
     def __len__(self):
-        return self._history.__len__()
+        """Returns the total number of versions
+        """
+        return self._length
 
-    def __getitem__(self, idx):
-        item = self._history.__getitem__(idx)
-        return VersionDataProxy(item, self._url, self._is_revert_allowed)
+    def __getitem__(self, index):
+        """Returns the version data for the version at `index`, where index
+        is the position in a descending list (most recent first, oldest
+        version last).
 
-    def __iter__(self):
-        return self._history.__iter__()
+        This allows for easy use in listing without having to mess with
+        reversing the sort order.
+
+        See Products.CMFEditions.browser.diff.DiffView.__call__()
+        for a more detailed example on how to use the ShadowHistory API.
+        """
+        # Order versions descending (most recent first)
+        # CMFEditions' storages call this the "selector" - it's basically the
+        # internal version number, with the low values being old versions
+        selector = self._length - index - 1
+
+        version_id = self._history.getVersionId(selector, countPurged=False)
+        vdata = self._history.retrieve(selector, countPurged=False)
+        vdata['version_id'] = version_id
+        return VersionDataProxy(vdata, self._url, self._is_revert_allowed)
 
 
 class IVersionsSourceConfig(ITableSourceConfig):
@@ -195,12 +244,12 @@ class VersionsTableSource(grok.MultiAdapter, BaseTableSource):
         unprotected_write(aq_parent(obj))
 
         repo_tool = api.portal.get_tool('portal_repository')
-        history = repo_tool.getHistory(obj)
-
+        shadow_history = repo_tool.getHistoryMetadata(obj)
         manager = getMultiAdapter((obj, self.request), ICheckinCheckoutManager)
 
-        return LazyHistoryProxy(history, obj.absolute_url(),
-                                is_revert_allowed=manager.is_revert_allowed())
+        return LazyHistoryMetadataProxy(
+            shadow_history, obj.absolute_url(),
+            is_revert_allowed=manager.is_revert_allowed())
 
 
 class VersionsTab(BaseListingTab):
