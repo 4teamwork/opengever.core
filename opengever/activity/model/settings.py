@@ -39,12 +39,11 @@ class NotificationDefault(Base):
     def __init__(self, kind, mail_notification=False, mail_notification_roles=[]):
         self.kind = kind
         self.mail_notification = mail_notification
-        self.mail_notification_roles = mail_notification_roles
+        self.set_mail_notification_roles(mail_notification_roles)
 
     @property
     def mail_notification_roles(self):
-        return json.loads(self._mail_notification_roles)
+        return frozenset(json.loads(self._mail_notification_roles))
 
-    @mail_notification_roles.setter
-    def mail_notification_roles(self, roles):
+    def set_mail_notification_roles(self, roles):
         self._mail_notification_roles = json.dumps(roles)

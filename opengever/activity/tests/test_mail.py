@@ -18,19 +18,19 @@ class TestEmailNotification(FunctionalTestCase):
         # setup mail
         Mailing(self.portal).set_up()
 
-        create(Builder('ogds_user')
+        self.hugo = create(Builder('ogds_user')
                .assign_to_org_units([self.org_unit])
                .having(userid='hugo.boss',
                        firstname='Hugo',
                        lastname='Boss',
                        email='hugo.boss@example.org'))
 
-        create(Builder('ogds_user')
+        self.franz = create(Builder('ogds_user')
                .assign_to_org_units([self.org_unit])
                .having(userid='franz.michel',
                        firstname='Franz',
                        lastname='Michel',
-                       email='hugo.boss@example.org'))
+                       email='franz.michel@example.org'))
 
         create(Builder('watcher').having(user_id='hugo.boss'))
 
@@ -98,3 +98,25 @@ class TestEmailNotification(FunctionalTestCase):
         mail = email.message_from_string(Mailing(self.portal).pop())
         self.assertEquals(
             'hugo.boss@example.org', get_header(mail, 'To'))
+
+    @browsing
+    def test_mail_dispatcher_respects_dispatcher_roles_even_if_its_a_group(self, browser):
+        """By default only the responsible should be notified by mail, when
+        a task gets added.
+        """
+
+        inbox_group = self.org_unit.inbox_group
+        inbox_group.users.append(self.hugo)
+        inbox_group.users.append(self.franz)
+
+        browser.login().open(self.dossier, view='++add++opengever.task.task')
+        browser.fill({'Title': 'Test Task',
+                      'Issuer': 'inbox:client1',
+                      'Responsible': 'franz.michel',
+                      'Task Type': 'comment'})
+        browser.css('#form-buttons-save').first.click()
+
+        self.assertEquals(1, len(Mailing(self.portal).get_messages()))
+        mail = email.message_from_string(Mailing(self.portal).pop())
+        self.assertEquals(
+            'franz.michel@example.org', get_header(mail, 'To'))

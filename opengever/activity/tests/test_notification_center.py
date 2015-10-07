@@ -405,7 +405,8 @@ class TestDispatchers(ActivityTestCase):
         setting = create(Builder('notification_default_setting')
                          .having(kind='task-added',
                                  mail_notification=False))
-        setting.mail_notification_roles = [WATCHER_ROLE, TASK_RESPONSIBLE_ROLE]
+        setting.set_mail_notification_roles(
+            [WATCHER_ROLE, TASK_RESPONSIBLE_ROLE])
 
         self.center.add_activity(
             Oguid('fd', '123'),
@@ -434,7 +435,7 @@ class TestDispatchers(ActivityTestCase):
         setting = create(Builder('notification_default_setting')
                          .having(kind='task-added',
                                  mail_notification=True))
-        setting.mail_notification_roles = [WATCHER_ROLE]
+        setting.set_mail_notification_roles([WATCHER_ROLE])
 
         self.center.add_activity(
             Oguid('fd', '123'),
