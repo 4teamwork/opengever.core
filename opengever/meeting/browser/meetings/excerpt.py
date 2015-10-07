@@ -8,7 +8,6 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import button
 from z3c.form.form import EditForm
 from z3c.form.interfaces import ActionExecutionError
-from z3c.form.interfaces import IDataConverter
 from z3c.relationfield.schema import RelationChoice
 from zope import schema
 from zope.interface import Invalid
@@ -100,18 +99,19 @@ class GenerateExcerpt(AutoExtensibleForm, EditForm):
         self.model = self.context.model
         self._excerpt_data = None
 
-    def updateWidgets(self):
-        super(GenerateExcerpt, self).updateWidgets()
+    def update(self):
         self.inject_initial_data()
+        super(GenerateExcerpt, self).update()
 
     def inject_initial_data(self):
         if self.request.method != 'GET':
             return
 
         initial_filename = self.model.get_excerpt_title()
-        widget = self.widgets['title']
-        value = IDataConverter(widget).toWidgetValue(initial_filename)
-        widget.value = value
+        self.request['form.widgets.title'] = initial_filename
+
+        dossier = self.model.get_dossier()
+        self.request['form.widgets.dossier'] = ['/'.join(dossier.getPhysicalPath())]
 
     def get_agenda_items(self):
         for agenda_item in self.model.agenda_items:

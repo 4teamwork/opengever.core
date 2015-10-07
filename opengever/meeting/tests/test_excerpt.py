@@ -82,6 +82,19 @@ class TestExcerpt(FunctionalTestCase):
                          self.committee.get_excerpt_template())
 
     @browsing
+    def test_manual_excerpt_pre_fills_fields(self, browser):
+        browser.login().open(self.meeting.get_url())
+        browser.find('Generate excerpt').click()
+
+        title_field = browser.find('Title')
+        self.assertEqual(u'Protocol Excerpt-B\xe4rn, Mar 04, 2014',
+                         title_field.value)
+
+        dossier_field = browser.find('form.widgets.dossier')
+        self.assertEqual('/'.join(self.dossier.getPhysicalPath()),
+                         dossier_field.value)
+
+    @browsing
     def test_manual_excerpt_can_be_generated(self, browser):
         browser.login().open(self.meeting.get_url())
 
