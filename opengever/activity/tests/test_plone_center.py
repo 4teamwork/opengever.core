@@ -52,9 +52,14 @@ class TestPloneNotificationCenter(FunctionalTestCase):
         task = self.dossier.get('task-1')
         resource = notification_center().fetch_resource(task)
 
+        subscriptions = resource.subscriptions
+
         self.assertItemsEqual(
-            [TEST_USER_ID, 'hugo.boss', 'franz.michel'],
-            [watcher.user_id for watcher in resource.watchers])
+            [(u'franz.michel', u'task_responsible'),
+             (u'hugo.boss', u'task_responsible'),
+             (u'test_user_1_', u'task_issuer'),
+             (u'test_user_1_', u'task_responsible')],
+            [(sub.watcher.user_id, sub.role) for sub in subscriptions])
 
 
 class TestNotifactionCenterErrorHandling(FunctionalTestCase):

@@ -77,10 +77,9 @@ class NotificationCenter(object):
         watcher = self.fetch_watcher(userid)
         resource = self.fetch_resource(oguid)
 
-        if watcher and resource:
-            subscription = Subscription.query.get_by_watcher_resource(resource, watcher)
-            subscription.remove_role(role)
-            if not subscription.roles:
+        if watcher and resource and role:
+            subscription = Subscription.query.fetch(resource, watcher, role)
+            if subscription:
                 self.session.delete(subscription)
 
     def get_watchers(self, oguid):

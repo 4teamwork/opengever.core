@@ -1,11 +1,13 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.activity.center import NotificationCenter
-from opengever.activity.center import WATCHER_ROLE
 from opengever.activity.mail import NotificationDispatcher
 from opengever.activity.model import Notification
 from opengever.activity.model import Resource
 from opengever.activity.model import Watcher
+from opengever.activity.model.resource import TASK_ISSUER_ROLE
+from opengever.activity.model.resource import TASK_RESPONSIBLE_ROLE
+from opengever.activity.model.resource import WATCHER_ROLE
 from opengever.activity.tests.base import ActivityTestCase
 from opengever.base.oguid import Oguid
 from sqlalchemy.exc import IntegrityError
@@ -24,7 +26,7 @@ class TestResourceHandling(ActivityTestCase):
         peter = create(Builder('watcher').having(user_id='peter'))
         res = create(Builder('resource').oguid('fd:1234'))
 
-        res.add_watcher('hugo', 'issuer')
+        res.add_watcher('hugo', TASK_ISSUER_ROLE)
         self.assertEquals([hugo], res.watchers)
 
     def test_fetch_return_resource_by_means_of_oguid(self):
@@ -140,7 +142,7 @@ class TestWatcherHandling(ActivityTestCase):
         resource = create(Builder('resource').oguid('fd:123'))
         watcher = create(Builder('watcher').having(user_id=u'peter'))
         create(Builder('subscription')
-               .having(resource=resource, watcher=watcher, roles=[WATCHER_ROLE]))
+               .having(resource=resource, watcher=watcher, role=WATCHER_ROLE))
 
         self.center.remove_watcher_from_resource(
             Oguid('fd', '123'), 'peter', WATCHER_ROLE)
@@ -393,15 +395,17 @@ class TestDispatchers(ActivityTestCase):
         peter = create(Builder('watcher').having(user_id='peter'))
         resource = create(Builder('resource').oguid('fd:123'))
         create(Builder('subscription')
-               .having(resource=resource, watcher=hugo, roles=['watcher']))
+               .having(resource=resource, watcher=hugo, role=WATCHER_ROLE))
         create(Builder('subscription')
-               .having(resource=resource, watcher=peter, roles=['responsible']))
+               .having(resource=resource,
+                       watcher=peter,
+                       role=TASK_RESPONSIBLE_ROLE))
 
     def test_check_for_notification_default(self):
         setting = create(Builder('notification_default_setting')
                          .having(kind='task-added',
                                  mail_notification=False))
-        setting.mail_notification_roles = ['watcher', 'responsible']
+        setting.mail_notification_roles = [WATCHER_ROLE, TASK_RESPONSIBLE_ROLE]
 
         self.center.add_activity(
             Oguid('fd', '123'),
@@ -430,7 +434,7 @@ class TestDispatchers(ActivityTestCase):
         setting = create(Builder('notification_default_setting')
                          .having(kind='task-added',
                                  mail_notification=True))
-        setting.mail_notification_roles = ['watcher']
+        setting.mail_notification_roles = [WATCHER_ROLE]
 
         self.center.add_activity(
             Oguid('fd', '123'),

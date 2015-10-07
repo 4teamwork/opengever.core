@@ -67,9 +67,9 @@ class TestTaskActivites(FunctionalTestCase):
         subscriptions = resource.subscriptions
 
         self.assertItemsEqual(
-            [(u'hugo.boss', [TASK_RESPONSIBLE_ROLE]),
-             (u'test_user_1_', [TASK_ISSUER_ROLE])],
-            [(subscription.watcher.user_id, subscription.roles)
+            [(u'hugo.boss', TASK_RESPONSIBLE_ROLE),
+             (u'test_user_1_', TASK_ISSUER_ROLE)],
+            [(subscription.watcher.user_id, subscription.role)
              for subscription in subscriptions])
 
     @browsing
@@ -285,10 +285,9 @@ class TestTaskReassignActivity(FunctionalTestCase):
         subscriptions = resource.subscriptions
 
         self.assertItemsEqual(
-            [(u'hugo.boss', [TASK_RESPONSIBLE_ROLE]),
-             (u'peter.meier', [TASK_ISSUER_ROLE])],
-            [(subscription.watcher.user_id, subscription.roles)
-             for subscription in subscriptions])
+            [(u'hugo.boss', TASK_RESPONSIBLE_ROLE),
+             (u'peter.meier', TASK_ISSUER_ROLE)],
+            [(sub.watcher.user_id, sub.role) for sub in subscriptions])
 
 
 class TestSuccesssorHandling(FunctionalTestCase):
@@ -337,12 +336,12 @@ class TestSuccesssorHandling(FunctionalTestCase):
         successor_resource = self.center.fetch_resource(successor)
 
         self.assertItemsEqual(
-            [(u'james.meier', [u'task_issuer']),
-             (u'hugo.boss', [u'regular_watcher'])],
-            [(subscription.watcher.user_id, subscription.roles)
+            [(u'james.meier', u'task_issuer'),
+             (u'hugo.boss', u'regular_watcher')],
+            [(subscription.watcher.user_id, subscription.role)
              for subscription in predecessor_resource.subscriptions])
 
         self.assertItemsEqual(
-            [(u'peter.meier', [u'task_responsible'])],
-            [(subscription.watcher.user_id, subscription.roles)
+            [(u'peter.meier', u'task_responsible')],
+            [(subscription.watcher.user_id, subscription.role)
              for subscription in successor_resource.subscriptions])

@@ -1,15 +1,10 @@
-from opengever.activity.center import TASK_RESPONSIBLE_ROLE
+from opengever.activity.model.resource import TASK_ISSUER_ROLE
+from opengever.activity.model.resource import TASK_RESPONSIBLE_ROLE
+from opengever.activity.model.resource import WATCHER_ROLE
 from opengever.core.upgrade import SchemaMigration
 from sqlalchemy import Column
 from sqlalchemy import Integer
-from sqlalchemy import Text
-
-
-DEFAULT_SETTINGS = {
-    'task-added': [TASK_RESPONSIBLE_ROLE],
-    'task-transition-reassign': [TASK_RESPONSIBLE_ROLE],
-    'forwarding-transition-reassign-refused': [TASK_RESPONSIBLE_ROLE]
-}
+from sqlalchemy.types import Enum
 
 
 class AddTableSubscriptions(SchemaMigration):
@@ -33,9 +28,13 @@ class AddTableSubscriptions(SchemaMigration):
     def add_subscriptions_table(self):
         self.op.create_table(
             'subscriptions',
-            Column('resource_id', Integer),
-            Column('watcher_id', Integer),
-            Column('roles', Text),
+            Column('resource_id', Integer, primary_key=True),
+            Column('watcher_id', Integer, primary_key=True),
+            Column('role',
+                   Enum(TASK_ISSUER_ROLE,
+                        TASK_RESPONSIBLE_ROLE,
+                        WATCHER_ROLE,
+                        name='subscription_role_type'), primary_key=True)
         )
 
     def remove_resource_watchers_table(self):

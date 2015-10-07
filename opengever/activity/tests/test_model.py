@@ -1,6 +1,9 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.activity.model.resource import WATCHER_ROLE
 from opengever.activity.tests.base import ActivityTestCase
+from sqlalchemy.exc import IntegrityError
+import transaction
 
 
 class TestNotification(ActivityTestCase):
@@ -61,7 +64,9 @@ class TestSubscription(ActivityTestCase):
         resource = create(Builder('resource').oguid('fd:123'))
         watcher = create(Builder('watcher').having(user_id=u'h\xfcgo.boss'))
         subscription = create(Builder('subscription')
-                          .having(resource=resource, watcher=watcher))
+                              .having(resource=resource,
+                                      watcher=watcher,
+                                      role=WATCHER_ROLE))
 
         self.assertEqual(
             "<Subscription <Watcher u'h\\xfcgo.boss'> @ <Resource fd:123>>",
@@ -70,23 +75,17 @@ class TestSubscription(ActivityTestCase):
             "<Subscription <Watcher u'h\\xfcgo.boss'> @ <Resource fd:123>>",
             repr(subscription))
 
-    def test_remove_role(self):
+    def test_primary_key_definition(self):
         resource = create(Builder('resource').oguid('fd:123'))
         watcher = create(Builder('watcher').having(user_id=u'h\xfcgo.boss'))
-        subscription = create(Builder('subscription')
-                          .having(resource=resource, watcher=watcher,
-                                  roles=['watcher', 'issuer']))
+        create(Builder('subscription')
+               .having(resource=resource, watcher=watcher, role=WATCHER_ROLE))
 
-        subscription.remove_role('watcher')
+        with self.assertRaises(IntegrityError):
+            create(Builder('subscription')
+                   .having(resource=resource,
+                           watcher=watcher,
+                           role=WATCHER_ROLE))
+            transaction.commit()
 
-        self.assertEqual(['issuer'], subscription.roles)
-
-    def test_remove_not_stored_role_is_ignored(self):
-        resource = create(Builder('resource').oguid('fd:123'))
-        watcher = create(Builder('watcher').having(user_id=u'h\xfcgo.boss'))
-        subscription = create(Builder('subscription')
-                          .having(resource=resource, watcher=watcher,
-                                  roles=['watcher']))
-
-        subscription.remove_role('issuer')
-        self.assertEqual(['watcher'], subscription.roles)
+        transaction.abort()

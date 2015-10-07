@@ -66,10 +66,9 @@ class Activity(Base, Translatable):
         """Returns a list of activities notifications, but only those
         where the watchers watch the resource in one of the given roles.
         """
-        roles = set(roles)
         watchers = []
         for subscription in self.resource.subscriptions:
-            if roles.intersection(subscription.roles):
+            if subscription.role in roles:
                 watchers.append(subscription.watcher)
 
         return [notification for notification in self.notifications
