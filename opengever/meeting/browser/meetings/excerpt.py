@@ -152,7 +152,7 @@ class GenerateExcerpt(AutoExtensibleForm, EditForm):
 
     @button.buttonAndHandler(_('Cancel', default=u'Cancel'), name='cancel')
     def handleCancel(self, action):
-        return self.redirect_to_meetinglist()
+        return self.redirect_to_meeting()
 
     def redirect_to_meeting(self):
         return self.request.RESPONSE.redirect(self.model.get_url())

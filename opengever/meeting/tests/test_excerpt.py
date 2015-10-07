@@ -120,6 +120,14 @@ class TestExcerpt(FunctionalTestCase):
         self.assertIsNotNone(browser.find('protocol-excerpt-barn-mar-04-2014'))
 
     @browsing
+    def test_manual_excerpt_form_redirects_to_meeting_on_abort(self, browser):
+        browser.login().open(self.meeting.get_url())
+        browser.find('Generate excerpt').click()
+
+        browser.find('form.buttons.cancel').click()
+        self.assertEqual(self.meeting.get_url(), browser.url)
+
+    @browsing
     def test_validator_excerpt_requires_at_least_one_field(self, browser):
         browser.login().open(self.meeting.get_url())
 
