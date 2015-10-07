@@ -48,7 +48,7 @@ class NotificationDispatcher(object):
             return []
 
         not_dispatched = []
-        notifications = activity.get_notification_for_watcher_roles(
+        notifications = activity.get_notifications_for_watcher_roles(
             self.get_roles_to_dispatch(activity.kind))
 
         for notification in notifications:

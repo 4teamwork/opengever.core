@@ -1,5 +1,8 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.activity.model.notification import Notification
+from opengever.activity.model.subscription import TASK_ISSUER_ROLE
+from opengever.activity.model.subscription import TASK_RESPONSIBLE_ROLE
 from opengever.activity.model.subscription import WATCHER_ROLE
 from opengever.activity.tests.base import ActivityTestCase
 from sqlalchemy.exc import IntegrityError
@@ -23,6 +26,41 @@ class TestNotification(ActivityTestCase):
         self.assertEqual(
             "<Notification 1 for <Watcher u'h\\xfcgo.boss'> on <Resource fd:123> >",
             repr(notification))
+
+    def test_by_subscription_role_query(self):
+        resource = create(Builder('resource').oguid('fd:123'))
+        activity = create(Builder('activity').having(
+            title=u'Bitte \xc4nderungen nachvollziehen', resource=resource))
+
+        hugo = create(Builder('watcher').having(user_id=u'h\xfcgo'))
+        peter = create(Builder('watcher').having(user_id=u'peter'))
+
+        create(Builder('subscription').having(resource=resource,
+                                              watcher=peter,
+                                              role=TASK_ISSUER_ROLE))
+        create(Builder('subscription').having(resource=resource,
+                                              watcher=peter,
+                                              role=WATCHER_ROLE))
+        create(Builder('subscription').having(resource=resource,
+                                              watcher=hugo,
+                                              role=WATCHER_ROLE))
+
+        notification_1 = create(Builder('notification')
+                                .having(activity=activity, watcher=hugo))
+        notification_2 = create(Builder('notification')
+                                .having(activity=activity, watcher=peter))
+
+        notifications = Notification.query.by_subscription_roles(
+            [TASK_ISSUER_ROLE], activity).all()
+        self.assertEqual([notification_2], notifications)
+
+        notifications = Notification.query.by_subscription_roles(
+            [WATCHER_ROLE], activity).all()
+        self.assertItemsEqual([notification_1, notification_2], notifications)
+
+        notifications = Notification.query.by_subscription_roles(
+            [TASK_RESPONSIBLE_ROLE], activity).all()
+        self.assertEqual([], notifications)
 
 
 class TestWatcher(ActivityTestCase):
