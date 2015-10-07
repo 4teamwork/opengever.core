@@ -36,8 +36,11 @@ class NotificationDispatcher(object):
             return getattr(setting, self.enabled_key)
         return False
 
-    def roles_to_dispatch(self, kind):
+    def get_roles_to_dispatch(self, kind):
         setting = self.get_setting(kind)
+        if not setting:
+            return []
+
         return getattr(setting, self.roles_key)
 
     def dispatch_notifications(self, activity):
@@ -46,7 +49,7 @@ class NotificationDispatcher(object):
 
         not_dispatched = []
         notifications = activity.get_notification_for_watcher_roles(
-            self.roles_to_dispatch(activity.kind))
+            self.get_roles_to_dispatch(activity.kind))
 
         for notification in notifications:
             try:
