@@ -1,5 +1,4 @@
 from datetime import datetime
-from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -18,16 +17,24 @@ class TestCommitteeTabs(FunctionalTestCase):
                                 .titled(u'Kleiner Burgerrat'))
         self.committee_model = self.committee.load_model()
 
-        create(Builder('meeting')
-               .having(committee=self.committee_model,
-                       location='Bern',
-                       start=datetime(2015, 01, 01, 12, 00),
-                       end=datetime(2015, 01, 03, 18, 00)))
+        self.repository_root, self.repository_folder = create(
+            Builder('repository_tree'))
+        self.dossier = create(Builder('dossier')
+                              .titled(u'D\xf6ssier')
+                              .within(self.repository_folder))
 
         create(Builder('meeting')
                .having(committee=self.committee_model,
                        location='Bern',
-                       start=datetime(2015, 06, 13, 9, 30)))
+                       start=datetime(2015, 01, 01, 12, 00),
+                       end=datetime(2015, 01, 03, 18, 00))
+               .link_with(self.dossier))
+
+        create(Builder('meeting')
+               .having(committee=self.committee_model,
+                       location='Bern',
+                       start=datetime(2015, 06, 13, 9, 30))
+               .link_with(self.dossier))
 
     @browsing
     def test_meeting_listing(self, browser):
@@ -39,10 +46,12 @@ class TestCommitteeTabs(FunctionalTestCase):
              'Date': 'Jan 01, 2015',
              'Location': 'Bern',
              'From': '12:00 PM',
-             'To': '06:00 PM'},
+             'To': '06:00 PM',
+             'Dossier': u'D\xf6ssier'},
             {'Title': 'Bern, Jun 13, 2015',
              'Date': 'Jun 13, 2015',
              'Location': 'Bern',
              'From': '09:30 AM',
-             'To': ''}
+             'To': '',
+             'Dossier': u'D\xf6ssier'}
         ], table.dicts())
