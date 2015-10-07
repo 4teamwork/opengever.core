@@ -1,8 +1,9 @@
 from opengever.activity.model import Activity
 from opengever.activity.model import Notification
 from opengever.activity.model import Resource
-from opengever.activity.model import Watcher
 from opengever.activity.model import Subscription
+from opengever.activity.model import Watcher
+from opengever.activity.model.subscription import WATCHER_ROLE
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.ogds.base.actor import Actor
@@ -20,11 +21,6 @@ import traceback
 
 _ = MessageFactory("opengever.activity")
 logger = logging.getLogger('opengever.activity')
-
-# WATCHER ROLES
-TASK_ISSUER_ROLE = 'task_issuer'
-TASK_RESPONSIBLE_ROLE = 'task_responsible'
-WATCHER_ROLE = 'regular_watcher'
 
 
 class NotificationCenter(object):

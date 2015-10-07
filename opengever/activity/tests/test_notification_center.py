@@ -5,9 +5,9 @@ from opengever.activity.mail import NotificationDispatcher
 from opengever.activity.model import Notification
 from opengever.activity.model import Resource
 from opengever.activity.model import Watcher
-from opengever.activity.model.resource import TASK_ISSUER_ROLE
-from opengever.activity.model.resource import TASK_RESPONSIBLE_ROLE
-from opengever.activity.model.resource import WATCHER_ROLE
+from opengever.activity.model.subscription import TASK_ISSUER_ROLE
+from opengever.activity.model.subscription import TASK_RESPONSIBLE_ROLE
+from opengever.activity.model.subscription import WATCHER_ROLE
 from opengever.activity.tests.base import ActivityTestCase
 from opengever.base.oguid import Oguid
 from sqlalchemy.exc import IntegrityError

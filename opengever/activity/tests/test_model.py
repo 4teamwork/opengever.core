@@ -1,6 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from opengever.activity.model.resource import WATCHER_ROLE
+from opengever.activity.model.subscription import WATCHER_ROLE
 from opengever.activity.tests.base import ActivityTestCase
 from sqlalchemy.exc import IntegrityError
 import transaction

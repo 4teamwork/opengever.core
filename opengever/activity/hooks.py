@@ -1,7 +1,8 @@
 from opengever.activity.model import NotificationDefault
+from opengever.activity.model.subscription import TASK_RESPONSIBLE_ROLE
 from opengever.base.model import create_session
 from sqlalchemy.orm.exc import NoResultFound
-from opengever.activity.center import TASK_RESPONSIBLE_ROLE
+
 
 DEFAULT_SETTINGS = [
     {'kind':'task-added',

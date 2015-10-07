@@ -1,4 +1,4 @@
-from opengever.activity.center import TASK_RESPONSIBLE_ROLE
+from opengever.activity.model.subscription import TASK_RESPONSIBLE_ROLE
 from opengever.core.upgrade import SchemaMigration
 from sqlalchemy import Column
 from sqlalchemy import Text

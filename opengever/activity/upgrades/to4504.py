@@ -1,7 +1,7 @@
 from ftw.upgrade import UpgradeStep
 from opengever.activity import notification_center
-from opengever.activity.center import TASK_ISSUER_ROLE
-from opengever.activity.center import TASK_RESPONSIBLE_ROLE
+from opengever.activity.model.subscription import TASK_ISSUER_ROLE
+from opengever.activity.model.subscription import TASK_RESPONSIBLE_ROLE
 from opengever.globalindex.model.task import Task
 
 
