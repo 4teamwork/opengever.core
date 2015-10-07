@@ -3,8 +3,6 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.activity import notification_center
 from opengever.activity.model import Activity
-from opengever.activity.model.subscription import TASK_ISSUER_ROLE
-from opengever.activity.model.subscription import TASK_RESPONSIBLE_ROLE
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.task.browser.accept.utils import accept_forwarding_with_successor
 from opengever.task.browser.accept.utils import assign_forwarding_to_dossier
@@ -81,10 +79,8 @@ class TestForwardingActivites(FunctionalTestCase):
                             .having(responsible=TEST_USER_ID,
                                     issuer='hugo.boss')
                             .within(inbox))
-        self.center.add_watcher_to_resource(
-            forwarding, TEST_USER_ID, TASK_RESPONSIBLE_ROLE)
-        self.center.add_watcher_to_resource(
-            forwarding, 'hugo.boss', TASK_ISSUER_ROLE)
+        self.center.add_task_responsible(forwarding, TEST_USER_ID)
+        self.center.add_task_issuer(forwarding, 'hugo.boss')
 
         successor = accept_forwarding_with_successor(
             self.portal, forwarding.oguid.id,
@@ -113,10 +109,8 @@ class TestForwardingActivites(FunctionalTestCase):
                             .having(responsible=TEST_USER_ID,
                                     issuer='hugo.boss')
                             .within(inbox))
-        self.center.add_watcher_to_resource(
-            forwarding, TEST_USER_ID, TASK_RESPONSIBLE_ROLE)
-        self.center.add_watcher_to_resource(
-            forwarding, 'hugo.boss', TASK_ISSUER_ROLE)
+        self.center.add_task_responsible(forwarding, TEST_USER_ID)
+        self.center.add_task_issuer(forwarding, 'hugo.boss')
 
         task = accept_forwarding_with_successor(
             self.portal, forwarding.oguid.id,

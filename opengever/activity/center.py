@@ -3,6 +3,8 @@ from opengever.activity.model import Notification
 from opengever.activity.model import Resource
 from opengever.activity.model import Subscription
 from opengever.activity.model import Watcher
+from opengever.activity.model.subscription import TASK_ISSUER_ROLE
+from opengever.activity.model.subscription import TASK_RESPONSIBLE_ROLE
 from opengever.activity.model.subscription import WATCHER_ROLE
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
@@ -176,6 +178,18 @@ class PloneNotificationCenter(NotificationCenter):
         super(PloneNotificationCenter, self).remove_watcher_from_resource(
             oguid, userid, role)
 
+    def add_task_responsible(self, obj, actorid):
+        self.add_watcher_to_resource(obj, actorid, TASK_RESPONSIBLE_ROLE)
+
+    def remove_task_responsible(self, obj, actorid):
+        self.remove_watcher_from_resource(obj, actorid, TASK_RESPONSIBLE_ROLE)
+
+    def add_task_issuer(self, obj, actorid):
+        self.add_watcher_to_resource(obj, actorid, TASK_ISSUER_ROLE)
+
+    def remove_task_issuer(self, obj, actorid):
+        self.remove_watcher_from_resource(obj, actorid, TASK_ISSUER_ROLE)
+
     def add_activity(self, obj, kind, title, label, summary, actor_id, description):
         oguid = self._get_oguid_for(obj)
         try:
@@ -237,6 +251,18 @@ class DisabledNotificationCenter(NotificationCenter):
         pass
 
     def remove_watcher_from_resource(self, obj, userid, role):
+        pass
+
+    def add_task_responsible(self, obj, actorid):
+        pass
+
+    def remove_task_responsible(self, obj, actorid):
+        pass
+
+    def add_task_issuer(self, obj, actorid):
+        pass
+
+    def remove_task_issuer(self, obj, actorid):
         pass
 
     def get_watchers(self, obj):

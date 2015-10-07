@@ -317,10 +317,8 @@ class TestSuccesssorHandling(FunctionalTestCase):
                                   .having(responsible='peter.meier',
                                           issuer='james.meier'))
 
-        self.center.add_watcher_to_resource(
-            self.predecessor, 'peter.meier', TASK_RESPONSIBLE_ROLE)
-        self.center.add_watcher_to_resource(
-            self.predecessor, 'james.meier', TASK_ISSUER_ROLE)
+        self.center.add_task_responsible(self.predecessor, 'peter.meier')
+        self.center.add_task_issuer(self.predecessor, 'james.meier')
         self.center.add_watcher_to_resource(
             self.predecessor, 'hugo.boss', WATCHER_ROLE)
 
