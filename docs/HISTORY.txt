@@ -5,6 +5,10 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- VersionsTab: Use getHistoryMetadata() instead of getHistory() to avoid
+  fetching the actual versioned objects and hence improve performance.
+  [lgraf]
+
 - Prevent a silently ignored key error in our PAS IAuthenticationPlugin
   for internal requests.
   [lgraf]
