@@ -1,4 +1,3 @@
-from opengever.activity.model.subscription import TASK_RESPONSIBLE_ROLE
 from opengever.core.upgrade import SchemaMigration
 from sqlalchemy import Column
 from sqlalchemy import Text
@@ -7,6 +6,7 @@ from sqlalchemy.sql.expression import table
 import json
 
 
+TASK_RESPONSIBLE_ROLE = 'task_responsible'
 DEFAULT_SETTINGS = {
     'task-added': [TASK_RESPONSIBLE_ROLE],
     'task-transition-reassign': [TASK_RESPONSIBLE_ROLE],

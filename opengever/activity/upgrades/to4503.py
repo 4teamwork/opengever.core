@@ -1,10 +1,12 @@
-from opengever.activity.model.subscription import TASK_ISSUER_ROLE
-from opengever.activity.model.subscription import TASK_RESPONSIBLE_ROLE
-from opengever.activity.model.subscription import WATCHER_ROLE
 from opengever.core.upgrade import SchemaMigration
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy.types import Enum
+
+
+TASK_ISSUER_ROLE = 'task_issuer'
+TASK_RESPONSIBLE_ROLE = 'task_responsible'
+WATCHER_ROLE = 'regular_watcher'
 
 
 class AddTableSubscriptions(SchemaMigration):
