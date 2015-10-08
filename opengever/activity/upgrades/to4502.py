@@ -10,7 +10,8 @@ TASK_RESPONSIBLE_ROLE = 'task_responsible'
 DEFAULT_SETTINGS = {
     'task-added': [TASK_RESPONSIBLE_ROLE],
     'task-transition-reassign': [TASK_RESPONSIBLE_ROLE],
-    'forwarding-transition-reassign-refused': [TASK_RESPONSIBLE_ROLE]
+    'forwarding-transition-reassign-refused': [TASK_RESPONSIBLE_ROLE],
+    'forwarding-transition-reassign': [TASK_RESPONSIBLE_ROLE]
 }
 
 

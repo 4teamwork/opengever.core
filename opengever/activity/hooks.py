@@ -7,8 +7,7 @@ from sqlalchemy.orm.exc import NoResultFound
 DEFAULT_SETTINGS = [
     {'kind':'task-added',
      'mail_notification': True,
-     'mail_notification_roles': [TASK_RESPONSIBLE_ROLE]
- },
+     'mail_notification_roles': [TASK_RESPONSIBLE_ROLE]},
     {'kind':'task-transition-cancelled-open', 'mail_notification': False},
     {'kind':'task-transition-delegate', 'mail_notification': False},
     {'kind':'task-transition-in-progress-resolved', 'mail_notification': False},
@@ -21,8 +20,7 @@ DEFAULT_SETTINGS = [
     {'kind':'task-transition-open-tested-and-closed', 'mail_notification': False},
     {'kind':'task-transition-reassign',
      'mail_notification': True,
-     'mail_notification_roles': [TASK_RESPONSIBLE_ROLE]
- },
+     'mail_notification_roles': [TASK_RESPONSIBLE_ROLE]},
     {'kind':'task-transition-rejected-open', 'mail_notification': False},
     {'kind':'task-transition-resolved-in-progress', 'mail_notification': False},
     {'kind':'task-transition-resolved-tested-and-closed', 'mail_notification': False},
@@ -30,11 +28,12 @@ DEFAULT_SETTINGS = [
     {'kind':'forwarding-transition-accept', 'mail_notification': False},
     {'kind':'forwarding-transition-assign-to-dossier', 'mail_notification': False},
     {'kind':'forwarding-transition-close', 'mail_notification': False},
-    {'kind':'forwarding-transition-reassign', 'mail_notification': True},
+    {'kind':'forwarding-transition-reassign',
+     'mail_notification': True,
+     'mail_notification_roles': [TASK_RESPONSIBLE_ROLE]},
     {'kind':'forwarding-transition-reassign-refused',
      'mail_notification': True,
-     'mail_notification_roles': [TASK_RESPONSIBLE_ROLE]
- },
+     'mail_notification_roles': [TASK_RESPONSIBLE_ROLE]},
     {'kind':'forwarding-transition-refuse', 'mail_notification': False}
 ]
 
