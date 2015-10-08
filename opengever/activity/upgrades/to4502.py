@@ -31,14 +31,14 @@ class AddRolesColumn(SchemaMigration):
 
     def add_roles_column(self):
         self.op.add_column('notification_defaults',
-                           Column('_mail_notification_roles', Text))
+                           Column('mail_notification_roles', Text))
 
     def insert_notification_defaults(self):
         defaults_table = table(
             "notification_defaults",
             column("id"),
             column("kind"),
-            column("_mail_notification_roles"),
+            column("mail_notification_roles"),
         )
 
         settings = self.connection.execute(defaults_table.select()).fetchall()
@@ -49,6 +49,6 @@ class AddRolesColumn(SchemaMigration):
 
             self.execute(
                 defaults_table.update()
-                .values(_mail_notification_roles=json.dumps(roles))
+                .values(mail_notification_roles=json.dumps(roles))
                 .where(defaults_table.columns.id == setting.id)
             )

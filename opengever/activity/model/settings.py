@@ -34,7 +34,7 @@ class NotificationDefault(Base):
 
     kind = Column(String(50), nullable=False, unique=True)
     mail_notification = Column(Boolean, nullable=False, default=False)
-    _mail_notification_roles = Column(Text, )
+    _mail_notification_roles = Column('mail_notification_roles', Text)
 
     def __init__(self, kind, mail_notification=False, mail_notification_roles=[]):
         self.kind = kind
