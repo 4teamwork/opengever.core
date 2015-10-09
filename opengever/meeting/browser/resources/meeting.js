@@ -12,7 +12,7 @@
 
     var messageFactory = new global.MessageFactory(viewlet);
 
-    var toggleAttachements = function(event) {
+    var toggleAttachements = function() {
       $(this).parents("tr").toggleClass("expanded");
     };
 
