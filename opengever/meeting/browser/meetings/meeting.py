@@ -7,6 +7,7 @@ from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.meeting import _
 from opengever.meeting.browser.meetings.agendaitem import DeleteAgendaItem
+from opengever.meeting.browser.meetings.agendaitem import UpdateAgendaItem
 from opengever.meeting.browser.meetings.agendaitem import ScheduleSubmittedProposal
 from opengever.meeting.browser.meetings.agendaitem import ScheduleText
 from opengever.meeting.browser.meetings.agendaitem import UpdateAgendaItemOrder
@@ -288,6 +289,10 @@ class MeetingView(BrowserView):
     @property
     def url_update_agenda_item_order(self):
         return UpdateAgendaItemOrder.url_for(self.context, self.model)
+
+    @property
+    def url_update_agenda_item(self):
+        return UpdateAgendaItem.url_for(self.context, self.model)
 
     @property
     def msg_unexpected_error(self):

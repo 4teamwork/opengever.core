@@ -105,6 +105,12 @@ class AgendaItem(Base):
 
         return title
 
+    def set_title(self, title):
+        if self.has_proposal:
+            self.proposal.title = title
+        else:
+            self.title = title
+
     def get_dossier_reference_number(self):
         if self.has_proposal:
             return self.proposal.dossier_reference_number

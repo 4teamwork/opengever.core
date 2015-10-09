@@ -18,88 +18,96 @@
                                       unscheduled_proposals view/unscheduled_proposals">
       <div id="opengever_meeting_meeting"
            tal:attributes="data-unexpected-error view/msg_unexpected_error;
-                           data-update-agenda-item-order-url view/url_update_agenda_item_order">
+                           data-update-agenda-item-order-url view/url_update_agenda_item_order;
+                           data-update-agenda-item-url view/url_update_agenda_item">
 
         <div class="sidebar">
-          <fieldset class="metadata">
-            <legend i18n:translate="">Metadata</legend>
-            <table>
-              <tbody>
-                  <tr>
-                      <td class="state" colspan="2" tal:content="python: meeting.get_state().title"></td>
-                  </tr>
-                  <tr id="meeting_location">
-                      <td><i></i></td>
-                      <td tal:content="meeting/location"></td>
-                  </tr>
-                  <tr id="meeting_time">
-                      <td><i></i></td>
-                      <td><span tal:content="python: meeting.get_start_time()"></span> - <span tal:content="python: meeting.get_end_time()"></span></td>
-                  </tr>
-                  <tr id="meeting_presidency">
-                      <td><i></i></td>
-                      <td tal:condition="meeting/presidency" tal:content="meeting/presidency/fullname"></td>
-                  </tr>
-                  <tr id="meeting_secretary">
-                    <td><i></i></td>
-                    <td tal:condition="meeting/secretary" tal:content="meeting/secretary/fullname"></td>
-                  </tr>
-                  <tr id="meeting_participants">
-                    <td><i></i></td>
-                    <td>
-                      <ul>
-                        <li tal:repeat="participant meeting/participants" tal:content="participant/fullname"></li>
-                      </ul>
-                    </td>
-                  </tr>
-              </tbody>
-            </table>
-            <metal:use use-macro="context/@@meeting-macros/workflow_actions" />
-          </fieldset>
-
-          <fieldset class="dossier">
-            <legend i18n:translate="">Meeting Dossier</legend>
-            <a tal:attributes="href meeting/get_dossier_url"
-               tal:content="python: meeting.get_dossier().title"></a>
-          </fieldset>
-
-          <fieldset class="protocol" tal:define="protocol_document view/get_protocol_document">
-            <legend i18n:translate="">Protocol</legend>
-            <a tal:condition="protocol_document"
+          <div class="panel metadata">
+            <div class="panel-header">
+              <h3 class="panel-title" i18n:translate="">Metadata</h3>
+            </div>
+            <div class="panel-body">
+              <span class="state" tal:content="python: meeting.get_state().title"></span>
+              <dl>
+                <dt id="meeting_location"><i></i></dt>
+                <dd tal:content="meeting/location"></dd>
+                <dt id="meeting_time"><i></i></dt>
+                <dd><span tal:content="python: meeting.get_start_time()"></span> - <span tal:content="python: meeting.get_end_time()"></span></dd>
+                <dt tal:condition="meeting/secretary" id="meeting_secretary"><i></i></dt>
+                <dd tal:condition="meeting/secretary" tal:content="meeting/secretary/fullname"></dd>
+                <dt  tal:condition="meeting/presidency" id="meeting_presidency"><i></i></dt>
+                <dd tal:condition="meeting/presidency" tal:content="meeting/presidency/fullname"></dd>
+                <dt id="meeting_participants"><i></i></dt>
+                <dd>
+                  <ul>
+                    <li tal:repeat="participant meeting/participants" tal:content="participant/fullname"></li>
+                  </ul>
+                </dd>
+              </dl>
+            </div>
+            <div class="panel-footer">
+              <metal:use use-macro="context/@@meeting-macros/workflow_actions" />
+            </div>
+          </div>
+          <div class="panel dossier">
+            <div class="panel-header">
+              <h3 class="panel-title" i18n:translate="">Meeting Dossier</h3>
+            </div>
+            <div class="panel-body">
+              <a tal:attributes="href meeting/get_dossier_url"
+                 tal:content="python: meeting.get_dossier().title"></a>
+            </div>
+          </div>
+          <div class="panel" tal:define="protocol_document view/get_protocol_document">
+            <div class="panel-header">
+              <h3 class="panel-title" i18n:translate="">Protocol</h3>
+            </div>
+            <div class="panel-body protocol">
+              <a tal:condition="protocol_document"
                tal:attributes="href protocol_document/absolute_url; class python: view.get_css_class(protocol_document)"
                tal:content="protocol_document/Title"></a>
-            <div class="button_group">
-              <a class="button" tal:attributes="href view/url_protocol" i18n:translate="">Edit</a>
-              <a class="button" tal:attributes="href view/url_generate_protocol" i18n:translate="">Generate</a>
-              <a class="button" tal:attributes="href view/url_download_protocol" i18n:translate="">Download preview</a>
             </div>
-          </fieldset>
+            <div class="panel-footer">
+              <div class="button_group">
+                <a class="button" tal:attributes="href view/url_protocol" i18n:translate="">Edit</a>
+                <a class="button" tal:attributes="href view/url_generate_protocol" i18n:translate="">Generate</a>
+                <a class="button" tal:attributes="href view/url_download_protocol" i18n:translate="">Preview</a>
+              </div>
+            </div>
+          </div>
 
-          <fieldset class="excerpts" tal:define="excerpts view/manually_generated_excerpts">
-            <legend i18n:translate="">Excerpts</legend>
-            <tal:condition tal:condition="excerpts">
-              <ul>
-                <li tal:repeat="item excerpts">
-                  <a href="" tal:attributes="href item/absolute_url;
-                                             class python:view.get_css_class(item)">
-                    <span class="document" tal:condition="item/absolute_url" tal:content="item/Title" />
-                  </a>
-                </li>
-              </ul>
-            </tal:condition>
-
-            <a class="button" tal:attributes="href view/url_manually_generate_excerpt" i18n:translate="">Generate excerpt</a>
-
-          </fieldset>
+          <div class="panel" tal:define="excerpts view/manually_generated_excerpts">
+            <div class="panel-header">
+              <h3 class="panel-title" i18n:translate="">Excerpts</h3>
+            </div>
+            <div class="panel-body excerpts">
+              <tal:condition tal:condition="excerpts">
+                <ul>
+                  <li tal:repeat="item excerpts">
+                    <a href="" tal:attributes="href item/absolute_url;
+                                               class python:view.get_css_class(item)">
+                      <span class="document" tal:condition="item/absolute_url" tal:content="item/Title" />
+                    </a>
+                  </li>
+                </ul>
+              </tal:condition>
+            </div>
+            <div class="panel-footer">
+              <a class="button" tal:attributes="href view/url_manually_generate_excerpt" i18n:translate="">Generate excerpt</a>
+            </div>
+          </div>
         </div>
         <div class="content">
-          <fieldset class="proposal" tal:condition="meeting/is_editable">
-            <legend i18n:translate="">Add Agenda Item</legend>
-            <metal:block tal:condition="unscheduled_proposals">
+          <div class="panel" tal:condition="meeting/is_editable">
+            <div class="panel-header">
+              <h3 class="panel-title" i18n:translate="">Add Agenda Item</h3>
+            </div>
+            <div class="panel-body">
+              <metal:block tal:condition="unscheduled_proposals">
               <form method="post" tal:attributes="action view/url_schedule_proposal"
                     id="schedule_proposal">
                   <div class="form_group">
-                      <select id="proposal_id" class="button" name="proposal_id">
+                      <select id="proposal_id" name="proposal_id">
                           <tal:repeat tal:repeat="proposal unscheduled_proposals">
                               <option tal:attributes="id proposal/proposal_id;
                                                       value proposal/proposal_id;"
@@ -107,8 +115,7 @@
                               </option>
                           </tal:repeat>
                       </select>
-                      <span class="inputIcon"><input type="submit" name="submit" id="submit-schedule" value="Schedule"
-                         i18n:attributes="value schedule" /></span>
+                      <input type="submit" name="submit" id="submit-schedule" value="Schedule" i18n:attributes="value schedule" />
                   </div>
                 </form>
               </metal:block>
@@ -124,19 +131,30 @@
                     </div>
                 </div>
               </form>
-          </fieldset>
+            </div>
+          </div>
 
-          <h2 i18n:translate="">Agenda Items</h2>
+          <h3 i18n:translate="">Agenda Items</h3>
           <table id="agenda_items">
               <tbody>
                   <tr tal:repeat="agenda_item view/agenda_items" tal:attributes="data-uid agenda_item/agenda_item_id; class python: agenda_item.get_css_class()">
                       <td class="sortable_handle" tal:condition="meeting/is_editable"></td>
                       <td class="number" tal:content="agenda_item/number"></td>
                       <td class="title">
+                        <div class="edit_box">
+                          <div class="form_group">
+                            <input type="text" />
+                            <div class="button_group">
+                              <input i18n:attributes="value label_save_edit_box" type="button" class="button save" />
+                              <input i18n:attributes="value label_cancel_edit_box" type="button" class="button cancel" />
+                            </div>
+                          </div>
+                        </div>
                         <span>
-                          <a tal:condition="agenda_item/has_submitted_documents" class="toggle-attachements-btn"></a>
                           <tal tal:replace="structure python: agenda_item.get_proposal_link(include_icon=False)"></tal>
                         </span>
+                        <a class="edit_agenda_item"
+                           tal:attributes="data-id agenda_item/agenda_item_id"></a>
                         <tal:cond tal:condition="agenda_item/has_proposal">
                           <div class="attachements">
                             <h2 i18n:translate="">Attachements</h2>
@@ -160,7 +178,6 @@
                         <a tal:condition="agenda_item/has_submitted_documents" class="toggle-attachements-btn"></a>
                       </td>
                       <td tal:condition="meeting/is_editable" class="actions">
-                        <a class="edit_agenda_item"></a>
                         <a class="delete_agenda_item"
                            tal:attributes="href python: view.url_delete_agenda_item(agenda_item)"></a>
                       </td>

@@ -10,42 +10,7 @@
 
     var viewlet = $("#opengever_meeting_meeting");
 
-    var listMessages = function(messages) {
-
-      var lastPloneMessage = $(".portalMessage").last();
-      var messageTemplate = "<dl style='display:none'; class='portalMessage {{:messageClass}}'><dt>{{:messageTitle}}</dt><dd>{{:message}}</dd></dl>";
-      var defaultMessage = {
-        messageClass: "error",
-        messageTitle: "Fehler",
-        message: viewlet.data("msg_unexpected_error")
-      };
-      var currentMessages = $(".portalMessage:visible");
-
-      var clearMessages = function() {
-        currentMessages.delay(500).fadeOut("fast", function() {
-          $(this).remove();
-        });
-      };
-
-      var insertMessage = function(messageData) {
-        var message = messageTemplate;
-        message = message.replace("{{:messageClass}}", messageData.messageClass);
-        message = message.replace("{{:messageTitle}}", messageData.messageTitle);
-        message = message.replace("{{:message}}", messageData.message);
-        $(message).insertAfter(lastPloneMessage).fadeIn("fast");
-      };
-
-      if (!messages) {
-        insertMessage(defaultMessage);
-      } else {
-        $.each(messages, function(index, message) {
-          insertMessage(message);
-        });
-      }
-
-      clearMessages();
-
-    };
+    var messageFactory = new global.MessageFactory(viewlet);
 
     var toggleAttachements = function(event) {
       $(this).parents("tr").toggleClass("expanded");
@@ -59,12 +24,12 @@
         });
       },
       onOrderSuccess = function(data) {
-        listMessages(data.messages);
+        messageFactory.shout(data.messages);
         updateNumbers(data.numbers);
         agendaItemStore = $("tbody", agendaItemTable).clone();
       },
       onOrderFail = function() {
-        listMessages();
+        messageFactory.shout();
         agendaItemTable.html(agendaItemStore.clone());
         $("tbody", agendaItemTable).sortable(sortableSettings);
       },
@@ -101,6 +66,40 @@
     $("tbody", agendaItemTable).sortable(sortableSettings);
 
     $(".expandable .toggle-attachements", agendaItemTable).click(toggleAttachements);
+
+    var onUpdateSuccess = function(data) { messageFactory.shout(data.messages); };
+
+    var onUpdateFail = function(data) { messageFactory.shout(JSON.parse(data.responseText).messages); };
+
+    var updateAgendaItem = function(title) {
+      var id = this.trigger.data().id;
+      var payload = { agenda_item_id: id, title: title };
+      return $.ajax({
+        method: "POST",
+        dataType: "json",
+        contentType: "application/json",
+        url: viewlet.data("update-agenda-item-url"),
+        data: payload
+      }).done(onUpdateSuccess).fail(onUpdateFail);
+    };
+
+    var agendaItemTitleValidator = function(data) { return data.proceed; };
+
+    $("#agenda_items tr").each(function() {
+      var source;
+      if($(".title > span > a", this).length) {
+        source = $(".title > span > a", this);
+      } else {
+        source = $(".title > span", this);
+      }
+      var editbox = new global.Editbox({
+        trigger: $(".edit_agenda_item", this),
+        editbox: $(".title .edit_box", this),
+        source: source,
+        onChange: updateAgendaItem,
+        responseValidator: agendaItemTitleValidator
+      });
+    });
 
   });
 

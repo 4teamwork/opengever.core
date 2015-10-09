@@ -10,7 +10,9 @@ from opengever.meeting.browser.meetings.agendaitem import UpdateAgendaItemOrder
 from opengever.meeting.model import Meeting
 from opengever.meeting.model import Proposal
 from opengever.meeting.wrapper import MeetingWrapper
+from opengever.meeting.model.agendaitem import AgendaItem
 from opengever.testing import FunctionalTestCase
+from zExceptions import NotFound
 from zExceptions import Unauthorized
 import transaction
 
@@ -46,6 +48,16 @@ class TestAgendaItem(FunctionalTestCase):
                           .as_submitted())
 
         return proposal
+
+    def setup_proposal_agenda_item(self, browser):
+        proposal = self.setup_proposal()
+        proposal_model = proposal.load_model()
+
+        browser.login().open(self.meeting.get_url())
+
+        form = browser.css('#schedule_proposal').first
+        form.fill({'proposal_id': str(proposal_model.proposal_id)}).submit()
+        return proposal.load_model().agenda_item
 
     @browsing
     def test_free_text_agend_item_can_be_added(self, browser):
@@ -159,3 +171,44 @@ class TestAgendaItem(FunctionalTestCase):
 
         self.assertEqual(2, item1.sort_order)
         self.assertEqual(1, item2.sort_order)
+
+    @browsing
+    def test_wrong_params_raises_exception(self, browser):
+        self.assertEqual(browser.login().open(
+            MeetingWrapper.wrap(self.committee, self.meeting), view='update_agenda_item').json,
+            {'messages': [{'messageClass': 'error',
+                           'messageTitle': 'Error',
+                           'message': 'Agenda Item title must not be empty.'}],
+             'proceed': False})
+
+    @browsing
+    def test_not_found_item_raises_exception(self, browser):
+        with self.assertRaises(NotFound):
+            browser.login().open(MeetingWrapper.wrap(self.committee, self.meeting),
+                                 view='update_agenda_item',
+                                 data={'title': 'bar',
+                                       'agenda_item_id': 23})
+
+    @browsing
+    def test_update_agenda_item(self, browser):
+        item = create(Builder('agenda_item').having(
+            title=u'foo', meeting=self.meeting))
+
+        browser.login().open(MeetingWrapper.wrap(self.committee, self.meeting),
+                             view='update_agenda_item',
+                             data={'title': 'bar',
+                                   'agenda_item_id': item.agenda_item_id})
+
+        agenda_item = AgendaItem.get(item.agenda_item_id)
+        self.assertEqual(agenda_item.title, 'bar')
+
+    @browsing
+    def test_update_proposal_agenda_item(self, browser):
+        agenda_item = self.setup_proposal_agenda_item(browser)
+        browser.login().open(MeetingWrapper.wrap(self.committee, self.meeting),
+                             view='update_agenda_item',
+                             data={'title': 'bar',
+                                   'agenda_item_id': agenda_item.agenda_item_id})
+
+        agenda_item = AgendaItem.get(agenda_item.agenda_item_id)
+        self.assertEqual(agenda_item.get_title(), 'bar')
