@@ -102,11 +102,7 @@ class UpdateAgendaItemOrder(BrowserView):
         if not self.model.is_editable():
             raise Unauthorized("Editing is not allowed")
 
-        json_data = json.loads(self.request.get('BODY'))
-        return self.update_sortorder(json_data)
-
-    def update_sortorder(self, json_data):
-        new_order = [int(item_id) for item_id in json_data['sortOrder']]
+        new_order = [int(item_id) for item_id in self.request.get('sortOrder[]')]
         self.model.reorder_agenda_items(new_order)
 
         numbers = dict((each.agenda_item_id, each.number) for each in

@@ -34,20 +34,18 @@
         $("tbody", agendaItemTable).sortable(sortableSettings);
       },
       onUpdate = function() {
-        var updatePayload = {
-          sortOrder: []
-        };
+        var payload = { sortOrder: [] };
 
         $("tr", agendaItemTable).each(function(index, tableRow) {
-          updatePayload.sortOrder.push(tableRow.dataset.uid);
+          payload.sortOrder.push($(tableRow).data().uid);
         });
 
         $.ajax({
-          type: "POST",
+          method: "POST",
           dataType: "json",
           contentType: "application/json",
           url: viewlet.data("update-agenda-item-order-url"),
-          data: JSON.stringify(updatePayload),
+          data: payload,
           success: onOrderSuccess,
           error: onOrderFail
         });
