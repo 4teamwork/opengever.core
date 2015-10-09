@@ -5,6 +5,10 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Notifications: Store subscription role, on each resource <-> watcher relation.
+  Do allow a fine-grained configuration for the dispatchers.
+  [phgross]
+
 - VersionsTab: Use getHistoryMetadata() instead of getHistory() to avoid
   fetching the actual versioned objects and hence improve performance.
   [lgraf]

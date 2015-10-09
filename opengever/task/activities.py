@@ -141,10 +141,9 @@ class TaskAddedActivity(TaskActivity):
         ]
 
     def before_recording(self):
-        self.center.add_watcher_to_resource(self.context,
-                                            self.context.responsible)
-        self.center.add_watcher_to_resource(self.context,
-                                            self.context.issuer)
+        self.center.add_task_responsible(self.context,
+                                         self.context.responsible)
+        self.center.add_task_issuer(self.context, self.context.issuer)
 
 
 class TaskTransitionActivity(TaskActivity):
@@ -209,15 +208,14 @@ class TaskReassignActivity(TaskTransitionActivity):
     def before_recording(self):
         """Adds new responsible to watchers list.
         """
-        self.center.add_watcher_to_resource(self.context,
-                                            self.context.responsible)
+        self.center.add_task_responsible(
+            self.context, self.context.responsible)
 
     def after_recording(self):
         """Remove old responsible from watchers list.
         """
         change = self.response.get_change('responsible')
-        self.center.remove_watcher_from_resource(self.context,
-                                                 change.get('before'))
+        self.center.remove_task_responsible(self.context, change.get('before'))
 
     def _is_ignored_transition(self):
         return False

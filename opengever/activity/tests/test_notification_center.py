@@ -1,9 +1,13 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.activity.center import NotificationCenter
+from opengever.activity.mail import NotificationDispatcher
 from opengever.activity.model import Notification
 from opengever.activity.model import Resource
 from opengever.activity.model import Watcher
+from opengever.activity.model.subscription import TASK_ISSUER_ROLE
+from opengever.activity.model.subscription import TASK_RESPONSIBLE_ROLE
+from opengever.activity.model.subscription import WATCHER_ROLE
 from opengever.activity.tests.base import ActivityTestCase
 from opengever.base.oguid import Oguid
 from sqlalchemy.exc import IntegrityError
@@ -16,6 +20,14 @@ class TestResourceHandling(ActivityTestCase):
     def setUp(self):
         super(TestResourceHandling, self).setUp()
         self.center = NotificationCenter()
+
+    def test_add_watcher_to_a_resource(self):
+        hugo = create(Builder('watcher').having(user_id='hugo'))
+        peter = create(Builder('watcher').having(user_id='peter'))
+        res = create(Builder('resource').oguid('fd:1234'))
+
+        res.add_watcher('hugo', TASK_ISSUER_ROLE)
+        self.assertEquals([hugo], res.watchers)
 
     def test_fetch_return_resource_by_means_of_oguid(self):
         resource_a = create(Builder('resource').oguid('fd:123'))
@@ -108,12 +120,13 @@ class TestWatcherHandling(ActivityTestCase):
         hugo = create(Builder('watcher').having(user_id='hugo'))
         fritz = create(Builder('watcher').having(user_id='fritz'))
 
-        create(Builder('resource').oguid('fd:123').watchers([hugo, fritz]))
-        create(Builder('resource').oguid('fd:456').watchers([peter]))
+        resource_1 = create(Builder('resource')
+                            .oguid('fd:123').watchers([hugo, fritz]))
+        resource_2 = create(Builder('resource')
+                            .oguid('fd:456').watchers([peter]))
 
-        self.assertEquals(set([hugo, fritz]),
-                          self.center.get_watchers(Oguid('fd', '123')))
-        self.assertEquals(set([peter]),
+        self.assertEquals([hugo, fritz], self.center.get_watchers(Oguid('fd', '123')))
+        self.assertEquals([peter],
                           self.center.get_watchers(Oguid('fd', '456')))
 
     def test_get_watchers_returns_empty_list_when_resource_not_exists(self):
@@ -122,12 +135,25 @@ class TestWatcherHandling(ActivityTestCase):
     def test_remove_watcher_from_resource_will_be_ignored_when_watcher_not_exists(self):
         create(Builder('resource').oguid('fd:123'))
 
-        self.center.remove_watcher_from_resource(Oguid('fd', '123'), 'peter')
+        self.center.remove_watcher_from_resource(
+            Oguid('fd', '123'), 'peter', WATCHER_ROLE)
+
+    def test_remove_watcher_from_resource_will_remove_subscription_if_no_roles_left(self):
+        resource = create(Builder('resource').oguid('fd:123'))
+        watcher = create(Builder('watcher').having(user_id=u'peter'))
+        create(Builder('subscription')
+               .having(resource=resource, watcher=watcher, role=WATCHER_ROLE))
+
+        self.center.remove_watcher_from_resource(
+            Oguid('fd', '123'), 'peter', WATCHER_ROLE)
+
+        self.assertEquals([], resource.watchers)
 
     def test_remove_watcher_from_resource_will_be_ignored_when_resource_not_exists(self):
         create(Builder('watcher').having(user_id='peter'))
 
-        self.center.remove_watcher_from_resource(Oguid('fd', '123'), 'peter')
+        self.center.remove_watcher_from_resource(
+            Oguid('fd', '123'), 'peter', WATCHER_ROLE)
 
     def test_remove_watcher_from_resource(self):
         peter = create(Builder('watcher').having(user_id='peter'))
@@ -136,9 +162,10 @@ class TestWatcherHandling(ActivityTestCase):
                           .oguid('fd:123')
                           .watchers([hugo, peter]))
 
-        self.center.remove_watcher_from_resource(Oguid('fd', '123'), 'peter')
+        self.center.remove_watcher_from_resource(
+            Oguid('fd', '123'), 'peter', WATCHER_ROLE)
 
-        self.assertEquals(set([hugo]), resource.watchers)
+        self.assertEquals([hugo], resource.watchers)
 
 
 class TestAddActivity(ActivityTestCase):
@@ -344,18 +371,13 @@ class TestNotificationHandling(ActivityTestCase):
             [notification.activity.kind for notification in notifications])
 
 
-class FakeDispatcher(object):
+class FakeMailDispatcher(NotificationDispatcher):
 
-    setting_key = 'mail_notification'
+    enabled_key = 'mail_notification'
+    roles_key = 'mail_notification_roles'
 
     def __init__(self):
         self.notified = []
-
-    def dispatch_notifications(self, notifications):
-        for notification in notifications:
-            notification.dispatch(self)
-
-        return []
 
     def dispatch_notification(self, notification):
         self.notified.append(notification)
@@ -366,19 +388,25 @@ class TestDispatchers(ActivityTestCase):
     def setUp(self):
         super(TestDispatchers, self).setUp()
 
-        self.dispatcher = FakeDispatcher()
+        self.dispatcher = FakeMailDispatcher()
         self.center = NotificationCenter([self.dispatcher])
 
         hugo = create(Builder('watcher').having(user_id='hugo'))
         peter = create(Builder('watcher').having(user_id='peter'))
-
-        self.resource = create(Builder('resource').oguid('fd:123')
-                               .watchers([hugo, peter]))
+        resource = create(Builder('resource').oguid('fd:123'))
+        create(Builder('subscription')
+               .having(resource=resource, watcher=hugo, role=WATCHER_ROLE))
+        create(Builder('subscription')
+               .having(resource=resource,
+                       watcher=peter,
+                       role=TASK_RESPONSIBLE_ROLE))
 
     def test_check_for_notification_default(self):
         setting = create(Builder('notification_default_setting')
                          .having(kind='task-added',
                                  mail_notification=False))
+        setting.set_mail_notification_roles(
+            [WATCHER_ROLE, TASK_RESPONSIBLE_ROLE])
 
         self.center.add_activity(
             Oguid('fd', '123'),
@@ -402,6 +430,24 @@ class TestDispatchers(ActivityTestCase):
             {'en': None})
 
         self.assertEquals(2, len(self.dispatcher.notified))
+
+    def test_only_watchers_with_configured_roles_are_dispatched(self):
+        setting = create(Builder('notification_default_setting')
+                         .having(kind='task-added',
+                                 mail_notification=True))
+        setting.set_mail_notification_roles([WATCHER_ROLE])
+
+        self.center.add_activity(
+            Oguid('fd', '123'),
+            'task-added',
+            {'en': 'Kennzahlen 2014 erfassen'},
+            {'en': 'Task added'},
+            {'en': 'Task bla accepted by Peter'},
+            'hugo.boss',
+            {'en': None})
+
+        self.assertEquals(1, len(self.dispatcher.notified))
+        self.assertEquals(u'hugo', self.dispatcher.notified[0].watcher.user_id)
 
     def test_if_setting_for_kind_does_not_exist_dispatcher_is_ignored(self):
         self.center.add_activity(
