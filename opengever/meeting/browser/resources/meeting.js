@@ -20,7 +20,7 @@
       agendaItemStore = $("tbody", agendaItemTable).clone(),
       updateNumbers = function(numbers) {
         $("tr", agendaItemTable).each(function(idx, row) {
-          $(".number", row).html(numbers[row.dataset.uid]);
+          $(".number", row).html(numbers[$(row).data().uid]);
         });
       },
       onOrderSuccess = function(data) {
