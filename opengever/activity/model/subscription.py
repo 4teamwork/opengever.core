@@ -3,8 +3,8 @@ from opengever.ogds.models.query import BaseQuery
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
+from sqlalchemy import String
 from sqlalchemy.orm import relationship
-from sqlalchemy.types import Enum
 
 
 TASK_ISSUER_ROLE = 'task_issuer'
@@ -28,10 +28,7 @@ class Subscription(Base):
 
     resource_id = Column(Integer, ForeignKey('resources.id'), primary_key=True)
     watcher_id = Column(Integer, ForeignKey('watchers.id'), primary_key=True)
-    role = Column(Enum(TASK_ISSUER_ROLE,
-                       TASK_RESPONSIBLE_ROLE,
-                       WATCHER_ROLE,
-                       name='subscription_role_type'), primary_key=True)
+    role = Column(String(100), primary_key=True)
 
     resource = relationship('Resource', backref="subscriptions")
     watcher = relationship('Watcher', backref="subscriptions")

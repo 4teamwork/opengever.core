@@ -1,7 +1,7 @@
 from opengever.core.upgrade import SchemaMigration
 from sqlalchemy import Column
 from sqlalchemy import Integer
-from sqlalchemy.types import Enum
+from sqlalchemy import String
 
 
 TASK_ISSUER_ROLE = 'task_issuer'
@@ -32,11 +32,7 @@ class AddTableSubscriptions(SchemaMigration):
             'subscriptions',
             Column('resource_id', Integer, primary_key=True),
             Column('watcher_id', Integer, primary_key=True),
-            Column('role',
-                   Enum(TASK_ISSUER_ROLE,
-                        TASK_RESPONSIBLE_ROLE,
-                        WATCHER_ROLE,
-                        name='subscription_role_type'), primary_key=True)
+            Column('role', String(100), primary_key=True)
         )
 
     def remove_resource_watchers_table(self):
