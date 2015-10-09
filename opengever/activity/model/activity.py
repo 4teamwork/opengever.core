@@ -62,6 +62,12 @@ class Activity(Base, Translatable):
 
         return notifications
 
+    def get_notifications_for_watcher_roles(self, roles):
+        """Returns a list of activities notifications, but only those
+        where the watchers watch the resource in one of the given roles.
+        """
+        return Notification.query.by_subscription_roles(roles, self).all()
+
     def is_current_user(self, watcher):
         return watcher.user_id == self.actor_id
 

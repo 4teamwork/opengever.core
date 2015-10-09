@@ -1,7 +1,11 @@
 from opengever.activity.model import Activity
 from opengever.activity.model import Notification
 from opengever.activity.model import Resource
+from opengever.activity.model import Subscription
 from opengever.activity.model import Watcher
+from opengever.activity.model.subscription import TASK_ISSUER_ROLE
+from opengever.activity.model.subscription import TASK_RESPONSIBLE_ROLE
+from opengever.activity.model.subscription import WATCHER_ROLE
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.ogds.base.actor import Actor
@@ -15,6 +19,7 @@ from zope.i18nmessageid import MessageFactory
 import logging
 import sys
 import traceback
+
 
 _ = MessageFactory("opengever.activity")
 logger = logging.getLogger('opengever.activity')
@@ -48,7 +53,8 @@ class NotificationCenter(object):
         """Returns a resource by it's Oguid object or None when it does
         not exist.
         """
-        return Resource.query.get_by_oguid(oguid)
+        resource = Resource.query.get_by_oguid(oguid)
+        return resource
 
     def add_watcher(self, user_id):
         watcher = Watcher(user_id=user_id)
@@ -58,19 +64,21 @@ class NotificationCenter(object):
     def fetch_watcher(self, user_id):
         return Watcher.query.get_by_userid(user_id)
 
-    def add_watcher_to_resource(self, oguid, userid):
+    def add_watcher_to_resource(self, oguid, userid, role=WATCHER_ROLE):
         resource = self.fetch_resource(oguid)
         if not resource:
             resource = self.add_resource(oguid)
 
-        resource.add_watcher(userid)
+        resource.add_watcher(userid, role)
 
-    def remove_watcher_from_resource(self, oguid, userid):
+    def remove_watcher_from_resource(self, oguid, userid, role):
         watcher = self.fetch_watcher(userid)
         resource = self.fetch_resource(oguid)
 
-        if watcher and resource:
-            resource.remove_watcher(watcher)
+        if watcher and resource and role:
+            subscription = Subscription.query.fetch(resource, watcher, role)
+            if subscription:
+                self.session.delete(subscription)
 
     def get_watchers(self, oguid):
         resource = Resource.query.get_by_oguid(oguid)
@@ -108,10 +116,10 @@ class NotificationCenter(object):
         return {'activity': activity, 'errors': errors}
 
     def create_notifications(self, activity):
-        notifications = activity.create_notifications()
+        activity.create_notifications()
         errors = []
         for dispatcher in self.dispatchers:
-            result = dispatcher.dispatch_notifications(notifications)
+            result = dispatcher.dispatch_notifications(activity)
             errors += result
 
         return errors
@@ -158,17 +166,29 @@ class PloneNotificationCenter(NotificationCenter):
             return Oguid.for_object(item)
         return item
 
-    def add_watcher_to_resource(self, obj, actorid):
+    def add_watcher_to_resource(self, obj, actorid, role):
         actor = Actor.lookup(actorid)
         oguid = self._get_oguid_for(obj)
         for representative in actor.representatives():
             super(PloneNotificationCenter, self).add_watcher_to_resource(
-                oguid, representative.userid)
+                oguid, representative.userid, role)
 
-    def remove_watcher_from_resource(self, obj, userid):
+    def remove_watcher_from_resource(self, obj, userid, role):
         oguid = self._get_oguid_for(obj)
         super(PloneNotificationCenter, self).remove_watcher_from_resource(
-            oguid, userid)
+            oguid, userid, role)
+
+    def add_task_responsible(self, obj, actorid):
+        self.add_watcher_to_resource(obj, actorid, TASK_RESPONSIBLE_ROLE)
+
+    def remove_task_responsible(self, obj, actorid):
+        self.remove_watcher_from_resource(obj, actorid, TASK_RESPONSIBLE_ROLE)
+
+    def add_task_issuer(self, obj, actorid):
+        self.add_watcher_to_resource(obj, actorid, TASK_ISSUER_ROLE)
+
+    def remove_task_issuer(self, obj, actorid):
+        self.remove_watcher_from_resource(obj, actorid, TASK_ISSUER_ROLE)
 
     def add_activity(self, obj, kind, title, label, summary, actor_id, description):
         oguid = self._get_oguid_for(obj)
@@ -199,6 +219,10 @@ class PloneNotificationCenter(NotificationCenter):
         oguid = self._get_oguid_for(obj)
         return super(PloneNotificationCenter, self).get_watchers(oguid)
 
+    def fetch_resource(self, obj):
+        oguid = self._get_oguid_for(obj)
+        return super(PloneNotificationCenter, self).fetch_resource(oguid)
+
     def get_current_users_notifications(self, only_unread=False, limit=None):
         return super(PloneNotificationCenter, self).get_users_notifications(
             api.user.get_current().getId(),
@@ -223,10 +247,22 @@ class DisabledNotificationCenter(NotificationCenter):
     def fetch_watcher(self, user_id):
         return None
 
-    def add_watcher_to_resource(self, obj, userid):
+    def add_watcher_to_resource(self, obj, userid, role):
         pass
 
-    def remove_watcher_from_resource(self, obj, userid):
+    def remove_watcher_from_resource(self, obj, userid, role):
+        pass
+
+    def add_task_responsible(self, obj, actorid):
+        pass
+
+    def remove_task_responsible(self, obj, actorid):
+        pass
+
+    def add_task_issuer(self, obj, actorid):
+        pass
+
+    def remove_task_issuer(self, obj, actorid):
         pass
 
     def get_watchers(self, obj):

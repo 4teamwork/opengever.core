@@ -1,9 +1,11 @@
 from ftw.builder import builder_registry
 from opengever.activity.model import Activity
-from opengever.activity.model import NotificationDefault
 from opengever.activity.model import Notification
+from opengever.activity.model import NotificationDefault
 from opengever.activity.model import Resource
+from opengever.activity.model import Subscription
 from opengever.activity.model import Watcher
+from opengever.activity.model.subscription import WATCHER_ROLE
 from opengever.base.oguid import Oguid
 from opengever.ogds.models.tests.builders import SqlObjectBuilder
 from opengever.testing.builders.base import TEST_USER_ID
@@ -14,6 +16,10 @@ class ResourceBuilder(SqlObjectBuilder):
     mapped_class = Resource
     id_argument_name = 'resource_id'
 
+    def __init__(self, session):
+        super(ResourceBuilder, self).__init__(session)
+        self._watchers = []
+
     def oguid(self, oguid):
         self.arguments['oguid'] = Oguid.parse(oguid)
         return self
@@ -22,8 +28,14 @@ class ResourceBuilder(SqlObjectBuilder):
         if isinstance(watchers, list):
             watchers = set(watchers)
 
-        self.arguments['watchers'] = watchers
+        self._watchers = watchers
         return self
+
+    def after_create(self, obj):
+        for watcher in self._watchers:
+            obj.add_watcher(watcher.user_id, WATCHER_ROLE)
+        return obj
+
 
 builder_registry.register('resource', ResourceBuilder)
 
@@ -34,6 +46,13 @@ class WatcherBuilder(SqlObjectBuilder):
     id_argument_name = 'watcher_id'
 
 builder_registry.register('watcher', WatcherBuilder)
+
+
+class SubscriptionBuilder(SqlObjectBuilder):
+
+    mapped_class = Subscription
+
+builder_registry.register('subscription', SubscriptionBuilder)
 
 
 class ActivityBuilder(SqlObjectBuilder):

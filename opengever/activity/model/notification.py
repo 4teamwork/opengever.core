@@ -1,6 +1,8 @@
-from opengever.activity.model.settings import NotificationDefault
+from opengever.activity.model.resource import Resource
+from opengever.activity.model.subscription import Subscription
 from opengever.base.model import Base
 from opengever.ogds.models.query import BaseQuery
+from sqlalchemy import and_
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
@@ -13,6 +15,15 @@ class NotificationQuery(BaseQuery):
 
     def by_user(self, userid):
         return self.join(Notification.watcher).filter_by(user_id=userid)
+
+    def by_subscription_roles(self, roles, activity):
+        query = self.filter_by(activity=activity).join(Notification.activity)
+        query = query.join(Resource)
+        query = query.join(
+            Subscription,
+            and_(Resource.resource_id == Subscription.resource_id,
+                 Notification.watcher_id == Subscription.watcher_id))
+        return query.filter(Subscription.role.in_(roles))
 
 
 class Notification(Base):
@@ -37,13 +48,3 @@ class Notification(Base):
             self.notification_id,
             repr(self.watcher),
             repr(self.activity.resource))
-
-    def dispatch(self, dispatcher):
-        if self.is_dispatch_needed(dispatcher):
-            dispatcher.dispatch_notification(self)
-
-    def is_dispatch_needed(self, dispatcher):
-        """Lookup if the given dispatcher is needed for the given kind.
-        """
-        return NotificationDefault.query.is_dispatch_needed(
-            dispatcher.setting_key, self.activity.kind)
