@@ -23,6 +23,12 @@ class DossierBuilder(DexterityBuilder):
 builder_registry.register('dossier', DossierBuilder)
 
 
+class MeetingDossierBuilder(DossierBuilder):
+    portal_type = 'opengever.meeting.meetingdossier'
+
+builder_registry.register('meeting_dossier', MeetingDossierBuilder)
+
+
 class TemplateDossierBuilder(DexterityBuilder):
     portal_type = 'opengever.dossier.templatedossier'
 

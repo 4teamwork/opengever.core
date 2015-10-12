@@ -118,7 +118,7 @@ class MeetingExampleContentCreator(object):
     def create_meeting(self, delta):
         start = datetime.combine(date.today() + timedelta(days=delta), time(10, 0))
         end = datetime.combine(date.today() + timedelta(days=delta), time(12, 0))
-        dossier = create(Builder('dossier')
+        dossier = create(Builder('meeting_dossier')
                          .having(title=u'Meeting {}'.format(
                              api.portal.get_localized_time(start)),)
                          .within(self.repository_folder_meeting))
