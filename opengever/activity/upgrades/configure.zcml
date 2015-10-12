@@ -127,4 +127,14 @@
         profile="opengever.activity:default"
         />
 
+    <!-- 4504 -> 4505 -->
+    <genericsetup:upgradeStep
+        title="Replace watcher relation on Notification table with a userid column"
+        description=""
+        source="4504"
+        destination="4505"
+        handler="opengever.activity.upgrades.to4505.ReplaceNotificationsWatcherRelation"
+        profile="opengever.activity:default"
+        />
+
 </configure>
