@@ -213,3 +213,21 @@ class TestProtocol(FunctionalTestCase):
         self.assertEqual(0, generated_document.generated_version)
         self.assertEqual(meeting, generated_document.meeting)
         self.assertEqual(1, GeneratedProtocol.query.count())
+
+    @browsing
+    def test_protocol_displays_numbers_in_navigation(self, browser):
+        self.setup_protocol(browser)
+
+        create(Builder('agenda_item').having(meeting=self.meeting,
+                                             title='Mach ize'))
+
+        browser.open(self.meeting.get_url())
+        browser.css('a[href*="/protocol"]').first.click()
+
+        navigation = browser.css('#scrollspy a.expandable')
+        headings = browser.css('.protocol_title .title')
+
+        self.assertEqual(map(lambda nav: nav.text, navigation),
+                         ['1. Mach doch', '2. Mach ize'])
+        self.assertEqual(map(lambda heading: heading.text, headings),
+                         ['1. Mach doch', '2. Mach ize'])

@@ -15,7 +15,12 @@
     function init() {
       $(options.selector + " a").click(function(event) {
         event.preventDefault();
-        scrollTo(event.target);
+        var target = $(event.target);
+        if(target.hasClass("paragraph")) {
+          scrollTo(target.parent().next().find("> a"));
+        } else {
+          scrollTo(event.target);
+        }
       });
     }
 
