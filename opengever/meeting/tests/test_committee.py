@@ -12,6 +12,8 @@ class TestCommittee(FunctionalTestCase):
 
     def setUp(self):
         super(TestCommittee, self).setUp()
+        self.grant('Administrator')
+
         self.repo_root = create(Builder('repository_root'))
         self.repository_folder = create(Builder('repository')
                                         .within(self.repo_root)

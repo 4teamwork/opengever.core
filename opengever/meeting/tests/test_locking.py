@@ -101,7 +101,9 @@ class TestMeetingLocking(FunctionalTestCase):
 
     @browsing
     def test_protocol_raise_redirect_back_to_meeting_view_when_protocol_is_locked(self, browser):
-        user = create(Builder('user').named('Hugo', 'Boss'))
+        user = create(Builder('user')
+                      .named('Hugo', 'Boss')
+                      .in_groups('client1_users'))
         browser.login(username='hugo.boss').open(self.meeting.get_url('protocol'))
 
         with self.assertRaises(Redirect) as cm:
@@ -113,7 +115,9 @@ class TestMeetingLocking(FunctionalTestCase):
 
     @browsing
     def test_meeting_view_shows_information_when_is_locked(self, browser):
-        user = create(Builder('user').named('Hugo', 'Boss'))
+        user = create(Builder('user')
+                      .named('Hugo', 'Boss')
+                      .in_groups('client1_users'))
         browser.login(username='hugo.boss').open(self.meeting.get_url('protocol'))
 
         browser.login().open(self.meeting.get_url())

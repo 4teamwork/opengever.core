@@ -352,4 +352,24 @@
         profile="opengever.meeting:default"
         directory="profiles/4606"
         />
+
+    <!-- 4606 -> 4607 -->
+    <genericsetup:upgradeStep
+        title="Let meeting workflows manage some permissions."
+        description=""
+        source="4606"
+        destination="4607"
+        handler="opengever.meeting.upgrades.to4607.AddPermissionsToWorkflows"
+        profile="opengever.meeting:default"
+        />
+
+    <genericsetup:registerProfile
+        name="4607"
+        title="opengever.meeting: upgrade profile 4607"
+        description=""
+        directory="profiles/4607"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
 </configure>

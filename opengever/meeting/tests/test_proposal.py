@@ -180,6 +180,7 @@ class TestProposal(FunctionalTestCase):
 
     @browsing
     def test_edit_view_availability_for_submitted_proposal(self, browser):
+        self.grant("Administrator")
         committee = create(Builder('committee'))
         proposal = create(Builder('proposal')
                           .within(self.dossier)
@@ -191,7 +192,7 @@ class TestProposal(FunctionalTestCase):
         submitted_proposal = api.portal.get().restrictedTraverse(
             proposal.load_model().submitted_physical_path.encode('utf-8'))
         browser.login().open(submitted_proposal)
-        self.assertEqual(['Contents', 'Edit', 'Sharing'],
+        self.assertEqual(['Edit', 'Sharing'],
                          browser.css('#content-views li').text)
 
         proposal_model = submitted_proposal.load_model()
@@ -200,7 +201,7 @@ class TestProposal(FunctionalTestCase):
 
         # cannot edit decided SubmittedProposal
         browser.open(submitted_proposal)
-        self.assertEqual(['Contents', 'Sharing'],
+        self.assertEqual(['Sharing'],
                          browser.css('#content-views li').text)
         with self.assertRaises(Unauthorized):
             browser.open(submitted_proposal, view='edit')
