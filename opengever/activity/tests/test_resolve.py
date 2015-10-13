@@ -13,7 +13,9 @@ from zExceptions import Unauthorized
 class TestResolveNotificationView(FunctionalTestCase):
 
     def test_resolve_notification_url(self):
-        notification = create(Builder('notification').id('123'))
+        notification = create(Builder('notification')
+                              .id('123')
+                              .having(userid='peter'))
         url = resolve_notification_url(notification)
         self.assertEquals(
             'http://example.com/@@resolve_notification?notification_id=123',
@@ -31,15 +33,14 @@ class TestResolveNotificationView(FunctionalTestCase):
                                  data={'notification_id': '123'})
 
     @browsing
-    def test_raises_unauthorized_when_notification_watcher_is_not_the_current_user(self, browser):
+    def test_raises_unauthorized_when_notification_is_not_for_the_current_user(self, browser):
         task = create(Builder('task'))
         oguid = Oguid.for_object(task)
 
-        watcher = create(Builder('watcher').having(user_id='hugo.boss'))
         resource = create(Builder('resource').oguid(oguid.id))
         activity = create(Builder('activity').having(resource=resource))
         notification = create(Builder('notification')
-                              .having(activity=activity, watcher=watcher))
+                              .having(activity=activity, userid='hugo.boss'))
 
         with self.assertRaises(Unauthorized):
             browser.login().open(
@@ -51,11 +52,10 @@ class TestResolveNotificationView(FunctionalTestCase):
         task = create(Builder('task'))
         oguid = Oguid.for_object(task)
 
-        watcher = create(Builder('watcher').having(user_id=TEST_USER_ID))
         resource = create(Builder('resource').oguid(oguid.id))
         activity = create(Builder('activity').having(resource=resource))
         notification = create(Builder('notification')
-                              .having(activity=activity, watcher=watcher))
+                              .having(activity=activity, userid=TEST_USER_ID))
 
         browser.login().open(self.portal, view='resolve_notification',
                              data={'notification_id': notification.notification_id})
@@ -70,11 +70,10 @@ class TestResolveNotificationView(FunctionalTestCase):
         task = create(Builder('task'))
         oguid = Oguid.for_object(task)
 
-        watcher = create(Builder('watcher').having(user_id=TEST_USER_ID))
         resource = create(Builder('resource').oguid(oguid.id))
         activity = create(Builder('activity').having(resource=resource))
         notification = create(Builder('notification')
-                              .having(activity=activity, watcher=watcher))
+                              .having(activity=activity, userid=TEST_USER_ID))
 
         browser.login().open(self.portal, view='resolve_notification',
                              data={'notification_id': notification.notification_id})
@@ -88,11 +87,10 @@ class TestResolveNotificationView(FunctionalTestCase):
                .having(public_url='http://example.com/additional')
                .id('additional'))
 
-        watcher = create(Builder('watcher').having(user_id=TEST_USER_ID))
         resource = create(Builder('resource').oguid('additional:123'))
         activity = create(Builder('activity').having(resource=resource))
         notification = create(Builder('notification')
-                              .having(activity=activity, watcher=watcher))
+                              .having(activity=activity, userid=TEST_USER_ID))
 
         # Calling the resolve_notification view for a foreign object should
         # raise an NotFound exception,  because the view redirects to the

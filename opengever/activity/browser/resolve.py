@@ -32,7 +32,7 @@ class ResolveNotificationView(ResolveOGUIDView):
         """Check if the current user is allowed to view the notification."""
 
         current_user = api.user.get_current()
-        return self.notification.watcher.user_id == current_user.getId()
+        return self.notification.userid == current_user.getId()
 
     def mark_as_read(self):
         self.notification.is_read = True

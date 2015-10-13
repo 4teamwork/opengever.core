@@ -75,6 +75,10 @@ class NotificationBuilder(SqlObjectBuilder):
     mapped_class = Notification
     id_argument_name = 'notification_id'
 
+    def watcher(self, watcher):
+        self.arguments['userid'] = watcher.user_id
+        return self
+
     def as_read(self):
         self.arguments['is_read'] = True
         return self

@@ -274,7 +274,7 @@ class TestTaskReassignActivity(FunctionalTestCase):
         reassign_activity = activities[-1]
         self.assertItemsEqual(
             [u'james.meier', u'peter.meier', u'hugo.boss'],
-            [notes.watcher.user_id for notes in reassign_activity.notifications])
+            [notes.userid for notes in reassign_activity.notifications])
 
     @browsing
     def test_removes_old_responsible_from_watchers_list(self, browser):

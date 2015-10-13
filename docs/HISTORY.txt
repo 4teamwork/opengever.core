@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Notification center: Register actor as watcher instead of every single user.
+  [phgross]
+
 - Introduce wrapper objects for members and memberships to eliminate
   traversal hacks.
   [deiferni]

@@ -144,10 +144,11 @@ class NotificationCenter(object):
                                      sort_reverse=False, offset=0, limit=None):
 
         order = desc if sort_reverse else asc
-        query = Notification.query.join(Notification.activity)
+        query = Notification.query
         if userid:
             query = query.by_user(userid)
 
+        query = query.join(Notification.activity)
         query = query.order_by(order(sort_on))
         query = query.offset(offset).limit(limit)
         return query.options(contains_eager(Notification.activity)).all()
@@ -167,11 +168,9 @@ class PloneNotificationCenter(NotificationCenter):
         return item
 
     def add_watcher_to_resource(self, obj, actorid, role):
-        actor = Actor.lookup(actorid)
         oguid = self._get_oguid_for(obj)
-        for representative in actor.representatives():
-            super(PloneNotificationCenter, self).add_watcher_to_resource(
-                oguid, representative.userid, role)
+        return super(PloneNotificationCenter, self).add_watcher_to_resource(
+            oguid, actorid, role)
 
     def remove_watcher_from_resource(self, obj, userid, role):
         oguid = self._get_oguid_for(obj)

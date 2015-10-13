@@ -205,12 +205,12 @@ class TestAddActivity(ActivityTestCase):
             'hugo.boss',
             {'en': None}).get('activity')
 
-        notification = peter.notifications[0]
+        notification = Notification.query.by_user('peter').first()
         self.assertEquals(activity, notification.activity)
         self.assertEquals(resource_a, notification.activity.resource)
         self.assertFalse(notification.is_read)
 
-        notification = hugo.notifications[0]
+        notification = Notification.query.by_user('hugo').first()
         self.assertEquals(activity, notification.activity)
         self.assertEquals(resource_a, notification.activity.resource)
         self.assertFalse(notification.is_read)
@@ -230,9 +230,8 @@ class TestAddActivity(ActivityTestCase):
             'peter',
             {'en': None})
 
-
-        self.assertEquals(1, len(hugo.notifications))
-        self.assertEquals(0, len(peter.notifications))
+        self.assertEquals(1, Notification.query.by_user('hugo').count())
+        self.assertEquals(0, Notification.query.by_user('peter').count())
 
 
 class TestNotificationHandling(ActivityTestCase):
@@ -242,7 +241,9 @@ class TestNotificationHandling(ActivityTestCase):
 
         self.center = NotificationCenter()
 
+        self.peter = create(Builder('ogds_user').id('peter'))
         self.peter = create(Builder('watcher').having(user_id='peter'))
+        self.hugo = create(Builder('ogds_user').id('hugo'))
         self.hugo = create(Builder('watcher').having(user_id='hugo'))
 
         self.resource_a = create(Builder('resource')
@@ -316,14 +317,13 @@ class TestNotificationHandling(ActivityTestCase):
                           self.center.get_users_notifications('franz'))
 
     def test_mark_notification_as_read(self):
-        notification_id = self.peter.notifications[0].notification_id
-
-        self.center.mark_notification_as_read(notification_id)
-
-        self.assertTrue(Notification.get(notification_id).is_read)
+        notification = Notification.query.by_user('peter').first()
+        self.center.mark_notification_as_read(notification.notification_id)
+        self.assertTrue(Notification.get(notification.notification_id).is_read)
 
     def test_mark_an_already_read_notification_is_ignored(self):
-        notification_id = self.peter.notifications[0].notification_id
+        notification = Notification.query.by_user('peter').first()
+        notification_id = notification.notification_id
 
         self.center.mark_notification_as_read(notification_id)
         self.assertTrue(Notification.get(notification_id).is_read)
@@ -447,7 +447,7 @@ class TestDispatchers(ActivityTestCase):
             {'en': None})
 
         self.assertEquals(1, len(self.dispatcher.notified))
-        self.assertEquals(u'hugo', self.dispatcher.notified[0].watcher.user_id)
+        self.assertEquals(u'hugo', self.dispatcher.notified[0].userid)
 
     def test_if_setting_for_kind_does_not_exist_dispatcher_is_ignored(self):
         self.center.add_activity(

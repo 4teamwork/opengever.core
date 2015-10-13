@@ -48,11 +48,14 @@ class TestNotificationViewlet(FunctionalTestCase):
     @browsing
     def test_header_contains_number_of_unread_messages(self, browser):
         create(Builder('notification')
-               .having(activity=self.activity_a, watcher=self.test_watcher))
+               .watcher(self.test_watcher)
+               .having(activity=self.activity_a))
         create(Builder('notification')
-               .having(activity=self.activity_b, watcher=self.test_watcher))
+               .watcher(self.test_watcher)
+               .having(activity=self.activity_b))
         create(Builder('notification')
-               .having(activity=self.activity_c, watcher=self.test_watcher))
+               .watcher(self.test_watcher)
+               .having(activity=self.activity_c))
 
         browser.login().open()
         self.assertEquals(
@@ -74,12 +77,15 @@ class TestNotificationViewlet(FunctionalTestCase):
     @browsing
     def test_lists_only_unread_notifications(self, browser):
         create(Builder('notification')
-               .having(activity=self.activity_a, watcher=self.test_watcher))
+               .watcher(self.test_watcher)
+               .having(activity=self.activity_a))
         create(Builder('notification')
                .as_read()
-               .having(activity=self.activity_b, watcher=self.test_watcher))
+               .watcher(self.test_watcher)
+               .having(activity=self.activity_b))
         create(Builder('notification')
-               .having(activity=self.activity_c, watcher=self.test_watcher))
+               .watcher(self.test_watcher)
+               .having(activity=self.activity_c))
 
         browser.login().open()
 
@@ -90,11 +96,14 @@ class TestNotificationViewlet(FunctionalTestCase):
     @browsing
     def test_lists_notification_chronologic_newest_at_the_top(self, browser):
         create(Builder('notification')
-               .having(activity=self.activity_a, watcher=self.test_watcher))
+               .watcher(self.test_watcher)
+               .having(activity=self.activity_a))
         create(Builder('notification')
-               .having(activity=self.activity_b, watcher=self.test_watcher))
+               .watcher(self.test_watcher)
+               .having(activity=self.activity_b))
         create(Builder('notification')
-               .having(activity=self.activity_c, watcher=self.test_watcher))
+               .watcher(self.test_watcher)
+               .having(activity=self.activity_c))
 
         browser.login().open()
 
@@ -105,7 +114,8 @@ class TestNotificationViewlet(FunctionalTestCase):
     @browsing
     def test_notifications_are_linked_to_resolve_notification_view(self, browser):
         create(Builder('notification')
-               .having(activity=self.activity_c, watcher=self.test_watcher))
+               .watcher(self.test_watcher)
+               .having(activity=self.activity_c))
 
         browser.login().open()
         link = browser.css('dl.notificationsMenu .item-content a').first
