@@ -372,4 +372,14 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <!-- 4607 -> 4608 -->
+    <genericsetup:upgradeStep
+        title="Add group-id to committee"
+        description=""
+        source="4607"
+        destination="4608"
+        handler="opengever.meeting.upgrades.to4608.AddGroupIdColumn"
+        profile="opengever.meeting:default"
+        />
+
 </configure>
