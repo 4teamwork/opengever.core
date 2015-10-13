@@ -344,4 +344,12 @@
         profile="opengever.meeting:default"
         />
 
+    <!-- 4605 -> 4606 -->
+    <upgrade-step:importProfile
+        title="Add 'add Member' permission, cleanup owner from rolemap."
+        source="4605"
+        destination="4606"
+        profile="opengever.meeting:default"
+        directory="profiles/4606"
+        />
 </configure>

@@ -39,4 +39,9 @@
           title="opengever.meeting: Add Sablon Template"
           />
 
+    <permission
+          id="opengever.meeting.AddMember"
+          title="opengever.meeting: Add Member"
+          />
+
 </configure>

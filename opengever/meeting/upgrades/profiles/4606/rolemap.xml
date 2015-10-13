@@ -20,10 +20,5 @@
       <role name="Administrator"/>
     </permission>
 
-    <permission name="opengever.meeting: Add Sablon Template" acquire="True">
-      <role name="Manager"/>
-      <role name="Administrator"/>
-    </permission>
-
   </permissions>
 </rolemap>
