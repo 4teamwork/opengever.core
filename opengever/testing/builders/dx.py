@@ -12,11 +12,8 @@ from opengever.trash.trash import ITrashable
 from plone import api
 from plone.namedfile.file import NamedBlobFile
 from Products.CMFCore.utils import getToolByName
-from z3c.relationfield.relation import RelationValue
 from zope.annotation.interfaces import IAnnotations
-from zope.component import getUtility
 from zope.event import notify
-from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import ObjectCreatedEvent
 
 
@@ -97,9 +94,7 @@ class DocumentBuilder(DexterityBuilder):
         if not isinstance(documents, list):
             documents = [documents]
 
-        intids = getUtility(IIntIds)
-        self.arguments['relatedItems'] = [
-            RelationValue(intids.getId(doc)) for doc in documents]
+        self.arguments['relatedItems'] = documents
         return self
 
 builder_registry.register('document', DocumentBuilder, force=True)
@@ -142,9 +137,7 @@ class TaskBuilder(DexterityBuilder):
         if not isinstance(documents, list):
             documents = [documents, ]
 
-        intids = getUtility(IIntIds)
-        self.arguments['relatedItems'] = [
-            RelationValue(intids.getId(doc)) for doc in documents]
+        self.arguments['relatedItems'] = documents
         return self
 
     def bidirectional_by_reference(self):
@@ -281,10 +274,7 @@ class ProposalBuilder(DexterityBuilder):
         super(ProposalBuilder, self).after_create(obj)
 
     def relate_to(self, *documents):
-        intids = getUtility(IIntIds)
-        related_documents = [RelationValue(intids.getId(document))
-                             for document in documents]
-        return self.having(relatedItems=related_documents)
+        return self.having(relatedItems=documents)
 
     def as_submitted(self):
         self._submitted = True
@@ -316,20 +306,6 @@ builder_registry.register('submitted_proposal', SubmittedProposalBuilder)
 
 class CommitteeContainerBuilder(DexterityBuilder):
     portal_type = 'opengever.meeting.committeecontainer'
-
-    relation_fields = [
-        'pre_protocol_template', 'protocol_template', 'excerpt_template']
-
-    def before_create(self):
-        """Make sure relations are set up correctly."""
-
-        super(CommitteeContainerBuilder, self).before_create()
-
-        intids = getUtility(IIntIds)
-        for field_name in self.relation_fields:
-            obj = self.arguments.pop(field_name, None)
-            if obj:
-                self.arguments[field_name] = RelationValue(intids.getId(obj))
 
 builder_registry.register('committee_container', CommitteeContainerBuilder)
 
