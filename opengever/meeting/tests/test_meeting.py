@@ -24,6 +24,8 @@ class TestMeeting(FunctionalTestCase):
                                         .within(self.repo))
         self.dossier = create(
             Builder('dossier').within(self.repository_folder))
+        self.meeting_dossier = create(
+            Builder('meeting_dossier').within(self.repository_folder))
         container = create(Builder('committee_container'))
         self.committee = create(Builder('committee')
                                 .within(container)
@@ -94,7 +96,7 @@ class TestMeeting(FunctionalTestCase):
                          .having(committee=committee_model,
                                  start=datetime(2013, 1, 1),
                                  location='There',)
-                         .link_with(self.dossier))
+                         .link_with(self.meeting_dossier))
 
         browser.login()
         browser.open(meeting.get_url(view='edit'))

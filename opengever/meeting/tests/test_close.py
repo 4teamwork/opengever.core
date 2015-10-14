@@ -14,8 +14,12 @@ class TestCloseMeeting(FunctionalTestCase):
     def setUp(self):
         super(TestCloseMeeting, self).setUp()
         self.repository_root = create(Builder('repository_root'))
+        self.repository = create(Builder('repository')
+                                 .within(self.repository_root))
         self.dossier = create(Builder('dossier')
-                              .within(self.repository_root))
+                              .within(self.repository))
+        self.meeting_dossier = create(
+            Builder('meeting_dossier').within(self.repository))
 
         self.sablon_template = create(
             Builder('sablontemplate')
@@ -40,7 +44,7 @@ class TestCloseMeeting(FunctionalTestCase):
                                       start=datetime(2013, 1, 1),
                                       location='There')
                               .scheduled_proposals([self.proposal_a, self.proposal_b])
-                              .link_with(self.dossier))
+                              .link_with(self.meeting_dossier))
         self.meeting.execute_transition('pending-held')
 
         # set correct public url, used for generated meeting urls

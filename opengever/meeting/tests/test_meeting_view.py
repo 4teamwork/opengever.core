@@ -22,7 +22,7 @@ class TestMeetingView(FunctionalTestCase):
         self.dossier = create(Builder('dossier')
                               .within(self.repository_root))
 
-        self.meeting_dossier = create(Builder('dossier')
+        self.meeting_dossier = create(Builder('meeting_dossier')
                                       .titled(u'Meeting Dossier')
                                       .within(self.repository_root))
 

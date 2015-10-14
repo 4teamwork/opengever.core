@@ -5,6 +5,7 @@ from opengever.base.oguid import Oguid
 from opengever.globalindex.model.task import Task
 from opengever.locking.interfaces import ISQLLockable
 from opengever.locking.model import Lock
+from opengever.meeting.interfaces import IMeetingDossier
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import Committee
 from opengever.meeting.model import Meeting
@@ -187,6 +188,7 @@ class MeetingBuilder(SqlObjectBuilder):
     def link_with(self, dossier):
         del self.arguments['dossier_admin_unit_id']
         del self.arguments['dossier_int_id']
+        assert IMeetingDossier.providedBy(dossier)
         self.arguments['dossier_oguid'] = Oguid.for_object(dossier)
         return self
 

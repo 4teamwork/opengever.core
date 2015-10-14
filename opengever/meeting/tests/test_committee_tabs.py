@@ -19,22 +19,22 @@ class TestCommitteeTabs(FunctionalTestCase):
 
         self.repository_root, self.repository_folder = create(
             Builder('repository_tree'))
-        self.dossier = create(Builder('dossier')
-                              .titled(u'D\xf6ssier')
-                              .within(self.repository_folder))
+        self.meeting_dossier = create(Builder('meeting_dossier')
+                                      .titled(u'D\xf6ssier')
+                                      .within(self.repository_folder))
 
         create(Builder('meeting')
                .having(committee=self.committee_model,
                        location='Bern',
                        start=datetime(2015, 01, 01, 12, 00),
                        end=datetime(2015, 01, 03, 18, 00))
-               .link_with(self.dossier))
+               .link_with(self.meeting_dossier))
 
         create(Builder('meeting')
                .having(committee=self.committee_model,
                        location='Bern',
                        start=datetime(2015, 06, 13, 9, 30))
-               .link_with(self.dossier))
+               .link_with(self.meeting_dossier))
 
     @browsing
     def test_meeting_listing(self, browser):

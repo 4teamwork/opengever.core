@@ -27,13 +27,15 @@ class TestAgendaItem(FunctionalTestCase):
             Builder('repository_tree'))
         self.dossier = create(
             Builder('dossier').within(self.repository_folder))
+        self.meeting_dossier = create(
+            Builder('meeting_dossier').within(self.repository_folder))
         container = create(Builder('committee_container'))
         self.committee = create(Builder('committee').within(container))
         self.meeting = create(Builder('meeting')
                               .having(committee=self.committee.load_model(),
                                       start=datetime(2013, 1, 1),
                                       location='There',)
-                              .link_with(self.dossier))
+                              .link_with(self.meeting_dossier))
 
     def setup_proposal(self):
         root, folder = create(Builder('repository_tree'))

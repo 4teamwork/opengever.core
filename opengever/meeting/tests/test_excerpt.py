@@ -21,6 +21,8 @@ class TestExcerpt(FunctionalTestCase):
             Builder('repository_tree'))
         self.dossier = create(
             Builder('dossier').within(self.repository_folder))
+        self.meeting_dossier = create(
+            Builder('meeting_dossier').within(self.repository_folder))
 
         self.templates = create(Builder('templatedossier'))
         self.sablon_template = create(
@@ -50,7 +52,7 @@ class TestExcerpt(FunctionalTestCase):
                               .having(committee=self.committee_model,
                                       start=datetime(2014, 3, 4),
                                       location=u'B\xe4rn',)
-                              .link_with(self.dossier))
+                              .link_with(self.meeting_dossier))
         self.meeting.execute_transition('pending-held')
         self.proposal_model = self.proposal.load_model()
 
@@ -91,7 +93,7 @@ class TestExcerpt(FunctionalTestCase):
                          title_field.value)
 
         dossier_field = browser.find('form.widgets.dossier')
-        self.assertEqual('/'.join(self.dossier.getPhysicalPath()),
+        self.assertEqual('/'.join(self.meeting_dossier.getPhysicalPath()),
                          dossier_field.value)
 
     @browsing
