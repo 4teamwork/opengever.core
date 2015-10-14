@@ -43,6 +43,10 @@ class TestCommittee(FunctionalTestCase):
 
         committee = browser.context
         self.assertEqual('committee-1', committee.getId())
+        self.assertTrue(committee.__ac_local_roles_block__)
+        self.assertEqual(
+            ('Contributor', 'Editor', 'Reader'),
+            dict(committee.get_local_roles()).get('client1_users'))
 
         model = committee.load_model()
         self.assertIsNotNone(model)
@@ -56,17 +60,29 @@ class TestCommittee(FunctionalTestCase):
                            .titled(u'My Committee')
                            .link_with(self.repository_folder))
 
+        self.assertEqual(
+            ('Contributor', 'Editor', 'Reader'),
+            dict(committee.get_local_roles()).get('client1_users'))
+
         browser.login().visit(committee, view='edit')
         form = browser.css('#content-core form').first
 
         self.assertEqual(u'My Committee', form.find_field('Title').value)
-        browser.fill({'Title': u'A c\xf6mmittee'})
+
+        browser.fill({'Title': u'A c\xf6mmittee',
+                      'Group': u'client1_inbox_users'})
         browser.css('#form-buttons-save').first.click()
         self.assertIn('Changes saved',
                       browser.css('.portalMessage.info dd').text)
 
         committee = browser.context
         self.assertEqual('committee-1', committee.getId())
+        local_roles = dict(committee.get_local_roles())
+        self.assertNotIn('client1_users', local_roles,
+                         local_roles.get('client1_users'))
+        self.assertEqual(
+            ('Contributor', 'Editor', 'Reader'),
+            local_roles.get('client1_inbox_users'))
 
         model = committee.load_model()
         self.assertIsNotNone(model)
