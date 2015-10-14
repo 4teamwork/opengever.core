@@ -35,7 +35,8 @@ class TestCommittee(FunctionalTestCase):
 
         browser.fill(
             {'Title': u'A c\xf6mmittee',
-             'Linked repository folder': self.repository_folder})
+             'Linked repository folder': self.repository_folder,
+             'Group': 'client1_users'})
         browser.css('#form-buttons-save').first.click()
         self.assertIn('Item created',
                       browser.css('.portalMessage.info dd').text)
