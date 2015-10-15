@@ -29,7 +29,6 @@ class AgendaItem(Base):
     sort_order = Column(Integer, nullable=False, default=0)
 
     meeting_id = Column(Integer, ForeignKey('meetings.id'), nullable=False)
-    meeting = relationship("Meeting")
 
     discussion = Column(UnicodeCoercingText)
     decision = Column(UnicodeCoercingText)

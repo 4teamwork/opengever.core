@@ -223,6 +223,10 @@ builder_registry.register('generated_excerpt', GeneratedExcerptBuilder)
 
 class AgendaItemBuilder(SqlObjectBuilder):
 
+    def after_create(self, obj):
+        obj.meeting.reorder_agenda_items()
+        return obj
+
     mapped_class = AgendaItem
 
 builder_registry.register('agenda_item', AgendaItemBuilder)

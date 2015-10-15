@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Extend agenda items in protocol view with numbers.
+  [Kevin Bieri]
+
 - No longer create RelationValue manually, this is now done by ftw.builder.
   [deiferni]
 

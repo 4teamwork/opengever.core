@@ -94,7 +94,8 @@ class Meeting(Base):
                                 secondary=meeting_participants,
                                 backref='meetings')
 
-    agenda_items = relationship("AgendaItem", order_by='AgendaItem.sort_order')
+    agenda_items = relationship("AgendaItem", order_by='AgendaItem.sort_order',
+                                backref='meeting')
 
     protocol_document_id = Column(Integer, ForeignKey('generateddocuments.id'))
     protocol_document = relationship(

@@ -181,9 +181,12 @@ class EditProtocol(AutoExtensibleForm, ModelProxyEditForm, EditForm):
         ModelProxyEditForm.render(self)
         return self.template()
 
-    def get_agenda_items(self):
+    def get_agenda_items(self, include_paragraphs=False):
         for agenda_item in self.model.agenda_items:
-            if not agenda_item.is_paragraph:
+            if agenda_item.is_paragraph:
+                if include_paragraphs:
+                    yield agenda_item
+            else:
                 yield agenda_item
 
     def redirect_to_meeting(self):

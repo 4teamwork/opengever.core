@@ -23,13 +23,11 @@ class TestUnitAgendaItem(TestCase):
         self.proposal_agenda_item = create(
             Builder('agenda_item')
             .having(proposal=self.proposal,
-                    meeting=self.meeting,
-                    number='2.'))
+                    meeting=self.meeting))
         self.simple_agenda_item = create(
             Builder('agenda_item')
             .having(title=u'Simple',
-                    meeting=self.meeting,
-                    number='3.'))
+                    meeting=self.meeting))
 
     def test_test_title_is_proposal_title_when_proposal_is_available(self):
         self.assertEqual(
@@ -37,7 +35,7 @@ class TestUnitAgendaItem(TestCase):
 
     def test_proposal_title_correctly_contains_number(self):
         self.assertEqual(
-            u'2. Pr\xf6posal',
+            u'1. Pr\xf6posal',
             self.proposal_agenda_item.get_title(include_number=True))
 
     def test_title_falls_back_to_agenda_item_title(self):
@@ -45,7 +43,7 @@ class TestUnitAgendaItem(TestCase):
 
     def test_agenda_item_title_correctly_contains_number(self):
         self.assertEqual(
-            u'3. Simple',
+            u'2. Simple',
             self.simple_agenda_item.get_title(include_number=True))
 
     def test_number_is_not_included_when_none(self):
