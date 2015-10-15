@@ -5,6 +5,15 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Link committees to a repository folder and link meetings to meeting-dossiers:
+
+    - Add a new content-type, meeting-dossier.
+    - Link dossier and meeting creation, automatically create a meeting-dossier
+      when a meeting is created.
+    - Automatically generate Protocols into the meeting's dossier.
+
+  [deiferni]
+
 - Extend agenda items in protocol view with numbers.
   [Kevin Bieri]
 

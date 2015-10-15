@@ -44,3 +44,14 @@ class TestOguidFunctional(FunctionalTestCase):
         oguid = Oguid.for_object(obj)
 
         self.assertEqual('client1:{}'.format(int_id), oguid)
+
+    def test_oguid_get_url_same_admin_unit(self):
+        obj = create(Builder('dossier'))
+        oguid = Oguid.for_object(obj)
+        self.assertEqual(obj.absolute_url(), oguid.get_url())
+
+    def test_oguid_url_different_admin_unit(self):
+        oguid = Oguid('foo', 1234)
+        self.assertEqual(
+            'http://example.com/@@resolve_oguid?oguid=foo:1234',
+            oguid.get_url())

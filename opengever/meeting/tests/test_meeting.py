@@ -20,8 +20,16 @@ class TestMeeting(FunctionalTestCase):
         self.admin_unit.public_url = 'http://nohost/plone'
 
         self.repo = create(Builder('repository_root'))
+        self.repository_folder = create(Builder('repository')
+                                        .within(self.repo))
+        self.dossier = create(
+            Builder('dossier').within(self.repository_folder))
+        self.meeting_dossier = create(
+            Builder('meeting_dossier').within(self.repository_folder))
         container = create(Builder('committee_container'))
-        self.committee = create(Builder('committee').within(container))
+        self.committee = create(Builder('committee')
+                                .within(container)
+                                .link_with(self.repository_folder))
 
     def test_meeting_title(self):
         self.assertEqual(
@@ -33,9 +41,10 @@ class TestMeeting(FunctionalTestCase):
             Meeting(start=datetime(2013, 10, 18)).get_title())
 
     def test_meeting_link(self):
-        meeting = Meeting(location=u'Bern',
-                          start=datetime(2013, 10, 18),
-                          committee=self.committee.load_model())
+        meeting = create(Builder('meeting').having(
+            location=u'Bern',
+            start=datetime(2013, 10, 18),
+            committee=self.committee.load_model()))
 
         link = PyQuery(meeting.get_link())[0]
 
@@ -47,7 +56,8 @@ class TestMeeting(FunctionalTestCase):
         self.assertEqual('Bern, Oct 18, 2013', link.text)
 
     @browsing
-    def test_add_meeting(self, browser):
+    def test_add_meeting_and_dossier(self, browser):
+        # create meeting
         browser.login().open(self.committee, view='add-meeting')
         browser.fill({
             'Start': datetime(2010, 1, 1, 10),
@@ -55,7 +65,18 @@ class TestMeeting(FunctionalTestCase):
             'Location': 'Somewhere',
         }).submit()
 
-        self.assertEquals([u'Record created'], info_messages())
+        # create dossier
+        self.assertEqual(u'Meeting on Jan 01, 2010',
+                         browser.find('Title').value)
+        browser.find('Save').click()
+
+        # back to meeting page
+        self.assertEqual(
+            [u'The meeting and its dossier were created successfully'],
+            info_messages())
+        self.assertEqual(
+            'http://nohost/plone/opengever-meeting-committeecontainer/committee-1/meeting-1/view',
+            browser.url)
 
         committee_model = self.committee.load_model()
         self.assertEqual(1, len(committee_model.meetings))
@@ -64,6 +85,9 @@ class TestMeeting(FunctionalTestCase):
         self.assertEqual(datetime(2010, 1, 1, 10), meeting.start)
         self.assertEqual(datetime(2010, 1, 1, 11), meeting.end)
         self.assertEqual('Somewhere', meeting.location)
+        dossier = meeting.dossier_oguid.resolve_object()
+        self.assertIsNotNone(dossier)
+        self.assertEquals(u'Meeting on Jan 01, 2010', dossier.title)
 
     @browsing
     def test_edit_meeting(self, browser):
@@ -71,7 +95,8 @@ class TestMeeting(FunctionalTestCase):
         meeting = create(Builder('meeting')
                          .having(committee=committee_model,
                                  start=datetime(2013, 1, 1),
-                                 location='There',))
+                                 location='There',)
+                         .link_with(self.meeting_dossier))
 
         browser.login()
         browser.open(meeting.get_url(view='edit'))

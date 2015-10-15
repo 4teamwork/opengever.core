@@ -57,6 +57,12 @@
             <metal:use use-macro="context/@@meeting-macros/workflow_actions" />
           </fieldset>
 
+          <fieldset class="dossier">
+            <legend i18n:translate="">Meeting Dossier</legend>
+            <a tal:attributes="href meeting/get_dossier_url"
+               tal:content="python: meeting.get_dossier().title"></a>
+          </fieldset>
+
           <fieldset class="protocol" tal:define="protocol_document view/get_protocol_document">
             <legend i18n:translate="">Protocol</legend>
             <a tal:condition="protocol_document"

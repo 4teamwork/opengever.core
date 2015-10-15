@@ -2,6 +2,7 @@ from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.browser.protocol import METHOD_NEW_DOCUMENT
@@ -27,6 +28,8 @@ class TestProtocol(FunctionalTestCase):
             Builder('repository_tree'))
         self.dossier = create(
             Builder('dossier').within(self.repository_folder))
+        self.meeting_dossier = create(
+            Builder('meeting_dossier').within(self.repository_folder))
 
         self.templates = create(Builder('templatedossier'))
         self.sablon_template = create(
@@ -37,7 +40,10 @@ class TestProtocol(FunctionalTestCase):
             protocol_template=self.sablon_template,
             excerpt_template=self.sablon_template))
 
-        self.committee = create(Builder('committee').within(container))
+        self.committee = create(
+            Builder('committee')
+            .within(container)
+            .having(repository_folder=self.repository_folder))
         self.proposal = create(Builder('proposal')
                                .within(self.dossier)
                                .having(title='Mach doch',
@@ -48,7 +54,8 @@ class TestProtocol(FunctionalTestCase):
         self.meeting = create(Builder('meeting')
                               .having(committee=self.committee_model,
                                       start=datetime(2013, 1, 1),
-                                      location='There',))
+                                      location='There',)
+                              .link_with(self.meeting_dossier))
         self.meeting.execute_transition('pending-held')
         self.proposal_model = self.proposal.load_model()
 
@@ -68,8 +75,6 @@ class TestProtocol(FunctionalTestCase):
     def setup_generated_protocol(self, browser):
         self.setup_protocol(browser)
         browser.css('a[href*="@@generate_protocol"]').first.click()
-        browser.fill({'Target dossier': self.dossier})
-        browser.find('Generate').click()
 
     def test_default_protocol_is_configured_on_commitee_container(self):
         self.assertEqual(self.sablon_template,
@@ -85,6 +90,7 @@ class TestProtocol(FunctionalTestCase):
         browser.login().open(self.committee, view='edit')
         browser.fill({'Protocol template': custom_template})
         browser.css('#form-buttons-save').first.click()
+        self.assertEqual([], error_messages())
 
         self.assertEqual(custom_template,
                          self.committee.get_protocol_template())
@@ -164,8 +170,6 @@ class TestProtocol(FunctionalTestCase):
     def test_protocol_can_be_generated(self, browser):
         self.setup_protocol(browser)
         browser.css('a[href*="@@generate_protocol"]').first.click()
-        browser.fill({'Target dossier': self.dossier})
-        browser.find('Generate').click()
 
         self.assertEquals(
             ['Protocol for meeting There, Jan 01, 2013 '
@@ -173,9 +177,8 @@ class TestProtocol(FunctionalTestCase):
             info_messages())
 
         meeting = Meeting.get(self.meeting.meeting_id)  # refresh meeting
-        document = browser.context
-        generated_document = GeneratedProtocol.query.by_document(
-            document).first()
+        self.assertIsNotNone(meeting.protocol_document)
+        generated_document = meeting.protocol_document
         self.assertIsNotNone(generated_document)
         self.assertEqual(0, generated_document.generated_version)
         self.assertEqual(meeting, generated_document.meeting)

@@ -29,3 +29,15 @@ all_open_dossiers_source = RepositoryPathSourceBinder(
             'repositoryfolder-state-active'] + DOSSIER_STATES_OPEN,
     }
 )
+
+
+repository_folder_source = RepositoryPathSourceBinder(
+    object_provides='opengever.repository.repositoryfolder.IRepositoryFolderSchema',
+    review_state='repositoryfolder-state-active',
+    navigation_tree_query={
+        'object_provides': [
+            'opengever.repository.repositoryroot.IRepositoryRoot',
+            'opengever.repository.repositoryfolder.IRepositoryFolderSchema',
+        ]
+    }
+)

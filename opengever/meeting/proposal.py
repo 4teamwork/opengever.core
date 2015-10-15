@@ -346,16 +346,17 @@ class Proposal(ProposalBase):
         committee_model = self.load_model().committee
         return committee_model.oguid.resolve_object()
 
-    def get_model_create_arguments(self, context):
+    def update_model_create_arguments(self, data, context):
         aq_wrapped_self = self.__of__(context)
 
         workflow_state = self.workflow.default_state.name
         reference_number = IReferenceNumber(
             context.get_main_dossier()).get_number()
 
-        return dict(workflow_state=workflow_state,
-                    physical_path=aq_wrapped_self.get_physical_path(),
-                    dossier_reference_number=reference_number)
+        data.update(dict(workflow_state=workflow_state,
+                         physical_path=aq_wrapped_self.get_physical_path(),
+                         dossier_reference_number=reference_number))
+        return data
 
     def get_edit_values(self, fieldnames):
         values = super(Proposal, self).get_edit_values(fieldnames)

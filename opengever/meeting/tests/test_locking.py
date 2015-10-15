@@ -23,6 +23,8 @@ class TestMeetingLocking(FunctionalTestCase):
             Builder('repository_tree'))
         self.dossier = create(
             Builder('dossier').within(self.repository_folder))
+        self.meeting_dossier = create(
+            Builder('meeting_dossier').within(self.repository_folder))
 
         self.templates = create(Builder('templatedossier'))
         self.sablon_template = create(
@@ -45,7 +47,8 @@ class TestMeetingLocking(FunctionalTestCase):
         self.meeting = create(Builder('meeting')
                               .having(committee=self.committee_model,
                                       start=datetime(2013, 1, 1),
-                                      location='There',))
+                                      location='There',)
+                              .link_with(self.meeting_dossier))
         self.meeting.execute_transition('pending-held')
         self.proposal_model = self.proposal.load_model()
 

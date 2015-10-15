@@ -1,6 +1,7 @@
+from opengever.ogds.base.utils import get_current_admin_unit
+from opengever.ogds.base.utils import ogds_service
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
-from opengever.ogds.base.utils import get_current_admin_unit
 
 
 class Oguid(object):
@@ -39,6 +40,24 @@ class Oguid(object):
     def __init__(self, admin_unit_id, int_id):
         self.admin_unit_id = admin_unit_id
         self.int_id = int(int_id) if int_id else None
+
+    def get_url(self):
+        """Return an url to the object represented by this Oguid.
+
+        Resolves the object and returns its absolute_url for objects on the
+        same admin-unit.
+        Returns an url to the resolve_oguid view for objects on foreign
+        admin-units.
+
+        """
+        obj = self.resolve_object()
+        if obj:
+            return obj.absolute_url()
+        admin_unit = ogds_service().fetch_admin_unit(self.admin_unit_id)
+
+        # XXX have some kind ouf routes to avoid cyclic dependecies
+        from opengever.base.browser.resolveoguid import ResolveOGUIDView
+        return ResolveOGUIDView.url_for(self, admin_unit=admin_unit)
 
     def resolve_object(self):
         if self.admin_unit_id != get_current_admin_unit().id():

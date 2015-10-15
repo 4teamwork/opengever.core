@@ -7,6 +7,7 @@ from opengever.meeting.model import Committee as CommitteeModel
 from opengever.meeting.model import Meeting
 from opengever.meeting.model import Membership
 from opengever.meeting.service import meeting_service
+from opengever.meeting.sources import repository_folder_source
 from opengever.meeting.sources import sablon_template_source
 from plone import api
 from plone.directives import form
@@ -30,6 +31,15 @@ class ICommittee(form.Schema):
         source=sablon_template_source,
         required=False,
     )
+
+    repository_folder = RelationChoice(
+        title=_(u'Linked repository folder'),
+        description=_(
+            u'label_linked_repository_folder',
+            default=u'Contains automatically generated dossiers and documents '
+                    u'for this committee.'),
+        source=repository_folder_source,
+        required=True)
 
 
 class ICommitteeModel(Interface):
@@ -81,10 +91,9 @@ class Committee(ModelContainer):
         committee_model = self.load_model()
         return meeting_service().get_submitted_proposals(committee_model)
 
-    def get_model_create_arguments(self, context):
+    def update_model_create_arguments(self, data, context):
         aq_wrapped_self = self.__of__(context)
-
-        return dict(physical_path=aq_wrapped_self.get_physical_path())
+        data['physical_path'] = aq_wrapped_self.get_physical_path()
 
     def get_physical_path(self):
         url_tool = api.portal.get_tool(name='portal_url')

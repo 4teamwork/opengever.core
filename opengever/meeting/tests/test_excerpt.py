@@ -2,6 +2,7 @@ from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.model import Meeting
@@ -20,17 +21,21 @@ class TestExcerpt(FunctionalTestCase):
             Builder('repository_tree'))
         self.dossier = create(
             Builder('dossier').within(self.repository_folder))
+        self.meeting_dossier = create(
+            Builder('meeting_dossier').within(self.repository_folder))
 
         self.templates = create(Builder('templatedossier'))
         self.sablon_template = create(
             Builder('sablontemplate')
             .within(self.templates)
             .with_asset_file('sablon_template.docx'))
-        container = create(Builder('committee_container').having(
-            protocol_template=self.sablon_template,
-            excerpt_template=self.sablon_template))
+        container = create(
+            Builder('committee_container').having(
+                protocol_template=self.sablon_template,
+                excerpt_template=self.sablon_template))
 
-        self.committee = create(Builder('committee').within(container))
+        self.committee = create(Builder('committee').within(container).having(
+            repository_folder=self.repository_folder))
         self.proposal = create(Builder('proposal')
                                .within(self.dossier)
                                .having(title='Mach doch',
@@ -46,7 +51,8 @@ class TestExcerpt(FunctionalTestCase):
         self.meeting = create(Builder('meeting')
                               .having(committee=self.committee_model,
                                       start=datetime(2014, 3, 4),
-                                      location=u'B\xe4rn',))
+                                      location=u'B\xe4rn',)
+                              .link_with(self.meeting_dossier))
         self.meeting.execute_transition('pending-held')
         self.proposal_model = self.proposal.load_model()
 
@@ -72,9 +78,23 @@ class TestExcerpt(FunctionalTestCase):
         browser.login().open(self.committee, view='edit')
         browser.fill({'Excerpt template': custom_template})
         browser.css('#form-buttons-save').first.click()
+        self.assertEqual([], error_messages())
 
         self.assertEqual(custom_template,
                          self.committee.get_excerpt_template())
+
+    @browsing
+    def test_manual_excerpt_pre_fills_fields(self, browser):
+        browser.login().open(self.meeting.get_url())
+        browser.find('Generate excerpt').click()
+
+        title_field = browser.find('Title')
+        self.assertEqual(u'Protocol Excerpt-B\xe4rn, Mar 04, 2014',
+                         title_field.value)
+
+        dossier_field = browser.find('form.widgets.dossier')
+        self.assertEqual('/'.join(self.meeting_dossier.getPhysicalPath()),
+                         dossier_field.value)
 
     @browsing
     def test_manual_excerpt_can_be_generated(self, browser):
@@ -100,6 +120,14 @@ class TestExcerpt(FunctionalTestCase):
         self.assertEqual(1, len(browser.css('.excerpts ul li a')),
                          'generated document should be linked')
         self.assertIsNotNone(browser.find('protocol-excerpt-barn-mar-04-2014'))
+
+    @browsing
+    def test_manual_excerpt_form_redirects_to_meeting_on_abort(self, browser):
+        browser.login().open(self.meeting.get_url())
+        browser.find('Generate excerpt').click()
+
+        browser.find('form.buttons.cancel').click()
+        self.assertEqual(self.meeting.get_url(), browser.url)
 
     @browsing
     def test_validator_excerpt_requires_at_least_one_field(self, browser):

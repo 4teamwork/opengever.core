@@ -7,6 +7,7 @@ from ftw.builder import create
 from ftw.builder import session
 from opengever.base.model import create_session
 from opengever.testing import builders  # keep!
+from plone import api
 from plone.portlets.constants import CONTEXT_CATEGORY
 from plone.portlets.interfaces import ILocalPortletAssignmentManager
 from plone.portlets.interfaces import IPortletManager
@@ -65,6 +66,8 @@ class MeetingExampleContentCreator(object):
             'ordnungssystem/ressourcen-und-support/finanzen/planung/finanzplanung/dossier-6')
         self.dossier_equipment = self.site.restrictedTraverse(
             'ordnungssystem/ressourcen-und-support/finanzen/planung/investitionsplanung/dossier-7')
+        self.repository_folder_meeting = self.site.restrictedTraverse(
+            'ordnungssystem/fuehrung/gemeindeversammlung-gemeindeparlament-legislative/versammlungen-sitzungen')
 
         self.document_baumann_1 = self.dossier_baumann['document-2']
         self.document_baumann_2 = self.dossier_baumann['document-3']
@@ -106,25 +109,26 @@ class MeetingExampleContentCreator(object):
                            date_to=date.today() + timedelta(days=512)))
 
     def create_meetings(self):
-        self.meeting = create(Builder('meeting').having(
-            committee=self.committee_assembly_model,
-            location=u'Bern',
-            start=datetime.combine(date.today() + timedelta(days=1), time(10, 0)),
-            end=datetime.combine(date.today() + timedelta(days=1), time(12, 0))
-            )
-        )
+        self.dossier, self.meeting = self.create_meeting(delta=1)
 
         # create future meetings
         for delta in [30, 60, 90, 120]:
-            create(Builder('meeting').having(
-                committee=self.committee_assembly_model,
-                location=u'Bern',
-                start=datetime.combine(date.today() + timedelta(days=delta),
-                                       time(10, 0)),
-                end=datetime.combine(date.today() + timedelta(days=delta),
-                                     time(12, 0))
-                )
-            )
+            self.create_meeting(delta=delta)
+
+    def create_meeting(self, delta):
+        start = datetime.combine(date.today() + timedelta(days=delta), time(10, 0))
+        end = datetime.combine(date.today() + timedelta(days=delta), time(12, 0))
+        dossier = create(Builder('meeting_dossier')
+                         .having(title=u'Meeting {}'.format(
+                             api.portal.get_localized_time(start)),)
+                         .within(self.repository_folder_meeting))
+        meeting = create(Builder('meeting')
+                         .having(committee=self.committee_assembly_model,
+                                 location=u'Bern',
+                                 start=start,
+                                 end=end,)
+                         .link_with(dossier))
+        return dossier, meeting
 
     def create_proposals(self):
         proposal1 = create(

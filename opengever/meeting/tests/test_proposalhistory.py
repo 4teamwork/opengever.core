@@ -15,13 +15,18 @@ class TestProposalHistory(FunctionalTestCase):
     def setUp(self):
         super(TestProposalHistory, self).setUp()
         self.admin_unit.public_url = 'http://nohost/plone'
+        self.repo, self.repo_folder = create(Builder('repository_tree'))
+        self.dossier = create(Builder('dossier').within(self.repo_folder))
+        self.meeting_dossier = create(
+            Builder('meeting_dossier').within(self.repo_folder))
 
         container = create(Builder('committee_container'))
         self.committee = create(Builder('committee').within(container))
         self.meeting = create(Builder('meeting')
                               .having(committee=self.committee.load_model(),
                                       start=datetime(2013, 1, 1),
-                                      location='There',))
+                                      location='There',)
+                              .link_with(self.meeting_dossier))
 
         self.repo, self.repo_folder = create(Builder('repository_tree'))
         self.dossier = create(Builder('dossier').within(self.repo_folder))

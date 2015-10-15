@@ -22,6 +22,10 @@ class TestMeetingView(FunctionalTestCase):
         self.dossier = create(Builder('dossier')
                               .within(self.repository_root))
 
+        self.meeting_dossier = create(Builder('meeting_dossier')
+                                      .titled(u'Meeting Dossier')
+                                      .within(self.repository_root))
+
         self.attachement = create(Builder('document')
                                   .attach_file_containing(u"attachement",
                                                           u"attachement.docx")
@@ -84,23 +88,34 @@ class TestMeetingView(FunctionalTestCase):
         # restore session by refreshing instance
         self.generated_excerpt = GeneratedExcerpt.get(self.generated_excerpt.document_id)
 
-        self.meeting = create(Builder('meeting')
-                              .having(committee=self.committee.load_model(),
-                                      start=datetime(2013, 1, 1, 8, 30),
-                                      end=datetime(2013, 1, 1, 10, 30),
-                                      location='There',
-                                      presidency=self.hugo,
-                                      participants = [self.peter,
-                                                      self.hans,
-                                                      self.roland],
-                                      secretary=self.sile,
-                                      protocol_document=self.generated_protocol,
-                                      excerpt_documents=[self.generated_excerpt],)
-                              .scheduled_proposals([self.proposal_a, self.proposal_b]))
+        self.meeting = create(
+            Builder('meeting')
+            .having(committee=self.committee.load_model(),
+                    start=datetime(2013, 1, 1, 8, 30),
+                    end=datetime(2013, 1, 1, 10, 30),
+                    location='There',
+                    presidency=self.hugo,
+                    participants=[self.peter,
+                                  self.hans,
+                                  self.roland],
+                    secretary=self.sile,
+                    protocol_document=self.generated_protocol,
+                    excerpt_documents=[self.generated_excerpt],)
+            .scheduled_proposals([self.proposal_a, self.proposal_b])
+            .link_with(self.meeting_dossier))
 
         # set correct public url, used for generated meeting urls
         get_current_admin_unit().public_url = self.portal.absolute_url()
         transaction.commit()
+
+    @browsing
+    def test_meeting_dossier_is_linked_from_meeting_view(self, browser):
+        browser.login().open(self.meeting.get_url())
+
+        link_node = browser.css('fieldset.dossier a').first
+        self.assertEqual('Meeting Dossier', link_node.text)
+        self.assertEqual(self.meeting_dossier.absolute_url(),
+                         link_node.get('href'))
 
     @browsing
     def test_accessing_the_meeting_directly_shows_meeting_view(self, browser):

@@ -6,7 +6,7 @@
   <browser:page
       for="opengever.meeting.committee.ICommittee"
       name="add-meeting"
-      class=".meeting.AddMeeting"
+      class=".meeting.AddMeetingWizardStepView"
       permission="zope2.View"
     />
 

@@ -1,6 +1,8 @@
 from five import grok
 from ftw.table.interfaces import ITableSource
 from ftw.table.interfaces import ITableSourceConfig
+from opengever.base.browser.helper import get_css_class
+from opengever.base.utils import escape_html
 from opengever.meeting import _
 from opengever.meeting.model import Meeting
 from opengever.tabbedview.browser.base import BaseListingTab
@@ -11,6 +13,17 @@ from zope.interface import Interface
 
 class IMeetingTableSourceConfig(ITableSourceConfig):
     """Marker interface for meeting table source configs."""
+
+
+def dossier_link(item, value):
+    dossier = item.get_dossier()
+    if not dossier:
+        return
+
+    url = dossier.absolute_url()
+    link = u'<a href="{0}" title="{1}" class="{2}">{1}</a>'.format(
+        url, escape_html(dossier.title), get_css_class(dossier))
+    return link
 
 
 class MeetingListingTab(BaseListingTab):
@@ -38,6 +51,11 @@ class MeetingListingTab(BaseListingTab):
         {'column': 'end_time',
          'column_title': _(u'column_to', default=u'To'),
          'transform': lambda item, value: item.get_end_time(),
+         'sortable': False},
+
+        {'column': 'dossier',
+         'column_title': _(u'dossier', default=u'Dossier'),
+         'transform': dossier_link,
          'sortable': False},
     )
 

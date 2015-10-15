@@ -24,11 +24,11 @@ class WizardDataStorage(grok.GlobalUtility):
     def _get_user_storage(self):
         userid = getSecurityManager().getUser().getId()
         data = IAnnotations(getSite())
-        if ANNOTATIONS_KEY not in data.keys():
+        if ANNOTATIONS_KEY not in data:
             data[ANNOTATIONS_KEY] = OOBTree()
 
         storage = data[ANNOTATIONS_KEY]
-        if userid not in storage.keys():
+        if userid not in storage:
             storage.insert(userid, PersistentDict())
 
         return storage.get(userid)
@@ -41,28 +41,46 @@ class WizardDataStorage(grok.GlobalUtility):
             if data.get('__created') < threshold:
                 del user_storage[key]
 
-    def get_data(self, key):
+    def _get_data(self, key):
         storage = self._get_user_storage()
         self._cleanup_user_storage(storage)
 
-        if key not in storage.keys():
+        if key not in storage:
             storage[key] = PersistentDict()
             storage[key]['__created'] = datetime.now()
 
         return storage[key]
 
+    def get_data(self, key):
+        """Return a dict copy of our internal PersistentDict.
+
+        The copy is created to:
+        - avoid exposing the internal timestamp (could be set as attribute of
+          objects created from the data-dict)
+        - avoid passing a reference to our internal data to avoid accidental
+          modifications
+
+        """
+        data = dict(self._get_data(key))
+        del data['__created']
+        return data
+
+    def drop_data(self, key):
+        storage = self._get_user_storage()
+        if key in storage:
+            del storage[key]
+
     def update(self, key, data):
-        self.get_data(key).update(data)
+        self._get_data(key).update(data)
 
     def get(self, key, datakey, default=None):
-        return self.get_data(key).get(datakey, default)
+        return self._get_data(key).get(datakey, default)
 
     def set(self, key, datakey, value):
-        self.get_data(key)[datakey] = value
+        self._get_data(key)[datakey] = value
 
     def push_to_remote_client(self, key, admin_unit_id):
-        data = dict(self.get_data(key))
-        del data['__created']
+        data = self.get_data(key)
 
         req_data = {'data-set': json.dumps(data),
                     'key': key}

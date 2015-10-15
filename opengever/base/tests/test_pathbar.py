@@ -11,13 +11,15 @@ class TestPathBar(FunctionalTestCase):
         super(TestPathBar, self).setUp()
         self.admin_unit.public_url = 'http://nohost/plone'
 
-        root = create(Builder('repository_root').titled(u'Repository'))
-        repo = create(Builder('repository')
-                      .within(root)
-                      .titled(u'Testposition'))
+        self.root = create(Builder('repository_root').titled(u'Repository'))
+        self.repo = create(Builder('repository')
+                           .within(self.root)
+                           .titled(u'Testposition'))
         self.dossier = create(Builder('dossier')
-                              .within(repo)
+                              .within(self.repo)
                               .titled(u'Dossier 1'))
+        self.meeting_dossier = create(
+            Builder('meeting_dossier').within(self.repo))
 
     @browsing
     def test_first_part_is_org_unit_title(self, browser):
@@ -54,7 +56,8 @@ class TestPathBar(FunctionalTestCase):
         committee = create(Builder('committee').within(container))
         meeting = create(Builder('meeting')
                          .having(committee=committee.load_model(),
-                                 start=datetime(2010, 1, 1)))
+                                 start=datetime(2010, 1, 1))
+                         .link_with(self.meeting_dossier))
 
         browser.login().open(meeting.get_url())
         last_link = browser.css('#portal-breadcrumbs a')[-1]
