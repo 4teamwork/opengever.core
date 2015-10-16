@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-07-20 13:12+0000\n"
+"POT-Creation-Date: 2015-10-16 09:00+0000\n"
 "PO-Revision-Date: 2014-09-04 01:03+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -274,6 +274,16 @@ msgstr "Titel"
 #: opengever/repository/classification.py
 msgid "limited-public"
 msgstr "Eingeschränkt öffentlich"
+
+#. Default: "Error"
+#: ./opengever/base/response.py:41
+msgid "message_title_error"
+msgstr "Fehler"
+
+#. Default: "Information"
+#: ./opengever/base/response.py:27
+msgid "message_title_info"
+msgstr "Information"
 
 #. Default: "Can't paste items, the clipboard is emtpy"
 #: ./opengever/base/browser/paste.py:29

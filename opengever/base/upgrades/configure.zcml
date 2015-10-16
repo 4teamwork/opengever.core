@@ -312,5 +312,14 @@
         profile="opengever.base:default"
         />
 
+    <!-- 4502 -> 4503 -->
+    <upgrade-step:importProfile
+        title="Regsiter MessageFactory javascript"
+        profile="opengever.base:default"
+        source="4502"
+        destination="4503"
+        directory="profiles/4503"
+        />
+
 
 </configure>
