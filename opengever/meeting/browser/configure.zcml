@@ -22,7 +22,7 @@
       for="opengever.meeting.committeecontainer.ICommitteeContainer"
       name="add-member"
       class=".members.AddMember"
-      permission="zope2.View"
+      permission="opengever.meeting.AddMember"
     />
 
   <browser:page

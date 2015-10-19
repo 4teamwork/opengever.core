@@ -382,4 +382,13 @@
         profile="opengever.meeting:default"
         />
 
+    <!-- 4608 -> 4609 -->
+    <upgrade-step:importProfile
+        title="Use Add Member permission to protect add-member action."
+        source="4608"
+        destination="4609"
+        profile="opengever.meeting:default"
+        directory="profiles/4609"
+        />
+
 </configure>
