@@ -1,4 +1,3 @@
-from opengever.meeting.interfaces import IMeetingWrapper
 from opengever.ogds.base.utils import get_current_admin_unit
 from plone.app.layout.viewlets import common
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
@@ -17,9 +16,6 @@ class PathBar(common.PathBarViewlet):
             self.append_model_breadcrumbs()
 
     def append_model_breadcrumbs(self):
-        if IMeetingWrapper.providedBy(self.context):
-            model = self.context.model
-
         model = self.view.model
         model_breadcrumbs = model.get_breadcrumbs(self.view.context)
         self.breadcrumbs = self.breadcrumbs + (model_breadcrumbs,)
