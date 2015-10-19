@@ -7,9 +7,9 @@ from opengever.meeting.browser.meetings.agendaitem import DeleteAgendaItem
 from opengever.meeting.browser.meetings.agendaitem import ScheduleSubmittedProposal
 from opengever.meeting.browser.meetings.agendaitem import ScheduleText
 from opengever.meeting.browser.meetings.agendaitem import UpdateAgendaItemOrder
-from opengever.meeting.meeting_wrapper import MeetingWrapper
 from opengever.meeting.model import Meeting
 from opengever.meeting.model import Proposal
+from opengever.meeting.wrapper import MeetingWrapper
 from opengever.testing import FunctionalTestCase
 from zExceptions import Unauthorized
 import transaction
@@ -153,7 +153,8 @@ class TestAgendaItem(FunctionalTestCase):
         self.assertEqual(1, item1.sort_order)
         self.assertEqual(2, item2.sort_order)
 
-        view = UpdateAgendaItemOrder(MeetingWrapper(self.meeting), self.request)
+        view = UpdateAgendaItemOrder(
+            MeetingWrapper.wrap(self.committee, self.meeting), self.request)
         view.update_sortorder({"sortOrder": [2, 1]})
 
         self.assertEqual(2, item1.sort_order)

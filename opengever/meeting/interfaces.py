@@ -15,5 +15,9 @@ class IMeetingWrapper(Interface):
     """Marker interface for meeting object wrappers."""
 
 
+class IMemberWrapper(Interface):
+    """Marker interface for member object wrappers."""
+
+
 class IMeetingDossier(form.Schema):
     """Marker interface for MeetingDossier"""

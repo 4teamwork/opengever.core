@@ -2,17 +2,26 @@ from Acquisition import Implicit
 from OFS.Traversable import Traversable
 from opengever.locking.interfaces import ISQLLockable
 from opengever.meeting.interfaces import IMeetingWrapper
+from opengever.meeting.interfaces import IMemberWrapper
 from Products.CMFPlone.interfaces import IHideFromBreadcrumbs
 from zope.interface import implements
 import ExtensionClass
 
 
-class MeetingWrapper(ExtensionClass.Base, Implicit, Traversable):
+class BaseWrapper(ExtensionClass.Base, Implicit, Traversable):
 
-    implements(IMeetingWrapper, ISQLLockable, IHideFromBreadcrumbs)
+    implements(IHideFromBreadcrumbs)
 
-    def __init__(self, model):
+    is_wrapper = True
+
+    def __init__(self, context, model):
+        self.parent = context
         self.model = model
+
+    @classmethod
+    def wrap(cls, context, model):
+        wrapper = cls(context, model)
+        return wrapper.__of__(context)
 
     def absolute_url(self):
         return self.model.get_url(view=None)
@@ -32,3 +41,16 @@ class MeetingWrapper(ExtensionClass.Base, Implicit, Traversable):
         if stack == []:
             stack.append('view')
             REQUEST._hacked_path = 1
+
+
+class MeetingWrapper(BaseWrapper):
+
+    implements(IMeetingWrapper, ISQLLockable)
+
+
+class MemberWrapper(BaseWrapper):
+
+    implements(IMemberWrapper)
+
+    def absolute_url(self):
+        return self.model.get_url(self.parent)

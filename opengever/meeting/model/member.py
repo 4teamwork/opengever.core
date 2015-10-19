@@ -45,13 +45,14 @@ class Member(Base):
         return self.get_link(context, title=self.lastname)
 
     def get_url(self, context):
-        return "{}/member/{}".format(context.absolute_url(), self.member_id)
+        return "{}/member-{}".format(context.absolute_url(), self.member_id)
 
     def get_edit_url(self, context):
         return '/'.join((self.get_url(context), 'edit'))
 
     def get_breadcrumbs(self, context):
-        return {'absolute_url': self.get_url(context), 'Title': self.fullname}
+        return {'absolute_url': self.get_url(context),
+                'Title': self.fullname}
 
     def get_edit_values(self, fieldnames):
         values = {}

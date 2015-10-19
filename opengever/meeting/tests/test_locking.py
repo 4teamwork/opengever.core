@@ -4,7 +4,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
-from opengever.meeting.meeting_wrapper import MeetingWrapper
+from opengever.meeting.wrapper import MeetingWrapper
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 from plone.locking.interfaces import ILockable
@@ -62,7 +62,8 @@ class TestMeetingLocking(FunctionalTestCase):
         browser.login().open(self.meeting.get_url('protocol'))
 
         browser.open(self.meeting.get_url('plone_lock_info/lock_info'))
-        lock_infos = ILockable(MeetingWrapper(self.meeting)).lock_info()
+        lock_infos = ILockable(
+            MeetingWrapper.wrap(self.committee, self.meeting)).lock_info()
 
         self.assertEquals(1, len(lock_infos))
         lock = lock_infos[0]
@@ -77,22 +78,26 @@ class TestMeetingLocking(FunctionalTestCase):
     @browsing
     def test_saving_protocol_unlock_meeting(self, browser):
         browser.login().open(self.meeting.get_url('protocol'))
-        lock_infos = ILockable(MeetingWrapper(self.meeting)).lock_info()
+        lock_infos = ILockable(
+            MeetingWrapper.wrap(self.committee, self.meeting)).lock_info()
         self.assertEquals(1, len(lock_infos))
 
         browser.find('Save').click()
         self.assertEquals(
-            [], ILockable(MeetingWrapper(self.meeting)).lock_info())
+            [], ILockable(
+                MeetingWrapper.wrap(self.committee, self.meeting)).lock_info())
 
     @browsing
     def test_cancelling_protocol_unlock_meeting(self, browser):
         browser.login().open(self.meeting.get_url('protocol'))
-        lock_infos = ILockable(MeetingWrapper(self.meeting)).lock_info()
+        lock_infos = ILockable(
+            MeetingWrapper.wrap(self.committee, self.meeting)).lock_info()
         self.assertEquals(1, len(lock_infos))
 
         browser.find('Cancel').click()
         self.assertEquals(
-            [], ILockable(MeetingWrapper(self.meeting)).lock_info())
+            [], ILockable(
+                MeetingWrapper.wrap(self.committee, self.meeting)).lock_info())
 
     @browsing
     def test_protocol_raise_redirect_back_to_meeting_view_when_protocol_is_locked(self, browser):

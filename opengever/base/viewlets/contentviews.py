@@ -1,3 +1,5 @@
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from plone.app.layout.viewlets.common import ContentViewsViewlet
 
 
@@ -25,6 +27,10 @@ class ModelContentViewsViewlet(ContentViewsViewlet):
         model = self.view.model
         if not model.is_editable():
             return tuple()
+
+        context = self.view.context
+        if hasattr(context, 'is_wrapper'):
+            context = aq_parent(aq_inner(context))
 
         return ({
             'category': 'object',

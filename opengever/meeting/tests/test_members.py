@@ -58,7 +58,7 @@ class TestMemberListing(FunctionalTestCase):
         link = PyQuery(link)[0]
 
         self.assertEqual(
-            'http://nohost/plone/opengever-meeting-committeecontainer/member/1',
+            'http://nohost/plone/opengever-meeting-committeecontainer/member-1',
             link.get('href'))
         self.assertEqual('contenttype-opengever-meeting-member', link.get('class'))
         self.assertEqual('Peter Meier', link.get('title'))

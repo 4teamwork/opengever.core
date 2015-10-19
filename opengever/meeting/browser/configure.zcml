@@ -71,4 +71,18 @@
       allowed_interface="plone.app.layout.globals.interfaces.ILayoutPolicy"
       />
 
+  <browser:page
+      for="opengever.meeting.interfaces.IMemberWrapper"
+      name="view"
+      class=".members.MemberView"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.meeting.interfaces.IMemberWrapper"
+      name="edit"
+      class=".members.EditMember"
+      permission="zope2.View"
+      />
+
 </configure>

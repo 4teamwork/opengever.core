@@ -2,13 +2,13 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from opengever.meeting import _
 from opengever.meeting.container import ModelContainer
-from opengever.meeting.meeting_wrapper import MeetingWrapper
 from opengever.meeting.model import Committee as CommitteeModel
 from opengever.meeting.model import Meeting
 from opengever.meeting.model import Membership
 from opengever.meeting.service import meeting_service
 from opengever.meeting.sources import repository_folder_source
 from opengever.meeting.sources import sablon_template_source
+from opengever.meeting.wrapper import MeetingWrapper
 from plone import api
 from plone.directives import form
 from z3c.relationfield.schema import RelationChoice
@@ -74,8 +74,7 @@ class Committee(ModelContainer):
             meeting_id = int(id_.split('-')[-1])
             meeting = Meeting.query.get(meeting_id)
             if meeting:
-                wrapper = MeetingWrapper(meeting)
-                return wrapper.__of__(self)
+                return MeetingWrapper.wrap(self, meeting)
 
         if default is _marker:
             raise KeyError(id_)
