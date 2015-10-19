@@ -5,6 +5,7 @@
     xmlns:i18n="http://namespaces.zope.org/i18n"
     >
 
+    <include file="permissions.zcml" />
     <include package=".behaviors" />
     <include package=".browser" />
     <include package=".upgrades" />
@@ -23,25 +24,5 @@
         directory="profiles/default"
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
-
-    <permission
-          id="opengever.meeting.AddProposal"
-          title="opengever.meeting: Add Proposal"
-          />
-
-    <permission
-          id="opengever.meeting.AddCommittee"
-          title="opengever.meeting: Add Committee"
-          />
-
-    <permission
-          id="opengever.meeting.AddSablonTemplate"
-          title="opengever.meeting: Add Sablon Template"
-          />
-
-    <permission
-          id="opengever.meeting.AddMember"
-          title="opengever.meeting: Add Member"
-          />
 
 </configure>

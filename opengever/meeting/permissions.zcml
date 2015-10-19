@@ -1,0 +1,25 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    i18n_domain="opengever.meeting">
+
+    <permission
+          id="opengever.meeting.AddProposal"
+          title="opengever.meeting: Add Proposal"
+          />
+
+    <permission
+          id="opengever.meeting.AddCommittee"
+          title="opengever.meeting: Add Committee"
+          />
+
+    <permission
+          id="opengever.meeting.AddSablonTemplate"
+          title="opengever.meeting: Add Sablon Template"
+          />
+
+    <permission
+          id="opengever.meeting.AddMember"
+          title="opengever.meeting: Add Member"
+          />
+
+</configure>
