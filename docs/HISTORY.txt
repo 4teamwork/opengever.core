@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- No longer show wrapper objects in pathbar.
+  [deiferni]
+
 - Merge changes made on `minimal` repository configuration to the `municipality` one.
   [phgross]
 
