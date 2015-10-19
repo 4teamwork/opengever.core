@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Merge changes made on `minimal` repository configuration to the `municipality` one.
+  [phgross]
+
 - Link committees to a repository folder and link meetings to meeting-dossiers:
 
     - Add a new content-type, meeting-dossier.
