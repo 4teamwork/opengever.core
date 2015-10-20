@@ -21,8 +21,7 @@ class NotificationViewlet(common.ViewletBase):
         return is_activity_feature_enabled()
 
     def num_unread(self):
-        notifications = self.fetch_notifications()
-        return len(notifications)
+        return notification_center().count_current_users_unread_notifications()
 
     def fetch_notifications(self):
         if not self.notifications:
