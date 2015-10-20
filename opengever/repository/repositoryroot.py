@@ -1,5 +1,6 @@
 from five import grok
 from opengever.repository import _
+from plone.dexterity.content import Container
 from plone.directives import form
 from Products.CMFCore.utils import getToolByName
 from zope import schema
@@ -29,6 +30,11 @@ class IRepositoryRoot(form.Schema):
         description=_(u'help_version', default=''),
         required=False,
         )
+
+
+class RepositoryRoot(Container):
+    """A Repositoryroot.
+    """
 
 
 def zero_fill(matchobj):

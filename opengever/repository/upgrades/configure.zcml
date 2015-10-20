@@ -86,4 +86,23 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+  <!-- 4300 -> 4600 -->
+  <genericsetup:upgradeStep
+      title="Add specific class for repositoryroots."
+      description=""
+      source="4300"
+      destination="4600"
+      handler="opengever.repository.upgrades.to4600.MigrateRepositoryRootClass"
+      profile="opengever.repository:default"
+      />
+
+  <genericsetup:registerProfile
+      name="4600"
+      title="opengever.repository: upgrade profile 4600"
+      description=""
+      directory="profiles/4600"
+      for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
 </configure>
