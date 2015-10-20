@@ -1,49 +1,51 @@
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testing import freeze
 from opengever.activity.center import NotificationCenter
 from opengever.base.oguid import Oguid
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 import json
+import pytz
 
 
-class TestNotificationView(FunctionalTestCase):
+class TestMarkAsRead(FunctionalTestCase):
 
     layer = OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 
     def setUp(self):
-        super(TestNotificationView, self).setUp()
+        super(TestMarkAsRead, self).setUp()
 
         self.center = NotificationCenter()
         self.test_user = create(Builder('watcher')
                                 .having(actorid=TEST_USER_ID))
-
         self.resource_a = create(Builder('resource')
                                  .oguid('fd:123')
                                  .watchers([self.test_user]))
 
-        self.activity_1 = self.center.add_activity(
-            Oguid('fd', '123'),
-            'task-added',
-            {'en': 'Kennzahlen 2014 erfassen'},
-            {'en': 'Task added'},
-            {'en': 'Task bla added by Hugo'},
-            'hugo.boss',
-            {'en': None}).get('activity')
+        with freeze(datetime(2014, 5, 7, 12, 30, tzinfo=pytz.utc)):
+            self.activity_1 = self.center.add_activity(
+                Oguid('fd', '123'),
+                'task-added',
+                {'en': 'Kennzahlen 2014 erfassen'},
+                {'en': 'Task added'},
+                {'en': 'Task bla added by Hugo'},
+                'hugo.boss',
+                {'en': None}).get('activity')
 
+            self.activity_2 = self.center.add_activity(
+                Oguid('fd', '123'),
+                'task-transition-open-in-progress',
+                {'en': 'Kennzahlen 2014 erfassen'},
+                {'en': 'Task accepted'},
+                {'en': 'Task bla accepted'},
+                'hugo.boss',
+                {'en': None}).get('activity')
 
-        self.activity_2 = self.center.add_activity(
-            Oguid('fd', '123'),
-            'task-transition-open-in-progress',
-            {'en': 'Kennzahlen 2014 erfassen'},
-            {'en': 'Task accepted'},
-            {'en': 'Task bla accepted'},
-            'hugo.boss',
-            {'en': None}).get('activity')
-
-        self.notifications = self.center.get_users_notifications(TEST_USER_ID)
+            self.notifications = self.center.get_users_notifications(TEST_USER_ID)
 
     @browsing
     def test_mark_notification_as_read(self, browser):
@@ -77,3 +79,118 @@ class TestNotificationView(FunctionalTestCase):
     def test_read_raise_attribute_error_when_parameters_are_missing(self, browser):
         with self.assertRaises(AttributeError):
             browser.login().open(self.portal, view='notifications/read')
+
+
+class TestListNotifications(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestListNotifications, self).setUp()
+        self.center = NotificationCenter()
+        self.test_user = create(Builder('watcher')
+                                .having(user_id=TEST_USER_ID))
+        self.resource_a = create(Builder('resource')
+                                 .oguid('fd:123')
+                                 .watchers([self.test_user]))
+
+        created = datetime(2014, 5, 7, 12, 30, tzinfo=pytz.utc)
+        self.activity = create(Builder('activity')
+                               .having(resource=self.resource_a,
+                                       created=created,
+                                       actor_id='hugo.boss',
+                                       kind='task-added',
+                                       title=u'Kennzahlen 2014 erfassen',
+                                       label=u'Task added',
+                                       summary=u'Task bla added by Hugo'))
+
+    @browsing
+    def test_returns_a_json_representation_of_the_notifications(self, browser):
+        create(Builder('notification')
+               .having(activity=self.activity, userid=TEST_USER_ID, is_read=False))
+        create(Builder('notification')
+               .having(activity=self.activity, userid=TEST_USER_ID, is_read=True))
+
+        browser.login().open(self.portal, view="notifications/list")
+        self.assertEquals(
+            [{u'title': u'Kennzahlen 2014 erfassen',
+              u'read': False,
+              u'created': u'2014-05-07T12:30:00+00:00',
+              u'summary': u'Task bla added by Hugo',
+              u'link': u'http://example.com/@@resolve_notification?notification_id=1',
+              u'label': u'Task added',
+              u'id': 1},
+             {u'title': u'Kennzahlen 2014 erfassen',
+              u'read': True,
+              u'created': u'2014-05-07T12:30:00+00:00',
+              u'summary': u'Task bla added by Hugo',
+              u'link': u'http://example.com/@@resolve_notification?notification_id=2',
+              u'label': u'Task added',
+              u'id': 2}], browser.json.get('notifications'))
+
+    @browsing
+    def test_is_batched_by_then_by_default(self, browser):
+        for i in range(0, 15):
+            create(Builder('notification')
+                   .having(activity=self.activity,
+                           userid=TEST_USER_ID,
+                           is_read=False))
+
+        browser.login().open(self.portal, view="notifications/list")
+        self.assertEquals(10, len(browser.json.get('notifications')))
+
+    @browsing
+    def test_batchsize_can_be_set_by_request_parameter(self, browser):
+        for i in range(0, 15):
+            create(Builder('notification')
+                   .having(activity=self.activity,
+                           userid=TEST_USER_ID,
+                           is_read=False))
+
+        browser.login().open(self.portal, view="notifications/list",
+                             data={'batch_size': 12})
+        self.assertEquals(12, len(browser.json.get('notifications')))
+
+    @browsing
+    def test_page_can_be_set_by_request_parameter(self, browser):
+        for i in range(0, 17):
+            create(Builder('notification')
+                   .having(activity=self.activity,
+                           userid=TEST_USER_ID,
+                           is_read=False))
+
+        # first page
+        browser.login().open(self.portal, view="notifications/list",
+                             data={'batch_size': 7})
+        self.assertEquals(
+            [1, 2, 3, 4, 5, 6, 7],
+            [item['id'] for item in browser.json.get('notifications')])
+
+        # second page
+        browser.login().open(self.portal, view="notifications/list",
+                             data={'batch_size': 7, 'page': 1})
+        self.assertEquals(
+            [8, 9, 10, 11, 12, 13, 14],
+            [item['id'] for item in browser.json.get('notifications')])
+
+        # third page
+        browser.login().open(self.portal, view="notifications/list",
+                             data={'batch_size': 7, 'page': 2})
+        self.assertEquals(
+            [15, 16, 17],
+            [item['id'] for item in browser.json.get('notifications')])
+
+    @browsing
+    def test_next_page_url(self, browser):
+        for i in range(0, 17):
+            create(Builder('notification')
+                   .having(activity=self.activity,
+                           userid=TEST_USER_ID,
+                           is_read=False))
+
+        browser.login().open(self.portal, view="notifications/list",
+                             data={'batch_size': 7})
+
+        next_page = browser.json.get('next_page')
+        browser.open(next_page)
+        self.assertEquals(
+            [8, 9, 10, 11, 12, 13, 14],
+            [item['id'] for item in browser.json.get('notifications')])

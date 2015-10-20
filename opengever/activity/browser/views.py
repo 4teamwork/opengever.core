@@ -1,11 +1,13 @@
 from five import grok
 from opengever.activity import notification_center
+from opengever.activity.browser import resolve_notification_url
 from opengever.activity.browser.listing import NotificationListingTab
 from plone import api
 from Products.Five import BrowserView
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.interface import Interface
 import json
+import pytz
 
 
 class NotificationView(BrowserView):
@@ -28,6 +30,52 @@ class NotificationView(BrowserView):
 
         else:
             raise AttributeError
+
+    def list(self):
+        """Returns a json representation of the current users notifications.
+        """
+        center = notification_center()
+
+        # batching
+        batch_size = int(self.request.get('batch_size', 10))
+        page = int(self.request.get('page', 0))
+        offset = page * batch_size
+
+        notifications = center.list_notifications(
+            api.user.get_current().getId(),
+            limit=batch_size,
+            offset=offset)
+
+        data = {
+            'next_page': self.get_next_batch_url(page, batch_size),
+            'notifications': self.dump_notifications(notifications)}
+        return self.json_respone(data)
+
+    def get_next_batch_url(self, current_page, batch_size):
+        return '{}/notifications/list?page={}&batch_size={}'.format(
+            self.context.absolute_url(), current_page + 1, batch_size)
+
+    def json_respone(self, data):
+        response = self.request.response
+        response.setHeader('Content-Type', 'application/json')
+        response.setHeader('X-Theme-Disabled', 'True')
+        response.enableHTTPCompression(REQUEST=self.request)
+        return json.dumps(data)
+
+    def dump_notifications(self, notifications):
+        data = []
+        for notification in notifications:
+            data.append({
+                'title': notification.activity.title,
+                'label': notification.activity.label,
+                'summary': notification.activity.summary,
+                'created': notification.activity.created.astimezone(
+                    pytz.UTC).isoformat(),
+                'link': resolve_notification_url(notification),
+                'read': notification.is_read,
+                'id': notification.notification_id})
+
+        return data
 
 
 class MyNotifications(NotificationListingTab):
