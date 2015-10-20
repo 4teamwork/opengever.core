@@ -3,6 +3,8 @@ from OFS.Traversable import Traversable
 from opengever.locking.interfaces import ISQLLockable
 from opengever.meeting.interfaces import IMeetingWrapper
 from opengever.meeting.interfaces import IMemberWrapper
+from opengever.meeting.interfaces import IMembershipWrapper
+from opengever.meeting.model import Membership
 from Products.CMFPlone.interfaces import IHideFromBreadcrumbs
 from zope.interface import implements
 import ExtensionClass
@@ -13,6 +15,7 @@ class BaseWrapper(ExtensionClass.Base, Implicit, Traversable):
     implements(IHideFromBreadcrumbs)
 
     is_wrapper = True
+    default_view = 'view'
 
     def __init__(self, context, model):
         self.parent = context
@@ -30,7 +33,7 @@ class BaseWrapper(ExtensionClass.Base, Implicit, Traversable):
         """Implements default-view behavior for meetings.
 
         Means that if a meeting gets accessed directly without a view,
-        the pre-traversal hook make sure that the `view` gets displayed.
+        the pre-traversal hook make sure that a default view gets displayed.
         """
 
         # XXX hack around a bug(?) in BeforeTraverse.MultiHook
@@ -39,7 +42,7 @@ class BaseWrapper(ExtensionClass.Base, Implicit, Traversable):
 
         stack = REQUEST['TraversalRequestNameStack']
         if stack == []:
-            stack.append('view')
+            stack.append(self.default_view)
             REQUEST._hacked_path = 1
 
 
@@ -51,6 +54,27 @@ class MeetingWrapper(BaseWrapper):
 class MemberWrapper(BaseWrapper):
 
     implements(IMemberWrapper)
+
+    def absolute_url(self):
+        return self.model.get_url(self.parent)
+
+    def __getitem__(self, key):
+        if not key.startswith('membership'):
+            raise KeyError(key)
+
+        membership_id = int(key.split('-')[-1])
+        membership = Membership.query.get(membership_id)
+        if not membership:
+            raise KeyError(key)
+
+        return MembershipWrapper.wrap(self, membership)
+
+
+class MembershipWrapper(BaseWrapper):
+
+    implements(IMembershipWrapper)
+
+    default_view = 'edit'
 
     def absolute_url(self):
         return self.model.get_url(self.parent)

@@ -8,6 +8,7 @@ from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.model import Member
 from opengever.meeting.model import Membership
+from opengever.meeting.wrapper import MemberWrapper
 from opengever.testing import FunctionalTestCase
 
 
@@ -20,6 +21,7 @@ class TestMemberships(FunctionalTestCase):
         self.container = create(Builder('committee_container'))
         self.committee = create(Builder('committee').within(self.container))
         self.member = create(Builder('member'))
+        self.member_wrapper = MemberWrapper.wrap(self.container, self.member)
 
     @browsing
     def test_membership_can_be_added(self, browser):
@@ -71,7 +73,7 @@ class TestMemberships(FunctionalTestCase):
                                     date_from=date(2003, 01, 01),
                                     date_to=date(2007, 12, 31)))
 
-        browser.login().open(membership.get_edit_url(self.committee))
+        browser.login().open(membership.get_edit_url(self.member_wrapper))
         browser.fill({'Role': u'tempor\xe4re Leitung',
                       'Start date': 'December 31, 2003'}).submit()
 
@@ -93,7 +95,7 @@ class TestMemberships(FunctionalTestCase):
                                     date_from=date(2008, 01, 01),
                                     date_to=date(2014, 01, 01)))
 
-        browser.login().open(membership.get_edit_url(self.committee))
+        browser.login().open(membership.get_edit_url(self.member_wrapper))
         browser.fill({'Start date': 'December 31, 2005'}).submit()
 
         self.assertEqual(['There were some errors.'], error_messages())

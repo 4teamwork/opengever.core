@@ -6,6 +6,7 @@ from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.browser.members import MemberView
 from opengever.meeting.model import Member
+from opengever.meeting.wrapper import MemberWrapper
 from opengever.testing import FunctionalTestCase
 from pyquery import PyQuery
 
@@ -74,6 +75,7 @@ class TestMemberView(FunctionalTestCase):
         self.container = create(Builder('committee_container'))
         self.member = create(Builder('member')
                              .having(email='p.meier@example.com'))
+        self.member_wrapper = MemberWrapper.wrap(self.container, self.member)
         self.committee = create(Builder('committee').within(self.container))
 
         self.membership_1 = create(Builder('membership')
@@ -141,7 +143,7 @@ class TestMemberView(FunctionalTestCase):
         browser.login().open(self.member.get_url(self.container))
 
         link = browser.css('a.edit_membership').first
-        self.assertEqual(self.membership_2.get_edit_url(self.container),
+        self.assertEqual(self.membership_2.get_edit_url(self.member_wrapper),
                          link.get('href'))
 
     @browsing
@@ -149,7 +151,7 @@ class TestMemberView(FunctionalTestCase):
         browser.login().open(self.member.get_url(self.container))
 
         link = browser.css('a.remove_membership').first
-        self.assertEqual(self.membership_2.get_remove_url(self.container),
+        self.assertEqual(self.membership_2.get_remove_url(self.member_wrapper),
                          link.get('href'))
 
     @browsing

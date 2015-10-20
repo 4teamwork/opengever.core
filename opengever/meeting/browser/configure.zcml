@@ -85,4 +85,18 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="opengever.meeting.interfaces.IMembershipWrapper"
+      name="edit"
+      class=".memberships.EditMembership"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.meeting.interfaces.IMembershipWrapper"
+      name="remove"
+      class=".memberships.RemoveMembership"
+      permission="zope2.View"
+      />
+
 </configure>
