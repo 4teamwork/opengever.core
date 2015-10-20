@@ -4,6 +4,7 @@ from opengever.activity.browser import resolve_notification_url
 from plone import api
 from plone.app.layout.viewlets import common
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+import json
 import pytz
 
 
@@ -23,7 +24,12 @@ class NotificationViewlet(common.ViewletBase):
     def num_unread(self):
         return notification_center().count_current_users_unread_notifications()
 
-    def fetch_notifications(self):
+    def unread_notification_ids(self):
+        return json.dumps(
+            [notification.notification_id
+             for notification in self.fetch_unread_notifications()])
+
+    def fetch_unread_notifications(self):
         if not self.notifications:
             center = notification_center()
             self.notifications = center.get_current_users_notifications(

@@ -3,8 +3,9 @@
   <h5 class="hiddenStructure" i18n:translate="heading_notifications">Notifications</h5>
 
   <dl class="notificationsMenu actionMenu deactivated" id="portal-notifications-selector-menu"
-      tal:attributes="data-read-url view/read_url"
+      tal:attributes="data-read-url view/read_url;
                       data-list-url view/list_url;
+                      data-unread-ids view/unread_notification_ids;"
       tal:define="num_unread view/num_unread">
 
     <dt class="notificationsMenuHeader actionMenuHeader">
