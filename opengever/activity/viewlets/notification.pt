@@ -4,6 +4,7 @@
 
   <dl class="notificationsMenu actionMenu deactivated" id="portal-notifications-selector-menu"
       tal:attributes="data-read-url view/read_url"
+                      data-list-url view/list_url;
       tal:define="num_unread view/num_unread">
 
     <dt class="notificationsMenuHeader actionMenuHeader">
