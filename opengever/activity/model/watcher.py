@@ -11,8 +11,8 @@ from sqlalchemy.schema import Sequence
 
 class WatcherQuery(BaseQuery):
 
-    def get_by_userid(self, user_id):
-        return self.filter_by(user_id=user_id).first()
+    def get_by_actorid(self, actorid):
+        return self.filter_by(actorid=actorid).first()
 
 
 class Watcher(Base):
@@ -24,12 +24,12 @@ class Watcher(Base):
 
     watcher_id = Column('id', Integer, Sequence('watchers_id_seq'),
                         primary_key=True)
-    user_id = Column(String(USER_ID_LENGTH), nullable=False, unique=True)
+    actorid = Column(String(USER_ID_LENGTH), nullable=False, unique=True)
 
     resources = association_proxy('subscriptions', 'resource')
 
     def __repr__(self):
-        return '<Watcher {}>'.format(repr(self.user_id))
+        return '<Watcher {}>'.format(repr(self.actorid))
 
     def get_user_ids(self):
         """Returns a list of userids which represents the given watcher:
@@ -39,10 +39,10 @@ class Watcher(Base):
         """
         # XXX Use opengever.ogds.models.actor instead of own actor differentiation.
         ogds_service = OGDSService(self.session)
-        if self.user_id.startswith('inbox:'):
-            org_unit_id = self.user_id.split(':', 1)[1]
+        if self.actorid.startswith('inbox:'):
+            org_unit_id = self.actorid.split(':', 1)[1]
             org_unit = ogds_service.fetch_org_unit(org_unit_id)
             return [user.userid for user in org_unit.inbox_group.users]
 
         else:
-            return [self.user_id]
+            return [self.actorid]

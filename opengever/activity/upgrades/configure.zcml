@@ -137,4 +137,14 @@
         profile="opengever.activity:default"
         />
 
+    <!-- 4505 -> 4506 -->
+    <genericsetup:upgradeStep
+        title="Rename Watcher's user_id column to actorid"
+        description=""
+        source="4505"
+        destination="4506"
+        handler="opengever.activity.upgrades.to4506.RenameUserIdColumn"
+        profile="opengever.activity:default"
+        />
+
 </configure>

@@ -57,7 +57,7 @@ class TestPloneNotificationCenter(FunctionalTestCase):
         self.assertItemsEqual(
             [(u'inbox:client1', u'task_responsible'),
              (u'test_user_1_', u'task_issuer')],
-            [(sub.watcher.user_id, sub.role) for sub in subscriptions])
+            [(sub.watcher.actorid, sub.role) for sub in subscriptions])
 
 
 class TestNotifactionCenterErrorHandling(FunctionalTestCase):

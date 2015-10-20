@@ -22,8 +22,8 @@ class TestResourceHandling(ActivityTestCase):
         self.center = NotificationCenter()
 
     def test_add_watcher_to_a_resource(self):
-        hugo = create(Builder('watcher').having(user_id='hugo'))
-        peter = create(Builder('watcher').having(user_id='peter'))
+        hugo = create(Builder('watcher').having(actorid='hugo'))
+        peter = create(Builder('watcher').having(actorid='peter'))
         res = create(Builder('resource').oguid('fd:1234'))
 
         res.add_watcher('hugo', TASK_ISSUER_ROLE)
@@ -58,9 +58,9 @@ class TestWatcherHandling(ActivityTestCase):
         super(TestWatcherHandling, self).setUp()
         self.center = NotificationCenter()
 
-    def test_fetch_returns_watcher_by_means_of_user_id(self):
-        hugo = create(Builder('watcher').having(user_id='hugo'))
-        peter = create(Builder('watcher').having(user_id='peter'))
+    def test_fetch_returns_watcher_by_means_of_actor_id(self):
+        hugo = create(Builder('watcher').having(actorid='hugo'))
+        peter = create(Builder('watcher').having(actorid='peter'))
 
         self.assertEquals(hugo, self.center.fetch_watcher('hugo'))
         self.assertEquals(peter, self.center.fetch_watcher('peter'))
@@ -72,7 +72,7 @@ class TestWatcherHandling(ActivityTestCase):
         self.center.add_watcher('peter')
 
         self.assertEquals(1, len(Watcher.query.all()))
-        self.assertEquals('peter', Watcher.query.first().user_id)
+        self.assertEquals('peter', Watcher.query.first().actorid)
 
     def test_add_watcher_twice_raise_integrity_error(self):
         self.center.add_watcher('peter')
@@ -83,7 +83,7 @@ class TestWatcherHandling(ActivityTestCase):
         transaction.abort()
 
     def test_add_watcher_to_resource(self):
-        peter = create(Builder('watcher').having(user_id='peter'))
+        peter = create(Builder('watcher').having(actorid='peter'))
         resource = create(Builder('resource').oguid('fd:123'))
 
         self.center.add_watcher_to_resource(Oguid('fd', '123'), 'peter')
@@ -91,7 +91,7 @@ class TestWatcherHandling(ActivityTestCase):
         self.assertEquals([peter], list(resource.watchers))
 
     def test_adding_watcher_twice_to_resource_is_ignored(self):
-        peter = create(Builder('watcher').having(user_id='peter'))
+        peter = create(Builder('watcher').having(actorid='peter'))
         resource = create(Builder('resource').oguid('fd:123'))
 
         self.center.add_watcher_to_resource(Oguid('fd', '123'), 'peter')
@@ -100,7 +100,7 @@ class TestWatcherHandling(ActivityTestCase):
         self.assertEquals([peter], list(resource.watchers))
 
     def test_add_watcher_to_resource_creates_resource_when_not_exitst(self):
-        peter = create(Builder('watcher').having(user_id='peter'))
+        peter = create(Builder('watcher').having(actorid='peter'))
 
         self.center.add_watcher_to_resource(Oguid('fd', '123'), 'peter')
 
@@ -113,12 +113,12 @@ class TestWatcherHandling(ActivityTestCase):
         self.center.add_watcher_to_resource(Oguid('fd', '123'), 'peter')
 
         watcher = list(resource.watchers)[0]
-        self.assertEquals('peter', watcher.user_id)
+        self.assertEquals('peter', watcher.actorid)
 
     def test_get_watchers_returns_a_list_of_resource_watchers(self):
-        peter = create(Builder('watcher').having(user_id='peter'))
-        hugo = create(Builder('watcher').having(user_id='hugo'))
-        fritz = create(Builder('watcher').having(user_id='fritz'))
+        peter = create(Builder('watcher').having(actorid='peter'))
+        hugo = create(Builder('watcher').having(actorid='hugo'))
+        fritz = create(Builder('watcher').having(actorid='fritz'))
 
         resource_1 = create(Builder('resource')
                             .oguid('fd:123').watchers([hugo, fritz]))
@@ -140,7 +140,7 @@ class TestWatcherHandling(ActivityTestCase):
 
     def test_remove_watcher_from_resource_will_remove_subscription_if_no_roles_left(self):
         resource = create(Builder('resource').oguid('fd:123'))
-        watcher = create(Builder('watcher').having(user_id=u'peter'))
+        watcher = create(Builder('watcher').having(actorid=u'peter'))
         create(Builder('subscription')
                .having(resource=resource, watcher=watcher, role=WATCHER_ROLE))
 
@@ -150,14 +150,14 @@ class TestWatcherHandling(ActivityTestCase):
         self.assertEquals([], resource.watchers)
 
     def test_remove_watcher_from_resource_will_be_ignored_when_resource_not_exists(self):
-        create(Builder('watcher').having(user_id='peter'))
+        create(Builder('watcher').having(actorid='peter'))
 
         self.center.remove_watcher_from_resource(
             Oguid('fd', '123'), 'peter', WATCHER_ROLE)
 
     def test_remove_watcher_from_resource(self):
-        peter = create(Builder('watcher').having(user_id='peter'))
-        hugo = create(Builder('watcher').having(user_id='hugo'))
+        peter = create(Builder('watcher').having(actorid='peter'))
+        hugo = create(Builder('watcher').having(actorid='hugo'))
         resource = create(Builder('resource')
                           .oguid('fd:123')
                           .watchers([hugo, peter]))
@@ -190,8 +190,8 @@ class TestAddActivity(ActivityTestCase):
         self.assertEquals(123, resource.int_id)
 
     def test_creates_notifications_for_each_resource_watcher(self):
-        peter = create(Builder('watcher').having(user_id='peter'))
-        hugo = create(Builder('watcher').having(user_id='hugo'))
+        peter = create(Builder('watcher').having(actorid='peter'))
+        hugo = create(Builder('watcher').having(actorid='hugo'))
 
         resource_a = create(Builder('resource').oguid('fd:123')
                             .watchers([hugo, peter]))
@@ -216,8 +216,8 @@ class TestAddActivity(ActivityTestCase):
         self.assertFalse(notification.is_read)
 
     def test_does_not_create_an_notification_for_the_actor(self):
-        peter = create(Builder('watcher').having(user_id='peter'))
-        hugo = create(Builder('watcher').having(user_id='hugo'))
+        peter = create(Builder('watcher').having(actorid='peter'))
+        hugo = create(Builder('watcher').having(actorid='hugo'))
 
         create(Builder('resource').oguid('fd:123').watchers([hugo, peter]))
 
@@ -242,9 +242,9 @@ class TestNotificationHandling(ActivityTestCase):
         self.center = NotificationCenter()
 
         self.peter = create(Builder('ogds_user').id('peter'))
-        self.peter = create(Builder('watcher').having(user_id='peter'))
+        self.peter = create(Builder('watcher').having(actorid='peter'))
         self.hugo = create(Builder('ogds_user').id('hugo'))
-        self.hugo = create(Builder('watcher').having(user_id='hugo'))
+        self.hugo = create(Builder('watcher').having(actorid='hugo'))
 
         self.resource_a = create(Builder('resource')
                                  .oguid('fd:123')
@@ -311,7 +311,7 @@ class TestNotificationHandling(ActivityTestCase):
         self.assertEquals(2, len(peters_notifications))
 
     def test_get_users_notifications_retuns_empty_list_when_no_notifications_for_this_user_exists(self):
-        create(Builder('watcher').having(user_id='franz'))
+        create(Builder('watcher').having(actorid='franz'))
 
         self.assertEquals([],
                           self.center.get_users_notifications('franz'))
@@ -391,8 +391,8 @@ class TestDispatchers(ActivityTestCase):
         self.dispatcher = FakeMailDispatcher()
         self.center = NotificationCenter([self.dispatcher])
 
-        hugo = create(Builder('watcher').having(user_id='hugo'))
-        peter = create(Builder('watcher').having(user_id='peter'))
+        hugo = create(Builder('watcher').having(actorid='hugo'))
+        peter = create(Builder('watcher').having(actorid='peter'))
         resource = create(Builder('resource').oguid('fd:123'))
         create(Builder('subscription')
                .having(resource=resource, watcher=hugo, role=WATCHER_ROLE))

@@ -31,8 +31,8 @@ class TestNotification(ActivityTestCase):
         activity = create(Builder('activity').having(
             title=u'Bitte \xc4nderungen nachvollziehen', resource=resource))
 
-        hugo = create(Builder('watcher').having(user_id=u'h\xfcgo'))
-        peter = create(Builder('watcher').having(user_id=u'peter'))
+        hugo = create(Builder('watcher').having(actorid=u'h\xfcgo'))
+        peter = create(Builder('watcher').having(actorid=u'peter'))
 
         create(Builder('subscription').having(resource=resource,
                                               watcher=peter,
@@ -90,7 +90,7 @@ class TestSubscription(ActivityTestCase):
 
     def test_string_representation(self):
         resource = create(Builder('resource').oguid('fd:123'))
-        watcher = create(Builder('watcher').having(user_id=u'h\xfcgo.boss'))
+        watcher = create(Builder('watcher').having(actorid=u'h\xfcgo.boss'))
         subscription = create(Builder('subscription')
                               .having(resource=resource,
                                       watcher=watcher,
@@ -105,7 +105,7 @@ class TestSubscription(ActivityTestCase):
 
     def test_primary_key_definition(self):
         resource = create(Builder('resource').oguid('fd:123'))
-        watcher = create(Builder('watcher').having(user_id=u'h\xfcgo.boss'))
+        watcher = create(Builder('watcher').having(actorid=u'h\xfcgo.boss'))
         create(Builder('subscription')
                .having(resource=resource, watcher=watcher, role=WATCHER_ROLE))
 

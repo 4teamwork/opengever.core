@@ -32,7 +32,7 @@ class TestEmailNotification(FunctionalTestCase):
                        lastname='Michel',
                        email='franz.michel@example.org'))
 
-        create(Builder('watcher').having(user_id='hugo.boss'))
+        create(Builder('watcher').having(actorid='hugo.boss'))
 
         self.dossier = create(Builder('dossier').titled(u'Dossier A'))
 

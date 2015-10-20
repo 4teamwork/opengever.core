@@ -25,8 +25,8 @@ class TestNotificationViewlet(FunctionalTestCase):
     def setUp(self):
         super(TestNotificationViewlet, self).setUp()
         self.test_watcher = create(Builder('watcher')
-                                   .having(user_id=TEST_USER_ID))
-        self.hugo = create(Builder('watcher').having(user_id='hugo'))
+                                   .having(actorid=TEST_USER_ID))
+        self.hugo = create(Builder('watcher').having(actorid='hugo'))
 
         self.resource_a = create(Builder('resource')
                                  .oguid('fd:123')

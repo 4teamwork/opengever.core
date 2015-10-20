@@ -6,7 +6,7 @@ from opengever.activity.tests.base import ActivityTestCase
 class TestWatcher(ActivityTestCase):
 
     def test_string_representation(self):
-        watcher = create(Builder('watcher').having(user_id=u'h\xfcgo.boss'))
+        watcher = create(Builder('watcher').having(actorid=u'h\xfcgo.boss'))
 
         self.assertEqual("<Watcher u'h\\xfcgo.boss'>", str(watcher))
         self.assertEqual("<Watcher u'h\\xfcgo.boss'>", repr(watcher))
@@ -28,6 +28,6 @@ class TestWatcher(ActivityTestCase):
                .assign_users([hugo, peter])
                .assign_users([james], to_inbox=False))
 
-        watcher = create(Builder('watcher').having(user_id=u'inbox:fd'))
+        watcher = create(Builder('watcher').having(actorid=u'inbox:fd'))
         self.assertEqual(['hugo.boss', 'peter.michel'],
                          watcher.get_user_ids())
