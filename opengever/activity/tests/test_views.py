@@ -6,6 +6,7 @@ from opengever.base.oguid import Oguid
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
+import json
 
 
 class TestNotificationView(FunctionalTestCase):
@@ -55,7 +56,24 @@ class TestNotificationView(FunctionalTestCase):
         self.assertFalse(notifications[1].is_read)
 
     @browsing
+    def test_mark_multiple_notifications_as_read(self, browser):
+        ids = [self.notifications[0].notification_id,
+               self.notifications[1].notification_id]
+
+        browser.login().open(self.portal, view='notifications/read',
+                             data={'notification_ids': json.dumps(ids)})
+
+        notifications = self.center.get_users_notifications(TEST_USER_ID)
+        self.assertTrue(notifications[0].is_read)
+        self.assertTrue(notifications[1].is_read)
+
+    @browsing
     def test_mark_invalid_notification_as_read_raise_attribute_error(self, browser):
         with self.assertRaises(AttributeError):
             browser.login().open(self.portal, view='notifications/read',
                                  data={'notification_id': '234'})
+
+    @browsing
+    def test_read_raise_attribute_error_when_parameters_are_missing(self, browser):
+        with self.assertRaises(AttributeError):
+            browser.login().open(self.portal, view='notifications/read')

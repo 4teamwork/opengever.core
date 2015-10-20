@@ -136,6 +136,12 @@ class NotificationCenter(object):
         notification = self.get_notification(notification_id)
         notification.is_read = True
 
+    def mark_notifications_as_read(self, ids):
+        query = Notification.query.filter(
+            Notification.notification_id.in_(ids))
+        query.update(
+            {Notification.is_read: True}, synchronize_session='fetch')
+
     def get_notification(self, notification_id):
         return Notification.get(notification_id)
 
