@@ -14,7 +14,6 @@ class BaseWrapper(ExtensionClass.Base, Implicit, Traversable):
 
     implements(IHideFromBreadcrumbs)
 
-    is_wrapper = True
     default_view = 'view'
 
     def __init__(self, context, model):
