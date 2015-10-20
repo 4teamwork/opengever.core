@@ -1,5 +1,3 @@
-from Acquisition import aq_inner
-from Acquisition import aq_parent
 from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.meeting import _
 from opengever.meeting.browser.members import MemberView
@@ -12,10 +10,7 @@ from z3c.form import field
 from z3c.form.interfaces import ActionExecutionError
 from z3c.form.interfaces import INPUT_MODE
 from zope import schema
-from zope.interface import implements
 from zope.interface import Invalid
-from zope.publisher.interfaces import IPublishTraverse
-from zope.publisher.interfaces.browser import IBrowserView
 
 
 class IMembershipModel(form.Schema):
@@ -104,7 +99,6 @@ class EditMembership(ModelEditForm):
 
 
 class RemoveMembership(RemoveModelView):
-    implements(IBrowserView, IPublishTraverse)
 
     def __init__(self, context, request):
         super(RemoveMembership, self).__init__(context, request, context.model)
