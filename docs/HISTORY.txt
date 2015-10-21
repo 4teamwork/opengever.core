@@ -5,6 +5,14 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Rework notification viewlet:
+
+    - Reimplement viewlet functionality clientside
+    - Display all notifications and add endless scrolling
+    - Mark notifications as read when opening the dropdown.
+
+  [phgross]
+
 - Remove leftover related_items catalog metadata.
   [deiferni]
 
