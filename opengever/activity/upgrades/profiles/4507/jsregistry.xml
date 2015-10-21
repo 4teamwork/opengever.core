@@ -5,9 +5,7 @@
               expression="" id="++resource++opengever.activity.resources/handlebars.min.js"
               inline="False"/>
 
-  <javascript cacheable="True" compression="safe" cookable="True" enabled="on"
-              expression="" id="++resource++opengever.activity.resources/notifications.js"
-              insert-after="++resource++opengever.activity.resources/handlebars.min.js"
-              inline="False"/>
+  <javascript id="++resource++opengever.activity.resources/notifications.js"
+              insert-after="++resource++opengever.activity.resources/handlebars.min.js" />
 
 </object>
