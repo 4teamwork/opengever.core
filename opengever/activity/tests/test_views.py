@@ -214,3 +214,37 @@ class TestListNotifications(FunctionalTestCase):
                              view="notifications/list",
                              data={'batch_size': 7, 'page':2})
         self.assertEquals(None, browser.json.get('next_page'))
+
+    @browsing
+    def test_lists_notification_chronologic_newest_at_the_top(self, browser):
+        created = datetime(2015, 5, 7, 12, 30, tzinfo=pytz.utc)
+        newes = create(Builder('activity')
+                     .having(resource=self.resource_a,
+                             created=created,
+                             actor_id='hugo.boss',
+                             kind='task-added',
+                             title=u'Kennzahlen 2015 erfassen',
+                             label=u'Task added',
+                             summary=u'Task bla added by Hugo'))
+
+        create(Builder('notification')
+               .having(activity=self.activity,
+                       userid=TEST_USER_ID, is_read=False))
+        create(Builder('notification')
+               .having(activity=newes,
+                       userid=TEST_USER_ID, is_read=False))
+
+        browser.login().open(self.portal, view="notifications/list")
+        self.assertEquals(u'Kennzahlen 2015 erfassen',
+                          browser.json.get('notifications')[0].get('title'))
+
+    @browsing
+    def test_notifications_are_linked_to_resolve_notification_view(self, browser):
+        create(Builder('notification')
+               .having(activity=self.activity,
+                       userid=TEST_USER_ID, is_read=False))
+
+        browser.login().open(self.portal, view="notifications/list")
+        self.assertEquals(
+            'http://example.com/@@resolve_notification?notification_id=1',
+            browser.json.get('notifications')[0].get('link'))
