@@ -1,3 +1,5 @@
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from five import grok
 from opengever.meeting.committee import ICommittee
 from opengever.meeting.tabs.meetinglisting import MeetingListingTab
@@ -38,3 +40,6 @@ class Memberships(MembershipListingTab):
 
     enabled_actions = []
     major_actions = []
+
+    def get_member_link(self, item, value):
+        return item.member.get_link(aq_parent(aq_inner(self.context)))

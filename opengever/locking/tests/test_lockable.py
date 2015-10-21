@@ -6,7 +6,7 @@ from ftw.testing import freeze
 from opengever.base.model import create_session
 from opengever.locking.model import Lock
 from opengever.locking.model.locks import utcnow_tz_aware
-from opengever.meeting.meeting_wrapper import MeetingWrapper
+from opengever.meeting.wrapper import MeetingWrapper
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 from plone.locking.interfaces import ILockable
@@ -19,12 +19,13 @@ class TestSQLLockable(FunctionalTestCase):
     def setUp(self):
         super(TestSQLLockable, self).setUp()
         self.session = create_session()
-        self.committee = create(Builder('committee_model'))
+        self.container = create(Builder('committee_container'))
+        self.committee = create(Builder('committee').within(self.container))
         self.meeting = create(Builder('meeting').having(
-            committee=self.committee,
+            committee=self.committee.load_model(),
             start=datetime(2010, 1, 1)))
 
-        self.wrapper = MeetingWrapper(self.meeting)
+        self.wrapper = MeetingWrapper.wrap(self.committee, self.meeting)
 
     def test_lock_use_model_class_name_as_object_type(self):
         lockable = ILockable(self.wrapper)

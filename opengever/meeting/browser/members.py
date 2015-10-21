@@ -1,3 +1,5 @@
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from five import grok
 from opengever.meeting import _
 from opengever.meeting.form import ModelAddForm
@@ -10,10 +12,8 @@ from plone.directives import form
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import field
-from zExceptions import NotFound
 from zope import schema
 from zope.interface import implements
-from zope.interface import Interface
 from zope.publisher.interfaces import IPublishTraverse
 from zope.publisher.interfaces.browser import IBrowserView
 
@@ -52,41 +52,12 @@ class EditMember(ModelEditForm):
 
     fields = field.Fields(IMemberModel)
 
+    def __init__(self, context, request):
+        super(EditMember, self).__init__(context, request, context.model)
+
     def nextURL(self):
-        return MemberView.url_for(self.context, self.model)
-
-
-class MemberTraverser(grok.View):
-
-    implements(IPublishTraverse)
-    grok.context(Interface)
-    grok.name('member')
-
-    @classmethod
-    def url_for(cls, context):
-        return "{}/{}".format(
-            context.absolute_url(), cls.__view_name__)
-
-    def render(self):
-        """This view is never rendered directly.
-
-        This method ist still needed to make grok checks happy, every grokked
-        view must have an associated template or 'render' method.
-
-        """
-        pass
-
-    def publishTraverse(self, request, name):
-        try:
-            member_id = int(name)
-        except ValueError:
-            raise NotFound
-
-        member = Member.query.get(member_id)
-        if member is None:
-            raise NotFound
-
-        return MemberView(self.context, self.request, member)
+        return MemberView.url_for(aq_parent(aq_inner(self.context)),
+                                  self.model)
 
 
 class MemberView(BrowserView):
@@ -97,24 +68,13 @@ class MemberView(BrowserView):
     is_model_view = True
     is_model_edit_view = False
 
-    mapped_actions = {
-        'edit': EditMember,
-    }
-
     @classmethod
     def url_for(cls, context, member):
-        return "{}/member/{}".format(
-            context.absolute_url(), member.member_id)
+        return member.get_url(context)
 
-    def __init__(self, context, request, member):
+    def __init__(self, context, request):
         super(MemberView, self).__init__(context, request)
-        self.model = member
+        self.model = self.context.model
 
     def __call__(self):
         return self.template()
-
-    def publishTraverse(self, request, name):
-        if name in self.mapped_actions:
-            view_class = self.mapped_actions.get(name)
-            return view_class(self.context, self.request, self.model)
-        raise NotFound

@@ -78,7 +78,7 @@ class Membership(Base):
             setattr(self, key, value)
 
     def get_url(self, context):
-        return "{}/membership/{}".format(context.absolute_url(),
+        return "{}/membership-{}".format(context.absolute_url(),
                                          self.membership_id)
 
     def get_edit_url(self, context):

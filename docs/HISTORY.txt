@@ -5,6 +5,10 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Introduce wrapper objects for members and memberships to eliminate
+  traversal hacks.
+  [deiferni]
+
 - No longer show wrapper objects in pathbar.
   [deiferni]
 
