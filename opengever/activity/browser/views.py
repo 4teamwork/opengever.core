@@ -35,27 +35,34 @@ class NotificationView(BrowserView):
         """Returns a json representation of the current users notifications.
         """
         center = notification_center()
+        current_user_id = api.user.get_current().getId()
 
         # batching
         batch_size = int(self.request.get('batch_size', 10))
         page = int(self.request.get('page', 0))
         offset = page * batch_size
 
+        total = center.count_notifications(current_user_id)
         notifications = center.list_notifications(
-            api.user.get_current().getId(),
+            current_user_id,
             limit=batch_size,
             offset=offset)
 
-        data = {
-            'next_page': self.get_next_batch_url(page, batch_size),
-            'notifications': self.dump_notifications(notifications)}
-        return self.json_respone(data)
+        next_url = self.get_next_batch_url(page, batch_size, total, offset)
+        return self.json_response({
+            'next_page': next_url,
+            'notifications': self.dump_notifications(notifications)})
 
-    def get_next_batch_url(self, current_page, batch_size):
-        return '{}/notifications/list?page={}&batch_size={}'.format(
-            self.context.absolute_url(), current_page + 1, batch_size)
+    def get_next_batch_url(self, current_page, batch_size, total, offset):
+        """Checks if there is a next page, thus it returns the prepared url
+        otherwise it returns None
+        """
+        if total > offset + batch_size:
+            return '{}/notifications/list?page={}&batch_size={}'.format(
+                self.context.absolute_url(), current_page + 1, batch_size)
+        return None
 
-    def json_respone(self, data):
+    def json_response(self, data):
         response = self.request.response
         response.setHeader('Content-Type', 'application/json')
         response.setHeader('X-Theme-Disabled', 'True')

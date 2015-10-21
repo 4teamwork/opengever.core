@@ -162,6 +162,14 @@ class NotificationCenter(object):
         query = query.offset(offset).limit(limit)
         return query.options(contains_eager(Notification.activity)).all()
 
+    def count_notifications(self, userid=None, filters=[]):
+        query = Notification.query
+        if userid:
+            query = query.by_user(userid)
+
+        query = query.join(Notification.activity)
+        return query.count()
+
 
 class PloneNotificationCenter(NotificationCenter):
     """The PloneNotificationCenter is a wrapper of the NotificationCenter,

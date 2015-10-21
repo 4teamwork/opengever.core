@@ -194,3 +194,23 @@ class TestListNotifications(FunctionalTestCase):
         self.assertEquals(
             [8, 9, 10, 11, 12, 13, 14],
             [item['id'] for item in browser.json.get('notifications')])
+
+    @browsing
+    def test_next_page_url_is_empty_when_next_page_does_not_exist(self, browser):
+        for i in range(0, 17):
+            create(Builder('notification')
+                   .having(activity=self.activity,
+                           userid=TEST_USER_ID,
+                           is_read=False))
+
+        browser.login().open(self.portal,
+                             view="notifications/list",
+                             data={'batch_size': 7, 'page':1})
+        self.assertEquals(
+            u'http://nohost/plone/notifications/list?page=2&batch_size=7',
+            browser.json.get('next_page'))
+
+        browser.login().open(self.portal,
+                             view="notifications/list",
+                             data={'batch_size': 7, 'page':2})
+        self.assertEquals(None, browser.json.get('next_page'))
