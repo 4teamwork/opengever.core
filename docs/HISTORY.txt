@@ -18,6 +18,15 @@ Changelog
     - Mark notifications as read when opening the dropdown.
 
   [phgross]
+- Add permissons for meetings.
+
+    - Add 'add Member' permission.
+    - Add permissions to Committee and CommitteeContainer workflows.
+    - Protect views with correct permissions instead of just View.
+    - Add configurable group to committees and set local roles on a committee for that group.
+    - Cleanup owner from rolemap.xml.
+
+  [deiferni]
 
 - Include missing items in protocol navigation.
   [deiferni]
