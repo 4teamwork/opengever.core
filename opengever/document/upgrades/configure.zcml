@@ -204,4 +204,14 @@
         profile="opengever.document:default"
         />
 
+    <!-- 4302 -> 4600 -->
+    <genericsetup:upgradeStep
+        title="Remove related_items catalog metadata."
+        description=""
+        source="4302"
+        destination="4600"
+        handler="opengever.document.upgrades.to4600.RemoveRelatedItemsMetadata"
+        profile="opengever.document:default"
+        />
+
 </configure>
