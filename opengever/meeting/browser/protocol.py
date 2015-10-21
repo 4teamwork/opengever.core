@@ -161,7 +161,7 @@ class ChooseProtocolUpdateMethod(Form):
 class UpdateProtocol(FormWrapper, grok.View):
     grok.context(IDocumentSchema)
     grok.name('update_protocol')
-    grok.require('zope2.View')
+    grok.require('cmf.ModifyPortalContent')
 
     form = ChooseProtocolUpdateMethod
 
