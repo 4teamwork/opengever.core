@@ -87,7 +87,7 @@ class TestListNotifications(FunctionalTestCase):
         super(TestListNotifications, self).setUp()
         self.center = NotificationCenter()
         self.test_user = create(Builder('watcher')
-                                .having(user_id=TEST_USER_ID))
+                                .having(actorid=TEST_USER_ID))
         self.resource_a = create(Builder('resource')
                                  .oguid('fd:123')
                                  .watchers([self.test_user]))

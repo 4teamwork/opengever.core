@@ -17,6 +17,7 @@ class NotificationView(BrowserView):
         or multiple notification ids as json list via the `notification_ids`
         parameter as read.
         """
+
         notification_id = self.request.get('notification_id')
         notification_ids = self.request.get('notification_ids')
 
@@ -46,6 +47,7 @@ class NotificationView(BrowserView):
         notifications = center.list_notifications(
             current_user_id,
             limit=batch_size,
+            sort_reverse=True,
             offset=offset)
 
         next_url = self.get_next_batch_url(page, batch_size, total, offset)
