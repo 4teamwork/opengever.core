@@ -42,7 +42,7 @@ class TestPloneNotificationCenter(FunctionalTestCase):
         self.dossier = create(Builder('dossier').titled(u'Dossier A'))
 
     @browsing
-    def test_add_watcher_adds_every_actor_representatives(self, member):
+    def test_add_watcher_adds_subscription_for_each_actor(self, member):
         browser.login().open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': 'Test Task',
                       'Responsible': 'inbox:client1',
@@ -55,11 +55,9 @@ class TestPloneNotificationCenter(FunctionalTestCase):
         subscriptions = resource.subscriptions
 
         self.assertItemsEqual(
-            [(u'franz.michel', u'task_responsible'),
-             (u'hugo.boss', u'task_responsible'),
-             (u'test_user_1_', u'task_issuer'),
-             (u'test_user_1_', u'task_responsible')],
-            [(sub.watcher.user_id, sub.role) for sub in subscriptions])
+            [(u'inbox:client1', u'task_responsible'),
+             (u'test_user_1_', u'task_issuer')],
+            [(sub.watcher.actorid, sub.role) for sub in subscriptions])
 
 
 class TestNotifactionCenterErrorHandling(FunctionalTestCase):

@@ -5,6 +5,9 @@ Changelog
 4.5.7 (unreleased)
 ------------------
 
+- Notification center: Register actor as watcher instead of every single user.
+  [phgross]
+
 - Notifications: Store subscription role, on each resource <-> watcher relation.
   Do allow a fine-grained configuration for the dispatchers.
   [phgross]

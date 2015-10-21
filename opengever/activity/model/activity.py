@@ -55,12 +55,19 @@ class Activity(Base, Translatable):
         """
 
         notifications = []
-        for watcher in self.resource.watchers:
-            if not self.is_current_user(watcher):
+        for userid in self.get_users_for_watchers():
+            if not self.is_current_user(userid):
                 notifications.append(
-                    Notification(watcher=watcher, activity=self))
+                    Notification(userid=userid, activity=self))
 
         return notifications
+
+    def get_users_for_watchers(self):
+        users = []
+        for watcher in self.resource.watchers:
+            users += watcher.get_user_ids()
+
+        return set(users)
 
     def get_notifications_for_watcher_roles(self, roles):
         """Returns a list of activities notifications, but only those
@@ -68,8 +75,8 @@ class Activity(Base, Translatable):
         """
         return Notification.query.by_subscription_roles(roles, self).all()
 
-    def is_current_user(self, watcher):
-        return watcher.user_id == self.actor_id
+    def is_current_user(self, user_id):
+        return user_id == self.actor_id
 
 
 class ActivityTranslation(translation_base(Activity)):

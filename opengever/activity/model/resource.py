@@ -39,10 +39,10 @@ class Resource(Base):
     def __repr__(self):
         return '<Resource {}:{}>'.format(self.admin_unit_id, self.int_id)
 
-    def add_watcher(self, user_id, role):
-        watcher = Watcher.query.get_by_userid(user_id)
+    def add_watcher(self, actorid, role):
+        watcher = Watcher.query.get_by_actorid(actorid)
         if not watcher:
-            watcher = Watcher(user_id=user_id)
+            watcher = Watcher(actorid=actorid)
             create_session().add(watcher)
 
         subscription = Subscription.query.fetch(self, watcher, role)

@@ -8,7 +8,6 @@ from opengever.activity.model.subscription import TASK_RESPONSIBLE_ROLE
 from opengever.activity.model.subscription import WATCHER_ROLE
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
-from opengever.ogds.base.actor import Actor
 from plone import api
 from sqlalchemy.orm import contains_eager
 from sqlalchemy.sql.expression import asc
@@ -56,13 +55,13 @@ class NotificationCenter(object):
         resource = Resource.query.get_by_oguid(oguid)
         return resource
 
-    def add_watcher(self, user_id):
-        watcher = Watcher(user_id=user_id)
+    def add_watcher(self, actorid):
+        watcher = Watcher(actorid=actorid)
         self.session.add(watcher)
         return watcher
 
-    def fetch_watcher(self, user_id):
-        return Watcher.query.get_by_userid(user_id)
+    def fetch_watcher(self, actorid):
+        return Watcher.query.get_by_actorid(actorid)
 
     def add_watcher_to_resource(self, oguid, userid, role=WATCHER_ROLE):
         resource = self.fetch_resource(oguid)
@@ -144,10 +143,11 @@ class NotificationCenter(object):
                                      sort_reverse=False, offset=0, limit=None):
 
         order = desc if sort_reverse else asc
-        query = Notification.query.join(Notification.activity)
+        query = Notification.query
         if userid:
             query = query.by_user(userid)
 
+        query = query.join(Notification.activity)
         query = query.order_by(order(sort_on))
         query = query.offset(offset).limit(limit)
         return query.options(contains_eager(Notification.activity)).all()
@@ -167,11 +167,9 @@ class PloneNotificationCenter(NotificationCenter):
         return item
 
     def add_watcher_to_resource(self, obj, actorid, role):
-        actor = Actor.lookup(actorid)
         oguid = self._get_oguid_for(obj)
-        for representative in actor.representatives():
-            super(PloneNotificationCenter, self).add_watcher_to_resource(
-                oguid, representative.userid, role)
+        return super(PloneNotificationCenter, self).add_watcher_to_resource(
+            oguid, actorid, role)
 
     def remove_watcher_from_resource(self, obj, userid, role):
         oguid = self._get_oguid_for(obj)
@@ -241,10 +239,10 @@ class DisabledNotificationCenter(NotificationCenter):
     def fetch_resource(self, oguid):
         return None
 
-    def add_watcher(self, user_id):
+    def add_watcher(self, actorid):
         pass
 
-    def fetch_watcher(self, user_id):
+    def fetch_watcher(self, actorid):
         return None
 
     def add_watcher_to_resource(self, obj, userid, role):

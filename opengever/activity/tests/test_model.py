@@ -12,19 +12,18 @@ import transaction
 class TestNotification(ActivityTestCase):
 
     def test_string_representation(self):
-        watcher = create(Builder('watcher').having(user_id=u'h\xfcgo.boss'))
         resource = create(Builder('resource').oguid('fd:123'))
         activity = create(Builder('activity').having(
             title=u'Bitte \xc4nderungen nachvollziehen', resource=resource))
         notification = create(Builder('notification')
-                              .having(activity=activity, watcher=watcher))
+                              .having(activity=activity, userid=u'h\xfcgo.boss'))
 
         self.assertEqual(
-            "<Notification 1 for <Watcher u'h\\xfcgo.boss'> on <Resource fd:123> >",
+            "<Notification 1 for u'h\\xfcgo.boss' on <Resource fd:123> >",
             str(notification))
 
         self.assertEqual(
-            "<Notification 1 for <Watcher u'h\\xfcgo.boss'> on <Resource fd:123> >",
+            "<Notification 1 for u'h\\xfcgo.boss' on <Resource fd:123> >",
             repr(notification))
 
     def test_by_subscription_role_query(self):
@@ -32,8 +31,8 @@ class TestNotification(ActivityTestCase):
         activity = create(Builder('activity').having(
             title=u'Bitte \xc4nderungen nachvollziehen', resource=resource))
 
-        hugo = create(Builder('watcher').having(user_id=u'h\xfcgo'))
-        peter = create(Builder('watcher').having(user_id=u'peter'))
+        hugo = create(Builder('watcher').having(actorid=u'h\xfcgo'))
+        peter = create(Builder('watcher').having(actorid=u'peter'))
 
         create(Builder('subscription').having(resource=resource,
                                               watcher=peter,
@@ -46,9 +45,9 @@ class TestNotification(ActivityTestCase):
                                               role=WATCHER_ROLE))
 
         notification_1 = create(Builder('notification')
-                                .having(activity=activity, watcher=hugo))
+                                .having(activity=activity, userid=u'h\xfcgo'))
         notification_2 = create(Builder('notification')
-                                .having(activity=activity, watcher=peter))
+                                .having(activity=activity, userid=u'peter'))
 
         notifications = Notification.query.by_subscription_roles(
             [TASK_ISSUER_ROLE], activity).all()
@@ -61,15 +60,6 @@ class TestNotification(ActivityTestCase):
         notifications = Notification.query.by_subscription_roles(
             [TASK_RESPONSIBLE_ROLE], activity).all()
         self.assertEqual([], notifications)
-
-
-class TestWatcher(ActivityTestCase):
-
-    def test_string_representation(self):
-        watcher = create(Builder('watcher').having(user_id=u'h\xfcgo.boss'))
-
-        self.assertEqual("<Watcher u'h\\xfcgo.boss'>", str(watcher))
-        self.assertEqual("<Watcher u'h\\xfcgo.boss'>", repr(watcher))
 
 
 class TestResource(ActivityTestCase):
@@ -100,7 +90,7 @@ class TestSubscription(ActivityTestCase):
 
     def test_string_representation(self):
         resource = create(Builder('resource').oguid('fd:123'))
-        watcher = create(Builder('watcher').having(user_id=u'h\xfcgo.boss'))
+        watcher = create(Builder('watcher').having(actorid=u'h\xfcgo.boss'))
         subscription = create(Builder('subscription')
                               .having(resource=resource,
                                       watcher=watcher,
@@ -115,7 +105,7 @@ class TestSubscription(ActivityTestCase):
 
     def test_primary_key_definition(self):
         resource = create(Builder('resource').oguid('fd:123'))
-        watcher = create(Builder('watcher').having(user_id=u'h\xfcgo.boss'))
+        watcher = create(Builder('watcher').having(actorid=u'h\xfcgo.boss'))
         create(Builder('subscription')
                .having(resource=resource, watcher=watcher, role=WATCHER_ROLE))
 
