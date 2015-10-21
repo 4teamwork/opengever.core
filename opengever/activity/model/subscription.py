@@ -21,6 +21,10 @@ class SubscriptionQuery(BaseQuery):
     def get_by_watcher_resource(self, resource, watcher):
         return self.filter_by(resource=resource, watcher=watcher).first()
 
+    def by_resource_and_role(self, resource, roles):
+        return self.filter_by(resource=resource).filter(
+            Subscription.role.in_(roles))
+
 
 class Subscription(Base):
     query_cls = SubscriptionQuery

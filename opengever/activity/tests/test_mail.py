@@ -19,11 +19,11 @@ class TestEmailNotification(FunctionalTestCase):
         Mailing(self.portal).set_up()
 
         self.hugo = create(Builder('ogds_user')
-               .assign_to_org_units([self.org_unit])
-               .having(userid='hugo.boss',
-                       firstname='Hugo',
-                       lastname='Boss',
-                       email='hugo.boss@example.org'))
+                           .assign_to_org_units([self.org_unit])
+                           .having(userid='hugo.boss',
+                                   firstname='Hugo',
+                                   lastname='Boss',
+                                   email='hugo.boss@example.org'))
 
         self.franz = create(Builder('ogds_user')
                .assign_to_org_units([self.org_unit])
@@ -32,7 +32,7 @@ class TestEmailNotification(FunctionalTestCase):
                        lastname='Michel',
                        email='franz.michel@example.org'))
 
-        create(Builder('watcher').having(user_id='hugo.boss'))
+        create(Builder('watcher').having(actorid='hugo.boss'))
 
         self.dossier = create(Builder('dossier').titled(u'Dossier A'))
 

@@ -69,7 +69,7 @@ class TestTaskActivites(FunctionalTestCase):
         self.assertItemsEqual(
             [(u'hugo.boss', TASK_RESPONSIBLE_ROLE),
              (u'test_user_1_', TASK_ISSUER_ROLE)],
-            [(subscription.watcher.user_id, subscription.role)
+            [(subscription.watcher.actorid, subscription.role)
              for subscription in subscriptions])
 
     @browsing
@@ -274,7 +274,7 @@ class TestTaskReassignActivity(FunctionalTestCase):
         reassign_activity = activities[-1]
         self.assertItemsEqual(
             [u'james.meier', u'peter.meier', u'hugo.boss'],
-            [notes.watcher.user_id for notes in reassign_activity.notifications])
+            [notes.userid for notes in reassign_activity.notifications])
 
     @browsing
     def test_removes_old_responsible_from_watchers_list(self, browser):
@@ -287,7 +287,7 @@ class TestTaskReassignActivity(FunctionalTestCase):
         self.assertItemsEqual(
             [(u'hugo.boss', TASK_RESPONSIBLE_ROLE),
              (u'peter.meier', TASK_ISSUER_ROLE)],
-            [(sub.watcher.user_id, sub.role) for sub in subscriptions])
+            [(sub.watcher.actorid, sub.role) for sub in subscriptions])
 
 
 class TestSuccesssorHandling(FunctionalTestCase):
@@ -336,10 +336,10 @@ class TestSuccesssorHandling(FunctionalTestCase):
         self.assertItemsEqual(
             [(u'james.meier', u'task_issuer'),
              (u'hugo.boss', u'regular_watcher')],
-            [(subscription.watcher.user_id, subscription.role)
+            [(subscription.watcher.actorid, subscription.role)
              for subscription in predecessor_resource.subscriptions])
 
         self.assertItemsEqual(
             [(u'peter.meier', u'task_responsible')],
-            [(subscription.watcher.user_id, subscription.role)
+            [(subscription.watcher.actorid, subscription.role)
              for subscription in successor_resource.subscriptions])

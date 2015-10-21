@@ -33,7 +33,7 @@ class ResourceBuilder(SqlObjectBuilder):
 
     def after_create(self, obj):
         for watcher in self._watchers:
-            obj.add_watcher(watcher.user_id, WATCHER_ROLE)
+            obj.add_watcher(watcher.actorid, WATCHER_ROLE)
         return obj
 
 
@@ -74,6 +74,10 @@ class NotificationBuilder(SqlObjectBuilder):
 
     mapped_class = Notification
     id_argument_name = 'notification_id'
+
+    def watcher(self, watcher):
+        self.arguments['userid'] = watcher.actorid
+        return self
 
     def as_read(self):
         self.arguments['is_read'] = True

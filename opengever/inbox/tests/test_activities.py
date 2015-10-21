@@ -63,13 +63,10 @@ class TestForwardingActivites(FunctionalTestCase):
                                             dossier, "Ok!")
 
         resource = notification_center().fetch_resource(task)
-        # The responsible of the task is the `inbox:client1`,
-        # but the PloneNotificationCenter adds every actor representative.
         self.assertItemsEqual(
             [(u'hugo.boss', u'task_responsible'),
-             (u'peter.mueller', u'task_issuer'),
-             (u'test_user_1_', u'task_issuer')],
-            [(subscription.watcher.user_id, subscription.role)
+             (u'inbox:client1', u'task_issuer')],
+            [(subscription.watcher.actorid, subscription.role)
              for subscription in resource.subscriptions])
 
     @browsing
@@ -91,14 +88,13 @@ class TestForwardingActivites(FunctionalTestCase):
 
         self.assertItemsEqual(
             [(u'hugo.boss', u'task_issuer')],
-            [(subscription.watcher.user_id, subscription.role)
+            [(subscription.watcher.actorid, subscription.role)
              for subscription in forwarding_resource.subscriptions])
 
         self.assertItemsEqual(
             [(u'test_user_1_', u'task_responsible'),
-             (u'test_user_1_', u'task_issuer'),
-             (u'peter.mueller', u'task_issuer')],
-            [(subscription.watcher.user_id, subscription.role)
+             (u'inbox:client1', u'task_issuer')],
+            [(subscription.watcher.actorid, subscription.role)
              for subscription in successor_resource.subscriptions])
 
     @browsing
@@ -120,10 +116,10 @@ class TestForwardingActivites(FunctionalTestCase):
         task_resource = self.center.fetch_resource(task)
         self.assertItemsEqual(
             ['hugo.boss'],
-            [watcher.user_id for watcher in forwarding_resource.watchers])
+            [watcher.actorid for watcher in forwarding_resource.watchers])
         self.assertItemsEqual(
             [TEST_USER_ID],
-            [watcher.user_id for watcher in task_resource.watchers])
+            [watcher.actorid for watcher in task_resource.watchers])
 
 
 class TestForwardingReassignActivity(FunctionalTestCase):
@@ -189,7 +185,7 @@ class TestForwardingReassignActivity(FunctionalTestCase):
         reassign_activity = activities[-1]
         self.assertItemsEqual(
             [u'jon.meier', u'peter.mueller', u'hugo.boss'],
-            [notes.watcher.user_id for notes in reassign_activity.notifications])
+            [notes.userid for notes in reassign_activity.notifications])
 
     @browsing
     def test_removes_old_responsible_from_watchers_list(self, browser):
@@ -199,4 +195,4 @@ class TestForwardingReassignActivity(FunctionalTestCase):
         resource = notification_center().fetch_resource(forwarding)
         self.assertItemsEqual(
             ['peter.mueller', u'hugo.boss'],
-            [watcher.user_id for watcher in resource.watchers])
+            [watcher.actorid for watcher in resource.watchers])

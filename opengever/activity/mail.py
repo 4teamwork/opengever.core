@@ -48,8 +48,8 @@ class NotificationDispatcher(object):
             return []
 
         not_dispatched = []
-        notifications = activity.get_notifications_for_watcher_roles(
-            self.get_roles_to_dispatch(activity.kind))
+        roles = self.get_roles_to_dispatch(activity.kind)
+        notifications = activity.get_notifications_for_watcher_roles(roles)
 
         for notification in notifications:
             try:
@@ -99,7 +99,7 @@ class PloneNotificationMailer(NotificationDispatcher):
         actor = ogds_service().fetch_user(notification.activity.actor_id)
         msg['From'] = make_addr_header(actor.fullname(), actor.email, 'utf-8')
 
-        recipient = ogds_service().fetch_user(notification.watcher.user_id)
+        recipient = ogds_service().fetch_user(notification.userid)
         msg['To'] = recipient.email
         msg['Subject'] = self.get_subject(notification)
 
