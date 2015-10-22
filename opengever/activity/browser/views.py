@@ -18,19 +18,12 @@ class NotificationView(BrowserView):
         parameter as read.
         """
 
-        notification_id = self.request.get('notification_id')
         notification_ids = self.request.get('notification_ids')
+        if not notification_ids:
+            raise Exception('Missing parameter `notification_ids`')
 
-        if notification_id:
-            return notification_center().mark_notification_as_read(
-                int(notification_id))
-
-        elif notification_ids:
-            return notification_center().mark_notifications_as_read(
-                json.loads(notification_ids))
-
-        else:
-            raise AttributeError
+        return notification_center().mark_notifications_as_read(
+            json.loads(notification_ids))
 
     def list(self):
         """Returns a json representation of the current users notifications.

@@ -48,10 +48,10 @@ class TestMarkAsRead(FunctionalTestCase):
             self.notifications = self.center.get_users_notifications(TEST_USER_ID)
 
     @browsing
-    def test_mark_notification_as_read(self, browser):
+    def test_mark_single_notification_as_read(self, browser):
         notification_id = self.notifications[0].notification_id
         browser.login().open(self.portal, view='notifications/read',
-                             data={'notification_id': notification_id})
+                             data={'notification_ids': json.dumps([notification_id])})
 
         notifications = self.center.get_users_notifications(TEST_USER_ID)
         self.assertTrue(notifications[0].is_read)
@@ -70,14 +70,19 @@ class TestMarkAsRead(FunctionalTestCase):
         self.assertTrue(notifications[1].is_read)
 
     @browsing
-    def test_mark_invalid_notification_as_read_raise_attribute_error(self, browser):
-        with self.assertRaises(AttributeError):
-            browser.login().open(self.portal, view='notifications/read',
-                                 data={'notification_id': '234'})
+    def test_mark_already_read_or_invalid_notification_as_read_is_ignored(self, browser):
+        invalid = 123
+        notification_id = self.notifications[0].notification_id
+
+        self.notifications[0].is_read = True
+
+        browser.login().open(
+            self.portal, view='notifications/read',
+            data={'notification_ids': json.dumps([invalid, notification_id])})
 
     @browsing
-    def test_read_raise_attribute_error_when_parameters_are_missing(self, browser):
-        with self.assertRaises(AttributeError):
+    def test_read_raise_exception_when_parameter_is_missing(self, browser):
+        with self.assertRaises(Exception):
             browser.login().open(self.portal, view='notifications/read')
 
 
