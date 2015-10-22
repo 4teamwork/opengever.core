@@ -51,7 +51,7 @@
       } else {
         counter.remove();
       }
-      options.outlet.on("scroll", this.trackScroll);
+      options.outlet.off("scroll").on("scroll", this.trackScroll);
     };
 
     this.trackScroll = function() {
@@ -71,13 +71,17 @@
   var initNotifications = function() {
     var template = $("#notificationTemplate").html();
     var endpoints = $("#portal-notifications dl.notificationsMenu").data();
+    var outlet = $(".notifications");
     var notifications = new Notifications({
       template: template,
-      outlet: $(".notifications"),
+      outlet: outlet,
       update: endpoints.readUrl
     });
     $(".notificationsMenuHeader > a").on("click", function() {
-      notifications.list(endpoints.listUrl);
+      if($(this).parents(".notificationsMenu").hasClass("activated")) {
+        outlet.empty();
+        notifications.list(endpoints.listUrl);
+      }
     });
   };
 
