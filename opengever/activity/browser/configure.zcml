@@ -11,7 +11,7 @@
       name="notifications"
       class=".views.NotificationView"
       permission="zope2.View"
-      allowed_attributes="read"
+      allowed_attributes="read list"
       />
 
 </configure>
