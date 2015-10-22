@@ -117,21 +117,11 @@
         profile="opengever.activity:default"
         />
 
-    <!-- 4503 -> 4504 -->
-    <genericsetup:upgradeStep
-        title="Re-register watchers for each task."
-        description=""
-        source="4503"
-        destination="4504"
-        handler="opengever.activity.upgrades.to4504.ReRegisterWatchers"
-        profile="opengever.activity:default"
-        />
-
-    <!-- 4504 -> 4505 -->
+    <!-- 4503 -> 4505 -->
     <genericsetup:upgradeStep
         title="Replace watcher relation on Notification table with a userid column"
         description=""
-        source="4504"
+        source="4503"
         destination="4505"
         handler="opengever.activity.upgrades.to4505.ReplaceNotificationsWatcherRelation"
         profile="opengever.activity:default"
@@ -154,6 +144,16 @@
         source="4506"
         destination="4507"
         directory="profiles/4507"
+        />
+
+    <!-- 4507 -> 4508 -->
+    <genericsetup:upgradeStep
+        title="Re-register watchers for each task."
+        description=""
+        source="4507"
+        destination="4508"
+        handler="opengever.activity.upgrades.to4508.ReRegisterWatchers"
+        profile="opengever.activity:default"
         />
 
 </configure>
