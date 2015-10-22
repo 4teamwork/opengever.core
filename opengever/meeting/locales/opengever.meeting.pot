@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-10-16 08:59+0000\n"
+"POT-Creation-Date: 2015-10-22 13:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,7 +39,7 @@ msgid "Add Member"
 msgstr ""
 
 #. Default: "Add Membership"
-#: ./opengever/meeting/browser/memberships.py:52
+#: ./opengever/meeting/browser/memberships.py:45
 msgid "Add Membership"
 msgstr ""
 
@@ -60,11 +60,11 @@ msgstr ""
 msgid "Attachements"
 msgstr ""
 
-#: ./opengever/meeting/browser/memberships.py:60
+#: ./opengever/meeting/browser/memberships.py:53
 msgid "Can't add membership, it overlaps an existing membership from ${date_from} to ${date_to}"
 msgstr ""
 
-#: ./opengever/meeting/browser/memberships.py:93
+#: ./opengever/meeting/browser/memberships.py:89
 msgid "Can't change membership, it overlaps an existing membership from ${date_from} to ${date_to}"
 msgstr ""
 
@@ -87,18 +87,6 @@ msgstr ""
 msgid "Committee Container"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:60
-msgid "Considerations"
-msgstr ""
-
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:81
-msgid "Decision"
-msgstr ""
-
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:71
-msgid "Discussion"
-msgstr ""
-
 #: ./opengever/meeting/command.py:274
 msgid "Document ${title} has already been submitted in that version"
 msgstr ""
@@ -116,7 +104,7 @@ msgid "Excerpt for meeting ${title} has been updated successfully"
 msgstr ""
 
 #: ./opengever/meeting/committee.py:30
-#: ./opengever/meeting/committeecontainer.py:19
+#: ./opengever/meeting/committeecontainer.py:21
 msgid "Excerpt template"
 msgstr ""
 
@@ -180,11 +168,7 @@ msgstr ""
 msgid "Include publish in"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:40
-msgid "Initial position"
-msgstr ""
-
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:30
+#: ./opengever/meeting/browser/meetings/templates/protocol.pt:151
 msgid "Legal basis"
 msgstr ""
 
@@ -232,10 +216,6 @@ msgstr ""
 msgid "Proposal"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:50
-msgid "Proposed action"
-msgstr ""
-
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:63
 #: ./opengever/meeting/model/meeting.py:147
 msgid "Protocol"
@@ -254,7 +234,7 @@ msgid "Protocol for meeting ${title} has been updated successfully"
 msgstr ""
 
 #: ./opengever/meeting/committee.py:24
-#: ./opengever/meeting/committeecontainer.py:13
+#: ./opengever/meeting/committeecontainer.py:15
 msgid "Protocol template"
 msgstr ""
 
@@ -495,12 +475,13 @@ msgid "label_committee"
 msgstr ""
 
 #. Default: "Considerations"
+#: ./opengever/meeting/browser/meetings/templates/protocol.pt:61
 #: ./opengever/meeting/proposal.py:107
 msgid "label_considerations"
 msgstr ""
 
 #. Default: "Copy for attention"
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:111
+#: ./opengever/meeting/browser/meetings/templates/protocol.pt:112
 #: ./opengever/meeting/proposal.py:74
 msgid "label_copy_for_attention"
 msgstr ""
@@ -511,26 +492,32 @@ msgid "label_current_members"
 msgstr ""
 
 #. Default: "Start date"
-#: ./opengever/meeting/browser/memberships.py:28
+#: ./opengever/meeting/browser/memberships.py:21
 #: ./opengever/meeting/browser/templates/member.pt:50
 msgid "label_date_from"
 msgstr ""
 
 #. Default: "End date"
-#: ./opengever/meeting/browser/memberships.py:33
+#: ./opengever/meeting/browser/memberships.py:26
 #: ./opengever/meeting/browser/templates/member.pt:51
 msgid "label_date_to"
 msgstr ""
 
 #. Default: "Decision"
+#: ./opengever/meeting/browser/meetings/templates/protocol.pt:82
 #: ./opengever/meeting/proposal.py:185
 msgid "label_decision"
 msgstr ""
 
 #. Default: "Disclose to"
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:101
+#: ./opengever/meeting/browser/meetings/templates/protocol.pt:102
 #: ./opengever/meeting/proposal.py:69
 msgid "label_disclose_to"
+msgstr ""
+
+#. Default: "Discussion"
+#: ./opengever/meeting/browser/meetings/templates/protocol.pt:72
+msgid "label_discussion"
 msgstr ""
 
 #. Default: "Documents"
@@ -546,7 +533,7 @@ msgid "label_edit"
 msgstr ""
 
 #. Default: "Edit Membership"
-#: ./opengever/meeting/browser/memberships.py:80
+#: ./opengever/meeting/browser/memberships.py:73
 msgid "label_edit_membership"
 msgstr ""
 
@@ -573,6 +560,7 @@ msgid "label_firstname"
 msgstr ""
 
 #. Default: "Initial position"
+#: ./opengever/meeting/browser/meetings/templates/protocol.pt:41
 #: ./opengever/meeting/proposal.py:54
 msgid "label_initial_position"
 msgstr ""
@@ -589,6 +577,7 @@ msgid "label_lastname"
 msgstr ""
 
 #. Default: "Legal basis"
+#: ./opengever/meeting/browser/meetings/templates/protocol.pt:31
 #: ./opengever/meeting/proposal.py:49
 msgid "label_legal_basis"
 msgstr ""
@@ -609,7 +598,7 @@ msgid "label_main_attributes"
 msgstr ""
 
 #. Default: "Member"
-#: ./opengever/meeting/browser/memberships.py:37
+#: ./opengever/meeting/browser/memberships.py:30
 msgid "label_member"
 msgstr ""
 
@@ -638,12 +627,13 @@ msgid "label_proposal"
 msgstr ""
 
 #. Default: "Proposed action"
+#: ./opengever/meeting/browser/meetings/templates/protocol.pt:51
 #: ./opengever/meeting/proposal.py:59
 msgid "label_proposed_action"
 msgstr ""
 
 #. Default: "Publish in"
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:91
+#: ./opengever/meeting/browser/meetings/templates/protocol.pt:92
 #: ./opengever/meeting/proposal.py:64
 msgid "label_publish_in"
 msgstr ""
@@ -654,7 +644,7 @@ msgid "label_remove"
 msgstr ""
 
 #. Default: "Role"
-#: ./opengever/meeting/browser/memberships.py:42
+#: ./opengever/meeting/browser/memberships.py:35
 #: ./opengever/meeting/browser/templates/member.pt:52
 msgid "label_role"
 msgstr ""
@@ -727,7 +717,7 @@ msgid "msg_meeting_successfully_closed"
 msgstr ""
 
 #. Default: "The membership was deleted successfully"
-#: ./opengever/meeting/browser/memberships.py:109
+#: ./opengever/meeting/browser/memberships.py:108
 msgid "msg_membership_deleted"
 msgstr ""
 
