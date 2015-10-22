@@ -33,8 +33,8 @@ class NotificationView(BrowserView):
 
         # batching
         batch_size = int(self.request.get('batch_size', 10))
-        page = int(self.request.get('page', 0))
-        offset = page * batch_size
+        page = int(self.request.get('page', 1))
+        offset = (page - 1) * batch_size
 
         total = center.count_notifications(current_user_id)
         notifications = center.list_notifications(

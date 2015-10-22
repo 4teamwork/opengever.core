@@ -132,7 +132,7 @@ class TestListNotifications(FunctionalTestCase):
               u'id': 2}], browser.json.get('notifications'))
 
     @browsing
-    def test_is_batched_by_then_by_default(self, browser):
+    def test_is_batched_in_tens_by_default(self, browser):
         for i in range(0, 15):
             create(Builder('notification')
                    .having(activity=self.activity,
@@ -171,14 +171,14 @@ class TestListNotifications(FunctionalTestCase):
 
         # second page
         browser.login().open(self.portal, view="notifications/list",
-                             data={'batch_size': 7, 'page': 1})
+                             data={'batch_size': 7, 'page': 2})
         self.assertEquals(
             [8, 9, 10, 11, 12, 13, 14],
             [item['id'] for item in browser.json.get('notifications')])
 
         # third page
         browser.login().open(self.portal, view="notifications/list",
-                             data={'batch_size': 7, 'page': 2})
+                             data={'batch_size': 7, 'page': 3})
         self.assertEquals(
             [15, 16, 17],
             [item['id'] for item in browser.json.get('notifications')])
@@ -210,27 +210,27 @@ class TestListNotifications(FunctionalTestCase):
 
         browser.login().open(self.portal,
                              view="notifications/list",
-                             data={'batch_size': 7, 'page':1})
+                             data={'batch_size': 7, 'page':2})
         self.assertEquals(
-            u'http://nohost/plone/notifications/list?page=2&batch_size=7',
+            u'http://nohost/plone/notifications/list?page=3&batch_size=7',
             browser.json.get('next_page'))
 
         browser.login().open(self.portal,
                              view="notifications/list",
-                             data={'batch_size': 7, 'page':2})
+                             data={'batch_size': 7, 'page':3})
         self.assertEquals(None, browser.json.get('next_page'))
 
     @browsing
     def test_lists_notification_chronologic_newest_at_the_top(self, browser):
         created = datetime(2015, 5, 7, 12, 30, tzinfo=pytz.utc)
         newes = create(Builder('activity')
-                     .having(resource=self.resource_a,
-                             created=created,
-                             actor_id='hugo.boss',
-                             kind='task-added',
-                             title=u'Kennzahlen 2015 erfassen',
-                             label=u'Task added',
-                             summary=u'Task bla added by Hugo'))
+                       .having(resource=self.resource_a,
+                               created=created,
+                               actor_id='hugo.boss',
+                               kind='task-added',
+                               title=u'Kennzahlen 2015 erfassen',
+                               label=u'Task added',
+                               summary=u'Task bla added by Hugo'))
 
         create(Builder('notification')
                .having(activity=self.activity,
