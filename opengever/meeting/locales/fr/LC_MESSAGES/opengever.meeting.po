@@ -4,7 +4,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
+<<<<<<< HEAD
 "POT-Creation-Date: 2015-10-22 13:11+0000\n"
+=======
+"POT-Creation-Date: 2015-10-22 13:51+0000\n"
+>>>>>>> Update translations.
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -104,7 +108,11 @@ msgstr ""
 msgid "Excerpt for meeting ${title} has been updated successfully"
 msgstr ""
 
+<<<<<<< HEAD
 #: ./opengever/meeting/committee.py:30
+=======
+#: ./opengever/meeting/committee.py:45
+>>>>>>> Update translations.
 #: ./opengever/meeting/committeecontainer.py:21
 msgid "Excerpt template"
 msgstr ""
@@ -173,7 +181,7 @@ msgstr ""
 msgid "Legal basis"
 msgstr "Base légale"
 
-#: ./opengever/meeting/committee.py:36
+#: ./opengever/meeting/committee.py:51
 msgid "Linked repository folder"
 msgstr ""
 
@@ -234,7 +242,11 @@ msgstr "Procès-verbal pour la séance ${title} a été créé avec succès"
 msgid "Protocol for meeting ${title} has been updated successfully"
 msgstr "Procès-verbal pour la séance ${title} a été actualisé avec succès."
 
+<<<<<<< HEAD
 #: ./opengever/meeting/committee.py:24
+=======
+#: ./opengever/meeting/committee.py:39
+>>>>>>> Update translations.
 #: ./opengever/meeting/committeecontainer.py:15
 msgid "Protocol template"
 msgstr ""
@@ -560,6 +572,11 @@ msgstr ""
 msgid "label_firstname"
 msgstr "Prénom"
 
+#. Default: "Group"
+#: ./opengever/meeting/committee.py:70
+msgid "label_group"
+msgstr ""
+
 #. Default: "Initial position"
 #: ./opengever/meeting/browser/meetings/templates/protocol.pt:41
 #: ./opengever/meeting/proposal.py:54
@@ -584,7 +601,7 @@ msgid "label_legal_basis"
 msgstr "Base légale"
 
 #. Default: "Contains automatically generated dossiers and documents for this committee."
-#: ./opengever/meeting/committee.py:37
+#: ./opengever/meeting/committee.py:52
 msgid "label_linked_repository_folder"
 msgstr ""
 
@@ -677,7 +694,7 @@ msgstr "Début"
 
 #. Default: "Title"
 #: ./opengever/meeting/browser/meetings/excerpt.py:31
-#: ./opengever/meeting/committee.py:49
+#: ./opengever/meeting/committee.py:64
 #: ./opengever/meeting/proposal.py:37
 msgid "label_title"
 msgstr "Titre"
