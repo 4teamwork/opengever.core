@@ -321,6 +321,17 @@ class TestNotificationHandling(ActivityTestCase):
         self.center.mark_notification_as_read(notification.notification_id)
         self.assertTrue(Notification.get(notification.notification_id).is_read)
 
+    def test_mark_notifications_as_read(self):
+        notification_1, notification_2, notification_3 = Notification.query.by_user(
+            'peter').all()
+
+        self.center.mark_notifications_as_read(
+            [notification_1.notification_id, notification_3.notification_id])
+
+        self.assertTrue(notification_1.is_read)
+        self.assertFalse(notification_2.is_read)
+        self.assertTrue(notification_3.is_read)
+
     def test_mark_an_already_read_notification_is_ignored(self):
         notification = Notification.query.by_user('peter').first()
         notification_id = notification.notification_id

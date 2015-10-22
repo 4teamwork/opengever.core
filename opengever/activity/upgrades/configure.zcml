@@ -147,4 +147,13 @@
         profile="opengever.activity:default"
         />
 
+    <!-- 4506 -> 4507 -->
+    <upgrade-step:importProfile
+        title="Reorder notification.js after handlebars registration."
+        profile="opengever.activity:default"
+        source="4506"
+        destination="4507"
+        directory="profiles/4507"
+        />
+
 </configure>

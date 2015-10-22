@@ -132,9 +132,19 @@ class NotificationCenter(object):
             Notification.activity).order_by(desc(Activity.created))
         return query.limit(limit).all()
 
+    def count_users_unread_notifications(self, userid):
+        query = Notification.query.by_user(userid)
+        return query.filter(Notification.is_read == False).count()
+
     def mark_notification_as_read(self, notification_id):
         notification = self.get_notification(notification_id)
         notification.is_read = True
+
+    def mark_notifications_as_read(self, ids):
+        query = Notification.query.filter(
+            Notification.notification_id.in_(ids))
+        query.update(
+            {Notification.is_read: True}, synchronize_session='fetch')
 
     def get_notification(self, notification_id):
         return Notification.get(notification_id)
@@ -151,6 +161,14 @@ class NotificationCenter(object):
         query = query.order_by(order(sort_on))
         query = query.offset(offset).limit(limit)
         return query.options(contains_eager(Notification.activity)).all()
+
+    def count_notifications(self, userid=None, filters=[]):
+        query = Notification.query
+        if userid:
+            query = query.by_user(userid)
+
+        query = query.join(Notification.activity)
+        return query.count()
 
 
 class PloneNotificationCenter(NotificationCenter):
@@ -220,6 +238,10 @@ class PloneNotificationCenter(NotificationCenter):
     def fetch_resource(self, obj):
         oguid = self._get_oguid_for(obj)
         return super(PloneNotificationCenter, self).fetch_resource(oguid)
+
+    def count_current_users_unread_notifications(self):
+        return super(PloneNotificationCenter, self).count_users_unread_notifications(
+            api.user.get_current().getId())
 
     def get_current_users_notifications(self, only_unread=False, limit=None):
         return super(PloneNotificationCenter, self).get_users_notifications(

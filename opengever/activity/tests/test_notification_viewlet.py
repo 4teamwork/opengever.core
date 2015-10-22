@@ -75,62 +75,8 @@ class TestNotificationViewlet(FunctionalTestCase):
             browser.css('dl.notificationsMenu').first.get('data-read-url'))
 
     @browsing
-    def test_lists_only_unread_notifications(self, browser):
-        create(Builder('notification')
-               .watcher(self.test_watcher)
-               .having(activity=self.activity_a))
-        create(Builder('notification')
-               .as_read()
-               .watcher(self.test_watcher)
-               .having(activity=self.activity_b))
-        create(Builder('notification')
-               .watcher(self.test_watcher)
-               .having(activity=self.activity_c))
-
+    def test_list_url(self, browser):
         browser.login().open()
-
         self.assertEquals(
-            ['Task resolved', 'Task accepted'],
-            browser.css('.item-content .item-summary').text)
-
-    @browsing
-    def test_lists_notification_chronologic_newest_at_the_top(self, browser):
-        create(Builder('notification')
-               .watcher(self.test_watcher)
-               .having(activity=self.activity_a))
-        create(Builder('notification')
-               .watcher(self.test_watcher)
-               .having(activity=self.activity_b))
-        create(Builder('notification')
-               .watcher(self.test_watcher)
-               .having(activity=self.activity_c))
-
-        browser.login().open()
-
-        self.assertEquals(
-            ['Task resolved', 'Task accepted', 'Task added'],
-            browser.css('.item-content .item-summary').text)
-
-    @browsing
-    def test_notifications_are_linked_to_resolve_notification_view(self, browser):
-        create(Builder('notification')
-               .watcher(self.test_watcher)
-               .having(activity=self.activity_c))
-
-        browser.login().open()
-        link = browser.css('dl.notificationsMenu .item-content a').first
-        self.assertEquals(
-            'http://example.com/@@resolve_notification?notification_id=1',
-            link.get('href'))
-
-    @browsing
-    def test_displays_message_when_no_unread_notifications(self, browser):
-        browser.login().open()
-
-        self.assertEquals(
-            ['No unread notifications', 'All Notifications'],
-            browser.css('dl.notificationsMenu li').text)
-
-        self.assertEquals(
-            'no-content',
-            browser.css('dl.notificationsMenu li').first.get('class'))
+            'http://nohost/plone/notifications/list',
+            browser.css('dl.notificationsMenu').first.get('data-list-url'))

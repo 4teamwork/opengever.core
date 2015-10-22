@@ -5,6 +5,14 @@ Changelog
 4.5.7 (unreleased)
 ------------------
 
+- Rework notification viewlet:
+
+    - Reimplement viewlet functionality clientside
+    - Display all notifications and add endless scrolling
+    - Mark notifications as read when opening the dropdown.
+
+  [phgross]
+
 - Notification center: Register actor as watcher instead of every single user.
   [phgross]
 

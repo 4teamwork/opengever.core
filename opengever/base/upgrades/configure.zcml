@@ -312,5 +312,13 @@
         profile="opengever.base:default"
         />
 
+    <!-- 4502 -> 4504 -->
+    <upgrade-step:importProfile
+        title="Register handlebars library."
+        profile="opengever.base:default"
+        source="4502"
+        destination="4504"
+        directory="profiles/4504"
+        />
 
 </configure>

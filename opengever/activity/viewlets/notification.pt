@@ -3,7 +3,8 @@
   <h5 class="hiddenStructure" i18n:translate="heading_notifications">Notifications</h5>
 
   <dl class="notificationsMenu actionMenu deactivated" id="portal-notifications-selector-menu"
-      tal:attributes="data-read-url view/read_url"
+      tal:attributes="data-read-url view/read_url;
+                      data-list-url view/list_url"
       tal:define="num_unread view/num_unread">
 
     <dt class="notificationsMenuHeader actionMenuHeader">
@@ -17,49 +18,31 @@
 
     </dt>
 
-    <dd class="actionMenuContent notificationsMenuContent">
+    <dd id="notificationsContent" class="actionMenuContent notificationsMenuContent">
       <ul class="notifications">
-        <li class="no-content" tal:condition="not: num_unread" >
-          <div class="item-content" i18n:translate="no_unread_notifications">
-            No unread notifications
-          </div>
-        </li>
-
-        <li class="notification-item" tal:repeat="notification view/get_notifications"
-            tal:attributes="data-notification-id notification/id">
-
-          <div class="buttons">
-            <a href="#" class="mark_as_read" title="Mark as read"
-               tal:condition="not: notification/read" i18n:attributes="title label_mark_as_read"></a>
-          </div>
-
-          <div class="item-content">
-            <div>
-              <div class="item-header">
-                <span class="item-type" tal:content="notification/label" />
-                <span class="item-creation">
-                  <span class="timeago relativetime"
-                        tal:attributes="title notification/created"
-                        tal:content="notification/created" />
-                </span>
-              </div>
-              <a class="item-location" href="#"
-                 tal:attributes="href notification/link"
-                 tal:content="notification/title"></a>
-              <div class="item-summary" tal:content="structure notification/summary" />
-            </div>
-          </div>
-        </li>
-
+        <script id="notificationTemplate" type="text/x-handlebars-template">
+            {{#each notifications}}
+              <li class="notification-item {{#unless read}}new{{/unless}}">
+                <div class="item-content">
+                  <div class="item-header">
+                    <span class="item-type">{{label}}</span>
+                    <span class="item-creation timeago relativetime" title="{{created}}">{{created}}</span>
+                  </div>
+                  <div class="item-footer">
+                    <a class="item-location" href="{{link}}">{{title}}</a>
+                    <div class="item-summary">{{{summary}}}</div>
+                  </div>
+                </div>
+              </li>
+            {{/each}}
+        </script>
       </ul>
-      <ul>
-        <li class="notification-item show_all">
-          <a href="#" class="all_link" tal:attributes="href view/overview_url"
-             i18n:translate="label_notifications_overview">
-            All Notifications
-          </a>
-        </li>
-      </ul>
+      <div class="notification-item show_all">
+        <a href="#" class="all_link" tal:attributes="href view/overview_url"
+           i18n:translate="label_notifications_overview">
+          All Notifications
+        </a>
+      </div>
     </dd>
   </dl>
 </div>
