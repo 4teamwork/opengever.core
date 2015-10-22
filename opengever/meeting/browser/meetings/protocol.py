@@ -45,6 +45,11 @@ class IParticipants(form.Schema):
         title=_(u"label_other_participants", default=u"Other Participants"),
         required=False)
 
+    protocol_start_page = schema.Int(
+        title=_(u"label_protocol_start_page", default=u"Protocol start-page"),
+        required=False
+        )
+
 
 class DownloadGeneratedProtocol(BrowserView):
 

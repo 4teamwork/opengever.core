@@ -109,7 +109,8 @@ class TestProtocol(FunctionalTestCase):
                       'Decision': 'Accepted',
                       'Publish in': 'There',
                       'Disclose to': 'Nobody',
-                      'Copy for attention': 'Hanspeter'}).submit()
+                      'Copy for attention': 'Hanspeter',
+                      'Protocol start-page': '10'}).submit()
 
         self.assertEquals(['Changes saved'], info_messages())
 

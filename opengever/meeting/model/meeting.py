@@ -109,6 +109,7 @@ class Meeting(Base):
         'GeneratedProtocol', uselist=False,
         backref=backref('meeting', uselist=False),
         primaryjoin="GeneratedProtocol.document_id==Meeting.protocol_document_id")
+    protocol_start_page = Column(Integer)
 
     # define relationship here using a secondary table to keep
     # GeneratedDocument as simple as possible and avoid that it actively

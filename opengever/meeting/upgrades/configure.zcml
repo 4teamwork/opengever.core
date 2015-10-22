@@ -391,4 +391,14 @@
         directory="profiles/4609"
         />
 
+    <!-- 4609 -> 4610 -->
+    <genericsetup:upgradeStep
+        title="Add protocol start-page to meeting."
+        description=""
+        source="4609"
+        destination="4610"
+        handler="opengever.meeting.upgrades.to4610.AddProtocolStartPage"
+        profile="opengever.meeting:default"
+        />
+
 </configure>
