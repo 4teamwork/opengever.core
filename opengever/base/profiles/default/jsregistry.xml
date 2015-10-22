@@ -21,4 +21,8 @@
                 enabled="True" id="++resource++opengever.base/base.js" inline="False"
                 />
 
+    <javascript cacheable="True" compression="safe" cookable="True" expression=""
+                enabled="True" id="++resource++opengever.base/MessageFactory.js" inline="False"
+                />
+
 </object>

@@ -1,13 +1,12 @@
+from opengever.base.response import JSONResponse
 from opengever.meeting import _
 from opengever.meeting.service import meeting_service
 from Products.Five.browser import BrowserView
 from zExceptions import NotFound
 from zExceptions import Unauthorized
-from zope.i18n import translate
 from zope.interface import implements
 from zope.publisher.interfaces import IPublishTraverse
 from zope.publisher.interfaces.browser import IBrowserView
-import json
 
 
 class ScheduleSubmittedProposal(BrowserView):
@@ -103,8 +102,14 @@ class UpdateAgendaItemOrder(BrowserView):
         if not self.model.is_editable():
             raise Unauthorized("Editing is not allowed")
 
-        json_data = json.loads(self.request.get('BODY'))
-        return self.update_sortorder(json_data)
+        new_order = [int(item_id) for item_id in self.request.get('sortOrder[]')]
+        self.model.reorder_agenda_items(new_order)
+
+        numbers = dict((each.agenda_item_id, each.number) for each in
+                       self.model.agenda_items)
+
+        return JSONResponse(self.request).info(_('agenda_item_order_updated',
+                                        default=u"Agenda Item order updated.")).data(numbers=numbers).dump()
 
     def update_sortorder(self, json_data):
         new_order = [int(item_id) for item_id in json_data['sortOrder']]
@@ -113,16 +118,8 @@ class UpdateAgendaItemOrder(BrowserView):
         numbers = dict((each.agenda_item_id, each.number) for each in
                        self.model.agenda_items)
 
-        self.request.response.setHeader("Content-type", "application/json")
-        return json.dumps(
-            {'messages': [{'messageClass': 'info',
-                           'messageTitle': 'Info',
-                           'message': translate(
-                               _('agenda_item_order_updated',
-                                 default=u"Agenda Item order updated."),
-                               context=self.request),
-                           }],
-             'numbers': numbers})
+        return JSONResponse(self.request).info(_('agenda_item_order_updated',
+                                        default=u"Agenda Item order updated.")).data(numbers=numbers).dump()
 
 
 class DeleteAgendaItem(BrowserView):
@@ -170,3 +167,28 @@ class DeleteAgendaItem(BrowserView):
         agenda_item.remove()
 
         return self.request.response.redirect(self.nextURL())
+
+
+class UpdateAgendaItem(BrowserView):
+
+    @classmethod
+    def url_for(cls, context, meeting):
+        return meeting.get_url(view='update_agenda_item')
+
+    def __call__(self):
+        if not self.context.model.is_editable():
+            raise Unauthorized("Editing is not allowed")
+
+        title = self.request.get('title')
+        agenda_item_id = self.request.get('agenda_item_id')
+        if not title or not agenda_item_id:
+            return JSONResponse(self.request).error(_('agenda_item_update_empty_string',
+                                                   default=u"Agenda Item title must not be empty.")).remain().dump()
+
+        agenda_item = meeting_service().fetch_agenda_item(agenda_item_id)
+        if not agenda_item:
+            raise NotFound
+
+        agenda_item.set_title(title)
+        return JSONResponse(self.request).info(_('agenda_item_updated',
+                                               default=u"Agenda Item updated.")).proceed().dump()

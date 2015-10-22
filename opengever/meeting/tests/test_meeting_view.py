@@ -112,7 +112,7 @@ class TestMeetingView(FunctionalTestCase):
     def test_meeting_dossier_is_linked_from_meeting_view(self, browser):
         browser.login().open(self.meeting.get_url())
 
-        link_node = browser.css('fieldset.dossier a').first
+        link_node = browser.css('.dossier a').first
         self.assertEqual('Meeting Dossier', link_node.text)
         self.assertEqual(self.meeting_dossier.absolute_url(),
                          link_node.get('href'))
@@ -126,56 +126,56 @@ class TestMeetingView(FunctionalTestCase):
     @browsing
     def test_participants_listing_precidency_is_existing(self, browser):
         browser.login().open(self.meeting.get_url())
-        self.assertEquals([u'h\xfcgo Boss'], browser.css("#meeting_presidency").text)
+        self.assertEquals([u'h\xfcgo Boss'], browser.css("#meeting_presidency + dd").text)
 
     @browsing
     def test_participants_listing_no_precidency_must_not_raise(self, browser):
         Meeting.query.all()[0].presidency = None
         transaction.commit()
         browser.login().open(self.meeting.get_url())
-        self.assertEquals([''], browser.css("#meeting_presidency").text)
+        self.assertEquals([], browser.css("#meeting_presidency + dd").text)
 
     @browsing
     def test_participants_listing_secretary_is_existing(self, browser):
         browser.login().open(self.meeting.get_url())
-        self.assertEquals(['Silvia Pangani'], browser.css("#meeting_secretary").text)
+        self.assertEquals(['Silvia Pangani'], browser.css("#meeting_secretary + dd").text)
 
     @browsing
     def test_participants_listing_no_secretary_must_not_raise(self, browser):
         Meeting.query.all()[0].secretary = None
         transaction.commit()
         browser.login().open(self.meeting.get_url())
-        self.assertEquals([''], browser.css("#meeting_secretary").text)
+        self.assertEquals([], browser.css("#meeting_secretary + dd").text)
 
     @browsing
     def test_participants_listing_participants_is_existing(self, browser):
         browser.login().open(self.meeting.get_url())
         self.assertEquals(['Peter Meter Hans Besen Roland Kuppler'],
-                          browser.css("#meeting_participants").text)
+                          browser.css("#meeting_participants + dd").text)
 
     @browsing
     def test_participants_listing_empty_participants_must_not_raise(self, browser):
         Meeting.query.all()[0].participants = []
         transaction.commit()
         browser.login().open(self.meeting.get_url())
-        self.assertEquals([''], browser.css("#meeting_participants").text)
+        self.assertEquals([''], browser.css("#meeting_participants + dd").text)
 
     @browsing
     def test_metadata_starttime_is_existing(self, browser):
         browser.login().open(self.meeting.get_url())
-        self.assertEquals('08:30 AM', browser.css("#meeting_time span")[0].text)
+        self.assertEquals('08:30 AM', browser.css("#meeting_time + dd span")[0].text)
 
     @browsing
     def test_metadata_endtime_is_existing(self, browser):
         browser.login().open(self.meeting.get_url())
-        self.assertEquals('10:30 AM', browser.css("#meeting_time span")[1].text)
+        self.assertEquals('10:30 AM', browser.css("#meeting_time + dd span")[1].text)
 
     @browsing
     def test_metadata_no_endtime_must_not_raise(self, browser):
         Meeting.query.all()[0].end = None
         transaction.commit()
         browser.login().open(self.meeting.get_url())
-        self.assertEquals('', browser.css("#meeting_time span")[1].text)
+        self.assertEquals('', browser.css("#meeting_time + dd span")[1].text)
 
     @browsing
     def test_metadata_state_pending_exists(self, browser):

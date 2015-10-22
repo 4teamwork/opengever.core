@@ -87,4 +87,11 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="opengever.meeting.interfaces.IMeetingWrapper"
+      name="update_agenda_item"
+      class=".agendaitem.UpdateAgendaItem"
+      permission="zope2.View"
+      />
+
 </configure>
