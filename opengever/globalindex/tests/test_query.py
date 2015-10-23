@@ -4,6 +4,7 @@ from opengever.globalindex.model.task import Task
 from opengever.testing import FunctionalTestCase
 from opengever.testing import MEMORY_DB_LAYER
 from opengever.testing import obj2brain
+from plone import api
 from unittest2 import TestCase
 
 
@@ -169,6 +170,17 @@ class TestFunctionalTaskQueries(FunctionalTestCase):
 
         self.assertItemsEqual(
             [task1.get_sql_object(), subtask.get_sql_object()],
+            Task.query.by_container(self.dossier, self.admin_unit).all())
+
+    def test_by_container_handles_similar_paths_exactly(self):
+        task1 = create(Builder('task').within(self.dossier))
+
+        dossier_11 = create(Builder('dossier').titled(u'Dossier 11'))
+        dossier_11 = api.content.rename(obj=dossier_11, new_id='dossier-11')
+        task2 = create(Builder('task').within(dossier_11))
+
+        self.assertItemsEqual(
+            [task1.get_sql_object()],
             Task.query.by_container(self.dossier, self.admin_unit).all())
 
     def test_by_container_queries_adminunit_dependent(self):
