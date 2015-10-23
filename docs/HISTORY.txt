@@ -5,6 +5,9 @@ Changelog
 4.5.7 (unreleased)
 ------------------
 
+- Notification viewlet: Fix javascript for sites with disabled activity feature.
+  [phgross]
+
 - Rework notification viewlet:
 
     - Reimplement viewlet functionality clientside
