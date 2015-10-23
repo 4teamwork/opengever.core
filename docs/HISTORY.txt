@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Fixed issue in Tasks `by_container` query, with similar dossier-ids.
+  [phgross]
+
 - Notification viewlet: Fix javascript for sites with disabled activity feature.
   [phgross]
 

@@ -64,6 +64,7 @@ class TaskQuery(BaseQuery):
     def by_container(self, container, admin_unit):
         url_tool = api.portal.get_tool(name='portal_url')
         path = '/'.join(url_tool.getRelativeContentPath(container))
+        path = '{}/'.format(path)
 
         return self.by_admin_unit(admin_unit)\
                    .filter(Task.physical_path.like(path + '%'))
