@@ -85,7 +85,10 @@
     });
   };
 
-  $(initNotifications);
-
+  $(function(){
+    if($('#portal-notifications-selector-menu').length){
+      initNotifications();
+    }
+  });
 
 }(window, jQuery, window.Handlebars));
