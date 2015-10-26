@@ -105,4 +105,23 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
+  <!-- 4600 -> 4601 -->
+  <genericsetup:upgradeStep
+      title="Add TranslatedTitle behavior to reporoot."
+      description=""
+      source="4600"
+      destination="4601"
+      handler="opengever.repository.upgrades.to4601.TranslatedTitleForRepositoryRoots"
+      profile="opengever.repository:default"
+      />
+
+  <genericsetup:registerProfile
+      name="4601"
+      title="opengever.repository: upgrade profile 4601"
+      description=""
+      directory="profiles/4601"
+      for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
 </configure>
