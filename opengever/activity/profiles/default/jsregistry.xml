@@ -2,12 +2,8 @@
 <object name="portal_javascripts" meta_type="JavaScripts Registry" autogroup="False">
 
   <javascript cacheable="True" compression="safe" cookable="True" enabled="on"
-              expression="" id="++resource++opengever.activity.resources/handlebars.min.js"
-              inline="False"/>
-
-  <javascript cacheable="True" compression="safe" cookable="True" enabled="on"
               expression="" id="++resource++opengever.activity.resources/notifications.js"
-              insert-after="++resource++opengever.activity.resources/handlebars.min.js"
+              insert-after="++resource++opengever.base/handlebars.min.js"
               inline="False"/>
 
 </object>
