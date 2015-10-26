@@ -80,3 +80,20 @@ class TestTranslatedTitle(FunctionalTestCase):
         browser.login().open(repository_root)
         browser.find('English').click()
         self.assertEquals("Ablage", browser.css('h1').first.text)
+
+    def test_catalog_metadata(self):
+        repository_root = create(Builder('repository_root')
+                                 .having(title_de=u"Ablage",
+                                         title_fr=u"syst\xe8me d'ordre"))
+
+        brain = obj2brain(repository_root)
+        self.assertEquals("Ablage", brain.title_de)
+        self.assertEquals(u"syst\xe8me d'ordre", brain.title_fr)
+
+    def test_indexer_returns_none_for_objects_without_translated_title_support(self):
+        dossier = create(Builder('dossier')
+                         .titled(u'Dossier A'))
+
+        brain = obj2brain(dossier)
+        self.assertEquals(None, brain.title_de)
+        self.assertEquals(None, brain.title_fr)
