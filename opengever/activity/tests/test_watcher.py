@@ -1,9 +1,9 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from opengever.activity.tests.base import ActivityTestCase
+from opengever.testing import FunctionalTestCase
 
 
-class TestWatcher(ActivityTestCase):
+class TestWatcher(FunctionalTestCase):
 
     def test_string_representation(self):
         watcher = create(Builder('watcher').having(actorid=u'h\xfcgo.boss'))
