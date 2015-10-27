@@ -15,14 +15,14 @@
       for="opengever.meeting.committee.ICommittee"
       name="add-membership"
       class=".memberships.AddMembership"
-      permission="zope2.View"
+      permission="cmf.ModifyPortalContent"
     />
 
   <browser:page
       for="opengever.meeting.committeecontainer.ICommitteeContainer"
       name="add-member"
       class=".members.AddMember"
-      permission="zope2.View"
+      permission="opengever.meeting.AddMember"
     />
 
   <browser:page
@@ -82,21 +82,21 @@
       for="opengever.meeting.interfaces.IMemberWrapper"
       name="edit"
       class=".members.EditMember"
-      permission="zope2.View"
+      permission="cmf.ModifyPortalContent"
       />
 
   <browser:page
       for="opengever.meeting.interfaces.IMembershipWrapper"
       name="edit"
       class=".memberships.EditMembership"
-      permission="zope2.View"
+      permission="cmf.ModifyPortalContent"
       />
 
   <browser:page
       for="opengever.meeting.interfaces.IMembershipWrapper"
       name="remove"
       class=".memberships.RemoveMembership"
-      permission="zope2.View"
+      permission="cmf.ModifyPortalContent"
       />
 
 </configure>

@@ -103,8 +103,9 @@ class FunctionalTestCase(TestCase):
         props = registry.forInterface(ITemplateDossierProperties)
         props.create_doc_properties = enabled
 
-    def grant(self, *roles):
-        setRoles(self.portal, TEST_USER_ID, list(roles))
+    def grant(self, *roles, **kwargs):
+        user_id = kwargs.get('user_id', TEST_USER_ID)
+        setRoles(self.portal, user_id, list(roles))
         transaction.commit()
 
     def login(self, user_id=TEST_USER_NAME):

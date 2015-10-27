@@ -34,6 +34,30 @@ class TestCommitteesTab(FunctionalTestCase):
             browser.css('#committees_view .committee_box h2').text)
 
     @browsing
+    def test_can_only_see_committees_for_corresponding_group(self, browser):
+        user = create(Builder('user')
+                      .with_userid('hugo.boss'))
+        create(Builder('group')
+               .with_groupid('kom_wirtschaft')
+               .with_members(user))
+        # make committee-container accessible
+        self.container.manage_setLocalRoles('kom_wirtschaft', ['Reader'])
+
+        create(Builder('committee')
+               .within(self.container)
+               .having(group_id='kom_wirtschaft')
+               .titled(u'Wirtschafts Kommission'))
+        create(Builder('committee')
+               .within(self.container)
+               .titled(u'Gew\xe4sser Kommission'))
+
+        browser.login('hugo.boss').open(self.container,
+                                        view='tabbedview_view-committees')
+        self.assertEquals(
+            [u'Wirtschafts Kommission'],
+            browser.css('#committees_view .committee_box h2').text)
+
+    @browsing
     def test_tabbedview_text_filter(self, browser):
         create(Builder('committee')
                .within(self.container)

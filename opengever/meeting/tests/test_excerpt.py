@@ -70,6 +70,7 @@ class TestExcerpt(FunctionalTestCase):
 
     @browsing
     def test_excerpt_template_can_be_configured_per_commitee(self, browser):
+        self.grant("Administrator")
         custom_template = create(
             Builder('sablontemplate')
             .within(self.templates)

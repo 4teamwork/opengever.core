@@ -344,4 +344,51 @@
         profile="opengever.meeting:default"
         />
 
+    <!-- 4605 -> 4606 -->
+    <upgrade-step:importProfile
+        title="Add 'add Member' permission, cleanup owner from rolemap."
+        source="4605"
+        destination="4606"
+        profile="opengever.meeting:default"
+        directory="profiles/4606"
+        />
+
+    <!-- 4606 -> 4607 -->
+    <genericsetup:upgradeStep
+        title="Let meeting workflows manage some permissions."
+        description=""
+        source="4606"
+        destination="4607"
+        handler="opengever.meeting.upgrades.to4607.AddPermissionsToWorkflows"
+        profile="opengever.meeting:default"
+        />
+
+    <genericsetup:registerProfile
+        name="4607"
+        title="opengever.meeting: upgrade profile 4607"
+        description=""
+        directory="profiles/4607"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+    <!-- 4607 -> 4608 -->
+    <genericsetup:upgradeStep
+        title="Add group-id to committee"
+        description=""
+        source="4607"
+        destination="4608"
+        handler="opengever.meeting.upgrades.to4608.AddGroupIdColumn"
+        profile="opengever.meeting:default"
+        />
+
+    <!-- 4608 -> 4609 -->
+    <upgrade-step:importProfile
+        title="Use Add Member permission to protect add-member action."
+        source="4608"
+        destination="4609"
+        profile="opengever.meeting:default"
+        directory="profiles/4609"
+        />
+
 </configure>

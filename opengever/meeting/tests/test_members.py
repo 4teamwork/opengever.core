@@ -22,6 +22,7 @@ class TestMemberListing(FunctionalTestCase):
 
     @browsing
     def test_members_can_be_added_in_browser(self, browser):
+        self.grant("Administrator")
         browser.login().open(self.container, view='add-member')
         browser.fill({'Firstname': u'Hanspeter',
                       'Lastname': u'Hansj\xf6rg',

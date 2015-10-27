@@ -50,7 +50,7 @@
           url_expr="string:${object_url}/add-member"
           icon_expr=""
           condition_expr="">
-      <permission value="Add portal content"/>
+      <permission value="opengever.meeting: Add Member"/>
   </action>
 
   <!-- Actions -->

@@ -1,6 +1,8 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
+from five import grok
 from opengever.meeting import _
+from opengever.meeting.committeeroles import CommitteeRoles
 from opengever.meeting.container import ModelContainer
 from opengever.meeting.model import Committee as CommitteeModel
 from opengever.meeting.model import Meeting
@@ -9,11 +11,24 @@ from opengever.meeting.service import meeting_service
 from opengever.meeting.sources import repository_folder_source
 from opengever.meeting.sources import sablon_template_source
 from opengever.meeting.wrapper import MeetingWrapper
+from opengever.ogds.base.utils import ogds_service
 from plone import api
 from plone.directives import form
 from z3c.relationfield.schema import RelationChoice
 from zope import schema
 from zope.interface import Interface
+from zope.schema.interfaces import IContextSourceBinder
+from zope.schema.vocabulary import SimpleVocabulary
+
+
+@grok.provider(IContextSourceBinder)
+def get_group_vocabulary(context):
+    service = ogds_service()
+    groups = []
+    for group in service.all_groups():
+        groups.append(SimpleVocabulary.createTerm(
+            group.groupid, group.groupid, group.title))
+    return SimpleVocabulary(groups)
 
 
 class ICommittee(form.Schema):
@@ -50,6 +65,16 @@ class ICommitteeModel(Interface):
         required=True,
         max_length=256,
         )
+
+    group_id = schema.Choice(
+        title=_('label_group', default="Group"),
+        description=_(
+            u'description_group',
+            default=u'Automatically configure permissions on the committee '
+                    u'for this group.'),
+        source=get_group_vocabulary,
+        required=True,
+    )
 
 
 _marker = object()
@@ -93,6 +118,18 @@ class Committee(ModelContainer):
     def update_model_create_arguments(self, data, context):
         aq_wrapped_self = self.__of__(context)
         data['physical_path'] = aq_wrapped_self.get_physical_path()
+
+    def _after_model_created(self, model_instance):
+        super(Committee, self)._after_model_created(model_instance)
+        CommitteeRoles(model_instance.group_id).initialize(self)
+
+    def update_model(self, data):
+        model = self.load_model()
+        if 'group_id' in data and data['group_id'] != model.group_id:
+            CommitteeRoles(data['group_id'],
+                           previous_group_id=model.group_id).update(self)
+
+        return super(Committee, self).update_model(data)
 
     def get_physical_path(self):
         url_tool = api.portal.get_tool(name='portal_url')

@@ -7,7 +7,7 @@
       for="opengever.meeting.committee.ICommittee"
       name="add-meeting"
       class=".meeting.AddMeetingWizardStepView"
-      permission="zope2.View"
+      permission="cmf.ModifyPortalContent"
     />
 
   <browser:page
@@ -21,21 +21,21 @@
       for="opengever.meeting.interfaces.IMeetingWrapper"
       name="edit"
       class=".meeting.EditMeeting"
-      permission="zope2.View"
+      permission="cmf.ModifyPortalContent"
       />
 
   <browser:page
       for="opengever.meeting.interfaces.IMeetingWrapper"
       name="meetingtransitioncontroller"
       class=".transitions.MeetingTransitionController"
-      permission="zope2.View"
+      permission="cmf.ModifyPortalContent"
       />
 
   <browser:page
       for="opengever.meeting.interfaces.IMeetingWrapper"
       name="protocol"
       class=".protocol.EditProtocol"
-      permission="zope2.View"
+      permission="cmf.ModifyPortalContent"
       />
 
   <browser:page
@@ -56,35 +56,35 @@
       for="opengever.meeting.interfaces.IMeetingWrapper"
       name="generate_excerpt"
       class=".excerpt.GenerateExcerpt"
-      permission="zope2.View"
+      permission="cmf.ModifyPortalContent"
       />
 
   <browser:page
       for="opengever.meeting.interfaces.IMeetingWrapper"
       name="schedule_proposal"
       class=".agendaitem.ScheduleSubmittedProposal"
-      permission="zope2.View"
+      permission="cmf.ModifyPortalContent"
       />
 
   <browser:page
       for="opengever.meeting.interfaces.IMeetingWrapper"
       name="schedule_text"
       class=".agendaitem.ScheduleText"
-      permission="zope2.View"
+      permission="cmf.ModifyPortalContent"
       />
 
   <browser:page
       for="opengever.meeting.interfaces.IMeetingWrapper"
       name="update_agenda_item_order"
       class=".agendaitem.UpdateAgendaItemOrder"
-      permission="zope2.View"
+      permission="cmf.ModifyPortalContent"
       />
 
   <browser:page
       for="opengever.meeting.interfaces.IMeetingWrapper"
       name="delete_agenda_item"
       class=".agendaitem.DeleteAgendaItem"
-      permission="zope2.View"
+      permission="cmf.ModifyPortalContent"
       />
 
   <browser:page

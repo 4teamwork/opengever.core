@@ -5,6 +5,7 @@ from opengever.meeting.model import Meeting
 from opengever.meeting.service import meeting_service
 from opengever.meeting.tabs.memberlisting import MemberListingTab
 from opengever.tabbedview.browser.base import OpengeverTab
+from plone import api
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 
 
@@ -16,9 +17,15 @@ class Committees(grok.View, OpengeverTab):
 
     def committees(self):
         committees = []
-
         filter = self.get_filter_text()
-        for committee in Committee.query.by_searchable_text(text_filters=filter).all():
+        query = Committee.query.by_searchable_text(text_filters=filter)
+        for committee in query.all():
+            content_obj = committee.resolve_committee()
+            if not content_obj:
+                continue
+            if not api.user.has_permission('View', obj=content_obj):
+                continue
+
             committees.append(
                 {'title': committee.title,
                  'url': committee.get_url(),
