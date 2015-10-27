@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-10-28 09:48+0000\n"
+"POT-Creation-Date: 2015-10-28 13:45+0000\n"
 "PO-Revision-Date: 2015-04-10 09:01+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -67,7 +67,7 @@ msgstr "Die Mitgliedschaft kann nicht geändert werden, weil sie eine bestehende
 
 #. Default: "Cancel"
 #: ./opengever/meeting/browser/meetings/excerpt.py:153
-#: ./opengever/meeting/browser/meetings/protocol.py:175
+#: ./opengever/meeting/browser/meetings/protocol.py:182
 #: ./opengever/meeting/form.py:51
 msgid "Cancel"
 msgstr "Abbrechen"
@@ -214,11 +214,11 @@ msgid "Proposal"
 msgstr "Antrag"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:63
-#: ./opengever/meeting/model/meeting.py:147
+#: ./opengever/meeting/model/meeting.py:148
 msgid "Protocol"
 msgstr "Protokoll"
 
-#: ./opengever/meeting/model/meeting.py:150
+#: ./opengever/meeting/model/meeting.py:151
 msgid "Protocol Excerpt"
 msgstr "Protokollauszug"
 
@@ -242,7 +242,7 @@ msgstr "Sablon Vorlage"
 
 #. Default: "Save"
 #: ./opengever/meeting/browser/meetings/excerpt.py:121
-#: ./opengever/meeting/browser/meetings/protocol.py:164
+#: ./opengever/meeting/browser/meetings/protocol.py:177
 #: ./opengever/meeting/form.py:42
 msgid "Save"
 msgstr "Speichern"
@@ -636,6 +636,11 @@ msgstr "Antrag"
 msgid "label_proposed_action"
 msgstr "Antrag"
 
+#. Default: "Protocol start-page"
+#: ./opengever/meeting/browser/meetings/protocol.py:49
+msgid "label_protocol_start_page_number"
+msgstr "Beginn Seitennummerierung Protokoll"
+
 #. Default: "Publish in"
 #: ./opengever/meeting/browser/meetings/templates/protocol.pt:92
 #: ./opengever/meeting/proposal.py:64
@@ -705,7 +710,7 @@ msgid "label_workflow_state"
 msgstr "Status"
 
 #. Default: "Changes saved"
-#: ./opengever/meeting/browser/meetings/protocol.py:169
+#: ./opengever/meeting/browser/meetings/protocol.py:142
 #: ./opengever/meeting/form.py:117
 msgid "message_changes_saved"
 msgstr "Änderungen gespeichert"
@@ -792,12 +797,12 @@ msgid "proposal_history_label_submitted"
 msgstr "Eingereicht durch ${user}"
 
 #. Default: "Protocol"
-#: ./opengever/meeting/protocol.py:46
+#: ./opengever/meeting/protocol.py:57
 msgid "protocol"
 msgstr "Protokoll"
 
 #. Default: "Protocol-Excerpt"
-#: ./opengever/meeting/protocol.py:113
+#: ./opengever/meeting/protocol.py:124
 msgid "protocol_excerpt"
 msgstr "Protokollauszug"
 

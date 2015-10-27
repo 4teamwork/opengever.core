@@ -48,9 +48,6 @@ class IParticipants(form.Schema):
     protocol_start_page_number = schema.Int(
         title=_(u"label_protocol_start_page_number",
                 default=u"Protocol start-page"),
-        description=_(
-            u"description_protocol_start_page_number",
-            default=u"Initial page number for the generate Protocol"),
         required=False
         )
 
