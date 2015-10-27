@@ -1,4 +1,5 @@
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
+from opengever.base.behaviors.translated_title import TranslatedTitleMixin
 from opengever.inbox import _
 from opengever.ogds.base.utils import ogds_service
 from opengever.repository.behaviors.responsibleorg import IResponsibleOrgUnit
@@ -24,7 +25,9 @@ class IInbox(form.Schema, ITabbedviewUploadable):
     )
 
 
-class Inbox(Container):
+class Inbox(Container, TranslatedTitleMixin):
+
+    Title = TranslatedTitleMixin.Title
 
     def get_responsible_org_unit(self):
         """Returns the OrgUnit object, which is configured in the
