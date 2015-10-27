@@ -9,8 +9,8 @@ from opengever.meeting.browser.meetings.agendaitem import ScheduleText
 from opengever.meeting.browser.meetings.agendaitem import UpdateAgendaItemOrder
 from opengever.meeting.model import Meeting
 from opengever.meeting.model import Proposal
-from opengever.meeting.wrapper import MeetingWrapper
 from opengever.meeting.model.agendaitem import AgendaItem
+from opengever.meeting.wrapper import MeetingWrapper
 from opengever.testing import FunctionalTestCase
 from zExceptions import NotFound
 from zExceptions import Unauthorized
@@ -38,6 +38,8 @@ class TestAgendaItem(FunctionalTestCase):
                                       start=datetime(2013, 1, 1),
                                       location='There',)
                               .link_with(self.meeting_dossier))
+
+        self.meeting_wrapper = MeetingWrapper.wrap(self.committee, self.meeting)
 
     def setup_proposal(self):
         root, folder = create(Builder('repository_tree'))
@@ -212,3 +214,93 @@ class TestAgendaItem(FunctionalTestCase):
 
         agenda_item = AgendaItem.get(agenda_item.agenda_item_id)
         self.assertEqual(agenda_item.get_title(), 'bar')
+
+
+class TestAgendaItemEdit(TestAgendaItem):
+
+    @browsing
+    def test_update_agenda_item(self, browser):
+        item = create(Builder('agenda_item').having(
+            title=u'foo', meeting=self.meeting))
+
+        browser.login().open(
+            self.meeting_wrapper,
+            view='agenda_items/{}/edit'.format(item.agenda_item_id),
+            data={'title': 'bar'})
+
+        self.assertEqual(AgendaItem.get(item.agenda_item_id).title, 'bar')
+        self.assertEquals([{u'message': u'Agenda Item updated.',
+                            u'messageClass': u'info',
+                            u'messageTitle': u'Information'}],
+                          browser.json.get('messages'))
+        self.assertEquals(True, browser.json.get('proceed'))
+
+    @browsing
+    def test_when_title_is_missing_returns_json_error(self, browser):
+        item = create(Builder('agenda_item').having(
+            title=u'foo', meeting=self.meeting))
+
+        browser.login().open(
+            self.meeting_wrapper,
+            view='agenda_items/{}/edit'.format(item.agenda_item_id))
+
+        self.assertEquals([{u'message': u'Agenda Item title must not be empty.',
+                            u'messageClass': u'error',
+                            u'messageTitle': u'Error'}],
+                          browser.json.get('messages'))
+        self.assertEquals(False, browser.json.get('proceed'))
+
+    @browsing
+    def test_raises_not_found_for_invalid_agenda_item_id(self, browser):
+        with self.assertRaises(NotFound):
+            browser.login().open(self.meeting_wrapper,
+                                 view='agenda_items/12345/edit')
+
+    @browsing
+    def test_update_agenda_item_raise_unauthorized_when_meeting_is_not_editable(self, browser):
+        item = create(Builder('agenda_item').having(
+            title=u'foo', meeting=self.meeting))
+
+        self.meeting.workflow_state = 'closed'
+
+        with self.assertRaises(Unauthorized):
+            browser.login().open(
+                self.meeting_wrapper,
+                view='agenda_items/{}/edit'.format(item.agenda_item_id),
+                data={'title': 'bar'})
+
+
+class TestAgendaItemDelete(TestAgendaItem):
+
+    @browsing
+    def test_delete_agenda_item(self, browser):
+        item = create(Builder('agenda_item').having(
+            title=u'foo', meeting=self.meeting))
+
+        browser.login().open(
+            self.meeting_wrapper,
+            view='agenda_items/{}/delete'.format(item.agenda_item_id))
+
+        self.assertEquals(0, AgendaItem.query.count())
+        self.assertEquals([{u'message': u'Successfully deleted',
+                            u'messageClass': u'info',
+                            u'messageTitle': u'Information'}],
+                          browser.json.get('messages'))
+
+    @browsing
+    def test_raises_not_found_for_invalid_agenda_item_id(self, browser):
+        with self.assertRaises(NotFound):
+            browser.login().open(self.meeting_wrapper,
+                                 view='agenda_items/12345/delete')
+
+    @browsing
+    def test_update_agenda_item_raise_unauthorized_when_meeting_is_not_editable(self, browser):
+        item = create(Builder('agenda_item').having(
+            title=u'foo', meeting=self.meeting))
+
+        self.meeting.workflow_state = 'closed'
+
+        with self.assertRaises(Unauthorized):
+            browser.login().open(
+                self.meeting_wrapper,
+                view='agenda_items/{}/delete'.format(item.agenda_item_id))

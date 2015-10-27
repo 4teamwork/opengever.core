@@ -7,37 +7,34 @@ from zExceptions import Unauthorized
 from zope.interface import implements
 from zope.publisher.interfaces import IPublishTraverse
 from zope.publisher.interfaces.browser import IBrowserView
+import json
+from opengever.base.browser.helper import get_css_class
 
 
 class ScheduleSubmittedProposal(BrowserView):
 
-    implements(IBrowserView)
+    implements(IBrowserView, IPublishTraverse)
 
     @classmethod
-    def url_for(cls, context, meeting):
-        return meeting.get_url(view='schedule_proposal')
+    def url_for(cls, context, meeting, proposal):
+        return '{}/{}'.format(
+            meeting.get_url(view='schedule_proposal'),
+            proposal.proposal_id)
 
     def __init__(self, context, request):
         super(ScheduleSubmittedProposal, self).__init__(context, request)
         self.meeting = self.context.model
+        self.proposal_id = None
 
-    def nextURL(self):
-        return self.meeting.get_url()
+    def publishTraverse(self, request, name):
+        # we only support exactly one id
+        if self.proposal_id:
+            raise NotFound
+        self.proposal_id = int(name)
+        return self
 
     def extract_proposal(self):
-        if self.request.method != 'POST':
-            return
-
-        if 'submit' not in self.request:
-            return
-
-        proposal_value = self.request.get('proposal_id')
-        try:
-            proposal_id = int(proposal_value)
-        except (ValueError, TypeError):
-            return
-
-        return meeting_service().fetch_proposal(proposal_id)
+        return meeting_service().fetch_proposal(self.proposal_id)
 
     def __call__(self):
         if not self.meeting.is_editable():
@@ -47,7 +44,8 @@ class ScheduleSubmittedProposal(BrowserView):
         if proposal:
             self.meeting.schedule_proposal(proposal)
 
-        return self.request.response.redirect(self.nextURL())
+        return JSONResponse(self.request).info(
+            _('Scheduled Successfully')).proceed().dump()
 
 
 class ScheduleText(ScheduleSubmittedProposal):
@@ -102,14 +100,10 @@ class UpdateAgendaItemOrder(BrowserView):
         if not self.model.is_editable():
             raise Unauthorized("Editing is not allowed")
 
-        new_order = [int(item_id) for item_id in self.request.get('sortOrder[]')]
-        self.model.reorder_agenda_items(new_order)
-
-        numbers = dict((each.agenda_item_id, each.number) for each in
-                       self.model.agenda_items)
+        self.model.reorder_agenda_items(json.loads(self.request.get('sortOrder')))
 
         return JSONResponse(self.request).info(_('agenda_item_order_updated',
-                                        default=u"Agenda Item order updated.")).data(numbers=numbers).dump()
+                                        default=u"Agenda Item order updated.")).dump()
 
     def update_sortorder(self, json_data):
         new_order = [int(item_id) for item_id in json_data['sortOrder']]
@@ -166,7 +160,7 @@ class DeleteAgendaItem(BrowserView):
 
         agenda_item.remove()
 
-        return self.request.response.redirect(self.nextURL())
+        return JSONResponse(self.request).info("Successfully deleted").dump()
 
 
 class UpdateAgendaItem(BrowserView):
@@ -192,3 +186,107 @@ class UpdateAgendaItem(BrowserView):
         agenda_item.set_title(title)
         return JSONResponse(self.request).info(_('agenda_item_updated',
                                                default=u"Agenda Item updated.")).proceed().dump()
+
+
+class AgendaItemsView(BrowserView):
+
+    implements(IBrowserView, IPublishTraverse)
+
+    def __init__(self, context, request):
+        super(AgendaItemsView, self).__init__(context, request)
+        self.meeting = self.context.model
+        self.agenda_item_id = None
+
+    def _serialize_submitted_documents(self, item):
+        if not item.has_proposal:
+            return []
+
+        return map(lambda document : {
+            'title': document.title,
+            'link': document.absolute_url(),
+            'css_class': get_css_class(document)},
+            item.proposal.resolve_submitted_documents())
+
+    def _serialize_submitted_excerpt(self, item):
+        if not item.has_proposal:
+            return None
+
+        excerpt = item.proposal.resolve_submitted_excerpt_document(),
+        return {
+            'title': excerpt.title,
+            'link': excerpt.absolute_url(),
+            'css_class': get_css_class(excerpt),
+            }
+
+    def publishTraverse(self, request, name):
+        if name == 'list':
+            return self.list
+
+        if name == 'edit':
+            return self.edit
+
+        if name == 'delete':
+            return self.delete
+
+        # we only support exactly one id
+        if self.agenda_item_id:
+            raise NotFound
+        self.agenda_item_id = int(name)
+        return self
+
+    def list(self):
+        """
+        Returns json list of all agendaitems for the current context (meeting).
+        """
+        meeting = self.context.model
+        agenda_items = []
+        for item in meeting.agenda_items:
+            data = item.serialize()
+            data['documents'] = self._serialize_submitted_documents(item)
+            data['excerpt'] = self._serialize_submitted_documents(item)
+            data['delete_link'] = meeting.get_url(
+                view='agenda_items/{}/delete'.format(item.agenda_item_id))
+            data['edit_link'] = meeting.get_url(
+                view='agenda_items/{}/edit'.format(item.agenda_item_id))
+            agenda_items.append(data)
+
+        return JSONResponse(self.request).data(items=agenda_items).dump()
+
+    def edit(self):
+        """Updates the title of the agendaitem, with the one given by the
+        request parameter `title`.
+        """
+        if not self.context.model.is_editable():
+            raise Unauthorized("Editing is not allowed")
+
+        agenda_item = meeting_service().fetch_agenda_item(self.agenda_item_id)
+        if not agenda_item:
+            raise NotFound
+
+        title = self.request.get('title')
+        if not title:
+            return JSONResponse(self.request).error(
+                _('agenda_item_update_empty_string',
+                  default=u"Agenda Item title must not be empty.")).remain().dump()
+
+        agenda_item.set_title(title)
+        return JSONResponse(self.request).info(
+            _('agenda_item_updated',
+              default=u"Agenda Item updated.")).proceed().dump()
+
+    def delete(self):
+        """Unschedule the current agenda_item. If the agenda_item has no
+        proposal, the agenda_item gets deleted. If there is a proposal related,
+        the proposal is unscheduled.
+        """
+
+        if not self.context.model.is_editable():
+            raise Unauthorized("Editing is not allowed")
+
+        agenda_item = meeting_service().fetch_agenda_item(self.agenda_item_id)
+        if not agenda_item:
+            raise NotFound
+
+        agenda_item.remove()
+
+        return JSONResponse(self.request).info("Successfully deleted").dump()

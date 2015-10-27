@@ -18,8 +18,14 @@ class TestUnitAgendaItem(TestCase):
             committee=self.committee,
             start=datetime(2010, 1, 1)))
 
+        create(Builder('admin_unit').id('fd'))
+
         self.proposal = create(
-            Builder('proposal_model').having(title=u'Pr\xf6posal'))
+            Builder('proposal_model').having(
+                title=u'Pr\xf6posal',
+                submitted_physical_path='meetings/proposal-1'))
+
+        self.proposal.submitted_admin_unit_id = 'fd'
         self.proposal_agenda_item = create(
             Builder('agenda_item')
             .having(proposal=self.proposal,
@@ -55,3 +61,22 @@ class TestUnitAgendaItem(TestCase):
         self.simple_agenda_item.number = ''
         self.assertEqual(
             u'Simple', self.simple_agenda_item.get_title(include_number=True))
+
+    def test_serialize(self):
+        self.assertEqual({'css_class': '',
+                          'number': '2.',
+                          'id': 2,
+                          'title': u'Simple',
+                          'has_proposal': False,
+                          'link': u'Simple',
+                          },
+                         self.simple_agenda_item.serialize())
+
+    def test_serialize_proposal_agenda_item(self):
+        self.assertEqual({'css_class': '',
+                          'number': '1.',
+                          'id': 1,
+                          'title': u'Pr\xf6posal',
+                          'has_proposal': True,
+                          'link': u'<a href="http://example.com/public/meetings/proposal-1" title="Pr\xf6posal">Pr\xf6posal</a>'},
+                         self.proposal_agenda_item.serialize())

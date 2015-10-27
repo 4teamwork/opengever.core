@@ -12,59 +12,6 @@
 
     var messageFactory = new global.MessageFactory(viewlet);
 
-    var toggleAttachements = function() {
-      $(this).parents("tr").toggleClass("expanded");
-    };
-
-    var agendaItemTable = $("#agenda_items"),
-      agendaItemStore = $("tbody", agendaItemTable).clone(),
-      updateNumbers = function(numbers) {
-        $("tr", agendaItemTable).each(function(idx, row) {
-          $(".number", row).html(numbers[$(row).data().uid]);
-        });
-      },
-      onOrderSuccess = function(data) {
-        messageFactory.shout(data.messages);
-        updateNumbers(data.numbers);
-        agendaItemStore = $("tbody", agendaItemTable).clone();
-      },
-      onOrderFail = function() {
-        messageFactory.shout();
-        agendaItemTable.html(agendaItemStore.clone());
-        $("tbody", agendaItemTable).sortable(sortableSettings);
-      },
-      onUpdate = function() {
-        var payload = { sortOrder: [] };
-
-        $("tr", agendaItemTable).each(function(index, tableRow) {
-          payload.sortOrder.push($(tableRow).data().uid);
-        });
-
-        $.ajax({
-          method: "POST",
-          dataType: "json",
-          contentType: "application/json",
-          url: viewlet.data("update-agenda-item-order-url"),
-          data: payload,
-          success: onOrderSuccess,
-          error: onOrderFail
-        });
-
-      },
-      sortableSettings = {
-        handle: ".sortable_handle",
-        forcePlaceholderSize: true,
-        opacity: 0.8,
-        placeholder: "placeholder",
-        items: "tr",
-        tolerance: "intersects",
-        update: onUpdate
-      };
-
-    $("tbody", agendaItemTable).sortable(sortableSettings);
-
-    $(".expandable .toggle-attachements", agendaItemTable).click(toggleAttachements);
-
     var onUpdateSuccess = function(data) { messageFactory.shout(data.messages); };
 
     var onUpdateFail = function(data) { messageFactory.shout(JSON.parse(data.responseText).messages); };

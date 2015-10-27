@@ -34,6 +34,7 @@ from zope.component import getUtility
 from zope.component import queryMultiAdapter
 from zope.globalrequest import getRequest
 from zope.i18n import translate
+import json
 
 
 class IMeetingModel(form.Schema):
@@ -248,8 +249,8 @@ class MeetingView(BrowserView):
     def unscheduled_proposals(self):
         return self.context.get_unscheduled_proposals()
 
-    def url_schedule_proposal(self):
-        return ScheduleSubmittedProposal.url_for(self.context, self.model)
+    def url_schedule_proposal(self, proposal):
+        return ScheduleSubmittedProposal.url_for(self.context, self.model, proposal)
 
     def url_schedule_text(self):
         return ScheduleText.url_for(self.context, self.model)
@@ -293,6 +294,10 @@ class MeetingView(BrowserView):
     @property
     def url_update_agenda_item(self):
         return UpdateAgendaItem.url_for(self.context, self.model)
+
+    @property
+    def url_list_agenda_items(self):
+        return '{}/agenda_items/list'.format(self.context.absolute_url())
 
     @property
     def msg_unexpected_error(self):

@@ -94,4 +94,12 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="opengever.meeting.interfaces.IMeetingWrapper"
+      name="agenda_items"
+      class=".agendaitem.AgendaItemsView"
+      permission="zope2.View"
+      allowed_attributes="list edit delete unschedule"
+      />
+
 </configure>
