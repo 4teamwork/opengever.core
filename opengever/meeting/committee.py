@@ -68,6 +68,10 @@ class ICommitteeModel(Interface):
 
     group_id = schema.Choice(
         title=_('label_group', default="Group"),
+        description=_(
+            u'description_group',
+            default=u'Automatically configure permissions on the committee '
+                    u'for this group.'),
         source=get_group_vocabulary,
         required=True,
     )

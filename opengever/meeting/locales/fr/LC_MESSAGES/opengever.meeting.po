@@ -4,11 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-<<<<<<< HEAD
-"POT-Creation-Date: 2015-10-22 13:11+0000\n"
-=======
-"POT-Creation-Date: 2015-10-22 13:51+0000\n"
->>>>>>> Update translations.
+"POT-Creation-Date: 2015-10-27 14:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -108,11 +104,7 @@ msgstr ""
 msgid "Excerpt for meeting ${title} has been updated successfully"
 msgstr ""
 
-<<<<<<< HEAD
-#: ./opengever/meeting/committee.py:30
-=======
 #: ./opengever/meeting/committee.py:45
->>>>>>> Update translations.
 #: ./opengever/meeting/committeecontainer.py:21
 msgid "Excerpt template"
 msgstr ""
@@ -242,11 +234,7 @@ msgstr "Procès-verbal pour la séance ${title} a été créé avec succès"
 msgid "Protocol for meeting ${title} has been updated successfully"
 msgstr "Procès-verbal pour la séance ${title} a été actualisé avec succès."
 
-<<<<<<< HEAD
-#: ./opengever/meeting/committee.py:24
-=======
 #: ./opengever/meeting/committee.py:39
->>>>>>> Update translations.
 #: ./opengever/meeting/committeecontainer.py:15
 msgid "Protocol template"
 msgstr ""
@@ -434,6 +422,11 @@ msgstr "Décider"
 #: ./opengever/meeting/model/proposal.py:100
 msgid "decided"
 msgstr "Décidé"
+
+#. Default: "Automatically configure permissions on the committee for this group."
+#: ./opengever/meeting/committee.py:71
+msgid "description_group"
+msgstr ""
 
 #. Default: "Dossier"
 #: ./opengever/meeting/tabs/meetinglisting.py:57
