@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-10-16 08:59+0000\n"
+"POT-Creation-Date: 2015-10-22 13:11+0000\n"
 "PO-Revision-Date: 2015-04-10 09:01+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,7 +40,7 @@ msgid "Add Member"
 msgstr "Mitglied hinzufügen"
 
 #. Default: "Add Membership"
-#: ./opengever/meeting/browser/memberships.py:52
+#: ./opengever/meeting/browser/memberships.py:45
 msgid "Add Membership"
 msgstr "Mitgliedschaft hinzufügen"
 
@@ -61,11 +61,11 @@ msgstr "Ein unerwarteter Fehler ist aufgetreten"
 msgid "Attachements"
 msgstr "Anhänge"
 
-#: ./opengever/meeting/browser/memberships.py:60
+#: ./opengever/meeting/browser/memberships.py:53
 msgid "Can't add membership, it overlaps an existing membership from ${date_from} to ${date_to}"
 msgstr "Die Mitgliedschaft kann nicht erstellt werden, weil sie eine bestehende Mitgliedschaft vom ${date_from} bis ${date_to} überschneidet."
 
-#: ./opengever/meeting/browser/memberships.py:93
+#: ./opengever/meeting/browser/memberships.py:89
 msgid "Can't change membership, it overlaps an existing membership from ${date_from} to ${date_to}"
 msgstr "Die Mitgliedschaft kann nicht geändert werden, weil sie eine bestehende Mitgliedschaft vom ${date_from} bis zum ${date_to} überschneidet."
 
@@ -88,18 +88,6 @@ msgstr "Kommission"
 msgid "Committee Container"
 msgstr "Ordner mit Kommissionen"
 
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:60
-msgid "Considerations"
-msgstr "Erwägungen"
-
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:81
-msgid "Decision"
-msgstr "Beschluss"
-
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:71
-msgid "Discussion"
-msgstr "Diskussion"
-
 #: ./opengever/meeting/command.py:274
 msgid "Document ${title} has already been submitted in that version"
 msgstr "Das Dokument ${title} wurde bereits in dieser Version eingereicht"
@@ -117,7 +105,7 @@ msgid "Excerpt for meeting ${title} has been updated successfully"
 msgstr "Protokollauszug für die Sitzung ${title} wurde erfolgreich aktualisiert."
 
 #: ./opengever/meeting/committee.py:30
-#: ./opengever/meeting/committeecontainer.py:19
+#: ./opengever/meeting/committeecontainer.py:21
 msgid "Excerpt template"
 msgstr "Vorlage Protokollauszug"
 
@@ -181,11 +169,7 @@ msgstr "Antrag einfügen"
 msgid "Include publish in"
 msgstr "Veröffentlichung im einfügen"
 
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:40
-msgid "Initial position"
-msgstr "Ausgangslage"
-
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:30
+#: ./opengever/meeting/browser/meetings/templates/protocol.pt:151
 msgid "Legal basis"
 msgstr "Rechtsgrundlage"
 
@@ -233,10 +217,6 @@ msgstr "Eigenschaften"
 msgid "Proposal"
 msgstr "Antrag"
 
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:50
-msgid "Proposed action"
-msgstr "Antrag"
-
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:63
 #: ./opengever/meeting/model/meeting.py:147
 msgid "Protocol"
@@ -255,7 +235,7 @@ msgid "Protocol for meeting ${title} has been updated successfully"
 msgstr "Protokoll für die Sitzung ${title} wurde erfolgreich aktualisiert."
 
 #: ./opengever/meeting/committee.py:24
-#: ./opengever/meeting/committeecontainer.py:13
+#: ./opengever/meeting/committeecontainer.py:15
 msgid "Protocol template"
 msgstr "Vorlage Protokoll"
 
@@ -496,12 +476,13 @@ msgid "label_committee"
 msgstr "Kommission"
 
 #. Default: "Considerations"
+#: ./opengever/meeting/browser/meetings/templates/protocol.pt:61
 #: ./opengever/meeting/proposal.py:107
 msgid "label_considerations"
 msgstr "Erwägungen"
 
 #. Default: "Copy for attention"
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:111
+#: ./opengever/meeting/browser/meetings/templates/protocol.pt:112
 #: ./opengever/meeting/proposal.py:74
 msgid "label_copy_for_attention"
 msgstr "Kopie z.K."
@@ -512,27 +493,33 @@ msgid "label_current_members"
 msgstr "Aktuelle Mitglieder"
 
 #. Default: "Start date"
-#: ./opengever/meeting/browser/memberships.py:28
+#: ./opengever/meeting/browser/memberships.py:21
 #: ./opengever/meeting/browser/templates/member.pt:50
 msgid "label_date_from"
 msgstr "Von"
 
 #. Default: "End date"
-#: ./opengever/meeting/browser/memberships.py:33
+#: ./opengever/meeting/browser/memberships.py:26
 #: ./opengever/meeting/browser/templates/member.pt:51
 msgid "label_date_to"
 msgstr "Bis"
 
 #. Default: "Decision"
+#: ./opengever/meeting/browser/meetings/templates/protocol.pt:82
 #: ./opengever/meeting/proposal.py:185
 msgid "label_decision"
 msgstr "Beschluss"
 
 #. Default: "Disclose to"
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:101
+#: ./opengever/meeting/browser/meetings/templates/protocol.pt:102
 #: ./opengever/meeting/proposal.py:69
 msgid "label_disclose_to"
 msgstr "Zu eröffnen an"
+
+#. Default: "Discussion"
+#: ./opengever/meeting/browser/meetings/templates/protocol.pt:72
+msgid "label_discussion"
+msgstr "Diskussion"
 
 #. Default: "Documents"
 #: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt:32
@@ -547,7 +534,7 @@ msgid "label_edit"
 msgstr "Bearbeiten"
 
 #. Default: "Edit Membership"
-#: ./opengever/meeting/browser/memberships.py:80
+#: ./opengever/meeting/browser/memberships.py:73
 msgid "label_edit_membership"
 msgstr "Mitgliedschaft bearbeiten"
 
@@ -574,6 +561,7 @@ msgid "label_firstname"
 msgstr "Vorname"
 
 #. Default: "Initial position"
+#: ./opengever/meeting/browser/meetings/templates/protocol.pt:41
 #: ./opengever/meeting/proposal.py:54
 msgid "label_initial_position"
 msgstr "Ausgangslage"
@@ -590,6 +578,7 @@ msgid "label_lastname"
 msgstr "Nachname"
 
 #. Default: "Legal basis"
+#: ./opengever/meeting/browser/meetings/templates/protocol.pt:31
 #: ./opengever/meeting/proposal.py:49
 msgid "label_legal_basis"
 msgstr "Rechtsgrundlage"
@@ -610,7 +599,7 @@ msgid "label_main_attributes"
 msgstr "Eigenschaften"
 
 #. Default: "Member"
-#: ./opengever/meeting/browser/memberships.py:37
+#: ./opengever/meeting/browser/memberships.py:30
 msgid "label_member"
 msgstr "Mitglied"
 
@@ -640,12 +629,13 @@ msgid "label_proposal"
 msgstr "Antrag"
 
 #. Default: "Proposed action"
+#: ./opengever/meeting/browser/meetings/templates/protocol.pt:51
 #: ./opengever/meeting/proposal.py:59
 msgid "label_proposed_action"
 msgstr "Antrag"
 
 #. Default: "Publish in"
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:91
+#: ./opengever/meeting/browser/meetings/templates/protocol.pt:92
 #: ./opengever/meeting/proposal.py:64
 msgid "label_publish_in"
 msgstr "Veröffentlichung im"
@@ -656,7 +646,7 @@ msgid "label_remove"
 msgstr "Löschen"
 
 #. Default: "Role"
-#: ./opengever/meeting/browser/memberships.py:42
+#: ./opengever/meeting/browser/memberships.py:35
 #: ./opengever/meeting/browser/templates/member.pt:52
 msgid "label_role"
 msgstr "Rolle"
@@ -729,7 +719,7 @@ msgid "msg_meeting_successfully_closed"
 msgstr "Die Sitzung ${title} wurde erfolgreich abgeschlossen, die Protokollauszüge wurden generiert und an die Urprungsdossiers zurückgespielt."
 
 #. Default: "The membership was deleted successfully"
-#: ./opengever/meeting/browser/memberships.py:109
+#: ./opengever/meeting/browser/memberships.py:108
 msgid "msg_membership_deleted"
 msgstr "Die Mitgliedschaft wurde erfolgreich gelöscht"
 

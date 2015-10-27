@@ -19,6 +19,9 @@ Changelog
 
   [phgross]
 
+- Include missing items in protocol navigation.
+  [deiferni]
+
 - Remove leftover related_items catalog metadata.
   [deiferni]
 

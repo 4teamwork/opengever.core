@@ -8,14 +8,15 @@
 
     <metal:content-core fill-slot="content-core">
       <metal:content-core define-macro="content-core"
-                          tal:define="meeting view/model;">
+                          tal:define="meeting view/model;
+                                      agenda_items python: list(view.get_agenda_items(include_paragraphs=True));">
         <div id="opengever_meeting_protocol">
           <metal:use use-macro="context/@@ploneform-macros/titlelessform">
 
             <metal:block fill-slot="fields">
              <div class="agenda_items">
                 <label id="dummy"></label>
-                <metal:block tal:repeat="protocol python: view.get_agenda_items(include_paragraphs=True)">
+                <metal:block tal:repeat="protocol agenda_items">
                   <metal:block tal:define="name protocol/name">
 
                     <h2 tal:attributes="id name;
@@ -29,7 +30,7 @@
                       <metal:block tal:condition="protocol/has_proposal">
                           <label tal:attributes="for string:${name}-legal_basis;
                                                  id string:${name}-legal_basis-label"
-                                 i18n:translate="">
+                                 i18n:translate="label_legal_basis">
                                  Legal basis
                           </label>
                           <textarea class="textarea-widget text-field"
@@ -39,7 +40,7 @@
 
                           <label tal:attributes="for string:${name}-initial_position;
                                                  id string:${name}-initial_position-label"
-                                 i18n:translate="">
+                                 i18n:translate="label_initial_position">
                                  Initial position
                           </label>
                           <textarea class="textarea-widget text-field"
@@ -49,7 +50,7 @@
 
                           <label tal:attributes="for string:${name}-proposed_action;
                                                  id string:${name}-proposed_action-label"
-                                 i18n:translate="">
+                                 i18n:translate="label_proposed_action">
                                  Proposed action
                           </label>
                           <textarea class="textarea-widget text-field"
@@ -59,7 +60,7 @@
 
                           <label tal:attributes="for string:${name}-considerations;
                                                  id string:${name}-considerations-label"
-                                 i18n:translate="">
+                                 i18n:translate="label_considerations">
                                  Considerations
                           </label>
                           <textarea class="textarea-widget text-field"
@@ -70,7 +71,7 @@
 
                       <label tal:attributes="for string:${name}-discussion;
                                              id string:${name}-discussion-label"
-                             i18n:translate="">
+                             i18n:translate="label_discussion">
                              Discussion
                       </label>
                       <textarea class="textarea-widget text-field"
@@ -80,7 +81,7 @@
 
                       <label tal:attributes="for string:${name}-decision;
                                              id string:${name}-decision-label"
-                             i18n:translate="">
+                             i18n:translate="label_decision">
                              Decision
                       </label>
                       <textarea class="textarea-widget text-field"
@@ -135,8 +136,8 @@
               </div>
               <div class="protocol-navigation" id="protocol-navigation">
                 <ul id="scrollspy" class="nav">
-                    <li tal:repeat="protocol python: view.get_agenda_items(include_paragraphs=True)"
-                        tal:attributes="class protocol/get_css_class">
+                    <li tal:repeat="protocol agenda_items"
+                        tal:attributes="class python: 'expandable ' + protocol.get_css_class()">
                       <metal:block tal:define="name protocol/name">
                         <a tal:attributes="href string:#${name};
                                            id string:${name}-anchor;
@@ -156,21 +157,21 @@
                                 <li>
                                   <a tal:attributes="href string:#${name}-initial_position;
                                                      id string:${name}-initial_position-anchor"
-                                     i18n:translate="">
+                                     i18n:translate="label_initial_position">
                                      Initial position
                                    </a>
                                 </li>
                                 <li>
                                   <a tal:attributes="href string:#${name}-proposed_action;
                                                      id string:${name}-proposed_action-anchor"
-                                     i18n:translate="">
+                                     i18n:translate="label_proposed_action">
                                      Proposed action
                                    </a>
                                 </li>
                                 <li>
                                   <a tal:attributes="href string:#${name}-considerations;
                                                      id string:${name}-considerations-anchor"
-                                     i18n:translate="">
+                                     i18n:translate="label_considerations">
                                      Considerations
                                    </a>
                                 </li>
@@ -178,15 +179,36 @@
                               <li>
                                 <a tal:attributes="href string:#${name}-discussion;
                                                      id string:${name}-discussion-anchor"
-                                   i18n:translate="">
+                                   i18n:translate="label_discussion">
                                    Discussion
                                  </a>
                               </li>
                               <li>
                                 <a tal:attributes="href string:#${name}-decision;
                                                      id string:${name}-decision-anchor"
-                                   i18n:translate="">
+                                   i18n:translate="label_decision">
                                    Decision
+                                 </a>
+                              </li>
+                              <li>
+                                <a tal:attributes="href string:#${name}-publish_in;
+                                                     id string:${name}-publish_in-anchor"
+                                   i18n:translate="label_publish_in">
+                                   Publish in
+                                 </a>
+                              </li>
+                              <li>
+                                <a tal:attributes="href string:#${name}-disclose_to;
+                                                     id string:${name}-disclose_to-anchor"
+                                   i18n:translate="label_disclose_to">
+                                   Disclose to
+                                 </a>
+                              </li>
+                              <li>
+                                <a tal:attributes="href string:#${name}-copy_for_attention;
+                                                     id string:${name}-copy_for_attention-anchor"
+                                   i18n:translate="label_copy_for_attention">
+                                   Copy for attention
                                  </a>
                               </li>
                             </ul>
