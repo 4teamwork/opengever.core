@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Move plone-group creation in OrgUnitBuilder to opengever.core.
+  [deiferni]
+
 - Revert review_state checks when accepting or assigning a task/forwarding.
   [phgross]
 

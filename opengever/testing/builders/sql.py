@@ -1,6 +1,8 @@
 from datetime import date
 from datetime import timedelta
+from ftw.builder import Builder
 from ftw.builder import builder_registry
+from ftw.builder import create
 from opengever.base.oguid import Oguid
 from opengever.globalindex.model.task import Task
 from opengever.locking.interfaces import ISQLLockable
@@ -23,6 +25,7 @@ from opengever.ogds.models.tests.builders import OrgUnitBuilder
 from opengever.ogds.models.tests.builders import SqlObjectBuilder
 from opengever.ogds.models.tests.builders import UserBuilder
 from opengever.testing.builders.base import TEST_USER_ID
+from plone import api
 from plone.locking.interfaces import ILockable
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
@@ -70,6 +73,18 @@ class PloneOrgUnitBuilder(OrgUnitBuilder):
     def as_current_org_unit(self):
         self._as_current_org_unit = True
         return self
+
+    def _create_users_group(self, users_group_id):
+        create(Builder('group')
+               .with_groupid(users_group_id)
+               .with_members(api.user.get(TEST_USER_ID)))
+        super(PloneOrgUnitBuilder, self)._create_users_group(users_group_id)
+
+    def _create_inbox_group(self, users_inbox_id):
+        create(Builder('group')
+               .with_groupid(users_inbox_id)
+               .with_members(api.user.get(TEST_USER_ID)))
+        super(PloneOrgUnitBuilder, self)._create_inbox_group(users_inbox_id)
 
 builder_registry.register('org_unit', PloneOrgUnitBuilder, force=True)
 
