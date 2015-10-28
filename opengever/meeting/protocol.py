@@ -37,12 +37,12 @@ class ProtocolData(object):
         self.add_agenda_items()
 
     def add_settings(self):
-        if not self.meeting.protocol_start_page:
+        if not self.meeting.protocol_start_page_number:
             return
 
         self.data['_sablon'] = {
             'properties': {
-                'start_page_number': self.meeting.protocol_start_page
+                'start_page_number': self.meeting.protocol_start_page_number
                 }
             }
 

@@ -45,8 +45,12 @@ class IParticipants(form.Schema):
         title=_(u"label_other_participants", default=u"Other Participants"),
         required=False)
 
-    protocol_start_page = schema.Int(
-        title=_(u"label_protocol_start_page", default=u"Protocol start-page"),
+    protocol_start_page_number = schema.Int(
+        title=_(u"label_protocol_start_page_number",
+                default=u"Protocol start-page"),
+        description=_(
+            u"description_protocol_start_page_number",
+            default=u"Initial page number for the generate Protocol"),
         required=False
         )
 

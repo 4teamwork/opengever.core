@@ -42,7 +42,7 @@ class TestProtocolJsonData(FunctionalTestCase):
             start=datetime(2010, 1, 1),
             participants=[self.member_peter, self.member_franz],
             other_participants=u'Hans M\xfcller\nHeidi Muster',
-            protocol_start_page=42))
+            protocol_start_page_number=42))
 
         self.agenda_item_proposal = create(
             Builder('agenda_item').having(

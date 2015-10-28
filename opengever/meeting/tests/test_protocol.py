@@ -56,7 +56,7 @@ class TestProtocol(FunctionalTestCase):
                               .having(committee=self.committee_model,
                                       start=datetime(2013, 1, 1),
                                       location='There',
-                                      protocol_start_page=42)
+                                      protocol_start_page_number=42)
                               .link_with(self.meeting_dossier))
         self.meeting.execute_transition('pending-held')
         self.proposal_model = self.proposal.load_model()
