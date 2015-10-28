@@ -5,6 +5,7 @@ from opengever.meeting.wrapper import MemberWrapper
 from plone.dexterity.content import Container
 from plone.directives import form
 from z3c.relationfield.schema import RelationChoice
+from opengever.base.behaviors.translated_title import TranslatedTitleMixin
 
 
 class ICommitteeContainer(form.Schema):
@@ -27,8 +28,10 @@ class ICommitteeContainer(form.Schema):
 _marker = object()
 
 
-class CommitteeContainer(Container):
+class CommitteeContainer(Container, TranslatedTitleMixin):
     """Committee Container class, a container for all committees."""
+
+    Title = TranslatedTitleMixin.Title
 
     def _getOb(self, id_, default=_marker):
         """We extend `_getOb` in order to change the context for member

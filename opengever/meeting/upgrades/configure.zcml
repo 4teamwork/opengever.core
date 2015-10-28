@@ -565,7 +565,6 @@
         profile="opengever.meeting:default"
     />
 
-
     <!-- 4625 -> 4626 -->
     <genericsetup:upgradeStep
         title="Rename title of the add-member action."
@@ -574,6 +573,25 @@
         destination="4626"
         handler="opengever.meeting.upgrades.to4626.RenameAddMemberAction"
         profile="opengever.meeting:default"
-    />
+        />
+
+    <!-- 4626 -> 4627 -->
+    <genericsetup:upgradeStep
+        title="Add TranslatedTitle behavior to committeecontainer."
+        description=""
+        source="4626"
+        destination="4627"
+        handler="opengever.meeting.upgrades.to4627.ActivateTranslatedTitle"
+        profile="opengever.meeting:default"
+        />
+
+    <genericsetup:registerProfile
+        name="4627"
+        title="opengever.meeting: upgrade profile 4627"
+        description=""
+        directory="profiles/4627"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
 
 </configure>
