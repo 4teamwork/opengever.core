@@ -4,6 +4,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
+from ftw.testbrowser.pages.z3cform import erroneous_fields
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.browser.protocol import METHOD_NEW_DOCUMENT
 from opengever.meeting.browser.protocol import METHOD_NEW_VERSION
@@ -96,6 +97,16 @@ class TestProtocol(FunctionalTestCase):
 
         self.assertEqual(custom_template,
                          self.committee.get_protocol_template())
+
+    @browsing
+    def test_protocol_shows_validation_errors(self, browser):
+        browser.login()
+        browser.open(self.meeting.get_url(view='protocol'))
+        browser.fill({'Protocol start-page': 'uhoh, no int'}).submit()
+
+        self.assertEqual(['There were some errors.'], error_messages())
+        self.assertIn('Protocol start-page',
+                      erroneous_fields(browser.forms['form']))
 
     @browsing
     def test_protocol_can_be_edited(self, browser):
