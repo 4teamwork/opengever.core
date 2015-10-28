@@ -56,6 +56,7 @@ class TestCommittee(FunctionalTestCase):
 
     @browsing
     def test_committee_can_be_edited_in_browser(self, browser):
+        self.grant('Administrator')
         committee = create(Builder('committee')
                            .within(self.container)
                            .titled(u'My Committee')
