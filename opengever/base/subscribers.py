@@ -1,19 +1,35 @@
-from five import grok
+from AccessControl import Unauthorized
+from AccessControl.SecurityManagement import getSecurityManager
 from OFS.interfaces import IObjectClonedEvent
+from Products.CMFCore.interfaces import ISiteRoot
+from Products.PluggableAuthService.interfaces.events import IUserLoggedOutEvent
+from ZPublisher.interfaces import IPubAfterTraversal
+from five import grok
 from opengever.base import _
 from plone.app.lockingbehavior.behaviors import ILocking
 from plone.app.relationfield.event import extract_relations
 from plone.dexterity.interfaces import IDexterityContent
 from plone.dexterity.interfaces import IEditBegunEvent
 from plone.protect.interfaces import IDisableCSRFProtection
-from Products.PluggableAuthService.interfaces.events import IUserLoggedOutEvent
 from z3c.relationfield.event import _setRelation
 from zope.annotation import IAnnotations
 from zope.component.hooks import getSite
-from zope.interface import alsoProvides
 from zope.interface import Interface
+from zope.interface import alsoProvides
 from zope.lifecycleevent.interfaces import IObjectAddedEvent
 from zope.lifecycleevent.interfaces import IObjectCreatedEvent
+
+ALLOWED_VIEWS = set([
+    'logged_out',
+    'login',
+    'login_form',
+    'mail_password',
+    'mail_password_form',
+    'passwordreset',
+    'pwreset_finish',
+    'pwreset_form',
+    'require_login',
+])
 
 
 @grok.subscribe(IDexterityContent, IObjectClonedEvent)
@@ -82,3 +98,18 @@ def add_behavior_relations(obj, event):
     """
     for behavior_interface, name, relation in extract_relations(obj):
         _setRelation(obj, name, relation)
+
+
+@grok.subscribe(IPubAfterTraversal)
+def disallow_anonymous_views_on_site_root(event):
+    """Do not allow access for anonymous to views on the portal root except
+       those explicitly allowed here. We do it this way because we cannot
+       revoke the view permissions for anonymous on the portal root.
+    """
+    user = getSecurityManager().getUser()
+    if user is None or user.getUserName() == 'Anonymous User':
+        context = event.request['PARENTS'][0]
+        if ISiteRoot.providedBy(context):
+            view_name = event.request['PUBLISHED'].__name__
+            if view_name not in ALLOWED_VIEWS:
+                raise Unauthorized
