@@ -21,7 +21,6 @@ def authenticated_member(context):
 
 def linked(item, value):
     url_method = lambda: '#'
-    #item = hasattr(item, 'aq_explicit') and item.aq_explicit or item
     if hasattr(item, 'getURL'):
         url_method = item.getURL
     elif hasattr(item, 'absolute_url'):
@@ -38,7 +37,6 @@ def linked(item, value):
 
 def linked_no_icon(item, value):
     url_method = lambda: '#'
-    #item = hasattr(item, 'aq_explicit') and item.aq_explicit or item
     if hasattr(item, 'getURL'):
         url_method = item.getURL
     elif hasattr(item, 'absolute_url'):
@@ -80,9 +78,9 @@ class Contacts(OpengeverCatalogListingTab):
         )
 
     sort_on = 'lastname'
-    sort_order=''
+    sort_order = ''
 
-    show_selects= False
+    show_selects = False
     enabled_actions = []
     major_actions = []
     selection = ViewPageTemplateFile("no_selection_amount.pt")
@@ -91,7 +89,7 @@ class Contacts(OpengeverCatalogListingTab):
         OpengeverCatalogListingTab.update_config(self)
 
         # configuration for the extjs grid
-        extjs_conf = {'auto_expand_column':'lastname'}
+        extjs_conf = {'auto_expand_column': 'lastname'}
         if isinstance(self.table_options, dict):
             self.table_options.update(extjs_conf)
         elif self.table_options is None:
