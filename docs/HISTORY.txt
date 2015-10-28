@@ -5,6 +5,9 @@ Changelog
 4.5.7 (unreleased)
 ------------------
 
+- Revert review_state checks when accepting or assigning a task/forwarding.
+  [phgross]
+
 - Fixed issue in Tasks `by_container` query, with similar dossier-ids.
   [phgross]
 

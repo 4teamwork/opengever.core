@@ -1,3 +1,4 @@
+from Products.CMFCore.utils import getToolByName
 from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
@@ -8,15 +9,11 @@ from opengever.globalindex.model.task import Task
 from opengever.ogds.base import utils
 from opengever.task.adapters import IResponseContainer
 from opengever.task.browser.accept.utils import accept_forwarding_with_successor
-from opengever.task.browser.accept.utils import accept_task_with_successor
-from opengever.task.exceptions import CannotAcceptTaskException
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.tests.data import DOCUMENT_EXTRACTION, FORWARDING_EXTRACTION
-from opengever.testing import FunctionalTestCase
 from opengever.testing import OPENGEVER_INTEGRATION_TESTING
-from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
-from Products.CMFCore.utils import getToolByName
+from plone.app.testing import setRoles
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 import unittest2
@@ -31,30 +28,6 @@ class FakeResponse(object):
 
     def read(self):
         return self.result
-
-
-class TestAcceptTask(FunctionalTestCase):
-
-    def test_cannot_accept_task_twice(self):
-        dossier = create(Builder('dossier').titled(u'Dosssier A'))
-        predecessor = create(Builder('task')
-                             .in_state('task-state-in-progress')
-                             .within(dossier))
-
-        with self.assertRaises(CannotAcceptTaskException):
-            accept_task_with_successor(
-                dossier, predecessor.oguid.id, 'msg')
-
-    def test_cannot_accept_forwarding_twice(self):
-        inbox = create(Builder('inbox').titled(u'Inbox'))
-        forwarding = create(Builder('forwarding')
-                            .within(inbox)
-                            .in_state('forwarding-state-closed '))
-
-        with self.assertRaises(CannotAcceptTaskException):
-            accept_forwarding_with_successor(
-                inbox, forwarding.oguid.id, 'msg')
-
 
 class TestTaskAccepting(MockTestCase):
 
