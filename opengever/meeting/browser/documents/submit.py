@@ -78,7 +78,8 @@ class SubmitAdditionalDocument(AutoExtensibleForm, Form):
         disable_edit_bar()
         return super(SubmitAdditionalDocument, self).__call__()
 
-    @buttonAndHandler(_(u'button_submit_document', default=u'Submit Document'))
+    @buttonAndHandler(_(u'button_submit_attachments',
+                        default=u'Submit Attachments'))
     def submit_documents(self, action):
         data, errors = self.extractData()
         if errors:

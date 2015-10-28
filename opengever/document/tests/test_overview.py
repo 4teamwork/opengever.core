@@ -289,7 +289,7 @@ class TestOverviewMeetingFeatures(FunctionalTestCase):
 
         browser.login().open(self.document, view='tabbedview_view-overview')
         browser.find('Update document in proposal').click()
-        browser.find('Submit Document').click()
+        browser.find('Submit Attachments').click()
 
         self.assertEqual(
             [u'A new submitted version of document Testdokum\xe4nt has been created'],

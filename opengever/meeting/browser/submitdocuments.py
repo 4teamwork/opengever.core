@@ -27,7 +27,7 @@ class ISubmitAdditionalDocuments(form.Schema):
     """Meeting model schema interface."""
 
     additionalDocuments = RelationList(
-        title=_(u'label_documents', default=u'Documents'),
+        title=_(u'label_attachments', default=u'Attachments'),
         default=[],
         missing_value=[],
         value_type=RelationChoice(
@@ -65,7 +65,8 @@ class SubmitAdditionalDocuments(AutoExtensibleForm, Form):
         return is_meeting_feature_enabled() and \
             self.context.is_submit_additional_documents_allowed()
 
-    @buttonAndHandler(_(u'button_submit_documents', default=u'Submit Documents'))
+    @buttonAndHandler(_(u'button_submit_attachments',
+                        default=u'Submit Attachments'))
     def submit_documents(self, action):
         data, errors = self.extractData()
         if errors:
@@ -105,7 +106,8 @@ class SubmitDocumentsByPaths(AutoExtensibleForm, Form):
     def available(self):
         return is_meeting_feature_enabled()
 
-    @buttonAndHandler(_(u'button_submit_documents', default=u'Submit Documents'))
+    @buttonAndHandler(_(u'button_submit_attachments',
+                        default=u'Submit Attachments'))
     def submit_documents(self, action):
         data, errors = self.extractData()
         if errors:

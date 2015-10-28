@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-10-27 14:09+0000\n"
+"POT-Creation-Date: 2015-10-28 09:48+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -56,10 +56,6 @@ msgstr ""
 msgid "An unexpected error has occurred"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:160
-msgid "Attachements"
-msgstr ""
-
 #: ./opengever/meeting/browser/memberships.py:53
 msgid "Can't add membership, it overlaps an existing membership from ${date_from} to ${date_to}"
 msgstr ""
@@ -103,7 +99,7 @@ msgstr ""
 msgid "Excerpt for meeting ${title} has been updated successfully"
 msgstr ""
 
-#: ./opengever/meeting/committee.py:30
+#: ./opengever/meeting/committee.py:45
 #: ./opengever/meeting/committeecontainer.py:21
 msgid "Excerpt template"
 msgstr ""
@@ -233,7 +229,7 @@ msgstr ""
 msgid "Protocol for meeting ${title} has been updated successfully"
 msgstr ""
 
-#: ./opengever/meeting/committee.py:24
+#: ./opengever/meeting/committee.py:39
 #: ./opengever/meeting/committeecontainer.py:15
 msgid "Protocol template"
 msgstr ""
@@ -262,7 +258,7 @@ msgstr ""
 msgid "The meeting and its dossier were created successfully"
 msgstr ""
 
-#: ./opengever/meeting/browser/submitdocuments.py:179
+#: ./opengever/meeting/browser/submitdocuments.py:181
 msgid "Updated with a newer docment version from proposal's dossier."
 msgstr ""
 
@@ -294,7 +290,7 @@ msgid "as paragraph"
 msgstr ""
 
 #. Default: "Cancel"
-#: ./opengever/meeting/browser/documents/submit.py:94
+#: ./opengever/meeting/browser/documents/submit.py:95
 #: ./opengever/meeting/browser/meetings/meeting.py:101
 #: ./opengever/meeting/browser/protocol.py:152
 msgid "button_cancel"
@@ -310,14 +306,10 @@ msgstr ""
 msgid "button_generate"
 msgstr ""
 
-#. Default: "Submit Document"
+#. Default: "Submit Attachments"
 #: ./opengever/meeting/browser/documents/submit.py:81
-msgid "button_submit_document"
-msgstr ""
-
-#. Default: "Submit Documents"
 #: ./opengever/meeting/browser/submitdocuments.py:68
-msgid "button_submit_documents"
+msgid "button_submit_attachments"
 msgstr ""
 
 #. Default: "Close"
@@ -468,6 +460,13 @@ msgstr ""
 msgid "hold meeting"
 msgstr ""
 
+#. Default: "Attachments"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:160
+#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt:32
+#: ./opengever/meeting/browser/submitdocuments.py:30
+msgid "label_attachments"
+msgstr ""
+
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:149
 msgid "label_cancel_edit_box"
 msgstr ""
@@ -523,13 +522,6 @@ msgstr ""
 #. Default: "Discussion"
 #: ./opengever/meeting/browser/meetings/templates/protocol.pt:72
 msgid "label_discussion"
-msgstr ""
-
-#. Default: "Documents"
-#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt:32
-#: ./opengever/meeting/browser/submitdocuments.py:30
-#: ./opengever/meeting/proposal.py:132
-msgid "label_documents"
 msgstr ""
 
 #. Default: "Edit"

@@ -83,8 +83,8 @@ class TestProposalHistory(FunctionalTestCase):
 
         browser.login().visit(self.proposal)
         browser.find('Submit additional documents').click()
-        browser.fill({'Documents': document})
-        browser.find('Submit Documents').click()
+        browser.fill({'Attachments': document})
+        browser.find('Submit Attachments').click()
 
         self.open_overview(browser)
         self.assertEqual(
@@ -100,8 +100,8 @@ class TestProposalHistory(FunctionalTestCase):
 
         browser.login().visit(self.proposal)
         browser.find('Submit additional documents').click()
-        browser.fill({'Documents': self.document})
-        browser.find('Submit Documents').click()
+        browser.fill({'Attachments': self.document})
+        browser.find('Submit Attachments').click()
 
         self.open_overview(browser)
         self.assertEqual(

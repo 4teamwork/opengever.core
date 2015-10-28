@@ -29,7 +29,7 @@
 
     <div id="documentsBox" class="box">
       <tal:condition tal:condition="documents">
-        <h2 i18n:translate="label_documents">Documents</h2>
+        <h2 i18n:translate="label_attachments">Attachments</h2>
         <ul>
           <li tal:repeat="item documents">
             <a href="" tal:attributes="href item/absolute_url;

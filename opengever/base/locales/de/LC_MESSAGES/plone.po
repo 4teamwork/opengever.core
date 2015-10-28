@@ -297,3 +297,8 @@ msgstr "Aktivieren"
 msgid "transition-add-document"
 msgstr "Dokument hinzugefügt"
 
+msgid "Submit additional documents"
+msgstr "Zusätzliche Anhänge einreichen"
+
+msgid "Submit additional document"
+msgstr "Zusätzlichen Anhang einreichen"
