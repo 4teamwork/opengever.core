@@ -3,8 +3,6 @@ from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
-from opengever.task.browser.accept.utils import assign_forwarding_to_dossier
-from opengever.task.exceptions import CannotAssignForwardingException
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 
@@ -34,17 +32,6 @@ class TestAssignForwardignToDossier(FunctionalTestCase):
         self.repo_folder = create(Builder('repository')
                                   .titled('Repo A')
                                   .within(self.repo_root))
-
-    def test_cannot_assign_forwarding_twice(self):
-        dossier = create(Builder('dossier').titled(u'Dosssier A'))
-        inbox = create(Builder('inbox').titled(u'Inbox'))
-        forwarding = create(Builder('forwarding')
-                            .within(inbox)
-                            .in_state('forwarding-state-closed '))
-
-        with self.assertRaises(CannotAssignForwardingException):
-            assign_forwarding_to_dossier(
-                inbox, forwarding.oguid.id, dossier, 'msg')
 
     @browsing
     def test_assign_to_new_dossier(self, browser):
