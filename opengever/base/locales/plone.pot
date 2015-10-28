@@ -305,3 +305,9 @@ msgstr ""
 
 msgid "Membership"
 msgstr ""
+
+msgid "Submit additional documents"
+msgstr ""
+
+msgid "Submit additional document"
+msgstr ""

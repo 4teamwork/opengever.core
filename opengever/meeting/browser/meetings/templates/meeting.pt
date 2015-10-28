@@ -157,7 +157,7 @@
                            tal:attributes="data-id agenda_item/agenda_item_id"></a>
                         <tal:cond tal:condition="agenda_item/has_proposal">
                           <div class="attachements">
-                            <h2 i18n:translate="">Attachements</h2>
+                            <h2 i18n:translate="label_attachments">Attachments</h2>
                             <ul>
                               <li tal:repeat="document agenda_item/proposal/resolve_submitted_documents">
                                 <a tal:content="document/Title" tal:attributes="href document/absolute_url; class python: view.get_css_class(document)"></a>

@@ -129,7 +129,7 @@ class IProposal(form.Schema):
     """Proposal Proxy Object Schema Interface"""
 
     relatedItems = RelationList(
-        title=_(u'label_documents', default=u'Documents'),
+        title=_(u'label_attachments', default=u'Attachments'),
         default=[],
         missing_value=[],
         value_type=RelationChoice(

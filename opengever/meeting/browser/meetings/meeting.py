@@ -77,7 +77,7 @@ def get_committee_oguid():
 
 class AddMeetingWizardStep(BaseWizardStepForm, Form):
     step_name = 'add-meeting'
-    label = _('Add Meeting', default=u'Add Meeting')
+    label = _('Add Meeting')
     steps = ADD_MEETING_STEPS
 
     fields = Fields(IMeetingModel)

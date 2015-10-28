@@ -105,7 +105,7 @@ msgstr "Als E-Mail versenden"
 #: ./opengever/document/profiles/default/actions.xml
 #: ./opengever/document/upgrades/profiles/4200/actions.xml
 msgid "Submit additional documents"
-msgstr "Dokumente nachreichen"
+msgstr "Zusätzliche Anhänge einreichen"
 
 #: ./opengever/document/browser/overview.py:165
 msgid "Submitted version: ${version}"

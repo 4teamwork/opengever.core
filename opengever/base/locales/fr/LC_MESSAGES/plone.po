@@ -297,3 +297,8 @@ msgstr "Activer"
 msgid "transition-add-document"
 msgstr ""
 
+msgid "Submit additional documents"
+msgstr ""
+
+msgid "Submit additional document"
+msgstr ""

@@ -104,7 +104,7 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
         browser.login().visit(self.document)
         browser.find('Submit additional document').click()
         browser.fill({'Proposal': proposal})
-        browser.find('Submit Document').click()
+        browser.find('Submit Attachments').click()
 
         self.assertSubmittedDocumentCreated(proposal, self.document)
         self.assertSequenceEqual(
@@ -117,8 +117,8 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
 
         browser.login().visit(proposal)
         browser.find('Submit additional documents').click()
-        browser.fill({'Documents': self.document})
-        browser.find('Submit Documents').click()
+        browser.fill({'Attachments': self.document})
+        browser.find('Submit Attachments').click()
 
         self.assertSubmittedDocumentCreated(proposal, self.document)
         self.assertSequenceEqual(
@@ -137,8 +137,8 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
 
         browser.login().visit(proposal)
         browser.find('Submit additional documents').click()
-        browser.fill({'Documents': self.document})
-        browser.find('Submit Documents').click()
+        browser.fill({'Attachments': self.document})
+        browser.find('Submit Attachments').click()
 
         self.assertSubmittedDocumentCreated(
             proposal, self.document, submitted_version=2)
