@@ -37,9 +37,8 @@ class RepositoryRoot(Container, TranslatedTitleMixin):
     """A Repositoryroot.
     """
 
-    def Title(self):
-        # XXX Should not be necessary
-        return TranslatedTitleMixin.Title(self)
+    Title = TranslatedTitleMixin.Title
+
 
 def zero_fill(matchobj):
     return matchobj.group().zfill(6)
