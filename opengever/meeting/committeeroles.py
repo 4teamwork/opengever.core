@@ -1,50 +1,54 @@
 class CommitteeRoles(object):
-    """Sets roles for committees based on an ogds group.
+    """Sets local roles committees for a principal.
 
-    The roles that are managed currently are 'Reader', 'Contributor' and
-    'Editor'. These roles will be added for the group that can be selected in
-    the add/edit forms.
+    Preserves other roles that are set for the principal.
 
-    Caution: this may conflict with roles that are set manually.
+    There is currently one special role CommitteeGroupMember. This role will
+    be added as local role on a committee for the group that can be selected
+    in the add/edit forms.
+
     """
+    managed_roles = ('CommitteeGroupMember',)
 
-    # XXX: Replace with proper CommitteeMember role
-    roles = ('Reader', 'Contributor', 'Editor')
+    def __init__(self, committee):
+        self.context = committee
 
-    def __init__(self, group_id, previous_group_id=None):
-        self.group_id = group_id
-        self.previous_group_id = previous_group_id
+    def _add_managed_local_roles(self, principal):
+        """Add managed roles to context for principal."""
 
-    def _add_local_roles(self, context, principal, roles):
-        """Adds managed roles to context."""
+        self.context.manage_addLocalRoles(principal, self.managed_roles)
 
-        current_roles = dict(context.get_local_roles()).get(principal, ())
-        new_roles = list(set(list(current_roles) + list(roles)))
-        context.manage_setLocalRoles(principal, new_roles)
+    def _drop_managed_local_roles(self, principal):
+        """Removes managed roles from context but preserves other, manually
+        added roles for principal.
 
-    def _drop_local_roles(self, context, principal, roles):
-        """Removes managed roles from context."""
-
-        current_roles = dict(context.get_local_roles()).get(principal, ())
+        """
+        current_roles = dict(self.context.get_local_roles()).get(principal, ())
         new_roles = list(set([role for role in current_roles
-                              if role not in self.roles]))
+                              if role not in self.managed_roles]))
         if new_roles:
-            context.manage_setLocalRoles(principal, new_roles)
+            self.context.manage_setLocalRoles(principal, new_roles)
         else:
-            context.manage_delLocalRoles([principal])
+            self.context.manage_delLocalRoles([principal])
 
-    def initialize(self, committee):
-        """Initialize local roles for a committee."""
+    def initialize(self, principal):
+        """Initialize local roles by adding managed roles for principal."""
 
-        committee.__ac_local_roles_block__ = True
-        self.update(committee)
+        if not principal:
+            return
 
-    def update(self, committee):
-        """Update local roles for a committee."""
+        self._add_managed_local_roles(principal)
+        self.context.reindexObjectSecurity()
 
-        if self.previous_group_id:
-            self._drop_local_roles(committee, self.previous_group_id,
-                                   self.roles)
-        self._add_local_roles(committee, self.group_id, self.roles)
+    def update(self, principal, previous_principal):
+        """Update local roles by adding managed roles for principal and dropping
+        managed roles for previous_principal.
 
-        committee.reindexObjectSecurity()
+        """
+        if principal == previous_principal:
+            return
+
+        if previous_principal:
+            self._drop_managed_local_roles(previous_principal)
+        self._add_managed_local_roles(principal)
+        self.context.reindexObjectSecurity()

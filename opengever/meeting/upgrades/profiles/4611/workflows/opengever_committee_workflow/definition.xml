@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <dc-workflow workflow_id="opengever_committee_workflow" title="Committee Workflow" description="" state_variable="review_state" initial_state="committee-state-active" manager_bypass="False">
- <permission>View</permission>
  <permission>Access contents information</permission>
  <permission>Add portal content</permission>
  <permission>List folder contents</permission>
  <permission>Modify portal content</permission>
  <permission>Sharing page: Delegate roles</permission>
+ <permission>View</permission>
  <state state_id="committee-state-active" title="committee-state-active">
   <permission-map name="Access contents information" acquired="False">
    <permission-role>Administrator</permission-role>
-   <permission-role>Manager</permission-role>
    <permission-role>CommitteeGroupMember</permission-role>
+   <permission-role>Manager</permission-role>
   </permission-map>
   <permission-map name="Add portal content" acquired="False">
    <permission-role>Administrator</permission-role>
@@ -31,8 +31,8 @@
   </permission-map>
   <permission-map name="View" acquired="False">
    <permission-role>Administrator</permission-role>
-   <permission-role>Manager</permission-role>
    <permission-role>CommitteeGroupMember</permission-role>
+   <permission-role>Manager</permission-role>
   </permission-map>
  </state>
  <variable variable_id="action" for_catalog="False" for_status="True" update_always="True">

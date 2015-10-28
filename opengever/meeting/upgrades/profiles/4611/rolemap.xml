@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<rolemap>
+
+  <roles>
+    <role name="CommitteeGroupMember" />
+  </roles>
+
+  <permissions>
+  </permissions>
+
+</rolemap>

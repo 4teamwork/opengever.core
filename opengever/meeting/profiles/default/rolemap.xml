@@ -1,5 +1,10 @@
 <?xml version="1.0"?>
 <rolemap>
+
+  <roles>
+    <role name="CommitteeGroupMember" />
+  </roles>
+
   <permissions>
 
     <permission name="opengever.meeting: Add Proposal" acquire="True">
