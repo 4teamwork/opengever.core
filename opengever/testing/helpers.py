@@ -4,6 +4,7 @@ from plone import api
 from Products.CMFCore.utils import getToolByName
 from Products.PloneLanguageTool.LanguageTool import LanguageBinding
 import pytz
+import transaction
 
 
 DEFAULT_TZ = pytz.timezone('Europe/Zurich')
@@ -51,3 +52,14 @@ def set_preferred_language(request, code):
     binding.DEFAULT_LANGUAGE = code
     binding.LANGUAGE = code
     request['LANGUAGE_TOOL'] = binding
+
+
+def add_languages(codes, support_combined=True):
+    lang_tool = api.portal.get_tool('portal_languages')
+    if support_combined:
+        lang_tool.use_combined_language_codes = True
+
+    for code in codes:
+        lang_tool.addSupportedLanguage(code)
+
+    transaction.commit()
