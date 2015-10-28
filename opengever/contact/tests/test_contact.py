@@ -25,8 +25,7 @@ class TestContact(FunctionalTestCase):
         self.browser.getControl('ContactFolder').click()
         self.browser.getControl('Add').click()
         self.browser.assert_url('http://nohost/plone/++add++opengever.contact.contactfolder')
-        self.browser.getControl('Title').value='Foobar'
-        self.browser.getControl(name='form.widgets.IBasic.description').value='Lorem Ipsum'
+        self.browser.getControl('Title (German)').value='Foobar'
         self.browser.getControl('Save').click()
 
         # create a contact:

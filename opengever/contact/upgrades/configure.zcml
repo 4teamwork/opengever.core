@@ -50,4 +50,23 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <!-- 4600 -> 4601 -->
+    <genericsetup:upgradeStep
+        title="Add TranslatedTitle behavior to contactfolder."
+        description=""
+        source="4600"
+        destination="4601"
+        handler="opengever.contact.upgrades.to4601.ActivateTranslatedTitle"
+        profile="opengever.contact:default"
+        />
+
+    <genericsetup:registerProfile
+        name="4601"
+        title="opengever.contact: upgrade profile 4601"
+        description=""
+        directory="profiles/4601"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
 </configure>
