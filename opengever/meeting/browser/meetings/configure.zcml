@@ -61,13 +61,6 @@
 
   <browser:page
       for="opengever.meeting.interfaces.IMeetingWrapper"
-      name="schedule_text"
-      class=".agendaitem.ScheduleText"
-      permission="cmf.ModifyPortalContent"
-      />
-
-  <browser:page
-      for="opengever.meeting.interfaces.IMeetingWrapper"
       name="update_agenda_item_order"
       class=".agendaitem.UpdateAgendaItemOrder"
       permission="cmf.ModifyPortalContent"

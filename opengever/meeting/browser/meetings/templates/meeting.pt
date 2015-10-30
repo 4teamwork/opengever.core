@@ -103,7 +103,7 @@
               <h2 class="label" i18n:translate="">Agenda Items</h2>
             </div>
             <div class="collapsible-content open">
-              <form method="post" tal:attributes="action view/url_schedule_text">
+              <form method="post">
                 <div class="input-group">
                   <label for="title">Freitext:</label>
                   <input id="title" type="text" />

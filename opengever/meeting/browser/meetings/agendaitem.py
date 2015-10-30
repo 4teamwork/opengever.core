@@ -11,42 +11,6 @@ import json
 from opengever.base.browser.helper import get_css_class
 
 
-class ScheduleText(ScheduleSubmittedProposal):
-
-    implements(IBrowserView)
-
-    @classmethod
-    def url_for(cls, context, meeting):
-        return meeting.get_url(view='schedule_text')
-
-    def nextURL(self):
-        return self.meeting.get_url()
-
-    def extract_title(self):
-        if self.request.method != 'POST':
-            return
-
-        if 'schedule-paragraph' not in self.request \
-                and 'schedule-text' not in self.request:
-            return
-
-        return self.request.get('title')
-
-    def extract_is_paragraph(self):
-        return 'schedule-paragraph' in self.request
-
-    def __call__(self):
-        if not self.meeting.is_editable():
-            raise Unauthorized("Editing is not allowed")
-
-        title = self.extract_title()
-        is_paragraph = self.extract_is_paragraph()
-        if title:
-            self.meeting.schedule_text(title, is_paragraph=is_paragraph)
-
-        return self.request.response.redirect(self.nextURL())
-
-
 class UpdateAgendaItemOrder(BrowserView):
 
     implements(IBrowserView, IPublishTraverse)
