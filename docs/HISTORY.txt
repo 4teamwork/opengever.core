@@ -5,6 +5,10 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Make sure only the new responsible gets notified by mail, when a
+  task gets reassigned.
+  [phgross]
+
 - Move plone-group creation in OrgUnitBuilder to opengever.core.
   [deiferni]
 
