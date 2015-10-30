@@ -99,7 +99,7 @@
       name="agenda_items"
       class=".agendaitem.AgendaItemsView"
       permission="zope2.View"
-      allowed_attributes="list edit delete unschedule"
+      allowed_attributes="list edit delete update_order"
       />
 
 </configure>

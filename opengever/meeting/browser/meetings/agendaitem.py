@@ -228,6 +228,9 @@ class AgendaItemsView(BrowserView):
         if name == 'delete':
             return self.delete
 
+        if name == 'update_order':
+            return self.update_order
+
         # we only support exactly one id
         if self.agenda_item_id:
             raise NotFound
@@ -251,6 +254,20 @@ class AgendaItemsView(BrowserView):
             agenda_items.append(data)
 
         return JSONResponse(self.request).data(items=agenda_items).dump()
+
+    def update_order(self):
+        """Updat the order of the agendaitems. The new sortOrder is expected
+        in the request parameter `sortOrder`.
+        """
+        if not self.context.model.is_editable():
+            raise Unauthorized("Editing is not allowed")
+
+        self.context.model.reorder_agenda_items(
+            json.loads(self.request.get('sortOrder')))
+
+        return JSONResponse(self.request).info(
+            _('agenda_item_order_updated',
+              default=u"Agenda Item order updated.")).dump()
 
     def edit(self):
         """Updates the title of the agendaitem, with the one given by the

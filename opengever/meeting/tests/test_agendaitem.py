@@ -14,6 +14,7 @@ from opengever.meeting.wrapper import MeetingWrapper
 from opengever.testing import FunctionalTestCase
 from zExceptions import NotFound
 from zExceptions import Unauthorized
+import json
 import transaction
 
 
@@ -304,3 +305,40 @@ class TestAgendaItemDelete(TestAgendaItem):
             browser.login().open(
                 self.meeting_wrapper,
                 view='agenda_items/{}/delete'.format(item.agenda_item_id))
+
+
+class TestAgendaItemUpdateOrder(TestAgendaItem):
+
+    @browsing
+    def test_update_agenda_item_order(self, browser):
+        item1 = create(Builder('agenda_item').having(
+            title=u'foo', meeting=self.meeting, sort_order=1))
+        item2 = create(Builder('agenda_item').having(
+            title=u'bar', meeting=self.meeting, sort_order=2))
+        item3 = create(Builder('agenda_item').having(
+            title=u'bar', meeting=self.meeting, sort_order=3))
+
+        self.assertEqual(1, item1.sort_order)
+        self.assertEqual(2, item2.sort_order)
+        self.assertEqual(3, item3.sort_order)
+
+        browser.login().open(self.meeting_wrapper,
+                             view='agenda_items/update_order',
+                             data={"sortOrder": json.dumps([1, 3, 2])})
+
+        self.assertEqual(1, AgendaItem.get(1).sort_order)
+        self.assertEqual(3, AgendaItem.get(2).sort_order)
+        self.assertEqual(2, AgendaItem.get(3).sort_order)
+
+        self.assertEquals([{u'message': u'Agenda Item order updated.',
+                            u'messageClass': u'info',
+                            u'messageTitle': u'Information'}],
+                          browser.json.get('messages'))
+
+    @browsing
+    def test_raise_unauthorized_when_meeting_is_not_editable(self, browser):
+        self.meeting.workflow_state = 'closed'
+
+        with self.assertRaises(Unauthorized):
+            browser.login().open(self.meeting_wrapper,
+                                 view='agenda_items/update_order')
