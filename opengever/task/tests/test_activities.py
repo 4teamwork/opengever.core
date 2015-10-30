@@ -1,9 +1,11 @@
 from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.mail.utils import get_header
 from ftw.testbrowser import browsing
 from ftw.testing.mailing import Mailing
 from opengever.activity import notification_center
+from opengever.activity.hooks import insert_notification_defaults
 from opengever.activity.model import Activity
 from opengever.activity.model.subscription import TASK_ISSUER_ROLE
 from opengever.activity.model.subscription import TASK_RESPONSIBLE_ROLE
@@ -12,6 +14,7 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.task.browser.accept.utils import accept_task_with_successor
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
+import email
 
 
 class TestTaskActivites(FunctionalTestCase):
@@ -217,11 +220,15 @@ class TestTaskReassignActivity(FunctionalTestCase):
 
     def setUp(self):
         super(TestTaskReassignActivity, self).setUp()
+        insert_notification_defaults(self.portal)
+        Mailing(self.portal).set_up()
+
         self.dossier = create(Builder('dossier').titled(u'Dossier XY'))
         self.hugo = create(Builder('ogds_user')
                            .id('hugo.boss')
                            .assign_to_org_units([self.org_unit])
-                           .having(firstname=u'Hugo', lastname=u'Boss'))
+                           .having(firstname=u'Hugo', lastname=u'Boss',
+                                   email='hugo.boss@example.org'))
 
         create(Builder('ogds_user')
                .id('peter.meier')
@@ -231,6 +238,10 @@ class TestTaskReassignActivity(FunctionalTestCase):
                .id('james.meier')
                .assign_to_org_units([self.org_unit])
                .having(firstname=u'James', lastname=u'Meier'))
+
+    def tearDown(self):
+        super(TestTaskReassignActivity, self).tearDown()
+        Mailing(self.layer['portal']).tear_down()
 
     def add_task(self, browser):
         browser.login().open(self.dossier, view='++add++opengever.task.task')
@@ -288,6 +299,18 @@ class TestTaskReassignActivity(FunctionalTestCase):
             [(u'hugo.boss', TASK_RESPONSIBLE_ROLE),
              (u'peter.meier', TASK_ISSUER_ROLE)],
             [(sub.watcher.actorid, sub.role) for sub in subscriptions])
+
+    @browsing
+    def test_notifies_only_new_responsible_per_mail(self, browser):
+        self.task = self.add_task(browser)
+        Mailing(self.portal).reset()
+
+        self.reassign(browser, 'hugo.boss', u'Bitte Abkl\xe4rungen erledigen.')
+        self.assertEqual(1, len(Mailing(self.portal).get_messages()))
+
+        mail = email.message_from_string(Mailing(self.portal).pop())
+        self.assertEquals(
+            'hugo.boss@example.org', get_header(mail, 'To'))
 
 
 class TestSuccesssorHandling(FunctionalTestCase):

@@ -5,6 +5,10 @@ Changelog
 4.5.7 (unreleased)
 ------------------
 
+- Make sure only the new responsible gets notified by mail, when a
+  task gets reassigned.
+  [phgross]
+
 - Revert review_state checks when accepting or assigning a task/forwarding.
   [phgross]
 
