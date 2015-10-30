@@ -342,3 +342,48 @@ class TestAgendaItemUpdateOrder(TestAgendaItem):
         with self.assertRaises(Unauthorized):
             browser.login().open(self.meeting_wrapper,
                                  view='agenda_items/update_order')
+
+
+class TestScheduleParagraph(TestAgendaItem):
+
+    @browsing
+    def test_schedule_paragraph(self, browser):
+        browser.login().open(self.meeting_wrapper,
+                             view='agenda_items/schedule_paragraph',
+                             data={'title': 'Abschnitt A'})
+
+        agenda_items =  Meeting.get(self.meeting.meeting_id).agenda_items
+
+        self.assertEquals(1, len(agenda_items))
+        self.assertEqual(u'Abschnitt A', agenda_items[0].title)
+        self.assertTrue(agenda_items[0].is_paragraph)
+
+    @browsing
+    def test_raise_unauthorized_when_meeting_is_not_editable(self, browser):
+        self.meeting.workflow_state = 'closed'
+
+        with self.assertRaises(Unauthorized):
+            browser.login().open(self.meeting_wrapper,
+                                 view='agenda_items/schedule_paragraph')
+
+class TestScheduleText(TestAgendaItem):
+
+    @browsing
+    def test_schedule_text(self, browser):
+        browser.login().open(self.meeting_wrapper,
+                             view='agenda_items/schedule_text',
+                             data={'title': u'Baugesuch Herr Maier'})
+
+        agenda_items =  Meeting.get(self.meeting.meeting_id).agenda_items
+
+        self.assertEquals(1, len(agenda_items))
+        self.assertEqual(u'Baugesuch Herr Maier', agenda_items[0].title)
+        self.assertFalse(agenda_items[0].is_paragraph)
+
+    @browsing
+    def test_raise_unauthorized_when_meeting_is_not_editable(self, browser):
+        self.meeting.workflow_state = 'closed'
+
+        with self.assertRaises(Unauthorized):
+            browser.login().open(self.meeting_wrapper,
+                                 view='agenda_items/schedule_paragraph')

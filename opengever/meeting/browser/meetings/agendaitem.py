@@ -231,6 +231,12 @@ class AgendaItemsView(BrowserView):
         if name == 'update_order':
             return self.update_order
 
+        if name == 'schedule_text':
+            return self.schedule_text
+
+        if name == 'schedule_paragraph':
+            return self.schedule_paragraph
+
         # we only support exactly one id
         if self.agenda_item_id:
             raise NotFound
@@ -307,3 +313,35 @@ class AgendaItemsView(BrowserView):
         agenda_item.remove()
 
         return JSONResponse(self.request).info("Successfully deleted").dump()
+
+    def schedule_paragraph(self):
+        """Schedule the given Paragraph (request parameter `title`) for the current
+        meeting.
+        """
+        self.check_editable()
+
+        title = self.request.get('title')
+        if not title:
+            raise ValueError
+
+        self.meeting.schedule_text(title, is_paragraph=True)
+        return JSONResponse(self.request).info(
+            _('paragraph_added', default=u"Paragrap successfully added.")
+        ).proceed().dump()
+
+    def schedule_text(self):
+        """Schedule the given Text (request parameter `title`) for the current
+        meeting.
+        """
+        self.check_editable()
+        title = self.request.get('title')
+        if not title:
+            raise ValueError
+
+        self.meeting.schedule_text(title)
+        return JSONResponse(self.request).info(
+            _('text_added', default=u"Texst successfully added.")).proceed().dump()
+
+    def check_editable(self):
+        if not self.meeting.is_editable():
+            raise Unauthorized("Editing is not allowed")
