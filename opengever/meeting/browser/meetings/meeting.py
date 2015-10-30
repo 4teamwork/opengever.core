@@ -6,7 +6,6 @@ from opengever.base.form import WizzardWrappedAddForm
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.meeting import _
-from opengever.meeting.browser.meetings.agendaitem import DeleteAgendaItem
 from opengever.meeting.browser.meetings.agendaitem import UpdateAgendaItem
 from opengever.meeting.browser.meetings.transitions import MeetingTransitionController
 from opengever.meeting.browser.protocol import GenerateProtocol
@@ -245,9 +244,6 @@ class MeetingView(BrowserView):
 
     def unscheduled_proposals(self):
         return self.context.get_unscheduled_proposals()
-
-    def url_delete_agenda_item(self, agenda_item):
-        return DeleteAgendaItem.url_for(self.context, self.model, agenda_item)
 
     def get_protocol_document(self):
         if self.model.protocol_document:

@@ -11,53 +11,6 @@ import json
 from opengever.base.browser.helper import get_css_class
 
 
-class DeleteAgendaItem(BrowserView):
-
-    implements(IBrowserView, IPublishTraverse)
-
-    @classmethod
-    def url_for(cls, context, meeting, agend_item):
-
-        return "{}/{}".format(
-            meeting.get_url('delete_agenda_item'),
-            agend_item.agenda_item_id)
-
-    def __init__(self, context, request):
-        super(DeleteAgendaItem, self).__init__(context, request)
-        self.model = self.context.model
-        self.item_id = None
-
-    def nextURL(self):
-        return self.model.get_url()
-
-    def publishTraverse(self, request, name):
-        # we only support exactly one id
-        if self.item_id:
-            raise NotFound
-        self.item_id = name
-        return self
-
-    def __call__(self):
-        if not self.model.is_editable():
-            raise Unauthorized("Editing is not allowed")
-
-        if not self.item_id:
-            raise NotFound
-
-        try:
-            item_id = int(self.item_id)
-        except ValueError:
-            raise NotFound
-
-        agenda_item = meeting_service().fetch_agenda_item(item_id)
-        if not agenda_item:
-            raise NotFound
-
-        agenda_item.remove()
-
-        return JSONResponse(self.request).info("Successfully deleted").dump()
-
-
 class UpdateAgendaItem(BrowserView):
 
     @classmethod
