@@ -11,38 +11,6 @@ import json
 from opengever.base.browser.helper import get_css_class
 
 
-class UpdateAgendaItemOrder(BrowserView):
-
-    implements(IBrowserView, IPublishTraverse)
-
-    @classmethod
-    def url_for(cls, context, meeting):
-        return meeting.get_url(view='update_agenda_item_order')
-
-    def __init__(self, context, request):
-        super(UpdateAgendaItemOrder, self).__init__(context, request)
-        self.model = self.context.model
-
-    def __call__(self):
-        if not self.model.is_editable():
-            raise Unauthorized("Editing is not allowed")
-
-        self.model.reorder_agenda_items(json.loads(self.request.get('sortOrder')))
-
-        return JSONResponse(self.request).info(_('agenda_item_order_updated',
-                                        default=u"Agenda Item order updated.")).dump()
-
-    def update_sortorder(self, json_data):
-        new_order = [int(item_id) for item_id in json_data['sortOrder']]
-        self.model.reorder_agenda_items(new_order)
-
-        numbers = dict((each.agenda_item_id, each.number) for each in
-                       self.model.agenda_items)
-
-        return JSONResponse(self.request).info(_('agenda_item_order_updated',
-                                        default=u"Agenda Item order updated.")).data(numbers=numbers).dump()
-
-
 class DeleteAgendaItem(BrowserView):
 
     implements(IBrowserView, IPublishTraverse)
