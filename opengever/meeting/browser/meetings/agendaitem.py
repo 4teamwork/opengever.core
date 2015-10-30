@@ -11,43 +11,6 @@ import json
 from opengever.base.browser.helper import get_css_class
 
 
-class ScheduleSubmittedProposal(BrowserView):
-
-    implements(IBrowserView, IPublishTraverse)
-
-    @classmethod
-    def url_for(cls, context, meeting, proposal):
-        return '{}/{}'.format(
-            meeting.get_url(view='schedule_proposal'),
-            proposal.proposal_id)
-
-    def __init__(self, context, request):
-        super(ScheduleSubmittedProposal, self).__init__(context, request)
-        self.meeting = self.context.model
-        self.proposal_id = None
-
-    def publishTraverse(self, request, name):
-        # we only support exactly one id
-        if self.proposal_id:
-            raise NotFound
-        self.proposal_id = int(name)
-        return self
-
-    def extract_proposal(self):
-        return meeting_service().fetch_proposal(self.proposal_id)
-
-    def __call__(self):
-        if not self.meeting.is_editable():
-            raise Unauthorized("Editing is not allowed")
-
-        proposal = self.extract_proposal()
-        if proposal:
-            self.meeting.schedule_proposal(proposal)
-
-        return JSONResponse(self.request).info(
-            _('Scheduled Successfully')).proceed().dump()
-
-
 class ScheduleText(ScheduleSubmittedProposal):
 
     implements(IBrowserView)

@@ -8,7 +8,6 @@ from opengever.base.oguid import Oguid
 from opengever.meeting import _
 from opengever.meeting.browser.meetings.agendaitem import DeleteAgendaItem
 from opengever.meeting.browser.meetings.agendaitem import UpdateAgendaItem
-from opengever.meeting.browser.meetings.agendaitem import ScheduleSubmittedProposal
 from opengever.meeting.browser.meetings.agendaitem import ScheduleText
 from opengever.meeting.browser.meetings.agendaitem import UpdateAgendaItemOrder
 from opengever.meeting.browser.meetings.transitions import MeetingTransitionController
@@ -248,9 +247,6 @@ class MeetingView(BrowserView):
 
     def unscheduled_proposals(self):
         return self.context.get_unscheduled_proposals()
-
-    def url_schedule_proposal(self, proposal):
-        return ScheduleSubmittedProposal.url_for(self.context, self.model, proposal)
 
     def url_schedule_text(self):
         return ScheduleText.url_for(self.context, self.model)
