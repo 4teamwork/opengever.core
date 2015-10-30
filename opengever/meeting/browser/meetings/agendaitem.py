@@ -11,31 +11,6 @@ import json
 from opengever.base.browser.helper import get_css_class
 
 
-class UpdateAgendaItem(BrowserView):
-
-    @classmethod
-    def url_for(cls, context, meeting):
-        return meeting.get_url(view='update_agenda_item')
-
-    def __call__(self):
-        if not self.context.model.is_editable():
-            raise Unauthorized("Editing is not allowed")
-
-        title = self.request.get('title')
-        agenda_item_id = self.request.get('agenda_item_id')
-        if not title or not agenda_item_id:
-            return JSONResponse(self.request).error(_('agenda_item_update_empty_string',
-                                                   default=u"Agenda Item title must not be empty.")).remain().dump()
-
-        agenda_item = meeting_service().fetch_agenda_item(agenda_item_id)
-        if not agenda_item:
-            raise NotFound
-
-        agenda_item.set_title(title)
-        return JSONResponse(self.request).info(_('agenda_item_updated',
-                                               default=u"Agenda Item updated.")).proceed().dump()
-
-
 class AgendaItemsView(BrowserView):
 
     implements(IBrowserView, IPublishTraverse)

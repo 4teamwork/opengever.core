@@ -6,7 +6,6 @@ from opengever.base.form import WizzardWrappedAddForm
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.meeting import _
-from opengever.meeting.browser.meetings.agendaitem import UpdateAgendaItem
 from opengever.meeting.browser.meetings.transitions import MeetingTransitionController
 from opengever.meeting.browser.protocol import GenerateProtocol
 from opengever.meeting.browser.protocol import UpdateProtocol
@@ -277,10 +276,6 @@ class MeetingView(BrowserView):
     @property
     def url_update_agenda_item_order(self):
         return '{}/agenda_items/update_order'.format(self.context.absolute_url())
-
-    @property
-    def url_update_agenda_item(self):
-        return UpdateAgendaItem.url_for(self.context, self.model)
 
     @property
     def url_list_agenda_items(self):
