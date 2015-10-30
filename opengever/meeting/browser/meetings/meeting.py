@@ -300,6 +300,18 @@ class MeetingView(BrowserView):
         return '{}/agenda_items/list'.format(self.context.absolute_url())
 
     @property
+    def url_schedule_text(self):
+        return '{}/agenda_items/schedule_text'.format(self.context.absolute_url())
+
+    @property
+    def url_schedule_paragraph(self):
+        return '{}/agenda_items/schedule_paragraph'.format(self.context.absolute_url())
+
+    @property
+    def url_list_unscheduled_proposals(self):
+        return '{}/unscheduled_proposals'.format(self.context.absolute_url())
+
+    @property
     def msg_unexpected_error(self):
         return translate(_('An unexpected error has occurred',
                            default='An unexpected error has occurred'),

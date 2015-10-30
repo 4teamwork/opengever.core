@@ -19,7 +19,7 @@
       <div id="opengever_meeting_meeting"
            tal:attributes="data-unexpected-error view/msg_unexpected_error;
                            data-update-agenda-item-order-url view/url_update_agenda_item_order;
-                           data-list-agenda-items-url view/url_list_agenda_items
+                           data-list-agenda-items-url view/url_list_agenda_items;
                            data-list-unscheduled-proposals-url view/url_list_unscheduled_proposals">
 
         <div class="sidebar">
@@ -106,36 +106,33 @@
               <form method="post" tal:attributes="action view/url_schedule_text">
                 <div class="input-group">
                   <label for="title">Freitext:</label>
-                  <input id="title" name="title" type="text" />
+                  <input id="title" type="text" />
                   <div class="button-group">
                     <input type="submit"
-                           name="schedule-paragraph"
-                           id="submit-schedule-paragraph"
                            value="as paragraph"
-                           i18n:attributes="value" />
+                           i18n:attributes="value"
+                           tal:attributes="data-url view/url_schedule_paragraph"
+                           class="schedule-paragraph" />
                     <input type="submit"
-                           name="schedule-text"
-                           id="submit-schedule-text"
                            value="as free-text"
-                           i18n:attributes="value" />
+                           i18n:attributes="value"
+                           tal:attributes="data-url view/url_schedule_text"
+                           class="schedule-text" />
                   </div>
                 </div>
               </form>
               <label>Anträge:</label>
-              <div class="list-group">
-                <tal:repeat tal:repeat="proposal unscheduled_proposals">
-                  <div class="list-group-item submit"
-                       tal:attributes="id proposal/proposal_id;
-                                       value proposal/proposal_id">
-                    <span class="title"
-                          tal:content="proposal/title"></span>
-                    <div class="button-group">
-                      <a class="button add-proposal"
-                         i18n:translate="schedule"
-                         tal:attributes="href python: view.url_schedule_proposal(proposal)"></a>
+              <div id="unscheduled_porposals" class="list-group">
+                <script id="proposalsTemplate" type="text/x-handlebars-template">
+                  {{#each proposals}}
+                    <div class="list-group-item submit">
+                      <span class="title">{{title}}</span>
+                      <div class="button-group">
+                        <a class="button schedule-proposal" href="{{schedule_url}}">Traktandieren</a>
+                      </div>
                     </div>
-                  </div>
-                </tal:repeat>
+                  {{/each}}
+                </script>
               </div>
             </div>
           </div>
@@ -172,6 +169,15 @@
                             <a href="{{excerpt.link}}" class="{{excerpt.css_class}}">{{excerpt.title}}</a>
                           </div>
                         {{/if}}
+                        <div class="edit-box">
+                          <div class="input-group">
+                            <input type="text" />
+                            <div class="button-group">
+                              <input i18n:attributes="value label_save_edit_box" value="Save" type="button" class="button edit-save" />
+                              <input i18n:attributes="value label_cancel_edit_box" value="Cancel" type="button" class="button edit-cancel" />
+                            </div>
+                          </div>
+                        </div>
                       </td>
                       <td class="toggle-attachements">
                         {{#if documents}}
