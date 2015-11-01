@@ -159,7 +159,7 @@ class TestSearchWithoutContent(FunctionalTestCase):
 
     @browsing
     def test_validate_searchstring_for_dossiers(self, browser):
-        browser.open(view='advanced_search')
+        browser.login().open(view='advanced_search')
         browser.fill({'form.widgets.searchableText': "dossier1",
                       'form.widgets.object_provides': ['opengever.dossier.behaviors.dossier.IDossierMarker'],
                       'form.widgets.start_1': "1/1/10",
@@ -189,7 +189,7 @@ class TestSearchWithoutContent(FunctionalTestCase):
 
     @browsing
     def test_validate_searchstring_for_documents(self, browser):
-        browser.open(view='advanced_search')
+        browser.login().open(view='advanced_search')
         browser.fill({'form.widgets.searchableText': "document1",
                       'form.widgets.object_provides': 'opengever.document.behaviors.IBaseDocument',
                       'form.widgets.receipt_date_1': "1/1/10",
@@ -217,7 +217,7 @@ class TestSearchWithoutContent(FunctionalTestCase):
 
     @browsing
     def test_validate_searchstring_for_tasks(self, browser):
-        browser.open(view='advanced_search')
+        browser.login().open(view='advanced_search')
         browser.fill({'form.widgets.searchableText': "task1",
                       'form.widgets.object_provides': 'opengever.task.task.ITask',
                       'form.widgets.deadline_1': "1/1/10",
@@ -237,5 +237,5 @@ class TestSearchWithoutContent(FunctionalTestCase):
 
     @browsing
     def test_disable_unload_protection(self, browser):
-        browser.open(view='advanced_search')
+        browser.login().open(view='advanced_search')
         self.assertNotIn('enableUnloadProtection', browser.contents)
