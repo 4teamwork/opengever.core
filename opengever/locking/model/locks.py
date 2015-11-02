@@ -1,5 +1,5 @@
-from datetime import datetime
 from datetime import timedelta
+from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.model import Base
 from opengever.base.model import UTCDateTime
 from opengever.ogds.models import USER_ID_LENGTH
@@ -9,15 +9,9 @@ from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy import UniqueConstraint
 from sqlalchemy.schema import Sequence
-import pytz
 
 
 DEFAULTTIMEOUT = 12 * 60L
-
-
-def utcnow_tz_aware():
-    """Returns the utc now datetime timezone aware."""
-    return datetime.now(pytz.utc)
 
 
 def lowest_valid():

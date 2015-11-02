@@ -3,9 +3,9 @@ from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testing import freeze
+from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.model import create_session
 from opengever.locking.model import Lock
-from opengever.locking.model.locks import utcnow_tz_aware
 from opengever.meeting.wrapper import MeetingWrapper
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID

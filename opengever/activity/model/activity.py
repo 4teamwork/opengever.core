@@ -1,4 +1,5 @@
 from opengever.activity.model.notification import Notification
+from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.model import Base
 from opengever.base.model import DEFAULT_LOCALE
 from opengever.base.model import SUPPORTED_LOCALES
@@ -14,13 +15,6 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
 from sqlalchemy_i18n import Translatable
 from sqlalchemy_i18n import translation_base
-import datetime
-import pytz
-
-
-def utcnow_tz_aware():
-    """Returns the utc now datetime timezone aware."""
-    return datetime.datetime.now(pytz.utc)
 
 
 class ActivityQuery(BaseQuery):
