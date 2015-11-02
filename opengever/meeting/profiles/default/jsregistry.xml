@@ -26,4 +26,9 @@
                 insert-after="++resource++opengever.meeting/sticky_heading.js"
                 />
 
+    <javascript cacheable="True" compression="safe" cookable="True" expression=""
+                enabled="True" id="++resource++opengever.meeting/agendaitems.js" inline="False"
+                insert-after="++resource++opengever.base/handlebars.min.js"
+                />
+
 </object>

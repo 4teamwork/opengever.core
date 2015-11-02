@@ -2,7 +2,9 @@
 
   "use strict";
 
-  function Controller(viewlet, template, outlet) {
+  function Controller(viewlet, template, outlet, options) {
+
+    options = $.extend({ message: true }, options);
 
     this.viewlet = viewlet;
     this.outlet = outlet;
@@ -11,7 +13,7 @@
     var self = this;
 
     var messageFunc = function(data) {
-      if(data && data.messages) {
+      if(data && data.messages && options.message) {
         self.messageFactory.shout(data.messages);
       }
     };
@@ -20,51 +22,83 @@
 
     this.render = function() {};
 
-    this.update = function() { self.fetch().always(messageFunc).done(self.render); };
+    this.onRender = function() {};
+
+    this.update = function() {
+      self.fetch().always(messageFunc).done(function(data) {
+        self.render(data);
+        self.onRender.call(self);
+      });
+    };
 
     this.connectedTo = [];
 
     this.events = {};
 
-    this.registerEvents = function() {
-      $.each(this.events, function(idx, callback) {
-        var method = idx.split("#")[0];
-        var target = idx.split("#")[1];
-        $(document).on(method, target, function(e) {
-          e.preventDefault();
-          var callbackPromise = callback.call(self, e);
-          if(callbackPromise && callbackPromise.done) {
-            callbackPromise.always(messageFunc).done(self.update);
-            $.each(self.connectedTo, function(controllerIdx, controller) {
-              controller.update();
-            });
-          }
-        });
+    this.updateConnected = function() {
+      $.each(this.connectedTo, function(controllerIdx, controller) {
+        controller.update();
       });
     };
 
+    this.trackEvent = function(event, callback, update, prevent) {
+      if(prevent) {
+        event.preventDefault();
+      }
+      $.when(callback.call(self, event)).always(messageFunc).done(function() {
+        if(update) {
+          self.update();
+          self.updateConnected();
+        }
+      });
+    };
+
+    this.registerAction = function(action, callback) {
+      var target = action.substring(action.indexOf("#") + 1).replace("!", "");
+      var method = action.substring(0, action.indexOf("#"));
+      var update = Boolean(action.indexOf("!") > -1);
+      var prevent = Boolean(action.indexOf("$") === -1);
+      $(document).on(method, target, function(event) { self.trackEvent(event, callback, update, prevent); } );
+    };
+
+    this.registerActions = function() { $.each(this.events, this.registerAction); };
+
     this.init = function() {
-      this.registerEvents();
-      self.update();
+      this.registerActions();
+      this.update();
     };
 
   }
 
-  window.Controller = Controller;
-
-  function AgendaItemController() {
+  function AgendaItemController(options) {
 
     var self = this;
     var viewlet = $("#opengever_meeting_meeting");
-    Controller.call(this, viewlet, $("#agendaitemsTemplate").html(), $("#agenda_items tbody"));
+
+    var sortableSettings = {
+      handle: ".sortable-handle",
+      forcePlaceholderSize: true,
+      placeholder: "placeholder",
+      items: "tr",
+      tolerance: "intersects",
+      update: self.updateSortOrder
+    };
+
+    Controller.call(this, viewlet, $("#agendaitemsTemplate").html(), $("#agenda_items tbody"), options);
 
     this.fetch = function() { return $.get(viewlet.data().listAgendaItemsUrl); };
 
     this.render = function(data) { self.outlet.html(self.template({ agendaitems: data.items })); };
 
-    this.delete = function(e) { return $.post($(e.target).attr("href")); };
+    this.unschedule = function(e) { return $.post($(e.target).attr("href")); };
 
-    this.agendaItemTitleValidator = function(data) { return data.proceed; };
+
+    this.updateSortOrder = function() {
+      var numbers = $.map($("tr", this.outlet), function(row) { return $(row).data().uid; });
+      return $.post(viewlet.data().updateAgendaItemOrderUrl, { sortOrder: JSON.stringify(numbers) });
+    };
+
+    var agendaItemTitleValidator = function(data) { return data.proceed; };
 
     this.showEditbox = function(e) {
       var row = $(e.target).parents("tr");
@@ -79,31 +113,36 @@
         source: source,
         trigger: $(e.target),
         onChange: self.edit,
-        responseValidator: self.agendaItemTitleValidator
+        onUpdateFail: self.onUpdateFail,
+        responseValidator: agendaItemTitleValidator
       });
 
       editbox.show();
     };
 
-    this.edit = function(title) {
-      return $.post(this.trigger.attr("href"), { title: title }).done(this.onUpdateSuccess).fail(this.onUpdateFail);
-    };
+    this.onRender = function() { this.outlet.sortable(sortableSettings); };
 
-    this.onUpdateSuccess = function(data) { this.messageFactory.shout(data.messages); };
+    this.edit = function(title) { return $.post(this.trigger.attr("href"), { title: title }); };
 
-    this.onUpdateFail = function(data) { this.messageFactory.shout(JSON.parse(data.responseText).messages); };
+    this.onUpdateFail = function(data) { self.messageFactory.shout(data.messages); };
+
+    this.toggleAttachements = function(e) { $(e.target).parents("tr").toggleClass("expanded"); };
 
     this.events = {
-      "click#.delete-agenda-item": this.delete,
-      "click#.edit-agenda-item": this.showEditbox
+      "click#.delete-agenda-item!": this.unschedule,
+      "click#.edit-agenda-item": this.showEditbox,
+      "sortupdate##agenda_items tbody$": this.updateSortOrder,
+      "click#.toggle-attachements": this.toggleAttachements
     };
+
+    this.init();
 
   }
 
-  function ProposalController() {
+  function ProposalController(options) {
 
     var viewlet = $("#opengever_meeting_meeting");
-    Controller.call(this, viewlet, $("#proposalsTemplate").html(), $("#unscheduled_porposals"));
+    Controller.call(this, viewlet, $("#proposalsTemplate").html(), $("#unscheduled_porposals"), options);
     var self = this;
 
     this.fetch = function() { return $.get(viewlet.data().listUnscheduledProposalsUrl); };
@@ -118,51 +157,23 @@
     };
 
     this.events = {
-      "click#.schedule-proposal": this.schedule,
-      "click#.schedule-paragraph": this.add,
-      "click#.schedule-text": this.add
+      "click#.schedule-proposal!": this.schedule,
+      "click#.schedule-paragraph!": this.add,
+      "click#.schedule-text!": this.add
     };
+
+    this.init();
 
   }
 
-  //   var sortableSettings = {
-  //     handle: ".sortable-handle",
-  //     forcePlaceholderSize: true,
-  //     opacity: .8,
-  //     placeholder: "placeholder",
-  //     items: "tr",
-  //     tolerance: "intersects",
-  //     update: function() { self.extractNumbers(); }
-  //   };
-
-  //   this.updateNumbers = function(numbers) {
-  //     $.post(options.updateUrl, { sortOrder: JSON.stringify(numbers) }).done(function(data) {
-  //       self.fetch();
-  //       messageFactory.shout(data.messages);
-  //     }).fail(function(data) {
-  //       messageFactory.shout(data.messages);
-  //       self.render();
-  //     });
-
-  //   };
-
-  //   this.extractNumbers = function() {
-  //     var numbers = $.map($("tr", options.outlet), function(row) {
-  //       return $(row).data().uid;
-  //     });
-  //     self.updateNumbers(numbers);
-  //   };
-
-
   $(function() {
-    var agendaItemController = new AgendaItemController();
-    agendaItemController.init();
+    if($("#opengever_meeting_meeting").length) {
+      var agendaItemController = new AgendaItemController({ message: false });
+      var proposalsController = new ProposalController({ message: false });
 
-    var proposalsController = new ProposalController();
-    proposalsController.init();
-
-    proposalsController.connectedTo = [agendaItemController];
-    agendaItemController.connectedTo = [proposalsController];
+      proposalsController.connectedTo = [agendaItemController];
+      agendaItemController.connectedTo = [proposalsController];
+    }
   });
 
 }(window, jQuery, window.Handlebars));

@@ -419,4 +419,14 @@
         for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
+
+    <!-- 4611 -> 4612 -->
+    <upgrade-step:importProfile
+        title="Register agendaitems javascript (Controller)."
+        source="4611"
+        destination="4612"
+        profile="opengever.meeting:default"
+        directory="profiles/4612"
+        />
+
 </configure>
