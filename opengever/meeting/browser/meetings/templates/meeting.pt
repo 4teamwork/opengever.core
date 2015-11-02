@@ -73,17 +73,22 @@
             <div class="list-group-item protocol"
                  tal:define="protocol_document view/get_protocol_document">
               <h2 i18n:translate="">Protocol</h2>
-              <a tal:condition="protocol_document"
-                 tal:attributes="href protocol_document/absolute_url; class python: view.get_css_class(protocol_document)"
-                 tal:content="protocol_document/Title"></a>
-              <div class="button_group">
-                <a class="button" tal:attributes="href view/url_generate_protocol" i18n:translate="">Generate</a>
-                <a class="button" tal:condition="protocol_document" tal:attributes="href view/url_download_protocol" i18n:translate="">Download preview</a>
-              </div>
+              <a class="generate-protocol"
+                 tal:attributes="href view/url_generate_protocol"></a>
+              <p>
+                <a tal:condition="protocol_document"
+                   tal:attributes="href protocol_document/absolute_url; class python: view.get_css_class(protocol_document)"
+                   tal:content="protocol_document/Title"></a>
+                <a class="download-protocol-btn"
+                   tal:condition="protocol_document"
+                   tal:attributes="href view/url_download_protocol"></a>
+              </p>
             </div>
-            <div class="list-group-item" tal:define="excerpts view/manually_generated_excerpts">
+            <div class="list-group-item excerpts" tal:define="excerpts view/manually_generated_excerpts">
               <h2 i18n:translate="">Excerpts</h2>
-              <ul class="excerpts">
+              <a class="generate-excerpt"
+                 tal:attributes="href view/url_manually_generate_excerpt"></a>
+              <ul>
                 <li tal:repeat="item excerpts">
                   <a href="" tal:attributes="href item/absolute_url;
                                              class python:view.get_css_class(item)">
@@ -91,7 +96,6 @@
                   </a>
                 </li>
               </ul>
-              <a class="button" tal:attributes="href view/url_manually_generate_excerpt" i18n:translate="">Generate excerpt</a>
             </div>
           </div>
 
