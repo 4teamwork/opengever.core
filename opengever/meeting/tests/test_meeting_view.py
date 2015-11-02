@@ -112,7 +112,7 @@ class TestMeetingView(FunctionalTestCase):
     def test_meeting_dossier_is_linked_from_meeting_view(self, browser):
         browser.login().open(self.meeting.get_url())
 
-        link_node = browser.css('.dossier a').first
+        link_node = browser.css('#related_dossier + dd > a').first
         self.assertEqual('Meeting Dossier', link_node.text)
         self.assertEqual(self.meeting_dossier.absolute_url(),
                          link_node.get('href'))
@@ -163,24 +163,19 @@ class TestMeetingView(FunctionalTestCase):
     @browsing
     def test_metadata_starttime_is_existing(self, browser):
         browser.login().open(self.meeting.get_url())
-        self.assertEquals('08:30 AM', browser.css("#meeting_time + dd span")[0].text)
-
-    @browsing
-    def test_metadata_endtime_is_existing(self, browser):
-        browser.login().open(self.meeting.get_url())
-        self.assertEquals('10:30 AM', browser.css("#meeting_time + dd span")[1].text)
+        self.assertEquals('08:30 AM - 10:30 AM', browser.css("#meeting_time + dd").first.text)
 
     @browsing
     def test_metadata_no_endtime_must_not_raise(self, browser):
         Meeting.query.all()[0].end = None
         transaction.commit()
         browser.login().open(self.meeting.get_url())
-        self.assertEquals('', browser.css("#meeting_time + dd span")[1].text)
+        self.assertEquals('08:30 AM -', browser.css("#meeting_time + dd").first.text)
 
     @browsing
     def test_metadata_state_pending_exists(self, browser):
         browser.login().open(self.meeting.get_url())
-        self.assertEquals('Pending', browser.css(".state").first.text)
+        self.assertEquals('pending', browser.css(".workflow_state + dd").first.text)
 
     @browsing
     def test_generated_protocol_exists(self, browser):
@@ -193,29 +188,3 @@ class TestMeetingView(FunctionalTestCase):
         browser.login().open(self.meeting.get_url())
         self.assertEquals('Excerpt', browser.css(".excerpts a").first.text)
         self.assertEquals(self.excerpt.absolute_url(), browser.css(".excerpts a").first.get('href'))
-
-    @browsing
-    def test_generated_proposal_exceprt_exists(self, browser):
-        browser.login().open(self.meeting.get_url())
-        self.assertEquals('Excerpt', browser.css(".summary > a").first.text)
-        self.assertEquals(self.excerpt.absolute_url(), browser.css(".summary > a").first.get('href'))
-
-    @browsing
-    def test_proposal_attachement_exists(self, browser):
-        browser.login().open(self.meeting.get_url())
-        self.assertEquals(u'Testdokum\xe4nt', browser.css(".attachements a").first.text)
-
-    @browsing
-    def test_proposal_attachement_link_exists(self, browser):
-        browser.login().open(self.meeting.get_url())
-        self.assertEquals(
-            self.proposal_a.load_model().resolve_submitted_documents()[0].absolute_url(),
-            browser.css(".attachements a").first.get('href'))
-
-    @browsing
-    def test_proposal_is_expandable(self, browser):
-        browser.login().open(self.meeting.get_url())
-        self.assertEquals('expandable',
-                          browser.css("#agenda_items tr")[0].get('class'))
-
-        self.assertEquals('', browser.css("#agenda_items tr")[1].get('class'))

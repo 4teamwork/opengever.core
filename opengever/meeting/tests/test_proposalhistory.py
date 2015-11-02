@@ -111,11 +111,8 @@ class TestProposalHistory(FunctionalTestCase):
     @browsing
     def test_scheduling_creates_history_entry(self, browser):
         self.submit_proposal()
-        browser.login().open(self.meeting.get_url())
-        form = browser.css('#schedule_proposal').first
-        form.fill(
-            {'proposal_id': str(self.proposal.load_model().proposal_id)}
-        ).submit()
+        browser.login().open(
+            self.meeting.get_url(view='unscheduled_proposals/1/schedule'))
 
         self.open_overview(browser)
         self.assertEqual(
@@ -125,14 +122,10 @@ class TestProposalHistory(FunctionalTestCase):
     @browsing
     def test_removing_from_schedule_creates_history_entry(self, browser):
         self.submit_proposal()
-        # schedule proposal
-        browser.login().open(self.meeting.get_url())
-        form = browser.css('#schedule_proposal').first
-        form.fill(
-            {'proposal_id': str(self.proposal.load_model().proposal_id)}
-        ).submit()
+        browser.login().open(
+            self.meeting.get_url(view='unscheduled_proposals/1/schedule'))
 
-        browser.css('.delete_agenda_item').first.click()
+        browser.login().open(self.meeting.get_url(view='agenda_items/1/delete'))
 
         self.open_overview(browser)
         self.assertEqual(
