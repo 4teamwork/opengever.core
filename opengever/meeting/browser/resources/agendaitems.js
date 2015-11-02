@@ -131,7 +131,7 @@
     this.events = {
       "click#.delete-agenda-item!": this.unschedule,
       "click#.edit-agenda-item": this.showEditbox,
-      "sortupdate##agenda_items tbody$": this.updateSortOrder,
+      "sortupdate##agenda_items tbody$!": this.updateSortOrder,
       "click#.toggle-attachements": this.toggleAttachements
     };
 
