@@ -1,3 +1,4 @@
+from opengever.base.browser.helper import get_css_class
 from opengever.base.response import JSONResponse
 from opengever.meeting import _
 from opengever.meeting.service import meeting_service
@@ -5,15 +6,61 @@ from Products.Five.browser import BrowserView
 from zExceptions import NotFound
 from zExceptions import Unauthorized
 from zope.interface import implements
+from zope.interface import Interface
 from zope.publisher.interfaces import IPublishTraverse
 from zope.publisher.interfaces.browser import IBrowserView
 import json
-from opengever.base.browser.helper import get_css_class
+
+
+class IAgendaItemActions(Interface):
+
+    def list():
+        """Returns json list of all agendaitems for the current
+        context (meeting).
+        """
+
+    def edit():
+        """Updates the title fo the current agendaitem, with the one given by
+        the request parameter `title`. The view expect that its called by
+        traversing over the agendaitem: `plone/meeting-3/14/edit` for example.
+        """
+
+    def delete():
+        """Remove or unschedule (proposal related) the current agendaitem.
+        The view expect that its called by traversing over the agendaitem:
+        `plone/meeting-3/14/delete` for example.
+        """
+
+    def update_order():
+        """Updates the order of the meetings agendaitems. The new sortOrder
+        is expected in the request parameter `sortOrder` and should be a list
+        of agendaitem ids.
+        """
+
+    def schedule_text():
+        """Schedule the given Text (request parameter `title`) for the current
+        meeting.
+        """
+
+    def schedule_paragraph():
+        """Schedule the given Paragraph (request parameter `title`) for the
+        current meeting.
+        """
 
 
 class AgendaItemsView(BrowserView):
 
     implements(IBrowserView, IPublishTraverse)
+
+    def publishTraverse(self, request, name):
+        if name in IAgendaItemActions.names():
+            return getattr(self, name)
+
+        # we only support exactly one id
+        if self.agenda_item_id:
+            raise NotFound
+        self.agenda_item_id = int(name)
+        return self
 
     def __init__(self, context, request):
         super(AgendaItemsView, self).__init__(context, request)
@@ -24,7 +71,7 @@ class AgendaItemsView(BrowserView):
         if not item.has_proposal:
             return []
 
-        return map(lambda document : {
+        return map(lambda document: {
             'title': document.title,
             'link': document.absolute_url(),
             'css_class': get_css_class(document)},
@@ -41,34 +88,9 @@ class AgendaItemsView(BrowserView):
             'css_class': get_css_class(excerpt),
             }
 
-    def publishTraverse(self, request, name):
-        if name == 'list':
-            return self.list
-
-        if name == 'edit':
-            return self.edit
-
-        if name == 'delete':
-            return self.delete
-
-        if name == 'update_order':
-            return self.update_order
-
-        if name == 'schedule_text':
-            return self.schedule_text
-
-        if name == 'schedule_paragraph':
-            return self.schedule_paragraph
-
-        # we only support exactly one id
-        if self.agenda_item_id:
-            raise NotFound
-        self.agenda_item_id = int(name)
-        return self
-
     def list(self):
-        """
-        Returns json list of all agendaitems for the current context (meeting).
+        """Returns json list of all agendaitems for the current
+        context (meeting).
         """
         meeting = self.context.model
         agenda_items = []
@@ -85,7 +107,7 @@ class AgendaItemsView(BrowserView):
         return JSONResponse(self.request).data(items=agenda_items).dump()
 
     def update_order(self):
-        """Updat the order of the agendaitems. The new sortOrder is expected
+        """Updates the order of the agendaitems. The new sortOrder is expected
         in the request parameter `sortOrder`.
         """
         if not self.context.model.is_editable():
