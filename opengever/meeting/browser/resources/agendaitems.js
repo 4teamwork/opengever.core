@@ -13,7 +13,7 @@
     var self = this;
 
     var messageFunc = function(data) {
-      if(data && data.messages && options.message) {
+      if(data && options.message) {
         self.messageFactory.shout(data.messages);
       }
     };
@@ -25,7 +25,7 @@
     this.onRender = function() {};
 
     this.update = function() {
-      self.fetch().always(messageFunc).done(function(data) {
+      self.fetch().fail(messageFunc).done(function(data) {
         self.render(data);
         self.onRender.call(self);
       });
@@ -168,8 +168,8 @@
 
   $(function() {
     if($("#opengever_meeting_meeting").length) {
-      var agendaItemController = new AgendaItemController({ message: false });
-      var proposalsController = new ProposalController({ message: false });
+      var agendaItemController = new AgendaItemController();
+      var proposalsController = new ProposalController();
 
       proposalsController.connectedTo = [agendaItemController];
       agendaItemController.connectedTo = [proposalsController];

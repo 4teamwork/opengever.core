@@ -8,7 +8,7 @@
     var defaultMessage = {
       messageClass: "error",
       messageTitle: "Fehler",
-      message: viewlet.data("msg_unexpected_error")
+      message: viewlet.data("unexpected-error")
     };
 
     this.clearMessages = function() {
