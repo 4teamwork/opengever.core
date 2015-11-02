@@ -97,12 +97,12 @@
 
         </div>
         <div class="content">
-          <div class="collapsible open">
+          <div class="collapsible">
             <div class="collapsible-header">
               <button class="button fa fa-plus"></button>
               <h2 class="label" i18n:translate="">Agenda Items</h2>
             </div>
-            <div class="collapsible-content open">
+            <div class="collapsible-content">
               <form method="post">
                 <div class="input-group">
                   <label for="title">Freitext:</label>

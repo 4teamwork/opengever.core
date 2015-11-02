@@ -8,13 +8,18 @@
 
     this.viewlet = viewlet;
     this.outlet = outlet;
-    this.template = HBS.compile(template);
     this.messageFactory = new global.MessageFactory(viewlet);
     var self = this;
 
     var messageFunc = function(data) {
       if(data && options.message) {
         self.messageFactory.shout(data.messages);
+      }
+    };
+
+    this.compile = function() {
+      if(template) {
+        this.template = HBS.compile(template);
       }
     };
 
@@ -25,7 +30,7 @@
     this.onRender = function() {};
 
     this.update = function() {
-      self.fetch().fail(messageFunc).done(function(data) {
+      $.when(self.fetch()).fail(messageFunc).done(function(data) {
         self.render(data);
         self.onRender.call(self);
       });
@@ -64,6 +69,7 @@
     this.registerActions = function() { $.each(this.events, this.registerAction); };
 
     this.init = function() {
+      this.compile();
       this.registerActions();
       this.update();
     };
@@ -166,10 +172,26 @@
 
   }
 
+  function CollapsibleController() {
+
+    var viewlet = $("#opengever_meeting_meeting");
+    Controller.call(this, viewlet);
+
+    this.toggle = function(e) { $(e.target).parents(".collapsible").toggleClass("open"); };
+
+    this.events = {
+      "click#.collapsible-header > button": this.toggle
+    };
+
+    this.init();
+
+  }
+
   $(function() {
     if($("#opengever_meeting_meeting").length) {
       var agendaItemController = new AgendaItemController();
       var proposalsController = new ProposalController();
+      var collapsibleController = new CollapsibleController();
 
       proposalsController.connectedTo = [agendaItemController];
       agendaItemController.connectedTo = [proposalsController];
