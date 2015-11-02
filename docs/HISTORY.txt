@@ -16,6 +16,17 @@ Changelog
 
   [lgraf]
 
+- Refactor meeting-permissions, add own role for commitee-group-members.
+  [deiferni]
+
+- Disallow access to views on the portal root for anonymous except of login
+  form and password reset.
+  [buchi]
+
+- Make sure only the new responsible gets notified by mail, when a
+  task gets reassigned.
+  [phgross]
+
 - Move plone-group creation in OrgUnitBuilder to opengever.core.
   [deiferni]
 
