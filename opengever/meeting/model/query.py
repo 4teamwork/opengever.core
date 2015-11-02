@@ -1,5 +1,5 @@
 from datetime import date
-from datetime import datetime
+from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.oguid import Oguid
 from opengever.meeting.model.committee import Committee
 from opengever.meeting.model.generateddocument import GeneratedDocument
@@ -135,13 +135,13 @@ class MeetingQuery(BaseQuery):
 
     def _upcoming_meetings(self, committee):
         query = self._committee_meetings(committee)
-        query = query.filter(Meeting.start >= datetime.now())
+        query = query.filter(Meeting.start >= utcnow_tz_aware())
         query = query.order_by(Meeting.start)
         return query
 
     def _past_meetings(self, committee):
         query = self._committee_meetings(committee)
-        query = query.filter(Meeting.start < datetime.now())
+        query = query.filter(Meeting.start < utcnow_tz_aware())
         query = query.order_by(desc(Meeting.start))
         return query
 

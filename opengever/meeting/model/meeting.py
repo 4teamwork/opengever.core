@@ -1,5 +1,6 @@
 from collections import OrderedDict
 from opengever.base.model import Base
+from opengever.base.model import UTCDateTime
 from opengever.base.oguid import Oguid
 from opengever.base.utils import escape_html
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
@@ -13,7 +14,6 @@ from opengever.ogds.models.types import UnicodeCoercingText
 from plone import api
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from sqlalchemy import Column
-from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
@@ -81,8 +81,8 @@ class Meeting(Base):
     committee_id = Column(Integer, ForeignKey('committees.id'), nullable=False)
     committee = relationship("Committee", backref='meetings')
     location = Column(String(256))
-    start = Column('start_datetime', DateTime, nullable=False)
-    end = Column('end_datetime', DateTime)
+    start = Column('start_datetime', UTCDateTime(timezone=True), nullable=False)
+    end = Column('end_datetime', UTCDateTime(timezone=True))
     workflow_state = Column(String(WORKFLOW_STATE_LENGTH), nullable=False,
                             default=workflow.default_state.name)
 
