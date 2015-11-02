@@ -41,7 +41,8 @@ class TestProtocolJsonData(FunctionalTestCase):
             committee=self.committee,
             start=datetime(2010, 1, 1),
             participants=[self.member_peter, self.member_franz],
-            other_participants=u'Hans M\xfcller\nHeidi Muster'))
+            other_participants=u'Hans M\xfcller\nHeidi Muster',
+            protocol_start_page_number=42))
 
         self.agenda_item_proposal = create(
             Builder('agenda_item').having(
@@ -59,7 +60,8 @@ class TestProtocolJsonData(FunctionalTestCase):
     def test_protocol_json(self):
         data = ProtocolData(self.meeting).data
         self.assertEqual(
-            {'agenda_items': [
+            {'_sablon': {'properties': {'start_page_number': 42}},
+             'agenda_items': [
                 {'description': u'Proposal',
                  'dossier_reference_number': 'FD 2.6.8/1',
                  'markdown:considerations': u'We should think about it',

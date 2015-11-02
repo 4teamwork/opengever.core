@@ -45,6 +45,12 @@ class IParticipants(form.Schema):
         title=_(u"label_other_participants", default=u"Other Participants"),
         required=False)
 
+    protocol_start_page_number = schema.Int(
+        title=_(u"label_protocol_start_page_number",
+                default=u"Protocol start-page"),
+        required=False
+        )
+
 
 class DownloadGeneratedProtocol(BrowserView):
 
@@ -131,6 +137,13 @@ class EditProtocol(AutoExtensibleForm, ModelProxyEditForm, EditForm):
         ModelProxyEditForm.applyChanges(self, data)
         for agenda_item in self.get_agenda_items():
             agenda_item.update(self.request)
+
+        api.portal.show_message(
+            _(u'message_changes_saved', default='Changes saved'),
+            self.request)
+
+        self.unlock()
+        self.redirect_to_meeting()
         # pretend to always change the underlying data
         return True
 
@@ -165,12 +178,6 @@ class EditProtocol(AutoExtensibleForm, ModelProxyEditForm, EditForm):
     def handleApply(self, action):
         # self as first argument is required by to the decorator
         super(EditProtocol, self).handleApply(self, action)
-        api.portal.show_message(
-            _(u'message_changes_saved', default='Changes saved'),
-            self.request)
-
-        self.unlock()
-        return self.redirect_to_meeting()
 
     @button.buttonAndHandler(_('Cancel', default=u'Cancel'), name='cancel')
     def handleCancel(self, action):

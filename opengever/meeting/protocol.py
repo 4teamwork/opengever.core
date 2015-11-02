@@ -29,11 +29,22 @@ class ProtocolData(object):
         self.agenda_items = agenda_items or self.meeting.agenda_items
 
         self.data = {}
+        self.add_settings()
         self.add_base()
         self.add_protocol_type()
         self.add_participants()
         self.add_meeting()
         self.add_agenda_items()
+
+    def add_settings(self):
+        if not self.meeting.protocol_start_page_number:
+            return
+
+        self.data['_sablon'] = {
+            'properties': {
+                'start_page_number': self.meeting.protocol_start_page_number
+                }
+            }
 
     def add_base(self):
         self.data['mandant'] = {
