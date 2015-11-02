@@ -29,6 +29,7 @@ ALLOWED_VIEWS = set([
     'pwreset_finish',
     'pwreset_form',
     'require_login',
+    'zauth',
 ])
 
 
