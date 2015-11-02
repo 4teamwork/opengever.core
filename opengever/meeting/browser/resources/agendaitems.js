@@ -103,8 +103,8 @@
     this.showEditbox = function(e) {
       var row = $(e.target).parents("tr");
       var source;
-      if($(".title > a", row).length) {
-        source = $(".title > a", row);
+      if($(".title > span > a", row).length) {
+        source = $(".title > span > a", row);
       } else {
         source = $(".title > span", row);
       }

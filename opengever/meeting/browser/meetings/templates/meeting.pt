@@ -154,7 +154,7 @@
                       <td class="sortable-handle"></td>
                       <td class="number">{{number}}</td>
                       <td class="title">
-                        {{{link}}}
+                        <span>{{{link}}}</span>
                         {{#if has_proposal}}
                           <ul class="attachements">
                             {{#each documents}}
