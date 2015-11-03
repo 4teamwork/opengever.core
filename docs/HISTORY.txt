@@ -8,6 +8,9 @@ Changelog
 - Include plone4.csrffixes in order to get back on the "Plone Way" to use
   automatic CSRF protection with Plone 4. This allows use to drop some of
   our custom handling of certain cases:
+
+    - Transforming responses with uncommon charsets
+
   [lgraf]
 
 - Disallow access to views on the portal root for anonymous except of login

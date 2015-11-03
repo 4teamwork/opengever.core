@@ -21,7 +21,6 @@ from zope.publisher.interfaces.browser import IBrowserRequest
 import gc
 import logging
 import os
-import re
 import subprocess
 import transaction
 
@@ -59,20 +58,6 @@ def _get_unprotected_objects():
 
 class OGProtectTransform(ProtectTransform):
     adapts(Interface, IBrowserRequest)
-
-    def parseTree(self, result):
-        # Rage quit early so that we have no html parsing errors.
-        if result in (None, ['']):
-            return None
-
-        # Decode content so that we have no problem with latin-9 for example.
-        charset_match = re.search(r'charset=(.*)',
-                                  self.request.response.getHeader('Content-Type'))
-        if charset_match:
-            result = map(lambda text: text.decode(charset_match.group(1)).encode('utf-8'),
-                         result)
-
-        return super(OGProtectTransform, self).parseTree(result)
 
     def _get_current_view(self):
         return getattr(self.request, 'steps', [''])[-1]
