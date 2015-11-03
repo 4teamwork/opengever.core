@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.5.7 (unreleased)
+4.5.7 (2015-11-03)
 ------------------
 
 - Disallow access to views on the portal root for anonymous except of login
