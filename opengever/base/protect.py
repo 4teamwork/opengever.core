@@ -3,8 +3,8 @@ from copy import copy
 from datetime import datetime
 from opengever.base.pathfinder import PathFinder
 from plone import api
-from plone.portlets.constants import CONTEXT_ASSIGNMENT_KEY
 from plone.protect.auto import ProtectTransform
+from plone.protect.auto import safeWrite
 from plone.protect.interfaces import IDisableCSRFProtection
 from pprint import pformat
 from Products.CMFCore.utils import getToolByName
@@ -15,13 +15,11 @@ from zope.annotation.interfaces import IAnnotatable
 from zope.annotation.interfaces import IAnnotations
 from zope.component import adapts
 from zope.component.hooks import getSite
-from zope.globalrequest import getRequest
 from zope.interface import Interface
 from zope.publisher.interfaces.browser import IBrowserRequest
 import gc
 import logging
 import os
-import re
 import subprocess
 import transaction
 
@@ -33,6 +31,13 @@ def unprotected_write(obj):
     """Marks ``obj`` so that it does not trigger plone.protect's
     write protection for GET request.
     The flag is not applied recursively.
+
+    This currently delegates most of the work to safeWrite(), but we can't
+    quite drop it yet, because:
+    - safeWrite() doesn't return the object, which makes it more awkward to use
+    - safeWrite() doesn't unwrap non-persistent attribute annotations
+
+    TODO: Possibly move this functionaly upstream (into plone.protect)
     """
     if obj is None:
         return obj
@@ -42,37 +47,12 @@ def unprotected_write(obj):
         unprotected_write(getattr(obj.obj, '__annotations__', None))
         return obj
 
-    _get_unprotected_objects().append(obj)
+    safeWrite(obj)
     return obj
-
-
-def _get_unprotected_objects():
-    request = getRequest()
-    if request is None:
-        # bail out - no request to protect
-        return []
-
-    if not hasattr(request, '_unprotected_objects'):
-        setattr(request, '_unprotected_objects', [])
-    return getattr(request, '_unprotected_objects')
 
 
 class OGProtectTransform(ProtectTransform):
     adapts(Interface, IBrowserRequest)
-
-    def parseTree(self, result):
-        # Rage quit early so that we have no html parsing errors.
-        if result in (None, ['']):
-            return None
-
-        # Decode content so that we have no problem with latin-9 for example.
-        charset_match = re.search(r'charset=(.*)',
-                                  self.request.response.getHeader('Content-Type'))
-        if charset_match:
-            result = map(lambda text: text.decode(charset_match.group(1)).encode('utf-8'),
-                         result)
-
-        return super(OGProtectTransform, self).parseTree(result)
 
     def _get_current_view(self):
         return getattr(self.request, 'steps', [''])[-1]
@@ -209,9 +189,7 @@ class OGProtectTransform(ProtectTransform):
 
     def _registered_objects(self):
         self._global_unprotect()
-        objects = super(OGProtectTransform, self)._registered_objects()
-        unprotected = _get_unprotected_objects()
-        return filter(lambda obj: obj not in unprotected, objects)
+        return super(OGProtectTransform, self)._registered_objects()
 
     def _global_unprotect(self):
         # portal_memberdata._members cache will be written sometimes.
@@ -224,14 +202,6 @@ class OGProtectTransform(ProtectTransform):
         if IAnnotatable.providedBy(context):
             annotations = IAnnotations(context)
             unprotected_write(annotations)
-            if CONTEXT_ASSIGNMENT_KEY in annotations:
-                # also allow writes to context portlet assignments
-                unprotected_write(annotations[CONTEXT_ASSIGNMENT_KEY])
-
-        # Allow _dav_writelocks to be initialized
-        # see webdav/Lockable.py:64
-        if hasattr(context, '_dav_writelocks'):
-            unprotected_write(context._dav_writelocks)
 
 
 class ProtectAwareAttributeAnnotations(AttributeAnnotations):

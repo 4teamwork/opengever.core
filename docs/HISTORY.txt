@@ -5,6 +5,17 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Include plone4.csrffixes in order to get back on the "Plone Way" to use
+  automatic CSRF protection with Plone 4. This allows use to drop some of
+  our custom handling of certain cases:
+
+    - Transforming responses with uncommon charsets
+    - Our own way of marking objects for safe writes
+    - Unprotecting writes to _dav_writelocks
+    - Handling context portlet assignments
+
+  [lgraf]
+
 - Disallow access to views on the portal root for anonymous except of login
   form and password reset.
   [buchi]
