@@ -8,6 +8,7 @@
 
     this.viewlet = viewlet;
     this.outlet = outlet;
+    this.template = function() {};
     this.messageFactory = new global.MessageFactory(viewlet);
     var self = this;
 
