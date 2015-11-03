@@ -21,7 +21,7 @@
                            data-update-agenda-item-order-url view/url_update_agenda_item_order;
                            data-list-agenda-items-url view/url_list_agenda_items;
                            data-list-unscheduled-proposals-url view/url_list_unscheduled_proposals;
-                           data-editable view/is_editable">
+                           data-editable view/json_is_editable">
 
         <div class="modal" id="confirm_unschedule"
              title="Unschedule proposal"
@@ -86,13 +86,14 @@
                  tal:define="protocol_document view/get_protocol_document">
               <h2 i18n:translate="">Protocol</h2>
               <a tal:attributes="href view/url_generate_protocol;
-                                 class python: 'refresh-protocol' if view.has_protocol_document() else 'generate-protocol'"></a>
+                                 class python: 'refresh-protocol' if view.has_protocol_document() else 'generate-protocol'"
+                  tal:condition="meeting/is_editable"></a>
               <p>
                 <a tal:condition="protocol_document"
                    tal:attributes="href protocol_document/absolute_url; class python: view.get_css_class(protocol_document)"
                    tal:content="protocol_document/Title"></a>
                 <a class="download-protocol-btn"
-                   tal:condition="protocol_document"
+                   tal:condition="python: meeting.is_editable() and protocol_document"
                    tal:attributes="href view/url_download_protocol"></a>
               </p>
             </div>
@@ -113,7 +114,8 @@
 
         </div>
         <div class="content">
-          <div class="collapsible">
+          <div class="collapsible"
+               tal:condition="meeting/is_editable">
             <div class="collapsible-header">
               <button class="button fa fa-plus"></button>
               <span class="label" i18n:translate="">Agenda Items</span>

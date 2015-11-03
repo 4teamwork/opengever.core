@@ -354,7 +354,7 @@ class MeetingView(BrowserView):
         return PROPOSALS_TEMPLATE % {'label_schedule': label_schedule,
                                      'label_no_proposals': label_no_proposals}
 
-    def is_editable(self):
+    def json_is_editable(self):
         return json.dumps(self.model.is_editable());
 
     @property
