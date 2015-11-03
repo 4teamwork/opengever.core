@@ -29,8 +29,11 @@
 
     this.onRender = function() {};
 
+    this.refresh = function() { this.render(this.chache); };
+
     this.update = function() {
       $.when(self.fetch()).fail(messageFunc).done(function(data) {
+        self.chache = data;
         self.render(data);
         self.onRender.call(self);
       });
@@ -101,7 +104,10 @@
 
     this.updateSortOrder = function() {
       var numbers = $.map($("tr", this.outlet), function(row) { return $(row).data().uid; });
-      return $.post(viewlet.data().updateAgendaItemOrderUrl, { sortOrder: JSON.stringify(numbers) });
+      return $.post(viewlet.data().updateAgendaItemOrderUrl,
+                    { sortOrder: JSON.stringify(numbers) }).fail(function() {
+                      self.refresh();
+                    });
     };
 
     var agendaItemTitleValidator = function(data) { return data.proceed; };
@@ -189,6 +195,9 @@
 
   $(function() {
     if($("#opengever_meeting_meeting").length) {
+
+
+
       var agendaItemController = new AgendaItemController();
       var proposalsController = new ProposalController();
       var collapsibleController = new CollapsibleController();
