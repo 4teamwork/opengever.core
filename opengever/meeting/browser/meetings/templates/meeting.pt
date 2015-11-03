@@ -73,8 +73,8 @@
             <div class="list-group-item protocol"
                  tal:define="protocol_document view/get_protocol_document">
               <h2 i18n:translate="">Protocol</h2>
-              <a class="generate-protocol"
-                 tal:attributes="href view/url_generate_protocol"></a>
+              <a tal:attributes="href view/url_generate_protocol;
+                                 class python: 'refresh-protocol' if view.has_protocol_document() else 'generate-protocol'"></a>
               <p>
                 <a tal:condition="protocol_document"
                    tal:attributes="href protocol_document/absolute_url; class python: view.get_css_class(protocol_document)"
