@@ -5,7 +5,7 @@ from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.form import WizzardWrappedAddForm
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
-from opengever.base.schema import TZLocalDatetime
+from opengever.base.schema import UTCDatetime
 from opengever.meeting import _
 from opengever.meeting.browser.meetings.transitions import MeetingTransitionController
 from opengever.meeting.browser.protocol import GenerateProtocol
@@ -45,11 +45,11 @@ class IMeetingModel(form.Schema):
         max_length=256,
         required=False)
 
-    start = TZLocalDatetime(
+    start = UTCDatetime(
         title=_('label_start', default=u"Start"),
         required=True)
 
-    end = TZLocalDatetime(
+    end = UTCDatetime(
         title=_('label_end', default=u"End"),
         required=False)
 

@@ -5,8 +5,8 @@
     i18n_domain="opengever.base">
 
     <adapter
-        factory=".schema.TZLocalDatetimeDataConverter"
-        for=".schema.ITZLocalDatetime
+        factory=".schema.UTCDatetimeDataConverter"
+        for=".schema.IUTCDatetime
              collective.z3cform.datetimewidget.interfaces.IDatetimeWidget" />
 
 </configure>

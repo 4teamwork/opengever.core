@@ -1,4 +1,5 @@
 from datetime import datetime
+from opengever.base.date_time import as_utc
 from Products.CMFCore.utils import getToolByName
 import pytz
 
@@ -7,14 +8,15 @@ DEFAULT_TZ = pytz.timezone('Europe/Zurich')
 
 
 def localized_datetime(*args, **kwargs):
-    """Localize timezone naive datetime to default timezone."""
+    """Localize timezone naive datetime to default timezone and return as utc.
 
+    """
     if args or kwargs:
         dt = datetime(*args, **kwargs)
     else:
         dt = datetime.now()
 
-    return DEFAULT_TZ.localize(dt)
+    return as_utc(DEFAULT_TZ.localize(dt))
 
 
 def create_plone_user(portal, userid, password='demo09'):
