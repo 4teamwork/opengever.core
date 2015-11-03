@@ -44,10 +44,7 @@ class AddRolesColumn(SchemaMigration):
 
         settings = self.connection.execute(defaults_table.select()).fetchall()
         for setting in settings:
-            roles = DEFAULT_SETTINGS.get(setting.kind)
-            if not roles:
-                continue
-
+            roles = DEFAULT_SETTINGS.get(setting.kind, [])
             self.execute(
                 defaults_table.update()
                 .values(mail_notification_roles=json.dumps(roles))
