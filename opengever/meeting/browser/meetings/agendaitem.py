@@ -82,6 +82,9 @@ class AgendaItemsView(BrowserView):
             return None
 
         excerpt = item.proposal.resolve_submitted_excerpt_document()
+        if excerpt is None:
+            return {}
+
         return {
             'title': excerpt.title,
             'link': excerpt.absolute_url(),
