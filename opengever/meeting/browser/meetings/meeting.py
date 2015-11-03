@@ -59,6 +59,67 @@ ADD_MEETING_STEPS = (
     ('add-meeting-dossier', _(u'Add Dossier for Meeting'))
 )
 
+AGENDAITEMS_TEMPLATE = '''
+<script id="agendaitemsTemplate" type="text/x-handlebars-template">
+  {{#each agendaitems}}
+    <tr class="{{css_class}}" data-uid={{id}}>
+      <td class="sortable-handle"></td>
+      <td class="number">{{number}}</td>
+      <td class="title">
+        <span>{{{link}}}</span>
+        {{#if has_proposal}}
+          <ul class="attachements">
+            {{#each documents}}
+              <li>
+                <a href={{link}} class="{{css_class}}">{{title}}</a>
+              </li>
+            {{/each}}
+          </ul>
+        {{/if}}
+        {{#if excerpt}}
+          <div class="summary">
+            <a href="{{excerpt.link}}" class="{{excerpt.css_class}}">{{excerpt.title}}</a>
+          </div>
+        {{/if}}
+        <div class="edit-box">
+          <div class="input-group">
+            <input type="text" />
+            <div class="button-group">
+              <input value="%(label_edit_save)s" type="button" class="button edit-save" />
+              <input value="%(label_edit_cancel)s" type="button" class="button edit-cancel" />
+            </div>
+          </div>
+        </div>
+      </td>
+      <td class="toggle-attachements">
+        {{#if documents}}
+          <a class="toggle-attachements-btn"></a>
+        {{/if}}
+      </td>
+      <td class="actions">
+        <div class="button-group">
+          <a href="{{edit_link}}" class="button edit-agenda-item"></a>
+          <a href="{{delete_link}}" class="button delete-agenda-item"></a>
+        </div>
+      </td>
+    </tr>
+  {{/each}}
+</script>
+'''
+
+PROPOSALS_TEMPLATE = '''
+<script tal:condition="view/unscheduled_proposals" id="proposalsTemplate" type="text/x-handlebars-template">
+  {{#each proposals}}
+    <div class="list-group-item submit">
+      <span class="title">{{title}}</span>
+      <div class="button-group">
+        <a class="button schedule-proposal" href="{{schedule_url}}">%(label_schedule)s</a>
+      </div>
+    </div>
+  {{/each}}
+</script>
+'''
+
 
 def get_dm_key(committee_oguid=None):
     """Return the key used to store meeting-data in the wizard-storage."""
@@ -275,6 +336,16 @@ class MeetingView(BrowserView):
     def manually_generated_excerpts(self):
         return [excerpt.resolve_document()
                 for excerpt in self.model.excerpt_documents]
+
+    def render_handlebars_agendaitems_template(self):
+        label_edit_cancel = translate(_('label_edit_cancel', default='Cancel'), context=self.request)
+        label_edit_save = translate(_('label_edit_save', default='Save'), context=self.request)
+        return AGENDAITEMS_TEMPLATE  % {'label_edit_cancel': label_edit_cancel,
+                                        'label_edit_save': label_edit_save}
+
+    def render_handlebars_proposals_template(self):
+        label_schedule = translate(_('label_schedule', default='Schedule'), context=self.request)
+        return PROPOSALS_TEMPLATE % {'label_schedule': label_schedule}
 
     @property
     def url_update_agenda_item_order(self):
