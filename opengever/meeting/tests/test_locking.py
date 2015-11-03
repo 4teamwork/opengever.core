@@ -1,4 +1,3 @@
-from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -46,7 +45,7 @@ class TestMeetingLocking(FunctionalTestCase):
         self.committee_model = self.committee.load_model()
         self.meeting = create(Builder('meeting')
                               .having(committee=self.committee_model,
-                                      start=datetime(2013, 1, 1),
+                                      start=self.localized_datetime(2013, 1, 1),
                                       location='There',)
                               .link_with(self.meeting_dossier))
         self.meeting.execute_transition('pending-held')

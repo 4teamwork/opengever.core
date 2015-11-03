@@ -1,7 +1,7 @@
-from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.testing import MEMORY_DB_LAYER
+from opengever.testing.test_case import localized_datetime
 from unittest2 import TestCase
 
 
@@ -16,7 +16,7 @@ class TestUnitAgendaItem(TestCase):
         self.committee = create(Builder('committee_model'))
         self.meeting = create(Builder('meeting').having(
             committee=self.committee,
-            start=datetime(2010, 1, 1)))
+            start=localized_datetime(2010, 1, 1)))
 
         create(Builder('admin_unit').id('fd'))
 

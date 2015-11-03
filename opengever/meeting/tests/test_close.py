@@ -1,4 +1,3 @@
-from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -41,7 +40,7 @@ class TestCloseMeeting(FunctionalTestCase):
 
         self.meeting = create(Builder('meeting')
                               .having(committee=self.committee.load_model(),
-                                      start=datetime(2013, 1, 1),
+                                      start=self.localized_datetime(2013, 1, 1),
                                       location='There')
                               .scheduled_proposals([self.proposal_a, self.proposal_b])
                               .link_with(self.meeting_dossier))

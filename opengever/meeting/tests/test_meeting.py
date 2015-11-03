@@ -34,16 +34,16 @@ class TestMeeting(FunctionalTestCase):
     def test_meeting_title(self):
         self.assertEqual(
             u'Bern, Oct 18, 2013',
-            Meeting(location=u'Bern', start=datetime(2013, 10, 18)).get_title())
+            Meeting(location=u'Bern', start=self.localized_datetime(2013, 10, 18)).get_title())
 
         self.assertEqual(
             u'Oct 18, 2013',
-            Meeting(start=datetime(2013, 10, 18)).get_title())
+            Meeting(start=self.localized_datetime(2013, 10, 18)).get_title())
 
     def test_meeting_link(self):
         meeting = create(Builder('meeting').having(
             location=u'Bern',
-            start=datetime(2013, 10, 18),
+            start=self.localized_datetime(2013, 10, 18),
             committee=self.committee.load_model()))
 
         link = PyQuery(meeting.get_link())[0]
@@ -82,8 +82,8 @@ class TestMeeting(FunctionalTestCase):
         self.assertEqual(1, len(committee_model.meetings))
         meeting = committee_model.meetings[0]
 
-        self.assertEqual(datetime(2010, 1, 1, 10), meeting.start)
-        self.assertEqual(datetime(2010, 1, 1, 11), meeting.end)
+        self.assertEqual(self.localized_datetime(2010, 1, 1, 10), meeting.start)
+        self.assertEqual(self.localized_datetime(2010, 1, 1, 11), meeting.end)
         self.assertEqual('Somewhere', meeting.location)
         dossier = meeting.dossier_oguid.resolve_object()
         self.assertIsNotNone(dossier)
@@ -94,7 +94,7 @@ class TestMeeting(FunctionalTestCase):
         committee_model = self.committee.load_model()
         meeting = create(Builder('meeting')
                          .having(committee=committee_model,
-                                 start=datetime(2013, 1, 1),
+                                 start=self.localized_datetime(2013, 1, 1),
                                  location='There',)
                          .link_with(self.meeting_dossier))
 
@@ -107,7 +107,7 @@ class TestMeeting(FunctionalTestCase):
         # refresh meeting, due to above request it has lost its session
         # this is expected behavior
         meeting = Meeting.query.get(meeting.meeting_id)
-        self.assertEqual(datetime(2012, 5, 5, 15), meeting.start)
+        self.assertEqual(self.localized_datetime(2012, 5, 5, 15), meeting.start)
         self.assertEqual('There', meeting.location)
 
     @browsing
@@ -115,7 +115,7 @@ class TestMeeting(FunctionalTestCase):
         committee_model = self.committee.load_model()
         meeting = create(Builder('meeting')
                          .having(committee=committee_model,
-                                 start=datetime(2013, 1, 1),
+                                 start=self.localized_datetime(2013, 1, 1),
                                  location='There',))
         meeting.execute_transition('pending-held')
         meeting.execute_transition('held-closed')

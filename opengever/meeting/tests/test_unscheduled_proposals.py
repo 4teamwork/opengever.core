@@ -28,7 +28,7 @@ class TestUnscheduledProposals(FunctionalTestCase):
         self.committee = create(Builder('committee').within(container))
         self.meeting = create(Builder('meeting')
                               .having(committee=self.committee.load_model(),
-                                      start=datetime(2013, 1, 1),
+                                      start=self.localized_datetime(2013, 1, 1),
                                       location='There',)
                               .link_with(self.meeting_dossier))
 

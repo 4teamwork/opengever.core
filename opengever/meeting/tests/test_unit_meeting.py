@@ -1,7 +1,7 @@
-from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.meeting.model import GeneratedProtocol
+from opengever.testing import localized_datetime
 from opengever.testing import MEMORY_DB_LAYER
 from unittest2 import TestCase
 
@@ -16,11 +16,13 @@ class TestUnitMeeting(TestCase):
         self.committee = create(Builder('committee_model'))
         self.meeting = create(Builder('meeting').having(
             committee=self.committee,
-            start=datetime(2010, 1, 1)))
+            start=localized_datetime(2010, 1, 1)))
 
     def test_string_representation(self):
-        self.assertEqual('<Meeting at "2010-01-01 00:00:00">', str(self.meeting))
-        self.assertEqual('<Meeting at "2010-01-01 00:00:00">', repr(self.meeting))
+        self.assertEqual(
+            '<Meeting at "2010-01-01 00:00:00+01:00">', str(self.meeting))
+        self.assertEqual(
+            '<Meeting at "2010-01-01 00:00:00+01:00">', repr(self.meeting))
 
     def test_is_editable(self):
         self.assertTrue(self.meeting.is_editable())

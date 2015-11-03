@@ -1,4 +1,3 @@
-from datetime import datetime
 from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
@@ -159,11 +158,11 @@ class TestCommitteesTab(FunctionalTestCase):
     def test_meetings_display(self, browser):
         meeting1 = create(Builder('meeting')
                           .having(committee=self.committee_model,
-                                  start=datetime(2015, 01, 01)))
+                                  start=self.localized_datetime(2015, 01, 01)))
 
         meeting2 = create(Builder('meeting')
                           .having(committee=self.committee_model,
-                                  start=datetime.now() + timedelta(days=1)))
+                                  start=self.localized_datetime() + timedelta(days=1)))
 
         browser.login().open(self.container, view='tabbedview_view-committees')
 

@@ -1,4 +1,3 @@
-from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -27,7 +26,7 @@ class TestPathBar(FunctionalTestCase):
         committee = create(Builder('committee').within(container))
         meeting = create(Builder('meeting')
                          .having(committee=committee.load_model(),
-                                 start=datetime(2010, 1, 1))
+                                 start=self.localized_datetime(2010, 1, 1))
                          .link_with(self.meeting_dossier))
 
         browser.login().open(meeting.get_url())

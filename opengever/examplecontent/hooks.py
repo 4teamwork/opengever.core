@@ -13,7 +13,7 @@ from plone.portlets.interfaces import ILocalPortletAssignmentManager
 from plone.portlets.interfaces import IPortletManager
 from zope.component import getMultiAdapter
 from zope.component import getUtility
-
+import pytz
 
 PROPOSED_ACTION_1 = u'''Der Rat stellt der Versammlung den Antrag, der Anstellung von Hans Baumann als Sachbearbeiter mit einem Bescha\u0308ftigungsgrad von 90%, Amtsantritt 01.05.2015, zuzustimmen.'''
 
@@ -48,6 +48,9 @@ class MeetingExampleContentCreator(object):
     Currently it is not possible to do this with ftw.inflator.
 
     """
+
+    tz = pytz.timezone('Europe/Zurich')
+
     def __init__(self, site):
         self.site = site
         self.db_session = create_session()
@@ -116,8 +119,10 @@ class MeetingExampleContentCreator(object):
             self.create_meeting(delta=delta)
 
     def create_meeting(self, delta):
-        start = datetime.combine(date.today() + timedelta(days=delta), time(10, 0))
-        end = datetime.combine(date.today() + timedelta(days=delta), time(12, 0))
+        start = self.tz.localize(
+            datetime.combine(date.today() + timedelta(days=delta), time(10, 0)))
+        end = self.tz.localize(
+            datetime.combine(date.today() + timedelta(days=delta), time(12, 0)))
         dossier = create(Builder('meeting_dossier')
                          .having(title=u'Meeting {}'.format(
                              api.portal.get_localized_time(start)),)

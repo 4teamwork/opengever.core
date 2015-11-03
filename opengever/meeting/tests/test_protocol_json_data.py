@@ -1,5 +1,4 @@
 from datetime import date
-from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.meeting.protocol import ProtocolData
@@ -39,7 +38,7 @@ class TestProtocolJsonData(FunctionalTestCase):
             role=None))
         self.meeting = create(Builder('meeting').having(
             committee=self.committee,
-            start=datetime(2010, 1, 1),
+            start=self.localized_datetime(2010, 1, 1),
             participants=[self.member_peter, self.member_franz],
             other_participants=u'Hans M\xfcller\nHeidi Muster',
             protocol_start_page_number=42))
