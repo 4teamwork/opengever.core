@@ -129,8 +129,6 @@
               <div id="unscheduled_porposals" class="list-group">
                 <tal:block tal:replace="structure view/render_handlebars_proposals_template"></tal:block>
               </div>
-              <span tal:condition="not: view/unscheduled_proposals"
-                    i18n:translate="">No proposals submitted</span>
             </div>
           </div>
 

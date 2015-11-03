@@ -117,6 +117,9 @@ PROPOSALS_TEMPLATE = '''
       </div>
     </div>
   {{/each}}
+  {{#unless proposals}}
+    <span>%(label_no_proposals)s</span>
+  {{/unless}}
 </script>
 '''
 
@@ -345,7 +348,9 @@ class MeetingView(BrowserView):
 
     def render_handlebars_proposals_template(self):
         label_schedule = translate(_('label_schedule', default='Schedule'), context=self.request)
-        return PROPOSALS_TEMPLATE % {'label_schedule': label_schedule}
+        label_no_proposals = translate(_('label_no_proposals', default='No proposals submitted'), context=self.request)
+        return PROPOSALS_TEMPLATE % {'label_schedule': label_schedule,
+                                     'label_no_proposals': label_no_proposals}
 
     @property
     def url_update_agenda_item_order(self):
