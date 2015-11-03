@@ -20,7 +20,8 @@
            tal:attributes="data-unexpected-error view/msg_unexpected_error;
                            data-update-agenda-item-order-url view/url_update_agenda_item_order;
                            data-list-agenda-items-url view/url_list_agenda_items;
-                           data-list-unscheduled-proposals-url view/url_list_unscheduled_proposals">
+                           data-list-unscheduled-proposals-url view/url_list_unscheduled_proposals;
+                           data-editable view/is_editable">
 
         <div class="sidebar">
           <div class="list-group metadata">
@@ -133,11 +134,13 @@
           <table id="agenda_items">
             <thead>
               <tr>
-                <th i18n:translate="">Order</th>
+                <th i18n:translate=""
+                    tal:condition="meeting/is_editable">Order</th>
                 <th i18n:translate="">Number</th>
                 <th i18n:translate="">Title</th>
                 <th i18n:translate="">Documents</th>
-                <th i18n:translate="">Actions</th>
+                <th i18n:translate=""
+                    tal:condition="meeting/is_editable">Actions</th>
               </tr>
             </thead>
             <tbody>

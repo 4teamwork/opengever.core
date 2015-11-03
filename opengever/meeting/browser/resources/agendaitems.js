@@ -98,7 +98,8 @@
 
     this.fetch = function() { return $.get(viewlet.data().listAgendaItemsUrl); };
 
-    this.render = function(data) { self.outlet.html(self.template({ agendaitems: data.items })); };
+    this.render = function(data) { self.outlet.html(self.template({ agendaitems: data.items,
+                                                                    editable: self.viewlet.data().editable })); };
 
     this.unschedule = function(e) { return $.post($(e.target).attr("href")); };
 

@@ -63,7 +63,7 @@ AGENDAITEMS_TEMPLATE = '''
 <script id="agendaitemsTemplate" type="text/x-handlebars-template">
   {{#each agendaitems}}
     <tr class="{{css_class}}" data-uid={{id}}>
-      <td class="sortable-handle"></td>
+      {{#if ../editable}}<td class="sortable-handle"></td>{{/if}}
       <td class="number">{{number}}</td>
       <td class="title">
         <span>{{{link}}}</span>
@@ -96,12 +96,14 @@ AGENDAITEMS_TEMPLATE = '''
           <a class="toggle-attachements-btn"></a>
         {{/if}}
       </td>
+      {{#if ../editable}}
       <td class="actions">
         <div class="button-group">
           <a href="{{edit_link}}" class="button edit-agenda-item"></a>
           <a href="{{delete_link}}" class="button delete-agenda-item"></a>
         </div>
       </td>
+      {{/if}}
     </tr>
   {{/each}}
 </script>
@@ -351,6 +353,9 @@ class MeetingView(BrowserView):
         label_no_proposals = translate(_('label_no_proposals', default='No proposals submitted'), context=self.request)
         return PROPOSALS_TEMPLATE % {'label_schedule': label_schedule,
                                      'label_no_proposals': label_no_proposals}
+
+    def is_editable(self):
+        return json.dumps(self.model.is_editable());
 
     @property
     def url_update_agenda_item_order(self):
