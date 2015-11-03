@@ -33,6 +33,14 @@ Changelog
   [lgraf]
 
 - Refactor meeting-permissions, add own role for commitee-group-members.
+
+- Make meeting datetime columns timezone aware.
+  The following columns are affected:
+
+    - Meeting.start
+    - Meeting.end
+    - ProposalHistory.created
+
   [deiferni]
 
 - Disallow access to views on the portal root for anonymous except of login
