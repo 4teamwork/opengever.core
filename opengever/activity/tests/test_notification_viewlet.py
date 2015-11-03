@@ -35,15 +35,15 @@ class TestNotificationViewlet(FunctionalTestCase):
         self.activity_a = create(Builder('activity')
                                  .having(resource=self.resource_a,
                                          summary='Task accepted',
-                                         created=datetime(2015, 8, 17, 9, 0, tzinfo=pytz.UTC)))
+                                         created=pytz.UTC.localize(datetime(2015, 8, 17, 9, 0))))
         self.activity_b = create(Builder('activity')
                                  .having(resource=self.resource_a,
                                          summary='Task added',
-                                         created=datetime(2015, 8, 17, 7, 0, tzinfo=pytz.UTC)))
+                                         created=pytz.UTC.localize(datetime(2015, 8, 17, 7, 0))))
         self.activity_c = create(Builder('activity')
                                  .having(resource=self.resource_a,
                                          summary='Task resolved',
-                                         created=datetime(2015, 8, 17, 12, 0, tzinfo=pytz.UTC)))
+                                         created=pytz.UTC.localize(datetime(2015, 8, 17, 12, 0))))
 
     @browsing
     def test_header_contains_number_of_unread_messages(self, browser):

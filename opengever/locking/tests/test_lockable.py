@@ -50,12 +50,12 @@ class TestSQLLockable(FunctionalTestCase):
         lockable = ILockable(self.wrapper)
         lockable.lock()
 
-        with freeze(datetime(2015, 03, 10, 12, 05, tzinfo=pytz.utc)):
+        with freeze(pytz.UTC.localize(datetime(2015, 03, 10, 12, 05))):
             lockable.refresh_lock()
 
             lock = Lock.query.one()
             self.assertEqual(
-                datetime(2015, 03, 10, 12, 05, tzinfo=pytz.utc), lock.time)
+                pytz.UTC.localize(datetime(2015, 03, 10, 12, 05)), lock.time)
 
     def test_unlock_does_nothing_for_not_locked_items(self):
         lockable = ILockable(self.wrapper)
