@@ -102,7 +102,6 @@
 
     this.unschedule = function(e) { return $.post($(e.target).attr("href")); };
 
-
     this.updateSortOrder = function() {
       var numbers = $.map($("tr", this.outlet), function(row) { return $(row).data().uid; });
       return $.post(viewlet.data().updateAgendaItemOrderUrl,
@@ -115,6 +114,7 @@
 
     this.showEditbox = function(e) {
       var row = $(e.target).parents("tr");
+      row.removeClass("expanded");
       var source;
       if($(".title > span > a", row).length) {
         source = $(".title > span > a", row);
