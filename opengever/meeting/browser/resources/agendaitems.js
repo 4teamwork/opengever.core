@@ -169,10 +169,18 @@
       return $.post($(e.target).data().url, { title: title.val() }).done(title.val(""));
     };
 
+    this.addText = function(e) {
+      var title = $(e.target);
+      if(e.which === $.ui.keyCode.ENTER) {
+        return $.post($(".schedule-text").first().data().url, { title: title.val() }).done(title.val(""));
+      }
+    };
+
     this.events = {
       "click#.schedule-proposal!": this.schedule,
       "click#.schedule-paragraph!": this.add,
-      "click#.schedule-text!": this.add
+      "click#.schedule-text!": this.add,
+      "keyup##title!": this.addText
     };
 
     this.init();

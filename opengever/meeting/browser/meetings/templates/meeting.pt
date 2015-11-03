@@ -107,24 +107,22 @@
               <span class="label" i18n:translate="">Agenda Items</span>
             </div>
             <div class="collapsible-content">
-              <form method="post">
-                <div class="input-group">
-                  <label i18n:translate="" for="title">Freitext:</label>
-                  <input id="title" type="text" />
-                  <div class="button-group">
-                    <input type="submit"
-                           value="as free-text"
-                           i18n:attributes="value"
-                           tal:attributes="data-url view/url_schedule_text"
-                           class="schedule-text" />
-                    <input type="submit"
-                           value="as paragraph"
-                           i18n:attributes="value"
-                           tal:attributes="data-url view/url_schedule_paragraph"
-                           class="schedule-paragraph" />
-                  </div>
+              <div class="input-group">
+                <label i18n:translate="" for="title">Freitext:</label>
+                <input id="title" type="text" />
+                <div class="button-group">
+                  <input type="submit"
+                         value="as free-text"
+                         i18n:attributes="value"
+                         tal:attributes="data-url view/url_schedule_text"
+                         class="schedule-text" />
+                  <input type="submit"
+                         value="as paragraph"
+                         i18n:attributes="value"
+                         tal:attributes="data-url view/url_schedule_paragraph"
+                         class="schedule-paragraph" />
                 </div>
-              </form>
+              </div>
               <label i18n:translate="">Proposals:</label>
               <div id="unscheduled_porposals" class="list-group">
                 <tal:block tal:replace="structure view/render_handlebars_proposals_template"></tal:block>
