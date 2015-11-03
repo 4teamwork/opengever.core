@@ -5,6 +5,7 @@ from opengever.base.pathfinder import PathFinder
 from plone import api
 from plone.portlets.constants import CONTEXT_ASSIGNMENT_KEY
 from plone.protect.auto import ProtectTransform
+from plone.protect.auto import safeWrite
 from plone.protect.interfaces import IDisableCSRFProtection
 from pprint import pformat
 from Products.CMFCore.utils import getToolByName
@@ -32,6 +33,13 @@ def unprotected_write(obj):
     """Marks ``obj`` so that it does not trigger plone.protect's
     write protection for GET request.
     The flag is not applied recursively.
+
+    This currently delegates most of the work to safeWrite(), but we can't
+    quite drop it yet, because:
+    - safeWrite() doesn't return the object, which makes it more awkward to use
+    - safeWrite() doesn't unwrap non-persistent attribute annotations
+
+    TODO: Possibly move this functionaly upstream (into plone.protect)
     """
     if obj is None:
         return obj
@@ -41,7 +49,7 @@ def unprotected_write(obj):
         unprotected_write(getattr(obj.obj, '__annotations__', None))
         return obj
 
-    _get_unprotected_objects().append(obj)
+    safeWrite(obj)
     return obj
 
 
