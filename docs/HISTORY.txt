@@ -11,6 +11,7 @@ Changelog
 
     - Transforming responses with uncommon charsets
     - Our own way of marking objects for safe writes
+    - Unprotecting writes to _dav_writelocks
 
   [lgraf]
 

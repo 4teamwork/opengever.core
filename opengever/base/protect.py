@@ -207,11 +207,6 @@ class OGProtectTransform(ProtectTransform):
                 # also allow writes to context portlet assignments
                 unprotected_write(annotations[CONTEXT_ASSIGNMENT_KEY])
 
-        # Allow _dav_writelocks to be initialized
-        # see webdav/Lockable.py:64
-        if hasattr(context, '_dav_writelocks'):
-            unprotected_write(context._dav_writelocks)
-
 
 class ProtectAwareAttributeAnnotations(AttributeAnnotations):
     """Zope AttributeAnnotations lazily intializes annotations.
