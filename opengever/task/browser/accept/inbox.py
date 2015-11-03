@@ -1,7 +1,5 @@
 from five import grok
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
-from opengever.base.protect import unprotected_write
-from opengever.debug.protect import TraceObjectRegistrations
 from opengever.task import _
 from opengever.task.browser.accept.utils import accept_forwarding_with_successor
 from plone.protect.interfaces import IDisableCSRFProtection
