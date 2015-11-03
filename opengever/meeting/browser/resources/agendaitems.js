@@ -172,7 +172,10 @@
     this.addText = function(e) {
       var title = $(e.target);
       if(e.which === $.ui.keyCode.ENTER) {
-        return $.post($(".schedule-text").first().data().url, { title: title.val() }).done(title.val(""));
+        return $.post($(".schedule-text").first().data().url, { title: title.val() }).done(function() {
+          title.val("");
+          self.updateConnected();
+        });
       }
     };
 
@@ -180,7 +183,7 @@
       "click#.schedule-proposal!": this.schedule,
       "click#.schedule-paragraph!": this.add,
       "click#.schedule-text!": this.add,
-      "keyup##title!": this.addText
+      "keyup##title": this.addText
     };
 
     this.init();
@@ -204,8 +207,6 @@
 
   $(function() {
     if($("#opengever_meeting_meeting").length) {
-
-
 
       var agendaItemController = new AgendaItemController();
       var proposalsController = new ProposalController();
