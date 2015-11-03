@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Make sure reassign a task over the edit form creates a response and record an activity.
+  [phgross]
+
 - Fix member edit link and refactor generating breadcrumbs for models.
   [deiferni]
 

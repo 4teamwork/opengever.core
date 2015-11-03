@@ -2,7 +2,9 @@ from five import grok
 from opengever.ogds.base.utils import ogds_service
 from opengever.task import _
 from opengever.task.activities import TaskAddedActivity
+from opengever.task.activities import TaskReassignActivity
 from opengever.task.task import ITask
+from opengever.task.util import add_simple_response
 from plone.directives import dexterity
 from z3c.form.interfaces import HIDDEN_MODE
 from zope.component import getMultiAdapter
@@ -60,3 +62,32 @@ class EditForm(dexterity.EditForm):
             self.groups[0].widgets['responsible_client'].mode = HIDDEN_MODE
             self.groups[0].widgets['responsible'].field.description = _(
                 u"help_responsible_single_client_setup", default=u"")
+
+    def applyChanges(self, data):
+        """Records reassign activity when the responsible has changed.
+        """
+        if self.is_reassigned(data):
+            response = self.add_reassign_response(data)
+            changes = super(EditForm, self).applyChanges(data)
+            TaskReassignActivity(self.context, response).record()
+        else:
+            changes = super(EditForm, self).applyChanges(data)
+
+        return changes
+
+    def is_reassigned(self, data):
+        if self.context.responsible != data.get('responsible') or \
+           self.context.responsible_client != data.get('responsible_client'):
+            return True
+
+        return False
+
+    def add_reassign_response(self, data):
+        return add_simple_response(
+            self.context,
+            text=None,
+            field_changes=(
+                (ITask['responsible'], data.get('responsible')),
+                (ITask['responsible_client'],
+                 data.get('responsible_client')),),
+            transition=REASSIGN_TRANSITION)
