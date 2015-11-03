@@ -85,6 +85,16 @@
     var self = this;
     var viewlet = $("#opengever_meeting_meeting");
 
+    var dialog = $( "#confirm_unschedule" ).dialog({
+      resizable: false,
+      draggable: false,
+      modal: true,
+      minWidth: 500,
+      minHeight: 350,
+      position: { my: "top+200", at: "top" },
+      autoOpen: false
+    });
+
     var sortableSettings = {
       handle: ".sortable-handle",
       forcePlaceholderSize: true,
@@ -101,7 +111,17 @@
     this.render = function(data) { self.outlet.html(self.template({ agendaitems: data.items,
                                                                     editable: self.viewlet.data().editable })); };
 
-    this.unschedule = function(e) { return $.post($(e.target).attr("href")); };
+    this.openModal = function(e) {
+      this.currentItem = $(e.target);
+      dialog.dialog("open");
+    };
+
+    this.unschedule = function() {
+      this.closeModal();
+      return $.post(this.currentItem.attr("href"));
+    };
+
+    this.closeModal = function() { dialog.dialog("close"); };
 
     this.updateSortOrder = function() {
       var numbers = $.map($("tr", this.outlet), function(row) { return $(row).data().uid; });
@@ -143,10 +163,12 @@
     this.toggleAttachements = function(e) { $(e.target).parents("tr").toggleClass("expanded"); };
 
     this.events = {
-      "click#.delete-agenda-item!": this.unschedule,
+      "click#.delete-agenda-item": this.openModal,
       "click#.edit-agenda-item": this.showEditbox,
       "sortupdate##agenda_items tbody$!": this.updateSortOrder,
-      "click#.toggle-attachements": this.toggleAttachements
+      "click#.toggle-attachements": this.toggleAttachements,
+      "click##confirm_unschedule .confirm!$": this.unschedule,
+      "click##confirm_unschedule .decline!": this.closeModal
     };
 
     this.init();
