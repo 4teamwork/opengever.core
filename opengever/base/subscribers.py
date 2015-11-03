@@ -20,15 +20,24 @@ from zope.lifecycleevent.interfaces import IObjectAddedEvent
 from zope.lifecycleevent.interfaces import IObjectCreatedEvent
 
 ALLOWED_VIEWS = set([
+    'customlogo',
+    'favicon',
+    'list-open-dossiers-json',
     'logged_out',
     'login',
+    'login_failed',
     'login_form',
+    'logout',
+    'mail-inbound',
     'mail_password',
     'mail_password_form',
+    'mnt-warmup',
     'passwordreset',
     'pwreset_finish',
     'pwreset_form',
     'require_login',
+    'update_sync_stamp',
+    'watcher-feed',
     'zauth',
 ])
 

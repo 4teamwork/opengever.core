@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Extend whitelist for anonymous access on siteroot.
+  [lgraf, phgross]
+
 - Add confirm-dialog when closing meetings.
   [deiferni]
 
