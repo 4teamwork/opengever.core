@@ -16,7 +16,6 @@ from zope.annotation.interfaces import IAnnotatable
 from zope.annotation.interfaces import IAnnotations
 from zope.component import adapts
 from zope.component.hooks import getSite
-from zope.globalrequest import getRequest
 from zope.interface import Interface
 from zope.publisher.interfaces.browser import IBrowserRequest
 import gc
@@ -51,17 +50,6 @@ def unprotected_write(obj):
 
     safeWrite(obj)
     return obj
-
-
-def _get_unprotected_objects():
-    request = getRequest()
-    if request is None:
-        # bail out - no request to protect
-        return []
-
-    if not hasattr(request, '_unprotected_objects'):
-        setattr(request, '_unprotected_objects', [])
-    return getattr(request, '_unprotected_objects')
 
 
 class OGProtectTransform(ProtectTransform):
@@ -202,9 +190,7 @@ class OGProtectTransform(ProtectTransform):
 
     def _registered_objects(self):
         self._global_unprotect()
-        objects = super(OGProtectTransform, self)._registered_objects()
-        unprotected = _get_unprotected_objects()
-        return filter(lambda obj: obj not in unprotected, objects)
+        return super(OGProtectTransform, self)._registered_objects()
 
     def _global_unprotect(self):
         # portal_memberdata._members cache will be written sometimes.
