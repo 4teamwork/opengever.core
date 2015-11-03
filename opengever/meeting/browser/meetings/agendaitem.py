@@ -81,7 +81,7 @@ class AgendaItemsView(BrowserView):
         if not item.has_proposal:
             return None
 
-        excerpt = item.proposal.resolve_submitted_excerpt_document(),
+        excerpt = item.proposal.resolve_submitted_excerpt_document()
         return {
             'title': excerpt.title,
             'link': excerpt.absolute_url(),
@@ -97,7 +97,7 @@ class AgendaItemsView(BrowserView):
         for item in meeting.agenda_items:
             data = item.serialize()
             data['documents'] = self._serialize_submitted_documents(item)
-            data['excerpt'] = self._serialize_submitted_documents(item)
+            data['excerpt'] = self._serialize_submitted_excerpt(item)
             data['delete_link'] = meeting.get_url(
                 view='agenda_items/{}/delete'.format(item.agenda_item_id))
             data['edit_link'] = meeting.get_url(
