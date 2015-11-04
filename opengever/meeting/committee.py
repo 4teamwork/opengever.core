@@ -79,6 +79,7 @@ class ICommitteeModel(Interface):
 
 _marker = object()
 
+
 class Committee(ModelContainer):
     """Plone Proxy for a Committe."""
 
@@ -121,14 +122,12 @@ class Committee(ModelContainer):
 
     def _after_model_created(self, model_instance):
         super(Committee, self)._after_model_created(model_instance)
-        CommitteeRoles(model_instance.group_id).initialize(self)
+        CommitteeRoles(self).initialize(model_instance.group_id)
 
     def update_model(self, data):
         model = self.load_model()
-        if 'group_id' in data and data['group_id'] != model.group_id:
-            CommitteeRoles(data['group_id'],
-                           previous_group_id=model.group_id).update(self)
-
+        CommitteeRoles(self).update(
+            data.get('group_id'), previous_principal=model.group_id)
         return super(Committee, self).update_model(data)
 
     def get_physical_path(self):
@@ -146,6 +145,10 @@ class Committee(ModelContainer):
         """A committee is always editable."""
 
         return True
+
+    def is_group_editable(self):
+        return api.user.has_permission(
+            'Modify portal content', obj=self.get_committee_container())
 
     def get_upcoming_meetings(self):
         committee_model = self.load_model()

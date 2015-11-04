@@ -401,4 +401,22 @@
         profile="opengever.meeting:default"
         />
 
+    <!-- 4610 -> 4611 -->
+    <genericsetup:upgradeStep
+        title="Add role for committee group members."
+        description=""
+        source="4610"
+        destination="4611"
+        handler="opengever.meeting.upgrades.to4611.UpdateWorkflowWithCustomRole"
+        profile="opengever.meeting:default"
+        />
+
+    <genericsetup:registerProfile
+        name="4611"
+        title="opengever.meeting: upgrade profile 4611"
+        description=""
+        directory="profiles/4611"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
 </configure>
