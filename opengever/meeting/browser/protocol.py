@@ -56,7 +56,8 @@ class GenerateProtocol(grok.View):
         meeting = self.get_meeting()
 
         command = CreateGeneratedDocumentCommand(
-            self.context, meeting, self.operations)
+            self.context, meeting, self.operations,
+            lock_document_after_creation=True)
         command.execute()
         command.show_message()
 

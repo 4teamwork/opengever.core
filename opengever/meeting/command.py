@@ -6,6 +6,7 @@ from opengever.base.oguid import Oguid
 from opengever.base.request import dispatch_json_request
 from opengever.base.transport import REQUEST_KEY
 from opengever.base.transport import Transporter
+from opengever.locking.lock import SYS_LOCK
 from opengever.meeting import _
 from opengever.meeting.model import GeneratedExcerpt
 from opengever.meeting.model import GeneratedProtocol
@@ -16,6 +17,7 @@ from opengever.meeting.protocol import ProtocolData
 from opengever.meeting.sablon import Sablon
 from plone import api
 from plone.i18n.normalizer.interfaces import IIDNormalizer
+from plone.locking.interfaces import ILockable
 from zope.component import getUtility
 import json
 
@@ -144,13 +146,15 @@ class ManualExcerptOperations(ExcerptOperations):
 
 class CreateGeneratedDocumentCommand(CreateDocumentCommand):
 
-    def __init__(self, target_dossier, meeting, document_operations):
+    def __init__(self, target_dossier, meeting, document_operations,
+                 lock_document_after_creation=False):
         """Data will be initialized lazily since it is only available after the
         document has been generated in `execute`.
 
         """
         self.meeting = meeting
         self.document_operations = document_operations
+        self.lock_document_after_creation = lock_document_after_creation
 
         super(CreateGeneratedDocumentCommand, self).__init__(
             target_dossier,
@@ -170,8 +174,15 @@ class CreateGeneratedDocumentCommand(CreateDocumentCommand):
         self.data = self.generate_file_data()
 
         document = super(CreateGeneratedDocumentCommand, self).execute()
+        self.lock_document(document)
         self.add_database_entry(document)
         return document
+
+    def lock_document(self, document):
+        if not self.lock_document_after_creation:
+            return
+
+        ILockable(document).lock(SYS_LOCK)
 
     def add_database_entry(self, document):
         session = create_session()
@@ -449,6 +460,17 @@ class CloseMeetingCommand(object):
     def execute(self):
         GenerateExcerptsCommand(self.meeting).execute()
         DecideProposalsCommand(self.meeting).execute()
+
+        self.unlock_protocol_document()
+
+    def unlock_protocol_document(self):
+        if not self.meeting.protocol_document:
+            return
+
+        document = self.meeting.protocol_document.resolve_document()
+        lockable = ILockable(document)
+        lockable.unlock(SYS_LOCK)
+        assert not lockable.locked(), 'unexpected: could not remove lock'
 
     def show_message(self):
         msg = _(u'msg_meeting_successfully_closed',
