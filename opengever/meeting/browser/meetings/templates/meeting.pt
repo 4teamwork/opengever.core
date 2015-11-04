@@ -23,16 +23,18 @@
                            data-list-unscheduled-proposals-url view/url_list_unscheduled_proposals;
                            data-editable view/json_is_editable">
 
-        <div class="modal" id="confirm_unschedule"
-             title="Unschedule proposal"
-             i18n:attributes="title label_unschedule_confirm_title">
-             <p i18n:translate="label_unschedule_confirm_text">Are you sure you want to delete this agendaitem?</p>
-             <div class="button-group">
-               <button class="button confirm"
-                       i18n:translate="">Delete</button>
-               <button class="button decline"
-                       i18n:translate="">Cancel</button>
-             </div>
+        <div class="overlay" id="confirm_unschedule">
+          <div class="close">
+            <a href="#" class="hiddenStructure" title="Close this box">Close this box.</a>
+          </div>
+          <h2 i18n:translate="">Unschedule proposal</h2>
+          <p i18n:translate="label_unschedule_confirm_text">Are you sure you want to delete this agendaitem?</p>
+          <div class="button-group">
+            <button class="button confirm"
+                    i18n:translate="">Delete</button>
+            <button class="button decline"
+                    i18n:translate="">Cancel</button>
+          </div>
         </div>
         <div class="sidebar">
           <div class="list-group metadata">

@@ -85,15 +85,11 @@
     var self = this;
     var viewlet = $("#opengever_meeting_meeting");
 
-    var dialog = $( "#confirm_unschedule" ).dialog({
-      resizable: false,
-      draggable: false,
-      modal: true,
-      minWidth: 500,
-      minHeight: 350,
-      position: { my: "top+200", at: "top" },
-      autoOpen: false
-    });
+    var dialog = $( "#confirm_unschedule" ).overlay({
+      speed: 0,
+      closeSpeed: 0,
+      mask: { loadSpeed: 0 }
+    }).data("overlay");
 
     var sortableSettings = {
       handle: ".sortable-handle",
@@ -113,7 +109,7 @@
 
     this.openModal = function(e) {
       this.currentItem = $(e.target);
-      dialog.dialog("open");
+      dialog.load();
     };
 
     this.unschedule = function() {
@@ -121,7 +117,7 @@
       return $.post(this.currentItem.attr("href"));
     };
 
-    this.closeModal = function() { dialog.dialog("close"); };
+    this.closeModal = function() { dialog.close(); };
 
     this.updateSortOrder = function() {
       var numbers = $.map($("tr", this.outlet), function(row) { return $(row).data().uid; });

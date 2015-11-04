@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-11-03 16:45+0000\n"
+"POT-Creation-Date: 2015-11-04 09:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +21,7 @@ msgstr ""
 msgid "A new submitted version of document ${title} has been created"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:153
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:157
 msgid "Actions"
 msgstr ""
 
@@ -47,7 +47,7 @@ msgstr ""
 msgid "Additional document ${title} has been submitted successfully"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:119
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:123
 msgid "Agenda Items"
 msgstr ""
 
@@ -66,7 +66,7 @@ msgstr ""
 
 #: ./opengever/meeting/browser/meetings/excerpt.py:153
 #: ./opengever/meeting/browser/meetings/protocol.py:182
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:33
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:35
 msgid "Cancel"
 msgstr ""
 
@@ -82,7 +82,7 @@ msgstr ""
 msgid "Committee Container"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:31
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:33
 msgid "Delete"
 msgstr ""
 
@@ -90,11 +90,11 @@ msgstr ""
 msgid "Document ${title} has already been submitted in that version"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:152
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:156
 msgid "Documents"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:41
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:43
 msgid "Edit"
 msgstr ""
 
@@ -111,7 +111,7 @@ msgstr ""
 msgid "Excerpt template"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:100
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:103
 msgid "Excerpts"
 msgstr ""
 
@@ -119,7 +119,7 @@ msgstr ""
 msgid "Export settings"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:123
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:127
 msgid "Freitext:"
 msgstr ""
 
@@ -184,11 +184,11 @@ msgstr ""
 msgid "Memberships"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:150
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:154
 msgid "Number"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:148
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:152
 msgid "Order"
 msgstr ""
 
@@ -210,11 +210,11 @@ msgstr ""
 msgid "Proposal"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:138
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:142
 msgid "Proposals:"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:87
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:89
 #: ./opengever/meeting/model/meeting.py:148
 msgid "Protocol"
 msgstr ""
@@ -264,8 +264,12 @@ msgstr ""
 msgid "The meeting and its dossier were created successfully"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:151
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:155
 msgid "Title"
+msgstr ""
+
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:30
+msgid "Unschedule proposal"
 msgstr ""
 
 #: ./opengever/meeting/browser/submitdocuments.py:181
@@ -291,11 +295,11 @@ msgstr ""
 msgid "agenda_item_updated"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:126
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:130
 msgid "as free-text"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:131
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:135
 msgid "as paragraph"
 msgstr ""
 
@@ -710,13 +714,8 @@ msgid "label_title"
 msgstr ""
 
 #. Default: "Are you sure you want to delete this agendaitem?"
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:29
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:31
 msgid "label_unschedule_confirm_text"
-msgstr ""
-
-#. Default: "Unschedule proposal"
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:26
-msgid "label_unschedule_confirm_title"
 msgstr ""
 
 #. Default: "Unscheduled proposals"
