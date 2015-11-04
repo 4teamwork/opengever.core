@@ -312,22 +312,23 @@
         profile="opengever.base:default"
         />
 
-    <!-- 4502 -> 4503 -->
-    <upgrade-step:importProfile
-        title="Regsiter MessageFactory javascript"
-        profile="opengever.base:default"
-        source="4502"
-        destination="4503"
-        directory="profiles/4503"
-        />
-
-    <!-- 4503 -> 4504 -->
+    <!-- 4502 -> 4504 -->
     <upgrade-step:importProfile
         title="Register handlebars library."
         profile="opengever.base:default"
-        source="4503"
+        source="4502"
         destination="4504"
         directory="profiles/4504"
         />
+
+    <!-- 4504 -> 4600 -->
+    <upgrade-step:importProfile
+        title="Regsiter MessageFactory javascript"
+        profile="opengever.base:default"
+        source="4504"
+        destination="4600"
+        directory="profiles/4600"
+        />
+
 
 </configure>
