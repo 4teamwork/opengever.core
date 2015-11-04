@@ -206,7 +206,7 @@ class TestProtocol(FunctionalTestCase):
     @browsing
     def test_protocol_can_be_downloaded(self, browser):
         self.setup_protocol(browser)
-        browser.find('Generate').click()
+        browser.css('.generate-protocol').first.click()
         browser.css('a[href$="download_protocol"]').first.click()
         self.assertEqual(browser.headers['content-type'], MIME_DOCX)
         self.assertIsNotNone(browser.contents)

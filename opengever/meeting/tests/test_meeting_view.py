@@ -175,16 +175,16 @@ class TestMeetingView(FunctionalTestCase):
     @browsing
     def test_metadata_state_pending_exists(self, browser):
         browser.login().open(self.meeting.get_url())
-        self.assertEquals('pending', browser.css(".workflow_state + dd").first.text)
+        self.assertEquals('Pending', browser.css(".workflow_state + dd").first.text)
 
     @browsing
     def test_generated_protocol_exists(self, browser):
         browser.login().open(self.meeting.get_url())
-        self.assertEquals('Protocol', browser.css(".protocol > a").first.text)
-        self.assertEquals(self.protocol.absolute_url(), browser.css(".protocol > a").first.get('href'))
+        self.assertEquals('Protocol', browser.css(".protocol p a").first.text)
+        self.assertEquals(self.protocol.absolute_url(), browser.css(".protocol p a").first.get('href'))
 
     @browsing
     def test_generated_exceprts_exists(self, browser):
         browser.login().open(self.meeting.get_url())
-        self.assertEquals('Excerpt', browser.css(".excerpts a").first.text)
-        self.assertEquals(self.excerpt.absolute_url(), browser.css(".excerpts a").first.get('href'))
+        self.assertEquals('Excerpt', browser.css(".excerpts a > span").first.text)
+        self.assertEquals(self.excerpt.absolute_url(), browser.css(".excerpts ul li a").first.get('href'))
