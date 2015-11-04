@@ -63,7 +63,7 @@
     };
 
     this.registerAction = function(action, callback) {
-      var target = action.substring(action.indexOf("#") + 1).replace("!", "");
+      var target = action.substring(action.indexOf("#") + 1).replace("!", "").replace("$", "");
       var method = action.substring(0, action.indexOf("#"));
       var update = Boolean(action.indexOf("!") > -1);
       var prevent = Boolean(action.indexOf("$") === -1);
@@ -74,8 +74,8 @@
 
     this.init = function() {
       this.compile();
-      this.registerActions();
       this.update();
+      this.registerActions();
     };
 
   }
@@ -161,7 +161,7 @@
     this.events = {
       "click#.delete-agenda-item": this.openModal,
       "click#.edit-agenda-item": this.showEditbox,
-      "sortupdate##agenda_items tbody$!": this.updateSortOrder,
+      "sortupdate##agenda_items tbody!$": this.updateSortOrder,
       "click#.toggle-attachements": this.toggleAttachements,
       "click##confirm_unschedule .confirm!$": this.unschedule,
       "click##confirm_unschedule .decline!": this.closeModal
@@ -176,6 +176,7 @@
     var viewlet = $("#opengever_meeting_meeting");
     Controller.call(this, viewlet, $("#proposalsTemplate").html(), $("#unscheduled_porposals"), options);
     var self = this;
+    var title = $("#title");
 
     this.fetch = function() { return $.get(viewlet.data().listUnscheduledProposalsUrl); };
 
@@ -183,26 +184,31 @@
 
     this.schedule = function(e) { return $.post($(e.target).attr("href")); };
 
-    this.add = function(e) {
-      var title = $("#title");
-      return $.post($(e.target).data().url, { title: title.val() }).done(title.val(""));
+    this.addParagraph = function() {
+      return $.post($(".schedule-paragraph").data().url, { title: title.val() }).done(function() {
+        title.val("");
+        self.updateConnected();
+      });
     };
 
-    this.addText = function(e) {
-      var title = $(e.target);
+    this.addText = function() {
+      return $.post($(".schedule-text").first().data().url, { title: title.val() }).done(function() {
+        title.val("");
+        self.updateConnected();
+      });
+    };
+
+    this.trackEnter = function(e) {
       if(e.which === $.ui.keyCode.ENTER) {
-        return $.post($(".schedule-text").first().data().url, { title: title.val() }).done(function() {
-          title.val("");
-          self.updateConnected();
-        });
+        this.addText();
       }
     };
 
     this.events = {
       "click#.schedule-proposal!": this.schedule,
-      "click#.schedule-paragraph!": this.add,
-      "click#.schedule-text!": this.add,
-      "keyup##title": this.addText
+      "click#.schedule-paragraph": this.addParagraph,
+      "click#.schedule-text": this.addText,
+      "keyup##title": this.trackEnter
     };
 
     this.init();
