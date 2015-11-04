@@ -27,9 +27,9 @@
               visible="True">
     <property
         name="text">&lt;p&gt;&lt;a class="external-link" href="http://www.onegov.ch/gever/die-wichtigsten-module-von-onegov-gever"&gt;Funktionen&lt;/a&gt;&lt;/p&gt;
-    &lt;p&gt;&lt;a class="external-link" href="https://github.com/4teamwork/opengever.core"&gt;Quellcode&lt;/a&gt;&lt;/p&gt;
+    &lt;p&gt;&lt;a class="external-link" href="https://github.com/OneGov/onegov.gever"&gt;Quellcode&lt;/a&gt;&lt;/p&gt;
     &lt;p&gt;&lt;a class="external-link" href="https://jenkins.4teamwork.ch"&gt;Software Tests&lt;/a&gt;&lt;/p&gt;
-    &lt;p&gt;&lt;a class="external-link" href="http://www.onegov.ch/gever/aktuell/onegov-gever-release-3.0"&gt;Release 3.0&lt;/a&gt;&lt;/p&gt;</property>
+    &lt;p&gt;&lt;a class="external-link" href="http://www.onegov.ch/gever/aktuell"&gt;Release-Informationen&lt;/a&gt;&lt;/p&gt;</property>
     <property name="more_url"/>
     <property name="omit_border">False</property>
     <property name="header">Über OneGov GEVER</property>
