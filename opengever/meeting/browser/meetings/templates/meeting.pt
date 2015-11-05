@@ -28,7 +28,7 @@
             <a href="#" class="hiddenStructure" title="Close this box">Close this box.</a>
           </div>
           <h2 i18n:translate="">Unschedule proposal</h2>
-          <p i18n:translate="label_unschedule_confirm_text">Are you sure you want to delete this agendaitem?</p>
+          <p i18n:translate="label_unschedule_agenda_item_confirm_text">Are you sure you want to delete this agendaitem?</p>
           <div class="button-group">
             <button class="button confirm"
                     i18n:translate="">Delete</button>

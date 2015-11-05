@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-11-04 09:07+0000\n"
+"POT-Creation-Date: 2015-11-05 16:34+0000\n"
 "PO-Revision-Date: 2015-04-10 09:01+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./opengever/meeting/command.py:311
+#: ./opengever/meeting/command.py:322
 msgid "A new submitted version of document ${title} has been created"
 msgstr "Eine neu eingereichte Version des Dokuments ${title} wurde erstellt."
 
@@ -44,7 +44,7 @@ msgstr "Mitglied hinzufügen"
 msgid "Add Membership"
 msgstr "Mitgliedschaft hinzufügen"
 
-#: ./opengever/meeting/command.py:344
+#: ./opengever/meeting/command.py:355
 msgid "Additional document ${title} has been submitted successfully"
 msgstr "Das zusätzliche Dokument ${title} wurde erfolgreich eingereicht."
 
@@ -88,7 +88,7 @@ msgstr "Ordner mit Kommissionen"
 msgid "Delete"
 msgstr "Löschen"
 
-#: ./opengever/meeting/command.py:274
+#: ./opengever/meeting/command.py:285
 msgid "Document ${title} has already been submitted in that version"
 msgstr "Das Dokument ${title} wurde bereits in dieser Version eingereicht"
 
@@ -100,11 +100,11 @@ msgstr "Dokumente"
 msgid "Edit"
 msgstr "Bearbeiten"
 
-#: ./opengever/meeting/command.py:80
+#: ./opengever/meeting/command.py:82
 msgid "Excerpt for meeting ${title} has been generated successfully"
 msgstr "Protokollauszug für die Sitzung ${title} wurde erfolgreich erstellt."
 
-#: ./opengever/meeting/command.py:85
+#: ./opengever/meeting/command.py:87
 msgid "Excerpt for meeting ${title} has been updated successfully"
 msgstr "Protokollauszug für die Sitzung ${title} wurde erfolgreich aktualisiert."
 
@@ -225,11 +225,11 @@ msgstr "Protokoll"
 msgid "Protocol Excerpt"
 msgstr "Protokollauszug"
 
-#: ./opengever/meeting/command.py:42
+#: ./opengever/meeting/command.py:44
 msgid "Protocol for meeting ${title} has been generated successfully"
 msgstr "Protokoll für die Sitzung ${title} wurde erfolgreich erstellt."
 
-#: ./opengever/meeting/command.py:47
+#: ./opengever/meeting/command.py:49
 msgid "Protocol for meeting ${title} has been updated successfully"
 msgstr "Protokoll für die Sitzung ${title} wurde erfolgreich aktualisiert."
 
@@ -278,9 +278,14 @@ msgstr "Traktandum löschen"
 msgid "Updated with a newer docment version from proposal's dossier."
 msgstr "Das Dokument wurde durch eine neuere Version aus dem Antragsdossier überschrieben."
 
-#: ./opengever/meeting/command.py:227
+#: ./opengever/meeting/command.py:238
 msgid "Updated with a newer generated version from meeting ${title}."
 msgstr "Mit einer neuen Version der Sitzung ${title} aktualisiert."
+
+#. Default: "Agenda Item Successfully deleted"
+#: ./opengever/meeting/browser/meetings/agendaitem.py:164
+msgid "agenda_item_deleted"
+msgstr "Traktandum wurde erfolgreich entfernt."
 
 #. Default: "Agenda Item order updated."
 #: ./opengever/meeting/browser/meetings/agendaitem.py:123
@@ -308,7 +313,7 @@ msgstr "Als Abschnitt"
 #. Default: "Cancel"
 #: ./opengever/meeting/browser/documents/submit.py:95
 #: ./opengever/meeting/browser/meetings/meeting.py:163
-#: ./opengever/meeting/browser/protocol.py:152
+#: ./opengever/meeting/browser/protocol.py:153
 msgid "button_cancel"
 msgstr "Abbrechen"
 
@@ -318,7 +323,7 @@ msgid "button_continue"
 msgstr "Weiter"
 
 #. Default: "Generate"
-#: ./opengever/meeting/browser/protocol.py:126
+#: ./opengever/meeting/browser/protocol.py:127
 msgid "button_generate"
 msgstr "Erstellen"
 
@@ -441,7 +446,7 @@ msgid "dossier"
 msgstr "Dossier"
 
 #. Default: "Update protocol"
-#: ./opengever/meeting/browser/protocol.py:113
+#: ./opengever/meeting/browser/protocol.py:114
 msgid "form_label_update_protocol"
 msgstr "Protokoll aktualisieren"
 
@@ -718,7 +723,7 @@ msgstr "Titel"
 
 #. Default: "Are you sure you want to delete this agendaitem?"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:31
-msgid "label_unschedule_confirm_text"
+msgid "label_unschedule_agenda_item_confirm_text"
 msgstr "Wollen Sie dieses Traktandum wirklich löschen?"
 
 #. Default: "Unscheduled proposals"
@@ -732,7 +737,7 @@ msgid "label_upcoming_meetings"
 msgstr "Kommende Sitzungen"
 
 #. Default: "Choose how to update an existing protocol:"
-#: ./opengever/meeting/browser/protocol.py:95
+#: ./opengever/meeting/browser/protocol.py:96
 msgid "label_update_generated_protocol_choose_method"
 msgstr "Wählen Sie wie ein bestehendes Protokoll aktualisiert werden soll:"
 
@@ -753,7 +758,7 @@ msgid "message_record_created"
 msgstr "Eintrag erzeugt"
 
 #. Default: "The meeting ${title} has been successfully closed, the excerpts have been generated and sent back to the initial dossier."
-#: ./opengever/meeting/command.py:454
+#: ./opengever/meeting/command.py:476
 msgid "msg_meeting_successfully_closed"
 msgstr "Die Sitzung ${title} wurde erfolgreich abgeschlossen, die Protokollauszüge wurden generiert und an die Urprungsdossiers zurückgespielt."
 
@@ -773,12 +778,12 @@ msgid "msg_successfully_deleted"
 msgstr "Das Objekt wurde erfolgreich gelöscht"
 
 #. Default: "Create a new document in dossier ${title}"
-#: ./opengever/meeting/browser/protocol.py:86
+#: ./opengever/meeting/browser/protocol.py:87
 msgid "new_document"
 msgstr "Ein neues Dokument im Dossier ${title} erstellen"
 
 #. Default: "Create a new document version for document ${title}"
-#: ./opengever/meeting/browser/protocol.py:80
+#: ./opengever/meeting/browser/protocol.py:81
 msgid "new_document_version"
 msgstr "Eine neue Dokumentversion des Dokuments ${title} erstellen"
 
@@ -788,7 +793,7 @@ msgid "new_unscheduled_proposals"
 msgstr "Neu eingereichte Anträge"
 
 #. Default: "Paragrap successfully added."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:177
+#: ./opengever/meeting/browser/meetings/agendaitem.py:179
 msgid "paragraph_added"
 msgstr "Paragraph erfolgreich hinzugefügt."
 
@@ -869,7 +874,7 @@ msgid "tab_matches"
 msgstr "${amount} Treffer"
 
 #. Default: "Texst successfully added."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:191
+#: ./opengever/meeting/browser/meetings/agendaitem.py:193
 msgid "text_added"
 msgstr "Freitext erfolgreich hinzugefügt"
 
@@ -877,4 +882,3 @@ msgstr "Freitext erfolgreich hinzugefügt"
 #: ./opengever/meeting/model/proposal.py:113
 msgid "un-schedule"
 msgstr "Traktandum entfernen"
-
