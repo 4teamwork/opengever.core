@@ -449,4 +449,23 @@
         profile="opengever.meeting:default"
         />
 
+    <!-- 4614 -> 4615 -->
+    <genericsetup:upgradeStep
+        title="Activate add-permissions for Contributor in committeecontainer workflow."
+        description=""
+        source="4614"
+        destination="4615"
+        handler="opengever.meeting.upgrades.to4615.UpdateCommitteeContainerWorkflow"
+        profile="opengever.meeting:default"
+        />
+
+    <genericsetup:registerProfile
+        name="4615"
+        title="opengever.meeting: upgrade profile 4615"
+        description=""
+        directory="profiles/4615"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
 </configure>
