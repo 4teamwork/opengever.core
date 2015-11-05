@@ -123,7 +123,7 @@ class TestAgendaItemDelete(TestAgendaItem):
             view='agenda_items/{}/delete'.format(item.agenda_item_id))
 
         self.assertEquals(0, AgendaItem.query.count())
-        self.assertEquals([{u'message': u'Successfully deleted',
+        self.assertEquals([{u'message': u'Agenda Item Successfully deleted',
                             u'messageClass': u'info',
                             u'messageTitle': u'Information'}],
                           browser.json.get('messages'))

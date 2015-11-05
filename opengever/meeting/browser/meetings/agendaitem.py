@@ -160,7 +160,9 @@ class AgendaItemsView(BrowserView):
 
         agenda_item.remove()
 
-        return JSONResponse(self.request).info("Successfully deleted").dump()
+        return JSONResponse(self.request).info(
+            _(u'agenda_item_deleted',
+              default=u'Agenda Item Successfully deleted')).dump()
 
     def schedule_paragraph(self):
         """Schedule the given Paragraph (request parameter `title`) for the current
