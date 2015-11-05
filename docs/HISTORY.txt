@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Lock protocol documents while a meeting is not closed.
+  [deiferni]
+
 - Adjust footer links (Release-Informationen, Quellcode).
   [phgross]
 

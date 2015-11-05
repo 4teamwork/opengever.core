@@ -6,6 +6,7 @@ from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from ftw.testbrowser.pages.z3cform import erroneous_fields
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
+from opengever.locking.lock import SYS_LOCK
 from opengever.meeting.browser.protocol import METHOD_NEW_DOCUMENT
 from opengever.meeting.browser.protocol import METHOD_NEW_VERSION
 from opengever.meeting.command import MIME_DOCX
@@ -15,6 +16,8 @@ from opengever.meeting.model import Meeting
 from opengever.meeting.model import Member
 from opengever.meeting.model import Proposal
 from opengever.testing import FunctionalTestCase
+from plone.locking.interfaces import ILockable
+from plone.locking.interfaces import STEALABLE_LOCK
 
 
 class TestProtocol(FunctionalTestCase):
@@ -65,6 +68,7 @@ class TestProtocol(FunctionalTestCase):
             Builder('agenda_item')
             .having(meeting=self.meeting,
                     proposal=self.proposal_model))
+        self.proposal_model.execute_transition('submitted-scheduled')
 
     def setup_protocol(self, browser):
         browser.login()
@@ -97,6 +101,32 @@ class TestProtocol(FunctionalTestCase):
 
         self.assertEqual(custom_template,
                          self.committee.get_protocol_template())
+
+    @browsing
+    def test_protocol_document_is_locked_by_system_once_generated(self, browser):
+        self.setup_generated_protocol(browser)
+
+        browser.find('Protocol-there-jan-01-2013').click()
+        document = browser.context
+        lockable = ILockable(document)
+
+        self.assertTrue(lockable.locked())
+        self.assertTrue(lockable.can_safely_unlock(SYS_LOCK))
+        self.assertFalse(lockable.can_safely_unlock(STEALABLE_LOCK))
+
+        lock_info = lockable.lock_info()[0]
+        self.assertEqual(u'sys.lock', lock_info['type'].__name__)
+
+    @browsing
+    def test_protocol_document_is_unlocked_when_meeting_is_closed(self, browser):
+        self.setup_generated_protocol(browser)
+        browser.find('Close').click()
+
+        browser.find('Protocol-there-jan-01-2013').click()
+        document = browser.context
+        lockable = ILockable(document)
+
+        self.assertFalse(lockable.locked())
 
     @browsing
     def test_protocol_shows_validation_errors(self, browser):
