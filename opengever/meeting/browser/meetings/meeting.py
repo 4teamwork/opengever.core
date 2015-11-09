@@ -11,7 +11,6 @@ from opengever.meeting.browser.meetings.transitions import MeetingTransitionCont
 from opengever.meeting.browser.protocol import GenerateProtocol
 from opengever.meeting.browser.protocol import UpdateProtocol
 from opengever.meeting.committee import ICommittee
-from opengever.meeting.form import ModelEditForm
 from opengever.meeting.model import Meeting
 from opengever.repository.interfaces import IRepositoryFolder
 from plone import api
@@ -20,7 +19,6 @@ from plone.directives import form
 from plone.z3cform.layout import FormWrapper
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from z3c.form import field
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
 from z3c.form.form import Form
@@ -265,31 +263,9 @@ class AddMeetingDossierView(WizzardWrappedAddForm):
         return super(AddMeetingDossierView, self).__call__()
 
 
-class EditMeeting(ModelEditForm):
-
-    fields = field.Fields(IMeetingModel)
-
-    def __init__(self, context, request):
-        super(EditMeeting, self).__init__(context, request, context.model)
-
-    def updateWidgets(self):
-        super(EditMeeting, self).updateWidgets()
-        self.inject_initial_data()
-
-        committee_id = self.context.load_model().committee_id
-        self.widgets['committee'].mode = HIDDEN_MODE
-        self.widgets['committee'].value = (str(committee_id), )
-
-    def nextURL(self):
-        return self.model.get_url()
-
-
 class MeetingView(BrowserView):
 
     template = ViewPageTemplateFile('templates/meeting.pt')
-
-    is_model_view = True
-    is_model_edit_view = False
 
     def __init__(self, context, request):
         super(MeetingView, self).__init__(context, request)

@@ -94,6 +94,9 @@ class ModelEditForm(EditForm):
     def updateWidgets(self):
         super(ModelEditForm, self).updateWidgets()
         self.inject_initial_data()
+        # inject_initial_data will change widget values, they might need
+        # another update
+        self.widgets.update()
 
     def applyChanges(self, data):
         self.model.update_model(data)
