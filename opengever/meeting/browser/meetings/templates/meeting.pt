@@ -52,6 +52,9 @@
                 <dt id="meeting_location"></dt>
                 <dd tal:content="meeting/location"></dd>
 
+                <dt id="meeting_date"></dt>
+                <dd tal:content="meeting/get_date"></dd>
+
                 <dt id="meeting_time"></dt>
                 <dd>
                   <span tal:replace="python: meeting.get_start_time()"></span>
