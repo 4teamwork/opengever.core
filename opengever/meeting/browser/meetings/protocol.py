@@ -179,7 +179,7 @@ class EditProtocol(AutoExtensibleForm, ModelProxyEditForm, EditForm):
         # self as first argument is required by to the decorator
         super(EditProtocol, self).handleApply(self, action)
 
-    @button.buttonAndHandler(_('Cancel', default=u'Cancel'), name='cancel')
+    @button.buttonAndHandler(_('label_cancel', default=u'Cancel'), name='cancel')
     def handleCancel(self, action):
         self.unlock()
         return self.redirect_to_meeting()

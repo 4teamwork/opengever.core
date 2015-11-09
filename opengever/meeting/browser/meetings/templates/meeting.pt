@@ -33,7 +33,7 @@
             <button class="button confirm"
                     i18n:translate="">Delete</button>
             <button class="button decline"
-                    i18n:translate="">Cancel</button>
+                    i18n:translate="label_cancel">Cancel</button>
           </div>
         </div>
         <div class="sidebar">
