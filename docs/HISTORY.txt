@@ -5,7 +5,8 @@ Changelog
 4.5.8 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Eliminate duplicate notification, about a task acceptance, when creating a successor.
+  [phgross]
 
 
 4.5.7 (2015-11-03)
