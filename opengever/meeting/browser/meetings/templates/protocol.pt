@@ -128,8 +128,8 @@
             </metal:block>
 
             <metal:block fill-slot="actions">
-              <div class="metadata">
-                <div class="fields">
+              <div class="metadata list-group">
+                <div class="list-group-item">
                   <metal:use use-macro="context/@@ploneform-macros/fields" />
                   <metal:use use-macro="context/@@ploneform-macros/actions" />
                 </div>

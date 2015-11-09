@@ -6,11 +6,6 @@ from opengever.base.form import WizzardWrappedAddForm
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.meeting import _
-from opengever.meeting.browser.meetings.agendaitem import DeleteAgendaItem
-from opengever.meeting.browser.meetings.agendaitem import UpdateAgendaItem
-from opengever.meeting.browser.meetings.agendaitem import ScheduleSubmittedProposal
-from opengever.meeting.browser.meetings.agendaitem import ScheduleText
-from opengever.meeting.browser.meetings.agendaitem import UpdateAgendaItemOrder
 from opengever.meeting.browser.meetings.transitions import MeetingTransitionController
 from opengever.meeting.browser.protocol import GenerateProtocol
 from opengever.meeting.browser.protocol import UpdateProtocol
@@ -34,6 +29,7 @@ from zope.component import getUtility
 from zope.component import queryMultiAdapter
 from zope.globalrequest import getRequest
 from zope.i18n import translate
+import json
 
 
 class IMeetingModel(form.Schema):
@@ -62,6 +58,72 @@ ADD_MEETING_STEPS = (
     ('add-meeting', _(u'Add Meeting')),
     ('add-meeting-dossier', _(u'Add Dossier for Meeting'))
 )
+
+AGENDAITEMS_TEMPLATE = '''
+<script id="agendaitemsTemplate" type="text/x-handlebars-template">
+  {{#each agendaitems}}
+    <tr class="{{css_class}}" data-uid={{id}}>
+      {{#if ../editable}}<td class="sortable-handle"></td>{{/if}}
+      <td class="number">{{number}}</td>
+      <td class="title">
+        <span>{{{link}}}</span>
+        {{#if has_proposal}}
+          <ul class="attachements">
+            {{#each documents}}
+              <li>
+                <a href={{link}} class="{{css_class}}">{{title}}</a>
+              </li>
+            {{/each}}
+          </ul>
+        {{/if}}
+        {{#if excerpt}}
+          <div class="summary">
+            <a href="{{excerpt.link}}" class="{{excerpt.css_class}}">{{excerpt.title}}</a>
+          </div>
+        {{/if}}
+        <div class="edit-box">
+          <div class="input-group">
+            <input type="text" />
+            <div class="button-group">
+              <input value="%(label_edit_save)s" type="button" class="button edit-save" />
+              <input value="%(label_edit_cancel)s" type="button" class="button edit-cancel" />
+            </div>
+          </div>
+        </div>
+      </td>
+      <td class="toggle-attachements">
+        {{#if documents}}
+          <a class="toggle-attachements-btn"></a>
+        {{/if}}
+      </td>
+      {{#if ../editable}}
+      <td class="actions">
+        <div class="button-group">
+          <a href="{{edit_link}}" class="button edit-agenda-item"></a>
+          <a href="{{delete_link}}" class="button delete-agenda-item"></a>
+        </div>
+      </td>
+      {{/if}}
+    </tr>
+  {{/each}}
+</script>
+'''
+
+PROPOSALS_TEMPLATE = '''
+<script tal:condition="view/unscheduled_proposals" id="proposalsTemplate" type="text/x-handlebars-template">
+  {{#each proposals}}
+    <div class="list-group-item submit">
+      <span class="title">{{title}}</span>
+      <div class="button-group">
+        <a class="button schedule-proposal" href="{{schedule_url}}">%(label_schedule)s</a>
+      </div>
+    </div>
+  {{/each}}
+  {{#unless proposals}}
+    <span>%(label_no_proposals)s</span>
+  {{/unless}}
+</script>
+'''
 
 
 def get_dm_key(committee_oguid=None):
@@ -248,15 +310,6 @@ class MeetingView(BrowserView):
     def unscheduled_proposals(self):
         return self.context.get_unscheduled_proposals()
 
-    def url_schedule_proposal(self):
-        return ScheduleSubmittedProposal.url_for(self.context, self.model)
-
-    def url_schedule_text(self):
-        return ScheduleText.url_for(self.context, self.model)
-
-    def url_delete_agenda_item(self, agenda_item):
-        return DeleteAgendaItem.url_for(self.context, self.model, agenda_item)
-
     def get_protocol_document(self):
         if self.model.protocol_document:
             return self.model.protocol_document.resolve_document()
@@ -269,6 +322,9 @@ class MeetingView(BrowserView):
             return GenerateProtocol.url_for(self.model)
         else:
             return UpdateProtocol.url_for(self.model.protocol_document)
+
+    def has_protocol_document(self):
+        return self.model.has_protocol_document()
 
     def url_download_protocol(self):
         return self.model.get_url(view='download_protocol')
@@ -286,13 +342,40 @@ class MeetingView(BrowserView):
         return [excerpt.resolve_document()
                 for excerpt in self.model.excerpt_documents]
 
-    @property
-    def url_update_agenda_item_order(self):
-        return UpdateAgendaItemOrder.url_for(self.context, self.model)
+    def render_handlebars_agendaitems_template(self):
+        label_edit_cancel = translate(_('label_edit_cancel', default='Cancel'), context=self.request)
+        label_edit_save = translate(_('label_edit_save', default='Save'), context=self.request)
+        return AGENDAITEMS_TEMPLATE  % {'label_edit_cancel': label_edit_cancel,
+                                        'label_edit_save': label_edit_save}
+
+    def render_handlebars_proposals_template(self):
+        label_schedule = translate(_('label_schedule', default='Schedule'), context=self.request)
+        label_no_proposals = translate(_('label_no_proposals', default='No proposals submitted'), context=self.request)
+        return PROPOSALS_TEMPLATE % {'label_schedule': label_schedule,
+                                     'label_no_proposals': label_no_proposals}
+
+    def json_is_editable(self):
+        return json.dumps(self.model.is_editable());
 
     @property
-    def url_update_agenda_item(self):
-        return UpdateAgendaItem.url_for(self.context, self.model)
+    def url_update_agenda_item_order(self):
+        return '{}/agenda_items/update_order'.format(self.context.absolute_url())
+
+    @property
+    def url_list_agenda_items(self):
+        return '{}/agenda_items/list'.format(self.context.absolute_url())
+
+    @property
+    def url_schedule_text(self):
+        return '{}/agenda_items/schedule_text'.format(self.context.absolute_url())
+
+    @property
+    def url_schedule_paragraph(self):
+        return '{}/agenda_items/schedule_paragraph'.format(self.context.absolute_url())
+
+    @property
+    def url_list_unscheduled_proposals(self):
+        return '{}/unscheduled_proposals'.format(self.context.absolute_url())
 
     @property
     def msg_unexpected_error(self):

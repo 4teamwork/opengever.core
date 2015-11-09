@@ -61,37 +61,18 @@
 
   <browser:page
       for="opengever.meeting.interfaces.IMeetingWrapper"
-      name="schedule_proposal"
-      class=".agendaitem.ScheduleSubmittedProposal"
-      permission="cmf.ModifyPortalContent"
-      />
-
-  <browser:page
-      for="opengever.meeting.interfaces.IMeetingWrapper"
-      name="schedule_text"
-      class=".agendaitem.ScheduleText"
-      permission="cmf.ModifyPortalContent"
-      />
-
-  <browser:page
-      for="opengever.meeting.interfaces.IMeetingWrapper"
-      name="update_agenda_item_order"
-      class=".agendaitem.UpdateAgendaItemOrder"
-      permission="cmf.ModifyPortalContent"
-      />
-
-  <browser:page
-      for="opengever.meeting.interfaces.IMeetingWrapper"
-      name="delete_agenda_item"
-      class=".agendaitem.DeleteAgendaItem"
-      permission="cmf.ModifyPortalContent"
-      />
-
-  <browser:page
-      for="opengever.meeting.interfaces.IMeetingWrapper"
-      name="update_agenda_item"
-      class=".agendaitem.UpdateAgendaItem"
+      name="agenda_items"
+      class=".agendaitem.AgendaItemsView"
       permission="zope2.View"
+      allowed_interface=".agendaitem.IAgendaItemActions"
+      />
+
+  <browser:page
+      for="opengever.meeting.interfaces.IMeetingWrapper"
+      name="unscheduled_proposals"
+      class=".unscheduled_proposals.UnscheduledProposalsView"
+      permission="zope2.View"
+      allowed_attributes="schedule"
       />
 
 </configure>

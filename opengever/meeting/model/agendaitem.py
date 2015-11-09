@@ -139,6 +139,16 @@ class AgendaItem(Base):
 
         return self.proposal.get_submitted_link(include_icon=include_icon)
 
+    def serialize(self):
+        return {
+            'id': self.agenda_item_id,
+            'css_class': self.get_css_class(),
+            'title': self.get_title(),
+            'number': self.number,
+            'has_proposal': self.has_proposal,
+            'link': self.get_proposal_link(include_icon=False),
+            }
+
     @property
     def has_proposal(self):
         return self.proposal is not None
