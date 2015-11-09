@@ -265,6 +265,8 @@ class AddMeetingDossierView(WizzardWrappedAddForm):
 
 class MeetingView(BrowserView):
 
+    has_model_breadcrumbs = True
+
     template = ViewPageTemplateFile('templates/meeting.pt')
 
     def __init__(self, context, request):

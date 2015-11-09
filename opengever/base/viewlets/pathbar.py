@@ -12,7 +12,7 @@ class PathBar(common.PathBarViewlet):
     def update(self):
         super(PathBar, self).update()
 
-        if hasattr(self.view, 'is_model_view') and self.view.is_model_view:
+        if getattr(self.view, 'has_model_breadcrumbs', False):
             self.append_model_breadcrumbs()
 
     def append_model_breadcrumbs(self):
