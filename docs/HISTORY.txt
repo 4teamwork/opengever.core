@@ -5,6 +5,12 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Meetingview rework:
+
+    - Implement clientside processing for meeting view (Controller Pattern).
+
+  [Kevin Bieri, phgross, deiferni]
+
 - Eliminate duplicate notification, about a task acceptance, when creating a successor.
   [phgross]
 
