@@ -91,13 +91,22 @@
       mask: { loadSpeed: 0 }
     }).data("overlay");
 
+    var sortableHelper = function(e, row) {
+      var helper = row.clone();
+      $.each(row.children(), function(idx, cell) {
+        helper.children().eq(idx).width($(cell).width());
+      });
+      return helper;
+    };
+
     var sortableSettings = {
       handle: ".sortable-handle",
       forcePlaceholderSize: true,
       placeholder: "placeholder",
       items: "tr",
       tolerance: "intersects",
-      update: self.updateSortOrder
+      update: self.updateSortOrder,
+      helper: sortableHelper
     };
 
     Controller.call(this, viewlet, $("#agendaitemsTemplate").html(), $("#agenda_items tbody"), options);
