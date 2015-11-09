@@ -42,8 +42,6 @@ class TestMeeting(FunctionalTestCase):
 
     def test_meeting_link(self):
         meeting = create(Builder('meeting').having(
-            location=u'Bern',
-            start=self.localized_datetime(2013, 10, 18),
             committee=self.committee.load_model()))
 
         link = PyQuery(meeting.get_link())[0]
@@ -52,8 +50,8 @@ class TestMeeting(FunctionalTestCase):
             'http://nohost/plone/opengever-meeting-committeecontainer/committee-1/meeting-1/view',
             link.get('href'))
         self.assertEqual('contenttype-opengever-meeting-meeting', link.get('class'))
-        self.assertEqual('Bern, Oct 18, 2013', link.get('title'))
-        self.assertEqual('Bern, Oct 18, 2013', link.text)
+        self.assertEqual(u'B\xe4rn, Dec 13, 2011', link.get('title'))
+        self.assertEqual(u'B\xe4rn, Dec 13, 2011', link.text)
 
     @browsing
     def test_add_meeting_and_dossier(self, browser):

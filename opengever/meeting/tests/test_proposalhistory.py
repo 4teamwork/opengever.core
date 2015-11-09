@@ -22,9 +22,7 @@ class TestProposalHistory(FunctionalTestCase):
         container = create(Builder('committee_container'))
         self.committee = create(Builder('committee').within(container))
         self.meeting = create(Builder('meeting')
-                              .having(committee=self.committee.load_model(),
-                                      start=self.localized_datetime(2013, 1, 1),
-                                      location='There',)
+                              .having(committee=self.committee.load_model())
                               .link_with(self.meeting_dossier))
 
         self.repo, self.repo_folder = create(Builder('repository_tree'))
@@ -115,7 +113,7 @@ class TestProposalHistory(FunctionalTestCase):
 
         self.open_overview(browser)
         self.assertEqual(
-            u'Scheduled for meeting There, Jan 01, 2013 by Test User (test_user_1_)',
+            u'Scheduled for meeting B\xe4rn, Dec 13, 2011 by Test User (test_user_1_)',
             self.get_latest_history_entry_text(browser))
 
     @browsing
@@ -128,5 +126,5 @@ class TestProposalHistory(FunctionalTestCase):
 
         self.open_overview(browser)
         self.assertEqual(
-            u'Removed from schedule of meeting There, Jan 01, 2013 by Test User (test_user_1_)',
+            u'Removed from schedule of meeting B\xe4rn, Dec 13, 2011 by Test User (test_user_1_)',
             self.get_latest_history_entry_text(browser))

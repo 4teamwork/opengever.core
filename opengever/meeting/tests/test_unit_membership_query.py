@@ -28,7 +28,8 @@ class TestUnitMembershipQuery(TestCase):
     def test_fetch_for_meeting(self):
         meeting = create(Builder('meeting').having(
                          committee=self.committee,
-                         start=localized_datetime(2014, 7, 1)))
+                         start=localized_datetime(2014, 7, 1),
+                         end=None))
         membership_before = create(Builder('membership').having(
             date_from=date(2013, 1, 1),
             date_to=date(2013, 12, 31),

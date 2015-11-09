@@ -28,9 +28,7 @@ class TestAgendaItem(FunctionalTestCase):
         container = create(Builder('committee_container'))
         self.committee = create(Builder('committee').within(container))
         self.meeting = create(Builder('meeting')
-                              .having(committee=self.committee.load_model(),
-                                      start=self.localized_datetime(2013, 1, 1),
-                                      location='There',)
+                              .having(committee=self.committee.load_model())
                               .link_with(self.meeting_dossier))
 
         self.meeting_wrapper = MeetingWrapper.wrap(self.committee, self.meeting)

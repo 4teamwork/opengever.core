@@ -22,8 +22,7 @@ class TestSQLLockable(FunctionalTestCase):
         self.container = create(Builder('committee_container'))
         self.committee = create(Builder('committee').within(self.container))
         self.meeting = create(Builder('meeting').having(
-            committee=self.committee.load_model(),
-            start=self.localized_datetime(2010, 1, 1)))
+            committee=self.committee.load_model()))
 
         self.wrapper = MeetingWrapper.wrap(self.committee, self.meeting)
 

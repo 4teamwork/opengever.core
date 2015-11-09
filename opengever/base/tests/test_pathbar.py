@@ -54,8 +54,7 @@ class TestPathBar(FunctionalTestCase):
         container = create(Builder('committee_container'))
         committee = create(Builder('committee').within(container))
         meeting = create(Builder('meeting')
-                         .having(committee=committee.load_model(),
-                                 start=self.localized_datetime(2010, 1, 1))
+                         .having(committee=committee.load_model())
                          .link_with(self.meeting_dossier))
 
         browser.login().open(meeting.get_url())
