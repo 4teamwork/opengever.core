@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Eliminate duplicate notification, about a task acceptance, when creating a successor.
+  [phgross]
+
 - Lock protocol documents while a meeting is not closed.
   [deiferni]
 

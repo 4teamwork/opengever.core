@@ -260,8 +260,6 @@ def accept_task_with_successor(dossier, predecessor_oguid, response_text):
 
     # Move current responsible from predecessor task to successor
     center = notification_center()
-    center.remove_task_responsible(Oguid.parse(predecessor_oguid),
-                                   successor.responsible)
     center.add_task_responsible(successor, successor.responsible)
 
     # First "accept" the successor task..
@@ -290,6 +288,14 @@ def accept_task_with_successor(dossier, predecessor_oguid, response_text):
 
 
 class AcceptTaskWorkflowTransitionView(grok.View):
+    """A remote request view called by another adminunit, to accept a task,
+    during the SuccessorTask creation process.
+
+    Additionally to workflow state change, it removes the task's responsible
+    from the notification_center's watcher list. Because the responsible of
+    the task will watch the successor.
+    """
+
     grok.context(ITask)
     grok.name('accept_task_workflow_transition')
     grok.require('cmf.AddPortalContent')
@@ -300,6 +306,9 @@ class AcceptTaskWorkflowTransitionView(grok.View):
 
         text = self.request.get('text')
         successor_oguid = self.request.get('successor_oguid')
+
+        center = notification_center()
+        center.remove_task_responsible(self.context, self.context.responsible)
 
         accept_task_with_response(self.context, text,
                                   successor_oguid=successor_oguid)
