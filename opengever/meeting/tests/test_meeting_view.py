@@ -1,4 +1,3 @@
-from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -91,8 +90,8 @@ class TestMeetingView(FunctionalTestCase):
         self.meeting = create(
             Builder('meeting')
             .having(committee=self.committee.load_model(),
-                    start=datetime(2013, 1, 1, 8, 30),
-                    end=datetime(2013, 1, 1, 10, 30),
+                    start=self.localized_datetime(2013, 1, 1, 8, 30),
+                    end=self.localized_datetime(2013, 1, 1, 10, 30),
                     location='There',
                     presidency=self.hugo,
                     participants=[self.peter,

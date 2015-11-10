@@ -429,4 +429,24 @@
         directory="profiles/4612"
         />
 
+    <!-- 4612 -> 4613 -->
+    <genericsetup:upgradeStep
+        title="Use timezone-aware meeting datetime columns."
+        description=""
+        source="4612"
+        destination="4613"
+        handler="opengever.meeting.upgrades.to4613.AlterMeetingDatetimeColumns"
+        profile="opengever.meeting:default"
+        />
+
+    <!-- 4613 -> 4614 -->
+    <genericsetup:upgradeStep
+        title="Use timezone-aware proposalhistory datetime columns."
+        description=""
+        source="4613"
+        destination="4614"
+        handler="opengever.meeting.upgrades.to4614.AlterProposalHistoryCreatedColumn"
+        profile="opengever.meeting:default"
+        />
+
 </configure>

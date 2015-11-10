@@ -1,5 +1,4 @@
 from datetime import date
-from datetime import datetime
 from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
@@ -56,13 +55,13 @@ class TestCommitteeOverview(FunctionalTestCase):
     def test_upcoming_meetings_box_only_lists_meetings_in_the_future(self, browser):
         create(Builder('meeting')
                .having(committee=self.committee_model,
-                       start=datetime.now() - timedelta(days=1)))
+                       start=self.localized_datetime() - timedelta(days=1)))
         meeting2 = create(Builder('meeting')
                           .having(committee=self.committee_model,
-                                  start=datetime.now() + timedelta(hours=1)))
+                                  start=self.localized_datetime() + timedelta(hours=1)))
         meeting3 = create(Builder('meeting')
                           .having(committee=self.committee_model,
-                                  start=datetime.now() + timedelta(days=1)))
+                                  start=self.localized_datetime() + timedelta(days=1)))
 
         browser.login().open(self.committee, view='tabbedview_view-overview')
 
@@ -76,10 +75,10 @@ class TestCommitteeOverview(FunctionalTestCase):
         committee_b_model = committee_b.load_model()
         meeting1 = create(Builder('meeting')
                           .having(committee=self.committee_model,
-                                  start=datetime.now() + timedelta(hours=1)))
+                                  start=self.localized_datetime() + timedelta(hours=1)))
         create(Builder('meeting')
                .having(committee=committee_b_model,
-                       start=datetime.now() + timedelta(hours=1)))
+                       start=self.localized_datetime() + timedelta(hours=1)))
 
         browser.login().open(self.committee, view='tabbedview_view-overview')
 
@@ -91,7 +90,7 @@ class TestCommitteeOverview(FunctionalTestCase):
     def test_meetings_are_linked_correctly(self, browser):
         meeting = create(Builder('meeting')
                          .having(committee=self.committee_model,
-                                 start=datetime.now() + timedelta(days=1)))
+                                 start=self.localized_datetime() + timedelta(days=1)))
 
         browser.login().open(self.committee, view='tabbedview_view-overview')
 
@@ -104,7 +103,7 @@ class TestCommitteeOverview(FunctionalTestCase):
         for i in range(0, 12):
             create(Builder('meeting')
                    .having(committee=self.committee_model,
-                           start=datetime.now() + timedelta(days=i)))
+                           start=self.localized_datetime() + timedelta(days=i)))
 
         browser.login().open(self.committee, view='tabbedview_view-overview')
 

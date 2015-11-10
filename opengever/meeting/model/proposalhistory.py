@@ -1,11 +1,11 @@
-from datetime import datetime
+from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.model import Base
+from opengever.base.model import UTCDateTime
 from opengever.meeting import _
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.models import USER_ID_LENGTH
 from plone import api
 from sqlalchemy import Column
-from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
@@ -28,7 +28,7 @@ class ProposalHistory(Base):
         Sequence("proposal_history_id_seq"), primary_key=True)
     proposal_id = Column(Integer, ForeignKey('proposals.id'), nullable=False)
     proposal = relationship('Proposal')
-    created = Column(DateTime, default=datetime.now, nullable=False)
+    created = Column(UTCDateTime(timezone=True), default=utcnow_tz_aware, nullable=False)
     userid = Column(String(USER_ID_LENGTH), default=get_current_user_id, nullable=False)
 
     # intended to be used only by DocumentSubmitted/DocumentUpdated

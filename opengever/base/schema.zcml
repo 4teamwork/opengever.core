@@ -1,0 +1,12 @@
+<configure
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="opengever.base">
+
+    <adapter
+        factory=".schema.UTCDatetimeDataConverter"
+        for=".schema.IUTCDatetime
+             collective.z3cform.datetimewidget.interfaces.IDatetimeWidget" />
+
+</configure>

@@ -5,6 +5,7 @@ from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.form import WizzardWrappedAddForm
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
+from opengever.base.schema import UTCDatetime
 from opengever.meeting import _
 from opengever.meeting.browser.meetings.transitions import MeetingTransitionController
 from opengever.meeting.browser.protocol import GenerateProtocol
@@ -26,7 +27,6 @@ from z3c.form.form import Form
 from z3c.form.interfaces import HIDDEN_MODE
 from zope import schema
 from zope.component import getUtility
-from zope.component import queryMultiAdapter
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 import json
@@ -45,11 +45,11 @@ class IMeetingModel(form.Schema):
         max_length=256,
         required=False)
 
-    start = schema.Datetime(
+    start = UTCDatetime(
         title=_('label_start', default=u"Start"),
         required=True)
 
-    end = schema.Datetime(
+    end = UTCDatetime(
         title=_('label_end', default=u"End"),
         required=False)
 
@@ -239,7 +239,6 @@ class AddMeetingDossierView(WizzardWrappedAddForm):
             def create_meeting(self, dossier, committee_oguid):
                 dm = getUtility(IWizardDataStorage)
                 data = dm.get_data(get_dm_key())
-
                 data['dossier_oguid'] = Oguid.for_object(dossier)
                 meeting = Meeting(**data)
                 session = create_session()

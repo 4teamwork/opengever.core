@@ -1,5 +1,4 @@
 from datetime import date
-from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.meeting.protocol import ProtocolData
@@ -28,18 +27,17 @@ class TestProtocolJsonData(FunctionalTestCase):
         self.membership_peter = create(Builder('membership').having(
             member=self.member_peter,
             committee=self.committee,
-            date_from=date(2009, 1, 1),
-            date_to=date(2011, 1, 1),
+            date_from=date(2010, 1, 1),
+            date_to=date(2012, 1, 1),
             role=u'F\xfcrst'))
         self.membership_franz = create(Builder('membership').having(
             member=self.member_franz,
             committee=self.committee,
-            date_from=date(2009, 1, 1),
-            date_to=date(2011, 1, 1),
+            date_from=date(2010, 1, 1),
+            date_to=date(2012, 1, 1),
             role=None))
         self.meeting = create(Builder('meeting').having(
             committee=self.committee,
-            start=datetime(2010, 1, 1),
             participants=[self.member_peter, self.member_franz],
             other_participants=u'Hans M\xfcller\nHeidi Muster',
             protocol_start_page_number=42))
@@ -91,15 +89,15 @@ class TestProtocolJsonData(FunctionalTestCase):
                  'title': u'Free Text',
                  'is_paragraph': False,}],
              'mandant': {'name': u'Client1'},
-             'meeting': {'date': u'Jan 01, 2010',
-                         'end_time': '',
-                         'start_time': u'12:00 AM'},
+             'meeting': {'date': u'Dec 13, 2011',
+                         'end_time': u'11:45 AM',
+                         'start_time': u'09:30 AM'},
              'participants': {
                 'members': [{'fullname': u'Peter Meier',
                              'role': u'F\xfcrst'},
                             {'fullname': u'Franz M\xfcller',
                              'role': None}],
-                'other': [u'Hans M\xfcller', 'Heidi Muster']},
+                'other': [u'Hans M\xfcller', u'Heidi Muster']},
              'protocol': {'type': u'Protocol'}},
             data
         )

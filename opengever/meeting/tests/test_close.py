@@ -1,4 +1,3 @@
-from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -40,9 +39,7 @@ class TestCloseMeeting(FunctionalTestCase):
                                  .having(committee=self.committee.load_model()))
 
         self.meeting = create(Builder('meeting')
-                              .having(committee=self.committee.load_model(),
-                                      start=datetime(2013, 1, 1),
-                                      location='There')
+                              .having(committee=self.committee.load_model())
                               .scheduled_proposals([self.proposal_a, self.proposal_b])
                               .link_with(self.meeting_dossier))
         self.meeting.execute_transition('pending-held')
@@ -58,9 +55,9 @@ class TestCloseMeeting(FunctionalTestCase):
 
         submitted_proposal = self.proposal_a.load_model().resolve_sumitted_proposal()
         excerpt = submitted_proposal.listFolderContents()[0]
-        self.assertEquals('Protocol Excerpt-there-jan-01-2013',
+        self.assertEquals('Protocol Excerpt-barn-dec-13-2011',
                           excerpt.Title())
-        self.assertEquals(u'protocol-excerpt-there-jan-01-2013.docx',
+        self.assertEquals(u'protocol-excerpt-barn-dec-13-2011.docx',
                           excerpt.file.filename)
 
         generated_document = self.proposal_a.load_model().submitted_excerpt_document
@@ -72,9 +69,9 @@ class TestCloseMeeting(FunctionalTestCase):
         browser.css('#held-closed').first.click()
 
         excerpt = self.proposal_a.listFolderContents()[0]
-        self.assertEquals('Protocol Excerpt-there-jan-01-2013',
+        self.assertEquals('Protocol Excerpt-barn-dec-13-2011',
                           excerpt.Title())
-        self.assertEquals(u'protocol-excerpt-there-jan-01-2013.docx',
+        self.assertEquals(u'protocol-excerpt-barn-dec-13-2011.docx',
                           excerpt.file.filename)
 
         generated_document = self.proposal_a.load_model().excerpt_document
@@ -103,7 +100,7 @@ class TestCloseMeeting(FunctionalTestCase):
         browser.open(self.proposal_a, view=u'tabbedview_view-overview')
         link = browser.css('#excerptBox a').first
         self.assertEquals(excerpt.absolute_url(), link.get('href'))
-        self.assertEquals('Protocol Excerpt-there-jan-01-2013', link.text)
+        self.assertEquals('Protocol Excerpt-barn-dec-13-2011', link.text)
 
     @browsing
     def test_states_are_updated(self, browser):
@@ -118,9 +115,9 @@ class TestCloseMeeting(FunctionalTestCase):
         browser.css('#held-closed').first.click()
 
         self.assertEquals(
-            ['The meeting There, Jan 01, 2013 has been successfully closed, '
-             'the excerpts have been generated and sent back to the '
-             'initial dossier.'],
+            [u'The meeting B\xe4rn, Dec 13, 2011 has been successfully closed, '
+             u'the excerpts have been generated and sent back to the '
+             u'initial dossier.'],
             info_messages())
 
         self.assertEquals(self.meeting.get_url(), browser.url)

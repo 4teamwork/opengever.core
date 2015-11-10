@@ -26,7 +26,7 @@ class TestMarkAsRead(FunctionalTestCase):
                                  .oguid('fd:123')
                                  .watchers([self.test_user]))
 
-        with freeze(datetime(2014, 5, 7, 12, 30, tzinfo=pytz.utc)):
+        with freeze(pytz.UTC.localize(datetime(2014, 5, 7, 12, 30))):
             self.activity_1 = self.center.add_activity(
                 Oguid('fd', '123'),
                 'task-added',
@@ -97,7 +97,7 @@ class TestListNotifications(FunctionalTestCase):
                                  .oguid('fd:123')
                                  .watchers([self.test_user]))
 
-        created = datetime(2014, 5, 7, 12, 30, tzinfo=pytz.utc)
+        created = pytz.UTC.localize(datetime(2014, 5, 7, 12, 30))
         self.activity = create(Builder('activity')
                                .having(resource=self.resource_a,
                                        created=created,
@@ -222,7 +222,7 @@ class TestListNotifications(FunctionalTestCase):
 
     @browsing
     def test_lists_notification_chronologic_newest_at_the_top(self, browser):
-        created = datetime(2015, 5, 7, 12, 30, tzinfo=pytz.utc)
+        created = pytz.UTC.localize(datetime(2015, 5, 7, 12, 30))
         newes = create(Builder('activity')
                        .having(resource=self.resource_a,
                                created=created,

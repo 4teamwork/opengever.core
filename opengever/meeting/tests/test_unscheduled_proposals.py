@@ -1,4 +1,3 @@
-from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -27,9 +26,7 @@ class TestUnscheduledProposals(FunctionalTestCase):
         container = create(Builder('committee_container'))
         self.committee = create(Builder('committee').within(container))
         self.meeting = create(Builder('meeting')
-                              .having(committee=self.committee.load_model(),
-                                      start=datetime(2013, 1, 1),
-                                      location='There',)
+                              .having(committee=self.committee.load_model())
                               .link_with(self.meeting_dossier))
 
         self.meeting_wrapper = MeetingWrapper.wrap(self.committee, self.meeting)

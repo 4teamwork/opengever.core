@@ -60,5 +60,5 @@ class UTCDateTime(types.TypeDecorator):
             if value.tzinfo is None:
                 # We manually add the UTC timezone, only needed for the DB
                 # backend who does not support timezone aware datetime.
-                value = pytz.utc.localize(value)
+                value = pytz.UTC.localize(value)
             return value

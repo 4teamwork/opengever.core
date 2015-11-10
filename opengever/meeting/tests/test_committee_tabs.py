@@ -1,4 +1,3 @@
-from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -24,16 +23,11 @@ class TestCommitteeTabs(FunctionalTestCase):
                                       .within(self.repository_folder))
 
         create(Builder('meeting')
-               .having(committee=self.committee_model,
-                       location='Bern',
-                       start=datetime(2015, 01, 01, 12, 00),
-                       end=datetime(2015, 01, 03, 18, 00))
+               .having(committee=self.committee_model)
                .link_with(self.meeting_dossier))
 
         create(Builder('meeting')
-               .having(committee=self.committee_model,
-                       location='Bern',
-                       start=datetime(2015, 06, 13, 9, 30))
+               .having(committee=self.committee_model, end=None)
                .link_with(self.meeting_dossier))
 
     @browsing
@@ -41,16 +35,17 @@ class TestCommitteeTabs(FunctionalTestCase):
         browser.login().open(self.committee, view='tabbedview_view-meetings')
 
         table = browser.css('.listing').first
+
         self.assertEquals([
-            {'Title': 'Bern, Jan 01, 2015',
-             'Date': 'Jan 01, 2015',
-             'Location': 'Bern',
-             'From': '12:00 PM',
-             'To': '06:00 PM',
+            {'Title': u'B\xe4rn, Dec 13, 2011',
+             'Date': 'Dec 13, 2011',
+             'Location': u'B\xe4rn',
+             'From': '09:30 AM',
+             'To': '11:45 AM',
              'Dossier': u'D\xf6ssier'},
-            {'Title': 'Bern, Jun 13, 2015',
-             'Date': 'Jun 13, 2015',
-             'Location': 'Bern',
+            {'Title': u'B\xe4rn, Dec 13, 2011',
+             'Date': 'Dec 13, 2011',
+             'Location': u'B\xe4rn',
              'From': '09:30 AM',
              'To': '',
              'Dossier': u'D\xf6ssier'}

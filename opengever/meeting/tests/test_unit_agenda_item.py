@@ -1,4 +1,3 @@
-from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.testing import MEMORY_DB_LAYER
@@ -15,8 +14,7 @@ class TestUnitAgendaItem(TestCase):
 
         self.committee = create(Builder('committee_model'))
         self.meeting = create(Builder('meeting').having(
-            committee=self.committee,
-            start=datetime(2010, 1, 1)))
+            committee=self.committee))
 
         create(Builder('admin_unit').id('fd'))
 

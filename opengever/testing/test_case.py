@@ -10,6 +10,7 @@ from opengever.ogds.models.org_unit import OrgUnit
 from opengever.ogds.models.user import User
 from opengever.testing import builders  # keep!
 from opengever.testing.browser import OGBrowser
+from opengever.testing.helpers import localized_datetime
 from plone import api
 from plone.app.testing import login
 from plone.app.testing import setRoles
@@ -68,6 +69,9 @@ class FunctionalTestCase(TestCase):
     committed. That way we make sure to always get a fresh object
     when a test case uses self.user, self.org_unit etc...
     """
+
+    def localized_datetime(self, *args, **kwargs):
+        return localized_datetime(*args, **kwargs)
 
     def get_user(self):
         return User.get(self._user_id)

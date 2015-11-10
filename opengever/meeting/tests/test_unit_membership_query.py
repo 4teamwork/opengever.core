@@ -3,6 +3,7 @@ from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.meeting.model import Membership
+from opengever.testing import localized_datetime
 from opengever.testing import MEMORY_DB_LAYER
 from unittest2 import TestCase
 
@@ -26,7 +27,9 @@ class TestUnitMembershipQuery(TestCase):
 
     def test_fetch_for_meeting(self):
         meeting = create(Builder('meeting').having(
-            committee=self.committee, start=date(2014, 7, 1)))
+                         committee=self.committee,
+                         start=localized_datetime(2014, 7, 1),
+                         end=None))
         membership_before = create(Builder('membership').having(
             date_from=date(2013, 1, 1),
             date_to=date(2013, 12, 31),

@@ -25,6 +25,7 @@ from opengever.ogds.models.tests.builders import OrgUnitBuilder
 from opengever.ogds.models.tests.builders import SqlObjectBuilder
 from opengever.ogds.models.tests.builders import UserBuilder
 from opengever.testing.builders.base import TEST_USER_ID
+from opengever.testing.helpers import localized_datetime
 from plone import api
 from plone.locking.interfaces import ILockable
 from plone.registry.interfaces import IRegistry
@@ -200,6 +201,9 @@ class MeetingBuilder(SqlObjectBuilder):
         self._scheduled_proposals = []
         self.arguments['dossier_admin_unit_id'] = 'foo'
         self.arguments['dossier_int_id'] = 1234
+        self.arguments['start'] = localized_datetime(2011, 12, 13, 9, 30)
+        self.arguments['end'] = localized_datetime(2011, 12, 13, 11, 45)
+        self.arguments['location'] = u'B\xe4rn'
 
     def link_with(self, dossier):
         del self.arguments['dossier_admin_unit_id']

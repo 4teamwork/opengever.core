@@ -1,4 +1,3 @@
-from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -49,9 +48,7 @@ class TestExcerpt(FunctionalTestCase):
 
         self.committee_model = self.committee.load_model()
         self.meeting = create(Builder('meeting')
-                              .having(committee=self.committee_model,
-                                      start=datetime(2014, 3, 4),
-                                      location=u'B\xe4rn',)
+                              .having(committee=self.committee_model)
                               .link_with(self.meeting_dossier))
         self.meeting.execute_transition('pending-held')
         self.proposal_model = self.proposal.load_model()
@@ -90,7 +87,7 @@ class TestExcerpt(FunctionalTestCase):
         browser.css('.generate-excerpt').first.click()
 
         title_field = browser.find('Title')
-        self.assertEqual(u'Protocol Excerpt-B\xe4rn, Mar 04, 2014',
+        self.assertEqual(u'Protocol Excerpt-B\xe4rn, Dec 13, 2011',
                          title_field.value)
 
         dossier_field = browser.find('form.widgets.dossier')
@@ -106,7 +103,7 @@ class TestExcerpt(FunctionalTestCase):
                       'Target dossier': self.dossier})
         browser.find('Save').click()
 
-        self.assertEqual([u'Excerpt for meeting B\xe4rn, Mar 04, 2014 has '
+        self.assertEqual([u'Excerpt for meeting B\xe4rn, Dec 13, 2011 has '
                           'been generated successfully'],
                          info_messages())
         # refresh
@@ -120,7 +117,7 @@ class TestExcerpt(FunctionalTestCase):
 
         self.assertEqual(1, len(browser.css('.excerpts li a')),
                          'generated document should be linked')
-        self.assertIsNotNone(browser.find('protocol-excerpt-barn-mar-04-2014'))
+        self.assertIsNotNone(browser.find('protocol-excerpt-barn-dec-13-2011'))
 
     @browsing
     def test_manual_excerpt_form_redirects_to_meeting_on_abort(self, browser):

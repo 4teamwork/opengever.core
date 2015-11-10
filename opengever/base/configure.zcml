@@ -25,6 +25,7 @@
   <include package=".upgrades" />
   <include file="skins.zcml" />
   <include file="permissions.zcml" />
+  <include file="schema.zcml" />
 
   <grok:grok package="." />
 
