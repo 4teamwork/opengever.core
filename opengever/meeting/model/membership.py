@@ -86,6 +86,3 @@ class Membership(Base):
 
     def get_remove_url(self, context):
         return '/'.join((self.get_url(context), 'remove'))
-
-    def get_breadcrumbs(self, context):
-        return {'absolute_url': self.get_url(context), 'Title': self.title}

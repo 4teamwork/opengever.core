@@ -16,7 +16,5 @@ class PathBar(common.PathBarViewlet):
             self.append_model_breadcrumbs()
 
     def append_model_breadcrumbs(self):
-        model = self.view.model
-
-        model_breadcrumbs = model.get_breadcrumbs(self.view.context)
-        self.breadcrumbs = self.breadcrumbs + (model_breadcrumbs,)
+        model_breadcrumbs = self.view.context.get_breadcrumbs()
+        self.breadcrumbs = self.breadcrumbs + model_breadcrumbs

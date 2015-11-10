@@ -72,8 +72,6 @@ class MemberView(BrowserView):
     implements(IBrowserView, IPublishTraverse)
 
     has_model_breadcrumbs = True
-    is_model_view = True
-    is_model_edit_view = False
 
     @classmethod
     def url_for(cls, context, member):

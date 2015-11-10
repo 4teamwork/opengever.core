@@ -28,6 +28,13 @@ class BaseWrapper(ExtensionClass.Base, Implicit, Traversable):
     def absolute_url(self):
         return self.model.get_url(view=None)
 
+    def get_breadcrumbs(self):
+        return ({'absolute_url': self.absolute_url(),
+                 'Title': self.get_title()},)
+
+    def get_title(self):
+        return self.model.get_title()
+
     def __before_publishing_traverse__(self, arg1, arg2=None):
         """Implements default-view behavior for meetings.
 
@@ -57,6 +64,9 @@ class MemberWrapper(BaseWrapper):
     def absolute_url(self):
         return self.model.get_url(self.parent)
 
+    def get_title(self):
+        return self.model.fullname
+
     def __getitem__(self, key):
         if not key.startswith('membership'):
             raise KeyError(key)
@@ -77,3 +87,13 @@ class MembershipWrapper(BaseWrapper):
 
     def absolute_url(self):
         return self.model.get_url(self.parent)
+
+    def get_title(self):
+        return '{}, {} - {}'.format(self.model.title(),
+                                    self.model.format_date_from(),
+                                    self.model.format_date_to())
+
+    def get_breadcrumbs(self):
+        my_breadcrumbs = super(MembershipWrapper, self).get_breadcrumbs()
+        parent_breadcrumbs = self.parent.get_breadcrumbs()
+        return parent_breadcrumbs + my_breadcrumbs
