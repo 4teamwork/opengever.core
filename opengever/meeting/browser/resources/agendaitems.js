@@ -2,14 +2,13 @@
 
   "use strict";
 
-  function Controller(viewlet, template, outlet, options) {
+  function Controller(template, outlet, options) {
 
     options = $.extend({ message: true }, options);
 
-    this.viewlet = viewlet;
     this.outlet = outlet;
     this.template = function() {};
-    this.messageFactory = new global.MessageFactory(viewlet);
+    this.messageFactory = new global.MessageFactory();
     var self = this;
 
     var messageFunc = function(data) {
@@ -100,12 +99,12 @@
       update: self.updateSortOrder
     };
 
-    Controller.call(this, viewlet, $("#agendaitemsTemplate").html(), $("#agenda_items tbody"), options);
+    Controller.call(this, $("#agendaitemsTemplate").html(), $("#agenda_items tbody"), options);
 
     this.fetch = function() { return $.get(viewlet.data().listAgendaItemsUrl); };
 
     this.render = function(data) { self.outlet.html(self.template({ agendaitems: data.items,
-                                                                    editable: self.viewlet.data().editable })); };
+                                                                    editable: viewlet.data().editable })); };
 
     this.openModal = function(e) {
       this.currentItem = $(e.target);
@@ -174,7 +173,7 @@
   function ProposalController(options) {
 
     var viewlet = $("#opengever_meeting_meeting");
-    Controller.call(this, viewlet, $("#proposalsTemplate").html(), $("#unscheduled_porposals"), options);
+    Controller.call(this, $("#proposalsTemplate").html(), $("#unscheduled_porposals"), options);
     var self = this;
     var title = $("#title");
 
@@ -217,8 +216,7 @@
 
   function CollapsibleController() {
 
-    var viewlet = $("#opengever_meeting_meeting");
-    Controller.call(this, viewlet);
+    Controller.call(this);
 
     this.toggle = function(e) { $(e.target).parents(".collapsible").toggleClass("open"); };
 
