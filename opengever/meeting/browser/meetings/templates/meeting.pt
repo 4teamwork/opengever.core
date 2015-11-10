@@ -33,7 +33,7 @@
             <button class="button confirm"
                     i18n:translate="">Delete</button>
             <button class="button decline"
-                    i18n:translate="">Cancel</button>
+                    i18n:translate="label_cancel">Cancel</button>
           </div>
         </div>
         <div class="sidebar">
@@ -46,16 +46,22 @@
             </div>
             <div class="list-group-item">
               <dl>
-                <dt tal:attributes="class python: 'workflow_state ' + meeting. workflow_state"></dt>
+                <dt tal:attributes="class python: 'workflow_state ' + meeting. workflow_state"
+                    i18n:attributes="title"
+                    title="status"></dt>
                 <dd tal:content="python: meeting.get_state().title"></dd>
 
-                <dt id="meeting_location"></dt>
+                <dt id="meeting_location"
+                    i18n:attributes="title"
+                    title="location"></dt>
                 <dd tal:content="meeting/location"></dd>
 
                 <dt id="meeting_date"></dt>
                 <dd tal:content="meeting/get_date"></dd>
 
-                <dt id="meeting_time"></dt>
+                <dt id="meeting_time"
+                    i18n:attributes="title"
+                    title="time"></dt>
                 <dd>
                   <span tal:replace="python: meeting.get_start_time()"></span>
                   -
@@ -63,16 +69,22 @@
                 </dd>
 
                 <dt id="meeting_presidency"
-                    tal:condition="meeting/presidency"></dt>
+                    tal:condition="meeting/presidency"
+                    i18n:attributes="title"
+                    title="presidency"></dt>
                 <dd tal:condition="meeting/presidency"
                     tal:content="meeting/presidency/fullname"></dd>
 
                 <dt id="meeting_secretary"
-                    tal:condition="meeting/secretary"></dt>
+                    tal:condition="meeting/secretary"
+                    i18n:attributes="title"
+                    title="secretary"></dt>
                 <dd tal:condition="meeting/secretary"
                     tal:content="meeting/secretary/fullname"></dd>
 
-                <dt id="meeting_participants"></dt>
+                <dt id="meeting_participants"
+                    i18n:attributes="title"
+                    title="participants"></dt>
                 <dd>
                   <ul>
                     <li tal:repeat="participant meeting/participants"
@@ -80,7 +92,9 @@
                   </ul>
                 </dd>
 
-                <dt id="related_dossier"></dt>
+                <dt id="related_dossier"
+                    i18n:attributes="title"
+                    title="meetingdossier"></dt>
                 <dd>
                   <a tal:attributes="href meeting/get_dossier_url"
                      tal:content="python: meeting.get_dossier().title"></a>
@@ -90,22 +104,34 @@
             <div class="list-group-item protocol"
                  tal:define="protocol_document view/get_protocol_document">
               <h2 i18n:translate="">Protocol</h2>
-              <a tal:attributes="href view/url_generate_protocol;
-                                 class python: 'refresh-protocol' if view.has_protocol_document() else 'generate-protocol'"
-                  tal:condition="meeting/is_editable"></a>
+              <a tal:attributes="href view/url_generate_protocol;"
+                  tal:condition="python: meeting.is_editable() and not view.has_protocol_document()"
+                  i18n:attributes="title"
+                  title="generate new protocol as word document"
+                  class="generate-protocol"></a>
+
+              <a tal:attributes="href view/url_generate_protocol;"
+                  tal:condition="python: meeting.is_editable() and view.has_protocol_document()"
+                  i18n:attributes="title"
+                  title="generate new version as word document"
+                  class="refresh-protocol"></a>
               <p>
                 <a tal:condition="protocol_document"
                    tal:attributes="href protocol_document/absolute_url; class python: view.get_css_class(protocol_document)"
                    tal:content="protocol_document/Title"></a>
                 <a class="download-protocol-btn"
                    tal:condition="python: meeting.is_editable() and protocol_document"
-                   tal:attributes="href view/url_download_protocol"></a>
+                   tal:attributes="href view/url_download_protocol"
+                   i18n:attributes="title"
+                   title="download protocol"></a>
               </p>
             </div>
             <div class="list-group-item excerpts" tal:define="excerpts view/manually_generated_excerpts">
               <h2 i18n:translate="">Excerpts</h2>
               <a class="generate-excerpt"
-                 tal:attributes="href view/url_manually_generate_excerpt"></a>
+                 tal:attributes="href view/url_manually_generate_excerpt"
+                 i18n:attributes="title"
+                 title="generate new excerpt"></a>
               <ul>
                 <li tal:repeat="item excerpts">
                   <a href="" tal:attributes="href item/absolute_url;

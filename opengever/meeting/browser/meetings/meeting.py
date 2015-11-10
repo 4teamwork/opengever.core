@@ -99,8 +99,8 @@ AGENDAITEMS_TEMPLATE = '''
       {{#if ../editable}}
       <td class="actions">
         <div class="button-group">
-          <a href="{{edit_link}}" class="button edit-agenda-item"></a>
-          <a href="{{delete_link}}" class="button delete-agenda-item"></a>
+          <a href="{{edit_link}}" title="%(label_edit_action)s" class="button edit-agenda-item"></a>
+          <a href="{{delete_link}}" title="%(label_delete_action)s" class="button delete-agenda-item"></a>
         </div>
       </td>
       {{/if}}
@@ -345,8 +345,12 @@ class MeetingView(BrowserView):
     def render_handlebars_agendaitems_template(self):
         label_edit_cancel = translate(_('label_edit_cancel', default='Cancel'), context=self.request)
         label_edit_save = translate(_('label_edit_save', default='Save'), context=self.request)
+        label_edit_action = translate(_('label_edit_action', default='edit title'), context=self.request)
+        label_delete_action = translate(_('label_delete_action', default='delete this agenda item'), context=self.request)
         return AGENDAITEMS_TEMPLATE  % {'label_edit_cancel': label_edit_cancel,
-                                        'label_edit_save': label_edit_save}
+                                        'label_edit_save': label_edit_save,
+                                        'label_edit_action': label_edit_action,
+                                        'label_delete_action': label_delete_action}
 
     def render_handlebars_proposals_template(self):
         label_schedule = translate(_('label_schedule', default='Schedule'), context=self.request)

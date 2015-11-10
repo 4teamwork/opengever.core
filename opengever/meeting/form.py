@@ -48,7 +48,7 @@ class ModelAddForm(AutoExtensibleForm, AddForm):
             api.portal.get().REQUEST)
         return self.request.RESPONSE.redirect(self.nextURL())
 
-    @button.buttonAndHandler(_(u'Cancel', default=u'Cancel'), name='cancel')
+    @button.buttonAndHandler(_(u'label_cancel', default=u'Cancel'), name='cancel')
     def cancel(self, action):
         return self.request.RESPONSE.redirect(self.cancelURL())
 
@@ -119,7 +119,7 @@ class ModelEditForm(EditForm):
 
         return self.request.RESPONSE.redirect(self.nextURL())
 
-    @button.buttonAndHandler(_(u'Cancel', default=u'Cancel'), name='cancel')
+    @button.buttonAndHandler(_(u'label_cancel', default=u'Cancel'), name='cancel')
     def cancel(self, action):
         return self.request.RESPONSE.redirect(self.nextURL())
 
