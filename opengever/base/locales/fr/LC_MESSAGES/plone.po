@@ -103,6 +103,12 @@ msgstr "Résultat de la recherche"
 msgid "Search results for ${term}"
 msgstr "Résultat de la recherche pour"
 
+msgid "Submit additional document"
+msgstr ""
+
+msgid "Submit additional documents"
+msgstr ""
+
 #: plone.app.search/plone/app/search/browser.py:121
 msgid "alphabetically"
 msgstr "Alphabétique"
@@ -297,8 +303,3 @@ msgstr "Activer"
 msgid "transition-add-document"
 msgstr ""
 
-msgid "Submit additional documents"
-msgstr ""
-
-msgid "Submit additional document"
-msgstr ""

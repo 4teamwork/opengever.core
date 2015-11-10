@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-10-16 09:00+0000\n"
+"POT-Creation-Date: 2015-11-10 08:28+0000\n"
 "PO-Revision-Date: 2014-09-04 01:03+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -210,6 +210,11 @@ msgstr "Kassationsdatum"
 msgid "label_dateofsubmission"
 msgstr "Anbietezeitpunkt"
 
+#. Default: "An unexpected error has occured"
+#: ./opengever/base/browser/templates/gever-macros.pt:110
+msgid "label_default_error_message"
+msgstr "Ein unerwarteter Fehler ist aufgetreten"
+
 #. Default: "Description"
 #: ./opengever/base/behaviors/base.py:30
 msgid "label_description"
@@ -221,7 +226,7 @@ msgid "label_dossier"
 msgstr "Dossier:"
 
 #. Default: "Initial version (document copied)"
-#: ./opengever/base/subscribers.py:28
+#: ./opengever/base/subscribers.py:45
 msgid "label_initial_version_copied"
 msgstr "Dokument kopiert (Initialversion)"
 
@@ -264,6 +269,11 @@ msgstr "Kommentar zur Aufbewahrungsdauer"
 #: ./opengever/base/browser/search.pt:39
 msgid "label_search"
 msgstr "Suche"
+
+#. Default: "Error"
+#: ./opengever/base/browser/templates/gever-macros.pt:109
+msgid "label_severity_error"
+msgstr "Fehler"
 
 #. Default: "Title"
 #: ./opengever/base/behaviors/base.py:24
