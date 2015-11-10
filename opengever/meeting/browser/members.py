@@ -1,6 +1,5 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
-from five import grok
 from opengever.meeting import _
 from opengever.meeting.form import ModelAddForm
 from opengever.meeting.form import ModelEditForm
@@ -59,6 +58,13 @@ class EditMember(ModelEditForm):
         return MemberView.url_for(aq_parent(aq_inner(self.context)),
                                   self.model)
 
+    def prepare_model_tabs(self, viewlet):
+        if not self.model.is_editable():
+            return tuple()
+
+        return viewlet.prepare_edit_tab(
+            self.model.get_edit_url(self.context.parent), is_selected=True)
+
 
 class MemberView(BrowserView):
 
@@ -79,3 +85,10 @@ class MemberView(BrowserView):
 
     def __call__(self):
         return self.template()
+
+    def prepare_model_tabs(self, viewlet):
+        if not self.model.is_editable():
+            return tuple()
+
+        return viewlet.prepare_edit_tab(
+            self.model.get_edit_url(self.context.parent))
