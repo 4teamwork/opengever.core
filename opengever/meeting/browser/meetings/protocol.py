@@ -162,7 +162,7 @@ class EditProtocol(AutoExtensibleForm, ModelEditForm):
         # needs duplication, otherwise button does not appear
         super(EditProtocol, self).handleApply(self, action)
 
-    @button.buttonAndHandler(_('Cancel', default=u'Cancel'), name='cancel')
+    @button.buttonAndHandler(_('label_cancel', default=u'Cancel'), name='cancel')
     def cancel(self, action):
         self.unlock()
         # self as first argument is required by to the decorator
