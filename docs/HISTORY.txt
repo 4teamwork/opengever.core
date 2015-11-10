@@ -5,12 +5,16 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Fix member edit link and refactor generating breadcrumbs for models.
+  [deiferni]
+
 - Meetingview rework:
 
     - Implement clientside processing for meeting view (Controller Pattern).
     - Display date in metadata section.
 
   [Kevin Bieri, phgross, deiferni]
+
 - Refactor meeting/protocol editing, drop duplicate forms.
   [deiferni]
 
