@@ -7,8 +7,6 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.model import Meeting
 from opengever.testing import FunctionalTestCase
 from pyquery import PyQuery
-from zExceptions import Unauthorized
-import transaction
 
 
 class TestMeeting(FunctionalTestCase):
@@ -86,38 +84,3 @@ class TestMeeting(FunctionalTestCase):
         dossier = meeting.dossier_oguid.resolve_object()
         self.assertIsNotNone(dossier)
         self.assertEquals(u'Meeting on Jan 01, 2010', dossier.title)
-
-    @browsing
-    def test_edit_meeting(self, browser):
-        committee_model = self.committee.load_model()
-        meeting = create(Builder('meeting')
-                         .having(committee=committee_model,
-                                 start=self.localized_datetime(2013, 1, 1),
-                                 location='There',)
-                         .link_with(self.meeting_dossier))
-
-        browser.login()
-        browser.open(meeting.get_url(view='edit'))
-        browser.fill({'Start': datetime(2012, 5, 5, 15)}).submit()
-
-        self.assertEquals([u'Changes saved'], info_messages())
-
-        # refresh meeting, due to above request it has lost its session
-        # this is expected behavior
-        meeting = Meeting.query.get(meeting.meeting_id)
-        self.assertEqual(self.localized_datetime(2012, 5, 5, 15), meeting.start)
-        self.assertEqual('There', meeting.location)
-
-    @browsing
-    def test_edit_meeting_not_possible_when_not_editable(self, browser):
-        committee_model = self.committee.load_model()
-        meeting = create(Builder('meeting')
-                         .having(committee=committee_model,
-                                 start=self.localized_datetime(2013, 1, 1),
-                                 location='There',))
-        meeting.execute_transition('pending-held')
-        meeting.execute_transition('held-closed')
-        transaction.commit()
-
-        with self.assertRaises(Unauthorized):
-            browser.open(meeting.get_url(view='edit'))

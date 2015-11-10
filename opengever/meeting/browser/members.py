@@ -65,6 +65,7 @@ class MemberView(BrowserView):
     template = ViewPageTemplateFile('templates/member.pt')
     implements(IBrowserView, IPublishTraverse)
 
+    has_model_breadcrumbs = True
     is_model_view = True
     is_model_edit_view = False
 

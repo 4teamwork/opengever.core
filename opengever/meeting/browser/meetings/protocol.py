@@ -1,9 +1,9 @@
+from opengever.base.schema import UTCDatetime
 from opengever.meeting import _
 from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.command import ProtocolOperations
-from opengever.meeting.form import ModelProxyEditForm
+from opengever.meeting.form import ModelEditForm
 from opengever.meeting.model import Meeting
-from opengever.meeting.model import Member
 from opengever.meeting.sablon import Sablon
 from opengever.meeting.vocabulary import get_committee_member_vocabulary
 from plone import api
@@ -14,13 +14,12 @@ from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import button
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
-from z3c.form.form import EditForm
 from zExceptions import Redirect
 from zope import schema
 
 
-class IParticipants(form.Schema):
-    """Schema interface for participants of a meeting."""
+class IMeetingMetadata(form.Schema):
+    """Schema interface for meeting metadata."""
 
     presidency = schema.Choice(
         title=_('label_presidency', default=u'Presidency'),
@@ -49,7 +48,20 @@ class IParticipants(form.Schema):
         title=_(u"label_protocol_start_page_number",
                 default=u"Protocol start-page"),
         required=False
-        )
+    )
+
+    location = schema.TextLine(
+        title=_(u"label_location", default=u"Location"),
+        max_length=256,
+        required=False)
+
+    start = UTCDatetime(
+        title=_('label_start', default=u"Start"),
+        required=True)
+
+    end = UTCDatetime(
+        title=_('label_end', default=u"End"),
+        required=False)
 
 
 class DownloadGeneratedProtocol(BrowserView):
@@ -90,15 +102,17 @@ class DownloadProtocolJson(DownloadGeneratedProtocol):
         return self.get_protocol_json(pretty=True)
 
 
-class EditProtocol(AutoExtensibleForm, ModelProxyEditForm, EditForm):
+class EditProtocol(AutoExtensibleForm, ModelEditForm):
 
-    is_model_view = True
-    is_model_edit_view = False
+    has_model_breadcrumbs = True
     ignoreContext = True
-    schema = IParticipants
+    schema = IMeetingMetadata
     content_type = Meeting
 
     template = ViewPageTemplateFile('templates/protocol.pt')
+
+    def __init__(self, context, request):
+        super(EditProtocol, self).__init__(context, request, context.model)
 
     def update(self):
         super(EditProtocol, self).update()
@@ -109,10 +123,6 @@ class EditProtocol(AutoExtensibleForm, ModelProxyEditForm, EditForm):
             raise Redirect(self.context.absolute_url())
 
         self.lock()
-
-    def __init__(self, context, request):
-        super(EditProtocol, self).__init__(context, request)
-        self.model = context.model
 
     def is_available_for_current_user(self):
         """Check whether the current meeting can be safely unlocked.
@@ -134,7 +144,8 @@ class EditProtocol(AutoExtensibleForm, ModelProxyEditForm, EditForm):
             lockable.unlock()
 
     def applyChanges(self, data):
-        ModelProxyEditForm.applyChanges(self, data)
+        ModelEditForm.applyChanges(self, data)
+
         for agenda_item in self.get_agenda_items():
             agenda_item.update(self.request)
 
@@ -143,49 +154,21 @@ class EditProtocol(AutoExtensibleForm, ModelProxyEditForm, EditForm):
             self.request)
 
         self.unlock()
-        self.redirect_to_meeting()
         # pretend to always change the underlying data
         return True
 
-    def partition_data(self, data):
-        participation_data = {}
-        for key in self.schema.names():
-            if key in data:
-                participation_data[key] = data.pop(key)
-        return {}, participation_data
-
-    def _convert_value(self, value):
-        if isinstance(value, Member):
-            value = str(value.member_id)
-        elif isinstance(value, list):
-            value = [self._convert_value(item) for item in value]
-        return value
-
-    def get_edit_values(self, keys):
-        values = {}
-        for fieldname in keys:
-            value = getattr(self.model, fieldname, None)
-            if value is None:
-                continue
-            values[fieldname] = self._convert_value(value)
-        return values
-
-    def update_model(self, model_data):
-        self.model.update_model(model_data)
-
-    # this renames the button but otherwise preserves super's behaviour
     @button.buttonAndHandler(_('Save', default=u'Save'), name='save')
     def handleApply(self, action):
-        # self as first argument is required by to the decorator
+        # needs duplication, otherwise button does not appear
         super(EditProtocol, self).handleApply(self, action)
 
-    @button.buttonAndHandler(_('label_cancel', default=u'Cancel'), name='cancel')
-    def handleCancel(self, action):
+    @button.buttonAndHandler(_('Cancel', default=u'Cancel'), name='cancel')
+    def cancel(self, action):
         self.unlock()
-        return self.redirect_to_meeting()
+        # self as first argument is required by to the decorator
+        super(EditProtocol, self).cancel(self, action)
 
     def render(self):
-        ModelProxyEditForm.render(self)
         return self.template()
 
     def get_agenda_items(self, include_paragraphs=False):
@@ -196,5 +179,5 @@ class EditProtocol(AutoExtensibleForm, ModelProxyEditForm, EditForm):
             else:
                 yield agenda_item
 
-    def redirect_to_meeting(self):
-        return self.request.RESPONSE.redirect(self.model.get_url())
+    def nextURL(self):
+        return self.model.get_url()

@@ -11,6 +11,8 @@ Changelog
     - Display date in metadata section.
 
   [Kevin Bieri, phgross, deiferni]
+- Refactor meeting/protocol editing, drop duplicate forms.
+  [deiferni]
 
 - Eliminate duplicate notification, about a task acceptance, when creating a successor.
   [phgross]
