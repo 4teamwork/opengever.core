@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <dc-workflow workflow_id="opengever_committeecontainer_workflow" title="Committee Container Workflow" description="" state_variable="review_state" initial_state="committeecontainer-state-active" manager_bypass="False">
- <permission>View</permission>
- <permission>List folder contents</permission>
  <permission>Access contents information</permission>
  <permission>Add portal content</permission>
- <permission>Sharing page: Delegate roles</permission>
+ <permission>List folder contents</permission>
  <permission>Modify portal content</permission>
+ <permission>Sharing page: Delegate roles</permission>
+ <permission>View</permission>
  <permission>opengever.meeting: Add Committee</permission>
  <permission>opengever.meeting: Add Member</permission>
  <state state_id="committeecontainer-state-active" title="committeecontainer-state-active">
