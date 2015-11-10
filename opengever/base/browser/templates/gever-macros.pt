@@ -104,5 +104,12 @@
 
     </metal:define>
 
+    <metal:define define-macro="js_default_error_messages">
+      <dl id="default-error-message" class="default-error-message portalMessage error" style="display:none">
+          <dt i18n:translate="label_severity_error">Error</dt>
+          <dd i18n:translate="label_default_error_message">An unexpected error has occured</dd>
+      </dl>
+    </metal:define>
+
   </body>
 </html>

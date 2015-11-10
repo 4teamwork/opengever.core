@@ -2,14 +2,10 @@
 
   "use strict";
 
-  var MessageFactory = function(viewlet) {
+  var MessageFactory = function() {
 
-    var messageTemplate = "<dl style='display:none'; class='portalMessage {{:messageClass}}'><dt>{{:messageTitle}}</dt><dd>{{:message}}</dd></dl>";
-    var defaultMessage = {
-      messageClass: "error",
-      messageTitle: "Fehler",
-      message: viewlet.data("unexpected-error")
-    };
+    var messageTemplate = "<dl style='display:none;' class='portalMessage {{:messageClass}}'><dt>{{:messageTitle}}</dt><dd>{{:message}}</dd></dl>";
+    var defaultMessage = $("#default-error-message");
 
     this.clearMessages = function() {
       var currentMessages = $(".portalMessage:visible");
@@ -20,10 +16,15 @@
 
     this.insertMessage = function(messageData) {
       var lastPloneMessage = $(".portalMessage").last();
-      var message = messageTemplate;
-      message = message.replace("{{:messageClass}}", messageData.messageClass);
-      message = message.replace("{{:messageTitle}}", messageData.messageTitle);
-      message = message.replace("{{:message}}", messageData.message);
+      var message;
+      if(messageData) {
+        message = messageTemplate;
+        message = message.replace("{{:messageClass}}", messageData.messageClass);
+        message = message.replace("{{:messageTitle}}", messageData.messageTitle);
+        message = message.replace("{{:message}}", messageData.message);
+      } else {
+        message = defaultMessage.clone().removeAttr("id");
+      }
       $(message).insertAfter(lastPloneMessage).fadeIn("fast");
     };
 
@@ -31,7 +32,7 @@
       this.clearMessages();
       var self = this;
       if (!messages) {
-        this.insertMessage(defaultMessage);
+        this.insertMessage();
       } else {
         $.each(messages, function(index, message) {
           self.insertMessage(message);

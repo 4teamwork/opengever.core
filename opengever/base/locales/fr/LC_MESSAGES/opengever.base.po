@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-10-16 09:00+0000\n"
+"POT-Creation-Date: 2015-11-10 08:28+0000\n"
 "PO-Revision-Date: 2012-08-30 15:34+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -207,6 +207,11 @@ msgstr "Date d'élimination"
 msgid "label_dateofsubmission"
 msgstr "Date de proposition (des documents)"
 
+#. Default: "An unexpected error has occured"
+#: ./opengever/base/browser/templates/gever-macros.pt:110
+msgid "label_default_error_message"
+msgstr ""
+
 #. Default: "Description"
 #: ./opengever/base/behaviors/base.py:30
 msgid "label_description"
@@ -218,7 +223,7 @@ msgid "label_dossier"
 msgstr ""
 
 #. Default: "Initial version (document copied)"
-#: ./opengever/base/subscribers.py:28
+#: ./opengever/base/subscribers.py:45
 msgid "label_initial_version_copied"
 msgstr "Version initiale (documents copiés)"
 
@@ -261,6 +266,11 @@ msgstr "Commentaire concernant le délai de protection"
 #: ./opengever/base/browser/search.pt:39
 msgid "label_search"
 msgstr "Recherche"
+
+#. Default: "Error"
+#: ./opengever/base/browser/templates/gever-macros.pt:109
+msgid "label_severity_error"
+msgstr ""
 
 #. Default: "Title"
 #: ./opengever/base/behaviors/base.py:24
