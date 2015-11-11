@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-11-11 13:27+0000\n"
+"POT-Creation-Date: 2015-11-11 14:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -641,6 +641,11 @@ msgstr "Nom"
 #: ./opengever/meeting/proposal.py:49
 msgid "label_legal_basis"
 msgstr "Base légale"
+
+#. Default: "Linked meeting"
+#: ./opengever/meeting/browser/dossier/overview.py:23
+msgid "label_linked_meeting"
+msgstr ""
 
 #. Default: "Contains automatically generated dossiers and documents for this committee."
 #: ./opengever/meeting/committee.py:52

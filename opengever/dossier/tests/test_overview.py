@@ -15,6 +15,9 @@ class TestOverview(FunctionalTestCase):
         super(TestOverview, self).setUp()
 
         self.hugo = create(Builder('fixture').with_hugo_boss())
+        self._setup_dossier()
+
+    def _setup_dossier(self):
         self.dossier = create(Builder('dossier')
                               .titled(u'Testdossier')
                               .having(description=u'Hie hesch e beschribig',

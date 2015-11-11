@@ -11,6 +11,9 @@ Changelog
 - Fix member edit link and refactor generating breadcrumbs for models.
   [deiferni]
 
+- Link meeting from meeting-dossier overview.
+  [deiferni]
+
 - Meetingview rework:
 
     - Implement clientside processing for meeting view (Controller Pattern).
@@ -42,6 +45,7 @@ Changelog
   [lgraf]
 
 - Refactor meeting-permissions, add own role for commitee-group-members.
+  [deiferni]
 
 - Make meeting datetime columns timezone aware.
   The following columns are affected:

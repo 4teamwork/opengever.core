@@ -154,6 +154,10 @@ class MeetingQuery(BaseQuery):
     def get_last_meeting(self, committee):
         return self._past_meetings(committee).first()
 
+    def by_dossier(self, dossier):
+        dossier_oguid = Oguid.for_object(dossier)
+        return self.filter_by(dossier_oguid=dossier_oguid)
+
 
 Meeting.query_cls = MeetingQuery
 
