@@ -41,7 +41,7 @@ meeting_excerpts = Table(
 )
 
 
-class HeldCloseTransition(Transition):
+class PendingClosedTransition(Transition):
 
     def execute(self, obj, model):
         assert self.can_execute(model)
@@ -60,18 +60,14 @@ class Meeting(Base):
 
     STATE_PENDING = State('pending', is_default=True,
                           title=_('pending', default='Pending'))
-    STATE_HELD = State('held', title=_('held', default='Held'))
     STATE_CLOSED = State('closed', title=_('closed', default='Closed'))
 
     workflow = Workflow([
         STATE_PENDING,
-        STATE_HELD,
         STATE_CLOSED,
         ], [
-        Transition('pending', 'held',
-                   title=_('hold meeting', default='Hold meeting')),
-        HeldCloseTransition('held', 'closed',
-                            title=_('close', default='Close')),
+        PendingClosedTransition('pending', 'closed',
+                                title=_('close', default='Close meeting')),
         ])
 
     __tablename__ = 'meetings'
@@ -125,7 +121,7 @@ class Meeting(Base):
         return 'contenttype-opengever-meeting-meeting'
 
     def is_editable(self):
-        return self.get_state() in (self.STATE_PENDING, self.STATE_HELD)
+        return self.get_state() == self.STATE_PENDING
 
     def has_protocol_document(self):
         return self.protocol_document is not None

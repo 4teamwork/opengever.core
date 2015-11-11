@@ -50,7 +50,6 @@ class TestExcerpt(FunctionalTestCase):
         self.meeting = create(Builder('meeting')
                               .having(committee=self.committee_model)
                               .link_with(self.meeting_dossier))
-        self.meeting.execute_transition('pending-held')
         self.proposal_model = self.proposal.load_model()
 
         self.agenda_item = create(

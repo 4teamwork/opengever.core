@@ -60,7 +60,6 @@ class TestProtocol(FunctionalTestCase):
                                       location='There',
                                       protocol_start_page_number=42)
                               .link_with(self.meeting_dossier))
-        self.meeting.execute_transition('pending-held')
         self.proposal_model = self.proposal.load_model()
 
         self.agenda_item = create(
@@ -119,7 +118,7 @@ class TestProtocol(FunctionalTestCase):
     @browsing
     def test_protocol_document_is_unlocked_when_meeting_is_closed(self, browser):
         self.setup_generated_protocol(browser)
-        browser.find('Close').click()
+        browser.find('Close meeting').click()
 
         browser.find('Protocol-there-jan-01-2013').click()
         document = browser.context

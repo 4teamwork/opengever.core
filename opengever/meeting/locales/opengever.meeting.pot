@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-11-11 14:04+0000\n"
+"POT-Creation-Date: 2015-11-11 14:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -213,11 +213,11 @@ msgid "Proposals:"
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:106
-#: ./opengever/meeting/model/meeting.py:148
+#: ./opengever/meeting/model/meeting.py:144
 msgid "Protocol"
 msgstr ""
 
-#: ./opengever/meeting/model/meeting.py:151
+#: ./opengever/meeting/model/meeting.py:147
 msgid "Protocol Excerpt"
 msgstr ""
 
@@ -329,13 +329,13 @@ msgstr ""
 msgid "button_submit_attachments"
 msgstr ""
 
-#. Default: "Close"
-#: ./opengever/meeting/model/meeting.py:74
+#. Default: "Close meeting"
+#: ./opengever/meeting/model/meeting.py:70
 msgid "close"
 msgstr ""
 
 #. Default: "Closed"
-#: ./opengever/meeting/model/meeting.py:64
+#: ./opengever/meeting/model/meeting.py:63
 msgid "closed"
 msgstr ""
 
@@ -462,11 +462,6 @@ msgstr ""
 msgid "generate new version as word document"
 msgstr ""
 
-#. Default: "Held"
-#: ./opengever/meeting/model/meeting.py:63
-msgid "held"
-msgstr ""
-
 #: ./opengever/meeting/proposal.py:108
 msgid "help_considerations"
 msgstr ""
@@ -486,11 +481,6 @@ msgstr ""
 
 #: ./opengever/meeting/proposal.py:84
 msgid "help_title"
-msgstr ""
-
-#. Default: "Hold meeting"
-#: ./opengever/meeting/model/meeting.py:72
-msgid "hold meeting"
 msgstr ""
 
 #. Default: "Attachments"

@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Simplify meeting workflow, drop state `held`.
+  [deiferni]
+
 - Make sure reassign a task over the edit form creates a response and record an activity.
   [phgross]
 
