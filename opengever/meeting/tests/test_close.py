@@ -42,7 +42,6 @@ class TestCloseMeeting(FunctionalTestCase):
                               .having(committee=self.committee.load_model())
                               .scheduled_proposals([self.proposal_a, self.proposal_b])
                               .link_with(self.meeting_dossier))
-        self.meeting.execute_transition('pending-held')
 
         # set correct public url, used for generated meeting urls
         get_current_admin_unit().public_url = self.portal.absolute_url()
@@ -51,7 +50,7 @@ class TestCloseMeeting(FunctionalTestCase):
     @browsing
     def test_generate_excerpt_and_add_it_to_submittedproposal(self, browser):
         browser.login().open(self.meeting.get_url())
-        browser.css('#held-closed').first.click()
+        browser.css('#pending-closed').first.click()
 
         submitted_proposal = self.proposal_a.load_model().resolve_sumitted_proposal()
         excerpt = submitted_proposal.listFolderContents()[0]
@@ -66,7 +65,7 @@ class TestCloseMeeting(FunctionalTestCase):
     @browsing
     def test_excerpt_is_copied_to_proposal(self, browser):
         browser.login().open(self.meeting.get_url())
-        browser.css('#held-closed').first.click()
+        browser.css('#pending-closed').first.click()
 
         excerpt = self.proposal_a.listFolderContents()[0]
         self.assertEquals('Protocol Excerpt-barn-dec-13-2011',
@@ -80,7 +79,7 @@ class TestCloseMeeting(FunctionalTestCase):
     @browsing
     def test_proposalhistory_is_added(self, browser):
         browser.login().open(self.meeting.get_url())
-        browser.css('#held-closed').first.click()
+        browser.css('#pending-closed').first.click()
 
         browser.open(self.proposal_a, view=u'tabbedview_view-overview')
         entry = browser.css('.answer').first
@@ -92,7 +91,7 @@ class TestCloseMeeting(FunctionalTestCase):
     @browsing
     def test_excerpt_is_displayed_in_proposal_view(self, browser):
         browser.login().open(self.meeting.get_url())
-        browser.css('#held-closed').first.click()
+        browser.css('#pending-closed').first.click()
 
         generated_document = self.proposal_a.load_model().excerpt_document
         excerpt = generated_document.oguid.resolve_object()
@@ -105,14 +104,14 @@ class TestCloseMeeting(FunctionalTestCase):
     @browsing
     def test_states_are_updated(self, browser):
         browser.login().open(self.meeting.get_url())
-        browser.css('#held-closed').first.click()
+        browser.css('#pending-closed').first.click()
         self.assertEquals('closed', Meeting.query.first().get_state().name)
         self.assertEquals('decided', self.proposal_a.get_state().name)
 
     @browsing
     def test_redirects_to_meeting_and_show_statusmessage(self, browser):
         browser.login().open(self.meeting.get_url())
-        browser.css('#held-closed').first.click()
+        browser.css('#pending-closed').first.click()
 
         self.assertEquals(
             [u'The meeting B\xe4rn, Dec 13, 2011 has been successfully closed, '

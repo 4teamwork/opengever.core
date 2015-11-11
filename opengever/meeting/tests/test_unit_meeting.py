@@ -27,8 +27,6 @@ class TestUnitMeeting(TestCase):
 
     def test_is_editable(self):
         self.assertTrue(self.meeting.is_editable())
-        self.meeting.workflow_state = 'held'
-        self.assertTrue(self.meeting.is_editable())
         self.meeting.workflow_state = 'closed'
         self.assertFalse(self.meeting.is_editable())
 

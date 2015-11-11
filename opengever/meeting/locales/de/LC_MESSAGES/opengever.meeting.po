@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-11-11 14:04+0000\n"
+"POT-Creation-Date: 2015-11-11 14:54+0000\n"
 "PO-Revision-Date: 2015-04-10 09:01+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -214,11 +214,11 @@ msgid "Proposals:"
 msgstr "Anträge"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:106
-#: ./opengever/meeting/model/meeting.py:148
+#: ./opengever/meeting/model/meeting.py:144
 msgid "Protocol"
 msgstr "Protokoll"
 
-#: ./opengever/meeting/model/meeting.py:151
+#: ./opengever/meeting/model/meeting.py:147
 msgid "Protocol Excerpt"
 msgstr "Protokollauszug"
 
@@ -330,13 +330,13 @@ msgstr "Erstellen"
 msgid "button_submit_attachments"
 msgstr "Anhänge einreichen"
 
-#. Default: "Close"
-#: ./opengever/meeting/model/meeting.py:74
+#. Default: "Close meeting"
+#: ./opengever/meeting/model/meeting.py:70
 msgid "close"
-msgstr "Schliessen"
+msgstr "Abschliessen"
 
 #. Default: "Closed"
-#: ./opengever/meeting/model/meeting.py:64
+#: ./opengever/meeting/model/meeting.py:63
 msgid "closed"
 msgstr "geschlossen"
 
@@ -463,11 +463,6 @@ msgstr "Protokoll als Worddokument generieren"
 msgid "generate new version as word document"
 msgstr "Neue Version als Worddokument generieren"
 
-#. Default: "Held"
-#: ./opengever/meeting/model/meeting.py:63
-msgid "held"
-msgstr "Durchgeführt"
-
 #: ./opengever/meeting/proposal.py:108
 msgid "help_considerations"
 msgstr ""
@@ -488,11 +483,6 @@ msgstr "Wählen Sie das Dossier aus, in welchem der Protokollauszug abgelegt wer
 #: ./opengever/meeting/proposal.py:84
 msgid "help_title"
 msgstr ""
-
-#. Default: "Hold meeting"
-#: ./opengever/meeting/model/meeting.py:72
-msgid "hold meeting"
-msgstr "Sitzung durchführen"
 
 #. Default: "Attachments"
 #: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt:32
