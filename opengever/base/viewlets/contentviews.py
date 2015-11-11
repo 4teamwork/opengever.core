@@ -12,8 +12,8 @@ class ModelContentViewsViewlet(ContentViewsViewlet):
         out which tab is selected. Used in global_contentviews.pt
         """
 
-        if getattr(self.view, 'is_model_view', False):
-            return self.prepare_model_tabs()
+        if hasattr(self.view, 'prepare_model_tabs'):
+            return self.view.prepare_model_tabs(self)
         else:
             tabs = super(ModelContentViewsViewlet, self).prepareObjectTabs(
                 default_tab, sort_first)
@@ -21,19 +21,15 @@ class ModelContentViewsViewlet(ContentViewsViewlet):
                 tabs = self.view.prepare_model_proxy_tabs(tabs)
             return tabs
 
-    def prepare_model_tabs(self):
-        model = self.view.model
-        if not model.is_editable():
-            return tuple()
-
+    def prepare_edit_tab(self, url, is_selected=False):
         return ({
             'category': 'object',
             'available': True,
             'description': u'',
             'icon': '',
             'title': u'Edit',
-            'url': model.get_edit_url(self.view.context),
-            'selected': self.view.is_model_edit_view,
+            'url': url,
+            'selected': is_selected,
             'visible': True,
             'allowed': True,
             'link_target': None,

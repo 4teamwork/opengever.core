@@ -65,8 +65,6 @@ class ModelEditForm(EditForm):
 
     ignoreContext = True
     has_model_breadcrumbs = True
-    is_model_view = True
-    is_model_edit_view = True
 
     fields = None
     field_prefix = 'form.widgets.'

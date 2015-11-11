@@ -1,6 +1,8 @@
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.meeting.wrapper import MemberWrapper
 from opengever.testing import FunctionalTestCase
 
 
@@ -21,7 +23,7 @@ class TestPathBar(FunctionalTestCase):
             Builder('meeting_dossier').within(self.repo))
 
     @browsing
-    def test_regression_committee_is_not_duplicated_in_pathbar(self, browser):
+    def test_committee_pathbar_is_correct(self, browser):
         container = create(Builder('committee_container'))
         committee = create(Builder('committee').within(container))
         meeting = create(Builder('meeting')
@@ -32,4 +34,33 @@ class TestPathBar(FunctionalTestCase):
         self.assertEqual(
             ['Client1', 'opengever-meeting-committeecontainer',
              'My Committee', u'B\xe4rn, Dec 13, 2011'],
+            browser.css('#portal-breadcrumbs a').text)
+
+    @browsing
+    def test_member_pathbar_is_correct(self, browser):
+        container = create(Builder('committee_container'))
+        member = create(Builder('member'))
+
+        browser.login().open(member.get_url(container))
+        self.assertEqual(
+            ['Client1', 'opengever-meeting-committeecontainer', 'Peter Meier'],
+            browser.css('#portal-breadcrumbs a').text)
+
+    @browsing
+    def test_membership_pathbar_is_correct(self, browser):
+        container = create(Builder('committee_container'))
+        committee = create(Builder('committee').within(container))
+        committee_model = committee.load_model()
+        member = create(Builder('member'))
+        membership = create(Builder('membership')
+                            .having(member=member,
+                                    committee=committee_model,
+                                    date_from=date(2014, 1, 1),
+                                    date_to=date(2015, 1, 1)))
+
+        wrapped_member = MemberWrapper.wrap(container, member)
+        browser.login().open(membership.get_url(wrapped_member))
+        self.assertEqual(
+            ['Client1', 'opengever-meeting-committeecontainer', 'Peter Meier',
+             'Peter Meier, Jan 01, 2014 - Jan 01, 2015'],
             browser.css('#portal-breadcrumbs a').text)

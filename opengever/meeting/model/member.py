@@ -50,10 +50,6 @@ class Member(Base):
     def get_edit_url(self, context):
         return '/'.join((self.get_url(context), 'edit'))
 
-    def get_breadcrumbs(self, context):
-        return {'absolute_url': self.get_url(context),
-                'Title': self.fullname}
-
     def get_edit_values(self, fieldnames):
         values = {}
         for fieldname in fieldnames:

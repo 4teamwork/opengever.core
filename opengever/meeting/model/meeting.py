@@ -288,6 +288,3 @@ class Meeting(Base):
 
     def get_edit_url(self, context):
         return self.get_url(view='edit')
-
-    def get_breadcrumbs(self, context):
-        return {'absolute_url': self.get_url(), 'Title': self.get_title()}

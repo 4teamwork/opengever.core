@@ -59,5 +59,7 @@ class TestPathBar(FunctionalTestCase):
 
         browser.login().open(meeting.get_url())
         last_link = browser.css('#portal-breadcrumbs a')[-1]
-        self.assertEqual(meeting.get_url(), last_link.node.attrib['href'])
+        self.assertEqual(
+            'http://nohost/plone/opengever-meeting-committeecontainer/committee-1/meeting-1',
+            last_link.node.attrib['href'])
         self.assertEqual(meeting.get_title(), last_link.node.text)
