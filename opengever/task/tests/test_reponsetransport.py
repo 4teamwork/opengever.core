@@ -1,118 +1,71 @@
-from DateTime import DateTime
-from datetime import datetime
-from ftw.testing import MockTestCase
-from grokcore.component.testing import grok
-from opengever.core.testing import ANNOTATION_LAYER
-from opengever.task.adapters import Response, IResponseContainer
+from ftw.builder import Builder
+from ftw.builder import create
+from opengever.task.adapters import IResponseContainer
 from opengever.task.task import ITask
-from opengever.task.transporter import ExtractResponses
 from opengever.task.transporter import IResponseTransporter
-from opengever.task.transporter import ReceiveResponses
-from z3c.relationfield import RelationValue
-from zope.annotation.interfaces import IAttributeAnnotatable
+from opengever.task.util import add_simple_response
+from opengever.testing import FunctionalTestCase
+from plone.app.testing import TEST_USER_ID
 
 
-class TestResponeTransporter(MockTestCase):
-
-    layer = ANNOTATION_LAYER
+class TestResponeTransporter(FunctionalTestCase):
 
     def setUp(self):
         super(TestResponeTransporter, self).setUp()
-        grok('opengever.task.transporter')
-        grok('opengever.task.adapters')
 
-    def test_encoding_decoding(self):
-        task = self.providing_stub([ITask])
-        # rel_value = self.mocker.replace(RelationValue)
-        # rel_value = self.expect(rel_value('hans')).result('RELATION VALUE')
+        create(Builder('ogds_user')
+               .having(userid=u'peter.mueller', firstname=u'Peter',
+                       lastname=u'M\xfcller'))
+        create(Builder('ogds_user')
+               .having(userid=u'hugo.boss', firstname=u'Hugo',
+                       lastname=u'B\xf6ss'))
 
-        # relation = self.stub()
-        # self.expect(relation.to_id).result('123')
-        self.replay()
+        self.task = create(Builder('task')
+                           .having(responsible=u'hugo.boss')
+                           .in_state('task-state-in-progress'))
+        add_simple_response(self.task,
+                            text=u'Ich \xfcbernehme diese Aufgabe',
+                            transition='task-transition-open-in-progress')
 
-        trans = IResponseTransporter(task)
+    def test_send_responses(self):
+        copy = create(Builder('task').in_state('task-state-in-progress'))
+        IResponseTransporter(self.task).send_responses(
+            'client1', copy.get_physical_path())
 
-        self.assertEquals(trans._decode('hans'), 'hans')
-        self.assertEquals(trans._decode(None), None)
-        self.assertEquals(trans._decode([111, 'hans']), [111, 'hans'])
+        responses = IResponseContainer(copy)
+        self.assertEquals(1, len(responses))
+        self.assertEquals('task-transition-open-in-progress', responses[0].transition)
+        self.assertEquals(u'Ich \xfcbernehme diese Aufgabe', responses[0].text)
+        self.assertEquals(TEST_USER_ID, responses[0].creator)
 
-        #string
-        self.assertEquals('hans', trans._decode(trans._encode('hans')))
-        # unicode
-        self.assertEquals(u'hans', trans._decode(trans._encode(u'hans')))
-        self.assertEquals(u'h\xe4ns', trans._decode(trans._encode(u'h\xe4ns')))
-        # datetime
-        self.assertEquals(
-            datetime(2012, 1, 1, 2, 2),
-            trans._decode(trans._encode(datetime(2012, 1, 1, 2, 2))))
-        # DateTime
-        self.assertEquals(
-            DateTime(2012, 1, 1, 2, 2),
-            trans._decode(trans._encode(DateTime(2012, 1, 1, 2, 2))))
-        # RelationValue
-        trans.intids_mapping = {'123': '321'}
-        value = RelationValue('123')
-        self.assertEquals(trans._decode(trans._encode(value)).to_id, '321')
-        #special type
-        self.assertEquals(['special_type', 'special value'],
-            trans._decode(['special_type', 'special value']))
+    def test_get_responses(self):
+        copy = create(Builder('task').in_state('task-state-in-progress'))
+        IResponseTransporter(copy).get_responses(
+            'client1', self.task.get_physical_path(), {})
 
-    def test_creating_and_extraction(self):
+        responses = IResponseContainer(copy)
+        self.assertEquals(1, len(responses))
+        self.assertEquals('task-transition-open-in-progress', responses[0].transition)
+        self.assertEquals(u'Ich \xfcbernehme diese Aufgabe', responses[0].text)
+        self.assertEquals(TEST_USER_ID, responses[0].creator)
 
-        class DummyResponse(object):
-            def getStatus(self):
-                return 200
+    def test_syncing_response_changes(self):
+        add_simple_response(self.task,
+                            text=u'Neu zugewiesen',
+                            field_changes=[(ITask['responsible'], 'peter.mueller'),
+                                           (ITask['responsible_client'], 'client2')],
+                            transition='task-transition-reassign',)
 
-            def setHeader(self, foo, bar):
-                pass
+        copy = create(Builder('task').in_state('task-state-in-progress'))
+        IResponseTransporter(self.task).send_responses(
+            'client1', copy.get_physical_path())
 
-        class DummyRequest(dict):
-            def __init__(self):
-                self.response = DummyResponse()
-
-        remote_task = self.providing_stub(
-            [ITask, IAttributeAnnotatable])
-        request = DummyRequest()
-        context = self.providing_stub(
-            [ITask, IAttributeAnnotatable])
-
-        self.replay()
-
-        response = Response(u'Sample text')
-        response.creator = u'hugo.boss'
-        response.date = DateTime("02.07.2010")
-
-        response.add_change(
-            'review_state', 'State', 'before-state', 'after-state')
-        response.add_change(
-            'responsible', 'Responsible', 'hugo.boss', 'james.bond')
-
-        container = IResponseContainer(remote_task)
-        container.add(response)
-
-        # extract
-        request.intids_mapping = {}
-        data = ExtractResponses(remote_task, request)()
-
-        # receive
-        request['responses'] = data
-        ReceiveResponses(context, request)()
-
-        # check if the response is correctly synced
-        self.assertTrue(len(IResponseContainer(context)) == 1)
-        synced_response = IResponseContainer(context)[0]
-        self.assertEquals(synced_response.text, response.text)
-        self.assertEquals(synced_response.creator, response.creator)
-        self.assertEquals(synced_response.date, response.date)
-        # changes
-        self.assertEquals(
-            synced_response.changes,
-            [
-                {u'after': u'after-state',
-                 u'id': u'review_state',
-                 u'name': u'State',
-                 u'before': u'before-state'},
-                {u'after': u'james.bond',
-                 u'id': u'responsible',
-                 u'name': u'Responsible',
-                 u'before': u'hugo.boss'}])
+        self.assertEquals([{u'after': u'peter.mueller',
+                            u'id': u'responsible',
+                            u'name': u'label_responsible',
+                            u'before': u'hugo.boss'},
+                           {u'after': u'client2',
+                            u'id': u'responsible_client',
+                            u'name': u'label_resonsible_client',
+                            u'before': u'client1'}],
+                          IResponseContainer(copy)[1].changes)
