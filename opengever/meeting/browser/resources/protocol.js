@@ -5,18 +5,25 @@ $(document).ready(function() {
 
   var scrollspy = new Scrollspy({ selectParent: true });
 
+  var navigation = $(".protocol-navigation");
+
   var headings = new StickyHeading({ selector: "#opengever_meeting_protocol .protocol_title" });
   var labels = new StickyHeading({ selector: "#opengever_meeting_protocol .agenda_items label", fix: false, dependsOn: headings});
+  var collapsible = StickyHeading({ selector: "#opengever_meeting_protocol .collapsible", clone: false});
 
   var currentOffset;
 
+  collapsible.onSticky(function() {
+    navigation.addClass("sticky");
+  });
+
   headings.onNoSticky(function() {
-    scrollSpy.css("position", "static");
+    navigation.removeClass("sticky");
     $(".metadata .fields").css("position", "static");
   });
 
   headings.onSticky(function(heading) {
-    scrollSpy.css("position", "fixed");
+    navigation.addClass("sticky");
     currentOffset = heading.clone.outerHeight();
     $(".metadata .fields").css("position", "fixed");
     scrollspy.expand($("#" + heading.node.attr("id") + "-anchor"));
@@ -24,7 +31,7 @@ $(document).ready(function() {
   });
 
   headings.onCollision(function() {
-    scrollSpy.css("position", "fixed");
+    navigation.addClass("sticky");
     $(".metadata .fields").css("position", "fixed");
   });
 

@@ -238,11 +238,11 @@
   }
 
   $(function() {
+    var collapsibleController = new CollapsibleController();
     if($("#opengever_meeting_meeting").length) {
 
       var agendaItemController = new AgendaItemController();
       var proposalsController = new ProposalController();
-      var collapsibleController = new CollapsibleController();
 
       proposalsController.connectedTo = [agendaItemController];
       agendaItemController.connectedTo = [proposalsController];

@@ -8,7 +8,7 @@
     var onNoStickyCallback = function() {};
     var onCollisionCallback = function() {};
 
-    var options = $.extend({ refresh: true, fix: true }, _options || {});
+    var options = $.extend({ refresh: true, fix: true, clone: true }, _options || {});
 
     var currentSticky;
 
@@ -19,11 +19,16 @@
       initHeadings: function(selector) {
         return $(selector).map(function(i, e) {
           var el = $(e);
-          var clone = el.clone();
-          clone.attr("id", el.attr("id") + "_clone");
-          clone.insertAfter(el);
-          clone.addClass("clone");
-          var heading = { node: el, offset: el.offset().top, height: el.outerHeight(), clone: clone }
+          var clone;
+          if(options.clone) {
+            clone = el.clone();
+            clone.attr("id", el.attr("id") + "_clone");
+            clone.insertAfter(el);
+            clone.addClass("clone");
+          } else {
+            clone = el;
+          }
+          var heading = { node: el, offset: el.offset().top, height: el.outerHeight(), clone: clone };
           el.addClass("original");
           return heading;
         });
