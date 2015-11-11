@@ -270,7 +270,7 @@ class TestProtocol(FunctionalTestCase):
         browser.open(self.meeting.get_url())
         browser.css('a[href*="/protocol"]').first.click()
 
-        navigation = browser.css('#scrollspy a.expandable')
+        navigation = browser.css('.navigation a.expandable')
         headings = browser.css('.protocol_title .title')
 
         self.assertEqual(map(lambda nav: nav.text, navigation),

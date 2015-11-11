@@ -5,7 +5,99 @@
     <div id="opengever_meeting_protocol">
       <metal:use use-macro="context/@@ploneform-macros/titlelessform">
         <metal:block fill-slot="fields">
-          <div class="left">
+          <div class="protocol-navigation">
+            <div class="list-group">
+              <div class="list-group-item submit actions">
+                <div class="button-group fluid">
+                  <metal:use use-macro="context/@@ploneform-macros/actions" />
+                </div>
+              </div>
+              <div class="list-group-item navigation">
+                <ul class="nav">
+                  <li tal:repeat="protocol agenda_items"
+                      tal:attributes="class python: 'expandable ' + protocol.get_css_class()">
+                    <metal:block tal:define="name protocol/name">
+                      <a tal:attributes="href string:#${name};
+                                         id string:${name}-anchor;
+                                         class python: 'expandable ' + protocol.get_css_class()"
+                         tal:content="python: protocol.get_title(include_number=True)">
+                      </a>
+                      <metal:block tal:condition="not: protocol/is_paragraph">
+                        <ul class="nav">
+                          <metal:block tal:condition="protocol/has_proposal">
+                            <li>
+                              <a tal:attributes="href string:#${name}-legal_basis;
+                                                 id string:${name}-legal_basis-anchor"
+                                 i18n:translate="">
+                                     Legal basis
+                                  </a>
+                            </li>
+                            <li>
+                              <a tal:attributes="href string:#${name}-initial_position;
+                                                 id string:${name}-initial_position-anchor"
+                                 i18n:translate="label_initial_position">
+                                     Initial position
+                                  </a>
+                            </li>
+                            <li>
+                              <a tal:attributes="href string:#${name}-proposed_action;
+                                                 id string:${name}-proposed_action-anchor"
+                                 i18n:translate="label_proposed_action">
+                                     Proposed action
+                                  </a>
+                            </li>
+                            <li>
+                              <a tal:attributes="href string:#${name}-considerations;
+                                                 id string:${name}-considerations-anchor"
+                                 i18n:translate="label_considerations">
+                                     Considerations
+                                  </a>
+                            </li>
+                          </metal:block>
+                          <li>
+                            <a tal:attributes="href string:#${name}-discussion;
+                                               id string:${name}-discussion-anchor"
+                               i18n:translate="label_discussion">
+                                   Discussion
+                                </a>
+                          </li>
+                          <li>
+                            <a tal:attributes="href string:#${name}-decision;
+                                               id string:${name}-decision-anchor"
+                               i18n:translate="label_decision">
+                                   Decision
+                                </a>
+                          </li>
+                          <li>
+                            <a tal:attributes="href string:#${name}-publish_in;
+                                               id string:${name}-publish_in-anchor"
+                               i18n:translate="label_publish_in">
+                                   Publish in
+                                 </a>
+                          </li>
+                          <li>
+                            <a tal:attributes="href string:#${name}-disclose_to;
+                                               id string:${name}-disclose_to-anchor"
+                               i18n:translate="label_disclose_to">
+                                   Disclose to
+                                 </a>
+                          </li>
+                          <li>
+                            <a tal:attributes="href string:#${name}-copy_for_attention;
+                                               id string:${name}-copy_for_attention-anchor"
+                               i18n:translate="label_copy_for_attention">
+                                   Copy for attention
+                                 </a>
+                          </li>
+                        </ul>
+                      </metal:block>
+                    </metal:block>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="right">
             <div class="collapsible">
               <div class="collapsible-header">
                 <button class="button fa fa-plus"></button>
@@ -114,98 +206,6 @@
                 </metal:block>
               </metal:block>
               <metal:use use-macro="context/@@meeting-macros/disable_kss_inline_validation" />
-            </div>
-          </div>
-          <div class="protocol-navigation">
-            <div class="list-group">
-              <div class="list-group-item submit actions">
-                <div class="button-group fluid">
-                  <metal:use use-macro="context/@@ploneform-macros/actions" />
-                </div>
-              </div>
-              <div class="list-group-item navigation">
-                <ul id="scrollspy" class="nav">
-                  <li tal:repeat="protocol agenda_items"
-                      tal:attributes="class python: 'expandable ' + protocol.get_css_class()">
-                    <metal:block tal:define="name protocol/name">
-                      <a tal:attributes="href string:#${name};
-                                         id string:${name}-anchor;
-                                         class python: 'expandable ' + protocol.get_css_class()"
-                         tal:content="python: protocol.get_title(include_number=True)">
-                      </a>
-                      <metal:block tal:condition="not: protocol/is_paragraph">
-                        <ul class="nav">
-                          <metal:block tal:condition="protocol/has_proposal">
-                            <li>
-                              <a tal:attributes="href string:#${name}-legal_basis;
-                                                 id string:${name}-legal_basis-anchor"
-                                 i18n:translate="">
-                                     Legal basis
-                                  </a>
-                            </li>
-                            <li>
-                              <a tal:attributes="href string:#${name}-initial_position;
-                                                 id string:${name}-initial_position-anchor"
-                                 i18n:translate="label_initial_position">
-                                     Initial position
-                                  </a>
-                            </li>
-                            <li>
-                              <a tal:attributes="href string:#${name}-proposed_action;
-                                                 id string:${name}-proposed_action-anchor"
-                                 i18n:translate="label_proposed_action">
-                                     Proposed action
-                                  </a>
-                            </li>
-                            <li>
-                              <a tal:attributes="href string:#${name}-considerations;
-                                                 id string:${name}-considerations-anchor"
-                                 i18n:translate="label_considerations">
-                                     Considerations
-                                  </a>
-                            </li>
-                          </metal:block>
-                          <li>
-                            <a tal:attributes="href string:#${name}-discussion;
-                                               id string:${name}-discussion-anchor"
-                               i18n:translate="label_discussion">
-                                   Discussion
-                                </a>
-                          </li>
-                          <li>
-                            <a tal:attributes="href string:#${name}-decision;
-                                               id string:${name}-decision-anchor"
-                               i18n:translate="label_decision">
-                                   Decision
-                                </a>
-                          </li>
-                          <li>
-                            <a tal:attributes="href string:#${name}-publish_in;
-                                               id string:${name}-publish_in-anchor"
-                               i18n:translate="label_publish_in">
-                                   Publish in
-                                 </a>
-                          </li>
-                          <li>
-                            <a tal:attributes="href string:#${name}-disclose_to;
-                                               id string:${name}-disclose_to-anchor"
-                               i18n:translate="label_disclose_to">
-                                   Disclose to
-                                 </a>
-                          </li>
-                          <li>
-                            <a tal:attributes="href string:#${name}-copy_for_attention;
-                                               id string:${name}-copy_for_attention-anchor"
-                               i18n:translate="label_copy_for_attention">
-                                   Copy for attention
-                                 </a>
-                          </li>
-                        </ul>
-                      </metal:block>
-                    </metal:block>
-                  </li>
-                </ul>
-              </div>
             </div>
           </div>
         </metal:block>
