@@ -63,3 +63,6 @@ class TestResponseTransporterSerialization(MockTestCase):
         value = RelationValue(111)
         with self.assertRaises(ValueError):
             self.transporter._encode(value)
+
+    def test_DateTime_encoding_decoding(self):
+        self.assert_serialization(DateTime(2015, 11, 6, 13, 30))

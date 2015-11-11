@@ -178,6 +178,9 @@ class ResponseTransporter(grok.Adapter):
         if type_ == 'unicode':
             return unicode(val)
 
+        if type_ == 'DateTime':
+            return DateTime(val)
+
         if type_ == 'datetime':
             return DateTime(val).asdatetime()
 
