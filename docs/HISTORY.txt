@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Add confirm-dialog when closing meetings.
+  [deiferni]
+
 - ResponseTransporter: fix de- and encoding of deadline changes.
   [phgross]
 
