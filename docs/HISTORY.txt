@@ -5,6 +5,9 @@ Changelog
 4.5.8 (unreleased)
 ------------------
 
+- Make sure reassign a task over the edit form creates a response and record an activity.
+  [phgross]
+
 - Eliminate duplicate notification, about a task acceptance, when creating a successor.
   [phgross]
 
