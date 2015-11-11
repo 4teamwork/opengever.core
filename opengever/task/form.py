@@ -18,7 +18,7 @@ REASSIGN_TRANSITION = 'task-transition-reassign'
 # or we don't know how to set it.
 # thus we use an add form hack by injecting the values into the request.
 
-class AddForm(dexterity.AddForm):
+class TaskAddForm(dexterity.AddForm):
     grok.name('opengever.task.task')
 
     def update(self):
@@ -32,7 +32,7 @@ class AddForm(dexterity.AddForm):
         member = portal_state.member()
         if not self.request.get('form.widgets.issuer', None):
             self.request.set('form.widgets.issuer', [member.getId()])
-        super(AddForm, self).update()
+        super(TaskAddForm, self).update()
 
         # omit the responsible_client field and adjust the field description
         # of the responsible field if there is only one orgunit configured.
@@ -42,19 +42,26 @@ class AddForm(dexterity.AddForm):
                 u"help_responsible_single_client_setup", default=u"")
 
     def createAndAdd(self, data):
-        task = super(AddForm, self).createAndAdd(data=data)
+        task = super(TaskAddForm, self).createAndAdd(data=data)
         activity = TaskAddedActivity(task, self.request, self.context)
         activity.record()
         return task
 
 
-class EditForm(dexterity.EditForm):
-    """Standard EditForm, just require the Edit Task permission"""
+class TaskEditForm(dexterity.EditForm):
+    """The standard dexterity EditForm with the following customizations:
+
+     - Require the Edit Task permission
+     - Omit `responsible` and `responsible_client` fields and adjust field
+       description for single orgunit deployments
+     - Records reassign activity when the responsible has changed.
+    """
+
     grok.context(ITask)
     grok.require('opengever.task.EditTask')
 
     def update(self):
-        super(EditForm, self).update()
+        super(TaskEditForm, self).update()
 
         # omit the responsible_client field and adjust the field description
         # of the responsible field if there is only one client configured.
@@ -68,10 +75,10 @@ class EditForm(dexterity.EditForm):
         """
         if self.is_reassigned(data):
             response = self.add_reassign_response(data)
-            changes = super(EditForm, self).applyChanges(data)
+            changes = super(TaskEditForm, self).applyChanges(data)
             TaskReassignActivity(self.context, response).record()
         else:
-            changes = super(EditForm, self).applyChanges(data)
+            changes = super(TaskEditForm, self).applyChanges(data)
 
         return changes
 
