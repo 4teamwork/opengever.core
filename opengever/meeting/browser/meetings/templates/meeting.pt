@@ -177,16 +177,22 @@
             </div>
             <div class="collapsible-content">
               <div class="input-group">
-                <label i18n:translate="" for="title">Freitext:</label>
-                <input id="title" type="text" />
+                <label i18n:translate="" for="schedule-text">Text:</label>
+                <input id="schedule-text" type="text" />
                 <div class="button-group">
                   <input type="submit"
-                         value="as free-text"
+                         value="label_schedule"
                          i18n:attributes="value"
                          tal:attributes="data-url view/url_schedule_text"
                          class="schedule-text allowMultiSubmit" />
+                </div>
+              </div>
+              <div class="input-group">
+                <label i18n:translate="" for="schedule-paragraph">Paragraph:</label>
+                <input id="schedule-paragraph" type="text" />
+                <div class="button-group">
                   <input type="submit"
-                         value="as paragraph"
+                         value="label_schedule"
                          i18n:attributes="value"
                          tal:attributes="data-url view/url_schedule_paragraph"
                          class="schedule-paragraph allowMultiSubmit" />
