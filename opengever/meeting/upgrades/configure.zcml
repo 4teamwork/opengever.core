@@ -468,4 +468,14 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <!-- 4615 -> 4616 -->
+    <genericsetup:upgradeStep
+        title="Drop meeting state held"
+        description=""
+        source="4615"
+        destination="4616"
+        handler="opengever.meeting.upgrades.to4616.DropMeetingStateHeld"
+        profile="opengever.meeting:default"
+        />
+
 </configure>
