@@ -460,8 +460,23 @@ class CloseMeetingCommand(object):
     def execute(self):
         GenerateExcerptsCommand(self.meeting).execute()
         DecideProposalsCommand(self.meeting).execute()
-
+        self.update_protocol_document()
         self.unlock_protocol_document()
+
+    def update_protocol_document(self):
+        """Update or create the protocol."""
+
+        operations = ProtocolOperations()
+
+        if self.meeting.has_protocol_document():
+            command = UpdateGeneratedDocumentCommand(
+                self.meeting.protocol_document, operations)
+        else:
+            command = CreateGeneratedDocumentCommand(
+                self.meeting.get_dossier(), self.meeting,
+                operations, lock_document_after_creation=True)
+
+        command.execute()
 
     def unlock_protocol_document(self):
         if not self.meeting.protocol_document:

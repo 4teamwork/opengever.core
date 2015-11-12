@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Make sure protocol exists and is updated when closing a meeting.
+  [deiferni]
+
 - Extend whitelist for anonymous access on siteroot.
   [lgraf, phgross]
 
