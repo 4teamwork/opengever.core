@@ -184,7 +184,6 @@
     var viewlet = $("#opengever_meeting_meeting");
     Controller.call(this, $("#proposalsTemplate").html(), $("#unscheduled_porposals"), options);
     var self = this;
-    var title = $("#title");
 
     this.fetch = function() { return $.get(viewlet.data().listUnscheduledProposalsUrl); };
 
@@ -193,22 +192,30 @@
     this.schedule = function(e) { return $.post($(e.target).attr("href")); };
 
     this.addParagraph = function() {
-      return $.post($(".schedule-paragraph").data().url, { title: title.val() }).done(function() {
-        title.val("");
+      var input = $("#schedule-paragraph");
+      return $.post($(".schedule-paragraph").data().url, { title: input.val() }).done(function() {
+        input.val("");
         self.updateConnected();
       });
     };
 
     this.addText = function() {
-      return $.post($(".schedule-text").first().data().url, { title: title.val() }).done(function() {
-        title.val("");
+      var input = $("#schedule-text");
+      return $.post($(".schedule-text").first().data().url, { title: input.val() }).done(function() {
+        input.val("");
         self.updateConnected();
       });
     };
 
-    this.trackEnter = function(e) {
+    this.trackText = function(e) {
       if(e.which === $.ui.keyCode.ENTER) {
         this.addText();
+      }
+    };
+
+    this.trackParagraph = function(e) {
+      if(e.which === $.ui.keyCode.ENTER) {
+        this.addParagraph();
       }
     };
 
@@ -216,7 +223,8 @@
       "click#.schedule-proposal!": this.schedule,
       "click#.schedule-paragraph": this.addParagraph,
       "click#.schedule-text": this.addText,
-      "keyup##title": this.trackEnter
+      "keyup##schedule-text": this.trackText,
+      "keyup##schedule-paragraph": this.trackParagraph
     };
 
     this.init();
