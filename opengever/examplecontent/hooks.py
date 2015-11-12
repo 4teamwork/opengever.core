@@ -6,6 +6,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.builder import session
 from opengever.base.model import create_session
+from opengever.setup.hooks import block_context_portlets
 from opengever.testing import builders  # keep!
 from plone import api
 from plone.portlets.constants import CONTEXT_CATEGORY
@@ -182,14 +183,7 @@ class MeetingExampleContentCreator(object):
 
 
 def block_portlets_for_meetings(site):
-    content = site.restrictedTraverse('sitzungen')
-    manager = getUtility(
-        IPortletManager, name=u'plone.leftcolumn', context=content)
-
-    # Block inherited context portlets on content
-    assignable = getMultiAdapter(
-        (content, manager), ILocalPortletAssignmentManager)
-    assignable.setBlacklistStatus(CONTEXT_CATEGORY, True)
+    block_context_portlets(site, 'sitzungen')
 
 
 def municipality_content_profile_installed(site):
