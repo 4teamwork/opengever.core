@@ -16,7 +16,7 @@
     </tal:comment>
 
     <metal:define define-macro="workflow_actions">
-      <div class="actionButtons">
+      <div tal:condition="view/transitions" class="actionButtons">
         <ul class="regular_buttons">
             <tal:block repeat="transition view/transitions">
               <li>
