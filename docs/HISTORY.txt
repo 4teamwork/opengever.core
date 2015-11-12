@@ -5,6 +5,9 @@ Changelog
 4.5.8 (unreleased)
 ------------------
 
+- Extend whitelist for anonymous access on siteroot.
+  [lgraf, phgross]
+
 - ResponseTransporter: fix de- and encoding of deadline changes.
   [phgross]
 
