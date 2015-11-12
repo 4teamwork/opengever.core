@@ -271,9 +271,13 @@ class TestProtocol(FunctionalTestCase):
         browser.css('a[href*="/protocol"]').first.click()
 
         navigation = browser.css('.navigation a.expandable')
-        headings = browser.css('.protocol_title .title')
+        headings = browser.css('.protocol_title .title .text')
+        numbers = browser.css('.protocol_title .number')
 
         self.assertEqual(map(lambda nav: nav.text, navigation),
                          ['1. Mach doch', '2. Mach ize'])
         self.assertEqual(map(lambda heading: heading.text, headings),
-                         ['1. Mach doch', '2. Mach ize'])
+                         ['Mach doch', 'Mach ize'])
+
+        self.assertEqual(map(lambda number: number.text, numbers),
+                         ['1.', '2.'])
