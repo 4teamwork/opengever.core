@@ -6,7 +6,9 @@
 
     this.options = $.extend({
       selector: "",
-      offset: 0
+      offset: 0,
+      animationSpeed: 300,
+      scrollOffset: 100
     }, _options || {});
 
     var scrollCallback = function() {};
@@ -22,7 +24,7 @@
     this.init = function() {
       $("a", this.element).click(function(event) {
         event.preventDefault();
-        var target = $(event.target);
+        var target = $(event.currentTarget);
         self.applyAnchor(target);
       });
       this.element.on("mouseover", function() {
@@ -48,9 +50,9 @@
       var selected = $(".selected", this.element);
       var offset = 0;
       if(selected.length) {
-        offset = selected.offset().top - this.element.offset().top + this.element.scrollTop() - 100;
+        offset = selected.offset().top - this.element.offset().top + this.element.scrollTop() - this.options.scrollOffset;
       }
-      $(this.element).stop().animate({ scrollTop: offset + "px" }, 400);
+      $(this.element).stop().animate({ scrollTop: offset + "px" }, this.options.animationSpeed);
     };
 
     this.expand = function(target) {
@@ -62,17 +64,19 @@
 
     this.scrollTo = function(offset) {
       offset = offset - this.options.offset;
-      root.animate({ scrollTop: offset + "px" }, 300);
+      root.animate({ scrollTop: offset + "px" }, this.options.animationSpeed);
+    };
+
+    this.extractAnchor = function(target) {
+      return $(target.attr("href"));
     };
 
     this.applyAnchor = function(target) {
       var anchor;
-      if(target.hasClass("paragraph")) {
-        anchor = $(target.next().attr("href"));
-      } else if (target.hasClass("expandable")) {
-        anchor = $(target.next().find("a").first().attr("href"));
+      if (target.hasClass("expandable") && !target.hasClass("paragraph")) {
+        anchor = this.extractAnchor(target.next().find("a").first());
       } else {
-        anchor = $(target.attr("href"));
+        anchor = this.extractAnchor(target);
       }
       beforeScrollCallback(target, anchor);
       this.scrollTo(anchor.offset().top);
