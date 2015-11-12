@@ -5,6 +5,9 @@ Changelog
 4.5.8 (unreleased)
 ------------------
 
+- ResponseTransporter: fix de- and encoding of deadline changes.
+  [phgross]
+
 - Make sure reassign a task over the edit form creates a response and record an activity.
   [phgross]
 

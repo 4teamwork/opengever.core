@@ -1,3 +1,4 @@
+from datetime import date
 from DateTime import DateTime
 from datetime import datetime
 from five import grok
@@ -12,6 +13,7 @@ from opengever.task.interfaces import ITaskDocumentsTransporter
 from opengever.task.response import Response
 from opengever.task.task import ITask
 from opengever.task.util import get_documents_of_task
+from persistent.dict import PersistentDict
 from persistent.list import PersistentList
 from z3c.relationfield import RelationValue
 from zope.annotation.interfaces import IAnnotations
@@ -134,6 +136,9 @@ class ResponseTransporter(grok.Adapter):
         if isinstance(value, datetime):
             return [u'datetime', str(value)]
 
+        if isinstance(value, date):
+            return [u'date', str(value)]
+
         if isinstance(value, DateTime):
             return [u'DateTime', str(value)]
 
@@ -148,6 +153,10 @@ class ResponseTransporter(grok.Adapter):
             else:
                 raise ValueError('intids of relation value not in '
                                  'mapping')
+
+        if isinstance(value, (PersistentDict, dict)):
+            return [u'dict',
+                    dict((k, self._encode(v)) for (k, v) in value.items())]
 
         return value
 
@@ -169,17 +178,23 @@ class ResponseTransporter(grok.Adapter):
         if type_ == 'unicode':
             return unicode(val)
 
+        if type_ == 'DateTime':
+            return DateTime(val)
+
         if type_ == 'datetime':
             return DateTime(val).asdatetime()
 
-        if type_ == 'DateTime':
-            return DateTime(val)
+        if type_ == 'date':
+            return DateTime(val).asdatetime().date()
 
         if type_ == 'RelationValue':
             return RelationValue(val)
 
         if type_ == 'list':
             return [self._decode(item) for item in val]
+
+        if type_ == 'dict':
+            return dict((k, self._decode(v)) for (k, v) in val.items())
 
         return val
 
