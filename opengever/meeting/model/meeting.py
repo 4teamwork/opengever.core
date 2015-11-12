@@ -67,7 +67,7 @@ class Meeting(Base):
         STATE_CLOSED,
         ], [
         PendingClosedTransition('pending', 'closed',
-                                title=_('close', default='Close meeting')),
+                                title=_('close_meeting', default='Close meeting')),
         ])
 
     __tablename__ = 'meetings'

@@ -237,8 +237,43 @@
 
   }
 
+  function MeetingController() {
+
+    Controller.call(this);
+
+    var self = this;
+
+    var dialog = $( "#confirm_close_meeting" ).overlay({
+      speed: 0,
+      closeSpeed: 0,
+      mask: { loadSpeed: 0 }
+    }).data("overlay");
+
+    this.openModal = function(e) {
+      self.currentItem = $(e.currentTarget);
+      dialog.load();
+    };
+
+    this.closeMeeting = function() {
+      this.closeModal();
+      window.location.href = self.currentItem.attr("href");
+    };
+
+    this.closeModal = function() { dialog.close(); };
+
+    this.events = {
+      "click##pending-closed": this.openModal,
+      "click##confirm_close_meeting .confirm!$": this.closeMeeting,
+      "click##confirm_close_meeting .decline!": this.closeModal
+    };
+
+    this.init();
+
+  }
+
   $(function() {
     var collapsibleController = new CollapsibleController();
+    var meetingController = new MeetingController();
     if($("#opengever_meeting_meeting").length) {
 
       var agendaItemController = new AgendaItemController();
