@@ -40,7 +40,7 @@
       <div tal:define="memberships member/memberships" id="memberships">
         <h2 i18n:translate="">Memberships</h2>
 
-        <span tal:condition="not: memberships" i18n_translate="label_no_memberships">
+        <span tal:condition="not: memberships" i18n:translate="label_no_memberships">
           This member has no memberships.
         </span>
 
