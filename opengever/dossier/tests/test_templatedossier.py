@@ -21,7 +21,6 @@ from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 import transaction
 
-
 class TestDocumentWithTemplateForm(FunctionalTestCase):
 
     expected_doc_properties = [
@@ -245,9 +244,10 @@ class TestTemplateDossier(FunctionalTestCase):
 
     @browsing
     def test_adding(self, browser):
+        add_languages(['de-ch'])
         browser.login().open(self.portal)
         factoriesmenu.add('Template Dossier')
-        browser.fill({'Title (German)': 'Templates',
+        browser.fill({'Title': 'Templates',
                       'Responsible': TEST_USER_ID}).save()
 
         self.assertEquals('tabbed_view', plone.view())

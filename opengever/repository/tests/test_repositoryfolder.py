@@ -5,6 +5,7 @@ from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages import plone
 from opengever.base.interfaces import IReferenceNumberSettings
 from opengever.repository.behaviors.referenceprefix import IReferenceNumberPrefix
+from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
 from opengever.testing import set_preferred_language
@@ -53,13 +54,17 @@ class TestRepositoryFolderTitle(FunctionalTestCase):
 
 class TestRepositoryFolderWithBrowser(FunctionalTestCase):
 
+    def setUp(self):
+        super(TestRepositoryFolderWithBrowser, self).setUp()
+        add_languages(['de-ch'])
+
     @browsing
     def test_repository_folder(self, browser):
         self.grant('Manager')
 
         browser.login().open()
         factoriesmenu.add('RepositoryRoot')
-        browser.fill({'Title (German)': 'Registraturplan'}).save()
+        browser.fill({'Title': 'Registraturplan'}).save()
         self.assertEquals(('tabbed_view', 'opengever-repository-repositoryroot'),
                           plone.view_and_portal_type())
         registraturplan = browser.context
@@ -67,7 +72,7 @@ class TestRepositoryFolderWithBrowser(FunctionalTestCase):
         # This will cause a WRITE to registraturplan the first time it is accessed.
         browser.open(registraturplan, view='++add++opengever.repository.repositoryfolder',
                      data={'_authenticator': createToken()})
-        browser.fill({'Title (German)': 'Accounting'}).save()
+        browser.fill({'Title': 'Accounting'}).save()
         self.assertEquals(('tabbed_view', 'opengever-repository-repositoryfolder'),
                           plone.view_and_portal_type())
         accounting = browser.context
@@ -76,7 +81,7 @@ class TestRepositoryFolderWithBrowser(FunctionalTestCase):
 
         browser.open(registraturplan)
         factoriesmenu.add('RepositoryFolder')
-        browser.fill({'Title (German)': 'Custody'}).save()
+        browser.fill({'Title': 'Custody'}).save()
         self.assertEquals(('tabbed_view', 'opengever-repository-repositoryfolder'),
                           plone.view_and_portal_type())
         custody = browser.context

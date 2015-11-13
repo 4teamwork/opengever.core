@@ -12,7 +12,7 @@ class TestReferencePrefixAdapter(FunctionalTestCase):
     def setUp(self):
         super(TestReferencePrefixAdapter, self).setUp()
 
-        self.repository = create(Builder('repository'))
+        self.repository = create(Builder('repository').titled(u'Position'))
         self.adapter = IReferenceNumberPrefix(self.repository)
 
     def test_numbering_starts_at_one_by_default(self):
