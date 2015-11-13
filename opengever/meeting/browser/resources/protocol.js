@@ -25,8 +25,10 @@
     }
 
     scrollspy.onBeforeScroll(function(target) {
-      if(target.hasClass("expandable")) {
+      if(target.hasClass("expandable") && !target.hasClass("paragraph")) {
         scrollspy.options.offset = target.outerHeight() + 60;
+      } else if (target.hasClass("paragraph")) {
+        scrollspy.options.offset = 0;
       }
     });
 
