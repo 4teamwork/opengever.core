@@ -2,13 +2,15 @@
 
   "use strict";
 
-  $(function() {
+  function init() {
 
     $("#opengever_meeting_protocol textarea").autosize();
 
     var scrollspy = new global.Scrollspy({ selector: ".navigation" });
 
     var navigation = $(".protocol-navigation");
+
+    navigation.css("left", navigation.offset().left);
 
     var headings = new global.StickyHeading({ selector: "#opengever_meeting_protocol .protocol_title" });
     var labels = new global.StickyHeading({ selector: "#opengever_meeting_protocol .agenda_items label", fix: false, dependsOn: headings});
@@ -62,7 +64,12 @@
       }
       moveCaretToEnd(toElement[0]);
     });
+  }
 
+  $(function() {
+    if($("#opengever_meeting_protocol").length) {
+      init();
+    }
   });
 
 }(window));
