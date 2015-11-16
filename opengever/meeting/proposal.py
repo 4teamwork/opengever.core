@@ -296,7 +296,9 @@ class SubmittedProposal(ProposalBase):
             sort_on='modified',
             sort_order='reverse')
 
-        return [document.getObject() for document in documents]
+        excerpt = self.get_excerpt()
+        all_docs = [document.getObject() for document in documents]
+        return [doc for doc in all_docs if doc != excerpt]
 
     def get_excerpt(self):
         return self.load_model().resolve_submitted_excerpt_document()
