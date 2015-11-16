@@ -28,7 +28,7 @@ class MemberVocabulary(grok.GlobalUtility):
     def __call__(self, context):
         terms = []
 
-        for member in Member.query:
+        for member in Member.query.order_by(Member.fullname):
             terms.append(SimpleTerm(value=member,
                                     token=member.member_id,
                                     title=member.fullname))
