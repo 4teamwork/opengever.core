@@ -24,7 +24,8 @@ class TestCloseMeeting(FunctionalTestCase):
             Builder('sablontemplate')
             .with_asset_file('excerpt_template.docx'))
         container = create(Builder('committee_container').having(
-            excerpt_template=self.sablon_template))
+            excerpt_template=self.sablon_template,
+            protocol_template=self.sablon_template))
         self.committee = create(Builder('committee').within(container))
 
         self.proposal_a = create(Builder('proposal')
