@@ -64,11 +64,11 @@ class TestCloseMeeting(FunctionalTestCase):
         self.assertEquals(excerpt, generated_document.oguid.resolve_object())
 
     @browsing
-    def test_excerpt_is_copied_to_proposal(self, browser):
+    def test_excerpt_is_copied_to_proposals_dossier(self, browser):
         browser.login().open(self.meeting.get_url())
         browser.css('#pending-closed').first.click()
 
-        excerpt = self.proposal_a.listFolderContents()[0]
+        excerpt = self.dossier.listFolderContents()[-2]
         self.assertEquals('Protocol Excerpt-barn-dec-13-2011',
                           excerpt.Title())
         self.assertEquals(u'protocol-excerpt-barn-dec-13-2011.docx',

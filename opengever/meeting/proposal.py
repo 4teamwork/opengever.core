@@ -2,6 +2,7 @@ from opengever.base.interfaces import IReferenceNumber
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.base.source import DossierPathSourceBinder
+from opengever.dossier.utils import get_containing_dossier
 from opengever.meeting import _
 from opengever.meeting.command import CopyProposalDocumentCommand
 from opengever.meeting.command import CreateSubmittedProposalCommand
@@ -341,6 +342,9 @@ class Proposal(ProposalBase):
     def get_committee(self):
         committee_model = self.load_model().committee
         return committee_model.oguid.resolve_object()
+
+    def get_containing_dossier(self):
+        return get_containing_dossier(self)
 
     def update_model_create_arguments(self, data, context):
         aq_wrapped_self = self.__of__(context)
