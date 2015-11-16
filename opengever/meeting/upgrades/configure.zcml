@@ -487,4 +487,14 @@
         directory="profiles/4617"
         />
 
+    <!-- 4617 -> 4618 -->
+    <genericsetup:upgradeStep
+        title="Add periods table."
+        description=""
+        source="4617"
+        destination="4618"
+        handler="opengever.meeting.upgrades.to4618.AddPeriods"
+        profile="opengever.meeting:default"
+        />
+
 </configure>
