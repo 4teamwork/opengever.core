@@ -18,7 +18,9 @@ class Committees(grok.View, OpengeverTab):
     def committees(self):
         committees = []
         filter = self.get_filter_text()
-        query = Committee.query.by_searchable_text(text_filters=filter)
+        query = Committee.query.order_by(Committee.title)
+        query = query.by_searchable_text(text_filters=filter)
+
         for committee in query.all():
             content_obj = committee.resolve_committee()
             if not content_obj:

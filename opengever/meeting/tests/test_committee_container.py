@@ -17,7 +17,7 @@ class TestCommitteesTab(FunctionalTestCase):
         self.committee_model = self.committee.load_model()
 
     @browsing
-    def test_shows_a_box_for_every_committee(self, browser):
+    def test_shows_albhabetically_sorted_committees_in_boxes(self, browser):
         create(Builder('committee')
                .within(self.container)
                .titled(u'Wirtschafts Kommission'))
@@ -29,7 +29,7 @@ class TestCommitteesTab(FunctionalTestCase):
         browser.login().open(self.container, view='tabbedview_view-committees')
 
         self.assertEquals(
-            [u'Kleiner Burgerrat', u'Wirtschafts Kommission', u'Gew\xe4sser Kommission'],
+            [u'Gew\xe4sser Kommission', u'Kleiner Burgerrat', u'Wirtschafts Kommission'],
             browser.css('#committees_view .committee_box h2').text)
 
     @browsing
@@ -144,7 +144,7 @@ class TestCommitteesTab(FunctionalTestCase):
         create(Builder('submitted_proposal').submitting(proposal_a))
 
         create(Builder('committee').within(self.container)
-               .titled(u'Gew\xe4sser Kommission'))
+               .titled(u'Xenophoben-Kommission'))
 
         browser.login().open(self.container, view='tabbedview_view-committees')
         links = browser.css('#committees_view .unscheduled_proposals a')
