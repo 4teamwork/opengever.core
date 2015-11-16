@@ -5,6 +5,10 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- No longer allow adding content to proposals.
+  Add excerpt to proposal's dossier instead.
+  [deiferni]
+
 - Make sure protocol exists and is updated when closing a meeting.
   [deiferni]
 
