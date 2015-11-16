@@ -478,4 +478,13 @@
         profile="opengever.meeting:default"
         />
 
+    <!-- 4616 -> 4617 -->
+    <upgrade-step:importProfile
+        title="No longer allow to add content to proposals."
+        source="4616"
+        destination="4617"
+        profile="opengever.meeting:default"
+        directory="profiles/4617"
+        />
+
 </configure>
