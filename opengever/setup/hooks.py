@@ -53,7 +53,8 @@ def assign_roles(context, admin_groups):
 
 
 def assign_default_navigation_portlet(context, content_id):
-    # Add a new navigation portlet to content
+    """Add a new navigation portlet to content."""
+
     content = context.restrictedTraverse(content_id)
     manager = getUtility(
         IPortletManager, name=u'plone.leftcolumn', context=content)
@@ -66,6 +67,17 @@ def assign_default_navigation_portlet(context, content_id):
             includeTop=False,
             topLevel=1,
             bottomLevel=0)
+
+    # Block inherited context portlets on content
+    assignable = getMultiAdapter(
+        (content, manager), ILocalPortletAssignmentManager)
+    assignable.setBlacklistStatus(CONTEXT_CATEGORY, True)
+
+
+def block_context_portlets(site, content_id):
+    content = site.restrictedTraverse(content_id)
+    manager = getUtility(
+        IPortletManager, name=u'plone.leftcolumn', context=content)
 
     # Block inherited context portlets on content
     assignable = getMultiAdapter(
