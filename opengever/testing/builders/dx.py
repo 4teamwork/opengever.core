@@ -1,9 +1,11 @@
+from datetime import date
 from ftw.builder import builder_registry
 from ftw.builder.dexterity import DexterityBuilder
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.document import Document
 from opengever.globalindex.handlers.task import sync_task
 from opengever.mail.mail import OGMail
+from opengever.meeting.model import Period
 from opengever.meeting.proposal import Proposal
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.testing import assets
@@ -333,7 +335,20 @@ class CommitteeBuilder(DexterityBuilder):
         self.arguments.pop('protocol_template', None)
 
         obj.create_model(self.arguments, self.container)
+        self.create_default_period(obj)
+
         super(CommitteeBuilder, self).after_create(obj)
+
+    def create_default_period(self, obj):
+        committee_model = obj.load_model()
+        today = date.today()
+        db_session = self.session.session
+
+        db_session.add(Period(committee=committee_model,
+                              title=unicode(today.year)))
+
+        if self.session.auto_commit:
+            db_session.flush()
 
 builder_registry.register('committee', CommitteeBuilder)
 
