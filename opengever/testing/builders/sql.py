@@ -13,6 +13,7 @@ from opengever.meeting.model import Committee
 from opengever.meeting.model import Meeting
 from opengever.meeting.model import Member
 from opengever.meeting.model import Membership
+from opengever.meeting.model import Period
 from opengever.meeting.model import Proposal as ProposalModel
 from opengever.meeting.model.generateddocument import GeneratedExcerpt
 from opengever.meeting.model.generateddocument import GeneratedProtocol
@@ -278,3 +279,15 @@ class LockBuilder(SqlObjectBuilder):
         return self
 
 builder_registry.register('lock', LockBuilder)
+
+
+class PeriodBuilder(SqlObjectBuilder):
+
+    mapped_class = Period
+    id_argument_name = 'period_id'
+
+    def __init__(self, session):
+        super(PeriodBuilder, self).__init__(session)
+        self.arguments['title'] = unicode(date.today().year)
+
+builder_registry.register('period', PeriodBuilder)
