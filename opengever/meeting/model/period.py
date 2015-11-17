@@ -48,3 +48,16 @@ class Period(Base):
 
     def can_execute_transition(self, name):
         return self.workflow.can_execute_transition(self, name)
+
+    def get_edit_values(self, fieldnames):
+        values = {}
+        for fieldname in fieldnames:
+            value = getattr(self, fieldname, None)
+            if value:
+                values[fieldname] = value
+
+        return values
+
+    def update_model(self, data):
+        for key, value in data.items():
+            setattr(self, key, value)

@@ -111,4 +111,15 @@
           url_expr="string:#"
           visible="True">
   </action>
+
+  <action
+        action_id="close-period"
+        visible="True"
+        title="Close current period"
+        url_expr="string:${object_url}/@@close-period"
+        condition_expr="object/@@close-period/available"
+        category="object_buttons">
+    <permission value="Modify portal content"/>
+  </action>
+
 </object>

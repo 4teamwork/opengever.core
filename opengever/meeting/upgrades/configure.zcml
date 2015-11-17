@@ -497,4 +497,13 @@
         profile="opengever.meeting:default"
         />
 
+    <!-- 4618 -> 4619 -->
+    <upgrade-step:importProfile
+        title="Add close period action to committee."
+        profile="opengever.meeting:default"
+        source="4618"
+        destination="4619"
+        directory="profiles/4619"
+        />
+
 </configure>

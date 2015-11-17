@@ -5,6 +5,7 @@ from opengever.meeting.model.committee import Committee
 from opengever.meeting.model.generateddocument import GeneratedDocument
 from opengever.meeting.model.meeting import Meeting
 from opengever.meeting.model.membership import Membership
+from opengever.meeting.model.period import Period
 from opengever.meeting.model.proposal import Proposal
 from opengever.meeting.model.submitteddocument import SubmittedDocument
 from opengever.ogds.models.query import BaseQuery
@@ -172,3 +173,17 @@ class GeneratedDocumentQuery(BaseQuery):
 
 
 GeneratedDocument.query_cls = GeneratedDocumentQuery
+
+
+class PeriodQuery(BaseQuery):
+
+    def active(self):
+        return self.filter_by(workflow_state=Period.STATE_ACTIVE.name)
+
+    def by_committee(self, committee):
+        return self.filter_by(committee=committee)
+
+    def get_current(self, committee):
+        return self.active().by_committee(committee).one()
+
+Period.query_cls = PeriodQuery

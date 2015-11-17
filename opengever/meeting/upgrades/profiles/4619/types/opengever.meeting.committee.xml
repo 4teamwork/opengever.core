@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<object name="opengever.meeting.committee"
+        i18n:domain="opengever.meeting"
+        xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+  <action
+        action_id="close-period"
+        visible="True"
+        title="Close current period"
+        url_expr="string:${object_url}/@@close-period"
+        condition_expr="object/@@close-period/available"
+        category="object_buttons">
+    <permission value="Modify portal content"/>
+  </action>
+
+</object>
