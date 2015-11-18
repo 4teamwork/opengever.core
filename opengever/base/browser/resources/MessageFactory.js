@@ -2,6 +2,8 @@
 
   "use strict";
 
+  var instance = null;
+
   var MessageFactory = function() {
 
     var messageTemplate = "<dl style='display:none;' class='portalMessage {{:messageClass}}'><dt>{{:messageTitle}}</dt><dd>{{:message}}</dd></dl>";
@@ -40,6 +42,11 @@
       }
     };
 
+  MessageFactory.getInstance = function() {
+    if(instance === null) {
+      instance = new MessageFactory();
+    }
+    return instance;
   };
 
   global.MessageFactory = MessageFactory;

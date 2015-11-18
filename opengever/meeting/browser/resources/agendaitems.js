@@ -8,7 +8,7 @@
 
     this.outlet = outlet;
     this.template = function() {};
-    this.messageFactory = new global.MessageFactory();
+    this.messageFactory = global.MessageFactory.getInstance();
     var self = this;
 
     var messageFunc = function(data) {
