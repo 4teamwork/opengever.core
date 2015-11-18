@@ -4,6 +4,7 @@ from opengever.meeting import _
 from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
+from plone import api
 from sqlalchemy import Column
 from sqlalchemy import Date
 from sqlalchemy import ForeignKey
@@ -42,6 +43,26 @@ class Period(Base):
 
     def __repr__(self):
         return '<Period {}>'.format(repr(self.title))
+
+    def get_title(self):
+        if self.date_from or self.date_to:
+            return u'{} ({} - {})'.format(
+                self.title, self.get_date_from(), self.get_date_to())
+        return self.title
+
+    def get_date_from(self):
+        """Return a localized date."""
+
+        if self.date_from:
+            return api.portal.get_localized_time(datetime=self.date_from)
+        return ''
+
+    def get_date_to(self):
+        """Return a localized date."""
+
+        if self.date_to:
+            return api.portal.get_localized_time(datetime=self.date_to)
+        return ''
 
     def execute_transition(self, name):
         self.workflow.execute_transition(self, self, name)

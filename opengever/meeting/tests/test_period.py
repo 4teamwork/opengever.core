@@ -49,3 +49,27 @@ class TestPeriod(FunctionalTestCase):
         self.assertEqual(u'New', new_period.title)
         self.assertEqual(date(2013, 1, 1), new_period.date_from)
         self.assertEqual(date(2013, 12, 31), new_period.date_to)
+
+    def test_period_title_without_date(self):
+        period = create(Builder('period').having(
+            title=u'Foo', committee=self.committee_model))
+        self.assertEqual(u'Foo', period.get_title())
+
+    def test_period_title_with_start_date(self):
+        period = create(Builder('period').having(
+            title=u'Foo', date_from=date(2010, 1, 1),
+            committee=self.committee_model))
+        self.assertEqual('Foo (Jan 01, 2010 - )', period.get_title())
+
+    def test_period_title_with_end_date(self):
+        period = create(Builder('period').having(
+            title=u'Foo', date_to=date(2010, 12, 31),
+            committee=self.committee_model))
+        self.assertEqual('Foo ( - Dec 31, 2010)', period.get_title())
+
+    def test_period_title_with_start_and_end_date(self):
+        period = create(Builder('period').having(
+            title=u'Foo', date_from=date(2010, 1, 1),
+            date_to=date(2010, 12, 31), committee=self.committee_model))
+        self.assertEqual('Foo (Jan 01, 2010 - Dec 31, 2010)',
+                         period.get_title())
