@@ -53,7 +53,7 @@
       if(prevent) {
         event.preventDefault();
       }
-      $.when(callback.call(self, event)).always(messageFunc).done(function() {
+      $.when(callback.call(self, $(event.currentTarget), event)).always(messageFunc).done(function() {
         if(update) {
           self.update();
           self.updateConnected();
@@ -115,8 +115,8 @@
     this.render = function(data) { self.outlet.html(self.template({ agendaitems: data.items,
                                                                     editable: viewlet.data().editable })); };
 
-    this.openModal = function(e) {
-      this.currentItem = $(e.target);
+    this.openModal = function(target) {
+      this.currentItem = target;
       dialog.load();
     };
 
@@ -137,8 +137,8 @@
 
     var agendaItemTitleValidator = function(data) { return data.proceed; };
 
-    this.showEditbox = function(e) {
-      var row = $(e.target).parents("tr");
+    this.showEditbox = function(target) {
+      var row = target.parents("tr");
       row.removeClass("expanded");
       var source;
       if($(".title > span > a", row).length) {
@@ -149,7 +149,7 @@
       var editbox = new global.Editbox({
         editbox: $(".edit-box", row),
         source: source,
-        trigger: $(e.target),
+        trigger: target,
         onChange: self.edit,
         onUpdateFail: self.onUpdateFail,
         responseValidator: agendaItemTitleValidator
@@ -164,7 +164,7 @@
 
     this.onUpdateFail = function(data) { self.messageFactory.shout(data.messages); };
 
-    this.toggleAttachements = function(e) { $(e.target).parents("tr").toggleClass("expanded"); };
+    this.toggleAttachements = function(target) { target.parents("tr").toggleClass("expanded"); };
 
     this.events = {
       "click#.delete-agenda-item": this.openModal,
@@ -189,7 +189,7 @@
 
     this.render = function(data) { self.outlet.html(self.template({ proposals: data.items })); };
 
-    this.schedule = function(e) { return $.post($(e.target).attr("href")); };
+    this.schedule = function(target) { return $.post(target.attr("href")); };
 
     this.addParagraph = function() {
       var input = $("#schedule-paragraph");
@@ -207,14 +207,14 @@
       });
     };
 
-    this.trackText = function(e) {
-      if(e.which === $.ui.keyCode.ENTER) {
+    this.trackText = function(target, event) {
+      if(event.which === $.ui.keyCode.ENTER) {
         this.addText();
       }
     };
 
-    this.trackParagraph = function(e) {
-      if(e.which === $.ui.keyCode.ENTER) {
+    this.trackParagraph = function(target, event) {
+      if(event.which === $.ui.keyCode.ENTER) {
         this.addParagraph();
       }
     };
@@ -235,7 +235,7 @@
 
     Controller.call(this);
 
-    this.toggle = function(e) { $(e.target).parents(".collapsible").toggleClass("open"); };
+    this.toggle = function(target) { target.parents(".collapsible").toggleClass("open"); };
 
     this.events = {
       "click#.collapsible-header > button": this.toggle
