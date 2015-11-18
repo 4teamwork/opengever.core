@@ -22,7 +22,13 @@
                 />
 
     <javascript cacheable="True" compression="safe" cookable="True" expression=""
+                enabled="True" id="++resource++opengever.base/notify.js" inline="False"
+                insert-after="++resource++plone.app.jquery.js"
+                />
+
+    <javascript cacheable="True" compression="safe" cookable="True" expression=""
                 enabled="True" id="++resource++opengever.base/MessageFactory.js" inline="False"
+                insert-after="++resource++opengever.base/notify.js"
                 />
 
     <javascript cacheable="True" compression="none" cookable="True" enabled="on"
