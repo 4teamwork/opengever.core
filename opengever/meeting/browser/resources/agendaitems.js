@@ -280,7 +280,9 @@
   }
 
   $(function() {
+
     var collapsibleController = new CollapsibleController();
+
     var meetingController = new MeetingController();
     if($("#opengever_meeting_meeting").length) {
 
