@@ -296,7 +296,9 @@ class SubmittedProposal(ProposalBase):
             sort_on='modified',
             sort_order='reverse')
 
-        return [document.getObject() for document in documents]
+        excerpt = self.get_excerpt()
+        all_docs = [document.getObject() for document in documents]
+        return [doc for doc in all_docs if doc != excerpt]
 
     def get_excerpt(self):
         return self.load_model().resolve_submitted_excerpt_document()
@@ -331,9 +333,6 @@ class Proposal(ProposalBase):
         """
         return self.load_model().is_editable_in_dossier()
 
-    def get_containing_dossier(self):
-        return get_containing_dossier(self)
-
     def get_documents(self):
         documents = [relation.to_object for relation in self.relatedItems]
         documents.sort(lambda a, b: cmp(b.modified(), a.modified()))
@@ -345,6 +344,9 @@ class Proposal(ProposalBase):
     def get_committee(self):
         committee_model = self.load_model().committee
         return committee_model.oguid.resolve_object()
+
+    def get_containing_dossier(self):
+        return get_containing_dossier(self)
 
     def update_model_create_arguments(self, data, context):
         aq_wrapped_self = self.__of__(context)

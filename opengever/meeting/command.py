@@ -445,10 +445,11 @@ class DecideProposalsCommand(object):
         proposal.execute_transition('scheduled-decided')
 
     def copy_document(self, proposal):
+        dossier = proposal.resolve_proposal().get_containing_dossier()
         response = OgCopyCommand(
             proposal.resolve_submitted_excerpt_document(),
             proposal.admin_unit_id,
-            proposal.physical_path).execute()
+            '/'.join(dossier.getPhysicalPath())).execute()
         return response['intid']
 
 

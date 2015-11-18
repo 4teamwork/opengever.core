@@ -231,13 +231,6 @@ class TestDocument(FunctionalTestCase):
 
         self.assertEqual(dossier, document.get_parent_dossier())
 
-    def test_get_parent_dossier_returns_proposals_dossier(self):
-        dossier = create(Builder('dossier'))
-        proposal = create(Builder('proposal').within(dossier))
-        document = create(Builder('document').within(proposal))
-
-        self.assertEqual(dossier, document.get_parent_dossier())
-
 
 class TestDocumentDefaultValues(FunctionalTestCase):
 
