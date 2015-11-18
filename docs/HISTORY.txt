@@ -5,6 +5,14 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Add periods to committees. A period represents a timespan similar to a fiscal year.
+
+    - Display the current period on committee overview.
+    - Add a wizard to close the current and create its successor.
+    - Add a wizard that creates an initial period upon committee creation.
+
+  [deiferni]
+
 - No longer allow adding content to proposals.
   Add excerpt to proposal's dossier instead.
   [deiferni]
