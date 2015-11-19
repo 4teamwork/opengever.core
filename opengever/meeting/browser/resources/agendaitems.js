@@ -8,7 +8,7 @@
 
     this.outlet = outlet;
     this.template = function() {};
-    this.messageFactory = new global.MessageFactory();
+    this.messageFactory = global.MessageFactory.getInstance();
     var self = this;
 
     var messageFunc = function(data) {
@@ -280,8 +280,11 @@
   }
 
   $(function() {
+
     var collapsibleController = new CollapsibleController();
+
     var meetingController = new MeetingController();
+
     if($("#opengever_meeting_meeting").length) {
 
       var agendaItemController = new AgendaItemController();
@@ -290,6 +293,18 @@
       proposalsController.connectedTo = [agendaItemController];
       agendaItemController.connectedTo = [proposalsController];
     }
+
+    $(global.document).on("notify", function() {
+      var notifyContainer = new global.StickyHeading({ selector: "#columns", clone: false, fix: false });
+      notifyContainer.onSticky(function() {
+        $(".notifyjs-corner").addClass("sticky");
+      });
+      notifyContainer.onNoSticky(function() {
+        $(".notifyjs-corner").removeClass("sticky");
+      });
+    });
+
+
   });
 
 }(window, jQuery, window.Handlebars));
