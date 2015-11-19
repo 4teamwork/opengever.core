@@ -1,5 +1,7 @@
 from five import grok
 from opengever.base.behaviors.translated_title import TranslatedTitleMixin
+from opengever.base.browser.translated_title import TranslatedTitleAddForm
+from opengever.base.browser.translated_title import TranslatedTitleEditForm
 from opengever.repository import _
 from plone.dexterity.content import Container
 from plone.directives import form
@@ -38,6 +40,14 @@ class RepositoryRoot(Container, TranslatedTitleMixin):
     """
 
     Title = TranslatedTitleMixin.Title
+
+
+class RepositoryRootAddForm(TranslatedTitleAddForm):
+    grok.name('opengever.repository.repositoryroot')
+
+
+class RepositoryRootEditForm(TranslatedTitleEditForm):
+    grok.context(IRepositoryRoot)
 
 
 def zero_fill(matchobj):

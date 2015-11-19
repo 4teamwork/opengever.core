@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
+from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
 from opengever.testing import set_preferred_language
@@ -127,3 +128,99 @@ class TestTranslatedTitle(FunctionalTestCase):
 
         set_preferred_language(self.portal.REQUEST, 'fr')
         self.assertEquals(u"Ablage", obj2brain(dossier).Title)
+
+
+class TestTranslatedTitleAddForm(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestTranslatedTitleAddForm, self).setUp()
+
+        self.grant('Manager')
+
+        add_languages('de-ch')
+        add_languages('fr-ch')
+        self.lang_tool = api.portal.get_tool('portal_languages')
+        self.lang_tool.supported_langs = ['de-ch', 'fr-ch']
+        transaction.commit()
+
+    @browsing
+    def test_language_fields_are_available_by_default(self, browser):
+        browser.login().open(self.portal)
+        factoriesmenu.add('RepositoryRoot')
+        browser.fill({'Title (German)': u'Ordnungssystem',
+                      u'Title (French)': u"syst\xe8me d'ordre"})
+        browser.find('Save').click()
+
+    @browsing
+    def test_language_fields_of_inactive_languages_are_hidden(self, browser):
+        self.lang_tool.supported_langs = ['fr-ch']
+        transaction.commit()
+
+        browser.login().open(self.portal)
+        factoriesmenu.add('RepositoryRoot')
+        self.assertEquals(
+            'hidden',
+            browser.css('#form-widgets-ITranslatedTitle-title_de').first.type)
+
+        self.lang_tool.supported_langs = ['de-ch']
+        transaction.commit()
+        browser.login().open(self.portal)
+        factoriesmenu.add('RepositoryRoot')
+        self.assertEquals(
+            'hidden',
+            browser.css('#form-widgets-ITranslatedTitle-title_fr').first.type)
+
+    @browsing
+    def test_label_is_renamed_to_title_for_sites_with_only_one_active_language(self, browser):
+        self.lang_tool.supported_langs = ['fr-ch']
+        transaction.commit()
+
+        browser.login().open(self.portal)
+        factoriesmenu.add('RepositoryRoot')
+
+        self.assertEquals(
+            'Title',
+            browser.css('label[for=form-widgets-ITranslatedTitle-title_fr]').first.text)
+
+
+class TestTranslatedTitleEditForm(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestTranslatedTitleEditForm, self).setUp()
+        self.grant('Manager')
+        self.lang_tool = api.portal.get_tool('portal_languages')
+
+        self.repository_root = create(Builder('repository_root')
+                                      .having(title_de=u"Ablage",
+                                              title_fr=u"syst\xe8me d'ordre"))
+
+    @browsing
+    def test_language_fields_are_available_by_default(self, browser):
+        self.lang_tool.supported_langs = ['de-ch', 'fr-ch']
+        transaction.commit()
+
+        browser.login().open(self.repository_root, view='edit')
+
+        browser.fill({'Title (German)': u'Ordnungssystem',
+                      u'Title (French)': u"syst\xe8me d'ordre"})
+        browser.find('Save').click()
+
+    @browsing
+    def test_language_fields_of_inactive_languages_are_hidden(self, browser):
+        self.lang_tool.supported_langs = ['fr-ch']
+        transaction.commit()
+
+        browser.login().open(self.repository_root, view='edit')
+        self.assertEquals(
+            'hidden',
+            browser.css('#form-widgets-ITranslatedTitle-title_de').first.type)
+
+    @browsing
+    def test_label_is_renamed_to_title_for_sites_with_only_one_active_language(self, browser):
+        self.lang_tool.supported_langs = ['fr-ch']
+        transaction.commit()
+
+        browser.login().open(self.repository_root, view='edit')
+        self.assertEquals(
+            'Title',
+            browser.css('label[for=form-widgets-ITranslatedTitle-title_fr]').first.text)
