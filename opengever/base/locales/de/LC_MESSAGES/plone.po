@@ -38,6 +38,9 @@ msgstr "Auschecken"
 msgid "Checkout and edit"
 msgstr "Auschecken / Bearbeiten"
 
+msgid "Close current period"
+msgstr "Aktuelle Periode abschliessen"
+
 msgid "Create successor task"
 msgstr "Folgeaufgabe erstellen"
 

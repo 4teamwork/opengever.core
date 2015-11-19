@@ -311,3 +311,6 @@ msgstr ""
 
 msgid "Submit additional document"
 msgstr ""
+
+msgid "Close current period"
+msgstr ""

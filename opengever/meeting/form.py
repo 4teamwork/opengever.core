@@ -43,6 +43,9 @@ class ModelAddForm(AutoExtensibleForm, AddForm):
     def handleAdd(self, action):
         # self as first argument is required by the decorator
         super(ModelAddForm, self).handleAdd(self, action)
+        if not self._finishedAdd:
+            return
+
         api.portal.show_message(
             _(u'message_record_created', default='Record created'),
             api.portal.get().REQUEST)

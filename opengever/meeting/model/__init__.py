@@ -7,6 +7,7 @@ from opengever.meeting.model.member import Member
 from opengever.meeting.model.membership import Membership
 from opengever.meeting.model.proposal import Proposal
 from opengever.meeting.model.submitteddocument import SubmittedDocument
+from opengever.meeting.model.period import Period
 import opengever.meeting.model.query  # keep, initializes query classes!
 
 
@@ -19,6 +20,7 @@ tables = [
     'meetings',
     'members',
     'memberships',
+    'periods',
     'proposalhistory',
     'proposals',
     'submitteddocuments',

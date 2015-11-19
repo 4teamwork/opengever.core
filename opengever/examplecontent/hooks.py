@@ -59,6 +59,9 @@ class MeetingExampleContentCreator(object):
         self.committee_law = self.site['sitzungen']['committee-1']
         self.committee_law_model = self.committee_law.load_model()
 
+        self.committee_accounting = self.site['sitzungen']['committee-2']
+        self.committee_accounting_model = self.committee_accounting.load_model()
+
         self.committee_assembly = self.site['sitzungen']['committee-3']
         self.committee_assembly_model = self.committee_assembly.load_model()
 
@@ -88,9 +91,15 @@ class MeetingExampleContentCreator(object):
         session.current_session.session = self.db_session
 
     def create_content(self):
+        self.create_periods()
         self.create_members_and_memberships()
         self.create_meetings()
         self.create_proposals()
+
+    def create_periods(self):
+        create(Builder('period').having(committee=self.committee_law_model))
+        create(Builder('period').having(committee=self.committee_accounting_model))
+        create(Builder('period').having(committee=self.committee_assembly_model))
 
     def create_members_and_memberships(self):
         peter = create(Builder('member')

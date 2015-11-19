@@ -1,3 +1,4 @@
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -40,6 +41,11 @@ class TestCommittee(FunctionalTestCase):
              'Linked repository folder': self.repository_folder,
              self.group_field_name: 'client1_users'})
         browser.css('#form-buttons-save').first.click()
+
+        browser.fill({'Title': u'Initial',
+                      'Start date': 'January 1, 2012',
+                      'End date': 'December 31, 2012'}).submit()
+
         self.assertIn('Item created',
                       browser.css('.portalMessage.info dd').text)
 
@@ -53,6 +59,13 @@ class TestCommittee(FunctionalTestCase):
         self.assertIsNotNone(model)
         self.assertEqual(Oguid.for_object(committee), model.oguid)
         self.assertEqual(u'A c\xf6mmittee', model.title)
+
+        self.assertEqual(1, len(model.periods))
+        period = model.periods[0]
+        self.assertEqual('active', period.workflow_state)
+        self.assertEqual(u'Initial', period.title)
+        self.assertEqual(date(2012, 1, 1), period.date_from)
+        self.assertEqual(date(2012, 12, 31), period.date_to)
 
     @browsing
     def test_committee_can_be_edited_in_browser(self, browser):

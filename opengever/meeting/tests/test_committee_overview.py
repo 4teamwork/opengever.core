@@ -14,6 +14,13 @@ class TestCommitteeOverview(FunctionalTestCase):
         self.committee_model = self.committee.load_model()
 
     @browsing
+    def test_shows_current_period_box(self, browser):
+        browser.login().open(self.committee, view='tabbedview_view-overview')
+
+        self.assertEqual(unicode(date.today().year),
+                         browser.css('#periodBox li').first.text)
+
+    @browsing
     def test_membership_box_shows_only_active_members(self, browser):
         peter = create(Builder('member'))
         hans = create(Builder('member')

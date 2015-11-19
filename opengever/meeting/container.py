@@ -50,6 +50,7 @@ class ModelContainer(Container):
         self.update_model_create_arguments(data, context)
         model_instance = self.model_class(oguid=oguid, **data)
         session.add(model_instance)
+        session.flush()  # required to create an autoincremented id
         self._after_model_created(model_instance)
 
         notify(ObjectModifiedEvent(aq_wrapped_self))

@@ -38,6 +38,9 @@ msgstr "Checkout"
 msgid "Checkout and edit"
 msgstr "Checkout et modifier"
 
+msgid "Close current period"
+msgstr ""
+
 msgid "Create successor task"
 msgstr "Créer tâche suivante"
 

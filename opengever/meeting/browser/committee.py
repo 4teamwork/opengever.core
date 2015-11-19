@@ -1,6 +1,7 @@
 from five import grok
 from opengever.meeting import _
 from opengever.meeting.committee import ICommittee
+from opengever.meeting.model import Period
 from opengever.tabbedview.browser.base import OpengeverTab
 
 
@@ -16,7 +17,11 @@ class CommitteeOverview(grok.View, OpengeverTab):
 
     def boxes(self):
         items = [
-            [{'id': 'upcoming_meetings',
+            [{'id': 'period',
+              'label': _('label_current_period', default=u'Current Period'),
+              'content': [self.period()],
+              'href': ''},
+             {'id': 'upcoming_meetings',
               'label': _('label_upcoming_meetings', default=u'Upcoming meetings'),
               'content': self.upcoming_meetings(),
               'href': 'meetings'}],
@@ -47,3 +52,7 @@ class CommitteeOverview(grok.View, OpengeverTab):
         memberships = self.context.get_active_memberships().all()
         members = [membership.member for membership in memberships]
         return [member.get_link(self.context) for member in members]
+
+    def period(self):
+        period = Period.query.get_current(self.context.load_model())
+        return period.get_title()
