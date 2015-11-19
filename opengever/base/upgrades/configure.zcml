@@ -339,14 +339,13 @@
         directory="profiles/4601"
         />
 
-    <!-- 4601 -> 4602 -->
+    <!-- 4602 -> 4603 -->
     <upgrade-step:importProfile
-        title="Remove compression for notifyjs."
+        title="Regsiter storage.js javascript"
         profile="opengever.base:default"
-        source="4601"
-        destination="4602"
-        directory="profiles/4602"
+        source="4602"
+        destination="4603"
+        directory="profiles/4603"
         />
-
 
 </configure>

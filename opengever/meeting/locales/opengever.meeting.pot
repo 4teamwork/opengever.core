@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-11-25 16:48+0000\n"
+"POT-Creation-Date: 2015-11-27 09:50+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -186,7 +186,7 @@ msgstr ""
 msgid "Include publish in"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:30
+#: ./opengever/meeting/browser/meetings/templates/protocol.pt:32
 msgid "Legal basis"
 msgstr ""
 
@@ -207,7 +207,7 @@ msgstr ""
 msgid "Meeting on ${date}"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:105
+#: ./opengever/meeting/browser/meetings/templates/protocol.pt:107
 msgid "Meetinginformation"
 msgstr ""
 
@@ -282,7 +282,7 @@ msgstr ""
 
 #. Default: "Save"
 #: ./opengever/meeting/browser/meetings/excerpt.py:120
-#: ./opengever/meeting/browser/meetings/protocol.py:160
+#: ./opengever/meeting/browser/meetings/protocol.py:167
 #: ./opengever/meeting/form.py:42
 msgid "Save"
 msgstr ""
@@ -551,7 +551,7 @@ msgstr ""
 
 #. Default: "Cancel"
 #: ./opengever/meeting/browser/meetings/excerpt.py:152
-#: ./opengever/meeting/browser/meetings/protocol.py:165
+#: ./opengever/meeting/browser/meetings/protocol.py:179
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:35
 msgid "label_cancel"
 msgstr ""
@@ -564,13 +564,13 @@ msgid "label_committee"
 msgstr ""
 
 #. Default: "Considerations"
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:51
+#: ./opengever/meeting/browser/meetings/templates/protocol.pt:53
 #: ./opengever/meeting/proposal.py:107
 msgid "label_considerations"
 msgstr ""
 
 #. Default: "Copy for attention"
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:87
+#: ./opengever/meeting/browser/meetings/templates/protocol.pt:89
 #: ./opengever/meeting/proposal.py:74
 msgid "label_copy_for_attention"
 msgstr ""
@@ -600,7 +600,7 @@ msgid "label_date_to"
 msgstr ""
 
 #. Default: "Decision"
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:66
+#: ./opengever/meeting/browser/meetings/templates/protocol.pt:68
 #: ./opengever/meeting/proposal.py:185
 msgid "label_decision"
 msgstr ""
@@ -616,13 +616,13 @@ msgid "label_delete_action"
 msgstr ""
 
 #. Default: "Disclose to"
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:80
+#: ./opengever/meeting/browser/meetings/templates/protocol.pt:82
 #: ./opengever/meeting/proposal.py:69
 msgid "label_disclose_to"
 msgstr ""
 
 #. Default: "Discussion"
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:59
+#: ./opengever/meeting/browser/meetings/templates/protocol.pt:61
 msgid "label_discussion"
 msgstr ""
 
@@ -659,7 +659,7 @@ msgstr ""
 
 #. Default: "End"
 #: ./opengever/meeting/browser/meetings/meeting.py:51
-#: ./opengever/meeting/browser/meetings/protocol.py:63
+#: ./opengever/meeting/browser/meetings/protocol.py:64
 msgid "label_end"
 msgstr ""
 
@@ -685,7 +685,7 @@ msgid "label_group"
 msgstr ""
 
 #. Default: "Initial position"
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:37
+#: ./opengever/meeting/browser/meetings/templates/protocol.pt:39
 #: ./opengever/meeting/proposal.py:54
 msgid "label_initial_position"
 msgstr ""
@@ -702,7 +702,7 @@ msgid "label_lastname"
 msgstr ""
 
 #. Default: "Legal basis"
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:130
+#: ./opengever/meeting/browser/meetings/templates/protocol.pt:132
 #: ./opengever/meeting/proposal.py:49
 msgid "label_legal_basis"
 msgstr ""
@@ -719,7 +719,7 @@ msgstr ""
 
 #. Default: "Location"
 #: ./opengever/meeting/browser/meetings/meeting.py:42
-#: ./opengever/meeting/browser/meetings/protocol.py:54
+#: ./opengever/meeting/browser/meetings/protocol.py:55
 msgid "label_location"
 msgstr ""
 
@@ -749,33 +749,33 @@ msgid "label_no_proposals"
 msgstr ""
 
 #. Default: "Other Participants"
-#: ./opengever/meeting/browser/meetings/protocol.py:44
+#: ./opengever/meeting/browser/meetings/protocol.py:45
 msgid "label_other_participants"
 msgstr ""
 
 #. Default: "Participants"
-#: ./opengever/meeting/browser/meetings/protocol.py:36
+#: ./opengever/meeting/browser/meetings/protocol.py:37
 msgid "label_participants"
 msgstr ""
 
 #. Default: "Presidency"
-#: ./opengever/meeting/browser/meetings/protocol.py:25
+#: ./opengever/meeting/browser/meetings/protocol.py:26
 msgid "label_presidency"
 msgstr ""
 
 #. Default: "Proposed action"
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:44
+#: ./opengever/meeting/browser/meetings/templates/protocol.pt:46
 #: ./opengever/meeting/proposal.py:59
 msgid "label_proposed_action"
 msgstr ""
 
 #. Default: "Protocol start-page"
-#: ./opengever/meeting/browser/meetings/protocol.py:48
+#: ./opengever/meeting/browser/meetings/protocol.py:49
 msgid "label_protocol_start_page_number"
 msgstr ""
 
 #. Default: "Publish in"
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:73
+#: ./opengever/meeting/browser/meetings/templates/protocol.pt:75
 #: ./opengever/meeting/proposal.py:64
 msgid "label_publish_in"
 msgstr ""
@@ -802,7 +802,7 @@ msgid "label_schedule"
 msgstr ""
 
 #. Default: "Secretary"
-#: ./opengever/meeting/browser/meetings/protocol.py:30
+#: ./opengever/meeting/browser/meetings/protocol.py:31
 msgid "label_secretary"
 msgstr ""
 
@@ -813,7 +813,7 @@ msgstr ""
 
 #. Default: "Start"
 #: ./opengever/meeting/browser/meetings/meeting.py:47
-#: ./opengever/meeting/browser/meetings/protocol.py:59
+#: ./opengever/meeting/browser/meetings/protocol.py:60
 msgid "label_start"
 msgstr ""
 
@@ -858,7 +858,7 @@ msgid "meetingdossier"
 msgstr ""
 
 #. Default: "Changes saved"
-#: ./opengever/meeting/browser/meetings/protocol.py:153
+#: ./opengever/meeting/browser/meetings/protocol.py:159
 #: ./opengever/meeting/form.py:122
 msgid "message_changes_saved"
 msgstr ""
@@ -965,6 +965,11 @@ msgstr ""
 #. Default: "Protocol-Excerpt"
 #: ./opengever/meeting/protocol.py:125
 msgid "protocol_excerpt"
+msgstr ""
+
+#. Default: "Protocol successfully changed."
+#: ./opengever/meeting/browser/meetings/protocol.py:188
+msgid "protocol_successfully_changed"
 msgstr ""
 
 #. Default: "Schedule"

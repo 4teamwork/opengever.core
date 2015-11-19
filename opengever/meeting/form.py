@@ -122,7 +122,7 @@ class ModelEditForm(EditForm):
             _(u'message_changes_saved', default='Changes saved'),
             api.portal.get().REQUEST)
 
-        return self.request.RESPONSE.redirect(self.nextURL())
+        return self.redirect_to_next_url()
 
     @button.buttonAndHandler(_(u'label_cancel', default=u'Cancel'), name='cancel')
     def cancel(self, action):
@@ -130,6 +130,9 @@ class ModelEditForm(EditForm):
 
     def nextURL(self):
         raise NotImplementedError()
+
+    def redirect_to_next_url(self):
+        return self.request.RESPONSE.redirect(self.nextURL())
 
 
 class ModelProxyAddForm(object):

@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<object name="portal_javascripts" meta_type="JavaScripts Registry">
+
+    <javascript cacheable="True" compression="none" cookable="True" enabled="on"
+                expression="" id="++resource++opengever.base/Storage.js" inline="False" />
+
+</object>

@@ -1,3 +1,4 @@
+from opengever.base.response import JSONResponse
 from opengever.base.schema import UTCDatetime
 from opengever.meeting import _
 from opengever.meeting.command import MIME_DOCX
@@ -112,7 +113,12 @@ class EditProtocol(AutoExtensibleForm, ModelEditForm):
     template = ViewPageTemplateFile('templates/protocol.pt')
 
     def __init__(self, context, request):
+        """
+        Introduce ```_has_successfully_saved``` because we have two diffrent response types.
+        If the protocol has been saved we want to return a JSON response.
+        """
         super(EditProtocol, self).__init__(context, request, context.model)
+        self._has_successfully_saved = False
 
     def update(self):
         super(EditProtocol, self).update()
@@ -152,6 +158,7 @@ class EditProtocol(AutoExtensibleForm, ModelEditForm):
         api.portal.show_message(
             _(u'message_changes_saved', default='Changes saved'),
             self.request)
+        self._has_successfully_saved = True
 
         self.unlock()
         # pretend to always change the underlying data
@@ -162,6 +169,13 @@ class EditProtocol(AutoExtensibleForm, ModelEditForm):
         # needs duplication, otherwise button does not appear
         super(EditProtocol, self).handleApply(self, action)
 
+    def redirect_to_next_url(self):
+        """
+        We dont want to make a redirect here because this view will be called
+        asynchronously.
+        """
+        pass
+
     @button.buttonAndHandler(_('label_cancel', default=u'Cancel'), name='cancel')
     def cancel(self, action):
         self.unlock()
@@ -169,6 +183,11 @@ class EditProtocol(AutoExtensibleForm, ModelEditForm):
         super(EditProtocol, self).cancel(self, action)
 
     def render(self):
+        if self._has_successfully_saved:
+            return JSONResponse(self.request).redirect(self.nextURL()).info(
+                _('protocol_successfully_changed',
+                  default=u"Protocol successfully changed.")).dump()
+
         return self.template()
 
     def get_agenda_items(self, include_paragraphs=False):

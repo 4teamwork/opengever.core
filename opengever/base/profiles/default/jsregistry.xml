@@ -35,4 +35,7 @@
                 expression="" id="++resource++opengever.base/handlebars.min.js"
                 inline="False"/>
 
+    <javascript cacheable="True" compression="none" cookable="True" enabled="on"
+                expression="" id="++resource++opengever.base/Storage.js" inline="False" />
+
 </object>
