@@ -19,6 +19,8 @@
     var defaultTitle = $("dt", defaultMessage).text();
     var defaultText = $("dd", defaultMessage).text();
 
+    var root = $(global.document);
+
     var messageTemplate = " \
       <div> \
           <span class='title' data-notify-text='title'></span> \
@@ -44,6 +46,9 @@
         title: messageData.messageTitle,
         message: messageData.message
       }, settings);
+
+      root.trigger("notify");
+
     };
 
     this.shout = function(messages) {
