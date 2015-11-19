@@ -4,7 +4,7 @@
 
   function init() {
 
-    $("#opengever_meeting_protocol textarea").autosize();
+    global.autosize($("#opengever_meeting_protocol textarea"));
 
     var scrollspy = new global.Scrollspy({ selector: ".navigation" });
 
