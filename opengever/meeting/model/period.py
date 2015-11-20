@@ -40,7 +40,7 @@ class Period(Base):
     title = Column(String(256), nullable=False)
     date_from = Column(Date)
     date_to = Column(Date)
-    sequence_nr_decision = Column(Integer, nullable=False, default=0)
+    decision_sequence_number = Column(Integer, nullable=False, default=0)
 
     def __repr__(self):
         return '<Period {}>'.format(repr(self.title))
@@ -83,3 +83,7 @@ class Period(Base):
     def update_model(self, data):
         for key, value in data.items():
             setattr(self, key, value)
+
+    def get_next_decision_sequence_number(self):
+        self.decision_sequence_number += 1
+        return self.decision_sequence_number

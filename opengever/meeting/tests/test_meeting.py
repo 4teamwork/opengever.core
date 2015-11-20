@@ -20,14 +20,22 @@ class TestMeeting(FunctionalTestCase):
         self.repo = create(Builder('repository_root'))
         self.repository_folder = create(Builder('repository')
                                         .within(self.repo))
+        self.templates = create(Builder('templatedossier'))
         self.dossier = create(
             Builder('dossier').within(self.repository_folder))
         self.meeting_dossier = create(
             Builder('meeting_dossier').within(self.repository_folder))
-        container = create(Builder('committee_container'))
+        self.sablon_template = create(
+            Builder('sablontemplate')
+            .within(self.templates)
+            .with_asset_file('sablon_template.docx'))
+        self.container = create(Builder('committee_container').having(
+                                protocol_template=self.sablon_template,
+                                excerpt_template=self.sablon_template))
         self.committee = create(Builder('committee')
-                                .within(container)
+                                .within(self.container)
                                 .link_with(self.repository_folder))
+        self.committee_model = self.committee.load_model()
 
     def test_meeting_title(self):
         self.assertEqual(
@@ -85,3 +93,18 @@ class TestMeeting(FunctionalTestCase):
         self.assertIsNotNone(dossier)
         self.assertEquals(u'Meeting on Jan 01, 2010', dossier.title)
         self.assertIsNotNone(meeting.modified)
+
+    @browsing
+    def test_close_meeting_generates_decision_numbers(self, browser):
+        meeting = create(Builder('meeting')
+                         .having(committee=self.committee_model)
+                         .link_with(self.meeting_dossier))
+        create(Builder('agenda_item').having(meeting=meeting,
+                                             title='Mach ize'))
+
+        browser.login().open(meeting.get_url())
+        browser.find('Close meeting').click()
+
+        meeting = Meeting.query.get(meeting.meeting_id)
+        self.assertEqual('closed', meeting.workflow_state)
+        self.assertEqual(1, meeting.agenda_items[0].decision_number)

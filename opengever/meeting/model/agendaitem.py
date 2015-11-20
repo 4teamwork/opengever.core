@@ -22,6 +22,7 @@ class AgendaItem(Base):
     proposal_id = Column(Integer, ForeignKey('proposals.id'))
     proposal = relationship("Proposal", uselist=False,
                             backref=backref('agenda_item', uselist=False))
+    decision_number = Column(Integer)
 
     title = Column(UnicodeCoercingText)
     number = Column('item_number', String(16))
