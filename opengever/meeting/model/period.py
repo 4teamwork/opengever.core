@@ -40,6 +40,7 @@ class Period(Base):
     title = Column(String(256), nullable=False)
     date_from = Column(Date)
     date_to = Column(Date)
+    sequence_nr_decision = Column(Integer, nullable=False, default=0)
 
     def __repr__(self):
         return '<Period {}>'.format(repr(self.title))
