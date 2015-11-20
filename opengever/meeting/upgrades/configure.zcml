@@ -506,4 +506,14 @@
         directory="profiles/4619"
         />
 
+    <!-- 4619 -> 4620 -->
+    <genericsetup:upgradeStep
+        title="Add modified timestamp to meeting."
+        description=""
+        source="4619"
+        destination="4620"
+        handler="opengever.meeting.upgrades.to4620.AddModifiedTimestampToMeeting"
+        profile="opengever.meeting:default"
+        />
+
 </configure>

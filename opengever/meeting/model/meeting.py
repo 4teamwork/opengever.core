@@ -1,4 +1,5 @@
 from collections import OrderedDict
+from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.model import Base
 from opengever.base.model import UTCDateTime
 from opengever.base.oguid import Oguid
@@ -81,6 +82,8 @@ class Meeting(Base):
     end = Column('end_datetime', UTCDateTime(timezone=True))
     workflow_state = Column(String(WORKFLOW_STATE_LENGTH), nullable=False,
                             default=workflow.default_state.name)
+    modified = Column(UTCDateTime(timezone=True), nullable=False,
+                      default=utcnow_tz_aware)
 
     presidency = relationship(
         'Member', primaryjoin="Member.member_id==Meeting.presidency_id")
