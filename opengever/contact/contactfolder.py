@@ -1,16 +1,21 @@
 from five import grok
 from opengever.base.behaviors.translated_title import TranslatedTitleMixin
 from opengever.contact import _
+from opengever.contact.interfaces import IContactFolder
 from opengever.tabbedview.browser.tabs import OpengeverCatalogListingTab
 from opengever.tabbedview.helper import email_helper
 from plone.dexterity.content import Container
 from plone.dexterity.interfaces import IDexterityContainer
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
+from zope.interface import implements
 
 
 class ContactFolder(Container, TranslatedTitleMixin):
     """Container which contains all contacts.
     """
+
+    implements(IContactFolder)
+
 
     Title = TranslatedTitleMixin.Title
 

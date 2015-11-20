@@ -1,9 +1,10 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
+from opengever.contact.interfaces import IContactFolder
 from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
-from plone import api
-import transaction
 
 
 class TestContactFolder(FunctionalTestCase):
@@ -13,6 +14,10 @@ class TestContactFolder(FunctionalTestCase):
         self.grant('Manager')
 
         add_languages(['de-ch', 'fr-ch'])
+
+    def test_provides_marker_interface(self):
+        contactfolder = create(Builder('contactfolder'))
+        self.assertTrue(IContactFolder.providedBy(contactfolder))
 
     @browsing
     def test_supports_translated_title(self, browser):
