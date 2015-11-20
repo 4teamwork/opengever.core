@@ -208,6 +208,12 @@
                 </div>
               </div>
               <label i18n:translate="">Proposals:</label>
+              <div class="input-group plain search-form">
+                <input id="filter-proposals"
+                       type="search"
+                       placeholder="Filter"
+                       i18n:attributes="placeholder label_filter_proposal"/>
+              </div>
               <div id="unscheduled_porposals" class="list-group">
                 <tal:block tal:replace="structure view/render_handlebars_proposals_template"></tal:block>
               </div>
