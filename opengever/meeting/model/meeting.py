@@ -184,8 +184,12 @@ class Meeting(Base):
         return values
 
     def update_model(self, data):
+        """Manually set the modified timestamp when updating meetings."""
+
         for key, value in data.items():
             setattr(self, key, value)
+
+        self.modified = utcnow_tz_aware()
 
     def get_title(self):
         if self.location:

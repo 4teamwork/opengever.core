@@ -84,3 +84,4 @@ class TestMeeting(FunctionalTestCase):
         dossier = meeting.dossier_oguid.resolve_object()
         self.assertIsNotNone(dossier)
         self.assertEquals(u'Meeting on Jan 01, 2010', dossier.title)
+        self.assertIsNotNone(meeting.modified)
