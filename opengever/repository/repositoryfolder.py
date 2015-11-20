@@ -2,13 +2,14 @@ from Acquisition import aq_inner, aq_parent
 from five import grok
 from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.behaviors.utils import hide_fields_from_behavior
+from opengever.base.browser.translated_title import TranslatedTitleAddForm
+from opengever.base.browser.translated_title import TranslatedTitleEditForm
 from opengever.base.interfaces import IReferenceNumber
 from opengever.repository import _
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.repository.interfaces import IRepositoryFolderRecords
 from plone.app.content.interfaces import INameFromTitle
 from plone.dexterity import content
-from plone.directives import dexterity
 from plone.directives import form
 from plone.registry.interfaces import IRegistry
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
@@ -185,7 +186,7 @@ class RepositoryFolder(content.Container):
         return types
 
 
-class AddForm(dexterity.AddForm):
+class AddForm(TranslatedTitleAddForm):
     grok.name('opengever.repository.repositoryfolder')
 
     def updateFields(self):
@@ -195,7 +196,7 @@ class AddForm(dexterity.AddForm):
                                    'IClassification.public_trial_statement'])
 
 
-class EditForm(dexterity.EditForm):
+class EditForm(TranslatedTitleEditForm):
     grok.context(IRepositoryFolder)
 
     def updateFields(self):

@@ -1,5 +1,7 @@
 from five import grok
 from opengever.base.behaviors.translated_title import TranslatedTitleMixin
+from opengever.base.browser.translated_title import TranslatedTitleAddForm
+from opengever.base.browser.translated_title import TranslatedTitleEditForm
 from opengever.contact import _
 from opengever.contact.interfaces import IContactFolder
 from opengever.tabbedview.browser.tabs import OpengeverCatalogListingTab
@@ -18,6 +20,14 @@ class ContactFolder(Container, TranslatedTitleMixin):
 
 
     Title = TranslatedTitleMixin.Title
+
+
+class ContactFolderAddForm(TranslatedTitleAddForm):
+    grok.name('opengever.contact.contactfolder')
+
+
+class ContactFolderEditForm(TranslatedTitleEditForm):
+    grok.context(IContactFolder)
 
 
 def authenticated_member(context):

@@ -1,3 +1,7 @@
+from five import grok
+from opengever.base.behaviors.translated_title import TranslatedTitleMixin
+from opengever.base.browser.translated_title import TranslatedTitleAddForm
+from opengever.base.browser.translated_title import TranslatedTitleEditForm
 from opengever.meeting import _
 from opengever.meeting.model import Member
 from opengever.meeting.sources import sablon_template_source
@@ -5,7 +9,6 @@ from opengever.meeting.wrapper import MemberWrapper
 from plone.dexterity.content import Container
 from plone.directives import form
 from z3c.relationfield.schema import RelationChoice
-from opengever.base.behaviors.translated_title import TranslatedTitleMixin
 
 
 class ICommitteeContainer(form.Schema):
@@ -23,6 +26,14 @@ class ICommitteeContainer(form.Schema):
         source=sablon_template_source,
         required=True,
     )
+
+
+class CommitteeContainerAddForm(TranslatedTitleAddForm):
+    grok.name('opengever.meeting.committeecontainer')
+
+
+class CommitteeContainerEditForm(TranslatedTitleEditForm):
+    grok.context(ICommitteeContainer)
 
 
 _marker = object()
