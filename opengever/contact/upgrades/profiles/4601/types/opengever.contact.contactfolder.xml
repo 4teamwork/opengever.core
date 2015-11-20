@@ -2,9 +2,6 @@
 <object xmlns:i18n="http://xml.zope.org/namespaces/i18n"
         name="opengever.contact.contactfolder" meta_type="Dexterity FTI">
 
-  <!-- enabled behaviors -->
-  <property name="behaviors" purge="False">
-    <element value="opengever.base.behaviors.translated_title.ITranslatedTitle" />
-  </property>
+  <property name="klass">opengever.contact.contactfolder.ContactFolder</property>
 
 </object>

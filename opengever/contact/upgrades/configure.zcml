@@ -33,11 +33,11 @@
 
     <!-- 4500 -> 4600 -->
     <genericsetup:upgradeStep
-        title="Change contactfolder class."
+        title="Add TranslatedTitle behavior to contactfolder."
         description=""
         source="4500"
         destination="4600"
-        handler="opengever.contact.upgrades.to4600.ChangeContactFolderClass"
+        handler="opengever.contact.upgrades.to4600.ActivateTranslatedTitle"
         profile="opengever.contact:default"
         />
 
@@ -52,11 +52,11 @@
 
     <!-- 4600 -> 4601 -->
     <genericsetup:upgradeStep
-        title="Add TranslatedTitle behavior to contactfolder."
+        title="Change contactfolder class."
         description=""
         source="4600"
         destination="4601"
-        handler="opengever.contact.upgrades.to4601.ActivateTranslatedTitle"
+        handler="opengever.contact.upgrades.to4601.ChangeContactFolderClass"
         profile="opengever.contact:default"
         />
 
