@@ -149,6 +149,8 @@ class TestProtocol(FunctionalTestCase):
     def test_protocol_can_be_edited(self, browser):
         browser.login()
         browser.open(self.meeting.get_url(view='protocol'))
+        self.assertIsNotNone(self.meeting.modified)
+        prev_modified = self.meeting.modified
 
         browser.fill({'Legal basis': 'Yes we can',
                       'Initial position': 'Still the same',
@@ -162,6 +164,9 @@ class TestProtocol(FunctionalTestCase):
                       'Protocol start-page': '10'}).submit()
 
         self.assertEquals(['Changes saved'], info_messages())
+
+        meeting = Meeting.query.get(self.meeting.meeting_id)
+        self.assertGreater(meeting.modified, prev_modified)
 
         proposal = Proposal.query.get(self.proposal_model.proposal_id)
         self.assertEqual('Yes we can', proposal.legal_basis)
@@ -189,6 +194,7 @@ class TestProtocol(FunctionalTestCase):
         create(Builder('membership').having(
             member=hans,
             committee=self.committee_model).as_active())
+        prev_modified = self.meeting.modified
 
         browser.login()
         browser.open(self.meeting.get_url(view='protocol'))
@@ -199,6 +205,9 @@ class TestProtocol(FunctionalTestCase):
                       'Other Participants': 'Klara'}).submit()
 
         self.assertEquals(['Changes saved'], info_messages())
+
+        meeting = Meeting.query.get(self.meeting.meeting_id)
+        self.assertGreater(meeting.modified, prev_modified)
 
         # refresh intances
         meeting = Meeting.query.get(self.meeting.meeting_id)
