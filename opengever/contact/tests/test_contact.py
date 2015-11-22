@@ -1,58 +1,59 @@
+from ftw.builder import Builder
+from ftw.builder import create
+from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import factoriesmenu
+from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
+from plone import api
 from Products.CMFCore.utils import getToolByName
 
 
 class TestContact(FunctionalTestCase):
-    use_browser = True
 
     def setUp(self):
         super(TestContact, self).setUp()
         self.grant('Member', 'Contributor', 'Manager')
 
-    def getSearchableText(self, obj):
-        brain = obj2brain(obj)
-        catalog = getToolByName(obj, 'portal_catalog')
+        add_languages(['de-ch', 'fr-ch'])
+
+    @browsing
+    def test_add_a_contact(self, browser):
+        contactfolder = create(Builder('contactfolder'))
+        browser.login().open(contactfolder)
+        factoriesmenu.add('Contact')
+        browser.fill({'Firstname': 'Hanspeter',
+                      'Lastname': 'D\xc3\xbcrr',
+                      'Description': 'Lorem ipsum, bla bla'})
+        browser.find('Save').click()
+
+        self.assertEquals(
+            'http://nohost/plone/opengever-contact-contactfolder/durr-hanspeter/contact_view',
+            browser.url)
+        self.assertEquals(u'D\xfcrr Hanspeter', browser.css('h1').first.text)
+
+    @browsing
+    def test_edit_a_contact(self, browser):
+        contactfolder = create(Builder('contactfolder'))
+        contact = create(Builder('contact')
+                         .within(contactfolder)
+                         .having(firstname=u'Hanspeter',
+                                 lastname='D\xc3\xbcrr'.decode('utf-8'),
+                                 description=u'Lorem ipsum, bla bla'))
+
+        browser.login().open(contact, view='edit')
+        browser.fill({'Lastname': 'Walter'})
+        browser.find('Save').click()
+
+        self.assertEquals('Walter Hanspeter', browser.css('h1').first.text)
+
+    def test_searchable_text(self):
+        contact = create(Builder('contact')
+                         .having(firstname=u'Hanspeter',
+                                 lastname='D\xc3\xbcrr'.decode('utf-8'),
+                                 description=u'Lorem ipsum, bla bla'))
+
+        brain = obj2brain(contact)
+        catalog = api.portal.get_tool('portal_catalog')
         data = catalog.getIndexDataForRID(brain.getRID())
-        return data['SearchableText']
-
-    def test_browser(self):
-        self.browser.open(self.portal.portal_url())
-        self.assertPageContains('test_user_1')
-
-        # create a contact folder
-        self.browser.open('http://nohost/plone/folder_factories')
-        self.browser.getControl('ContactFolder').click()
-        self.browser.getControl('Add').click()
-        self.browser.assert_url('http://nohost/plone/++add++opengever.contact.contactfolder')
-        self.browser.getControl('Title (German)').value='Foobar'
-        self.browser.getControl('Save').click()
-
-        # create a contact:
-        self.browser.open('http://nohost/plone/foobar/folder_factories')
-        self.browser.getControl('Contact').click()
-        self.browser.getControl('Add').click()
-
-        self.browser.assert_url('http://nohost/plone/foobar/++add++opengever.contact.contact')
-        self.browser.getControl('Firstname').value = 'lorem'
-        self.browser.getControl('Save').click()
-
-        self.browser.assert_url('http://nohost/plone/foobar/++add++opengever.contact.contact')
-
-        self.browser.getControl('Firstname').value = 'Hanspeter'
-        self.browser.getControl('Lastname').value = 'Walter'
-        self.browser.getControl('Description').value = 'Lorem ipsum, bla bla'
-        self.browser.getControl('Save').click()
-        self.browser.assert_url('http://nohost/plone/foobar/walter-hanspeter/contact_view')
-
-        # test searchabelText indexing
-        obj = self.portal.get('foobar').get('walter-hanspeter')
-        self.assertEquals(['walter', 'hanspeter'], self.getSearchableText(obj))
-
-        folder = self.portal.get('foobar')
-        self.assertEquals('Foobar', folder.Title())
-        self.assertEquals('Lorem Ipsum', folder.Description())
-
-        contact = folder.get('walter-hanspeter')
-        self.assertEquals('Walter Hanspeter', contact.Title())
-        self.assertEquals('Lorem ipsum, bla bla', contact.Description())
+        self.assertEquals(['durr', 'hanspeter'], data['SearchableText'])
