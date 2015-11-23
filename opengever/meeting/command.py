@@ -459,6 +459,7 @@ class CloseMeetingCommand(object):
         self.meeting = meeting
 
     def execute(self):
+        self.generate_decision_numbers()
         GenerateExcerptsCommand(self.meeting).execute()
         DecideProposalsCommand(self.meeting).execute()
         self.update_protocol_document()
@@ -478,6 +479,9 @@ class CloseMeetingCommand(object):
                 operations, lock_document_after_creation=True)
 
         command.execute()
+
+    def generate_decision_numbers(self):
+        self.meeting.generate_decision_numbers()
 
     def unlock_protocol_document(self):
         if not self.meeting.protocol_document:

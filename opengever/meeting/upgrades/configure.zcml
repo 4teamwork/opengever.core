@@ -516,4 +516,14 @@
         profile="opengever.meeting:default"
         />
 
+    <!-- 4620 -> 4621 -->
+    <genericsetup:upgradeStep
+        title="Add decision number to proposal."
+        description=""
+        source="4620"
+        destination="4621"
+        handler="opengever.meeting.upgrades.to4621.AddDecisionNrToProposal"
+        profile="opengever.meeting:default"
+        />
+
 </configure>

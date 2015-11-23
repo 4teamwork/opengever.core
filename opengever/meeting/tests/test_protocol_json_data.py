@@ -47,13 +47,15 @@ class TestProtocolJsonData(FunctionalTestCase):
                 proposal=self.proposal,
                 meeting=self.meeting,
                 discussion=u'Hmm',
-                decision=u'Do it'))
+                decision=u'Do it',
+                decision_number=1))
         self.agend_item_text = create(
             Builder('agenda_item').having(
                 title=u'Free Text',
                 meeting=self.meeting,
                 discussion=u'Blah',
-                decision=u'Done',))
+                decision=u'Done',
+                decision_number=2))
 
     def test_protocol_json(self):
         data = ProtocolData(self.meeting).data
@@ -73,7 +75,8 @@ class TestProtocolJsonData(FunctionalTestCase):
                  'markdown:publish_in': None,
                  'number': '1.',
                  'title': u'Proposal',
-                 'is_paragraph': False,},
+                 'is_paragraph': False,
+                 'decision_number': 1},
                 {'description': u'Free Text',
                  'dossier_reference_number': None,
                  'markdown:considerations': None,
@@ -87,7 +90,8 @@ class TestProtocolJsonData(FunctionalTestCase):
                  'markdown:publish_in': None,
                  'number': '2.',
                  'title': u'Free Text',
-                 'is_paragraph': False,}],
+                 'is_paragraph': False,
+                 'decision_number': 2}],
              'mandant': {'name': u'Client1'},
              'meeting': {'date': u'Dec 13, 2011',
                          'end_time': u'11:45 AM',

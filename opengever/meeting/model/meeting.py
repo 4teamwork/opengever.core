@@ -7,6 +7,7 @@ from opengever.base.utils import escape_html
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
 from opengever.meeting.model import AgendaItem
+from opengever.meeting.model import Period
 from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
@@ -118,6 +119,20 @@ class Meeting(Base):
 
     def __repr__(self):
         return '<Meeting at "{}">'.format(self.start)
+
+    def generate_decision_numbers(self):
+        """Generate decision numbers for each agenda item of this meeting.
+
+        This method locks the current period of this meeting to protect its
+        decision_sequence_number against concurrent updates.
+
+        """
+        period = Period.query.active().by_committee(
+            self.committee).with_for_update().one()
+
+        for agenda_item in self.agenda_items:
+            next_decision_number = period.get_next_decision_sequence_number()
+            agenda_item.decision_number = next_decision_number
 
     @property
     def css_class(self):
