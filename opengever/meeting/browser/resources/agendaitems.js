@@ -257,8 +257,8 @@
       mask: { loadSpeed: 0 }
     }).data("overlay");
 
-    this.openModal = function(e) {
-      self.currentItem = $(e.currentTarget);
+    this.openModal = function(target) {
+      self.currentItem = target;
       dialog.load();
     };
 
