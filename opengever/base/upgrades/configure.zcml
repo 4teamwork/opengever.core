@@ -339,5 +339,14 @@
         directory="profiles/4601"
         />
 
+    <!-- 4601 -> 4602 -->
+    <upgrade-step:importProfile
+        title="Remove compression for notifyjs."
+        profile="opengever.base:default"
+        source="4601"
+        destination="4602"
+        directory="profiles/4602"
+        />
+
 
 </configure>
