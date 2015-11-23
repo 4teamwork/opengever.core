@@ -65,6 +65,7 @@ class AgendaItem(Base):
             'title': self.get_title(),
             'dossier_reference_number': self.get_dossier_reference_number(),
             'is_paragraph': self.is_paragraph,
+            'decision_number': self.decision_number,
         }
         if include_initial_position:
             data['markdown:initial_position'] = self._sanitize_text(
