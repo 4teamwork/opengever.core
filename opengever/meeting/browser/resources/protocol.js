@@ -50,6 +50,11 @@
       });
     };
 
+    this.saveProtocol = function(target) {
+      var action = target.attr("action");
+      return $.post(action, target.serialize());
+    };
+
     this.events = {
       "submit##form": this.saveProtocol
     };
@@ -122,6 +127,9 @@
       }
       moveCaretToEnd(toElement[0]);
     });
+
+    var protocolController = new ProtocolController();
+
   }
 
   $(function() {

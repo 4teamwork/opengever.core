@@ -122,43 +122,7 @@
 
   }
 
-  $(function() {
-
-    if(!$("#opengever_meeting_protocol").length) {
-      return false;
-    }
-
-    var currentMeeting = $(".protocol-navigation").data().meeting;
-    var createdAt = new Date($(".protocol-navigation").data().modified).getTime();
-
-    var protocolSynchronizer = new Synchronizer({ target: "textarea" });
-    var meetingStorage = new MeetingStorage(currentMeeting);
-
-    var updateAutosize = function() {
-      global.autosize.update(document.querySelectorAll(protocolSynchronizer.options.target));
-    };
-
-    var parseProposal = function(expression) { return expression.split("-"); };
-
-    var syncProtocol = function(target) {
-      var proposalExpression = parseProposal(target.id);
-      var text = target.value;
-      meetingStorage.addOrUpdateUnit(proposalExpression[1], proposalExpression[2], text);
-      meetingStorage.push();
-    };
-
-    protocolSynchronizer.onSync(syncProtocol);
-    protocolSynchronizer.observe();
-
-    meetingStorage.pull();
-
-    if(createdAt < meetingStorage.currentMeeting.revision) {
-      meetingStorage.restore();
-      updateAutosize();
-    }
-
-    $("#form-buttons-save").on("click", function() { meetingStorage.deleteCurrentMeeting(); });
-
-  });
+  window.MeetingStorage = MeetingStorage;
+  window.Synchronizer = Synchronizer;
 
 }(window, jQuery));
