@@ -348,4 +348,13 @@
         directory="profiles/4603"
         />
 
+    <!-- 4602 -> 4603 -->
+    <upgrade-step:importProfile
+        title="Resolve javascript dependencies"
+        profile="opengever.base:default"
+        source="4603"
+        destination="4604"
+        directory="profiles/4604"
+        />
+
 </configure>

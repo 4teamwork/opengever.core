@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<object name="portal_javascripts" meta_type="JavaScripts Registry">
+
+    <javascript id="++resource++opengever.base/handlebars.min.js"
+                insert-after="++resource++plone.app.jquery.js" />
+
+    <javascript id="++resource++opengever.base/notify.js"
+                insert-after="++resource++opengever.base/handlebars.min.js" />
+
+    <javascript id="++resource++opengever.base/MessageFactory.js"
+                insert-after="++resource++opengever.base/notify.js" />
+
+    <javascript id="++resource++opengever.base/Controller.js"
+                insert-after="++resource++opengever.base/MessageFactory.js" />
+
+    <javascript id="++resource++opengever.base/Storage.js"
+                insert-after="++resource++opengever.base/Controller.js" />
+
+</object>
