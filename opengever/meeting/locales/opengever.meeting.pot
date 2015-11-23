@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-11-19 08:34+0000\n"
+"POT-Creation-Date: 2015-11-23 10:38+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -250,11 +250,11 @@ msgid "Proposals:"
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:131
-#: ./opengever/meeting/model/meeting.py:144
+#: ./opengever/meeting/model/meeting.py:162
 msgid "Protocol"
 msgstr ""
 
-#: ./opengever/meeting/model/meeting.py:147
+#: ./opengever/meeting/model/meeting.py:165
 msgid "Protocol Excerpt"
 msgstr ""
 
@@ -379,7 +379,7 @@ msgstr ""
 
 #. Default: "Close meeting"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:44
-#: ./opengever/meeting/model/meeting.py:70
+#: ./opengever/meeting/model/meeting.py:72
 msgid "close_meeting"
 msgstr ""
 
@@ -389,7 +389,7 @@ msgid "close_period"
 msgstr ""
 
 #. Default: "Closed"
-#: ./opengever/meeting/model/meeting.py:63
+#: ./opengever/meeting/model/meeting.py:65
 #: ./opengever/meeting/model/period.py:21
 msgid "closed"
 msgstr ""
@@ -601,6 +601,11 @@ msgstr ""
 msgid "label_decision"
 msgstr ""
 
+#. Default: "Decision number"
+#: ./opengever/meeting/proposal.py:191
+msgid "label_decision_number"
+msgstr ""
+
 #. Default: "delete this agenda item"
 #: ./opengever/meeting/browser/meetings/meeting.py:326
 msgid "label_delete_action"
@@ -749,10 +754,6 @@ msgstr ""
 msgid "label_presidency"
 msgstr ""
 
-#: ./opengever/meeting/proposal.py:252
-msgid "label_proposal"
-msgstr ""
-
 #. Default: "Proposed action"
 #: ./opengever/meeting/browser/meetings/templates/protocol.pt:44
 #: ./opengever/meeting/proposal.py:59
@@ -859,7 +860,7 @@ msgid "message_record_created"
 msgstr ""
 
 #. Default: "The meeting ${title} has been successfully closed, the excerpts have been generated and sent back to the initial dossier."
-#: ./opengever/meeting/command.py:492
+#: ./opengever/meeting/command.py:496
 msgid "msg_meeting_successfully_closed"
 msgstr ""
 
@@ -903,7 +904,7 @@ msgid "participants"
 msgstr ""
 
 #. Default: "Pending"
-#: ./opengever/meeting/model/meeting.py:62
+#: ./opengever/meeting/model/meeting.py:64
 #: ./opengever/meeting/model/proposal.py:95
 msgid "pending"
 msgstr ""

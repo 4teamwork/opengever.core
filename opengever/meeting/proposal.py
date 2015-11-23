@@ -187,6 +187,9 @@ class ProposalBase(ModelContainer):
 
             {'label': _('label_workflow_state', default=u'State'),
              'value': self.get_state().title},
+
+            {'label': _('label_decision_number', default=u'Decision number'),
+             'value': model.get_decision_number()},
         ]
 
     def can_execute_transition(self, name):

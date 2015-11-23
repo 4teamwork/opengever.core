@@ -147,6 +147,11 @@ class Proposal(Base):
             return self.agenda_item.decision
         return None
 
+    def get_decision_number(self):
+        if self.agenda_item:
+            return self.agenda_item.decision_number
+        return None
+
     def get_url(self):
         return self._get_url(self.get_admin_unit(), self.physical_path)
 

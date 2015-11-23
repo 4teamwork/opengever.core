@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-11-19 08:34+0000\n"
+"POT-Creation-Date: 2015-11-23 10:38+0000\n"
 "PO-Revision-Date: 2015-04-10 09:01+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -251,11 +251,11 @@ msgid "Proposals:"
 msgstr "Anträge"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:131
-#: ./opengever/meeting/model/meeting.py:144
+#: ./opengever/meeting/model/meeting.py:162
 msgid "Protocol"
 msgstr "Protokoll"
 
-#: ./opengever/meeting/model/meeting.py:147
+#: ./opengever/meeting/model/meeting.py:165
 msgid "Protocol Excerpt"
 msgstr "Protokollauszug"
 
@@ -380,7 +380,7 @@ msgstr "Anhänge einreichen"
 
 #. Default: "Close meeting"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:44
-#: ./opengever/meeting/model/meeting.py:70
+#: ./opengever/meeting/model/meeting.py:72
 msgid "close_meeting"
 msgstr "Abschliessen"
 
@@ -390,7 +390,7 @@ msgid "close_period"
 msgstr "Periode abschliessen"
 
 #. Default: "Closed"
-#: ./opengever/meeting/model/meeting.py:63
+#: ./opengever/meeting/model/meeting.py:65
 #: ./opengever/meeting/model/period.py:21
 msgid "closed"
 msgstr "geschlossen"
@@ -602,6 +602,11 @@ msgstr "Bis"
 msgid "label_decision"
 msgstr "Beschluss"
 
+#. Default: "Decision number"
+#: ./opengever/meeting/proposal.py:191
+msgid "label_decision_number"
+msgstr "Beschlussnummer"
+
 #. Default: "delete this agenda item"
 #: ./opengever/meeting/browser/meetings/meeting.py:326
 msgid "label_delete_action"
@@ -750,11 +755,6 @@ msgstr "Teilnehmende"
 msgid "label_presidency"
 msgstr "Vorsitz"
 
-#. Default: "Proposal"
-#: ./opengever/meeting/proposal.py:252
-msgid "label_proposal"
-msgstr "Antrag"
-
 #. Default: "Proposed action"
 #: ./opengever/meeting/browser/meetings/templates/protocol.pt:44
 #: ./opengever/meeting/proposal.py:59
@@ -862,7 +862,7 @@ msgid "message_record_created"
 msgstr "Eintrag erzeugt"
 
 #. Default: "The meeting ${title} has been successfully closed, the excerpts have been generated and sent back to the initial dossier."
-#: ./opengever/meeting/command.py:492
+#: ./opengever/meeting/command.py:496
 msgid "msg_meeting_successfully_closed"
 msgstr "Die Sitzung ${title} wurde erfolgreich abgeschlossen, die Protokollauszüge wurden generiert und an die Urprungsdossiers zurückgespielt."
 
@@ -906,7 +906,7 @@ msgid "participants"
 msgstr "Teilnehmende"
 
 #. Default: "Pending"
-#: ./opengever/meeting/model/meeting.py:62
+#: ./opengever/meeting/model/meeting.py:64
 #: ./opengever/meeting/model/proposal.py:95
 msgid "pending"
 msgstr "In Bearbeitung"
