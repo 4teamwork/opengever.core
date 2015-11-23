@@ -247,11 +247,7 @@ class SubmittedProposal(ProposalBase):
             {
                 'label': _('label_considerations', default=u"Considerations"),
                 'value': model.considerations,
-            },
-            {
-                'label': _('label_proposal'),
-                'value': model.proposed_action,
-            },
+            }
         ])
         return data
 
