@@ -85,6 +85,7 @@ class Meeting(Base):
                             default=workflow.default_state.name)
     modified = Column(UTCDateTime(timezone=True), nullable=False,
                       default=utcnow_tz_aware)
+    meeting_number = Column(Integer)
 
     presidency = relationship(
         'Member', primaryjoin="Member.member_id==Meeting.presidency_id")

@@ -526,4 +526,14 @@
         profile="opengever.meeting:default"
         />
 
+    <!-- 4621 -> 4622 -->
+    <genericsetup:upgradeStep
+        title="Add meeting number."
+        description=""
+        source="4621"
+        destination="4622"
+        handler="opengever.meeting.upgrades.to4622.AddMeetingNumber"
+        profile="opengever.meeting:default"
+        />
+
 </configure>
