@@ -5,6 +5,10 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Add decision number to period and agenda-item.
+  Each agenda-item is assigned a decision number when its meeting is closed. The decision number is unique per period.
+  [deiferni]
+
 - Add periods to committees. A period represents a timespan similar to a fiscal year.
 
     - Display the current period on committee overview.
