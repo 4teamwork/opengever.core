@@ -459,6 +459,7 @@ class CloseMeetingCommand(object):
         self.meeting = meeting
 
     def execute(self):
+        self.meeting.generate_meeting_number()
         self.generate_decision_numbers()
         GenerateExcerptsCommand(self.meeting).execute()
         DecideProposalsCommand(self.meeting).execute()

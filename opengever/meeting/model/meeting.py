@@ -121,6 +121,17 @@ class Meeting(Base):
     def __repr__(self):
         return '<Meeting at "{}">'.format(self.start)
 
+    def generate_meeting_number(self):
+        """Generate meeting number for self.
+
+        This method locks the current period of this meeting to protect its
+        meeting_sequence_number against concurrent updates.
+
+        """
+        period = Period.query.get_current_for_update(self.committee)
+
+        self.meeting_number = period.get_next_meeting_sequence_number()
+
     def generate_decision_numbers(self):
         """Generate decision numbers for each agenda item of this meeting.
 
@@ -128,8 +139,7 @@ class Meeting(Base):
         decision_sequence_number against concurrent updates.
 
         """
-        period = Period.query.active().by_committee(
-            self.committee).with_for_update().one()
+        period = Period.query.get_current_for_update(self.committee)
 
         for agenda_item in self.agenda_items:
             next_decision_number = period.get_next_decision_sequence_number()

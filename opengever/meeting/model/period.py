@@ -88,3 +88,7 @@ class Period(Base):
     def get_next_decision_sequence_number(self):
         self.decision_sequence_number += 1
         return self.decision_sequence_number
+
+    def get_next_meeting_sequence_number(self):
+        self.meeting_sequence_number += 1
+        return self.meeting_sequence_number
