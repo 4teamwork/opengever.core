@@ -124,6 +124,14 @@
                   <a tal:attributes="href meeting/get_dossier_url"
                      tal:content="python: meeting.get_dossier().title"></a>
                 </dd>
+
+                <dt id="meeting_number" i18n:attributes="title" title="Meeting number"></dt>
+                <dd>
+                  <tal:block tal:condition="meeting/meeting_number">
+                    <tal:inline i18n:translate="">Meeting number</tal:inline>:
+                    <tal:inline tal:replace="meeting/meeting_number"></tal:inline>
+                  </tal:block>
+                </dd>
               </dl>
             </div>
             <div class="list-group-item protocol"
