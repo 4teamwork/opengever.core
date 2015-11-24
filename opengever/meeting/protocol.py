@@ -93,6 +93,7 @@ class ProtocolData(object):
             'date': self.meeting.get_date(),
             'start_time': self.meeting.get_start_time(),
             'end_time': self.meeting.get_end_time(),
+            'number': self.meeting.meeting_number,
         }
 
     def add_agenda_items(self):

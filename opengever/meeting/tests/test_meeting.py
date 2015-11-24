@@ -95,7 +95,7 @@ class TestMeeting(FunctionalTestCase):
         self.assertIsNotNone(meeting.modified)
 
     @browsing
-    def test_close_meeting_generates_decision_numbers(self, browser):
+    def test_close_meeting_generates_sequence_numbers_by_period(self, browser):
         meeting = create(Builder('meeting')
                          .having(committee=self.committee_model)
                          .link_with(self.meeting_dossier))
@@ -108,3 +108,4 @@ class TestMeeting(FunctionalTestCase):
         meeting = Meeting.query.get(meeting.meeting_id)
         self.assertEqual('closed', meeting.workflow_state)
         self.assertEqual(1, meeting.agenda_items[0].decision_number)
+        self.assertEqual(1, meeting.meeting_number)

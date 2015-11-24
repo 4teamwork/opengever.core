@@ -74,3 +74,10 @@ class TestUnitMeeting(TestCase):
         self.assertEqual(2, item_2.decision_number)
         period = self.committee.periods[0]
         self.assertEqual(2, period.decision_sequence_number)
+
+    def test_generate_meeting_number(self):
+        create(Builder('period').having(committee=self.committee))
+
+        self.meeting.generate_meeting_number()
+
+        self.assertEqual(1, self.meeting.meeting_number)

@@ -41,6 +41,7 @@ class Period(Base):
     date_from = Column(Date)
     date_to = Column(Date)
     decision_sequence_number = Column(Integer, nullable=False, default=0)
+    meeting_sequence_number = Column(Integer, nullable=False, default=0)
 
     def __repr__(self):
         return '<Period {}>'.format(repr(self.title))
@@ -87,3 +88,7 @@ class Period(Base):
     def get_next_decision_sequence_number(self):
         self.decision_sequence_number += 1
         return self.decision_sequence_number
+
+    def get_next_meeting_sequence_number(self):
+        self.meeting_sequence_number += 1
+        return self.meeting_sequence_number

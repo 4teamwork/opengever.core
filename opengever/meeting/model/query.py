@@ -186,4 +186,7 @@ class PeriodQuery(BaseQuery):
     def get_current(self, committee):
         return self.active().by_committee(committee).one()
 
+    def get_current_for_update(self, committee):
+        return self.with_for_update().get_current(committee)
+
 Period.query_cls = PeriodQuery

@@ -40,7 +40,8 @@ class TestProtocolJsonData(FunctionalTestCase):
             committee=self.committee,
             participants=[self.member_peter, self.member_franz],
             other_participants=u'Hans M\xfcller\nHeidi Muster',
-            protocol_start_page_number=42))
+            protocol_start_page_number=42,
+            meeting_number=11))
 
         self.agenda_item_proposal = create(
             Builder('agenda_item').having(
@@ -95,7 +96,8 @@ class TestProtocolJsonData(FunctionalTestCase):
              'mandant': {'name': u'Client1'},
              'meeting': {'date': u'Dec 13, 2011',
                          'end_time': u'11:45 AM',
-                         'start_time': u'09:30 AM'},
+                         'start_time': u'09:30 AM',
+                         'number': 11},
              'participants': {
                 'members': [{'fullname': u'Peter Meier',
                              'role': u'F\xfcrst'},
