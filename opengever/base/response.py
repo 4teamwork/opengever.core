@@ -55,6 +55,13 @@ class JSONResponse(object):
         self.response.update(kwargs)
         return self
 
+    def redirect(self, redirect_url):
+        """
+        Define redirect_url
+        """
+        self.response['redirectUrl'] = redirect_url
+        return self
+
     def proceed(self):
         """
         Set the proceed flag to True to say the client that everthing went okay.
