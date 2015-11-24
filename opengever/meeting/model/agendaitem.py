@@ -198,3 +198,8 @@ class AgendaItem(Base):
 
     def has_submitted_excerpt_document(self):
         return self.has_proposal and self.proposal.has_submitted_excerpt_document()
+
+    def generate_excerpt(self):
+        if self.has_proposal:
+            self.proposal.generate_excerpt(self)
+

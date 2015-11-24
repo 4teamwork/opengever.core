@@ -396,24 +396,6 @@ class OgCopyCommand(object):
             self.source, self.target_admin_unit_id, self.target_path)
 
 
-class GenerateExcerptsCommand(object):
-
-    def __init__(self, meeting):
-        self.meeting = meeting
-
-    def execute(self):
-        for agenda_item in self.meeting.agenda_items:
-            if agenda_item.has_proposal:
-                self.generate_excerpt(agenda_item)
-
-    def generate_excerpt(self, agenda_item):
-        proposal_obj = agenda_item.proposal.resolve_sumitted_proposal()
-        operations = ExcerptOperations([agenda_item])
-
-        CreateGeneratedDocumentCommand(
-            proposal_obj, self.meeting, operations).execute()
-
-
 class DecideProposalsCommand(object):
 
     def __init__(self, meeting):
@@ -464,10 +446,14 @@ class CloseMeetingCommand(object):
     def execute(self):
         self.meeting.generate_meeting_number()
         self.generate_decision_numbers()
-        GenerateExcerptsCommand(self.meeting).execute()
+        self.generate_excerpts()
         DecideProposalsCommand(self.meeting).execute()
         self.update_protocol_document()
         self.unlock_protocol_document()
+
+    def generate_excerpts(self):
+        for agenda_item in self.meeting.agenda_items:
+            agenda_item.generate_excerpt()
 
     def update_protocol_document(self):
         """Update or create the protocol."""

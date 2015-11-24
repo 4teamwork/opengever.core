@@ -235,3 +235,12 @@ class Proposal(Base):
 
     def resolve_proposal(self):
         return self.oguid.resolve_object()
+
+    def generate_excerpt(self, agenda_item):
+        from opengever.meeting.command import CreateGeneratedDocumentCommand
+        from opengever.meeting.command import ExcerptOperations
+        proposal_obj = self.resolve_sumitted_proposal()
+        operations = ExcerptOperations([agenda_item])
+        CreateGeneratedDocumentCommand(
+            proposal_obj, agenda_item.meeting, operations).execute()
+
