@@ -1,23 +1,26 @@
 from AccessControl import Unauthorized
 from AccessControl.SecurityManagement import getSecurityManager
-from OFS.interfaces import IObjectClonedEvent
-from Products.CMFCore.interfaces import ISiteRoot
-from Products.PluggableAuthService.interfaces.events import IUserLoggedOutEvent
-from ZPublisher.interfaces import IPubAfterTraversal
 from five import grok
+from OFS.interfaces import IObjectClonedEvent
 from opengever.base import _
 from plone.app.lockingbehavior.behaviors import ILocking
 from plone.app.relationfield.event import extract_relations
 from plone.dexterity.interfaces import IDexterityContent
 from plone.dexterity.interfaces import IEditBegunEvent
 from plone.protect.interfaces import IDisableCSRFProtection
+from Products.CMFCore.interfaces import ISiteRoot
+from Products.PluggableAuthService.interfaces.events import IUserLoggedOutEvent
 from z3c.relationfield.event import _setRelation
 from zope.annotation import IAnnotations
 from zope.component.hooks import getSite
-from zope.interface import Interface
+from zope.globalrequest import getRequest
+from zope.i18n import translate
 from zope.interface import alsoProvides
+from zope.interface import Interface
 from zope.lifecycleevent.interfaces import IObjectAddedEvent
 from zope.lifecycleevent.interfaces import IObjectCreatedEvent
+from ZPublisher.interfaces import IPubAfterTraversal
+
 
 ALLOWED_VIEWS = set([
     'customlogo',
@@ -51,8 +54,9 @@ def create_initial_version(obj, event):
     history = pr.getHistory(obj)
 
     if history is not None and not len(history) > 0:
-        comment = _(u'label_initial_version_copied',
-                    default="Initial version (document copied)")
+        comment = translate(_(u'label_initial_version_copied',
+                            default="Initial version (document copied)"),
+                            context=getRequest())
         # Create an initial version
         pr._recursiveSave(obj, {}, pr._prepareSysMetadata(comment),
             autoapply=pr.autoapply)
