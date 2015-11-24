@@ -19,6 +19,8 @@ from plone import api
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.locking.interfaces import ILockable
 from zope.component import getUtility
+from zope.globalrequest import getRequest
+from zope.i18n import translate
 import json
 
 
@@ -235,9 +237,10 @@ class UpdateGeneratedDocumentCommand(object):
         document.file.data = self.generate_file_data()
 
         repository = api.portal.get_tool('portal_repository')
-        comment = _(u'Updated with a newer generated version from meeting '
-                    '${title}.',
-                    mapping=dict(title=self.meeting.get_title()))
+        comment = translate(
+            _(u'Updated with a newer generated version from meeting ${title}.',
+              mapping=dict(title=self.meeting.get_title())),
+            context=getRequest())
         repository.save(obj=document, comment=comment)
 
         new_version = document.get_current_version()
