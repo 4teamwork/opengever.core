@@ -19,6 +19,7 @@ from z3c.relationfield.schema import RelationList
 from zExceptions import Unauthorized
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
+from zope.i18n import translate
 from zope.schema import TextLine
 import json
 
@@ -178,8 +179,10 @@ class ReceiveObject(grok.View):
         portal_path = '/'.join(api.portal.get().getPhysicalPath())
         intids = getUtility(IIntIds)
         repository = api.portal.get_tool('portal_repository')
-        comment = _(u"Updated with a newer docment version from proposal's "
-                    "dossier.")
+        comment = translate(
+            _(u"Updated with a newer docment version from proposal's "
+                "dossier."),
+            context=self.request)
         repository.save(obj=self.context, comment=comment)
 
         data = {
