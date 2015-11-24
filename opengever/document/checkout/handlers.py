@@ -6,6 +6,8 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFEditions.interfaces.IArchivist import ArchivistUnregisteredError
 from Products.CMFEditions.interfaces.IModifier import FileTooLargeToVersionError
 from Products.CMFPlone.utils import base_hasattr
+from zope.globalrequest import getRequest
+from zope.i18n import translate
 from zope.lifecycleevent.interfaces import IObjectAddedEvent
 
 
@@ -42,6 +44,7 @@ def create_initial_version(context):
     else:
         change_note = _(u'initial_document_version_change_note',
                         default=u'Initial version')
+    change_note = translate(change_note, context=getRequest())
 
     changed = False
     if not base_hasattr(context, 'version_id'):
