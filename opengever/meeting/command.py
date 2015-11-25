@@ -405,27 +405,12 @@ class CloseMeetingCommand(object):
         self.meeting.generate_meeting_number()
         self.generate_decision_numbers()
         self.decide_agenda_items()
-        self.update_protocol_document()
+        self.meeting.update_protocol_document()
         self.unlock_protocol_document()
 
     def decide_agenda_items(self):
         for agenda_item in self.meeting.agenda_items:
             agenda_item.decide()
-
-    def update_protocol_document(self):
-        """Update or create the protocol."""
-
-        operations = ProtocolOperations()
-
-        if self.meeting.has_protocol_document():
-            command = UpdateGeneratedDocumentCommand(
-                self.meeting.protocol_document, operations)
-        else:
-            command = CreateGeneratedDocumentCommand(
-                self.meeting.get_dossier(), self.meeting,
-                operations, lock_document_after_creation=True)
-
-        command.execute()
 
     def generate_decision_numbers(self):
         self.meeting.generate_decision_numbers()

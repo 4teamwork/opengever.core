@@ -145,6 +145,26 @@ class Meeting(Base):
             next_decision_number = period.get_next_decision_sequence_number()
             agenda_item.decision_number = next_decision_number
 
+    def update_protocol_document(self):
+        """Update or create meeting's protocol."""
+
+        # XXX Import problems, should be solved when be finished
+        # with command rework
+        from opengever.meeting.command import CreateGeneratedDocumentCommand
+        from opengever.meeting.command import ProtocolOperations
+        from opengever.meeting.command import UpdateGeneratedDocumentCommand
+
+        operations = ProtocolOperations()
+        if self.has_protocol_document():
+            command = UpdateGeneratedDocumentCommand(
+                self.protocol_document, operations)
+        else:
+            command = CreateGeneratedDocumentCommand(
+                self.get_dossier(), self, operations,
+                lock_document_after_creation=True)
+
+        command.execute()
+
     @property
     def css_class(self):
         return 'contenttype-opengever-meeting-meeting'
