@@ -5,6 +5,10 @@ Changelog
 4.5.8 (unreleased)
 ------------------
 
+- Fixes activity upgradestep for mysql. Drop foreign key first before droping
+  the column when using mysql as OGDS backend.
+  [phgross]
+
 - Extend whitelist for anonymous access on siteroot.
   [lgraf, phgross]
 
