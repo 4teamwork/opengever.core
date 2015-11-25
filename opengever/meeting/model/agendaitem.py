@@ -1,5 +1,10 @@
 from opengever.base.model import Base
 from opengever.base.model import create_session
+from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
+from opengever.meeting import _
+from opengever.meeting.workflow import State
+from opengever.meeting.workflow import Transition
+from opengever.meeting.workflow import Workflow
 from opengever.ogds.models.types import UnicodeCoercingText
 from sqlalchemy import Boolean
 from sqlalchemy import Column
@@ -15,10 +20,24 @@ class AgendaItem(Base):
     """An item must either have a reference to a proposal or a title.
 
     """
+
     __tablename__ = 'agendaitems'
+
+    # workflow definition
+    STATE_PENDING = State('pending', is_default=True,
+                          title=_('pending', default='Pending'))
+    STATE_DECIDED = State('decided', title=_('decided', default='Decided'))
+
+    workflow = Workflow(
+        [STATE_PENDING, STATE_DECIDED],
+        [Transition('pending', 'decided',
+                    title=_('decide', default='Decide'))]
+    )
 
     agenda_item_id = Column("id", Integer, Sequence("agendaitems_id_seq"),
                             primary_key=True)
+    workflow_state = Column(String(WORKFLOW_STATE_LENGTH), nullable=False,
+                            default=workflow.default_state.name)
     proposal_id = Column(Integer, ForeignKey('proposals.id'))
     proposal = relationship("Proposal", uselist=False,
                             backref=backref('agenda_item', uselist=False))
