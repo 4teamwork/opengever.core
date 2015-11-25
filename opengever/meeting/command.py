@@ -10,8 +10,8 @@ from opengever.locking.lock import SYS_LOCK
 from opengever.meeting import _
 from opengever.meeting.model import GeneratedExcerpt
 from opengever.meeting.model import GeneratedProtocol
-from opengever.meeting.model import proposalhistory
-from opengever.meeting.model import SubmittedDocument
+from opengever.meeting.model.proposalhistory import Submitted, DocumentUpdated, DocumentSubmitted
+from opengever.meeting.model.submitteddocument import SubmittedDocument
 from opengever.meeting.protocol import ExcerptProtocolData
 from opengever.meeting.protocol import ProtocolData
 from opengever.meeting.sablon import Sablon
@@ -271,7 +271,7 @@ class CreateSubmittedProposalCommand(object):
             self.admin_unit_id, '@@create_submitted_proposal', data=request_data)
 
         self.submitted_proposal_path = response['path']
-        create_session().add(proposalhistory.Submitted(proposal=model))
+        create_session().add(Submitted(proposal=model))
 
 
 class NullUpdateSubmittedDocumentCommand(object):
@@ -313,7 +313,7 @@ class UpdateSubmittedDocumentCommand(object):
             self.proposal, self.document)
         submitted_document.submitted_version = submitted_version
 
-        session.add(proposalhistory.DocumentUpdated(
+        session.add(DocumentUpdated(
             proposal=proposal_model,
             submitted_document=submitted_document,
             submitted_version=submitted_version,
@@ -373,7 +373,7 @@ class CopyProposalDocumentCommand(object):
                                 submitted_version=submitted_version)
         session.add(doc)
 
-        session.add(proposalhistory.DocumentSubmitted(
+        session.add(DocumentSubmitted(
             proposal=proposal_model,
             submitted_document=doc,
             submitted_version=submitted_version,

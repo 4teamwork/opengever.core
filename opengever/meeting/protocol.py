@@ -1,5 +1,5 @@
 from opengever.meeting import _
-from opengever.meeting.model import Membership
+from opengever.meeting.model.membership import Membership
 from opengever.ogds.base.utils import get_current_admin_unit
 from zope.globalrequest import getRequest
 from zope.i18n import translate

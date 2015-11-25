@@ -4,6 +4,9 @@ from opengever.base.oguid import Oguid
 from opengever.base.utils import escape_html
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
+from opengever.meeting.command import CreateGeneratedDocumentCommand
+from opengever.meeting.command import ExcerptOperations
+from opengever.meeting.command import OgCopyCommand
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import GeneratedExcerpt
 from opengever.meeting.model import proposalhistory
@@ -238,8 +241,6 @@ class Proposal(Base):
         return self.oguid.resolve_object()
 
     def generate_excerpt(self, agenda_item):
-        from opengever.meeting.command import CreateGeneratedDocumentCommand
-        from opengever.meeting.command import ExcerptOperations
         proposal_obj = self.resolve_sumitted_proposal()
         operations = ExcerptOperations([agenda_item])
         CreateGeneratedDocumentCommand(
@@ -267,8 +268,6 @@ class Proposal(Base):
         """Copies the submitted excerpt to the source dossier and returns
         the intid of the created document.
         """
-        from opengever.meeting.command import OgCopyCommand
-
         dossier = self.resolve_proposal().get_containing_dossier()
         response = OgCopyCommand(
             self.resolve_submitted_excerpt_document(),
