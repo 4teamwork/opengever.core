@@ -406,7 +406,7 @@ class CloseMeetingCommand(object):
         self.generate_decision_numbers()
         self.decide_agenda_items()
         self.meeting.update_protocol_document()
-        self.unlock_protocol_document()
+        self.meeting.unlock_protocol_document()
 
     def decide_agenda_items(self):
         for agenda_item in self.meeting.agenda_items:
@@ -414,15 +414,6 @@ class CloseMeetingCommand(object):
 
     def generate_decision_numbers(self):
         self.meeting.generate_decision_numbers()
-
-    def unlock_protocol_document(self):
-        if not self.meeting.protocol_document:
-            return
-
-        document = self.meeting.protocol_document.resolve_document()
-        lockable = ILockable(document)
-        lockable.unlock(SYS_LOCK)
-        assert not lockable.locked(), 'unexpected: could not remove lock'
 
     def show_message(self):
         msg = _(u'msg_meeting_successfully_closed',

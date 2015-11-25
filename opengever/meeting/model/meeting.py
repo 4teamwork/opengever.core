@@ -165,6 +165,12 @@ class Meeting(Base):
 
         command.execute()
 
+    def unlock_protocol_document(self):
+        if not self.protocol_document:
+            return
+
+        self.protocol_document.unlock_document()
+
     @property
     def css_class(self):
         return 'contenttype-opengever-meeting-meeting'
