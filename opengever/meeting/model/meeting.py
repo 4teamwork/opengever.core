@@ -48,14 +48,15 @@ class PendingClosedTransition(Transition):
     def execute(self, obj, model):
         assert self.can_execute(model)
 
-        # Has to be done because of circular imports between Commands
-        # and Models.
-        from opengever.meeting.command import CloseMeetingCommand
-        command = CloseMeetingCommand(model)
-        command.execute()
-        command.show_message()
+        model.close()
 
-        model.workflow_state = self.state_to
+        msg = _(u'msg_meeting_successfully_closed',
+                default=u'The meeting ${title} has been successfully closed, '
+                'the excerpts have been generated and sent back to the '
+                'initial dossier.',
+                mapping=dict(title=model.get_title()))
+
+        api.portal.show_message(msg, api.portal.get().REQUEST)
 
 
 class Meeting(Base):
@@ -170,6 +171,27 @@ class Meeting(Base):
             return
 
         self.protocol_document.unlock_document()
+
+    def decide(self):
+        for agenda_item in self.agenda_items:
+            agenda_item.decide()
+
+    def close(self):
+        """ Closes a meeting means set the meeting in the closed state and ...
+
+         - generate and set the meeting number
+         - generate decision numbers for each agenda_item
+         - decide each agenda item (generates proposal excerpt
+           and change workflow state)
+         - update and unlock the protocol document
+        """
+
+        self.generate_meeting_number()
+        self.generate_decision_numbers()
+        self.decide()
+        self.update_protocol_document()
+        self.unlock_protocol_document()
+        self.workflow_state = 'closed'
 
     @property
     def css_class(self):

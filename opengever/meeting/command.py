@@ -394,32 +394,3 @@ class OgCopyCommand(object):
     def execute(self):
         return Transporter().transport_to(
             self.source, self.target_admin_unit_id, self.target_path)
-
-
-class CloseMeetingCommand(object):
-
-    def __init__(self, meeting):
-        self.meeting = meeting
-
-    def execute(self):
-        self.meeting.generate_meeting_number()
-        self.generate_decision_numbers()
-        self.decide_agenda_items()
-        self.meeting.update_protocol_document()
-        self.meeting.unlock_protocol_document()
-
-    def decide_agenda_items(self):
-        for agenda_item in self.meeting.agenda_items:
-            agenda_item.decide()
-
-    def generate_decision_numbers(self):
-        self.meeting.generate_decision_numbers()
-
-    def show_message(self):
-        msg = _(u'msg_meeting_successfully_closed',
-                default=u'The meeting ${title} has been successfully closed, '
-                'the excerpts have been generated and sent back to the '
-                'initial dossier.',
-                mapping=dict(title=self.meeting.get_title()))
-
-        api.portal.show_message(msg, api.portal.get().REQUEST)
