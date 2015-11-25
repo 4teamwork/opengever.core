@@ -6,8 +6,11 @@ from opengever.meeting.model import Meeting
 from opengever.meeting.model.agendaitem import AgendaItem
 from opengever.meeting.wrapper import MeetingWrapper
 from opengever.testing import FunctionalTestCase
+from z3c.relationfield.relation import RelationValue
 from zExceptions import NotFound
 from zExceptions import Unauthorized
+from zope.component import getUtility
+from zope.intid.interfaces import IIntIds
 import json
 
 
@@ -25,8 +28,8 @@ class TestAgendaItem(FunctionalTestCase):
             Builder('dossier').within(self.repository_folder))
         self.meeting_dossier = create(
             Builder('meeting_dossier').within(self.repository_folder))
-        container = create(Builder('committee_container'))
-        self.committee = create(Builder('committee').within(container))
+        self.container = create(Builder('committee_container'))
+        self.committee = create(Builder('committee').within(self.container))
         self.meeting = create(Builder('meeting')
                               .having(committee=self.committee.load_model())
                               .link_with(self.meeting_dossier))
@@ -34,24 +37,11 @@ class TestAgendaItem(FunctionalTestCase):
         self.meeting_wrapper = MeetingWrapper.wrap(self.committee, self.meeting)
 
     def setup_proposal(self):
-        root, folder = create(Builder('repository_tree'))
-        dossier = create(Builder('dossier').within(folder))
         proposal = create(Builder('proposal')
-                          .within(dossier)
+                          .within(self.dossier)
                           .having(committee=self.committee.load_model())
                           .as_submitted())
-
         return proposal
-
-    def setup_proposal_agenda_item(self, browser):
-        proposal = self.setup_proposal()
-        proposal_model = proposal.load_model()
-
-        browser.login().open(self.meeting.get_url())
-
-        form = browser.css('#schedule_proposal').first
-        form.fill({'proposal_id': str(proposal_model.proposal_id)}).submit()
-        return proposal.load_model().agenda_item
 
 
 class TestAgendaItemEdit(TestAgendaItem):
@@ -142,6 +132,74 @@ class TestAgendaItemDelete(TestAgendaItem):
             browser.login().open(
                 self.meeting_wrapper,
                 view='agenda_items/{}/delete'.format(item.agenda_item_id))
+
+
+class TestAgendaItemDecide(TestAgendaItem):
+
+    def setup_excerpt_template(self):
+        templates = create(Builder('templatedossier'))
+        sablon_template = create(
+            Builder('sablontemplate')
+            .within(templates)
+            .with_asset_file('sablon_template.docx'))
+
+        self.container.excerpt_template = RelationValue(
+            getUtility(IIntIds).getId(sablon_template))
+
+    @browsing
+    def test_decide_agenda_item(self, browser):
+        item = create(Builder('agenda_item').having(
+            title=u'foo', meeting=self.meeting))
+
+        browser.login().open(
+            self.meeting_wrapper,
+            view='agenda_items/{}/decide'.format(item.agenda_item_id))
+
+        self.assertEquals('decided', AgendaItem.query.first().workflow_state)
+        self.assertEquals([{u'message': u'Agenda Item decided.',
+                            u'messageClass': u'info',
+                            u'messageTitle': u'Information'}],
+                          browser.json.get('messages'))
+
+    @browsing
+    def test_decide_proposal_agenda_item(self, browser):
+        self.setup_excerpt_template()
+        proposal = self.setup_proposal()
+
+        # schedule
+        view = 'unscheduled_proposals/{}/schedule'.format(
+            proposal.load_model().proposal_id)
+        browser.login().open(self.meeting_wrapper, view=view)
+
+        item = AgendaItem.query.first()
+        browser.login().open(
+            self.meeting_wrapper,
+            view='agenda_items/{}/decide'.format(item.agenda_item_id))
+
+        self.assertEquals('decided', AgendaItem.query.first().workflow_state)
+        self.assertEquals(
+            [{u'message': u'Agenda Item decided and excerpt generated.',
+              u'messageClass': u'info',
+              u'messageTitle': u'Information'}],
+            browser.json.get('messages'))
+
+    @browsing
+    def test_raises_not_found_for_invalid_agenda_item_id(self, browser):
+        with self.assertRaises(NotFound):
+            browser.login().open(self.meeting_wrapper,
+                                 view='agenda_items/12345/decide')
+
+    @browsing
+    def test_update_agenda_item_raise_unauthorized_when_meeting_is_not_editable(self, browser):
+        item = create(Builder('agenda_item').having(
+            title=u'foo', meeting=self.meeting))
+
+        self.meeting.workflow_state = 'closed'
+
+        with self.assertRaises(Unauthorized):
+            browser.login().open(
+                self.meeting_wrapper,
+                view='agenda_items/{}/decide'.format(item.agenda_item_id))
 
 
 class TestAgendaItemUpdateOrder(TestAgendaItem):

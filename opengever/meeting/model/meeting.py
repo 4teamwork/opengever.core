@@ -170,6 +170,9 @@ class Meeting(Base):
         self.protocol_document.unlock_document()
 
     def decide(self):
+        if self.workflow_state == 'decided':
+            return
+
         for agenda_item in self.agenda_items:
             agenda_item.decide()
 
