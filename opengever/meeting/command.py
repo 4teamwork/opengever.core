@@ -396,48 +396,6 @@ class OgCopyCommand(object):
             self.source, self.target_admin_unit_id, self.target_path)
 
 
-class DecideProposalsCommand(object):
-
-    def __init__(self, meeting):
-        self.meeting = meeting
-
-    def execute(self):
-        for agenda_item in self.meeting.agenda_items:
-            if not agenda_item.has_proposal:
-                continue
-
-            self.decide_proposals(agenda_item.proposal)
-
-    def decide_proposals(self, proposal):
-        document_intid = self.copy_document(proposal)
-        self.add_database_entry(proposal, document_intid)
-        self.update_state(proposal)
-
-    def add_database_entry(self, proposal, document_intid):
-        session = create_session()
-        version = proposal.submitted_excerpt_document.generated_version
-
-        excerpt = GeneratedExcerpt(
-            admin_unit_id=proposal.admin_unit_id,
-            int_id=document_intid,
-            generated_version=version)
-        session.add(excerpt)
-
-        proposal.excerpt_document = excerpt
-        session.add(proposalhistory.ProposalDecided(proposal=proposal))
-
-    def update_state(self, proposal):
-        proposal.execute_transition('scheduled-decided')
-
-    def copy_document(self, proposal):
-        dossier = proposal.resolve_proposal().get_containing_dossier()
-        response = OgCopyCommand(
-            proposal.resolve_submitted_excerpt_document(),
-            proposal.admin_unit_id,
-            '/'.join(dossier.getPhysicalPath())).execute()
-        return response['intid']
-
-
 class CloseMeetingCommand(object):
 
     def __init__(self, meeting):
@@ -446,14 +404,13 @@ class CloseMeetingCommand(object):
     def execute(self):
         self.meeting.generate_meeting_number()
         self.generate_decision_numbers()
-        self.generate_excerpts()
-        DecideProposalsCommand(self.meeting).execute()
+        self.decide_agenda_items()
         self.update_protocol_document()
         self.unlock_protocol_document()
 
-    def generate_excerpts(self):
+    def decide_agenda_items(self):
         for agenda_item in self.meeting.agenda_items:
-            agenda_item.generate_excerpt()
+            agenda_item.decide()
 
     def update_protocol_document(self):
         """Update or create the protocol."""
