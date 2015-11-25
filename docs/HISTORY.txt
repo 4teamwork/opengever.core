@@ -5,6 +5,10 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Fixes activity upgradestep for mysql. Drop foreign key first before droping
+  the column when using mysql as OGDS backend.
+  [phgross]
+
 - Add meeting number to period and meeting.
   Each meeting is assigned a meeting number when the meeting is closed. The meeting number is unique per period.
   [deiferni]

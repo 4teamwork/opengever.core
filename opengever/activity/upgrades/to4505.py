@@ -50,6 +50,10 @@ class ReplaceNotificationsWatcherRelation(SchemaMigration):
             )
 
     def remove_watcherid_column(self):
+        if self.is_mysql:
+            fk_name = self.get_foreign_key_name('notifications', 'watcher_id')
+            self.op.drop_constraint(fk_name, 'notifications', type_='foreignkey')
+
         self.op.drop_column('notifications', 'watcher_id')
 
     def make_userid_column_required(self):
