@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.5.8 (unreleased)
+4.5.8 (2015-11-25)
 ------------------
 
 - Fixes activity upgradestep for mysql. Drop foreign key first before droping
