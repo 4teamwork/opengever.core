@@ -5,10 +5,6 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
-- Fixes activity upgradestep for mysql. Drop foreign key first before droping
-  the column when using mysql as OGDS backend.
-  [phgross]
-
 - Add meeting number to period and meeting.
   Each meeting is assigned a meeting number when the meeting is closed. The meeting number is unique per period.
   [deiferni]
@@ -32,20 +28,11 @@ Changelog
 - Make sure protocol exists and is updated when closing a meeting.
   [deiferni]
 
-- Extend whitelist for anonymous access on siteroot.
-  [lgraf, phgross]
-
 - Add confirm-dialog when closing meetings.
   [deiferni]
 
-- ResponseTransporter: fix de- and encoding of deadline changes.
-  [phgross]
-
 - Simplify meeting workflow, drop state `held`.
   [deiferni]
-
-- Make sure reassign a task over the edit form creates a response and record an activity.
-  [phgross]
 
 - Fix member edit link and refactor generating breadcrumbs for models.
   [deiferni]
@@ -62,9 +49,6 @@ Changelog
 
 - Refactor meeting/protocol editing, drop duplicate forms.
   [deiferni]
-
-- Eliminate duplicate notification, about a task acceptance, when creating a successor.
-  [phgross]
 
 - Lock protocol documents while a meeting is not closed.
   [deiferni]
@@ -198,6 +182,26 @@ Changelog
 
 - Use dossier title as default title for new proposals.
   [deiferni]
+
+
+4.5.8 (2015-11-25)
+------------------
+
+- Fixes activity upgradestep for mysql. Drop foreign key first before droping
+  the column when using mysql as OGDS backend.
+  [phgross]
+
+- Extend whitelist for anonymous access on siteroot.
+  [lgraf, phgross]
+
+- ResponseTransporter: fix de- and encoding of deadline changes.
+  [phgross]
+
+- Make sure reassign a task over the edit form creates a response and record an activity.
+  [phgross]
+
+- Eliminate duplicate notification, about a task acceptance, when creating a successor.
+  [phgross]
 
 
 4.5.7 (2015-11-03)
