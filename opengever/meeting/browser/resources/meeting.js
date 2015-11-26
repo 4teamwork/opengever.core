@@ -123,9 +123,17 @@
 
     this.toggleAttachements = function(target) { target.parents("tr").toggleClass("expanded"); };
 
+    this.decide = function(target) {
+      target.addClass('loading');
+      return $.post(target.attr("href")).always(function(){
+        target.removeClass('loading');
+      });
+    };
+
     this.events = {
       "click#.delete-agenda-item": this.openModal,
       "click#.edit-agenda-item": this.showEditbox,
+      "click#.decide-agenda-item!": this.decide,
       "sortupdate##agenda_items tbody!$": this.updateSortOrder,
       "click#.toggle-attachements": this.toggleAttachements,
       "click##confirm_unschedule .confirm!$": this.unschedule,
