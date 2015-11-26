@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import Meeting
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -65,3 +66,10 @@ class TestDecideMeeting(FunctionalTestCase):
         item_a, item_b = AgendaItem.query.all()
         self.assertEquals(1, item_a.decision_number)
         self.assertEquals(2, item_b.decision_number)
+
+    @browsing
+    def test_decide_transition_is_not_visible(self, browser):
+        browser.login().open(self.meeting.get_url())
+
+        self.assertEquals(
+            ['Close meeting'], browser.css('.actionButtons a').text)
