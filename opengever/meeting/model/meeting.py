@@ -46,7 +46,9 @@ meeting_excerpts = Table(
 )
 
 
-class PendingClosedTransition(Transition):
+class CloseTransition(Transition):
+    """Used by pending-closed and decided-closed transitions.
+    """
 
     def execute(self, obj, model):
         assert self.can_execute(model)
@@ -66,15 +68,20 @@ class Meeting(Base):
 
     STATE_PENDING = State('pending', is_default=True,
                           title=_('pending', default='Pending'))
+    STATE_DECIDED = State('decided', title=_('decided', default='Decided'))
     STATE_CLOSED = State('closed', title=_('closed', default='Closed'))
 
-    workflow = Workflow([
-        STATE_PENDING,
-        STATE_CLOSED,
-        ], [
-        PendingClosedTransition('pending', 'closed',
-                                title=_('close_meeting', default='Close meeting')),
-        ])
+    workflow = Workflow(
+        [STATE_PENDING, STATE_DECIDED, STATE_CLOSED],
+        [CloseTransition(
+            'pending', 'closed',
+            title=_('close_meeting', default='Close meeting')),
+         Transition('pending', 'decided',
+                    title=_('decide', default='Decide'), visible=False),
+         CloseTransition(
+             'decided', 'closed',
+             title=_('close_meeting', default='Close meeting'))]
+    )
 
     __tablename__ = 'meetings'
 
@@ -173,8 +180,9 @@ class Meeting(Base):
         if self.workflow_state == 'decided':
             return
 
-        for agenda_item in self.agenda_items:
-            agenda_item.decide()
+        self.generate_meeting_number()
+        self.generate_decision_numbers()
+        self.workflow_state = 'decided'
 
     def close(self):
         """ Closes a meeting means set the meeting in the closed state and ...
@@ -186,9 +194,10 @@ class Meeting(Base):
          - update and unlock the protocol document
         """
 
-        self.generate_meeting_number()
-        self.generate_decision_numbers()
         self.decide()
+        for agenda_item in self.agenda_items:
+            agenda_item.decide()
+
         self.update_protocol_document()
         self.unlock_protocol_document()
         self.workflow_state = 'closed'
