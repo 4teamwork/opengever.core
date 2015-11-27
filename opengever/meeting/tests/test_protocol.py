@@ -76,13 +76,19 @@ class TestProtocol(FunctionalTestCase):
                       'Discussion': 'We should accept it',
                       'Decision': 'Accepted'}).submit()
 
+        # This redirect is done through javascript
+        browser.open(self.meeting.get_url())
+
     def setup_generated_protocol(self, browser):
         self.setup_protocol(browser)
-        browser.css('a[href*="@@generate_protocol"]').first.click()
+        browser.css('.generate-protocol').first.click()
 
     def test_default_protocol_is_configured_on_commitee_container(self):
         self.assertEqual(self.sablon_template,
                          self.committee.get_protocol_template())
+
+    def json_messages(self, browser):
+        return browser.json.get('messages', None)
 
     @browsing
     def test_protocol_template_can_be_configured_per_commitee(self, browser):
@@ -163,7 +169,16 @@ class TestProtocol(FunctionalTestCase):
                       'Copy for attention': 'Hanspeter',
                       'Protocol start-page': '10'}).submit()
 
-        self.assertEquals(['Changes saved'], info_messages())
+        self.json_messages(browser)
+
+        self.assertEquals(
+            [{
+                u'messageTitle': u'Information',
+                u'message': u'Protocol successfully changed.',
+                u'messageClass': u'info'
+            }],
+            self.json_messages(browser)
+        )
 
         meeting = Meeting.query.get(self.meeting.meeting_id)
         self.assertGreater(meeting.modified, prev_modified)
@@ -180,6 +195,9 @@ class TestProtocol(FunctionalTestCase):
         agenda_item = AgendaItem.get(self.agenda_item.agenda_item_id)
         self.assertEqual('We should accept it', agenda_item.discussion)
         self.assertEqual('Accepted', agenda_item.decision)
+
+        # This redirect is done through javascript
+        browser.open(self.meeting.get_url())
 
         self.assertEqual(self.meeting.get_url(), browser.url)
 
@@ -204,7 +222,14 @@ class TestProtocol(FunctionalTestCase):
                       'Participants': str(peter.member_id),
                       'Other Participants': 'Klara'}).submit()
 
-        self.assertEquals(['Changes saved'], info_messages())
+        self.assertEquals(
+            [{
+                u'messageTitle': u'Information',
+                u'message': u'Protocol successfully changed.',
+                u'messageClass': u'info'
+            }],
+            self.json_messages(browser)
+        )
 
         meeting = Meeting.query.get(self.meeting.meeting_id)
         self.assertGreater(meeting.modified, prev_modified)
@@ -267,6 +292,7 @@ class TestProtocol(FunctionalTestCase):
 
         browser.open(self.meeting.get_url())
         browser.css('a[href*="@@update_protocol"]').first.click()
+
         browser.fill({'form.widgets.method': METHOD_NEW_DOCUMENT}).submit()
 
         meeting = Meeting.get(self.meeting.meeting_id)  # refresh meeting
