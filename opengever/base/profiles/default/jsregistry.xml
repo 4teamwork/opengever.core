@@ -21,9 +21,13 @@
                 enabled="True" id="++resource++opengever.base/base.js" inline="False"
                 />
 
+    <javascript cacheable="True" compression="none" cookable="True" enabled="on"
+                expression="" id="++resource++opengever.base/handlebars.min.js"
+                inline="False" insert-after="++resource++plone.app.jquery.js" />
+
     <javascript cacheable="True" compression="none" cookable="True" expression=""
                 enabled="True" id="++resource++opengever.base/notify.js" inline="False"
-                insert-after="++resource++plone.app.jquery.js"
+                insert-after="++resource++opengever.base/handlebars.min.js"
                 />
 
     <javascript cacheable="True" compression="safe" cookable="True" expression=""
@@ -31,8 +35,13 @@
                 insert-after="++resource++opengever.base/notify.js"
                 />
 
+    <javascript cacheable="True" compression="safe" cookable="True" expression=""
+                enabled="True" id="++resource++opengever.base/Controller.js" inline="False"
+                insert-after="++resource++opengever.base/MessageFactory.js"
+                />
+
     <javascript cacheable="True" compression="none" cookable="True" enabled="on"
-                expression="" id="++resource++opengever.base/handlebars.min.js"
-                inline="False"/>
+                expression="" id="++resource++opengever.base/Storage.js" inline="False"
+                insert-after="++resource++opengever.base/Controller.js" />
 
 </object>

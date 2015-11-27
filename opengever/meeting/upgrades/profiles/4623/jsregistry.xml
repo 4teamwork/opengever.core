@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<object name="portal_javascripts" meta_type="JavaScripts Registry">
+
+    <javascript id="++resource++opengever.meeting/agendaitems.js" remove="True" />
+
+    <javascript id="++resource++opengever.meeting/jquery.autosize.js"
+                insert-after="++resource++opengever.base/Storage.js" />
+
+    <javascript id="++resource++opengever.meeting/Scrollspy.js"
+                insert-after="++resource++opengever.meeting/jquery.autosize.js" />
+
+    <javascript id="++resource++opengever.meeting/sticky_heading.js"
+                insert-after="++resource++opengever.meeting/Scrollspy.js" />
+
+    <javascript id="++resource++opengever.meeting/protocol.js"
+                insert-after="++resource++opengever.meeting/sticky_heading.js" />
+
+    <javascript id="++resource++opengever.meeting/Editbox.js"
+                insert-after="++resource++opengever.meeting/protocol.js" />
+
+    <javascript id="++resource++opengever.meeting/meeting.js"
+                insert-after="collective.js.jqueryui.custom.min.js" />
+
+</object>

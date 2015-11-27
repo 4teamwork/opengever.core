@@ -5,7 +5,9 @@
     <div id="opengever_meeting_protocol">
       <metal:use use-macro="context/@@ploneform-macros/titlelessform">
         <metal:block fill-slot="fields">
-          <div class="protocol-navigation">
+          <div class="protocol-navigation"
+               tal:attributes="data-meeting meeting/meeting_id;
+                               data-modified meeting/modified">
             <div class="list-group">
               <div class="list-group-item submit actions">
                 <div class="button-group fluid">

@@ -534,6 +534,15 @@
         destination="4622"
         handler="opengever.meeting.upgrades.to4622.AddMeetingNumber"
         profile="opengever.meeting:default"
-        />
+    />
+
+    <!-- 4622 -> 4623 -->
+    <upgrade-step:importProfile
+        title="Resolve javascript dependencies."
+        profile="opengever.meeting:default"
+        source="4622"
+        destination="4623"
+        directory="profiles/4623"
+    />
 
 </configure>
