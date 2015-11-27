@@ -21,7 +21,8 @@
            tal:attributes="data-update-agenda-item-order-url view/url_update_agenda_item_order;
                            data-list-agenda-items-url view/url_list_agenda_items;
                            data-list-unscheduled-proposals-url view/url_list_unscheduled_proposals;
-                           data-editable view/json_is_editable">
+                           data-editable view/json_is_editable;
+                           data-agendalist_editable view/json_is_agendalist_editable">
 
         <div class="overlay" id="confirm_unschedule">
           <div class="close">
@@ -179,7 +180,7 @@
         </div>
         <div class="content">
           <div class="collapsible"
-               tal:condition="meeting/is_editable">
+               tal:condition="meeting/is_agendalist_editable">
             <div class="collapsible-header">
               <button class="button fa fa-plus"></button>
               <span class="label" i18n:translate="">Agenda Items</span>
@@ -224,7 +225,7 @@
             <thead>
               <tr>
                 <th i18n:translate=""
-                    tal:condition="meeting/is_editable">Order</th>
+                    tal:condition="meeting/is_agendalist_editable">Order</th>
                 <th i18n:translate="">Number</th>
                 <th i18n:translate="">Title</th>
                 <th i18n:translate="">Documents</th>

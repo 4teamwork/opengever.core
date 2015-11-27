@@ -69,8 +69,13 @@
 
     this.fetch = function() { return $.get(viewlet.data().listAgendaItemsUrl); };
 
-    this.render = function(data) { self.outlet.html(self.template({ agendaitems: data.items,
-                                                                    editable: viewlet.data().editable })); };
+    this.render = function(data) {
+      self.outlet.html(self.template({
+        agendaitems: data.items,
+        editable: viewlet.data().editable,
+        agendalist_editable: viewlet.data().agendalist_editable
+      }));
+    };
 
     this.openModal = function(target) {
       this.currentItem = target;
