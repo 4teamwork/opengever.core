@@ -189,7 +189,9 @@
 
     this.render = function(data) { self.outlet.html(self.template({ proposals: data.items })); };
 
-    this.schedule = function(target) { return $.post(target.attr("href")); };
+    this.schedule = function(target) {
+      return $.post(target.attr("href")).done(function() { $("#filter-proposals").val(""); });
+    };
 
     this.addParagraph = function() {
       var input = $("#schedule-paragraph");
@@ -219,12 +221,21 @@
       }
     };
 
+    this.filterProposal = function(target) {
+      var pattern = target.val();
+      var result = $.grep(this.chache.items, function(item) {
+        return item.title.toLowerCase().indexOf(pattern.toLowerCase()) >= 0;
+      });
+      this.render({ items: result });
+    };
+
     this.events = {
       "click#.schedule-proposal!": this.schedule,
       "click#.schedule-paragraph": this.addParagraph,
       "click#.schedule-text": this.addText,
       "keyup##schedule-text": this.trackText,
-      "keyup##schedule-paragraph": this.trackParagraph
+      "keyup##schedule-paragraph": this.trackParagraph,
+      "keyup##filter-proposals": this.filterProposal
     };
 
     this.init();
