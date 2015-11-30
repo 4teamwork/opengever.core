@@ -75,7 +75,14 @@
       options.context.on(method, target, function(event) { self.trackEvent(event, callback, update, prevent); } );
     };
 
+    this.unregisterAction = function(action) {
+      var method = action.substring(0, action.indexOf("#"));
+      options.context.off(method);
+    };
+
     this.registerActions = function() { $.each(this.events, this.registerAction); };
+
+    this.unregisterActions = function() { $.each(this.events, this.unregisterAction); };
 
     this.init = function() {
       this.compile();
@@ -83,6 +90,7 @@
       this.registerActions();
     };
 
+    this.destroy = function() { this.unregisterActions(); };
 
   }
 
