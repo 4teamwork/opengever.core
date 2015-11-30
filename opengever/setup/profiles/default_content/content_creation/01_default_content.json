@@ -2,19 +2,22 @@
     {
         "_path": "eingangskorb",
         "_type": "opengever.inbox.inbox",
-        "title": "Eingangskorb",
+        "title_de": "Eingangskorb",
+        "title_fr": "Boîte de réception",
         "inbox_group": "og_mandant1_eingangskorb"
     },
     {
         "_path": "vorlagen",
         "_type": "opengever.dossier.templatedossier",
-        "title": "Vorlagen",
+        "title_de": "Vorlagen",
+        "title_fr": "Modèles",
         "responsible": "ogadmin"
     },
     {
         "_path": "kontakte",
         "_type": "opengever.contact.contactfolder",
-        "title": "Kontakte",
+        "title_de": "Kontakte",
+        "title_fr": "Contacts",
         "_transitions": "publish"
     }
 ]
