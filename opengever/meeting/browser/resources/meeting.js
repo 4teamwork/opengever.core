@@ -92,8 +92,6 @@
                     });
     };
 
-    var agendaItemTitleValidator = function(data) { return data.proceed; };
-
     this.showEditbox = function(target) {
       var row = target.parents("tr");
       row.removeClass("expanded");
@@ -103,21 +101,14 @@
       } else {
         source = $(".title > span", row);
       }
-      var editbox = new global.Editbox({
+      var editbox = new global.EditboxController({
         editbox: $(".edit-box", row),
         source: source,
-        trigger: target,
-        onChange: self.edit,
-        onUpdateFail: self.onUpdateFail,
-        responseValidator: agendaItemTitleValidator
+        trigger: target
       });
-
-      editbox.show();
     };
 
     this.onRender = function() { this.outlet.sortable(sortableSettings); };
-
-    this.edit = function(title) { return $.post(this.trigger.attr("href"), { title: title }); };
 
     this.onUpdateFail = function(data) { self.messageFactory.shout(data.messages); };
 

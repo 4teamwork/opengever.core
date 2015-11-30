@@ -2,76 +2,72 @@
 
   "use strict";
 
-  var Editbox = function(options) {
+  var EditboxController = function(options) {
 
-    options = $.extend({
-      trigger: ".editbox_trigger",
-      editbox: ".editbox",
-      source: ".source",
-      onChange: function(){},
-      responseValidator: function(){},
-      onUpdateFail: function(){}
-    }, options);
+    global.Controller.call(this, "", null, { context: options.editbox });
 
-    this.editbox = $(options.editbox);
-    this.trigger = $(options.trigger);
-    this.saveTrigger = $(".edit-save", this.editbox);
-    this.cancelTrigger = $(".edit-cancel", this.editbox);
-    this.input = $("input[type='text']", this.editbox);
-    this.source = $(options.source);
     var self = this;
 
+    var input = $('input[type="text"]', options.editbox);
+
+    var value = function() { return input.val().trim(); };
+
+    var source = function() { return options.source.text().trim(); };
+
     this.show = function() {
-      self.source.hide();
-      self.input.val(self.source.text().trim());
-      self.editbox.show();
-      self.input.focus();
+      options.source.hide();
+      input.val(source());
+      options.editbox.show();
+      input.focus();
     };
 
     this.hide = function() {
-      this.editbox.hide();
-      this.source.show();
+      options.editbox.hide();
+      options.source.show();
     };
 
-    this.cancel = function() { self.hide(); };
-
-    this.save = function(data) {
-      if(options.responseValidator(data)) {
-        self.source.text(self.input.val());
-        self.hide();
-      } else {
-        self.cancel();
-        options.onUpdateFail.call(self, data);
-      }
+    this.cancel = function() {
+      this.hide();
+      this.destroy();
     };
 
-    this.onChange = function() {
-      $.when(options.onChange.call(self, self.input.val()))
-            .done(self.save)
-            .fail(self.cancel);
+    this.save = function() {
+      options.source.text(value());
+      this.hide();
+      this.destroy();
     };
 
-    this.trigger.on("click", this.show);
+    this.updateValue = function() {
+      this.proceed = this.save;
+      this.remain = this.cancel;
+      return $.post(options.trigger.attr("href"), { title: value() });
+    };
 
-    this.cancelTrigger.on("click", this.cancel);
-
-    this.saveTrigger.on("click", this.onChange);
-
-    this.input.on("keyup", function(event) {
+    this.trackKey = function(target, event) {
+      var result;
       switch (event.which) {
         case $.ui.keyCode.ENTER:
-          self.onChange();
+          result = self.updateValue();
           break;
         case $.ui.keyCode.ESCAPE:
-          self.cancel();
+          result = self.cancel();
           break;
       }
-    });
+      return result;
+    };
+
+    this.events = {
+      "click#.edit-cancel": this.cancel,
+      "click#.edit-save": this.updateValue,
+      "keyup#input": this.trackKey
+    };
+
+    this.init();
+
+    this.show();
 
   };
 
-  window.Editbox = Editbox;
-
-  return Editbox;
+  window.EditboxController = EditboxController;
 
 }(window, jQuery));
