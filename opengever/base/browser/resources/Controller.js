@@ -20,11 +20,11 @@
 
     this.compile = function() { this.template = HBS.compile(template); };
 
-    this.fetch = function() {};
+    this.fetch = $.noop;
 
-    this.render = function() {};
+    this.render = $.noop;
 
-    this.onRender = function() {};
+    this.onRender = $.noop;
 
     this.refresh = function() { this.render(this.chache); };
 
@@ -40,10 +40,19 @@
 
     this.events = {};
 
+    this.proceed = $.noop;
+
+    this.remain = $.noop;
+
     this.updateConnected = function() {
       $.each(this.connectedTo, function(controllerIdx, controller) {
         controller.update();
       });
+    };
+
+    this.cleanHooks = function() {
+      this.proceed = $.noop;
+      this.remain = $.noop;
     };
 
     this.trackEvent = function(event, callback, update, prevent) {
@@ -65,7 +74,6 @@
       var prevent = Boolean(action.indexOf("$") === -1);
       options.context.on(method, target, function(event) { self.trackEvent(event, callback, update, prevent); } );
     };
-    };
 
     this.registerActions = function() { $.each(this.events, this.registerAction); };
 
@@ -74,6 +82,7 @@
       this.update();
       this.registerActions();
     };
+
 
   }
 
