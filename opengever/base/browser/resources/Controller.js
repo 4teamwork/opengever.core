@@ -4,7 +4,7 @@
 
   function Controller(template, outlet, options) {
 
-    options = $.extend({ message: true }, options);
+    options = $.extend({ message: true, context: $(document) }, options);
 
     this.outlet = outlet;
     this.template = function() {};
@@ -66,7 +66,8 @@
       var method = action.substring(0, action.indexOf("#"));
       var update = Boolean(action.indexOf("!") > -1);
       var prevent = Boolean(action.indexOf("$") === -1);
-      $(document).on(method, target, function(event) { self.trackEvent(event, callback, update, prevent); } );
+      options.context.on(method, target, function(event) { self.trackEvent(event, callback, update, prevent); } );
+    };
     };
 
     this.registerActions = function() { $.each(this.events, this.registerAction); };
