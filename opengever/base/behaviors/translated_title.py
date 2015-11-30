@@ -47,7 +47,7 @@ class ITranslatedTitle(Schema):
     searchable('title_fr')
     title_fr = TextLine(
         title=_(u'label_title_fr', default=u'Title (French)'),
-        required=False)
+        required=True)
 
 
 alsoProvides(ITranslatedTitle, IFormFieldProvider)

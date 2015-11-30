@@ -158,17 +158,21 @@ class TestTranslatedTitleAddForm(FunctionalTestCase):
 
         browser.login().open(self.portal)
         factoriesmenu.add('RepositoryRoot')
-        self.assertEquals(
-            'hidden',
-            browser.css('#form-widgets-ITranslatedTitle-title_de').first.type)
+
+        self.assertEquals([u'Title', 'Valid from', 'Valid until', 'Version'],
+                          browser.forms.get('form').css('label').text)
+        self.assertEquals('form.widgets.ITranslatedTitle.title_fr',
+                          browser.find_field_by_text('Title').get('name'))
 
         self.lang_tool.supported_langs = ['de-ch']
         transaction.commit()
         browser.login().open(self.portal)
         factoriesmenu.add('RepositoryRoot')
-        self.assertEquals(
-            'hidden',
-            browser.css('#form-widgets-ITranslatedTitle-title_fr').first.type)
+
+        self.assertEquals([u'Title', 'Valid from', 'Valid until', 'Version'],
+                          browser.forms.get('form').css('label').text)
+        self.assertEquals('form.widgets.ITranslatedTitle.title_de',
+                          browser.find_field_by_text('Title').get('name'))
 
     @browsing
     def test_label_is_renamed_to_title_for_sites_with_only_one_active_language(self, browser):
@@ -211,9 +215,10 @@ class TestTranslatedTitleEditForm(FunctionalTestCase):
         transaction.commit()
 
         browser.login().open(self.repository_root, view='edit')
-        self.assertEquals(
-            'hidden',
-            browser.css('#form-widgets-ITranslatedTitle-title_de').first.type)
+        self.assertEquals([u'Title', 'Valid from', 'Valid until', 'Version'],
+                  browser.forms.get('form').css('label').text)
+        self.assertEquals('form.widgets.ITranslatedTitle.title_fr',
+                          browser.find_field_by_text('Title').get('name'))
 
     @browsing
     def test_label_is_renamed_to_title_for_sites_with_only_one_active_language(self, browser):
