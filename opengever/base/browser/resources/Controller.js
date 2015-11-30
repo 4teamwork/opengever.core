@@ -26,6 +26,8 @@
 
     this.onRender = $.noop;
 
+    this.validator = function(data) { return data && data.proceed !== false; };
+
     this.refresh = function() { this.render(this.chache); };
 
     this.update = function() {
@@ -59,12 +61,29 @@
       if(prevent) {
         event.preventDefault();
       }
-      $.when(callback.call(self, $(event.currentTarget), event)).always(messageFunc).done(function() {
-        if(update) {
-          self.update();
-          self.updateConnected();
+
+      var eventCallback = $.when(callback.call(self, $(event.currentTarget), event));
+
+      eventCallback.pipe(function(data) {
+        var validator = new $.Deferred();
+        if(self.validator(data)) {
+          validator.resolve(data);
+        } else {
+          validator.reject(data);
         }
-      });
+        return validator.promise();
+      }).done(function() {
+          if(update) {
+            self.update();
+            self.updateConnected();
+          }
+          self.proceed();
+        })
+        .fail(function() { self.remain(); })
+        .always(function(data) {
+          self.cleanHooks();
+          messageFunc(data);
+        });
     };
 
     this.registerAction = function(action, callback) {
