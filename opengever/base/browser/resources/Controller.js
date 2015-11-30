@@ -6,6 +6,7 @@
 
     options = $.extend({ message: true, context: $(document) }, options);
 
+    template = template || "";
     this.outlet = outlet;
     this.template = function() {};
     this.messageFactory = global.MessageFactory.getInstance();
@@ -17,11 +18,7 @@
       }
     };
 
-    this.compile = function() {
-      if(template) {
-        this.template = HBS.compile(template);
-      }
-    };
+    this.compile = function() { this.template = HBS.compile(template); };
 
     this.fetch = function() {};
 
