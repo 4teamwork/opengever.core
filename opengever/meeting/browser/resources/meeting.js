@@ -132,6 +132,10 @@
       target.addClass('loading');
       return $.post(target.attr("href")).always(function(){
         target.removeClass('loading');
+      }).done(function(data){
+        if (data.redirectUrl){
+          window.location = data.redirectUrl;
+        }
       });
     };
 

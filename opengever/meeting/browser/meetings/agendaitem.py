@@ -176,6 +176,8 @@ class AgendaItemsView(BrowserView):
     def decide(self):
         """Decide the current agendaitem and decide the meeting.
         """
+        meeting_state = self.meeting.get_state()
+
         if not self.context.model.is_editable():
             raise Unauthorized("Editing is not allowed")
 
@@ -185,16 +187,19 @@ class AgendaItemsView(BrowserView):
 
         agenda_item.decide()
 
+        response = JSONResponse(self.request)
         if agenda_item.has_proposal:
-            msg = _(u'agenda_item_proposal_decided',
-                    default=u'Agenda Item decided and excerpt generated.')
+            response.info(
+                _(u'agenda_item_proposal_decided',
+                  default=u'Agenda Item decided and excerpt generated.'))
         else:
-            msg = _(u'agenda_item_decided', default=u'Agenda Item decided.')
+            response.info(_(u'agenda_item_decided',
+                            default=u'Agenda Item decided.'))
 
-        # XXX this is needed because sometimes(tests) the changes on sql objects
-        # aren't commited properly
-        transaction.commit()
-        return JSONResponse(self.request).info(msg).dump()
+        if meeting_state != self.meeting.get_state():
+            response.redirect(self.context.absolute_url())
+
+        return response.dump()
 
     def schedule_paragraph(self):
         """Schedule the given Paragraph (request parameter `title`) for the current

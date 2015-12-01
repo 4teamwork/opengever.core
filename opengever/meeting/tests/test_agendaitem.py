@@ -6,6 +6,7 @@ from opengever.meeting.model import Meeting
 from opengever.meeting.model.agendaitem import AgendaItem
 from opengever.meeting.wrapper import MeetingWrapper
 from opengever.testing import FunctionalTestCase
+from plone.protect import createToken
 from z3c.relationfield.relation import RelationValue
 from zExceptions import NotFound
 from zExceptions import Unauthorized
@@ -177,12 +178,14 @@ class TestAgendaItemDecide(TestAgendaItem):
         # schedule
         view = 'unscheduled_proposals/{}/schedule'.format(
             proposal.load_model().proposal_id)
+
         browser.login().open(self.meeting_wrapper, view=view)
 
         item = AgendaItem.query.first()
         browser.login().open(
             self.meeting_wrapper,
-            view='agenda_items/{}/decide'.format(item.agenda_item_id))
+            view='agenda_items/{}/decide'.format(item.agenda_item_id),
+            data={'_authenticator': createToken()})
 
         self.assertEquals('decided', AgendaItem.query.first().workflow_state)
         self.assertEquals(
@@ -208,6 +211,25 @@ class TestAgendaItemDecide(TestAgendaItem):
             browser.login().open(
                 self.meeting_wrapper,
                 view='agenda_items/{}/decide'.format(item.agenda_item_id))
+
+    @browsing
+    def test_redirect_to_current_view_when_meeting_has_to_be_decided_as_well(self, browser):
+        item1 = create(Builder('agenda_item')
+                       .having(title=u'foo', meeting=self.meeting))
+        item2 = create(Builder('agenda_item')
+                       .having(title=u'foo', meeting=self.meeting))
+
+        browser.login().open(
+            self.meeting_wrapper,
+            view='agenda_items/{}/decide'.format(item1.agenda_item_id))
+        self.assertEquals(self.meeting_wrapper.absolute_url(),
+                          browser.json.get('redirectUrl'))
+
+        browser.login().open(
+            self.meeting_wrapper,
+            view='agenda_items/{}/decide'.format(item2.agenda_item_id))
+
+        self.assertEquals(None, browser.json.get('redirectUrl'))
 
 
 class TestAgendaItemUpdateOrder(TestAgendaItem):
