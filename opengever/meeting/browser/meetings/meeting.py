@@ -101,7 +101,9 @@ AGENDAITEMS_TEMPLATE = '''
               <a href="{{edit_link}}" title="%(label_edit_action)s" class="button edit-agenda-item"></a>
               <a href="{{delete_link}}" title="%(label_delete_action)s" class="button delete-agenda-item"></a>
           {{/if}}
-          <a href="{{decide_link}}" title="%(label_decide_action)s" class="button decide-agenda-item"><span></span></a>
+          {{#if decide_link}}
+            <a href="{{decide_link}}" title="%(label_decide_action)s" class="button decide-agenda-item"><span></span></a>
+          {{/if}}
         </div>
       </td>
       {{/if}}

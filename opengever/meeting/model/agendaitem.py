@@ -145,6 +145,9 @@ class AgendaItem(Base):
             css_classes.append("expandable")
         return " ".join(css_classes)
 
+    def get_state(self):
+        return self.workflow.get_state(self.workflow_state)
+
     def remove(self):
         assert self.meeting.is_editable()
 
@@ -217,6 +220,9 @@ class AgendaItem(Base):
 
     def has_submitted_excerpt_document(self):
         return self.has_proposal and self.proposal.has_submitted_excerpt_document()
+
+    def is_decide_possible(self):
+        return self.get_state() == self.STATE_PENDING
 
     def decide(self):
         if self.has_proposal:
