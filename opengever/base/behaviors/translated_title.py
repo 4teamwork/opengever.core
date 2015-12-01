@@ -61,8 +61,10 @@ class TranslatedTitle(object):
         self.context = context
 
     def translated_title(self, language=None):
-        language = get_preferred_language_code()
-        title = getattr(self, 'title_%s' % language, None)
+        if not language:
+            language = get_preferred_language_code()
+
+        title = getattr(self, 'title_{}'.format(language), None)
         if not title:
             title = getattr(self,
                             'title_{}'.format(self.FALLBACK_LANGUAGE), None)

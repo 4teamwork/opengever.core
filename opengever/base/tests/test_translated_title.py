@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
+from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
@@ -72,6 +73,27 @@ class TestTranslatedTitle(FunctionalTestCase):
 
         browser.find('DE').click()
         self.assertEquals("Ablage", browser.css('h1').first.text)
+
+    @browsing
+    def test_translated_title_returns_title_in_asked_language(self, browser):
+        repository_root = create(Builder('repository_root')
+                                 .having(title_de=u"Ablage",
+                                         title_fr=u"syst\xe8me d'ordre"))
+
+        set_preferred_language(self.portal.REQUEST, 'de-ch')
+        self.assertEquals(
+            u"syst\xe8me d'ordre",
+            ITranslatedTitle(repository_root).translated_title(language='fr'))
+
+    @browsing
+    def test_translated_title_returns_title_in_fallback_language_when_asked_language_not_supported(self, browser):
+        repository_root = create(Builder('repository_root')
+                                 .having(title_de=u"Ablage",
+                                         title_fr=u"syst\xe8me d'ordre"))
+
+        self.assertEquals(
+            u"Ablage",
+            ITranslatedTitle(repository_root).translated_title(language='it'))
 
     @browsing
     def test_fallback_for_title_is_the_german_title(self, browser):
