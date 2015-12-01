@@ -6,6 +6,9 @@ from opengever.base.oguid import Oguid
 from opengever.base.utils import escape_html
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
+from opengever.meeting.command import CreateGeneratedDocumentCommand
+from opengever.meeting.command import ProtocolOperations
+from opengever.meeting.command import UpdateGeneratedDocumentCommand
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import Period
 from opengever.meeting.workflow import State
@@ -48,14 +51,15 @@ class PendingClosedTransition(Transition):
     def execute(self, obj, model):
         assert self.can_execute(model)
 
-        # Has to be done because of circular imports between Commands
-        # and Models.
-        from opengever.meeting.command import CloseMeetingCommand
-        command = CloseMeetingCommand(model)
-        command.execute()
-        command.show_message()
+        model.close()
 
-        model.workflow_state = self.state_to
+        msg = _(u'msg_meeting_successfully_closed',
+                default=u'The meeting ${title} has been successfully closed, '
+                'the excerpts have been generated and sent back to the '
+                'initial dossier.',
+                mapping=dict(title=model.get_title()))
+
+        api.portal.show_message(msg, api.portal.get().REQUEST)
 
 
 class Meeting(Base):
@@ -144,6 +148,47 @@ class Meeting(Base):
         for agenda_item in self.agenda_items:
             next_decision_number = period.get_next_decision_sequence_number()
             agenda_item.decision_number = next_decision_number
+
+    def update_protocol_document(self):
+        """Update or create meeting's protocol."""
+
+        operations = ProtocolOperations()
+        if self.has_protocol_document():
+            command = UpdateGeneratedDocumentCommand(
+                self.protocol_document, operations)
+        else:
+            command = CreateGeneratedDocumentCommand(
+                self.get_dossier(), self, operations,
+                lock_document_after_creation=True)
+
+        command.execute()
+
+    def unlock_protocol_document(self):
+        if not self.protocol_document:
+            return
+
+        self.protocol_document.unlock_document()
+
+    def decide(self):
+        for agenda_item in self.agenda_items:
+            agenda_item.decide()
+
+    def close(self):
+        """ Closes a meeting means set the meeting in the closed state and ...
+
+         - generate and set the meeting number
+         - generate decision numbers for each agenda_item
+         - decide each agenda item (generates proposal excerpt
+           and change workflow state)
+         - update and unlock the protocol document
+        """
+
+        self.generate_meeting_number()
+        self.generate_decision_numbers()
+        self.decide()
+        self.update_protocol_document()
+        self.unlock_protocol_document()
+        self.workflow_state = 'closed'
 
     @property
     def css_class(self):

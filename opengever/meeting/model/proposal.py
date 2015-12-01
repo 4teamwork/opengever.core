@@ -4,7 +4,11 @@ from opengever.base.oguid import Oguid
 from opengever.base.utils import escape_html
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
+from opengever.meeting.command import CreateGeneratedDocumentCommand
+from opengever.meeting.command import ExcerptOperations
+from opengever.meeting.command import OgCopyCommand
 from opengever.meeting.model import AgendaItem
+from opengever.meeting.model import GeneratedExcerpt
 from opengever.meeting.model import proposalhistory
 from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
@@ -235,3 +239,38 @@ class Proposal(Base):
 
     def resolve_proposal(self):
         return self.oguid.resolve_object()
+
+    def generate_excerpt(self, agenda_item):
+        proposal_obj = self.resolve_sumitted_proposal()
+        operations = ExcerptOperations([agenda_item])
+        CreateGeneratedDocumentCommand(
+            proposal_obj, agenda_item.meeting, operations).execute()
+
+    def decide(self):
+        document_intid = self.copy_excerpt_to_proposal_dossier()
+        self.register_excerpt(document_intid)
+        self.execute_transition('scheduled-decided')
+
+    def register_excerpt(self, document_intid):
+        """Adds a GeneratedExcerpt database entry and a corresponding
+        proposalhistory entry.
+        """
+        version = self.submitted_excerpt_document.generated_version
+        excerpt = GeneratedExcerpt(admin_unit_id=self.admin_unit_id,
+                                   int_id=document_intid,
+                                   generated_version=version)
+        self.session.add(excerpt)
+
+        self.excerpt_document = excerpt
+        self.session.add(proposalhistory.ProposalDecided(proposal=self))
+
+    def copy_excerpt_to_proposal_dossier(self):
+        """Copies the submitted excerpt to the source dossier and returns
+        the intid of the created document.
+        """
+        dossier = self.resolve_proposal().get_containing_dossier()
+        response = OgCopyCommand(
+            self.resolve_submitted_excerpt_document(),
+            self.admin_unit_id,
+            '/'.join(dossier.getPhysicalPath())).execute()
+        return response['intid']

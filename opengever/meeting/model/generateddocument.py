@@ -1,6 +1,8 @@
 from opengever.base.model import Base
 from opengever.base.oguid import Oguid
+from opengever.locking.lock import SYS_LOCK
 from opengever.ogds.models import UNIT_ID_LENGTH
+from plone.locking.interfaces import ILockable
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import String
@@ -42,6 +44,12 @@ class GeneratedDocument(Base):
 
     def resolve_document(self):
         return self.oguid.resolve_object()
+
+    def unlock_document(self):
+        document = self.resolve_document()
+        lockable = ILockable(document)
+        lockable.unlock(SYS_LOCK)
+        assert not lockable.locked(), 'unexpected: could not remove lock'
 
 
 class GeneratedProtocol(GeneratedDocument):

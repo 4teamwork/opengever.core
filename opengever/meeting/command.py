@@ -10,8 +10,8 @@ from opengever.locking.lock import SYS_LOCK
 from opengever.meeting import _
 from opengever.meeting.model import GeneratedExcerpt
 from opengever.meeting.model import GeneratedProtocol
-from opengever.meeting.model import proposalhistory
-from opengever.meeting.model import SubmittedDocument
+from opengever.meeting.model.proposalhistory import Submitted, DocumentUpdated, DocumentSubmitted
+from opengever.meeting.model.submitteddocument import SubmittedDocument
 from opengever.meeting.protocol import ExcerptProtocolData
 from opengever.meeting.protocol import ProtocolData
 from opengever.meeting.sablon import Sablon
@@ -271,7 +271,7 @@ class CreateSubmittedProposalCommand(object):
             self.admin_unit_id, '@@create_submitted_proposal', data=request_data)
 
         self.submitted_proposal_path = response['path']
-        create_session().add(proposalhistory.Submitted(proposal=model))
+        create_session().add(Submitted(proposal=model))
 
 
 class NullUpdateSubmittedDocumentCommand(object):
@@ -313,7 +313,7 @@ class UpdateSubmittedDocumentCommand(object):
             self.proposal, self.document)
         submitted_document.submitted_version = submitted_version
 
-        session.add(proposalhistory.DocumentUpdated(
+        session.add(DocumentUpdated(
             proposal=proposal_model,
             submitted_document=submitted_document,
             submitted_version=submitted_version,
@@ -373,7 +373,7 @@ class CopyProposalDocumentCommand(object):
                                 submitted_version=submitted_version)
         session.add(doc)
 
-        session.add(proposalhistory.DocumentSubmitted(
+        session.add(DocumentSubmitted(
             proposal=proposal_model,
             submitted_document=doc,
             submitted_version=submitted_version,
@@ -394,113 +394,3 @@ class OgCopyCommand(object):
     def execute(self):
         return Transporter().transport_to(
             self.source, self.target_admin_unit_id, self.target_path)
-
-
-class GenerateExcerptsCommand(object):
-
-    def __init__(self, meeting):
-        self.meeting = meeting
-
-    def execute(self):
-        for agenda_item in self.meeting.agenda_items:
-            if agenda_item.has_proposal:
-                self.generate_excerpt(agenda_item)
-
-    def generate_excerpt(self, agenda_item):
-        proposal_obj = agenda_item.proposal.resolve_sumitted_proposal()
-        operations = ExcerptOperations([agenda_item])
-
-        CreateGeneratedDocumentCommand(
-            proposal_obj, self.meeting, operations).execute()
-
-
-class DecideProposalsCommand(object):
-
-    def __init__(self, meeting):
-        self.meeting = meeting
-
-    def execute(self):
-        for agenda_item in self.meeting.agenda_items:
-            if not agenda_item.has_proposal:
-                continue
-
-            self.decide_proposals(agenda_item.proposal)
-
-    def decide_proposals(self, proposal):
-        document_intid = self.copy_document(proposal)
-        self.add_database_entry(proposal, document_intid)
-        self.update_state(proposal)
-
-    def add_database_entry(self, proposal, document_intid):
-        session = create_session()
-        version = proposal.submitted_excerpt_document.generated_version
-
-        excerpt = GeneratedExcerpt(
-            admin_unit_id=proposal.admin_unit_id,
-            int_id=document_intid,
-            generated_version=version)
-        session.add(excerpt)
-
-        proposal.excerpt_document = excerpt
-        session.add(proposalhistory.ProposalDecided(proposal=proposal))
-
-    def update_state(self, proposal):
-        proposal.execute_transition('scheduled-decided')
-
-    def copy_document(self, proposal):
-        dossier = proposal.resolve_proposal().get_containing_dossier()
-        response = OgCopyCommand(
-            proposal.resolve_submitted_excerpt_document(),
-            proposal.admin_unit_id,
-            '/'.join(dossier.getPhysicalPath())).execute()
-        return response['intid']
-
-
-class CloseMeetingCommand(object):
-
-    def __init__(self, meeting):
-        self.meeting = meeting
-
-    def execute(self):
-        self.meeting.generate_meeting_number()
-        self.generate_decision_numbers()
-        GenerateExcerptsCommand(self.meeting).execute()
-        DecideProposalsCommand(self.meeting).execute()
-        self.update_protocol_document()
-        self.unlock_protocol_document()
-
-    def update_protocol_document(self):
-        """Update or create the protocol."""
-
-        operations = ProtocolOperations()
-
-        if self.meeting.has_protocol_document():
-            command = UpdateGeneratedDocumentCommand(
-                self.meeting.protocol_document, operations)
-        else:
-            command = CreateGeneratedDocumentCommand(
-                self.meeting.get_dossier(), self.meeting,
-                operations, lock_document_after_creation=True)
-
-        command.execute()
-
-    def generate_decision_numbers(self):
-        self.meeting.generate_decision_numbers()
-
-    def unlock_protocol_document(self):
-        if not self.meeting.protocol_document:
-            return
-
-        document = self.meeting.protocol_document.resolve_document()
-        lockable = ILockable(document)
-        lockable.unlock(SYS_LOCK)
-        assert not lockable.locked(), 'unexpected: could not remove lock'
-
-    def show_message(self):
-        msg = _(u'msg_meeting_successfully_closed',
-                default=u'The meeting ${title} has been successfully closed, '
-                'the excerpts have been generated and sent back to the '
-                'initial dossier.',
-                mapping=dict(title=self.meeting.get_title()))
-
-        api.portal.show_message(msg, api.portal.get().REQUEST)
