@@ -36,7 +36,7 @@
     }
 
     this.saveProtocol = function(target) {
-      var payload = target.serializeArray();
+      var payload = target.parents("form").serializeArray();
       payload.push({ name: "form.buttons.save", value: $("#form-buttons-save").val() });
       var action = target.attr("action");
       return $.ajax({
@@ -50,8 +50,11 @@
       });
     };
 
+    this.discardProtocol = function() { meetingStorage.deleteCurrentMeeting(); };
+
     this.events = {
-      "submit##form": this.saveProtocol
+      "click##form-buttons-save$": this.saveProtocol,
+      "click##form-buttons-cancel$": this.discardProtocol
     };
 
     this.init();
