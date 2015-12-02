@@ -1,3 +1,6 @@
+from opengever.base.response import JSONResponse
+from opengever.meeting import _
+from opengever.meeting.model.meeting import Meeting
 from plone.protect.utils import addTokenToUrl
 from Products.Five.browser import BrowserView
 from zExceptions import NotFound
@@ -19,11 +22,15 @@ class MeetingTransitionController(BrowserView):
             raise NotFound
 
         self.execute_transition(transition)
-        return self.redirect_to_meeting()
+        msg = _('label_transition_executed',
+                default='Transition ${transition} executed',
+                mapping={ 'transition': Meeting.workflow.transitions.get(transition).title})
+
+        return JSONResponse(self.request).info(msg).dump();
 
     @classmethod
     def url_for(cls, context, meeting, transition):
-        url = "{}?transition={}".format(
+        url = '{}?transition={}'.format(
             meeting.get_url(view='meetingtransitioncontroller'), transition)
         return addTokenToUrl(url)
 
@@ -32,6 +39,3 @@ class MeetingTransitionController(BrowserView):
 
     def execute_transition(self, transition_name):
         return self.model.execute_transition(transition_name)
-
-    def redirect_to_meeting(self):
-        return self.request.RESPONSE.redirect(self.model.get_url())
