@@ -56,6 +56,7 @@ alsoProvides(ITranslatedTitle, IFormFieldProvider)
 class TranslatedTitle(object):
 
     FALLBACK_LANGUAGE = 'de'
+    SUPPORTED_LANGUAGES = ['de', 'fr']
 
     def __init__(self, context):
         self.context = context

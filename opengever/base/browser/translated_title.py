@@ -1,32 +1,38 @@
 from opengever.base import _
+from opengever.base.behaviors.translated_title import TranslatedTitle
 from plone import api
 from plone.directives.dexterity import AddForm
 from plone.directives.dexterity import EditForm
 import martian
 
 
-TRANSLATED_TITLE_FIELDS = {'de-ch': 'ITranslatedTitle.title_de',
-                           'fr-ch': 'ITranslatedTitle.title_fr'}
-
-
 class TranslatedTitleFormMixin(object):
 
-    def omit_non_active_language_fields(self):
+    def get_active_languages(self):
+        """Returns a list of the current languages
+        """
         lang_tool = api.portal.get_tool('portal_languages')
-        for lang, fieldname in TRANSLATED_TITLE_FIELDS.items():
-            if lang not in lang_tool.supported_langs:
-                self.fields = self.fields.omit(fieldname)
+        return [lang.split('-')[0] for lang in lang_tool.supported_langs]
+
+    def get_title_fieldname(self, lang):
+        return 'ITranslatedTitle.title_{}'.format(lang)
+
+    def omit_non_active_language_fields(self):
+        for lang in TranslatedTitle.SUPPORTED_LANGUAGES:
+            if lang not in self.get_active_languages():
+                self.fields = self.fields.omit(self.get_title_fieldname(lang))
 
     def adjust_title_on_language_fields(self):
         """If there is only one language specific title field available,
         we ajdust the label to a `Title`.
         """
-        lang_tool = api.portal.get_tool('portal_languages')
-        active_languages = [lang for lang in TRANSLATED_TITLE_FIELDS.keys()
-                            if lang in lang_tool.supported_langs]
+        supported_languages = set(TranslatedTitle.SUPPORTED_LANGUAGES)
+        supported_active_languages = supported_languages.intersection(
+            set(self.get_active_languages()))
 
-        if len(active_languages) == 1:
-            fieldname = TRANSLATED_TITLE_FIELDS[active_languages[0]]
+        if len(supported_active_languages) == 1:
+            fieldname = self.get_title_fieldname(
+                list(supported_active_languages)[0])
             self.widgets[fieldname].label = _(u"label_title", default=u"Title")
 
 
