@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Added support for bilingual titles in the repositorysystem and the main elements.
+  [phgross]
+
 - Set all active members of a committee as meeting participants by default.
   [deiferni]
 
