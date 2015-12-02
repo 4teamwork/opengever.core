@@ -3,6 +3,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from opengever.base.behaviors.translated_title import ITranslatedTitle
+from opengever.base.behaviors.translated_title import TranslatedTitle
 from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
@@ -23,15 +24,6 @@ class TestTranslatedTitle(FunctionalTestCase):
         self.lang_tool.addSupportedLanguage('fr-ch')
         self.lang_tool.addSupportedLanguage('en')
         transaction.commit()
-
-    def test_translated_title_catalog_metadata(self):
-        repository_root = create(Builder('repository_root')
-                                 .having(title_de=u"Ablage",
-                                         title_fr=u"syst\xe8me d'ordre"))
-
-        brain = obj2brain(repository_root)
-        self.assertEquals(u"Ablage", brain.title_de)
-        self.assertEquals(u"syst\xe8me d'ordre", brain.title_fr)
 
     @browsing
     def test_both_title_fields_are_accessible_on_add_form(self, browser):
@@ -251,3 +243,48 @@ class TestTranslatedTitleEditForm(FunctionalTestCase):
         self.assertEquals(
             'Title',
             browser.css('label[for=form-widgets-ITranslatedTitle-title_fr]').first.text)
+
+
+class TestTranslatedTitleLanguageSupport(FunctionalTestCase):
+    """A test which ensure that all language from the SUPPORTED_LANGUAGE
+    constant is fully and correctly implemented.
+    """
+
+    def test_title_getter(self):
+        titles = dict(
+            (u'title_{}'.format(lang), u'Repository title in {}'.format(lang))
+            for lang in TranslatedTitle.SUPPORTED_LANGUAGES)
+        repository_root = create(Builder('repository_root')
+                                 .having(**titles))
+
+        for lang in TranslatedTitle.SUPPORTED_LANGUAGES:
+            self.assertEquals(
+                u"Repository title in {}".format(lang),
+                getattr(ITranslatedTitle(repository_root), 'title_{}'.format(lang)))
+
+    def test_title_setter(self):
+        repository_root = create(Builder('repository_root'))
+
+        for lang in TranslatedTitle.SUPPORTED_LANGUAGES:
+            setattr(ITranslatedTitle(repository_root),
+                    u'title_{}'.format(lang),
+                    u'TITLE {}'.format(lang.upper()))
+
+        for lang in TranslatedTitle.SUPPORTED_LANGUAGES:
+            self.assertEquals(
+                u'TITLE {}'.format(lang.upper()),
+                getattr(ITranslatedTitle(repository_root), 'title_{}'.format(lang)))
+
+    def test_all_catalog_metadata(self):
+        titles = dict(
+            (u'title_{}'.format(lang), u'Repository title in {}'.format(lang))
+            for lang in TranslatedTitle.SUPPORTED_LANGUAGES)
+
+        repository_root = create(Builder('repository_root')
+                                 .having(**titles))
+
+        brain = obj2brain(repository_root)
+        for lang in TranslatedTitle.SUPPORTED_LANGUAGES:
+            self.assertEquals(
+                u"Repository title in {}".format(lang),
+                getattr(brain, 'title_{}'.format(lang)))
