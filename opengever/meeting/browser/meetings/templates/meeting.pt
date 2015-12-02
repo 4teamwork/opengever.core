@@ -63,7 +63,7 @@
         </div>
 
         <div class="overlay" id="confirm_hold_meeting">
-          <h2 i18n:translate="hold_meeting">Hold meeting</h2>
+          <h2 i18n:translate="decide_agendaitem">Decide Agendaitem</h2>
           <p i18n:translate="msg_hold_meeting_dialog">
             When deciding an agendaitem the meeting will sent to hold state. Once the meeting is held, the agenda list is no longer editable.
           </p>
@@ -207,8 +207,8 @@
                 <input id="schedule-text" type="text" />
                 <div class="button-group">
                   <input type="submit"
-                         value="label_schedule"
-                         i18n:attributes="value"
+                         value="Schedule"
+                         i18n:attributes="value label_schedule"
                          tal:attributes="data-url view/url_schedule_text"
                          class="schedule-text allowMultiSubmit" />
                 </div>
@@ -218,8 +218,8 @@
                 <input id="schedule-paragraph" type="text" />
                 <div class="button-group">
                   <input type="submit"
-                         value="label_schedule"
-                         i18n:attributes="value"
+                         value="Schedule"
+                         i18n:attributes="value label_schedule"
                          tal:attributes="data-url view/url_schedule_paragraph"
                          class="schedule-paragraph allowMultiSubmit" />
                 </div>
