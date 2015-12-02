@@ -19,9 +19,14 @@
       dialog.load();
     };
 
-    this.closeMeeting = function() {
-      this.closeModal();
-      window.location.href = self.currentItem.attr("href");
+    this.closeMeeting = function(target) {
+      target.addClass("loading");
+      return $.post(self.currentItem.attr("href"))
+              .done(function() {
+                self.closeModal();
+                global.location.reload();
+              })
+              .always(function() { target.removeClass("loading"); });
     };
 
     this.closeModal = function() { dialog.close(); };
