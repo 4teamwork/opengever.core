@@ -33,10 +33,11 @@ class State(object):
 
 class Transition(object):
 
-    def __init__(self, state_from, state_to, title=None):
+    def __init__(self, state_from, state_to, title=None, visible=True):
         self.state_from = state_from
         self.state_to = state_to
         self.title = title or self.name
+        self.visible = visible
 
     @property
     def name(self):

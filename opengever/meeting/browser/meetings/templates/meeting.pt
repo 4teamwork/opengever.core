@@ -21,7 +21,8 @@
            tal:attributes="data-update-agenda-item-order-url view/url_update_agenda_item_order;
                            data-list-agenda-items-url view/url_list_agenda_items;
                            data-list-unscheduled-proposals-url view/url_list_unscheduled_proposals;
-                           data-editable view/json_is_editable">
+                           data-editable view/json_is_editable;
+                           data-agendalist_editable view/json_is_agendalist_editable">
 
         <div class="overlay" id="confirm_unschedule">
           <div class="close">
@@ -56,6 +57,22 @@
           <div class="button-group">
             <button class="button confirm"
                     i18n:translate="close_meeting">Close meeting</button>
+            <button class="button decline"
+                    i18n:translate="label_cancel">Cancel</button>
+          </div>
+        </div>
+
+        <div class="overlay" id="confirm_hold_meeting">
+          <h2 i18n:translate="decide_agendaitem">Decide Agendaitem</h2>
+          <p i18n:translate="msg_hold_meeting_dialog">
+            When deciding an agendaitem the meeting will sent to hold state. Once the meeting is held, the agenda list is no longer editable.
+          </p>
+          <p i18n:translate="">
+            Are you sure you want to decide this agendaitem?
+          </p>
+          <div class="button-group">
+            <button class="button confirm"
+                    i18n:translate="label_decide">Decide</button>
             <button class="button decline"
                     i18n:translate="label_cancel">Cancel</button>
           </div>
@@ -179,7 +196,7 @@
         </div>
         <div class="content">
           <div class="collapsible"
-               tal:condition="meeting/is_editable">
+               tal:condition="meeting/is_agendalist_editable">
             <div class="collapsible-header">
               <button class="button fa fa-plus"></button>
               <span class="label" i18n:translate="">Agenda Items</span>
@@ -190,8 +207,8 @@
                 <input id="schedule-text" type="text" />
                 <div class="button-group">
                   <input type="submit"
-                         value="label_schedule"
-                         i18n:attributes="value"
+                         value="Schedule"
+                         i18n:attributes="value label_schedule"
                          tal:attributes="data-url view/url_schedule_text"
                          class="schedule-text allowMultiSubmit" />
                 </div>
@@ -201,8 +218,8 @@
                 <input id="schedule-paragraph" type="text" />
                 <div class="button-group">
                   <input type="submit"
-                         value="label_schedule"
-                         i18n:attributes="value"
+                         value="Schedule"
+                         i18n:attributes="value label_schedule"
                          tal:attributes="data-url view/url_schedule_paragraph"
                          class="schedule-paragraph allowMultiSubmit" />
                 </div>
@@ -224,7 +241,7 @@
             <thead>
               <tr>
                 <th i18n:translate=""
-                    tal:condition="meeting/is_editable">Order</th>
+                    tal:condition="meeting/is_agendalist_editable">Order</th>
                 <th i18n:translate="">Number</th>
                 <th i18n:translate="">Title</th>
                 <th i18n:translate="">Documents</th>

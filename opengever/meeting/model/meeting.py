@@ -46,7 +46,9 @@ meeting_excerpts = Table(
 )
 
 
-class PendingClosedTransition(Transition):
+class CloseTransition(Transition):
+    """Used by pending-closed and held-closed transitions.
+    """
 
     def execute(self, obj, model):
         assert self.can_execute(model)
@@ -66,15 +68,20 @@ class Meeting(Base):
 
     STATE_PENDING = State('pending', is_default=True,
                           title=_('pending', default='Pending'))
+    STATE_HELD = State('held', title=_('held', default='Held'))
     STATE_CLOSED = State('closed', title=_('closed', default='Closed'))
 
-    workflow = Workflow([
-        STATE_PENDING,
-        STATE_CLOSED,
-        ], [
-        PendingClosedTransition('pending', 'closed',
-                                title=_('close_meeting', default='Close meeting')),
-        ])
+    workflow = Workflow(
+        [STATE_PENDING, STATE_HELD, STATE_CLOSED],
+        [CloseTransition(
+            'pending', 'closed',
+            title=_('close_meeting', default='Close meeting')),
+         Transition('pending', 'held',
+                    title=_('hold', default='Hold meeting'), visible=False),
+         CloseTransition(
+             'held', 'closed',
+             title=_('close_meeting', default='Close meeting'))]
+    )
 
     __tablename__ = 'meetings'
 
@@ -169,9 +176,13 @@ class Meeting(Base):
 
         self.protocol_document.unlock_document()
 
-    def decide(self):
-        for agenda_item in self.agenda_items:
-            agenda_item.decide()
+    def hold(self):
+        if self.workflow_state == 'held':
+            return
+
+        self.generate_meeting_number()
+        self.generate_decision_numbers()
+        self.workflow_state = 'held'
 
     def close(self):
         """ Closes a meeting means set the meeting in the closed state and ...
@@ -183,9 +194,10 @@ class Meeting(Base):
          - update and unlock the protocol document
         """
 
-        self.generate_meeting_number()
-        self.generate_decision_numbers()
-        self.decide()
+        self.hold()
+        for agenda_item in self.agenda_items:
+            agenda_item.decide()
+
         self.update_protocol_document()
         self.unlock_protocol_document()
         self.workflow_state = 'closed'
@@ -195,6 +207,9 @@ class Meeting(Base):
         return 'contenttype-opengever-meeting-meeting'
 
     def is_editable(self):
+        return self.get_state() in [self.STATE_PENDING, self.STATE_HELD]
+
+    def is_agendalist_editable(self):
         return self.get_state() == self.STATE_PENDING
 
     def has_protocol_document(self):

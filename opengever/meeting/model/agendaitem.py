@@ -1,5 +1,10 @@
 from opengever.base.model import Base
 from opengever.base.model import create_session
+from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
+from opengever.meeting import _
+from opengever.meeting.workflow import State
+from opengever.meeting.workflow import Transition
+from opengever.meeting.workflow import Workflow
 from opengever.ogds.models.types import UnicodeCoercingText
 from sqlalchemy import Boolean
 from sqlalchemy import Column
@@ -15,10 +20,24 @@ class AgendaItem(Base):
     """An item must either have a reference to a proposal or a title.
 
     """
+
     __tablename__ = 'agendaitems'
+
+    # workflow definition
+    STATE_PENDING = State('pending', is_default=True,
+                          title=_('pending', default='Pending'))
+    STATE_DECIDED = State('decided', title=_('decided', default='Decided'))
+
+    workflow = Workflow(
+        [STATE_PENDING, STATE_DECIDED],
+        [Transition('pending', 'decided',
+                    title=_('decide', default='Decide'))]
+    )
 
     agenda_item_id = Column("id", Integer, Sequence("agendaitems_id_seq"),
                             primary_key=True)
+    workflow_state = Column(String(WORKFLOW_STATE_LENGTH), nullable=False,
+                            default=workflow.default_state.name)
     proposal_id = Column(Integer, ForeignKey('proposals.id'))
     proposal = relationship("Proposal", uselist=False,
                             backref=backref('agenda_item', uselist=False))
@@ -126,6 +145,9 @@ class AgendaItem(Base):
             css_classes.append("expandable")
         return " ".join(css_classes)
 
+    def get_state(self):
+        return self.workflow.get_state(self.workflow_state)
+
     def remove(self):
         assert self.meeting.is_editable()
 
@@ -199,8 +221,19 @@ class AgendaItem(Base):
     def has_submitted_excerpt_document(self):
         return self.has_proposal and self.proposal.has_submitted_excerpt_document()
 
+    def is_decide_possible(self):
+        if not self.is_paragraph:
+            return self.get_state() == self.STATE_PENDING
+        return False
+
     def decide(self):
+        if self.get_state() == self.STATE_DECIDED:
+            return
+
         if self.has_proposal:
             self.proposal.generate_excerpt(self)
             self.proposal.decide()
 
+        self.meeting.hold()
+
+        self.workflow.execute_transition(None, self, 'pending-decided')

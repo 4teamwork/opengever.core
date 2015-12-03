@@ -19,7 +19,7 @@
       <div tal:condition="view/transitions" class="actionButtons">
         <ul class="regular_buttons">
             <tal:block repeat="transition view/transitions">
-              <li>
+              <li tal:condition="transition/visible">
                 <a tal:attributes="href python: view.transition_url(transition);
                                    title transition/title;
                                    id transition/name;

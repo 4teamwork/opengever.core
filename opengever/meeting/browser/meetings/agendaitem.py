@@ -10,6 +10,7 @@ from zope.interface import Interface
 from zope.publisher.interfaces import IPublishTraverse
 from zope.publisher.interfaces.browser import IBrowserView
 import json
+import transaction
 
 
 class IAgendaItemActions(Interface):
@@ -45,6 +46,10 @@ class IAgendaItemActions(Interface):
     def schedule_paragraph():
         """Schedule the given Paragraph (request parameter `title`) for the
         current meeting.
+        """
+
+    def decide():
+        """Decide the current agendaitem and decide the meeting.
         """
 
 
@@ -105,6 +110,10 @@ class AgendaItemsView(BrowserView):
                 view='agenda_items/{}/delete'.format(item.agenda_item_id))
             data['edit_link'] = meeting.get_url(
                 view='agenda_items/{}/edit'.format(item.agenda_item_id))
+            if item.is_decide_possible():
+                data['decide_link'] = meeting.get_url(
+                    view='agenda_items/{}/decide'.format(item.agenda_item_id))
+
             agenda_items.append(data)
 
         return JSONResponse(self.request).data(items=agenda_items).dump()
@@ -163,6 +172,35 @@ class AgendaItemsView(BrowserView):
         return JSONResponse(self.request).info(
             _(u'agenda_item_deleted',
               default=u'Agenda Item Successfully deleted')).dump()
+
+    def decide(self):
+        """Decide the current agendaitem and move the meeting in the
+        held state.
+        """
+        meeting_state = self.meeting.get_state()
+
+        if not self.context.model.is_editable():
+            raise Unauthorized("Editing is not allowed")
+
+        agenda_item = meeting_service().fetch_agenda_item(self.agenda_item_id)
+        if not agenda_item:
+            raise NotFound
+
+        agenda_item.decide()
+
+        response = JSONResponse(self.request)
+        if agenda_item.has_proposal:
+            response.info(
+                _(u'agenda_item_proposal_decided',
+                  default=u'Agenda Item decided and excerpt generated.'))
+        else:
+            response.info(_(u'agenda_item_decided',
+                            default=u'Agenda Item decided.'))
+
+        if meeting_state != self.meeting.get_state():
+            response.redirect(self.context.absolute_url())
+
+        return response.dump()
 
     def schedule_paragraph(self):
         """Schedule the given Paragraph (request parameter `title`) for the current

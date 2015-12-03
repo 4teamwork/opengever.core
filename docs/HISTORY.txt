@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Add an option to decide a single agenda_item.
+  [phgross]
+
 - Add a view to fill sablon-templates with sample meeting-data.
   [deiferni]
 

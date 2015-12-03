@@ -545,4 +545,14 @@
         directory="profiles/4623"
     />
 
+    <!-- 4623 -> 4624 -->
+    <genericsetup:upgradeStep
+        title="Add workflow state to AgendaItem."
+        description=""
+        source="4623"
+        destination="4624"
+        handler="opengever.meeting.upgrades.to4624.AddWorkflowStateToAgendaItem"
+        profile="opengever.meeting:default"
+        />
+
 </configure>

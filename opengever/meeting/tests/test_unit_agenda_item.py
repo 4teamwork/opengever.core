@@ -78,3 +78,24 @@ class TestUnitAgendaItem(TestCase):
                           'has_proposal': True,
                           'link': u'<a href="http://example.com/public/meetings/proposal-1" title="Pr\xf6posal">Pr\xf6posal</a>'},
                          self.proposal_agenda_item.serialize())
+
+    def test_decide_is_only_possible_if_agenda_item_is_pending(self):
+        self.assertTrue(
+            self.simple_agenda_item.is_decide_possible())
+
+        self.simple_agenda_item.workflow_state = 'decided'
+        self.assertFalse(
+            self.simple_agenda_item.is_decide_possible())
+
+    def test_decide_is_not_possible_for_paragraphs(self):
+        item = create(Builder('agenda_item')
+                      .having(is_paragraph=True, meeting=self.meeting))
+
+        self.assertFalse(item.is_decide_possible())
+
+    def test_get_state(self):
+        item = self.simple_agenda_item
+        self.assertEquals(item.STATE_PENDING, item.get_state())
+
+        item.workflow_state = 'decided'
+        self.assertEquals(item.STATE_DECIDED, item.get_state())

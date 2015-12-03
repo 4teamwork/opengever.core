@@ -28,6 +28,7 @@
 
     this.events = {
       "click##pending-closed": this.openModal,
+      "click##held-closed": this.openModal,
       "click##confirm_close_meeting .confirm!$": this.closeMeeting,
       "click##confirm_close_meeting .decline!": this.closeModal
     };
@@ -45,6 +46,14 @@
       speed: 0,
       closeSpeed: 0,
       mask: { loadSpeed: 0 }
+    }).data("overlay");
+
+    var holdDialog = $( "#confirm_hold_meeting" ).overlay({
+      speed: 0,
+      closeSpeed: 0,
+      mask: { loadSpeed: 0 },
+      closeOnClick: false,
+      closeOnEsc: false
     }).data("overlay");
 
     var sortableHelper = function(e, row) {
@@ -69,8 +78,13 @@
 
     this.fetch = function() { return $.get(viewlet.data().listAgendaItemsUrl); };
 
-    this.render = function(data) { self.outlet.html(self.template({ agendaitems: data.items,
-                                                                    editable: viewlet.data().editable })); };
+    this.render = function(data) {
+      self.outlet.html(self.template({
+        agendaitems: data.items,
+        editable: viewlet.data().editable,
+        agendalist_editable: viewlet.data().agendalist_editable
+      }));
+    };
 
     this.openModal = function(target) {
       this.currentItem = target;
@@ -123,13 +137,43 @@
 
     this.toggleAttachements = function(target) { target.parents("tr").toggleClass("expanded"); };
 
+    this.decide = function(target) {
+      this.currentDecideTarget = target;
+      if(viewlet.data().agendalist_editable) {
+        holdDialog.load();
+      }
+      else {
+        return this.confirmDecide(target);
+      }
+    };
+
+    this.confirmDecide = function(target) {
+      target.addClass("loading");
+      var holdDialogCancelButton = $("#confirm_hold_meeting .decline");
+      holdDialogCancelButton.hide();
+      return $.post(this.currentDecideTarget.attr("href")).always(function(){
+        target.removeClass("loading");
+        holdDialogCancelButton.show();
+        holdDialog.close();
+      }).done(function(data){
+        if (data.redirectUrl){
+          window.location = data.redirectUrl;
+        }
+      });
+    };
+
+    this.declineDecide = function() { holdDialog.close(); };
+
     this.events = {
       "click#.delete-agenda-item": this.openModal,
       "click#.edit-agenda-item": this.showEditbox,
+      "click#.decide-agenda-item!": this.decide,
       "sortupdate##agenda_items tbody!$": this.updateSortOrder,
       "click#.toggle-attachements": this.toggleAttachements,
       "click##confirm_unschedule .confirm!$": this.unschedule,
-      "click##confirm_unschedule .decline!": this.closeModal
+      "click##confirm_unschedule .decline!": this.closeModal,
+      "click##confirm_hold_meeting .confirm!$": this.confirmDecide,
+      "click##confirm_hold_meeting .decline!": this.declineDecide
     };
 
     this.init();
