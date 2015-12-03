@@ -200,22 +200,6 @@ class CreateGeneratedDocumentCommand(CreateDocumentCommand):
             portal.REQUEST)
 
 
-class ReplaceGeneratedDocumentCommand(CreateGeneratedDocumentCommand):
-
-    def __init__(self, generated_document, document_operations):
-        meeting = generated_document.meeting
-        document = generated_document.resolve_document()
-        dossier = aq_parent(aq_inner(document))
-        super(ReplaceGeneratedDocumentCommand, self).__init__(
-            dossier, meeting, document_operations)
-
-        self.generated_document = generated_document
-
-    def add_database_entry(self, document):
-        self.generated_document.oguid = Oguid.for_object(document)
-        self.generated_document.generated_version = document.get_current_version()
-
-
 class UpdateGeneratedDocumentCommand(object):
 
     def __init__(self, generated_document, document_operations):

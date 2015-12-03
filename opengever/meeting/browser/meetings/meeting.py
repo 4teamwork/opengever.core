@@ -298,7 +298,7 @@ class MeetingView(BrowserView):
         if not self.model.has_protocol_document():
             return GenerateProtocol.url_for(self.model)
         else:
-            return UpdateProtocol.url_for(self.model.protocol_document)
+            return UpdateProtocol.url_for(self.model)
 
     def has_protocol_document(self):
         return self.model.has_protocol_document()
