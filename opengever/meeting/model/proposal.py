@@ -44,7 +44,7 @@ class Submit(Transition):
 class Reject(Transition):
 
     def execute(self, obj, model):
-        url = "{}/reject".format(obj.absolute_url())
+        url = "{}/reject_proposal".format(obj.absolute_url())
         return getRequest().RESPONSE.redirect(url)
 
 
@@ -239,6 +239,13 @@ class Proposal(Base):
         session = create_session()
         meeting.agenda_items.append(AgendaItem(proposal=self))
         session.add(proposalhistory.Scheduled(proposal=self, meeting=meeting))
+
+    def reject(self, comment):
+        assert self.workflow.can_execute_transition(self, 'submitted-pending')
+
+        # set workflow state directly for once, the transition is used to
+        # redirect to a form.
+        self.workflow_state = self.STATE_PENDING.name
 
     def remove_scheduled(self, meeting):
         self.execute_transition('scheduled-submitted')
