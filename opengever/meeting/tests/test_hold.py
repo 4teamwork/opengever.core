@@ -8,10 +8,10 @@ from opengever.testing import FunctionalTestCase
 import transaction
 
 
-class TestDecideMeeting(FunctionalTestCase):
+class TestHoldMeeting(FunctionalTestCase):
 
     def setUp(self):
-        super(TestDecideMeeting, self).setUp()
+        super(TestHoldMeeting, self).setUp()
         self.repository_root = create(Builder('repository_root'))
         self.repository = create(Builder('repository')
                                  .within(self.repository_root))
@@ -50,25 +50,25 @@ class TestDecideMeeting(FunctionalTestCase):
 
     def test_change_workflow_state(self):
         meeting = Meeting.query.first()
-        meeting.decide()
+        meeting.hold()
 
-        self.assertEquals('decided', meeting.workflow_state)
+        self.assertEquals('held', meeting.workflow_state)
 
     def test_generates_meeting_number(self):
         meeting = Meeting.query.first()
-        meeting.decide()
+        meeting.hold()
 
         self.assertEquals(1, meeting.meeting_number)
 
     def test_generate_decision_numbers(self):
-        Meeting.query.first().decide()
+        Meeting.query.first().hold()
 
         item_a, item_b = AgendaItem.query.all()
         self.assertEquals(1, item_a.decision_number)
         self.assertEquals(2, item_b.decision_number)
 
     @browsing
-    def test_decide_transition_is_not_visible(self, browser):
+    def test_hold_transition_is_not_visible(self, browser):
         browser.login().open(self.meeting.get_url())
 
         self.assertEquals(

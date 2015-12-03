@@ -229,6 +229,6 @@ class AgendaItem(Base):
             self.proposal.generate_excerpt(self)
             self.proposal.decide()
 
-        self.meeting.decide()
+        self.meeting.hold()
 
         self.workflow.execute_transition(None, self, 'pending-decided')

@@ -174,7 +174,8 @@ class AgendaItemsView(BrowserView):
               default=u'Agenda Item Successfully deleted')).dump()
 
     def decide(self):
-        """Decide the current agendaitem and decide the meeting.
+        """Decide the current agendaitem and move the meeting in the
+        held state.
         """
         meeting_state = self.meeting.get_state()
 

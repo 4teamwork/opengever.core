@@ -147,13 +147,13 @@ class TestAgendaItemDecide(TestAgendaItem):
         self.container.excerpt_template = RelationValue(
             getUtility(IIntIds).getId(sablon_template))
 
-    def test_meeting_is_decided_when_deciding_an_agendaitem(self):
+    def test_meeting_is_held_when_deciding_an_agendaitem(self):
         item = create(Builder('agenda_item').having(
             title=u'foo', meeting=self.meeting))
 
         item.decide()
 
-        self.assertEquals('decided', self.meeting.workflow_state)
+        self.assertEquals('held', self.meeting.workflow_state)
 
     @browsing
     def test_decide_agenda_item(self, browser):
