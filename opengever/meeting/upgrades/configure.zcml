@@ -555,4 +555,14 @@
         profile="opengever.meeting:default"
         />
 
+    <!-- 4624 -> 4625 -->
+    <genericsetup:upgradeStep
+        title="Add comment to proposalhistory."
+        description=""
+        source="4624"
+        destination="4625"
+        handler="opengever.meeting.upgrades.to4625.AddCommentColumnToProposalHistory"
+        profile="opengever.meeting:default"
+    />
+
 </configure>

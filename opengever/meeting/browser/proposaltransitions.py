@@ -1,5 +1,5 @@
-from Acqusition import aq_inner
-from Acqusition import aq_parent
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from five import grok
 from opengever.meeting import _
 from opengever.meeting.proposal import IProposal

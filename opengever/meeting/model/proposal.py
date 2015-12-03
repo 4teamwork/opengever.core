@@ -246,6 +246,8 @@ class Proposal(Base):
         # set workflow state directly for once, the transition is used to
         # redirect to a form.
         self.workflow_state = self.STATE_PENDING.name
+        session = create_session()
+        session.add(proposalhistory.Rejected(proposal=self, comment=comment))
 
     def remove_scheduled(self, meeting):
         self.execute_transition('scheduled-submitted')

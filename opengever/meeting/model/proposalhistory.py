@@ -4,6 +4,7 @@ from opengever.base.model import UTCDateTime
 from opengever.meeting import _
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.models import USER_ID_LENGTH
+from opengever.ogds.models.types import UnicodeCoercingText
 from plone import api
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
@@ -30,6 +31,7 @@ class ProposalHistory(Base):
     proposal = relationship('Proposal')
     created = Column(UTCDateTime(timezone=True), default=utcnow_tz_aware, nullable=False)
     userid = Column(String(USER_ID_LENGTH), default=get_current_user_id, nullable=False)
+    text = Column(UnicodeCoercingText)
 
     # intended to be used only by DocumentSubmitted/DocumentUpdated
     submitted_document_id = Column(Integer, ForeignKey('submitteddocuments.id'))
@@ -72,6 +74,18 @@ class Submitted(ProposalHistory):
     def message(self):
         return _(u'proposal_history_label_submitted',
                  u'Submitted by ${user}',
+                 mapping={'user': self.get_actor_link()})
+
+
+class Rejected(ProposalHistory):
+
+    __mapper_args__ = {'polymorphic_identity': 'rejected'}
+
+    css_class = 'rejected'
+
+    def message(self):
+        return _(u'proposal_history_label_rejected',
+                 u'Rejected by ${user}',
                  mapping={'user': self.get_actor_link()})
 
 
