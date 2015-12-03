@@ -47,6 +47,14 @@
       mask: { loadSpeed: 0 }
     }).data("overlay");
 
+    var holdDialog = $( "#confirm_hold_meeting" ).overlay({
+      speed: 0,
+      closeSpeed: 0,
+      mask: { loadSpeed: 0 },
+      closeOnClick: false,
+      closeOnEsc: false
+    }).data("overlay");
+
     var sortableHelper = function(e, row) {
       var helper = row.clone();
       $.each(row.children(), function(idx, cell) {
@@ -129,15 +137,31 @@
     this.toggleAttachements = function(target) { target.parents("tr").toggleClass("expanded"); };
 
     this.decide = function(target) {
-      target.addClass('loading');
-      return $.post(target.attr("href")).always(function(){
-        target.removeClass('loading');
+      this.currentDecideTarget = target;
+      if(viewlet.data().agendalist_editable) {
+        holdDialog.load();
+      }
+      else {
+        return this.confirmDecide(target);
+      }
+    };
+
+    this.confirmDecide = function(target) {
+      target.addClass("loading");
+      var holdDialogCancelButton = $("#confirm_hold_meeting .decline");
+      holdDialogCancelButton.hide();
+      return $.post(this.currentDecideTarget.attr("href")).always(function(){
+        target.removeClass("loading");
+        holdDialogCancelButton.show();
+        holdDialog.close();
       }).done(function(data){
         if (data.redirectUrl){
           window.location = data.redirectUrl;
         }
       });
     };
+
+    this.declineDecide = function() { holdDialog.close(); };
 
     this.events = {
       "click#.delete-agenda-item": this.openModal,
@@ -146,7 +170,9 @@
       "sortupdate##agenda_items tbody!$": this.updateSortOrder,
       "click#.toggle-attachements": this.toggleAttachements,
       "click##confirm_unschedule .confirm!$": this.unschedule,
-      "click##confirm_unschedule .decline!": this.closeModal
+      "click##confirm_unschedule .decline!": this.closeModal,
+      "click##confirm_hold_meeting .confirm!$": this.confirmDecide,
+      "click##confirm_hold_meeting .decline!": this.declineDecide
     };
 
     this.init();
