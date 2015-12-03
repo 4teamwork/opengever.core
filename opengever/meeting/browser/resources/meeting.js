@@ -28,6 +28,7 @@
 
     this.events = {
       "click##pending-closed": this.openModal,
+      "click##held-closed": this.openModal,
       "click##confirm_close_meeting .confirm!$": this.closeMeeting,
       "click##confirm_close_meeting .decline!": this.closeModal
     };
