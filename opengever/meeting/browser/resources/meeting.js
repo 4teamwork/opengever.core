@@ -157,13 +157,13 @@
 
     this.trackText = function(target, event) {
       if(event.which === $.ui.keyCode.ENTER) {
-        this.addText();
+        return this.addText();
       }
     };
 
     this.trackParagraph = function(target, event) {
       if(event.which === $.ui.keyCode.ENTER) {
-        this.addParagraph();
+        return this.addParagraph();
       }
     };
 
