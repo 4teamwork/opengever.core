@@ -227,6 +227,9 @@ class AgendaItem(Base):
         return False
 
     def decide(self):
+        if self.get_state() == self.STATE_DECIDED:
+            return
+
         if self.has_proposal:
             self.proposal.generate_excerpt(self)
             self.proposal.decide()

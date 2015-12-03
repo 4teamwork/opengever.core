@@ -155,6 +155,13 @@ class TestAgendaItemDecide(TestAgendaItem):
 
         self.assertEquals('held', self.meeting.workflow_state)
 
+    def test_decide_an_decided_agenda_item_is_ignored(self):
+        item = create(Builder('agenda_item').having(
+            title=u'foo', meeting=self.meeting))
+        item.decide()
+
+        item.decide()
+
     @browsing
     def test_decide_agenda_item(self, browser):
         item = create(Builder('agenda_item').having(
