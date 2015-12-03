@@ -222,7 +222,9 @@ class AgendaItem(Base):
         return self.has_proposal and self.proposal.has_submitted_excerpt_document()
 
     def is_decide_possible(self):
-        return self.get_state() == self.STATE_PENDING
+        if not self.is_paragraph:
+            return self.get_state() == self.STATE_PENDING
+        return False
 
     def decide(self):
         if self.has_proposal:

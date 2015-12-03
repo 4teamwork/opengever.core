@@ -87,6 +87,12 @@ class TestUnitAgendaItem(TestCase):
         self.assertFalse(
             self.simple_agenda_item.is_decide_possible())
 
+    def test_decide_is_not_possible_for_paragraphs(self):
+        item = create(Builder('agenda_item')
+                      .having(is_paragraph=True, meeting=self.meeting))
+
+        self.assertFalse(item.is_decide_possible())
+
     def test_get_state(self):
         item = self.simple_agenda_item
         self.assertEquals(item.STATE_PENDING, item.get_state())
