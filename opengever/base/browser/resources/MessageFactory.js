@@ -62,8 +62,6 @@
       }
     };
 
-    this.clearMessages();
-
   };
 
   MessageFactory.getInstance = function() {
