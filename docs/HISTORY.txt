@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Add a view to fill sablon-templates with sample meeting-data.
+  [deiferni]
+
 - Add meeting number to period and meeting.
   Each meeting is assigned a meeting number when the meeting is closed. The meeting number is unique per period.
   [deiferni]
