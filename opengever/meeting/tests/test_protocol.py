@@ -6,8 +6,6 @@ from ftw.testbrowser.pages.statusmessages import info_messages
 from ftw.testbrowser.pages.z3cform import erroneous_fields
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.locking.lock import SYS_LOCK
-from opengever.meeting.browser.protocol import METHOD_NEW_DOCUMENT
-from opengever.meeting.browser.protocol import METHOD_NEW_VERSION
 from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import GeneratedProtocol
@@ -275,32 +273,12 @@ class TestProtocol(FunctionalTestCase):
 
         browser.open(self.meeting.get_url())
         browser.css('a[href*="@@update_protocol"]').first.click()
-        browser.fill({'form.widgets.method': METHOD_NEW_VERSION}).submit()
 
         meeting = Meeting.get(self.meeting.meeting_id)  # refresh meeting
-        document = browser.context
-        generated_document = GeneratedProtocol.query.by_document(
-            document).first()
+        generated_document = meeting.protocol_document
+
         self.assertIsNotNone(generated_document)
         self.assertEqual(1, generated_document.generated_version)
-        self.assertEqual(meeting, generated_document.meeting)
-        self.assertEqual(1, GeneratedProtocol.query.count())
-
-    @browsing
-    def test_new_generated_protocol_can_be_created(self, browser):
-        self.setup_generated_protocol(browser)
-
-        browser.open(self.meeting.get_url())
-        browser.css('a[href*="@@update_protocol"]').first.click()
-
-        browser.fill({'form.widgets.method': METHOD_NEW_DOCUMENT}).submit()
-
-        meeting = Meeting.get(self.meeting.meeting_id)  # refresh meeting
-        document = browser.context
-        generated_document = GeneratedProtocol.query.by_document(
-            document).first()
-        self.assertIsNotNone(generated_document)
-        self.assertEqual(0, generated_document.generated_version)
         self.assertEqual(meeting, generated_document.meeting)
         self.assertEqual(1, GeneratedProtocol.query.count())
 
