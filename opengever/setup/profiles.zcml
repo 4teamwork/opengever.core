@@ -32,4 +32,17 @@
       handler=".hooks.default_content_installed"
       />
 
+  <genericsetup:registerProfile
+      name="casauth"
+      title="opengever.setup: casauth"
+      directory="profiles/casauth"
+      description="Sets up the cas authentication plugin."
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <profilehook:hook
+      profile="opengever.setup:casauth"
+      handler=".casauth.setup_cas"
+      />
+
 </configure>
