@@ -234,7 +234,8 @@ class SubmittedProposal(ProposalBase):
     model_class = ProposalModel
 
     implements(content_schema)
-    workflow = ProposalModel.workflow.with_visible_transitions([])
+    workflow = ProposalModel.workflow.with_visible_transitions(
+        ['submitted-pending'])
 
     def is_editable(self):
         """A proposal in a meeting/committee is editable when submitted but not

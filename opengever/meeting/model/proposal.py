@@ -41,6 +41,13 @@ class Submit(Transition):
         api.portal.show_message(msg, request=getRequest(), type='info')
 
 
+class Reject(Transition):
+
+    def execute(self, obj, model):
+        url = "{}/reject".format(obj.absolute_url())
+        return getRequest().RESPONSE.redirect(url)
+
+
 class Proposal(Base):
     """Sql representation of a proposal."""
 
@@ -111,6 +118,8 @@ class Proposal(Base):
         ], [
         Submit('pending', 'submitted',
                title=_('submit', default='Submit')),
+        Reject('submitted', 'pending',
+               title=_('reject', default='Reject')),
         Transition('submitted', 'scheduled',
                    title=_('schedule', default='Schedule')),
         Transition('scheduled', 'submitted',

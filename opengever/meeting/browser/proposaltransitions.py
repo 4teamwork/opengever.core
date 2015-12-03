@@ -29,4 +29,7 @@ class ProposalTransitionController(grok.View):
         return self.context.execute_transition(transition_name)
 
     def redirect_to_proposal(self):
+        response = self.request.RESPONSE
+        if response.status != 302:  # only redirect if not already redirecting
+            return response.redirect(self.context.absolute_url())
         return self.request.RESPONSE.redirect(self.context.absolute_url())
