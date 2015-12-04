@@ -1,10 +1,9 @@
 from ftw.casauth.plugin import CASAuthenticationPlugin
-from opengever.ogds.base.utils import get_current_admin_unit
+from opengever.base.casauth import get_cas_portal_url
 from plone import api
 from Products.PluggableAuthService.interfaces.plugins import IChallengePlugin
 
 
-CAS_SERVER_URL_FORMAT = '{admin_unit_public_url}/portal'
 SESSION_DEFAULT_TIMEOUT = 24 * 60 * 60
 
 
@@ -20,8 +19,7 @@ def install_cas_auth_plugin():
     acl_users = api.portal.get_tool('acl_users')
 
     if 'cas_auth' not in acl_users.objectIds():
-        cas_server_url = CAS_SERVER_URL_FORMAT.format(
-            admin_unit_public_url=get_current_admin_unit().public_url)
+        cas_server_url = get_cas_portal_url()
         plugin = CASAuthenticationPlugin(
             'cas_auth', cas_server_url=cas_server_url)
         acl_users._setObject(plugin.getId(), plugin)

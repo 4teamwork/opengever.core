@@ -1,7 +1,9 @@
 from AccessControl import getSecurityManager
+from five import grok
+from opengever.base.casauth import get_cas_portal_url
+from opengever.base.casauth import is_cas_auth_enabled
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from five import grok
 from zope.interface import Interface
 
 
@@ -15,8 +17,11 @@ class LogoutOverlay(grok.View):
 
     @property
     def redirect_url(self):
-        portal_url_tool = getToolByName(self.context, 'portal_url')
-        return '{}/logout'.format(portal_url_tool())
+        if is_cas_auth_enabled():
+            return '{}/logout'.format(get_cas_portal_url())
+        else:
+            portal_url_tool = getToolByName(self.context, 'portal_url')
+            return '{}/logout'.format(portal_url_tool())
 
     def get_checkedout_documents(self):
         """ Return all documents checked out by the logged in user
