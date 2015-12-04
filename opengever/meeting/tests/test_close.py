@@ -115,9 +115,11 @@ class TestCloseMeeting(FunctionalTestCase):
         browser.css('#pending-closed').first.click()
 
         self.assertEquals(
-            [u'The meeting B\xe4rn, Dec 13, 2011 has been successfully closed, '
-             u'the excerpts have been generated and sent back to the '
-             u'initial dossier.'],
-            info_messages())
-
-        self.assertEquals(self.meeting.get_url(), browser.url)
+          {
+            "redirectUrl": self.meeting.get_url(),
+            "messages": [{
+              "messageTitle": "Information",
+              "message": "Transition Close meeting executed",
+              "messageClass": "info" }]
+          }, browser.json
+        )

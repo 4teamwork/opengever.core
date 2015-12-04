@@ -122,7 +122,10 @@ class TestProtocol(FunctionalTestCase):
     @browsing
     def test_protocol_document_is_unlocked_when_meeting_is_closed(self, browser):
         self.setup_generated_protocol(browser)
+
         browser.find('Close meeting').click()
+
+        browser.open(self.meeting.get_url())
 
         browser.find('Protocol-there-jan-01-2013').click()
         document = browser.context
@@ -133,9 +136,12 @@ class TestProtocol(FunctionalTestCase):
     @browsing
     def test_protocol_is_generated_when_closing_meetings(self, browser):
         self.setup_protocol(browser)
+
         self.assertFalse(browser.context.model.has_protocol_document())
 
         browser.find('Close meeting').click()
+
+        browser.open(self.meeting.get_url())
 
         self.assertTrue(browser.context.model.has_protocol_document())
 
