@@ -2,8 +2,6 @@
 
   "use strict";
 
-  var noop = function() {};
-
   function Storage(options) {
 
     this.options = $.extend({ root: "storage" }, options || {});
@@ -31,9 +29,9 @@
 
     this.drop = function() { Storage.storage.removeItem(this.options.root); };
 
-    this.reviver = noop;
+    this.reviver = $.noop;
 
-    this.postPull = noop;
+    this.postPull = $.noop;
 
     if (!isSupported) {
       throw new Error("LocalStroage is not supported");
@@ -53,7 +51,7 @@
 
     var self = this;
 
-    var syncCallback = noop;
+    var syncCallback = $.noop;
 
     var trackType = function(event) {
       global.clearTimeout(this.timeout);
