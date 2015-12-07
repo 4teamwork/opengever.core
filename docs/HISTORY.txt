@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Allow rejecting proposals from a committee. It is possible to enter an optional comment.
+  [deiferni]
+
 - Add an option to decide a single agenda_item.
   [phgross]
 
