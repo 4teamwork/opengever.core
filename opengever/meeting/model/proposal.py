@@ -243,6 +243,16 @@ class Proposal(Base):
     def reject(self, comment):
         assert self.workflow.can_execute_transition(self, 'submitted-pending')
 
+        self.submitted_physical_path = None
+        self.submitted_oguid = None
+
+        # kill references to submitted documents (i.e. copies), they will be
+        # deleted.
+        query = proposalhistory.DocumentSubmitted.query.filter_by(
+            proposal=self)
+        for record in query.all():
+            record.submitted_document = None
+
         # set workflow state directly for once, the transition is used to
         # redirect to a form.
         self.workflow_state = self.STATE_PENDING.name

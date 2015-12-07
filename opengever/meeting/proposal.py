@@ -306,6 +306,12 @@ class SubmittedProposal(ProposalBase):
     def is_submit_additional_documents_allowed(self):
         return False
 
+    def reject(self, comment):
+        proposal = self.load_model()
+        proposal.reject(comment)
+
+        api.content.delete(self)
+
 
 class Proposal(ProposalBase):
     """Act as proxy for the proposal stored in the database.

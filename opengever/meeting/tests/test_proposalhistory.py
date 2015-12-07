@@ -72,6 +72,26 @@ class TestProposalHistory(FunctionalTestCase):
             self.get_history_entries_text(browser)[:2])
 
     @browsing
+    def test_rejecting_proposals_creates_history_entries(self, browser):
+        browser.login()
+        self.open_overview(browser)
+
+        # submit proposal
+        browser.css('#pending-submitted').first.click()
+        proposal = browser.context
+
+        # reject submitted proposal
+        submitted_proposal = proposal.load_model().resolve_sumitted_proposal()
+        browser.open(submitted_proposal, view='tabbedview_view-overview')
+        browser.find('Reject').click()
+        browser.fill({'Comment': u'Bitte \xfcberarbeiten'}).submit()
+
+        self.open_overview(browser)
+        self.assertSequenceEqual(
+            u'Rejected by Test User (test_user_1_)',
+            self.get_history_entries_text(browser)[0])
+
+    @browsing
     def test_submitting_additional_document_creates_history_entry(self, browser):
         self.submit_proposal()
         document = create(Builder('document')
