@@ -3,6 +3,7 @@ from Acquisition import aq_parent
 from five import grok
 from opengever.meeting import _
 from opengever.meeting.proposal import IProposal
+from plone import api
 from plone.protect.utils import addTokenToUrl
 from plone.z3cform import layout
 from z3c.form.field import Fields
@@ -65,18 +66,21 @@ class RejectProposalForm(Form):
 
         self.reject_proposal(data['comment'])
         committee = aq_parent(aq_inner(self.context))
+
+        api.portal.show_message(
+            _(u"The proposal has been rejected successfully"),
+            request=self.request)
         self.redirect(committee)
 
     def reject_proposal(self, comment):
-        proposal = self.context.load_model()
-        proposal.reject(comment)
+        self.context.reject(comment)
 
     @button.buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
     def cancel(self, action):
         return self.redirect(self.context)
 
     def redirect(self, content):
-        return self.request.RESPONSE.redirect(self.context.absolute_url())
+        return self.request.RESPONSE.redirect(content.absolute_url())
 
 
 class RejectProposalView(layout.FormWrapper, grok.View):

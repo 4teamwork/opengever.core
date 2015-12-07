@@ -244,7 +244,8 @@ class Proposal(Base):
         assert self.workflow.can_execute_transition(self, 'submitted-pending')
 
         self.submitted_physical_path = None
-        self.submitted_oguid = None
+        self.submitted_admin_unit_id = None
+        self.submitted_int_id = None
 
         # kill references to submitted documents (i.e. copies), they will be
         # deleted.

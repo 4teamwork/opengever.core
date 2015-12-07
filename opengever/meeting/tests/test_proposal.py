@@ -1,6 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.oguid import Oguid
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.model import Proposal
@@ -331,6 +332,36 @@ class TestProposal(FunctionalTestCase):
         browser.css('#pending-submitted').first.click()
 
         self.assertEqual(Proposal.STATE_SUBMITTED, proposal.get_state())
+
+    @browsing
+    def test_submitted_proposal_can_be_rejected(self, browser):
+        self.grant('CommitteeGroupMember', 'Contributor', 'Editor')
+        committee = create(Builder('committee'))
+        proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .having(title='Mach doch',
+                                  committee=committee.load_model()))
+
+        browser.login().open(proposal, view='tabbedview_view-overview')
+        browser.css('#pending-submitted').first.click()
+
+        submitted_path = proposal.load_model().submitted_physical_path.encode('utf-8')
+        self.assertIsNotNone(self.portal.unrestrictedTraverse(submitted_path))
+
+        submitted_proposal = proposal.load_model().resolve_sumitted_proposal()
+        browser.open(submitted_proposal, view='tabbedview_view-overview')
+        browser.find('Reject').click()
+        browser.fill({'Comment': u'Bitte \xfcberarbeiten'}).submit()
+
+        with self.assertRaises(KeyError):
+            self.portal.unrestrictedTraverse(submitted_path)
+        self.assertEqual([u"The proposal has been rejected successfully"],
+                         info_messages())
+        self.assertEqual(Proposal.STATE_PENDING, proposal.get_state())
+        proposal_model = proposal.load_model()
+        self.assertIsNone(proposal_model.submitted_physical_path)
+        self.assertIsNone(proposal_model.submitted_int_id)
+        self.assertIsNone(proposal_model.submitted_admin_unit_id)
 
     def test_is_submission_allowed(self):
         committee = create(Builder('committee').titled('My committee'))

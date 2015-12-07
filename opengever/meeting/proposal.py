@@ -1,6 +1,7 @@
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
+from opengever.base.security import elevated_privileges
 from opengever.base.source import DossierPathSourceBinder
 from opengever.dossier.utils import get_containing_dossier
 from opengever.meeting import _
@@ -310,7 +311,8 @@ class SubmittedProposal(ProposalBase):
         proposal = self.load_model()
         proposal.reject(comment)
 
-        api.content.delete(self)
+        with elevated_privileges():
+            api.content.delete(self)
 
 
 class Proposal(ProposalBase):
