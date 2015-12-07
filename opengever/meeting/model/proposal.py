@@ -41,6 +41,13 @@ class Submit(Transition):
         api.portal.show_message(msg, request=getRequest(), type='info')
 
 
+class Reject(Transition):
+
+    def execute(self, obj, model):
+        url = "{}/reject_proposal".format(obj.absolute_url())
+        return getRequest().RESPONSE.redirect(url)
+
+
 class Proposal(Base):
     """Sql representation of a proposal."""
 
@@ -111,6 +118,8 @@ class Proposal(Base):
         ], [
         Submit('pending', 'submitted',
                title=_('submit', default='Submit')),
+        Reject('submitted', 'pending',
+               title=_('reject', default='Reject')),
         Transition('submitted', 'scheduled',
                    title=_('schedule', default='Schedule')),
         Transition('scheduled', 'submitted',
@@ -230,6 +239,26 @@ class Proposal(Base):
         session = create_session()
         meeting.agenda_items.append(AgendaItem(proposal=self))
         session.add(proposalhistory.Scheduled(proposal=self, meeting=meeting))
+
+    def reject(self, text):
+        assert self.workflow.can_execute_transition(self, 'submitted-pending')
+
+        self.submitted_physical_path = None
+        self.submitted_admin_unit_id = None
+        self.submitted_int_id = None
+
+        # kill references to submitted documents (i.e. copies), they will be
+        # deleted.
+        query = proposalhistory.DocumentSubmitted.query.filter_by(
+            proposal=self)
+        for record in query.all():
+            record.submitted_document = None
+
+        # set workflow state directly for once, the transition is used to
+        # redirect to a form.
+        self.workflow_state = self.STATE_PENDING.name
+        session = create_session()
+        session.add(proposalhistory.Rejected(proposal=self, text=text))
 
     def remove_scheduled(self, meeting):
         self.execute_transition('scheduled-submitted')

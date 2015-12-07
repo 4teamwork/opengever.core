@@ -79,6 +79,9 @@
 
               <h3 tal:content="structure history_record/message" i18n:translate="">
               </h3>
+              <div tal:condition="history_record/text" class="text"
+                   tal:content="history_record/text">
+              </div>
             </div>
           </div>
           <div style="clear:both"><!-- --></div>

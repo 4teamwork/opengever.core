@@ -1,6 +1,7 @@
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
+from opengever.base.security import elevated_privileges
 from opengever.base.source import DossierPathSourceBinder
 from opengever.dossier.utils import get_containing_dossier
 from opengever.meeting import _
@@ -234,7 +235,8 @@ class SubmittedProposal(ProposalBase):
     model_class = ProposalModel
 
     implements(content_schema)
-    workflow = ProposalModel.workflow.with_visible_transitions([])
+    workflow = ProposalModel.workflow.with_visible_transitions(
+        ['submitted-pending'])
 
     def is_editable(self):
         """A proposal in a meeting/committee is editable when submitted but not
@@ -304,6 +306,13 @@ class SubmittedProposal(ProposalBase):
 
     def is_submit_additional_documents_allowed(self):
         return False
+
+    def reject(self, text):
+        proposal = self.load_model()
+        proposal.reject(text)
+
+        with elevated_privileges():
+            api.content.delete(self)
 
 
 class Proposal(ProposalBase):
