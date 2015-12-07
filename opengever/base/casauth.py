@@ -15,4 +15,4 @@ def is_cas_auth_enabled():
 
 def get_cas_portal_url():
     return CAS_SERVER_URL_FORMAT.format(
-        admin_unit_public_url=get_current_admin_unit().public_url)
+        admin_unit_public_url=get_current_admin_unit().public_url.rstrip('/'))
