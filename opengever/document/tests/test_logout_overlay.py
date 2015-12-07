@@ -1,7 +1,9 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.setup.casauth import install_cas_auth_plugin
 from opengever.testing import FunctionalTestCase
+from plone import api
 import transaction
 
 
@@ -55,3 +57,23 @@ class TestLogoutOverlayWithCheckouts(FunctionalTestCase):
         self.assertEqual(
             'http://nohost/plone/logout',
             browser.css('input[name="form.redirect.url"]').first.get('value'))
+
+
+class TestLogoutOverlayWithCASAuth(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestLogoutOverlayWithCASAuth, self).setUp()
+        install_cas_auth_plugin()
+        transaction.commit()
+
+    def tearDown(self):
+        super(TestLogoutOverlayWithCASAuth, self).tearDown()
+        acl_users = api.portal.get_tool('acl_users')
+        acl_users.plugins.removePluginById('cas_auth')
+        transaction.commit()
+
+    @browsing
+    def test_redirects_to_portal_logout(self, browser):
+        browser.login().open(view='logout_overlay')
+        self.assertEquals('empty:http://example.com/portal/logout',
+                          browser.contents)
