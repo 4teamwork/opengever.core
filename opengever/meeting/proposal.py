@@ -307,9 +307,9 @@ class SubmittedProposal(ProposalBase):
     def is_submit_additional_documents_allowed(self):
         return False
 
-    def reject(self, comment):
+    def reject(self, text):
         proposal = self.load_model()
-        proposal.reject(comment)
+        proposal.reject(text)
 
         with elevated_privileges():
             api.content.delete(self)

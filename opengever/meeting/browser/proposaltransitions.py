@@ -46,9 +46,9 @@ class ProposalTransitionController(grok.View):
 
 class IRejectProposalSchema(Interface):
 
-    comment = schema.Text(
-        title=_(u'label_reject_proposal_comment', default=u'Comment'),
-        description=_(u'help_reject_proposal_comment',
+    text = schema.Text(
+        title=_(u'label_reject_proposal_text', default=u'Comment'),
+        description=_(u'help_reject_proposal_text',
                       default=u'Describe why the proposal is rejected'),
         required=False)
 
@@ -64,7 +64,7 @@ class RejectProposalForm(Form):
         if len(errors) > 0:
             return
 
-        self.reject_proposal(data['comment'])
+        self.reject_proposal(data['text'])
         committee = aq_parent(aq_inner(self.context))
 
         api.portal.show_message(
@@ -72,8 +72,8 @@ class RejectProposalForm(Form):
             request=self.request)
         self.redirect(committee)
 
-    def reject_proposal(self, comment):
-        self.context.reject(comment)
+    def reject_proposal(self, text):
+        self.context.reject(text)
 
     @button.buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
     def cancel(self, action):

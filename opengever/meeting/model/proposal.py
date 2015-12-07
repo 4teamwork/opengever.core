@@ -240,7 +240,7 @@ class Proposal(Base):
         meeting.agenda_items.append(AgendaItem(proposal=self))
         session.add(proposalhistory.Scheduled(proposal=self, meeting=meeting))
 
-    def reject(self, comment):
+    def reject(self, text):
         assert self.workflow.can_execute_transition(self, 'submitted-pending')
 
         self.submitted_physical_path = None
@@ -258,7 +258,7 @@ class Proposal(Base):
         # redirect to a form.
         self.workflow_state = self.STATE_PENDING.name
         session = create_session()
-        session.add(proposalhistory.Rejected(proposal=self, comment=comment))
+        session.add(proposalhistory.Rejected(proposal=self, text=text))
 
     def remove_scheduled(self, meeting):
         self.execute_transition('scheduled-submitted')
