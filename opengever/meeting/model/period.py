@@ -30,7 +30,7 @@ class Period(Base):
 
     __tablename__ = 'periods'
 
-    period_id = Column('id', Integer, Sequence('period_id_seq'),
+    period_id = Column('id', Integer, Sequence('periods_id_seq'),
                        primary_key=True)
     committee_id = Column('committee_id', Integer, ForeignKey('committees.id'),
                           nullable=False)
