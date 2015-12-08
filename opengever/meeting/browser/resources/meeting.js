@@ -250,6 +250,9 @@
       agendaItemController.connectedTo = [proposalsController];
     }
 
+    global.autosize($('body.template-opengever-meeting-proposal textarea'));
+    global.autosize($('body.template-edit.portaltype-opengever-meeting-proposal textarea'));
+    global.autosize($('body.template-edit.portaltype-opengever-meeting-submittedproposal textarea'));
 
     $(global.document).on("notify", function() {
       var notifyContainer = new global.StickyHeading({ selector: "#columns", clone: false, fix: false });
