@@ -397,3 +397,20 @@ def nullupgrade(context):
 
 marmoset_patch(betas.to43rc1, nullupgrade)
 LOGGER.info('Marmoset patched plone.app.upgrade.v43.betas.to43rc1')
+
+
+# --------
+# Monkey patch the regex used to replace relative paths in url() statements
+# with absolute paths in the portal_css tool.
+# This has been fixed as of release 3.0.3 of Products.ResourceRegistries
+# which is only available for Plone 5.
+# See https://github.com/plone/Products.ResourceRegistries/commit/4f9094919bc1c50404e74c748b067a3563e640aa
+
+import re
+from Products.ResourceRegistries import utils
+
+
+utils.URL_MATCH = re.compile(r'''(url\s*\(\s*['"]?)(?!data:)([^'")]+)(['"]?\s*\))''', re.I | re.S)
+
+
+LOGGER.info('Monkey patched Products.ResourceRegistries.utils.URL_MATCH regexp')
