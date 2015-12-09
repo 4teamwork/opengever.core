@@ -15,7 +15,7 @@
 
     var beforeScrollCallback = function() {};
 
-    var root = $(":root");
+    var root = $("html, body");
 
     var self = this;
 
