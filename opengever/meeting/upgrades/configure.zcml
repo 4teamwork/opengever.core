@@ -565,4 +565,15 @@
         profile="opengever.meeting:default"
     />
 
+
+    <!-- 4625 -> 4626 -->
+    <genericsetup:upgradeStep
+        title="Rename title of the add-member action."
+        description=""
+        source="4625"
+        destination="4626"
+        handler="opengever.meeting.upgrades.to4626.RenameAddMemberAction"
+        profile="opengever.meeting:default"
+    />
+
 </configure>

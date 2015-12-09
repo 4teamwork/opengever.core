@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-11-10 08:28+0000\n"
+"POT-Creation-Date: 2015-12-09 09:17+0000\n"
 "PO-Revision-Date: 2014-09-04 01:03+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -226,7 +226,7 @@ msgid "label_dossier"
 msgstr "Dossier:"
 
 #. Default: "Initial version (document copied)"
-#: ./opengever/base/subscribers.py:45
+#: ./opengever/base/subscribers.py:57
 msgid "label_initial_version_copied"
 msgstr "Dokument kopiert (Initialversion)"
 
