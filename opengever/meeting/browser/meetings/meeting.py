@@ -90,7 +90,7 @@ AGENDAITEMS_TEMPLATE = '''
         </div>
       </td>
       <td class="toggle-attachements">
-        {{#if documents}}
+        {{#if has_documents}}
           <a class="toggle-attachements-btn"></a>
         {{/if}}
       </td>
