@@ -75,16 +75,6 @@
     var labels = new global.StickyHeading({ selector: "#opengever_meeting_protocol .agenda_items label", fix: false, dependsOn: headings});
     var collapsible = new global.StickyHeading({ selector: "#opengever_meeting_protocol .collapsible", clone: false});
 
-    function moveCaretToEnd(el) {
-      if (typeof el.selectionStart === "number") {
-          el.selectionStart = el.selectionEnd = el.value.length;
-      } else if (el.createTextRange) {
-          var range = el.createTextRange();
-          range.collapse(false);
-      }
-      el.focus();
-    }
-
     scrollspy.onBeforeScroll(function(target) {
       if(target.hasClass("expandable") && !target.hasClass("paragraph")) {
         scrollspy.options.offset = target.outerHeight() + 60;
