@@ -46,7 +46,7 @@ msgstr "Mitgliedschaft hinzufügen"
 
 #: ./opengever/meeting/browser/committeeforms.py:32
 msgid "Add committee"
-msgstr "Kommittee hinzufügen"
+msgstr "Kommission hinzufügen"
 
 #: ./opengever/meeting/browser/periods.py:40
 msgid "Add new period"
@@ -514,7 +514,7 @@ msgstr "Beschlossen"
 #. Default: "Automatically configure permissions on the committee for this group."
 #: ./opengever/meeting/committee.py:71
 msgid "description_group"
-msgstr "Für diese Gruppe werden automatisch Berechtigungen auf dem Kommittee vergeben."
+msgstr "Für diese Gruppe werden automatisch Berechtigungen auf der Kommission vergeben."
 
 #. Default: "Dossier"
 #: ./opengever/meeting/tabs/meetinglisting.py:57
