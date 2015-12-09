@@ -856,7 +856,7 @@ msgstr "Traktandieren"
 #. Default: "Secretary"
 #: ./opengever/meeting/browser/meetings/protocol.py:31
 msgid "label_secretary"
-msgstr "Sekretär"
+msgstr "Protokollführung"
 
 #. Default: "Target dossier"
 #: ./opengever/meeting/browser/meetings/excerpt.py:22
