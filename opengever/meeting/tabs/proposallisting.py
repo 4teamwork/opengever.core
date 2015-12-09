@@ -32,27 +32,29 @@ class ProposalListingTab(BaseListingTab):
 
     model = Proposal
 
-    columns = (
-        {'column': 'title',
-         'column_title': _(u'column_title', default=u'Title'),
-         'transform': proposal_link},
+    @property
+    def columns(self):
+        return (
+            {'column': 'title',
+             'column_title': _(u'column_title', default=u'Title'),
+             'transform': proposal_link},
 
-        {'column': 'workflow_state',
-         'column_title': _(u'column_state', default=u'State'),
-         'transform': translated_state},
+            {'column': 'workflow_state',
+             'column_title': _(u'column_state', default=u'State'),
+             'transform': translated_state},
 
-        {'column': 'committee_id',
-         'column_title': _(u'column_comittee', default=u'Comittee'),
-         'transform': lambda item, value: item.committee.title},
+            {'column': 'committee_id',
+             'column_title': _(u'column_comittee', default=u'Comittee'),
+             'transform': lambda item, value: item.committee.title},
 
-        {'column': 'initial_position',
-         'column_title': _(u'column_initial_position',
-                           default=u'Initial Position')},
+            {'column': 'initial_position',
+             'column_title': _(u'column_initial_position',
+                               default=u'Initial Position')},
 
-        {'column': 'proposed_action',
-         'column_title': _(u'column_proposed_action',
-                           default=u'Proposed action')},
-    )
+            {'column': 'proposed_action',
+             'column_title': _(u'column_proposed_action',
+                               default=u'Proposed action')},
+        )
 
 
 class ProposalTableSource(SqlTableSource):
