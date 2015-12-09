@@ -113,7 +113,6 @@
       if(target.hasClass("expandable")) {
         scrollspy.expand(target);
       }
-      moveCaretToEnd(toElement[0]);
     });
 
     var protocolController = new ProtocolController();
