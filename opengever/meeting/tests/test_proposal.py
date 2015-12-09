@@ -336,11 +336,16 @@ class TestProposal(FunctionalTestCase):
     @browsing
     def test_submitted_proposal_can_be_rejected(self, browser):
         self.grant('CommitteeGroupMember', 'Contributor', 'Editor')
+        document = create(Builder('document')
+                          .within(self.dossier)
+                          .titled('A Document'))
+
         committee = create(Builder('committee'))
         proposal = create(Builder('proposal')
                           .within(self.dossier)
                           .having(title='Mach doch',
-                                  committee=committee.load_model()))
+                                  committee=committee.load_model())
+                          .relate_to(document))
 
         browser.login().open(proposal, view='tabbedview_view-overview')
         browser.css('#pending-submitted').first.click()
@@ -358,10 +363,17 @@ class TestProposal(FunctionalTestCase):
         self.assertEqual([u"The proposal has been rejected successfully"],
                          info_messages())
         self.assertEqual(Proposal.STATE_PENDING, proposal.get_state())
+
         proposal_model = proposal.load_model()
         self.assertIsNone(proposal_model.submitted_physical_path)
         self.assertIsNone(proposal_model.submitted_int_id)
         self.assertIsNone(proposal_model.submitted_admin_unit_id)
+
+        for record in proposal_model.history_records:
+            self.assertIsNone(
+                record.submitted_document,
+                "reference to submitted document on {} should be removed".format(
+                    record))
 
     def test_is_submission_allowed(self):
         committee = create(Builder('committee').titled('My committee'))
