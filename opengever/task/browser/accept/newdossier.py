@@ -7,6 +7,7 @@ from five import grok
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.form import WizzardWrappedAddForm
 from opengever.base.source import RepositoryPathSourceBinder
+from opengever.base.validators import BaseRepositoryfolderValidator
 from opengever.globalindex.model.task import Task
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.task import _
@@ -97,27 +98,8 @@ class ISelectRepositoryfolderSchema(Schema):
                 }))
 
 
-class RepositoryfolderValidator(SimpleFieldValidator):
-
-    def validate(self, value):
-
-        super(RepositoryfolderValidator, self).validate(value)
-
-        # The user should be able to create a dossier (of any type) in the
-        # selected repository folder.
-        dossier_behavior = 'opengever.dossier.behaviors.dossier.IDossier'
-        dossier_addable = False
-
-        for fti in value.allowedContentTypes():
-            if dossier_behavior in getattr(fti, 'behaviors', ()):
-                dossier_addable = True
-                break
-
-        if not dossier_addable:
-            msg = _(u'You cannot add dossiers in the selected repository '
-                    u'folder. Either you do not have the privileges or the '
-                    u'repository folder contains another repository folder.')
-            raise Invalid(msg)
+class RepositoryfolderValidator(BaseRepositoryfolderValidator):
+    pass
 
 WidgetValidatorDiscriminators(
     RepositoryfolderValidator,

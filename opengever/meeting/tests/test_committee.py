@@ -31,6 +31,30 @@ class TestCommittee(FunctionalTestCase):
         self.assertEqual(Oguid.for_object(committee), model.oguid)
 
     @browsing
+    def test_committee_repository_is_validated(self, browser):
+        parent_repo = create(Builder('repository')
+                             .within(self.repo_root))
+        leaf_repo = create(Builder('repository')
+                           .within(parent_repo))
+
+        self.grant('Administrator')
+        browser.login()
+        browser.open(self.container, view='++add++opengever.meeting.committee')
+
+        browser.fill(
+            {'Title': u'A c\xf6mmittee',
+             'Linked repository folder': parent_repo,
+             self.group_field_name: 'client1_users'})
+        browser.css('#form-buttons-save').first.click()
+
+        error = browser.css("#formfield-form-widgets-repository_folder div.error").first.text
+        self.assertEqual('You cannot add dossiers in the selected repository '
+                         'folder. Either you do not have the privileges or '
+                         'the repository folder contains another repository '
+                         'folder.',
+                         error)
+
+    @browsing
     def test_committee_can_be_created_in_browser(self, browser):
         self.grant('Administrator')
         browser.login()

@@ -1,6 +1,7 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from five import grok
+from opengever.base.validators import BaseRepositoryfolderValidator
 from opengever.meeting import _
 from opengever.meeting.committeeroles import CommitteeRoles
 from opengever.meeting.container import ModelContainer
@@ -14,6 +15,7 @@ from opengever.meeting.wrapper import MeetingWrapper
 from opengever.ogds.base.utils import ogds_service
 from plone import api
 from plone.directives import form
+from z3c.form.validator import WidgetValidatorDiscriminators
 from z3c.relationfield.schema import RelationChoice
 from zope import schema
 from zope.interface import Interface
@@ -55,6 +57,15 @@ class ICommittee(form.Schema):
                     u'for this committee.'),
         source=repository_folder_source,
         required=True)
+
+
+class RepositoryfolderValidator(BaseRepositoryfolderValidator):
+    pass
+
+WidgetValidatorDiscriminators(
+    RepositoryfolderValidator,
+    field=ICommittee['repository_folder'])
+grok.global_adapter(RepositoryfolderValidator)
 
 
 class ICommitteeModel(Interface):
