@@ -34,6 +34,7 @@ class ProtocolData(object):
         self.add_protocol_type()
         self.add_participants()
         self.add_meeting()
+        self.add_commitee()
         self.add_agenda_items()
 
     def add_settings(self):
@@ -94,6 +95,11 @@ class ProtocolData(object):
             'start_time': self.meeting.get_start_time(),
             'end_time': self.meeting.get_end_time(),
             'number': self.meeting.meeting_number,
+        }
+
+    def add_commitee(self):
+        self.data['committee'] = {
+            'name': self.meeting.committee.title,
         }
 
     def add_agenda_items(self):
