@@ -23,7 +23,8 @@ class TestProtocolJsonData(FunctionalTestCase):
                     copy_for_attention=u'Hanspeter',
                     disclose_to=u'Jans\xf6rg',
                     publish_in=u'Tagblatt'))
-        self.committee = create(Builder('committee_model'))
+        self.committee = create(Builder('committee_model')
+                                .having(title=u'Gemeinderat'))
         self.member_peter = create(Builder('member'))
         self.member_franz = create(Builder('member')
                                    .having(firstname=u'Franz',
