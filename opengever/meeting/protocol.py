@@ -65,8 +65,8 @@ class ProtocolData(object):
                 self.meeting, participant)
             members.append({
                 "fullname": participant.fullname,
-                "role": membership.role
-                })
+                "role": membership.role if membership else None
+            })
 
         participants = {
             'members': members
