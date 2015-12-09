@@ -53,7 +53,7 @@
     this.discardProtocol = function() { meetingStorage.deleteCurrentMeeting(); };
 
     this.events = {
-      "click##form-buttons-save$": this.saveProtocol,
+      "click##form-buttons-save": this.saveProtocol,
       "click##form-buttons-cancel$": this.discardProtocol
     };
 
