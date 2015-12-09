@@ -7,6 +7,7 @@ from opengever.meeting.model.agendaitem import AgendaItem
 from opengever.meeting.wrapper import MeetingWrapper
 from opengever.testing import FunctionalTestCase
 from plone.protect import createToken
+from plone.protect import createToken
 from z3c.relationfield.relation import RelationValue
 from zExceptions import NotFound
 from zExceptions import Unauthorized
@@ -37,12 +38,98 @@ class TestAgendaItem(FunctionalTestCase):
 
         self.meeting_wrapper = MeetingWrapper.wrap(self.committee, self.meeting)
 
-    def setup_proposal(self):
-        proposal = create(Builder('proposal')
-                          .within(self.dossier)
-                          .having(committee=self.committee.load_model())
-                          .as_submitted())
-        return proposal
+    def setup_proposal(self, has_document=False):
+        builder = (Builder('proposal')
+                   .within(self.dossier)
+                   .having(committee=self.committee.load_model())
+                   .as_submitted())
+
+        if has_document:
+            document = create(Builder('document').within(self.dossier))
+            builder = builder.relate_to(document)
+
+        return create(builder)
+
+    def schedule_proposal(self, proposal, browser):
+        view = 'unscheduled_proposals/{}/schedule'.format(
+            proposal.load_model().proposal_id)
+
+        browser.login().open(self.meeting_wrapper, view=view)
+
+        return AgendaItem.query.first()
+
+    def setup_excerpt_template(self):
+        templates = create(Builder('templatedossier'))
+        sablon_template = create(
+            Builder('sablontemplate')
+            .within(templates)
+            .with_asset_file('sablon_template.docx'))
+
+        self.container.excerpt_template = RelationValue(
+            getUtility(IIntIds).getId(sablon_template))
+
+
+class TestAgendaItemList(TestAgendaItem):
+
+    @browsing
+    def test_agendaitem_without_attachements_has_no_documents(self, browser):
+        item = create(Builder('agenda_item').having(
+            title=u'foo', meeting=self.meeting))
+
+        browser.login().open(
+            self.meeting_wrapper,
+            view='agenda_items/{}/list'.format(item.agenda_item_id),
+            data={'title': 'bar'})
+        item = browser.json.get('items')[0]
+
+        self.assertFalse(item.get('has_documents'))
+
+    @browsing
+    def test_agendaitem_with_attachements_has_documents(self, browser):
+        item = self.setup_proposal(has_document = True)
+        item = self.schedule_proposal(item, browser)
+
+        browser.login().open(
+            self.meeting_wrapper,
+            view='agenda_items/{}/list'.format(item.agenda_item_id),
+            data={'title': 'bar'})
+        item = browser.json.get('items')[0]
+
+        self.assertTrue(item.get('has_documents'))
+
+    @browsing
+    def test_agendaitem_with_excerpts_and_documents_has_documents(self, browser):
+        self.setup_excerpt_template()
+        item = self.setup_proposal(has_document = True)
+        item = self.schedule_proposal(item, browser)
+        browser.login().open(
+            self.meeting_wrapper, {'_authenticator': createToken()},
+            view='agenda_items/{}/decide'.format(item.agenda_item_id))
+
+        browser.login().open(
+            self.meeting_wrapper,
+            view='agenda_items/{}/list'.format(item.agenda_item_id),
+            data={'title': 'bar'})
+        item = browser.json.get('items')[0]
+
+        self.assertTrue(item.get('has_documents'))
+
+    @browsing
+    def test_agendaitem_with_excerpts_has_documents(self, browser):
+        self.setup_excerpt_template()
+        item = self.setup_proposal()
+        item = self.schedule_proposal(item, browser)
+        browser.login().open(
+            self.meeting_wrapper, {'_authenticator': createToken()},
+            view='agenda_items/{}/decide'.format(item.agenda_item_id))
+
+        browser.login().open(
+            self.meeting_wrapper,
+            view='agenda_items/{}/list'.format(item.agenda_item_id),
+            data={'title': 'bar'})
+        item = browser.json.get('items')[0]
+
+        self.assertTrue(item.get('has_documents'))
 
 
 class TestAgendaItemEdit(TestAgendaItem):
@@ -136,16 +223,6 @@ class TestAgendaItemDelete(TestAgendaItem):
 
 
 class TestAgendaItemDecide(TestAgendaItem):
-
-    def setup_excerpt_template(self):
-        templates = create(Builder('templatedossier'))
-        sablon_template = create(
-            Builder('sablontemplate')
-            .within(templates)
-            .with_asset_file('sablon_template.docx'))
-
-        self.container.excerpt_template = RelationValue(
-            getUtility(IIntIds).getId(sablon_template))
 
     def test_meeting_is_held_when_deciding_an_agendaitem(self):
         item = create(Builder('agenda_item').having(

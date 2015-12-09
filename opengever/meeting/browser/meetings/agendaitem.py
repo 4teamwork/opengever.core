@@ -96,6 +96,13 @@ class AgendaItemsView(BrowserView):
             'css_class': get_css_class(excerpt),
             }
 
+    def has_documents(self, item):
+        if not item.has_proposal:
+            return False
+
+        return bool(item.proposal.submitted_documents or
+                item.proposal.submitted_excerpt_document)
+
     def list(self):
         """Returns json list of all agendaitems for the current
         context (meeting).
@@ -106,6 +113,7 @@ class AgendaItemsView(BrowserView):
             data = item.serialize()
             data['documents'] = self._serialize_submitted_documents(item)
             data['excerpt'] = self._serialize_submitted_excerpt(item)
+            data['has_documents'] = self.has_documents(item)
             data['delete_link'] = meeting.get_url(
                 view='agenda_items/{}/delete'.format(item.agenda_item_id))
             data['edit_link'] = meeting.get_url(
