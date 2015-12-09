@@ -16,6 +16,8 @@ class OpengeverNavtreeStrategy(NavtreeStrategy):
 
     Because the `normalized_portal_type` attribute is only used by the
     contenttree widgets, it's save to overwrite this attribute.
+
+    Also disable rendering of plone icons for sablon templates.
     """
 
     implements(INavtreeStrategy)
@@ -23,11 +25,15 @@ class OpengeverNavtreeStrategy(NavtreeStrategy):
 
     def decoratorFactory(self, node):
         new_node = super(OpengeverNavtreeStrategy, self).decoratorFactory(node)
-        if new_node.get('portal_type', '') == 'opengever.document.document':
+        portal_type = new_node.get('portal_type', '')
+        if portal_type == 'opengever.document.document':
             brain = new_node.get('item_icon').brain
             new_node['normalized_portal_type'] = ' {}'.format(
                 get_css_class(brain))
 
+            new_node['item_icon'] = None
+
+        elif portal_type == 'opengever.meeting.sablontemplate':
             new_node['item_icon'] = None
 
         return new_node
