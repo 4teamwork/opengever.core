@@ -249,7 +249,7 @@ class Proposal(Base):
 
         # kill references to submitted documents (i.e. copies), they will be
         # deleted.
-        query = proposalhistory.DocumentSubmitted.query.filter_by(
+        query = proposalhistory.ProposalHistory.query.filter_by(
             proposal=self)
         for record in query.all():
             record.submitted_document = None
