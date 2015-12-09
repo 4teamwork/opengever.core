@@ -64,8 +64,9 @@
 
     this.focus = function(target) {
       target.focus();
-      if (typeof target.stargetectionStart === "number") {
-        target.stargetectionStart = target.stargetectionEnd = target.value.length;
+      target = target[0];
+      if (typeof target.selectionStart === "number") {
+        target.selectionStart = target.selectionEnd = target.value.length;
       } else if (target.createTextRange) {
         var range = target.createTextRange();
         range.collapse(false);
