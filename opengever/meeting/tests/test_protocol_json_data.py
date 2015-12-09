@@ -1,6 +1,7 @@
 from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.base.model import create_session
 from opengever.meeting.browser.sablontemplate import SAMPLE_MEETING_DATA
 from opengever.meeting.protocol import ProtocolData
 from opengever.testing import FunctionalTestCase
@@ -66,3 +67,11 @@ class TestProtocolJsonData(FunctionalTestCase):
     def test_protocol_json(self):
         data = ProtocolData(self.meeting).data
         self.assertDictEqual(SAMPLE_MEETING_DATA, data)
+
+    def test_add_members_handles_participants_are_no_longer_committee_memberships(self):
+        create_session().delete(self.membership_peter)
+
+        self.assertEquals(
+            {'members': [{'fullname': u'Peter Meier', 'role': None},
+                         {'fullname': u'Franz M\xfcller', 'role': None}]},
+            ProtocolData(self.meeting).add_members())
