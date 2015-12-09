@@ -15,7 +15,7 @@
 
     var beforeScrollCallback = function() {};
 
-    var root = $(":root");
+    var root = $("html, body");
 
     var self = this;
 
@@ -62,9 +62,19 @@
       }
     };
 
-    this.scrollTo = function(offset) {
+    this.focus = function(target) {
+      target.focus();
+      if (typeof target.stargetectionStart === "number") {
+        target.stargetectionStart = target.stargetectionEnd = target.value.length;
+      } else if (target.createTextRange) {
+        var range = target.createTextRange();
+        range.collapse(false);
+      }
+    };
+
+    this.scrollTo = function(offset, callback) {
       offset = offset - this.options.offset;
-      root.animate({ scrollTop: offset + "px" }, this.options.animationSpeed);
+      root.animate({ scrollTop: offset + "px" }, this.options.animationSpeed, callback);
     };
 
     this.extractAnchor = function(target) {
@@ -79,7 +89,7 @@
         anchor = this.extractAnchor(target);
       }
       beforeScrollCallback(target, anchor);
-      this.scrollTo(anchor.offset().top);
+      this.scrollTo(anchor.offset().top, function() { self.focus(anchor); });
       scrollCallback(target, anchor);
     };
 
