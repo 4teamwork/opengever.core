@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-12-09 09:17+0000\n"
+"POT-Creation-Date: 2015-12-09 10:38+0000\n"
 "PO-Revision-Date: 2012-08-30 15:34+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,6 +44,10 @@ msgstr "Ce groupe n'a aucun utilisateur"
 #: ./opengever/base/browser/list_groupmembers.pt:3
 msgid "Users of group:"
 msgstr "Utilisateur du groupe"
+
+#: ./opengever/base/validators.py:15
+msgid "You cannot add dossiers in the selected repository folder. Either you do not have the privileges or the repository folder contains another repository folder."
+msgstr "Vous ne pouvez créer aucun dossier dans ce numéro de classement. Ce dernier en contient d'autres ou alors vous n'avez pas les droits suffisants pour effectuer cette tâche."
 
 #. Default ""
 #: opengever/repository/classification.py
