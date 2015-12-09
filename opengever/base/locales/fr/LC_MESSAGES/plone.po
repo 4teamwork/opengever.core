@@ -41,6 +41,9 @@ msgstr "Checkout et modifier"
 msgid "Close current period"
 msgstr ""
 
+msgid "Committee Member"
+msgstr ""
+
 msgid "Create successor task"
 msgstr "Créer tâche suivante"
 

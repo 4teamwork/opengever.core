@@ -303,6 +303,9 @@ msgstr ""
 msgid "Meeting"
 msgstr ""
 
+msgid "Committee Member"
+msgstr ""
+
 msgid "Membership"
 msgstr ""
 

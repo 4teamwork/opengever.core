@@ -41,6 +41,9 @@ msgstr "Auschecken / Bearbeiten"
 msgid "Close current period"
 msgstr "Aktuelle Periode abschliessen"
 
+msgid "Committee Member"
+msgstr "Mitglied"
+
 msgid "Create successor task"
 msgstr "Folgeaufgabe erstellen"
 
@@ -305,4 +308,3 @@ msgstr "Aktivieren"
 
 msgid "transition-add-document"
 msgstr "Dokument hinzugefügt"
-
