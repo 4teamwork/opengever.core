@@ -276,18 +276,10 @@ class AdvancedSearchForm(directives_form.Form):
 
     ignoreContext = True
 
+    enable_unload_protection = False
+
     def field_mapping(self):
         return FIELD_MAPPING
-
-    def render(self):
-        """Overwritting the render method to disable the UnloadProtection.
-        Becuase overwrite and copy the whole template makes no sense.
-        Unfortunately it's not configurable in the plone.app.z3c form itself.
-        """
-
-        html = super(AdvancedSearchForm, self).render()
-        html = html.replace('enableUnloadProtection', '')
-        return html
 
     def get_fields(self):
         if getattr(self, '_fields', None) is not None:
