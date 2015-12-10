@@ -109,6 +109,7 @@ class EditProtocol(AutoExtensibleForm, ModelEditForm):
     ignoreContext = True
     schema = IMeetingMetadata
     content_type = Meeting
+    enable_unload_protection = False
 
     template = ViewPageTemplateFile('templates/protocol.pt')
 
