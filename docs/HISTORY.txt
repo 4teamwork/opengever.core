@@ -5,6 +5,9 @@ Changelog
 4.6.0 (unreleased)
 ------------------
 
+- Set all active members of a committee as meeting participants by default.
+  [deiferni]
+
 - Allow rejecting proposals from a committee. It is possible to enter an optional comment.
   [deiferni]
 
