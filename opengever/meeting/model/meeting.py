@@ -129,6 +129,17 @@ class Meeting(Base):
     excerpt_documents = relationship('GeneratedExcerpt',
                                      secondary=meeting_excerpts,)
 
+    def __init__(self, *args, **kwargs):
+        super(Meeting, self).__init__(*args, **kwargs)
+
+    def initialize_participants(self):
+        """Set all active members of our committee as participants of
+        this meeting.
+
+        """
+        self.participants = [membership.member for membership in
+                             self.committee.get_active_memberships()]
+
     def __repr__(self):
         return '<Meeting at "{}">'.format(self.start)
 

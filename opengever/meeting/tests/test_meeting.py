@@ -1,10 +1,13 @@
+from datetime import date
 from datetime import datetime
+from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.model import Meeting
+from opengever.meeting.model import Member
 from opengever.testing import FunctionalTestCase
 from pyquery import PyQuery
 
@@ -36,6 +39,12 @@ class TestMeeting(FunctionalTestCase):
                                 .within(self.container)
                                 .link_with(self.repository_folder))
         self.committee_model = self.committee.load_model()
+        self.peter = create(Builder('member')
+                            .having(firstname=u'Peter', lastname=u'M\xfcller'))
+        self.membership = create(Builder('membership')
+                                 .having(committee=self.committee_model,
+                                         member=self.peter)
+                                 .as_active())
 
     def test_meeting_title(self):
         self.assertEqual(
@@ -89,6 +98,8 @@ class TestMeeting(FunctionalTestCase):
         self.assertEqual(self.localized_datetime(2010, 1, 1, 10), meeting.start)
         self.assertEqual(self.localized_datetime(2010, 1, 1, 11), meeting.end)
         self.assertEqual('Somewhere', meeting.location)
+        self.assertEqual([Member.get(self.peter.member_id)],
+                         meeting.participants)
         dossier = meeting.dossier_oguid.resolve_object()
         self.assertIsNotNone(dossier)
         self.assertEquals(u'Meeting on Jan 01, 2010', dossier.title)

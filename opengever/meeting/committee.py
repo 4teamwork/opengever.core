@@ -146,8 +146,7 @@ class Committee(ModelContainer):
         return '/'.join(url_tool.getRelativeContentPath(self))
 
     def get_active_memberships(self):
-        return Membership.query.filter_by(
-            committee=self.load_model()).only_active()
+        return self.load_model().get_active_memberships()
 
     def get_memberships(self):
         return self.load_model().memberships

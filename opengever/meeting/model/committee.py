@@ -1,6 +1,7 @@
 from opengever.base.model import Base
 from opengever.base.oguid import Oguid
 from opengever.base.utils import escape_html
+from opengever.meeting.model.membership import Membership
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models import GROUP_ID_LENGTH
 from opengever.ogds.models import UNIT_ID_LENGTH
@@ -59,3 +60,7 @@ class Committee(Base):
 
     def get_excerpt_template(self):
         return self.resolve_committee().get_excerpt_template()
+
+    def get_active_memberships(self):
+        return Membership.query.filter_by(
+            committee=self).only_active()

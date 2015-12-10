@@ -244,6 +244,7 @@ class AddMeetingDossierView(WizzardWrappedAddForm):
                 data = dm.get_data(get_dm_key())
                 data['dossier_oguid'] = Oguid.for_object(dossier)
                 meeting = Meeting(**data)
+                meeting.initialize_participants()
                 session = create_session()
                 session.add(meeting)
                 session.flush()  # required to create an autoincremented id
