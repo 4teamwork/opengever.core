@@ -58,6 +58,8 @@
                                   form_tabbing python:(has_groups and enable_form_tabbing) and 'enableFormTabbing' or '';
                                   show_default_label python:has_groups and default_fieldset_label and len(view.widgets);
                                   enable_refreshable_locks context/@@ploneform-macros/enable_refreshable_locks;
+                                  enable_unload_protection view/enable_unload_protection|python:True;
+                                  unload_protection python: 'enableUnloadProtection' if enable_unload_protection else '';
                                   lock_class python: enable_refreshable_locks and 'enableUnlockProtection' or '';
                                   kss_class python: 'kssattr-formname-{}'.format(request.getURL().split('/')[-1])
                                   "
@@ -65,7 +67,7 @@
                                       enctype view/enctype;
                                       id view/id;
                                       method view/method|string:'post';
-                                      class python:' '.join(['rowlike', 'enableUnloadProtection', kss_class, form_tabbing, lock_class])"
+                                      class python:' '.join(['rowlike', unload_protection, kss_class, form_tabbing, lock_class])"
                       >
 
                     <metal:block define-slot="formtop" />
