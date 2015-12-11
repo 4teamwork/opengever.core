@@ -7,7 +7,7 @@
                       data-list-url view/list_url"
       tal:define="num_unread view/num_unread">
 
-    <dt class="notificationsMenuHeader actionMenuHeader">
+    <dt class="notificationsMenuHeader">
 
       <a tal:attributes="href string:#"></a>
 

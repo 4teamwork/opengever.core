@@ -77,7 +77,9 @@
       outlet: outlet,
       update: endpoints.readUrl
     });
-    $(".notificationsMenuHeader > a").on("click", function() {
+    $(".notificationsMenuHeader > a").on("click", function(event) {
+      event.preventDefault();
+      toggleMenuHandler.call(this, event);
       if($(this).parents(".notificationsMenu").hasClass("activated")) {
         outlet.empty();
         notifications.list(endpoints.listUrl);
