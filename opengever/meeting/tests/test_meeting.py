@@ -106,7 +106,9 @@ class TestMeeting(FunctionalTestCase):
         self.assertIsNotNone(meeting.modified)
 
     @browsing
-    def test_close_meeting_generates_sequence_numbers_by_period(self, browser):
+    def test_close_meeting(self, browser):
+        close_meeting_button_name = 'Close meeting'
+
         meeting = create(Builder('meeting')
                          .having(committee=self.committee_model)
                          .link_with(self.meeting_dossier))
@@ -114,9 +116,18 @@ class TestMeeting(FunctionalTestCase):
                                              title='Mach ize'))
 
         browser.login().open(meeting.get_url())
-        browser.find('Close meeting').click()
+        browser.find(close_meeting_button_name).click()
 
         meeting = Meeting.query.get(meeting.meeting_id)
         self.assertEqual('closed', meeting.workflow_state)
         self.assertEqual(1, meeting.agenda_items[0].decision_number)
         self.assertEqual(1, meeting.meeting_number)
+
+        # javascript redirects upon close, we need to do so manually here ...
+        browser.open(meeting.get_url())
+        self.assertEqual(
+            [u'The meeting B\xe4rn, Dec 13, 2011 has been successfully '
+             u'closed, the excerpts have been generated and sent back to the '
+             u'initial dossier.'],
+            info_messages())
+        self.assertIsNone(browser.find(close_meeting_button_name))
