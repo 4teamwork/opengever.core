@@ -2,7 +2,36 @@ from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
+
+
+class TestCommitteeContainer(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestCommitteeContainer, self).setUp()
+        self.grant('Manager')
+        add_languages(['de-ch', 'fr-ch'])
+        self.template = create(
+            Builder('sablontemplate')
+            .without_default_title()
+            .attach_file_containing("blub blub", name=u't\xf6st.txt'))
+
+    @browsing
+    def test_supports_translated_title(self, browser):
+        browser.login().open(view='++add++opengever.meeting.committeecontainer')
+        browser.fill({'Title (German)': u'Sitzungen',
+                      'Title (French)': u's\xe9ance',
+                      'Protocol template':self.template,
+                      'Excerpt template': self.template})
+
+        browser.find('Save').click()
+
+        browser.find('FR').click()
+        self.assertEquals(u's\xe9ance', browser.css('h1').first.text)
+
+        browser.find('DE').click()
+        self.assertEquals(u'Sitzungen', browser.css('h1').first.text)
 
 
 class TestCommitteesTab(FunctionalTestCase):

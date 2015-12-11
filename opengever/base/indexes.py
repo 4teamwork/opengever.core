@@ -2,6 +2,8 @@ from Acquisition import aq_base
 from datetime import datetime
 from DateTime import DateTime
 from five import grok
+from opengever.base.behaviors.translated_title import ITranslatedTitle
+from opengever.base.behaviors.translated_title import ITranslatedTitleSupport
 from opengever.base.interfaces import IReferenceNumber
 from plone.dexterity.interfaces import IDexterityContent
 from plone.indexer import indexer
@@ -46,3 +48,21 @@ def modified_seconds(obj):
 
     return int(modified)  # seconds since the epoch
 grok.global_adapter(modified_seconds, name="modified_seconds")
+
+
+@indexer(IDexterityContent)
+def title_de_indexer(obj):
+    if ITranslatedTitleSupport.providedBy(obj):
+        return ITranslatedTitle(obj).title_de
+    return None
+
+grok.global_adapter(title_de_indexer, name="title_de")
+
+
+@indexer(IDexterityContent)
+def title_fr_indexer(obj):
+    if ITranslatedTitleSupport.providedBy(obj):
+        return ITranslatedTitle(obj).title_fr
+    return None
+
+grok.global_adapter(title_fr_indexer, name="title_fr")

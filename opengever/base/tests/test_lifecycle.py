@@ -7,6 +7,7 @@ from mocker import Mocker
 from opengever.base.behaviors import lifecycle
 from opengever.base.interfaces import IBaseCustodyPeriods
 from opengever.base.interfaces import IRetentionPeriodRegister
+from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
 from plone.mocktestcase import MockTestCase
 from plone.registry.interfaces import IRegistry
@@ -186,6 +187,8 @@ class TestRetentionPeriod(FunctionalTestCase):
 
     def setUp(self):
         super(TestRetentionPeriod, self).setUp()
+        add_languages(['de-ch'])
+
         self.grant('Administrator')
         self.repo = create(Builder('repository')
                            .having(retention_period=15))
@@ -231,7 +234,8 @@ class TestRetentionPeriod(FunctionalTestCase):
         browser.login().open(self.repo,
                              view='++add++opengever.repository.repositoryfolder')
 
-        browser.fill({'Title': 'SubRepo', 'Retention period (years)': u'20'})
+        browser.fill({'Title': 'SubRepo',
+                      'Retention period (years)': u'20'})
         browser.find('Save').click()
 
         sub_repo = browser.context

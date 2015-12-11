@@ -235,4 +235,23 @@
         profile="opengever.dossier:default"
         />
 
+    <!-- 4502 -> 4600 -->
+    <genericsetup:upgradeStep
+        title="Add TranslatedTitle behavior to templatedossier."
+        description=""
+        source="4502"
+        destination="4600"
+        handler="opengever.dossier.upgrades.to4600.ActivateTranslatedTitle"
+        profile="opengever.dossier:default"
+        />
+
+    <genericsetup:registerProfile
+        name="4600"
+        title="opengever.dossier: upgrade profile 4600"
+        description=""
+        directory="profiles/4600"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
 </configure>

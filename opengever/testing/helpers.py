@@ -1,7 +1,10 @@
 from datetime import datetime
 from opengever.base.date_time import as_utc
+from plone import api
 from Products.CMFCore.utils import getToolByName
+from Products.PloneLanguageTool.LanguageTool import LanguageBinding
 import pytz
+import transaction
 
 
 DEFAULT_TZ = pytz.timezone('Europe/Zurich')
@@ -42,3 +45,21 @@ def obj2brain(obj, unrestricted=False):
 def index_data_for(obj):
     catalog = getToolByName(obj, 'portal_catalog')
     return catalog.getIndexDataForRID(obj2brain(obj).getRID())
+
+
+def set_preferred_language(request, code):
+    binding = LanguageBinding(api.portal.get_tool('portal_languages'))
+    binding.DEFAULT_LANGUAGE = code
+    binding.LANGUAGE = code
+    request['LANGUAGE_TOOL'] = binding
+
+
+def add_languages(codes, support_combined=True):
+    lang_tool = api.portal.get_tool('portal_languages')
+    if support_combined:
+        lang_tool.use_combined_language_codes = True
+
+    for code in codes:
+        lang_tool.addSupportedLanguage(code)
+
+    transaction.commit()

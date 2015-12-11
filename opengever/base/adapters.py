@@ -1,6 +1,7 @@
 from Acquisition import aq_base
 from five import grok
 from opengever.base import _
+from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.behaviors.utils import split_string_by_numbers
 from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.base.interfaces import IReferenceNumberSettings
@@ -181,7 +182,7 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
             obj = intid_util.queryObject(intid)
 
             if obj:
-                title = intid_util.getObject(intid).effective_title
+                title = ITranslatedTitle(obj).translated_title()
                 active = (self.get_prefix_mapping()[intid] == prefix)
             else:
                 # if a repositoryfolder is already removed the intid

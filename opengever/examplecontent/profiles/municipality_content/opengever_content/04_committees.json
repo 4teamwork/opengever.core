@@ -2,7 +2,8 @@
     {
         "_path": "sitzungen",
         "_type": "opengever.meeting.committeecontainer",
-        "title": "Sitzungen",
+        "title_de": "Sitzungen",
+        "title_fr": "Séances",
         "protocol_template": "resolvePath::/vorlagen/sablon-template-1",
         "excerpt_template": "resolvePath::/vorlagen/sablon-template-2",
 

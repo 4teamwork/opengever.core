@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<object name="opengever.repository.repositoryroot" meta_type="Dexterity FTI"
+        i18n:domain="opengever.repository" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+  <!-- class used for content items -->
+  <property name="klass">opengever.repository.repositoryroot.RepositoryRoot</property>
+
+</object>

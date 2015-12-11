@@ -160,7 +160,7 @@ msgid "help_retention_period_annotation"
 msgstr ""
 
 #. Default: "-- Already removed object --"
-#: ./opengever/base/adapters.py:192
+#: ./opengever/base/adapters.py:193
 msgid "label_already_removed"
 msgstr "-- Bereits gelöscht --"
 
@@ -281,8 +281,19 @@ msgstr "Fehler"
 
 #. Default: "Title"
 #: ./opengever/base/behaviors/base.py:24
+#: ./opengever/base/browser/translated_title.py:30
 msgid "label_title"
 msgstr "Titel"
+
+#. Default: "Title (German)"
+#: ./opengever/base/behaviors/translated_title.py:42
+msgid "label_title_de"
+msgstr "Titel (deutsch)"
+
+#. Default: "Title (French)"
+#: ./opengever/base/behaviors/translated_title.py:48
+msgid "label_title_fr"
+msgstr "Titel (französisch)"
 
 #. Default: "limited-public"
 #: opengever/repository/classification.py
@@ -378,4 +389,3 @@ msgstr "Nicht geprüft"
 #: opengever/repository/classification.py
 msgid "unprotected"
 msgstr "Nicht klassifiziert"
-

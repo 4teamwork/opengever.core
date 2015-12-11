@@ -13,13 +13,13 @@ from opengever.dossier.templatedossier import get_template_dossier
 from opengever.journal.handlers import DOC_PROPERTIES_UPDATED
 from opengever.journal.tests.utils import get_journal_entry
 from opengever.ogds.base.actor import Actor
+from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
 from opengever.testing.pages import sharing_tab_data
 from plone.app.testing import TEST_USER_ID
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 import transaction
-
 
 class TestDocumentWithTemplateForm(FunctionalTestCase):
 
@@ -244,6 +244,7 @@ class TestTemplateDossier(FunctionalTestCase):
 
     @browsing
     def test_adding(self, browser):
+        add_languages(['de-ch'])
         browser.login().open(self.portal)
         factoriesmenu.add('Template Dossier')
         browser.fill({'Title': 'Templates',
@@ -260,6 +261,23 @@ class TestTemplateDossier(FunctionalTestCase):
         self.assertEquals(
             ['Document', 'TaskTemplateFolder', 'Template Dossier'],
             factoriesmenu.addable_types())
+
+    @browsing
+    def test_supports_translated_title(self, browser):
+        add_languages(['de-ch', 'fr-ch'])
+
+        browser.login().open()
+        factoriesmenu.add('Template Dossier')
+        browser.fill({'Responsible': TEST_USER_ID,
+                      'Title (German)': u'Vorlagen',
+                      'Title (French)': u'mod\xe8le'})
+        browser.find('Save').click()
+
+        browser.find('FR').click()
+        self.assertEquals(u'mod\xe8le', browser.css('h1').first.text)
+
+        browser.find('DE').click()
+        self.assertEquals(u'Vorlagen', browser.css('h1').first.text)
 
 
 class TestTemplateDossierMeetingEnabled(FunctionalTestCase):

@@ -1,6 +1,7 @@
 from datetime import date
 from ftw.builder import builder_registry
 from ftw.builder.dexterity import DexterityBuilder
+from opengever.base.behaviors.translated_title import TranslatedTitle
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.document import Document
 from opengever.globalindex.handlers.task import sync_task
@@ -224,7 +225,11 @@ class RepositoryBuilder(DexterityBuilder):
     portal_type = 'opengever.repository.repositoryfolder'
 
     def titled(self, title):
-        self.arguments["effective_title"] = title
+        if not isinstance(title, unicode):
+            title = title.decode('utf-8')
+
+        fieldname = 'title_{}'.format(TranslatedTitle.FALLBACK_LANGUAGE)
+        self.arguments[fieldname] = title
         return self
 
 builder_registry.register('repository', RepositoryBuilder)
@@ -244,6 +249,14 @@ builder_registry.register('contact', ContactBuilder)
 
 class RepositoryRootBuilder(DexterityBuilder):
     portal_type = 'opengever.repository.repositoryroot'
+
+    def titled(self, title):
+        if not isinstance(title, unicode):
+            title = title.decode('utf-8')
+
+        fieldname = 'title_{}'.format(TranslatedTitle.FALLBACK_LANGUAGE)
+        self.arguments[fieldname] = title
+        return self
 
 builder_registry.register('repository_root', RepositoryRootBuilder)
 

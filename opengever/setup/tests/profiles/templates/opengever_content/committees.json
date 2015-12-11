@@ -2,7 +2,8 @@
     {
         "_path": "kommitees",
         "_type": "opengever.meeting.committeecontainer",
-        "title": "Kommitees",
+        "title_de": "Kommitees",
+        "title_fr": "Comités",
         "_children": [
             {
                 "_id": "committee-1",

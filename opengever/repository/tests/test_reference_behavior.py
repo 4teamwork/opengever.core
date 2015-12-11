@@ -3,6 +3,7 @@ from ftw.builder import create
 from opengever.repository.behaviors.referenceprefix import IReferenceNumberPrefix
 from opengever.repository.behaviors.referenceprefix import IReferenceNumberPrefixMarker
 from opengever.repository.behaviors.referenceprefix import ReferenceNumberPrefixValidator
+from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
 from zope.component import provideAdapter
 
@@ -20,6 +21,7 @@ class TestReferenceBehavior(FunctionalTestCase):
         # the reference number validator again.
         provideAdapter(ReferenceNumberPrefixValidator)
 
+        add_languages(['de-ch'])
         self.repo = create(Builder('repository'))
 
     def test_repositories_provided_referenceprefix_marker_interface(self):

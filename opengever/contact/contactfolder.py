@@ -1,9 +1,33 @@
 from five import grok
+from opengever.base.behaviors.translated_title import TranslatedTitleMixin
+from opengever.base.browser.translated_title import TranslatedTitleAddForm
+from opengever.base.browser.translated_title import TranslatedTitleEditForm
 from opengever.contact import _
+from opengever.contact.interfaces import IContactFolder
 from opengever.tabbedview.browser.tabs import OpengeverCatalogListingTab
 from opengever.tabbedview.helper import email_helper
+from plone.dexterity.content import Container
 from plone.dexterity.interfaces import IDexterityContainer
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
+from zope.interface import implements
+
+
+class ContactFolder(Container, TranslatedTitleMixin):
+    """Container which contains all contacts.
+    """
+
+    implements(IContactFolder)
+
+
+    Title = TranslatedTitleMixin.Title
+
+
+class ContactFolderAddForm(TranslatedTitleAddForm):
+    grok.name('opengever.contact.contactfolder')
+
+
+class ContactFolderEditForm(TranslatedTitleEditForm):
+    grok.context(IContactFolder)
 
 
 def authenticated_member(context):
@@ -12,7 +36,6 @@ def authenticated_member(context):
 
 def linked(item, value):
     url_method = lambda: '#'
-    #item = hasattr(item, 'aq_explicit') and item.aq_explicit or item
     if hasattr(item, 'getURL'):
         url_method = item.getURL
     elif hasattr(item, 'absolute_url'):
@@ -29,7 +52,6 @@ def linked(item, value):
 
 def linked_no_icon(item, value):
     url_method = lambda: '#'
-    #item = hasattr(item, 'aq_explicit') and item.aq_explicit or item
     if hasattr(item, 'getURL'):
         url_method = item.getURL
     elif hasattr(item, 'absolute_url'):
@@ -71,9 +93,9 @@ class Contacts(OpengeverCatalogListingTab):
         )
 
     sort_on = 'lastname'
-    sort_order=''
+    sort_order = ''
 
-    show_selects= False
+    show_selects = False
     enabled_actions = []
     major_actions = []
     selection = ViewPageTemplateFile("no_selection_amount.pt")
@@ -82,7 +104,7 @@ class Contacts(OpengeverCatalogListingTab):
         OpengeverCatalogListingTab.update_config(self)
 
         # configuration for the extjs grid
-        extjs_conf = {'auto_expand_column':'lastname'}
+        extjs_conf = {'auto_expand_column': 'lastname'}
         if isinstance(self.table_options, dict):
             self.table_options.update(extjs_conf)
         elif self.table_options is None:

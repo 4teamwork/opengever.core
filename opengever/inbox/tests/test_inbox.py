@@ -1,6 +1,11 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import factoriesmenu
+from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
+from plone import api
+import transaction
 
 
 class TestInbox(FunctionalTestCase):
@@ -26,3 +31,22 @@ class TestInbox(FunctionalTestCase):
         inbox = create(Builder('inbox'))
 
         self.assertEqual(None, inbox.get_sequence_number())
+        transaction.commit()
+
+    @browsing
+    def test_supports_translated_title(self, browser):
+        add_languages(['de-ch', 'fr-ch'])
+
+        browser.login().open()
+        factoriesmenu.add('Inbox')
+        browser.fill({'Title (German)': u'Eingangskorb',
+                      'Title (French)': u'Bo\xeete de r\xe9ception'})
+        browser.find('Save').click()
+
+        browser.find('FR').click()
+        self.assertEquals(u'Bo\xeete de r\xe9ception',
+                          browser.css('h1').first.text)
+
+        browser.find('DE').click()
+        self.assertEquals(u'Eingangskorb',
+                          browser.css('h1').first.text)

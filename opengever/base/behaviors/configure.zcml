@@ -48,4 +48,13 @@
       for="plone.dexterity.interfaces.IDexterityContent"
       />
 
+  <plone:behavior
+      title="TranslatedTitle"
+      description="Adds translated title fields."
+      provides=".translated_title.ITranslatedTitle"
+      factory=".translated_title.TranslatedTitle"
+      marker=".translated_title.ITranslatedTitleSupport"
+      for="plone.dexterity.interfaces.IDexterityContent"
+      />
+
 </configure>

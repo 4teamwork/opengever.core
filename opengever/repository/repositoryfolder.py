@@ -1,13 +1,15 @@
 from Acquisition import aq_inner, aq_parent
 from five import grok
+from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.behaviors.utils import hide_fields_from_behavior
+from opengever.base.browser.translated_title import TranslatedTitleAddForm
+from opengever.base.browser.translated_title import TranslatedTitleEditForm
 from opengever.base.interfaces import IReferenceNumber
 from opengever.repository import _
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.repository.interfaces import IRepositoryFolderRecords
 from plone.app.content.interfaces import INameFromTitle
 from plone.dexterity import content
-from plone.directives import dexterity
 from plone.directives import form
 from plone.registry.interfaces import IRegistry
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
@@ -25,7 +27,6 @@ class IRepositoryFolderSchema(form.Schema):
         u'common',
         label=_(u'fieldset_common', default=u'Common'),
         fields=[
-            u'effective_title',
             u'description',
             u'valid_from',
             u'valid_until',
@@ -33,12 +34,6 @@ class IRepositoryFolderSchema(form.Schema):
             u'referenced_activity',
             u'former_reference',
             ],
-        )
-
-    form.order_before(effective_title='*')
-    effective_title = schema.TextLine(
-        title=_(u'Title'),
-        required=True,
         )
 
     description = schema.Text(
@@ -98,15 +93,26 @@ class RepositoryFolder(content.Container):
     implements(IRepositoryFolder)
 
     def Title(self):
+        title = self._prefix_with_reference_number(
+            ITranslatedTitle(self).translated_title())
+        return title.encode('utf-8')
 
+    def get_prefixed_title_de(self):
+        title = self.title_de
+        if title:
+            return self._prefix_with_reference_number(title)
+
+    def get_prefixed_title_fr(self):
+        title = self.title_fr
+        if title:
+            return self._prefix_with_reference_number(title)
+
+    def _prefix_with_reference_number(self, title):
         reference_adapter = IReferenceNumber(self)
-
-        title = u'{number}{sep} {title}'.format(
+        return u'{number}{sep} {title}'.format(
             number=reference_adapter.get_repository_number(),
             sep=reference_adapter.get_active_formatter().repository_title_seperator,
-            title=self.effective_title)
-
-        return title.encode('utf-8')
+            title=title)
 
     def allowedContentTypes(self, *args, **kwargs):
         """
@@ -180,7 +186,7 @@ class RepositoryFolder(content.Container):
         return types
 
 
-class AddForm(dexterity.AddForm):
+class AddForm(TranslatedTitleAddForm):
     grok.name('opengever.repository.repositoryfolder')
 
     def updateFields(self):
@@ -190,7 +196,7 @@ class AddForm(dexterity.AddForm):
                                    'IClassification.public_trial_statement'])
 
 
-class EditForm(dexterity.EditForm):
+class EditForm(TranslatedTitleEditForm):
     grok.context(IRepositoryFolder)
 
     def updateFields(self):
@@ -201,8 +207,8 @@ class EditForm(dexterity.EditForm):
 
 
 class NameFromTitle(grok.Adapter):
-    """ An INameFromTitle adapter for namechooser
-    gets the name from effective_title
+    """ An INameFromTitle adapter for namechooser gets the name from the
+    translated_title.
     """
     grok.implements(INameFromTitle)
     grok.context(IRepositoryFolder)
@@ -212,4 +218,4 @@ class NameFromTitle(grok.Adapter):
 
     @property
     def title(self):
-        return self.context.effective_title
+        return ITranslatedTitle(self.context).translated_title()

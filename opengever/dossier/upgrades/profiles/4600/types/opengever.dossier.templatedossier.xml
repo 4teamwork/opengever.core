@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<object name="opengever.dossier.templatedossier" meta_type="Dexterity FTI"
+        xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+    <property name="behaviors" purge="False">
+        <element value="opengever.base.behaviors.translated_title.ITranslatedTitle" />
+    </property>
+
+</object>

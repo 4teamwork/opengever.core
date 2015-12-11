@@ -147,4 +147,23 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <!-- 4300 -> 4600 -->
+    <genericsetup:upgradeStep
+        title="Add TranslatedTitle behavior to inbox and inboxcontainer."
+        description=""
+        source="4300"
+        destination="4600"
+        handler="opengever.inbox.upgrades.to4600.ActivateTranslatedTitle"
+        profile="opengever.inbox:default"
+        />
+
+    <genericsetup:registerProfile
+        name="4600"
+        title="opengever.inbox: upgrade profile 4600"
+        description=""
+        directory="profiles/4600"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
 </configure>

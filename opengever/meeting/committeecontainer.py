@@ -1,3 +1,7 @@
+from five import grok
+from opengever.base.behaviors.translated_title import TranslatedTitleMixin
+from opengever.base.browser.translated_title import TranslatedTitleAddForm
+from opengever.base.browser.translated_title import TranslatedTitleEditForm
 from opengever.meeting import _
 from opengever.meeting.model import Member
 from opengever.meeting.sources import sablon_template_source
@@ -24,11 +28,21 @@ class ICommitteeContainer(form.Schema):
     )
 
 
+class CommitteeContainerAddForm(TranslatedTitleAddForm):
+    grok.name('opengever.meeting.committeecontainer')
+
+
+class CommitteeContainerEditForm(TranslatedTitleEditForm):
+    grok.context(ICommitteeContainer)
+
+
 _marker = object()
 
 
-class CommitteeContainer(Container):
+class CommitteeContainer(Container, TranslatedTitleMixin):
     """Committee Container class, a container for all committees."""
+
+    Title = TranslatedTitleMixin.Title
 
     def _getOb(self, id_, default=_marker):
         """We extend `_getOb` in order to change the context for member
