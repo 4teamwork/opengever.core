@@ -46,6 +46,7 @@
     this.options = $.extend({
       delay: 1000,
       target: global.document,
+      context: global.document,
       triggers: []
     }, options || {});
 
@@ -58,7 +59,7 @@
       this.timeout = global.setTimeout(function() { syncCallback(event.target); }, self.options.delay);
     };
 
-    this.observe = function() { $(this.options.target).on(this.options.triggers.join(" "), trackType); };
+    this.observe = function() { $(this.options.context).on(this.options.triggers.join(" "), this.options.target, trackType); };
 
     this.onSync = function(callback) { syncCallback = callback; };
 

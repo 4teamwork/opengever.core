@@ -29,4 +29,9 @@
                 insert-after="collective.js.jqueryui.custom.min.js"
                 />
 
+    <javascript cacheable="True" compression="safe" cookable="True" expression=""
+                enabled="True" id="++resource++opengever.meeting/datetimepicker.js" inline="False"
+                insert-after="++resource++opengever.base/datetimepicker.min.js"
+                />
+
 </object>
