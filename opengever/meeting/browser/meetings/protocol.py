@@ -177,7 +177,7 @@ class EditProtocol(AutoExtensibleForm, ModelEditForm):
         """
         pass
 
-    @button.buttonAndHandler(_('label_cancel', default=u'Cancel'), name='cancel')
+    @button.buttonAndHandler(_('label_close', default=u'Close'), name='cancel')
     def cancel(self, action):
         self.unlock()
         # self as first argument is required by to the decorator

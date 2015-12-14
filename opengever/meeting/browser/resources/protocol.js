@@ -1,4 +1,4 @@
-(function(global) {
+(function(global, $) {
 
   "use strict";
 
@@ -6,14 +6,22 @@
 
     global.Controller.call(this);
 
+    var saveButton = $("#form-buttons-save");
+    var protocolControls = $("#protocol-controls");
+
     var currentMeeting = $(".protocol-navigation").data().meeting;
     var createdAt = new Date($(".protocol-navigation").data().modified).getTime();
 
-    var protocolSynchronizer = new global.Synchronizer({ target: "textarea" });
+    var protocolSynchronizer = new global.Synchronizer({ target: "textarea", trigger: "input" });
     var meetingStorage = new global.MeetingStorage(currentMeeting);
 
     var updateAutosize = function() {
       global.autosize.update(document.querySelectorAll(protocolSynchronizer.options.target));
+    };
+
+    var showHintForLocalChanges = function() {
+      $("#form-buttons-cancel").val($("#button-value-discard").val());
+      protocolControls.addClass("local-changes");
     };
 
     var parseProposal = function(expression) { return expression.split("-"); };
@@ -23,6 +31,7 @@
       var text = target.value;
       meetingStorage.addOrUpdateUnit(proposalExpression[1], proposalExpression[2], text);
       meetingStorage.push();
+      showHintForLocalChanges();
     };
 
     protocolSynchronizer.onSync(syncProposal);
@@ -58,6 +67,10 @@
     };
 
     this.init();
+
+    if(meetingStorage.currentMeeting.revision) {
+      showHintForLocalChanges();
+    }
 
   }
 
@@ -125,4 +138,4 @@
     }
   });
 
-}(window));
+}(window, jQuery));
