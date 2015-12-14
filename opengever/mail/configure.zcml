@@ -9,6 +9,8 @@
     xmlns:profilehook="http://namespaces.zope.org/profilehook"
     i18n_domain="opengever.mail">
 
+  <include package="ftw.profilehook" />
+
   <grok:grok package="." />
 
   <include package=".browser" />

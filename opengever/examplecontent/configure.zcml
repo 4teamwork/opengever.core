@@ -7,6 +7,8 @@
     xmlns:transmogrifier="http://namespaces.plone.org/transmogrifier"
     i18n_domain="opengever.examplecontent">
 
+  <include package="ftw.profilehook" />
+
   <include package=".upgrades" />
 
   <opengever:registerDeployment

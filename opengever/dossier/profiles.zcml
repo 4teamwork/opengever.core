@@ -3,6 +3,8 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:profilehook="http://namespaces.zope.org/profilehook">
 
+  <include package="ftw.profilehook" />
+
   <!-- default profile -->
   <genericsetup:registerProfile
       name="default"
