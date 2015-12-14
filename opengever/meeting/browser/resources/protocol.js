@@ -46,17 +46,12 @@
 
     this.saveProtocol = function(target) {
       var payload = target.parents("form").serializeArray();
-      payload.push({ name: "form.buttons.save", value: $("#form-buttons-save").val() });
-      var action = target.attr("action");
-      return $.ajax({
-        type: "POST",
-        url: action,
-        data: payload,
-        dataType: "json"
-      }).done(function(data) {
-        meetingStorage.deleteCurrentMeeting();
-        window.location = data.redirectUrl;
-      });
+      payload.push({ name: "form.buttons.save", value: saveButton.val() });
+      return $.post(target.attr("action"), payload)
+              .done(function(data) {
+              meetingStorage.deleteCurrentMeeting();
+              window.location = data.redirectUrl;
+             });
     };
 
     this.discardProtocol = function() { meetingStorage.deleteCurrentMeeting(); };
