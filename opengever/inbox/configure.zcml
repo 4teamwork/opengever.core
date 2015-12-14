@@ -8,6 +8,8 @@
     xmlns:profilehook="http://namespaces.zope.org/profilehook"
     i18n_domain="opengever.inbox">
 
+  <include package="ftw.profilehook" />
+
   <grok:grok package="." />
 
   <i18n:registerTranslations directory="locales" />
