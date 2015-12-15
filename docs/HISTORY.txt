@@ -5,6 +5,9 @@ Changelog
 4.6.2 (unreleased)
 ------------------
 
+- Introduce the concept of a base URL for the GEVER cluster.
+  [lgraf]
+
 - Only build URL to CAS server once during setup, after that fetch it
   from the plugin when used as a base to build other URLs.
   [lgraf]
