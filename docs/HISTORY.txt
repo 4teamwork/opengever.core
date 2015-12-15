@@ -5,6 +5,9 @@ Changelog
 4.6.3 (unreleased)
 ------------------
 
+- Displays hint that no documents have been generated yet.
+  [Kevin Bieri]
+
 - Update policy templates to include default committee container and initial templates.
   [deiferni]
 

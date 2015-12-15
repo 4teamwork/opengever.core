@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-01-19 08:49+0000\n"
+"POT-Creation-Date: 2016-01-20 06:55+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +21,7 @@ msgstr ""
 msgid "A new submitted version of document ${title} has been created"
 msgstr "Une nouvelle version soumis du document ${title} a été créeé"
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:261
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:263
 msgid "Actions"
 msgstr ""
 
@@ -61,7 +61,7 @@ msgstr ""
 msgid "Additional document ${title} has been submitted successfully"
 msgstr "Le document supplémentaire ${title} a été soumis avec succès"
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:215
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:217
 msgid "Agenda Items"
 msgstr "Points de l'ordre du jour"
 
@@ -126,7 +126,7 @@ msgstr ""
 msgid "Document ${title} has already been submitted in that version"
 msgstr "Le document ${title} a déjà été soumis dans cette version."
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:260
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:262
 msgid "Documents"
 msgstr ""
 
@@ -147,7 +147,7 @@ msgstr ""
 msgid "Excerpt template"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:193
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:194
 msgid "Excerpts"
 msgstr ""
 
@@ -224,7 +224,7 @@ msgstr ""
 msgid "Memberships"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:258
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:260
 msgid "Number"
 msgstr ""
 
@@ -232,11 +232,11 @@ msgstr ""
 msgid "Once closed the meeting and its protocol cannot be edited any longer. The following tasks will be perfomed:"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:256
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:258
 msgid "Order"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:230
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:232
 msgid "Paragraph:"
 msgstr ""
 
@@ -258,7 +258,7 @@ msgstr "Propriétés"
 msgid "Proposal"
 msgstr "Proposition"
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:240
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:242
 msgid "Proposals:"
 msgstr ""
 
@@ -308,7 +308,7 @@ msgstr "Afficher plus"
 msgid "Submitted Proposal"
 msgstr "Proposition soumise"
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:219
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:221
 msgid "Text:"
 msgstr ""
 
@@ -320,7 +320,7 @@ msgstr ""
 msgid "The proposal has been rejected successfully"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:259
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:261
 msgid "Title"
 msgstr ""
 
@@ -534,11 +534,11 @@ msgstr ""
 msgid "dossier"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:185
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:186
 msgid "download protocol"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:194
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:195
 msgid "generate new excerpt"
 msgstr ""
 
@@ -738,7 +738,7 @@ msgid "label_excerpt"
 msgstr ""
 
 #. Default: "Filter"
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:242
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:244
 msgid "label_filter_proposal"
 msgstr ""
 
@@ -807,6 +807,11 @@ msgstr "Membre"
 msgid "label_next_meeting"
 msgstr "Prochaine séance:"
 
+#. Default: "No additional excerpts have been generated yet."
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:199
+msgid "label_no_excerpts"
+msgstr ""
+
 #. Default: "This member has no memberships."
 #: ./opengever/meeting/browser/templates/member.pt:43
 msgid "label_no_memberships"
@@ -815,6 +820,11 @@ msgstr ""
 #. Default: "No proposals submitted"
 #: ./opengever/meeting/browser/meetings/meeting.py:344
 msgid "label_no_proposals"
+msgstr ""
+
+#. Default: "No additional protocols have been generated yet."
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:181
+msgid "label_no_protocols"
 msgstr ""
 
 #. Default: "Other Participants"
@@ -872,7 +882,7 @@ msgstr ""
 
 #. Default: "Schedule"
 #: ./opengever/meeting/browser/meetings/meeting.py:343
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:222
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:224
 msgid "label_schedule"
 msgstr ""
 

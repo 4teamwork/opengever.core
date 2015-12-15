@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-01-19 08:49+0000\n"
+"POT-Creation-Date: 2016-01-20 06:55+0000\n"
 "PO-Revision-Date: 2015-04-10 09:01+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +21,7 @@ msgstr ""
 msgid "A new submitted version of document ${title} has been created"
 msgstr "Eine neu eingereichte Version des Dokuments ${title} wurde erstellt."
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:261
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:263
 msgid "Actions"
 msgstr "Aktionen"
 
@@ -61,7 +61,7 @@ msgstr "Periode hinzufügen"
 msgid "Additional document ${title} has been submitted successfully"
 msgstr "Das zusätzliche Dokument ${title} wurde erfolgreich eingereicht."
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:215
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:217
 msgid "Agenda Items"
 msgstr "Traktanden"
 
@@ -126,7 +126,7 @@ msgstr "Verwerfen"
 msgid "Document ${title} has already been submitted in that version"
 msgstr "Das Dokument ${title} wurde bereits in dieser Version eingereicht"
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:260
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:262
 msgid "Documents"
 msgstr "Dokumente"
 
@@ -147,7 +147,7 @@ msgstr "Protokollauszug für die Sitzung ${title} wurde erfolgreich aktualisiert
 msgid "Excerpt template"
 msgstr "Vorlage Protokollauszug"
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:193
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:194
 msgid "Excerpts"
 msgstr "Protokollauszüge"
 
@@ -224,7 +224,7 @@ msgstr "Sitzungsangaben"
 msgid "Memberships"
 msgstr "Mitgliedschaften"
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:258
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:260
 msgid "Number"
 msgstr "Nummer"
 
@@ -232,11 +232,11 @@ msgstr "Nummer"
 msgid "Once closed the meeting and its protocol cannot be edited any longer. The following tasks will be perfomed:"
 msgstr "Die Sitzung und ihr Protokoll können nach Abschluss nicht mehr bearbeitet werden. Die folgenden Aktionen werden beim Abschliessen ausgeführt:"
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:256
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:258
 msgid "Order"
 msgstr "Sortierung"
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:230
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:232
 msgid "Paragraph:"
 msgstr "Abschnitt:"
 
@@ -258,7 +258,7 @@ msgstr "Eigenschaften"
 msgid "Proposal"
 msgstr "Antrag"
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:240
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:242
 msgid "Proposals:"
 msgstr "Anträge"
 
@@ -308,7 +308,7 @@ msgstr "Mehr anzeigen"
 msgid "Submitted Proposal"
 msgstr "Eingereichten Antrag"
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:219
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:221
 msgid "Text:"
 msgstr "Freitext:"
 
@@ -320,7 +320,7 @@ msgstr "Die Sitzung und das dazugehörige Sitzungsdossier wurden erfolgreich ers
 msgid "The proposal has been rejected successfully"
 msgstr "Der Antrag wurde erfolgreich zurückgewiesen."
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:259
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:261
 msgid "Title"
 msgstr "Titel"
 
@@ -534,11 +534,11 @@ msgstr "Für diese Gruppe werden automatisch Berechtigungen auf der Kommission v
 msgid "dossier"
 msgstr "Dossier"
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:185
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:186
 msgid "download protocol"
 msgstr "Protokoll herunterladen"
 
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:194
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:195
 msgid "generate new excerpt"
 msgstr "Neuer Protokollauszug generieren"
 
@@ -738,7 +738,7 @@ msgid "label_excerpt"
 msgstr "Protokollauszug"
 
 #. Default: "Filter"
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:242
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:244
 msgid "label_filter_proposal"
 msgstr "Filtern"
 
@@ -807,6 +807,11 @@ msgstr "Mitglied"
 msgid "label_next_meeting"
 msgstr "Nächste Sitzung:"
 
+#. Default: "No additional excerpts have been generated yet."
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:199
+msgid "label_no_excerpts"
+msgstr "Es wurden noch keine Anträge generiert."
+
 #. Default: "This member has no memberships."
 #: ./opengever/meeting/browser/templates/member.pt:43
 msgid "label_no_memberships"
@@ -816,6 +821,11 @@ msgstr "Dieser Benutzer hat keine Mitgliedschaften."
 #: ./opengever/meeting/browser/meetings/meeting.py:344
 msgid "label_no_proposals"
 msgstr "Keine Anträge eingereicht"
+
+#. Default: "No additional protocols have been generated yet."
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:181
+msgid "label_no_protocols"
+msgstr "Es wurden noch keine zusätzlichen Protokollauszüge generiert."
 
 #. Default: "Other Participants"
 #: ./opengever/meeting/browser/meetings/protocol.py:45
@@ -872,7 +882,7 @@ msgstr "Vorlage-Datei"
 
 #. Default: "Schedule"
 #: ./opengever/meeting/browser/meetings/meeting.py:343
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt:222
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:224
 msgid "label_schedule"
 msgstr "Traktandieren"
 
@@ -911,7 +921,6 @@ msgstr "Sie haben nicht gespeicherte lokale Änderungen"
 
 #. Default: "Are you sure you want to unschedule this agendaitem?"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:45
-#, fuzzy
 msgid "label_unschedule_agenda_item_confirm_text"
 msgstr "Wollen Sie dieses Traktandum wirklich detraktandieren?"
 
