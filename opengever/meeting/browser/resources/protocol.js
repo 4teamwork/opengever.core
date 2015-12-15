@@ -12,7 +12,7 @@
     var currentMeeting = $(".protocol-navigation").data().meeting;
     var createdAt = new Date($(".protocol-navigation").data().modified).getTime();
 
-    var protocolSynchronizer = new global.Synchronizer({ target: "textarea", trigger: "input" });
+    var protocolSynchronizer = new global.Synchronizer({ target: "textarea, input, select", triggers: ["input", "change"] });
     var meetingStorage = new global.MeetingStorage(currentMeeting);
 
     var updateAutosize = function() {
