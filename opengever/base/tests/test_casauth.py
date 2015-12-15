@@ -1,5 +1,6 @@
 from opengever.base.casauth import get_cas_server_url
 from opengever.base.casauth import get_cluster_base_url
+from opengever.base.casauth import get_gever_portal_url
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import applyProfile
@@ -48,3 +49,12 @@ class TestCASServerURL(FunctionalTestCase):
         get_current_admin_unit().public_url = 'http://example.com/'
         applyProfile(self.layer['portal'], 'opengever.setup:casauth')
         self.assertEquals('http://example.com/portal', get_cas_server_url())
+
+
+class TestGEVERPortalURL(FunctionalTestCase):
+
+    def test_gever_portal_url_is_based_on_cluster_url(self):
+        # Cluster base URL is equal to admin unit's public_url *for now*
+        get_current_admin_unit().public_url = 'http://example.com/foobar'
+        self.assertEquals(
+            'http://example.com/foobar/portal', get_gever_portal_url())

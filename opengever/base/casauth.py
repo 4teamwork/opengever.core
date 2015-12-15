@@ -25,6 +25,13 @@ def get_cluster_base_url():
     return base_url
 
 
+def get_gever_portal_url():
+    """Get the URL of the GEVER portal.
+    """
+    base_url = get_cluster_base_url()
+    return urljoin(base_url, 'portal')
+
+
 def get_cas_server_url():
     """Get the CAS server URL from the ftw.casauth plugin.
     """

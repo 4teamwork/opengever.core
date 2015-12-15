@@ -5,6 +5,9 @@ Changelog
 4.6.2 (unreleased)
 ------------------
 
+- Introduce the concept of a GEVER portal URL.
+  [lgraf]
+
 - Introduce the concept of a base URL for the GEVER cluster.
   [lgraf]
 
