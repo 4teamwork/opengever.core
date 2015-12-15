@@ -11,6 +11,9 @@ Changelog
 - Fix an issue with setting-up translated content with transmogrifiers schemaupdater.
   [deiferni]
 
+- Fix an issue with repo-folders not stored persistently on committee after create.
+  [deiferni]
+
 
 4.6.0 (2015-12-11)
 ------------------
