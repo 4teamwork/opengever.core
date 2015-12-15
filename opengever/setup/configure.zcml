@@ -6,6 +6,7 @@
 
   <include package=".browser" />
   <include package=".creation" />
+  <include package=".upgrades" />
   <include file="profiles.zcml" />
   <include file="transmogrifier.zcml" />
 

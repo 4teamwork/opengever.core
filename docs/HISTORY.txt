@@ -5,6 +5,9 @@ Changelog
 4.6.2 (unreleased)
 ------------------
 
+- Make `my-portal` action use @@gever_state/gever_portal_url
+  [lgraf]
+
 - Add a `gever_state` view with traversable helper methods for use in TAL
   expressions and templates.
   [lgraf]

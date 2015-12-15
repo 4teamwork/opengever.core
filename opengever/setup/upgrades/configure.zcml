@@ -1,0 +1,24 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:upgrade-step="http://namespaces.zope.org/ftw.upgrade"
+    i18n_domain="opengever.setup">
+
+  <include package="ftw.upgrade" file="meta.zcml" />
+
+    <!-- opengever.setup:default upgrades -->
+    <!-- ... -->
+
+
+    <!-- opengever.setup:casauth upgrades -->
+
+    <!-- 1 -> 4600 -->
+    <upgrade-step:importProfile
+        title="Upgrade my-portal action to use @@gever_state/gever_portal_url"
+        profile="opengever.setup:casauth"
+        source="1"
+        destination="4600"
+        directory="casauth_profiles/4600"
+        />
+
+</configure>
