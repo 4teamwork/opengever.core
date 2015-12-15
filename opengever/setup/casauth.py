@@ -1,5 +1,5 @@
 from ftw.casauth.plugin import CASAuthenticationPlugin
-from opengever.base.casauth import build_cas_portal_url
+from opengever.base.casauth import build_cas_server_url
 from plone import api
 from Products.PluggableAuthService.interfaces.plugins import IChallengePlugin
 
@@ -21,7 +21,7 @@ def install_cas_auth_plugin():
     if 'cas_auth' not in acl_users.objectIds():
         # Build the URL for the CAS server once during initial setup and
         # configure it for the plugin.
-        cas_server_url = build_cas_portal_url()
+        cas_server_url = build_cas_server_url()
 
         plugin = CASAuthenticationPlugin(
             'cas_auth', cas_server_url=cas_server_url)

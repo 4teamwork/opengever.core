@@ -13,7 +13,7 @@ def is_cas_auth_enabled():
     return isinstance(challenge_plugin[1], CASAuthenticationPlugin)
 
 
-def build_cas_portal_url():
+def build_cas_server_url():
     """This function *guesses* the URL for the CAS server, in order to
     initially configure the ftw.casauth plugin during setup.
 
@@ -25,7 +25,7 @@ def build_cas_portal_url():
         admin_unit_public_url=get_current_admin_unit().public_url.rstrip('/'))
 
 
-def get_cas_portal_url():
+def get_cas_server_url():
     """Get the CAS server URL from the ftw.casauth plugin.
     """
     acl_users = api.portal.get_tool('acl_users')
