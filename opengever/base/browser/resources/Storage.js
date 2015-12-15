@@ -33,7 +33,7 @@
 
     this.postPull = $.noop;
 
-    if (!isSupported) {
+    if (!isSupported()) {
       throw new Error("LocalStroage is not supported");
     } else {
       Storage.storage = window.localStorage;
