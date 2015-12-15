@@ -5,7 +5,9 @@ Changelog
 4.6.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Only build URL to CAS server once during setup, after that fetch it
+  from the plugin when used as a base to build other URLs.
+  [lgraf]
 
 
 4.6.1 (2015-12-16)
