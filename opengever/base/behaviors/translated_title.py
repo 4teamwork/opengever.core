@@ -78,6 +78,8 @@ class TranslatedTitle(object):
 
     @title_de.setter
     def title_de(self, value):
+        if value is None:
+            return
         if not isinstance(value, unicode):
             raise ValueError('title_de must be unicode.')
         self.context.title_de = value
@@ -88,37 +90,8 @@ class TranslatedTitle(object):
 
     @title_fr.setter
     def title_fr(self, value):
+        if value is None:
+            return
         if not isinstance(value, unicode):
             raise ValueError('title_fr must be unicode.')
         self.context.title_fr = value
-
-
-@indexer(ITranslatedTitleSupport)
-def translated_title_indexer(obj):
-    return obj.Title(language='de')
-
-
-@indexer(ITranslatedTitleSupport)
-def translated_sortable_title_indexer(obj):
-    ## mostly copied from Products.CMFPlone.CatalogTool.sortable_title
-    title = getattr(obj, 'Title', None)
-    if title is not None:
-        if safe_callable(title):
-            # CUSTOM
-            title = title(language='de')
-            # / CUSTOM
-
-        if isinstance(title, basestring):
-            # Ignore case, normalize accents, strip spaces
-            sortabletitle = mapUnicode(safe_unicode(title)).lower().strip()
-            # Replace numbers with zero filled numbers
-            sortabletitle = num_sort_regex.sub(zero_fill, sortabletitle)
-
-            # Truncate to prevent bloat, take bits from start and end
-            if len(sortabletitle) > MAX_SORTABLE_TITLE:
-                start = sortabletitle[:(MAX_SORTABLE_TITLE - 13)]
-                end = sortabletitle[-10:]
-                sortabletitle = start + '...' + end
-            return sortabletitle.encode('utf-8')
-
-    return ''

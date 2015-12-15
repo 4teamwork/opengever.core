@@ -8,6 +8,9 @@ Changelog
 - Include ftw.profilehook, when required.
   [deiferni]
 
+- Fix an issue with setting-up translated content with transmogrifiers schemaupdater.
+  [deiferni]
+
 
 4.6.0 (2015-12-11)
 ------------------
