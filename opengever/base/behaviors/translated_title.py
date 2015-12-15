@@ -78,6 +78,8 @@ class TranslatedTitle(object):
 
     @title_de.setter
     def title_de(self, value):
+        if value is None:
+            return
         if not isinstance(value, unicode):
             raise ValueError('title_de must be unicode.')
         self.context.title_de = value
@@ -88,6 +90,8 @@ class TranslatedTitle(object):
 
     @title_fr.setter
     def title_fr(self, value):
+        if value is None:
+            return
         if not isinstance(value, unicode):
             raise ValueError('title_fr must be unicode.')
         self.context.title_fr = value

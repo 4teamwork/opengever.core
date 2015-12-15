@@ -288,3 +288,20 @@ class TestTranslatedTitleLanguageSupport(FunctionalTestCase):
             self.assertEquals(
                 u"Repository title in {}".format(lang),
                 getattr(brain, 'title_{}'.format(lang)))
+
+    def test_translated_attribute_can_be_set_to_none(self):
+        repository_root = create(Builder('repository_root')
+                                 .having(title_de=u"Ablage",
+                                         title_fr=u"syst\xe8me d'ordre"))
+        root_translation = ITranslatedTitle(repository_root)
+
+        repository_root.title_de = None
+        repository_root.title_fr = None
+
+        self.assertIsNone(root_translation.translated_title())
+        self.assertIsNone(root_translation.translated_title(language='de'))
+        self.assertIsNone(root_translation.translated_title(language='fr'))
+
+        self.assertEqual('', repository_root.Title())
+        self.assertEqual('', repository_root.Title(language='de'))
+        self.assertEqual('', repository_root.Title(language='fr'))
