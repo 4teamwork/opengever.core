@@ -5,6 +5,10 @@ Changelog
 4.6.2 (unreleased)
 ------------------
 
+- Add a `gever_state` view with traversable helper methods for use in TAL
+  expressions and templates.
+  [lgraf]
+
 - Introduce the concept of a GEVER portal URL.
   [lgraf]
 

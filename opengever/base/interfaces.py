@@ -240,3 +240,21 @@ class IDataCollector(Interface):
         """Deserializes the *data* and changes the *obj* according to the
         data.
         """
+
+
+class IGeverState(Interface):
+    """A view that provides traversable helper methods to be used in templates
+    or TAL expressions, similar to Plone's portal_state view.
+    """
+
+    def cluster_base_url():
+        """Base URL of the GEVER cluster (includes trailing slash).
+        """
+
+    def gever_portal_url():
+        """URL of the GEVER portal.
+        """
+
+    def cas_server_url():
+        """URL of the CAS server.
+        """
