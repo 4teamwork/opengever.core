@@ -5,6 +5,9 @@ Changelog
 4.6.2 (unreleased)
 ------------------
 
+- Fixed missing `responsible` parameters in synced responses when reassigning a multi AdminUnit task.
+  [phgross]
+
 - Cluster URL: Add heuristic to determine the correct cluster base URL
   for both single- and multi-admin-unit setups.
   [lgraf]

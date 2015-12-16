@@ -132,7 +132,7 @@ class SyncTaskWorkflowStateReceiveView(grok.View):
         if responsible and responsible is not 'None':
             # special handling for reassign
             response.add_change(
-                'reponsible',
+                'responsible',
                 _(u"label_responsible", default=u"Responsible"),
                 ITask(self.context).responsible,
                 responsible)
