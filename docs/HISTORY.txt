@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.6.1 (unreleased)
+4.6.1 (2015-12-16)
 ------------------
 
 - Include ftw.profilehook, when required.
