@@ -77,9 +77,10 @@ class AddInitialPeriodStep(BaseWizardStepForm, ModelProxyAddForm, DefaultAddForm
     Second part of a two-step wizard. Loads data from IIWizardStorage to
     also create the committee from the first step after successful submission.
 
-
     This form extends from dexterity's DefaultAddForm to create the plone
-    content-type easily.
+    content-type easily. To avoid duplicating DefaultAddForm.create we swap
+    this form's fields during createAndAdd, i.e. after validation was
+    successful.
 
     Does not extend from dexterity.AddForm to avoid auto-registering this
     form as add-form for committees, this would conflict with the form
@@ -123,8 +124,13 @@ class AddInitialPeriodStep(BaseWizardStepForm, ModelProxyAddForm, DefaultAddForm
         form.
 
         """
+        # switch fields when creating, use committee content-type fields to
+        # create the plone object.
+        self.fields = Fields(Committee.content_schema)
+
         dm = getUtility(IWizardDataStorage)
         committee_data = dm.get_data(get_dm_key(self.context))
+
         committee = super(AddInitialPeriodStep, self).createAndAdd(
             committee_data)
 

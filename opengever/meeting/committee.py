@@ -178,3 +178,6 @@ class Committee(ModelContainer):
             return self.excerpt_template.to_object
 
         return self.get_committee_container().get_excerpt_template()
+
+    def get_repository_folder(self):
+        return self.repository_folder.to_object

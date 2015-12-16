@@ -57,11 +57,20 @@ class TestCommittee(FunctionalTestCase):
     @browsing
     def test_committee_can_be_created_in_browser(self, browser):
         self.grant('Administrator')
+
+        templates = create(Builder('templatedossier'))
+        sablon_template = create(
+            Builder('sablontemplate')
+            .within(templates)
+            .with_asset_file('sablon_template.docx'))
+
         browser.login()
         browser.open(self.container, view='++add++opengever.meeting.committee')
 
         browser.fill(
             {'Title': u'A c\xf6mmittee',
+             'Protocol template': sablon_template,
+             'Excerpt template': sablon_template,
              'Linked repository folder': self.repository_folder,
              self.group_field_name: 'client1_users'})
         browser.css('#form-buttons-save').first.click()
@@ -78,6 +87,10 @@ class TestCommittee(FunctionalTestCase):
         self.assertEqual(
             ('CommitteeGroupMember',),
             dict(committee.get_local_roles()).get('client1_users'))
+        self.assertEqual(self.repository_folder,
+                         committee.get_repository_folder())
+        self.assertEqual(sablon_template, committee.get_protocol_template())
+        self.assertEqual(sablon_template, committee.get_excerpt_template())
 
         model = committee.load_model()
         self.assertIsNotNone(model)
