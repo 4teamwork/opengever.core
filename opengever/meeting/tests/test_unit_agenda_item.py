@@ -71,7 +71,7 @@ class TestUnitAgendaItem(TestCase):
                          self.simple_agenda_item.serialize())
 
     def test_serialize_proposal_agenda_item(self):
-        self.assertEqual({'css_class': '',
+        self.assertEqual({'css_class': 'proposal',
                           'number': '1.',
                           'id': 1,
                           'title': u'Pr\xf6posal',
