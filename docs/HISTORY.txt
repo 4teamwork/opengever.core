@@ -5,6 +5,10 @@ Changelog
 4.6.2 (unreleased)
 ------------------
 
+- Cluster URL: Add heuristic to determine the correct cluster base URL
+  for both single- and multi-admin-unit setups.
+  [lgraf]
+
 - Make `my-portal` action use @@gever_state/gever_portal_url
   [lgraf]
 

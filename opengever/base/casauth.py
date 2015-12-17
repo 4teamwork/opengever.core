@@ -3,6 +3,7 @@ from opengever.ogds.base.utils import get_current_admin_unit
 from plone import api
 from Products.PluggableAuthService.interfaces.plugins import IChallengePlugin
 from urlparse import urljoin
+import re
 
 
 def is_cas_auth_enabled():
@@ -12,16 +13,25 @@ def is_cas_auth_enabled():
 
 
 def get_cluster_base_url():
-    """This function *guesses* the base URL for this GEVER cluster
-    (always ending with a trailing slash).
-
-    This is known to be incorrect for deployments with multiple admin units,
-    and will be fixed later, once we store the configuration for the
-    GEVER cluster in the OGDS.
+    """Determine the base URL for this GEVER cluster (always ending with a
+    trailing slash).
     """
-    base_url = get_current_admin_unit().public_url
+    admin_unit = get_current_admin_unit()
+
+    base_url = admin_unit.public_url
     if not base_url.endswith('/'):
         base_url = base_url + '/'
+
+    # XXX: Heuristic in order to determine the correct cluster base URL:
+    # If URL ends with the ID of the current admin unit, we're probably
+    # dealing with a deployment with multiple admin units. So we strip the
+    # admin unit ID from the end of the URL to get the correct cluster base.
+    #
+    # This heuristic will later be replaced with a configuration of the
+    # cluster base URL in OGDS.
+    unit_suffix_pattern = re.compile('/{}/$'.format(admin_unit.unit_id))
+    base_url = re.sub(unit_suffix_pattern, '/', base_url)
+
     return base_url
 
 
