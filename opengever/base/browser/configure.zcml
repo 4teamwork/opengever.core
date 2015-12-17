@@ -54,6 +54,14 @@
         permission="zope2.View"
         />
 
+    <browser:page
+        name="gever_state"
+        for="*"
+        permission="zope2.View"
+        class=".gever_state.GeverStateView"
+        allowed_interface="opengever.base.interfaces.IGeverState"
+        />
+
     <browser:resourceDirectory
         name="opengever.base"
         directory="resources"

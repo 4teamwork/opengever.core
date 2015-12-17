@@ -5,7 +5,26 @@ Changelog
 4.6.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Cluster URL: Add heuristic to determine the correct cluster base URL
+  for both single- and multi-admin-unit setups.
+  [lgraf]
+
+- Make `my-portal` action use @@gever_state/gever_portal_url
+  [lgraf]
+
+- Add a `gever_state` view with traversable helper methods for use in TAL
+  expressions and templates.
+  [lgraf]
+
+- Introduce the concept of a GEVER portal URL.
+  [lgraf]
+
+- Introduce the concept of a base URL for the GEVER cluster.
+  [lgraf]
+
+- Only build URL to CAS server once during setup, after that fetch it
+  from the plugin when used as a base to build other URLs.
+  [lgraf]
 
 
 4.6.1 (2015-12-16)

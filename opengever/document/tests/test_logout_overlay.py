@@ -73,7 +73,7 @@ class TestLogoutOverlayWithCASAuth(FunctionalTestCase):
         transaction.commit()
 
     @browsing
-    def test_redirects_to_portal_logout(self, browser):
+    def test_redirects_to_cas_server_logout(self, browser):
         browser.login().open(view='logout_overlay')
         self.assertEquals('empty:http://example.com/portal/logout',
                           browser.contents)

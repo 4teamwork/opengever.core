@@ -1,6 +1,6 @@
 from AccessControl import getSecurityManager
 from five import grok
-from opengever.base.casauth import get_cas_portal_url
+from opengever.base.casauth import get_cas_server_url
 from opengever.base.casauth import is_cas_auth_enabled
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
@@ -18,8 +18,10 @@ class LogoutOverlay(grok.View):
     @property
     def redirect_url(self):
         if is_cas_auth_enabled():
-            return '{}/logout'.format(get_cas_portal_url())
+            # Single-Logout via CAS server
+            return '{}/logout'.format(get_cas_server_url())
         else:
+            # Logout via Plone PAS
             portal_url_tool = getToolByName(self.context, 'portal_url')
             return '{}/logout'.format(portal_url_tool())
 
