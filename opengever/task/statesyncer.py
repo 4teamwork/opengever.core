@@ -97,10 +97,12 @@ class SyncTaskWorkflowStateReceiveView(grok.View):
     # grok.layer(IInternalOpengeverRequestLayer)
     # grok.require('zope2.Public')
 
-    def render(self):
-
+    def check_internal_request(self):
         if not IInternalOpengeverRequestLayer.providedBy(self.request):
             raise Forbidden()
+
+    def render(self):
+        self.check_internal_request()
 
         transition = self.request.get('transition')
         text = self.request.get('text')
@@ -130,7 +132,7 @@ class SyncTaskWorkflowStateReceiveView(grok.View):
         if responsible and responsible is not 'None':
             # special handling for reassign
             response.add_change(
-                'reponsible',
+                'responsible',
                 _(u"label_responsible", default=u"Responsible"),
                 ITask(self.context).responsible,
                 responsible)
