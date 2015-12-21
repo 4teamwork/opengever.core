@@ -148,6 +148,13 @@ class AgendaItem(Base):
     def get_state(self):
         return self.workflow.get_state(self.workflow_state)
 
+    def generate_decision_number(self, period):
+        if self.is_paragraph:
+            return
+
+        next_decision_number = period.get_next_decision_sequence_number()
+        self.decision_number = next_decision_number
+
     def remove(self):
         assert self.meeting.is_editable()
 

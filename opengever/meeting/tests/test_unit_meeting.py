@@ -79,12 +79,16 @@ class TestUnitMeeting(TestCase):
         item_1 = create(Builder('agenda_item')
                         .having(meeting=self.meeting))
         item_2 = create(Builder('agenda_item')
+                        .having(meeting=self.meeting,
+                                is_paragraph=True))
+        item_3 = create(Builder('agenda_item')
                         .having(meeting=self.meeting))
 
         self.meeting.generate_decision_numbers()
 
         self.assertEqual(1, item_1.decision_number)
-        self.assertEqual(2, item_2.decision_number)
+        self.assertIsNone(item_2.decision_number)
+        self.assertEqual(2, item_3.decision_number)
         period = self.committee.periods[0]
         self.assertEqual(2, period.decision_sequence_number)
 

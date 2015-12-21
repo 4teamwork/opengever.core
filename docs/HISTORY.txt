@@ -5,6 +5,9 @@ Changelog
 4.6.2 (unreleased)
 ------------------
 
+- Don't generate decision numbers for paragraphs.
+  [deiferni]
+
 - Fixed missing `responsible` parameters in synced responses when reassigning a multi AdminUnit task.
   [phgross]
 
