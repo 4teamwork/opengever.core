@@ -164,8 +164,7 @@ class Meeting(Base):
         period = Period.query.get_current_for_update(self.committee)
 
         for agenda_item in self.agenda_items:
-            next_decision_number = period.get_next_decision_sequence_number()
-            agenda_item.decision_number = next_decision_number
+            agenda_item.generate_decision_number(period)
 
     def update_protocol_document(self):
         """Update or create meeting's protocol."""
