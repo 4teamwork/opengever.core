@@ -143,6 +143,8 @@ class AgendaItem(Base):
             css_classes.append("paragraph")
         if self.has_submitted_documents():
             css_classes.append("expandable")
+        if self.has_proposal:
+            css_classes.append("proposal")
         return " ".join(css_classes)
 
     def get_state(self):

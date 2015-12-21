@@ -47,7 +47,13 @@
     var self = this;
     var viewlet = $("#opengever_meeting_meeting");
 
-    var dialog = $( "#confirm_unschedule" ).overlay({
+    var unscheduleDialog = $( "#confirm_unschedule" ).overlay({
+      speed: 0,
+      closeSpeed: 0,
+      mask: { loadSpeed: 0 }
+    }).data("overlay");
+
+    var deleteDialog = $( "#confirm_delete" ).overlay({
       speed: 0,
       closeSpeed: 0,
       mask: { loadSpeed: 0 }
@@ -93,7 +99,11 @@
 
     this.openModal = function(target) {
       this.currentItem = target;
-      dialog.load();
+      if(target.parents("tr").hasClass("proposal")) {
+        unscheduleDialog.load();
+      } else {
+        deleteDialog.load();
+      }
     };
 
     this.unschedule = function() {
@@ -101,7 +111,10 @@
       return $.post(this.currentItem.attr("href"));
     };
 
-    this.closeModal = function() { dialog.close(); };
+    this.closeModal = function() {
+      unscheduleDialog.close();
+      deleteDialog.close();
+    };
 
     this.updateSortOrder = function() {
       var numbers = $.map($("tr", this.outlet), function(row) { return $(row).data().uid; });
@@ -166,8 +179,8 @@
       "click#.decide-agenda-item!": this.decide,
       "sortupdate##agenda_items tbody!$": this.updateSortOrder,
       "click#.toggle-attachements": this.toggleAttachements,
-      "click##confirm_unschedule .confirm!$": this.unschedule,
-      "click##confirm_unschedule .decline!": this.closeModal,
+      "click##confirm_unschedule .confirm, #confirm_delete .confirm!$": this.unschedule,
+      "click##confirm_unschedule .decline, #confirm_delete .decline!": this.closeModal,
       "click##confirm_hold_meeting .confirm!$": this.confirmDecide,
       "click##confirm_hold_meeting .decline!": this.declineDecide
     };

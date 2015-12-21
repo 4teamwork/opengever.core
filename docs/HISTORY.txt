@@ -5,6 +5,9 @@ Changelog
 4.6.2 (unreleased)
 ------------------
 
+- Show diffrent buttons for deleting or unscheduling agenda items
+  [Kevin Bieri]
+
 - Make sure that decision numbers are available when rendering excerpts.
   [deiferni]
 
