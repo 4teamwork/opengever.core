@@ -43,8 +43,7 @@ class TestMeeting(FunctionalTestCase):
                             .having(firstname=u'Peter', lastname=u'M\xfcller'))
         self.membership = create(Builder('membership')
                                  .having(committee=self.committee_model,
-                                         member=self.peter)
-                                 .as_active())
+                                         member=self.peter))
 
     def test_meeting_title(self):
         self.assertEqual(

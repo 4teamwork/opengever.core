@@ -57,6 +57,18 @@ class TestUnitMembershipQuery(TestCase):
         active = self.setup_membership(yesterday, tomorrow)
         self.assertEqual([active], Membership.query.only_active().all())
 
+    def test_by_meeting(self):
+        prev = self.setup_membership(date(2004, 1, 20), date(2010, 1, 19))
+        active = self.setup_membership(date(2010, 1, 20), date(2013, 7, 21))
+        post = self.setup_membership(date(2013, 7, 22), date(2016, 1, 1))
+
+        meeting = create(Builder('meeting').having(
+                         committee=self.committee,
+                         start=localized_datetime(2010, 1, 29),
+                         end=None))
+
+        self.assertEqual([active], Membership.query.for_meeting(meeting).all())
+
     def test_fetch_overlapping(self):
         membership = self.setup_membership(date(2012, 5, 1), date(2012, 7, 10))
         self.assertEqual(membership, Membership.query.fetch_overlapping(

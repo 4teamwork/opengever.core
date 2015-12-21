@@ -63,6 +63,20 @@ Committee.query_cls = CommitteeQuery
 
 class MembershipQuery(BaseQuery):
 
+    def for_meeting(self, meeting):
+        """Return all memberships that are active when the meeting takes place.
+        """
+
+        start_date = meeting.start.date()
+        end_date = start_date
+        if meeting.end:
+            end_date = meeting.end.date()
+
+        query = self.filter(
+            and_(Membership.date_from <= start_date,
+                 Membership.date_to >= end_date))
+        return query.filter_by(committee=meeting.committee)
+
     def only_active(self):
         return self.filter(
             and_(Membership.date_from <= date.today(),
@@ -82,6 +96,8 @@ class MembershipQuery(BaseQuery):
         return query.first()
 
     def fetch_for_meeting(self, meeting, member):
+        """Fetch the membership for a member at the time of a meeting."""
+
         end = meeting.end if meeting.end else meeting.start
         return self.fetch_overlapping(
             meeting.start, end, member, meeting.committee)
