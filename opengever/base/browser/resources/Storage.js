@@ -85,7 +85,7 @@
 
     Storage.call(this, { root: "protocol" });
 
-    var extendProposal = function(proposal, unit) { return "#agenda_item-" + proposal + "-" + unit; };
+    var extendProposal = function(proposal, unit) { return "agenda_item-" + proposal + "-" + unit; };
 
     var isMeeting = function(object) { return object.hasOwnProperty("proposals") && object.hasOwnProperty("revision"); };
 
@@ -111,7 +111,7 @@
     this.restore = function() {
       $.each(this.currentMeeting.proposals, function(proposalId, proposal) {
         $.each(proposal, function(unitName, unitText) {
-          $(extendProposal(proposalId, unitName)).val(unitText);
+          $("[input='" + extendProposal(proposalId, unitName) + "']")[0].editor.loadJSON(JSON.parse(unitText));
         });
       });
     };

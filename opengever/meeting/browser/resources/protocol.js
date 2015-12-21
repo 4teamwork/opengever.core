@@ -12,12 +12,9 @@
     var currentMeeting = $(".protocol-navigation").data().meeting;
     var createdAt = new Date($(".protocol-navigation").data().modified).getTime();
 
-    var protocolSynchronizer = new global.Synchronizer({ target: "textarea, input, select", triggers: ["input", "change"] });
+    var protocolSynchronizer = new global.Synchronizer({ target: "input, select, textarea", triggers: ["input", "change"] });
+    var trixSynchronizer = new global.Synchronizer({ target: "trix-editor", triggers: ["input"] });
     var meetingStorage = new global.MeetingStorage(currentMeeting);
-
-    var updateAutosize = function() {
-      global.autosize.update(document.querySelectorAll(protocolSynchronizer.options.target));
-    };
 
     var showHintForLocalChanges = function() {
       $("#form-buttons-cancel").val($("#button-value-discard").val());
@@ -26,23 +23,38 @@
 
     var parseProposal = function(expression) { return expression.split("-"); };
 
-    var syncProposal = function(target) {
-      var proposalExpression = parseProposal(target.id);
-      var text = target.value;
-      meetingStorage.addOrUpdateUnit(proposalExpression[1], proposalExpression[2], text);
+    var syncTrix = function(target) {
+      var proposalExpression = parseProposal(target.inputElement.id);
+      var html = JSON.stringify(target.editor);
+      meetingStorage.addOrUpdateUnit(proposalExpression[1], proposalExpression[2], html);
       meetingStorage.push();
+      showHintForLocalChanges();
+    };
+
+    var syncProposal = function() {
       showHintForLocalChanges();
     };
 
     protocolSynchronizer.onSync(syncProposal);
     protocolSynchronizer.observe();
 
+    trixSynchronizer.onSync(syncTrix);
+    trixSynchronizer.observe();
+
     meetingStorage.pull();
 
     if(createdAt < meetingStorage.currentMeeting.revision) {
       meetingStorage.restore();
-      updateAutosize();
     }
+
+    this.activateToolbar = function(toolbar) {
+      $("trix-toolbar").removeClass("active");
+      toolbar.addClass("active");
+    };
+
+    this.attachToolbar = function(target) {
+      this.activateToolbar($("#" + target.attr("toolbar")));
+    };
 
     this.saveProtocol = function(target) {
       var payload = target.parents("form").serializeArray();
@@ -58,7 +70,8 @@
 
     this.events = {
       "click##form-buttons-save": this.saveProtocol,
-      "click##form-buttons-cancel$": this.discardProtocol
+      "click##form-buttons-cancel$": this.discardProtocol,
+      "click#trix-editor": this.attachToolbar
     };
 
     this.init();
@@ -71,7 +84,7 @@
 
   function init() {
 
-    global.autosize($("#opengever_meeting_protocol textarea"));
+    var protocolController = new ProtocolController();
 
     var scrollspy = new global.Scrollspy({ selector: ".navigation" });
 
@@ -83,47 +96,31 @@
     var labels = new global.StickyHeading({ selector: "#opengever_meeting_protocol .agenda_items label", fix: false, dependsOn: headings});
     var collapsible = new global.StickyHeading({ selector: "#opengever_meeting_protocol .collapsible", clone: false});
 
-    scrollspy.onBeforeScroll(function(target) {
-      if(target.hasClass("expandable") && !target.hasClass("paragraph")) {
-        scrollspy.options.offset = target.outerHeight() + 60;
-      } else if (target.hasClass("paragraph")) {
-        scrollspy.options.offset = 0;
-      }
-    });
+    scrollspy.onBeforeScroll(function(target, anchor) { scrollspy.options.offset = anchor.siblings("h2.clone").height() + 40; });
 
     collapsible.onSticky(function() { navigation.addClass("sticky"); });
 
-    headings.onNoSticky(function() {
-      navigation.removeClass("sticky");
-      $(".metadata .fields").css("position", "static");
-    });
+    headings.onNoSticky(function() { navigation.removeClass("sticky"); });
 
     headings.onSticky(function(heading) {
       navigation.addClass("sticky");
-      $(".metadata .fields").css("position", "fixed");
       scrollspy.expand($("#" + heading.node.attr("id") + "-anchor"));
       scrollspy.select($("#" + heading.node.attr("id") + "-anchor"));
     });
 
-    headings.onCollision(function() {
-      navigation.addClass("sticky");
-      $(".metadata .fields").css("position", "fixed");
-    });
+    headings.onCollision(function() { navigation.addClass("sticky"); });
 
-    labels.onSticky(function(label) {
-      scrollspy.select($("#" + label.node.attr("for") + "-anchor"));
-    });
-    labels.onCollision(function(fadingIn, fadingOut) {
-      scrollspy.select($("#" + fadingOut.node.attr("for") + "-anchor"));
-    });
+    labels.onSticky(function(label) { scrollspy.select($("#" + label.node.attr("for") + "-anchor")); });
 
-    scrollspy.onScroll(function(target, toElement) {
+    labels.onCollision(function(fadingIn, fadingOut) { scrollspy.select($("#" + fadingOut.node.attr("for") + "-anchor")); });
+
+    scrollspy.onScroll(function(target, anchor) {
+      protocolController.activateToolbar($("#" + anchor.attr("id") + "-toolbar"));
       if(target.hasClass("expandable")) {
         scrollspy.expand(target);
       }
     });
 
-    var protocolController = new ProtocolController();
 
   }
 

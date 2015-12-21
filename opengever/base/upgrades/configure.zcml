@@ -375,4 +375,13 @@
         profile="opengever.base:default"
         />
 
+    <!-- 4606 -> 4607 -->
+    <upgrade-step:importProfile
+        title="Resister trix javascript."
+        profile="opengever.base:default"
+        source="4606"
+        destination="4607"
+        directory="profiles/4607"
+        />
+
 </configure>
