@@ -72,6 +72,6 @@ class TestProtocolJsonData(FunctionalTestCase):
         create_session().delete(self.membership_peter)
 
         self.assertEquals(
-            {'members': [{'fullname': u'Peter Meier', 'role': None},
+            {'members': [{'fullname': u'Peter M\xfcller', 'role': None},
                          {'fullname': u'Franz M\xfcller', 'role': None}]},
             ProtocolData(self.meeting).add_members())

@@ -45,7 +45,7 @@ SAMPLE_MEETING_DATA = {
                 'number': 11},
     'committee': {'name': 'Gemeinderat'},
     'participants': {
-        'members': [{'fullname': u'Peter Meier',
+        'members': [{'fullname': u'Peter M\xfcller',
                     'role': u'F\xfcrst'},
                    {'fullname': u'Franz M\xfcller',
                     'role': None}],

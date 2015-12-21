@@ -165,8 +165,8 @@ class MemberBuilder(SqlObjectBuilder):
 
     def __init__(self, session):
         super(MemberBuilder, self).__init__(session)
-        self.arguments['firstname'] = 'Peter'
-        self.arguments['lastname'] = 'Meier'
+        self.arguments['firstname'] = u'Peter'
+        self.arguments['lastname'] = u'M\xfcller'
 
 builder_registry.register('member', MemberBuilder)
 
