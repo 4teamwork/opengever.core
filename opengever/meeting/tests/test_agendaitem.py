@@ -13,6 +13,7 @@ from zExceptions import Unauthorized
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 import json
+import transaction
 
 
 class TestAgendaItem(FunctionalTestCase):
@@ -313,6 +314,57 @@ class TestAgendaItemDecide(TestAgendaItem):
             view='agenda_items/{}/decide'.format(item2.agenda_item_id))
 
         self.assertEquals(None, browser.json.get('redirectUrl'))
+
+
+class TestAgendaItemRevise(TestAgendaItem):
+
+    @browsing
+    def test_revise_agenda_item(self, browser):
+        proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .having(committee=self.committee.load_model())
+                          .as_submitted())
+        proposal.load_model().workflow_state = 'decided'
+
+        item = create(Builder('agenda_item').having(
+            title=u'foo',
+            meeting=self.meeting,
+            workflow_state='decided',
+            proposal=proposal.load_model()))
+
+        browser.login().open(
+            self.meeting_wrapper,
+            view='agenda_items/{}/revise'.format(item.agenda_item_id))
+        transaction.commit()
+
+        self.assertEquals(AgendaItem.STATE_PENDING,
+                          AgendaItem.query.first().get_state())
+        self.assertEquals(Proposal.STATE_PENDING,
+                          Proposal.query.first().get_state())
+        self.assertEquals([{u'message': u'Agenda Item successfully revised.',
+                            u'messageClass': u'info',
+                            u'messageTitle': u'Information'}],
+                          browser.json.get('messages'))
+
+    @browsing
+    def test_raises_not_found_for_invalid_agenda_item_id(self, browser):
+        with self.assertRaises(NotFound):
+            browser.login().open(self.meeting_wrapper,
+                                 view='agenda_items/12345/revise')
+
+    @browsing
+    def test_raise_unauthorized_when_meeting_is_not_editable(self, browser):
+        item = create(Builder('agenda_item').having(
+            title=u'foo', meeting=self.meeting))
+        item.decide()
+
+        self.meeting.workflow_state = 'closed'
+
+        with self.assertRaises(Unauthorized):
+            browser.login().open(
+                self.meeting_wrapper,
+                view='agenda_items/{}/revise'.format(item.agenda_item_id))
+
 
 
 class TestAgendaItemUpdateOrder(TestAgendaItem):

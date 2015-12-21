@@ -53,6 +53,11 @@ class IAgendaItemActions(Interface):
         """Decide the current agendaitem and decide the meeting.
         """
 
+    def revise():
+        """Revise the current agendaitem. Means set workflow state back
+        to pending for the current agendaitem.
+        """
+
 
 class AgendaItemsView(BrowserView):
 
@@ -122,6 +127,9 @@ class AgendaItemsView(BrowserView):
             if item.is_decide_possible():
                 data['decide_link'] = meeting.get_url(
                     view='agenda_items/{}/decide'.format(item.agenda_item_id))
+            if item.is_revise_possible():
+                data['revise_link'] = meeting.get_url(
+                    view='agenda_items/{}/revise'.format(item.agenda_item_id))
 
             agenda_items.append(data)
 
@@ -213,6 +221,23 @@ class AgendaItemsView(BrowserView):
             api.portal.show_message(message=msg, request=self.request, type='info')
 
         return response.dump()
+
+    def revise(self):
+        """Revise the current agendaitem. Means set workflow state back
+        to pending for the current agendaitem.
+        """
+        if not self.context.model.is_editable():
+            raise Unauthorized("Editing is not allowed")
+
+        agenda_item = meeting_service().fetch_agenda_item(self.agenda_item_id)
+        if not agenda_item:
+            raise NotFound
+
+        agenda_item.revise()
+
+        return JSONResponse(self.request).info(
+            _(u'agenda_item_revised',
+              default=u'Agenda Item successfully revised.')).dump()
 
     def schedule_paragraph(self):
         """Schedule the given Paragraph (request parameter `title`) for the current
