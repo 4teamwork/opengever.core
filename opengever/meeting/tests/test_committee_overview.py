@@ -40,7 +40,7 @@ class TestCommitteeOverview(FunctionalTestCase):
 
         browser.login().open(self.committee, view='tabbedview_view-overview')
 
-        self.assertEquals(['Peter Meier', u'Hans M\xfcller'],
+        self.assertEquals([u'Peter M\xfcller', u'Hans M\xfcller'],
                           browser.css('#current_membersBox li:not(.moreLink)').text)
 
     @browsing

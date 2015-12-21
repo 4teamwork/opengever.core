@@ -43,7 +43,9 @@ class TestPathBar(FunctionalTestCase):
 
         browser.login().open(member.get_url(container))
         self.assertEqual(
-            ['Client1', 'opengever-meeting-committeecontainer', 'Peter Meier'],
+            [u'Client1',
+             u'opengever-meeting-committeecontainer',
+             u'Peter M\xfcller'],
             browser.css('#portal-breadcrumbs a').text)
 
     @browsing
@@ -61,6 +63,8 @@ class TestPathBar(FunctionalTestCase):
         wrapped_member = MemberWrapper.wrap(container, member)
         browser.login().open(membership.get_url(wrapped_member))
         self.assertEqual(
-            ['Client1', 'opengever-meeting-committeecontainer', 'Peter Meier',
-             'Peter Meier, Jan 01, 2014 - Jan 01, 2015'],
+            [u'Client1',
+             u'opengever-meeting-committeecontainer',
+             u'Peter M\xfcller',
+             u'Peter M\xfcller, Jan 01, 2014 - Jan 01, 2015'],
             browser.css('#portal-breadcrumbs a').text)
