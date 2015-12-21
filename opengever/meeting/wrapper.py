@@ -89,9 +89,9 @@ class MembershipWrapper(BaseWrapper):
         return self.model.get_url(self.parent)
 
     def get_title(self):
-        return '{}, {} - {}'.format(self.model.title(),
-                                    self.model.format_date_from(),
-                                    self.model.format_date_to())
+        return u'{}, {} - {}'.format(self.model.title(),
+                                     self.model.format_date_from(),
+                                     self.model.format_date_to())
 
     def get_breadcrumbs(self):
         my_breadcrumbs = super(MembershipWrapper, self).get_breadcrumbs()

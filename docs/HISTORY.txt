@@ -5,6 +5,9 @@ Changelog
 4.6.2 (unreleased)
 ------------------
 
+- Fix an encoding issue while editing memberships.
+  [deiferni]
+
 - Show diffrent buttons for deleting or unscheduling agenda items
   [Kevin Bieri]
 
