@@ -32,7 +32,9 @@ class AgendaItem(Base):
     workflow = Workflow(
         [STATE_PENDING, STATE_DECIDED],
         [Transition('pending', 'decided',
-                    title=_('decide', default='Decide'))]
+                    title=_('decide', default='Decide')),
+         Transition('decided', 'pending',
+                    title=_('revise', default='Revise'))]
     )
 
     agenda_item_id = Column("id", Integer, Sequence("agendaitems_id_seq"),
@@ -267,3 +269,9 @@ class AgendaItem(Base):
             self.proposal.decide()
 
         self.workflow.execute_transition(None, self, 'pending-decided')
+
+    def revise(self):
+        self.workflow.execute_transition(None, self, 'decided-pending')
+
+    def is_revise_possible(self):
+        return self.get_state() == self.STATE_DECIDED
