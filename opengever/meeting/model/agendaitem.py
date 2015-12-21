@@ -237,10 +237,10 @@ class AgendaItem(Base):
         if self.get_state() == self.STATE_DECIDED:
             return
 
+        self.meeting.hold()
+
         if self.has_proposal:
             self.proposal.generate_excerpt(self)
             self.proposal.decide()
-
-        self.meeting.hold()
 
         self.workflow.execute_transition(None, self, 'pending-decided')

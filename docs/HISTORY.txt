@@ -5,6 +5,9 @@ Changelog
 4.6.2 (unreleased)
 ------------------
 
+- Make sure that decision numbers are available when rendering excerpts.
+  [deiferni]
+
 - Don't generate decision numbers for paragraphs.
   [deiferni]
 
