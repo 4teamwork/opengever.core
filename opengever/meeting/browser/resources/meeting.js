@@ -219,6 +219,14 @@
         }
       },
       {
+        method: "click",
+        target: ".revise-agenda-item",
+        callback: this.revise,
+        options: {
+          update: true
+        }
+      },
+      {
         method: "sortupdate",
         target: "#agenda_items tbody",
         callback: this.updateSortOrder,

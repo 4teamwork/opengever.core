@@ -116,6 +116,9 @@ AGENDAITEMS_TEMPLATE = '''
           {{#if decide_link}}
             <a href="{{decide_link}}" title="%(label_decide_action)s" class="button decide-agenda-item"><span></span></a>
           {{/if}}
+          {{#if revise_link}}
+            <a href="{{revise_link}}" title="%(label_revise_action)s" class="button revise-agenda-item"><span></span></a>
+          {{/if}}
         </div>
       </td>
       {{/if}}
@@ -345,11 +348,15 @@ class MeetingView(BrowserView):
         label_decide_action = translate(
             _('label_decide_action', default='Decide this agenda item'),
             context=self.request)
+        label_revise_action = translate(
+            _('label_revise_action', default='Revise this agenda item'),
+            context=self.request)
         return AGENDAITEMS_TEMPLATE  % {'label_edit_cancel': label_edit_cancel,
                                         'label_edit_save': label_edit_save,
                                         'label_edit_action': label_edit_action,
                                         'label_delete_action': label_delete_action,
-                                        'label_decide_action': label_decide_action}
+                                        'label_decide_action': label_decide_action,
+                                        'label_revise_action': label_revise_action}
 
     def render_handlebars_proposals_template(self):
         label_schedule = translate(_('label_schedule', default='Schedule'), context=self.request)
