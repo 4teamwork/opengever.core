@@ -56,7 +56,7 @@ msgstr ""
 
 #: ./opengever/setup/profiles/casauth/actions.xml
 msgid "My portal"
-msgstr ""
+msgstr "Mon portail"
 
 #: ./opengever/setup/browser/adddeployment.pt:118
 msgid "Purge SQL"

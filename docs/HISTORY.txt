@@ -5,6 +5,9 @@ Changelog
 4.6.2 (unreleased)
 ------------------
 
+- Add french translation for "My portal" action.
+  [lgraf]
+
 - Show hint for unsaved local changes while editing the protocol.
   [Kevin Bieri]
 
