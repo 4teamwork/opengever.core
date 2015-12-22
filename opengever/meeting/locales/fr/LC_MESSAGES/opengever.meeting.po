@@ -557,7 +557,7 @@ msgstr ""
 #. Default: "Held"
 #: ./opengever/meeting/model/meeting.py:72
 msgid "held"
-msgstr ""
+msgstr "Conduit"
 
 #: ./opengever/meeting/proposal.py:109
 msgid "help_considerations"

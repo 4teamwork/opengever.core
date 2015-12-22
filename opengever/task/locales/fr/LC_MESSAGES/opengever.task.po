@@ -833,7 +833,7 @@ msgstr ""
 #. Default: "Accepted by ${user}"
 #: ./opengever/task/response_description.py:142
 msgid "transition_msg_accept"
-msgstr "Accépté par ${user}"
+msgstr "Accepté par ${user}"
 
 #. Default: "Assigned to dossier by ${user} successor=${successor}"
 #: ./opengever/task/response_description.py:268

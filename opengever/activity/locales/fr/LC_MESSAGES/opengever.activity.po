@@ -35,7 +35,7 @@ msgstr "Titre"
 #. Default: "Created"
 #: ./opengever/activity/browser/listing.py:57
 msgid "created"
-msgstr ""
+msgstr "Créé"
 
 #. Default: "Notifications"
 #: ./opengever/activity/viewlets/notification.pt:3
