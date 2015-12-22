@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2015-04-16 17:18+0000\n"
+"POT-Creation-Date: 2015-12-22 14:43+0000\n"
 "PO-Revision-Date: 2010-12-22 10:37+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -30,7 +30,7 @@ msgid "active_yes"
 msgstr "Ja"
 
 #. Default: "Inbox: ${client}"
-#: ./opengever/ogds/base/actor.py:141
+#: ./opengever/ogds/base/actor.py:143
 msgid "inbox_label"
 msgstr "Eingangskorb: ${client}"
 

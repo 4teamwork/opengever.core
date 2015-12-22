@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-12-09 10:38+0000\n"
+"POT-Creation-Date: 2015-12-22 14:43+0000\n"
 "PO-Revision-Date: 2012-08-30 15:34+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -278,17 +278,17 @@ msgstr ""
 
 #. Default: "Title"
 #: ./opengever/base/behaviors/base.py:24
-#: ./opengever/base/browser/translated_title.py:30
+#: ./opengever/base/browser/translated_title.py:36
 msgid "label_title"
 msgstr "Titre"
 
 #. Default: "Title (German)"
-#: ./opengever/base/behaviors/translated_title.py:42
+#: ./opengever/base/behaviors/translated_title.py:43
 msgid "label_title_de"
 msgstr ""
 
 #. Default: "Title (French)"
-#: ./opengever/base/behaviors/translated_title.py:48
+#: ./opengever/base/behaviors/translated_title.py:49
 msgid "label_title_fr"
 msgstr ""
 
@@ -385,3 +385,4 @@ msgstr "Non contrôlé"
 #: opengever/repository/classification.py
 msgid "unprotected"
 msgstr "Non classé"
+

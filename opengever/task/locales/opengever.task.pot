@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2015-12-09 10:39+0000\n"
+"POT-Creation-Date: 2015-12-22 14:43+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -36,7 +36,7 @@ msgid "Edit"
 msgstr ""
 
 #: ./opengever/task/response.py:251
-#: ./opengever/task/statesyncer.py:143
+#: ./opengever/task/statesyncer.py:145
 #: ./opengever/task/util.py:162
 msgid "Issue state"
 msgstr ""
@@ -560,7 +560,7 @@ msgstr ""
 #. Default: "Responsible"
 #: ./opengever/task/browser/assign.py:45
 #: ./opengever/task/browser/overview.py:97
-#: ./opengever/task/statesyncer.py:134
+#: ./opengever/task/statesyncer.py:136
 msgid "label_responsible"
 msgstr ""
 

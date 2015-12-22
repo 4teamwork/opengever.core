@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-08-17 14:30+0000\n"
+"POT-Creation-Date: 2015-12-22 14:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,22 +18,22 @@ msgstr ""
 "Domain: DOMAIN\n"
 
 #. Default: "Actor"
-#: ./opengever/activity/browser/listing.py:58
+#: ./opengever/activity/browser/listing.py:52
 msgid "column_Actor"
 msgstr "Acteur"
 
 #. Default: "Kind"
-#: ./opengever/activity/browser/listing.py:48
+#: ./opengever/activity/browser/listing.py:42
 msgid "column_kind"
 msgstr "Type"
 
 #. Default: "Title"
-#: ./opengever/activity/browser/listing.py:53
+#: ./opengever/activity/browser/listing.py:47
 msgid "column_title"
 msgstr "Titre"
 
 #. Default: "Created"
-#: ./opengever/activity/browser/listing.py:63
+#: ./opengever/activity/browser/listing.py:57
 msgid "created"
 msgstr ""
 
@@ -43,32 +43,22 @@ msgid "heading_notifications"
 msgstr "Notifications"
 
 #. Default: "Details:"
-#: ./opengever/activity/templates/notification.pt:19
+#: ./opengever/activity/templates/notification.pt:42
 msgid "label_details"
 msgstr ""
 
-#. Default: "Mark as read"
-#: ./opengever/activity/viewlets/notification.pt:32
-msgid "label_mark_as_read"
-msgstr ""
-
 #. Default: "All Notifications"
-#: ./opengever/activity/viewlets/notification.pt:55
+#: ./opengever/activity/viewlets/notification.pt:41
 msgid "label_notifications_overview"
 msgstr ""
 
 #. Default: "A problem has occurred during the notification creation. Notification could not or only partially produced."
-#: ./opengever/activity/center.py:192
+#: ./opengever/activity/center.py:228
 msgid "msg_error_not_notified"
 msgstr ""
 
-#. Default: "No unread notifications"
-#: ./opengever/activity/viewlets/notification.pt:23
-msgid "no_unread_notifications"
-msgstr ""
-
 #. Default: "GEVER Task"
-#: ./opengever/activity/mail.py:78
+#: ./opengever/activity/mail.py:112
 msgid "subject_prefix"
 msgstr ""
 

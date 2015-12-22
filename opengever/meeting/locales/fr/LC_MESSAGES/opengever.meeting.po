@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-12-22 13:07+0000\n"
+"POT-Creation-Date: 2015-12-22 14:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -267,11 +267,11 @@ msgid "Proposals:"
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:169
-#: ./opengever/meeting/model/meeting.py:243
+#: ./opengever/meeting/model/meeting.py:244
 msgid "Protocol"
 msgstr "Procès-verbal"
 
-#: ./opengever/meeting/model/meeting.py:246
+#: ./opengever/meeting/model/meeting.py:247
 msgid "Protocol Excerpt"
 msgstr ""
 
@@ -409,7 +409,7 @@ msgstr ""
 
 #. Default: "Close meeting"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:58
-#: ./opengever/meeting/model/meeting.py:78
+#: ./opengever/meeting/model/meeting.py:79
 msgid "close_meeting"
 msgstr ""
 
@@ -419,7 +419,7 @@ msgid "close_period"
 msgstr ""
 
 #. Default: "Closed"
-#: ./opengever/meeting/model/meeting.py:72
+#: ./opengever/meeting/model/meeting.py:73
 #: ./opengever/meeting/model/period.py:21
 msgid "closed"
 msgstr "Fermé"
@@ -555,7 +555,7 @@ msgid "heading_reject_proposal_form"
 msgstr ""
 
 #. Default: "Held"
-#: ./opengever/meeting/model/meeting.py:71
+#: ./opengever/meeting/model/meeting.py:72
 msgid "held"
 msgstr ""
 
@@ -586,7 +586,7 @@ msgid "help_title"
 msgstr ""
 
 #. Default: "Hold meeting"
-#: ./opengever/meeting/model/meeting.py:80
+#: ./opengever/meeting/model/meeting.py:81
 msgid "hold"
 msgstr ""
 
@@ -953,7 +953,7 @@ msgid "msg_hold_meeting_dialog"
 msgstr ""
 
 #. Default: "The meeting ${title} has been successfully closed, the excerpts have been generated and sent back to the initial dossier."
-#: ./opengever/meeting/model/meeting.py:58
+#: ./opengever/meeting/model/meeting.py:59
 msgid "msg_meeting_successfully_closed"
 msgstr ""
 
@@ -988,7 +988,7 @@ msgstr ""
 
 #. Default: "Pending"
 #: ./opengever/meeting/model/agendaitem.py:28
-#: ./opengever/meeting/model/meeting.py:70
+#: ./opengever/meeting/model/meeting.py:71
 #: ./opengever/meeting/model/proposal.py:106
 msgid "pending"
 msgstr "En modification"

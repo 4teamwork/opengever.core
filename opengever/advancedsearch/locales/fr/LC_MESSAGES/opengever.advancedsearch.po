@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-04-16 17:18+0000\n"
+"POT-Creation-Date: 2015-12-22 14:43+0000\n"
 "PO-Revision-Date: 2013-06-05 09:24+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgid "advanced_search"
 msgstr "Recherche avancée"
 
 #. Default: "Search"
-#: ./opengever/advancedsearch/advanced_search.py:465
+#: ./opengever/advancedsearch/advanced_search.py:457
 msgid "button_search"
 msgstr "Rechercher"
 
@@ -50,7 +50,7 @@ msgid "help_portal_type"
 msgstr "Choix du type de contenu à rechercher."
 
 #. Default: "Select the contenttype to be searched for.It searches only items from the current client."
-#: ./opengever/advancedsearch/advanced_search.py:363
+#: ./opengever/advancedsearch/advanced_search.py:355
 msgid "help_portal_type_multiclient_setup"
 msgstr "Choix du type de contenu à rechercher. Ne sont parcourus que les contenus du mandant actuel."
 

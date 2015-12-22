@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-08-05 07:35+0000\n"
+"POT-Creation-Date: 2015-12-22 14:43+0000\n"
 "PO-Revision-Date: 2013-03-27 11:23+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -79,7 +79,7 @@ msgid "button_more_actions"
 msgstr "Autres actions"
 
 #. Default: "PDF Preview"
-#: ./opengever/tabbedview/helper.py:229
+#: ./opengever/tabbedview/helper.py:223
 msgid "button_pdf_preview"
 msgstr ""
 
@@ -280,7 +280,7 @@ msgid "label_issuer"
 msgstr "Mandant"
 
 #. Default: "My notifications"
-#: ./opengever/tabbedview/browser/personal_overview.py:99
+#: ./opengever/tabbedview/browser/personal_overview.py:107
 msgid "label_my_notifications"
 msgstr ""
 
@@ -369,7 +369,7 @@ msgid "participants"
 msgstr "Participants"
 
 #. Default: "Personal Overview: ${user_name}"
-#: ./opengever/tabbedview/browser/personal_overview.py:80
+#: ./opengever/tabbedview/browser/personal_overview.py:88
 msgid "personal_overview_title"
 msgstr "Vue d'ensemble personnelle: ${user_name}"
 
