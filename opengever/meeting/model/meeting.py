@@ -11,6 +11,7 @@ from opengever.meeting.command import ProtocolOperations
 from opengever.meeting.command import UpdateGeneratedDocumentCommand
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import Period
+from opengever.meeting.model.membership import Membership
 from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
@@ -138,7 +139,7 @@ class Meeting(Base):
 
         """
         self.participants = [membership.member for membership in
-                             self.committee.get_active_memberships()]
+                             Membership.query.for_meeting(self)]
 
     def __repr__(self):
         return '<Meeting at "{}">'.format(self.start)

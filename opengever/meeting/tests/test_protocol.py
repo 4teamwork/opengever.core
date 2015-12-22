@@ -212,10 +212,10 @@ class TestProtocol(FunctionalTestCase):
             firstname=u'Hans', lastname=u'M\xfcller'))
         create(Builder('membership').having(
             member=peter,
-            committee=self.committee_model).as_active())
+            committee=self.committee_model))
         create(Builder('membership').having(
             member=hans,
-            committee=self.committee_model).as_active())
+            committee=self.committee_model))
         prev_modified = self.meeting.modified
 
         browser.login()

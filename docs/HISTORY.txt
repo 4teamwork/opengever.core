@@ -5,6 +5,9 @@ Changelog
 4.6.2 (unreleased)
 ------------------
 
+- Don't use current date when editing meeting participants but the meeting's date.
+  [deiferni]
+
 - Fix an encoding issue while editing memberships.
   [deiferni]
 

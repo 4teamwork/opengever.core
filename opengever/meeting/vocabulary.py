@@ -1,5 +1,6 @@
 from five import grok
 from opengever.meeting.model import Member
+from opengever.meeting.model import Membership
 from opengever.meeting.service import meeting_service
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.interfaces import IVocabularyFactory
@@ -37,9 +38,9 @@ class MemberVocabulary(grok.GlobalUtility):
 
 @grok.provider(IContextSourceBinder)
 def get_committee_member_vocabulary(meetingwrapper):
-    committee = meetingwrapper.model.committee.resolve_committee()
+    meeting = meetingwrapper.model
     members = []
-    for membership in committee.get_active_memberships():
+    for membership in Membership.query.for_meeting(meeting):
         member = membership.member
         members.append(
             SimpleVocabulary.createTerm(member,
