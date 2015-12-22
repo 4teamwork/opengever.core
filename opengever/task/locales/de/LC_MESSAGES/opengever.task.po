@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2015-12-09 10:39+0000\n"
+"POT-Creation-Date: 2015-12-22 14:43+0000\n"
 "PO-Revision-Date: 2015-02-17 18:41+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -35,7 +35,7 @@ msgid "Edit"
 msgstr "Bearbeiten"
 
 #: ./opengever/task/response.py:251
-#: ./opengever/task/statesyncer.py:143
+#: ./opengever/task/statesyncer.py:145
 #: ./opengever/task/util.py:162
 msgid "Issue state"
 msgstr "Status"
@@ -561,7 +561,7 @@ msgstr "Antworttext"
 #. Default: "Responsible"
 #: ./opengever/task/browser/assign.py:45
 #: ./opengever/task/browser/overview.py:97
-#: ./opengever/task/statesyncer.py:134
+#: ./opengever/task/statesyncer.py:136
 msgid "label_responsible"
 msgstr "Auftragnehmer"
 

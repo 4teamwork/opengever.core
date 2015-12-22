@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2015-08-05 07:35+0000\n"
+"POT-Creation-Date: 2015-12-22 14:43+0000\n"
 "PO-Revision-Date: 2012-11-22 14:19+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -82,7 +82,7 @@ msgid "button_more_actions"
 msgstr "Weitere Aktionen &#9660;"
 
 #. Default: "PDF Preview"
-#: ./opengever/tabbedview/helper.py:229
+#: ./opengever/tabbedview/helper.py:223
 msgid "button_pdf_preview"
 msgstr "PDF Vorschau"
 
@@ -288,7 +288,7 @@ msgid "label_issuer"
 msgstr "Auftraggeber"
 
 #. Default: "My notifications"
-#: ./opengever/tabbedview/browser/personal_overview.py:99
+#: ./opengever/tabbedview/browser/personal_overview.py:107
 msgid "label_my_notifications"
 msgstr "Meine Benachrichtigungen"
 
@@ -379,7 +379,7 @@ msgid "participants"
 msgstr "Beteiligte"
 
 #. Default: "Personal Overview: ${user_name}"
-#: ./opengever/tabbedview/browser/personal_overview.py:80
+#: ./opengever/tabbedview/browser/personal_overview.py:88
 msgid "personal_overview_title"
 msgstr "Persönliche Übersicht: ${user_name}"
 
@@ -451,3 +451,4 @@ msgstr "Titel"
 
 msgid "trash"
 msgstr "Papierkorb"
+

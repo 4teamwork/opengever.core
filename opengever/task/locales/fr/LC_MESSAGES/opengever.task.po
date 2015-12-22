@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-12-09 10:39+0000\n"
+"POT-Creation-Date: 2015-12-22 14:43+0000\n"
 "PO-Revision-Date: 2015-02-17 18:42+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,7 +35,7 @@ msgid "Edit"
 msgstr "Modifier"
 
 #: ./opengever/task/response.py:251
-#: ./opengever/task/statesyncer.py:143
+#: ./opengever/task/statesyncer.py:145
 #: ./opengever/task/util.py:162
 msgid "Issue state"
 msgstr "Etat"
@@ -560,7 +560,7 @@ msgstr "Response"
 #. Default: "Responsible"
 #: ./opengever/task/browser/assign.py:45
 #: ./opengever/task/browser/overview.py:97
-#: ./opengever/task/statesyncer.py:134
+#: ./opengever/task/statesyncer.py:136
 msgid "label_responsible"
 msgstr "Mandataire"
 
@@ -833,7 +833,7 @@ msgstr ""
 #. Default: "Accepted by ${user}"
 #: ./opengever/task/response_description.py:142
 msgid "transition_msg_accept"
-msgstr "Accépté par ${user}"
+msgstr "Accepté par ${user}"
 
 #. Default: "Assigned to dossier by ${user} successor=${successor}"
 #: ./opengever/task/response_description.py:268

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-12-04 07:52+0000\n"
+"POT-Creation-Date: 2015-12-22 14:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -69,3 +69,4 @@ msgstr ""
 #: ./opengever/setup/browser/adddeployment.pt:112
 msgid "Use \"og_demo-ftw_users\" group for OrgUnits and local role configuration"
 msgstr ""
+

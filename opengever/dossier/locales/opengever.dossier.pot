@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-08-05 10:00+0000\n"
+"POT-Creation-Date: 2015-12-22 14:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.dossier\n"
 
-#: ./opengever/dossier/move_items.py:150
+#: ./opengever/dossier/move_items.py:149
 msgid "${copied_items} Elements were moved successfully"
 msgstr ""
 
@@ -36,7 +36,7 @@ msgstr ""
 msgid "Business Case Dossier"
 msgstr ""
 
-#: ./opengever/dossier/move_items.py:188
+#: ./opengever/dossier/move_items.py:185
 msgid "Can only move objects from open dossiers!"
 msgstr ""
 
@@ -52,7 +52,7 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: ./opengever/dossier/move_items.py:98
+#: ./opengever/dossier/move_items.py:97
 msgid "Document ${name} is connected to a Task. Please move the Task."
 msgstr ""
 
@@ -73,15 +73,15 @@ msgstr ""
 msgid "Export selection"
 msgstr ""
 
-#: ./opengever/dossier/move_items.py:156
+#: ./opengever/dossier/move_items.py:155
 msgid "Failed to copy following objects: ${failed_objects}"
 msgstr ""
 
-#: ./opengever/dossier/move_items.py:162
+#: ./opengever/dossier/move_items.py:161
 msgid "Failed to copy following objects: ${failed_objects}                    . Locked via WebDAV"
 msgstr ""
 
-#: ./opengever/dossier/move_items.py:215
+#: ./opengever/dossier/move_items.py:212
 msgid "It isn't allowed to add such items there"
 msgstr ""
 
@@ -121,7 +121,7 @@ msgstr ""
 msgid "Project Dossier"
 msgstr ""
 
-#: ./opengever/dossier/menu.py:22
+#: ./opengever/dossier/menu.py:16
 msgid "Subdossier"
 msgstr ""
 
@@ -176,7 +176,7 @@ msgstr ""
 msgid "The given value is not a valid Year"
 msgstr ""
 
-#: ./opengever/dossier/move_items.py:90
+#: ./opengever/dossier/move_items.py:89
 msgid "The selected objects can't be found, please try it again."
 msgstr ""
 
@@ -200,7 +200,7 @@ msgstr ""
 msgid "When the Action give filing number is selected,                         all fields are required."
 msgstr ""
 
-#: ./opengever/dossier/move_items.py:198
+#: ./opengever/dossier/move_items.py:195
 msgid "You have not selected any items"
 msgstr ""
 
@@ -220,12 +220,12 @@ msgstr ""
 #. Default: "Cancel"
 #: ./opengever/dossier/archive.py:274
 #: ./opengever/dossier/behaviors/participation.py:167
-#: ./opengever/dossier/move_items.py:127
+#: ./opengever/dossier/move_items.py:126
 msgid "button_cancel"
 msgstr ""
 
 #. Default: "Move"
-#: ./opengever/dossier/move_items.py:75
+#: ./opengever/dossier/move_items.py:74
 msgid "button_submit"
 msgstr ""
 
@@ -248,7 +248,7 @@ msgid "documents"
 msgstr ""
 
 #. Default: "It isn't allowed to add such items there: ${failed_objects}"
-#: ./opengever/dossier/move_items.py:246
+#: ./opengever/dossier/move_items.py:243
 msgid "error_NotInContentTypes ${failed_objects}"
 msgstr ""
 
@@ -316,7 +316,7 @@ msgid "heading_archive_form"
 msgstr ""
 
 #. Default: "Move Items"
-#: ./opengever/dossier/move_items.py:57
+#: ./opengever/dossier/move_items.py:56
 msgid "heading_move_items"
 msgstr ""
 
@@ -337,7 +337,7 @@ msgid "help_container_type"
 msgstr ""
 
 #. Default: "Live Search: search the Plone Site"
-#: ./opengever/dossier/move_items.py:28
+#: ./opengever/dossier/move_items.py:27
 msgid "help_destination"
 msgstr ""
 
@@ -436,7 +436,7 @@ msgid "label_creator"
 msgstr ""
 
 #. Default: "Destination"
-#: ./opengever/dossier/move_items.py:27
+#: ./opengever/dossier/move_items.py:26
 msgid "label_destination"
 msgstr ""
 
