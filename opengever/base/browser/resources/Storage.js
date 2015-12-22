@@ -33,7 +33,7 @@
 
     this.postPull = $.noop;
 
-    if (!isSupported) {
+    if (!isSupported()) {
       throw new Error("LocalStroage is not supported");
     } else {
       Storage.storage = window.localStorage;
@@ -46,7 +46,7 @@
     this.options = $.extend({
       delay: 1000,
       target: global.document,
-      trigger: "keyup"
+      triggers: []
     }, options || {});
 
     var self = this;
@@ -58,7 +58,7 @@
       this.timeout = global.setTimeout(function() { syncCallback(event.target); }, self.options.delay);
     };
 
-    this.observe = function() { $(this.options.target).on(this.options.trigger, trackType); };
+    this.observe = function() { $(this.options.target).on(this.options.triggers.join(" "), trackType); };
 
     this.onSync = function(callback) { syncCallback = callback; };
 

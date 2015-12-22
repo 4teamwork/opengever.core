@@ -5,6 +5,9 @@ Changelog
 4.6.2 (unreleased)
 ------------------
 
+- Show hint for unsaved local changes while editing the protocol.
+  [Kevin Bieri]
+
 - Don't use current date when editing meeting participants but the meeting's date.
   [deiferni]
 

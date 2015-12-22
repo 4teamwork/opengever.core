@@ -9,9 +9,14 @@
                tal:attributes="data-meeting meeting/meeting_id;
                                data-modified meeting/modified">
             <div class="list-group">
-              <div class="list-group-item submit actions">
+              <div id="protocol-controls" class="list-group-item submit actions">
                 <div class="button-group fluid">
                   <metal:use use-macro="context/@@ploneform-macros/actions" />
+                  <input type="submit" id="button-value-discard" value="Discard" i18n:attributes="value" />
+                </div>
+                <div id="changes-hint" class="spv-label warning">
+                  <i></i>
+                  <span i18n:translate="label_unsaved_changes">You have unsaved changes</span>
                 </div>
               </div>
               <div class="list-group-item navigation">

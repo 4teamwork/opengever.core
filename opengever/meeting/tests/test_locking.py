@@ -91,7 +91,7 @@ class TestMeetingLocking(FunctionalTestCase):
             MeetingWrapper.wrap(self.committee, self.meeting)).lock_info()
         self.assertEquals(1, len(lock_infos))
 
-        browser.find('Cancel').click()
+        browser.find('Close').click()
         self.assertEquals(
             [], ILockable(
                 MeetingWrapper.wrap(self.committee, self.meeting)).lock_info())

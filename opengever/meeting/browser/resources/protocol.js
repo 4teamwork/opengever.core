@@ -1,4 +1,4 @@
-(function(global) {
+(function(global, $) {
 
   "use strict";
 
@@ -6,14 +6,22 @@
 
     global.Controller.call(this);
 
+    var saveButton = $("#form-buttons-save");
+    var protocolControls = $("#protocol-controls");
+
     var currentMeeting = $(".protocol-navigation").data().meeting;
     var createdAt = new Date($(".protocol-navigation").data().modified).getTime();
 
-    var protocolSynchronizer = new global.Synchronizer({ target: "textarea" });
+    var protocolSynchronizer = new global.Synchronizer({ target: "textarea, input, select", triggers: ["input", "change"] });
     var meetingStorage = new global.MeetingStorage(currentMeeting);
 
     var updateAutosize = function() {
       global.autosize.update(document.querySelectorAll(protocolSynchronizer.options.target));
+    };
+
+    var showHintForLocalChanges = function() {
+      $("#form-buttons-cancel").val($("#button-value-discard").val());
+      protocolControls.addClass("local-changes");
     };
 
     var parseProposal = function(expression) { return expression.split("-"); };
@@ -23,6 +31,7 @@
       var text = target.value;
       meetingStorage.addOrUpdateUnit(proposalExpression[1], proposalExpression[2], text);
       meetingStorage.push();
+      showHintForLocalChanges();
     };
 
     protocolSynchronizer.onSync(syncProposal);
@@ -37,17 +46,12 @@
 
     this.saveProtocol = function(target) {
       var payload = target.parents("form").serializeArray();
-      payload.push({ name: "form.buttons.save", value: $("#form-buttons-save").val() });
-      var action = target.attr("action");
-      return $.ajax({
-        type: "POST",
-        url: action,
-        data: payload,
-        dataType: "json"
-      }).done(function(data) {
-        meetingStorage.deleteCurrentMeeting();
-        window.location = data.redirectUrl;
-      });
+      payload.push({ name: "form.buttons.save", value: saveButton.val() });
+      return $.post(target.attr("action"), payload)
+              .done(function(data) {
+              meetingStorage.deleteCurrentMeeting();
+              window.location = data.redirectUrl;
+             });
     };
 
     this.discardProtocol = function() { meetingStorage.deleteCurrentMeeting(); };
@@ -58,6 +62,10 @@
     };
 
     this.init();
+
+    if(meetingStorage.currentMeeting.revision) {
+      showHintForLocalChanges();
+    }
 
   }
 
@@ -125,4 +133,4 @@
     }
   });
 
-}(window));
+}(window, jQuery));
