@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.6.2 (unreleased)
+4.6.2 (2015-12-22)
 ------------------
 
 - Add french translation for "My portal" action.
