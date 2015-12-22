@@ -3,6 +3,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.model import Meeting
+from opengever.meeting.model import Proposal
 from opengever.meeting.model.agendaitem import AgendaItem
 from opengever.meeting.wrapper import MeetingWrapper
 from opengever.testing import FunctionalTestCase
@@ -316,10 +317,10 @@ class TestAgendaItemDecide(TestAgendaItem):
         self.assertEquals(None, browser.json.get('redirectUrl'))
 
 
-class TestAgendaItemRevise(TestAgendaItem):
+class TestAgendaItemReopen(TestAgendaItem):
 
     @browsing
-    def test_revise_agenda_item(self, browser):
+    def test_ropen_agenda_item(self, browser):
         proposal = create(Builder('proposal')
                           .within(self.dossier)
                           .having(committee=self.committee.load_model())
@@ -334,14 +335,14 @@ class TestAgendaItemRevise(TestAgendaItem):
 
         browser.login().open(
             self.meeting_wrapper,
-            view='agenda_items/{}/revise'.format(item.agenda_item_id))
+            view='agenda_items/{}/reopen'.format(item.agenda_item_id))
         transaction.commit()
 
-        self.assertEquals(AgendaItem.STATE_PENDING,
+        self.assertEquals(AgendaItem.STATE_REVISION,
                           AgendaItem.query.first().get_state())
-        self.assertEquals(Proposal.STATE_PENDING,
+        self.assertEquals(Proposal.STATE_DECIDED,
                           Proposal.query.first().get_state())
-        self.assertEquals([{u'message': u'Agenda Item successfully revised.',
+        self.assertEquals([{u'message': u'Agenda Item successfully reopened.',
                             u'messageClass': u'info',
                             u'messageTitle': u'Information'}],
                           browser.json.get('messages'))
@@ -350,7 +351,7 @@ class TestAgendaItemRevise(TestAgendaItem):
     def test_raises_not_found_for_invalid_agenda_item_id(self, browser):
         with self.assertRaises(NotFound):
             browser.login().open(self.meeting_wrapper,
-                                 view='agenda_items/12345/revise')
+                                 view='agenda_items/12345/reopen')
 
     @browsing
     def test_raise_unauthorized_when_meeting_is_not_editable(self, browser):
@@ -363,8 +364,7 @@ class TestAgendaItemRevise(TestAgendaItem):
         with self.assertRaises(Unauthorized):
             browser.login().open(
                 self.meeting_wrapper,
-                view='agenda_items/{}/revise'.format(item.agenda_item_id))
-
+                view='agenda_items/{}/reopen'.format(item.agenda_item_id))
 
 
 class TestAgendaItemUpdateOrder(TestAgendaItem):

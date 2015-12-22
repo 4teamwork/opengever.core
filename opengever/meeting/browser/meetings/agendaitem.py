@@ -53,9 +53,9 @@ class IAgendaItemActions(Interface):
         """Decide the current agendaitem and decide the meeting.
         """
 
-    def revise():
-        """Revise the current agendaitem. Means set workflow state back
-        to pending for the current agendaitem.
+    def reopen():
+        """Reioeb the current agendaitem and make it available for editing
+        again.
         """
 
 
@@ -127,9 +127,9 @@ class AgendaItemsView(BrowserView):
             if item.is_decide_possible():
                 data['decide_link'] = meeting.get_url(
                     view='agenda_items/{}/decide'.format(item.agenda_item_id))
-            if item.is_revise_possible():
-                data['revise_link'] = meeting.get_url(
-                    view='agenda_items/{}/revise'.format(item.agenda_item_id))
+            if item.is_reopen_possible():
+                data['reopen_link'] = meeting.get_url(
+                    view='agenda_items/{}/reopen'.format(item.agenda_item_id))
 
             agenda_items.append(data)
 
@@ -222,9 +222,9 @@ class AgendaItemsView(BrowserView):
 
         return response.dump()
 
-    def revise(self):
-        """Revise the current agendaitem. Means set workflow state back
-        to pending for the current agendaitem.
+    def reopen(self):
+        """Reopen the current agendaitem. Set the workflow state to revision
+        to indicate that editing is possible again.
         """
         if not self.context.model.is_editable():
             raise Unauthorized("Editing is not allowed")
@@ -233,11 +233,11 @@ class AgendaItemsView(BrowserView):
         if not agenda_item:
             raise NotFound
 
-        agenda_item.revise()
+        agenda_item.reopen()
 
         return JSONResponse(self.request).info(
-            _(u'agenda_item_revised',
-              default=u'Agenda Item successfully revised.')).dump()
+            _(u'agenda_item_reopened',
+              default=u'Agenda Item successfully reopened.')).dump()
 
     def schedule_paragraph(self):
         """Schedule the given Paragraph (request parameter `title`) for the current

@@ -199,6 +199,13 @@
 
     this.declineDecide = function() { holdDialog.close(); };
 
+    this.reopen = function(target){
+      target.addClass('loading');
+      return $.post(target.attr("href"))
+        .done(function() { global.location.reload(); })
+        .always(function() { target.removeClass("loading"); });
+    }
+
     this.events = [
       {
         method: "click",
@@ -220,8 +227,8 @@
       },
       {
         method: "click",
-        target: ".revise-agenda-item",
-        callback: this.revise,
+        target: ".reopen-agenda-item",
+        callback: this.reopen,
         options: {
           update: true
         }
