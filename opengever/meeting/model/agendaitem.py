@@ -36,6 +36,8 @@ class AgendaItem(Base):
                     title=_('decide', default='Decide')),
          Transition('decided', 'revision',
                     title=_('reopen', default='Reopen')),
+         Transition('revision', 'decided',
+                    title=_('revise', default='Revise')),
          ]
     )
 
@@ -267,8 +269,7 @@ class AgendaItem(Base):
         self.meeting.hold()
 
         if self.has_proposal:
-            self.proposal.generate_excerpt(self)
-            self.proposal.decide()
+            self.proposal.decide(self)
 
         self.workflow.execute_transition(None, self, 'pending-decided')
 
@@ -276,4 +277,18 @@ class AgendaItem(Base):
         self.workflow.execute_transition(None, self, 'decided-revision')
 
     def is_reopen_possible(self):
-        return self.get_state() == self.STATE_DECIDED
+        if not self.is_paragraph:
+            return self.get_state() == self.STATE_DECIDED
+        return False
+
+    def revise(self):
+        assert self.is_revise_possible()
+
+        if self.has_proposal:
+            self.proposal.revise(self)
+        self.workflow.execute_transition(None, self, 'revision-decided')
+
+    def is_revise_possible(self):
+        if not self.is_paragraph:
+            return self.get_state() == self.STATE_REVISION
+        return False

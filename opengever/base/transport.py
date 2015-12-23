@@ -43,7 +43,7 @@ class Transporter(object):
     """
 
     def transport_to(self, obj, target_cid, container_path,
-                     view='transporter-receive-object'):
+                     view='transporter-receive-object', **data):
         """ Copies an *object* to another client (*target_cid*).
         """
 
@@ -52,6 +52,7 @@ class Transporter(object):
         request_data = {
             REQUEST_KEY: jsondata,
             }
+        request_data.update(**data)
 
         return dispatch_json_request(
             target_cid, '@@{}'.format(view),

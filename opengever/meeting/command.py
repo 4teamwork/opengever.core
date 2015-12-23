@@ -1,5 +1,3 @@
-from Acquisition import aq_inner
-from Acquisition import aq_parent
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
@@ -220,9 +218,9 @@ class CreateGeneratedDocumentCommand(CreateDocumentCommand):
 
 class UpdateGeneratedDocumentCommand(object):
 
-    def __init__(self, generated_document, document_operations):
+    def __init__(self, generated_document, meeting, document_operations):
         self.generated_document = generated_document
-        self.meeting = generated_document.meeting
+        self.meeting = meeting
         self.document_operations = document_operations
 
     def generate_file_data(self):
@@ -255,6 +253,27 @@ class UpdateGeneratedDocumentCommand(object):
         api.portal.show_message(
             self.document_operations.get_updated_message(self.meeting),
             portal.REQUEST)
+
+
+class UpdateExcerptInDossierCommand(object):
+    """Update an excerpt that has already been stored in a dossier from an
+    excerpt that is stored in a submitted proposal.
+
+    """
+    def __init__(self, proposal):
+        self.proposal = proposal
+        self.excerpt = proposal.excerpt_document
+        self.submitted_excerpt = proposal.submitted_excerpt_document
+        self.document = self.submitted_excerpt.resolve_document()
+
+    def execute(self):
+        #XXX handle errors when executing across admin units.
+        Transporter().transport_to(
+            self.document,
+            self.excerpt.admin_unit_id,
+            '',
+            view='update-dossier-excerpt',
+            oguid=self.excerpt.oguid.id)
 
 
 class CreateSubmittedProposalCommand(object):

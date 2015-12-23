@@ -116,8 +116,11 @@ AGENDAITEMS_TEMPLATE = '''
           {{#if decide_link}}
             <a href="{{decide_link}}" title="%(label_decide_action)s" class="button decide-agenda-item"><span></span></a>
           {{/if}}
-          {{#if reopen}}
-            <a href="{{reopen}}" title="%(label_reopen_action)s" class="button reopen-agenda-item"><span></span></a>
+          {{#if reopen_link}}
+            <a href="{{reopen_link}}" title="%(label_reopen_action)s" class="button reopen-agenda-item"><span></span></a>
+          {{/if}}
+          {{#if revise_link}}
+            <a href="{{revise_link}}" title="%(label_revise_action)s" class="button revise-agenda-item"><span></span></a>
           {{/if}}
         </div>
       </td>
@@ -351,12 +354,18 @@ class MeetingView(BrowserView):
         label_reopen_action = translate(
             _('label_reopen_action', default='Reopen this agenda item'),
             context=self.request)
-        return AGENDAITEMS_TEMPLATE  % {'label_edit_cancel': label_edit_cancel,
-                                        'label_edit_save': label_edit_save,
-                                        'label_edit_action': label_edit_action,
-                                        'label_delete_action': label_delete_action,
-                                        'label_decide_action': label_decide_action,
-                                        'label_reopen_action': label_reopen_action}
+        label_revise_action = translate(
+            _('label_revise_action', default='Revise this agenda item'),
+            context=self.request)
+        return AGENDAITEMS_TEMPLATE % {
+            'label_edit_cancel': label_edit_cancel,
+            'label_edit_save': label_edit_save,
+            'label_edit_action': label_edit_action,
+            'label_delete_action': label_delete_action,
+            'label_decide_action': label_decide_action,
+            'label_reopen_action': label_reopen_action,
+            'label_revise_action': label_revise_action,
+        }
 
     def render_handlebars_proposals_template(self):
         label_schedule = translate(_('label_schedule', default='Schedule'), context=self.request)
@@ -365,10 +374,10 @@ class MeetingView(BrowserView):
                                      'label_no_proposals': label_no_proposals}
 
     def json_is_editable(self):
-        return json.dumps(self.model.is_editable());
+        return json.dumps(self.model.is_editable())
 
     def json_is_agendalist_editable(self):
-        return json.dumps(self.model.is_agendalist_editable());
+        return json.dumps(self.model.is_agendalist_editable())
 
     @property
     def url_update_agenda_item_order(self):

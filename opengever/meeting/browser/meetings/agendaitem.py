@@ -11,7 +11,6 @@ from zope.interface import Interface
 from zope.publisher.interfaces import IPublishTraverse
 from zope.publisher.interfaces.browser import IBrowserView
 import json
-import transaction
 
 
 class IAgendaItemActions(Interface):
@@ -54,8 +53,13 @@ class IAgendaItemActions(Interface):
         """
 
     def reopen():
-        """Reioeb the current agendaitem and make it available for editing
+        """Reopen the current agendaitem and make it available for editing
         again.
+        """
+
+    def revise():
+        """Revise a reopened agenda-item by updating excerpts and prevent
+        further editing.
         """
 
 
@@ -102,17 +106,7 @@ class AgendaItemsView(BrowserView):
             'css_class': get_css_class(excerpt),
             }
 
-    def has_documents(self, item):
-        if not item.has_proposal:
-            return False
-
-        return bool(item.proposal.submitted_documents or
-                item.proposal.submitted_excerpt_document)
-
-    def list(self):
-        """Returns json list of all agendaitems for the current
-        context (meeting).
-        """
+    def _get_agenda_items(self):
         meeting = self.context.model
         agenda_items = []
         for item in meeting.agenda_items:
@@ -130,10 +124,26 @@ class AgendaItemsView(BrowserView):
             if item.is_reopen_possible():
                 data['reopen_link'] = meeting.get_url(
                     view='agenda_items/{}/reopen'.format(item.agenda_item_id))
+            if item.is_revise_possible():
+                data['revise_link'] = meeting.get_url(
+                    view='agenda_items/{}/revise'.format(item.agenda_item_id))
 
             agenda_items.append(data)
+        return agenda_items
 
-        return JSONResponse(self.request).data(items=agenda_items).dump()
+    def has_documents(self, item):
+        if not item.has_proposal:
+            return False
+
+        return bool(item.proposal.submitted_documents or
+                item.proposal.submitted_excerpt_document)
+
+    def list(self):
+        """Returns json list of all agendaitems for the current
+        context (meeting).
+        """
+
+        return JSONResponse(self.request).data(items=self._get_agenda_items()).dump()
 
     def update_order(self):
         """Updates the order of the agendaitems. The new sortOrder is expected
@@ -238,6 +248,23 @@ class AgendaItemsView(BrowserView):
         return JSONResponse(self.request).info(
             _(u'agenda_item_reopened',
               default=u'Agenda Item successfully reopened.')).dump()
+
+    def revise(self):
+        """Revise the current agendaitem. Set the workflow state to decided
+        to indicate that editing is no longer possible.
+        """
+        if not self.context.model.is_editable():
+            raise Unauthorized("Editing is not allowed")
+
+        agenda_item = meeting_service().fetch_agenda_item(self.agenda_item_id)
+        if not agenda_item:
+            raise NotFound
+
+        agenda_item.revise()
+
+        return JSONResponse(self.request).info(
+            _(u'agenda_item_revised',
+              default=u'Agenda Item revised successfully.')).dump()
 
     def schedule_paragraph(self):
         """Schedule the given Paragraph (request parameter `title`) for the current
