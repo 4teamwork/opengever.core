@@ -4,7 +4,6 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.testing import FunctionalTestCase
 from plone.uuid.interfaces import IUUID
-import json
 
 
 class TestNavigation(FunctionalTestCase):
