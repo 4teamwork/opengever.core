@@ -5,6 +5,9 @@ Changelog
 4.6.3 (unreleased)
 ------------------
 
+- Refactor registration of additional mimetypes.
+  [lgraf]
+
 - Change CMFEdition IDs to uuid4 instead of auto-increment.
   This reduces conflict errors.
   [jone]
