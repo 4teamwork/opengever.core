@@ -5,7 +5,9 @@ Changelog
 4.6.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Change CMFEdition IDs to uuid4 instead of auto-increment.
+  This reduces conflict errors.
+  [jone]
 
 
 4.6.2 (2015-12-22)
