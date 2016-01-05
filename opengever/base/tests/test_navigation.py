@@ -1,9 +1,13 @@
 from contextlib import contextmanager
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testing import freeze
 from opengever.testing import FunctionalTestCase
 from plone.uuid.interfaces import IUUID
+from zope.event import notify
+from zope.lifecycleevent import ObjectModifiedEvent
 
 
 class TestNavigation(FunctionalTestCase):
@@ -72,6 +76,34 @@ class TestNavigation(FunctionalTestCase):
         browser.visit(root, view='navigation.json?cache_key=1')
         self.assertEquals('private, max-age=31536000',
                           browser.headers.get('Cache-Control'))
+
+    def test_cachekey_change_precision_is_less_than_minute(self):
+        """The precision of the "modified" DateIndex is "minute".
+
+        This means when querying objects and sorting them by modified index
+        the sort order may not be correct when objects were changed within the
+        same minute.
+
+        We want to make sure that this does not affect the cachekey.
+        """
+
+        with freeze(datetime(2015, 1, 1, 12, 0)) as clock:
+            root = create(Builder('repository_root'))
+            one = create(Builder('repository').within(root).titled(u'One'))
+            two = create(Builder('repository').within(root).titled(u'Two'))
+            view = root.restrictedTraverse('navigation.json')
+
+            clock.forward(seconds=1)
+            notify(ObjectModifiedEvent(two))
+            cachekey_two = view._navigation_cache_key()
+
+            clock.forward(seconds=1)
+            notify(ObjectModifiedEvent(one))
+            cachekey_one = view._navigation_cache_key()
+
+            self.assertNotEqual(
+                cachekey_two, cachekey_one,
+                'Cachekey should change when repository is modified.')
 
     @contextmanager
     def assert_changes(self, value_callback, msg=None):
