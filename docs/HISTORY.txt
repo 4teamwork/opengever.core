@@ -5,6 +5,11 @@ Changelog
 4.6.3 (unreleased)
 ------------------
 
+- ZEM download: Include filename of doc in metadata by
+  registering a callback for Products.ExternalEditor that
+  adds the filename to the metadata during ZEM generation.
+  [lgraf]
+
 - Refactor registration of additional mimetypes.
   [lgraf]
 
