@@ -87,28 +87,28 @@ class AgendaItem(Base):
             'decision_number': self.decision_number,
         }
         if include_initial_position:
-            data['markdown:initial_position'] = self._sanitize_text(
+            data['html:initial_position'] = self._sanitize_text(
                 self.initial_position)
         if include_legal_basis:
-            data['markdown:legal_basis'] = self._sanitize_text(
+            data['html:legal_basis'] = self._sanitize_text(
                 self.legal_basis)
         if include_considerations:
-            data['markdown:considerations'] = self._sanitize_text(
+            data['html:considerations'] = self._sanitize_text(
                 self.considerations)
         if include_proposed_action:
-            data['markdown:proposed_action'] = self._sanitize_text(
+            data['html:proposed_action'] = self._sanitize_text(
                 self.proposed_action)
         if include_discussion:
-            data['markdown:discussion'] = self._sanitize_text(self.discussion)
+            data['html:discussion'] = self._sanitize_text(self.discussion)
         if include_decision:
-            data['markdown:decision'] = self._sanitize_text(self.decision)
+            data['html:decision'] = self._sanitize_text(self.decision)
         if include_publish_in:
-            data['markdown:publish_in'] = self._sanitize_text(self.publish_in)
+            data['html:publish_in'] = self._sanitize_text(self.publish_in)
         if include_disclose_to:
-            data['markdown:disclose_to'] = self._sanitize_text(
+            data['html:disclose_to'] = self._sanitize_text(
                 self.disclose_to)
         if include_copy_for_attention:
-            data['markdown:copy_for_attention'] = self._sanitize_text(
+            data['html:copy_for_attention'] = self._sanitize_text(
                 self.copy_for_attention)
 
         return data
