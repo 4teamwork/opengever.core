@@ -5,6 +5,10 @@ Changelog
 4.6.3 (unreleased)
 ------------------
 
+- Remove modified_seconds index and refactor tree portlet to use default
+  modified index.
+  [jone]
+
 - ZEM download: Include filename of doc in metadata by
   registering a callback for Products.ExternalEditor that
   adds the filename to the metadata during ZEM generation.
