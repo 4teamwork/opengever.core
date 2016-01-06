@@ -73,7 +73,7 @@ class JSONNavigation(BrowserView):
     def query(self):
         interfaces = (
             'opengever.repository.repositoryfolder.IRepositoryFolderSchema',
-            )
+        )
         return {'object_provides': interfaces,
                 'path': '/'.join(self.context.getPhysicalPath()),
                 'sort_on': 'sortable_title'}
@@ -91,20 +91,54 @@ class JSONNavigation(BrowserView):
                 'uid': brain.UID}
 
     def _navigation_cache_key(self):
-        query = self.query()
-        query['object_provides'] += (
-            'opengever.repository.repositoryroot.IRepositoryRoot',
-            )
-        query['sort_on'] = 'modified_seconds'
-        query['sort_order'] = 'reverse'
-        query['sort_limit'] = 1
-
-        catalog = getToolByName(self.context, 'portal_catalog')
-        brains = catalog(query)
-        if len(brains) > 0:
-            last_modified = str(brains[0].modified.millis())
+        last_modified = self._get_newest_modification_timestamp()
+        if last_modified is not None:
             version = get_distribution('opengever.core').version
             username = getSecurityManager().getUser().getId()
             return '-'.join((version, last_modified, username))
         else:
             return None
+
+    def _get_newest_modification_timestamp(self):
+        """Returns the timestamp (in milliseconds) of the latest modification
+        that happened to any object in the navigation.
+
+        The problem here is that the ``modified`` index's precision is minutes.
+        This means that when multiple objects are modified in the same minute,
+        the order of a modified-ordered query may be wrong.
+
+        We therefore must make sure that we consider enough brains in order to
+        be sure that the timestamp is really accurate.
+
+        This was previously implemented with a separate modified_seconds index,
+        which turned out to be a bad idea (conflict errors, performance).
+        """
+
+        query = self.query()
+        # Also include repository root:
+        query['object_provides'] += (
+            'opengever.repository.repositoryroot.IRepositoryRoot',
+        )
+        query['sort_on'] = 'modified'
+        query['sort_order'] = 'reverse'
+        query['sort_limit'] = 100
+
+        brains = getToolByName(self.context, 'portal_catalog')(query)
+        if len(brains) == 0:
+            return None
+
+        # Walk through the brains as long as the brain's modification
+        # timestamp is in the same minute; that is the set of brains
+        # which the modified-index of the catalog cannot order correctly.
+        # When we reach the next minute, return the newest modification
+        # timestamp.
+        minute_of = lambda stamp: stamp.strftime('%Y-%m-%d %H:%M')
+        previous = None
+        newest = None
+        for brain in brains:
+            newest = max(brain.modified, newest)
+            if previous and minute_of(previous) != minute_of(brain.modified):
+                break
+            previous = brain.modified
+
+        return str(newest.millis())
