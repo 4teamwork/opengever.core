@@ -366,4 +366,13 @@
         directory="profiles/4605"
         />
 
+    <!-- 4605 -> 4606 -->
+    <genericsetup:upgradeStep
+        title="Remove modified_seconds index."
+        source="4605"
+        destination="4606"
+        handler="opengever.base.upgrades.to4606.RemoveModifiedSecondsIndex"
+        profile="opengever.base:default"
+        />
+
 </configure>
