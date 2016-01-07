@@ -14,6 +14,7 @@ from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import IntegrationTesting
 from plone.app.testing import PLONE_FIXTURE
+from plone.app.testing import PLONE_ZSERVER
 from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import ploneSite
 from plone.app.testing import setRoles
@@ -240,6 +241,12 @@ OPENGEVER_FUNCTIONAL_TESTING = FunctionalTesting(
     bases=(OPENGEVER_FIXTURE,
            set_builder_session_factory(functional_session_factory)),
     name="opengever.core:functional")
+
+OPENGEVER_FUNCTIONAL_ZSERVER_TESTING = FunctionalTesting(
+    bases=(OPENGEVER_FIXTURE,
+           set_builder_session_factory(functional_session_factory),
+           PLONE_ZSERVER),
+    name="opengever.core:functional:zserver")
 
 
 def activate_filing_number(portal):
