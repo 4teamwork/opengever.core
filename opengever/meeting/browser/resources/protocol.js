@@ -13,7 +13,7 @@
     var createdAt = new Date($(".protocol-navigation").data().modified).getTime();
 
     var protocolSynchronizer = new global.Synchronizer({ target: "input, select, textarea", triggers: ["input", "change"] });
-    var trixSynchronizer = new global.Synchronizer({ target: "trix-editor", triggers: ["input"] });
+    var trixSynchronizer = new global.Synchronizer({ target: "trix-editor", triggers: ["trix-change"] });
     var meetingStorage = new global.MeetingStorage(currentMeeting);
 
     var showHintForLocalChanges = function() {
