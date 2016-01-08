@@ -206,7 +206,7 @@
 
     <!-- 4000 -> 4001 -->
     <genericsetup:upgradeStep
-        title="Add 'modified_seconds' index for tree portlet."
+        title="DISABLED: Add 'modified_seconds' index for tree portlet."
         source="4000"
         destination="4001"
         handler="opengever.base.upgrades.to4001.AddModifiedSecondsIndex"
@@ -364,6 +364,15 @@
         source="4604"
         destination="4605"
         directory="profiles/4605"
+        />
+
+    <!-- 4605 -> 4606 -->
+    <genericsetup:upgradeStep
+        title="Remove modified_seconds index."
+        source="4605"
+        destination="4606"
+        handler="opengever.base.upgrades.to4606.RemoveModifiedSecondsIndex"
+        profile="opengever.base:default"
         />
 
 </configure>
