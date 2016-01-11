@@ -12,7 +12,7 @@ class TranslatedTitleForRepositoryFolders(UpgradeStep):
 
         query = {'portal_type': 'opengever.repository.repositoryfolder'}
         msg = 'Migrate repositoryfolder title'
-        for repository in self.objects(query, msg, savepoints=500):
+        for repository in self.objects(query, msg):
             self.migrate_repositoryfolder_titles(repository)
 
     def migrate_repositoryfolder_titles(self, repositoryfolder):

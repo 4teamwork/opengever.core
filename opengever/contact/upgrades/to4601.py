@@ -13,6 +13,6 @@ class ChangeContactFolderClass(UpgradeStep):
     def migrate_contactfolder_class(self):
         query = {'portal_type': 'opengever.contact.contactfolder'}
         msg = 'Migrate contactfolder class'
-        for contactfolder in self.objects(query, msg, savepoints=500):
+        for contactfolder in self.objects(query, msg):
             self.migrate_class(contactfolder, ContactFolder)
             notify(ObjectModifiedEvent(contactfolder))
