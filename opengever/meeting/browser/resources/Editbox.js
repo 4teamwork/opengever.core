@@ -26,21 +26,25 @@
       options.source.show();
     };
 
-    this.cancel = function() {
+    this.cancel = $.proxy(function() {
       this.hide();
       this.destroy();
-    };
+    }, this);
 
-    this.save = function() {
+    this.save = $.proxy(function() {
       options.source.text(value());
       this.hide();
       this.destroy();
-    };
+    }, this);
 
     this.updateValue = function() {
-      this.proceed = this.save;
-      this.remain = this.cancel;
-      return $.post(options.trigger.attr("href"), { title: value() });
+      return this.request(options.trigger.attr("href"),
+        {
+          method: "POST",
+          data: { title: value() }
+        }
+      ).done(this.save)
+       .fail(this.cancel);
     };
 
     this.trackKey = function(target, event) {

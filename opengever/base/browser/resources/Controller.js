@@ -42,19 +42,22 @@
 
     this.events = {};
 
-    this.proceed = $.noop;
-
-    this.remain = $.noop;
-
     this.updateConnected = function() {
       $.each(this.connectedTo, function(controllerIdx, controller) {
         controller.update();
       });
     };
 
-    this.cleanHooks = function() {
-      this.proceed = $.noop;
-      this.remain = $.noop;
+    this.request = function(url, settings) {
+      var validator = settings.validator || this.validator;
+      var valid = new $.Deferred();
+      return $.ajax(url, settings).pipe(function(data) {
+        if(validator(data)) {
+          return valid.resolve(data);
+        } else {
+          return valid.reject(data);
+        }
+      });
     };
 
     this.trackEvent = function(event, callback, update, prevent) {
@@ -64,26 +67,12 @@
 
       var eventCallback = $.when(callback.call(self, $(event.currentTarget), event));
 
-      eventCallback.pipe(function(data) {
-        var validator = new $.Deferred();
-        if(self.validator(data)) {
-          validator.resolve(data);
-        } else {
-          validator.reject(data);
+      eventCallback.done(function() {
+        if(update) {
+          self.update();
+          self.updateConnected();
         }
-        return validator.promise();
-      }).done(function() {
-          if(update) {
-            self.update();
-            self.updateConnected();
-          }
-          self.proceed();
-        })
-        .fail(function() { self.remain(); })
-        .always(function(data) {
-          self.cleanHooks();
-          messageFunc(data);
-        });
+      }).always(messageFunc);
     };
 
     this.registerAction = function(action, callback) {
