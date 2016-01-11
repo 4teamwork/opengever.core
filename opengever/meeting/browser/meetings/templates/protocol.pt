@@ -30,81 +30,24 @@
                         <span class="number" tal:content="python: protocol.number"></span>
                         <span class="title" tal:content="python: protocol.get_title()"></span>
                       </a>
-                      <metal:block tal:condition="not: protocol/is_paragraph">
-                        <ul class="nav">
-                          <metal:block tal:condition="protocol/has_proposal">
+                      <ul class="nav">
+                        <metal:block tal:repeat="field view/agenda_item_fields">
+                          <metal:block tal:define="field_name field/name">
                             <li>
-                              <a tal:attributes="href string:#${name}-legal_basis;
-                                                 id string:${name}-legal_basis-anchor"
-                                 i18n:translate="">
-                                     Legal basis
-                                  </a>
-                            </li>
-                            <li>
-                              <a tal:attributes="href string:#${name}-initial_position;
-                                                 id string:${name}-initial_position-anchor"
-                                 i18n:translate="label_initial_position">
-                                     Initial position
-                                  </a>
-                            </li>
-                            <li>
-                              <a tal:attributes="href string:#${name}-proposed_action;
-                                                 id string:${name}-proposed_action-anchor"
-                                 i18n:translate="label_proposed_action">
-                                     Proposed action
-                                  </a>
-                            </li>
-                            <li>
-                              <a tal:attributes="href string:#${name}-considerations;
-                                                 id string:${name}-considerations-anchor"
-                                 i18n:translate="label_considerations">
-                                     Considerations
-                                  </a>
+                              <a tal:attributes="href string:#${name}-${field_name};
+                                                 id string:${name}-${field_name}-anchor"
+                                 tal:content="field/label">
+                              </a>
                             </li>
                           </metal:block>
-                          <li>
-                            <a tal:attributes="href string:#${name}-discussion;
-                                               id string:${name}-discussion-anchor"
-                               i18n:translate="label_discussion">
-                                   Discussion
-                                </a>
-                          </li>
-                          <li>
-                            <a tal:attributes="href string:#${name}-decision;
-                                               id string:${name}-decision-anchor"
-                               i18n:translate="label_decision">
-                                   Decision
-                                </a>
-                          </li>
-                          <li>
-                            <a tal:attributes="href string:#${name}-publish_in;
-                                               id string:${name}-publish_in-anchor"
-                               i18n:translate="label_publish_in">
-                                   Publish in
-                                 </a>
-                          </li>
-                          <li>
-                            <a tal:attributes="href string:#${name}-disclose_to;
-                                               id string:${name}-disclose_to-anchor"
-                               i18n:translate="label_disclose_to">
-                                   Disclose to
-                                 </a>
-                          </li>
-                          <li>
-                            <a tal:attributes="href string:#${name}-copy_for_attention;
-                                               id string:${name}-copy_for_attention-anchor"
-                               i18n:translate="label_copy_for_attention">
-                                   Copy for attention
-                                 </a>
-                          </li>
-                        </ul>
-                      </metal:block>
+                        </metal:block>
+                      </ul>
                     </metal:block>
                   </li>
                 </ul>
-              </div>
-            </div>
-          </div>
+              </div><!-- Navigation -->
+            </div><!-- List group -->
+          </div><!-- Protocol navigation -->
           <div class="right">
             <div class="collapsible">
               <div class="collapsible-header">
@@ -118,338 +61,63 @@
             <div class="agenda_items">
               <label id="dummy"></label>
               <metal:block tal:repeat="protocol agenda_items">
-                <div class="item">
-                <metal:block tal:define="name protocol/name">
+                <div tal:define="name protocol/name" class="item">
                   <h2 tal:attributes="id name;
-                                          class python: 'protocol_title ' + protocol.get_css_class()">
-                        <span class="heading">
-                          <span class="number"
-                                tal:content="python: protocol.number"></span>
-                          <span class="title">
-                            <span class="text" tal:content="python: protocol.get_title()"></span>
-                            <span class="dossier_reference_number"
-                                tal:content="protocol/get_dossier_reference_number"></span>
-                          </span>
-                        </span>
-                      </h2>
-                  <metal:block tal:condition="not: protocol/is_paragraph">
-                    <metal:block tal:condition="protocol/has_proposal">
-                      <label tal:attributes="for string:${name}-legal_basis;
-                                             id string:${name}-legal_basis-label"
-                             i18n:translate="label_legal_basis">
-                        Legal basis
-                        </label>
-                        <input type="text"
-                                  tal:attributes="name string:${name}.legal_basis:record;
-                                                  id string:${name}-legal_basis;
-                                                  value protocol/legal_basis" />
-                        <trix-toolbar tal:attributes="id string:${name}-legal_basis-toolbar">
-                          <div class="button-group">
-                              <button type="button" class="button bold" data-attribute="bold"></button>
-                              <button type="button" class="button italic" data-attribute="italic"></button>
-                          </div>
-                          <div class="button-group">
-                            <button type="button" class="button bullet" data-attribute="bullet"></button>
-                            <button type="button" class="button number" data-attribute="number"></button>
-                          </div>
-                          <div class="button-group">
-                            <button type="button" class="button increaseBlockLevel" data-action="increaseBlockLevel"></button>
-                            <button type="button" class="button decreaseBlockLevel" data-action="decreaseBlockLevel"></button>
-                          </div>
-                          <div class="button-group">
-                            <button type="button" class="button undo"data-action="undo"></button>
-                            <button type="button" class="button redo"data-action="redo"></button>
-                          </div>
-                        </trix-toolbar>
-                        <trix-editor toolbar="toolbar"
-                                     tal:attributes="toolbar string:${name}-legal_basis-toolbar;
-                                                     input string:${name}-legal_basis"
-                                     tal:content="structure protocol/legal_basis" />
-
-
-
-                        <label tal:attributes="for string:${name}-initial_position;
-                                               id string:${name}-initial_position-label"
-                               i18n:translate="label_initial_position">
-                          Initial position
-                        </label>
-                        <input type="text"
-                                  tal:attributes="name string:${name}.initial_position:record;
-                                                  id string:${name}-initial_position;
-                                                  value protocol/initial_position" />
-                        <trix-toolbar tal:attributes="id string:${name}-initial_position-toolbar">
-                          <div class="button-group">
-                              <button type="button" class="button bold" data-attribute="bold"></button>
-                              <button type="button" class="button italic" data-attribute="italic"></button>
-                          </div>
-                          <div class="button-group">
-                            <button type="button" class="button bullet" data-attribute="bullet"></button>
-                            <button type="button" class="button number" data-attribute="number"></button>
-                          </div>
-                          <div class="button-group">
-                            <button type="button" class="button increaseBlockLevel" data-action="increaseBlockLevel"></button>
-                            <button type="button" class="button decreaseBlockLevel" data-action="decreaseBlockLevel"></button>
-                          </div>
-                          <div class="button-group">
-                            <button type="button" class="button undo"data-action="undo"></button>
-                            <button type="button" class="button redo"data-action="redo"></button>
-                          </div>
-                        </trix-toolbar>
-                        <trix-editor toolbar="toolbar"
-                                  tal:attributes="toolbar string:${name}-initial_position-toolbar;
-                                                  input string:${name}-initial_position"
-                                  tal:content="structure protocol/initial_position" />
-
-
-
-                        <label tal:attributes="for string:${name}-proposed_action;
-                                               id string:${name}-proposed_action-label"
-                               i18n:translate="label_proposed_action">
-                          Proposed action
-                        </label>
-                        <input type="text"
-                                  tal:attributes="name string:${name}.proposed_action:record;
-                                                  id string:${name}-proposed_action;
-                                                  value protocol/proposed_action" />
-                        <trix-toolbar tal:attributes="id string:${name}-proposed_action-toolbar">
-                          <div class="button-group">
-                              <button type="button" class="button bold" data-attribute="bold"></button>
-                              <button type="button" class="button italic" data-attribute="italic"></button>
-                          </div>
-                          <div class="button-group">
-                            <button type="button" class="button bullet" data-attribute="bullet"></button>
-                            <button type="button" class="button number" data-attribute="number"></button>
-                          </div>
-                          <div class="button-group">
-                            <button type="button" class="button increaseBlockLevel" data-action="increaseBlockLevel"></button>
-                            <button type="button" class="button decreaseBlockLevel" data-action="decreaseBlockLevel"></button>
-                          </div>
-                          <div class="button-group">
-                            <button type="button" class="button undo"data-action="undo"></button>
-                            <button type="button" class="button redo"data-action="redo"></button>
-                          </div>
-                        </trix-toolbar>
-                        <trix-editor toolbar="toolbar"
-                                  tal:attributes="toolbar string:${name}-proposed_action-toolbar;
-                                                  input string:${name}-proposed_action"
-                                  tal:content="structure protocol/proposed_action" />
-
-
-
-                        <label tal:attributes="for string:${name}-considerations;
-                                               id string:${name}-considerations-label"
-                               i18n:translate="label_considerations">
-                          Considerations
-                        </label>
-                        <input type="text"
-                                  tal:attributes="name string:${name}.considerations:record;
-                                                  id string:${name}-considerations;
-                                                  value protocol/considerations" />
-                        <trix-toolbar tal:attributes="id string:${name}-considerations-toolbar">
-                          <div class="button-group">
-                              <button type="button" class="button bold" data-attribute="bold"></button>
-                              <button type="button" class="button italic" data-attribute="italic"></button>
-                          </div>
-                          <div class="button-group">
-                            <button type="button" class="button bullet" data-attribute="bullet"></button>
-                            <button type="button" class="button number" data-attribute="number"></button>
-                          </div>
-                          <div class="button-group">
-                            <button type="button" class="button increaseBlockLevel" data-action="increaseBlockLevel"></button>
-                            <button type="button" class="button decreaseBlockLevel" data-action="decreaseBlockLevel"></button>
-                          </div>
-                          <div class="button-group">
-                            <button type="button" class="button undo"data-action="undo"></button>
-                            <button type="button" class="button redo"data-action="redo"></button>
-                          </div>
-                        </trix-toolbar>
-                        <trix-editor toolbar="toolbar"
-                                  tal:attributes="toolbar string:${name}-considerations-toolbar;
-                                                  input string:${name}-considerations"
-                                  tal:content="structure protocol/considerations" />
-
-
-
-                      </metal:block>
-                      <label tal:attributes="for string:${name}-discussion;
-                                             id string:${name}-discussion-label"
-                             i18n:translate="label_discussion">
-                        Discussion
-                      </label>
+                                      class python: 'protocol_title ' + protocol.get_css_class()">
+                    <span class="heading">
+                      <span class="number"
+                            tal:content="python: protocol.number"></span>
+                      <span class="title">
+                        <span class="text"
+                              tal:content="python: protocol.get_title()"></span>
+                        <span class="dossier_reference_number"
+                              tal:content="protocol/get_dossier_reference_number"></span>
+                      </span>
+                    </span>
+                  </h2>
+                  <metal:block tal:repeat="field view/agenda_item_fields">
+                    <metal:block tal:define="field_name field/name">
+                      <label tal:attributes="for string:${name}-${field_name};
+                                             id string:${name}-${field_name}-label"
+                             tal:content="field/label"></label>
                       <input type="text"
-                                tal:attributes="name string:${name}.discussion:record;
-                                                id string:${name}-discussion;
-                                                value protocol/discussion" />
-                      <trix-toolbar tal:attributes="id string:${name}-discussion-toolbar">
-                          <div class="button-group">
-                              <button type="button" class="button bold" data-attribute="bold"></button>
-                              <button type="button" class="button italic" data-attribute="italic"></button>
-                          </div>
-                          <div class="button-group">
-                            <button type="button" class="button bullet" data-attribute="bullet"></button>
-                            <button type="button" class="button number" data-attribute="number"></button>
-                          </div>
-                          <div class="button-group">
-                            <button type="button" class="button increaseBlockLevel" data-action="increaseBlockLevel"></button>
-                            <button type="button" class="button decreaseBlockLevel" data-action="decreaseBlockLevel"></button>
-                          </div>
-                          <div class="button-group">
-                            <button type="button" class="button undo"data-action="undo"></button>
-                            <button type="button" class="button redo"data-action="redo"></button>
-                          </div>
-                        </trix-toolbar>
-                        <trix-editor toolbar="toolbar"
-                                  tal:attributes="toolbar string:${name}-discussion-toolbar;
-                                                  input string:${name}-discussion"
-                                  tal:content="structure protocol/discussion" />
-
-
-
-                      <label tal:attributes="for string:${name}-decision;
-                                             id string:${name}-decision-label"
-                             i18n:translate="label_decision">
-                        Decision
-                      </label>
-                      <input type="text"
-                                tal:attributes="name string:${name}.decision:record;
-                                                id string:${name}-decision;
-                                                value protocol/decision" />
-                      <trix-toolbar tal:attributes="id string:${name}-decision-toolbar">
-                          <div class="button-group">
-                              <button type="button" class="button bold" data-attribute="bold"></button>
-                              <button type="button" class="button italic" data-attribute="italic"></button>
-                          </div>
-                          <div class="button-group">
-                            <button type="button" class="button bullet" data-attribute="bullet"></button>
-                            <button type="button" class="button number" data-attribute="number"></button>
-                          </div>
-                          <div class="button-group">
-                            <button type="button" class="button increaseBlockLevel" data-action="increaseBlockLevel"></button>
-                            <button type="button" class="button decreaseBlockLevel" data-action="decreaseBlockLevel"></button>
-                          </div>
-                          <div class="button-group">
-                            <button type="button" class="button undo"data-action="undo"></button>
-                            <button type="button" class="button redo"data-action="redo"></button>
-                          </div>
-                        </trix-toolbar>
-                        <trix-editor toolbar="toolbar"
-                                  tal:attributes="toolbar string:${name}-decision-toolbar;
-                                                  input string:${name}-decision"
-                                  tal:content="structure protocol/decision" />
-
-
-
-                      <label tal:attributes="for string:${name}-publish_in;
-                                             id string:${name}-publish_in-label"
-                             i18n:translate="label_publish_in">
-                        Publish in
-                      </label>
-                      <input type="text"
-                                tal:attributes="name string:${name}.publish_in:record;
-                                                id string:${name}-publish_in;
-                                                value protocol/publish_in" />
-                      <trix-toolbar tal:attributes="id string:${name}-publish_in-toolbar">
-                          <div class="button-group">
-                              <button type="button" class="button bold" data-attribute="bold"></button>
-                              <button type="button" class="button italic" data-attribute="italic"></button>
-                          </div>
-                          <div class="button-group">
-                            <button type="button" class="button bullet" data-attribute="bullet"></button>
-                            <button type="button" class="button number" data-attribute="number"></button>
-                          </div>
-                          <div class="button-group">
-                            <button type="button" class="button increaseBlockLevel" data-action="increaseBlockLevel"></button>
-                            <button type="button" class="button decreaseBlockLevel" data-action="decreaseBlockLevel"></button>
-                          </div>
-                          <div class="button-group">
-                            <button type="button" class="button undo"data-action="undo"></button>
-                            <button type="button" class="button redo"data-action="redo"></button>
-                          </div>
-                        </trix-toolbar>
-                        <trix-editor toolbar="toolbar"
-                                  tal:attributes="toolbar string:${name}-publish_in-toolbar;
-                                                  input string:${name}-publish_in"
-                                  tal:content="structure protocol/publish_in" />
-
-
-
-                      <label tal:attributes="for string:${name}-disclose_to;
-                                             id string:${name}-disclose_to-label"
-                             i18n:translate="label_disclose_to">
-                        Disclose to
-                      </label>
-                      <input type="text"
-                                tal:attributes="name string:${name}.disclose_to:record;
-                                                id string:${name}-disclose_to;
-                                                value protocol/disclose_to" />
-                      <trix-toolbar tal:attributes="id string:${name}-disclose_to-toolbar">
-                          <div class="button-group">
-                              <button type="button" class="button bold" data-attribute="bold"></button>
-                              <button type="button" class="button italic" data-attribute="italic"></button>
-                          </div>
-                          <div class="button-group">
-                            <button type="button" class="button bullet" data-attribute="bullet"></button>
-                            <button type="button" class="button number" data-attribute="number"></button>
-                          </div>
-                          <div class="button-group">
-                            <button type="button" class="button increaseBlockLevel" data-action="increaseBlockLevel"></button>
-                            <button type="button" class="button decreaseBlockLevel" data-action="decreaseBlockLevel"></button>
-                          </div>
-                          <div class="button-group">
-                            <button type="button" class="button undo"data-action="undo"></button>
-                            <button type="button" class="button redo"data-action="redo"></button>
-                          </div>
-                        </trix-toolbar>
-                        <trix-editor toolbar="toolbar"
-                                  tal:attributes="toolbar string:${name}-disclose_to-toolbar;
-                                                  input string:${name}-disclose_to"
-                                  tal:content="structure protocol/disclose_to" />
-
-
-
-                      <label tal:attributes="for string:${name}-copy_for_attention;
-                                             id string:${name}-copy_for_attention-label"
-                             i18n:translate="label_copy_for_attention">
-                        Copy for attention
-                      </label>
-                      <input type="text"
-                                tal:attributes="name string:${name}.copy_for_attention:record;
-                                                id string:${name}-copy_for_attention;
-                                                value protocol/copy_for_attention" />
-                      <trix-toolbar tal:attributes="id string:${name}-copy_for_attention-toolbar">
-                          <div class="button-group">
-                              <button type="button" class="button bold" data-attribute="bold"></button>
-                              <button type="button" class="button italic" data-attribute="italic"></button>
-                          </div>
-                          <div class="button-group">
-                            <button type="button" class="button bullet" data-attribute="bullet"></button>
-                            <button type="button" class="button number" data-attribute="number"></button>
-                          </div>
-                          <div class="button-group">
-                            <button type="button" class="button increaseBlockLevel" data-action="increaseBlockLevel"></button>
-                            <button type="button" class="button decreaseBlockLevel" data-action="decreaseBlockLevel"></button>
-                          </div>
-                          <div class="button-group">
-                            <button type="button" class="button undo"data-action="undo"></button>
-                            <button type="button" class="button redo"data-action="redo"></button>
-                          </div>
-                        </trix-toolbar>
-                        <trix-editor toolbar="toolbar"
-                                  tal:attributes="toolbar string:${name}-copy_for_attention-toolbar;
-                                                  input string:${name}-copy_for_attention"
-                                  tal:content="structure protocol/copy_for_attention" />
+                             tal:attributes="name string:${name}.${field_name}:record;
+                                             id string:${name}-${field_name};
+                                             value python:getattr(protocol, field_name)" />
+                      <trix-toolbar tal:attributes="id string:${name}-${field_name}-toolbar">
+                        <div class="button-group">
+                            <button type="button" class="button bold" data-attribute="bold"></button>
+                            <button type="button" class="button italic" data-attribute="italic"></button>
+                        </div>
+                        <div class="button-group">
+                          <button type="button" class="button bullet" data-attribute="bullet"></button>
+                          <button type="button" class="button number" data-attribute="number"></button>
+                        </div>
+                        <div class="button-group">
+                          <button type="button" class="button increaseBlockLevel" data-action="increaseBlockLevel"></button>
+                          <button type="button" class="button decreaseBlockLevel" data-action="decreaseBlockLevel"></button>
+                        </div>
+                        <div class="button-group">
+                          <button type="button" class="button undo" data-action="undo"></button>
+                          <button type="button" class="button redo" data-action="redo"></button>
+                        </div>
+                      </trix-toolbar>
+                      <trix-editor toolbar="toolbar"
+                                   tal:attributes="toolbar string:${name}-${field_name}-toolbar;
+                                                   input string:${name}-${field_name}"
+                                   tal:content="structure python:getattr(protocol, field_name)" />
                     </metal:block>
                   </metal:block>
                 </div>
               </metal:block>
-              <metal:use use-macro="context/@@meeting-macros/disable_kss_inline_validation" />
             </div>
           </div>
+          <metal:use use-macro="context/@@meeting-macros/disable_kss_inline_validation" />
         </metal:block>
-        <metal:block fill-slot="actions">
-
-        </metal:block>
+        <!-- Prevent rendering form actions by inserting empty content -->
+        <metal:block fill-slot="actions"></metal:block>
       </metal:use>
+    </div>
   </metal:content-core>
 </metal:content-core>
 
