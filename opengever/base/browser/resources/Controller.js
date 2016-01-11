@@ -13,7 +13,7 @@
     var self = this;
 
     var messageFunc = function(data) {
-      if(data && options.message) {
+      if(data && !data.redirectUrl && options.message) {
         self.messageFactory.shout(data.messages);
       }
     };
