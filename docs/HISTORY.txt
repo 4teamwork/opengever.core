@@ -5,6 +5,12 @@ Changelog
 4.6.3 (unreleased)
 ------------------
 
+- Don't create savepoints in 46xx upgrade steps - MySQL implicitly commits
+  savepoints as soon as a DDL statement is emitted (similar to Oracle).
+  That means we can't reliably use savepoints in upgrade paths that contain
+  upgrades involving DDL.
+  [lgraf]
+
 - Remove modified_seconds index and refactor tree portlet to use default
   modified index.
   [jone]

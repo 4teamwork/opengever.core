@@ -16,7 +16,7 @@ class ActivateTranslatedTitle(UpgradeStep):
 
         query = {'portal_type': self.portal_types}
         msg = 'Migrate title of contactfolders'
-        for contactfolder in self.objects(query, msg, savepoints=500):
+        for contactfolder in self.objects(query, msg):
             self.migrate_titles(contactfolder)
 
         self.remove_base_behavior()

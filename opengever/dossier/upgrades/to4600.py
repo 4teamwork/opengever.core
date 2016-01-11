@@ -14,7 +14,7 @@ class ActivateTranslatedTitle(UpgradeStep):
 
         query = {'portal_type': 'opengever.dossier.templatedossier'}
         msg = 'Migrate title of templatedossiers'
-        for templatedossier in self.objects(query, msg, savepoints=500):
+        for templatedossier in self.objects(query, msg):
             self.migrate_titles(templatedossier)
 
         self.remove_base_behavior()

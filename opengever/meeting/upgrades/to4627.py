@@ -11,7 +11,7 @@ class ActivateTranslatedTitle(UpgradeStep):
 
         query = {'portal_type': 'opengever.meeting.committeecontainer'}
         msg = 'Migrate committeecontainer titles'
-        for container in self.objects(query, msg, savepoints=500):
+        for container in self.objects(query, msg):
             self.migrate_titles(container)
 
         self.remove_base_behaviors()

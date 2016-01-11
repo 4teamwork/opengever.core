@@ -14,7 +14,7 @@ class TranslatedTitleForRepositoryRoots(UpgradeStep):
 
         query = {'portal_type': 'opengever.repository.repositoryroot'}
         msg = 'Migrate repositoryroot title'
-        for repository in self.objects(query, msg, savepoints=500):
+        for repository in self.objects(query, msg):
             self.migrate_repositoryroot_titles(repository)
 
         self.remove_basic_behavior()

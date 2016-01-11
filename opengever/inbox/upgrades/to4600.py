@@ -16,7 +16,7 @@ class ActivateTranslatedTitle(UpgradeStep):
 
         query = {'portal_type': self.portal_types}
         msg = 'Migrate title of inboxes and inboxcontainers'
-        for inbox in self.objects(query, msg, savepoints=500):
+        for inbox in self.objects(query, msg):
             self.migrate_titles(inbox)
 
         self.remove_base_behavior()
