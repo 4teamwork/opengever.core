@@ -28,11 +28,11 @@
 
     this.validator = function(data) { return data && data.proceed !== false; };
 
-    this.refresh = function() { this.render(this.chache); };
+    this.refresh = function() { this.render(this.cache); };
 
     this.update = function() {
       $.when(self.fetch()).fail(messageFunc).done(function(data) {
-        self.chache = data;
+        self.cache = data;
         self.render(data);
         self.onRender.call(self);
       });
