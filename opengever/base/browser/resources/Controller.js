@@ -75,16 +75,25 @@
       }).always(messageFunc);
     };
 
+    var parseAction = function(action) {
+      var actionParser = /(\w+)#(.*[^\!\$])(\!*)(\$*)/;
+      if(!actionParser.test(action)) {
+        throw new Error(action + "' is not a valid action expression");
+      }
+      return actionParser.exec(action);
+    };
+
     this.registerAction = function(action, callback) {
-      var target = action.substring(action.indexOf("#") + 1).replace("!", "").replace("$", "");
-      var method = action.substring(0, action.indexOf("#"));
-      var update = Boolean(action.indexOf("!") > -1);
-      var prevent = Boolean(action.indexOf("$") === -1);
+      var parsedAction = parseAction(action);
+      var method = parsedAction[1];
+      var target = parsedAction[2];
+      var update = !!parsedAction[3];
+      var prevent = !parsedAction[4];
       options.context.on(method, target, function(event) { self.trackEvent(event, callback, update, prevent); } );
     };
 
     this.unregisterAction = function(action) {
-      var method = action.substring(0, action.indexOf("#"));
+      var method = parseAction(action)[1];
       options.context.off(method);
     };
 
