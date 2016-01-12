@@ -5,6 +5,9 @@ Changelog
 4.6.3 (unreleased)
 ------------------
 
+- Display an additional column for the meeting state in the meeting overview.
+  [Kevin Bieri]
+
 - Displays hint that no documents have been generated yet.
   [Kevin Bieri]
 

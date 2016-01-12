@@ -7,12 +7,21 @@ from opengever.meeting import _
 from opengever.meeting.model import Meeting
 from opengever.tabbedview.browser.base import BaseListingTab
 from opengever.tabbedview.browser.sqltablelisting import SqlTableSource
+from zope.globalrequest import getRequest
+from zope.i18n import translate
 from zope.interface import implements
 from zope.interface import Interface
 
 
 class IMeetingTableSourceConfig(ITableSourceConfig):
     """Marker interface for meeting table source configs."""
+
+
+def translated_state(item, value):
+    wrapper = '<span class="{0}">{1}</span>'
+    return wrapper.format(
+        item.get_state().title,
+        translate(item.get_state().title, context=getRequest()))
 
 
 def dossier_link(item, value):
@@ -35,6 +44,10 @@ class MeetingListingTab(BaseListingTab):
         {'column': 'committee_id',
          'column_title': _(u'column_title', default=u'Title'),
          'transform': lambda item, value: item.get_link()},
+
+        {'column': 'workflow_state',
+         'column_title': _(u'column_state', default=u'State'),
+         'transform': translated_state},
 
         {'column': 'location',
          'column_title': _(u'column_location', default=u'Location')},
