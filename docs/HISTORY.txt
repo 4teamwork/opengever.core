@@ -5,6 +5,10 @@ Changelog
 4.6.3 (unreleased)
 ------------------
 
+- Fix opengever.meeting upgrade to 4600 for MySQL. Delete a foreign key before
+  its corresponding column is removed.
+  [deiferni]
+
 - Don't create savepoints in 46xx upgrade steps - MySQL implicitly commits
   savepoints as soon as a DDL statement is emitted (similar to Oracle).
   That means we can't reliably use savepoints in upgrade paths that contain
