@@ -2,9 +2,10 @@
       xmlns:tal="http://xml.zope.org/namespaces/tal"
       tal:omit-tag="">
 <input type="text"
-   tal:attributes="id view/id;
-                   name view/name;
-                   value view/value"
+       class="trix-input"
+       tal:attributes="id view/id;
+                       name view/name;
+                       value view/value"
                    />
 
   <trix-toolbar tal:attributes="id string:${view/id}-toolbar">

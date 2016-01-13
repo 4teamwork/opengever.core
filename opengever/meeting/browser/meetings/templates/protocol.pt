@@ -81,6 +81,7 @@
                                              id string:${name}-${field_name}-label"
                              tal:content="field/label"></label>
                       <input type="text"
+                             class="trix-input"
                              tal:attributes="name string:${name}.${field_name}:record;
                                              id string:${name}-${field_name};
                                              value python:getattr(protocol, field_name)" />
