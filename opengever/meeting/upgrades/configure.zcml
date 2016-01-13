@@ -603,4 +603,13 @@
         directory="profiles/4628"
         />
 
+    <!-- 4628 -> 4629 -->
+    <upgrade-step:importProfile
+        title="Resolve protocol controller javascript dependencies."
+        profile="opengever.meeting:default"
+        source="4628"
+        destination="4629"
+        directory="profiles/4629"
+        />
+
 </configure>

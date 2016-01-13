@@ -47,15 +47,6 @@
       meetingStorage.restore();
     }
 
-    this.activateToolbar = function(toolbar) {
-      $("trix-toolbar").removeClass("active");
-      toolbar.addClass("active");
-    };
-
-    this.attachToolbar = function(target) {
-      this.activateToolbar($("#" + target.attr("toolbar")));
-    };
-
     this.saveProtocol = function(target) {
       var payload = target.parents("form").serializeArray();
       payload.push({ name: "form.buttons.save", value: saveButton.val() });
@@ -70,8 +61,7 @@
 
     this.events = {
       "click##form-buttons-save": this.saveProtocol,
-      "click##form-buttons-cancel$": this.discardProtocol,
-      "click#trix-editor": this.attachToolbar
+      "click##form-buttons-cancel$": this.discardProtocol
     };
 
     this.init();
@@ -81,6 +71,29 @@
     }
 
   }
+
+  function TrixController() {
+
+    global.Controller.call(this);
+
+    this.activateToolbar = function(toolbar) {
+      $("trix-toolbar").removeClass("active");
+      toolbar.addClass("active");
+    };
+
+    this.attachToolbar = function(target) {
+      this.activateToolbar($("#" + target.attr("toolbar")));
+    };
+
+    this.events = {
+      "click#trix-editor": this.attachToolbar
+    };
+
+    this.init();
+
+  }
+
+  var trixController = new TrixController();
 
   function init() {
 
@@ -115,7 +128,7 @@
     labels.onCollision(function(fadingIn, fadingOut) { scrollspy.select($("#" + fadingOut.node.attr("for") + "-anchor")); });
 
     scrollspy.onScroll(function(target, anchor) {
-      protocolController.activateToolbar($("#" + anchor.attr("id") + "-toolbar"));
+      trixController.activateToolbar($("#" + anchor.attr("id") + "-toolbar"));
       if(target.hasClass("expandable")) {
         scrollspy.expand(target);
       }
