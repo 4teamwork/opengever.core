@@ -27,6 +27,7 @@
   <include file="skins.zcml" />
   <include file="permissions.zcml" />
   <include file="schema.zcml" />
+  <include file="widgets.zcml" />
 
   <grok:grok package="." />
 
