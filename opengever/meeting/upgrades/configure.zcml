@@ -594,7 +594,7 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
-    <!-- 4622 -> 4623 -->
+    <!-- 4627 -> 4628 -->
     <upgrade-step:importProfile
         title="Resolve trix dependencies."
         profile="opengever.meeting:default"
