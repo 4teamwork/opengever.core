@@ -103,8 +103,7 @@
                           <button type="button" class="button redo" data-action="redo"></button>
                         </div>
                       </trix-toolbar>
-                      <trix-editor autofocus toolbar="toolbar"
-                                   tal:define="autofocus repeat/field/start"
+                      <trix-editor tal:define="autofocus repeat/field/start"
                                    tal:attributes="toolbar string:${name}-${field_name}-toolbar;
                                                    input string:${name}-${field_name};
                                                    autofocus python: '' if autofocus else nothing"
