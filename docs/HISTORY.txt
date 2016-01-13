@@ -5,6 +5,9 @@ Changelog
 4.6.3 (unreleased)
 ------------------
 
+- meeting: Use trix as editor in protocol.
+  [Kevin Bieri]
+
 - Fix opengever.meeting upgrade to 4600 for MySQL. Delete a foreign key before
   its corresponding column is removed.
   [deiferni]

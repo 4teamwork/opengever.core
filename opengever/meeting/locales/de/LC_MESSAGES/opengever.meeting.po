@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-01-05 11:09+0000\n"
+"POT-Creation-Date: 2016-01-12 10:07+0000\n"
 "PO-Revision-Date: 2015-04-10 09:01+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -199,10 +199,6 @@ msgstr "Antrag einfügen"
 msgid "Include publish in"
 msgstr "Veröffentlichung im einfügen"
 
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:37
-msgid "Legal basis"
-msgstr "Rechtsgrundlage"
-
 #: ./opengever/meeting/committee.py:53
 msgid "Linked repository folder"
 msgstr "Ablageposition"
@@ -220,7 +216,7 @@ msgstr "Sitzungsnummer"
 msgid "Meeting on ${date}"
 msgstr "Sitzung vom ${date}"
 
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:112
+#: ./opengever/meeting/browser/meetings/templates/protocol.pt:55
 msgid "Meetinginformation"
 msgstr "Sitzungsangaben"
 
@@ -295,7 +291,7 @@ msgstr "Sablon Vorlage"
 
 #. Default: "Save"
 #: ./opengever/meeting/browser/meetings/excerpt.py:120
-#: ./opengever/meeting/browser/meetings/protocol.py:168
+#: ./opengever/meeting/browser/meetings/protocol.py:180
 #: ./opengever/meeting/form.py:42
 msgid "Save"
 msgstr "Speichern"
@@ -605,7 +601,7 @@ msgid "label_cancel"
 msgstr "Abbrechen"
 
 #. Default: "Close"
-#: ./opengever/meeting/browser/meetings/protocol.py:180
+#: ./opengever/meeting/browser/meetings/protocol.py:192
 msgid "label_close"
 msgstr "Schliessen"
 
@@ -617,13 +613,13 @@ msgid "label_committee"
 msgstr "Kommission"
 
 #. Default: "Considerations"
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:58
+#: ./opengever/meeting/browser/meetings/protocol.py:118
 #: ./opengever/meeting/proposal.py:108
 msgid "label_considerations"
 msgstr "Erwägungen"
 
 #. Default: "Copy for attention"
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:94
+#: ./opengever/meeting/browser/meetings/protocol.py:123
 #: ./opengever/meeting/proposal.py:75
 msgid "label_copy_for_attention"
 msgstr "Kopie z.K."
@@ -663,7 +659,7 @@ msgid "label_decide_action"
 msgstr "Dieses Traktandum beschliessen"
 
 #. Default: "Decision"
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:73
+#: ./opengever/meeting/browser/meetings/protocol.py:120
 #: ./opengever/meeting/proposal.py:186
 msgid "label_decision"
 msgstr "Beschluss"
@@ -684,13 +680,13 @@ msgid "label_delete_agenda_item_confirm_text"
 msgstr "Wollen Sie dieses Traktandum wirklich löschen?"
 
 #. Default: "Disclose to"
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:87
+#: ./opengever/meeting/browser/meetings/protocol.py:122
 #: ./opengever/meeting/proposal.py:70
 msgid "label_disclose_to"
 msgstr "Zu eröffnen an"
 
 #. Default: "Discussion"
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:66
+#: ./opengever/meeting/browser/meetings/protocol.py:119
 msgid "label_discussion"
 msgstr "Diskussion"
 
@@ -753,7 +749,7 @@ msgid "label_group"
 msgstr "Gruppe"
 
 #. Default: "Initial position"
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:44
+#: ./opengever/meeting/browser/meetings/protocol.py:116
 #: ./opengever/meeting/proposal.py:55
 msgid "label_initial_position"
 msgstr "Ausgangslage"
@@ -770,7 +766,7 @@ msgid "label_lastname"
 msgstr "Nachname"
 
 #. Default: "Legal basis"
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:137
+#: ./opengever/meeting/browser/meetings/protocol.py:115
 #: ./opengever/meeting/proposal.py:50
 msgid "label_legal_basis"
 msgstr "Rechtsgrundlage"
@@ -832,7 +828,7 @@ msgid "label_presidency"
 msgstr "Vorsitz"
 
 #. Default: "Proposed action"
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:51
+#: ./opengever/meeting/browser/meetings/protocol.py:117
 #: ./opengever/meeting/proposal.py:60
 msgid "label_proposed_action"
 msgstr "Antrag"
@@ -843,7 +839,7 @@ msgid "label_protocol_start_page_number"
 msgstr "Beginn Seitennummerierung Protokoll"
 
 #. Default: "Publish in"
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:80
+#: ./opengever/meeting/browser/meetings/protocol.py:121
 #: ./opengever/meeting/proposal.py:65
 msgid "label_publish_in"
 msgstr "Veröffentlichung im"
@@ -905,7 +901,6 @@ msgstr "Statusänderung ${transition} ausgeführt"
 
 #. Default: "You have unsaved changes"
 #: ./opengever/meeting/browser/meetings/templates/protocol.pt:19
-#, fuzzy
 msgid "label_unsaved_changes"
 msgstr "Sie haben nicht gespeicherte lokale Änderungen"
 
@@ -939,7 +934,7 @@ msgid "meetingdossier"
 msgstr "Sitzungsdossier"
 
 #. Default: "Changes saved"
-#: ./opengever/meeting/browser/meetings/protocol.py:160
+#: ./opengever/meeting/browser/meetings/protocol.py:172
 #: ./opengever/meeting/form.py:122
 msgid "message_changes_saved"
 msgstr "Änderungen gespeichert"
@@ -1050,7 +1045,7 @@ msgid "protocol_excerpt"
 msgstr "Protokollauszug"
 
 #. Default: "Protocol successfully changed."
-#: ./opengever/meeting/browser/meetings/protocol.py:189
+#: ./opengever/meeting/browser/meetings/protocol.py:201
 msgid "protocol_successfully_changed"
 msgstr "Protokoll erfolgreich gespeichert."
 

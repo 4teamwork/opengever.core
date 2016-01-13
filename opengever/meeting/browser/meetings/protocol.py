@@ -111,6 +111,36 @@ class EditProtocol(AutoExtensibleForm, ModelEditForm):
     content_type = Meeting
     enable_unload_protection = False
 
+    agenda_item_fields = [
+        {"name": "legal_basis",
+         "label": _("label_legal_basis", default="Legal basis"),
+         "needs_propsal": True},
+        {"name": "initial_position",
+         "label": _("label_initial_position", default="Initial position"),
+         "needs_propsal": True},
+        {"name": "proposed_action",
+         "label": _("label_proposed_action", default="Proposed action"),
+         "needs_propsal": True},
+        {"name": "considerations",
+         "label": _("label_considerations", default="Considerations"),
+         "needs_propsal": True},
+        {"name": "discussion",
+         "label": _("label_discussion", default="Discussion"),
+         "needs_propsal": False},
+        {"name": "decision",
+         "label": _("label_decision", default="Decision"),
+         "needs_propsal": False},
+        {"name": "publish_in",
+         "label": _("label_publish_in", default="Publish in"),
+         "needs_propsal": True},
+        {"name": "disclose_to",
+         "label": _("label_disclose_to", default="Disclose to"),
+         "needs_propsal": True},
+        {"name": "copy_for_attention",
+         "label": _("label_copy_for_attention", default="Copy for attention"),
+         "needs_propsal": True},
+    ]
+
     template = ViewPageTemplateFile('templates/protocol.pt')
 
     def __init__(self, context, request):

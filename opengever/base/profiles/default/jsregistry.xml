@@ -44,4 +44,8 @@
                 expression="" id="++resource++opengever.base/Storage.js" inline="False"
                 insert-after="++resource++opengever.base/Controller.js" />
 
+    <javascript cacheable="True" compression="none" cookable="True" enabled="on"
+                expression="" id="++resource++opengever.base/trix.js" inline="False"
+                insert-after="++resource++plone.app.jquery.js" />
+
 </object>

@@ -62,17 +62,6 @@
       }
     };
 
-    this.focus = function(target) {
-      target.focus();
-      target = target[0];
-      if (typeof target.selectionStart === "number") {
-        target.selectionStart = target.selectionEnd = target.value.length;
-      } else if (target.createTextRange) {
-        var range = target.createTextRange();
-        range.collapse(false);
-      }
-    };
-
     this.scrollTo = function(offset, callback) {
       offset = offset - this.options.offset;
       root.animate({ scrollTop: offset + "px" }, this.options.animationSpeed, callback);
@@ -90,8 +79,7 @@
         anchor = this.extractAnchor(target);
       }
       beforeScrollCallback(target, anchor);
-      this.scrollTo(anchor.offset().top, function() { self.focus(anchor); });
-      scrollCallback(target, anchor);
+      this.scrollTo(anchor.offset().top, function() { scrollCallback(target, anchor); });
     };
 
     this.select = function(target) {
