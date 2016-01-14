@@ -61,6 +61,7 @@
             <div class="agenda_items">
               <label id="dummy"></label>
               <metal:block tal:repeat="protocol agenda_items">
+
                 <div tal:define="name protocol/name" class="item">
                   <h2 tal:attributes="id name;
                                       class python: 'protocol_title ' + protocol.get_css_class()">
@@ -76,7 +77,7 @@
                     </span>
                   </h2>
                   <metal:block tal:repeat="field view/agenda_item_fields">
-                    <metal:block tal:define="field_name field/name;">
+                    <metal:block tal:define="field_name field/name;" tal:condition="python: view.is_field_visible(field, protocol)">
                       <label tal:attributes="for string:${name}-${field_name};
                                              id string:${name}-${field_name}-label"
                              tal:content="field/label"></label>
@@ -90,6 +91,7 @@
                     </metal:block>
                   </metal:block>
                 </div>
+
               </metal:block>
             </div>
           </div>
