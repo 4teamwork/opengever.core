@@ -1,4 +1,5 @@
 from five import grok
+from opengever.base.widgets import TrixFieldWidget
 from opengever.meeting.form import ModelProxyAddForm
 from opengever.meeting.form import ModelProxyEditForm
 from opengever.meeting.proposal import IProposal
@@ -16,12 +17,27 @@ class ProposalEditForm(ModelProxyEditForm, dexterity.EditForm):
     fields = field.Fields(Proposal.model_schema, ignoreContext=True)
     content_type = Proposal
 
+    fields['legal_basis'].widgetFactory = TrixFieldWidget
+    fields['initial_position'].widgetFactory = TrixFieldWidget
+    fields['proposed_action'].widgetFactory = TrixFieldWidget
+    fields['publish_in'].widgetFactory = TrixFieldWidget
+    fields['disclose_to'].widgetFactory = TrixFieldWidget
+    fields['copy_for_attention'].widgetFactory = TrixFieldWidget
+
 
 class SubmittedProposalEditForm(ModelProxyEditForm, dexterity.EditForm):
 
     grok.context(ISubmittedProposal)
     fields = field.Fields(SubmittedProposal.model_schema, ignoreContext=True)
     content_type = Proposal
+
+    fields['legal_basis'].widgetFactory = TrixFieldWidget
+    fields['initial_position'].widgetFactory = TrixFieldWidget
+    fields['proposed_action'].widgetFactory = TrixFieldWidget
+    fields['considerations'].widgetFactory = TrixFieldWidget
+    fields['publish_in'].widgetFactory = TrixFieldWidget
+    fields['disclose_to'].widgetFactory = TrixFieldWidget
+    fields['copy_for_attention'].widgetFactory = TrixFieldWidget
 
     def updateWidgets(self):
         super(SubmittedProposalEditForm, self).updateWidgets()
@@ -33,3 +49,11 @@ class AddForm(ModelProxyAddForm, dexterity.AddForm):
     grok.name('opengever.meeting.proposal')
     content_type = Proposal
     fields = field.Fields(Proposal.model_schema)
+
+    fields['legal_basis'].widgetFactory = TrixFieldWidget
+    fields['initial_position'].widgetFactory = TrixFieldWidget
+    fields['proposed_action'].widgetFactory = TrixFieldWidget
+    fields['publish_in'].widgetFactory = TrixFieldWidget
+    fields['disclose_to'].widgetFactory = TrixFieldWidget
+    fields['copy_for_attention'].widgetFactory = TrixFieldWidget
+

@@ -136,6 +136,11 @@ class OpengeverFixture(PloneSandboxLayer):
         transient_object_container = app.temp_folder.session_data
         transient_object_container.setSubobjectLimit(0)
 
+        import opengever.base.tests.views
+        xmlconfig.file('configure.zcml',
+                       opengever.base.tests.views,
+                       context=configurationContext)
+
     def setUpPloneSite(self, portal):
         self.installOpengeverProfiles(portal)
         self.createMemberFolder(portal)

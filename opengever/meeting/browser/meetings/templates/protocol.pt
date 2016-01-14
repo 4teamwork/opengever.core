@@ -76,38 +76,17 @@
                     </span>
                   </h2>
                   <metal:block tal:repeat="field view/agenda_item_fields">
-                    <metal:block tal:define="field_name field/name">
+                    <metal:block tal:define="field_name field/name;">
                       <label tal:attributes="for string:${name}-${field_name};
                                              id string:${name}-${field_name}-label"
                              tal:content="field/label"></label>
-                      <input type="text"
-                             tal:attributes="name string:${name}.${field_name}:record;
-                                             id string:${name}-${field_name};
-                                             value python:getattr(protocol, field_name)" />
-                      <trix-toolbar tal:attributes="id string:${name}-${field_name}-toolbar">
-                        <div class="button-group">
-                            <button type="button" class="button bold" data-attribute="bold"></button>
-                            <button type="button" class="button italic" data-attribute="italic"></button>
-                        </div>
-                        <div class="button-group">
-                          <button type="button" class="button bullet" data-attribute="bullet"></button>
-                          <button type="button" class="button number" data-attribute="number"></button>
-                        </div>
-                        <div class="button-group">
-                          <button type="button" class="button increaseBlockLevel" data-action="increaseBlockLevel"></button>
-                          <button type="button" class="button decreaseBlockLevel" data-action="decreaseBlockLevel"></button>
-                        </div>
-                        <div class="button-group">
-                          <button type="button" class="button undo" data-action="undo"></button>
-                          <button type="button" class="button redo" data-action="redo"></button>
-                        </div>
-                      </trix-toolbar>
-                      <trix-editor autofocus toolbar="toolbar"
-                                   tal:define="autofocus repeat/field/start"
-                                   tal:attributes="toolbar string:${name}-${field_name}-toolbar;
-                                                   input string:${name}-${field_name};
-                                                   autofocus python: '' if autofocus else nothing"
-                                   tal:content="structure python:getattr(protocol, field_name)" />
+                      <metal:block tal:define="id string:${name}-${field_name};
+                                               name string:${name}.${field_name}:record;
+                                               value python:getattr(protocol, field_name);
+                                               autofocus repeat/field/start">
+                        <metal:use use-macro="context/@@gever-macros/render_trix_editor">
+                        </metal:use>
+                      </metal:block>
                     </metal:block>
                   </metal:block>
                 </div>

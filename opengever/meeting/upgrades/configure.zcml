@@ -594,13 +594,22 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
-    <!-- 4622 -> 4623 -->
+    <!-- 4627 -> 4628 -->
     <upgrade-step:importProfile
         title="Resolve trix dependencies."
         profile="opengever.meeting:default"
         source="4627"
         destination="4628"
         directory="profiles/4628"
+        />
+
+    <!-- 4628 -> 4629 -->
+    <upgrade-step:importProfile
+        title="Resolve protocol controller javascript dependencies."
+        profile="opengever.meeting:default"
+        source="4628"
+        destination="4629"
+        directory="profiles/4629"
         />
 
 </configure>

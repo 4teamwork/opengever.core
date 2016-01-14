@@ -1,0 +1,14 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser">
+
+    <include package="Products.CMFCore"/>
+
+    <browser:page
+        name="test-z3cform-widget"
+        class=".z3cforms.WidgetTestView"
+        for="*"
+        permission="cmf.ModifyPortalContent"
+        />
+
+</configure>
