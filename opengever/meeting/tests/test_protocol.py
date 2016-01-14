@@ -156,6 +156,35 @@ class TestProtocol(FunctionalTestCase):
                       erroneous_fields(browser.forms['form']))
 
     @browsing
+    def test_renders_correct_fields_for_free_text_agenda_item(self, browser):
+        meeting = create(Builder('meeting')
+                         .having(committee=self.committee_model,
+                                 start=self.localized_datetime(2014, 1, 1, 10, 45),
+                                 location='Somewhere',
+                                 protocol_start_page_number=11)
+                         .link_with(self.meeting_dossier))
+        create(Builder('agenda_item').having(meeting=meeting))
+
+        browser.login()
+        browser.open(meeting.get_url(view='protocol'))
+
+        self.assertEqual(
+            ['Discussion', 'Decision'],
+            browser.css('.agenda_items .item label').text
+        )
+
+    @browsing
+    def test_renders_correct_fields_for_proposal_based_agenda_item(self, browser):
+        browser.login()
+        browser.open(self.meeting.get_url(view='protocol'))
+        self.assertEqual(
+            ['Legal basis', 'Initial position', 'Proposed action',
+             'Considerations', 'Discussion', 'Decision', 'Publish in',
+             'Disclose to', 'Copy for attention'],
+            browser.css('.agenda_items .item label').text
+        )
+
+    @browsing
     def test_protocol_can_be_edited(self, browser):
         browser.login()
         browser.open(self.meeting.get_url(view='protocol'))

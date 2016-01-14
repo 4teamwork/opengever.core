@@ -114,31 +114,31 @@ class EditProtocol(AutoExtensibleForm, ModelEditForm):
     agenda_item_fields = [
         {"name": "legal_basis",
          "label": _("label_legal_basis", default="Legal basis"),
-         "needs_propsal": True},
+         "needs_proposal": True},
         {"name": "initial_position",
          "label": _("label_initial_position", default="Initial position"),
-         "needs_propsal": True},
+         "needs_proposal": True},
         {"name": "proposed_action",
          "label": _("label_proposed_action", default="Proposed action"),
-         "needs_propsal": True},
+         "needs_proposal": True},
         {"name": "considerations",
          "label": _("label_considerations", default="Considerations"),
-         "needs_propsal": True},
+         "needs_proposal": True},
         {"name": "discussion",
          "label": _("label_discussion", default="Discussion"),
-         "needs_propsal": False},
+         "needs_proposal": False},
         {"name": "decision",
          "label": _("label_decision", default="Decision"),
-         "needs_propsal": False},
+         "needs_proposal": False},
         {"name": "publish_in",
          "label": _("label_publish_in", default="Publish in"),
-         "needs_propsal": True},
+         "needs_proposal": True},
         {"name": "disclose_to",
          "label": _("label_disclose_to", default="Disclose to"),
-         "needs_propsal": True},
+         "needs_proposal": True},
         {"name": "copy_for_attention",
          "label": _("label_copy_for_attention", default="Copy for attention"),
-         "needs_propsal": True},
+         "needs_proposal": True},
     ]
 
     template = ViewPageTemplateFile('templates/protocol.pt')
@@ -231,3 +231,9 @@ class EditProtocol(AutoExtensibleForm, ModelEditForm):
 
     def nextURL(self):
         return self.model.get_url()
+
+    def is_field_visible(self, field, agenda_item):
+        if field['needs_proposal']:
+            return agenda_item.has_proposal
+        else:
+            return True
