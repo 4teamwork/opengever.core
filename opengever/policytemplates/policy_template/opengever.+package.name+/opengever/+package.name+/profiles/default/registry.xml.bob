@@ -32,7 +32,7 @@
 
 {{% if setup.maximum_repository_depth %}}
   <records interface="opengever.repository.interfaces.IRepositoryFolderRecords">
-    <value key="maximum_repository_depth">{{setup.maximum_repository_depth}}</value>
+    <value key="maximum_repository_depth">{{{setup.maximum_repository_depth}}}</value>
   </records>
 
 {{% endif %}}
