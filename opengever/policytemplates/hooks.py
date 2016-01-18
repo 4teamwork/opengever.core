@@ -145,11 +145,12 @@ def post_preserved_as_paper(configurator, question, answer):
 
 
 def post_render(configurator):
-    if not configurator.variables['include_templates']:
-        _delete_templates_files(configurator)
+    _delete_templates_files(configurator)
 
 
 def _delete_templates_files(configurator):
+    has_templates = configurator.variables['include_templates']
+    has_meeting = configurator.variables['setup.enable_meeting_feature']
     package_name = configurator.variables['package.name']
     content_path = os.path.join(
         configurator.target_directory,
@@ -160,5 +161,10 @@ def _delete_templates_files(configurator):
         'default_content',
         'opengever_content')
 
-    os.remove(os.path.join(content_path, '02-templates.json'))
-    os.rmdir(os.path.join(content_path, 'templates'))
+    if not has_meeting:
+        os.remove(os.path.join(content_path, 'templates', 'protokoll.docx'))
+        os.remove(os.path.join(content_path, 'templates', 'protokollauszug.docx'))
+        os.remove(os.path.join(content_path, '03_committees.json'))
+        if not has_templates:
+            os.remove(os.path.join(content_path, '02-templates.json'))
+            os.rmdir(os.path.join(content_path, 'templates'))
