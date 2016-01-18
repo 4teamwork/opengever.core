@@ -5,6 +5,10 @@ Changelog
 4.6.3 (unreleased)
 ------------------
 
+- Transform trix input to safe_html to prevent XSS vulerability.
+  Implemented for protocol page and trix widgets.
+  [deiferni]
+
 - Introduce request method on controller to pass a validator for ajax requests.
   Only show notify messages when the response does not contain a redirect statement.
   [Kevin Bieri]
