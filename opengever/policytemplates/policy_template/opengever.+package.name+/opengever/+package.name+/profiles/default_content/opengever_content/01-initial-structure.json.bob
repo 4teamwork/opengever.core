@@ -2,7 +2,7 @@
     {
         "_path": "eingangskorb",
         "_type": "opengever.inbox.inbox",
-        "title": "Eingangskorb",
+        "title_de": "Eingangskorb",
         "responsible_org_unit": "{{{orgunit.id}}}",
         "_ac_local_roles": {
           "{{{orgunit.inbox_group}}}": [
@@ -15,7 +15,7 @@
     {
         "_path": "vorlagen",
         "_type": "opengever.dossier.templatedossier",
-        "title": "Vorlagen",
+        "title_de": "Vorlagen",
         "_ac_local_roles": {
             "{{{orgunit.users_group}}}": [
                 "Reader"
@@ -30,7 +30,7 @@
     {
         "_path": "kontakte",
         "_type": "opengever.contact.contactfolder",
-        "title": "Kontakte",
+        "title_de": "Kontakte",
         "_transitions": "publish",
         "_ac_local_roles": {
             "{{{orgunit.users_group}}}": [
