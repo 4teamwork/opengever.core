@@ -3,6 +3,7 @@
     xmlns:z3c="http://namespaces.zope.org/z3c">
 
   <adapter factory=".widgets.TrixFieldWidget" />
+  <adapter factory=".widgets.TrixDataConverter" />
 
   <class class=".widgets.TrixFieldWidget">
       <require

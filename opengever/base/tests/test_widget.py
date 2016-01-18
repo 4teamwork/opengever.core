@@ -18,3 +18,14 @@ class TestWidget(FunctionalTestCase):
         browser.fill({u'trix_field': u'<div>P\xe4ter</div>'}).submit()
         self.assertEquals({u'trix_field': u'<div>P\xe4ter</div>'},
                           browser.json)
+
+    @browsing
+    def test_trix_field_is_xss_safe(self, browser):
+        browser.login().visit(view='test-z3cform-widget')
+
+        browser.fill({
+            u'trix_field':
+            u'<div onclick="alert(\'foo\');">P\xe4ter<script>alert("foo");</script></div>'
+        }).submit()
+        self.assertEquals({u'trix_field': u'<div>P\xe4ter</div>'},
+                          browser.json)
