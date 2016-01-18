@@ -5,6 +5,9 @@ Changelog
 4.6.3 (unreleased)
 ------------------
 
+- Update LDAP path in policy templates.
+  [deiferni]
+
 - meeting: Use trix as editor in proposals.
   [Kevin Bieri, deiferni]
 
