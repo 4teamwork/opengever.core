@@ -6,6 +6,7 @@ from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
 from opengever.ogds.models.types import UnicodeCoercingText
+from plone import api
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
@@ -60,17 +61,26 @@ class AgendaItem(Base):
         if not data:
             return
 
-        if self.has_proposal:
-            self.proposal.legal_basis = data.get('legal_basis')
-            self.proposal.initial_position = data.get('initial_position')
-            self.proposal.considerations = data.get('considerations')
-            self.proposal.proposed_action = data.get('proposed_action')
-            self.proposal.publish_in = data.get('publish_in')
-            self.proposal.disclose_to = data.get('disclose_to')
-            self.proposal.copy_for_attention = data.get('copy_for_attention')
+        transformer = api.portal.get_tool('portal_transforms')
 
-        self.discussion = data.get('discussion')
-        self.decision = data.get('decision')
+        def to_safe_html(markup):
+            # keep empty data (whatever it is), it makes transform unhappy
+            if not markup:
+                return markup
+
+            return transformer.convert('safe_html', markup).getData()
+
+        if self.has_proposal:
+            self.proposal.legal_basis = to_safe_html(data.get('legal_basis'))
+            self.proposal.initial_position = to_safe_html(data.get('initial_position'))
+            self.proposal.considerations = to_safe_html(data.get('considerations'))
+            self.proposal.proposed_action = to_safe_html(data.get('proposed_action'))
+            self.proposal.publish_in = to_safe_html(data.get('publish_in'))
+            self.proposal.disclose_to = to_safe_html(data.get('disclose_to'))
+            self.proposal.copy_for_attention = to_safe_html(data.get('copy_for_attention'))
+
+        self.discussion = to_safe_html(data.get('discussion'))
+        self.decision = to_safe_html(data.get('decision'))
 
     def get_field_data(self, include_initial_position=True,
                        include_legal_basis=True, include_considerations=True,
