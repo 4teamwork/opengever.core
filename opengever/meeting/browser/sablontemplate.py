@@ -43,8 +43,10 @@ SAMPLE_MEETING_DATA = {
                 'end_time': u'11:45 AM',
                 'start_time': u'09:30 AM',
                 'number': 11},
-    'committee': {'name': 'Gemeinderat'},
+    'committee': {'name': u'Gemeinderat'},
     'participants': {
+        'presidency': u'Peter M\xfcller',
+        'secretary': u'Franz M\xfcller',
         'members': [{'fullname': u'Peter M\xfcller',
                     'role': u'F\xfcrst'},
                    {'fullname': u'Franz M\xfcller',
