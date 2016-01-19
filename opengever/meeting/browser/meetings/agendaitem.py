@@ -2,6 +2,7 @@ from opengever.base.browser.helper import get_css_class
 from opengever.base.response import JSONResponse
 from opengever.meeting import _
 from opengever.meeting.service import meeting_service
+from plone import api
 from Products.Five.browser import BrowserView
 from zExceptions import NotFound
 from zExceptions import Unauthorized
@@ -207,6 +208,9 @@ class AgendaItemsView(BrowserView):
 
         if meeting_state != self.meeting.get_state():
             response.redirect(self.context.absolute_url())
+            msg = _(u'agenda_item_meeting_held',
+                default=u"Agendaitem has been decided and the meeting has been held.")
+            api.portal.show_message(message=msg, request=self.request, type='info')
 
         return response.dump()
 

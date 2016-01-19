@@ -13,7 +13,7 @@
     var self = this;
 
     var messageFunc = function(data) {
-      if(data && options.message) {
+      if(data && !data.redirectUrl && options.message) {
         self.messageFactory.shout(data.messages);
       }
     };
@@ -28,11 +28,11 @@
 
     this.validator = function(data) { return data && data.proceed !== false; };
 
-    this.refresh = function() { this.render(this.chache); };
+    this.refresh = function() { this.render(this.cache); };
 
     this.update = function() {
       $.when(self.fetch()).fail(messageFunc).done(function(data) {
-        self.chache = data;
+        self.cache = data;
         self.render(data);
         self.onRender.call(self);
       });
@@ -42,19 +42,22 @@
 
     this.events = {};
 
-    this.proceed = $.noop;
-
-    this.remain = $.noop;
-
     this.updateConnected = function() {
       $.each(this.connectedTo, function(controllerIdx, controller) {
         controller.update();
       });
     };
 
-    this.cleanHooks = function() {
-      this.proceed = $.noop;
-      this.remain = $.noop;
+    this.request = function(url, settings) {
+      var validator = settings.validator || this.validator;
+      var valid = new $.Deferred();
+      return $.ajax(url, settings).pipe(function(data) {
+        if(validator(data)) {
+          return valid.resolve(data);
+        } else {
+          return valid.reject(data);
+        }
+      });
     };
 
     this.trackEvent = function(event, callback, update, prevent) {
@@ -64,38 +67,33 @@
 
       var eventCallback = $.when(callback.call(self, $(event.currentTarget), event));
 
-      eventCallback.pipe(function(data) {
-        var validator = new $.Deferred();
-        if(self.validator(data)) {
-          validator.resolve(data);
-        } else {
-          validator.reject(data);
+      eventCallback.done(function() {
+        if(update) {
+          self.update();
+          self.updateConnected();
         }
-        return validator.promise();
-      }).done(function() {
-          if(update) {
-            self.update();
-            self.updateConnected();
-          }
-          self.proceed();
-        })
-        .fail(function() { self.remain(); })
-        .always(function(data) {
-          self.cleanHooks();
-          messageFunc(data);
-        });
+      }).always(messageFunc);
+    };
+
+    var parseAction = function(action) {
+      var actionParser = /(\w+)#(.*[^\!\$])(\!*)(\$*)/;
+      if(!actionParser.test(action)) {
+        throw new Error(action + "' is not a valid action expression");
+      }
+      return actionParser.exec(action);
     };
 
     this.registerAction = function(action, callback) {
-      var target = action.substring(action.indexOf("#") + 1).replace("!", "").replace("$", "");
-      var method = action.substring(0, action.indexOf("#"));
-      var update = Boolean(action.indexOf("!") > -1);
-      var prevent = Boolean(action.indexOf("$") === -1);
+      var parsedAction = parseAction(action);
+      var method = parsedAction[1];
+      var target = parsedAction[2];
+      var update = !!parsedAction[3];
+      var prevent = !parsedAction[4];
       options.context.on(method, target, function(event) { self.trackEvent(event, callback, update, prevent); } );
     };
 
     this.unregisterAction = function(action) {
-      var method = action.substring(0, action.indexOf("#"));
+      var method = parseAction(action)[1];
       options.context.off(method);
     };
 

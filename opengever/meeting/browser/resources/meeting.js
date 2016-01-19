@@ -22,11 +22,8 @@
     this.closeMeeting = function(target) {
       target.addClass("loading");
       return $.post(self.currentItem.attr("href"))
-              .done(function() {
-                self.closeModal();
-                global.location.reload();
-              })
-              .always(function() { target.removeClass("loading"); });
+              .always(function() { target.removeClass("loading"); })
+              .done(function() { global.location.reload(); });
     };
 
     this.closeModal = function() { dialog.close(); };

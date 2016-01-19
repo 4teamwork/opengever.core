@@ -5,6 +5,10 @@ Changelog
 4.6.3 (unreleased)
 ------------------
 
+- Introduce request method on controller to pass a validator for ajax requests.
+  Only show notify messages when the response does not contain a redirect statement.
+  [Kevin Bieri]
+
 - Update LDAP path in policy templates.
   [deiferni]
 
