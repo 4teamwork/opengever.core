@@ -185,6 +185,18 @@ class TestProtocol(FunctionalTestCase):
         )
 
     @browsing
+    def test_protocol_fields_are_xss_safe(self, browser):
+        browser.login()
+        browser.open(self.meeting.get_url(view='protocol'))
+        browser.fill({
+            'Legal basis':
+            '<div onload="alert(\'qux\');">Hans<script>alert("qux");</script></div>'
+        }).submit()
+
+        proposal = Proposal.query.get(self.proposal_model.proposal_id)
+        self.assertEqual('<div>Hans</div>', proposal.legal_basis)
+
+    @browsing
     def test_protocol_can_be_edited(self, browser):
         browser.login()
         browser.open(self.meeting.get_url(view='protocol'))
