@@ -5,6 +5,9 @@ Changelog
 4.6.3 (unreleased)
 ------------------
 
+- Update policy templates to include default committee container and initial templates.
+  [deiferni]
+
 - Transform trix input to safe_html to prevent XSS vulerability.
   Implemented for protocol page and trix widgets.
   [deiferni]
