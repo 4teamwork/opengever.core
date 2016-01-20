@@ -38,12 +38,14 @@ class TestCommitteeTabs(FunctionalTestCase):
 
         self.assertEquals([
             {'Title': u'B\xe4rn, Dec 13, 2011',
+             'State': u'Pending',
              'Date': 'Dec 13, 2011',
              'Location': u'B\xe4rn',
              'From': '09:30 AM',
              'To': '11:45 AM',
              'Dossier': u'D\xf6ssier'},
             {'Title': u'B\xe4rn, Dec 13, 2011',
+             'State': u'Pending',
              'Date': 'Dec 13, 2011',
              'Location': u'B\xe4rn',
              'From': '09:30 AM',
