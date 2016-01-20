@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-01-20 06:55+0000\n"
+"POT-Creation-Date: 2016-01-20 09:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -508,7 +508,7 @@ msgid "column_to"
 msgstr "Jusqu'à"
 
 #. Default: "Decide"
-#: ./opengever/meeting/model/agendaitem.py:34
+#: ./opengever/meeting/model/agendaitem.py:35
 #: ./opengever/meeting/model/proposal.py:128
 msgid "decide"
 msgstr "Décider"
@@ -519,7 +519,7 @@ msgid "decide_agendaitem"
 msgstr ""
 
 #. Default: "Decided"
-#: ./opengever/meeting/model/agendaitem.py:29
+#: ./opengever/meeting/model/agendaitem.py:30
 #: ./opengever/meeting/model/proposal.py:111
 msgid "decided"
 msgstr "Décidé"
@@ -822,9 +822,9 @@ msgstr ""
 msgid "label_no_proposals"
 msgstr ""
 
-#. Default: "No additional protocols have been generated yet."
+#. Default: "No protocol has been generated yet."
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:181
-msgid "label_no_protocols"
+msgid "label_no_protocol"
 msgstr ""
 
 #. Default: "Other Participants"
@@ -998,7 +998,7 @@ msgid "participants"
 msgstr ""
 
 #. Default: "Pending"
-#: ./opengever/meeting/model/agendaitem.py:28
+#: ./opengever/meeting/model/agendaitem.py:29
 #: ./opengever/meeting/model/meeting.py:71
 #: ./opengever/meeting/model/proposal.py:106
 msgid "pending"

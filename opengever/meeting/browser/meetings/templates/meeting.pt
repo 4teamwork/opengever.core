@@ -178,7 +178,7 @@
                   i18n:attributes="title"
                   title="generate new version as word document"
                   class="refresh-protocol"></a>
-              <p tal:condition="not:protocol_document" i18n:translate="label_no_protocols">No additional protocols have been generated yet.</p>
+              <p tal:condition="not:protocol_document" i18n:translate="label_no_protocol">No protocol has been generated yet.</p>
               <p tal:condition="protocol_document">
                 <a tal:condition="protocol_document"
                    tal:attributes="href protocol_document/absolute_url; class python: view.get_css_class(protocol_document)"

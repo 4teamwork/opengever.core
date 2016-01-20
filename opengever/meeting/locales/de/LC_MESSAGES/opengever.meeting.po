@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-01-20 06:55+0000\n"
+"POT-Creation-Date: 2016-01-20 09:24+0000\n"
 "PO-Revision-Date: 2015-04-10 09:01+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -508,7 +508,7 @@ msgid "column_to"
 msgstr "Von"
 
 #. Default: "Decide"
-#: ./opengever/meeting/model/agendaitem.py:34
+#: ./opengever/meeting/model/agendaitem.py:35
 #: ./opengever/meeting/model/proposal.py:128
 msgid "decide"
 msgstr "Beschliessen"
@@ -519,7 +519,7 @@ msgid "decide_agendaitem"
 msgstr "Traktandum beschliessen"
 
 #. Default: "Decided"
-#: ./opengever/meeting/model/agendaitem.py:29
+#: ./opengever/meeting/model/agendaitem.py:30
 #: ./opengever/meeting/model/proposal.py:111
 msgid "decided"
 msgstr "Beschlossen"
@@ -810,7 +810,7 @@ msgstr "Nächste Sitzung:"
 #. Default: "No additional excerpts have been generated yet."
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:199
 msgid "label_no_excerpts"
-msgstr "Es wurden noch keine Anträge generiert."
+msgstr "Es wurden noch keine zusätzlichen Protokollauszüge generiert."
 
 #. Default: "This member has no memberships."
 #: ./opengever/meeting/browser/templates/member.pt:43
@@ -822,10 +822,10 @@ msgstr "Dieser Benutzer hat keine Mitgliedschaften."
 msgid "label_no_proposals"
 msgstr "Keine Anträge eingereicht"
 
-#. Default: "No additional protocols have been generated yet."
+#. Default: "No protocol has been generated yet."
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:181
-msgid "label_no_protocols"
-msgstr "Es wurden noch keine zusätzlichen Protokollauszüge generiert."
+msgid "label_no_protocol"
+msgstr "Es wurde noch kein Protokoll generiert."
 
 #. Default: "Other Participants"
 #: ./opengever/meeting/browser/meetings/protocol.py:45
@@ -998,7 +998,7 @@ msgid "participants"
 msgstr "Teilnehmende"
 
 #. Default: "Pending"
-#: ./opengever/meeting/model/agendaitem.py:28
+#: ./opengever/meeting/model/agendaitem.py:29
 #: ./opengever/meeting/model/meeting.py:71
 #: ./opengever/meeting/model/proposal.py:106
 msgid "pending"
