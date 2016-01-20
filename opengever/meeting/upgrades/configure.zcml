@@ -612,4 +612,14 @@
         directory="profiles/4629"
         />
 
+    <!-- 4629 -> 4630 -->
+    <genericsetup:upgradeStep
+        title="Convert proposals/agenda_items from markdown to HTML (for trix)"
+        description=""
+        source="4629"
+        destination="4630"
+        handler="opengever.meeting.upgrades.to4630.ConvertMarkdownToHTML"
+        profile="opengever.meeting:default"
+        />
+
 </configure>
