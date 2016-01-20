@@ -141,6 +141,9 @@
     if($("#opengever_meeting_protocol").length) {
       init();
     }
+    if($(".template-add-membership").length) {
+      var autocompleteSelects = new global.SelectAutocomplete();
+    }
   });
 
 }(window, jQuery));

@@ -384,4 +384,13 @@
         directory="profiles/4607"
         />
 
+    <!-- 4607 -> 4608 -->
+    <upgrade-step:importProfile
+        title="Register SelectAutocomplete javascript."
+        profile="opengever.base:default"
+        source="4607"
+        destination="4608"
+        directory="profiles/4608"
+        />
+
 </configure>
