@@ -178,7 +178,8 @@
                   i18n:attributes="title"
                   title="generate new version as word document"
                   class="refresh-protocol"></a>
-              <p>
+              <p tal:condition="not:protocol_document" i18n:translate="label_no_protocol">No protocol has been generated yet.</p>
+              <p tal:condition="protocol_document">
                 <a tal:condition="protocol_document"
                    tal:attributes="href protocol_document/absolute_url; class python: view.get_css_class(protocol_document)"
                    tal:content="protocol_document/Title"></a>
@@ -195,7 +196,8 @@
                  tal:attributes="href view/url_manually_generate_excerpt"
                  i18n:attributes="title"
                  title="generate new excerpt"></a>
-              <ul>
+              <p tal:condition="not:excerpts" i18n:translate="label_no_excerpts">No additional excerpts have been generated yet.</p>
+              <ul tal:condition="excerpts">
                 <li tal:repeat="item excerpts">
                   <a href="" tal:attributes="href item/absolute_url;
                                              class python:view.get_css_class(item)">
