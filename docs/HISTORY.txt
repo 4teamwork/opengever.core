@@ -5,6 +5,9 @@ Changelog
 4.6.3 (unreleased)
 ------------------
 
+- Update policy templates to include casauth plugin.
+  [elioschmutz]
+
 - Use searchable dropdown widget for adding a membership
   [Kevin Bieri]
 
