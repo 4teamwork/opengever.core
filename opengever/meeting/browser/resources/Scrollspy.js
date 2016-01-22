@@ -75,7 +75,10 @@
       var anchor;
       if (target.hasClass("expandable") && !target.hasClass("paragraph")) {
         anchor = this.extractAnchor(target.next().find("a").first());
-      } else {
+      } else if(target.hasClass("paragraph")) {
+        anchor = this.extractAnchor(target.parent().next().find("a").first().next().find("a").first());
+      }
+      else {
         anchor = this.extractAnchor(target);
       }
       beforeScrollCallback(target, anchor);
