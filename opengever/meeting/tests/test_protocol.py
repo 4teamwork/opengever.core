@@ -185,6 +185,21 @@ class TestProtocol(FunctionalTestCase):
         )
 
     @browsing
+    def test_does_not_render_any_field_for_paragraph(self, browser):
+        meeting = create(Builder('meeting')
+                         .having(committee=self.committee_model,
+                                 start=self.localized_datetime(2014, 1, 1, 10, 45),
+                                 location='Somewhere',
+                                 protocol_start_page_number=11)
+                         .link_with(self.meeting_dossier))
+        create(Builder('agenda_item').having(meeting=meeting, is_paragraph=True))
+
+        browser.login()
+        browser.open(meeting.get_url(view='protocol'))
+
+        self.assertEqual([], browser.css('.agenda_items .item label').text)
+
+    @browsing
     def test_protocol_fields_are_xss_safe(self, browser):
         browser.login()
         browser.open(self.meeting.get_url(view='protocol'))
