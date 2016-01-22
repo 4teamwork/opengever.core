@@ -15,7 +15,7 @@
               manager="ftw.footer.column3" type="plone.portlet.static.Static"
               visible="True">
     <property
-        name="text">&lt;p&gt;&lt;a class="external-link" href="http://www.onegov.ch/gever/dokumentation"&gt;Benutzerhandbuch&lt;/a&gt;&lt;br /&gt;&lt;a class="external-link" href="http://feedback.onegov.ch"&gt;Feedback Forum&lt;/a&gt;&lt;/p&gt;</property>
+        name="text">&lt;p&gt;&lt;a class="external-link" href="http://www.onegov.ch/gever/dokumentation"&gt;Benutzerhandbuch&lt;/a&gt;&lt;br /&gt;&lt;a class="external-link" href="https://feedback.onegovgever.ch"&gt;Feedback Forum&lt;/a&gt;&lt;/p&gt;</property>
     <property name="more_url"/>
     <property name="omit_border">False</property>
     <property name="header">Dokumentation</property>

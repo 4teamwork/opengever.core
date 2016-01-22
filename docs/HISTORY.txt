@@ -5,6 +5,9 @@ Changelog
 4.6.3 (unreleased)
 ------------------
 
+- Update link to feedback forum in example content and policy template footers.
+  [lgraf]
+
 - Update policy templates to include casauth plugin.
   [elioschmutz]
 
