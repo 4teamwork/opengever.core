@@ -5,6 +5,9 @@ Changelog
 4.6.4 (unreleased)
 ------------------
 
+- Use autoselect for proposals add and edit view.
+  [Kevin Bieri]
+
 - Add upgrade-step to update feedback link in footer (if necessary).
   [lgraf]
 
