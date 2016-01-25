@@ -32,7 +32,7 @@
                         <span class="number" tal:content="python: protocol.number"></span>
                         <span class="title" tal:content="python: protocol.get_title()"></span>
                       </a>
-                      <ul class="nav">
+                      <ul class="nav" tal:condition="not: protocol/is_paragraph">
                         <metal:block tal:repeat="field view/agenda_item_fields">
                           <metal:block tal:define="field_name field/name"
                                        tal:condition="python: view.is_field_visible(field, protocol)">
