@@ -37,7 +37,8 @@
                           <metal:block tal:define="field_name field/name"
                                        tal:condition="python: view.is_field_visible(field, protocol)">
                             <li>
-                              <a tal:attributes="href string:#${name}-${field_name};
+                              <a class="field"
+                                 tal:attributes="href string:#${name}-${field_name};
                                                  id string:${name}-${field_name}-anchor"
                                  tal:content="field/label">
                               </a>
