@@ -18,10 +18,11 @@ class IMeetingTableSourceConfig(ITableSourceConfig):
 
 
 def translated_state(item, value):
-    wrapper = '<span class="{0}">{1}</span>'
+    wrapper = u'<span class="{0}">{1}</span>'
+    state = item.get_state()
     return wrapper.format(
-        item.get_state().title,
-        translate(item.get_state().title, context=getRequest()))
+        state.title,
+        translate(state.title, context=getRequest()))
 
 
 def dossier_link(item, value):
