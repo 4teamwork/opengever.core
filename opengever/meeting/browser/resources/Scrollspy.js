@@ -95,6 +95,11 @@
       this.align();
     };
 
+    this.reset = function() {
+      $(".selected", this.element).removeClass("selected");
+      $(".expanded", this.element).removeClass("expanded");
+    };
+
     this.onBeforeScroll = function(callback) { beforeScrollCallback = callback; };
 
     this.onScroll = function(callback) { scrollCallback = callback; };

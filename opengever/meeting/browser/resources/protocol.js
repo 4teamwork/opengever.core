@@ -118,7 +118,10 @@
 
     collapsible.onSticky(function() { navigation.addClass("sticky"); });
 
-    headings.onNoSticky(function() { navigation.removeClass("sticky"); });
+    headings.onNoSticky(function() {
+      scrollspy.reset();
+      navigation.removeClass("sticky");
+    });
 
     headings.onSticky(function(heading) {
       navigation.addClass("sticky");
