@@ -385,7 +385,7 @@ class TestProtocol(FunctionalTestCase):
         browser.open(self.meeting.get_url())
         browser.css('a[href*="/protocol"]').first.click()
 
-        navigation = browser.css('.navigation a.expandable')
+        navigation = browser.css('.navigation > ul > li > a')
         headings = browser.css('.protocol_title .title .text')
         numbers = browser.css('.protocol_title .number')
 
