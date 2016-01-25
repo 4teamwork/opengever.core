@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.6.3 (unreleased)
+4.6.3 (2016-01-25)
 ------------------
 
 - Add migration for trix, convert fields from markdown to html.
