@@ -5,6 +5,9 @@ Changelog
 4.6.3 (unreleased)
 ------------------
 
+- Add migration for trix, convert fields from markdown to html.
+  [deiferni]
+
 - Exclude non visible fields from the scrollspy navigation.
   [Kevin Bieri]
 
