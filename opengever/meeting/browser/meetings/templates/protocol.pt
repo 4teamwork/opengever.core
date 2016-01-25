@@ -32,7 +32,8 @@
                       </a>
                       <ul class="nav">
                         <metal:block tal:repeat="field view/agenda_item_fields">
-                          <metal:block tal:define="field_name field/name">
+                          <metal:block tal:define="field_name field/name"
+                                       tal:condition="python: view.is_field_visible(field, protocol)">
                             <li>
                               <a tal:attributes="href string:#${name}-${field_name};
                                                  id string:${name}-${field_name}-anchor"
@@ -77,7 +78,8 @@
                     </span>
                   </h2>
                   <metal:block tal:repeat="field view/agenda_item_fields">
-                    <metal:block tal:define="field_name field/name;" tal:condition="python: view.is_field_visible(field, protocol)">
+                    <metal:block tal:define="field_name field/name;"
+                                 tal:condition="python: view.is_field_visible(field, protocol)">
                       <label tal:attributes="for string:${name}-${field_name};
                                              id string:${name}-${field_name}-label"
                              tal:content="field/label"></label>

@@ -5,6 +5,9 @@ Changelog
 4.6.3 (unreleased)
 ------------------
 
+- Exclude non visible fields from the scrollspy navigation.
+  [Kevin Bieri]
+
 - Introduce IDuringSetup marker interface to flag a request that
   happens during GEVER setup.
   [lgraf]

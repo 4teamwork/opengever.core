@@ -236,4 +236,4 @@ class EditProtocol(AutoExtensibleForm, ModelEditForm):
         if field['needs_proposal']:
             return agenda_item.has_proposal
         else:
-            return True
+            return not agenda_item.is_paragraph
