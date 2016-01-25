@@ -393,4 +393,14 @@
         directory="profiles/4608"
         />
 
+    <!-- 4608 -> 4609 -->
+    <genericsetup:upgradeStep
+        title="Migrate sequence number increasers"
+        description=""
+        source="4608"
+        destination="4609"
+        handler="opengever.base.upgrades.to4609.MigrateSequenceNumberIncreasers"
+        profile="opengever.base:default"
+        />
+
 </configure>
