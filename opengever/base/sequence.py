@@ -2,6 +2,7 @@ from five import grok
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.interfaces import ISequenceNumberGenerator
 from opengever.base.protect import unprotected_write
+from opengever.setup.interfaces import IDuringSetup
 from persistent.dict import PersistentDict
 from plone.dexterity.interfaces import IDexterityContent
 from Products.CMFCore.interfaces import ISiteRoot
@@ -9,6 +10,7 @@ from ZODB.DemoStorage import DemoStorage
 from ZODB.POSException import ConflictError
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility, getAdapter
+from zope.globalrequest import getRequest
 import logging
 import transaction
 
@@ -79,10 +81,19 @@ class SequenceNumberIncrementer(object):
 
     def __call__(self, sequence_number_key):
         portal = getUtility(ISiteRoot)
+        request = getRequest()
+
         if isinstance(portal._p_jar.db().storage, DemoStorage):
             # We use DemoStorage (probably in tests), which
             # do not allow concurrent DB connections,
             # thus we don't spawn a new database connection.
+            return self._increment_number(portal, sequence_number_key)
+
+        if IDuringSetup.providedBy(request):
+            # During setup, the Plone site will just have been created in that
+            # very transaction. That means it's not available for us to fetch
+            # from a separate ZODB connection during setup. So no separate
+            # ZODB connection for sequence numbers during setup.
             return self._increment_number(portal, sequence_number_key)
 
         return self._separate_zodb_connection(
