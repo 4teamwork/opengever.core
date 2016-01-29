@@ -3,7 +3,6 @@ from datetime import datetime
 from opengever.base.model import create_session
 from opengever.setup.deploy import GeverDeployment
 from opengever.setup.interfaces import IDeploymentConfigurationRegistry
-from opengever.setup.interfaces import IDuringSetup
 from opengever.setup.interfaces import ILDAPConfigurationRegistry
 from plone.protect.interfaces import IDisableCSRFProtection
 from Products.CMFPlone.browser.admin import AddPloneSite
@@ -121,7 +120,6 @@ class CreateDeployment(BrowserView):
 
     def __call__(self):
         alsoProvides(self.request, IDisableCSRFProtection)
-        alsoProvides(self.request, IDuringSetup)
 
         self.form = self.request.form
         self.db_session = create_session()

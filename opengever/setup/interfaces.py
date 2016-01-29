@@ -1,12 +1,6 @@
 from zope.interface import Interface
 
 
-class IDuringSetup(Interface):
-    """Marker interface to tag a request to indicate that we're currently
-    setting up a GEVER deployment (which may require some special handling).
-    """
-
-
 class IDeploymentConfigurationRegistry(Interface):
     """A deployment configuration registry is a utility which knows all the
     registered configurations.

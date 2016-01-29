@@ -17,10 +17,6 @@ Changelog
 - Exclude non visible fields from the scrollspy navigation.
   [Kevin Bieri]
 
-- Introduce IDuringSetup marker interface to flag a request that
-  happens during GEVER setup.
-  [lgraf]
-
 - Refactor sequence number generation in order to reduce conflicts
   in content creation requests and to ensure uniqueness.
   [jone]
