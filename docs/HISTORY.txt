@@ -17,10 +17,6 @@ Changelog
 - Exclude non visible fields from the scrollspy navigation.
   [Kevin Bieri]
 
-- Refactor sequence number generation in order to reduce conflicts
-  in content creation requests and to ensure uniqueness.
-  [jone]
-
 - Update link to feedback forum in example content and policy template footers.
   [lgraf]
 
