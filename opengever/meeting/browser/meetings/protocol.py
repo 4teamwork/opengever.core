@@ -1,3 +1,5 @@
+from calendar import timegm
+from opengever.base.date_time import as_utc
 from opengever.base.response import JSONResponse
 from opengever.base.schema import UTCDatetime
 from opengever.meeting import _
@@ -149,6 +151,7 @@ class EditProtocol(AutoExtensibleForm, ModelEditForm):
         If the protocol has been saved we want to return a JSON response.
         """
         super(EditProtocol, self).__init__(context, request, context.model)
+        self._has_write_conflict = False
         self._has_successfully_saved = False
 
     def update(self):
@@ -185,20 +188,24 @@ class EditProtocol(AutoExtensibleForm, ModelEditForm):
 
         for agenda_item in self.get_agenda_items():
             agenda_item.update(self.request)
-
-        api.portal.show_message(
-            _(u'message_changes_saved', default='Changes saved'),
-            self.request)
         self._has_successfully_saved = True
 
         self.unlock()
         # pretend to always change the underlying data
         return True
 
+    # needs duplication, otherwise button does not appear
     @button.buttonAndHandler(_('Save', default=u'Save'), name='save')
     def handleApply(self, action):
-        # needs duplication, otherwise button does not appear
+        """"""
+        if self.has_write_conflict():
+            self._has_write_conflict = True
+            return
+
         super(EditProtocol, self).handleApply(self, action)
+
+    def has_write_conflict(self):
+        return self.modified_timestamp() != self.submitted_modified_timestamp()
 
     def redirect_to_next_url(self):
         """
@@ -214,10 +221,17 @@ class EditProtocol(AutoExtensibleForm, ModelEditForm):
         super(EditProtocol, self).cancel(self, action)
 
     def render(self):
-        if self._has_successfully_saved:
-            return JSONResponse(self.request).redirect(self.nextURL()).info(
-                _('protocol_successfully_changed',
-                  default=u"Protocol successfully changed.")).dump()
+        if self._has_write_conflict:
+            msg = _(u'message_write_conflict',
+                    default='Your changes were not saved, the protocol has '
+                            'been modified in the meantime.')
+            return JSONResponse(self.request).error(msg).dump()
+
+        elif self._has_successfully_saved:
+            api.portal.show_message(
+                _(u'message_changes_saved', default='Changes saved'),
+                self.request)
+            return JSONResponse(self.request).redirect(self.nextURL()).dump()
 
         return self.template()
 
@@ -237,3 +251,19 @@ class EditProtocol(AutoExtensibleForm, ModelEditForm):
             return agenda_item.has_proposal
         else:
             return not agenda_item.is_paragraph
+
+    def modified_timestamp(self):
+        """Return the modified timestamp as seconds since the epoch."""
+
+        return timegm(as_utc(self.model.modified).timetuple())
+
+    def submitted_modified_timestamp(self):
+        """Return the modified timestamp that has been submitted by the
+        client.
+
+        """
+        timestamp = self.request.get('modified')
+        if not timestamp:
+            return None
+
+        return int(timestamp)

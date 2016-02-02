@@ -85,9 +85,6 @@ class TestProtocol(FunctionalTestCase):
         self.assertEqual(self.sablon_template,
                          self.committee.get_protocol_template())
 
-    def json_messages(self, browser):
-        return browser.json.get('messages', None)
-
     @browsing
     def test_protocol_template_can_be_configured_per_commitee(self, browser):
         self.grant("Administrator")
@@ -228,17 +225,11 @@ class TestProtocol(FunctionalTestCase):
                       'Disclose to': 'Nobody',
                       'Copy for attention': 'Hanspeter',
                       'Protocol start-page': '10'}).submit()
-
-        self.json_messages(browser)
-
-        self.assertEquals(
-            [{
-                u'messageTitle': u'Information',
-                u'message': u'Protocol successfully changed.',
-                u'messageClass': u'info'
-            }],
-            self.json_messages(browser)
-        )
+        self.assertEqual({
+            u'redirectUrl': u'http://nohost/plone/opengever-meeting-committeecontainer/committee-1/meeting-1/view'},
+            browser.json)
+        browser.open(self.meeting.get_url(view='view'))
+        self.assertEqual(['Changes saved'], info_messages())
 
         meeting = Meeting.query.get(self.meeting.meeting_id)
         self.assertGreater(meeting.modified, prev_modified)
@@ -282,14 +273,11 @@ class TestProtocol(FunctionalTestCase):
                       'Participants': str(peter.member_id),
                       'Other Participants': 'Klara'}).submit()
 
-        self.assertEquals(
-            [{
-                u'messageTitle': u'Information',
-                u'message': u'Protocol successfully changed.',
-                u'messageClass': u'info'
-            }],
-            self.json_messages(browser)
-        )
+        self.assertEqual({
+            u'redirectUrl': u'http://nohost/plone/opengever-meeting-committeecontainer/committee-1/meeting-1/view'},
+            browser.json)
+        browser.open(self.meeting.get_url(view='view'))
+        self.assertEqual(['Changes saved'], info_messages())
 
         meeting = Meeting.query.get(self.meeting.meeting_id)
         self.assertGreater(meeting.modified, prev_modified)
@@ -303,6 +291,21 @@ class TestProtocol(FunctionalTestCase):
         self.assertEqual(peter, meeting.presidency)
         self.assertEqual(hans, meeting.secretary)
         self.assertEqual(u'Klara', meeting.other_participants)
+
+    @browsing
+    def test_protocol_conflicts_are_detected(self, browser):
+        browser.login()
+        browser.open(self.meeting.get_url(view='protocol'))
+
+        browser.fill({"modified": '1'}).submit()
+        self.assertEqual({
+            u'messages': [{
+                u'messageTitle': u'Error',
+                u'message': u'Your changes were not saved, the protocol has been modified in the meantime.',
+                u'messageClass': u'error'}
+            ]},
+            browser.json
+        )
 
     @browsing
     def test_protocol_can_be_downloaded(self, browser):

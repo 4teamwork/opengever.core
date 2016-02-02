@@ -52,8 +52,13 @@
       payload.push({ name: "form.buttons.save", value: saveButton.val() });
       return $.post(target.attr("action"), payload)
               .done(function(data) {
-              meetingStorage.deleteCurrentMeeting();
-              window.location = data.redirectUrl;
+                if (data.redirectUrl !== undefined) {
+                  meetingStorage.deleteCurrentMeeting();
+                  window.location = data.redirectUrl;
+                } else {
+                  // we stay on the same site. allow re-submit.
+                  $("#form-buttons-save").removeClass("submitting");
+                }
              });
     };
 
