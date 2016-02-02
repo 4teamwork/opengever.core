@@ -1,11 +1,15 @@
+from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from ftw.testbrowser.pages.z3cform import erroneous_fields
+from opengever.base.date_time import utcnow_tz_aware
+from opengever.base.model import create_session
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.locking.lock import SYS_LOCK
+from opengever.locking.model import Lock
 from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import GeneratedProtocol
@@ -15,6 +19,7 @@ from opengever.meeting.model import Proposal
 from opengever.testing import FunctionalTestCase
 from plone.locking.interfaces import ILockable
 from plone.locking.interfaces import STEALABLE_LOCK
+import transaction
 
 
 class TestProtocol(FunctionalTestCase):
@@ -302,6 +307,29 @@ class TestProtocol(FunctionalTestCase):
             u'messages': [{
                 u'messageTitle': u'Error',
                 u'message': u'Your changes were not saved, the protocol has been modified in the meantime.',
+                u'messageClass': u'error'}
+            ]},
+            browser.json
+        )
+
+    @browsing
+    def test_protocol_cannot_be_saved_when_locked_by_another_user(self, browser):
+        browser.login()
+        # acquire the lock for test-user
+        browser.open(self.meeting.get_url(view='protocol'))
+
+        # simulate somebody stealing the lock in the meantime
+        sess = create_session()
+        lock = sess.query(Lock).one()
+        lock.creator = 'another.user'
+        transaction.commit()
+
+        # the form is still open and can be submitted, but fails
+        browser.fill({'Legal basis': u'Yes we can'}).submit()
+        self.assertEqual({
+            u'messages': [{
+                u'messageTitle': u'Error',
+                u'message': u'Your changes were not saved, the protocol is locked by another.user.',
                 u'messageClass': u'error'}
             ]},
             browser.json
