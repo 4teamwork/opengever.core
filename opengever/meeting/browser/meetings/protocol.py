@@ -188,10 +188,6 @@ class EditProtocol(AutoExtensibleForm, ModelEditForm):
 
         for agenda_item in self.get_agenda_items():
             agenda_item.update(self.request)
-
-        api.portal.show_message(
-            _(u'message_changes_saved', default='Changes saved'),
-            self.request)
         self._has_successfully_saved = True
 
         self.unlock()
@@ -232,9 +228,10 @@ class EditProtocol(AutoExtensibleForm, ModelEditForm):
             return JSONResponse(self.request).error(msg).dump()
 
         elif self._has_successfully_saved:
-            return JSONResponse(self.request).redirect(self.nextURL()).info(
-                _('protocol_successfully_changed',
-                  default=u"Protocol successfully changed.")).dump()
+            api.portal.show_message(
+                _(u'message_changes_saved', default='Changes saved'),
+                self.request)
+            return JSONResponse(self.request).redirect(self.nextURL()).dump()
 
         return self.template()
 
