@@ -5,6 +5,9 @@ Changelog
 4.6.4 (unreleased)
 ------------------
 
+- Recycle reference numbers. When moving an object back to a previous
+  parent, the previous reference number is recycled. [jone]
+
 - Remove "reference_number" from catalog metadata. [jone]
 
 
