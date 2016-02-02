@@ -5,6 +5,11 @@ Changelog
 4.6.3 (unreleased)
 ------------------
 
+- Prevent that the protocol form can overwrite a newer version of the protocol.
+  If concurrent modifications occur we don't offer conflict resolution as of yet but
+  leave the submitted form open to allow the user to take manual action.
+  [deiferni]
+
 - Add migration for trix, convert fields from markdown to html.
   [deiferni]
 

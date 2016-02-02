@@ -305,6 +305,21 @@ class TestProtocol(FunctionalTestCase):
         self.assertEqual(u'Klara', meeting.other_participants)
 
     @browsing
+    def test_protocol_conflicts_are_detected(self, browser):
+        browser.login()
+        browser.open(self.meeting.get_url(view='protocol'))
+
+        browser.fill({"modified": '1'}).submit()
+        self.assertEqual({
+            u'messages': [{
+                u'messageTitle': u'Error',
+                u'message': u'Your changes were not saved, the protocol has been modified in the meantime.',
+                u'messageClass': u'error'}
+            ]},
+            browser.json
+        )
+
+    @browsing
     def test_protocol_can_be_downloaded(self, browser):
         self.setup_protocol(browser)
         browser.css('.generate-protocol').first.click()
