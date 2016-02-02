@@ -5,7 +5,7 @@ Changelog
 4.6.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Remove "reference_number" from catalog metadata. [jone]
 
 
 4.6.3 (2016-01-25)
