@@ -210,7 +210,7 @@ class EditProtocol(AutoExtensibleForm, ModelEditForm):
         super(EditProtocol, self).handleApply(self, action)
 
     def has_write_conflict(self):
-        return self.modified_timestamp() != self.submitted_modified_timestamp()
+        return self.server_timestamp != self.client_timestamp
 
     def is_locked_by_another_user(self):
         """Return False if the document is locked by the current user or is
@@ -277,12 +277,14 @@ class EditProtocol(AutoExtensibleForm, ModelEditForm):
         else:
             return not agenda_item.is_paragraph
 
-    def modified_timestamp(self):
+    @property
+    def server_timestamp(self):
         """Return the modified timestamp as seconds since the epoch."""
 
         return timegm(as_utc(self.model.modified).timetuple())
 
-    def submitted_modified_timestamp(self):
+    @property
+    def client_timestamp(self):
         """Return the modified timestamp that has been submitted by the
         client.
 
