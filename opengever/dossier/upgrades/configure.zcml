@@ -254,4 +254,13 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <!-- 4600 -> 4601 -->
+    <upgrade-step:importProfile
+        title="Remove 'reference_number' from catalog metadata."
+        profile="opengever.dossier:default"
+        source="4600"
+        destination="4601"
+        directory="profiles/4601"
+        />
+
 </configure>
