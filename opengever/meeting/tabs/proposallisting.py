@@ -46,14 +46,6 @@ class ProposalListingTab(BaseListingTab):
             {'column': 'committee_id',
              'column_title': _(u'column_comittee', default=u'Comittee'),
              'transform': lambda item, value: item.committee.title},
-
-            {'column': 'initial_position',
-             'column_title': _(u'column_initial_position',
-                               default=u'Initial Position')},
-
-            {'column': 'proposed_action',
-             'column_title': _(u'column_proposed_action',
-                               default=u'Proposed action')},
         )
 
 
