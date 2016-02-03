@@ -17,13 +17,13 @@ class TestMeetingView(FunctionalTestCase):
         super(TestMeetingView, self).setUp()
         self.admin_unit.public_url = 'http://nohost/plone'
 
-        self.repository_root = create(Builder('repository_root'))
+        self.repo, self.repo_folder = create(Builder('repository_tree'))
         self.dossier = create(Builder('dossier')
-                              .within(self.repository_root))
+                              .within(self.repo_folder))
 
         self.meeting_dossier = create(Builder('meeting_dossier')
                                       .titled(u'Meeting Dossier')
-                                      .within(self.repository_root))
+                                      .within(self.repo_folder))
 
         self.attachement = create(Builder('document')
                                   .attach_file_containing(u"attachement",

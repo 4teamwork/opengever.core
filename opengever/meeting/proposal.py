@@ -1,8 +1,11 @@
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.base.security import elevated_privileges
 from opengever.base.source import DossierPathSourceBinder
+from opengever.base.utils import get_preferred_language_code
 from opengever.dossier.utils import get_containing_dossier
 from opengever.meeting import _
 from opengever.meeting.command import CopyProposalDocumentCommand
@@ -75,6 +78,12 @@ class IProposalModel(Interface):
         title=_('label_copy_for_attention', default=u"Copy for attention"),
         required=False,
         )
+
+    language = schema.Choice(
+        title=_('language', default=u'Language'),
+        source='opengever.meeting.LanguagesVocabulary',
+        required=True,
+        defaultFactory=get_preferred_language_code)
 
 
 class ISubmittedProposalModel(Interface):
@@ -356,6 +365,12 @@ class Proposal(ProposalBase):
     def get_containing_dossier(self):
         return get_containing_dossier(self)
 
+    def get_repository_folder_title(self, language):
+        main_dossier = self.get_containing_dossier().get_main_dossier()
+        repository_folder = aq_parent(aq_inner(main_dossier))
+        return repository_folder.Title(language=language,
+                                       prefix_with_reference_number=False)
+
     def update_model_create_arguments(self, data, context):
         aq_wrapped_self = self.__of__(context)
 
@@ -363,10 +378,21 @@ class Proposal(ProposalBase):
         reference_number = IReferenceNumber(
             context.get_main_dossier()).get_number()
 
+        language = data.get('language')
+        repository_folder_title = aq_wrapped_self.get_repository_folder_title(
+            language)
+
         data.update(dict(workflow_state=workflow_state,
                          physical_path=aq_wrapped_self.get_physical_path(),
-                         dossier_reference_number=reference_number))
+                         dossier_reference_number=reference_number,
+                         repository_folder_title=repository_folder_title))
         return data
+
+    def update_model(self, data):
+        language = data.get('language')
+        data['repository_folder_title'] = self.get_repository_folder_title(
+            language)
+        return super(Proposal, self).update_model(data)
 
     def get_edit_values(self, fieldnames):
         values = super(Proposal, self).get_edit_values(fieldnames)

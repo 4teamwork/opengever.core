@@ -6,6 +6,7 @@ from opengever.meeting.proposal import IProposal
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.meeting.proposal import Proposal
 from opengever.meeting.proposal import SubmittedProposal
+from plone import api
 from plone.directives import dexterity
 from z3c.form import field
 from z3c.form.interfaces import HIDDEN_MODE
@@ -23,6 +24,13 @@ class ProposalEditForm(ModelProxyEditForm, dexterity.EditForm):
     fields['publish_in'].widgetFactory = TrixFieldWidget
     fields['disclose_to'].widgetFactory = TrixFieldWidget
     fields['copy_for_attention'].widgetFactory = TrixFieldWidget
+
+    def updateWidgets(self):
+        super(ProposalEditForm, self).updateWidgets()
+
+        ltool = api.portal.get_tool('portal_languages')
+        if ltool.getSupportedLanguages() <= 1:
+            self.widgets['language'].mode = HIDDEN_MODE
 
 
 class SubmittedProposalEditForm(ModelProxyEditForm, dexterity.EditForm):
@@ -57,3 +65,9 @@ class AddForm(ModelProxyAddForm, dexterity.AddForm):
     fields['disclose_to'].widgetFactory = TrixFieldWidget
     fields['copy_for_attention'].widgetFactory = TrixFieldWidget
 
+    def updateWidgets(self):
+        super(AddForm, self).updateWidgets()
+
+        ltool = api.portal.get_tool('portal_languages')
+        if ltool.getSupportedLanguages() <= 1:
+            self.widgets['language'].mode = HIDDEN_MODE

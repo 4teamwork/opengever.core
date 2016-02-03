@@ -119,7 +119,8 @@ class TestCommitteeOverview(FunctionalTestCase):
 
     @browsing
     def test_proposal_box_only_lists_unscheduled_proposals(self, browser):
-        dossier = create(Builder('dossier'))
+        repo, repo_folder = create(Builder('repository_tree'))
+        dossier = create(Builder('dossier').within(repo_folder))
         proposal_a = create(Builder('proposal')
                             .within(dossier)
                             .having(title=u'Proposal A',
@@ -139,7 +140,8 @@ class TestCommitteeOverview(FunctionalTestCase):
 
     @browsing
     def test_proposals_are_linked_correctly(self, browser):
-        dossier = create(Builder('dossier'))
+        repo, repo_folder = create(Builder('repository_tree'))
+        dossier = create(Builder('dossier').within(repo_folder))
         proposal_a = create(Builder('proposal')
                             .within(dossier)
                             .having(title=u'Mach doch',

@@ -263,7 +263,8 @@ class ProposalBuilder(DexterityBuilder):
 
     def __init__(self, session):
         super(ProposalBuilder, self).__init__(session)
-        self.arguments = {'title': 'Fooo'}
+        self.arguments = {'title': 'Fooo',
+                          'language': TranslatedTitle.FALLBACK_LANGUAGE}
         self.model_arguments = None
         self._submitted = False
 

@@ -41,7 +41,10 @@ class TestProposal(FunctionalTestCase):
 
     def setUp(self):
         super(TestProposal, self).setUp()
-        self.repo, self.repo_folder = create(Builder('repository_tree'))
+        self.repo = create(Builder('repository_root'))
+        self.repo_folder = create(Builder('repository')
+                                  .within(self.repo)
+                                  .titled(u'Stuff'))
         self.dossier = create(Builder('dossier')
                               .within(self.repo_folder)
                               .titled(u'D\xf6ssier'))
@@ -79,7 +82,6 @@ class TestProposal(FunctionalTestCase):
         browser.open(self.dossier, view='++add++opengever.meeting.proposal')
 
         self.search_for_document(browser, document)
-
         browser.fill({
             'Title': u'A pr\xf6posal',
             'Legal basis': u'possible',
@@ -110,6 +112,9 @@ class TestProposal(FunctionalTestCase):
         self.assertEqual(u'B\xe4rner Zeitung', model.publish_in)
         self.assertEqual(u'Hansj\xf6rg', model.disclose_to)
         self.assertEqual(u'P\xe4tra', model.copy_for_attention)
+        self.assertEqual(u'P\xe4tra', model.copy_for_attention)
+        self.assertEqual(u'Stuff', model.repository_folder_title)
+        self.assertEqual(u'en', model.language)
 
         self.assertEqual(['a', 'proposal', 'my', 'proposal'],
                          index_data_for(proposal)['SearchableText'])

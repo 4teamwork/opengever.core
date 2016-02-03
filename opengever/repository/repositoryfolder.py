@@ -92,10 +92,13 @@ class RepositoryFolder(content.Container):
 
     implements(IRepositoryFolder)
 
-    def Title(self, language=None):
-        title = self._prefix_with_reference_number(
-            ITranslatedTitle(self).translated_title(language))
-        return title.encode('utf-8')
+    def Title(self, language=None, prefix_with_reference_number=True):
+        title = ITranslatedTitle(self).translated_title(language)
+        if prefix_with_reference_number:
+            title = self._prefix_with_reference_number(title)
+        if isinstance(title, unicode):
+            return title.encode('utf-8')
+        return title or ''
 
     def get_prefixed_title_de(self):
         title = self.title_de

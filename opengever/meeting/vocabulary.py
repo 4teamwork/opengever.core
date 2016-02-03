@@ -6,6 +6,7 @@ from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
+from plone import api
 
 
 class CommitteeVocabulary(grok.GlobalUtility):
@@ -48,3 +49,16 @@ def get_committee_member_vocabulary(meetingwrapper):
                                         member.fullname))
 
     return SimpleVocabulary(members)
+
+
+class LanguagesVocabulary(grok.GlobalUtility):
+    grok.provides(IVocabularyFactory)
+    grok.name('opengever.meeting.LanguagesVocabulary')
+
+    def __call__(self, context):
+        ltool = api.portal.get_tool('portal_languages')
+        languages = [code.split('-')[0]
+                     for code in ltool.getSupportedLanguages()]
+
+        return SimpleVocabulary(
+            [SimpleTerm(language) for language in languages])

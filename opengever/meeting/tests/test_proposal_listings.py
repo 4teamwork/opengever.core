@@ -8,8 +8,10 @@ class ProposalListingTests(FunctionalTestCase):
 
     def setUp(self):
         super(ProposalListingTests, self).setUp()
-
-        self.dossier = create(Builder('dossier').titled(u'Dossier A'))
+        self.repo, self.repo_folder = create(Builder('repository_tree'))
+        self.dossier = create(Builder('dossier')
+                              .titled(u'Dossier A')
+                              .within(self.repo_folder))
         self.committee = create(Builder('committee').titled('My committee'))
         self.proposal = create(Builder('proposal')
                                .within(self.dossier)
@@ -43,7 +45,7 @@ class TestDossierProposalListing(ProposalListingTests):
         link = table.rows[1].css('a').first
 
         self.assertEquals('My Proposal', link.text)
-        self.assertEquals('http://example.com/dossier-1/proposal-1',
+        self.assertEquals('http://example.com/opengever-repository-repositoryroot/opengever-repository-repositoryfolder/dossier-1/proposal-1',
                           link.get('href'))
 
 

@@ -191,7 +191,8 @@ class TestDocument(FunctionalTestCase):
         self.assertFalse(doc.is_movable())
 
     def test_document_inside_a_submitted_proposal_is_not_movable(self):
-        dossier = create(Builder('dossier'))
+        repo, repo_folder = create(Builder('repository_tree'))
+        dossier = create(Builder('dossier').within(repo_folder))
         document = create(Builder('document').within(dossier))
         committee = create(Builder('committee'))
         proposal = create(Builder('proposal')
