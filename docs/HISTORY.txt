@@ -5,6 +5,11 @@ Changelog
 4.6.4 (unreleased)
 ------------------
 
+- Adjust proposaloverview view.
+  Moves the document listing into the attributes-table, to gain more
+  space for the table.
+  [elioschmutz]
+
 - Adjust proposal tabbedview tab.
 
   - Remove unused rows: 'initial_position' and 'proposed_action'
