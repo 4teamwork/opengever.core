@@ -5,6 +5,9 @@ Changelog
 4.6.4 (unreleased)
 ------------------
 
+- Change translation for label_publish_in
+  [elioschmutz]
+
 - Update policy templates: Creates meeting portlet if enable_meeting_feature
   is true.
   [elioschmutz]
