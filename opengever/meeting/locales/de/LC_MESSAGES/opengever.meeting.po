@@ -473,7 +473,7 @@ msgstr "Nachname"
 #. Default: "Location"
 #: ./opengever/meeting/tabs/meetinglisting.py:54
 msgid "column_location"
-msgstr "Standort"
+msgstr "Sitzungsort"
 
 #. Default: "Member"
 #: ./opengever/meeting/tabs/membershiplisting.py:25
@@ -791,7 +791,7 @@ msgstr "Alle automatisch generierten Sitzungsdossiers und Dokumente werden in di
 #: ./opengever/meeting/browser/meetings/meeting.py:42
 #: ./opengever/meeting/browser/meetings/protocol.py:57
 msgid "label_location"
-msgstr "Standort"
+msgstr "Sitzungsort"
 
 #. Default: "Main Atrributes"
 #: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt:13

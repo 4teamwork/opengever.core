@@ -5,6 +5,9 @@ Changelog
 4.6.4 (unreleased)
 ------------------
 
+- Translate "Standort" to "Sitzungsort" for Meetings.
+  [elioschmutz]
+
 - Change translation for label_publish_in
   [elioschmutz]
 
