@@ -197,7 +197,7 @@ msgstr "Antrag einfügen"
 
 #: ./opengever/meeting/browser/meetings/excerpt.py:60
 msgid "Include publish in"
-msgstr "Veröffentlichung im einfügen"
+msgstr "Veröffentlichung in einfügen"
 
 #: ./opengever/meeting/committee.py:53
 msgid "Linked repository folder"
@@ -858,7 +858,7 @@ msgstr "Beginn Seitennummerierung Protokoll"
 #: ./opengever/meeting/browser/meetings/protocol.py:136
 #: ./opengever/meeting/proposal.py:65
 msgid "label_publish_in"
-msgstr "Veröffentlichung im"
+msgstr "Veröffentlichung in"
 
 #. Default: "Comment"
 #: ./opengever/meeting/browser/proposaltransitions.py:50
