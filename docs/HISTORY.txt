@@ -5,6 +5,10 @@ Changelog
 4.6.4 (unreleased)
 ------------------
 
+- Update policy templates: Creates meeting portlet if enable_meeting_feature
+  is true.
+  [elioschmutz]
+
 - Recycle reference numbers. When moving an object back to a previous
   parent, the previous reference number is recycled. [jone]
 
