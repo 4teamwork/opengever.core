@@ -75,4 +75,15 @@
         directory="profiles/4300"
         />
 
+    <!-- 4300 -> 4600 -->
+    <genericsetup:upgradeStep
+        title="Moves the new proposal_id-column for proposallisting
+               tabbedview tab to the first position"
+        description=""
+        source="4300"
+        destination="4600"
+        handler="opengever.tabbedview.upgrades.to4600.SortSubmittedProposallistingTabbbedviewTabs"
+        profile="opengever.tabbedview:default"
+        />
+
 </configure>

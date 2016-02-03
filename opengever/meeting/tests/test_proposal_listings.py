@@ -31,8 +31,7 @@ class TestDossierProposalListing(ProposalListingTests):
         # TODO: state should be translated
         self.assertEquals(
             [{'State': 'Pending',
-              'Proposed action': u'My proposed acti\xf6n',
-              'Initial Position': u'My p\xf6sition is',
+              'Reference Number': '1',
               'Comittee': 'My committee',
               'Title': 'My Proposal'}],
             table.dicts())
@@ -66,8 +65,7 @@ class TestSubmittedProposals(ProposalListingTests):
         # TODO: state should be translated
         self.assertEquals(
             [{'State': 'Submitted',
-              'Proposed action': u'My proposed acti\xf6n',
-              'Initial Position': u'My p\xf6sition is',
+              'Reference Number': '1',
               'Comittee': 'My committee',
               'Title': 'My Proposal'}],
             table.dicts())

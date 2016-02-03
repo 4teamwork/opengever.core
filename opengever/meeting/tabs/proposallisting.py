@@ -35,6 +35,9 @@ class ProposalListingTab(BaseListingTab):
     @property
     def columns(self):
         return (
+            {'column': 'proposal_id',
+             'column_title': _(u'label_proposal_id', default=u'Reference Number')},
+
             {'column': 'title',
              'column_title': _(u'column_title', default=u'Title'),
              'transform': proposal_link},
@@ -46,6 +49,7 @@ class ProposalListingTab(BaseListingTab):
             {'column': 'committee_id',
              'column_title': _(u'column_comittee', default=u'Comittee'),
              'transform': lambda item, value: item.committee.title},
+
         )
 
 
@@ -53,6 +57,7 @@ class ProposalTableSource(SqlTableSource):
     grok.implements(ITableSource)
     grok.adapts(ProposalListingTab, Interface)
 
-    searchable_columns = [Proposal.title,
+    searchable_columns = [Proposal.proposal_id,
+                          Proposal.title,
                           Proposal.initial_position,
                           Proposal.proposed_action]
