@@ -1,12 +1,17 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
 from ftw.testbrowser.pages.statusmessages import error_messages
+from opengever.base.interfaces import IReferenceNumber
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.uuid.interfaces import IUUID
 from Products.CMFCore.utils import getToolByName
+from zope.component import getUtility
+from zope.intid.interfaces import IIntIds
+import transaction
 
 
 class TestMoveItems(FunctionalTestCase):
@@ -317,3 +322,72 @@ class TestMoveItemsWithTestbrowser(FunctionalTestCase):
 
         # Should not cause our check in is_pasting_allowed view to fail
         browser.css('#form-buttons-button_submit').first.click()
+
+    @browsing
+    def test_reference_number_is_not_reset_when_moving_to_same_parent(self, browser):
+        """When a dossier is select to be moved but the target is the current
+        parent, the dossier will not actually change the location.
+        In this case the reference number should not be changed.
+        """
+        browser.login().open(self.source_dossier)
+        self.assertEquals('Reference Number: Client1 1 / 1',
+                          browser.css('.reference_number').first.text,
+                          'Unexpected reference number. Test fixture changed?')
+        dossier_intid = getUtility(IIntIds).getId(self.source_dossier)
+
+        self.move_items(browser,
+                        obj=self.source_dossier,
+                        src=self.source_repo,
+                        target=self.source_repo)
+        assert_no_error_messages()
+
+        transaction.begin()  # sync
+        dossier = getUtility(IIntIds).getObject(dossier_intid)
+        browser.open(dossier)
+        self.assertEquals('Reference Number: Client1 1 / 1',
+                          browser.css('.reference_number').first.text,
+                          'Moving to the current parent should not change'
+                          ' the reference number because the location does'
+                          ' not change.')
+
+    @browsing
+    def test_reference_number_is_recycled_when_moving_dossier_back(self, browser):
+        """When a dossier is moved back to a repository where it was before,
+        the original reference number should be recycled.
+        """
+
+        browser.login().open(self.source_dossier)
+        self.assertEquals('Reference Number: Client1 1 / 1',
+                          browser.css('.reference_number').first.text,
+                          'Unexpected reference number. Test fixture changed?')
+        dossier_intid = getUtility(IIntIds).getId(self.source_dossier)
+
+        # Move to other_repository
+        other_repository = create(Builder('repository'))
+        self.move_items(browser,
+                        obj=self.source_dossier,
+                        src=self.source_repo,
+                        target=other_repository)
+        assert_no_error_messages()
+
+        transaction.begin()  # sync
+        dossier = getUtility(IIntIds).getObject(dossier_intid)
+        browser.open(dossier)
+        self.assertEquals('Reference Number: Client1 2 / 1',
+                          browser.css('.reference_number').first.text,
+                          'Unexpected reference number after moving.')
+
+        # Move back to source_repo
+        self.move_items(browser,
+                        obj=dossier,
+                        src=other_repository,
+                        target=self.source_repo)
+        assert_no_error_messages()
+
+        transaction.begin()  # sync
+        dossier = getUtility(IIntIds).getObject(dossier_intid)
+        browser.open(dossier)
+        self.assertEquals('Reference Number: Client1 1 / 1',
+                          browser.css('.reference_number').first.text,
+                          'When moving back, the old reference_number should be'
+                          ' recycled.')

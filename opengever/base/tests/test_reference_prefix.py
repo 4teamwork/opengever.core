@@ -47,10 +47,11 @@ class TestReferencePrefixAdapter(FunctionalTestCase):
         self.assertEquals(u'42', self.adapter.set_number(item, u'42'))
         self.assertEquals(u'42', self.adapter.get_number(item))
 
-    def test_without_passing_a_number_set_number_generates_a_new_one(self):
+    def test_set_number_recycles_old_numbers(self):
         item = self.create_item()
-        self.assertEquals(u'2', self.adapter.set_number(item))
-        self.assertEquals(u'2', self.adapter.get_number(item))
+        self.assertEquals(u'1', self.adapter.get_number(item))
+        self.assertEquals(u'1', self.adapter.set_number(item))
+        self.assertEquals(u'1', self.adapter.get_number(item))
 
     def test_non_assigned_numbers_are_valid(self):
         self.create_numbered_item(u'3')

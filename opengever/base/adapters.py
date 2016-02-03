@@ -71,10 +71,16 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
         """
 
         child_mapping = self.get_child_mapping(obj)
+        prefix_mapping = self.get_prefix_mapping(obj)
+        intid = obj and getUtility(IIntIds).getId(aq_base(obj))
 
         if not child_mapping.keys():
             # It's the first number ever issued
             return self.get_first_number(obj)
+        elif intid and intid in prefix_mapping:
+            # Moving back? The object already used to have a number
+            # here - lets recycle it!
+            return prefix_mapping[intid]
         else:
             prefixes_in_use = child_mapping.keys()
             # Sort the list of unicode strings *numerically*
