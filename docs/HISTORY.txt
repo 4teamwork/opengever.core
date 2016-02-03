@@ -5,6 +5,9 @@ Changelog
 4.6.4 (unreleased)
 ------------------
 
+- Display versions tab for sablon templates.
+  [deiferni]
+
 - Translate "Standort" to "Sitzungsort" for Meetings.
   [elioschmutz]
 

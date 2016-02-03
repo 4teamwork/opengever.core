@@ -622,4 +622,14 @@
         profile="opengever.meeting:default"
         />
 
+    <!-- 4630 -> 4631 -->
+    <genericsetup:upgradeStep
+        title="Show versions tab for sablon templates."
+        description=""
+        source="4630"
+        destination="4631"
+        handler="opengever.meeting.upgrades.to4631.ShowSablonTemplateVersionsTab"
+        profile="opengever.meeting:default"
+        />
+
 </configure>
