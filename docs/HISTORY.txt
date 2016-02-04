@@ -5,6 +5,14 @@ Changelog
 4.6.4 (unreleased)
 ------------------
 
+- Adjust proposal tabbedview tab.
+
+  - Remove unused rows: 'initial_position' and 'proposed_action'
+  - Add referencenumber row
+  - Add meeting row: link to the related meeting if the proposal is scheduled
+
+  [elioschmutz]
+
 - Make a proposal's repository-folder title available as variable
   for sablon templates.
   [deiferni]

@@ -7,6 +7,7 @@ from opengever.base.oguid import Oguid
 from opengever.globalindex.model.task import Task
 from opengever.locking.interfaces import ISQLLockable
 from opengever.locking.model import Lock
+from opengever.meeting.committee import ICommittee
 from opengever.meeting.interfaces import IMeetingDossier
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import Committee
@@ -31,7 +32,6 @@ from plone import api
 from plone.locking.interfaces import ILockable
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
-
 
 class PloneAdminUnitBuilder(AdminUnitBuilder):
     """Add plone specific functionality to opengever.ogds.models
@@ -207,6 +207,14 @@ class MeetingBuilder(SqlObjectBuilder):
         self.arguments['start'] = localized_datetime(2011, 12, 13, 9, 30)
         self.arguments['end'] = localized_datetime(2011, 12, 13, 11, 45)
         self.arguments['location'] = u'B\xe4rn'
+
+    def before_create(self):
+        committee = self.arguments.get('committee')
+        if not committee:
+            return
+
+        if ICommittee.providedBy(committee):
+            self.arguments['committee'] = committee.load_model()
 
     def link_with(self, dossier):
         del self.arguments['dossier_admin_unit_id']
