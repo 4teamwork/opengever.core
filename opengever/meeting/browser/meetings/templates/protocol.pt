@@ -6,7 +6,7 @@
       <metal:use use-macro="context/@@ploneform-macros/titlelessform">
         <metal:block fill-slot="fields">
           <!-- for write conflict detection (optimistic locking) -->
-          <input type="hidden" name="modified" tal:attributes="value view/modified_timestamp" />
+          <input type="hidden" name="modified" tal:attributes="value view/server_timestamp" />
 
           <div class="protocol-navigation"
                tal:attributes="data-meeting meeting/meeting_id;

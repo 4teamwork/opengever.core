@@ -9,6 +9,7 @@ from opengever.meeting.form import ModelEditForm
 from opengever.meeting.model import Meeting
 from opengever.meeting.sablon import Sablon
 from opengever.meeting.vocabulary import get_committee_member_vocabulary
+from opengever.ogds.base.actor import Actor
 from plone import api
 from plone.autoform.form import AutoExtensibleForm
 from plone.directives import form
@@ -152,6 +153,7 @@ class EditProtocol(AutoExtensibleForm, ModelEditForm):
         """
         super(EditProtocol, self).__init__(context, request, context.model)
         self._has_write_conflict = False
+        self._is_locked_by_another_user = False
         self._has_successfully_saved = False
 
     def update(self):
@@ -201,11 +203,27 @@ class EditProtocol(AutoExtensibleForm, ModelEditForm):
         if self.has_write_conflict():
             self._has_write_conflict = True
             return
+        if self.is_locked_by_another_user():
+            self._is_locked_by_another_user = True
+            return
 
         super(EditProtocol, self).handleApply(self, action)
 
     def has_write_conflict(self):
-        return self.modified_timestamp() != self.submitted_modified_timestamp()
+        return self.server_timestamp != self.client_timestamp
+
+    def is_locked_by_another_user(self):
+        """Return False if the document is locked by the current user or is
+        not locked at all, True otherwise.
+
+        """
+        lockable = ILockable(self.context)
+        return not lockable.can_safely_unlock()
+
+    def get_lock_creator_user_name(self):
+        lockable = ILockable(self.context)
+        creator = lockable.lock_info()[0]['creator']
+        return Actor.lookup(creator).get_label()
 
     def redirect_to_next_url(self):
         """
@@ -225,6 +243,13 @@ class EditProtocol(AutoExtensibleForm, ModelEditForm):
             msg = _(u'message_write_conflict',
                     default='Your changes were not saved, the protocol has '
                             'been modified in the meantime.')
+            return JSONResponse(self.request).error(msg).dump()
+
+        elif self._is_locked_by_another_user:
+            msg = _(u'message_locked_by_another_user',
+                    default='Your changes were not saved, the protocol is '
+                            'locked by ${username}.',
+                    mapping={'username': self.get_lock_creator_user_name()})
             return JSONResponse(self.request).error(msg).dump()
 
         elif self._has_successfully_saved:
@@ -252,12 +277,14 @@ class EditProtocol(AutoExtensibleForm, ModelEditForm):
         else:
             return not agenda_item.is_paragraph
 
-    def modified_timestamp(self):
+    @property
+    def server_timestamp(self):
         """Return the modified timestamp as seconds since the epoch."""
 
         return timegm(as_utc(self.model.modified).timetuple())
 
-    def submitted_modified_timestamp(self):
+    @property
+    def client_timestamp(self):
         """Return the modified timestamp that has been submitted by the
         client.
 
