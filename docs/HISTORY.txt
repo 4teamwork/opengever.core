@@ -5,6 +5,9 @@ Changelog
 4.6.4 (unreleased)
 ------------------
 
+- Add upgrade-step to update feedback link in footer (if necessary).
+  [lgraf]
+
 - Prevent saving the protocol when it is locked by another user.
   [deiferni]
 

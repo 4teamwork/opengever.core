@@ -403,4 +403,13 @@
         profile="opengever.base:default"
         />
 
+    <!-- 4609 -> 4610 -->
+    <genericsetup:upgradeStep
+        title="Update feedback forum link in footer (if necessary)"
+        source="4609"
+        destination="4610"
+        handler="opengever.base.upgrades.to4610.UpdateFeedbackLinkInFooter"
+        profile="opengever.base:default"
+        />
+
 </configure>
