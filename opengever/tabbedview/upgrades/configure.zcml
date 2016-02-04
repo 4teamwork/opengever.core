@@ -77,12 +77,11 @@
 
     <!-- 4300 -> 4600 -->
     <genericsetup:upgradeStep
-        title="Moves the new proposal_id-column for proposallisting
-               tabbedview tab to the first position"
+        title="Reset proposallisting tabbbedview tabs for new rows"
         description=""
         source="4300"
         destination="4600"
-        handler="opengever.tabbedview.upgrades.to4600.SortSubmittedProposallistingTabbbedviewTabs"
+        handler="opengever.tabbedview.upgrades.to4600.ResetProposallistingTabbbedviewTabsForNewRows"
         profile="opengever.tabbedview:default"
         />
 
