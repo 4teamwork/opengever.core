@@ -5,6 +5,9 @@ Changelog
 4.6.4 (unreleased)
 ------------------
 
+- Rename "Kommission" to more generic "Gremium"
+  [elioschmutz]
+
 - Display versions tab for sablon templates.
   [deiferni]
 

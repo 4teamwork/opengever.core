@@ -46,7 +46,7 @@ msgstr "Mitgliedschaft hinzufügen"
 
 #: ./opengever/meeting/browser/committeeforms.py:32
 msgid "Add committee"
-msgstr "Kommission hinzufügen"
+msgstr "Gremium hinzufügen"
 
 #: ./opengever/meeting/browser/periods.py:40
 msgid "Add new period"
@@ -104,11 +104,11 @@ msgstr "Periode abschliessen"
 
 #: ./opengever/meeting/profiles/default/types/opengever.meeting.committee.xml
 msgid "Committee"
-msgstr "Kommission"
+msgstr "Gremium"
 
 #: ./opengever/meeting/profiles/default/types/opengever.meeting.committeecontainer.xml
 msgid "Committee Container"
-msgstr "Ordner mit Kommissionen"
+msgstr "Ordner mit Gremien"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:34
 msgid "Delete"
@@ -428,7 +428,7 @@ msgstr "geschlossen"
 #. Default: "Comittee"
 #: ./opengever/meeting/tabs/proposallisting.py:47
 msgid "column_comittee"
-msgstr "Kommission"
+msgstr "Gremium"
 
 #. Default: "Date"
 #: ./opengever/meeting/tabs/meetinglisting.py:57
@@ -528,7 +528,7 @@ msgstr "Beschlossen"
 #. Default: "Automatically configure permissions on the committee for this group."
 #: ./opengever/meeting/committee.py:82
 msgid "description_group"
-msgstr "Für diese Gruppe werden automatisch Berechtigungen auf der Kommission vergeben."
+msgstr "Für diese Gruppe werden automatisch Berechtigungen auf dem Gremium vergeben."
 
 #. Default: "Dossier"
 #: ./opengever/meeting/tabs/meetinglisting.py:71
@@ -616,7 +616,7 @@ msgstr "Schliessen"
 #: ./opengever/meeting/browser/templates/member.pt:49
 #: ./opengever/meeting/proposal.py:45
 msgid "label_committee"
-msgstr "Kommission"
+msgstr "Gremium"
 
 #. Default: "Considerations"
 #: ./opengever/meeting/browser/meetings/protocol.py:127
