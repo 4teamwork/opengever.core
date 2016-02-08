@@ -20,10 +20,11 @@ class TestProtocolJsonData(FunctionalTestCase):
                     legal_basis=u'<div>Gegen diesen Strafbefehl k\xf6nnen die Geb\xfcssten innert 20 Tagen seit Er\xf6ffnung beim Gemeinderat schriftlich Einsprache erheben. Die Einsprache hat ein Begehren und eine Begr\xfcndung zu enthalten. In diesem Falle wird eine Einspracheverhandlung vor dem Gemeinderat durchgef\xfchrt, in deren Folge der Gemeinderat einen Entscheid mit Beschwerdem\xf6glichkeit an das Bezirksgericht f\xe4llt.</div>',
                     proposed_action=u'<div>Busse</div>',
                     dossier_reference_number='FD 2.6.8/1',
+                    repository_folder_title=u'Strafwesen',
                     considerations=u'<div>Die Bauten sind eindeutig Baubewilligungspflichtig. Gem\xe4ss \xa7 59 des Baugesetzes bed\xfcrfen alle Bauten und ihre im Hinblick auf die Anliegen der Raumplanung, des Umweltschutzes oder der Baupolizei wesentliche Umgestaltung, Erweiterung oder Zweck\xe4nderung sowie die Beseitigung von Geb\xe4uden der Bewilligung durch den Gemeinderat. Das Bauen ohne Baubewilligung stellt eine strafbare Handlung nach \xa7 160 Baugesetz dar. Strafbar ist die vors\xe4tzliche oder fahrl\xe4ssige Widerhandlung, begangen durch Bauherren, Eigent\xfcmer, sonstige Berechtigte, Projektverfasser, Unternehmer und Bauleiter. Im vorliegenden Fall ist der Straftatbestand durch den Bauherrn und seinen Sohn erf\xfcllt. Aus Gr\xfcnden der Gleichbehandlung mit anderen F\xe4llen ist der Gemeinderat gezwungen, die \xdcbertretung angemessen zu bestrafen.</div>',
                     copy_for_attention=u'<div>Hanspeter</div>',
                     disclose_to=u'<div>Jans\xf6rg</div>',
-                    publish_in=u'<div>Tagblatt</div>'))
+                    publish_in=u'<div>Tagblatt</div>',))
         self.committee = create(Builder('committee_model')
                                 .having(title=u'Gemeinderat'))
         self.member_peter = create(Builder('member'))

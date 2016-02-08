@@ -164,6 +164,51 @@ class TestProposal(FunctionalTestCase):
         self.assertEqual(u'Lorem ips\xfcm', model.proposed_action)
 
     @browsing
+    def test_proposal_language_field_with_multiple_languages(self, browser):
+        """Create and update proposal with multiple languages.
+
+        Test that form displays language selection widget and updates/sets
+        repository_folder_title for the chosen language.
+
+        """
+        committee = create(Builder('committee_model'))
+        self.repo_folder.title_fr = u'Stoffe'
+
+        lang_tool = api.portal.get_tool('portal_languages')
+        lang_tool.use_combined_language_codes = True
+        lang_tool.addSupportedLanguage('de-ch')
+        lang_tool.addSupportedLanguage('fr-ch')
+        lang_tool.addSupportedLanguage('en')
+        transaction.commit()
+
+        browser.login()
+        browser.open(self.dossier, view='++add++opengever.meeting.proposal')
+        browser.fill({
+            'Title': u'A pr\xf6posal',
+            'Committee': str(committee.committee_id),
+            'Language': 'fr'
+            })
+        browser.css('#form-buttons-save').first.click()
+
+        proposal = browser.context.load_model()
+        self.assertIn('Item created',
+                      browser.css('.portalMessage.info dd').text)
+        self.assertEqual(u'fr', proposal.language)
+        self.assertEqual(u'Stoffe', proposal.repository_folder_title)
+
+        browser.visit(browser.context, view='edit')
+        browser.fill({
+            'Language': 'de'
+            })
+        browser.css('#form-buttons-save').first.click()
+
+        proposal = browser.context.load_model()
+        self.assertIn('Changes saved',
+                      browser.css('.portalMessage.info dd').text)
+        self.assertEqual(u'de', proposal.language)
+        self.assertEqual(u'Stuff', proposal.repository_folder_title)
+
+    @browsing
     def test_edit_view_availability_for_proposal(self, browser):
         committee = create(Builder('committee'))
         proposal = create(Builder('proposal')

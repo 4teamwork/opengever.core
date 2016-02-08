@@ -29,7 +29,7 @@ class ProposalEditForm(ModelProxyEditForm, dexterity.EditForm):
         super(ProposalEditForm, self).updateWidgets()
 
         ltool = api.portal.get_tool('portal_languages')
-        if ltool.getSupportedLanguages() <= 1:
+        if len(ltool.getSupportedLanguages()) <= 1:
             self.widgets['language'].mode = HIDDEN_MODE
 
 
@@ -69,5 +69,5 @@ class AddForm(ModelProxyAddForm, dexterity.AddForm):
         super(AddForm, self).updateWidgets()
 
         ltool = api.portal.get_tool('portal_languages')
-        if ltool.getSupportedLanguages() <= 1:
+        if len(ltool.getSupportedLanguages()) <= 1:
             self.widgets['language'].mode = HIDDEN_MODE
