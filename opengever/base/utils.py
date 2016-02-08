@@ -75,9 +75,6 @@ def get_preferred_language_code():
     return language_code.split('-')[0]
 
 
-
-
-
 def get_hostname(request):
     """Extract hostname in virtual-host-safe manner
 
