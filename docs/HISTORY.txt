@@ -5,6 +5,10 @@ Changelog
 4.6.4 (unreleased)
 ------------------
 
+- Make a proposal's repository-folder title available as variable
+  for sablon templates.
+  [deiferni]
+
 - Use autoselect for proposals add and edit view.
   [Kevin Bieri]
 
