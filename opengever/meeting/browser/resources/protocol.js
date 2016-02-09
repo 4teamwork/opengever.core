@@ -146,7 +146,7 @@
     if($("#opengever_meeting_protocol").length) {
       init();
     }
-    if($(".template-add-membership").length) {
+    if($(".template-add-membership, .template-opengever-meeting-proposal, .portaltype-opengever-meeting-proposal.template-edit").length) {
       var autocompleteSelects = new global.SelectAutocomplete();
     }
   });
