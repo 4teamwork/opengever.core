@@ -132,6 +132,8 @@ class ProposalModelBuilder(SqlObjectBuilder):
         self.arguments['title'] = 'Bar'
         self.arguments['workflow_state'] = Proposal.workflow.default_state.name
         self.arguments['dossier_reference_number'] = 'FD 1.2.3 / 1'
+        self.arguments['language'] = 'en'
+        self.arguments['repository_folder_title'] = 'Just a Repo-Folder'
 
     def id(self, identifier):
         """Proposals have a composite primary key, admin_unit_id and int_id.

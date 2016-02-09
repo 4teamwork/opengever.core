@@ -4,13 +4,6 @@ from opengever.base.utils import get_preferred_language_code
 from plone.autoform import directives
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.directives.form import Schema
-from plone.i18n.normalizer.base import mapUnicode
-from plone.indexer import indexer
-from Products.CMFPlone.CatalogTool import MAX_SORTABLE_TITLE
-from Products.CMFPlone.CatalogTool import num_sort_regex
-from Products.CMFPlone.CatalogTool import zero_fill
-from Products.CMFPlone.utils import safe_callable
-from Products.CMFPlone.utils import safe_unicode
 from zope.interface import alsoProvides
 from zope.interface import Interface
 from zope.schema import TextLine

@@ -11,6 +11,7 @@ from opengever.meeting.proposal import Proposal
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.testing import assets
 from opengever.testing.builders.base import TEST_USER_ID
+from opengever.testing.builders.translated import TranslatedTitleBuilderMixin
 from opengever.trash.trash import ITrashable
 from plone import api
 from plone.namedfile.file import NamedBlobFile
@@ -32,13 +33,13 @@ class MeetingDossierBuilder(DossierBuilder):
 builder_registry.register('meeting_dossier', MeetingDossierBuilder)
 
 
-class TemplateDossierBuilder(DexterityBuilder):
+class TemplateDossierBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
     portal_type = 'opengever.dossier.templatedossier'
 
 builder_registry.register('templatedossier', TemplateDossierBuilder)
 
 
-class InboxBuilder(DexterityBuilder):
+class InboxBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
     portal_type = 'opengever.inbox.inbox'
 
 builder_registry.register('inbox', InboxBuilder)
@@ -221,21 +222,13 @@ class MailBuilder(DexterityBuilder):
 builder_registry.register('mail', MailBuilder)
 
 
-class RepositoryBuilder(DexterityBuilder):
+class RepositoryBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
     portal_type = 'opengever.repository.repositoryfolder'
-
-    def titled(self, title):
-        if not isinstance(title, unicode):
-            title = title.decode('utf-8')
-
-        fieldname = 'title_{}'.format(TranslatedTitle.FALLBACK_LANGUAGE)
-        self.arguments[fieldname] = title
-        return self
 
 builder_registry.register('repository', RepositoryBuilder)
 
 
-class ContactFolderBuilder(DexterityBuilder):
+class ContactFolderBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
     portal_type = 'opengever.contact.contactfolder'
 
 builder_registry.register('contactfolder', ContactFolderBuilder)
@@ -247,16 +240,8 @@ class ContactBuilder(DexterityBuilder):
 builder_registry.register('contact', ContactBuilder)
 
 
-class RepositoryRootBuilder(DexterityBuilder):
+class RepositoryRootBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
     portal_type = 'opengever.repository.repositoryroot'
-
-    def titled(self, title):
-        if not isinstance(title, unicode):
-            title = title.decode('utf-8')
-
-        fieldname = 'title_{}'.format(TranslatedTitle.FALLBACK_LANGUAGE)
-        self.arguments[fieldname] = title
-        return self
 
 builder_registry.register('repository_root', RepositoryRootBuilder)
 
@@ -267,7 +252,7 @@ class YearFolderbuilder(DexterityBuilder):
 builder_registry.register('yearfolder', YearFolderbuilder)
 
 
-class InboxContainerBuilder(DexterityBuilder):
+class InboxContainerBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
     portal_type = 'opengever.inbox.container'
 
 builder_registry.register('inbox_container', InboxContainerBuilder)
@@ -278,7 +263,8 @@ class ProposalBuilder(DexterityBuilder):
 
     def __init__(self, session):
         super(ProposalBuilder, self).__init__(session)
-        self.arguments = {'title': 'Fooo'}
+        self.arguments = {'title': 'Fooo',
+                          'language': TranslatedTitle.FALLBACK_LANGUAGE}
         self.model_arguments = None
         self._submitted = False
 
@@ -325,7 +311,7 @@ class SubmittedProposalBuilder(object):
 builder_registry.register('submitted_proposal', SubmittedProposalBuilder)
 
 
-class CommitteeContainerBuilder(DexterityBuilder):
+class CommitteeContainerBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
     portal_type = 'opengever.meeting.committeecontainer'
 
 builder_registry.register('committee_container', CommitteeContainerBuilder)

@@ -10,6 +10,7 @@ SAMPLE_MEETING_DATA = {
     'agenda_items': [{
         'description': u'Strafbefehl wegen Bauens ohne Bewilligung',
         'dossier_reference_number': 'FD 2.6.8/1',
+        'repository_folder_title': u'Strafwesen',
         'html:considerations': u'<div>Die Bauten sind eindeutig Baubewilligungspflichtig. Gem\xe4ss \xa7 59 des Baugesetzes bed\xfcrfen alle Bauten und ihre im Hinblick auf die Anliegen der Raumplanung, des Umweltschutzes oder der Baupolizei wesentliche Umgestaltung, Erweiterung oder Zweck\xe4nderung sowie die Beseitigung von Geb\xe4uden der Bewilligung durch den Gemeinderat. Das Bauen ohne Baubewilligung stellt eine strafbare Handlung nach \xa7 160 Baugesetz dar. Strafbar ist die vors\xe4tzliche oder fahrl\xe4ssige Widerhandlung, begangen durch Bauherren, Eigent\xfcmer, sonstige Berechtigte, Projektverfasser, Unternehmer und Bauleiter. Im vorliegenden Fall ist der Straftatbestand durch den Bauherrn und seinen Sohn erf\xfcllt. Aus Gr\xfcnden der Gleichbehandlung mit anderen F\xe4llen ist der Gemeinderat gezwungen, die \xdcbertretung angemessen zu bestrafen.</div>',
         'html:decision': u'<div>Die Bauherren werden gest\xfctzt auf \xa7 160 und in Anwendung von \xa7 162 des Baugesetzes wegen Bauens ohne Baubewilligung gesamthaft bestraft. Der Betrag von je Fr. 1000.-- ist - sofern keine Einsprache erfolgt - innert 30 Tagen der Finanzverwaltung der Gemeinde zu bezahlen.</div>',
         'html:discussion': u'<div>Der Gemeinderat setzt sich geschlossen f\xfcr eine Busse ein.</div>',
@@ -25,6 +26,7 @@ SAMPLE_MEETING_DATA = {
         'decision_number': 1}, {
         'description': u'R\xfccktritt Hans Muster',
         'dossier_reference_number': None,
+        'repository_folder_title': None,
         'html:considerations': None,
         'html:decision': u'<div>Der Gemeinderat hat den R\xfccktritt genehmigt. Die Neuwahl eines Ersatzmitglieds f\xfcr Hans Muster erfolgt bald. Die Wahlvorschl\xe4ge sind n\xe4chstens bei der Kanzlei einzureichen. Falls ein 2. Wahlgang notwendig werden sollte, wird dieser danach durchgef\xfchrt. Die detaillierten Angaben \xfcber den Eingang der Wahlvorschl\xe4ge usw. sind ab sofort auf der Gemeindehomepage publiziert.</div>',
         'html:discussion': u'<div>Hans Muster tritt als Gemeinderat zur\xfcck.</div>',

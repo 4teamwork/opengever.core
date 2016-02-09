@@ -93,6 +93,7 @@ class AgendaItem(Base):
             'description': self.description,
             'title': self.get_title(),
             'dossier_reference_number': self.get_dossier_reference_number(),
+            'repository_folder_title': self.get_repository_folder_title(),
             'is_paragraph': self.is_paragraph,
             'decision_number': self.decision_number,
         }
@@ -145,6 +146,11 @@ class AgendaItem(Base):
     def get_dossier_reference_number(self):
         if self.has_proposal:
             return self.proposal.dossier_reference_number
+        return None
+
+    def get_repository_folder_title(self):
+        if self.has_proposal:
+            return self.proposal.repository_folder_title
         return None
 
     def get_css_class(self):

@@ -41,7 +41,10 @@ class TestProposal(FunctionalTestCase):
 
     def setUp(self):
         super(TestProposal, self).setUp()
-        self.repo, self.repo_folder = create(Builder('repository_tree'))
+        self.repo = create(Builder('repository_root'))
+        self.repo_folder = create(Builder('repository')
+                                  .within(self.repo)
+                                  .titled(u'Stuff'))
         self.dossier = create(Builder('dossier')
                               .within(self.repo_folder)
                               .titled(u'D\xf6ssier'))
@@ -79,7 +82,6 @@ class TestProposal(FunctionalTestCase):
         browser.open(self.dossier, view='++add++opengever.meeting.proposal')
 
         self.search_for_document(browser, document)
-
         browser.fill({
             'Title': u'A pr\xf6posal',
             'Legal basis': u'possible',
@@ -110,6 +112,9 @@ class TestProposal(FunctionalTestCase):
         self.assertEqual(u'B\xe4rner Zeitung', model.publish_in)
         self.assertEqual(u'Hansj\xf6rg', model.disclose_to)
         self.assertEqual(u'P\xe4tra', model.copy_for_attention)
+        self.assertEqual(u'P\xe4tra', model.copy_for_attention)
+        self.assertEqual(u'Stuff', model.repository_folder_title)
+        self.assertEqual(u'en', model.language)
 
         self.assertEqual(['a', 'proposal', 'my', 'proposal'],
                          index_data_for(proposal)['SearchableText'])
@@ -157,6 +162,51 @@ class TestProposal(FunctionalTestCase):
         self.assertEqual(u'not possible', model.legal_basis)
         self.assertEqual(u'My pr\xf6posal', model.initial_position)
         self.assertEqual(u'Lorem ips\xfcm', model.proposed_action)
+
+    @browsing
+    def test_proposal_language_field_with_multiple_languages(self, browser):
+        """Create and update proposal with multiple languages.
+
+        Test that form displays language selection widget and updates/sets
+        repository_folder_title for the chosen language.
+
+        """
+        committee = create(Builder('committee_model'))
+        self.repo_folder.title_fr = u'Stoffe'
+
+        lang_tool = api.portal.get_tool('portal_languages')
+        lang_tool.use_combined_language_codes = True
+        lang_tool.addSupportedLanguage('de-ch')
+        lang_tool.addSupportedLanguage('fr-ch')
+        lang_tool.addSupportedLanguage('en')
+        transaction.commit()
+
+        browser.login()
+        browser.open(self.dossier, view='++add++opengever.meeting.proposal')
+        browser.fill({
+            'Title': u'A pr\xf6posal',
+            'Committee': str(committee.committee_id),
+            'Language': 'fr'
+            })
+        browser.css('#form-buttons-save').first.click()
+
+        proposal = browser.context.load_model()
+        self.assertIn('Item created',
+                      browser.css('.portalMessage.info dd').text)
+        self.assertEqual(u'fr', proposal.language)
+        self.assertEqual(u'Stoffe', proposal.repository_folder_title)
+
+        browser.visit(browser.context, view='edit')
+        browser.fill({
+            'Language': 'de'
+            })
+        browser.css('#form-buttons-save').first.click()
+
+        proposal = browser.context.load_model()
+        self.assertIn('Changes saved',
+                      browser.css('.portalMessage.info dd').text)
+        self.assertEqual(u'de', proposal.language)
+        self.assertEqual(u'Stuff', proposal.repository_folder_title)
 
     @browsing
     def test_edit_view_availability_for_proposal(self, browser):

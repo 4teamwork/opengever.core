@@ -632,4 +632,24 @@
         profile="opengever.meeting:default"
         />
 
+    <!-- 4631 -> 4632 -->
+    <genericsetup:upgradeStep
+        title="Add new columns for repo folders."
+        description=""
+        source="4631"
+        destination="4632"
+        handler="opengever.meeting.upgrades.to4632.AddRepositoryFolderColumns"
+        profile="opengever.meeting:default"
+        />
+
+    <!-- 4632 -> 4633 -->
+    <genericsetup:upgradeStep
+        title="Set repository folder titles for new columns from 4632."
+        description=""
+        source="4632"
+        destination="4633"
+        handler="opengever.meeting.upgrades.to4633.UpdateRepositoryFolderTitle"
+        profile="opengever.meeting:default"
+        />
+
 </configure>
