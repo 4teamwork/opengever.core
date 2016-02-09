@@ -1,5 +1,3 @@
-from ftw.builder import Builder
-from ftw.builder import create
 from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.app.testing import applyProfile
@@ -10,7 +8,6 @@ class TestDocumentTemplates(FunctionalTestCase):
     def setUp(self):
         super(TestDocumentTemplates, self).setUp()
         self.grant('Manager')
-        self.dossier = create(Builder('templatedossier').titled(u'Vorlagen'))
         applyProfile(self.portal, 'opengever.setup.tests:templates')
 
     def test_template_documents_are_loaded_with_working_initial_version(self):
