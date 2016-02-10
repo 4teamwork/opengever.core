@@ -412,4 +412,13 @@
         profile="opengever.base:default"
         />
 
+    <!-- 4610 -> 4611 -->
+    <upgrade-step:importProfile
+        title="Register datetimepicker jQuery plugin."
+        profile="opengever.base:default"
+        source="4610"
+        destination="4611"
+        directory="profiles/4611"
+        />
+
 </configure>

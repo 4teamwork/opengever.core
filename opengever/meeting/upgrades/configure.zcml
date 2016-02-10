@@ -652,4 +652,13 @@
         profile="opengever.meeting:default"
         />
 
+    <!-- 4633 -> 4634 -->
+    <upgrade-step:importProfile
+        title="Register datetimepicker javascript."
+        profile="opengever.meeting:default"
+        source="4633"
+        destination="4634"
+        directory="profiles/4634"
+        />
+
 </configure>

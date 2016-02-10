@@ -12,7 +12,7 @@
     var currentMeeting = $(".protocol-navigation").data().meeting;
     var createdAt = new Date($(".protocol-navigation").data().modified).getTime();
 
-    var protocolSynchronizer = new global.Synchronizer({ target: "#content-core input, #content-core select, #content-core textarea", triggers: ["input", "change"] });
+    var protocolSynchronizer = new global.Synchronizer({ target: "#content-core input, #content-core select, #content-core textarea", triggers: ["input", "change", "changeDate"] });
     var trixSynchronizer = new global.Synchronizer({ target: "trix-editor", triggers: ["trix-change"] });
     var meetingStorage = new global.MeetingStorage(currentMeeting);
 
@@ -24,6 +24,7 @@
     var parseProposal = function(expression) { return expression.split("-"); };
 
     var syncTrix = function(target) {
+      console.log("sync");
       var proposalExpression = parseProposal(target.inputElement.id);
       var html = JSON.stringify(target.editor);
       meetingStorage.addOrUpdateUnit(proposalExpression[1], proposalExpression[2], html);
