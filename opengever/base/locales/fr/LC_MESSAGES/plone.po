@@ -66,7 +66,7 @@ msgid "Document state changed to document-state-working_copy"
 msgstr "Etat du document modifié : copie de travail"
 
 msgid "Dossier state changed to dossier-state-active"
-msgstr "Etat du dossier modifié : En modification"
+msgstr "Etat du dossier modifié : En cours de traitement"
 
 msgid "Dossier state changed to dossier-state-archived"
 msgstr "Etat du dossier modifié : Archivé"
@@ -148,7 +148,7 @@ msgid "document_with_template"
 msgstr "Document à partir du modèle"
 
 msgid "dossier-state-active"
-msgstr "En modification"
+msgstr "En cours de traitement"
 
 msgid "dossier-state-archived"
 msgstr "Archivé"
