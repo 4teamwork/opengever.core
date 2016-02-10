@@ -305,3 +305,10 @@ class Proposal(Base):
             self.admin_unit_id,
             '/'.join(dossier.getPhysicalPath())).execute()
         return response['intid']
+
+    def get_meeting_link(self):
+        agenda_item = self.agenda_item
+        if not agenda_item:
+            return u''
+
+        return agenda_item.meeting.get_link()
