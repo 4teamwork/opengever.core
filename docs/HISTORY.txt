@@ -5,6 +5,19 @@ Changelog
 4.6.4 (unreleased)
 ------------------
 
+- Add attributes for proposal view.
+
+  - publish_in
+  - disclose_to
+  - copy_for_attention
+
+  Add additional attributes for submitted proposal view:
+
+  - considerations
+  - discussion
+
+  [elioschmutz]
+
 - Add link from proposal to committee.
   [elioschmutz]
 

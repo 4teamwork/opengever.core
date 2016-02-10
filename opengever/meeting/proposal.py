@@ -266,12 +266,24 @@ class SubmittedProposal(ProposalBase):
     def get_overview_attributes(self):
         data = super(SubmittedProposal, self).get_overview_attributes()
         model = self.load_model()
-        data.extend([
-            {
+
+        # Insert considerations after proposed_action
+        data.insert(
+            5, {
                 'label': _('label_considerations', default=u"Considerations"),
                 'value': model.considerations,
             }
-        ])
+        )
+
+        # Insert discussion after considerations
+        agenda = model.agenda_item
+        data.insert(
+            6, {
+                'label': _('label_discussion', default=u"Discussion"),
+                'value': agenda and agenda.discussion or ''
+            }
+        )
+
         return data
 
     @classmethod
