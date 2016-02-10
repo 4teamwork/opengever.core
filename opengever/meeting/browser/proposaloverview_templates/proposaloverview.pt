@@ -5,10 +5,9 @@
 
   <tal:i18n i18n:domain="opengever.meeting"
             tal:define="documents view/documents;
-                        excerpt view/excerpt;
-                        css_width python:99/2;">
+                        excerpt view/excerpt;">
 
-    <div tal:attributes="class string:boxGroup; style string:width:${css_width}%">
+    <div tal:attributes="class string:boxGroup">
       <div id="main_attributesBox" class="box">
         <h2 i18n:translate="label_main_attributes">Main Atrributes</h2>
           <table class="vertical listing">
@@ -23,26 +22,25 @@
                   tal:attributes="class item/css_class|nothing"
                   tal:content="structure item/value" />
             </tr>
+            <tr tal:condition="documents">
+              <th i18n:translate="label_attachments">Attachments</th>
+              <td>
+                <ul>
+                  <li tal:repeat="item documents">
+                    <a href="" tal:attributes="href item/absolute_url;
+                    title python: getattr(item, 'document_date', None) and item.document_date.strftime('%d.%m.%Y') or '';
+                    class python:view.get_css_class(item)">
+                      <span class="document" tal:condition="item/absolute_url" tal:content="item/Title" />
+                    </a>
+                  </li>
+                </ul>
+              </td>
+            </tr>
           </table>
       </div>
     </div>
 
-    <div id="documentsBox" class="box">
-      <tal:condition tal:condition="documents">
-        <h2 i18n:translate="label_attachments">Attachments</h2>
-        <ul>
-          <li tal:repeat="item documents">
-            <a href="" tal:attributes="href item/absolute_url;
-                                       title python: getattr(item, 'document_date', None) and item.document_date.strftime('%d.%m.%Y') or '';
-                                       class python:view.get_css_class(item)">
-              <span class="document" tal:condition="item/absolute_url" tal:content="item/Title" />
-            </a>
-          </li>
-        </ul>
-      </tal:condition>
-    </div>
-
-    <div id="excerptBox" class="box">
+     <div id="excerptBox" class="box">
       <tal:condition tal:condition="excerpt">
         <h2 i18n:translate="label_excerpt">Excerpt</h2>
         <ul>
