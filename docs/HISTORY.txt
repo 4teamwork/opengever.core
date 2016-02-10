@@ -5,6 +5,9 @@ Changelog
 4.6.4 (unreleased)
 ------------------
 
+- Adjust french translation 'En modification' to eCH-0039-standard 'En cours de traitement'
+  [elioschmutz]
+
 - Adjust proposaloverview view.
   Moves the document listing into the attributes-table, to gain more
   space for the table.
