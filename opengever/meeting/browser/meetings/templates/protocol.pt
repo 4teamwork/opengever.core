@@ -24,21 +24,21 @@
               </div>
               <div class="list-group-item navigation">
                 <ul class="nav">
-                  <li tal:repeat="protocol agenda_items"
-                      tal:attributes="class python: 'expandable ' + protocol.get_css_class()">
+                  <li tal:repeat="protocol agenda_items">
                     <metal:block tal:define="name protocol/name">
                       <a tal:attributes="href string:#${name};
                                          id string:${name}-anchor;
-                                         class python: 'expandable ' + protocol.get_css_class()">
+                                         class python: protocol.get_css_class()">
                         <span class="number" tal:content="python: protocol.number"></span>
                         <span class="title" tal:content="python: protocol.get_title()"></span>
                       </a>
-                      <ul class="nav">
+                      <ul class="nav" tal:condition="not: protocol/is_paragraph">
                         <metal:block tal:repeat="field view/agenda_item_fields">
                           <metal:block tal:define="field_name field/name"
                                        tal:condition="python: view.is_field_visible(field, protocol)">
                             <li>
-                              <a tal:attributes="href string:#${name}-${field_name};
+                              <a class="field"
+                                 tal:attributes="href string:#${name}-${field_name};
                                                  id string:${name}-${field_name}-anchor"
                                  tal:content="field/label">
                               </a>

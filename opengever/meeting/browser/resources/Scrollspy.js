@@ -73,10 +73,10 @@
 
     this.applyAnchor = function(target) {
       var anchor;
-      if (target.hasClass("expandable") && !target.hasClass("paragraph")) {
-        anchor = this.extractAnchor(target.next().find("a").first());
+      if (target.hasClass("expandable")) {
+        anchor = this.extractAnchor(target.next().find(".field").first());
       } else if(target.hasClass("paragraph")) {
-        anchor = this.extractAnchor(target.parent().next().find("a").first().next().find("a").first());
+        anchor = this.extractAnchor(target.parent().next().find(".field").first());
       }
       else {
         anchor = this.extractAnchor(target);
@@ -93,6 +93,11 @@
       selected.not(parent).removeClass("selected");
       parent.addClass("selected");
       this.align();
+    };
+
+    this.reset = function() {
+      $(".selected", this.element).removeClass("selected");
+      $(".expanded", this.element).removeClass("expanded");
     };
 
     this.onBeforeScroll = function(callback) { beforeScrollCallback = callback; };

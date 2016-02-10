@@ -50,6 +50,9 @@ Changelog
 4.6.3 (2016-01-25)
 ------------------
 
+- Reduce complexity for traversing the scrollspy navigation tree.
+  [Kevin Bieri]
+
 - Add migration for trix, convert fields from markdown to html.
   [deiferni]
 
