@@ -195,6 +195,15 @@ class ProposalBase(ModelContainer):
             {'label': _('label_decision', default=u'Decision'),
              'value': model.get_decision()},
 
+            {'label': _('label_publish_in', default=u'Publish in'),
+             'value': model.publish_in},
+
+            {'label': _('label_disclose_to', default=u'Disclose to'),
+             'value': model.disclose_to},
+
+            {'label': _('label_copy_for_attention', default=u'Copy for attention'),
+             'value': model.copy_for_attention},
+
             {'label': _('label_workflow_state', default=u'State'),
              'value': self.get_state().title},
 
