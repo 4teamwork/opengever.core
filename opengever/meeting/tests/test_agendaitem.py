@@ -7,7 +7,6 @@ from opengever.meeting.model.agendaitem import AgendaItem
 from opengever.meeting.wrapper import MeetingWrapper
 from opengever.testing import FunctionalTestCase
 from plone.protect import createToken
-from plone.protect import createToken
 from z3c.relationfield.relation import RelationValue
 from zExceptions import NotFound
 from zExceptions import Unauthorized

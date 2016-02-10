@@ -8,11 +8,16 @@ class ProposalListingTests(FunctionalTestCase):
 
     def setUp(self):
         super(ProposalListingTests, self).setUp()
-        self.repo, self.repo_folder = create(Builder('repository_tree'))
+        self.repository_root, self.repository_folder = create(
+            Builder('repository_tree'))
         self.dossier = create(Builder('dossier')
-                              .titled(u'Dossier A')
-                              .within(self.repo_folder))
-        self.committee = create(Builder('committee').titled('My committee'))
+                              .within(self.repository_folder)
+                              .titled(u'Dossier A'))
+        self.committee_container = create(Builder('committee_container'))
+        self.committee = create(Builder('committee')
+                                .within(self.committee_container)
+                                .titled('My committee'))
+
         self.proposal = create(Builder('proposal')
                                .within(self.dossier)
                                .titled(u'My Proposal')
@@ -31,10 +36,10 @@ class TestDossierProposalListing(ProposalListingTests):
         # TODO: state should be translated
         self.assertEquals(
             [{'State': 'Pending',
-              'Proposed action': u'My proposed acti\xf6n',
-              'Initial Position': u'My p\xf6sition is',
+              'Reference Number': '1',
               'Comittee': 'My committee',
-              'Title': 'My Proposal'}],
+              'Title': 'My Proposal',
+              'Meeting': ''}],
             table.dicts())
 
     @browsing
@@ -45,8 +50,33 @@ class TestDossierProposalListing(ProposalListingTests):
         link = table.rows[1].css('a').first
 
         self.assertEquals('My Proposal', link.text)
-        self.assertEquals('http://example.com/opengever-repository-repositoryroot/opengever-repository-repositoryfolder/dossier-1/proposal-1',
-                          link.get('href'))
+
+        self.assertEquals(
+            'http://example.com/opengever-repository-repositoryroot/'
+            'opengever-repository-repositoryfolder/dossier-1/proposal-1',
+            link.get('href'))
+
+    @browsing
+    def test_proposals_are_linked_to_meeting_if_scheduled(self, browser):
+        meeting_dossier = create(
+            Builder('meeting_dossier').within(self.repository_folder))
+
+        create(Builder('submitted_proposal').submitting(self.proposal))
+        create(Builder('meeting')
+               .having(committee=self.committee)
+               .link_with(meeting_dossier)
+               .scheduled_proposals([self.proposal, ]))
+
+        browser.login().open(self.dossier, view='tabbedview_view-proposals')
+        table = browser.css('table.listing').first
+
+        self.assertEquals(
+            [{'State': 'Scheduled',
+              'Reference Number': '1',
+              'Comittee': 'My committee',
+              'Title': 'My Proposal',
+              'Meeting': u'B\xe4rn, Dec 13, 2011'}],
+            table.dicts())
 
 
 class TestSubmittedProposals(ProposalListingTests):
@@ -66,10 +96,10 @@ class TestSubmittedProposals(ProposalListingTests):
         # TODO: state should be translated
         self.assertEquals(
             [{'State': 'Submitted',
-              'Proposed action': u'My proposed acti\xf6n',
-              'Initial Position': u'My p\xf6sition is',
+              'Reference Number': '1',
               'Comittee': 'My committee',
-              'Title': 'My Proposal'}],
+              'Title': 'My Proposal',
+              'Meeting': ''}],
             table.dicts())
 
     @browsing
@@ -82,5 +112,28 @@ class TestSubmittedProposals(ProposalListingTests):
 
         self.assertEquals('My Proposal', link.text)
         self.assertEquals(
-            'http://example.com/committee-1/submitted-proposal-1',
+            'http://example.com/opengever-meeting-committeecontainer/'
+            'committee-1/submitted-proposal-1',
             link.get('href'))
+
+    @browsing
+    def test_submitted_proposals_are_linked_to_meeting_if_scheduled(self, browser):
+        meeting_dossier = create(
+            Builder('meeting_dossier').within(self.repository_folder))
+
+        create(Builder('meeting')
+               .having(committee=self.committee)
+               .link_with(meeting_dossier)
+               .scheduled_proposals([self.submitted_proposal, ]))
+
+        browser.login().open(self.committee,
+                             view='tabbedview_view-submittedproposals')
+        table = browser.css('table.listing').first
+
+        self.assertEquals(
+            [{'State': 'Scheduled',
+              'Reference Number': '1',
+              'Comittee': 'My committee',
+              'Title': 'My Proposal',
+              'Meeting': u'B\xe4rn, Dec 13, 2011'}],
+            table.dicts())

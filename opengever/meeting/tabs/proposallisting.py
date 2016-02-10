@@ -23,6 +23,14 @@ def translated_state(item, value):
     )
 
 
+def meeting_link(item, value):
+    agenda_item = item.agenda_item
+    if not agenda_item:
+        return u''
+
+    return agenda_item.meeting.get_link()
+
+
 class IProposalTableSourceConfig(ITableSourceConfig):
     """Marker interface for proposal table source configs."""
 
@@ -35,6 +43,9 @@ class ProposalListingTab(BaseListingTab):
     @property
     def columns(self):
         return (
+            {'column': 'proposal_id',
+             'column_title': _(u'label_proposal_id', default=u'Reference Number')},
+
             {'column': 'title',
              'column_title': _(u'column_title', default=u'Title'),
              'transform': proposal_link},
@@ -47,13 +58,10 @@ class ProposalListingTab(BaseListingTab):
              'column_title': _(u'column_comittee', default=u'Comittee'),
              'transform': lambda item, value: item.committee.title},
 
-            {'column': 'initial_position',
-             'column_title': _(u'column_initial_position',
-                               default=u'Initial Position')},
+            {'column': 'generated_meeting_link',
+             'column_title': _(u'column_meeting', default=u'Meeting'),
+             'transform': meeting_link},
 
-            {'column': 'proposed_action',
-             'column_title': _(u'column_proposed_action',
-                               default=u'Proposed action')},
         )
 
 
@@ -61,6 +69,4 @@ class ProposalTableSource(SqlTableSource):
     grok.implements(ITableSource)
     grok.adapts(ProposalListingTab, Interface)
 
-    searchable_columns = [Proposal.title,
-                          Proposal.initial_position,
-                          Proposal.proposed_action]
+    searchable_columns = [Proposal.title, ]
