@@ -536,6 +536,7 @@ class TestProposal(FunctionalTestCase):
         self.assertEqual(
             [u'label_title',
              u'label_committee',
+             u'label_dossier',
              u'label_meeting',
              u'label_legal_basis',
              u'label_initial_position',
@@ -568,6 +569,72 @@ class TestProposal(FunctionalTestCase):
             proposal.get_meeting_link(),
             meeting.get_link(),
             "The method should return the meeting link.")
+
+    def test_get_containing_dossier_for_submitted_proposal_if_on_same_admin_unit(self):
+        committee = create(Builder('committee').titled('My committee'))
+        proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .titled(u'My Proposal')
+                          .having(committee=committee.load_model())
+                          .as_submitted())
+
+        submitted_proposal = proposal.load_model().resolve_sumitted_proposal()
+
+        self.assertEqual(
+            self.dossier, submitted_proposal.get_containing_dossier())
+
+    def test_get_none_for_containing_dossier_if_submitted_proposal_is_not_on_same_admin_unit(self):
+        committee = create(Builder('committee').titled('My committee'))
+        proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .titled(u'My Proposal')
+                          .having(committee=committee.load_model())
+                          .as_submitted())
+
+        model = proposal.load_model()
+        submitted_proposal = model.resolve_sumitted_proposal()
+
+        model.admin_unit_id = u'client2'
+
+        self.assertIsNone(submitted_proposal.get_containing_dossier())
+
+    @browsing
+    def test_get_link_to_dossier_for_submitted_proposal(self, browser):
+        committee = create(Builder('committee').titled('My committee'))
+        proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .titled(u'My Proposal')
+                          .having(committee=committee.load_model())
+                          .as_submitted())
+
+        submitted_proposal = proposal.load_model().resolve_sumitted_proposal()
+
+        browser.open_html(submitted_proposal.get_dossier_link())
+
+        self.assertEqual(
+            self.dossier.title,
+            browser.css('a').first.get('title'))
+
+        self.assertEqual(
+            '/'.join(self.dossier.getPhysicalPath()),
+            browser.css('a').first.get('href'))
+
+    def test_get_link_returns_fallback_message_if_proposal_is_not_on_same_admin_unit(self):
+        committee = create(Builder('committee').titled('My committee'))
+        proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .titled(u'My Proposal')
+                          .having(committee=committee.load_model())
+                          .as_submitted())
+
+        model = proposal.load_model()
+
+        submitted_proposal = proposal.load_model().resolve_sumitted_proposal()
+
+        model.admin_unit_id = u'client2'
+
+        self.assertEqual(
+            u'label_dossier_not_available', submitted_proposal.get_dossier_link())
 
     def assertSubmittedDocumentCreated(self, proposal, document, submitted_document):
         submitted_document_model = SubmittedDocument.query.get_by_source(
