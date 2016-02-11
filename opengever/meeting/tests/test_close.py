@@ -55,7 +55,7 @@ class TestCloseMeeting(FunctionalTestCase):
 
         submitted_proposal = self.proposal_a.load_model().resolve_sumitted_proposal()
         excerpt = submitted_proposal.listFolderContents()[0]
-        self.assertEquals('Protocol Excerpt-barn-dec-13-2011',
+        self.assertEquals('Protocol Excerpt-B\xc3\xa4rn, Dec 13, 2011',
                           excerpt.Title())
         self.assertEquals(u'protocol-excerpt-barn-dec-13-2011.docx',
                           excerpt.file.filename)
@@ -69,7 +69,7 @@ class TestCloseMeeting(FunctionalTestCase):
         browser.css('#pending-closed').first.click()
 
         excerpt = self.dossier.listFolderContents()[-2]
-        self.assertEquals('Protocol Excerpt-barn-dec-13-2011',
+        self.assertEquals('Protocol Excerpt-B\xc3\xa4rn, Dec 13, 2011',
                           excerpt.Title())
         self.assertEquals(u'protocol-excerpt-barn-dec-13-2011.docx',
                           excerpt.file.filename)
@@ -100,7 +100,7 @@ class TestCloseMeeting(FunctionalTestCase):
         browser.open(self.proposal_a, view=u'tabbedview_view-overview')
         link = browser.css('#excerptBox a').first
         self.assertEquals(excerpt.absolute_url(), link.get('href'))
-        self.assertEquals('Protocol Excerpt-barn-dec-13-2011', link.text)
+        self.assertEquals(u'Protocol Excerpt-B\xe4rn, Dec 13, 2011', link.text)
 
     @browsing
     def test_states_are_updated(self, browser):

@@ -5,6 +5,10 @@ Changelog
 4.6.4 (unreleased)
 ------------------
 
+- Add skip_defaults_fields for CreateGeneratedDocumentCommand.
+  Fix the issue, where the object-title was always the document-title.
+  [elioschmutz]
+
 - Add link from submitted proposal to dossier if it's in the same admin-unit.
   [elioschmutz]
 
