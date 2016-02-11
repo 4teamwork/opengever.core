@@ -5,6 +5,9 @@ Changelog
 4.6.4 (unreleased)
 ------------------
 
+- Add link from proposal to committee.
+  [elioschmutz]
+
 - Adjust french translation 'En modification' to eCH-0039-standard 'En cours de traitement'
   [elioschmutz]
 

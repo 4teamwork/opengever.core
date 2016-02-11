@@ -56,7 +56,7 @@ class ProposalListingTab(BaseListingTab):
 
             {'column': 'committee_id',
              'column_title': _(u'column_comittee', default=u'Comittee'),
-             'transform': lambda item, value: item.committee.title},
+             'transform': lambda item, value: item.committee.get_link()},
 
             {'column': 'generated_meeting_link',
              'column_title': _(u'column_meeting', default=u'Meeting'),
