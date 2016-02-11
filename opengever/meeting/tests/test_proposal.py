@@ -496,6 +496,59 @@ class TestProposal(FunctionalTestCase):
 
         self.assertEqual(1, submitted_document.get_current_version())
 
+    def test_attributes_sort_order_for_proposal(self):
+        committee = create(Builder('committee').titled('My committee'))
+        proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .titled(u'My Proposal')
+                          .having(committee=committee.load_model())
+                          .as_submitted())
+
+        attributes = proposal.get_overview_attributes()
+        self.assertEqual(
+            [u'label_title',
+             u'label_committee',
+             u'label_legal_basis',
+             u'label_initial_position',
+             u'label_proposed_action',
+             u'label_decision',
+             u'label_publish_in',
+             u'label_disclose_to',
+             u'label_copy_for_attention',
+             u'label_workflow_state',
+             u'label_decision_number'],
+            [attribute.get('label') for attribute in attributes],
+            )
+
+    def test_attributes_sort_order_for_submitted_proposal(self):
+        committee = create(Builder('committee').titled('My committee'))
+        proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .titled(u'My Proposal')
+                          .having(committee=committee.load_model())
+                          .as_submitted())
+
+        submitted_proposal = api.portal.get().restrictedTraverse(
+            proposal.load_model().submitted_physical_path.encode('utf-8'))
+
+        attributes = submitted_proposal.get_overview_attributes()
+        self.assertEqual(
+            [u'label_title',
+             u'label_committee',
+             u'label_legal_basis',
+             u'label_initial_position',
+             u'label_proposed_action',
+             u'label_considerations',
+             u'label_discussion',
+             u'label_decision',
+             u'label_publish_in',
+             u'label_disclose_to',
+             u'label_copy_for_attention',
+             u'label_workflow_state',
+             u'label_decision_number'],
+            [attribute.get('label') for attribute in attributes],
+            )
+
     def assertSubmittedDocumentCreated(self, proposal, document, submitted_document):
         submitted_document_model = SubmittedDocument.query.get_by_source(
             proposal, document)

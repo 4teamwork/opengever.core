@@ -195,6 +195,15 @@ class ProposalBase(ModelContainer):
             {'label': _('label_decision', default=u'Decision'),
              'value': model.get_decision()},
 
+            {'label': _('label_publish_in', default=u'Publish in'),
+             'value': model.publish_in},
+
+            {'label': _('label_disclose_to', default=u'Disclose to'),
+             'value': model.disclose_to},
+
+            {'label': _('label_copy_for_attention', default=u'Copy for attention'),
+             'value': model.copy_for_attention},
+
             {'label': _('label_workflow_state', default=u'State'),
              'value': self.get_state().title},
 
@@ -257,12 +266,24 @@ class SubmittedProposal(ProposalBase):
     def get_overview_attributes(self):
         data = super(SubmittedProposal, self).get_overview_attributes()
         model = self.load_model()
-        data.extend([
-            {
+
+        # Insert considerations after proposed_action
+        data.insert(
+            5, {
                 'label': _('label_considerations', default=u"Considerations"),
                 'value': model.considerations,
             }
-        ])
+        )
+
+        # Insert discussion after considerations
+        agenda = model.agenda_item
+        data.insert(
+            6, {
+                'label': _('label_discussion', default=u"Discussion"),
+                'value': agenda and agenda.discussion or ''
+            }
+        )
+
         return data
 
     @classmethod
