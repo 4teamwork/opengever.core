@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+set -e
+
+buildout_dir=$( cd "$(dirname "$BASH_SOURCE")/.." ; pwd -P )
+package=$1; shift
+
+set -o pipefail
+result=$($buildout_dir/bin/create-upgrade $package "$@" | tee /dev/tty) || exit $?
+
+search="Created upgrade step at: "
+if [[ $result != *"$search"* ]]; then
+    >&2 echo "ERROR: could not find path to upgrade step by searching \"$search\""
+    exit 1
+fi
+
+directory=`echo "$result" | grep "$search" | sed -e "s/$search//"`
+upgrade=$directory/upgrade.py
+if [[ ! -f $upgrade ]]; then
+    echo "ERROR: could not find file $upgrade"
+    exit 1
+fi
+
+sed -i '' 's/from ftw.upgrade import UpgradeStep/from opengever.core.upgrade import SchemaMigration/' $upgrade
+sed -i '' 's/(UpgradeStep)/(SchemaMigration)/' $upgrade
+sed -i '' 's/__call__(self)/migrate(self)/' $upgrade
+sed -i '' 's/self.install_upgrade_profile()/pass/' $upgrade
