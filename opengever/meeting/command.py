@@ -59,45 +59,48 @@ class ProtocolOperations(object):
         return meeting.get_protocol_filename()
 
 
-class ExcerptOperations(ProtocolOperations):
+class ExcerptOperations(object):
 
-    def __init__(self, agenda_items):
-        self.agenda_items = agenda_items
+    def __init__(self, agenda_item):
+        self.agenda_item = agenda_item
+        self.proposal = agenda_item.proposal
 
     def get_sablon_template(self, meeting):
         return meeting.get_excerpt_template()
 
     def get_meeting_data(self, meeting):
-        return ExcerptProtocolData(meeting, self.agenda_items)
+        return ExcerptProtocolData(meeting, [self.agenda_item])
 
     def create_database_entry(self, meeting, document):
         excerpt = GeneratedExcerpt(
             oguid=Oguid.for_object(document),
             generated_version=document.get_current_version())
 
-        for agenda_item in self.agenda_items:
-            agenda_item.proposal.submitted_excerpt_document = excerpt
+        self.proposal.submitted_excerpt_document = excerpt
 
         return excerpt
 
     def get_generated_message(self, meeting):
-        return _(u'Excerpt for meeting ${title} has been generated '
+        return _(u'Excerpt for agenda item ${title} has been generated '
                  'successfully',
                  mapping=dict(title=meeting.get_title()))
 
     def get_updated_message(self, meeting):
-        return _(u'Excerpt for meeting ${title} has been updated '
+        return _(u'Excerpt for agenda item ${title} has been updated '
                  'successfully',
                  mapping=dict(title=meeting.get_title()))
 
     def get_title(self, meeting):
-        return meeting.get_excerpt_title()
+        return u"{} - {}".format(self.proposal.title, meeting.get_title())
 
     def get_filename(self, meeting):
-        return meeting.get_excerpt_filename()
+        normalizer = getUtility(IIDNormalizer)
+        return u"{}-{}.docx".format(
+            normalizer.normalize(self.proposal.title),
+            normalizer.normalize(meeting.get_title()))
 
 
-class ManualExcerptOperations(ExcerptOperations):
+class ManualExcerptOperations(object):
 
     def __init__(self, agenda_items, title,
                  include_initial_position=True, include_legal_basis=True,
@@ -105,7 +108,7 @@ class ManualExcerptOperations(ExcerptOperations):
                  include_discussion=True, include_decision=True,
                  include_publish_in=True, include_disclose_to=True,
                  include_copy_for_attention=True):
-        super(ManualExcerptOperations, self).__init__(agenda_items)
+        self.agenda_items = agenda_items
         self.title = title
         self.include_initial_position = include_initial_position
         self.include_legal_basis = include_legal_basis
@@ -116,6 +119,9 @@ class ManualExcerptOperations(ExcerptOperations):
         self.include_publish_in = include_publish_in
         self.include_disclose_to = include_disclose_to
         self.include_copy_for_attention = include_copy_for_attention
+
+    def get_sablon_template(self, meeting):
+        return meeting.get_excerpt_template()
 
     def get_meeting_data(self, meeting):
         return ExcerptProtocolData(
@@ -138,6 +144,16 @@ class ManualExcerptOperations(ExcerptOperations):
         meeting.excerpt_documents.append(excerpt)
         return excerpt
 
+    def get_generated_message(self, meeting):
+        return _(u'Excerpt for meeting ${title} has been generated '
+                 'successfully',
+                 mapping=dict(title=meeting.get_title()))
+
+    def get_updated_message(self, meeting):
+        return _(u'Excerpt for meeting ${title} has been updated '
+                 'successfully',
+                 mapping=dict(title=meeting.get_title()))
+
     def get_title(self, meeting):
         return self.title
 
@@ -150,7 +166,7 @@ class CreateGeneratedDocumentCommand(CreateDocumentCommand):
 
     skip_defaults_fields = ['title', ]
 
-    def __init__(self, target_dossier, meeting, document_operations,
+    def __init__(self, context, meeting, document_operations,
                  lock_document_after_creation=False):
         """Data will be initialized lazily since it is only available after the
         document has been generated in `execute`.
@@ -161,7 +177,7 @@ class CreateGeneratedDocumentCommand(CreateDocumentCommand):
         self.lock_document_after_creation = lock_document_after_creation
 
         super(CreateGeneratedDocumentCommand, self).__init__(
-            target_dossier,
+            context,
             self.document_operations.get_filename(self.meeting),
             data=None,
             title=self.document_operations.get_title(self.meeting),
