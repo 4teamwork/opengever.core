@@ -143,4 +143,13 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
+  <upgrade-step:directory
+      profile="opengever.repository:default"
+      directory="."
+      />
+
+  <!-- Do not add more upgrade steps here.
+       use ./bin/create-upgrade opengever.repository "Upgrade description"
+       /-->
+
 </configure>

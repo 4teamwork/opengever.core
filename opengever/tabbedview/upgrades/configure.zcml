@@ -85,4 +85,13 @@
         profile="opengever.tabbedview:default"
         />
 
+    <upgrade-step:directory
+        profile="opengever.tabbedview:default"
+        directory="."
+        />
+
+    <!-- Do not add more upgrade steps here.
+         use ./bin/create-upgrade opengever.tabbedview "Upgrade description"
+         /-->
+
 </configure>

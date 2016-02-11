@@ -10,12 +10,12 @@
     i18n_domain="opengever.task">
 
     <include package=".browser" />
-    <include package=".upgrades" />
     <include package=".viewlets" />
 
     <include file="profiles.zcml" />
     <include file="permissions.zcml" />
     <include file="behaviors.zcml" />
+    <include package=".upgrades" />
 
     <grok:grok package="." />
 

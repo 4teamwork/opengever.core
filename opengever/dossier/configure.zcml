@@ -16,13 +16,13 @@
       name="opengever.dossier.resources" directory="resources" />
 
   <include package=".viewlets" />
-  <include package=".upgrades" />
   <include package=".filing" />
   <include package=".browser" />
 
   <include file="behaviors.zcml" />
   <include file="permissions.zcml" />
   <include file="profiles.zcml" />
+  <include package=".upgrades" />
 
   <i18n:registerTranslations directory="locales" />
 

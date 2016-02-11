@@ -6,7 +6,6 @@
     i18n_domain="opengever.globalindex">
 
   <include package=".handlers" />
-  <include package=".upgrades" />
 
   <grok:grok package="." />
 
@@ -19,5 +18,6 @@
       description="Installs the opengever.globalindex package"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
+  <include package=".upgrades" />
 
 </configure>

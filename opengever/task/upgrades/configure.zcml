@@ -139,4 +139,13 @@
         directory="profiles/4500"
         />
 
+    <upgrade-step:directory
+        profile="opengever.task:default"
+        directory="."
+        />
+
+    <!-- Do not add more upgrade steps here.
+         use ./bin/create-upgrade opengever.task "Upgrade description"
+         /-->
+
 </configure>

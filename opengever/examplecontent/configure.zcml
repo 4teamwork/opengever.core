@@ -9,7 +9,6 @@
 
   <include package="ftw.profilehook" />
 
-  <include package=".upgrades" />
 
   <opengever:registerDeployment
       title="Development with examplecontent"
@@ -34,6 +33,7 @@
       description="create example content for developing "
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
+  <include package=".upgrades" />
 
   <genericsetup:registerProfile
       name="init"

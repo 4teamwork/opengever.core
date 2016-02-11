@@ -14,7 +14,6 @@
   <grok:grok package="." />
 
   <include package=".browser" />
-  <include package=".upgrades" />
 
   <i18n:registerTranslations directory="locales" />
 
@@ -46,6 +45,7 @@
         description="opengever mail"
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
+  <include package=".upgrades" />
 
   <profilehook:hook
       profile="opengever.mail:default"

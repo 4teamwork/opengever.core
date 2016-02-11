@@ -138,4 +138,13 @@
       profile="opengever.policy.base:default"
       />
 
+  <upgrade-step:directory
+      profile="opengever.policy.base:default"
+      directory="."
+      />
+
+  <!-- Do not add more upgrade steps here.
+       use ./bin/create-upgrade opengever.policy.base "Upgrade description"
+       /-->
+
 </configure>

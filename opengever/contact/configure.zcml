@@ -16,8 +16,6 @@
 
   <i18n:registerTranslations directory="locales" />
 
-  <include package=".upgrades" />
-
   <genericsetup:registerProfile
       name="default"
       title="opengever.contact"
@@ -25,6 +23,7 @@
       directory="profiles/default"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
+  <include package=".upgrades" />
 
   <profilehook:hook
       profile="opengever.contact:default"

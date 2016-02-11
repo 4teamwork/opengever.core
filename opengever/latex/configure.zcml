@@ -9,7 +9,6 @@
 
     <!-- grok -->
     <grok:grok package="." />
-    <include package=".upgrades" />
 
     <!-- generic setup -->
     <genericsetup:registerProfile
@@ -19,5 +18,6 @@
         directory="profiles/default"
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
+    <include package=".upgrades" />
 
 </configure>

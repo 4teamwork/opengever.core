@@ -15,4 +15,13 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
+  <upgrade-step:directory
+      profile="opengever.sharing:default"
+      directory="."
+      />
+
+  <!-- Do not add more upgrade steps here.
+       use ./bin/create-upgrade opengever.sharing "Upgrade description"
+       /-->
+
 </configure>

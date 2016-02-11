@@ -10,8 +10,6 @@
     <five:registerPackage package="." initialize=".initialize" />
     <i18n:registerTranslations directory="locales" />
 
-    <include package=".upgrades"/>
-
     <browser:resourceDirectory
         name="opengever.portlets.tree-resources"
         directory="resources" />
@@ -23,6 +21,7 @@
        description=""
        provides="Products.GenericSetup.interfaces.EXTENSION"
        />
+    <include package=".upgrades"/>
 
      <!-- Register the portlet -->
 

@@ -421,4 +421,13 @@
         directory="profiles/4611"
         />
 
+    <upgrade-step:directory
+        profile="opengever.base:default"
+        directory="."
+        />
+
+    <!-- Do not add more upgrade steps here.
+         use ./bin/create-upgrade opengever.base "Upgrade description"
+         /-->
+
 </configure>

@@ -166,4 +166,13 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <upgrade-step:directory
+        profile="opengever.inbox:default"
+        directory="."
+        />
+
+    <!-- Do not add more upgrade steps here.
+         use ./bin/create-upgrade opengever.inbox "Upgrade description"
+         /-->
+
 </configure>

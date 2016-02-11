@@ -111,4 +111,13 @@
         profile="opengever.ogds.base:default"
         />
 
+    <upgrade-step:directory
+        profile="opengever.ogds.base:default"
+        directory="."
+        />
+
+    <!-- Do not add more upgrade steps here.
+         use ./bin/create-upgrade opengever.ogds.base "Upgrade description"
+         /-->
+
 </configure>

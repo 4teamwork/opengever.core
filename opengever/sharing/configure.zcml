@@ -12,7 +12,6 @@
 
     <include package="plone.app.workflow" />
     <include package=".browser" />
-    <include package=".upgrades" />
 
     <grok:grok package="." />
 
@@ -26,6 +25,7 @@
         directory="profiles/default"
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
+    <include package=".upgrades" />
 
     <!--  Sharing behaviors -->
     <plone:behavior

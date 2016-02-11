@@ -94,4 +94,13 @@
         profile="opengever.globalindex:default"
         />
 
+    <upgrade-step:directory
+        profile="opengever.globalindex:default"
+        directory="."
+        />
+
+    <!-- Do not add more upgrade steps here.
+         use ./bin/create-upgrade opengever.globalindex "Upgrade description"
+         /-->
+
 </configure>
