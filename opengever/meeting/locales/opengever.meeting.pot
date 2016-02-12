@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-02-25 15:36+0000\n"
+"POT-Creation-Date: 2016-03-03 13:58+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -166,7 +166,7 @@ msgstr ""
 msgid "Generate excerpts for all proposals"
 msgstr ""
 
-#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt:64
+#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt:90
 msgid "History"
 msgstr ""
 
@@ -223,7 +223,7 @@ msgstr ""
 msgid "Meeting on ${date}"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:59
+#: ./opengever/meeting/browser/meetings/templates/protocol.pt:63
 msgid "Meetinginformation"
 msgstr ""
 
@@ -343,7 +343,7 @@ msgstr ""
 msgid "Update or create the protocol"
 msgstr ""
 
-#: ./opengever/meeting/browser/submitdocuments.py:183
+#: ./opengever/meeting/browser/submitdocuments.py:194
 msgid "Updated with a newer docment version from proposal's dossier."
 msgstr ""
 
@@ -425,7 +425,7 @@ msgstr ""
 
 #. Default: "Submit Attachments"
 #: ./opengever/meeting/browser/documents/submit.py:81
-#: ./opengever/meeting/browser/submitdocuments.py:69
+#: ./opengever/meeting/browser/submitdocuments.py:73
 msgid "button_submit_attachments"
 msgstr ""
 
@@ -634,6 +634,11 @@ msgstr ""
 msgid "label_committee"
 msgstr ""
 
+#. Default: "The protocol has been modified in the meantime. If you want to keep your changes try resolving the conflicts manually."
+#: ./opengever/meeting/browser/meetings/templates/protocol.pt:22
+msgid "label_conflict_changes"
+msgstr ""
+
 #. Default: "Considerations"
 #: ./opengever/meeting/browser/meetings/protocol.py:132
 #: ./opengever/meeting/proposal.py:117
@@ -761,7 +766,7 @@ msgid "label_end"
 msgstr ""
 
 #. Default: "Excerpt"
-#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt:45
+#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt:71
 msgid "label_excerpt"
 msgstr ""
 
@@ -963,7 +968,7 @@ msgid "label_transition_executed"
 msgstr ""
 
 #. Default: "You have unsaved changes"
-#: ./opengever/meeting/browser/meetings/templates/protocol.pt:22
+#: ./opengever/meeting/browser/meetings/templates/protocol.pt:26
 msgid "label_unsaved_changes"
 msgstr ""
 

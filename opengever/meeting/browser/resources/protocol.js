@@ -6,6 +6,8 @@
 
     global.Controller.call(this);
 
+    var root = $(":root");
+
     var saveButton = $("#form-buttons-save");
     var protocolControls = $("#protocol-controls");
 
@@ -19,6 +21,10 @@
     var showHintForLocalChanges = function() {
       $("#form-buttons-cancel").val($("#button-value-discard").val());
       protocolControls.addClass("local-changes");
+    };
+
+    var showHintForConflictChanges = function() {
+      root.addClass("conflict-changes");
     };
 
     var parseProposal = function(expression) { return expression.split("-"); };
@@ -50,7 +56,13 @@
     this.saveProtocol = function(target) {
       var payload = target.parents("form").serializeArray();
       payload.push({ name: "form.buttons.save", value: saveButton.val() });
-      return $.post(target.attr("action"), payload)
+      var conflictValidator = function(data) {
+        if(data.hasConflict) {
+          showHintForConflictChanges();
+        }
+        return !data.hasConflict;
+      }
+      return this.request(target.attr("action"), { method: "POST", data: payload, validator: conflictValidator })
               .done(function(data) {
                 if (data.redirectUrl !== undefined) {
                   meetingStorage.deleteCurrentMeeting();
@@ -123,15 +135,18 @@
 
     var navigation = $(".protocol-navigation");
 
-    navigation.css("left", navigation.offset().left);
-
     var headings = new global.StickyHeading({ selector: "#opengever_meeting_protocol .protocol_title" });
     var labels = new global.StickyHeading({ selector: "#opengever_meeting_protocol .agenda_items label", fix: false, dependsOn: headings});
     var collapsible = new global.StickyHeading({ selector: "#opengever_meeting_protocol .collapsible", clone: false});
 
     scrollspy.onBeforeScroll(function(target, anchor) { scrollspy.options.offset = anchor.siblings("h2.clone").height() + 40; });
 
-    collapsible.onSticky(function() { navigation.addClass("sticky"); });
+    collapsible.onSticky(function() {
+      navigation.addClass("sticky");
+      navigation.css("left", navigation.offset().left);
+    });
+
+    collapsible.onNoSticky(function() { navigation.css("left", "auto"); });
 
     headings.onNoSticky(function() {
       scrollspy.reset();

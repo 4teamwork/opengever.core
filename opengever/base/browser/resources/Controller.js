@@ -234,7 +234,7 @@
     var self = this;
 
     var messageFunc = function(data) {
-      if(data && !data.redirectUrl && options.showMessage) {
+      if(data && data.messages && !data.redirectUrl && options.showMessage) {
         self.messageFactory.shout(data.messages);
       }
     };
