@@ -24,7 +24,6 @@
     var parseProposal = function(expression) { return expression.split("-"); };
 
     var syncTrix = function(target) {
-      console.log("sync");
       var proposalExpression = parseProposal(target.inputElement.id);
       var html = JSON.stringify(target.editor);
       meetingStorage.addOrUpdateUnit(proposalExpression[1], proposalExpression[2], html);
@@ -65,10 +64,21 @@
 
     this.discardProtocol = function() { meetingStorage.deleteCurrentMeeting(); };
 
-    this.events = {
-      "click##form-buttons-save": this.saveProtocol,
-      "click##form-buttons-cancel$": this.discardProtocol
-    };
+    this.events = [
+      {
+        method: "click",
+        target: "#form-buttons-save",
+        callback: this.saveProtocol
+      },
+      {
+        method: "click",
+        target: "#form-buttons-cancel",
+        callback: this.discardProtocol,
+        options: {
+          prevent: false
+        }
+      }
+    ];
 
     this.init();
 
@@ -91,9 +101,13 @@
       this.activateToolbar($("#" + target.attr("toolbar")));
     };
 
-    this.events = {
-      "click#trix-editor": this.attachToolbar
-    };
+    this.events = [
+      {
+        method: "click",
+        target: "trix-editor",
+        callback: this.attachToolbar
+      }
+    ];
 
     this.init();
 

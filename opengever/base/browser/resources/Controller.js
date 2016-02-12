@@ -40,7 +40,7 @@
 
     this.connectedTo = [];
 
-    this.events = {};
+    this.events = [];
 
     this.updateConnected = function() {
       $.each(this.connectedTo, function(controllerIdx, controller) {
@@ -60,41 +60,35 @@
       });
     };
 
-    this.trackEvent = function(event, callback, update, prevent) {
-      if(prevent) {
+    this.trackEvent = function(event, callback, options) {
+      if(options.prevent) {
         event.preventDefault();
       }
 
       var eventCallback = $.when(callback.call(self, $(event.currentTarget), event));
 
       eventCallback.done(function() {
-        if(update) {
+        if(options.update) {
           self.update();
           self.updateConnected();
         }
       }).always(messageFunc);
     };
 
-    var parseAction = function(action) {
-      var actionParser = /(\w+)#(.*[^\!\$])(\!*)(\$*)/;
-      if(!actionParser.test(action)) {
-        throw new Error(action + "' is not a valid action expression");
-      }
-      return actionParser.exec(action);
-    };
+    this.registerAction = function(_, action) {
+      action.options = $.extend({
+        update: false,
+        prevent: true
+      }, action.options);
 
-    this.registerAction = function(action, callback) {
-      var parsedAction = parseAction(action);
-      var method = parsedAction[1];
-      var target = parsedAction[2];
-      var update = !!parsedAction[3];
-      var prevent = !parsedAction[4];
-      options.context.on(method, target, function(event) { self.trackEvent(event, callback, update, prevent); } );
+      console.log(action);
+      options.context.on(action.method, action.target, function(event) {
+        self.trackEvent(event, action.callback, action.options);
+      } );
     };
 
     this.unregisterAction = function(action) {
-      var method = parseAction(action)[1];
-      options.context.off(method);
+      options.context.off(action.method);
     };
 
     this.registerActions = function() { $.each(this.events, this.registerAction); };
@@ -119,9 +113,13 @@
 
     this.toggle = function(target) { target.parents(".collapsible").toggleClass("open"); };
 
-    this.events = {
-      "click#.collapsible-header > button": this.toggle
-    };
+    this.events = [
+      {
+        method: "click",
+        target: ".collapsible-header > button",
+        callback: this.toggle
+      }
+    ];
 
     this.init();
 

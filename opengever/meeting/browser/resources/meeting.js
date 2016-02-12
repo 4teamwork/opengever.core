@@ -28,12 +28,41 @@
 
     this.closeModal = function() { dialog.close(); };
 
-    this.events = {
-      "click##pending-closed": this.openModal,
-      "click##held-closed": this.openModal,
-      "click##confirm_close_meeting .confirm!$": this.closeMeeting,
-      "click##confirm_close_meeting .decline!": this.closeModal
-    };
+    this.events = [
+      {
+        method: "click",
+        target: "#pending-closed",
+        callback: this.openModal,
+        options: {
+          update: true
+        }
+      },
+      {
+        method: "click",
+        target: "#held-closed",
+        callback: this.openModal,
+        options: {
+          update: true
+        }
+      },
+      {
+        method: "click",
+        target: "#confirm_close_meeting .confirm",
+        callback: this.closeMeeting,
+        options: {
+          prevent: false,
+          update: true
+        }
+      },
+      {
+        method: "click",
+        target: "#confirm_close_meeting .decline",
+        callback: this.closeModal,
+        options: {
+          update: true
+        }
+      }
+    ];
 
     this.init();
 
@@ -170,17 +199,67 @@
 
     this.declineDecide = function() { holdDialog.close(); };
 
-    this.events = {
-      "click#.delete-agenda-item": this.openModal,
-      "click#.edit-agenda-item": this.showEditbox,
-      "click#.decide-agenda-item!": this.decide,
-      "sortupdate##agenda_items tbody!$": this.updateSortOrder,
-      "click#.toggle-attachements": this.toggleAttachements,
-      "click##confirm_unschedule .confirm, #confirm_delete .confirm!$": this.unschedule,
-      "click##confirm_unschedule .decline, #confirm_delete .decline!": this.closeModal,
-      "click##confirm_hold_meeting .confirm!$": this.confirmDecide,
-      "click##confirm_hold_meeting .decline!": this.declineDecide
-    };
+    this.events = [
+      {
+        method: "click",
+        target: ".delete-agenda-item",
+        callback: this.openModal
+      },
+      {
+        method: "click",
+        target: ".edit-agenda-item",
+        callback: this.showEditbox
+      },
+      {
+        method: "click",
+        target: ".decide-agenda-item",
+        callback: this.decide,
+        options: {
+          update: true
+        }
+      },
+      {
+        method: "sortupdate",
+        target: "#agenda_items tbody",
+        callback: this.updateSortOrder,
+        options: {
+          prevent: false,
+          update: true
+        }
+      },
+      {
+        method: "click",
+        target: ".toggle-attachements",
+        callback: this.toggleAttachements
+      },
+      {
+        method: "click",
+        target: "#confirm_unschedule .confirm, #confirm_delete .confirm",
+        callback: this.unschedule,
+        options: {
+          prevent: false,
+          update: true
+        }
+      },
+      {
+        method: "click",
+        target: "#confirm_unschedule .decline, #confirm_delete .decline",
+        callback: this.closeModal
+      },
+      {
+        method: "click",
+        target: "#confirm_hold_meeting .confirm",
+        callback: this.confirmDecide,
+        options: {
+          prevent: false
+        }
+      },
+      {
+        method: "click",
+        target: "#confirm_hold_meeting .decline",
+        callback: this.declineDecide
+      }
+    ];
 
     this.init();
 
@@ -230,20 +309,47 @@
 
     this.filterProposal = function(target) {
       var pattern = target.val();
-      var result = $.grep(this.chache.items, function(item) {
+      var result = $.grep(self.cache.items, function(item) {
         return item.title.toLowerCase().indexOf(pattern.toLowerCase()) >= 0;
       });
       this.render({ items: result });
     };
 
-    this.events = {
-      "click#.schedule-proposal!": this.schedule,
-      "click#.schedule-paragraph": this.addParagraph,
-      "click#.schedule-text": this.addText,
-      "keyup##schedule-text": this.trackText,
-      "keyup##schedule-paragraph": this.trackParagraph,
-      "keyup##filter-proposals": this.filterProposal
-    };
+    this.events = [
+      {
+        method: "click",
+        target: ".schedule-proposal",
+        callback: this.schedule,
+        options: {
+          update: true
+        }
+      },
+      {
+        method: "click",
+        target: ".schedule-paragraph",
+        callback: this.addParagraph
+      },
+      {
+        method: "click",
+        target: ".schedule-text",
+        callback: this.addText
+      },
+      {
+        method: "keyup",
+        target: "#schedule-text",
+        callback: this.trackText
+      },
+      {
+        method: "keyup",
+        target: "#schedule-paragraph",
+        callback: this.trackParagraph
+      },
+      {
+        method: "keyup",
+        target: "#filter-proposals",
+        callback: this.filterProposal
+      }
+    ];
 
     this.init();
 
