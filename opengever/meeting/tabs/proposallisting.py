@@ -23,14 +23,6 @@ def translated_state(item, value):
     )
 
 
-def meeting_link(item, value):
-    agenda_item = item.agenda_item
-    if not agenda_item:
-        return u''
-
-    return agenda_item.meeting.get_link()
-
-
 class IProposalTableSourceConfig(ITableSourceConfig):
     """Marker interface for proposal table source configs."""
 
@@ -60,7 +52,7 @@ class ProposalListingTab(BaseListingTab):
 
             {'column': 'generated_meeting_link',
              'column_title': _(u'column_meeting', default=u'Meeting'),
-             'transform': meeting_link},
+             'transform': lambda item, value: item.get_meeting_link()},
 
         )
 

@@ -5,6 +5,9 @@ Changelog
 4.6.4 (unreleased)
 ------------------
 
+- Add link from proposal to meeting.
+  [elioschmutz]
+
 - Add attributes for proposal view.
 
   - publish_in

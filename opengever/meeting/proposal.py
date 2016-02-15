@@ -183,6 +183,9 @@ class ProposalBase(ModelContainer):
             {'label': _('label_committee', default=u'Committee'),
              'value': model.committee.get_link()},
 
+            {'label': _('label_meeting', default=u'Meeting'),
+             'value': model.get_meeting_link()},
+
             {'label': _('label_legal_basis', default=u'Legal basis'),
              'value': model.legal_basis},
 
@@ -269,7 +272,7 @@ class SubmittedProposal(ProposalBase):
 
         # Insert considerations after proposed_action
         data.insert(
-            5, {
+            6, {
                 'label': _('label_considerations', default=u"Considerations"),
                 'value': model.considerations,
             }
@@ -278,7 +281,7 @@ class SubmittedProposal(ProposalBase):
         # Insert discussion after considerations
         agenda = model.agenda_item
         data.insert(
-            6, {
+            7, {
                 'label': _('label_discussion', default=u"Discussion"),
                 'value': agenda and agenda.discussion or ''
             }

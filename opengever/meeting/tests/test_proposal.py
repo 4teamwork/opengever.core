@@ -508,6 +508,7 @@ class TestProposal(FunctionalTestCase):
         self.assertEqual(
             [u'label_title',
              u'label_committee',
+             u'label_meeting',
              u'label_legal_basis',
              u'label_initial_position',
              u'label_proposed_action',
@@ -535,6 +536,7 @@ class TestProposal(FunctionalTestCase):
         self.assertEqual(
             [u'label_title',
              u'label_committee',
+             u'label_meeting',
              u'label_legal_basis',
              u'label_initial_position',
              u'label_proposed_action',
@@ -548,6 +550,24 @@ class TestProposal(FunctionalTestCase):
              u'label_decision_number'],
             [attribute.get('label') for attribute in attributes],
             )
+
+    def test_get_meeting_link_returns_empty_string_if_not_scheduled(self):
+        proposal = create(Builder('proposal_model'))
+
+        self.assertEqual('', proposal.get_meeting_link())
+
+    def test_get_meeting_link_returns_link_if_scheduled(self):
+        admin_unit = create(Builder('admin_unit'))
+        proposal = create(Builder('proposal_model'))
+        committee = create(Builder('committee_model')
+                           .having(admin_unit_id=admin_unit.unit_id))
+        meeting = create(Builder('meeting').having(committee=committee))
+        create(Builder('agenda_item').having(meeting=meeting, proposal=proposal))
+
+        self.assertEqual(
+            proposal.get_meeting_link(),
+            meeting.get_link(),
+            "The method should return the meeting link.")
 
     def assertSubmittedDocumentCreated(self, proposal, document, submitted_document):
         submitted_document_model = SubmittedDocument.query.get_by_source(
