@@ -60,11 +60,23 @@
       return result;
     };
 
-    this.events = {
-      "click#.edit-cancel": this.cancel,
-      "click#.edit-save": this.updateValue,
-      "keyup#input": this.trackKey
-    };
+    this.events = [
+      {
+        method: "click",
+        target: ".edit-cancel",
+        callback: this.cancel
+      },
+      {
+        method: "click",
+        target: ".edit-save",
+        callback: this.updateValue
+      },
+      {
+        method: "keyup",
+        target: "input",
+        callback: this.trackKey
+      }
+    ];
 
     this.init();
 
