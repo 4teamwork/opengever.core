@@ -4,6 +4,11 @@ import os
 version = '4.6.4.dev0'
 maintainer = '4teamwork AG'
 
+
+api_require = [
+    'plone.restapi',
+]
+
 tests_require = [
     'Products.CMFPlone',
     'ftw.journal',
@@ -141,7 +146,10 @@ setup(name='opengever.core',
         # -*- Extra requirements: -*-
         ],
       tests_require=tests_require,
-      extras_require=dict(tests=tests_require),
+      extras_require=dict(
+          tests=tests_require,
+          api=api_require,
+      ),
       entry_points="""
       # -*- Entry points: -*-
       [z3c.autoinclude.plugin]

@@ -5,6 +5,9 @@ Changelog
 4.6.4 (unreleased)
 ------------------
 
+- Introduce [api] extra that pulls in plone.restapi (and plone.rest).
+  [lgraf]
+
 - Change title and filename for generated excerpts.
   Old title format: Protocolexcerpt-[meetingtitle, meetingdate]
   New title format: [excerpttitle] - [meetingtitle, meetingdate].
