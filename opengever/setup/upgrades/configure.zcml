@@ -21,4 +21,13 @@
         directory="casauth_profiles/4600"
         />
 
+    <upgrade-step:directory
+        profile="opengever.setup:default"
+        directory="."
+        />
+
+    <!-- Do not add more upgrade steps here.
+         use ./bin/create-upgrade opengever.setup "Upgrade description"
+         /-->
+
 </configure>

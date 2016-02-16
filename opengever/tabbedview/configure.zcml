@@ -13,7 +13,6 @@
   <include package="ftw.profilehook" />
 
   <include package=".browser" />
-  <include package=".upgrades" />
 
   <grok:grok package="." />
 
@@ -37,6 +36,7 @@
         description="opengever Tabbed View"
         provides="Products.GenericSetup.interfaces.EXTENSION"
           />
+  <include package=".upgrades" />
 
   <profilehook:hook
       profile="opengever.tabbedview:default"

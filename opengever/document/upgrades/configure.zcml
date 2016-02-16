@@ -214,4 +214,13 @@
         profile="opengever.document:default"
         />
 
+    <upgrade-step:directory
+        profile="opengever.document:default"
+        directory="."
+        />
+
+    <!-- Do not add more upgrade steps here.
+         use ./bin/create-upgrade opengever.document "Upgrade description"
+         /-->
+
 </configure>

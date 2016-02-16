@@ -18,8 +18,6 @@
     <!-- Register locales translations -->
     <i18n:registerTranslations directory="locales" />
 
-    <include package=".upgrades" />
-
     <!-- Register an extension profile to make the product installable -->
     <genericsetup:registerProfile
         name="default"
@@ -28,5 +26,6 @@
         directory="profiles/default"
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
+    <include package=".upgrades" />
 
 </configure>

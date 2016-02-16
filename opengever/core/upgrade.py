@@ -4,7 +4,7 @@ from decorator import decorator
 from ftw.upgrade import UpgradeStep
 from opengever.base.model import create_session
 from sqlalchemy import Column
-from sqlalchemy import Integer
+from sqlalchemy import BigInteger
 from sqlalchemy import MetaData
 from sqlalchemy import select
 from sqlalchemy import String
@@ -244,25 +244,8 @@ class SchemaMigration(UpgradeStep):
     """Baseclass for database-(schema) upgrade steps.
 
     Maintains a tracking table to make sure that a database migration is only
-    run once. Configure as follows:
-      - `profileid`:
-        The opengever sub-package name for which the migration runs.
-      - `upgradeid`:
-        The target profile id.
-
-    e.g.::
-
-        class MyMigration(SchemaMigration):
-
-            profileid = 'opengever.globalindex'
-            upgradeid = 2701
-
-            def migrate(self):
-                # do stuff here!
-
+    run once.
     """
-    profileid = None
-    upgradeid = None
 
     def __call__(self):
         self._assert_configuration()
@@ -277,6 +260,23 @@ class SchemaMigration(UpgradeStep):
             mark_changed(self.session)
         else:
             self._log_skipping_migration()
+
+    @property
+    def profileid(self):
+        """The standard profile id is the base_profile provided by the upgrade
+        step discovery of ftw.upgrade.
+        Older migrations are overriding the `profileid` attribute.
+        """
+        return self.base_profile
+
+    @property
+    def upgradeid(self):
+        """The `upgradeid` is based on the upgrade step's target version
+        provided by ftw.upgrade's upgrade step discovery.
+
+        Older migrations are overriding the `upgradeid` attribute.
+        """
+        return int(self.target_version)
 
     def migrate(self):
         raise NotImplementedError()
@@ -353,7 +353,7 @@ class SchemaMigration(UpgradeStep):
         tracking_table_definition = (
             TRACKING_TABLE_NAME,
             Column('profileid', String(50), primary_key=True),
-            Column('upgradeid', Integer, nullable=False),
+            Column('upgradeid', BigInteger, nullable=False),
         )
         table = self.op.create_table(*tracking_table_definition)
         return table

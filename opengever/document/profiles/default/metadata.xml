@@ -1,5 +1,4 @@
 <metadata>
-    <version>4600</version>
     <dependencies>
         <dependency>profile-plone.app.versioningbehavior:default</dependency>
     </dependencies>

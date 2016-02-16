@@ -13,4 +13,13 @@
       directory="profiles/4100"
       />
 
+  <upgrade-step:directory
+      profile="opengever.trash:default"
+      directory="."
+      />
+
+  <!-- Do not add more upgrade steps here.
+       use ./bin/create-upgrade opengever.trash "Upgrade description"
+       /-->
+
 </configure>

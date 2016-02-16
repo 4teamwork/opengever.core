@@ -156,4 +156,13 @@
         profile="opengever.activity:default"
         />
 
+    <upgrade-step:directory
+        profile="opengever.activity:default"
+        directory="."
+        />
+
+    <!-- Do not add more upgrade steps here.
+         use ./bin/create-upgrade opengever.activity "Upgrade description"
+         /-->
+
 </configure>

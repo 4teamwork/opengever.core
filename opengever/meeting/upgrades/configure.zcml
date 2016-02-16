@@ -661,4 +661,13 @@
         directory="profiles/4634"
         />
 
+    <upgrade-step:directory
+        profile="opengever.meeting:default"
+        directory="."
+        />
+
+    <!-- Do not add more upgrade steps here.
+         use ./bin/create-upgrade opengever.meeting "Upgrade description"
+         /-->
+
 </configure>

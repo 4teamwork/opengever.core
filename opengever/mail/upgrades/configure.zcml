@@ -198,4 +198,13 @@
         profile="opengever.mail:default"
         />
 
+    <upgrade-step:directory
+        profile="opengever.mail:default"
+        directory="."
+        />
+
+    <!-- Do not add more upgrade steps here.
+         use ./bin/create-upgrade opengever.mail "Upgrade description"
+         /-->
+
 </configure>

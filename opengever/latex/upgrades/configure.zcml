@@ -34,4 +34,13 @@
         directory="profiles/2602"
         />
 
+    <upgrade-step:directory
+        profile="opengever.latex:default"
+        directory="."
+        />
+
+    <!-- Do not add more upgrade steps here.
+         use ./bin/create-upgrade opengever.latex "Upgrade description"
+         /-->
+
 </configure>

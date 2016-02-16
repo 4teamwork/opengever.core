@@ -53,4 +53,13 @@
         directory="profiles/4300"
         />
 
+    <upgrade-step:directory
+        profile="opengever.advancedsearch:default"
+        directory="."
+        />
+
+    <!-- Do not add more upgrade steps here.
+         use ./bin/create-upgrade opengever.advancedsearch "Upgrade description"
+         /-->
+
 </configure>
