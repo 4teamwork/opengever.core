@@ -2,6 +2,7 @@ from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.mail.utils import get_attachments
+from ftw.testbrowser import browsing
 from ftw.testing.mailing import Mailing
 from opengever.mail.behaviors import ISendableDocsContainer
 from opengever.mail.interfaces import IDocumentSent
@@ -180,6 +181,66 @@ f\xc3\xbcr Ernst Franz\r\n\r\nBesten Dank im Voraus"""
 
         self.assertEquals(u'User Test', filed_mail.document_author,
                           "Author of filed mail should be name of OGDS user")
+
+    def test_do_not_create_mail_archive_if_dossier_is_resolved(self):
+        dossier = create(Builder("dossier").in_state('dossier-state-resolved'))
+        document = create(Builder("document").with_dummy_content())
+
+        self.send_documents(dossier, [document], file_copy_in_dossier=True)
+
+        self.assertEqual(
+            [], dossier.listFolderContents(),
+            "Sent mail shouldn't be archived in the dossier because "
+            "the dossier is not in an open state.")
+
+    @browsing
+    def test_file_copy_field_is_shown_for_open_dossier(self, browser):
+        fieldname = 'file_copy_in_dossier'
+        dossier = create(Builder("dossier").in_state('dossier-state-active'))
+
+        browser.login().open(dossier, view="send_documents")
+
+        field = browser.find('File a copy of the sent mail in dossier')
+
+        self.assertTrue(
+            field,
+            "The field should be available and be visible. "
+            "The browser wasn't able to find the field. "
+            "Available fields are: {}".format(
+                browser.css('input[name^="form.widgets"]'))
+            )
+
+        self.assertEqual(
+            'checkbox', field.type,
+            "The field {} is not visible. See the field: {}".format(
+                fieldname, field))
+
+    @browsing
+    def test_file_copy_field_not_shown_for_closed_dossier(self, browser):
+        fieldname = 'file_copy_in_dossier'
+
+        dossier = create(Builder("dossier").in_state('dossier-state-resolved'))
+
+        browser.login().open(dossier, view="send_documents")
+
+        field = browser.find('File a copy of the sent mail in dossier')
+        self.assertIsNone(field, "The field should not be visible")
+
+        fields = browser.css('input[id="form-widgets-{}-0"]'.format(fieldname))
+        self.assertEqual(
+            1, len(fields),
+            "The field should be available but not be visible. "
+            "The browser wasn't able to find the field. "
+            "Available fields are: {}".format(
+                browser.css('input[name^="form.widgets"]'))
+            )
+
+        field = fields.first
+        self.assertEqual(
+            'disabled', field.get('disabled', None),
+            "The field {} is not disabled. "
+            "See the field: {}".format(
+                fieldname, field))
 
     def send_documents(self, container, documents, **kwargs):
         documents = ['/'.join(doc.getPhysicalPath()) for doc in documents]
