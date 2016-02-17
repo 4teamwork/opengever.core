@@ -110,7 +110,7 @@ class TestProtocol(FunctionalTestCase):
     def test_protocol_document_is_locked_by_system_once_generated(self, browser):
         self.setup_generated_protocol(browser)
 
-        browser.find('Protocol-there-jan-01-2013').click()
+        browser.find('Protocol-There, Jan 01, 2013').click()
         document = browser.context
         lockable = ILockable(document)
 
@@ -129,7 +129,7 @@ class TestProtocol(FunctionalTestCase):
 
         browser.open(self.meeting.get_url())
 
-        browser.find('Protocol-there-jan-01-2013').click()
+        browser.find('Protocol-There, Jan 01, 2013').click()
         document = browser.context
         lockable = ILockable(document)
 

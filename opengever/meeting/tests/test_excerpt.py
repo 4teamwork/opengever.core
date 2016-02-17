@@ -116,7 +116,8 @@ class TestExcerpt(FunctionalTestCase):
 
         self.assertEqual(1, len(browser.css('.excerpts li a')),
                          'generated document should be linked')
-        self.assertIsNotNone(browser.find('protocol-excerpt-barn-dec-13-2011'))
+
+        self.assertIsNotNone(browser.find(u'Protocol Excerpt-B\xe4rn, Dec 13, 2011'))
 
     @browsing
     def test_manual_excerpt_form_redirects_to_meeting_on_abort(self, browser):

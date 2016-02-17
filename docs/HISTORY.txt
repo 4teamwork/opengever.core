@@ -5,6 +5,15 @@ Changelog
 4.6.4 (unreleased)
 ------------------
 
+- Change title and filename for generated excerpts.
+  Old title format: Protocolexcerpt-[meetingtitle, meetingdate]
+  New title format: [excerpttitle] - [meetingtitle, meetingdate].
+  [elioschmutz]
+
+- Add skip_defaults_fields for CreateGeneratedDocumentCommand.
+  Fix the issue, where the object-title was always the document-title.
+  [elioschmutz]
+
 - Add link from submitted proposal to dossier if it's in the same admin-unit.
   [elioschmutz]
 

@@ -275,7 +275,7 @@ class Proposal(Base):
 
     def generate_excerpt(self, agenda_item):
         proposal_obj = self.resolve_sumitted_proposal()
-        operations = ExcerptOperations([agenda_item])
+        operations = ExcerptOperations(agenda_item)
         CreateGeneratedDocumentCommand(
             proposal_obj, agenda_item.meeting, operations).execute()
 
