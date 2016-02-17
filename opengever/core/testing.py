@@ -79,6 +79,20 @@ def truncate_sql_tables():
         session.execute(table.delete())
 
 
+def deactivateActivityCenter():
+    registry = getUtility(IRegistry)
+    settings = registry.forInterface(IActivitySettings)
+    settings.is_feature_enabled = False
+    transaction.commit()
+
+
+def activateActivityCenter():
+    registry = getUtility(IRegistry)
+    settings = registry.forInterface(IActivitySettings)
+    settings.is_feature_enabled = True
+    transaction.commit()
+
+
 class AnnotationLayer(ComponentRegistryLayer):
     """Loads ZML of zope.annotation.
     """
@@ -144,10 +158,14 @@ class OpengeverFixture(PloneSandboxLayer):
     def setUpPloneSite(self, portal):
         self.installOpengeverProfiles(portal)
         self.createMemberFolder(portal)
+        deactivateActivityCenter()
 
     def tearDown(self):
         super(OpengeverFixture, self).tearDown()
         clear_transmogrifier_registry()
+
+    def tearDownPloneSite(self, portal):
+        activateActivityCenter()
 
     def installOpengeverProfiles(self, portal):
         # Copied from metadata.zxml of opengever.policy.base:default
@@ -306,16 +324,10 @@ OPENGEVER_FUNCTIONAL_MEETING_LAYER = MeetingLayer()
 class ActivityLayer(PloneSandboxLayer):
 
     def setUpPloneSite(self, portal):
-        registry = getUtility(IRegistry)
-        settings = registry.forInterface(IActivitySettings)
-        settings.is_feature_enabled = True
-        transaction.commit()
+        activateActivityCenter()
 
     def tearDownPloneSite(self, portal):
-        registry = getUtility(IRegistry)
-        settings = registry.forInterface(IActivitySettings)
-        settings.is_feature_enabled = False
-        transaction.commit()
+        deactivateActivityCenter()
 
     defaultBases = (OPENGEVER_FUNCTIONAL_TESTING,)
 

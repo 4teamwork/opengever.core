@@ -3,10 +3,6 @@
       <field type="plone.registry.field.Bool" />
       <value>True</value>
     </record>
-    <record interface="opengever.activity.interfaces.IActivitySettings" field="is_feature_enabled">
-      <field type="plone.registry.field.Bool" />
-      <value>True</value>
-    </record>
 
     <records interface="opengever.base.interfaces.IReferenceNumberSettings">
       <value key="reference_prefix_starting_point">0</value>
