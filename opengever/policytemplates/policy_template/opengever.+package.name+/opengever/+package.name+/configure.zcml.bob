@@ -11,8 +11,6 @@
 
   <grok:grok package="." />
 
-  <include package=".upgrades" />
-
   <genericsetup:registerProfile
       name="default"
       title="opengever.{{{package.name}}}:default"
@@ -20,6 +18,7 @@
       directory="profiles/default"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
+  <include package=".upgrades" />
 
   <genericsetup:registerProfile
       name="default_content"
