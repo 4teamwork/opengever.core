@@ -51,7 +51,6 @@ class TestUnscheduledProposals(FunctionalTestCase):
         form.fill({'proposal_id': str(proposal_model.proposal_id)}).submit()
         return proposal.load_model().agenda_item
 
-
     @browsing
     def test_list_unscheduled_proposals_returns_a_json_representation_for_all_unscheduled_proposals(self, browser):
         self.setup_proposal()
@@ -60,9 +59,11 @@ class TestUnscheduledProposals(FunctionalTestCase):
         browser.login().open(self.meeting_wrapper, view='unscheduled_proposals')
         self.assertEquals(
             [{u'schedule_url': u'http://nohost/plone/opengever-meeting-committeecontainer/committee-1/meeting-1/unscheduled_proposals/1/schedule',
+              u'submitted_proposal_url': u'http://nohost/plone/opengever-meeting-committeecontainer/committee-1/submitted-proposal-1',
               u'title': u'Fooo'},
-             {u'schedule_url': u'http://nohost/plone/opengever-meeting-committeecontainer/committee-1/meeting-1/unscheduled_proposals/2/schedule', u'title': u'Fooo'}]
-            ,
+             {u'schedule_url': u'http://nohost/plone/opengever-meeting-committeecontainer/committee-1/meeting-1/unscheduled_proposals/2/schedule',
+              u'submitted_proposal_url': u'http://nohost/plone/opengever-meeting-committeecontainer/committee-1/submitted-proposal-2',
+              u'title': u'Fooo'}],
             browser.json.get('items'))
 
     @browsing
