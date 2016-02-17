@@ -270,9 +270,17 @@ class SubmittedProposal(ProposalBase):
         data = super(SubmittedProposal, self).get_overview_attributes()
         model = self.load_model()
 
+        # Insert dossier link if dossier exists after committee
+        data.insert(
+            2, {
+                'label': _('label_dossier', default=u"Dossier"),
+                'value': self.get_dossier_link(),
+            }
+        )
+
         # Insert considerations after proposed_action
         data.insert(
-            6, {
+            7, {
                 'label': _('label_considerations', default=u"Considerations"),
                 'value': model.considerations,
             }
@@ -281,7 +289,7 @@ class SubmittedProposal(ProposalBase):
         # Insert discussion after considerations
         agenda = model.agenda_item
         data.insert(
-            7, {
+            8, {
                 'label': _('label_discussion', default=u"Discussion"),
                 'value': agenda and agenda.discussion or ''
             }
@@ -346,6 +354,23 @@ class SubmittedProposal(ProposalBase):
 
         with elevated_privileges():
             api.content.delete(self)
+
+    def get_containing_dossier(self):
+        model = self.load_model()
+        proposal = model.resolve_proposal()
+        if not proposal:
+            return None
+        return get_containing_dossier(proposal)
+
+    def get_dossier_link(self):
+        dossier = self.get_containing_dossier()
+        if not dossier:
+            return _('label_dossier_not_available',
+                     default=u"Dossier not available")
+
+        return u'<a href="{0}" title="{1}">{1}</a>'.format(
+            '/'.join(dossier.getPhysicalPath()),
+            dossier.title)
 
 
 class Proposal(ProposalBase):

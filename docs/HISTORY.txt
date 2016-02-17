@@ -5,6 +5,9 @@ Changelog
 4.6.4 (unreleased)
 ------------------
 
+- Add link from submitted proposal to dossier if it's in the same admin-unit.
+  [elioschmutz]
+
 - Setup upgrade-step directories for all default profiles. [jone]
 
 - Add link from proposal to meeting.
