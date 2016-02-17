@@ -5,6 +5,10 @@ Changelog
 4.6.4 (unreleased)
 ------------------
 
+- Fix an issue where tabs on the plone site were visible as anonymous under
+  certain circumstances.
+  [deiferni]
+
 - Add trix customizations to prevent accepting unsupported content.
   We don't support links, quotes, code-blocks and file uploads of any kind.
   [deiferni]
