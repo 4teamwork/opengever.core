@@ -5,6 +5,9 @@ Changelog
 4.6.4 (unreleased)
 ------------------
 
+- Add link in meetingoverview from unscheduled proposals to their corresponding submitted proposals.
+  [elioschmutz]
+
 - Introduce [api] extra that pulls in plone.restapi (and plone.rest).
   [lgraf]
 

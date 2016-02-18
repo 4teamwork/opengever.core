@@ -116,7 +116,7 @@ PROPOSALS_TEMPLATE = '''
 <script tal:condition="view/unscheduled_proposals" id="proposalsTemplate" type="text/x-handlebars-template">
   {{#each proposals}}
     <div class="list-group-item submit">
-      <span class="title">{{title}}</span>
+      <a href="{{submitted_proposal_url}}" class="title">{{title}}</a>
       <div class="button-group">
         <a class="button schedule-proposal" href="{{schedule_url}}">%(label_schedule)s</a>
       </div>
