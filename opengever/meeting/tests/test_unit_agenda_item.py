@@ -93,6 +93,25 @@ class TestUnitAgendaItem(TestCase):
 
         self.assertFalse(item.is_decide_possible())
 
+    def test_is_decided_is_false_if_the_agendaitem_is_not_decided(self):
+        agenda_item = create(Builder('agenda_item')
+                             .having(title=u'Simple', meeting=self.meeting))
+
+        self.assertFalse(agenda_item.is_decided())
+
+    def test_is_decided_is_true_if_the_agendatiem_is_decided(self):
+        agenda_item = create(Builder('agenda_item')
+                             .having(title=u'Simple', meeting=self.meeting))
+
+        agenda_item.workflow_state = 'decided'
+        self.assertTrue(agenda_item.is_decided())
+
+    def test_is_decided_is_false_for_paragraphs(self):
+        agenda_item = create(Builder('agenda_item')
+                             .having(is_paragraph=True, meeting=self.meeting))
+
+        self.assertFalse(agenda_item.is_decided())
+
     def test_get_state(self):
         item = self.simple_agenda_item
         self.assertEquals(item.STATE_PENDING, item.get_state())

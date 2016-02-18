@@ -81,18 +81,23 @@
                     </span>
                   </h2>
                   <metal:block tal:repeat="field view/agenda_item_fields">
-                    <metal:block tal:define="field_name field/name;"
-                                 tal:condition="python: view.is_field_visible(field, protocol)">
-                      <label tal:attributes="for string:${name}-${field_name};
-                                             id string:${name}-${field_name}-label"
-                             tal:content="field/label"></label>
-                      <metal:block tal:define="id string:${name}-${field_name};
-                                               name string:${name}.${field_name}:record;
-                                               value python:getattr(protocol, field_name);
-                                               autofocus repeat/field/start">
-                        <metal:use use-macro="context/@@gever-macros/render_trix_editor">
-                        </metal:use>
-                      </metal:block>
+                    <metal:block tal:condition="python: view.is_field_visible(field, protocol)">
+                      <tal:agendaitem define="field_name field/name;
+                                              field_value python:getattr(protocol, field_name)">
+                        <label tal:attributes="for string:${name}-${field_name};
+                                               id string:${name}-${field_name}-label"
+                               tal:content="field/label"></label>
+
+                        <span class="readonly" tal:content="structure field_value"
+                              tal:condition="protocol/is_decided"></span>
+                        <metal:block tal:define="id string:${name}-${field_name};
+                                                 name string:${name}.${field_name}:record;
+                                                 value field_value;
+                                                 autofocus repeat/field/start"
+                                     tal:condition="not: protocol/is_decided">
+                          <metal:use use-macro="context/@@gever-macros/render_trix_editor"></metal:use>
+                        </metal:block>
+                      </tal:agendaitem>
                     </metal:block>
                   </metal:block>
                 </div>

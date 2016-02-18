@@ -5,6 +5,9 @@ Changelog
 4.6.4 (unreleased)
 ------------------
 
+- Disable editing of decided agenda-items in protocol view.
+  [elioschmutz]
+
 - Avoid infinite loop in BasicReferenceNumber.get_parent_numbers() if context
   is not acquisition wrapped.
   [lgraf]
