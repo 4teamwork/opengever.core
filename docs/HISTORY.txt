@@ -5,6 +5,11 @@ Changelog
 4.6.4 (unreleased)
 ------------------
 
+- Fixes an issue with broken db-migrations.
+  Don't load proposal model in upgrade steps but use sqlalchemy expression
+  api for database access.
+  [deiferni]
+
 - Activate notification-center by default.
   [elioschmutz]
 

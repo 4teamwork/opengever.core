@@ -240,16 +240,38 @@ class DeactivatedFKConstraint(object):
         return False
 
 
-class SchemaMigration(UpgradeStep):
-    """Baseclass for database-(schema) upgrade steps.
+class SQLUpgradeStep(UpgradeStep):
+    """Baseclass for upgrade steps that modify database content.
 
-    Maintains a tracking table to make sure that a database migration is only
+    This migration is run per plone site, if you want a migration that runs
+    only once have a look at `SchemaMigration`.
+
+    """
+    def __call__(self):
+        self._setup_db_connection()
+        self.migrate()
+
+    def migrate(self):
+        raise NotImplementedError()
+
+    def execute(self, statement):
+        return self.connection.execute(statement)
+
+    def _setup_db_connection(self):
+        self.session = create_session()
+        self.connection = self.session.connection()
+
+
+class SchemaMigration(SQLUpgradeStep):
+    """Baseclass for database schema migrations.
+
+    Maintains a tracking table to make sure that a schema migration is only
     run once.
     """
 
     def __call__(self):
         self._assert_configuration()
-        self.session = self._setup_db_connection()
+        self._setup_db_connection()
         self._insert_initial_version()
         if self._has_upgrades_to_install():
             self._log_do_migration()
@@ -277,12 +299,6 @@ class SchemaMigration(UpgradeStep):
         Older migrations are overriding the `upgradeid` attribute.
         """
         return int(self.target_version)
-
-    def migrate(self):
-        raise NotImplementedError()
-
-    def execute(self, statement):
-        return self.connection.execute(statement)
 
     def refresh_metadata(self):
         self.metadata.clear()
@@ -393,11 +409,9 @@ class SchemaMigration(UpgradeStep):
             return Operations(self.migration_context)
 
     def _setup_db_connection(self):
-        session = create_session()
-        self.connection = session.connection()
-        self.dialect_name = self.connection.dialect.name
+        super(SchemaMigration, self)._setup_db_connection()
 
+        self.dialect_name = self.connection.dialect.name
         self.migration_context = MigrationContext.configure(self.connection)
         self.metadata = MetaData(self.connection, reflect=True)
         self.op = self._create_operations()
-        return session
