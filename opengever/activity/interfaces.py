@@ -17,4 +17,4 @@ class IActivitySettings(Interface):
     is_feature_enabled = schema.Bool(
         title=u'Enable activity feature',
         description=u'Whether features from opengever.activity are enabled',
-        default=False)
+        default=True)

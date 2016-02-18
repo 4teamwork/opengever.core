@@ -5,6 +5,9 @@ Changelog
 4.6.4 (unreleased)
 ------------------
 
+- Activate notification-center by default.
+  [elioschmutz]
+
 - Add link in meetingoverview from unscheduled proposals to their corresponding submitted proposals.
   [elioschmutz]
 

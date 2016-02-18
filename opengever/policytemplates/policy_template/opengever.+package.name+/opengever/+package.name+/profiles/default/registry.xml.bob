@@ -6,10 +6,10 @@
   </record>
 
 {{% endif %}}
-{{% if setup.enable_activity_feature %}}
+{{% if not setup.enable_activity_feature %}}
   <record interface="opengever.activity.interfaces.IActivitySettings" field="is_feature_enabled">
     <field type="plone.registry.field.Bool" />
-    <value>True</value>
+    <value>False</value>
   </record>
 
 {{% endif %}}
