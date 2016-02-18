@@ -86,7 +86,7 @@ class TestExcerpt(FunctionalTestCase):
         browser.css('.generate-excerpt').first.click()
 
         title_field = browser.find('Title')
-        self.assertEqual(u'Protocol Excerpt-B\xe4rn, Dec 13, 2011',
+        self.assertEqual(u'Protocol Excerpt-C\xf6mmunity meeting',
                          title_field.value)
 
         dossier_field = browser.find('form.widgets.dossier')
@@ -102,7 +102,7 @@ class TestExcerpt(FunctionalTestCase):
                       'Target dossier': self.dossier})
         browser.find('Save').click()
 
-        self.assertEqual([u'Excerpt for meeting B\xe4rn, Dec 13, 2011 has '
+        self.assertEqual([u'Excerpt for meeting C\xf6mmunity meeting has '
                           'been generated successfully'],
                          info_messages())
         # refresh
@@ -117,7 +117,7 @@ class TestExcerpt(FunctionalTestCase):
         self.assertEqual(1, len(browser.css('.excerpts li a')),
                          'generated document should be linked')
 
-        self.assertIsNotNone(browser.find(u'Protocol Excerpt-B\xe4rn, Dec 13, 2011'))
+        self.assertIsNotNone(browser.find(u'Protocol Excerpt-C\xf6mmunity meeting'))
 
     @browsing
     def test_manual_excerpt_form_redirects_to_meeting_on_abort(self, browser):

@@ -91,6 +91,7 @@ class Meeting(Base):
     committee_id = Column(Integer, ForeignKey('committees.id'), nullable=False)
     committee = relationship("Committee", backref='meetings')
     location = Column(String(256))
+    title = Column(UnicodeCoercingText)
     start = Column('start_datetime', UTCDateTime(timezone=True), nullable=False)
     end = Column('end_datetime', UTCDateTime(timezone=True))
     workflow_state = Column(String(WORKFLOW_STATE_LENGTH), nullable=False,
@@ -289,10 +290,7 @@ class Meeting(Base):
         self.modified = utcnow_tz_aware()
 
     def get_title(self):
-        if self.location:
-            return u"{}, {}".format(self.location, self.get_date())
-        else:
-            return self.get_date()
+        return self.title
 
     def get_date(self):
         return api.portal.get_localized_time(datetime=self.start)

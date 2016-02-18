@@ -58,7 +58,8 @@ class TestProtocol(FunctionalTestCase):
 
         self.committee_model = self.committee.load_model()
         self.meeting = create(Builder('meeting')
-                              .having(committee=self.committee_model,
+                              .having(title='My meeting',
+                                      committee=self.committee_model,
                                       start=self.localized_datetime(2013, 1, 1, 10, 45),
                                       location='There',
                                       protocol_start_page_number=42)
@@ -110,7 +111,7 @@ class TestProtocol(FunctionalTestCase):
     def test_protocol_document_is_locked_by_system_once_generated(self, browser):
         self.setup_generated_protocol(browser)
 
-        browser.find('Protocol-There, Jan 01, 2013').click()
+        browser.find('Protocol-My meeting').click()
         document = browser.context
         lockable = ILockable(document)
 
@@ -129,7 +130,7 @@ class TestProtocol(FunctionalTestCase):
 
         browser.open(self.meeting.get_url())
 
-        browser.find('Protocol-There, Jan 01, 2013').click()
+        browser.find('Protocol-My meeting').click()
         document = browser.context
         lockable = ILockable(document)
 
@@ -220,7 +221,8 @@ class TestProtocol(FunctionalTestCase):
         self.assertIsNotNone(self.meeting.modified)
         prev_modified = self.meeting.modified
 
-        browser.fill({'Legal basis': 'Yes we can',
+        browser.fill({'Title': 'The Meeting',
+                      'Legal basis': 'Yes we can',
                       'Initial position': 'Still the same',
                       'Considerations': 'It is important',
                       'Proposed action': 'Accept it',
@@ -238,6 +240,7 @@ class TestProtocol(FunctionalTestCase):
 
         meeting = Meeting.query.get(self.meeting.meeting_id)
         self.assertGreater(meeting.modified, prev_modified)
+        self.assertEqual('The Meeting', meeting.title)
 
         proposal = Proposal.query.get(self.proposal_model.proposal_id)
         self.assertEqual('Yes we can', proposal.legal_basis)
@@ -349,7 +352,7 @@ class TestProtocol(FunctionalTestCase):
         browser.css('a[href*="@@generate_protocol"]').first.click()
 
         self.assertEquals(
-            ['Protocol for meeting There, Jan 01, 2013 '
+            ['Protocol for meeting My meeting '
              'has been generated successfully'],
             info_messages())
 
