@@ -7,7 +7,7 @@
     options = $.extend({ message: true, context: $(document) }, options);
 
     template = template || "";
-    this.outlet = outlet;
+    this.outlet = outlet || $();
     this.template = function() {};
     this.messageFactory = global.MessageFactory.getInstance();
     var self = this;
@@ -28,12 +28,12 @@
 
     this.validator = function(data) { return data && data.proceed !== false; };
 
-    this.refresh = function() { this.render(this.cache); };
+    this.refresh = function() { this.outlet.html(this.render(this.cache)); };
 
     this.update = function() {
       $.when(self.fetch()).fail(messageFunc).done(function(data) {
         self.cache = data;
-        self.render(data);
+        self.outlet.html(self.render(data));
         self.onRender.call(self);
       });
     };

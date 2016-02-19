@@ -116,11 +116,11 @@
     this.fetch = function() { return $.get(viewlet.data().listAgendaItemsUrl); };
 
     this.render = function(data) {
-      self.outlet.html(self.template({
+      return self.template({
         agendaitems: data.items,
         editable: viewlet.data().editable,
         agendalist_editable: viewlet.data().agendalist_editable
-      }));
+      });
     };
 
     this.openModal = function(target) {
@@ -273,7 +273,7 @@
 
     this.fetch = function() { return $.get(viewlet.data().listUnscheduledProposalsUrl); };
 
-    this.render = function(data) { self.outlet.html(self.template({ proposals: data.items })); };
+    this.render = function(data) { return self.template({ proposals: data.items }); };
 
     this.schedule = function(target) {
       return $.post(target.attr("href")).done(function() { $("#filter-proposals").val(""); });
