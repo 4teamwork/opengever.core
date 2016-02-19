@@ -81,7 +81,6 @@
         prevent: true
       }, action.options);
 
-      console.log(action);
       options.context.on(action.method, action.target, function(event) {
         self.trackEvent(event, action.callback, action.options);
       } );
