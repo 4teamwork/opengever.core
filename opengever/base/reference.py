@@ -45,7 +45,7 @@ class BasicReferenceNumber(grok.Adapter):
         self.append_local_number(numbers)
 
         parent = self.context
-        while not ISiteRoot.providedBy(parent):
+        while parent and not ISiteRoot.providedBy(parent):
             parent = aq_parent(aq_inner(parent))
             parent_reference_adapter = queryAdapter(parent, IReferenceNumber)
             if parent_reference_adapter:
