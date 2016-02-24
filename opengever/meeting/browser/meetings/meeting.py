@@ -1,3 +1,5 @@
+from Products.Five.browser import BrowserView
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from five import grok
 from opengever.base.browser.helper import get_css_class
 from opengever.base.browser.wizard import BaseWizardStepForm
@@ -17,8 +19,6 @@ from plone import api
 from plone.dexterity.i18n import MessageFactory as pd_mf
 from plone.directives import form
 from plone.z3cform.layout import FormWrapper
-from Products.Five.browser import BrowserView
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
 from z3c.form.form import Form
@@ -27,11 +27,23 @@ from zope import schema
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.i18n import translate
+from zope.interface import provider
+from zope.schema.interfaces import IContextAwareDefaultFactory
 import json
+
+
+@provider(IContextAwareDefaultFactory)
+def default_title(context):
+    return context.Title()
 
 
 class IMeetingModel(form.Schema):
     """Meeting model schema interface."""
+
+    title = schema.TextLine(
+        title=_(u"label_title", default=u"Title"),
+        defaultFactory=default_title,
+        required=True)
 
     committee = schema.Choice(
         title=_('label_committee', default=u'Committee'),
@@ -185,8 +197,8 @@ class AddMeetingWizardStepView(FormWrapper, grok.View):
     form = AddMeetingWizardStep
 
     def __init__(self, *args, **kwargs):
-         FormWrapper.__init__(self, *args, **kwargs)
-         grok.View.__init__(self, *args, **kwargs)
+        FormWrapper.__init__(self, *args, **kwargs)
+        grok.View.__init__(self, *args, **kwargs)
 
 
 class AddMeetingDossierView(WizzardWrappedAddForm):

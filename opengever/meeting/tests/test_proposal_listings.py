@@ -75,7 +75,7 @@ class TestDossierProposalListing(ProposalListingTests):
               'Reference Number': '1',
               'Comittee': 'My committee',
               'Title': 'My Proposal',
-              'Meeting': u'B\xe4rn, Dec 13, 2011'}],
+              'Meeting': u'C\xf6mmunity meeting'}],
             table.dicts())
 
 
@@ -135,5 +135,5 @@ class TestSubmittedProposals(ProposalListingTests):
               'Reference Number': '1',
               'Comittee': 'My committee',
               'Title': 'My Proposal',
-              'Meeting': u'B\xe4rn, Dec 13, 2011'}],
+              'Meeting': u'C\xf6mmunity meeting'}],
             table.dicts())

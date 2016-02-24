@@ -37,14 +37,14 @@ class TestCommitteeTabs(FunctionalTestCase):
         table = browser.css('.listing').first
 
         self.assertEquals([
-            {'Title': u'B\xe4rn, Dec 13, 2011',
+            {'Title': u'C\xf6mmunity meeting',
              'State': u'Pending',
              'Date': 'Dec 13, 2011',
              'Location': u'B\xe4rn',
              'From': '09:30 AM',
              'To': '11:45 AM',
              'Dossier': u'D\xf6ssier'},
-            {'Title': u'B\xe4rn, Dec 13, 2011',
+            {'Title': u'C\xf6mmunity meeting',
              'State': u'Pending',
              'Date': 'Dec 13, 2011',
              'Location': u'B\xe4rn',

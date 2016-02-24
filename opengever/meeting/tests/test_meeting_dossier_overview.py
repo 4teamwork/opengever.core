@@ -26,5 +26,5 @@ class TestMeetingDossierOverview(TestOverview):
     def test_meeting_is_linked_on_overview(self, browser):
         browser.login().open(self.dossier, view='tabbedview_view-overview')
 
-        link_node = browser.find(u'B\xe4rn, Dec 13, 2011')
+        link_node = browser.find(u'C\xf6mmunity meeting')
         self.assertEqual(self.meeting.get_url(), link_node.get('href'))

@@ -33,7 +33,7 @@ class TestPathBar(FunctionalTestCase):
         browser.login().open(meeting.get_url())
         self.assertEqual(
             ['Client1', 'opengever-meeting-committeecontainer',
-             'My Committee', u'B\xe4rn, Dec 13, 2011'],
+             'My Committee', u'C\xf6mmunity meeting'],
             browser.css('#portal-breadcrumbs a').text)
 
     @browsing

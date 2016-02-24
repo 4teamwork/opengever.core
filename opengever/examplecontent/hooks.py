@@ -133,12 +133,16 @@ class MeetingExampleContentCreator(object):
             datetime.combine(date.today() + timedelta(days=delta), time(10, 0)))
         end = self.tz.localize(
             datetime.combine(date.today() + timedelta(days=delta), time(12, 0)))
+        title = "Gemeindeversammlung, {}".format(
+            api.portal.get_localized_time(datetime=start))
+
         dossier = create(Builder('meeting_dossier')
                          .having(title=u'Meeting {}'.format(
                              api.portal.get_localized_time(start)),)
                          .within(self.repository_folder_meeting))
         meeting = create(Builder('meeting')
-                         .having(committee=self.committee_assembly_model,
+                         .having(title=title,
+                                 committee=self.committee_assembly_model,
                                  location=u'Bern',
                                  start=start,
                                  end=end,)

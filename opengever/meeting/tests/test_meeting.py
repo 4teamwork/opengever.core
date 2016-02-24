@@ -47,12 +47,8 @@ class TestMeeting(FunctionalTestCase):
 
     def test_meeting_title(self):
         self.assertEqual(
-            u'Bern, Oct 18, 2013',
-            Meeting(location=u'Bern', start=self.localized_datetime(2013, 10, 18)).get_title())
-
-        self.assertEqual(
-            u'Oct 18, 2013',
-            Meeting(start=self.localized_datetime(2013, 10, 18)).get_title())
+            u'My Title',
+            Meeting(title="My Title").get_title())
 
     def test_meeting_link(self):
         meeting = create(Builder('meeting').having(
@@ -64,8 +60,8 @@ class TestMeeting(FunctionalTestCase):
             'http://nohost/plone/opengever-meeting-committeecontainer/committee-1/meeting-1/view',
             link.get('href'))
         self.assertEqual('contenttype-opengever-meeting-meeting', link.get('class'))
-        self.assertEqual(u'B\xe4rn, Dec 13, 2011', link.get('title'))
-        self.assertEqual(u'B\xe4rn, Dec 13, 2011', link.text)
+        self.assertEqual(u'C\xf6mmunity meeting', link.get('title'))
+        self.assertEqual(u'C\xf6mmunity meeting', link.text)
 
     @browsing
     def test_add_meeting_and_dossier(self, browser):
@@ -125,7 +121,7 @@ class TestMeeting(FunctionalTestCase):
         # javascript redirects upon close, we need to do so manually here ...
         browser.open(meeting.get_url())
         self.assertEqual(
-            [u'The meeting B\xe4rn, Dec 13, 2011 has been successfully '
+            [u'The meeting C\xf6mmunity meeting has been successfully '
              u'closed, the excerpts have been generated and sent back to the '
              u'initial dossier.'],
             info_messages())

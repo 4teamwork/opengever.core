@@ -5,6 +5,11 @@ Changelog
 4.6.4 (unreleased)
 ------------------
 
+- Add an editable title to meeting objects.
+  The user can set the title for a meeting manually now. Per default,
+  the title will be the name of the committee and the date.
+  [elioschmutz]
+
 - Disable editing of decided agenda-items in protocol view.
   [elioschmutz]
 

@@ -25,6 +25,10 @@ from zope import schema
 class IMeetingMetadata(form.Schema):
     """Schema interface for meeting metadata."""
 
+    title = schema.TextLine(
+        title=_(u"label_title", default=u"Title"),
+        required=True)
+
     presidency = schema.Choice(
         title=_('label_presidency', default=u'Presidency'),
         source=get_committee_member_vocabulary,

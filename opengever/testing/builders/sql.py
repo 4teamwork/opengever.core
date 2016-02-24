@@ -207,6 +207,7 @@ class MeetingBuilder(SqlObjectBuilder):
         self.arguments['start'] = localized_datetime(2011, 12, 13, 9, 30)
         self.arguments['end'] = localized_datetime(2011, 12, 13, 11, 45)
         self.arguments['location'] = u'B\xe4rn'
+        self.arguments['title'] = u'C\xf6mmunity meeting'
 
     def before_create(self):
         committee = self.arguments.get('committee')
