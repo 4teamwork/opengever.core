@@ -52,13 +52,12 @@ def post_adminunit_title(configurator, question, answer):
 
 def post_adminunit_abbreviation(configurator, question, answer):
     configurator.defaults.update({
-        'package.name': answer,
-        'adminunit.id': answer,
+        'adminunit.id': answer.lower(),
         'deployment.ldap_ou': 'OpenGever{}'.format(answer.capitalize()),
         'deployment.rolemanager_group': 'og_{}_leitung'.format(answer),
         'orgunit.users_group': 'og_{}_benutzer'.format(answer),
         'orgunit.inbox_group': 'og_{}_sekretariat'.format(answer),
-        'orgunit.id': answer
+        'orgunit.id': answer.lower()
     })
     return answer
 
