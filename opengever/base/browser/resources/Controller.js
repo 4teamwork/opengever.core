@@ -225,7 +225,7 @@
 
   function Controller(template, outlet, options) {
 
-    options = $.extend({ message: true, context: $(document) }, options);
+    options = $.extend({ showMessage: true, context: $(document) }, options);
 
     template = template || "";
     this.outlet = outlet || $();
@@ -234,7 +234,7 @@
     var self = this;
 
     var messageFunc = function(data) {
-      if(data && !data.redirectUrl && options.message) {
+      if(data && !data.redirectUrl && options.showMessage) {
         self.messageFactory.shout(data.messages);
       }
     };
