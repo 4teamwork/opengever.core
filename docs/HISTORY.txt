@@ -5,6 +5,11 @@ Changelog
 4.6.4 (unreleased)
 ------------------
 
+- Add a custom handler to force a page reload (and thus force a
+  redirect to the login form) when tabbed-view requests are redirected to
+  the gever portal.
+  [deiferni]
+
 - Fix an issue where tabs on the plone site were visible as anonymous under
   certain circumstances.
   [deiferni]
