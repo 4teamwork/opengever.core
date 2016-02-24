@@ -229,7 +229,7 @@
 
     template = template || "";
     this.outlet = outlet || $();
-    this.template = function() {};
+    this.template = $.noop;
     this.messageFactory = global.MessageFactory.getInstance();
     var self = this;
 
