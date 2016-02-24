@@ -251,6 +251,11 @@ class AgendaItem(Base):
             return self.get_state() == self.STATE_PENDING
         return False
 
+    def is_decided(self):
+        if not self.is_paragraph:
+            return self.get_state() == self.STATE_DECIDED
+        return False
+
     def decide(self):
         if self.get_state() == self.STATE_DECIDED:
             return

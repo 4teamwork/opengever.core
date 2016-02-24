@@ -396,3 +396,51 @@ class TestProtocol(FunctionalTestCase):
 
         self.assertEqual(map(lambda number: number.text, numbers),
                          ['1.', '2.'])
+
+    @browsing
+    def test_decided_agenda_items_will_not_be_loaded_in_editor(self, browser):
+        meeting = create(Builder('meeting')
+                         .having(committee=self.committee_model,
+                                 start=self.localized_datetime(2014, 1, 1, 10, 45),
+                                 location='Somewhere',
+                                 protocol_start_page_number=11)
+                         .link_with(self.meeting_dossier))
+        agenda_item = create(Builder('agenda_item')
+                             .having(meeting=meeting,
+                                     discussion="My talks",
+                                     decision=""
+                                     ))
+
+        agenda_item.decide()
+
+        browser.login()
+        browser.open(meeting.get_url(view='protocol'))
+
+        self.assertEqual(
+            ['My talks'],
+            browser.css('.readonly').text,
+            'The attributes should not be loaded in the editor because '
+            'the agenda_item was decided.')
+
+    @browsing
+    def test_not_decided_agenda_items_will_be_loaded_in_editor(self, browser):
+        meeting = create(Builder('meeting')
+                         .having(committee=self.committee_model,
+                                 start=self.localized_datetime(2014, 1, 1, 10, 45),
+                                 location='Somewhere',
+                                 protocol_start_page_number=11)
+                         .link_with(self.meeting_dossier))
+        create(Builder('agenda_item').having(meeting=meeting))
+
+        browser.login()
+        browser.open(meeting.get_url(view='protocol'))
+
+        self.assertEqual(
+            ['Discussion', 'Decision'],
+            browser.css('.agenda_items .item label').text
+        )
+
+        self.assertEqual(
+            2, len(browser.css('.trix-input')),
+            'Each field should be loaded with the trix editor because '
+            'the agenda_item is not decided yet')
