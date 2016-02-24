@@ -5,6 +5,9 @@ Changelog
 4.6.4 (unreleased)
 ------------------
 
+- Update locking message for locked protocols.
+  [elioschmutz]
+
 - Add a link to update an outdated document from the proposal view.
   [elioschmutz]
 

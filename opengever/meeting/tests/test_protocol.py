@@ -123,6 +123,25 @@ class TestProtocol(FunctionalTestCase):
         self.assertEqual(u'sys.lock', lock_info['type'].__name__)
 
     @browsing
+    def test_special_message_for_locked_generated_protocols(self, browser):
+        self.setup_generated_protocol(browser)
+
+        browser.find('Protocol-My meeting').click()
+
+        self.assertEqual(
+            ['This protocol will remain locked until the meeting My meeting is closed.'],
+            info_messages(),
+            "There should be a special locking message for a locked generated "
+            "protocol"
+            )
+
+        self.assertEqual(
+            self.meeting.get_url(),
+            browser.css('.portalMessage.info a').first.get('href'),
+            "The message should contain a link to the related meeting object."
+            )
+
+    @browsing
     def test_protocol_document_is_unlocked_when_meeting_is_closed(self, browser):
         self.setup_generated_protocol(browser)
 
