@@ -201,14 +201,14 @@ class Meeting(Base):
 
          - generate and set the meeting number
          - generate decision numbers for each agenda_item
-         - decide each agenda item (generates proposal excerpt
+         - close each agenda item (generates proposal excerpt
            and change workflow state)
          - update and unlock the protocol document
         """
 
         self.hold()
         for agenda_item in self.agenda_items:
-            agenda_item.decide()
+            agenda_item.close()
 
         self.update_protocol_document()
         self.unlock_protocol_document()

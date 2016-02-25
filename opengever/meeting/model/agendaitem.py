@@ -252,6 +252,20 @@ class AgendaItem(Base):
     def has_submitted_excerpt_document(self):
         return self.has_proposal and self.proposal.has_submitted_excerpt_document()
 
+    def close(self):
+        """Close the agenda item.
+
+        Can be called to close an agenda item, this puts the agenda item in
+        decided state using the correct transitions. Currently valid states
+        are:
+        decided: do nothing
+        pending: decide
+        revision: revise
+        """
+        if self.is_revise_possible():
+            self.revise()
+        self.decide()
+
     def is_decide_possible(self):
         if not self.is_paragraph:
             return self.get_state() == self.STATE_PENDING
