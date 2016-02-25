@@ -297,6 +297,7 @@ class Proposal(Base):
         self.generate_excerpt(agenda_item)
         document_intid = self.copy_excerpt_to_proposal_dossier()
         self.register_excerpt(document_intid)
+        self.session.add(proposalhistory.ProposalDecided(proposal=self))
         self.execute_transition('scheduled-decided')
 
     def register_excerpt(self, document_intid):
@@ -308,9 +309,7 @@ class Proposal(Base):
                                    int_id=document_intid,
                                    generated_version=version)
         self.session.add(excerpt)
-
         self.excerpt_document = excerpt
-        self.session.add(proposalhistory.ProposalDecided(proposal=self))
 
     def copy_excerpt_to_proposal_dossier(self):
         """Copies the submitted excerpt to the source dossier and returns
