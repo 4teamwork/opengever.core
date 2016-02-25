@@ -145,3 +145,86 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
         self.assertSequenceEqual(
             ['A new submitted version of document A Document has been created'],
             info_messages())
+
+    @browsing
+    def test_preselecting_document_if_url_in_request(self, browser):
+        proposal = self.setup_proposal()
+        document_path = '/'.join(self.document.getPhysicalPath())
+
+        browser.login().visit(
+            proposal,
+            view="submit_additional_documents?document_path={}".format(document_path))
+
+        browser.find('Submit Attachments').click()
+
+        self.assertSubmittedDocumentCreated(proposal, self.document)
+        self.assertSequenceEqual(
+            ['Additional document A Document has been submitted successfully'],
+            info_messages(),
+            "The document was preselected by the request parameter and should "
+            "have been updated without selecting it again.")
+
+    @browsing
+    def test_update_existing_document_version_by_clicking_on_update_link(self, browser):
+        proposal = self.setup_proposal(attach_document=True)
+
+        repository = api.portal.get_tool('portal_repository')
+        repository.save(self.document)
+        transaction.commit()
+
+        browser.login().visit(proposal, view='tabbedview_view-overview')
+
+        browser.find('Update document in proposal').click()
+        browser.find('Submit Attachments').click()
+
+        # self.assertSubmittedDocumentCreated(proposal, self.document)
+        self.assertSequenceEqual(
+            ['A new submitted version of document A Document has been created'],
+            info_messages())
+
+    @browsing
+    def test_do_not_show_link_if_document_is_not_outdated(self, browser):
+        proposal = self.setup_proposal(attach_document=True)
+
+        browser.login().visit(proposal, view='tabbedview_view-overview')
+
+        self.assertIsNone(
+            browser.find('Update document in proposal'),
+            "The link to update the outdated document should not be visible "
+            "because there is no new version of the document.")
+
+    @browsing
+    def test_do_not_show_link_to_update_outdated_document_on_submitted_proposal_view(self, browser):
+        proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .having(title='Mach doch',
+                                  committee=self.committee.load_model())
+                          .relate_to(self.document))
+
+        submitted_proposal = create(
+            Builder('submitted_proposal').submitting(proposal))
+
+        repository = api.portal.get_tool('portal_repository')
+        repository.save(self.document)
+        transaction.commit()
+
+        browser.login().visit(
+            proposal, view='tabbedview_view-overview')
+
+        self.assertEqual(
+            ['Update document in proposal'],
+            browser.css('a.outdated').text,
+            "The outdated link should be visible on a proposal")
+
+        browser.login().visit(
+            submitted_proposal, view='tabbedview_view-overview')
+
+        self.assertEqual(
+            ['A Document'],
+            browser.css('.document').text,
+            "The document should be available in the "
+            "submittedproposal listing")
+
+        self.assertEqual(
+            [], browser.css('a.outdated'),
+            "The outdated link should not be visible on a submitted proposal")
