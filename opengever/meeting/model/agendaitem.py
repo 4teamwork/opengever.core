@@ -274,6 +274,8 @@ class AgendaItem(Base):
         self.workflow.execute_transition(None, self, 'pending-decided')
 
     def reopen(self):
+        if self.has_proposal:
+            self.proposal.reopen(self)
         self.workflow.execute_transition(None, self, 'decided-revision')
 
     def is_reopen_possible(self):
