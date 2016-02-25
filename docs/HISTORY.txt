@@ -5,6 +5,10 @@ Changelog
 4.6.4 (unreleased)
 ------------------
 
+- Improve agenda-item workflow, allow decided agenda-items to be re-opened for
+  revision. Also update excerpts when the agenda-item is revised.
+  [phgross, deiferni]
+
 - Add a fix for links from Microsoft Office applications.
   The fix hacks around office's behavior to resolve links prior to opening
   a browser. This lead to an "insufficient privileges" page being displayed if
