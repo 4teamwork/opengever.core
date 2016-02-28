@@ -1,0 +1,54 @@
+.required-marker:after {
+    font-size: 11px;
+    visibility: visible;
+    content: "■";
+    color: #FF0000;
+    padding-left: 4px;
+}
+
+.required {
+    visibility: hidden;
+}
+
+
+h3 {
+    margin-top: 1em !important;
+}
+
+h3 img {
+    margin-bottom: -7px;
+    padding-right: 5px;
+}
+
+dl.class {
+    padding-top: 1em;
+}
+
+dl.attribute {
+    padding-top: 0.5em;
+}
+
+hr {
+    margin-bottom: 3em;
+}
+
+.field-title {
+    padding-bottom: 5px;
+}
+
+table.field-list th.field-name {
+    color: #666666;
+    font-weight: normal;
+}
+
+table.field-list tbody tr:first-child th {
+    padding-bottom: 3px;
+}
+
+table.field-list tbody tr:first-child td {
+    font-weight: bold;
+}
+
+table.field-list th.field-name {
+    min-width: 10em;
+}

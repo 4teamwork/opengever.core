@@ -1,0 +1,283 @@
+{
+    "portal_type": "opengever.document.document",
+    "title": "Dokument",
+    "schemas": [
+        {
+            "name": "opengever.document.document.IDocumentSchema",
+            "fields": [
+                {
+                    "name": "title",
+                    "type": "TextLine",
+                    "title": "Titel",
+                    "desc": "",
+                    "required": false
+                },
+                {
+                    "name": "file",
+                    "type": "NamedBlobFile",
+                    "title": "Datei",
+                    "desc": "Datei, die zu einem Dossier hinzugef\u00fcgt wird",
+                    "required": false
+                }
+            ],
+            "fieldsets": {
+                "fieldset_common": [
+                    "title",
+                    "file"
+                ]
+            }
+        },
+        {
+            "name": "opengever.base.behaviors.creator.ICreator",
+            "fields": [
+                {
+                    "name": "creators",
+                    "type": "Tuple",
+                    "title": "Autoren",
+                    "desc": "",
+                    "required": false,
+                    "omitted": {
+                        "zope.interface.Interface": true
+                    }
+                }
+            ]
+        },
+        {
+            "name": "opengever.base.behaviors.classification.IClassification",
+            "fields": [
+                {
+                    "name": "classification",
+                    "type": "Choice",
+                    "title": "Klassifikation",
+                    "desc": "Grad, in dem die Unterlagen vor unberechtigter Einsicht gesch\u00fctzt werden m\u00fcssen",
+                    "required": true,
+                    "default": "unprotected",
+                    "vocabulary": [
+                        "unprotected",
+                        "confidential",
+                        "classified"
+                    ]
+                },
+                {
+                    "name": "privacy_layer",
+                    "type": "Choice",
+                    "title": "Datenschutzstufe",
+                    "desc": "Markierung, die angibt, ob die Unterlagen besonders sch\u00fctzenswerte Personendaten oder Pers\u00f6nlichkeitsprofile gem\u00e4ss Datenschutzrecht enthalten",
+                    "required": true,
+                    "default": "privacy_layer_no",
+                    "vocabulary": [
+                        "privacy_layer_no",
+                        "privacy_layer_yes"
+                    ]
+                },
+                {
+                    "name": "public_trial",
+                    "type": "Choice",
+                    "title": "\u00d6ffentlichkeitsstatus",
+                    "desc": "Angabe, ob die Unterlagen gem\u00e4ss \u00d6ffentlichkeitsgesetz zug\u00e4nglich sind oder nicht",
+                    "required": true,
+                    "default": "unchecked",
+                    "vocabulary": [
+                        "unchecked",
+                        "public",
+                        "limited-public",
+                        "private"
+                    ]
+                },
+                {
+                    "name": "public_trial_statement",
+                    "type": "Text",
+                    "title": "Bearbeitungsinformation",
+                    "desc": "Datum Gesuch, Gesuchsteller, Datum Entscheid, Verweis auf GEVER-Gesuchdossier",
+                    "required": false,
+                    "default": ""
+                }
+            ],
+            "fieldsets": {
+                "fieldset_classification": [
+                    "classification",
+                    "privacy_layer",
+                    "public_trial",
+                    "public_trial_statement"
+                ]
+            }
+        },
+        {
+            "name": "opengever.document.behaviors.related_docs.IRelatedDocuments",
+            "fields": [
+                {
+                    "name": "relatedItems",
+                    "type": "RelationList",
+                    "title": "Verwandte Dokumente",
+                    "desc": "",
+                    "required": false,
+                    "default": []
+                }
+            ],
+            "fieldsets": {
+                "fieldset_common": [
+                    "relatedItems"
+                ]
+            }
+        },
+        {
+            "name": "plone.app.versioningbehavior.behaviors.IVersionable",
+            "fields": [
+                {
+                    "name": "changeNote",
+                    "type": "TextLine",
+                    "title": "\u00c4nderungsnotiz",
+                    "desc": "Geben Sie einen Kommentar ein, der die von Ihnen gemachten \u00c4nderungen beschreibt.",
+                    "required": false,
+                    "omitted": {
+                        "z3c.form.interfaces.IAddForm": true,
+                        "z3c.form.interfaces.IEditForm": true,
+                        "zope.interface.Interface": true
+                    }
+                }
+            ],
+            "fieldsets": {
+                "common": [
+                    "changeNote"
+                ]
+            }
+        },
+        {
+            "name": "opengever.document.behaviors.metadata.IDocumentMetadata",
+            "fields": [
+                {
+                    "name": "description",
+                    "type": "Text",
+                    "title": "Beschreibung",
+                    "desc": "",
+                    "required": false
+                },
+                {
+                    "name": "keywords",
+                    "type": "Tuple",
+                    "title": "Schlagworte",
+                    "desc": "",
+                    "required": false
+                },
+                {
+                    "name": "foreign_reference",
+                    "type": "TextLine",
+                    "title": "Fremdzeichen",
+                    "desc": "Referenz auf das entsprechende Dossier des Absenders",
+                    "required": false
+                },
+                {
+                    "name": "document_date",
+                    "type": "Date",
+                    "title": "Dokumentdatum",
+                    "desc": "Datum, an dem das Dokument erstellt worden ist",
+                    "required": false,
+                    "default": "<Aktuelles Datum>"
+                },
+                {
+                    "name": "receipt_date",
+                    "type": "Date",
+                    "title": "Eingangsdatum",
+                    "desc": "Datum, an dem das Dokument \u00fcber den Korrespondenzweg angekommen ist",
+                    "required": false
+                },
+                {
+                    "name": "delivery_date",
+                    "type": "Date",
+                    "title": "Ausgangsdatum",
+                    "desc": "Datum, an dem das Dokument \u00fcber den Korrespondenzweg versandt worden ist",
+                    "required": false
+                },
+                {
+                    "name": "document_type",
+                    "type": "Choice",
+                    "title": "Dokumenttyp",
+                    "desc": "",
+                    "required": false,
+                    "vocabulary": [
+                        "question",
+                        "request",
+                        "report",
+                        "offer",
+                        "protocol",
+                        "regulations",
+                        "contract",
+                        "directive"
+                    ]
+                },
+                {
+                    "name": "document_author",
+                    "type": "TextLine",
+                    "title": "Autor",
+                    "desc": "Nachname Vorname oder ein Benutzerk\u00fcrzel (wird automatisch nach Nachname Vorname aufgel\u00f6st).",
+                    "required": false
+                },
+                {
+                    "name": "digitally_available",
+                    "type": "Bool",
+                    "title": "Digital verf\u00fcgbar",
+                    "desc": "Is the Document Digital Availabe",
+                    "required": false,
+                    "modes": {
+                        "zope.interface.Interface": "hidden"
+                    }
+                },
+                {
+                    "name": "preserved_as_paper",
+                    "type": "Bool",
+                    "title": "In Papierform aufbewahrt",
+                    "desc": "In Papierform aufbewahrt",
+                    "required": false,
+                    "default": true
+                },
+                {
+                    "name": "archival_file",
+                    "type": "NamedBlobFile",
+                    "title": "Archivierte Datei",
+                    "desc": "Archivtaugliche Version der Originaldatei",
+                    "required": false,
+                    "omitted": {
+                        "zope.interface.Interface": true
+                    }
+                },
+                {
+                    "name": "thumbnail",
+                    "type": "NamedBlobFile",
+                    "title": "Kurzbild",
+                    "desc": "",
+                    "required": false,
+                    "omitted": {
+                        "zope.interface.Interface": true
+                    }
+                },
+                {
+                    "name": "preview",
+                    "type": "NamedBlobFile",
+                    "title": "Vorschau",
+                    "desc": "Online Voransicht des Originaldokuments",
+                    "required": false,
+                    "omitted": {
+                        "zope.interface.Interface": true
+                    }
+                }
+            ],
+            "fieldsets": {
+                "fieldset_common": [
+                    "description",
+                    "keywords",
+                    "foreign_reference",
+                    "document_date",
+                    "receipt_date",
+                    "delivery_date",
+                    "document_type",
+                    "document_author",
+                    "digitally_available",
+                    "preserved_as_paper",
+                    "archival_file",
+                    "thumbnail",
+                    "preview"
+                ]
+            }
+        }
+    ]
+}
