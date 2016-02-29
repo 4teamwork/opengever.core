@@ -8,8 +8,8 @@ class MockTemplate(object):
     """Return hardcoded path to test asset template."""
 
     def as_file(self, path):
-        template_path = resource_filename('opengever.meeting.tests',
-                                          'assets/sablon_template.docx')
+        template_path = resource_filename('opengever.testing.assets',
+                                          'sablon_template.docx')
         return template_path
 
 
