@@ -49,6 +49,10 @@
                 insert-after="++resource++plone.app.jquery.js" />
 
     <javascript cacheable="True" compression="none" cookable="True" enabled="on"
+                expression="" id="++resource++opengever.base/trix-custom.js" inline="False"
+                insert-after="++resource++opengever.base/trix.js" />
+
+    <javascript cacheable="True" compression="none" cookable="True" enabled="on"
                 expression="" id="++resource++opengever.base/SelectAutocomplete.js" inline="False"
                 insert-after="++resource++plone.app.jquery.js" />
 
