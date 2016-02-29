@@ -5,7 +5,8 @@ Changelog
 4.6.4 (unreleased)
 ------------------
 
-- Add trix customizations, prevent pasting links and accepting file-uploads.
+- Add trix customizations to prevent accepting unsupported content.
+  We don't support links, quotes, code-blocks and file uploads of any kind.
   [deiferni]
 
 - Avoid infinite loops in find_parent_dossier() and set_default_with_acquisition()
