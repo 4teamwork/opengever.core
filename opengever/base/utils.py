@@ -48,7 +48,7 @@ def find_parent_dossier(content):
     if IPloneSiteRoot.providedBy(content):
         raise ValueError('Site root passed as argument.')
 
-    while not IDossierMarker.providedBy(content):
+    while content and not IDossierMarker.providedBy(content):
         content = aq_parent(aq_inner(content))
         if IPloneSiteRoot.providedBy(content):
             raise ValueError('Site root reached while searching '

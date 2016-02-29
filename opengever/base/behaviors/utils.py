@@ -157,7 +157,7 @@ def set_default_with_acquisition(field, default=None):
     def default_value_generator(data):
         obj = data.context
         # try to get it from context or a parent
-        while not ISiteRoot.providedBy(obj):
+        while obj and not ISiteRoot.providedBy(obj):
             try:
                 interface_ = data.field.interface
             except AttributeError:
