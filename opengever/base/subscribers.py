@@ -1,6 +1,8 @@
 from AccessControl import Unauthorized
 from AccessControl.SecurityManagement import getSecurityManager
+from Acquisition import aq_parent
 from five import grok
+from ftw.tabbedview.browser.tabbed import TabbedView
 from OFS.interfaces import IObjectClonedEvent
 from opengever.base import _
 from plone.app.lockingbehavior.behaviors import ILocking
@@ -22,7 +24,7 @@ from zope.lifecycleevent.interfaces import IObjectCreatedEvent
 from ZPublisher.interfaces import IPubAfterTraversal
 
 
-ALLOWED_VIEWS = set([
+ALLOWED_ENDPOINTS = set([
     'customlogo',
     'favicon',
     'list-open-dossiers-json',
@@ -119,11 +121,19 @@ def disallow_anonymous_views_on_site_root(event):
     """Do not allow access for anonymous to views on the portal root except
        those explicitly allowed here. We do it this way because we cannot
        revoke the view permissions for anonymous on the portal root.
+
+       The same applies for tabbed_view attributes of a tabbed_view that is
+       displayed for the portal root.
     """
     user = getSecurityManager().getUser()
     if user is None or user.getUserName() == 'Anonymous User':
         context = event.request['PARENTS'][0]
-        if ISiteRoot.providedBy(context):
-            view_name = event.request['PUBLISHED'].__name__
-            if view_name not in ALLOWED_VIEWS:
+
+        is_site_root = ISiteRoot.providedBy(context)
+        is_tabbed_view_on_site_root = isinstance(context, TabbedView) and \
+            ISiteRoot.providedBy(aq_parent(context))
+
+        if is_site_root or is_tabbed_view_on_site_root:
+            endpoint_name = event.request['PUBLISHED'].__name__
+            if endpoint_name not in ALLOWED_ENDPOINTS:
                 raise Unauthorized
