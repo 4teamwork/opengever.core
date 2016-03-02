@@ -5,6 +5,10 @@ Changelog
 4.6.4 (unreleased)
 ------------------
 
+- Prevent creating a mail-copy in the dossier when sending documents
+  from a closed dossiers.
+  [elioschmutz]
+
 - Add a custom handler to force a page reload (and thus force a
   redirect to the login form) when tabbed-view requests are redirected to
   the gever portal.

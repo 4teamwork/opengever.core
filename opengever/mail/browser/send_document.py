@@ -1,3 +1,5 @@
+from Products.CMFCore.utils import getToolByName
+from Products.statusmessages.interfaces import IStatusMessage
 from datetime import date
 from email import Encoders
 from email.Header import Header
@@ -24,15 +26,18 @@ from plone.formwidget.autocomplete import AutocompleteMultiFieldWidget
 from plone.registry.interfaces import IRegistry
 from plone.z3cform import layout
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
-from Products.CMFCore.utils import getToolByName
-from Products.statusmessages.interfaces import IStatusMessage
-from z3c.form import form, button, field, validator
+from z3c.form import button
+from z3c.form import field
+from z3c.form import form
+from z3c.form import validator
 from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget
+from z3c.form.interfaces import HIDDEN_MODE
 from z3c.form.interfaces import INPUT_MODE
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
 from zope import schema
-from zope.component import getUtility, provideAdapter
+from zope.component import getUtility
+from zope.component import provideAdapter
 from zope.event import notify
 from zope.i18n import translate
 from zope.interface import Interface
@@ -172,7 +177,24 @@ class SendDocumentForm(form.Form):
         paths = self.request.get('paths', [])
         if paths:
             self.request.set('form.widgets.documents', paths)
+
         super(SendDocumentForm, self).update()
+
+    def updateWidgets(self):
+        super(SendDocumentForm, self).updateWidgets()
+
+        if not self.context.is_open():
+            file_copy_widget = self.widgets['file_copy_in_dossier']
+            disabled_hint_text = translate(
+                _(u'file_copy_widget_disabled_hint_text',
+                  default='(only possible for open dossiers)'),
+                context=self.request)
+
+            checkbox = file_copy_widget.items[0]
+            checkbox['checked'] = False
+            checkbox['label'] = u'{} {}'.format(
+                checkbox['label'], disabled_hint_text)
+            file_copy_widget.disabled = 'disabled'
 
     @button.buttonAndHandler(_(u'button_send', default=u'Send'))
     def send_button_handler(self, action):
@@ -217,7 +239,7 @@ class SendDocumentForm(form.Form):
             mh.send(msg, mfrom=mfrom, mto=','.join(addresses))
 
             # Store a copy of the sent mail in dossier
-            if data.get('file_copy_in_dossier', False):
+            if data.get('file_copy_in_dossier', False) and self.context.is_open():
                 self.file_sent_mail_in_dossier(msg)
 
             # let the user know that the mail was sent
