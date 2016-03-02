@@ -5,6 +5,14 @@ Changelog
 4.6.4 (unreleased)
 ------------------
 
+- Add a fix for links from Microsoft Office applications.
+  The fix hacks around office's behavior to resolve links prior to opening
+  a browser. This lead to an "insufficient privileges" page being displayed if
+  the user was already logged in. The fix attempts to traverse to the came_from
+  url that is available to the require_login script, and if the url is traversable
+  redirects to that location.
+  [deiferni]
+
 - Update locking message for locked protocols.
   [elioschmutz]
 
