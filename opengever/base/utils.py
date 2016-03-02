@@ -108,6 +108,9 @@ def escape_html(text):
 
     See: https://wiki.python.org/moin/EscapingHtml
     """
+    if text is None:
+        return None
+
     # escape() and unescape() takes care of &, < and >, but not quotes
     html_escape_table = {
         '"': "&quot;",

@@ -1,3 +1,4 @@
+from opengever.base.utils import escape_html
 from opengever.meeting import _
 from opengever.meeting.model.membership import Membership
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -65,13 +66,14 @@ class ProtocolData(object):
             membership = Membership.query.fetch_for_meeting(
                 self.meeting, participant)
             members.append({
-                "fullname": participant.fullname,
+                "fullname": participant.get_title(show_email_as_link=False),
                 "role": membership.role if membership else None
             })
 
         participants = {
             'members': members
         }
+
         return participants
 
     def add_participants(self):
@@ -83,9 +85,11 @@ class ProtocolData(object):
         participants['other'] = other_participants
 
         if self.meeting.presidency:
-            participants['presidency'] = self.meeting.presidency.fullname
+            participants['presidency'] = self.meeting.presidency.get_title(
+                show_email_as_link=False)
         if self.meeting.secretary:
-            participants['secretary'] = self.meeting.secretary.fullname
+            participants['secretary'] = self.meeting.secretary.get_title(
+                show_email_as_link=False)
 
         self.data['participants'] = participants
 

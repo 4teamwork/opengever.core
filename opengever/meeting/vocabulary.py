@@ -2,11 +2,11 @@ from five import grok
 from opengever.meeting.model import Member
 from opengever.meeting.model import Membership
 from opengever.meeting.service import meeting_service
+from plone import api
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
-from plone import api
 
 
 class CommitteeVocabulary(grok.GlobalUtility):
@@ -44,9 +44,10 @@ def get_committee_member_vocabulary(meetingwrapper):
     for membership in Membership.query.for_meeting(meeting):
         member = membership.member
         members.append(
-            SimpleVocabulary.createTerm(member,
-                                        str(member.member_id),
-                                        member.fullname))
+            SimpleVocabulary.createTerm(
+                member,
+                str(member.member_id),
+                member.get_title(show_email_as_link=False)))
 
     return SimpleVocabulary(members)
 

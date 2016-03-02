@@ -5,6 +5,9 @@ Changelog
 4.7.3 (unreleased)
 ------------------
 
+- Show email addresses of participant in a meeting or a meeting protocol.
+  [elioschmutz]
+
 - Add API documentation (Sphinx).
   [lgraf]
 

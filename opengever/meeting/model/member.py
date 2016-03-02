@@ -63,3 +63,17 @@ class Member(Base):
     def update_model(self, data):
         for key, value in data.items():
             setattr(self, key, value)
+
+    def get_title(self, show_email_as_link=True):
+        fullname = escape_html(self.fullname)
+        email = escape_html(self.email)
+
+        if not email:
+            return fullname
+
+        if show_email_as_link:
+            email = '<a href="mailto:{email}">{email}</a>'.format(email=email)
+
+        participant = u'{} ({})'.format(fullname, email)
+
+        return participant

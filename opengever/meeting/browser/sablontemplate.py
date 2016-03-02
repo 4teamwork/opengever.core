@@ -48,10 +48,10 @@ SAMPLE_MEETING_DATA = {
     'committee': {'name': u'Gemeinderat'},
     'participants': {
         'presidency': u'Peter M\xfcller',
-        'secretary': u'Franz M\xfcller',
+        'secretary': u'Franz M\xfcller (mueller@example.com)',
         'members': [{'fullname': u'Peter M\xfcller',
                     'role': u'F\xfcrst'},
-                   {'fullname': u'Franz M\xfcller',
+                   {'fullname': u'Franz M\xfcller (mueller@example.com)',
                     'role': None}],
         'other': [u'Hans M\xfcller', u'Heidi Muster']},
     'protocol': {'type': u'Protocol'}}
