@@ -3,9 +3,13 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:grok="http://namespaces.zope.org/grok"
     xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
     i18n_domain="opengever.locking">
 
   <grok:grok package="." />
+
+  <!-- Register locales translations -->
+  <i18n:registerTranslations directory="locales" />
 
   <adapter factory=".lockable.SQLLockable" />
 
@@ -23,6 +27,15 @@
       class="plone.locking.browser.info.LockInfoViewlet"
       permission="cmf.ModifyPortalContent"
       for="opengever.locking.interfaces.ISQLLockable"
+      />
+
+  <browser:viewlet
+      name="plone.lockinfo"
+      manager="plone.app.layout.viewlets.interfaces.IAboveContent"
+      class=".info.GeverLockInfoViewlet"
+      permission="cmf.ModifyPortalContent"
+      for="plone.locking.interfaces.ITTWLockable"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
       />
 
   <browser:page
