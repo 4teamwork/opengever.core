@@ -26,12 +26,38 @@
               <th i18n:translate="label_attachments">Attachments</th>
               <td>
                 <ul>
-                  <li tal:repeat="item documents">
-                    <a href="" tal:attributes="href item/absolute_url;
-                    title python: getattr(item, 'document_date', None) and item.document_date.strftime('%d.%m.%Y') or '';
-                    class python:view.get_css_class(item)">
-                      <span class="document" tal:condition="item/absolute_url" tal:content="item/Title" />
+                  <li tal:repeat="document documents">
+
+                    <a href="" tal:attributes="href document/absolute_url;
+                    title python: getattr(document, 'document_date', None) and document.document_date.strftime('%d.%m.%Y') or '';
+                    class python:view.get_css_class(document)">
+                      <span class="document" tal:condition="document/absolute_url" tal:content="document/Title" />
                     </a>
+
+                    <tal:enable tal:condition="view/is_update_outdated_endabled">
+                      <tal:outdated
+                          tal:define="submitted_document python:view.get_submitted_document(document)"
+                          tal:condition="python: submitted_document and view.is_outdated(document, submitted_document)"
+                          i18n:domain="opengever.document">
+
+                          <span class="discreet">
+                            —
+                            <div tal:replace="python: view.render_submitted_version(submitted_document)"></div>
+                            —
+                            <div tal:replace="python: view.render_current_document_version(document)"></div>
+                          </span>
+
+                        <div class="updateActions">
+                          <a class="outdated"
+                             tal:attributes="href python: view.get_update_document_url(document);"
+                             i18n:translate="">
+                            Update document in proposal
+                          </a>
+                        </div>
+                      </tal:outdated>
+                    </tal:enable>
+
+
                   </li>
                 </ul>
               </td>

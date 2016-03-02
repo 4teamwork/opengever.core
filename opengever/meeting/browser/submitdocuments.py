@@ -62,6 +62,10 @@ class SubmitAdditionalDocuments(AutoExtensibleForm, Form):
         disable_edit_bar()
         return super(SubmitAdditionalDocuments, self).__call__()
 
+    def update(self):
+        self._preselect_proposal()
+        return super(SubmitAdditionalDocuments, self).update()
+
     def available(self):
         return is_meeting_feature_enabled() and \
             self.context.is_submit_additional_documents_allowed()
@@ -86,6 +90,13 @@ class SubmitAdditionalDocuments(AutoExtensibleForm, Form):
 
     def nextURL(self):
         return self.context.absolute_url()
+
+    def _preselect_proposal(self):
+        document_path = self.request.get('document_path')
+        if not document_path:
+            return
+
+        self.request.set('form.widgets.additionalDocuments', document_path)
 
 
 class ISubmitDocumentsByPaths(ISubmitAdditionalDocument):

@@ -5,6 +5,9 @@ Changelog
 4.6.4 (unreleased)
 ------------------
 
+- Add a link to update an outdated document from the proposal view.
+  [elioschmutz]
+
 - Prevent creating a mail-copy in the dossier when sending documents
   from a closed dossiers.
   [elioschmutz]
