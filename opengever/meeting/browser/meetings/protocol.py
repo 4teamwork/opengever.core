@@ -247,7 +247,7 @@ class EditProtocol(AutoExtensibleForm, ModelEditForm):
             msg = _(u'message_write_conflict',
                     default='Your changes were not saved, the protocol has '
                             'been modified in the meantime.')
-            return JSONResponse(self.request).error(msg).dump()
+            return JSONResponse(self.request).data(hasConflict=True).dump()
 
         elif self._is_locked_by_another_user:
             msg = _(u'message_locked_by_another_user',

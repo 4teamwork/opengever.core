@@ -17,6 +17,10 @@
                   <metal:use use-macro="context/@@ploneform-macros/actions" />
                   <input type="submit" id="button-value-discard" value="Discard" i18n:attributes="value" />
                 </div>
+                <span id="conflict-hint" class="spv-label error">
+                  <i></i>
+                  <span i18n:translate="label_conflict_changes">The protocol has been modified in the meantime. If you want to keep your changes try resolving the conflicts manually.</span>
+                </span>
                 <div id="changes-hint" class="spv-label warning">
                   <i></i>
                   <span i18n:translate="label_unsaved_changes">You have unsaved changes</span>

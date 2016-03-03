@@ -5,6 +5,9 @@ Changelog
 4.6.4 (unreleased)
 ------------------
 
+- Meeting: Implement hint for conflicts while saving a protocol.
+  [Kevin Bieri]
+
 - Improve agenda-item workflow, allow decided agenda-items to be re-opened for
   revision. Also update excerpts when the agenda-item is revised.
   [phgross, deiferni]

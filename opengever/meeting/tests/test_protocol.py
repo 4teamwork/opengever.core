@@ -325,14 +325,7 @@ class TestProtocol(FunctionalTestCase):
         browser.open(self.meeting.get_url(view='protocol'))
 
         browser.fill({"modified": '1'}).submit()
-        self.assertEqual({
-            u'messages': [{
-                u'messageTitle': u'Error',
-                u'message': u'Your changes were not saved, the protocol has been modified in the meantime.',
-                u'messageClass': u'error'}
-            ]},
-            browser.json
-        )
+        self.assertEqual({u'hasConflict': True}, browser.json)
 
     @browsing
     def test_protocol_cannot_be_saved_when_locked_by_another_user(self, browser):
