@@ -5,6 +5,10 @@ Changelog
 4.6.4 (unreleased)
 ------------------
 
+- Make sure IRedirector JS redirects aren't unconditionally trigged when the
+  user is on the @@confirm-action view.
+  [lgraf]
+
 - Meeting: Implement hint for conflicts while saving a protocol.
   [Kevin Bieri]
 

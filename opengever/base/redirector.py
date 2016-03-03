@@ -97,8 +97,23 @@ $(function() {
 </script>
 '''
 
+    def view_name(self):
+        view = getattr(self, 'view', None)
+        if view:
+            return getattr(view, '__name__', None)
+
     def render(self):
         redirector = IRedirector(self.request)
+
+        # If we're on the CSRF confirm-action dialog, we don't want to
+        # trigger any redirects.
+        if self.view_name() == 'confirm-action':
+            # Consume the redirector cookie to avoid unconditional redirects
+            # immediately *after* the confirm-action view. If the user
+            # confirms, the redirector cookies will be set again.
+            redirector.get_redirects(remove=True)
+            return ''
+
         redirects = redirector.get_redirects(remove=True)
         html = []
         for redirect in redirects:
