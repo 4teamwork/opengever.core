@@ -96,6 +96,15 @@ class TestReferenceNumberAdapter(FunctionalTestCase):
             '2.4.7 / 8.2',
             IReferenceNumber(self.subdossier).get_number())
 
+    def test_use_no_client_id_grouped_by_three_formatter(self):
+        registry = getUtility(IRegistry)
+        proxy = registry.forInterface(IReferenceNumberSettings)
+        proxy.formatter = 'no_client_id_grouped_by_three'
+
+        self.assertEquals(
+            '247-8.2',
+            IReferenceNumber(self.subdossier).get_number())
+
 
 class TestDottedFormatter(FunctionalTestCase):
 

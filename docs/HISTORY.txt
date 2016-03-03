@@ -5,6 +5,9 @@ Changelog
 4.6.4 (unreleased)
 ------------------
 
+- Add no_client_id_grouped_by_three reference number formatter.
+  [deiferni]
+
 - Make sure IRedirector JS redirects aren't unconditionally trigged when the
   user is on the @@confirm-action view.
   [lgraf]
