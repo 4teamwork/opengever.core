@@ -12,11 +12,21 @@ class GeverLockInfoViewlet(LockInfoViewlet):
     meeting_lock_template = ViewPageTemplateFile('templates/meeting_lock.pt')
 
     def render(self):
-        lock_info = self.info.lock_info()
-        if lock_info and lock_info.get('type').__name__ == LOCK_TYPE_SYS_LOCK:
+        if self.is_meeting_lock():
             return self.meeting_lock_template()
 
         return super(GeverLockInfoViewlet, self).render()
+
+    def is_meeting_lock(self):
+        lock_info = self.lock_info()
+        if not lock_info:
+            return False
+
+        lock_type = lock_info.get('type')
+        if not lock_type:
+            return False
+
+        return lock_type.__name__ == LOCK_TYPE_SYS_LOCK
 
     def get_related_meeting_from_protocol(self):
         oguid = Oguid.for_object(self.context)
