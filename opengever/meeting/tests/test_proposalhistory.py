@@ -4,6 +4,7 @@ from ftw.testbrowser import browsing
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.testing import FunctionalTestCase
 from plone import api
+from plone.protect import createToken
 import transaction
 
 
@@ -18,8 +19,10 @@ class TestProposalHistory(FunctionalTestCase):
         self.dossier = create(Builder('dossier').within(self.repo_folder))
         self.meeting_dossier = create(
             Builder('meeting_dossier').within(self.repo_folder))
-
-        container = create(Builder('committee_container'))
+        self.excerpt_template = create(Builder('sablontemplate')
+                                       .with_asset_file('excerpt_template.docx'))
+        container = create(Builder('committee_container')
+                           .having(excerpt_template=self.excerpt_template))
         self.committee = create(Builder('committee').within(container))
         self.meeting = create(Builder('meeting')
                               .having(committee=self.committee.load_model())
@@ -109,7 +112,7 @@ class TestProposalHistory(FunctionalTestCase):
             self.get_latest_history_entry_text(browser))
 
     @browsing
-    def test_upading_existing_document_creates_history_entry(self, browser):
+    def test_updating_existing_document_creates_history_entry(self, browser):
         self.submit_proposal()
         repository = api.portal.get_tool('portal_repository')
         repository.save(self.document)
@@ -147,4 +150,38 @@ class TestProposalHistory(FunctionalTestCase):
         self.open_overview(browser)
         self.assertEqual(
             u'Removed from schedule of meeting C\xf6mmunity meeting by Test User (test_user_1_)',
+            self.get_latest_history_entry_text(browser))
+
+    @browsing
+    def test_reopening_creates_history_entry(self, browser):
+        self.submit_proposal()
+        transaction.commit()
+        browser.login().open(
+            self.meeting.get_url(view='unscheduled_proposals/1/schedule'))
+        browser.open(self.meeting.get_url(view='agenda_items/1/decide'),
+                     data={'_authenticator': createToken()})
+        browser.open(self.meeting.get_url(view='agenda_items/1/reopen'),
+                     data={'_authenticator': createToken()})
+
+        self.open_overview(browser)
+        self.assertEqual(
+            u'Proposal reopened by Test User (test_user_1_)',
+            self.get_latest_history_entry_text(browser))
+
+    @browsing
+    def test_revising_creates_history_entry(self, browser):
+        self.submit_proposal()
+        transaction.commit()
+        browser.login().open(
+            self.meeting.get_url(view='unscheduled_proposals/1/schedule'))
+        browser.open(self.meeting.get_url(view='agenda_items/1/decide'),
+                     data={'_authenticator': createToken()})
+        browser.open(self.meeting.get_url(view='agenda_items/1/reopen'),
+                     data={'_authenticator': createToken()})
+        browser.open(self.meeting.get_url(view='agenda_items/1/revise'),
+                     data={'_authenticator': createToken()})
+
+        self.open_overview(browser)
+        self.assertEqual(
+            u'Proposal revised by Test User (test_user_1_)',
             self.get_latest_history_entry_text(browser))

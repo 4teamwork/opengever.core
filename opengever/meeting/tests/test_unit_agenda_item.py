@@ -79,6 +79,38 @@ class TestUnitAgendaItem(TestCase):
                           'link': u'<a href="http://example.com/public/meetings/proposal-1" title="Pr\xf6posal">Pr\xf6posal</a>'},
                          self.proposal_agenda_item.serialize())
 
+    def test_reopen_is_only_possible_if_agenda_item_is_decided(self):
+        self.assertFalse(
+            self.simple_agenda_item.is_reopen_possible())
+
+        self.simple_agenda_item.workflow_state = 'decided'
+        self.assertTrue(
+            self.simple_agenda_item.is_reopen_possible())
+
+    def test_reopen_is_not_possible_for_paragraphs(self):
+        item = create(Builder('agenda_item')
+                      .having(is_paragraph=True, meeting=self.meeting))
+        self.assertFalse(item.is_reopen_possible())
+
+        item.workflow_state = 'decided'
+        self.assertFalse(item.is_reopen_possible())
+
+    def test_revise_is_only_possible_if_agenda_item_is_in_revision(self):
+        self.assertFalse(
+            self.simple_agenda_item.is_revise_possible())
+
+        self.simple_agenda_item.workflow_state = 'revision'
+        self.assertTrue(
+            self.simple_agenda_item.is_revise_possible())
+
+    def test_revise_is_not_possible_for_paragraphs(self):
+        item = create(Builder('agenda_item')
+                      .having(is_paragraph=True, meeting=self.meeting))
+        self.assertFalse(item.is_revise_possible())
+
+        item.workflow_state = 'revision'
+        self.assertFalse(item.is_revise_possible())
+
     def test_decide_is_only_possible_if_agenda_item_is_pending(self):
         self.assertTrue(
             self.simple_agenda_item.is_decide_possible())

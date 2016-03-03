@@ -9,6 +9,8 @@ from opengever.meeting import _
 from opengever.meeting.command import CreateGeneratedDocumentCommand
 from opengever.meeting.command import ExcerptOperations
 from opengever.meeting.command import OgCopyCommand
+from opengever.meeting.command import UpdateExcerptInDossierCommand
+from opengever.meeting.command import UpdateGeneratedDocumentCommand
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import GeneratedExcerpt
 from opengever.meeting.model import proposalhistory
@@ -279,9 +281,28 @@ class Proposal(Base):
         CreateGeneratedDocumentCommand(
             proposal_obj, agenda_item.meeting, operations).execute()
 
-    def decide(self):
+    def revise(self, agenda_item):
+        assert self.get_state() == self.STATE_DECIDED
+        self.update_excerpt(agenda_item)
+        self.session.add(proposalhistory.ProposalRevised(proposal=self))
+
+    def reopen(self, agenda_item):
+        assert self.get_state() == self.STATE_DECIDED
+        self.session.add(proposalhistory.ProposalReopened(proposal=self))
+
+    def update_excerpt(self, agenda_item):
+        operations = ExcerptOperations(agenda_item)
+        UpdateGeneratedDocumentCommand(
+            self.submitted_excerpt_document,
+            agenda_item.meeting,
+            operations).execute()
+        UpdateExcerptInDossierCommand(self).execute()
+
+    def decide(self, agenda_item):
+        self.generate_excerpt(agenda_item)
         document_intid = self.copy_excerpt_to_proposal_dossier()
         self.register_excerpt(document_intid)
+        self.session.add(proposalhistory.ProposalDecided(proposal=self))
         self.execute_transition('scheduled-decided')
 
     def register_excerpt(self, document_intid):
@@ -293,9 +314,7 @@ class Proposal(Base):
                                    int_id=document_intid,
                                    generated_version=version)
         self.session.add(excerpt)
-
         self.excerpt_document = excerpt
-        self.session.add(proposalhistory.ProposalDecided(proposal=self))
 
     def copy_excerpt_to_proposal_dossier(self):
         """Copies the submitted excerpt to the source dossier and returns

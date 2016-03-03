@@ -28,11 +28,17 @@ class AgendaItem(Base):
     STATE_PENDING = State('pending', is_default=True,
                           title=_('pending', default='Pending'))
     STATE_DECIDED = State('decided', title=_('decided', default='Decided'))
+    STATE_REVISION = State('revision', title=_('revision', default='Revision'))
 
     workflow = Workflow(
-        [STATE_PENDING, STATE_DECIDED],
+        [STATE_PENDING, STATE_DECIDED, STATE_REVISION],
         [Transition('pending', 'decided',
-                    title=_('decide', default='Decide'))]
+                    title=_('decide', default='Decide')),
+         Transition('decided', 'revision',
+                    title=_('reopen', default='Reopen')),
+         Transition('revision', 'decided',
+                    title=_('revise', default='Revise')),
+         ]
     )
 
     agenda_item_id = Column("id", Integer, Sequence("agendaitems_id_seq"),
@@ -246,6 +252,20 @@ class AgendaItem(Base):
     def has_submitted_excerpt_document(self):
         return self.has_proposal and self.proposal.has_submitted_excerpt_document()
 
+    def close(self):
+        """Close the agenda item.
+
+        Can be called to close an agenda item, this puts the agenda item in
+        decided state using the correct transitions. Currently valid states
+        are:
+        decided: do nothing
+        pending: decide
+        revision: revise
+        """
+        if self.is_revise_possible():
+            self.revise()
+        self.decide()
+
     def is_decide_possible(self):
         if not self.is_paragraph:
             return self.get_state() == self.STATE_PENDING
@@ -263,7 +283,28 @@ class AgendaItem(Base):
         self.meeting.hold()
 
         if self.has_proposal:
-            self.proposal.generate_excerpt(self)
-            self.proposal.decide()
+            self.proposal.decide(self)
 
         self.workflow.execute_transition(None, self, 'pending-decided')
+
+    def reopen(self):
+        if self.has_proposal:
+            self.proposal.reopen(self)
+        self.workflow.execute_transition(None, self, 'decided-revision')
+
+    def is_reopen_possible(self):
+        if not self.is_paragraph:
+            return self.get_state() == self.STATE_DECIDED
+        return False
+
+    def revise(self):
+        assert self.is_revise_possible()
+
+        if self.has_proposal:
+            self.proposal.revise(self)
+        self.workflow.execute_transition(None, self, 'revision-decided')
+
+    def is_revise_possible(self):
+        if not self.is_paragraph:
+            return self.get_state() == self.STATE_REVISION
+        return False

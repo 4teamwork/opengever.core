@@ -155,3 +155,27 @@ class ProposalDecided(ProposalHistory):
         return _(u'proposal_history_label_decided',
                  u'Proposal decided by ${user}',
                  mapping={'user': self.get_actor_link()})
+
+
+class ProposalReopened(ProposalHistory):
+
+    __mapper_args__ = {'polymorphic_identity': 'reopened'}
+
+    css_class = 'reopened'
+
+    def message(self):
+        return _(u'proposal_history_label_reopened',
+                 u'Proposal reopened by ${user}',
+                 mapping={'user': self.get_actor_link()})
+
+
+class ProposalRevised(ProposalHistory):
+
+    __mapper_args__ = {'polymorphic_identity': 'revised'}
+
+    css_class = 'revised'
+
+    def message(self):
+        return _(u'proposal_history_label_revised',
+                 u'Proposal revised by ${user}',
+                 mapping={'user': self.get_actor_link()})

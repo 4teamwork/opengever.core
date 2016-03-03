@@ -1,6 +1,4 @@
-from datetime import date
 from datetime import datetime
-from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -109,6 +107,9 @@ class TestMeeting(FunctionalTestCase):
                          .link_with(self.meeting_dossier))
         create(Builder('agenda_item').having(meeting=meeting,
                                              title='Mach ize'))
+        create(Builder('agenda_item').having(meeting=meeting,
+                                             title='Oebbis in revision',
+                                             workflow_state='revision'))
 
         browser.login().open(meeting.get_url())
         browser.find(close_meeting_button_name).click()

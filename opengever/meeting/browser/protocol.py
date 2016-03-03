@@ -90,7 +90,7 @@ class UpdateProtocol(grok.View):
         generated_doc = self.get_generated_document()
 
         command = UpdateGeneratedDocumentCommand(
-            generated_doc, self.operations)
+            generated_doc, meeting, self.operations)
         command.execute()
         command.show_message()
 
