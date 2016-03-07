@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.6.4 (unreleased)
+4.7.0 (2016-03-07)
 ------------------
 
 - Add no_client_id_grouped_by_three reference number formatter.
