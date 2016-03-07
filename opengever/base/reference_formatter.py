@@ -168,3 +168,31 @@ class NoClientIdDottedReferenceFormatter(DottedReferenceFormatter):
                     self.document_number(numbers))
 
             return reference_number.encode('utf-8')
+
+
+# XXX Refactor me and avoid copy-paste of complete_number.
+class NoClientIdGroupedByThreeFormatter(GroupedByThreeReferenceFormatter):
+    grok.name('no_client_id_grouped_by_three')
+
+    def complete_number(self, numbers):
+        """GroupedByThreeFormatter which omits client id.
+        """
+
+        reference_number = u''
+
+        if self.repository_number(numbers):
+            reference_number = self.repository_number(numbers)
+
+        if self.dossier_number(numbers):
+            reference_number = u'%s%s%s' % (
+                reference_number,
+                self.repository_dossier_seperator,
+                self.dossier_number(numbers))
+
+        if self.document_number(numbers):
+            reference_number = u'%s%s%s' % (
+                reference_number,
+                self.dossier_document_seperator,
+                self.document_number(numbers))
+
+        return reference_number.encode('utf-8')
