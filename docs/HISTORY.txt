@@ -5,7 +5,8 @@ Changelog
 4.7.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Activate "remove GEVER content" by default for new policies.
+  [deiferni]
 
 
 4.7.0 (2016-03-07)
