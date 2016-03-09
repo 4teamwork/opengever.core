@@ -20,7 +20,7 @@ USER_TEMPLATE = {
     'userid': 'sk1m1'
 }
 
-USER_DN_TEMPLATE = "{},ou=Users,ou=OpenGever,dc=4teamwork,dc=ch"
+USER_DN_TEMPLATE = "{},ou=Users,ou=Dev,ou=OneGovGEVER,dc=4teamwork,dc=ch"
 
 
 class LDAPUserBuilder(object):
@@ -62,12 +62,12 @@ GROUP_TEMPLATE = {
     'cn': 'og_mandant1_users',
     'objectClass': ['groupOfUniqueNames', 'top'],
     'uniqueMember': [
-        'cn=Sekretariat1 Mandant1,ou=Users,ou=OpenGever,dc=4teamwork,dc=ch',
-        'cn=Sekretariat2 Mandant1,ou=Users,ou=OpenGever,dc=4teamwork,dc=ch',
+        'cn=Sekretariat1 Mandant1,ou=Users,ou=Dev,ou=OneGovGEVER,dc=4teamwork,dc=ch',
+        'cn=Sekretariat2 Mandant1,ou=Users,ou=Dev,ou=OneGovGEVER,dc=4teamwork,dc=ch',
     ]
 }
 
-GROUP_DN_TEMPLATE = "cn={},ou=Groups,ou=OpenGever,dc=4teamwork,dc=ch"
+GROUP_DN_TEMPLATE = "cn={},ou=Groups,ou=Dev,ou=OneGovGEVER,dc=4teamwork,dc=ch"
 
 
 class LDAPGroupBuilder(object):
