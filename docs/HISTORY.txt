@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.7.1 (unreleased)
+4.7.1 (2016-03-10)
 ------------------
 
 - Implement sorter for 'no_client_id_grouped_by_three' reference number formatter.
