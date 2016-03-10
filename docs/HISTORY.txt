@@ -5,6 +5,9 @@ Changelog
 4.7.2 (unreleased)
 ------------------
 
+- Keep existing date on a protocol instead of creating a new one.
+  [Kevin Bieri]
+
 - Fix timezone mess in datetimepicker.
   [Kevin Bieri]
 

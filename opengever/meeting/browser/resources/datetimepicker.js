@@ -144,8 +144,40 @@
       $("#form-widgets-end-min").attr("value", endDate.getMinutes());
     };
 
+    var parsePloneWidgetStart = function() {
+      var startDate = new Date();
+
+      startDate.setDate($("#form-widgets-start-day").attr("value"));
+      startDate.setMonth($("#form-widgets-start-month").attr("value") - 1);
+      startDate.setFullYear($("#form-widgets-start-year").attr("value"));
+      startDate.setHours($("#form-widgets-start-hour").attr("value"));
+      startDate.setMinutes($("#form-widgets-start-min").attr("value"));
+
+      return startDate;
+    };
+
+    var parsePloneWidgetEnd = function() {
+      var endDate = new Date();
+
+      endDate.setDate($("#form-widgets-end-day").attr("value"));
+      endDate.setMonth($("#form-widgets-end-month").attr("value") - 1);
+      endDate.setFullYear($("#form-widgets-end-year").attr("value"));
+      endDate.setHours($("#form-widgets-end-hour").attr("value"));
+      endDate.setMinutes($("#form-widgets-end-min").attr("value"));
+
+      return endDate;
+    };
+
     range.start.on("changeDate", applyPloneWidget);
     range.end.on("changeDate", applyPloneWidget);
+
+    if($("#form-widgets-start-day").attr("value")) {
+      range.start.setDate(parsePloneWidgetStart());
+    }
+
+    if($("#form-widgets-end-day").attr("value")) {
+      range.end.setDate(parsePloneWidgetEnd());
+    }
 
     applyPloneWidget();
 
