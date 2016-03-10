@@ -41,9 +41,6 @@
     format: "dd/mm/yyyy hh:ii"
   };
 
-  // Confirmend bug in https://github.com/smalot/bootstrap-datetimepicker/issues/122
-  var applyTimezone = function(date) { return new Date(date.setTime(date.getTime() + (date.getTimezoneOffset() * 60 * 1000))); };
-
   var Datetimepicker = function(options) {
 
     var lang = $("#ploneLanguage").data("lang");
@@ -61,29 +58,23 @@
 
     this.element = $(options.target);
 
-    var roundMinutes = function(date, precision) { return new Date(date.setMinutes(Math.ceil(date.getMinutes() / precision) * precision)); };
-
-    var getUTCDate = function(date) { return new Date(date + "UTC"); };
-
-    var convertToLocalTime = function(date) { return applyTimezone(date); };
-
-    this.date = roundMinutes(getUTCDate(new Date()), options.minuteStep);
+    var roundMinutes = function(date, precision) {
+      return new Date(date.setMinutes(Math.ceil(date.getMinutes() / precision) * precision));
+    };
 
     this.element.datetimepicker(options);
 
     this.on = function(event, callback) { this.element.on(event, callback); };
 
-    this.setStartDate = function(date) { this.element.datetimepicker("setStartDate", convertToLocalTime(new Date(date))); };
+    this.setStartDate = function(date) { this.element.datetimepicker("setStartDate", date); };
 
-    this.setEndDate = function(date) { this.element.datetimepicker("setEndDate", convertToLocalTime(new Date(date))); };
+    this.setEndDate = function(date) { this.element.datetimepicker("setEndDate", date); };
 
-    this.setDate = function(date) {
-      this.date = new Date(date);
-      var localTime = convertToLocalTime(new Date(date));
-      this.element.datetimepicker("setDate", localTime);
-    };
+    this.setDate = function(date) { this.element.datetimepicker("setDate", date); };
 
-    this.setDate(this.date);
+    this.getDate = function() { return this.element.datetimepicker("getDate"); };
+
+    this.setDate(roundMinutes(new Date(), options.minuteStep));
 
   };
 
@@ -108,14 +99,14 @@
     }, this);
 
     var updateDate = $.proxy(function(date) {
-      if(options.minRange && (this.end.date - date) < (options.minRange * 60 * 60 * 1000)) {
+      if(options.minRange && (this.end.getDate() - date) < (options.minRange * 60 * 60 * 1000)) {
         adjustEndtime(date);
       }
       this.end.setStartDate(date);
       this.start.setDate(date);
     }, this);
 
-    updateDate(this.start.date);
+    updateDate(this.start.getDate());
 
     this.start.on("changeDate", function(event) { updateDate(event.date); });
     this.end.on("changeDate", function(event) { self.end.setDate(event.date); });
@@ -138,14 +129,14 @@
     });
 
     var applyPloneWidget = function() {
-      var startDate = applyTimezone(new Date(range.start.date));
+      var startDate = new Date(range.start.getDate());
       $("#form-widgets-start-day").attr("value", startDate.getDate());
       $("#form-widgets-start-month").attr("value", startDate.getMonth() + 1);
       $("#form-widgets-start-year").attr("value", startDate.getFullYear());
       $("#form-widgets-start-hour").attr("value", startDate.getHours());
       $("#form-widgets-start-min").attr("value", startDate.getMinutes());
 
-      var endDate = applyTimezone(new Date(range.end.date));
+      var endDate = new Date(range.end.getDate());
       $("#form-widgets-end-day").attr("value", endDate.getDate());
       $("#form-widgets-end-month").attr("value", endDate.getMonth() + 1);
       $("#form-widgets-end-year").attr("value", endDate.getFullYear());

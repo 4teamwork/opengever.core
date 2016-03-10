@@ -5,7 +5,8 @@ Changelog
 4.7.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix timezone mess in datetimepicker.
+  [Kevin Bieri]
 
 
 4.7.1 (2016-03-10)
