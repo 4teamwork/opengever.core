@@ -54,15 +54,16 @@
     }
 
     this.saveProtocol = function(target) {
-      var payload = target.parents("form").serializeArray();
+      var form = target.parents("form");
+      var payload = form.serializeArray();
       payload.push({ name: "form.buttons.save", value: saveButton.val() });
       var conflictValidator = function(data) {
         if(data.hasConflict) {
           showHintForConflictChanges();
         }
         return !data.hasConflict;
-      }
-      return this.request(target.attr("action"), { method: "POST", data: payload, validator: conflictValidator })
+      };
+      return this.request(form.attr("action"), { type: "POST", data: payload, validator: conflictValidator })
               .done(function(data) {
                 if (data.redirectUrl !== undefined) {
                   meetingStorage.deleteCurrentMeeting();
