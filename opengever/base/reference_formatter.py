@@ -122,8 +122,10 @@ class GroupedByThreeReferenceFormatter(DottedReferenceFormatter):
 
         clientid_repository_separator = u' '
 
-        # '010.123.43-1.1-7'  -->  '010.123.43', '1.1-7'
+        # 'OG 010.123.43-1.1-7'  -->  '010.123.43-1.1-7'
         clientid, remainder = value.split(clientid_repository_separator, 1)
+
+        # '010.123.43-1.1-7'  -->  '010.123.43', '1.1-7'
         refnums_part, remainder = remainder.split(self.repository_dossier_seperator, 1)
 
         # Return a tuple with the different parts separated.
@@ -196,3 +198,30 @@ class NoClientIdGroupedByThreeFormatter(GroupedByThreeReferenceFormatter):
                 self.document_number(numbers))
 
         return reference_number.encode('utf-8')
+
+    def sorter(self, brain_or_value):
+        if not isinstance(brain_or_value, basestring):
+            # It's a brain
+            value = brain_or_value.reference
+        else:
+            # It's already a string value
+            value = brain_or_value
+
+        # '010.123.43-1.1-7'  -->  '010.123.43', '1.1-7'
+        refnums_part, remainder = value.split(self.repository_dossier_seperator, 1)
+
+        # Return a tuple with the different parts separated.
+        # Cast document and (sub)dossier parts to integers to achieve proper
+        # sorting, but keep the refnum part as a string because it is already
+        # zero-padded and sorting it numerically would yield wrong results.
+
+        if remainder.count(self.dossier_document_seperator) > 0:
+            # Document Reference Number
+            dossier_part, document_part = remainder.split(self.dossier_document_seperator, 1)
+            subdossier_parts = [int(d) for d in dossier_part.split('.')]
+            return (refnums_part, tuple(subdossier_parts), int(document_part))
+        else:
+            # Dossier Reference Number
+            dossier_part = remainder
+            subdossier_parts = [int(d) for d in dossier_part.split('.')]
+            return (refnums_part, tuple(subdossier_parts))

@@ -5,6 +5,9 @@ Changelog
 4.7.1 (unreleased)
 ------------------
 
+- Implement sorter for 'no_client_id_grouped_by_three' reference number formatter.
+  [lgraf]
+
 - Activate "remove GEVER content" by default for new policies.
   [deiferni]
 
