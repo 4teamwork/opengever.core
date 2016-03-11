@@ -1,0 +1,1 @@
+from .schema import dump_schemas_zopectl_handler

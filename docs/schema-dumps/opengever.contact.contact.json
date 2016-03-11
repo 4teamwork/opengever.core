@@ -1,0 +1,189 @@
+{
+    "portal_type": "opengever.contact.contact",
+    "title": "Kontakt",
+    "schemas": [
+        {
+            "name": "opengever.contact.contact.IContact",
+            "fields": [
+                {
+                    "name": "salutation",
+                    "type": "TextLine",
+                    "title": "Anrede",
+                    "desc": "",
+                    "required": false
+                },
+                {
+                    "name": "academic_title",
+                    "type": "TextLine",
+                    "title": "Titel",
+                    "desc": "",
+                    "required": false
+                },
+                {
+                    "name": "lastname",
+                    "type": "TextLine",
+                    "title": "Nachname",
+                    "desc": "",
+                    "required": true
+                },
+                {
+                    "name": "firstname",
+                    "type": "TextLine",
+                    "title": "Vorname",
+                    "desc": "",
+                    "required": true
+                },
+                {
+                    "name": "company",
+                    "type": "TextLine",
+                    "title": "Firma",
+                    "desc": "",
+                    "required": false
+                },
+                {
+                    "name": "department",
+                    "type": "TextLine",
+                    "title": "Abteilung",
+                    "desc": "",
+                    "required": false
+                },
+                {
+                    "name": "function",
+                    "type": "TextLine",
+                    "title": "Funktion",
+                    "desc": "",
+                    "required": false
+                },
+                {
+                    "name": "email",
+                    "type": "TextLine",
+                    "title": "E-Mail 1",
+                    "desc": "",
+                    "required": false
+                },
+                {
+                    "name": "email2",
+                    "type": "TextLine",
+                    "title": "E-Mail 2",
+                    "desc": "",
+                    "required": false
+                },
+                {
+                    "name": "url",
+                    "type": "URI",
+                    "title": "URL",
+                    "desc": "",
+                    "required": false
+                },
+                {
+                    "name": "phone_office",
+                    "type": "TextLine",
+                    "title": "Telefon Arbeit",
+                    "desc": "",
+                    "required": false
+                },
+                {
+                    "name": "phone_fax",
+                    "type": "TextLine",
+                    "title": "Fax Arbeit",
+                    "desc": "",
+                    "required": false
+                },
+                {
+                    "name": "phone_mobile",
+                    "type": "TextLine",
+                    "title": "Telefon Mobile",
+                    "desc": "",
+                    "required": false
+                },
+                {
+                    "name": "phone_home",
+                    "type": "TextLine",
+                    "title": "Telefon Privat",
+                    "desc": "",
+                    "required": false
+                },
+                {
+                    "name": "picture",
+                    "type": "NamedImage",
+                    "title": "Bild",
+                    "desc": "",
+                    "required": false
+                },
+                {
+                    "name": "description",
+                    "type": "Text",
+                    "title": "Beschreibung",
+                    "desc": "",
+                    "required": false
+                },
+                {
+                    "name": "address1",
+                    "type": "TextLine",
+                    "title": "Adresse (Strasse / Nr.)",
+                    "desc": "",
+                    "required": false
+                },
+                {
+                    "name": "address2",
+                    "type": "TextLine",
+                    "title": "Adresszusatz",
+                    "desc": "",
+                    "required": false
+                },
+                {
+                    "name": "zip_code",
+                    "type": "TextLine",
+                    "title": "PLZ",
+                    "desc": "",
+                    "required": false
+                },
+                {
+                    "name": "city",
+                    "type": "TextLine",
+                    "title": "Ort",
+                    "desc": "",
+                    "required": false
+                },
+                {
+                    "name": "country",
+                    "type": "TextLine",
+                    "title": "Land",
+                    "desc": "",
+                    "required": false
+                }
+            ],
+            "fieldsets": {
+                "personal": [
+                    "salutation",
+                    "academic_title",
+                    "firstname",
+                    "lastname",
+                    "description",
+                    "picture",
+                    "company",
+                    "department",
+                    "function"
+                ],
+                "address": [
+                    "address1",
+                    "address2",
+                    "zip_code",
+                    "city",
+                    "country"
+                ],
+                "telefon": [
+                    "phone_office",
+                    "phone_fax",
+                    "phone_mobile",
+                    "phone_home"
+                ],
+                "internet": [
+                    "email",
+                    "email2",
+                    "url"
+                ]
+            }
+        }
+    ]
+}

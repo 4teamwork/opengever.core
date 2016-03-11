@@ -5,7 +5,8 @@ Changelog
 4.7.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add API documentation (Sphinx).
+  [lgraf]
 
 
 4.7.2 (2016-03-10)

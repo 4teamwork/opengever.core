@@ -6,6 +6,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from xml.sax.saxutils import escape
 from zope.component import getMultiAdapter
+import json
 
 
 def language_cache_key(method, context, request):
@@ -113,3 +114,9 @@ def escape_html(text):
         "'": "&apos;"
     }
     return escape(text, html_escape_table)
+
+
+def pretty_json(obj):
+    """Dump an object to a pretty printed JSON string.
+    """
+    return json.dumps(obj, indent=4, separators=(',', ': '))
