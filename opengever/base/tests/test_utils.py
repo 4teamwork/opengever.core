@@ -128,3 +128,11 @@ class TestEscapeHTML(TestCase):
     def test_escapes_ampersand(self):
         text = "Foo &Bar& Baz"
         self.assertEquals('Foo &amp;Bar&amp; Baz', escape_html(text))
+
+    def test_escapes_empty_string_returns_empty_string(self):
+        text = ''
+        self.assertEquals('', escape_html(text))
+
+    def test_escapes_none_returns_none(self):
+        text = None
+        self.assertEquals(None, escape_html(text))

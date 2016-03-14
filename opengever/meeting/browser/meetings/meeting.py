@@ -1,5 +1,3 @@
-from Products.Five.browser import BrowserView
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from five import grok
 from opengever.base.browser.helper import get_css_class
 from opengever.base.browser.wizard import BaseWizardStepForm
@@ -19,6 +17,8 @@ from plone import api
 from plone.dexterity.i18n import MessageFactory as pd_mf
 from plone.directives import form
 from plone.z3cform.layout import FormWrapper
+from Products.Five.browser import BrowserView
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
 from z3c.form.form import Form

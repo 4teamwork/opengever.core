@@ -53,13 +53,16 @@ class TestMeetingView(FunctionalTestCase):
                                         .for_document(self.excerpt))
 
         self.hugo = create(Builder('member').having(firstname=u'h\xfcgo',
-                                                    lastname="Boss"))
+                                                    lastname="Boss",
+                                                    email="boss@foo.ch"))
 
         self.sile = create(Builder('member').having(firstname="Silvia",
-                                                    lastname="Pangani"))
+                                                    lastname="Pangani",
+                                                    email="pangani@foo.ch"))
 
         self.peter = create(Builder('member').having(firstname="Peter",
-                                                     lastname="Meter"))
+                                                     lastname="Meter",
+                                                     email="meter@foo.ch"))
 
         self.hans = create(Builder('member').having(firstname="Hans",
                                                     lastname="Besen"))
@@ -125,7 +128,9 @@ class TestMeetingView(FunctionalTestCase):
     @browsing
     def test_participants_listing_precidency_is_existing(self, browser):
         browser.login().open(self.meeting.get_url())
-        self.assertEquals([u'h\xfcgo Boss'], browser.css("#meeting_presidency + dd").text)
+        self.assertEquals(
+            [u'h\xfcgo Boss (boss@foo.ch)'],
+            browser.css("#meeting_presidency + dd").text)
 
     @browsing
     def test_participants_listing_no_precidency_must_not_raise(self, browser):
@@ -137,7 +142,9 @@ class TestMeetingView(FunctionalTestCase):
     @browsing
     def test_participants_listing_secretary_is_existing(self, browser):
         browser.login().open(self.meeting.get_url())
-        self.assertEquals(['Silvia Pangani'], browser.css("#meeting_secretary + dd").text)
+        self.assertEquals(
+            [u'Silvia Pangani (pangani@foo.ch)'],
+            browser.css("#meeting_secretary + dd").text)
 
     @browsing
     def test_participants_listing_no_secretary_must_not_raise(self, browser):
@@ -149,8 +156,9 @@ class TestMeetingView(FunctionalTestCase):
     @browsing
     def test_participants_listing_participants_is_existing(self, browser):
         browser.login().open(self.meeting.get_url())
-        self.assertEquals(['Peter Meter Hans Besen Roland Kuppler'],
-                          browser.css("#meeting_participants + dd").text)
+        self.assertEquals(
+            ['Peter Meter (meter@foo.ch) Hans Besen Roland Kuppler'],
+            browser.css("#meeting_participants + dd").text)
 
     @browsing
     def test_participants_listing_empty_participants_must_not_raise(self, browser):

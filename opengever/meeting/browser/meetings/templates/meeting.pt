@@ -128,14 +128,14 @@
                     i18n:attributes="title"
                     title="presidency"></dt>
                 <dd tal:condition="meeting/presidency"
-                    tal:content="meeting/presidency/fullname"></dd>
+                    tal:content="structure meeting/presidency/get_title"></dd>
 
                 <dt id="meeting_secretary"
                     tal:condition="meeting/secretary"
                     i18n:attributes="title"
                     title="secretary"></dt>
                 <dd tal:condition="meeting/secretary"
-                    tal:content="meeting/secretary/fullname"></dd>
+                    tal:content="structure meeting/secretary/get_title"></dd>
 
                 <dt id="meeting_participants"
                     i18n:attributes="title"
@@ -143,7 +143,7 @@
                 <dd>
                   <ul>
                     <li tal:repeat="participant meeting/participants"
-                        tal:content="participant/fullname"></li>
+                        tal:content="structure participant/get_title"></li>
                   </ul>
                 </dd>
 

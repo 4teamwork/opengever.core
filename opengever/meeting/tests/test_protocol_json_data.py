@@ -30,7 +30,8 @@ class TestProtocolJsonData(FunctionalTestCase):
         self.member_peter = create(Builder('member'))
         self.member_franz = create(Builder('member')
                                    .having(firstname=u'Franz',
-                                           lastname=u'M\xfcller'))
+                                           lastname=u'M\xfcller',
+                                           email="mueller@example.com"))
         self.membership_peter = create(Builder('membership').having(
             member=self.member_peter,
             committee=self.committee,
@@ -76,5 +77,5 @@ class TestProtocolJsonData(FunctionalTestCase):
 
         self.assertEquals(
             {'members': [{'fullname': u'Peter M\xfcller', 'role': None},
-                         {'fullname': u'Franz M\xfcller', 'role': None}]},
+                         {'fullname': u'Franz M\xfcller (mueller@example.com)', 'role': None}]},
             ProtocolData(self.meeting).add_members())
