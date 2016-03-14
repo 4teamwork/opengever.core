@@ -62,6 +62,11 @@ def post_adminunit_abbreviation(configurator, question, answer):
     return answer
 
 
+def post_adminunit_id(configurator, question, answer):
+    configurator.variables['adminunit.ac_cookie_name'] = answer.replace('-', '_')
+    return answer
+
+
 def post_base_domain(configurator, question, answer):
     configurator.defaults.update({
         'adminunit.site_url': 'https://{}'.format(answer),
