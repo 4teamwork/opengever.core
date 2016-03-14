@@ -1,6 +1,6 @@
 [buildout]
 extends =
-  test-plone-4-2-x.cfg
+  test-plone-4-3-x.cfg
   https://raw.github.com/4teamwork/ftw-buildouts/master/plone-development.cfg
 {{% if setup.enable_meeting_feature %}}
   http://buildout-proxy.4teamwork.ch/4teamwork/opengever-buildouts/master/ruby-gems.cfg
