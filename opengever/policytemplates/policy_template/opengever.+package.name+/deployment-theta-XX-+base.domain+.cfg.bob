@@ -11,4 +11,5 @@ ogds-db-name = gever-{{{package.name}}}
 client-policy = opengever.{{{package.name}}}
 usernamelogger_ac_cookie_name = __ac_{{{adminunit.id}}}
 instance-eggs += opengever.{{{package.name}}}
+raven_tags = {"cluster": "{{{base.domain}}}"}
 develop = .
