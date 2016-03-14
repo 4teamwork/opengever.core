@@ -6,6 +6,8 @@ Inhalt:
 .. toctree::
    :maxdepth: 2
 
+   basics.rst
+   operations.rst
    exploring.rst
    content_types.rst
 
