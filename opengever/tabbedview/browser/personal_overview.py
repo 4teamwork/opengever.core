@@ -1,4 +1,6 @@
 from AccessControl import Unauthorized
+from Products.CMFPlone.utils import getToolByName
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from five import grok
 from ftw.tabbedview.browser.tabbed import TabbedView
 from opengever.activity import is_activity_feature_enabled
@@ -7,13 +9,12 @@ from opengever.latex.opentaskreport import is_open_task_report_allowed
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
-from opengever.tabbedview import _
 from opengever.tabbedview import LOG
+from opengever.tabbedview import _
 from opengever.tabbedview.browser.tabs import Documents, Dossiers
 from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
 from plone import api
-from Products.CMFPlone.utils import getToolByName
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from plone.memoize.view import memoize_contextless
 from sqlalchemy.exc import OperationalError
 from zope.interface import Interface
 import AccessControl
@@ -124,6 +125,7 @@ class PersonalOverview(TabbedView):
         current_user = ogds_service().fetch_current_user()
         return current_user in inbox.assigned_users() or self._is_user_admin()
 
+    @memoize_contextless
     def user_is_allowed_to_view(self):
         """Returns True if the current client is one of the user's home
         clients or an administrator and he therefore is allowed to view
@@ -131,7 +133,7 @@ class PersonalOverview(TabbedView):
         """
         try:
             current_user = ogds_service().fetch_current_user()
-            if current_user in get_current_admin_unit().assigned_users():
+            if get_current_admin_unit().is_user_assigned(current_user):
                 return True
             elif self._is_user_admin():
                 return True

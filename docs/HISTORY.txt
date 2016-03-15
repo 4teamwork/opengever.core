@@ -5,6 +5,9 @@ Changelog
 4.7.3 (unreleased)
 ------------------
 
+- Optimize `user_is_allowed_to_view()`.
+  [buchi]
+
 - meeting: Allow blank end date for meetings
   [Kevin Bieri]
 
