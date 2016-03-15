@@ -7,7 +7,6 @@ from opengever.meeting.committeeroles import CommitteeRoles
 from opengever.meeting.container import ModelContainer
 from opengever.meeting.model import Committee as CommitteeModel
 from opengever.meeting.model import Meeting
-from opengever.meeting.model import Membership
 from opengever.meeting.service import meeting_service
 from opengever.meeting.sources import repository_folder_source
 from opengever.meeting.sources import sablon_template_source
@@ -26,11 +25,18 @@ from zope.schema.vocabulary import SimpleVocabulary
 @grok.provider(IContextSourceBinder)
 def get_group_vocabulary(context):
     service = ogds_service()
-    groups = []
-    for group in service.all_groups():
-        groups.append(SimpleVocabulary.createTerm(
+    userid = api.user.get_current().getId()
+    terms = []
+
+    if api.user.has_permission('cmf.ManagePortal', obj=context):
+        groups = service.all_groups()
+    else:
+        groups = service.assigned_groups(userid)
+
+    for group in groups:
+        terms.append(SimpleVocabulary.createTerm(
             group.groupid, group.groupid, group.title))
-    return SimpleVocabulary(groups)
+    return SimpleVocabulary(terms)
 
 
 class ICommittee(form.Schema):

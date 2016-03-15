@@ -5,6 +5,9 @@ Changelog
 4.7.5 (unreleased)
 ------------------
 
+- Only groups where the user is a member are available to select when creating/editing committees.
+  [elioschmutz]
+
 - Fix examplecontent repositories.
   [deiferni]
 
