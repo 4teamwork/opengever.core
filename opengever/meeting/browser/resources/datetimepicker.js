@@ -41,9 +41,11 @@
     format: "dd/mm/yyyy hh:ii"
   };
 
-  var Datetimepicker = function(options) {
+  var Datetimepicker = function(initialDate, options) {
 
     var lang = $("#ploneLanguage").data("lang");
+
+    var clearBtn = $("<a href='#' class='spv-datetime-widget-clear'>");
 
     options = $.extend({
       target: ".datetimepicker",
@@ -53,10 +55,22 @@
       startView: 1,
       minuteStep: 5,
       viewSelect: "year",
-      language: lang
+      language: lang,
+      clearBtn: false
     }, options);
 
+    this.blank = true;
+
     this.element = $(options.target);
+
+    clearBtn.on("click", function(event) {
+      event.preventDefault();
+      this.clear();
+    }.bind(this));
+
+    if(options.clearBtn) {
+      clearBtn.insertAfter(this.element);
+    }
 
     var roundMinutes = function(date, precision) {
       return new Date(date.setMinutes(Math.ceil(date.getMinutes() / precision) * precision));
@@ -70,11 +84,24 @@
 
     this.setEndDate = function(date) { this.element.datetimepicker("setEndDate", date); };
 
-    this.setDate = function(date) { this.element.datetimepicker("setDate", date); };
+    this.setDate = function(date) {
+      this.blank = false;
+      this.element.datetimepicker("setDate", date);
+      this.element.trigger("date-changed", [date]);
+    };
 
     this.getDate = function() { return this.element.datetimepicker("getDate"); };
 
-    this.setDate(roundMinutes(new Date(), options.minuteStep));
+    this.clear = function() {
+      this.blank = true;
+      this.element.val("");
+      this.element.trigger("date-cleared");
+      this.element.trigger("input");
+    };
+
+    if(initialDate) {
+      this.setDate(roundMinutes(initialDate, options.minuteStep));
+    }
 
   };
 
@@ -90,8 +117,8 @@
 
     var self = this;
 
-    this.start = new Datetimepicker({ target: options.target.start });
-    this.end = new Datetimepicker({ target: options.target.end });
+    this.start = new Datetimepicker(options.start || new Date(), { target: options.target.start });
+    this.end = new Datetimepicker(options.end, { target: options.target.end, clearBtn: true });
 
     var adjustEndtime = $.proxy(function(start) {
       var end = new Date(new Date(start).setHours(start.getHours() + options.minRange));
@@ -106,7 +133,11 @@
       this.start.setDate(date);
     }, this);
 
-    updateDate(this.start.getDate());
+    if(!this.end.blank) {
+      updateDate(this.start.getDate());
+    } else {
+      this.end.setStartDate(this.start.getDate());
+    }
 
     this.start.on("changeDate", function(event) { updateDate(event.date); });
     this.end.on("changeDate", function(event) { self.end.setDate(event.date); });
@@ -115,34 +146,11 @@
 
   $(function() {
 
-    var start = $("<input class='spv-datetime-widget' type='text' />");
-    var end = $("<input class='spv-datetime-widget' type='text' />");
+    var start = $("<input class='spv-datetime-widget' readonly type='text' />");
+    var end = $("<input class='spv-datetime-widget' readonly type='text' />");
 
     start.insertAfter("#formfield-form-widgets-start > label");
     end.insertAfter("#formfield-form-widgets-end > label");
-
-    var range = new Rangetimepicker({
-      target: {
-        start: start,
-        end: end
-      }
-    });
-
-    var applyPloneWidget = function() {
-      var startDate = new Date(range.start.getDate());
-      $("#form-widgets-start-day").attr("value", startDate.getDate());
-      $("#form-widgets-start-month").attr("value", startDate.getMonth() + 1);
-      $("#form-widgets-start-year").attr("value", startDate.getFullYear());
-      $("#form-widgets-start-hour").attr("value", startDate.getHours());
-      $("#form-widgets-start-min").attr("value", startDate.getMinutes());
-
-      var endDate = new Date(range.end.getDate());
-      $("#form-widgets-end-day").attr("value", endDate.getDate());
-      $("#form-widgets-end-month").attr("value", endDate.getMonth() + 1);
-      $("#form-widgets-end-year").attr("value", endDate.getFullYear());
-      $("#form-widgets-end-hour").attr("value", endDate.getHours());
-      $("#form-widgets-end-min").attr("value", endDate.getMinutes());
-    };
 
     var parsePloneWidgetStart = function() {
       var startDate = new Date();
@@ -158,29 +166,60 @@
 
     var parsePloneWidgetEnd = function() {
       var endDate = new Date();
-
       endDate.setDate($("#form-widgets-end-day").attr("value"));
       endDate.setMonth($("#form-widgets-end-month").attr("value") - 1);
       endDate.setFullYear($("#form-widgets-end-year").attr("value"));
       endDate.setHours($("#form-widgets-end-hour").attr("value"));
       endDate.setMinutes($("#form-widgets-end-min").attr("value"));
-
       return endDate;
     };
 
-    range.start.on("changeDate", applyPloneWidget);
-    range.end.on("changeDate", applyPloneWidget);
+    var applyStartWidget = function(date) {
+      $("#form-widgets-start-day").attr("value", date.getDate());
+      $("#form-widgets-start-month").attr("value", date.getMonth() + 1);
+      $("#form-widgets-start-year").attr("value", date.getFullYear());
+      $("#form-widgets-start-hour").attr("value", date.getHours());
+      $("#form-widgets-start-min").attr("value", date.getMinutes());
+    };
 
-    if($("#form-widgets-start-day").attr("value")) {
-      range.start.setDate(parsePloneWidgetStart());
+    var applyEndWidget = function(date) {
+      $("#form-widgets-end-day").attr("value", date.getDate());
+      $("#form-widgets-end-month").attr("value", date.getMonth() + 1);
+      $("#form-widgets-end-year").attr("value", date.getFullYear());
+      $("#form-widgets-end-hour").attr("value", date.getHours());
+      $("#form-widgets-end-min").attr("value", date.getMinutes());
+    };
+
+    var clearEndWidget = function() {
+      $("#form-widgets-end-day").attr("value", null);
+      $("#form-widgets-end-month").attr("value", null);
+      $("#form-widgets-end-year").attr("value", null);
+      $("#form-widgets-end-hour").attr("value", null);
+      $("#form-widgets-end-min").attr("value", null);
+    };
+
+    var options = {
+      target: {
+        start: start,
+        end: end
+      }
+    };
+
+    if($("#form-widgets-start-day").attr("value") !== "") {
+      options.start = parsePloneWidgetStart();
     }
 
-    if($("#form-widgets-end-day").attr("value")) {
-      range.end.setDate(parsePloneWidgetEnd());
+    if($("#form-widgets-end-day").attr("value") !== "") {
+      options.end = parsePloneWidgetEnd();
     }
 
-    applyPloneWidget();
+    var range = new Rangetimepicker(options);
 
+    range.start.on("date-changed", function(event, date) { applyStartWidget(date); });
+    range.end.on("date-changed", function(event, date) { applyEndWidget(date); });
+    range.end.on("date-cleared", function() { clearEndWidget(); });
+
+    applyStartWidget(range.start.getDate());
 
   });
 

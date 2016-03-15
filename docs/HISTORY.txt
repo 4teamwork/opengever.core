@@ -5,6 +5,9 @@ Changelog
 4.7.3 (unreleased)
 ------------------
 
+- meeting: Allow blank end date for meetings
+  [Kevin Bieri]
+
 - Show email addresses of participant in a meeting or a meeting protocol.
   [elioschmutz]
 
