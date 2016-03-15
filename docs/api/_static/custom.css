@@ -29,7 +29,12 @@ dl.attribute {
 }
 
 hr {
-    margin-bottom: 3em;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    border: 0;
+    height: 1px;
+    background: #333;
+    background-image: linear-gradient(to right, #ccc, #333, #ccc);
 }
 
 .field-title {
@@ -51,4 +56,11 @@ table.field-list tbody tr:first-child td {
 
 table.field-list th.field-name {
     min-width: 10em;
+}
+
+blockquote {
+  background: #f9f9f9;
+  border-left: 10px solid #ccc;
+  margin: 1.5em 10px;
+  padding: 0.5em 10px;
 }
