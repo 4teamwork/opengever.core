@@ -5,6 +5,9 @@ Changelog
 4.7.5 (unreleased)
 ------------------
 
+- Fix broken TranslatedTitleBrain. It has to return utf-8 instead of unicode.
+  [elioschmutz]
+
 - Only groups where the user is a member are available to select when creating/editing committees.
   [elioschmutz]
 

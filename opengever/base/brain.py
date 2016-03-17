@@ -22,6 +22,8 @@ def useBrains(self, brains):
             if not title:
                 title = super(TranslatedTitleBrain, self).Title
 
+            if isinstance(title, unicode):
+                return title.encode('utf-8')
             return title
 
     self._v_result_class = TranslatedTitleBrain

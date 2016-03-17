@@ -122,7 +122,7 @@ class TestTranslatedTitle(FunctionalTestCase):
 
         set_preferred_language(self.portal.REQUEST, 'fr-ch')
 
-        self.assertEquals(u"syst\xe8me d'ordre",
+        self.assertEquals("syst\xc3\xa8me d'ordre",
                           obj2brain(repository_root).Title)
 
     @browsing
@@ -136,12 +136,12 @@ class TestTranslatedTitle(FunctionalTestCase):
 
     @browsing
     def test_Title_on_brains_use_Title_as_fallback_when_no_language_title_exists(self, browser):
-        dossier = create(Builder('dossier').titled(u"Ablage"))
+        dossier = create(Builder('dossier').titled(u'F\xfchrung'))
         set_preferred_language(self.portal.REQUEST, 'de')
-        self.assertEquals(u"Ablage", obj2brain(dossier).Title)
+        self.assertEquals("F\xc3\xbchrung", obj2brain(dossier).Title)
 
         set_preferred_language(self.portal.REQUEST, 'fr')
-        self.assertEquals(u"Ablage", obj2brain(dossier).Title)
+        self.assertEquals("F\xc3\xbchrung", obj2brain(dossier).Title)
 
 
 class TestTranslatedTitleAddForm(FunctionalTestCase):
