@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.7.3 (unreleased)
+4.7.3 (2016-03-17)
 ------------------
 
 - Optimize `user_is_allowed_to_view()`.
