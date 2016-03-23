@@ -1,4 +1,3 @@
-from opengever.base.utils import escape_html
 from opengever.meeting import _
 from opengever.meeting.model.membership import Membership
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -135,3 +134,7 @@ class ExcerptProtocolData(ProtocolData):
                 _(u'protocol_excerpt', default=u'Protocol-Excerpt'),
                 context=getRequest())
         }
+
+    def add_settings(self):
+        """Do not add the start-page setting for excertps."""
+        pass
