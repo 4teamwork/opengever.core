@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.7.4 (unreleased)
+4.7.4 (2016-03-23)
 ------------------
 
 - No longer set start-page for documents generated as protocol excerpts.
