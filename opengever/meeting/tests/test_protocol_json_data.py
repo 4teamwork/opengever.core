@@ -3,6 +3,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.model import create_session
 from opengever.meeting.browser.sablontemplate import SAMPLE_MEETING_DATA
+from opengever.meeting.protocol import ExcerptProtocolData
 from opengever.meeting.protocol import ProtocolData
 from opengever.testing import FunctionalTestCase
 
@@ -79,3 +80,35 @@ class TestProtocolJsonData(FunctionalTestCase):
             {'members': [{'fullname': u'Peter M\xfcller', 'role': None},
                          {'fullname': u'Franz M\xfcller (mueller@example.com)', 'role': None}]},
             ProtocolData(self.meeting).add_members())
+
+
+class TestExcerptJsonData(FunctionalTestCase):
+
+    maxDiff = None
+
+    def setUp(self):
+        super(TestExcerptJsonData, self).setUp()
+        self.proposal = create(
+            Builder('proposal_model')
+            .having(title=u'Strafbefehl wegen Bauens ohne Bewilligung'))
+        self.committee = create(Builder('committee_model')
+                                .having(title=u'Gemeinderat'))
+        self.meeting = create(Builder('meeting').having(
+            committee=self.committee,
+            protocol_start_page_number=13,
+            meeting_number=11,))
+
+    def test_excerpt_json_does_not_contain_start_page(self):
+        data = ExcerptProtocolData(self.meeting).data
+        self.assertEqual({
+            'agenda_items': [],
+            'protocol': {'type': u'Protocol-Excerpt'},
+            'participants': {'other': [], 'members': []},
+            'committee': {'name': u'Gemeinderat'},
+            'mandant': {'name': u'Client1'},
+            'meeting': {'date': u'Dec 13, 2011',
+                        'start_time': u'09:30 AM',
+                        'end_time': u'11:45 AM',
+                        'number': 11}},
+            data
+        )

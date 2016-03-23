@@ -5,7 +5,8 @@ Changelog
 4.7.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- No longer set start-page for documents generated as protocol excerpts.
+  [deiferni]
 
 
 4.7.3 (2016-03-17)
