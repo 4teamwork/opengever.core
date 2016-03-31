@@ -5,7 +5,8 @@ Changelog
 4.7.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix examplecontent repositories.
+  [deiferni]
 
 
 4.7.4 (2016-03-23)
