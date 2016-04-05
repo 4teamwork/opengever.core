@@ -35,9 +35,9 @@ from zope.component import provideUtility
 from zope.configuration import xmlconfig
 from zope.sqlalchemy import datamanager
 import logging
+import os
 import sys
 import transaction
-
 
 loghandler = logging.StreamHandler(stream=sys.stdout)
 loghandler.setLevel(logging.DEBUG)
@@ -142,6 +142,7 @@ class OpengeverFixture(PloneSandboxLayer):
             context=configurationContext)
 
         z2.installProduct(app, 'plone.app.versioningbehavior')
+        z2.installProduct(app, 'collective.taskqueue.pasplugin')
 
         setupCoreSessions(app)
 
@@ -149,6 +150,8 @@ class OpengeverFixture(PloneSandboxLayer):
         # In tests this is set to 100 by default
         transient_object_container = app.temp_folder.session_data
         transient_object_container.setSubobjectLimit(0)
+
+        os.environ['BUMBLEBEE_DEACTIVATE'] = "True"
 
         import opengever.base.tests.views
         xmlconfig.file('configure.zcml',
@@ -166,6 +169,10 @@ class OpengeverFixture(PloneSandboxLayer):
 
     def tearDownPloneSite(self, portal):
         activateActivityCenter()
+
+    def tearDownZope(self, app):
+        super(OpengeverFixture, self).tearDownZope(app)
+        os.environ['BUMBLEBEE_DEACTIVATE'] = "True"
 
     def installOpengeverProfiles(self, portal):
         # Copied from metadata.zxml of opengever.policy.base:default
@@ -195,6 +202,7 @@ class OpengeverFixture(PloneSandboxLayer):
         applyProfile(portal, 'opengever.latex:default')
         applyProfile(portal, 'opengever.meeting:default')
         applyProfile(portal, 'opengever.activity:default')
+        applyProfile(portal, 'opengever.bumblebee:default')
         applyProfile(portal, 'ftw.datepicker:default')
         applyProfile(portal, 'plone.formwidget.autocomplete:default')
         applyProfile(portal, 'plone.formwidget.contenttree:default')
