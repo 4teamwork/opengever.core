@@ -126,15 +126,6 @@ class TestTranslatedTitle(FunctionalTestCase):
                           obj2brain(repository_root).Title)
 
     @browsing
-    def test_Title_on_brains_use_german_title_as_fallback(self, browser):
-        repository_root = create(Builder('repository_root')
-                                 .having(title_de=u"Ablage"))
-
-        set_preferred_language(self.portal.REQUEST, 'fr-ch')
-
-        self.assertEquals(u"Ablage", obj2brain(repository_root).Title)
-
-    @browsing
     def test_Title_on_brains_use_Title_as_fallback_when_no_language_title_exists(self, browser):
         dossier = create(Builder('dossier').titled(u'F\xfchrung'))
         set_preferred_language(self.portal.REQUEST, 'de')

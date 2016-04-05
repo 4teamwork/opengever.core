@@ -5,6 +5,9 @@ Changelog
 4.7.5 (unreleased)
 ------------------
 
+- Remove unused fallback method for TranslatedTitleBrain (it has never worked so far).
+  [elioschmutz]
+
 - Fix broken TranslatedTitleBrain. It has to return utf-8 instead of unicode.
   [elioschmutz]
 
