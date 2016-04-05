@@ -1,4 +1,3 @@
-from opengever.base.behaviors.translated_title import TranslatedTitle
 from opengever.base.utils import get_preferred_language_code
 
 
@@ -16,12 +15,13 @@ def useBrains(self, brains):
         def Title(self):
             code = get_preferred_language_code()
             title = getattr(self, 'title_%s' % code, None)
-            if not title:
-                title = getattr(self, TranslatedTitle.FALLBACK_LANGUAGE, None)
 
-            if not title:
+            if title is None:
+                # non-translated content
                 title = super(TranslatedTitleBrain, self).Title
 
+            if isinstance(title, unicode):
+                return title.encode('utf-8')
             return title
 
     self._v_result_class = TranslatedTitleBrain
