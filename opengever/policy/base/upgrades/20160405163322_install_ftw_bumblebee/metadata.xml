@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<metadata>
+  <dependencies>
+    <dependency>profile-opengever.bumblebee:default</dependency>
+  </dependencies>
+</metadata>
