@@ -256,6 +256,33 @@ Alternatively it's also possible to only update a single subpackage, for example
     bin/i18n-build opengever.dossier
 
 
+Updating API docs
+-----------------
+
+In order to build the Sphinx API docs locally, use the provided
+``bin/api-docs-build`` script:
+
+.. code::
+
+    bin/api-docs-build
+
+This will build the docs (using the ``html`` target by default). If you'd like
+to build a different output format, supply it as the fist argument to the
+script (e.g. ``bin/api-docs-build latexpdf``).
+
+If you made changes to any schema interfaces that need to make their way into
+the docs, you need to run the ``bin/instance dump_schemas`` script before
+running the ``api-docs-build`` script:
+
+.. code::
+
+    bin/instance dump_schemas
+
+This will update the respective schema dumps in ``docs/schema-dumps/`` that
+are then used by the ``api-docs-build`` script to render restructured text
+schema docs.
+
+
 Scripts
 -------
 Scripts are located in ``/scripts``.
