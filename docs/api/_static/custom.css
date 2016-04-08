@@ -64,3 +64,28 @@ blockquote {
   margin: 1.5em 10px;
   padding: 0.5em 10px;
 }
+
+
+/* Content type icons */
+
+#schemas .section > h3 {
+    background-repeat: no-repeat;
+    padding-left: 2em;
+    padding-top: 0.25em;
+}
+
+#schemas #geschaftsdossier > h3 {
+    background-image: url('img/dossier.png');
+}
+
+#schemas #dokument > h3 {
+    background-image: url('img/document.png');
+}
+
+#schemas #mail > h3 {
+    background-image: url('img/mail.png');
+}
+
+#schemas #kontakt > h3 {
+    background-image: url('img/contact.png');
+}
