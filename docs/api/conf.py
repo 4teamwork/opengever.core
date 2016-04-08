@@ -30,6 +30,7 @@ import os
 # ones.
 extensions = [
     'sphinxcontrib.httpdomain',
+    'sphinxcontrib.googleanalytics',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -50,6 +51,9 @@ master_doc = 'index'
 project = u'OneGov GEVER API'
 copyright = u'2016, 4teamwork AG'
 author = u'4teamwork AG'
+
+googleanalytics_id = 'UA-7414398-7'
+googleanalytics_enabled = True
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
