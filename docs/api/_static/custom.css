@@ -74,6 +74,10 @@ blockquote {
     padding-top: 0.25em;
 }
 
+#schemas #ordnungssystem > h3 {
+    background-image: url('img/repositoryroot.png');
+}
+
 #schemas #ordnungsposition > h3 {
     background-image: url('img/repositoryfolder.png');
 }

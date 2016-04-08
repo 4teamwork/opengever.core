@@ -8,6 +8,7 @@ Im Folgenden sind (substantielle) Änderungen an der Dokumentation aufgeführt.
 2016-04-08
 ----------
 
+- Schema für Typ "Ordnungssystem" hinzugefügt
 - Schema für Typ "Ordnungsposition" hinzugefügt
 - Lokales Inhaltsverzeichnis im Kapitel "Inhaltstypen" hinzugefügt
 - Kapitel "Changelog" hinzugefügt

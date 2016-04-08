@@ -8,6 +8,7 @@ GEVER_TYPES = [
     'ftw.mail.mail',
     'opengever.contact.contact',
     'opengever.repository.repositoryfolder',
+    'opengever.repository.repositoryroot',
 ]
 
 
