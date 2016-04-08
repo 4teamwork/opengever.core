@@ -49,7 +49,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'OneGov GEVER API'
-copyright = u'2016, 4teamwork AG'
+copyright = u'<a href="https://www.4teamwork.ch">2016, 4teamwork AG</a>'
 author = u'4teamwork AG'
 
 googleanalytics_id = 'UA-7414398-7'
