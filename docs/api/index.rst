@@ -10,6 +10,7 @@ Inhalt:
    operations.rst
    exploring.rst
    content_types.rst
+   docs_changelog.rst
 
 
 Stichwortverzeichnis
