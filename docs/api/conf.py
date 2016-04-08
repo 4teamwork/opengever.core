@@ -116,6 +116,7 @@ html_theme = 'alabaster'
 # documentation.
 html_theme_options = {
     'show_powered_by': False,
+    'github_button': False,
     'logo_name': False,
     'logo': 'img/gever_logo.png',
 }
