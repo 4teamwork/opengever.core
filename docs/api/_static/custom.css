@@ -74,6 +74,10 @@ blockquote {
     padding-top: 0.25em;
 }
 
+#schemas #ordnungsposition > h3 {
+    background-image: url('img/repositoryfolder.png');
+}
+
 #schemas #geschaftsdossier > h3 {
     background-image: url('img/dossier.png');
 }
