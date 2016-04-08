@@ -3,6 +3,11 @@
 Inhaltstypen
 ============
 
+.. contents::
+   :local:
+   :backlinks: none
+
+
 Schemas
 -------
 
