@@ -5,6 +5,9 @@ Changelog
 4.7.5 (unreleased)
 ------------------
 
+- Various updates to API documentation.
+  [lgraf]
+
 - Remove unused fallback method for TranslatedTitleBrain (it has never worked so far).
   [elioschmutz]
 
