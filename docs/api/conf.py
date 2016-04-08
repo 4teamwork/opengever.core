@@ -116,6 +116,8 @@ html_theme = 'alabaster'
 # documentation.
 html_theme_options = {
     'show_powered_by': False,
+    'logo_name': False,
+    'logo': 'img/gever_logo.png',
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
@@ -130,7 +132,10 @@ html_theme_options = {
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-html_logo = '_static/img/gever_logo.png'
+#
+# HINT: Logo is defined below in theme_options instead, in order to be able
+# to turn off the project name link that causes wrapping in our navigation.
+#html_logo = '_static/img/gever_logo.png'
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
