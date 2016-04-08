@@ -15,6 +15,23 @@ Schemas
 .. role:: field-title
 
 
+Ordnungssystem
+^^^^^^^^^^^^^^^^
+
+.. include:: schemas/opengever.repository.repositoryroot.inc
+
+--------------------
+
+
+Ordnungsposition
+^^^^^^^^^^^^^^^^
+
+.. include:: schemas/opengever.repository.repositoryfolder.inc
+
+--------------------
+
+
+
 Geschäftsdossier
 ^^^^^^^^^^^^^^^^
 

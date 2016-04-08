@@ -7,6 +7,8 @@ GEVER_TYPES = [
     'opengever.document.document',
     'ftw.mail.mail',
     'opengever.contact.contact',
+    'opengever.repository.repositoryfolder',
+    'opengever.repository.repositoryroot',
 ]
 
 
@@ -22,5 +24,9 @@ DEFAULT_OVERRIDES = {
     },
     'opengever.document.behaviors.metadata.IDocumentMetadata': {
         'document_date': '<Aktuelles Datum>',
+    },
+    'opengever.repository.behaviors.referenceprefix.IReferenceNumberPrefix': {
+        'reference_number_prefix':
+            u'<H\xf6chste auf dieser Ebene vergebene Nummer + 1>',
     },
 }

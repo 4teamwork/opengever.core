@@ -1,0 +1,51 @@
+{
+    "portal_type": "opengever.repository.repositoryroot",
+    "title": "Ordnungssystem",
+    "schemas": [
+        {
+            "name": "opengever.repository.repositoryroot.IRepositoryRoot",
+            "fields": [
+                {
+                    "name": "valid_from",
+                    "type": "Date",
+                    "title": "G\u00fcltig ab",
+                    "desc": "",
+                    "required": false
+                },
+                {
+                    "name": "valid_until",
+                    "type": "Date",
+                    "title": "G\u00fcltig bis",
+                    "desc": "",
+                    "required": false
+                },
+                {
+                    "name": "version",
+                    "type": "TextLine",
+                    "title": "Version",
+                    "desc": "",
+                    "required": false
+                }
+            ]
+        },
+        {
+            "name": "opengever.base.behaviors.translated_title.ITranslatedTitle",
+            "fields": [
+                {
+                    "name": "title_de",
+                    "type": "TextLine",
+                    "title": "Titel (deutsch)",
+                    "desc": "",
+                    "required": true
+                },
+                {
+                    "name": "title_fr",
+                    "type": "TextLine",
+                    "title": "Titel (franz\u00f6sisch)",
+                    "desc": "",
+                    "required": true
+                }
+            ]
+        }
+    ]
+}
