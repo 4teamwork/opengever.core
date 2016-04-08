@@ -20,6 +20,8 @@ Geschäftsdossier
 
 .. include:: schemas/opengever.dossier.businesscasedossier.inc
 
+--------------------
+
 
 
 Dokument
@@ -27,12 +29,16 @@ Dokument
 
 .. include:: schemas/opengever.document.document.inc
 
+--------------------
+
 
 
 Mail
 ^^^^
 
 .. include:: schemas/ftw.mail.mail.inc
+
+--------------------
 
 
 
