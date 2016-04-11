@@ -5,6 +5,9 @@ Changelog
 4.7.5 (unreleased)
 ------------------
 
+- Redirect to the members listingtab after adding a new member instead of the members detailview.
+  [phgross]
+
 - Various updates to API documentation.
   [lgraf]
 
