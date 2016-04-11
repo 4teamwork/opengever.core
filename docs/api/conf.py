@@ -30,7 +30,6 @@ import os
 # ones.
 extensions = [
     'sphinxcontrib.httpdomain',
-    'sphinxcontrib.googleanalytics',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -51,9 +50,6 @@ master_doc = 'index'
 project = u'OneGov GEVER API'
 copyright = u'<a href="https://www.4teamwork.ch">2016, 4teamwork AG</a>'
 author = u'4teamwork AG'
-
-googleanalytics_id = 'UA-7414398-7'
-googleanalytics_enabled = True
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -123,6 +119,7 @@ html_theme_options = {
     'github_button': False,
     'logo_name': False,
     'logo': 'img/gever_logo.png',
+    'analytics_id': 'UA-7414398-7',
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
