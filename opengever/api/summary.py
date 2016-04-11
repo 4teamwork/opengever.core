@@ -15,6 +15,7 @@ class GeverJSONSummarySerializer(DefaultJSONSummarySerializer):
 
     Includes
     - translated 'title' for objects with ITranslatedTitleSupport
+    - the object's portal_type
 
     Titles will be translated in the negotiated language, coming from the
     request's Accept-Language header for API requests.
@@ -32,6 +33,9 @@ class GeverJSONSummarySerializer(DefaultJSONSummarySerializer):
     def __call__(self):
         # Get the default summary first, then modify it as needed
         summary = super(GeverJSONSummarySerializer, self).__call__()
+
+        # Include portal_type
+        summary['@type'] = self.context.portal_type
 
         if ITranslatedTitleSupport.providedBy(self.context):
             # Update title to contain translated title in negotiated language

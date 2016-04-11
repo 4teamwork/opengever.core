@@ -8,6 +8,7 @@ Changelog
 - REST API: Customize summary representation to include
 
   - Translated 'title' for objects with ITranslatedTitleSupport
+  - The object's portal_type
 
  [lgraf]
 
