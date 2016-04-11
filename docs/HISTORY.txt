@@ -5,6 +5,12 @@ Changelog
 4.7.5 (unreleased)
 ------------------
 
+- REST API: Customize summary representation to include
+
+  - Translated 'title' for objects with ITranslatedTitleSupport
+
+ [lgraf]
+
 - Meeting: Rename button to create paragraphs to "insert".
   [deiferni]
 
