@@ -30,7 +30,7 @@ class TestMemberListing(FunctionalTestCase):
         self.assertEquals([u'Record created'], info_messages())
 
         hans = Member.query.filter_by(firstname=u'Hanspeter').first()
-        self.assertEqual(MemberView.url_for(self.container, hans),
+        self.assertEqual('{}#members'.format(self.container.absolute_url()),
                          browser.url)
 
         self.assertIsNotNone(hans)
