@@ -11,15 +11,19 @@ class IMeetingSettings(Interface):
         default=False)
 
 
-class IMeetingWrapper(Interface):
+class IBaseWrapper(Interface):
+    """Marker interface for sql object wrappers."""
+
+
+class IMeetingWrapper(IBaseWrapper):
     """Marker interface for meeting object wrappers."""
 
 
-class IMemberWrapper(Interface):
+class IMemberWrapper(IBaseWrapper):
     """Marker interface for member object wrappers."""
 
 
-class IMembershipWrapper(Interface):
+class IMembershipWrapper(IBaseWrapper):
     """Marker interface for membership object wrappers."""
 
 
