@@ -48,8 +48,10 @@ Wordvorlage, die in OneGov GEVER über den Menüpunkt Vorlagen abgelegt ist, vor
 
 |docprops-4|
 
-  Für die Erarbeitung einer neuen Vorlage können auch bestehende Vorlagen überarbeitet werden. So müssen 
-  nicht alle DocProperties jedes Mal manuell neu erstellt werden, sondern werden mitkopiert.
+.. admonition:: Vorlagen kopieren
+
+   Für die Erarbeitung einer neuen Vorlage können auch bestehende Vorlagen überarbeitet werden. So müssen 
+   nicht alle DocProperties jedes Mal manuell neu erstellt werden, sondern werden mitkopiert.
 
 Sind alle benötigten DocProperties in der Wordvorlage definiert, können sie nun nach Belieben im Haupttext 
 verwendet werden.
