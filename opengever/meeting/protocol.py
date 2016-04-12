@@ -84,11 +84,22 @@ class ProtocolData(object):
         participants['other'] = other_participants
 
         if self.meeting.presidency:
-            participants['presidency'] = self.meeting.presidency.get_title(
-                show_email_as_link=False)
+            membership = Membership.query.fetch_for_meeting(
+                self.meeting, self.meeting.presidency)
+            participants['presidency'] = {
+                "fullname": self.meeting.presidency.get_title(
+                    show_email_as_link=False),
+                "role": membership.role if membership else None
+            }
+
         if self.meeting.secretary:
-            participants['secretary'] = self.meeting.secretary.get_title(
-                show_email_as_link=False)
+            membership = Membership.query.fetch_for_meeting(
+                self.meeting, self.meeting.secretary)
+            participants['secretary'] = {
+                "fullname": self.meeting.secretary.get_title(
+                    show_email_as_link=False),
+                "role": membership.role if membership else None
+            }
 
         self.data['participants'] = participants
 
