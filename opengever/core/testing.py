@@ -225,7 +225,7 @@ class OpengeverFixture(PloneSandboxLayer):
         lang_tool.start_neutral = False
         lang_tool.use_subdomain_negotiation = False
         lang_tool.authenticated_users_only = False
-        lang_tool.use_request_negotiation = False
+        lang_tool.use_request_negotiation = True
 
         # These would be (possible) production defaults, but will break tests
         # lang_tool.setDefaultLanguage('de-ch')

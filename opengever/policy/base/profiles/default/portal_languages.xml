@@ -6,6 +6,7 @@
     <start_neutral value="False"/>
     <use_subdomain_negotiation value="False"/>
     <authenticated_users_only value="False"/>
+    <use_request_negotiation value="True"/>
     <supported_langs>
         <element value="de-ch"/>
     </supported_langs>
