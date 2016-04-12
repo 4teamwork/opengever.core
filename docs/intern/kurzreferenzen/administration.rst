@@ -30,15 +30,13 @@ DocProperties in Vorlagen verwenden
 Damit DocProperties in Worddokumenten verwendet werden können, muss in einem ersten Schritt die entsprechende 
 Wordvorlage, die in OneGov GEVER über den Menüpunkt Vorlagen abgelegt ist, vorbereitet werden:
 
-1)	Wählen Sie die Wordvorlage im Vorlagenbereich von OneGov GEVER aus, und öffnen Sie das Dokument 
-zur Bearbeitung (Auschecken und bearbeiten).
+1)	Wählen Sie die Wordvorlage im Vorlagenbereich von OneGov GEVER aus, und öffnen Sie das Dokument zur Bearbeitung (Auschecken und bearbeiten).
 
 2)	Begeben Sie sich in Word auf Datei > Eigenschaften > Erweiterte Eigenschaften > Anpassen.
 
 3)	Geben Sie den Namen der gewünschten DocProperty im Feld Name ein.
 
-4)	Als “Wert” kann vorerst ein Leerschlag (Space) eingefügt werden. Dieser wird bei der Erstellung eines neuen 
- Dokuments ab Vorlage automatisch mit dem aktuellen Metadatenwert überschrieben. 
+4)	Als “Wert” kann vorerst ein Leerschlag (Space) eingefügt werden. Dieser wird bei der Erstellung eines neuen Dokuments ab Vorlage automatisch mit dem aktuellen Metadatenwert überschrieben. 
 
 5)	Die so erstellte DocProperty kann nun über das Feld Hinzufügen den Eigenschaften hinzugefügt werden.
  
@@ -95,9 +93,7 @@ Dies muss einmalig in Word gemacht werden, nicht für jede Wordvorlage!
 
 6)	Vergeben Sie den Makronamen “AutoOpen”.
 
-7)	Erstellen Sie das Makro über Erstellen. Bei der Option Makros in können "Alle aktiven Dokumentvorlagen 
- und Dokumenten" ausgewählt werden. Damit wird sichergestellt, dass das Makro in allen Dokumenten 
- automatisch verfügbar ist.
+7)	Erstellen Sie das Makro über Erstellen. Bei der Option Makros in können "Alle aktiven Dokumentvorlagen und Dokumenten" ausgewählt werden. Damit wird sichergestellt, dass das Makro in allen Dokumenten automatisch verfügbar ist.
 
 8)	Den Code (siehe Tabelle) können Sie dem Feld Normal - NewMacros (Code) hinzufügen.
  
