@@ -1,9 +1,10 @@
 from Acquisition import Implicit
 from OFS.Traversable import Traversable
 from opengever.locking.interfaces import ISQLLockable
+from opengever.meeting.interfaces import IBaseWrapper
 from opengever.meeting.interfaces import IMeetingWrapper
-from opengever.meeting.interfaces import IMemberWrapper
 from opengever.meeting.interfaces import IMembershipWrapper
+from opengever.meeting.interfaces import IMemberWrapper
 from opengever.meeting.model import Membership
 from Products.CMFPlone.interfaces import IHideFromBreadcrumbs
 from zope.interface import implements
@@ -12,7 +13,7 @@ import ExtensionClass
 
 class BaseWrapper(ExtensionClass.Base, Implicit, Traversable):
 
-    implements(IHideFromBreadcrumbs)
+    implements(IHideFromBreadcrumbs, IBaseWrapper)
 
     default_view = 'view'
 
