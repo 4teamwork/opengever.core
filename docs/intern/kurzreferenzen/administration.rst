@@ -99,7 +99,7 @@ Dies muss einmalig in Word gemacht werden, nicht für jede Wordvorlage!
  
 9)	Nachdem Sie den Code eingefügt haben, speichern Sie die Einstellungen ab.
 
-.. sourcecode:: Visual Basic.NET
+.. sourcecode:: vb
 
   Sub AutoOpen()
   '
