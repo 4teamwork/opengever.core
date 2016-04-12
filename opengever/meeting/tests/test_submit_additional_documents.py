@@ -9,6 +9,7 @@ from opengever.meeting.model import SubmittedDocument
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.testing import FunctionalTestCase
 from plone import api
+from zExceptions import Unauthorized
 import transaction
 
 
@@ -44,6 +45,16 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
         self.assertTrue(proposal.is_submit_additional_documents_allowed())
         transaction.commit()
         return proposal
+
+    def login_as_user_without_committee_permission(self, browser):
+        create(Builder('user').named('Hugo', 'Boss'))
+        api.user.grant_roles(username=u'hugo.boss',
+                             obj=self.dossier,
+                             roles=['Contributor', 'Editor', 'Reader'])
+        transaction.commit()
+        browser.login(username='hugo.boss')
+        with self.assertRaises(Unauthorized):
+            browser.open(self.committee)
 
     def test_cannot_submit_new_document_versions_outside_proposals(self):
         document = create(Builder('document')
@@ -228,3 +239,37 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
         self.assertEqual(
             [], browser.css('a.outdated'),
             "The outdated link should not be visible on a submitted proposal")
+
+    @browsing
+    def test_submit_new_document_to_proposal_without_permission_on_committee_is_possible(self, browser):
+        proposal = self.setup_proposal()
+
+        self.login_as_user_without_committee_permission(browser)
+
+        browser.visit(self.document)
+        browser.find('Submit additional document').click()
+        browser.fill({'Proposal': proposal})
+        browser.find('Submit Attachments').click()
+
+        self.assertSubmittedDocumentCreated(proposal, self.document)
+        self.assertSequenceEqual(
+            ['Additional document A Document has been submitted successfully'],
+            info_messages())
+
+    @browsing
+    def test_update_existing_document_without_permission_on_committee_is_possible(self, browser):
+        proposal = self.setup_proposal(attach_document=True)
+        repository = api.portal.get_tool('portal_repository')
+        repository.save(self.document)
+        transaction.commit()
+
+        self.login_as_user_without_committee_permission(browser)
+
+        browser.visit(proposal, view='tabbedview_view-overview')
+        browser.find('Update document in proposal').click()
+        browser.find('Submit Attachments').click()
+
+        # self.assertSubmittedDocumentCreated(proposal, self.document)
+        self.assertSequenceEqual(
+            ['A new submitted version of document A Document has been created'],
+            info_messages())

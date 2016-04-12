@@ -370,7 +370,8 @@ class CopyProposalDocumentCommand(object):
         return self._target_admin_unit_id or self._parent_action.admin_unit_id
 
     def execute(self):
-        reponse = self.copy_document(self.target_path, self.target_admin_unit_id)
+        reponse = self.copy_document(
+            self.target_path, self.target_admin_unit_id)
         self.add_database_entry(reponse, self.target_admin_unit_id)
 
     def show_message(self):
@@ -401,7 +402,7 @@ class CopyProposalDocumentCommand(object):
             document_title=self.document.title))
 
     def copy_document(self, target_path, target_admin_unit_id):
-        return OgCopyCommand(
+        return OgCopyCommandWithElevatedPrivileges(
             self.document, target_admin_unit_id, target_path).execute()
 
 
@@ -414,4 +415,10 @@ class OgCopyCommand(object):
 
     def execute(self):
         return Transporter().transport_to(
+            self.source, self.target_admin_unit_id, self.target_path)
+
+class OgCopyCommandWithElevatedPrivileges(OgCopyCommand):
+
+    def execute(self):
+        return Transporter().transport_to_with_elevated_privileges(
             self.source, self.target_admin_unit_id, self.target_path)
