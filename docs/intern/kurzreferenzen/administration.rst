@@ -30,7 +30,7 @@ DocProperties in Vorlagen verwenden
 Damit DocProperties in Worddokumenten verwendet werden können, muss in einem ersten Schritt die entsprechende 
 Wordvorlage, die in OneGov GEVER über den Menüpunkt Vorlagen abgelegt ist, vorbereitet werden:
 
-1)	Waehlen Sie die Wordvorlage im Vorlagenbereich von OneGov GEVER aus, und öffnen Sie das Dokument zur Bearbeitung 
+1)	Waehlen Sie die Wordvorlage im Vorlagenbereich von OneGov GEVER aus, und oeffnen Sie das Dokument zur Bearbeitung 
 (Auschecken und bearbeiten).
 
 2)	Begeben Sie sich in Word auf Datei > Eigenschaften > Erweiterte Eigenschaften > Anpassen.
