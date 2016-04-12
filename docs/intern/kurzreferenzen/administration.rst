@@ -40,7 +40,7 @@ Wordvorlage, die in OneGov GEVER über den Menüpunkt Vorlagen abgelegt ist, vor
 
 5)	Die so erstellte DocProperty kann nun über das Feld Hinzufügen den Eigenschaften hinzugefügt werden.
  
-  |docprops-3|
+ |docprops-3|
  
 6)	Die so erstellten DocProperties sind nun in den Eigenschaften ersichtlich.
 
