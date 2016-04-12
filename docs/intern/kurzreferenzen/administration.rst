@@ -122,3 +122,19 @@ Dies muss einmalig in Word gemacht werden, nicht für jede Wordvorlage!
   End Sub
 
 Nun werden in neu geöffneten Worddokumenten automatisch die DocProperties aktualisiert.
+
+.. |docprops-3| image:: _static/img/kurzref_adm_docprops_3.png
+.. |docprops-4| image:: _static/img/kurzref_adm_docprops_4.png
+.. |docprops-5| image:: _static/img/kurzref_adm_docprops_5.png
+.. |docprops-6| image:: _static/img/kurzref_adm_docprops_6.png
+.. |docprops-7| image:: _static/img/kurzref_adm_docprops_7.png
+.. |docprops-8| image:: _static/img/kurzref_adm_docprops_8.png
+.. |docprops-9| image:: _static/img/kurzref_adm_docprops_9.png
+.. |docprops-10| image:: _static/img/kurzref_adm_docprops_10.png
+.. |docprops-11| image:: _static/img/kurzref_adm_docprops_11.png
+.. |docprops-12| image:: _static/img/kurzref_adm_docprops_12.png
+.. |docprops-13| image:: _static/img/kurzref_adm_docprops_13.png
+.. |docprops-14| image:: _static/img/kurzref_adm_docprops_14.png
+.. |docprops-15| image:: _static/img/kurzref_adm_docprops_15.png
+
+
