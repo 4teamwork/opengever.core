@@ -101,24 +101,24 @@ Dies muss einmalig in Word gemacht werden, nicht für jede Wordvorlage!
 
 .. sourcecode:: Visual Basic.NET
 
- Sub AutoOpen()
- '
- ' UpdateDocprops Makro
- ' http://www.gmayor.com/installing_macro.htm                    
- '                                                 
- '
- Dim oStory As Range
- For Each oStory In ActiveDocument.StoryRanges
-   oStory.Fields.Update
-   If oStory.StoryType <> wdMainTextStory Then
-     While Not (oStory.NextStoryRange Is Nothing)
-       Set oStory = oStory.NextStoryRange
-       oStory.Fields.Update
-     Wend
-   End If
- Next oStory
- Set oStory = Nothing
+  Sub AutoOpen()
+  '
+  ' UpdateDocprops Makro
+  ' http://www.gmayor.com/installing_macro.htm                    
+  '                                                 
+  '
+  Dim oStory As Range
+  For Each oStory In ActiveDocument.StoryRanges
+    oStory.Fields.Update
+    If oStory.StoryType <> wdMainTextStory Then
+      While Not (oStory.NextStoryRange Is Nothing)
+        Set oStory = oStory.NextStoryRange
+        oStory.Fields.Update
+      Wend
+    End If
+  Next oStory
+  Set oStory = Nothing
 
- End Sub
+  End Sub
 
 Nun werden in neu geöffneten Worddokumenten automatisch die DocProperties aktualisiert.
