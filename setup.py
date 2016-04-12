@@ -146,6 +146,7 @@ setup(name='opengever.core',
         'z3c.saconfig',
         'zc.relation',
         'zope.globalrequest',
+        'PyXB',
         # -*- Extra requirements: -*-
         ],
       tests_require=tests_require,
@@ -167,5 +168,6 @@ setup(name='opengever.core',
 
       [console_scripts]
       create-policy = opengever.policytemplates.cli:main
+      pyxbgen = opengever.disposition.ech0160.pyxbgen:main
       """,
       )
