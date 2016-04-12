@@ -60,7 +60,7 @@ class XlsSource(object):
 
         files = sorted(os.listdir(self.path))
         for repo_num, filename in enumerate(reversed(files)):
-            if filename.startswith('.') or not filename.endswith('.xlsx'):
+            if not self.is_parsable(filename):
                 continue
 
             xls_path = os.path.join(self.path, filename)
@@ -73,6 +73,20 @@ class XlsSource(object):
             keys, sheet_data = self.read_excel_file(xls_path)
             for rownum, row in enumerate(sheet_data):
                 yield self.process_row(row, rownum, keys, repository_id)
+
+    def is_parsable(self, filename):
+        """Return wheter we should attempt to parse the file based on its
+        filename.
+
+        Microsoft office crates temp files in the same directory and prefixes
+        them with a tilde.
+        """
+        if filename.startswith('.') or filename.startswith('~'):
+            return False
+        if not filename.endswith('.xlsx'):
+            return False
+
+        return True
 
     def read_excel_file(self, xls_path):
         tables = xlrd_xls2array(xls_path)
