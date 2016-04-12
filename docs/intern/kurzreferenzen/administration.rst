@@ -40,12 +40,14 @@ Wordvorlage, die in OneGov GEVER über den Menüpunkt Vorlagen abgelegt ist, vor
 
 5)	Die so erstellte DocProperty kann nun über das Feld Hinzufügen den Eigenschaften hinzugefügt werden.
  
- |docprops-3|
+|docprops-3|
  
 6)	Die so erstellten DocProperties sind nun in den Eigenschaften ersichtlich.
 
 7)	Wenn alle gewünschten DocProperties erstellt wurden, mit OK abschliessen. 
- 
+
+|docprops-4|
+
   Für die Erarbeitung einer neuen Vorlage können auch bestehende Vorlagen überarbeitet werden. So müssen 
   nicht alle DocProperties jedes Mal manuell neu erstellt werden, sondern werden mitkopiert.
 
@@ -56,9 +58,13 @@ Dies geschieht in Word wie folgt:
 
 1)	Die gewünschte Stelle, an der die DocProperty eingefügt werden soll, markieren. 
 
+|docprops-5|
+
 2)	Den Menüpunkt Einfügen auswählen.
 
 3)	Unter Schnellbausteine die Option Feld auswählen.
+
+|docprops-6|
 
 4)	Feldname auswählen = DocProperty. 
 
@@ -66,12 +72,18 @@ Dies geschieht in Word wie folgt:
 
 6)	Die Option “Feldfunktionen” auswählen.
 
+|docprops-7|
+
 7)	Ausgewähltes DocProperty in Anführungs - und Schlusszeichen setzen.
 
 8)	Mit “OK” bestätigen.
 
+|docprops-8|
+
 Die DocProperty ist eingefügt und kann in Word mit Doppelklick > Rechtsklick > Feldfunktion ein an 
 der gewünschten Position im Dokument angezeigt und überprüft werden.
+
+|docprops-9|
 
 DocProperties in Worddokumenten automatisch aktualisieren
 ---------------------------------------------------------
@@ -85,20 +97,32 @@ Dies muss einmalig in Word gemacht werden, nicht für jede Wordvorlage!
 
 1)	Begeben Sie sich bitte im Word auf Datei > Optionen > Menüband anpassen.
 
+|docprops-10|
+
 2)	Aktivieren Sie die “Entwicklertools” durch Setzen eines Häkchens in den Hauptregisterkarten aus.
 
 3)	Bestätigen Sie die Änderung mit “OK”.
 
+|docprops-11|
+
 4)	Sind die “Entwicklertools” dem Menüband hinzugefügt, wählen Sie diese Menü bitte aus.
+
+|docprops-12|
 
 5)	Begeben Sie sich auf den Menüpunkt “Makros”
 
+|docprops-13|
+
 6)	Vergeben Sie den Makronamen “AutoOpen”.
+
+|docprops-14|
 
 7)	Erstellen Sie das Makro über Erstellen. Bei der Option Makros in können "Alle aktiven Dokumentvorlagen und Dokumenten" ausgewählt werden. Damit wird sichergestellt, dass das Makro in allen Dokumenten automatisch verfügbar ist.
 
 8)	Den Code (siehe Tabelle) können Sie dem Feld Normal - NewMacros (Code) hinzufügen.
- 
+
+|docprops-15|
+
 9)	Nachdem Sie den Code eingefügt haben, speichern Sie die Einstellungen ab.
 
 .. sourcecode:: vb
@@ -125,18 +149,18 @@ Dies muss einmalig in Word gemacht werden, nicht für jede Wordvorlage!
 
 Nun werden in neu geöffneten Worddokumenten automatisch die DocProperties aktualisiert.
 
-.. |docprops-3| image:: _static/img/kurzref_adm_docprops_3.png
-.. |docprops-4| image:: _static/img/kurzref_adm_docprops_4.png
-.. |docprops-5| image:: _static/img/kurzref_adm_docprops_5.png
-.. |docprops-6| image:: _static/img/kurzref_adm_docprops_6.png
-.. |docprops-7| image:: _static/img/kurzref_adm_docprops_7.png
-.. |docprops-8| image:: _static/img/kurzref_adm_docprops_8.png
-.. |docprops-9| image:: _static/img/kurzref_adm_docprops_9.png
-.. |docprops-10| image:: _static/img/kurzref_adm_docprops_10.png
-.. |docprops-11| image:: _static/img/kurzref_adm_docprops_11.png
-.. |docprops-12| image:: _static/img/kurzref_adm_docprops_12.png
-.. |docprops-13| image:: _static/img/kurzref_adm_docprops_13.png
-.. |docprops-14| image:: _static/img/kurzref_adm_docprops_14.png
-.. |docprops-15| image:: _static/img/kurzref_adm_docprops_15.png
+.. |docprops-3| image:: ../_static/img/kurzref_adm_docprops_3.png
+.. |docprops-4| image:: ../_static/img/kurzref_adm_docprops_4.png
+.. |docprops-5| image:: ../_static/img/kurzref_adm_docprops_5.png
+.. |docprops-6| image:: ../_static/img/kurzref_adm_docprops_6.png
+.. |docprops-7| image:: ../_static/img/kurzref_adm_docprops_7.png
+.. |docprops-8| image:: ../_static/img/kurzref_adm_docprops_8.png
+.. |docprops-9| image:: ../_static/img/kurzref_adm_docprops_9.png
+.. |docprops-10| image:: ../_static/img/kurzref_adm_docprops_10.png
+.. |docprops-11| image:: ../_static/img/kurzref_adm_docprops_11.png
+.. |docprops-12| image:: ../_static/img/kurzref_adm_docprops_12.png
+.. |docprops-13| image:: ../_static/img/kurzref_adm_docprops_13.png
+.. |docprops-14| image:: ../_static/img/kurzref_adm_docprops_14.png
+.. |docprops-15| image:: ../_static/img/kurzref_adm_docprops_15.png
 
 
