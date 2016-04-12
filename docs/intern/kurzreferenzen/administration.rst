@@ -97,9 +97,9 @@ Dies muss einmalig in Word gemacht werden, nicht für jede Wordvorlage!
 
 1)	Begeben Sie sich bitte im Word auf Datei > Optionen > Menüband anpassen.
 
-|docprops-10|
-
 2)	Aktivieren Sie die “Entwicklertools” durch Setzen eines Häkchens in den Hauptregisterkarten aus.
+
+|docprops-10|
 
 3)	Bestätigen Sie die Änderung mit “OK”.
 
