@@ -11,25 +11,40 @@ DocProperties
 
 Mit DocProperties können ausgewählte Metadaten aus Dossiers von OneGov GEVER direkt in Worddokumenten übernommen 
 werden. Die folgenden Metadaten werden von OneGov GEVER-beim Öffnen von Worddokumenten automatisch weitergegeben:
-- Dossier.ReferenceNumber – Aktenzeichen des Dossiers, welches das Dokument enthält
-- Document.ReferenceNumber – Aktenzeichen des Dokuments
--	Document.SequenceNumber – Laufnummer des Dokuments
--	User.FullName – Vor- und Nachname des angemeldeten Benutzers
--	Dossier.Title – Titel des Dossiers, welches das Dokument enthält
--	User.ID – Benutzerkennung des angemeldeten Benutzers
+
+- *Dossier.ReferenceNumber* – Aktenzeichen des Dossiers, welches das Dokument enthält
+
+- *Document.ReferenceNumber* – Aktenzeichen des Dokuments
+
+-	*Document.SequenceNumber* – Laufnummer des Dokuments
+
+-	*User.FullName* – Vor- und Nachname des angemeldeten Benutzers
+
+-	*Dossier.Title* – Titel des Dossiers, welches das Dokument enthält
+
+-	*User.ID* – Benutzerkennung des angemeldeten Benutzers
 
 DocProperties in Vorlagen verwenden
 -----------------------------------
-Damit DocProperties in Worddokumenten verwendet werden können, muss in einem ersten Schritt die entsprechende Wordvorlage, die in OneGov GEVER über den Menüpunkt Vorlagen abgelegt ist, vorbereitet werden:
-1)	Wählen Sie die Wordvorlage im Vorlagenbereich von OneGov GEVER aus, und öffnen Sie das Dokument zur Bearbeitung (Auschecken und bearbeiten).
-2)	Begeben Sie sich in Word auf Datei > Eigenschaften > Erweiterte Eigenschaften > Anpassen.
-3)	Geben Sie den Namen der gewünschten DocProperty im Feld Name ein.
-4)	Als “Wert” kann vorerst ein Leerschlag (Space) eingefügt werden. Dieser wird bei der Erstellung eines neuen Dokuments ab Vorlage automatisch mit dem aktuellen Metadatenwert überschrie-ben. 
-5)	Die so erstellte DocProperty kann nun über das Feld Hinzufügen den Eigenschaften hinzugefügt werden.
 
+Damit DocProperties in Worddokumenten verwendet werden können, muss in einem ersten Schritt die entsprechende 
+Wordvorlage, die in OneGov GEVER über den Menüpunkt Vorlagen abgelegt ist, vorbereitet werden:
+
+1	Wählen Sie die Wordvorlage im Vorlagenbereich von OneGov GEVER aus, und öffnen Sie das Dokument zur Bearbeitung 
+(Auschecken und bearbeiten).
+
+2	Begeben Sie sich in Word auf Datei > Eigenschaften > Erweiterte Eigenschaften > Anpassen.
+
+3	Geben Sie den Namen der gewünschten DocProperty im Feld Name ein.
+
+4	Als “Wert” kann vorerst ein Leerschlag (Space) eingefügt werden. Dieser wird bei der Erstellung eines neuen 
+Dokuments ab Vorlage automatisch mit dem aktuellen Metadatenwert überschrie-ben. 
+
+5	Die so erstellte DocProperty kann nun über das Feld Hinzufügen den Eigenschaften hinzugefügt werden.
  
-6)	Die so erstellten DocProperties sind nun in den Eigenschaften ersichtlich.
-7)	Wenn alle gewünschten DocProperties erstellt wurden, mit OK abschliessen. 
+6	Die so erstellten DocProperties sind nun in den Eigenschaften ersichtlich.
+
+7	Wenn alle gewünschten DocProperties erstellt wurden, mit OK abschliessen. 
  
 
 i	Für die Erarbeitung einer neuen Vorlage können auch bestehende Vorlagen überarbeitet werden. So müssen nicht alle DocProperties jedes Mal manuell neu erstellt werden, son-dern werden mitkopiert.
