@@ -66,6 +66,19 @@ class TestMemberships(FunctionalTestCase):
             browser.css('div#content-core div.error').text)
 
     @browsing
+    def test_site_title_is_membership_title(self, browser):
+        membership = create(Builder('membership')
+                            .having(member=self.member,
+                                    committee=self.committee.load_model(),
+                                    date_from=date(2003, 01, 01),
+                                    date_to=date(2007, 12, 31)))
+
+        browser.login().open(membership.get_edit_url(self.member_wrapper))
+        self.assertEquals(
+            u'Peter M\xfcller, Jan 01, 2003 - Dec 31, 2007 \u2014 Plone site',
+            browser.css('title').first.text)
+
+    @browsing
     def test_membership_can_be_edited(self, browser):
         membership = create(Builder('membership')
                             .having(member=self.member,

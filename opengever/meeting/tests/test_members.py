@@ -94,6 +94,13 @@ class TestMemberView(FunctionalTestCase):
                                            date_to=date(2007, 12, 31)))
 
     @browsing
+    def test_site_title_is_member_title(self, browser):
+        browser.login().open(self.member.get_url(self.container))
+        self.assertEquals(
+            u'Peter M\xfcller \u2014 Plone site',
+            browser.css('title').first.text)
+
+    @browsing
     def test_lists_member_properties(self, browser):
         browser.login().open(self.member.get_url(self.container))
 

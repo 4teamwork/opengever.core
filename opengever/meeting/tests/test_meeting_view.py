@@ -126,6 +126,13 @@ class TestMeetingView(FunctionalTestCase):
         self.assertEquals([u'C\xf6mmunity meeting'], browser.css('h1').text)
 
     @browsing
+    def test_site_title_is_meeting_title(self, browser):
+        browser.login().open(self.meeting.get_url())
+        self.assertEquals(
+            u'C\xf6mmunity meeting \u2014 Plone site',
+            browser.css('title').first.text)
+
+    @browsing
     def test_participants_listing_precidency_is_existing(self, browser):
         browser.login().open(self.meeting.get_url())
         self.assertEquals(

@@ -5,6 +5,9 @@ Changelog
 4.7.5 (unreleased)
 ------------------
 
+- Fixes sitetitle for wrapper objects.
+  [phgross]
+
 - No longer attempt to parse temporary excel files while creating repositories.
   [deiferni]
 
