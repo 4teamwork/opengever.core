@@ -51,7 +51,7 @@ table.field-list tbody tr:first-child th {
 }
 
 table.field-list tbody tr:first-child td {
-    font-weight: bold;
+    font-weight: 600;
 }
 
 table.field-list th.field-name {
@@ -70,7 +70,7 @@ blockquote {
 
 #schemas .section > h3 {
     background-repeat: no-repeat;
-    padding-left: 2em;
+    padding-left: 2.5em;
     padding-top: 0.25em;
 }
 

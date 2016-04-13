@@ -1,0 +1,84 @@
+@import url("http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700");
+
+body {
+    font-family: 'Open Sans', 'Lucida Grande', 'Lucida Sans Unicode',
+                 'Geneva', 'Verdana', sans-serif !important;
+    font-size: 15px;
+}
+
+div.body p, div.body dd, div.body li {
+    line-height: 1.5em;
+}
+
+/* -- body elements ----------------------------------------------------- */
+
+div.body h1, div.body h2, div.body h3, div.body h4, div.body h5, div.body h6,
+div.sphinxsidebar h3, div.sphinxsidebar h4 {
+    font-family: 'Open Sans', 'Lucida Grande', 'Lucida Sans Unicode',
+                 'Geneva', 'Verdana', sans-serif !important;
+}
+
+div.body h1 {
+    margin: 10px 0 0 0;
+    font-size: 2.4em;
+    color: #0A507A;
+    font-weight: 500;
+}
+
+div.body h2 {
+    margin: 1.0em 0 0.2em 0;
+    font-size: 1.5em;
+    font-weight: 500;
+    padding: 0;
+    color: #174967;
+}
+
+div.body h3 {
+    margin: 1em 0 -0.3em 0;
+    font-size: 1.3em;
+    font-weight: 500;
+}
+
+pre, tt, code {
+    font-size: 100%;
+}
+
+/* -- sidebar ----------------------------------------------------------- */
+
+div.sphinxsidebar {
+    line-height: 1.7;
+}
+
+div.sphinxsidebar ul {
+    margin-top: 5px;
+}
+
+div.sphinxsidebar ul a {
+    color: #666;
+    font-weight: 400;
+}
+
+div.sphinxsidebar ul li.toctree-l1 > a {
+    font-size: 105%;
+}
+
+div.sphinxsidebar ul li.toctree-l2 > a {
+    font-size: 95%;
+}
+
+div.sphinxsidebar h3 {
+    font-size: 1.6em;
+}
+
+div.sphinxsidebar h4 {
+    font-size: 1.2em;
+}
+
+div.sphinxsidebar h3, div.sphinxsidebar h4 {
+    color: #333;
+    font-weight: 500;
+}
+
+div.sphinxsidebar p.logo {
+    margin-top: 0px;
+}
