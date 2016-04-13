@@ -13,4 +13,9 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
+  <permission
+      id="opengever.disposition.AddDisposition"
+      title="opengever.disposition: Add disposition"
+      />
+
 </configure>
