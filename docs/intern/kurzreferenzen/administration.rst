@@ -13,18 +13,18 @@ Mit DocProperties können ausgewählte Metadaten aus Dossiers von OneGov GEVER
 direkt in Worddokumenten übernommen werden. Die folgenden Metadaten werden von
 OneGov GEVER-beim Öffnen von Worddokumenten automatisch weitergegeben:
 
-- *Dossier.ReferenceNumber* – Aktenzeichen des Dossiers, welches das Dokument
+- ``Dossier.ReferenceNumber`` – Aktenzeichen des Dossiers, welches das Dokument
   enthält
 
-- *Document.ReferenceNumber* – Aktenzeichen des Dokuments
+- ``Document.ReferenceNumber`` – Aktenzeichen des Dokuments
 
-- *Document.SequenceNumber* – Laufnummer des Dokuments
+- ``Document.SequenceNumber`` – Laufnummer des Dokuments
 
-- *User.FullName* – Vor- und Nachname des angemeldeten Benutzers
+- ``User.FullName`` – Vor- und Nachname des angemeldeten Benutzers
 
-- *Dossier.Title* – Titel des Dossiers, welches das Dokument enthält
+- ``Dossier.Title`` – Titel des Dossiers, welches das Dokument enthält
 
-- *User.ID* – Benutzerkennung des angemeldeten Benutzers
+- ``User.ID`` – Benutzerkennung des angemeldeten Benutzers
 
 DocProperties in Vorlagen verwenden
 -----------------------------------
@@ -131,7 +131,7 @@ Wordvorlage!
 
    |docprops-13|
 
-6. Vergeben Sie den Makronamen “AutoOpen”.
+6. Vergeben Sie den Makronamen ``AutoOpen``.
 
    |docprops-14|
 
@@ -209,142 +209,142 @@ Die folgenden Seriendruckfelder können standardmässig verwendet werden:
 
 Metadaten zur Sitzung:
 
-- mandant.name
+- ``mandant.name``
 
   Titel der OneGov GEVER Installation (String)
 
-- protocol.type
+- ``protocol.type``
 
   Art des Protokolls („Protokoll“, „Protokollauszug“)
 
-- committee.name
+- ``committee.name``
 
   Name des Gremiums
 
-- meeting.date
+- ``meeting.date``
 
   Datum der Sitzung
 
-- meeting.start_time
+- ``meeting.start_time``
 
   Beginn der Sitzung (Uhrzeit)
 
-- meeting.end_time
+- ``meeting.end_time``
 
   Ende der Sitzung (Uhrzeit)
 
-- meeting.number
+- ``meeting.number``
 
   Sitzungsnummer. Beginnt am Anfang einer Sitzungsperiode (üblicherweise ein
   Kalenderjahr) immer mit 1. Die Sitzungsnummer wird von OneGov GEVER erst
   vergeben, wenn mindestens 1 Traktandum (oder die ganze Sitzung)
   abgeschlossen wurde.
 
-- participants.presidency
+- ``participants.presidency``
 
   Vorsitz der Sitzung (String)
 
-- participants.secretary
+- ``participants.secretary``
 
   Sekretär der Sitzung (String)
 
-- participants.members
+- ``participants.members``
 
   Liste aller Teilnehmenden (Liste von Participant, siehe unten)
 
-- participants.other
+- ``participants.other``
 
   Liste aller weiteren Teilnehmenden/Gäste (Liste von Strings)
 
-- participants.members
+- ``participants.members``
 
   Liste aller Teilnehmenden zur Sitzung (Liste von Participant). Über diese
   Liste wird typischer-weise iteriert, um die Namen darzustellen (siehe weiter
   unten).
 
-- agenda_items
+- ``agenda_items``
 
   Liste von Traktanden (Liste von AgendaItem)
 
 
 Metadaten zu einem Sitzungsteilnehmer (Participant):
 
-- member.fullname
+- ``member.fullname``
 
   Vollständiger Name eines Teilnehmers (String). Dabei ist member eine
   Laufvariable, die für die Iteration über alle Elemente von
-  participants.members verwendet wird.
+  ``participants.members`` verwendet wird.
 
-- member.role
+- ``member.role``
 
   Definierte Rolle des Teilnehmers innerhalb der Sitzung (String). Dabei ist
   member eine Laufvari-able, die für die Iteration über alle Elemente von
-  participants.members verwendet wird.
+  ``participants.members`` verwendet wird.
 
 Metadaten zu einem Traktandum (AgendaItem):
 
-- repository_folder_title
+- ``repository_folder_title``
 
   Titel der Ordnungsposition zum aktuellen Traktandum (String). Je nach
   definierter Sprache des Antrags wird hier der deutsche oder französische
   OP-Titel zurückgegeben
 
-- title
+- ``title``
 
   Titel des Antrags (String).
 
-- number
+- ``number``
 
   Traktandennummer (startet bei jeder neuen Sitzung wieder bei 1).
 
-- dossier_reference_number
+- ``dossier_reference_number``
 
   Aktenzeichen des Dossiers (String), in der sich der Antrag befindet.
 
-- decision_number
+- ``decision_number``
 
   Beschlussnummer (String). Diese Nummer wird von der Sitzungs- und
   Protokollverwaltung auto-matisch vergeben, wobei die Nummerierung jeweils
   bei Anfang einer neuen Sitzungsperiode (üb-licherweise ein Kalendarjahr)
   wieder bei 1 beginnt.
 
-- is_paragraph
+- ``is_paragraph``
 
   Gibt an, ob es sich um einen Abschnitt handelt oder nicht (Boolean).
 
-- legal_basis
+- ``legal_basis``
 
   Rechtsgrundlage des Antrags (Text).
 
-- initial_position
+- ``initial_position``
 
   Ausgangslage des Antrags (Text).
 
-- considerations
+- ``considerations``
 
   Erwägungen zum Antrag (Text).
 
-- proposed_action
+- ``proposed_action``
 
   Text des Antrags (Text).
 
-- discussion
+- ``discussion``
 
   Diskussion während der Sitzung zum Antrag (Text).
 
-- decision
+- ``decision``
 
   Beschluss zum Antrag gemäss Sitzung (Text).
 
-- disclose_to
+- ``disclose_to``
 
   Zu eröffnen an (Text).
 
-- copy_for_attention
+- ``copy_for_attention``
 
   Kopie geht an (Text).
 
-- publish_in
+- ``publish_in``
 
   Zu veröffentlichen in (Text).
 
@@ -354,22 +354,26 @@ Seriendruckfelder in Sablon-Vorlagen verwenden
 Um über eine Liste von Einträge iterieren zu können, muss dies in der
 Wordvorlage über die folgenden Felder (in eckigen Klammern) gesteuert werden:
 
-[<liste>:each(member)]
-...
-[<liste>:endEach]
+.. code-block:: none
 
-wobei <liste> einem Metadatum vom Typ Liste entspricht, also z.B. participants.
+    [<liste>:each(member)]
+    ...
+    [<liste>:endEach]
+
+wobei ``<liste>`` einem Metadatum vom Typ Liste entspricht, also z.B.
+``participants``.
 Der Text zwischen den beiden Seriendruckfeldern (angedeutet durch ...) wird
 dabei bei jedem Schleifendurchlauf neu im erzeugten Word eingefügt.
 Damit der Inhalt eines Metadatums in einer Vorlage eingefügt wird, muss im
 Seriendruckfeld dem Namen des gewünschten Metadatums ein Gleichheitszeichen
-(=) vorangestellt werden, z.B. liefert [=meeting.date] das Sitzungsdatum, das
-an der entsprechenden Stelle in der Wordvorlage eingefügt wird.
+(``=``) vorangestellt werden, z.B. liefert ``[=meeting.date]`` das
+Sitzungsdatum, das an der entsprechenden Stelle in der Wordvorlage eingefügt
+wird.
 
 Zusätzlich können Kommentare in der Wordvorlage hinterlegt werden, die in den
 generierten Worddokumenten (Protokoll, Protokollauszug) nicht mitgegeben
-werden. Kommentare müssen dazu zwischen die Felder comment und endComment
-befinden.
+werden. Kommentare müssen dazu zwischen die Felder ``comment`` und
+``endComment`` befinden.
 
 Eine Dokumentation der DSL findet man unter: https://github.com/senny/sablon#conditionals
 Beispiele einer Sablon Datei findet man unter: https://github.com/senny/sablon#examples
@@ -380,11 +384,11 @@ Debugging von Sablon-Vorlagen
 Einem Manager stehen die folgenden Plone-Views zum Debugging der Vorlagen zur
 Verfügung:
 
-- Inhaltstyp Sablon-Vorlage: fill_meeting_template füllt Beispieldaten einer
+- Inhaltstyp Sablon-Vorlage: ``fill_meeting_template`` füllt Beispieldaten einer
   Sitzung in die Sab-lon-Vorlage ein. Probleme mit der Syntax der
   Formatierungs-DSL werden so schnell ersichtlich.
 
-- Inhaltstyp Sitzung: download_protocol_json, ermöglich es das JSON File
+- Inhaltstyp Sitzung: ``download_protocol_json``, ermöglich es das JSON File
   herunterzulande, das zum generieren des Dokuments aus der Sablon-Vorlage
   verwendet wird.
 
