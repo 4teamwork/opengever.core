@@ -6,6 +6,7 @@ from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import FunctionalTestCase
+from opengever.testing import obj2brain
 import transaction
 
 
@@ -31,3 +32,5 @@ class TestRetentionExpirationDate(FunctionalTestCase):
             browser.find('dossier-transition-deactivate').click()
             self.assertEqual(date(2030, 02, 25),
                              self.dossier.get_retention_expiration_date())
+            self.assertEqual(date(2030, 02, 25),
+                             obj2brain(self.dossier).retention_expiration)
