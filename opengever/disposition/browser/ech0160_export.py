@@ -1,6 +1,8 @@
 from DateTime import DateTime
 from Products.Five import BrowserView
+from Products.CMFCore.utils import getToolByName
 from ZPublisher.Iterators import IStreamIterator
+from opengever.disposition.ech0160 import model
 from opengever.disposition.ech0160.bindings import arelda
 from pyxb.namespace import XMLSchema_instance as xsi
 from pyxb.utils.domutils import BindingDOMSupport
@@ -48,8 +50,17 @@ class ECH0160ExportView(BrowserView):
         doc.ablieferung.provenienz = arelda.provenienzGeverSIP()
         doc.ablieferung.provenienz.aktenbildnerName = u'Grossrat des Kantons'
         doc.ablieferung.provenienz.registratur = u'Ratsinformationssystem'
-        doc.ablieferung.ordnungssystem = arelda.ordnungssystemGeverSIP()
-        doc.ablieferung.ordnungssystem.name = u'Aktenplan V2'
+
+        catalog = getToolByName(self.context, 'portal_catalog')
+        dossiers = catalog(portal_type='opengever.dossier.businesscasedossier')
+
+        repo = model.Repository()
+        for dossier in dossiers:
+            repo.add_dossier(model.Dossier(dossier.getObject()))
+
+        doc.ablieferung.ordnungssystem = repo.binding()
+        # doc.ablieferung.ordnungssystem = arelda.ordnungssystemGeverSIP()
+        # doc.ablieferung.ordnungssystem.name = repo.Title()
 
         tmpfile = TemporaryFile()
         with ZipFile(tmpfile, 'w', ZIP_DEFLATED, True) as zipfile:
@@ -69,10 +80,10 @@ class ECH0160ExportView(BrowserView):
                 ))
 
             # add dossiers
-            op = arelda.ordnungssystempositionGeverSIP(id=u'abc')
-            op.nummer = u'1'
-            op.titel = u'Position 1'
-            doc.ablieferung.ordnungssystem.ordnungssystemposition.append(op)
+            # op = arelda.ordnungssystempositionGeverSIP(id=u'abc')
+            # op.nummer = u'1'
+            # op.titel = u'Position 1'
+            # doc.ablieferung.ordnungssystem.ordnungssystemposition.append(op)
 
             dom = doc.toDOM(element_name='paket')
             dom.documentElement.setAttributeNS(
