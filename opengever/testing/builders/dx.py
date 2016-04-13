@@ -24,6 +24,10 @@ from zope.lifecycleevent import ObjectCreatedEvent
 class DossierBuilder(DexterityBuilder):
     portal_type = 'opengever.dossier.businesscasedossier'
 
+    def __init__(self, session):
+        super(DossierBuilder, self).__init__(session)
+        self.arguments['retention_period'] = 15
+
 builder_registry.register('dossier', DossierBuilder)
 
 
