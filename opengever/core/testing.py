@@ -10,6 +10,7 @@ from opengever.base.model import create_session
 from opengever.meeting.interfaces import IMeetingSettings
 from opengever.ogds.base.setup import create_sql_tables
 from opengever.ogds.models import BASE
+from plone import api
 from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import IntegrationTesting
@@ -158,6 +159,7 @@ class OpengeverFixture(PloneSandboxLayer):
     def setUpPloneSite(self, portal):
         self.installOpengeverProfiles(portal)
         self.createMemberFolder(portal)
+        self.setupLanguageTool(portal)
         deactivateActivityCenter()
 
     def tearDown(self):
@@ -207,6 +209,27 @@ class OpengeverFixture(PloneSandboxLayer):
         portal.invokeFactory('Folder', 'Members')
         portal['Members'].invokeFactory('Folder', TEST_USER_ID)
         setRoles(portal, TEST_USER_ID, ['Member'])
+
+    def setupLanguageTool(self, portal):
+        """Configure the language tool as close as possible to production,
+        without breaking most of the existing tests.
+
+        For production, the language tool is configured in
+        opengever.policy.base:default, which we don't import here
+        (see comment in installOpengeverProfiles() above).
+        """
+
+        lang_tool = api.portal.get_tool('portal_languages')
+        lang_tool.use_combined_language_codes = True
+        lang_tool.display_flags = False
+        lang_tool.start_neutral = False
+        lang_tool.use_subdomain_negotiation = False
+        lang_tool.authenticated_users_only = False
+        lang_tool.use_request_negotiation = True
+
+        # These would be (possible) production defaults, but will break tests
+        # lang_tool.setDefaultLanguage('de-ch')
+        # lang_tool.supported_langs = ['fr-ch', 'de-ch']
 
 
 class MemoryDBLayer(Layer):

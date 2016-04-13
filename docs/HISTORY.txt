@@ -5,6 +5,9 @@ Changelog
 4.7.5 (unreleased)
 ------------------
 
+- Language Tool: Enable request content negotiation.
+  [lgraf]
+
 - Fixes sitetitle for wrapper objects.
   [phgross]
 
