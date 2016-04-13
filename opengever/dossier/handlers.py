@@ -7,6 +7,7 @@ from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
 from opengever.globalindex.handlers.task import sync_task
 from opengever.globalindex.handlers.task import TaskSqlSyncer
 from plone import api
+from Products.CMFCore.interfaces import IActionSucceededEvent
 from Products.CMFCore.utils import getToolByName
 from zope.component import getAdapter
 from zope.lifecycleevent import IObjectRemovedEvent
@@ -115,3 +116,10 @@ def reindex_containing_dossier(dossier, event):
                         if brain.portal_type in ['opengever.task.task',
                             'opengever.inbox.forwarding']:
                             sync_task(brain.getObject(), event)
+
+
+@grok.subscribe(IDossierMarker, IActionSucceededEvent)
+def dossier_state_changed(context, event):
+    if event.action == 'dossier-state-resolved':
+        context.update_retention_expiration()
+        context.reindexObject()
