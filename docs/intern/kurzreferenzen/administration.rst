@@ -147,7 +147,7 @@ Wordvorlage!
 
 9. Nachdem Sie den Code eingefügt haben, speichern Sie die Einstellungen ab.
 
-.. sourcecode:: vb
+.. sourcecode:: vb.net
 
   Sub AutoOpen()
   '
