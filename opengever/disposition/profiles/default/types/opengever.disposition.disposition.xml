@@ -18,8 +18,8 @@
     <!-- class used for content items -->
     <property name="klass">opengever.disposition.disposition.Disposition</property>
 
-    <!-- XXX separate permission has to be created -->
-    <!-- <property name="add_permission"></property> -->
+    <!-- add permission -->
+    <property name="add_permission">opengever.disposition.AddDisposition</property>
 
     <!-- enabled behaviors -->
     <property name="behaviors">
