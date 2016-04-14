@@ -34,3 +34,15 @@ class TestRetentionExpirationDate(FunctionalTestCase):
                              self.dossier.get_retention_expiration_date())
             self.assertEqual(date(2030, 02, 25),
                              obj2brain(self.dossier).retention_expiration)
+
+    def is_expired_when_its_earlier_than_today(self):
+        with freeze(datetime(2030, 02, 22)):
+            self.assertTrue(self.dossier.is_retention_period_expired())
+
+    def is_expired_when_its_today(self):
+        with freeze(datetime(2030, 02, 21)):
+            self.assertTrue(self.dossier.is_retention_period_expired())
+
+    def is_not_expired_when_its_later_than_today(self):
+        with freeze(datetime(2030, 02, 21)):
+            self.assertTrue(self.dossier.is_retention_period_expired())
