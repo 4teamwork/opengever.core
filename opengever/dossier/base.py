@@ -1,5 +1,6 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
+from datetime import date
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from five import grok
@@ -310,6 +311,12 @@ class DossierContainer(Container):
                 years=ILifeCycle(self).retention_period)
 
         return None
+
+    def is_retention_period_expired(self):
+        if IDossier(self).end:
+            return self.get_retention_expiration_date() <= date.today()
+
+        return False
 
 
 class DefaultConstrainTypeDecider(grok.MultiAdapter):

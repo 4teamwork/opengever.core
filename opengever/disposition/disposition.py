@@ -8,6 +8,8 @@ from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
 from zope import schema
 from zope.component import getUtility
+from zope.interface import Invalid
+from zope.interface import invariant
 
 
 class IDisposition(form.Schema):
@@ -35,6 +37,15 @@ class IDisposition(form.Schema):
             ),
         required=False,
     )
+
+    @invariant
+    def is_retention_period_expired(data):
+        for dossier in data.dossiers:
+            if not dossier.is_retention_period_expired():
+                raise Invalid(
+                    _(u'error_retention_period_not_expired',
+                      default=u'The retention period of the selected dossiers'
+                      ' is not expired.'))
 
 
 class Disposition(Container):
