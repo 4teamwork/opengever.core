@@ -32,6 +32,12 @@ grok.global_adapter(endIndexer, name="end")
 
 
 @indexer(IDossierMarker)
+def retention_expiration(obj):
+    return obj.get_retention_expiration_date()
+grok.global_adapter(retention_expiration, name="retention_expiration")
+
+
+@indexer(IDossierMarker)
 def responsibleIndexer(obj):
     aobj = IDossier(obj)
     if aobj.responsible is None:

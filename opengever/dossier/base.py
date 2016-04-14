@@ -1,7 +1,10 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
+from datetime import date
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
 from five import grok
+from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.base.interfaces import ISequenceNumber
 from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.behaviors.dossier import IDossier
@@ -257,6 +260,19 @@ class DossierContainer(Container):
 
     def get_sequence_number(self):
         return getUtility(ISequenceNumber).get_number(self)
+
+    def get_retention_expiration_date(self):
+        if IDossier(self).end:
+            return IDossier(self).end + relativedelta(
+                years=ILifeCycle(self).retention_period)
+
+        return None
+
+    def is_retention_period_expired(self):
+        if IDossier(self).end:
+            return self.get_retention_expiration_date() <= date.today()
+
+        return False
 
 
 class DefaultConstrainTypeDecider(grok.MultiAdapter):
