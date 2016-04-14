@@ -72,7 +72,7 @@ class Member(Base):
             return fullname
 
         if show_email_as_link:
-            email = '<a href="mailto:{email}">{email}</a>'.format(email=email)
+            email = u'<a href="mailto:{email}">{email}</a>'.format(email=email)
 
         participant = u'{} ({})'.format(fullname, email)
 
