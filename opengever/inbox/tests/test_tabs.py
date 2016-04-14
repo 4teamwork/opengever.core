@@ -176,6 +176,6 @@ class TestClosedForwardings(FunctionalTestCase):
             'tabbedview_view-{}'.format(self.viewname))
         view.update()
 
-        self.assertFalse(view.state_filter_available)
+        self.assertFalse(view.filterlist_available)
         self.assertEquals(
             [self.forwarding.get_sql_object()], view.contents)

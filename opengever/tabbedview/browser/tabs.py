@@ -26,7 +26,7 @@ from opengever.tabbedview.helper import linked_trashed_document_with_tooltip
 from opengever.tabbedview.helper import readable_ogds_author
 from opengever.tabbedview.helper import readable_ogds_user
 from opengever.tabbedview.helper import workflow_state
-from opengever.tabbedview.interfaces import IStateFilterTableSourceConfig
+from opengever.tabbedview.interfaces import IFilterListTableSourceConfig
 from plone.dexterity.interfaces import IDexterityContainer
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapts
@@ -138,13 +138,13 @@ class Documents(OpengeverCatalogListingTab):
 class Dossiers(OpengeverCatalogListingTab):
     grok.name('tabbedview_view-dossiers')
 
-    implements(IStateFilterTableSourceConfig)
+    implements(IFilterListTableSourceConfig)
 
     selection = ViewPageTemplateFile("selection_with_filters.pt")
     template = ViewPageTemplateFile("generic_with_filters.pt")
 
-    state_filter_name = 'dossier_state_filter'
-    state_filter_available = True
+    filterlist_name = 'dossier_state_filter'
+    filterlist_available = True
 
     filterlist = FilterList(
         Filter('filter_all', _('all')),
@@ -212,15 +212,15 @@ class SubDossiers(Dossiers):
     search_options = {'is_subdossier': True}
 
 
-class StateFilterTableSource(grok.MultiAdapter, CatalogTableSource):
+class FilterListTableSource(grok.MultiAdapter, CatalogTableSource):
     """Catalog Table source Adapter,
     which provides open/all state filtering."""
 
-    adapts(IStateFilterTableSourceConfig, Interface)
+    adapts(IFilterListTableSourceConfig, Interface)
 
     def build_query(self):
         """extends the standard catalog soruce build_query with the
-        extend_query_with_statefilter functionality.
+        extend_query_with_filter functionality.
         """
 
         # initalize config
@@ -239,8 +239,8 @@ class StateFilterTableSource(grok.MultiAdapter, CatalogTableSource):
                 query, self.config.filter_text)
 
         # reviewstate-filter
-        if self.config.state_filter_available:
-            query = self.extend_query_with_statefilter(query)
+        if self.config.filterlist_available:
+            query = self.extend_query_with_filter(query)
 
         # batching
         if self.config.batching_enabled and not self.config.lazy:
@@ -248,11 +248,11 @@ class StateFilterTableSource(grok.MultiAdapter, CatalogTableSource):
 
         return query
 
-    def extend_query_with_statefilter(self, query):
+    def extend_query_with_filter(self, query):
         """Extends the given query with a filter,
         which show just objects in the open state."""
 
-        filter_id = self.request.get(self.config.state_filter_name, None)
+        filter_id = self.request.get(self.config.filterlist_name, None)
         if filter_id:
             return self.config.filterlist.get(filter_id).update_query(query)
 

@@ -1,7 +1,7 @@
 <div tal:condition="view/show_selects" class="tabbedview_select"
-     tal:define="state_filter_name python: view.state_filter_name;
-                 filter_id python: view.request.get(state_filter_name)"
-     tal:attributes="id state_filter_name"
+     tal:define="filterlist_name python: view.filterlist_name;
+                 filter_id python: view.request.get(filterlist_name)"
+     tal:attributes="id filterlist_name"
      i18n:domain="ftw.tabbedview">
 
     <span i18n:translate="">Choose:</span>
@@ -12,8 +12,8 @@
         All visible entries chosen <a href="#" i18n:translate="">Show all in this Folder</a>
     </span>
 
-    <span tal:condition="view/state_filter_available"
-          tal:attributes="id state_filter_name" class="state_filters">
+    <span tal:condition="view/filterlist_available"
+          tal:attributes="id filterlist_name" class="state_filters">
 
       <span> | </span>
 

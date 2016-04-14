@@ -59,8 +59,8 @@ class GlobalTaskListingTab(grok.View, OpengeverTab,
     select_all_template = ViewPageTemplateFile('select_all_globaltasks.pt')
     selection = ViewPageTemplateFile("selection_with_filters.pt")
 
-    state_filter_name = 'task_state_filter'
-    state_filter_available = True
+    filterlist_name = 'task_state_filter'
+    filterlist_available = True
 
     filterlist = FilterList(
         Filter('filter_all', _('all')),
@@ -162,8 +162,8 @@ class GlobalTaskTableSource(SqlTableSource):
                 query, self.config.filter_text)
 
         # reviewstate-filter
-        if self.config.state_filter_available:
-            query = self.extend_query_with_statefilter(query)
+        if self.config.filterlist_available:
+            query = self.extend_query_with_filter(query)
 
         # batching
         if self.config.batching_enabled and not self.config.lazy:
@@ -171,11 +171,11 @@ class GlobalTaskTableSource(SqlTableSource):
 
         return query
 
-    def extend_query_with_statefilter(self, query):
-        """When a state filter is active,
-        we add a filter which selects just the pending tasks"""
+    def extend_query_with_filter(self, query):
+        """When the filterlist is active, we update the query with
+        the current filter."""
 
-        filter_id = self.request.get(self.config.state_filter_name, None)
+        filter_id = self.request.get(self.config.filterlist_name, None)
         if filter_id:
             return self.config.filterlist.get(filter_id).update_query(query)
 
