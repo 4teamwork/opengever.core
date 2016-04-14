@@ -5,6 +5,15 @@ Changelog
 4.7.5 (unreleased)
 ------------------
 
+- Meeting Protocol:
+
+  - Also provide the role for the meetings presidency and secretary in the JSON data.
+  - Add presidency and secretary role to the example protocol sablon template.
+  - Harmonize format of all participants (members, presidency, secretary).
+
+  Note: The Sablontemplates have to be updated after installing this release!
+  [phgross]
+
 - Language Tool: Enable request content negotiation.
   [lgraf]
 
