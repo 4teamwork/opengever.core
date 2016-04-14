@@ -5,10 +5,11 @@ Changelog
 4.7.5 (unreleased)
 ------------------
 
-- Fix wrong from/to column labels in meeting overviews.
+- Fix an issue with importing no_client_id_grouped_by_three formatted
+  repositories.
   [deiferni]
 
-- Meeting: fix an issue with e-mail addresses that contain non-ascii characters.
+- Fix wrong from/to column labels in meeting overviews.
   [deiferni]
 
 - Meeting Protocol:
