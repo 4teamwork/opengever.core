@@ -1,6 +1,7 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:plone="http://namespaces.plone.org/plone"
     xmlns:grok="http://namespaces.zope.org/grok"
     i18n_domain="opengever.document">
 
@@ -19,6 +20,15 @@
   <permission
       id="opengever.disposition.AddDisposition"
       title="opengever.disposition: Add disposition"
+      />
+
+  <!-- name from title behaviors -->
+  <plone:behavior
+      title="Disposition name from title"
+      description=""
+      provides="opengever.disposition.behaviors.namefromtitle.IDispositionNameFromTitle"
+      factory=".behaviors.namefromtitle.DispositionNameFromTitle"
+      for="opengever.disposition.disposition.IDisposition"
       />
 
 </configure>
