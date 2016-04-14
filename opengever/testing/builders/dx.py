@@ -377,3 +377,10 @@ class TaskTemplateBuilder(DexterityBuilder):
 
 
 builder_registry.register('tasktemplate', TaskTemplateBuilder)
+
+
+class DispositionBuilder(DexterityBuilder):
+    portal_type = 'opengever.disposition.disposition'
+
+
+builder_registry.register('disposition', DispositionBuilder)
