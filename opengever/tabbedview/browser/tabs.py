@@ -252,11 +252,8 @@ class FilterListTableSource(grok.MultiAdapter, CatalogTableSource):
         """Extends the given query with a filter,
         which show just objects in the open state."""
 
-        filter_id = self.request.get(self.config.filterlist_name, None)
-        if filter_id:
-            return self.config.filterlist.get(filter_id).update_query(query)
-
-        return self.config.filterlist.default_filter.update_query(query)
+        selected_filter_id = self.request.get(self.config.filterlist_name)
+        return self.config.filterlist.update_query(query, selected_filter_id)
 
 
 class Tasks(GlobalTaskListingTab):

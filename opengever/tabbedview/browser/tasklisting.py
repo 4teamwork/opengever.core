@@ -174,9 +174,5 @@ class GlobalTaskTableSource(SqlTableSource):
     def extend_query_with_filter(self, query):
         """When the filterlist is active, we update the query with
         the current filter."""
-
-        filter_id = self.request.get(self.config.filterlist_name, None)
-        if filter_id:
-            return self.config.filterlist.get(filter_id).update_query(query)
-
-        return self.config.filterlist.default_filter.update_query(query)
+        selected_filter_id = self.request.get(self.config.filterlist_name)
+        return self.config.filterlist.update_query(query, selected_filter_id)

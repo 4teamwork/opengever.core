@@ -57,3 +57,17 @@ class TestFilterList(TestCase):
         self.assertFalse(self.filter_all.is_active(selected_filter_id))
         self.assertTrue(self.filter_active.is_active(selected_filter_id))
         self.assertFalse(self.filter_closed.is_active(selected_filter_id))
+
+    def test_update_query_by_selected_filter(self):
+        selected_filter_id = 'filter_closed'
+
+        self.assertEquals(
+            {'review_state': ['state-closed']},
+            self.filter_list.update_query({}, selected_filter_id))
+
+    def test_update_query_by_default_filter_when_no_filter_is_selected(self):
+        selected_filter_id = None
+
+        self.assertEquals(
+            {'review_state': ['state-open']},
+            self.filter_list.update_query({}, selected_filter_id))

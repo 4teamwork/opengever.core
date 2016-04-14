@@ -72,3 +72,9 @@ class FilterList(object):
 
     def filters(self):
         return self._filters.values()
+
+    def update_query(self, query, selected_filter_id):
+        if selected_filter_id:
+            return self._filters[selected_filter_id].update_query(query)
+
+        return self.default_filter.update_query(query)
