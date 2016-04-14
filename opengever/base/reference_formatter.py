@@ -11,6 +11,8 @@ class DottedReferenceFormatter(grok.Adapter):
     grok.context(Interface)
     grok.name('dotted')
 
+    is_grouped_by_three = False
+
     repository_dossier_seperator = u' / '
     dossier_document_seperator = u' / '
     repository_title_seperator = u'.'
@@ -96,6 +98,8 @@ class GroupedByThreeReferenceFormatter(DottedReferenceFormatter):
     grok.provides(IReferenceNumberFormatter)
     grok.context(Interface)
     grok.name('grouped_by_three')
+
+    is_grouped_by_three = True
 
     repository_dossier_seperator = u'-'
     dossier_document_seperator = u'-'
