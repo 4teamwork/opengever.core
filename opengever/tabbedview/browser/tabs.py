@@ -1,3 +1,4 @@
+from datetime import date
 from five import grok
 from ftw.tabbedview.interfaces import ITabbedView
 from ftw.table import helper
@@ -192,7 +193,13 @@ class Dossiers(BaseCatalogListingTab):
             'filter_active',
             _('Active'),
             default=True,
-            query_extension={'review_state': DOSSIER_STATES_OPEN})
+            query_extension={'review_state': DOSSIER_STATES_OPEN}),
+        CatalogQueryFilter(
+            'filter_retention_expired',
+            _('expired'),
+            query_extension={
+                'review_state': DOSSIER_STATES_CLOSED,
+                'retention_expiration': {'query': date.today(), 'range': 'max'}})
     )
 
     object_provides = 'opengever.dossier.behaviors.dossier.IDossierMarker'
