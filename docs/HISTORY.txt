@@ -5,6 +5,9 @@ Changelog
 4.7.5 (unreleased)
 ------------------
 
+- Fix wrong from/to column labels in meeting overviews.
+  [deiferni]
+
 - Meeting: fix an issue with e-mail addresses that contain non-ascii characters.
   [deiferni]
 

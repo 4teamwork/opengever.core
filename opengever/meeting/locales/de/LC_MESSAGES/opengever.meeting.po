@@ -480,7 +480,7 @@ msgstr "Vorname"
 #. Default: "From"
 #: ./opengever/meeting/tabs/meetinglisting.py:61
 msgid "column_from"
-msgstr "Bis"
+msgstr "Von"
 
 #. Default: "Lastname"
 #: ./opengever/meeting/tabs/memberlisting.py:30
@@ -523,7 +523,7 @@ msgstr "Titel"
 #. Default: "To"
 #: ./opengever/meeting/tabs/meetinglisting.py:66
 msgid "column_to"
-msgstr "Von"
+msgstr "Bis"
 
 #. Default: "Decide"
 #: ./opengever/meeting/model/agendaitem.py:36
