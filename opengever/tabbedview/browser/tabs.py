@@ -1,7 +1,9 @@
+from DateTime import DateTime
 from five import grok
 from ftw.tabbedview.interfaces import ITabbedView
 from ftw.table import helper
 from ftw.table.catalog_source import CatalogTableSource
+from opengever.dossier.base import DOSSIER_STATES_CLOSED
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.interfaces import IDossierMarker
 from opengever.globalindex.model.task import Task
@@ -12,6 +14,9 @@ from opengever.tabbedview import _
 from opengever.tabbedview.browser.base import OpengeverTab
 from opengever.tabbedview.browser.listing import CatalogListingView
 from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
+from opengever.tabbedview.filters import CatalogQueryFilter
+from opengever.tabbedview.filters import Filter
+from opengever.tabbedview.filters import FilterList
 from opengever.tabbedview.helper import escape_html_transform
 from opengever.tabbedview.helper import external_edit_link
 from opengever.tabbedview.helper import linked
@@ -138,9 +143,17 @@ class Dossiers(OpengeverCatalogListingTab):
     selection = ViewPageTemplateFile("selection_dossier.pt")
     template = ViewPageTemplateFile("generic_dossier.pt")
 
-    open_states = DOSSIER_STATES_OPEN
     state_filter_name = 'dossier_state_filter'
     state_filter_available = True
+
+    filterlist = FilterList(
+        Filter('filter_all', _('all')),
+        CatalogQueryFilter(
+            'filter_active',
+            _('Active'),
+            default=True,
+            query_extension={'review_state': DOSSIER_STATES_OPEN})
+    )
 
     object_provides = 'opengever.dossier.behaviors.dossier.IDossierMarker'
 
@@ -227,12 +240,7 @@ class StateFilterTableSource(grok.MultiAdapter, CatalogTableSource):
 
         # reviewstate-filter
         if self.config.state_filter_available:
-            review_state_filter = self.request.get(
-                self.config.state_filter_name, None)
-
-            # return the open states, when state_filter is not set to all
-            if review_state_filter != 'false':
-                query = self.extend_query_with_statefilter(query)
+            query = self.extend_query_with_statefilter(query)
 
         # batching
         if self.config.batching_enabled and not self.config.lazy:
@@ -244,8 +252,11 @@ class StateFilterTableSource(grok.MultiAdapter, CatalogTableSource):
         """Extends the given query with a filter,
         which show just objects in the open state."""
 
-        query['review_state'] = self.config.open_states
-        return query
+        filter_id = self.request.get(self.config.state_filter_name, None)
+        if filter_id:
+            return self.config.filterlist.get(filter_id).update_query(query)
+
+        return self.config.filterlist.default_filter.update_query(query)
 
 
 class Tasks(GlobalTaskListingTab):

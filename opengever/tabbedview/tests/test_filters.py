@@ -1,0 +1,45 @@
+from opengever.tabbedview.filters import CatalogQueryFilter
+from opengever.tabbedview.filters import Filter
+from opengever.tabbedview.filters import FilterList
+from unittest2 import TestCase
+
+
+class TestFilterList(TestCase):
+
+    def setUp(self):
+        super(TestFilterList, self).setUp()
+
+        self.filter_all = Filter('filter_all', 'All')
+        self.filter_active = CatalogQueryFilter(
+            'filter_active', 'Active', default=True,
+            query_extension={'review_state': ['state-open']})
+        self.filter_closed = CatalogQueryFilter(
+            'filter_closed', 'Closed',
+            query_extension={'review_state': ['state-closed']})
+
+        self.filter_list = FilterList(
+            self.filter_all, self.filter_active, self.filter_closed)
+
+    def test_get_by_filter_id(self):
+        self.assertEquals(
+            self.filter_all, self.filter_list.get('filter_all'))
+
+        self.assertEquals(
+            self.filter_active, self.filter_list.get('filter_active'))
+
+    def test_default_filter(self):
+        self.assertEquals(self.filter_active, self.filter_list.default_filter)
+
+    def test_only_one_default_filter_possible(self):
+        with self.assertRaises(ValueError) as cm:
+            FilterList(Filter('all', 'All', default=True),
+                       Filter('active', 'Active', default=True))
+
+        self.assertEquals(
+            'Only one filter marked as default possible.',
+            str(cm.exception))
+
+    def test_filters_are_ordered(self):
+        self.assertEquals(
+            [self.filter_all, self.filter_active, self.filter_closed],
+            self.filter_list.filters())

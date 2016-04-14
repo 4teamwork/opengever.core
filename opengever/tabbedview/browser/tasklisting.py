@@ -9,6 +9,9 @@ from opengever.tabbedview import _
 from opengever.tabbedview.browser.base import OpengeverTab
 from opengever.tabbedview.browser.listing import ListingView
 from opengever.tabbedview.browser.sqltablelisting import SqlTableSource
+from opengever.tabbedview.filters import Filter
+from opengever.tabbedview.filters import FilterList
+from opengever.tabbedview.filters import PendingTasksFilter
 from opengever.tabbedview.helper import display_org_unit_title_condition
 from opengever.tabbedview.helper import org_unit_title_helper
 from opengever.tabbedview.helper import readable_date_set_invisibles
@@ -58,6 +61,11 @@ class GlobalTaskListingTab(grok.View, OpengeverTab,
 
     state_filter_name = 'task_state_filter'
     state_filter_available = True
+
+    filterlist = FilterList(
+        Filter('filter_all', _('all')),
+        PendingTasksFilter('filter_pending', _('Active'), default=True),
+    )
 
     columns = (
         {'column': '',
@@ -155,11 +163,7 @@ class GlobalTaskTableSource(SqlTableSource):
 
         # reviewstate-filter
         if self.config.state_filter_available:
-            review_state_filter = self.request.get(
-                self.config.state_filter_name, None)
-
-            if review_state_filter != 'false':
-                query = self.extend_query_with_statefilter(query)
+            query = self.extend_query_with_statefilter(query)
 
         # batching
         if self.config.batching_enabled and not self.config.lazy:
@@ -171,4 +175,8 @@ class GlobalTaskTableSource(SqlTableSource):
         """When a state filter is active,
         we add a filter which selects just the pending tasks"""
 
-        return query.in_pending_state()
+        filter_id = self.request.get(self.config.state_filter_name, None)
+        if filter_id:
+            return self.config.filterlist.get(filter_id).update_query(query)
+
+        return self.config.filterlist.default_filter.update_query(query)
