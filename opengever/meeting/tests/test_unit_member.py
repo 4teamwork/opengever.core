@@ -13,7 +13,7 @@ class TestUnitMember(TestCase):
         self.session = self.layer.session
 
     def test_string_representation(self):
-        proposal = create(Builder('member').having(
+        member = create(Builder('member').having(
             firstname=u'Peter', lastname=u'M\xfcller'))
-        self.assertEqual("<Member u'Peter M\\xfcller'>", str(proposal))
-        self.assertEqual("<Member u'Peter M\\xfcller'>", repr(proposal))
+        self.assertEqual("<Member u'Peter M\\xfcller'>", str(member))
+        self.assertEqual("<Member u'Peter M\\xfcller'>", repr(member))
