@@ -233,8 +233,8 @@
                 <input id="schedule-paragraph" type="text" />
                 <div class="button-group">
                   <input type="submit"
-                         value="Schedule"
-                         i18n:attributes="value label_schedule"
+                         value="Insert"
+                         i18n:attributes="value label_insert"
                          tal:attributes="data-url view/url_schedule_paragraph"
                          class="schedule-paragraph allowMultiSubmit" />
                 </div>

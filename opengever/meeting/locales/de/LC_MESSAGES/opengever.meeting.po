@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-03-03 13:58+0000\n"
+"POT-Creation-Date: 2016-04-14 14:52+0000\n"
 "PO-Revision-Date: 2015-04-10 09:01+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -150,7 +150,7 @@ msgstr "Protokollauszug für die Sitzung ${title} wurde erfolgreich erstellt."
 msgid "Excerpt for meeting ${title} has been updated successfully"
 msgstr "Protokollauszug für die Sitzung ${title} wurde erfolgreich aktualisiert."
 
-#: ./opengever/meeting/committee.py:47
+#: ./opengever/meeting/committee.py:53
 #: ./opengever/meeting/committeecontainer.py:25
 msgid "Excerpt template"
 msgstr "Vorlage Protokollauszug"
@@ -207,7 +207,7 @@ msgstr "Antrag einfügen"
 msgid "Include publish in"
 msgstr "Veröffentlichung in einfügen"
 
-#: ./opengever/meeting/committee.py:53
+#: ./opengever/meeting/committee.py:59
 msgid "Linked repository folder"
 msgstr "Ablageposition"
 
@@ -287,7 +287,7 @@ msgstr "Protokoll für die Sitzung ${title} wurde erfolgreich erstellt."
 msgid "Protocol for meeting ${title} has been updated successfully"
 msgstr "Protokoll für die Sitzung ${title} wurde erfolgreich aktualisiert."
 
-#: ./opengever/meeting/committee.py:41
+#: ./opengever/meeting/committee.py:47
 #: ./opengever/meeting/committeecontainer.py:19
 msgid "Protocol template"
 msgstr "Vorlage Protokoll"
@@ -543,7 +543,7 @@ msgid "decided"
 msgstr "Beschlossen"
 
 #. Default: "Automatically configure permissions on the committee for this group."
-#: ./opengever/meeting/committee.py:82
+#: ./opengever/meeting/committee.py:88
 msgid "description_group"
 msgstr "Für diese Gruppe werden automatisch Berechtigungen auf dem Gremium vergeben."
 
@@ -783,7 +783,7 @@ msgid "label_firstname"
 msgstr "Vorname"
 
 #. Default: "Group"
-#: ./opengever/meeting/committee.py:81
+#: ./opengever/meeting/committee.py:87
 msgid "label_group"
 msgstr "Gruppe"
 
@@ -792,6 +792,11 @@ msgstr "Gruppe"
 #: ./opengever/meeting/proposal.py:58
 msgid "label_initial_position"
 msgstr "Ausgangslage"
+
+#. Default: "Insert"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:235
+msgid "label_insert"
+msgstr "Einfügen"
 
 #. Default: "Last Meeting:"
 #: ./opengever/meeting/browser/committeecontainertabs_templates/committee.pt:27
@@ -816,7 +821,7 @@ msgid "label_linked_meeting"
 msgstr "Sitzung"
 
 #. Default: "Contains automatically generated dossiers and documents for this committee."
-#: ./opengever/meeting/committee.py:54
+#: ./opengever/meeting/committee.py:60
 msgid "label_linked_repository_folder"
 msgstr "Alle automatisch generierten Sitzungsdossiers und Dokumente werden in dieser Ordnungsposition abgelegt."
 
@@ -1133,7 +1138,7 @@ msgid "protocol"
 msgstr "Protokoll"
 
 #. Default: "Protocol-Excerpt"
-#: ./opengever/meeting/protocol.py:131
+#: ./opengever/meeting/protocol.py:145
 msgid "protocol_excerpt"
 msgstr "Protokollauszug"
 

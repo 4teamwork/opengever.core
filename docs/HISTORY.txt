@@ -5,6 +5,9 @@ Changelog
 4.7.5 (unreleased)
 ------------------
 
+- Meeting: Rename button to create paragraphs to "insert".
+  [deiferni]
+
 - Fix an issue with importing no_client_id_grouped_by_three formatted
   repositories.
   [deiferni]
