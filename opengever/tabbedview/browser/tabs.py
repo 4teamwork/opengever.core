@@ -140,8 +140,8 @@ class Dossiers(OpengeverCatalogListingTab):
 
     implements(IStateFilterTableSourceConfig)
 
-    selection = ViewPageTemplateFile("selection_dossier.pt")
-    template = ViewPageTemplateFile("generic_dossier.pt")
+    selection = ViewPageTemplateFile("selection_with_filters.pt")
+    template = ViewPageTemplateFile("generic_with_filters.pt")
 
     state_filter_name = 'dossier_state_filter'
     state_filter_available = True

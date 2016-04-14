@@ -44,7 +44,7 @@ class GlobalTaskListingTab(grok.View, OpengeverTab,
     grok.context(IJournalizable)
     grok.require('zope2.View')
 
-    template = ViewPageTemplateFile("generic_task.pt")
+    template = ViewPageTemplateFile("generic_with_filters.pt")
 
     sort_on = 'modified'
     sort_reverse = False
@@ -57,7 +57,7 @@ class GlobalTaskListingTab(grok.View, OpengeverTab,
     major_actions = []
 
     select_all_template = ViewPageTemplateFile('select_all_globaltasks.pt')
-    selection = ViewPageTemplateFile("selection_tasks.pt")
+    selection = ViewPageTemplateFile("selection_with_filters.pt")
 
     state_filter_name = 'task_state_filter'
     state_filter_available = True
