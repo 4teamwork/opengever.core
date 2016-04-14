@@ -51,15 +51,15 @@ class PendingTasksFilter(Filter):
         return query.in_pending_state()
 
 
-class FilterList(object):
+class FilterList(OrderedDict):
     """A list of tabbedview listing Filter objects.
     """
 
     def __init__(self, *args):
-        self._filters = OrderedDict()
+        super(FilterList, self).__init__()
         self.default_filter = None
         for flt in args:
-            self._filters[flt.id] = flt
+            self[flt.id] = flt
             if flt.default:
                 if self.default_filter:
                     raise ValueError(
@@ -67,14 +67,11 @@ class FilterList(object):
 
                 self.default_filter = flt
 
-    def get(self, filter_id):
-        return self._filters[filter_id]
-
     def filters(self):
-        return self._filters.values()
+        return self.values()
 
     def update_query(self, query, selected_filter_id):
         if selected_filter_id:
-            return self._filters[selected_filter_id].update_query(query)
+            return self[selected_filter_id].update_query(query)
 
         return self.default_filter.update_query(query)

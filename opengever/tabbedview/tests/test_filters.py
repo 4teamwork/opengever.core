@@ -22,10 +22,10 @@ class TestFilterList(TestCase):
 
     def test_get_by_filter_id(self):
         self.assertEquals(
-            self.filter_all, self.filter_list.get('filter_all'))
+            self.filter_all, self.filter_list['filter_all'])
 
         self.assertEquals(
-            self.filter_active, self.filter_list.get('filter_active'))
+            self.filter_active, self.filter_list['filter_active'])
 
     def test_default_filter(self):
         self.assertEquals(self.filter_active, self.filter_list.default_filter)
