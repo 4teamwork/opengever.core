@@ -5,5 +5,5 @@ class ITabbedViewEnabled(Interface):
     """TabbedView behaviour"""
 
 
-class IStateFilterTableSourceConfig(Interface):
+class IFilterListTableSourceConfig(Interface):
     pass

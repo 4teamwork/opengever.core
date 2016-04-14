@@ -46,23 +46,21 @@
     <tal:START_CUSTOM_______________________________________ />
     <div id="message_no_contents" class="tabbedview_select" style="display:none"
         i18n:domain="opengever.tabbedview"
-        tal:define="state_filter_name python: view.state_filter_name;
-                    review_state python: view.request.get(state_filter_name);
-                    all_filter python: review_state == 'false';">
+        tal:define="filterlist_name python: view.filterlist_name;
+                    filter_id python: view.request.get(filterlist_name)">
 
-      <span tal:condition="view/state_filter_available"
-            tal:attributes="id state_filter_name" class="state_filters">
+      <span tal:condition="view/filterlist_available"
+            tal:attributes="id filterlist_name" class="state_filters">
         <span i18n:translate="" >State</span>
 
-        <a id="filter_all"
-           tal:attributes="class python: all_filter and 'active'"
+        <a tal:repeat="filter python: view.filterlist.filters()"
+           tal:attributes="id filter/id;
+                           class python: filter.is_active(filter_id) and 'active'"
+           tal:content="filter/label"
            href="javascript:void(0);"
-           i18n:translate="">All</a>
+           i18n:domain="opengever.tabbedview">
+        </a>
 
-        <a id="filter_open"
-           tal:attributes="class python: not all_filter and 'active' "
-           href="javascript:void(0);"
-           i18n:translate="">Active</a>
       </span>
 
       <p id="message_no_contents"

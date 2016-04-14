@@ -47,3 +47,23 @@ class TestDossierListing(FunctionalTestCase):
                             'Test User (test_user_1_)',
                             '10.02.2015',
                             '22.02.2015']], table.lists())
+
+    @browsing
+    def test_list_every_dossiers_with_the_all_filter(self, browser):
+        browser.login().open(self.repository,
+                             view='tabbedview_view-dossiers',
+                             data={'dossier_state_filter': 'filter_all'})
+
+        table = browser.css('.listing').first
+        self.assertEquals(['Dossier A', 'Dossier B', 'Dossier C'],
+                          [row.get('Title') for row in table.dicts()])
+
+
+    @browsing
+    def test_active_and_closed_filter_available(self, browser):
+        browser.login().open(self.repository,
+                             view='tabbedview_view-dossiers',
+                             data={'dossier_state_filter': 'filter_all'})
+
+        self.assertEquals(['all', 'Active'],
+                          browser.css('.state_filters a').text)

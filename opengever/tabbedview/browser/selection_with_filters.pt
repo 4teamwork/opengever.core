@@ -1,7 +1,7 @@
 <div tal:condition="view/show_selects" class="tabbedview_select"
-     tal:define="state_filter_name python: view.state_filter_name;
-                 all_filter python: view.request.get(state_filter_name) == 'false'"
-     tal:attributes="id state_filter_name"
+     tal:define="filterlist_name python: view.filterlist_name;
+                 filter_id python: view.request.get(filterlist_name)"
+     tal:attributes="id filterlist_name"
      i18n:domain="ftw.tabbedview">
 
     <span i18n:translate="">Choose:</span>
@@ -12,16 +12,21 @@
         All visible entries chosen <a href="#" i18n:translate="">Show all in this Folder</a>
     </span>
 
-    <span tal:condition="view/state_filter_available"
-          tal:attributes="id state_filter_name" class="state_filters">
+    <span tal:condition="view/filterlist_available"
+          tal:attributes="id filterlist_name" class="state_filters">
 
       <span> | </span>
 
       <span i18n:translate="" i18n:domain="opengever.tabbedview">State</span>
 
-      <a id="filter_all" tal:attributes="class python: all_filter and 'active'" href="javascript:void(0);" i18n:domain="opengever.tabbedview" i18n:translate="">All</a>
+      <a tal:repeat="filter python: view.filterlist.filters()"
+         tal:attributes="id filter/id;
+                         class python: filter.is_active(filter_id) and 'active'"
+         tal:content="filter/label"
+         href="javascript:void(0);"
+         i18n:domain="opengever.tabbedview">
+      </a>
 
-      <a id="filter_open" tal:attributes="class python: not all_filter and 'active'" href="javascript:void(0);" i18n:domain="opengever.tabbedview" i18n:translate="">Active</a>
     </span>
 
 </div>

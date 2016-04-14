@@ -81,7 +81,7 @@ class ClosedForwardings(Tasks):
     types = ['opengever.inbox.forwarding', ]
     enabled_actions = []
     major_actions = []
-    state_filter_available = False
+    filterlist_available = False
 
 
 class InboxDocuments(Documents):

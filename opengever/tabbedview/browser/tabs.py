@@ -1,7 +1,9 @@
+from DateTime import DateTime
 from five import grok
 from ftw.tabbedview.interfaces import ITabbedView
 from ftw.table import helper
 from ftw.table.catalog_source import CatalogTableSource
+from opengever.dossier.base import DOSSIER_STATES_CLOSED
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.interfaces import IDossierMarker
 from opengever.globalindex.model.task import Task
@@ -12,6 +14,9 @@ from opengever.tabbedview import _
 from opengever.tabbedview.browser.base import OpengeverTab
 from opengever.tabbedview.browser.listing import CatalogListingView
 from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
+from opengever.tabbedview.filters import CatalogQueryFilter
+from opengever.tabbedview.filters import Filter
+from opengever.tabbedview.filters import FilterList
 from opengever.tabbedview.helper import escape_html_transform
 from opengever.tabbedview.helper import external_edit_link
 from opengever.tabbedview.helper import linked
@@ -21,7 +26,7 @@ from opengever.tabbedview.helper import linked_trashed_document_with_tooltip
 from opengever.tabbedview.helper import readable_ogds_author
 from opengever.tabbedview.helper import readable_ogds_user
 from opengever.tabbedview.helper import workflow_state
-from opengever.tabbedview.interfaces import IStateFilterTableSourceConfig
+from opengever.tabbedview.interfaces import IFilterListTableSourceConfig
 from plone.dexterity.interfaces import IDexterityContainer
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapts
@@ -133,14 +138,22 @@ class Documents(OpengeverCatalogListingTab):
 class Dossiers(OpengeverCatalogListingTab):
     grok.name('tabbedview_view-dossiers')
 
-    implements(IStateFilterTableSourceConfig)
+    implements(IFilterListTableSourceConfig)
 
-    selection = ViewPageTemplateFile("selection_dossier.pt")
-    template = ViewPageTemplateFile("generic_dossier.pt")
+    selection = ViewPageTemplateFile("selection_with_filters.pt")
+    template = ViewPageTemplateFile("generic_with_filters.pt")
 
-    open_states = DOSSIER_STATES_OPEN
-    state_filter_name = 'dossier_state_filter'
-    state_filter_available = True
+    filterlist_name = 'dossier_state_filter'
+    filterlist_available = True
+
+    filterlist = FilterList(
+        Filter('filter_all', _('all')),
+        CatalogQueryFilter(
+            'filter_active',
+            _('Active'),
+            default=True,
+            query_extension={'review_state': DOSSIER_STATES_OPEN})
+    )
 
     object_provides = 'opengever.dossier.behaviors.dossier.IDossierMarker'
 
@@ -199,15 +212,15 @@ class SubDossiers(Dossiers):
     search_options = {'is_subdossier': True}
 
 
-class StateFilterTableSource(grok.MultiAdapter, CatalogTableSource):
+class FilterListTableSource(grok.MultiAdapter, CatalogTableSource):
     """Catalog Table source Adapter,
     which provides open/all state filtering."""
 
-    adapts(IStateFilterTableSourceConfig, Interface)
+    adapts(IFilterListTableSourceConfig, Interface)
 
     def build_query(self):
         """extends the standard catalog soruce build_query with the
-        extend_query_with_statefilter functionality.
+        extend_query_with_filter functionality.
         """
 
         # initalize config
@@ -226,13 +239,8 @@ class StateFilterTableSource(grok.MultiAdapter, CatalogTableSource):
                 query, self.config.filter_text)
 
         # reviewstate-filter
-        if self.config.state_filter_available:
-            review_state_filter = self.request.get(
-                self.config.state_filter_name, None)
-
-            # return the open states, when state_filter is not set to all
-            if review_state_filter != 'false':
-                query = self.extend_query_with_statefilter(query)
+        if self.config.filterlist_available:
+            query = self.extend_query_with_filter(query)
 
         # batching
         if self.config.batching_enabled and not self.config.lazy:
@@ -240,12 +248,12 @@ class StateFilterTableSource(grok.MultiAdapter, CatalogTableSource):
 
         return query
 
-    def extend_query_with_statefilter(self, query):
+    def extend_query_with_filter(self, query):
         """Extends the given query with a filter,
         which show just objects in the open state."""
 
-        query['review_state'] = self.config.open_states
-        return query
+        selected_filter_id = self.request.get(self.config.filterlist_name)
+        return self.config.filterlist.update_query(query, selected_filter_id)
 
 
 class Tasks(GlobalTaskListingTab):
