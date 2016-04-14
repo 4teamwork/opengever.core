@@ -17,3 +17,11 @@ class TestUnitMember(TestCase):
             firstname=u'Peter', lastname=u'M\xfcller'))
         self.assertEqual("<Member u'Peter M\\xfcller'>", str(member))
         self.assertEqual("<Member u'Peter M\\xfcller'>", repr(member))
+
+    def test_get_title_embedds_email_correctly(self):
+        member = create(Builder('member').having(
+            firstname=u'Peter',
+            lastname=u'M\xfcller',
+            email=u'm\xf6ller@example.com'))
+        self.assertEqual(u'Peter M\xfcller (<a href="mailto:m\xf6ller@example.com">m\xf6ller@example.com</a>)',
+                         member.get_title())
