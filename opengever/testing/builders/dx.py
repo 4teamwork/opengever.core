@@ -418,3 +418,10 @@ class PrivateDossierBuilder(DossierBuilder):
 
 
 builder_registry.register('private_dossier', PrivateDossierBuilder)
+
+
+class DispositionBuilder(DexterityBuilder):
+    portal_type = 'opengever.disposition.disposition'
+
+
+builder_registry.register('disposition', DispositionBuilder)
