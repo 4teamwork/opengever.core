@@ -43,3 +43,17 @@ class TestFilterList(TestCase):
         self.assertEquals(
             [self.filter_all, self.filter_active, self.filter_closed],
             self.filter_list.filters())
+
+    def test_is_active_when_id_matchs(self):
+        selected_filter_id = 'filter_all'
+
+        self.assertTrue(self.filter_all.is_active(selected_filter_id))
+        self.assertFalse(self.filter_active.is_active(selected_filter_id))
+        self.assertFalse(self.filter_closed.is_active(selected_filter_id))
+
+    def test_is_active_when_its_the_default_and_currently_no_filter_is_selected(self):
+        selected_filter_id = None
+
+        self.assertFalse(self.filter_all.is_active(selected_filter_id))
+        self.assertTrue(self.filter_active.is_active(selected_filter_id))
+        self.assertFalse(self.filter_closed.is_active(selected_filter_id))

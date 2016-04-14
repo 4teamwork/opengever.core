@@ -21,7 +21,7 @@
 
       <a tal:repeat="filter python: view.filterlist.filters()"
          tal:attributes="id filter/id;
-                         class python: (filter.id == filter_id or (filter_id is None and filter.default)) and 'active'"
+                         class python: filter.is_active(filter_id) and 'active'"
          tal:content="filter/label"
          href="javascript:void(0);"
          i18n:domain="opengever.tabbedview">
