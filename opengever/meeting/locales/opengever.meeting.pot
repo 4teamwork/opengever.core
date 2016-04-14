@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-03-03 13:58+0000\n"
+"POT-Creation-Date: 2016-04-14 14:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -149,7 +149,7 @@ msgstr ""
 msgid "Excerpt for meeting ${title} has been updated successfully"
 msgstr ""
 
-#: ./opengever/meeting/committee.py:47
+#: ./opengever/meeting/committee.py:53
 #: ./opengever/meeting/committeecontainer.py:25
 msgid "Excerpt template"
 msgstr ""
@@ -206,7 +206,7 @@ msgstr ""
 msgid "Include publish in"
 msgstr ""
 
-#: ./opengever/meeting/committee.py:53
+#: ./opengever/meeting/committee.py:59
 msgid "Linked repository folder"
 msgstr ""
 
@@ -286,7 +286,7 @@ msgstr ""
 msgid "Protocol for meeting ${title} has been updated successfully"
 msgstr ""
 
-#: ./opengever/meeting/committee.py:41
+#: ./opengever/meeting/committee.py:47
 #: ./opengever/meeting/committeecontainer.py:19
 msgid "Protocol template"
 msgstr ""
@@ -542,7 +542,7 @@ msgid "decided"
 msgstr ""
 
 #. Default: "Automatically configure permissions on the committee for this group."
-#: ./opengever/meeting/committee.py:82
+#: ./opengever/meeting/committee.py:88
 msgid "description_group"
 msgstr ""
 
@@ -782,7 +782,7 @@ msgid "label_firstname"
 msgstr ""
 
 #. Default: "Group"
-#: ./opengever/meeting/committee.py:81
+#: ./opengever/meeting/committee.py:87
 msgid "label_group"
 msgstr ""
 
@@ -790,6 +790,11 @@ msgstr ""
 #: ./opengever/meeting/browser/meetings/protocol.py:126
 #: ./opengever/meeting/proposal.py:58
 msgid "label_initial_position"
+msgstr ""
+
+#. Default: "Insert"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt:235
+msgid "label_insert"
 msgstr ""
 
 #. Default: "Last Meeting:"
@@ -815,7 +820,7 @@ msgid "label_linked_meeting"
 msgstr ""
 
 #. Default: "Contains automatically generated dossiers and documents for this committee."
-#: ./opengever/meeting/committee.py:54
+#: ./opengever/meeting/committee.py:60
 msgid "label_linked_repository_folder"
 msgstr ""
 
@@ -1132,7 +1137,7 @@ msgid "protocol"
 msgstr ""
 
 #. Default: "Protocol-Excerpt"
-#: ./opengever/meeting/protocol.py:131
+#: ./opengever/meeting/protocol.py:145
 msgid "protocol_excerpt"
 msgstr ""
 
