@@ -39,6 +39,8 @@ Die URL eines Requests ist bestimmt durch das Objekt, für welches eine
 Operation durchgeführt werden soll. Diese URL ist in der Regel für das
 entsprechende Objekt in der Adresszeile des Browsers sichtbar.
 
+.. _basics-headers:
+
 Headers
 ^^^^^^^
 
@@ -117,6 +119,7 @@ Key           Bedeutung               Beschreibung
 
 ------
 
+.. _basics-authentication:
 
 Authentisierung
 ---------------
@@ -134,9 +137,11 @@ Für HTTP Basic Auth muss ein `Authorization` Header im Request gesetzt werden:
   Accept: application/json
 
 Die HTTP Client Libraries bieten üblicherweise Hilfsfunktionen an, um diesen
-Header basierend auf Benutzername und Passwort zu generieren
-(siehe Code-Beispiele).
+Header basierend auf Benutzername und Passwort zu generieren.
 
+**Code-Beispiel (Python)**: Session erzeugen und Headers setzen
+
+.. literalinclude:: examples/example_session.py
 
 
 .. _RESTful: https://de.wikipedia.org/wiki/Representational_State_Transfer
