@@ -356,3 +356,17 @@ class ActivityLayer(PloneSandboxLayer):
 
 
 OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER = ActivityLayer()
+
+
+class APILayer(PloneSandboxLayer):
+
+    def setUpPloneSite(self, portal):
+        applyProfile(portal, 'plone.restapi:default')
+
+    def tearDownPloneSite(self, portal):
+        unregister_layer('plone.restapi')
+
+    defaultBases = (OPENGEVER_FUNCTIONAL_ZSERVER_TESTING,)
+
+
+OPENGEVER_FUNCTIONAL_API_ZSERVER_LAYER = APILayer()

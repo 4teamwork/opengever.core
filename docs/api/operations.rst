@@ -67,11 +67,13 @@ Unterobjekte enthält (direkte children des Objekts).
         "member": [
           {
             "@id": "https://example.org/ordnungssystem/fuehrung/dossier-23/document-259",
+            "@type": "opengever.document.document",
             "description": null,
             "title": "Ein Dokument"
           },
           {
             "@id": "https://example.org/ordnungssystem/fuehrung/dossier-23/document-260",
+            "@type": "opengever.document.document",
             "description": null,
             "title": "Ein weiteres Dokument"
           }
@@ -80,6 +82,7 @@ Unterobjekte enthält (direkte children des Objekts).
         "number_of_containers": null,
         "parent": {
           "@id": "https://example.org/ordnungssystem/fuehrung",
+          "@type": "opengever.repository.repositoryfolder",
           "description": null,
           "title": "Führung"
         },
