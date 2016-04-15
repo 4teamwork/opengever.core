@@ -151,6 +151,14 @@ Committen und im sich öffnenden Editor eine commit message vergeben:
 
    git commit
 
+.. hint::
+   Um zu verhinden, dass der CI Governor einen branch testet, der nur Updates
+   an der Dokumentation enthält, kann in der commit message das Tag
+   ``[ci skip]`` verwendet werden. Dieses sollte auf einer eigenen Zeile am
+   Ende der commit message eingeführt werden, damit ``git log`` übersichtlich
+   bleibt.
+
+
 Den eigenen branch pushen:
 
 .. code-block:: bash
