@@ -41,8 +41,8 @@ class ECH0160ExportView(BrowserView):
         doc.inhaltsverzeichnis.ordner.append(header)
         xsd = arelda.ordnerSIP(u'xsd', u'xsd')
         header.ordner.append(xsd)
-        content = arelda.ordnerSIP(u'content', u'content')
-        doc.inhaltsverzeichnis.append(content)
+        # content = arelda.ordnerSIP(u'content', u'content')
+        # doc.inhaltsverzeichnis.append(content)
 
         doc.ablieferung = arelda.ablieferungGeverSIP()
         doc.ablieferung.ablieferungstyp = u'GEVER'
@@ -55,12 +55,38 @@ class ECH0160ExportView(BrowserView):
         dossiers = catalog(portal_type='opengever.dossier.businesscasedossier')
 
         repo = model.Repository()
+        content = model.ContentRootFolder()
         for dossier in dossiers:
-            repo.add_dossier(model.Dossier(dossier.getObject()))
+            d = model.Dossier(dossier.getObject())
+            repo.add_dossier(d)
+            content.add_dossier(d)
 
         doc.ablieferung.ordnungssystem = repo.binding()
+        doc.inhaltsverzeichnis.append(content.binding())
+
         # doc.ablieferung.ordnungssystem = arelda.ordnungssystemGeverSIP()
         # doc.ablieferung.ordnungssystem.name = repo.Title()
+
+        # TODO: remove
+        # return metadata.xml only
+        dom = doc.toDOM(element_name='paket')
+        dom.documentElement.setAttributeNS(
+            xsi.uri(),
+            u'xsi:schemaLocation',
+            u'http://bar.admin.ch/arelda/v4 xsd/arelda.xsd',
+        )
+        dom.documentElement.setAttributeNS(
+            xsi.uri(),
+            u'xsi:type',
+            u'paketSIP',
+        )
+        body = dom.toprettyxml(encoding='utf8')
+        response = self.request.response
+        response.setHeader(
+            "Content-Disposition", 'inline; filename="metadata.xml"')
+        response.setHeader("Content-type", "text/xml")
+        response.setHeader("Content-Length", len(body))
+        return body
 
         tmpfile = TemporaryFile()
         with ZipFile(tmpfile, 'w', ZIP_DEFLATED, True) as zipfile:
@@ -90,6 +116,11 @@ class ECH0160ExportView(BrowserView):
                 xsi.uri(),
                 u'xsi:schemaLocation',
                 u'http://bar.admin.ch/arelda/v4 xsd/arelda.xsd',
+            )
+            dom.documentElement.setAttributeNS(
+                xsi.uri(),
+                u'xsi:type',
+                u'paketSIP',
             )
             arcname = os.path.join(sip_folder_name, 'header', 'metadata.xml')
             zipfile.writestr(arcname, dom.toprettyxml(encoding='utf8'))
