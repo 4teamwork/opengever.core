@@ -1,6 +1,7 @@
 from collective import dexteritytextindexer
 from opengever.base.interfaces import ISequenceNumber
 from opengever.disposition import _
+from plone import api
 from plone.dexterity.content import Container
 from plone.directives import form
 from plone.formwidget.contenttree import ObjPathSourceBinder
@@ -51,6 +52,8 @@ class IDisposition(form.Schema):
 
 class Disposition(Container):
 
+    _dossiers = []
+
     @property
     def title(self):
         return u'{} {}'.format(
@@ -59,3 +62,34 @@ class Disposition(Container):
     @title.setter
     def title(self, x):
         pass
+
+    @property
+    def dossiers(self):
+        return self._dossiers
+        return IDisposition.get('dossiers').get(self)
+
+    @dossiers.setter
+    def dossiers(self, value):
+        old = set([rel.to_object for rel in self._dossiers])
+        new = set([rel.to_object for rel in value])
+
+        self._dossiers = value
+
+        self.update_added_dossiers(new - old)
+        self.update_dropped_dossiers(old - new)
+
+    def update_added_dossiers(self, dossiers):
+        for dossier in dossiers:
+            api.content.transition(
+                obj=dossier, transition='dossier-transition-offer')
+
+    def update_dropped_dossiers(self, dossiers):
+        for dossier in dossiers:
+            api.content.transition(
+                obj=dossier, to_state=self.get_former_state(dossier))
+
+    def get_former_state(self, dossier):
+        workflow = api.portal.get_tool('portal_workflow')
+        workflow_id = workflow.getWorkflowsFor(dossier)[0].getId()
+        history = workflow.getHistoryOf(workflow_id,dossier)
+        return history[1].get('review_state')
