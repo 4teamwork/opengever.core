@@ -8,6 +8,7 @@ Inhalt:
 
    kurzreferenzen/index.rst
    glossar.rst
+   meta.rst
 
 
 Stichwortverzeichnis
