@@ -1,7 +1,7 @@
 # ./bindings/paket.py
 # -*- coding: utf-8 -*-
 # PyXB bindings for NM:e92452c8d3e28a9e27abfc9994d2007779e7f4c9
-# Generated 2016-04-07 18:47:22.286733 by PyXB version 1.2.4 using Python 2.7.11.final.0
+# Generated 2016-04-16 12:49:30.772315 by PyXB version 1.2.5-DEV using Python 2.7.11.final.0
 # Namespace AbsentNamespace10
 # flake8: noqa
 
@@ -14,15 +14,18 @@ import pyxb.utils.utility
 import pyxb.utils.domutils
 import sys
 import pyxb.utils.six as _six
-
 # Unique identifier for bindings created at the same time
-_GenerationUID = pyxb.utils.utility.UniqueIdentifier('urn:uuid:65d8c99c-fce0-11e5-a76e-6c40088f2de0')
+_GenerationUID = pyxb.utils.utility.UniqueIdentifier('urn:uuid:e548cfc5-03c0-11e6-820c-c42c03358f75')
 
 # Version of PyXB used to generate the bindings
-_PyXBVersion = '1.2.4'
+_PyXBVersion = '1.2.5-DEV'
 # Generated bindings are not compatible across PyXB versions
 if pyxb.__version__ != _PyXBVersion:
     raise pyxb.PyXBVersionError(_PyXBVersion)
+
+# A holder for module-level binding classes so we can access them from
+# inside class definitions where property names may conflict.
+_module_typeBindings = pyxb.utils.utility.Object()
 
 # Import bindings for namespaces imported into schema
 import pyxb.binding.datatypes
@@ -84,6 +87,7 @@ class ca (pyxb.binding.datatypes.boolean):
     _Documentation = ''
 ca._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'ca', ca)
+_module_typeBindings.ca = ca
 
 # Atomic simple type: keineAngabe
 class keineAngabe (pyxb.binding.datatypes.token, pyxb.binding.basis.enumeration_mixin):
@@ -97,6 +101,7 @@ keineAngabe._CF_enumeration = pyxb.binding.facets.CF_enumeration(value_datatype=
 keineAngabe.keine_Angabe = keineAngabe._CF_enumeration.addEnumeration(unicode_value='keine Angabe', tag='keine_Angabe')
 keineAngabe._InitializeFacetMap(keineAngabe._CF_enumeration)
 Namespace.addCategoryObject('typeBinding', 'keineAngabe', keineAngabe)
+_module_typeBindings.keineAngabe = keineAngabe
 
 # Union simple type: zeitpunkt
 # superclasses pyxb.binding.datatypes.anySimpleType
@@ -114,6 +119,7 @@ zeitpunkt._CF_enumeration = pyxb.binding.facets.CF_enumeration(value_datatype=ze
 zeitpunkt._InitializeFacetMap(zeitpunkt._CF_pattern,
    zeitpunkt._CF_enumeration)
 Namespace.addCategoryObject('typeBinding', 'zeitpunkt', zeitpunkt)
+_module_typeBindings.zeitpunkt = zeitpunkt
 
 # Union simple type: datumTypB
 # superclasses pyxb.binding.datatypes.anySimpleType
@@ -186,6 +192,7 @@ datumTypB._CF_enumeration = pyxb.binding.facets.CF_enumeration(value_datatype=da
 datumTypB._InitializeFacetMap(datumTypB._CF_pattern,
    datumTypB._CF_enumeration)
 Namespace.addCategoryObject('typeBinding', 'datumTypB', datumTypB)
+_module_typeBindings.datumTypB = datumTypB
 
 # Atomic simple type: text1
 class text1 (pyxb.binding.datatypes.string):
@@ -198,6 +205,7 @@ class text1 (pyxb.binding.datatypes.string):
 text1._CF_maxLength = pyxb.binding.facets.CF_maxLength(value=pyxb.binding.datatypes.nonNegativeInteger(100))
 text1._InitializeFacetMap(text1._CF_maxLength)
 Namespace.addCategoryObject('typeBinding', 'text1', text1)
+_module_typeBindings.text1 = text1
 
 # Atomic simple type: text2
 class text2 (pyxb.binding.datatypes.string):
@@ -210,6 +218,7 @@ class text2 (pyxb.binding.datatypes.string):
 text2._CF_maxLength = pyxb.binding.facets.CF_maxLength(value=pyxb.binding.datatypes.nonNegativeInteger(200))
 text2._InitializeFacetMap(text2._CF_maxLength)
 Namespace.addCategoryObject('typeBinding', 'text2', text2)
+_module_typeBindings.text2 = text2
 
 # Atomic simple type: text3
 class text3 (pyxb.binding.datatypes.string):
@@ -222,6 +231,7 @@ class text3 (pyxb.binding.datatypes.string):
 text3._CF_maxLength = pyxb.binding.facets.CF_maxLength(value=pyxb.binding.datatypes.nonNegativeInteger(1000))
 text3._InitializeFacetMap(text3._CF_maxLength)
 Namespace.addCategoryObject('typeBinding', 'text3', text3)
+_module_typeBindings.text3 = text3
 
 # Atomic simple type: text4
 class text4 (pyxb.binding.datatypes.string):
@@ -233,6 +243,7 @@ class text4 (pyxb.binding.datatypes.string):
     _Documentation = None
 text4._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'text4', text4)
+_module_typeBindings.text4 = text4
 
 # Atomic simple type: paketTyp
 class paketTyp (pyxb.binding.datatypes.token, pyxb.binding.basis.enumeration_mixin):
@@ -248,6 +259,7 @@ paketTyp.AIP = paketTyp._CF_enumeration.addEnumeration(unicode_value='AIP', tag=
 paketTyp.DIP = paketTyp._CF_enumeration.addEnumeration(unicode_value='DIP', tag='DIP')
 paketTyp._InitializeFacetMap(paketTyp._CF_enumeration)
 Namespace.addCategoryObject('typeBinding', 'paketTyp', paketTyp)
+_module_typeBindings.paketTyp = paketTyp
 
 # Atomic simple type: version
 class version (pyxb.binding.datatypes.nonNegativeInteger):
@@ -259,6 +271,7 @@ class version (pyxb.binding.datatypes.nonNegativeInteger):
     _Documentation = 'Die Versionierung des Pakets. Aus der Version ist schnell ersichtlich, wie oft ein AIP bereits migriert wurde.Version the package was created with. Version is a rapid way to determine how often an AIP has already been migrated.La gestion des versions du paquet. Gr\xe2ce \xe0 la version, il est facile de voir combien de fois un AIP a d\xe9j\xe0 \xe9t\xe9 migr\xe9.'
 version._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'version', version)
+_module_typeBindings.version = version
 
 # Union simple type: datumTypA
 # superclasses pyxb.binding.datatypes.anySimpleType
@@ -293,6 +306,7 @@ datumTypA.keine_Angabe = 'keine Angabe'           # originally keineAngabe.keine
 datumTypA._InitializeFacetMap(datumTypA._CF_pattern,
    datumTypA._CF_enumeration)
 Namespace.addCategoryObject('typeBinding', 'datumTypA', datumTypA)
+_module_typeBindings.datumTypA = datumTypA
 
 # Union simple type: notizDatum
 # superclasses datumTypB
@@ -307,6 +321,7 @@ class notizDatum (pyxb.binding.basis.STD_union):
     _MemberTypes = ( pyxb.binding.datatypes.date, pyxb.binding.datatypes.dateTime, )
 notizDatum._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'notizDatum', notizDatum)
+_module_typeBindings.notizDatum = notizDatum
 
 # Atomic simple type: notizErfasser
 class notizErfasser (text1):
@@ -318,6 +333,7 @@ class notizErfasser (text1):
     _Documentation = 'Benutzer, welcher die Notiz erfasst hat. Optionales Feld.User who created the note. Optional field.Utilisateur qui a catalogu\xe9 la notice. Champ facultatif.'
 notizErfasser._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'notizErfasser', notizErfasser)
+_module_typeBindings.notizErfasser = notizErfasser
 
 # Atomic simple type: notizBeschreibung
 class notizBeschreibung (text4):
@@ -329,6 +345,7 @@ class notizBeschreibung (text4):
     _Documentation = 'Notiz i.e.S, d.h. Beschreibung. Zwingendes Feld.Notice in narrower sense, i.e. description. Compulsory field.Notice au sens strict, c.-\xe0-d. description. Champ obligatoire'
 notizBeschreibung._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'notizBeschreibung', notizBeschreibung)
+_module_typeBindings.notizBeschreibung = notizBeschreibung
 
 # Atomic simple type: nameSIP
 class nameSIP (text1):
@@ -342,6 +359,7 @@ nameSIP._CF_pattern = pyxb.binding.facets.CF_pattern()
 nameSIP._CF_pattern.addPattern(pattern='[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}')
 nameSIP._InitializeFacetMap(nameSIP._CF_pattern)
 Namespace.addCategoryObject('typeBinding', 'nameSIP', nameSIP)
+_module_typeBindings.nameSIP = nameSIP
 
 # Atomic simple type: globaleAIPId
 class globaleAIPId (text1):
@@ -353,6 +371,7 @@ class globaleAIPId (text1):
     _Documentation = "\xdcber die Gesamtheit der AIP eindeutige ID. Wird im AIS verzeichnet.Unambiguous ID for the whole of the AIP. Described in the AIS.ID univoque pour tout l'AIP. Elle est enregistr\xe9e dans AIS."
 globaleAIPId._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'globaleAIPId', globaleAIPId)
+_module_typeBindings.globaleAIPId = globaleAIPId
 
 # Atomic simple type: lokaleAIPId
 class lokaleAIPId (text1):
@@ -364,6 +383,7 @@ class lokaleAIPId (text1):
     _Documentation = "\xdcber die Gesamtheit der AIP eindeutige ID im Zusammenhang mit Paketmigrationen. Entsteht zum ersten Mal, wenn ein AIP migriert wird. Wird nicht im AIS verzeichnet.Unambiguous ID for the whole of the AIP in connection with package migrations. Is created for the first time when an AIP is migrated. Is not described in the AIS.ID univoque pour tout l'AIP en rapport avec la migration du paquet. Elle est cr\xe9\xe9e au moment o\xf9 un AIP est migr\xe9. Elle n'est pas enregistr\xe9e dans AIS."
 lokaleAIPId._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'lokaleAIPId', lokaleAIPId)
+_module_typeBindings.lokaleAIPId = lokaleAIPId
 
 # Atomic simple type: fruehereLokaleAIPId
 class fruehereLokaleAIPId (text1):
@@ -375,6 +395,7 @@ class fruehereLokaleAIPId (text1):
     _Documentation = 'Zeigt auf das "Vater-AIP" zur\xfcck, also dasjenige AIP, aus welchem das vorliegende hervorgegangen ist.Refers back to the "father AIP "\x9d, i.e. the AIP from which the present one came.D\xe9signe "l\'AIP-p\xe8re", donc l\'AIP duquel r\xe9sulte celui actuel.'
 fruehereLokaleAIPId._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'fruehereLokaleAIPId', fruehereLokaleAIPId)
+_module_typeBindings.fruehereLokaleAIPId = fruehereLokaleAIPId
 
 # Atomic simple type: schemaVersion
 class schemaVersion (text1, pyxb.binding.basis.enumeration_mixin):
@@ -388,6 +409,7 @@ schemaVersion._CF_enumeration = pyxb.binding.facets.CF_enumeration(value_datatyp
 schemaVersion.n4_1 = schemaVersion._CF_enumeration.addEnumeration(unicode_value='4.1', tag='n4_1')
 schemaVersion._InitializeFacetMap(schemaVersion._CF_enumeration)
 Namespace.addCategoryObject('typeBinding', 'schemaVersion', schemaVersion)
+_module_typeBindings.schemaVersion = schemaVersion
 
 # Complex type comparable with content type EMPTY
 class comparable (pyxb.binding.basis.complexTypeDefinition):
@@ -406,6 +428,7 @@ class comparable (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
 
     })
+_module_typeBindings.comparable = comparable
 Namespace.addCategoryObject('typeBinding', 'comparable', comparable)
 
 
@@ -441,6 +464,7 @@ class historischerZeitpunkt (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
 
     })
+_module_typeBindings.historischerZeitpunkt = historischerZeitpunkt
 Namespace.addCategoryObject('typeBinding', 'historischerZeitpunkt', historischerZeitpunkt)
 
 
@@ -476,6 +500,7 @@ class historischerZeitraum (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
 
     })
+_module_typeBindings.historischerZeitraum = historischerZeitraum
 Namespace.addCategoryObject('typeBinding', 'historischerZeitraum', historischerZeitraum)
 
 
@@ -511,6 +536,7 @@ class zeitraum (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
 
     })
+_module_typeBindings.zeitraum = zeitraum
 Namespace.addCategoryObject('typeBinding', 'zeitraum', zeitraum)
 
 

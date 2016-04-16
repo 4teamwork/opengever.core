@@ -1,7 +1,7 @@
 # ./bindings/datei.py
 # -*- coding: utf-8 -*-
 # PyXB bindings for NM:e92452c8d3e28a9e27abfc9994d2007779e7f4c9
-# Generated 2016-04-07 18:47:22.288768 by PyXB version 1.2.4 using Python 2.7.11.final.0
+# Generated 2016-04-16 12:49:30.773424 by PyXB version 1.2.5-DEV using Python 2.7.11.final.0
 # Namespace AbsentNamespace4
 # flake8: noqa
 
@@ -14,15 +14,18 @@ import pyxb.utils.utility
 import pyxb.utils.domutils
 import sys
 import pyxb.utils.six as _six
-
 # Unique identifier for bindings created at the same time
-_GenerationUID = pyxb.utils.utility.UniqueIdentifier('urn:uuid:65d8c99c-fce0-11e5-a76e-6c40088f2de0')
+_GenerationUID = pyxb.utils.utility.UniqueIdentifier('urn:uuid:e548cfc5-03c0-11e6-820c-c42c03358f75')
 
 # Version of PyXB used to generate the bindings
-_PyXBVersion = '1.2.4'
+_PyXBVersion = '1.2.5-DEV'
 # Generated bindings are not compatible across PyXB versions
 if pyxb.__version__ != _PyXBVersion:
     raise pyxb.PyXBVersionError(_PyXBVersion)
+
+# A holder for module-level binding classes so we can access them from
+# inside class definitions where property names may conflict.
+_module_typeBindings = pyxb.utils.utility.Object()
 
 # Import bindings for namespaces imported into schema
 import pyxb.binding.datatypes
@@ -84,6 +87,7 @@ class ca (pyxb.binding.datatypes.boolean):
     _Documentation = ''
 ca._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'ca', ca)
+_module_typeBindings.ca = ca
 
 # Atomic simple type: keineAngabe
 class keineAngabe (pyxb.binding.datatypes.token, pyxb.binding.basis.enumeration_mixin):
@@ -97,6 +101,7 @@ keineAngabe._CF_enumeration = pyxb.binding.facets.CF_enumeration(value_datatype=
 keineAngabe.keine_Angabe = keineAngabe._CF_enumeration.addEnumeration(unicode_value='keine Angabe', tag='keine_Angabe')
 keineAngabe._InitializeFacetMap(keineAngabe._CF_enumeration)
 Namespace.addCategoryObject('typeBinding', 'keineAngabe', keineAngabe)
+_module_typeBindings.keineAngabe = keineAngabe
 
 # Union simple type: zeitpunkt
 # superclasses pyxb.binding.datatypes.anySimpleType
@@ -114,6 +119,7 @@ zeitpunkt._CF_enumeration = pyxb.binding.facets.CF_enumeration(value_datatype=ze
 zeitpunkt._InitializeFacetMap(zeitpunkt._CF_pattern,
    zeitpunkt._CF_enumeration)
 Namespace.addCategoryObject('typeBinding', 'zeitpunkt', zeitpunkt)
+_module_typeBindings.zeitpunkt = zeitpunkt
 
 # Union simple type: datumTypB
 # superclasses pyxb.binding.datatypes.anySimpleType
@@ -186,6 +192,7 @@ datumTypB._CF_enumeration = pyxb.binding.facets.CF_enumeration(value_datatype=da
 datumTypB._InitializeFacetMap(datumTypB._CF_pattern,
    datumTypB._CF_enumeration)
 Namespace.addCategoryObject('typeBinding', 'datumTypB', datumTypB)
+_module_typeBindings.datumTypB = datumTypB
 
 # Atomic simple type: text1
 class text1 (pyxb.binding.datatypes.string):
@@ -198,6 +205,7 @@ class text1 (pyxb.binding.datatypes.string):
 text1._CF_maxLength = pyxb.binding.facets.CF_maxLength(value=pyxb.binding.datatypes.nonNegativeInteger(100))
 text1._InitializeFacetMap(text1._CF_maxLength)
 Namespace.addCategoryObject('typeBinding', 'text1', text1)
+_module_typeBindings.text1 = text1
 
 # Atomic simple type: text2
 class text2 (pyxb.binding.datatypes.string):
@@ -210,6 +218,7 @@ class text2 (pyxb.binding.datatypes.string):
 text2._CF_maxLength = pyxb.binding.facets.CF_maxLength(value=pyxb.binding.datatypes.nonNegativeInteger(200))
 text2._InitializeFacetMap(text2._CF_maxLength)
 Namespace.addCategoryObject('typeBinding', 'text2', text2)
+_module_typeBindings.text2 = text2
 
 # Atomic simple type: text3
 class text3 (pyxb.binding.datatypes.string):
@@ -222,6 +231,7 @@ class text3 (pyxb.binding.datatypes.string):
 text3._CF_maxLength = pyxb.binding.facets.CF_maxLength(value=pyxb.binding.datatypes.nonNegativeInteger(1000))
 text3._InitializeFacetMap(text3._CF_maxLength)
 Namespace.addCategoryObject('typeBinding', 'text3', text3)
+_module_typeBindings.text3 = text3
 
 # Atomic simple type: text4
 class text4 (pyxb.binding.datatypes.string):
@@ -233,6 +243,7 @@ class text4 (pyxb.binding.datatypes.string):
     _Documentation = None
 text4._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'text4', text4)
+_module_typeBindings.text4 = text4
 
 # Atomic simple type: idDatei
 class idDatei (pyxb.binding.datatypes.ID):
@@ -244,6 +255,7 @@ class idDatei (pyxb.binding.datatypes.ID):
     _Documentation = 'Paketweit eindeutige ID f\xfcr die Datei (technischer Prim\xe4rschl\xfcssel). Diese ID wird aus dem Dokument heraus referenziert.Unambiguous ID for the file throughout the package (technical primary key). This ID is referenced out of the document.ID univoque pour tout le paquet pour le dossier (cl\xe9 primaire technique). Cette ID est r\xe9f\xe9renc\xe9e sur le document.'
 idDatei._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'idDatei', idDatei)
+_module_typeBindings.idDatei = idDatei
 
 # Atomic simple type: pruefalgorithmus
 class pruefalgorithmus (pyxb.binding.datatypes.token, pyxb.binding.basis.enumeration_mixin):
@@ -260,6 +272,7 @@ pruefalgorithmus.SHA_256 = pruefalgorithmus._CF_enumeration.addEnumeration(unico
 pruefalgorithmus.SHA_512 = pruefalgorithmus._CF_enumeration.addEnumeration(unicode_value='SHA-512', tag='SHA_512')
 pruefalgorithmus._InitializeFacetMap(pruefalgorithmus._CF_enumeration)
 Namespace.addCategoryObject('typeBinding', 'pruefalgorithmus', pruefalgorithmus)
+_module_typeBindings.pruefalgorithmus = pruefalgorithmus
 
 # Union simple type: datumTypA
 # superclasses pyxb.binding.datatypes.anySimpleType
@@ -294,6 +307,7 @@ datumTypA.keine_Angabe = 'keine Angabe'           # originally keineAngabe.keine
 datumTypA._InitializeFacetMap(datumTypA._CF_pattern,
    datumTypA._CF_enumeration)
 Namespace.addCategoryObject('typeBinding', 'datumTypA', datumTypA)
+_module_typeBindings.datumTypA = datumTypA
 
 # Union simple type: notizDatum
 # superclasses datumTypB
@@ -308,6 +322,7 @@ class notizDatum (pyxb.binding.basis.STD_union):
     _MemberTypes = ( pyxb.binding.datatypes.date, pyxb.binding.datatypes.dateTime, )
 notizDatum._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'notizDatum', notizDatum)
+_module_typeBindings.notizDatum = notizDatum
 
 # Atomic simple type: notizErfasser
 class notizErfasser (text1):
@@ -319,6 +334,7 @@ class notizErfasser (text1):
     _Documentation = 'Benutzer, welcher die Notiz erfasst hat. Optionales Feld.User who created the note. Optional field.Utilisateur qui a catalogu\xe9 la notice. Champ facultatif.'
 notizErfasser._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'notizErfasser', notizErfasser)
+_module_typeBindings.notizErfasser = notizErfasser
 
 # Atomic simple type: notizBeschreibung
 class notizBeschreibung (text4):
@@ -330,6 +346,7 @@ class notizBeschreibung (text4):
     _Documentation = 'Notiz i.e.S, d.h. Beschreibung. Zwingendes Feld.Notice in narrower sense, i.e. description. Compulsory field.Notice au sens strict, c.-\xe0-d. description. Champ obligatoire'
 notizBeschreibung._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'notizBeschreibung', notizBeschreibung)
+_module_typeBindings.notizBeschreibung = notizBeschreibung
 
 # Atomic simple type: nameDatei
 class nameDatei (text2):
@@ -341,6 +358,7 @@ class nameDatei (text2):
     _Documentation = 'Name der Datei, wie dieser im SIP/AIP/DIP erscheint (z.B. "p000001_Machbarkeitsanaly.pdf").Name of the file as it appears in the SIP/AIP/DIP (e.g. "p000001_Feasibility_Study.pdf"\x9d).Nom du fichier comme il appara\xeet dans le SIP/AIP/DIP (p. ex.: "p000001_Machbarkeitsanaly.pdf").'
 nameDatei._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'nameDatei', nameDatei)
+_module_typeBindings.nameDatei = nameDatei
 
 # Atomic simple type: physischerName
 class physischerName (text1):
@@ -352,6 +370,7 @@ class physischerName (text1):
     _Documentation = 'Name der Datei im Filesystem.Name of the file in the file system.Nom du fichier dans le syst\xe8me de fichiers.'
 physischerName._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'physischerName', physischerName)
+_module_typeBindings.physischerName = physischerName
 
 # Atomic simple type: originalName
 class originalName (text4):
@@ -363,6 +382,7 @@ class originalName (text4):
     _Documentation = 'Name des Ordners oder der Datei, wie diese in der Originalstruktur (im GEVER-System, in der Dateiablage) beim Aktenbildner geheissen hat (z.B. "Arbeitspaket" oder "Bericht.doc").Name of the folder or file as it was called in the original structure (in the GEVER system, in the file archive) at the records creator (e.g. "work package"\x9d or "Report.doc"\x9d.Nom du r\xe9pertoire ou du fichier, comme il a \xe9t\xe9 inscrit dans la structure d\'origine (dans le syst\xe8me GEVER, dans la collection de fichiers) par le producteur des documents (exemples: "Paquet de travail" ou "Rapport.doc")'
 originalName._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'originalName', originalName)
+_module_typeBindings.originalName = originalName
 
 # Atomic simple type: pruefsumme
 class pruefsumme (text3):
@@ -374,6 +394,7 @@ class pruefsumme (text3):
     _Documentation = "Pr\xfcfsummenwert (abh\xe4ngig vom verwendeten Pr\xfcfalgorithmus).Checksum value (depending on the checksum algorithm used).Valeur de la somme de contr\xf4le (d\xe9pendant de l'algorithme de contr\xf4le utilis\xe9)."
 pruefsumme._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'pruefsumme', pruefsumme)
+_module_typeBindings.pruefsumme = pruefsumme
 
 # Atomic simple type: eigenschaft
 class eigenschaft (text4):
@@ -385,6 +406,7 @@ class eigenschaft (text4):
     _Documentation = 'Generisches Attribut, welches im Zusammenhang mit Wert verwendet wird. Wird bspw. eine CSV-Datei abgeliefert, dann k\xf6nnen mittels Attributpaar "eigenschaft" und "wert" Feld- und Zeilendelemiter, Texterkennungszeichen oder Spaltennamen angegeben werden.Generic attribute used in connection with value. For example, if a CSV file is submitted, the "property"\x9d and "value"\x9d pair of attributes can be used to indicate field and line delimiters, text recognition symbols or column names.Attribut g\xe9n\xe9rique qui est employ\xe9 en rapport avec la valeur. Par exemple est vers\xe9 un fichier CSV; ensuite, le s\xe9parateur de champs et de lignes, la reconnaissance de caract\xe8res et les noms des colonnes peuvent \xeatre indiqu\xe9s au moyen de la paire d\'attributs "propri\xe9t\xe9s" et "valeur".'
 eigenschaft._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'eigenschaft', eigenschaft)
+_module_typeBindings.eigenschaft = eigenschaft
 
 # Complex type comparable with content type EMPTY
 class comparable (pyxb.binding.basis.complexTypeDefinition):
@@ -403,6 +425,7 @@ class comparable (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
 
     })
+_module_typeBindings.comparable = comparable
 Namespace.addCategoryObject('typeBinding', 'comparable', comparable)
 
 
@@ -438,6 +461,7 @@ class historischerZeitpunkt (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
 
     })
+_module_typeBindings.historischerZeitpunkt = historischerZeitpunkt
 Namespace.addCategoryObject('typeBinding', 'historischerZeitpunkt', historischerZeitpunkt)
 
 
@@ -473,6 +497,7 @@ class historischerZeitraum (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
 
     })
+_module_typeBindings.historischerZeitraum = historischerZeitraum
 Namespace.addCategoryObject('typeBinding', 'historischerZeitraum', historischerZeitraum)
 
 
@@ -508,6 +533,7 @@ class zeitraum (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
 
     })
+_module_typeBindings.zeitraum = zeitraum
 Namespace.addCategoryObject('typeBinding', 'zeitraum', zeitraum)
 
 

@@ -1,7 +1,7 @@
 # ./bindings/arelda.py
 # -*- coding: utf-8 -*-
 # PyXB bindings for NM:6c0240a71cf2b3453dc5965e68fe90afa978a339
-# Generated 2016-04-07 18:47:22.286117 by PyXB version 1.2.4 using Python 2.7.11.final.0
+# Generated 2016-04-16 12:49:30.771518 by PyXB version 1.2.5-DEV using Python 2.7.11.final.0
 # Namespace http://bar.admin.ch/arelda/v4
 # flake8: noqa
 
@@ -14,15 +14,18 @@ import pyxb.utils.utility
 import pyxb.utils.domutils
 import sys
 import pyxb.utils.six as _six
-
 # Unique identifier for bindings created at the same time
-_GenerationUID = pyxb.utils.utility.UniqueIdentifier('urn:uuid:65d8c99c-fce0-11e5-a76e-6c40088f2de0')
+_GenerationUID = pyxb.utils.utility.UniqueIdentifier('urn:uuid:e548cfc5-03c0-11e6-820c-c42c03358f75')
 
 # Version of PyXB used to generate the bindings
-_PyXBVersion = '1.2.4'
+_PyXBVersion = '1.2.5-DEV'
 # Generated bindings are not compatible across PyXB versions
 if pyxb.__version__ != _PyXBVersion:
     raise pyxb.PyXBVersionError(_PyXBVersion)
+
+# A holder for module-level binding classes so we can access them from
+# inside class definitions where property names may conflict.
+_module_typeBindings = pyxb.utils.utility.Object()
 
 # Import bindings for namespaces imported into schema
 import pyxb.binding.datatypes
@@ -87,6 +90,7 @@ ablieferungstyp.GEVER = ablieferungstyp._CF_enumeration.addEnumeration(unicode_v
 ablieferungstyp.FILES = ablieferungstyp._CF_enumeration.addEnumeration(unicode_value='FILES', tag='FILES')
 ablieferungstyp._InitializeFacetMap(ablieferungstyp._CF_enumeration)
 Namespace.addCategoryObject('typeBinding', 'ablieferungstyp', ablieferungstyp)
+_module_typeBindings.ablieferungstyp = ablieferungstyp
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}idArchivischeNotiz
 class idArchivischeNotiz (pyxb.binding.datatypes.ID):
@@ -99,6 +103,7 @@ class idArchivischeNotiz (pyxb.binding.datatypes.ID):
 idArchivischeNotiz._CF_minLength = pyxb.binding.facets.CF_minLength(value=pyxb.binding.datatypes.nonNegativeInteger(1))
 idArchivischeNotiz._InitializeFacetMap(idArchivischeNotiz._CF_minLength)
 Namespace.addCategoryObject('typeBinding', 'idArchivischeNotiz', idArchivischeNotiz)
+_module_typeBindings.idArchivischeNotiz = idArchivischeNotiz
 
 # List simple type: {http://bar.admin.ch/arelda/v4}dateiRef
 # superclasses pyxb.binding.datatypes.IDREFS
@@ -114,6 +119,7 @@ class dateiRef (pyxb.binding.basis.STD_list):
 dateiRef._CF_length = pyxb.binding.facets.CF_length(value=pyxb.binding.datatypes.nonNegativeInteger(1))
 dateiRef._InitializeFacetMap(dateiRef._CF_length)
 Namespace.addCategoryObject('typeBinding', 'dateiRef', dateiRef)
+_module_typeBindings.dateiRef = dateiRef
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}ca
 class ca (pyxb.binding.datatypes.boolean):
@@ -125,6 +131,7 @@ class ca (pyxb.binding.datatypes.boolean):
     _Documentation = ''
 ca._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'ca', ca)
+_module_typeBindings.ca = ca
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}keineAngabe
 class keineAngabe (pyxb.binding.datatypes.token, pyxb.binding.basis.enumeration_mixin):
@@ -138,6 +145,7 @@ keineAngabe._CF_enumeration = pyxb.binding.facets.CF_enumeration(value_datatype=
 keineAngabe.keine_Angabe = keineAngabe._CF_enumeration.addEnumeration(unicode_value='keine Angabe', tag='keine_Angabe')
 keineAngabe._InitializeFacetMap(keineAngabe._CF_enumeration)
 Namespace.addCategoryObject('typeBinding', 'keineAngabe', keineAngabe)
+_module_typeBindings.keineAngabe = keineAngabe
 
 # Union simple type: {http://bar.admin.ch/arelda/v4}zeitpunkt
 # superclasses pyxb.binding.datatypes.anySimpleType
@@ -155,6 +163,7 @@ zeitpunkt._CF_enumeration = pyxb.binding.facets.CF_enumeration(value_datatype=ze
 zeitpunkt._InitializeFacetMap(zeitpunkt._CF_pattern,
    zeitpunkt._CF_enumeration)
 Namespace.addCategoryObject('typeBinding', 'zeitpunkt', zeitpunkt)
+_module_typeBindings.zeitpunkt = zeitpunkt
 
 # Union simple type: {http://bar.admin.ch/arelda/v4}datumTypB
 # superclasses pyxb.binding.datatypes.anySimpleType
@@ -227,6 +236,7 @@ datumTypB._CF_enumeration = pyxb.binding.facets.CF_enumeration(value_datatype=da
 datumTypB._InitializeFacetMap(datumTypB._CF_pattern,
    datumTypB._CF_enumeration)
 Namespace.addCategoryObject('typeBinding', 'datumTypB', datumTypB)
+_module_typeBindings.datumTypB = datumTypB
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}text1
 class text1 (pyxb.binding.datatypes.string):
@@ -239,6 +249,7 @@ class text1 (pyxb.binding.datatypes.string):
 text1._CF_maxLength = pyxb.binding.facets.CF_maxLength(value=pyxb.binding.datatypes.nonNegativeInteger(100))
 text1._InitializeFacetMap(text1._CF_maxLength)
 Namespace.addCategoryObject('typeBinding', 'text1', text1)
+_module_typeBindings.text1 = text1
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}text2
 class text2 (pyxb.binding.datatypes.string):
@@ -251,6 +262,7 @@ class text2 (pyxb.binding.datatypes.string):
 text2._CF_maxLength = pyxb.binding.facets.CF_maxLength(value=pyxb.binding.datatypes.nonNegativeInteger(200))
 text2._InitializeFacetMap(text2._CF_maxLength)
 Namespace.addCategoryObject('typeBinding', 'text2', text2)
+_module_typeBindings.text2 = text2
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}text3
 class text3 (pyxb.binding.datatypes.string):
@@ -263,6 +275,7 @@ class text3 (pyxb.binding.datatypes.string):
 text3._CF_maxLength = pyxb.binding.facets.CF_maxLength(value=pyxb.binding.datatypes.nonNegativeInteger(1000))
 text3._InitializeFacetMap(text3._CF_maxLength)
 Namespace.addCategoryObject('typeBinding', 'text3', text3)
+_module_typeBindings.text3 = text3
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}text4
 class text4 (pyxb.binding.datatypes.string):
@@ -274,6 +287,7 @@ class text4 (pyxb.binding.datatypes.string):
     _Documentation = None
 text4._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'text4', text4)
+_module_typeBindings.text4 = text4
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}idDatei
 class idDatei (pyxb.binding.datatypes.ID):
@@ -285,6 +299,7 @@ class idDatei (pyxb.binding.datatypes.ID):
     _Documentation = 'Paketweit eindeutige ID f\xfcr die Datei (technischer Prim\xe4rschl\xfcssel). Diese ID wird aus dem Dokument heraus referenziert.Unambiguous ID for the file throughout the package (technical primary key). This ID is referenced out of the document.ID univoque pour tout le paquet pour le dossier (cl\xe9 primaire technique). Cette ID est r\xe9f\xe9renc\xe9e sur le document.'
 idDatei._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'idDatei', idDatei)
+_module_typeBindings.idDatei = idDatei
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}pruefalgorithmus
 class pruefalgorithmus (pyxb.binding.datatypes.token, pyxb.binding.basis.enumeration_mixin):
@@ -301,6 +316,7 @@ pruefalgorithmus.SHA_256 = pruefalgorithmus._CF_enumeration.addEnumeration(unico
 pruefalgorithmus.SHA_512 = pruefalgorithmus._CF_enumeration.addEnumeration(unicode_value='SHA-512', tag='SHA_512')
 pruefalgorithmus._InitializeFacetMap(pruefalgorithmus._CF_enumeration)
 Namespace.addCategoryObject('typeBinding', 'pruefalgorithmus', pruefalgorithmus)
+_module_typeBindings.pruefalgorithmus = pruefalgorithmus
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}idDokument
 class idDokument (pyxb.binding.datatypes.ID):
@@ -313,6 +329,7 @@ class idDokument (pyxb.binding.datatypes.ID):
 idDokument._CF_minLength = pyxb.binding.facets.CF_minLength(value=pyxb.binding.datatypes.nonNegativeInteger(1))
 idDokument._InitializeFacetMap(idDokument._CF_minLength)
 Namespace.addCategoryObject('typeBinding', 'idDokument', idDokument)
+_module_typeBindings.idDokument = idDokument
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}erscheinungsformDokument
 class erscheinungsformDokument (pyxb.binding.datatypes.token, pyxb.binding.basis.enumeration_mixin):
@@ -327,6 +344,7 @@ erscheinungsformDokument.digital = erscheinungsformDokument._CF_enumeration.addE
 erscheinungsformDokument.nicht_digital = erscheinungsformDokument._CF_enumeration.addEnumeration(unicode_value='nicht digital', tag='nicht_digital')
 erscheinungsformDokument._InitializeFacetMap(erscheinungsformDokument._CF_enumeration)
 Namespace.addCategoryObject('typeBinding', 'erscheinungsformDokument', erscheinungsformDokument)
+_module_typeBindings.erscheinungsformDokument = erscheinungsformDokument
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}datenschutzDokument
 class datenschutzDokument (pyxb.binding.datatypes.boolean):
@@ -338,6 +356,7 @@ class datenschutzDokument (pyxb.binding.datatypes.boolean):
     _Documentation = "Markierung, die angibt, ob das Dokument besonders sch\xfctzenswerte Personendaten oder Pers\xf6nlichkeitsprofile gem\xe4ss Datenschutzrecht Art 3.Marking indicating whether the document contains sensitive personal data or personal profiles under the Data Protection Act.Marque qui pr\xe9cise si le document contient des donn\xe9es sensibles ou des profils de la personnalit\xe9 selon l'art. 3 de la loi sur la protection des donn\xe9es"
 datenschutzDokument._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'datenschutzDokument', datenschutzDokument)
+_module_typeBindings.datenschutzDokument = datenschutzDokument
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}idDossier
 class idDossier (pyxb.binding.datatypes.ID):
@@ -350,6 +369,7 @@ class idDossier (pyxb.binding.datatypes.ID):
 idDossier._CF_minLength = pyxb.binding.facets.CF_minLength(value=pyxb.binding.datatypes.nonNegativeInteger(1))
 idDossier._InitializeFacetMap(idDossier._CF_minLength)
 Namespace.addCategoryObject('typeBinding', 'idDossier', idDossier)
+_module_typeBindings.idDossier = idDossier
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}erscheinungsformDossier
 class erscheinungsformDossier (pyxb.binding.datatypes.token, pyxb.binding.basis.enumeration_mixin):
@@ -366,6 +386,7 @@ erscheinungsformDossier.nicht_digital = erscheinungsformDossier._CF_enumeration.
 erscheinungsformDossier.gemischt = erscheinungsformDossier._CF_enumeration.addEnumeration(unicode_value='gemischt', tag='gemischt')
 erscheinungsformDossier._InitializeFacetMap(erscheinungsformDossier._CF_enumeration)
 Namespace.addCategoryObject('typeBinding', 'erscheinungsformDossier', erscheinungsformDossier)
+_module_typeBindings.erscheinungsformDossier = erscheinungsformDossier
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}datenschutzDossier
 class datenschutzDossier (pyxb.binding.datatypes.boolean):
@@ -377,6 +398,7 @@ class datenschutzDossier (pyxb.binding.datatypes.boolean):
     _Documentation = 'Markierung, die angibt, ob sich in den Dokumenten des Dossiers besonders sch\xfctzenswerten Personendaten oder Pers\xf6nlichkeitsprofilen gem\xe4ss Datenschutzrecht.Marking indicating whether documents in the dossier contain sensitive personal data or personal profiles under the Data Protection Act.Marque qui pr\xe9cise si des documents du dossier contiennent des donn\xe9es sensibles ou des profils de la personnalit\xe9 selon la loi sur la protection des donn\xe9es'
 datenschutzDossier._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'datenschutzDossier', datenschutzDossier)
+_module_typeBindings.datenschutzDossier = datenschutzDossier
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}orderVorgang
 class orderVorgang (pyxb.binding.datatypes.integer):
@@ -388,6 +410,7 @@ class orderVorgang (pyxb.binding.datatypes.integer):
     _Documentation = "Ordnungszahl welche die Reihenfolge von Vorg\xe4ngen innerhalb eines Dossiers festlegt, muss innerhalb des selben Dossier eindeutig sein.Atomic number which defines the sequence of operations within a dossier, must be unique within the same dossier.Num\xe9ro qui d\xe9finit l'ordre des activit\xe9s au sein d'un dossier. Doit \xeatre univoque au sein du m\xeame dossier."
 orderVorgang._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'orderVorgang', orderVorgang)
+_module_typeBindings.orderVorgang = orderVorgang
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}orderAktivitaet
 class orderAktivitaet (pyxb.binding.datatypes.integer):
@@ -399,6 +422,7 @@ class orderAktivitaet (pyxb.binding.datatypes.integer):
     _Documentation = "Ordnungszahl welche die Reihenfolge der Aktivit\xe4ten innerhalb eines Vorgangs festlegt, muss innerhalb des selben Vorgangs eindeutig sein.Atomic number which defines the sequence of activities within a process, must be unique within the same process.Num\xe9ro qui d\xe9finit l'ordre des activit\xe9s au sein d'un processus. Doit \xeatre univoque au sein du m\xeame processus."
 orderAktivitaet._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'orderAktivitaet', orderAktivitaet)
+_module_typeBindings.orderAktivitaet = orderAktivitaet
 
 # Union simple type: {http://bar.admin.ch/arelda/v4}abschlussdatumAktivitaet
 # superclasses pyxb.binding.datatypes.anySimpleType
@@ -416,6 +440,7 @@ abschlussdatumAktivitaet._CF_enumeration = pyxb.binding.facets.CF_enumeration(va
 abschlussdatumAktivitaet._InitializeFacetMap(abschlussdatumAktivitaet._CF_pattern,
    abschlussdatumAktivitaet._CF_enumeration)
 Namespace.addCategoryObject('typeBinding', 'abschlussdatumAktivitaet', abschlussdatumAktivitaet)
+_module_typeBindings.abschlussdatumAktivitaet = abschlussdatumAktivitaet
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}nameOrdner
 class nameOrdner (pyxb.binding.datatypes.string):
@@ -427,6 +452,7 @@ class nameOrdner (pyxb.binding.datatypes.string):
     _Documentation = 'Das Inhaltsverzeichnis listet alle Dateien und Ordner des Pakets hierarchisch auf. F\xfcr die Ordner wird der Ordnername eingesetzt.The table of contents lists all the files and folders in the package hierarchically. The folder name is used for the folders.La table des mati\xe8res dresse une liste hi\xe9rarchique de tous les fichiers et r\xe9pertoires du paquet. Pour le r\xe9pertoire est utilis\xe9 le nom du r\xe9pertoire.'
 nameOrdner._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'nameOrdner', nameOrdner)
+_module_typeBindings.nameOrdner = nameOrdner
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}idOrdner
 class idOrdner (pyxb.binding.datatypes.ID):
@@ -438,6 +464,7 @@ class idOrdner (pyxb.binding.datatypes.ID):
     _Documentation = 'Paketweit eindeutige ID f\xfcr den Ordner (technischer Prim\xe4rschl\xfcssel). Diese ID wird aus dem Dokument heraus referenziert.Unambiguous ID for the folder throughout the package (technical primary key). This ID is referenced outside of the document.ID univoque pour tout le paquet pour le r\xe9pertoire (cl\xe9 primaire technique). Cette ID est r\xe9f\xe9renc\xe9e sur le document.'
 idOrdner._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'idOrdner', idOrdner)
+_module_typeBindings.idOrdner = idOrdner
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}idOrdnungssystemposition
 class idOrdnungssystemposition (pyxb.binding.datatypes.ID):
@@ -449,6 +476,7 @@ class idOrdnungssystemposition (pyxb.binding.datatypes.ID):
     _Documentation = 'Paketweit eindeutige ID (Prim\xe4rschl\xfcssel).Unambiguous ID for the whole package (primary key).ID univoque pour tout le paquet (cl\xe9 primaire).'
 idOrdnungssystemposition._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'idOrdnungssystemposition', idOrdnungssystemposition)
+_module_typeBindings.idOrdnungssystemposition = idOrdnungssystemposition
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}datenschutzOrdnungssystemposition
 class datenschutzOrdnungssystemposition (pyxb.binding.datatypes.boolean):
@@ -460,6 +488,7 @@ class datenschutzOrdnungssystemposition (pyxb.binding.datatypes.boolean):
     _Documentation = 'Markierung, die angibt, ob sich in den Unterlagen der Ordnungssystemposition solche mit besonders sch\xfctzenswerten Personendaten oder Pers\xf6nlichkeitsprofilen gem\xe4ss Datenschutzgesetz.Marking indicating whether documents in the classification system position contain sensitive personal data or personal profiles under the Data Protection Act.Marque qui pr\xe9cise si des documents de la position du syst\xe8me de classement contiennent des donn\xe9es sensibles ou des profils de la personnalit\xe9 selon la loi sur la protection des donn\xe9es.'
 datenschutzOrdnungssystemposition._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'datenschutzOrdnungssystemposition', datenschutzOrdnungssystemposition)
+_module_typeBindings.datenschutzOrdnungssystemposition = datenschutzOrdnungssystemposition
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}paketTyp
 class paketTyp (pyxb.binding.datatypes.token, pyxb.binding.basis.enumeration_mixin):
@@ -475,6 +504,7 @@ paketTyp.AIP = paketTyp._CF_enumeration.addEnumeration(unicode_value='AIP', tag=
 paketTyp.DIP = paketTyp._CF_enumeration.addEnumeration(unicode_value='DIP', tag='DIP')
 paketTyp._InitializeFacetMap(paketTyp._CF_enumeration)
 Namespace.addCategoryObject('typeBinding', 'paketTyp', paketTyp)
+_module_typeBindings.paketTyp = paketTyp
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}version
 class version (pyxb.binding.datatypes.nonNegativeInteger):
@@ -486,6 +516,7 @@ class version (pyxb.binding.datatypes.nonNegativeInteger):
     _Documentation = 'Die Versionierung des Pakets. Aus der Version ist schnell ersichtlich, wie oft ein AIP bereits migriert wurde.Version the package was created with. Version is a rapid way to determine how often an AIP has already been migrated.La gestion des versions du paquet. Gr\xe2ce \xe0 la version, il est facile de voir combien de fois un AIP a d\xe9j\xe0 \xe9t\xe9 migr\xe9.'
 version._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'version', version)
+_module_typeBindings.version = version
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}ablieferungsnummer
 class ablieferungsnummer (text1):
@@ -497,6 +528,7 @@ class ablieferungsnummer (text1):
     _Documentation = "Die Ablieferungsnummer dient zur Identifizierung der Ablieferung im Archiv. Sie besteht in der Regel aus dem Ablieferungsjahr und einer Laufnummer innerhalb dieses Jahres. Die Ablieferungsnummer kann auch Buchstaben enthalten.The submission number serves to identify the submission. It consists of the submission year and a consecutive number within that year.Le num\xe9ro de versement sert \xe0 l'identification du versement aux archives. Il est g\xe9n\xe9ralement constitu\xe9 de l'ann\xe9e du versement et d'un num\xe9ro courant de cette ann\xe9e. Le num\xe9ro de versement peut aussi contenir des lettres."
 ablieferungsnummer._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'ablieferungsnummer', ablieferungsnummer)
+_module_typeBindings.ablieferungsnummer = ablieferungsnummer
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}angebotsnummer
 class angebotsnummer (text1):
@@ -508,6 +540,7 @@ class angebotsnummer (text1):
     _Documentation = "Die vom Archiv vergebene Nummer des Angebots, auf welches sich die Ablieferung st\xfctzt.The number, allocated by the archive, of the offering on which the submission is based.Le num\xe9ro de l'offre qui est donn\xe9 par les archives et sur lequel se base le versement."
 angebotsnummer._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'angebotsnummer', angebotsnummer)
+_module_typeBindings.angebotsnummer = angebotsnummer
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}ablieferndeStelle
 class ablieferndeStelle (text2):
@@ -519,6 +552,7 @@ class ablieferndeStelle (text2):
     _Documentation = 'Organisationseinheit, welche die abzuliefernden Unterlagen aufbereitet (der Name wird ausgeschrieben, keine Abk\xfcrzung), und Name der Person, die f\xfcr die Ablieferung zust\xe4ndig ist.Organisational unit that prepares the documents to be submitted (name written out in full, no abbreviations) and name of the person responsible for the submission.Unit\xe9 organisationnelle qui pr\xe9pare les documents \xe0 verser (le nom est \xe9crit en toutes lettres, sans abr\xe9viation) et nom de la personne qui est responsable du versement.'
 ablieferndeStelle._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'ablieferndeStelle', ablieferndeStelle)
+_module_typeBindings.ablieferndeStelle = ablieferndeStelle
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}referenzBewertungsentscheid
 class referenzBewertungsentscheid (text1):
@@ -530,6 +564,7 @@ class referenzBewertungsentscheid (text1):
     _Documentation = "Aktenzeichen Bewertungsentscheid(e) Archiv, welches die Ablieferung betreffen.File reference of the appraisal decision(s) relating to the submission.R\xe9f\xe9rence d\xe9cision(s) d'\xe9valuation archives qui concernent le versement."
 referenzBewertungsentscheid._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'referenzBewertungsentscheid', referenzBewertungsentscheid)
+_module_typeBindings.referenzBewertungsentscheid = referenzBewertungsentscheid
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}referenzSchutzfristenFormular
 class referenzSchutzfristenFormular (text1):
@@ -541,6 +576,7 @@ class referenzSchutzfristenFormular (text1):
     _Documentation = 'Aktenzeichen des Formulars \u201eMeldung von Unterlagen mit besonderer Schutzfrist und \xf6ffentlich zug\xe4nglichen Unterlagen\u201c, in dem die f\xfcr die Ablieferung vereinbarten Schutzfristen festgehalten sind.File reference of the "Notification of documents subject to a special closure period and publicly accessible documents"\x9d form in which the closure periods agreed for the submission are set down.R\xe9f\xe9rence du formulaire "Annonce de documents avec un d\xe9lai de protection particulier et de documents consultables par le public", dans lequel sont fix\xe9s les d\xe9lais de protection convenus pour le versement.'
 referenzSchutzfristenFormular._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'referenzSchutzfristenFormular', referenzSchutzfristenFormular)
+_module_typeBindings.referenzSchutzfristenFormular = referenzSchutzfristenFormular
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}schutzfristenkategorieAblieferung
 class schutzfristenkategorieAblieferung (text1):
@@ -552,6 +588,7 @@ class schutzfristenkategorieAblieferung (text1):
     _Documentation = 'Artikel des Gesetztes, der die Schutzfrist festh\xe4lt, die das Amt im Formular \u201eMeldung von Unterlagen mit besonderer Schutzfrist und \xf6ffentlich zug\xe4nglichen Unterlagen\u201c gemeldet hat und vom Archiv auf ihre formale Korrektheit und Vollst\xe4ndigkeit kontrolliert worden ist.Article of the law stipulating the closure period reported by the authority in the "Notification of documents subject to a special closure period and publicly accessible documents"\x9d form and checked for formal correctness and completeness by the archive.Article de la loi qui fixe le d\xe9lai de protection que l\u2019administration a annonc\xe9 dans le formulaire "Annonce de documents avec un d\xe9lai de protection particulier et de documents consultables par le public" et dont les archives ont contr\xf4l\xe9 l\u2019exactitude et l\u2019int\xe9gralit\xe9.'
 schutzfristenkategorieAblieferung._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'schutzfristenkategorieAblieferung', schutzfristenkategorieAblieferung)
+_module_typeBindings.schutzfristenkategorieAblieferung = schutzfristenkategorieAblieferung
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}schutzfristAblieferung
 class schutzfristAblieferung (text1):
@@ -565,6 +602,7 @@ schutzfristAblieferung._CF_pattern = pyxb.binding.facets.CF_pattern()
 schutzfristAblieferung._CF_pattern.addPattern(pattern='[0-9]*')
 schutzfristAblieferung._InitializeFacetMap(schutzfristAblieferung._CF_pattern)
 Namespace.addCategoryObject('typeBinding', 'schutzfristAblieferung', schutzfristAblieferung)
+_module_typeBindings.schutzfristAblieferung = schutzfristAblieferung
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}ablieferungsteile
 class ablieferungsteile (text3):
@@ -576,6 +614,7 @@ class ablieferungsteile (text3):
     _Documentation = 'Angabe \xfcber den gesamten Inhalt der Ablieferung (sowohl der digitalen als auch der nicht digitalen Teile).Indication of the full content of the submission (both digital and non-digital components).Informations sur le contenu entier du versement (non seulement la partie num\xe9rique, mais aussi la partie non num\xe9rique).'
 ablieferungsteile._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'ablieferungsteile', ablieferungsteile)
+_module_typeBindings.ablieferungsteile = ablieferungsteile
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}bemerkungAblieferung
 class bemerkungAblieferung (text4):
@@ -587,6 +626,7 @@ class bemerkungAblieferung (text4):
     _Documentation = "Zus\xe4tzliche Informationen, welche die Ablieferung und ihre Entstehung betreffen. Wenn die Unterlagen in der Ablieferung aus einer periodisierten Registratur stammen, kann hier die Registraturperiode angegeben werden.Additional information relating to the submission and its creation. If the documents in the submission come from a periodised registry, the registry period can be indicated here.Informations compl\xe9mentaires qui concernent le versement et sa cr\xe9ation . Si les documents du versement datent d'une p\xe9riode donn\xe9e, la date d'enregistrement peut \xeatre indiqu\xe9e ici."
 bemerkungAblieferung._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'bemerkungAblieferung', bemerkungAblieferung)
+_module_typeBindings.bemerkungAblieferung = bemerkungAblieferung
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}vorgangstyp
 class vorgangstyp (text1):
@@ -598,6 +638,7 @@ class vorgangstyp (text1):
     _Documentation = "Klassifizierung des Vorgangs.Classification of the process.Classification de l'activit\xe9"
 vorgangstyp._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'vorgangstyp', vorgangstyp)
+_module_typeBindings.vorgangstyp = vorgangstyp
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}beschreibung
 class beschreibung (text4):
@@ -609,6 +650,7 @@ class beschreibung (text4):
     _Documentation = "Nachweis und Resultat der durchgef\xfchrten T\xe4tigkeit.Confirmation and result of the activity carried out.Justification et r\xe9sultat de l'activit\xe9 effectu\xe9e"
 beschreibung._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'beschreibung', beschreibung)
+_module_typeBindings.beschreibung = beschreibung
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}bearbeiter
 class bearbeiter (text2):
@@ -620,6 +662,7 @@ class bearbeiter (text2):
     _Documentation = "Name der Person, die den archivischen Vorgang durchgef\xfchrt hat.Name of the person who carried out the archival process.Nom de la personne qui a effectu\xe9 l'activit\xe9 archivistique"
 bearbeiter._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'bearbeiter', bearbeiter)
+_module_typeBindings.bearbeiter = bearbeiter
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}referenzUebernahmedossier
 class referenzUebernahmedossier (text1):
@@ -631,6 +674,7 @@ class referenzUebernahmedossier (text1):
     _Documentation = "Aktenzeichen des \xdcbernahmedossiers des Archivs.File reference of the ingest dossier in the archive application.R\xe9f\xe9rence du dossier de prise en charge dans l'application GEVER des archives."
 referenzUebernahmedossier._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'referenzUebernahmedossier', referenzUebernahmedossier)
+_module_typeBindings.referenzUebernahmedossier = referenzUebernahmedossier
 
 # Union simple type: {http://bar.admin.ch/arelda/v4}datumTypA
 # superclasses pyxb.binding.datatypes.anySimpleType
@@ -665,6 +709,7 @@ datumTypA.keine_Angabe = 'keine Angabe'           # originally keineAngabe.keine
 datumTypA._InitializeFacetMap(datumTypA._CF_pattern,
    datumTypA._CF_enumeration)
 Namespace.addCategoryObject('typeBinding', 'datumTypA', datumTypA)
+_module_typeBindings.datumTypA = datumTypA
 
 # Union simple type: {http://bar.admin.ch/arelda/v4}notizDatum
 # superclasses datumTypB
@@ -679,6 +724,7 @@ class notizDatum (pyxb.binding.basis.STD_union):
     _MemberTypes = ( pyxb.binding.datatypes.date, pyxb.binding.datatypes.dateTime, )
 notizDatum._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'notizDatum', notizDatum)
+_module_typeBindings.notizDatum = notizDatum
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}notizErfasser
 class notizErfasser (text1):
@@ -690,6 +736,7 @@ class notizErfasser (text1):
     _Documentation = 'Benutzer, welcher die Notiz erfasst hat. Optionales Feld.User who created the note. Optional field.Utilisateur qui a catalogu\xe9 la notice. Champ facultatif.'
 notizErfasser._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'notizErfasser', notizErfasser)
+_module_typeBindings.notizErfasser = notizErfasser
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}notizBeschreibung
 class notizBeschreibung (text4):
@@ -701,6 +748,7 @@ class notizBeschreibung (text4):
     _Documentation = 'Notiz i.e.S, d.h. Beschreibung. Zwingendes Feld.Notice in narrower sense, i.e. description. Compulsory field.Notice au sens strict, c.-\xe0-d. description. Champ obligatoire'
 notizBeschreibung._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'notizBeschreibung', notizBeschreibung)
+_module_typeBindings.notizBeschreibung = notizBeschreibung
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}nameDatei
 class nameDatei (text2):
@@ -712,6 +760,7 @@ class nameDatei (text2):
     _Documentation = 'Name der Datei, wie dieser im SIP/AIP/DIP erscheint (z.B. "p000001_Machbarkeitsanaly.pdf").Name of the file as it appears in the SIP/AIP/DIP (e.g. "p000001_Feasibility_Study.pdf"\x9d).Nom du fichier comme il appara\xeet dans le SIP/AIP/DIP (p. ex.: "p000001_Machbarkeitsanaly.pdf").'
 nameDatei._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'nameDatei', nameDatei)
+_module_typeBindings.nameDatei = nameDatei
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}physischerName
 class physischerName (text1):
@@ -723,6 +772,7 @@ class physischerName (text1):
     _Documentation = 'Name der Datei im Filesystem.Name of the file in the file system.Nom du fichier dans le syst\xe8me de fichiers.'
 physischerName._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'physischerName', physischerName)
+_module_typeBindings.physischerName = physischerName
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}originalName
 class originalName (text4):
@@ -734,6 +784,7 @@ class originalName (text4):
     _Documentation = 'Name des Ordners oder der Datei, wie diese in der Originalstruktur (im GEVER-System, in der Dateiablage) beim Aktenbildner geheissen hat (z.B. "Arbeitspaket" oder "Bericht.doc").Name of the folder or file as it was called in the original structure (in the GEVER system, in the file archive) at the records creator (e.g. "work package"\x9d or "Report.doc"\x9d.Nom du r\xe9pertoire ou du fichier, comme il a \xe9t\xe9 inscrit dans la structure d\'origine (dans le syst\xe8me GEVER, dans la collection de fichiers) par le producteur des documents (exemples: "Paquet de travail" ou "Rapport.doc")'
 originalName._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'originalName', originalName)
+_module_typeBindings.originalName = originalName
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}pruefsumme
 class pruefsumme (text3):
@@ -745,6 +796,7 @@ class pruefsumme (text3):
     _Documentation = "Pr\xfcfsummenwert (abh\xe4ngig vom verwendeten Pr\xfcfalgorithmus).Checksum value (depending on the checksum algorithm used).Valeur de la somme de contr\xf4le (d\xe9pendant de l'algorithme de contr\xf4le utilis\xe9)."
 pruefsumme._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'pruefsumme', pruefsumme)
+_module_typeBindings.pruefsumme = pruefsumme
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}eigenschaft
 class eigenschaft (text4):
@@ -756,6 +808,7 @@ class eigenschaft (text4):
     _Documentation = 'Generisches Attribut, welches im Zusammenhang mit Wert verwendet wird. Wird bspw. eine CSV-Datei abgeliefert, dann k\xf6nnen mittels Attributpaar "eigenschaft" und "wert" Feld- und Zeilendelemiter, Texterkennungszeichen oder Spaltennamen angegeben werden.Generic attribute used in connection with value. For example, if a CSV file is submitted, the "property"\x9d and "value"\x9d pair of attributes can be used to indicate field and line delimiters, text recognition symbols or column names.Attribut g\xe9n\xe9rique qui est employ\xe9 en rapport avec la valeur. Par exemple est vers\xe9 un fichier CSV; ensuite, le s\xe9parateur de champs et de lignes, la reconnaissance de caract\xe8res et les noms des colonnes peuvent \xeatre indiqu\xe9s au moyen de la paire d\'attributs "propri\xe9t\xe9s" et "valeur".'
 eigenschaft._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'eigenschaft', eigenschaft)
+_module_typeBindings.eigenschaft = eigenschaft
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}titelDokument
 class titelDokument (text4):
@@ -767,6 +820,7 @@ class titelDokument (text4):
     _Documentation = "Kurze Beschreibung des im Dokument behandelten Gegenstandes.Brief description of the subject matter dealt with in the document.Br\xe8ve description de l'objet trait\xe9 dans le document."
 titelDokument._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'titelDokument', titelDokument)
+_module_typeBindings.titelDokument = titelDokument
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}autor
 class autor (text4):
@@ -778,6 +832,7 @@ class autor (text4):
     _Documentation = "Verfasser eines Dokuments.Author of a document.R\xe9dacteur d'un document."
 autor._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'autor', autor)
+_module_typeBindings.autor = autor
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}dokumenttyp
 class dokumenttyp (text3):
@@ -789,6 +844,7 @@ class dokumenttyp (text3):
     _Documentation = 'Aussehen des Dokuments, das zu erhalten ist.Appearance of the document that is to be preserved.Pr\xe9sentation du document qui doit \xeatre conserv\xe9.'
 dokumenttyp._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'dokumenttyp', dokumenttyp)
+_module_typeBindings.dokumenttyp = dokumenttyp
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}anwendung
 class anwendung (text2):
@@ -800,6 +856,7 @@ class anwendung (text2):
     _Documentation = "Kategorisierung des Dokuments in Bezug auf seinen Anwendungsbereich in der Verwaltungseinheit.Categorisation of the document in respect of its area of application in the administrative unit.Cat\xe9gorisation du document en rapport avec son domaine d'utilisation dans l'unit\xe9 administrative"
 anwendung._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'anwendung', anwendung)
+_module_typeBindings.anwendung = anwendung
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}klassifizierungskategorieDokument
 class klassifizierungskategorieDokument (text2):
@@ -811,6 +868,7 @@ class klassifizierungskategorieDokument (text2):
     _Documentation = "Grad, in dem das Dokument vor unberechtigter Einsicht gesch\xfctzt werden muss. Referenz: Verordnung vom 10.12.1990 \xfcber die Klassifizierung und Behandlung von Informationen im zivilen Verwaltungsbereich ([SR 172.015]) und Verordnung vom 1.5.1990 \xfcber den Schutz milit\xe4rischer Informationen ([SR 510.411]).Degree to which the document must be protected against unauthorised access. Reference: Ordinance of 10.12.1990 on the Classification and Treatment of Information in the Civil Administration ([SR 172.015]) and Ordinance of 1.5.1990 on the Protection of Military Information ([SR 510.411]).Degr\xe9 dans lequel le document doit \xeatre prot\xe9g\xe9 d'une consultation non autoris\xe9e. R\xe9f\xe9rence: Ordonnance du 10.12.1990 sur la classification et le traitement d'informations de l'administration civile  ([SR 172.015]) et ordonnance du 1.5.1990 sur la protection des informations militaires ([SR 510.411])."
 klassifizierungskategorieDokument._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'klassifizierungskategorieDokument', klassifizierungskategorieDokument)
+_module_typeBindings.klassifizierungskategorieDokument = klassifizierungskategorieDokument
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}oeffentlichkeitsstatusDokument
 class oeffentlichkeitsstatusDokument (text2):
@@ -822,6 +880,7 @@ class oeffentlichkeitsstatusDokument (text2):
     _Documentation = "Angabe, ob das Dokument gem\xe4ss [BG\xd6] \xf6ffentlich zug\xe4nglich ist oder nicht.Indication of whether or not the document is publicly accessible.Indiquer si le document est ou n'est pas consultable par le public selon la [LTrans]"
 oeffentlichkeitsstatusDokument._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'oeffentlichkeitsstatusDokument', oeffentlichkeitsstatusDokument)
+_module_typeBindings.oeffentlichkeitsstatusDokument = oeffentlichkeitsstatusDokument
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}oeffentlichkeitsstatusBegruendungDokument
 class oeffentlichkeitsstatusBegruendungDokument (text4):
@@ -833,6 +892,7 @@ class oeffentlichkeitsstatusBegruendungDokument (text4):
     _Documentation = "Argumente gegen die \xf6ffentliche Zug\xe4nglichkeit gem\xe4ss [BG\xd6]. Gem\xe4ss Entwurf [BG\xd6] muss begr\xfcndet werden, warum Unterlagen nicht \xf6ffentlich zug\xe4nglich gemacht werden k\xf6nnen.Arguments against public access. Reasons why documents cannot be made publicly accessible must be stated.Arguments contre l'acc\xe8s public selon la [LTrans]. Selon le projet de [LTrans], il faut donner les raisons pour lesquelles des documents ne peuvent \xeatre accessibles au public."
 oeffentlichkeitsstatusBegruendungDokument._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'oeffentlichkeitsstatusBegruendungDokument', oeffentlichkeitsstatusBegruendungDokument)
+_module_typeBindings.oeffentlichkeitsstatusBegruendungDokument = oeffentlichkeitsstatusBegruendungDokument
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}sonstigeBestimmungenDokument
 class sonstigeBestimmungenDokument (text4):
@@ -844,6 +904,7 @@ class sonstigeBestimmungenDokument (text4):
     _Documentation = "Angaben \xfcber sonstige rechtliche Auflagen, denen das Dokument unterstellt ist.Indication of other legal conditions to which the document is subject.Informations sur d'autres \xe9ventuelles conditions l\xe9gales auxquelles le document est soumis"
 sonstigeBestimmungenDokument._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'sonstigeBestimmungenDokument', sonstigeBestimmungenDokument)
+_module_typeBindings.sonstigeBestimmungenDokument = sonstigeBestimmungenDokument
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}bemerkungDokument
 class bemerkungDokument (text4):
@@ -855,6 +916,7 @@ class bemerkungDokument (text4):
     _Documentation = "Verschiedene Informationen, die in Zusammenhang mit dem Dokument, seiner Entstehung und allf\xe4lligen Ver\xe4nderungen festgehalten werden m\xfcssen.Various information that must be recorded in connection with the document, its creation and any changes.Diff\xe9rentes informations qui doivent \xeatre d\xe9finies en rapport avec le document, sa cr\xe9ation et d'\xe9ventuelles modifications."
 bemerkungDokument._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'bemerkungDokument', bemerkungDokument)
+_module_typeBindings.bemerkungDokument = bemerkungDokument
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}aktenzeichen
 class aktenzeichen (text2):
@@ -866,6 +928,7 @@ class aktenzeichen (text2):
     _Documentation = "Identifikation und Ordnungsmerkmal des Dossiers. Das Aktenzeichen erlaubt es, das Dossier innerhalb eines bestimmten Ablagesystems einer eindeutigen Position (Rubrik) des OS zuzuordnen.Identification and classification feature of the dossier. The file reference allows the dossier to be assigned to an unambiguous position (rubric) of the CS within a specific archive system.Identification et caract\xe9ristique de classement du dossier. La r\xe9f\xe9rence permet d'attribuer le dossier dans un syst\xe8me de classement d\xe9termin\xe9 \xe0 une position univoque (rubrique) du syst\xe8me de classement."
 aktenzeichen._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'aktenzeichen', aktenzeichen)
+_module_typeBindings.aktenzeichen = aktenzeichen
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}zusatzmerkmal
 class zusatzmerkmal (text2):
@@ -877,6 +940,7 @@ class zusatzmerkmal (text2):
     _Documentation = "Angaben \xfcber zus\xe4tzliche Merkmale, welche das Dossier identifizieren. Hier kann z.B. die Bandnummer eines Dossiers vermerkt werden, als Unterscheidungs- und Reihungsmerkmal von Fortsetzungsdossiers mit demselben Dossier-Titel und mit demselben Aktenzeichen erfasst.Information on additional characteristics that identify the dossier. For example the volume number of a dossier can be indicated here to differentiate and sequence in respect of consecutive dossiers with the same dossier title and the same file reference.Informations sur des composants additionnels qui servent \xe0 l'identification du dossier. Ici peut, par exemple, \xeatre mentionn\xe9 le num\xe9ro de volume d'un dossier, qui constitue une caract\xe9ristique de diff\xe9renciation des dossiers successifs avec le m\xeame titre et la m\xeame r\xe9f\xe9rence."
 zusatzmerkmal._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'zusatzmerkmal', zusatzmerkmal)
+_module_typeBindings.zusatzmerkmal = zusatzmerkmal
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}titelDossier
 class titelDossier (text4):
@@ -894,6 +958,7 @@ class titelDossier (text4):
     _Documentation = 'Bezeichnung des Dossiers.\n        GEVER: Kurzbeschreibung des Gesch\xe4ftsfalls (bei Seriendossierbildung) oder des Sachbetreffs (bei Sachdossierbildung) zu welchem Dokumente im Dossier abgelegt werden. \n        FILES: Kurzbeschreibung des Inhalts der Datensammlung und der Dokumentation (falls vorhanden)"Designation of the dossier.\n        GEVER: Brief description of the business event (when creating serial dossiers) or matter (when creating dossiers for specific matters) in respect of which documents are archived in the dossier. \n        FILES: Brief description of the content of the data collection and the documentation (if present)""D\xe9signation du dossier ou du groupe de documents.\n        GEVER: br\xe8ve description de l\'affaire (dans le cas de la formation des dossiers en s\xe9rie) ou des objets (dans le cas de la formation de dossiers) auxquels appartiennent les documents class\xe9s dans le dossier.\n        FILES: br\xe8ve description du contenu de la collection de donn\xe9es et de la documentation (si elle existe)."'
 titelDossier._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'titelDossier', titelDossier)
+_module_typeBindings.titelDossier = titelDossier
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}inhalt
 class inhalt (text4):
@@ -905,6 +970,7 @@ class inhalt (text4):
     _Documentation = 'Inhaltlicher Schwerpunkt der Datensammlung sofern dies nicht aus dem Feld "Titel" hervorgeht.Main content focus of the data collection, if not clear from the "title"\x9d field.Sujet principal du contenu de la collection de donn\xe9es, si celui-ci n\'appara\xeet pas dans le champ "Titre".'
 inhalt._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'inhalt', inhalt)
+_module_typeBindings.inhalt = inhalt
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}formInhalt
 class formInhalt (text4):
@@ -916,6 +982,7 @@ class formInhalt (text4):
     _Documentation = 'Angabe des Mediums (Fotos, Tondokumente, schriftliche Unterlagen usw.)Indication of the medium (photos, sound documents, written documents, etc.)Indication du support (photos, documents sonores, documents manuscrits, etc.)'
 formInhalt._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'formInhalt', formInhalt)
+_module_typeBindings.formInhalt = formInhalt
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}umfang
 class umfang (text4):
@@ -927,6 +994,7 @@ class umfang (text4):
     _Documentation = "Anzahl der Dateien des Dossiers und Umfang in MBytes zum Zeitpunkt der Ablieferung. Bei Datenbanken: Anzahl Datens\xe4tze der vorliegenden Datensammlung zum Zeitpunkt der Ablieferung. Als Datensatz gilt das Ensemble von Zeilen einer oder mehrerer miteinander verkn\xfcpften Tabellen (zentrale logische Einheit). Die Anzahl Datens\xe4tze ist zusammen mit der Bezeichnung der zentralen logischen Einheit zu nennen. Diese h\xe4ngt vom Hauptfokus der Datensammlung ab. Bei Unklarheit muss mit einem Zusatztext erkl\xe4rt werden, wie viele Datens\xe4tze welchen Typs vorliegen.Number of files in the dossier and size in MBytes at the time of submission. For databases: number of datasets in the present data collection at the time of submission. A dataset is a set of lines of one or more interlinked tables (central logical unit). The number of datasets must be named along with the designation of the central logical unit. This depends on the main focus of the data collection. Where there is uncertainty, an additional text must be supplied to explain how many datasets of which type are present.Nombre de fichiers dans le dossier et volume en MBytes au moment du versement. Pour les bases de donn\xe9es: nombre de donn\xe9es dans la collection de donn\xe9es au moment du versement. La notion donn\xe9e s'applique \xe0 l'ensemble des lignes d'un ou de plusieurs tableaux li\xe9s l'un \xe0 l'autre (unit\xe9 logique centrale). Le nombre de donn\xe9es est \xe0 mentionner avec la d\xe9signation de l'unit\xe9 logique centrale. Ceci d\xe9pend du sujet principal de la collection de donn\xe9es. En cas de manque de clart\xe9 doit \xeatre indiqu\xe9 combien de donn\xe9es existent pour chaque type."
 umfang._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'umfang', umfang)
+_module_typeBindings.umfang = umfang
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}federfuehrendeOrganisationseinheitDossier
 class federfuehrendeOrganisationseinheitDossier (text2):
@@ -938,6 +1006,7 @@ class federfuehrendeOrganisationseinheitDossier (text2):
     _Documentation = "Bestimmung der f\xfcr die Erledigung des Gesch\xe4ftes zust\xe4ndigen federf\xfchrenden Organisationseinheit.Name of the lead organisational unit responsible for dealing with the business matter.D\xe9signation de l'unit\xe9 organisationnelle responsable pour le traitement d'une affaire."
 federfuehrendeOrganisationseinheitDossier._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'federfuehrendeOrganisationseinheitDossier', federfuehrendeOrganisationseinheitDossier)
+_module_typeBindings.federfuehrendeOrganisationseinheitDossier = federfuehrendeOrganisationseinheitDossier
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}entstehungszeitraumAnmerkung
 class entstehungszeitraumAnmerkung (text4):
@@ -949,6 +1018,7 @@ class entstehungszeitraumAnmerkung (text4):
     _Documentation = "Zus\xe4tzliche Informationen, welche f\xfcr die Ermittlung des Entstehungszeitraums relevant sind. Hier k\xf6nnen Angaben \xfcber allf\xe4llige L\xf6schungen und Mutationen an der Datensammlung eingetragen werden (f\xfcr FILES relevant). Falls der Entstehungszeitraum gesch\xe4tzt wurde, ist hier das Kriterium f\xfcr die Sch\xe4tzung zu nennen.Additional information relevant for determining the creation period. Information on any deletions and changes in the data collection can be entered here (relevant for FILES). If the creation period has been estimated, the criterion for the estimate is to be named here.Informations compl\xe9mentaires qui sont importantes pour la d\xe9termination de la p\xe9riode de cr\xe9ation. Ici peuvent \xeatre report\xe9es les informations sur les effacements et les mutations de la collection de donn\xe9es (important pour FILES). Si la p\xe9riode de cr\xe9ation a \xe9t\xe9 estim\xe9e, le crit\xe8re d'estimation est \xe0 mentionner ici."
 entstehungszeitraumAnmerkung._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'entstehungszeitraumAnmerkung', entstehungszeitraumAnmerkung)
+_module_typeBindings.entstehungszeitraumAnmerkung = entstehungszeitraumAnmerkung
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}schutzfristenkategorieDossier
 class schutzfristenkategorieDossier (text1):
@@ -960,6 +1030,7 @@ class schutzfristenkategorieDossier (text1):
     _Documentation = 'Artikel des Gesetzes, der die Schutzfrist festh\xe4lt, die das Amt im Formular \u201eMeldung von Unterlagen mit besonderer Schutzfrist und \xf6ffentlich zug\xe4nglichen Unterlagen\u201c gemeldet hat und vom Archiv auf ihre formale Korrektheit und Vollst\xe4ndigkeit kontrolliert worden ist.Article of the law stipulating the closure period reported by the authority in the "Notification of documents subject to a special closure period and publicly accessible documents"\x9d form and checked for formal correctness and completeness by the archive.Article de la loi qui fixe le d\xe9lai de protection que l\u2019administration a annonc\xe9 dans le formulaire "Annonce de documents avec un d\xe9lai de protection particulier et de documents consultables par le public" et dont les archives ont contr\xf4l\xe9 l\u2019exactitude et l\u2019int\xe9gralit\xe9.'
 schutzfristenkategorieDossier._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'schutzfristenkategorieDossier', schutzfristenkategorieDossier)
+_module_typeBindings.schutzfristenkategorieDossier = schutzfristenkategorieDossier
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}schutzfristDossier
 class schutzfristDossier (text1):
@@ -973,6 +1044,7 @@ schutzfristDossier._CF_pattern = pyxb.binding.facets.CF_pattern()
 schutzfristDossier._CF_pattern.addPattern(pattern='[0-9]*')
 schutzfristDossier._InitializeFacetMap(schutzfristDossier._CF_pattern)
 Namespace.addCategoryObject('typeBinding', 'schutzfristDossier', schutzfristDossier)
+_module_typeBindings.schutzfristDossier = schutzfristDossier
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}schutzfristenBegruendungDossier
 class schutzfristenBegruendungDossier (text4):
@@ -984,6 +1056,7 @@ class schutzfristenBegruendungDossier (text4):
     _Documentation = 'Erl\xe4uterung der Begr\xfcndung f\xfcr eine verl\xe4ngerte Schutzfrist f\xfcr Unterlagen, die nach Personennamen erschlossen sind und sch\xfctzenswerte Personendaten gem\xe4ss DSG enthalten (z.B. Art. 11 BGA), und f\xfcr bestimmte Kategorien oder f\xfcr einzelne Dossiers, die \xfcberwiegend schutzw\xfcrdige \xf6ffentliche oder private Interessen tangieren (z.B. Art. 12 Abs. 1 BGA und Art. 12 Abs. 2 BGA).Explanation of the reasons for an extended closure period for documents that are catalogued by individuals"\u2122 names and contain sensitive personal data in accordance with the DPA (Art. 11 ArchA) and for certain categories or individual dossiers that touch on matters where there is an overriding public or private interest in preventing consultation (Art. 12 para. 1 ArchA and Art. 12 para. 2 ArchA).Explication du motif de prolongation du d\xe9lai de protection pour les documents class\xe9s selon des noms de personnes et contenant des donn\xe9es personnelles sensibles selon la LPD (par exemple art. 11 LAr) et pour des cat\xe9gories d\xe9finies ou pour certains dossiers qui touchent un int\xe9r\xeat public ou priv\xe9 pr\xe9pond\xe9rant, digne de protection (par exemple art. 12 al. 1 LAr et art. 12 al. 2 LAr)'
 schutzfristenBegruendungDossier._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'schutzfristenBegruendungDossier', schutzfristenBegruendungDossier)
+_module_typeBindings.schutzfristenBegruendungDossier = schutzfristenBegruendungDossier
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}klassifizierungskategorieDossier
 class klassifizierungskategorieDossier (text2):
@@ -995,6 +1068,7 @@ class klassifizierungskategorieDossier (text2):
     _Documentation = "Grad, in dem das Dossier und die enthaltenen Dokumente und Dateien vor unberechtigter Einsicht gesch\xfctzt werden m\xfcssen. Referenz: Verordnung vom 10.12.1990 \xfcber die Klassifizierung und Behandlung von Informationen im zivilen Verwaltungsbereich ([SR 172.015]) und Verordnung vom 1.5.1990 \xfcber den Schutz milit\xe4rischer Informationen ([SR 510.411]).Degree to which the dossier and the documents and files it contains must be protected against unauthorised access. Reference: Ordinance of 10.12.1990 on the Classification and Treatment of Information in the Civil Administration ([SR 172.015]) and Ordinance of 1.5.1990 on the Protection of Military Information ([SR 510.411]).Degr\xe9 dans lequel le dossier et les documents et fichiers qu'il contient doivent \xeatre prot\xe9g\xe9s d'une consultation non autoris\xe9e. R\xe9f\xe9rence: Ordonnance du 10.12.1990 sur la classification et le traitement d'informations de l'administration civile  ([SR 172.015]) et ordonnance du 1.5.1990 sur la protection des informations militaires ([SR 510.411])."
 klassifizierungskategorieDossier._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'klassifizierungskategorieDossier', klassifizierungskategorieDossier)
+_module_typeBindings.klassifizierungskategorieDossier = klassifizierungskategorieDossier
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}oeffentlichkeitsstatusDossier
 class oeffentlichkeitsstatusDossier (text2):
@@ -1006,6 +1080,7 @@ class oeffentlichkeitsstatusDossier (text2):
     _Documentation = 'Angabe, ob das Dossier gem\xe4ss [BG\xd6] sch\xfctzenswerte Dokumente oder Dateien enth\xe4lt oder nicht.Indication of whether or not the dossier contains sensitive documents or files.Indiquer le dossier contient ou non des documents dignes de protection selon la [LTrans].'
 oeffentlichkeitsstatusDossier._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'oeffentlichkeitsstatusDossier', oeffentlichkeitsstatusDossier)
+_module_typeBindings.oeffentlichkeitsstatusDossier = oeffentlichkeitsstatusDossier
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}oeffentlichkeitsstatusBegruendungDossier
 class oeffentlichkeitsstatusBegruendungDossier (text4):
@@ -1017,6 +1092,7 @@ class oeffentlichkeitsstatusBegruendungDossier (text4):
     _Documentation = "Argumente gegen die \xf6ffentliche Zug\xe4nglichkeit gem\xe4ss [BG\xd6]. Gem\xe4ss Entwurf [BG\xd6] muss begr\xfcndet werden, warum Unterlagen nicht \xf6ffentlich zug\xe4nglich gemacht werden k\xf6nnen.Arguments against public access. Reasons why documents cannot be made publicly accessible must be stated.Arguments contre l'acc\xe8s public selon la [LTrans]. Selon le projet de [LTrans], il faut donner les raisons pour lesquelles des documents ne peuvent \xeatre accessibles au public."
 oeffentlichkeitsstatusBegruendungDossier._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'oeffentlichkeitsstatusBegruendungDossier', oeffentlichkeitsstatusBegruendungDossier)
+_module_typeBindings.oeffentlichkeitsstatusBegruendungDossier = oeffentlichkeitsstatusBegruendungDossier
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}sonstigeBestimmungenDossier
 class sonstigeBestimmungenDossier (text4):
@@ -1028,6 +1104,7 @@ class sonstigeBestimmungenDossier (text4):
     _Documentation = "Angaben \xfcber sonstige rechtliche Auflagen, denen das Dossier unterstellt ist.Indication of other legal conditions to which the dossier is subject.Informations sur d'autres \xe9ventuelles conditions l\xe9gales auxquelles est soumis le dossier."
 sonstigeBestimmungenDossier._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'sonstigeBestimmungenDossier', sonstigeBestimmungenDossier)
+_module_typeBindings.sonstigeBestimmungenDossier = sonstigeBestimmungenDossier
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}vorgang
 class vorgang (text4):
@@ -1039,6 +1116,7 @@ class vorgang (text4):
     _Documentation = "Angaben \xfcber T\xe4tigkeiten, die an Dokumenten des Dossiers durchgef\xfchrt wurden. Es k\xf6nnen z.B. Angaben zu T\xe4tigkeiten sein, die im Rahmen eines Auftragssubdossiers durchgef\xfchrt wurden.Information on activities that have been carried out on the documents in the dossier. These may include e.g. information on activities carried out as part of a mandate subdossier.Informations sur les activit\xe9s qui sont effectu\xe9es avec les documents du dossier. Ce peut \xeatre, par exemple, des informations sur les activit\xe9s qui sont effectu\xe9es dans le cadre d'un mandat."
 vorgang._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'vorgang', vorgang)
+_module_typeBindings.vorgang = vorgang
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}bemerkungDossier
 class bemerkungDossier (text4):
@@ -1050,6 +1128,7 @@ class bemerkungDossier (text4):
     _Documentation = "Zus\xe4tzliche Informationen, welche das Dossier oder die Datensammlung betreffen. Hier k\xf6nnen n\xe4here Angaben zur Sprache und zu speziellen technischen Anforderungen eingetragen werden, welche den Zugang der Daten einschr\xe4nken k\xf6nnten.Additional information relating to the dossier or the data collection. Further information on the language and special technical requirements that may restrict access to the data may be entered here.Informations compl\xe9mentaires qui concernent le dossier ou la collection de donn\xe9es. Ici peuvent \xeatre report\xe9es les pr\xe9cisions sur la langue et sur les exigences techniques qui peuvent limiter l'acc\xe8s aux donn\xe9es."
 bemerkungDossier._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'bemerkungDossier', bemerkungDossier)
+_module_typeBindings.bemerkungDossier = bemerkungDossier
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}titelVorgang
 class titelVorgang (text3):
@@ -1061,6 +1140,7 @@ class titelVorgang (text3):
     _Documentation = "Benennung von T\xe4tigkeit und Gegenstand des Gesch\xe4ftsvorfalles.Description of activity and object of the transaction.D\xe9nomination de l'activit\xe9 et de l'objet du processus de l'activit\xe9."
 titelVorgang._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'titelVorgang', titelVorgang)
+_module_typeBindings.titelVorgang = titelVorgang
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}arbeitsanweisungVorgang
 class arbeitsanweisungVorgang (text4):
@@ -1072,6 +1152,7 @@ class arbeitsanweisungVorgang (text4):
     _Documentation = "Arbeitsanweisung, bzw.Auftragsbeschreibung: Vorgaben und Hinweise f\xfcr die Durchf\xfchrung und Erledigung.Instruction, guidelines and suggestions for implementation and completion.Instruction de travail ou description du mandat: directives et remarques pour l'ex\xe9cution et la liquidation."
 arbeitsanweisungVorgang._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'arbeitsanweisungVorgang', arbeitsanweisungVorgang)
+_module_typeBindings.arbeitsanweisungVorgang = arbeitsanweisungVorgang
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}federfuehrungVorgang
 class federfuehrungVorgang (text3):
@@ -1083,6 +1164,7 @@ class federfuehrungVorgang (text3):
     _Documentation = "Akteur, der f\xfcr die korrekte Durchf\xfchrung des Gesch\xe4ftsvorfalls verantwortlich ist.Player who is responsible for the correct execution of the transaction.Acteur qui est responsable de la bonne ex\xe9cution du processus de l'activit\xe9."
 federfuehrungVorgang._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'federfuehrungVorgang', federfuehrungVorgang)
+_module_typeBindings.federfuehrungVorgang = federfuehrungVorgang
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}verweisVorgang
 class verweisVorgang (text4):
@@ -1094,6 +1176,7 @@ class verweisVorgang (text4):
     _Documentation = "Referenz auf andere Ordnungssystempositionen, Dossiers oder Vorg\xe4nge, die in enger Beziehung mit dem Vorgang stehen ohne direkt mit ihm verkn\xfcpft zu sein.Reference to other classification system positions, dossier or processes that are directly linked  or in close relationship with the process.R\xe9f\xe9rence \xe0 d'autres positions de syst\xe8me de classement, dossiers ou processus qui sont en relation \xe9troite avec le processus sans \xeatre en ligne hi\xe9rarchique directe avec lui."
 verweisVorgang._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'verweisVorgang', verweisVorgang)
+_module_typeBindings.verweisVorgang = verweisVorgang
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}bemerkungVorgang
 class bemerkungVorgang (text4):
@@ -1105,6 +1188,7 @@ class bemerkungVorgang (text4):
     _Documentation = "Erg\xe4nzende Information zum Vorgang.Supplementary information of the transaction.Des renseignements suppl\xe9mentaires du processus de l'activit\xe9."
 bemerkungVorgang._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'bemerkungVorgang', bemerkungVorgang)
+_module_typeBindings.bemerkungVorgang = bemerkungVorgang
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}vorschreibungAktivitaet
 class vorschreibungAktivitaet (text3):
@@ -1116,6 +1200,7 @@ class vorschreibungAktivitaet (text3):
     _Documentation = "Beschreibung der T\xe4tigkeit, die ausgef\xfchrt werden soll (Standardanweisungen).Description of the activity to be performed (standard instructions).Description de l'activit\xe9 qui doit \xeatre effectu\xe9e (Instructions standard)."
 vorschreibungAktivitaet._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'vorschreibungAktivitaet', vorschreibungAktivitaet)
+_module_typeBindings.vorschreibungAktivitaet = vorschreibungAktivitaet
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}anweisungAktivitaet
 class anweisungAktivitaet (text4):
@@ -1127,6 +1212,7 @@ class anweisungAktivitaet (text4):
     _Documentation = "Freitext f\xfcr die Eingabe der Anweisung zu einer Aktivit\xe4t.Detailed description of the activity to be performed.Description d\xe9taill\xe9e de l'activit\xe9 qui doit \xeatre effectu\xe9e."
 anweisungAktivitaet._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'anweisungAktivitaet', anweisungAktivitaet)
+_module_typeBindings.anweisungAktivitaet = anweisungAktivitaet
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}bearbeiterAktivitaet
 class bearbeiterAktivitaet (text3):
@@ -1138,6 +1224,7 @@ class bearbeiterAktivitaet (text3):
     _Documentation = "Akteur, welcher die Aktivit\xe4t durchf\xfchrt. Im Organigramm bzw. den Organisationsvorschriften der Verwaltungseinheit aufgef\xfchrte Rollen bzw. Personen.Player which performs the activity. In the organization or the organizational rules of the administrative unit specified roles or persons.Acteur qui ex\xe9cute l'activit\xe9. R\xf4les ou personnes mentionn\xe9s dans l'organigramme ou les directives d'organisation de l'unit\xe9 administrative."
 bearbeiterAktivitaet._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'bearbeiterAktivitaet', bearbeiterAktivitaet)
+_module_typeBindings.bearbeiterAktivitaet = bearbeiterAktivitaet
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}verweisAktivitaet
 class verweisAktivitaet (text4):
@@ -1149,6 +1236,7 @@ class verweisAktivitaet (text4):
     _Documentation = "Referenz auf andere Ordnungssystempositionen, Dossiers, Vorg\xe4nge oder Aktivit\xe4ten, die in enger Beziehung zu der Aktivit\xe4t stehen ohne direkt mit ihr verkn\xfcpft zu sein.Reference to other classification system positions, dossier or processes that are directly linked  or in close relationship with the process.R\xe9f\xe9rence \xe0 d'autres positions de syst\xe8me de classement, dossiers ou processus qui sont en relation \xe9troite avec le processus sans \xeatre en ligne hi\xe9rarchique directe avec lui."
 verweisAktivitaet._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'verweisAktivitaet', verweisAktivitaet)
+_module_typeBindings.verweisAktivitaet = verweisAktivitaet
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}bemerkungAktivitaet
 class bemerkungAktivitaet (text4):
@@ -1160,6 +1248,7 @@ class bemerkungAktivitaet (text4):
     _Documentation = "Informationen, die f\xfcr die Aktivit\xe4t von Bedeutung sind.Information of significance for the activity.Informations importantes pour l'activit\xe9"
 bemerkungAktivitaet._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'bemerkungAktivitaet', bemerkungAktivitaet)
+_module_typeBindings.bemerkungAktivitaet = bemerkungAktivitaet
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}nameOrdnungssystem
 class nameOrdnungssystem (text2):
@@ -1171,6 +1260,7 @@ class nameOrdnungssystem (text2):
     _Documentation = "Eindeutige Bezeichnung des Ordnungssystems, welche den Geltungsbereich des Ordnungssystems wiedergibt. Enth\xe4lt in der Regel als Element die Bezeichnung der Verwaltungseinheit oder des Aufgabenbereichs, in welchem das Ordnungssystem angewandt wird.Unambiguous designation of the classification system indicating the scope of validity of the classification system. Generally contains as an element the designation of the administrative unit or area of responsibility in which the classification system is used.D\xe9signation univoque du syst\xe8me de classement, laquelle restitue le champ d'application du syst\xe8me de classement. Contient normalement comme \xe9l\xe9ment la d\xe9signation de l'unit\xe9 administrative ou le secteur d'activit\xe9s, dans lequel est employ\xe9 le syst\xe8me de classement."
 nameOrdnungssystem._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'nameOrdnungssystem', nameOrdnungssystem)
+_module_typeBindings.nameOrdnungssystem = nameOrdnungssystem
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}generation
 class generation (text1):
@@ -1182,6 +1272,7 @@ class generation (text1):
     _Documentation = 'Versionsbezeichnung des Ordnungssystems. Dient zur Verkn\xfcpfung und Unterscheidung von zeitlich aufeinander folgenden OS desselben Typs mit demselben Geltungsbereich.version of the classification system. Serves to link and differentiate chronologically sequential CSs of the same type with the same scope of validity.D\xe9signation de la version du syst\xe8me de classement. Sert \xe0 relier et \xe0 diff\xe9rencier des syst\xe8mes de classement du m\xeame type qui se suivent dans le temps avec le m\xeame domaine d\u2019application.'
 generation._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'generation', generation)
+_module_typeBindings.generation = generation
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}mitbenutzung
 class mitbenutzung (text4):
@@ -1193,6 +1284,7 @@ class mitbenutzung (text4):
     _Documentation = 'Weitere Organisationseinheiten, ausserhalb des Aktenbildners, welche das Ordnungssystem mitbenutzen oder mitbenutzt haben.Further organisational units outside the records creator that also use or have used the classification system.Autres unit\xe9s organisationnelles, en dehors du producteur de dossiers, qui utilisent ou ont utilis\xe9 le syst\xe8me de classement.'
 mitbenutzung._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'mitbenutzung', mitbenutzung)
+_module_typeBindings.mitbenutzung = mitbenutzung
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}bemerkungOrdnungssysstem
 class bemerkungOrdnungssysstem (text4):
@@ -1204,6 +1296,7 @@ class bemerkungOrdnungssysstem (text4):
     _Documentation = 'Zus\xe4tzliche Informationen, welche das Ordnungssystem betreffen.Additional information relating to the classification system.Informations compl\xe9mentaires qui concernent le syst\xe8me de classement.'
 bemerkungOrdnungssysstem._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'bemerkungOrdnungssysstem', bemerkungOrdnungssysstem)
+_module_typeBindings.bemerkungOrdnungssysstem = bemerkungOrdnungssysstem
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}nummer
 class nummer (text1):
@@ -1215,6 +1308,7 @@ class nummer (text1):
     _Documentation = 'Eindeutige Identifikation und Ordnungsmerkmal der Ordnungssystemposition.Unambiguous identification and classification feature of the classification system position.Identification univoque et caract\xe9ristique de classement de la position du syst\xe8me de classement.'
 nummer._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'nummer', nummer)
+_module_typeBindings.nummer = nummer
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}titelOrdnungssystemposition
 class titelOrdnungssystemposition (text2):
@@ -1226,6 +1320,7 @@ class titelOrdnungssystemposition (text2):
     _Documentation = "Bezeichnung des Aufgabenbereichs, dem die Ordnungssystemposition zugewiesen ist.Designation of the area of responsibility to which the classification system position is allocated.D\xe9signation du secteur d'activit\xe9s qui est attribu\xe9 \xe0 cette position du syst\xe8me de classement."
 titelOrdnungssystemposition._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'titelOrdnungssystemposition', titelOrdnungssystemposition)
+_module_typeBindings.titelOrdnungssystemposition = titelOrdnungssystemposition
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}federfuehrendeOrganisationseinheitOrdnungssystemposition
 class federfuehrendeOrganisationseinheitOrdnungssystemposition (text2):
@@ -1237,6 +1332,7 @@ class federfuehrendeOrganisationseinheitOrdnungssystemposition (text2):
     _Documentation = "Bestimmung der f\xfcr die Erledigung des Gesch\xe4ftes zust\xe4ndigen federf\xfchrenden Organisationseinheit.Name of the lead organisational unit responsible for dealing with the business matter.D\xe9signation de l'unit\xe9 organisationnelle responsable pour le traitement de l'affaire."
 federfuehrendeOrganisationseinheitOrdnungssystemposition._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'federfuehrendeOrganisationseinheitOrdnungssystemposition', federfuehrendeOrganisationseinheitOrdnungssystemposition)
+_module_typeBindings.federfuehrendeOrganisationseinheitOrdnungssystemposition = federfuehrendeOrganisationseinheitOrdnungssystemposition
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}schutzfristenkategorieOrdnungssystemposition
 class schutzfristenkategorieOrdnungssystemposition (text1):
@@ -1248,6 +1344,7 @@ class schutzfristenkategorieOrdnungssystemposition (text1):
     _Documentation = 'Artikel des Gesetztes, der die Schutzfrist festh\xe4lt, die das Amt im Formular \u201eMeldung von Unterlagen mit besonderer Schutzfrist und \xf6ffentlich zug\xe4nglichen Unterlagen\u201c gemeldet hat und vom Archiv auf ihre formale Korrektheit und Vollst\xe4ndigkeit kontrolliert worden ist.Article of the ArchA stipulating the closure period reported by the authority in the "Notification of documents subject to a special closure period and publicly accessible documents"\x9d form and checked for formal correctness and completeness by the archive.Article de la loi qui fixe le d\xe9lai de protection que l\u2019administration a annonc\xe9 dans le formulaire "Annonce de documents avec un d\xe9lai de protection particulier et de documents consultables par le public" et dont les archives ont contr\xf4l\xe9 l\u2019exactitude et l\u2019int\xe9gralit\xe9.'
 schutzfristenkategorieOrdnungssystemposition._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'schutzfristenkategorieOrdnungssystemposition', schutzfristenkategorieOrdnungssystemposition)
+_module_typeBindings.schutzfristenkategorieOrdnungssystemposition = schutzfristenkategorieOrdnungssystemposition
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}schutzfristOrdnungssystemposition
 class schutzfristOrdnungssystemposition (text1):
@@ -1261,6 +1358,7 @@ schutzfristOrdnungssystemposition._CF_pattern = pyxb.binding.facets.CF_pattern()
 schutzfristOrdnungssystemposition._CF_pattern.addPattern(pattern='[0-9]*')
 schutzfristOrdnungssystemposition._InitializeFacetMap(schutzfristOrdnungssystemposition._CF_pattern)
 Namespace.addCategoryObject('typeBinding', 'schutzfristOrdnungssystemposition', schutzfristOrdnungssystemposition)
+_module_typeBindings.schutzfristOrdnungssystemposition = schutzfristOrdnungssystemposition
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}schutzfristenBegruendungOrdnungssystemposition
 class schutzfristenBegruendungOrdnungssystemposition (text4):
@@ -1272,6 +1370,7 @@ class schutzfristenBegruendungOrdnungssystemposition (text4):
     _Documentation = 'Erl\xe4uterung der Begr\xfcndung f\xfcr eine verl\xe4ngerte Schutzfrist f\xfcr Unterlagen, die nach Personennamen erschlossen sind und sch\xfctzenswerte Personendaten gem\xe4ss DSG enthalten (z.B. Art. 11 BGA), und f\xfcr bestimmte Kategorien oder f\xfcr einzelne Dossiers, die \xfcberwiegend schutzw\xfcrdige \xf6ffentliche oder private Interessen tangieren (z.B. Art. 12 Abs. 1 BGA und Art. 12 Abs. 2 BGA).Explanation of the reasons for an extended closure period for documents that are catalogued by individuals"\u2122 names and contain sensitive personal data in accordance with the DPA (Art. 11 ArchA) and for certain categories or individual dossiers that touch on matters where there is an overriding public or private interest in preventing consultation (Art. 12 para. 1 ArchA and Art. 12 para. 2 ArchA).Explication du motif de prolongation du d\xe9lai de protection pour les documents class\xe9s selon des noms de personnes et contenant des donn\xe9es personnelles sensibles selon la LPD (par exemple art. 11 LAr) et pour des cat\xe9gories d\xe9finies ou pour certains dossiers qui touchent un int\xe9r\xeat public ou priv\xe9 pr\xe9pond\xe9rant, digne de protection (par exemple art. 12 al. 1 LAr et art. 12 al. 2 LAr)'
 schutzfristenBegruendungOrdnungssystemposition._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'schutzfristenBegruendungOrdnungssystemposition', schutzfristenBegruendungOrdnungssystemposition)
+_module_typeBindings.schutzfristenBegruendungOrdnungssystemposition = schutzfristenBegruendungOrdnungssystemposition
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}klassifizierungskategorieOrdnungssystemposition
 class klassifizierungskategorieOrdnungssystemposition (text2):
@@ -1283,6 +1382,7 @@ class klassifizierungskategorieOrdnungssystemposition (text2):
     _Documentation = "Grad, in dem alle der Ordnungssystemposition untergeordneten Objekte Dossier und Dokumente vor unberechtigter Einsicht gesch\xfctzt werden m\xfcssen. Referenz: Verordnung vom 10.12.1990 \xfcber die Klassifizierung und Behandlung von Informationen im zivilen Verwaltungsbereich ([SR 172.015]) und Verordnung vom 1.5.1990 \xfcber den Schutz milit\xe4rischer Informationen ([SR 510.411]).Degree to which all the dossier and document objects subordinated to the classification system position must be protected against unauthorised access. Reference: Ordinance of 10.12.1990 on the Classification and Treatment of Information in the Civil Administration ([SR 172.015]) and Ordinance of 1.5.1990 on the Protection of Military Information ([SR 510.411]).Degr\xe9 dans lequel doivent \xeatre prot\xe9g\xe9s d'une consultation non autoris\xe9e tous les dossiers et documents subordonn\xe9s \xe0 une position du syst\xe8me de classement. R\xe9f\xe9rence: Ordonnance du 10.12.1990 sur la classification et le traitement d'informations de l'administration civile  ([SR 172.015]) et ordonnance du 1.5.1990 sur la protection des informations militaires ([SR 510.411]"
 klassifizierungskategorieOrdnungssystemposition._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'klassifizierungskategorieOrdnungssystemposition', klassifizierungskategorieOrdnungssystemposition)
+_module_typeBindings.klassifizierungskategorieOrdnungssystemposition = klassifizierungskategorieOrdnungssystemposition
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}oeffentlichkeitsstatusOrdnungssystemposition
 class oeffentlichkeitsstatusOrdnungssystemposition (text2):
@@ -1294,6 +1394,7 @@ class oeffentlichkeitsstatusOrdnungssystemposition (text2):
     _Documentation = 'Angabe, ob der Ordnungssystemposition untergeordnete Dossiers gem\xe4ss [BG\xd6] sch\xfctzenswerte Dokumente enthalten oder nicht.Indication of whether or not dossiers subordinated to the classification system position contain sensitive documents under the [FoIA].Indiquer si les dossiers subordonn\xe9s \xe0 la position du syst\xe8me de classement contiennent ou non des documents dignes de protection selon la [LTrans]'
 oeffentlichkeitsstatusOrdnungssystemposition._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'oeffentlichkeitsstatusOrdnungssystemposition', oeffentlichkeitsstatusOrdnungssystemposition)
+_module_typeBindings.oeffentlichkeitsstatusOrdnungssystemposition = oeffentlichkeitsstatusOrdnungssystemposition
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}oeffentlichkeitsstatusBegruendungOrdnungssystemposition
 class oeffentlichkeitsstatusBegruendungOrdnungssystemposition (text4):
@@ -1305,6 +1406,7 @@ class oeffentlichkeitsstatusBegruendungOrdnungssystemposition (text4):
     _Documentation = "Argumente gegen die \xf6ffentliche Zug\xe4nglichkeit gem\xe4ss [BG\xd6]. Gem\xe4ss Entwurf [BG\xd6] muss begr\xfcndet werden, warum Unterlagen nicht \xf6ffentlich zug\xe4nglich gemacht werden k\xf6nnen.Arguments against public access under the [FoIA]. According to the draft [FoIA], reasons why documents cannot be made publicly accessible must be stated.Arguments contre l'acc\xe8s public selon la [LTrans]. Selon le projet de [LTrans], il faut donner les raisons pour lesquelles des documents ne peuvent \xeatre accessibles au public."
 oeffentlichkeitsstatusBegruendungOrdnungssystemposition._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'oeffentlichkeitsstatusBegruendungOrdnungssystemposition', oeffentlichkeitsstatusBegruendungOrdnungssystemposition)
+_module_typeBindings.oeffentlichkeitsstatusBegruendungOrdnungssystemposition = oeffentlichkeitsstatusBegruendungOrdnungssystemposition
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}sonstigeBestimmungenOrdnungssystemposition
 class sonstigeBestimmungenOrdnungssystemposition (text4):
@@ -1316,6 +1418,7 @@ class sonstigeBestimmungenOrdnungssystemposition (text4):
     _Documentation = "Angaben \xfcber sonstige rechtliche Auflagen, denen die Ordnungssystemposition unterstellt ist. Information on other legal conditions to which the classification system position is subject. Informations sur d'autres \xe9ventuelles conditions l\xe9gales auxquelles est soumise la position du syst\xe8me de classement."
 sonstigeBestimmungenOrdnungssystemposition._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'sonstigeBestimmungenOrdnungssystemposition', sonstigeBestimmungenOrdnungssystemposition)
+_module_typeBindings.sonstigeBestimmungenOrdnungssystemposition = sonstigeBestimmungenOrdnungssystemposition
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}nameSIP
 class nameSIP (text1):
@@ -1329,6 +1432,7 @@ nameSIP._CF_pattern = pyxb.binding.facets.CF_pattern()
 nameSIP._CF_pattern.addPattern(pattern='[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}')
 nameSIP._InitializeFacetMap(nameSIP._CF_pattern)
 Namespace.addCategoryObject('typeBinding', 'nameSIP', nameSIP)
+_module_typeBindings.nameSIP = nameSIP
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}globaleAIPId
 class globaleAIPId (text1):
@@ -1340,6 +1444,7 @@ class globaleAIPId (text1):
     _Documentation = "\xdcber die Gesamtheit der AIP eindeutige ID. Wird im AIS verzeichnet.Unambiguous ID for the whole of the AIP. Described in the AIS.ID univoque pour tout l'AIP. Elle est enregistr\xe9e dans AIS."
 globaleAIPId._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'globaleAIPId', globaleAIPId)
+_module_typeBindings.globaleAIPId = globaleAIPId
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}lokaleAIPId
 class lokaleAIPId (text1):
@@ -1351,6 +1456,7 @@ class lokaleAIPId (text1):
     _Documentation = "\xdcber die Gesamtheit der AIP eindeutige ID im Zusammenhang mit Paketmigrationen. Entsteht zum ersten Mal, wenn ein AIP migriert wird. Wird nicht im AIS verzeichnet.Unambiguous ID for the whole of the AIP in connection with package migrations. Is created for the first time when an AIP is migrated. Is not described in the AIS.ID univoque pour tout l'AIP en rapport avec la migration du paquet. Elle est cr\xe9\xe9e au moment o\xf9 un AIP est migr\xe9. Elle n'est pas enregistr\xe9e dans AIS."
 lokaleAIPId._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'lokaleAIPId', lokaleAIPId)
+_module_typeBindings.lokaleAIPId = lokaleAIPId
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}fruehereLokaleAIPId
 class fruehereLokaleAIPId (text1):
@@ -1362,6 +1468,7 @@ class fruehereLokaleAIPId (text1):
     _Documentation = 'Zeigt auf das "Vater-AIP" zur\xfcck, also dasjenige AIP, aus welchem das vorliegende hervorgegangen ist.Refers back to the "father AIP "\x9d, i.e. the AIP from which the present one came.D\xe9signe "l\'AIP-p\xe8re", donc l\'AIP duquel r\xe9sulte celui actuel.'
 fruehereLokaleAIPId._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'fruehereLokaleAIPId', fruehereLokaleAIPId)
+_module_typeBindings.fruehereLokaleAIPId = fruehereLokaleAIPId
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}schemaVersion
 class schemaVersion (text1, pyxb.binding.basis.enumeration_mixin):
@@ -1375,6 +1482,7 @@ schemaVersion._CF_enumeration = pyxb.binding.facets.CF_enumeration(value_datatyp
 schemaVersion.n4_1 = schemaVersion._CF_enumeration.addEnumeration(unicode_value='4.1', tag='n4_1')
 schemaVersion._InitializeFacetMap(schemaVersion._CF_enumeration)
 Namespace.addCategoryObject('typeBinding', 'schemaVersion', schemaVersion)
+_module_typeBindings.schemaVersion = schemaVersion
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}aktenbildnerName
 class aktenbildnerName (text2):
@@ -1386,6 +1494,7 @@ class aktenbildnerName (text2):
     _Documentation = 'Bezeichnung der Stelle, der Organisationseinheit oder der Person(en), welche die Unterlagen oder die Datensammlung erstellt oder gef\xfchrt hat. Falls der Aktenbildner unbekannt ist, muss die Angabe "Aktenbildner unbekannt" eingetragen werden.Designation of the authority, organisational unit or person(s) that created or managed the documents or the data collection. If the records creator is unknown, the information "Records creator unknown"\x9d must be entered.D\xe9signation du service, de l\'unit\xe9 organisationnelle ou de la (des) personne(s), qui a cr\xe9\xe9 ou g\xe9r\xe9 les documents ou la collection de donn\xe9es. Dans le cas o\xf9 le producteur de dossiers est inconnu, l\'indication "producteur de dossiers inconnu" doit \xeatre inscrite.'
 aktenbildnerName._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'aktenbildnerName', aktenbildnerName)
+_module_typeBindings.aktenbildnerName = aktenbildnerName
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}systemName
 class systemName (text3):
@@ -1397,6 +1506,7 @@ class systemName (text3):
     _Documentation = "Name des Informationssystems, aus dem die abgelieferten Daten (FILES), Dossiers und Dokumente (GEVER) stammen.Name of the information system from which the data (FILES), dossiers and documents (GEVER) submitted come.Nom du syst\xe8me d'information duquel proviennent les donn\xe9es (FILES), les dossiers et les documents (GEVER) vers\xe9s."
 systemName._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'systemName', systemName)
+_module_typeBindings.systemName = systemName
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}systemBeschreibung
 class systemBeschreibung (text4):
@@ -1408,6 +1518,7 @@ class systemBeschreibung (text4):
     _Documentation = "Knappe Beschreibung des Informationssystems, aus dem die abgelieferten Daten (FILES) stammen. Die Beschreibung gibt Auskunft \xfcber den Zweck (inkl. Angabe der gesetzlichen Grundlagen), die Architektur, die Entwicklung und \xfcber relevante Erg\xe4nzungen und \xc4nderungen des Systems. Zudem k\xf6nnen hier Angaben zur Datenerhebung und zu den Organisationseinheiten gemacht werden, die neben dem Aktenbildner das System verwenden.Brief description of the information system from which the data (FILES) submitted come. The description provides information on the purpose (including an indication of the legal bases), architecture and development of the system as well as relevant additions and changes. Information on data gathering and the organisational units that use the system in addition to the records creator can also be supplied here.Description concise du syst\xe8me d'information duquel proviennent les donn\xe9es (FILES) vers\xe9es. La description renseigne sur le but (y compris l'indication des bases l\xe9gales), l'architecture, le d\xe9veloppement et sur les compl\xe9ments et modifications importants du syst\xe8me. En outre, les indications sur la collecte des donn\xe9es et sur les unit\xe9s organisationnelles, qui emploient le syst\xe8me en dehors du producteur de dossiers, peuvent \xeatre donn\xe9es ici."
 systemBeschreibung._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'systemBeschreibung', systemBeschreibung)
+_module_typeBindings.systemBeschreibung = systemBeschreibung
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}verwandteSysteme
 class verwandteSysteme (text4):
@@ -1419,6 +1530,7 @@ class verwandteSysteme (text4):
     _Documentation = 'Systeme, die mit dem beschriebenen System Daten ausgetauscht haben und damit Subsysteme, Parallelsysteme oder \xfcbergeordnete Systeme sind. Hier werden die Bezeichnungen der Systeme und die Art der Verwandtschaft eingetragen.Brief description of the information system from which the data (FILES) submitted come. The description provides information on the purpose (including an indication of the legal bases), architecture and development of the system as well as relevant additions and changes. Information on data gathering and the organisational units that use the system in addition to the records creator can also be supplied here.Syst\xe8mes qui ont \xe9chang\xe9 des donn\xe9es avec le syst\xe8me d\xe9crit et qui sont ainsi des sous-syst\xe8mes, des syst\xe8mes parall\xe8les ou des syst\xe8mes sup\xe9rieurs. Ici sont report\xe9es les d\xe9signations des syst\xe8mes et leur relation.'
 verwandteSysteme._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'verwandteSysteme', verwandteSysteme)
+_module_typeBindings.verwandteSysteme = verwandteSysteme
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}archivierungsmodusLoeschvorschriften
 class archivierungsmodusLoeschvorschriften (text4):
@@ -1430,6 +1542,7 @@ class archivierungsmodusLoeschvorschriften (text4):
     _Documentation = "Angaben dar\xfcber, auf welche Weise die Daten aus dem System archiviert werden, allf\xe4llige L\xf6schvorschriften, Angaben dar\xfcber, welche Funktionalit\xe4ten des Originalsystems nicht archiviert werden konnten, und vereinbartes Intervall der Ablieferungen sind hier zu nennen.Information about the way in which the data from the system are archived, any rules on deletion, information about which functionalities of the original system could not be archived, and the agreed interval for submissions are to be indicated here.Informations sur la mani\xe8re dont sont archiv\xe9es les donn\xe9es du syst\xe8me, sur les \xe9ventuelles directives d'effacement, sur la fonctionnalit\xe9 du syst\xe8me original qui ne peut pas \xeatre archiv\xe9e, et sur l'intervalle convenu de versement sont ici \xe0 indiquer."
 archivierungsmodusLoeschvorschriften._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'archivierungsmodusLoeschvorschriften', archivierungsmodusLoeschvorschriften)
+_module_typeBindings.archivierungsmodusLoeschvorschriften = archivierungsmodusLoeschvorschriften
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}registratur
 class registratur (text2):
@@ -1441,6 +1554,7 @@ class registratur (text2):
     _Documentation = 'Name der Ablage, f\xfcr welche das prim\xe4re Ordnungssystem verwendet wird und die einem Mandanten im System entspricht. Eine aktenbildende Stelle kann im Prinzip mehr als eine Registratur f\xfchren. Pro Registratur gibt es allerdings nur ein prim\xe4res Ordnungssystem.Name of the archive for which the primary classification system is used and that corresponds to a client in the system. In principle, a records-creating authority may maintain more than one registry. However, there is only one primary classification system for each registry.Nom de l\u2019archivage pour lequel le syst\xe8me de classement primaire est utilis\xe9 et qui correspond \xe0 un mandant dans le syst\xe8me. Un service qui cr\xe9e des dossiers peut, en principe, g\xe9rer plus qu\u2019un enregistrement. Par enregistrement toutefois, il n\u2019y a qu\u2019un syst\xe8me de classement primaire.'
 registratur._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'registratur', registratur)
+_module_typeBindings.registratur = registratur
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}geschichteAktenbildner
 class geschichteAktenbildner (text4):
@@ -1452,6 +1566,7 @@ class geschichteAktenbildner (text4):
     _Documentation = "Allgemeiner \xdcberblick \xfcber die Geschichte des Aktenbildners und Angaben \xfcber Vorg\xe4nger und Nachfolgerorganisationen.General overview of the history of the records creator and information about predecessor and successor organisations.Aper\xe7u g\xe9n\xe9ral sur l'histoire du service producteur de documents et indications sur les pr\xe9d\xe9cesseurs et les organisations ayant pris la suite."
 geschichteAktenbildner._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'geschichteAktenbildner', geschichteAktenbildner)
+_module_typeBindings.geschichteAktenbildner = geschichteAktenbildner
 
 # Atomic simple type: {http://bar.admin.ch/arelda/v4}bemerkungProvenienz
 class bemerkungProvenienz (text4):
@@ -1463,6 +1578,7 @@ class bemerkungProvenienz (text4):
     _Documentation = 'Zus\xe4tzliche Informationen, die den Aktenbildner und die Herkunft der Unterlagen oder der Datensammlung betreffen.Additional information relating to the records creator and the origin of the documents or the data collection.Informations compl\xe9mentaires, qui concernent le producteur de dossiers et la provenance des documents ou de la collection de donn\xe9es.'
 bemerkungProvenienz._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'bemerkungProvenienz', bemerkungProvenienz)
+_module_typeBindings.bemerkungProvenienz = bemerkungProvenienz
 
 # Complex type {http://bar.admin.ch/arelda/v4}archivischerVorgang with content type ELEMENT_ONLY
 class archivischerVorgang (pyxb.binding.basis.complexTypeDefinition):
@@ -1512,6 +1628,7 @@ class archivischerVorgang (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
 
     })
+_module_typeBindings.archivischerVorgang = archivischerVorgang
 Namespace.addCategoryObject('typeBinding', 'archivischerVorgang', archivischerVorgang)
 
 
@@ -1587,6 +1704,7 @@ class ablieferung (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
 
     })
+_module_typeBindings.ablieferung = ablieferung
 Namespace.addCategoryObject('typeBinding', 'ablieferung', ablieferung)
 
 
@@ -1654,6 +1772,7 @@ class provenienz (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
 
     })
+_module_typeBindings.provenienz = provenienz
 Namespace.addCategoryObject('typeBinding', 'provenienz', provenienz)
 
 
@@ -1713,6 +1832,7 @@ class ordnungssystem (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
 
     })
+_module_typeBindings.ordnungssystem = ordnungssystem
 Namespace.addCategoryObject('typeBinding', 'ordnungssystem', ordnungssystem)
 
 
@@ -1788,6 +1908,7 @@ class ordnungssystemposition (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
 
     })
+_module_typeBindings.ordnungssystemposition = ordnungssystemposition
 Namespace.addCategoryObject('typeBinding', 'ordnungssystemposition', ordnungssystemposition)
 
 
@@ -1808,6 +1929,7 @@ class inhaltsverzeichnis (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
 
     })
+_module_typeBindings.inhaltsverzeichnis = inhaltsverzeichnis
 Namespace.addCategoryObject('typeBinding', 'inhaltsverzeichnis', inhaltsverzeichnis)
 
 
@@ -1843,6 +1965,7 @@ class ordner (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
 
     })
+_module_typeBindings.ordner = ordner
 Namespace.addCategoryObject('typeBinding', 'ordner', ordner)
 
 
@@ -1878,6 +2001,7 @@ class unstrukturierterAnhang (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
 
     })
+_module_typeBindings.unstrukturierterAnhang = unstrukturierterAnhang
 Namespace.addCategoryObject('typeBinding', 'unstrukturierterAnhang', unstrukturierterAnhang)
 
 
@@ -1898,6 +2022,7 @@ class comparable (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
 
     })
+_module_typeBindings.comparable = comparable
 Namespace.addCategoryObject('typeBinding', 'comparable', comparable)
 
 
@@ -1933,6 +2058,7 @@ class historischerZeitpunkt (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
 
     })
+_module_typeBindings.historischerZeitpunkt = historischerZeitpunkt
 Namespace.addCategoryObject('typeBinding', 'historischerZeitpunkt', historischerZeitpunkt)
 
 
@@ -1968,6 +2094,7 @@ class historischerZeitraum (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
 
     })
+_module_typeBindings.historischerZeitraum = historischerZeitraum
 Namespace.addCategoryObject('typeBinding', 'historischerZeitraum', historischerZeitraum)
 
 
@@ -2003,6 +2130,7 @@ class zeitraum (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
 
     })
+_module_typeBindings.zeitraum = zeitraum
 Namespace.addCategoryObject('typeBinding', 'zeitraum', zeitraum)
 
 
@@ -2030,6 +2158,7 @@ class zusatzDaten (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
 
     })
+_module_typeBindings.zusatzDaten = zusatzDaten
 Namespace.addCategoryObject('typeBinding', 'zusatzDaten', zusatzDaten)
 
 
@@ -2119,6 +2248,7 @@ class ablieferungSIP (ablieferung):
     _AttributeMap.update({
 
     })
+_module_typeBindings.ablieferungSIP = ablieferungSIP
 Namespace.addCategoryObject('typeBinding', 'ablieferungSIP', ablieferungSIP)
 
 
@@ -2200,6 +2330,7 @@ class ablieferungAIP (ablieferung):
     _AttributeMap.update({
 
     })
+_module_typeBindings.ablieferungAIP = ablieferungAIP
 Namespace.addCategoryObject('typeBinding', 'ablieferungAIP', ablieferungAIP)
 
 
@@ -2249,6 +2380,7 @@ class ablieferungDIP (ablieferung):
     _AttributeMap.update({
 
     })
+_module_typeBindings.ablieferungDIP = ablieferungDIP
 Namespace.addCategoryObject('typeBinding', 'ablieferungDIP', ablieferungDIP)
 
 
@@ -2288,6 +2420,7 @@ class provenienzGever (provenienz):
     _AttributeMap.update({
 
     })
+_module_typeBindings.provenienzGever = provenienzGever
 Namespace.addCategoryObject('typeBinding', 'provenienzGever', provenienzGever)
 
 
@@ -2343,6 +2476,7 @@ class provenienzFiles (provenienz):
     _AttributeMap.update({
 
     })
+_module_typeBindings.provenienzFiles = provenienzFiles
 Namespace.addCategoryObject('typeBinding', 'provenienzFiles', provenienzFiles)
 
 
@@ -2380,6 +2514,7 @@ class ordnungssystemGever (ordnungssystem):
     _AttributeMap.update({
 
     })
+_module_typeBindings.ordnungssystemGever = ordnungssystemGever
 Namespace.addCategoryObject('typeBinding', 'ordnungssystemGever', ordnungssystemGever)
 
 
@@ -2417,6 +2552,7 @@ class ordnungssystemFiles (ordnungssystem):
     _AttributeMap.update({
 
     })
+_module_typeBindings.ordnungssystemFiles = ordnungssystemFiles
 Namespace.addCategoryObject('typeBinding', 'ordnungssystemFiles', ordnungssystemFiles)
 
 
@@ -2461,7 +2597,7 @@ class ordnungssystempositionGever (ordnungssystemposition):
 
 
     # Attribute id uses Python identifier id
-    __id = pyxb.binding.content.AttributeUse(pyxb.namespace.ExpandedName(None, 'id'), 'id', '__httpbar_admin_chareldav4_ordnungssystempositionGever_id', idOrdnungssystemposition, required=True)
+    __id = pyxb.binding.content.AttributeUse(pyxb.namespace.ExpandedName(None, 'id'), 'id', '__httpbar_admin_chareldav4_ordnungssystempositionGever_id', _module_typeBindings.idOrdnungssystemposition, required=True)
     __id._DeclarationLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/arelda.xsd', 449, 8)
     __id._UseLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/arelda.xsd', 449, 8)
 
@@ -2474,6 +2610,7 @@ class ordnungssystempositionGever (ordnungssystemposition):
     _AttributeMap.update({
         __id.name() : __id
     })
+_module_typeBindings.ordnungssystempositionGever = ordnungssystempositionGever
 Namespace.addCategoryObject('typeBinding', 'ordnungssystempositionGever', ordnungssystempositionGever)
 
 
@@ -2518,7 +2655,7 @@ class ordnungssystempositionFiles (ordnungssystemposition):
 
 
     # Attribute id uses Python identifier id
-    __id = pyxb.binding.content.AttributeUse(pyxb.namespace.ExpandedName(None, 'id'), 'id', '__httpbar_admin_chareldav4_ordnungssystempositionFiles_id', idOrdnungssystemposition)
+    __id = pyxb.binding.content.AttributeUse(pyxb.namespace.ExpandedName(None, 'id'), 'id', '__httpbar_admin_chareldav4_ordnungssystempositionFiles_id', _module_typeBindings.idOrdnungssystemposition)
     __id._DeclarationLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/arelda.xsd', 502, 8)
     __id._UseLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/arelda.xsd', 502, 8)
 
@@ -2531,6 +2668,7 @@ class ordnungssystempositionFiles (ordnungssystemposition):
     _AttributeMap.update({
         __id.name() : __id
     })
+_module_typeBindings.ordnungssystempositionFiles = ordnungssystempositionFiles
 Namespace.addCategoryObject('typeBinding', 'ordnungssystempositionFiles', ordnungssystempositionFiles)
 
 
@@ -2652,7 +2790,7 @@ class dossier (pyxb.binding.basis.complexTypeDefinition):
 
 
     # Attribute id uses Python identifier id
-    __id = pyxb.binding.content.AttributeUse(pyxb.namespace.ExpandedName(None, 'id'), 'id', '__httpbar_admin_chareldav4_dossier_id', idDossier, required=True)
+    __id = pyxb.binding.content.AttributeUse(pyxb.namespace.ExpandedName(None, 'id'), 'id', '__httpbar_admin_chareldav4_dossier_id', _module_typeBindings.idDossier, required=True)
     __id._DeclarationLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/arelda.xsd', 606, 4)
     __id._UseLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/arelda.xsd', 606, 4)
 
@@ -2678,6 +2816,7 @@ class dossier (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
         __id.name() : __id
     })
+_module_typeBindings.dossier = dossier
 Namespace.addCategoryObject('typeBinding', 'dossier', dossier)
 
 
@@ -2743,7 +2882,7 @@ class vorgangAktivitaet (pyxb.binding.basis.complexTypeDefinition):
 
 
     # Attribute order uses Python identifier order
-    __order = pyxb.binding.content.AttributeUse(pyxb.namespace.ExpandedName(None, 'order'), 'order', '__httpbar_admin_chareldav4_vorgangAktivitaet_order', orderVorgang)
+    __order = pyxb.binding.content.AttributeUse(pyxb.namespace.ExpandedName(None, 'order'), 'order', '__httpbar_admin_chareldav4_vorgangAktivitaet_order', _module_typeBindings.orderVorgang)
     __order._DeclarationLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/arelda.xsd', 816, 4)
     __order._UseLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/arelda.xsd', 816, 4)
 
@@ -2761,6 +2900,7 @@ class vorgangAktivitaet (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
         __order.name() : __order
     })
+_module_typeBindings.vorgangAktivitaet = vorgangAktivitaet
 Namespace.addCategoryObject('typeBinding', 'vorgangAktivitaet', vorgangAktivitaet)
 
 
@@ -2826,7 +2966,7 @@ class aktivitaet (pyxb.binding.basis.complexTypeDefinition):
 
 
     # Attribute order uses Python identifier order
-    __order = pyxb.binding.content.AttributeUse(pyxb.namespace.ExpandedName(None, 'order'), 'order', '__httpbar_admin_chareldav4_aktivitaet_order', orderAktivitaet)
+    __order = pyxb.binding.content.AttributeUse(pyxb.namespace.ExpandedName(None, 'order'), 'order', '__httpbar_admin_chareldav4_aktivitaet_order', _module_typeBindings.orderAktivitaet)
     __order._DeclarationLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/arelda.xsd', 831, 4)
     __order._UseLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/arelda.xsd', 831, 4)
 
@@ -2844,6 +2984,7 @@ class aktivitaet (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
         __order.name() : __order
     })
+_module_typeBindings.aktivitaet = aktivitaet
 Namespace.addCategoryObject('typeBinding', 'aktivitaet', aktivitaet)
 
 
@@ -2958,7 +3099,7 @@ class dokument (pyxb.binding.basis.complexTypeDefinition):
 
 
     # Attribute id uses Python identifier id
-    __id = pyxb.binding.content.AttributeUse(pyxb.namespace.ExpandedName(None, 'id'), 'id', '__httpbar_admin_chareldav4_dokument_id', idDokument, required=True)
+    __id = pyxb.binding.content.AttributeUse(pyxb.namespace.ExpandedName(None, 'id'), 'id', '__httpbar_admin_chareldav4_dokument_id', _module_typeBindings.idDokument, required=True)
     __id._DeclarationLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/arelda.xsd', 871, 4)
     __id._UseLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/arelda.xsd', 871, 4)
 
@@ -2983,6 +3124,7 @@ class dokument (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
         __id.name() : __id
     })
+_module_typeBindings.dokument = dokument
 Namespace.addCategoryObject('typeBinding', 'dokument', dokument)
 
 
@@ -3018,6 +3160,7 @@ class inhaltsverzeichnisSIP (inhaltsverzeichnis):
     _AttributeMap.update({
 
     })
+_module_typeBindings.inhaltsverzeichnisSIP = inhaltsverzeichnisSIP
 Namespace.addCategoryObject('typeBinding', 'inhaltsverzeichnisSIP', inhaltsverzeichnisSIP)
 
 
@@ -3053,6 +3196,7 @@ class inhaltsverzeichnisAIP (inhaltsverzeichnis):
     _AttributeMap.update({
 
     })
+_module_typeBindings.inhaltsverzeichnisAIP = inhaltsverzeichnisAIP
 Namespace.addCategoryObject('typeBinding', 'inhaltsverzeichnisAIP', inhaltsverzeichnisAIP)
 
 
@@ -3088,6 +3232,7 @@ class inhaltsverzeichnisDIP (inhaltsverzeichnis):
     _AttributeMap.update({
 
     })
+_module_typeBindings.inhaltsverzeichnisDIP = inhaltsverzeichnisDIP
 Namespace.addCategoryObject('typeBinding', 'inhaltsverzeichnisDIP', inhaltsverzeichnisDIP)
 
 
@@ -3139,7 +3284,7 @@ class datei (pyxb.binding.basis.complexTypeDefinition):
 
 
     # Attribute id uses Python identifier id
-    __id = pyxb.binding.content.AttributeUse(pyxb.namespace.ExpandedName(None, 'id'), 'id', '__httpbar_admin_chareldav4_datei_id', idDatei, required=True)
+    __id = pyxb.binding.content.AttributeUse(pyxb.namespace.ExpandedName(None, 'id'), 'id', '__httpbar_admin_chareldav4_datei_id', _module_typeBindings.idDatei, required=True)
     __id._DeclarationLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/arelda.xsd', 1000, 4)
     __id._UseLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/arelda.xsd', 1000, 4)
 
@@ -3155,6 +3300,7 @@ class datei (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
         __id.name() : __id
     })
+_module_typeBindings.datei = datei
 Namespace.addCategoryObject('typeBinding', 'datei', datei)
 
 
@@ -3194,6 +3340,7 @@ class ordnerSIP (ordner):
     _AttributeMap.update({
 
     })
+_module_typeBindings.ordnerSIP = ordnerSIP
 Namespace.addCategoryObject('typeBinding', 'ordnerSIP', ordnerSIP)
 
 
@@ -3233,6 +3380,7 @@ class ordnerAIP (ordner):
     _AttributeMap.update({
 
     })
+_module_typeBindings.ordnerAIP = ordnerAIP
 Namespace.addCategoryObject('typeBinding', 'ordnerAIP', ordnerAIP)
 
 
@@ -3272,6 +3420,7 @@ class ordnerDIP (ordner):
     _AttributeMap.update({
 
     })
+_module_typeBindings.ordnerDIP = ordnerDIP
 Namespace.addCategoryObject('typeBinding', 'ordnerDIP', ordnerDIP)
 
 
@@ -3309,7 +3458,7 @@ class archivischeNotiz (pyxb.binding.basis.complexTypeDefinition):
 
 
     # Attribute id uses Python identifier id
-    __id = pyxb.binding.content.AttributeUse(pyxb.namespace.ExpandedName(None, 'id'), 'id', '__httpbar_admin_chareldav4_archivischeNotiz_id', idArchivischeNotiz, required=True)
+    __id = pyxb.binding.content.AttributeUse(pyxb.namespace.ExpandedName(None, 'id'), 'id', '__httpbar_admin_chareldav4_archivischeNotiz_id', _module_typeBindings.idArchivischeNotiz, required=True)
     __id._DeclarationLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/arelda.xsd', 1097, 4)
     __id._UseLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/arelda.xsd', 1097, 4)
 
@@ -3323,6 +3472,7 @@ class archivischeNotiz (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
         __id.name() : __id
     })
+_module_typeBindings.archivischeNotiz = archivischeNotiz
 Namespace.addCategoryObject('typeBinding', 'archivischeNotiz', archivischeNotiz)
 
 
@@ -3339,7 +3489,7 @@ class CTD_ANON (pyxb.binding.basis.complexTypeDefinition):
     # Base type is text4
 
     # Attribute name uses Python identifier name
-    __name = pyxb.binding.content.AttributeUse(pyxb.namespace.ExpandedName(None, 'name'), 'name', '__httpbar_admin_chareldav4_CTD_ANON_name', text4, required=True)
+    __name = pyxb.binding.content.AttributeUse(pyxb.namespace.ExpandedName(None, 'name'), 'name', '__httpbar_admin_chareldav4_CTD_ANON_name', _module_typeBindings.text4, required=True)
     __name._DeclarationLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/zusatzDaten.xsd', 19, 14)
     __name._UseLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/zusatzDaten.xsd', 19, 14)
 
@@ -3351,7 +3501,7 @@ class CTD_ANON (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
         __name.name() : __name
     })
-
+_module_typeBindings.CTD_ANON = CTD_ANON
 
 
 # Complex type {http://bar.admin.ch/arelda/v4}paket with content type ELEMENT_ONLY
@@ -3381,7 +3531,7 @@ class paket_ (pyxb.binding.basis.complexTypeDefinition):
 
 
     # Attribute schemaVersion uses Python identifier schemaVersion
-    __schemaVersion = pyxb.binding.content.AttributeUse(pyxb.namespace.ExpandedName(None, 'schemaVersion'), 'schemaVersion', '__httpbar_admin_chareldav4_paket__schemaVersion', schemaVersion, required=True)
+    __schemaVersion = pyxb.binding.content.AttributeUse(pyxb.namespace.ExpandedName(None, 'schemaVersion'), 'schemaVersion', '__httpbar_admin_chareldav4_paket__schemaVersion', _module_typeBindings.schemaVersion, required=True)
     __schemaVersion._DeclarationLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/arelda.xsd', 28, 4)
     __schemaVersion._UseLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/arelda.xsd', 28, 4)
 
@@ -3394,6 +3544,7 @@ class paket_ (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
         __schemaVersion.name() : __schemaVersion
     })
+_module_typeBindings.paket_ = paket_
 Namespace.addCategoryObject('typeBinding', 'paket', paket_)
 
 
@@ -3457,6 +3608,7 @@ class ablieferungGeverSIP (ablieferungSIP):
     _AttributeMap.update({
 
     })
+_module_typeBindings.ablieferungGeverSIP = ablieferungGeverSIP
 Namespace.addCategoryObject('typeBinding', 'ablieferungGeverSIP', ablieferungGeverSIP)
 
 
@@ -3520,6 +3672,7 @@ class ablieferungFilesSIP (ablieferungSIP):
     _AttributeMap.update({
 
     })
+_module_typeBindings.ablieferungFilesSIP = ablieferungFilesSIP
 Namespace.addCategoryObject('typeBinding', 'ablieferungFilesSIP', ablieferungFilesSIP)
 
 
@@ -3581,6 +3734,7 @@ class ablieferungGeverAIP (ablieferungAIP):
     _AttributeMap.update({
 
     })
+_module_typeBindings.ablieferungGeverAIP = ablieferungGeverAIP
 Namespace.addCategoryObject('typeBinding', 'ablieferungGeverAIP', ablieferungGeverAIP)
 
 
@@ -3642,6 +3796,7 @@ class ablieferungFilesAIP (ablieferungAIP):
     _AttributeMap.update({
 
     })
+_module_typeBindings.ablieferungFilesAIP = ablieferungFilesAIP
 Namespace.addCategoryObject('typeBinding', 'ablieferungFilesAIP', ablieferungFilesAIP)
 
 
@@ -3695,6 +3850,7 @@ class ablieferungGeverDIP (ablieferungDIP):
     _AttributeMap.update({
 
     })
+_module_typeBindings.ablieferungGeverDIP = ablieferungGeverDIP
 Namespace.addCategoryObject('typeBinding', 'ablieferungGeverDIP', ablieferungGeverDIP)
 
 
@@ -3748,6 +3904,7 @@ class ablieferungFilesDIP (ablieferungDIP):
     _AttributeMap.update({
 
     })
+_module_typeBindings.ablieferungFilesDIP = ablieferungFilesDIP
 Namespace.addCategoryObject('typeBinding', 'ablieferungFilesDIP', ablieferungFilesDIP)
 
 
@@ -3789,6 +3946,7 @@ class provenienzGeverSIP (provenienzGever):
     _AttributeMap.update({
 
     })
+_module_typeBindings.provenienzGeverSIP = provenienzGeverSIP
 Namespace.addCategoryObject('typeBinding', 'provenienzGeverSIP', provenienzGeverSIP)
 
 
@@ -3823,6 +3981,7 @@ class provenienzGeverAIP (provenienzGever):
     _AttributeMap.update({
 
     })
+_module_typeBindings.provenienzGeverAIP = provenienzGeverAIP
 Namespace.addCategoryObject('typeBinding', 'provenienzGeverAIP', provenienzGeverAIP)
 
 
@@ -3864,6 +4023,7 @@ class provenienzGeverDIP (provenienzGever):
     _AttributeMap.update({
 
     })
+_module_typeBindings.provenienzGeverDIP = provenienzGeverDIP
 Namespace.addCategoryObject('typeBinding', 'provenienzGeverDIP', provenienzGeverDIP)
 
 
@@ -3909,6 +4069,7 @@ class provenienzFilesSIP (provenienzFiles):
     _AttributeMap.update({
 
     })
+_module_typeBindings.provenienzFilesSIP = provenienzFilesSIP
 Namespace.addCategoryObject('typeBinding', 'provenienzFilesSIP', provenienzFilesSIP)
 
 
@@ -3947,6 +4108,7 @@ class provenienzFilesAIP (provenienzFiles):
     _AttributeMap.update({
 
     })
+_module_typeBindings.provenienzFilesAIP = provenienzFilesAIP
 Namespace.addCategoryObject('typeBinding', 'provenienzFilesAIP', provenienzFilesAIP)
 
 
@@ -3992,6 +4154,7 @@ class provenienzFilesDIP (provenienzFiles):
     _AttributeMap.update({
 
     })
+_module_typeBindings.provenienzFilesDIP = provenienzFilesDIP
 Namespace.addCategoryObject('typeBinding', 'provenienzFilesDIP', provenienzFilesDIP)
 
 
@@ -4039,6 +4202,7 @@ class ordnungssystemGeverSIP (ordnungssystemGever):
     _AttributeMap.update({
 
     })
+_module_typeBindings.ordnungssystemGeverSIP = ordnungssystemGeverSIP
 Namespace.addCategoryObject('typeBinding', 'ordnungssystemGeverSIP', ordnungssystemGeverSIP)
 
 
@@ -4078,6 +4242,7 @@ class ordnungssystemGeverAIP (ordnungssystemGever):
     _AttributeMap.update({
 
     })
+_module_typeBindings.ordnungssystemGeverAIP = ordnungssystemGeverAIP
 Namespace.addCategoryObject('typeBinding', 'ordnungssystemGeverAIP', ordnungssystemGeverAIP)
 
 
@@ -4125,6 +4290,7 @@ class ordnungssystemGeverDIP (ordnungssystemGever):
     _AttributeMap.update({
 
     })
+_module_typeBindings.ordnungssystemGeverDIP = ordnungssystemGeverDIP
 Namespace.addCategoryObject('typeBinding', 'ordnungssystemGeverDIP', ordnungssystemGeverDIP)
 
 
@@ -4172,6 +4338,7 @@ class ordnungssystemFilesSIP (ordnungssystemFiles):
     _AttributeMap.update({
 
     })
+_module_typeBindings.ordnungssystemFilesSIP = ordnungssystemFilesSIP
 Namespace.addCategoryObject('typeBinding', 'ordnungssystemFilesSIP', ordnungssystemFilesSIP)
 
 
@@ -4211,6 +4378,7 @@ class ordnungssystemFilesAIP (ordnungssystemFiles):
     _AttributeMap.update({
 
     })
+_module_typeBindings.ordnungssystemFilesAIP = ordnungssystemFilesAIP
 Namespace.addCategoryObject('typeBinding', 'ordnungssystemFilesAIP', ordnungssystemFilesAIP)
 
 
@@ -4258,6 +4426,7 @@ class ordnungssystemFilesDIP (ordnungssystemFiles):
     _AttributeMap.update({
 
     })
+_module_typeBindings.ordnungssystemFilesDIP = ordnungssystemFilesDIP
 Namespace.addCategoryObject('typeBinding', 'ordnungssystemFilesDIP', ordnungssystemFilesDIP)
 
 
@@ -4345,6 +4514,7 @@ class ordnungssystempositionGeverSIP (ordnungssystempositionGever):
     _AttributeMap.update({
 
     })
+_module_typeBindings.ordnungssystempositionGeverSIP = ordnungssystempositionGeverSIP
 Namespace.addCategoryObject('typeBinding', 'ordnungssystempositionGeverSIP', ordnungssystempositionGeverSIP)
 
 
@@ -4424,6 +4594,7 @@ class ordnungssystempositionGeverAIP (ordnungssystempositionGever):
     _AttributeMap.update({
 
     })
+_module_typeBindings.ordnungssystempositionGeverAIP = ordnungssystempositionGeverAIP
 Namespace.addCategoryObject('typeBinding', 'ordnungssystempositionGeverAIP', ordnungssystempositionGeverAIP)
 
 
@@ -4487,6 +4658,7 @@ class ordnungssystempositionGeverDIP (ordnungssystempositionGever):
     _AttributeMap.update({
 
     })
+_module_typeBindings.ordnungssystempositionGeverDIP = ordnungssystempositionGeverDIP
 Namespace.addCategoryObject('typeBinding', 'ordnungssystempositionGeverDIP', ordnungssystempositionGeverDIP)
 
 
@@ -4574,6 +4746,7 @@ class ordnungssystempositionFilesSIP (ordnungssystempositionFiles):
     _AttributeMap.update({
 
     })
+_module_typeBindings.ordnungssystempositionFilesSIP = ordnungssystempositionFilesSIP
 Namespace.addCategoryObject('typeBinding', 'ordnungssystempositionFilesSIP', ordnungssystempositionFilesSIP)
 
 
@@ -4653,6 +4826,7 @@ class ordnungssystempositionFilesAIP (ordnungssystempositionFiles):
     _AttributeMap.update({
 
     })
+_module_typeBindings.ordnungssystempositionFilesAIP = ordnungssystempositionFilesAIP
 Namespace.addCategoryObject('typeBinding', 'ordnungssystempositionFilesAIP', ordnungssystempositionFilesAIP)
 
 
@@ -4716,6 +4890,7 @@ class ordnungssystempositionFilesDIP (ordnungssystempositionFiles):
     _AttributeMap.update({
 
     })
+_module_typeBindings.ordnungssystempositionFilesDIP = ordnungssystempositionFilesDIP
 Namespace.addCategoryObject('typeBinding', 'ordnungssystempositionFilesDIP', ordnungssystempositionFilesDIP)
 
 
@@ -4799,6 +4974,7 @@ class dossierGever (dossier):
     _AttributeMap.update({
 
     })
+_module_typeBindings.dossierGever = dossierGever
 Namespace.addCategoryObject('typeBinding', 'dossierGever', dossierGever)
 
 
@@ -4858,6 +5034,7 @@ class dossierFiles (dossier):
     _AttributeMap.update({
 
     })
+_module_typeBindings.dossierFiles = dossierFiles
 Namespace.addCategoryObject('typeBinding', 'dossierFiles', dossierFiles)
 
 
@@ -4915,6 +5092,7 @@ class dokumentGever (dokument):
     _AttributeMap.update({
 
     })
+_module_typeBindings.dokumentGever = dokumentGever
 Namespace.addCategoryObject('typeBinding', 'dokumentGever', dokumentGever)
 
 
@@ -4965,6 +5143,7 @@ class dokumentFiles (dokument):
     _AttributeMap.update({
 
     })
+_module_typeBindings.dokumentFiles = dokumentFiles
 Namespace.addCategoryObject('typeBinding', 'dokumentFiles', dokumentFiles)
 
 
@@ -5004,6 +5183,7 @@ class dateiSIP (datei):
     _AttributeMap.update({
 
     })
+_module_typeBindings.dateiSIP = dateiSIP
 Namespace.addCategoryObject('typeBinding', 'dateiSIP', dateiSIP)
 
 
@@ -5036,6 +5216,7 @@ class dateiAIP (datei):
     _AttributeMap.update({
 
     })
+_module_typeBindings.dateiAIP = dateiAIP
 Namespace.addCategoryObject('typeBinding', 'dateiAIP', dateiAIP)
 
 
@@ -5075,6 +5256,7 @@ class dateiDIP (datei):
     _AttributeMap.update({
 
     })
+_module_typeBindings.dateiDIP = dateiDIP
 Namespace.addCategoryObject('typeBinding', 'dateiDIP', dateiDIP)
 
 
@@ -5091,7 +5273,7 @@ class eigenschaftDatei (pyxb.binding.basis.complexTypeDefinition):
     # Base type is eigenschaft
 
     # Attribute name uses Python identifier name
-    __name = pyxb.binding.content.AttributeUse(pyxb.namespace.ExpandedName(None, 'name'), 'name', '__httpbar_admin_chareldav4_eigenschaftDatei_name', text4, required=True)
+    __name = pyxb.binding.content.AttributeUse(pyxb.namespace.ExpandedName(None, 'name'), 'name', '__httpbar_admin_chareldav4_eigenschaftDatei_name', _module_typeBindings.text4, required=True)
     __name._DeclarationLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/arelda.xsd', 1103, 8)
     __name._UseLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/arelda.xsd', 1103, 8)
 
@@ -5103,6 +5285,7 @@ class eigenschaftDatei (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
         __name.name() : __name
     })
+_module_typeBindings.eigenschaftDatei = eigenschaftDatei
 Namespace.addCategoryObject('typeBinding', 'eigenschaftDatei', eigenschaftDatei)
 
 
@@ -5168,6 +5351,7 @@ class paketSIP (paket_):
     _AttributeMap.update({
 
     })
+_module_typeBindings.paketSIP = paketSIP
 Namespace.addCategoryObject('typeBinding', 'paketSIP', paketSIP)
 
 
@@ -5265,6 +5449,7 @@ class paketAIP (paket_):
     _AttributeMap.update({
 
     })
+_module_typeBindings.paketAIP = paketAIP
 Namespace.addCategoryObject('typeBinding', 'paketAIP', paketAIP)
 
 
@@ -5346,6 +5531,7 @@ class paketDIP (paket_):
     _AttributeMap.update({
 
     })
+_module_typeBindings.paketDIP = paketDIP
 Namespace.addCategoryObject('typeBinding', 'paketDIP', paketDIP)
 
 
@@ -5453,6 +5639,7 @@ class dossierGeverSIP (dossierGever):
     _AttributeMap.update({
 
     })
+_module_typeBindings.dossierGeverSIP = dossierGeverSIP
 Namespace.addCategoryObject('typeBinding', 'dossierGeverSIP', dossierGeverSIP)
 
 
@@ -5552,6 +5739,7 @@ class dossierGeverAIP (dossierGever):
     _AttributeMap.update({
 
     })
+_module_typeBindings.dossierGeverAIP = dossierGeverAIP
 Namespace.addCategoryObject('typeBinding', 'dossierGeverAIP', dossierGeverAIP)
 
 
@@ -5635,6 +5823,7 @@ class dossierGeverDIP (dossierGever):
     _AttributeMap.update({
 
     })
+_module_typeBindings.dossierGeverDIP = dossierGeverDIP
 Namespace.addCategoryObject('typeBinding', 'dossierGeverDIP', dossierGeverDIP)
 
 
@@ -5752,6 +5941,7 @@ class dossierFilesSIP (dossierFiles):
     _AttributeMap.update({
 
     })
+_module_typeBindings.dossierFilesSIP = dossierFilesSIP
 Namespace.addCategoryObject('typeBinding', 'dossierFilesSIP', dossierFilesSIP)
 
 
@@ -5861,6 +6051,7 @@ class dossierFilesAIP (dossierFiles):
     _AttributeMap.update({
 
     })
+_module_typeBindings.dossierFilesAIP = dossierFilesAIP
 Namespace.addCategoryObject('typeBinding', 'dossierFilesAIP', dossierFilesAIP)
 
 
@@ -5946,6 +6137,7 @@ class dossierFilesDIP (dossierFiles):
     _AttributeMap.update({
 
     })
+_module_typeBindings.dossierFilesDIP = dossierFilesDIP
 Namespace.addCategoryObject('typeBinding', 'dossierFilesDIP', dossierFilesDIP)
 
 
@@ -6005,6 +6197,7 @@ class dokumentGeverSIP (dokumentGever):
     _AttributeMap.update({
 
     })
+_module_typeBindings.dokumentGeverSIP = dokumentGeverSIP
 Namespace.addCategoryObject('typeBinding', 'dokumentGeverSIP', dokumentGeverSIP)
 
 
@@ -6057,6 +6250,7 @@ class dokumentGeverAIP (dokumentGever):
     _AttributeMap.update({
 
     })
+_module_typeBindings.dokumentGeverAIP = dokumentGeverAIP
 Namespace.addCategoryObject('typeBinding', 'dokumentGeverAIP', dokumentGeverAIP)
 
 
@@ -6116,6 +6310,7 @@ class dokumentGeverDIP (dokumentGever):
     _AttributeMap.update({
 
     })
+_module_typeBindings.dokumentGeverDIP = dokumentGeverDIP
 Namespace.addCategoryObject('typeBinding', 'dokumentGeverDIP', dokumentGeverDIP)
 
 
@@ -6173,6 +6368,7 @@ class dokumentFilesSIP (dokumentFiles):
     _AttributeMap.update({
 
     })
+_module_typeBindings.dokumentFilesSIP = dokumentFilesSIP
 Namespace.addCategoryObject('typeBinding', 'dokumentFilesSIP', dokumentFilesSIP)
 
 
@@ -6223,6 +6419,7 @@ class dokumentFilesAIP (dokumentFiles):
     _AttributeMap.update({
 
     })
+_module_typeBindings.dokumentFilesAIP = dokumentFilesAIP
 Namespace.addCategoryObject('typeBinding', 'dokumentFilesAIP', dokumentFilesAIP)
 
 
@@ -6280,6 +6477,7 @@ class dokumentFilesDIP (dokumentFiles):
     _AttributeMap.update({
 
     })
+_module_typeBindings.dokumentFilesDIP = dokumentFilesDIP
 Namespace.addCategoryObject('typeBinding', 'dokumentFilesDIP', dokumentFilesDIP)
 
 
