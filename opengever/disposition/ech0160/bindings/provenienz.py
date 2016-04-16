@@ -1,7 +1,7 @@
 # ./bindings/provenienz.py
 # -*- coding: utf-8 -*-
 # PyXB bindings for NM:e92452c8d3e28a9e27abfc9994d2007779e7f4c9
-# Generated 2016-04-07 18:47:22.287307 by PyXB version 1.2.4 using Python 2.7.11.final.0
+# Generated 2016-04-16 12:49:30.774185 by PyXB version 1.2.5-DEV using Python 2.7.11.final.0
 # Namespace AbsentNamespace11
 # flake8: noqa
 
@@ -14,15 +14,18 @@ import pyxb.utils.utility
 import pyxb.utils.domutils
 import sys
 import pyxb.utils.six as _six
-
 # Unique identifier for bindings created at the same time
-_GenerationUID = pyxb.utils.utility.UniqueIdentifier('urn:uuid:65d8c99c-fce0-11e5-a76e-6c40088f2de0')
+_GenerationUID = pyxb.utils.utility.UniqueIdentifier('urn:uuid:e548cfc5-03c0-11e6-820c-c42c03358f75')
 
 # Version of PyXB used to generate the bindings
-_PyXBVersion = '1.2.4'
+_PyXBVersion = '1.2.5-DEV'
 # Generated bindings are not compatible across PyXB versions
 if pyxb.__version__ != _PyXBVersion:
     raise pyxb.PyXBVersionError(_PyXBVersion)
+
+# A holder for module-level binding classes so we can access them from
+# inside class definitions where property names may conflict.
+_module_typeBindings = pyxb.utils.utility.Object()
 
 # Import bindings for namespaces imported into schema
 import pyxb.binding.datatypes
@@ -84,6 +87,7 @@ class ca (pyxb.binding.datatypes.boolean):
     _Documentation = ''
 ca._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'ca', ca)
+_module_typeBindings.ca = ca
 
 # Atomic simple type: keineAngabe
 class keineAngabe (pyxb.binding.datatypes.token, pyxb.binding.basis.enumeration_mixin):
@@ -97,6 +101,7 @@ keineAngabe._CF_enumeration = pyxb.binding.facets.CF_enumeration(value_datatype=
 keineAngabe.keine_Angabe = keineAngabe._CF_enumeration.addEnumeration(unicode_value='keine Angabe', tag='keine_Angabe')
 keineAngabe._InitializeFacetMap(keineAngabe._CF_enumeration)
 Namespace.addCategoryObject('typeBinding', 'keineAngabe', keineAngabe)
+_module_typeBindings.keineAngabe = keineAngabe
 
 # Union simple type: zeitpunkt
 # superclasses pyxb.binding.datatypes.anySimpleType
@@ -114,6 +119,7 @@ zeitpunkt._CF_enumeration = pyxb.binding.facets.CF_enumeration(value_datatype=ze
 zeitpunkt._InitializeFacetMap(zeitpunkt._CF_pattern,
    zeitpunkt._CF_enumeration)
 Namespace.addCategoryObject('typeBinding', 'zeitpunkt', zeitpunkt)
+_module_typeBindings.zeitpunkt = zeitpunkt
 
 # Union simple type: datumTypB
 # superclasses pyxb.binding.datatypes.anySimpleType
@@ -186,6 +192,7 @@ datumTypB._CF_enumeration = pyxb.binding.facets.CF_enumeration(value_datatype=da
 datumTypB._InitializeFacetMap(datumTypB._CF_pattern,
    datumTypB._CF_enumeration)
 Namespace.addCategoryObject('typeBinding', 'datumTypB', datumTypB)
+_module_typeBindings.datumTypB = datumTypB
 
 # Atomic simple type: text1
 class text1 (pyxb.binding.datatypes.string):
@@ -198,6 +205,7 @@ class text1 (pyxb.binding.datatypes.string):
 text1._CF_maxLength = pyxb.binding.facets.CF_maxLength(value=pyxb.binding.datatypes.nonNegativeInteger(100))
 text1._InitializeFacetMap(text1._CF_maxLength)
 Namespace.addCategoryObject('typeBinding', 'text1', text1)
+_module_typeBindings.text1 = text1
 
 # Atomic simple type: text2
 class text2 (pyxb.binding.datatypes.string):
@@ -210,6 +218,7 @@ class text2 (pyxb.binding.datatypes.string):
 text2._CF_maxLength = pyxb.binding.facets.CF_maxLength(value=pyxb.binding.datatypes.nonNegativeInteger(200))
 text2._InitializeFacetMap(text2._CF_maxLength)
 Namespace.addCategoryObject('typeBinding', 'text2', text2)
+_module_typeBindings.text2 = text2
 
 # Atomic simple type: text3
 class text3 (pyxb.binding.datatypes.string):
@@ -222,6 +231,7 @@ class text3 (pyxb.binding.datatypes.string):
 text3._CF_maxLength = pyxb.binding.facets.CF_maxLength(value=pyxb.binding.datatypes.nonNegativeInteger(1000))
 text3._InitializeFacetMap(text3._CF_maxLength)
 Namespace.addCategoryObject('typeBinding', 'text3', text3)
+_module_typeBindings.text3 = text3
 
 # Atomic simple type: text4
 class text4 (pyxb.binding.datatypes.string):
@@ -233,6 +243,7 @@ class text4 (pyxb.binding.datatypes.string):
     _Documentation = None
 text4._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'text4', text4)
+_module_typeBindings.text4 = text4
 
 # Union simple type: datumTypA
 # superclasses pyxb.binding.datatypes.anySimpleType
@@ -267,6 +278,7 @@ datumTypA.keine_Angabe = 'keine Angabe'           # originally keineAngabe.keine
 datumTypA._InitializeFacetMap(datumTypA._CF_pattern,
    datumTypA._CF_enumeration)
 Namespace.addCategoryObject('typeBinding', 'datumTypA', datumTypA)
+_module_typeBindings.datumTypA = datumTypA
 
 # Union simple type: notizDatum
 # superclasses datumTypB
@@ -281,6 +293,7 @@ class notizDatum (pyxb.binding.basis.STD_union):
     _MemberTypes = ( pyxb.binding.datatypes.date, pyxb.binding.datatypes.dateTime, )
 notizDatum._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'notizDatum', notizDatum)
+_module_typeBindings.notizDatum = notizDatum
 
 # Atomic simple type: notizErfasser
 class notizErfasser (text1):
@@ -292,6 +305,7 @@ class notizErfasser (text1):
     _Documentation = 'Benutzer, welcher die Notiz erfasst hat. Optionales Feld.User who created the note. Optional field.Utilisateur qui a catalogu\xe9 la notice. Champ facultatif.'
 notizErfasser._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'notizErfasser', notizErfasser)
+_module_typeBindings.notizErfasser = notizErfasser
 
 # Atomic simple type: notizBeschreibung
 class notizBeschreibung (text4):
@@ -303,6 +317,7 @@ class notizBeschreibung (text4):
     _Documentation = 'Notiz i.e.S, d.h. Beschreibung. Zwingendes Feld.Notice in narrower sense, i.e. description. Compulsory field.Notice au sens strict, c.-\xe0-d. description. Champ obligatoire'
 notizBeschreibung._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'notizBeschreibung', notizBeschreibung)
+_module_typeBindings.notizBeschreibung = notizBeschreibung
 
 # Atomic simple type: aktenbildnerName
 class aktenbildnerName (text2):
@@ -314,6 +329,7 @@ class aktenbildnerName (text2):
     _Documentation = 'Bezeichnung der Stelle, der Organisationseinheit oder der Person(en), welche die Unterlagen oder die Datensammlung erstellt oder gef\xfchrt hat. Falls der Aktenbildner unbekannt ist, muss die Angabe "Aktenbildner unbekannt" eingetragen werden.Designation of the authority, organisational unit or person(s) that created or managed the documents or the data collection. If the records creator is unknown, the information "Records creator unknown"\x9d must be entered.D\xe9signation du service, de l\'unit\xe9 organisationnelle ou de la (des) personne(s), qui a cr\xe9\xe9 ou g\xe9r\xe9 les documents ou la collection de donn\xe9es. Dans le cas o\xf9 le producteur de dossiers est inconnu, l\'indication "producteur de dossiers inconnu" doit \xeatre inscrite.'
 aktenbildnerName._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'aktenbildnerName', aktenbildnerName)
+_module_typeBindings.aktenbildnerName = aktenbildnerName
 
 # Atomic simple type: systemName
 class systemName (text3):
@@ -325,6 +341,7 @@ class systemName (text3):
     _Documentation = "Name des Informationssystems, aus dem die abgelieferten Daten (FILES), Dossiers und Dokumente (GEVER) stammen.Name of the information system from which the data (FILES), dossiers and documents (GEVER) submitted come.Nom du syst\xe8me d'information duquel proviennent les donn\xe9es (FILES), les dossiers et les documents (GEVER) vers\xe9s."
 systemName._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'systemName', systemName)
+_module_typeBindings.systemName = systemName
 
 # Atomic simple type: systemBeschreibung
 class systemBeschreibung (text4):
@@ -336,6 +353,7 @@ class systemBeschreibung (text4):
     _Documentation = "Knappe Beschreibung des Informationssystems, aus dem die abgelieferten Daten (FILES) stammen. Die Beschreibung gibt Auskunft \xfcber den Zweck (inkl. Angabe der gesetzlichen Grundlagen), die Architektur, die Entwicklung und \xfcber relevante Erg\xe4nzungen und \xc4nderungen des Systems. Zudem k\xf6nnen hier Angaben zur Datenerhebung und zu den Organisationseinheiten gemacht werden, die neben dem Aktenbildner das System verwenden.Brief description of the information system from which the data (FILES) submitted come. The description provides information on the purpose (including an indication of the legal bases), architecture and development of the system as well as relevant additions and changes. Information on data gathering and the organisational units that use the system in addition to the records creator can also be supplied here.Description concise du syst\xe8me d'information duquel proviennent les donn\xe9es (FILES) vers\xe9es. La description renseigne sur le but (y compris l'indication des bases l\xe9gales), l'architecture, le d\xe9veloppement et sur les compl\xe9ments et modifications importants du syst\xe8me. En outre, les indications sur la collecte des donn\xe9es et sur les unit\xe9s organisationnelles, qui emploient le syst\xe8me en dehors du producteur de dossiers, peuvent \xeatre donn\xe9es ici."
 systemBeschreibung._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'systemBeschreibung', systemBeschreibung)
+_module_typeBindings.systemBeschreibung = systemBeschreibung
 
 # Atomic simple type: verwandteSysteme
 class verwandteSysteme (text4):
@@ -347,6 +365,7 @@ class verwandteSysteme (text4):
     _Documentation = 'Systeme, die mit dem beschriebenen System Daten ausgetauscht haben und damit Subsysteme, Parallelsysteme oder \xfcbergeordnete Systeme sind. Hier werden die Bezeichnungen der Systeme und die Art der Verwandtschaft eingetragen.Brief description of the information system from which the data (FILES) submitted come. The description provides information on the purpose (including an indication of the legal bases), architecture and development of the system as well as relevant additions and changes. Information on data gathering and the organisational units that use the system in addition to the records creator can also be supplied here.Syst\xe8mes qui ont \xe9chang\xe9 des donn\xe9es avec le syst\xe8me d\xe9crit et qui sont ainsi des sous-syst\xe8mes, des syst\xe8mes parall\xe8les ou des syst\xe8mes sup\xe9rieurs. Ici sont report\xe9es les d\xe9signations des syst\xe8mes et leur relation.'
 verwandteSysteme._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'verwandteSysteme', verwandteSysteme)
+_module_typeBindings.verwandteSysteme = verwandteSysteme
 
 # Atomic simple type: archivierungsmodusLoeschvorschriften
 class archivierungsmodusLoeschvorschriften (text4):
@@ -358,6 +377,7 @@ class archivierungsmodusLoeschvorschriften (text4):
     _Documentation = "Angaben dar\xfcber, auf welche Weise die Daten aus dem System archiviert werden, allf\xe4llige L\xf6schvorschriften, Angaben dar\xfcber, welche Funktionalit\xe4ten des Originalsystems nicht archiviert werden konnten, und vereinbartes Intervall der Ablieferungen sind hier zu nennen.Information about the way in which the data from the system are archived, any rules on deletion, information about which functionalities of the original system could not be archived, and the agreed interval for submissions are to be indicated here.Informations sur la mani\xe8re dont sont archiv\xe9es les donn\xe9es du syst\xe8me, sur les \xe9ventuelles directives d'effacement, sur la fonctionnalit\xe9 du syst\xe8me original qui ne peut pas \xeatre archiv\xe9e, et sur l'intervalle convenu de versement sont ici \xe0 indiquer."
 archivierungsmodusLoeschvorschriften._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'archivierungsmodusLoeschvorschriften', archivierungsmodusLoeschvorschriften)
+_module_typeBindings.archivierungsmodusLoeschvorschriften = archivierungsmodusLoeschvorschriften
 
 # Atomic simple type: registratur
 class registratur (text2):
@@ -369,6 +389,7 @@ class registratur (text2):
     _Documentation = 'Name der Ablage, f\xfcr welche das prim\xe4re Ordnungssystem verwendet wird und die einem Mandanten im System entspricht. Eine aktenbildende Stelle kann im Prinzip mehr als eine Registratur f\xfchren. Pro Registratur gibt es allerdings nur ein prim\xe4res Ordnungssystem.Name of the archive for which the primary classification system is used and that corresponds to a client in the system. In principle, a records-creating authority may maintain more than one registry. However, there is only one primary classification system for each registry.Nom de l\u2019archivage pour lequel le syst\xe8me de classement primaire est utilis\xe9 et qui correspond \xe0 un mandant dans le syst\xe8me. Un service qui cr\xe9e des dossiers peut, en principe, g\xe9rer plus qu\u2019un enregistrement. Par enregistrement toutefois, il n\u2019y a qu\u2019un syst\xe8me de classement primaire.'
 registratur._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'registratur', registratur)
+_module_typeBindings.registratur = registratur
 
 # Atomic simple type: geschichteAktenbildner
 class geschichteAktenbildner (text4):
@@ -380,6 +401,7 @@ class geschichteAktenbildner (text4):
     _Documentation = "Allgemeiner \xdcberblick \xfcber die Geschichte des Aktenbildners und Angaben \xfcber Vorg\xe4nger und Nachfolgerorganisationen.General overview of the history of the records creator and information about predecessor and successor organisations.Aper\xe7u g\xe9n\xe9ral sur l'histoire du service producteur de documents et indications sur les pr\xe9d\xe9cesseurs et les organisations ayant pris la suite."
 geschichteAktenbildner._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'geschichteAktenbildner', geschichteAktenbildner)
+_module_typeBindings.geschichteAktenbildner = geschichteAktenbildner
 
 # Atomic simple type: bemerkungProvenienz
 class bemerkungProvenienz (text4):
@@ -391,6 +413,7 @@ class bemerkungProvenienz (text4):
     _Documentation = 'Zus\xe4tzliche Informationen, die den Aktenbildner und die Herkunft der Unterlagen oder der Datensammlung betreffen.Additional information relating to the records creator and the origin of the documents or the data collection.Informations compl\xe9mentaires, qui concernent le producteur de dossiers et la provenance des documents ou de la collection de donn\xe9es.'
 bemerkungProvenienz._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'bemerkungProvenienz', bemerkungProvenienz)
+_module_typeBindings.bemerkungProvenienz = bemerkungProvenienz
 
 # Complex type comparable with content type EMPTY
 class comparable (pyxb.binding.basis.complexTypeDefinition):
@@ -409,6 +432,7 @@ class comparable (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
 
     })
+_module_typeBindings.comparable = comparable
 Namespace.addCategoryObject('typeBinding', 'comparable', comparable)
 
 
@@ -444,6 +468,7 @@ class historischerZeitpunkt (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
 
     })
+_module_typeBindings.historischerZeitpunkt = historischerZeitpunkt
 Namespace.addCategoryObject('typeBinding', 'historischerZeitpunkt', historischerZeitpunkt)
 
 
@@ -479,6 +504,7 @@ class historischerZeitraum (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
 
     })
+_module_typeBindings.historischerZeitraum = historischerZeitraum
 Namespace.addCategoryObject('typeBinding', 'historischerZeitraum', historischerZeitraum)
 
 
@@ -514,6 +540,7 @@ class zeitraum (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
 
     })
+_module_typeBindings.zeitraum = zeitraum
 Namespace.addCategoryObject('typeBinding', 'zeitraum', zeitraum)
 
 
