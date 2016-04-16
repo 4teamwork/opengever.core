@@ -1,7 +1,7 @@
 # ./bindings/ablieferung.py
 # -*- coding: utf-8 -*-
 # PyXB bindings for NM:e92452c8d3e28a9e27abfc9994d2007779e7f4c9
-# Generated 2016-04-07 18:47:22.287128 by PyXB version 1.2.4 using Python 2.7.11.final.0
+# Generated 2016-04-16 12:49:30.774696 by PyXB version 1.2.5-DEV using Python 2.7.11.final.0
 # Namespace AbsentNamespace0
 # flake8: noqa
 
@@ -14,15 +14,18 @@ import pyxb.utils.utility
 import pyxb.utils.domutils
 import sys
 import pyxb.utils.six as _six
-
 # Unique identifier for bindings created at the same time
-_GenerationUID = pyxb.utils.utility.UniqueIdentifier('urn:uuid:65d8c99c-fce0-11e5-a76e-6c40088f2de0')
+_GenerationUID = pyxb.utils.utility.UniqueIdentifier('urn:uuid:e548cfc5-03c0-11e6-820c-c42c03358f75')
 
 # Version of PyXB used to generate the bindings
-_PyXBVersion = '1.2.4'
+_PyXBVersion = '1.2.5-DEV'
 # Generated bindings are not compatible across PyXB versions
 if pyxb.__version__ != _PyXBVersion:
     raise pyxb.PyXBVersionError(_PyXBVersion)
+
+# A holder for module-level binding classes so we can access them from
+# inside class definitions where property names may conflict.
+_module_typeBindings = pyxb.utils.utility.Object()
 
 # Import bindings for namespaces imported into schema
 import pyxb.binding.datatypes
@@ -87,6 +90,7 @@ ablieferungstyp.GEVER = ablieferungstyp._CF_enumeration.addEnumeration(unicode_v
 ablieferungstyp.FILES = ablieferungstyp._CF_enumeration.addEnumeration(unicode_value='FILES', tag='FILES')
 ablieferungstyp._InitializeFacetMap(ablieferungstyp._CF_enumeration)
 Namespace.addCategoryObject('typeBinding', 'ablieferungstyp', ablieferungstyp)
+_module_typeBindings.ablieferungstyp = ablieferungstyp
 
 # Atomic simple type: ca
 class ca (pyxb.binding.datatypes.boolean):
@@ -98,6 +102,7 @@ class ca (pyxb.binding.datatypes.boolean):
     _Documentation = ''
 ca._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'ca', ca)
+_module_typeBindings.ca = ca
 
 # Atomic simple type: keineAngabe
 class keineAngabe (pyxb.binding.datatypes.token, pyxb.binding.basis.enumeration_mixin):
@@ -111,6 +116,7 @@ keineAngabe._CF_enumeration = pyxb.binding.facets.CF_enumeration(value_datatype=
 keineAngabe.keine_Angabe = keineAngabe._CF_enumeration.addEnumeration(unicode_value='keine Angabe', tag='keine_Angabe')
 keineAngabe._InitializeFacetMap(keineAngabe._CF_enumeration)
 Namespace.addCategoryObject('typeBinding', 'keineAngabe', keineAngabe)
+_module_typeBindings.keineAngabe = keineAngabe
 
 # Union simple type: zeitpunkt
 # superclasses pyxb.binding.datatypes.anySimpleType
@@ -128,6 +134,7 @@ zeitpunkt._CF_enumeration = pyxb.binding.facets.CF_enumeration(value_datatype=ze
 zeitpunkt._InitializeFacetMap(zeitpunkt._CF_pattern,
    zeitpunkt._CF_enumeration)
 Namespace.addCategoryObject('typeBinding', 'zeitpunkt', zeitpunkt)
+_module_typeBindings.zeitpunkt = zeitpunkt
 
 # Union simple type: datumTypB
 # superclasses pyxb.binding.datatypes.anySimpleType
@@ -200,6 +207,7 @@ datumTypB._CF_enumeration = pyxb.binding.facets.CF_enumeration(value_datatype=da
 datumTypB._InitializeFacetMap(datumTypB._CF_pattern,
    datumTypB._CF_enumeration)
 Namespace.addCategoryObject('typeBinding', 'datumTypB', datumTypB)
+_module_typeBindings.datumTypB = datumTypB
 
 # Atomic simple type: text1
 class text1 (pyxb.binding.datatypes.string):
@@ -212,6 +220,7 @@ class text1 (pyxb.binding.datatypes.string):
 text1._CF_maxLength = pyxb.binding.facets.CF_maxLength(value=pyxb.binding.datatypes.nonNegativeInteger(100))
 text1._InitializeFacetMap(text1._CF_maxLength)
 Namespace.addCategoryObject('typeBinding', 'text1', text1)
+_module_typeBindings.text1 = text1
 
 # Atomic simple type: text2
 class text2 (pyxb.binding.datatypes.string):
@@ -224,6 +233,7 @@ class text2 (pyxb.binding.datatypes.string):
 text2._CF_maxLength = pyxb.binding.facets.CF_maxLength(value=pyxb.binding.datatypes.nonNegativeInteger(200))
 text2._InitializeFacetMap(text2._CF_maxLength)
 Namespace.addCategoryObject('typeBinding', 'text2', text2)
+_module_typeBindings.text2 = text2
 
 # Atomic simple type: text3
 class text3 (pyxb.binding.datatypes.string):
@@ -236,6 +246,7 @@ class text3 (pyxb.binding.datatypes.string):
 text3._CF_maxLength = pyxb.binding.facets.CF_maxLength(value=pyxb.binding.datatypes.nonNegativeInteger(1000))
 text3._InitializeFacetMap(text3._CF_maxLength)
 Namespace.addCategoryObject('typeBinding', 'text3', text3)
+_module_typeBindings.text3 = text3
 
 # Atomic simple type: text4
 class text4 (pyxb.binding.datatypes.string):
@@ -247,6 +258,7 @@ class text4 (pyxb.binding.datatypes.string):
     _Documentation = None
 text4._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'text4', text4)
+_module_typeBindings.text4 = text4
 
 # Atomic simple type: ablieferungsnummer
 class ablieferungsnummer (text1):
@@ -258,6 +270,7 @@ class ablieferungsnummer (text1):
     _Documentation = "Die Ablieferungsnummer dient zur Identifizierung der Ablieferung im Archiv. Sie besteht in der Regel aus dem Ablieferungsjahr und einer Laufnummer innerhalb dieses Jahres. Die Ablieferungsnummer kann auch Buchstaben enthalten.The submission number serves to identify the submission. It consists of the submission year and a consecutive number within that year.Le num\xe9ro de versement sert \xe0 l'identification du versement aux archives. Il est g\xe9n\xe9ralement constitu\xe9 de l'ann\xe9e du versement et d'un num\xe9ro courant de cette ann\xe9e. Le num\xe9ro de versement peut aussi contenir des lettres."
 ablieferungsnummer._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'ablieferungsnummer', ablieferungsnummer)
+_module_typeBindings.ablieferungsnummer = ablieferungsnummer
 
 # Atomic simple type: angebotsnummer
 class angebotsnummer (text1):
@@ -269,6 +282,7 @@ class angebotsnummer (text1):
     _Documentation = "Die vom Archiv vergebene Nummer des Angebots, auf welches sich die Ablieferung st\xfctzt.The number, allocated by the archive, of the offering on which the submission is based.Le num\xe9ro de l'offre qui est donn\xe9 par les archives et sur lequel se base le versement."
 angebotsnummer._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'angebotsnummer', angebotsnummer)
+_module_typeBindings.angebotsnummer = angebotsnummer
 
 # Atomic simple type: ablieferndeStelle
 class ablieferndeStelle (text2):
@@ -280,6 +294,7 @@ class ablieferndeStelle (text2):
     _Documentation = 'Organisationseinheit, welche die abzuliefernden Unterlagen aufbereitet (der Name wird ausgeschrieben, keine Abk\xfcrzung), und Name der Person, die f\xfcr die Ablieferung zust\xe4ndig ist.Organisational unit that prepares the documents to be submitted (name written out in full, no abbreviations) and name of the person responsible for the submission.Unit\xe9 organisationnelle qui pr\xe9pare les documents \xe0 verser (le nom est \xe9crit en toutes lettres, sans abr\xe9viation) et nom de la personne qui est responsable du versement.'
 ablieferndeStelle._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'ablieferndeStelle', ablieferndeStelle)
+_module_typeBindings.ablieferndeStelle = ablieferndeStelle
 
 # Atomic simple type: referenzBewertungsentscheid
 class referenzBewertungsentscheid (text1):
@@ -291,6 +306,7 @@ class referenzBewertungsentscheid (text1):
     _Documentation = "Aktenzeichen Bewertungsentscheid(e) Archiv, welches die Ablieferung betreffen.File reference of the appraisal decision(s) relating to the submission.R\xe9f\xe9rence d\xe9cision(s) d'\xe9valuation archives qui concernent le versement."
 referenzBewertungsentscheid._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'referenzBewertungsentscheid', referenzBewertungsentscheid)
+_module_typeBindings.referenzBewertungsentscheid = referenzBewertungsentscheid
 
 # Atomic simple type: referenzSchutzfristenFormular
 class referenzSchutzfristenFormular (text1):
@@ -302,6 +318,7 @@ class referenzSchutzfristenFormular (text1):
     _Documentation = 'Aktenzeichen des Formulars \u201eMeldung von Unterlagen mit besonderer Schutzfrist und \xf6ffentlich zug\xe4nglichen Unterlagen\u201c, in dem die f\xfcr die Ablieferung vereinbarten Schutzfristen festgehalten sind.File reference of the "Notification of documents subject to a special closure period and publicly accessible documents"\x9d form in which the closure periods agreed for the submission are set down.R\xe9f\xe9rence du formulaire "Annonce de documents avec un d\xe9lai de protection particulier et de documents consultables par le public", dans lequel sont fix\xe9s les d\xe9lais de protection convenus pour le versement.'
 referenzSchutzfristenFormular._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'referenzSchutzfristenFormular', referenzSchutzfristenFormular)
+_module_typeBindings.referenzSchutzfristenFormular = referenzSchutzfristenFormular
 
 # Atomic simple type: schutzfristenkategorieAblieferung
 class schutzfristenkategorieAblieferung (text1):
@@ -313,6 +330,7 @@ class schutzfristenkategorieAblieferung (text1):
     _Documentation = 'Artikel des Gesetztes, der die Schutzfrist festh\xe4lt, die das Amt im Formular \u201eMeldung von Unterlagen mit besonderer Schutzfrist und \xf6ffentlich zug\xe4nglichen Unterlagen\u201c gemeldet hat und vom Archiv auf ihre formale Korrektheit und Vollst\xe4ndigkeit kontrolliert worden ist.Article of the law stipulating the closure period reported by the authority in the "Notification of documents subject to a special closure period and publicly accessible documents"\x9d form and checked for formal correctness and completeness by the archive.Article de la loi qui fixe le d\xe9lai de protection que l\u2019administration a annonc\xe9 dans le formulaire "Annonce de documents avec un d\xe9lai de protection particulier et de documents consultables par le public" et dont les archives ont contr\xf4l\xe9 l\u2019exactitude et l\u2019int\xe9gralit\xe9.'
 schutzfristenkategorieAblieferung._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'schutzfristenkategorieAblieferung', schutzfristenkategorieAblieferung)
+_module_typeBindings.schutzfristenkategorieAblieferung = schutzfristenkategorieAblieferung
 
 # Atomic simple type: schutzfristAblieferung
 class schutzfristAblieferung (text1):
@@ -326,6 +344,7 @@ schutzfristAblieferung._CF_pattern = pyxb.binding.facets.CF_pattern()
 schutzfristAblieferung._CF_pattern.addPattern(pattern='[0-9]*')
 schutzfristAblieferung._InitializeFacetMap(schutzfristAblieferung._CF_pattern)
 Namespace.addCategoryObject('typeBinding', 'schutzfristAblieferung', schutzfristAblieferung)
+_module_typeBindings.schutzfristAblieferung = schutzfristAblieferung
 
 # Atomic simple type: ablieferungsteile
 class ablieferungsteile (text3):
@@ -337,6 +356,7 @@ class ablieferungsteile (text3):
     _Documentation = 'Angabe \xfcber den gesamten Inhalt der Ablieferung (sowohl der digitalen als auch der nicht digitalen Teile).Indication of the full content of the submission (both digital and non-digital components).Informations sur le contenu entier du versement (non seulement la partie num\xe9rique, mais aussi la partie non num\xe9rique).'
 ablieferungsteile._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'ablieferungsteile', ablieferungsteile)
+_module_typeBindings.ablieferungsteile = ablieferungsteile
 
 # Atomic simple type: bemerkungAblieferung
 class bemerkungAblieferung (text4):
@@ -348,6 +368,7 @@ class bemerkungAblieferung (text4):
     _Documentation = "Zus\xe4tzliche Informationen, welche die Ablieferung und ihre Entstehung betreffen. Wenn die Unterlagen in der Ablieferung aus einer periodisierten Registratur stammen, kann hier die Registraturperiode angegeben werden.Additional information relating to the submission and its creation. If the documents in the submission come from a periodised registry, the registry period can be indicated here.Informations compl\xe9mentaires qui concernent le versement et sa cr\xe9ation . Si les documents du versement datent d'une p\xe9riode donn\xe9e, la date d'enregistrement peut \xeatre indiqu\xe9e ici."
 bemerkungAblieferung._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'bemerkungAblieferung', bemerkungAblieferung)
+_module_typeBindings.bemerkungAblieferung = bemerkungAblieferung
 
 # Union simple type: datumTypA
 # superclasses pyxb.binding.datatypes.anySimpleType
@@ -382,6 +403,7 @@ datumTypA.keine_Angabe = 'keine Angabe'           # originally keineAngabe.keine
 datumTypA._InitializeFacetMap(datumTypA._CF_pattern,
    datumTypA._CF_enumeration)
 Namespace.addCategoryObject('typeBinding', 'datumTypA', datumTypA)
+_module_typeBindings.datumTypA = datumTypA
 
 # Union simple type: notizDatum
 # superclasses datumTypB
@@ -396,6 +418,7 @@ class notizDatum (pyxb.binding.basis.STD_union):
     _MemberTypes = ( pyxb.binding.datatypes.date, pyxb.binding.datatypes.dateTime, )
 notizDatum._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'notizDatum', notizDatum)
+_module_typeBindings.notizDatum = notizDatum
 
 # Atomic simple type: notizErfasser
 class notizErfasser (text1):
@@ -407,6 +430,7 @@ class notizErfasser (text1):
     _Documentation = 'Benutzer, welcher die Notiz erfasst hat. Optionales Feld.User who created the note. Optional field.Utilisateur qui a catalogu\xe9 la notice. Champ facultatif.'
 notizErfasser._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'notizErfasser', notizErfasser)
+_module_typeBindings.notizErfasser = notizErfasser
 
 # Atomic simple type: notizBeschreibung
 class notizBeschreibung (text4):
@@ -418,6 +442,7 @@ class notizBeschreibung (text4):
     _Documentation = 'Notiz i.e.S, d.h. Beschreibung. Zwingendes Feld.Notice in narrower sense, i.e. description. Compulsory field.Notice au sens strict, c.-\xe0-d. description. Champ obligatoire'
 notizBeschreibung._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'notizBeschreibung', notizBeschreibung)
+_module_typeBindings.notizBeschreibung = notizBeschreibung
 
 # Complex type comparable with content type EMPTY
 class comparable (pyxb.binding.basis.complexTypeDefinition):
@@ -436,6 +461,7 @@ class comparable (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
 
     })
+_module_typeBindings.comparable = comparable
 Namespace.addCategoryObject('typeBinding', 'comparable', comparable)
 
 
@@ -471,6 +497,7 @@ class historischerZeitpunkt (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
 
     })
+_module_typeBindings.historischerZeitpunkt = historischerZeitpunkt
 Namespace.addCategoryObject('typeBinding', 'historischerZeitpunkt', historischerZeitpunkt)
 
 
@@ -506,6 +533,7 @@ class historischerZeitraum (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
 
     })
+_module_typeBindings.historischerZeitraum = historischerZeitraum
 Namespace.addCategoryObject('typeBinding', 'historischerZeitraum', historischerZeitraum)
 
 
@@ -541,6 +569,7 @@ class zeitraum (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
 
     })
+_module_typeBindings.zeitraum = zeitraum
 Namespace.addCategoryObject('typeBinding', 'zeitraum', zeitraum)
 
 

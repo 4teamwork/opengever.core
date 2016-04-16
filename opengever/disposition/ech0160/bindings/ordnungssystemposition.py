@@ -1,7 +1,7 @@
 # ./bindings/ordnungssystemposition.py
 # -*- coding: utf-8 -*-
 # PyXB bindings for NM:e92452c8d3e28a9e27abfc9994d2007779e7f4c9
-# Generated 2016-04-07 18:47:22.288209 by PyXB version 1.2.4 using Python 2.7.11.final.0
+# Generated 2016-04-16 12:49:30.772876 by PyXB version 1.2.5-DEV using Python 2.7.11.final.0
 # Namespace AbsentNamespace9
 # flake8: noqa
 
@@ -14,15 +14,18 @@ import pyxb.utils.utility
 import pyxb.utils.domutils
 import sys
 import pyxb.utils.six as _six
-
 # Unique identifier for bindings created at the same time
-_GenerationUID = pyxb.utils.utility.UniqueIdentifier('urn:uuid:65d8c99c-fce0-11e5-a76e-6c40088f2de0')
+_GenerationUID = pyxb.utils.utility.UniqueIdentifier('urn:uuid:e548cfc5-03c0-11e6-820c-c42c03358f75')
 
 # Version of PyXB used to generate the bindings
-_PyXBVersion = '1.2.4'
+_PyXBVersion = '1.2.5-DEV'
 # Generated bindings are not compatible across PyXB versions
 if pyxb.__version__ != _PyXBVersion:
     raise pyxb.PyXBVersionError(_PyXBVersion)
+
+# A holder for module-level binding classes so we can access them from
+# inside class definitions where property names may conflict.
+_module_typeBindings = pyxb.utils.utility.Object()
 
 # Import bindings for namespaces imported into schema
 import pyxb.binding.datatypes
@@ -84,6 +87,7 @@ class ca (pyxb.binding.datatypes.boolean):
     _Documentation = ''
 ca._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'ca', ca)
+_module_typeBindings.ca = ca
 
 # Atomic simple type: keineAngabe
 class keineAngabe (pyxb.binding.datatypes.token, pyxb.binding.basis.enumeration_mixin):
@@ -97,6 +101,7 @@ keineAngabe._CF_enumeration = pyxb.binding.facets.CF_enumeration(value_datatype=
 keineAngabe.keine_Angabe = keineAngabe._CF_enumeration.addEnumeration(unicode_value='keine Angabe', tag='keine_Angabe')
 keineAngabe._InitializeFacetMap(keineAngabe._CF_enumeration)
 Namespace.addCategoryObject('typeBinding', 'keineAngabe', keineAngabe)
+_module_typeBindings.keineAngabe = keineAngabe
 
 # Union simple type: zeitpunkt
 # superclasses pyxb.binding.datatypes.anySimpleType
@@ -114,6 +119,7 @@ zeitpunkt._CF_enumeration = pyxb.binding.facets.CF_enumeration(value_datatype=ze
 zeitpunkt._InitializeFacetMap(zeitpunkt._CF_pattern,
    zeitpunkt._CF_enumeration)
 Namespace.addCategoryObject('typeBinding', 'zeitpunkt', zeitpunkt)
+_module_typeBindings.zeitpunkt = zeitpunkt
 
 # Union simple type: datumTypB
 # superclasses pyxb.binding.datatypes.anySimpleType
@@ -186,6 +192,7 @@ datumTypB._CF_enumeration = pyxb.binding.facets.CF_enumeration(value_datatype=da
 datumTypB._InitializeFacetMap(datumTypB._CF_pattern,
    datumTypB._CF_enumeration)
 Namespace.addCategoryObject('typeBinding', 'datumTypB', datumTypB)
+_module_typeBindings.datumTypB = datumTypB
 
 # Atomic simple type: text1
 class text1 (pyxb.binding.datatypes.string):
@@ -198,6 +205,7 @@ class text1 (pyxb.binding.datatypes.string):
 text1._CF_maxLength = pyxb.binding.facets.CF_maxLength(value=pyxb.binding.datatypes.nonNegativeInteger(100))
 text1._InitializeFacetMap(text1._CF_maxLength)
 Namespace.addCategoryObject('typeBinding', 'text1', text1)
+_module_typeBindings.text1 = text1
 
 # Atomic simple type: text2
 class text2 (pyxb.binding.datatypes.string):
@@ -210,6 +218,7 @@ class text2 (pyxb.binding.datatypes.string):
 text2._CF_maxLength = pyxb.binding.facets.CF_maxLength(value=pyxb.binding.datatypes.nonNegativeInteger(200))
 text2._InitializeFacetMap(text2._CF_maxLength)
 Namespace.addCategoryObject('typeBinding', 'text2', text2)
+_module_typeBindings.text2 = text2
 
 # Atomic simple type: text3
 class text3 (pyxb.binding.datatypes.string):
@@ -222,6 +231,7 @@ class text3 (pyxb.binding.datatypes.string):
 text3._CF_maxLength = pyxb.binding.facets.CF_maxLength(value=pyxb.binding.datatypes.nonNegativeInteger(1000))
 text3._InitializeFacetMap(text3._CF_maxLength)
 Namespace.addCategoryObject('typeBinding', 'text3', text3)
+_module_typeBindings.text3 = text3
 
 # Atomic simple type: text4
 class text4 (pyxb.binding.datatypes.string):
@@ -233,6 +243,7 @@ class text4 (pyxb.binding.datatypes.string):
     _Documentation = None
 text4._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'text4', text4)
+_module_typeBindings.text4 = text4
 
 # Atomic simple type: idOrdnungssystemposition
 class idOrdnungssystemposition (pyxb.binding.datatypes.ID):
@@ -244,6 +255,7 @@ class idOrdnungssystemposition (pyxb.binding.datatypes.ID):
     _Documentation = 'Paketweit eindeutige ID (Prim\xe4rschl\xfcssel).Unambiguous ID for the whole package (primary key).ID univoque pour tout le paquet (cl\xe9 primaire).'
 idOrdnungssystemposition._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'idOrdnungssystemposition', idOrdnungssystemposition)
+_module_typeBindings.idOrdnungssystemposition = idOrdnungssystemposition
 
 # Atomic simple type: datenschutzOrdnungssystemposition
 class datenschutzOrdnungssystemposition (pyxb.binding.datatypes.boolean):
@@ -255,6 +267,7 @@ class datenschutzOrdnungssystemposition (pyxb.binding.datatypes.boolean):
     _Documentation = 'Markierung, die angibt, ob sich in den Unterlagen der Ordnungssystemposition solche mit besonders sch\xfctzenswerten Personendaten oder Pers\xf6nlichkeitsprofilen gem\xe4ss Datenschutzgesetz.Marking indicating whether documents in the classification system position contain sensitive personal data or personal profiles under the Data Protection Act.Marque qui pr\xe9cise si des documents de la position du syst\xe8me de classement contiennent des donn\xe9es sensibles ou des profils de la personnalit\xe9 selon la loi sur la protection des donn\xe9es.'
 datenschutzOrdnungssystemposition._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'datenschutzOrdnungssystemposition', datenschutzOrdnungssystemposition)
+_module_typeBindings.datenschutzOrdnungssystemposition = datenschutzOrdnungssystemposition
 
 # Union simple type: datumTypA
 # superclasses pyxb.binding.datatypes.anySimpleType
@@ -289,6 +302,7 @@ datumTypA.keine_Angabe = 'keine Angabe'           # originally keineAngabe.keine
 datumTypA._InitializeFacetMap(datumTypA._CF_pattern,
    datumTypA._CF_enumeration)
 Namespace.addCategoryObject('typeBinding', 'datumTypA', datumTypA)
+_module_typeBindings.datumTypA = datumTypA
 
 # Union simple type: notizDatum
 # superclasses datumTypB
@@ -303,6 +317,7 @@ class notizDatum (pyxb.binding.basis.STD_union):
     _MemberTypes = ( pyxb.binding.datatypes.date, pyxb.binding.datatypes.dateTime, )
 notizDatum._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'notizDatum', notizDatum)
+_module_typeBindings.notizDatum = notizDatum
 
 # Atomic simple type: notizErfasser
 class notizErfasser (text1):
@@ -314,6 +329,7 @@ class notizErfasser (text1):
     _Documentation = 'Benutzer, welcher die Notiz erfasst hat. Optionales Feld.User who created the note. Optional field.Utilisateur qui a catalogu\xe9 la notice. Champ facultatif.'
 notizErfasser._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'notizErfasser', notizErfasser)
+_module_typeBindings.notizErfasser = notizErfasser
 
 # Atomic simple type: notizBeschreibung
 class notizBeschreibung (text4):
@@ -325,6 +341,7 @@ class notizBeschreibung (text4):
     _Documentation = 'Notiz i.e.S, d.h. Beschreibung. Zwingendes Feld.Notice in narrower sense, i.e. description. Compulsory field.Notice au sens strict, c.-\xe0-d. description. Champ obligatoire'
 notizBeschreibung._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'notizBeschreibung', notizBeschreibung)
+_module_typeBindings.notizBeschreibung = notizBeschreibung
 
 # Atomic simple type: nummer
 class nummer (text1):
@@ -336,6 +353,7 @@ class nummer (text1):
     _Documentation = 'Eindeutige Identifikation und Ordnungsmerkmal der Ordnungssystemposition.Unambiguous identification and classification feature of the classification system position.Identification univoque et caract\xe9ristique de classement de la position du syst\xe8me de classement.'
 nummer._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'nummer', nummer)
+_module_typeBindings.nummer = nummer
 
 # Atomic simple type: titelOrdnungssystemposition
 class titelOrdnungssystemposition (text2):
@@ -347,6 +365,7 @@ class titelOrdnungssystemposition (text2):
     _Documentation = "Bezeichnung des Aufgabenbereichs, dem die Ordnungssystemposition zugewiesen ist.Designation of the area of responsibility to which the classification system position is allocated.D\xe9signation du secteur d'activit\xe9s qui est attribu\xe9 \xe0 cette position du syst\xe8me de classement."
 titelOrdnungssystemposition._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'titelOrdnungssystemposition', titelOrdnungssystemposition)
+_module_typeBindings.titelOrdnungssystemposition = titelOrdnungssystemposition
 
 # Atomic simple type: federfuehrendeOrganisationseinheitOrdnungssystemposition
 class federfuehrendeOrganisationseinheitOrdnungssystemposition (text2):
@@ -358,6 +377,7 @@ class federfuehrendeOrganisationseinheitOrdnungssystemposition (text2):
     _Documentation = "Bestimmung der f\xfcr die Erledigung des Gesch\xe4ftes zust\xe4ndigen federf\xfchrenden Organisationseinheit.Name of the lead organisational unit responsible for dealing with the business matter.D\xe9signation de l'unit\xe9 organisationnelle responsable pour le traitement de l'affaire."
 federfuehrendeOrganisationseinheitOrdnungssystemposition._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'federfuehrendeOrganisationseinheitOrdnungssystemposition', federfuehrendeOrganisationseinheitOrdnungssystemposition)
+_module_typeBindings.federfuehrendeOrganisationseinheitOrdnungssystemposition = federfuehrendeOrganisationseinheitOrdnungssystemposition
 
 # Atomic simple type: schutzfristenkategorieOrdnungssystemposition
 class schutzfristenkategorieOrdnungssystemposition (text1):
@@ -369,6 +389,7 @@ class schutzfristenkategorieOrdnungssystemposition (text1):
     _Documentation = 'Artikel des Gesetztes, der die Schutzfrist festh\xe4lt, die das Amt im Formular \u201eMeldung von Unterlagen mit besonderer Schutzfrist und \xf6ffentlich zug\xe4nglichen Unterlagen\u201c gemeldet hat und vom Archiv auf ihre formale Korrektheit und Vollst\xe4ndigkeit kontrolliert worden ist.Article of the ArchA stipulating the closure period reported by the authority in the "Notification of documents subject to a special closure period and publicly accessible documents"\x9d form and checked for formal correctness and completeness by the archive.Article de la loi qui fixe le d\xe9lai de protection que l\u2019administration a annonc\xe9 dans le formulaire "Annonce de documents avec un d\xe9lai de protection particulier et de documents consultables par le public" et dont les archives ont contr\xf4l\xe9 l\u2019exactitude et l\u2019int\xe9gralit\xe9.'
 schutzfristenkategorieOrdnungssystemposition._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'schutzfristenkategorieOrdnungssystemposition', schutzfristenkategorieOrdnungssystemposition)
+_module_typeBindings.schutzfristenkategorieOrdnungssystemposition = schutzfristenkategorieOrdnungssystemposition
 
 # Atomic simple type: schutzfristOrdnungssystemposition
 class schutzfristOrdnungssystemposition (text1):
@@ -382,6 +403,7 @@ schutzfristOrdnungssystemposition._CF_pattern = pyxb.binding.facets.CF_pattern()
 schutzfristOrdnungssystemposition._CF_pattern.addPattern(pattern='[0-9]*')
 schutzfristOrdnungssystemposition._InitializeFacetMap(schutzfristOrdnungssystemposition._CF_pattern)
 Namespace.addCategoryObject('typeBinding', 'schutzfristOrdnungssystemposition', schutzfristOrdnungssystemposition)
+_module_typeBindings.schutzfristOrdnungssystemposition = schutzfristOrdnungssystemposition
 
 # Atomic simple type: schutzfristenBegruendungOrdnungssystemposition
 class schutzfristenBegruendungOrdnungssystemposition (text4):
@@ -393,6 +415,7 @@ class schutzfristenBegruendungOrdnungssystemposition (text4):
     _Documentation = 'Erl\xe4uterung der Begr\xfcndung f\xfcr eine verl\xe4ngerte Schutzfrist f\xfcr Unterlagen, die nach Personennamen erschlossen sind und sch\xfctzenswerte Personendaten gem\xe4ss DSG enthalten (z.B. Art. 11 BGA), und f\xfcr bestimmte Kategorien oder f\xfcr einzelne Dossiers, die \xfcberwiegend schutzw\xfcrdige \xf6ffentliche oder private Interessen tangieren (z.B. Art. 12 Abs. 1 BGA und Art. 12 Abs. 2 BGA).Explanation of the reasons for an extended closure period for documents that are catalogued by individuals"\u2122 names and contain sensitive personal data in accordance with the DPA (Art. 11 ArchA) and for certain categories or individual dossiers that touch on matters where there is an overriding public or private interest in preventing consultation (Art. 12 para. 1 ArchA and Art. 12 para. 2 ArchA).Explication du motif de prolongation du d\xe9lai de protection pour les documents class\xe9s selon des noms de personnes et contenant des donn\xe9es personnelles sensibles selon la LPD (par exemple art. 11 LAr) et pour des cat\xe9gories d\xe9finies ou pour certains dossiers qui touchent un int\xe9r\xeat public ou priv\xe9 pr\xe9pond\xe9rant, digne de protection (par exemple art. 12 al. 1 LAr et art. 12 al. 2 LAr)'
 schutzfristenBegruendungOrdnungssystemposition._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'schutzfristenBegruendungOrdnungssystemposition', schutzfristenBegruendungOrdnungssystemposition)
+_module_typeBindings.schutzfristenBegruendungOrdnungssystemposition = schutzfristenBegruendungOrdnungssystemposition
 
 # Atomic simple type: klassifizierungskategorieOrdnungssystemposition
 class klassifizierungskategorieOrdnungssystemposition (text2):
@@ -404,6 +427,7 @@ class klassifizierungskategorieOrdnungssystemposition (text2):
     _Documentation = "Grad, in dem alle der Ordnungssystemposition untergeordneten Objekte Dossier und Dokumente vor unberechtigter Einsicht gesch\xfctzt werden m\xfcssen. Referenz: Verordnung vom 10.12.1990 \xfcber die Klassifizierung und Behandlung von Informationen im zivilen Verwaltungsbereich ([SR 172.015]) und Verordnung vom 1.5.1990 \xfcber den Schutz milit\xe4rischer Informationen ([SR 510.411]).Degree to which all the dossier and document objects subordinated to the classification system position must be protected against unauthorised access. Reference: Ordinance of 10.12.1990 on the Classification and Treatment of Information in the Civil Administration ([SR 172.015]) and Ordinance of 1.5.1990 on the Protection of Military Information ([SR 510.411]).Degr\xe9 dans lequel doivent \xeatre prot\xe9g\xe9s d'une consultation non autoris\xe9e tous les dossiers et documents subordonn\xe9s \xe0 une position du syst\xe8me de classement. R\xe9f\xe9rence: Ordonnance du 10.12.1990 sur la classification et le traitement d'informations de l'administration civile  ([SR 172.015]) et ordonnance du 1.5.1990 sur la protection des informations militaires ([SR 510.411]"
 klassifizierungskategorieOrdnungssystemposition._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'klassifizierungskategorieOrdnungssystemposition', klassifizierungskategorieOrdnungssystemposition)
+_module_typeBindings.klassifizierungskategorieOrdnungssystemposition = klassifizierungskategorieOrdnungssystemposition
 
 # Atomic simple type: oeffentlichkeitsstatusOrdnungssystemposition
 class oeffentlichkeitsstatusOrdnungssystemposition (text2):
@@ -415,6 +439,7 @@ class oeffentlichkeitsstatusOrdnungssystemposition (text2):
     _Documentation = 'Angabe, ob der Ordnungssystemposition untergeordnete Dossiers gem\xe4ss [BG\xd6] sch\xfctzenswerte Dokumente enthalten oder nicht.Indication of whether or not dossiers subordinated to the classification system position contain sensitive documents under the [FoIA].Indiquer si les dossiers subordonn\xe9s \xe0 la position du syst\xe8me de classement contiennent ou non des documents dignes de protection selon la [LTrans]'
 oeffentlichkeitsstatusOrdnungssystemposition._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'oeffentlichkeitsstatusOrdnungssystemposition', oeffentlichkeitsstatusOrdnungssystemposition)
+_module_typeBindings.oeffentlichkeitsstatusOrdnungssystemposition = oeffentlichkeitsstatusOrdnungssystemposition
 
 # Atomic simple type: oeffentlichkeitsstatusBegruendungOrdnungssystemposition
 class oeffentlichkeitsstatusBegruendungOrdnungssystemposition (text4):
@@ -426,6 +451,7 @@ class oeffentlichkeitsstatusBegruendungOrdnungssystemposition (text4):
     _Documentation = "Argumente gegen die \xf6ffentliche Zug\xe4nglichkeit gem\xe4ss [BG\xd6]. Gem\xe4ss Entwurf [BG\xd6] muss begr\xfcndet werden, warum Unterlagen nicht \xf6ffentlich zug\xe4nglich gemacht werden k\xf6nnen.Arguments against public access under the [FoIA]. According to the draft [FoIA], reasons why documents cannot be made publicly accessible must be stated.Arguments contre l'acc\xe8s public selon la [LTrans]. Selon le projet de [LTrans], il faut donner les raisons pour lesquelles des documents ne peuvent \xeatre accessibles au public."
 oeffentlichkeitsstatusBegruendungOrdnungssystemposition._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'oeffentlichkeitsstatusBegruendungOrdnungssystemposition', oeffentlichkeitsstatusBegruendungOrdnungssystemposition)
+_module_typeBindings.oeffentlichkeitsstatusBegruendungOrdnungssystemposition = oeffentlichkeitsstatusBegruendungOrdnungssystemposition
 
 # Atomic simple type: sonstigeBestimmungenOrdnungssystemposition
 class sonstigeBestimmungenOrdnungssystemposition (text4):
@@ -437,6 +463,7 @@ class sonstigeBestimmungenOrdnungssystemposition (text4):
     _Documentation = "Angaben \xfcber sonstige rechtliche Auflagen, denen die Ordnungssystemposition unterstellt ist. Information on other legal conditions to which the classification system position is subject. Informations sur d'autres \xe9ventuelles conditions l\xe9gales auxquelles est soumise la position du syst\xe8me de classement."
 sonstigeBestimmungenOrdnungssystemposition._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'sonstigeBestimmungenOrdnungssystemposition', sonstigeBestimmungenOrdnungssystemposition)
+_module_typeBindings.sonstigeBestimmungenOrdnungssystemposition = sonstigeBestimmungenOrdnungssystemposition
 
 # Complex type comparable with content type EMPTY
 class comparable (pyxb.binding.basis.complexTypeDefinition):
@@ -455,6 +482,7 @@ class comparable (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
 
     })
+_module_typeBindings.comparable = comparable
 Namespace.addCategoryObject('typeBinding', 'comparable', comparable)
 
 
@@ -490,6 +518,7 @@ class historischerZeitpunkt (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
 
     })
+_module_typeBindings.historischerZeitpunkt = historischerZeitpunkt
 Namespace.addCategoryObject('typeBinding', 'historischerZeitpunkt', historischerZeitpunkt)
 
 
@@ -525,6 +554,7 @@ class historischerZeitraum (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
 
     })
+_module_typeBindings.historischerZeitraum = historischerZeitraum
 Namespace.addCategoryObject('typeBinding', 'historischerZeitraum', historischerZeitraum)
 
 
@@ -560,6 +590,7 @@ class zeitraum (pyxb.binding.basis.complexTypeDefinition):
     _AttributeMap.update({
 
     })
+_module_typeBindings.zeitraum = zeitraum
 Namespace.addCategoryObject('typeBinding', 'zeitraum', zeitraum)
 
 
