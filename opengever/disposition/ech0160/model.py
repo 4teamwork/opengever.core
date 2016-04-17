@@ -1,12 +1,16 @@
 from Acquisition import aq_parent
 from Products.CMFCore.utils import getToolByName
+from opengever.base.behaviors.classification import IClassification
 from opengever.base.interfaces import IReferenceNumber
 from opengever.disposition.ech0160.bindings import arelda
+from opengever.disposition.ech0160.utils import file_checksum
+from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.document import IDocumentSchema
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.repository.repositoryroot import IRepositoryRoot
+
 import binascii
 import os.path
 
@@ -19,14 +23,15 @@ class Repository(object):
         self.positions = {}
 
     def add_dossier(self, dossier):
+        """Add a dossier to the model"""
         parents = dossier.parents()
         if self.obj is None:
             self.obj = parents[0]
         elif self.obj != parents[0]:
             raise ValueError("Multiple repositories")
-        self.add_descendants(parents[1:])
+        self._add_descendants(parents[1:])
 
-    def add_descendants(self, descendants):
+    def _add_descendants(self, descendants):
         if descendants:
             obj = descendants[0]
             uid = obj.UID()
@@ -35,9 +40,10 @@ class Repository(object):
             else:
                 pos = Position(obj)
                 self.positions[uid] = pos
-            pos.add_descendants(descendants[1:])
+            pos._add_descendants(descendants[1:])
 
     def binding(self):
+        """Return XML binding"""
         os = arelda.ordnungssystemGeverSIP()
         os.name = self.obj.Title()
         for pos in self.positions.values():
@@ -53,29 +59,30 @@ class Position(object):
         self.positions = {}
         self.dossiers = {}
 
-    def add_descendants(self, descendants):
+    def _add_descendants(self, descendants):
         if descendants:
             obj = descendants[0]
-            uid = obj.UID()
             if IRepositoryFolder.providedBy(obj):
+                uid = obj.UID()
                 if uid in self.positions:
                     pos = self.positions[uid]
                 else:
                     pos = Position(obj)
                     self.positions[uid] = pos
-                pos.add_descendants(descendants[1:])
-            elif IDossierMarker.providedBy(obj):
+                pos._add_descendants(descendants[1:])
+            elif isinstance(obj, Dossier):
+                uid = obj.obj.UID()
                 if uid in self.dossiers:
                     dossier = self.dossiers[uid]
                 else:
-                    dossier = Dossier(obj)
+                    dossier = obj
                     self.dossiers[uid] = dossier
 
     def binding(self):
         op = arelda.ordnungssystempositionGeverSIP(
             id=u'_{}'.format(self.obj.UID()))
         op.nummer = IReferenceNumber(self.obj).get_repository_number()
-        op.titel = self.obj.Title(prefix_with_reference_number=False)
+        op.titel = self.obj.Title(prefix_with_reference_number=False).decode('utf8')
 
         for pos in self.positions.values():
             op.ordnungssystemposition.append(pos.binding())
@@ -95,11 +102,11 @@ class Dossier(object):
         self.dossiers = {}
         self.documents = {}
 
-        self.add_descendants()
+        self._add_descendants()
 
     def parents(self):
         obj = self.obj
-        parents = [obj]
+        parents = [self]
         while True:
             obj = aq_parent(obj)
             parents.insert(0, obj)
@@ -107,13 +114,11 @@ class Dossier(object):
                 break
         return parents
 
-    def add_descendants(self):
+    def _add_descendants(self):
         objs = self.obj.objectValues()
         for obj in objs:
             if IDossierMarker.providedBy(obj):
-                dossier = Dossier(obj)
-                self.dossiers[obj.UID()] = dossier
-                dossier.add_descendants()
+                self.dossiers[obj.UID()] = Dossier(obj)
             elif IDocumentSchema.providedBy(obj):
                 self.documents[obj.UID()] = Document(obj)
 
@@ -171,52 +176,49 @@ class Document(object):
 
     def __init__(self, obj):
         self.obj = obj
+        self.file_ref = None
 
     def binding(self):
         dokument = arelda.dokumentGeverSIP(id=u'_{}'.format(self.obj.UID()))
         dokument.titel = self.obj.Title().decode('utf8')
+        if self.file_ref:
+            dokument.dateiRef.append(self.file_ref)
+
         if self.obj.digitally_available:
             dokument.erscheinungsform = u'digital'
         else:
             dokument.erscheinungsform = u'nicht digital'
 
-        if self.obj.document_author:
-            dokument.autor.append(self.obj.document_author)
+        md = IDocumentMetadata(self.obj)
+        if md.document_author:
+            dokument.autor.append(md.document_author)
 
+        dokument.dokumenttyp = md.document_type
+
+        dokument.registrierdatum = arelda.historischerZeitpunkt(
+            self.obj.created().asdatetime().date())
+
+        classification = IClassification(self.obj)
+        dokument.klassifizierungskategorie = classification.classification
+        dokument.datenschutz = True if classification.privacy_layer == 'privacy_layer_yes' else False
+        dokument.oeffentlichkeitsstatus = classification.public_trial
+        dokument.oeffentlichkeitsstatusBegruendung = classification.public_trial_statement
         return dokument
-
-
-class ContentRootFolder(object):
-    """eCH-0160 ordnerSIP"""
-
-    def __init__(self):
-        self.next_folder = 1
-        self.next_file = 1
-        self.folders = []
-        self.files = []
-
-    def add_dossier(self, dossier):
-        self.folders.append(Folder(self, dossier))
-
-    def binding(self):
-        ordner = arelda.ordnerSIP(u'content')
-        for folder in self.folders:
-            ordner.ordner.append(folder.binding())
-        return ordner
 
 
 class Folder(object):
     """eCH-0160 ordnerSIP"""
 
-    def __init__(self, toc, dossier):
+    def __init__(self, toc, dossier, base_path):
         self.folders = []
         self.files = []
 
-        self.name = 'd{0:06d}'.format(toc.next_folder)
+        self.name = u'd{0:06d}'.format(toc.next_folder)
         toc.next_folder += 1
+        self.path = os.path.join(base_path, self.name)
 
         for dossier in dossier.dossiers.values():
-            self.folder.append(Folder(toc, dossier))
+            self.folder.append(Folder(toc, dossier, self.path))
 
         for doc in dossier.documents.values():
             self.files.append(File(toc, doc))
@@ -232,20 +234,47 @@ class Folder(object):
 
         return ordner
 
+    def add_to_zip(self, zipfile):
+        for file_ in self.files:
+            zipfile.write(file_.filepath, os.path.join(self.path, file_.name))
+        for folder in self.folders:
+            folder.add_to_zip(zipfile)
+
+
+class ContentRootFolder(Folder):
+    """eCH-0160 content root folder of type ordnerSIP"""
+
+    def __init__(self, base_path):
+        self.next_folder = 1
+        self.next_file = 1
+        self.name = u'content'
+        self.path = os.path.join(base_path, self.name)
+        self.folders = []
+        self.files = []
+
+    def add_dossier(self, dossier):
+        self.folders.append(Folder(self, dossier, self.path))
+
 
 class File(object):
+    """eCH-0160 dateiSIP"""
 
     def __init__(self, toc, document):
+        self.file = document.obj.archival_file or document.obj.file
+        self.id = u'_{}'.format(binascii.hexlify(self.file._p_oid))
+        document.file_ref = self.id
         self.document = document
+        self.filename = self.file.filename
+        self.filepath = self.file._blob.committed()
 
-        base, extension = os.path.splitext(document.obj.file.filename)
+        base, extension = os.path.splitext(self.filename)
         self.name = 'p{0:06d}{1}'.format(toc.next_file, extension)
         toc.next_file += 1
 
     def binding(self):
-        id_ = binascii.hexlify(self.document.obj.file._p_oid)
-        datei = arelda.dateiSIP(id=u'_{}'.format(id_))
+        datei = arelda.dateiSIP(id=self.id)
         datei.name = self.name
-        datei.pruefalgorithmus = u'SHA-256'
-        datei.pruefsumme = u'TODO'
+        datei.originalName = self.filename
+        datei.pruefalgorithmus = u'MD5'
+        datei.pruefsumme = file_checksum(self.filepath)
         return datei
