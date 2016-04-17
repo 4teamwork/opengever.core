@@ -1,9 +1,10 @@
 from DateTime import DateTime
-from Products.Five import BrowserView
 from Products.CMFCore.utils import getToolByName
+from Products.Five import BrowserView
 from ZPublisher.Iterators import IStreamIterator
 from opengever.disposition.ech0160 import model
 from opengever.disposition.ech0160.bindings import arelda
+from opengever.disposition.ech0160.utils import file_checksum
 from pyxb.namespace import XMLSchema_instance as xsi
 from pyxb.utils.domutils import BindingDOMSupport
 from tempfile import TemporaryFile
@@ -41,8 +42,6 @@ class ECH0160ExportView(BrowserView):
         doc.inhaltsverzeichnis.ordner.append(header)
         xsd = arelda.ordnerSIP(u'xsd', u'xsd')
         header.ordner.append(xsd)
-        # content = arelda.ordnerSIP(u'content', u'content')
-        # doc.inhaltsverzeichnis.append(content)
 
         doc.ablieferung = arelda.ablieferungGeverSIP()
         doc.ablieferung.ablieferungstyp = u'GEVER'
@@ -52,10 +51,13 @@ class ECH0160ExportView(BrowserView):
         doc.ablieferung.provenienz.registratur = u'Ratsinformationssystem'
 
         catalog = getToolByName(self.context, 'portal_catalog')
-        dossiers = catalog(portal_type='opengever.dossier.businesscasedossier')
+        dossiers = catalog(
+            portal_type='opengever.dossier.businesscasedossier',
+            # UID='84bd8defbef3426b9f4fac396d691d8b',
+        )
 
         repo = model.Repository()
-        content = model.ContentRootFolder()
+        content = model.ContentRootFolder(sip_folder_name)
         for dossier in dossiers:
             d = model.Dossier(dossier.getObject())
             repo.add_dossier(d)
@@ -64,29 +66,25 @@ class ECH0160ExportView(BrowserView):
         doc.ablieferung.ordnungssystem = repo.binding()
         doc.inhaltsverzeichnis.append(content.binding())
 
-        # doc.ablieferung.ordnungssystem = arelda.ordnungssystemGeverSIP()
-        # doc.ablieferung.ordnungssystem.name = repo.Title()
-
-        # TODO: remove
-        # return metadata.xml only
-        dom = doc.toDOM(element_name='paket')
-        dom.documentElement.setAttributeNS(
-            xsi.uri(),
-            u'xsi:schemaLocation',
-            u'http://bar.admin.ch/arelda/v4 xsd/arelda.xsd',
-        )
-        dom.documentElement.setAttributeNS(
-            xsi.uri(),
-            u'xsi:type',
-            u'paketSIP',
-        )
-        body = dom.toprettyxml(encoding='utf8')
-        response = self.request.response
-        response.setHeader(
-            "Content-Disposition", 'inline; filename="metadata.xml"')
-        response.setHeader("Content-type", "text/xml")
-        response.setHeader("Content-Length", len(body))
-        return body
+        # ### return metadata.xml only
+        # dom = doc.toDOM(element_name='paket')
+        # dom.documentElement.setAttributeNS(
+        #     xsi.uri(),
+        #     u'xsi:schemaLocation',
+        #     u'http://bar.admin.ch/arelda/v4 xsd/arelda.xsd',
+        # )
+        # dom.documentElement.setAttributeNS(
+        #     xsi.uri(),
+        #     u'xsi:type',
+        #     u'paketSIP',
+        # )
+        # body = dom.toprettyxml(encoding='utf8')
+        # response = self.request.response
+        # response.setHeader(
+        #     "Content-Disposition", 'inline; filename="metadata.xml"')
+        # response.setHeader("Content-type", "text/xml")
+        # response.setHeader("Content-Length", len(body))
+        # return body
 
         tmpfile = TemporaryFile()
         with ZipFile(tmpfile, 'w', ZIP_DEFLATED, True) as zipfile:
@@ -97,19 +95,17 @@ class ECH0160ExportView(BrowserView):
                 arcname = os.path.join(sip_folder_name, 'header', 'xsd', schema)
                 zipfile.write(filename, arcname)
 
+                checksum = file_checksum(filename)
                 xsd.append(arelda.dateiSIP(
                     schema,
                     schema,
                     u'MD5',
-                    u'fc855f31a14976b854dfd035bd515721',  # TODO: checksum
-                    id=u'abcd',
+                    checksum,
+                    id=u'_xsd_{}'.format(os.path.splitext(schema)[0]),
                 ))
 
-            # add dossiers
-            # op = arelda.ordnungssystempositionGeverSIP(id=u'abc')
-            # op.nummer = u'1'
-            # op.titel = u'Position 1'
-            # doc.ablieferung.ordnungssystem.ordnungssystemposition.append(op)
+            # add document files
+            content.add_to_zip(zipfile)
 
             dom = doc.toDOM(element_name='paket')
             dom.documentElement.setAttributeNS(
@@ -123,7 +119,7 @@ class ECH0160ExportView(BrowserView):
                 u'paketSIP',
             )
             arcname = os.path.join(sip_folder_name, 'header', 'metadata.xml')
-            zipfile.writestr(arcname, dom.toprettyxml(encoding='utf8'))
+            zipfile.writestr(arcname, dom.toprettyxml(encoding='UTF-8'))
 
         size = tmpfile.tell()
 
