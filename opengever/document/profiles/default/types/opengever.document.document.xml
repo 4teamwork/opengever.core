@@ -33,6 +33,7 @@
     <element value="plone.app.lockingbehavior.behaviors.ILocking" />
     <element value="opengever.document.behaviors.IBaseDocument" />
     <element value="opengever.document.behaviors.metadata.IDocumentMetadata" />
+    <element value="ftw.bumblebee.interfaces.IBumblebeeable" />
   </property>
 
   <!-- View information -->
