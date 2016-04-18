@@ -5,6 +5,9 @@ Changelog
 4.7.5 (unreleased)
 ------------------
 
+- Enable zip-export for personal overview.
+  [deiferni]
+
 - Reworked XLSReporter using the openpyxl library instead of xlwt, to support
   xlsx creation.
   [phgross]
