@@ -57,9 +57,9 @@ class TaskReporter(grok.View):
                     self.context.absolute_url())
 
         task_attributes = [
-            {'id':'title', 'title':_('label_task_title')},
-            {'id':'review_state', 'title':_('review_state'),
-             'transform':StringTranslater(
+            {'id': 'title', 'title': _('label_task_title')},
+            {'id': 'review_state', 'title': _('review_state'),
+             'transform': StringTranslater(
                  self.context.REQUEST, 'plone').translate},
             {'id': 'deadline', 'title': _('label_deadline'),
              'style': get_date_style()},
