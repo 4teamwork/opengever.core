@@ -1,6 +1,11 @@
 from collective import dexteritytextindexer
+from opengever.base.behaviors.classification import IClassification
+from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.base.interfaces import ISequenceNumber
 from opengever.disposition import _
+from opengever.disposition.appraisal import IAppraisal
+from opengever.disposition.interfaces import IDisposition
+from opengever.dossier.behaviors.dossier import IDossier
 from persistent.list import PersistentList
 from plone import api
 from plone.dexterity.content import Container
@@ -10,11 +15,32 @@ from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
 from zope import schema
 from zope.component import getUtility
+from zope.interface import implements
 from zope.interface import Invalid
 from zope.interface import invariant
+from zope.intid.interfaces import IIntIds
 
 
-class IDisposition(form.Schema):
+class DossierRepresentation(object):
+    """A wrapper objects for dossiers.
+    To provide easy access for the dossier's data, via the disposition
+    relations list. See Disposition.get_dossier_representations.
+    """
+
+    def __init__(self, dossier, disposition):
+        self.title = dossier.title
+        self.intid = getUtility(IIntIds).getId(dossier)
+        self.url = dossier.absolute_url()
+        self.reference_number = dossier.get_reference_number()
+        self.start = IDossier(dossier).start
+        self.end = IDossier(dossier).end
+        self.public_trial = IClassification(dossier).public_trial
+        self.archival_value = ILifeCycle(dossier).archival_value
+        self.archival_value_annotation = ILifeCycle(dossier).archival_value_annotation
+        self.appraisal = IAppraisal(disposition).get(dossier)
+
+
+class IDispositionSchema(form.Schema):
 
     dexteritytextindexer.searchable('reference')
     reference = schema.TextLine(
@@ -51,6 +77,7 @@ class IDisposition(form.Schema):
 
 
 class Disposition(Container):
+    implements(IDisposition)
 
     destroyed_key = 'destroyed_dossiers'
 
@@ -87,10 +114,14 @@ class Disposition(Container):
             api.content.transition(
                 obj=dossier, transition='dossier-transition-offer')
 
+            IAppraisal(self).initialize(dossier)
+
     def update_dropped_dossiers(self, dossiers):
         for dossier in dossiers:
             api.content.transition(
                 obj=dossier, to_state=self.get_former_state(dossier))
+
+            IAppraisal(self).drop(dossier)
 
     def get_former_state(self, dossier):
         workflow = api.portal.get_tool('portal_workflow')

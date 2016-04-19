@@ -13,7 +13,7 @@
     </property>
 
     <!-- schema interface -->
-    <property name="schema">opengever.disposition.disposition.IDisposition</property>
+    <property name="schema">opengever.disposition.disposition.IDispositionSchema</property>
 
     <!-- class used for content items -->
     <property name="klass">opengever.disposition.disposition.Disposition</property>

@@ -3,6 +3,11 @@
   xmlns:browser="http://namespaces.zope.org/browser"
   i18n_domain="opengever.core">
 
+  <browser:resourceDirectory
+      name="opengever.disposition"
+      directory="resources"
+      />
+
   <browser:page
     class=".ech0160.ECH0160ExportView"
     for="*"
