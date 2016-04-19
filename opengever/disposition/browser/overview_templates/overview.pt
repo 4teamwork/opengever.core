@@ -1,0 +1,60 @@
+<div id="disposition_overview">
+
+  <ul class="list-group">
+    <li tal:repeat="dossier view/get_dossiers"
+        class="dispositions list-group-item">
+
+      <div class="list-group-cell data-cell">
+        <h3 class="title">
+          <span class="reference_number" tal:content="dossier/reference_number"/>
+          <a href="#" tal:attributes="href dossier/url" tal:content="dossier/title" />
+        </h3>
+        <div class="meta">
+          <span class="meta-value date_period">
+            <span i18n:translate="period">Period</span>:
+            <span tal:content="python: view.get_localized_time(dossier.start)"/>
+            -
+            <span tal:content="python: view.get_localized_time(dossier.end)"/>
+          </span>
+          <span class="meta-value public_trial">
+            <span i18n:domain="opengever.base" i18n:translate="label_public_trial">Public Trial</span>:
+            <span i18n:domain="opengever.base" i18n:translate="" tal:content="dossier/public_trial"/>
+          </span>
+          <span class="meta-value archival_value">
+            <span i18n:domain="opengever.base" i18n:translate="label_archival_value">Archival value</span>:
+            <span i18n:domain="opengever.base" i18n:translate=""
+                  tal:content="dossier/archival_value"/>
+            (
+            <span i18n:domain="opengever.base"
+                  tal:content="dossier/archival_value_annotation"/>
+            )
+          </span>
+
+        </div>
+      </div>
+
+      <div class="list-group-cell action-cell">
+
+        <div class="button-group appraisal-button-group">
+
+          <a href="#"
+             class="button"
+             tal:attributes="class python: dossier.appraisal and 'button active' or 'button';
+                             data-url python: view.get_update_appraisal_url(dossier, True);">
+            Archive
+          </a>
+
+          <a href="#"
+             class="button"
+             tal:attributes="class python: dossier.appraisal and 'button' or 'button active';
+                             data-url python: view.get_update_appraisal_url(dossier, False);">
+            Don't archive
+          </a>
+
+        </div>
+      </div>
+
+     </li>
+   </ul>
+
+</div>
