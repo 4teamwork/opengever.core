@@ -134,7 +134,7 @@ mitgegeben werden.
         "responsible": "john.doe",
         "custody_period": 30,
         "archival_value": "unchecked",
-        "retention_period": 5,
+        "retention_period": 5
       }
 
    **Beispiel-Response**:
