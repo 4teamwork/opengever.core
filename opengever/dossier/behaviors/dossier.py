@@ -12,7 +12,7 @@ from opengever.dossier import _
 from opengever.dossier.widget import referenceNumberWidgetFactory
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from plone.autoform.interfaces import IFormFieldProvider
-from plone.dexterity.i18n import MessageFactory as pd_mf
+from plone.dexterity.i18n import MessageFactory as pd_mf  # noqa
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.directives import form, dexterity
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
@@ -27,12 +27,16 @@ LOG = logging.getLogger('opengever.dossier')
 
 
 class IDossierMarker(Interface, ITabbedviewUploadable):
-    """ Marker Interface for dossiers.
+    """Marker Interface for dossiers.
     """
 
 
+def start_date_default():
+    return date.today()
+
+
 class IDossier(form.Schema):
-    """ Behaviour interface for dossier types providing
+    """Behaviour interface for dossier types providing
     common properties/fields.
     """
 
@@ -65,6 +69,7 @@ class IDossier(form.Schema):
         title=_(u'label_start', default=u'Opening Date'),
         description=_(u'help_start', default=u''),
         required=False,
+        defaultFactory=start_date_default,
     )
 
     # workaround because ftw.datepicker wasn't working on the edit form
@@ -181,7 +186,7 @@ class IDossier(form.Schema):
     )
 
     @invariant
-    def validateStartEnd(data):
+    def validate_start_end(data):
         # Do not get the data from the context when it is not in the current
         # fields / z3cform group
         data = data._Data_data___
@@ -232,6 +237,7 @@ class AddForm(dexterity.AddForm):
 
 class EditForm(dexterity.EditForm):
     """Standard Editform, provide just a special label for subdossiers"""
+
     grok.context(IDossierMarker)
 
     def updateFields(self):
@@ -251,8 +257,3 @@ class EditForm(dexterity.EditForm):
 
 class StartBeforeEnd(Invalid):
     __doc__ = _(u"The start or end date is invalid")
-
-
-@form.default_value(field=IDossier['start'])
-def start_date_default(data):
-    return date.today()

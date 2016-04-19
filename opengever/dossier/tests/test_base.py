@@ -1,9 +1,10 @@
 from datetime import date
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testing import freeze
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import FunctionalTestCase
-from plone.app.testing import TEST_USER_ID
 
 
 class TestDossierContainer(FunctionalTestCase):
@@ -165,6 +166,11 @@ class TestDossierChecks(FunctionalTestCase):
 
 
 class TestDateCalculations(FunctionalTestCase):
+
+    def test_start_date_defaults_to_today(self):
+        with freeze(datetime.now()):
+            dossier = create(Builder("dossier"))
+            self.assertEqual(IDossier(dossier).start, date.today())
 
     def test_earliest_possible_is_none_for_empty_dossiers(self):
         dossier = create(Builder("dossier")

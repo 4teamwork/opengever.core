@@ -5,6 +5,10 @@ Changelog
 4.7.5 (unreleased)
 ------------------
 
+- Make default value for IDossier.start a defaultFactory instead
+  of a form level default.
+  [lgraf]
+
 - REST API: Customize summary representation to include
 
   - Translated 'title' for objects with ITranslatedTitleSupport
