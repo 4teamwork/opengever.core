@@ -31,6 +31,10 @@ class IDossierMarker(Interface, ITabbedviewUploadable):
     """
 
 
+def start_date_default():
+    return date.today()
+
+
 class IDossier(form.Schema):
     """Behaviour interface for dossier types providing
     common properties/fields.
@@ -65,6 +69,7 @@ class IDossier(form.Schema):
         title=_(u'label_start', default=u'Opening Date'),
         description=_(u'help_start', default=u''),
         required=False,
+        defaultFactory=start_date_default,
     )
 
     # workaround because ftw.datepicker wasn't working on the edit form
@@ -252,8 +257,3 @@ class EditForm(dexterity.EditForm):
 
 class StartBeforeEnd(Invalid):
     __doc__ = _(u"The start or end date is invalid")
-
-
-@form.default_value(field=IDossier['start'])
-def start_date_default(data):
-    return date.today()
