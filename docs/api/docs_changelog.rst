@@ -5,6 +5,11 @@ Changelog
 
 Im Folgenden sind (substantielle) Änderungen an der Dokumentation aufgeführt.
 
+2016-04-15
+----------
+
+- Code-Beispiele (Python) hinzugefügt
+
 2016-04-08
 ----------
 

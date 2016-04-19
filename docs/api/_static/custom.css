@@ -97,3 +97,19 @@ blockquote {
 #schemas #kontakt > h3 {
     background-image: url('img/contact.png');
 }
+
+
+/* Collapsibles */
+
+.collapsible .header {
+    display: block;
+    clear: both;
+}
+
+.collapsible .header:after {
+    content: " ▶";
+}
+
+.collapsible .header.open:after {
+    content: " ▼";
+}

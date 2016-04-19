@@ -99,6 +99,14 @@ Unterobjekte enthält (direkte children des Objekts).
         "title": "Ein Geschäftsdossier"
       }
 
+.. container:: collapsible
+
+    .. container:: header
+
+       **Code-Beispiel (Python)**
+
+    .. literalinclude:: examples/example_get.py
+
 
 Inhalte erstellen (POST)
 ------------------------
@@ -142,6 +150,14 @@ mitgegeben werden.
 Im ``Location`` Header der Response ist die URL des neu erstellen Objekts zu
 finden.
 
+.. container:: collapsible
+
+    .. container:: header
+
+       **Code-Beispiel (Python)**
+
+    .. literalinclude:: examples/example_post.py
+
 
 Inhalte bearbeiten (PATCH)
 --------------------------
@@ -173,3 +189,10 @@ Um ein oder mehrere Attribute eines Objekts zu aktualisieren, wird ein
 
       null
 
+.. container:: collapsible
+
+    .. container:: header
+
+       **Code-Beispiel (Python)**
+
+    .. literalinclude:: examples/example_patch.py
