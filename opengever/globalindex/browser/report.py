@@ -97,7 +97,9 @@ class TaskReporter(grok.View):
 
         response = self.request.RESPONSE
 
-        response.setHeader('Content-Type', 'application/vnd.ms-excel')
-        set_attachment_content_disposition(self.request, "task_report.xls")
+        response.setHeader(
+            'Content-Type',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        set_attachment_content_disposition(self.request, "task_report.xlsx")
 
         return data
