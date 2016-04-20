@@ -109,6 +109,10 @@ class Disposition(Container):
         self.update_added_dossiers(new - old)
         self.update_dropped_dossiers(old - new)
 
+    def get_dossier_representations(self):
+        return [DossierRepresentation(rel.to_object, self)
+                for rel in self.dossiers]
+
     def update_added_dossiers(self, dossiers):
         for dossier in dossiers:
             api.content.transition(
