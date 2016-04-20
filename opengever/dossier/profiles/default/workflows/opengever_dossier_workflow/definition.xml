@@ -582,6 +582,7 @@
   <action url="" category="workflow" icon="">dossier-transition-offer</action>
   <guard>
    <guard-role>Editor</guard-role>
+   <guard-role>Manager</guard-role>
   </guard>
  </transition>
  <worklist worklist_id="reviewer_queue" title="">
