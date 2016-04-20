@@ -95,11 +95,11 @@ class ECH0160ExportView(BrowserView):
                 arcname = os.path.join(sip_folder_name, 'header', 'xsd', schema)
                 zipfile.write(filename, arcname)
 
-                checksum = file_checksum(filename)
+                checksum_alg, checksum = file_checksum(filename)
                 xsd.append(arelda.dateiSIP(
                     schema,
                     schema,
-                    u'MD5',
+                    checksum_alg,
                     checksum,
                     id=u'_xsd_{}'.format(os.path.splitext(schema)[0]),
                 ))
