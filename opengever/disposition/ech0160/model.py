@@ -275,6 +275,5 @@ class File(object):
         datei = arelda.dateiSIP(id=self.id)
         datei.name = self.name
         datei.originalName = self.filename
-        datei.pruefalgorithmus = u'MD5'
-        datei.pruefsumme = file_checksum(self.filepath)
+        datei.pruefalgorithmus, datei.pruefsumme = file_checksum(self.filepath)
         return datei
