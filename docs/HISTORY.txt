@@ -5,7 +5,8 @@ Changelog
 4.8.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Update trix to 0.9.6
+  [Kevin Bieri]
 
 
 4.8.0 (2016-05-02)
