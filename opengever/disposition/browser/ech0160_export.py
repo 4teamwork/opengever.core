@@ -5,6 +5,7 @@ from ZPublisher.Iterators import IStreamIterator
 from opengever.disposition.ech0160 import model
 from opengever.disposition.ech0160.bindings import arelda
 from opengever.disposition.ech0160.utils import file_checksum
+from opengever.ogds.base.utils import get_current_org_unit
 from pyxb.namespace import XMLSchema_instance as xsi
 from pyxb.utils.domutils import BindingDOMSupport
 from tempfile import TemporaryFile
@@ -45,7 +46,7 @@ class ECH0160ExportView(BrowserView):
 
         doc.ablieferung = arelda.ablieferungGeverSIP()
         doc.ablieferung.ablieferungstyp = u'GEVER'
-        doc.ablieferung.ablieferndeStelle = u'Amt f\xfcr Beispiele'
+        doc.ablieferung.ablieferndeStelle = get_current_org_unit().label()
         doc.ablieferung.provenienz = arelda.provenienzGeverSIP()
         doc.ablieferung.provenienz.aktenbildnerName = u'Grossrat des Kantons'
         doc.ablieferung.provenienz.registratur = u'Ratsinformationssystem'
