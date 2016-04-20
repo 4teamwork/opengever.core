@@ -5,6 +5,7 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from five import grok
 from opengever.base.behaviors.lifecycle import ILifeCycle
+from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.oguid import Oguid
 from opengever.contact.models import Participation
@@ -304,6 +305,9 @@ class DossierContainer(Container):
 
     def has_participation_support(self):
         return IParticipationAwareMarker.providedBy(self)
+
+    def get_reference_number(self):
+        return IReferenceNumber(self).get_number()
 
     def get_retention_expiration_date(self):
         if IDossier(self).end:
