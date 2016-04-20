@@ -3,7 +3,6 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import FunctionalTestCase
-from plone.app.testing import TEST_USER_ID
 
 
 class TestDossierContainer(FunctionalTestCase):
@@ -101,6 +100,17 @@ class TestDossierContainer(FunctionalTestCase):
         self.assertEquals(1, dossier_1.get_sequence_number())
         self.assertEquals(2, subdossier.get_sequence_number())
         self.assertEquals(3, dossier_2.get_sequence_number())
+
+    def test_reference_number(self):
+        root = create(Builder('repository_root'))
+        repo = create(Builder('repository').within(root))
+        dossier_1 = create(Builder("dossier").within(repo))
+        subdossier = create(Builder("dossier").within(dossier_1))
+        dossier_2 = create(Builder("dossier").within(repo))
+
+        self.assertEquals('Client1 1 / 1', dossier_1.get_reference_number())
+        self.assertEquals('Client1 1 / 1.1', subdossier.get_reference_number())
+        self.assertEquals('Client1 1 / 2', dossier_2.get_reference_number())
 
 
 class TestDossierChecks(FunctionalTestCase):
