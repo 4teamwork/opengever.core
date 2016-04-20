@@ -4,6 +4,7 @@ from opengever.base.behaviors.classification import IClassification
 from opengever.base.interfaces import IReferenceNumber
 from opengever.disposition.ech0160.bindings import arelda
 from opengever.disposition.ech0160.utils import file_checksum
+from opengever.disposition.ech0160.utils import voc_term_title
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.document import IDocumentSchema
 from opengever.dossier.behaviors.dossier import IDossier
@@ -193,7 +194,8 @@ class Document(object):
         if md.document_author:
             dokument.autor.append(md.document_author)
 
-        dokument.dokumenttyp = md.document_type
+        dokument.dokumenttyp = voc_term_title(
+            IDocumentMetadata['document_type'], md.document_type)
 
         dokument.registrierdatum = arelda.historischerZeitpunkt(
             self.obj.created().asdatetime().date())
