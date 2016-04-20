@@ -1,9 +1,10 @@
 from Acquisition import aq_parent
 from Products.CMFCore.utils import getToolByName
-from opengever.base.behaviors.classification import IClassification
+from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.base.interfaces import IReferenceNumber
 from opengever.disposition.ech0160.bindings import arelda
 from opengever.disposition.ech0160.utils import file_checksum
+from opengever.disposition.ech0160.utils import set_classification_attributes
 from opengever.disposition.ech0160.utils import voc_term_title
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.document import IDocumentSchema
@@ -47,8 +48,26 @@ class Repository(object):
         """Return XML binding"""
         os = arelda.ordnungssystemGeverSIP()
         os.name = self.obj.Title()
+
+        if self.obj.version:
+            os.generation = self.obj.version
+
+        if self.obj.valid_from or self.obj.valid_until:
+            os.anwendungszeitraum = arelda.historischerZeitraum()
+            if self.obj.valid_from:
+                os.anwendungszeitraum.von = arelda.historischerZeitpunkt(
+                    self.obj.valid_from)
+            else:
+                os.anwendungszeitraum.von = u'keine Angabe'
+            if self.obj.valid_until:
+                os.anwendungszeitraum.bis = arelda.historischerZeitpunkt(
+                    self.obj.valid_until)
+            else:
+                os.anwendungszeitraum.bis = u'keine Angabe'
+
         for pos in self.positions.values():
             os.ordnungssystemposition.append(pos.binding())
+
         return os
 
 
@@ -83,7 +102,12 @@ class Position(object):
         op = arelda.ordnungssystempositionGeverSIP(
             id=u'_{}'.format(self.obj.UID()))
         op.nummer = IReferenceNumber(self.obj).get_repository_number()
-        op.titel = self.obj.Title(prefix_with_reference_number=False).decode('utf8')
+        op.titel = self.obj.Title(
+            prefix_with_reference_number=False).decode('utf8')
+
+        set_classification_attributes(op, self.obj)
+
+        op.schutzfrist = unicode(ILifeCycle(self.obj).custody_period)
 
         for pos in self.positions.values():
             op.ordnungssystemposition.append(pos.binding())
@@ -128,7 +152,6 @@ class Dossier(object):
         dossier.titel = self.obj.Title().decode('utf8')
 
         dossier.entstehungszeitraum = arelda.historischerZeitraum()
-
         catalog = getToolByName(self.obj, 'portal_catalog')
         oldest_docs = catalog(
             portal_type=self.document_types,
@@ -153,6 +176,8 @@ class Dossier(object):
         else:
             dossier.entstehungszeitraum.bis = u'keine Angabe'
 
+        set_classification_attributes(dossier, self.obj)
+
         dossier.aktenzeichen = IReferenceNumber(self.obj).get_number()
 
         dossier_obj = IDossier(self.obj)
@@ -162,6 +187,8 @@ class Dossier(object):
         if dossier_obj.end:
             dossier.abschlussdatum = arelda.historischerZeitpunkt(
                 dossier_obj.end)
+
+        dossier.schutzfrist = unicode(ILifeCycle(self.obj).custody_period)
 
         for d in self.dossiers.values():
             dossier.dossier.append(d.binding())
@@ -182,17 +209,15 @@ class Document(object):
     def binding(self):
         dokument = arelda.dokumentGeverSIP(id=u'_{}'.format(self.obj.UID()))
         dokument.titel = self.obj.Title().decode('utf8')
-        if self.file_ref:
-            dokument.dateiRef.append(self.file_ref)
+
+        md = IDocumentMetadata(self.obj)
+        if md.document_author:
+            dokument.autor.append(md.document_author)
 
         if self.obj.digitally_available:
             dokument.erscheinungsform = u'digital'
         else:
             dokument.erscheinungsform = u'nicht digital'
-
-        md = IDocumentMetadata(self.obj)
-        if md.document_author:
-            dokument.autor.append(md.document_author)
 
         dokument.dokumenttyp = voc_term_title(
             IDocumentMetadata['document_type'], md.document_type)
@@ -200,11 +225,17 @@ class Document(object):
         dokument.registrierdatum = arelda.historischerZeitpunkt(
             self.obj.created().asdatetime().date())
 
-        classification = IClassification(self.obj)
-        dokument.klassifizierungskategorie = classification.classification
-        dokument.datenschutz = True if classification.privacy_layer == 'privacy_layer_yes' else False
-        dokument.oeffentlichkeitsstatus = classification.public_trial
-        dokument.oeffentlichkeitsstatusBegruendung = classification.public_trial_statement
+        dokument.entstehungszeitraum = arelda.historischerZeitraum()
+        dokument.entstehungszeitraum.von = arelda.historischerZeitpunkt(
+            self.obj.created().asdatetime().date())
+        dokument.entstehungszeitraum.bis = arelda.historischerZeitpunkt(
+            self.obj.modified().asdatetime().date())
+
+        set_classification_attributes(dokument, self.obj)
+
+        if self.file_ref:
+            dokument.dateiRef.append(self.file_ref)
+
         return dokument
 
 

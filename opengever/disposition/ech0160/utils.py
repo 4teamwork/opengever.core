@@ -1,5 +1,6 @@
 from zope.component import getUtility
 from zope.schema.interfaces import IVocabularyFactory
+from opengever.base.behaviors.classification import IClassification
 import hashlib
 
 
@@ -28,3 +29,15 @@ def voc_term_title(field, value):
         voc = factory(None)
         return voc.getTerm(value).title
     return value
+
+
+def set_classification_attributes(binding, obj):
+    classification = IClassification(obj)
+    binding.klassifizierungskategorie = voc_term_title(
+        IClassification['classification'], classification.classification)
+    binding.datenschutz = (True if classification.privacy_layer ==
+                           'privacy_layer_yes' else False)
+    binding.oeffentlichkeitsstatus = voc_term_title(
+        IClassification['public_trial'], classification.public_trial)
+    binding.oeffentlichkeitsstatusBegruendung = (
+        classification.public_trial_statement)
