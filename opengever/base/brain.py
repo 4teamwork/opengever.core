@@ -1,4 +1,5 @@
 from opengever.base.utils import get_preferred_language_code
+import Missing
 
 
 def useBrains(self, brains):
@@ -16,7 +17,7 @@ def useBrains(self, brains):
             code = get_preferred_language_code()
             title = getattr(self, 'title_%s' % code, None)
 
-            if title is None:
+            if title in (None, Missing.Value):
                 # non-translated content
                 title = super(TranslatedTitleBrain, self).Title
 
