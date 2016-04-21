@@ -1,0 +1,18 @@
+<tal:loop repeat="preview previews" define="previews view/previews">
+  <div class="imageContainer" tal:attributes="data-document-id preview/document_id">
+    <a class="colorboxLink previewitem" rel="entry"
+       tal:attributes="href string:${preview/overlay_url};
+                       id preview/uid">
+
+      <span tal:attributes="class string:file-mimetype ${preview/css_class}"></span>
+
+      <img tal:attributes="src preview/preview_image_url; alt preview/title"
+           width="200"
+           class="file-preview" />
+
+      <div class="bumblebeeTitle">
+          <span tal:content="preview/title" />
+      </div>
+    </a>
+  </div>
+</tal:loop>
