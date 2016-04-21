@@ -6,6 +6,7 @@
     i18n_domain="opengever.document">
 
 	<include package=".browser" />
+	<include package=".viewlets" />
 
   <grok:grok package="." />
 
