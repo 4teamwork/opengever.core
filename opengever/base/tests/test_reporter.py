@@ -10,21 +10,23 @@ from opengever.base.reporter import readable_author
 from opengever.base.reporter import StringTranslater
 from opengever.base.reporter import XLSReporter
 from opengever.testing import MEMORY_DB_LAYER
+from openpyxl import load_workbook
+from tempfile import NamedTemporaryFile
 from zope.i18n.tests.test_itranslationdomain import Environment
-import xlrd
 
 
 class TestReporter(MockTestCase):
 
     layer = MEMORY_DB_LAYER
 
-    def test_xlsreporter(self):
+    def setUp(self):
+        super(TestReporter, self).setUp()
+
         create(Builder('ogds_user').id('test_user_0'))
         create(Builder('ogds_user').id('test_user_1'))
 
-        request = self.mocker.mock()
-        brains = []
-
+        self.request = self.mocker.mock()
+        self.brains = []
         for i in range(2):
             brain = self.stub()
             self.expect(brain.Title).result('Objekt %i' % (i))
@@ -33,15 +35,14 @@ class TestReporter(MockTestCase):
                 datetime(2012, 2, 25) + timedelta(i))
             self.expect(brain.responsible).result('test_user_%i' % (i))
             self.expect(brain.review_state).result('dossier-state-active')
-            brains.append(brain)
+            self.brains.append(brain)
 
         self.replay()
 
         translation_request = Environment(('de', 'de'))
 
-        test_attributes = [
+        self.test_attributes = [
             {'id': 'Title', 'title': _('label_title', default='Title')},
-            #test missingvalue
             {'id': 'missing', 'missing': 'Missing', },
             {'id': 'start', 'title': _('label_start', default='Start'),
              'transform': format_datetime, 'style': get_date_style()},
@@ -54,27 +55,38 @@ class TestReporter(MockTestCase):
                  translation_request, 'plone').translate},
         ]
 
-        # generate the report.xls
-        reporter = XLSReporter(request, test_attributes, brains)
-        data = reporter()
-
-        # check the generate xls with the xlrd module
-        wb = xlrd.open_workbook(file_contents=data)
-        sheet = wb.sheets()[0]
-
-        labels = sheet.row(0)
+    def test_label_row_is_translated_attribute_titles(self):
+        reporter = XLSReporter(self.request, self.test_attributes, self.brains)
+        workbook = self.get_workbook(reporter())
         self.assertEquals(
-            [cell.value for cell in labels],
-            [u'Title', u'', u'Start', u'Responsible', u'Review state'])
+            [u'Title', None, u'Start', u'Responsible', u'Review state'],
+            [cell.value for cell in workbook.active.rows[0]])
 
-        row1 = sheet.row(1)
+    def test_value_rows(self):
+        reporter = XLSReporter(self.request, self.test_attributes, self.brains)
+        workbook = self.get_workbook(reporter())
         self.assertEquals(
-            [cell.value for cell in row1],
-            [u'Objekt 0', u'', u'25.02.2012', u'test_user_0 (test_user_0)',
-             u'dossier-state-active'])
+            [u'Objekt 0', None, u'25.02.2012', u'test_user_0 (test_user_0)',
+             u'dossier-state-active'],
+            [cell.value for cell in workbook.active.rows[1]])
 
-        row2 = sheet.row(2)
         self.assertEquals(
-            [cell.value for cell in row2],
-            [u'Objekt 1', u'', u'26.02.2012', u'test_user_1 (test_user_1)',
-             u'dossier-state-active'])
+            [u'Objekt 1', None, u'26.02.2012', u'test_user_1 (test_user_1)',
+             u'dossier-state-active'],
+            [cell.value for cell in workbook.active.rows[2]])
+
+    def test_set_sheet_title_for_active_workbook_sheet(self):
+        title = 'Aufgaben\xc3\xbcbersicht'.decode('utf-8')
+        reporter = XLSReporter(
+            None, [], [], sheet_title=title)
+
+        workbook = self.get_workbook(reporter())
+        self.assertEquals(title, workbook.active.title)
+
+    def get_workbook(self, data):
+        with NamedTemporaryFile(delete=False, suffix='.xlsx') as tmpfile:
+            tmpfile.write(data)
+            tmpfile.flush()
+            workbook = load_workbook(tmpfile.name)
+
+        return workbook

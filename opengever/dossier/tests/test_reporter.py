@@ -8,8 +8,9 @@ from opengever.dossier.filing.report import filing_no_filing
 from opengever.dossier.filing.report import filing_no_number
 from opengever.dossier.filing.report import filing_no_year
 from opengever.testing import FunctionalTestCase
+from openpyxl import load_workbook
 from plone.app.testing import TEST_USER_ID
-import xlrd
+from tempfile import NamedTemporaryFile
 
 
 class TestDossierReporterWithFilingNumberSupport(FunctionalTestCase):
@@ -36,8 +37,13 @@ class TestDossierReporterWithFilingNumberSupport(FunctionalTestCase):
                              data={'paths:list': [
                                    '/'.join(self.dossier.getPhysicalPath()),
                                    ]})
-        workbook = xlrd.open_workbook(file_contents=browser.contents)
-        sheet = workbook.sheets()[0]
+
+        data = browser.contents
+        with NamedTemporaryFile(delete=False, suffix='.xlsx') as tmpfile:
+            tmpfile.write(data)
+            tmpfile.flush()
+            workbook = load_workbook(tmpfile.name)
+
         self.assertSequenceEqual(
             [u'Export1 Dossier',
              u'01.01.2012',
@@ -49,7 +55,7 @@ class TestDossierReporterWithFilingNumberSupport(FunctionalTestCase):
              u'Client1-Leitung-2012-1',
              u'active',
              u'Client1 / 1'],
-            sheet.row_values(1))
+            [cell.value for cell in workbook.active.rows[1]])
 
 
 class TestDossierReporter(FunctionalTestCase):
@@ -79,8 +85,13 @@ class TestDossierReporter(FunctionalTestCase):
                                    '/'.join(self.dossier1.getPhysicalPath()),
                                    '/'.join(self.dossier2.getPhysicalPath())
                                    ]})
-        workbook = xlrd.open_workbook(file_contents=browser.contents)
-        sheet = workbook.sheets()[0]
+
+        data = browser.contents
+        with NamedTemporaryFile(delete=False, suffix='.xlsx') as tmpfile:
+            tmpfile.write(data)
+            tmpfile.flush()
+            workbook = load_workbook(tmpfile.name)
+
         self.assertSequenceEqual(
             [u'Export1 Dossier',
              u'01.01.2012',
@@ -88,7 +99,7 @@ class TestDossierReporter(FunctionalTestCase):
              u'Test User (test_user_1_)',
              u'active',
              u'Client1 / 1'],
-            sheet.row_values(1))
+            [cell.value for cell in workbook.active.rows[1]])
         self.assertSequenceEqual(
             [u'Foo Dossier',
              u'01.01.2012',
@@ -96,7 +107,7 @@ class TestDossierReporter(FunctionalTestCase):
              u'Test User (test_user_1_)',
              u'active',
              u'Client1 / 2'],
-            sheet.row_values(2))
+            [cell.value for cell in workbook.active.rows[2]])
 
     def test_filing_no_year(self):
         self.assertEquals(

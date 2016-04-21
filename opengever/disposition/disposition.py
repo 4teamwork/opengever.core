@@ -1,6 +1,11 @@
 from collective import dexteritytextindexer
+from opengever.base.behaviors.classification import IClassification
+from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.base.interfaces import ISequenceNumber
 from opengever.disposition import _
+from opengever.disposition.appraisal import IAppraisal
+from opengever.disposition.interfaces import IDisposition
+from opengever.dossier.behaviors.dossier import IDossier
 from plone import api
 from plone.dexterity.content import Container
 from plone.directives import form
@@ -9,11 +14,32 @@ from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
 from zope import schema
 from zope.component import getUtility
+from zope.interface import implements
 from zope.interface import Invalid
 from zope.interface import invariant
+from zope.intid.interfaces import IIntIds
 
 
-class IDisposition(form.Schema):
+class DossierRepresentation(object):
+    """A wrapper objects for dossiers.
+    To provide easy access for the dossier's data via the dispositions
+    relations list. See Disposition.get_dossier_representations.
+    """
+
+    def __init__(self, dossier, disposition):
+        self.title = dossier.title
+        self.intid = getUtility(IIntIds).getId(dossier)
+        self.url = dossier.absolute_url()
+        self.reference_number = dossier.get_reference_number()
+        self.start = IDossier(dossier).start
+        self.end = IDossier(dossier).end
+        self.public_trial = IClassification(dossier).public_trial
+        self.archival_value = ILifeCycle(dossier).archival_value
+        self.archival_value_annotation = ILifeCycle(dossier).archival_value_annotation
+        self.appraisal = IAppraisal(disposition).get(dossier)
+
+
+class IDispositionSchema(form.Schema):
 
     dexteritytextindexer.searchable('reference')
     reference = schema.TextLine(
@@ -51,8 +77,13 @@ class IDisposition(form.Schema):
 
 
 class Disposition(Container):
+    implements(IDisposition)
 
     _dossiers = []
+
+    def __init__(self, *args, **kwargs):
+        super(Disposition, self).__init__(*args, **kwargs)
+        self.appraisal = {}
 
     @property
     def title(self):
@@ -66,7 +97,7 @@ class Disposition(Container):
     @property
     def dossiers(self):
         return self._dossiers
-        return IDisposition.get('dossiers').get(self)
+        return IDispositionSchema.get('dossiers').get(self)
 
     @dossiers.setter
     def dossiers(self, value):
@@ -78,15 +109,23 @@ class Disposition(Container):
         self.update_added_dossiers(new - old)
         self.update_dropped_dossiers(old - new)
 
+    def get_dossier_representations(self):
+        return [DossierRepresentation(rel.to_object, self)
+                for rel in self.dossiers]
+
     def update_added_dossiers(self, dossiers):
         for dossier in dossiers:
             api.content.transition(
                 obj=dossier, transition='dossier-transition-offer')
 
+            IAppraisal(self).initialize(dossier)
+
     def update_dropped_dossiers(self, dossiers):
         for dossier in dossiers:
             api.content.transition(
                 obj=dossier, to_state=self.get_former_state(dossier))
+
+            IAppraisal(self).drop(dossier)
 
     def get_former_state(self, dossier):
         workflow = api.portal.get_tool('portal_workflow')
