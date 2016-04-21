@@ -1,5 +1,6 @@
 from five import grok
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_UNWORTHY
+from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_WORTHY
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.disposition.interfaces import IAppraisal
 from opengever.disposition.interfaces import IDisposition
@@ -53,3 +54,10 @@ class Appraisal(grok.Adapter):
     def drop(self, dossier):
         intid = getUtility(IIntIds).getId(dossier)
         self.storage.pop(intid)
+
+    def write_to_dossier(self, dossier):
+        if self.get(dossier):
+            ILifeCycle(dossier).archival_value = ARCHIVAL_VALUE_WORTHY
+
+        else:
+            ILifeCycle(dossier).archival_value = ARCHIVAL_VALUE_UNWORTHY
