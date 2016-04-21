@@ -127,6 +127,13 @@ class Disposition(Container):
 
             IAppraisal(self).drop(dossier)
 
+    def finalize_appraisal(self):
+        """Write back the appraisal value to the dossiers.
+        """
+        appraisal = IAppraisal(self)
+        for relation in self.dossiers:
+            appraisal.write_to_dossier(relation.to_object)
+
     def get_former_state(self, dossier):
         workflow = api.portal.get_tool('portal_workflow')
         workflow_id = workflow.getWorkflowsFor(dossier)[0].getId()
