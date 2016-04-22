@@ -1,4 +1,4 @@
-<div id="disposition_overview">
+<div id="disposition_overview" i18n:domain="opengever.disposition">
 
   <ul class="list-group">
     <li tal:repeat="dossier view/get_dossiers"
@@ -40,14 +40,16 @@
           <a href="#"
              class="button"
              tal:attributes="class python: dossier.appraisal and 'button active' or 'button';
-                             data-url python: view.get_update_appraisal_url(dossier, True);">
+                             data-url python: view.get_update_appraisal_url(dossier, True);"
+             i18n:translate="">
             Archive
           </a>
 
           <a href="#"
              class="button"
              tal:attributes="class python: dossier.appraisal and 'button' or 'button active';
-                             data-url python: view.get_update_appraisal_url(dossier, False);">
+                             data-url python: view.get_update_appraisal_url(dossier, False);"
+             i18n:translate="">
             Don't archive
           </a>
 
