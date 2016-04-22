@@ -1,0 +1,21 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="opengever.core">
+
+  <browser:page
+      name="ech0147_export"
+      for="*"
+      class=".export.ECH0147ExportForm"
+      allowed_attributes="available"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="ech0147_import"
+      for="*"
+      class=".import.ECH0147ImportForm"
+      permission="zope2.View"
+      />
+
+</configure>
