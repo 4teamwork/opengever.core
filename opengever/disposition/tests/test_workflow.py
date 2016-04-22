@@ -47,3 +47,19 @@ class TestDispositionWorkflow(FunctionalTestCase):
             ARCHIVAL_VALUE_UNWORTHY, ILifeCycle(self.dossier1).archival_value)
         self.assertEquals(
             ARCHIVAL_VALUE_WORTHY, ILifeCycle(self.dossier2).archival_value)
+
+    def test_when_archiving_all_dossiers_moved_to_archived_set_to_archive_state(self):
+        IAppraisal(self.disposition).update(dossier=self.dossier1, archive=True)
+        IAppraisal(self.disposition).update(dossier=self.dossier2, archive=True)
+        api.content.transition(
+            self.disposition, transition='disposition-transition-appraise')
+        api.content.transition(
+            self.disposition, transition='disposition-transition-dispose')
+
+        api.content.transition(
+            self.disposition, transition='disposition-transition-archive')
+
+        self.assertEquals(
+            'dossier-state-archived', api.content.get_state(self.dossier1))
+        self.assertEquals(
+            'dossier-state-archived', api.content.get_state(self.dossier2))
