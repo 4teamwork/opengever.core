@@ -134,6 +134,11 @@ class Disposition(Container):
         for relation in self.dossiers:
             appraisal.write_to_dossier(relation.to_object)
 
+    def mark_dossiers_as_archived(self):
+        for relation in self.dossiers:
+            api.content.transition(
+                obj=relation.to_object, transition='dossier-transition-archive')
+
     def get_former_state(self, dossier):
         workflow = api.portal.get_tool('portal_workflow')
         workflow_id = workflow.getWorkflowsFor(dossier)[0].getId()
