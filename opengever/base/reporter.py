@@ -1,15 +1,10 @@
 from Missing import Value as MissingValue
 from opengever.ogds.base.actor import Actor
+from openpyxl import Workbook
+from openpyxl.styles import Font
+from openpyxl.styles import Style
 from StringIO import StringIO
-from xlwt import Workbook, XFStyle
 from zope.i18n import translate
-
-
-def format_datetime(date):
-    """helper method for formatting a dattime in to string"""
-    if date:
-        return date.strftime('%d.%m.%Y')
-    return None
 
 
 def readable_author(author):
@@ -35,12 +30,10 @@ class StringTranslater(object):
         return None
 
 
-def get_date_style(format='D.M.YY'):
+def get_date_style(format='DD.MM.YYYY'):
     """ Set up a date format style to use in the spreadsheet and return it."""
-    excel_date_fmt = format
-    style = XFStyle()
-    style.num_format_str = excel_date_fmt
-    return style
+
+    return Style(number_format=format)
 
 
 class XLSReporter(object):
@@ -63,41 +56,43 @@ class XLSReporter(object):
         self.portrait_format = portrait_format
 
     def __call__(self):
-        """Generates the xls data for the given objects.
-        """
+        workbook = self.prepare_workbook()
+        # save the Workbook-data in to a StringIO
+        data = StringIO()
+        workbook.save(data)
+        data.seek(0)
+        return data.read()
 
-        w = Workbook()
-        sheet = w.add_sheet(self.sheet_title)
-        sheet.portrait = self.portrait_format
-        sheet.set_footer_str(self.footer)
+    def prepare_workbook(self):
+        workbook = Workbook()
+        sheet = workbook.active
+        sheet.title = self.sheet_title
+        sheet.header_footer.center_footer.text = self.footer
 
-        title_style = XFStyle()
-        title_style.font.bold = True
+        self.insert_label_row(sheet)
+        self.insert_value_rows(sheet)
 
-        #create labels row
-        for i, attr in enumerate(self.attributes):
-            sheet.write(0, i,
-                        translate(attr.get('title', ''), context=self.request),
-                        title_style)
+        return workbook
 
-        for r, dossier in enumerate(self.results):
-            for c, attr in enumerate(self.attributes):
+    def insert_label_row(self, sheet):
+        title_font = Font(bold=True)
+        for i, attr in enumerate(self.attributes, 1):
+            cell = sheet.cell(row=1, column=i)
+            cell.value = translate(attr.get('title', ''), context=self.request)
+            cell.font = title_font
+
+    def insert_value_rows(self, sheet):
+        for row, dossier in enumerate(self.results, 2):
+            for column, attr in enumerate(self.attributes, 1):
+                cell = sheet.cell(row=row, column=column)
 
                 value = getattr(dossier, attr.get('id'))
-
-                # transform the value when a transform is given
                 if attr.get('transform'):
                     value = attr.get('transform')(value)
                 if value == MissingValue:
                     value = ''
-                # set a XFStyle, when one is given
-                if attr.get('style'):
-                    sheet.write(r + 1, c, value, attr.get('style'))
-                else:
-                    sheet.write(r + 1, c, value)
 
-        # save the Workbook-data in to a StringIO
-        data = StringIO()
-        w.save(data)
-        data.seek(0)
-        return data.read()
+                cell.value = value
+
+                if attr.get('style'):
+                    cell.style = attr.get('style')

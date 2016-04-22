@@ -1,11 +1,11 @@
+from five import grok
+from opengever.base.behaviors.utils import set_attachment_content_disposition
+from opengever.base.reporter import get_date_style
+from opengever.base.reporter import readable_author
+from opengever.base.reporter import StringTranslater, XLSReporter
+from opengever.dossier import _
 from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
-from five import grok
-from opengever.base.reporter import StringTranslater, XLSReporter
-from opengever.base.reporter import format_datetime, get_date_style
-from opengever.base.reporter import readable_author
-from opengever.base.behaviors.utils import set_attachment_content_disposition
-from opengever.dossier import _
 from zope.interface import Interface
 
 
@@ -29,25 +29,23 @@ class DossierReporter(grok.View):
 
     def get_dossier_attributes(self):
         return [
-            {'id':'Title',
-             'title':_('label_title', default=u'title'),
-             'transform':to_unicode},
-            {'id':'start',
-             'title':_(u'label_start', default=u'Opening Date'),
-             'transform':format_datetime,
-             'style':get_date_style()},
-            {'id':'end',
-             'title':_(u'label_end', default=u'Closing Date'),
-             'transform':format_datetime,
-             'style':get_date_style()},
-            {'id':'responsible',
-             'title':_(u'label_responsible', default='Responsible'),
-             'transform':readable_author},
-            {'id':'review_state',
-             'title':_('label_review_state', default='Review state'),
-             'transform':StringTranslater(self.request, 'plone').translate},
-            {'id':'reference',
-             'title':_(u'label_reference_number',
+            {'id': 'Title',
+             'title': _('label_title', default=u'title'),
+             'transform': to_unicode},
+            {'id': 'start',
+             'title': _(u'label_start', default=u'Opening Date'),
+             'style': get_date_style()},
+            {'id': 'end',
+             'title': _(u'label_end', default=u'Closing Date'),
+             'style': get_date_style()},
+            {'id': 'responsible',
+             'title': _(u'label_responsible', default='Responsible'),
+             'transform': readable_author},
+            {'id': 'review_state',
+             'title': _('label_review_state', default='Review state'),
+             'transform': StringTranslater(self.request, 'plone').translate},
+            {'id': 'reference',
+             'title': _(u'label_reference_number',
                        default=u'Reference Number')},
         ]
 
@@ -88,7 +86,9 @@ class DossierReporter(grok.View):
 
         response = self.request.RESPONSE
 
-        response.setHeader('Content-Type', 'application/vnd.ms-excel')
-        set_attachment_content_disposition(self.request, "dossier_report.xls")
+        response.setHeader(
+            'Content-Type',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        set_attachment_content_disposition(self.request, "dossier_report.xlsx")
 
         return data

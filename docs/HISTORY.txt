@@ -5,6 +5,10 @@ Changelog
 4.7.5 (unreleased)
 ------------------
 
+- Reworked XLSReporter using the openpyxl library instead of xlwt, to support
+  xlsx creation.
+  [phgross]
+
 -  TranslatedTitleBrain: Also use Missing.Value as indicator that a brain
    has no translated title, and should therefore return the regular title.
    [lgraf]

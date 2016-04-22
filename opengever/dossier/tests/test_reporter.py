@@ -1,4 +1,5 @@
-from DateTime import DateTime
+from datetime import datetime
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -8,8 +9,9 @@ from opengever.dossier.filing.report import filing_no_filing
 from opengever.dossier.filing.report import filing_no_number
 from opengever.dossier.filing.report import filing_no_year
 from opengever.testing import FunctionalTestCase
+from openpyxl import load_workbook
 from plone.app.testing import TEST_USER_ID
-import xlrd
+from tempfile import NamedTemporaryFile
 
 
 class TestDossierReporterWithFilingNumberSupport(FunctionalTestCase):
@@ -20,8 +22,8 @@ class TestDossierReporterWithFilingNumberSupport(FunctionalTestCase):
 
         self.dossier = create(Builder('dossier')
                               .titled(u'Export1 Dossier')
-                              .having(start=DateTime(2012, 1, 1),
-                                      end=DateTime(2012, 12, 1),
+                              .having(start=date(2012, 1, 1),
+                                      end=date(2012, 12, 1),
                                       responsible=TEST_USER_ID,
                                       filing_no='Client1-Leitung-2012-1')
                               .in_state('active'))
@@ -36,12 +38,17 @@ class TestDossierReporterWithFilingNumberSupport(FunctionalTestCase):
                              data={'paths:list': [
                                    '/'.join(self.dossier.getPhysicalPath()),
                                    ]})
-        workbook = xlrd.open_workbook(file_contents=browser.contents)
-        sheet = workbook.sheets()[0]
+
+        data = browser.contents
+        with NamedTemporaryFile(delete=False, suffix='.xlsx') as tmpfile:
+            tmpfile.write(data)
+            tmpfile.flush()
+            workbook = load_workbook(tmpfile.name)
+
         self.assertSequenceEqual(
             [u'Export1 Dossier',
-             u'01.01.2012',
-             u'01.12.2012',
+             datetime(2012, 1, 1),
+             datetime(2012, 12, 1),
              u'Test User (test_user_1_)',
              u'Leitung',
              2012.0,
@@ -49,7 +56,7 @@ class TestDossierReporterWithFilingNumberSupport(FunctionalTestCase):
              u'Client1-Leitung-2012-1',
              u'active',
              u'Client1 / 1'],
-            sheet.row_values(1))
+            [cell.value for cell in workbook.active.rows[1]])
 
 
 class TestDossierReporter(FunctionalTestCase):
@@ -59,15 +66,15 @@ class TestDossierReporter(FunctionalTestCase):
 
         self.dossier1 = create(Builder('dossier')
                                .titled(u'Export1 Dossier')
-                               .having(start=DateTime(2012, 1, 1),
-                                       end=DateTime(2012, 12, 1),
+                               .having(start=date(2012, 1, 1),
+                                       end=date(2012, 12, 1),
                                        responsible=TEST_USER_ID)
                                .in_state('active'))
 
         self.dossier2 = create(Builder('dossier')
                                .titled(u'Foo Dossier')
-                               .having(start=DateTime(2012, 1, 1),
-                                       end=DateTime(2012, 12, 1),
+                               .having(start=date(2012, 1, 1),
+                                       end=date(2012, 12, 1),
                                        responsible=TEST_USER_ID)
                                .in_state('active'))
 
@@ -79,24 +86,29 @@ class TestDossierReporter(FunctionalTestCase):
                                    '/'.join(self.dossier1.getPhysicalPath()),
                                    '/'.join(self.dossier2.getPhysicalPath())
                                    ]})
-        workbook = xlrd.open_workbook(file_contents=browser.contents)
-        sheet = workbook.sheets()[0]
+
+        data = browser.contents
+        with NamedTemporaryFile(delete=False, suffix='.xlsx') as tmpfile:
+            tmpfile.write(data)
+            tmpfile.flush()
+            workbook = load_workbook(tmpfile.name)
+
         self.assertSequenceEqual(
             [u'Export1 Dossier',
-             u'01.01.2012',
-             u'01.12.2012',
+             datetime(2012, 1, 1),
+             datetime(2012, 12, 1),
              u'Test User (test_user_1_)',
              u'active',
              u'Client1 / 1'],
-            sheet.row_values(1))
+            [cell.value for cell in workbook.active.rows[1]])
         self.assertSequenceEqual(
             [u'Foo Dossier',
-             u'01.01.2012',
-             u'01.12.2012',
+             datetime(2012, 1, 1),
+             datetime(2012, 12, 1),
              u'Test User (test_user_1_)',
              u'active',
              u'Client1 / 2'],
-            sheet.row_values(2))
+            [cell.value for cell in workbook.active.rows[2]])
 
     def test_filing_no_year(self):
         self.assertEquals(

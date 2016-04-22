@@ -1,7 +1,6 @@
 from datetime import datetime
 from five import grok
 from opengever.base.behaviors.utils import set_attachment_content_disposition
-from opengever.base.reporter import format_datetime
 from opengever.base.reporter import get_date_style
 from opengever.base.reporter import readable_author
 from opengever.base.reporter import StringTranslater
@@ -58,23 +57,23 @@ class TaskReporter(grok.View):
                     self.context.absolute_url())
 
         task_attributes = [
-            {'id':'title', 'title':_('label_task_title')},
-            {'id':'review_state', 'title':_('review_state'),
-             'transform':StringTranslater(
-                self.context.REQUEST, 'plone').translate},
-            {'id':'deadline', 'title':_('label_deadline'),
-             'transform':format_datetime, 'style':get_date_style()},
-            {'id':'completed', 'title':_('label_completed'),
-             'transform':format_datetime, 'style':get_date_style()},
-            {'id': 'containing_dossier', 'title':_('label_dossier_title')},
-            {'id':'issuer', 'title':_('label_issuer'),
-             'transform':readable_author},
-            {'id':'responsible', 'title':_('label_responsible'),
-             'transform':readable_author},
-            {'id':'task_type', 'title':_('label_task_type'),
-             'transform':task_type_helper},
-            {'id':'admin_unit_id', 'title':_('label_admin_unit_id')},
-            {'id':'sequence_number', 'title':_('label_sequence_number')},
+            {'id': 'title', 'title': _('label_task_title')},
+            {'id': 'review_state', 'title': _('review_state'),
+             'transform': StringTranslater(
+                 self.context.REQUEST, 'plone').translate},
+            {'id': 'deadline', 'title': _('label_deadline'),
+             'style': get_date_style()},
+            {'id': 'completed', 'title': _('label_completed'),
+             'style': get_date_style()},
+            {'id': 'containing_dossier', 'title': _('label_dossier_title')},
+            {'id': 'issuer', 'title': _('label_issuer'),
+             'transform': readable_author},
+            {'id': 'responsible', 'title': _('label_responsible'),
+             'transform': readable_author},
+            {'id': 'task_type', 'title': _('label_task_type'),
+             'transform': task_type_helper},
+            {'id': 'admin_unit_id', 'title': _('label_admin_unit_id')},
+            {'id': 'sequence_number', 'title': _('label_sequence_number')},
         ]
 
         reporter = XLSReporter(
@@ -97,7 +96,9 @@ class TaskReporter(grok.View):
 
         response = self.request.RESPONSE
 
-        response.setHeader('Content-Type', 'application/vnd.ms-excel')
-        set_attachment_content_disposition(self.request, "task_report.xls")
+        response.setHeader(
+            'Content-Type',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        set_attachment_content_disposition(self.request, "task_report.xlsx")
 
         return data
