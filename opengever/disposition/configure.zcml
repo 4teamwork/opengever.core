@@ -3,7 +3,10 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:plone="http://namespaces.plone.org/plone"
     xmlns:grok="http://namespaces.zope.org/grok"
-    i18n_domain="opengever.document">
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="opengever.disposition">
+
+  <i18n:registerTranslations directory="locales" />
 
 	<include package=".browser" />
 	<include package=".viewlets" />
