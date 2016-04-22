@@ -57,6 +57,22 @@
       </div>
 
      </li>
-   </ul>
+  </ul>
+</div>
 
+<div class="actionButtons">
+  <ul class="transitions">
+    <li tal:repeat="transition view/get_transitions" >
+      <a tal:condition="transition/url"
+         tal:attributes="href transition/url;
+                         title transition/title;
+                         id transition/id | nothing;
+                         class string: ${transition/id} button"
+         i18n:attributes="title">
+        <span tal:content="transition/title" class="transition actionText"
+              i18n:translate="" i18n:domain="plone">
+        </span>
+      </a>
+    </li>
+  </ul>
 </div>

@@ -30,3 +30,8 @@ class DispositionOverview(grok.View, OpengeverTab):
             self.context.absolute_url(), dossier.intid, json.dumps(should_be_archived))
 
         return addTokenToUrl(url)
+
+    def get_transitions(self):
+        wftool = api.portal.get_tool(name='portal_workflow')
+        infos = wftool.listActionInfos(object=self.context, check_condition=False)
+        return infos
