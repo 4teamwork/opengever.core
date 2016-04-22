@@ -3,6 +3,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.testing import FunctionalTestCase
+from plone import api
 
 
 class TestDispositionOverview(FunctionalTestCase):
@@ -88,3 +89,18 @@ class TestDispositionOverview(FunctionalTestCase):
         self.assertEquals(
             "Don't archive",
             browser.css('.appraisal-button-group .active')[0].text)
+
+    @browsing
+    def test_lists_possible_transitions_in_actionmenu_as_buttons(self, browser):
+        self.grant('Records Manager')
+        browser.login().open(self.disposition, view='tabbedview_view-overview')
+
+        self.assertEquals(['disposition-transition-appraise'],
+                          browser.css('.transitions li').text)
+        browser.css('.transitions li a').first.click()
+        self.assertEquals('disposition-state-appraised',
+                          api.content.get_state(self.disposition))
+
+        browser.login().open(self.disposition, view='tabbedview_view-overview')
+        self.assertEquals(['disposition-transition-dispose'],
+                          browser.css('.transitions li').text)

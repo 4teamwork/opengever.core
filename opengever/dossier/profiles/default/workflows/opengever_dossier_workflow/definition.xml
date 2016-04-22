@@ -459,6 +459,7 @@
  <state state_id="dossier-state-offered" title="dossier-state-offered">
   <exit-transition transition_id="dossier-transition-resolve"/>
   <exit-transition transition_id="dossier-transition-deactivate"/>
+  <exit-transition transition_id="dossier-transition-archive"/>
   <permission-map name="opengever.meeting: Add Proposal" acquired="False">
   </permission-map>
   <permission-map name="Access contents information" acquired="False">
@@ -582,6 +583,13 @@
   <action url="" category="workflow" icon="">dossier-transition-offer</action>
   <guard>
    <guard-role>Editor</guard-role>
+   <guard-role>Manager</guard-role>
+  </guard>
+ </transition>
+ <transition transition_id="dossier-transition-archive" title="Archive dossier" new_state="dossier-state-archived" trigger="USER" before_script="" after_script="">
+  <action url="" category="workflow" icon="">dossier-transition-archive</action>
+  <guard>
+   <guard-role>Records Manager</guard-role>
    <guard-role>Manager</guard-role>
   </guard>
  </transition>

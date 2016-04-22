@@ -26,7 +26,8 @@ class TestAppraisal(FunctionalTestCase):
                                .as_expired()
                                .within(self.repository))
 
-        self.grant('Contributor', 'Editor', 'Reader', 'Reviewer')
+        self.grant(
+            'Contributor', 'Editor', 'Reader', 'Reviewer', 'Records Manager')
 
     def test__added_dossiers(self):
         disposition = create(Builder('disposition')

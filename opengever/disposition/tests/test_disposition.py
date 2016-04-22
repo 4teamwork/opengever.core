@@ -28,6 +28,9 @@ class TestDisposition(FunctionalTestCase):
                                .as_expired()
                                .within(self.repository))
 
+        self.grant(
+            'Contributor', 'Editor', 'Reader', 'Reviewer', 'Records Manager')
+
     def test_id_is_sequence_number_prefixed_with_disposition(self):
         disposition_1 = create(Builder('disposition'))
         disposition_2 = create(Builder('disposition'))
@@ -111,7 +114,7 @@ class TestDispositionEditForm(FunctionalTestCase):
                                .as_expired()
                                .within(self.repository))
 
-        self.grant('Contributor', 'Editor', 'Reader', 'Reviewer')
+        self.grant('Contributor', 'Editor', 'Reader', 'Reviewer', 'Records Manager')
 
     @browsing
     def test_set_added_dossiers_to_offered_state(self, browser):

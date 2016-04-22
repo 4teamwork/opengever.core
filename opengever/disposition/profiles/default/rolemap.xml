@@ -1,11 +1,13 @@
 <?xml version="1.0"?>
 
 <rolemap>
+  <roles>
+    <role name="Records Manager" />
+  </roles>
   <permissions>
     <permission name="opengever.disposition: Add disposition" acquire="True">
       <role name="Manager"/>
-      <role name="Contributor"/>
-      <role name="Administrator"/>
+      <role name="Records Manager"/>
     </permission>
   </permissions>
 </rolemap>
