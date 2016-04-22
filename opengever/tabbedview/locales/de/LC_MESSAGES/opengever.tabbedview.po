@@ -14,7 +14,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./opengever/tabbedview/browser/tabs.py:167
+#: ./opengever/tabbedview/browser/tabs.py:153
 #: ./opengever/tabbedview/browser/tasklisting.py:67
 msgid "Active"
 msgstr "Aktiv"
@@ -54,7 +54,7 @@ msgstr "Akteur"
 msgid "additional_contact"
 msgstr "Zusätzliches"
 
-#: ./opengever/tabbedview/browser/tabs.py:164
+#: ./opengever/tabbedview/browser/tabs.py:150
 #: ./opengever/tabbedview/browser/tasklisting.py:66
 msgid "all"
 msgstr "Alle"
@@ -191,7 +191,7 @@ msgid "document_date"
 msgstr "Dokumentdatum"
 
 #. Default: "Sequence Number"
-#: ./opengever/tabbedview/browser/tabs.py:82
+#: ./opengever/tabbedview/browser/tabs.py:80
 msgid "document_sequence_number"
 msgstr "Laufnummer"
 
@@ -228,6 +228,10 @@ msgstr "Ende"
 msgid "events"
 msgstr "Termine"
 
+#: ./opengever/tabbedview/browser/tabs.py:158
+msgid "expired"
+msgstr "Abgelaufen"
+
 msgid "important_contact"
 msgstr "Allgemein"
 
@@ -247,12 +251,12 @@ msgid "label_active"
 msgstr "Aktiv"
 
 #. Default: "Checked out by"
-#: ./opengever/tabbedview/browser/tabs.py:109
+#: ./opengever/tabbedview/browser/tabs.py:107
 msgid "label_checked_out"
 msgstr "In Bearbeitung"
 
 #. Default: "Delivery Date"
-#: ./opengever/tabbedview/browser/tabs.py:105
+#: ./opengever/tabbedview/browser/tabs.py:103
 msgid "label_delivery_date"
 msgstr "Ausgangsdatum"
 
@@ -267,22 +271,22 @@ msgid "label_directorate_user"
 msgstr "Direktion"
 
 #. Default: "Document Author"
-#: ./opengever/tabbedview/browser/tabs.py:92
+#: ./opengever/tabbedview/browser/tabs.py:90
 msgid "label_document_author"
 msgstr "Autor"
 
 #. Default: "Document Date"
-#: ./opengever/tabbedview/browser/tabs.py:97
+#: ./opengever/tabbedview/browser/tabs.py:95
 msgid "label_document_date"
 msgstr "Dokumentdatum"
 
 #. Default: "Responsible"
-#: ./opengever/tabbedview/browser/tabs.py:195
+#: ./opengever/tabbedview/browser/tabs.py:187
 msgid "label_dossier_responsible"
 msgstr "Federführung"
 
 #. Default: "End"
-#: ./opengever/tabbedview/browser/tabs.py:204
+#: ./opengever/tabbedview/browser/tabs.py:196
 msgid "label_end"
 msgstr "Ende"
 
@@ -292,7 +296,7 @@ msgid "label_issuer"
 msgstr "Auftraggeber"
 
 #. Default: "My notifications"
-#: ./opengever/tabbedview/browser/personal_overview.py:109
+#: ./opengever/tabbedview/browser/personal_overview.py:108
 msgid "label_my_notifications"
 msgstr "Meine Benachrichtigungen"
 
@@ -302,17 +306,17 @@ msgid "label_no_contents"
 msgstr "Keine Inhalte"
 
 #. Default: "Public Trial"
-#: ./opengever/tabbedview/browser/tabs.py:117
+#: ./opengever/tabbedview/browser/tabs.py:115
 msgid "label_public_trial"
 msgstr "Öffentlichkeitsstatus"
 
 #. Default: "Receipt Date"
-#: ./opengever/tabbedview/browser/tabs.py:101
+#: ./opengever/tabbedview/browser/tabs.py:99
 msgid "label_receipt_date"
 msgstr "Eingangsdatum"
 
 #. Default: "Reference Number"
-#: ./opengever/tabbedview/browser/tabs.py:183
+#: ./opengever/tabbedview/browser/tabs.py:175
 msgid "label_reference"
 msgstr "Aktenzeichen"
 
@@ -322,22 +326,22 @@ msgid "label_responsible_task"
 msgstr "Auftragnehmer"
 
 #. Default: "Review state"
-#: ./opengever/tabbedview/browser/tabs.py:191
+#: ./opengever/tabbedview/browser/tabs.py:183
 msgid "label_review_state"
 msgstr "Status"
 
 #. Default: "Start"
-#: ./opengever/tabbedview/browser/tabs.py:200
+#: ./opengever/tabbedview/browser/tabs.py:192
 msgid "label_start"
 msgstr "Beginn"
 
 #. Default: "Subdossier"
-#: ./opengever/tabbedview/browser/tabs.py:113
+#: ./opengever/tabbedview/browser/tabs.py:111
 msgid "label_subdossier"
 msgstr "Subdossier"
 
 #. Default: "Title"
-#: ./opengever/tabbedview/browser/tabs.py:87
+#: ./opengever/tabbedview/browser/tabs.py:85
 msgid "label_title"
 msgstr "Titel"
 
@@ -388,7 +392,7 @@ msgid "participants"
 msgstr "Beteiligte"
 
 #. Default: "Personal Overview: ${user_name}"
-#: ./opengever/tabbedview/browser/personal_overview.py:90
+#: ./opengever/tabbedview/browser/personal_overview.py:89
 msgid "personal_overview_title"
 msgstr "Persönliche Übersicht: ${user_name}"
 
@@ -460,4 +464,3 @@ msgstr "Titel"
 
 msgid "trash"
 msgstr "Papierkorb"
-
