@@ -126,6 +126,33 @@ msgstr "Télécharger"
 msgid "date (newest first)"
 msgstr "Changement de date (descendant)"
 
+msgid "disposition-state-appraised"
+msgstr ""
+
+msgid "disposition-state-archived"
+msgstr ""
+
+msgid "disposition-state-closed"
+msgstr ""
+
+msgid "disposition-state-disposed"
+msgstr ""
+
+msgid "disposition-state-in-progress"
+msgstr ""
+
+msgid "disposition-transition-appraise"
+msgstr ""
+
+msgid "disposition-transition-archive"
+msgstr ""
+
+msgid "disposition-transition-close"
+msgstr ""
+
+msgid "disposition-transition-dispose"
+msgstr ""
+
 msgid "document-state-draft"
 msgstr "Non défini"
 
@@ -158,6 +185,9 @@ msgstr "Archivé"
 
 msgid "dossier-state-inactive"
 msgstr "Annulé"
+
+msgid "dossier-state-offered"
+msgstr ""
 
 msgid "dossier-state-resolved"
 msgstr "Fermé"
