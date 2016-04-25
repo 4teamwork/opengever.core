@@ -74,6 +74,9 @@ msgstr "Gremien"
 msgid "contacts"
 msgstr "Kontakte"
 
+msgid "dispositions"
+msgstr "Angebote"
+
 msgid "documents"
 msgstr "Dokumente"
 

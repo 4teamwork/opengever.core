@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-04-22 09:05+0000\n"
+"POT-Creation-Date: 2016-04-25 14:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.disposition\n"
 
-#: ./opengever/disposition/browser/overview_templates/overview.pt:40
+#: ./opengever/disposition/browser/overview_templates/overview.pt:41
 msgid "Archive"
 msgstr ""
 
@@ -30,16 +30,17 @@ msgstr ""
 msgid "Disposition"
 msgstr ""
 
-#: ./opengever/disposition/browser/overview_templates/overview.pt:48
+#: ./opengever/disposition/browser/overview_templates/overview.pt:49
 msgid "Don't archive"
-msgstr ""
-
-#: ./opengever/disposition/profiles/default/actions.xml
-msgid "Export appraisal list"
 msgstr ""
 
 #: ./opengever/disposition/browser/excel_export.py:58
 msgid "The report could not been generated."
+msgstr ""
+
+#. Default: "Sequence Number"
+#: ./opengever/disposition/browser/listing.py:24
+msgid "document_sequence_number"
 msgstr ""
 
 #. Default: "The retention period of the selected dossiers is not expired."
@@ -56,9 +57,24 @@ msgstr ""
 msgid "label_dossiers"
 msgstr ""
 
+#. Default: "Export appraisal list"
+#: ./opengever/disposition/browser/overview.py:43
+msgid "label_export_appraisal_list"
+msgstr ""
+
 #. Default: "Reference"
 #: ./opengever/disposition/disposition.py:46
 msgid "label_reference"
+msgstr ""
+
+#. Default: "SIP download"
+#: ./opengever/disposition/browser/overview.py:49
+msgid "label_sip_download"
+msgstr ""
+
+#. Default: "Title"
+#: ./opengever/disposition/browser/listing.py:29
+msgid "label_title"
 msgstr ""
 
 #. Default: "Period"
