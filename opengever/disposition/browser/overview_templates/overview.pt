@@ -75,4 +75,18 @@
       </a>
     </li>
   </ul>
+  <ul class="actions">
+    <li tal:repeat="action view/get_actions" >
+      <a class="button"
+         tal:condition="action/visible"
+         tal:attributes="href action/url;
+                         title action/label;
+                         id action/id | nothing;"
+         i18n:attributes="title">
+        <span tal:content="action/label" class="actionText"
+              i18n:translate="" i18n:domain="plone">
+        </span>
+      </a>
+    </li>
+  </ul>
 </div>
