@@ -75,6 +75,23 @@ class TestDispositionOverview(FunctionalTestCase):
             browser.css('.appraisal-button-group .active')[1].text)
 
     @browsing
+    def test_appraisal_buttons_are_only_buttons_in_progress_state(self, browser):
+        self.grant('Records Manager')
+        browser.login().open(self.disposition, view='tabbedview_view-overview')
+
+        self.assertEquals(
+            ['Archive', "Don't archive"],
+            browser.css('.appraisal-button-group').first.css('a').text)
+        browser.find('disposition-transition-appraise').click()
+
+        browser.login().open(self.disposition, view='tabbedview_view-overview')
+        self.assertEquals(
+            [], browser.css('.appraisal-button-group').first.css('a').text)
+        self.assertEquals(
+            ['Archive', "Don't archive"],
+            browser.css('.appraisal-button-group').first.css('span').text)
+
+    @browsing
     def test_update_appraisal_is_correct(self, browser):
         browser.login().open(self.disposition, view='tabbedview_view-overview')
 

@@ -35,7 +35,8 @@
 
       <div class="list-group-cell action-cell">
 
-        <div class="button-group appraisal-button-group">
+        <div class="button-group appraisal-button-group"
+             tal:condition="view/appraisal_buttons_available">
 
           <a href="#"
              class="button"
@@ -52,6 +53,23 @@
              i18n:translate="">
             Don't archive
           </a>
+
+        </div>
+
+        <div class="button-group appraisal-button-group"
+             tal:condition="not: view/appraisal_buttons_available">
+
+          <span class="readonly button"
+             tal:attributes="class python: dossier.appraisal and 'readonly button active' or 'readonly button';"
+             i18n:translate="">
+            Archive
+          </span>
+
+          <span class="readonly button"
+                tal:attributes="class python: dossier.appraisal and 'readonly button' or 'readonly button active';"
+                i18n:translate="">
+            Don't archive
+          </span>
 
         </div>
       </div>
