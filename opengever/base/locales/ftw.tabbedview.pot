@@ -235,3 +235,6 @@ msgstr ""
 
 msgid "versions"
 msgstr ""
+
+msgid "dispositions"
+msgstr ""
