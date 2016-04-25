@@ -10,7 +10,7 @@
 
   <browser:page
     class=".ech0160_export.ECH0160ExportView"
-    for="*"
+    for="opengever.disposition.interfaces.IDisposition"
     name="ech0160_export"
     permission="zope2.View"/>
 
