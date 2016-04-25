@@ -75,6 +75,23 @@ class TestDispositionOverview(FunctionalTestCase):
             browser.css('.appraisal-button-group .active')[1].text)
 
     @browsing
+    def test_appraisal_buttons_are_only_buttons_in_progress_state(self, browser):
+        self.grant('Records Manager')
+        browser.login().open(self.disposition, view='tabbedview_view-overview')
+
+        self.assertEquals(
+            ['Archive', "Don't archive"],
+            browser.css('.appraisal-button-group').first.css('a').text)
+        browser.find('disposition-transition-appraise').click()
+
+        browser.login().open(self.disposition, view='tabbedview_view-overview')
+        self.assertEquals(
+            [], browser.css('.appraisal-button-group').first.css('a').text)
+        self.assertEquals(
+            ['Archive', "Don't archive"],
+            browser.css('.appraisal-button-group').first.css('span').text)
+
+    @browsing
     def test_update_appraisal_is_correct(self, browser):
         browser.login().open(self.disposition, view='tabbedview_view-overview')
 
@@ -104,3 +121,24 @@ class TestDispositionOverview(FunctionalTestCase):
         browser.login().open(self.disposition, view='tabbedview_view-overview')
         self.assertEquals(['disposition-transition-dispose'],
                           browser.css('.transitions li').text)
+
+    @browsing
+    def test_sip_download_is_active_in_appraised_state(self, browser):
+        self.grant('Records Manager')
+        browser.login().open(self.disposition, view='tabbedview_view-overview')
+        browser.find('disposition-transition-appraise').click()
+
+        browser.open(self.disposition, view='tabbedview_view-overview')
+        self.assertEquals(['Export appraisal list', 'SIP download'],
+                          browser.css('ul.actions li').text)
+        self.assertEquals('http://nohost/plone/disposition-1/ech0160_export',
+                          browser.find('SIP download').get('href'))
+
+    @browsing
+    def test_appraisal_list_download_is_allways_available(self, browser):
+        self.grant('Records Manager')
+        browser.login().open(self.disposition, view='tabbedview_view-overview')
+        self.assertEquals(['Export appraisal list'],
+                          browser.css('ul.actions li').text)
+        self.assertEquals('http://nohost/plone/disposition-1/xlsx',
+                          browser.find('Export appraisal list').get('href'))

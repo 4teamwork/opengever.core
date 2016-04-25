@@ -1,6 +1,7 @@
 from five import grok
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_UNWORTHY
 from opengever.base.behaviors.lifecycle import ILifeCycle
+from opengever.disposition import _
 from opengever.disposition.interfaces import IDisposition
 from opengever.tabbedview.browser.base import OpengeverTab
 from plone import api
@@ -35,3 +36,26 @@ class DispositionOverview(grok.View, OpengeverTab):
         wftool = api.portal.get_tool(name='portal_workflow')
         infos = wftool.listActionInfos(object=self.context, check_condition=False)
         return infos
+
+    def get_actions(self):
+        return [
+            {'id': 'export_appraisal_list',
+             'label': _('label_export_appraisal_list',
+                        default=u'Export appraisal list'),
+             'url': '{}/xlsx'.format(self.context.absolute_url()),
+             'visible': True,
+             'class': 'appraisal_list'},
+            {'id': 'sip_download',
+             'label': _('label_sip_download', default=u'SIP download'),
+             'url': '{}/ech0160_export'.format(self.context.absolute_url()),
+             'visible': self.sip_download_available(),
+             'class': 'sip_download'},
+        ]
+
+    def sip_download_available(self):
+        """TODO: Should be protected with a own permission.
+        """
+        return api.content.get_state(self.context) == 'disposition-state-appraised'
+
+    def appraisal_buttons_available(self):
+        return api.content.get_state(self.context) == 'disposition-state-in-progress'

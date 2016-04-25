@@ -1,11 +1,9 @@
 from DateTime import DateTime
-from Products.CMFCore.utils import getToolByName
-from Products.Five import BrowserView
-from ZPublisher.Iterators import IStreamIterator
 from opengever.disposition.ech0160 import model
 from opengever.disposition.ech0160.bindings import arelda
 from opengever.disposition.ech0160.utils import file_checksum
 from opengever.ogds.base.utils import get_current_org_unit
+from Products.Five import BrowserView
 from pyxb.namespace import XMLSchema_instance as xsi
 from pyxb.utils.domutils import BindingDOMSupport
 from tempfile import TemporaryFile
@@ -13,6 +11,7 @@ from zipfile import ZIP_DEFLATED
 from zipfile import ZipFile
 from zope.component import queryMultiAdapter
 from zope.interface import implements
+from ZPublisher.Iterators import IStreamIterator
 import os.path
 
 schemas_path = os.path.join(
@@ -51,16 +50,10 @@ class ECH0160ExportView(BrowserView):
         doc.ablieferung.provenienz.aktenbildnerName = u'Grossrat des Kantons'
         doc.ablieferung.provenienz.registratur = u'Ratsinformationssystem'
 
-        catalog = getToolByName(self.context, 'portal_catalog')
-        dossiers = catalog(
-            portal_type='opengever.dossier.businesscasedossier',
-            # UID='84bd8defbef3426b9f4fac396d691d8b',
-        )
-
         repo = model.Repository()
         content = model.ContentRootFolder(sip_folder_name)
-        for dossier in dossiers:
-            d = model.Dossier(dossier.getObject())
+        for relation in self.context.dossiers:
+            d = model.Dossier(relation.to_object)
             repo.add_dossier(d)
             content.add_dossier(d)
 
