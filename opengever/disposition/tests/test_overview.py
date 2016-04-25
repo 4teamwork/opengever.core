@@ -104,3 +104,14 @@ class TestDispositionOverview(FunctionalTestCase):
         browser.login().open(self.disposition, view='tabbedview_view-overview')
         self.assertEquals(['disposition-transition-dispose'],
                           browser.css('.transitions li').text)
+
+    @browsing
+    def test_sip_download_is_active_in_appraised_state(self, browser):
+        self.grant('Records Manager')
+        browser.login().open(self.disposition, view='tabbedview_view-overview')
+        browser.find('disposition-transition-appraise').click()
+
+        browser.open(self.disposition, view='tabbedview_view-overview')
+        self.assertEquals(['SIP download'], browser.css('ul.actions li').text)
+        self.assertEquals('http://nohost/plone/disposition-1/ech0160_export',
+                          browser.find('SIP download').get('href'))
