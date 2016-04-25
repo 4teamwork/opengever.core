@@ -112,6 +112,16 @@ class TestDispositionOverview(FunctionalTestCase):
         browser.find('disposition-transition-appraise').click()
 
         browser.open(self.disposition, view='tabbedview_view-overview')
-        self.assertEquals(['SIP download'], browser.css('ul.actions li').text)
+        self.assertEquals(['Export appraisal list', 'SIP download'],
+                          browser.css('ul.actions li').text)
         self.assertEquals('http://nohost/plone/disposition-1/ech0160_export',
                           browser.find('SIP download').get('href'))
+
+    @browsing
+    def test_appraisal_list_download_is_allways_available(self, browser):
+        self.grant('Records Manager')
+        browser.login().open(self.disposition, view='tabbedview_view-overview')
+        self.assertEquals(['Export appraisal list'],
+                          browser.css('ul.actions li').text)
+        self.assertEquals('http://nohost/plone/disposition-1/xlsx',
+                          browser.find('Export appraisal list').get('href'))
