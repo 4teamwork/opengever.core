@@ -83,6 +83,16 @@
         <permission value="View"/>
     </action>
 
+    <action action_id="dispositions"
+            visible="True"
+            title="Dispositions"
+            category="tabbedview-tabs"
+            url_expr="string:#"
+            condition_expr=""
+            i18n:domain="opengever.repository">
+      <permission value="View"/>
+    </action>
+
     <action action_id="sharing"
             visible="True"
             title="Sharing"
