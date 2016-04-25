@@ -102,3 +102,20 @@ class TestDossierListing(FunctionalTestCase):
         table = browser.css('.listing').first
         self.assertEquals(['Dossier C'],
                           [row.get('Title') for row in table.dicts()])
+
+    @browsing
+    def test_expired_filters_exclude_archived_dossiers(self, browser):
+        create(Builder('dossier')
+               .within(self.repository)
+               .titled(u'Dossier D')
+               .as_expired()
+               .in_state('dossier-state-archived'))
+
+        browser.login().open(
+            self.repository,
+            view='tabbedview_view-dossiers',
+            data={'dossier_state_filter': 'filter_retention_expired'})
+
+        table = browser.css('.listing').first
+        self.assertEquals(['Dossier B', 'Dossier C'],
+                          [row.get('Title') for row in table.dicts()])

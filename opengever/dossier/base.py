@@ -40,7 +40,6 @@ DOSSIER_STATES_OPEN = [
 ]
 
 DOSSIER_STATES_CLOSED = [
-    'dossier-state-archived',
     'dossier-state-inactive',
     'dossier-state-resolved'
 ]
