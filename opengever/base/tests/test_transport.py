@@ -4,7 +4,9 @@ from ftw.builder import create
 from opengever.base.behaviors.classification import IClassification
 from opengever.base.transport import Transporter
 from opengever.testing import FunctionalTestCase
+from plone import api
 from plone.app.testing import TEST_USER_ID
+from zExceptions import Unauthorized
 
 
 class TestTransporter(FunctionalTestCase):
@@ -70,7 +72,37 @@ class TestTransporter(FunctionalTestCase):
         task = create(Builder("task")
                       .within(source_dossier)
                       .titled(u'Fo\xf6')
-                      .having(deadline=date(2014, 07, 01)))
+                      .having(deadline=date(2014, 7, 1)))
 
         transported_task = Transporter().transport_from(
             source_dossier, 'client1', '/'.join(task.getPhysicalPath()))
+
+    def test_transport_to_with_elevated_privileges(self):
+        source = create(Builder("dossier").titled(u"Source"))
+        target = create(Builder("dossier").titled(u"Target"))
+        target_path = '/'.join(target.getPhysicalPath())
+        task = create(Builder("task")
+                      .within(source)
+                      .titled(u'Fo\xf6')
+                      .having(deadline=date(2014, 7, 1)))
+
+        create(Builder('user').named('Hugo', 'Boss'))
+        api.user.grant_roles(username=u'hugo.boss',
+                             obj=source,
+                             roles=['Contributor', 'Editor', 'Reader'])
+        self.login(u'hugo.boss')
+
+        with self.assertRaises(Unauthorized):
+            Transporter().transport_to(task, 'client1', target_path)
+
+        Transporter().transport_to_with_elevated_privileges(
+            task, 'client1', target_path)
+
+    def test_keyword_argument_view_is_not_allowed_when_transporting_with_elevated_privileges_(self):
+
+        with self.assertRaises(ValueError) as cm:
+            Transporter().transport_to_with_elevated_privileges(
+                object(), 'client1', '/ordnungssytem', view='submit-proposal')
+
+        self.assertEquals('Keyword argument `view` not allowed.',
+                          str(cm.exception))

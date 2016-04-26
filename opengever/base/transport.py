@@ -2,6 +2,7 @@ from five import grok
 from opengever.base.exceptions import TransportationError
 from opengever.base.interfaces import IDataCollector
 from opengever.base.request import dispatch_json_request
+from opengever.base.security import elevated_privileges
 from opengever.ogds.base.utils import decode_for_json
 from opengever.ogds.base.utils import encode_after_json
 from plone.dexterity.interfaces import IDexterityContent
@@ -58,6 +59,16 @@ class Transporter(object):
             target_cid, '@@{}'.format(view),
             path=container_path, data=request_data)
 
+    def transport_to_with_elevated_privileges(
+            self, obj, target_cid, container_path, **data):
+
+        if data.get('view'):
+            raise ValueError('Keyword argument `view` not allowed.')
+
+        return self.transport_to(
+            obj, target_cid, container_path,
+            view='transporter-privileged-receive-object', **data)
+
     def transport_from(self, container, source_cid, path):
         """ Copies the object under *path* from client with *source_cid* into
         the local folder *container*
@@ -98,9 +109,7 @@ class ReceiveObject(grok.View):
     grok.context(Interface)
 
     def render(self):
-        transporter = Transporter()
-        container = self.context
-        obj = transporter.receive(container, self.request)
+        obj = self.receive()
         portal = self.context.portal_url.getPortalObject()
         portal_path = '/'.join(portal.getPhysicalPath())
 
@@ -115,6 +124,27 @@ class ReceiveObject(grok.View):
         # Set correct content type for JSON response
         self.request.response.setHeader("Content-type", "application/json")
         return json.dumps(data)
+
+    def receive(self):
+        transporter = Transporter()
+        container = self.context
+        return transporter.receive(container, self.request)
+
+
+class PrivilegedReceiveObject(ReceiveObject):
+    """Same functionality as the ReceiveObject view, but creates the content
+    with elevated privileges.
+    """
+
+    grok.name('transporter-privileged-receive-object')
+    grok.require('cmf.AddPortalContent')
+    grok.context(Interface)
+
+    def receive(self):
+        transporter = Transporter()
+        container = self.context
+        with elevated_privileges():
+            return transporter.receive(container, self.request)
 
 
 class ExtractObject(grok.View):
