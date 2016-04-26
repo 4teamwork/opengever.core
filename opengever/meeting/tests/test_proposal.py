@@ -384,6 +384,24 @@ class TestProposal(FunctionalTestCase):
         self.assertEqual(Proposal.STATE_SUBMITTED, proposal.get_state())
 
     @browsing
+    def test_proposal_can_be_submitted_without_permission_on_commitee(self, browser):
+        document = create(Builder('document').within(self.dossier))
+        committee = create(Builder('committee'))
+        proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .having(title='Mach doch',
+                                  committee=committee.load_model(),
+                                  relatedItems=[document]))
+
+
+        self.login_as_user_without_committee_permission(browser, committee)
+
+        browser.visit(proposal, view='tabbedview_view-overview')
+        browser.css('#pending-submitted').first.click()
+
+        self.assertEqual(Proposal.STATE_SUBMITTED, proposal.get_state())
+
+    @browsing
     def test_submitted_proposal_can_be_rejected(self, browser):
         self.grant('CommitteeGroupMember', 'Contributor', 'Editor')
         document = create(Builder('document')
@@ -645,3 +663,13 @@ class TestProposal(FunctionalTestCase):
         self.assertEqual(0, submitted_document_model.submitted_version)
         self.assertEqual(proposal.load_model(),
                          submitted_document_model.proposal)
+
+    def login_as_user_without_committee_permission(self, browser, committee):
+        create(Builder('user').named('Hugo', 'Boss'))
+        api.user.grant_roles(username=u'hugo.boss',
+                             obj=self.dossier,
+                             roles=['Contributor', 'Editor', 'Reader'])
+        transaction.commit()
+        browser.login(username='hugo.boss')
+        with self.assertRaises(Unauthorized):
+            browser.open(committee)

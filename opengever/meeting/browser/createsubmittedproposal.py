@@ -1,6 +1,6 @@
 from five import grok
 from opengever.base.oguid import Oguid
-from opengever.base.security import changed_security
+from opengever.base.security import elevated_privileges
 from opengever.base.transport import REQUEST_KEY
 from opengever.meeting.proposal import SubmittedProposal
 from opengever.meeting.service import meeting_service
@@ -20,7 +20,7 @@ class CreateSubmittedProposal(grok.View):
         proposal_oguid = Oguid.parse(data['proposal_oguid'])
         proposal = meeting_service().fetch_proposal_by_oguid(proposal_oguid)
 
-        with changed_security():
+        with elevated_privileges():
             submitted_proposal = SubmittedProposal.create(proposal, committee)
 
             self.request.response.setHeader("Content-type", "application/json")
