@@ -2,25 +2,29 @@ from five import grok
 from ftw.bumblebee.utils import get_representation_url_by_brain
 from opengever.base.browser.helper import get_css_class
 from opengever.bumblebee import is_bumblebee_feature_enabled
+from opengever.tabbedview.browser.tabs import Documents
 from Products.CMFPlone.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zExceptions import NotFound
 from zope.interface import Interface
 
 
-class BumblebeeGallery(grok.View):
+class BumblebeeGallery(Documents):
     grok.name('tabbedview_view-galleryview')
     grok.require('zope2.View')
     grok.context(Interface)
 
+    template = ViewPageTemplateFile('bumblebeegallery.pt')
     previews_template = ViewPageTemplateFile('bumblebee_previews.pt')
+
+    document_list_name = 'documents'
 
     amount_preloaded_documents = 24
 
     def __call__(self, *args, **kwargs):
         if not is_bumblebee_feature_enabled():
             raise NotFound
-        return super(BumblebeeGallery, self).__call__(*args, **kwargs)
+        return self.template()
 
     def _query(self, **kwargs):
         query = dict(
@@ -65,7 +69,7 @@ class BumblebeeGallery(grok.View):
             }
 
     def available(self):
-        return is_bumblebee_feature_enabled() and self.number_of_documents() > 0
+        return self.number_of_documents() > 0
 
     def number_of_documents(self):
         catalog = getToolByName(self.context, 'portal_catalog')

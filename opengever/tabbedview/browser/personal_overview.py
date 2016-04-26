@@ -183,12 +183,6 @@ class MyDocuments(Documents):
 
     bumblebee_template = ViewPageTemplateFile('generic_with_bumblebee_viewchooser.pt')
 
-    def __call__(self, *args, **kwargs):
-        if is_bumblebee_feature_enabled():
-            self.template = BoundPageTemplate(self.bumblebee_template, self)
-
-        return super(MyDocuments, self).__call__(self, *args, **kwargs)
-
     @property
     def columns(self):
         """Gets the columns wich wich will be displayed
