@@ -10,6 +10,7 @@ from opengever.base.model import create_session
 from opengever.meeting.interfaces import IMeetingSettings
 from opengever.ogds.base.setup import create_sql_tables
 from opengever.ogds.models import BASE
+from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from plone import api
 from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
@@ -80,18 +81,34 @@ def truncate_sql_tables():
         session.execute(table.delete())
 
 
-def deactivateActivityCenter():
-    registry = getUtility(IRegistry)
-    settings = registry.forInterface(IActivitySettings)
-    settings.is_feature_enabled = False
+def toggleActivateFeature(registry_interface, activate=True):
+    settings = getUtility(IRegistry).forInterface(registry_interface)
+    settings.is_feature_enabled = activate
     transaction.commit()
+
+
+def deactivateMeeting():
+    toggleActivateFeature(IMeetingSettings, activate=False)
+
+
+def activateMeeting():
+    toggleActivateFeature(IMeetingSettings, activate=True)
+
+
+def deactivateActivityCenter():
+    toggleActivateFeature(IActivitySettings, activate=False)
 
 
 def activateActivityCenter():
-    registry = getUtility(IRegistry)
-    settings = registry.forInterface(IActivitySettings)
-    settings.is_feature_enabled = True
-    transaction.commit()
+    toggleActivateFeature(IActivitySettings, activate=True)
+
+
+def deactivateBumblebeeFeature():
+    toggleActivateFeature(IGeverBumblebeeSettings, activate=False)
+
+
+def activateBumblebeeFeature():
+    toggleActivateFeature(IGeverBumblebeeSettings, activate=True)
 
 
 class AnnotationLayer(ComponentRegistryLayer):
@@ -164,6 +181,7 @@ class OpengeverFixture(PloneSandboxLayer):
         self.createMemberFolder(portal)
         self.setupLanguageTool(portal)
         deactivateActivityCenter()
+        deactivateBumblebeeFeature()
 
     def tearDown(self):
         super(OpengeverFixture, self).tearDown()
@@ -171,6 +189,7 @@ class OpengeverFixture(PloneSandboxLayer):
 
     def tearDownPloneSite(self, portal):
         activateActivityCenter()
+        activateBumblebeeFeature()
 
     def tearDownZope(self, app):
         super(OpengeverFixture, self).tearDownZope(app)
@@ -335,16 +354,10 @@ OPENGEVER_FUNCTIONAL_FILING_LAYER = FilingLayer()
 class MeetingLayer(PloneSandboxLayer):
 
     def setUpPloneSite(self, portal):
-        registry = getUtility(IRegistry)
-        settings = registry.forInterface(IMeetingSettings)
-        settings.is_feature_enabled = True
-        transaction.commit()
+        activateMeeting()
 
     def tearDownPloneSite(self, portal):
-        registry = getUtility(IRegistry)
-        settings = registry.forInterface(IMeetingSettings)
-        settings.is_feature_enabled = False
-        transaction.commit()
+        deactivateMeeting()
 
     defaultBases = (OPENGEVER_FUNCTIONAL_TESTING,)
 
@@ -364,6 +377,20 @@ class ActivityLayer(PloneSandboxLayer):
 
 
 OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER = ActivityLayer()
+
+
+class BumblebeeLayer(OpengeverFixture):
+
+    def setUpPloneSite(self, portal):
+        activateBumblebeeFeature()
+
+    def tearDownPloneSite(self, portal):
+        deactivateBumblebeeFeature()
+
+    defaultBases = (OPENGEVER_FUNCTIONAL_TESTING,)
+
+
+OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER = BumblebeeLayer()
 
 
 class APILayer(PloneSandboxLayer):
