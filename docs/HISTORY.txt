@@ -5,6 +5,11 @@ Changelog
 4.7.5 (unreleased)
 ------------------
 
+- Exclude email from sablon variable fullname and add a email variable instead.
+  Note: The sablontemplates have to be updated after installing this release,
+  when the email is still needed in the protocoll.
+  [phgross]
+
 - Enable zip-export for personal overview.
   [deiferni]
 

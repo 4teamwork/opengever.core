@@ -65,7 +65,8 @@ class ProtocolData(object):
             membership = Membership.query.fetch_for_meeting(
                 self.meeting, participant)
             members.append({
-                "fullname": participant.get_title(show_email_as_link=False),
+                "fullname": participant.fullname,
+                "email": participant.email,
                 "role": membership.role if membership else None
             })
 
@@ -87,8 +88,8 @@ class ProtocolData(object):
             membership = Membership.query.fetch_for_meeting(
                 self.meeting, self.meeting.presidency)
             participants['presidency'] = {
-                "fullname": self.meeting.presidency.get_title(
-                    show_email_as_link=False),
+                "fullname": self.meeting.presidency.fullname,
+                "email": self.meeting.presidency.email,
                 "role": membership.role if membership else None
             }
 
@@ -96,8 +97,8 @@ class ProtocolData(object):
             membership = Membership.query.fetch_for_meeting(
                 self.meeting, self.meeting.secretary)
             participants['secretary'] = {
-                "fullname": self.meeting.secretary.get_title(
-                    show_email_as_link=False),
+                "fullname": self.meeting.secretary.fullname,
+                "email": self.meeting.secretary.email,
                 "role": membership.role if membership else None
             }
 
