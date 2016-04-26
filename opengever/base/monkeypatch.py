@@ -5,7 +5,6 @@ from ZODB.POSException import ConflictError
 from ZPublisher.HTTPRequest import FileUpload
 import logging
 import time
-import urllib
 
 
 LOGGER = logging.getLogger('opengever.base')
@@ -49,27 +48,6 @@ LOGGER.info('Monkey patched ZServer.medusa.http_server.compute_timezone_for_log'
 http_server.tz_for_log = compute_timezone_for_log()
 LOGGER.info('Monkey patched ZServer.medusa.http_server.tz_for_log')
 
-
-# --------
-class Foo(object):
-    @property
-    def filename_encoded(self):
-        filename = self.filename
-        # new part
-        if isinstance(filename, unicode):
-            filename = filename.encode('utf8')
-        # / new part
-        if filename is None:
-            return None
-        else:
-            return urllib.quote_plus(filename)
-
-from plone.formwidget.namedfile import widget
-setattr(widget.NamedFileWidget,
-        'filename_encoded',
-        Foo.filename_encoded)
-LOGGER.info('Monkey patched plone.formwidget.namedfile.widget.'
-            'NameFileWidget.filename_encoded')
 
 # --------
 
