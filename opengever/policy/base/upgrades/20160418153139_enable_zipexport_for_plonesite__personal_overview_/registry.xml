@@ -1,7 +1,6 @@
 <registry>
     <records interface="ftw.zipexport.interfaces.IZipExportSettings">
-        <value key="enabled_dotted_names">
-            <element>opengever.dossier.behaviors.dossier.IDossierMarker</element>
+        <value key="enabled_dotted_names" purge="False">
             <element>Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot</element>
         </value>
     </records>
