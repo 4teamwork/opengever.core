@@ -188,7 +188,6 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
         browser.find('Update document in proposal').click()
         browser.find('Submit Attachments').click()
 
-        # self.assertSubmittedDocumentCreated(proposal, self.document)
         self.assertSequenceEqual(
             ['A new submitted version of document A Document has been created'],
             info_messages())
@@ -269,7 +268,6 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
         browser.find('Update document in proposal').click()
         browser.find('Submit Attachments').click()
 
-        # self.assertSubmittedDocumentCreated(proposal, self.document)
         self.assertSequenceEqual(
             ['A new submitted version of document A Document has been created'],
             info_messages())
