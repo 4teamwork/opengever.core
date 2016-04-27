@@ -1,7 +1,7 @@
 <tal:DOMAIN i18n:domain="opengever.tabbedview">
     <ul class="ViewChooser">
         <li class="active"><span class="documentsGallery" i18n:translate="documents_pill_documents">Gallery</span></li>
-        <li><a tal:attributes="id view/document_list_name" class="documentsList" href="#" i18n:translate="documents_pill_list">List</a></li>
+        <li><a tal:attributes="id view/list_view_name" class="documentsList" href="#" i18n:translate="documents_pill_list">List</a></li>
     </ul>
     <div tal:define="available view/available"
          class="preview-listing"

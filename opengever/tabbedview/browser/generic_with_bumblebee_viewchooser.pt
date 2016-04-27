@@ -7,7 +7,7 @@
 
   <tal:START_CUSTOM_______________________________________  />
   <ul class="ViewChooser">
-      <li><a id="galleryview" class="documentsGallery" href="#" i18n:translate="documents_pill_documents">Gallery</a></li>
+      <li><a tal:attributes="id view/gallery_view_name" class="documentsGallery" href="#" i18n:translate="documents_pill_documents">Gallery</a></li>
       <li class="active"><span class="documentsList" i18n:translate="documents_pill_list">List</span></li>
   </ul>
   <tal:END_CUSTOM_______________________________________ />

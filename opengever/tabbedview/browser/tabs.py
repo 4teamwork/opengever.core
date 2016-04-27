@@ -144,6 +144,10 @@ class Documents(OpengeverCatalogListingTab):
 
         return super(Documents, self).__call__(self, *args, **kwargs)
 
+    @property
+    def gallery_view_name(self):
+        return '{}-gallery'.format(self.view_name)
+
 
 class Dossiers(OpengeverCatalogListingTab):
     grok.name('tabbedview_view-dossiers')

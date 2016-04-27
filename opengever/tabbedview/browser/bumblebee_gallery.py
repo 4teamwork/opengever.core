@@ -3,21 +3,16 @@ from ftw.bumblebee.utils import get_representation_url_by_brain
 from opengever.base.browser.helper import get_css_class
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.tabbedview.browser.tabs import Documents
+from opengever.tabbedview.browser.personal_overview import MyDocuments
 from Products.CMFPlone.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zExceptions import NotFound
-from zope.interface import Interface
 
 
-class BumblebeeGallery(Documents):
-    grok.name('tabbedview_view-galleryview')
-    grok.require('zope2.View')
-    grok.context(Interface)
+class BumblebeeGalleryMixin(object):
 
-    template = ViewPageTemplateFile('bumblebeegallery.pt')
+    template = ViewPageTemplateFile('bumblebee_gallery.pt')
     previews_template = ViewPageTemplateFile('bumblebee_previews.pt')
-
-    document_list_name = 'documents'
 
     amount_preloaded_documents = 24
 
@@ -25,6 +20,10 @@ class BumblebeeGallery(Documents):
         if not is_bumblebee_feature_enabled():
             raise NotFound
         return self.template()
+
+    @property
+    def list_view_name(self):
+        return self.view_name.split('-gallery')[0]
 
     def _query(self, **kwargs):
         query = dict(
@@ -84,3 +83,11 @@ class BumblebeeGallery(Documents):
         # there are no tags at all, so that diazo does not try to
         # parse it.
         return self.previews_template().strip()
+
+
+class DocumentsGallery(BumblebeeGalleryMixin, Documents):
+    grok.name('tabbedview_view-documents-gallery')
+
+
+class MyDocumentsGallery(BumblebeeGalleryMixin, MyDocuments):
+    grok.name('tabbedview_view-mydocuments-gallery')
