@@ -10,11 +10,16 @@ from zExceptions import NotFound
 
 
 class BumblebeeGalleryMixin(object):
+    """This mixin provides the functionality to render the
+    bumblebee gallery view in a tab.
+    """
 
     template = ViewPageTemplateFile('bumblebee_gallery.pt')
     previews_template = ViewPageTemplateFile('bumblebee_previews.pt')
 
     amount_preloaded_documents = 24
+
+    object_provides = 'ftw.bumblebee.interfaces.IBumblebeeable'
 
     def __call__(self, *args, **kwargs):
         if not is_bumblebee_feature_enabled():
@@ -25,24 +30,17 @@ class BumblebeeGalleryMixin(object):
     def list_view_name(self):
         return self.view_name.split('-gallery')[0]
 
-    def _query(self, **kwargs):
-        query = self.table_source.build_query()
-        query.update(
-            dict(object_provides='ftw.bumblebee.interfaces.IBumblebeeable')),
+    def available(self):
+        return self.number_of_documents() > 0
 
-        return query
+    def number_of_documents(self):
+        return len(self._get_brains())
 
     def previews(self, **kwargs):
-        catalog = getToolByName(self.context, 'portal_catalog')
-        brains = catalog(self._query())
+        brains = self._get_brains()
 
-        next_document_id = int(self.request.get('next_document_id', 0))
-        to_document_id = next_document_id + self.amount_preloaded_documents
-
-        for document_id, brain in enumerate(
-                brains[next_document_id:to_document_id],
-                start=next_document_id):
-
+        # TODO: Batching
+        for brain in brains:
             desc = brain.Description
             if desc:
                 desc = len(desc) < 50 and desc or desc[:49] + '...'
@@ -57,22 +55,11 @@ class BumblebeeGalleryMixin(object):
                 'mime_type_css_class': get_css_class(brain),
             }
 
-    def available(self):
-        return self.number_of_documents() > 0
-
-    def number_of_documents(self):
-        catalog = getToolByName(self.context, 'portal_catalog')
-        return len(catalog(self._query()))
-
-    def fetch(self):
-        """Action for retrieving more events (based on `next_event_id` in
-        the request) with AJAX.
-        """
-        self.request.response.setHeader('X-Theme-Disabled', 'True')
-        # The HTML stripped in order to have empty response content when
-        # there are no tags at all, so that diazo does not try to
-        # parse it.
-        return self.previews_template().strip()
+    def _get_brains(self):
+        if not hasattr(self, '_brains'):
+            catalog = getToolByName(self.context, 'portal_catalog')
+            setattr(self, '_brains', catalog(self.table_source.build_query()))
+        return getattr(self, '_brains')
 
 
 class DocumentsGallery(BumblebeeGalleryMixin, Documents):
