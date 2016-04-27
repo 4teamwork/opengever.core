@@ -2,7 +2,6 @@ from AccessControl import Unauthorized
 from five import grok
 from ftw.tabbedview.browser.tabbed import TabbedView
 from opengever.activity import is_activity_feature_enabled
-from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.globalindex.model.task import Task
 from opengever.latex.opentaskreport import is_open_task_report_allowed
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -16,7 +15,6 @@ from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
 from plone import api
 from plone.memoize.view import memoize_contextless
 from Products.CMFPlone.utils import getToolByName
-from Products.Five.browser.pagetemplatefile import BoundPageTemplate
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from sqlalchemy.exc import OperationalError
 from zope.interface import Interface
@@ -180,8 +178,6 @@ class MyDocuments(Documents):
     major_actions = []
 
     columns = remove_subdossier_column(Documents.columns)
-
-    bumblebee_template = ViewPageTemplateFile('generic_with_bumblebee_viewchooser.pt')
 
     @property
     def columns(self):

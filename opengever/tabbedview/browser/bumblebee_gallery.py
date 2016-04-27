@@ -14,7 +14,7 @@ class BumblebeeGalleryMixin(object):
     template = ViewPageTemplateFile('bumblebee_gallery.pt')
     previews_template = ViewPageTemplateFile('bumblebee_previews.pt')
 
-    amount_preloaded_documents = 21
+    amount_preloaded_documents = 24
 
     def __call__(self, *args, **kwargs):
         if not is_bumblebee_feature_enabled():
@@ -26,7 +26,11 @@ class BumblebeeGalleryMixin(object):
         return self.view_name.split('-gallery')[0]
 
     def _query(self, **kwargs):
-        return self.table_source.build_query()
+        query = self.table_source.build_query()
+        query.update(
+            dict(object_provides='ftw.bumblebee.interfaces.IBumblebeeable')),
+
+        return query
 
     def previews(self, **kwargs):
         catalog = getToolByName(self.context, 'portal_catalog')
