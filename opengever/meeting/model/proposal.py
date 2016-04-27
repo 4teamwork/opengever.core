@@ -1,5 +1,3 @@
-from Acquisition import aq_inner
-from Acquisition import aq_parent
 from opengever.base.model import Base
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
@@ -8,7 +6,7 @@ from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
 from opengever.meeting.command import CreateGeneratedDocumentCommand
 from opengever.meeting.command import ExcerptOperations
-from opengever.meeting.command import OgCopyCommand
+from opengever.meeting.command import OgCopyCommandWithElevatedPrivileges
 from opengever.meeting.command import UpdateExcerptInDossierCommand
 from opengever.meeting.command import UpdateGeneratedDocumentCommand
 from opengever.meeting.model import AgendaItem
@@ -321,7 +319,7 @@ class Proposal(Base):
         the intid of the created document.
         """
         dossier = self.resolve_proposal().get_containing_dossier()
-        response = OgCopyCommand(
+        response = OgCopyCommandWithElevatedPrivileges(
             self.resolve_submitted_excerpt_document(),
             self.admin_unit_id,
             '/'.join(dossier.getPhysicalPath())).execute()

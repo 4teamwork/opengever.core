@@ -5,6 +5,11 @@ Changelog
 4.7.5 (unreleased)
 ------------------
 
+- Create and update proposals and documents with elevated privileges,
+  when submitting proposal, add or update submitted documents or
+  copy back excerpt documents.
+  [phgross]
+
 - Exclude email from sablon variable fullname and add a email variable instead.
   Note: The sablontemplates have to be updated after installing this release,
   when the email is still needed in the protocoll.

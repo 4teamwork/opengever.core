@@ -7,6 +7,7 @@ from opengever.meeting.model import Proposal
 from opengever.meeting.model.agendaitem import AgendaItem
 from opengever.meeting.wrapper import MeetingWrapper
 from opengever.testing import FunctionalTestCase
+from plone import api
 from plone.protect import createToken
 from z3c.relationfield.relation import RelationValue
 from zExceptions import NotFound
@@ -14,6 +15,7 @@ from zExceptions import Unauthorized
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 import json
+import transaction
 
 
 class TestAgendaItem(FunctionalTestCase):
@@ -282,6 +284,31 @@ class TestAgendaItemDecide(TestAgendaItem):
             browser.json.get('messages'))
 
     @browsing
+    def test_decide_proposal_agenda_item_without_dossier_permission(self, browser):
+        self.setup_excerpt_template()
+        proposal = self.setup_proposal()
+
+        # schedule
+        view = 'unscheduled_proposals/{}/schedule'.format(
+            proposal.load_model().proposal_id)
+
+        self.login_as_user_without_dossier_permission(browser)
+
+        browser.open(self.meeting_wrapper, view=view)
+        item = AgendaItem.query.first()
+        browser.open(
+            self.meeting_wrapper,
+            view='agenda_items/{}/decide'.format(item.agenda_item_id),
+            data={'_authenticator': createToken()})
+
+        self.assertEquals('decided', AgendaItem.query.first().workflow_state)
+        self.assertEquals(
+            [{u'message': u'Agenda Item decided and excerpt generated.',
+              u'messageClass': u'info',
+              u'messageTitle': u'Information'}],
+            browser.json.get('messages'))
+
+    @browsing
     def test_raises_not_found_for_invalid_agenda_item_id(self, browser):
         with self.assertRaises(NotFound):
             browser.login().open(self.meeting_wrapper,
@@ -317,6 +344,18 @@ class TestAgendaItemDecide(TestAgendaItem):
             view='agenda_items/{}/decide'.format(item2.agenda_item_id))
 
         self.assertEquals(None, browser.json.get('redirectUrl'))
+
+    def login_as_user_without_dossier_permission(self, browser):
+        create(Builder('user').named('Hugo', 'Boss'))
+        api.user.grant_roles(
+            username=u'hugo.boss', obj=self.committee,
+            roles=['Contributor', 'Editor', 'Reader', 'CommitteeGroupMember'])
+        transaction.commit()
+
+        self.login(user_id=u'hugo.boss')
+        browser.login(username=u'hugo.boss')
+        with self.assertRaises(Unauthorized):
+            browser.open(self.dossier)
 
 
 class TestAgendaItemReopen(TestAgendaItem):

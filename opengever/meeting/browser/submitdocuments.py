@@ -1,4 +1,5 @@
 from five import grok
+from opengever.base.security import elevated_privileges
 from opengever.base.source import DossierPathSourceBinder
 from opengever.base.transport import Transporter
 from opengever.base.utils import disable_edit_bar
@@ -184,23 +185,24 @@ class ReceiveObject(grok.View):
         if self.context.is_checked_out():
             raise Unauthorized()
 
-        transporter = Transporter()
-        transporter.update(self.context, self.request)
+        with elevated_privileges():
+            transporter = Transporter()
+            transporter.update(self.context, self.request)
 
-        portal_path = '/'.join(api.portal.get().getPhysicalPath())
-        intids = getUtility(IIntIds)
-        repository = api.portal.get_tool('portal_repository')
-        comment = translate(
-            _(u"Updated with a newer docment version from proposal's "
-                "dossier."),
-            context=self.request)
-        repository.save(obj=self.context, comment=comment)
+            portal_path = '/'.join(api.portal.get().getPhysicalPath())
+            intids = getUtility(IIntIds)
+            repository = api.portal.get_tool('portal_repository')
+            comment = translate(
+                _(u"Updated with a newer docment version from proposal's "
+                    "dossier."),
+                context=self.request)
+            repository.save(obj=self.context, comment=comment)
 
-        data = {
-            'path': '/'.join(self.context.getPhysicalPath())[
-                len(portal_path) + 1:],
-            'intid': intids.queryId(self.context)
-            }
+            data = {
+                'path': '/'.join(self.context.getPhysicalPath())[
+                    len(portal_path) + 1:],
+                'intid': intids.queryId(self.context)
+                }
 
         # Set correct content type for JSON response
         self.request.response.setHeader("Content-type", "application/json")
