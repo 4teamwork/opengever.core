@@ -87,27 +87,27 @@ def toggle_feature(registry_interface, enabled=True):
     transaction.commit()
 
 
-def deactivateMeeting():
+def deactivate_meeting():
     toggle_feature(IMeetingSettings, enabled=False)
 
 
-def activateMeeting():
+def activate_meeting():
     toggle_feature(IMeetingSettings, enabled=True)
 
 
-def deactivateActivityCenter():
+def deactivate_activity_center():
     toggle_feature(IActivitySettings, enabled=False)
 
 
-def activateActivityCenter():
+def activate_activity_center():
     toggle_feature(IActivitySettings, enabled=True)
 
 
-def deactivateBumblebeeFeature():
+def deactivate_bumblebee_feature():
     toggle_feature(IGeverBumblebeeSettings, enabled=False)
 
 
-def activateBumblebeeFeature():
+def activate_bumblebee_feature():
     toggle_feature(IGeverBumblebeeSettings, enabled=True)
 
 
@@ -180,16 +180,16 @@ class OpengeverFixture(PloneSandboxLayer):
         self.installOpengeverProfiles(portal)
         self.createMemberFolder(portal)
         self.setupLanguageTool(portal)
-        deactivateActivityCenter()
-        deactivateBumblebeeFeature()
+        deactivate_activity_center()
+        deactivate_bumblebee_feature()
 
     def tearDown(self):
         super(OpengeverFixture, self).tearDown()
         clear_transmogrifier_registry()
 
     def tearDownPloneSite(self, portal):
-        activateActivityCenter()
-        activateBumblebeeFeature()
+        activate_activity_center()
+        activate_bumblebee_feature()
 
     def tearDownZope(self, app):
         super(OpengeverFixture, self).tearDownZope(app)
@@ -354,10 +354,10 @@ OPENGEVER_FUNCTIONAL_FILING_LAYER = FilingLayer()
 class MeetingLayer(PloneSandboxLayer):
 
     def setUpPloneSite(self, portal):
-        activateMeeting()
+        activate_meeting()
 
     def tearDownPloneSite(self, portal):
-        deactivateMeeting()
+        deactivate_meeting()
 
     defaultBases = (OPENGEVER_FUNCTIONAL_TESTING,)
 
@@ -368,10 +368,10 @@ OPENGEVER_FUNCTIONAL_MEETING_LAYER = MeetingLayer()
 class ActivityLayer(PloneSandboxLayer):
 
     def setUpPloneSite(self, portal):
-        activateActivityCenter()
+        activate_activity_center()
 
     def tearDownPloneSite(self, portal):
-        deactivateActivityCenter()
+        deactivate_activity_center()
 
     defaultBases = (OPENGEVER_FUNCTIONAL_TESTING,)
 
@@ -382,10 +382,10 @@ OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER = ActivityLayer()
 class BumblebeeLayer(OpengeverFixture):
 
     def setUpPloneSite(self, portal):
-        activateBumblebeeFeature()
+        activate_bumblebee_feature()
 
     def tearDownPloneSite(self, portal):
-        deactivateBumblebeeFeature()
+        deactivate_bumblebee_feature()
 
     defaultBases = (OPENGEVER_FUNCTIONAL_TESTING,)
 
