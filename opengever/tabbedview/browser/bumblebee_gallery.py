@@ -14,7 +14,7 @@ class BumblebeeGalleryMixin(object):
     template = ViewPageTemplateFile('bumblebee_gallery.pt')
     previews_template = ViewPageTemplateFile('bumblebee_previews.pt')
 
-    amount_preloaded_documents = 24
+    amount_preloaded_documents = 21
 
     def __call__(self, *args, **kwargs):
         if not is_bumblebee_feature_enabled():
@@ -26,20 +26,7 @@ class BumblebeeGalleryMixin(object):
         return self.view_name.split('-gallery')[0]
 
     def _query(self, **kwargs):
-        query = dict(
-            object_provides='ftw.bumblebee.interfaces.IBumblebeeable',
-            sort_on='modified',
-            sort_order="descending",
-            path='/'.join(self.context.getPhysicalPath()))
-
-        if 'searchable_text' in self.request.keys() and \
-           self.request['searchable_text'] != '':
-            query['SearchableText'] = self.request.get('searchable_text')
-            if not query['SearchableText'].endswith('*'):
-                query['SearchableText'] += '*'
-
-        query.update(kwargs)
-        return query
+        return self.table_source.build_query()
 
     def previews(self, **kwargs):
         catalog = getToolByName(self.context, 'portal_catalog')
@@ -63,8 +50,7 @@ class BumblebeeGalleryMixin(object):
                 'preview_image_url': get_representation_url_by_brain(
                     'thumbnail', brain),
                 'uid': brain.UID,
-                'document_id': document_id,
-                'css_class': get_css_class(brain),
+                'mime_type_css_class': get_css_class(brain),
             }
 
     def available(self):
