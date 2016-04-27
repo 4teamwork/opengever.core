@@ -43,7 +43,7 @@ class BumblebeeGalleryMixin(object):
         for brain in brains:
             desc = brain.Description
             if desc:
-                desc = len(desc) < 50 and desc or desc[:49] + '...'
+                desc = desc if len(desc) < 50 else desc[:49] + u'...'
 
             yield {
                 'title': brain.Title,
