@@ -81,34 +81,34 @@ def truncate_sql_tables():
         session.execute(table.delete())
 
 
-def toggleActivateFeature(registry_interface, activate=True):
+def toggle_feature(registry_interface, enabled=True):
     settings = getUtility(IRegistry).forInterface(registry_interface)
-    settings.is_feature_enabled = activate
+    settings.is_feature_enabled = enabled
     transaction.commit()
 
 
 def deactivateMeeting():
-    toggleActivateFeature(IMeetingSettings, activate=False)
+    toggle_feature(IMeetingSettings, enabled=False)
 
 
 def activateMeeting():
-    toggleActivateFeature(IMeetingSettings, activate=True)
+    toggle_feature(IMeetingSettings, enabled=True)
 
 
 def deactivateActivityCenter():
-    toggleActivateFeature(IActivitySettings, activate=False)
+    toggle_feature(IActivitySettings, enabled=False)
 
 
 def activateActivityCenter():
-    toggleActivateFeature(IActivitySettings, activate=True)
+    toggle_feature(IActivitySettings, enabled=True)
 
 
 def deactivateBumblebeeFeature():
-    toggleActivateFeature(IGeverBumblebeeSettings, activate=False)
+    toggle_feature(IGeverBumblebeeSettings, enabled=False)
 
 
 def activateBumblebeeFeature():
-    toggleActivateFeature(IGeverBumblebeeSettings, activate=True)
+    toggle_feature(IGeverBumblebeeSettings, enabled=True)
 
 
 class AnnotationLayer(ComponentRegistryLayer):
