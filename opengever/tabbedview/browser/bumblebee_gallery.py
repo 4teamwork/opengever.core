@@ -34,10 +34,10 @@ class BumblebeeGalleryMixin(object):
         return self.number_of_documents() > 0
 
     def number_of_documents(self):
-        return len(self._get_brains())
+        return len(self.get_brains())
 
     def previews(self, **kwargs):
-        brains = self._get_brains()
+        brains = self.get_brains()
 
         # TODO: Batching
         for brain in brains:
@@ -55,7 +55,7 @@ class BumblebeeGalleryMixin(object):
                 'mime_type_css_class': get_css_class(brain),
             }
 
-    def _get_brains(self):
+    def get_brains(self):
         if not hasattr(self, '_brains'):
             catalog = getToolByName(self.context, 'portal_catalog')
             setattr(self, '_brains', catalog(self.table_source.build_query()))
