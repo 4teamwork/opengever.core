@@ -3,6 +3,7 @@ from five import grok
 from ftw.tabbedview.interfaces import ITabbedView
 from ftw.table import helper
 from ftw.table.catalog_source import CatalogTableSource
+from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.dossier.base import DOSSIER_STATES_CLOSED
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.interfaces import IDossierMarker
@@ -28,6 +29,7 @@ from opengever.tabbedview.helper import readable_ogds_user
 from opengever.tabbedview.helper import workflow_state
 from opengever.tabbedview.interfaces import IFilterListTableSourceConfig
 from plone.dexterity.interfaces import IDexterityContainer
+from Products.Five.browser.pagetemplatefile import BoundPageTemplate
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapts
 from zope.component.hooks import getSite
@@ -133,6 +135,18 @@ class Documents(OpengeverCatalogListingTab):
     major_actions = [
         'create_task',
         ]
+
+    bumblebee_template = ViewPageTemplateFile('generic_with_bumblebee_viewchooser.pt')
+
+    def __call__(self, *args, **kwargs):
+        if is_bumblebee_feature_enabled():
+            self.template = BoundPageTemplate(self.bumblebee_template, self)
+
+        return super(Documents, self).__call__(self, *args, **kwargs)
+
+    @property
+    def gallery_view_name(self):
+        return '{}-gallery'.format(self.view_name)
 
 
 class Dossiers(OpengeverCatalogListingTab):

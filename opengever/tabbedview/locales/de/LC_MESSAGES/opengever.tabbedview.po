@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2016-04-22 08:51+0000\n"
+"POT-Creation-Date: 2016-04-28 16:46+0000\n"
 "PO-Revision-Date: 2012-11-22 14:19+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./opengever/tabbedview/browser/tabs.py:153
+#: ./opengever/tabbedview/browser/tabs.py:167
 #: ./opengever/tabbedview/browser/tasklisting.py:67
 msgid "Active"
 msgstr "Aktiv"
@@ -54,7 +54,7 @@ msgstr "Akteur"
 msgid "additional_contact"
 msgstr "Zusätzliches"
 
-#: ./opengever/tabbedview/browser/tabs.py:150
+#: ./opengever/tabbedview/browser/tabs.py:164
 #: ./opengever/tabbedview/browser/tasklisting.py:66
 msgid "all"
 msgstr "Alle"
@@ -191,13 +191,28 @@ msgid "document_date"
 msgstr "Dokumentdatum"
 
 #. Default: "Sequence Number"
-#: ./opengever/tabbedview/browser/tabs.py:80
+#: ./opengever/tabbedview/browser/tabs.py:82
 msgid "document_sequence_number"
 msgstr "Laufnummer"
 
 #. Default: "Dokumente"
 msgid "documents"
 msgstr "Dokumente"
+
+#. Default: "Show more"
+#: ./opengever/tabbedview/browser/bumblebee_gallery.pt:17
+msgid "documentsShowMore"
+msgstr "Mehr anzeigen"
+
+#. Default: "Gallery"
+#: ./opengever/tabbedview/browser/bumblebee_gallery.pt:3
+msgid "documents_pill_documents"
+msgstr "Galerieansicht"
+
+#. Default: "List"
+#: ./opengever/tabbedview/browser/bumblebee_gallery.pt:4
+msgid "documents_pill_list"
+msgstr "Listenansicht"
 
 #. Default: "Dossiers"
 msgid "dossiers"
@@ -213,7 +228,7 @@ msgstr "Ende"
 msgid "events"
 msgstr "Termine"
 
-#: ./opengever/tabbedview/browser/tabs.py:158
+#: ./opengever/tabbedview/browser/tabs.py:172
 msgid "expired"
 msgstr "Abgelaufen"
 
@@ -236,12 +251,12 @@ msgid "label_active"
 msgstr "Aktiv"
 
 #. Default: "Checked out by"
-#: ./opengever/tabbedview/browser/tabs.py:107
+#: ./opengever/tabbedview/browser/tabs.py:109
 msgid "label_checked_out"
 msgstr "In Bearbeitung"
 
 #. Default: "Delivery Date"
-#: ./opengever/tabbedview/browser/tabs.py:103
+#: ./opengever/tabbedview/browser/tabs.py:105
 msgid "label_delivery_date"
 msgstr "Ausgangsdatum"
 
@@ -256,22 +271,22 @@ msgid "label_directorate_user"
 msgstr "Direktion"
 
 #. Default: "Document Author"
-#: ./opengever/tabbedview/browser/tabs.py:90
+#: ./opengever/tabbedview/browser/tabs.py:92
 msgid "label_document_author"
 msgstr "Autor"
 
 #. Default: "Document Date"
-#: ./opengever/tabbedview/browser/tabs.py:95
+#: ./opengever/tabbedview/browser/tabs.py:97
 msgid "label_document_date"
 msgstr "Dokumentdatum"
 
 #. Default: "Responsible"
-#: ./opengever/tabbedview/browser/tabs.py:187
+#: ./opengever/tabbedview/browser/tabs.py:201
 msgid "label_dossier_responsible"
 msgstr "Federführung"
 
 #. Default: "End"
-#: ./opengever/tabbedview/browser/tabs.py:196
+#: ./opengever/tabbedview/browser/tabs.py:210
 msgid "label_end"
 msgstr "Ende"
 
@@ -281,22 +296,27 @@ msgid "label_issuer"
 msgstr "Auftraggeber"
 
 #. Default: "My notifications"
-#: ./opengever/tabbedview/browser/personal_overview.py:108
+#: ./opengever/tabbedview/browser/personal_overview.py:109
 msgid "label_my_notifications"
 msgstr "Meine Benachrichtigungen"
 
+#. Default: "No contents"
+#: ./opengever/tabbedview/browser/bumblebee_gallery.pt:23
+msgid "label_no_contents"
+msgstr "Keine Inhalte"
+
 #. Default: "Public Trial"
-#: ./opengever/tabbedview/browser/tabs.py:115
+#: ./opengever/tabbedview/browser/tabs.py:117
 msgid "label_public_trial"
 msgstr "Öffentlichkeitsstatus"
 
 #. Default: "Receipt Date"
-#: ./opengever/tabbedview/browser/tabs.py:99
+#: ./opengever/tabbedview/browser/tabs.py:101
 msgid "label_receipt_date"
 msgstr "Eingangsdatum"
 
 #. Default: "Reference Number"
-#: ./opengever/tabbedview/browser/tabs.py:175
+#: ./opengever/tabbedview/browser/tabs.py:189
 msgid "label_reference"
 msgstr "Aktenzeichen"
 
@@ -306,22 +326,22 @@ msgid "label_responsible_task"
 msgstr "Auftragnehmer"
 
 #. Default: "Review state"
-#: ./opengever/tabbedview/browser/tabs.py:183
+#: ./opengever/tabbedview/browser/tabs.py:197
 msgid "label_review_state"
 msgstr "Status"
 
 #. Default: "Start"
-#: ./opengever/tabbedview/browser/tabs.py:192
+#: ./opengever/tabbedview/browser/tabs.py:206
 msgid "label_start"
 msgstr "Beginn"
 
 #. Default: "Subdossier"
-#: ./opengever/tabbedview/browser/tabs.py:111
+#: ./opengever/tabbedview/browser/tabs.py:113
 msgid "label_subdossier"
 msgstr "Subdossier"
 
 #. Default: "Title"
-#: ./opengever/tabbedview/browser/tabs.py:85
+#: ./opengever/tabbedview/browser/tabs.py:87
 msgid "label_title"
 msgstr "Titel"
 
@@ -372,7 +392,7 @@ msgid "participants"
 msgstr "Beteiligte"
 
 #. Default: "Personal Overview: ${user_name}"
-#: ./opengever/tabbedview/browser/personal_overview.py:89
+#: ./opengever/tabbedview/browser/personal_overview.py:90
 msgid "personal_overview_title"
 msgstr "Persönliche Übersicht: ${user_name}"
 
@@ -444,3 +464,4 @@ msgstr "Titel"
 
 msgid "trash"
 msgstr "Papierkorb"
+
