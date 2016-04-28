@@ -4,6 +4,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.testing import FunctionalTestCase
 from plone import api
+import transaction
 
 
 class TestDispositionOverview(FunctionalTestCase):
@@ -142,3 +143,50 @@ class TestDispositionOverview(FunctionalTestCase):
                           browser.css('ul.actions li').text)
         self.assertEquals('http://nohost/plone/disposition-1/xlsx',
                           browser.find('Export appraisal list').get('href'))
+
+
+class TestClosedDispositionOverview(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestClosedDispositionOverview, self).setUp()
+
+        self.grant(
+            'Contributor', 'Editor', 'Reader', 'Reviewer', 'Records Manager')
+
+        self.root = create(Builder('repository_root'))
+        self.repository = create(Builder('repository').within(self.root))
+        self.dossier1 = create(Builder('dossier')
+                               .as_expired()
+                               .within(self.repository)
+                               .having(title=u'Dossier A',
+                                       archival_value='archival worthy'))
+
+        self.dossier2 = create(Builder('dossier')
+                               .as_expired()
+                               .within(self.repository)
+                               .having(title=u'Dossier B',
+                                       archival_value='not archival worthy',))
+
+        self.disposition = create(Builder('disposition')
+                                  .in_state('disposition-state-archived')
+                                  .having(dossiers=[self.dossier1, self.dossier2]))
+        self.disposition.mark_dossiers_as_archived()
+        api.content.transition(obj=self.disposition,
+                               transition='disposition-transition-close')
+        transaction.commit()
+
+    @browsing
+    def test_dossier_title_is_not_linked(self, browser):
+        browser.login().open(self.disposition, view='tabbedview_view-overview')
+
+        self.assertEquals(
+            ['Client1 1 / 1', 'Dossier A', 'Client1 1 / 2', 'Dossier B'],
+            browser.css('h3.title span').text)
+
+        self.assertEquals([], browser.css('h3.title a'))
+
+    @browsing
+    def test_additional_metadata_is_not_displayed(self, browser):
+        browser.login().open(self.disposition, view='tabbedview_view-overview')
+
+        self.assertEquals([], browser.css('#disposition_overview div.meta'))

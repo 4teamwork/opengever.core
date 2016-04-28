@@ -24,8 +24,9 @@ from zope.interface import invariant
 from zope.intid.interfaces import IIntIds
 
 
-class DossierRepresentation(object):
-    """A wrapper objects for dossiers.
+class DossierDispositionInformation(object):
+    """A wrapper object for dossiers.
+
     To provide easy access for the dossier's data, via the disposition
     relations list. See Disposition.get_dossier_representations.
     """
@@ -42,6 +43,10 @@ class DossierRepresentation(object):
         self.archival_value_annotation = ILifeCycle(dossier).archival_value_annotation
         self.appraisal = IAppraisal(disposition).get(dossier)
 
+    @property
+    def additional_metadata_available(self):
+        return True
+
     def get_storage_representation(self):
         """Returns a PersistentDict with the most important values.
         """
@@ -50,6 +55,25 @@ class DossierRepresentation(object):
             'intid': self.intid,
             'reference_number': self.reference_number,
             'appraisal': self.appraisal})
+
+
+class RemovedDossierDispositionInformation(DossierDispositionInformation):
+
+    def __init__(self, dossier_mapping, disposition):
+        self.title = dossier_mapping.get('title')
+        self.intid = dossier_mapping.get('intid')
+        self.appraisal = dossier_mapping.get('appraisal')
+        self.reference_number = dossier_mapping.get('reference_number')
+        self.url = None
+        self.start = None
+        self.end = None
+        self.public_trial = None
+        self.archival_value = None
+        self.archival_value_annotation = None
+
+    @property
+    def additional_metadata_available(self):
+        return False
 
 
 class IDispositionSchema(form.Schema):
@@ -129,13 +153,17 @@ class Disposition(Container):
 
     def set_destroyed_dossiers(self, dossiers):
         value = PersistentList([
-            DossierRepresentation(dossier, self).get_storage_representation()
+            DossierDispositionInformation(dossier, self).get_storage_representation()
             for dossier in dossiers])
 
         IAnnotations(self)[self.destroyed_key] = value
 
     def get_dossier_representations(self):
-        return [DossierRepresentation(rel.to_object, self)
+        if api.content.get_state(self) == 'disposition-state-closed':
+            return [RemovedDossierDispositionInformation(data, self)
+                    for data in self.get_destroyed_dossiers()]
+
+        return [DossierDispositionInformation(rel.to_object, self)
                 for rel in self.dossiers]
 
     def update_added_dossiers(self, dossiers):
