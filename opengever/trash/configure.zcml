@@ -18,22 +18,12 @@
 
   <include package="plone.directives.form" />
 
-  <include package="collective.monkeypatcher" />
-
   <include package=".upgrades" />
 
   <!-- Include custom permissions -->
   <include file="permissions.zcml" />
 
   <grok:grok package="." />
-
-  <monkey:patch
-     class="Products.CMFPlone.CatalogTool.CatalogTool"
-     original="searchResults"
-     replacement=".monkey.dummy_method"
-     handler=".monkey.search_patch"
-     docstringWarning="false"
-     />
 
   <plone:behavior
       title="ITrashable Behavior"

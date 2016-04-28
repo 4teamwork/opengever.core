@@ -55,6 +55,9 @@ class Trasher(object):
             raise Unauthorized()
 
         alsoProvides(self.context, ITrashed)
+
+        # Trashed objects will be filtered from catalog search results by
+        # default via a monkey patch somewhere in opengever.base.monkey
         self.context.reindexObject()
         notify(TrashedEvent(self.context))
 
@@ -70,6 +73,9 @@ class Trasher(object):
 
 @indexer(Interface)
 def trashIndexer(obj):
+    # This index is used to filter trashed documents from catalog search
+    # results by default. For that we monkey patch the catalog tool's
+    # searchResults(), see the patch in opengever.base.monkey
     return ITrashed.providedBy(obj)
 grok.global_adapter(trashIndexer, name="trashed")
 
