@@ -1,8 +1,10 @@
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import info_messages
+from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
 from opengever.testing import obj2paths
@@ -97,6 +99,20 @@ class TestDisposition(FunctionalTestCase):
         self.assertEquals(OFFERED_STATE, api.content.get_state(self.dossier1))
         self.assertEquals(OFFERED_STATE, api.content.get_state(self.dossier3))
 
+    @browsing
+    def test_date_of_submission_is_set_today_for_attached_dossiers(self, browser):
+        data = {'paths:list': obj2paths([self.dossier1, self.dossier3]),
+                '_authenticator': createToken()}
+        browser.login().open(self.root,
+                             view='++add++opengever.disposition.disposition',
+                             data=data)
+        browser.find('Save').click()
+
+        self.assertEquals(date.today(),
+                          ILifeCycle(self.dossier1).date_of_submission)
+        self.assertEquals(date.today(),
+                          ILifeCycle(self.dossier3).date_of_submission)
+
 
 class TestDispositionEditForm(FunctionalTestCase):
 
@@ -144,3 +160,18 @@ class TestDispositionEditForm(FunctionalTestCase):
         self.assertEquals('dossier-state-inactive',
                           api.content.get_state(self.dossier2))
         self.assertEquals(OFFERED_STATE, api.content.get_state(self.dossier3))
+
+    @browsing
+    def test_reset_date_of_submission_for_dropped_dossiers(self, browser):
+        disposition = create(Builder('disposition')
+                             .having(dossiers=[self.dossier1, self.dossier2, self.dossier3])
+                             .within(self.root))
+
+        browser.login().open(disposition, view='edit')
+        browser.fill({'Dossiers': [self.dossier3]})
+        browser.find('Save').click()
+
+        self.assertEquals(None, ILifeCycle(self.dossier1).date_of_submission)
+        self.assertEquals(None, ILifeCycle(self.dossier2).date_of_submission)
+        self.assertEquals(date.today(),
+                          ILifeCycle(self.dossier3).date_of_submission)
