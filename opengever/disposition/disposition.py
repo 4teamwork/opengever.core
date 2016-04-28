@@ -2,10 +2,13 @@ from collective import dexteritytextindexer
 from opengever.base.behaviors.classification import IClassification
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.base.interfaces import ISequenceNumber
+from opengever.base.security import elevated_privileges
 from opengever.disposition import _
 from opengever.disposition.appraisal import IAppraisal
 from opengever.disposition.interfaces import IDisposition
 from opengever.dossier.behaviors.dossier import IDossier
+from persistent.dict import PersistentDict
+from persistent.list import PersistentList
 from plone import api
 from plone.dexterity.content import Container
 from plone.directives import form
@@ -13,6 +16,7 @@ from plone.formwidget.contenttree import ObjPathSourceBinder
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
 from zope import schema
+from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
 from zope.interface import implements
 from zope.interface import Invalid
@@ -37,6 +41,38 @@ class DossierRepresentation(object):
         self.archival_value = ILifeCycle(dossier).archival_value
         self.archival_value_annotation = ILifeCycle(dossier).archival_value_annotation
         self.appraisal = IAppraisal(disposition).get(dossier)
+
+    @property
+    def additional_metadata_available(self):
+        return True
+
+    def get_storage_representation(self):
+        """Returns a PersistentDict with the most important values.
+        """
+        return PersistentDict({
+            'title': self.title,
+            'intid': self.intid,
+            'reference_number': self.reference_number,
+            'appraisal': self.appraisal})
+
+
+class RemovedDossierRepresentation(object):
+
+    def __init__(self, dossier_mapping, disposition):
+        self.title = dossier_mapping.get('title')
+        self.intid = dossier_mapping.get('intid')
+        self.appraisal = dossier_mapping.get('appraisal')
+        self.reference_number = dossier_mapping.get('reference_number')
+        self.url = None
+        self.start = None
+        self.end = None
+        self.public_trial = None
+        self.archival_value = None
+        self.archival_value_annotation = None
+
+    @property
+    def additional_metadata_available(self):
+        return False
 
 
 class IDispositionSchema(form.Schema):
@@ -80,6 +116,7 @@ class Disposition(Container):
     implements(IDisposition)
 
     _dossiers = []
+    destroyed_key = 'destroyed_dossiers'
 
     def __init__(self, *args, **kwargs):
         super(Disposition, self).__init__(*args, **kwargs)
@@ -109,7 +146,24 @@ class Disposition(Container):
         self.update_added_dossiers(new - old)
         self.update_dropped_dossiers(old - new)
 
+    def get_destroyed_dossiers(self):
+        annotations = IAnnotations(self)
+        if not annotations.get(self.destroyed_key):
+            return None
+        return annotations.get(self.destroyed_key)
+
+    def set_destroyed_dossiers(self, dossiers):
+        value = PersistentList([
+            DossierRepresentation(dossier, self).get_storage_representation()
+            for dossier in dossiers])
+
+        IAnnotations(self)[self.destroyed_key] = value
+
     def get_dossier_representations(self):
+        if api.content.get_state(self) == 'disposition-state-closed':
+            return [RemovedDossierRepresentation(data, self)
+                    for data in self.get_destroyed_dossiers()]
+
         return [DossierRepresentation(rel.to_object, self)
                 for rel in self.dossiers]
 
@@ -145,3 +199,9 @@ class Disposition(Container):
         workflow_id = workflow.getWorkflowsFor(dossier)[0].getId()
         history = workflow.getHistoryOf(workflow_id,dossier)
         return history[1].get('review_state')
+
+    def destroy_dossiers(self):
+        dossiers = [relation.to_object for relation in self.dossiers]
+        self.set_destroyed_dossiers(dossiers)
+        with elevated_privileges():
+            api.content.delete(objects=dossiers)

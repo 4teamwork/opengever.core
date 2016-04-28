@@ -7,9 +7,14 @@
       <div class="list-group-cell data-cell">
         <h3 class="title">
           <span class="reference_number" tal:content="dossier/reference_number"/>
-          <a href="#" tal:attributes="href dossier/url" tal:content="dossier/title" />
+
+          <a href="#" tal:condition="dossier/url"
+             tal:attributes="href dossier/url" tal:content="dossier/title" />
+
+          <span tal:condition="not: dossier/url" tal:content="dossier/title" />
+
         </h3>
-        <div class="meta">
+        <div class="meta" tal:condition="dossier/additional_metadata_available">
           <span class="meta-value date_period">
             <span i18n:translate="period">Period</span>:
             <span tal:content="python: view.get_localized_time(dossier.start)"/>
