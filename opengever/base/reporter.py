@@ -52,6 +52,8 @@ class XLSReporter(object):
         self.results = results
         self.request = request
         self.sheet_title = sheet_title
+        # if isinstance(self.sheet_title, unicode):
+        #     self.sheet_title.decode('utf-8')
         self.footer = footer
         self.portrait_format = portrait_format
 

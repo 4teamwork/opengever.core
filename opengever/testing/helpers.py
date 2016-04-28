@@ -63,3 +63,8 @@ def add_languages(codes, support_combined=True):
         lang_tool.addSupportedLanguage(code)
 
     transaction.commit()
+
+def obj2paths(objs):
+    """Returns a list of paths(string) for the given objects
+    """
+    return ['/'.join(obj.getPhysicalPath()) for obj in objs]

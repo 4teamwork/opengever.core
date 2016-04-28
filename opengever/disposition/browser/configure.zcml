@@ -1,0 +1,17 @@
+<configure
+  xmlns="http://namespaces.zope.org/zope"
+  xmlns:browser="http://namespaces.zope.org/browser"
+  i18n_domain="opengever.core">
+
+  <browser:resourceDirectory
+      name="opengever.disposition"
+      directory="resources"
+      />
+
+  <browser:page
+    class=".ech0160_export.ECH0160ExportView"
+    for="opengever.disposition.interfaces.IDisposition"
+    name="ech0160_export"
+    permission="zope2.View"/>
+
+</configure>

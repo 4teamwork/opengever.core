@@ -117,6 +117,9 @@ msgstr ""
 msgid "dossier-state-resolved"
 msgstr ""
 
+msgid "dossier-state-offered"
+msgstr ""
+
 msgid "dossier-state-archived"
 msgstr ""
 
@@ -316,4 +319,34 @@ msgid "Submit additional document"
 msgstr ""
 
 msgid "Close current period"
+msgstr ""
+
+msgid "Close current period"
+msgstr ""
+
+msgid "disposition-state-appraised"
+msgstr ""
+
+msgid "disposition-state-archived"
+msgstr ""
+
+msgid "disposition-state-closed"
+msgstr ""
+
+msgid "disposition-state-disposed"
+msgstr ""
+
+msgid "disposition-state-in-progress"
+msgstr ""
+
+msgid "disposition-transition-appraise"
+msgstr ""
+
+msgid "disposition-transition-archive"
+msgstr ""
+
+msgid "disposition-transition-close"
+msgstr ""
+
+msgid "disposition-transition-dispose"
 msgstr ""

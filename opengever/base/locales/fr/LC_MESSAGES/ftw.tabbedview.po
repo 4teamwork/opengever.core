@@ -74,6 +74,9 @@ msgstr "Commissions"
 msgid "contacts"
 msgstr "Contacts"
 
+msgid "dispositions"
+msgstr ""
+
 msgid "documents"
 msgstr "Documents"
 

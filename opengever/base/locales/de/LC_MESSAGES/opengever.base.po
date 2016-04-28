@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-12-22 14:43+0000\n"
+"POT-Creation-Date: 2016-04-25 14:45+0000\n"
 "PO-Revision-Date: 2014-09-04 01:03+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -160,7 +160,7 @@ msgid "help_retention_period_annotation"
 msgstr ""
 
 #. Default: "-- Already removed object --"
-#: ./opengever/base/adapters.py:193
+#: ./opengever/base/adapters.py:199
 msgid "label_already_removed"
 msgstr "-- Bereits gelöscht --"
 
@@ -230,7 +230,7 @@ msgid "label_dossier"
 msgstr "Dossier:"
 
 #. Default: "Initial version (document copied)"
-#: ./opengever/base/subscribers.py:57
+#: ./opengever/base/subscribers.py:59
 msgid "label_initial_version_copied"
 msgstr "Dokument kopiert (Initialversion)"
 
@@ -286,12 +286,12 @@ msgid "label_title"
 msgstr "Titel"
 
 #. Default: "Title (German)"
-#: ./opengever/base/behaviors/translated_title.py:43
+#: ./opengever/base/behaviors/translated_title.py:36
 msgid "label_title_de"
 msgstr "Titel (deutsch)"
 
 #. Default: "Title (French)"
-#: ./opengever/base/behaviors/translated_title.py:49
+#: ./opengever/base/behaviors/translated_title.py:42
 msgid "label_title_fr"
 msgstr "Titel (französisch)"
 

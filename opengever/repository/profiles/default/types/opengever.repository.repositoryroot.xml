@@ -11,6 +11,7 @@
     <property name="filter_content_types">True</property>
     <property name="allowed_content_types">
         <element value="opengever.repository.repositoryfolder" />
+        <element value="opengever.disposition.disposition" />
     </property>
 
     <!-- schema interface -->
@@ -80,6 +81,16 @@
             condition_expr=""
             url_expr="string:#">
         <permission value="View"/>
+    </action>
+
+    <action action_id="dispositions"
+            visible="True"
+            title="Dispositions"
+            category="tabbedview-tabs"
+            url_expr="string:#"
+            condition_expr=""
+            i18n:domain="opengever.repository">
+      <permission value="View"/>
     </action>
 
     <action action_id="sharing"
