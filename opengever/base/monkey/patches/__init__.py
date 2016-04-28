@@ -1,4 +1,5 @@
 from .create_mail_defaults import PatchCreateMailInContainer
+from .history_handler_tool import PatchCMFEditonsHistoryHandlerTool
 from .ldap_userfolder_encoding import PatchLDAPUserFolderEncoding
 from .namedfile_data_converter import PatchNamedfileNamedDataConverter
 from .paste_permission import PatchDXContainerPastePermission
@@ -9,6 +10,7 @@ from .verify_object_paste import PatchCopyContainerVerifyObjectPaste
 from .webdav_lock_timeout import PatchWebDAVLockTimeout
 
 
+PatchCMFEditonsHistoryHandlerTool()()
 PatchCopyContainerVerifyObjectPaste()()
 PatchCreateMailInContainer()()
 PatchDXContainerPastePermission()()
