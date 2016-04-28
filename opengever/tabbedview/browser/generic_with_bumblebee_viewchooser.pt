@@ -1,0 +1,69 @@
+<html
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    tal:omit-tag="python: True"
+    i18n:domain="ftw.tabbedview">
+
+  <tal:START_CUSTOM_______________________________________  />
+  <ul class="ViewChooser">
+      <li><a tal:attributes="id view/gallery_view_name" class="documentsGallery" href="#" i18n:translate="documents_pill_documents">Gallery</a></li>
+      <li class="active"><span class="documentsList" i18n:translate="documents_pill_list">List</span></li>
+  </ul>
+  <tal:END_CUSTOM_______________________________________ />
+
+  <tal:has_contents tal:condition="view/contents">
+    <div tal:omit-tag="python: view.extjs_enabled" class="tab_container">
+
+      <tal:extjs condition="view/extjs_enabled">
+        <div id="selection_container" class="ftwtable"><!--iefix--></div>
+        <div id="batching_container" class="ftwtable"><!--iefix--></div>
+      </tal:extjs>
+      <tal:html condition="not:view/extjs_enabled">
+        <div tal:replace="structure view/batching" />
+        <div tal:replace="structure view/selection" />
+      </tal:html>
+
+      <form name="tabbedview_form"
+            method="post"
+            action="folder_object"
+            tal:attributes="action context/absolute_url">
+        <input type="hidden" name="orig_template" tal:attributes="value string:${context/absolute_url}/#${view/view_name}" />
+        <span tal:replace="structure context/@@authenticator/authenticator"/>
+
+        <tal:extjs condition="view/extjs_enabled">
+          <div id="listing_container"
+               class="ftwtable +extjs tab_container"><!--iefix--></div>
+          <div id="menu_container" class="ftwtable"><!--iefix--></div>
+        </tal:extjs>
+
+        <tal:html condition="not:view/extjs_enabled">
+          <div id="listing_container">
+            <div tal:content="structure view/render_listing" />
+          </div>
+          <div tal:replace="structure view/menu" />
+        </tal:html>
+
+      </form>
+
+    </div>
+  </tal:has_contents>
+
+  <tal:extjs condition="view/extjs_enabled">
+    <p style="display:none"
+       id="message_no_contents"
+       i18n:translate="label_no_contents">
+      No contents
+    </p>
+  </tal:extjs>
+
+  <tal:html condition="not:view/extjs_enabled">
+    <p tal:condition="not:view/contents"
+       id="message_no_contents"
+       i18n:translate="label_no_contents">
+      No contents
+    </p>
+  </tal:html>
+
+
+</html>
