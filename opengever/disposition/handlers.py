@@ -10,3 +10,6 @@ def disposition_state_changed(context, event):
 
     if event.action == 'disposition-transition-archive':
         context.mark_dossiers_as_archived()
+
+    if event.action == 'disposition-transition-close':
+        context.destroy_dossiers()
