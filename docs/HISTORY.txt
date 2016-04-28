@@ -5,6 +5,9 @@ Changelog
 4.7.5 (unreleased)
 ------------------
 
+- Fix bug in redirect when no templatedossier is found.
+  [phgross]
+
 - Create and update proposals and documents with elevated privileges,
   when submitting proposal, add or update submitted documents or
   copy back excerpt documents.
