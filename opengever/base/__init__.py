@@ -1,3 +1,4 @@
+from opengever.base import monkey  # noqa
 from plone.i18n.locales import languages
 from zope.i18nmessageid import MessageFactory
 import csv
