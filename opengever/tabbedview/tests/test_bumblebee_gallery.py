@@ -1,7 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
-from opengever.core.testing import deactivate_bumblebee_feature
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.tabbedview.browser.bumblebee_gallery import BumblebeeGalleryMixin
 from opengever.testing import FunctionalTestCase
@@ -13,11 +12,8 @@ import transaction
 
 class TestBumblebeeGalleryMixin(FunctionalTestCase):
 
-    layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
-
     @browsing
     def test_calling_mixin_raise_404_if_feature_is_deactivated(self, browser):
-        deactivate_bumblebee_feature()
         with self.assertRaises(NotFound):
             BumblebeeGalleryMixin()(self.portal, self.request)
 
@@ -149,26 +145,27 @@ class TestBumblebeeGalleryMixinAvailable(FunctionalTestCase):
         self.assertFalse(view.available())
 
 
+class TestBumblebeeGalleryViewChooserWithoutFeature(FunctionalTestCase):
+
+    @browsing
+    def test_do_not_show_viewchooser_on_my_documents_tab(self, browser):
+        browser.login().open(self.portal, view='tabbedview_view-mydocuments')
+        self.assertEqual(0, len(browser.css('.ViewChooser')))
+
+    @browsing
+    def test_do_not_show_viewchooser_on_documents_tab(self, browser):
+        browser.login().open(self.portal, view='tabbedview_view-mydocuments')
+        self.assertEqual(0, len(browser.css('.ViewChooser')))
+
+
 class TestBumblebeeGalleryViewChooser(FunctionalTestCase):
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
     @browsing
-    def test_do_not_show_viewchooser_if_feature_is_deactivated_on_my_documents_tab(self, browser):
-        deactivate_bumblebee_feature()
-        browser.login().open(self.portal, view='tabbedview_view-mydocuments')
-        self.assertEqual(0, len(browser.css('.ViewChooser')))
-
-    @browsing
     def test_show_viewchooser_if_feature_is_activated_on_my_documents_tab(self, browser):
         browser.login().open(self.portal, view='tabbedview_view-mydocuments')
         self.assertEqual(1, len(browser.css('.ViewChooser')))
-
-    @browsing
-    def test_do_not_show_viewchooser_if_feature_is_deactivated_on_documents_tab(self, browser):
-        deactivate_bumblebee_feature()
-        browser.login().open(self.portal, view='tabbedview_view-mydocuments')
-        self.assertEqual(0, len(browser.css('.ViewChooser')))
 
     @browsing
     def test_show_viewchooser_if_feature_is_activated_on_documents_tab(self, browser):
