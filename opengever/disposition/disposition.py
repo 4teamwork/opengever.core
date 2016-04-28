@@ -18,6 +18,8 @@ from z3c.relationfield.schema import RelationList
 from zope import schema
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
+from zope.globalrequest import getRequest
+from zope.i18n import translate
 from zope.interface import implements
 from zope.interface import Invalid
 from zope.interface import invariant
@@ -125,7 +127,9 @@ class Disposition(Container):
     @property
     def title(self):
         return u'{} {}'.format(
-            _('Disposition'), getUtility(ISequenceNumber).get_number(self))
+            translate(_('label_disposition', default=u'Disposition'),
+                      context=getRequest()),
+            getUtility(ISequenceNumber).get_number(self))
 
     @title.setter
     def title(self, x):
