@@ -9,13 +9,6 @@ import logging
 LOGGER = logging.getLogger('opengever.base')
 
 
-import webdav.LockItem
- # 24 hours
-webdav.LockItem.DEFAULTTIMEOUT = 24 * 60 * 60L
-LOGGER.info('Monkey patched webdav.LockItem.DEFAULTTIMEOUT')
-
-# --------
-
 from plone.dexterity.content import Container
 # Change permission for manage_pasteObjects to "Add portal content"
 # See https://dev.plone.org/ticket/9177
