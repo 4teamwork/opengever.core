@@ -20,7 +20,7 @@
       </div>
 
       <div tal:condition="not: available">
-          <p class="no_content" i18n:translate="label_no_contents">No Contents</p>
+          <p class="no_content" i18n:translate="label_no_contents">No contents</p>
       </div>
 
     </div>

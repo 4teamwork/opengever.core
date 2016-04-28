@@ -99,7 +99,7 @@ class TestBumblebeeGalleryMixinGetBrains(FunctionalTestCase):
 
         self.assertEqual(
             1, len(view.get_brains()),
-            "Should only display one document because the secont "
+            "Should only display one document because the second "
             "is not and IBumblebeeable object")
 
 
@@ -174,3 +174,28 @@ class TestBumblebeeGalleryViewChooser(FunctionalTestCase):
     def test_show_viewchooser_if_feature_is_activated_on_documents_tab(self, browser):
         browser.login().open(self.portal, view='tabbedview_view-mydocuments')
         self.assertEqual(1, len(browser.css('.ViewChooser')))
+
+
+class TestBumblebeeGalleryView(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+
+    @browsing
+    def test_show_image_container_for_each_document(self, browser):
+        dossier = create(Builder('dossier'))
+
+        create(Builder('document').within(dossier))
+        create(Builder('document').within(dossier))
+
+        browser.login().visit(dossier, view="tabbedview_view-documents-gallery")
+
+        self.assertEqual(2, len(browser.css('.imageContainer')))
+
+    @browsing
+    def test_show_fallback_message_if_no_documents_are_available(self, browser):
+        dossier = create(Builder('dossier'))
+
+        browser.login().visit(dossier, view="tabbedview_view-documents-gallery")
+
+        self.assertEqual(0, len(browser.css('.imageContainer')))
+        self.assertEqual("No contents", browser.css('.no_content').first.text)
