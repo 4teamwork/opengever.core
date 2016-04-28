@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-04-25 14:23+0000\n"
+"POT-Creation-Date: 2016-04-28 18:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.disposition\n"
 
-#: ./opengever/disposition/browser/overview_templates/overview.pt:41
+#: ./opengever/disposition/browser/overview_templates/overview.pt:46
 msgid "Archive"
 msgstr ""
 
@@ -25,12 +25,11 @@ msgstr ""
 msgid "Create Disposition"
 msgstr ""
 
-#: ./opengever/disposition/disposition.py:91
 #: ./opengever/disposition/profiles/default/types/opengever.disposition.disposition.xml
 msgid "Disposition"
 msgstr ""
 
-#: ./opengever/disposition/browser/overview_templates/overview.pt:49
+#: ./opengever/disposition/browser/overview_templates/overview.pt:54
 msgid "Don't archive"
 msgstr ""
 
@@ -44,16 +43,21 @@ msgid "document_sequence_number"
 msgstr ""
 
 #. Default: "The retention period of the selected dossiers is not expired."
-#: ./opengever/disposition/disposition.py:74
+#: ./opengever/disposition/disposition.py:112
 msgid "error_retention_period_not_expired"
 msgstr ""
 
-#: ./opengever/disposition/disposition.py:47
+#: ./opengever/disposition/disposition.py:85
 msgid "help_reference"
 msgstr ""
 
+#. Default: "Disposition"
+#: ./opengever/disposition/disposition.py:131
+msgid "label_disposition"
+msgstr ""
+
 #. Default: "Dossiers"
-#: ./opengever/disposition/disposition.py:52
+#: ./opengever/disposition/disposition.py:90
 msgid "label_dossiers"
 msgstr ""
 
@@ -63,7 +67,7 @@ msgid "label_export_appraisal_list"
 msgstr ""
 
 #. Default: "Reference"
-#: ./opengever/disposition/disposition.py:46
+#: ./opengever/disposition/disposition.py:84
 msgid "label_reference"
 msgstr ""
 
@@ -78,7 +82,7 @@ msgid "label_title"
 msgstr ""
 
 #. Default: "Period"
-#: ./opengever/disposition/browser/overview_templates/overview.pt:14
+#: ./opengever/disposition/browser/overview_templates/overview.pt:19
 msgid "period"
 msgstr ""
 
