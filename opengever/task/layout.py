@@ -1,7 +1,7 @@
-from plone.app.layout.globals.layout import LayoutPolicy
+from opengever.core.layout import GeverLayoutPolicy
 
 
-class TaskLayoutPolicy(LayoutPolicy):
+class TaskLayoutPolicy(GeverLayoutPolicy):
 
     def bodyClass(self, template, view):
         """Extends default body class with the subtask class, for subtasks.
