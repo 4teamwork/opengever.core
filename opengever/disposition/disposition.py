@@ -1,4 +1,5 @@
 from collective import dexteritytextindexer
+from datetime import date
 from opengever.base.behaviors.classification import IClassification
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.base.interfaces import ISequenceNumber
@@ -168,6 +169,7 @@ class Disposition(Container):
 
     def update_added_dossiers(self, dossiers):
         for dossier in dossiers:
+            ILifeCycle(dossier).date_of_submission = date.today()
             api.content.transition(
                 obj=dossier, transition='dossier-transition-offer')
 
@@ -175,6 +177,7 @@ class Disposition(Container):
 
     def update_dropped_dossiers(self, dossiers):
         for dossier in dossiers:
+            ILifeCycle(dossier).date_of_submission = None
             api.content.transition(
                 obj=dossier, to_state=self.get_former_state(dossier))
 
