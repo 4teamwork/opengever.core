@@ -116,10 +116,3 @@ def reindex_containing_dossier(dossier, event):
                         if brain.portal_type in ['opengever.task.task',
                             'opengever.inbox.forwarding']:
                             sync_task(brain.getObject(), event)
-
-
-@grok.subscribe(IDossierMarker, IActionSucceededEvent)
-def dossier_state_changed(context, event):
-    if event.action == 'dossier-state-resolved':
-        context.update_retention_expiration()
-        context.reindexObject()
