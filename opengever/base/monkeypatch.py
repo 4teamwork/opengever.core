@@ -9,14 +9,6 @@ import logging
 LOGGER = logging.getLogger('opengever.base')
 
 
-import Products.LDAPUserFolder
-
-Products.LDAPUserFolder.utils.encoding = 'utf-8'
-LOGGER.info('Monkey patched Products.LDAPUserFolder.utils.encoding (utf-8)')
-
-
-# --------
-
 import webdav.LockItem
  # 24 hours
 webdav.LockItem.DEFAULTTIMEOUT = 24 * 60 * 60L
