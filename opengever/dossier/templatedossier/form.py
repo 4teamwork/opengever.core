@@ -101,8 +101,7 @@ class TemplateDocumentFormView(grok.View):
             status = IStatusMessage(self.request)
             status.addStatusMessage(
                 _("Not found the templatedossier"), type="error")
-            return self.context.request.RESPONSE.redirect(
-                self.context.absolute_url())
+            return self.request.RESPONSE.redirect(self.context.absolute_url())
 
         self.templatedossier_path = '/'.join(
             template_dossier.getPhysicalPath())

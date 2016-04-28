@@ -5,6 +5,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages import plone
+from ftw.testbrowser.pages.statusmessages import error_messages
 from ooxml_docprops import read_properties
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.dossier.docprops import TemporaryDocFile
@@ -20,6 +21,19 @@ from plone.app.testing import TEST_USER_ID
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 import transaction
+
+
+class TestNoTemplateDossier(FunctionalTestCase):
+
+    @browsing
+    def test_shows_message_when_no_templatedossier_is_found(self, browser):
+        dossier = create(Builder('dossier'))
+
+        browser.login().open(dossier, view='document_with_template')
+
+        self.assertEquals(
+            ['Not found the templatedossier'], error_messages())
+
 
 class TestDocumentWithTemplateForm(FunctionalTestCase):
 
