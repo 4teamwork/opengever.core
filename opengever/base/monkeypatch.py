@@ -1,4 +1,3 @@
-from opengever.base.marmoset_patch import marmoset_patch
 from ZODB.POSException import ConflictError
 import logging
 
@@ -6,21 +5,6 @@ import logging
 LOGGER = logging.getLogger('opengever.base')
 
 
-# Marmoset patch `plone.app.upgrade.v43.betas.to43rc1` to delay an expensive
-# upgrade. The upgrade is re-defined as opengever.policy.base.to4504.
-
-
-from plone.app.upgrade.v43 import betas
-
-
-def nullupgrade(context):
-    pass
-
-marmoset_patch(betas.to43rc1, nullupgrade)
-LOGGER.info('Marmoset patched plone.app.upgrade.v43.betas.to43rc1')
-
-
-# --------
 # Monkey patch the regex used to replace relative paths in url() statements
 # with absolute paths in the portal_css tool.
 # This has been fixed as of release 3.0.3 of Products.ResourceRegistries
