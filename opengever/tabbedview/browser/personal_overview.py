@@ -1,6 +1,4 @@
 from AccessControl import Unauthorized
-from Products.CMFPlone.utils import getToolByName
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from five import grok
 from ftw.tabbedview.browser.tabbed import TabbedView
 from opengever.activity import is_activity_feature_enabled
@@ -9,12 +7,15 @@ from opengever.latex.opentaskreport import is_open_task_report_allowed
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
-from opengever.tabbedview import LOG
 from opengever.tabbedview import _
-from opengever.tabbedview.browser.tabs import Documents, Dossiers
+from opengever.tabbedview import LOG
+from opengever.tabbedview.browser.tabs import Documents
+from opengever.tabbedview.browser.tabs import Dossiers
 from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
 from plone import api
 from plone.memoize.view import memoize_contextless
+from Products.CMFPlone.utils import getToolByName
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from sqlalchemy.exc import OperationalError
 from zope.interface import Interface
 import AccessControl
