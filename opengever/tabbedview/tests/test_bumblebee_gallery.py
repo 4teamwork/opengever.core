@@ -1,6 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.bumblebee import BUMBLEBEE_VIEW_COOKIE_NAME
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.tabbedview.browser.bumblebee_gallery import BumblebeeGalleryMixin
 from opengever.testing import FunctionalTestCase
@@ -191,3 +192,63 @@ class TestBumblebeeGalleryView(FunctionalTestCase):
 
         self.assertEqual(0, len(browser.css('.imageContainer')))
         self.assertEqual("No contents", browser.css('.no_content').first.text)
+
+
+class TestBumblebeeDocumentsProxyWithDeactivatedFeature(FunctionalTestCase):
+
+    @browsing
+    def test_do_not_set_cookie_for_bumblebee_view(self, browser):
+        browser.login().visit(view="tabbedview_view-mydocuments-proxy")
+        self.assertIsNone(browser.cookies.get(BUMBLEBEE_VIEW_COOKIE_NAME))
+
+    @browsing
+    def test_redirect_to_list_view(self, browser):
+        dossier = create(Builder('dossier'))
+        create(Builder('document').within(dossier))
+
+        browser.login().visit(view="tabbedview_view-mydocuments-proxy")
+
+        self.assertEqual(
+            'http://nohost/plone/#mydocuments',
+            browser.css('input[name="orig_template"]').first.value)
+
+
+class TestBumblebeeDocumentsProxyWithActivatedFeature(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+
+    @browsing
+    def test_set_cookie_to_the_last_accessed_bumblebee_view(self, browser):
+        dossier = create(Builder('dossier'))
+        browser.login().visit(dossier, view="tabbedview_view-documents-gallery")
+
+        self.assertEqual(
+            '"gallery"',
+            browser.cookies.get(BUMBLEBEE_VIEW_COOKIE_NAME).get('value'))
+
+        browser.login().visit(dossier, view="tabbedview_view-documents")
+
+        self.assertEqual(
+            '"list"',
+            browser.cookies.get(BUMBLEBEE_VIEW_COOKIE_NAME).get('value'))
+
+    @browsing
+    def test_redirect_to_the_given_cookie_view(self, browser):
+        dossier = create(Builder('dossier'))
+
+        browser.login().visit(dossier, view="tabbedview_view-documents-gallery")
+        browser.login().visit(view="tabbedview_view-mydocuments-proxy")
+
+        self.assertEqual(
+            'Gallery',
+            browser.css('.ViewChooser .active').first.text)
+
+    @browsing
+    def test_redirect_to_the_list_view_if_no_cookie_is_set(self, browser):
+        self.assertIsNone(browser.cookies.get(BUMBLEBEE_VIEW_COOKIE_NAME))
+
+        browser.login().visit(view="tabbedview_view-mydocuments-proxy")
+
+        self.assertEqual(
+            'List',
+            browser.css('.ViewChooser .active').first.text)

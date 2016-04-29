@@ -2,6 +2,9 @@ from ftw.bumblebee.utils import get_representation_url_by_brain as representatio
 from ftw.bumblebee.utils import get_representation_url_by_object as representation_url_by_object
 from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from plone import api
+from zope.globalrequest import getRequest
+
+BUMBLEBEE_VIEW_COOKIE_NAME = 'bumblebee-view'
 
 
 def get_preserved_as_paper_placeholder_image_url():
@@ -43,3 +46,13 @@ def get_representation_url_by_brain(format_name, brain):
     """
     return representation_url_by_brain(format_name, brain) or \
         get_preserved_as_paper_placeholder_image_url()
+
+
+def set_prefered_listing_view(value):
+    request = getRequest()
+    request.RESPONSE.setCookie(BUMBLEBEE_VIEW_COOKIE_NAME, value, path='/')
+
+
+def get_prefered_listing_view():
+    request = getRequest()
+    return request.cookies.get(BUMBLEBEE_VIEW_COOKIE_NAME, '')
