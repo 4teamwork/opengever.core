@@ -1,0 +1,14 @@
+<configure
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="opengever.core">
+
+    <browser:page
+        name="plone_layout"
+        for="*"
+        permission="zope.Public"
+        class=".layout.GeverLayoutPolicy"
+        allowed_interface="plone.app.layout.globals.interfaces.ILayoutPolicy"
+        layer="opengever.base.interfaces.IOpengeverBaseLayer"
+        />
+
+</configure>

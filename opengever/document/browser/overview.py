@@ -3,6 +3,8 @@ from five import grok
 from opengever.base import _ as ogbmf
 from opengever.base.browser import edit_public_trial
 from opengever.base.browser.helper import get_css_class
+from opengever.bumblebee import get_representation_url_by_object
+from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.document import _
 from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.document.document import IDocumentSchema
@@ -257,3 +259,9 @@ class Overview(DisplayForm, OpengeverTab):
             additional_classes=['function-download-copy'],
             include_token=True
             )
+
+    def show_preview(self):
+        return is_bumblebee_feature_enabled()
+
+    def get_preview_image_url(self):
+        return get_representation_url_by_object('image', self.context)
