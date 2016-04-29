@@ -36,11 +36,16 @@ class IDocumentMetadata(form.Schema):
             u'document_author',
             u'digitally_available',
             u'preserved_as_paper',
-            u'archival_file',
             u'thumbnail',
             u'preview',
             ],
         )
+
+    form.fieldset(
+        u'archive_file',
+        label=_(u'fieldset_archive_file', u'Archive file'),
+        fields=[u'archival_file']
+    )
 
     dexteritytextindexer.searchable('description')
     description = schema.Text(
@@ -124,7 +129,6 @@ class IDocumentMetadata(form.Schema):
         default=True,
         )
 
-    form.omitted('archival_file')
     archival_file = NamedBlobFile(
         title=_(u'label_archival_file', default='Archival File'),
         description=_(u'help_archival_file', default=''),
