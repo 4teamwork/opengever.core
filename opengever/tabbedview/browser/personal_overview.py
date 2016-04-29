@@ -10,6 +10,7 @@ from opengever.ogds.base.utils import ogds_service
 from opengever.tabbedview import _
 from opengever.tabbedview import LOG
 from opengever.tabbedview.browser.tabs import Documents
+from opengever.tabbedview.browser.tabs import DocumentsProxy
 from opengever.tabbedview.browser.tabs import Dossiers
 from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
 from plone import api
@@ -47,7 +48,7 @@ class PersonalOverview(TabbedView):
 
     default_tabs = [
         {'id': 'mydossiers', 'icon': None, 'url': '#', 'class': None},
-        {'id': 'mydocuments', 'icon': None, 'url': '#', 'class': None},
+        {'id': 'mydocuments-proxy', 'icon': None, 'url': '#', 'class': None},
         {'id': 'mytasks', 'icon': None, 'url': '#', 'class': None},
         {'id': 'myissuedtasks', 'icon': None, 'url': '#', 'class': None},
     ]
@@ -162,6 +163,14 @@ class MyDossiers(Dossiers):
     @property
     def view_name(self):
         return self.__name__.split('tabbedview_view-')[1]
+
+
+class MyDocumentsProxy(DocumentsProxy):
+    grok.name('tabbedview_view-mydocuments-proxy')
+    grok.context(Interface)
+
+    listview = "tabbedview_view-mydocuments"
+    galleryview = "tabbedview_view-mydocuments-gallery"
 
 
 class MyDocuments(Documents):
