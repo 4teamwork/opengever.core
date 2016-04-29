@@ -1,10 +1,14 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.bumblebee.tests.helpers import asset as bumblebee_asset
+from ftw.testbrowser import browsing
+from opengever.bumblebee import get_prefered_listing_view
 from opengever.bumblebee import get_representation_url_by_brain
 from opengever.bumblebee import get_representation_url_by_object
 from opengever.bumblebee import is_bumblebee_feature_enabled
+from opengever.bumblebee import set_prefered_listing_view
 from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
 from plone import api
