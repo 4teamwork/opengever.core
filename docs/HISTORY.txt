@@ -5,6 +5,9 @@ Changelog
 4.7.5 (unreleased)
 ------------------
 
+- Clean up our monkey patches.
+  [lgraf]
+
 - Fix bug in redirect when no templatedossier is found.
   [phgross]
 
