@@ -363,7 +363,7 @@ def document_modified(context, event):
 
     for desc in event.descriptions:
         for attr in desc.attributes:
-            if attr in ('file', 'message'):
+            if attr in ('file', 'message', 'IDocumentMetadata.archival_file'):
                 file_changed = True
             elif attr in ('IClassification.public_trial', 'public_trial'):
                 # Attribute name is different when changed through regular
