@@ -40,6 +40,14 @@ OPENGEVER_PATH = os.path.join(BUILDOUT_PATH, 'opengever')
 
 
 def main():
+    # Remove *.py[co] files to avoid race conditions with parallel workers
+    # stepping on each other's toes when trying to clean up stale bytecode.
+    #
+    # Setting PYTHONDONTWRITEBYTECODE is not enough, because running buildout
+    # also already precompiles bytecode for some eggs.
+    remove_bytecode_files(OPENGEVER_PATH)
+    remove_bytecode_files('src')
+
     threads = []
     exitcodes = []
     output = []
@@ -122,6 +130,18 @@ def packages_by_size():
                sorted(map(lambda pair: (len(list(pair[1])), pair[0]),
                           test_suites_by_packages()),
                       reverse=True))
+
+def remove_bytecode_files(path):
+    print "Removing bytecode files from %r" % path
+    for filename in find_bytecode_files(path):
+        os.unlink(filename)
+
+
+def find_bytecode_files(path):
+    for root, dirs, files in os.walk(path):
+        for name in files:
+            if fnmatch(name, '*.py[co]'):
+                yield os.path.join(root, name)
 
 def test_suites():
     for dirpath, dirnames, filenames in os.walk(OPENGEVER_PATH):
