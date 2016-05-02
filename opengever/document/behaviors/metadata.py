@@ -23,6 +23,15 @@ def document_date_default():
     return date.today()
 
 
+def preserved_as_paper_default():
+    """Set the client specific default for `preserved_as_paper`
+    (configured in registry).
+    """
+    registry = getUtility(IRegistry)
+    document_settings = registry.forInterface(IDocumentSettings)
+    return document_settings.preserved_as_paper_default
+
+
 class IDocumentMetadata(form.Schema):
     """Schema behavior for common GEVER document metadata
     """
@@ -127,7 +136,7 @@ class IDocumentMetadata(form.Schema):
         title=_(u'label_preserved_as_paper', default='Preserved as paper'),
         description=_(u'help_preserved_as_paper', default=''),
         required=False,
-        default=True,
+        defaultFactory=preserved_as_paper_default,
         )
 
     form.omitted('archival_file')
@@ -196,13 +205,3 @@ validator.WidgetValidatorDiscriminators(
     )
 
 grok.global_adapter(FileOrPaperValidator)
-
-
-@form.default_value(field=IDocumentMetadata['preserved_as_paper'])
-def default_preserved_as_paper(data):
-    """Set the client specific default for `preserved_as_paper`
-    (configured in registry).
-    """
-    registry = getUtility(IRegistry)
-    document_settings = registry.forInterface(IDocumentSettings)
-    return document_settings.preserved_as_paper_default
