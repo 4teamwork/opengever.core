@@ -1,15 +1,16 @@
 from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
 from ftw.testing import MockTestCase
 from grokcore.component.testing import grok
 from opengever.core.testing import activate_filing_number
 from opengever.core.testing import ANNOTATION_LAYER
 from opengever.core.testing import inactivate_filing_number
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_FILING_LAYER
 from opengever.dossier.archive import Archiver
 from opengever.dossier.archive import default_end_date
 from opengever.dossier.archive import EnddateValidator
-from opengever.dossier.archive import filing_prefix_default_value
 from opengever.dossier.archive import filing_year_default_value
 from opengever.dossier.archive import get_filing_actions
 from opengever.dossier.archive import METHOD_FILING
@@ -31,6 +32,7 @@ from opengever.dossier.interfaces import IDossierArchiver
 from opengever.testing import FunctionalTestCase
 from zope.interface import Invalid
 from zope.interface.verify import verifyClass
+import transaction
 
 
 class TestArchiver(FunctionalTestCase):
@@ -241,20 +243,6 @@ class TestArchiving(MockTestCase):
         self.assertEquals(actions.by_token.keys(),[ONLY_NUMBER])
         self.assertEquals(actions.by_value.keys(),[METHOD_FILING])
 
-    def test_default_prefix(self):
-        data = self.stub()
-        dossier = self.stub_dossier()
-        self.expect(data.context).result(dossier)
-
-        with self.mocker.order():
-            self.expect(dossier.filing_prefix).result('administration')
-            self.expect(dossier.filing_prefix).result(None)
-
-        self.replay()
-
-        self.assertEquals(filing_prefix_default_value(data), 'administration')
-        self.assertEquals(filing_prefix_default_value(data), '')
-
     def test_default_filing_year(self):
         data = self.stub()
         dossier = self.stub_dossier()
@@ -293,3 +281,27 @@ class TestArchiving(MockTestCase):
         self.assertEquals(default_end_date(data), date(2012, 3, 3))
         self.assertEquals(default_end_date(data), date(2012, 4, 4))
         self.assertEquals(default_end_date(data), date(2012, 5, 5))
+
+
+class TestArchiveFormDefaults(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_FILING_LAYER
+
+    def setUp(self):
+        super(TestArchiveFormDefaults, self).setUp()
+        self.dossier = create(Builder('dossier'))
+
+    @browsing
+    def test_filing_prefix_default(self, browser):
+        # Dossier has no filing_prefix set - default to None in archive form
+        browser.login().open(self.dossier, view='transition-archive')
+        form_default = browser.css('#form-widgets-filing_prefix').first.value
+        self.assertEqual(None, form_default)
+
+        # Dossier has a filing_prefix - default to that one in archive form
+        IDossier(self.dossier).filing_prefix = 'department'
+        transaction.commit()
+
+        browser.login().open(self.dossier, view='transition-archive')
+        form_default = browser.css('#form-widgets-filing_prefix').first.value
+        self.assertEqual('department', form_default)

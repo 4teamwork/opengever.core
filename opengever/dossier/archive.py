@@ -23,6 +23,8 @@ from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility, provideAdapter
 from zope.interface import Invalid
 from zope.interface import invariant
+from zope.interface import provider
+from zope.schema.interfaces import IContextAwareDefaultFactory
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import getVocabularyRegistry
 from zope.schema.vocabulary import SimpleVocabulary
@@ -131,6 +133,21 @@ def get_filing_actions(context):
     return SimpleVocabulary(values)
 
 
+@provider(IContextAwareDefaultFactory)
+def filing_prefix_default(context):
+    """If the dossier already has a filing_prefix set, use that one as the
+    default for the filing_prefix in the ArchiveForm.
+
+    context: Dossier that's being archived.
+    """
+    prefix = IDossier(context).filing_prefix
+    if prefix:
+        return prefix.decode('utf-8')
+    # Need to return None here instead of empty string, because otherwise
+    # validation in zope.schema's DefaultProperty fails (value not in vocab)
+    return None
+
+
 class IArchiveFormSchema(directives_form.Schema):
 
     filing_prefix = schema.Choice(
@@ -140,6 +157,7 @@ class IArchiveFormSchema(directives_form.Schema):
             visible_terms_from_registry="opengever.dossier"
                 '.interfaces.IDossierContainerTypes.type_prefixes'),
         required=False,
+        defaultFactory=filing_prefix_default,
     )
 
     dossier_enddate = schema.Date(
@@ -173,17 +191,6 @@ class IArchiveFormSchema(directives_form.Schema):
 
 
 # defaults
-@directives_form.default_value(field=IArchiveFormSchema['filing_prefix'])
-def filing_prefix_default_value(data):
-    """If allready a filing_prefix is selected on the dossier,
-    it return this as default."""
-
-    prefix = IDossier(data.context).filing_prefix
-    if prefix:
-        return prefix.decode('utf-8')
-    return ""
-
-
 @directives_form.default_value(field=IArchiveFormSchema['filing_year'])
 def filing_year_default_value(data):
     last_date = data.context.earliest_possible_end_date()
