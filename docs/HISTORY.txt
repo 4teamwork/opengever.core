@@ -31,9 +31,9 @@ Changelog
   xlsx creation.
   [phgross]
 
--  TranslatedTitleBrain: Also use Missing.Value as indicator that a brain
-   has no translated title, and should therefore return the regular title.
-   [lgraf]
+- TranslatedTitleBrain: Also use Missing.Value as indicator that a brain
+  has no translated title, and should therefore return the regular title.
+  [lgraf]
 
 - Make default value for IDossier.start a defaultFactory instead
   of a form level default.
