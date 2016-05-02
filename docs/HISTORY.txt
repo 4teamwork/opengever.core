@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.7.5 (unreleased)
+4.8.0 (2016-05-02)
 ------------------
 
 - Only show active sub-dossiers in dossier navigation.
