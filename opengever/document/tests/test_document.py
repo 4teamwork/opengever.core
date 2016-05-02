@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -6,9 +6,9 @@ from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.dexterity import erroneous_fields
 from ftw.testbrowser.pages.statusmessages import assert_message
 from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
+from ftw.testing import freeze
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.document.behaviors import IBaseDocument
-from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.document import IDocumentSchema
 from opengever.document.document import UploadValidator
 from opengever.document.interfaces import IDocumentSettings
@@ -235,8 +235,23 @@ class TestDocument(FunctionalTestCase):
 
 class TestDocumentDefaultValues(FunctionalTestCase):
 
-    def test_default_document_date_is_today(self):
-        self.assertEquals(date.today(), self.default_value_for('document_date'))
+    def setUp(self):
+        super(TestDocumentDefaultValues, self).setUp()
+        self.dossier = create(Builder('dossier'))
+
+    @browsing
+    def test_default_document_date_is_today(self, browser):
+        now = datetime.now()
+        today = now.date()
+
+        browser.login().open(self.dossier)
+
+        with freeze(now):
+            factoriesmenu.add('Document')
+            browser.fill({'Title': u'My Document'}).save()
+        document = self.dossier['document-1']
+
+        self.assertEqual(today, document.document_date)
 
     def test_preserverd_as_paper_default(self):
         registry = getUtility(IRegistry)
