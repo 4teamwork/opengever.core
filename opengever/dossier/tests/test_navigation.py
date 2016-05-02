@@ -72,3 +72,45 @@ class TestNavigation(FunctionalTestCase):
                          }],
               }],
             browser.json)
+
+    @browsing
+    def test_only_show_active_subdossiers(self, browser):
+        sub1 = create(Builder('dossier')
+                      .titled(u'active')
+                      .having(description=u'The active sub-dossier')
+                      .within(self.main_dossier))
+
+        sub2 = create(Builder('dossier')
+                      .titled(u'archived')
+                      .having(description=u'The archived sub-dossier')
+                      .in_state('dossier-state-archived')
+                      .within(self.main_dossier))
+
+        sub3 = create(Builder('dossier')
+                      .titled(u'inactive(storniert)')
+                      .having(description=u'The inactive sub-dossier')
+                      .in_state('dossier-state-inactive')
+                      .within(self.main_dossier))
+
+        sub4 = create(Builder('dossier')
+                      .titled(u'resolved(abgeschlossen)')
+                      .having(description=u'The resolved sub-dossier')
+                      .in_state('dossier-state-resolved')
+                      .within(self.main_dossier))
+
+        browser.login().visit(self.main_dossier,
+                              view='dossier_navigation.json')
+        self.assert_json_equal(
+            [{"text": "Main",
+              "description": "The main dossier",
+              "uid": IUUID(self.main_dossier),
+              "url": self.main_dossier.absolute_url(),
+              "nodes": [
+                        {"text": "active",
+                         "description": "The active sub-dossier",
+                         "nodes": [],
+                         "uid": IUUID(sub1),
+                         "url": sub1.absolute_url(),
+                         }]
+              }],
+            browser.json)

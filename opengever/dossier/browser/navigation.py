@@ -1,7 +1,8 @@
 from opengever.base.browser.navigation import make_tree_by_url
+from opengever.dossier.base import DOSSIER_STATES_OPEN
+from plone import api
 from Products.Five import BrowserView
 import json
-from plone import api
 
 
 class JSONNavigation(BrowserView):
@@ -31,7 +32,8 @@ class JSONNavigation(BrowserView):
     def _tree(self):
         subdossier_nodes = map(
             self._brain_to_node,
-            self.context.get_subdossiers(sort_on='sortable_title'))
+            self.context.get_subdossiers(sort_on='sortable_title',
+                                         review_state=DOSSIER_STATES_OPEN))
         nodes = [self._context_as_node()] + subdossier_nodes
 
         return make_tree_by_url(nodes)

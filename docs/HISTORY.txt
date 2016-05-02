@@ -5,6 +5,9 @@ Changelog
 4.7.5 (unreleased)
 ------------------
 
+- Only show active sub-dossiers in dossier navigation.
+  [deiferni]
+
 - Clean up our monkey patches.
   [lgraf]
 
