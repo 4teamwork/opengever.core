@@ -18,6 +18,11 @@ from zope.interface import alsoProvides
 from zope.interface import Invalid
 
 
+def document_date_default():
+    """Set today's date as the default `document_date`"""
+    return date.today()
+
+
 class IDocumentMetadata(form.Schema):
     """Schema behavior for common GEVER document metadata
     """
@@ -72,6 +77,7 @@ class IDocumentMetadata(form.Schema):
         title=_(u'label_document_date', default='Document Date'),
         description=_(u'help_document_date', default=''),
         required=False,
+        defaultFactory=document_date_default,
         )
 
     # workaround because ftw.datepicker wasn't working
@@ -190,13 +196,6 @@ validator.WidgetValidatorDiscriminators(
     )
 
 grok.global_adapter(FileOrPaperValidator)
-
-
-# Default values
-@form.default_value(field=IDocumentMetadata['document_date'])
-def default_document_date(data):
-    """Set today's date as the default `document_date`"""
-    return date.today()
 
 
 @form.default_value(field=IDocumentMetadata['preserved_as_paper'])
