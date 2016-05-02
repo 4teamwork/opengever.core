@@ -6,14 +6,13 @@ from ftw.datepicker.widget import DatePickerFieldWidget
 from ftw.mail.mail import IMail
 from opengever.document import _
 from opengever.document.interfaces import IDocumentSettings
+from plone import api
 from plone.directives import form
 from plone.namedfile.field import NamedBlobFile
-from plone.registry.interfaces import IRegistry
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 from z3c.form import validator
 from z3c.form.browser import checkbox
 from zope import schema
-from zope.component import getUtility
 from zope.interface import alsoProvides
 from zope.interface import Invalid
 
@@ -21,6 +20,14 @@ from zope.interface import Invalid
 def document_date_default():
     """Set today's date as the default `document_date`"""
     return date.today()
+
+
+def preserved_as_paper_default():
+    """Set the client specific default for `preserved_as_paper`
+    (configured in registry).
+    """
+    return api.portal.get_registry_record(
+        'preserved_as_paper_default', interface=IDocumentSettings)
 
 
 class IDocumentMetadata(form.Schema):
@@ -127,7 +134,7 @@ class IDocumentMetadata(form.Schema):
         title=_(u'label_preserved_as_paper', default='Preserved as paper'),
         description=_(u'help_preserved_as_paper', default=''),
         required=False,
-        default=True,
+        defaultFactory=preserved_as_paper_default,
         )
 
     form.omitted('archival_file')
@@ -196,13 +203,3 @@ validator.WidgetValidatorDiscriminators(
     )
 
 grok.global_adapter(FileOrPaperValidator)
-
-
-@form.default_value(field=IDocumentMetadata['preserved_as_paper'])
-def default_preserved_as_paper(data):
-    """Set the client specific default for `preserved_as_paper`
-    (configured in registry).
-    """
-    registry = getUtility(IRegistry)
-    document_settings = registry.forInterface(IDocumentSettings)
-    return document_settings.preserved_as_paper_default
