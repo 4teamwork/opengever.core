@@ -2,6 +2,7 @@ from five import grok
 from opengever.base.browser.helper import get_css_class
 from opengever.bumblebee import get_representation_url_by_brain
 from opengever.bumblebee import is_bumblebee_feature_enabled
+from opengever.bumblebee import set_prefered_listing_view
 from opengever.tabbedview.browser.personal_overview import MyDocuments
 from opengever.tabbedview.browser.tabs import Documents
 from Products.CMFPlone.utils import getToolByName
@@ -24,6 +25,8 @@ class BumblebeeGalleryMixin(object):
     def __call__(self, *args, **kwargs):
         if not is_bumblebee_feature_enabled():
             raise NotFound
+
+        set_prefered_listing_view('gallery')
         return self.template()
 
     @property
