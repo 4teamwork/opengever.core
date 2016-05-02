@@ -148,6 +148,20 @@ def filing_prefix_default(context):
     return None
 
 
+@provider(IContextAwareDefaultFactory)
+def filing_year_default(context):
+    """Propose default for filing_year based on the most recent date of
+    any object contained in the dossier or the dossier itself.
+
+    context: Dossier that's being archived.
+    """
+    youngest_date = context.earliest_possible_end_date()
+    if youngest_date:
+        # filing_year is of type TextLine for some reason
+        return unicode(youngest_date.year)
+    return None
+
+
 class IArchiveFormSchema(directives_form.Schema):
 
     filing_prefix = schema.Choice(
@@ -170,6 +184,7 @@ class IArchiveFormSchema(directives_form.Schema):
         title=_(u'filing_year', default="filing Year"),
         constraint=valid_filing_year,
         required=False,
+        defaultFactory=filing_year_default,
     )
 
     filing_action = schema.Choice(
@@ -191,14 +206,6 @@ class IArchiveFormSchema(directives_form.Schema):
 
 
 # defaults
-@directives_form.default_value(field=IArchiveFormSchema['filing_year'])
-def filing_year_default_value(data):
-    last_date = data.context.earliest_possible_end_date()
-    if last_date:
-        return str(last_date.year)
-    return None
-
-
 @directives_form.default_value(field=IArchiveFormSchema['dossier_enddate'])
 def default_end_date(data):
     if IDossier(data.context).end and data.context.has_valid_enddate():

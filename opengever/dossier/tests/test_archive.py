@@ -1,7 +1,9 @@
 from datetime import date
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testing import freeze
 from ftw.testing import MockTestCase
 from grokcore.component.testing import grok
 from opengever.core.testing import activate_filing_number
@@ -11,7 +13,6 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_FILING_LAYER
 from opengever.dossier.archive import Archiver
 from opengever.dossier.archive import default_end_date
 from opengever.dossier.archive import EnddateValidator
-from opengever.dossier.archive import filing_year_default_value
 from opengever.dossier.archive import get_filing_actions
 from opengever.dossier.archive import METHOD_FILING
 from opengever.dossier.archive import METHOD_RESOLVING
@@ -33,6 +34,9 @@ from opengever.testing import FunctionalTestCase
 from zope.interface import Invalid
 from zope.interface.verify import verifyClass
 import transaction
+
+
+FROZEN_NOW = datetime.now()
 
 
 class TestArchiver(FunctionalTestCase):
@@ -243,20 +247,6 @@ class TestArchiving(MockTestCase):
         self.assertEquals(actions.by_token.keys(),[ONLY_NUMBER])
         self.assertEquals(actions.by_value.keys(),[METHOD_FILING])
 
-    def test_default_filing_year(self):
-        data = self.stub()
-        dossier = self.stub_dossier()
-        self.expect(data.context).result(dossier)
-
-        with self.mocker.order():
-            self.expect(dossier.earliest_possible_end_date()).result(date(2012, 3, 3))
-            self.expect(dossier.earliest_possible_end_date()).result(None)
-
-        self.replay()
-
-        self.assertEquals(filing_year_default_value(data), '2012')
-        self.assertEquals(filing_year_default_value(data), None)
-
     def test_default_end_date(self):
         data = self.stub()
         dossier = self.stub_dossier()
@@ -289,7 +279,8 @@ class TestArchiveFormDefaults(FunctionalTestCase):
 
     def setUp(self):
         super(TestArchiveFormDefaults, self).setUp()
-        self.dossier = create(Builder('dossier'))
+        with freeze(FROZEN_NOW):
+            self.dossier = create(Builder('dossier'))
 
     @browsing
     def test_filing_prefix_default(self, browser):
@@ -305,3 +296,20 @@ class TestArchiveFormDefaults(FunctionalTestCase):
         browser.login().open(self.dossier, view='transition-archive')
         form_default = browser.css('#form-widgets-filing_prefix').first.value
         self.assertEqual('department', form_default)
+
+    @browsing
+    def test_filing_year_default(self, browser):
+        # Dossier without sub-objects - earliest possible end date is dossier
+        # start date, filing_year should therefore default to this year
+        browser.login().open(self.dossier, view='transition-archive')
+        form_default = browser.css('#form-widgets-filing_year').first.value
+        self.assertEqual(FROZEN_NOW.date().year, int(form_default))
+
+        # Document with date newer than dossier start. Suggested filing_year
+        # default should be that of the document (year of the youngest object)
+        doc = create(Builder('document')
+                     .within(self.dossier)
+                     .having(document_date=date(2050, 1, 1)))
+        browser.login().open(self.dossier, view='transition-archive')
+        form_default = browser.css('#form-widgets-filing_year').first.value
+        self.assertEqual(doc.document_date.year, int(form_default))
