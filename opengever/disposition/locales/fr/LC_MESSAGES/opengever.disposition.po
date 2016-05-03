@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-05-03 11:42+0000\n"
+"POT-Creation-Date: 2016-05-03 21:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,9 +73,9 @@ msgstr ""
 msgid "label_dossiers"
 msgstr ""
 
-#. Default: "Export appraisal list"
+#. Default: "Export appraisal list as excel"
 #: ./opengever/disposition/browser/overview.py:44
-msgid "label_export_appraisal_list"
+msgid "label_export_appraisal_list_as_excel"
 msgstr ""
 
 #. Default: "Reference"
