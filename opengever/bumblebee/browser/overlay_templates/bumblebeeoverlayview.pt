@@ -1,31 +1,51 @@
 <div id="file-preview" i18n:domain="opengever.bumblebee">
+  <aside class="sidebar">
+    <header tal:condition="context/file">
+      <span tal:attributes="class string:file-mimetype ${view/get_mime_type_css_class}" />
+      <span class="title" tal:content="view/get_file_title" />
+      <span class="filesize" tal:content="string:${view/get_file_size} KB" />
+    </header>
+    <main>
+      <ul class="metadata">
+        <li>
+          <span class="title">Creator:</span>
+          <span class="value" tal:content="view/get_creator"></span>
+        </li>
+        <li tal:define="date view/get_document_date" tal:condition="date" class="detailItem">
+          <span class="title">Documentdate:</span>
+          <span class="value" tal:content="date"></span>
+        </li>
+        <li tal:define="dossier view/get_containing_dossier" tal:condition="dossier" class="detailItem">
+           <span class="title">Dossier:</span>
+           <a class="value" tal:attributes="href dossier/absolute_url" tal:content="dossier/Title"></a>
+        </li>
+        <li>
+          <span class="title">Sequence number:</span>
+          <span class="value" tal:content="view/get_sequence_number"></span>
+        </li>
+        <li>
+          <span class="title">Reference number:</span>
+          <span class="value" tal:content="view/get_reference_number"></span>
+        </li>
+      </ul>
+    </main>
+    <footer>
+      <ul class="file-actions">
+        <li>
+          <a id="action-view" tal:define="link view/get_detail_view_link" tal:condition="link" tal:attributes="href context/absolute_url">Open detailview</a>
+        </li>
+        <li id="action-download" tal:define="link view/get_download_copy_link" tal:condition="link" tal:content="structure link">
+        </li>
+        <li tal:define="link view/get_edit_metadata_link" tal:condition="link">
+          <a id="action-edit" tal:attributes="href view/get_edit_metadata_link">Edit metadata</a>
+        </li>
+        <li tal:define="link view/get_checkout_link" tal:condition="link">
+          <a id="action-checkout" tal:attributes="href view/get_checkout_link">Checkout and edit</a>
+        </li>
+      </ul>
+    </footer>
+  </aside>
   <div class="preview">
-     <iframe tal:attributes="src view/get_preview_pdf_url"></iframe>
-  </div>
-  <div class="sidebar">
-    <span tal:attributes="class string:file-mimetype ${view/get_mime_type_css_class}"></span>
-    <span tal:content="view/get_file_title"></span>
-    <span tal:content="view/get_file_size"></span> KB
-    <!-- Metadata -->
-    <ul>
-      <li class="detailItem">Creator: <span tal:content="view/get_creator"></span></li>
-      <li class="detailItem">Documentdate: <span tal:content="view/get_document_date"></span></li>
-      <li tal:define="dossier view/get_containing_dossier" tal:condition="dossier" class="detailItem">
-        Dossier: <a tal:attributes="href dossier/absolute_url" tal:content="dossier/Title"></a>
-      </li>
-      <li class="detailItem">Sequence number: <span tal:content="view/get_sequence_number"></span></li>
-      <li class="detailItem">Reference number: <span tal:content="view/get_reference_number"></span></li>
-    </ul>
-    <!-- End metadata -->
-
-    <!-- Edit Actions -->
-    <ul class="fileActions">
-      <li><a tal:attributes="href context/absolute_url" class="button">Open detailview</a></li>
-      <li><a tal:attributes="href view/get_download_copy_link" class="button">Download copy</a></li>
-      <li><a tal:attributes="href view/get_edit_metadata_link" class="button">Edit metadata</a></li>
-      <li><a tal:attributes="href view/get_checkout_link" class="button">Checkout and edit</a></li>
-
-    </ul>
-    <!-- End actions -->
+    <iframe tal:attributes="src view/get_preview_pdf_url"></iframe>
   </div>
 </div>
