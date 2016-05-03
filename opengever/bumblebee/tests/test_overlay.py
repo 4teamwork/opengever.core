@@ -3,6 +3,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.bumblebee.tests.helpers import asset as bumblebee_asset
 from ftw.testbrowser import browsing
+from opengever.bumblebee.browser.overlay import BumblebeeOverlayMixin
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import login
@@ -10,16 +11,42 @@ from zExceptions import NotFound
 import transaction
 
 
+class TestBumblebeeOverlayListing(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+
+    @browsing
+    def test_render_bumblebee_overlay_listing(self, browser):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document').within(dossier))
+
+        browser.login().visit(document, view="bumblebee-overlay-listing")
+
+        self.assertEqual(browser.css('#file-preview'))
+
+
+class TestBumblebeeOverlayDocument(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+
+    @browsing
+    def test_render_bumblebee_overlay_document(self, browser):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document').within(dossier))
+
+        browser.login().visit(document, view="bumblebee-overlay-document")
+
+        self.assertEqual(browser.css('#file-preview'))
+
+
 class TestBumblebeeOverlayWithoutBumblebeeFeature(FunctionalTestCase):
 
     @browsing
     def test_calling_mixin_raise_404_if_feature_is_deactivated(self, browser):
-        dossier = create(Builder('dossier'))
-        document = create(Builder('document').within(dossier))
-        view = document.restrictedTraverse('bumblebee-overlay')
+        mixin = BumblebeeOverlayMixin()
 
         with self.assertRaises(NotFound):
-            view()
+            mixin()
 
 
 class TestGetPreviewPdfUrl(FunctionalTestCase):
@@ -29,9 +56,11 @@ class TestGetPreviewPdfUrl(FunctionalTestCase):
     def test_returns_preview_pdf_url_as_string(self):
         dossier = create(Builder('dossier'))
         document = create(Builder('document').within(dossier))
-        view = document.restrictedTraverse('bumblebee-overlay')
 
-        self.assertIn('preserved_as_paper.png', view.get_preview_pdf_url())
+        mixin = BumblebeeOverlayMixin()
+        mixin.context = document
+
+        self.assertIn('preserved_as_paper.png', mixin.get_preview_pdf_url())
         transaction.commit()
 
 
@@ -48,17 +77,19 @@ class TestGetFileTitle(FunctionalTestCase):
                               bumblebee_asset('example.docx').bytes(),
                               u'example.docx'))
 
-        view = document.restrictedTraverse('bumblebee-overlay')
+        mixin = BumblebeeOverlayMixin()
+        mixin.context = document
 
-        self.assertEqual('example.docx', view.get_file_title())
+        self.assertEqual('example.docx', mixin.get_file_title())
 
     def test_returns_none_if_no_file_is_available(self):
         dossier = create(Builder('dossier'))
         document = create(Builder('document').within(dossier))
 
-        view = document.restrictedTraverse('bumblebee-overlay')
+        mixin = BumblebeeOverlayMixin()
+        mixin.context = document
 
-        self.assertIsNone(view.get_file_title())
+        self.assertIsNone(mixin.get_file_title())
 
 
 class TestGetFileSize(FunctionalTestCase):
@@ -73,17 +104,19 @@ class TestGetFileSize(FunctionalTestCase):
                               bumblebee_asset('example.docx').bytes(),
                               u'example.docx'))
 
-        view = document.restrictedTraverse('bumblebee-overlay')
+        mixin = BumblebeeOverlayMixin()
+        mixin.context = document
 
-        self.assertEqual(26, view.get_file_size())
+        self.assertEqual(26, mixin.get_file_size())
 
     def test_returns_none_if_no_file_is_available(self):
         dossier = create(Builder('dossier'))
         document = create(Builder('document').within(dossier))
 
-        view = document.restrictedTraverse('bumblebee-overlay')
+        mixin = BumblebeeOverlayMixin()
+        mixin.context = document
 
-        self.assertIsNone(view.get_file_size())
+        self.assertIsNone(mixin.get_file_size())
 
 
 class TestGetCreator(FunctionalTestCase):
@@ -94,9 +127,10 @@ class TestGetCreator(FunctionalTestCase):
         dossier = create(Builder('dossier'))
         document = create(Builder('document').within(dossier))
 
-        view = document.restrictedTraverse('bumblebee-overlay')
+        mixin = BumblebeeOverlayMixin()
+        mixin.context = document
 
-        self.assertIn('Test User (test_user_1_)', view.get_creator())
+        self.assertIn('Test User (test_user_1_)', mixin.get_creator())
 
 
 class TestGetDocumentDate(FunctionalTestCase):
@@ -109,9 +143,10 @@ class TestGetDocumentDate(FunctionalTestCase):
                           .within(dossier)
                           .having(document_date=date(2014, 1, 1)))
 
-        view = document.restrictedTraverse('bumblebee-overlay')
+        mixin = BumblebeeOverlayMixin()
+        mixin.context = document
 
-        self.assertEqual(u'Jan 01, 2014 01:00 AM', view.get_document_date())
+        self.assertEqual(u'Jan 01, 2014 01:00 AM', mixin.get_document_date())
 
     def test_returns_none_if_no_document_date_is_set(self):
         dossier = create(Builder('dossier'))
@@ -119,9 +154,10 @@ class TestGetDocumentDate(FunctionalTestCase):
                           .within(dossier)
                           .having(document_date=''))
 
-        view = document.restrictedTraverse('bumblebee-overlay')
+        mixin = BumblebeeOverlayMixin()
+        mixin.context = document
 
-        self.assertIsNone(view.get_document_date())
+        self.assertIsNone(mixin.get_document_date())
 
 
 class TestGetContainingDossier(FunctionalTestCase):
@@ -134,9 +170,10 @@ class TestGetContainingDossier(FunctionalTestCase):
                           .within(dossier)
                           .having(document_date=date(2014, 1, 1)))
 
-        view = document.restrictedTraverse('bumblebee-overlay')
+        mixin = BumblebeeOverlayMixin()
+        mixin.context = document
 
-        self.assertEqual(dossier, view.get_containing_dossier())
+        self.assertEqual(dossier, mixin.get_containing_dossier())
 
 
 class TestGetSequenceNumber(FunctionalTestCase):
@@ -147,9 +184,10 @@ class TestGetSequenceNumber(FunctionalTestCase):
         dossier = create(Builder('dossier'))
         document = create(Builder('document').within(dossier))
 
-        view = document.restrictedTraverse('bumblebee-overlay')
+        mixin = BumblebeeOverlayMixin()
+        mixin.context = document
 
-        self.assertEqual(1, view.get_sequence_number())
+        self.assertEqual(1, mixin.get_sequence_number())
 
 
 class TestGetReferenceNumber(FunctionalTestCase):
@@ -160,9 +198,10 @@ class TestGetReferenceNumber(FunctionalTestCase):
         dossier = create(Builder('dossier'))
         document = create(Builder('document').within(dossier))
 
-        view = document.restrictedTraverse('bumblebee-overlay')
+        mixin = BumblebeeOverlayMixin()
+        mixin.context = document
 
-        self.assertEqual('Client1 / 1 / 1', view.get_reference_number())
+        self.assertEqual('Client1 / 1 / 1', mixin.get_reference_number())
 
 
 class TestGetCheckoutLink(FunctionalTestCase):
@@ -177,19 +216,21 @@ class TestGetCheckoutLink(FunctionalTestCase):
                               bumblebee_asset('example.docx').bytes(),
                               u'example.docx'))
 
-        view = document.restrictedTraverse('bumblebee-overlay')
+        mixin = BumblebeeOverlayMixin()
+        mixin.context = document
 
         self.assertIn(
             'http://nohost/plone/dossier-1/document-1/editing_document',
-            view.get_checkout_link())
+            mixin.get_checkout_link())
 
     def test_returns_none_if_no_document_is_available_to_checkout(self):
         dossier = create(Builder('dossier'))
         document = create(Builder('document').within(dossier))
 
-        view = document.restrictedTraverse('bumblebee-overlay')
+        mixin = BumblebeeOverlayMixin()
+        mixin.context = document
 
-        self.assertIsNone(None, view.get_checkout_link())
+        self.assertIsNone(None, mixin.get_checkout_link())
 
     def test_returns_none_if_user_is_not_allowed_to_edit(self):
         dossier = create(Builder('dossier'))
@@ -199,11 +240,12 @@ class TestGetCheckoutLink(FunctionalTestCase):
                               bumblebee_asset('example.docx').bytes(),
                               u'example.docx'))
 
-        view = document.restrictedTraverse('bumblebee-overlay')
+        mixin = BumblebeeOverlayMixin()
+        mixin.context = document
 
         self.assertIn(
             'http://nohost/plone/dossier-1/document-1/editing_document',
-            view.get_checkout_link())
+            mixin.get_checkout_link())
 
         self.portal.acl_users.userFolderAddUser(
             'bond', 'secret', ['Member', 'Reader'], [])
@@ -211,8 +253,9 @@ class TestGetCheckoutLink(FunctionalTestCase):
 
         login(self.portal, 'bond')
 
-        view = document.restrictedTraverse('bumblebee-overlay')
-        self.assertIsNone(None, view.get_checkout_link())
+        mixin = BumblebeeOverlayMixin()
+        mixin.context = document
+        self.assertIsNone(None, mixin.get_checkout_link())
 
 
 class TestGetDownloadCopyLink(FunctionalTestCase):
@@ -228,9 +271,10 @@ class TestGetDownloadCopyLink(FunctionalTestCase):
                               bumblebee_asset('example.docx').bytes(),
                               u'example.docx'))
 
-        view = document.restrictedTraverse('bumblebee-overlay')
+        mixin = BumblebeeOverlayMixin()
+        mixin.context = document
 
-        browser.open_html(view.get_download_copy_link())
+        browser.open_html(mixin.get_download_copy_link())
 
         self.assertEqual('Download copy', browser.css('a').first.text)
 
@@ -238,8 +282,9 @@ class TestGetDownloadCopyLink(FunctionalTestCase):
         dossier = create(Builder('dossier'))
         document = create(Builder('document').within(dossier))
 
-        view = document.restrictedTraverse('bumblebee-overlay')
-        self.assertIsNone(view.get_download_copy_link())
+        mixin = BumblebeeOverlayMixin()
+        mixin.context = document
+        self.assertIsNone(mixin.get_download_copy_link())
 
 
 class TestGetEditMetadataLink(FunctionalTestCase):
@@ -250,19 +295,21 @@ class TestGetEditMetadataLink(FunctionalTestCase):
         dossier = create(Builder('dossier'))
         document = create(Builder('document').within(dossier))
 
-        view = document.restrictedTraverse('bumblebee-overlay')
+        mixin = BumblebeeOverlayMixin()
+        mixin.context = document
         self.assertEqual(
             'http://nohost/plone/dossier-1/document-1/edit',
-            view.get_edit_metadata_link())
+            mixin.get_edit_metadata_link())
 
     def test_returns_none_if_user_is_not_allowed_to_edit(self):
         dossier = create(Builder('dossier'))
         document = create(Builder('document').within(dossier))
 
-        view = document.restrictedTraverse('bumblebee-overlay')
+        mixin = BumblebeeOverlayMixin()
+        mixin.context = document
         self.assertEqual(
             'http://nohost/plone/dossier-1/document-1/edit',
-            view.get_edit_metadata_link())
+            mixin.get_edit_metadata_link())
 
         self.portal.acl_users.userFolderAddUser(
             'bond', 'secret', ['Member', 'Reader'], [])
@@ -270,5 +317,6 @@ class TestGetEditMetadataLink(FunctionalTestCase):
 
         login(self.portal, 'bond')
 
-        view = document.restrictedTraverse('bumblebee-overlay')
-        self.assertIsNone(view.get_edit_metadata_link())
+        mixin = BumblebeeOverlayMixin()
+        mixin.context = document
+        self.assertIsNone(mixin.get_edit_metadata_link())

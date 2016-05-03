@@ -15,16 +15,16 @@ from zope.component import getUtility
 from zope.component import queryMultiAdapter
 
 
-class BumblebeeOverlayView(grok.View):
-    grok.context(IBumblebeeable)
-    grok.require('zope2.View')
-    grok.name('bumblebee-overlay')
+class BumblebeeOverlayMixin(object):
+    """Provides all methdos to display all the nesecary metadata and actions
+    on the overlay.
+    """
 
     def __call__(self):
         if not is_bumblebee_feature_enabled():
             raise NotFound
 
-        return super(BumblebeeOverlayView, self).__call__()
+        return super(BumblebeeOverlayMixin, self).__call__()
 
     def get_preview_pdf_url(self):
         return get_representation_url_by_object('preview', self.context)
@@ -78,7 +78,6 @@ class BumblebeeOverlayView(grok.View):
         dc_helper = DownloadConfirmationHelper()
         return dc_helper.get_html_tag(
             self.context.absolute_url(),
-            additional_classes=['button'],
             include_token=True
             )
 
@@ -89,6 +88,9 @@ class BumblebeeOverlayView(grok.View):
 
         return '{}/edit'.format(self.context.absolute_url())
 
+    def get_detail_view_link(self):
+        return self.context.absolute_url()
+
     def _is_checkout_and_edit_available(self):
         manager = queryMultiAdapter(
             (self.context, self.request), ICheckinCheckoutManager)
@@ -98,3 +100,20 @@ class BumblebeeOverlayView(grok.View):
         if not userid:
             return manager.is_checkout_allowed()
         return userid == getSecurityManager().getUser().getId()
+
+
+class BumblebeeOverlayListing(BumblebeeOverlayMixin, grok.View):
+    grok.context(IBumblebeeable)
+    grok.require('zope2.View')
+    grok.name('bumblebee-overlay-listing')
+    grok.template('bumblebeeoverlayview')
+
+
+class BumblebeeOverlayDocument(BumblebeeOverlayMixin, grok.View):
+    grok.context(IBumblebeeable)
+    grok.require('zope2.View')
+    grok.name('bumblebee-overlay-document')
+    grok.template('bumblebeeoverlayview')
+
+    def get_detail_view_link(self):
+        return None
