@@ -4,6 +4,7 @@ from ftw.testbrowser import browsing
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.testing import FunctionalTestCase
 from zope.interface import alsoProvides
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
 
 class TestOpengeverSearch(FunctionalTestCase):
@@ -37,3 +38,27 @@ class TestOpengeverSearch(FunctionalTestCase):
 
         browser.login().open(self.portal, view='search')
         self.assertEqual(25, len(browser.css('dl.searchResults dt')))
+
+    @browsing
+    def test_no_bubmlebee_preview_rendered_when_feature_not_enabled(self, browser):
+        browser.login().open(self.portal, view='search')
+        self.assertEqual(0, len(browser.css('.searchImage')))
+
+class TestBumblebeePreview(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+
+    @browsing
+    def test_image_previews_are_rendered_withsearch_results(self, browser):
+        document = create(Builder('document')
+                         .titled(u'Foo Document')
+                         .with_dummy_content())
+
+        browser.login().open(self.portal, view='search')
+        browser.fill({'Search Site': 'Foo Document'}).submit()
+
+        preview_image = browser.css('.searchImage').first
+        document_link = preview_image.css('a').first
+
+        self.assertEqual(document.absolute_url(), document_link.get('href'))
+        self.assertEqual('Foo Document', document_link.get('title'))
