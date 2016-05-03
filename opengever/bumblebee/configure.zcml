@@ -8,6 +8,11 @@
 
   <grok:grok package="." />
 
+  <!-- Register locales translations -->
+  <i18n:registerTranslations directory="locales" />
+
+  <include package=".browser" />
+
   <genericsetup:registerProfile
       name="default"
       title="opengever.bumblebee"
@@ -15,5 +20,7 @@
       directory="profiles/default"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
+
+  <include package=".upgrades" />
 
 </configure>

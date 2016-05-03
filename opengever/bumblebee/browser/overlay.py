@@ -1,4 +1,3 @@
-from AccessControl import getSecurityManager
 from five import grok
 from ftw.bumblebee.interfaces import IBumblebeeable
 from opengever.base.browser.helper import get_css_class
@@ -9,6 +8,7 @@ from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.ogds.base.actor import Actor
 from plone import api
+from plone.protect import createToken
 from zExceptions import NotFound
 from zope.component import getAdapter
 from zope.component import getUtility
@@ -16,7 +16,7 @@ from zope.component import queryMultiAdapter
 
 
 class BumblebeeOverlayMixin(object):
-    """Provides all methdos to display all the nesecary metadata and actions
+    """Provides all methods to display all the necessary metadata and actions
     on the overlay.
     """
 
@@ -33,39 +33,36 @@ class BumblebeeOverlayMixin(object):
         return get_css_class(self.context)
 
     def get_file_title(self):
-        file = self.context.file
-        return file and file.filename
+        file_ = self.context.file
+        return file_ and file_.filename
 
     def get_file_size(self):
-        file = self.context.file
-        return file and self.context.file.size / 1024
+        file_ = self.context.file
+        return file_ and self.context.file.size / 1024
 
-    def get_creator(self):
+    def get_creator_link(self):
         return Actor.user(self.context.Creator()).get_link()
 
     def get_document_date(self):
-        adapter = queryMultiAdapter((self.context, self.request), name="plone")
-        return adapter.toLocalizedTime(
+        return api.portal.get_localized_time(
             str(self.context.document_date), long_format=True)
 
     def get_containing_dossier(self):
         return self.context.get_parent_dossier()
 
     def get_sequence_number(self):
-        seqNumb = getUtility(ISequenceNumber)
-        return seqNumb.get_number(self.context)
+        return getUtility(ISequenceNumber).get_number(self.context)
 
     def get_reference_number(self):
-        refNumb = getAdapter(self.context, IReferenceNumber)
-        return refNumb.get_number()
+        return getAdapter(self.context, IReferenceNumber).get_number()
 
-    def get_checkout_link(self):
+    def get_checkout_url(self):
         if not self.context.file or not self._is_checkout_and_edit_available():
             return None
 
         return '{}/editing_document?_authenticator={}'.format(
             self.context.absolute_url(),
-            self.context.restrictedTraverse('@@authenticator').token())
+            createToken())
 
     def get_download_copy_link(self):
         # Because of cyclic dependencies, we can not import
@@ -82,15 +79,21 @@ class BumblebeeOverlayMixin(object):
             include_token=True
             )
 
-    def get_edit_metadata_link(self):
+    def get_edit_metadata_url(self):
         if not api.user.has_permission(
                 'Modify portal content', obj=self.context):
             return None
 
         return '{}/edit'.format(self.context.absolute_url())
 
-    def get_detail_view_link(self):
+    def get_detail_view_url(self):
         return self.context.absolute_url()
+
+    def get_checkin_without_comment_url(self):
+        return self._get_checkin_url(with_comment=False)
+
+    def get_checkin_with_comment_url(self):
+        return self._get_checkin_url(with_comment=True)
 
     def _is_checkout_and_edit_available(self):
         manager = queryMultiAdapter(
@@ -100,7 +103,26 @@ class BumblebeeOverlayMixin(object):
 
         if not userid:
             return manager.is_checkout_allowed()
-        return userid == getSecurityManager().getUser().getId()
+        return userid == api.user.get_current().getId()
+
+    def _get_checkin_url(self, with_comment=False):
+        if not self._is_checkin_allowed():
+            return None
+
+        checkin_view = '@@checkin_document'
+        if with_comment:
+            checkin_view = '@@checkin_without_comment'
+
+        return "{}/{}?_authenticator={}".format(
+            self.context.absolute_url(),
+            checkin_view,
+            createToken())
+
+    def _is_checkin_allowed(self):
+        manager = queryMultiAdapter(
+            (self.context, self.request), ICheckinCheckoutManager)
+
+        return manager.is_checkin_allowed()
 
 
 class BumblebeeOverlayListing(BumblebeeOverlayMixin, grok.View):
@@ -116,5 +138,5 @@ class BumblebeeOverlayDocument(BumblebeeOverlayMixin, grok.View):
     grok.name('bumblebee-overlay-document')
     grok.template('bumblebeeoverlayview')
 
-    def get_detail_view_link(self):
+    def get_detail_view_url(self):
         return None

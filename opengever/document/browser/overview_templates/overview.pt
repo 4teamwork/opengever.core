@@ -13,7 +13,11 @@
         </table>
     </div>
     <div tal:condition="view/show_preview" class="documentPreview">
-        <img tal:attributes="src view/get_preview_image_url; alt context/title" />
+        <img class="imageContainer showroom-item"
+             tal:attributes="data-showroom-target view/get_overlay_url;
+                             data-showroom-title string:${context/title};
+                             src view/get_preview_image_url;
+                             alt context/title" />
     </div>
 </body>
 </html>

@@ -1,5 +1,5 @@
 <tal:loop repeat="preview previews" define="previews view/previews">
-  <div class="imageContainer"
+  <div class="imageContainer showroom-item"
        tal:attributes="data-showroom-target string:${preview/overlay_url};
                        data-showroom-title string:${preview/title};
                        id preview/uid">
