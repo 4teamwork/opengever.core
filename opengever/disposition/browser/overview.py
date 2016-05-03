@@ -3,6 +3,7 @@ from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_UNWORTHY
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.disposition import _
 from opengever.disposition.interfaces import IDisposition
+from opengever.disposition.interfaces import IHistoryStorage
 from opengever.tabbedview.browser.base import OpengeverTab
 from plone import api
 from plone.protect.utils import addTokenToUrl
@@ -59,3 +60,6 @@ class DispositionOverview(grok.View, OpengeverTab):
 
     def appraisal_buttons_available(self):
         return api.content.get_state(self.context) == 'disposition-state-in-progress'
+
+    def get_history(self):
+        return IHistoryStorage(self.context).get_history()
