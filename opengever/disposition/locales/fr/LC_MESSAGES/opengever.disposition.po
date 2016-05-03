@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-04-28 18:23+0000\n"
+"POT-Creation-Date: 2016-05-03 11:42+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,12 +40,22 @@ msgid "document_sequence_number"
 msgstr ""
 
 #. Default: "The retention period of the selected dossiers is not expired."
-#: ./opengever/disposition/disposition.py:112
+#: ./opengever/disposition/disposition.py:113
 msgid "error_retention_period_not_expired"
 msgstr ""
 
-#: ./opengever/disposition/disposition.py:85
+#: ./opengever/disposition/disposition.py:86
 msgid "help_reference"
+msgstr ""
+
+#. Default: "Archive"
+#: ./opengever/disposition/browser/overview_templates/overview.pt:138
+msgid "label_archive"
+msgstr ""
+
+#. Default: "Details:"
+#: ./opengever/disposition/browser/overview_templates/overview.pt:131
+msgid "label_details"
 msgstr ""
 
 #. Default: "Disposition"
@@ -53,23 +63,28 @@ msgstr ""
 msgid "label_disposition"
 msgstr ""
 
+#. Default: "Don't Archive"
+#: ./opengever/disposition/browser/overview_templates/overview.pt:140
+msgid "label_dont_archive"
+msgstr ""
+
 #. Default: "Dossiers"
-#: ./opengever/disposition/disposition.py:90
+#: ./opengever/disposition/disposition.py:91
 msgid "label_dossiers"
 msgstr ""
 
 #. Default: "Export appraisal list"
-#: ./opengever/disposition/browser/overview.py:43
+#: ./opengever/disposition/browser/overview.py:44
 msgid "label_export_appraisal_list"
 msgstr ""
 
 #. Default: "Reference"
-#: ./opengever/disposition/disposition.py:84
+#: ./opengever/disposition/disposition.py:85
 msgid "label_reference"
 msgstr ""
 
 #. Default: "SIP download"
-#: ./opengever/disposition/browser/overview.py:49
+#: ./opengever/disposition/browser/overview.py:50
 msgid "label_sip_download"
 msgstr ""
 
@@ -78,8 +93,48 @@ msgstr ""
 msgid "label_title"
 msgstr ""
 
+#. Default: "Added by ${user}"
+#: ./opengever/disposition/history.py:67
+msgid "msg_disposition_added"
+msgstr ""
+
+#. Default: "Appraisal finalized by ${user}"
+#: ./opengever/disposition/history.py:90
+msgid "msg_disposition_appraised"
+msgstr ""
+
+#. Default: "The archiving confirmed by ${user}"
+#: ./opengever/disposition/history.py:114
+msgid "msg_disposition_archived"
+msgstr ""
+
+#. Default: "Disposition closed and all dossiers destroyed by ${user}"
+#: ./opengever/disposition/history.py:126
+msgid "msg_disposition_close"
+msgstr ""
+
+#. Default: "Disposition disposed for the archive by ${user}"
+#: ./opengever/disposition/history.py:102
+msgid "msg_disposition_disposed"
+msgstr ""
+
+#. Default: "Edited by ${user}"
+#: ./opengever/disposition/history.py:78
+msgid "msg_disposition_edited"
+msgstr ""
+
+#. Default: "Updated by ${user}"
+#: ./opengever/disposition/history.py:51
+msgid "msg_disposition_updated"
+msgstr ""
+
 #. Default: "Period"
 #: ./opengever/disposition/browser/overview_templates/overview.pt:19
 msgid "period"
+msgstr ""
+
+#. Default: "Progress:"
+#: ./opengever/disposition/browser/overview_templates/overview.pt:118
+msgid "progress"
 msgstr ""
 
