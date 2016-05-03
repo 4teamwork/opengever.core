@@ -5,5 +5,9 @@ class IAppraisal(Interface):
     """The appraisal adapter Interface."""
 
 
+class IHistoryStorage(Interface):
+    """The history storage adapter Interface."""
+
+
 class IDisposition(Interface):
     """The appraisal adapter Interface."""
