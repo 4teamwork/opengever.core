@@ -78,6 +78,7 @@ class BumblebeeOverlayMixin(object):
         dc_helper = DownloadConfirmationHelper()
         return dc_helper.get_html_tag(
             self.context.absolute_url(),
+            additional_classes=[''],
             include_token=True
             )
 

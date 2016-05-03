@@ -46,7 +46,7 @@ class BumblebeeGalleryMixin(object):
         for brain in brains:
             yield {
                 'title': brain.Title,
-                'overlay_url': brain.getURL(),
+                'overlay_url': '{}/@@bumblebee-overlay'.format(brain.getURL()),
                 'preview_image_url': get_representation_url_by_brain(
                     'thumbnail', brain),
                 'uid': brain.UID,
