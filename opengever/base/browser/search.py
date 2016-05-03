@@ -1,4 +1,6 @@
 from DateTime import DateTime
+from ftw.bumblebee.utils import get_representation_url_by_brain
+from opengever.bumblebee import is_bumblebee_feature_enabled
 from plone import api
 from plone.app.search.browser import EVER
 from plone.app.search.browser import quote_chars
@@ -70,6 +72,15 @@ class OpengeverSearch(Search):
             'query': query_value,
             'range': usage
         }
+
+    def is_bumblebee_feature_enabled(self):
+        return is_bumblebee_feature_enabled()
+
+    def get_preview_image_url(self, brain):
+        if not brain.bumblebee_checksum:
+            return None
+
+        return get_representation_url_by_brain('thumbnail', brain)
 
     def filter_query(self, query):
         """The filter query of the standard search view (plone.app.search)
