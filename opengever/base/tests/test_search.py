@@ -44,21 +44,20 @@ class TestOpengeverSearch(FunctionalTestCase):
         browser.login().open(self.portal, view='search')
         self.assertEqual(0, len(browser.css('.searchImage')))
 
+
 class TestBumblebeePreview(FunctionalTestCase):
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
     @browsing
-    def test_image_previews_are_rendered_withsearch_results(self, browser):
-        document = create(Builder('document')
-                         .titled(u'Foo Document')
-                         .with_dummy_content())
+    def test_link_previews_to_bumblebee_overlay_listing(self, browser):
+        create(Builder('document')
+               .titled(u'Foo Document')
+               .with_dummy_content())
 
         browser.login().open(self.portal, view='search')
         browser.fill({'Search Site': 'Foo Document'}).submit()
 
-        preview_image = browser.css('.searchImage').first
-        document_link = preview_image.css('a').first
-
-        self.assertEqual(document.absolute_url(), document_link.get('href'))
-        self.assertEqual('Foo Document', document_link.get('title'))
+        self.assertEqual(
+            'http://nohost/plone/document-1/@@bumblebee-overlay-listing',
+            browser.css('.showroom-item').first.get('data-showroom-target'))

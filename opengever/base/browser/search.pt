@@ -347,13 +347,10 @@
                       </div>
                       <div class="searchImage" tal:condition="is_bumblebee_feature_enabled">
                         <tal:bumblebee define="preview_image_url python:view.get_preview_image_url(item)" tal:condition="preview_image_url" >
-                        <a tal:define="item_url item/getURL;
-                                       item_type item/portal_type"
-                           tal:attributes="href python:item_type in use_view_action and (item_url + '/view') or item_url;
-                                           title item/Title">
-                          <img class="bumblebeeSearchPreview" tal:attributes="src preview_image_url;
-                                                                              title item/title" />
-                        </a>
+                          <img class="showroom-item bumblebeeSearchPreview"
+                               tal:attributes="src preview_image_url;
+                                               data-showroom-target python:view.get_overlay_url(item);
+                                               data-showroom-title item/title;" />
                         </tal:bumblebee>
                       </div>
                       <div class="visualClear"><!-- --></div>
