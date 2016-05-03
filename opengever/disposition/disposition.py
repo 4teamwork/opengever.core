@@ -59,7 +59,7 @@ class DossierRepresentation(object):
             'appraisal': self.appraisal})
 
 
-class RemovedDossierRepresentation(object):
+class RemovedDossierRepresentation(DossierRepresentation):
 
     def __init__(self, dossier_mapping, disposition):
         self.title = dossier_mapping.get('title')
