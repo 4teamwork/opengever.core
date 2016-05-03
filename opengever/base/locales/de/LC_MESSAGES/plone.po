@@ -148,7 +148,7 @@ msgid "disposition-transition-archive"
 msgstr "Archivieren"
 
 msgid "disposition-transition-close"
-msgstr "Abschliessen"
+msgstr "Dossiers aussondern"
 
 msgid "disposition-transition-dispose"
 msgstr "Abliefern"
@@ -193,7 +193,7 @@ msgid "dossier-transition-activate"
 msgstr "Aktivieren"
 
 msgid "dossier-transition-archive"
-msgstr "Archivieren"
+msgstr "Archivierung bestätigen"
 
 msgid "dossier-transition-deactivate"
 msgstr "Stornieren"
@@ -338,4 +338,3 @@ msgstr "Aktivieren"
 
 msgid "transition-add-document"
 msgstr "Dokument hinzugefügt"
-
