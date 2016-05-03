@@ -21,6 +21,14 @@ NEW_BEHAVIORS = [
 class ActivateBehaviors(UpgradeStep):
 
     def __call__(self):
+        raise Exception(
+            "This upgrade step won't work anymore unless it's updated with"
+            "changes to default value adapters, therefore we refuse to "
+            "install it! There should not be any deployment out in the wild"
+            "any more that needs this (OpenGever KGS 2.9 or newer are fine).")
+
+        # XXX: Remove this upgrade step along with all others that aren't
+        # needed any more.
 
         fti = getUtility(IDexterityFTI, name=u'ftw.mail.mail')
         behaviors = list(fti.behaviors)
