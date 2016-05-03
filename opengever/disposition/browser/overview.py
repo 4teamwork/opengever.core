@@ -56,7 +56,7 @@ class DispositionOverview(grok.View, OpengeverTab):
     def sip_download_available(self):
         """TODO: Should be protected with a own permission.
         """
-        return api.content.get_state(self.context) == 'disposition-state-appraised'
+        return api.content.get_state(self.context) == 'disposition-state-disposed'
 
     def appraisal_buttons_available(self):
         return api.content.get_state(self.context) == 'disposition-state-in-progress'

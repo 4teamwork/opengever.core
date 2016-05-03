@@ -124,10 +124,12 @@ class TestDispositionOverview(FunctionalTestCase):
                           browser.css('.transitions li').text)
 
     @browsing
-    def test_sip_download_is_active_in_appraised_state(self, browser):
+    def test_sip_download_is_active_in_disposed_state(self, browser):
         self.grant('Records Manager')
         browser.login().open(self.disposition, view='tabbedview_view-overview')
         browser.find('disposition-transition-appraise').click()
+        browser.login().open(self.disposition, view='tabbedview_view-overview')
+        browser.find('disposition-transition-dispose').click()
 
         browser.open(self.disposition, view='tabbedview_view-overview')
         self.assertEquals(['Export appraisal list', 'SIP download'],
