@@ -132,10 +132,12 @@ class TestDispositionOverview(FunctionalTestCase):
         browser.find('disposition-transition-dispose').click()
 
         browser.open(self.disposition, view='tabbedview_view-overview')
-        self.assertEquals(['Export appraisal list as excel', 'SIP download'],
+        self.assertEquals(['Export appraisal list as excel',
+                           'Download disposition package'],
                           browser.css('ul.actions li').text)
-        self.assertEquals('http://nohost/plone/disposition-1/ech0160_export',
-                          browser.find('SIP download').get('href'))
+        self.assertEquals(
+            'http://nohost/plone/disposition-1/ech0160_export',
+            browser.find('Download disposition package').get('href'))
 
     @browsing
     def test_appraisal_list_download_is_allways_available(self, browser):
