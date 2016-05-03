@@ -41,9 +41,9 @@ class DispositionOverview(grok.View, OpengeverTab):
     def get_actions(self):
         return [
             {'id': 'export_appraisal_list',
-             'label': _('label_export_appraisal_list',
-                        default=u'Export appraisal list'),
-             'url': '{}/xlsx'.format(self.context.absolute_url()),
+             'label': _('label_export_appraisal_list_as_excel',
+                        default=u'Export appraisal list as excel'),
+             'url': '{}/download_excel'.format(self.context.absolute_url()),
              'visible': True,
              'class': 'appraisal_list'},
             {'id': 'sip_download',

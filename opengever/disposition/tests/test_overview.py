@@ -132,7 +132,7 @@ class TestDispositionOverview(FunctionalTestCase):
         browser.find('disposition-transition-dispose').click()
 
         browser.open(self.disposition, view='tabbedview_view-overview')
-        self.assertEquals(['Export appraisal list', 'SIP download'],
+        self.assertEquals(['Export appraisal list as excel', 'SIP download'],
                           browser.css('ul.actions li').text)
         self.assertEquals('http://nohost/plone/disposition-1/ech0160_export',
                           browser.find('SIP download').get('href'))
@@ -141,10 +141,11 @@ class TestDispositionOverview(FunctionalTestCase):
     def test_appraisal_list_download_is_always_available(self, browser):
         self.grant('Records Manager')
         browser.login().open(self.disposition, view='tabbedview_view-overview')
-        self.assertEquals(['Export appraisal list'],
+        self.assertEquals(['Export appraisal list as excel'],
                           browser.css('ul.actions li').text)
-        self.assertEquals('http://nohost/plone/disposition-1/xlsx',
-                          browser.find('Export appraisal list').get('href'))
+        self.assertEquals(
+            'http://nohost/plone/disposition-1/download_excel',
+            browser.find('Export appraisal list as excel').get('href'))
 
 
 class TestClosedDispositionOverview(FunctionalTestCase):
