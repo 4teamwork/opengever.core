@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.8.1 (unreleased)
+4.8.1 (2016-05-03)
 ------------------
 
 - Update trix to 0.9.6
