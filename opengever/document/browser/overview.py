@@ -265,3 +265,7 @@ class Overview(DisplayForm, OpengeverTab):
 
     def get_preview_image_url(self):
         return get_representation_url_by_object('image', self.context)
+
+    def get_overlay_url(self):
+        return '{}/@@bumblebee-overlay-document'.format(
+            self.context.absolute_url())
