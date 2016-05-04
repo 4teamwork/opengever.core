@@ -51,3 +51,16 @@ class TestBumblebeeIntegrationWithEnabledFeature(FunctionalTestCase):
         browser.login().visit(document, view='tabbedview_view-overview')
 
         self.assertEqual(1, len(browser.css('.documentPreview')))
+
+    @browsing
+    def test_link_previews_to_bumblebee_overlay_document(self, browser):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document').within(dossier))
+
+        create(Builder('document').within(dossier))
+
+        browser.login().visit(document, view="tabbedview_view-overview")
+
+        self.assertEqual(
+            'http://nohost/plone/dossier-1/document-1/@@bumblebee-overlay-document',
+            browser.css('.imageContainer').first.get('data-showroom-target'))

@@ -123,3 +123,6 @@ class OpengeverSearch(Search):
             query['path'] = getNavigationRoot(self.context)
 
         return query
+
+    def get_overlay_url(self, item):
+        return '{}/@@bumblebee-overlay-listing'.format(item.getURL())

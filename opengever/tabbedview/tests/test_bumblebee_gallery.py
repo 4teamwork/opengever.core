@@ -193,6 +193,18 @@ class TestBumblebeeGalleryView(FunctionalTestCase):
         self.assertEqual(0, len(browser.css('.imageContainer')))
         self.assertEqual("No contents", browser.css('.no_content').first.text)
 
+    @browsing
+    def test_link_previews_to_bumblebee_overlay_listing(self, browser):
+        dossier = create(Builder('dossier'))
+
+        create(Builder('document').within(dossier))
+
+        browser.login().visit(dossier, view="tabbedview_view-documents-gallery")
+
+        self.assertEqual(
+            'http://nohost/plone/dossier-1/document-1/@@bumblebee-overlay-listing',
+            browser.css('.imageContainer').first.get('data-showroom-target'))
+
 
 class TestBumblebeeDocumentsProxyWithDeactivatedFeature(FunctionalTestCase):
 
