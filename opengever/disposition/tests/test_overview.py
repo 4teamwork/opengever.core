@@ -59,7 +59,7 @@ class TestDispositionOverview(FunctionalTestCase):
             browser.css('.dispositions .public_trial').text)
 
         self.assertEquals(
-            ['Archival value: archival worthy ( )',
+            ['Archival value: archival worthy',
              'Archival value: not archival worthy ( In Absprache mit ARCH. )'],
             browser.css('.dispositions .archival_value').text)
 
