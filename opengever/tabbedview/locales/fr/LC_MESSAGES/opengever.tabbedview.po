@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-04-28 08:53+0000\n"
+"POT-Creation-Date: 2016-04-22 08:51+0000\n"
 "PO-Revision-Date: 2013-03-27 11:23+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./opengever/tabbedview/browser/tabs.py:167
+#: ./opengever/tabbedview/browser/tabs.py:153
 #: ./opengever/tabbedview/browser/tasklisting.py:67
 msgid "Active"
 msgstr "Actif"
@@ -51,7 +51,7 @@ msgstr "Acteur"
 msgid "additional_contact"
 msgstr "Additionnel"
 
-#: ./opengever/tabbedview/browser/tabs.py:164
+#: ./opengever/tabbedview/browser/tabs.py:150
 #: ./opengever/tabbedview/browser/tasklisting.py:66
 msgid "all"
 msgstr "Tous"
@@ -187,7 +187,7 @@ msgid "document_date"
 msgstr "Date du document"
 
 #. Default: "Sequence Number"
-#: ./opengever/tabbedview/browser/tabs.py:82
+#: ./opengever/tabbedview/browser/tabs.py:80
 msgid "document_sequence_number"
 msgstr "Numéro courant"
 
@@ -221,6 +221,10 @@ msgstr "Fin"
 msgid "events"
 msgstr "Rendez-vous"
 
+#: ./opengever/tabbedview/browser/tabs.py:158
+msgid "expired"
+msgstr ""
+
 msgid "important_contact"
 msgstr "En général"
 
@@ -239,12 +243,12 @@ msgid "label_active"
 msgstr "Actif"
 
 #. Default: "Checked out by"
-#: ./opengever/tabbedview/browser/tabs.py:109
+#: ./opengever/tabbedview/browser/tabs.py:107
 msgid "label_checked_out"
 msgstr "En traitement"
 
 #. Default: "Delivery Date"
-#: ./opengever/tabbedview/browser/tabs.py:105
+#: ./opengever/tabbedview/browser/tabs.py:103
 msgid "label_delivery_date"
 msgstr "Date de remise"
 
@@ -259,22 +263,22 @@ msgid "label_directorate_user"
 msgstr "Direction"
 
 #. Default: "Document Author"
-#: ./opengever/tabbedview/browser/tabs.py:92
+#: ./opengever/tabbedview/browser/tabs.py:90
 msgid "label_document_author"
 msgstr "Auteur"
 
 #. Default: "Document Date"
-#: ./opengever/tabbedview/browser/tabs.py:97
+#: ./opengever/tabbedview/browser/tabs.py:95
 msgid "label_document_date"
 msgstr "Date du document"
 
 #. Default: "Responsible"
-#: ./opengever/tabbedview/browser/tabs.py:195
+#: ./opengever/tabbedview/browser/tabs.py:187
 msgid "label_dossier_responsible"
 msgstr "Responsable"
 
 #. Default: "End"
-#: ./opengever/tabbedview/browser/tabs.py:204
+#: ./opengever/tabbedview/browser/tabs.py:196
 msgid "label_end"
 msgstr "Fin"
 
@@ -284,7 +288,7 @@ msgid "label_issuer"
 msgstr "Mandant"
 
 #. Default: "My notifications"
-#: ./opengever/tabbedview/browser/personal_overview.py:109
+#: ./opengever/tabbedview/browser/personal_overview.py:108
 msgid "label_my_notifications"
 msgstr ""
 
@@ -294,17 +298,17 @@ msgid "label_no_contents"
 msgstr "Aucun contenu"
 
 #. Default: "Public Trial"
-#: ./opengever/tabbedview/browser/tabs.py:117
+#: ./opengever/tabbedview/browser/tabs.py:115
 msgid "label_public_trial"
 msgstr "Statut public"
 
 #. Default: "Receipt Date"
-#: ./opengever/tabbedview/browser/tabs.py:101
+#: ./opengever/tabbedview/browser/tabs.py:99
 msgid "label_receipt_date"
 msgstr "Date d'entrée"
 
 #. Default: "Reference Number"
-#: ./opengever/tabbedview/browser/tabs.py:183
+#: ./opengever/tabbedview/browser/tabs.py:175
 msgid "label_reference"
 msgstr "Numéro de référence"
 
@@ -314,22 +318,22 @@ msgid "label_responsible_task"
 msgstr "Mandataire"
 
 #. Default: "Review state"
-#: ./opengever/tabbedview/browser/tabs.py:191
+#: ./opengever/tabbedview/browser/tabs.py:183
 msgid "label_review_state"
 msgstr "Etat"
 
 #. Default: "Start"
-#: ./opengever/tabbedview/browser/tabs.py:200
+#: ./opengever/tabbedview/browser/tabs.py:192
 msgid "label_start"
 msgstr "Début"
 
 #. Default: "Subdossier"
-#: ./opengever/tabbedview/browser/tabs.py:113
+#: ./opengever/tabbedview/browser/tabs.py:111
 msgid "label_subdossier"
 msgstr "Sous-dossier"
 
 #. Default: "Title"
-#: ./opengever/tabbedview/browser/tabs.py:87
+#: ./opengever/tabbedview/browser/tabs.py:85
 msgid "label_title"
 msgstr "Titre"
 
@@ -378,7 +382,7 @@ msgid "participants"
 msgstr "Participants"
 
 #. Default: "Personal Overview: ${user_name}"
-#: ./opengever/tabbedview/browser/personal_overview.py:90
+#: ./opengever/tabbedview/browser/personal_overview.py:89
 msgid "personal_overview_title"
 msgstr "Vue d'ensemble personnelle: ${user_name}"
 
@@ -440,4 +444,3 @@ msgstr "Titre"
 
 msgid "trash"
 msgstr "Corbeille"
-

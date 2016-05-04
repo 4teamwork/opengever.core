@@ -126,6 +126,33 @@ msgstr "herunterladen"
 msgid "date (newest first)"
 msgstr "Änderungsdatum (absteigend)"
 
+msgid "disposition-state-appraised"
+msgstr "Bewertet"
+
+msgid "disposition-state-archived"
+msgstr "Archiviert"
+
+msgid "disposition-state-closed"
+msgstr "Abgeschlossen"
+
+msgid "disposition-state-disposed"
+msgstr "Abgeliefert"
+
+msgid "disposition-state-in-progress"
+msgstr "In Bearbeitung"
+
+msgid "disposition-transition-appraise"
+msgstr "Bewertung finalisieren"
+
+msgid "disposition-transition-archive"
+msgstr "Archivieren"
+
+msgid "disposition-transition-close"
+msgstr "Dossiers aussondern"
+
+msgid "disposition-transition-dispose"
+msgstr "Abliefern"
+
 msgid "document-state-draft"
 msgstr "nicht definiert"
 
@@ -156,6 +183,9 @@ msgstr "Archiviert"
 msgid "dossier-state-inactive"
 msgstr "Storniert"
 
+msgid "dossier-state-offered"
+msgstr "Angeboten"
+
 msgid "dossier-state-resolved"
 msgstr "Abgeschlossen"
 
@@ -163,7 +193,7 @@ msgid "dossier-transition-activate"
 msgstr "Aktivieren"
 
 msgid "dossier-transition-archive"
-msgstr "Archivieren"
+msgstr "Archivierung bestätigen"
 
 msgid "dossier-transition-deactivate"
 msgstr "Stornieren"
@@ -308,4 +338,3 @@ msgstr "Aktivieren"
 
 msgid "transition-add-document"
 msgstr "Dokument hinzugefügt"
-

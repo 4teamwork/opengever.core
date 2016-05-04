@@ -1,0 +1,38 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:grok="http://namespaces.zope.org/grok"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="opengever.disposition">
+
+  <i18n:registerTranslations directory="locales" />
+
+	<include package=".browser" />
+	<include package=".viewlets" />
+
+  <grok:grok package="." />
+
+  <genericsetup:registerProfile
+      name="default"
+      title="opengever.disposition"
+      directory="profiles/default"
+      description=""
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <permission
+      id="opengever.disposition.AddDisposition"
+      title="opengever.disposition: Add disposition"
+      />
+
+  <!-- name from title behaviors -->
+  <plone:behavior
+      title="Disposition name from title"
+      description=""
+      provides="opengever.disposition.behaviors.namefromtitle.IDispositionNameFromTitle"
+      factory=".behaviors.namefromtitle.DispositionNameFromTitle"
+      for="opengever.disposition.disposition.IDisposition"
+      />
+
+</configure>
