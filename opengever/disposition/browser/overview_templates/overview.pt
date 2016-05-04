@@ -84,7 +84,7 @@
 
      </li>
   </ul>
-  <div class="actionButtons">
+  <div class="actionButtons clearfix">
     <ul class="transitions">
       <li tal:repeat="transition view/get_transitions" >
         <a tal:condition="transition/url"
@@ -99,7 +99,7 @@
         </a>
       </li>
     </ul>
-    <ul class="actions clearfix">
+    <ul class="actions">
       <tal:repeat tal:repeat="action view/get_actions">
         <li tal:condition="action/visible">
           <a class="button"
