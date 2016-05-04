@@ -70,13 +70,12 @@ class TestDispositionOverview(FunctionalTestCase):
         self.assertEquals(
             'Archive',
             browser.css('.appraisal-button-group .active')[0].text)
-
         self.assertEquals(
             "Don't archive",
             browser.css('.appraisal-button-group .active')[1].text)
 
     @browsing
-    def test_appraisal_buttons_are_only_buttons_in_progress_state(self, browser):
+    def test_appraisal_buttons_are_only_links_in_progress_state(self, browser):
         self.grant('Records Manager')
         browser.login().open(self.disposition, view='tabbedview_view-overview')
 
@@ -88,25 +87,26 @@ class TestDispositionOverview(FunctionalTestCase):
         browser.login().open(self.disposition, view='tabbedview_view-overview')
         self.assertEquals(
             [], browser.css('.appraisal-button-group').first.css('a').text)
-        self.assertEquals(
-            ['Archive', "Don't archive"],
-            browser.css('.appraisal-button-group').first.css('span').text)
+
+        buttons = browser.css('.appraisal-button-group')
+        self.assertEquals('Archive', buttons[0].text)
+        self.assertEquals("Don't archive", buttons[1].text)
 
     @browsing
     def test_update_appraisal_is_correct(self, browser):
         browser.login().open(self.disposition, view='tabbedview_view-overview')
 
         self.assertEquals(
-            "Archive",
-            browser.css('.appraisal-button-group .active')[0].text)
+            ['Archive', "Don't archive"],
+            browser.css('.appraisal-button-group .active').text)
 
-        dont_archive_button = browser.css('.appraisal-button-group .button')[1]
+        dont_archive_button = browser.css('.appraisal-button-group .archive')[1]
         browser.open(dont_archive_button.get('data-url'))
 
         browser.login().open(self.disposition, view='tabbedview_view-overview')
         self.assertEquals(
-            "Don't archive",
-            browser.css('.appraisal-button-group .active')[0].text)
+            ['Archive', 'Archive'],
+            browser.css('.appraisal-button-group .active').text)
 
     @browsing
     def test_lists_possible_transitions_in_actionmenu_as_buttons(self, browser):
