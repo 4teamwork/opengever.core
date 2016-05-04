@@ -124,25 +124,30 @@ class TestDispositionOverview(FunctionalTestCase):
                           browser.css('.transitions li').text)
 
     @browsing
-    def test_sip_download_is_active_in_appraised_state(self, browser):
+    def test_sip_download_is_active_in_disposed_state(self, browser):
         self.grant('Records Manager')
         browser.login().open(self.disposition, view='tabbedview_view-overview')
         browser.find('disposition-transition-appraise').click()
+        browser.login().open(self.disposition, view='tabbedview_view-overview')
+        browser.find('disposition-transition-dispose').click()
 
         browser.open(self.disposition, view='tabbedview_view-overview')
-        self.assertEquals(['Export appraisal list', 'SIP download'],
+        self.assertEquals(['Export appraisal list as excel',
+                           'Download disposition package'],
                           browser.css('ul.actions li').text)
-        self.assertEquals('http://nohost/plone/disposition-1/ech0160_export',
-                          browser.find('SIP download').get('href'))
+        self.assertEquals(
+            'http://nohost/plone/disposition-1/ech0160_export',
+            browser.find('Download disposition package').get('href'))
 
     @browsing
     def test_appraisal_list_download_is_allways_available(self, browser):
         self.grant('Records Manager')
         browser.login().open(self.disposition, view='tabbedview_view-overview')
-        self.assertEquals(['Export appraisal list'],
+        self.assertEquals(['Export appraisal list as excel'],
                           browser.css('ul.actions li').text)
-        self.assertEquals('http://nohost/plone/disposition-1/xlsx',
-                          browser.find('Export appraisal list').get('href'))
+        self.assertEquals(
+            'http://nohost/plone/disposition-1/xlsx',
+            browser.find('Export appraisal list as excel').get('href'))
 
 
 class TestClosedDispositionOverview(FunctionalTestCase):

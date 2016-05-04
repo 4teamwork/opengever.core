@@ -41,13 +41,14 @@ class DispositionOverview(grok.View, OpengeverTab):
     def get_actions(self):
         return [
             {'id': 'export_appraisal_list',
-             'label': _('label_export_appraisal_list',
-                        default=u'Export appraisal list'),
+             'label': _('label_export_appraisal_list_as_excel',
+                        default=u'Export appraisal list as excel'),
              'url': '{}/xlsx'.format(self.context.absolute_url()),
              'visible': True,
              'class': 'appraisal_list'},
             {'id': 'sip_download',
-             'label': _('label_sip_download', default=u'SIP download'),
+             'label': _('label_dispositon_package_download',
+                        default=u'Download disposition package'),
              'url': '{}/ech0160_export'.format(self.context.absolute_url()),
              'visible': self.sip_download_available(),
              'class': 'sip_download'},
@@ -56,7 +57,7 @@ class DispositionOverview(grok.View, OpengeverTab):
     def sip_download_available(self):
         """TODO: Should be protected with a own permission.
         """
-        return api.content.get_state(self.context) == 'disposition-state-appraised'
+        return api.content.get_state(self.context) == 'disposition-state-disposed'
 
     def appraisal_buttons_available(self):
         return api.content.get_state(self.context) == 'disposition-state-in-progress'

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-05-03 11:42+0000\n"
+"POT-Creation-Date: 2016-05-03 21:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -66,6 +66,11 @@ msgstr ""
 msgid "label_disposition"
 msgstr ""
 
+#. Default: "Download disposition package"
+#: ./opengever/disposition/browser/overview.py:50
+msgid "label_dispositon_package_download"
+msgstr ""
+
 #. Default: "Don't Archive"
 #: ./opengever/disposition/browser/overview_templates/overview.pt:140
 msgid "label_dont_archive"
@@ -76,19 +81,14 @@ msgstr ""
 msgid "label_dossiers"
 msgstr ""
 
-#. Default: "Export appraisal list"
+#. Default: "Export appraisal list as excel"
 #: ./opengever/disposition/browser/overview.py:44
-msgid "label_export_appraisal_list"
+msgid "label_export_appraisal_list_as_excel"
 msgstr ""
 
 #. Default: "Reference"
 #: ./opengever/disposition/disposition.py:85
 msgid "label_reference"
-msgstr ""
-
-#. Default: "SIP download"
-#: ./opengever/disposition/browser/overview.py:50
-msgid "label_sip_download"
 msgstr ""
 
 #. Default: "Title"
