@@ -29,10 +29,13 @@
             <span i18n:domain="opengever.base" i18n:translate="label_archival_value">Archival value</span>:
             <span i18n:domain="opengever.base" i18n:translate=""
                   tal:content="dossier/archival_value"/>
-            (
-            <span i18n:domain="opengever.base"
-                  tal:content="dossier/archival_value_annotation"/>
-            )
+
+            <span tal:condition="dossier/archival_value_annotation">
+              (
+              <span i18n:domain="opengever.base"
+                    tal:content="dossier/archival_value_annotation"/>
+              )
+            </span>
           </span>
 
         </div>
