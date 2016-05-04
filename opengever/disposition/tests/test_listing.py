@@ -1,6 +1,8 @@
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testing import freeze
 from opengever.testing import FunctionalTestCase
 
 
@@ -20,16 +22,26 @@ class TestDispositionListing(FunctionalTestCase):
 
     @browsing
     def test_disposition_listing(self, browser):
-        repository = create(Builder('repository').within(self.root))
-        self.disposition_a = create(Builder('disposition').within(repository))
-        self.disposition_b = create(Builder('disposition').within(repository))
-        self.disposition_c = create(Builder('disposition').within(repository))
+        with freeze(datetime(2015, 1, 1)):
+            repository = create(Builder('repository').within(self.root))
+            self.disposition_a = create(Builder('disposition')
+                                        .within(repository))
+            self.disposition_b = create(Builder('disposition')
+                                        .within(repository))
+            self.disposition_c = create(Builder('disposition')
+                                        .within(repository))
 
         browser.login().open(self.root, view='tabbedview_view-dispositions')
         self.assertEquals(
-            [{'':'', 'Sequence Number': '1', 'Title': 'Disposition 1'},
-             {'':'', 'Sequence Number': '2', 'Title': 'Disposition 2'},
-             {'':'', 'Sequence Number': '3', 'Title': 'Disposition 3'}],
+            [{'': '',
+              'Sequence Number': '1',
+              'Title': 'Disposition Client1 2015 1'},
+             {'': '',
+              'Sequence Number': '2',
+              'Title': 'Disposition Client1 2015 2'},
+             {'': '',
+              'Sequence Number': '3',
+              'Title': 'Disposition Client1 2015 3'}],
             browser.css('.listing').first.dicts())
 
     @browsing

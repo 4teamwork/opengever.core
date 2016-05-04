@@ -8,6 +8,7 @@ from opengever.disposition import _
 from opengever.disposition.appraisal import IAppraisal
 from opengever.disposition.interfaces import IDisposition
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.ogds.base.utils import get_current_admin_unit
 from persistent.dict import PersistentDict
 from persistent.list import PersistentList
 from plone import api
@@ -127,9 +128,17 @@ class Disposition(Container):
 
     @property
     def title(self):
-        return u'{} {}'.format(
+        """The disposition title is composed of the string Disposition,
+        the client abbrivation, the year of the creation and the
+        disposition sequence number.
+
+        Angebot SKA.ARCH 2016 3
+        """
+        return u'{} {} {} {}'.format(
             translate(_('label_disposition', default=u'Disposition'),
                       context=getRequest()),
+            get_current_admin_unit().abbreviation,
+            self.created().year(),
             getUtility(ISequenceNumber).get_number(self))
 
     @title.setter
