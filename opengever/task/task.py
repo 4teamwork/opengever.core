@@ -209,14 +209,6 @@ validator.WidgetValidatorDiscriminators(
 provideAdapter(NoCheckedoutDocsValidator)
 
 
-def default_issuer(data):
-    portal_state = getMultiAdapter(
-        (data.context, data.request),
-        name=u"plone_portal_state")
-    member = portal_state.member()
-    return member.getId()
-
-
 class Task(Container):
     implements(ITask, ITabbedviewUploadable)
 
