@@ -5,7 +5,8 @@ Changelog
 4.8.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix sample protocol template control structures.
+  [deiferni]
 
 
 4.8.1 (2016-05-03)
