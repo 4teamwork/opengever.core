@@ -242,11 +242,11 @@ Metadaten zur Sitzung:
 
 - ``participants.presidency``
 
-  Vorsitz der Sitzung (String)
+  Vorsitz der Sitzung (Participant)
 
 - ``participants.secretary``
 
-  Sekretär der Sitzung (String)
+  Sekretär der Sitzung (Participant)
 
 - ``participants.members``
 
@@ -280,6 +280,11 @@ Metadaten zu einem Sitzungsteilnehmer (Participant):
   Definierte Rolle des Teilnehmers innerhalb der Sitzung (String). Dabei ist
   member eine Laufvari-able, die für die Iteration über alle Elemente von
   ``participants.members`` verwendet wird.
+
+- ``member.email``
+
+  Die E-Mail Adresse eines Teilnehmers (String).
+
 
 Metadaten zu einem Traktandum (AgendaItem):
 
