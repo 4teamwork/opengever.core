@@ -1,6 +1,29 @@
 <div id="disposition_overview" i18n:domain="opengever.disposition">
 
+  <div>
+    <!-- <h3><span i18n:domain="plone" i18n:translate="State">State</span>:</h3> -->
+    <div class="workflow_wizard">
+      <ul class="wizard_steps" tal:define="current_state view/get_current_state" >
+        <li tal:repeat="state view/get_states"
+            tal:content="state"
+            tal:attributes="class python: state == current_state and 'selected' or ''"
+            i18n:domain="plone" i18n:translate="">
+        </li>
+      </ul>
+    </div>
+  </div>
+
   <ul class="list-group">
+
+    <li class="list-group-item label">
+      <div class="list-group-cell data-cell">
+        <h3 i18n:translate="label_dosisers">Dossiers</h3>
+      </div>
+      <div class="list-group-cell action-cell">
+        <h3 i18n:translate="label_archive">Archive</h3>
+      </div>
+    </li>
+
     <li tal:repeat="dossier view/get_dossiers"
         class="dispositions list-group-item">
 
@@ -29,10 +52,13 @@
             <span i18n:domain="opengever.base" i18n:translate="label_archival_value">Archival value</span>:
             <span i18n:domain="opengever.base" i18n:translate=""
                   tal:content="dossier/archival_value"/>
-            (
-            <span i18n:domain="opengever.base"
-                  tal:content="dossier/archival_value_annotation"/>
-            )
+
+            <span tal:condition="dossier/archival_value_annotation">
+              (
+              <span i18n:domain="opengever.base"
+                    tal:content="dossier/archival_value_annotation"/>
+              )
+            </span>
           </span>
 
         </div>
@@ -45,7 +71,7 @@
 
           <a href="#"
              class="button"
-             tal:attributes="class python: dossier.appraisal and 'button active' or 'button';
+             tal:attributes="class python: dossier.appraisal and 'icon_button archive active' or 'icon_button archive';
                              data-url python: view.get_update_appraisal_url(dossier, True);"
              i18n:translate="">
             Archive
@@ -53,7 +79,7 @@
 
           <a href="#"
              class="button"
-             tal:attributes="class python: dossier.appraisal and 'button' or 'button active';
+             tal:attributes="class python: dossier.appraisal and 'not_archive icon_button' or 'not_archive icon_button active';
                              data-url python: view.get_update_appraisal_url(dossier, False);"
              i18n:translate="">
             Don't archive
@@ -63,25 +89,23 @@
 
         <div class="button-group appraisal-button-group"
              tal:condition="not: view/appraisal_buttons_available">
-
-          <span class="readonly button"
-             tal:attributes="class python: dossier.appraisal and 'readonly button active' or 'readonly button';"
-             i18n:translate="">
+          <span tal:condition="dossier/appraisal"
+                class="icon_button archive active"
+                i18n:translate="label_archive">
             Archive
           </span>
-
-          <span class="readonly button"
-                tal:attributes="class python: dossier.appraisal and 'readonly button' or 'readonly button active';"
-                i18n:translate="">
+          <span
+              tal:condition="not: dossier/appraisal"
+              class="icon_button not_archive active"
+              i18n:translate="label_dont_archive">
             Don't archive
           </span>
-
         </div>
       </div>
 
      </li>
   </ul>
-  <div class="actionButtons">
+  <div class="actionButtons clearfix">
     <ul class="transitions">
       <li tal:repeat="transition view/get_transitions" >
         <a tal:condition="transition/url"
@@ -96,7 +120,7 @@
         </a>
       </li>
     </ul>
-    <ul class="actions clearfix">
+    <ul class="actions">
       <tal:repeat tal:repeat="action view/get_actions">
         <li tal:condition="action/visible">
           <a class="button"
