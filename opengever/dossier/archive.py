@@ -162,6 +162,17 @@ def filing_year_default(context):
     return None
 
 
+@provider(IContextAwareDefaultFactory)
+def dossier_enddate_default(context):
+    """Suggested default for the dossier's enddate.
+
+    context: Dossier that's being archived.
+    """
+    if IDossier(context).end and context.has_valid_enddate():
+        return IDossier(context).end
+    return context.earliest_possible_end_date()
+
+
 class IArchiveFormSchema(directives_form.Schema):
 
     filing_prefix = schema.Choice(
@@ -178,6 +189,7 @@ class IArchiveFormSchema(directives_form.Schema):
         title=_(u'label_end', default=u'Closing Date'),
         description=_(u'help_end', default=u''),
         required=True,
+        defaultFactory=dossier_enddate_default,
     )
 
     filing_year = schema.TextLine(
@@ -203,14 +215,6 @@ class IArchiveFormSchema(directives_form.Schema):
                 raise Invalid(
                     _(u"When the Action give filing number is selected, \
                         all fields are required."))
-
-
-# defaults
-@directives_form.default_value(field=IArchiveFormSchema['dossier_enddate'])
-def default_end_date(data):
-    if IDossier(data.context).end and data.context.has_valid_enddate():
-        return IDossier(data.context).end
-    return data.context.earliest_possible_end_date()
 
 
 class ArchiveForm(directives_form.Form):
