@@ -60,20 +60,10 @@ class FilingNumberMaintenance(BrowserView):
             self.log('%s: %s' % (term.value, term.title))
 
 
-class IFilingNumberRowSchema(Interface):
-    key = schema.TextLine(title=u"Key")
-    counter = schema.Int(title=u"Increaser Value")
-
-
-class IFilingNumberCountersFormSchema(Interface):
-    counters = schema.List(
-        title=u"counters",
-        value_type=DictRow(title=u"counter", schema=IFilingNumberRowSchema)
-        )
-
-
-@form.default_value(field=IFilingNumberCountersFormSchema['counters'])
-def set_counters(data):
+def counters_default():
+    """Determine the "defaults" for the ``counter`` datagrid field in the
+    FilingNumberCountersForm (i.e. the stored counter mappings).
+    """
     portal = getUtility(ISiteRoot)
     ann = IAnnotations(portal)
 
@@ -85,6 +75,19 @@ def set_counters(data):
 
     else:
         return {}
+
+
+class IFilingNumberRowSchema(Interface):
+    key = schema.TextLine(title=u"Key")
+    counter = schema.Int(title=u"Increaser Value")
+
+
+class IFilingNumberCountersFormSchema(Interface):
+    counters = schema.List(
+        title=u"counters",
+        value_type=DictRow(title=u"counter", schema=IFilingNumberRowSchema),
+        defaultFactory=counters_default,
+        )
 
 
 class FilingNumberCountersForm(form.Form):
