@@ -10,7 +10,6 @@ from opengever.core.testing import activate_filing_number
 from opengever.core.testing import ANNOTATION_LAYER
 from opengever.core.testing import inactivate_filing_number
 from opengever.dossier.archive import Archiver
-from opengever.dossier.archive import default_end_date
 from opengever.dossier.archive import EnddateValidator
 from opengever.dossier.archive import get_filing_actions
 from opengever.dossier.archive import METHOD_FILING
@@ -247,31 +246,6 @@ class TestArchiving(MockTestCase):
         self.assertEquals(actions.by_token.keys(),[ONLY_NUMBER])
         self.assertEquals(actions.by_value.keys(),[METHOD_FILING])
 
-    def test_default_end_date(self):
-        data = self.stub()
-        dossier = self.stub_dossier()
-        self.expect(data.context).result(dossier)
-
-        with self.mocker.order():
-            self.expect(dossier.end).result(date(2012, 3, 3))
-            self.expect(dossier.has_valid_enddate()).result(True)
-            self.expect(dossier.end).result(date(2012, 3, 3))
-
-            self.expect(dossier.end).result(None)
-            self.expect(dossier.earliest_possible_end_date()).result(date(2012, 4, 4))
-
-            self.expect(dossier.end).result(date(2012, 3, 3))
-            self.expect(dossier.has_valid_enddate()).result(True)
-            self.expect(dossier.end).result(date(2012, 5, 5))
-
-            self.expect(dossier.filing_year).result(None)
-
-        self.replay()
-
-        self.assertEquals(default_end_date(data), date(2012, 3, 3))
-        self.assertEquals(default_end_date(data), date(2012, 4, 4))
-        self.assertEquals(default_end_date(data), date(2012, 5, 5))
-
 
 class TestArchiveFormDefaults(FunctionalTestCase):
 
@@ -280,6 +254,10 @@ class TestArchiveFormDefaults(FunctionalTestCase):
         applyProfile(self.portal, 'opengever.dossier:filing')
         with freeze(FROZEN_NOW):
             self.dossier = create(Builder('dossier'))
+
+    def _get_form_date(self, browser, field_name):
+        datestr = browser.css('#form-widgets-%s' % field_name).first.value
+        return datetime.strptime(datestr, '%B %d, %Y').date()
 
     @browsing
     def test_filing_prefix_default(self, browser):
@@ -312,3 +290,43 @@ class TestArchiveFormDefaults(FunctionalTestCase):
         browser.login().open(self.dossier, view='transition-archive')
         form_default = browser.css('#form-widgets-filing_year').first.value
         self.assertEqual(doc.document_date.year, int(form_default))
+
+    @browsing
+    def test_dossier_enddate_default(self, browser):
+        # Dossier without sub-objects - earliest possible end date is dossier
+        # start date, suggested enddate should therefore default to that
+        browser.login().open(self.dossier, view='transition-archive')
+
+        form_default = self._get_form_date(browser, 'dossier_enddate')
+        self.assertEqual(IDossier(self.dossier).start, form_default)
+
+        # Document with date newer than dossier start. Suggested end date
+        # default should be that of the document (year of the youngest object)
+        doc = create(Builder('document')
+                     .within(self.dossier)
+                     .having(document_date=date(2050, 1, 1)))
+        browser.login().open(self.dossier, view='transition-archive')
+
+        form_default = self._get_form_date(browser, 'dossier_enddate')
+        self.assertEqual(doc.document_date, form_default)
+
+        # Dossier with invalid enddate (older than youngest doc) - should
+        # fall back to earliest possible enddate
+        IDossier(self.dossier).end = date(2020, 1, 1)
+        transaction.commit()
+
+        browser.login().open(self.dossier, view='transition-archive')
+
+        form_default = self._get_form_date(browser, 'dossier_enddate')
+        self.assertEqual(
+            self.dossier.earliest_possible_end_date(),
+            form_default)
+
+        # Dossier with a valid enddate - should be used as the default
+        IDossier(self.dossier).end = date(2070, 1, 1)
+        transaction.commit()
+
+        browser.login().open(self.dossier, view='transition-archive')
+
+        form_default = self._get_form_date(browser, 'dossier_enddate')
+        self.assertEqual(IDossier(self.dossier).end, form_default)
