@@ -7,9 +7,23 @@ from z3c.form import validator, error
 from z3c.form.interfaces import IAddForm
 from zope import schema
 from zope.component import provideAdapter
-from zope.interface import Interface, alsoProvides
+from zope.interface import alsoProvides
+from zope.interface import Interface
+from zope.interface import provider
 from zope.lifecycleevent.interfaces import IObjectAddedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
+from zope.schema.interfaces import IContextAwareDefaultFactory
+
+
+@provider(IContextAwareDefaultFactory)
+def reference_number_prefix_default(context):
+    """Determine the default for the reference number prefix.
+
+    context: Usually the container where a new object is created (i.e.
+    default factory is called during content creation), unless the factory
+    is called from an edit or display action (which shouldn't happen).
+    """
+    return PrefixAdapter(context).get_next_number()
 
 
 class IReferenceNumberPrefix(form.Schema):
@@ -28,15 +42,10 @@ class IReferenceNumberPrefix(form.Schema):
             default=u'Reference Prefix'),
         description=_(u'help_reference_number_prefix', default=u''),
         required=False,
+        defaultFactory=reference_number_prefix_default,
         )
 
 alsoProvides(IReferenceNumberPrefix, form.IFormFieldProvider)
-
-
-@form.default_value(
-    field=IReferenceNumberPrefix['reference_number_prefix'])
-def reference_number_default_value(data):
-    return PrefixAdapter(data.context).get_next_number()
 
 
 class ReferenceNumberPrefixValidator(validator.SimpleFieldValidator):
