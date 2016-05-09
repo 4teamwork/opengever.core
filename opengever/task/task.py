@@ -46,6 +46,13 @@ from zope.schema.vocabulary import getVocabularyRegistry
 _marker = object()
 
 
+def deadline_default():
+    registry = getUtility(IRegistry)
+    settings = registry.forInterface(ITaskSettings)
+    offset = settings.deadline_timedelta
+    return (datetime.today() + timedelta(days=offset)).date()
+
+
 class ITask(form.Schema):
 
     form.fieldset(
@@ -124,6 +131,7 @@ class ITask(form.Schema):
         title=_(u"label_deadline", default=u"Deadline"),
         description=_(u"help_deadline", default=u""),
         required=True,
+        defaultFactory=deadline_default,
         )
 
     form.widget(date_of_completion=DatePickerFieldWidget)
@@ -361,13 +369,6 @@ class Task(Container):
             vocabulary = util.getTaskTypeVocabulary(self)
             term = vocabulary.getTerm(self.task_type)
             return term.title
-
-
-@form.default_value(field=ITask['deadline'])
-def deadline_default_value(data):
-    registry = getUtility(IRegistry)
-    proxy = registry.forInterface(ITaskSettings)
-    return datetime.today() + timedelta(days=proxy.deadline_timedelta)
 
 
 @form.default_value(field=ITask['responsible_client'])
