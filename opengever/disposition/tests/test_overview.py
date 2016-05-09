@@ -149,6 +149,26 @@ class TestDispositionOverview(FunctionalTestCase):
             'http://nohost/plone/disposition-1/download_excel',
             browser.find('Export appraisal list as excel').get('href'))
 
+    @browsing
+    def test_states_are_displayed_in_a_wizard_in_the_process_order(self, browser):
+        browser.login().open(self.disposition, view='tabbedview_view-overview')
+
+        self.assertEquals(
+            ['disposition-state-in-progress',
+             'disposition-state-appraised',
+             'disposition-state-disposed',
+             'disposition-state-archived',
+             'disposition-state-closed'],
+            browser.css('.wizard_steps li').text)
+
+    @browsing
+    def test_current_state_is_selected(self, browser):
+        browser.login().open(self.disposition, view='tabbedview_view-overview')
+
+        self.assertEquals(
+            ['disposition-state-in-progress'],
+            browser.css('.wizard_steps li.selected').text)
+
 
 class TestClosedDispositionOverview(FunctionalTestCase):
 
