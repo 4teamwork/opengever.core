@@ -64,3 +64,17 @@ class DispositionOverview(grok.View, OpengeverTab):
 
     def get_history(self):
         return IHistoryStorage(self.context).get_history()
+
+    def get_states(self):
+        """Return all disposition states in a orderd way.
+        Used to generate and display the status wizzard.
+        """
+
+        return ['disposition-state-in-progress',
+                'disposition-state-appraised',
+                'disposition-state-disposed',
+                'disposition-state-archived',
+                'disposition-state-closed']
+
+    def get_current_state(self):
+        return api.content.get_state(self.context)

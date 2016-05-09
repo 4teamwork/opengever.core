@@ -1,5 +1,18 @@
 <div id="disposition_overview" i18n:domain="opengever.disposition">
 
+  <div>
+    <!-- <h3><span i18n:domain="plone" i18n:translate="State">State</span>:</h3> -->
+    <div class="workflow_wizard">
+      <ul class="wizard_steps" tal:define="current_state view/get_current_state" >
+        <li tal:repeat="state view/get_states"
+            tal:content="state"
+            tal:attributes="class python: state == current_state and 'selected' or ''"
+            i18n:domain="plone" i18n:translate="">
+        </li>
+      </ul>
+    </div>
+  </div>
+
   <ul class="list-group">
 
     <li class="list-group-item label">
