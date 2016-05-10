@@ -56,3 +56,13 @@ def set_prefered_listing_view(value):
 def get_prefered_listing_view():
     request = getRequest()
     return request.cookies.get(BUMBLEBEE_VIEW_COOKIE_NAME, '')
+
+
+def is_bumblebeeable(brain):
+    """Return whether the brain has a bumblebee_checksum.
+
+    The checksum is only available for objects that provide IBumblebeeable,
+    so we use it to detect if a brain's object is IBumblebeeable without
+    loading the object.
+    """
+    return bool(brain.bumblebee_checksum)

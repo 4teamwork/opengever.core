@@ -4,6 +4,7 @@ from ftw.bumblebee.tests.helpers import asset as bumblebee_asset
 from opengever.bumblebee import get_representation_url_by_brain
 from opengever.bumblebee import get_representation_url_by_object
 from opengever.bumblebee import is_bumblebee_feature_enabled
+from opengever.bumblebee import is_bumblebeeable
 from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
@@ -67,3 +68,36 @@ class TestGetRepresentationUrlByBrain(FunctionalTestCase):
         self.assertIn(
             'preserved_as_paper.png',
             get_representation_url_by_brain('thumbnail', brain))
+
+
+def TestIsBumblebeeable(FunctionalTestCase):
+
+    def test_documents_are_bumblebeeable(self):
+        document = create(Builder('document').with_dummy_content())
+        brain = obj2brain(document)
+
+        self.assertTrue(is_bumblebeeable(brain))
+
+    def test_dossiers_are_not_bumblebeeable(self):
+        document = create(Builder('dossier'))
+        brain = obj2brain(document)
+
+        self.assertFalse(is_bumblebeeable(brain))
+
+    def test_mails_are_not_bumblebeeable(self):
+        document = create(Builder('mail'))
+        brain = obj2brain(document)
+
+        self.assertFalse(is_bumblebeeable(brain))
+
+    def test_repositories_are_not_bumblebeeable(self):
+        document = create(Builder('repository'))
+        brain = obj2brain(document)
+
+        self.assertFalse(is_bumblebeeable(brain))
+
+    def test_repo_roots_are_not_bumblebeeable(self):
+        document = create(Builder('repository_root'))
+        brain = obj2brain(document)
+
+        self.assertFalse(is_bumblebeeable(brain))
