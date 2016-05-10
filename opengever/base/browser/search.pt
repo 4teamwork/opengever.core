@@ -296,15 +296,26 @@
                       <div class="searchItem">
                         <dt tal:attributes="class item/ContentTypeClass">
                           <img tal:replace="structure item/getIcon" />
-
-                          <a href="#"
-                             tal:define="item_url item/getURL;
-                                         item_type item/portal_type"
-                             tal:attributes="href python:item_type in use_view_action and (item_url + '/view') or item_url;
-                                             class string:state-${item/review_state};
-                                             title item/Title"
-                             tal:content="item/CroppedTitle" />
-
+                          <tal:block tal:condition="python: is_bumblebee_feature_enabled and view.is_bumblebeeable(item)">
+                            <a href="#"
+                               tal:define="item_url item/getURL;
+                                           item_type item/portal_type"
+                               tal:attributes="href python:item_type in use_view_action and (item_url + '/view') or item_url;
+                                               class string:showroom-item state-${item/review_state};
+                                               title item/Title;
+                                               data-showroom-target python:view.get_overlay_url(item);
+                                               data-showroom-title item/title;"
+                               tal:content="item/CroppedTitle" />
+                          </tal:block>
+                          <tal:block tal:condition="python: not is_bumblebee_feature_enabled or not view.is_bumblebeeable(item)">
+                            <a href="#"
+                               tal:define="item_url item/getURL;
+                                           item_type item/portal_type"
+                               tal:attributes="href python:item_type in use_view_action and (item_url + '/view') or item_url;
+                                               class string:state-${item/review_state};
+                                               title item/Title;"
+                               tal:content="item/CroppedTitle" />
+                          </tal:block>
                         </dt>
                         <dd>
                           <div class="main_dossier">
@@ -345,7 +356,7 @@
                           </cite>
                         </dd>
                       </div>
-                      <div class="searchImage" tal:condition="is_bumblebee_feature_enabled">
+                      <div class="searchImage" tal:condition="python: is_bumblebee_feature_enabled and view.is_bumblebeeable(item)">
                         <tal:bumblebee define="preview_image_url python:view.get_preview_image_url(item)" tal:condition="preview_image_url" >
                           <img class="showroom-item bumblebeeSearchPreview"
                                tal:attributes="src preview_image_url;
