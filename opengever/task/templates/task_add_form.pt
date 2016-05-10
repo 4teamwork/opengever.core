@@ -1,0 +1,5 @@
+<div>
+  <a href="multi_task" class="button multitask_button" i18n:translate="label_multi_task">Multitask Aufgabe erstellen</a>
+</div>
+
+<metal:use use-macro="context/@@ploneform-macros/titlelessform" />

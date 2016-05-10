@@ -6,6 +6,8 @@ from opengever.task.activities import TaskReassignActivity
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
 from plone.directives import dexterity
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from z3c.form import button
 from z3c.form.interfaces import HIDDEN_MODE
 from zope.component import getMultiAdapter
 
@@ -20,6 +22,8 @@ REASSIGN_TRANSITION = 'task-transition-reassign'
 
 class TaskAddForm(dexterity.AddForm):
     grok.name('opengever.task.task')
+
+    template = ViewPageTemplateFile('templates/task_add_form.pt')
 
     def update(self):
         # put default value for relatedItems into request
