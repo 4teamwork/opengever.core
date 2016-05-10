@@ -61,3 +61,26 @@ class TestBumblebeePreview(FunctionalTestCase):
         self.assertEqual(
             'http://nohost/plone/document-1/@@bumblebee-overlay-listing',
             browser.css('.showroom-item').first.get('data-showroom-target'))
+
+    @browsing
+    def test_only_bumblebeeable_content_opens_in_overlay(self, browser):
+        dossier = create(Builder('dossier')
+               .titled(u'Foo Dossier'))
+        create(Builder('document')
+               .titled(u'Foo Document')
+               .with_dummy_content()
+               .within(dossier))
+
+        browser.login().open(self.portal, view='search')
+        browser.fill({'SearchableText': 'Foo*'}).submit()
+
+        results = browser.css('.searchResults .searchItem dt a')
+        self.assertEqual(
+            ['Foo Dossier', 'Foo Document'],
+            results.text)
+        self.assertEqual(['state-dossier-state-active'],
+                         results[0].classes)
+        self.assertEqual(['showroom-item', 'state-document-state-draft'],
+                         results[1].classes)
+
+
