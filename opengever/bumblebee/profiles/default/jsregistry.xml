@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <object name="portal_javascripts" meta_type="JavaScripts Registry" autogroup="False">
 
-  <javascript id="++resource++ftw.showroom-client/showroom.js"
+  <javascript id="++resource++ftw.showroom/showroom.js"
               insert-after="++resource++opengever.base/handlebars.min.js" />
 
   <javascript cacheable="True" compression="safe" cookable="True" enabled="on"
               expression="" id="++resource++opengever.bumblebee.resources/bumblebee.js"
-              insert-after="++resource++ftw.showroom-client/showroom.js"
+              insert-after="++resource++ftw.showroom/showroom.js"
               inline="False"/>
 
   <!-- GEVER is providing its own handlebars.js. So we have to disable the handlebars
