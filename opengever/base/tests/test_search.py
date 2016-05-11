@@ -65,7 +65,7 @@ class TestBumblebeePreview(FunctionalTestCase):
     @browsing
     def test_only_bumblebeeable_content_opens_in_overlay(self, browser):
         dossier = create(Builder('dossier')
-               .titled(u'Foo Dossier'))
+                         .titled(u'Foo Dossier'))
         create(Builder('document')
                .titled(u'Foo Document')
                .with_dummy_content()
@@ -80,7 +80,5 @@ class TestBumblebeePreview(FunctionalTestCase):
             results.text)
         self.assertEqual(['state-dossier-state-active'],
                          results[0].classes)
-        self.assertEqual(['showroom-item', 'state-document-state-draft'],
+        self.assertEqual(['state-document-state-draft', 'showroom-item'],
                          results[1].classes)
-
-

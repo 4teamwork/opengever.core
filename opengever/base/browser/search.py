@@ -1,7 +1,4 @@
 from DateTime import DateTime
-from ftw.bumblebee.utils import get_representation_url_by_brain
-from opengever.bumblebee import is_bumblebee_feature_enabled
-from opengever.bumblebee import is_bumblebeeable
 from plone import api
 from plone.app.search.browser import EVER
 from plone.app.search.browser import quote_chars
@@ -74,18 +71,6 @@ class OpengeverSearch(Search):
             'range': usage
         }
 
-    def is_bumblebee_feature_enabled(self):
-        return is_bumblebee_feature_enabled()
-
-    def is_bumblebeeable(self, item):
-        return is_bumblebeeable(item)
-
-    def get_preview_image_url(self, brain):
-        if not brain.bumblebee_checksum:
-            return None
-
-        return get_representation_url_by_brain('thumbnail', brain)
-
     def filter_query(self, query):
         """The filter query of the standard search view (plone.app.search)
         cancel the query generation if not SearchableText is given.
@@ -127,6 +112,3 @@ class OpengeverSearch(Search):
             query['path'] = getNavigationRoot(self.context)
 
         return query
-
-    def get_overlay_url(self, item):
-        return '{}/@@bumblebee-overlay-listing'.format(item.getURL())

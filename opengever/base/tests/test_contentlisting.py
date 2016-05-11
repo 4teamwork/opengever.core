@@ -1,5 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.bumblebee.utils import get_representation_url_by_brain
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
 from plone.app.contentlisting.interfaces import IContentListingObject
@@ -84,3 +86,65 @@ class TestOpengeverContentListing(FunctionalTestCase):
     def assertCropping(self, size, value):
         self.assertEquals(
             size, len(value), 'Text cropping failed for %s' % value)
+
+
+class TestOpengeverContentListingWithDisabledBumblebee(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestOpengeverContentListingWithDisabledBumblebee, self).setUp()
+
+        document = create(Builder('document'))
+        self.obj = IContentListingObject(obj2brain(document))
+
+    def test_documents_are_not_bumblebeeable(self):
+        self.assertFalse(self.obj.is_bumblebeeable())
+
+    def test_get_css_classes(self):
+        self.assertEqual('state-document-state-draft',
+                         self.obj.get_css_classes())
+
+    def test_get_preview_image_url(self):
+        self.assertEqual(get_representation_url_by_brain('thumbnail', self.obj),
+                         self.obj.get_preview_image_url())
+
+    def test_get_overlay_title(self):
+        self.assertIsNone(self.obj.get_overlay_title())
+
+    def test_get_overlay_url(self):
+        self.assertIsNone(self.obj.get_overlay_url())
+
+
+class TestOpengeverContentListingWithEnabledBumblebee(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+
+    def setUp(self):
+        super(TestOpengeverContentListingWithEnabledBumblebee, self).setUp()
+
+        document = create(Builder('document')
+                          .with_dummy_content())
+        self.obj = IContentListingObject(obj2brain(document))
+
+    def test_documents_are_bumblebeeable(self):
+        self.assertTrue(self.obj.is_bumblebeeable())
+
+    def test_dossiers_are_not_bumblebeeable(self):
+        dossier = create(Builder('dossier'))
+        listing = IContentListingObject(obj2brain(dossier))
+
+        self.assertFalse(listing.is_bumblebeeable())
+
+    def test_get_css_classes(self):
+        self.assertEqual('state-document-state-draft showroom-item',
+                         self.obj.get_css_classes())
+
+    def test_get_preview_image_url(self):
+        self.assertIsNotNone(self.obj.get_preview_image_url())
+
+    def test_get_overlay_title(self):
+        self.assertEqual(u'Testdokum\xe4nt'.encode('utf-8'),
+                         self.obj.get_overlay_title())
+
+    def test_get_overlay_url(self):
+        self.assertEqual('http://nohost/plone/document-1/@@bumblebee-overlay-listing',
+                         self.obj.get_overlay_url())
