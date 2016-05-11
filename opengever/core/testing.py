@@ -379,7 +379,7 @@ class ActivityLayer(PloneSandboxLayer):
 OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER = ActivityLayer()
 
 
-class BumblebeeLayer(OpengeverFixture):
+class BumblebeeLayer(PloneSandboxLayer):
 
     def setUpPloneSite(self, portal):
         activate_bumblebee_feature()
