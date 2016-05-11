@@ -5,6 +5,9 @@ Changelog
 4.8.2 (unreleased)
 ------------------
 
+- Introduce prev and next buttons for bumblebee preview.
+  [Kevin Bieri]
+
 - Fix sample protocol template control structures.
   [deiferni]
 
