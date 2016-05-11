@@ -1,11 +1,11 @@
 from Missing import Value as MissingValue
 from opengever.base.browser.helper import get_css_class
-from plone.app.contentlisting.catalog import \
-    CatalogContentListingObject as CoreListingObject
+from opengever.bumblebee import is_bumblebeeable
+from plone.app.contentlisting.catalog import CatalogContentListingObject
 from zope.component import getMultiAdapter
 
 
-class OpengeverCatalogContentListingObject(CoreListingObject):
+class OpengeverCatalogContentListingObject(CatalogContentListingObject):
     """OpenGever specific catalog content listing.
     Provides correct MIME type icons and containing dossier for rendering
     breadcrumbs in search results. Additionaly it provides cropped Title and
