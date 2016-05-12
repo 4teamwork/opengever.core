@@ -116,3 +116,11 @@ def reindex_containing_dossier(dossier, event):
                         if brain.portal_type in ['opengever.task.task',
                             'opengever.inbox.forwarding']:
                             sync_task(brain.getObject(), event)
+
+
+@grok.subscribe(IDossierMarker, IActionSucceededEvent)
+def run_cleanup_jobs(dossier, event):
+    if event.action != 'dossier-transition-resolve':
+        return
+
+    DossierResolver(dossier).after_resolve_jobs()
