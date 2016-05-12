@@ -4,6 +4,7 @@ from OFS.interfaces import IObjectWillBeMovedEvent
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
+from opengever.dossier.resolve import DossierResolver
 from opengever.globalindex.handlers.task import sync_task
 from opengever.globalindex.handlers.task import TaskSqlSyncer
 from plone import api
@@ -120,13 +121,5 @@ def reindex_containing_dossier(dossier, event):
 
 @grok.subscribe(IDossierMarker, IActionSucceededEvent)
 def run_cleanup_jobs(dossier, event):
-    """After resovling a dossier, some cleanup jobs have to be done or
-    be triggered:
-
-    - Remove all trashed documents.
-    - Trigger PDF-A conversion.
-    - Generate a PDF output of the journal.
-    """
-
     if event.action == 'dossier-transition-resolve':
-        dossier.purge_trash()
+        DossierResolver(dossier).after_resolve_jobs()

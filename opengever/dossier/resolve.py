@@ -1,10 +1,13 @@
 from five import grok
+from opengever.base.security import elevated_privileges
+from opengever.document.behaviors import IBaseDocument
 from opengever.dossier import _
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.filing import IFilingNumberMarker
 from opengever.dossier.interfaces import IDossierResolver
+from plone import api
 from Products.CMFCore.utils import getToolByName
 
 
@@ -133,6 +136,31 @@ class DossierResolver(grok.Adapter):
             raise TypeError
         else:
             Resolver(self.context).resolve_dossier(end_date=end_date)
+
+    def after_resolve_jobs(self):
+        """After resovling a dossier, some cleanup jobs have to be done or be
+        triggered:
+
+        - Remove all trashed documents.
+        - (Trigger PDF-A conversion).
+        - Generate a PDF output of the journal.
+        """
+
+        self.purge_trash()
+
+    def purge_trash(self):
+        """Delete all trashed documents inside the dossier (recursive).
+        """
+        trashed_docs = api.content.find(
+            context=self.context,
+            depth=-1,
+            object_provides=[IBaseDocument],
+            trashed=True)
+
+        if trashed_docs:
+            with elevated_privileges():
+                api.content.delete(
+                    objects=[brain.getObject() for brain in trashed_docs])
 
     def is_reactivate_possible(self):
         parent = self.context.get_parent_dossier()
