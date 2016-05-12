@@ -4,6 +4,7 @@ from OFS.interfaces import IObjectWillBeMovedEvent
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
+from opengever.dossier.resolve import DossierResolver
 from opengever.globalindex.handlers.task import sync_task
 from opengever.globalindex.handlers.task import TaskSqlSyncer
 from plone import api
@@ -123,4 +124,4 @@ def run_cleanup_jobs(dossier, event):
     if event.action != 'dossier-transition-resolve':
         return
 
-    DossierResolver(dossier).after_resolve_jobs()
+    DossierResolver(dossier).after_resolve()
