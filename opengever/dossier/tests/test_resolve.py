@@ -7,6 +7,7 @@ from ftw.testing import freeze
 from ftw.testing import MockTestCase
 from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.dossier.interfaces import IDossierResolver
 from opengever.dossier.resolve import DossierResolver
 from opengever.dossier.resolve import NO_START_DATE
@@ -18,6 +19,8 @@ from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.app.testing import applyProfile
 from plone.protect import createToken
+from plone.registry.interfaces import IRegistry
+from zope.component import getUtility
 from zope.interface import implements
 from zope.interface.verify import verifyClass
 import transaction
@@ -73,7 +76,6 @@ class TestResolveJobs(FunctionalTestCase):
 
         api.content.transition(obj=self.dossier,
                                transition='dossier-transition-resolve')
-        transaction.commit()
 
         docs = [brain.getObject() for brain in
                 self.catalog.unrestrictedSearchResults(
@@ -89,7 +91,6 @@ class TestResolveJobs(FunctionalTestCase):
 
         api.content.transition(obj=self.dossier,
                                transition='dossier-transition-resolve')
-        transaction.commit()
 
         docs = [brain.getObject() for brain in
                 self.catalog.unrestrictedSearchResults(
@@ -98,11 +99,23 @@ class TestResolveJobs(FunctionalTestCase):
         self.assertIn(doc1, docs)
         self.assertNotIn(doc2, docs)
 
-    def test_adds_journal_pdf(self):
-        with freeze(datetime(2016, 04, 25)):
+    def test_purging_can_be_disabled_by_registry_property(self):
+        api.portal.set_registry_record(
+            'purge_trash_enabled', False, interface=IDossierResolveProperties)
+
+        doc1 = create(Builder('document').within(self.dossier).trashed())
+        api.content.transition(obj=self.dossier,
+                               transition='dossier-transition-resolve')
+
+        docs = [brain.getObject() for brain in
+                self.catalog.unrestrictedSearchResults(
+                    path='/'.join(self.dossier.getPhysicalPath()))]
+        self.assertIn(doc1, docs)
+
+    def test_adds_journal_pdf_by_default(self):
+        with freeze(datetime(2016, 4, 25)):
             api.content.transition(obj=self.dossier,
                                    transition='dossier-transition-resolve')
-            transaction.commit()
 
         journal_pdf = self.dossier.get('document-1')
         self.assertEquals(u'Journal Apr 25, 2016', journal_pdf.title)
@@ -115,7 +128,6 @@ class TestResolveJobs(FunctionalTestCase):
         create(Builder('dossier').within(self.dossier))
         api.content.transition(obj=self.dossier,
                                transition='dossier-transition-resolve')
-        transaction.commit()
 
         docs = api.content.find(context=self.dossier,
                                 depth=-1,
@@ -123,6 +135,18 @@ class TestResolveJobs(FunctionalTestCase):
 
         self.assertEquals(1, len(docs))
         self.assertEquals(self.dossier, aq_parent(docs[0].getObject()))
+
+    def test_journal_pdf_can_be_disabled_by_registry_property(self):
+        api.portal.set_registry_record(
+            'journal_pdf_enabled', False, interface=IDossierResolveProperties)
+
+        doc1 = create(Builder('document').within(self.dossier).trashed())
+        api.content.transition(obj=self.dossier,
+                               transition='dossier-transition-resolve')
+
+        self.assertFalse(
+            self.dossier.get('document-1', False),
+            'Journal PDF created altough its disabled by registry property.')
 
 
 class TestResolvingDossiersWithFilingNumberSupport(FunctionalTestCase):
