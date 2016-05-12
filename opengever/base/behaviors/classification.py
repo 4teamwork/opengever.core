@@ -36,6 +36,15 @@ def translated_public_trial_terms(context, request):
     return values
 
 
+def public_trial_default():
+    """Default value for `public_trial` field for new documents.
+    """
+    registry = getUtility(IRegistry)
+    settings = registry.forInterface(IClassificationSettings)
+    public_trial_default_value = settings.public_trial_default_value
+    return public_trial_default_value
+
+
 class IClassification(form.Schema):
 
     form.fieldset(
@@ -68,6 +77,7 @@ class IClassification(form.Schema):
         description=_(u'help_public_trial', default=u''),
         source=u'classification_public_trial_vocabulary',
         required=True,
+        defaultFactory=public_trial_default,
     )
 
     public_trial_statement = schema.Text(
@@ -173,18 +183,6 @@ form.default_value(field=IClassification['privacy_layer'])(
         default=PRIVACY_LAYER_NO
     )
 )
-
-
-# XXX: Setting the default value in the field directly, breaks the
-# DCFieldProperty stuff. thus we implement the default value this way.
-@form.default_value(field=IClassification['public_trial'])
-def default_public_trial(data):
-    """Default value for `public_trial` field for new documents.
-    """
-    registry = getUtility(IRegistry)
-    settings = registry.forInterface(IClassificationSettings)
-    public_trial_default_value = settings.public_trial_default_value
-    return public_trial_default_value
 
 
 class Classification(metadata.MetadataBase):
