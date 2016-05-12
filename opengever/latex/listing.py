@@ -2,6 +2,7 @@ from collections import OrderedDict
 from five import grok
 from ftw.table import helper
 from opengever.base.interfaces import IReferenceNumber
+from opengever.journal.tab import title_helper
 from opengever.latex import _
 from opengever.latex.utils import get_issuer_of_task
 from opengever.latex.utils import get_responsible_of_task
@@ -11,6 +12,7 @@ from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.task.helper import task_type_helper
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.interface import Interface
+from opengever.journal import _ as journal_mf
 
 
 class Column(object):
@@ -277,4 +279,39 @@ class TasksLaTeXListing(DossiersLaTeXListing):
                    _('label_deadline', default='Deadline'),
                    '15%',
                    lambda item: helper.readable_date(item, item.deadline))
+        ]
+
+
+
+class JournalLaTeXListing(LaTexListing):
+    grok.provides(ILaTexListing)
+    grok.adapts(Interface, Interface, Interface)
+    grok.name('journal')
+
+    template = ViewPageTemplateFile('templates/listing.pt')
+
+    def get_actor_label(self, item):
+        return Actor.lookup(item.get('actor')).get_label()
+
+    def get_columns(self):
+        return [
+            Column('time',
+                   journal_mf('label_time', default=u'Time'),
+                   '10%',
+                   lambda brain: helper.readable_date_time(brain, brain.get('time'))),
+
+            Column('title',
+                   journal_mf('label_titel', default=u'Title'),
+                   '45%',
+                   lambda brain: title_helper(brain, brain['action'].get('title'))),
+
+            Column('actor',
+                   journal_mf('label_actor', default=u'Changed by'),
+                   '15%',
+                   self.get_actor_label),
+
+            Column('comments',
+                   journal_mf('label_comments', default='Comments'),
+                   '30%',
+                   lambda brain: brain.get('comments'))
         ]
