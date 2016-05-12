@@ -8,9 +8,12 @@ from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.filing import IFilingNumberMarker
+from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.dossier.interfaces import IDossierResolver
 from plone import api
+from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
+from zope.component import getUtility
 from zope.i18n import translate
 
 
@@ -100,6 +103,11 @@ class DossierResolver(grok.Adapter):
     preconditions_fulfilled = False
     enddates_valid = False
 
+    @property
+    def properties(self):
+        registry = getUtility(IRegistry)
+        return registry.forInterface(IDossierResolveProperties)
+
     def is_resolve_possible(self):
         """Check if all preconditions are fulfilled.
         Return a list of errors, or a empty list when resolving is possible.
@@ -155,6 +163,9 @@ class DossierResolver(grok.Adapter):
     def purge_trash(self):
         """Delete all trashed documents inside the dossier (recursive).
         """
+        if not self.properties.purge_trash_enabled:
+            return
+
         trashed_docs = api.content.find(
             context=self.context,
             depth=-1,
@@ -170,6 +181,9 @@ class DossierResolver(grok.Adapter):
         """Creates a pdf representation of the dossier journal, and add it to
         the dossier as a normal document.
         """
+        if not self.properties.journal_pdf_enabled:
+            return
+
         view = self.context.unrestrictedTraverse('pdf-dossier-journal')
         today = api.portal.get_localized_time(datetime=datetime.today())
         filename = u'Journal {}.pdf'.format(today)
