@@ -1,4 +1,5 @@
 from datetime import date
+from DateTime import DateTime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -279,3 +280,71 @@ class TestTaskListings(FunctionalTestCase):
         task_id = self.task.get_sql_object().id
         browser.login().open(data={'pdf-tasks-listing:method': 1,
                                    'task_ids:list': task_id})
+
+
+class TestJournalListings(FunctionalTestCase):
+
+    sample_journal_entries = [
+        {'action': {'visible': True,
+                    'type': 'Dossier added',
+                    'title': u'label_dossier_added'},
+         'comments': '',
+         'actor': 'peter.mueller',
+         'time': DateTime(2016, 04, 12, 10, 7)},
+
+                {'action': {'visible': True,
+                            'type': 'Document added',
+                            'title': u'label_document_added'},
+                 'comments': '',
+                 'actor': 'hugo.boss',
+                 'time': DateTime(2016, 04, 12, 12, 10)},
+
+                {'action': {'visible': False,
+                            'type': 'Dossier modified',
+                            'title': u'label_dossier_modified'},
+                 'comments': '',
+                 'actor': 'peter.mueller',
+                 'time': DateTime(2016, 04, 25, 10, 0)},
+    ]
+
+    def setUp(self):
+        super(TestJournalListings, self).setUp()
+        dossier = create(Builder('dossier'))
+
+        self.listing = getMultiAdapter(
+            (dossier, dossier.REQUEST, self),
+            ILaTexListing, name='journal')
+        self.listing.items = self.sample_journal_entries
+
+        create(Builder('ogds_user').having(userid=u'peter.mueller',
+                                           firstname=u'Peter',
+                                           lastname=u'M\xfcller'))
+        create(Builder('ogds_user').having(userid=u'hugo.boss',
+                                           firstname=u'Hugo',
+                                           lastname=u'B\xf6ss'))
+
+    def test_labels_are_translated_and_show_as_table_headers(self):
+        table = lxml.html.fromstring(self.listing.template())
+        cols = table.xpath(CSSSelector('thead th').path)
+
+        self.assertEquals(
+            ['Time', 'Title', 'Changed by', 'Comments'],
+            [col.text_content().strip() for col in cols])
+
+    def test_shows_label_including_prinicpal_of_actor(self):
+        table = lxml.html.fromstring(self.listing.template())
+        rows = table.xpath(CSSSelector('tbody tr').path)
+
+        self.assertEquals(u'M\xfcller Peter (peter.mueller)',
+                          rows[0].xpath(CSSSelector('td').path)[2].text)
+        self.assertEquals(u'B\xf6ss Hugo (hugo.boss)',
+                          rows[1].xpath(CSSSelector('td').path)[2].text)
+
+    def test_time_is_readable(self):
+        table = lxml.html.fromstring(self.listing.template())
+        rows = table.xpath(CSSSelector('tbody tr').path)
+
+        self.assertEquals('12.04.2016 10:07',
+                          rows[0].xpath(CSSSelector('td').path)[0].text)
+        self.assertEquals('12.04.2016 12:10',
+                          rows[1].xpath(CSSSelector('td').path)[0].text)
