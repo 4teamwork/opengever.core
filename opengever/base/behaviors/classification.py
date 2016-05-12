@@ -131,6 +131,7 @@ grok.global_utility(
     name=u'classification_classification_vocabulary')
 
 
+# XXX: Eventually rewrite this as a context aware defaultFactory
 form.default_value(field=IClassification['classification'])(
     utils.set_default_with_acquisition(
         field=IClassification['classification'],
@@ -165,6 +166,7 @@ grok.global_utility(
     name=u'classification_privacy_layer_vocabulary')
 
 
+# XXX: Eventually rewrite this as a context aware defaultFactory
 form.default_value(field=IClassification['privacy_layer'])(
     utils.set_default_with_acquisition(
         field=IClassification['privacy_layer'],
