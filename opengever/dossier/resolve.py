@@ -1,4 +1,6 @@
+from datetime import datetime
 from five import grok
+from opengever.base.command import CreateDocumentCommand
 from opengever.base.security import elevated_privileges
 from opengever.document.behaviors import IBaseDocument
 from opengever.dossier import _
@@ -9,6 +11,7 @@ from opengever.dossier.behaviors.filing import IFilingNumberMarker
 from opengever.dossier.interfaces import IDossierResolver
 from plone import api
 from Products.CMFCore.utils import getToolByName
+from zope.i18n import translate
 
 
 NOT_SUPPLIED_OBJECTS = _(
@@ -147,6 +150,7 @@ class DossierResolver(grok.Adapter):
         """
 
         self.purge_trash()
+        self.create_journal_pdf()
 
     def purge_trash(self):
         """Delete all trashed documents inside the dossier (recursive).
@@ -161,6 +165,23 @@ class DossierResolver(grok.Adapter):
             with elevated_privileges():
                 api.content.delete(
                     objects=[brain.getObject() for brain in trashed_docs])
+
+    def create_journal_pdf(self):
+        """Creates a pdf representation of the dossier journal, and add it to
+        the dossier as a normal document.
+        """
+        view = self.context.unrestrictedTraverse('pdf-dossier-journal')
+        today = api.portal.get_localized_time(datetime=datetime.today())
+        filename = u'Journal {}.pdf'.format(today)
+        title = _(u'title_dossier_journal',
+                  default=u'Dossier Journal ${today}',
+                  mapping={'today': today})
+
+        with elevated_privileges():
+            CreateDocumentCommand(
+                self.context, filename, view.get_data(),
+                title=translate(title, context=self.context.REQUEST),
+                content_type='application/pdf').execute()
 
     def is_reactivate_possible(self):
         parent = self.context.get_parent_dossier()
