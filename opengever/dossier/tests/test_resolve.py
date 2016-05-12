@@ -1,7 +1,11 @@
+from Acquisition import aq_parent
 from datetime import date
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testing import freeze
 from ftw.testing import MockTestCase
+from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.interfaces import IDossierResolver
 from opengever.dossier.resolve import DossierResolver
@@ -17,6 +21,7 @@ from plone.protect import createToken
 from zope.interface import implements
 from zope.interface.verify import verifyClass
 import transaction
+
 
 TEST_DATE = date(2012, 3, 1)
 
@@ -62,32 +67,62 @@ class TestResolveJobs(FunctionalTestCase):
         self.grant('Contributor', 'Editor', 'Reader', 'Reviewer')
         self.catalog = api.portal.get_tool('portal_catalog')
 
-    def test_all_trashed_documents_are_deleted_when_resolving_a_dossier(self):
+    def test_all_trashed_documents_are_deleted_when_resolving_a_dossier_by_default(self):
         doc1 = create(Builder('document').within(self.dossier))
-        create(Builder('document').within(self.dossier).trashed())
+        doc2 = create(Builder('document').within(self.dossier).trashed())
 
         api.content.transition(obj=self.dossier,
                                transition='dossier-transition-resolve')
         transaction.commit()
 
-        docs = self.catalog.unrestrictedSearchResults(
-            path='/'.join(self.dossier.getPhysicalPath()))
-        self.assertEquals([self.dossier, doc1],
-                          [brain.getObject() for brain in docs])
+        docs = [brain.getObject() for brain in
+                self.catalog.unrestrictedSearchResults(
+                    path='/'.join(self.dossier.getPhysicalPath()))]
+
+        self.assertIn(doc1, docs)
+        self.assertNotIn(doc2, docs)
 
     def test_purge_trashs_recursive(self):
         subdossier = create(Builder('dossier').within(self.dossier))
         doc1 = create(Builder('document').within(subdossier))
-        create(Builder('document').within(subdossier).trashed())
+        doc2 = create(Builder('document').within(subdossier).trashed())
 
         api.content.transition(obj=self.dossier,
                                transition='dossier-transition-resolve')
         transaction.commit()
 
-        docs = self.catalog.unrestrictedSearchResults(
-            path='/'.join(self.dossier.getPhysicalPath()))
-        self.assertEquals([self.dossier, subdossier, doc1],
-                          [brain.getObject() for brain in docs])
+        docs = [brain.getObject() for brain in
+                self.catalog.unrestrictedSearchResults(
+                    path='/'.join(self.dossier.getPhysicalPath()))]
+
+        self.assertIn(doc1, docs)
+        self.assertNotIn(doc2, docs)
+
+    def test_adds_journal_pdf(self):
+        with freeze(datetime(2016, 04, 25)):
+            api.content.transition(obj=self.dossier,
+                                   transition='dossier-transition-resolve')
+            transaction.commit()
+
+        journal_pdf = self.dossier.get('document-1')
+        self.assertEquals(u'Journal Apr 25, 2016', journal_pdf.title)
+        self.assertEquals(u'journal-apr-25-2016.pdf',
+                          journal_pdf.file.filename)
+        self.assertEquals(u'application/pdf',
+                          journal_pdf.file.contentType)
+
+    def test_journal_pdf_is_only_added_to_main_dossier(self):
+        create(Builder('dossier').within(self.dossier))
+        api.content.transition(obj=self.dossier,
+                               transition='dossier-transition-resolve')
+        transaction.commit()
+
+        docs = api.content.find(context=self.dossier,
+                                depth=-1,
+                                object_provides=[IBaseDocument])
+
+        self.assertEquals(1, len(docs))
+        self.assertEquals(self.dossier, aq_parent(docs[0].getObject()))
 
 
 class TestResolvingDossiersWithFilingNumberSupport(FunctionalTestCase):

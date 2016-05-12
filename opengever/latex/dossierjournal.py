@@ -5,6 +5,7 @@ from ftw.journal.interfaces import IAnnotationsJournalizable
 from ftw.pdfgenerator.browser.views import ExportPDFView
 from ftw.pdfgenerator.interfaces import ILaTeXLayout
 from ftw.pdfgenerator.interfaces import ILaTeXView
+from ftw.pdfgenerator.interfaces import IPDFAssembler
 from ftw.pdfgenerator.utils import provide_request_layer
 from ftw.pdfgenerator.view import MakoLaTeXView
 from opengever.latex import _
@@ -36,6 +37,14 @@ class DossierJournalPDFView(grok.View, ExportPDFView):
         provide_request_layer(self.request, self.request_layer)
 
         return ExportPDFView.__call__(self)
+
+    def get_data(self):
+        # let the request provide IDossierListingLayer
+        provide_request_layer(self.request, self.request_layer)
+
+        assembler = getMultiAdapter((self.context, self.request),
+                                    IPDFAssembler)
+        return assembler.build_pdf()
 
 
 class DossierListingLaTeXView(grok.MultiAdapter, MakoLaTeXView):
