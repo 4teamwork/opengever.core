@@ -195,6 +195,21 @@ msgstr ""
 msgid "documents"
 msgstr ""
 
+#. Default: "Show more"
+#: ./opengever/tabbedview/browser/bumblebee_gallery.pt:17
+msgid "documentsShowMore"
+msgstr ""
+
+#. Default: "Gallery"
+#: ./opengever/tabbedview/browser/bumblebee_gallery.pt:3
+msgid "documents_pill_documents"
+msgstr ""
+
+#. Default: "List"
+#: ./opengever/tabbedview/browser/bumblebee_gallery.pt:4
+msgid "documents_pill_list"
+msgstr ""
+
 msgid "dossiers"
 msgstr ""
 
@@ -276,6 +291,11 @@ msgstr ""
 #. Default: "My notifications"
 #: ./opengever/tabbedview/browser/personal_overview.py:108
 msgid "label_my_notifications"
+msgstr ""
+
+#. Default: "No contents"
+#: ./opengever/tabbedview/browser/bumblebee_gallery.pt:23
+msgid "label_no_contents"
 msgstr ""
 
 #. Default: "Public Trial"
@@ -425,4 +445,3 @@ msgstr ""
 
 msgid "trash"
 msgstr ""
-

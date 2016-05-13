@@ -27,6 +27,7 @@
     <dependency>profile-opengever.latex:default</dependency>
     <dependency>profile-opengever.meeting:default</dependency>
     <dependency>profile-opengever.activity:default</dependency>
+    <dependency>profile-opengever.bumblebee:default</dependency>
     <dependency>profile-ftw.datepicker:default</dependency>
     <dependency>profile-ftw.contentmenu:default</dependency>
     <dependency>profile-ftw.zipexport:default</dependency>

@@ -384,4 +384,3 @@ msgstr ""
 #: opengever/repository/classification.py
 msgid "unprotected"
 msgstr ""
-

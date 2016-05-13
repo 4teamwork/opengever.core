@@ -83,6 +83,9 @@ msgstr ""
 msgid "documents"
 msgstr ""
 
+msgid "documents-proxy"
+msgstr ""
+
 msgid "events"
 msgstr ""
 
@@ -180,6 +183,9 @@ msgid "mydossiers"
 msgstr ""
 
 msgid "mydocuments"
+msgstr ""
+
+msgid "mydocuments-proxy"
 msgstr ""
 
 msgid "mytasks"

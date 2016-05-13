@@ -80,6 +80,9 @@ msgstr ""
 msgid "documents"
 msgstr "Documents"
 
+msgid "documents-proxy"
+msgstr "Documents"
+
 msgid "dossiers"
 msgstr "Dossiers"
 
@@ -150,6 +153,9 @@ msgid "my_issues"
 msgstr "Mes tickets"
 
 msgid "mydocuments"
+msgstr "Mes documents"
+
+msgid "mydocuments-proxy"
 msgstr "Mes documents"
 
 msgid "mydossiers"

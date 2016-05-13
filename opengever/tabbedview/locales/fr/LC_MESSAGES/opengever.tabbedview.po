@@ -14,7 +14,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./opengever/tabbedview/browser/tabs.py:153
+#: ./opengever/tabbedview/browser/tabs.py:167
 #: ./opengever/tabbedview/browser/tasklisting.py:67
 msgid "Active"
 msgstr "Actif"
@@ -51,7 +51,7 @@ msgstr "Acteur"
 msgid "additional_contact"
 msgstr "Additionnel"
 
-#: ./opengever/tabbedview/browser/tabs.py:150
+#: ./opengever/tabbedview/browser/tabs.py:164
 #: ./opengever/tabbedview/browser/tasklisting.py:66
 msgid "all"
 msgstr "Tous"
@@ -194,6 +194,21 @@ msgstr "Numéro courant"
 msgid "documents"
 msgstr "Documents "
 
+#. Default: "Show more"
+#: ./opengever/tabbedview/browser/bumblebee_gallery.pt:17
+msgid "documentsShowMore"
+msgstr "Montre plus"
+
+#. Default: "Gallery"
+#: ./opengever/tabbedview/browser/bumblebee_gallery.pt:3
+msgid "documents_pill_documents"
+msgstr "Galerie"
+
+#. Default: "List"
+#: ./opengever/tabbedview/browser/bumblebee_gallery.pt:4
+msgid "documents_pill_list"
+msgstr "Liste"
+
 msgid "dossiers"
 msgstr "Dossiers"
 
@@ -228,12 +243,12 @@ msgid "label_active"
 msgstr "Actif"
 
 #. Default: "Checked out by"
-#: ./opengever/tabbedview/browser/tabs.py:107
+#: ./opengever/tabbedview/browser/tabs.py:109
 msgid "label_checked_out"
 msgstr "En traitement"
 
 #. Default: "Delivery Date"
-#: ./opengever/tabbedview/browser/tabs.py:103
+#: ./opengever/tabbedview/browser/tabs.py:105
 msgid "label_delivery_date"
 msgstr "Date de remise"
 
@@ -276,6 +291,11 @@ msgstr "Mandant"
 #: ./opengever/tabbedview/browser/personal_overview.py:108
 msgid "label_my_notifications"
 msgstr ""
+
+#. Default: "No contents"
+#: ./opengever/tabbedview/browser/bumblebee_gallery.pt:23
+msgid "label_no_contents"
+msgstr "Aucun contenu"
 
 #. Default: "Public Trial"
 #: ./opengever/tabbedview/browser/tabs.py:115
@@ -424,4 +444,3 @@ msgstr "Titre"
 
 msgid "trash"
 msgstr "Corbeille"
-
