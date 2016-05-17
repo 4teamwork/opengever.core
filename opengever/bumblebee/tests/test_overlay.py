@@ -161,7 +161,6 @@ class TestGetPreviewPdfUrl(FunctionalTestCase):
         view = MockOverlayView(document, self.request)
 
         self.assertIn('preserved_as_paper.png', view.get_preview_pdf_url())
-        transaction.commit()
 
 
 class TestGetFileTitle(FunctionalTestCase):
@@ -194,7 +193,7 @@ class TestGetFileSize(FunctionalTestCase):
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
-    def test_returns_file_size_if_file_is_available(self):
+    def test_returns_file_size_in_kb_if_file_is_available(self):
         dossier = create(Builder('dossier'))
         document = create(Builder('document')
                           .within(dossier)
@@ -224,8 +223,11 @@ class TestGetCreator(FunctionalTestCase):
         document = create(Builder('document').within(dossier))
 
         view = MockOverlayView(document, self.request)
+        creator_link = view.get_creator_link()
 
-        self.assertIn('Test User (test_user_1_)', view.get_creator_link())
+        self.assertIn('Test User (test_user_1_)', creator_link)
+        self.assertIn('http://nohost/plone/@@user-details/test_user_1_',
+                      creator_link)
 
 
 class TestGetDocumentDate(FunctionalTestCase):
@@ -240,7 +242,7 @@ class TestGetDocumentDate(FunctionalTestCase):
 
         view = MockOverlayView(document, self.request)
 
-        self.assertEqual(u'Jan 01, 2014 01:00 AM', view.get_document_date())
+        self.assertEqual(u'Jan 01, 2014', view.get_document_date())
 
     def test_returns_none_if_no_document_date_is_set(self):
         dossier = create(Builder('dossier'))
@@ -272,7 +274,7 @@ class TestGetSequenceNumber(FunctionalTestCase):
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
-    def test_returns_sequense_number(self):
+    def test_returns_sequence_number(self):
         dossier = create(Builder('dossier'))
         document = create(Builder('document').within(dossier))
 
@@ -298,7 +300,7 @@ class TestGetCheckoutLink(FunctionalTestCase):
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
-    def test_returns_checkout_link_as_string(self):
+    def test_returns_checkout_and_edit_url(self):
         dossier = create(Builder('dossier'))
         document = create(Builder('document')
                           .within(dossier)
@@ -327,6 +329,9 @@ class TestGetCheckoutLink(FunctionalTestCase):
                           .attach_file_containing(
                               bumblebee_asset('example.docx').bytes(),
                               u'example.docx'))
+        create(Builder('user')
+               .with_userid('bond')
+               .with_roles('Member', 'Reader'))
 
         view = MockOverlayView(document, self.request)
 
@@ -334,12 +339,7 @@ class TestGetCheckoutLink(FunctionalTestCase):
             'http://nohost/plone/dossier-1/document-1/editing_document',
             view.get_checkout_url())
 
-        self.portal.acl_users.userFolderAddUser(
-            'bond', 'secret', ['Member', 'Reader'], [])
-        transaction.commit()
-
         login(self.portal, 'bond')
-
         self.assertIsNone(None, view.get_checkout_url())
 
 
@@ -374,7 +374,7 @@ class TestGetEditMetadataLink(FunctionalTestCase):
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
-    def test_returns_edit_link_as_string(self):
+    def test_returns_edit_metadata_url(self):
         dossier = create(Builder('dossier'))
         document = create(Builder('document').within(dossier))
 
@@ -386,17 +386,15 @@ class TestGetEditMetadataLink(FunctionalTestCase):
     def test_returns_none_if_user_is_not_allowed_to_edit(self):
         dossier = create(Builder('dossier'))
         document = create(Builder('document').within(dossier))
+        create(Builder('user')
+               .with_userid('bond')
+               .with_roles('Member', 'Reader'))
 
         view = MockOverlayView(document, self.request)
+
         self.assertEqual(
             'http://nohost/plone/dossier-1/document-1/edit',
             view.get_edit_metadata_url())
 
-        self.portal.acl_users.userFolderAddUser(
-            'bond', 'secret', ['Member', 'Reader'], [])
-        transaction.commit()
-
         login(self.portal, 'bond')
-
-        view = MockOverlayView(document, self.request)
         self.assertIsNone(view.get_edit_metadata_url())

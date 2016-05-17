@@ -4,7 +4,7 @@
   <javascript id="++resource++ftw.showroom/showroom.js"
               insert-after="++resource++opengever.base/handlebars.min.js" />
 
-  <javascript cacheable="True" compression="safe" cookable="True" enabled="on"
+  <javascript cacheable="True" compression="safe" cookable="True" enabled="True"
               expression="" id="++resource++opengever.bumblebee.resources/bumblebee.js"
               insert-after="++resource++ftw.showroom/showroom.js"
               inline="False"/>

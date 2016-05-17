@@ -61,18 +61,24 @@ class OpengeverCatalogContentListingObject(CatalogContentListingObject):
         return " ".join(classes)
 
     def get_overlay_url(self):
+        """Return the url to fetch the bumblebee overlay."""
+
         if not self.is_bumblebeeable():
             return None
 
         return '{}/@@bumblebee-overlay-listing'.format(self.getURL())
 
     def get_preview_image_url(self):
+        """Return the url to fetch the bumblebee preview thumbnail."""
+
         if not self.is_bumblebeeable():
             return None
 
         return get_representation_url_by_brain('thumbnail', self)
 
     def get_overlay_title(self):
+        """Return the title for the bumblebee overlay."""
+
         if not self.is_bumblebeeable():
             return None
 

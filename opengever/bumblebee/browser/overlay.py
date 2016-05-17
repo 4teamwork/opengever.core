@@ -37,15 +37,16 @@ class BumblebeeOverlayMixin(object):
         return file_ and file_.filename
 
     def get_file_size(self):
+        """Return the filesize in KB."""
+
         file_ = self.context.file
-        return file_ and self.context.file.size / 1024
+        return file_ and file_.getSize() / 1024
 
     def get_creator_link(self):
         return Actor.user(self.context.Creator()).get_link()
 
     def get_document_date(self):
-        return api.portal.get_localized_time(
-            str(self.context.document_date), long_format=True)
+        return api.portal.get_localized_time(self.context.document_date)
 
     def get_containing_dossier(self):
         return self.context.get_parent_dossier()

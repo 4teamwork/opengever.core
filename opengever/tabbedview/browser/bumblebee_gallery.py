@@ -18,8 +18,6 @@ class BumblebeeGalleryMixin(object):
     template = ViewPageTemplateFile('bumblebee_gallery.pt')
     previews_template = ViewPageTemplateFile('bumblebee_previews.pt')
 
-    amount_preloaded_documents = 24
-
     object_provides = 'ftw.bumblebee.interfaces.IBumblebeeable'
 
     def __call__(self, *args, **kwargs):

@@ -82,8 +82,9 @@ def truncate_sql_tables():
 
 
 def toggle_feature(registry_interface, enabled=True):
-    settings = getUtility(IRegistry).forInterface(registry_interface)
-    settings.is_feature_enabled = enabled
+
+    api.portal.set_registry_record('is_feature_enabled', enabled,
+                                   interface=registry_interface)
     transaction.commit()
 
 

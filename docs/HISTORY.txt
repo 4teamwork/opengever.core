@@ -8,7 +8,7 @@ Changelog
 - Add Visual Search (Bumblebee) integration using ftw.bumblebee.
 
   This new feature can be toggled with a feature flag.
-  We introduces two new depenencies, ftw.bumblebee to provide the base
+  We introduces two new dependencies, ftw.bumblebee to provide the base
   integration and for communicating with the bumblebee service and
   ftw.showroom display the overlay.
 

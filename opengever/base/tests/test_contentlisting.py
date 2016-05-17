@@ -104,8 +104,7 @@ class TestOpengeverContentListingWithDisabledBumblebee(FunctionalTestCase):
                          self.obj.get_css_classes())
 
     def test_get_preview_image_url(self):
-        self.assertEqual(get_representation_url_by_brain('thumbnail', self.obj),
-                         self.obj.get_preview_image_url())
+        self.assertIsNone(self.obj.get_preview_image_url())
 
     def test_get_overlay_title(self):
         self.assertIsNone(self.obj.get_overlay_title())
@@ -134,7 +133,7 @@ class TestOpengeverContentListingWithEnabledBumblebee(FunctionalTestCase):
 
         self.assertFalse(listing.is_bumblebeeable())
 
-    def test_get_css_classes(self):
+    def test_get_css_classes_extended_with_showroom_item_class(self):
         self.assertEqual('state-document-state-draft showroom-item',
                          self.obj.get_css_classes())
 

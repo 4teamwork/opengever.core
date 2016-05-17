@@ -43,18 +43,20 @@ class TestBumblebeeGalleryMixinGetBrains(FunctionalTestCase):
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
-    def test_returns_brains(self):
+    def test_returns_brains_depending_on_tablesource_query(self):
         dossier = create(Builder('dossier'))
+        other_dossier = create(Builder('dossier'))
         view = getMultiAdapter(
             (dossier, self.request), name="tabbedview_view-documents-gallery")
 
         document = create(Builder('document').within(dossier))
+        other_document = create(Builder('document').within(other_dossier))
 
         brains = view.get_brains()
 
         self.assertEqual([document, ], [brain.getObject() for brain in brains])
 
-    def test_cache_brains(self):
+    def test_brain_listing_is_cached_per_request(self):
         dossier = create(Builder('dossier'))
         view = getMultiAdapter(
             (dossier, self.request), name="tabbedview_view-documents-gallery")
@@ -214,7 +216,7 @@ class TestBumblebeeDocumentsProxyWithDeactivatedFeature(FunctionalTestCase):
         self.assertIsNone(browser.cookies.get(BUMBLEBEE_VIEW_COOKIE_NAME))
 
     @browsing
-    def test_redirect_to_list_view(self, browser):
+    def test_always_redirect_to_list_view(self, browser):
         dossier = create(Builder('dossier'))
         create(Builder('document').within(dossier))
 
