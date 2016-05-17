@@ -29,7 +29,7 @@ class BumblebeeGalleryMixin(object):
 
     @property
     def list_view_name(self):
-        return self.view_name.split('-gallery')[0]
+        raise NotImplementedError
 
     def available(self):
         return self.number_of_documents() > 0
@@ -61,6 +61,14 @@ class BumblebeeGalleryMixin(object):
 class DocumentsGallery(BumblebeeGalleryMixin, Documents):
     grok.name('tabbedview_view-documents-gallery')
 
+    @property
+    def list_view_name(self):
+        return "documents"
+
 
 class MyDocumentsGallery(BumblebeeGalleryMixin, MyDocuments):
     grok.name('tabbedview_view-mydocuments-gallery')
+
+    @property
+    def list_view_name(self):
+        return "mydocuments"
