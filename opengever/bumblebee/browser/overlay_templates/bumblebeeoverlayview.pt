@@ -68,8 +68,8 @@
     </footer>
   </aside>
   <div class="preview">
-    <button id="ftw-showroom-prev" class="showroom-nav-button"></button>
+    <button id="ftw-showroom-prev" title="Previous" i18n:attributes="title showroom_nav_button_prev" class="showroom-nav-button"></button>
     <iframe tal:attributes="src view/get_preview_pdf_url"></iframe>
-    <button id="ftw-showroom-next" class="showroom-nav-button"></button>
+    <button id="ftw-showroom-next" title="Next" i18n:attributes="title showroom_nav_button_next" class="showroom-nav-button"></button>
   </div>
 </div>
