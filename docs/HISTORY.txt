@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.8.2 (unreleased)
+4.9.0 (unreleased)
 ------------------
 
 - Add Visual Search (Bumblebee) integration using ftw.bumblebee.
