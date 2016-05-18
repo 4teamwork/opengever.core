@@ -1,8 +1,8 @@
 from ftw.upgrade import UpgradeStep
 
 
-class InstallFtwBumblebee(UpgradeStep):
-    """Install ftw bumblebee.
+class InstallBumblebeeProfile(UpgradeStep):
+    """Install the opengever.bumblebee profile.
     """
 
     def __call__(self):
