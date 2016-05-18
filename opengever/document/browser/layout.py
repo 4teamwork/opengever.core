@@ -1,4 +1,4 @@
-from opengever.core.layout import GeverLayoutPolicy
+from opengever.base.browser.layout import GeverLayoutPolicy
 
 
 class DocumentishLayoutPolicy(GeverLayoutPolicy):

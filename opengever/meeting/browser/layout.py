@@ -1,4 +1,4 @@
-from opengever.core.layout import GeverLayoutPolicy
+from opengever.base.browser.layout import GeverLayoutPolicy
 from opengever.meeting.browser.meetings.meeting import MeetingView
 from opengever.meeting.browser.members import MemberView
 
