@@ -46,5 +46,6 @@ class TestDocumentOverviewMissingFields(FunctionalTestCase):
              'Classification',
              'Privacy layer',
              'Public Trial',
-             'Public trial statement'],
+             'Public trial statement',
+             'Archival File'],
             field_headers)
