@@ -8,7 +8,6 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import login
 from zExceptions import NotFound
-import transaction
 
 
 class MockOverlayView(BumblebeeOverlayMixin):
@@ -78,6 +77,27 @@ class TestBumblebeeOverlayListing(FunctionalTestCase):
              'Checkin with comment'],
             browser.css('.file-actions a').text)
 
+    @browsing
+    def test_actions_with_file_checked_out_by_another_user(self, browser):
+        hans = create(Builder('user')
+                      .with_userid('hans')
+                      .with_roles('Contributor', 'Editor', 'Reader'))
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document')
+                          .within(dossier)
+                          .attach_file_containing(
+                              bumblebee_asset('example.docx').bytes(),
+                              u'example.docx')
+                          .checked_out_by('hans'))
+
+        browser.login().visit(document, view="bumblebee-overlay-listing")
+
+        self.assertEqual(
+            ['Open detail view',
+             'Download copy',
+             'Edit metadata'],
+            browser.css('.file-actions a').text)
+
 
 class TestBumblebeeOverlayDocument(FunctionalTestCase):
 
@@ -137,6 +157,27 @@ class TestBumblebeeOverlayDocument(FunctionalTestCase):
              'Checkout and edit',
              'Checkin without comment',
              'Checkin with comment'],
+            browser.css('.file-actions a').text)
+
+    @browsing
+    def test_actions_with_file_checked_out_by_another_user(self, browser):
+        hans = create(Builder('user')
+                      .with_userid('hans')
+                      .with_roles('Contributor', 'Editor', 'Reader'))
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document')
+                          .within(dossier)
+                          .attach_file_containing(
+                              bumblebee_asset('example.docx').bytes(),
+                              u'example.docx')
+                          .checked_out_by('hans'))
+
+        browser.login().visit(document, view="bumblebee-overlay-listing")
+
+        self.assertEqual(
+            ['Open detail view',
+             'Download copy',
+             'Edit metadata'],
             browser.css('.file-actions a').text)
 
 
