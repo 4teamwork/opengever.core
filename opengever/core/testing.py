@@ -1,16 +1,18 @@
+from collective.taskqueue.interfaces import ITaskQueue
 from collective.transmogrifier import transmogrifier
 from ftw.builder import session
 from ftw.builder.testing import BUILDER_LAYER
 from ftw.builder.testing import set_builder_session_factory
+from ftw.bumblebee.tests.helpers import BumblebeeTestTaskQueue
 from ftw.testing import ComponentRegistryLayer
 from ftw.testing.quickinstaller import snapshots
 from opengever.activity.interfaces import IActivitySettings
 from opengever.base import model
 from opengever.base.model import create_session
+from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from opengever.meeting.interfaces import IMeetingSettings
 from opengever.ogds.base.setup import create_sql_tables
 from opengever.ogds.models import BASE
-from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from plone import api
 from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
@@ -32,6 +34,7 @@ from z3c.saconfig import EngineFactory
 from z3c.saconfig import GloballyScopedSession
 from z3c.saconfig.interfaces import IEngineFactory
 from z3c.saconfig.interfaces import IScopedSession
+from zope.component import getSiteManager
 from zope.component import getUtility
 from zope.component import provideUtility
 from zope.configuration import xmlconfig
@@ -40,6 +43,7 @@ import logging
 import os
 import sys
 import transaction
+
 
 loghandler = logging.StreamHandler(stream=sys.stdout)
 loghandler.setLevel(logging.DEBUG)
@@ -381,6 +385,13 @@ OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER = ActivityLayer()
 
 
 class BumblebeeLayer(PloneSandboxLayer):
+
+    def setUpZope(self, app, configurationContext):
+        super(BumblebeeLayer, self).setUpZope(app, configurationContext)
+
+        queue = BumblebeeTestTaskQueue()
+        sm = getSiteManager()
+        sm.registerUtility(queue, provided=ITaskQueue, name='test-queue')
 
     def setUpPloneSite(self, portal):
         activate_bumblebee_feature()
