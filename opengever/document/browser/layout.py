@@ -1,7 +1,7 @@
-from plone.app.layout.globals.layout import LayoutPolicy
+from opengever.base.browser.layout import GeverLayoutPolicy
 
 
-class DocumentishLayoutPolicy(LayoutPolicy):
+class DocumentishLayoutPolicy(GeverLayoutPolicy):
 
     def bodyClass(self, template, view):
         """Extends the default body class with the `removed` class, when

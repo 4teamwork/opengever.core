@@ -1,0 +1,75 @@
+<div id="file-preview" i18n:domain="opengever.bumblebee">
+  <aside class="sidebar">
+    <header tal:condition="context/file">
+      <span tal:attributes="class string:file-mimetype ${view/get_mime_type_css_class}" />
+      <div>
+        <span class="title" tal:content="view/get_file_title" />
+        <span class="filesize" tal:content="string:${view/get_file_size} KB" />
+      </div>
+    </header>
+    <main>
+      <ul class="metadata">
+        <li>
+          <span class="title" i18n:translate="">Creator:</span>
+          <span class="value" tal:content="structure view/get_creator_link"></span>
+        </li>
+        <li tal:define="date view/get_document_date" tal:condition="date" class="detailItem">
+          <span class="title" i18n:translate="">Document date:</span>
+          <span class="value" tal:content="date"></span>
+        </li>
+        <li tal:define="dossier view/get_containing_dossier" tal:condition="dossier" class="detailItem">
+           <span class="title" i18n:translate="">Dossier:</span>
+           <a class="value" tal:attributes="href dossier/absolute_url" tal:content="dossier/Title"></a>
+        </li>
+        <li>
+          <span class="title" i18n:translate="">Sequence number:</span>
+          <span class="value" tal:content="view/get_sequence_number"></span>
+        </li>
+        <li>
+          <span class="title" i18n:translate="">Reference number:</span>
+          <span class="value" tal:content="view/get_reference_number"></span>
+        </li>
+      </ul>
+    </main>
+    <footer>
+      <ul class="file-actions">
+        <li tal:define="link view/get_detail_view_url" tal:condition="link">
+          <a id="action-view"
+             tal:attributes="href link"
+             i18n:translate="">Open detail view</a>
+        </li>
+        <li id="action-download" tal:define="link view/get_download_copy_link" tal:condition="link" tal:content="structure link">
+        </li>
+        <li tal:define="link view/get_edit_metadata_url" tal:condition="link">
+          <a id="action-edit"
+             tal:attributes="href view/get_edit_metadata_url"
+             i18n:domain="plone"
+             i18n:translate="">Edit metadata</a>
+        </li>
+        <li tal:define="link view/get_checkout_url" tal:condition="link">
+          <a id="action-checkout"
+             tal:attributes="href view/get_checkout_url"
+             i18n:domain="plone"
+             i18n:translate="">Checkout and edit</a>
+        </li>
+        <li tal:define="link view/get_checkin_without_comment_url" tal:condition="link">
+          <a id="action-checkin"
+             tal:attributes="href link"
+             i18n:domain="opengever.document"
+             i18n:translate="">Checkin without comment</a>
+        </li>
+        <li tal:define="link view/get_checkin_with_comment_url" tal:condition="link">
+          <a id="action-checkin"
+             tal:attributes="href link"
+             i18n:domain="opengever.document"
+             i18n:translate="">Checkin with comment</a>
+        </li>
+      </ul>
+    </footer>
+  </aside>
+  <div class="preview">
+    <button id="ftw-showroom-prev" title="Previous" i18n:attributes="title showroom_nav_button_prev" class="showroom-nav-button"></button>
+    <iframe tal:attributes="src view/get_preview_pdf_url"></iframe>
+    <button id="ftw-showroom-next" title="Next" i18n:attributes="title showroom_nav_button_next" class="showroom-nav-button"></button>
+  </div>
+</div>

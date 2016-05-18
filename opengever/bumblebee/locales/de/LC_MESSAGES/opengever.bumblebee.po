@@ -1,0 +1,50 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2016-05-17 14:53+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+#: ./opengever/bumblebee/browser/overlay_templates/bumblebeeoverlayview.pt:13
+msgid "Creator:"
+msgstr "Ersteller:"
+
+#: ./opengever/bumblebee/browser/overlay_templates/bumblebeeoverlayview.pt:17
+msgid "Document date:"
+msgstr "Dokumentdatum:"
+
+#: ./opengever/bumblebee/browser/overlay_templates/bumblebeeoverlayview.pt:21
+msgid "Dossier:"
+msgstr "Dossier:"
+
+#: ./opengever/bumblebee/browser/overlay_templates/bumblebeeoverlayview.pt:37
+msgid "Open detail view"
+msgstr "Detailansicht öffnen"
+
+#: ./opengever/bumblebee/browser/overlay_templates/bumblebeeoverlayview.pt:29
+msgid "Reference number:"
+msgstr "Aktenzeichen:"
+
+#: ./opengever/bumblebee/browser/overlay_templates/bumblebeeoverlayview.pt:25
+msgid "Sequence number:"
+msgstr "Laufnummer:"
+
+#. Default: "Next"
+#: ./opengever/bumblebee/browser/overlay_templates/bumblebeeoverlayview.pt:73
+msgid "showroom_nav_button_next"
+msgstr "Weiter"
+
+#. Default: "Previous"
+#: ./opengever/bumblebee/browser/overlay_templates/bumblebeeoverlayview.pt:71
+msgid "showroom_nav_button_prev"
+msgstr "Zurück"
+

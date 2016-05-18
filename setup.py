@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '4.8.2.dev0'
+version = '4.9.0.dev0'
 maintainer = '4teamwork AG'
 
 
@@ -77,6 +77,7 @@ setup(name='opengever.core',
         'five.globalrequest',
         'five.grok',
         'ftw.builder',
+        'ftw.bumblebee',
         'ftw.casauth',
         'ftw.contentmenu >= 2.4.0',
         'ftw.datepicker',
@@ -89,6 +90,7 @@ setup(name='opengever.core',
         'ftw.profilehook',
         'ftw.tabbedview[extjs, quickupload]',
         'ftw.table',
+        'ftw.showroom',
         'ftw.tooltip',
         'ftw.upgrade >= 1.18.0',
         'ftw.zipexport',
@@ -100,7 +102,7 @@ setup(name='opengever.core',
         'ordereddict',
         'Pillow',
         'Plone',
-        'plone.api',
+        'plone.api >= 1.4.11',
         'plone.app.dexterity [grok, relations]',
         'plone.app.lockingbehavior',
         'plone.app.registry',
@@ -122,6 +124,7 @@ setup(name='opengever.core',
         'plone.supermodel',
         'plone.z3cform',
         'plone4.csrffixes',
+        'plonetheme.teamraum',
         'Products.LDAPUserFolder',
         'Products.PloneLDAP',
         'python-ldap',

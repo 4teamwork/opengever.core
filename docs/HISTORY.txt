@@ -2,8 +2,24 @@
 Changelog
 =========
 
-4.8.2 (unreleased)
+4.9.0 (unreleased)
 ------------------
+
+- Add Visual Search (Bumblebee) integration using ftw.bumblebee.
+
+  This new feature can be toggled with a feature flag.
+  We introduces two new dependencies, ftw.bumblebee to provide the base
+  integration and for communicating with the bumblebee service and
+  ftw.showroom display the overlay.
+
+  The initial integration also adds the following UI components:
+  - A gallery with small preview-thumbnails for documents of a dossier
+  - A large preview thumbnail on the document overview
+  - Small preview-thumbnails for search-results
+  - An overlay to read the document that opens when clicking on
+    one of the aforementioned thumbnails
+
+  [elioschmutz, Kevin Bieri, deiferni]
 
 - Fix sample protocol template control structures.
   [deiferni]

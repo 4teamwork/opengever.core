@@ -1,11 +1,13 @@
+from ftw.bumblebee.utils import get_representation_url_by_brain
 from Missing import Value as MissingValue
 from opengever.base.browser.helper import get_css_class
-from plone.app.contentlisting.catalog import \
-    CatalogContentListingObject as CoreListingObject
+from opengever.bumblebee import is_bumblebee_feature_enabled
+from opengever.bumblebee import is_bumblebeeable
+from plone.app.contentlisting.catalog import CatalogContentListingObject
 from zope.component import getMultiAdapter
 
 
-class OpengeverCatalogContentListingObject(CoreListingObject):
+class OpengeverCatalogContentListingObject(CatalogContentListingObject):
     """OpenGever specific catalog content listing.
     Provides correct MIME type icons and containing dossier for rendering
     breadcrumbs in search results. Additionaly it provides cropped Title and
@@ -49,3 +51,41 @@ class OpengeverCatalogContentListingObject(CoreListingObject):
         is not implemented yet."""
 
         return self._crop_text(self.Description(), 400)
+
+    def get_css_classes(self):
+        """Return the css classes for this item."""
+
+        classes = ["state-{}".format(self.review_state())]
+        if self.is_bumblebeeable():
+            classes.append("showroom-item")
+        return " ".join(classes)
+
+    def get_overlay_url(self):
+        """Return the url to fetch the bumblebee overlay."""
+
+        if not self.is_bumblebeeable():
+            return None
+
+        return '{}/@@bumblebee-overlay-listing'.format(self.getURL())
+
+    def get_preview_image_url(self):
+        """Return the url to fetch the bumblebee preview thumbnail."""
+
+        if not self.is_bumblebeeable():
+            return None
+
+        return get_representation_url_by_brain('thumbnail', self)
+
+    def get_overlay_title(self):
+        """Return the title for the bumblebee overlay."""
+
+        if not self.is_bumblebeeable():
+            return None
+
+        return self.CroppedTitle()
+
+    def is_bumblebeeable(self):
+        if not hasattr(self, '_is_bumblebeeable'):
+            self._is_bumblebeeable = (is_bumblebee_feature_enabled() and
+                                      is_bumblebeeable(self))
+        return self._is_bumblebeeable

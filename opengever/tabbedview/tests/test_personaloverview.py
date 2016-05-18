@@ -59,7 +59,7 @@ class TestPersonalOverview(FunctionalTestCase):
         browser.login(username='hugo.boss', password='demo09').open(
             view='personal_overview')
         self.assertEqual(
-            ['mydossiers', 'mydocuments', 'mytasks', 'myissuedtasks',
+            ['mydossiers', 'mydocuments-proxy', 'mytasks', 'myissuedtasks',
              'alltasks', 'allissuedtasks'],
             browser.css('li.formTab a').text)
 
@@ -67,7 +67,7 @@ class TestPersonalOverview(FunctionalTestCase):
     def test_additional_tabs_are_shown_for_inbox_users(self, browser):
         browser.login().open(view='personal_overview')
         self.assertEqual(
-            ['mydossiers', 'mydocuments', 'mytasks', 'myissuedtasks',
+            ['mydossiers', 'mydocuments-proxy', 'mytasks', 'myissuedtasks',
              'alltasks', 'allissuedtasks'],
             browser.css('li.formTab a').text)
 
@@ -76,7 +76,7 @@ class TestPersonalOverview(FunctionalTestCase):
         browser.login(username='hugo.boss', password='demo09').open(
             view='personal_overview')
         self.assertEqual(
-            ['mydossiers', 'mydocuments', 'mytasks', 'myissuedtasks'],
+            ['mydossiers', 'mydocuments-proxy', 'mytasks', 'myissuedtasks'],
             browser.css('li.formTab a').text)
 
     @browsing
@@ -84,7 +84,7 @@ class TestPersonalOverview(FunctionalTestCase):
         browser.login(username='hugo.boss', password='demo09').open(
             view='personal_overview')
         self.assertEqual(
-            ['mydossiers', 'mydocuments', 'mytasks', 'myissuedtasks'],
+            ['mydossiers', 'mydocuments-proxy', 'mytasks', 'myissuedtasks'],
             browser.css('li.formTab a').text)
 
 
@@ -108,7 +108,7 @@ class TestPersonalOverviewActivitySupport(FunctionalTestCase):
     def test_notification_tab_is_displayed_when_activity_feature_is_enabled(self, browser):
         browser.login().open(view='personal_overview')
         self.assertEqual(
-            ['mydossiers', 'mydocuments',
+            ['mydossiers', 'mydocuments-proxy',
              'mytasks',
              'myissuedtasks',
              'My notifications',
@@ -119,7 +119,7 @@ class TestPersonalOverviewActivitySupport(FunctionalTestCase):
         browser.login(username='hugo.boss', password='demo09').open(
             view='personal_overview')
         self.assertEqual(
-            ['mydossiers', 'mydocuments', 'mytasks',
+            ['mydossiers', 'mydocuments-proxy', 'mytasks',
              'myissuedtasks', 'My notifications'],
             browser.css('li.formTab a').text)
 

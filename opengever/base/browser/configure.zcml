@@ -67,4 +67,13 @@
         directory="resources"
         />
 
+    <browser:page
+        name="plone_layout"
+        for="*"
+        permission="zope.Public"
+        class=".layout.GeverLayoutPolicy"
+        allowed_interface="plone.app.layout.globals.interfaces.ILayoutPolicy"
+        layer="opengever.base.interfaces.IOpengeverBaseLayer"
+        />
+
 </configure>
