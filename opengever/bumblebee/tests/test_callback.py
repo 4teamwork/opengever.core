@@ -4,6 +4,7 @@ from ftw.builder import create
 from ftw.bumblebee.tests.helpers import download_token_for
 from ftw.testing import freeze
 from opengever.bumblebee.browser.callback import StoreArchivalFile
+from opengever.document.archival_file import ARCHIVAL_FILE_STATE_FAILED
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.testing import FunctionalTestCase
 from plone.namedfile.file import NamedBlobFile
@@ -33,3 +34,17 @@ class TestStoreArchivalFile(FunctionalTestCase):
         self.assertTrue(isinstance(archival_file, NamedBlobFile))
         self.assertEquals('application/pdf', archival_file.contentType)
         self.assertEquals('Test String', archival_file.data)
+
+    def test_sets_failed_state_when_conversion_not_suceeded(self):
+        with freeze(datetime(2016, 4, 25, 10, 24)):
+            body = {"status": "failed",
+                    "error": "Some parts of the document could not be processed"}
+            self.request.set('BODY', json.dumps(body))
+            self.request.set('token', download_token_for(self.document))
+
+            view = StoreArchivalFile(self.document, self.request)
+            view()
+
+        self.assertEquals(
+            ARCHIVAL_FILE_STATE_FAILED,
+            IDocumentMetadata(self.document).archival_file_state)
