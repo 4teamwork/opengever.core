@@ -50,6 +50,11 @@ class LinkTestCase(MockTestCase):
 
     def setUp(self):
         super(LinkTestCase, self).setUp()
+
+        is_bumblebee_feature_enabled = self.mocker.replace(
+            'opengever.bumblebee.is_bumblebee_feature_enabled', count=False)
+        self.expect(is_bumblebee_feature_enabled()).result(False)
+
         self.request = self.stub_request()
         self.expect(self.request.SERVER_URL).result('http://nohost/plone')
         self.expect(self.request.environ).result({'_auth_token': '123456'})

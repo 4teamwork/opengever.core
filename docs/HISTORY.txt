@@ -27,7 +27,8 @@ Changelog
   - A large preview thumbnail on the document overview
   - Small preview-thumbnails for search-results
   - An overlay to read the document that opens when clicking on
-    one of the aforementioned thumbnails
+    one of the aforementioned thumbnails and a document in a document
+    listing (tab)
 
   [elioschmutz, Kevin Bieri, deiferni]
 
