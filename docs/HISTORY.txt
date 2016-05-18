@@ -5,6 +5,9 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Add batching for the bumblebee gallery-view.
+  [elioschmutz]
+
 - Fix tests for GeverJSONSummarySerializer: The `member` attribute
   has been renamed to `items` in plone/plone.restapi#107.
   [lgraf]
