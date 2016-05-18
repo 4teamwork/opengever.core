@@ -3,8 +3,13 @@ from datetime import date
 from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.bumblebee.tests import RequestsSessionMock
+from ftw.bumblebee.tests.helpers import asset as bumblebee_asset
+from ftw.bumblebee.tests.helpers import get_queue
+from ftw.bumblebee.tests.helpers import reset_queue
 from ftw.testing import freeze
 from ftw.testing import MockTestCase
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.interfaces import IDossierResolveProperties
@@ -147,6 +152,49 @@ class TestResolveJobs(FunctionalTestCase):
         self.assertFalse(
             self.dossier.get('document-1', False),
             'Journal PDF created altough its disabled by registry property.')
+
+
+
+class TestAutomaticPDFAConversion(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+
+    def setUp(self):
+        super(TestAutomaticPDFAConversion, self).setUp()
+        self.dossier = create(Builder('dossier'))
+        self.grant('Contributor', 'Editor', 'Reader', 'Reviewer')
+        self.catalog = api.portal.get_tool('portal_catalog')
+
+        reset_queue()
+
+    def test_pdf_conversion_job_is_queued_for_every_document(self):
+        api.portal.set_registry_record(
+            'journal_pdf_enabled', False, interface=IDossierResolveProperties)
+
+        doc1 = create(Builder('document')
+                      .within(self.dossier)
+                      .attach_file_containing(
+                          bumblebee_asset('example.docx').bytes(),
+                          u'example.docx'))
+        doc2 = create(Builder('document')
+                      .within(self.dossier)
+                      .attach_file_containing(
+                          bumblebee_asset('example.docx').bytes(),
+                          u'example.docx'))
+
+        with RequestsSessionMock.installed() as session:
+            api.content.transition(obj=self.dossier,
+                                   transition='dossier-transition-resolve')
+            transaction.commit()
+
+            self.assertEquals(2, len(get_queue().queue))
+            self.assertDictContainsSubset(
+                {'callback_url': '{}/archival_file_conversion_callback'.format(
+                    doc1.absolute_url()),
+                 'file_url': '{}/bumblebee_download'.format(doc1.absolute_url()),
+                 'target_format': 'pdf/a',
+                 'url': '/plone/dossier-1/document-1/bumblebee_trigger_conversion'},
+                get_queue().queue[0])
 
 
 class TestResolvingDossiersWithFilingNumberSupport(FunctionalTestCase):
