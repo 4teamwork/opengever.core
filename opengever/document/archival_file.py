@@ -38,6 +38,9 @@ class ArchivalFileConverter(object):
     def handle_conversion_failure(self):
         self.set_state(ARCHIVAL_FILE_STATE_FAILED)
 
+    def set_manually_state(self):
+        self.set_state(ARCHIVAL_FILE_STATE_MANUALLY)
+
     def get_file_name(self):
         filename, ext = os.path.splitext(self.document.file.filename)
         return u'{}.pdf'.format(filename)
