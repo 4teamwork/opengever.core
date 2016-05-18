@@ -5,6 +5,9 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Update Bumblebee integration for API v3 support.
+  [phgross]
+
 - Add batching for the bumblebee gallery-view.
   [elioschmutz]
 

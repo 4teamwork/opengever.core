@@ -228,7 +228,7 @@ class TestGetOpenAsPdfLink(FunctionalTestCase):
         view = MockOverlayView(document, self.request)
 
         self.assertIn(
-            '/YnVtYmxlYmVl/api/v2/resource/', view.get_open_as_pdf_link())
+            '/YnVtYmxlYmVl/api/v3/resource/', view.get_open_as_pdf_link())
 
     def test_returns_none_if_no_mimetype_is_available(self):
         dossier = create(Builder('dossier'))

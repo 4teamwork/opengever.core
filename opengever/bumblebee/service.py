@@ -1,13 +1,12 @@
-from ftw.bumblebee.service import BumblebeeService
+from ftw.bumblebee.service import BumblebeeServiceV3
 from opengever.bumblebee import is_bumblebee_feature_enabled
 
 
-class GeverBumblebeeService(BumblebeeService):
-    """Only queues conversions when the bumblebee feature is enabled."""
+class GeverBumblebeeService(BumblebeeServiceV3):
+    """Only queues storings when the bumblebee feature is enabled."""
 
-    def queue_conversion(self, queue, version_id=None):
+    def queue_storing(self, queue):
         if not is_bumblebee_feature_enabled():
             return False
 
-        return super(GeverBumblebeeService, self).queue_conversion(
-            queue, version_id=version_id)
+        return super(GeverBumblebeeService, self).queue_storing(queue)
