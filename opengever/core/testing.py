@@ -422,6 +422,8 @@ OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER = ActivityLayer()
 class BumblebeeLayer(PloneSandboxLayer):
 
     def setUpZope(self, app, configurationContext):
+        super(BumblebeeLayer, self).setUpZope(app, configurationContext)
+
         queue = BumblebeeTestTaskQueue()
         sm = getSiteManager()
         sm.registerUtility(queue, provided=ITaskQueue, name='test-queue')

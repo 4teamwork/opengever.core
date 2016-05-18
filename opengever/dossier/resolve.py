@@ -2,6 +2,7 @@ from datetime import datetime
 from five import grok
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.security import elevated_privileges
+from opengever.document.archival_file import ArchivalFileConverter
 from opengever.document.behaviors import IBaseDocument
 from opengever.dossier import _
 from opengever.dossier.base import DOSSIER_STATES_OPEN
@@ -156,6 +157,7 @@ class DossierResolver(grok.Adapter):
 
         self.purge_trash()
         self.create_journal_pdf()
+        self.trigger_pdf_conversion()
 
     def purge_trash(self):
         """Delete all trashed documents inside the dossier (recursive).
@@ -193,6 +195,11 @@ class DossierResolver(grok.Adapter):
                 self.context, filename, view.get_data(),
                 title=translate(title, context=self.context.REQUEST),
                 content_type='application/pdf').execute()
+
+    def trigger_pdf_conversion(self):
+        docs = api.content.find(self.context, object_provides=[IBaseDocument])
+        for doc in docs:
+            ArchivalFileConverter(doc.getObject()).trigger_conversion()
 
     def is_reactivate_possible(self):
         parent = self.context.get_parent_dossier()

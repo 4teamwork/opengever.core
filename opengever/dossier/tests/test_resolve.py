@@ -3,10 +3,15 @@ from datetime import date
 from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.bumblebee.tests import RequestsSessionMock
+from ftw.bumblebee.tests.helpers import asset as bumblebee_asset
+from ftw.bumblebee.tests.helpers import get_queue
+from ftw.bumblebee.tests.helpers import reset_queue
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from ftw.testing import freeze
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.interfaces import IDossierResolveProperties
@@ -14,6 +19,7 @@ from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.app.testing import applyProfile
 from plone.protect import createToken
+import transaction
 
 
 class TestResolvingDossiers(FunctionalTestCase):
@@ -136,6 +142,73 @@ class TestResolveJobs(FunctionalTestCase):
             'Journal PDF created altough its disabled by registry property.')
 
 
+class TestAutomaticPDFAConversion(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+
+    def setUp(self):
+        super(TestAutomaticPDFAConversion, self).setUp()
+        self.dossier = create(Builder('dossier'))
+        self.grant('Contributor', 'Editor', 'Reader', 'Reviewer')
+        self.catalog = api.portal.get_tool('portal_catalog')
+
+        reset_queue()
+
+        api.portal.set_registry_record(
+            'journal_pdf_enabled', False, interface=IDossierResolveProperties)
+
+    def test_pdf_conversion_job_is_queued_for_every_document(self):
+        api.portal.set_registry_record(
+            'journal_pdf_enabled', False, interface=IDossierResolveProperties)
+
+        doc1 = create(Builder('document')
+                      .within(self.dossier)
+                      .attach_file_containing(
+                          bumblebee_asset('example.docx').bytes(),
+                          u'example.docx'))
+        doc2 = create(Builder('document')
+                      .within(self.dossier)
+                      .attach_file_containing(
+                          bumblebee_asset('example.docx').bytes(),
+                          u'example.docx'))
+
+        get_queue().reset()
+        with RequestsSessionMock.installed() as session:
+            api.content.transition(obj=self.dossier,
+                                   transition='dossier-transition-resolve')
+            transaction.commit()
+
+            self.assertEquals(2, len(get_queue().queue))
+            self.assertDictContainsSubset(
+                {'callback_url': '{}/archival_file_conversion_callback'.format(
+                    doc1.absolute_url()),
+                 'file_url': 'http://nohost/plone/bumblebee_download?checksum={}&uuid={}'.format(
+                     DOCX_CHECKSUM, IUUID(doc1)),
+                 'target_format': 'pdf/a',
+                 'url': '/plone/dossier-1/document-1/bumblebee_trigger_conversion'},
+                get_queue().queue[0])
+
+    def test_pdf_conversion_can_be_disabled_with_registry_property(self):
+        api.portal.set_registry_record(
+            'archival_file_conversion_enabled',
+            False,
+            interface=IDossierResolveProperties)
+
+        doc1 = create(Builder('document')
+                      .within(self.dossier)
+                      .attach_file_containing(
+                          bumblebee_asset('example.docx').bytes(),
+                          u'example.docx'))
+
+        get_queue().reset()
+        with RequestsSessionMock.installed() as session:
+            api.content.transition(obj=self.dossier,
+                                   transition='dossier-transition-resolve')
+            transaction.commit()
+
+            self.assertEquals(0, len(get_queue().queue))
+
+
 class TestResolvingDossiersWithFilingNumberSupport(FunctionalTestCase):
 
     def setUp(self):
@@ -209,7 +282,6 @@ class TestResolveConditions(FunctionalTestCase):
         create(Builder('document')
                .within(dossier)
                .having(document_date=date(2016, 6, 1)))
-
 
         browser.login().open(dossier,
                              {'_authenticator': createToken()},
