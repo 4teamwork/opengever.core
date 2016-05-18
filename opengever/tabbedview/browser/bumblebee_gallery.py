@@ -20,6 +20,8 @@ class BumblebeeGalleryMixin(object):
 
     object_provides = 'ftw.bumblebee.interfaces.IBumblebeeable'
 
+    amount_preloaded_documents = 24
+
     def __call__(self, *args, **kwargs):
         if not is_bumblebee_feature_enabled():
             raise NotFound
@@ -40,8 +42,10 @@ class BumblebeeGalleryMixin(object):
     def previews(self, **kwargs):
         brains = self.get_brains()
 
-        # TODO: Batching
-        for brain in brains:
+        from_batch_id = int(self.request.get('document_pointer', 0))
+        to_batch_id = from_batch_id + self.amount_preloaded_documents
+
+        for brain in brains[from_batch_id:to_batch_id]:
             yield {
                 'title': brain.Title,
                 'overlay_url': '{}/@@bumblebee-overlay-listing'.format(brain.getURL()),
@@ -57,6 +61,16 @@ class BumblebeeGalleryMixin(object):
             setattr(self, '_brains', catalog(self.table_source.build_query()))
         return getattr(self, '_brains')
 
+    def fetch(self):
+        """Action for retrieving more events (based on `next_event_id` in
+        the request) with AJAX.
+        """
+        self.request.response.setHeader('X-Theme-Disabled', 'True')
+        # The HTML stripped in order to have empty response content when
+        # there are no tags at all, so that diazo does not try to
+        # parse it.
+        return self.previews_template().strip()
+
 
 class DocumentsGallery(BumblebeeGalleryMixin, Documents):
     grok.name('tabbedview_view-documents-gallery')
@@ -66,9 +80,41 @@ class DocumentsGallery(BumblebeeGalleryMixin, Documents):
         return "documents"
 
 
+class DocumentsGalleryFetch(DocumentsGallery):
+    """Returns the next gallery-items.
+
+    Unfortunately it's not possible to use a traversable method with
+    five.grok-views. Therefore we have to register an own browserview
+    to fetch the next gallery-items.
+
+    This browserview can be removed and implemented with allowed-attributes as
+    soon as the parent views are registered as Zope 3 BrowserViews.
+    """
+    grok.name('tabbedview_view-documents-gallery-fetch')
+
+    def __call__(self):
+        return self.fetch()
+
+
 class MyDocumentsGallery(BumblebeeGalleryMixin, MyDocuments):
     grok.name('tabbedview_view-mydocuments-gallery')
 
     @property
     def list_view_name(self):
         return "mydocuments"
+
+
+class MyDocumentsGalleryFetch(MyDocumentsGallery):
+    """Returns the next gallery-items.
+
+    Unfortunately it's not possible to use a traversable method with
+    five.grok-views. Therefore we have to register an own browserview
+    to fetch the next gallery-items.
+
+    This browserview can be removed and implemented with allowed-attributes as
+    soon as the parent views are registered as Zope 3 BrowserViews.
+    """
+    grok.name('tabbedview_view-mydocuments-gallery-fetch')
+
+    def __call__(self):
+        return self.fetch()
