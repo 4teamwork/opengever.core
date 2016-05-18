@@ -9,6 +9,10 @@ class StoreArchivalFile(BaseConvertCallbackView):
         ArchivalFileConverter(self.context).store_file(self.get_file_data())
         super(StoreArchivalFile, self).handle_success()
 
+    def handle_error(self):
+        ArchivalFileConverter(self.context).handle_conversion_failure()
+        super(StoreArchivalFile, self).handle_error()
+
     def verify_token(self):
         # TODO: Remove and let the BaseConvertCallbackView check the token.
         return True
