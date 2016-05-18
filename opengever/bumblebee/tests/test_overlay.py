@@ -160,7 +160,7 @@ class TestGetPreviewPdfUrl(FunctionalTestCase):
 
         view = MockOverlayView(document, self.request)
 
-        self.assertIn('preserved_as_paper.png', view.get_preview_pdf_url())
+        self.assertIn('not_digitally_available.png', view.get_preview_pdf_url())
 
 
 class TestGetFileTitle(FunctionalTestCase):

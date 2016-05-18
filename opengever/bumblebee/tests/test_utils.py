@@ -38,11 +38,11 @@ class TestGetRepresentationUrlByObject(FunctionalTestCase):
             '/YnVtYmxlYmVl/api/v2/resource/',
             get_representation_url_by_object('thumbnail', document))
 
-    def test_returns_preserved_as_paper_placeholder_image_if_no_ckecksum_is_available(self):
+    def test_returns_not_digitally_available_placeholder_image_if_no_ckecksum_is_available(self):
         document = create(Builder('document'))
 
         self.assertIn(
-            'preserved_as_paper.png',
+            'not_digitally_available.png',
             get_representation_url_by_object('thumbnail', document))
 
 
@@ -60,13 +60,13 @@ class TestGetRepresentationUrlByBrain(FunctionalTestCase):
             '/YnVtYmxlYmVl/api/v2/resource/',
             get_representation_url_by_brain('thumbnail', brain))
 
-    def test_returns_preserved_as_paper_placeholder_image_if_no_ckecksum_is_available(self):
+    def test_returns_not_digitally_available_placeholder_image_if_no_ckecksum_is_available(self):
         document = create(Builder('document'))
 
         brain = obj2brain(document)
 
         self.assertIn(
-            'preserved_as_paper.png',
+            'not_digitally_available.png',
             get_representation_url_by_brain('thumbnail', brain))
 
 

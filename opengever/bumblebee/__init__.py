@@ -7,10 +7,10 @@ from zope.globalrequest import getRequest
 BUMBLEBEE_VIEW_COOKIE_NAME = 'bumblebee-view'
 
 
-def get_preserved_as_paper_placeholder_image_url():
+def get_not_digitally_available_placeholder_image_url():
     return "{}{}".format(
         api.portal.get().absolute_url(),
-        "/++resource++opengever.base/images/preserved_as_paper.png")
+        "/++resource++opengever.base/images/not_digitally_available.png")
 
 
 def is_bumblebee_feature_enabled():
@@ -30,7 +30,7 @@ def get_representation_url_by_object(format_name, obj):
     a special placeholder image for these documents
     """
     return representation_url_by_object(format_name, obj) or \
-        get_preserved_as_paper_placeholder_image_url()
+        get_not_digitally_available_placeholder_image_url()
 
 
 def get_representation_url_by_brain(format_name, brain):
@@ -45,7 +45,7 @@ def get_representation_url_by_brain(format_name, brain):
     a special placeholder image for these documents
     """
     return representation_url_by_brain(format_name, brain) or \
-        get_preserved_as_paper_placeholder_image_url()
+        get_not_digitally_available_placeholder_image_url()
 
 
 def set_prefered_listing_view(value):
