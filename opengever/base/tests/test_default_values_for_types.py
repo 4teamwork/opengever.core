@@ -22,8 +22,8 @@ DEFAULT_TITLE = u'My title'
 DEFAULT_CLIENT = u'client1'
 
 OMITTED_FORM_FIELDS = [
-    'creators', 'predecessor', 'preview', 'archival_file', 'thumbnail',
-    'former_reference_number', 'reference_number',
+    'creators', 'predecessor', 'preview', 'archival_file_state',
+    'thumbnail', 'former_reference_number', 'reference_number',
     'temporary_former_reference_number'
 ]
 
@@ -125,6 +125,7 @@ DOCUMENT_DEFAULTS = {
 DOCUMENT_FORM_DEFAULTS = {}
 DOCUMENT_MISSING_VALUES = {
     'archival_file': None,
+    'archival_file_state': None,
     'delivery_date': None,
     'document_author': None,
     'document_type': None,
@@ -153,6 +154,7 @@ MAIL_DEFAULTS = {
 MAIL_FORM_DEFAULTS = {}
 MAIL_MISSING_VALUES = {
     'archival_file': None,
+    'archival_file_state': None,
     'delivery_date': None,
     'document_type': None,
     'foreign_reference': None,

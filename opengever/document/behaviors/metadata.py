@@ -139,6 +139,12 @@ class IDocumentMetadata(form.Schema):
         required=False,
         )
 
+    form.omitted('archival_file_state')
+    archival_file_state = schema.Int(
+        title=_(u'label_archival_file_state', default='Archival file state'),
+        required=False,
+    )
+
     form.omitted('thumbnail')
     thumbnail = NamedBlobFile(
         title=_(u'label_thumbnail', default='Thumbnail'),
