@@ -16,7 +16,7 @@
   }
 
   function toggleShowMoreButton() {
-    var button = $('.showMore');
+    var button = $('.bumblebeeGalleryShowMore');
     var shown = $('.imageContainer').length;
 
     if (shown >= number_of_documents) {
@@ -48,7 +48,7 @@
 
   $(document)
     .on("reload", init)
-    .on("click", ".showMore", function() {loadNextItems(); });
+    .on("click", ".bumblebeeGalleryShowMore", function() {loadNextItems(); });
 
   $(init);
 

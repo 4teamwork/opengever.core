@@ -13,7 +13,7 @@
 
           <div class="visualClear"></div>
 
-          <div class="showMore">
+          <div class="bumblebeeGalleryShowMore">
             <span i18n:translate="documentsShowMore">Show more</span>
           </div>
 
