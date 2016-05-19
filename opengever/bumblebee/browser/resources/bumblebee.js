@@ -22,7 +22,7 @@
     if (shown >= number_of_documents) {
       button.hide();
     }else {
-      button.show();
+      button.css("display", "block");
     }
   }
 

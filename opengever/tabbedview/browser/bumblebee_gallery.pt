@@ -13,9 +13,9 @@
 
           <div class="visualClear"></div>
 
-          <div class="bumblebeeGalleryShowMore">
+          <button class="bumblebeeGalleryShowMore button">
             <span i18n:translate="documentsShowMore">Show more</span>
-          </div>
+          </button>
 
       </tal:available>
 
