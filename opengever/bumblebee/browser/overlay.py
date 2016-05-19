@@ -1,5 +1,6 @@
 from five import grok
 from ftw.bumblebee.interfaces import IBumblebeeable
+from ftw.bumblebee.mimetypes import is_mimetype_supported
 from opengever.base.browser.helper import get_css_class
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
@@ -79,6 +80,13 @@ class BumblebeeOverlayMixin(object):
             additional_classes=[''],
             include_token=True
             )
+
+    def get_open_as_pdf_link(self):
+        mimetypeitem = self.context.get_mimetype()
+        if not mimetypeitem or not is_mimetype_supported(mimetypeitem[0]):
+            return None
+
+        return get_representation_url_by_object('pdf', obj=self.context)
 
     def get_edit_metadata_url(self):
         if not api.user.has_permission(

@@ -204,6 +204,41 @@ class TestGetPreviewPdfUrl(FunctionalTestCase):
         self.assertIn('not_digitally_available.png', view.get_preview_pdf_url())
 
 
+class TestGetOpenAsPdfLink(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+
+    def test_returns_pdf_url_as_string(self):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document')
+                          .within(dossier)
+                          .with_dummy_content())
+
+        view = MockOverlayView(document, self.request)
+
+        self.assertIn(
+            '/YnVtYmxlYmVl/api/v2/resource/', view.get_open_as_pdf_link())
+
+    def test_returns_none_if_no_mimetype_is_available(self):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document').within(dossier))
+
+        view = MockOverlayView(document, self.request)
+
+        self.assertIsNone(view.get_open_as_pdf_link())
+
+    def test_returns_none_if_mimetype_is_not_supported(self):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document')
+                          .within(dossier)
+                          .attach_file_containing(
+                              "data", name=u"test.notsupported"))
+
+        view = MockOverlayView(document, self.request)
+
+        self.assertIsNone(view.get_open_as_pdf_link())
+
+
 class TestGetFileTitle(FunctionalTestCase):
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
