@@ -6,7 +6,7 @@
     <div tal:define="available view/available"
          class="preview-listing"
          tal:attributes="data-number-of-documents view/number_of_documents;
-                         data-fetch-url string:${context/absolute_url}/${view/__name__}-fetch">
+                         data-fetch-url view/get_fetch_url">
       <tal:available tal:condition="available">
 
           <tal:PREVIEWS tal:replace="structure view/previews_template"></tal:PREVIEWS>

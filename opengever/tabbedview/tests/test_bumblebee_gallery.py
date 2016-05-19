@@ -39,6 +39,30 @@ class TestBumblebeeGalleryMixinListViewName(FunctionalTestCase):
         self.assertEqual('mydocuments', view.list_view_name)
 
 
+class TestBumblebeeGalleryMixinGetFetchUrl(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+
+    def test_get_fetch_url_returns_the_url_to_fetch_new_items(self):
+        dossier = create(Builder('dossier'))
+
+        viewname = "tabbedview_view-documents-gallery"
+        view = getMultiAdapter(
+            (dossier, self.request), name=viewname)
+
+        self.assertEqual(
+            'http://nohost/plone/dossier-1/tabbedview_view-documents-gallery-fetch',
+            view.get_fetch_url())
+
+        viewname = "tabbedview_view-mydocuments-gallery"
+        view = getMultiAdapter(
+            (dossier, self.request), name=viewname)
+
+        self.assertEqual(
+            'http://nohost/plone/dossier-1/tabbedview_view-mydocuments-gallery-fetch',
+            view.get_fetch_url())
+
+
 class TestBumblebeeGalleryMixinGetBrains(FunctionalTestCase):
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER

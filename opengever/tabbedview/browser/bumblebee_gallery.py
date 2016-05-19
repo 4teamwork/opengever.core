@@ -33,6 +33,9 @@ class BumblebeeGalleryMixin(object):
     def list_view_name(self):
         raise NotImplementedError
 
+    def get_fetch_url(self):
+        return '{}/{}-fetch'.format(self.context.absolute_url(), self.__name__)
+
     def available(self):
         return self.number_of_documents() > 0
 
