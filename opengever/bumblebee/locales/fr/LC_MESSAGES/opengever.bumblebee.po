@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-05-17 14:53+0000\n"
+"POT-Creation-Date: 2016-05-20 12:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,6 +26,10 @@ msgstr "Date du document:"
 msgid "Dossier:"
 msgstr "Dossier:"
 
+#: ./opengever/bumblebee/browser/overlay_templates/bumblebeeoverlayview.pt:44
+msgid "Open as PDF"
+msgstr "Ouvrir le document en PDF"
+
 #: ./opengever/bumblebee/browser/overlay_templates/bumblebeeoverlayview.pt:37
 msgid "Open detail view"
 msgstr "Ouvrir vue détaillée"
@@ -39,12 +43,12 @@ msgid "Sequence number:"
 msgstr "Numéro courant:"
 
 #. Default: "Next"
-#: ./opengever/bumblebee/browser/overlay_templates/bumblebeeoverlayview.pt:73
+#: ./opengever/bumblebee/browser/overlay_templates/bumblebeeoverlayview.pt:78
 msgid "showroom_nav_button_next"
 msgstr ""
 
 #. Default: "Previous"
-#: ./opengever/bumblebee/browser/overlay_templates/bumblebeeoverlayview.pt:71
+#: ./opengever/bumblebee/browser/overlay_templates/bumblebeeoverlayview.pt:76
 msgid "showroom_nav_button_prev"
 msgstr ""
 

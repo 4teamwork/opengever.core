@@ -18,7 +18,7 @@ def is_bumblebee_feature_enabled():
         'is_feature_enabled', interface=IGeverBumblebeeSettings)
 
 
-def get_representation_url_by_object(format_name, obj):
+def get_representation_url_by_object(format_name, obj, filename=''):
     """Returns the bumblebee representation url of the object.
 
     Bumblebee will return the representation if the obj has a checksum.
@@ -29,7 +29,7 @@ def get_representation_url_by_object(format_name, obj):
     That means, our obj is only preserved as paper and we have to return
     a special placeholder image for these documents
     """
-    return representation_url_by_object(format_name, obj) or \
+    return representation_url_by_object(format_name, obj, filename) or \
         get_not_digitally_available_placeholder_image_url()
 
 

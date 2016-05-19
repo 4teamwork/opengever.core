@@ -5,6 +5,9 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Add 'open as pdf' link in the bumblebee overlay.
+  [elioschmutz]
+
 - Add Visual Search (Bumblebee) integration using ftw.bumblebee.
 
   This new feature can be toggled with a feature flag.
