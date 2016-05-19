@@ -17,9 +17,15 @@ class ArchivalFileConverter(object):
         self.document = document
 
     def trigger_conversion(self):
+        if self.get_state() == ARCHIVAL_FILE_STATE_MANUALLY:
+            return
+
         self.set_state(ARCHIVAL_FILE_STATE_CONVERTING)
         IBumblebeeServiceV3(self.document).queue_conversion(
             PROCESSING_QUEUE, self.get_callback_url(), target_format='pdf/a')
+
+    def get_state(self):
+        return IDocumentMetadata(self.document).archival_file_state
 
     def set_state(self, state):
         IDocumentMetadata(self.document).archival_file_state = state
