@@ -42,7 +42,11 @@ class TestBumblebeeOverlayListing(FunctionalTestCase):
         browser.login().visit(document, view="bumblebee-overlay-listing")
 
         self.assertEqual(
-            ['Open detail view', 'Download copy', 'Edit metadata', 'Checkout and edit'],
+            ['Open detail view',
+             'Download copy',
+             'Open as PDF',
+             'Edit metadata',
+             'Checkout and edit'],
             browser.css('.file-actions a').text)
 
     @browsing
@@ -71,6 +75,7 @@ class TestBumblebeeOverlayListing(FunctionalTestCase):
         self.assertEqual(
             ['Open detail view',
              'Download copy',
+             'Open as PDF',
              'Edit metadata',
              'Checkout and edit',
              'Checkin without comment',
@@ -95,6 +100,7 @@ class TestBumblebeeOverlayListing(FunctionalTestCase):
         self.assertEqual(
             ['Open detail view',
              'Download copy',
+             'Open as PDF',
              'Edit metadata'],
             browser.css('.file-actions a').text)
 
@@ -124,7 +130,10 @@ class TestBumblebeeOverlayDocument(FunctionalTestCase):
         browser.login().visit(document, view="bumblebee-overlay-document")
 
         self.assertEqual(
-            ['Download copy', 'Edit metadata', 'Checkout and edit'],
+            ['Download copy',
+             'Open as PDF',
+             'Edit metadata',
+             'Checkout and edit'],
             browser.css('.file-actions a').text)
 
     @browsing
@@ -153,6 +162,7 @@ class TestBumblebeeOverlayDocument(FunctionalTestCase):
         self.assertEqual(
             ['Open detail view',
              'Download copy',
+             'Open as PDF',
              'Edit metadata',
              'Checkout and edit',
              'Checkin without comment',
@@ -177,6 +187,7 @@ class TestBumblebeeOverlayDocument(FunctionalTestCase):
         self.assertEqual(
             ['Open detail view',
              'Download copy',
+             'Open as PDF',
              'Edit metadata'],
             browser.css('.file-actions a').text)
 
@@ -202,6 +213,67 @@ class TestGetPreviewPdfUrl(FunctionalTestCase):
         view = MockOverlayView(document, self.request)
 
         self.assertIn('not_digitally_available.png', view.get_preview_pdf_url())
+
+
+class TestGetOpenAsPdfLink(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+
+    def test_returns_pdf_url_as_string(self):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document')
+                          .within(dossier)
+                          .with_dummy_content())
+
+        view = MockOverlayView(document, self.request)
+
+        self.assertIn(
+            '/YnVtYmxlYmVl/api/v2/resource/', view.get_open_as_pdf_link())
+
+    def test_returns_none_if_no_mimetype_is_available(self):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document').within(dossier))
+
+        view = MockOverlayView(document, self.request)
+
+        self.assertIsNone(view.get_open_as_pdf_link())
+
+    def test_returns_none_if_mimetype_is_not_supported(self):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document')
+                          .within(dossier)
+                          .attach_file_containing(
+                              "data", name=u"test.notsupported"))
+
+        view = MockOverlayView(document, self.request)
+
+        self.assertIsNone(view.get_open_as_pdf_link())
+
+
+class TestGetPdfFilename(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+
+    def test_changes_filename_extension_to_pdf_and_returns_filename(self):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document')
+                          .within(dossier)
+                          .attach_file_containing(
+                              "data", name=u"test.docx"))
+
+        view = MockOverlayView(document, self.request)
+
+        self.assertEqual('testdokumant.docx', document.file.filename)
+        self.assertEqual('testdokumant.pdf', view.get_pdf_filename())
+
+    def test_returns_none_if_no_file_is_given(self):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document')
+                          .within(dossier))
+
+        view = MockOverlayView(document, self.request)
+
+        self.assertIsNone(view.get_pdf_filename())
 
 
 class TestGetFileTitle(FunctionalTestCase):
