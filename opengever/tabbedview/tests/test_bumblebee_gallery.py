@@ -120,6 +120,25 @@ class TestBumblebeeGalleryMixinGetBrains(FunctionalTestCase):
             "Should only display one document because the second "
             "is not and IBumblebeeable object")
 
+    @browsing
+    def test_respects_searchable_text_in_request(self, browser):
+        dossier = create(Builder('dossier'))
+        view = getMultiAdapter(
+            (dossier, self.request), name="tabbedview_view-documents-gallery")
+
+        document = create(Builder('document')
+                          .within(dossier)
+                          .titled("James Bond"))
+
+        create(Builder('document')
+               .within(dossier)
+               .titled("Chuck Norris"))
+
+        view.request['searchableText'] = "James"
+        brains = view.get_brains()
+
+        self.assertEqual([document, ], [brain.getObject() for brain in brains])
+
 
 class TestBumblebeeGalleryMixinFetch(FunctionalTestCase):
 
@@ -151,7 +170,7 @@ class TestBumblebeeGalleryMixinFetch(FunctionalTestCase):
 
         create(Builder('document').within(dossier))
 
-        self.request.set('document_pointer', 20)
+        self.request.set('documentPointer', 20)
 
         view = getMultiAdapter(
             (dossier, self.request), name="tabbedview_view-documents-gallery")
@@ -231,7 +250,7 @@ class TestBumblebeeGalleryMixinPreviews(FunctionalTestCase):
         view = getMultiAdapter(
             (dossier, self.request), name="tabbedview_view-documents-gallery")
 
-        self.request.set('document_pointer', 1)
+        self.request.set('documentPointer', 1)
 
         document0 = create(Builder('document').within(dossier))
         document1 = create(Builder('document').within(dossier))
@@ -263,7 +282,7 @@ class TestBumblebeeGalleryMixinPreviews(FunctionalTestCase):
         view = getMultiAdapter(
             (dossier, self.request), name="tabbedview_view-documents-gallery")
 
-        self.request.set('document_pointer', 20)
+        self.request.set('documentPointer', 20)
 
         create(Builder('document').within(dossier))
 
