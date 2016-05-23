@@ -39,6 +39,30 @@ class TestBumblebeeGalleryMixinListViewName(FunctionalTestCase):
         self.assertEqual('mydocuments', view.list_view_name)
 
 
+class TestBumblebeeGalleryMixinGetFetchUrl(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+
+    def test_get_fetch_url_returns_the_url_to_fetch_new_items(self):
+        dossier = create(Builder('dossier'))
+
+        viewname = "tabbedview_view-documents-gallery"
+        view = getMultiAdapter(
+            (dossier, self.request), name=viewname)
+
+        self.assertEqual(
+            'http://nohost/plone/dossier-1/tabbedview_view-documents-gallery-fetch',
+            view.get_fetch_url())
+
+        viewname = "tabbedview_view-mydocuments-gallery"
+        view = getMultiAdapter(
+            (dossier, self.request), name=viewname)
+
+        self.assertEqual(
+            'http://nohost/plone/dossier-1/tabbedview_view-mydocuments-gallery-fetch',
+            view.get_fetch_url())
+
+
 class TestBumblebeeGalleryMixinGetBrains(FunctionalTestCase):
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
@@ -97,6 +121,44 @@ class TestBumblebeeGalleryMixinGetBrains(FunctionalTestCase):
             "is not and IBumblebeeable object")
 
 
+class TestBumblebeeGalleryMixinFetch(FunctionalTestCase):
+
+    @browsing
+    def test_returns_new_items_as_html(self, browser):
+        dossier = create(Builder('dossier'))
+
+        create(Builder('document').within(dossier))
+        create(Builder('document').within(dossier))
+        create(Builder('document').within(dossier))
+
+        view = getMultiAdapter(
+            (dossier, self.request), name="tabbedview_view-documents-gallery")
+
+        browser.open_html(view.fetch())
+
+        self.assertEqual(3, len(browser.css('.imageContainer')))
+
+    def test_returns_empty_string_if_no_items_are_available(self):
+        dossier = create(Builder('dossier'))
+
+        view = getMultiAdapter(
+            (dossier, self.request), name="tabbedview_view-documents-gallery")
+
+        self.assertEqual('', view.fetch())
+
+    def test_returns_empty_string_if_pointer_does_not_point_to_any_object(self):
+        dossier = create(Builder('dossier'))
+
+        create(Builder('document').within(dossier))
+
+        self.request.set('document_pointer', 20)
+
+        view = getMultiAdapter(
+            (dossier, self.request), name="tabbedview_view-documents-gallery")
+
+        self.assertEqual('', view.fetch())
+
+
 class TestBumblebeeGalleryMixinNumberOfDocuments(FunctionalTestCase):
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
@@ -141,6 +203,71 @@ class TestBumblebeeGalleryMixinAvailable(FunctionalTestCase):
             (dossier, self.request), name="tabbedview_view-documents-gallery")
 
         self.assertFalse(view.available())
+
+
+class TestBumblebeeGalleryMixinPreviews(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+
+    def test_returns_streamed_dict_representations_of_brains(self):
+        dossier = create(Builder('dossier'))
+
+        view = getMultiAdapter(
+            (dossier, self.request), name="tabbedview_view-documents-gallery")
+
+        document = create(Builder('document').within(dossier))
+
+        self.assertEqual(
+            [{'uid': document.UID(),
+              'overlay_url': 'http://nohost/plone/dossier-1/document-1/@@bumblebee-overlay-listing',
+              'mime_type_css_class': 'contenttype-opengever-document-document',
+              'preview_image_url': 'http://nohost/plone/++resource++opengever.base/images/not_digitally_available.png',
+              'title': 'Testdokum\xc3\xa4nt'}],
+            list(view.previews()))
+
+    def test_return_stream_from_the_given_document_pointer(self):
+        dossier = create(Builder('dossier'))
+
+        view = getMultiAdapter(
+            (dossier, self.request), name="tabbedview_view-documents-gallery")
+
+        self.request.set('document_pointer', 1)
+
+        document0 = create(Builder('document').within(dossier))
+        document1 = create(Builder('document').within(dossier))
+        document2 = create(Builder('document').within(dossier))
+
+        self.assertEqual(
+            [document1.UID(), document2.UID()],
+            [item.get('uid') for item in view.previews()])
+
+    def test_stream_length_is_configurable(self):
+        dossier = create(Builder('dossier'))
+
+        view = getMultiAdapter(
+            (dossier, self.request), name="tabbedview_view-documents-gallery")
+
+        view.amount_preloaded_documents = 2
+
+        document0 = create(Builder('document').within(dossier))
+        document1 = create(Builder('document').within(dossier))
+        document2 = create(Builder('document').within(dossier))
+
+        self.assertEqual(
+            [document0.UID(), document1.UID()],
+            [item.get('uid') for item in view.previews()])
+
+    def test_returns_empty_list_if_pointer_does_not_point_to_any_object(self):
+        dossier = create(Builder('dossier'))
+
+        view = getMultiAdapter(
+            (dossier, self.request), name="tabbedview_view-documents-gallery")
+
+        self.request.set('document_pointer', 20)
+
+        create(Builder('document').within(dossier))
+
+        self.assertEqual([], list(view.previews()))
 
 
 class TestBumblebeeGalleryViewChooserWithoutFeature(FunctionalTestCase):
@@ -266,3 +393,35 @@ class TestBumblebeeDocumentsProxyWithActivatedFeature(FunctionalTestCase):
         self.assertEqual(
             'List',
             browser.css('.ViewChooser .active').first.text)
+
+
+class TestDocumentsGalleryFetch(FunctionalTestCase):
+
+    @browsing
+    def test_fetching_new_items_returns_html_with_items(self, browser):
+        dossier = create(Builder('dossier'))
+
+        create(Builder('document').within(dossier))
+        create(Builder('document').within(dossier))
+        create(Builder('document').within(dossier))
+
+        browser.login().visit(dossier, view="tabbedview_view-documents-gallery-fetch")
+
+        self.assertEqual(
+            3, len(browser.css('.imageContainer')))
+
+
+class TestMyDocumentsGalleryFetch(FunctionalTestCase):
+
+    @browsing
+    def test_fetching_new_items_returns_html_with_items(self, browser):
+        dossier = create(Builder('dossier'))
+
+        create(Builder('document').within(dossier))
+        create(Builder('document').within(dossier))
+        create(Builder('document').within(dossier))
+
+        browser.login().visit(dossier, view="tabbedview_view-mydocuments-gallery-fetch")
+
+        self.assertEqual(
+            3, len(browser.css('.imageContainer')))
