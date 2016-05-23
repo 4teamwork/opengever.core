@@ -48,8 +48,8 @@
 
   $(document)
     .on("reload", init)
+    .on("viewReady", init)
     .on("click", ".bumblebeeGalleryShowMore", function() {loadNextItems(); });
-
   $(init);
 
 })(window, window.showroom, window.jQuery);

@@ -2,6 +2,8 @@ from ftw.mail.utils import get_header
 from opengever.base.browser.helper import get_css_class
 from opengever.base.utils import escape_html
 from opengever.base.utils import get_hostname
+from opengever.bumblebee import is_bumblebee_feature_enabled
+from opengever.bumblebee import is_bumblebeeable
 from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.document.document import Document
 from opengever.mail.mail import OGMail
@@ -20,6 +22,7 @@ from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 import pkg_resources
+
 
 try:
     pkg_resources.get_distribution('opengever.pdfconverter')
@@ -187,6 +190,9 @@ def linked_document_with_tooltip(item, value):
     """Wrapper method for the _linked_document_with_tooltip method
     for normal not trashed documents and mails."""
 
+    if is_bumblebee_feature_enabled() and is_bumblebeeable(item):
+        return _linked_bumblebee_document(item, value)
+
     return _linked_document_with_tooltip(item, value)
 
 
@@ -201,6 +207,26 @@ def linked_trashed_document_with_tooltip(item, value):
 
     return _linked_document_with_tooltip(item, value, trashed=True,
                                          removed=removed)
+
+
+def _linked_bumblebee_document(item, value):
+    data = {
+        'url': item.getURL(),
+        'showroom_url': '{}/@@bumblebee-overlay-listing'.format(item.getURL()),
+        'css_class': get_css_class(item),
+        'title': value,
+    }
+
+    return """
+    <div>
+        <a class="showroom-item %(css_class)s"
+           href="%(url)s"
+           data-showroom-target="%(showroom_url)s"
+           data-showroom-title="%(title)s">
+        %(title)s
+        </a>
+    </div>
+    """ % data
 
 
 def _linked_document_with_tooltip(item, value, trashed=False, removed=False):
