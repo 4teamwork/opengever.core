@@ -117,12 +117,15 @@ class Proposal(Base):
     STATE_SCHEDULED = State('scheduled',
                             title=_('scheduled', default='Scheduled'))
     STATE_DECIDED = State('decided', title=_('decided', default='Decided'))
+    STATE_CANCELLED = State('cancelled',
+                            title=_('cancelled', default='Cancelled'))
 
     workflow = Workflow([
         STATE_PENDING,
         STATE_SUBMITTED,
         STATE_SCHEDULED,
-        STATE_DECIDED
+        STATE_DECIDED,
+        STATE_CANCELLED,
         ], [
         Submit('pending', 'submitted',
                title=_('submit', default='Submit')),
@@ -134,6 +137,10 @@ class Proposal(Base):
                    title=_('un-schedule', default='Remove from schedule')),
         Transition('scheduled', 'decided',
                    title=_('decide', default='Decide')),
+        Transition('pending', 'cancelled',
+               title=_('cancel', default='Cancel')),
+        Transition('cancelled', 'pending',
+                   title=_('reactivate', default='Reactivate')),
         ])
 
     def __repr__(self):

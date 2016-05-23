@@ -266,7 +266,7 @@ class ProposalBuilder(DexterityBuilder):
         self.arguments = {'title': 'Fooo',
                           'language': TranslatedTitle.FALLBACK_LANGUAGE}
         self.model_arguments = None
-        self._submitted = False
+        self._transition = None
 
     def before_create(self):
         self.arguments, self.model_arguments = Proposal.partition_data(
@@ -275,8 +275,8 @@ class ProposalBuilder(DexterityBuilder):
     def after_create(self, obj):
         obj.create_model(self.model_arguments, self.container)
 
-        if self._submitted:
-            obj.execute_transition('pending-submitted')
+        if self._transition:
+            obj.execute_transition(self._transition)
 
         super(ProposalBuilder, self).after_create(obj)
 
@@ -284,7 +284,11 @@ class ProposalBuilder(DexterityBuilder):
         return self.having(relatedItems=documents)
 
     def as_submitted(self):
-        self._submitted = True
+        self._transition = 'pending-submitted'
+        return self
+
+    def as_cancelled(self):
+        self._transition = 'pending-cancelled'
         return self
 
 builder_registry.register('proposal', ProposalBuilder)
