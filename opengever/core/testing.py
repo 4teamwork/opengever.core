@@ -26,6 +26,7 @@ from plone.dexterity.schema import SCHEMA_CACHE
 from plone.testing import Layer
 from plone.testing import z2
 from Products.CMFCore.utils import getToolByName
+from sqlalchemy.pool import StaticPool
 from Testing.ZopeTestCase.utils import setupCoreSessions
 from z3c.saconfig import EngineFactory
 from z3c.saconfig import GloballyScopedSession
@@ -299,7 +300,10 @@ def functional_session_factory():
 
 
 def memory_session_factory():
-    engine_factory = EngineFactory('sqlite:///:memory:')
+    engine_factory = EngineFactory(
+        'sqlite:///:memory:',
+        connect_args={'check_same_thread': False},
+        poolclass=StaticPool)
     provideUtility(
         engine_factory, provides=IEngineFactory, name=u'opengever_db')
 
