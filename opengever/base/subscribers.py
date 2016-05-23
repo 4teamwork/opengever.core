@@ -44,6 +44,7 @@ ALLOWED_ENDPOINTS = set([
     'update_sync_stamp',
     'watcher-feed',
     'zauth',
+    'bumblebee_download',
 ])
 
 
