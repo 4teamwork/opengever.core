@@ -257,6 +257,18 @@ class OpengeverFixture(PloneSandboxLayer):
         # lang_tool.supported_langs = ['fr-ch', 'de-ch']
 
 
+class APILayer(Layer):
+    """A layer that installs the plone.restapi:default generic setup profile.
+    """
+
+    def setUp(self):
+        with ploneSite() as site:
+            applyProfile(site, 'plone.restapi:default')
+
+
+RESTAPI_LAYER = APILayer()
+
+
 class MemoryDBLayer(Layer):
     """A Layer which only set up a test sqlite db in to the memory
     """
@@ -314,10 +326,17 @@ OPENGEVER_FUNCTIONAL_TESTING = FunctionalTesting(
     name="opengever.core:functional")
 
 OPENGEVER_FUNCTIONAL_ZSERVER_TESTING = FunctionalTesting(
+    bases=(z2.ZSERVER_FIXTURE, OPENGEVER_FIXTURE,
+           set_builder_session_factory(functional_session_factory),
+           ),
+    name="opengever.core:functional:zserver")
+
+OPENGEVER_FUNCTIONAL_ZSERVER_API_TESTING = FunctionalTesting(
     bases=(OPENGEVER_FIXTURE,
+           RESTAPI_LAYER,
            set_builder_session_factory(functional_session_factory),
            PLONE_ZSERVER),
-    name="opengever.core:functional:zserver")
+    name="opengever.core:functional:zserver:api")
 
 
 def activate_filing_number(portal):
@@ -389,17 +408,3 @@ class BumblebeeLayer(PloneSandboxLayer):
 
 
 OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER = BumblebeeLayer()
-
-
-class APILayer(PloneSandboxLayer):
-
-    def setUpPloneSite(self, portal):
-        applyProfile(portal, 'plone.restapi:default')
-
-    def tearDownPloneSite(self, portal):
-        unregister_layer('plone.restapi')
-
-    defaultBases = (OPENGEVER_FUNCTIONAL_ZSERVER_TESTING,)
-
-
-OPENGEVER_FUNCTIONAL_API_ZSERVER_LAYER = APILayer()
