@@ -39,6 +39,7 @@ import os
 import sys
 import transaction
 
+
 loghandler = logging.StreamHandler(stream=sys.stdout)
 loghandler.setLevel(logging.DEBUG)
 for name, level in {'plone.protect': logging.INFO,
@@ -161,6 +162,7 @@ class OpengeverFixture(PloneSandboxLayer):
         z2.installProduct(app, 'plone.app.versioningbehavior')
         z2.installProduct(app, 'collective.taskqueue.pasplugin')
 
+        memory_session_factory()
         setupCoreSessions(app)
 
         # Set max subobject limit to 0 -> unlimited
