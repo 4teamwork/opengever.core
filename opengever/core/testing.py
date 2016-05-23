@@ -7,10 +7,10 @@ from ftw.testing.quickinstaller import snapshots
 from opengever.activity.interfaces import IActivitySettings
 from opengever.base import model
 from opengever.base.model import create_session
+from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from opengever.meeting.interfaces import IMeetingSettings
 from opengever.ogds.base.setup import create_sql_tables
 from opengever.ogds.models import BASE
-from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from plone import api
 from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
@@ -23,7 +23,6 @@ from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.browserlayer.utils import unregister_layer
 from plone.dexterity.schema import SCHEMA_CACHE
-from plone.registry.interfaces import IRegistry
 from plone.testing import Layer
 from plone.testing import z2
 from Products.CMFCore.utils import getToolByName
@@ -32,7 +31,6 @@ from z3c.saconfig import EngineFactory
 from z3c.saconfig import GloballyScopedSession
 from z3c.saconfig.interfaces import IEngineFactory
 from z3c.saconfig.interfaces import IScopedSession
-from zope.component import getUtility
 from zope.component import provideUtility
 from zope.configuration import xmlconfig
 from zope.sqlalchemy import datamanager
@@ -246,7 +244,6 @@ class OpengeverFixture(PloneSandboxLayer):
         opengever.policy.base:default, which we don't import here
         (see comment in installOpengeverProfiles() above).
         """
-
         lang_tool = api.portal.get_tool('portal_languages')
         lang_tool.use_combined_language_codes = True
         lang_tool.display_flags = False
