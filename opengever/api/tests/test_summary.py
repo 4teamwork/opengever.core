@@ -40,14 +40,14 @@ class TestGeverJSONSummarySerializer(FunctionalTestCase):
 
     def test_portal_type_is_included(self):
         response = self.api.get('/ordnungssystem')
-        repofolder_summary = response.json()['member'][0]
+        repofolder_summary = response.json()['items'][0]
 
         self.assertDictContainsSubset(
             {u'@type': u'opengever.repository.repositoryfolder'},
             repofolder_summary)
 
         response = self.api.get('/ordnungssystem/ordnungsposition')
-        dossier_summary = response.json()['member'][0]
+        dossier_summary = response.json()['items'][0]
 
         self.assertDictContainsSubset(
             {u'@type': u'opengever.dossier.businesscasedossier'},
@@ -56,7 +56,7 @@ class TestGeverJSONSummarySerializer(FunctionalTestCase):
     def test_translated_title_contained_in_summary_if_obj_translated(self):
         response = self.api.get(
             '/ordnungssystem', headers={'Accept-Language': 'de-ch'})
-        repofolder_summary = response.json()['member'][0]
+        repofolder_summary = response.json()['items'][0]
 
         self.assertDictContainsSubset(
             {u'title': u'Ordnungsposition'},
@@ -64,7 +64,7 @@ class TestGeverJSONSummarySerializer(FunctionalTestCase):
 
         response = self.api.get(
             '/ordnungssystem', headers={'Accept-Language': 'fr-ch'})
-        repofolder_summary = response.json()['member'][0]
+        repofolder_summary = response.json()['items'][0]
 
         self.assertDictContainsSubset(
             {u'title': u'Position'},
@@ -72,7 +72,7 @@ class TestGeverJSONSummarySerializer(FunctionalTestCase):
 
     def test_translated_titles_default_to_german(self):
         response = self.api.get('/ordnungssystem')
-        repofolder_summary = response.json()['member'][0]
+        repofolder_summary = response.json()['items'][0]
 
         self.assertDictContainsSubset(
             {u'title': u'Ordnungsposition'},
@@ -80,7 +80,7 @@ class TestGeverJSONSummarySerializer(FunctionalTestCase):
 
     def test_regular_title_in_summary_if_obj_not_translated(self):
         response = self.api.get('/ordnungssystem/ordnungsposition')
-        dossier_summary = response.json()['member'][0]
+        dossier_summary = response.json()['items'][0]
 
         self.assertDictContainsSubset(
             {u'title': u'Mein Dossier'},
