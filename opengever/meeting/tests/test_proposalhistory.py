@@ -95,6 +95,25 @@ class TestProposalHistory(FunctionalTestCase):
             self.get_history_entries_text(browser)[0])
 
     @browsing
+    def test_cancelling_and_reactivating_proposal_creates_history_entry(self, browser):
+        browser.login()
+        self.open_overview(browser)
+
+        # cancel proposal
+        browser.css('#pending-cancelled').first.click()
+        self.open_overview(browser)
+        self.assertEqual(
+            u'Proposal cancelled by Test User (test_user_1_)',
+            self.get_latest_history_entry_text(browser))
+
+        # reactivate proposal
+        browser.css('#cancelled-pending').first.click()
+        self.open_overview(browser)
+        self.assertEqual(
+            u'Proposal reactivated by Test User (test_user_1_)',
+            self.get_latest_history_entry_text(browser))
+
+    @browsing
     def test_submitting_additional_document_creates_history_entry(self, browser):
         self.submit_proposal()
         document = create(Builder('document')

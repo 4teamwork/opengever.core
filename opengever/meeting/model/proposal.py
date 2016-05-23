@@ -54,6 +54,29 @@ class Reject(Transition):
         return getRequest().RESPONSE.redirect(url)
 
 
+class Cancel(Transition):
+
+    def execute(self, obj, model):
+        super(Cancel, self).execute(obj, model)
+        model.cancel()
+
+        msg = _(u'msg_proposal_cancelled',
+                default=u'Proposal cancelled successfully.')
+        api.portal.show_message(msg, request=getRequest(), type='info')
+
+
+class Reactivate(Transition):
+
+    def execute(self, obj, model):
+        super(Reactivate, self).execute(obj, model)
+        model.reactivate()
+
+        msg = _(u'msg_proposal_reactivated',
+                default=u'Proposal reactivated successfully.')
+        api.portal.show_message(msg, request=getRequest(), type='info')
+
+
+
 class Proposal(Base):
     """Sql representation of a proposal."""
 
@@ -137,9 +160,9 @@ class Proposal(Base):
                    title=_('un-schedule', default='Remove from schedule')),
         Transition('scheduled', 'decided',
                    title=_('decide', default='Decide')),
-        Transition('pending', 'cancelled',
+        Cancel('pending', 'cancelled',
                title=_('cancel', default='Cancel')),
-        Transition('cancelled', 'pending',
+        Reactivate('cancelled', 'pending',
                    title=_('reactivate', default='Reactivate')),
         ])
 
@@ -301,6 +324,12 @@ class Proposal(Base):
     def reopen(self, agenda_item):
         assert self.get_state() == self.STATE_DECIDED
         self.session.add(proposalhistory.ProposalReopened(proposal=self))
+
+    def cancel(self):
+        self.session.add(proposalhistory.Cancelled(proposal=self))
+
+    def reactivate(self):
+        self.session.add(proposalhistory.Reactivated(proposal=self))
 
     def update_excerpt(self, agenda_item):
         from opengever.meeting.command import ExcerptOperations
