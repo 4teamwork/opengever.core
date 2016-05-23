@@ -292,63 +292,65 @@
                                            show_about python:not isAnon or allowAnonymousViewAbout;">
                   <dl class="searchResults">
                     <tal:results repeat="item batch">
-                      <div class="searchItem">
-                        <dt tal:attributes="class item/ContentTypeClass">
-                          <img tal:replace="structure item/getIcon" />
-                            <a href="#"
-                               tal:define="item_url item/getURL;
-                                           item_type item/portal_type"
-                               tal:attributes="href python:item_type in use_view_action and (item_url + '/view') or item_url;
-                                               class item/get_css_classes;
-                                               title item/Title;
-                                               data-showroom-target item/get_overlay_url;
-                                               data-showroom-title item/get_overlay_title;"
-                               tal:content="item/CroppedTitle" />
-                        </dt>
-                        <dd>
-                          <div class="main_dossier">
-                            <span i18n:domain="opengever.base" i18n:translate="label_dossier">Dossier:</span>
-                            <a href="#" tal:content="item/containing_dossier"
-                               tal:attributes="href item/main_dossier_link">
-                              Main dossier link
-                            </a>
+                      <div class="search-item-wrapper">
+                        <div class="searchItem">
+                          <dt tal:attributes="class item/ContentTypeClass">
+                            <img tal:replace="structure item/getIcon" />
+                              <a href="#"
+                                 tal:define="item_url item/getURL;
+                                             item_type item/portal_type"
+                                 tal:attributes="href python:item_type in use_view_action and (item_url + '/view') or item_url;
+                                                 class item/get_css_classes;
+                                                 title item/Title;
+                                                 data-showroom-target item/get_overlay_url;
+                                                 data-showroom-title item/get_overlay_title;"
+                                 tal:content="item/CroppedTitle" />
+                          </dt>
+                          <dd>
+                            <div class="main_dossier">
+                              <span i18n:domain="opengever.base" i18n:translate="label_dossier">Dossier:</span>
+                              <a href="#" tal:content="item/containing_dossier"
+                                 tal:attributes="href item/main_dossier_link">
+                                Main dossier link
+                              </a>
 
-                          </div>
+                            </div>
 
-                          <div class="description" tal:content="item/CroppedDescription">
-                            Cropped description
-                          </div>
+                            <div class="description" tal:content="item/CroppedDescription">
+                              Cropped description
+                            </div>
 
-                          <cite class="documentLocation link-location"
-                                tal:define="breadcrumbs python: view.breadcrumbs(item);
-                                            is_rtl context/@@plone_portal_state/is_rtl;"
-                                tal:condition='breadcrumbs'>
-                            <span tal:repeat="crumb breadcrumbs"
-                                  tal:attributes="dir python:is_rtl and 'rtl' or 'ltr';">
-                              <tal:item tal:define="is_last repeat/crumb/end;
-                                                    url crumb/absolute_url;
-                                                    title crumb/Title">
-                                <a href="#"
-                                   tal:omit-tag="not: url"
-                                   tal:attributes="href url"
-                                   tal:content="title">
-                                  crumb
-                                </a>
-                                <span class="breadcrumbSeparator" tal:condition="not: is_last">
-                                  <tal:ltr condition="not: is_rtl">/</tal:ltr>
-                                  <tal:rtl condition="is_rtl">/</tal:rtl>
-                                </span>
-                              </tal:item>
-                            </span>
+                            <cite class="documentLocation link-location"
+                                  tal:define="breadcrumbs python: view.breadcrumbs(item);
+                                              is_rtl context/@@plone_portal_state/is_rtl;"
+                                  tal:condition='breadcrumbs'>
+                              <span tal:repeat="crumb breadcrumbs"
+                                    tal:attributes="dir python:is_rtl and 'rtl' or 'ltr';">
+                                <tal:item tal:define="is_last repeat/crumb/end;
+                                                      url crumb/absolute_url;
+                                                      title crumb/Title">
+                                  <a href="#"
+                                     tal:omit-tag="not: url"
+                                     tal:attributes="href url"
+                                     tal:content="title">
+                                    crumb
+                                  </a>
+                                  <span class="breadcrumbSeparator" tal:condition="not: is_last">
+                                    <tal:ltr condition="not: is_rtl">/</tal:ltr>
+                                    <tal:rtl condition="is_rtl">/</tal:rtl>
+                                  </span>
+                                </tal:item>
+                              </span>
 
-                          </cite>
-                        </dd>
-                      </div>
-                      <div class="searchImage" tal:condition="item/is_bumblebeeable">
-                        <img class="showroom-item bumblebeeSearchPreview"
-                               tal:attributes="src item/get_preview_image_url;
-                                               data-showroom-target item/get_overlay_url;
-                                               data-showroom-title item/get_overlay_title;" />
+                            </cite>
+                          </dd>
+                        </div>
+                        <div class="searchImage" tal:condition="item/is_bumblebeeable">
+                          <img class="showroom-item bumblebeeSearchPreview"
+                                 tal:attributes="src item/get_preview_image_url;
+                                                 data-showroom-target item/get_overlay_url;
+                                                 data-showroom-title item/get_overlay_title;" />
+                        </div>
                       </div>
                       <div class="visualClear"><!-- --></div>
 
