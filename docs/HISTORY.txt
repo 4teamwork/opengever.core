@@ -5,6 +5,10 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Fix tests for GeverJSONSummarySerializer: The `member` attribute
+  has been renamed to `items` in plone/plone.restapi#107.
+  [lgraf]
+
 - Add 'open as pdf' link in the bumblebee overlay.
   [elioschmutz]
 
