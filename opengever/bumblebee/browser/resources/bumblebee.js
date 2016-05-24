@@ -4,6 +4,14 @@
   var showroom;
   var number_of_documents;
 
+  function scanForBrokenImages(context) {
+    $("img", context).error(function(){
+      $(this)
+        .attr("src", "++resource++opengever.bumblebee.resources/fallback.svg")
+        .addClass("broken-image");
+    });
+  }
+
   function loadNextItems() {
     var data = { document_pointer: $('.imageContainer').length };
     $.get(endpoint, data).done(function(data) {
@@ -12,8 +20,10 @@
       items.insertAfter($('.imageContainer').last());
       toggleShowMoreButton();
       showroom.append(items);
+      scanForBrokenImages(items);
     });
   }
+
 
   function toggleShowMoreButton() {
     var button = $('.bumblebeeGalleryShowMore');
@@ -44,6 +54,7 @@
     }
 
     toggleShowMoreButton();
+    scanForBrokenImages(".preview-listing");
   }
 
   $(document)
