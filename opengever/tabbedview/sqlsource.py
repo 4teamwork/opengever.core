@@ -2,8 +2,9 @@ from five import grok
 from opengever.tabbedview import GeverTableSource
 from sqlalchemy import or_
 from sqlalchemy.orm.query import Query
-from sqlalchemy.sql.expression import asc, desc
+from sqlalchemy.sql.expression import asc
 from sqlalchemy.sql.expression import column
+from sqlalchemy.sql.expression import desc
 
 
 class SqlTableSource(GeverTableSource):
@@ -14,6 +15,25 @@ class SqlTableSource(GeverTableSource):
     grok.baseclass()
 
     searchable_columns = []
+
+    def build_query(self):
+        """Builds the query based on `get_base_query()` method of config.
+        Returns the query object.
+        """
+        # initalize config
+        query = super(SqlTableSource, self).build_query()
+
+        # reviewstate-filter
+        if self.config.filterlist_available:
+            query = self.extend_query_with_filter(query)
+
+        return query
+
+    def extend_query_with_filter(self, query):
+        """When the filterlist is active, we update the query with
+        the current filter."""
+        selected_filter_id = self.request.get(self.config.filterlist_name)
+        return self.config.filterlist.update_query(query, selected_filter_id)
 
     def validate_base_query(self, query):
         """Validates and fixes the base query. Returns the query object.

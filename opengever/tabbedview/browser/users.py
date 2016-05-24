@@ -4,9 +4,9 @@ from opengever.base.model import create_session
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.models.user import User
 from opengever.tabbedview import _
+from opengever.tabbedview import SqlTableSource
 from opengever.tabbedview.browser.base import OpengeverTab
 from opengever.tabbedview.browser.listing import ListingView
-from opengever.tabbedview.browser.sqltablelisting import SqlTableSource
 from opengever.tabbedview.helper import boolean_helper
 from opengever.tabbedview.helper import email_helper
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile

@@ -6,9 +6,9 @@ from opengever.globalindex.model.task import Task
 from opengever.globalindex.utils import indexed_task_link_helper
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.tabbedview import _
+from opengever.tabbedview import SqlTableSource
 from opengever.tabbedview.browser.base import OpengeverTab
 from opengever.tabbedview.browser.listing import ListingView
-from opengever.tabbedview.browser.sqltablelisting import SqlTableSource
 from opengever.tabbedview.filters import Filter
 from opengever.tabbedview.filters import FilterList
 from opengever.tabbedview.filters import PendingTasksFilter

@@ -5,7 +5,6 @@ from opengever.base.interfaces import IReferenceNumberFormatter
 from opengever.base.interfaces import IReferenceNumberSettings
 from opengever.ogds.base.sort_helpers import SortHelpers
 from opengever.tabbedview.browser.listing import ListingView
-from opengever.tabbedview.browser.sqltablelisting import SqlTableSource
 from opengever.tabbedview.utils import get_translated_transitions
 from opengever.tabbedview.utils import get_translated_types
 from plone.registry.interfaces import IRegistry
