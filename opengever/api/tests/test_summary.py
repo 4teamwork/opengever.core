@@ -59,7 +59,7 @@ class TestGeverJSONSummarySerializer(FunctionalTestCase):
         repofolder_summary = response.json()['items'][0]
 
         self.assertDictContainsSubset(
-            {u'title': u'Ordnungsposition'},
+            {u'title': u'1. Ordnungsposition'},
             repofolder_summary)
 
         response = self.api.get(
@@ -67,7 +67,7 @@ class TestGeverJSONSummarySerializer(FunctionalTestCase):
         repofolder_summary = response.json()['items'][0]
 
         self.assertDictContainsSubset(
-            {u'title': u'Position'},
+            {u'title': u'1. Position'},
             repofolder_summary)
 
     def test_translated_titles_default_to_german(self):
@@ -75,7 +75,7 @@ class TestGeverJSONSummarySerializer(FunctionalTestCase):
         repofolder_summary = response.json()['items'][0]
 
         self.assertDictContainsSubset(
-            {u'title': u'Ordnungsposition'},
+            {u'title': u'1. Ordnungsposition'},
             repofolder_summary)
 
     def test_regular_title_in_summary_if_obj_not_translated(self):
