@@ -229,3 +229,33 @@ class TestCommitteeWorkflow(FunctionalTestCase):
                          committee.load_model().get_state())
         self.assertEqual(['Committee reactivated successfully'],
                          info_messages())
+
+    @browsing
+    def test_add_meeting_is_not_available_on_inactive_committee(self, browser):
+        committee = create(Builder('committee')
+                           .titled(u'My Committee')
+                           .in_state('committee-state-inactive'))
+        model = committee.load_model()
+
+        model.workflow.execute_transition(committee, model, 'active-inactive')
+        transaction.commit()
+
+        browser.login().open(committee)
+        self.assertEqual(
+            [],
+            browser.css('#plone-contentmenu-factories #add-meeting'))
+
+    @browsing
+    def test_add_membership_is_not_available_on_inactive_committee(self, browser):
+        committee = create(Builder('committee')
+                           .titled(u'My Committee')
+                           .in_state('committee-state-inactive'))
+        model = committee.load_model()
+
+        model.workflow.execute_transition(committee, model, 'active-inactive')
+        transaction.commit()
+
+        browser.login().open(committee)
+        self.assertEqual(
+            [],
+            browser.css('#plone-contentmenu-factories #add-membership'))

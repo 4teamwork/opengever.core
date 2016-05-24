@@ -68,7 +68,7 @@
           category="folder_factories"
           url_expr="string:${object_url}/add-meeting"
           icon_expr=""
-          condition_expr="">
+          condition_expr="context/is_active">
       <permission value="Add portal content"/>
   </action>
 
@@ -78,7 +78,7 @@
           category="folder_factories"
           url_expr="string:${object_url}/add-membership"
           icon_expr=""
-          condition_expr="">
+          condition_expr="context/is_active">
       <permission value="Add portal content"/>
   </action>
 
