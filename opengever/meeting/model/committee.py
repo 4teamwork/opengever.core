@@ -58,6 +58,9 @@ class Committee(Base):
     def __repr__(self):
         return '<Committee {}>'.format(repr(self.title))
 
+    def is_active(self):
+        return self.get_state() == self.STATE_ACTIVE
+
     def get_admin_unit(self):
         return ogds_service().fetch_admin_unit(self.admin_unit_id)
 

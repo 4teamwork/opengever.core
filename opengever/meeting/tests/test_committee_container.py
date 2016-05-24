@@ -122,6 +122,50 @@ class TestCommitteesTab(FunctionalTestCase):
             browser.css('#committees_view .committee_box h2').text)
 
     @browsing
+    def test_list_onlyactive_committees_by_default(self, browser):
+        committee_b = create(Builder('committee')
+                             .within(self.container)
+                             .titled(u'Wasserkommission'))
+
+        browser.login().open(committee_b, view='deactivate')
+        browser.open(self.container, view='tabbedview_view-committees')
+
+        self.assertEquals(
+            [u'Kleiner Burgerrat'],
+            browser.css('#committees_view .committee_box h2').text)
+
+    @browsing
+    def test_list_all_committees_when_selecting_all_filter(self, browser):
+        committee_b = create(Builder('committee')
+                             .within(self.container)
+                             .titled(u'Wasserkommission'))
+
+        browser.login().open(committee_b, view='deactivate')
+        browser.open(self.container, view='tabbedview_view-committees',
+                     data={'committee_state_filter': 'filter_all'})
+
+        self.assertEquals(
+            [u'Kleiner Burgerrat', u'Wasserkommission'],
+            browser.css('#committees_view .committee_box h2').text)
+
+    @browsing
+    def test_committe_box_has_state_class(self, browser):
+        committee_b = create(Builder('committee')
+                             .within(self.container)
+                             .titled(u'Wasserkommission'))
+
+        browser.login().open(committee_b, view='deactivate')
+        browser.open(self.container, view='tabbedview_view-committees',
+                     data={'committee_state_filter': 'filter_all'})
+
+        self.assertEquals(
+            'committee_box active',
+            browser.css('#committees_view .committee_box')[0].get('class'))
+        self.assertEquals(
+            'committee_box inactive',
+            browser.css('#committees_view .committee_box')[1].get('class'))
+
+    @browsing
     def test_commitee_is_linked_correctly(self, browser):
         browser.login().open(self.container, view='tabbedview_view-committees')
         title = browser.css('#committees_view .committee_box a').first

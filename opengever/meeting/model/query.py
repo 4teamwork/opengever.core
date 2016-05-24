@@ -57,6 +57,10 @@ class CommitteeQuery(BaseQuery):
         """
         return self.filter(Committee.oguid == oguid).first()
 
+    def only_active(self):
+        return self.filter(
+            Committee.workflow_state == Committee.STATE_ACTIVE.name)
+
 
 Committee.query_cls = CommitteeQuery
 
