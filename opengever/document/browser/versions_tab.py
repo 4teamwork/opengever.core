@@ -9,8 +9,8 @@ from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.ogds.base.actor import Actor
+from opengever.tabbedview import BaseListingTab
 from opengever.tabbedview import GeverTableSource
-from opengever.tabbedview.browser.base import BaseListingTab
 from plone import api
 from plone.protect.utils import addTokenToUrl
 from Products.CMFPlone.utils import safe_unicode

@@ -15,7 +15,7 @@ from zope.interface import Interface
 import re
 
 
-class OpengeverTab(object):
+class GeverTabMixin(object):
     implements(ISQLAlchemy)
 
     show_searchform = True
@@ -150,7 +150,7 @@ class OpengeverTab(object):
         return filter.strip().split(' ')
 
 
-class BaseListingTab(grok.View, OpengeverTab, ListingView):
+class BaseListingTab(grok.View, GeverTabMixin, ListingView):
     """Base listing tab."""
 
     grok.context(Interface)

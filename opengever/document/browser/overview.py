@@ -13,7 +13,7 @@ from opengever.dossier.base import DOSSIER_STATES_CLOSED
 from opengever.meeting import is_meeting_feature_enabled
 from opengever.meeting.model import SubmittedDocument
 from opengever.ogds.base.actor import Actor
-from opengever.tabbedview.browser.base import OpengeverTab
+from opengever.tabbedview import GeverTabMixin
 from plone import api
 from plone.directives.dexterity import DisplayForm
 from z3c.form.browser.checkbox import SingleCheckBoxWidget
@@ -120,7 +120,7 @@ class TemplateRow(CustomRow):
         return self.renderer(self.view)
 
 
-class Overview(DisplayForm, OpengeverTab):
+class Overview(DisplayForm, GeverTabMixin):
     grok.context(IDocumentSchema)
     grok.name('tabbedview_view-overview')
     grok.template('overview')

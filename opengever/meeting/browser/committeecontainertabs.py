@@ -4,7 +4,7 @@ from opengever.meeting.model import Committee
 from opengever.meeting.model import Meeting
 from opengever.meeting.service import meeting_service
 from opengever.meeting.tabs.memberlisting import MemberListingTab
-from opengever.tabbedview.browser.base import OpengeverTab
+from opengever.tabbedview import GeverTabMixin
 from opengever.tabbedview.filters import Filter
 from opengever.tabbedview.filters import FilterList
 from opengever.tabbedview import _ as tmf
@@ -17,7 +17,7 @@ class ActiveOnlyFilter(Filter):
         return query.active()
 
 
-class Committees(grok.View, OpengeverTab):
+class Committees(grok.View, GeverTabMixin):
     grok.name('tabbedview_view-committees')
     grok.context(ICommitteeContainer)
     grok.require('zope2.View')

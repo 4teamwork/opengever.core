@@ -10,7 +10,7 @@ from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
-from opengever.tabbedview.browser.base import OpengeverTab
+from opengever.tabbedview import GeverTabMixin
 from sqlalchemy import desc
 from zc.relation.interfaces import ICatalog
 from zope.component import getUtility
@@ -18,7 +18,7 @@ from zope.intid.interfaces import IIntIds
 from zope.security import checkPermission
 
 
-class DossierOverview(BoxesViewMixin, grok.View, OpengeverTab):
+class DossierOverview(BoxesViewMixin, grok.View, GeverTabMixin):
 
     show_searchform = False
 

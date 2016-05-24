@@ -2,12 +2,12 @@ from five import grok
 from opengever.meeting import _
 from opengever.meeting.committee import ICommittee
 from opengever.meeting.model import Period
-from opengever.tabbedview.browser.base import OpengeverTab
+from opengever.tabbedview import GeverTabMixin
 from plone import api
 from Products.Five import BrowserView
 
 
-class CommitteeOverview(grok.View, OpengeverTab):
+class CommitteeOverview(grok.View, GeverTabMixin):
     """The overview tab for the committee tabbeview.
     """
     grok.context(ICommittee)

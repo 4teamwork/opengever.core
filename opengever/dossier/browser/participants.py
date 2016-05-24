@@ -7,7 +7,7 @@ from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.behaviors.participation import IParticipationAwareMarker
 from opengever.ogds.base.actor import Actor
 from opengever.tabbedview import GeverTableSource
-from opengever.tabbedview.browser.base import OpengeverTab
+from opengever.tabbedview import GeverTabMixin
 from opengever.tabbedview.browser.listing import ListingView
 from opengever.tabbedview.helper import linked_ogds_author
 from opengever.tabbedview.helper import readable_ogds_author
@@ -89,7 +89,7 @@ class IParticipationSourceConfig(ITableSourceConfig):
     """
 
 
-class Participants(grok.View, OpengeverTab, ListingView):
+class Participants(grok.View, GeverTabMixin, ListingView):
     """ Participants listing tab for dossiers using the
     IParticipantsAware behavior
     """

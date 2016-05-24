@@ -5,8 +5,8 @@ from opengever.base.browser.helper import get_css_class
 from opengever.base.utils import escape_html
 from opengever.meeting import _
 from opengever.meeting.model import Meeting
+from opengever.tabbedview import BaseListingTab
 from opengever.tabbedview import SqlTableSource
-from opengever.tabbedview.browser.base import BaseListingTab
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import implements

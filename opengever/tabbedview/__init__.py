@@ -1,3 +1,5 @@
+from opengever.tabbedview.base_tabs import BaseListingTab
+from opengever.tabbedview.base_tabs import GeverTabMixin
 from opengever.tabbedview.basesource import GeverTableSource
 from opengever.tabbedview.catalog_source import GeverCatalogTableSource
 from opengever.tabbedview.sqlsource import SqlTableSource

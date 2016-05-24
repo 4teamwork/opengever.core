@@ -12,7 +12,7 @@ from opengever.meeting.model.proposal import Proposal
 from opengever.meeting.tabs.proposallisting import ProposalListingTab
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.tabbedview import _
-from opengever.tabbedview.browser.base import OpengeverTab
+from opengever.tabbedview import GeverTabMixin
 from opengever.tabbedview.browser.listing import CatalogListingView
 from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
 from opengever.tabbedview.filters import CatalogQueryFilter
@@ -34,7 +34,7 @@ from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
 
 
-class OpengeverCatalogListingTab(grok.View, OpengeverTab, CatalogListingView):
+class OpengeverCatalogListingTab(grok.View, GeverTabMixin, CatalogListingView):
     """Base view for catalog listing tabs.
     """
 

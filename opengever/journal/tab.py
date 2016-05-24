@@ -9,7 +9,7 @@ from ftw.table import helper
 from ftw.table.interfaces import ITableSourceConfig, ITableSource
 from opengever.journal import _
 from opengever.tabbedview import GeverTableSource
-from opengever.tabbedview.browser.base import OpengeverTab
+from opengever.tabbedview import GeverTabMixin
 from opengever.tabbedview.browser.listing import ListingView
 from opengever.tabbedview.helper import linked_ogds_author
 from zope.annotation.interfaces import IAnnotations
@@ -34,7 +34,7 @@ class IJournalSourceConfig(ITableSourceConfig):
     """
 
 
-class JournalTab(grok.View, OpengeverTab, ListingView):
+class JournalTab(grok.View, GeverTabMixin, ListingView):
     """Journal tab implementing IJorunalConfig.
     """
 
