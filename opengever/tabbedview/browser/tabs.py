@@ -250,6 +250,12 @@ class Tasks(GlobalTaskListingTab):
         return Task.query.by_container(self.context, get_current_admin_unit())
 
 
+class ActiveProposalFilter(Filter):
+
+    def update_query(self, query):
+        return query.active()
+
+
 class Proposals(ProposalListingTab):
 
     grok.name('tabbedview_view-proposals')
@@ -258,6 +264,23 @@ class Proposals(ProposalListingTab):
     enabled_actions = []
     major_actions = []
     sort_on = 'title'
+    show_selects = False
+
+    selection = ViewPageTemplateFile("selection_with_filters.pt")
+    template = ViewPageTemplateFile("generic_with_filters.pt")
+
+    model = Proposal
+
+    filterlist_name = 'proposal_state_filter'
+    filterlist_available = True
+
+    filterlist = FilterList(
+        Filter('filter_all', _('all')),
+        ActiveProposalFilter(
+            'filter_active',
+            _('Active'),
+            default=True)
+    )
 
     def get_base_query(self):
         return Proposal.query.by_container(
