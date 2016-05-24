@@ -3,7 +3,9 @@ from opengever.tabbedview.filtered_source import FilteredTableSourceMixin
 from ftw.table.basesource import BaseTableSource
 
 
-class GeverTableSource(grok.MultiAdapter, FilteredTableSourceMixin, BaseTableSource):
+class GeverTableSource(grok.MultiAdapter,
+                       FilteredTableSourceMixin,
+                       BaseTableSource):
     """Base table source used for some tables.
 
     Add support for gever-specific filterlist configuration option, also

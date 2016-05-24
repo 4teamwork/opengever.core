@@ -6,7 +6,9 @@ from zope.interface import Interface
 from opengever.tabbedview.filtered_source import FilteredTableSourceMixin
 
 
-class GeverCatalogTableSource(grok.MultiAdapter, FilteredTableSourceMixin, CatalogTableSource):
+class GeverCatalogTableSource(grok.MultiAdapter,
+                              FilteredTableSourceMixin,
+                              CatalogTableSource):
 
     grok.implements(ITableSource)
     grok.adapts(IGeverCatalogTableSourceConfig, Interface)

@@ -1,16 +1,16 @@
 from five import grok
+from ftw.table.catalog_source import default_custom_sort
 from ftw.table.interfaces import ICatalogTableSourceConfig
-from ftw.table.catalog_source import CatalogTableSource
+from ftw.table.interfaces import ITableSource
+from opengever.tabbedview import GeverCatalogTableSource
 from opengever.tabbedview.browser.tabs import Documents
+from opengever.task.task import ITask
 from operator import attrgetter
+from plone.app.uuid.utils import uuidToCatalogBrain
+from plone.uuid.interfaces import IUUID
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.CatalogTool import sortable_title
 from zope.interface import Interface
-from opengever.task.task import ITask
-from ftw.table.interfaces import ITableSource
-from plone.uuid.interfaces import IUUID
-from plone.app.uuid.utils import uuidToCatalogBrain
-from ftw.table.catalog_source import default_custom_sort
 
 
 class BrainWrapper(object):
@@ -41,8 +41,7 @@ class IRelatedDocumentsCatalogTableSourceConfig(ICatalogTableSourceConfig):
     """
 
 
-class RelatedDocumentsCatalogTableSource(
-    grok.MultiAdapter, CatalogTableSource):
+class RelatedDocumentsCatalogTableSource(GeverCatalogTableSource):
     """Related documents table source adapter
     """
 
