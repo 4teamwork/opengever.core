@@ -35,7 +35,7 @@ class TestGetRepresentationUrlByObject(FunctionalTestCase):
                               u'example.docx'))
 
         self.assertIn(
-            '/YnVtYmxlYmVl/api/v2/resource/',
+            '/YnVtYmxlYmVl/api/v3/resource/',
             get_representation_url_by_object('thumbnail', document))
 
     def test_returns_not_digitally_available_placeholder_image_if_no_ckecksum_is_available(self):
@@ -57,7 +57,7 @@ class TestGetRepresentationUrlByBrain(FunctionalTestCase):
         brain = obj2brain(document)
 
         self.assertIn(
-            '/YnVtYmxlYmVl/api/v2/resource/',
+            '/YnVtYmxlYmVl/api/v3/resource/',
             get_representation_url_by_brain('thumbnail', brain))
 
     def test_returns_not_digitally_available_placeholder_image_if_no_ckecksum_is_available(self):
