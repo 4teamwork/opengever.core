@@ -8,9 +8,8 @@ from ftw.journal.interfaces import IWorkflowHistoryJournalizable
 from ftw.table import helper
 from ftw.table.interfaces import ITableSourceConfig, ITableSource
 from opengever.journal import _
+from opengever.tabbedview import BaseListingTab
 from opengever.tabbedview import GeverTableSource
-from opengever.tabbedview import GeverTabMixin
-from opengever.tabbedview.browser.listing import ListingView
 from opengever.tabbedview.helper import linked_ogds_author
 from zope.annotation.interfaces import IAnnotations
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
@@ -34,7 +33,7 @@ class IJournalSourceConfig(ITableSourceConfig):
     """
 
 
-class JournalTab(grok.View, GeverTabMixin, ListingView):
+class JournalTab(BaseListingTab):
     """Journal tab implementing IJorunalConfig.
     """
 
@@ -76,10 +75,6 @@ class JournalTab(grok.View, GeverTabMixin, ListingView):
 
     def get_base_query(self):
         return None
-
-    __call__ = ListingView.__call__
-    update = ListingView.update
-    render = __call__
 
 
 class JournalTableSource(GeverTableSource):

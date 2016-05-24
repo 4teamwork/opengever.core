@@ -6,10 +6,8 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.behaviors.participation import IParticipationAwareMarker
 from opengever.ogds.base.actor import Actor
+from opengever.tabbedview import BaseListingTab
 from opengever.tabbedview import GeverTableSource
-from opengever.tabbedview import GeverTabMixin
-from opengever.tabbedview.browser.listing import ListingView
-from opengever.tabbedview.helper import linked_ogds_author
 from opengever.tabbedview.helper import readable_ogds_author
 from persistent.list import PersistentList
 from plone.memoize import ram
@@ -89,7 +87,7 @@ class IParticipationSourceConfig(ITableSourceConfig):
     """
 
 
-class Participants(grok.View, GeverTabMixin, ListingView):
+class Participants(BaseListingTab):
     """ Participants listing tab for dossiers using the
     IParticipantsAware behavior
     """
@@ -137,10 +135,6 @@ class Participants(grok.View, GeverTabMixin, ListingView):
 
     def get_base_query(self):
         return None
-
-    __call__ = ListingView.__call__
-    update = ListingView.update
-    render = __call__
 
 
 class ParticipationResponsible(object):

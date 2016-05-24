@@ -6,9 +6,8 @@ from opengever.globalindex.model.task import Task
 from opengever.globalindex.utils import indexed_task_link_helper
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.tabbedview import _
-from opengever.tabbedview import GeverTabMixin
+from opengever.tabbedview import BaseListingTab
 from opengever.tabbedview import SqlTableSource
-from opengever.tabbedview.browser.listing import ListingView
 from opengever.tabbedview.filters import Filter
 from opengever.tabbedview.filters import FilterList
 from opengever.tabbedview.filters import PendingTasksFilter
@@ -31,7 +30,7 @@ class IGlobalTaskTableSourceConfig(ITableSourceConfig):
     """
 
 
-class GlobalTaskListingTab(grok.View, GeverTabMixin, ListingView):
+class GlobalTaskListingTab(BaseListingTab):
     """A tabbed view mixin which brings support for listing tasks from
     the SQL (globally over all clients).
 
@@ -118,10 +117,6 @@ class GlobalTaskListingTab(grok.View, GeverTabMixin, ListingView):
                            default=u'Sequence number')},
 
         )
-
-    __call__ = ListingView.__call__
-    update = ListingView.update
-    render = __call__
 
 
 class GlobalTaskTableSource(SqlTableSource):

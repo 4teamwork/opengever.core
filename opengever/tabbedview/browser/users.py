@@ -4,9 +4,8 @@ from opengever.base.model import create_session
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.models.user import User
 from opengever.tabbedview import _
-from opengever.tabbedview import GeverTabMixin
+from opengever.tabbedview import BaseListingTab
 from opengever.tabbedview import SqlTableSource
-from opengever.tabbedview.browser.listing import ListingView
 from opengever.tabbedview.helper import boolean_helper
 from opengever.tabbedview.helper import email_helper
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
@@ -30,7 +29,7 @@ class IUsersListingTableSourceConfig(ITableSourceConfig):
     """
 
 
-class UsersListing(grok.View, GeverTabMixin, ListingView):
+class UsersListing(BaseListingTab):
     """Tab registered on contacts folder (see opengever.contact) listing all
     users.
     """
@@ -93,10 +92,6 @@ class UsersListing(grok.View, GeverTabMixin, ListingView):
          'transform': boolean_helper},
 
         )
-
-    __call__ = ListingView.__call__
-    update = ListingView.update
-    render = __call__
 
     def get_base_query(self):
         """Returns the base search query (sqlalchemy)
