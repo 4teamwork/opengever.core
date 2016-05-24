@@ -34,13 +34,22 @@ from zope.globalrequest import getRequest
 class Submit(Transition):
 
     def execute(self, obj, model):
-        super(Submit, self).execute(obj, model)
         assert obj, 'submitting requires a plone context object.'
+
+        if not model.committee.is_active():
+            api.portal.show_message(
+                _(u'msg_inactive_committee_selected',
+                  default=u'The selected committeee has been deactivated, the'
+                  ' proposal could not been submitted.'),
+                request=getRequest(), type='error')
+            return getRequest().RESPONSE.redirect(obj.absolute_url())
+
+        super(Submit, self).execute(obj, model)
         obj.submit()
 
         msg = _(u'msg_proposal_submitted',
                 default=u'Proposal successfully submitted.')
-        api.portal.show_message(msg, request=getRequest(), type='info')
+        api.portal.show_message(msg, request=getRequest(), type='error')
 
 
 class Reject(Transition):
