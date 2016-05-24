@@ -140,39 +140,18 @@ class GlobalTaskTableSource(SqlTableSource):
         Returns the query object.
         """
         # initalize config
-        self.config.update_config()
+        query = super(GlobalTaskTableSource, self).build_query()
 
-        # get the base query from the config
-        query = self.config.get_base_query()
-        query = self.validate_base_query(query)
+        query = self.avoid_duplicates(query)
+        return query
 
-        # If a task has a successor task, list only one of them.
-        # List the only the one which is assigned to this client.
+    def avoid_duplicates(self, query):
+        """If a task has a successor task, list only one of them.
+
+        List the only the one which is assigned to this client.
+        """
         query = query.filter(
             or_(
                 and_(Task.predecessor == None, Task.successors == None),
                 Task.admin_unit_id == get_current_admin_unit().id()))
-
-        # ordering
-        query = self.extend_query_with_ordering(query)
-
-        # filter
-        if self.config.filter_text:
-            query = self.extend_query_with_textfilter(
-                query, self.config.filter_text)
-
-        # reviewstate-filter
-        if self.config.filterlist_available:
-            query = self.extend_query_with_filter(query)
-
-        # batching
-        if self.config.batching_enabled and not self.config.lazy:
-            query = self.extend_query_with_batching(query)
-
         return query
-
-    def extend_query_with_filter(self, query):
-        """When the filterlist is active, we update the query with
-        the current filter."""
-        selected_filter_id = self.request.get(self.config.filterlist_name)
-        return self.config.filterlist.update_query(query, selected_filter_id)
