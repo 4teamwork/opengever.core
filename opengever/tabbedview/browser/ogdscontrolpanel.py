@@ -20,11 +20,6 @@ class OGDSControlPanel(grok.View, TabbedView):
     grok.require('cmf.ManagePortal')
 
     tabs = [
-        {'id': 'ogds-cp-clients',
-         'icon': None,
-         'url': '#',
-         'class': None},
-
         {'id': 'users',
          'icon': None,
          'url': '#',

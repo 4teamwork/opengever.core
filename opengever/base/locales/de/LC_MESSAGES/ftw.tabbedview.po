@@ -167,9 +167,6 @@ msgstr "Meine Aufgaben"
 msgid "ogds-cp-alltasks"
 msgstr "Alle Aufgaben"
 
-msgid "ogds-cp-clients"
-msgstr "Mandanten"
-
 msgid "open_issues"
 msgstr "Offene Tickets"
 

@@ -167,9 +167,6 @@ msgstr "Mes tâches"
 msgid "ogds-cp-alltasks"
 msgstr "Toutes les tâches"
 
-msgid "ogds-cp-clients"
-msgstr "Client"
-
 msgid "open_issues"
 msgstr "Tickets disponibles"
 
