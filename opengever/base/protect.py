@@ -17,7 +17,6 @@ from zope.component import adapts
 from zope.component.hooks import getSite
 from zope.interface import Interface
 from zope.publisher.interfaces.browser import IBrowserRequest
-import gc
 import logging
 import os
 import subprocess
@@ -81,9 +80,9 @@ class OGProtectTransform(ProtectTransform):
         should_log_csrf = bool(os.environ.get('CSRF_LOG_ENABLED', True))
 
         if should_log_csrf:
-            # Create a (shallow) copy of _registered_objects and
+            # Keep a summary of _registered_objects and a shallow copy of
             # request.__dict__ if we want to log the incident later
-            registered_objects_before_check = self._registered_objects()[:]
+            registered_objects_summary = self._registered_objects_summary()
             request_dict_before_check = copy(self.request.__dict__)
 
         self._abort_txn_on_confirm_action_view()
@@ -101,12 +100,28 @@ class OGProtectTransform(ProtectTransform):
             env = {
                 'username': user.getUserName() if user else 'unknown-user',
                 'url': self.request.getURL(),
-                '_registered_objects': registered_objects_before_check,
+                'registered_objects_summary': registered_objects_summary,
                 'request_dict': request_dict_before_check,
             }
             self._log_csrf_incident(env)
 
         return is_safe
+
+    def _registered_objects_summary(self):
+        """Summarize the contents of _registered_objects in a way that is
+        suited for logging:
+
+        - OID
+        - Object class
+        - Object's repr, cropped
+        """
+        summary = []
+        for obj in self._registered_objects():
+            oid = hex(u64(getattr(obj, '_p_oid', '\x00' * 8)))
+            klass = repr(getattr(obj, '__class__', None))
+            obj_summary = repr(obj)[:100]
+            summary.append({'oid': oid, 'class': klass, 'obj': obj_summary})
+        return summary
 
     def _log_csrf_incident(self, env):
         """Log a CSRF incident to a file.
@@ -135,9 +150,6 @@ class OGProtectTransform(ProtectTransform):
         """Generator that produces a sequence of lines to be logged to a file
         as the CSRF incident report.
         """
-        _registered_objects = env['_registered_objects']
-        _registered_object_oids = [
-            hex(u64(obj._p_oid)) for obj in _registered_objects]
         request_dict = env['request_dict']
 
         # Drop response from request dict - we know what we're gonna send
@@ -162,30 +174,15 @@ class OGProtectTransform(ProtectTransform):
         yield request_dict.get('environ', {}).get('HTTP_REFERER', '')
         yield '\n'
 
-        yield '_registered_object_oids:'
+        yield 'registered_objects_summary:'
         yield '-' * 80
-        yield pformat(_registered_object_oids)
+        yield '\n' + pformat(env['registered_objects_summary'])
         yield '\n'
 
-        yield '_registered_objects:'
+        yield 'Request:'
         yield '-' * 80
-        yield pformat(_registered_objects)
+        yield '\n' + pformat(request_dict)
         yield '\n'
-
-        yield 'References to registered objects:'
-        yield '-' * 80
-
-        for obj in _registered_objects:
-            yield "Object: {}".format(obj)
-            referrers = gc.get_referrers(obj)
-            yield "Referrers:\n{}".format(pformat(referrers))
-            yield '\n' * 10
-
-            # Avoid creating reference cycles!
-            del referrers
-
-        yield 'Request:\n{}'.format(pformat(request_dict))
-        yield '-' * 80
 
     def _registered_objects(self):
         self._global_unprotect()
