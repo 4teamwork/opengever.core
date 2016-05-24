@@ -5,6 +5,9 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Bumblebee: Implement gallery preview image fallback.
+  [Kevin Bieri]
+
 - Update Bumblebee integration for API v3 support.
   [phgross]
 
