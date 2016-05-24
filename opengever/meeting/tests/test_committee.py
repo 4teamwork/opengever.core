@@ -3,9 +3,13 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.exceptions import FormFieldNotFound
+from ftw.testbrowser.pages.statusmessages import error_messages
+from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.oguid import Oguid
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
+from opengever.meeting.model import Committee
 from opengever.testing import FunctionalTestCase
+import transaction
 
 
 class TestCommittee(FunctionalTestCase):
@@ -154,3 +158,74 @@ class TestCommittee(FunctionalTestCase):
         browser.login(username='hugo.boss').visit(committee, view='edit')
         with self.assertRaises(FormFieldNotFound):
             browser.fill({self.group_field_name: 'client1_users'})
+
+
+
+
+class TestCommitteeWorkflow(FunctionalTestCase):
+
+    def test_initial_state_is_active(self):
+        committee = create(Builder('committee').titled(u'My Committee'))
+        self.assertEqual(Committee.STATE_ACTIVE,
+                         committee.load_model().get_state())
+
+    @browsing
+    def test_can_be_deactivated(self, browser):
+        committee = create(Builder('committee').titled(u'My Committee'))
+
+        browser.login().open(committee)
+        browser.find('Deactivate').click()
+
+        self.assertEqual(Committee.STATE_INACTIVE,
+                         committee.load_model().get_state())
+        self.assertEqual(['Committee deactivated successfully'],
+                         info_messages())
+
+    @browsing
+    def test_deactivating_is_not_possible_when_pending_meetings_exists(self, browser):
+        committee = create(Builder('committee').titled(u'My Committee'))
+        create(Builder('meeting').having(committee=committee))
+
+        browser.login().open(committee)
+        browser.find('Deactivate').click()
+
+        self.assertEqual(['Not all meetings are closed.'], error_messages())
+        self.assertEqual(Committee.STATE_ACTIVE,
+                         committee.load_model().get_state())
+
+    @browsing
+    def test_when_unscheduled_proposals_exist(self, browser):
+        repo = create(Builder('repository'))
+        dossier = create(Builder('dossier').within(repo))
+        committee = create(Builder('committee').titled(u'My Committee'))
+        proposal = create(Builder('proposal')
+                          .within(dossier)
+                          .having(committee=committee.load_model()))
+        create(Builder('submitted_proposal').submitting(proposal))
+
+        browser.login().open(committee)
+        browser.find('Deactivate').click()
+
+        self.assertEqual(
+            ['There are unscheduled proposals submitted to this committee.'],
+            error_messages())
+        self.assertEqual(Committee.STATE_ACTIVE,
+                         committee.load_model().get_state())
+
+    @browsing
+    def test_deactivated_comittee_can_be_reactivated(self, browser):
+        committee = create(Builder('committee')
+                           .titled(u'My Committee')
+                           .in_state('committee-state-inactive'))
+        model = committee.load_model()
+
+        model.workflow.execute_transition(committee, model, 'active-inactive')
+        transaction.commit()
+
+        browser.login().open(committee)
+        browser.find('Activate').click()
+
+        self.assertEqual(Committee.STATE_ACTIVE,
+                         committee.load_model().get_state())
+        self.assertEqual(['Committee reactivated successfully'],
+                         info_messages())
