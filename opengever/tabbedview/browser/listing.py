@@ -1,20 +1,25 @@
-from ftw.tabbedview.browser.listing import CatalogListingView as FtwTabbedviewCatalogListingView
-from ftw.tabbedview.browser.listing import ListingView as FtwTabbedviewListingView
+from opengever.tabbedview.interfaces import IGeverCatalogTableSourceConfig
+from opengever.tabbedview.interfaces import IGeverTableSourceConfig
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
+from zope.interface import implements
+import ftw.tabbedview.browser.listing
 
 
-class ListingView(FtwTabbedviewListingView):
+class ListingView(ftw.tabbedview.browser.listing.ListingView):
     """ XXX OpenGever specific override of the ftw.tabbedview ListingView in
     order to fix batching by overriding the page template.
     """
+    implements(IGeverTableSourceConfig)
 
     batching = ViewPageTemplateFile("batching.pt")
 
 
-class CatalogListingView(FtwTabbedviewCatalogListingView):
+class CatalogListingView(ftw.tabbedview.browser.listing.CatalogListingView):
     """ XXX OpenGever specific override of the ftw.tabbedview
     CatalogListingView in order to fix batching by overriding
     the page template.
     """
+
+    implements(IGeverCatalogTableSourceConfig)
 
     batching = ViewPageTemplateFile("batching.pt")
