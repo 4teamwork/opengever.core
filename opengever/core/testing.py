@@ -7,10 +7,10 @@ from ftw.testing.quickinstaller import snapshots
 from opengever.activity.interfaces import IActivitySettings
 from opengever.base import model
 from opengever.base.model import create_session
+from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from opengever.meeting.interfaces import IMeetingSettings
 from opengever.ogds.base.setup import create_sql_tables
 from opengever.ogds.models import BASE
-from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from plone import api
 from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
@@ -23,16 +23,15 @@ from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.browserlayer.utils import unregister_layer
 from plone.dexterity.schema import SCHEMA_CACHE
-from plone.registry.interfaces import IRegistry
 from plone.testing import Layer
 from plone.testing import z2
 from Products.CMFCore.utils import getToolByName
+from sqlalchemy.pool import StaticPool
 from Testing.ZopeTestCase.utils import setupCoreSessions
 from z3c.saconfig import EngineFactory
 from z3c.saconfig import GloballyScopedSession
 from z3c.saconfig.interfaces import IEngineFactory
 from z3c.saconfig.interfaces import IScopedSession
-from zope.component import getUtility
 from zope.component import provideUtility
 from zope.configuration import xmlconfig
 from zope.sqlalchemy import datamanager
@@ -40,6 +39,7 @@ import logging
 import os
 import sys
 import transaction
+
 
 loghandler = logging.StreamHandler(stream=sys.stdout)
 loghandler.setLevel(logging.DEBUG)
@@ -163,6 +163,7 @@ class OpengeverFixture(PloneSandboxLayer):
         z2.installProduct(app, 'plone.app.versioningbehavior')
         z2.installProduct(app, 'collective.taskqueue.pasplugin')
 
+        memory_session_factory()
         setupCoreSessions(app)
 
         # Set max subobject limit to 0 -> unlimited
@@ -246,7 +247,6 @@ class OpengeverFixture(PloneSandboxLayer):
         opengever.policy.base:default, which we don't import here
         (see comment in installOpengeverProfiles() above).
         """
-
         lang_tool = api.portal.get_tool('portal_languages')
         lang_tool.use_combined_language_codes = True
         lang_tool.display_flags = False
@@ -258,6 +258,18 @@ class OpengeverFixture(PloneSandboxLayer):
         # These would be (possible) production defaults, but will break tests
         # lang_tool.setDefaultLanguage('de-ch')
         # lang_tool.supported_langs = ['fr-ch', 'de-ch']
+
+
+class APILayer(Layer):
+    """A layer that installs the plone.restapi:default generic setup profile.
+    """
+
+    def setUp(self):
+        with ploneSite() as site:
+            applyProfile(site, 'plone.restapi:default')
+
+
+RESTAPI_LAYER = APILayer()
 
 
 class MemoryDBLayer(Layer):
@@ -288,7 +300,10 @@ def functional_session_factory():
 
 
 def memory_session_factory():
-    engine_factory = EngineFactory('sqlite:///:memory:')
+    engine_factory = EngineFactory(
+        'sqlite:///:memory:',
+        connect_args={'check_same_thread': False},
+        poolclass=StaticPool)
     provideUtility(
         engine_factory, provides=IEngineFactory, name=u'opengever_db')
 
@@ -317,10 +332,17 @@ OPENGEVER_FUNCTIONAL_TESTING = FunctionalTesting(
     name="opengever.core:functional")
 
 OPENGEVER_FUNCTIONAL_ZSERVER_TESTING = FunctionalTesting(
+    bases=(z2.ZSERVER_FIXTURE, OPENGEVER_FIXTURE,
+           set_builder_session_factory(functional_session_factory),
+           ),
+    name="opengever.core:functional:zserver")
+
+OPENGEVER_FUNCTIONAL_ZSERVER_API_TESTING = FunctionalTesting(
     bases=(OPENGEVER_FIXTURE,
+           RESTAPI_LAYER,
            set_builder_session_factory(functional_session_factory),
            PLONE_ZSERVER),
-    name="opengever.core:functional:zserver")
+    name="opengever.core:functional:zserver:api")
 
 
 def activate_filing_number(portal):
@@ -392,17 +414,3 @@ class BumblebeeLayer(PloneSandboxLayer):
 
 
 OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER = BumblebeeLayer()
-
-
-class APILayer(PloneSandboxLayer):
-
-    def setUpPloneSite(self, portal):
-        applyProfile(portal, 'plone.restapi:default')
-
-    def tearDownPloneSite(self, portal):
-        unregister_layer('plone.restapi')
-
-    defaultBases = (OPENGEVER_FUNCTIONAL_ZSERVER_TESTING,)
-
-
-OPENGEVER_FUNCTIONAL_API_ZSERVER_LAYER = APILayer()
