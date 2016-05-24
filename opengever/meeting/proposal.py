@@ -46,7 +46,7 @@ class IProposalModel(Interface):
 
     committee = schema.Choice(
         title=_('label_committee', default=u'Committee'),
-        source='opengever.meeting.CommitteeVocabulary',
+        source='opengever.meeting.ActiveCommitteeVocabulary',
         required=True)
 
     legal_basis = schema.Text(

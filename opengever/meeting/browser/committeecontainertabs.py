@@ -14,7 +14,7 @@ from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 
 class ActiveOnlyFilter(Filter):
     def update_query(self, query):
-        return query.only_active()
+        return query.active()
 
 
 class Committees(grok.View, OpengeverTab):
