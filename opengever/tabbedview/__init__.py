@@ -1,3 +1,4 @@
+from opengever.tabbedview.basesource import GeverTableSource
 from zope.i18nmessageid import MessageFactory
 import logging
 

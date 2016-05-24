@@ -1,5 +1,4 @@
 from five import grok
-from ftw.table.basesource import BaseTableSource
 from ftw.table.interfaces import ITableSource
 from ftw.table.interfaces import ITableSourceConfig
 from opengever.dossier import _
@@ -7,6 +6,7 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.behaviors.participation import IParticipationAwareMarker
 from opengever.ogds.base.actor import Actor
+from opengever.tabbedview import GeverTableSource
 from opengever.tabbedview.browser.base import OpengeverTab
 from opengever.tabbedview.browser.listing import ListingView
 from opengever.tabbedview.helper import linked_ogds_author
@@ -155,7 +155,7 @@ class ParticipationResponsible(object):
         self.contact = contact
 
 
-class ParticipantsTableSource(grok.MultiAdapter, BaseTableSource):
+class ParticipantsTableSource(GeverTableSource):
     """
     """
 

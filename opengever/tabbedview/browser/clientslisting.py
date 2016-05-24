@@ -1,11 +1,11 @@
 from five import grok
 from ftw.table import helper
-from ftw.table.basesource import BaseTableSource
 from ftw.table.interfaces import ITableSource, ITableSourceConfig
 from opengever.base.model import create_session
 from opengever.globalindex.model.task import Task
 from opengever.ogds.models.org_unit import OrgUnit
 from opengever.tabbedview import _
+from opengever.tabbedview import GeverTableSource
 from opengever.tabbedview.browser.base import OpengeverTab
 from opengever.tabbedview.browser.listing import ListingView
 from sqlalchemy import or_
@@ -99,7 +99,7 @@ class ClientsListing(grok.View, OpengeverTab, ListingView):
         return create_session().query(OrgUnit)
 
 
-class ClientsTableSource(grok.MultiAdapter, BaseTableSource):
+class ClientsTableSource(GeverTableSource):
     """Clients source adapter.
     """
 

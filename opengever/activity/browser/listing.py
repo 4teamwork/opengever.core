@@ -1,5 +1,5 @@
 from five import grok
-from ftw.table.basesource import BaseTableSource
+from opengever.tabbedview import GeverTableSource
 from ftw.table.interfaces import ITableSource
 from ftw.table.interfaces import ITableSourceConfig
 from opengever.activity import _
@@ -59,7 +59,7 @@ class NotificationListingTab(BaseListingTab):
     )
 
 
-class NotificationTableSource(grok.MultiAdapter, BaseTableSource):
+class NotificationTableSource(GeverTableSource):
     """Base table source adapter for notification listings, which get their
     data from the notification center.
     """

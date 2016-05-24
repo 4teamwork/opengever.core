@@ -6,9 +6,9 @@ from ftw.journal.interfaces import IAnnotationsJournalizable
 from ftw.journal.interfaces import IJournalizable
 from ftw.journal.interfaces import IWorkflowHistoryJournalizable
 from ftw.table import helper
-from ftw.table.basesource import BaseTableSource
 from ftw.table.interfaces import ITableSourceConfig, ITableSource
 from opengever.journal import _
+from opengever.tabbedview import GeverTableSource
 from opengever.tabbedview.browser.base import OpengeverTab
 from opengever.tabbedview.browser.listing import ListingView
 from opengever.tabbedview.helper import linked_ogds_author
@@ -82,7 +82,7 @@ class JournalTab(grok.View, OpengeverTab, ListingView):
     render = __call__
 
 
-class JournalTableSource(grok.MultiAdapter, BaseTableSource):
+class JournalTableSource(GeverTableSource):
 
     grok.implements(ITableSource)
     grok.adapts(IJournalSourceConfig, Interface)
