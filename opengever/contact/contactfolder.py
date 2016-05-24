@@ -4,7 +4,7 @@ from opengever.base.browser.translated_title import TranslatedTitleAddForm
 from opengever.base.browser.translated_title import TranslatedTitleEditForm
 from opengever.contact import _
 from opengever.contact.interfaces import IContactFolder
-from opengever.tabbedview.browser.tabs import OpengeverCatalogListingTab
+from opengever.tabbedview import BaseCatalogListingTab
 from opengever.tabbedview.helper import email_helper
 from plone.dexterity.content import Container
 from plone.dexterity.interfaces import IDexterityContainer
@@ -63,7 +63,7 @@ def linked_no_icon(item, value):
     return wrapper
 
 
-class Contacts(OpengeverCatalogListingTab):
+class Contacts(BaseCatalogListingTab):
     """ Listing of all Task of the authenticated Member """
 
     grok.name('tabbedview_view-local')
@@ -101,7 +101,7 @@ class Contacts(OpengeverCatalogListingTab):
     selection = ViewPageTemplateFile("no_selection_amount.pt")
 
     def update_config(self):
-        OpengeverCatalogListingTab.update_config(self)
+        BaseCatalogListingTab.update_config(self)
 
         # configuration for the extjs grid
         extjs_conf = {'auto_expand_column': 'lastname'}

@@ -12,8 +12,7 @@ from opengever.meeting.model.proposal import Proposal
 from opengever.meeting.tabs.proposallisting import ProposalListingTab
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.tabbedview import _
-from opengever.tabbedview import GeverTabMixin
-from opengever.tabbedview.browser.listing import CatalogListingView
+from opengever.tabbedview import BaseCatalogListingTab
 from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
 from opengever.tabbedview.filters import CatalogQueryFilter
 from opengever.tabbedview.filters import Filter
@@ -32,24 +31,6 @@ from Products.Five.browser.pagetemplatefile import BoundPageTemplate
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
-
-
-class OpengeverCatalogListingTab(grok.View, GeverTabMixin, CatalogListingView):
-    """Base view for catalog listing tabs.
-    """
-
-    grok.context(ITabbedView)
-    grok.require('zope2.View')
-
-    columns = ()
-
-    search_index = 'SearchableText'
-    sort_on = 'modified'
-    sort_order = 'reverse'
-
-    __call__ = CatalogListingView.__call__
-    update = CatalogListingView.update
-    render = __call__
 
 
 def translate_public_trial_options(item, value):
@@ -81,7 +62,7 @@ class DocumentsProxy(grok.View):
         return self.context.restrictedTraverse(prefered_view)()
 
 
-class Documents(OpengeverCatalogListingTab):
+class Documents(BaseCatalogListingTab):
     """List all documents recursively. Working copies are not listed.
     """
 
@@ -169,7 +150,7 @@ class Documents(OpengeverCatalogListingTab):
         return '{}-gallery'.format(self.view_name)
 
 
-class Dossiers(OpengeverCatalogListingTab):
+class Dossiers(BaseCatalogListingTab):
     grok.name('tabbedview_view-dossiers')
 
     selection = ViewPageTemplateFile("selection_with_filters.pt")

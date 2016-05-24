@@ -1,9 +1,11 @@
 from five import grok
 from ftw.dictstorage.interfaces import ISQLAlchemy
+from ftw.tabbedview.interfaces import ITabbedView
 from opengever.base.behaviors.classification import translated_public_trial_terms
 from opengever.base.interfaces import IReferenceNumberFormatter
 from opengever.base.interfaces import IReferenceNumberSettings
 from opengever.ogds.base.sort_helpers import SortHelpers
+from opengever.tabbedview.browser.listing import CatalogListingView
 from opengever.tabbedview.browser.listing import ListingView
 from opengever.tabbedview.utils import get_translated_transitions
 from opengever.tabbedview.utils import get_translated_types
@@ -173,20 +175,19 @@ class BaseListingTab(grok.View, GeverTabMixin, ListingView):
     render = __call__
 
 
-#XXX this is only for SQL stuff. rename?
-class BaseTableSource(SqlTableSource):
+class BaseCatalogListingTab(grok.View, GeverTabMixin, CatalogListingView):
+    """Base view for catalog listing tabs.
+    """
 
-    grok.baseclass()
+    grok.context(ITabbedView)
+    grok.require('zope2.View')
 
-    def build_query(self):
-        """Builds the query based on `get_base_query()` method of config.
-        Returns the query object.
-        """
-        # initalize config
-        self.config.update_config()
+    columns = ()
 
-        # get the base query from the config
-        query = self.config.get_base_query()
-        query = self.validate_base_query(query)
+    search_index = 'SearchableText'
+    sort_on = 'modified'
+    sort_order = 'reverse'
 
-        return query
+    __call__ = CatalogListingView.__call__
+    update = CatalogListingView.update
+    render = __call__
