@@ -2,6 +2,7 @@ from BTrees.OOBTree import OOBTree
 from copy import copy
 from datetime import datetime
 from opengever.base.pathfinder import PathFinder
+from opengever.base.sentry import log_msg_to_sentry
 from plone import api
 from plone.protect.auto import ProtectTransform
 from plone.protect.auto import safeWrite
@@ -95,15 +96,21 @@ class OGProtectTransform(ProtectTransform):
 
         is_safe = super(OGProtectTransform, self)._check()
 
-        if not is_safe and should_log_csrf:
+        if not is_safe:
             user = api.user.get_current()
             env = {
                 'username': user.getUserName() if user else 'unknown-user',
-                'url': self.request.getURL(),
+                'url': self.request.get('ACTUAL_URL', ''),
                 'registered_objects_summary': registered_objects_summary,
                 'request_dict': request_dict_before_check,
             }
-            self._log_csrf_incident(env)
+
+            # Always (try to) log to Sentry
+            self._log_csrf_incident_to_sentry(env)
+
+            if should_log_csrf:
+                # Log to file if enabled
+                self._log_csrf_incident(env)
 
         return is_safe
 
@@ -145,6 +152,28 @@ class OGProtectTransform(ProtectTransform):
         subprocess.check_call(
             "find {} -name 'csrf-*.log' -type f -mmin +{} -delete".format(
                 log_dir, max_age), shell=True)
+
+    def _log_csrf_incident_to_sentry(self, env):
+        logged = False
+        try:
+            print None.bla
+            extra = {'referrer': self.request.get('HTTP_REFERER', ''),
+                     '_registered_objects': env['registered_objects_summary']}
+        except Exception as e:
+            LOG.error('Error while preparing CSRF incident data for Sentry'
+                      ' (%r)' % e)
+            return
+
+        logged = log_msg_to_sentry(
+            'CSRF @@confirm-action triggered',
+            request=self.request,
+            url=env['url'],
+            extra=extra,
+            fingerprint=['{{ default }}', env['url']],
+        )
+
+        if logged:
+            LOG.warn('Logged CSRF incident to Sentry')
 
     def _build_csrf_report(self, env):
         """Generator that produces a sequence of lines to be logged to a file

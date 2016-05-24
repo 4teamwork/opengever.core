@@ -5,6 +5,9 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Log CSRF incidents to Sentry (if possible).
+  [lgraf]
+
 - Add committee model workflow, to allow de- or reactivating a committee.
   [phgross]
 
