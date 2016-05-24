@@ -3,6 +3,7 @@
 # Runs the tests in multiple threads.
 
 from collections import defaultdict
+from copy import copy
 from fnmatch import fnmatch
 from itertools import groupby
 from operator import itemgetter
@@ -59,7 +60,7 @@ def main():
         thread = Thread(
             target=execute_command,
             name=name,
-            args=(cmd, name, output_file.name, exitcodes))
+            args=(cmd, name, index, output_file.name, exitcodes))
         threads.append(thread)
 
     with BufferedPrinter(output):
@@ -95,15 +96,34 @@ class BufferedPrinter(Thread):
         self.running = False
         self.join()
 
-def execute_command(command, workername, output_path, exitcodes):
+def execute_command(command, workername, worker_idx, output_path, exitcodes):
     print '{0}: > {1}'.format(workername, command)
 
     with open(output_path, 'wb', 1) as output:
         args = shlex.split(command)
-        proc = subprocess.Popen(args, stdout=output, stderr=output)
+        env = get_worker_env(worker_idx)
+        print "Spawning worker {0} with ZSERVER_PORT={1}".format(
+            workername, env['ZSERVER_PORT'])
+        proc = subprocess.Popen(args, stdout=output, stderr=output, env=env)
         code = proc.wait()
     exitcodes.append(code)
     print '{0}: TERMINATED with exitcode {1}'.format(workername, code)
+
+
+def get_worker_env(worker_idx):
+    env = copy(os.environ)
+    env['ZSERVER_PORT'] = get_worker_zserver_port(worker_idx)
+    return env
+
+
+def get_worker_zserver_port(worker_idx):
+    # Use the 8 build-specific ports provided by the Jenkins Port Allocator
+    # Plugin to allocate each mtest worker a different ZSERVER_PORT
+    local_default_port = 55001 + worker_idx
+    zserver_port = int(os.environ.get('PORT%s' % worker_idx,
+                                      local_default_port))
+    return str(zserver_port)
+
 
 def processor_commands():
     test_path = os.path.relpath(
