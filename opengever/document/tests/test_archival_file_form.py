@@ -75,7 +75,7 @@ class TestArchivalFileForm(FunctionalTestCase):
                                .within(dossier))
 
     @browsing
-    def test_raise_aunauthorized_if_the_user_CANNOT_modify(self, browser):
+    def test_raise_unauthorized_if_the_user_CANNOT_modify(self, browser):
         user = create(Builder('user').with_roles('Contributor'))
 
         with self.assertRaises(Unauthorized):

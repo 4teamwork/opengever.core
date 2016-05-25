@@ -65,7 +65,10 @@ class TestResolveJobs(FunctionalTestCase):
         self.grant('Contributor', 'Editor', 'Reader', 'Reviewer')
         self.catalog = api.portal.get_tool('portal_catalog')
 
-    def test_all_trashed_documents_are_deleted_when_resolving_a_dossier_by_default(self):
+    def test_all_trashed_documents_are_deleted_when_resolving_a_dossier_if_enabled(self):
+        api.portal.set_registry_record(
+            'purge_trash_enabled', True, interface=IDossierResolveProperties)
+
         doc1 = create(Builder('document').within(self.dossier))
         doc2 = create(Builder('document').within(self.dossier).trashed())
 
@@ -80,6 +83,9 @@ class TestResolveJobs(FunctionalTestCase):
         self.assertNotIn(doc2, docs)
 
     def test_purge_trashs_recursive(self):
+        api.portal.set_registry_record(
+            'purge_trash_enabled', True, interface=IDossierResolveProperties)
+
         subdossier = create(Builder('dossier').within(self.dossier))
         doc1 = create(Builder('document').within(subdossier))
         doc2 = create(Builder('document').within(subdossier).trashed())
@@ -94,7 +100,7 @@ class TestResolveJobs(FunctionalTestCase):
         self.assertIn(doc1, docs)
         self.assertNotIn(doc2, docs)
 
-    def test_purging_can_be_disabled_by_registry_property(self):
+    def test_purging_trashed_documents_is_disabled_by_default(self):
         api.portal.set_registry_record(
             'purge_trash_enabled', False, interface=IDossierResolveProperties)
 
@@ -107,7 +113,10 @@ class TestResolveJobs(FunctionalTestCase):
                     path='/'.join(self.dossier.getPhysicalPath()))]
         self.assertIn(doc1, docs)
 
-    def test_adds_journal_pdf_by_default(self):
+    def test_adds_journal_pdf_when_enabled(self):
+        api.portal.set_registry_record(
+            'journal_pdf_enabled', True, interface=IDossierResolveProperties)
+
         with freeze(datetime(2016, 4, 25)):
             api.content.transition(obj=self.dossier,
                                    transition='dossier-transition-resolve')
@@ -120,6 +129,9 @@ class TestResolveJobs(FunctionalTestCase):
                           journal_pdf.file.contentType)
 
     def test_journal_pdf_is_only_added_to_main_dossier(self):
+        api.portal.set_registry_record(
+            'journal_pdf_enabled', True, interface=IDossierResolveProperties)
+
         create(Builder('dossier').within(self.dossier))
         api.content.transition(obj=self.dossier,
                                transition='dossier-transition-resolve')
@@ -131,17 +143,14 @@ class TestResolveJobs(FunctionalTestCase):
         self.assertEquals(1, len(docs))
         self.assertEquals(self.dossier, aq_parent(docs[0].getObject()))
 
-    def test_journal_pdf_can_be_disabled_by_registry_property(self):
-        api.portal.set_registry_record(
-            'journal_pdf_enabled', False, interface=IDossierResolveProperties)
-
-        doc1 = create(Builder('document').within(self.dossier).trashed())
+    def test_journal_pdf_is_disabled_by_default(self):
+        doc1 = create(Builder('document').within(self.dossier))
         api.content.transition(obj=self.dossier,
                                transition='dossier-transition-resolve')
 
-        self.assertFalse(
-            self.dossier.get('document-1', False),
-            'Journal PDF created altough its disabled by registry property.')
+        self.assertEquals(
+            [doc1], self.dossier.listFolderContents(),
+            "Journal PDF created altough it's disabled by default.")
 
 
 class TestAutomaticPDFAConversion(FunctionalTestCase):
@@ -156,26 +165,24 @@ class TestAutomaticPDFAConversion(FunctionalTestCase):
 
         reset_queue()
 
-        api.portal.set_registry_record(
-            'journal_pdf_enabled', False, interface=IDossierResolveProperties)
-
     def test_pdf_conversion_job_is_queued_for_every_document(self):
         api.portal.set_registry_record(
-            'journal_pdf_enabled', False, interface=IDossierResolveProperties)
+            'archival_file_conversion_enabled', True,
+            interface=IDossierResolveProperties)
 
         doc1 = create(Builder('document')
                       .within(self.dossier)
                       .attach_file_containing(
                           bumblebee_asset('example.docx').bytes(),
                           u'example.docx'))
-        doc2 = create(Builder('document')
-                      .within(self.dossier)
-                      .attach_file_containing(
-                          bumblebee_asset('example.docx').bytes(),
-                          u'example.docx'))
+        create(Builder('document')
+               .within(self.dossier)
+               .attach_file_containing(
+                   bumblebee_asset('example.docx').bytes(),
+                   u'example.docx'))
 
         get_queue().reset()
-        with RequestsSessionMock.installed() as session:
+        with RequestsSessionMock.installed():
             api.content.transition(obj=self.dossier,
                                    transition='dossier-transition-resolve')
             transaction.commit()
@@ -190,20 +197,16 @@ class TestAutomaticPDFAConversion(FunctionalTestCase):
                  'url': '/plone/dossier-1/document-1/bumblebee_trigger_conversion'},
                 get_queue().queue[0])
 
-    def test_pdf_conversion_can_be_disabled_with_registry_property(self):
-        api.portal.set_registry_record(
-            'archival_file_conversion_enabled',
-            False,
-            interface=IDossierResolveProperties)
-
-        doc1 = create(Builder('document')
-                      .within(self.dossier)
-                      .attach_file_containing(
-                          bumblebee_asset('example.docx').bytes(),
-                          u'example.docx'))
+    def test_pdf_conversion_is_disabled_by_default(self):
+        create(Builder('document')
+               .within(self.dossier)
+               .attach_file_containing(
+                   bumblebee_asset('example.docx').bytes(),
+                   u'example.docx'))
 
         get_queue().reset()
-        with RequestsSessionMock.installed() as session:
+
+        with RequestsSessionMock.installed():
             api.content.transition(obj=self.dossier,
                                    transition='dossier-transition-resolve')
             transaction.commit()

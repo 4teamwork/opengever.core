@@ -197,6 +197,9 @@ class DossierResolver(grok.Adapter):
                 content_type='application/pdf').execute()
 
     def trigger_pdf_conversion(self):
+        if not self.get_property('archival_file_conversion_enabled'):
+            return
+
         docs = api.content.find(self.context, object_provides=[IBaseDocument])
         for doc in docs:
             ArchivalFileConverter(doc.getObject()).trigger_conversion()
