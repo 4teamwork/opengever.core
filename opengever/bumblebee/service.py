@@ -11,12 +11,10 @@ class GeverBumblebeeService(BumblebeeServiceV3):
 
         return super(GeverBumblebeeService, self).queue_storing(queue)
 
-    def queue_conversion(self, queue, callback_url, target_format='pdf/a',
-                         version_id=None):
+    def queue_conversion(self, queue, callback_url, target_format='pdf/a'):
 
         if not is_bumblebee_feature_enabled():
             return False
 
         return super(GeverBumblebeeService, self).queue_conversion(
-            queue, callback_url, target_format=target_format,
-            version_id=version_id)
+            queue, callback_url, target_format=target_format)
