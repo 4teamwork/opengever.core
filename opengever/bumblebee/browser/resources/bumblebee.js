@@ -2,7 +2,7 @@
 
   var endpoint;
   var showroom;
-  var number_of_documents;
+  var numberOfDocuments;
 
   function scanForBrokenImages(context) {
     $("img", context).error(function(){
@@ -12,10 +12,12 @@
     });
   }
 
-  function loadNextItems() {
-    var data = { document_pointer: $('.imageContainer').length };
+  function loadNextTabbedviewItems() {
+    var data = {
+      documentPointer: $('.imageContainer').length,
+      searchableText: global.tabbedview.searchbox.val()
+    };
     $.get(endpoint, data).done(function(data) {
-
       var items = $(data).filter('.imageContainer');
       items.insertAfter($('.imageContainer').last());
       toggleShowMoreButton();
@@ -29,38 +31,41 @@
     var button = $('.bumblebeeGalleryShowMore');
     var shown = $('.imageContainer').length;
 
-    if (shown >= number_of_documents) {
+    if (shown >= numberOfDocuments) {
       button.hide();
-    }else {
+    } else {
       button.css("display", "block");
     }
   }
 
-  function tail(item) { loadNextItems(); }
+  function tail(item) {
+    if(global.tabbedview) {
+      loadNextTabbedviewItems();
+    }
+  }
 
   function init() {
-    endpoint = $(".preview-listing").data("fetch-url");
-    number_of_documents = $('.preview-listing').data('number-of-documents');
+    showroom = Showroom([], { 'tail': tail });
+    updateShowroom();
+  }
 
+  function updateShowroom() {
     var items = document.querySelectorAll(".showroom-item");
+    var previewListing = $(".preview-listing");
 
-    var config = {
-      'total': number_of_documents,
-      'tail': tail
-    };
-
-    if (items.length) {
-      showroom = Showroom(items, config);
-    }
-
+    endpoint = previewListing.data("fetch-url");
+    numberOfDocuments = previewListing.data('number-of-documents') || 0;
     toggleShowMoreButton();
     scanForBrokenImages(".preview-listing");
+
+    showroom.reset(items);
+    showroom.setTotal(numberOfDocuments);
   }
 
   $(document)
-    .on("reload", init)
-    .on("viewReady", init)
-    .on("click", ".bumblebeeGalleryShowMore", function() {loadNextItems(); });
+    .on("reload", updateShowroom)
+    .on("viewReady", updateShowroom)
+    .on("click", ".bumblebeeGalleryShowMore", function() {loadNextTabbedviewItems(); });
   $(init);
 
 })(window, window.showroom, window.jQuery);

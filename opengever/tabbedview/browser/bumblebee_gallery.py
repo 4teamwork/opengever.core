@@ -27,6 +27,7 @@ class BumblebeeGalleryMixin(object):
             raise NotFound
 
         set_prefered_listing_view('gallery')
+
         return self.template()
 
     @property
@@ -45,7 +46,7 @@ class BumblebeeGalleryMixin(object):
     def previews(self, **kwargs):
         brains = self.get_brains()
 
-        from_batch_id = int(self.request.get('document_pointer', 0))
+        from_batch_id = int(self.request.get('documentPointer', 0))
         to_batch_id = from_batch_id + self.amount_preloaded_documents
 
         for brain in brains[from_batch_id:to_batch_id]:
@@ -59,6 +60,8 @@ class BumblebeeGalleryMixin(object):
             }
 
     def get_brains(self):
+        self.table_source.config.filter_text = self.request.get('searchableText', '')
+
         if not hasattr(self, '_brains'):
             catalog = getToolByName(self.context, 'portal_catalog')
             setattr(self, '_brains', catalog(self.table_source.build_query()))
@@ -72,7 +75,7 @@ class BumblebeeGalleryMixin(object):
         # The HTML stripped in order to have empty response content when
         # there are no tags at all, so that diazo does not try to
         # parse it.
-        if int(self.request.get('document_pointer', 0)) >= self.number_of_documents():
+        if int(self.request.get('documentPointer', 0)) >= self.number_of_documents():
             # We have to return an empty string if we have no more documents
             # to render. Otherwise plone.protect will log a error-warning:
             # WARNING plone.protect error parsing dom, failure to add csrf
