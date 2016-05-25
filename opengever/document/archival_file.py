@@ -34,10 +34,10 @@ class ArchivalFileConverter(object):
         return "{}/archival_file_conversion_callback".format(
             self.document.absolute_url())
 
-    def store_file(self, data):
+    def store_file(self, data, mimetype='application/pdf'):
         IDocumentMetadata(self.document).archival_file = NamedBlobFile(
             data=data,
-            contentType='application/pdf',
+            contentType=mimetype,
             filename=self.get_file_name())
         self.set_state(ARCHIVAL_FILE_STATE_CONVERTED)
 

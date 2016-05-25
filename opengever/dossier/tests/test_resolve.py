@@ -5,6 +5,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.bumblebee.tests import RequestsSessionMock
 from ftw.bumblebee.tests.helpers import asset as bumblebee_asset
+from ftw.bumblebee.tests.helpers import DOCX_CHECKSUM
 from ftw.bumblebee.tests.helpers import get_queue
 from ftw.bumblebee.tests.helpers import reset_queue
 from ftw.testbrowser import browsing
@@ -19,6 +20,7 @@ from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.app.testing import applyProfile
 from plone.protect import createToken
+from plone.uuid.interfaces import IUUID
 import transaction
 
 
