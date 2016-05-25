@@ -122,7 +122,7 @@ class TestCommitteesTab(FunctionalTestCase):
             browser.css('#committees_view .committee_box h2').text)
 
     @browsing
-    def test_list_onlyactive_committees_by_default(self, browser):
+    def test_list_only_active_committees_by_default(self, browser):
         committee_b = create(Builder('committee')
                              .within(self.container)
                              .titled(u'Wasserkommission'))

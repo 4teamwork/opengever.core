@@ -160,8 +160,6 @@ class TestCommittee(FunctionalTestCase):
             browser.fill({self.group_field_name: 'client1_users'})
 
 
-
-
 class TestCommitteeWorkflow(FunctionalTestCase):
 
     def test_initial_state_is_active(self):
@@ -215,8 +213,7 @@ class TestCommitteeWorkflow(FunctionalTestCase):
     @browsing
     def test_deactivated_comittee_can_be_reactivated(self, browser):
         committee = create(Builder('committee')
-                           .titled(u'My Committee')
-                           .in_state('committee-state-inactive'))
+                           .titled(u'My Committee'))
         model = committee.load_model()
 
         model.workflow.execute_transition(committee, model, 'active-inactive')
@@ -233,8 +230,7 @@ class TestCommitteeWorkflow(FunctionalTestCase):
     @browsing
     def test_add_meeting_is_not_available_on_inactive_committee(self, browser):
         committee = create(Builder('committee')
-                           .titled(u'My Committee')
-                           .in_state('committee-state-inactive'))
+                           .titled(u'My Committee'))
         model = committee.load_model()
 
         model.workflow.execute_transition(committee, model, 'active-inactive')
@@ -248,8 +244,7 @@ class TestCommitteeWorkflow(FunctionalTestCase):
     @browsing
     def test_add_membership_is_not_available_on_inactive_committee(self, browser):
         committee = create(Builder('committee')
-                           .titled(u'My Committee')
-                           .in_state('committee-state-inactive'))
+                           .titled(u'My Committee'))
         model = committee.load_model()
 
         model.workflow.execute_transition(committee, model, 'active-inactive')
