@@ -199,6 +199,25 @@ class TestAutomaticPDFAConversion(FunctionalTestCase):
                  'url': '/plone/dossier-1/document-1/bumblebee_trigger_conversion'},
                 get_queue().queue[0])
 
+    def test_pdf_conversion_can_be_disabled_with_registry_property(self):
+        api.portal.set_registry_record(
+            'archival_file_conversion_enabled',
+            False,
+            interface=IDossierResolveProperties)
+
+        doc1 = create(Builder('document')
+                      .within(self.dossier)
+                      .attach_file_containing(
+                          bumblebee_asset('example.docx').bytes(),
+                          u'example.docx'))
+
+        with RequestsSessionMock.installed() as session:
+            api.content.transition(obj=self.dossier,
+                                   transition='dossier-transition-resolve')
+            transaction.commit()
+
+            self.assertEquals(0, len(get_queue().queue))
+
 
 class TestResolvingDossiersWithFilingNumberSupport(FunctionalTestCase):
 

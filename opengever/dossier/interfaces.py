@@ -192,3 +192,9 @@ class IDossierResolveProperties(Interface):
         description=u'Select if a pdf representation of the dossier journal '
         'should be added automatically to the dossier when it gets resolved.',
         default=True)
+
+    archival_file_conversion_enabled = schema.Bool(
+        title=u'Enable automatic archival file conversion with bumblebee.',
+        description=u'Select if GEVER should trigger the archival file '
+        'conversion for each document, when a dossier gets resolved.',
+        default=True)
