@@ -3,7 +3,9 @@ from opengever.base.oguid import Oguid
 from opengever.base.utils import escape_html
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
+from opengever.meeting.model import Meeting
 from opengever.meeting.model.membership import Membership
+from opengever.meeting.model.proposal import Proposal
 from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
@@ -95,3 +97,31 @@ class Committee(Base):
     def get_active_memberships(self):
         return Membership.query.filter_by(
             committee=self).only_active()
+
+    def deactivate(self):
+        if self.has_pending_meetings() or self.has_unscheduled_proposals():
+            return False
+
+        return self.workflow.execute_transition(None, self, 'active-inactive')
+
+    def reactivate(self):
+        return self.workflow.execute_transition(None, self, 'inactive-active')
+
+    def check_deactivate_conditions(self):
+        conditions = [self.all_meetings_closed,
+                      self.no_unscheduled_proposals]
+
+        for condition in conditions:
+            if not condition():
+                return False
+
+        return True
+
+    def has_pending_meetings(self):
+        return bool(Meeting.query.pending_meetings(self).count())
+
+    def has_unscheduled_proposals(self):
+        query = Proposal.query.filter_by(
+            committee=self, workflow_state=Proposal.STATE_SUBMITTED.name)
+
+        return bool(query.count())

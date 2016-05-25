@@ -1,7 +1,6 @@
 from five import grok
 from opengever.meeting import _
 from opengever.meeting.committee import ICommittee
-from opengever.meeting.model import Meeting
 from opengever.meeting.model import Period
 from opengever.tabbedview.browser.base import OpengeverTab
 from plone import api
@@ -66,13 +65,26 @@ class DeactivateCommittee(BrowserView):
     transition_id = 'active-inactive'
 
     def __call__(self):
-        self.model = self.context.load_model()
+        model = self.context.load_model()
 
-        if not self.check_preconditions():
+        if model.has_pending_meetings():
+            api.portal.show_message(
+                message=_('msg_pending_meetings',
+                          default=u'Not all meetings are closed.'),
+                request=self.request, type='error')
+
             return self.redirect()
 
-        self.model.workflow.execute_transition(
-            self.context, self.model, self.transition_id)
+        if model.has_unscheduled_proposals():
+            api.portal.show_message(
+                message=_('msg_unscheduled_proposals',
+                          default=u'There are unscheduled proposals submitted'
+                          ' to this committee.'),
+                request=self.request, type='error')
+
+            return self.redirect()
+
+        model.deactivate()
         api.portal.show_message(
             message=_(u'label_committe_deactivated',
                       default="Committee deactivated successfully"),
@@ -80,44 +92,13 @@ class DeactivateCommittee(BrowserView):
 
         return self.redirect()
 
+    def redirect(self):
+        return self.request.RESPONSE.redirect(self.context.absolute_url())
+
     def available(self):
         model = self.context.load_model()
         transition = model.workflow.transitions.get(self.transition_id)
         return transition in model.get_state().transitions
-
-    def redirect(self):
-        return self.request.RESPONSE.redirect(self.context.absolute_url())
-
-    def check_preconditions(self):
-        conditions = [self.all_meetings_closed,
-                      self.no_unscheduled_proposals]
-
-        for condition in conditions:
-            if not condition():
-                return False
-
-        return True
-
-    def all_meetings_closed(self):
-        if Meeting.query.pending_meetings(self.model).count():
-            api.portal.show_message(
-                message=_('msg_pending_meetings',
-                          default=u'Not all meetings are closed.'),
-                request=self.request, type='error')
-            return False
-
-        return True
-
-    def no_unscheduled_proposals(self):
-        if self.context.get_unscheduled_proposals():
-            api.portal.show_message(
-                message=_('msg_unscheduled_proposals',
-                          default=u'There are unscheduled proposals submitted'
-                          ' to this committee.'),
-                request=self.request, type='error')
-            return False
-
-        return True
 
 
 class ReactivateCommittee(BrowserView):
@@ -125,13 +106,10 @@ class ReactivateCommittee(BrowserView):
     transition_id = 'inactive-active'
 
     def __call__(self):
-        model = self.context.load_model()
-        model.workflow.execute_transition(
-            self.context, model, self.transition_id)
-
+        self.context.load_model().reactivate()
         api.portal.show_message(
             message=_(u'label_committe_reactivated',
-              default="Committee reactivated successfully"),
+                      default="Committee reactivated successfully"),
             request=self.request, type='info')
 
         return self.request.RESPONSE.redirect(self.context.absolute_url())

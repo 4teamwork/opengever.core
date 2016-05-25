@@ -10,8 +10,8 @@ from opengever.meeting.command import OgCopyCommandWithElevatedPrivileges
 from opengever.meeting.command import UpdateExcerptInDossierCommand
 from opengever.meeting.command import UpdateGeneratedDocumentCommand
 from opengever.meeting.model import AgendaItem
-from opengever.meeting.model import GeneratedExcerpt
 from opengever.meeting.model import proposalhistory
+from opengever.meeting.model.generateddocument import GeneratedExcerpt
 from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow

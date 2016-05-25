@@ -392,8 +392,7 @@ class TestProposal(FunctionalTestCase):
                           .having(title='Mach doch',
                                   committee=committee.load_model()))
 
-        committee.load_model().workflow.execute_transition(
-            committee, committee.load_model(), 'active-inactive')
+        committee.load_model().deactivate()
         transaction.commit()
 
         browser.login().open(proposal, view='tabbedview_view-overview')

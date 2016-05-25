@@ -18,9 +18,7 @@ class TestCommitteeVocabularies(FunctionalTestCase):
                              .within(container)
                              .titled(u'Wasserkommission'))
 
-        model = self.committee_b.load_model()
-        model.workflow.execute_transition(
-            self.committee_b, model, 'active-inactive')
+        self.committee_b.load_model().deactivate()
         transaction.commit()
 
     def test_committeee_vocabulary_list_all_committees(self):
