@@ -8,7 +8,8 @@ import os
 ARCHIVAL_FILE_STATE_CONVERTING = 1
 ARCHIVAL_FILE_STATE_CONVERTED = 2
 ARCHIVAL_FILE_STATE_MANUALLY = 3
-ARCHIVAL_FILE_STATE_FAILED = 4
+ARCHIVAL_FILE_STATE_FAILED_TEMPORARILY = 4
+ARCHIVAL_FILE_STATE_FAILED_PERMANENTLY = 5
 
 
 class ArchivalFileConverter(object):
@@ -41,8 +42,11 @@ class ArchivalFileConverter(object):
             filename=self.get_file_name())
         self.set_state(ARCHIVAL_FILE_STATE_CONVERTED)
 
-    def handle_conversion_failure(self):
-        self.set_state(ARCHIVAL_FILE_STATE_FAILED)
+    def handle_temporary_conversion_failure(self):
+        self.set_state(ARCHIVAL_FILE_STATE_FAILED_TEMPORARILY)
+
+    def handle_permanent_conversion_failure(self):
+        self.set_state(ARCHIVAL_FILE_STATE_FAILED_PERMANENTLY)
 
     def set_manually_state(self):
         self.set_state(ARCHIVAL_FILE_STATE_MANUALLY)
