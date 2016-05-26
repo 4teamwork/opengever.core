@@ -5,6 +5,11 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Decouple default values for fields from any forms (as much as possible).
+  This is necessary groundwork for later changes that will make sure that
+  default values also get set during programmatic content creation.
+  [lgraf]
+
 - Refactor opengever.tabbedview:
 
   - Provide better base classes for tabs
