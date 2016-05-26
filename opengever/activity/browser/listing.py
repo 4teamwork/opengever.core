@@ -1,12 +1,12 @@
 from five import grok
-from ftw.table.basesource import BaseTableSource
 from ftw.table.interfaces import ITableSource
 from ftw.table.interfaces import ITableSourceConfig
 from opengever.activity import _
 from opengever.activity import notification_center
 from opengever.activity.browser import resolve_notification_url
 from opengever.ogds.base.actor import Actor
-from opengever.tabbedview.browser.base import BaseListingTab
+from opengever.tabbedview import BaseListingTab
+from opengever.tabbedview import GeverTableSource
 from plone import api
 from zope.interface import implements
 from zope.interface import Interface
@@ -59,7 +59,7 @@ class NotificationListingTab(BaseListingTab):
     )
 
 
-class NotificationTableSource(grok.MultiAdapter, BaseTableSource):
+class NotificationTableSource(GeverTableSource):
     """Base table source adapter for notification listings, which get their
     data from the notification center.
     """

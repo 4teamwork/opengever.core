@@ -1,6 +1,6 @@
 from five import grok
 from ftw.table import helper
-from opengever.tabbedview.browser.tabs import OpengeverCatalogListingTab
+from opengever.tabbedview import BaseCatalogListingTab
 from opengever.tabbedview.helper import linked
 from opengever.task import _ as taskmsg
 from opengever.task.helper import task_type_helper
@@ -22,7 +22,7 @@ def preselected_helper(item, value):
         return ''
 
 
-class TaskTemplates(OpengeverCatalogListingTab):
+class TaskTemplates(BaseCatalogListingTab):
     grok.name('tabbedview_view-tasktemplates')
 
     columns = (

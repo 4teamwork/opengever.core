@@ -41,9 +41,6 @@ msgstr ""
 msgid "users"
 msgstr ""
 
-msgid "ogds-cp-clients"
-msgstr ""
-
 msgid "ogds-cp-alltasks"
 msgstr ""
 

@@ -1,7 +1,6 @@
 from Acquisition import aq_parent
 from datetime import datetime
 from five import grok
-from ftw.table.basesource import BaseTableSource
 from ftw.table.interfaces import ITableSource
 from ftw.table.interfaces import ITableSourceConfig
 from opengever.base.protect import unprotected_write
@@ -10,7 +9,8 @@ from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.ogds.base.actor import Actor
-from opengever.tabbedview.browser.base import BaseListingTab
+from opengever.tabbedview import BaseListingTab
+from opengever.tabbedview import GeverTableSource
 from plone import api
 from plone.protect.utils import addTokenToUrl
 from Products.CMFPlone.utils import safe_unicode
@@ -227,7 +227,7 @@ class IVersionsSourceConfig(ITableSourceConfig):
     """
 
 
-class VersionsTableSource(grok.MultiAdapter, BaseTableSource):
+class VersionsTableSource(GeverTableSource):
     """Table source that returns a wrapped LazyHistory for CMFEditions
     versions.
     """

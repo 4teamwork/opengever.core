@@ -5,7 +5,7 @@ from opengever.meeting.browser.proposaltransitions import ProposalTransitionCont
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.proposal import IProposal
 from opengever.meeting.proposal import ISubmittedProposal
-from opengever.tabbedview.browser.base import OpengeverTab
+from opengever.tabbedview import GeverTabMixin
 from plone.directives.dexterity import DisplayForm
 
 
@@ -49,7 +49,7 @@ class OverviewBase(object):
         return not ISubmittedProposal.providedBy(self.context)
 
 
-class ProposalOverview(OverviewBase, DisplayForm, OpengeverTab):
+class ProposalOverview(OverviewBase, DisplayForm, GeverTabMixin):
     grok.context(IProposal)
     grok.name('tabbedview_view-overview')
     grok.template('proposaloverview')
@@ -78,7 +78,7 @@ class ProposalOverview(OverviewBase, DisplayForm, OpengeverTab):
             mapping={'version': document.get_current_version()})
 
 
-class SubmittedProposalOverview(OverviewBase, DisplayForm, OpengeverTab):
+class SubmittedProposalOverview(OverviewBase, DisplayForm, GeverTabMixin):
     grok.context(ISubmittedProposal)
     grok.name('tabbedview_view-overview')
     grok.template('proposaloverview')

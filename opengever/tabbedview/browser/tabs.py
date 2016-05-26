@@ -2,11 +2,9 @@ from DateTime import DateTime
 from five import grok
 from ftw.tabbedview.interfaces import ITabbedView
 from ftw.table import helper
-from ftw.table.catalog_source import CatalogTableSource
 from opengever.bumblebee import get_prefered_listing_view
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.bumblebee import set_prefered_listing_view
-from opengever.dossier.base import DOSSIER_STATES_CLOSED
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.interfaces import IDossierMarker
 from opengever.globalindex.model.task import Task
@@ -14,8 +12,7 @@ from opengever.meeting.model.proposal import Proposal
 from opengever.meeting.tabs.proposallisting import ProposalListingTab
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.tabbedview import _
-from opengever.tabbedview.browser.base import OpengeverTab
-from opengever.tabbedview.browser.listing import CatalogListingView
+from opengever.tabbedview import BaseCatalogListingTab
 from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
 from opengever.tabbedview.filters import CatalogQueryFilter
 from opengever.tabbedview.filters import Filter
@@ -29,33 +26,11 @@ from opengever.tabbedview.helper import linked_trashed_document_with_tooltip
 from opengever.tabbedview.helper import readable_ogds_author
 from opengever.tabbedview.helper import readable_ogds_user
 from opengever.tabbedview.helper import workflow_state
-from opengever.tabbedview.interfaces import IFilterListTableSourceConfig
 from plone.dexterity.interfaces import IDexterityContainer
 from Products.Five.browser.pagetemplatefile import BoundPageTemplate
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
-from zope.component import adapts
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
-from zope.interface import implements
-from zope.interface import Interface
-
-
-class OpengeverCatalogListingTab(grok.View, OpengeverTab, CatalogListingView):
-    """Base view for catalog listing tabs.
-    """
-
-    grok.context(ITabbedView)
-    grok.require('zope2.View')
-
-    columns = ()
-
-    search_index = 'SearchableText'
-    sort_on = 'modified'
-    sort_order = 'reverse'
-
-    __call__ = CatalogListingView.__call__
-    update = CatalogListingView.update
-    render = __call__
 
 
 def translate_public_trial_options(item, value):
@@ -87,7 +62,7 @@ class DocumentsProxy(grok.View):
         return self.context.restrictedTraverse(prefered_view)()
 
 
-class Documents(OpengeverCatalogListingTab):
+class Documents(BaseCatalogListingTab):
     """List all documents recursively. Working copies are not listed.
     """
 
@@ -175,10 +150,8 @@ class Documents(OpengeverCatalogListingTab):
         return '{}-gallery'.format(self.view_name)
 
 
-class Dossiers(OpengeverCatalogListingTab):
+class Dossiers(BaseCatalogListingTab):
     grok.name('tabbedview_view-dossiers')
-
-    implements(IFilterListTableSourceConfig)
 
     selection = ViewPageTemplateFile("selection_with_filters.pt")
     template = ViewPageTemplateFile("generic_with_filters.pt")
@@ -250,50 +223,6 @@ class SubDossiers(Dossiers):
     grok.name('tabbedview_view-subdossiers')
 
     search_options = {'is_subdossier': True}
-
-
-class FilterListTableSource(grok.MultiAdapter, CatalogTableSource):
-    """Catalog Table source Adapter,
-    which provides open/all state filtering."""
-
-    adapts(IFilterListTableSourceConfig, Interface)
-
-    def build_query(self):
-        """extends the standard catalog soruce build_query with the
-        extend_query_with_filter functionality.
-        """
-
-        # initalize config
-        self.config.update_config()
-
-        # get the base query from the config
-        query = self.config.get_base_query()
-        query = self.validate_base_query(query)
-
-        # ordering
-        query = self.extend_query_with_ordering(query)
-
-        # filter
-        if self.config.filter_text:
-            query = self.extend_query_with_textfilter(
-                query, self.config.filter_text)
-
-        # reviewstate-filter
-        if self.config.filterlist_available:
-            query = self.extend_query_with_filter(query)
-
-        # batching
-        if self.config.batching_enabled and not self.config.lazy:
-            query = self.extend_query_with_batching(query)
-
-        return query
-
-    def extend_query_with_filter(self, query):
-        """Extends the given query with a filter,
-        which show just objects in the open state."""
-
-        selected_filter_id = self.request.get(self.config.filterlist_name)
-        return self.config.filterlist.update_query(query, selected_filter_id)
 
 
 class Tasks(GlobalTaskListingTab):

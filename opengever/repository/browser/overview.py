@@ -1,10 +1,10 @@
 from five import grok
 from opengever.repository.repositoryroot import IRepositoryRoot
-from opengever.tabbedview.browser.base import OpengeverTab
+from opengever.tabbedview import GeverTabMixin
 from Products.CMFCore.utils import getToolByName
 
 
-class RepositoryRootOverview(grok.View, OpengeverTab):
+class RepositoryRootOverview(grok.View, GeverTabMixin):
 
     grok.context(IRepositoryRoot)
     grok.name('tabbedview_view-overview')

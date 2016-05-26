@@ -5,6 +5,16 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Refactor opengever.tabbedview:
+
+  - Provide better base classes for tabs
+  - Expose base classes in opengever.tabbedview instead of a submodule
+  - Provide support for state filters in all tabs with minimal effort
+  - remove duplicate/dead code
+  - drop unused clients-listing
+
+  [deiferni]
+
 - Log CSRF incidents to Sentry (if possible).
   [lgraf]
 
@@ -35,6 +45,7 @@ Changelog
   ftw.showroom display the overlay.
 
   The initial integration also adds the following UI components:
+
   - A gallery with small preview-thumbnails for documents of a dossier
   - A large preview thumbnail on the document overview
   - Small preview-thumbnails for search-results

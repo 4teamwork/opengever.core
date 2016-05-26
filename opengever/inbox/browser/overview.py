@@ -5,13 +5,13 @@ from opengever.globalindex.model.task import Task
 from opengever.inbox import _
 from opengever.inbox.inbox import IInbox
 from opengever.ogds.base.utils import get_current_org_unit
-from opengever.tabbedview.browser.base import OpengeverTab
+from opengever.tabbedview import GeverTabMixin
 from opengever.task import OPEN_TASK_STATES
 from plone import api
 from sqlalchemy import desc
 
 
-class InboxOverview(BoxesViewMixin, grok.View, OpengeverTab):
+class InboxOverview(BoxesViewMixin, grok.View, GeverTabMixin):
 
     show_searchform = False
 

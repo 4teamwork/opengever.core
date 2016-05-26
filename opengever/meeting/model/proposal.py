@@ -4,11 +4,6 @@ from opengever.base.oguid import Oguid
 from opengever.base.utils import escape_html
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
-from opengever.meeting.command import CreateGeneratedDocumentCommand
-from opengever.meeting.command import ExcerptOperations
-from opengever.meeting.command import OgCopyCommandWithElevatedPrivileges
-from opengever.meeting.command import UpdateExcerptInDossierCommand
-from opengever.meeting.command import UpdateGeneratedDocumentCommand
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import proposalhistory
 from opengever.meeting.model.generateddocument import GeneratedExcerpt
@@ -283,6 +278,9 @@ class Proposal(Base):
         return self.oguid.resolve_object()
 
     def generate_excerpt(self, agenda_item):
+        from opengever.meeting.command import CreateGeneratedDocumentCommand
+        from opengever.meeting.command import ExcerptOperations
+
         proposal_obj = self.resolve_sumitted_proposal()
         operations = ExcerptOperations(agenda_item)
         CreateGeneratedDocumentCommand(
@@ -298,6 +296,10 @@ class Proposal(Base):
         self.session.add(proposalhistory.ProposalReopened(proposal=self))
 
     def update_excerpt(self, agenda_item):
+        from opengever.meeting.command import ExcerptOperations
+        from opengever.meeting.command import UpdateExcerptInDossierCommand
+        from opengever.meeting.command import UpdateGeneratedDocumentCommand
+
         operations = ExcerptOperations(agenda_item)
         UpdateGeneratedDocumentCommand(
             self.submitted_excerpt_document,
@@ -327,6 +329,8 @@ class Proposal(Base):
         """Copies the submitted excerpt to the source dossier and returns
         the intid of the created document.
         """
+        from opengever.meeting.command import OgCopyCommandWithElevatedPrivileges
+
         dossier = self.resolve_proposal().get_containing_dossier()
         response = OgCopyCommandWithElevatedPrivileges(
             self.resolve_submitted_excerpt_document(),
