@@ -5,6 +5,9 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Enables to replace a checked out document by Drag'n'Drop.
+  [phgross]
+
 - Redirect to meeting tab when a meeting has been created.
   [deiferni]
 

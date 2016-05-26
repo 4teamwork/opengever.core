@@ -10,6 +10,7 @@ from opengever.document.events import ObjectCheckoutCanceledEvent
 from opengever.document.events import ObjectRevertedToVersion
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.trash.trash import ITrashed
+from plone import api
 from plone.locking.interfaces import IRefreshableLockable
 from plone.namedfile.file import NamedBlobFile
 from Products.CMFCore.utils import getToolByName
@@ -36,6 +37,12 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         returns `None`.
         """
         return self.annotations.get(CHECKIN_CHECKOUT_ANNOTATIONS_KEY, None)
+
+    def is_checked_out_by_current_user(self):
+        return self.get_checked_out_by() == api.user.get_current().getId()
+
+    def is_file_change_allowed(self):
+        return self.is_checked_out_by_current_user() and not self.is_locked()
 
     def is_checkout_allowed(self):
         """Checks whether checkout is allowed for the current user on the
