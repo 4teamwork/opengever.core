@@ -6,9 +6,6 @@ from opengever.base.oguid import Oguid
 from opengever.base.utils import escape_html
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
-from opengever.meeting.command import CreateGeneratedDocumentCommand
-from opengever.meeting.command import ProtocolOperations
-from opengever.meeting.command import UpdateGeneratedDocumentCommand
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import Period
 from opengever.meeting.model.membership import Membership
@@ -170,6 +167,9 @@ class Meeting(Base):
 
     def update_protocol_document(self):
         """Update or create meeting's protocol."""
+        from opengever.meeting.command import CreateGeneratedDocumentCommand
+        from opengever.meeting.command import ProtocolOperations
+        from opengever.meeting.command import UpdateGeneratedDocumentCommand
 
         operations = ProtocolOperations()
         if self.has_protocol_document():
