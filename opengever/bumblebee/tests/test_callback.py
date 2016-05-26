@@ -4,7 +4,8 @@ from ftw.builder import create
 from ftw.bumblebee.tests.helpers import download_token_for
 from ftw.testing import freeze
 from opengever.bumblebee.browser.callback import StoreArchivalFile
-from opengever.document.archival_file import ARCHIVAL_FILE_STATE_FAILED
+from opengever.document.archival_file import ARCHIVAL_FILE_STATE_FAILED_TEMPORARILY
+from opengever.document.archival_file import ARCHIVAL_FILE_STATE_FAILED_PERMANENTLY
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.testing import FunctionalTestCase
 from plone.namedfile.file import NamedBlobFile
@@ -35,7 +36,21 @@ class TestStoreArchivalFile(FunctionalTestCase):
         self.assertEquals('application/pdf', archival_file.contentType)
         self.assertEquals('Test String', archival_file.data)
 
-    def test_sets_failed_state_when_conversion_not_suceeded(self):
+    def test_sets_failed_permanently_state_when_conversion_was_skipped(self):
+        with freeze(datetime(2016, 4, 25, 10, 24)):
+            body = {"status": "skipped",
+                    "error": "File is password protected."}
+            self.request.set('BODY', json.dumps(body))
+            self.request.set('token', download_token_for(self.document))
+
+            view = StoreArchivalFile(self.document, self.request)
+            view()
+
+        self.assertEquals(
+            ARCHIVAL_FILE_STATE_FAILED_PERMANENTLY,
+            IDocumentMetadata(self.document).archival_file_state)
+
+    def test_sets_failed_temporary_state_when_conversion_has_not_succeeded_or_skipped(self):
         with freeze(datetime(2016, 4, 25, 10, 24)):
             body = {"status": "failed",
                     "error": "Some parts of the document could not be processed"}
@@ -46,5 +61,5 @@ class TestStoreArchivalFile(FunctionalTestCase):
             view()
 
         self.assertEquals(
-            ARCHIVAL_FILE_STATE_FAILED,
+            ARCHIVAL_FILE_STATE_FAILED_TEMPORARILY,
             IDocumentMetadata(self.document).archival_file_state)
