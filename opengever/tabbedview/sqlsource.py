@@ -1,7 +1,6 @@
 from five import grok
-from ftw.table.basesource import BaseTableSource
 from ftw.table.interfaces import ITableSource
-from opengever.tabbedview.filtered_source import FilteredTableSourceMixin
+from opengever.tabbedview import GeverTableSource
 from opengever.tabbedview.interfaces import IGeverTableSourceConfig
 from sqlalchemy import or_
 from sqlalchemy.orm.query import Query
@@ -11,7 +10,7 @@ from sqlalchemy.sql.expression import desc
 from zope.interface import Interface
 
 
-class SqlTableSource(grok.MultiAdapter, FilteredTableSourceMixin, BaseTableSource):
+class SqlTableSource(GeverTableSource):
     """Base table source adapter for every listing,
        that gets the content from sql.
     """
