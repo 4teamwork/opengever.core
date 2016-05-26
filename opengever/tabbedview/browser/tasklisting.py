@@ -142,7 +142,7 @@ class GlobalTaskTableSource(SqlTableSource):
     def avoid_duplicates(self, query):
         """If a task has a successor task, list only one of them.
 
-        List the only the one which is assigned to this client.
+        List only the one which is assigned to this client.
         """
         query = query.filter(
             or_(
