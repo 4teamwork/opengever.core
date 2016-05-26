@@ -64,7 +64,6 @@ def linked_no_icon(item, value):
 
 
 class Contacts(BaseCatalogListingTab):
-    """ Listing of all Task of the authenticated Member """
 
     grok.name('tabbedview_view-local')
     grok.context(IDexterityContainer)
@@ -101,7 +100,7 @@ class Contacts(BaseCatalogListingTab):
     selection = ViewPageTemplateFile("no_selection_amount.pt")
 
     def update_config(self):
-        BaseCatalogListingTab.update_config(self)
+        super(BaseCatalogListingTab, self).update_config()
 
         # configuration for the extjs grid
         extjs_conf = {'auto_expand_column': 'lastname'}
