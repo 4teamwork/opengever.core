@@ -75,6 +75,11 @@ class ICheckinCheckoutManager(Interface):
         """Checkout the adapted document.
         """
 
+    def is_checked_out_by_current_user():
+        """Returns True if the document is checked out by the currently
+        logged in user otherwise False.
+        """
+
     def is_checkin_allowed():
         """Checks whether checkin is allowed for the current user on the
         adapted document.

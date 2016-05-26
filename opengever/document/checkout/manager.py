@@ -41,7 +41,7 @@ class CheckinCheckoutManager(grok.MultiAdapter):
     def is_checked_out_by_current_user(self):
         return self.get_checked_out_by() == api.user.get_current().getId()
 
-    def is_file_change_allowed(self):
+    def is_file_upload_allowed(self):
         return self.is_checked_out_by_current_user() and not self.is_locked()
 
     def is_checkout_allowed(self):

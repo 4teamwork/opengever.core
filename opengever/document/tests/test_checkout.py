@@ -200,23 +200,23 @@ class TestManagerHelpers(FunctionalTestCase):
         doc = create(Builder('document'))
         self.assertFalse(self.get_manager(doc).is_checked_out_by_current_user())
 
-    def test_file_change_is_disallowed_when_document_is_locked(self):
+    def test_file_upload_is_disallowed_when_document_is_locked(self):
         doc = create(Builder('document').checked_out())
         IRefreshableLockable(doc).lock()
 
-        self.assertFalse(self.get_manager(doc).is_file_change_allowed())
+        self.assertFalse(self.get_manager(doc).is_file_upload_allowed())
 
-    def test_file_change_is_disallowed_when_document_is_checked_out_by_other_user(self):
+    def test_file_upload_is_disallowed_when_document_is_checked_out_by_other_user(self):
         doc = create(Builder('document').checked_out_by('hugo.boss'))
-        self.assertFalse(self.get_manager(doc).is_file_change_allowed())
+        self.assertFalse(self.get_manager(doc).is_file_upload_allowed())
 
-    def test_file_change_is_disallowed_when_document_is_not_checked_out(self):
+    def test_file_upload_is_disallowed_when_document_is_not_checked_out(self):
         doc = create(Builder('document'))
-        self.assertFalse(self.get_manager(doc).is_file_change_allowed())
+        self.assertFalse(self.get_manager(doc).is_file_upload_allowed())
 
-    def test_file_change_is_allowed_when_document_is_checked_out_and_not_locked(self):
+    def test_file_upload_is_allowed_when_document_is_checked_out_and_not_locked(self):
         doc = create(Builder('document').checked_out())
-        self.assertTrue(self.get_manager(doc).is_file_change_allowed())
+        self.assertTrue(self.get_manager(doc).is_file_upload_allowed())
 
 
 class TestCheckinCheckoutManager(FunctionalTestCase):

@@ -20,16 +20,16 @@ class QuickUploadFileUpdater(grok.Adapter):
         self.context = aq_inner(context)
 
     def __call__(self, filename, title, description, content_type, data, portal_type):
-        if not self.upload_allowed():
+        if not self.is_upload_allowed():
             raise Unauthorized
 
         self.update_file(filename, content_type, data)
         return {'success': self.context}
 
-    def upload_allowed(self):
+    def is_upload_allowed(self):
         manager = getMultiAdapter((self.context, self.context.REQUEST),
                                   ICheckinCheckoutManager)
-        return manager.is_file_change_allowed()
+        return manager.is_file_upload_allowed()
 
     def update_file(self, filename, content_type, data):
         self.context.file = NamedBlobFile(
