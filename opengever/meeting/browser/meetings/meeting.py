@@ -230,15 +230,18 @@ class AddMeetingDossierView(WizzardWrappedAddForm):
                     self.status = self.formErrorsMessage
                     return
 
+                committee_oguid = get_committee_oguid()
                 dossier = self.create_meeting_dossier(data)
-                meeting = self.create_meeting(dossier, get_committee_oguid())
+                meeting = self.create_meeting(dossier, committee_oguid)
 
                 api.portal.show_message(
                     _(u"The meeting and its dossier were created successfully"),
                     request=self.request,
                     type="info")
 
-                return self.request.RESPONSE.redirect(meeting.get_url())
+                committee = committee_oguid.resolve_object()
+                return self.request.RESPONSE.redirect(
+                    '{}#meetings'.format(committee.absolute_url()))
 
             @buttonAndHandler(pd_mf(u'Cancel'), name='cancel')
             def handleCancel(self, action):

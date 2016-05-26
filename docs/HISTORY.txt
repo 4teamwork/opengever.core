@@ -5,6 +5,9 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Redirect to meeting tab when a meeting has been created.
+  [deiferni]
+
 - Decouple default values for fields from any forms (as much as possible).
   This is necessary groundwork for later changes that will make sure that
   default values also get set during programmatic content creation.
