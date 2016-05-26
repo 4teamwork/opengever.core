@@ -1,7 +1,25 @@
 <div i18n:domain="opengever.meeting" id="committees_view"
-     tal:define="committees view/committees">
+     tal:define="committees view/committees;
+                 filterlist_name python: view.filterlist_name;
+                 filter_id python: view.request.get(filterlist_name)">
 
-  <div tal:repeat="committee committees" class="committee_box">
+  <div tal:condition="view/filterlist_available"
+        tal:attributes="id view/filterlist_name" class="state_filters">
+
+    <span i18n:translate="" i18n:domain="opengever.tabbedview">State</span>
+
+    <a tal:repeat="filter python: view.filterlist.filters()"
+       tal:attributes="id filter/id;
+                       class python: filter.is_active(filter_id) and 'active'"
+       tal:content="filter/label"
+       href="javascript:void(0);"
+       i18n:domain="opengever.tabbedview">
+    </a>
+
+  </div>
+
+  <div class="committee_box" tal:repeat="committee committees"
+       tal:attributes="class string:committee_box ${committee/state_class}">
 
     <div class="header">
       <a href="" tal:attributes="href committee/url">

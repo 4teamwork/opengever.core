@@ -55,8 +55,8 @@ class TestDossierListing(FunctionalTestCase):
                              data={'dossier_state_filter': 'filter_all'})
 
         table = browser.css('.listing').first
-        self.assertEquals(['Dossier A', 'Dossier B', 'Dossier C'],
-                          [row.get('Title') for row in table.dicts()])
+        self.assertItemsEqual(['Dossier A', 'Dossier B', 'Dossier C'],
+                              [row.get('Title') for row in table.dicts()])
 
 
     @browsing

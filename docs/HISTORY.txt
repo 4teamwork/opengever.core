@@ -5,6 +5,9 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Add committee model workflow, to allow de- or reactivating a committee.
+  [phgross]
+
 - Bumblebee: Implement gallery preview image fallback.
   [Kevin Bieri]
 

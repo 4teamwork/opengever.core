@@ -6,8 +6,8 @@ from opengever.base.transport import REQUEST_KEY
 from opengever.base.transport import Transporter
 from opengever.locking.lock import SYS_LOCK
 from opengever.meeting import _
-from opengever.meeting.model import GeneratedExcerpt
-from opengever.meeting.model import GeneratedProtocol
+from opengever.meeting.model.generateddocument import GeneratedExcerpt
+from opengever.meeting.model.generateddocument import GeneratedProtocol
 from opengever.meeting.model.proposalhistory import Submitted, DocumentUpdated, DocumentSubmitted
 from opengever.meeting.model.submitteddocument import SubmittedDocument
 from opengever.meeting.protocol import ExcerptProtocolData

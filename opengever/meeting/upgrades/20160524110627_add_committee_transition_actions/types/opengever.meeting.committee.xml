@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<object name="opengever.meeting.committee" meta_type="Dexterity FTI"
+        xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+  <action
+      action_id="deactivate-committee"
+      visible="True"
+      title="Deactivate"
+      url_expr="string:${object_url}/@@deactivate"
+      condition_expr="object/@@deactivate/available"
+      category="object_buttons">
+    <permission value="Modify portal content"/>
+  </action>
+
+  <action
+      action_id="reactivate-committee"
+      visible="True"
+      title="Activate"
+      url_expr="string:${object_url}/@@reactivate"
+      condition_expr="object/@@reactivate/available"
+      category="object_buttons">
+    <permission value="Modify portal content"/>
+  </action>
+
+</object>

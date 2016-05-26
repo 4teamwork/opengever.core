@@ -1,6 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.oguid import Oguid
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
@@ -382,6 +383,26 @@ class TestProposal(FunctionalTestCase):
         browser.css('#pending-submitted').first.click()
 
         self.assertEqual(Proposal.STATE_SUBMITTED, proposal.get_state())
+
+    @browsing
+    def test_proposal_can_not_be_submitted_when_committee_is_inactive(self, browser):
+        committee = create(Builder('committee'))
+        proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .having(title='Mach doch',
+                                  committee=committee.load_model()))
+
+        committee.load_model().deactivate()
+        transaction.commit()
+
+        browser.login().open(proposal, view='tabbedview_view-overview')
+        browser.css('#pending-submitted').first.click()
+
+        self.assertEqual(
+            [u'The selected committeee has been deactivated, the proposal '
+             'could not been submitted.'], error_messages())
+        self.assertEqual(proposal.absolute_url(), browser.url)
+        self.assertEqual(Proposal.STATE_PENDING, proposal.load_model().get_state())
 
     @browsing
     def test_proposal_can_be_submitted_without_permission_on_commitee(self, browser):

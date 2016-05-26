@@ -57,6 +57,10 @@ class CommitteeQuery(BaseQuery):
         """
         return self.filter(Committee.oguid == oguid).first()
 
+    def active(self):
+        return self.filter(
+            Committee.workflow_state == Committee.STATE_ACTIVE.name)
+
 
 Committee.query_cls = CommitteeQuery
 
@@ -170,6 +174,10 @@ class MeetingQuery(BaseQuery):
 
     def get_last_meeting(self, committee):
         return self._past_meetings(committee).first()
+
+    def pending_meetings(self, committee):
+        query = self._committee_meetings(committee)
+        return query.filter(Meeting.workflow_state != Meeting.STATE_CLOSED.name)
 
     def by_dossier(self, dossier):
         dossier_oguid = Oguid.for_object(dossier)

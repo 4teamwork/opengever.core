@@ -1,7 +1,7 @@
 from five import grok
+from opengever.meeting.model import Committee
 from opengever.meeting.model import Member
 from opengever.meeting.model import Membership
-from opengever.meeting.service import meeting_service
 from plone import api
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.interfaces import IVocabularyFactory
@@ -16,11 +16,21 @@ class CommitteeVocabulary(grok.GlobalUtility):
     def __call__(self, context):
         terms = []
 
-        for committee in meeting_service().all_committees():
+        for committee in self.get_committees():
             terms.append(SimpleTerm(value=committee,
                                     token=committee.committee_id,
                                     title=committee.title))
         return SimpleVocabulary(terms)
+
+    def get_committees(self):
+        return Committee.query.all()
+
+
+class ActiveCommitteeVocabulary(CommitteeVocabulary):
+    grok.name('opengever.meeting.ActiveCommitteeVocabulary')
+
+    def get_committees(self):
+        return Committee.query.active().all()
 
 
 class MemberVocabulary(grok.GlobalUtility):

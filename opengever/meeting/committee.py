@@ -123,6 +123,11 @@ class Committee(ModelContainer):
             raise KeyError(id_)
         return default
 
+    def is_active(self):
+        """Check if committee is in a active state.
+        """
+        return self.load_model().is_active()
+
     def Title(self):
         model = self.load_model()
         if not model:

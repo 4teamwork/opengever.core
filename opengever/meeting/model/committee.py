@@ -1,7 +1,14 @@
 from opengever.base.model import Base
 from opengever.base.oguid import Oguid
 from opengever.base.utils import escape_html
+from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
+from opengever.meeting import _
+from opengever.meeting.model import Meeting
 from opengever.meeting.model.membership import Membership
+from opengever.meeting.model.proposal import Proposal
+from opengever.meeting.workflow import State
+from opengever.meeting.workflow import Transition
+from opengever.meeting.workflow import Workflow
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models import GROUP_ID_LENGTH
 from opengever.ogds.models import UNIT_ID_LENGTH
@@ -18,6 +25,23 @@ class Committee(Base):
     __tablename__ = 'committees'
     __table_args__ = (UniqueConstraint('admin_unit_id', 'int_id'), {})
 
+
+    STATE_ACTIVE = State('active', is_default=True,
+                         title=_('active', default='Active'))
+    STATE_INACTIVE = State('inactive', title=_('inactive', default='Inactive'))
+
+    workflow = Workflow(
+        [STATE_ACTIVE, STATE_INACTIVE],
+        [Transition(
+            'active', 'inactive',
+            title=_('label_deactivate', default='Deactivate committee'),
+            visible=False),
+         Transition(
+             'inactive', 'active',
+             title=_('label_reactivate', default='Reactivate committee'),
+             visible=False)],
+    )
+
     committee_id = Column("id", Integer, Sequence("committee_id_seq"),
                           primary_key=True)
 
@@ -29,9 +53,15 @@ class Committee(Base):
     oguid = composite(Oguid, admin_unit_id, int_id)
     title = Column(String(256))
     physical_path = Column(String(256), nullable=False)
+    workflow_state = Column(String(WORKFLOW_STATE_LENGTH),
+                            nullable=False,
+                            default=workflow.default_state.name)
 
     def __repr__(self):
         return '<Committee {}>'.format(repr(self.title))
+
+    def is_active(self):
+        return self.get_state() == self.STATE_ACTIVE
 
     def get_admin_unit(self):
         return ogds_service().fetch_admin_unit(self.admin_unit_id)
@@ -52,6 +82,9 @@ class Committee(Base):
 
         return '/'.join((admin_unit.public_url, self.physical_path))
 
+    def get_state(self):
+        return self.workflow.get_state(self.workflow_state)
+
     def resolve_committee(self):
         return self.oguid.resolve_object()
 
@@ -64,3 +97,31 @@ class Committee(Base):
     def get_active_memberships(self):
         return Membership.query.filter_by(
             committee=self).only_active()
+
+    def deactivate(self):
+        if self.has_pending_meetings() or self.has_unscheduled_proposals():
+            return False
+
+        return self.workflow.execute_transition(None, self, 'active-inactive')
+
+    def reactivate(self):
+        return self.workflow.execute_transition(None, self, 'inactive-active')
+
+    def check_deactivate_conditions(self):
+        conditions = [self.all_meetings_closed,
+                      self.no_unscheduled_proposals]
+
+        for condition in conditions:
+            if not condition():
+                return False
+
+        return True
+
+    def has_pending_meetings(self):
+        return bool(Meeting.query.pending_meetings(self).count())
+
+    def has_unscheduled_proposals(self):
+        query = Proposal.query.filter_by(
+            committee=self, workflow_state=Proposal.STATE_SUBMITTED.name)
+
+        return bool(query.count())

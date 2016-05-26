@@ -68,7 +68,7 @@
           category="folder_factories"
           url_expr="string:${object_url}/add-meeting"
           icon_expr=""
-          condition_expr="">
+          condition_expr="context/is_active">
       <permission value="Add portal content"/>
   </action>
 
@@ -78,7 +78,7 @@
           category="folder_factories"
           url_expr="string:${object_url}/add-membership"
           icon_expr=""
-          condition_expr="">
+          condition_expr="context/is_active">
       <permission value="Add portal content"/>
   </action>
 
@@ -119,6 +119,26 @@
         url_expr="string:${object_url}/@@close-period"
         condition_expr="object/@@close-period/available"
         category="object_buttons">
+    <permission value="Modify portal content"/>
+  </action>
+
+  <action
+      action_id="deactivate-committee"
+      visible="True"
+      title="Deactivate"
+      url_expr="string:${object_url}/@@deactivate"
+      condition_expr="object/@@deactivate/available"
+      category="object_buttons">
+    <permission value="Modify portal content"/>
+  </action>
+
+  <action
+      action_id="reactivate-committee"
+      visible="True"
+      title="Activate"
+      url_expr="string:${object_url}/@@reactivate"
+      condition_expr="object/@@reactivate/available"
+      category="object_buttons">
     <permission value="Modify portal content"/>
   </action>
 

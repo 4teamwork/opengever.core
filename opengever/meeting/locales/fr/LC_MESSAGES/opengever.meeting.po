@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-04-14 14:52+0000\n"
+"POT-Creation-Date: 2016-05-25 06:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,7 +57,7 @@ msgstr ""
 msgid "Add period"
 msgstr ""
 
-#: ./opengever/meeting/command.py:379
+#: ./opengever/meeting/command.py:380
 msgid "Additional document ${title} has been submitted successfully"
 msgstr "Le document supplémentaire ${title} a été soumis avec succès"
 
@@ -344,7 +344,7 @@ msgstr ""
 msgid "Update or create the protocol"
 msgstr ""
 
-#: ./opengever/meeting/browser/submitdocuments.py:194
+#: ./opengever/meeting/browser/submitdocuments.py:196
 msgid "Updated with a newer docment version from proposal's dossier."
 msgstr "Le document a été écrasé par une version plus récente du dossier proposé"
 
@@ -357,6 +357,7 @@ msgid "Updated with a newer generated version from meeting ${title}."
 msgstr "Actualisé avec une nouvelle version de la séance ${title}."
 
 #. Default: "Active"
+#: ./opengever/meeting/model/committee.py:28
 #: ./opengever/meeting/model/period.py:20
 msgid "active"
 msgstr ""
@@ -426,7 +427,7 @@ msgstr ""
 
 #. Default: "Submit Attachments"
 #: ./opengever/meeting/browser/documents/submit.py:81
-#: ./opengever/meeting/browser/submitdocuments.py:73
+#: ./opengever/meeting/browser/submitdocuments.py:74
 msgid "button_submit_attachments"
 msgstr ""
 
@@ -527,7 +528,7 @@ msgstr "Jusqu'à"
 
 #. Default: "Decide"
 #: ./opengever/meeting/model/agendaitem.py:36
-#: ./opengever/meeting/model/proposal.py:134
+#: ./opengever/meeting/model/proposal.py:141
 msgid "decide"
 msgstr "Décider"
 
@@ -538,7 +539,7 @@ msgstr ""
 
 #. Default: "Decided"
 #: ./opengever/meeting/model/agendaitem.py:30
-#: ./opengever/meeting/model/proposal.py:117
+#: ./opengever/meeting/model/proposal.py:124
 msgid "decided"
 msgstr "Décidé"
 
@@ -609,9 +610,14 @@ msgstr ""
 msgid "hold"
 msgstr ""
 
+#. Default: "Inactive"
+#: ./opengever/meeting/model/committee.py:30
+msgid "inactive"
+msgstr ""
+
 #. Default: "Attachments"
 #: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt:26
-#: ./opengever/meeting/browser/submitdocuments.py:31
+#: ./opengever/meeting/browser/submitdocuments.py:32
 #: ./opengever/meeting/proposal.py:142
 msgid "label_attachments"
 msgstr ""
@@ -626,6 +632,16 @@ msgstr ""
 #. Default: "Close"
 #: ./opengever/meeting/browser/meetings/protocol.py:239
 msgid "label_close"
+msgstr ""
+
+#. Default: "Committee deactivated successfully"
+#: ./opengever/meeting/browser/committee.py:77
+msgid "label_committe_deactivated"
+msgstr ""
+
+#. Default: "Committee reactivated successfully"
+#: ./opengever/meeting/browser/committee.py:133
+msgid "label_committe_reactivated"
 msgstr ""
 
 #. Default: "Committee"
@@ -653,12 +669,12 @@ msgid "label_copy_for_attention"
 msgstr ""
 
 #. Default: "Current members"
-#: ./opengever/meeting/browser/committee.py:36
+#: ./opengever/meeting/browser/committee.py:39
 msgid "label_current_members"
 msgstr "Membres actuels"
 
 #. Default: "Current Period"
-#: ./opengever/meeting/browser/committee.py:21
+#: ./opengever/meeting/browser/committee.py:24
 msgid "label_current_period"
 msgstr ""
 
@@ -675,6 +691,11 @@ msgstr "De"
 #: ./opengever/meeting/browser/templates/member.pt:51
 msgid "label_date_to"
 msgstr "Jusqu'à"
+
+#. Default: "Deactivate committee"
+#: ./opengever/meeting/model/committee.py:36
+msgid "label_deactivate"
+msgstr ""
 
 #. Default: "Decide"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:87
@@ -799,7 +820,7 @@ msgid "label_insert"
 msgstr ""
 
 #. Default: "Last Meeting:"
-#: ./opengever/meeting/browser/committeecontainertabs_templates/committee.pt:27
+#: ./opengever/meeting/browser/committeecontainertabs_templates/committee.pt:45
 msgid "label_last_meeting"
 msgstr "Dernière séance:"
 
@@ -847,7 +868,7 @@ msgid "label_member"
 msgstr "Membre"
 
 #. Default: "Next Meeting:"
-#: ./opengever/meeting/browser/committeecontainertabs_templates/committee.pt:35
+#: ./opengever/meeting/browser/committeecontainertabs_templates/committee.pt:53
 msgid "label_next_meeting"
 msgstr "Prochaine séance:"
 
@@ -906,6 +927,11 @@ msgstr ""
 #: ./opengever/meeting/browser/meetings/protocol.py:141
 #: ./opengever/meeting/proposal.py:68
 msgid "label_publish_in"
+msgstr ""
+
+#. Default: "Reactivate committee"
+#: ./opengever/meeting/model/committee.py:40
+msgid "label_reactivate"
 msgstr ""
 
 #. Default: "Comment"
@@ -984,12 +1010,12 @@ msgid "label_unschedule_agenda_item_confirm_text"
 msgstr ""
 
 #. Default: "Unscheduled proposals"
-#: ./opengever/meeting/browser/committee.py:30
+#: ./opengever/meeting/browser/committee.py:33
 msgid "label_unscheduled_proposals"
 msgstr "Propositions imprévues"
 
 #. Default: "Upcoming meetings"
-#: ./opengever/meeting/browser/committee.py:25
+#: ./opengever/meeting/browser/committee.py:28
 msgid "label_upcoming_meetings"
 msgstr "Prochaines séances"
 
@@ -1037,6 +1063,11 @@ msgstr ""
 msgid "msg_hold_meeting_dialog"
 msgstr ""
 
+#. Default: "The selected committeee has been deactivated, the proposal could not been submitted."
+#: ./opengever/meeting/model/proposal.py:41
+msgid "msg_inactive_committee_selected"
+msgstr ""
+
 #. Default: "The meeting ${title} has been successfully closed, the excerpts have been generated and sent back to the initial dossier."
 #: ./opengever/meeting/model/meeting.py:59
 msgid "msg_meeting_successfully_closed"
@@ -1047,8 +1078,13 @@ msgstr ""
 msgid "msg_membership_deleted"
 msgstr ""
 
+#. Default: "Not all meetings are closed."
+#: ./opengever/meeting/browser/committee.py:104
+msgid "msg_pending_meetings"
+msgstr ""
+
 #. Default: "Proposal successfully submitted."
-#: ./opengever/meeting/model/proposal.py:43
+#: ./opengever/meeting/model/proposal.py:50
 msgid "msg_proposal_submitted"
 msgstr ""
 
@@ -1057,8 +1093,13 @@ msgstr ""
 msgid "msg_successfully_deleted"
 msgstr ""
 
+#. Default: "There are unscheduled proposals submitted to this committee."
+#: ./opengever/meeting/browser/committee.py:114
+msgid "msg_unscheduled_proposals"
+msgstr ""
+
 #. Default: "New unschedulded proposals:"
-#: ./opengever/meeting/browser/committeecontainertabs_templates/committee.pt:14
+#: ./opengever/meeting/browser/committeecontainertabs_templates/committee.pt:32
 msgid "new_unscheduled_proposals"
 msgstr "Nouvelles propositions soumises"
 
@@ -1074,7 +1115,7 @@ msgstr ""
 #. Default: "Pending"
 #: ./opengever/meeting/model/agendaitem.py:29
 #: ./opengever/meeting/model/meeting.py:71
-#: ./opengever/meeting/model/proposal.py:112
+#: ./opengever/meeting/model/proposal.py:119
 msgid "pending"
 msgstr "En modification"
 
@@ -1138,13 +1179,13 @@ msgid "protocol"
 msgstr "Procès-verbal"
 
 #. Default: "Protocol-Excerpt"
-#: ./opengever/meeting/protocol.py:145
+#: ./opengever/meeting/protocol.py:146
 msgid "protocol_excerpt"
 msgstr ""
 
 #. Default: "Reject"
 #: ./opengever/meeting/browser/proposaltransitions.py:61
-#: ./opengever/meeting/model/proposal.py:128
+#: ./opengever/meeting/model/proposal.py:135
 msgid "reject"
 msgstr ""
 
@@ -1164,12 +1205,12 @@ msgid "revision"
 msgstr ""
 
 #. Default: "Schedule"
-#: ./opengever/meeting/model/proposal.py:130
+#: ./opengever/meeting/model/proposal.py:137
 msgid "schedule"
 msgstr "Mettre à l`ordre du jour"
 
 #. Default: "Scheduled"
-#: ./opengever/meeting/model/proposal.py:116
+#: ./opengever/meeting/model/proposal.py:123
 msgid "scheduled"
 msgstr "Mis à l'ordre du jour"
 
@@ -1182,12 +1223,12 @@ msgid "status"
 msgstr ""
 
 #. Default: "Submit"
-#: ./opengever/meeting/model/proposal.py:126
+#: ./opengever/meeting/model/proposal.py:133
 msgid "submit"
 msgstr "soumettre"
 
 #. Default: "Submitted"
-#: ./opengever/meeting/model/proposal.py:114
+#: ./opengever/meeting/model/proposal.py:121
 msgid "submitted"
 msgstr "Soumis"
 
@@ -1206,7 +1247,7 @@ msgid "time"
 msgstr ""
 
 #. Default: "Remove from schedule"
-#: ./opengever/meeting/model/proposal.py:132
+#: ./opengever/meeting/model/proposal.py:139
 msgid "un-schedule"
 msgstr "Enlever le point de l'ordre du jour"
 
