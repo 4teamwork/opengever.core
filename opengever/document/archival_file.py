@@ -5,11 +5,11 @@ from plone.namedfile.file import NamedBlobFile
 import os
 
 
-ARCHIVAL_FILE_STATE_CONVERTING = 1
-ARCHIVAL_FILE_STATE_CONVERTED = 2
-ARCHIVAL_FILE_STATE_MANUALLY = 3
-ARCHIVAL_FILE_STATE_FAILED_TEMPORARILY = 4
-ARCHIVAL_FILE_STATE_FAILED_PERMANENTLY = 5
+STATE_CONVERTING = 1
+STATE_CONVERTED = 2
+STATE_MANUALLY_PROVIDED = 3
+STATE_FAILED_TEMPORARILY = 4
+STATE_FAILED_PERMANENTLY = 5
 
 
 class ArchivalFileConverter(object):
@@ -18,10 +18,10 @@ class ArchivalFileConverter(object):
         self.document = document
 
     def trigger_conversion(self):
-        if self.get_state() == ARCHIVAL_FILE_STATE_MANUALLY:
+        if self.get_state() == STATE_MANUALLY_PROVIDED:
             return
 
-        self.set_state(ARCHIVAL_FILE_STATE_CONVERTING)
+        self.set_state(STATE_CONVERTING)
         IBumblebeeServiceV3(self.document).queue_conversion(
             PROCESSING_QUEUE, self.get_callback_url(), target_format='pdf/a')
 
@@ -40,16 +40,16 @@ class ArchivalFileConverter(object):
             data=data,
             contentType=mimetype,
             filename=self.get_file_name())
-        self.set_state(ARCHIVAL_FILE_STATE_CONVERTED)
+        self.set_state(STATE_CONVERTED)
 
     def handle_temporary_conversion_failure(self):
-        self.set_state(ARCHIVAL_FILE_STATE_FAILED_TEMPORARILY)
+        self.set_state(STATE_FAILED_TEMPORARILY)
 
     def handle_permanent_conversion_failure(self):
-        self.set_state(ARCHIVAL_FILE_STATE_FAILED_PERMANENTLY)
+        self.set_state(STATE_FAILED_PERMANENTLY)
 
     def set_manually_state(self):
-        self.set_state(ARCHIVAL_FILE_STATE_MANUALLY)
+        self.set_state(STATE_MANUALLY_PROVIDED)
 
     def get_file_name(self):
         filename, ext = os.path.splitext(self.document.file.filename)

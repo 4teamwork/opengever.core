@@ -1,5 +1,5 @@
 from five import grok
-from opengever.document.archival_file import ARCHIVAL_FILE_STATE_MANUALLY
+from opengever.document.archival_file import STATE_MANUALLY_PROVIDED
 from opengever.document.archival_file import ArchivalFileConverter
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import IObjectCheckedInEvent
@@ -49,4 +49,4 @@ def set_archival_file_state(context, event):
                 break
 
     if archival_file_changed:
-        ArchivalFileConverter(context).set_state(ARCHIVAL_FILE_STATE_MANUALLY)
+        ArchivalFileConverter(context).set_state(STATE_MANUALLY_PROVIDED)

@@ -1,9 +1,9 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
-from opengever.document.archival_file import ARCHIVAL_FILE_STATE_CONVERTED
-from opengever.document.archival_file import ARCHIVAL_FILE_STATE_MANUALLY
-from opengever.document.archival_file import ARCHIVAL_FILE_STATE_CONVERTING
+from opengever.document.archival_file import STATE_CONVERTED
+from opengever.document.archival_file import STATE_MANUALLY_PROVIDED
+from opengever.document.archival_file import STATE_CONVERTING
 from opengever.document.archival_file import ArchivalFileConverter
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.testing import FunctionalTestCase
@@ -33,22 +33,22 @@ class TestArchivalFile(FunctionalTestCase):
 
     def test_trigger_conversion_sets_state_to_converting(self):
         ArchivalFileConverter(self.document).trigger_conversion()
-        self.assertEquals(ARCHIVAL_FILE_STATE_CONVERTING,
+        self.assertEquals(STATE_CONVERTING,
                           IDocumentMetadata(self.document).archival_file_state)
 
     def test_trigger_conversion_skip_files_in_manually_state(self):
         document = create(Builder('document')
                           .titled(u'\xdcberpr\xfcfung XY')
                           .with_dummy_content()
-                          .having(archival_file_state=ARCHIVAL_FILE_STATE_MANUALLY))
+                          .having(archival_file_state=STATE_MANUALLY_PROVIDED))
 
         ArchivalFileConverter(self.document).trigger_conversion()
 
-        self.assertEquals(ARCHIVAL_FILE_STATE_MANUALLY,
+        self.assertEquals(STATE_MANUALLY_PROVIDED,
                           IDocumentMetadata(document).archival_file_state)
 
     def test_store_file_sets_state_to_converted(self):
         ArchivalFileConverter(self.document).store_file('TEST DATA')
         self.assertEquals(
-            ARCHIVAL_FILE_STATE_CONVERTED,
+            STATE_CONVERTED,
             IDocumentMetadata(self.document).archival_file_state)
