@@ -4,8 +4,8 @@ from ftw.builder import create
 from ftw.bumblebee.tests.helpers import download_token_for
 from ftw.testing import freeze
 from opengever.bumblebee.browser.callback import StoreArchivalFile
-from opengever.document.archival_file import ARCHIVAL_FILE_STATE_FAILED_TEMPORARILY
-from opengever.document.archival_file import ARCHIVAL_FILE_STATE_FAILED_PERMANENTLY
+from opengever.document.archival_file import STATE_FAILED_TEMPORARILY
+from opengever.document.archival_file import STATE_FAILED_PERMANENTLY
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.testing import FunctionalTestCase
 from plone.namedfile.file import NamedBlobFile
@@ -47,7 +47,7 @@ class TestStoreArchivalFile(FunctionalTestCase):
             view()
 
         self.assertEquals(
-            ARCHIVAL_FILE_STATE_FAILED_PERMANENTLY,
+            STATE_FAILED_PERMANENTLY,
             IDocumentMetadata(self.document).archival_file_state)
 
     def test_sets_failed_temporary_state_when_conversion_has_not_succeeded_or_skipped(self):
@@ -61,5 +61,5 @@ class TestStoreArchivalFile(FunctionalTestCase):
             view()
 
         self.assertEquals(
-            ARCHIVAL_FILE_STATE_FAILED_TEMPORARILY,
+            STATE_FAILED_TEMPORARILY,
             IDocumentMetadata(self.document).archival_file_state)

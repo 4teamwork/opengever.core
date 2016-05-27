@@ -1,7 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
-from opengever.document.archival_file import ARCHIVAL_FILE_STATE_MANUALLY
+from opengever.document.archival_file import STATE_MANUALLY_PROVIDED
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.browser.archival_file_form import can_access_archival_file_form
 from opengever.testing import FunctionalTestCase
@@ -117,5 +117,5 @@ class TestArchivalFileForm(FunctionalTestCase):
             {'Archival File': ('FILE DATA', 'archival_file.pdf')}).submit()
 
         self.assertEquals(
-            ARCHIVAL_FILE_STATE_MANUALLY,
+            STATE_MANUALLY_PROVIDED,
             IDocumentMetadata(self.document).archival_file_state)
