@@ -18,9 +18,3 @@ class StoreArchivalFile(BaseConvertCallbackView):
     def handle_skipped(self):
         ArchivalFileConverter(
             self.context).handle_permanent_conversion_failure()
-
-    def verify_token(self):
-        # XXX currently the bumblebee app does not send a token
-        # https://github.com/4teamwork/bumblebee/issues/15
-        # TODO: Remove and let the BaseConvertCallbackView check the token.
-        return True
