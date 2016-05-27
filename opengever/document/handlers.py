@@ -1,5 +1,4 @@
 from five import grok
-from opengever.document.archival_file import STATE_MANUALLY_PROVIDED
 from opengever.document.archival_file import ArchivalFileConverter
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import IObjectBeforeCheckInEvent
@@ -40,13 +39,23 @@ def _update_docproperties(document):
 
 @grok.subscribe(IDocumentSchema, IObjectModifiedEvent)
 def set_archival_file_state(context, event):
-    archival_file_changed = False
+    # Because every filewidget is always marked as changed, in the event
+    # descriptions, even when no file has changed, we have to check the request
+    request = context.REQUEST
 
-    for desc in event.descriptions:
-        for attr in desc.attributes:
-            if attr == 'IDocumentMetadata.archival_file':
-                archival_file_changed = True
-                break
+    if request.get('ACTUAL_URL').endswith('edit_archival_file'):
+        field_name = 'archival_file'
+    else:
+        field_name = 'IDocumentMetadata.archival_file'
 
-    if archival_file_changed:
-        ArchivalFileConverter(context).set_state(STATE_MANUALLY_PROVIDED)
+    fileupload = request.get('form.widgets.{}'.format(field_name))
+    action = request.get('form.widgets.{}.action'.format(field_name), '')
+
+    if bool(fileupload):
+        ArchivalFileConverter(context).handle_manual_file_upload()
+
+    file_removed = action == u'remove'
+    file_removed_in_archival_form = isinstance(action, list) and u'remove' in action
+
+    if file_removed or file_removed_in_archival_form:
+        ArchivalFileConverter(context).remove_state()

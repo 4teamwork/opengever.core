@@ -1,7 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
-from opengever.document.archival_file import STATE_MANUALLY_PROVIDED
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.browser.archival_file_form import can_access_archival_file_form
 from opengever.testing import FunctionalTestCase
@@ -109,13 +108,3 @@ class TestArchivalFileForm(FunctionalTestCase):
         browser.login().visit(self.document, view='edit_archival_file')
         browser.find('Cancel').click()
         self.assertEquals(self.document.absolute_url(), browser.url)
-
-    @browsing
-    def test_changing_the_archival_file_sets_conversion_state_to_manually(self, browser):
-        browser.login().visit(self.document, view='edit_archival_file')
-        browser.fill(
-            {'Archival File': ('FILE DATA', 'archival_file.pdf')}).submit()
-
-        self.assertEquals(
-            STATE_MANUALLY_PROVIDED,
-            IDocumentMetadata(self.document).archival_file_state)

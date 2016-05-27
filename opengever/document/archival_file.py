@@ -31,6 +31,9 @@ class ArchivalFileConverter(object):
     def set_state(self, state):
         IDocumentMetadata(self.document).archival_file_state = state
 
+    def remove_state(self):
+        IDocumentMetadata(self.document).archival_file_state = None
+
     def get_callback_url(self):
         return "{}/archival_file_conversion_callback".format(
             self.document.absolute_url())
@@ -48,7 +51,7 @@ class ArchivalFileConverter(object):
     def handle_permanent_conversion_failure(self):
         self.set_state(STATE_FAILED_PERMANENTLY)
 
-    def set_manually_state(self):
+    def handle_manual_file_upload(self):
         self.set_state(STATE_MANUALLY_PROVIDED)
 
     def get_file_name(self):
