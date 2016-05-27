@@ -23,9 +23,9 @@ class TestStoreArchivalFile(FunctionalTestCase):
     def test_updates_archival_file_when_conversion_succeeded(self):
         with freeze(datetime(2016, 4, 25, 10, 24)):
             body = {'status': "success",
-                    'data': "data:application/pdf;base64,VGVzdCBTdHJpbmc="}
+                    'data': "data:application/pdf;base64,VGVzdCBTdHJpbmc=",
+                    'token': download_token_for(self.document)}
             self.request.set('BODY', json.dumps(body))
-            self.request.set('token', download_token_for(self.document))
 
             view = StoreArchivalFile(self.document, self.request)
             view()
@@ -39,9 +39,9 @@ class TestStoreArchivalFile(FunctionalTestCase):
     def test_sets_failed_permanently_state_when_conversion_was_skipped(self):
         with freeze(datetime(2016, 4, 25, 10, 24)):
             body = {"status": "skipped",
-                    "error": "File is password protected."}
+                    "error": "File is password protected.",
+                    "token": download_token_for(self.document)}
             self.request.set('BODY', json.dumps(body))
-            self.request.set('token', download_token_for(self.document))
 
             view = StoreArchivalFile(self.document, self.request)
             view()
@@ -53,9 +53,9 @@ class TestStoreArchivalFile(FunctionalTestCase):
     def test_sets_failed_temporary_state_when_conversion_has_not_succeeded_or_skipped(self):
         with freeze(datetime(2016, 4, 25, 10, 24)):
             body = {"status": "failed",
-                    "error": "Some parts of the document could not be processed"}
+                    "error": "Some parts of the document could not be processed",
+                    "token": download_token_for(self.document)}
             self.request.set('BODY', json.dumps(body))
-            self.request.set('token', download_token_for(self.document))
 
             view = StoreArchivalFile(self.document, self.request)
             view()
