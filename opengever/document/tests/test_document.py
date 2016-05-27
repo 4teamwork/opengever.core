@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -6,9 +6,9 @@ from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.dexterity import erroneous_fields
 from ftw.testbrowser.pages.statusmessages import assert_message
 from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
+from ftw.testing import freeze
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.document.behaviors import IBaseDocument
-from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.document import IDocumentSchema
 from opengever.document.document import UploadValidator
 from opengever.document.interfaces import IDocumentSettings
@@ -24,10 +24,8 @@ from plone.dexterity.fti import register
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.utils import createContentInContainer
 from plone.namedfile.file import NamedBlobFile
-from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from z3c.form import interfaces
-from z3c.form.interfaces import IValue
 from zope.component import createObject
 from zope.component import queryMultiAdapter, getAdapter
 from zope.component import queryUtility, getUtility
@@ -235,32 +233,53 @@ class TestDocument(FunctionalTestCase):
 
 class TestDocumentDefaultValues(FunctionalTestCase):
 
-    def test_default_document_date_is_today(self):
-        self.assertEquals(date.today(), self.default_value_for('document_date'))
+    def setUp(self):
+        super(TestDocumentDefaultValues, self).setUp()
+        self.dossier = create(Builder('dossier'))
 
-    def test_preserverd_as_paper_default(self):
-        registry = getUtility(IRegistry)
-        proxy = registry.forInterface(IDocumentSettings)
+    @browsing
+    def test_default_document_date_is_today(self, browser):
+        now = datetime.now()
+        today = now.date()
 
-        proxy.preserved_as_paper_default = False
+        browser.login().open(self.dossier)
+
+        with freeze(now):
+            factoriesmenu.add('Document')
+            browser.fill({'Title': u'My Document'}).save()
+        document = self.dossier['document-1']
+
+        self.assertEqual(today, document.document_date)
+
+    @browsing
+    def test_preserverd_as_paper_default(self, browser):
+        browser.login()
+
+        # registry default of False
+        api.portal.set_registry_record(
+            'preserved_as_paper_default', False,
+            interface=IDocumentSettings)
         transaction.commit()
-        self.assertFalse(self.default_value_for('preserved_as_paper'))
 
-        proxy.preserved_as_paper_default = True
+        browser.open(self.dossier)
+        factoriesmenu.add('Document')
+        browser.fill(
+            {'Title': u'My Document',
+             'File': ('DATA', 'file.txt', 'text/plain')}).save()
+        document = self.dossier['document-1']
+        self.assertFalse(document.preserved_as_paper)
+
+        # registry default of True
+        api.portal.set_registry_record(
+            'preserved_as_paper_default', True,
+            interface=IDocumentSettings)
         transaction.commit()
-        self.assertTrue(self.default_value_for('preserved_as_paper'))
 
-    def default_value_for(self, field_name):
-        field = getFields(IDocumentSchema).get(field_name)
-        # If not found in base IDocumentSchema, look in IDocumentMetadata
-        if not field:
-            field = getFields(IDocumentMetadata).get(field_name)
-        document = createContentInContainer(self.portal,
-                                            'opengever.document.document')
-        default = queryMultiAdapter(
-            (document, document.REQUEST, None, field, None, ),
-            IValue, name='default')
-        return default.get()
+        browser.open(self.dossier)
+        factoriesmenu.add('Document')
+        browser.fill({'Title': u'My Document'}).save()
+        document = self.dossier['document-1']
+        self.assertTrue(document.preserved_as_paper)
 
 
 class TestDocumentNumbering(FunctionalTestCase):

@@ -23,6 +23,8 @@ from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility, provideAdapter
 from zope.interface import Invalid
 from zope.interface import invariant
+from zope.interface import provider
+from zope.schema.interfaces import IContextAwareDefaultFactory
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import getVocabularyRegistry
 from zope.schema.vocabulary import SimpleVocabulary
@@ -131,6 +133,46 @@ def get_filing_actions(context):
     return SimpleVocabulary(values)
 
 
+@provider(IContextAwareDefaultFactory)
+def filing_prefix_default(context):
+    """If the dossier already has a filing_prefix set, use that one as the
+    default for the filing_prefix in the ArchiveForm.
+
+    context: Dossier that's being archived.
+    """
+    prefix = IDossier(context).filing_prefix
+    if prefix:
+        return prefix.decode('utf-8')
+    # Need to return None here instead of empty string, because otherwise
+    # validation in zope.schema's DefaultProperty fails (value not in vocab)
+    return None
+
+
+@provider(IContextAwareDefaultFactory)
+def filing_year_default(context):
+    """Propose default for filing_year based on the most recent date of
+    any object contained in the dossier or the dossier itself.
+
+    context: Dossier that's being archived.
+    """
+    youngest_date = context.earliest_possible_end_date()
+    if youngest_date:
+        # filing_year is of type TextLine for some reason
+        return unicode(youngest_date.year)
+    return None
+
+
+@provider(IContextAwareDefaultFactory)
+def dossier_enddate_default(context):
+    """Suggested default for the dossier's enddate.
+
+    context: Dossier that's being archived.
+    """
+    if IDossier(context).end and context.has_valid_enddate():
+        return IDossier(context).end
+    return context.earliest_possible_end_date()
+
+
 class IArchiveFormSchema(directives_form.Schema):
 
     filing_prefix = schema.Choice(
@@ -140,18 +182,21 @@ class IArchiveFormSchema(directives_form.Schema):
             visible_terms_from_registry="opengever.dossier"
                 '.interfaces.IDossierContainerTypes.type_prefixes'),
         required=False,
+        defaultFactory=filing_prefix_default,
     )
 
     dossier_enddate = schema.Date(
         title=_(u'label_end', default=u'Closing Date'),
         description=_(u'help_end', default=u''),
         required=True,
+        defaultFactory=dossier_enddate_default,
     )
 
     filing_year = schema.TextLine(
         title=_(u'filing_year', default="filing Year"),
         constraint=valid_filing_year,
         required=False,
+        defaultFactory=filing_year_default,
     )
 
     filing_action = schema.Choice(
@@ -170,33 +215,6 @@ class IArchiveFormSchema(directives_form.Schema):
                 raise Invalid(
                     _(u"When the Action give filing number is selected, \
                         all fields are required."))
-
-
-# defaults
-@directives_form.default_value(field=IArchiveFormSchema['filing_prefix'])
-def filing_prefix_default_value(data):
-    """If allready a filing_prefix is selected on the dossier,
-    it return this as default."""
-
-    prefix = IDossier(data.context).filing_prefix
-    if prefix:
-        return prefix.decode('utf-8')
-    return ""
-
-
-@directives_form.default_value(field=IArchiveFormSchema['filing_year'])
-def filing_year_default_value(data):
-    last_date = data.context.earliest_possible_end_date()
-    if last_date:
-        return str(last_date.year)
-    return None
-
-
-@directives_form.default_value(field=IArchiveFormSchema['dossier_enddate'])
-def default_end_date(data):
-    if IDossier(data.context).end and data.context.has_valid_enddate():
-        return IDossier(data.context).end
-    return data.context.earliest_possible_end_date()
 
 
 class ArchiveForm(directives_form.Form):

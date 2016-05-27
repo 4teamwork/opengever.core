@@ -1,10 +1,8 @@
-from collective.quickupload.interfaces import IQuickUploadFileFactory
 from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.mail import inbound
 from ftw.testbrowser import browser
-from opengever.document.behaviors import metadata
 from opengever.document.interfaces import IDocumentSettings
 from opengever.mail.mail import extract_email
 from opengever.mail.mail import get_author_by_email
@@ -12,7 +10,6 @@ from opengever.mail.tests import MAIL_DATA
 from opengever.mail.tests.utils import get_header_date
 from opengever.testing import FunctionalTestCase
 from opengever.testing.sql import create_ogds_user
-from plone.dexterity.interfaces import IDexterityFTI
 from plone.registry.interfaces import IRegistry
 from unittest2 import TestCase
 from zope.component import getUtility
@@ -180,65 +177,6 @@ class TestMailPreservedAsPaperDefault(FunctionalTestCase):
 
         inbound_mail = self.create_mail_inbound()
         self.assertEquals(False, inbound_mail.preserved_as_paper)
-
-
-class TestMailUpgradeStep(FunctionalTestCase):
-
-    def test_metadata_initialization_upgrade_step(self):
-        fti = getUtility(IDexterityFTI, name=u'ftw.mail.mail')
-        behaviors = list(fti.behaviors)
-        behaviors.remove(
-            u'opengever.document.behaviors.metadata.IDocumentMetadata')
-        fti._updateProperty('behaviors', tuple(behaviors))
-
-        # Set the registry default value for `preserved_as_paper` to
-        # something else than the schema default
-        set_preserved_as_paper_default(False)
-
-        mail = create(Builder("mail").with_message(MAIL_DATA))
-
-        from opengever.mail.upgrades.to3401 import ActivateBehaviors
-        ActivateBehaviors(self.portal.portal_setup)
-
-        assert metadata.IDocumentMetadata.providedBy(mail)
-        mail = metadata.IDocumentMetadata(mail)
-        # The description is initialized wihtout the behavior, so the default
-        # value is by another behavior with a description field.
-        self.assertEquals(u'',
-                          mail.description,
-                          'Description has no value')
-
-        self.assertEquals((), mail.keywords, 'Expect no keywords')
-
-        self.assertIsNone(mail.foreign_reference,
-                          'Foreign reference has no value')
-
-        self.assertEquals(get_header_date(mail).date(),
-                          mail.document_date)
-
-        self.assertEquals(None,
-                          mail.receipt_date)
-
-        self.assertIsNone(mail.delivery_date,
-                          'Delivery date has no value')
-
-        self.assertIsNone(mail.document_type,
-                          'Document type has no value')
-
-        self.assertTrue(mail.digitally_available,
-                        'Digitally available should be True')
-
-        self.assertEquals(get_preserved_as_paper_default(),
-                          mail.preserved_as_paper)
-
-        self.assertIsNone(mail.archival_file,
-                          'Archive file has no value')
-
-        self.assertIsNone(mail.thumbnail,
-                          'Thumbnail has no value')
-
-        self.assertIsNone(mail.preview,
-                          'Preview has no value')
 
 
 class TestEmailRegex(TestCase):

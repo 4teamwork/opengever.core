@@ -178,6 +178,7 @@ grok.global_utility(
 
 
 # Default value
+# XXX: Eventually rewrite this as a context aware defaultFactory
 form.default_value(field=ILifeCycle['retention_period'])(
     utils.set_default_with_acquisition(
         field=ILifeCycle['retention_period'],
@@ -223,6 +224,7 @@ grok.global_utility(
 
 
 # Default value
+# XXX: Eventually rewrite this as a context aware defaultFactory
 form.default_value(field=ILifeCycle['custody_period'])(
     utils.set_default_with_acquisition(
         field=ILifeCycle['custody_period'],
@@ -310,6 +312,7 @@ grok.global_utility(
     name=u'lifecycle_archival_value_vocabulary')
 
 
+# XXX: Eventually rewrite this as a context aware defaultFactory
 form.default_value(field=ILifeCycle['archival_value'])(
     utils.set_default_with_acquisition(
         field=ILifeCycle['archival_value'],

@@ -1,16 +1,17 @@
 from datetime import date
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
+from ftw.testing import freeze
 from ftw.testing import MockTestCase
 from grokcore.component.testing import grok
 from opengever.core.testing import activate_filing_number
 from opengever.core.testing import ANNOTATION_LAYER
 from opengever.core.testing import inactivate_filing_number
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_FILING_LAYER
 from opengever.dossier.archive import Archiver
-from opengever.dossier.archive import default_end_date
 from opengever.dossier.archive import EnddateValidator
-from opengever.dossier.archive import filing_prefix_default_value
-from opengever.dossier.archive import filing_year_default_value
 from opengever.dossier.archive import get_filing_actions
 from opengever.dossier.archive import METHOD_FILING
 from opengever.dossier.archive import METHOD_RESOLVING
@@ -31,6 +32,10 @@ from opengever.dossier.interfaces import IDossierArchiver
 from opengever.testing import FunctionalTestCase
 from zope.interface import Invalid
 from zope.interface.verify import verifyClass
+import transaction
+
+
+FROZEN_NOW = datetime.now()
 
 
 class TestArchiver(FunctionalTestCase):
@@ -241,55 +246,88 @@ class TestArchiving(MockTestCase):
         self.assertEquals(actions.by_token.keys(),[ONLY_NUMBER])
         self.assertEquals(actions.by_value.keys(),[METHOD_FILING])
 
-    def test_default_prefix(self):
-        data = self.stub()
-        dossier = self.stub_dossier()
-        self.expect(data.context).result(dossier)
 
-        with self.mocker.order():
-            self.expect(dossier.filing_prefix).result('administration')
-            self.expect(dossier.filing_prefix).result(None)
+class TestArchiveFormDefaults(FunctionalTestCase):
 
-        self.replay()
+    layer = OPENGEVER_FUNCTIONAL_FILING_LAYER
 
-        self.assertEquals(filing_prefix_default_value(data), 'administration')
-        self.assertEquals(filing_prefix_default_value(data), '')
+    def setUp(self):
+        super(TestArchiveFormDefaults, self).setUp()
+        with freeze(FROZEN_NOW):
+            self.dossier = create(Builder('dossier'))
 
-    def test_default_filing_year(self):
-        data = self.stub()
-        dossier = self.stub_dossier()
-        self.expect(data.context).result(dossier)
+    def _get_form_date(self, browser, field_name):
+        datestr = browser.css('#form-widgets-%s' % field_name).first.value
+        return datetime.strptime(datestr, '%B %d, %Y').date()
 
-        with self.mocker.order():
-            self.expect(dossier.earliest_possible_end_date()).result(date(2012, 3, 3))
-            self.expect(dossier.earliest_possible_end_date()).result(None)
+    @browsing
+    def test_filing_prefix_default(self, browser):
+        # Dossier has no filing_prefix set - default to None in archive form
+        browser.login().open(self.dossier, view='transition-archive')
+        form_default = browser.css('#form-widgets-filing_prefix').first.value
+        self.assertEqual(None, form_default)
 
-        self.replay()
+        # Dossier has a filing_prefix - default to that one in archive form
+        IDossier(self.dossier).filing_prefix = 'department'
+        transaction.commit()
 
-        self.assertEquals(filing_year_default_value(data), '2012')
-        self.assertEquals(filing_year_default_value(data), None)
+        browser.login().open(self.dossier, view='transition-archive')
+        form_default = browser.css('#form-widgets-filing_prefix').first.value
+        self.assertEqual('department', form_default)
 
-    def test_default_end_date(self):
-        data = self.stub()
-        dossier = self.stub_dossier()
-        self.expect(data.context).result(dossier)
+    @browsing
+    def test_filing_year_default(self, browser):
+        # Dossier without sub-objects - earliest possible end date is dossier
+        # start date, filing_year should therefore default to this year
+        browser.login().open(self.dossier, view='transition-archive')
+        form_default = browser.css('#form-widgets-filing_year').first.value
+        self.assertEqual(FROZEN_NOW.date().year, int(form_default))
 
-        with self.mocker.order():
-            self.expect(dossier.end).result(date(2012, 3, 3))
-            self.expect(dossier.has_valid_enddate()).result(True)
-            self.expect(dossier.end).result(date(2012, 3, 3))
+        # Document with date newer than dossier start. Suggested filing_year
+        # default should be that of the document (year of the youngest object)
+        doc = create(Builder('document')
+                     .within(self.dossier)
+                     .having(document_date=date(2050, 1, 1)))
+        browser.login().open(self.dossier, view='transition-archive')
+        form_default = browser.css('#form-widgets-filing_year').first.value
+        self.assertEqual(doc.document_date.year, int(form_default))
 
-            self.expect(dossier.end).result(None)
-            self.expect(dossier.earliest_possible_end_date()).result(date(2012, 4, 4))
+    @browsing
+    def test_dossier_enddate_default(self, browser):
+        # Dossier without sub-objects - earliest possible end date is dossier
+        # start date, suggested enddate should therefore default to that
+        browser.login().open(self.dossier, view='transition-archive')
 
-            self.expect(dossier.end).result(date(2012, 3, 3))
-            self.expect(dossier.has_valid_enddate()).result(True)
-            self.expect(dossier.end).result(date(2012, 5, 5))
+        form_default = self._get_form_date(browser, 'dossier_enddate')
+        self.assertEqual(IDossier(self.dossier).start, form_default)
 
-            self.expect(dossier.filing_year).result(None)
+        # Document with date newer than dossier start. Suggested end date
+        # default should be that of the document (year of the youngest object)
+        doc = create(Builder('document')
+                     .within(self.dossier)
+                     .having(document_date=date(2050, 1, 1)))
+        browser.login().open(self.dossier, view='transition-archive')
 
-        self.replay()
+        form_default = self._get_form_date(browser, 'dossier_enddate')
+        self.assertEqual(doc.document_date, form_default)
 
-        self.assertEquals(default_end_date(data), date(2012, 3, 3))
-        self.assertEquals(default_end_date(data), date(2012, 4, 4))
-        self.assertEquals(default_end_date(data), date(2012, 5, 5))
+        # Dossier with invalid enddate (older than youngest doc) - should
+        # fall back to earliest possible enddate
+        IDossier(self.dossier).end = date(2020, 1, 1)
+        transaction.commit()
+
+        browser.login().open(self.dossier, view='transition-archive')
+
+        form_default = self._get_form_date(browser, 'dossier_enddate')
+        self.assertEqual(
+            self.dossier.earliest_possible_end_date(),
+            form_default)
+
+        # Dossier with a valid enddate - should be used as the default
+        IDossier(self.dossier).end = date(2070, 1, 1)
+        transaction.commit()
+
+        browser.login().open(self.dossier, view='transition-archive')
+
+        form_default = self._get_form_date(browser, 'dossier_enddate')
+        self.assertEqual(IDossier(self.dossier).end, form_default)

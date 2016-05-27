@@ -146,6 +146,14 @@ def create_restricted_vocabulary(field, options,
     return GeneratedVocabulary
 
 
+# XXX: Eventually this should be rewritten to be compatible with the use of
+# context aware default factories.
+# The combination of acquired default values with restricted vocabularies
+# makes this tricky though. _get_acquisiton_value() in particular is
+# problematic because it needs to distinguish between "add" and "edit"
+# situations, and currently does so in a way that doesn't work for
+# programmatic content creation.
+
 def set_default_with_acquisition(field, default=None):
     """
     Sets a default value generator which uses the value

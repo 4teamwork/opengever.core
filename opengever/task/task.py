@@ -26,7 +26,6 @@ from plone import api
 from plone.dexterity.content import Container
 from plone.directives import form
 from plone.indexer.interfaces import IIndexer
-from plone.registry.interfaces import IRegistry
 from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import _mergedLocalRoles
 from Products.CMFCore.utils import getToolByName
@@ -44,6 +43,12 @@ from zope.schema.vocabulary import getVocabularyRegistry
 
 
 _marker = object()
+
+
+def deadline_default():
+    offset = api.portal.get_registry_record(
+        'deadline_timedelta', interface=ITaskSettings)
+    return (datetime.today() + timedelta(days=offset)).date()
 
 
 class ITask(form.Schema):
@@ -124,6 +129,7 @@ class ITask(form.Schema):
         title=_(u"label_deadline", default=u"Deadline"),
         description=_(u"help_deadline", default=u""),
         required=True,
+        defaultFactory=deadline_default,
         )
 
     form.widget(date_of_completion=DatePickerFieldWidget)
@@ -201,14 +207,6 @@ class ITask(form.Schema):
 validator.WidgetValidatorDiscriminators(
     NoCheckedoutDocsValidator, field=ITask['relatedItems'])
 provideAdapter(NoCheckedoutDocsValidator)
-
-
-def default_issuer(data):
-    portal_state = getMultiAdapter(
-        (data.context, data.request),
-        name=u"plone_portal_state")
-    member = portal_state.member()
-    return member.getId()
 
 
 class Task(Container):
@@ -361,13 +359,6 @@ class Task(Container):
             vocabulary = util.getTaskTypeVocabulary(self)
             term = vocabulary.getTerm(self.task_type)
             return term.title
-
-
-@form.default_value(field=ITask['deadline'])
-def deadline_default_value(data):
-    registry = getUtility(IRegistry)
-    proxy = registry.forInterface(ITaskSettings)
-    return datetime.today() + timedelta(days=proxy.deadline_timedelta)
 
 
 @form.default_value(field=ITask['responsible_client'])

@@ -2,13 +2,12 @@ from five import grok
 from opengever.base import _
 from opengever.base.behaviors import utils
 from opengever.base.utils import language_cache_key
+from plone import api
 from plone.app.dexterity.behaviors import metadata
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.directives import form
 from plone.memoize import ram
-from plone.registry.interfaces import IRegistry
 from zope import schema
-from zope.component import getUtility
 from zope.i18n import translate
 from zope.interface import alsoProvides, Interface
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
@@ -34,6 +33,13 @@ def translated_public_trial_terms(context, request):
         values[term] = translate(term, context=request,
                                  domain="opengever.base")
     return values
+
+
+def public_trial_default():
+    """Default value for `public_trial` field for new documents.
+    """
+    return api.portal.get_registry_record(
+        'public_trial_default_value', interface=IClassificationSettings)
 
 
 class IClassification(form.Schema):
@@ -68,6 +74,7 @@ class IClassification(form.Schema):
         description=_(u'help_public_trial', default=u''),
         source=u'classification_public_trial_vocabulary',
         required=True,
+        defaultFactory=public_trial_default,
     )
 
     public_trial_statement = schema.Text(
@@ -131,6 +138,7 @@ grok.global_utility(
     name=u'classification_classification_vocabulary')
 
 
+# XXX: Eventually rewrite this as a context aware defaultFactory
 form.default_value(field=IClassification['classification'])(
     utils.set_default_with_acquisition(
         field=IClassification['classification'],
@@ -165,24 +173,13 @@ grok.global_utility(
     name=u'classification_privacy_layer_vocabulary')
 
 
+# XXX: Eventually rewrite this as a context aware defaultFactory
 form.default_value(field=IClassification['privacy_layer'])(
     utils.set_default_with_acquisition(
         field=IClassification['privacy_layer'],
         default=PRIVACY_LAYER_NO
     )
 )
-
-
-# XXX: Setting the default value in the field directly, breaks the
-# DCFieldProperty stuff. thus we implement the default value this way.
-@form.default_value(field=IClassification['public_trial'])
-def default_public_trial(data):
-    """Default value for `public_trial` field for new documents.
-    """
-    registry = getUtility(IRegistry)
-    settings = registry.forInterface(IClassificationSettings)
-    public_trial_default_value = settings.public_trial_default_value
-    return public_trial_default_value
 
 
 class Classification(metadata.MetadataBase):
