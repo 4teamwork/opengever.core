@@ -247,17 +247,26 @@ class Meeting(Base):
     def get_excerpt_title(self):
         return self._get_title(_("Protocol Excerpt"))
 
+    def get_agendaitem_list_title(self):
+        return self._get_title(_("Agendaitem list"))
+
     def get_protocol_filename(self):
         return self._get_filename(_("Protocol"))
 
     def get_excerpt_filename(self):
         return self._get_filename(_("Protocol Excerpt"))
 
+    def get_agendaitem_list_filename(self):
+        return self._get_filename(_("Agendaitem list"))
+
     def get_protocol_template(self):
         return self.committee.get_protocol_template()
 
     def get_excerpt_template(self):
         return self.committee.get_excerpt_template()
+
+    def get_agendaitem_list_template(self):
+        return self.committee.get_agendaitem_list_template()
 
     @property
     def physical_path(self):

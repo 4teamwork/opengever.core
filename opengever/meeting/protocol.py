@@ -148,5 +148,19 @@ class ExcerptProtocolData(ProtocolData):
         }
 
     def add_settings(self):
-        """Do not add the start-page setting for excertps."""
+        """Do not add the start-page setting for excerpts."""
+        pass
+
+
+class AgendaItemListProtocolData(ProtocolData):
+
+    def add_protocol_type(self):
+        self.data['protocol'] = {
+            'type': translate(
+                _(u'label_agenda_item_list', default=u'Agendaitem list'),
+                context=getRequest())
+        }
+
+    def add_settings(self):
+        """Do not add the start-page setting for agendaitem lists."""
         pass

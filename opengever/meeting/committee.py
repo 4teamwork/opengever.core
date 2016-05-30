@@ -55,6 +55,13 @@ class ICommittee(form.Schema):
         required=False,
     )
 
+    agendaitem_list_template = RelationChoice(
+        title=_('label_agendaitem_list_template',
+                default=u'Agendaitem list template'),
+        source=sablon_template_source,
+        required=False,
+    )
+
     repository_folder = RelationChoice(
         title=_(u'Linked repository folder'),
         description=_(
@@ -189,6 +196,12 @@ class Committee(ModelContainer):
             return self.excerpt_template.to_object
 
         return self.get_committee_container().get_excerpt_template()
+
+    def get_agendaitem_list_template(self):
+        if self.agendaitem_list_template:
+            return self.agendaitem_list_template.to_object
+
+        return self.get_committee_container().get_agendaitem_list_template()
 
     def get_repository_folder(self):
         return self.repository_folder.to_object

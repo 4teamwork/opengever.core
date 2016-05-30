@@ -164,6 +164,12 @@
                 </dd>
               </dl>
             </div>
+            <div class="list-group-item agendaitem_list">
+              <h2 i18n:translate="label_agendaitem_list">Agendaitem list</h2>
+              <a href="" tal:attributes="href view/url_agendaitem_list"
+                 i18n:translate="label_download_agendaitem_list">Download agendaitem list</a>
+            </div>
+
             <div class="list-group-item protocol"
                  tal:define="protocol_document view/get_protocol_document">
               <h2 i18n:translate="">Protocol</h2>
