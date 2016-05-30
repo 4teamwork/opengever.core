@@ -65,7 +65,7 @@ class TestAgendaItemList(FunctionalTestCase):
                          .link_with(self.meeting_dossier))
 
         browser.login().open(meeting.get_url())
-        browser.find('Download agendaitem list').click()
+        browser.css('.download-agendaitem-list-btn').first.click()
 
         self.assertDictContainsSubset(
             {'status': '200 Ok',

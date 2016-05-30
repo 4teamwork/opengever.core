@@ -164,53 +164,73 @@
                 </dd>
               </dl>
             </div>
-            <div class="list-group-item agendaitem_list">
-              <h2 i18n:translate="label_agendaitem_list">Agendaitem list</h2>
-              <a href="" tal:attributes="href view/url_agendaitem_list"
-                 i18n:translate="label_download_agendaitem_list">Download agendaitem list</a>
-            </div>
-
-            <div class="list-group-item protocol"
+            <div class="list-group-item documents"
                  tal:define="protocol_document view/get_protocol_document">
-              <h2 i18n:translate="">Protocol</h2>
-              <a tal:attributes="href view/url_generate_protocol;"
-                  tal:condition="python: meeting.is_editable() and not view.has_protocol_document()"
-                  i18n:attributes="title"
-                  title="generate new protocol as word document"
-                  class="generate-protocol"></a>
 
-              <a tal:attributes="href view/url_generate_protocol;"
-                  tal:condition="python: meeting.is_editable() and view.has_protocol_document()"
-                  i18n:attributes="title"
-                  title="generate new version as word document"
-                  class="refresh-protocol"></a>
-              <p tal:condition="not:protocol_document" i18n:translate="label_no_protocol">No protocol has been generated yet.</p>
-              <p tal:condition="protocol_document">
-                <a tal:condition="protocol_document"
-                   tal:attributes="href protocol_document/absolute_url; class python: view.get_css_class(protocol_document)"
-                   tal:content="protocol_document/Title"></a>
-                <a class="download-protocol-btn"
-                   tal:condition="python: meeting.is_editable() and protocol_document"
-                   tal:attributes="href view/url_download_protocol"
-                   i18n:attributes="title"
-                   title="download protocol"></a>
-              </p>
+              <div class="item agendaitem_list">
+                <span class="title" i18n:translate="label_agendaitem_list">Agendaitem list</span>
+                <a href="#" class="download-agendaitem-list-btn"
+                   tal:attributes="href view/url_agendaitem_list"
+                   title="label_download_agendaitem_list"
+                   i18n:attributes="title">
+                </a>
+              </div>
+
+              <div class="item protocol">
+                <div>
+                  <span class="title" i18n:translate="">Protocol</span>
+                  <a tal:condition="python: meeting.is_editable() and not view.has_protocol_document()"
+                     tal:attributes="href view/url_generate_protocol;"
+                     i18n:attributes="title"
+                     title="generate new protocol as word document"
+                     class="generate-protocol"></a>
+
+                  <a class="download-protocol-btn"
+                     tal:condition="python: meeting.is_editable() and protocol_document"
+                     tal:attributes="href view/url_download_protocol"
+                     i18n:attributes="title"
+                     title="download protocol"></a>
+
+                  <a tal:condition="python: meeting.is_editable() and view.has_protocol_document()"
+                     tal:attributes="href view/url_generate_protocol;"
+                     i18n:attributes="title"
+                     title="generate new version as word document"
+                     class="refresh-protocol"></a>
+                </div>
+
+                <div class="fileinfo">
+                  <span tal:condition="not:protocol_document"
+                        i18n:translate="label_no_protocol">No protocol has been generated yet.</span>
+
+                  <span tal:condition="protocol_document">
+                    <a tal:condition="protocol_document"
+                       tal:attributes="href protocol_document/absolute_url; class python: view.get_css_class(protocol_document)"
+                       tal:content="protocol_document/Title"></a>
+                  </span>
+                </div>
+              </div>
+
             </div>
+
             <div class="list-group-item excerpts" tal:define="excerpts view/manually_generated_excerpts">
-              <h2 i18n:translate="">Excerpts</h2>
-              <a class="generate-excerpt"
-                 tal:attributes="href view/url_manually_generate_excerpt"
-                 i18n:attributes="title"
-                 title="generate new excerpt"></a>
-              <p tal:condition="not:excerpts" i18n:translate="label_no_excerpts">No additional excerpts have been generated yet.</p>
-              <ul tal:condition="excerpts">
-                <li tal:repeat="item excerpts">
-                  <a href="" tal:attributes="href item/absolute_url;
-                                             class python:view.get_css_class(item)">
-                    <span class="document" tal:condition="item/absolute_url" tal:content="item/Title" />
-                  </a>
-                </li>
-              </ul>
+              <div class="item">
+                <span class="title" i18n:translate="">Excerpts</span>
+
+                <a class="generate-excerpt"
+                   tal:attributes="href view/url_manually_generate_excerpt"
+                   i18n:attributes="title"
+                   title="generate new excerpt"></a>
+
+                <p tal:condition="not:excerpts" i18n:translate="label_no_excerpts">No additional excerpts have been generated yet.</p>
+                <ul tal:condition="excerpts">
+                  <li tal:repeat="item excerpts">
+                    <a href="" tal:attributes="href item/absolute_url;
+                                               class python:view.get_css_class(item)">
+                      <span class="document" tal:condition="item/absolute_url" tal:content="item/Title" />
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
 
