@@ -2,6 +2,7 @@ from Acquisition import aq_inner, aq_parent
 from collective import dexteritytextindexer
 from five import grok
 from ftw.mail.interfaces import IEmailAddress
+from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.document import _
 from opengever.document.base import BaseDocumentMixin
 from opengever.document.behaviors.related_docs import IRelatedDocuments
@@ -13,12 +14,14 @@ from plone import api
 from plone.autoform import directives as form_directives
 from plone.dexterity.content import Item
 from plone.directives import form
-from plone.namedfile.field import NamedBlobFile
+from plone.namedfile import field
+from plone.namedfile.file import NamedBlobFile
 from Products.CMFCore.utils import getToolByName
 from Products.MimetypesRegistry.common import MimeTypeException
 from z3c.form import validator
 from zope import schema
 from zope.component import getMultiAdapter
+from zope.interface import implements
 from zope.interface import Invalid
 from zope.interface import invariant
 import logging
@@ -56,7 +59,7 @@ class IDocumentSchema(form.Schema):
 
     form.primary('file')
     form_directives.order_after(file='IDocumentMetadata.document_author')
-    file = NamedBlobFile(
+    file = field.NamedBlobFile(
         title=_(u'label_file', default='File'),
         description=_(u'help_file', default=''),
         required=False,
@@ -107,6 +110,8 @@ grok.global_adapter(UploadValidator)
 
 class Document(Item, BaseDocumentMixin):
 
+    implements(ITabbedviewUploadable)
+
     # document state's
     removed_state = 'document-state-removed'
     active_state = 'document-state-draft'
@@ -116,6 +121,13 @@ class Document(Item, BaseDocumentMixin):
 
     # disable file preview creation when modifying or creating document
     buildPreview = False
+
+    def __contains__(self, key):
+        """Used because of a the following contains check in
+        collective.quickupload (https://github.com/collective/collective.quickupload/blob/1.8.2/collective/quickupload/browser/quick_upload.py#L679)
+        """
+
+        return False
 
     def surrender(self, relative_to_portal=1):
         return super(Document, self).getIcon(
@@ -211,3 +223,9 @@ class Document(Item, BaseDocumentMixin):
         assert history.retrieve(current_version), \
             'missing history entry for verion {}'.format(current_version)
         return current_version
+
+    def update_file(self, filename, content_type, data):
+        self.file = NamedBlobFile(
+            data=data,
+            filename=filename,
+            contentType=content_type)

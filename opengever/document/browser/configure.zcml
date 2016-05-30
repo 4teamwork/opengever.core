@@ -27,4 +27,12 @@
         allowed_interface="plone.app.layout.globals.interfaces.ILayoutPolicy"
         />
 
+    <browser:page
+        for="opengever.document.document.IDocumentSchema"
+        name="tabbed_view"
+        class=".tabbed.DocumentTabbedView"
+        permission="zope2.View"
+        allowed_attributes="listing select_all reorder setgridstate set_default_tab msg_unknownresponse"
+        />
+
 </configure>
