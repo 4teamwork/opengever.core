@@ -385,6 +385,33 @@ class TestProposal(FunctionalTestCase):
         self.assertEqual(Proposal.STATE_SUBMITTED, proposal.get_state())
 
     @browsing
+    def test_proposal_can_be_cancelled(self, browser):
+        committee = create(Builder('committee'))
+        proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .having(title='Mach doch',
+                                  committee=committee.load_model()))
+
+        browser.login().open(proposal, view='tabbedview_view-overview')
+        browser.css('#pending-cancelled').first.click()
+
+        self.assertEqual(Proposal.STATE_CANCELLED, proposal.get_state())
+
+    @browsing
+    def test_proposal_can_be_reactivated(self, browser):
+        committee = create(Builder('committee'))
+        proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .having(title='Mach doch',
+                                  committee=committee.load_model())
+                          .as_cancelled())
+
+        browser.login().open(proposal, view='tabbedview_view-overview')
+        browser.css('#cancelled-pending').first.click()
+
+        self.assertEqual(Proposal.STATE_PENDING, proposal.get_state())
+
+    @browsing
     def test_proposal_can_not_be_submitted_when_committee_is_inactive(self, browser):
         committee = create(Builder('committee'))
         proposal = create(Builder('proposal')

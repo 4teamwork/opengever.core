@@ -58,3 +58,24 @@ class TestUnitProposal(TestCase):
         self.assertEqual(
             proposal,
             Proposal.query.by_admin_unit(AdminUnit(unit_id='unita')).first())
+
+    def test_active_query_returns_only_active_proposals(self):
+        pending_proposal = create(Builder('proposal_model').having(
+            int_id=1, workflow_state=Proposal.STATE_PENDING.name,
+            ))
+        submitted_proposal = create(Builder('proposal_model').having(
+            int_id=2, workflow_state=Proposal.STATE_SUBMITTED.name,
+            ))
+        scheduled_proposal = create(Builder('proposal_model').having(
+            int_id=3, workflow_state=Proposal.STATE_SCHEDULED.name,
+            ))
+        decided_proposal = create(Builder('proposal_model').having(
+            int_id=4, workflow_state=Proposal.STATE_DECIDED.name,
+            ))
+        cancelled_proposal = create(Builder('proposal_model').having(
+            int_id=5, workflow_state=Proposal.STATE_CANCELLED.name,
+            ))
+
+        self.assertItemsEqual(
+            [pending_proposal, submitted_proposal, scheduled_proposal],
+            Proposal.query.active().all())

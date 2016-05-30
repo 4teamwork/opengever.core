@@ -5,6 +5,12 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Make proposals cancellable.
+  Add model workflow to cancel/reactivate proposals.
+  Add statefilter for a dossiers proposals tab to only display
+  active proposals.
+  [deiferni]
+
 - Enables to replace a checked out document by Drag'n'Drop.
   [phgross]
 

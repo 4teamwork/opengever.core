@@ -384,7 +384,7 @@ class Proposal(ProposalBase):
     implements(content_schema)
 
     workflow = ProposalModel.workflow.with_visible_transitions(
-        ['pending-submitted'])
+        ['pending-submitted', 'pending-cancelled', 'cancelled-pending'])
 
     def _after_model_created(self, model_instance):
         session = create_session()

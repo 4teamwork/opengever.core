@@ -54,6 +54,29 @@ class Reject(Transition):
         return getRequest().RESPONSE.redirect(url)
 
 
+class Cancel(Transition):
+
+    def execute(self, obj, model):
+        super(Cancel, self).execute(obj, model)
+        model.cancel()
+
+        msg = _(u'msg_proposal_cancelled',
+                default=u'Proposal cancelled successfully.')
+        api.portal.show_message(msg, request=getRequest(), type='info')
+
+
+class Reactivate(Transition):
+
+    def execute(self, obj, model):
+        super(Reactivate, self).execute(obj, model)
+        model.reactivate()
+
+        msg = _(u'msg_proposal_reactivated',
+                default=u'Proposal reactivated successfully.')
+        api.portal.show_message(msg, request=getRequest(), type='info')
+
+
+
 class Proposal(Base):
     """Sql representation of a proposal."""
 
@@ -117,12 +140,15 @@ class Proposal(Base):
     STATE_SCHEDULED = State('scheduled',
                             title=_('scheduled', default='Scheduled'))
     STATE_DECIDED = State('decided', title=_('decided', default='Decided'))
+    STATE_CANCELLED = State('cancelled',
+                            title=_('cancelled', default='Cancelled'))
 
     workflow = Workflow([
         STATE_PENDING,
         STATE_SUBMITTED,
         STATE_SCHEDULED,
-        STATE_DECIDED
+        STATE_DECIDED,
+        STATE_CANCELLED,
         ], [
         Submit('pending', 'submitted',
                title=_('submit', default='Submit')),
@@ -134,6 +160,10 @@ class Proposal(Base):
                    title=_('un-schedule', default='Remove from schedule')),
         Transition('scheduled', 'decided',
                    title=_('decide', default='Decide')),
+        Cancel('pending', 'cancelled',
+               title=_('cancel', default='Cancel')),
+        Reactivate('cancelled', 'pending',
+                   title=_('reactivate', default='Reactivate')),
         ])
 
     def __repr__(self):
@@ -294,6 +324,12 @@ class Proposal(Base):
     def reopen(self, agenda_item):
         assert self.get_state() == self.STATE_DECIDED
         self.session.add(proposalhistory.ProposalReopened(proposal=self))
+
+    def cancel(self):
+        self.session.add(proposalhistory.Cancelled(proposal=self))
+
+    def reactivate(self):
+        self.session.add(proposalhistory.Reactivated(proposal=self))
 
     def update_excerpt(self, agenda_item):
         from opengever.meeting.command import ExcerptOperations
