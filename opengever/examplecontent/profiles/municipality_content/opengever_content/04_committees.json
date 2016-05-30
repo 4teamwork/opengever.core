@@ -6,6 +6,7 @@
         "title_fr": "Séances",
         "protocol_template": "resolvePath::/vorlagen/sablon-template-1",
         "excerpt_template": "resolvePath::/vorlagen/sablon-template-2",
+        "agendaitem_list_template": "resolvePath::/vorlagen/sablon-template-3",
 
         "_children": [
             {
