@@ -14,7 +14,8 @@ from plone import api
 from plone.autoform import directives as form_directives
 from plone.dexterity.content import Item
 from plone.directives import form
-from plone.namedfile.field import NamedBlobFile
+from plone.namedfile import field
+from plone.namedfile.file import NamedBlobFile
 from Products.CMFCore.utils import getToolByName
 from Products.MimetypesRegistry.common import MimeTypeException
 from z3c.form import validator
@@ -58,7 +59,7 @@ class IDocumentSchema(form.Schema):
 
     form.primary('file')
     form_directives.order_after(file='IDocumentMetadata.document_author')
-    file = NamedBlobFile(
+    file = field.NamedBlobFile(
         title=_(u'label_file', default='File'),
         description=_(u'help_file', default=''),
         required=False,
@@ -222,3 +223,9 @@ class Document(Item, BaseDocumentMixin):
         assert history.retrieve(current_version), \
             'missing history entry for verion {}'.format(current_version)
         return current_version
+
+    def update_file(self, filename, content_type, data):
+        self.file = NamedBlobFile(
+            data=data,
+            filename=filename,
+            contentType=content_type)
