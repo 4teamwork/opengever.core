@@ -54,7 +54,7 @@
     var previewListing = $(".preview-listing");
 
     endpoint = previewListing.data("fetch-url");
-    numberOfDocuments = previewListing.data('number-of-documents') || 0;
+    numberOfDocuments = previewListing.data('number-of-documents') || items.length;
     toggleShowMoreButton();
     scanForBrokenImages(".preview-listing");
 

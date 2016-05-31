@@ -62,6 +62,8 @@
                   <tal:brain tal:condition="python: view.get_type(item) == 'brain'">
                     <a href="" tal:attributes="href item/getURL|nothing;
                                                title item/alt|nothing;
+                                               data-showroom-target item/data-showroom-target|nothing;
+                                               data-showroom-title item/data-showroom-title|nothing;
                                                class python:view.get_item_css_classes(item)" tal:omit-tag="not: item/getURL|nothing"
                        tal:content="item/Title">
                     </a>
@@ -74,6 +76,8 @@
                     <a href=""
                        tal:attributes="href item/getURL|nothing;
                                        title item/alt|nothing;
+                                       data-showroom-target item/data-showroom-target|nothing;
+                                       data-showroom-title item/data-showroom-title|nothing;
                                        class python:'rollover-breadcrumb %s' % (item.get('css_class'))"
                        tal:omit-tag="not: item/getURL|nothing">
                     <span tal:content="item/Title" /></a>
