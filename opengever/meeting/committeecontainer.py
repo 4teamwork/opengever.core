@@ -30,7 +30,7 @@ class ICommitteeContainer(form.Schema):
     agendaitem_list_template = RelationChoice(
         title=_('Agendaitems list template'),
         source=sablon_template_source,
-        required=True,
+        required=False,
     )
 
 
@@ -76,4 +76,7 @@ class CommitteeContainer(Container, TranslatedTitleMixin):
         return self.excerpt_template.to_object
 
     def get_agendaitem_list_template(self):
-        return self.agendaitem_list_template.to_object
+        if self.agendaitem_list_template:
+            return self.agendaitem_list_template.to_object
+
+        return None

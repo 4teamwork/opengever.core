@@ -5,6 +5,7 @@ from ftw.testbrowser.pages.statusmessages import error_messages
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.command import MIME_DOCX
 from opengever.testing import FunctionalTestCase
+import transaction
 
 
 class TestAgendaItemList(FunctionalTestCase):
@@ -21,29 +22,28 @@ class TestAgendaItemList(FunctionalTestCase):
         self.meeting_dossier = create(Builder('meeting_dossier')
                                       .within(self.repository_folder))
 
-
         self.templates = create(Builder('templatedossier'))
         self.sablon_template = create(Builder('sablontemplate')
                                       .within(self.templates)
                                       .with_asset_file('sablon_template.docx'))
 
-        container = create(
+        self.container = create(
             Builder('committee_container').having(
                 protocol_template=self.sablon_template,
                 excerpt_template=self.sablon_template,
                 agendaitem_list_template=self.sablon_template))
 
         self.committee = create(Builder('committee')
-                                .within(container)
+                                .within(self.container)
                                 .having(repository_folder=self.repository_folder))
         self.committee_model = self.committee.load_model()
 
-    def test_default_template_is_configured_on_commitee_container(self):
+    def test_default_template_is_configured_on_committee_container(self):
         self.assertEqual(self.sablon_template,
                          self.committee.get_agendaitem_list_template())
 
     @browsing
-    def test_template_can_be_configured_per_commitee(self, browser):
+    def test_template_can_be_configured_per_committee(self, browser):
         self.grant("Administrator")
         custom_template = create(
             Builder('sablontemplate')
@@ -57,6 +57,24 @@ class TestAgendaItemList(FunctionalTestCase):
 
         self.assertEqual(custom_template,
                          self.committee.get_agendaitem_list_template())
+
+    @browsing
+    def test_shows_statusmessage_when_no_template_is_configured(self, browser):
+        self.container.agendaitem_list_template = None
+        transaction.commit()
+
+        meeting = create(Builder('meeting')
+                         .having(committee=self.committee_model)
+                         .link_with(self.meeting_dossier))
+
+        browser.login().open(meeting.get_url())
+        browser.css('.download-agendaitem-list-btn').first.click()
+
+        self.assertEqual(browser.url, meeting.get_url())
+        self.assertEqual(
+            u'There is no agendaitem list template configured, '
+            'agendaitem list could not be generated.',
+            error_messages()[0])
 
     @browsing
     def test_agendaitem_list_can_be_downloaded(self, browser):
@@ -108,9 +126,8 @@ class TestAgendaItemList(FunctionalTestCase):
                                   legal_basis=u'We may do it',
                                   initial_position=u'We should do it.',
                                   proposed_action=u'Do it.',
-                                  considerations=u'Uhm....',
-                              )
-                       .as_submitted())
+                                  considerations=u'Uhm....')
+                          .as_submitted())
 
         create(Builder('agenda_item')
                .having(meeting=meeting, proposal=proposal.load_model(),

@@ -1,6 +1,8 @@
+from opengever.meeting import _
 from opengever.meeting.command import AgendaItemListOperations
 from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.sablon import Sablon
+from plone import api
 from Products.Five.browser import BrowserView
 
 
@@ -17,7 +19,18 @@ class DownloadAgendaItemList(BrowserView):
             self.model).as_json(pretty=pretty)
 
     def __call__(self):
-        sablon = Sablon(self.operations.get_sablon_template(self.model))
+        template = self.operations.get_sablon_template(self.model)
+        if not template:
+            api.portal.show_message(
+                _('msg_no_agenaitem_list_template',
+                  default=u'There is no agendaitem list template configured, '
+                  'agendaitem list could not be generated.'),
+                request=self.request,
+                type='error')
+
+            return self.request.RESPONSE.redirect(self.model.get_url())
+
+        sablon = Sablon(template)
         sablon.process(self.get_json_data())
 
         assert sablon.is_processed_successfully(), sablon.stderr
