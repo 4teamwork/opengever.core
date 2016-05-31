@@ -190,7 +190,8 @@ def _copy_sablon_templates(content_path):
 def _get_sablon_template_paths():
     paths = []
     filenames = ['protokoll.docx',
-                 'protokollauszug.docx']
+                 'protokollauszug.docx',
+                 'traktandenliste.docx']
 
     for filename in filenames:
         paths.append(resource_filename(
