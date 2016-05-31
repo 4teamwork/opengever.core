@@ -44,7 +44,7 @@ class Submit(Transition):
 
         msg = _(u'msg_proposal_submitted',
                 default=u'Proposal successfully submitted.')
-        api.portal.show_message(msg, request=getRequest(), type='error')
+        api.portal.show_message(msg, request=getRequest())
 
 
 class Reject(Transition):
