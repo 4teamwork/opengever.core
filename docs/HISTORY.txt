@@ -5,6 +5,9 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Use global pagesize parameter for batchsize in gallery-view.
+  [elioschmutz]
+
 - Make proposals cancellable.
   Add model workflow to cancel/reactivate proposals.
   Add statefilter for a dossiers proposals tab to only display

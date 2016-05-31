@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.tabbedview.interfaces import ITabbedView
 from ftw.testbrowser import browsing
 from opengever.bumblebee import BUMBLEBEE_VIEW_COOKIE_NAME
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
@@ -260,13 +261,12 @@ class TestBumblebeeGalleryMixinPreviews(FunctionalTestCase):
             [document1.UID(), document2.UID()],
             [item.get('uid') for item in view.previews()])
 
-    def test_stream_length_is_configurable(self):
+    def test_stream_length_is_configurable_through_tabbedview_pagesize(self):
         dossier = create(Builder('dossier'))
+        api.portal.set_registry_record('batch_size', 2, interface=ITabbedView)
 
         view = getMultiAdapter(
             (dossier, self.request), name="tabbedview_view-documents-gallery")
-
-        view.amount_preloaded_documents = 2
 
         document0 = create(Builder('document').within(dossier))
         document1 = create(Builder('document').within(dossier))

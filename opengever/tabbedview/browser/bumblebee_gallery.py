@@ -20,8 +20,6 @@ class BumblebeeGalleryMixin(object):
 
     object_provides = 'ftw.bumblebee.interfaces.IBumblebeeable'
 
-    amount_preloaded_documents = 24
-
     def __call__(self, *args, **kwargs):
         if not is_bumblebee_feature_enabled():
             raise NotFound
@@ -47,7 +45,7 @@ class BumblebeeGalleryMixin(object):
         brains = self.get_brains()
 
         from_batch_id = int(self.request.get('documentPointer', 0))
-        to_batch_id = from_batch_id + self.amount_preloaded_documents
+        to_batch_id = from_batch_id + self.pagesize
 
         for brain in brains[from_batch_id:to_batch_id]:
             yield {
