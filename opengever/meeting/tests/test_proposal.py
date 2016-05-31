@@ -301,6 +301,8 @@ class TestProposal(FunctionalTestCase):
         browser.open(proposal, view='tabbedview_view-overview')
         browser.css('#pending-submitted').first.click()
 
+        self.assertEqual(['Proposal successfully submitted.'], info_messages())
+
         proposal_model = proposal.load_model()
 
         # submitted proposal created
