@@ -5,6 +5,9 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Add bumblebeeoverlay for documents on the overview tab.
+  [elioschmutz]
+
 - Use global pagesize parameter for batchsize in gallery-view.
   [elioschmutz]
 
