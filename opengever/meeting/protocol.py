@@ -157,7 +157,7 @@ class AgendaItemListProtocolData(ProtocolData):
     def add_protocol_type(self):
         self.data['protocol'] = {
             'type': translate(
-                _(u'label_agenda_item_list', default=u'Agendaitem list'),
+                _(u'label_agendaitem_list', default=u'Agendaitem list'),
                 context=getRequest())
         }
 

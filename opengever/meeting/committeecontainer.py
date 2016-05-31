@@ -28,7 +28,8 @@ class ICommitteeContainer(form.Schema):
     )
 
     agendaitem_list_template = RelationChoice(
-        title=_('Agendaitems list template'),
+        title=_('label_agendaitem_list_template',
+                default=u'Agendaitem list template'),
         source=sablon_template_source,
         required=False,
     )

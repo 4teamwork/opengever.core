@@ -248,7 +248,8 @@ class Meeting(Base):
         return self._get_title(_("Protocol Excerpt"))
 
     def get_agendaitem_list_title(self):
-        return self._get_title(_("Agendaitem list"))
+        return self._get_title(
+            _(u'label_agendaitem_list', default=u'Agendaitem list'))
 
     def get_protocol_filename(self):
         return self._get_filename(_("Protocol"))
@@ -257,7 +258,8 @@ class Meeting(Base):
         return self._get_filename(_("Protocol Excerpt"))
 
     def get_agendaitem_list_filename(self):
-        return self._get_filename(_("Agendaitem list"))
+        return self._get_filename(
+            _(u'label_agendaitem_list', default=u'Agendaitem list'))
 
     def get_protocol_template(self):
         return self.committee.get_protocol_template()
