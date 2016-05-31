@@ -10,6 +10,7 @@ from opengever.meeting.model.generateddocument import GeneratedExcerpt
 from opengever.meeting.model.generateddocument import GeneratedProtocol
 from opengever.meeting.model.proposalhistory import Submitted, DocumentUpdated, DocumentSubmitted
 from opengever.meeting.model.submitteddocument import SubmittedDocument
+from opengever.meeting.protocol import AgendaItemListProtocolData
 from opengever.meeting.protocol import ExcerptProtocolData
 from opengever.meeting.protocol import ProtocolData
 from opengever.meeting.sablon import Sablon
@@ -55,6 +56,21 @@ class ProtocolOperations(object):
 
     def get_filename(self, meeting):
         return meeting.get_protocol_filename()
+
+
+class AgendaItemListOperations(object):
+
+    def get_sablon_template(self, meeting):
+        return meeting.get_agendaitem_list_template()
+
+    def get_meeting_data(self, meeting):
+        return AgendaItemListProtocolData(meeting)
+
+    def get_title(self, meeting):
+        return meeting.get_agendaitem_list_title()
+
+    def get_filename(self, meeting):
+        return meeting.get_agendaitem_list_filename()
 
 
 class ExcerptOperations(object):

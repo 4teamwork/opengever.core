@@ -94,6 +94,9 @@ class Committee(Base):
     def get_excerpt_template(self):
         return self.resolve_committee().get_excerpt_template()
 
+    def get_agendaitem_list_template(self):
+        return self.resolve_committee().get_agendaitem_list_template()
+
     def get_active_memberships(self):
         return Membership.query.filter_by(
             committee=self).only_active()

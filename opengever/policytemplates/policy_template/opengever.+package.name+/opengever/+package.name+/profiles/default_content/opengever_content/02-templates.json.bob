@@ -11,6 +11,12 @@
         "_type": "opengever.meeting.sablontemplate",
         "title": "Protokollauszug",
         "file:file": "templates/protokollauszug.docx"
+      },
+      {
+        "_path": "/vorlagen/sablon-template-3",
+        "_type": "opengever.meeting.sablontemplate",
+        "title": "Traktandenliste",
+        "file:file": "templates/traktandenliste.docx"
       }{{% if setup.nof_templates > 0 %}},{{% endif %}}
 {{% endif %}}
 {{% for template in range(setup.nof_templates) %}}

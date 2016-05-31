@@ -27,6 +27,13 @@ class ICommitteeContainer(form.Schema):
         required=True,
     )
 
+    agendaitem_list_template = RelationChoice(
+        title=_('label_agendaitem_list_template',
+                default=u'Agendaitem list template'),
+        source=sablon_template_source,
+        required=False,
+    )
+
 
 class CommitteeContainerAddForm(TranslatedTitleAddForm):
     grok.name('opengever.meeting.committeecontainer')
@@ -68,3 +75,9 @@ class CommitteeContainer(Container, TranslatedTitleMixin):
 
     def get_excerpt_template(self):
         return self.excerpt_template.to_object
+
+    def get_agendaitem_list_template(self):
+        if self.agendaitem_list_template:
+            return self.agendaitem_list_template.to_object
+
+        return None

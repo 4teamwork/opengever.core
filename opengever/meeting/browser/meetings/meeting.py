@@ -333,6 +333,9 @@ class MeetingView(BrowserView):
     def url_download_protocol(self):
         return self.model.get_url(view='download_protocol')
 
+    def url_agendaitem_list(self):
+        return self.model.get_url(view='agenda_item_list')
+
     def url_manually_generate_excerpt(self):
         return self.model.get_url(view='generate_excerpt')
 

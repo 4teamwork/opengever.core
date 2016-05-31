@@ -7,7 +7,9 @@ from opengever.document.interfaces import PRESERVED_AS_PAPER_DEFAULT
 from opengever.dossier.interfaces import DEFAULT_DOSSIER_DEPTH
 from opengever.mail.interfaces import DEFAULT_MAIL_MAX_SIZE
 from opengever.repository.interfaces import DEFAULT_REPOSITORY_DEPTH
+from pkg_resources import resource_filename
 import os
+import shutil
 
 
 def init_defaults(configurator, question):
@@ -149,26 +151,52 @@ def post_preserved_as_paper(configurator, question, answer):
 
 
 def post_render(configurator):
-    _delete_templates_files(configurator)
-
-
-def _delete_templates_files(configurator):
     has_templates = configurator.variables['include_templates']
     has_meeting = configurator.variables['setup.enable_meeting_feature']
+
     package_name = configurator.variables['package.name']
     content_path = os.path.join(
         configurator.target_directory,
         'opengever.{}'.format(package_name),
-        'opengever',
-        package_name,
-        'profiles',
-        'default_content',
+        'opengever', package_name, 'profiles', 'default_content',
         'opengever_content')
 
-    if not has_meeting:
-        os.remove(os.path.join(content_path, 'templates', 'protokoll.docx'))
-        os.remove(os.path.join(content_path, 'templates', 'protokollauszug.docx'))
-        os.remove(os.path.join(content_path, '03_committees.json'))
+    if has_meeting:
+        _copy_sablon_templates(content_path)
+
+    else:
+        _delete_committees_configuration(content_path)
+
         if not has_templates:
-            os.remove(os.path.join(content_path, '02-templates.json'))
-            os.rmdir(os.path.join(content_path, 'templates'))
+            _delete_templates_files(configurator, content_path)
+
+
+def _delete_templates_files(configurator, content_path):
+    os.remove(os.path.join(content_path, '02-templates.json'))
+    os.rmdir(os.path.join(content_path, 'templates'))
+
+
+def _delete_committees_configuration(content_path):
+    os.remove(os.path.join(content_path, '03_committees.json'))
+
+
+def _copy_sablon_templates(content_path):
+    templates_path = os.path.join(content_path, 'templates')
+
+    for path in _get_sablon_template_paths():
+        shutil.copy(path, templates_path)
+
+
+def _get_sablon_template_paths():
+    paths = []
+    filenames = ['protokoll.docx',
+                 'protokollauszug.docx',
+                 'traktandenliste.docx']
+
+    for filename in filenames:
+        paths.append(resource_filename(
+            'opengever.examplecontent',
+            'profiles/municipality_content/opengever_content/templates/{}'.format(
+                filename)))
+
+    return paths

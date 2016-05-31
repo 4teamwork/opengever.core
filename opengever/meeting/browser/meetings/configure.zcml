@@ -62,6 +62,14 @@
 
   <browser:page
       for="opengever.meeting.interfaces.IMeetingWrapper"
+      name="agenda_item_list"
+      class=".agendaitem_list.DownloadAgendaItemList"
+      permission="zope2.View"
+      allowed_attributes="as_json"
+      />
+
+  <browser:page
+      for="opengever.meeting.interfaces.IMeetingWrapper"
       name="unscheduled_proposals"
       class=".unscheduled_proposals.UnscheduledProposalsView"
       permission="zope2.View"
