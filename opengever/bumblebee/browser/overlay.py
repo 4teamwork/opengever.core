@@ -26,6 +26,9 @@ class BumblebeeOverlayMixin(object):
         if not is_bumblebee_feature_enabled():
             raise NotFound
 
+        # we only render an html fragment, no reason to waste time on diazo
+        self.request.response.setHeader('X-Theme-Disabled', 'True')
+
         return super(BumblebeeOverlayMixin, self).__call__()
 
     def get_preview_pdf_url(self):
