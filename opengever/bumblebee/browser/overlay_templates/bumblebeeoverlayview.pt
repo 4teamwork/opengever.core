@@ -1,6 +1,6 @@
 <div id="file-preview" i18n:domain="opengever.bumblebee">
   <aside class="sidebar">
-    <header tal:condition="context/file">
+    <header tal:condition="nocall: context/file">
       <span tal:attributes="class string:file-mimetype ${view/get_mime_type_css_class}" />
       <div>
         <span class="title" tal:content="view/get_file_title" />
@@ -13,11 +13,11 @@
           <span class="title" i18n:translate="">Creator:</span>
           <span class="value" tal:content="structure view/get_creator_link"></span>
         </li>
-        <li tal:define="date view/get_document_date" tal:condition="date" class="detailItem">
+        <li tal:define="date view/get_document_date" tal:condition="nocall: date" class="detailItem">
           <span class="title" i18n:translate="">Document date:</span>
           <span class="value" tal:content="date"></span>
         </li>
-        <li tal:define="dossier view/get_containing_dossier" tal:condition="dossier" class="detailItem">
+        <li tal:define="dossier view/get_containing_dossier" tal:condition="nocall: dossier" class="detailItem">
            <span class="title" i18n:translate="">Dossier:</span>
            <a class="value" tal:attributes="href dossier/absolute_url" tal:content="dossier/Title"></a>
         </li>
@@ -33,37 +33,37 @@
     </main>
     <footer>
       <ul class="file-actions">
-        <li tal:define="link view/get_detail_view_url" tal:condition="link">
+        <li tal:define="link view/get_detail_view_url" tal:condition="nocall: link">
           <a id="action-view"
              tal:attributes="href link"
              i18n:translate="">Open detail view</a>
         </li>
-        <li id="action-download" tal:define="link view/get_download_copy_link" tal:condition="link" tal:content="structure link">
+        <li id="action-download" tal:define="link view/get_download_copy_link" tal:condition="nocall: link" tal:content="structure link">
         </li>
-        <li tal:define="link view/get_open_as_pdf_link" tal:condition="link">
+        <li tal:define="link view/get_open_as_pdf_link" tal:condition="nocall: link">
           <a id="action-pdf"
              tal:attributes="href link"
              i18n:translate="">Open as PDF</a>
         </li>
-        <li tal:define="link view/get_edit_metadata_url" tal:condition="link">
+        <li tal:define="link view/get_edit_metadata_url" tal:condition="nocall: link">
           <a id="action-edit"
              tal:attributes="href link"
              i18n:domain="plone"
              i18n:translate="">Edit metadata</a>
         </li>
-        <li tal:define="link view/get_checkout_url" tal:condition="link">
+        <li tal:define="link view/get_checkout_url" tal:condition="nocall: link">
           <a id="action-checkout"
              tal:attributes="href link"
              i18n:domain="plone"
              i18n:translate="">Checkout and edit</a>
         </li>
-        <li tal:define="link view/get_checkin_without_comment_url" tal:condition="link">
+        <li tal:define="link view/get_checkin_without_comment_url" tal:condition="nocall: link">
           <a id="action-checkin"
              tal:attributes="href link"
              i18n:domain="opengever.document"
              i18n:translate="">Checkin without comment</a>
         </li>
-        <li tal:define="link view/get_checkin_with_comment_url" tal:condition="link">
+        <li tal:define="link view/get_checkin_with_comment_url" tal:condition="nocall: link">
           <a id="action-checkin"
              tal:attributes="href link"
              i18n:domain="opengever.document"
