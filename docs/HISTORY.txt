@@ -5,6 +5,10 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Boost bumblebee overlay performance by omitting diazo and improving
+  template condition expressions with nocall:.
+  [deiferni]
+
 - Dont quote advanced parameters twice.
   Fixes a bug where certain terms would not be found.
   [deiferni]
