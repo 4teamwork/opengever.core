@@ -159,6 +159,10 @@ class TestSearchWithoutContent(FunctionalTestCase):
 
     @browsing
     def test_validate_searchstring_for_dossiers(self, browser):
+        create(Builder('ogds_user')
+               .having(firstname='Foo', lastname='Boss',
+                       userid='foo@example.com'))
+
         browser.login().open(view='advanced_search')
         browser.fill({'form.widgets.searchableText': "dossier1",
                       'form.widgets.object_provides': ['opengever.dossier.behaviors.dossier.IDossierMarker'],
@@ -169,6 +173,7 @@ class TestSearchWithoutContent(FunctionalTestCase):
                       'form.widgets.reference': "OG 14.2",
                       'form.widgets.sequence_number': "5",
                       'form.widgets.searchable_filing_no': "14",
+                      'Responsible': "foo@example.com",
                       'form.widgets.dossier_review_state:list': 'dossier-state-active'})
         browser.css('#form-buttons-button_search').first.click()
 
@@ -181,9 +186,10 @@ class TestSearchWithoutContent(FunctionalTestCase):
             ('end_usage', 'minmax'),
             ('end:list', '03/01/10'),
             ('end:list', '04/02/10'),
-            ('reference', 'OG%2014.2'),
+            ('reference', 'OG 14.2'),
             ('sequence_number:int', '5'),
             ('searchable_filing_no', '14'),
+            ('responsible', 'foo@example.com'),
             ('review_state:list', 'dossier-state-active'),
         ])
 

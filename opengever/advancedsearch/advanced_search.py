@@ -99,11 +99,11 @@ FIELD_MAPPING = {'opengever-dossier-behaviors-dossier-IDossierMarker': [
                 }
 
 
-def quotestring(value):
+def strip_parantheses(value):
     bad_chars = ["(", ")"]
     for char in bad_chars:
         value = value.replace(char, ' ')
-    return urllib.quote(value)
+    return value
 
 
 class IAdvancedSearch(directives_form.Schema):
@@ -391,7 +391,7 @@ class AdvancedSearchForm(directives_form.Form):
             self.append_key_to_params(key, value, params)
 
     def append_key_to_params(self, key, value, params):
-        params.append((key, quotestring(value.encode('utf-8'))))
+        params.append((key, strip_parantheses(value.encode('utf-8'))))
 
     def append_sequence_number_to_params(self, value, params):
         params.append(('sequence_number:int', value))

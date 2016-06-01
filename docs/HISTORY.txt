@@ -5,6 +5,10 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Dont quote advanced parameters twice.
+  Fixes a bug where certain terms would not be found.
+  [deiferni]
+
 - Add bumblebeeoverlay for documents on the overview tab.
   [elioschmutz]
 
