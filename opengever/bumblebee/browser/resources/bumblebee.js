@@ -68,12 +68,32 @@
     }
   }
 
+  function getNumberOfDocuments(fallback_value) {
+    var galleryDocuments = $(".preview-listing").data('number-of-documents')
+
+    if ( $.isNumeric(galleryDocuments) ) {
+      // we are in gallery_view
+      return galleryDocuments;
+    }
+
+    if ( window.store ) {
+      // The store-attribute comes from ftw.table. If it's available,
+      // we are on a list view.
+      var listDocuments = store.totalLength
+      if ( $.isNumeric(listDocuments)) {
+        return listDocuments;
+      }
+    }
+    // we are somewhere else i.e. search view
+    return fallback_value;
+  }
+
   function updateShowroom() {
     var items = document.querySelectorAll(".showroom-item");
     var previewListing = $(".preview-listing");
 
     endpoint = previewListing.data("fetch-url");
-    numberOfDocuments = previewListing.data('number-of-documents') || items.length;
+    numberOfDocuments = getNumberOfDocuments(fallback_value=items.length);
     toggleShowMoreButton();
     scanForBrokenImages(".preview-listing");
 
