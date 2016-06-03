@@ -5,6 +5,10 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Reindex documents after adding ftw.bumblebee.interfaces.IBumblebeeable to
+  make sure object_provides is up to date.
+  [deiferni]
+
 - Boost bumblebee overlay performance by omitting diazo and improving
   template condition expressions with nocall:.
   [deiferni]
