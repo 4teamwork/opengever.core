@@ -1,5 +1,7 @@
-from DateTime import DateTime
 from five import grok
+from ftw.dictstorage.interfaces import IDictStorage
+from ftw.tabbedview import tabbedviewMessageFactory as _
+from ftw.tabbedview.interfaces import IGridStateStorageKeyGenerator
 from ftw.tabbedview.interfaces import ITabbedView
 from ftw.table import helper
 from opengever.bumblebee import get_prefered_listing_view
@@ -11,7 +13,6 @@ from opengever.globalindex.model.task import Task
 from opengever.meeting.model.proposal import Proposal
 from opengever.meeting.tabs.proposallisting import ProposalListingTab
 from opengever.ogds.base.utils import get_current_admin_unit
-from opengever.tabbedview import _
 from opengever.tabbedview import BaseCatalogListingTab
 from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
 from opengever.tabbedview.filters import CatalogQueryFilter
@@ -28,9 +29,17 @@ from opengever.tabbedview.helper import readable_ogds_user
 from opengever.tabbedview.helper import workflow_state
 from plone.dexterity.interfaces import IDexterityContainer
 from Products.Five.browser.pagetemplatefile import BoundPageTemplate
-from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from zope.component import queryMultiAdapter
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
+
+try:
+    import json
+except ImportError:
+    import simplejson as json
+
+_marker = object()
 
 
 def translate_public_trial_options(item, value):
@@ -148,6 +157,79 @@ class Documents(BaseCatalogListingTab):
     @property
     def gallery_view_name(self):
         return '{}-gallery'.format(self.view_name)
+
+    def load_grid_state(self):
+        """We have to override this function because we have to call the
+        storage from another view.
+
+        The setgridstate from the TabbedView will store the state on the
+        prox-view, but the ListingView (this view) will load the grid from
+        the specific document_view. That means, that we are not able
+        to load the old grid-state.
+
+        So we have to call the IDictStroage with the proxy-view instead
+        the specific document view.
+
+        Loads the stored grid state - if any is stored.
+        """
+        storage_view = self.context.restrictedTraverse(
+            '{}-proxy'.format(self.__name__))
+
+        # get the key from the key generator
+        generator = queryMultiAdapter((self.context, self, self.request),
+                                      IGridStateStorageKeyGenerator)
+
+        key = generator.get_key()
+
+        # get the state (string)
+        storage = IDictStorage(storage_view)
+        state = storage.get(key, None)
+
+        if state:
+            parsed_state = json.loads(state)
+
+            # Do not persistently store grouping, since loading the group
+            # initially would not work.
+            if 'group' in parsed_state:
+                del parsed_state['group']
+
+            # In some situations the sorting in the state is corrupt. Every
+            # visible row should have a 'sortable' by default.
+            column_state_by_id = dict((col['id'], col)
+                                      for col in parsed_state['columns'])
+
+            for column in self.columns:
+                if not isinstance(column, dict):
+                    continue
+
+                name = column.get('sort_index', column.get('column', None))
+                if name not in column_state_by_id:
+                    continue
+
+                col_state = column_state_by_id[name]
+                if 'sortable' not in col_state:
+                    col_state['sortable'] = True
+
+            state = json.dumps(parsed_state)
+        if state:
+            self.table_options.update({'gridstate': state})
+        else:
+            return
+
+        # if the sorting order is set in the state and is not set in the
+        # request, we need to change it in the config using the state
+        # config.
+        if self.request.get('dir', _marker) == _marker and \
+                self.request.get('sort', _marker) == _marker and \
+                'sort' in parsed_state:
+            if 'field' in parsed_state['sort']:
+                self.sort_on = parsed_state['sort']['field']
+            if parsed_state['sort']['direction'] == 'ASC':
+                self.sort_order = 'asc'
+                self.sort_reverse = False
+            else:
+                self.sort_order = 'reverse'
+                self.sort_reverse = True
 
 
 class Dossiers(BaseCatalogListingTab):
