@@ -5,6 +5,9 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Mark mails as IBumblebeeable.
+  [elioschmutz]
+
 - Strip whitespace when saving proposals or a protocol.
   [deiferni]
 
