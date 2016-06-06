@@ -10,6 +10,7 @@ from opengever.meeting.model import SubmittedDocument
 from opengever.testing import FunctionalTestCase
 from opengever.testing import index_data_for
 from plone import api
+from plone.app.testing import TEST_USER_ID
 from zExceptions import Unauthorized
 import transaction
 
@@ -106,6 +107,7 @@ class TestProposal(FunctionalTestCase):
         model = proposal.load_model()
         self.assertIsNotNone(model)
         self.assertEqual(Oguid.for_object(proposal), model.oguid)
+        self.assertEqual(TEST_USER_ID, model.creator)
         self.assertEqual(u'A pr\xf6posal', model.title)
         self.assertEqual(u'possible', model.legal_basis)
         self.assertEqual(u'Lorem ips\xfcm', model.proposed_action)

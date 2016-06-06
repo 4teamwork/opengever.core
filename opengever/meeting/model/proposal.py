@@ -12,6 +12,7 @@ from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models import UNIT_ID_LENGTH
+from opengever.ogds.models import USER_ID_LENGTH
 from opengever.ogds.models.types import UnicodeCoercingText
 from plone import api
 from sqlalchemy import Column
@@ -92,6 +93,7 @@ class Proposal(Base):
     int_id = Column(Integer, nullable=False)
     oguid = composite(Oguid, admin_unit_id, int_id)
     physical_path = Column(String(256), nullable=False)
+    creator = Column(String(USER_ID_LENGTH), nullable=False)
 
     submitted_admin_unit_id = Column(String(UNIT_ID_LENGTH))
     submitted_int_id = Column(Integer)

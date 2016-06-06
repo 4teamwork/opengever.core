@@ -434,7 +434,8 @@ class Proposal(ProposalBase):
         data.update(dict(workflow_state=workflow_state,
                          physical_path=aq_wrapped_self.get_physical_path(),
                          dossier_reference_number=reference_number,
-                         repository_folder_title=repository_folder_title))
+                         repository_folder_title=repository_folder_title,
+                         creator=aq_wrapped_self.Creator()))
         return data
 
     def update_model(self, data):
