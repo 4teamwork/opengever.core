@@ -5,6 +5,10 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Show correct total document size in the showroom overlay if opening files
+  from the list-view.
+  [elioschmutz]
+
 - Fix: Add GeverTabbedviewDictStorage adapter to handle bumblebee proxy views.
   Normally, the tabbedview is storing the last state (i.e. sorting) per user per tab.
   Since bumblebee requires a proxy view to determine if the list or the gallery should be
