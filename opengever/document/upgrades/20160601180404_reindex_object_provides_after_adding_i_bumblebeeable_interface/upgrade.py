@@ -12,4 +12,5 @@ class ReindexObjectProvidesAfterAddingIBumblebeeableInterface(UpgradeStep):
         msg = 'Reindex object_provides for documents.'
 
         for obj in self.objects(query, msg):
-            catalog.reindexObject(obj, idxs=['object_provides'])
+            catalog.reindexObject(obj, idxs=['object_provides'],
+                                  update_metadata=False)
