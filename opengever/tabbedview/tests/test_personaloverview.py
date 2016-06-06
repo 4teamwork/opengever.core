@@ -60,7 +60,7 @@ class TestPersonalOverview(FunctionalTestCase):
             view='personal_overview')
         self.assertEqual(
             ['mydossiers', 'mydocuments-proxy', 'mytasks', 'myissuedtasks',
-             'alltasks', 'allissuedtasks'],
+             'myproposals', 'alltasks', 'allissuedtasks'],
             browser.css('li.formTab a').text)
 
     @browsing
@@ -68,7 +68,7 @@ class TestPersonalOverview(FunctionalTestCase):
         browser.login().open(view='personal_overview')
         self.assertEqual(
             ['mydossiers', 'mydocuments-proxy', 'mytasks', 'myissuedtasks',
-             'alltasks', 'allissuedtasks'],
+             'myproposals', 'alltasks', 'allissuedtasks'],
             browser.css('li.formTab a').text)
 
     @browsing
@@ -76,7 +76,8 @@ class TestPersonalOverview(FunctionalTestCase):
         browser.login(username='hugo.boss', password='demo09').open(
             view='personal_overview')
         self.assertEqual(
-            ['mydossiers', 'mydocuments-proxy', 'mytasks', 'myissuedtasks'],
+            ['mydossiers', 'mydocuments-proxy', 'mytasks',
+             'myissuedtasks', 'myproposals'],
             browser.css('li.formTab a').text)
 
     @browsing
@@ -84,7 +85,8 @@ class TestPersonalOverview(FunctionalTestCase):
         browser.login(username='hugo.boss', password='demo09').open(
             view='personal_overview')
         self.assertEqual(
-            ['mydossiers', 'mydocuments-proxy', 'mytasks', 'myissuedtasks'],
+            ['mydossiers', 'mydocuments-proxy', 'mytasks', 'myissuedtasks',
+             'myproposals'],
             browser.css('li.formTab a').text)
 
 
@@ -111,6 +113,7 @@ class TestPersonalOverviewActivitySupport(FunctionalTestCase):
             ['mydossiers', 'mydocuments-proxy',
              'mytasks',
              'myissuedtasks',
+             'myproposals',
              'My notifications',
              'alltasks',
              'allissuedtasks'],
@@ -120,7 +123,7 @@ class TestPersonalOverviewActivitySupport(FunctionalTestCase):
             view='personal_overview')
         self.assertEqual(
             ['mydossiers', 'mydocuments-proxy', 'mytasks',
-             'myissuedtasks', 'My notifications'],
+             'myissuedtasks', 'myproposals', 'My notifications'],
             browser.css('li.formTab a').text)
 
 

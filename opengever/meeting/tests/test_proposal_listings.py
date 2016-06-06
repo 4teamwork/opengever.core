@@ -110,6 +110,31 @@ class TestDossierProposalListing(ProposalListingTests):
                           [row.get('Title') for row in table.dicts()])
 
 
+class TestMyProposals(ProposalListingTests):
+
+    @browsing
+    def test_lists_only_proposals_created_by_current_user(self, browser):
+        create(Builder('user').named('Hugo', 'Boss'))
+        self.login('hugo.boss')
+        self.proposal = create(Builder('proposal')
+                               .within(self.dossier)
+                               .titled(u'Proposal from Hugo')
+                               .having(committee=self.committee.load_model(),
+                                       initial_position=u'My p\xf6sition is',
+                                       proposed_action=u'My proposed acti\xf6n'))
+
+        browser.login().open(view='tabbedview_view-myproposals')
+        table = browser.css('table.listing').first
+        self.assertEquals([u'My Proposal'],
+                          [row.get('Title') for row in table.dicts()])
+
+        browser.login(username='hugo.boss', password='secret')
+        browser.open(view='tabbedview_view-myproposals')
+        table = browser.css('table.listing').first
+        self.assertEquals([u'Proposal from Hugo'],
+                          [row.get('Title') for row in table.dicts()])
+
+
 class TestSubmittedProposals(ProposalListingTests):
 
     def setUp(self):

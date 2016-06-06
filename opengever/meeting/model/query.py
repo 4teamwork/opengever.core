@@ -49,6 +49,9 @@ class ProposalQuery(BaseQuery):
             Proposal.STATE_SCHEDULED.name,
             ]))
 
+    def by_creator(self, creator_id):
+        return self.filter(Proposal.creator == creator_id)
+
 Proposal.query_cls = ProposalQuery
 
 

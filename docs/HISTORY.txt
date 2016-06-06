@@ -5,6 +5,9 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Added new tab "My Proposals" to the personal overview.
+  [phgross]
+
 - Show correct total document size in the showroom overlay if opening files
   from the list-view.
   [elioschmutz]
