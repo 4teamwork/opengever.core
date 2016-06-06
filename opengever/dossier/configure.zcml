@@ -31,4 +31,10 @@
       provides="z3c.form.interfaces.IValidator"
       />
 
+  <adapter
+      factory=".tabbedviewstatestorage.GeverTabbedviewDictStorage"
+      provides="ftw.dictstorage.interfaces.IDictStorage"
+      for="zope.browser.interfaces.IBrowserView"
+      />
+
 </configure>

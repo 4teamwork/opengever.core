@@ -26,6 +26,7 @@ from opengever.tabbedview.helper import linked_trashed_document_with_tooltip
 from opengever.tabbedview.helper import readable_ogds_author
 from opengever.tabbedview.helper import readable_ogds_user
 from opengever.tabbedview.helper import workflow_state
+from opengever.tabbedview.interfaces import ITabbedViewProxy
 from plone.dexterity.interfaces import IDexterityContainer
 from Products.Five.browser.pagetemplatefile import BoundPageTemplate
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
@@ -45,6 +46,7 @@ class DocumentsProxy(grok.View):
     """
     grok.name('tabbedview_view-documents-proxy')
     grok.context(ITabbedView)
+    grok.implements(ITabbedViewProxy)
     grok.require('zope2.View')
 
     listview = "tabbedview_view-documents"
