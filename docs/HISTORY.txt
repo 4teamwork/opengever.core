@@ -54,6 +54,13 @@ Changelog
 - Add SQL Model for new contact implementation.
   [phgross]
 
+- Fix bumblebee-overlay current item and next/prev in search view.
+  The textlink and the image overlay will now open the same showroom item.
+  That means, the counter will show the correct current number.
+  If you press the next/prev button, it will jump automatically to
+  the next search entry.
+  [elioschmutz]
+
 - Improve document overview functions layout.
   [elioschmutz]
 
