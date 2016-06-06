@@ -4,6 +4,7 @@ from ftw.tabbedview.browser.tabbed import TabbedView
 from opengever.activity import is_activity_feature_enabled
 from opengever.globalindex.model.task import Task
 from opengever.latex.opentaskreport import is_open_task_report_allowed
+from opengever.meeting import is_meeting_feature_enabled
 from opengever.meeting.model.proposal import Proposal
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
@@ -53,7 +54,6 @@ class PersonalOverview(TabbedView):
         {'id': 'mydocuments-proxy', 'icon': None, 'url': '#', 'class': None},
         {'id': 'mytasks', 'icon': None, 'url': '#', 'class': None},
         {'id': 'myissuedtasks', 'icon': None, 'url': '#', 'class': None},
-        {'id': 'myproposals', 'icon': None, 'url': '#', 'class': None},
     ]
 
     admin_tabs = [
@@ -115,8 +115,19 @@ class PersonalOverview(TabbedView):
 
         return tabs
 
+    @property
+    def meeting_tabs(self):
+        tabs = []
+        if is_meeting_feature_enabled():
+            tabs.append(
+                {'id': 'myproposals',
+                 'title': _('label_my_proposals', default=u'My proposals'),
+                 'icon': None, 'url': '#', 'class': None})
+
+        return tabs
+
     def get_tabs(self):
-        tabs = self.default_tabs + self.notification_tabs
+        tabs = self.default_tabs + self.meeting_tabs + self.notification_tabs
         if self.is_user_allowed_to_view_additional_tabs():
             tabs += self.admin_tabs
 
