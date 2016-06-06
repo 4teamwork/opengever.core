@@ -47,6 +47,25 @@
   function init() {
     showroom = Showroom([], { 'tail': tail });
     updateShowroom();
+
+    // The search.js does not trigger an event after reloading the searchview.
+    // The only possiblity to update the showroom is to listen on the ajaxComplete
+    // event which will be triggered after every ajax request.
+    //
+    // First we have to check if we are really on the search-site to register
+    // the event-listener.
+    //
+    // If the event have been triggered, it is possible that it has been triggered
+    // by the showroom itself. If we do an updateShowroom while the overlay is open,
+    // we will destroy it. So we have to do this check first before updating
+    // the showroom.
+    if ($('#search-results').length) {
+      $( document ).ajaxComplete(function(event, jqXHR, params) {
+        if(params.url.indexOf("@@updated_search") !== -1) {
+          updateShowroom();
+        }
+      });
+    }
   }
 
   function updateShowroom() {

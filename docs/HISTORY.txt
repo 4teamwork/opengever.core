@@ -5,6 +5,9 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Initialize the showroom correctly for dynamically loaded items in the search-view.
+  [elioschmutz]
+
 - Reindex documents after adding ftw.bumblebee.interfaces.IBumblebeeable to
   make sure object_provides is up to date.
   [deiferni]
