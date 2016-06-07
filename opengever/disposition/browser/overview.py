@@ -4,13 +4,13 @@ from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.disposition import _
 from opengever.disposition.interfaces import IDisposition
 from opengever.disposition.interfaces import IHistoryStorage
-from opengever.tabbedview.browser.base import OpengeverTab
+from opengever.tabbedview import GeverTabMixin
 from plone import api
 from plone.protect.utils import addTokenToUrl
 import json
 
 
-class DispositionOverview(grok.View, OpengeverTab):
+class DispositionOverview(grok.View, GeverTabMixin):
     grok.context(IDisposition)
     grok.name('tabbedview_view-overview')
     grok.require('zope2.View')
