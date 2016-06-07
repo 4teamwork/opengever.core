@@ -232,22 +232,22 @@ class TestProtocol(FunctionalTestCase):
         self.assertEqual('<div>Hans</div>', proposal.legal_basis)
 
     @browsing
-    def test_protocol_can_be_edited(self, browser):
+    def test_protocol_can_be_edited_and_strips_whitespace(self, browser):
         browser.login()
         browser.open(self.meeting.get_url(view='protocol'))
         self.assertIsNotNone(self.meeting.modified)
         prev_modified = self.meeting.modified
 
         browser.fill({'Title': 'The Meeting',
-                      'Legal basis': 'Yes we can',
-                      'Initial position': 'Still the same',
-                      'Considerations': 'It is important',
-                      'Proposed action': 'Accept it',
-                      'Discussion': 'We should accept it',
-                      'Decision': 'Accepted',
-                      'Publish in': 'There',
-                      'Disclose to': 'Nobody',
-                      'Copy for attention': 'Hanspeter',
+                      'Legal basis': '<div>Yes we can</div>',
+                      'Initial position': '<div>Still the same</div>',
+                      'Considerations': '<div>It is important</div>',
+                      'Proposed action': '<div>Accept it</div>',
+                      'Discussion': '<div>We should accept it</div>',
+                      'Decision': '<div>Accepted</div>',
+                      'Publish in': '<div> <br> \n &nbsp;there&nbsp; <br /> \t </div>',
+                      'Disclose to': '<div>&nbsp;    </div>',
+                      'Copy for attention': '<div>Hanspeter</div>',
                       'Protocol start-page': '10'}).submit()
         self.assertEqual({
             u'redirectUrl': u'http://nohost/plone/opengever-meeting-committeecontainer/committee-1/meeting-1/view'},
@@ -260,17 +260,17 @@ class TestProtocol(FunctionalTestCase):
         self.assertEqual('The Meeting', meeting.title)
 
         proposal = Proposal.query.get(self.proposal_model.proposal_id)
-        self.assertEqual('Yes we can', proposal.legal_basis)
-        self.assertEqual('Still the same', proposal.initial_position)
-        self.assertEqual('It is important', proposal.considerations)
-        self.assertEqual('Accept it', proposal.proposed_action)
-        self.assertEqual('There', proposal.publish_in)
-        self.assertEqual('Nobody', proposal.disclose_to)
-        self.assertEqual('Hanspeter', proposal.copy_for_attention)
+        self.assertEqual('<div>Yes we can</div>', proposal.legal_basis)
+        self.assertEqual('<div>Still the same</div>', proposal.initial_position)
+        self.assertEqual('<div>It is important</div>', proposal.considerations)
+        self.assertEqual('<div>Accept it</div>', proposal.proposed_action)
+        self.assertEqual('<div>there</div>', proposal.publish_in)
+        self.assertEqual('<div></div>', proposal.disclose_to)
+        self.assertEqual('<div>Hanspeter</div>', proposal.copy_for_attention)
 
         agenda_item = AgendaItem.get(self.agenda_item.agenda_item_id)
-        self.assertEqual('We should accept it', agenda_item.discussion)
-        self.assertEqual('Accepted', agenda_item.decision)
+        self.assertEqual('<div>We should accept it</div>', agenda_item.discussion)
+        self.assertEqual('<div>Accepted</div>', agenda_item.decision)
 
         # This redirect is done through javascript
         browser.open(self.meeting.get_url())

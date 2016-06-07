@@ -74,7 +74,7 @@ class TestProposal(FunctionalTestCase):
         self.assertEqual(u'D\xf6ssier', browser.find('Title').value)
 
     @browsing
-    def test_proposal_can_be_created_in_browser(self, browser):
+    def test_proposal_can_be_created_in_browser_and_strips_whitespace(self, browser):
         committee = create(Builder('committee_model'))
         document = create(Builder('document')
                           .within(self.dossier)
@@ -86,14 +86,14 @@ class TestProposal(FunctionalTestCase):
         self.search_for_document(browser, document)
         browser.fill({
             'Title': u'A pr\xf6posal',
-            'Legal basis': u'possible',
-            'Initial position': u'My pr\xf6posal',
-            'Proposed action': u'Lorem ips\xfcm',
             'Committee': str(committee.committee_id),
-            'Publish in': u'B\xe4rner Zeitung',
-            'Disclose to': u'Hansj\xf6rg',
-            'Copy for attention': u'P\xe4tra',
             'form.widgets.relatedItems:list': True,
+            'Legal basis': u'<div>possible</div>',
+            'Initial position': u'<div>My pr\xf6posal</div>',
+            'Proposed action': u'<div>Lorem ips\xfcm</div>',
+            'Publish in': u'<div>B\xe4rner Zeitung</div>',
+            'Disclose to': u'<div>Hansj\xf6rg</div>',
+            'Copy for attention': u'<div>   &nbsp; \n  &nbsp;</div>',
         })
         browser.css('#form-buttons-save').first.click()
         self.assertIn('Item created',
@@ -109,21 +109,20 @@ class TestProposal(FunctionalTestCase):
         self.assertEqual(Oguid.for_object(proposal), model.oguid)
         self.assertEqual(TEST_USER_ID, model.creator)
         self.assertEqual(u'A pr\xf6posal', model.title)
-        self.assertEqual(u'possible', model.legal_basis)
-        self.assertEqual(u'Lorem ips\xfcm', model.proposed_action)
-        self.assertEqual(u'My pr\xf6posal', model.initial_position)
-        self.assertEqual(u'B\xe4rner Zeitung', model.publish_in)
-        self.assertEqual(u'Hansj\xf6rg', model.disclose_to)
-        self.assertEqual(u'P\xe4tra', model.copy_for_attention)
-        self.assertEqual(u'P\xe4tra', model.copy_for_attention)
+        self.assertEqual(u'<div>possible</div>', model.legal_basis)
+        self.assertEqual(u'<div>Lorem ips\xfcm</div>', model.proposed_action)
+        self.assertEqual(u'<div>My pr\xf6posal</div>', model.initial_position)
+        self.assertEqual(u'<div>B\xe4rner Zeitung</div>', model.publish_in)
+        self.assertEqual(u'<div>Hansj\xf6rg</div>', model.disclose_to)
+        self.assertEqual(u'<div></div>', model.copy_for_attention)
         self.assertEqual(u'Stuff', model.repository_folder_title)
         self.assertEqual(u'en', model.language)
 
-        self.assertEqual(['a', 'proposal', 'my', 'proposal'],
-                         index_data_for(proposal)['SearchableText'])
+        self.assertTrue(set(['a', 'proposal', 'my', 'proposal']).issubset(set(
+                            index_data_for(proposal)['SearchableText'])))
 
     @browsing
-    def test_proposal_can_be_edited_in_browser(self, browser):
+    def test_proposal_can_be_edited_in_browser_and_strips_whitespace(self, browser):
         committee = create(Builder('committee_model'))
         document = create(Builder('document')
                           .within(self.dossier)
@@ -140,13 +139,13 @@ class TestProposal(FunctionalTestCase):
 
         browser.fill({
             'Title': u'A pr\xf6posal',
-            'Legal basis': u'not possible',
-            'Initial position': u'My pr\xf6posal',
-            'Proposed action': u'Lorem ips\xfcm',
+            'Legal basis': u'<div>not possible</div>',
+            'Initial position': u'<div>My pr\xf6posal</div>',
+            'Proposed action': u'<div>&nbsp; do it  \r </div>',
             'Committee': str(committee.committee_id),
-            'Publish in': u'B\xe4rner Zeitung',
-            'Disclose to': u'Hansj\xf6rg',
-            'Copy for attention': u'P\xe4tra',
+            'Publish in': u'<div>B\xe4rner Zeitung</div>',
+            'Disclose to': u'<div>Hansj\xf6rg</div>',
+            'Copy for attention': u'<div>P\xe4tra</div>',
             'form.widgets.relatedItems:list': True,
             })
 
@@ -162,9 +161,9 @@ class TestProposal(FunctionalTestCase):
         self.assertIsNotNone(model)
         self.assertEqual(Oguid.for_object(proposal), model.oguid)
         self.assertEqual(u'A pr\xf6posal', model.title)
-        self.assertEqual(u'not possible', model.legal_basis)
-        self.assertEqual(u'My pr\xf6posal', model.initial_position)
-        self.assertEqual(u'Lorem ips\xfcm', model.proposed_action)
+        self.assertEqual(u'<div>not possible</div>', model.legal_basis)
+        self.assertEqual(u'<div>My pr\xf6posal</div>', model.initial_position)
+        self.assertEqual(u'<div>do it</div>', model.proposed_action)
 
     @browsing
     def test_proposal_language_field_with_multiple_languages(self, browser):

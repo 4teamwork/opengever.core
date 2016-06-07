@@ -1,5 +1,6 @@
 from opengever.base.model import Base
 from opengever.base.model import create_session
+from opengever.base.widgets import trix_strip_whitespace
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
 from opengever.meeting.workflow import State
@@ -74,7 +75,9 @@ class AgendaItem(Base):
             if not markup:
                 return markup
 
-            return transformer.convert('safe_html', markup).getData()
+            markup = markup.decode('utf-8')
+            markup = transformer.convert('safe_html', markup).getData()
+            return trix_strip_whitespace(markup)
 
         if self.has_proposal:
             self.proposal.legal_basis = to_safe_html(data.get('legal_basis'))
