@@ -12,6 +12,9 @@ class IGeverBumblebeeSettings(Interface):
 
 class IBumblebeeOverlay(Interface):
     """Interface for the bumblebee overlay.
+
+    This interface defines the required methods to render the bumblebee
+    overlay template.
     """
 
     def get_preview_pdf_url():

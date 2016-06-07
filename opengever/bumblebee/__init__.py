@@ -34,7 +34,10 @@ def get_representation_url_by_object(format_name, obj, filename=''):
     If no checksum is available, the representation_url will be none.
 
     That means, our obj is only preserved as paper and we have to return
-    a special placeholder image for these documents
+    a special placeholder image for these documents.
+
+    At the moment it's not possible to create previews with bumblebee.
+    So we also handle emails with a special fallback image.
     """
     if IOGMailMarker.providedBy(obj):
         return get_mail_placeholder_image_url()
@@ -52,7 +55,10 @@ def get_representation_url_by_brain(format_name, brain):
     If no checksum is available, the representation_url will be none.
 
     That means, our brain is only preserved as paper and we have to return
-    a special placeholder image for these documents
+    a special placeholder image for these documents.
+
+    At the moment it's not possible to create previews with bumblebee.
+    So we also handle emails with a special fallback image.
     """
     if brain.portal_type in ['ftw.mail.mail']:
         return get_mail_placeholder_image_url()

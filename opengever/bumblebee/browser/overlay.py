@@ -61,11 +61,11 @@ class BumblebeeBaseDocumentOverlay(object):
         return self.context.absolute_url()
 
     def get_file_title(self):
-        return self.has_file() and self.get_file().filename or None
+        return self.get_file().filename if self.has_file() else None
 
     def get_file_size(self):
         """Return the filesize in KB."""
-        return self.has_file() and self.get_file().getSize() / 1024 or None
+        return self.get_file().getSize() / 1024 if self.has_file() else None
 
     def get_checkout_url(self):
         if not self.has_file() or not self._is_checkout_and_edit_available():
@@ -114,8 +114,8 @@ class BumblebeeBaseDocumentOverlay(object):
     def get_file(self):
         if not hasattr(self, '_file'):
             has_file = hasattr(self.context, 'file') and self.context.file
-            setattr(self, '_file', has_file and self.context.file or None)
-        return getattr(self, '_file')
+            self._file = self.context.file if has_file else None
+        return self._file
 
     def _get_pdf_filename(self):
         if not self.has_file():
@@ -185,8 +185,8 @@ class BumblebeeMailOverlay(BumblebeeBaseDocumentOverlay):
     def get_file(self):
         if not hasattr(self, '_file'):
             has_file = hasattr(self.context, 'message') and self.context.message
-            setattr(self, '_file', has_file and self.context.message or None)
-        return getattr(self, '_file')
+            self._file = self.context.message if has_file else None
+        return self._file
 
 
 class BumblebeeOverlayBaseView(BrowserView):
