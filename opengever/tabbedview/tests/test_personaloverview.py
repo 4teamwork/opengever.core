@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.testing import create_plone_user
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import setRoles
@@ -121,6 +122,23 @@ class TestPersonalOverviewActivitySupport(FunctionalTestCase):
         self.assertEqual(
             ['mydossiers', 'mydocuments-proxy', 'mytasks',
              'myissuedtasks', 'My notifications'],
+            browser.css('li.formTab a').text)
+
+
+class TestPersonalOverviewMeetingSupport(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_MEETING_LAYER
+
+    @browsing
+    def test_myproposal_tab_is_displayed_when_meeting_feature_is_enabled(self, browser):
+        browser.login().open(view='personal_overview')
+        self.assertEqual(
+            ['mydossiers', 'mydocuments-proxy',
+             'mytasks',
+             'myissuedtasks',
+             'My proposals',
+             'alltasks',
+             'allissuedtasks'],
             browser.css('li.formTab a').text)
 
 
