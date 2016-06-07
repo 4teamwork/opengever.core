@@ -1,7 +1,7 @@
 from five import grok
+from plone import api
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 from z3c.form.converter import BaseDataConverter
-from zope.schema.interfaces import IField
 from z3c.form.interfaces import IFieldWidget
 from z3c.form.interfaces import IFormLayer
 from z3c.form.interfaces import ITextAreaWidget
@@ -12,9 +12,10 @@ from zope.component import adapts
 from zope.interface import implementer
 from zope.interface import implementsOnly
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
+from zope.schema.interfaces import IField
 from zope.schema.interfaces import ISequence
 from zope.schema.interfaces import ITextLine
-from plone import api
+import re
 
 
 @grok.implementer(IFieldWidget)
@@ -42,6 +43,27 @@ def TrixFieldWidget(field, request):
     return FieldWidget(field, TrixWidget(request))
 
 
+# markup processed by trix is always wrapped in a single container div
+RE_TRIX_LEADING_WHITESPACE = re.compile(
+    ur"^<div>(&nbsp;|<br\s*/?>|\s)*", re.UNICODE)
+RE_TRIX_TRAILING_WHITESPACE = re.compile(
+    ur"(&nbsp;|<br\s*/?>|\s)*</div>$", re.UNICODE)
+
+
+def trix_strip_whitespace(string):
+    """Strip whitespace from a string.
+
+    The string will contain markup supplied by trix, thus consecutive
+    space characters will be encoded as &nbsp;.
+    """
+    if not string:
+        return string
+
+    lstripped = RE_TRIX_LEADING_WHITESPACE.sub(u"<div>", string)
+    rstripped = RE_TRIX_TRAILING_WHITESPACE.sub(u"</div>", lstripped)
+    return rstripped
+
+
 class TrixDataConverter(BaseDataConverter):
     """Convert trix input to safe html."""
 
@@ -53,4 +75,8 @@ class TrixDataConverter(BaseDataConverter):
 
     def toFieldValue(self, value):
         safe_html = self.transformer.convert('safe_html', value).getData()
-        return super(TrixDataConverter, self).toFieldValue(safe_html)
+        # transform may return non-unicode empty string which raises validation
+        # errors on the field
+        safe_html = safe_html or u''
+        field_value = self.field.fromUnicode(safe_html)
+        return trix_strip_whitespace(field_value)

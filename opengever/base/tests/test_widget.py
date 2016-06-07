@@ -1,5 +1,7 @@
 from ftw.testbrowser import browsing
+from opengever.base.widgets import trix_strip_whitespace
 from opengever.testing import FunctionalTestCase
+from unittest2 import TestCase
 
 
 class TestWidget(FunctionalTestCase):
@@ -29,3 +31,22 @@ class TestWidget(FunctionalTestCase):
         }).submit()
         self.assertEquals({u'trix_field': u'<div>P\xe4ter</div>'},
                           browser.json)
+
+
+class TestUnitTrixStripWhitespace(TestCase):
+
+    def test_preserves_none(self):
+        self.assertIsNone(trix_strip_whitespace(None))
+
+    def test_preserves_empty_string(self):
+        self.assertEqual(u'', trix_strip_whitespace(u''))
+
+    def test_strips_leading_whitepace(self):
+        self.assertEqual(
+            u'<div>f\xf6  \nbar</div>',
+            trix_strip_whitespace(u'<div>\t&nbsp; <br> \n\r\v  f\xf6  \nbar</div>'))
+
+    def test_strips_trailing_whitespace(self):
+        self.assertEqual(
+            u'<div>b\xe4r\t\r\nqux</div>',
+            trix_strip_whitespace(u'<div>b\xe4r\t\r\nqux&nbsp;&nbsp;<br /><br/> \n</div>'))

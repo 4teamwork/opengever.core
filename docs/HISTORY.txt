@@ -5,6 +5,9 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Strip whitespace when saving proposals or a protocol.
+  [deiferni]
+
 - Added new tab "My Proposals" to the personal overview.
   [phgross]
 
