@@ -54,7 +54,7 @@ class TestGetOpenAsPdfLink(FunctionalTestCase):
         adapter = getMultiAdapter((document, self.request), IBumblebeeOverlay)
 
         self.assertIn(
-            '/YnVtYmxlYmVl/api/v3/resource/', adapter.get_open_as_pdf_link())
+            '/YnVtYmxlYmVl/api/v3/resource/', adapter.get_open_as_pdf_url())
 
     def test_returns_none_if_no_mimetype_is_available(self):
         dossier = create(Builder('dossier'))
@@ -62,7 +62,7 @@ class TestGetOpenAsPdfLink(FunctionalTestCase):
 
         adapter = getMultiAdapter((document, self.request), IBumblebeeOverlay)
 
-        self.assertIsNone(adapter.get_open_as_pdf_link())
+        self.assertIsNone(adapter.get_open_as_pdf_url())
 
     def test_returns_none_if_mimetype_is_not_supported(self):
         dossier = create(Builder('dossier'))
@@ -73,7 +73,7 @@ class TestGetOpenAsPdfLink(FunctionalTestCase):
 
         adapter = getMultiAdapter((document, self.request), IBumblebeeOverlay)
 
-        self.assertIsNone(adapter.get_open_as_pdf_link())
+        self.assertIsNone(adapter.get_open_as_pdf_url())
 
 
 class TestGetPdfFilename(FunctionalTestCase):

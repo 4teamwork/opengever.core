@@ -40,7 +40,7 @@
         </li>
         <li id="action-download" tal:define="link view/overlay/get_download_copy_link" tal:condition="nocall: link" tal:content="structure link">
         </li>
-        <li tal:define="link view/overlay/get_open_as_pdf_link" tal:condition="nocall: link">
+        <li tal:define="link view/overlay/get_open_as_pdf_url" tal:condition="nocall: link">
           <a id="action-pdf"
              tal:attributes="href link"
              i18n:translate="">Open as PDF</a>

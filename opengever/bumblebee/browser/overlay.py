@@ -90,7 +90,7 @@ class BumblebeeBaseDocumentOverlay(object):
             include_token=True
             )
 
-    def get_open_as_pdf_link(self):
+    def get_open_as_pdf_url(self):
         mimetypeitem = self.context.get_mimetype()
         if not mimetypeitem or not is_mimetype_supported(mimetypeitem[0]):
             return None
@@ -159,7 +159,7 @@ class BumblebeeMailOverlay(BumblebeeBaseDocumentOverlay):
     """Bumblebee overlay for base mails.
     """
 
-    def get_open_as_pdf_link(self):
+    def get_open_as_pdf_url(self):
         return None
 
     def get_checkout_url(self):
