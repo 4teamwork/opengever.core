@@ -71,35 +71,37 @@
 
           <a href="#"
              class="button"
-             tal:attributes="class python: dossier.appraisal and 'icon_button archive active' or 'icon_button archive';
-                             data-url python: view.get_update_appraisal_url(dossier, True);"
-             i18n:translate="">
-            Archive
+             title="Archive"
+             i18n:attributes="title label_archive"
+             tal:attributes="class python: 'icon_button archive active' if dossier.appraisal else 'icon_button archive';
+                             data-url python: view.get_update_appraisal_url(dossier, True);">
+
           </a>
 
           <a href="#"
              class="button"
-             tal:attributes="class python: dossier.appraisal and 'not_archive icon_button' or 'not_archive icon_button active';
-                             data-url python: view.get_update_appraisal_url(dossier, False);"
-             i18n:translate="">
-            Don't archive
+             title="Don't archive"
+             i18n:attributes="title label_dont_archive"
+             tal:attributes="class python: 'not_archive icon_button' if dossier.appraisal else 'not_archive icon_button active';
+                             data-url python: view.get_update_appraisal_url(dossier, False);">
           </a>
 
         </div>
 
         <div class="button-group appraisal-button-group"
              tal:condition="not: view/appraisal_buttons_available">
+
           <span tal:condition="dossier/appraisal"
                 class="icon_button archive active"
-                i18n:translate="label_archive">
-            Archive
-          </span>
+                title="Archive"
+                i18n:attributes="title label_archive" />
+
           <span
               tal:condition="not: dossier/appraisal"
               class="icon_button not_archive active"
-              i18n:translate="label_dont_archive">
-            Don't archive
-          </span>
+              title="Don't archive"
+              i18n:attributes="title label_dont_archive" />
+
         </div>
       </div>
 

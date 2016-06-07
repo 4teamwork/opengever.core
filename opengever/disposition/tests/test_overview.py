@@ -69,10 +69,10 @@ class TestDispositionOverview(FunctionalTestCase):
 
         self.assertEquals(
             'Archive',
-            browser.css('.appraisal-button-group .active')[0].text)
+            browser.css('.appraisal-button-group .active')[0].get('title'))
         self.assertEquals(
             "Don't archive",
-            browser.css('.appraisal-button-group .active')[1].text)
+            browser.css('.appraisal-button-group .active')[1].get('title'))
 
     @browsing
     def test_appraisal_buttons_are_only_links_in_progress_state(self, browser):
@@ -81,24 +81,27 @@ class TestDispositionOverview(FunctionalTestCase):
 
         self.assertEquals(
             ['Archive', "Don't archive"],
-            browser.css('.appraisal-button-group').first.css('a').text)
+            [link.get('title') for link in browser.css('.appraisal-button-group').first.css('a')])
         browser.find('disposition-transition-appraise').click()
 
         browser.login().open(self.disposition, view='tabbedview_view-overview')
         self.assertEquals(
-            [], browser.css('.appraisal-button-group').first.css('a').text)
+            [],
+            [link.get('title') for link in browser.css('.appraisal-button-group').first.css('a')])
 
         buttons = browser.css('.appraisal-button-group')
-        self.assertEquals('Archive', buttons[0].text)
-        self.assertEquals("Don't archive", buttons[1].text)
+        self.assertEquals(['Archive'],
+                          [link.get('title') for link in buttons[0].css('span')])
+        self.assertEquals(["Don't archive"],
+                          [link.get('title') for link in buttons[1].css('span')])
 
     @browsing
-    def test_update_appraisal_is_correct(self, browser):
+    def test_update_appraisal_displays_buttons_correctly(self, browser):
         browser.login().open(self.disposition, view='tabbedview_view-overview')
 
         self.assertEquals(
             ['Archive', "Don't archive"],
-            browser.css('.appraisal-button-group .active').text)
+            [link.get('title') for link in browser.css('.appraisal-button-group .active')])
 
         dont_archive_button = browser.css('.appraisal-button-group .archive')[1]
         browser.open(dont_archive_button.get('data-url'))
@@ -106,7 +109,7 @@ class TestDispositionOverview(FunctionalTestCase):
         browser.login().open(self.disposition, view='tabbedview_view-overview')
         self.assertEquals(
             ['Archive', 'Archive'],
-            browser.css('.appraisal-button-group .active').text)
+            [link.get('title') for link in browser.css('.appraisal-button-group .active')])
 
     @browsing
     def test_lists_possible_transitions_in_actionmenu_as_buttons(self, browser):
