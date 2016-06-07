@@ -42,8 +42,15 @@ class TestGetRepresentationUrlByObject(FunctionalTestCase):
         document = create(Builder('document'))
 
         self.assertIn(
-            'not_digitally_available.png',
+            'fallback_not_digitally_available.png',
             get_representation_url_by_object('thumbnail', document))
+
+    def test_returns_mail_placeholder_image_if_mail(self):
+        mail = create(Builder('mail'))
+
+        self.assertIn(
+            'fallback_email.png',
+            get_representation_url_by_object('thumbnail', mail))
 
 
 class TestGetRepresentationUrlByBrain(FunctionalTestCase):
@@ -66,8 +73,15 @@ class TestGetRepresentationUrlByBrain(FunctionalTestCase):
         brain = obj2brain(document)
 
         self.assertIn(
-            'not_digitally_available.png',
+            'fallback_not_digitally_available.png',
             get_representation_url_by_brain('thumbnail', brain))
+
+    def test_returns_mail_placeholder_image_if_mail(self):
+        mail = create(Builder('mail'))
+
+        self.assertIn(
+            'fallback_email.png',
+            get_representation_url_by_brain('thumbnail', mail))
 
 
 def TestIsBumblebeeable(FunctionalTestCase):

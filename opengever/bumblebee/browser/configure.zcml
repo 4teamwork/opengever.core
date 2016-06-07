@@ -1,9 +1,38 @@
 <configure
+    xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="opengever.bumblebee">
 
   <browser:resourceDirectory
       name="opengever.bumblebee.resources"
       directory="resources" />
+
+  <browser:page
+      for="ftw.bumblebee.interfaces.IBumblebeeable"
+      name="bumblebee-overlay-document"
+      class=".overlay.BumblebeeOverlayDocumentView"
+      template="templates/bumblebeeoverlay.pt"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="ftw.bumblebee.interfaces.IBumblebeeable"
+      name="bumblebee-overlay-listing"
+      class=".overlay.BumblebeeOverlayListingView"
+      template="templates/bumblebeeoverlay.pt"
+      permission="zope2.View"
+      />
+
+  <adapter
+      for="opengever.document.document.IDocumentSchema
+           zope.interface.Interface"
+      factory=".overlay.BumblebeeBaseDocumentOverlay"
+      />
+
+  <adapter
+      for="opengever.mail.mail.IOGMailMarker
+           zope.interface.Interface"
+      factory=".overlay.BumblebeeMailOverlay"
+      />
 
 </configure>
