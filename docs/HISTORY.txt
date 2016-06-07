@@ -5,6 +5,9 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Fixed label for the pending statefilter on task listings.
+  [phgross]
+
 - Mark mails as IBumblebeeable.
   [elioschmutz]
 
