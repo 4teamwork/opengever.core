@@ -72,7 +72,7 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
                 physical_path,
                 view='update-submitted-document')
 
-    def test_database_entry_is_deleted_when_removing_target_document(self):
+    def test_database_entry_is_deleted_when_removing_submitted_proposal(self):
         self.grant('Manager')
         proposal = create(Builder('proposal')
                           .within(self.dossier)
@@ -86,12 +86,12 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
         self.assertIsNotNone(
             SubmittedDocument.query.get_by_target(submitted_document))
 
-        api.content.delete(submitted_document)
+        api.content.delete(submitted_proposal)
 
         self.assertIsNone(
             SubmittedDocument.query.get_by_target(submitted_document))
 
-    def test_database_entry_is_deleted_when_removing_source_document(self):
+    def test_database_entry_is_deleted_when_removing_proposal(self):
         self.grant('Manager')
         proposal = create(Builder('proposal')
                           .within(self.dossier)

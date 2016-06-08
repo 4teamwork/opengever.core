@@ -6,3 +6,9 @@ LOCK_TYPE_SYS_LOCK = u'sys.lock'
 
 SYS_LOCK = LockType(LOCK_TYPE_SYS_LOCK, stealable=True, user_unlockable=True,
                     timeout=MAX_TIMEOUT)
+
+
+LOCK_TYPE_MEETING_SUBMITTED_LOCK = u'meeting.submitted.lock'
+MEETING_SUBMITTED_LOCK = LockType(
+    LOCK_TYPE_MEETING_SUBMITTED_LOCK,
+    stealable=True, user_unlockable=True, timeout=MAX_TIMEOUT)
