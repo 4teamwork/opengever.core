@@ -64,6 +64,11 @@ class IProposalModel(Interface):
         required=False,
         )
 
+    decision_draft = schema.Text(
+        title=_('label_decision_draft', default=u"Decision draft"),
+        required=False,
+        )
+
     publish_in = schema.Text(
         title=_('label_publish_in', default=u"Publish in"),
         required=False,
@@ -116,6 +121,11 @@ class ISubmittedProposalModel(Interface):
     considerations = schema.Text(
         title=_('label_considerations', default=u"Considerations"),
         description=_("help_considerations", default=u""),
+        required=False,
+        )
+
+    decision_draft = schema.Text(
+        title=_('label_decision_draft', default=u"Decision draft"),
         required=False,
         )
 
@@ -194,6 +204,9 @@ class ProposalBase(ModelContainer):
 
             {'label': _('label_proposed_action', default=u'Proposed action'),
              'value': model.proposed_action},
+
+            {'label': _('label_decision_draft', default=u'Decision draft'),
+             'value': model.decision_draft},
 
             {'label': _('label_decision', default=u'Decision'),
              'value': model.get_decision()},

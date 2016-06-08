@@ -5,6 +5,10 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Added new attribute decision_draft to proposal, which allows to
+  prefill the agendaitem's decision.
+  [phgross]
+
 - Add support for single showroom items.
   [Kevin Bieri]
 
