@@ -38,7 +38,7 @@
     }
   }
 
-  function tail(item) {
+  function tail() {
     if(global.tabbedview) {
       loadNextTabbedviewItems();
     }
@@ -62,14 +62,14 @@
     if ($('#search-results').length) {
       $( document ).ajaxComplete(function(event, jqXHR, params) {
         if(params.url.indexOf("@@updated_search") !== -1) {
-          updateShowroom();
+          initSingleShowroom();
         }
       });
     }
   }
 
   function getNumberOfDocuments(fallback_value) {
-    var galleryDocuments = $(".preview-listing").data('number-of-documents')
+    var galleryDocuments = $(".preview-listing").data('number-of-documents');
 
     if ( $.isNumeric(galleryDocuments) ) {
       // we are in gallery_view
@@ -79,7 +79,7 @@
     if ( window.store ) {
       // The store-attribute comes from ftw.table. If it's available,
       // we are on a list view.
-      var listDocuments = store.totalLength
+      var listDocuments = window.store.totalLength;
       if ( $.isNumeric(listDocuments)) {
         return listDocuments;
       }
@@ -89,16 +89,31 @@
   }
 
   function updateShowroom() {
+    if(($(".template-search").length) || $(".portaltype-opengever-document-document").length) {
+      initSingleShowroom();
+      return;
+    }
     var items = document.querySelectorAll(".showroom-item");
     var previewListing = $(".preview-listing");
 
     endpoint = previewListing.data("fetch-url");
-    numberOfDocuments = getNumberOfDocuments(fallback_value=items.length);
+    numberOfDocuments = getNumberOfDocuments(items.length);
     toggleShowMoreButton();
     scanForBrokenImages(".preview-listing");
 
     showroom.reset(items);
     showroom.setTotal(numberOfDocuments);
+  }
+
+  function initSingleShowroom() {
+    var items = document.querySelectorAll(".showroom-item");
+    var previewListing = $(".preview-listing");
+
+    endpoint = previewListing.data("fetch-url");
+    scanForBrokenImages(".preview-listing");
+    items.forEach(function(item) {
+      Showroom([item], { displayCurrent: false });
+    });
   }
 
   $(document)

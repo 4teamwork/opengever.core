@@ -5,6 +5,9 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Add support for single showroom items.
+  [Kevin Bieri]
+
 - Fixed label for the pending statefilter on task listings.
   [phgross]
 
