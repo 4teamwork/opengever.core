@@ -7,6 +7,8 @@ from ftw.testbrowser import browsing
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.testing import FunctionalTestCase
 from plone.rfc822.interfaces import IPrimaryFieldInfo
+from zope.event import notify
+from zope.lifecycleevent import ObjectModifiedEvent
 
 
 class TestBumblebeeIntegrationWithDisabledFeature(FunctionalTestCase):
@@ -64,3 +66,23 @@ class TestBumblebeeIntegrationWithEnabledFeature(FunctionalTestCase):
         self.assertEqual(
             'http://nohost/plone/dossier-1/document-1/@@bumblebee-overlay-document',
             browser.css('.imageContainer').first.get('data-showroom-target'))
+
+    def test_prevents_checked_out_document_checksum_update(self):
+        document = create(Builder('document')
+                          .attach_file_containing(
+                              bumblebee_asset('example.docx').bytes(),
+                              u'example.docx')
+                          .checked_out())
+
+        self.assertEquals(
+            DOCX_CHECKSUM,
+            bumblebee_utils.get_document_checksum(document))
+
+        document.update_file(filename=u'foo.txt',
+                             content_type='text/plain',
+                             data='foo')
+        notify(ObjectModifiedEvent(document))
+
+        self.assertEquals(
+            DOCX_CHECKSUM,
+            bumblebee_utils.get_document_checksum(document))
