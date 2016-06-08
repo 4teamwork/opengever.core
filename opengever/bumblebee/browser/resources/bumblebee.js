@@ -38,7 +38,7 @@
     }
   }
 
-  function tail(item) {
+  function tail() {
     if(global.tabbedview) {
       loadNextTabbedviewItems();
     }
@@ -69,7 +69,7 @@
   }
 
   function getNumberOfDocuments(fallback_value) {
-    var galleryDocuments = $(".preview-listing").data('number-of-documents')
+    var galleryDocuments = $(".preview-listing").data('number-of-documents');
 
     if ( $.isNumeric(galleryDocuments) ) {
       // we are in gallery_view
@@ -79,7 +79,7 @@
     if ( window.store ) {
       // The store-attribute comes from ftw.table. If it's available,
       // we are on a list view.
-      var listDocuments = store.totalLength
+      var listDocuments = window.store.totalLength;
       if ( $.isNumeric(listDocuments)) {
         return listDocuments;
       }
@@ -93,7 +93,7 @@
     var previewListing = $(".preview-listing");
 
     endpoint = previewListing.data("fetch-url");
-    numberOfDocuments = getNumberOfDocuments(fallback_value=items.length);
+    numberOfDocuments = getNumberOfDocuments(items.length);
     toggleShowMoreButton();
     scanForBrokenImages(".preview-listing");
 
