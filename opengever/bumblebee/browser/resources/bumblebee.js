@@ -62,7 +62,7 @@
     if ($('#search-results').length) {
       $( document ).ajaxComplete(function(event, jqXHR, params) {
         if(params.url.indexOf("@@updated_search") !== -1) {
-          updateShowroom();
+          initSingleShowroom();
         }
       });
     }
@@ -89,6 +89,10 @@
   }
 
   function updateShowroom() {
+    if(($(".template-search").length) || $(".portaltype-opengever-document-document").length) {
+      initSingleShowroom();
+      return;
+    }
     var items = document.querySelectorAll(".showroom-item");
     var previewListing = $(".preview-listing");
 
@@ -99,6 +103,17 @@
 
     showroom.reset(items);
     showroom.setTotal(numberOfDocuments);
+  }
+
+  function initSingleShowroom() {
+    var items = document.querySelectorAll(".showroom-item");
+    var previewListing = $(".preview-listing");
+
+    endpoint = previewListing.data("fetch-url");
+    scanForBrokenImages(".preview-listing");
+    items.forEach(function(item) {
+      Showroom([item], { displayCurrent: false });
+    });
   }
 
   $(document)
