@@ -114,7 +114,9 @@ class AgendaItem(Base):
             'repository_folder_title': self.get_repository_folder_title(),
             'is_paragraph': self.is_paragraph,
             'decision_number': self.decision_number,
-        }
+            'html:decision_draft': self._sanitize_text(
+                self.get_decision_draft())}
+
         if include_initial_position:
             data['html:initial_position'] = self._sanitize_text(
                 self.initial_position)
@@ -160,6 +162,10 @@ class AgendaItem(Base):
             self.proposal.title = title
         else:
             self.title = title
+
+    def get_decision_draft(self):
+        if self.has_proposal:
+            return self.proposal.decision_draft
 
     def get_dossier_reference_number(self):
         if self.has_proposal:

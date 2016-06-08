@@ -115,6 +115,7 @@ class TestAgendaItemList(FunctionalTestCase):
 
     @browsing
     def test_contains_proposal_and_freetext_agendaitems(self, browser):
+        self.maxDiff = None
         meeting = create(Builder('meeting')
                          .having(committee=self.committee_model)
                          .link_with(self.meeting_dossier))
@@ -124,6 +125,7 @@ class TestAgendaItemList(FunctionalTestCase):
                           .having(title='Mach doch',
                                   committee=self.committee.load_model(),
                                   legal_basis=u'We may do it',
+                                  decision_draft=u'Proposal approved',
                                   initial_position=u'We should do it.',
                                   proposed_action=u'Do it.',
                                   considerations=u'Uhm....')
@@ -143,7 +145,8 @@ class TestAgendaItemList(FunctionalTestCase):
               u'dossier_reference_number': u'Client1 1 / 1',
               u'html:considerations': u'Uhm....',
               u'html:copy_for_attention': None,
-              u'html:decision': None,
+              u'html:decision': u'Proposal approved',
+              u'html:decision_draft': u'Proposal approved',
               u'html:disclose_to': None,
               u'html:discussion': u'I say Nay!',
               u'html:initial_position': u'We should do it.',
@@ -160,6 +163,7 @@ class TestAgendaItemList(FunctionalTestCase):
               u'html:considerations': None,
               u'html:copy_for_attention': None,
               u'html:decision': None,
+              u'html:decision_draft': None,
               u'html:disclose_to': None,
               u'html:discussion': None,
               u'html:initial_position': None,
