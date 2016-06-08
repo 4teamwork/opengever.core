@@ -329,6 +329,16 @@ class TestProposal(FunctionalTestCase):
 
         self.assertSubmittedDocumentCreated(proposal, document, submitted_document)
 
+        # document should have custom lock message
+        browser.open(submitted_document)
+        self.assertEqual(
+            ['This document has been submitted as a copy of A Document and '
+             'cannot be edited directly.'],
+            info_messages())
+        self.assertEqual(
+            document.absolute_url(),
+            browser.css('.portalMessage.info a').first.get('href'))
+
     @browsing
     def test_dossier_reference_number_is_set_on_creation(self, browser):
         committee = create(Builder('committee_model'))

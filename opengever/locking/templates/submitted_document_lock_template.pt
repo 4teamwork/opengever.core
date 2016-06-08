@@ -1,0 +1,24 @@
+<div id="plone-lock-status"
+     i18n:domain="opengever.locking"
+     tal:define="locked view/info/is_locked_for_current_user;
+                 document view/get_source_document_from_submitted_document;">
+  <tal:block condition="locked">
+    <dl class="portalMessage info">
+      <dt i18n:domain="plone" i18n:translate="label_locked">Locked</dt>
+      <dd>
+        <tal:author-page tal:condition="nocall: document"
+            i18n:translate="description_locked_linked_submitted_document">
+          This document has been submitted as a copy of
+          <a i18n:name="document"
+             tal:content="document/Title"
+             tal:attributes="href document/absolute_url" />
+          and cannot be edited directly.
+        </tal:author-page>
+        <tal:author-page tal:condition="not: nocall: document"
+            i18n:translate="description_locked_submitted_document">
+          This document has been submitted as a copy and cannot be edited directly.
+        </tal:author-page>
+      </dd>
+    </dl>
+  </tal:block>
+</div>
