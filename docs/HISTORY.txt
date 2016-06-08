@@ -5,6 +5,9 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Fixed textfiltering for task listings on PostgreSQL.
+  [phgross]
+
 - Prevent updating bumblebee checksum for checked out documents.
   This no longer updates the preview pdf and thumbnails for checked
   out documents and prevents that other users can see the working
