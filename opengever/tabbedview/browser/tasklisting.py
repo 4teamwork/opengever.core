@@ -62,7 +62,8 @@ class GlobalTaskListingTab(BaseListingTab):
 
     filterlist = FilterList(
         Filter('filter_all', _('all')),
-        PendingTasksFilter('filter_pending', _('Active'), default=True),
+        PendingTasksFilter('filter_pending',
+                           _('label_pending', 'Pending'), default=True),
     )
 
     columns = (
