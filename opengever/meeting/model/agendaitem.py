@@ -61,6 +61,15 @@ class AgendaItem(Base):
     discussion = Column(UnicodeCoercingText)
     decision = Column(UnicodeCoercingText)
 
+    def __init__(self, *args, **kwargs):
+        """Prefill the decision attributes with proposal's decision_draft.
+        """
+        proposal = kwargs.get('proposal')
+        if proposal and not kwargs.get('decision'):
+            kwargs.update({'decision': proposal.decision_draft})
+
+        super(AgendaItem, self).__init__(*args, **kwargs)
+
     def update(self, request):
         """Update with changed data."""
 
