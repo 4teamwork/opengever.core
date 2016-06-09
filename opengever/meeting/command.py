@@ -447,3 +447,11 @@ class SubmitDocumentCommand(OgCopyCommand):
         return Transporter().transport_to(
             self.source, self.target_admin_unit_id, self.target_path,
             view='recieve-submitted-document')
+
+
+class CreateExcerptCommand(OgCopyCommand):
+
+    def execute(self):
+        return Transporter().transport_to(
+            self.source, self.target_admin_unit_id, self.target_path,
+            view='recieve-excerpt-document')

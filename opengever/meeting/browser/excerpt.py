@@ -1,13 +1,17 @@
 from five import grok
 from opengever.base.oguid import Oguid
 from opengever.base.security import elevated_privileges
+from opengever.base.transport import PrivilegedReceiveObject
 from opengever.base.transport import Transporter
+from opengever.locking.lock import MEETING_EXCERPT_LOCK
 from opengever.meeting import _
 from plone import api
+from plone.locking.interfaces import ILockable
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from zExceptions import NotFound
 from zExceptions import Unauthorized
 from zope.i18n import translate
+from zope.interface import Interface
 import json
 
 
@@ -41,3 +45,16 @@ class UpdateDossierExcerpt(grok.View):
                 context=self.request)
             repository.save(obj=document, comment=comment)
         return json.dumps({})
+
+
+class RecieveExcerptDocumentView(PrivilegedReceiveObject):
+    """Lock excerpt documents after recieving them."""
+
+    grok.name('recieve-excerpt-document')
+    grok.require('cmf.AddPortalContent')
+    grok.context(Interface)
+
+    def receive(self):
+        document = super(RecieveExcerptDocumentView, self).receive()
+        ILockable(document).lock(MEETING_EXCERPT_LOCK)
+        return document

@@ -2,12 +2,14 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
+from opengever.locking.lock import MEETING_EXCERPT_LOCK
 from opengever.meeting.model import Meeting
 from opengever.meeting.model import Proposal
 from opengever.meeting.model.agendaitem import AgendaItem
 from opengever.meeting.wrapper import MeetingWrapper
 from opengever.testing import FunctionalTestCase
 from plone import api
+from plone.locking.interfaces import ILockable
 from plone.protect import createToken
 from z3c.relationfield.relation import RelationValue
 from zExceptions import NotFound
@@ -282,6 +284,27 @@ class TestAgendaItemDecide(TestAgendaItem):
               u'messageClass': u'info',
               u'messageTitle': u'Information'}],
             browser.json.get('messages'))
+
+    @browsing
+    def test_decide_agenda_item_creates_locked_excerpt_in_dossier(self, browser):
+        self.setup_excerpt_template()
+        proposal = self.setup_proposal()
+        # schedule
+        view = 'unscheduled_proposals/{}/schedule'.format(
+            proposal.load_model().proposal_id)
+
+        browser.login().open(self.meeting_wrapper, view=view)
+        agenda_item = AgendaItem.query.first()
+        browser.login().open(
+            self.meeting_wrapper,
+            view='agenda_items/{}/decide'.format(agenda_item.agenda_item_id),
+            data={'_authenticator': createToken()})
+
+        agenda_item = AgendaItem.query.first()  # refresh
+        excerpt_in_dossier = agenda_item.proposal.excerpt_document.resolve_document()
+        lockable = ILockable(excerpt_in_dossier)
+        self.assertTrue(lockable.locked())
+        self.assertTrue(lockable.can_safely_unlock(MEETING_EXCERPT_LOCK))
 
     @browsing
     def test_decide_proposal_agenda_item_without_dossier_permission(self, browser):
