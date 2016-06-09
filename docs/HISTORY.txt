@@ -5,6 +5,12 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Prevent updating bumblebee checksum for checked out documents.
+  This no longer updates the preview pdf and thumbnails for checked
+  out documents and prevents that other users can see the working
+  copy.
+  [deiferni]
+
 - Added new attribute decision_draft to proposal, which allows to
   prefill the agendaitem's decision.
   [phgross]
