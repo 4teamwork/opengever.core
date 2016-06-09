@@ -106,7 +106,7 @@
   }
 
   function initSingleShowroom() {
-    var items = document.querySelectorAll(".showroom-item");
+    var items = [].slice.call(document.querySelectorAll(".showroom-item"));
     var previewListing = $(".preview-listing");
 
     endpoint = previewListing.data("fetch-url");

@@ -5,6 +5,9 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Fix document overview.
+  [Kevin Bieri]
+
 - Fixed textfiltering for task listings on PostgreSQL.
   [phgross]
 
