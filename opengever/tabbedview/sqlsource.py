@@ -3,8 +3,10 @@ from ftw.table.interfaces import ITableSource
 from opengever.tabbedview import GeverTableSource
 from opengever.tabbedview.interfaces import IGeverTableSourceConfig
 from sqlalchemy import or_
+from sqlalchemy import String
 from sqlalchemy.orm.query import Query
 from sqlalchemy.sql.expression import asc
+from sqlalchemy.sql.expression import cast
 from sqlalchemy.sql.expression import column
 from sqlalchemy.sql.expression import desc
 from zope.interface import Interface
@@ -77,8 +79,9 @@ class SqlTableSource(GeverTableSource):
                 # Issue #759
                 query.session
 
-                query = query.filter(
-                    or_(*[field.like(term) for field in self.searchable_columns]))
+                query = query.filter(or_(
+                    *[cast(field, String).like(term)
+                      for field in self.searchable_columns]))
 
         return query
 
