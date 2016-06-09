@@ -121,6 +121,7 @@ class Proposal(Base):
     proposed_action = Column(UnicodeCoercingText)
 
     considerations = Column(UnicodeCoercingText)
+    decision_draft = Column(UnicodeCoercingText)
     publish_in = Column(UnicodeCoercingText)
     disclose_to = Column(UnicodeCoercingText)
     copy_for_attention = Column(UnicodeCoercingText)

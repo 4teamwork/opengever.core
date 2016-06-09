@@ -25,6 +25,7 @@ class TestProtocolJsonData(FunctionalTestCase):
                     considerations=u'<div>Die Bauten sind eindeutig Baubewilligungspflichtig. Gem\xe4ss \xa7 59 des Baugesetzes bed\xfcrfen alle Bauten und ihre im Hinblick auf die Anliegen der Raumplanung, des Umweltschutzes oder der Baupolizei wesentliche Umgestaltung, Erweiterung oder Zweck\xe4nderung sowie die Beseitigung von Geb\xe4uden der Bewilligung durch den Gemeinderat. Das Bauen ohne Baubewilligung stellt eine strafbare Handlung nach \xa7 160 Baugesetz dar. Strafbar ist die vors\xe4tzliche oder fahrl\xe4ssige Widerhandlung, begangen durch Bauherren, Eigent\xfcmer, sonstige Berechtigte, Projektverfasser, Unternehmer und Bauleiter. Im vorliegenden Fall ist der Straftatbestand durch den Bauherrn und seinen Sohn erf\xfcllt. Aus Gr\xfcnden der Gleichbehandlung mit anderen F\xe4llen ist der Gemeinderat gezwungen, die \xdcbertretung angemessen zu bestrafen.</div><ul><li>UL Eintrag</li><li>UL Eintrag<ul><li>UL Einger\xfcckt</li></ul></li></ul>',
                     copy_for_attention=u'<div>Hanspeter</div>',
                     disclose_to=u'<div>Jans\xf6rg</div>',
+                    decision_draft=u'<div>Der Gemeinderat erstattet Strafanzeige gegen Unbekannt und informiert zudem den Vermieter (Herr. Meier).</div>',
                     publish_in=u'<div>Tagblatt</div>',))
         self.committee = create(Builder('committee_model')
                                 .having(title=u'Gemeinderat'))

@@ -21,6 +21,7 @@ class ProposalEditForm(ModelProxyEditForm, dexterity.EditForm):
     fields['legal_basis'].widgetFactory = TrixFieldWidget
     fields['initial_position'].widgetFactory = TrixFieldWidget
     fields['proposed_action'].widgetFactory = TrixFieldWidget
+    fields['decision_draft'].widgetFactory = TrixFieldWidget
     fields['publish_in'].widgetFactory = TrixFieldWidget
     fields['disclose_to'].widgetFactory = TrixFieldWidget
     fields['copy_for_attention'].widgetFactory = TrixFieldWidget
@@ -43,6 +44,7 @@ class SubmittedProposalEditForm(ModelProxyEditForm, dexterity.EditForm):
     fields['initial_position'].widgetFactory = TrixFieldWidget
     fields['proposed_action'].widgetFactory = TrixFieldWidget
     fields['considerations'].widgetFactory = TrixFieldWidget
+    fields['decision_draft'].widgetFactory = TrixFieldWidget
     fields['publish_in'].widgetFactory = TrixFieldWidget
     fields['disclose_to'].widgetFactory = TrixFieldWidget
     fields['copy_for_attention'].widgetFactory = TrixFieldWidget
@@ -61,6 +63,7 @@ class AddForm(ModelProxyAddForm, dexterity.AddForm):
     fields['legal_basis'].widgetFactory = TrixFieldWidget
     fields['initial_position'].widgetFactory = TrixFieldWidget
     fields['proposed_action'].widgetFactory = TrixFieldWidget
+    fields['decision_draft'].widgetFactory = TrixFieldWidget
     fields['publish_in'].widgetFactory = TrixFieldWidget
     fields['disclose_to'].widgetFactory = TrixFieldWidget
     fields['copy_for_attention'].widgetFactory = TrixFieldWidget

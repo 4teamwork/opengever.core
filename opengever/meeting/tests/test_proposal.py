@@ -91,6 +91,7 @@ class TestProposal(FunctionalTestCase):
             'Legal basis': u'<div>possible</div>',
             'Initial position': u'<div>My pr\xf6posal</div>',
             'Proposed action': u'<div>Lorem ips\xfcm</div>',
+            'Decision draft': u'<div>Project allowed.</div>',
             'Publish in': u'<div>B\xe4rner Zeitung</div>',
             'Disclose to': u'<div>Hansj\xf6rg</div>',
             'Copy for attention': u'<div>   &nbsp; \n  &nbsp;</div>',
@@ -112,6 +113,7 @@ class TestProposal(FunctionalTestCase):
         self.assertEqual(u'<div>possible</div>', model.legal_basis)
         self.assertEqual(u'<div>Lorem ips\xfcm</div>', model.proposed_action)
         self.assertEqual(u'<div>My pr\xf6posal</div>', model.initial_position)
+        self.assertEqual(u'<div>Project allowed.</div>', model.decision_draft)
         self.assertEqual(u'<div>B\xe4rner Zeitung</div>', model.publish_in)
         self.assertEqual(u'<div>Hansj\xf6rg</div>', model.disclose_to)
         self.assertEqual(u'<div></div>', model.copy_for_attention)
@@ -581,6 +583,7 @@ class TestProposal(FunctionalTestCase):
              u'label_legal_basis',
              u'label_initial_position',
              u'label_proposed_action',
+             u'label_decision_draft',
              u'label_decision',
              u'label_publish_in',
              u'label_disclose_to',
@@ -612,6 +615,7 @@ class TestProposal(FunctionalTestCase):
              u'label_proposed_action',
              u'label_considerations',
              u'label_discussion',
+             u'label_decision_draft',
              u'label_decision',
              u'label_publish_in',
              u'label_disclose_to',
