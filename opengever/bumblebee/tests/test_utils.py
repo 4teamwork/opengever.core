@@ -92,26 +92,26 @@ class TestIsBumblebeeable(FunctionalTestCase):
 
         self.assertTrue(is_bumblebeeable(brain))
 
+    def test_mails_are_bumblebeeable(self):
+        mail = create(Builder('mail'))
+        brain = obj2brain(mail)
+
+        self.assertTrue(is_bumblebeeable(brain))
+
     def test_dossiers_are_not_bumblebeeable(self):
-        document = create(Builder('dossier'))
-        brain = obj2brain(document)
-
-        self.assertFalse(is_bumblebeeable(brain))
-
-    def test_mails_are_not_bumblebeeable(self):
-        document = create(Builder('mail'))
-        brain = obj2brain(document)
+        dossier = create(Builder('dossier'))
+        brain = obj2brain(dossier)
 
         self.assertFalse(is_bumblebeeable(brain))
 
     def test_repositories_are_not_bumblebeeable(self):
-        document = create(Builder('repository'))
-        brain = obj2brain(document)
+        repository = create(Builder('repository'))
+        brain = obj2brain(repository)
 
         self.assertFalse(is_bumblebeeable(brain))
 
     def test_repo_roots_are_not_bumblebeeable(self):
-        document = create(Builder('repository_root'))
-        brain = obj2brain(document)
+        repository_root = create(Builder('repository_root'))
+        brain = obj2brain(repository_root)
 
         self.assertFalse(is_bumblebeeable(brain))
