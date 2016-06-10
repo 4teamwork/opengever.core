@@ -5,6 +5,9 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Change background color of download confirmation dialog to partial transparent black.
+  [Kevin Bieri, phgross]
+
 - Fix document overview.
   [Kevin Bieri]
 

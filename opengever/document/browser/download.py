@@ -127,7 +127,7 @@ class DownloadConfirmationHelper(object):
                      viewname='download', include_token=False):
         if self.is_active():
             viewname = 'file_download_confirmation'
-            clazz = 'link-overlay {0}'.format(' '.join(additional_classes))
+            clazz = 'link-overlay modal {0}'.format(' '.join(additional_classes))
         else:
             clazz = ' '.join(additional_classes)
 

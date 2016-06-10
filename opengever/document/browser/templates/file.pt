@@ -50,7 +50,7 @@
           </tal:cond>
           <tal:cond tal:condition="not: copy_download_available">
             &nbsp;|&nbsp;
-            <span class="function-download-copy-inactive link-overlay discreet"
+            <span class="function-download-copy-inactive link-overlay modal discreet"
                   i18n:translate="label_download_copy">Download copy</span>
           </tal:cond>
         </div>
