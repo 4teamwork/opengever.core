@@ -2,6 +2,11 @@
      id="plone-document-byline"
      tal:condition="view/show">
 
+  <div class="description"
+       tal:condition="view/show_description"
+       tal:content="view/get_description"
+       tal:attributes="title view/get_description" />
+
   <ul tal:define="css_class view/get_css_class">
     <tal:repeat tal:repeat="item view/get_items">
       <li tal:attributes="class item/class" tal:condition="item/content">

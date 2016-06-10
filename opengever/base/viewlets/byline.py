@@ -19,6 +19,13 @@ class BylineBase(content.DocumentBylineViewlet):
     def get_css_class(self):
         return get_css_class(self.context)
 
+    @property
+    def show_description(self):
+        return False
+
+    def get_description(self):
+        return None
+
     @memoize
     def sequence_number(self):
         seqNumb = getUtility(ISequenceNumber)
