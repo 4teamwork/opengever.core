@@ -1,19 +1,20 @@
 $(function() {
-    $('.link-overlay').live('click', function(event) {
+  $('.link-overlay').live('click', function(event) {
 
-        event.preventDefault();
+    event.preventDefault();
 
-        var events = $(this).data('events');
+    var events = $(this).data('events');
 
-        if (!events || !events.click) {
-             $(this).prepOverlay({
-                 subtype:'ajax',
-                 urlmatch:'$',
-                 urlreplace:''
-             });
+    if (!events || !events.click) {
+      $(this).prepOverlay({
+        subtype: 'ajax',
+        urlmatch: '$',
+        urlreplace: '',
+        config: { expose: { color: "#000" } }
+      });
 
-            $(this).trigger('click');
-        }
+      $(this).trigger('click');
+    }
 
-    });
+  });
 });
