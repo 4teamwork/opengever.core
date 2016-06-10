@@ -84,7 +84,7 @@ class TestGetRepresentationUrlByBrain(FunctionalTestCase):
             get_representation_url_by_brain('thumbnail', mail))
 
 
-def TestIsBumblebeeable(FunctionalTestCase):
+class TestIsBumblebeeable(FunctionalTestCase):
 
     def test_documents_are_bumblebeeable(self):
         document = create(Builder('document').with_dummy_content())
