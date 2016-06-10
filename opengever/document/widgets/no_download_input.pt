@@ -27,7 +27,7 @@
                 allow_nochange view/allow_nochange;">
     <span tal:condition="python: exists and action=='nochange'">
         <span tal:attributes="class context/css_class"></span>
-        <a class="link-overlay" tal:content="view/filename" tal:attributes="href download_url">Filename</a>
+        <a class="link-overlay modal" tal:content="view/filename" tal:attributes="href download_url">Filename</a>
         <span class="discreet"> &mdash;
             <span tal:define="sizekb view/file_size" tal:replace="sizekb">100</span> KB
         </span>
