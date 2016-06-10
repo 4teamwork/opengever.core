@@ -6,6 +6,13 @@ from zope.i18n import translate
 
 class RepositoryByline(BylineBase):
 
+    @property
+    def show_description(self):
+        return bool(self.context.description)
+
+    def get_description(self):
+        return self.context.description
+
     def privacy_layer(self):
         return translate(self.context.privacy_layer,
                          context=self.request,
