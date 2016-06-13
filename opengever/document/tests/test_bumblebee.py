@@ -3,10 +3,15 @@ from ftw.builder import create
 from ftw.bumblebee import utils as bumblebee_utils
 from ftw.bumblebee.tests.helpers import asset as bumblebee_asset
 from ftw.bumblebee.tests.helpers import DOCX_CHECKSUM
+from ftw.bumblebee.tests.helpers import get_queue
 from ftw.testbrowser import browsing
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import FunctionalTestCase
+from plone import api
 from plone.rfc822.interfaces import IPrimaryFieldInfo
+from plone.uuid.interfaces import IUUID
+from zope.component import getMultiAdapter
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
 
@@ -43,7 +48,14 @@ class TestBumblebeeIntegrationWithDisabledFeature(FunctionalTestCase):
 
 class TestBumblebeeIntegrationWithEnabledFeature(FunctionalTestCase):
 
+    maxDiff = None
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+
+    def _create_version(self, doc, version_id, data=None):
+        repo_tool = api.portal.get_tool('portal_repository')
+        vdata = data or 'VERSION {} DATA'.format(version_id)
+        doc.file.data = vdata
+        repo_tool.save(obj=doc, comment="This is Version %s" % version_id)
 
     @browsing
     def test_document_preview_is_visible(self, browser):
@@ -86,3 +98,66 @@ class TestBumblebeeIntegrationWithEnabledFeature(FunctionalTestCase):
         self.assertEquals(
             DOCX_CHECKSUM,
             bumblebee_utils.get_document_checksum(document))
+
+    def test_queues_bumblebee_storing_after_document_checkin(self):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document')
+                          .within(dossier)
+                          .attach_file_containing(
+                              'foo',
+                              u'example.docx')
+                          .checked_out())
+        queue = get_queue()
+        queue.reset()
+
+        document.update_file(filename=u'example.docx',
+                             content_type='text/plain',
+                             data=bumblebee_asset('example.docx').bytes())
+        manager = getMultiAdapter((document, self.portal.REQUEST),
+                                  ICheckinCheckoutManager)
+        manager.checkin()
+
+        self.assertEquals(1, len(queue), 'Expected 1 job in the queue.')
+        job, = queue.queue
+
+        self.assertDictEqual(
+            {'application': 'local',
+             'file_url': ('http://nohost/plone/bumblebee_download' +
+                          '?checksum={}'.format(DOCX_CHECKSUM) +
+                          '&uuid={}'.format(IUUID(document))),
+             'salt': IUUID(document),
+             'checksum': DOCX_CHECKSUM,
+             'deferred': False,
+             'url': '/plone/dossier-1/document-1/bumblebee_trigger_storing'},
+            job)
+
+    def test_queues_bumblebee_storing_after_revert_to_previous_version(self):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document')
+                          .within(dossier)
+                          .attach_file_containing(
+                              'foo', u'example.docx'))
+        self._create_version(document, 1,
+                             data=bumblebee_asset('example.docx').bytes())
+        self._create_version(document, 2)
+        queue = get_queue()
+        queue.reset()
+
+        manager = getMultiAdapter((document, self.portal.REQUEST),
+                                  ICheckinCheckoutManager)
+        manager.revert_to_version(1)
+
+        self.assertEquals(1, len(queue), 'Expected 1 job in the queue.')
+        job, = queue.queue
+
+        self.assertDictEqual(
+            {'application': 'local',
+             'file_url': ('http://nohost/plone/bumblebee_download' +
+                          '?checksum={}'.format(DOCX_CHECKSUM) +
+                          '&uuid={}'.format(IUUID(document))),
+             'salt': IUUID(document),
+             'checksum': DOCX_CHECKSUM,
+             'deferred': False,
+             'url': '/plone/dossier-1/document-1/bumblebee_trigger_storing'},
+            job)
+
