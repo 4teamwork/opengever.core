@@ -5,6 +5,10 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Fix public_trial indexer.
+  (Adapt object to behavior interface before accessing attribute)
+  [lgraf]
+
 - Lock submitted documents after proposal submission.
   [deiferni]
 

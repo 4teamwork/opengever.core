@@ -1,8 +1,10 @@
 from Acquisition import aq_inner
 from collective import dexteritytextindexer
 from five import grok
+from opengever.base.behaviors.classification import IClassification
+from opengever.base.behaviors.classification import IClassificationMarker
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
-from opengever.document.behaviors import IBaseDocument
+from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.interfaces import IDocumentIndexer
@@ -12,8 +14,8 @@ from Products.CMFCore.utils import getToolByName
 from ZODB.POSException import ConflictError
 from zope.component import getUtility, queryMultiAdapter, getAdapter
 from zope.interface import Interface
+
 import logging
-from opengever.document.behaviors.metadata import IDocumentMetadata
 
 
 logger = logging.getLogger('opengever.document')
@@ -153,9 +155,9 @@ def sortable_author(obj):
 grok.global_adapter(sortable_author, name='sortable_author')
 
 
-@indexer(IBaseDocument)
+@indexer(IClassificationMarker)
 def public_trial(obj):
-    public_trial = obj.public_trial
+    public_trial = IClassification(obj).public_trial
     if public_trial:
         return public_trial
 
