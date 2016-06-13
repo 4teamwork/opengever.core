@@ -11,8 +11,10 @@ from opengever.testing import FunctionalTestCase
 from opengever.testing import index_data_for
 from plone import api
 from plone.app.testing import TEST_USER_ID
+from plone.locking.interfaces import ILockable
 from zExceptions import Unauthorized
 import transaction
+from opengever.locking.lock import MEETING_SUBMITTED_LOCK
 
 
 class TestProposalViewsDisabled(FunctionalTestCase):
@@ -327,6 +329,16 @@ class TestProposal(FunctionalTestCase):
 
         self.assertSubmittedDocumentCreated(proposal, document, submitted_document)
 
+        # document should have custom lock message
+        browser.open(submitted_document)
+        self.assertEqual(
+            ['This document has been submitted as a copy of A Document and '
+             'cannot be edited directly.'],
+            info_messages())
+        self.assertEqual(
+            document.absolute_url(),
+            browser.css('.portalMessage.info a').first.get('href'))
+
     @browsing
     def test_dossier_reference_number_is_set_on_creation(self, browser):
         committee = create(Builder('committee_model'))
@@ -515,7 +527,7 @@ class TestProposal(FunctionalTestCase):
         proposal_model.execute_transition('scheduled-decided')
         self.assertFalse(proposal.is_submit_additional_documents_allowed())
 
-    def test_submit_additional_document_creates_new_document(self):
+    def test_submit_additional_document_creates_new_locked_document(self):
         committee = create(Builder('committee').titled('My committee'))
         document = create(Builder('document')
                           .within(self.dossier)
@@ -537,6 +549,11 @@ class TestProposal(FunctionalTestCase):
         self.assertEqual(document.Title(), submitted_document.Title())
         self.assertEqual(document.file.filename,
                          submitted_document.file.filename)
+
+        # submitted document should be locked by custom lock
+        lockable = ILockable(submitted_document)
+        self.assertTrue(lockable.locked())
+        self.assertTrue(lockable.can_safely_unlock(MEETING_SUBMITTED_LOCK))
 
         self.assertSubmittedDocumentCreated(proposal, document, submitted_document)
 

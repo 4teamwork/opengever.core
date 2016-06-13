@@ -5,6 +5,9 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Lock submitted documents after proposal submission.
+  [deiferni]
+
 - Fix links to checkin actions from overlay.
   [deiferni]
 

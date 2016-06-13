@@ -52,3 +52,8 @@ class SubmittedDocument(Base):
 
     def resolve_submitted(self):
         return self.submitted_oguid.resolve_object()
+
+    def resolve_source(self):
+        """Resolve the source document."""
+
+        return self.oguid.resolve_object()

@@ -418,7 +418,7 @@ class CopyProposalDocumentCommand(object):
             document_title=self.document.title))
 
     def copy_document(self, target_path, target_admin_unit_id):
-        return OgCopyCommandWithElevatedPrivileges(
+        return SubmitDocumentCommand(
             self.document, target_admin_unit_id, target_path).execute()
 
 
@@ -433,8 +433,17 @@ class OgCopyCommand(object):
         return Transporter().transport_to(
             self.source, self.target_admin_unit_id, self.target_path)
 
+
 class OgCopyCommandWithElevatedPrivileges(OgCopyCommand):
 
     def execute(self):
         return Transporter().transport_to_with_elevated_privileges(
             self.source, self.target_admin_unit_id, self.target_path)
+
+
+class SubmitDocumentCommand(OgCopyCommand):
+
+    def execute(self):
+        return Transporter().transport_to(
+            self.source, self.target_admin_unit_id, self.target_path,
+            view='recieve-submitted-document')
