@@ -387,3 +387,57 @@ class TestGetFile(FunctionalTestCase):
         adapter = getMultiAdapter((document, self.request), IBumblebeeOverlay)
 
         self.assertEqual(document.file, adapter.get_file())
+
+
+class TestGetCheckinWithoutCommentUrl(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+
+    def test_returns_none_when_document_is_not_checked_out(self):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document')
+                          .within(dossier)
+                          .with_dummy_content())
+
+        adapter = getMultiAdapter((document, self.request), IBumblebeeOverlay)
+
+        self.assertIsNone(adapter.get_checkin_without_comment_url())
+
+    def test_returns_checkin_without_comment_url_as_string(self):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document')
+                          .within(dossier)
+                          .with_dummy_content()
+                          .checked_out())
+
+        adapter = getMultiAdapter((document, self.request), IBumblebeeOverlay)
+        self.assertIn(
+            'http://nohost/plone/dossier-1/document-1/@@checkin_without_comment',
+            adapter.get_checkin_without_comment_url())
+
+
+class TestGetCheckinWithCommentUrl(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+
+    def test_returns_none_when_document_is_not_checked_out(self):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document')
+                          .within(dossier)
+                          .with_dummy_content())
+
+        adapter = getMultiAdapter((document, self.request), IBumblebeeOverlay)
+
+        self.assertIsNone(adapter.get_checkin_with_comment_url())
+
+    def test_returns_checkin_with_comment_url_as_string(self):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document')
+                          .within(dossier)
+                          .with_dummy_content()
+                          .checked_out())
+
+        adapter = getMultiAdapter((document, self.request), IBumblebeeOverlay)
+        self.assertIn(
+            'http://nohost/plone/dossier-1/document-1/@@checkin_document',
+            adapter.get_checkin_with_comment_url())

@@ -5,6 +5,9 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Fix links to checkin actions from overlay.
+  [deiferni]
+
 - Fix bumblebeeability check for documents that are not digitally available.
   [deiferni]
 
