@@ -34,6 +34,16 @@
     <include package=".viewlets" />
     <include package=".upgrades" />
 
+    <subscriber
+        for="ftw.bumblebee.interfaces.IBumblebeeable
+             opengever.document.interfaces.IObjectCheckedInEvent"
+        handler="ftw.bumblebee.subscribers.handle_bumblebee_update" />
+
+    <subscriber
+        for="ftw.bumblebee.interfaces.IBumblebeeable
+             opengever.document.interfaces.IObjectRevertedToVersion"
+        handler="ftw.bumblebee.subscribers.handle_bumblebee_update" />
+
     <!-- Register locales translations -->
     <i18n:registerTranslations directory="locales" />
 
