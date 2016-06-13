@@ -145,8 +145,9 @@ class BumblebeeBaseDocumentOverlay(object):
         if not self._is_checkin_allowed():
             return None
 
-        checkin_view = '@@checkin_document'
         if with_comment:
+            checkin_view = '@@checkin_document'
+        else:
             checkin_view = '@@checkin_without_comment'
 
         return "{}/{}?_authenticator={}".format(
