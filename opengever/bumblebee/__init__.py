@@ -5,7 +5,9 @@ from opengever.mail.mail import IOGMailMarker
 from plone import api
 from zope.globalrequest import getRequest
 
+
 BUMBLEBEE_VIEW_COOKIE_NAME = 'bumblebee-view'
+SUPPORTED_CONTENT_TYPES = ['opengever.document.document', 'ftw.mail.mail']
 
 
 def get_not_digitally_available_placeholder_image_url():
@@ -78,10 +80,11 @@ def get_prefered_listing_view():
 
 
 def is_bumblebeeable(brain):
-    """Return whether the brain has a bumblebee_checksum.
+    """Return whether the brain is bumblebeeable.
 
-    The checksum is only available for objects that provide IBumblebeeable,
-    so we use it to detect if a brain's object is IBumblebeeable without
-    loading the object.
+    Being bumblebeeable is a decision which is made on a per content-type
+    basis. Plone content-types are marked as bumblebeeable by providing a
+    marker interface. There is no metadata for object_provides on a brain
+    so we do a portal_type check instead.
     """
-    return bool(brain.bumblebee_checksum)
+    return brain.portal_type in SUPPORTED_CONTENT_TYPES

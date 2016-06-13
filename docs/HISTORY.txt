@@ -5,6 +5,9 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Fix bumblebeeability check for documents that are not digitally available.
+  [deiferni]
+
 - Update bumblebee when documents are checked in and reverted
   to a previous version.
   [deiferni]
