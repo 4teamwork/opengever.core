@@ -187,10 +187,14 @@ class Contact(Item):
             title = _(u'Contact')
         return title
 
-    def setTitle(self, title):
-        """ Dummy action (is called while creating object)
+    @title.setter
+    def title(self, value):
+        """Dummy action (is called while creating object)
         """
-        pass
+
+    def setTitle(self, title):
+        """Dummy action (is called while creating object)
+        """
 
 
 @indexer(IContact)

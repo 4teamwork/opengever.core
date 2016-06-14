@@ -1,5 +1,8 @@
 from .create_mail_defaults import PatchCreateMailInContainer
 from .default_values import PatchDexterityContentGetattr
+from .default_values import PatchDXCreateContentInContainer
+from .default_values import PatchZ3CFormChangedField
+from .default_values import PatchInvokeFactory
 from .filter_trashed_from_catalog import PatchCatalogToFilterTrashedDocs
 from .history_handler_tool import PatchCMFEditonsHistoryHandlerTool
 from .ldap_userfolder_encoding import PatchLDAPUserFolderEncoding
@@ -17,6 +20,9 @@ PatchCMFEditonsHistoryHandlerTool()()
 PatchCopyContainerVerifyObjectPaste()()
 PatchCreateMailInContainer()()
 PatchDXContainerPastePermission()()
+PatchDXCreateContentInContainer()()
+PatchZ3CFormChangedField()()
+PatchInvokeFactory()()
 PatchLDAPUserFolderEncoding()()
 PatchNamedfileNamedDataConverter()()
 PatchPlone43RC1Upgrade()()

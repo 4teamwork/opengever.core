@@ -252,7 +252,7 @@ class TestDocumentDefaultValues(FunctionalTestCase):
         self.assertEqual(today, document.document_date)
 
     @browsing
-    def test_preserverd_as_paper_default(self, browser):
+    def test_preserverd_as_paper_default_false(self, browser):
         browser.login()
 
         # registry default of False
@@ -268,6 +268,10 @@ class TestDocumentDefaultValues(FunctionalTestCase):
              'File': ('DATA', 'file.txt', 'text/plain')}).save()
         document = self.dossier['document-1']
         self.assertFalse(document.preserved_as_paper)
+
+    @browsing
+    def test_preserverd_as_paper_default_true(self, browser):
+        browser.login()
 
         # registry default of True
         api.portal.set_registry_record(

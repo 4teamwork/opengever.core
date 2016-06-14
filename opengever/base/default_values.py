@@ -1,0 +1,234 @@
+"""
+This module contains functions to help fix issues around Dexterity's
+behavior regarding default values.
+
+Default values not being persisted
+----------------------------------
+
+In some cases, default values that have been prefilled in a z3c.form form wont
+get persisted in the DB, causing an object's fields to "retroactively change"
+once the default[Factory] for a field is changed.
+
+Both these cases share a similar pattern: z3c.form checks whether a field's
+value has changed or not, and only writes fields whose values it believes
+have changed. However, that check gets fooled by __getattr__ fallbacks in
+DexterityContent and AnnotationsFactoryImpl that don't raise AttributeError,
+but return the field's default or missing_value respectively.
+
+1) - AttributeStorage
+
+Given:
+
+- Field in base schema or a behavior using AttributeStorage
+- Field has a default or a defaultFactory
+
+Steps to reproduce:
+
+- Add a new object using the z3c.form add form, leaving the field at its
+  prefilled default value (Add & immediately save)
+- Change the field's default or defaultFactory in the code
+
+=> The field's value will not have been persisted.
+
+(When displaying the field or reading it programmatically, the new default
+will be returned, indicating that the old default has never been persisted.)
+
+This happens because z3c.form checks whether a field has been changed or not
+when applying changes, and only saves values that are different
+(see z3c.form.form.applyChanges()).
+
+Because plone.dexterity's DexterityContent defines a __getattr__ that falls
+back to a field's default instead of raising an AttributeError, for a newly
+created object, accessing an attribute that doesn't exist yet will result in
+the fields default value.
+
+This will lead z3c.form to comparing the field's default value (prefilled in
+the form's widget) with the field's default value (returned by Dexterity's
+fallback when accessing a non-existent attribute). Because of that the field's
+value is never considered "changed", and therefore won't be written to the
+object.
+
+On the surface things appear to have worked though, because Dexterity's
+fallback also will dynamically return the default on display / programmatic
+read access.
+
+2) - AnnotationStorage
+
+Given:
+
+- Field in a behavior using AnnotationStorage
+- Field default that is equal to field's missing_value
+
+Steps to reproduce:
+
+- Add a new object using the z3c.form add form, leaving the field at its
+  prefilled default value (Add & immediately save)
+- Change the field's default or defaultFactory in the code
+
+=> The field's value will not have been persisted.
+
+In this case, the value isn't being persisted because there is a similar
+fallback in AnnotationsFactoryImpl: Instead of raising an AttributeError, it
+will fall back to returning the field's missing_value
+(see plone.behavior.annotation.AnnotationsFactoryImpl. __getattr__).
+
+This will result in z3c.form.form.applyChanges() comparing the default value
+for a field against the field's missing_value - if they happen to be the same,
+the field's value will never be persisted.
+
+Approach to fixing the issues
+-----------------------------
+
+We attempt to fix the z3c.form related issues where default values won't be
+persisted by patching z3c.form.util.changedField(). The idea is to patch it in
+a way so that it doesn't just rely on the DataManager to return a field's
+value (which would trigger the mentioned fallbacks), but instead uses the
+function below to really get to the persisted value for a field, taking the
+underlying storage into account. That way we can hopefully avoid any fallbacks
+that would fool the check.
+"""
+
+from Acquisition import aq_base
+from persistent.interfaces import IPersistent
+from plone.behavior.annotation import AnnotationsFactoryImpl
+from plone.dexterity.utils import iterSchemata
+from zope.schema import getFieldsInOrder
+from zope.schema._bootstrapinterfaces import IContextAwareDefaultFactory
+
+
+def get_persisted_value_for_field(context, field):
+    """Return the *real* stored value for a field, avoiding any fallbacks.
+
+    In particular, this circumvents the __getattr__ fallbacks in
+    DexterityContent and AnnotationsFactoryImpl that return the field's
+    default / missing_value.
+
+    Raises an AttributeError if there is no stored value for the field.
+    """
+    if not IPersistent.providedBy(context):
+        raise Exception(
+            "Attempt to get persisted field value for a non-persistent object")
+
+    # AQ unwrap object to avoid finding an attribute via acquisition
+    context = aq_base(context)
+    storage_impl = field.interface(context)
+
+    if isinstance(storage_impl, AnnotationsFactoryImpl):
+        # AnnotationStorage
+        name = field.__name__
+        if name not in storage_impl.__dict__['schema']:
+            raise AttributeError(name)
+
+        annotations = storage_impl.__dict__['annotations']
+        key_name = storage_impl.__dict__['prefix'] + name
+        try:
+            value = annotations[key_name]
+        except KeyError:
+            # Don't do the fallback to field.missing_value that
+            # AnnotationsFactoryImpl.__getattr__ does
+            raise AttributeError(name)
+        return value
+    else:
+        # Assume attribute storage
+        name = field.getName()
+        try:
+            # Two possible cases here: Field in base schema, or field in
+            # behavior with attribute storage. Either way, we look up the
+            # attribute in the objec's __dict__ in order to circumvent the
+            # fallback in DexterityContent.__getattr__
+            value = context.__dict__[name]
+        except KeyError:
+            raise AttributeError(name)
+        return value
+
+
+def get_persisted_values_for_obj(context):
+    values = {}
+    schemas = list(iterSchemata(context))
+    for schema in schemas:
+        fields = getFieldsInOrder(schema)
+        for name, field in fields:
+            try:
+                value = get_persisted_value_for_field(context, field)
+                values[name] = value
+            except AttributeError:
+                continue
+    return values
+
+
+def set_default_values(content, container, values):
+    """Set default values for all fields.
+
+    This is necessary for content created programmatically since dexterity
+    only sets default values in a view.
+
+    Parameters:
+    - content:   The object in creation. Might not be AQ wrapped yet
+    - container: The parent container the object will be added to
+    - values:    Mapping of *actual* values (not defaults) that will be or
+                 have been set on the object (not by us). I.e. kwargs to
+                 invokeFactory or createContentInContainer. Will be taken
+                 into consideration when determining whether defaults should
+                 apply or not.
+
+    """
+    marker = object()
+
+    def object_has_value_for_field(obj, field):
+        """Determine whether a value is persisted on `obj` for `field`.
+        """
+        try:
+            get_persisted_value_for_field(content, field)
+            return True
+        except AttributeError:
+            return False
+
+    def determine_default_value(field, container):
+        """Determine a field's default value during object creation.
+        """
+        # We deliberately ignore form level defaults here.
+
+        # zope.schema defaultFactory
+        #
+        # Based on zope.schema._boostrapfields.DefaultProperty. We don't use
+        # the class level 'default' attribute, which is a DefaultProperty,
+        # because we want to be able to distinguish "default of None" and
+        # "no default", at least for the defaultFactory. That's why it's
+        # necessary to check in the instance dict for a defaultFactory first,
+        # instead of letting the DefaultProperty implementation handle it.
+
+        default_factory = field.__dict__.get('defaultFactory')
+        if default_factory is not None:
+
+            if IContextAwareDefaultFactory.providedBy(default_factory):
+                # Access DefaultProperty descriptor to trigger validation
+                field.bind(container).default
+                return default_factory(container)
+            else:
+                # Access DefaultProperty descriptor to trigger validation
+                field.default
+                return default_factory()
+
+        field_default = field.__dict__.get('default')
+        if field_default is not None:
+            # Access DefaultProperty descriptor to trigger validation
+            field.default
+            return field_default
+
+        return marker
+
+    for schema in iterSchemata(content):
+        for name, field in getFieldsInOrder(schema):
+            default = determine_default_value(field, container)
+            if default is not marker:
+                if name in values:
+                    # Only set default if no *actual* value was supplied as
+                    # an argument to object construction
+                    continue
+
+                if object_has_value_for_field(content, field):
+                    # Only set default if a value hasn't been set on the
+                    # object yet
+                    continue
+
+                field.set(field.interface(content), default)

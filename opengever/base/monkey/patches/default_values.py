@@ -26,7 +26,7 @@ def _default_from_schema(context, schema, fieldname):
 
 class PatchDexterityContentGetattr(MonkeyPatch):
     """Patch DexterityContent.__getattr__ to correctly fall back to defaults
-    from behavior schemas.
+    from behavior schemas with *marker* interfaces.
 
     Rationale: The implementation in plone.dexterity 2.1.x grabs
     *marker interfaces* from SCHEMA_CACHE.subtypes() for behaviors that have
@@ -87,3 +87,136 @@ class PatchDexterityContentGetattr(MonkeyPatch):
         from plone.dexterity.content import Item
         self.patch_refs(DexterityContent, '__getattr__', __getattr__)
         self.patch_refs(Item, '__getattr__', __getattr__)
+
+
+class PatchDXCreateContentInContainer(MonkeyPatch):
+    """Monkey patch Dexterity's createContentInContainer so that it sets
+    default values for fields that haven't had a value passed in to the
+    constructor.
+    """
+
+    def __call__(self):
+        from opengever.base.default_values import set_default_values
+        from plone.dexterity.interfaces import IDexterityFTI
+        from plone.dexterity.utils import addContentToContainer
+        from zope.component import createObject
+        from zope.component import getUtility
+        from zope.event import notify
+        from zope.lifecycleevent import ObjectCreatedEvent
+
+        def createContentWithDefaults(portal_type, container, **kw):
+            fti = getUtility(IDexterityFTI, name=portal_type)
+            content = createObject(fti.factory)
+            set_default_values(content, container, kw)
+
+            # Note: The factory may have done this already, but we want to be sure
+            # that the created type has the right portal type. It is possible
+            # to re-define a type through the web that uses the factory from an
+            # existing type, but wants a unique portal_type!
+            content.portal_type = fti.getId()
+
+            for (key, value) in kw.items():
+                setattr(content, key, value)
+
+            notify(ObjectCreatedEvent(content))
+            return content
+
+        def createContentInContainer(container, portal_type, checkConstraints=True, **kw):
+            # Also pass container to createContent so it is available for
+            # determining default values
+            content = createContentWithDefaults(portal_type, container, **kw)
+            return addContentToContainer(
+                container, content, checkConstraints=checkConstraints)
+
+        from plone.dexterity import utils
+        self.patch_refs(
+            utils, 'createContentInContainer', createContentInContainer)
+
+
+class PatchInvokeFactory(MonkeyPatch):
+    """Monkey patch invokeFactory so that it sets default values for fields
+    that haven't had a value passed in to the constructor.
+    """
+
+    def __call__(self):
+        from opengever.base.default_values import set_default_values
+        from Products.CMFCore.utils import getToolByName
+
+        def invokeFactory(self, type_name, id, RESPONSE=None, *args, **kw):
+            """ Invokes the portal_types tool.
+            """
+            pt = getToolByName(self, 'portal_types')
+            myType = pt.getTypeInfo(self)
+
+            if myType is not None:
+                if not myType.allowType( type_name ):
+                    raise ValueError('Disallowed subobject type: %s' % type_name)
+
+            new_id = pt.constructContent(type_name, self, id, RESPONSE, *args, **kw)
+            content = self[new_id]
+
+            # Set default values
+            set_default_values(content, self, kw)
+
+            return new_id
+
+        from Products.CMFCore.PortalFolder import PortalFolderBase
+        self.patch_refs(PortalFolderBase, 'invokeFactory', invokeFactory)
+
+
+class PatchZ3CFormChangedField(MonkeyPatch):
+    """Patch changedField() so that it doesn't simply rely on the DataManager
+    to return a field's stored value (which triggers fallbacks to the field's
+    default / missing_value), but uses our helper function to access the real
+    stored value, taking the underlying storage into account.
+    """
+
+    def __call__(self):
+        from opengever.base.default_values import get_persisted_value_for_field
+        from persistent.interfaces import IPersistent
+        from z3c.form import interfaces
+        from z3c.formwidget.query.widget import QueryContext
+        import zope.schema
+
+        def changedField(field, value, context=None):
+            """Figure if a field's value changed
+
+            Comparing the value of the context attribute and the given value"""
+            if context is None:
+                context = field.context
+            if context is None:
+                # IObjectWidget madness
+                return True
+            if zope.schema.interfaces.IObject.providedBy(field):
+                return True
+
+            if not IPersistent.providedBy(context):
+                # Field is not persisted, delegate to original implementation
+                assert isinstance(context, QueryContext)
+                return original_changedField(field, value, context)
+
+            dm = zope.component.getMultiAdapter(
+                (context, field), interfaces.IDataManager)
+
+            if not dm.canAccess():
+                # Can't get the original value, assume it changed
+                return True
+
+            # Determine the original value
+            # Use a helper method that actually returns the persisted value,
+            # *without* triggering any fallbacks to default values or
+            # missing values.
+            try:
+                stored_value = get_persisted_value_for_field(context, field)
+            except AttributeError:
+                return True
+
+            if stored_value != value:
+                return True
+
+            return False
+
+        from z3c.form import util
+        __patch_refs__ = False
+        original_changedField = util.changedField
+        self.patch_refs(util, 'changedField', changedField)

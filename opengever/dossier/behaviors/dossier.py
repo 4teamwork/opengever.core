@@ -147,6 +147,7 @@ class IDossier(form.Schema):
     relatedDossier = RelationList(
         title=_(u'label_related_dossier', default=u'Related Dossier'),
         default=[],
+        missing_value=[],
         value_type=RelationChoice(
             title=u"Related",
             source=RepositoryPathSourceBinder(
