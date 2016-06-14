@@ -185,6 +185,10 @@ Changelog
 - Use non self-closing br tags in trix transform.
   [deiferni]
 
+- Patch DexterityContent.__getattr__ to correctly fall back to defaults
+  from behavior schemas.
+  [lgraf]
+
 - Increase maximum string length in sentry extra data for errors reported
   by trix2sablon.
   [deiferni]
