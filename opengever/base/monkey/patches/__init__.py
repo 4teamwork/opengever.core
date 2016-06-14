@@ -1,4 +1,5 @@
 from .create_mail_defaults import PatchCreateMailInContainer
+from .default_values import PatchDexterityContentGetattr
 from .filter_trashed_from_catalog import PatchCatalogToFilterTrashedDocs
 from .history_handler_tool import PatchCMFEditonsHistoryHandlerTool
 from .ldap_userfolder_encoding import PatchLDAPUserFolderEncoding
@@ -22,3 +23,4 @@ PatchPlone43RC1Upgrade()()
 PatchResourceRegistriesURLRegex()()
 PatchWebDAVLockTimeout()()
 PatchZ2LogTimezone()()
+PatchDexterityContentGetattr()()
