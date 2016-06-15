@@ -5,7 +5,9 @@ from opengever.base.interfaces import ISequenceNumber
 from opengever.bumblebee import get_representation_url_by_object
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.bumblebee.interfaces import IBumblebeeOverlay
+from opengever.document.checkout.viewlets import CheckedOutViewlet
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.locking.info import GeverLockInfoViewlet
 from opengever.ogds.base.actor import Actor
 from plone import api
 from plone.protect import createToken
@@ -116,6 +118,16 @@ class BumblebeeBaseDocumentOverlay(object):
             has_file = hasattr(self.context, 'file') and self.context.file
             self._file = self.context.file if has_file else None
         return self._file
+
+    def render_checked_out_viewlet(self):
+        viewlet = CheckedOutViewlet(self.context, self.request, None, None)
+        viewlet.update()
+        return viewlet.render()
+
+    def render_lock_info_viewlet(self):
+        viewlet = GeverLockInfoViewlet(self.context, self.request, None, None)
+        viewlet.update()
+        return viewlet.render()
 
     def _get_pdf_filename(self):
         if not self.has_file():
