@@ -1,10 +1,12 @@
 from opengever.base.oguid import Oguid
+from opengever.locking.lock import LOCK_TYPE_MEETING_EXCERPT_LOCK
 from opengever.locking.lock import LOCK_TYPE_MEETING_SUBMITTED_LOCK
 from opengever.locking.lock import LOCK_TYPE_SYS_LOCK
 from opengever.meeting.model import GeneratedProtocol
 from opengever.meeting.model import SubmittedDocument
 from plone.locking.browser.info import LockInfoViewlet
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from opengever.meeting.model import GeneratedExcerpt
 
 
 class GeverLockInfoViewlet(LockInfoViewlet):
@@ -15,6 +17,8 @@ class GeverLockInfoViewlet(LockInfoViewlet):
         'templates/meeting_lock.pt')
     submitted_document_lock_template = ViewPageTemplateFile(
         'templates/submitted_document_lock_template.pt')
+    excerpt_document_lock_template = ViewPageTemplateFile(
+        'templates/excerpt_document_lock_template.pt')
 
     # templates seem to be converted to BoundPageTemplate with acquisition
     # magic, thus we cannot put the ViewPageTemplateFile instances directly
@@ -22,6 +26,7 @@ class GeverLockInfoViewlet(LockInfoViewlet):
     custom_templates = {
         LOCK_TYPE_SYS_LOCK: 'meeting_lock_template',
         LOCK_TYPE_MEETING_SUBMITTED_LOCK: 'submitted_document_lock_template',
+        LOCK_TYPE_MEETING_EXCERPT_LOCK: 'excerpt_document_lock_template'
     }
 
     def render(self):
@@ -51,3 +56,31 @@ class GeverLockInfoViewlet(LockInfoViewlet):
     def get_source_document_from_submitted_document(self):
         document = SubmittedDocument.query.get_by_target(self.context)
         return document.resolve_source()if document else None
+
+    def _get_proposal_from_dossier_excerpt(self):
+        if not hasattr(self, '_proposal_from_dossier_excerpt'):
+            self._proposal_from_dossier_excerpt = None
+            excerpt_in_dossier = GeneratedExcerpt.query.by_document(self.context).first()
+            if excerpt_in_dossier:
+                self._proposal_from_dossier_excerpt = excerpt_in_dossier.proposal
+
+        return self._proposal_from_dossier_excerpt
+
+    def get_meeting_excerpt_from_dossier_excerpt(self):
+        proposal = self._get_proposal_from_dossier_excerpt()
+        if not proposal:
+            return None
+
+        excerpt_in_meeting = proposal.submitted_excerpt_document.resolve_document()
+        return excerpt_in_meeting
+
+    def get_meeting_from_dossier_excerpt(self):
+        proposal = self._get_proposal_from_dossier_excerpt()
+        if not proposal:
+            return None
+
+        agenda_item = proposal.agenda_item
+        if not agenda_item:
+            return None
+
+        return agenda_item.meeting

@@ -1,0 +1,29 @@
+<div id="plone-lock-status"
+     i18n:domain="opengever.locking"
+     tal:define="locked view/info/is_locked_for_current_user;
+                 document view/get_meeting_excerpt_from_dossier_excerpt;
+                 meeting view/get_meeting_from_dossier_excerpt;">
+  <tal:block condition="locked">
+    <dl class="portalMessage info">
+      <dt i18n:domain="plone" i18n:translate="label_locked">Locked</dt>
+      <dd>
+        <tal:author-page tal:condition="python: document and meeting"
+            i18n:translate="description_locked_linked_excerpt_document">
+          This document is a copy of the excerpt
+          <a i18n:name="document"
+             tal:content="document/Title"
+             tal:attributes="href document/absolute_url" />
+          from the meeting
+          <a i18n:name="meeting"
+             tal:content="meeting/get_title"
+             tal:attributes="href meeting/get_url" />
+          and cannot be edited directly.
+        </tal:author-page>
+        <tal:author-page tal:condition="python: not (document and meeting)"
+            i18n:translate="description_locked_excerpt_document">
+          This document is a copy of an excerpt from a meeting and cannot be edited directly.
+        </tal:author-page>
+      </dd>
+    </dl>
+  </tal:block>
+</div>
