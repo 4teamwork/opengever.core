@@ -5,10 +5,13 @@ from ftw.testbrowser import browsing
 from opengever.bumblebee import BUMBLEBEE_VIEW_COOKIE_NAME
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.tabbedview.browser.bumblebee_gallery import BumblebeeGalleryMixin
+from opengever.tabbedview.browser.tabs import DocumentsProxy
+from opengever.tabbedview.interfaces import ITabbedViewProxy
 from opengever.testing import FunctionalTestCase
 from plone import api
 from zExceptions import NotFound
 from zope.component import getMultiAdapter
+from zope.interface.verify import verifyClass
 import transaction
 
 
@@ -377,6 +380,9 @@ class TestBumblebeeDocumentsProxyWithActivatedFeature(FunctionalTestCase):
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
+    def test_verify_class(self):
+        verifyClass(ITabbedViewProxy, DocumentsProxy)
+
     @browsing
     def test_set_cookie_to_the_last_accessed_bumblebee_view(self, browser):
         dossier = create(Builder('dossier'))
@@ -412,6 +418,14 @@ class TestBumblebeeDocumentsProxyWithActivatedFeature(FunctionalTestCase):
         self.assertEqual(
             'List',
             browser.css('.ViewChooser .active').first.text)
+
+    def test_name_without_postfix_will_replace_the_proxy_addition_on_end_of_string(self):
+        dossier = create(Builder('dossier'))
+
+        view = dossier.restrictedTraverse('tabbedview_view-documents-proxy')
+
+        self.assertEqual('tabbedview_view-documents-proxy', view.__name__)
+        self.assertEqual('tabbedview_view-documents', view.name_without_postfix)
 
 
 class TestDocumentsGalleryFetch(FunctionalTestCase):

@@ -34,6 +34,9 @@ from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
 
 
+PROXY_VIEW_POSTFIX = "-proxy"
+
+
 def translate_public_trial_options(item, value):
     portal = getSite()
     request = getRequest()
@@ -62,6 +65,10 @@ class DocumentsProxy(BaseCatalogListingTab):
                 prefered_view = self.galleryview
 
         return self.context.restrictedTraverse(prefered_view)()
+
+    @property
+    def name_without_postfix(self):
+        return self.__name__.rstrip(PROXY_VIEW_POSTFIX)
 
 
 class Documents(BaseCatalogListingTab):
