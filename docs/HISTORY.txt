@@ -5,6 +5,9 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Fix error: AttributeError: 'DocumentsProxy' object has no attribute 'select_all'.
+  [elioschmutz]
+
 - Fix public_trial indexer.
   (Adapt object to behavior interface before accessing attribute)
   [lgraf]

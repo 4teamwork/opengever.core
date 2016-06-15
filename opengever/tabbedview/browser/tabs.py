@@ -40,7 +40,7 @@ def translate_public_trial_options(item, value):
     return portal.translate(value, context=request, domain="opengever.base")
 
 
-class DocumentsProxy(grok.View):
+class DocumentsProxy(BaseCatalogListingTab):
     """This proxyview is looking for the last used documents
     view (list or gallery) and reopens this view.
     """
