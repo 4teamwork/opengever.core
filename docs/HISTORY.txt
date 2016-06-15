@@ -5,6 +5,11 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Lock excerpts in the dossiers and sync updates to the
+  excerpt in a meeting/submitted proposal to the excerpt copy
+  in the dossier.
+  [deiferni]
+
 - Simplify protocol download button in meeting view.
   Only download the exisiting protocol without regenerating it with sablon.
   [phgross]
