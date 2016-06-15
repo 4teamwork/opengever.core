@@ -4,8 +4,97 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
+from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.meeting.model import Meeting
 from opengever.testing import FunctionalTestCase
+from plone import api
+from zope.component import getMultiAdapter
+from zope.event import notify
+from zope.lifecycleevent import ObjectModifiedEvent
+
+
+class TestSyncExcerpt(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_MEETING_LAYER
+
+    def setUp(self):
+        super(TestSyncExcerpt, self).setUp()
+        self.repository_root, self.repository_folder = create(
+            Builder('repository_tree'))
+        self.dossier = create(
+            Builder('dossier').within(self.repository_folder))
+        self.container = create(Builder('committee_container'))
+        self.committee = create(Builder('committee').within(self.container))
+
+        self.document_in_dossier = create(
+            Builder('document').within(self.dossier))
+        self.excerpt_in_dossier = create(
+            Builder('generated_excerpt')
+            .for_document(self.document_in_dossier))
+        self.proposal = create(
+            Builder('proposal')
+            .within(self.dossier)
+            .having(
+                committee=self.committee.load_model(),
+                excerpt_document=self.excerpt_in_dossier)
+            .as_submitted())
+        self.submitted_proposal = self.proposal.load_model().submitted_oguid.resolve_object()
+        self.document_in_proposal = create(
+            Builder('document')
+            .within(self.submitted_proposal))
+        self.excerpt_in_proposal = create(
+            Builder('generated_excerpt')
+            .for_document(self.document_in_proposal))
+        self.proposal.load_model().submitted_excerpt_document = self.excerpt_in_proposal
+
+    def _create_version(self, doc, version_id, data=None):
+        repo_tool = api.portal.get_tool('portal_repository')
+        vdata = data or 'VERSION {} DATA'.format(version_id)
+        doc.file.data = vdata
+        repo_tool.save(obj=doc, comment="This is Version %s" % version_id)
+
+    def test_updates_excerpt_in_dossier_after_checkin(self):
+        self.assertEqual(0, self.document_in_proposal.get_current_version())
+        self.assertEqual(0, self.document_in_dossier.get_current_version())
+        manager = getMultiAdapter((self.document_in_proposal,
+                                   self.portal.REQUEST),
+                                  ICheckinCheckoutManager)
+        manager.checkout()
+        self.document_in_proposal.update_file(
+            filename=u'example.docx',
+            content_type='text/plain',
+            data='foo bar')
+        manager.checkin()
+
+        self.assertEqual(1, self.document_in_proposal.get_current_version())
+        self.assertEqual(1, self.document_in_dossier.get_current_version())
+
+    def test_updates_excerpt_in_dossier_after_revert(self):
+        self.assertEqual(0, self.document_in_proposal.get_current_version())
+        self.assertEqual(0, self.document_in_dossier.get_current_version())
+        manager = getMultiAdapter((self.document_in_proposal,
+                                   self.portal.REQUEST),
+                                  ICheckinCheckoutManager)
+        manager.checkout()
+        self.document_in_proposal.update_file(
+            filename=u'example.docx',
+            content_type='text/plain',
+            data='foo bar')
+        manager.checkin()
+
+        manager.revert_to_version(0)
+        self.assertEqual(2, self.document_in_proposal.get_current_version())
+        self.assertEqual(2, self.document_in_dossier.get_current_version())
+
+    def test_updates_excerpt_in_dossier_after_modification(self):
+        self.assertEqual(0, self.document_in_dossier.get_current_version())
+        self.document_in_proposal.update_file(
+            filename=u'example.docx',
+            content_type='text/plain',
+            data='foo bar')
+        notify(ObjectModifiedEvent(self.document_in_proposal))
+
+        self.assertEqual(1, self.document_in_dossier.get_current_version())
 
 
 class TestExcerpt(FunctionalTestCase):
