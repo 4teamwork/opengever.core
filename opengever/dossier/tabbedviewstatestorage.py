@@ -4,10 +4,9 @@ from ftw.tabbedview.interfaces import IGridStateStorageKeyGenerator
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.tabbedview.interfaces import ITabbedViewProxy
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.interfaces.browser import IBrowserView
-
-PROXY_VIEW_POSTFIX = "-proxy"
 
 
 class DossierGridStateStorageKeyGenerator(grok.MultiAdapter):
@@ -31,7 +30,11 @@ class DossierGridStateStorageKeyGenerator(grok.MultiAdapter):
         key.append('openever.dossier')
 
         # add the name of the tab
-        key.append(self.tabview.__name__)
+        view_name = self.tabview.__name__
+
+        if ITabbedViewProxy.providedBy(self.tabview):
+            view_name = self.tabview.name_without_postfix
+        key.append(view_name)
 
         # add the userid
         mtool = getToolByName(self.context, 'portal_membership')
@@ -40,6 +43,14 @@ class DossierGridStateStorageKeyGenerator(grok.MultiAdapter):
 
         # concatenate with "-"
         return '-'.join(key)
+
+
+class FrontPageDossierGridStateStorageKeyGenerator(DossierGridStateStorageKeyGenerator):
+    """This storage key generator creates a shared key for all dossier types,
+    since we need to share the configuration between different dossier types.
+    """
+    grok.implements(IGridStateStorageKeyGenerator)
+    grok.adapts(IPloneSiteRoot, IBrowserView, IBrowserRequest)
 
 
 class GeverTabbedviewDictStorage(DictStorage):
@@ -71,24 +82,25 @@ class GeverTabbedviewDictStorage(DictStorage):
         super(GeverTabbedviewDictStorage, self).__init__(context)
 
     def __getitem__(self, key, default=None):
-        key = self.strip_proxy_postfix(key)
+        key = self.strip_proxy_postfix(self.context, key)
         return super(GeverTabbedviewDictStorage, self).__getitem__(key, default)
 
     def __setitem__(self, key, value):
-        key = self.strip_proxy_postfix(key)
+        key = self.strip_proxy_postfix(self.context, key)
         return super(GeverTabbedviewDictStorage, self).__setitem__(key, value)
 
     def __delitem__(self, key):
-        key = self.strip_proxy_postfix(key)
+        key = self.strip_proxy_postfix(self.context, key)
         return super(GeverTabbedviewDictStorage, self).__setitem__(key)
 
-    def strip_proxy_postfix(self, value):
-        if ITabbedViewProxy.providedBy(self.context):
-            return value.rstrip(PROXY_VIEW_POSTFIX, '')
+    def strip_proxy_postfix(self, view, value):
+        if ITabbedViewProxy.providedBy(view):
+            value = view.name_without_postfix
+        return value
 
     def change_proxy_context(self, view):
         if ITabbedViewProxy.providedBy(view):
-            non_proxy_view_name = self.strip_proxy_postfix(view.__name__)
+            non_proxy_view_name = self.strip_proxy_postfix(view, view.__name__)
             view = view.context.restrictedTraverse(non_proxy_view_name)
 
         return view
