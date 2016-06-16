@@ -85,7 +85,7 @@ class AgendaItem(Base):
                 return markup
 
             markup = markup.decode('utf-8')
-            markup = transformer.convert('safe_html', markup).getData()
+            markup = transformer.convert('trix_to_sablon', markup).getData()
             return trix_strip_whitespace(markup)
 
         if self.has_proposal:

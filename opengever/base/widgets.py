@@ -74,7 +74,7 @@ class TrixDataConverter(BaseDataConverter):
         self.transformer = api.portal.get_tool('portal_transforms')
 
     def toFieldValue(self, value):
-        safe_html = self.transformer.convert('safe_html', value).getData()
+        safe_html = self.transformer.convert('trix_to_sablon', value).getData()
         # transform may return non-unicode empty string which raises validation
         # errors on the field
         safe_html = safe_html or u''
