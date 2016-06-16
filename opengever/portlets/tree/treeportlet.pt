@@ -5,7 +5,8 @@
                     data-context-url view/context_url"
     i18n:attributes="data-i18n-add-to-favorites label_add_to_favorites;
                      data-i18n-remove-from-favorites label_remove_from_favorites;"
-    i18n:domain="opengever.portlets.tree">
+    i18n:domain="opengever.portlets.tree"
+    tal:define="portal_url context/@@plone_portal_state/portal_url">
 
     <dt class="portletHeader">
         <ul class="portlet-header-tabs">
@@ -19,7 +20,7 @@
     <dd class="portletItem odd portlet-tabs">
         <div id="tree-complete" class="tab">
             <ul class="filetree">
-                <img src="spinner.gif" class="spinner"/>
+                <img tal:attributes="src string:${portal_url}/spinner.gif" class="spinner"/>
             </ul>
         </div>
 
@@ -29,7 +30,7 @@
             </div>
 
             <ul class="filetree">
-                <img src="spinner.gif" class="spinner"/>
+                <img tal:attributes="src string:${portal_url}/spinner.gif" class="spinner"/>
             </ul>
 
             <a href="#" class="toggle-helptext" i18n:translate="label_help">Help</a>
