@@ -1,6 +1,8 @@
 from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import info_messages
 from ftw.testing import MockTestCase
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.interfaces import IDossierResolver
@@ -22,57 +24,55 @@ TEST_DATE = date(2012, 3, 1)
 
 class TestResolvingDossiers(FunctionalTestCase):
 
-    use_browser = True
-
-    def test_archive_form_is_omitted_for_sites_without_filing_number_support(self):
+    @browsing
+    def test_archive_form_is_omitted_for_sites_without_filing_number_support(self, browser):
         self.grant('Manager')
         dossier = create(Builder('dossier')
                          .having(start=date(2013, 11, 5)))
 
-        self.browser.open(
-            '{}/transition-resolve?_authenticator={}'.format(
-                dossier.absolute_url(), createToken()))
+        browser.login().open(dossier,
+                             {'_authenticator': createToken()},
+                             view='transition-resolve')
 
-        self.browser.assert_url(dossier.absolute_url())
-        self.browser.assert_portal_message(
-            'The dossier has been succesfully resolved')
+        self.assertEquals(dossier.absolute_url(), browser.url)
+        self.assertEquals(['The dossier has been succesfully resolved'],
+                          info_messages())
 
-    def test_archive_form_is_omitted_when_resolving_subdossiers(self):
+    @browsing
+    def test_archive_form_is_omitted_when_resolving_subdossiers(self, browser):
         self.grant('Manager')
         dossier = create(Builder('dossier'))
         subdossier = create(Builder('dossier')
                             .within(dossier)
                             .having(start=date(2013, 11, 5)))
 
-        self.browser.open(
-            '{}/transition-resolve?_authenticator={}'.format(
-                subdossier.absolute_url(), createToken()))
+        browser.login().open(subdossier,
+                             {'_authenticator': createToken()},
+                             view='transition-resolve')
 
-        self.browser.assert_url(subdossier.absolute_url())
-        self.browser.assert_portal_message(
-            'The subdossier has been succesfully resolved')
+        self.assertEquals(subdossier.absolute_url(), browser.url)
+        self.assertEquals(['The subdossier has been succesfully resolved'],
+                          info_messages())
 
 
 class TestResolvingDossiersWithFilingNumberSupport(FunctionalTestCase):
-
-    use_browser = True
 
     def setUp(self):
         super(TestResolvingDossiersWithFilingNumberSupport, self).setUp()
 
         applyProfile(self.portal, 'opengever.dossier:filing')
 
-    def test_archive_form_is_displayed_for_sites_with_filing_number_support(self):
-
+    @browsing
+    def test_archive_form_is_displayed_for_sites_with_filing_number_support(self, browser):
         dossier = create(Builder('dossier')
                          .having(start=date(2013, 11, 5)))
 
-        self.browser.open(
-            '{}/transition-resolve?_authenticator={}'.format(
-                dossier.absolute_url(), createToken()))
-
-        self.browser.assert_url(
-            '{}/transition-archive'.format(dossier.absolute_url()))
+        browser.login().open(dossier,
+                             {'_authenticator': createToken()},
+                             view='transition-resolve')
+        self.assertEquals(
+            '{}/transition-archive'.format(dossier.absolute_url()),
+            browser.url)
 
 
 class TestResolveConditions(MockTestCase):
