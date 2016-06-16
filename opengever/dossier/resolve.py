@@ -219,7 +219,7 @@ class ResolveConditions(object):
             errors.append(NOT_SUPPLIED_OBJECTS)
         if not self.context.is_all_checked_in():
             errors.append(NOT_CHECKED_IN_DOCS)
-        if not self.context.is_all_closed():
+        if self.context.has_active_tasks():
             errors.append(NOT_CLOSED_TASKS)
         if not self.context.has_valid_startdate():
             errors.append(NO_START_DATE)

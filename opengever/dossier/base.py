@@ -154,16 +154,15 @@ class DossierContainer(Container):
 
         return True
 
-    def is_all_closed(self):
-        """ Check if all tasks are in a closed state.
+    def has_active_tasks(self):
+        """Check if there are tasks inside the dossier, which
+        are not in an end state.
         """
-
-        open_tasks = self.portal_catalog(
-            portal_type="opengever.task.task",
-            path=dict(query='/'.join(self.getPhysicalPath())),
+        active_tasks = api.content.find(
+            context=self, depth=-1, object_provides=ITask,
             review_state=OPEN_TASK_STATES)
 
-        return len(open_tasks) == 0
+        return bool(active_tasks)
 
     def is_all_checked_in(self):
         """ check if all documents in this path are checked in """
