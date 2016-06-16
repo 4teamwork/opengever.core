@@ -1,13 +1,16 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
+from opengever.locking.lock import MEETING_EXCERPT_LOCK
 from opengever.meeting.model import Meeting
 from opengever.meeting.model import Proposal
 from opengever.meeting.model.agendaitem import AgendaItem
 from opengever.meeting.wrapper import MeetingWrapper
 from opengever.testing import FunctionalTestCase
 from plone import api
+from plone.locking.interfaces import ILockable
 from plone.protect import createToken
 from z3c.relationfield.relation import RelationValue
 from zExceptions import NotFound
@@ -282,6 +285,41 @@ class TestAgendaItemDecide(TestAgendaItem):
               u'messageClass': u'info',
               u'messageTitle': u'Information'}],
             browser.json.get('messages'))
+
+    @browsing
+    def test_decide_agenda_item_creates_locked_excerpt_in_dossier(self, browser):
+        self.setup_excerpt_template()
+        proposal = self.setup_proposal()
+        # schedule
+        view = 'unscheduled_proposals/{}/schedule'.format(
+            proposal.load_model().proposal_id)
+
+        browser.login().open(self.meeting_wrapper, view=view)
+        agenda_item = AgendaItem.query.first()
+        browser.login().open(
+            self.meeting_wrapper,
+            view='agenda_items/{}/decide'.format(agenda_item.agenda_item_id),
+            data={'_authenticator': createToken()})
+
+        agenda_item = AgendaItem.query.first()  # refresh
+        proposal = agenda_item.proposal
+        excerpt_in_dossier = proposal.excerpt_document.resolve_document()
+        lockable = ILockable(excerpt_in_dossier)
+        self.assertTrue(lockable.locked())
+        self.assertTrue(lockable.can_safely_unlock(MEETING_EXCERPT_LOCK))
+
+        browser.open(excerpt_in_dossier)
+        self.assertEqual(u'This document is a copy of the excerpt Fooo - '
+                         u'C\xf6mmunity meeting from the meeting C\xf6mmunity '
+                         u'meeting and cannot be edited directly.',
+                         info_messages()[0])
+        message_links = browser.css('.portalMessage.info a')
+        self.assertEqual(
+            'http://nohost/plone/opengever-meeting-committeecontainer/committee-1/submitted-proposal-1/document-3',
+            message_links[0].get('href'))
+        self.assertEqual(
+            'http://nohost/plone/opengever-meeting-committeecontainer/committee-1/meeting-1/view',
+            message_links[1].get('href'))
 
     @browsing
     def test_decide_proposal_agenda_item_without_dossier_permission(self, browser):

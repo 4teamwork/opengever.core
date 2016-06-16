@@ -63,3 +63,10 @@ def add_languages(codes, support_combined=True):
         lang_tool.addSupportedLanguage(code)
 
     transaction.commit()
+
+
+def create_document_version(doc, version_id, data=None):
+    repo_tool = api.portal.get_tool('portal_repository')
+    vdata = data or 'VERSION {} DATA'.format(version_id)
+    doc.file.data = vdata
+    repo_tool.save(obj=doc, comment="This is Version %s" % version_id)

@@ -4,6 +4,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.testing import FunctionalTestCase
+from opengever.testing.helpers import create_document_version
 from plone import api
 from urlparse import parse_qs
 from urlparse import urlparse
@@ -30,7 +31,7 @@ class TestVersionsTab(FunctionalTestCase):
     def _create_doc_with_versions(self, n=3):
         doc = self._create_doc()
         for version_id in range(1, n + 1):
-            self._create_version(doc, version_id)
+            create_document_version(doc, version_id)
         return doc
 
     def _create_doc(self):
@@ -40,12 +41,6 @@ class TestVersionsTab(FunctionalTestCase):
                                              u"somefile.txt"))
         return doc
 
-    def _create_version(self, doc, version_id):
-        repo = api.portal.get_tool('portal_repository')
-        vdata = 'VERSION {} DATA'.format(version_id)
-        doc.file.data = vdata
-        repo.save(obj=doc, comment="This is Version %s" % version_id)
-
 
 class TestVersionsTabWithoutPDFConverter(TestVersionsTab):
 
@@ -54,7 +49,7 @@ class TestVersionsTabWithoutPDFConverter(TestVersionsTab):
         with freeze(datetime(2015, 01, 28, 12, 00)):
             doc = self._create_doc()
         with freeze(datetime(2015, 01, 28, 18, 30)):
-            self._create_version(doc, 1)
+            create_document_version(doc, 1)
         transaction.commit()
 
         browser.login().open(doc, view='tabbedview_view-versions')

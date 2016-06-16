@@ -224,3 +224,4 @@ class RecieveSubmittedDocumentView(PrivilegedReceiveObject):
         document = super(RecieveSubmittedDocumentView, self).receive()
         ILockable(document).lock(MEETING_SUBMITTED_LOCK)
         return document
+

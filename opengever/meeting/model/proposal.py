@@ -368,10 +368,10 @@ class Proposal(Base):
         """Copies the submitted excerpt to the source dossier and returns
         the intid of the created document.
         """
-        from opengever.meeting.command import OgCopyCommandWithElevatedPrivileges
+        from opengever.meeting.command import CreateExcerptCommand
 
         dossier = self.resolve_proposal().get_containing_dossier()
-        response = OgCopyCommandWithElevatedPrivileges(
+        response = CreateExcerptCommand(
             self.resolve_submitted_excerpt_document(),
             self.admin_unit_id,
             '/'.join(dossier.getPhysicalPath())).execute()
