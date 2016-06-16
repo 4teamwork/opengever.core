@@ -47,6 +47,12 @@ class DossierDeactivateView(grok.View):
                   "documents are checked in."), type='error')
             satisfied = False
 
+        if self.context.has_active_proposals():
+            api.portal.show_message(
+                _(u"The Dossier can't be deactivated, it contains active "
+                  "proposals."), self.request, type='error')
+            satisfied = False
+
         # check for resolved subdossiers
         for subdossier in self.context.get_subdossiers():
             state = api.content.get_state(obj=subdossier.getObject())
