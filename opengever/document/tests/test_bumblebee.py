@@ -8,7 +8,7 @@ from ftw.testbrowser import browsing
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import FunctionalTestCase
-from plone import api
+from opengever.testing.helpers import create_document_version
 from plone.rfc822.interfaces import IPrimaryFieldInfo
 from plone.uuid.interfaces import IUUID
 from zope.component import getMultiAdapter
@@ -50,12 +50,6 @@ class TestBumblebeeIntegrationWithEnabledFeature(FunctionalTestCase):
 
     maxDiff = None
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
-
-    def _create_version(self, doc, version_id, data=None):
-        repo_tool = api.portal.get_tool('portal_repository')
-        vdata = data or 'VERSION {} DATA'.format(version_id)
-        doc.file.data = vdata
-        repo_tool.save(obj=doc, comment="This is Version %s" % version_id)
 
     @browsing
     def test_document_preview_is_visible(self, browser):
@@ -137,9 +131,9 @@ class TestBumblebeeIntegrationWithEnabledFeature(FunctionalTestCase):
                           .within(dossier)
                           .attach_file_containing(
                               'foo', u'example.docx'))
-        self._create_version(document, 1,
-                             data=bumblebee_asset('example.docx').bytes())
-        self._create_version(document, 2)
+        create_document_version(document, 1,
+                                data=bumblebee_asset('example.docx').bytes())
+        create_document_version(document, 2)
         queue = get_queue()
         queue.reset()
 
@@ -160,4 +154,3 @@ class TestBumblebeeIntegrationWithEnabledFeature(FunctionalTestCase):
              'deferred': False,
              'url': '/plone/dossier-1/document-1/bumblebee_trigger_storing'},
             job)
-

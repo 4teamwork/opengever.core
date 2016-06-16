@@ -47,12 +47,6 @@ class TestSyncExcerpt(FunctionalTestCase):
             .for_document(self.document_in_proposal))
         self.proposal.load_model().submitted_excerpt_document = self.excerpt_in_proposal
 
-    def _create_version(self, doc, version_id, data=None):
-        repo_tool = api.portal.get_tool('portal_repository')
-        vdata = data or 'VERSION {} DATA'.format(version_id)
-        doc.file.data = vdata
-        repo_tool.save(obj=doc, comment="This is Version %s" % version_id)
-
     def test_updates_excerpt_in_dossier_after_checkin(self):
         self.assertEqual(0, self.document_in_proposal.get_current_version())
         self.assertEqual(0, self.document_in_dossier.get_current_version())

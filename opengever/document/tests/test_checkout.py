@@ -11,6 +11,7 @@ from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
+from opengever.testing.helpers import create_document_version
 from opengever.trash.trash import Trasher
 from plone import api
 from plone.app.testing import login
@@ -85,18 +86,12 @@ class TestReverting(FunctionalTestCase):
                                .attach_file_containing(
                                    u"INITIAL VERSION DATA", u"somefile.txt"))
 
-        self._create_version(self.document, 1)
-        self._create_version(self.document, 2)
+        create_document_version(self.document, 1)
+        create_document_version(self.document, 2)
         transaction.commit()
 
         self.manager = getMultiAdapter(
             (self.document, self.portal.REQUEST), ICheckinCheckoutManager)
-
-    def _create_version(self, doc, version_id):
-        repo_tool = api.portal.get_tool('portal_repository')
-        vdata = 'VERSION {} DATA'.format(version_id)
-        doc.file.data = vdata
-        repo_tool.save(obj=doc, comment="This is Version %s" % version_id)
 
     def test_creates_new_version_with_same_data(self):
         self.manager.revert_to_version(2)
@@ -121,7 +116,7 @@ class TestReverting(FunctionalTestCase):
 
     def test_resets_document_date_to_reverted_version(self):
         with freeze(datetime(2015, 01, 28, 12, 00)):
-            self._create_version(self.document, 3)
+            create_document_version(self.document, 3)
 
         self.document.document_date = date(2015, 5, 15)
         self.manager.revert_to_version(3)
@@ -287,12 +282,6 @@ class TestCheckinViews(FunctionalTestCase):
         self.document = create(Builder("document")
                                .checked_out()
                                .within(self.dossier))
-
-    def _create_version(self, doc, version_id):
-        repo = api.portal.get_tool('portal_repository')
-        vdata = 'VERSION {} DATA'.format(version_id)
-        doc.file.data = vdata
-        repo.save(obj=doc, comment="This is Version %s" % version_id)
 
     @browsing
     def test_single_checkin_with_comment(self, browser):
