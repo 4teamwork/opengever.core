@@ -9,7 +9,9 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.interfaces import IConstrainTypeDecider
 from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.meeting import is_meeting_feature_enabled
+from opengever.meeting.model import Proposal
 from opengever.ogds.base.actor import Actor
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.task import OPEN_TASK_STATES
 from opengever.task.task import ITask
 from plone import api
@@ -163,6 +165,14 @@ class DossierContainer(Container):
             review_state=OPEN_TASK_STATES)
 
         return bool(active_tasks)
+
+    def has_active_proposals(self):
+        """Check if there are proposals inside the dossier, which
+        are not in an end state.
+        """
+        query = Proposal.query.active().by_container(
+            self, get_current_admin_unit())
+        return bool(query.count())
 
     def is_all_checked_in(self):
         """ check if all documents in this path are checked in """

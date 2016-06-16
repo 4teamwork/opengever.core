@@ -69,43 +69,45 @@ class TestResolveConditions(FunctionalTestCase):
     def setUp(self):
         super(TestResolveConditions, self).setUp()
         self.grant('Contributor', 'Editor', 'Reader', 'Reviewer')
-        self.dossier = create(Builder('dossier'))
 
     @browsing
     def test_resolving_is_cancelled_when_documents_are_not_filed_correctly(self, browser):
-        create(Builder('dossier').within(self.dossier))
-        create(Builder('document').within(self.dossier).checked_out())
+        dossier = create(Builder('dossier'))
+        create(Builder('dossier').within(dossier))
+        create(Builder('document').within(dossier).checked_out())
 
-        browser.login().open(self.dossier,
+        browser.login().open(dossier,
                              {'_authenticator': createToken()},
                              view='transition-resolve')
 
-        self.assertEquals(self.dossier.absolute_url(), browser.url)
+        self.assertEquals(dossier.absolute_url(), browser.url)
         self.assertEquals(
             ['not all documents and tasks are stored in a subdossier',
              'not all documents are checked in'], error_messages())
 
     @browsing
     def test_resolving_is_cancelled_when_documents_are_checked_out(self, browser):
-        create(Builder('document').within(self.dossier).checked_out())
+        dossier = create(Builder('dossier'))
+        create(Builder('document').within(dossier).checked_out())
 
-        browser.login().open(self.dossier,
+        browser.login().open(dossier,
                              {'_authenticator': createToken()},
                              view='transition-resolve')
 
-        self.assertEquals(self.dossier.absolute_url(), browser.url)
+        self.assertEquals(dossier.absolute_url(), browser.url)
         self.assertEquals(['not all documents are checked in'],
                           error_messages())
 
     @browsing
-    def test_resolving_is_cancelled_when_active_tasks_exists(self, browser):
-        create(Builder('task').within(self.dossier))
+    def test_resolving_is_cancelled_when_active_tasks_exist(self, browser):
+        dossier = create(Builder('dossier'))
+        create(Builder('task').within(dossier))
 
-        browser.login().open(self.dossier,
+        browser.login().open(dossier,
                              {'_authenticator': createToken()},
                              view='transition-resolve')
 
-        self.assertEquals(self.dossier.absolute_url(), browser.url)
+        self.assertEquals(dossier.absolute_url(), browser.url)
         self.assertEquals(['not all task are closed'],
                           error_messages())
 
@@ -117,25 +119,42 @@ class TestResolveConditions(FunctionalTestCase):
                .having(document_date=date(2016, 6, 1)))
 
 
-        browser.login().open(self.dossier,
+        browser.login().open(dossier,
                              {'_authenticator': createToken()},
                              view='transition-resolve')
 
-        self.assertEquals(self.dossier.absolute_url(), browser.url)
+        self.assertEquals(dossier.absolute_url(), browser.url)
         self.assertEquals([],
                           error_messages())
 
     @browsing
-    def test_resolving_is_done_when_all_tasks_are_closed_and_documents_checked_in(self, browser):
-        create(Builder('document').within(self.dossier))
-        create(Builder('task').within(self.dossier)
-               .in_state('task-state-tested-and-closed'))
+    def test_resolving_is_cancelled_when_dossier_has_active_proposals(self, browser):
+        repo = create(Builder('repository'))
+        dossier = create(Builder('dossier')
+                         .within(repo)
+                         .having(end=date(2016, 5, 7)))
+        create(Builder('proposal').within(dossier))
 
-        browser.login().open(self.dossier,
+        browser.login().open(dossier,
                              {'_authenticator': createToken()},
                              view='transition-resolve')
 
-        self.assertEquals(self.dossier.absolute_url(), browser.url)
+        self.assertEquals(dossier.absolute_url(), browser.url)
+        self.assertEquals(['The dossier contains active proposals.'],
+                          error_messages())
+
+    @browsing
+    def test_dossier_is_resolved_when_all_tasks_are_closed_and_documents_checked_in(self, browser):
+        dossier = create(Builder('dossier'))
+        create(Builder('document').within(dossier))
+        create(Builder('task').within(dossier)
+               .in_state('task-state-tested-and-closed'))
+
+        browser.login().open(dossier,
+                             {'_authenticator': createToken()},
+                             view='transition-resolve')
+
+        self.assertEquals(dossier.absolute_url(), browser.url)
         self.assertEquals(['The dossier has been succesfully resolved'],
                           info_messages())
 

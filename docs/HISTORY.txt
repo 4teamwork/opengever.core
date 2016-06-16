@@ -5,6 +5,9 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Disallow closing of a dossier which contains active proposals.
+  [phgross]
+
 - Remove fallback-image for mails because bumblebee supports .eml mimetiype now.
   [elioschmutz]
 
