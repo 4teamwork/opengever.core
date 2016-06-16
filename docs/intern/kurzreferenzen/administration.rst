@@ -397,3 +397,6 @@ Verfügung:
   herunterzuladen, das zum Generieren des Dokuments aus der Sablon-Vorlage
   verwendet wird.
 
+- Inhaltstyp Sitzung: ``download_generated_protocol`` ermöglicht es, ein
+  Protokoll einer Sitzung zu generieren und herunterzuladen, ohne dass das
+  bestehende Protokoll (das im GEVER abgelegte Dokument) verändert wird.

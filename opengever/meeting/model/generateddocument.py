@@ -51,6 +51,8 @@ class GeneratedDocument(Base):
         lockable.unlock(SYS_LOCK)
         assert not lockable.locked(), 'unexpected: could not remove lock'
 
+    def get_download_url(self):
+        return '{}/download'.format(self.resolve_document().absolute_url())
 
 class GeneratedProtocol(GeneratedDocument):
 

@@ -352,9 +352,13 @@ class TestProtocol(FunctionalTestCase):
     def test_protocol_can_be_downloaded(self, browser):
         self.setup_protocol(browser)
         browser.css('.generate-protocol').first.click()
-        browser.css('a[href$="download_protocol"]').first.click()
+
+        meeting = Meeting.query.first()
+        expected_data = meeting.protocol_document.resolve_document().file.data
+
+        browser.css('a.download-protocol-btn').first.click()
         self.assertEqual(browser.headers['content-type'], MIME_DOCX)
-        self.assertIsNotNone(browser.contents)
+        self.assertEqual(expected_data, browser.contents)
 
     @browsing
     def test_protocol_can_be_generated(self, browser):

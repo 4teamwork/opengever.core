@@ -331,7 +331,8 @@ class MeetingView(BrowserView):
         return self.model.has_protocol_document()
 
     def url_download_protocol(self):
-        return self.model.get_url(view='download_protocol')
+        if self.has_protocol_document:
+            return self.model.protocol_document.get_download_url()
 
     def url_agendaitem_list(self):
         return self.model.get_url(view='agenda_item_list')
