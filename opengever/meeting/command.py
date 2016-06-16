@@ -434,13 +434,6 @@ class OgCopyCommand(object):
             self.source, self.target_admin_unit_id, self.target_path)
 
 
-class OgCopyCommandWithElevatedPrivileges(OgCopyCommand):
-
-    def execute(self):
-        return Transporter().transport_to_with_elevated_privileges(
-            self.source, self.target_admin_unit_id, self.target_path)
-
-
 class SubmitDocumentCommand(OgCopyCommand):
 
     def execute(self):

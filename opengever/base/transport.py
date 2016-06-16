@@ -59,16 +59,6 @@ class Transporter(object):
             target_cid, '@@{}'.format(view),
             path=container_path, data=request_data)
 
-    def transport_to_with_elevated_privileges(
-            self, obj, target_cid, container_path, **data):
-
-        if data.get('view'):
-            raise ValueError('Keyword argument `view` not allowed.')
-
-        return self.transport_to(
-            obj, target_cid, container_path,
-            view='transporter-privileged-receive-object', **data)
-
     def transport_from(self, container, source_cid, path):
         """ Copies the object under *path* from client with *source_cid* into
         the local folder *container*

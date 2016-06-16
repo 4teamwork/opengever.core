@@ -95,14 +95,6 @@ class TestTransporter(FunctionalTestCase):
         with self.assertRaises(Unauthorized):
             Transporter().transport_to(task, 'client1', target_path)
 
-        Transporter().transport_to_with_elevated_privileges(
-            task, 'client1', target_path)
-
-    def test_keyword_argument_view_is_not_allowed_when_transporting_with_elevated_privileges_(self):
-
-        with self.assertRaises(ValueError) as cm:
-            Transporter().transport_to_with_elevated_privileges(
-                object(), 'client1', '/ordnungssytem', view='submit-proposal')
-
-        self.assertEquals('Keyword argument `view` not allowed.',
-                          str(cm.exception))
+        Transporter().transport_to(
+            task, 'client1', target_path,
+            view='transporter-privileged-receive-object')
