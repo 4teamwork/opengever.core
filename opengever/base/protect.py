@@ -156,7 +156,6 @@ class OGProtectTransform(ProtectTransform):
     def _log_csrf_incident_to_sentry(self, env):
         logged = False
         try:
-            print None.bla
             extra = {'referrer': self.request.get('HTTP_REFERER', ''),
                      '_registered_objects': env['registered_objects_summary']}
         except Exception as e:
