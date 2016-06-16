@@ -1,6 +1,4 @@
 from opengever.base import model
-from opengever.base.transforms import trix_html_to_sablon_html
-from plone import api
 from Products.CMFCore.utils import getToolByName
 
 
@@ -29,12 +27,6 @@ def create_models():
     model.Base.metadata.create_all(model.Session().bind, checkfirst=True)
 
 
-def register_trix_to_sablon_transform():
-    types_tool = api.portal.get_tool('portal_transforms')
-    types_tool.registerTransform(trix_html_to_sablon_html.register())
-
-
 def installed(site):
     remove_standard_extedit_action(site)
     create_models()
-    register_trix_to_sablon_transform()

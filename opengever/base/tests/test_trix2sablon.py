@@ -1,16 +1,12 @@
+from opengever.base.transforms import trix2sablon
 from opengever.testing import FunctionalTestCase
-from plone import api
 import string
 
 
 class TestTrixSablonTransform(FunctionalTestCase):
 
-    def setUp(self):
-        super(TestTrixSablonTransform, self).setUp()
-        self.transforms = api.portal.get_tool('portal_transforms')
-
     def apply_transform(self, value):
-        return self.transforms.convert('trix_to_sablon', value).getData()
+        return trix2sablon.convert(value)
 
     def test_transform_strips_disallowed_html_tags(self):
         value = (
