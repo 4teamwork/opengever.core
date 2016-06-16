@@ -5,6 +5,10 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Simplify protocol download button in meeting view.
+  Only download the exisiting protocol without regenerating it with sablon.
+  [phgross]
+
 - Fix error: AttributeError: 'DocumentsProxy' object has no attribute 'select_all'.
   [elioschmutz]
 
