@@ -70,6 +70,10 @@
              i18n:translate="">Checkin with comment</a>
         </li>
       </ul>
+      <div class="info-viewlets">
+        <div tal:replace="structure view/overlay/render_checked_out_viewlet" />
+        <div tal:replace="structure view/overlay/render_lock_info_viewlet" />
+      </div>
     </footer>
   </aside>
   <div class="preview">

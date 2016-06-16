@@ -5,6 +5,9 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Add lock-info and checkout-info viewlets to bumblebee-overlay.
+  [elioschmutz]
+
 - Lock excerpts in the dossiers and sync updates to the
   excerpt in a meeting/submitted proposal to the excerpt copy
   in the dossier.

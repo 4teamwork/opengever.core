@@ -8,6 +8,7 @@ from opengever.bumblebee.interfaces import IBumblebeeOverlay
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import login
+from plone.locking.interfaces import IRefreshableLockable
 from zope.component import getMultiAdapter
 from zope.interface.verify import verifyClass
 
@@ -441,3 +442,68 @@ class TestGetCheckinWithCommentUrl(FunctionalTestCase):
         self.assertIn(
             'http://nohost/plone/dossier-1/document-1/@@checkin_document',
             adapter.get_checkin_with_comment_url())
+
+
+class TestRenderLockInfoViewlet(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+
+    @browsing
+    def test_returns_empty_html_if_not_locked(self, browser):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document')
+                          .within(dossier)
+                          .with_dummy_content())
+
+        adapter = getMultiAdapter((document, self.request), IBumblebeeOverlay)
+        browser.open_html(adapter.render_lock_info_viewlet())
+
+        self.assertEqual(0, len(browser.css('.portalMessage')))
+
+    @browsing
+    def test_returns_lock_info_viewlet_if_locked(self, browser):
+        create(Builder('user')
+               .with_userid('bond')
+               .with_roles('Member', 'Reader'))
+
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document')
+                          .within(dossier)
+                          .with_dummy_content())
+
+        IRefreshableLockable(document).lock()
+
+        login(self.portal, 'bond')
+
+        adapter = getMultiAdapter((document, self.request), IBumblebeeOverlay)
+        browser.open_html(adapter.render_lock_info_viewlet())
+
+        self.assertEqual(1, len(browser.css('.portalMessage')))
+
+
+class TestRenderCheckedOutViewlet(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+
+    @browsing
+    def test_returns_empty_html_if_not_checked_out(self, browser):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document')
+                          .within(dossier)
+                          .with_dummy_content())
+
+        adapter = getMultiAdapter((document, self.request), IBumblebeeOverlay)
+        self.assertEqual(u'\n', adapter.render_checked_out_viewlet())
+
+    @browsing
+    def test_returns_lock_info_viewlet_if_checked_out(self, browser):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document')
+                          .within(dossier)
+                          .with_dummy_content()
+                          .checked_out())
+
+        adapter = getMultiAdapter((document, self.request), IBumblebeeOverlay)
+        browser.open_html(adapter.render_checked_out_viewlet())
+
+        self.assertEqual(1, len(browser.css('.portalMessage')))

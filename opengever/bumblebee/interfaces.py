@@ -111,3 +111,15 @@ class IBumblebeeOverlay(Interface):
 
         Returns None if there is no file.
         """
+
+    def render_checked_out_viewlet():
+        """Renders the checked out viewlet.
+
+        Returns html.
+        """
+
+    def render_lock_info_viewlet():
+        """Renders the lock info viewlet.
+
+        Returns html.
+        """
