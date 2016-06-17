@@ -90,7 +90,7 @@
             url_expr="string:#"
             condition_expr=""
             i18n:domain="opengever.repository">
-      <permission value="View"/>
+      <permission value="opengever.disposition: Add disposition"/>
     </action>
 
     <action action_id="sharing"

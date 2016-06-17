@@ -18,4 +18,4 @@ class AddDispositionTabAction(UpgradeStep):
                'condition': '',
                'link_target': '',
                'visible': True,
-               'permissions': ('View', )})
+               'permissions': ('opengever.disposition: Add disposition', )})

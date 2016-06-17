@@ -14,10 +14,20 @@ class TestDispositionListing(FunctionalTestCase):
 
     @browsing
     def test_disposition_tab_is_available_on_repositoryroots(self, browser):
+        self.grant('Contributor', 'Editor', 'Reader', 'Records Manager')
+
         browser.login().open(self.root)
 
         self.assertEquals(
             ['overview', 'dossiers', 'dispositions', 'sharing'],
+            browser.css('.tabbedview-tabs li').text)
+
+    @browsing
+    def test_disposition_tab_is_not_available_when_user_cant_add_dispositions(self, browser):
+        browser.login().open(self.root)
+
+        self.assertEquals(
+            ['overview', 'dossiers', 'sharing'],
             browser.css('.tabbedview-tabs li').text)
 
     @browsing
