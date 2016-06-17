@@ -1,4 +1,3 @@
-from AccessControl import Unauthorized
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from datetime import date
@@ -20,8 +19,6 @@ from plone.dexterity.utils import createContent, addContentToContainer
 from plone.directives import form
 from plone.z3cform.layout import FormWrapper
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
-from Products.CMFPlone.utils import getToolByName
-from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.browser import checkbox
 from z3c.form.browser import radio
 from z3c.form.button import buttonAndHandler
@@ -184,8 +181,9 @@ class SelectTaskTemplatesWizardStep(BaseWizardStepForm, Form):
         main_task = self.create_main_task(tasktemplatefolder, templates)
         self.create_subtasks(main_task, templates)
 
-        IStatusMessage(self.request).addStatusMessage(
-            _(u'message_tasks_created', default=u'tasks created'), type="info")
+        api.portal.show_message(
+            _(u'message_tasks_created', default=u'tasks created'),
+            self.request, type="info")
         return self.request.RESPONSE.redirect(
             '%s#tasks' % self.context.absolute_url())
 
@@ -212,8 +210,8 @@ class SelectTaskTemplatesWizardStep(BaseWizardStepForm, Form):
         alsoProvides(main_task, IFromTasktemplateGenerated)
 
         # set the main_task in to the in progress state
-        wft = getToolByName(self.context, 'portal_workflow')
-        wft.doActionFor(main_task, 'task-transition-open-in-progress')
+        api.content.transition(obj=main_task,
+                               transition='task-transition-open-in-progress')
 
         return main_task
 
@@ -258,8 +256,12 @@ class SelectTaskTemplatesWizardStep(BaseWizardStepForm, Form):
         activity.record()
 
     def replace_interactive_user(self, principal):
-        """Replaces interactive users in the principal.
+        """The current systems knows two interactive users:
+
+        `responsible`: the reponsible of the main dossier.
+        `current_user`: the currently logged in user.
         """
+
         if principal == 'responsible':
             # find the dossier
             dossier = self.context
@@ -272,15 +274,11 @@ class SelectTaskTemplatesWizardStep(BaseWizardStepForm, Form):
             return wrapped_dossier.responsible
 
         elif principal == 'current_user':
-            # get the current user
-            mtool = getToolByName(self.context, 'portal_membership')
-            member = mtool.getAuthenticatedMember()
-            if not member:
-                raise Unauthorized()
-            return member.getId()
+            return api.user.get_current().getId()
 
         else:
             return principal
+
 
     @buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
     def handle_cancel(self, action):
