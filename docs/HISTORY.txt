@@ -5,6 +5,9 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Make sure references to spinner.gif are absolute URLs.
+  [lgraf]
+
 - Add lock-info and checkout-info viewlets to bumblebee-overlay.
   [elioschmutz]
 

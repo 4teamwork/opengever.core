@@ -13,7 +13,8 @@
                              data-context-url context_url;"
              tal:define="context_url context/absolute_url">
           <ul class="filetree">
-            <img src="spinner.gif" class="spinner"/>
+            <img tal:define="portal_url context/@@plone_portal_state/portal_url"
+                 tal:attributes="src string:${portal_url}/spinner.gif" class="spinner"/>
           </ul>
         </div>
 
