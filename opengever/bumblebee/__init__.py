@@ -16,12 +16,6 @@ def get_not_digitally_available_placeholder_image_url():
         "/++resource++opengever.bumblebee.resources/fallback_not_digitally_available.png")
 
 
-def get_mail_placeholder_image_url():
-    return "{}{}".format(
-        api.portal.get().absolute_url(),
-        "/++resource++opengever.bumblebee.resources/fallback_email.png")
-
-
 def is_bumblebee_feature_enabled():
     return api.portal.get_registry_record(
         'is_feature_enabled', interface=IGeverBumblebeeSettings)
@@ -37,12 +31,7 @@ def get_representation_url_by_object(format_name, obj, filename=''):
 
     That means, our obj is only preserved as paper and we have to return
     a special placeholder image for these documents.
-
-    At the moment it's not possible to create previews with bumblebee.
-    So we also handle emails with a special fallback image.
     """
-    if IOGMailMarker.providedBy(obj):
-        return get_mail_placeholder_image_url()
 
     return representation_url_by_object(format_name, obj, filename) or \
         get_not_digitally_available_placeholder_image_url()
@@ -58,12 +47,7 @@ def get_representation_url_by_brain(format_name, brain):
 
     That means, our brain is only preserved as paper and we have to return
     a special placeholder image for these documents.
-
-    At the moment it's not possible to create previews with bumblebee.
-    So we also handle emails with a special fallback image.
     """
-    if brain.portal_type in ['ftw.mail.mail']:
-        return get_mail_placeholder_image_url()
 
     return representation_url_by_brain(format_name, brain) or \
         get_not_digitally_available_placeholder_image_url()
