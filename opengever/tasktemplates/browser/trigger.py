@@ -1,3 +1,4 @@
+from AccessControl.users import nobody
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from datetime import date
@@ -6,6 +7,7 @@ from five import grok
 from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.oguid import Oguid
+from opengever.base.source import DossierPathSourceBinder
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.ogds.base.utils import get_current_org_unit
@@ -15,7 +17,8 @@ from opengever.tasktemplates import _
 from opengever.tasktemplates.content.tasktemplate import MAIN_TASK_DEADLINE_DELTA
 from opengever.tasktemplates.interfaces import IFromTasktemplateGenerated
 from plone import api
-from plone.dexterity.utils import createContent, addContentToContainer
+from plone.dexterity.utils import addContentToContainer
+from plone.dexterity.utils import createContent
 from plone.directives import form
 from plone.z3cform.layout import FormWrapper
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
@@ -25,7 +28,11 @@ from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
 from z3c.form.form import Form
 from z3c.form.interfaces import INPUT_MODE
+from z3c.relationfield.relation import RelationValue
+from z3c.relationfield.schema import RelationChoice
+from z3c.relationfield.schema import RelationList
 from zope import schema
+from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
 from zope.event import notify
 from zope.interface import alsoProvides
@@ -64,6 +71,25 @@ class ISelectTaskTemplateFolder(form.Schema):
         required=True
     )
 
+    related_documents = RelationList(
+        title=_(u'label_related_documents', default=u'Related documents'),
+        default=[],
+        missing_value=[],
+        value_type=RelationChoice(
+            title=u"Related",
+            source=DossierPathSourceBinder(
+                portal_type=("opengever.document.document", "ftw.mail.mail"),
+                navigation_tree_query={
+                    'object_provides':
+                    ['opengever.dossier.behaviors.dossier.IDossierMarker',
+                     'opengever.document.document.IDocumentSchema',
+                     'opengever.task.task.ITask',
+                     'ftw.mail.mail.IMail', ],
+                }),
+            ),
+        required=False,
+    )
+
 
 class SelectTaskTemplateFolderWizardStep(BaseWizardStepForm, Form):
     step_name = 'select-tasktemplatefolder'
@@ -74,7 +100,11 @@ class SelectTaskTemplateFolderWizardStep(BaseWizardStepForm, Form):
     fields = Fields(ISelectTaskTemplateFolder)
 
     def update(self):
-        if not self.has_active_tasktemplates():
+        # ignore unauthorized checks (they're called by the contenttree widget)
+        if api.user.get_current() == nobody:
+            pass
+
+        elif not self.has_active_tasktemplates():
             api.portal.show_message(
                 _(u'msg_no_active_tasktemplatefolders',
                   default=u'Currently there are no active task template '
@@ -166,6 +196,11 @@ class SelectTaskTemplatesWizardStep(BaseWizardStepForm, Form):
         uid = get_wizard_data(self.context, 'tasktemplatefolder')
         return api.content.get(UID=uid)
 
+    def get_selected_related_documents(self):
+        intids = getUtility(IIntIds)
+        value = get_wizard_data(self.context, 'related_documents')
+        return [RelationValue(intids.getId(obj)) for obj in value]
+
     def get_selected_tasktemplates(self, data):
         catalog = api.portal.get_tool('portal_catalog')
         return [brain.getObject() for brain in
@@ -178,10 +213,11 @@ class SelectTaskTemplatesWizardStep(BaseWizardStepForm, Form):
             return
 
         tasktemplatefolder = self.get_selected_task_templatefolder()
+        related_documents = self.get_selected_related_documents()
         templates = self.get_selected_tasktemplates(data)
 
         main_task = self.create_main_task(tasktemplatefolder, templates)
-        self.create_subtasks(main_task, templates)
+        self.create_subtasks(main_task, templates, related_documents)
 
         api.portal.show_message(
             _(u'message_tasks_created', default=u'tasks created'),
@@ -220,18 +256,20 @@ class SelectTaskTemplatesWizardStep(BaseWizardStepForm, Form):
 
         return main_task
 
-    def create_subtasks(self, main_task, selected_templates):
-        for template in selected_templates:
-            self.create_subtask(main_task, template)
+    def create_subtasks(self, main_task,
+                        selected_templates, related_documents):
 
-    def create_subtask(self, main_task, template):
+        for template in selected_templates:
+            self.create_subtask(main_task, template, related_documents)
+
+    def create_subtask(self, main_task, template, related_documents):
         data = dict(
             title=template.title,
             issuer=self.replace_interactive_user(template.issuer),
-            responsible=self.replace_interactive_user(
-                template.responsible),
+            responsible=self.replace_interactive_user(template.responsible),
             task_type=template.task_type,
             text=template.text,
+            relatedItems=related_documents,
             deadline=date.today() + timedelta(template.deadline),
         )
 

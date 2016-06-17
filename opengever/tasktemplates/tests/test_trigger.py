@@ -184,3 +184,22 @@ class TestTriggeringTaskTemplate(FunctionalTestCase):
         # responsible
         self.assertEquals('peter.meier', subtask3.responsible)
         self.assertEquals('client1', subtask1.responsible_client)
+
+    @browsing
+    def set_relateditems_on_every_subtask_when_selected(self, browser):
+        doc1 = create(Builder('document')
+                      .within(self.dossier)
+                      .titled(u'Doc A'))
+        doc2 = create(Builder('document')
+                      .within(self.dossier)
+                      .titled(u'Doc B'))
+
+        self.trigger_tasktemplatefolder(
+            browser, templates=['Mitbericht FD', 'Mitbericht SD'],
+            documents=['Doc A', 'Doc B'])
+
+        main_task = self.dossier.get('task-1')
+        subtask1, subtask2 = main_task.listFolderContents()
+
+        self.assertEquals([doc1, doc2], subtask1.relatedItems)
+        self.assertEquals([doc1, doc2], subtask2.relatedItems)
