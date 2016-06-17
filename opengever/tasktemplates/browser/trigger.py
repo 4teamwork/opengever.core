@@ -110,7 +110,6 @@ class TriggerTaskTemlateFolderView(FormWrapper, grok.View):
     """View to render the form to create a new period."""
 
     grok.context(IDossierMarker)
-    # grok.name('trigger-tasktemplatefolder')
     grok.name('add-tasktemplate')
     grok.require('cmf.AddPortalContent')
     form = SelectTaskTemplateFolderWizardStep
@@ -167,16 +166,19 @@ class SelectTaskTemplatesWizardStep(BaseWizardStepForm, Form):
         uid = get_wizard_data(self.context, 'tasktemplatefolder')
         return api.content.get(UID=uid)
 
+    def get_selected_tasktemplates(self, data):
+        catalog = api.portal.get_tool('portal_catalog')
+        return [brain.getObject() for brain in
+                catalog(UID=data.get('tasktemplates'))]
+
     @buttonAndHandler(_(u'button_trigger', default=u'Trigger'), name='trigger')
     def handle_continue(self, action):
         data, errors = self.extractData()
         if errors:
             return
 
-        catalog = api.portal.get_tool('portal_catalog')
         tasktemplatefolder = self.get_selected_task_templatefolder()
-        templates = [brain.getObject() for brain in
-                     catalog(UID=data.get('tasktemplates'))]
+        templates = self.get_selected_tasktemplates(data)
 
         main_task = self.create_main_task(tasktemplatefolder, templates)
         self.create_subtasks(main_task, templates)
@@ -185,7 +187,11 @@ class SelectTaskTemplatesWizardStep(BaseWizardStepForm, Form):
             _(u'message_tasks_created', default=u'tasks created'),
             self.request, type="info")
         return self.request.RESPONSE.redirect(
-            '%s#tasks' % self.context.absolute_url())
+            '{}#tasks'.format(self.context.absolute_url()))
+
+    @buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
+    def handle_cancel(self, action):
+        return self.request.RESPONSE.redirect(self.context.absolute_url())
 
     def create_main_task(self, templatefolder, selected_templates):
         highest_deadline = max(
@@ -206,8 +212,7 @@ class SelectTaskTemplatesWizardStep(BaseWizardStepForm, Form):
         main_task = addContentToContainer(
             self.context, main_task, checkConstraints=True)
 
-        # set marker Interfaces
-        alsoProvides(main_task, IFromTasktemplateGenerated)
+        self.mark_as_generated_from_tasktemplate(main_task)
 
         # set the main_task in to the in progress state
         api.content.transition(obj=main_task,
@@ -230,25 +235,14 @@ class SelectTaskTemplatesWizardStep(BaseWizardStepForm, Form):
             deadline=date.today() + timedelta(template.deadline),
         )
 
-        if template.responsible_client == 'interactive_users':
-            responsible_assigned_org_units = ogds_service().assigned_org_units(
-                data['responsible'])
-            current_org_unit = get_current_org_unit()
-            if not responsible_assigned_org_units or \
-                    current_org_unit in responsible_assigned_org_units:
-                data['responsible_client'] = current_org_unit.id()
-            else:
-                data['responsible_client'] = \
-                    responsible_assigned_org_units[0].id()
-        else:
-            data['responsible_client'] = template.responsible_client
+        data['responsible_client'] = self.get_responsible_client(
+            template, data['responsible'])
 
         task = createContent('opengever.task.task', **data)
         notify(ObjectCreatedEvent(task))
-        task = addContentToContainer(main_task,
-                                     task,
-                                     checkConstraints=True)
-        alsoProvides(task, IFromTasktemplateGenerated)
+        task = addContentToContainer(main_task, task, checkConstraints=True)
+        self.mark_as_generated_from_tasktemplate(task)
+
         task.reindexObject()
 
         # add activity record for subtask
@@ -263,15 +257,13 @@ class SelectTaskTemplatesWizardStep(BaseWizardStepForm, Form):
         """
 
         if principal == 'responsible':
-            # find the dossier
             dossier = self.context
             while not IDossierMarker.providedBy(dossier):
                 if IPloneSiteRoot.providedBy(dossier):
                     raise ValueError('Could not find dossier')
                 dossier = aq_parent(aq_inner(dossier))
-            # get the responsible of the dossier
-            wrapped_dossier = IDossier(dossier)
-            return wrapped_dossier.responsible
+
+            return IDossier(dossier).responsible
 
         elif principal == 'current_user':
             return api.user.get_current().getId()
@@ -279,10 +271,21 @@ class SelectTaskTemplatesWizardStep(BaseWizardStepForm, Form):
         else:
             return principal
 
+    def get_responsible_client(self, template, responsible):
+        if template.responsible_client == 'interactive_users':
+            current_org_unit = get_current_org_unit()
+            responsible_org_units = ogds_service().assigned_org_units(responsible)
 
-    @buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
-    def handle_cancel(self, action):
-        return self.request.RESPONSE.redirect(self.context.absolute_url())
+            if current_org_unit in responsible_org_units or \
+               not responsible_org_units:
+                return current_org_unit.id()
+            else:
+                return responsible_org_units[0].id()
+
+        return template.responsible_client
+
+    def mark_as_generated_from_tasktemplate(self, task):
+        alsoProvides(task, IFromTasktemplateGenerated)
 
 
 class SelectTaskTemplatesView(FormWrapper, grok.View):
