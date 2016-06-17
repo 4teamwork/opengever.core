@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2015-12-22 14:43+0000\n"
+"POT-Creation-Date: 2016-06-17 10:21+0000\n"
 "PO-Revision-Date: 2012-02-23 14:39+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -32,12 +32,27 @@ msgstr "Titel"
 msgid "add tasktemplate"
 msgstr "Aufgabenvorlage hinzufügen"
 
+#. Default: "Cancel"
+#: ./opengever/tasktemplates/browser/trigger.py:129
+msgid "button_cancel"
+msgstr "Abbrechen"
+
+#. Default: "Continue"
+#: ./opengever/tasktemplates/browser/trigger.py:117
+msgid "button_continue"
+msgstr "Weiter"
+
+#. Default: "Trigger"
+#: ./opengever/tasktemplates/browser/trigger.py:209
+msgid "button_trigger"
+msgstr "Auslösen"
+
 #: ./opengever/tasktemplates/browser/form.pt:32
 msgid "choose template"
 msgstr "Vorlage auswählen"
 
 #. Default: "Interactive users"
-#: ./opengever/tasktemplates/vocabularies.py:48
+#: ./opengever/tasktemplates/vocabularies.py:54
 msgid "client_interactive_users"
 msgstr "Interaktiver Benutzer"
 
@@ -79,12 +94,12 @@ msgid "help_title"
 msgstr "Der Name der Aufgabe."
 
 #. Default: "Current user"
-#: ./opengever/tasktemplates/vocabularies.py:17
+#: ./opengever/tasktemplates/vocabularies.py:23
 msgid "interactive_user_current_user"
 msgstr "Sachbearbeiter"
 
 #. Default: "Responsible"
-#: ./opengever/tasktemplates/vocabularies.py:13
+#: ./opengever/tasktemplates/vocabularies.py:19
 msgid "interactive_user_responsible"
 msgstr "Federführender"
 
@@ -116,6 +131,11 @@ msgstr "Auftraggeber"
 msgid "label_preselected"
 msgstr "Vorselektiert"
 
+#. Default: "Related documents"
+#: ./opengever/tasktemplates/browser/trigger.py:75
+msgid "label_related_documents"
+msgstr "Verweise"
+
 #. Default: "Responsible Client"
 #: ./opengever/tasktemplates/content/tasktemplate.py:57
 msgid "label_resonsible_client"
@@ -136,10 +156,41 @@ msgstr "Auftragnehmer"
 msgid "label_review_state"
 msgstr "Status"
 
+#. Default: "Select tasktemplatefolder"
+#: ./opengever/tasktemplates/browser/trigger.py:96
+msgid "label_select_tasktemplatefolder"
+msgstr "Auswahl Standardablauf"
+
+#. Default: "Select tasktemplates"
+#: ./opengever/tasktemplates/browser/trigger.py:177
+msgid "label_select_tasktemplates"
+msgstr "Auswahl Aufgabenvorlagen"
+
 #. Default: "Task Type"
 #: ./opengever/tasktemplates/content/tasktemplate.py:47
 msgid "label_task_type"
 msgstr "Auftragstyp"
+
+#. Default: "Tasktemplate selection"
+#: ./opengever/tasktemplates/browser/trigger.py:50
+msgid "label_tasktemplate_selection"
+msgstr "Auswahl Aufgabenvorlagen"
+
+#. Default: "Tasktemplatefolder"
+#: ./opengever/tasktemplates/browser/trigger.py:69
+msgid "label_tasktemplatefolder"
+msgstr "Standardablauf"
+
+#. Default: "Tasktemplatefolder selection"
+#: ./opengever/tasktemplates/browser/trigger.py:46
+msgid "label_tasktemplatefolder_selection"
+msgstr "Auswahl Standardablauf"
+
+#. Default: "Tasktemplates"
+#: ./opengever/tasktemplates/browser/trigger.py:166
+#, fuzzy
+msgid "label_tasktemplates"
+msgstr "Aufgabenvorlage"
 
 #. Default: "Text"
 #: ./opengever/tasktemplates/content/tasktemplate.py:80
@@ -165,11 +216,13 @@ msgstr "Sie haben keine Vorlagen ausgewählt."
 
 #. Default: "tasks created"
 #: ./opengever/tasktemplates/browser/form.py:307
+#: ./opengever/tasktemplates/browser/trigger.py:223
 msgid "message_tasks_created"
 msgstr "Alle Aufgaben aus gewähltem Standardablauf wurden erstellt."
 
 #. Default: "Currently there are no activetask template folders registered."
 #: ./opengever/tasktemplates/browser/form.py:144
+#: ./opengever/tasktemplates/browser/trigger.py:109
 msgid "msg_no_active_tasktemplatefolders"
 msgstr "Zurzeit sind keine aktiven Standardabläufe hinterlegt."
 
@@ -181,4 +234,3 @@ msgstr "Ja"
 #: ./opengever/tasktemplates/browser/form.pt:33
 msgid "select tasks"
 msgstr "Aufgaben auswählen"
-

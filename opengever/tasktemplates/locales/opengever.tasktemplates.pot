@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-12-22 14:43+0000\n"
+"POT-Creation-Date: 2016-06-17 10:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,12 +35,27 @@ msgstr ""
 msgid "add tasktemplate"
 msgstr ""
 
+#. Default: "Cancel"
+#: ./opengever/tasktemplates/browser/trigger.py:129
+msgid "button_cancel"
+msgstr ""
+
+#. Default: "Continue"
+#: ./opengever/tasktemplates/browser/trigger.py:117
+msgid "button_continue"
+msgstr ""
+
+#. Default: "Trigger"
+#: ./opengever/tasktemplates/browser/trigger.py:209
+msgid "button_trigger"
+msgstr ""
+
 #: ./opengever/tasktemplates/browser/form.pt:32
 msgid "choose template"
 msgstr ""
 
 #. Default: "Interactive users"
-#: ./opengever/tasktemplates/vocabularies.py:48
+#: ./opengever/tasktemplates/vocabularies.py:54
 msgid "client_interactive_users"
 msgstr ""
 
@@ -82,12 +97,12 @@ msgid "help_title"
 msgstr ""
 
 #. Default: "Current user"
-#: ./opengever/tasktemplates/vocabularies.py:17
+#: ./opengever/tasktemplates/vocabularies.py:23
 msgid "interactive_user_current_user"
 msgstr ""
 
 #. Default: "Responsible"
-#: ./opengever/tasktemplates/vocabularies.py:13
+#: ./opengever/tasktemplates/vocabularies.py:19
 msgid "interactive_user_responsible"
 msgstr ""
 
@@ -119,6 +134,11 @@ msgstr ""
 msgid "label_preselected"
 msgstr ""
 
+#. Default: "Related documents"
+#: ./opengever/tasktemplates/browser/trigger.py:75
+msgid "label_related_documents"
+msgstr ""
+
 #. Default: "Responsible Client"
 #: ./opengever/tasktemplates/content/tasktemplate.py:57
 msgid "label_resonsible_client"
@@ -139,9 +159,39 @@ msgstr ""
 msgid "label_review_state"
 msgstr ""
 
+#. Default: "Select tasktemplatefolder"
+#: ./opengever/tasktemplates/browser/trigger.py:96
+msgid "label_select_tasktemplatefolder"
+msgstr ""
+
+#. Default: "Select tasktemplates"
+#: ./opengever/tasktemplates/browser/trigger.py:177
+msgid "label_select_tasktemplates"
+msgstr ""
+
 #. Default: "Task Type"
 #: ./opengever/tasktemplates/content/tasktemplate.py:47
 msgid "label_task_type"
+msgstr ""
+
+#. Default: "Tasktemplate selection"
+#: ./opengever/tasktemplates/browser/trigger.py:50
+msgid "label_tasktemplate_selection"
+msgstr ""
+
+#. Default: "Tasktemplatefolder"
+#: ./opengever/tasktemplates/browser/trigger.py:69
+msgid "label_tasktemplatefolder"
+msgstr ""
+
+#. Default: "Tasktemplatefolder selection"
+#: ./opengever/tasktemplates/browser/trigger.py:46
+msgid "label_tasktemplatefolder_selection"
+msgstr ""
+
+#. Default: "Tasktemplates"
+#: ./opengever/tasktemplates/browser/trigger.py:166
+msgid "label_tasktemplates"
 msgstr ""
 
 #. Default: "Text"
@@ -168,11 +218,13 @@ msgstr ""
 
 #. Default: "tasks created"
 #: ./opengever/tasktemplates/browser/form.py:307
+#: ./opengever/tasktemplates/browser/trigger.py:223
 msgid "message_tasks_created"
 msgstr ""
 
 #. Default: "Currently there are no activetask template folders registered."
 #: ./opengever/tasktemplates/browser/form.py:144
+#: ./opengever/tasktemplates/browser/trigger.py:109
 msgid "msg_no_active_tasktemplatefolders"
 msgstr ""
 
