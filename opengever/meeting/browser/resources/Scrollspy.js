@@ -2,109 +2,86 @@
 
   "use strict";
 
-  function Scrollspy(_options) {
+  function Scrollspy(target) {
 
-    this.options = $.extend({
-      selector: "",
-      offset: 0,
-      animationSpeed: 300,
-      scrollOffset: 100
-    }, _options || {});
+    target = $(target);
 
-    var scrollCallback = function() {};
+    var element = target.parent();
 
-    var beforeScrollCallback = function() {};
+    var reveal = {};
 
-    var root = $("html, body");
+    var anchors = $("a", target);
 
-    var self = this;
+    var beforeSelectCallback = $.noop;
 
-    this.element = $(this.options.selector);
+    var root = $(":root");
 
-    this.init = function() {
-      $("a", this.element).click(function(event) {
-        event.preventDefault();
-        var target = $(event.currentTarget);
-        self.applyAnchor(target);
-      });
-      this.element.on("mouseover", function() {
-        var range = self.element.children("ul").height() - self.element.height();
-        self.trapScroll(range);
-      });
-      this.element.on("mouseleave", function() { self.releaseScroll(); });
-    };
+    function scrollTo(offset, callback) { root.animate({ scrollTop: offset + "px" }, 300, callback); }
 
-    this.trapScroll = function(range) {
+    function extractAnchor(node) {
+      node = $(node);
+      return $(node.attr("href"));
+    }
+
+    function applyAnchor(node) {
+      var anchor = extractAnchor(node);
+      scrollTo(anchor.offset().top + 1);
+    }
+
+    function expand(node) {
+      var expandable = node.next(".expandable");
+      if(!expandable.length) {
+        return false;
+      }
+      $(".expanded").removeClass("expanded");
+      expandable.addClass("expanded");
+      expandable.prev().addClass("selected");
+    }
+
+    function select(node) {
+      node = $(node);
+      beforeSelectCallback(node, extractAnchor(node));
+      node.closest("ul").find(".selected").removeClass("selected");
+      node.addClass("selected");
+      expand(node);
+    }
+
+    function onSelect(callback) { beforeSelectCallback = callback; }
+
+    function reset() {
+      $(".selected").removeClass("selected");
+      $(".expanded").removeClass("expanded");
+    }
+
+    function releaseScroll() { $(window).off("wheel"); }
+
+    function trapScroll(range) {
       $(window).on("wheel", function(event) {
         var deltaY = event.originalEvent.deltaY;
-        var offset = self.element.scrollTop();
+        var offset = element.scrollTop();
         if ((deltaY > 0 && offset >= range) || (deltaY < 0 && offset <= 0)) {
           event.preventDefault();
         }
       });
-    };
+    }
 
-    this.releaseScroll = function() { $(window).off("wheel"); };
+    anchors.on("click", function(event) {
+      event.preventDefault();
+      applyAnchor(event.currentTarget);
+    });
 
-    this.align = function() {
-      var selected = $(".selected", this.element);
-      var offset = 0;
-      if(selected.length) {
-        offset = selected.offset().top - this.element.offset().top + this.element.scrollTop() - this.options.scrollOffset;
-      }
-      $(this.element).stop().animate({ scrollTop: offset + "px" }, this.options.animationSpeed);
-    };
+    element.on("mouseover", function() {
+      var range = element.children("ul").height() - element.height();
+      trapScroll(range);
+    });
+    element.on("mouseleave", function() { releaseScroll(); });
 
-    this.expand = function(target) {
-      if(target.hasClass("expandable")) {
-        $(".expandable", this.element).not(target).removeClass("expanded");
-        target.addClass("expanded");
-      }
-    };
+    reveal.select = select;
+    reveal.onSelect = onSelect;
+    reveal.reset = reset;
 
-    this.scrollTo = function(offset, callback) {
-      offset = offset - this.options.offset;
-      root.animate({ scrollTop: offset + "px" }, this.options.animationSpeed, callback);
-    };
+    return Object.freeze(reveal);
 
-    this.extractAnchor = function(target) {
-      return $(target.attr("href"));
-    };
-
-    this.applyAnchor = function(target) {
-      var anchor;
-      if (target.hasClass("expandable")) {
-        anchor = this.extractAnchor(target.next().find(".field").first());
-      } else if(target.hasClass("paragraph")) {
-        anchor = this.extractAnchor(target.parent().next().find(".field").first());
-      }
-      else {
-        anchor = this.extractAnchor(target);
-      }
-      beforeScrollCallback(target, anchor);
-      this.scrollTo(anchor.offset().top, function() { scrollCallback(target, anchor); });
-    };
-
-    this.select = function(target) {
-      var selected = $(".selected", this.element).not(target);
-      selected.removeClass("selected");
-      target.addClass("selected");
-      var parent = target.closest("ul").prev(".expandable");
-      selected.not(parent).removeClass("selected");
-      parent.addClass("selected");
-      this.align();
-    };
-
-    this.reset = function() {
-      $(".selected", this.element).removeClass("selected");
-      $(".expanded", this.element).removeClass("expanded");
-    };
-
-    this.onBeforeScroll = function(callback) { beforeScrollCallback = callback; };
-
-    this.onScroll = function(callback) { scrollCallback = callback; };
-
-    this.init();
   }
 
   global.Scrollspy = Scrollspy;

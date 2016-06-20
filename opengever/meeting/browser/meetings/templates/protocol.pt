@@ -36,13 +36,13 @@
                         <span class="number" tal:content="python: protocol.number"></span>
                         <span class="title" tal:content="python: protocol.get_title()"></span>
                       </a>
-                      <ul class="nav" tal:condition="not: protocol/is_paragraph">
+                      <ul class="nav expandable" tal:condition="not: protocol/is_paragraph">
                         <metal:block tal:repeat="field view/agenda_item_fields">
                           <metal:block tal:define="field_name field/name"
                                        tal:condition="python: view.is_field_visible(field, protocol)">
                             <li>
                               <a class="field"
-                                 tal:attributes="href string:#${name}-${field_name};
+                                 tal:attributes="href string:#${name}-${field_name}-label;
                                                  id string:${name}-${field_name}-anchor"
                                  tal:content="field/label">
                               </a>
@@ -67,7 +67,6 @@
               </div>
             </div>
             <div class="agenda_items">
-              <label id="dummy"></label>
               <metal:block tal:repeat="protocol agenda_items">
 
                 <div tal:define="name protocol/name" class="item">
@@ -95,6 +94,7 @@
                         <span class="readonly" tal:content="structure field_value"
                               tal:condition="protocol/is_decided"></span>
                         <metal:block tal:define="id string:${name}-${field_name};
+                                                 class name;
                                                  name string:${name}.${field_name}:record;
                                                  value field_value;
                                                  autofocus repeat/field/start"

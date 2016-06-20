@@ -132,53 +132,32 @@
 
     var protocolController = new ProtocolController();
 
-    var scrollspy = new global.Scrollspy({ selector: ".navigation" });
+    var scrollspy = global.Scrollspy(".navigation > ul");
 
-    var navigation = $(".protocol-navigation");
+    var headings = global.Pin("#opengever_meeting_protocol .protocol_title", "trix-toolbar");
+    var labels = global.Pin("#opengever_meeting_protocol .agenda_items label", null, { pin: false });
+    var navigation = global.Pin(".protocol-navigation", null, { pin: false });
 
-    var headings = new global.StickyHeading({ selector: "#opengever_meeting_protocol .protocol_title" });
-    var labels = new global.StickyHeading({ selector: "#opengever_meeting_protocol .agenda_items label", fix: false, dependsOn: headings});
-    var collapsible = new global.StickyHeading({ selector: "#opengever_meeting_protocol .collapsible", clone: false});
-
-    scrollspy.onBeforeScroll(function(target, anchor) { scrollspy.options.offset = anchor.siblings("h2.clone").height() + 40; });
-
-    collapsible.onSticky(function() {
-      navigation.addClass("sticky");
-      navigation.css("left", navigation.offset().left);
-    });
-
-    collapsible.onNoSticky(function() { navigation.css("left", "auto"); });
-
-    headings.onNoSticky(function() {
+    headings.onRelease(function() {
       scrollspy.reset();
-      navigation.removeClass("sticky");
     });
 
-    headings.onSticky(function(heading) {
-      navigation.addClass("sticky");
-      scrollspy.expand($("#" + heading.node.attr("id") + "-anchor"));
-      scrollspy.select($("#" + heading.node.attr("id") + "-anchor"));
+    headings.onPin(function(item) {
+      scrollspy.select($("#" + item.element.attr("id") + "-anchor"));
     });
 
-    headings.onCollision(function() { navigation.addClass("sticky"); });
-
-    labels.onSticky(function(label) { scrollspy.select($("#" + label.node.attr("for") + "-anchor")); });
-
-    labels.onCollision(function(fadingIn, fadingOut) { scrollspy.select($("#" + fadingOut.node.attr("for") + "-anchor")); });
-
-    scrollspy.onScroll(function(target, anchor) {
-      trixController.activateToolbar($("#" + anchor.attr("id") + "-toolbar"));
-      if(target.hasClass("expandable")) {
-        scrollspy.expand(target);
-      }
+    labels.onPin(function(item) {
+      scrollspy.select($("#" + item.element.attr("for") + "-anchor"));
     });
-
 
   }
 
   $(function() {
     if($("#opengever_meeting_protocol").length) {
       init();
+    }
+    if($(".template-opengever-meeting-proposal, .portaltype-opengever-meeting-submittedproposal.template-edit, .portaltype-opengever-meeting-proposal.template-edit").length) {
+      global.Pin("trix-toolbar");
     }
     if($(".template-add-membership, .template-opengever-meeting-proposal, .portaltype-opengever-meeting-proposal.template-edit").length) {
       var autocompleteSelects = new global.SelectAutocomplete();

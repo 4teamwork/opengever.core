@@ -122,10 +122,12 @@
       id: string, id used for the input field
       name: string, name used for the input field
       value: string, value of the input field
-      autofocus: optional, boolenan, whether the field is autofocused initially
+      autofocus: optional, boolean, whether the field is autofocused initially
+      class: optional, string, class used for the toolbar
     </tal:comment>
     <metal:define define-macro="render_trix_editor"
-                  tal:define="autofocus autofocus | nothing">
+                  tal:define="autofocus autofocus | nothing;
+                              class class | nothing;">
 
       <input type="text"
              class="trix-input"
@@ -134,7 +136,7 @@
                              value value"
       />
 
-      <trix-toolbar tal:attributes="id string:${id}-toolbar">
+      <trix-toolbar tal:attributes="id string:${id}-toolbar; class class">
         <div class="button-group">
           <button type="button" class="button bold" data-trix-attribute="bold"></button>
           <button type="button" class="button italic" data-trix-attribute="italic"></button>
