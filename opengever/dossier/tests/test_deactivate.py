@@ -58,6 +58,22 @@ class TestDossierDeactivation(FunctionalTestCase):
             error_messages()[0])
 
     @browsing
+    def test_not_possible_with_active_proposals(self, browser):
+        repo = create(Builder('repository'))
+        dossier = create(Builder('dossier').within(repo))
+        create(Builder('proposal').within(dossier))
+
+        browser.login().open(dossier,
+                             view='transition-deactivate',
+                             data={'_authenticator': createToken()})
+
+        self.assertEqual('dossier-state-active',
+                         api.content.get_state(dossier))
+        self.assertEqual(
+            u"The Dossier can't be deactivated, it contains active proposals.",
+            error_messages()[0])
+
+    @browsing
     def test_recursively_deactivate_subdossier(self, browser):
         subdossier = create(Builder('dossier').within(self.dossier))
         subsubdossier = create(Builder('dossier').within(subdossier))

@@ -2,7 +2,6 @@ from five import grok
 from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from plone import api
-from Products.statusmessages.interfaces import IStatusMessage
 
 
 class DossierDeactivateView(grok.View):
@@ -30,8 +29,8 @@ class DossierDeactivateView(grok.View):
         api.content.transition(obj=self.context,
                                transition='dossier-transition-deactivate')
 
-        IStatusMessage(self.request).add(
-            _("The Dossier has been deactivated"), type='info')
+        api.portal.show_message(
+            _("The Dossier has been deactivated"), self.request, type='info')
 
         return self.redirect()
 
@@ -42,26 +41,33 @@ class DossierDeactivateView(grok.View):
         satisfied = True
 
         if not self.context.is_all_checked_in():
-            IStatusMessage(self.request).add(
+            api.portal.show_message(
                 _(u"The Dossier can't be deactivated, not all contained"
-                  "documents are checked in."), type='error')
+                  "documents are checked in."), self.request, type='error')
+            satisfied = False
+
+        if self.context.has_active_proposals():
+            api.portal.show_message(
+                _(u"The Dossier can't be deactivated, it contains active "
+                  "proposals."), self.request, type='error')
             satisfied = False
 
         # check for resolved subdossiers
         for subdossier in self.context.get_subdossiers():
             state = api.content.get_state(obj=subdossier.getObject())
             if state == 'dossier-state-resolved':
-                IStatusMessage(self.request).add(
-                    _(u"The Dossier can't be deactivated, the subdossier "
-                      "${dossier} is already resolved",
-                      mapping=dict(dossier=subdossier.Title.decode('utf-8'),)),
-                    type='error')
+                msg = _(u"The Dossier can't be deactivated, the subdossier "
+                       "${dossier} is already resolved",
+                       mapping=dict(dossier=subdossier.Title.decode('utf-8')))
+                api.portal.show_message(msg, self.request, type='error')
+
                 satisfied = False
 
-        if not self.context.is_all_closed():
+        if self.context.has_active_tasks():
             satisfied = False
-            IStatusMessage(self.request).add(
+            api.portal.show_message(
                 _(u"The Dossier can't be deactivated, not all contained "
-                  "tasks are in a closed state."), type='error')
+                  "tasks are in a closed state."),
+                self.request, type='error')
 
         return satisfied

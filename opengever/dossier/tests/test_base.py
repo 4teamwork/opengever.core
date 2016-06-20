@@ -106,11 +106,11 @@ class TestDossierContainer(FunctionalTestCase):
 
 class TestDossierChecks(FunctionalTestCase):
 
-    def test_its_all_closed_if_no_task_exists(self):
+    def test_it_has_no_active_task_when_no_task_exists(self):
         dossier = create(Builder("dossier"))
-        self.assertTrue(dossier.is_all_closed())
+        self.assertFalse(dossier.has_active_tasks())
 
-    def test_its_all_closed_if_all_task_stays_in_an_inactive_state(self):
+    def test_it_has_no_active_task_if_all_task_are_in_an_inactive_state(self):
         dossier = create(Builder("dossier"))
         create(Builder("task").within(dossier)
                .in_state('task-state-cancelled'))
@@ -119,9 +119,9 @@ class TestDossierChecks(FunctionalTestCase):
         create(Builder("task").within(dossier)
                .in_state('task-state-tested-and-closed'))
 
-        self.assertTrue(dossier.is_all_closed())
+        self.assertFalse(dossier.has_active_tasks())
 
-    def test_its_all_closed_if_tasks_and_subtasks_stays_in_an_inactive_state(self):
+    def test_it_has_no_active_task_if_tasks_and_subtasks_are_in_an_inactive_state(self):
         dossier = create(Builder("dossier"))
         task = create(Builder("task").within(dossier)
                       .in_state('task-state-cancelled'))
@@ -130,14 +130,22 @@ class TestDossierChecks(FunctionalTestCase):
         create(Builder("task").within(subtask)
                .in_state('task-state-tested-and-closed'))
 
-        self.assertTrue(dossier.is_all_closed())
+        self.assertFalse(dossier.has_active_tasks())
 
-    def test_its_not_all_closed_if_a_task_stays_in_an_active_state(self):
+    def test_it_has_active_tasks_if_a_task_is_in_an_active_state(self):
         dossier = create(Builder("dossier"))
         create(Builder("task").within(dossier)
                .in_state('task-state-open'))
 
-        self.assertFalse(dossier.is_all_closed())
+        self.assertTrue(dossier.has_active_tasks())
+
+    def test_has_active_tasks_checks_recursive(self):
+        dossier = create(Builder("dossier"))
+        subdossier = create(Builder("dossier").within(dossier))
+        subsubdossier = create(Builder("dossier").within(subdossier))
+        create(Builder("task").within(subsubdossier).in_state('task-state-open'))
+
+        self.assertTrue(dossier.has_active_tasks())
 
     def test_its_all_checked_in_when_no_document_exists(self):
         dossier = create(Builder("dossier"))

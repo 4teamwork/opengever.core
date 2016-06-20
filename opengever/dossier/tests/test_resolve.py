@@ -1,265 +1,244 @@
 from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
-from ftw.testing import MockTestCase
+from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import error_messages
+from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.dossier.behaviors.dossier import IDossier
-from opengever.dossier.interfaces import IDossierResolver
-from opengever.dossier.resolve import DossierResolver
-from opengever.dossier.resolve import NO_START_DATE
-from opengever.dossier.resolve import NOT_CHECKED_IN_DOCS
-from opengever.dossier.resolve import NOT_CLOSED_TASKS
-from opengever.dossier.resolve import NOT_SUPPLIED_OBJECTS
-from opengever.dossier.resolve import ResolveConditions, Resolver
 from opengever.testing import FunctionalTestCase
+from plone import api
 from plone.app.testing import applyProfile
 from plone.protect import createToken
-from zope.interface import implements
-from zope.interface.verify import verifyClass
-
-
-TEST_DATE = date(2012, 3, 1)
 
 
 class TestResolvingDossiers(FunctionalTestCase):
 
-    use_browser = True
-
-    def test_archive_form_is_omitted_for_sites_without_filing_number_support(self):
+    @browsing
+    def test_archive_form_is_omitted_for_sites_without_filing_number_support(self, browser):
         self.grant('Manager')
         dossier = create(Builder('dossier')
                          .having(start=date(2013, 11, 5)))
 
-        self.browser.open(
-            '{}/transition-resolve?_authenticator={}'.format(
-                dossier.absolute_url(), createToken()))
+        browser.login().open(dossier,
+                             {'_authenticator': createToken()},
+                             view='transition-resolve')
 
-        self.browser.assert_url(dossier.absolute_url())
-        self.browser.assert_portal_message(
-            'The dossier has been succesfully resolved')
+        self.assertEquals(dossier.absolute_url(), browser.url)
+        self.assertEquals(['The dossier has been succesfully resolved'],
+                          info_messages())
 
-    def test_archive_form_is_omitted_when_resolving_subdossiers(self):
+    @browsing
+    def test_archive_form_is_omitted_when_resolving_subdossiers(self, browser):
         self.grant('Manager')
         dossier = create(Builder('dossier'))
         subdossier = create(Builder('dossier')
                             .within(dossier)
                             .having(start=date(2013, 11, 5)))
 
-        self.browser.open(
-            '{}/transition-resolve?_authenticator={}'.format(
-                subdossier.absolute_url(), createToken()))
+        browser.login().open(subdossier,
+                             {'_authenticator': createToken()},
+                             view='transition-resolve')
 
-        self.browser.assert_url(subdossier.absolute_url())
-        self.browser.assert_portal_message(
-            'The subdossier has been succesfully resolved')
+        self.assertEquals(subdossier.absolute_url(), browser.url)
+        self.assertEquals(['The subdossier has been succesfully resolved'],
+                          info_messages())
 
 
 class TestResolvingDossiersWithFilingNumberSupport(FunctionalTestCase):
-
-    use_browser = True
 
     def setUp(self):
         super(TestResolvingDossiersWithFilingNumberSupport, self).setUp()
 
         applyProfile(self.portal, 'opengever.dossier:filing')
 
-    def test_archive_form_is_displayed_for_sites_with_filing_number_support(self):
-
+    @browsing
+    def test_archive_form_is_displayed_for_sites_with_filing_number_support(self, browser):
         dossier = create(Builder('dossier')
                          .having(start=date(2013, 11, 5)))
 
-        self.browser.open(
-            '{}/transition-resolve?_authenticator={}'.format(
-                dossier.absolute_url(), createToken()))
-
-        self.browser.assert_url(
-            '{}/transition-archive'.format(dossier.absolute_url()))
-
-
-class TestResolveConditions(MockTestCase):
-
-    def test_check_preconditions(self):
-
-        context = self.stub()
-
-        with self.mocker.order():
-            self.expect(context.is_all_supplied()).result(False)
-            self.expect(context.is_all_checked_in()).result(False)
-            self.expect(context.is_all_closed()).result(True)
-            self.expect(context.has_valid_startdate()).result(True)
-
-            self.expect(context.is_all_supplied()).result(True)
-            self.expect(context.is_all_checked_in()).result(True)
-            self.expect(context.is_all_closed()).result(False)
-            self.expect(context.has_valid_startdate()).result(True)
-
-            self.expect(context.is_all_supplied()).result(True)
-            self.expect(context.is_all_checked_in()).result(True)
-            self.expect(context.is_all_closed()).result(True)
-            self.expect(context.has_valid_startdate()).result(False)
-
-            self.expect(context.is_all_supplied()).result(True)
-            self.expect(context.is_all_checked_in()).result(True)
-            self.expect(context.is_all_closed()).result(True)
-            self.expect(context.has_valid_startdate()).result(True)
-
-        self.replay()
-
+        browser.login().open(dossier,
+                             {'_authenticator': createToken()},
+                             view='transition-resolve')
         self.assertEquals(
-            ResolveConditions(context).check_preconditions(),
-            [NOT_SUPPLIED_OBJECTS, NOT_CHECKED_IN_DOCS]
-            )
+            '{}/transition-archive'.format(dossier.absolute_url()),
+            browser.url)
 
+
+class TestResolveConditions(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestResolveConditions, self).setUp()
+        self.grant('Contributor', 'Editor', 'Reader', 'Reviewer')
+
+    @browsing
+    def test_resolving_is_cancelled_when_documents_are_not_filed_correctly(self, browser):
+        dossier = create(Builder('dossier'))
+        create(Builder('dossier').within(dossier))
+        create(Builder('document').within(dossier).checked_out())
+
+        browser.login().open(dossier,
+                             {'_authenticator': createToken()},
+                             view='transition-resolve')
+
+        self.assertEquals(dossier.absolute_url(), browser.url)
         self.assertEquals(
-            ResolveConditions(context).check_preconditions(),
-            [NOT_CLOSED_TASKS, ]
-            )
+            ['not all documents and tasks are stored in a subdossier',
+             'not all documents are checked in'], error_messages())
 
-        self.assertEquals(
-            ResolveConditions(context).check_preconditions(),
-            [NO_START_DATE]
-            )
+    @browsing
+    def test_resolving_is_cancelled_when_documents_are_checked_out(self, browser):
+        dossier = create(Builder('dossier'))
+        create(Builder('document').within(dossier).checked_out())
 
-        self.assertEquals(
-            ResolveConditions(context).check_preconditions(),
-            []
-            )
+        browser.login().open(dossier,
+                             {'_authenticator': createToken()},
+                             view='transition-resolve')
 
-    def test_check_end_dates(self):
-        dossier = self.stub()
-        self.expect(dossier.title).result('Dossier')
-        sub1 = self.stub()
-        self.expect(sub1.title).result('Sub 1')
-        self.expect(sub1.getObject()).result(sub1)
-        sub2 = self.stub()
-        self.expect(sub2.title).result('Sub 2')
-        self.expect(sub2.getObject()).result(sub2)
-        subsub1 = self.stub()
-        self.expect(subsub1.title).result('Sub Sub 1')
-        self.expect(subsub1.getObject()).result(subsub1)
-        subsub2 = self.stub()
-        self.expect(subsub2.title).result('Sub Sub 2')
-        self.expect(subsub2.getObject()).result(subsub2)
-        subsubsub1 = self.stub()
-        self.expect(subsubsub1.title).result('Sub Sub Sub 1')
-        self.expect(subsubsub1.getObject()).result(subsubsub1)
+        self.assertEquals(dossier.absolute_url(), browser.url)
+        self.assertEquals(['not all documents are checked in'],
+                          error_messages())
 
-        with self.mocker.order():
-            # test 1
-            self.expect(dossier.get_subdossiers()).result([sub1, sub2])
+    @browsing
+    def test_resolving_is_cancelled_when_active_tasks_exist(self, browser):
+        dossier = create(Builder('dossier'))
+        create(Builder('task').within(dossier))
 
-            self.expect(sub1.has_valid_enddate()).result(False)
-            self.expect(sub1.get_subdossiers()).result([subsub1, ])
-            self.expect(subsub1.has_valid_enddate()).result(True)
-            self.expect(subsub1.get_subdossiers()).result([])
+        browser.login().open(dossier,
+                             {'_authenticator': createToken()},
+                             view='transition-resolve')
 
-            self.expect(sub2.has_valid_enddate()).result(True)
-            self.expect(sub2.get_subdossiers()).result([subsub2, ])
-            self.expect(subsub2.has_valid_enddate()).result(True)
-            self.expect(subsub2.get_subdossiers()).result([subsubsub1, ])
-            self.expect(subsubsub1.has_valid_enddate()).result(False)
-            self.expect(subsubsub1.get_subdossiers()).result([])
+        self.assertEquals(dossier.absolute_url(), browser.url)
+        self.assertEquals(['not all task are closed'],
+                          error_messages())
 
-            # test 2
-            self.expect(dossier.get_subdossiers()).result([sub1, sub2])
-
-            self.expect(sub1.has_valid_enddate()).result(True)
-            self.expect(sub1.get_subdossiers()).result([subsub1, ])
-            self.expect(subsub1.has_valid_enddate()).result(True)
-            self.expect(subsub1.get_subdossiers()).result([])
-
-            self.expect(sub2.has_valid_enddate()).result(True)
-            self.expect(sub2.get_subdossiers()).result([subsub2, ])
-            self.expect(subsub2.has_valid_enddate()).result(True)
-            self.expect(subsub2.get_subdossiers()).result([subsubsub1, ])
-            self.expect(subsubsub1.has_valid_enddate()).result(True)
-            self.expect(subsubsub1.get_subdossiers()).result([])
-
-            # test 3
-            self.expect(dossier.get_subdossiers()).result([])
-
-        self.replay()
-
-        self.assertEquals(ResolveConditions(dossier).check_end_dates(),
-            ['Sub 1', 'Sub Sub Sub 1']
-            )
-        self.assertEquals(ResolveConditions(dossier).check_end_dates(), [])
-        self.assertEquals(ResolveConditions(dossier).check_end_dates(), [])
+    @browsing
+    def test_resolving_is_cancelled_when_dossier_has_an_invalid_end_date(self, browser):
+        dossier = create(Builder('dossier').having(end=date(2016, 5, 7)))
+        create(Builder('document')
+               .within(dossier)
+               .having(document_date=date(2016, 6, 1)))
 
 
-class TestResolver(MockTestCase):
+        browser.login().open(dossier,
+                             {'_authenticator': createToken()},
+                             view='transition-resolve')
 
-    def test_implements_interface(self):
-        verifyClass(IDossierResolver, DossierResolver)
+        self.assertEquals(dossier.absolute_url(), browser.url)
+        self.assertEquals([],
+                          error_messages())
 
-    def test_resolve_dossier(self):
+    @browsing
+    def test_resolving_is_cancelled_when_dossier_has_active_proposals(self, browser):
+        repo = create(Builder('repository'))
+        dossier = create(Builder('dossier')
+                         .within(repo)
+                         .having(end=date(2016, 5, 7)))
+        create(Builder('proposal').within(dossier))
 
-        wft = self.stub()
-        self.mock_tool(wft, 'portal_workflow')
+        browser.login().open(dossier,
+                             {'_authenticator': createToken()},
+                             view='transition-resolve')
 
-        # provide IDossier instead of IDossierMarker
-        # so that zope.component doesn't lookup the adapter
-        # and return the adapted object directly
+        self.assertEquals(dossier.absolute_url(), browser.url)
+        self.assertEquals(['The dossier contains active proposals.'],
+                          error_messages())
 
-        class StubDossier(object):
-            implements(IDossier)
+    @browsing
+    def test_dossier_is_resolved_when_all_tasks_are_closed_and_documents_checked_in(self, browser):
+        dossier = create(Builder('dossier'))
+        create(Builder('document').within(dossier))
+        create(Builder('task').within(dossier)
+               .in_state('task-state-tested-and-closed'))
 
-            def __init__(self, end, valid, sub=[]):
-                self.end = end
-                self.valid = valid
-                self.sub = sub
+        browser.login().open(dossier,
+                             {'_authenticator': createToken()},
+                             view='transition-resolve')
 
-            def getObject(self):
-                return self
+        self.assertEquals(dossier.absolute_url(), browser.url)
+        self.assertEquals(['The dossier has been succesfully resolved'],
+                          info_messages())
 
-            def get_subdossiers(self):
-                return self.sub
 
-            def has_valid_enddate(self):
-                return self.valid
+class TestResolving(FunctionalTestCase):
 
-        sub1 = StubDossier(date(2012, 1, 1), False)
-        sub2 = StubDossier(date(2012, 2, 1), True)
-        dossier = StubDossier(None, True, )
-        subsub1 = StubDossier(None, False)
+    def setUp(self):
+        super(TestResolving, self).setUp()
+        self.grant('Contributor', 'Editor', 'Reader', 'Reviewer')
 
-        dossier.sub = [sub1, sub2]
-        sub1.sub = [subsub1, ]
+    @browsing
+    def test_set_end_date_to_earliest_possible_one(self, browser):
+        dossier = create(Builder('dossier').having(start=date(2015, 1, 1)))
+        subdossier = create(Builder('dossier')
+                            .having(start=date(2015, 1, 1))
+                            .within(dossier))
+        create(Builder('document')
+               .within(subdossier)
+               .having(document_date=date(2016, 6, 1)))
 
-        with self.mocker.order():
-            # test 1
-            self.expect(wft.getInfoFor(subsub1, 'review_state')).result(
-                'dossier-state-active')
-            self.expect(wft.doActionFor(subsub1, 'dossier-transition-resolve'))
-            self.expect(wft.getInfoFor(sub1, 'review_state')).result(
-                'dossier-state-active')
-            self.expect(wft.doActionFor(sub1, 'dossier-transition-resolve'))
-            self.expect(wft.getInfoFor(sub2, 'review_state')).result(
-                'dossier-state-resolved')
-            self.expect(wft.getInfoFor(dossier, 'review_state')).result(
-                'dossier-state-active')
-            self.expect(wft.doActionFor(dossier, 'dossier-transition-resolve'))
+        browser.login().open(dossier,
+                             {'_authenticator': createToken()},
+                             view='transition-resolve')
 
-        self.replay()
+        self.assertEquals(date(2016, 6, 1), IDossier(dossier).end)
+        self.assertEquals(date(2016, 6, 1), IDossier(subdossier).end,
+                          'The end date has not been set recursively.')
 
-        Resolver(dossier).resolve_dossier(TEST_DATE)
-        self.assertEquals(dossier.end, TEST_DATE)
-        self.assertEquals(sub1.end, TEST_DATE)
-        self.assertEquals(sub2.end, date(2012, 2, 1))
+    @browsing
+    def test_resolves_the_dossier_and_subdossiers(self, browser):
+        dossier = create(Builder('dossier'))
+        subdossier = create(Builder('dossier').within(dossier))
 
-    def test_resolving_subdossier(self):
-        wft = self.stub()
-        self.mock_tool(wft, 'portal_workflow')
+        browser.login().open(dossier,
+                             {'_authenticator': createToken()},
+                             view='transition-resolve')
 
-        subdossier = self.providing_stub([IDossier, ])
-        self.expect(subdossier.is_subdossier()).result(True)
-        self.expect(subdossier.earliest_possible_end_date()).result(TEST_DATE)
-        self.expect(subdossier.get_subdossiers()).result([])
-        self.expect(wft.getInfoFor(subdossier, 'review_state')).result(
-            'dossier-state-active')
-        self.expect(wft.doActionFor(subdossier, 'dossier-transition-resolve'))
+        self.assertEquals('dossier-state-resolved',
+                          api.content.get_state(dossier))
+        self.assertEquals('dossier-state-resolved',
+                          api.content.get_state(subdossier))
 
-        self.replay()
+    @browsing
+    def test_handles_already_resolved_subdossiers(self, browser):
+        dossier = create(Builder('dossier'))
+        subdossier = create(Builder('dossier')
+                            .within(dossier)
+                            .in_state('dossier-state-resolved'))
 
-        Resolver(subdossier).resolve_dossier()
+        browser.login().open(dossier,
+                             {'_authenticator': createToken()},
+                             view='transition-resolve')
 
-        self.assertEquals(IDossier(subdossier).end, TEST_DATE)
+        self.assertEquals('dossier-state-resolved',
+                          api.content.get_state(dossier))
+        self.assertEquals('dossier-state-resolved',
+                          api.content.get_state(subdossier))
+
+    @browsing
+    def test_inactive_subdossiers_stays_inactive(self, browser):
+        dossier = create(Builder('dossier'))
+        subdossier = create(Builder('dossier')
+                            .within(dossier)
+                            .in_state('dossier-state-inactive'))
+
+        browser.login().open(dossier,
+                             {'_authenticator': createToken()},
+                             view='transition-resolve')
+
+        self.assertEquals('dossier-state-resolved',
+                          api.content.get_state(dossier))
+        self.assertEquals('dossier-state-inactive',
+                          api.content.get_state(subdossier))
+
+    @browsing
+    def test_resolving_only_a_subdossier_is_possible(self, browser):
+        dossier = create(Builder('dossier'))
+        subdossier = create(Builder('dossier').within(dossier))
+
+        browser.login().open(subdossier,
+                             {'_authenticator': createToken()},
+                             view='transition-resolve')
+
+        self.assertEquals('dossier-state-active',
+                          api.content.get_state(dossier))
+        self.assertEquals('dossier-state-resolved',
+                          api.content.get_state(subdossier))
