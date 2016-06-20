@@ -24,24 +24,24 @@ class TestTaskTemplateActivites(FunctionalTestCase):
                                  .titled(u'Mitberichtsverfahren'))
         tasktemplate_1 =  create(Builder('tasktemplate')
                                  .within(template_folder)
-                                 .titled(u'Einladung zum Mitbericht versenden'))
+                                 .titled(u'Einladung zum Mitbericht versenden')
+                                 .having(preselected=True))
         tasktemplate_2 =  create(Builder('tasktemplate')
                                  .within(template_folder)
-                                 .titled(u'Mitberichte zusammenfassen.'))
+                                 .titled(u'Mitberichte zusammenfassen.')
+                                 .having(preselected=True))
         tasktemplate_3 =  create(Builder('tasktemplate')
                                  .within(template_folder)
-                                 .titled(u'Endg\xfcltige Stellungnahme versenden'))
+                                 .titled(u'Endg\xfcltige Stellungnahme versenden')
+                                 .having(preselected=True))
 
-        browser.login().open(self.dossier)
+        browser.login().open(self.dossier, view='add-tasktemplate')
+        browser.fill({'Tasktemplatefolder': u'Mitberichtsverfahren'})
+        browser.click_on('Continue')
+        browser.click_on('Trigger')
 
-        paths = ['/'.join(document.getPhysicalPath()) for
-                 document in (tasktemplate_1, tasktemplate_2, tasktemplate_3)]
-        browser.open(self.dossier, {'paths': paths}, view='add-tasktemplate/create')
-
-        self.assertEquals(4, len(Activity.query.all()))
         self.assertEquals(
             [u'Einladung zum Mitbericht versenden',
              u'Mitberichte zusammenfassen.',
-             u'Endg\xfcltige Stellungnahme versenden',
-             u'Mitberichtsverfahren'],
+             u'Endg\xfcltige Stellungnahme versenden'],
             [activity.title for activity in Activity.query.all()])
