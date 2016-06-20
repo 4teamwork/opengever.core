@@ -121,20 +121,21 @@ def create_restricted_vocabulary(field, options,
                 obj = context.aq_inner.aq_parent
             while not ISiteRoot.providedBy(obj):
                 try:
-                    return self.field.get(obj)
+                    interface_ = self.field.interface
                 except AttributeError:
+                    pass
+                else:
                     try:
-                        interface_ = self.field.interface
-                    except AttributeError:
-                        pass
-                    else:
+                        adpt = interface_(obj)
+                    except TypeError:
+                        # could not adapt
                         try:
-                            adpt = interface_(obj)
-                        except TypeError:
-                             # could not adapt
+                            return self.field.get(obj)
+                        except AttributeError:
                             pass
-                        else:
-                            return self.field.get(adpt)
+                    else:
+                        return self.field.get(adpt)
+
                 obj = obj.aq_inner.aq_parent
             return self.field.default
 
