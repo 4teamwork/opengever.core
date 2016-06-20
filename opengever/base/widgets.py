@@ -1,5 +1,5 @@
 from five import grok
-from plone import api
+from opengever.base.transforms import trix2sablon
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 from z3c.form.converter import BaseDataConverter
 from z3c.form.interfaces import IFieldWidget
@@ -69,12 +69,8 @@ class TrixDataConverter(BaseDataConverter):
 
     adapts(IField, ITrixWidget)
 
-    def __init__(self, field, widget):
-        super(TrixDataConverter, self).__init__(field, widget)
-        self.transformer = api.portal.get_tool('portal_transforms')
-
     def toFieldValue(self, value):
-        safe_html = self.transformer.convert('safe_html', value).getData()
+        safe_html = trix2sablon.convert(value)
         # transform may return non-unicode empty string which raises validation
         # errors on the field
         safe_html = safe_html or u''

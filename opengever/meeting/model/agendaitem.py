@@ -1,5 +1,6 @@
 from opengever.base.model import Base
 from opengever.base.model import create_session
+from opengever.base.transforms import trix2sablon
 from opengever.base.widgets import trix_strip_whitespace
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
@@ -7,7 +8,6 @@ from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
 from opengever.ogds.models.types import UnicodeCoercingText
-from plone import api
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
@@ -77,15 +77,13 @@ class AgendaItem(Base):
         if not data:
             return
 
-        transformer = api.portal.get_tool('portal_transforms')
-
         def to_safe_html(markup):
             # keep empty data (whatever it is), it makes transform unhappy
             if not markup:
                 return markup
 
             markup = markup.decode('utf-8')
-            markup = transformer.convert('safe_html', markup).getData()
+            markup = trix2sablon.convert(markup)
             return trix_strip_whitespace(markup)
 
         if self.has_proposal:
