@@ -1,6 +1,4 @@
 from AccessControl.users import nobody
-from Acquisition import aq_inner
-from Acquisition import aq_parent
 from datetime import date
 from datetime import timedelta
 from five import grok
@@ -21,7 +19,6 @@ from plone.dexterity.utils import addContentToContainer
 from plone.dexterity.utils import createContent
 from plone.directives import form
 from plone.z3cform.layout import FormWrapper
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from z3c.form.browser import checkbox
 from z3c.form.browser import radio
 from z3c.form.button import buttonAndHandler
@@ -33,6 +30,7 @@ from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
 from zope import schema
 from zope.app.intid.interfaces import IIntIds
+from zope.component import getAdapter
 from zope.component import getUtility
 from zope.event import notify
 from zope.interface import alsoProvides
@@ -295,13 +293,8 @@ class SelectTaskTemplatesWizardStep(BaseWizardStepForm, Form):
         """
 
         if principal == 'responsible':
-            dossier = self.context
-            while not IDossierMarker.providedBy(dossier):
-                if IPloneSiteRoot.providedBy(dossier):
-                    raise ValueError('Could not find dossier')
-                dossier = aq_parent(aq_inner(dossier))
-
-            return IDossier(dossier).responsible
+            finder = getAdapter(self.context, name='parent-dossier-finder')
+            return IDossier(finder.find_dossier()).responsible
 
         elif principal == 'current_user':
             return api.user.get_current().getId()
