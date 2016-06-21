@@ -26,6 +26,36 @@
     });
   }
 
+  function extendShowroomQueue(pagenumber, extender){
+    var fetch_url = store.proxy.url.split('?')[0]
+    var params = {'pagenumber': pagenumber,
+                  'initialize': 0,
+                  'view_name': global.tabbedview.prop('view_name'),
+                  'tableType': 'extjs'}
+
+    $.get(fetch_url, params).done(function(data){
+      extender(data.rows.map(function(row) {
+        return $(row['sortable_title']).children("a")[0];
+      }));
+    });
+
+  }
+
+  function loadNextListingItems() {
+    var pagenumber = global.tabbedview.param('pagenumber:int') || 1;
+    extendShowroomQueue(pagenumber + 1, showroom.append);
+  }
+
+  function loadPreviousListingItems() {
+    var pagenumber = global.tabbedview.param('pagenumber:int');
+    if (!pagenumber) {
+      // If there is no pagenumber given, the listing shows the first page,
+      // so there are no previous items.
+      return
+    }
+
+    extendShowroomQueue(pagenumber - 1, showroom.prepend);
+  }
 
   function toggleShowMoreButton() {
     var button = $('.bumblebeeGalleryShowMore');
@@ -40,12 +70,23 @@
 
   function tail() {
     if(global.tabbedview) {
+      if (global.tabbedview.table.length) {
+        // document table listing
+        loadNextListingItems();
+      }
       loadNextTabbedviewItems();
     }
   }
 
+  function head() {
+    if(global.tabbedview && global.tabbedview.table.length) {
+      // document table listing
+      loadPreviousListingItems();
+    }
+  }
+
   function init() {
-    showroom = Showroom([], { 'tail': tail });
+    showroom = Showroom([], { 'tail': tail, 'head': head });
     updateShowroom();
 
     // The search.js does not trigger an event after reloading the searchview.

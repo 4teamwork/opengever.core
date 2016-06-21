@@ -5,6 +5,9 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Fixed bumblebee overlay browse functionality for the document extjs listing.
+  [phgross]
+
 - Use non self-closing br tags in trix transform.
   [deiferni]
 
