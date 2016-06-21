@@ -37,12 +37,12 @@
     <subscriber
         for="ftw.bumblebee.interfaces.IBumblebeeable
              opengever.document.interfaces.IObjectCheckedInEvent"
-        handler="ftw.bumblebee.subscribers.handle_bumblebee_update" />
+        handler="ftw.bumblebee.subscribers.handle_bumblebee_document_added" />
 
     <subscriber
         for="ftw.bumblebee.interfaces.IBumblebeeable
              opengever.document.interfaces.IObjectRevertedToVersion"
-        handler="ftw.bumblebee.subscribers.handle_bumblebee_update" />
+        handler="ftw.bumblebee.subscribers.handle_bumblebee_document_added" />
 
     <!-- Register locales translations -->
     <i18n:registerTranslations directory="locales" />
