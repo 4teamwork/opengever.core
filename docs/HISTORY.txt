@@ -5,6 +5,10 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Getting default with AQ: Change lookup order so that we first
+  try to properly adapt the context to the schema interface.
+  [lgraf]
+
 - Reworked the trigger tasktemplatefolder form:
   Replaced old custom form with a z3c wizard-form and allow to attach documents.
   [phgross]
