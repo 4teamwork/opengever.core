@@ -5,6 +5,9 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Fixed translation of the bumblebee gallery/list icons.
+  [phgross]
+
 - Getting default with AQ: Change lookup order so that we first
   try to properly adapt the context to the schema interface.
   [lgraf]
