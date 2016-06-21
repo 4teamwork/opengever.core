@@ -5,6 +5,9 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- No longer hide `Open as PDF` link in the bumblebee overlay for mails.
+  [phgross]
+
 - Implement sticky trix editor toolbars.
   [Kevin Bieri]
 

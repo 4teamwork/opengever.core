@@ -76,7 +76,8 @@ class TestGetOpenAsPdfLink(FunctionalTestCase):
 
         adapter = getMultiAdapter((mail, self.request), IBumblebeeOverlay)
 
-        self.assertIsNone(adapter.get_open_as_pdf_url())
+        self.assertIn(
+            '/YnVtYmxlYmVl/api/v3/resource/', adapter.get_open_as_pdf_url())
 
 
 class TestGetCheckoutUrl(FunctionalTestCase):
