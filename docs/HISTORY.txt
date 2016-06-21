@@ -201,6 +201,10 @@ Changelog
 - Use non self-closing br tags in trix transform.
   [deiferni]
 
+- Use defaultFactory for IClassification public_trial instead of form
+  level defaults.
+  [lgraf]
+
 - Patch DexterityContent.__getattr__ to correctly fall back to defaults
   from behavior schemas.
   [lgraf]
