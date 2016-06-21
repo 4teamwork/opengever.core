@@ -5,6 +5,10 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Patch DexterityContent.__getattr__ to correctly fall back to defaults
+  from behavior schemas.
+  [lgraf]
+
 - Fixed translation of the bumblebee gallery/list icons.
   [phgross]
 
