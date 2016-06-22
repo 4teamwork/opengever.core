@@ -173,7 +173,8 @@ class BumblebeeMailOverlay(BumblebeeBaseDocumentOverlay):
     """
 
     def get_open_as_pdf_url(self):
-        return None
+        return get_representation_url_by_object(
+            'pdf', obj=self.context, filename=self._get_pdf_filename())
 
     def get_checkout_url(self):
         return None

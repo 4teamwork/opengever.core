@@ -107,6 +107,7 @@ class TestBumblebeeOverlayListing(FunctionalTestCase):
         self.assertEqual(
             ['Open detail view',
              'Download copy',
+             'Open as PDF',
              'Edit metadata'],
             browser.css('.file-actions a').text)
 
@@ -206,6 +207,7 @@ class TestBumblebeeOverlayDocument(FunctionalTestCase):
 
         self.assertEqual(
             ['Download copy',
+             'Open as PDF',
              'Edit metadata'],
             browser.css('.file-actions a').text)
 
