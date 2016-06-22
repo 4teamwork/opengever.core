@@ -1,17 +1,11 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
-from opengever.base.interfaces import IOpengeverBaseLayer
-from opengever.testing import FunctionalTestCase
-from zope.interface import alsoProvides
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+from opengever.testing import FunctionalTestCase
 
 
 class TestOpengeverSearch(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestOpengeverSearch, self).setUp()
-        alsoProvides(self.portal.REQUEST, IOpengeverBaseLayer)
 
     def test_types_filters_list_is_limited_to_main_types(self):
         create(Builder('repository'))
