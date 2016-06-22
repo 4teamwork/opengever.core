@@ -20,7 +20,7 @@ class OpengeverTabbedviewTooltipSource(object):
     def tooltips(self):
         return [{
             'selector': u'.tabbedview-tooltip',
-            'condition': '#documents_overview, #mydocuments_overview, ' \
+            'condition': '#documents-proxy_overview, #mydocuments-proxy_overview, ' \
                          '#relateddocuments_overview',
             'content': u'.tabbedview-tooltip-data',
         }]

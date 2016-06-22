@@ -5,6 +5,9 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Fixed icon tooltip in document listings.
+  [phgross]
+
 - Adjust registered bumblebee-events.
   The bumblebee events changed. So we have to change this in opengever.core too.
   [elioschmutz]
