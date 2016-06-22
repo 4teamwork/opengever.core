@@ -5,6 +5,10 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Adjust registered bumblebee-events.
+  The bumblebee events changed. So we have to change this in opengever.core too.
+  [elioschmutz]
+
 - Fixed translation of the bumblebee gallery/list icons.
   [phgross]
 

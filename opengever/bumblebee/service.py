@@ -13,7 +13,7 @@ class GeverBumblebeeService(BumblebeeServiceV3):
         return super(GeverBumblebeeService, self).queue_storing(
             queue, deferred=deferred)
 
-    def handle_document_update(self):
+    def handle_document_update(self, force=False):
         """Do nothing when attempting to update a checked out document.
 
         This prevents that a preview of a working copy is rendered, it would
@@ -23,4 +23,4 @@ class GeverBumblebeeService(BumblebeeServiceV3):
             if self.context.is_checked_out():
                 return
 
-        return super(GeverBumblebeeService, self).handle_document_update()
+        return super(GeverBumblebeeService, self).handle_document_update(force=force)
