@@ -138,7 +138,7 @@ class TestBumblebeeGalleryMixinGetBrains(FunctionalTestCase):
                .within(dossier)
                .titled("Chuck Norris"))
 
-        view.request['searchableText'] = "James"
+        view.request['searchable_text'] = "James"
         brains = view.get_brains()
 
         self.assertEqual([document, ], [brain.getObject() for brain in brains])

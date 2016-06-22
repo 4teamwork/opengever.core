@@ -58,7 +58,8 @@ class BumblebeeGalleryMixin(object):
             }
 
     def get_brains(self):
-        self.table_source.config.filter_text = self.request.get('searchableText', '')
+        self.table_source.config.filter_text = self.request.get(
+            'searchable_text', '')
 
         if not hasattr(self, '_brains'):
             catalog = getToolByName(self.context, 'portal_catalog')
