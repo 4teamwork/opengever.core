@@ -1,8 +1,8 @@
 from Products.CMFPlone.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from five import grok
+from ftw import bumblebee
 from opengever.base.browser.helper import get_css_class
-from opengever.bumblebee import get_representation_url_by_brain
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.bumblebee import set_preferred_listing_view
 from opengever.tabbedview.browser.personal_overview import MyDocuments
@@ -52,8 +52,8 @@ class BumblebeeGalleryMixin(object):
             yield {
                 'title': brain.Title,
                 'overlay_url': '{}/@@bumblebee-overlay-listing'.format(brain.getURL()),
-                'preview_image_url': get_representation_url_by_brain(
-                    'thumbnail', brain),
+                'preview_image_url': bumblebee.get_service_v3().get_representation_url(
+                    brain, 'thumbnail'),
                 'uid': brain.UID,
                 'mime_type_css_class': get_css_class(brain),
             }

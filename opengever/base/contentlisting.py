@@ -1,4 +1,4 @@
-from ftw.bumblebee.utils import get_representation_url_by_brain
+from ftw import bumblebee
 from Missing import Value as MissingValue
 from opengever.base.browser.helper import get_css_class
 from opengever.bumblebee import is_bumblebee_feature_enabled
@@ -70,11 +70,11 @@ class OpengeverCatalogContentListingObject(CatalogContentListingObject):
 
     def get_preview_image_url(self):
         """Return the url to fetch the bumblebee preview thumbnail."""
-
         if not self.is_bumblebeeable():
             return None
 
-        return get_representation_url_by_brain('thumbnail', self)
+        return bumblebee.get_service_v3().get_representation_url(
+            self.getDataOrigin(), 'thumbnail')
 
     def get_overlay_title(self):
         """Return the title for the bumblebee overlay."""
