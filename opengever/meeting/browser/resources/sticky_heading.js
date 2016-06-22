@@ -1,135 +1,262 @@
-(function($){
+(function() {
 
-  "use strict";
+  function throttle(func) {
+    return function () { requestAnimationFrame(func); };
+  }
 
-  function StickyHeading(_options) {
-
-    var onStickyCallback = function() {};
-    var onNoStickyCallback = function() {};
-    var onCollisionCallback = function() {};
-
-    var options = $.extend({ refresh: true, fix: true, clone: true }, _options || {});
-
-    var currentSticky;
-
-    var currentHeadings;
-
-    var layouter = {
-
-      initHeadings: function(selector) {
-        return $(selector).map(function(i, e) {
-          var el = $(e);
-          var clone;
-          if(options.clone) {
-            clone = el.clone();
-            clone.attr("id", el.attr("id") + "_clone");
-            clone.insertAfter(el);
-            clone.addClass("clone");
-          } else {
-            clone = el;
-          }
-          var heading = { node: el, offset: el.offset().top, height: el.outerHeight(), clone: clone };
-          el.addClass("original");
-          return heading;
-        });
-      },
-
-      updateOffsets: function(headings) {
-        return $.each(headings, function(i, e){
-          e.offset = e.node.offset().top;
-        });
-      },
-
-      findPastHeadings: function(headings, scrollPositionTop) {
-        return $.grep(headings, function(heading) {
-          return scrollPositionTop >= heading.offset;
-        });
-      },
-
-      observe: function(selector) {
-        var self = this;
-        var currentHeadings = this.initHeadings(selector);
-        $(window).scroll(function() { self.onScroll(currentHeadings) });
-      },
-
-      onScroll: function(headings) {
-        if(options.refresh) {
-          headings = this.updateOffsets(headings);
-        }
-        if(options.fix) {
-          this.reset(headings);
-        }
-        var scrollPositionTop = $(window).scrollTop();
-        var pastHeadings = this.findPastHeadings(headings, scrollPositionTop);
-        var offsetHeight = 0;
-
-        if(options.dependsOn && options.dependsOn.getSticky()) {
-          offsetHeight = options.dependsOn.getSticky().clone.outerHeight();
-        }
-
-        if (pastHeadings.length > 0) {
-          var sticky = pastHeadings[pastHeadings.length - 1];
-          var nextHeading = headings[headings.index(sticky) + 1];
-          if (nextHeading && scrollPositionTop >= nextHeading.offset - (sticky.height + offsetHeight)) {
-            this.collision(sticky, nextHeading, scrollPositionTop);
-          } else {
-            this.sticky(sticky, scrollPositionTop);
-          }
-        } else {
-          this.noSticky(scrollPositionTop);
-        }
-      },
-
-      reset: function(headings){
-        $.each(headings, function(i, heading) { heading.clone.removeClass('sticky').css('top', 0); });
-      },
-
-      noSticky: function(scrollPositionTop){
-        onNoStickyCallback(scrollPositionTop);
-      },
-
-      sticky: function(heading, scrollPositionTop){
-        if(options.fix) {
-          heading.clone.addClass('sticky');
-          heading.clone.css('top', scrollPositionTop - heading.offset);
-        }
-        currentSticky = heading;
-        onStickyCallback(heading, scrollPositionTop);
-      },
-
-      collision: function(fadeOutHeading, fadeInHeading, scrollPositionTop) {
-        if(options.fix) {
-          fadeOutHeading.clone.addClass('sticky').css('top', fadeInHeading.offset - fadeOutHeading.offset - fadeOutHeading.height);
-          fadeInHeading.clone.addClass('sticky');
-        }
-        onCollisionCallback(fadeOutHeading, fadeInHeading, scrollPositionTop);
+  if(!Array.prototype.last) {
+    Array.prototype.last = function () {
+      if(this.length) {
+        return this[this.length - 1];
       }
     };
+  }
 
-    layouter.observe(options.selector);
+  var $window = $(window);
 
-    var app = {};
+  function PinItem(element, options) {
 
-    app.onSticky = function(callback) {
-        onStickyCallback = callback;
-    };
+    options = $.extend({ pin: true }, options);
 
-    app.onNoSticky = function(callback) {
-      onNoStickyCallback = callback;
-    };
+    element = $(element);
 
-    app.onCollision = function(callback) {
-      onCollisionCallback = callback;
-    };
+    var reveal = {};
+    var offset = element.offset().top;
+    var pushed = false;
 
-    app.getSticky = function() {
-      return currentSticky;
-    };
+    function top() { return position() - $window.scrollTop(); }
 
-    return app;
+    function bottom() { return top() + height(); }
+
+    function position() { return element.offset().top - $window.scrollTop(); }
+
+    function height() { return element.innerHeight(); }
+
+    function isPast() { return offset <= $window.scrollTop(); }
+
+    function makeSticky(pushOffset) {
+      element.addClass("pin-pinned");
+      if(options.pin) {
+        element.css("top", $window.scrollTop() - offset + pushOffset + "px");
+      }
+    }
+
+    function pin(item) {
+      var pushOffset = item ? item.height() : 0;
+      makeSticky(pushOffset);
+    }
+
+    function pushedBy(item) {
+      makeSticky(-(height() - item.position()));
+    }
+
+    function pushHeading(heading) {
+      heading.makeSticky(-(heading.height() - position()));
+    }
+
+    function pushToolbar(toolbar) {
+      toolbar.makeSticky(-(toolbar.height() - position()));
+    }
+
+    function release() {
+      reveal.pushed = false;
+      element.removeClass("pin-pinned");
+      if(options.pin) {
+        element.css("top", "auto");
+      }
+    }
+
+    function refresh() {
+      release();
+      offset = element.offset().top;
+    }
+
+    function intersects(item) {
+      return !(top() > item.bottom() || bottom() < item.top());
+    }
+
+    reveal.isPast = isPast;
+    reveal.pin = pin;
+    reveal.release = release;
+    reveal.intersects = intersects;
+    reveal.pushedBy = pushedBy;
+    reveal.pushToolbar = pushToolbar;
+    reveal.pushHeading = pushHeading;
+    reveal.makeSticky = makeSticky;
+    reveal.top = top;
+    reveal.bottom = bottom;
+    reveal.height = height;
+    reveal.position = position;
+    reveal.refresh = refresh;
+
+    Object.defineProperty(reveal, "offset", { get: function() { return offset; } });
+    Object.defineProperty(reveal, "element", { get: function() { return element; } });
+    Object.defineProperty(reveal, "pushed", {
+      get: function() { return pushed; },
+      set: function(value) { pushed = value; }
+    });
+
+    return reveal;
 
   }
 
-  window.StickyHeading = StickyHeading;
+  function Heading(element, options) {
 
-}(jQuery));
+    var reveal = {};
+    reveal.__proto__ = PinItem(element, options);
+
+    function pushedBy(item){
+      item.pushHeading(reveal);
+    }
+
+    reveal.pushedBy = pushedBy;
+
+    return reveal;
+  }
+
+  function Toolbar(element, options) {
+
+    var reveal = {};
+    reveal.__proto__ = PinItem(element, options);
+
+    function pushedBy(item){
+      reveal.pushed = true;
+      item.pushToolbar(reveal);
+    }
+
+    function pushHeading(heading) {
+      if(!reveal.pushed) {
+        reveal.pin(heading);
+      }
+    }
+
+    reveal.pushedBy = pushedBy;
+    reveal.pushHeading = pushHeading;
+
+    return reveal;
+  }
+
+  function Pin(headings, toolbars, options) {
+
+    options = $.extend({ pin: true }, options);
+
+    var reveal = {};
+
+    headings = $.map($(headings), function(heading) { return Heading(heading, options); });
+    toolbars = $.map($(toolbars), function(toolbar) { return Toolbar(toolbar, options); });
+
+    var items = headings.concat(toolbars);
+
+    items.sort(function(left, right) { return left.offset - right.offset; });
+
+    var pinCallback = $.noop;
+    var releaseCallback = $.noop;
+
+    function findPastItems(items) {
+      return items.filter(function(item) {
+        return item.isPast();
+      });
+    }
+
+    function findCollidingItems(item, collidingItems) {
+      collidingItems = collidingItems || [];
+      var position = items.indexOf(item) + 1;
+      var upcomingItems = items.slice(position);
+
+      for(var i = 0; i < upcomingItems.length; i++) {
+        var upcomingItem = upcomingItems[i];
+        if(item.intersects(upcomingItem)) {
+          collidingItems.push(upcomingItem);
+          findCollidingItems(upcomingItem, collidingItems);
+        } else {
+          break;
+        }
+      }
+      return collidingItems;
+    }
+
+    function findCollidingItemsInList(item, list) {
+      return list.filter(function(listItem) {
+        return item.intersects(listItem);
+      });
+    }
+
+    function resetItems() { items.forEach(function(item) { item.release(); }); }
+
+    function check() {
+      resetItems();
+
+      var pastItems = [];
+
+      var pastHeadings = findPastItems(headings);
+      var pastToolbars = findPastItems(toolbars);
+
+      if(pastHeadings.length) {
+        var topStickyHeading = pastHeadings.last();
+        topStickyHeading.pin();
+        pinCallback(topStickyHeading);
+        pastItems.push(pastHeadings.last());
+
+        if(pastToolbars.length) {
+          var topStickyToolbar = pastToolbars.last();
+          if(topStickyToolbar && topStickyToolbar.element.hasClass(topStickyHeading.element.attr("id"))) {
+            topStickyToolbar.pin(topStickyHeading);
+            pinCallback(topStickyToolbar);
+            pastItems.push(pastToolbars.last());
+          }
+        }
+
+      }
+
+      if(pastItems.length) {
+        var collidingItems = findCollidingItems(pastItems.last());
+
+        collidingItems.forEach(function(item) {
+             if(pastItems.indexOf(item) < 0) {
+                 pastItems.push(item);
+             }
+        });
+
+        pastItems = pastItems.reverse();
+        pastItems.forEach(function(item, index) {
+          var colliding = findCollidingItemsInList(item, pastItems.slice(index+1));
+          colliding.forEach(function(collidingItem) {
+            collidingItem.pushedBy(item);
+          });
+        });
+
+      } else {
+        releaseCallback();
+      }
+
+    }
+
+    function refresh() {
+      items.forEach(function(item) { item.refresh(); });
+      check();
+    }
+
+    function onPin(callback) { pinCallback = callback; }
+
+    function onRelease(callback) { releaseCallback = callback; }
+
+    $window.on("resize", throttle(function() {
+      refresh();
+      check();
+    }));
+
+    $window.on("scroll", throttle(check));
+
+    check();
+
+    reveal.onPin = onPin;
+    reveal.onRelease = onRelease;
+    reveal.refresh = refresh;
+
+    return Object.freeze(reveal);
+
+  }
+
+  window.Pin = Pin;
+
+})();

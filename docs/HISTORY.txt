@@ -5,6 +5,9 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Implement sticky trix editor toolbars.
+  [Kevin Bieri]
+
 - Fixed icon tooltip in document listings.
   [phgross]
 
