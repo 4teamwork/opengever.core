@@ -9,7 +9,8 @@ from zope.globalrequest import getRequest
 # tags (like <br />).
 VALID_TAGS = {
     'b'          : 1,
-    'br'         : 0,
+# trix delivers html5 and not xhtml, so we we use 1 here to force <br>
+    'br'         : 1,
     'div'        : 1,
     'em'         : 1,
     'i'          : 1,
