@@ -15,8 +15,8 @@ from zope.interface.verify import verifyClass
 import transaction
 
 
-def set_cooke(request, value):
-    # We cannot use set_prefered_listing_view from opengever.bumblebee
+def set_cookie(request, value):
+    # We cannot use set_preferred_listing_view from opengever.bumblebee
     # because it wont set the cookie properly in tests.
     #
     # Because that, we set the cookie value directly into the request
@@ -29,18 +29,18 @@ class MockProxyTabView(BaseTabProxy):
 
 class TestBaseTabProxyWithDeactivatedFeature(FunctionalTestCase):
 
-    def test_prefered_view_name_returns_always_list_view(self):
+    def test_preferred_view_name_returns_always_list_view(self):
         proxy_view = MockProxyTabView(self.portal, self.request)
 
-        set_cooke(self.request, 'gallery')
+        set_cookie(self.request, 'gallery')
 
         self.assertEqual(
-            'tabbedview_view-mocktab', proxy_view.prefered_view_name)
+            'tabbedview_view-mocktab', proxy_view.preferred_view_name)
 
-        set_cooke(self.request, 'list')
+        set_cookie(self.request, 'list')
 
         self.assertEqual(
-            'tabbedview_view-mocktab', proxy_view.prefered_view_name)
+            'tabbedview_view-mocktab', proxy_view.preferred_view_name)
 
 
 class TestBaseTabProxyWithActivatedFeature(FunctionalTestCase):
@@ -68,18 +68,18 @@ class TestBaseTabProxyWithActivatedFeature(FunctionalTestCase):
         self.assertEqual(
             'tabbedview_view-mocktab-gallery', proxy_view.gallery_view_name)
 
-    def test_prefered_view_name_returns_last_used_view_name(self):
+    def test_preferred_view_name_returns_last_used_view_name(self):
         proxy_view = MockProxyTabView(self.portal, self.request)
 
-        set_cooke(self.request, 'gallery')
+        set_cookie(self.request, 'gallery')
 
         self.assertEqual(
-            'tabbedview_view-mocktab-gallery', proxy_view.prefered_view_name)
+            'tabbedview_view-mocktab-gallery', proxy_view.preferred_view_name)
 
-        set_cooke(self.request, 'list')
+        set_cookie(self.request, 'list')
 
         self.assertEqual(
-            'tabbedview_view-mocktab', proxy_view.prefered_view_name)
+            'tabbedview_view-mocktab', proxy_view.preferred_view_name)
 
 
 class TestBumblebeeGalleryMixin(FunctionalTestCase):
@@ -492,8 +492,10 @@ class TestProxyViewsWithActivatedFeature(FunctionalTestCase):
             'List',
             browser.css('.ViewChooser .active').first.text)
 
+        # Set cookie for gallery-view
         browser.login().visit(dossier, view="tabbedview_view-documents-gallery")
-        browser.login().visit(view="tabbedview_view-mydocuments-proxy")
+
+        browser.login().visit(dossier, view="tabbedview_view-documents-proxy")
 
         self.assertEqual(
             'Gallery',
@@ -508,8 +510,10 @@ class TestProxyViewsWithActivatedFeature(FunctionalTestCase):
             'List',
             browser.css('.ViewChooser .active').first.text)
 
+        # Set cookie for gallery-view
         browser.login().visit(
             self.portal, view="tabbedview_view-mydocuments-gallery")
+
         browser.login().visit(view="tabbedview_view-mydocuments-proxy")
 
         self.assertEqual(
@@ -526,8 +530,10 @@ class TestProxyViewsWithActivatedFeature(FunctionalTestCase):
             'List',
             browser.css('.ViewChooser .active').first.text)
 
+        # Set cookie for gallery-view
         browser.login().visit(dossier, view="tabbedview_view-trash-gallery")
-        browser.login().visit(view="tabbedview_view-trash-proxy")
+
+        browser.login().visit(dossier, view="tabbedview_view-trash-proxy")
 
         self.assertEqual(
             'Gallery',

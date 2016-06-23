@@ -1,12 +1,13 @@
+from Products.CMFPlone.utils import getToolByName
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from five import grok
 from opengever.base.browser.helper import get_css_class
 from opengever.bumblebee import get_representation_url_by_brain
 from opengever.bumblebee import is_bumblebee_feature_enabled
-from opengever.bumblebee import set_prefered_listing_view
+from opengever.bumblebee import set_preferred_listing_view
 from opengever.tabbedview.browser.personal_overview import MyDocuments
 from opengever.tabbedview.browser.tabs import Documents
-from Products.CMFPlone.utils import getToolByName
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from opengever.tabbedview.browser.tabs import Trash
 from zExceptions import NotFound
 
 
@@ -24,7 +25,7 @@ class BumblebeeGalleryMixin(object):
         if not is_bumblebee_feature_enabled():
             raise NotFound
 
-        set_prefered_listing_view('gallery')
+        set_preferred_listing_view('gallery')
 
         return self.template()
 
@@ -126,6 +127,30 @@ class MyDocumentsGalleryFetch(MyDocumentsGallery):
     soon as the parent views are registered as Zope 3 BrowserViews.
     """
     grok.name('tabbedview_view-mydocuments-gallery-fetch')
+
+    def __call__(self):
+        return self.fetch()
+
+
+class TrashGallery(BumblebeeGalleryMixin, Trash):
+    grok.name('tabbedview_view-trash-gallery')
+
+    @property
+    def list_view_name(self):
+        return "trash"
+
+
+class TrashGalleryFetch(TrashGallery):
+    """Returns the next gallery-items.
+
+    Unfortunately it's not possible to use a traversable method with
+    five.grok-views. Therefore we have to register an own browserview
+    to fetch the next gallery-items.
+
+    This browserview can be removed and implemented with allowed-attributes as
+    soon as the parent views are registered as Zope 3 BrowserViews.
+    """
+    grok.name('tabbedview_view-trash-gallery-fetch')
 
     def __call__(self):
         return self.fetch()

@@ -21,12 +21,12 @@ class ITabbedViewProxy(Interface):
     which defines which sub-view should be rendered (bumblebee).
     """
 
-    def render_prefered_view():
-        """Renders the current prefered view name
+    def render_preferred_view():
+        """Renders the current preferred view name
         """
 
-    prefered_view_name = Attribute(
-        "Returns the current prefered view name")
+    preferred_view_name = Attribute(
+        "Returns the current preferred view name")
 
     list_view_name = Attribute(
         "Returns the viewname of the listing-view")

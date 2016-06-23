@@ -5,6 +5,9 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Add gallery-view for trash-tab
+  [elioschmutz]
+
 - Adjust decision in TranslatedTitleBrain if the the language specific title
   should be used or not. It checks now if the portal_type supports TranslatedTitle,
   by making a lookup in the fti with the help of the brain's portal_type.

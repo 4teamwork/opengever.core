@@ -2,9 +2,9 @@ from DateTime import DateTime
 from five import grok
 from ftw.tabbedview.interfaces import ITabbedView
 from ftw.table import helper
-from opengever.bumblebee import get_prefered_listing_view
+from opengever.bumblebee import get_preferred_listing_view
 from opengever.bumblebee import is_bumblebee_feature_enabled
-from opengever.bumblebee import set_prefered_listing_view
+from opengever.bumblebee import set_preferred_listing_view
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.interfaces import IDossierMarker
 from opengever.globalindex.model.task import Task
@@ -57,19 +57,19 @@ class BaseTabProxy(BaseCatalogListingTab):
         return
 
     def __call__(self):
-        return self.render_prefered_view()
+        return self.render_preferred_view()
 
-    def render_prefered_view(self):
-        return self.context.restrictedTraverse(self.prefered_view_name)()
+    def render_preferred_view(self):
+        return self.context.restrictedTraverse(self.preferred_view_name)()
 
     @property
-    def prefered_view_name(self):
-        prefered_view = self.list_view_name
+    def preferred_view_name(self):
+        preferred_view = self.list_view_name
         if is_bumblebee_feature_enabled() and \
-                get_prefered_listing_view() == 'gallery':
-            prefered_view = self.gallery_view_name
+                get_preferred_listing_view() == 'gallery':
+            preferred_view = self.gallery_view_name
 
-        return prefered_view
+        return preferred_view
 
     @property
     def list_view_name(self):
@@ -169,7 +169,7 @@ class Documents(BaseCatalogListingTab):
 
     def __call__(self, *args, **kwargs):
         if is_bumblebee_feature_enabled():
-            set_prefered_listing_view('list')
+            set_preferred_listing_view('list')
             self.template = BoundPageTemplate(self.bumblebee_template, self)
 
         return super(Documents, self).__call__(self, *args, **kwargs)
