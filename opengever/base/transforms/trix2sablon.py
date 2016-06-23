@@ -22,6 +22,9 @@ VALID_TAGS = {
 }
 
 
+SERVER_SIDE_STRING_MAX_LENGTH = 2**14
+
+
 _transform = SafeHTML(name='trix_to_sablon', valid_tags=VALID_TAGS)
 
 
@@ -55,4 +58,5 @@ def _log_unexpected_conversion_to_sentry(converted, markup):
         'Unexpected html during trix/sablon conversion',
         request=request,
         url=request.get('ACTUAL_URL', ''),
-        extra=extra)
+        extra=extra,
+        string_max_length=SERVER_SIDE_STRING_MAX_LENGTH)

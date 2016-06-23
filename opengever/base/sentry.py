@@ -1,3 +1,4 @@
+from contextlib import contextmanager
 from zope.globalrequest import getRequest
 import logging
 
@@ -37,8 +38,12 @@ def url_from_request(request):
     return request.get('ACTUAL_URL', '')
 
 
+_marker = object()
+
+
 def log_msg_to_sentry(message, context=None, request=None, url=None,
-                      data=None, extra=None, fingerprint=None):
+                      data=None, extra=None, fingerprint=None,
+                      string_max_length=_marker):
     """A (hopefully) fail-safe function to log a message to Sentry.
 
     This is loosely based on ftw.raven's maybe_report_exception(), except that
@@ -106,7 +111,9 @@ def log_msg_to_sentry(message, context=None, request=None, url=None,
             if fingerprint:
                 kwargs['fingerprint'] = fingerprint
 
-            client.captureMessage(**kwargs)
+            with custom_string_max_length(client, string_max_length):
+                client.captureMessage(**kwargs)
+
         except:
             log.error('Error while reporting to sentry.')
             raise
@@ -122,3 +129,14 @@ def log_msg_to_sentry(message, context=None, request=None, url=None,
                 'Failed to report error occured while reporting error.')
             return False
     return True
+
+
+@contextmanager
+def custom_string_max_length(client, string_max_length):
+    try:
+        prev_string_max_length = client.string_max_length
+        if string_max_length != _marker:
+            client.string_max_length = string_max_length
+        yield
+    finally:
+        client.string_max_length = prev_string_max_length
