@@ -5,7 +5,7 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
-- Add gallery-view for trash-tab
+- Add gallery-view for trash-tab.
   [elioschmutz]
 
 - Adjust decision in TranslatedTitleBrain if the the language specific title

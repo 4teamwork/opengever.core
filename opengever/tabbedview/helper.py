@@ -199,6 +199,8 @@ def linked_document_with_tooltip(item, value):
 def linked_trashed_document_with_tooltip(item, value):
     """Wrapper method for the _linked_document_with_tooltip method
     for normal but trashed documents and mails."""
+    if is_bumblebee_feature_enabled() and is_bumblebeeable(item):
+        return _linked_bumblebee_document(item, value)
 
     if item.review_state in [Document.removed_state, OGMail.removed_state]:
         removed = True
