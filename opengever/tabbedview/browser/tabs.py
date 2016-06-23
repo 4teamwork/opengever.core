@@ -35,6 +35,7 @@ from zope.globalrequest import getRequest
 
 
 PROXY_VIEW_POSTFIX = "-proxy"
+GALLERY_VIEW_POSTFIX = "-gallery"
 
 
 def translate_public_trial_options(item, value):
@@ -43,32 +44,51 @@ def translate_public_trial_options(item, value):
     return portal.translate(value, context=request, domain="opengever.base")
 
 
-class DocumentsProxy(BaseCatalogListingTab):
-    """This proxyview is looking for the last used documents
-    view (list or gallery) and reopens this view.
+class BaseTabProxy(BaseCatalogListingTab):
+    """This proxyview is looking for the last
+    used view-mode (list or gallery) on a tab
+    and reopens this view.
     """
-    grok.name('tabbedview_view-documents-proxy')
     grok.context(ITabbedView)
     grok.implements(ITabbedViewProxy)
     grok.require('zope2.View')
-
-    listview = "tabbedview_view-documents"
-    galleryview = "tabbedview_view-documents-gallery"
 
     def render(self):
         return
 
     def __call__(self):
-        prefered_view = self.listview
-        if is_bumblebee_feature_enabled():
-            if get_prefered_listing_view() == 'gallery':
-                prefered_view = self.galleryview
+        return self.render_prefered_view()
 
-        return self.context.restrictedTraverse(prefered_view)()
+    def render_prefered_view(self):
+        return self.context.restrictedTraverse(self.prefered_view_name)()
+
+    @property
+    def prefered_view_name(self):
+        prefered_view = self.list_view_name
+        if is_bumblebee_feature_enabled() and \
+                get_prefered_listing_view() == 'gallery':
+            prefered_view = self.gallery_view_name
+
+        return prefered_view
+
+    @property
+    def list_view_name(self):
+        return self.name_without_postfix
+
+    @property
+    def gallery_view_name(self):
+        return self.name_without_postfix + GALLERY_VIEW_POSTFIX
 
     @property
     def name_without_postfix(self):
         return self.__name__.rstrip(PROXY_VIEW_POSTFIX)
+
+
+class DocumentsProxy(BaseTabProxy):
+    """This proxyview is looking for the last used documents
+    view (list or gallery) and reopens this view.
+    """
+    grok.name('tabbedview_view-documents-proxy')
 
 
 class Documents(BaseCatalogListingTab):
@@ -294,6 +314,13 @@ class Proposals(ProposalListingTab):
     def get_base_query(self):
         return Proposal.query.by_container(
             self.context, get_current_admin_unit())
+
+
+class TrashProxy(BaseTabProxy):
+    """This proxyview is looking for the last used documents
+    view (list or gallery) and reopens this view.
+    """
+    grok.name('tabbedview_view-trash-proxy')
 
 
 class Trash(Documents):

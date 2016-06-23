@@ -5,7 +5,7 @@ from ftw.testbrowser import browsing
 from opengever.bumblebee import BUMBLEBEE_VIEW_COOKIE_NAME
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.tabbedview.browser.bumblebee_gallery import BumblebeeGalleryMixin
-from opengever.tabbedview.browser.tabs import DocumentsProxy
+from opengever.tabbedview.browser.tabs import BaseTabProxy
 from opengever.tabbedview.interfaces import ITabbedViewProxy
 from opengever.testing import FunctionalTestCase
 from plone import api
@@ -13,6 +13,73 @@ from zExceptions import NotFound
 from zope.component import getMultiAdapter
 from zope.interface.verify import verifyClass
 import transaction
+
+
+def set_cooke(request, value):
+    # We cannot use set_prefered_listing_view from opengever.bumblebee
+    # because it wont set the cookie properly in tests.
+    #
+    # Because that, we set the cookie value directly into the request
+    request.cookies[BUMBLEBEE_VIEW_COOKIE_NAME] = value
+
+
+class MockProxyTabView(BaseTabProxy):
+    __view_name__ = 'tabbedview_view-mocktab-proxy'
+
+
+class TestBaseTabProxyWithDeactivatedFeature(FunctionalTestCase):
+
+    def test_prefered_view_name_returns_always_list_view(self):
+        proxy_view = MockProxyTabView(self.portal, self.request)
+
+        set_cooke(self.request, 'gallery')
+
+        self.assertEqual(
+            'tabbedview_view-mocktab', proxy_view.prefered_view_name)
+
+        set_cooke(self.request, 'list')
+
+        self.assertEqual(
+            'tabbedview_view-mocktab', proxy_view.prefered_view_name)
+
+
+class TestBaseTabProxyWithActivatedFeature(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+
+    def test_verify_class(self):
+        verifyClass(ITabbedViewProxy, BaseTabProxy)
+
+    def test_name_without_postfix_extract_postfix_from_view_name(self):
+        proxy_view = MockProxyTabView(self.portal, self.request)
+
+        self.assertEqual(
+            'tabbedview_view-mocktab', proxy_view.name_without_postfix)
+
+    def test_list_view_name_returns_proxy_view_name_without_postfix(self):
+        proxy_view = MockProxyTabView(self.portal, self.request)
+
+        self.assertEqual(
+            'tabbedview_view-mocktab', proxy_view.list_view_name)
+
+    def test_gallery_view_name_returns_list_view_name_with_gallery_postfix(self):
+        proxy_view = MockProxyTabView(self.portal, self.request)
+
+        self.assertEqual(
+            'tabbedview_view-mocktab-gallery', proxy_view.gallery_view_name)
+
+    def test_prefered_view_name_returns_last_used_view_name(self):
+        proxy_view = MockProxyTabView(self.portal, self.request)
+
+        set_cooke(self.request, 'gallery')
+
+        self.assertEqual(
+            'tabbedview_view-mocktab-gallery', proxy_view.prefered_view_name)
+
+        set_cooke(self.request, 'list')
+
+        self.assertEqual(
+            'tabbedview_view-mocktab', proxy_view.prefered_view_name)
 
 
 class TestBumblebeeGalleryMixin(FunctionalTestCase):
@@ -357,77 +424,6 @@ class TestBumblebeeGalleryView(FunctionalTestCase):
             browser.css('.imageContainer').first.get('data-showroom-target'))
 
 
-class TestBumblebeeDocumentsProxyWithDeactivatedFeature(FunctionalTestCase):
-
-    @browsing
-    def test_do_not_set_cookie_for_bumblebee_view(self, browser):
-        browser.login().visit(view="tabbedview_view-mydocuments-proxy")
-        self.assertIsNone(browser.cookies.get(BUMBLEBEE_VIEW_COOKIE_NAME))
-
-    @browsing
-    def test_always_redirect_to_list_view(self, browser):
-        dossier = create(Builder('dossier'))
-        create(Builder('document').within(dossier))
-
-        browser.login().visit(view="tabbedview_view-mydocuments-proxy")
-
-        self.assertEqual(
-            'http://nohost/plone/#mydocuments',
-            browser.css('input[name="orig_template"]').first.value)
-
-
-class TestBumblebeeDocumentsProxyWithActivatedFeature(FunctionalTestCase):
-
-    layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
-
-    def test_verify_class(self):
-        verifyClass(ITabbedViewProxy, DocumentsProxy)
-
-    @browsing
-    def test_set_cookie_to_the_last_accessed_bumblebee_view(self, browser):
-        dossier = create(Builder('dossier'))
-        browser.login().visit(dossier, view="tabbedview_view-documents-gallery")
-
-        self.assertEqual(
-            '"gallery"',
-            browser.cookies.get(BUMBLEBEE_VIEW_COOKIE_NAME).get('value'))
-
-        browser.login().visit(dossier, view="tabbedview_view-documents")
-
-        self.assertEqual(
-            '"list"',
-            browser.cookies.get(BUMBLEBEE_VIEW_COOKIE_NAME).get('value'))
-
-    @browsing
-    def test_redirect_to_the_given_cookie_view(self, browser):
-        dossier = create(Builder('dossier'))
-
-        browser.login().visit(dossier, view="tabbedview_view-documents-gallery")
-        browser.login().visit(view="tabbedview_view-mydocuments-proxy")
-
-        self.assertEqual(
-            'Gallery',
-            browser.css('.ViewChooser .active').first.text)
-
-    @browsing
-    def test_redirect_to_the_list_view_if_no_cookie_is_set(self, browser):
-        self.assertIsNone(browser.cookies.get(BUMBLEBEE_VIEW_COOKIE_NAME))
-
-        browser.login().visit(view="tabbedview_view-mydocuments-proxy")
-
-        self.assertEqual(
-            'List',
-            browser.css('.ViewChooser .active').first.text)
-
-    def test_name_without_postfix_will_replace_the_proxy_addition_on_end_of_string(self):
-        dossier = create(Builder('dossier'))
-
-        view = dossier.restrictedTraverse('tabbedview_view-documents-proxy')
-
-        self.assertEqual('tabbedview_view-documents-proxy', view.__name__)
-        self.assertEqual('tabbedview_view-documents', view.name_without_postfix)
-
-
 class TestDocumentsGalleryFetch(FunctionalTestCase):
 
     @browsing
@@ -458,3 +454,81 @@ class TestMyDocumentsGalleryFetch(FunctionalTestCase):
 
         self.assertEqual(
             3, len(browser.css('.imageContainer')))
+
+
+class TestProxyViewsWithDeactivatedFeature(FunctionalTestCase):
+
+    @browsing
+    def test_do_not_set_cookie_on_documents_tab(self, browser):
+        dossier = create(Builder('dossier'))
+
+        browser.login().visit(dossier, view="tabbedview_view-documents-proxy")
+        self.assertIsNone(browser.cookies.get(BUMBLEBEE_VIEW_COOKIE_NAME))
+
+    @browsing
+    def test_do_not_set_cookie_on_mydocuments_tab(self, browser):
+        browser.login().visit(view="tabbedview_view-mydocuments-proxy")
+        self.assertIsNone(browser.cookies.get(BUMBLEBEE_VIEW_COOKIE_NAME))
+
+    @browsing
+    def test_do_not_set_cookie_on_trash_tab(self, browser):
+        dossier = create(Builder('dossier'))
+
+        browser.login().visit(dossier, view="tabbedview_view-trash-proxy")
+        self.assertIsNone(browser.cookies.get(BUMBLEBEE_VIEW_COOKIE_NAME))
+
+
+class TestProxyViewsWithActivatedFeature(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+
+    @browsing
+    def test_documents_proxy_tab(self, browser):
+        dossier = create(Builder('dossier'))
+
+        browser.login().visit(dossier, view="tabbedview_view-documents-proxy")
+
+        self.assertEqual(
+            'List',
+            browser.css('.ViewChooser .active').first.text)
+
+        browser.login().visit(dossier, view="tabbedview_view-documents-gallery")
+        browser.login().visit(view="tabbedview_view-mydocuments-proxy")
+
+        self.assertEqual(
+            'Gallery',
+            browser.css('.ViewChooser .active').first.text)
+
+    @browsing
+    def test_mydocuments_proxy_tab(self, browser):
+        browser.login().visit(
+            self.portal, view="tabbedview_view-mydocuments-proxy")
+
+        self.assertEqual(
+            'List',
+            browser.css('.ViewChooser .active').first.text)
+
+        browser.login().visit(
+            self.portal, view="tabbedview_view-mydocuments-gallery")
+        browser.login().visit(view="tabbedview_view-mydocuments-proxy")
+
+        self.assertEqual(
+            'Gallery',
+            browser.css('.ViewChooser .active').first.text)
+
+    @browsing
+    def test_trash_proxy_tab(self, browser):
+        dossier = create(Builder('dossier'))
+
+        browser.login().visit(dossier, view="tabbedview_view-trash-proxy")
+
+        self.assertEqual(
+            'List',
+            browser.css('.ViewChooser .active').first.text)
+
+        browser.login().visit(dossier, view="tabbedview_view-trash-gallery")
+        browser.login().visit(view="tabbedview_view-trash-proxy")
+
+        self.assertEqual(
+            'Gallery',
+            browser.css('.ViewChooser .active').first.text)

@@ -81,7 +81,7 @@
         <permission value="View"/>
     </action>
 
-    <action i18n:domain="opengever.dossier" title="Trash" action_id="trash" category="tabbedview-tabs"
+    <action i18n:domain="opengever.dossier" title="Trash" action_id="trash-proxy" category="tabbedview-tabs"
             condition_expr="" url_expr="string:#" visible="True">
     </action>
 
