@@ -5,6 +5,9 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Fixed textfilter in the documents gallery view.
+  [phgross]
+
 - No longer hide `Open as PDF` link in the bumblebee overlay for mails.
   [phgross]
 
