@@ -5,6 +5,10 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Increase maximum string length in sentry extra data for errors reported
+  by trix2sablon.
+  [deiferni]
+
 - Fixed textfilter in the documents gallery view.
   [phgross]
 
