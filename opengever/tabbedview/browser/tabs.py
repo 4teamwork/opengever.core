@@ -21,7 +21,7 @@ from opengever.tabbedview.helper import escape_html_transform
 from opengever.tabbedview.helper import external_edit_link
 from opengever.tabbedview.helper import linked
 from opengever.tabbedview.helper import linked_document_subdossier
-from opengever.tabbedview.helper import linked_document_with_tooltip
+from opengever.tabbedview.helper import linked_document
 from opengever.tabbedview.helper import linked_trashed_document_with_tooltip
 from opengever.tabbedview.helper import readable_ogds_author
 from opengever.tabbedview.helper import readable_ogds_user
@@ -115,7 +115,7 @@ class Documents(BaseCatalogListingTab):
         {'column': 'Title',
          'column_title': _(u'label_title', default=u'Title'),
          'sort_index': 'sortable_title',
-         'transform': linked_document_with_tooltip},
+         'transform': linked_document},
 
         {'column': 'document_author',
          'column_title': _('label_document_author', default="Document Author"),

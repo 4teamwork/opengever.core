@@ -2,19 +2,12 @@ from ftw.mail.utils import get_header
 from opengever.base.browser.helper import get_css_class
 from opengever.base.utils import escape_html
 from opengever.base.utils import get_hostname
-from opengever.bumblebee import is_bumblebee_feature_enabled
-from opengever.bumblebee import is_bumblebeeable
-from opengever.document.browser.download import DownloadConfirmationHelper
-from opengever.document.document import Document
-from opengever.mail.mail import OGMail
+from opengever.document.renderer import DocumentLinkRenderer
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import ogds_service
-from opengever.tabbedview import _
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize import ram
-from plone.protect.utils import addTokenToUrl
 from Products.CMFCore.interfaces._tools import IMemberData
-from Products.CMFPlone import PloneMessageFactory as pmf
 from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
 from zope.component import getMultiAdapter
 from zope.component import getUtility
@@ -186,14 +179,12 @@ def document_with_icon(item, value):
     return icon
 
 
-def linked_document_with_tooltip(item, value):
-    """Wrapper method for the _linked_document_with_tooltip method
-    for normal not trashed documents and mails."""
+def linked_document(item, value):
+    """Tabbedview helper wich returns a rendered link for the a document,
+    using the DocumentLinkRenderer.
+    """
 
-    if is_bumblebee_feature_enabled() and is_bumblebeeable(item):
-        return _linked_bumblebee_document(item, value)
-
-    return _linked_document_with_tooltip(item, value)
+    return DocumentLinkRenderer(item).render()
 
 
 def linked_trashed_document_with_tooltip(item, value):
@@ -202,13 +193,7 @@ def linked_trashed_document_with_tooltip(item, value):
     if is_bumblebee_feature_enabled() and is_bumblebeeable(item):
         return _linked_bumblebee_document(item, value)
 
-    if item.review_state in [Document.removed_state, OGMail.removed_state]:
-        removed = True
-    else:
-        removed = False
-
-    return _linked_document_with_tooltip(item, value, trashed=True,
-                                         removed=removed)
+    return DocumentLinkRenderer(item).render()
 
 
 def linked_version_preview(item, value):
@@ -240,117 +225,6 @@ def linked_version_preview(item, value):
         </a>
     </div>
     """ % data
-
-
-def _linked_bumblebee_document(item, value):
-    data = {
-        'url': item.getURL(),
-        'showroom_url': '{}/@@bumblebee-overlay-listing'.format(item.getURL()),
-        'css_class': get_css_class(item),
-        'title': value,
-    }
-
-    return """
-    <div>
-        <a class="showroom-item %(css_class)s"
-           href="%(url)s"
-           data-showroom-target="%(showroom_url)s"
-           data-showroom-title="%(title)s">
-        %(title)s
-        </a>
-    </div>
-    """ % data
-
-
-def _linked_document_with_tooltip(item, value, trashed=False, removed=False):
-    data = {}
-
-    if isinstance(value, unicode):
-        value = value.encode('utf-8')
-    data['value'] = value
-
-    # Determine URL method
-    data['url'] = '#'
-    if hasattr(item, 'getURL'):
-        data['url'] = item.getURL()
-    elif hasattr(item, 'absolute_url'):
-        data['url'] = item.absolute_url()
-
-    # tooltip links
-    data['preview_link'] = '%s/@@download_pdfpreview' % (data['url'])
-    data['preview_label'] = translate(
-        _(u'button_pdf_preview', 'PDF Preview'),
-        context=item.REQUEST).encode('utf-8')
-
-    data['edit_metadata_link'] = '%s/edit_checker' % (data['url'])
-    data['edit_metadata_label'] = translate(
-        pmf(u'Edit metadata'), context=item.REQUEST).encode('utf-8')
-
-    data['edit_direct_link'] = addTokenToUrl('%s/editing_document' % (data['url']))
-    data['edit_direct_label'] = translate(
-        pmf(u'Checkout and edit'), context=item.REQUEST).encode('utf-8')
-
-    # Construct CSS class
-    data['css_class'] = get_css_class(item)
-
-    # Construct breadcrumbs
-    breadcrumb_titles = _breadcrumbs_from_item(item)
-    data['breadcrumbs'] = " > ".join(t for t in breadcrumb_titles)
-
-    # Make sure all data used in the HTML snippet is properly escaped
-    for k, v in data.items():
-        data[k] = escape_html(v)
-
-    tooltip_links = []
-
-    is_doc = item.portal_type == 'opengever.document.document'
-
-    if is_doc and PDFCONVERTER_AVAILABLE:
-        tooltip_links.append("""<a href='%(preview_link)s'>
-                    %(preview_label)s
-                </a>""" % data)
-
-    if not trashed:
-        tooltip_links.append("""<a href='%(edit_metadata_link)s'>
-                    %(edit_metadata_label)s
-                </a>""" % data)
-
-    if is_doc and not trashed:
-        tooltip_links.append("""<a href='%(edit_direct_link)s'>
-                    %(edit_direct_label)s
-                </a>""" % data)
-
-    if is_doc:
-        dc_helper = DownloadConfirmationHelper()
-        tooltip_links.append(
-            dc_helper.get_html_tag(data['url']))
-
-    if removed:
-        data['removed_span'] = "<span class='removed_document'></span>"
-    else:
-        data['removed_span'] = ''
-
-    data['tooltip_links'] = """
-                """.join(tooltip_links)
-
-    link = """
-    <div class='linkWrapper'>
-        %(removed_span)s
-        <a class='tabbedview-tooltip %(css_class)s' href='%(url)s'></a>
-        <a href='%(url)s'>%(value)s</a>
-        <div class='tabbedview-tooltip-data'>
-            <div class='tooltip-content'>
-                <div class='tooltip-header'>%(value)s</div>
-                <div class='tooltip-breadcrumb'>%(breadcrumbs)s</div>
-                <div class='tooltip-links'>
-                    %(tooltip_links)s
-                </div>
-            </div>
-            <div class='bottomImage'></div>
-        </div>
-    </div>""" % data
-
-    return link
 
 
 def readable_date_set_invisibles(item, date):
