@@ -187,15 +187,6 @@ def linked_document(item, value):
     return DocumentLinkRenderer(item).render()
 
 
-def linked_trashed_document_with_tooltip(item, value):
-    """Wrapper method for the _linked_document_with_tooltip method
-    for normal but trashed documents and mails."""
-    if is_bumblebee_feature_enabled() and is_bumblebeeable(item):
-        return _linked_bumblebee_document(item, value)
-
-    return DocumentLinkRenderer(item).render()
-
-
 def linked_version_preview(item, value):
     url = "{}/@@bumblebee-overlay-listing?version_id={}".format(
         item.url, item.version)
