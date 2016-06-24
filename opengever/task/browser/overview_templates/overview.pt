@@ -34,11 +34,7 @@
           <h2 i18n:translate="label_documents">Documents</h2>
           <ul>
             <li tal:repeat="item documents">
-              <a href="" tal:attributes="href item/absolute_url;
-                                         title python: getattr(item, 'document_date', None) and item.document_date.strftime('%d.%m.%Y') or '';
-                                         class python:view.get_css_class(item)">
-                <span class="document" tal:condition="item/absolute_url" tal:content="item/Title" />
-              </a>
+              <a tal:replace="structure item/render_link" />
             </li>
           </ul>
         </tal:condition>
