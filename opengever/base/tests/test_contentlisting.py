@@ -1,6 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+from opengever.document.renderer import DocumentLinkRenderer
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
 from plone.app.contentlisting.interfaces import IContentListingObject
@@ -85,6 +86,93 @@ class TestOpengeverContentListing(FunctionalTestCase):
     def assertCropping(self, size, value):
         self.assertEquals(
             size, len(value), 'Text cropping failed for %s' % value)
+
+    def test_is_document(self):
+        document = create(Builder('document'))
+        mail = create(Builder('mail'))
+        dossier = create(Builder('dossier'))
+
+        self.assertTrue(IContentListingObject(obj2brain(document)).is_document)
+        self.assertFalse(IContentListingObject(obj2brain(mail)).is_document)
+        self.assertFalse(IContentListingObject(obj2brain(dossier)).is_document)
+
+    def test_is_trashed(self):
+        self.grant('Administrator')
+        document_a = create(Builder('document'))
+        document_b = create(Builder('document').trashed())
+
+        dossier = create(Builder('dossier'))
+
+        self.assertFalse(IContentListingObject(obj2brain(document_a)).is_trashed)
+        self.assertTrue(
+            IContentListingObject(obj2brain(document_b, unrestricted=True)).is_trashed)
+        self.assertFalse(IContentListingObject(obj2brain(dossier)).is_trashed)
+
+    def test_is_removed(self):
+        document_a = create(Builder('document'))
+        document_b = create(Builder('document').removed())
+        dossier = create(Builder('dossier'))
+
+        self.assertFalse(IContentListingObject(obj2brain(document_a)).is_removed)
+        self.assertTrue(
+            IContentListingObject(obj2brain(document_b, unrestricted=True)).is_removed)
+        self.assertFalse(IContentListingObject(obj2brain(dossier)).is_removed)
+
+    def test_get_breadcrumbs_returns_titles_joined_with_greater_than_sign(self):
+        root = create(Builder('repository_root').titled(u'Ordnungssystem'))
+        repo = create(Builder('repository')
+                      .within(root)
+                      .titled(u'Ablage 1'))
+        dossier = create(Builder('dossier')
+                         .within(repo)
+                         .titled('hans m\xc3\xbcller'.decode('utf-8')))
+        document = create(Builder('document')
+                          .titled('Anfrage Meier')
+                          .within(dossier)
+                          .with_dummy_content())
+
+        self.assertEquals(
+            'Ordnungssystem > 1. Ablage 1 > hans m\xc3\xbcller > Anfrage Meier',
+            IContentListingObject(document).get_breadcrumbs())
+
+
+class TestBrainContentListingRenderLink(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestBrainContentListingRenderLink, self).setUp()
+
+        # Because the DocumentLinkRenderer is already tested in a separate
+        # testcase, we replace them with a simple patch for this test.
+        def patched_link_render(self):
+            return 'PATCHED LINK {}'.format(self.document.Title())
+
+        self.org_render = DocumentLinkRenderer.render
+        DocumentLinkRenderer.render = patched_link_render
+
+    def tearDown(self):
+        DocumentLinkRenderer.render = self.org_render
+        super(TestBrainContentListingRenderLink, self).tearDown()
+
+    def test_uses_documentlinkrenderer_for_documents(self):
+        document = create(Builder('document').titled(u'Document A'))
+
+        self.assertEquals(
+            'PATCHED LINK Document A',
+            IContentListingObject(obj2brain(document)).render_link())
+
+    def test_uses_documentlinkrenderer_for_mails(self):
+        mail = create(Builder('mail').titled(u'Mail A'))
+
+        self.assertEquals(
+            'PATCHED LINK Mail A',
+            IContentListingObject(obj2brain(mail)).render_link())
+
+    def test_uses_simple_renderer_for_dossiers(self):
+        dossier = create(Builder('dossier').titled(u'Dossier A'))
+
+        self.assertEquals(
+            '<a href="http://nohost/plone/dossier-1" alt="Dossier A" class="state-dossier-state-active">Dossier A</a>',
+            IContentListingObject(obj2brain(dossier)).render_link())
 
 
 class TestOpengeverContentListingWithDisabledBumblebee(FunctionalTestCase):
