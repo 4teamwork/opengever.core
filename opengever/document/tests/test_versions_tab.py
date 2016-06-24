@@ -3,6 +3,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.testing import FunctionalTestCase
 from opengever.testing.helpers import create_document_version
 from plone import api
@@ -70,7 +71,12 @@ class TestVersionsTabWithoutPDFConverter(TestVersionsTab):
         listing = browser.css('.listing').first
         column_headers = listing.lists()[0]
         self.assertEquals(
-            ['Version', u'Ge\xe4ndert von', 'Datum', 'Kommentar', '', ''],
+            ['Version',
+             u'Ge\xe4ndert von',
+             'Datum',
+             'Kommentar',
+             'Kopie herunterladen',
+             u'Zur\xfccksetzten'],
             column_headers)
 
     @browsing
@@ -142,3 +148,34 @@ class TestVersionsTabWithPDFConverter(TestVersionsTab):
         self.assertIn('_authenticator', query)
         self.assertEquals(
             '/plone/dossier-1/document-1/download_pdf_version', url.path)
+
+
+class TestVersionsTabWithBubmelbeeActivated(TestVersionsTab):
+
+    layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+
+    @browsing
+    def test_columns_are_ordered_and_translated(self, browser):
+        browser.login().open(self.document, view='tabbedview_view-versions')
+        listing = browser.css('.listing').first
+        column_headers = listing.lists()[0]
+        self.assertEquals(
+            ['Version',
+             u'Ge\xe4ndert von',
+             'Datum',
+             'Kommentar',
+             'Kopie herunterladen',
+             u'Zur\xfccksetzten',
+             'Vorschau'],
+            column_headers)
+
+    @browsing
+    def test_preview_link_is_properly_constructed(self, browser):
+        browser.login().open(self.document, view='tabbedview_view-versions')
+
+        preview_link = browser.css('.listing .showroom-item').first
+
+        self.assertEquals('Vorschau', preview_link.text)
+        self.assertIn(
+            '/plone/dossier-1/document-1/@@bumblebee-overlay-listing?version_id=3',
+            preview_link.attrib['href'])

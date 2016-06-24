@@ -1,4 +1,5 @@
 from zope import schema
+from zope.interface import Attribute
 from zope.interface import Interface
 
 
@@ -10,12 +11,21 @@ class IGeverBumblebeeSettings(Interface):
         default=False)
 
 
+class IVersionedContextMarker(Interface):
+    """Marker interface for a versioned context.
+    """
+
+
 class IBumblebeeOverlay(Interface):
     """Interface for the bumblebee overlay.
 
     This interface defines the required methods to render the bumblebee
     overlay template.
     """
+
+    version_id = Attribute(
+        "Defines which version of the file should be shown."
+        "Default: None => the actual file will be shown")
 
     def get_preview_pdf_url():
         """Returns an url to an image.
@@ -122,4 +132,12 @@ class IBumblebeeOverlay(Interface):
         """Renders the lock info viewlet.
 
         Returns html.
+        """
+
+    def get_revert_link():
+        """Returns the url to retrieve the document.
+        """
+
+    def is_versioned_context():
+        """Returns True if the context is a versioned context.
         """

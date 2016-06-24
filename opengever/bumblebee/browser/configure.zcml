@@ -35,4 +35,10 @@
       factory=".overlay.BumblebeeMailOverlay"
       />
 
+  <adapter
+      for="opengever.document.document.IDocumentSchema
+           opengever.bumblebee.interfaces.IVersionedContextMarker"
+      factory=".overlay.BumblebeeDocumentVersionOverlay"
+      />
+
 </configure>

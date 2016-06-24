@@ -5,8 +5,8 @@ Changelog
 4.9.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Implement bumblebee preview images in versions-tab.
+  [elioschmutz]
 
 4.9.0 (2016-06-28)
 ------------------

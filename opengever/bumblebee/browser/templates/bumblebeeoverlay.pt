@@ -38,7 +38,10 @@
              tal:attributes="href link"
              i18n:translate="">Open detail view</a>
         </li>
-        <li id="action-download" tal:define="link view/overlay/get_download_copy_link" tal:condition="nocall: link" tal:content="structure link">
+        <li id="action-download"
+            tal:define="link view/overlay/get_download_copy_link"
+            tal:condition="nocall: link"
+            tal:content="structure link">
         </li>
         <li tal:define="link view/overlay/get_open_as_pdf_url" tal:condition="nocall: link">
           <a id="action-pdf"
@@ -69,10 +72,23 @@
              i18n:domain="opengever.document"
              i18n:translate="">Checkin with comment</a>
         </li>
+        <li id="action-revert"
+            tal:define="link view/overlay/get_revert_link"
+            tal:condition="nocall: link"
+            tal:content="structure link">
+        </li>
       </ul>
       <div class="info-viewlets">
         <div tal:replace="structure view/overlay/render_checked_out_viewlet" />
         <div tal:replace="structure view/overlay/render_lock_info_viewlet" />
+        <div tal:condition="view/overlay/is_versioned_context">
+          <dl class="portalMessage warning">
+            <dt i18n:domain="plone" i18n:translate="">Warning</dt>
+            <dd i18n:translate="warning_on_versioned_context">
+              You are watching a versioned file.
+            </dd>
+          </dl>
+        </div>
       </div>
     </footer>
   </aside>

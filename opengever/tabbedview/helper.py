@@ -217,8 +217,8 @@ def linked_version_preview(item, value):
 
     showroom_title = translate(
         _('label_showroom_version_title',
-            default='Version ${version}',
-            mapping={'version': item.version}),
+            default='Version ${version} of ${timestamp}',
+            mapping={'version': item.version, 'timestamp': item.timestamp}),
         context=getRequest()).encode('utf-8')
 
     data = {
