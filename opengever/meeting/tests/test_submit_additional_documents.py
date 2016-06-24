@@ -231,7 +231,7 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
 
         self.assertEqual(
             ['A Document'],
-            browser.css('.document').text,
+            browser.css('.document_link').text,
             "The document should be available in the "
             "submittedproposal listing")
 
