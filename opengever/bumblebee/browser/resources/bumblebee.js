@@ -130,7 +130,7 @@
   }
 
   function updateShowroom() {
-    if(($(".template-search").length) || $(".portaltype-opengever-document-document").length) {
+    if(($(".template-search").length)) {
       initSingleShowroom();
       return;
     }

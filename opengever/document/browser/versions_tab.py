@@ -4,6 +4,8 @@ from five import grok
 from ftw.table.interfaces import ITableSource
 from ftw.table.interfaces import ITableSourceConfig
 from opengever.base.protect import unprotected_write
+from opengever.bumblebee import is_bumblebee_feature_enabled
+from opengever.bumblebee import is_bumblebeeable
 from opengever.document import _
 from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.document.document import IDocumentSchema
@@ -11,6 +13,7 @@ from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.ogds.base.actor import Actor
 from opengever.tabbedview import BaseListingTab
 from opengever.tabbedview import GeverTableSource
+from opengever.tabbedview.helper import linked_version_preview
 from plone import api
 from plone.protect.utils import addTokenToUrl
 from Products.CMFPlone.utils import safe_unicode
@@ -292,7 +295,7 @@ class VersionsTab(BaseListingTab):
          },
 
         {'column': 'download_link',
-         'column_title': ' ',
+         'column_title': _(u'label_download_copy', default=u'Download copy'),
          },
 
         # Dropped if PDFCONVERTER_AVAILABLE == False
@@ -301,7 +304,12 @@ class VersionsTab(BaseListingTab):
          },
 
         {'column': 'revert_link',
-         'column_title': ' ',
+         'column_title': _(u'label_revert', default=u'Revert'),
+         },
+
+        {'column': 'preview',
+         'column_title': _(u'label_preview', default=u'Preview'),
+         'transform': linked_version_preview
          },
     )
 
@@ -309,11 +317,16 @@ class VersionsTab(BaseListingTab):
     def columns(self):
         """Disable pdf_preview link in deployments without pdfconverter.
         """
+        if not is_bumblebee_feature_enabled() or not is_bumblebeeable(self.context):
+            self._columns = self.remove_column('preview')
+
         if not PDFCONVERTER_AVAILABLE:
-            return filter(
-                lambda c: c['column'] != 'pdf_preview_link', self._columns)
+            self._columns = self.remove_column('pdf_preview_link')
 
         return self._columns
 
     def get_base_query(self):
         return self.context
+
+    def remove_column(self, column):
+        return filter(lambda c: c['column'] != column, self._columns)

@@ -28,8 +28,9 @@ class BumblebeeBaseDocumentOverlay(object):
     implements(IBumblebeeOverlay)
 
     def __init__(self, context, request):
-        self.context = context
         self.request = request
+        self.context = self._get_context(
+            context, request.get('version_id', None))
 
     def get_preview_pdf_url(self):
         return get_representation_url_by_object('preview', self.context)
@@ -166,6 +167,13 @@ class BumblebeeBaseDocumentOverlay(object):
             self.context.absolute_url(),
             checkin_view,
             createToken())
+
+    def _get_context(self, context, version_id):
+        if not version_id:
+            return context
+
+        prtool = api.portal.get_tool('portal_repository')
+        return prtool.retrieve(context, version_id).object
 
 
 class BumblebeeMailOverlay(BumblebeeBaseDocumentOverlay):
