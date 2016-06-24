@@ -1,9 +1,12 @@
 from ftw.bumblebee.utils import get_representation_url_by_brain as representation_url_by_brain
 from ftw.bumblebee.utils import get_representation_url_by_object as representation_url_by_object
 from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
-from opengever.mail.mail import IOGMailMarker
 from plone import api
 from zope.globalrequest import getRequest
+from zope.i18nmessageid import MessageFactory
+
+
+_ = MessageFactory('opengever.bumblebee')
 
 
 BUMBLEBEE_VIEW_COOKIE_NAME = 'bumblebee-view'

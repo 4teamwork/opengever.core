@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-06-26 18:26+0000\n"
+"POT-Creation-Date: 2016-06-28 07:25+0000\n"
 "PO-Revision-Date: 2013-03-27 11:23+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -67,7 +67,7 @@ msgid "button_more_actions"
 msgstr "Autres actions"
 
 #. Default: "PDF Preview"
-#: ./opengever/tabbedview/helper.py:249
+#: ./opengever/tabbedview/helper.py:280
 msgid "button_pdf_preview"
 msgstr ""
 
@@ -268,6 +268,11 @@ msgstr "Aucun contenu"
 msgid "label_pending"
 msgstr "En suspens"
 
+#. Default: "Preview"
+#: ./opengever/tabbedview/helper.py:227
+msgid "label_preview"
+msgstr "Aperçu"
+
 #. Default: "Public Trial"
 #: ./opengever/tabbedview/browser/tabs.py:126
 msgid "label_public_trial"
@@ -292,6 +297,11 @@ msgstr "Mandataire"
 #: ./opengever/tabbedview/browser/tabs.py:199
 msgid "label_review_state"
 msgstr "Etat"
+
+#. Default: "Version ${version} of ${timestamp}"
+#: ./opengever/tabbedview/helper.py:217
+msgid "label_showroom_version_title"
+msgstr "Version ${version} de ${timestamp}"
 
 #. Default: "Start"
 #: ./opengever/tabbedview/browser/tabs.py:208

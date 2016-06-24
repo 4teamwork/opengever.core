@@ -85,7 +85,7 @@
           <dl class="portalMessage warning">
             <dt i18n:domain="plone" i18n:translate="">Warning</dt>
             <dd i18n:translate="warning_on_versioned_context">
-              You are watching a versioned file.
+              You are looking at a versioned file.
             </dd>
           </dl>
         </div>

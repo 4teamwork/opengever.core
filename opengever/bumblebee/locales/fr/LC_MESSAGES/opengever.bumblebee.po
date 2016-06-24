@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-06-26 18:26+0000\n"
+"POT-Creation-Date: 2016-06-28 07:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,7 +26,7 @@ msgstr "Date du document:"
 msgid "Dossier:"
 msgstr "Dossier:"
 
-#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:44
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:47
 msgid "Open as PDF"
 msgstr "Ouvrir le document en PDF"
 
@@ -42,13 +42,23 @@ msgstr "Numéro de référence:"
 msgid "Sequence number:"
 msgstr "Numéro courant:"
 
+#. Default: "Revert document"
+#: ./opengever/bumblebee/browser/overlay.py:196
+msgid "label_revert"
+msgstr "Reculer le document"
+
 #. Default: "Next"
-#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:82
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:98
 msgid "showroom_nav_button_next"
 msgstr ""
 
 #. Default: "Previous"
-#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:80
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:96
 msgid "showroom_nav_button_prev"
 msgstr ""
+
+#. Default: "You are looking at a versioned file."
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:87
+msgid "warning_on_versioned_context"
+msgstr "Vous regardez un fichier versionné."
 

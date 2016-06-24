@@ -76,7 +76,7 @@ class TestVersionsTabWithoutPDFConverter(TestVersionsTab):
              'Datum',
              'Kommentar',
              'Kopie herunterladen',
-             u'Zur\xfccksetzten'],
+             u'Zur\xfccksetzen'],
             column_headers)
 
     @browsing
@@ -165,7 +165,7 @@ class TestVersionsTabWithBubmelbeeActivated(TestVersionsTab):
              'Datum',
              'Kommentar',
              'Kopie herunterladen',
-             u'Zur\xfccksetzten',
+             u'Zur\xfccksetzen',
              'Vorschau'],
             column_headers)
 

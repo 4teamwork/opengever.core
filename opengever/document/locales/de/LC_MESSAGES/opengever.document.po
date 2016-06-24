@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2016-06-26 19:18+0000\n"
+"POT-Creation-Date: 2016-06-28 07:24+0000\n"
 "PO-Revision-Date: 2013-03-27 10:44+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -154,7 +154,7 @@ msgid "button_checkin"
 msgstr "Einchecken"
 
 #. Default: "PDF"
-#: ./opengever/document/browser/versions_tab.py:147
+#: ./opengever/document/browser/versions_tab.py:150
 msgid "button_pdf"
 msgstr "PDF Vorschau"
 
@@ -263,7 +263,7 @@ msgid "initial_document_version_change_note"
 msgstr "Dokument erstellt (Initialversion)"
 
 #. Default: "Changed by"
-#: ./opengever/document/browser/versions_tab.py:283
+#: ./opengever/document/browser/versions_tab.py:286
 msgid "label_actor"
 msgstr "Geändert von"
 
@@ -303,7 +303,7 @@ msgid "label_checkout_and_edit"
 msgstr "Auschecken / Bearbeiten"
 
 #. Default: "Comment"
-#: ./opengever/document/browser/versions_tab.py:291
+#: ./opengever/document/browser/versions_tab.py:294
 msgid "label_comment"
 msgstr "Kommentar"
 
@@ -313,7 +313,7 @@ msgid "label_creator"
 msgstr "Ersteller"
 
 #. Default: "Date"
-#: ./opengever/document/browser/versions_tab.py:287
+#: ./opengever/document/browser/versions_tab.py:290
 msgid "label_date"
 msgstr "Datum"
 
@@ -390,6 +390,7 @@ msgstr "In Papierform aufbewahrt"
 
 #. Default: "Preview"
 #: ./opengever/document/behaviors/metadata.py:150
+#: ./opengever/document/browser/versions_tab.py:311
 msgid "label_preview"
 msgstr "Vorschau"
 
@@ -409,8 +410,13 @@ msgid "label_related_documents"
 msgstr "Verwandte Dokumente"
 
 #. Default: "reset"
-#: ./opengever/document/browser/versions_tab.py:162
+#: ./opengever/document/browser/versions_tab.py:165
 msgid "label_reset"
+msgstr "Zurücksetzen"
+
+#. Default: "Revert"
+#: ./opengever/document/browser/versions_tab.py:307
+msgid "label_revert"
 msgstr "Zurücksetzen"
 
 #. Default: "Sequence Number"
@@ -434,7 +440,7 @@ msgid "label_title"
 msgstr "Titel"
 
 #. Default: "Version"
-#: ./opengever/document/browser/versions_tab.py:279
+#: ./opengever/document/browser/versions_tab.py:282
 msgid "label_version"
 msgstr "Version"
 
