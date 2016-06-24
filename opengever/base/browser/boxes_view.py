@@ -1,6 +1,7 @@
 from opengever.base.browser.helper import get_css_class
 from opengever.globalindex.model.task import Task
 from opengever.globalindex.utils import indexed_task_link_helper
+from plone.app.contentlisting.interfaces import IContentListingObject
 from Products.ZCatalog.interfaces import ICatalogBrain
 from z3c.form.interfaces import IFieldWidget
 
@@ -22,6 +23,8 @@ class BoxesViewMixin(object):
             return 'dict'
         elif ICatalogBrain.providedBy(item):
             return 'brain'
+        elif IContentListingObject.providedBy(item):
+            return 'contentlistingobject'
         elif IFieldWidget.providedBy(item):
             return 'widget'
         elif isinstance(item, Task):

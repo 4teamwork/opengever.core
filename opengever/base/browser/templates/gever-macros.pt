@@ -62,12 +62,17 @@
                   <tal:brain tal:condition="python: view.get_type(item) == 'brain'">
                     <a href="" tal:attributes="href item/getURL|nothing;
                                                title item/alt|nothing;
-                                               data-showroom-target item/data-showroom-target|nothing;
-                                               data-showroom-title item/data-showroom-title|nothing;
                                                class python:view.get_item_css_classes(item)" tal:omit-tag="not: item/getURL|nothing"
                        tal:content="item/Title">
                     </a>
                   </tal:brain>
+
+                  <tal:comment replace="nothing">
+                    Item is a contentlistingobject:
+                  </tal:comment>
+                  <tal:contentlisting tal:condition="python: view.get_type(item) == 'contentlistingobject'">
+                    <a tal:replace="structure item/render_link" />
+                  </tal:contentlisting>
 
                   <tal:comment replace="nothing">
                     Item is a dict (Documents and participants):
@@ -76,8 +81,6 @@
                     <a href=""
                        tal:attributes="href item/getURL|nothing;
                                        title item/alt|nothing;
-                                       data-showroom-target item/data-showroom-target|nothing;
-                                       data-showroom-title item/data-showroom-title|nothing;
                                        class python:'rollover-breadcrumb %s' % (item.get('css_class'))"
                        tal:omit-tag="not: item/getURL|nothing">
                     <span tal:content="item/Title" /></a>
