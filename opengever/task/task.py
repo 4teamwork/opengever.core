@@ -92,7 +92,6 @@ class ITask(form.Schema):
     form.widget(issuer=AutocompleteFieldWidget)
     issuer = schema.Choice(
         title=_(u"label_issuer", default=u"Issuer"),
-        description=_('help_issuer', default=u""),
         vocabulary=u'opengever.ogds.base.ContactsAndUsersVocabulary',
         required=True,
         )
@@ -169,7 +168,6 @@ class ITask(form.Schema):
     form.widget(expectedStartOfWork=DatePickerFieldWidget)
     expectedStartOfWork = schema.Date(
         title=_(u"label_expectedStartOfWork", default="Start with work"),
-        description=_(u"help_expectedStartOfWork", default=""),
         required=False,
         )
 
@@ -200,7 +198,6 @@ class ITask(form.Schema):
     form.omitted('predecessor')
     predecessor = schema.TextLine(
         title=_(u'label_predecessor', default=u'Predecessor'),
-        description=_(u'help_predecessor', default=u''),
         required=False)
 
 

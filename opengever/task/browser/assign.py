@@ -28,7 +28,6 @@ class IAssignSchema(form.Schema):
     # hidden
     transition = schema.Choice(
         title=_("label_transition", default="Transition"),
-        description=_(u"help_transition", default=""),
         source=getTransitionVocab,
         required=True,
         )
@@ -50,7 +49,6 @@ class IAssignSchema(form.Schema):
 
     text = schema.Text(
         title=_('label_response', default="Response"),
-        description=_('help_response', default=""),
         required=False,
         )
 
