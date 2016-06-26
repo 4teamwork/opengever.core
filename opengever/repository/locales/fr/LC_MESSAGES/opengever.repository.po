@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-12-22 14:43+0000\n"
+"POT-Creation-Date: 2016-06-26 18:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,12 +42,12 @@ msgid "empty_repository"
 msgstr "Pas de numéros de classement disponible dans cette subdivison."
 
 #. Default: "A Sibling with the same reference number is existing"
-#: ./opengever/repository/behaviors/referenceprefix.py:64
+#: ./opengever/repository/behaviors/referenceprefix.py:73
 msgid "error_sibling_reference_number_existing"
 msgstr "A ce niveau du classement ce numéro de référence existe déjà."
 
 #. Default: "Common"
-#: ./opengever/repository/behaviors/referenceprefix.py:19
+#: ./opengever/repository/behaviors/referenceprefix.py:33
 #: ./opengever/repository/behaviors/responsibleorg.py:12
 #: ./opengever/repository/repositoryfolder.py:28
 msgid "fieldset_common"
@@ -71,7 +71,7 @@ msgstr ""
 msgid "help_location"
 msgstr ""
 
-#: ./opengever/repository/behaviors/referenceprefix.py:29
+#: ./opengever/repository/behaviors/referenceprefix.py:43
 msgid "help_reference_number_prefix"
 msgstr ""
 
@@ -124,7 +124,7 @@ msgid "label_location"
 msgstr "Site"
 
 #. Default: "Reference Prefix"
-#: ./opengever/repository/behaviors/referenceprefix.py:26
+#: ./opengever/repository/behaviors/referenceprefix.py:40
 msgid "label_reference_number_prefix"
 msgstr "Préfixe référence"
 
@@ -161,7 +161,7 @@ msgid "label_warning"
 msgstr "Avertissement"
 
 #. Default: "State"
-#: ./opengever/repository/viewlets/byline.py:17
+#: ./opengever/repository/viewlets/byline.py:24
 msgid "label_workflow_state"
 msgstr "Etat"
 

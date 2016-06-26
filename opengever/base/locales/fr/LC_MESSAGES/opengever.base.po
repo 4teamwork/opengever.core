@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-04-29 15:22+0000\n"
+"POT-Creation-Date: 2016-06-26 18:26+0000\n"
 "PO-Revision-Date: 2012-08-30 15:34+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -187,7 +187,7 @@ msgid "label_confirm_action"
 msgstr "Confirmer l'action"
 
 #. Default: "Created"
-#: ./opengever/base/viewlets/byline.py:60
+#: ./opengever/base/viewlets/byline.py:67
 msgid "label_created"
 msgstr "Créé le"
 
@@ -212,7 +212,7 @@ msgid "label_dateofsubmission"
 msgstr "Date de proposition (des documents)"
 
 #. Default: "An unexpected error has occured"
-#: ./opengever/base/browser/templates/gever-macros.pt:110
+#: ./opengever/base/browser/templates/gever-macros.pt:114
 msgid "label_default_error_message"
 msgstr ""
 
@@ -222,17 +222,17 @@ msgid "label_description"
 msgstr "Description"
 
 #. Default: "Dossier:"
-#: ./opengever/base/browser/search.pt:309
+#: ./opengever/base/browser/search.pt:311
 msgid "label_dossier"
 msgstr ""
 
 #. Default: "Initial version (document copied)"
-#: ./opengever/base/subscribers.py:59
+#: ./opengever/base/subscribers.py:60
 msgid "label_initial_version_copied"
 msgstr "Version initiale (documents copiés)"
 
 #. Default: "Last modified"
-#: ./opengever/base/viewlets/byline.py:65
+#: ./opengever/base/viewlets/byline.py:72
 msgid "label_last_modified"
 msgstr "Dernière modification"
 
@@ -272,7 +272,7 @@ msgid "label_search"
 msgstr "Recherche"
 
 #. Default: "Error"
-#: ./opengever/base/browser/templates/gever-macros.pt:109
+#: ./opengever/base/browser/templates/gever-macros.pt:113
 msgid "label_severity_error"
 msgstr ""
 
@@ -367,7 +367,7 @@ msgstr "Vous n'avez pas trouvé ce que vous avez cherché? La ${advanced_search}
 msgid "search_results_advanced_link"
 msgstr "Recherche avancée"
 
-#: ./opengever/base/browser/templates/gever-macros.pt:92
+#: ./opengever/base/browser/templates/gever-macros.pt:96
 msgid "show all"
 msgstr "Tout afficher"
 

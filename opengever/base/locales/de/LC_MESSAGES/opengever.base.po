@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-04-29 15:22+0000\n"
+"POT-Creation-Date: 2016-06-26 18:26+0000\n"
 "PO-Revision-Date: 2014-09-04 01:03+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -190,7 +190,7 @@ msgid "label_confirm_action"
 msgstr "Aktion bestätigen"
 
 #. Default: "Created"
-#: ./opengever/base/viewlets/byline.py:60
+#: ./opengever/base/viewlets/byline.py:67
 msgid "label_created"
 msgstr "Erstellt am"
 
@@ -215,7 +215,7 @@ msgid "label_dateofsubmission"
 msgstr "Anbietezeitpunkt"
 
 #. Default: "An unexpected error has occured"
-#: ./opengever/base/browser/templates/gever-macros.pt:110
+#: ./opengever/base/browser/templates/gever-macros.pt:114
 msgid "label_default_error_message"
 msgstr "Ein unerwarteter Fehler ist aufgetreten"
 
@@ -225,17 +225,17 @@ msgid "label_description"
 msgstr "Beschreibung"
 
 #. Default: "Dossier:"
-#: ./opengever/base/browser/search.pt:309
+#: ./opengever/base/browser/search.pt:311
 msgid "label_dossier"
 msgstr "Dossier:"
 
 #. Default: "Initial version (document copied)"
-#: ./opengever/base/subscribers.py:59
+#: ./opengever/base/subscribers.py:60
 msgid "label_initial_version_copied"
 msgstr "Dokument kopiert (Initialversion)"
 
 #. Default: "Last modified"
-#: ./opengever/base/viewlets/byline.py:65
+#: ./opengever/base/viewlets/byline.py:72
 msgid "label_last_modified"
 msgstr "Zuletzt verändert"
 
@@ -275,7 +275,7 @@ msgid "label_search"
 msgstr "Suche"
 
 #. Default: "Error"
-#: ./opengever/base/browser/templates/gever-macros.pt:109
+#: ./opengever/base/browser/templates/gever-macros.pt:113
 msgid "label_severity_error"
 msgstr "Fehler"
 
@@ -370,7 +370,7 @@ msgstr "Haben Sie nicht gefunden, wonach Sie gesucht haben? Die ${advanced_searc
 msgid "search_results_advanced_link"
 msgstr "erweiterte Suche"
 
-#: ./opengever/base/browser/templates/gever-macros.pt:92
+#: ./opengever/base/browser/templates/gever-macros.pt:96
 msgid "show all"
 msgstr "Alle anzeigen"
 

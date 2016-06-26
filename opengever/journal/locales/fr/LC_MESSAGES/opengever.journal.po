@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-12-22 14:43+0000\n"
+"POT-Creation-Date: 2016-06-26 18:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgid "heading_journal"
 msgstr "Historique"
 
 #. Default: "Changed by"
-#: ./opengever/journal/tab.py:69
+#: ./opengever/journal/tab.py:68
 msgid "label_actor"
 msgstr "Modifier le"
 
@@ -30,7 +30,7 @@ msgid "label_attachments_deleted"
 msgstr "Fichiers attachés effacés: ${filenames}"
 
 #. Default: "Comments"
-#: ./opengever/journal/tab.py:73
+#: ./opengever/journal/tab.py:72
 msgid "label_comments"
 msgstr "Commentaire"
 
@@ -205,12 +205,12 @@ msgid "label_task_modified"
 msgstr "Tâche modifiée : ${title}"
 
 #. Default: "Time"
-#: ./opengever/journal/tab.py:61
+#: ./opengever/journal/tab.py:60
 msgid "label_time"
 msgstr "Date"
 
 #. Default: "Title"
-#: ./opengever/journal/tab.py:65
+#: ./opengever/journal/tab.py:64
 msgid "label_title"
 msgstr "Titre"
 

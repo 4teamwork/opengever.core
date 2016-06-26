@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: opengever.trash 1.0\n"
-"POT-Creation-Date: 2015-12-22 14:43+0000\n"
+"POT-Creation-Date: 2016-06-26 18:26+0000\n"
 "PO-Revision-Date: 2014-11-18 17:19+0100\n"
 "Last-Translator: Julian Infanger <julian.infangner.@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -15,15 +15,15 @@ msgstr ""
 "Domain: DOMAIN\n"
 "X-Is-Fallback-For: de-at de-li de-lu de-ch de-de\n"
 
-#: ./opengever/trash/trash.py:118
+#: ./opengever/trash/trash.py:124
 msgid "You have not selected any items"
 msgstr "Sie haben keine Objekte ausgewählt"
 
-#: ./opengever/trash/trash.py:93
+#: ./opengever/trash/trash.py:99
 msgid "could not trash the object ${obj}, it is already trashed"
 msgstr "Das Objekt ${obj} wurde bereits in den Papierkorb verschoben"
 
-#: ./opengever/trash/trash.py:102
+#: ./opengever/trash/trash.py:108
 msgid "could not trash the object ${obj}, it is checked out"
 msgstr "Das Objekt ${obj} konnte nicht in den Papierkorb verschoben werden, es ist ausgecheckt."
 
@@ -92,7 +92,7 @@ msgstr "Das Dokument ist noch nicht im Papierkorb"
 msgid "remove"
 msgstr "Löschen"
 
-#: ./opengever/trash/trash.py:112
+#: ./opengever/trash/trash.py:118
 msgid "the object ${obj} trashed"
 msgstr "Das Objekt ${obj} wurde in den Papierkorb verschoben."
 

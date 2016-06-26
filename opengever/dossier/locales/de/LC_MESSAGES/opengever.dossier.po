@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2016-06-16 16:20+0000\n"
+"POT-Creation-Date: 2016-06-26 18:26+0000\n"
 "PO-Revision-Date: 2015-01-22 17:49+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -100,7 +100,7 @@ msgstr "Neuste Dokumente"
 msgid "Newest tasks"
 msgstr "Neuste Aufgaben"
 
-#: ./opengever/dossier/browser/overview_templates/overview.pt:27
+#: ./opengever/dossier/browser/overview_templates/overview.pt:28
 msgid "No Subdossiers"
 msgstr "Keine Subdossiers"
 
