@@ -48,7 +48,6 @@ class ILifeCycle(form.Schema):
     retention_period_annotation = schema.Text(
         title=_(u'label_retention_period_annotation',
                 default=u'retentionPeriodAnnotation'),
-        description=_(u'help_retention_period_annotation', default=u''),
         required=False
     )
 
@@ -64,7 +63,6 @@ class ILifeCycle(form.Schema):
     archival_value_annotation = schema.Text(
         title=_(u'label_archival_value_annotation',
                 default=u'archivalValueAnnotation'),
-        description=_(u'help_archival_value_annotation', default=u''),
         required=False
     )
 
@@ -80,7 +78,6 @@ class ILifeCycle(form.Schema):
     form.widget(date_of_cassation=DatePickerFieldWidget)
     date_of_cassation = schema.Date(
         title=_(u'label_dateofcassation', default=u'Date of cassation'),
-        description=_(u'help_dateofcassation', default=u''),
         required=False,
     )
 
@@ -88,7 +85,6 @@ class ILifeCycle(form.Schema):
     form.widget(date_of_submission=DatePickerFieldWidget)
     date_of_submission = schema.Date(
         title=_(u'label_dateofsubmission', default=u'Date of submission'),
-        description=_(u'help_dateofsubmission', default=u''),
         required=False,
     )
 

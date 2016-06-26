@@ -16,7 +16,6 @@ class ICreator(form.Schema):
     form.omitted('creators')
     creators = schema.Tuple(
         title=_(u'label_creators', u'Creators'),
-        description=_(u'help_creators', u''),
         value_type=schema.TextLine(),
         required=False,
         missing_value=(),
