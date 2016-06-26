@@ -46,19 +46,16 @@ class IRepositoryFolderSchema(form.Schema):
 
     valid_from = schema.Date(
         title=_(u'label_valid_from', default=u'Valid from'),
-        description=_(u'help_valid_from', default=u''),
         required=False,
         )
 
     valid_until = schema.Date(
         title=_(u'label_valid_until', default=u'Valid until'),
-        description=_(u'help_valid_until', default=u''),
         required=False,
         )
 
     location = schema.TextLine(
         title=_(u'label_location', default=u'Location'),
-        description=_(u'help_location', default=u''),
         required=False,
         )
 
@@ -66,13 +63,11 @@ class IRepositoryFolderSchema(form.Schema):
         title=_(
             u'label_referenced_activity',
             default=u'Referenced activity'),
-        description=_(u'help_referenced_activity', default=u''),
         required=False,
         )
 
     former_reference = schema.TextLine(
         title=_(u'label_former_reference', default=u'Former reference'),
-        description=_(u'help_former_reference', default=u''),
         required=False,
         )
 
