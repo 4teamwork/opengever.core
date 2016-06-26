@@ -67,7 +67,6 @@ class IDossier(form.Schema):
     form.widget(start=DatePickerFieldWidget)
     start = schema.Date(
         title=_(u'label_start', default=u'Opening Date'),
-        description=_(u'help_start', default=u''),
         required=False,
         defaultFactory=start_date_default,
     )
@@ -76,20 +75,17 @@ class IDossier(form.Schema):
     form.widget(end=DatePickerFieldWidget)
     end = schema.Date(
         title=_(u'label_end', default=u'Closing Date'),
-        description=_(u'help_end', default=u''),
         required=False,
     )
 
     comments = schema.Text(
         title=_(u'label_comments', default=u'Comments'),
-        description=_(u'help_comments', default=u''),
         required=False,
     )
 
     form.widget(responsible=AutocompleteFieldWidget)
     responsible = schema.Choice(
         title=_(u"label_responsible", default="Responsible"),
-        description=_(u"help_responsible", default=""),
         vocabulary=u'opengever.ogds.base.AssignedUsersVocabulary',
         required=True,
     )
@@ -109,7 +105,6 @@ class IDossier(form.Schema):
 
     filing_prefix = schema.Choice(
         title=_(u'filing_prefix', default="filing prefix"),
-        description=_(u'help_filing_prefix', default=""),
         source=wrap_vocabulary(
             'opengever.dossier.type_prefixes',
             visible_terms_from_registry="opengever.dossier"
@@ -123,7 +118,6 @@ class IDossier(form.Schema):
     temporary_former_reference_number = schema.TextLine(
         title=_(u'temporary_former_reference_number',
                 default="Temporary former reference number"),
-        description=_(u'help_temporary_former_reference_number', default=u''),
         required=False,
     )
 
@@ -174,14 +168,12 @@ class IDossier(form.Schema):
     former_reference_number = schema.TextLine(
         title=_(u'label_former_reference_number',
                 default=u'Reference Number'),
-        description=_(u'help_former_reference_number', default=u''),
         required=False,
     )
 
     form.widget(reference_number=referenceNumberWidgetFactory)
     reference_number = schema.TextLine(
         title=_(u'label_reference_number', default=u'Reference Number'),
-        description=_(u'help_reference_number ', default=u''),
         required=False,
     )
 
