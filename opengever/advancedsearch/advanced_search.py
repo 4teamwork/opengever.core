@@ -160,14 +160,12 @@ class IAdvancedSearch(directives_form.Schema):
     directives_form.widget(responsible=AutocompleteFieldWidget)
     responsible = schema.Choice(
         title=_('label_reponsible', default='Responsible'),
-        description=_('help_responsible', default=''),
         vocabulary=u'opengever.ogds.base.AllUsersVocabulary',
         required=False,
     )
 
     dossier_review_state = schema.List(
         title=_('label_review_state', default='State'),
-        description=_('help_review_state', default=''),
         value_type=schema.Choice(
             source=get_possible_dossier_states,
         ),
@@ -210,21 +208,18 @@ class IAdvancedSearch(directives_form.Schema):
 
     document_author = schema.TextLine(
         title=_('label_document_author', default='Document author'),
-        description=_('help_document_author', default=''),
         required=False,
     )
 
     directives_form.widget(responsible=AutocompleteFieldWidget)
     checked_out = schema.Choice(
         title=_('label_checked_out', default='Checked out by'),
-        description=_('help_checked_out', default=''),
         vocabulary=u'opengever.ogds.base.UsersVocabulary',
         required=False,
     )
 
     trashed = schema.Bool(
         title=_('label_trashed', default='Also search in the recycle bin'),
-        description=_('help_trashed', default=''),
         required=False,
     )
 
@@ -251,7 +246,6 @@ class IAdvancedSearch(directives_form.Schema):
 
     task_type = schema.Choice(
         title=_('label_tasktype', default=''),
-        description=_('help_tasktyp', default=''),
         source=getTaskTypeVocabulary,
         required=False,
     )
