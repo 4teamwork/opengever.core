@@ -62,20 +62,17 @@ class IContact(form.Schema):
 
     salutation = schema.TextLine(
         title = _(u'label_salutation', default=u'Salutation'),
-        description = _(u'help_salutation', default=u''),
         required = False,
         )
 
     academic_title = schema.TextLine(
         title = _(u'label_academic_title', default=u'Academic title'),
-        description = _(u'help_academic_title', default=u''),
         required = False,
         )
 
     dexteritytextindexer.searchable('lastname')
     lastname = schema.TextLine(
         title = _(u'label_lastname', default=u'Lastname'),
-        description = _(u'help_lastname', default=u''),
         required = True,
         max_length=LASTNAME_LENGTH,
         )
@@ -83,70 +80,59 @@ class IContact(form.Schema):
     dexteritytextindexer.searchable('firstname')
     firstname = schema.TextLine(
         title = _(u'label_firstname', default=u'Firstname'),
-        description = _(u'help_firstname', default=u''),
         required = True,
         max_length=FIRSTNAME_LENGTH,
         )
 
     company = schema.TextLine(
         title = _(u'label_company', default=u"Company"),
-        description = _(u'help_company', default=u''),
         required = False,
         )
 
     department = schema.TextLine(
         title = _(u'label_department', default=u'Department'),
-        description = _(u'help_department', default=u''),
         required = False,
         )
 
     function = schema.TextLine(
         title = _(u'lable_function', default=u'Function'),
-        description = _(u'help_function', default=u''),
         required = False,
         )
 
     email = schema.TextLine(
         title = _(u'label_email', default=u'email'),
-        description = _(u'help_email', default=u''),
         required = False,
         max_length=EMAIL_LENGTH,
         )
 
     email2 = schema.TextLine(
         title = _(u'label_email2', default=u'Email 2'),
-        description = _('help_email2', default=u''),
         required = False,
         max_length=EMAIL_LENGTH,
         )
 
     url = schema.URI(
         title = _(u'label_url', default=u'Url'),
-        description = _(u'help_url', default=u''),
         required = False,
         )
 
     phone_office = schema.TextLine(
         title = _(u'label_phone_office', default=u'Phone office'),
-        description = _(u'help_phone_office', default=u''),
         required = False,
         )
 
     phone_fax = schema.TextLine(
         title = _(u'label_phone_fax', default=u'Fax'),
-        description = _(u'help_phone_fax', default=u''),
         required = False,
         )
 
     phone_mobile = schema.TextLine(
         title = _(u'label_phone_mobile', default=u'Mobile'),
-        description = _(u'help_phone_mobile', default=u''),
         required = False,
         )
 
     phone_home = schema.TextLine(
         title = _(u'label_phone_home', default=u'Phone home'),
-        description = _(u'help_phone_home', default=u''),
         required = False,
         )
 
@@ -157,37 +143,31 @@ class IContact(form.Schema):
 
     description = schema.Text(
         title=_(u'label_description', default=u'Description'),
-        description = _(u'help_description', default=u''),
         required=False,
         )
 
     address1 = schema.TextLine(
         title = _(u'label_address1', default=u'Address 1'),
-        description = _(u'help_address1', default=u''),
         required = False,
         )
 
     address2 = schema.TextLine(
         title = _(u'label_address2', default=u'Address 2'),
-        description = _(u'help_address2', default=u''),
         required = False,
         )
 
     zip_code = schema.TextLine(
         title = _(u'label_zip', default=u'ZIP'),
-        description = _(u'help_zip', default=u''),
         required = False,
         )
 
     city = schema.TextLine(
         title = _(u'label_city', default=u'City'),
-        description = _(u'help_city', default=u''),
         required = False,
         )
 
     country = schema.TextLine(
         title = _(u'label_country', default=u'Country'),
-        description = _(u'help_country', default=u''),
         required = False,
         )
 
