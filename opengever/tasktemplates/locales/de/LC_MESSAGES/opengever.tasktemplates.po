@@ -188,7 +188,6 @@ msgstr "Auswahl Standardablauf"
 
 #. Default: "Tasktemplates"
 #: ./opengever/tasktemplates/browser/trigger.py:164
-#, fuzzy
 msgid "label_tasktemplates"
 msgstr "Aufgabenvorlage"
 
