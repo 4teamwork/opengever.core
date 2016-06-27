@@ -5,6 +5,10 @@ Changelog
 4.9.1 (unreleased)
 ------------------
 
+- Add BTree consistency check to the CleanupRelationsCatalog upgradestep and
+  fix the BTree if necessary.
+  [phgross]
+
 - Implement bumblebee overlay for the versions-tab.
   [elioschmutz]
 
