@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-04-29 15:22+0000\n"
+"POT-Creation-Date: 2016-06-26 19:06+0000\n"
 "PO-Revision-Date: 2014-09-04 01:03+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -101,38 +101,18 @@ msgid "fieldset_lifecycle"
 msgstr "Lebenszyklus"
 
 #. Default: "Archival value code"
-#: ./opengever/base/behaviors/lifecycle.py:58
+#: ./opengever/base/behaviors/lifecycle.py:57
 msgid "help_archival_value"
 msgstr "Archivwürdigkeit"
-
-#: ./opengever/base/behaviors/lifecycle.py:67
-msgid "help_archival_value_annotation"
-msgstr ""
 
 #. Default: ""
 #: ./opengever/base/behaviors/classification.py:54
 msgid "help_classification"
 msgstr "Grad, in dem die Unterlagen vor unberechtigter Einsicht geschützt werden müssen"
 
-#: ./opengever/base/behaviors/creator.py:19
-msgid "help_creators"
-msgstr ""
-
-#: ./opengever/base/behaviors/lifecycle.py:74
+#: ./opengever/base/behaviors/lifecycle.py:72
 msgid "help_custody_period"
 msgstr "Dauer, während der nach der Archivierung die Dokumente vor öffentlicher Einsichtnahme geschützt sind"
-
-#: ./opengever/base/behaviors/lifecycle.py:83
-msgid "help_dateofcassation"
-msgstr ""
-
-#: ./opengever/base/behaviors/lifecycle.py:91
-msgid "help_dateofsubmission"
-msgstr ""
-
-#: ./opengever/base/behaviors/base.py:31
-msgid "help_description"
-msgstr ""
 
 #. Default: ""
 #: ./opengever/base/behaviors/classification.py:61
@@ -143,10 +123,6 @@ msgstr "Markierung, die angibt, ob die Unterlagen besonders schützenswerte Pers
 msgid "help_public_trial"
 msgstr "Angabe, ob die Unterlagen gemäss Öffentlichkeitsgesetz zugänglich sind oder nicht"
 
-#: ./opengever/base/behaviors/classification.py:97
-msgid "help_public_trial_default_value"
-msgstr ""
-
 #: ./opengever/base/behaviors/classification.py:76
 msgid "help_public_trial_statement"
 msgstr "Datum Gesuch, Gesuchsteller, Datum Entscheid, Verweis auf GEVER-Gesuchdossier"
@@ -155,22 +131,18 @@ msgstr "Datum Gesuch, Gesuchsteller, Datum Entscheid, Verweis auf GEVER-Gesuchdo
 msgid "help_retention_period"
 msgstr "Zeitraum zwischen dem jüngsten Dokumentdatum eines in einem Dossier enthaltenen Dokuments und dem Zeitpunkt, an dem dieses für die Geschäftstätigkeit der Verwaltungseinheit nicht mehr benötigt wird"
 
-#: ./opengever/base/behaviors/lifecycle.py:51
-msgid "help_retention_period_annotation"
-msgstr ""
-
 #. Default: "-- Already removed object --"
 #: ./opengever/base/adapters.py:199
 msgid "label_already_removed"
 msgstr "-- Bereits gelöscht --"
 
 #. Default: "Archival value"
-#: ./opengever/base/behaviors/lifecycle.py:57
+#: ./opengever/base/behaviors/lifecycle.py:56
 msgid "label_archival_value"
 msgstr "Archivwürdigkeit"
 
 #. Default: "archivalValueAnnotation"
-#: ./opengever/base/behaviors/lifecycle.py:65
+#: ./opengever/base/behaviors/lifecycle.py:64
 msgid "label_archival_value_annotation"
 msgstr "Kommentar zur Archivwürdigkeit"
 
@@ -190,7 +162,7 @@ msgid "label_confirm_action"
 msgstr "Aktion bestätigen"
 
 #. Default: "Created"
-#: ./opengever/base/viewlets/byline.py:60
+#: ./opengever/base/viewlets/byline.py:67
 msgid "label_created"
 msgstr "Erstellt am"
 
@@ -200,22 +172,22 @@ msgid "label_creators"
 msgstr "Autoren"
 
 #. Default: "Custody period (years)"
-#: ./opengever/base/behaviors/lifecycle.py:73
+#: ./opengever/base/behaviors/lifecycle.py:71
 msgid "label_custody_period"
 msgstr "Archivische Schutzfrist (Jahre)"
 
 #. Default: "Date of cassation"
-#: ./opengever/base/behaviors/lifecycle.py:82
+#: ./opengever/base/behaviors/lifecycle.py:80
 msgid "label_dateofcassation"
 msgstr "Kassationsdatum"
 
 #. Default: "Date of submission"
-#: ./opengever/base/behaviors/lifecycle.py:90
+#: ./opengever/base/behaviors/lifecycle.py:87
 msgid "label_dateofsubmission"
 msgstr "Anbietezeitpunkt"
 
 #. Default: "An unexpected error has occured"
-#: ./opengever/base/browser/templates/gever-macros.pt:110
+#: ./opengever/base/browser/templates/gever-macros.pt:114
 msgid "label_default_error_message"
 msgstr "Ein unerwarteter Fehler ist aufgetreten"
 
@@ -225,17 +197,17 @@ msgid "label_description"
 msgstr "Beschreibung"
 
 #. Default: "Dossier:"
-#: ./opengever/base/browser/search.pt:309
+#: ./opengever/base/browser/search.pt:311
 msgid "label_dossier"
 msgstr "Dossier:"
 
 #. Default: "Initial version (document copied)"
-#: ./opengever/base/subscribers.py:59
+#: ./opengever/base/subscribers.py:60
 msgid "label_initial_version_copied"
 msgstr "Dokument kopiert (Initialversion)"
 
 #. Default: "Last modified"
-#: ./opengever/base/viewlets/byline.py:65
+#: ./opengever/base/viewlets/byline.py:72
 msgid "label_last_modified"
 msgstr "Zuletzt verändert"
 
@@ -275,7 +247,7 @@ msgid "label_search"
 msgstr "Suche"
 
 #. Default: "Error"
-#: ./opengever/base/browser/templates/gever-macros.pt:109
+#: ./opengever/base/browser/templates/gever-macros.pt:113
 msgid "label_severity_error"
 msgstr "Fehler"
 
@@ -370,7 +342,7 @@ msgstr "Haben Sie nicht gefunden, wonach Sie gesucht haben? Die ${advanced_searc
 msgid "search_results_advanced_link"
 msgstr "erweiterte Suche"
 
-#: ./opengever/base/browser/templates/gever-macros.pt:92
+#: ./opengever/base/browser/templates/gever-macros.pt:96
 msgid "show all"
 msgstr "Alle anzeigen"
 

@@ -80,13 +80,11 @@ class ISendDocumentSchema(Interface):
 
     subject = schema.TextLine(
         title=_(u'label_subject', default=u'Subject'),
-        description=_(u'help_subject', default=u''),
         required=True,
         )
 
     message = schema.Text(
         title=_(u'label_message', default=u'Message'),
-        description=_(u'help_message', default=u''),
         required=True,
         )
 

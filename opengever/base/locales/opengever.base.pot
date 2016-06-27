@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-04-29 15:22+0000\n"
+"POT-Creation-Date: 2016-06-26 19:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -100,36 +100,16 @@ msgid "fieldset_lifecycle"
 msgstr ""
 
 #. Default: "Archival value code"
-#: ./opengever/base/behaviors/lifecycle.py:58
+#: ./opengever/base/behaviors/lifecycle.py:57
 msgid "help_archival_value"
-msgstr ""
-
-#: ./opengever/base/behaviors/lifecycle.py:67
-msgid "help_archival_value_annotation"
 msgstr ""
 
 #: ./opengever/base/behaviors/classification.py:54
 msgid "help_classification"
 msgstr ""
 
-#: ./opengever/base/behaviors/creator.py:19
-msgid "help_creators"
-msgstr ""
-
-#: ./opengever/base/behaviors/lifecycle.py:74
+#: ./opengever/base/behaviors/lifecycle.py:72
 msgid "help_custody_period"
-msgstr ""
-
-#: ./opengever/base/behaviors/lifecycle.py:83
-msgid "help_dateofcassation"
-msgstr ""
-
-#: ./opengever/base/behaviors/lifecycle.py:91
-msgid "help_dateofsubmission"
-msgstr ""
-
-#: ./opengever/base/behaviors/base.py:31
-msgid "help_description"
 msgstr ""
 
 #: ./opengever/base/behaviors/classification.py:61
@@ -140,10 +120,6 @@ msgstr ""
 msgid "help_public_trial"
 msgstr ""
 
-#: ./opengever/base/behaviors/classification.py:97
-msgid "help_public_trial_default_value"
-msgstr ""
-
 #: ./opengever/base/behaviors/classification.py:76
 msgid "help_public_trial_statement"
 msgstr ""
@@ -152,22 +128,18 @@ msgstr ""
 msgid "help_retention_period"
 msgstr ""
 
-#: ./opengever/base/behaviors/lifecycle.py:51
-msgid "help_retention_period_annotation"
-msgstr ""
-
 #. Default: "-- Already removed object --"
 #: ./opengever/base/adapters.py:199
 msgid "label_already_removed"
 msgstr ""
 
 #. Default: "Archival value"
-#: ./opengever/base/behaviors/lifecycle.py:57
+#: ./opengever/base/behaviors/lifecycle.py:56
 msgid "label_archival_value"
 msgstr ""
 
 #. Default: "archivalValueAnnotation"
-#: ./opengever/base/behaviors/lifecycle.py:65
+#: ./opengever/base/behaviors/lifecycle.py:64
 msgid "label_archival_value_annotation"
 msgstr ""
 
@@ -187,7 +159,7 @@ msgid "label_confirm_action"
 msgstr ""
 
 #. Default: "Created"
-#: ./opengever/base/viewlets/byline.py:60
+#: ./opengever/base/viewlets/byline.py:67
 msgid "label_created"
 msgstr ""
 
@@ -197,22 +169,22 @@ msgid "label_creators"
 msgstr ""
 
 #. Default: "Custody period (years)"
-#: ./opengever/base/behaviors/lifecycle.py:73
+#: ./opengever/base/behaviors/lifecycle.py:71
 msgid "label_custody_period"
 msgstr ""
 
 #. Default: "Date of cassation"
-#: ./opengever/base/behaviors/lifecycle.py:82
+#: ./opengever/base/behaviors/lifecycle.py:80
 msgid "label_dateofcassation"
 msgstr ""
 
 #. Default: "Date of submission"
-#: ./opengever/base/behaviors/lifecycle.py:90
+#: ./opengever/base/behaviors/lifecycle.py:87
 msgid "label_dateofsubmission"
 msgstr ""
 
 #. Default: "An unexpected error has occured"
-#: ./opengever/base/browser/templates/gever-macros.pt:110
+#: ./opengever/base/browser/templates/gever-macros.pt:114
 msgid "label_default_error_message"
 msgstr ""
 
@@ -222,17 +194,17 @@ msgid "label_description"
 msgstr ""
 
 #. Default: "Dossier:"
-#: ./opengever/base/browser/search.pt:309
+#: ./opengever/base/browser/search.pt:311
 msgid "label_dossier"
 msgstr ""
 
 #. Default: "Initial version (document copied)"
-#: ./opengever/base/subscribers.py:59
+#: ./opengever/base/subscribers.py:60
 msgid "label_initial_version_copied"
 msgstr ""
 
 #. Default: "Last modified"
-#: ./opengever/base/viewlets/byline.py:65
+#: ./opengever/base/viewlets/byline.py:72
 msgid "label_last_modified"
 msgstr ""
 
@@ -272,7 +244,7 @@ msgid "label_search"
 msgstr ""
 
 #. Default: "Error"
-#: ./opengever/base/browser/templates/gever-macros.pt:109
+#: ./opengever/base/browser/templates/gever-macros.pt:113
 msgid "label_severity_error"
 msgstr ""
 
@@ -366,7 +338,7 @@ msgstr ""
 msgid "search_results_advanced_link"
 msgstr ""
 
-#: ./opengever/base/browser/templates/gever-macros.pt:92
+#: ./opengever/base/browser/templates/gever-macros.pt:96
 msgid "show all"
 msgstr ""
 

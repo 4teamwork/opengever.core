@@ -28,7 +28,6 @@ class IOpenGeverBase(form.Schema):
     dexteritytextindexer.searchable('description')
     description = schema.Text(
         title=_(u'label_description', default=u'Description'),
-        description=_(u'help_description', default=u''),
         required=False,
         missing_value=u'',
         default=u'',

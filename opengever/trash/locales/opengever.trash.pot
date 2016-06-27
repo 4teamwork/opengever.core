@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-12-22 14:43+0000\n"
+"POT-Creation-Date: 2016-06-26 18:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,15 +17,15 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.trash\n"
 
-#: ./opengever/trash/trash.py:118
+#: ./opengever/trash/trash.py:124
 msgid "You have not selected any items"
 msgstr ""
 
-#: ./opengever/trash/trash.py:93
+#: ./opengever/trash/trash.py:99
 msgid "could not trash the object ${obj}, it is already trashed"
 msgstr ""
 
-#: ./opengever/trash/trash.py:102
+#: ./opengever/trash/trash.py:108
 msgid "could not trash the object ${obj}, it is checked out"
 msgstr ""
 
@@ -94,7 +94,7 @@ msgstr ""
 msgid "remove"
 msgstr ""
 
-#: ./opengever/trash/trash.py:112
+#: ./opengever/trash/trash.py:118
 msgid "the object ${obj} trashed"
 msgstr ""
 

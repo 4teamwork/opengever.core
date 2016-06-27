@@ -96,7 +96,6 @@ class IParticipation(form.Schema):
 
     roles = schema.List(
         title=_(u'label_roles', default=u'Roles'),
-        description=_(u'help_roles', default=u''),
         value_type=schema.Choice(
             source=wrap_vocabulary(
                 'opengever.dossier.participation_roles',

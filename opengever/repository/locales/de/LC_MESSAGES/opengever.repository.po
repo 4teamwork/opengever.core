@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2015-12-22 14:43+0000\n"
+"POT-Creation-Date: 2016-06-26 19:01+0000\n"
 "PO-Revision-Date: 2014-11-25 11:31+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -46,19 +46,19 @@ msgid "empty_repository"
 msgstr "Keine untergeordnete Ordnungspositionen verfügbar."
 
 #. Default: "A Sibling with the same reference number is existing"
-#: ./opengever/repository/behaviors/referenceprefix.py:64
+#: ./opengever/repository/behaviors/referenceprefix.py:72
 msgid "error_sibling_reference_number_existing"
 msgstr "Eine Ordnungsposition mit diesem Aktenzeichen existiert bereits auf gleicher Stufe"
 
 #. Default: "Common"
-#: ./opengever/repository/behaviors/referenceprefix.py:19
+#: ./opengever/repository/behaviors/referenceprefix.py:33
 #: ./opengever/repository/behaviors/responsibleorg.py:12
 #: ./opengever/repository/repositoryfolder.py:28
 msgid "fieldset_common"
 msgstr "Allgemein"
 
 #. Default: "Select all additional dossier types which should be addable in this repository folder."
-#: ./opengever/repository/repositoryfolder.py:83
+#: ./opengever/repository/repositoryfolder.py:78
 msgid "help_addable_dossier_types"
 msgstr "Wählen Sie die Spezialdossiers aus, die in dieser Ordnungsposition erlaubt sind."
 
@@ -67,38 +67,8 @@ msgstr "Wählen Sie die Spezialdossiers aus, die in dieser Ordnungsposition erla
 msgid "help_description"
 msgstr "Eine kurze Beschreibung des Inhalts."
 
-#: ./opengever/repository/repositoryfolder.py:75
-msgid "help_former_reference"
-msgstr ""
-
-#: ./opengever/repository/repositoryfolder.py:61
-msgid "help_location"
-msgstr ""
-
-#: ./opengever/repository/behaviors/referenceprefix.py:29
-msgid "help_reference_number_prefix"
-msgstr ""
-
-#: ./opengever/repository/repositoryfolder.py:69
-msgid "help_referenced_activity"
-msgstr ""
-
-#: ./opengever/repository/repositoryfolder.py:49
-#: ./opengever/repository/repositoryroot.py:21
-msgid "help_valid_from"
-msgstr ""
-
-#: ./opengever/repository/repositoryfolder.py:55
-#: ./opengever/repository/repositoryroot.py:27
-msgid "help_valid_until"
-msgstr ""
-
-#: ./opengever/repository/repositoryroot.py:33
-msgid "help_version"
-msgstr ""
-
 #. Default: "Addable dossier types"
-#: ./opengever/repository/repositoryfolder.py:81
+#: ./opengever/repository/repositoryfolder.py:76
 msgid "label_addable_dossier_types"
 msgstr "Erlaubte Spezialdossiers"
 
@@ -118,22 +88,22 @@ msgid "label_description"
 msgstr "Beschreibung"
 
 #. Default: "Former reference"
-#: ./opengever/repository/repositoryfolder.py:74
+#: ./opengever/repository/repositoryfolder.py:70
 msgid "label_former_reference"
 msgstr "Früheres Zeichen"
 
 #. Default: "Location"
-#: ./opengever/repository/repositoryfolder.py:60
+#: ./opengever/repository/repositoryfolder.py:58
 msgid "label_location"
 msgstr "Standort"
 
 #. Default: "Reference Prefix"
-#: ./opengever/repository/behaviors/referenceprefix.py:26
+#: ./opengever/repository/behaviors/referenceprefix.py:40
 msgid "label_reference_number_prefix"
 msgstr "Präfix des Aktenzeichens"
 
 #. Default: "Referenced activity"
-#: ./opengever/repository/repositoryfolder.py:66
+#: ./opengever/repository/repositoryfolder.py:63
 msgid "label_referenced_activity"
 msgstr "Leistung"
 
@@ -149,13 +119,13 @@ msgid "label_valid_from"
 msgstr "Gültig ab"
 
 #. Default: "Valid until"
-#: ./opengever/repository/repositoryfolder.py:54
-#: ./opengever/repository/repositoryroot.py:26
+#: ./opengever/repository/repositoryfolder.py:53
+#: ./opengever/repository/repositoryroot.py:25
 msgid "label_valid_until"
 msgstr "Gültig bis"
 
 #. Default: "Version"
-#: ./opengever/repository/repositoryroot.py:32
+#: ./opengever/repository/repositoryroot.py:30
 msgid "label_version"
 msgstr "Version"
 
@@ -165,7 +135,7 @@ msgid "label_warning"
 msgstr "Warnung"
 
 #. Default: "State"
-#: ./opengever/repository/viewlets/byline.py:17
+#: ./opengever/repository/viewlets/byline.py:24
 msgid "label_workflow_state"
 msgstr "Status"
 

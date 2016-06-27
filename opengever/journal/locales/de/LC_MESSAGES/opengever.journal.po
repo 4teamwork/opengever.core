@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2015-12-22 14:43+0000\n"
+"POT-Creation-Date: 2016-06-26 18:26+0000\n"
 "PO-Revision-Date: 2014-11-19 12:25+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -20,7 +20,7 @@ msgid "heading_journal"
 msgstr "Journal"
 
 #. Default: "Changed by"
-#: ./opengever/journal/tab.py:69
+#: ./opengever/journal/tab.py:68
 msgid "label_actor"
 msgstr "Geändert von"
 
@@ -30,7 +30,7 @@ msgid "label_attachments_deleted"
 msgstr "Attachments gelöscht: ${filenames}"
 
 #. Default: "Comments"
-#: ./opengever/journal/tab.py:73
+#: ./opengever/journal/tab.py:72
 msgid "label_comments"
 msgstr "Kommentare"
 
@@ -205,12 +205,12 @@ msgid "label_task_modified"
 msgstr "Aufgabe modifiziert: ${title}"
 
 #. Default: "Time"
-#: ./opengever/journal/tab.py:61
+#: ./opengever/journal/tab.py:60
 msgid "label_time"
 msgstr "Zeitpunkt"
 
 #. Default: "Title"
-#: ./opengever/journal/tab.py:65
+#: ./opengever/journal/tab.py:64
 msgid "label_title"
 msgstr "Titel"
 

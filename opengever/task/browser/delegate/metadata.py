@@ -25,7 +25,6 @@ class IUpdateMetadata(Schema):
 
     issuer = schema.Choice(
         title=_(u"label_issuer", default=u"Issuer"),
-        description=_('help_issuer', default=u""),
         vocabulary=u'opengever.ogds.base.ContactsAndUsersVocabulary',
         required=True)
 

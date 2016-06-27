@@ -40,7 +40,6 @@ class IReferenceNumberPrefix(form.Schema):
         title=_(
             u'label_reference_number_prefix',
             default=u'Reference Prefix'),
-        description=_(u'help_reference_number_prefix', default=u''),
         required=False,
         defaultFactory=reference_number_prefix_default,
         )

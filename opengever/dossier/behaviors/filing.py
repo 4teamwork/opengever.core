@@ -21,7 +21,6 @@ class IFilingNumber(form.Schema):
     form.omitted('filing_no')
     filing_no = schema.TextLine(
         title=_(u'filing_no', default="Filing number"),
-        description=_(u'help_filing_no', default=u''),
         required=False,
         )
 

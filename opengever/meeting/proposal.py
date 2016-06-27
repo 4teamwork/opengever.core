@@ -96,7 +96,6 @@ class ISubmittedProposalModel(Interface):
 
     title = schema.TextLine(
         title=_(u"label_title", default=u"Title"),
-        description=_('help_title', default=u""),
         required=True,
         max_length=256,
         )
@@ -108,19 +107,16 @@ class ISubmittedProposalModel(Interface):
 
     initial_position = schema.Text(
         title=_('label_initial_position', default=u"Initial position"),
-        description=_("help_initial_position", default=u""),
         required=False,
         )
 
     proposed_action = schema.Text(
         title=_('label_proposed_action', default=u"Proposed action"),
-        description=_("help_proposed_action", default=u""),
         required=False,
         )
 
     considerations = schema.Text(
         title=_('label_considerations', default=u"Considerations"),
-        description=_("help_considerations", default=u""),
         required=False,
         )
 

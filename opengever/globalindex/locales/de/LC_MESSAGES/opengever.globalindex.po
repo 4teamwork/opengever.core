@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-12-22 14:43+0000\n"
+"POT-Creation-Date: 2016-06-26 18:26+0000\n"
 "PO-Revision-Date: 2012-02-22 11:55+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./opengever/globalindex/browser/report.py:93
+#: ./opengever/globalindex/browser/report.py:92
 msgid "Could not generate the report"
 msgstr "Aufgaben Export konnte nicht erstellt werden."
 
@@ -24,57 +24,57 @@ msgid "Export selection"
 msgstr "Auswahl exportieren"
 
 #. Default: "You have not selected any Items"
-#: ./opengever/globalindex/browser/report.py:50
+#: ./opengever/globalindex/browser/report.py:49
 msgid "error_no_items"
 msgstr "Sie haben keine Objekte ausgewählt."
 
 #. Default: "Forwarding"
-#: ./opengever/globalindex/browser/report.py:24
+#: ./opengever/globalindex/browser/report.py:23
 msgid "forwarding_task_type"
 msgstr ""
 
-#: ./opengever/globalindex/browser/report.py:76
+#: ./opengever/globalindex/browser/report.py:75
 msgid "label_admin_unit_id"
 msgstr "Verwaltungseinheit"
 
-#: ./opengever/globalindex/browser/report.py:67
+#: ./opengever/globalindex/browser/report.py:66
 msgid "label_completed"
 msgstr "Erledigt am"
 
-#: ./opengever/globalindex/browser/report.py:65
+#: ./opengever/globalindex/browser/report.py:64
 msgid "label_deadline"
 msgstr "Frist"
 
-#: ./opengever/globalindex/browser/report.py:69
+#: ./opengever/globalindex/browser/report.py:68
 msgid "label_dossier_title"
 msgstr "Dossier Titel"
 
-#: ./opengever/globalindex/browser/report.py:70
+#: ./opengever/globalindex/browser/report.py:69
 msgid "label_issuer"
 msgstr "Auftraggeber"
 
-#: ./opengever/globalindex/browser/report.py:72
+#: ./opengever/globalindex/browser/report.py:71
 msgid "label_responsible"
 msgstr "Auftragnehmer"
 
-#: ./opengever/globalindex/browser/report.py:77
+#: ./opengever/globalindex/browser/report.py:76
 msgid "label_sequence_number"
 msgstr "Laufnummer"
 
-#: ./opengever/globalindex/browser/report.py:61
+#: ./opengever/globalindex/browser/report.py:60
 msgid "label_task_title"
 msgstr "Aufgabentitel"
 
-#: ./opengever/globalindex/browser/report.py:74
+#: ./opengever/globalindex/browser/report.py:73
 msgid "label_task_type"
 msgstr "Auftragstyp"
 
 #. Default: "Tasks"
-#: ./opengever/globalindex/browser/report.py:85
+#: ./opengever/globalindex/browser/report.py:84
 msgid "label_tasks"
 msgstr "Tasks"
 
-#: ./opengever/globalindex/browser/report.py:62
+#: ./opengever/globalindex/browser/report.py:61
 msgid "review_state"
 msgstr "Status"
 

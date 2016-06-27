@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-05-20 12:19+0000\n"
+"POT-Creation-Date: 2016-06-26 18:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,41 +14,41 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./opengever/bumblebee/browser/overlay_templates/bumblebeeoverlayview.pt:13
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:13
 msgid "Creator:"
 msgstr "Créateur:"
 
-#: ./opengever/bumblebee/browser/overlay_templates/bumblebeeoverlayview.pt:17
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:17
 msgid "Document date:"
 msgstr "Date du document:"
 
-#: ./opengever/bumblebee/browser/overlay_templates/bumblebeeoverlayview.pt:21
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:21
 msgid "Dossier:"
 msgstr "Dossier:"
 
-#: ./opengever/bumblebee/browser/overlay_templates/bumblebeeoverlayview.pt:44
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:44
 msgid "Open as PDF"
 msgstr "Ouvrir le document en PDF"
 
-#: ./opengever/bumblebee/browser/overlay_templates/bumblebeeoverlayview.pt:37
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:37
 msgid "Open detail view"
 msgstr "Ouvrir vue détaillée"
 
-#: ./opengever/bumblebee/browser/overlay_templates/bumblebeeoverlayview.pt:29
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:29
 msgid "Reference number:"
 msgstr "Numéro de référence:"
 
-#: ./opengever/bumblebee/browser/overlay_templates/bumblebeeoverlayview.pt:25
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:25
 msgid "Sequence number:"
 msgstr "Numéro courant:"
 
 #. Default: "Next"
-#: ./opengever/bumblebee/browser/overlay_templates/bumblebeeoverlayview.pt:78
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:82
 msgid "showroom_nav_button_next"
 msgstr ""
 
 #. Default: "Previous"
-#: ./opengever/bumblebee/browser/overlay_templates/bumblebeeoverlayview.pt:76
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:80
 msgid "showroom_nav_button_prev"
 msgstr ""
 

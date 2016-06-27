@@ -57,7 +57,6 @@ class IDocumentMetadata(form.Schema):
     dexteritytextindexer.searchable('description')
     description = schema.Text(
         title=_(u'label_description', default=u'Description'),
-        description=_(u'help_description', default=u''),
         required=False,
         )
 
@@ -65,7 +64,6 @@ class IDocumentMetadata(form.Schema):
     form.widget(keywords=TextLinesFieldWidget)
     keywords = schema.Tuple(
         title=_(u'label_keywords', default=u'Keywords'),
-        description=_(u'help_keywords', default=u''),
         value_type=schema.TextLine(),
         required=False,
         missing_value=(),
@@ -105,7 +103,6 @@ class IDocumentMetadata(form.Schema):
 
     document_type = schema.Choice(
         title=_(u'label_document_type', default='Document Type'),
-        description=_(u'help_document_type', default=''),
         source=wrap_vocabulary('opengever.document.document_types',
                     visible_terms_from_registry='opengever.document' +
                             '.interfaces.IDocumentType.document_types'),
@@ -124,8 +121,6 @@ class IDocumentMetadata(form.Schema):
     form.mode(digitally_available='hidden')
     digitally_available = schema.Bool(
         title=_(u'label_digitally_available', default='Digital Available'),
-        description=_(u'help_digitally_available',
-            default='Is the Document Digital Availabe'),
         required=False,
         )
 
@@ -147,7 +142,6 @@ class IDocumentMetadata(form.Schema):
     form.omitted('thumbnail')
     thumbnail = NamedBlobFile(
         title=_(u'label_thumbnail', default='Thumbnail'),
-        description=_(u'help_thumbnail', default=''),
         required=False,
         )
 

@@ -187,7 +187,6 @@ class IArchiveFormSchema(directives_form.Schema):
 
     dossier_enddate = schema.Date(
         title=_(u'label_end', default=u'Closing Date'),
-        description=_(u'help_end', default=u''),
         required=True,
         defaultFactory=dossier_enddate_default,
     )

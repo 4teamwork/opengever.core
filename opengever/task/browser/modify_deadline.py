@@ -23,7 +23,6 @@ class IModifyDeadlineSchema(form.Schema):
     # hidden
     transition = schema.Choice(
         title=_("label_transition", default="Transition"),
-        description=_(u"help_transition", default=""),
         source=getTransitionVocab,
         required=True,
         )
@@ -31,13 +30,11 @@ class IModifyDeadlineSchema(form.Schema):
     form.widget(new_deadline=DatePickerFieldWidget)
     new_deadline = schema.Date(
         title=_(u"label_new_deadline", default=u"New Deadline"),
-        description=_(u"help_new_deadline", default=u""),
         required=True,
         )
 
     text = schema.Text(
         title=_('label_response', default="Response"),
-        description=_('help_response', default=""),
         required=False,
         )
 
