@@ -5,6 +5,10 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Add helper script to generate JSON files for component import
+  into Weblate.
+  [lgraf]
+
 - Remove i18n markup for strings in opengever.setup:
   We're never going to translate those.
   [lgraf]
