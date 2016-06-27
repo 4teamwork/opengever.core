@@ -5,6 +5,10 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Remove i18n markup for strings in opengever.setup:
+  We're never going to translate those.
+  [lgraf]
+
 - Remove empty help texts (field descriptions that were i18nized
   but never got translated).
   [lgraf]

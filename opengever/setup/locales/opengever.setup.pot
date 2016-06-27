@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-06-26 18:26+0000\n"
+"POT-Creation-Date: 2016-06-27 09:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,59 +17,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.setup\n"
 
-#: ./opengever/setup/browser/adddeployment.pt:78
-msgid "- skip LDAP -"
-msgstr ""
-
-#: ./opengever/setup/browser/adddeployment.pt:13
-msgid "Deploy OneGov GEVER"
-msgstr ""
-
-#: ./opengever/setup/browser/adddeployment.pt:51
-msgid "Deployment profile"
-msgstr ""
-
-#: ./opengever/setup/browser/adddeployment.pt:105
-msgid "Development mode"
-msgstr ""
-
-#: ./opengever/setup/browser/adddeployment.pt:102
-msgid "Development options"
-msgstr ""
-
-#: ./opengever/setup/browser/adddeployment.pt:88
-msgid "Import LDAP-users into OGDS"
-msgstr ""
-
-#: ./opengever/setup/browser/adddeployment.pt:95
-msgid "Import users from LDAP into OGDS?"
-msgstr ""
-
-#: ./opengever/setup/browser/adddeployment.pt:45
-msgid "Install OneGov GEVER"
-msgstr ""
-
-#: ./opengever/setup/browser/adddeployment.pt:48
-msgid "Installation configuration"
-msgstr ""
-
-#: ./opengever/setup/browser/adddeployment.pt:75
-msgid "LDAP configuration profile"
-msgstr ""
-
 #: ./opengever/setup/profiles/casauth/actions.xml
 msgid "My portal"
-msgstr ""
-
-#: ./opengever/setup/browser/adddeployment.pt:118
-msgid "Purge SQL"
-msgstr ""
-
-#: ./opengever/setup/browser/adddeployment.pt:125
-msgid "Purge SQL completely before setup"
-msgstr ""
-
-#: ./opengever/setup/browser/adddeployment.pt:112
-msgid "Use \"og_demo-ftw_users\" group for OrgUnits and local role configuration"
 msgstr ""
 

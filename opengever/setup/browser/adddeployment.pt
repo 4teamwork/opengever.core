@@ -3,14 +3,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
       xmlns:tal="http://xml.zope.org/namespaces/tal"
       xmlns:metal="http://xml.zope.org/namespaces/metal"
-      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
-      lang="en"
-      i18n:domain="opengever.setup">
+      lang="en">
 
   <head>
     <meta http-equiv="content-type" content="text/html;charset=utf-8" />
 
-    <title i18n:translate="">Deploy OneGov GEVER</title>
+    <title>Deploy OneGov GEVER</title>
 
     <link rel="stylesheet" type="text/css" href="/++resource++plone-admin-ui.css" />
     <link rel="stylesheet" type="text/css" href="/++resource++adddeployment.css" />
@@ -42,13 +40,13 @@
                       extension_profiles profiles/extensions;
                       advanced request/advanced|nothing;">
 
-      <h1 i18n:translate="">Install OneGov GEVER</h1>
+      <h1>Install OneGov GEVER</h1>
 
       <fieldset class="config">
-        <legend i18n:translate="">Installation configuration</legend>
+        <legend>Installation configuration</legend>
 
         <div class="field">
-          <label for="policy" i18n:translate="">Deployment profile</label>
+          <label for="policy">Deployment profile</label>
           <div class="formHelp"></div>
           <select name="policy" autofocus="autofocus">
             <option tal:repeat="item view/get_deployment_profiles"
@@ -72,10 +70,10 @@
         </div>
 
         <div class="field" id="ldap_profile_selector">
-          <label for="ldap" i18n:translate="">LDAP configuration profile</label>
+          <label for="ldap">LDAP configuration profile</label>
           <div class="formHelp"></div>
           <select name="ldap">
-            <option value="" i18n:translate="">- skip LDAP -</option>
+            <option value="">- skip LDAP -</option>
             <option tal:repeat="item view/get_ldap_profiles"
                     tal:content="python:item[0]"
                     tal:attributes="value python:item[1];
@@ -85,44 +83,44 @@
         </div>
 
         <div class="field">
-          <label for="sync_ogds" i18n:translate="">
+          <label for="sync_ogds">
             Import LDAP-users into OGDS
           </label>
           <div class="formHelp"></div>
           <input type="checkbox" name="sync_ogds:boolean"
                  id="sync_ogds"
                  tal:attributes="checked python:'checked' if view.is_development_mode else ''"/>
-          <span i18n:translate="">
+          <span>
             Import users from LDAP into OGDS?
           </span>
         </div>
 
       </fieldset>
       <fieldset class="config">
-        <legend i18n:translate="">Development options</legend>
+        <legend>Development options</legend>
 
         <div class="field">
-          <label for="dev_mode" i18n:translate="">
+          <label for="dev_mode">
             Development mode
           </label>
           <div class="formHelp"></div>
           <input type="checkbox" name="dev_mode:boolean"
                  id="dev_mode"
                  tal:attributes="checked python:'checked' if view.is_development_mode else ''"/>
-          <span i18n:translate="" class="dev_mode_label">
+          <span class="dev_mode_label">
             Use "og_demo-ftw_users" group for OrgUnits and local role configuration
           </span>
         </div>
 
         <div class="field">
-          <label for="purge_sql" i18n:translate="">
+          <label for="purge_sql">
             Purge SQL
           </label>
           <div class="formHelp"></div>
           <input type="checkbox" name="purge_sql:boolean"
                  id="purge_sql"
                  tal:attributes="checked python:'checked' if view.is_development_mode else ''"/>
-          <span i18n:translate="" class="purge_sql_label">
+          <span class="purge_sql_label">
             Purge SQL completely before setup
           </span>
         </div>
@@ -131,8 +129,7 @@
 
       <div class="formControls">
         <input type="hidden" name="form.submitted:boolean" value="True" />
-        <input type="submit" name="submit" value="Install OneGov GEVER"
-               i18n:attributes="value;" />
+        <input type="submit" name="submit" value="Install OneGov GEVER" />
         <a class="backlink" href="/manage_main">back to Manage</a>
       </div>
     </form>
