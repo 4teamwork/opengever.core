@@ -1,5 +1,17 @@
+from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.utils import get_preferred_language_code
-import Missing
+from plone import api
+from plone.memoize import ram
+
+
+def cache_key(m, portal_type):
+    return portal_type
+
+
+@ram.cache(cache_key)
+def supports_translated_title(portal_type):
+    fti = api.portal.get_tool('portal_types').get(portal_type)
+    return ITranslatedTitle.__identifier__ in fti.behaviors
 
 
 def useBrains(self, brains):
@@ -14,15 +26,14 @@ def useBrains(self, brains):
 
         @property
         def Title(self):
-            code = get_preferred_language_code()
-            title = getattr(self, 'title_%s' % code, None)
+            if supports_translated_title(self.portal_type):
+                code = get_preferred_language_code()
+                title = getattr(self, 'title_%s' % code, None)
 
-            if title in (None, Missing.Value):
-                # non-translated content
-                title = super(TranslatedTitleBrain, self).Title
+                if isinstance(title, unicode):
+                    return title.encode('utf-8')
+                return title
 
-            if isinstance(title, unicode):
-                return title.encode('utf-8')
-            return title
+            return super(TranslatedTitleBrain, self).Title
 
     self._v_result_class = TranslatedTitleBrain

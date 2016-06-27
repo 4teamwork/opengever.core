@@ -4,10 +4,13 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
+from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
+from opengever.testing import set_preferred_language
 from plone.uuid.interfaces import IUUID
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
+import transaction
 
 
 class TestNavigation(FunctionalTestCase):
@@ -38,17 +41,22 @@ class TestNavigation(FunctionalTestCase):
 
     @browsing
     def test_json_is_valid(self, browser):
+        add_languages(['de-ch'])
+        transaction.commit()
+
         root = create(Builder('repository_root'))
         folder = create(Builder('repository')
-                        .titled('The Folder')
-                        .having(description='A primary folder')
+                        .having(title_de=u'The Folder',
+                                description='A primary folder')
                         .within(root))
         subfolder = create(Builder('repository')
-                           .titled('The Sub Folder')
-                           .having(description='A secondary folder')
+                           .having(title_de=u'The Sub Folder',
+                                   description='A secondary folder')
                            .within(folder))
 
-        browser.login().visit(root, view='navigation.json')
+        browser.login().open()
+        browser.click_on('DE')
+        browser.visit(root, view='navigation.json')
         self.assert_json_equal(
             [{"text": "1. The Folder",
               "description": "A primary folder",
