@@ -5,6 +5,11 @@ Changelog
 4.9.0 (unreleased)
 ------------------
 
+- Adjust decision in TranslatedTitleBrain if the the language specific title
+  should be used or not. It checks now if the portal_type supports TranslatedTitle,
+  by making a lookup in the fti with the help of the brain's portal_type.
+  [phgross]
+
 - Add helper script to generate JSON files for component import
   into Weblate.
   [lgraf]

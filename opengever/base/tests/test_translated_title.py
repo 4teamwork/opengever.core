@@ -4,12 +4,40 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.behaviors.translated_title import TranslatedTitle
+from opengever.base.brain import supports_translated_title
 from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
 from opengever.testing import set_preferred_language
 from plone import api
 import transaction
+
+
+class TestSupportTranslatedTitle(FunctionalTestCase):
+
+    def test_repositories_supports_translated_title(self):
+        self.assertTrue(
+            supports_translated_title('opengever.repository.repositoryfolder'))
+
+    def test_portal_objects_supports_translated_title(self):
+        self.assertTrue(
+            supports_translated_title('opengever.repository.repositoryroot'))
+        self.assertTrue(
+            supports_translated_title('opengever.inbox.inbox'))
+        self.assertTrue(
+            supports_translated_title('opengever.contact.contactfolder'))
+        self.assertTrue(
+            supports_translated_title('opengever.dossier.templatedossier'))
+
+    def test_content_objects_does_not_support_translated_title(self):
+        self.assertFalse(
+            supports_translated_title('opengever.dossier.businesscasedossier'))
+        self.assertFalse(
+            supports_translated_title('opengever.document.document'))
+        self.assertFalse(
+            supports_translated_title('ftw.mail.mail'))
+        self.assertFalse(
+            supports_translated_title('opengever.contact.contact'))
 
 
 class TestTranslatedTitle(FunctionalTestCase):
@@ -126,7 +154,7 @@ class TestTranslatedTitle(FunctionalTestCase):
                           obj2brain(repository_root).Title)
 
     @browsing
-    def test_Title_on_brains_use_Title_as_fallback_when_no_language_title_exists(self, browser):
+    def test_Title_on_brains_uses_Title_when_type_does_not_support_translated_title(self, browser):
         dossier = create(Builder('dossier').titled(u'F\xfchrung'))
         set_preferred_language(self.portal.REQUEST, 'de')
         self.assertEquals("F\xc3\xbchrung", obj2brain(dossier).Title)
