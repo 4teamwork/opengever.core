@@ -11,12 +11,6 @@ BUMBLEBEE_VIEW_COOKIE_NAME = 'bumblebee-view'
 SUPPORTED_CONTENT_TYPES = ['opengever.document.document', 'ftw.mail.mail']
 
 
-def get_not_digitally_available_placeholder_image_url():
-    return "{}{}".format(
-        api.portal.get().absolute_url(),
-        "/++resource++opengever.bumblebee.resources/fallback_not_digitally_available.png")
-
-
 def is_bumblebee_feature_enabled():
     return api.portal.get_registry_record(
         'is_feature_enabled', interface=IGeverBumblebeeSettings)
