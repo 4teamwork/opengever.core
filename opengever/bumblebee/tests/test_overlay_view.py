@@ -2,10 +2,12 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.bumblebee.tests.helpers import asset as bumblebee_asset
 from ftw.testbrowser import browsing
+from opengever.bumblebee.browser.overlay import BumblebeeOverlayBaseView
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.testing import FunctionalTestCase
+from opengever.testing.helpers import create_document_version
 from zExceptions import NotFound
-from opengever.bumblebee.browser.overlay import BumblebeeOverlayBaseView
+import transaction
 
 
 class TestBumblebeeOverlayListing(FunctionalTestCase):
@@ -111,6 +113,25 @@ class TestBumblebeeOverlayListing(FunctionalTestCase):
              'Edit metadata'],
             browser.css('.file-actions a').text)
 
+    @browsing
+    def test_actions_with_versioned_document(self, browser):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document')
+                          .within(dossier)
+                          .attach_file_containing(
+                              bumblebee_asset('example.docx').bytes(),
+                              u'example.docx'))
+
+        create_document_version(document, version_id=1)
+        transaction.commit()
+
+        browser.login().visit(document, view="bumblebee-overlay-document?version_id=1")
+
+        self.assertEqual(
+            ['Download copy',
+             'Revert document'],
+            browser.css('.file-actions a').text)
+
 
 class TestBumblebeeOverlayDocument(FunctionalTestCase):
 
@@ -209,6 +230,25 @@ class TestBumblebeeOverlayDocument(FunctionalTestCase):
             ['Download copy',
              'Open as PDF',
              'Edit metadata'],
+            browser.css('.file-actions a').text)
+
+    @browsing
+    def test_actions_with_versioned_document(self, browser):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document')
+                          .within(dossier)
+                          .attach_file_containing(
+                              bumblebee_asset('example.docx').bytes(),
+                              u'example.docx'))
+
+        create_document_version(document, version_id=1)
+        transaction.commit()
+
+        browser.login().visit(document, view="bumblebee-overlay-document?version_id=1")
+
+        self.assertEqual(
+            ['Download copy',
+             'Revert document'],
             browser.css('.file-actions a').text)
 
 

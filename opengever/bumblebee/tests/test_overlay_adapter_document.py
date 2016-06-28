@@ -5,11 +5,13 @@ from ftw.bumblebee.tests.helpers import asset as bumblebee_asset
 from ftw.testbrowser import browsing
 from opengever.bumblebee.browser.overlay import BumblebeeBaseDocumentOverlay
 from opengever.bumblebee.interfaces import IBumblebeeOverlay
+from opengever.bumblebee.interfaces import IVersionedContextMarker
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import login
 from plone.locking.interfaces import IRefreshableLockable
 from zope.component import getMultiAdapter
+from zope.interface import alsoProvides
 from zope.interface.verify import verifyClass
 
 
@@ -507,3 +509,62 @@ class TestRenderCheckedOutViewlet(FunctionalTestCase):
         browser.open_html(adapter.render_checked_out_viewlet())
 
         self.assertEqual(1, len(browser.css('.portalMessage')))
+
+
+class TestIsVersionedContext(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+
+    def test_returns_false_if_no_version_id_is_given(self):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document').within(dossier))
+
+        adapter = getMultiAdapter((document, self.request), IBumblebeeOverlay)
+
+        self.assertFalse(adapter.is_versioned_context())
+
+    def test_returns_true_if_version_id_is_0(self):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document').within(dossier))
+
+        adapter = getMultiAdapter((document, self.request), IBumblebeeOverlay)
+        adapter.version_id = 0
+
+        self.assertTrue(adapter.is_versioned_context())
+
+    def test_returns_true_if_version_id_is_a_number(self):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document').within(dossier))
+
+        adapter = getMultiAdapter((document, self.request), IBumblebeeOverlay)
+        adapter.version_id = 123
+
+        self.assertTrue(adapter.is_versioned_context())
+
+
+class TestGetRevertUrl(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+
+    def test_returns_revert_url_as_string(self):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document').within(dossier))
+
+        alsoProvides(self.request, IVersionedContextMarker)
+
+        adapter = getMultiAdapter((document, self.request), IBumblebeeOverlay)
+        adapter.version_id = 3
+
+        self.assertIn(
+            'revert-file-to-version?version_id=3',
+            adapter.get_revert_link())
+
+    def test_returns_none_if_context_is_not_a_versioned_context(self):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document').within(dossier))
+
+        alsoProvides(self.request, IVersionedContextMarker)
+
+        adapter = getMultiAdapter((document, self.request), IBumblebeeOverlay)
+
+        self.assertIsNone(adapter.get_revert_link())

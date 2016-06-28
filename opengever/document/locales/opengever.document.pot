@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-06-26 19:18+0000\n"
+"POT-Creation-Date: 2016-06-28 07:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -154,7 +154,7 @@ msgid "button_checkin"
 msgstr ""
 
 #. Default: "PDF"
-#: ./opengever/document/browser/versions_tab.py:147
+#: ./opengever/document/browser/versions_tab.py:150
 msgid "button_pdf"
 msgstr ""
 
@@ -258,7 +258,7 @@ msgid "initial_document_version_change_note"
 msgstr ""
 
 #. Default: "Changed by"
-#: ./opengever/document/browser/versions_tab.py:283
+#: ./opengever/document/browser/versions_tab.py:286
 msgid "label_actor"
 msgstr ""
 
@@ -298,7 +298,7 @@ msgid "label_checkout_and_edit"
 msgstr ""
 
 #. Default: "Comment"
-#: ./opengever/document/browser/versions_tab.py:291
+#: ./opengever/document/browser/versions_tab.py:294
 msgid "label_comment"
 msgstr ""
 
@@ -308,7 +308,7 @@ msgid "label_creator"
 msgstr ""
 
 #. Default: "Date"
-#: ./opengever/document/browser/versions_tab.py:287
+#: ./opengever/document/browser/versions_tab.py:290
 msgid "label_date"
 msgstr ""
 
@@ -385,6 +385,7 @@ msgstr ""
 
 #. Default: "Preview"
 #: ./opengever/document/behaviors/metadata.py:150
+#: ./opengever/document/browser/versions_tab.py:311
 msgid "label_preview"
 msgstr ""
 
@@ -404,8 +405,13 @@ msgid "label_related_documents"
 msgstr ""
 
 #. Default: "reset"
-#: ./opengever/document/browser/versions_tab.py:162
+#: ./opengever/document/browser/versions_tab.py:165
 msgid "label_reset"
+msgstr ""
+
+#. Default: "Revert"
+#: ./opengever/document/browser/versions_tab.py:307
+msgid "label_revert"
 msgstr ""
 
 #. Default: "Sequence Number"
@@ -429,7 +435,7 @@ msgid "label_title"
 msgstr ""
 
 #. Default: "Version"
-#: ./opengever/document/browser/versions_tab.py:279
+#: ./opengever/document/browser/versions_tab.py:282
 msgid "label_version"
 msgstr ""
 

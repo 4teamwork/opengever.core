@@ -211,6 +211,37 @@ def linked_trashed_document_with_tooltip(item, value):
                                          removed=removed)
 
 
+def linked_version_preview(item, value):
+    url = "{}/@@bumblebee-overlay-listing?version_id={}".format(
+        item.url, item.version)
+
+    showroom_title = translate(
+        _('label_showroom_version_title',
+            default='Version ${version} of ${timestamp}',
+            mapping={'version': item.version, 'timestamp': item.timestamp}),
+        context=getRequest()).encode('utf-8')
+
+    data = {
+        'url': url,
+        'showroom_url': url,
+        'showroom_title': showroom_title,
+        'title': translate(
+            _('label_preview', default='Preview'),
+            context=getRequest()).encode('utf-8')
+    }
+
+    return """
+    <div>
+        <a class="showroom-item"
+           href="{%(url)s}"
+           data-showroom-target="%(showroom_url)s"
+           data-showroom-title="%(showroom_title)s">
+        %(title)s
+        </a>
+    </div>
+    """ % data
+
+
 def _linked_bumblebee_document(item, value):
     data = {
         'url': item.getURL(),

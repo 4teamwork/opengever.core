@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2016-06-26 18:26+0000\n"
+"POT-Creation-Date: 2016-06-28 07:25+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -68,7 +68,7 @@ msgid "button_more_actions"
 msgstr ""
 
 #. Default: "PDF Preview"
-#: ./opengever/tabbedview/helper.py:249
+#: ./opengever/tabbedview/helper.py:280
 msgid "button_pdf_preview"
 msgstr ""
 
@@ -269,6 +269,11 @@ msgstr ""
 msgid "label_pending"
 msgstr ""
 
+#. Default: "Preview"
+#: ./opengever/tabbedview/helper.py:227
+msgid "label_preview"
+msgstr ""
+
 #. Default: "Public Trial"
 #: ./opengever/tabbedview/browser/tabs.py:126
 msgid "label_public_trial"
@@ -292,6 +297,11 @@ msgstr ""
 #. Default: "Review state"
 #: ./opengever/tabbedview/browser/tabs.py:199
 msgid "label_review_state"
+msgstr ""
+
+#. Default: "Version ${version} of ${timestamp}"
+#: ./opengever/tabbedview/helper.py:217
+msgid "label_showroom_version_title"
 msgstr ""
 
 #. Default: "Start"
