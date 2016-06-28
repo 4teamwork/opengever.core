@@ -81,7 +81,7 @@ AGENDAITEMS_TEMPLATE = '''
           <ul class="attachements">
             {{#each documents}}
               <li>
-                <a href={{link}} class="{{css_class}}">{{title}}</a>
+                {{{link}}}
               </li>
             {{/each}}
           </ul>
