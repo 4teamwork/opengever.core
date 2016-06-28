@@ -14,17 +14,6 @@ class GeverBumblebeeService(BumblebeeServiceV3):
         return super(GeverBumblebeeService, self).queue_storing(
             document, queue, deferred=deferred)
 
-    def handle_update(self, document, force=False):
-        """Do nothing when attempting to update a checked out document.
-
-        This prevents that a preview of a working copy is rendered, it would
-        be visible to all the other users as well.
-        """
-        if IDocumentSchema.providedBy(document):
-            if document.is_checked_out():
-                return
-
-        return super(GeverBumblebeeService, self).handle_update(document, force=force)
 
     def get_not_digitally_available_placeholder_image_url(self):
         return "{}{}".format(

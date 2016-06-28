@@ -25,6 +25,10 @@
       for="opengever.base.interfaces.IOpengeverBaseLayer"
       factory=".service.GeverBumblebeeService" />
 
+  <adapter
+      for="opengever.document.document.IDocumentSchema"
+      factory=".document.DocumentBumblebeeDocument" />
+
   <include package=".upgrades" />
 
 </configure>
