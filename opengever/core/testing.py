@@ -317,6 +317,21 @@ def memory_session_factory():
     return functional_session_factory()
 
 
+class DefaultContentLayer(Layer):
+
+    def setUp(self):
+        session.current_session = session.factory()
+        session.current_session.auto_commit = True
+        super(DefaultContentLayer, self).setUp()
+
+    def tearDown(self):
+        session.current_session = None
+        super(DefaultContentLayer, self).tearDown()
+
+
+DEFAULT_CONTENT_FIXTURE = DefaultContentLayer()
+
+
 MEMORY_DB_LAYER = MemoryDBLayer(
     bases=(BUILDER_LAYER,
            set_builder_session_factory(memory_session_factory)),
@@ -346,6 +361,11 @@ OPENGEVER_FUNCTIONAL_ZSERVER_API_TESTING = FunctionalTesting(
            set_builder_session_factory(functional_session_factory),
            PLONE_ZSERVER),
     name="opengever.core:functional:zserver:api")
+
+OPENGEVER_DEFAULT_CONTENT_TESTING = FunctionalTesting(
+    bases=(OPENGEVER_FIXTURE,
+           DEFAULT_CONTENT_FIXTURE),
+    name="opengever.core:functional:default-content")
 
 
 def activate_filing_number(portal):
