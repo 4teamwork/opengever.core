@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.9.0 (unreleased)
+4.9.0 (2016-06-28)
 ------------------
 
 - Adjust decision in TranslatedTitleBrain if the the language specific title
