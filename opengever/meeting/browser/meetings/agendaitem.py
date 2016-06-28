@@ -1,9 +1,9 @@
-from opengever.base.browser.helper import get_css_class
 from opengever.base.response import JSONResponse
 from opengever.meeting import _
 from opengever.meeting.service import meeting_service
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
+from plone.app.contentlisting.interfaces import IContentListingObject
 from Products.Five.browser import BrowserView
 from zExceptions import NotFound
 from zExceptions import Unauthorized
@@ -97,14 +97,8 @@ class AgendaItemsView(BrowserView):
             return None
 
         excerpt = item.proposal.resolve_submitted_excerpt_document()
-        if excerpt is None:
-            return {}
-
-        return {
-            'title': excerpt.title,
-            'link': excerpt.absolute_url(),
-            'css_class': get_css_class(excerpt),
-            }
+        if excerpt:
+            return IContentListingObject(excerpt).render_link()
 
     def _get_agenda_items(self):
         meeting = self.context.model

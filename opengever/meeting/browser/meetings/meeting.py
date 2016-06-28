@@ -88,7 +88,7 @@ AGENDAITEMS_TEMPLATE = '''
         {{/if}}
         {{#if excerpt}}
           <div class="summary">
-            <a href="{{excerpt.link}}" class="{{excerpt.css_class}}">{{excerpt.title}}</a>
+            {{{excerpt}}}
           </div>
         {{/if}}
         <div class="edit-box">
