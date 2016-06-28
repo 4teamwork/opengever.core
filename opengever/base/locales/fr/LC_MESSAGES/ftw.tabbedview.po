@@ -224,7 +224,7 @@ msgstr "Info"
 msgid "tracker_overview"
 msgstr "Sommaire"
 
-msgid "trash"
+msgid "trash-proxy"
 msgstr "Corbeille"
 
 msgid "users"

@@ -5,7 +5,7 @@ ACTIONS_ORDER = ['overview',
                  'documents-proxy',
                  'assigned_inbox_tasks',
                  'issued_inbox_tasks',
-                 'trash',
+                 'trash-proxy',
                  'journal',
                  'sharing']
 

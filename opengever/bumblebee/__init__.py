@@ -53,12 +53,12 @@ def get_representation_url_by_brain(format_name, brain):
         get_not_digitally_available_placeholder_image_url()
 
 
-def set_prefered_listing_view(value):
+def set_preferred_listing_view(value):
     request = getRequest()
     request.RESPONSE.setCookie(BUMBLEBEE_VIEW_COOKIE_NAME, value, path='/')
 
 
-def get_prefered_listing_view():
+def get_preferred_listing_view():
     request = getRequest()
     return request.cookies.get(BUMBLEBEE_VIEW_COOKIE_NAME, '')
 

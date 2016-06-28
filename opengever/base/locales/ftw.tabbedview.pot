@@ -173,7 +173,7 @@ msgstr ""
 msgid "journal"
 msgstr ""
 
-msgid "trash"
+msgid "trash-proxy"
 msgstr ""
 
 msgid "mydossiers"

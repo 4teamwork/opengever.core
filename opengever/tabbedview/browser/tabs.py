@@ -2,9 +2,9 @@ from DateTime import DateTime
 from five import grok
 from ftw.tabbedview.interfaces import ITabbedView
 from ftw.table import helper
-from opengever.bumblebee import get_prefered_listing_view
+from opengever.bumblebee import get_preferred_listing_view
 from opengever.bumblebee import is_bumblebee_feature_enabled
-from opengever.bumblebee import set_prefered_listing_view
+from opengever.bumblebee import set_preferred_listing_view
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.interfaces import IDossierMarker
 from opengever.globalindex.model.task import Task
@@ -35,6 +35,7 @@ from zope.globalrequest import getRequest
 
 
 PROXY_VIEW_POSTFIX = "-proxy"
+GALLERY_VIEW_POSTFIX = "-gallery"
 
 
 def translate_public_trial_options(item, value):
@@ -43,32 +44,51 @@ def translate_public_trial_options(item, value):
     return portal.translate(value, context=request, domain="opengever.base")
 
 
-class DocumentsProxy(BaseCatalogListingTab):
-    """This proxyview is looking for the last used documents
-    view (list or gallery) and reopens this view.
+class BaseTabProxy(BaseCatalogListingTab):
+    """This proxyview is looking for the last
+    used view-mode (list or gallery) on a tab
+    and reopens this view.
     """
-    grok.name('tabbedview_view-documents-proxy')
     grok.context(ITabbedView)
     grok.implements(ITabbedViewProxy)
     grok.require('zope2.View')
-
-    listview = "tabbedview_view-documents"
-    galleryview = "tabbedview_view-documents-gallery"
 
     def render(self):
         return
 
     def __call__(self):
-        prefered_view = self.listview
-        if is_bumblebee_feature_enabled():
-            if get_prefered_listing_view() == 'gallery':
-                prefered_view = self.galleryview
+        return self.render_preferred_view()
 
-        return self.context.restrictedTraverse(prefered_view)()
+    def render_preferred_view(self):
+        return self.context.restrictedTraverse(self.preferred_view_name)()
+
+    @property
+    def preferred_view_name(self):
+        preferred_view = self.list_view_name
+        if is_bumblebee_feature_enabled() and \
+                get_preferred_listing_view() == 'gallery':
+            preferred_view = self.gallery_view_name
+
+        return preferred_view
+
+    @property
+    def list_view_name(self):
+        return self.name_without_postfix
+
+    @property
+    def gallery_view_name(self):
+        return self.name_without_postfix + GALLERY_VIEW_POSTFIX
 
     @property
     def name_without_postfix(self):
         return self.__name__.rstrip(PROXY_VIEW_POSTFIX)
+
+
+class DocumentsProxy(BaseTabProxy):
+    """This proxyview is looking for the last used documents
+    view (list or gallery) and reopens this view.
+    """
+    grok.name('tabbedview_view-documents-proxy')
 
 
 class Documents(BaseCatalogListingTab):
@@ -149,7 +169,7 @@ class Documents(BaseCatalogListingTab):
 
     def __call__(self, *args, **kwargs):
         if is_bumblebee_feature_enabled():
-            set_prefered_listing_view('list')
+            set_preferred_listing_view('list')
             self.template = BoundPageTemplate(self.bumblebee_template, self)
 
         return super(Documents, self).__call__(self, *args, **kwargs)
@@ -294,6 +314,13 @@ class Proposals(ProposalListingTab):
     def get_base_query(self):
         return Proposal.query.by_container(
             self.context, get_current_admin_unit())
+
+
+class TrashProxy(BaseTabProxy):
+    """This proxyview is looking for the last used documents
+    view (list or gallery) and reopens this view.
+    """
+    grok.name('tabbedview_view-trash-proxy')
 
 
 class Trash(Documents):
