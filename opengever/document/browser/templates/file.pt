@@ -31,7 +31,6 @@
                 PDF Preview
               </span>
             </tal:cond>
-            &nbsp;|&nbsp;
           </tal:preview_support>
           <tal:cond tal:condition="checkout_and_edit_available">
             <a class="function-edit" href="#" i18n:translate="label_checkout_and_edit"
@@ -45,11 +44,9 @@
             </span>
           </tal:cond>
           <tal:cond tal:condition="copy_download_available">
-            &nbsp;|&nbsp;
             <span tal:replace="structure view/get_download_copy_tag"></span>
           </tal:cond>
           <tal:cond tal:condition="not: copy_download_available">
-            &nbsp;|&nbsp;
             <span class="function-download-copy-inactive link-overlay modal discreet"
                   i18n:translate="label_download_copy">Download copy</span>
           </tal:cond>
