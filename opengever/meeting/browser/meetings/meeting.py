@@ -14,6 +14,8 @@ from opengever.meeting.committee import ICommittee
 from opengever.meeting.model import Meeting
 from opengever.repository.interfaces import IRepositoryFolder
 from plone import api
+from plone.app.contentlisting.interfaces import IContentListing
+from plone.app.contentlisting.interfaces import IContentListingObject
 from plone.dexterity.i18n import MessageFactory as pd_mf
 from plone.directives import form
 from plone.z3cform.layout import FormWrapper
@@ -316,7 +318,8 @@ class MeetingView(BrowserView):
 
     def get_protocol_document(self):
         if self.model.protocol_document:
-            return self.model.protocol_document.resolve_document()
+            return IContentListingObject(
+                self.model.protocol_document.resolve_document())
 
     def url_protocol(self):
         return self.model.get_url(view='protocol')
@@ -347,8 +350,10 @@ class MeetingView(BrowserView):
         return self.model.agenda_items
 
     def manually_generated_excerpts(self):
-        return [excerpt.resolve_document()
+        docs = [excerpt.resolve_document()
                 for excerpt in self.model.excerpt_documents]
+
+        return IContentListing(docs)
 
     def render_handlebars_agendaitems_template(self):
         label_edit_cancel = translate(_('label_edit_cancel', default='Cancel'), context=self.request)

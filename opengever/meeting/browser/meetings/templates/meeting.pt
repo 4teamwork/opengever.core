@@ -203,9 +203,7 @@
                         i18n:translate="label_no_protocol">No protocol has been generated yet.</span>
 
                   <span tal:condition="protocol_document">
-                    <a tal:condition="protocol_document"
-                       tal:attributes="href protocol_document/absolute_url; class python: view.get_css_class(protocol_document)"
-                       tal:content="protocol_document/Title"></a>
+                    <a tal:replace="structure protocol_document/render_link" />
                   </span>
                 </div>
               </div>
@@ -224,10 +222,7 @@
                 <p tal:condition="not:excerpts" i18n:translate="label_no_excerpts">No additional excerpts have been generated yet.</p>
                 <ul tal:condition="excerpts">
                   <li tal:repeat="item excerpts">
-                    <a href="" tal:attributes="href item/absolute_url;
-                                               class python:view.get_css_class(item)">
-                      <span class="document" tal:condition="item/absolute_url" tal:content="item/Title" />
-                    </a>
+                    <a tal:replace="structure item/render_link" />
                   </li>
                 </ul>
               </div>

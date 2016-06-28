@@ -194,7 +194,7 @@ class TestMeetingView(FunctionalTestCase):
     @browsing
     def test_generated_protocol_exists(self, browser):
         browser.login().open(self.meeting.get_url())
-        protocol_link = browser.css(".protocol .fileinfo a").first
+        protocol_link = browser.css(".protocol .fileinfo a.document_link").first
         self.assertEquals('Protocol', protocol_link.text)
         self.assertEquals(self.protocol.absolute_url(),
                           protocol_link.get('href'))
@@ -202,5 +202,9 @@ class TestMeetingView(FunctionalTestCase):
     @browsing
     def test_generated_exceprts_exists(self, browser):
         browser.login().open(self.meeting.get_url())
-        self.assertEquals('Excerpt', browser.css(".excerpts a > span").first.text)
-        self.assertEquals(self.excerpt.absolute_url(), browser.css(".excerpts ul li a").first.get('href'))
+
+        self.assertEquals(['Excerpt'],
+                          browser.css(".excerpts li a.document_link").text)
+        self.assertEquals(
+            self.excerpt.absolute_url(),
+            browser.css(".excerpts li a.document_link").first.get('href'))
