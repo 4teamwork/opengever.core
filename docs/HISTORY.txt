@@ -5,6 +5,9 @@ Changelog
 4.9.1 (unreleased)
 ------------------
 
+- Fix tooltip in tabbedview-listings if bumblebee is activated.
+  [elioschmutz]
+
 - Implement bumblebee overlay for the versions-tab.
   [elioschmutz]
 
