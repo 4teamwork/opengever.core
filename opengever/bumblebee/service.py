@@ -1,19 +1,16 @@
 from ftw.bumblebee.service import BumblebeeServiceV3
 from opengever.bumblebee import is_bumblebee_feature_enabled
-from opengever.document.document import IDocumentSchema
 from plone import api
 
 
 class GeverBumblebeeService(BumblebeeServiceV3):
-    """Only queues storings when the bumblebee feature is enabled."""
+    """Only converts/stores when the bumblebee feature is enabled."""
 
-    def queue_storing(self, document, queue, deferred=False):
+    def is_convertable(self, document):
         if not is_bumblebee_feature_enabled():
             return False
 
-        return super(GeverBumblebeeService, self).queue_storing(
-            document, queue, deferred=deferred)
-
+        return super(GeverBumblebeeService, self).is_convertable(document)
 
     def get_not_digitally_available_placeholder_image_url(self):
         return "{}{}".format(
