@@ -32,6 +32,58 @@ else:
     PDFCONVERTER_AVAILABLE = True
 
 
+link_template = """
+    <div class='linkWrapper'>
+        {removed_span}
+        <a class='tabbedview-tooltip {css_class}' href='{url}'></a>
+        <a href='{url}'>{value}</a>
+        <div class='tabbedview-tooltip-data'>
+            <div class='tooltip-content'>
+                <div class='tooltip-header'>{value}</div>
+                <div class='tooltip-breadcrumb'>{breadcrumbs}</div>
+                <div class='tooltip-links'>
+                    {tooltip_links}
+                </div>
+            </div>
+            <div class='bottomImage'></div>
+        </div>
+    </div>"""
+
+
+bumblebee_link_template = """
+    <div>
+        <a class="tabbedview-tooltip showroom-item {css_class}"
+           href="{url}"
+           data-showroom-target="{showroom_url}"
+           data-showroom-title="{value}">
+        {value}
+        </a>
+        <div class='tabbedview-tooltip-data'>
+            <div class='tooltip-content'>
+                <div class='tooltip-header'>{value}</div>
+                <div class='tooltip-breadcrumb'>{breadcrumbs}</div>
+                <div class='tooltip-links'>
+                    {tooltip_links}
+                </div>
+            </div>
+            <div class='bottomImage'></div>
+        </div>
+    </div>
+    """
+
+
+bumblebee_version_link_template = """
+    <div>
+        <a class="showroom-item"
+           href="{url}"
+           data-showroom-target="{showroom_url}"
+           data-showroom-title="{showroom_title}">
+        {title}
+        </a>
+    </div>
+    """
+
+
 def org_unit_title_helper(item, value):
     return item.get_issuing_org_unit().label()
 
@@ -189,10 +241,6 @@ def document_with_icon(item, value):
 def linked_document_with_tooltip(item, value):
     """Wrapper method for the _linked_document_with_tooltip method
     for normal not trashed documents and mails."""
-
-    if is_bumblebee_feature_enabled() and is_bumblebeeable(item):
-        return _linked_bumblebee_document(item, value)
-
     return _linked_document_with_tooltip(item, value)
 
 
@@ -230,36 +278,7 @@ def linked_version_preview(item, value):
             context=getRequest()).encode('utf-8')
     }
 
-    return """
-    <div>
-        <a class="showroom-item"
-           href="{%(url)s}"
-           data-showroom-target="%(showroom_url)s"
-           data-showroom-title="%(showroom_title)s">
-        %(title)s
-        </a>
-    </div>
-    """ % data
-
-
-def _linked_bumblebee_document(item, value):
-    data = {
-        'url': item.getURL(),
-        'showroom_url': '{}/@@bumblebee-overlay-listing'.format(item.getURL()),
-        'css_class': get_css_class(item),
-        'title': value,
-    }
-
-    return """
-    <div>
-        <a class="showroom-item %(css_class)s"
-           href="%(url)s"
-           data-showroom-target="%(showroom_url)s"
-           data-showroom-title="%(title)s">
-        %(title)s
-        </a>
-    </div>
-    """ % data
+    return bumblebee_version_link_template.format(**data)
 
 
 def _linked_document_with_tooltip(item, value, trashed=False, removed=False):
@@ -333,22 +352,11 @@ def _linked_document_with_tooltip(item, value, trashed=False, removed=False):
     data['tooltip_links'] = """
                 """.join(tooltip_links)
 
-    link = """
-    <div class='linkWrapper'>
-        %(removed_span)s
-        <a class='tabbedview-tooltip %(css_class)s' href='%(url)s'></a>
-        <a href='%(url)s'>%(value)s</a>
-        <div class='tabbedview-tooltip-data'>
-            <div class='tooltip-content'>
-                <div class='tooltip-header'>%(value)s</div>
-                <div class='tooltip-breadcrumb'>%(breadcrumbs)s</div>
-                <div class='tooltip-links'>
-                    %(tooltip_links)s
-                </div>
-            </div>
-            <div class='bottomImage'></div>
-        </div>
-    </div>""" % data
+    if is_bumblebee_feature_enabled() and is_bumblebeeable(item):
+        data['showroom_url'] = '{}/@@bumblebee-overlay-listing'.format(data['url'])
+        link = bumblebee_link_template.format(**data)
+    else:
+        link = link_template.format(**data)
 
     return link
 
