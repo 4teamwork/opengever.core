@@ -1,6 +1,6 @@
 {
 delay: 30,
-position: 'top center',
+position: 'center right',
 offset: [0, 0],
 events: {
   def: 'mouseenter,mouseleave',

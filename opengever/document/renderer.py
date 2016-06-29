@@ -40,7 +40,8 @@ class DocumentLinkRenderer(object):
         link = u'{}/@@download_pdfpreview'.format(self.get_url())
         label = translate(_(u'button_pdf_preview', u'PDF Preview'),
                           context=getRequest())
-        return '<a href="{}">{}</a>'.format(link, label.decode('utf-8'))
+        return '<a class="action-pdf" href="{}">{}</a>'.format(
+            link, label.decode('utf-8'))
 
     def edit_metadata_link_available(self):
         return not self.document.is_trashed
@@ -48,7 +49,8 @@ class DocumentLinkRenderer(object):
     def edit_metadata_link(self):
         link = u'{}/edit_checker'.format(self.get_url())
         label = translate(pmf(u'Edit metadata'), context=getRequest())
-        return '<a href="{}">{}</a>'.format(link, label.decode('utf-8'))
+        return '<a class="action-edit" href="{}">{}</a>'.format(
+            link, label.decode('utf-8'))
 
     def checkout_and_edit_link_available(self):
         return self.document.is_document
@@ -56,14 +58,16 @@ class DocumentLinkRenderer(object):
     def checkout_and_edit_link(self):
         link = addTokenToUrl('{}/editing_document'.format(self.get_url()))
         label = translate(pmf('Checkout and edit'), context=getRequest())
-        return '<a href="{}">{}</a>'.format(link, label.decode('utf-8'))
+        return '<a class="action-checkout" href="{}">{}</a>'.format(
+            link, label.decode('utf-8'))
 
     def download_link_available(self):
         return self.document.is_document
 
     def download_link(self):
         dc_helper = DownloadConfirmationHelper()
-        return dc_helper.get_html_tag(self.get_url())
+        return dc_helper.get_html_tag(self.get_url(),
+                                      additional_classes=['action-download'])
 
     def tooltip_actions(self):
         links = []
@@ -116,13 +120,13 @@ class DocumentLinkRenderer(object):
             <div class='tabbedview-tooltip-data'>
                 <div class='tooltip-header'>{title}</div>
                 <div class='tooltip-breadcrumb'>{breadcrumbs}</div>
-                <div class="preview">
-                    {bumblebee_thumbnail}
-                </div>
                 <div class='tooltip-content'>
                     <ul class='tooltip-links'>
                         {tooltip_actions}
                     </ul>
+                    <div class="preview">
+                        {bumblebee_thumbnail}
+                    </div>
                 </div>
                 <div class='bottomImage'></div>
             </div>
