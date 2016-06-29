@@ -5,8 +5,9 @@ Changelog
 4.9.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Add BTree consistency check to the CleanupRelationsCatalog upgradestep and
+  fix the BTree if necessary.
+  [phgross]
 
 4.9.0 (2016-06-28)
 ------------------
