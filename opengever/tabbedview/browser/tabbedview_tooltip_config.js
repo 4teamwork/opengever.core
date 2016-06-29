@@ -1,5 +1,6 @@
 {
-delay: 30,
+delay: 100,
+predelay: 500,
 position: 'center right',
 offset: [0, 0],
 events: {
