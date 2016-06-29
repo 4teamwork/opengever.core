@@ -19,15 +19,14 @@ class TestDocumentLinkRenderer(FunctionalTestCase):
         renderer.PDFCONVERTER_AVAILABLE = self.converter_avaialable
 
     @browsing
-    def test_is_prefixed_with_tooltiped_mimetype_icon(self, browser):
+    def test_link_contains_mimetype_icon_clas(self, browser):
         document = create(Builder('document').with_dummy_content())
 
         browser.open_html(DocumentLinkRenderer(document).render())
 
-        tooltip_link = browser.css('a.tabbedview-tooltip')
-        self.assertEquals([''], tooltip_link.text)
-        self.assertEquals('tabbedview-tooltip icon-doc',
-                          tooltip_link.first.get('class'))
+        link = browser.css('a.document_link').first
+        self.assertEquals('tabbedview-tooltip document_link icon-doc ',
+                          link.get('class'))
 
     @browsing
     def test_is_linked_to_the_object(self, browser):
@@ -37,7 +36,7 @@ class TestDocumentLinkRenderer(FunctionalTestCase):
 
         browser.open_html(DocumentLinkRenderer(document).render())
 
-        link = browser.css('a')[1]
+        link = browser.css('a.document_link').first
         self.assertEquals('Anfrage Meier', link.text)
         self.assertEquals(document.absolute_url(), link.get('href'))
 
@@ -173,8 +172,8 @@ class TestDocumentLinkRendererWithActivatedBumblebee(FunctionalTestCase):
 
         browser.open_html(DocumentLinkRenderer(document).render())
 
-        link = browser.css('.document_link')
-        self.assertEquals('document_link showroom-item', link.get('class'))
+        link = browser.css('a.document_link').first
+        self.assertIn('showroom-item', link.get('class'))
         self.assertEquals(
             'http://nohost/plone/document-1/@@bumblebee-overlay-listing',
             link.get('data-showroom-target'))

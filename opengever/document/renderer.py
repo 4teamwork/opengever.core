@@ -111,8 +111,8 @@ class DocumentLinkRenderer(object):
         return """
         <div class='linkWrapper'>
             {removed_marker}
-            <a class='tabbedview-tooltip {css_class}' href='{url}'></a>
-            <a href='{url}' class="document_link {showroom_class}" {showroom}>{title}</a>
+            <a class='tabbedview-tooltip document_link {css_class} {showroom_class}'
+                href='{url}' {showroom}>{title}</a>
             <div class='tabbedview-tooltip-data'>
                 <div class='tooltip-header'>{title}</div>
                 <div class='tooltip-breadcrumb'>{breadcrumbs}</div>
