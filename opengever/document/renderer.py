@@ -68,16 +68,16 @@ class DocumentLinkRenderer(object):
     def tooltip_actions(self):
         links = []
         if self.preview_link_available():
-            links.append(self.preview_link())
+            links.append('<li>{}</li>'.format(self.preview_link()))
 
         if self.edit_metadata_link_available():
-            links.append(self.edit_metadata_link())
+            links.append('<li>{}</li>'.format(self.edit_metadata_link()))
 
         if self.checkout_and_edit_link_available():
-            links.append(self.checkout_and_edit_link())
+            links.append('<li>{}</li>'.format(self.checkout_and_edit_link()))
 
         if self.download_link_available():
-            links.append(self.download_link())
+            links.append('<li>{}</li>'.format(self.download_link()))
 
         return """
         """.join(links)
@@ -98,6 +98,15 @@ class DocumentLinkRenderer(object):
                 overlay_url=self.document.get_overlay_url(),
                 title=self.document.get_overlay_title())
 
+    def get_bumblebee_thumbnail(self):
+        if self.is_bumblebeeable():
+            return """
+            <img src='{image_url}' alt='{title}' width="200" class="file-preview" />
+            """.format(image_url=self.document.get_preview_image_url(),
+                       title=self.get_title())
+
+        return ''
+
     def render(self):
         return """
         <div class='linkWrapper'>
@@ -105,12 +114,15 @@ class DocumentLinkRenderer(object):
             <a class='tabbedview-tooltip {css_class}' href='{url}'></a>
             <a href='{url}' class="document_link {showroom_class}" {showroom}>{title}</a>
             <div class='tabbedview-tooltip-data'>
+                <div class='tooltip-header'>{title}</div>
+                <div class='tooltip-breadcrumb'>{breadcrumbs}</div>
+                <div class="preview">
+                    {bumblebee_thumbnail}
+                </div>
                 <div class='tooltip-content'>
-                    <div class='tooltip-header'>{title}</div>
-                    <div class='tooltip-breadcrumb'>{breadcrumbs}</div>
-                    <div class='tooltip-links'>
+                    <ul class='tooltip-links'>
                         {tooltip_actions}
-                    </div>
+                    </ul>
                 </div>
                 <div class='bottomImage'></div>
             </div>
@@ -121,4 +133,5 @@ class DocumentLinkRenderer(object):
                          showroom=self.get_showroom_data(),
                          showroom_class=self.get_showroom_class(),
                          tooltip_actions=self.tooltip_actions(),
-                         breadcrumbs=self.document.get_breadcrumbs())
+                         breadcrumbs=self.document.get_breadcrumbs(),
+                         bumblebee_thumbnail=self.get_bumblebee_thumbnail())

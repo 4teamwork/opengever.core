@@ -1,9 +1,11 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw import bumblebee
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+from opengever.document import renderer
 from opengever.document.renderer import DocumentLinkRenderer
 from opengever.testing import FunctionalTestCase
-from opengever.document import renderer
 
 
 class TestDocumentLinkRenderer(FunctionalTestCase):
@@ -159,3 +161,20 @@ class TestDocumentLinkRenderer(FunctionalTestCase):
 
         browser.open_html(DocumentLinkRenderer(mail).render())
         self.assertNotIn('Download copy', browser.css('.tooltip-links a').text)
+
+
+class TestDocumentLinkRendererWithActivatedBumblebee(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+
+    @browsing
+    def test_tooltip_contains_preview_thumbnail(self, browser):
+        document = create(Builder('document').with_dummy_content())
+
+        browser.open_html(DocumentLinkRenderer(document).render())
+
+        thumbnail_url = bumblebee.get_service_v3().get_representation_url(
+            document, 'thumbnail')
+
+        self.assertEquals(
+            thumbnail_url, browser.css('.preview img').first.get('src'))

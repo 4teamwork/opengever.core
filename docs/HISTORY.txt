@@ -5,6 +5,9 @@ Changelog
 4.10.0 (unreleased)
 ------------------
 
+- Include preview thumbnail in the document tooltip.
+  [phgross]
+
 - Whitelist '@@health-check' view on site root.
   [lgraf]
 
