@@ -168,6 +168,21 @@ class TestDocumentLinkRendererWithActivatedBumblebee(FunctionalTestCase):
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
     @browsing
+    def test_document_link_is_extend_with_showrom_data(self, browser):
+        document = create(Builder('document').with_dummy_content())
+
+        browser.open_html(DocumentLinkRenderer(document).render())
+
+        link = browser.css('.document_link')
+        self.assertEquals('document_link showroom-item', link.get('class'))
+        self.assertEquals(
+            'http://nohost/plone/document-1/@@bumblebee-overlay-listing',
+            link.get('data-showroom-target'))
+        self.assertEquals(
+            u'Testdokum\xc3\xa4nt',
+            link.get('data-showroom-title'))
+
+    @browsing
     def test_tooltip_contains_preview_thumbnail(self, browser):
         document = create(Builder('document').with_dummy_content())
 
