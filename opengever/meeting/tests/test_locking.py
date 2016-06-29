@@ -7,6 +7,7 @@ from opengever.meeting.wrapper import MeetingWrapper
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 from plone.locking.interfaces import ILockable
+from plone.protect import createToken
 from zExceptions import Redirect
 
 
@@ -118,7 +119,8 @@ class TestMeetingLocking(FunctionalTestCase):
                       .in_groups('client1_users'))
         browser.login(username='hugo.boss').open(self.meeting.get_url('protocol'))
 
-        browser.login().open(self.meeting.get_url())
+        browser.login().open(self.meeting.get_url(),
+                             {'_authenticator': createToken()})
 
         # the unlock link is rendered as a submit button, therefore `unlock`
         # is missing in the following statement
