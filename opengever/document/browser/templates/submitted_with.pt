@@ -3,13 +3,12 @@
     <tal:block tal:define="is_outdated python: view.is_outdated(submitted_document)">
 
       <div class="proposal" tal:condition="not: is_outdated">
-        <span tal:content="structure python: submitted_document.proposal.get_link()"></span>
+        <span class="proposalLink" tal:content="structure python: submitted_document.proposal.get_link()"></span>
       </div>
-      <div class="propsoal" tal:condition="is_outdated">
+      <div class="proposal" tal:condition="is_outdated">
         <div>
-          <span tal:content="structure python: submitted_document.proposal.get_link()"></span>
+          <span class="proposalLink" tal:content="structure python: submitted_document.proposal.get_link()"></span>
           <span class="discreet">
-            —
             <div tal:replace="python: view.render_submitted_version(submitted_document)"></div>
             —
             <div tal:replace="python: view.render_current_document_version()"></div>

@@ -4,7 +4,10 @@ Changelog
 
 4.10.0 (unreleased)
 ------------------
-  
+
+- Improve document overview functions layout.
+  [elioschmutz]
+
 - Bumblebee integration for tasks and SPV.
   [phgross]
 
