@@ -6,6 +6,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.builder import session
 from opengever.base.model import create_session
+from opengever.examplecontent.contacts import ExampleContactCreator
 from opengever.setup.hooks import block_context_portlets
 from opengever.testing import builders  # keep!
 from plone import api
@@ -202,5 +203,8 @@ def block_portlets_for_meetings(site):
 def municipality_content_profile_installed(site):
     creator = MeetingExampleContentCreator(site)
     creator.create_content()
+
+    creator = ExampleContactCreator()
+    creator.create()
 
     block_portlets_for_meetings(site)
