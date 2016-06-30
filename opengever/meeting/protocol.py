@@ -110,6 +110,7 @@ class ProtocolData(object):
             'start_time': self.meeting.get_start_time(),
             'end_time': self.meeting.get_end_time(),
             'number': self.meeting.meeting_number,
+            'location': self.meeting.location,
         }
 
     def add_commitee(self):

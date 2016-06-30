@@ -114,6 +114,8 @@ class TestExcerptJsonData(FunctionalTestCase):
             'meeting': {'date': u'Dec 13, 2011',
                         'start_time': u'09:30 AM',
                         'end_time': u'11:45 AM',
-                        'number': 11}},
+                        'number': 11,
+                        'location': u'B\xe4rn',
+                        }},
             data
         )
