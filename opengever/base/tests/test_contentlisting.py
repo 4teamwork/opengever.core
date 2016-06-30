@@ -1,6 +1,5 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from ftw.bumblebee.utils import get_representation_url_by_brain
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain

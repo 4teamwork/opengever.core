@@ -1,8 +1,7 @@
+from ftw import bumblebee
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.bumblebee.tests.helpers import asset as bumblebee_asset
-from opengever.bumblebee import get_representation_url_by_brain
-from opengever.bumblebee import get_representation_url_by_object
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.bumblebee import is_bumblebeeable
 from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
@@ -36,14 +35,14 @@ class TestGetRepresentationUrlByObject(FunctionalTestCase):
 
         self.assertIn(
             '/YnVtYmxlYmVl/api/v3/resource/',
-            get_representation_url_by_object('thumbnail', document))
+            bumblebee.get_service_v3().get_representation_url(document, 'thumbnail'))
 
     def test_returns_not_digitally_available_placeholder_image_if_no_ckecksum_is_available(self):
         document = create(Builder('document'))
 
         self.assertIn(
             'fallback_not_digitally_available.png',
-            get_representation_url_by_object('thumbnail', document))
+            bumblebee.get_service_v3().get_representation_url(document, 'thumbnail'))
 
 
 class TestGetRepresentationUrlByBrain(FunctionalTestCase):
@@ -58,7 +57,7 @@ class TestGetRepresentationUrlByBrain(FunctionalTestCase):
 
         self.assertIn(
             '/YnVtYmxlYmVl/api/v3/resource/',
-            get_representation_url_by_brain('thumbnail', brain))
+            bumblebee.get_service_v3().get_representation_url(brain, 'thumbnail'))
 
     def test_returns_not_digitally_available_placeholder_image_if_no_ckecksum_is_available(self):
         document = create(Builder('document'))
@@ -67,7 +66,7 @@ class TestGetRepresentationUrlByBrain(FunctionalTestCase):
 
         self.assertIn(
             'fallback_not_digitally_available.png',
-            get_representation_url_by_brain('thumbnail', brain))
+            bumblebee.get_service_v3().get_representation_url(brain, 'thumbnail'))
 
 
 class TestIsBumblebeeable(FunctionalTestCase):

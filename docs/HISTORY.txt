@@ -5,6 +5,9 @@ Changelog
 4.9.1 (unreleased)
 ------------------
 
+- Catch up with refactoring of ftw.bumblebee.
+  [deiferni]
+
 - Add BTree consistency check to the CleanupRelationsCatalog upgradestep and
   fix the BTree if necessary.
   [phgross]

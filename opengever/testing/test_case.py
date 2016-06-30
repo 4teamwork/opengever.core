@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.base.oguid import Oguid
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.dossier.interfaces import ITemplateDossierProperties
@@ -21,6 +22,7 @@ from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from zope.component import getUtility
 from zope.i18n import translate
+from zope.interface import alsoProvides
 import json
 import transaction
 import unittest2
@@ -40,6 +42,7 @@ class FunctionalTestCase(TestCase):
         self.portal = self.layer['portal']
         self.app = self.layer['app']
         self.request = self.app.REQUEST
+        alsoProvides(self.request, IOpengeverBaseLayer)
         self.membership_tool = getToolByName(self.portal, 'portal_membership')
         if self.use_browser:
             self.browser = self._setup_browser()

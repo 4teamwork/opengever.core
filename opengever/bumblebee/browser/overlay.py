@@ -1,11 +1,11 @@
 from Acquisition import aq_parent
+from ftw import bumblebee
 from ftw.bumblebee.mimetypes import is_mimetype_supported
 from opengever.base.browser.helper import get_css_class
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.protect import unprotected_write
 from opengever.bumblebee import _
-from opengever.bumblebee import get_representation_url_by_object
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.bumblebee.interfaces import IBumblebeeOverlay
 from opengever.bumblebee.interfaces import IVersionedContextMarker
@@ -42,7 +42,8 @@ class BumblebeeBaseDocumentOverlay(object):
         self.request = request
 
     def get_preview_pdf_url(self):
-        return get_representation_url_by_object('preview', self.context)
+        return bumblebee.get_service_v3().get_representation_url(
+            self.context, 'preview')
 
     def get_mime_type_css_class(self):
         return get_css_class(self.context)
@@ -107,8 +108,8 @@ class BumblebeeBaseDocumentOverlay(object):
         if not mimetypeitem or not is_mimetype_supported(mimetypeitem[0]):
             return None
 
-        return get_representation_url_by_object(
-            'pdf', obj=self.context, filename=self._get_pdf_filename())
+        return bumblebee.get_service_v3().get_representation_url(
+            self.context, 'pdf', filename=self._get_pdf_filename())
 
     def get_checkin_without_comment_url(self):
         if not self.has_file():
@@ -202,8 +203,8 @@ class BumblebeeMailOverlay(BumblebeeBaseDocumentOverlay):
     """
 
     def get_open_as_pdf_url(self):
-        return get_representation_url_by_object(
-            'pdf', obj=self.context, filename=self._get_pdf_filename())
+        return bumblebee.get_service_v3().get_representation_url(
+            self.context, 'pdf', filename=self._get_pdf_filename())
 
     def get_checkout_url(self):
         return None

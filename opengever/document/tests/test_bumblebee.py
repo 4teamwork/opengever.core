@@ -1,6 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from ftw.bumblebee import utils as bumblebee_utils
+from ftw.bumblebee.interfaces import IBumblebeeDocument
 from ftw.bumblebee.tests.helpers import asset as bumblebee_asset
 from ftw.bumblebee.tests.helpers import DOCX_CHECKSUM
 from ftw.bumblebee.tests.helpers import get_queue
@@ -30,7 +30,7 @@ class TestBumblebeeIntegrationWithDisabledFeature(FunctionalTestCase):
     def test_bumblebee_checksum_is_calculated_for_opengever_docs(self):
         self.assertEquals(
             DOCX_CHECKSUM,
-            bumblebee_utils.get_document_checksum(self.document))
+            IBumblebeeDocument(self.document).get_checksum())
 
     def test_opengever_documents_have_a_primary_field(self):
         fieldinfo = IPrimaryFieldInfo(self.document)
@@ -82,7 +82,7 @@ class TestBumblebeeIntegrationWithEnabledFeature(FunctionalTestCase):
 
         self.assertEquals(
             DOCX_CHECKSUM,
-            bumblebee_utils.get_document_checksum(document))
+            IBumblebeeDocument(document).get_checksum())
 
         document.update_file(filename=u'foo.txt',
                              content_type='text/plain',
@@ -91,7 +91,7 @@ class TestBumblebeeIntegrationWithEnabledFeature(FunctionalTestCase):
 
         self.assertEquals(
             DOCX_CHECKSUM,
-            bumblebee_utils.get_document_checksum(document))
+            IBumblebeeDocument(document).get_checksum())
 
     def test_queues_bumblebee_storing_after_document_checkin(self):
         dossier = create(Builder('dossier'))
