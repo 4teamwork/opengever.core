@@ -35,7 +35,7 @@
 
     $.get(fetch_url, params).done(function(data){
       extender(data.rows.map(function(row) {
-        return $(row['sortable_title']).children("a")[0];
+        return $(row['sortable_title']).children("a.showroom-item")[0];
       }));
     });
 
