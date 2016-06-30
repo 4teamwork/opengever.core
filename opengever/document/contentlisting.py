@@ -1,4 +1,4 @@
-from ftw.bumblebee.utils import get_representation_url_by_object
+from ftw import bumblebee
 from opengever.base.browser.helper import get_css_class
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.document.document import Document
@@ -65,7 +65,8 @@ class DocumentContentListingObject(RealContentListingObject):
         if not self.is_bumblebeeable():
             return None
 
-        return get_representation_url_by_object('thumbnail', self._realobject)
+        return bumblebee.get_service_v3().get_representation_url(
+            self._realobject, 'thumbnail')
 
     def get_overlay_title(self):
         return self.Title()

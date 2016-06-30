@@ -5,6 +5,7 @@ from opengever.base.utils import get_hostname
 from opengever.document.renderer import DocumentLinkRenderer
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import ogds_service
+from opengever.tabbedview import _
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize import ram
 from Products.CMFCore.interfaces._tools import IMemberData
