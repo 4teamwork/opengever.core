@@ -5,6 +5,9 @@ Changelog
 4.10.0 (unreleased)
 -------------------
 
+- Configure offset for showroom overlay.
+  [deiferni]
+
 - Whitelist '@@health-check' view on site root.
   [lgraf]
 
