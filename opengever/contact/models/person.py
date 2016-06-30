@@ -7,6 +7,7 @@ from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
+from sqlalchemy.orm import relationship
 
 
 class Person(Contact):
@@ -20,5 +21,7 @@ class Person(Contact):
     firstname = Column(String(FIRSTNAME_LENGTH), nullable=False)
     lastname = Column(String(LASTNAME_LENGTH), nullable=False)
     description = Column(UnicodeCoercingText)
+
+    organisations = relationship("OrgRole", back_populates="person")
 
     __mapper_args__ = {'polymorphic_identity':'person'}
