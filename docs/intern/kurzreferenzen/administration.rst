@@ -225,6 +225,11 @@ Metadaten zur Sitzung:
 
   Datum der Sitzung
 
+- ``meeting.location``
+
+  Standort der Sitzung
+
+
 - ``meeting.start_time``
 
   Beginn der Sitzung (Uhrzeit)
