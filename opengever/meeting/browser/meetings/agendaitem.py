@@ -1,8 +1,9 @@
-from opengever.base.browser.helper import get_css_class
 from opengever.base.response import JSONResponse
 from opengever.meeting import _
 from opengever.meeting.service import meeting_service
 from plone import api
+from plone.app.contentlisting.interfaces import IContentListing
+from plone.app.contentlisting.interfaces import IContentListingObject
 from Products.Five.browser import BrowserView
 from zExceptions import NotFound
 from zExceptions import Unauthorized
@@ -83,28 +84,21 @@ class AgendaItemsView(BrowserView):
         self.agenda_item_id = None
 
     def _serialize_submitted_documents(self, item):
+        """Returns a list of html strings (the complete document link).
+        """
         if not item.has_proposal:
             return []
 
-        return map(lambda document: {
-            'title': document.title,
-            'link': document.absolute_url(),
-            'css_class': get_css_class(document)},
-            item.proposal.resolve_submitted_documents())
+        docs = IContentListing(item.proposal.resolve_submitted_documents())
+        return [doc.render_link() for doc in docs]
 
     def _serialize_submitted_excerpt(self, item):
         if not item.has_proposal:
             return None
 
         excerpt = item.proposal.resolve_submitted_excerpt_document()
-        if excerpt is None:
-            return {}
-
-        return {
-            'title': excerpt.title,
-            'link': excerpt.absolute_url(),
-            'css_class': get_css_class(excerpt),
-            }
+        if excerpt:
+            return IContentListingObject(excerpt).render_link()
 
     def _get_agenda_items(self):
         meeting = self.context.model

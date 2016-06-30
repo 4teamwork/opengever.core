@@ -6,6 +6,7 @@ from opengever.tabbedview import GeverTabMixin
 from opengever.task import _
 from opengever.task.task import ITask
 from plone import api
+from plone.app.contentlisting.interfaces import IContentListing
 from Products.CMFCore.utils import getToolByName
 
 
@@ -46,7 +47,7 @@ class Overview(grok.View, GeverTabMixin):
         document_list = _get_documents() + _get_related_documents()
         document_list.sort(lambda a, b: cmp(b.modified(), a.modified()))
 
-        return document_list
+        return IContentListing(document_list)
 
     def get_main_attributes(self):
         """ return a list of widgets,

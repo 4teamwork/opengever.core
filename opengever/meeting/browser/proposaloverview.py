@@ -6,6 +6,7 @@ from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.proposal import IProposal
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.tabbedview import GeverTabMixin
+from plone.app.contentlisting.interfaces import IContentListing
 from plone.directives.dexterity import DisplayForm
 
 
@@ -31,7 +32,7 @@ class OverviewBase(object):
         return '{} {}'.format("rollover-breadcrumb", css)
 
     def documents(self):
-        return self.context.get_documents()
+        return IContentListing(self.context.get_documents())
 
     def excerpt(self):
         return self.context.get_excerpt()
@@ -55,17 +56,18 @@ class ProposalOverview(OverviewBase, DisplayForm, GeverTabMixin):
     grok.template('proposaloverview')
 
     def get_submitted_document(self, document):
-        return SubmittedDocument.query.get_by_source(self.context, document)
+        return SubmittedDocument.query.get_by_source(
+            self.context, document.getObject())
 
     def get_update_document_url(self, document):
         return '{}/@@submit_additional_documents?document_path={}'.format(
             self.context.absolute_url(),
-            '/'.join(document.getPhysicalPath())
+            '/'.join(document.getObject().getPhysicalPath())
 
         )
 
     def is_outdated(self, document, submitted_document):
-        return not submitted_document.is_up_to_date(document)
+        return not submitted_document.is_up_to_date(document.getObject())
 
     def render_submitted_version(self, submitted_document):
         return document_mf(
@@ -75,7 +77,7 @@ class ProposalOverview(OverviewBase, DisplayForm, GeverTabMixin):
     def render_current_document_version(self, document):
         return document_mf(
             u"Current version: ${version}",
-            mapping={'version': document.get_current_version()})
+            mapping={'version': document.getObject().get_current_version()})
 
 
 class SubmittedProposalOverview(OverviewBase, DisplayForm, GeverTabMixin):

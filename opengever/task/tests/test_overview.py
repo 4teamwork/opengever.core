@@ -86,7 +86,7 @@ class TestTaskOverview(FunctionalTestCase):
         browser.login().open(task, view='tabbedview_view-overview')
         self.assertSequenceEqual(
             [u'Some document'],
-            browser.css('#documentsBox span.document').text)
+            browser.css('#documentsBox a.document_link').text)
 
     @browsing
     def test_task_overview_displays_task_information(self, browser):

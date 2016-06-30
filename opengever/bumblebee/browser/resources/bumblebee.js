@@ -160,6 +160,7 @@
   $(document)
     .on("reload", updateShowroom)
     .on("viewReady", updateShowroom)
+    .on("agendaItemsReady", updateShowroom)
     .on("click", ".bumblebeeGalleryShowMore", function() {loadNextTabbedviewItems(); });
   $(init);
 

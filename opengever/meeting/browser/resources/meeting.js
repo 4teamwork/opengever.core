@@ -166,7 +166,10 @@
       });
     };
 
-    this.onRender = function() { this.outlet.sortable(sortableSettings); };
+    this.onRender = function() {
+      this.outlet.sortable(sortableSettings);
+      $(document).trigger('agendaItemsReady');
+    };
 
     this.onUpdateFail = function(data) { self.messageFactory.shout(data.messages); };
 

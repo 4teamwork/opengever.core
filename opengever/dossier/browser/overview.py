@@ -2,8 +2,6 @@ from Acquisition import aq_inner
 from five import grok
 from opengever.base.browser.boxes_view import BoxesViewMixin
 from opengever.base.browser.helper import get_css_class
-from opengever.bumblebee import is_bumblebee_feature_enabled
-from opengever.bumblebee import is_bumblebeeable
 from opengever.dossier import _
 from opengever.dossier import _ as _dossier
 from opengever.dossier.base import DOSSIER_STATES_OPEN
@@ -14,6 +12,7 @@ from opengever.globalindex.model.task import Task
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.tabbedview import GeverTabMixin
+from plone.app.contentlisting.interfaces import IContentListing
 from sqlalchemy import desc
 from zc.relation.interfaces import ICatalog
 from zope.component import getUtility
@@ -75,30 +74,8 @@ class DossierOverview(BoxesViewMixin, grok.View, GeverTabMixin):
                          .order_by(desc('modified')).limit(5).all()
 
     def documents(self):
-        documents = self.catalog(
-            ['opengever.document.document', 'ftw.mail.mail', ])[:10]
-
-        document_list = []
-        for document in documents:
-            document_item = {
-                'Title': document.Title,
-                'getURL': document.getURL,
-                'alt': document.document_date and
-                document.document_date.strftime('%d.%m.%Y') or '',
-                'css_class': get_css_class(document),
-                'portal_type': document.portal_type,
-                }
-
-            if is_bumblebee_feature_enabled() and is_bumblebeeable(document):
-                document_item.update({
-                    'data-showroom-target': '{}/@@bumblebee-overlay-listing'.format(document.getURL()),
-                    'data-showroom-title': document.Title,
-                    'css_class': 'showroom-item {}'.format(get_css_class(document))
-                    })
-
-            document_list.append(document_item)
-
-        return document_list
+        return IContentListing(self.catalog(
+            ['opengever.document.document', 'ftw.mail.mail', ])[:10])
 
     def sharing(self):
         # get the participants

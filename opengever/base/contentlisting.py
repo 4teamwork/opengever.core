@@ -3,6 +3,9 @@ from Missing import Value as MissingValue
 from opengever.base.browser.helper import get_css_class
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.bumblebee import is_bumblebeeable
+from opengever.document.document import Document
+from opengever.document.renderer import DocumentLinkRenderer
+from opengever.mail.mail import OGMail
 from plone.app.contentlisting.catalog import CatalogContentListingObject
 from zope.component import getMultiAdapter
 
@@ -13,6 +16,25 @@ class OpengeverCatalogContentListingObject(CatalogContentListingObject):
     breadcrumbs in search results. Additionaly it provides cropped Title and
     Description methods.
     """
+
+    documentish_types = ['opengever.document.document', 'ftw.mail.mail']
+
+    @property
+    def is_document(self):
+        return self._brain.portal_type == 'opengever.document.document'
+
+    @property
+    def is_documentish(self):
+        return self._brain.portal_type in self.documentish_types
+
+    @property
+    def is_trashed(self):
+        return self._brain.trashed
+
+    @property
+    def is_removed(self):
+        removed_states = [Document.removed_state, OGMail.removed_state]
+        return self.review_state() in removed_states
 
     def ContentTypeClass(self):
         """Here we set the correct content type class so that documents with
@@ -84,8 +106,22 @@ class OpengeverCatalogContentListingObject(CatalogContentListingObject):
 
         return self.CroppedTitle()
 
+    def get_breadcrumbs(self):
+        breadcrumbs = self._brain.breadcrumb_titles
+        return " > ".join(
+            [breadcrumb.get('Title') for breadcrumb in breadcrumbs])
+
     def is_bumblebeeable(self):
         if not hasattr(self, '_is_bumblebeeable'):
             self._is_bumblebeeable = (is_bumblebee_feature_enabled() and
                                       is_bumblebeeable(self))
         return self._is_bumblebeeable
+
+    def render_link(self):
+        if self.is_documentish:
+            return DocumentLinkRenderer(self).render()
+
+        structure = '<a href="{url}" alt="{title}" class="{css_class}">{title}</a>'
+        return structure.format(
+            url=self.getURL(), title=self.Title(),
+            css_class=self.get_css_classes())

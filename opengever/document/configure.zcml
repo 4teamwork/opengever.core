@@ -44,6 +44,11 @@
              opengever.document.interfaces.IObjectRevertedToVersion"
         handler="ftw.bumblebee.subscribers.handle_bumblebee_document_added" />
 
+    <adapter
+        factory=".contentlisting.DocumentContentListingObject"
+        for="opengever.document.behaviors.IBaseDocument"
+        />
+
     <!-- Register locales translations -->
     <i18n:registerTranslations directory="locales" />
 

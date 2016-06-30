@@ -28,11 +28,7 @@
                 <ul>
                   <li tal:repeat="document documents">
 
-                    <a href="" tal:attributes="href document/absolute_url;
-                    title python: getattr(document, 'document_date', None) and document.document_date.strftime('%d.%m.%Y') or '';
-                    class python:view.get_css_class(document)">
-                      <span class="document" tal:condition="document/absolute_url" tal:content="document/Title" />
-                    </a>
+                    <a tal:replace="structure document/render_link" />
 
                     <tal:enable tal:condition="view/is_update_outdated_endabled">
                       <tal:outdated

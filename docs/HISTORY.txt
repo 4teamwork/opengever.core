@@ -2,8 +2,15 @@
 Changelog
 =========
 
-4.9.1 (unreleased)
+4.10.0 (unreleased)
 ------------------
+  
+- Bumblebee integration for tasks and SPV.
+  [phgross]
+
+- Reworked and centralized the document link generation using the
+  IContentListing adapter.
+  [phgross]
 
 - Catch up with refactoring of ftw.bumblebee.
   [deiferni]
@@ -14,6 +21,7 @@ Changelog
 
 - Implement bumblebee overlay for the versions-tab.
   [elioschmutz]
+
 
 4.9.0 (2016-06-28)
 ------------------

@@ -7,7 +7,6 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.meeting.model import Meeting
 from opengever.testing import FunctionalTestCase
-from plone import api
 from zope.component import getMultiAdapter
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
@@ -197,10 +196,10 @@ class TestExcerpt(FunctionalTestCase):
         self.assertEqual(self.meeting.get_url(), browser.url,
                          'should be on meeting view')
 
-        self.assertEqual(1, len(browser.css('.excerpts li a')),
+        self.assertEqual(1, len(browser.css('.excerpts li a.document_link')),
                          'generated document should be linked')
-
-        self.assertIsNotNone(browser.find(u'Protocol Excerpt-C\xf6mmunity meeting'))
+        self.assertEqual([u'Protocol Excerpt-C\xf6mmunity meeting'],
+                         browser.css('.excerpts li a.document_link').text)
 
     @browsing
     def test_manual_excerpt_form_redirects_to_meeting_on_abort(self, browser):
