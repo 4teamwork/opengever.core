@@ -1,0 +1,128 @@
+[
+  {
+    "street": "Via delle Vigne 108",
+    "city": "Wagerswil",
+    "name": "Schuhmacher AG",
+    "zip_code": 8564,
+    "mail": "ManuelaSchuhmacher@superrito.com"
+  },
+  {
+    "street": "Seefeldstrasse 30",
+    "city": "Kleindöttingen",
+    "name": "Jaeger & Heike GmbH",
+    "zip_code": 5314,
+    "mail": "HeikeJaeger@rhyta.com"
+  },
+  {
+    "street": "Auerstrasse 77",
+    "city": "Mannried",
+    "name": "Trommler corp.",
+    "zip_code": 3771,
+    "mail": "AnkeTrommler@einrot.com"
+  },
+  {
+    "street": "Möhe 110",
+    "city": "Illnau-Effretikon",
+    "name": "Beyer AG",
+    "zip_code": 8307,
+    "mail": "MandyBeyer@superrito.com"
+  },
+  {
+    "street": "Mühle 102",
+    "city": "Schwarzhäusern",
+    "name": "Kalb SA",
+    "zip_code": 4911,
+    "mail": "KatjaKalb@einrot.com"
+  },
+  {
+    "street": "Hasenbühlstrasse 38",
+    "city": "Bôle",
+    "name": "Neudorf",
+    "zip_code": 2014,
+    "mail": "BerndNeudorf@einrot.com"
+  },
+  {
+    "street": "Allmenrüti 93",
+    "city": "Selkingen",
+    "name": "Decker",
+    "zip_code": 3989,
+    "mail": "LeaDecker@jourrapide.com"
+  },
+  {
+    "street": "Via Schliffras 39",
+    "city": "Gattikon",
+    "name": "Bäckerei Konig",
+    "zip_code": 8136,
+    "mail": "StephanieKonig@gustr.com"
+  },
+  {
+    "street": "Studhaldenstrasse 26",
+    "city": "Les Avants",
+    "name": "Propst B & N SA",
+    "zip_code": 1833,
+    "mail": "BenjaminPropst@rhyta.com"
+  },
+  {
+    "street": "Via Albarelle 149",
+    "city": "Strada",
+    "name": "Peters",
+    "zip_code": 7558,
+    "mail": "FlorianPeters@teleworm.us"
+  },
+  {
+    "street": "Sonnenbergstr 19",
+    "city": "Bourg-St. Pierre",
+    "name": "Reinhardt",
+    "zip_code": 1946,
+    "mail": "SarahReinhardt@teleworm.us"
+  },
+  {
+    "street": "Piazza Rezzonico 84",
+    "city": "Villeret",
+    "name": "Barth GmbH",
+    "zip_code": 2613,
+    "mail": "JulianeBarth@einrot.com"
+  },
+  {
+    "street": "Auerstrasse 54",
+    "city": "Lyss",
+    "name": "Eberhart Produktionen",
+    "zip_code": 3250,
+    "mail": "FrankEberhart@fleckens.hu"
+  },
+  {
+    "street": "Forrenböhlstrasse 131",
+    "city": "Kartause-Ittingen",
+    "name": "Keller Design",
+    "zip_code": 8532,
+    "mail": "PatrickKeller@gustr.com"
+  },
+  {
+    "street": "Casa Gielgia 112",
+    "city": "Neuchâtel",
+    "name": "Brandt SA",
+    "zip_code": 2007,
+    "mail": "ChristinaBrandt@jourrapide.com"
+  },
+  {
+    "street": "Seefeldstrasse 102",
+    "city": "Kehrsiten",
+    "name": "DO PD ND",
+    "zip_code": 6365,
+    "mail": "JenniferNadel@cuvox.de"
+  },
+  {
+    "street": "Via Altisio 127",
+    "city": "Sood",
+    "name": "M. Peters AG",
+    "zip_code": 5727,
+    "mail": "MichellePeters@fleckens.hu"
+  },
+  {
+    "street": "Sonnenbergstr 53",
+    "city": "Bourg-St. Pierre",
+    "name": "Sandra Eichel Eisenwaren GmbH",
+    "zip_code": 1946,
+    "mail": "SandraEichel@rhyta.com"
+  }
+]

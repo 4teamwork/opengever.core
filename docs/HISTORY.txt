@@ -5,6 +5,10 @@ Changelog
 4.10.0 (unreleased)
 -------------------
 
+- Create example contacts and organizations when setting up a
+  gever with examplecontent.
+  [phgross]
+
 - Don't store documents that are not digitally available in bumblebee.
   [deiferni]
 
