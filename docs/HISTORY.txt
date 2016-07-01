@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.9.1 (unreleased)
+4.9.1 (2016-07-01)
 ------------------
 
 - Add BTree consistency check to the CleanupRelationsCatalog upgradestep and
