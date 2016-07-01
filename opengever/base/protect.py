@@ -4,6 +4,7 @@ from datetime import datetime
 from opengever.base.pathfinder import PathFinder
 from opengever.base.sentry import log_msg_to_sentry
 from plone import api
+from plone.portlets.constants import CONTEXT_ASSIGNMENT_KEY
 from plone.protect.auto import ProtectTransform
 from plone.protect.auto import safeWrite
 from plone.protect.interfaces import IDisableCSRFProtection
@@ -227,6 +228,10 @@ class OGProtectTransform(ProtectTransform):
         if IAnnotatable.providedBy(context):
             annotations = IAnnotations(context)
             unprotected_write(annotations)
+
+            if CONTEXT_ASSIGNMENT_KEY in annotations:
+                # also allow writes to context portlet assignments
+                unprotected_write(annotations[CONTEXT_ASSIGNMENT_KEY])
 
 
 class ProtectAwareAttributeAnnotations(AttributeAnnotations):

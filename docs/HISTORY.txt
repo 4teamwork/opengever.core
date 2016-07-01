@@ -5,6 +5,9 @@ Changelog
 4.10.0 (unreleased)
 ------------------
 
+- CSRF: Whitelist context portlet assignment annotations.
+  [lgraf]
+
 - Improve document overview functions layout.
   [elioschmutz]
 
