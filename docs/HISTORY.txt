@@ -3,7 +3,7 @@ Changelog
 =========
 
 4.10.0 (unreleased)
-------------------
+-------------------
 
 - Improve document overview functions layout.
   [elioschmutz]
@@ -18,12 +18,16 @@ Changelog
 - Catch up with refactoring of ftw.bumblebee.
   [deiferni]
 
+- Implement bumblebee overlay for the versions-tab.
+  [elioschmutz]
+
+
+4.9.1 (2016-07-01)
+------------------
+
 - Add BTree consistency check to the CleanupRelationsCatalog upgradestep and
   fix the BTree if necessary.
   [phgross]
-
-- Implement bumblebee overlay for the versions-tab.
-  [elioschmutz]
 
 
 4.9.0 (2016-06-28)
