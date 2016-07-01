@@ -45,6 +45,7 @@ ALLOWED_ENDPOINTS = set([
     'watcher-feed',
     'zauth',
     'bumblebee_download',
+    'health-check',
 ])
 
 
