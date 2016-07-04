@@ -58,7 +58,7 @@ class TestDocumentContentListingObject(FunctionalTestCase):
                           .titled('Anfrage B\xc3\xbcchel'.decode('utf-8')))
 
         self.assertEquals(
-            'Anfrage B\xc3\xbcchel',
+            u'Anfrage B\xfcchel',
             IContentListingObject(document).get_overlay_title())
 
     def test_get_breadcrumbs_returns_titled_joined_with_a_greater_than_symbol(self):

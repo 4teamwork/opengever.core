@@ -69,4 +69,4 @@ class DocumentContentListingObject(RealContentListingObject):
             self._realobject, 'thumbnail')
 
     def get_overlay_title(self):
-        return self.Title()
+        return self.Title().decode('utf-8')

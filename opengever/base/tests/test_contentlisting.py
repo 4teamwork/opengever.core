@@ -228,8 +228,7 @@ class TestOpengeverContentListingWithEnabledBumblebee(FunctionalTestCase):
         self.assertIsNotNone(self.obj.get_preview_image_url())
 
     def test_get_overlay_title(self):
-        self.assertEqual(u'Testdokum\xe4nt'.encode('utf-8'),
-                         self.obj.get_overlay_title())
+        self.assertEqual(u'Testdokum\xe4nt', self.obj.get_overlay_title())
 
     def test_get_overlay_url(self):
         self.assertEqual('http://nohost/plone/document-1/@@bumblebee-overlay-listing',
