@@ -1,7 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
-from opengever.document.renderer import DocumentLinkRenderer
+from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
 from plone.app.contentlisting.interfaces import IContentListingObject
@@ -141,16 +141,16 @@ class TestBrainContentListingRenderLink(FunctionalTestCase):
     def setUp(self):
         super(TestBrainContentListingRenderLink, self).setUp()
 
-        # Because the DocumentLinkRenderer is already tested in a separate
+        # Because the DocumentLinkWidget is already tested in a separate
         # testcase, we replace them with a simple patch for this test.
         def patched_link_render(self):
             return 'PATCHED LINK {}'.format(self.document.Title())
 
-        self.org_render = DocumentLinkRenderer.render
-        DocumentLinkRenderer.render = patched_link_render
+        self.org_render = DocumentLinkWidget.render
+        DocumentLinkWidget.render = patched_link_render
 
     def tearDown(self):
-        DocumentLinkRenderer.render = self.org_render
+        DocumentLinkWidget.render = self.org_render
         super(TestBrainContentListingRenderLink, self).tearDown()
 
     def test_uses_documentlinkrenderer_for_documents(self):

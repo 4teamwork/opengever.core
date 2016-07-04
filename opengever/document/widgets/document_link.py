@@ -14,9 +14,9 @@ else:
     PDFCONVERTER_AVAILABLE = True
 
 
-class DocumentLinkRenderer(object):
+class DocumentLinkWidget(object):
 
-    template = ViewPageTemplateFile('browser/templates/document_link.pt')
+    template = ViewPageTemplateFile('document_link.pt')
 
     def __init__(self, document):
         self.document = IContentListingObject(document)

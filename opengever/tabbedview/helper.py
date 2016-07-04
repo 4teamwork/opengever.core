@@ -2,7 +2,7 @@ from ftw.mail.utils import get_header
 from opengever.base.browser.helper import get_css_class
 from opengever.base.utils import escape_html
 from opengever.base.utils import get_hostname
-from opengever.document.renderer import DocumentLinkRenderer
+from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import ogds_service
 from opengever.tabbedview import _
@@ -182,10 +182,10 @@ def document_with_icon(item, value):
 
 def linked_document(item, value):
     """Tabbedview helper wich returns a rendered link for the a document,
-    using the DocumentLinkRenderer.
+    using the DocumentLinkWidget.
     """
 
-    return DocumentLinkRenderer(item).render()
+    return DocumentLinkWidget(item).render()
 
 
 def linked_version_preview(item, value):

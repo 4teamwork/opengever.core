@@ -2,7 +2,7 @@ from ftw import bumblebee
 from opengever.base.browser.helper import get_css_class
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.document.document import Document
-from opengever.document.renderer import DocumentLinkRenderer
+from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.mail.mail import OGMail
 from opengever.trash.trash import ITrashed
 from plone import api
@@ -35,7 +35,7 @@ class DocumentContentListingObject(RealContentListingObject):
         return is_bumblebee_feature_enabled()
 
     def render_link(self):
-        return DocumentLinkRenderer(self).render()
+        return DocumentLinkWidget(self).render()
 
     def get_breadcrumbs(self):
         titles = []
