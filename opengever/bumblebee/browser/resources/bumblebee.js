@@ -35,7 +35,7 @@
 
     $.get(fetch_url, params).done(function(data){
       extender(data.rows.map(function(row) {
-        return $(row['sortable_title']).children("a")[0];
+        return $(row['sortable_title']).children("a.showroom-item")[0];
       }));
     });
 
@@ -53,7 +53,6 @@
       // so there are no previous items.
       return
     }
-
     extendShowroomQueue(pagenumber - 1, showroom.prepend);
   }
 
@@ -129,6 +128,20 @@
     return fallback_value;
   }
 
+  function getOffset() {
+    if ( window.store ) {
+      // The store-attribute comes from ftw.table. If it's available,
+      // we are on a list view.
+      var pagenumber = global.tabbedview.param('pagenumber:int') || 1;
+      var batchSize = $('#tabbedview-batchbox').val();
+      if ( batchSize && pagenumber > 1) {
+        return (pagenumber - 1) * batchSize;
+      }
+    }
+    return 0;
+
+  }
+
   function updateShowroom() {
     if(($(".template-search").length)) {
       initSingleShowroom();
@@ -142,7 +155,7 @@
     toggleShowMoreButton();
     scanForBrokenImages(".preview-listing");
 
-    showroom.reset(items);
+    showroom.reset(items, getOffset());
     showroom.setTotal(numberOfDocuments);
   }
 
