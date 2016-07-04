@@ -110,7 +110,8 @@ class TestAgendaItemList(FunctionalTestCase):
              u'meeting': {u'date': u'Dec 13, 2011',
                           u'start_time': u'09:30 AM',
                           u'end_time': u'11:45 AM',
-                          u'number': None}},
+                          u'number': None,
+                          u'location': u'B\xe4rn'}},
             browser.json)
 
     @browsing

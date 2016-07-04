@@ -11,6 +11,9 @@ Changelog
 - CSRF: Whitelist context portlet assignment annotations.
   [lgraf]
 
+- Also provide the meeting location in JSON data for protocols.
+  [deiferni]
+
 - Improve document overview functions layout.
   [elioschmutz]
 
