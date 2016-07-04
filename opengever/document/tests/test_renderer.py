@@ -25,7 +25,7 @@ class TestDocumentLinkRenderer(FunctionalTestCase):
         browser.open_html(DocumentLinkRenderer(document).render())
 
         link = browser.css('a.document_link').first
-        self.assertEquals('tabbedview-tooltip document_link icon-doc ',
+        self.assertEquals('tabbedview-tooltip document_link icon-doc',
                           link.get('class'))
 
     @browsing
@@ -178,7 +178,7 @@ class TestDocumentLinkRendererWithActivatedBumblebee(FunctionalTestCase):
             'http://nohost/plone/document-1/@@bumblebee-overlay-listing',
             link.get('data-showroom-target'))
         self.assertEquals(
-            u'Testdokum\xc3\xa4nt',
+            u'Testdokum\xe4nt',
             link.get('data-showroom-title'))
 
     @browsing
