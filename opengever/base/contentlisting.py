@@ -4,7 +4,7 @@ from opengever.base.browser.helper import get_css_class
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.bumblebee import is_bumblebeeable
 from opengever.document.document import Document
-from opengever.document.renderer import DocumentLinkRenderer
+from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.mail.mail import OGMail
 from plone.app.contentlisting.catalog import CatalogContentListingObject
 from zope.component import getMultiAdapter
@@ -104,12 +104,10 @@ class OpengeverCatalogContentListingObject(CatalogContentListingObject):
         if not self.is_bumblebeeable():
             return None
 
-        return self.CroppedTitle()
+        return self.CroppedTitle().decode('utf-8')
 
     def get_breadcrumbs(self):
-        breadcrumbs = self._brain.breadcrumb_titles
-        return " > ".join(
-            [breadcrumb.get('Title') for breadcrumb in breadcrumbs])
+        return self._brain.breadcrumb_titles
 
     def is_bumblebeeable(self):
         if not hasattr(self, '_is_bumblebeeable'):
@@ -119,7 +117,7 @@ class OpengeverCatalogContentListingObject(CatalogContentListingObject):
 
     def render_link(self):
         if self.is_documentish:
-            return DocumentLinkRenderer(self).render()
+            return DocumentLinkWidget(self).render()
 
         structure = '<a href="{url}" alt="{title}" class="{css_class}">{title}</a>'
         return structure.format(

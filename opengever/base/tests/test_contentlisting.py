@@ -1,7 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
-from opengever.document.renderer import DocumentLinkRenderer
+from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
 from plone.app.contentlisting.interfaces import IContentListingObject
@@ -118,7 +118,7 @@ class TestOpengeverContentListing(FunctionalTestCase):
             IContentListingObject(obj2brain(document_b, unrestricted=True)).is_removed)
         self.assertFalse(IContentListingObject(obj2brain(dossier)).is_removed)
 
-    def test_get_breadcrumbs_returns_titles_joined_with_greater_than_sign(self):
+    def test_get_breadcrumbs_returns_a_tuple_of_dicts_with_title_and_url(self):
         root = create(Builder('repository_root').titled(u'Ordnungssystem'))
         repo = create(Builder('repository')
                       .within(root)
@@ -132,8 +132,15 @@ class TestOpengeverContentListing(FunctionalTestCase):
                           .with_dummy_content())
 
         self.assertEquals(
-            'Ordnungssystem > 1. Ablage 1 > hans m\xc3\xbcller > Anfrage Meier',
-            IContentListingObject(document).get_breadcrumbs())
+            ({'absolute_url': 'http://nohost/plone/opengever-repository-repositoryroot',
+              'Title': 'Ordnungssystem'},
+             {'absolute_url': 'http://nohost/plone/opengever-repository-repositoryroot/ablage-1',
+              'Title': '1. Ablage 1'},
+             {'absolute_url': 'http://nohost/plone/opengever-repository-repositoryroot/ablage-1/dossier-1',
+              'Title': 'hans m\xc3\xbcller'},
+             {'absolute_url': 'http://nohost/plone/opengever-repository-repositoryroot/ablage-1/dossier-1/document-1',
+              'Title': 'Anfrage Meier'}),
+            IContentListingObject(obj2brain(document)).get_breadcrumbs())
 
 
 class TestBrainContentListingRenderLink(FunctionalTestCase):
@@ -141,16 +148,16 @@ class TestBrainContentListingRenderLink(FunctionalTestCase):
     def setUp(self):
         super(TestBrainContentListingRenderLink, self).setUp()
 
-        # Because the DocumentLinkRenderer is already tested in a separate
+        # Because the DocumentLinkWidget is already tested in a separate
         # testcase, we replace them with a simple patch for this test.
         def patched_link_render(self):
             return 'PATCHED LINK {}'.format(self.document.Title())
 
-        self.org_render = DocumentLinkRenderer.render
-        DocumentLinkRenderer.render = patched_link_render
+        self.org_render = DocumentLinkWidget.render
+        DocumentLinkWidget.render = patched_link_render
 
     def tearDown(self):
-        DocumentLinkRenderer.render = self.org_render
+        DocumentLinkWidget.render = self.org_render
         super(TestBrainContentListingRenderLink, self).tearDown()
 
     def test_uses_documentlinkrenderer_for_documents(self):
@@ -228,8 +235,7 @@ class TestOpengeverContentListingWithEnabledBumblebee(FunctionalTestCase):
         self.assertIsNotNone(self.obj.get_preview_image_url())
 
     def test_get_overlay_title(self):
-        self.assertEqual(u'Testdokum\xe4nt'.encode('utf-8'),
-                         self.obj.get_overlay_title())
+        self.assertEqual(u'Testdokum\xe4nt', self.obj.get_overlay_title())
 
     def test_get_overlay_url(self):
         self.assertEqual('http://nohost/plone/document-1/@@bumblebee-overlay-listing',

@@ -8,6 +8,9 @@ Changelog
 - Configure offset for showroom overlay.
   [deiferni]
 
+- Include preview thumbnail in the document tooltip.
+  [phgross]
+
 - Whitelist '@@health-check' view on site root.
   [lgraf]
 

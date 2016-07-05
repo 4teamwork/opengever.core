@@ -2,7 +2,7 @@ from ftw import bumblebee
 from opengever.base.browser.helper import get_css_class
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.document.document import Document
-from opengever.document.renderer import DocumentLinkRenderer
+from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.mail.mail import OGMail
 from opengever.trash.trash import ITrashed
 from plone import api
@@ -35,21 +35,12 @@ class DocumentContentListingObject(RealContentListingObject):
         return is_bumblebee_feature_enabled()
 
     def render_link(self):
-        return DocumentLinkRenderer(self).render()
+        return DocumentLinkWidget(self).render()
 
     def get_breadcrumbs(self):
-        titles = []
-        breadcrumbs_view = getMultiAdapter(
-            (self._realobject, getRequest()), name='breadcrumbs_view')
-
-        for breadcrumb in breadcrumbs_view.breadcrumbs():
-            title = breadcrumb.get('Title')
-            if isinstance(title, unicode):
-                title = title.encode('utf-8')
-
-            titles.append(title)
-
-        return " > ".join(titles)
+        breadcrumbs_view = getMultiAdapter((self._realobject, getRequest()),
+                                           name='breadcrumbs_view')
+        return breadcrumbs_view.breadcrumbs()
 
     def get_overlay_url(self):
         """Return the url to fetch the bumblebee overlay."""
@@ -69,4 +60,4 @@ class DocumentContentListingObject(RealContentListingObject):
             self._realobject, 'thumbnail')
 
     def get_overlay_title(self):
-        return self.Title()
+        return self.Title().decode('utf-8')
