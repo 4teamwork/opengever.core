@@ -76,4 +76,12 @@
         layer="opengever.base.interfaces.IOpengeverBaseLayer"
         />
 
+    <browser:page
+        name="plone_context_state"
+        for="opengever.base.interfaces.ISQLObjectWrapper"
+        permission="zope.Public"
+        class=".context.WrapperContextState"
+        allowed_interface="plone.app.layout.globals.interfaces.IContextState"
+        />
+
 </configure>

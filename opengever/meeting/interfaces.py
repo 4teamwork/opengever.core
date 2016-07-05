@@ -1,6 +1,7 @@
+from opengever.base.interfaces import ISQLObjectWrapper
+from plone.directives import form
 from zope import schema
 from zope.interface import Interface
-from plone.directives import form
 
 
 class IMeetingSettings(Interface):
@@ -11,19 +12,15 @@ class IMeetingSettings(Interface):
         default=False)
 
 
-class IBaseWrapper(Interface):
-    """Marker interface for sql object wrappers."""
-
-
-class IMeetingWrapper(IBaseWrapper):
+class IMeetingWrapper(ISQLObjectWrapper):
     """Marker interface for meeting object wrappers."""
 
 
-class IMemberWrapper(IBaseWrapper):
+class IMemberWrapper(ISQLObjectWrapper):
     """Marker interface for member object wrappers."""
 
 
-class IMembershipWrapper(IBaseWrapper):
+class IMembershipWrapper(ISQLObjectWrapper):
     """Marker interface for membership object wrappers."""
 
 

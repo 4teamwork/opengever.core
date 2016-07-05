@@ -100,14 +100,6 @@
       />
 
   <browser:page
-      name="plone_context_state"
-      for="opengever.meeting.interfaces.IBaseWrapper"
-      permission="zope.Public"
-      class=".context.WrapperContextState"
-      allowed_interface="plone.app.layout.globals.interfaces.IContextState"
-      />
-
-  <browser:page
       name="deactivate"
       for="opengever.meeting.committee.ICommittee"
       permission="cmf.ModifyPortalContent"
