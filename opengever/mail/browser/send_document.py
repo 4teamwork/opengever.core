@@ -91,6 +91,7 @@ class ISendDocumentSchema(Interface):
     documents = RelationList(
         title=_(u'label_documents', default=u'Documents'),
         default=[],
+        missing_value=[],
         value_type=RelationChoice(
             title=u"Documents",
             source=DossierPathSourceBinder(
