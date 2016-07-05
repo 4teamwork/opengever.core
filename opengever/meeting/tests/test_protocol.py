@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import error_messages
+from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from ftw.testbrowser.pages.z3cform import erroneous_fields
 from opengever.base.model import create_session
@@ -380,12 +381,13 @@ class TestProtocol(FunctionalTestCase):
         self.assertEqual(meeting, generated_document.meeting)
 
     @browsing
-    def test_generating_protocol_twice_raises_error(self, browser):
+    def test_generating_protocol_twice_displays_error_message(self, browser):
         self.setup_protocol(browser)
         browser.open(GenerateProtocol.url_for(self.meeting))
 
-        with(self.assertRaises(ProtocolAlreadyGenerated)):
-            browser.open(GenerateProtocol.url_for(self.meeting))
+        browser.open(GenerateProtocol.url_for(self.meeting))
+        self.assertEqual('The protocol for meeting My meeting has already '
+                         'been generated.', error_messages()[0])
 
     @browsing
     def test_generated_protocol_can_be_updated(self, browser):

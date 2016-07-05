@@ -1,11 +1,14 @@
 from five import grok
 from opengever.document.document import IDocumentSchema
+from opengever.meeting import _
 from opengever.meeting.command import CreateGeneratedDocumentCommand
 from opengever.meeting.command import ProtocolOperations
 from opengever.meeting.command import UpdateGeneratedDocumentCommand
+from opengever.meeting.exceptions import ProtocolAlreadyGenerated
 from opengever.meeting.interfaces import IMeetingDossier
 from opengever.meeting.model import GeneratedProtocol
 from opengever.meeting.model import Meeting
+from plone import api
 from plone.protect.utils import addTokenToUrl
 from zExceptions import NotFound
 
@@ -41,8 +44,15 @@ class GenerateProtocol(grok.View):
         command = CreateGeneratedDocumentCommand(
             self.context, meeting, self.operations,
             lock_document_after_creation=True)
-        command.execute()
-        command.show_message()
+        try:
+            command.execute()
+            command.show_message()
+        except ProtocolAlreadyGenerated:
+            msg = _(u'msg_error_protocol_already_generated',
+                    default=u'The protocol for meeting ${title} has already '
+                            u'been generated.',
+                    mapping=dict(title=meeting.get_title()))
+            api.portal.show_message(msg, self.request, type='error')
 
         return self.request.RESPONSE.redirect(meeting.get_url())
 
