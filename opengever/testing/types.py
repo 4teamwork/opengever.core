@@ -2,6 +2,7 @@ from plone.dexterity.content import Container
 from plone.directives import form
 from zope import schema
 from zope.interface import alsoProvides
+from zope.interface import Interface
 
 
 class IDummySchema(form.Schema):
@@ -13,6 +14,19 @@ class IDummySchema(form.Schema):
         required=False,
         default=111,
     )
+
+
+class IDummyWithMarkerSchema(form.Schema):
+    """Dummy schema used for testing.
+    """
+
+    int_marker_field = schema.Int(
+        title=u'Behavior (with marker) Int Field',
+        required=False,
+        default=111,
+    )
+
+alsoProvides(IDummyWithMarkerSchema, form.IFormFieldProvider)
 
 
 class IDummyAttributeStorageBehavior(form.Schema):
@@ -39,3 +53,7 @@ alsoProvides(IDummyAnnotationStorageBehavior, form.IFormFieldProvider)
 
 class Dummy(Container):
     """Dummy type used for testing"""
+
+
+class IDummyMarker(Interface):
+    """Behavior marker interface"""

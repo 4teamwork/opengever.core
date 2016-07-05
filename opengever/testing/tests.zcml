@@ -18,4 +18,13 @@
         for="plone.dexterity.interfaces.IDexterityContent"
         />
 
+  <plone:behavior
+      title="Dummy Behavior (with marker)"
+      description=""
+      provides="opengever.testing.types.IDummyWithMarkerSchema"
+      factory="plone.behavior.AnnotationStorage"
+      marker="opengever.testing.types.IDummyMarker"
+      for="plone.dexterity.interfaces.IDexterityContent"
+      />
+
 </configure>
