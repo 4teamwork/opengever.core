@@ -133,6 +133,37 @@ class PatchDXCreateContentInContainer(MonkeyPatch):
             utils, 'createContentInContainer', createContentInContainer)
 
 
+class PatchInvokeFactory(MonkeyPatch):
+    """Monkey patch invokeFactory so that it sets default values for fields
+    that haven't had a value passed in to the constructor.
+    """
+
+    def __call__(self):
+        from opengever.base.default_values import set_default_values
+        from Products.CMFCore.utils import getToolByName
+
+        def invokeFactory(self, type_name, id, RESPONSE=None, *args, **kw):
+            """ Invokes the portal_types tool.
+            """
+            pt = getToolByName(self, 'portal_types')
+            myType = pt.getTypeInfo(self)
+
+            if myType is not None:
+                if not myType.allowType( type_name ):
+                    raise ValueError('Disallowed subobject type: %s' % type_name)
+
+            new_id = pt.constructContent(type_name, self, id, RESPONSE, *args, **kw)
+            content = self[new_id]
+
+            # Set default values
+            set_default_values(content, self, kw)
+
+            return new_id
+
+        from Products.CMFCore.PortalFolder import PortalFolderBase
+        self.patch_refs(PortalFolderBase, 'invokeFactory', invokeFactory)
+
+
 class PatchZ3CFormChangedField(MonkeyPatch):
     """Patch changedField() so that it doesn't simply rely on the DataManager
     to return a field's stored value (which triggers fallbacks to the field's
