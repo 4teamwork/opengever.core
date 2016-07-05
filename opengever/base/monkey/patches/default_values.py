@@ -26,7 +26,7 @@ def _default_from_schema(context, schema, fieldname):
 
 class PatchDexterityContentGetattr(MonkeyPatch):
     """Patch DexterityContent.__getattr__ to correctly fall back to defaults
-    from behavior schemas.
+    from behavior schemas with *marker* interfaces.
 
     Rationale: The implementation in plone.dexterity 2.1.x grabs
     *marker interfaces* from SCHEMA_CACHE.subtypes() for behaviors that have
@@ -87,3 +87,61 @@ class PatchDexterityContentGetattr(MonkeyPatch):
         from plone.dexterity.content import Item
         self.patch_refs(DexterityContent, '__getattr__', __getattr__)
         self.patch_refs(Item, '__getattr__', __getattr__)
+
+
+class PatchZ3CFormChangedField(MonkeyPatch):
+    """Patch changedField() so that it doesn't simply rely on the DataManager
+    to return a field's stored value (which triggers fallbacks to the field's
+    default / missing_value), but uses our helper function to access the real
+    stored value, taking the underlying storage into account.
+    """
+
+    def __call__(self):
+        from opengever.base.default_values import get_persisted_value_for_field
+        from persistent.interfaces import IPersistent
+        from z3c.form import interfaces
+        from z3c.formwidget.query.widget import QueryContext
+        import zope.schema
+
+        def changedField(field, value, context=None):
+            """Figure if a field's value changed
+
+            Comparing the value of the context attribute and the given value"""
+            if context is None:
+                context = field.context
+            if context is None:
+                # IObjectWidget madness
+                return True
+            if zope.schema.interfaces.IObject.providedBy(field):
+                return True
+
+            if not IPersistent.providedBy(context):
+                # Field is not persisted, delegate to original implementation
+                assert isinstance(context, QueryContext)
+                return original_changedField(field, value, context)
+
+            dm = zope.component.getMultiAdapter(
+                (context, field), interfaces.IDataManager)
+
+            if not dm.canAccess():
+                # Can't get the original value, assume it changed
+                return True
+
+            # Determine the original value
+            # Use a helper method that actually returns the persisted value,
+            # *without* triggering any fallbacks to default values or
+            # missing values.
+            try:
+                stored_value = get_persisted_value_for_field(context, field)
+            except AttributeError:
+                return True
+
+            if stored_value != value:
+                return True
+
+            return False
+
+        from z3c.form import util
+        __patch_refs__ = False
+        original_changedField = util.changedField
+        self.patch_refs(util, 'changedField', changedField)

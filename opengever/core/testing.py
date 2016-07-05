@@ -158,6 +158,7 @@ class OpengeverFixture(PloneSandboxLayer):
             '  <include package="opengever.core.tests" file="tests.zcml" />'
             '  <include package="opengever.ogds.base" file="tests.zcml" />'
             '  <include package="opengever.base.tests" file="tests.zcml" />'
+            '  <include package="opengever.testing" file="tests.zcml" />'
             '  <include package="opengever.setup.tests" />'
 
             '</configure>',
@@ -234,6 +235,8 @@ class OpengeverFixture(PloneSandboxLayer):
         applyProfile(portal, 'plone.formwidget.contenttree:default')
         applyProfile(portal, 'ftw.contentmenu:default')
         applyProfile(portal, 'ftw.zipexport:default')
+
+        applyProfile(portal, 'opengever.testing:testing')
 
     def createMemberFolder(self, portal):
         # Create a Members folder.
