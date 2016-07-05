@@ -89,6 +89,50 @@ class PatchDexterityContentGetattr(MonkeyPatch):
         self.patch_refs(Item, '__getattr__', __getattr__)
 
 
+class PatchDXCreateContentInContainer(MonkeyPatch):
+    """Monkey patch Dexterity's createContentInContainer so that it sets
+    default values for fields that haven't had a value passed in to the
+    constructor.
+    """
+
+    def __call__(self):
+        from opengever.base.default_values import set_default_values
+        from plone.dexterity.interfaces import IDexterityFTI
+        from plone.dexterity.utils import addContentToContainer
+        from zope.component import createObject
+        from zope.component import getUtility
+        from zope.event import notify
+        from zope.lifecycleevent import ObjectCreatedEvent
+
+        def createContentWithDefaults(portal_type, container, **kw):
+            fti = getUtility(IDexterityFTI, name=portal_type)
+            content = createObject(fti.factory)
+            set_default_values(content, container, kw)
+
+            # Note: The factory may have done this already, but we want to be sure
+            # that the created type has the right portal type. It is possible
+            # to re-define a type through the web that uses the factory from an
+            # existing type, but wants a unique portal_type!
+            content.portal_type = fti.getId()
+
+            for (key, value) in kw.items():
+                setattr(content, key, value)
+
+            notify(ObjectCreatedEvent(content))
+            return content
+
+        def createContentInContainer(container, portal_type, checkConstraints=True, **kw):
+            # Also pass container to createContent so it is available for
+            # determining default values
+            content = createContentWithDefaults(portal_type, container, **kw)
+            return addContentToContainer(
+                container, content, checkConstraints=checkConstraints)
+
+        from plone.dexterity import utils
+        self.patch_refs(
+            utils, 'createContentInContainer', createContentInContainer)
+
+
 class PatchZ3CFormChangedField(MonkeyPatch):
     """Patch changedField() so that it doesn't simply rely on the DataManager
     to return a field's stored value (which triggers fallbacks to the field's
