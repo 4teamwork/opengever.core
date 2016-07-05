@@ -13,6 +13,10 @@ DEFAULT_LOCALE = 'de'
 SUPPORTED_LOCALES = ['de', 'fr', 'en']
 
 
+CONTENT_TITLE_LENGTH = 255
+ZIP_CODE_LENGTH = 16
+
+
 def get_locale():
     try:
         ltool = api.portal.get_tool('portal_languages')

@@ -20,6 +20,9 @@ Changelog
 - Also provide the meeting location in JSON data for protocols.
   [deiferni]
 
+- Add SQL Model for new contact implementation.
+  [phgross]
+
 - Improve document overview functions layout.
   [elioschmutz]
 
