@@ -16,7 +16,10 @@
 
   <div class='tabbedview-tooltip-data'>
     <div class='tooltip-header' tal:content="view/get_title" />
-    <div class='tooltip-breadcrumb' tal:content="context/get_breadcrumbs" />
+    <ul class='tooltip-breadcrumb' tal:define="breadcrumbs context/get_breadcrumbs">
+      <li tal:repeat="breadcrumb breadcrumbs" tal:content="breadcrumb/Title" />
+    </ul>
+
     <div class='tooltip-content'>
       <ul class='tooltip-links'>
         <li tal:condition="view/preview_link_available">

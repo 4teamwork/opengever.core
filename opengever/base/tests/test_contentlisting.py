@@ -118,7 +118,7 @@ class TestOpengeverContentListing(FunctionalTestCase):
             IContentListingObject(obj2brain(document_b, unrestricted=True)).is_removed)
         self.assertFalse(IContentListingObject(obj2brain(dossier)).is_removed)
 
-    def test_get_breadcrumbs_returns_titles_joined_with_greater_than_sign(self):
+    def test_get_breadcrumbs_returns_a_tuple_of_dicts_with_title_and_url(self):
         root = create(Builder('repository_root').titled(u'Ordnungssystem'))
         repo = create(Builder('repository')
                       .within(root)
@@ -132,8 +132,15 @@ class TestOpengeverContentListing(FunctionalTestCase):
                           .with_dummy_content())
 
         self.assertEquals(
-            'Ordnungssystem > 1. Ablage 1 > hans m\xc3\xbcller > Anfrage Meier',
-            IContentListingObject(document).get_breadcrumbs())
+            ({'absolute_url': 'http://nohost/plone/opengever-repository-repositoryroot',
+              'Title': 'Ordnungssystem'},
+             {'absolute_url': 'http://nohost/plone/opengever-repository-repositoryroot/ablage-1',
+              'Title': '1. Ablage 1'},
+             {'absolute_url': 'http://nohost/plone/opengever-repository-repositoryroot/ablage-1/dossier-1',
+              'Title': 'hans m\xc3\xbcller'},
+             {'absolute_url': 'http://nohost/plone/opengever-repository-repositoryroot/ablage-1/dossier-1/document-1',
+              'Title': 'Anfrage Meier'}),
+            IContentListingObject(obj2brain(document)).get_breadcrumbs())
 
 
 class TestBrainContentListingRenderLink(FunctionalTestCase):

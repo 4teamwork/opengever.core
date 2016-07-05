@@ -61,7 +61,7 @@ class TestDocumentContentListingObject(FunctionalTestCase):
             u'Anfrage B\xfcchel',
             IContentListingObject(document).get_overlay_title())
 
-    def test_get_breadcrumbs_returns_titled_joined_with_a_greater_than_symbol(self):
+    def test_get_breadcrumbs_returns_a_tuple_of_dicts_with_title_and_url(self):
         root = create(Builder('repository_root').titled(u'Ordnungssystem'))
         repo = create(Builder('repository')
                       .within(root)
@@ -75,7 +75,14 @@ class TestDocumentContentListingObject(FunctionalTestCase):
                           .with_dummy_content())
 
         self.assertEquals(
-            'Ordnungssystem > 1. Ablage 1 > hans m\xc3\xbcller > Anfrage Meier',
+            ({'absolute_url': 'http://nohost/plone/opengever-repository-repositoryroot',
+              'Title': 'Ordnungssystem'},
+             {'absolute_url': 'http://nohost/plone/opengever-repository-repositoryroot/ablage-1',
+              'Title': '1. Ablage 1'},
+             {'absolute_url': 'http://nohost/plone/opengever-repository-repositoryroot/ablage-1/dossier-1',
+              'Title': 'hans m\xc3\xbcller'},
+             {'absolute_url': 'http://nohost/plone/opengever-repository-repositoryroot/ablage-1/dossier-1/document-1',
+              'Title': 'Anfrage Meier'}),
             IContentListingObject(document).get_breadcrumbs())
 
 

@@ -56,8 +56,8 @@ class TestDocumentLinkWidget(FunctionalTestCase):
 
         browser.open_html(DocumentLinkWidget(document).render())
         self.assertEquals(
-            'Ordnungssystem > 1. Ablage 1 > Hans Meier > Anfrage Meier',
-            browser.css('.tooltip-breadcrumb').first.text)
+            ['Ordnungssystem', '1. Ablage 1', 'Hans Meier', 'Anfrage Meier'],
+            browser.css('.tooltip-breadcrumb li').text)
 
     @browsing
     def test_tooltip_actions(self, browser):

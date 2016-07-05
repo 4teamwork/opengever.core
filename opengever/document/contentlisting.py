@@ -38,18 +38,9 @@ class DocumentContentListingObject(RealContentListingObject):
         return DocumentLinkWidget(self).render()
 
     def get_breadcrumbs(self):
-        titles = []
-        breadcrumbs_view = getMultiAdapter(
-            (self._realobject, getRequest()), name='breadcrumbs_view')
-
-        for breadcrumb in breadcrumbs_view.breadcrumbs():
-            title = breadcrumb.get('Title')
-            if isinstance(title, unicode):
-                title = title.encode('utf-8')
-
-            titles.append(title)
-
-        return " > ".join(titles)
+        breadcrumbs_view = getMultiAdapter((self._realobject, getRequest()),
+                                           name='breadcrumbs_view')
+        return breadcrumbs_view.breadcrumbs()
 
     def get_overlay_url(self):
         """Return the url to fetch the bumblebee overlay."""
