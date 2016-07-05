@@ -5,6 +5,9 @@ Changelog
 4.10.0 (unreleased)
 -------------------
 
+- Don't store documents that are not digitally available in bumblebee.
+  [deiferni]
+
 - Don't allow protocols for a meeting to be generated twice.
   [deiferni]
 
