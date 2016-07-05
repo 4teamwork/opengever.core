@@ -1,0 +1,13 @@
+<configure
+      xmlns="http://namespaces.zope.org/zope"
+      xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
+
+  <genericsetup:registerProfile
+      name="testing"
+      title="opengever.testing:testing"
+      description="testing profile"
+      directory="profiles/testing"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+</configure>
