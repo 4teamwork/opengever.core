@@ -30,10 +30,6 @@ class IResponseAdder(IViewletManager):
 directlyProvides(IResponseAdder, ITALNamespaceData)
 
 
-class ICreateResponse(Interface):
-    pass
-
-
 class ITaskSettings(Interface):
 
     crop_length = schema.Int(title=u"Crop length", default=20)
