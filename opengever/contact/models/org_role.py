@@ -18,10 +18,10 @@ class OrgRole(Base):
                          primary_key=True)
 
     person_id = Column(Integer, ForeignKey('persons.id'))
-    organisation_id = Column(Integer, ForeignKey('organisations.id'))
+    organization_id = Column(Integer, ForeignKey('organizations.id'))
 
-    organisation = relationship("Organisation", back_populates="persons")
-    person = relationship("Person", back_populates="organisations")
+    organization = relationship("Organization", back_populates="persons")
+    person = relationship("Person", back_populates="organizations")
 
     function = Column(String(CONTENT_TITLE_LENGTH))
     description = Column(UnicodeCoercingText)

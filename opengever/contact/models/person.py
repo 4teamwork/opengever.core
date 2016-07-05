@@ -22,6 +22,6 @@ class Person(Contact):
     lastname = Column(String(LASTNAME_LENGTH), nullable=False)
     description = Column(UnicodeCoercingText)
 
-    organisations = relationship("OrgRole", back_populates="person")
+    organizations = relationship("OrgRole", back_populates="person")
 
     __mapper_args__ = {'polymorphic_identity':'person'}

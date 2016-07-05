@@ -9,16 +9,16 @@ from sqlalchemy import String
 from sqlalchemy.orm import relationship
 
 
-class Organisation(Contact):
+class Organization(Contact):
 
-    __tablename__ = 'organisations'
+    __tablename__ = 'organizations'
 
-    organisation_id = Column('id', Integer,
+    organization_id = Column('id', Integer,
                              ForeignKey('contacts.id'), primary_key=True)
     contact_type = Column(String(20), nullable=False)
     name = Column(String(CONTENT_TITLE_LENGTH), nullable=False)
     description = Column(UnicodeCoercingText)
 
-    persons = relationship("OrgRole", back_populates="organisation")
+    persons = relationship("OrgRole", back_populates="organization")
 
-    __mapper_args__ = {'polymorphic_identity':'organisation'}
+    __mapper_args__ = {'polymorphic_identity': 'organization'}
