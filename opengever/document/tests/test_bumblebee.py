@@ -73,6 +73,11 @@ class TestBumblebeeIntegrationWithEnabledFeature(FunctionalTestCase):
             'http://nohost/plone/dossier-1/document-1/@@bumblebee-overlay-document',
             browser.css('.imageContainer').first.get('data-showroom-target'))
 
+    def test_does_not_queue_bumblebee_storing_if_not_digitally_available(self):
+        create(Builder('document'))
+        queue = get_queue()
+        self.assertEquals(0, len(queue), 'Expected no job in the queue.')
+
     def test_prevents_checked_out_document_checksum_update(self):
         document = create(Builder('document')
                           .attach_file_containing(
