@@ -26,6 +26,7 @@ from z3c.form.interfaces import HIDDEN_MODE
 from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
+from zExceptions import BadRequest
 from zope import schema
 from zope.cachedescriptors.property import Lazy
 from zope.component import getMultiAdapter
@@ -143,19 +144,25 @@ class Base(BrowserView):
 
 class AddForm(form.AddForm, AutoExtensibleForm):
     fields = field.Fields(IResponse)
+    # keep widget for converters (even though field is hidden)
     fields['transition'].widgetFactory = radio.RadioFieldWidget
     fields = fields.omit('date_of_completion')
 
     @property
     def label(self):
-        transition = self.request.get('form.widgets.transition',
-                                      self.request.get('transition', None))
+        label = self.context.Title().decode('utf-8')
+        transition = translate(self.transition, domain='plone',
+                               context=self.request)
+        return u'{}: {}'.format(label, transition)
 
-        label = [self.context.Title().decode('utf-8')]
-        if transition:
-            label.append(translate(transition, domain='plone',
-                                   context=self.request))
-        return u': '.join(label)
+    @property
+    def transition(self):
+        if not hasattr(self, '_transition'):
+            self._transition = self.request.get('form.widgets.transition',
+                                                self.request.get('transition'))
+            if not self._transition:
+                raise BadRequest("A transition is required")
+        return self._transition
 
     def updateActions(self):
         super(AddForm, self).updateActions()
@@ -179,19 +186,19 @@ class AddForm(form.AddForm, AutoExtensibleForm):
             #define responseTyp
             responseCreator = new_response.creator
             task = aq_inner(self.context)
+            transition = data['transition']
 
             if responseCreator == '(anonymous)':
                 new_response.type = 'additional'
             if responseCreator == task.Creator():
                 new_response.type = 'clarification'
 
-            if data.get('transition', None):
-                new_response.transition = data.get('transition', None)
+            new_response.transition = self.transition
 
             #if util.getManagersVocab.getTerm(responseCreator):
             #   new_response.type =  'reply'
             #check transition
-            if data.get('transition', None) in (
+            if transition in (
                 'task-transition-open-resolved',
                 'task-transition-in-progress-resolved'):
 
@@ -238,16 +245,15 @@ class AddForm(form.AddForm, AutoExtensibleForm):
                                         linked(item, item.Title()))
 
             # change workflow state of task
-            if data.get('transition'):
-                wftool = getToolByName(self.context, 'portal_workflow')
-                before = wftool.getInfoFor(self.context, 'review_state')
-                if data.get('transition') != before:
-                    before = wftool.getTitleForStateOnType(before, task.Type())
-                    wftool.doActionFor(self.context, data.get('transition'))
-                    after = wftool.getInfoFor(self.context, 'review_state')
-                    after = wftool.getTitleForStateOnType(after, task.Type())
-                    new_response.add_change('review_state', _(u'Issue state'),
-                                            before, after)
+            wftool = getToolByName(self.context, 'portal_workflow')
+            before = wftool.getInfoFor(self.context, 'review_state')
+            if transition != before:
+                before = wftool.getTitleForStateOnType(before, task.Type())
+                wftool.doActionFor(self.context, transition)
+                after = wftool.getInfoFor(self.context, 'review_state')
+                after = wftool.getTitleForStateOnType(after, task.Type())
+                new_response.add_change('review_state', _(u'Issue state'),
+                                        before, after)
 
             container = IResponseContainer(self.context)
             container.add(new_response)
@@ -256,11 +262,10 @@ class AddForm(form.AddForm, AutoExtensibleForm):
 
             self.record_activity(new_response)
 
-            if data.get('transition'):
-                syncer = getMultiAdapter((self.context, self.request),
-                                         IWorkflowStateSyncer)
-                syncer.change_remote_tasks_workflow_state(
-                    data.get('transition'), text=data.get('text'))
+            syncer = getMultiAdapter((self.context, self.request),
+                                     IWorkflowStateSyncer)
+            syncer.change_remote_tasks_workflow_state(
+                transition, text=data.get('text'))
 
             url = self.context.absolute_url()
             self.request.RESPONSE.redirect(url)

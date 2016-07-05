@@ -5,6 +5,9 @@ Changelog
 4.10.0 (unreleased)
 -------------------
 
+- Make transition required for the addresponse view.
+  [deiferni]
+
 - Create example contacts and organizations when setting up a
   gever with examplecontent.
   [phgross]
