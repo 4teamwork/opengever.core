@@ -9,7 +9,6 @@ from opengever.task import util
 from opengever.task.activities import TaskTransitionActivity
 from opengever.task.adapters import IResponseContainer
 from opengever.task.adapters import Response
-from opengever.task.interfaces import IResponseAdder
 from opengever.task.interfaces import IWorkflowStateSyncer
 from opengever.task.permissions import DEFAULT_ISSUE_MIME_TYPE
 from opengever.task.task import ITask
@@ -290,7 +289,6 @@ class AddForm(form.AddForm, AutoExtensibleForm):
 
 
 class SingleAddFormView(layout.FormWrapper, grok.View):
-    grok.implements(IResponseAdder)
     grok.context(ITask)
     grok.name("addresponse")
     grok.require('cmf.AddPortalContent')
