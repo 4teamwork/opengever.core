@@ -6,6 +6,7 @@ from opengever.testing.patch import TempMonkeyPatch
 from opengever.testing.types import IDummyAnnotationStorageBehavior
 from opengever.testing.types import IDummyAttributeStorageBehavior
 from opengever.testing.types import IDummySchema
+from plone.dexterity.utils import createContentInContainer
 import unittest
 
 
@@ -143,3 +144,49 @@ class TestDefaultValuePersistenceZ3CForm(TestDVPersistenceBase):
 
         self.assert_value_persisted(
             field, initial_default=None, new_default=42, browser=browser)
+
+
+class TestDefaultValuePersistenceCreateContent(TestDVPersistenceBase):
+
+    def add_object(self, browser):
+        obj = createContentInContainer(self.portal, 'Dummy')
+        return obj
+
+    def test_base_schema(self):
+        field = IDummySchema['int_field']
+
+        self.assert_value_persisted(
+            field, initial_default=11, new_default=42)
+
+    def test_base_schema_with_default_equal_missing_value(self):
+        field = IDummySchema['int_field']
+        assert field.missing_value is None
+
+        self.assert_value_persisted(
+            field, initial_default=None, new_default=42)
+
+    def test_attr_behavior(self):
+        field = IDummyAttributeStorageBehavior['attr_behavior_int_field']
+
+        self.assert_value_persisted(
+            field, initial_default=11, new_default=42)
+
+    def test_attr_behavior_with_default_equal_missing_value(self):
+        field = IDummyAttributeStorageBehavior['attr_behavior_int_field']
+        assert field.missing_value is None
+
+        self.assert_value_persisted(
+            field, initial_default=None, new_default=42)
+
+    def test_ann_behavior(self):
+        field = IDummyAnnotationStorageBehavior['ann_behavior_int_field']
+
+        self.assert_value_persisted(
+            field, initial_default=11, new_default=42)
+
+    def test_ann_behavior_with_default_equal_missing_value(self):
+        field = IDummyAnnotationStorageBehavior['ann_behavior_int_field']
+        assert field.missing_value is None
+
+        self.assert_value_persisted(
+            field, initial_default=None, new_default=42)
