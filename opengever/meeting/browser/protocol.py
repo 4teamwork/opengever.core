@@ -29,7 +29,7 @@ class GenerateProtocol(grok.View):
         if not meeting_id:
             raise NotFound
 
-        meeting = Meeting.get(meeting_id)
+        meeting = Meeting.query.with_for_update().get(meeting_id)
         if not meeting:
             raise NotFound
 

@@ -6,6 +6,7 @@ from opengever.base.transport import REQUEST_KEY
 from opengever.base.transport import Transporter
 from opengever.locking.lock import SYS_LOCK
 from opengever.meeting import _
+from opengever.meeting.exceptions import ProtocolAlreadyGenerated
 from opengever.meeting.model.generateddocument import GeneratedExcerpt
 from opengever.meeting.model.generateddocument import GeneratedProtocol
 from opengever.meeting.model.proposalhistory import Submitted, DocumentUpdated, DocumentSubmitted
@@ -35,6 +36,8 @@ class ProtocolOperations(object):
         return ProtocolData(meeting)
 
     def create_database_entry(self, meeting, document):
+        if meeting.protocol_document is not None:
+            raise ProtocolAlreadyGenerated()
         protocol_document = GeneratedProtocol(
             oguid=Oguid.for_object(document),
             generated_version=document.get_current_version())

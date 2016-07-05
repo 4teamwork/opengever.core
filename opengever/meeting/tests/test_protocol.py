@@ -8,7 +8,9 @@ from opengever.base.model import create_session
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.locking.lock import SYS_LOCK
 from opengever.locking.model import Lock
+from opengever.meeting.browser.protocol import GenerateProtocol
 from opengever.meeting.command import MIME_DOCX
+from opengever.meeting.exceptions import ProtocolAlreadyGenerated
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import GeneratedProtocol
 from opengever.meeting.model import Meeting
@@ -376,6 +378,14 @@ class TestProtocol(FunctionalTestCase):
         self.assertIsNotNone(generated_document)
         self.assertEqual(0, generated_document.generated_version)
         self.assertEqual(meeting, generated_document.meeting)
+
+    @browsing
+    def test_generating_protocol_twice_raises_error(self, browser):
+        self.setup_protocol(browser)
+        browser.open(GenerateProtocol.url_for(self.meeting))
+
+        with(self.assertRaises(ProtocolAlreadyGenerated)):
+            browser.open(GenerateProtocol.url_for(self.meeting))
 
     @browsing
     def test_generated_protocol_can_be_updated(self, browser):
