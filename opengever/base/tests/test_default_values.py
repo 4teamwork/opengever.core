@@ -6,6 +6,8 @@ from opengever.testing.patch import TempMonkeyPatch
 from opengever.testing.types import IDummyAnnotationStorageBehavior
 from opengever.testing.types import IDummyAttributeStorageBehavior
 from opengever.testing.types import IDummySchema
+from opengever.testing.types import IDummyWithMarkerSchema
+from plone import api
 from plone.dexterity.utils import createContentInContainer
 import unittest
 
@@ -42,6 +44,26 @@ class TestZ3CFormFilledInDefaults(FunctionalTestCase):
                     initial_value,
                     int(form.find(field.title).value),
                     'Value %r should have been prefilled' % initial_value)
+
+
+class TestDXContentGetattrWithMarkerBehavior(FunctionalTestCase):
+    """This test verifies that the patched DexterityContent.__getattr__
+    correctly falls back to defaults for fields in behaviors which have
+    *marker interfaces*.
+
+    Because default value logic has already been patched to always persist
+    default values, we need to add a behavior to the type of an already
+    existing object, so that we can construct the "missing value" case and
+    trigger the fallback.
+    """
+
+    def test_behavior_with_marker_interface(self):
+        field = IDummyWithMarkerSchema['int_marker_field']
+        obj = createContentInContainer(self.portal, 'Dummy')
+        fti = api.portal.get_tool('portal_types')['Dummy']
+        fti.behaviors = fti.behaviors + (
+            'opengever.testing.types.IDummyWithMarkerSchema', )
+        self.assertEquals(field.default, obj.int_marker_field)
 
 
 class TestDVPersistenceBase(FunctionalTestCase):
