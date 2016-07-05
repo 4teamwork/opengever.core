@@ -51,7 +51,7 @@
     if (!pagenumber) {
       // If there is no pagenumber given, the listing shows the first page,
       // so there are no previous items.
-      return
+      return;
     }
     extendShowroomQueue(pagenumber - 1, showroom.prepend);
   }
@@ -102,7 +102,7 @@
     if ($('#search-results').length) {
       $( document ).ajaxComplete(function(event, jqXHR, params) {
         if(params.url.indexOf("@@updated_search") !== -1) {
-          initSingleShowroom();
+          updateShowroom();
         }
       });
     }
@@ -143,10 +143,6 @@
   }
 
   function updateShowroom() {
-    if(($(".template-search").length)) {
-      initSingleShowroom();
-      return;
-    }
     var items = document.querySelectorAll(".showroom-item");
     var previewListing = $(".preview-listing");
 
@@ -157,17 +153,7 @@
 
     showroom.reset(items, getOffset());
     showroom.setTotal(numberOfDocuments);
-  }
-
-  function initSingleShowroom() {
-    var items = [].slice.call(document.querySelectorAll(".showroom-item"));
-    var previewListing = $(".preview-listing");
-
-    endpoint = previewListing.data("fetch-url");
-    scanForBrokenImages(".preview-listing");
-    items.forEach(function(item) {
-      Showroom([item], { displayCurrent: false });
-    });
+    showroom.refresh();
   }
 
   $(document)
