@@ -13,7 +13,10 @@ from zope.globalrequest import getRequest
 
 def select_current_org_unit(unit_id='client1'):
     request = getRequest()
-    request.cookies[CURRENT_ORG_UNIT_KEY] = unit_id
+    try:
+        request.cookies[CURRENT_ORG_UNIT_KEY] = unit_id
+    except:
+        pass
 
 
 def create_ogds_user(userid, session=None,

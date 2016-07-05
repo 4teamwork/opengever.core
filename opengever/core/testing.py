@@ -1,5 +1,7 @@
 from collective.taskqueue.interfaces import ITaskQueue
 from collective.transmogrifier import transmogrifier
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.builder import session
 from ftw.builder.testing import BUILDER_LAYER
 from ftw.builder.testing import set_builder_session_factory
@@ -36,6 +38,7 @@ from z3c.saconfig.interfaces import IEngineFactory
 from z3c.saconfig.interfaces import IScopedSession
 from zope.component import getSiteManager
 from zope.component import provideUtility
+from zope.globalrequest import setRequest
 from zope.configuration import xmlconfig
 from zope.sqlalchemy import datamanager
 import logging
@@ -132,12 +135,10 @@ class OpengeverFixture(PloneSandboxLayer):
 
     defaultBases = (PLONE_FIXTURE, BUILDER_LAYER)
 
-    def testSetUp(self):
-        super(OpengeverFixture, self).testSetUp()
-        setup_sql_tables()
+    # def testSetUp(self):
+    #     super(OpengeverFixture, self).testSetUp()
 
     def testTearDown(self):
-        truncate_sql_tables()
         from opengever.testing.sql import reset_ogds_sync_stamp
         with ploneSite() as portal:
             reset_ogds_sync_stamp(portal)
@@ -187,6 +188,7 @@ class OpengeverFixture(PloneSandboxLayer):
         self.setupLanguageTool(portal)
         deactivate_activity_center()
         deactivate_bumblebee_feature()
+        setup_sql_tables()
 
     def tearDown(self):
         super(OpengeverFixture, self).tearDown()
@@ -195,6 +197,7 @@ class OpengeverFixture(PloneSandboxLayer):
     def tearDownPloneSite(self, portal):
         activate_activity_center()
         activate_bumblebee_feature()
+        #truncate_sql_tables()
 
     def tearDownZope(self, app):
         super(OpengeverFixture, self).tearDownZope(app)
@@ -242,6 +245,11 @@ class OpengeverFixture(PloneSandboxLayer):
         portal['Members'].invokeFactory('Folder', TEST_USER_ID)
         setRoles(portal, TEST_USER_ID, ['Member'])
 
+    # def createContentFixture(self, portal):
+    #     setRoles(portal, TEST_USER_ID, ['Manager'])
+    #     portal.invokeFactory('opengever.dossier.businesscasedossier', 'dossier')
+    #     setRoles(portal, TEST_USER_ID, ['Member'])
+
     def setupLanguageTool(self, portal):
         """Configure the language tool as close as possible to production,
         without breaking most of the existing tests.
@@ -269,6 +277,7 @@ class APILayer(Layer):
 
     def setUp(self):
         with ploneSite() as site:
+            setRequest(site.REQUEST)
             applyProfile(site, 'plone.restapi:default')
 
 
@@ -320,9 +329,22 @@ def memory_session_factory():
 class DefaultContentLayer(Layer):
 
     def setUp(self):
-        session.current_session = session.factory()
+        session.current_session = memory_session_factory()
         session.current_session.auto_commit = True
+
+        with ploneSite() as portal:
+            user, org_unit, admin_unit = create(
+                Builder('fixture').with_all_unit_setup())
+            self['user'] = user
+            self['org_unit'] = org_unit
+            self['admin_unit'] = admin_unit
+
+            self.setup_content_structure(portal)
         super(DefaultContentLayer, self).setUp()
+
+    def setup_content_structure(self, portal):
+        dossier = create(Builder('dossier').within(portal))
+        self['le_dossier'] = dossier
 
     def tearDown(self):
         session.current_session = None

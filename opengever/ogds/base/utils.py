@@ -60,8 +60,11 @@ class CookieStorage(DictMixin):
         return self.request.cookies.get(key)
 
     def __setitem__(self, key, value):
-        self.request.cookies[key] = value
-        self.request.RESPONSE.setCookie(key, value, expires=self.expires)
+        try:
+            self.request.cookies[key] = value
+            self.request.RESPONSE.setCookie(key, value, expires=self.expires)
+        except:
+            pass
 
     def __delitem__(self, key):
         del self.request.cookies[key]

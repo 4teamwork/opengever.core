@@ -44,14 +44,17 @@ class FunctionalTestCase(TestCase):
         if self.use_browser:
             self.browser = self._setup_browser()
 
-        if self.use_default_fixture:
-            user, org_unit, admin_unit = create(
-                Builder('fixture').with_all_unit_setup())
+        user = self.layer.get('user')
+        if user is None:
+            if self.use_default_fixture:
+                user, org_unit, admin_unit = create(
+                    Builder('fixture').with_all_unit_setup())
 
-            # Used in the properties below to facilitate lazy access
-            self._user_id = user.userid
-            self._org_unit_id = org_unit.unit_id
-            self._admin_unit_id = admin_unit.unit_id
+                # Used in the properties below to facilitate lazy access
+        else:
+            self._user_id = self.layer['user'].userid
+            self._org_unit_id = self.layer['org_unit'].unit_id
+            self._admin_unit_id = self.layer['admin_unit'].unit_id
 
         self.grant('Contributor', 'Editor', 'Reader')
 
