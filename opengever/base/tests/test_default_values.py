@@ -190,3 +190,104 @@ class TestDefaultValuePersistenceCreateContent(TestDVPersistenceBase):
 
         self.assert_value_persisted(
             field, initial_default=None, new_default=42)
+
+
+class TestDefaultValuePersistenceInvokeFactoryPortal(TestDVPersistenceBase):
+    """Dexterity's Container extends invokeFactory which it inherits from
+    PortalFolderBase.
+
+    Just to be sure our monkey patch affects both, we test both cases:
+    Calling invokeFactory on the Portal (this testcase), and calling it on
+    a DX Container (testcase below).
+    """
+
+    def add_object(self, browser):
+        portal = self.layer['portal']
+        obj = portal[portal.invokeFactory('Dummy', 'dummy')]
+        return obj
+
+    def test_base_schema(self):
+        field = IDummySchema['int_field']
+
+        self.assert_value_persisted(
+            field, initial_default=11, new_default=42)
+
+    def test_base_schema_with_default_equal_missing_value(self):
+        field = IDummySchema['int_field']
+        assert field.missing_value is None
+
+        self.assert_value_persisted(
+            field, initial_default=None, new_default=42)
+
+    def test_attr_behavior(self):
+        field = IDummyAttributeStorageBehavior['attr_behavior_int_field']
+
+        self.assert_value_persisted(
+            field, initial_default=11, new_default=42)
+
+    def test_attr_behavior_with_default_equal_missing_value(self):
+        field = IDummyAttributeStorageBehavior['attr_behavior_int_field']
+        assert field.missing_value is None
+
+        self.assert_value_persisted(
+            field, initial_default=None, new_default=42)
+
+    def test_ann_behavior(self):
+        field = IDummyAnnotationStorageBehavior['ann_behavior_int_field']
+
+        self.assert_value_persisted(
+            field, initial_default=11, new_default=42)
+
+    def test_ann_behavior_with_default_equal_missing_value(self):
+        field = IDummyAnnotationStorageBehavior['ann_behavior_int_field']
+        assert field.missing_value is None
+
+        self.assert_value_persisted(
+            field, initial_default=None, new_default=42)
+
+
+class TestDefaultValuePersistenceInvokeFactoryDXContent(TestDVPersistenceBase):
+
+    def add_object(self, browser):
+        folder = self.portal[self.portal.invokeFactory('Dummy', 'dummyfolder')]
+        obj = folder[folder.invokeFactory('Dummy', 'dummy')]
+        return obj
+
+    def test_base_schema(self):
+        field = IDummySchema['int_field']
+
+        self.assert_value_persisted(
+            field, initial_default=11, new_default=42)
+
+    def test_base_schema_with_default_equal_missing_value(self):
+        field = IDummySchema['int_field']
+        assert field.missing_value is None
+
+        self.assert_value_persisted(
+            field, initial_default=None, new_default=42)
+
+    def test_attr_behavior(self):
+        field = IDummyAttributeStorageBehavior['attr_behavior_int_field']
+
+        self.assert_value_persisted(
+            field, initial_default=11, new_default=42)
+
+    def test_attr_behavior_with_default_equal_missing_value(self):
+        field = IDummyAttributeStorageBehavior['attr_behavior_int_field']
+        assert field.missing_value is None
+
+        self.assert_value_persisted(
+            field, initial_default=None, new_default=42)
+
+    def test_ann_behavior(self):
+        field = IDummyAnnotationStorageBehavior['ann_behavior_int_field']
+
+        self.assert_value_persisted(
+            field, initial_default=11, new_default=42)
+
+    def test_ann_behavior_with_default_equal_missing_value(self):
+        field = IDummyAnnotationStorageBehavior['ann_behavior_int_field']
+        assert field.missing_value is None
+
+        self.assert_value_persisted(
+            field, initial_default=None, new_default=42)
