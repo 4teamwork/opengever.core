@@ -16,6 +16,7 @@ class IRelatedDocuments(form.Schema):
     relatedItems = RelationList(
         title=_(u'label_related_documents', default=u'Related Documents'),
         default=[],
+        missing_value=[],
         value_type=RelationChoice(
             title=u"Related",
             source=RepositoryPathSourceBinder(
