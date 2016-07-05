@@ -1,0 +1,21 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    i18n_domain="opengever.testing">
+
+    <plone:behavior
+        title="Dummy Behavior (AttributeStorage)"
+        description=""
+        provides="opengever.testing.types.IDummyAttributeStorageBehavior"
+        for="plone.dexterity.interfaces.IDexterityContent"
+        />
+
+    <plone:behavior
+        title="Dummy Behavior (AnnotationStorage)"
+        description=""
+        provides="opengever.testing.types.IDummyAnnotationStorageBehavior"
+        factory="plone.behavior.AnnotationStorage"
+        for="plone.dexterity.interfaces.IDexterityContent"
+        />
+
+</configure>
