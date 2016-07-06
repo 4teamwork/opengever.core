@@ -317,7 +317,7 @@ class PersonBuilder(SqlObjectBuilder):
     id_argument_name = 'person_id'
     organizations = []
 
-    def in_organizations(self, organizations):
+    def in_orgs(self, organizations):
         self.organizations = organizations
         return self
 

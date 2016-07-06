@@ -50,7 +50,7 @@ class TestPersonView(FunctionalTestCase):
                                academic_title='Dr. rer. nat.'))
 
         browser.login().open(self.contactfolder, view=peter.wrapper_id)
-        table = browser.css('.personal_infos').first
+        table = browser.css('.personal_info').first
 
         [['Name', u'Peter M\xfcller'],
          ['Salutation', 'Herr'],
@@ -126,3 +126,24 @@ class TestPersonView(FunctionalTestCase):
                           browser.css('.mail dt').text)
         self.assertEquals([u'peter.m@example.com', u'peter.work@example.com'],
                           browser.css('.mail dd').text)
+
+    @browsing
+    def test_list_all_of_the_users_organizations(self, browser):
+        org1 = create(Builder('organization').named(u'Jaeger & Heike GmbH'))
+        org2 = create(Builder('organization').named(u'Schuhmacher Peter AG'))
+        org3 = create(Builder('organization').named(u'Propst B & N SA'))
+
+        peter = create(Builder('person')
+                       .having(firstname=u'Peter', lastname=u'M\xfcller')
+                       .in_orgs([(org1, 'CEO'),
+                                 (org3, u'Stellvertretende F\xfchrung')]))
+
+        browser.login().open(self.contactfolder, view=peter.wrapper_id)
+        self.assertEquals(
+            ['Jaeger & Heike GmbH', 'Propst B & N SA'],
+            browser.css('.organizations .name').text)
+
+        browser.login().open(self.contactfolder, view=peter.wrapper_id)
+        self.assertEquals(
+            [u'CEO', u'Stellvertretende F\xfchrung'],
+            browser.css('.organizations .function').text)
