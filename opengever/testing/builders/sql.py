@@ -4,6 +4,10 @@ from ftw.builder import Builder
 from ftw.builder import builder_registry
 from ftw.builder import create
 from opengever.base.oguid import Oguid
+from opengever.contact.models import Address
+from opengever.contact.models import MailAddress
+from opengever.contact.models import Person
+from opengever.contact.models import PhoneNumber
 from opengever.globalindex.model.task import Task
 from opengever.locking.interfaces import ISQLLockable
 from opengever.locking.model import Lock
@@ -304,3 +308,49 @@ class PeriodBuilder(SqlObjectBuilder):
         self.arguments['title'] = unicode(date.today().year)
 
 builder_registry.register('period', PeriodBuilder)
+
+
+class PersonBuilder(SqlObjectBuilder):
+
+    mapped_class = Person
+    id_argument_name = 'person_id'
+
+builder_registry.register('person', PersonBuilder)
+
+
+class ContactAttributesBuilder(SqlObjectBuilder):
+    """Base class for contacts attributes builders like the
+    AddressBuilder, PhoneNumberBuilder or the MailAddressBuilder.
+    """
+
+    def for_contact(self, contact):
+        self.arguments['contact'] = contact
+        return self
+
+    def labeled(self, label):
+        self.arguments['label'] = label
+        return self
+
+
+class AddressBuilder(ContactAttributesBuilder):
+
+    mapped_class = Address
+    id_argument_name = 'address_id'
+
+builder_registry.register('address', AddressBuilder)
+
+
+class PhoneNumberBuilder(ContactAttributesBuilder):
+
+    mapped_class = PhoneNumber
+    id_argument_name = 'phone_number_id'
+
+builder_registry.register('phonenumber', PhoneNumberBuilder)
+
+
+class MailAddressBuilder(ContactAttributesBuilder):
+
+    mapped_class = MailAddress
+    id_argument_name = 'mailaddress_id'
+
+builder_registry.register('mailaddress', MailAddressBuilder)
