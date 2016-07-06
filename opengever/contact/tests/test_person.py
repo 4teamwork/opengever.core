@@ -58,3 +58,11 @@ class TestPerson(unittest2.TestCase):
         self.assertEquals([home, work], peter.phonenumbers)
         self.assertEquals([u'+41791234566', u'0315110000'],
                           [phone.phone_number for phone in peter.phonenumbers])
+
+    def test_fullname_is_firstname_and_lastname_separated_with_a_space(self):
+        peter = Person(firstname=u'Peter', lastname=u'M\xfcller')
+        self.assertEquals(u'Peter M\xfcller', peter.fullname)
+
+    def test_title_is_fullname(self):
+        peter = Person(firstname=u'Peter', lastname=u'M\xfcller')
+        self.assertEquals(u'Peter M\xfcller', peter.get_title())
