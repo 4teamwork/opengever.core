@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-06-26 18:42+0000\n"
+"POT-Creation-Date: 2016-07-08 14:02+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,6 +38,7 @@ msgid "internet"
 msgstr "Site internet"
 
 #. Default: "Academic title"
+#: ./opengever/contact/browser/templates/person.pt:30
 #: ./opengever/contact/contact.py:69
 msgid "label_academic_title"
 msgstr "Titre"
@@ -51,6 +52,11 @@ msgstr "Adresse (rue / n°)"
 #: ./opengever/contact/contact.py:155
 msgid "label_address2"
 msgstr "Complément d'adresse"
+
+#. Default: "Addresses"
+#: ./opengever/contact/browser/templates/person.pt:35
+msgid "label_addresses"
+msgstr ""
 
 #. Default: "City"
 #: ./opengever/contact/contact.py:165
@@ -79,7 +85,7 @@ msgstr "Description"
 
 #. Default: "email"
 #: ./opengever/contact/contact.py:103
-#: ./opengever/contact/contactfolder.py:85
+#: ./opengever/contact/contactfolder.py:109
 msgid "label_email"
 msgstr "Email 1"
 
@@ -90,15 +96,35 @@ msgstr "Email 2"
 
 #. Default: "Firstname"
 #: ./opengever/contact/contact.py:82
-#: ./opengever/contact/contactfolder.py:80
+#: ./opengever/contact/contactfolder.py:104
 msgid "label_firstname"
 msgstr "Prénom"
 
 #. Default: "Lastname"
 #: ./opengever/contact/contact.py:75
-#: ./opengever/contact/contactfolder.py:75
+#: ./opengever/contact/contactfolder.py:99
 msgid "label_lastname"
 msgstr "Nom"
+
+#. Default: "Mail Addresses"
+#: ./opengever/contact/browser/templates/person.pt:52
+msgid "label_mail"
+msgstr ""
+
+#. Default: "Name"
+#: ./opengever/contact/browser/templates/person.pt:22
+msgid "label_name"
+msgstr ""
+
+#. Default: "Organizations:"
+#: ./opengever/contact/browser/templates/person.pt:81
+msgid "label_organizations"
+msgstr ""
+
+#. Default: "Personal information:"
+#: ./opengever/contact/browser/templates/person.pt:19
+msgid "label_personal_information"
+msgstr ""
 
 #. Default: "Fax"
 #: ./opengever/contact/contact.py:125
@@ -115,9 +141,14 @@ msgstr "Téléphone privé"
 msgid "label_phone_mobile"
 msgstr "Téléphone mobile"
 
+#. Default: "Phone numbers"
+#: ./opengever/contact/browser/templates/person.pt:66
+msgid "label_phone_numbers"
+msgstr ""
+
 #. Default: "Phone office"
 #: ./opengever/contact/contact.py:120
-#: ./opengever/contact/contactfolder.py:90
+#: ./opengever/contact/contactfolder.py:114
 msgid "label_phone_office"
 msgstr "Téléphone professionnel"
 
@@ -127,6 +158,7 @@ msgid "label_picture"
 msgstr "Image"
 
 #. Default: "Salutation"
+#: ./opengever/contact/browser/templates/person.pt:26
 #: ./opengever/contact/contact.py:64
 msgid "label_salutation"
 msgstr "Titre"
