@@ -107,8 +107,8 @@ label_no_results_found = _(
     default='No matching results found.')
 label_has_parse_errors = _(
     'label_has_parse_errors',
-    default='There were errors parsing your query, please note that boolen '
-            'expressions like AND, NOT and OR are not allowed in quick '
+    default='There were errors parsing your query, please note that boolean '
+            'expressions like AND, NOT and OR are only allowed in advanced '
             'search.')
 label_advanced_search = _(
     'label_advanced_search',
