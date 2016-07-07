@@ -5,6 +5,9 @@ Changelog
 4.10.0 (unreleased)
 -------------------
 
+- Fix scrollspy auto scrolling.
+  [Kevin Bieri]
+
 - Display a hint in livesearch results view when the query could
   not be processed.
   [deiferni]
