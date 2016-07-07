@@ -14,6 +14,7 @@ from plone.app.testing import TEST_USER_ID
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.registry.interfaces import IRegistry
 from z3c.relationfield.relation import RelationValue
+from zExceptions import BadRequest
 from zope.component import createObject
 from zope.component import getUtility
 from zope.component import queryUtility
@@ -100,6 +101,13 @@ class TestTaskIntegration(FunctionalTestCase):
         container = IResponseContainer(t1)
         container.add(res)
         self.failUnless(res in container)
+
+    @browsing
+    def test_addresponse_fails_without_transition(self, browser):
+        dossier = create(Builder('dossier'))
+        task = create(Builder('task').within(dossier).titled('some task'))
+        with self.assertRaises(BadRequest):
+            browser.login().open(task, view='addresponse')
 
     def test_task_type_category(self):
         t1 = create(Builder('task').titled('Task 1'))
