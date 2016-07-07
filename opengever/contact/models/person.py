@@ -21,7 +21,6 @@ class Person(Contact):
     academic_title = Column(String(CONTENT_TITLE_LENGTH))
     firstname = Column(String(FIRSTNAME_LENGTH), nullable=False)
     lastname = Column(String(LASTNAME_LENGTH), nullable=False)
-    description = Column(UnicodeCoercingText)
 
     organizations = relationship("OrgRole", back_populates="person")
 
