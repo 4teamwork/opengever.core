@@ -14,7 +14,7 @@
 
     var beforeSelectCallback = $.noop;
 
-    var root = $(":root");
+    var root = $("html, body");
 
     function scrollTo(offset, callback) { root.animate({ scrollTop: offset + "px" }, 300, callback); }
 
