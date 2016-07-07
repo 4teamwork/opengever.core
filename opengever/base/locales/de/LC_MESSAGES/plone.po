@@ -309,3 +309,6 @@ msgstr "Aktivieren"
 msgid "transition-add-document"
 msgstr "Dokument hinzugefügt"
 
+msgid "label_has_parse_errors"
+msgstr "Fehler bei der Verarbeitung Ihrer Suchanfrage. Bitte beachten Sie, dass Ausdrücke wie AND, NOT und OR nur in der erweiterten Suche erlaubt sind."
+

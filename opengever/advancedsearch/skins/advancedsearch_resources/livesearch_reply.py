@@ -11,8 +11,10 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import PloneMessageFactory as _
 from Products.CMFPlone.browser.navtree import getNavigationRoot
 from Products.CMFPlone.utils import safe_unicode
-from Products.PythonScripts.standard import url_quote_plus
 from Products.PythonScripts.standard import html_quote
+from Products.PythonScripts.standard import url_quote_plus
+from Products.ZCTextIndex.ParseTree import ParseError
+
 
 ploneUtils = getToolByName(context, 'plone_utils')
 portal_url = getToolByName(context, 'portal_url')()
@@ -81,7 +83,12 @@ else:
     params['path'] = path
 
 # search limit+1 results to know if limit is exceeded
-results = catalog(**params)
+has_parse_errors = False
+try:
+    results = catalog(**params)
+except ParseError:
+    results = []
+    has_parse_errors = True
 
 searchterm_query = '?searchterm=%s' % url_quote_plus(q)
 
@@ -92,10 +99,23 @@ RESPONSE.setHeader('Content-Type', 'text/xml;charset=%s' % site_encoding)
 # replace named entities with their numbered counterparts, in the xml the named ones are not correct
 #   &darr;      --> &#8595;
 #   &hellip;    --> &#8230;
-legend_livesearch = _('legend_livesearch', default='LiveSearch &#8595;')
-label_no_results_found = _('label_no_results_found', default='No matching results found.')
-label_advanced_search = _('label_advanced_search', default='Advanced Search&#8230;')
-label_show_all = _('label_show_all', default='Show all items')
+legend_livesearch = _(
+    'legend_livesearch',
+    default='LiveSearch &#8595;')
+label_no_results_found = _(
+    'label_no_results_found',
+    default='No matching results found.')
+label_has_parse_errors = _(
+    'label_has_parse_errors',
+    default='There were errors parsing your query, please note that boolean '
+            'expressions like AND, NOT and OR are only allowed in advanced '
+            'search.')
+label_advanced_search = _(
+    'label_advanced_search',
+    default='Advanced Search&#8230;')
+label_show_all = _(
+    'label_show_all',
+    default='Show all items')
 
 ts = getToolByName(context, 'translation_service')
 
@@ -110,7 +130,12 @@ if not results:
     write('''<fieldset class="livesearchContainer">''')
     write('''<legend id="livesearchLegend">%s</legend>''' % ts.translate(legend_livesearch, context=REQUEST))
     write('''<div class="LSIEFix">''')
-    write('''<div id="LSNothingFound">%s</div>''' % ts.translate(label_no_results_found, context=REQUEST))
+    if has_parse_errors:
+        write('''<div id="LSParseErrors"><div class="label_error">%s</div>%s</div>''' %
+              (ts.translate(_('Error'), context=REQUEST),
+               ts.translate(label_has_parse_errors, context=REQUEST)))
+    else:
+        write('''<div id="LSNothingFound">%s</div>''' % ts.translate(label_no_results_found, context=REQUEST))
     write('''<div class="LSRow">''')
     write('<a href="%s" style="font-weight:normal">%s</a>' %
          (portal_url + '/advanced_search?SearchableText=%s' % searchurlparameter,
