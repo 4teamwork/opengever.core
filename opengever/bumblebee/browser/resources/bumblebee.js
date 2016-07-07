@@ -99,7 +99,7 @@
     // by the showroom itself. If we do an updateShowroom while the overlay is open,
     // we will destroy it. So we have to do this check first before updating
     // the showroom.
-    if ($('#search-results').length) {
+    if (isOnSearchView()) {
       $( document ).ajaxComplete(function(event, jqXHR, params) {
         if(params.url.indexOf("@@updated_search") !== -1) {
           updateShowroom();
@@ -111,17 +111,22 @@
   function getNumberOfDocuments(fallback_value) {
     var galleryDocuments = $(".preview-listing").data('number-of-documents');
 
-    if ( $.isNumeric(galleryDocuments) ) {
+    if ($.isNumeric(galleryDocuments)) {
       // we are in gallery_view
       return galleryDocuments;
     }
 
-    if ( window.store ) {
-      // The store-attribute comes from ftw.table. If it's available,
-      // we are on a list view.
+    else if (isOnTableView()) {
       var listDocuments = window.store.totalLength;
-      if ( $.isNumeric(listDocuments)) {
+      if ($.isNumeric(listDocuments)) {
         return listDocuments;
+      }
+    }
+
+    else if (isOnSearchView()) {
+      searchResultsNumber = $('#search-results-number').text();
+      if ($.isNumeric(searchResultsNumber)) {
+        return parseInt(searchResultsNumber);
       }
     }
     // we are somewhere else i.e. search view
@@ -129,17 +134,43 @@
   }
 
   function getOffset() {
-    if ( window.store ) {
-      // The store-attribute comes from ftw.table. If it's available,
-      // we are on a list view.
+    if (isOnTableView()) {
       var pagenumber = global.tabbedview.param('pagenumber:int') || 1;
       var batchSize = $('#tabbedview-batchbox').val();
-      if ( batchSize && pagenumber > 1) {
+      if (batchSize && pagenumber > 1) {
         return (pagenumber - 1) * batchSize;
       }
     }
+
+    else if (isOnSearchView()) {
+      offset = parseQueryString('b_start');
+      if ($.isNumeric(offset)) {
+        return parseInt(offset);
+      }
+
+    }
     return 0;
 
+  }
+
+  function isOnSearchView() {
+    // If the search-results tag is available, we are on the search-view.
+    return $('#search-results').length;
+  }
+
+  function isOnTableView() {
+    // The store-attribute comes from ftw.table. If it's available,
+    // we are on a list view.
+    return window.store;
+  }
+
+  function parseQueryString(name) {
+    // Returns the value of a url-parameter.
+    return window.location.search.split(/&/).filter(function(pair) {
+      return pair.indexOf(name) >= 0;
+    }).map(function(pair) {
+      return pair.split("=")[1];
+    }).join();
   }
 
   function updateShowroom() {
