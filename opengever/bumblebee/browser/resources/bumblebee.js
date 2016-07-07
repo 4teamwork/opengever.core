@@ -26,34 +26,79 @@
     });
   }
 
-  function extendTabbedviewTableShowroomItems(pagenumber, extender) {
+  function fetchTabbedviewTableShowroomItems(pagenumber) {
     var fetch_url = store.proxy.url.split('?')[0];
     var params = {'pagenumber': pagenumber,
                   'initialize': 0,
                   'view_name': global.tabbedview.prop('view_name'),
                   'tableType': 'extjs'};
 
-    $.get(fetch_url, params).done(function(data) {
-      extender(data.rows.map(function(row) {
-        return $(row['sortable_title']).children("a.showroom-item")[0];
-      }));
+    return $.get(fetch_url, params);
+  }
+
+  function convertTabbedviewTableAjaxRowsToShowroomItems(tabledata) {
+    return tabledata.rows.map(function(row) {
+      return $(row.sortable_title).children("a.showroom-item")[0];
+    });
+  }
+
+  function loadNextTabbedviewTableItems() {
+    var pagenumber = getTabbedviewTablePagenumber();
+    fetchTabbedviewTableShowroomItems(pagenumber + 1).done(function(data) {
+      showroom.append(convertTabbedviewTableAjaxRowsToShowroomItems(data));
     });
 
   }
 
-  function loadNextTabbedviewTableItems() {
-    var pagenumber = global.tabbedview.param('pagenumber:int') || 1;
-    extendTabbedviewTableShowroomItems(pagenumber + 1, showroom.append);
-  }
-
   function loadPreviousTabbedviewTableItems() {
-    var pagenumber = global.tabbedview.param('pagenumber:int');
+    var pagenumber = getTabbedviewTablePagenumber();
     if (!pagenumber) {
       // If there is no pagenumber given, the listing shows the first page,
       // so there are no previous items.
       return;
     }
-    extendTabbedviewTableShowroomItems(pagenumber - 1, showroom.prepend);
+    fetchTabbedviewTableShowroomItems(pagenumber - 1).done(function(data) {
+      showroom.prepend(convertTabbedviewTableAjaxRowsToShowroomItems(data));
+    });
+  }
+
+  function fetchSearchViewItems(fetchurl) {
+    if (!fetchurl) { return; }
+
+    var parser = document.createElement("a");
+    parser.href = fetchurl;
+
+    var queryString = parser.search;
+
+    // In order to update the showroom items after changing the search-query
+    // trough the web, we had to register an event-listener for the
+    // updated_search-view (see init-Method in this file).
+    //
+    // We have to do the same ajax-request here but don't want to update the
+    // showroom. For this case we have to deactivate the event-listerer
+    // by adding a special request-parameter which will be handled in the
+    // event-listener.
+    var additionalParams = {'deactivate_update': true};
+
+    return $.get('@@updated_search' + queryString, additionalParams);
+  }
+
+  function loadNextSearchItems() {
+    var url = $('#search-results .pagination .next').attr('href');
+    if (!url) { return; }
+
+    fetchSearchViewItems(url).done(function(data) {
+      showroom.append($('.showroom-item', data));
+    });
+  }
+
+  function loadPreviousSearchItems() {
+    var url = $('#search-results .pagination .previous').attr('href');
+    if (!url) { return; }
+
+    fetchSearchViewItems(url).done(function(data) {
+      showroom.prepend($('.showroom-item', data));
+    });
   }
 
   function toggleShowMoreButton() {
@@ -75,11 +120,19 @@
     else if (isOnTabbedviewTableView()) {
       loadNextTabbedviewTableItems();
     }
+
+    else if (isOnSearchView()) {
+      loadNextSearchItems();
+    }
   }
 
   function head() {
-    if (isOnTabbedviewTableView) {
+    if (isOnTabbedviewTableView()) {
       loadPreviousTabbedviewTableItems();
+    }
+
+    else if (isOnSearchView()) {
+      loadPreviousSearchItems();
     }
   }
 
@@ -98,16 +151,22 @@
     // by the showroom itself. If we do an updateShowroom while the overlay is open,
     // we will destroy it. So we have to do this check first before updating
     // the showroom.
+    //
+    // It's also possible to deactivate this listener by adding a "deactivate_update"
+    // request parameter.
     if (isOnSearchView()) {
-      $( document ).ajaxComplete(function(event, jqXHR, params) {
-        if(params.url.indexOf("@@updated_search") !== -1) {
+      $(document).ajaxComplete(function(event, jqXHR, params) {
+        if (params.url.indexOf("@@updated_search") !== -1 &&
+            params.url.indexOf("deactivate_update=true") === -1) {
+
           updateShowroom();
         }
+
       });
     }
   }
 
-  function getNumberOfDocuments(fallback_value) {
+  function getNumberOfDocuments(fallbackValue) {
     var galleryDocuments = $(".preview-listing").data('number-of-documents');
 
     if ($.isNumeric(galleryDocuments)) {
@@ -125,18 +184,22 @@
     else if (isOnSearchView()) {
       searchResultsNumber = $('#search-results-number').text();
       if ($.isNumeric(searchResultsNumber)) {
-        return parseInt(searchResultsNumber);
+        return parseInt(searchResultsNumber, 10);
       }
     }
     // we are somewhere else i.e. search view
-    return fallback_value;
+    return fallbackValue;
+  }
+
+  function getTabbedviewTablePagenumber() {
+    return global.tabbedview.param('pagenumber:int') || 1;
   }
 
   function getOffset() {
     if (isOnTabbedviewTableView()) {
-      var pagenumber = global.tabbedview.param('pagenumber:int') || 1;
-      var batchSize = $('#tabbedview-batchbox').val();
-      if (batchSize && pagenumber > 1) {
+      var pagenumber = getTabbedviewTablePagenumber();
+      var batchSize = parseInt($('#tabbedview-batchbox').val(), 10);
+      if (batchSize && pagenumber) {
         return (pagenumber - 1) * batchSize;
       }
     }
@@ -144,7 +207,7 @@
     else if (isOnSearchView()) {
       offset = parseQueryString('b_start');
       if ($.isNumeric(offset)) {
-        return parseInt(offset);
+        return parseInt(offset, 10);
       }
 
     }
@@ -168,7 +231,6 @@
   }
 
   function parseQueryString(name) {
-    // Returns the value of a url-parameter.
     return window.location.search.split(/&/).filter(function(pair) {
       return pair.indexOf(name) >= 0;
     }).map(function(pair) {
@@ -194,7 +256,7 @@
     .on("reload", updateShowroom)
     .on("viewReady", updateShowroom)
     .on("agendaItemsReady", updateShowroom)
-    .on("click", ".bumblebeeGalleryShowMore", function() {loadNextTabbedviewGalleryView(); });
+    .on("click", ".bumblebeeGalleryShowMore", loadNextTabbedviewGalleryView);
   $(init);
 
 })(window, window.showroom, window.jQuery);

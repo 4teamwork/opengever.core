@@ -19,6 +19,8 @@ class OpengeverSearch(Search):
     """Customizing the plone default Search View.
     """
 
+    b_size = 25
+
     def __init__(self, context, request):
         super(OpengeverSearch, self).__init__(context, request)
 
@@ -29,9 +31,8 @@ class OpengeverSearch(Search):
         """Overwrite this method to adjust the default batch size from
         10 to 25.
         """
-        b_size = 25
         return super(OpengeverSearch, self).results(
-            query=query, batch=batch, b_size=b_size, b_start=b_start)
+            query=query, batch=batch, b_size=self.b_size, b_start=b_start)
 
     def breadcrumbs(self, item):
         obj = item.getObject()

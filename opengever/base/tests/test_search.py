@@ -76,3 +76,19 @@ class TestBumblebeePreview(FunctionalTestCase):
                          results[0].classes)
         self.assertEqual(['state-document-state-draft', 'showroom-item'],
                          results[1].classes)
+
+    @browsing
+    def test_batch_size_is_available_in_template(self, browser):
+        dossier = create(Builder('dossier')
+                         .titled(u'Foo Dossier'))
+        create(Builder('document')
+               .titled(u'Foo Document')
+               .with_dummy_content()
+               .within(dossier))
+
+        browser.login().open(self.portal, view='search')
+        batch_size = browser.css('#search-results').first.attrib.get('data-batch-size')
+
+        self.assertEqual(
+            25, int(batch_size),
+            'The batch-size data atribute should be on the tag')
