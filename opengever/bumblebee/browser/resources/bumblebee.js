@@ -12,7 +12,7 @@
     });
   }
 
-  function loadNextTabbedviewItems() {
+  function loadNextTabbedviewGalleryView() {
     var data = {
       documentPointer: $('.imageContainer').length,
       searchableText: global.tabbedview.searchbox.val()
@@ -26,14 +26,14 @@
     });
   }
 
-  function extendShowroomQueue(pagenumber, extender){
-    var fetch_url = store.proxy.url.split('?')[0]
+  function extendTabbedviewTableShowroomItems(pagenumber, extender) {
+    var fetch_url = store.proxy.url.split('?')[0];
     var params = {'pagenumber': pagenumber,
                   'initialize': 0,
                   'view_name': global.tabbedview.prop('view_name'),
-                  'tableType': 'extjs'}
+                  'tableType': 'extjs'};
 
-    $.get(fetch_url, params).done(function(data){
+    $.get(fetch_url, params).done(function(data) {
       extender(data.rows.map(function(row) {
         return $(row['sortable_title']).children("a.showroom-item")[0];
       }));
@@ -41,19 +41,19 @@
 
   }
 
-  function loadNextListingItems() {
+  function loadNextTabbedviewTableItems() {
     var pagenumber = global.tabbedview.param('pagenumber:int') || 1;
-    extendShowroomQueue(pagenumber + 1, showroom.append);
+    extendTabbedviewTableShowroomItems(pagenumber + 1, showroom.append);
   }
 
-  function loadPreviousListingItems() {
+  function loadPreviousTabbedviewTableItems() {
     var pagenumber = global.tabbedview.param('pagenumber:int');
     if (!pagenumber) {
       // If there is no pagenumber given, the listing shows the first page,
       // so there are no previous items.
       return;
     }
-    extendShowroomQueue(pagenumber - 1, showroom.prepend);
+    extendTabbedviewTableShowroomItems(pagenumber - 1, showroom.prepend);
   }
 
   function toggleShowMoreButton() {
@@ -68,19 +68,18 @@
   }
 
   function tail() {
-    if(global.tabbedview) {
-      if (global.tabbedview.table.length) {
-        // document table listing
-        loadNextListingItems();
-      }
-      loadNextTabbedviewItems();
+    if (isOnTabbedviewGalleryView()) {
+      loadNextTabbedviewGalleryView();
+    }
+
+    else if (isOnTabbedviewTableView()) {
+      loadNextTabbedviewTableItems();
     }
   }
 
   function head() {
-    if(global.tabbedview && global.tabbedview.table.length) {
-      // document table listing
-      loadPreviousListingItems();
+    if (isOnTabbedviewTableView) {
+      loadPreviousTabbedviewTableItems();
     }
   }
 
@@ -116,7 +115,7 @@
       return galleryDocuments;
     }
 
-    else if (isOnTableView()) {
+    else if (isOnTabbedviewTableView()) {
       var listDocuments = window.store.totalLength;
       if ($.isNumeric(listDocuments)) {
         return listDocuments;
@@ -134,7 +133,7 @@
   }
 
   function getOffset() {
-    if (isOnTableView()) {
+    if (isOnTabbedviewTableView()) {
       var pagenumber = global.tabbedview.param('pagenumber:int') || 1;
       var batchSize = $('#tabbedview-batchbox').val();
       if (batchSize && pagenumber > 1) {
@@ -158,10 +157,14 @@
     return $('#search-results').length;
   }
 
-  function isOnTableView() {
+  function isOnTabbedviewTableView() {
     // The store-attribute comes from ftw.table. If it's available,
     // we are on a list view.
     return window.store;
+  }
+
+  function isOnTabbedviewGalleryView() {
+    return $('.preview-listing').length;
   }
 
   function parseQueryString(name) {
@@ -191,7 +194,7 @@
     .on("reload", updateShowroom)
     .on("viewReady", updateShowroom)
     .on("agendaItemsReady", updateShowroom)
-    .on("click", ".bumblebeeGalleryShowMore", function() {loadNextTabbedviewItems(); });
+    .on("click", ".bumblebeeGalleryShowMore", function() {loadNextTabbedviewGalleryView(); });
   $(init);
 
 })(window, window.showroom, window.jQuery);
