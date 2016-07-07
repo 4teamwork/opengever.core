@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.9.2 (unreleased)
+4.9.2 (2016-07-07)
 ------------------
 
 - Fix scrollspy auto scrolling.
