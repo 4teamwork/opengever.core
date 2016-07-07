@@ -3,7 +3,6 @@ from opengever.contact.models.contact import Contact
 from opengever.contact.utils import get_contactfolder_url
 from opengever.ogds.models import FIRSTNAME_LENGTH
 from opengever.ogds.models import LASTNAME_LENGTH
-from opengever.ogds.models.types import UnicodeCoercingText
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
@@ -24,7 +23,7 @@ class Person(Contact):
 
     organizations = relationship("OrgRole", back_populates="person")
 
-    __mapper_args__ = {'polymorphic_identity':'person'}
+    __mapper_args__ = {'polymorphic_identity': 'person'}
 
     @property
     def fullname(self):

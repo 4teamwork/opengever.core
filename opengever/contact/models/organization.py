@@ -1,7 +1,5 @@
 from opengever.base.model import CONTENT_TITLE_LENGTH
 from opengever.contact.models.contact import Contact
-from opengever.contact.models.org_role import OrgRole
-from opengever.ogds.models.types import UnicodeCoercingText
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer

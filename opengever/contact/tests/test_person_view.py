@@ -130,7 +130,7 @@ class TestPersonView(FunctionalTestCase):
     @browsing
     def test_list_all_of_the_users_organizations(self, browser):
         org1 = create(Builder('organization').named(u'Jaeger & Heike GmbH'))
-        org2 = create(Builder('organization').named(u'Schuhmacher Peter AG'))
+        create(Builder('organization').named(u'Schuhmacher Peter AG'))
         org3 = create(Builder('organization').named(u'Propst B & N SA'))
 
         peter = create(Builder('person')
