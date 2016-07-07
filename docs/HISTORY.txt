@@ -5,6 +5,10 @@ Changelog
 4.10.0 (unreleased)
 -------------------
 
+- Drop duplicated description and contact_type columns on Organization
+  and Person model.
+  [phgross]
+
 - Add first simple version of the person view.
   [phgross]
 

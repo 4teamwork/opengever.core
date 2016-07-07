@@ -15,7 +15,6 @@ class Organization(Contact):
 
     organization_id = Column('id', Integer,
                              ForeignKey('contacts.id'), primary_key=True)
-    contact_type = Column(String(20), nullable=False)
     name = Column(String(CONTENT_TITLE_LENGTH), nullable=False)
 
     persons = relationship("OrgRole", back_populates="organization")
