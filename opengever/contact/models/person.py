@@ -1,9 +1,9 @@
 from opengever.base.model import CONTENT_TITLE_LENGTH
 from opengever.contact.models.contact import Contact
+from opengever.contact.utils import get_contactfolder_url
 from opengever.ogds.models import FIRSTNAME_LENGTH
 from opengever.ogds.models import LASTNAME_LENGTH
 from opengever.ogds.models.types import UnicodeCoercingText
-from plone import api
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
@@ -36,9 +36,8 @@ class Person(Contact):
         return 'person-{}'.format(self.person_id)
 
     def get_url(self, view='view'):
-        # XXX get contactfolder dynamically
-        return '{}/kontakte/person-{}'.format(
-            api.portal.get().absolute_url(), self.person_id)
+        return '{}/{}/{}'.format(
+            get_contactfolder_url(), self.wrapper_id, view)
 
     def get_title(self):
         return self.fullname
