@@ -22,6 +22,7 @@ class Contact(Base):
     mail_addresses = relationship("MailAddress", back_populates="contact")
     phonenumbers = relationship("PhoneNumber", back_populates="contact")
     urls = relationship("URL", back_populates="contact")
+    participations = relationship("Participation", back_populates="contact")
 
     __mapper_args__ = {'polymorphic_on':contact_type,
                        'polymorphic_identity':'contact',
