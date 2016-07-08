@@ -1,5 +1,6 @@
 from opengever.base.model import CONTENT_TITLE_LENGTH
 from opengever.contact.models.contact import Contact
+from opengever.contact.utils import get_contactfolder_url
 from opengever.ogds.models import FIRSTNAME_LENGTH
 from opengever.ogds.models import LASTNAME_LENGTH
 from opengever.ogds.models.types import UnicodeCoercingText
@@ -25,3 +26,18 @@ class Person(Contact):
     organizations = relationship("OrgRole", back_populates="person")
 
     __mapper_args__ = {'polymorphic_identity':'person'}
+
+    @property
+    def fullname(self):
+        return u'{} {}'.format(self.firstname, self.lastname)
+
+    @property
+    def wrapper_id(self):
+        return 'person-{}'.format(self.person_id)
+
+    def get_url(self, view='view'):
+        return '{}/{}/{}'.format(
+            get_contactfolder_url(), self.wrapper_id, view)
+
+    def get_title(self):
+        return self.fullname

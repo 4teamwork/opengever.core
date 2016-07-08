@@ -4,8 +4,13 @@ from ftw.builder import Builder
 from ftw.builder import builder_registry
 from ftw.builder import create
 from opengever.base.oguid import Oguid
+from opengever.contact.models import Address
+from opengever.contact.models import MailAddress
+from opengever.contact.models import Organization
+from opengever.contact.models import OrgRole
+from opengever.contact.models import Person
+from opengever.contact.models import PhoneNumber
 from opengever.globalindex.model.task import Task
-from opengever.locking.interfaces import ISQLLockable
 from opengever.locking.model import Lock
 from opengever.meeting.committee import ICommittee
 from opengever.meeting.interfaces import IMeetingDossier
@@ -304,3 +309,89 @@ class PeriodBuilder(SqlObjectBuilder):
         self.arguments['title'] = unicode(date.today().year)
 
 builder_registry.register('period', PeriodBuilder)
+
+
+class PersonBuilder(SqlObjectBuilder):
+
+    mapped_class = Person
+    id_argument_name = 'person_id'
+    organizations = []
+
+    def in_orgs(self, organizations):
+        self.organizations = organizations
+        return self
+
+    def after_create(self, obj):
+        obj = super(PersonBuilder, self).after_create(obj)
+        for organization in self.organizations:
+            if isinstance(organization, tuple):
+                organization, function = organization
+            else:
+                function = None
+
+            create(Builder('org_role')
+                   .having(person=obj,
+                           organization=organization,
+                           function=function))
+
+        return obj
+
+builder_registry.register('person', PersonBuilder)
+
+
+class ContactAttributesBuilder(SqlObjectBuilder):
+    """Base class for contacts attributes builders like the
+    AddressBuilder, PhoneNumberBuilder or the MailAddressBuilder.
+    """
+
+    def for_contact(self, contact):
+        self.arguments['contact'] = contact
+        return self
+
+    def labeled(self, label):
+        self.arguments['label'] = label
+        return self
+
+
+class AddressBuilder(ContactAttributesBuilder):
+
+    mapped_class = Address
+    id_argument_name = 'address_id'
+
+builder_registry.register('address', AddressBuilder)
+
+
+class PhoneNumberBuilder(ContactAttributesBuilder):
+
+    mapped_class = PhoneNumber
+    id_argument_name = 'phone_number_id'
+
+builder_registry.register('phonenumber', PhoneNumberBuilder)
+
+
+class MailAddressBuilder(ContactAttributesBuilder):
+
+    mapped_class = MailAddress
+    id_argument_name = 'mailaddress_id'
+
+builder_registry.register('mailaddress', MailAddressBuilder)
+
+
+class OrganizationBuilder(SqlObjectBuilder):
+
+    mapped_class = Organization
+    id_argument_name = 'organization_id'
+
+    def named(self, name):
+        self.arguments['name'] = name
+        return self
+
+builder_registry.register('organization', OrganizationBuilder)
+
+
+class OrgRoleBuilder(SqlObjectBuilder):
+
+    mapped_class = OrgRole
+    id_argument_name = 'org_role_id'
+
+builder_registry.register('org_role', OrgRoleBuilder)

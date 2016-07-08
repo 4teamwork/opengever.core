@@ -258,3 +258,7 @@ class IGeverState(Interface):
     def cas_server_url():
         """URL of the CAS server.
         """
+
+
+class ISQLObjectWrapper(Interface):
+    """Marker interface for sql object wrappers."""
