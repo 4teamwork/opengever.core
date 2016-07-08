@@ -10,23 +10,22 @@ from opengever.testing import FunctionalTestCase
 class TestDocumentLinkWidget(FunctionalTestCase):
 
     @browsing
-    def test_link_contains_mimetype_icon_clas(self, browser):
+    def test_link_contains_mimetype_icon_class(self, browser):
         document = create(Builder('document').with_dummy_content())
 
         browser.open_html(DocumentLinkWidget(document).render())
 
         link = browser.css('a.document_link').first
-        self.assertEquals('tabbedview-tooltip document_link icon-doc',
-                          link.get('class'))
+        self.assertEquals('document_link icon-doc', link.get('class'))
 
     @browsing
     def test_tooltip_link_is_documents_tooltip_view(self, browser):
         document = create(Builder('document').with_dummy_content())
 
         browser.open_html(DocumentLinkWidget(document).render())
-        link = browser.css('a.document_link').first
-        self.assertEquals('http://nohost/plone/document-1/tooltip',
-                          link.get('data-tooltip-url'))
+        self.assertEquals(
+            'http://nohost/plone/document-1/tooltip',
+            browser.css('.tooltip-trigger').first.get('data-tooltip-url'))
 
     @browsing
     def test_is_linked_to_the_object(self, browser):

@@ -60,4 +60,14 @@
                 expression="" id="++resource++opengever.base/datetimepicker.js" inline="False"
                 insert-after="++resource++plone.app.jquery.js" />
 
+    <javascript cacheable="True" compression="safe" cookable="True" expression=""
+                enabled="True" id="++resource++opengever.base/qtip.js" inline="False"
+                insert-after="++resource++plone.app.jquery.js"
+                />
+
+    <javascript cacheable="True" compression="safe" cookable="True" expression=""
+                enabled="True" id="++resource++opengever.base/tooltip.js" inline="False"
+                insert-after="++resource++opengever.base/qtip.js"
+                />
+
 </object>

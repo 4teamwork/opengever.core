@@ -44,7 +44,7 @@ class TestDocumentTooltip(FunctionalTestCase):
         document = create(Builder('document').with_dummy_content())
 
         browser.login().open(document, view='tooltip')
-        preview, metadata, checkout, download = browser.css('.tooltip-links a')
+        preview, metadata, checkout, download = browser.css('.file-actions a')
 
         # preview
         self.assertEquals('PDF Preview', preview.text)
@@ -76,10 +76,10 @@ class TestDocumentTooltip(FunctionalTestCase):
         mail = create(Builder('mail'))
 
         browser.login().open(document, view='tooltip')
-        self.assertIn('PDF Preview', browser.css('.tooltip-links a').text)
+        self.assertIn('PDF Preview', browser.css('.file-actions a').text)
 
         browser.open(mail, view='tooltip')
-        self.assertNotIn('PDF Preview', browser.css('.tooltip-links a').text)
+        self.assertNotIn('PDF Preview', browser.css('.file-actions a').text)
 
     @browsing
     def test_preview_link_is_only_available_when_pdfconverter_is_active(self, browser):
@@ -87,11 +87,11 @@ class TestDocumentTooltip(FunctionalTestCase):
 
         pdfconverter.PDFCONVERTER_AVAILABLE = True
         browser.login().open(document, view='tooltip')
-        self.assertIn('PDF Preview', browser.css('.tooltip-links a').text)
+        self.assertIn('PDF Preview', browser.css('.file-actions a').text)
 
         pdfconverter.PDFCONVERTER_AVAILABLE = False
         browser.open(document, view='tooltip')
-        self.assertNotIn('PDF Preview', browser.css('.tooltip-links a').text)
+        self.assertNotIn('PDF Preview', browser.css('.file-actions a').text)
 
     @browsing
     def test_edit_metadata_link_is_not_available_for_trashed_documents(self, browser):
@@ -100,10 +100,10 @@ class TestDocumentTooltip(FunctionalTestCase):
         document_b = create(Builder('document').with_dummy_content().trashed())
 
         browser.login().open(document_a, view='tooltip')
-        self.assertIn('Edit metadata', browser.css('.tooltip-links a').text)
+        self.assertIn('Edit metadata', browser.css('.file-actions a').text)
 
         browser.open(document_b, view='tooltip')
-        self.assertNotIn('Edit metadata', browser.css('.tooltip-links a').text)
+        self.assertNotIn('Edit metadata', browser.css('.file-actions a').text)
 
     @browsing
     def test_checkout_link_is_only_available_for_documents(self, browser):
@@ -112,11 +112,11 @@ class TestDocumentTooltip(FunctionalTestCase):
 
         browser.login().open(document, view='tooltip')
         self.assertIn('Checkout and edit',
-                      browser.css('.tooltip-links a').text)
+                      browser.css('.file-actions a').text)
 
         browser.open(mail, view='tooltip')
         self.assertNotIn('Checkout and edit',
-                         browser.css('.tooltip-links a').text)
+                         browser.css('.file-actions a').text)
 
     @browsing
     def test_download_link_is_only_available_for_documents(self, browser):
@@ -124,10 +124,10 @@ class TestDocumentTooltip(FunctionalTestCase):
         mail = create(Builder('mail'))
 
         browser.login().open(document, view='tooltip')
-        self.assertIn('Download copy', browser.css('.tooltip-links a').text)
+        self.assertIn('Download copy', browser.css('.file-actions a').text)
 
         browser.open(mail, view='tooltip')
-        self.assertNotIn('Download copy', browser.css('.tooltip-links a').text)
+        self.assertNotIn('Download copy', browser.css('.file-actions a').text)
 
 
 class TestDocumentLinkWidgetWithActivatedBumblebee(FunctionalTestCase):

@@ -5,6 +5,12 @@ Changelog
 4.10.0 (unreleased)
 -------------------
 
+- Use qtip2 library for document preview tooltip
+
+  - Load tooltip data asynchronously.
+
+  [phgross, Kevin Bieri]
+
 - Adjust overlay according to customer feedback
   Add link to document title in overlay
   Trigger close when clicking on the backdrop of the overlay

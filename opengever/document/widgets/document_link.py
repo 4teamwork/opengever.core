@@ -20,8 +20,7 @@ class DocumentLinkWidget(object):
         return api.portal.get().absolute_url()
 
     def get_css_class(self):
-        classes = ['tabbedview-tooltip', 'document_link',
-                   self.document.ContentTypeClass()]
+        classes = ['document_link', self.document.ContentTypeClass()]
 
         if self.document.is_bumblebeeable():
             classes.append('showroom-item')

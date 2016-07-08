@@ -1,23 +1,18 @@
-<div i18n:domain="opengever.document" class='linkWrapper'
-     tal:define="is_bumblebeeable context/is_bumblebeeable">
+<div i18n:domain="opengever.document" class="linkWrapper tooltip-trigger"
+     tal:define="is_bumblebeeable context/is_bumblebeeable"
+     tal:attributes="data-tooltip-url string:${view/get_url}/tooltip">
 
   <span tal:condition="context/is_removed" class='removed_document' />
 
   <a tal:condition="not: is_bumblebeeable"
      tal:content="view/get_title"
-     tal:attributes="class view/get_css_class; href view/get_url;
-                     data-tooltip-url string:${view/get_url}/tooltip" />
+     tal:attributes="class view/get_css_class; href view/get_url;" />
 
   <a tal:condition="is_bumblebeeable"
      tal:content="view/get_title"
      tal:attributes="class view/get_css_class;
                      href view/get_url;
                      data-showroom-target context/get_overlay_url;
-                     data-showroom-title context/get_overlay_title;
-                     data-tooltip-url string:${view/get_url}/tooltip;" />
-
-  <div class="tabbedview-tooltip-data" >
-    <img tal:attributes="src string:${view/portal_url}/spinner.gif" class="spinner"/>
-  </div>
+                     data-showroom-title context/get_overlay_title" />
 
 </div>

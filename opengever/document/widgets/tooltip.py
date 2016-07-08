@@ -31,5 +31,4 @@ class TooltipView(BrowserView):
 
     def download_link(self):
         dc_helper = DownloadConfirmationHelper()
-        return dc_helper.get_html_tag(self.get_url(),
-                                      additional_classes=['action-download'])
+        return dc_helper.get_html_tag(self.get_url())
