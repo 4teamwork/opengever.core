@@ -5,55 +5,19 @@
 
   <a tal:condition="not: is_bumblebeeable"
      tal:content="view/get_title"
-     tal:attributes="class view/get_css_class; href view/get_url" />
+     tal:attributes="class view/get_css_class; href view/get_url;
+                     data-tooltip-url string:${view/get_url}/tooltip" />
 
   <a tal:condition="is_bumblebeeable"
      tal:content="view/get_title"
      tal:attributes="class view/get_css_class;
                      href view/get_url;
                      data-showroom-target context/get_overlay_url;
-                     data-showroom-title context/get_overlay_title" />
+                     data-showroom-title context/get_overlay_title;
+                     data-tooltip-url string:${view/get_url}/tooltip;" />
 
-  <div class='tabbedview-tooltip-data'>
-    <div class='tooltip-header' tal:content="view/get_title" />
-    <ul class='tooltip-breadcrumb' tal:define="breadcrumbs context/get_breadcrumbs">
-      <li tal:repeat="breadcrumb breadcrumbs" tal:content="breadcrumb/Title" />
-    </ul>
-
-    <div class='tooltip-content'>
-      <ul class='tooltip-links'>
-        <li tal:condition="view/preview_link_available">
-          <a class="action-pdf"
-             tal:attributes="href string:${view/get_url}/@@download_pdfpreview"
-             i18n:translate="button_pdf_preview">
-            PDF Preview
-          </a>
-        </li>
-        <li tal:condition="view/edit_metadata_link_available">
-          <a class="action-edit"
-             tal:attributes="href string:${view/get_url}/edit_checker"
-             i18n:domain="plone" i18n:translate="">
-            Edit metadata
-          </a>
-        </li>
-        <li tal:condition="view/checkout_and_edit_link_available">
-          <a class="action-checkout"
-             tal:attributes="href view/checkout_and_edit_link"
-             i18n:domain="plone" i18n:translate="">
-            Checkout and edit
-          </a>
-        </li>
-        <li tal:condition="view/download_link_available">
-          <a class="action-download"
-             tal:replace="structure view/download_link" />
-        </li>
-      </ul>
-      <div class="preview" tal:condition="is_bumblebeeable">
-        <img tal:attributes="src context/get_preview_image_url; alt view/get_title"
-             width="200" class="file-preview" />
-      </div>
-    </div>
-    <div class='bottomImage'></div>
+  <div class="tabbedview-tooltip-data" >
+    <img tal:attributes="src string:${view/portal_url}/spinner.gif" class="spinner"/>
   </div>
 
 </div>
