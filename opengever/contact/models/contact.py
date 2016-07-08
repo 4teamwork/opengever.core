@@ -27,3 +27,23 @@ class Contact(Base):
     __mapper_args__ = {'polymorphic_on':contact_type,
                        'polymorphic_identity':'contact',
                        'with_polymorphic':'*'}
+
+    def is_editable(self):
+        return True
+
+    def get_edit_url(self, context):
+        return self.get_url(view='edit')
+
+    def get_edit_values(self, fieldnames):
+        values = {}
+        for fieldname in fieldnames:
+            value = getattr(self, fieldname, None)
+            if not value:
+                continue
+
+            values[fieldname] = value
+        return values
+
+    def update_model(self, data):
+        for key, value in data.items():
+            setattr(self, key, value)

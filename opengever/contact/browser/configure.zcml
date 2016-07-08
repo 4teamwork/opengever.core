@@ -11,6 +11,13 @@
       permission="zope2.View"
       />
 
+<browser:page
+      name="edit"
+      for="opengever.contact.interfaces.IPerson"
+      class=".person.EditPerson"
+      permission="cmf.ModifyPortalContent"
+      />
+
   <browser:page
       name="plone_layout"
       for="opengever.contact.interfaces.IPerson"
