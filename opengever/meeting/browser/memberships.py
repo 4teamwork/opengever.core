@@ -2,8 +2,8 @@ from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.meeting import _
 from opengever.meeting.browser.members import MemberView
 from opengever.meeting.browser.views import RemoveModelView
-from opengever.meeting.form import ModelAddForm
-from opengever.meeting.form import ModelEditForm
+from opengever.base.browser.modelforms import ModelAddForm
+from opengever.base.browser.modelforms import ModelEditForm
 from opengever.meeting.model import Membership
 from plone.directives import form
 from z3c.form import field

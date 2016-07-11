@@ -10,7 +10,7 @@ from opengever.meeting.browser.periods import IPeriodModel
 from opengever.meeting.committee import Committee
 from opengever.meeting.committee import ICommittee
 from opengever.meeting.committeecontainer import ICommitteeContainer
-from opengever.meeting.form import ModelAddForm
+from opengever.base.browser.modelforms import ModelAddForm
 from opengever.meeting.form import ModelProxyAddForm
 from opengever.meeting.form import ModelProxyEditForm
 from opengever.meeting.model import Period
