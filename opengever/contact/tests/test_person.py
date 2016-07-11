@@ -24,6 +24,29 @@ class TestPerson(FunctionalTestCase):
             sandra.get_url(view='edit'))
 
     @browsing
+    def test_person_can_be_added_in_browser(self, browser):
+        contactfolder = create(Builder('contactfolder'))
+
+        browser.login().open(contactfolder, view="@@add-person")
+
+        browser.fill({'Salutation': u'Sir',
+                      'Academic title': u'Dr',
+                      'Firstname': u'Hanspeter',
+                      'Lastname': u'Hansj\xf6rg',
+                      'Description': u'Pellentesque posuere.'}).submit()
+
+        self.assertEquals([u'Record created'], info_messages())
+
+        person = Person.query.first()
+        self.assertIsNotNone(person)
+
+        self.assertEqual(u'Sir', person.salutation)
+        self.assertEqual(u'Dr', person.academic_title)
+        self.assertEqual(u'Hanspeter', person.firstname)
+        self.assertEqual(u'Hansj\xf6rg', person.lastname)
+        self.assertEqual(u'Pellentesque posuere.', person.description)
+
+    @browsing
     def test_person_can_be_edited_in_browser(self, browser):
         contactfolder = create(Builder('contactfolder'))
 
@@ -42,10 +65,10 @@ class TestPerson(FunctionalTestCase):
 
         self.assertEquals([u'Changes saved'], info_messages())
 
-        person = Person.get(self.person.person_id)
+        person = Person.get(peter.person_id)
         self.assertIsNotNone(person)
         self.assertEqual(u'Sir', person.salutation)
         self.assertEqual(u'Dr', person.academic_title)
         self.assertEqual(u'Hanspeter', person.firstname)
         self.assertEqual(u'Hansj\xf6rg', person.lastname)
-        self.assertEqual(u'foo@example.com', person.description)
+        self.assertEqual(u'Pellentesque posuere.', person.description)

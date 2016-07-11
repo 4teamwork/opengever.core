@@ -15,14 +15,14 @@
       name="edit"
       for="opengever.contact.interfaces.IPerson"
       class=".person.EditPerson"
-      permission="cmf.ModifyPortalContent"
+      permission="opengever.contact.EditPerson"
       />
 
 <browser:page
       name="add-person"
       for="opengever.contact.interfaces.IContactFolder"
       class=".person.AddPerson"
-      permission="cmf.ModifyPortalContent"
+      permission="opengever.contact.AddPerson"
       />
 
   <browser:page

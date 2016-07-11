@@ -13,4 +13,14 @@
         title="opengever.contact: Add contactfolder"
         />
 
+    <permission
+        id="opengever.contact.AddPerson"
+        title="opengever.contact: Add person"
+        />
+
+    <permission
+        id="opengever.contact.EditPerson"
+        title="opengever.contact: Edit person"
+        />
+
 </configure>
