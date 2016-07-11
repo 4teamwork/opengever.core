@@ -207,6 +207,9 @@ msgstr "Ouvert"
 msgid "label_actions_menu"
 msgstr "Actions supplémentaires"
 
+msgid "label_has_parse_errors"
+msgstr ""
+
 msgid "label_reset"
 msgstr "Remettre"
 

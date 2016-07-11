@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-06-26 19:06+0000\n"
+"POT-Creation-Date: 2016-07-11 13:09+0000\n"
 "PO-Revision-Date: 2014-09-04 01:03+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -37,6 +37,11 @@ msgstr "In dieser Version ist keine Datei vorhanden"
 #: ./opengever/base/profiles/default/actions.xml
 msgid "Properties"
 msgstr "Eigenschaften anzeigen"
+
+#. Default: "Save"
+#: ./opengever/base/browser/modelforms.py:41
+msgid "Save"
+msgstr "Speichern"
 
 #: ./opengever/base/browser/list_groupmembers.pt:14
 msgid "There are no members in this group."
@@ -146,6 +151,11 @@ msgstr "Archivwürdigkeit"
 msgid "label_archival_value_annotation"
 msgstr "Kommentar zur Archivwürdigkeit"
 
+#. Default: "Cancel"
+#: ./opengever/base/browser/modelforms.py:53
+msgid "label_cancel"
+msgstr "Abbrechen"
+
 #. Default: "Change public trial information."
 #: ./opengever/base/browser/edit_public_trial.py:62
 msgid "label_change_public_trial"
@@ -187,7 +197,7 @@ msgid "label_dateofsubmission"
 msgstr "Anbietezeitpunkt"
 
 #. Default: "An unexpected error has occured"
-#: ./opengever/base/browser/templates/gever-macros.pt:114
+#: ./opengever/base/browser/templates/gever-macros.pt:117
 msgid "label_default_error_message"
 msgstr "Ein unerwarteter Fehler ist aufgetreten"
 
@@ -202,7 +212,7 @@ msgid "label_dossier"
 msgstr "Dossier:"
 
 #. Default: "Initial version (document copied)"
-#: ./opengever/base/subscribers.py:60
+#: ./opengever/base/subscribers.py:61
 msgid "label_initial_version_copied"
 msgstr "Dokument kopiert (Initialversion)"
 
@@ -247,7 +257,7 @@ msgid "label_search"
 msgstr "Suche"
 
 #. Default: "Error"
-#: ./opengever/base/browser/templates/gever-macros.pt:113
+#: ./opengever/base/browser/templates/gever-macros.pt:116
 msgid "label_severity_error"
 msgstr "Fehler"
 
@@ -271,6 +281,16 @@ msgstr "Titel (französisch)"
 #: opengever/repository/classification.py
 msgid "limited-public"
 msgstr "Eingeschränkt öffentlich"
+
+#. Default: "Changes saved"
+#: ./opengever/base/browser/modelforms.py:121
+msgid "message_changes_saved"
+msgstr "Änderungen gespeichert"
+
+#. Default: "Record created"
+#: ./opengever/base/browser/modelforms.py:49
+msgid "message_record_created"
+msgstr "Eintrag erzeugt"
 
 #. Default: "Error"
 #: ./opengever/base/response.py:41
@@ -342,7 +362,7 @@ msgstr "Haben Sie nicht gefunden, wonach Sie gesucht haben? Die ${advanced_searc
 msgid "search_results_advanced_link"
 msgstr "erweiterte Suche"
 
-#: ./opengever/base/browser/templates/gever-macros.pt:96
+#: ./opengever/base/browser/templates/gever-macros.pt:99
 msgid "show all"
 msgstr "Alle anzeigen"
 

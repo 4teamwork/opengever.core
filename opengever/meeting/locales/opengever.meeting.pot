@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-07-05 11:55+0000\n"
+"POT-Creation-Date: 2016-07-11 13:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -299,7 +299,6 @@ msgstr ""
 #. Default: "Save"
 #: ./opengever/meeting/browser/meetings/excerpt.py:120
 #: ./opengever/meeting/browser/meetings/protocol.py:204
-#: ./opengever/meeting/form.py:42
 msgid "Save"
 msgstr ""
 
@@ -631,7 +630,6 @@ msgstr ""
 #. Default: "Cancel"
 #: ./opengever/meeting/browser/meetings/excerpt.py:152
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:36
-#: ./opengever/meeting/form.py:54
 msgid "label_cancel"
 msgstr ""
 
@@ -1054,18 +1052,12 @@ msgstr ""
 
 #. Default: "Changes saved"
 #: ./opengever/meeting/browser/meetings/protocol.py:261
-#: ./opengever/meeting/form.py:122
 msgid "message_changes_saved"
 msgstr ""
 
 #. Default: "Your changes were not saved, the protocol is locked by ${username}."
 #: ./opengever/meeting/browser/meetings/protocol.py:253
 msgid "message_locked_by_another_user"
-msgstr ""
-
-#. Default: "Record created"
-#: ./opengever/meeting/form.py:50
-msgid "message_record_created"
 msgstr ""
 
 #. Default: "Your changes were not saved, the protocol has been modified in the meantime."

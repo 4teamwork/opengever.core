@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2016-07-08 14:02+0000\n"
+"POT-Creation-Date: 2016-07-11 13:06+0000\n"
 "PO-Revision-Date: 2011-01-05 15:15+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -13,6 +13,11 @@ msgstr ""
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+
+#. Default: "Add Person"
+#: ./opengever/contact/browser/person.py:72
+msgid "Add Person"
+msgstr "Person hinzufügen"
 
 #: ./opengever/contact/contact.py:187
 #: ./opengever/contact/profiles/default/types/opengever.contact.contact.xml
@@ -38,6 +43,7 @@ msgid "internet"
 msgstr "Internet"
 
 #. Default: "Academic title"
+#: ./opengever/contact/browser/person.py:43
 #: ./opengever/contact/browser/templates/person.pt:30
 #: ./opengever/contact/contact.py:69
 msgid "label_academic_title"
@@ -79,6 +85,7 @@ msgid "label_department"
 msgstr "Abteilung"
 
 #. Default: "Description"
+#: ./opengever/contact/browser/person.py:58
 #: ./opengever/contact/contact.py:145
 msgid "label_description"
 msgstr "Beschreibung"
@@ -95,12 +102,14 @@ msgid "label_email2"
 msgstr "E-Mail 2"
 
 #. Default: "Firstname"
+#: ./opengever/contact/browser/person.py:48
 #: ./opengever/contact/contact.py:82
 #: ./opengever/contact/contactfolder.py:104
 msgid "label_firstname"
 msgstr "Vorname"
 
 #. Default: "Lastname"
+#: ./opengever/contact/browser/person.py:53
 #: ./opengever/contact/contact.py:75
 #: ./opengever/contact/contactfolder.py:99
 msgid "label_lastname"
@@ -158,6 +167,7 @@ msgid "label_picture"
 msgstr "Bild"
 
 #. Default: "Salutation"
+#: ./opengever/contact/browser/person.py:38
 #: ./opengever/contact/browser/templates/person.pt:26
 #: ./opengever/contact/contact.py:64
 msgid "label_salutation"
@@ -192,3 +202,4 @@ msgstr "${amount} Treffer."
 #: ./opengever/contact/contact.py:44
 msgid "telefon"
 msgstr "Telefon"
+
