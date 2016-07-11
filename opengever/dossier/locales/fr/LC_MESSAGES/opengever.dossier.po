@@ -100,7 +100,7 @@ msgstr "Dernières tâches"
 
 #: ./opengever/dossier/browser/overview_templates/overview.pt:28
 msgid "No Subdossiers"
-msgstr ""
+msgstr "Pas de sous-dossiers"
 
 #: ./opengever/dossier/archive.py:56
 msgid "Not all required fields are filled"
@@ -604,4 +604,3 @@ msgstr "Périmé"
 #: ./opengever/dossier/behaviors/participation.py:196
 msgid "warning_no_participants_selected"
 msgstr "Vous n'avez sélectionné aucune participation"
-
