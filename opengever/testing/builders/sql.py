@@ -10,6 +10,7 @@ from opengever.contact.models import Organization
 from opengever.contact.models import OrgRole
 from opengever.contact.models import Person
 from opengever.contact.models import PhoneNumber
+from opengever.contact.models import URL
 from opengever.globalindex.model.task import Task
 from opengever.locking.model import Lock
 from opengever.meeting.committee import ICommittee
@@ -375,6 +376,14 @@ class MailAddressBuilder(ContactAttributesBuilder):
     id_argument_name = 'mailaddress_id'
 
 builder_registry.register('mailaddress', MailAddressBuilder)
+
+
+class URLBuilder(ContactAttributesBuilder):
+
+    mapped_class = URL
+    id_argument_name = 'url_id'
+
+builder_registry.register('url', URLBuilder)
 
 
 class OrganizationBuilder(SqlObjectBuilder):
