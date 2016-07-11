@@ -92,3 +92,25 @@ class TestBumblebeePreview(FunctionalTestCase):
         self.assertEqual(
             25, int(batch_size),
             'The batch-size data atribute should be on the tag')
+
+    @browsing
+    def test_number_of_documents_is_available_in_template(self, browser):
+        dossier = create(Builder('dossier')
+                         .titled(u'Foo Dossier'))
+
+        create(Builder('document')
+               .titled(u'Foo Document')
+               .with_dummy_content()
+               .within(dossier))
+
+        create(Builder('dossier').within(dossier))
+
+        browser.login().open(self.portal, view='search')
+
+        number_of_documents = browser.css(
+            '#search-results .searchResults').first.attrib.get('data-number-of-documents')
+
+        self.assertEqual(
+            1, int(number_of_documents),
+            'The number_of_documents data should be set to the amount of'
+            'of found bumblebeeable objects.')

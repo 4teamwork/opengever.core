@@ -182,7 +182,7 @@
     }
 
     else if (isOnSearchView()) {
-      searchResultsNumber = $('#search-results-number').text();
+      searchResultsNumber = $('#search-results .searchResults').data('number-of-documents');
       if ($.isNumeric(searchResultsNumber)) {
         return parseInt(searchResultsNumber, 10);
       }

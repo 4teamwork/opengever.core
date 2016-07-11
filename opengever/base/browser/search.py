@@ -1,4 +1,5 @@
 from DateTime import DateTime
+from opengever.bumblebee import is_bumblebee_feature_enabled
 from plone import api
 from plone.app.search.browser import EVER
 from plone.app.search.browser import quote_chars
@@ -20,6 +21,7 @@ class OpengeverSearch(Search):
     """
 
     b_size = 25
+    number_of_documents = 0
 
     def __init__(self, context, request):
         super(OpengeverSearch, self).__init__(context, request)
@@ -31,6 +33,19 @@ class OpengeverSearch(Search):
         """Overwrite this method to adjust the default batch size from
         10 to 25.
         """
+        if is_bumblebee_feature_enabled:
+            # We have to update the number of documents in a sepparate query
+            # because the query can contain different portaltypes. In the
+            # showroom overlay we just want to display the amount of
+            # bumblebee-items and not the amount of all search results.
+            bumblebee_search_query = query or {}
+            bumblebee_search_query.update(
+                {'object_provides': 'ftw.bumblebee.interfaces.IBumblebeeable'})
+
+            self.number_of_documents = len(super(OpengeverSearch, self).results(
+                query=bumblebee_search_query,
+                batch=False))
+
         return super(OpengeverSearch, self).results(
             query=query, batch=batch, b_size=self.b_size, b_start=b_start)
 

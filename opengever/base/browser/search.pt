@@ -291,7 +291,8 @@
                                            use_view_action site_properties/typesUseViewActionInListings|python:();
                                            allowAnonymousViewAbout site_properties/allowAnonymousViewAbout;
                                            show_about python:not isAnon or allowAnonymousViewAbout;">
-                  <dl class="searchResults">
+                  <dl class="searchResults"
+                      tal:attributes="data-number-of-documents view/number_of_documents">
                     <tal:results repeat="item batch">
                       <div class="search-item-wrapper">
                         <div class="searchItem">
