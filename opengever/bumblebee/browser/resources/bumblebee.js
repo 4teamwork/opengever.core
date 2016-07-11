@@ -205,7 +205,7 @@
     }
 
     else if (isOnSearchView()) {
-      offset = parseQueryString('b_start');
+      offset = $('#search-results .searchResults').data('offset');
       if ($.isNumeric(offset)) {
         return parseInt(offset, 10);
       }

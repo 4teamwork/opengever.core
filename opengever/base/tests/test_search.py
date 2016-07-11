@@ -3,6 +3,8 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.testing import FunctionalTestCase
+from plone import api
+from zope.component import getMultiAdapter
 
 
 class TestOpengeverSearch(FunctionalTestCase):
@@ -114,3 +116,37 @@ class TestBumblebeePreview(FunctionalTestCase):
             1, int(number_of_documents),
             'The number_of_documents data should be set to the amount of'
             'of found bumblebeeable objects.')
+
+    @browsing
+    def test_set_showroom_vars_correctly(self, browser):
+        catalog = api.portal.get_tool('portal_catalog')
+
+        base = create(Builder('dossier'))
+
+        search_view = getMultiAdapter((self.portal, self.request), name="search")
+
+        # Batch 1
+        create(Builder('document').within(base).titled(u'A Foo'))
+        create(Builder('dossier').within(base).titled(u'B Foo'))
+
+        # Batch 2
+        create(Builder('document').within(base).titled(u'C Foo'))
+        create(Builder('document').within(base).titled(u'D Foo'))
+
+        # Batch 3
+        create(Builder('dossier').within(base).titled(u'E Foo'))
+        create(Builder('document').within(base).titled(u'F Foo'))
+
+        brains = catalog({'sort_on': 'sortable_title', 'SearchableText':"Foo"})
+
+        search_view.calculate_showroom_configuration(brains, b_start=0)
+        self.assertEqual(4, search_view.number_of_documents)
+        self.assertEqual(0, search_view.offset)
+
+        search_view.calculate_showroom_configuration(brains, b_start=3)
+        self.assertEqual(4, search_view.number_of_documents)
+        self.assertEqual(2, search_view.offset)
+
+        search_view.calculate_showroom_configuration(brains, b_start=5)
+        self.assertEqual(4, search_view.number_of_documents)
+        self.assertEqual(3, search_view.offset)
