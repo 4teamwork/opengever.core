@@ -5,7 +5,7 @@ Changelog
 4.10.0 (unreleased)
 -------------------
 
-- Add edit-form for a person.
+- Add edit- and add-form for a person.
   [elioschmutz]
 
 - Let bumblebee take precedence over pdfconverter.

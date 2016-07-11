@@ -18,6 +18,13 @@
       permission="cmf.ModifyPortalContent"
       />
 
+<browser:page
+      name="add-person"
+      for="opengever.contact.interfaces.IContactFolder"
+      class=".person.AddPerson"
+      permission="cmf.ModifyPortalContent"
+      />
+
   <browser:page
       name="plone_layout"
       for="opengever.contact.interfaces.IPerson"

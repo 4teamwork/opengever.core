@@ -1,5 +1,7 @@
 from opengever.base.model import CONTENT_TITLE_LENGTH
 from opengever.contact import _
+from opengever.contact.models.person import Person
+from opengever.meeting.form import ModelAddForm
 from opengever.meeting.form import ModelEditForm
 from opengever.ogds.models import FIRSTNAME_LENGTH
 from opengever.ogds.models import LASTNAME_LENGTH
@@ -67,9 +69,16 @@ class IPersonModel(form.Schema):
         )
 
 
-# TODO: ModelEditForm should not be imported from opengever.meeting.
-# Means: we have to move the method out of opengever.meeting to a
-# more global place... any ideas where?
+class AddPerson(ModelAddForm):
+    schema = IPersonModel
+    model_class = Person
+
+    label = _('Add Person', default=u'Add Person')
+
+    def nextURL(self):
+        return self._created_object.get_url()
+
+
 class EditPerson(ModelEditForm):
 
     fields = field.Fields(IPersonModel)
