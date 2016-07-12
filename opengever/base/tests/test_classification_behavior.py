@@ -3,9 +3,11 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from opengever.base.behaviors import classification
+from opengever.base.behaviors.classification import IClassification
 from opengever.base.behaviors.classification import IClassificationSettings
 from opengever.journal.browser import JournalHistory
 from opengever.testing import FunctionalTestCase
+from plone import api
 from plone.app.testing import TEST_USER_ID
 from plone.dexterity.fti import DexterityFTI
 from plone.dexterity.utils import createContentInContainer
@@ -13,6 +15,227 @@ from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 from zope.i18n import translate
 import transaction
+
+
+class TestClassificationDefault(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestClassificationDefault, self).setUp()
+        self.repofolder = create(Builder('repository'))
+        self.field = IClassification['classification']
+
+    def get_classification(self, obj):
+        return self.field.get(self.field.interface(obj))
+
+    def set_classification(self, obj, value):
+        self.field.set(self.field.interface(obj), value)
+        transaction.commit()
+
+    def get_fti(self, portal_type):
+        types_tool = api.portal.get_tool('portal_types')
+        return types_tool[portal_type]
+
+    @browsing
+    def test_classification_default(self, browser):
+        browser.login().open()
+        factoriesmenu.add(u'Business Case Dossier')
+        browser.fill({'Title': 'My Dossier'}).save()
+        dossier = browser.context
+
+        value = self.get_classification(dossier)
+        self.assertEqual(u'unprotected', value)
+
+    @browsing
+    def test_classification_acquired_default(self, browser):
+        browser.login().open(self.repofolder)
+        self.set_classification(self.repofolder, u'confidential')
+        factoriesmenu.add(u'Business Case Dossier')
+        browser.fill({'Title': 'My Dossier'}).save()
+        dossier = browser.context
+
+        value = self.get_classification(dossier)
+        self.assertEqual(u'confidential', value)
+
+    @browsing
+    def test_intermediate_folder_doesnt_break_default_aq(self, browser):
+        # An intermediate folderish object that doesn't have the respective
+        # field shouldn't break acquisition of the default
+        self.set_classification(self.repofolder, u'confidential')
+
+        fti = self.get_fti('opengever.repository.repositoryfolder')
+        fti.allowed_content_types = fti.allowed_content_types + ('Dummy',)
+
+        dummy = createContentInContainer(self.repofolder, 'Dummy')
+        transaction.commit()
+        browser.login().open(dummy)
+
+        factoriesmenu.add(u'Business Case Dossier')
+        browser.fill({'Title': 'My Dossier'}).save()
+        dossier = browser.context
+
+        value = self.get_classification(dossier)
+        self.assertEqual(u'confidential', value)
+
+
+class TestClassificationVocabulary(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestClassificationVocabulary, self).setUp()
+        self.repofolder = create(Builder('repository'))
+        self.field = IClassification['classification']
+
+    def get_classification(self, obj):
+        return self.field.get(self.field.interface(obj))
+
+    def set_classification(self, obj, value):
+        self.field.set(self.field.interface(obj), value)
+        transaction.commit()
+
+    @browsing
+    def test_classification_default_choices(self, browser):
+        browser.login().open(self.repofolder)
+        factoriesmenu.add(u'Business Case Dossier')
+        form_field = browser.find('Classification')
+        self.assertEqual(
+            ['unprotected', 'confidential', 'classified'],
+            form_field.options_values)
+
+    @browsing
+    def test_aq_value_is_contained_in_choices_if_restricted(self, browser):
+        self.set_classification(self.repofolder, u'confidential')
+
+        browser.login().open(self.repofolder)
+        factoriesmenu.add(u'Business Case Dossier')
+
+        form_field = browser.find('Classification')
+        self.assertIn('confidential', form_field.options_values)
+
+    @browsing
+    def test_vocab_is_restricted_if_indicated_by_aq_value(self, browser):
+        self.set_classification(self.repofolder, u'confidential')
+
+        browser.login().open(self.repofolder)
+        factoriesmenu.add(u'Business Case Dossier')
+
+        form_field = browser.find('Classification')
+        self.assertSetEqual(
+            set(['confidential', 'classified']),
+            set(form_field.options_values))
+
+    @browsing
+    def test_acquired_value_is_suggested_as_default(self, browser):
+        self.set_classification(self.repofolder, u'confidential')
+
+        browser.login().open(self.repofolder)
+        factoriesmenu.add(u'Business Case Dossier')
+
+        form_field = browser.find('Classification')
+
+        self.assertEqual('confidential', form_field.value)
+        # Default listed first
+        self.assertEqual('confidential', form_field.options_values[0])
+
+    @browsing
+    def test_restriction_works_in_edit_form(self, browser):
+        self.set_classification(self.repofolder, u'confidential')
+
+        browser.login().open(self.repofolder)
+        factoriesmenu.add(u'Business Case Dossier')
+        browser.fill({'Title': 'My Dossier'}).save()
+        transaction.commit()
+
+        browser.click_on('Edit')
+        form_field = browser.find('Classification')
+        self.assertSetEqual(
+            set(['confidential', 'classified']),
+            set(form_field.options_values))
+
+
+class TestClassificationPropagation(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestClassificationPropagation, self).setUp()
+        self.repofolder = create(Builder('repository'))
+        self.field = IClassification['classification']
+        self.grant('Administrator')
+
+    def get_classification(self, obj):
+        return self.field.get(self.field.interface(obj))
+
+    def set_classification(self, obj, value):
+        self.field.set(self.field.interface(obj), value)
+        transaction.commit()
+
+    @browsing
+    def test_change_propagates_to_children(self, browser):
+        # Start with a loose classification
+        self.set_classification(self.repofolder, u'unprotected')
+
+        browser.login().open(self.repofolder)
+        factoriesmenu.add(u'Business Case Dossier')
+        browser.fill({'Title': 'My Dossier'}).save()
+        dossier = browser.context
+
+        value = self.get_classification(dossier)
+        # Dossier should have inherited classification from repofolder
+        self.assertEqual(u'unprotected', value)
+
+        browser.open(self.repofolder, view='edit')
+        # Make classification more strict
+        browser.fill({'Classification': 'confidential'}).save()
+        transaction.commit()
+
+        value = self.get_classification(dossier)
+        # Stricter classification should have propagated to dossier
+        self.assertEqual(u'confidential', value)
+
+    @browsing
+    def test_change_doesnt_propagate_if_old_value_still_valid(self, browser):
+        browser.login().open(self.repofolder)
+        factoriesmenu.add(u'Business Case Dossier')
+        browser.fill({
+            'Title': 'My Dossier',
+            'Classification': 'confidential'}).save()
+        dossier = browser.context
+
+        value = self.get_classification(dossier)
+        self.assertEqual(u'confidential', value)
+
+        browser.open(self.repofolder, view='edit')
+        browser.fill({'Classification': 'unprotected'}).save()
+        transaction.commit()
+
+        value = self.get_classification(dossier)
+        self.assertEqual(u'confidential', value)
+
+    @browsing
+    def test_propagation_is_depth_limited(self, browser):
+        """Propagation of classification is depth limited to 2 levels.
+        Not sure why this was implemented this way, but here we test for it.
+        """
+        # Start with a loose classification
+        self.set_classification(self.repofolder, u'unprotected')
+        repofolder2 = create(Builder('repository').within(self.repofolder))
+        repofolder3 = create(Builder('repository').within(repofolder2))
+
+        browser.login().open(repofolder3)
+        factoriesmenu.add(u'Business Case Dossier')
+        browser.fill({'Title': 'My Dossier'}).save()
+        dossier = browser.context
+
+        value = self.get_classification(dossier)
+        # Dossier should have inherited classification from repofolder2
+        self.assertEqual(u'unprotected', value)
+
+        browser.open(self.repofolder, view='edit')
+        # Make classification more strict on top level repofolder
+        browser.fill({'Classification': 'confidential'}).save()
+        transaction.commit()
+
+        # Stricter classification should have propagated to repofolder2, but
+        # not dossier (because of depth limitation)
+        self.assertEqual(u'confidential', self.get_classification(repofolder2))
+        self.assertEqual(u'unprotected', self.get_classification(dossier))
 
 
 class TestClassificationBehavior(FunctionalTestCase):
