@@ -23,6 +23,20 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="opengever.document.document.IDocumentSchema"
+      name="bumblebee-open-pdf"
+      class=".open_pdf.OpenDocumentPDFView"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.mail.mail.IOGMailMarker"
+      name="bumblebee-open-pdf"
+      class=".open_pdf.OpenMailPDFView"
+      permission="zope2.View"
+      />
+
   <adapter
       for="opengever.document.document.IDocumentSchema
            zope.interface.Interface"

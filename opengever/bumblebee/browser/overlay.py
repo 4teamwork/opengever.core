@@ -19,6 +19,7 @@ from plone.protect import createToken
 from plone.protect.utils import addTokenToUrl
 from Products.CMFEditions.interfaces.IArchivist import ArchivistRetrieveError
 from Products.Five import BrowserView
+from urllib import quote
 from zExceptions import NotFound
 from zope.component import getAdapter
 from zope.component import getMultiAdapter
@@ -108,8 +109,8 @@ class BumblebeeBaseDocumentOverlay(object):
         if not mimetypeitem or not is_mimetype_supported(mimetypeitem[0]):
             return None
 
-        return bumblebee.get_service_v3().get_representation_url(
-            self.context, 'pdf', filename=self._get_pdf_filename())
+        return '{}/bumblebee-open-pdf?filename={}'.format(
+            self.context.absolute_url(), quote(self._get_pdf_filename()))
 
     def get_checkin_without_comment_url(self):
         if not self.has_file():
@@ -203,8 +204,8 @@ class BumblebeeMailOverlay(BumblebeeBaseDocumentOverlay):
     """
 
     def get_open_as_pdf_url(self):
-        return bumblebee.get_service_v3().get_representation_url(
-            self.context, 'pdf', filename=self._get_pdf_filename())
+        return '{}/bumblebee-open-pdf?filename={}'.format(
+            self.context.absolute_url(), quote(self._get_pdf_filename()))
 
     def get_checkout_url(self):
         return None
