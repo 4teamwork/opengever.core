@@ -238,6 +238,229 @@ class TestClassificationPropagation(FunctionalTestCase):
         self.assertEqual(u'unprotected', self.get_classification(dossier))
 
 
+class TestPrivacyLayerDefault(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestPrivacyLayerDefault, self).setUp()
+        self.repofolder = create(Builder('repository'))
+        self.field = IClassification['privacy_layer']
+
+    def get_privacy_layer(self, obj):
+        return self.field.get(self.field.interface(obj))
+
+    def set_privacy_layer(self, obj, value):
+        self.field.set(self.field.interface(obj), value)
+        transaction.commit()
+
+    def get_fti(self, portal_type):
+        types_tool = api.portal.get_tool('portal_types')
+        return types_tool[portal_type]
+
+    @browsing
+    def test_privacy_layer_default(self, browser):
+        browser.login().open()
+        factoriesmenu.add(u'Business Case Dossier')
+        browser.fill({'Title': 'My Dossier'}).save()
+        dossier = browser.context
+
+        value = self.get_privacy_layer(dossier)
+        self.assertEqual(u'privacy_layer_no', value)
+
+    @browsing
+    def test_privacy_layer_acquired_default(self, browser):
+        browser.login().open(self.repofolder)
+        self.set_privacy_layer(self.repofolder, u'privacy_layer_yes')
+        factoriesmenu.add(u'Business Case Dossier')
+        browser.fill({'Title': 'My Dossier'}).save()
+        dossier = browser.context
+
+        value = self.get_privacy_layer(dossier)
+        self.assertEqual(u'privacy_layer_yes', value)
+
+    @browsing
+    def test_intermediate_folder_doesnt_break_default_aq(self, browser):
+        # An intermediate folderish object that doesn't have the respective
+        # field shouldn't break acquisition of the default
+        self.set_privacy_layer(self.repofolder, u'privacy_layer_yes')
+
+        fti = self.get_fti('opengever.repository.repositoryfolder')
+        fti.allowed_content_types = fti.allowed_content_types + ('Dummy',)
+
+        dummy = createContentInContainer(self.repofolder, 'Dummy')
+        transaction.commit()
+        browser.login().open(dummy)
+
+        factoriesmenu.add(u'Business Case Dossier')
+        browser.fill({'Title': 'My Dossier'}).save()
+        dossier = browser.context
+
+        value = self.get_privacy_layer(dossier)
+        self.assertEqual(u'privacy_layer_yes', value)
+
+
+class TestPrivacyLayerVocabulary(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestPrivacyLayerVocabulary, self).setUp()
+        self.repofolder = create(Builder('repository'))
+        self.field = IClassification['privacy_layer']
+
+    def get_privacy_layer(self, obj):
+        return self.field.get(self.field.interface(obj))
+
+    def set_privacy_layer(self, obj, value):
+        self.field.set(self.field.interface(obj), value)
+        transaction.commit()
+
+    @browsing
+    def test_privacy_layer_default_choices(self, browser):
+        browser.login().open(self.repofolder)
+        factoriesmenu.add(u'Business Case Dossier')
+        form_field = browser.find('Privacy layer')
+        self.assertEqual(
+            ['privacy_layer_no', 'privacy_layer_yes'],
+            form_field.options_values)
+
+    @browsing
+    def test_aq_value_is_contained_in_choices_if_restricted(self, browser):
+        self.set_privacy_layer(self.repofolder, u'privacy_layer_yes')
+
+        browser.login().open(self.repofolder)
+        factoriesmenu.add(u'Business Case Dossier')
+
+        form_field = browser.find('Privacy layer')
+        self.assertIn('privacy_layer_yes', form_field.options_values)
+
+    @browsing
+    def test_vocab_is_restricted_if_indicated_by_aq_value(self, browser):
+        self.set_privacy_layer(self.repofolder, u'privacy_layer_yes')
+
+        browser.login().open(self.repofolder)
+        factoriesmenu.add(u'Business Case Dossier')
+
+        form_field = browser.find('Privacy layer')
+        self.assertSetEqual(
+            set(['privacy_layer_yes']),
+            set(form_field.options_values))
+
+    @browsing
+    def test_acquired_value_is_suggested_as_default(self, browser):
+        self.set_privacy_layer(self.repofolder, u'privacy_layer_yes')
+
+        browser.login().open(self.repofolder)
+        factoriesmenu.add(u'Business Case Dossier')
+
+        form_field = browser.find('Privacy layer')
+
+        self.assertEqual('privacy_layer_yes', form_field.value)
+        # Default listed first
+        self.assertEqual('privacy_layer_yes', form_field.options_values[0])
+
+    @browsing
+    def test_restriction_works_in_edit_form(self, browser):
+        self.set_privacy_layer(self.repofolder, u'privacy_layer_yes')
+
+        browser.login().open(self.repofolder)
+        factoriesmenu.add(u'Business Case Dossier')
+        browser.fill({'Title': 'My Dossier'}).save()
+        transaction.commit()
+
+        browser.click_on('Edit')
+        form_field = browser.find('Privacy layer')
+        self.assertSetEqual(
+            set(['privacy_layer_yes']),
+            set(form_field.options_values))
+
+
+class TestPrivacyLayerPropagation(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestPrivacyLayerPropagation, self).setUp()
+        self.repofolder = create(Builder('repository'))
+        self.field = IClassification['privacy_layer']
+        self.grant('Administrator')
+
+    def get_privacy_layer(self, obj):
+        return self.field.get(self.field.interface(obj))
+
+    def set_privacy_layer(self, obj, value):
+        self.field.set(self.field.interface(obj), value)
+        transaction.commit()
+
+    @browsing
+    def test_change_propagates_to_children(self, browser):
+        # Start with a loose privacy layer
+        self.set_privacy_layer(self.repofolder, u'privacy_layer_no')
+
+        browser.login().open(self.repofolder)
+        factoriesmenu.add(u'Business Case Dossier')
+        browser.fill({'Title': 'My Dossier'}).save()
+        dossier = browser.context
+
+        value = self.get_privacy_layer(dossier)
+        # Dossier should have inherited privacy layer from repofolder
+        self.assertEqual(u'privacy_layer_no', value)
+
+        browser.open(self.repofolder, view='edit')
+        # Make privacy layer more strict
+        browser.fill({'Privacy layer': 'privacy_layer_yes'}).save()
+        transaction.commit()
+
+        value = self.get_privacy_layer(dossier)
+        # Stricter privacy layer should have propagated to dossier
+        self.assertEqual(u'privacy_layer_yes', value)
+
+    @browsing
+    def test_change_doesnt_propagate_if_old_value_still_valid(self, browser):
+        browser.login().open(self.repofolder)
+        factoriesmenu.add(u'Business Case Dossier')
+        browser.fill({
+            'Title': 'My Dossier',
+            'Privacy layer': 'privacy_layer_yes'}).save()
+        dossier = browser.context
+
+        value = self.get_privacy_layer(dossier)
+        self.assertEqual(u'privacy_layer_yes', value)
+
+        browser.open(self.repofolder, view='edit')
+        browser.fill({'Privacy layer': 'privacy_layer_no'}).save()
+        transaction.commit()
+
+        value = self.get_privacy_layer(dossier)
+        self.assertEqual(u'privacy_layer_yes', value)
+
+    @browsing
+    def test_propagation_is_depth_limited(self, browser):
+        """Propagation of privacy layer is depth limited to 2 levels.
+        Not sure why this was implemented this way, but here we test for it.
+        """
+        # Start with a loose privacy layer
+        self.set_privacy_layer(self.repofolder, u'privacy_layer_no')
+        repofolder2 = create(Builder('repository').within(self.repofolder))
+        repofolder3 = create(Builder('repository').within(repofolder2))
+
+        browser.login().open(repofolder3)
+        factoriesmenu.add(u'Business Case Dossier')
+        browser.fill({'Title': 'My Dossier'}).save()
+        dossier = browser.context
+
+        value = self.get_privacy_layer(dossier)
+        # Dossier should have inherited privacy layer from repofolder2
+        self.assertEqual(u'privacy_layer_no', value)
+
+        browser.open(self.repofolder, view='edit')
+        # Reduce privacy layer on top level repofolder
+        browser.fill({'Privacy layer': 'privacy_layer_yes'}).save()
+        transaction.commit()
+
+        # Reduced privacy layer should have propagated to repofolder2, but
+        # not dossier (because of depth limitation)
+        self.assertEqual(
+            u'privacy_layer_yes', self.get_privacy_layer(repofolder2))
+        self.assertEqual(
+            u'privacy_layer_no', self.get_privacy_layer(dossier))
+
+
 class TestClassificationBehavior(FunctionalTestCase):
     use_browser = True
 
