@@ -35,11 +35,11 @@ class TestBumblebeeOverlayListing(FunctionalTestCase):
         browser.login().visit(document, view="bumblebee-overlay-listing")
 
         self.assertEqual(
-            ['Open detail view',
+            ['Checkout and edit',
+             'Edit metadata',
              'Download copy',
              'Open as PDF',
-             'Edit metadata',
-             'Checkout and edit'],
+             'Open detail view'],
             browser.css('.file-actions a').text)
 
     @browsing
@@ -50,7 +50,7 @@ class TestBumblebeeOverlayListing(FunctionalTestCase):
         browser.login().visit(document, view="bumblebee-overlay-listing")
 
         self.assertEqual(
-            ['Open detail view', 'Edit metadata'],
+            ['Edit metadata', 'Open detail view'],
             browser.css('.file-actions a').text)
 
     @browsing
@@ -66,13 +66,13 @@ class TestBumblebeeOverlayListing(FunctionalTestCase):
         browser.login().visit(document, view="bumblebee-overlay-listing")
 
         self.assertEqual(
-            ['Open detail view',
+            ['Checkout and edit',
+             'Checkin without comment',
+             'Checkin with comment',
+             'Edit metadata',
              'Download copy',
              'Open as PDF',
-             'Edit metadata',
-             'Checkout and edit',
-             'Checkin without comment',
-             'Checkin with comment'],
+             'Open detail view'],
             browser.css('.file-actions a').text)
 
     @browsing
@@ -91,10 +91,10 @@ class TestBumblebeeOverlayListing(FunctionalTestCase):
         browser.login().visit(document, view="bumblebee-overlay-listing")
 
         self.assertEqual(
-            ['Open detail view',
+            ['Edit metadata',
              'Download copy',
              'Open as PDF',
-             'Edit metadata'],
+             'Open detail view'],
             browser.css('.file-actions a').text)
 
     @browsing
@@ -107,10 +107,10 @@ class TestBumblebeeOverlayListing(FunctionalTestCase):
         browser.login().visit(mail, view="bumblebee-overlay-listing")
 
         self.assertEqual(
-            ['Open detail view',
+            ['Edit metadata',
              'Download copy',
              'Open as PDF',
-             'Edit metadata'],
+             'Open detail view'],
             browser.css('.file-actions a').text)
 
     @browsing
@@ -128,8 +128,7 @@ class TestBumblebeeOverlayListing(FunctionalTestCase):
         browser.login().visit(document, view="bumblebee-overlay-document?version_id=1")
 
         self.assertEqual(
-            ['Download copy',
-             'Revert document'],
+            ['Revert document', 'Download copy'],
             browser.css('.file-actions a').text)
 
 
@@ -158,10 +157,10 @@ class TestBumblebeeOverlayDocument(FunctionalTestCase):
         browser.login().visit(document, view="bumblebee-overlay-document")
 
         self.assertEqual(
-            ['Download copy',
-             'Open as PDF',
+            ['Checkout and edit',
              'Edit metadata',
-             'Checkout and edit'],
+             'Download copy',
+             'Open as PDF'],
             browser.css('.file-actions a').text)
 
     @browsing
@@ -188,12 +187,12 @@ class TestBumblebeeOverlayDocument(FunctionalTestCase):
         browser.login().visit(document, view="bumblebee-overlay-document")
 
         self.assertEqual(
-            ['Download copy',
-             'Open as PDF',
-             'Edit metadata',
-             'Checkout and edit',
+            ['Checkout and edit',
              'Checkin without comment',
-             'Checkin with comment'],
+             'Checkin with comment',
+             'Edit metadata',
+             'Download copy',
+             'Open as PDF'],
             browser.css('.file-actions a').text)
 
     @browsing
@@ -212,9 +211,9 @@ class TestBumblebeeOverlayDocument(FunctionalTestCase):
         browser.login().visit(document, view="bumblebee-overlay-document")
 
         self.assertEqual(
-            ['Download copy',
-             'Open as PDF',
-             'Edit metadata'],
+            ['Edit metadata',
+             'Download copy',
+             'Open as PDF'],
             browser.css('.file-actions a').text)
 
     @browsing
@@ -227,9 +226,9 @@ class TestBumblebeeOverlayDocument(FunctionalTestCase):
         browser.login().visit(mail, view="bumblebee-overlay-document")
 
         self.assertEqual(
-            ['Download copy',
-             'Open as PDF',
-             'Edit metadata'],
+            ['Edit metadata',
+             'Download copy',
+             'Open as PDF'],
             browser.css('.file-actions a').text)
 
     @browsing
@@ -247,8 +246,8 @@ class TestBumblebeeOverlayDocument(FunctionalTestCase):
         browser.login().visit(document, view="bumblebee-overlay-document?version_id=1")
 
         self.assertEqual(
-            ['Download copy',
-             'Revert document'],
+            ['Revert document',
+             'Download copy'],
             browser.css('.file-actions a').text)
 
 

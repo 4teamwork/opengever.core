@@ -4,6 +4,26 @@
   var showroom;
   var numberOfDocuments;
 
+  var template = (' \
+    <div class="{{showroom.options.cssClass}}"> \
+      <div class="ftw-showroom-backdrop"></div> \
+      <nav> \
+        <a id="ftw-showroom-prev" class="ftw-showroom-button"></a> \
+        {{#if showroom.options.displayCurrent}} \
+          <span class="ftw-showroom-current">{{showroom.current}}</span> \
+        {{/if}} \
+        {{#if showroom.options.displayTotal}} \
+          {{#if showroom.options.total}}<span>/</span> \
+            <span class="ftw-showroom-total">{{showroom.options.total}}</span> \
+          {{/if}} \
+        {{/if}} \
+        <a id="ftw-showroom-next" class="ftw-showroom-button"></a> \
+        <a id="ftw-showroom-close" class="ftw-showroom-button"></a> \
+      </nav> \
+      {{{content}}} \
+    </div> \
+  ');
+
   function scanForBrokenImages(context) {
     $("img", context).error(function(){
       $(this)
@@ -137,7 +157,11 @@
   }
 
   function init() {
-    showroom = Showroom([], { 'tail': tail, 'head': head });
+    showroom = Showroom([], {
+      'tail': tail,
+      'head': head,
+      template: template
+    });
     updateShowroom();
 
     // The search.js does not trigger an event after reloading the searchview.
