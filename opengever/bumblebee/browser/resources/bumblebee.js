@@ -262,6 +262,8 @@
     }).join();
   }
 
+  function closeShowroom() { showroom.close(); }
+
   function updateShowroom() {
     var items = document.querySelectorAll(".showroom-item");
     var previewListing = $(".preview-listing");
@@ -280,7 +282,8 @@
     .on("reload", updateShowroom)
     .on("viewReady", updateShowroom)
     .on("agendaItemsReady", updateShowroom)
-    .on("click", ".bumblebeeGalleryShowMore", loadNextTabbedviewGalleryView);
+    .on("click", ".bumblebeeGalleryShowMore", loadNextTabbedviewGalleryView)
+    .on("click", ".ftw-showroom-backdrop", closeShowroom);
   $(init);
 
 })(window, window.showroom, window.jQuery);
