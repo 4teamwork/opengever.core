@@ -7,6 +7,8 @@ from opengever.base.oguid import Oguid
 from opengever.contact.models import Address
 from opengever.contact.models import MailAddress
 from opengever.contact.models import Organization
+from opengever.contact.models import Participation
+from opengever.contact.models import ParticipationRole
 from opengever.contact.models import OrgRole
 from opengever.contact.models import Person
 from opengever.contact.models import PhoneNumber
@@ -404,3 +406,19 @@ class OrgRoleBuilder(SqlObjectBuilder):
     id_argument_name = 'org_role_id'
 
 builder_registry.register('org_role', OrgRoleBuilder)
+
+
+class ParticipationBuilder(SqlObjectBuilder):
+
+    mapped_class = Participation
+    id_argument_name = 'participation_id'
+
+builder_registry.register('participation', ParticipationBuilder)
+
+
+class ParticipationRoleBuilder(SqlObjectBuilder):
+
+    mapped_class = ParticipationRole
+    id_argument_name = 'participation_role_id'
+
+builder_registry.register('participation_role', ParticipationRoleBuilder)
