@@ -3,6 +3,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
+from opengever.base import pdfconverter
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.testing import FunctionalTestCase
 from opengever.testing.helpers import create_document_version
@@ -125,13 +126,11 @@ class TestVersionsTabWithPDFConverter(TestVersionsTab):
 
     def setUp(self):
         super(TestVersionsTabWithPDFConverter, self).setUp()
-        import opengever.document
-        opengever.document.browser.versions_tab.PDFCONVERTER_AVAILABLE = True
+        pdfconverter.PDFCONVERTER_AVAILABLE = True
 
     def tearDown(self):
         super(TestVersionsTabWithPDFConverter, self).tearDown()
-        import opengever.document
-        opengever.document.browser.versions_tab.PDFCONVERTER_AVAILABLE = False
+        pdfconverter.PDFCONVERTER_AVAILABLE = False
 
     @browsing
     def test_download_pdf_link_is_properly_constructed(self, browser):

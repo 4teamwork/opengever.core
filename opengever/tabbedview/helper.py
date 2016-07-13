@@ -15,15 +15,6 @@ from zope.component import getUtility
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
 from zope.i18n import translate
-import pkg_resources
-
-
-try:
-    pkg_resources.get_distribution('opengever.pdfconverter')
-except pkg_resources.DistributionNotFound:
-    PDFCONVERTER_AVAILABLE = False
-else:
-    PDFCONVERTER_AVAILABLE = True
 
 
 def org_unit_title_helper(item, value):

@@ -2,8 +2,8 @@ from ftw import bumblebee
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.base import pdfconverter
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
-from opengever.document.widgets import document_link
 from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.testing import FunctionalTestCase
 
@@ -12,11 +12,11 @@ class TestDocumentLinkWidget(FunctionalTestCase):
 
     def setUp(self):
         super(TestDocumentLinkWidget, self).setUp()
-        self.converter_avaialable = document_link.PDFCONVERTER_AVAILABLE
+        self.converter_avaialable = pdfconverter.PDFCONVERTER_AVAILABLE
 
     def tearDown(self):
         super(TestDocumentLinkWidget, self).tearDown()
-        document_link.PDFCONVERTER_AVAILABLE = self.converter_avaialable
+        pdfconverter.PDFCONVERTER_AVAILABLE = self.converter_avaialable
 
     @browsing
     def test_link_contains_mimetype_icon_clas(self, browser):
@@ -61,7 +61,7 @@ class TestDocumentLinkWidget(FunctionalTestCase):
 
     @browsing
     def test_tooltip_actions(self, browser):
-        document_link.PDFCONVERTER_AVAILABLE = True
+        pdfconverter.PDFCONVERTER_AVAILABLE = True
         document = create(Builder('document').with_dummy_content())
 
         browser.open_html(DocumentLinkWidget(document).render())
@@ -103,7 +103,7 @@ class TestDocumentLinkWidget(FunctionalTestCase):
 
     @browsing
     def test_preview_link_is_only_available_for_documents(self, browser):
-        document_link.PDFCONVERTER_AVAILABLE = True
+        pdfconverter.PDFCONVERTER_AVAILABLE = True
         document = create(Builder('document').with_dummy_content())
         mail = create(Builder('mail'))
 
@@ -117,11 +117,11 @@ class TestDocumentLinkWidget(FunctionalTestCase):
     def test_preview_link_is_only_available_when_pdfconverter_is_active(self, browser):
         document = create(Builder('document').with_dummy_content())
 
-        document_link.PDFCONVERTER_AVAILABLE = True
+        pdfconverter.PDFCONVERTER_AVAILABLE = True
         browser.open_html(DocumentLinkWidget(document).render())
         self.assertIn('PDF Preview', browser.css('.tooltip-links a').text)
 
-        document_link.PDFCONVERTER_AVAILABLE = False
+        pdfconverter.PDFCONVERTER_AVAILABLE = False
         browser.open_html(DocumentLinkWidget(document).render())
         self.assertNotIn('PDF Preview', browser.css('.tooltip-links a').text)
 

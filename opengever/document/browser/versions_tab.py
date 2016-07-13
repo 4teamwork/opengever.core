@@ -3,6 +3,7 @@ from datetime import datetime
 from five import grok
 from ftw.table.interfaces import ITableSource
 from ftw.table.interfaces import ITableSourceConfig
+from opengever.base.pdfconverter import is_pdfconverter_enabled
 from opengever.base.protect import unprotected_write
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.bumblebee import is_bumblebeeable
@@ -22,14 +23,6 @@ from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import implements
 from zope.interface import Interface
-import pkg_resources
-
-try:
-    pkg_resources.get_distribution('opengever.pdfconverter')
-except pkg_resources.DistributionNotFound:
-    PDFCONVERTER_AVAILABLE = False
-else:
-    PDFCONVERTER_AVAILABLE = True
 
 
 def translate_link(url, label, css_class=None):
@@ -298,7 +291,7 @@ class VersionsTab(BaseListingTab):
          'column_title': _(u'label_download_copy', default=u'Download copy'),
          },
 
-        # Dropped if PDFCONVERTER_AVAILABLE == False
+        # Dropped if pdfconverter is not enabled
         {'column': 'pdf_preview_link',
          'column_title': ' ',
          },
@@ -307,6 +300,7 @@ class VersionsTab(BaseListingTab):
          'column_title': _(u'label_revert', default=u'Revert'),
          },
 
+        # Dropped if bumblebee is not enabled
         {'column': 'preview',
          'column_title': _(u'label_preview', default=u'Preview'),
          'transform': linked_version_preview
@@ -320,7 +314,7 @@ class VersionsTab(BaseListingTab):
         if not is_bumblebee_feature_enabled() or not is_bumblebeeable(self.context):
             self._columns = self.remove_column('preview')
 
-        if not PDFCONVERTER_AVAILABLE:
+        if not is_pdfconverter_enabled():
             self._columns = self.remove_column('pdf_preview_link')
 
         return self._columns

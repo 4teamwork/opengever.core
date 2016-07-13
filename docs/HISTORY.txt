@@ -5,6 +5,10 @@ Changelog
 4.10.0 (unreleased)
 -------------------
 
+- Let bumblebee take precedence over pdfconverter.
+  Don't consider pdfconverter being available when bumblebee feature is enabled.
+  [deiferni]
+
 - Add participation model for contacts.
   [deiferni]
 
