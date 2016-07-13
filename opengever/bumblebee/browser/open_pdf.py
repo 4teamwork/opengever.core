@@ -1,12 +1,14 @@
 from ftw import bumblebee
 from ftw.bumblebee.mimetypes import is_mimetype_supported
 from opengever.bumblebee import is_bumblebee_feature_enabled
+from opengever.bumblebee.events import PDFDownloadedEvent
 from Products.Five import BrowserView
 from zExceptions import NotFound
+from zope.event import notify
 
 
 class OpenMailPDFView(BrowserView):
-    """Redirect to bumblebee pdf for mails."""
+    """Redirect to bumblebee pdf for mails and fire downloaded event."""
 
     def __call__(self):
         if not is_bumblebee_feature_enabled():
@@ -15,6 +17,8 @@ class OpenMailPDFView(BrowserView):
         filename = self.request.get('filename')
         if not filename:
             raise NotFound
+
+        notify(PDFDownloadedEvent(self.context))
 
         url = bumblebee.get_service_v3().get_representation_url(
             self.context, 'pdf', filename=filename)

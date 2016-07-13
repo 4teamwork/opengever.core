@@ -6,6 +6,7 @@ from ftw.mail.mail import IMail
 from OFS.interfaces import IObjectWillBeMovedEvent, IObjectWillBeAddedEvent
 from opengever.base.behaviors import classification
 from opengever.base.browser.paste import ICopyPasteRequestLayer
+from opengever.bumblebee.interfaces import IPDFDownloadedEvent
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.interfaces import IFileCopyDownloadedEvent
 from opengever.document.interfaces import IObjectCheckedInEvent
@@ -487,6 +488,15 @@ def file_copy_downloaded(context, event):
     title = _(u'label_file_copy_downloaded',
               default=u'Download copy')
     journal_entry_factory(context, FILE_COPY_DOWNLOADED, title)
+
+
+PDF_DOWNLOADED = 'PDF downloaded'
+
+
+@grok.subscribe(IBaseDocument, IPDFDownloadedEvent)
+def pdf_downloaded(context, event):
+    title = _(u'label_pdf_downloaded', default=u'PDF downloaded')
+    journal_entry_factory(context, PDF_DOWNLOADED, title)
 
 
 DOCUMENT_SENT = 'Document Sent'
