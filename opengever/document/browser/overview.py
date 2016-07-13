@@ -4,6 +4,7 @@ from ftw import bumblebee
 from opengever.base import _ as ogbmf
 from opengever.base.browser import edit_public_trial
 from opengever.base.browser.helper import get_css_class
+from opengever.base.pdfconverter import is_pdfconverter_enabled
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.document import _
 from opengever.document.browser.download import DownloadConfirmationHelper
@@ -24,10 +25,8 @@ from zope.component import queryMultiAdapter
 try:
     from opengever.pdfconverter.behaviors.preview import IPreviewMarker
     from opengever.pdfconverter.behaviors.preview import IPreview
-
-    PDFCONVERTER_AVAILABLE = True
 except ImportError:
-    PDFCONVERTER_AVAILABLE = False
+    pass
 
 
 class BaseRow(object):
@@ -207,7 +206,7 @@ class Overview(DisplayForm, GeverTabMixin):
 
     def is_preview_supported(self):
         # XXX TODO: should be persistent called two times
-        if PDFCONVERTER_AVAILABLE:
+        if is_pdfconverter_enabled():
             return IPreviewMarker.providedBy(self.context)
         return False
 

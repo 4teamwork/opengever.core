@@ -1,17 +1,9 @@
+from opengever.base.pdfconverter import is_pdfconverter_enabled
 from opengever.document.browser.download import DownloadConfirmationHelper
 from plone.app.contentlisting.interfaces import IContentListingObject
 from plone.protect.utils import addTokenToUrl
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.globalrequest import getRequest
-import pkg_resources
-
-
-try:
-    pkg_resources.get_distribution('opengever.pdfconverter')
-except pkg_resources.DistributionNotFound:
-    PDFCONVERTER_AVAILABLE = False
-else:
-    PDFCONVERTER_AVAILABLE = True
 
 
 class DocumentLinkWidget(object):
@@ -39,7 +31,7 @@ class DocumentLinkWidget(object):
         return self.document.Title().decode('utf-8')
 
     def preview_link_available(self):
-        return self.document.is_document and PDFCONVERTER_AVAILABLE
+        return self.document.is_document and is_pdfconverter_enabled()
 
     def edit_metadata_link_available(self):
         return not self.document.is_trashed
