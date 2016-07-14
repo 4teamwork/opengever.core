@@ -11,16 +11,16 @@ import re
 import zope.schema.vocabulary
 
 
-def create_simple_vocabulary(options, message_factory):
+def create_simple_vocabulary(choices, message_factory):
 
     class GenericSimpleVocabulary(object):
 
-        options = None
+        choices = None
         message_factory = None
 
         def __call__(self, context):
             terms = []
-            for item in self.options:
+            for item in self.choices:
                 title = item
                 if self.message_factory:
                     title = self.message_factory(item)
@@ -28,7 +28,7 @@ def create_simple_vocabulary(options, message_factory):
                     zope.schema.vocabulary.SimpleTerm(item, title=title))
             return zope.schema.vocabulary.SimpleVocabulary(terms)
 
-    GenericSimpleVocabulary.options = options
+    GenericSimpleVocabulary.choices = choices
     GenericSimpleVocabulary.message_factory = message_factory
     return GenericSimpleVocabulary
 
@@ -36,51 +36,51 @@ def create_simple_vocabulary(options, message_factory):
 class RestrictedVocabularyFactory(object):
     """Factory for a restricted vocabulary.
 
-    Expects a options list which looks as follows:
-    options = (
+    Expects a choices list which looks as follows:
+    choices = (
     (0,     u'none'),
-    (1,     u'raw_option_one'),
-    (1,     u'raw_option_two'),
-    (2,     u'detailed_option_one'),
-    (2,     u'detailed_option_two'),
+    (1,     u'raw_choice_one'),
+    (1,     u'raw_choice_two'),
+    (2,     u'detailed_choice_one'),
+    (2,     u'detailed_choice_two'),
     )
 
     Use the string as internationalization message-id.
 
     What it does in the example:
-    if the parent object has a "raw" option set, then only detailed
-    options or the selected raw option are allowed to be selected.
+    if the parent object has a "raw" choice set, then only detailed
+    choices or the selected raw choice are allowed to be selected.
     """
 
-    def __init__(self, field, options, message_factory, restricted):
+    def __init__(self, field, choices, message_factory, restricted):
         self.field = field
-        self._options = options
+        self._choices = choices
         self.message_factory = message_factory
         self.restricted = restricted
 
     @property
-    def option_level_mapping(self):
-        option_level_mapping = [list(a) for a in self.options[:]]
-        option_level_mapping = dict([a for a in option_level_mapping
+    def choice_level_mapping(self):
+        choice_level_mapping = [list(a) for a in self.choices[:]]
+        choice_level_mapping = dict([a for a in choice_level_mapping
                                      if not a.reverse()])
-        return option_level_mapping
+        return choice_level_mapping
 
     @property
-    def option_names(self):
-        return [a[1] for a in self.options]
+    def choice_names(self):
+        return [a[1] for a in self.choices]
 
     @property
-    def options(self):
-        if callable(self._options):
-            return self._options()
+    def choices(self):
+        if callable(self._choices):
+            return self._choices()
         else:
-            return self._options
+            return self._choices
 
     def __call__(self, context):
         self.context = context
 
         terms = []
-        for name in self.get_allowed_option_names():
+        for name in self.get_allowed_choice_names():
             title = name
             if self.message_factory:
                 title = self.message_factory(name)
@@ -88,23 +88,23 @@ class RestrictedVocabularyFactory(object):
                 zope.schema.vocabulary.SimpleTerm(name, title=title))
         return zope.schema.vocabulary.SimpleVocabulary(terms)
 
-    def get_allowed_option_names(self):
+    def get_allowed_choice_names(self):
         acquisition_value = self._get_acquisiton_value()
 
         if not self.restricted():
-            return self.option_names
+            return self.choice_names
 
-        if not acquisition_value or acquisition_value not in self.option_names:
-            return self.option_names
+        if not acquisition_value or acquisition_value not in self.choice_names:
+            return self.choice_names
 
-        allowed_option_names = []
-        allowed_option_names.append(acquisition_value)
-        allowed_level = self.option_level_mapping[acquisition_value] + 1
-        for level, name in self.options:
+        allowed_choice_names = []
+        allowed_choice_names.append(acquisition_value)
+        allowed_level = self.choice_level_mapping[acquisition_value] + 1
+        for level, name in self.choices:
             if level >= allowed_level:
-                allowed_option_names.append(name)
+                allowed_choice_names.append(name)
 
-        return allowed_option_names
+        return allowed_choice_names
 
     def _get_acquisiton_value(self):
         context = self.context

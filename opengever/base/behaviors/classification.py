@@ -20,7 +20,7 @@ PUBLIC_TRIAL_UNCHECKED = u'unchecked'
 PUBLIC_TRIAL_PUBLIC = u'public'
 PUBLIC_TRIAL_PRIVATE = u'private'
 PUBLIC_TRIAL_LIMITED_PUBLIC = u'limited-public'
-PUBLIC_TRIAL_OPTIONS = (
+PUBLIC_TRIAL_CHOICES = (
     PUBLIC_TRIAL_UNCHECKED,
     PUBLIC_TRIAL_PUBLIC,
     PUBLIC_TRIAL_LIMITED_PUBLIC,
@@ -31,7 +31,7 @@ PUBLIC_TRIAL_OPTIONS = (
 @ram.cache(language_cache_key)
 def translated_public_trial_terms(context, request):
     values = {}
-    for term in PUBLIC_TRIAL_OPTIONS:
+    for term in PUBLIC_TRIAL_CHOICES:
         values[term] = translate(term, context=request,
                                  domain="opengever.base")
     return values
@@ -120,8 +120,8 @@ def validate_children(folder, event):
 CLASSIFICATION_UNPROTECTED = u'unprotected'
 CLASSIFICATION_CONFIDENTIAL = u'confidential'
 CLASSIFICATION_CLASSIFIED = u'classified'
-CLASSIFICATION_OPTIONS = (
-    # Option-   # Option Name
+CLASSIFICATION_CHOICES = (
+    # Choice-   # Choice Name
     # level     #
     (1, CLASSIFICATION_UNPROTECTED),
     (2, CLASSIFICATION_CONFIDENTIAL),
@@ -131,7 +131,7 @@ CLASSIFICATION_OPTIONS = (
 
 classification_vf = RestrictedVocabularyFactory(
     IClassification['classification'],
-    CLASSIFICATION_OPTIONS,
+    CLASSIFICATION_CHOICES,
     message_factory=_,
     restricted=lambda: True)
 
@@ -146,14 +146,14 @@ form.default_value(field=IClassification['classification'])(
 
 # TODO: This will be rewritten to eliminate one level of factories
 public_trial_vf_factory = create_simple_vocabulary(
-    PUBLIC_TRIAL_OPTIONS,
+    PUBLIC_TRIAL_CHOICES,
     message_factory=_)
 
 
 # PRIVACY_LAYER: Vocabulary and default value
 PRIVACY_LAYER_NO = u'privacy_layer_no'
 PRIVACY_LAYER_YES = u'privacy_layer_yes'
-PRIVACY_LAYER_OPTIONS = (
+PRIVACY_LAYER_CHOICES = (
     (1, PRIVACY_LAYER_NO),
     (2, PRIVACY_LAYER_YES),
 )
@@ -161,7 +161,7 @@ PRIVACY_LAYER_OPTIONS = (
 
 privacy_layer_vf = RestrictedVocabularyFactory(
     IClassification['privacy_layer'],
-    PRIVACY_LAYER_OPTIONS,
+    PRIVACY_LAYER_CHOICES,
     message_factory=_,
     restricted=lambda: True)
 
