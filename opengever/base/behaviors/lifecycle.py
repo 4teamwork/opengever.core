@@ -156,7 +156,7 @@ custody_period_vf = RestrictedVocabularyFactory(
     ILifeCycle['custody_period'],
     _get_custody_period_choices,
     message_factory=_,
-    restricted=lambda: True)
+    restricted=True)
 
 
 # Default value
@@ -188,7 +188,7 @@ archival_value_vf = RestrictedVocabularyFactory(
     ILifeCycle['archival_value'],
     ARCHIVAL_VALUE_CHOICES,
     message_factory=_,
-    restricted=lambda: True)
+    restricted=True)
 
 
 # XXX: Eventually rewrite this as a context aware defaultFactory
