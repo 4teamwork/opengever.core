@@ -53,7 +53,7 @@ def create_restricted_vocabulary(field, options,
     if the parent object has a "raw" option set, then only detailed
     options or the selected raw option are allowed to be selected.
     """
-    class GeneratedVocabulary(object):
+    class RestrictedVocabularyFactory(object):
 
         def __init__(self, field, options, message_factory, restricted):
             self.field = field
@@ -134,7 +134,8 @@ def create_restricted_vocabulary(field, options,
             # Otherwise use the field default
             return self.field.default
 
-    return GeneratedVocabulary(field, options, message_factory, restricted)
+    return RestrictedVocabularyFactory(
+        field, options, message_factory, restricted)
 
 
 def set_default_with_acquisition(field, default=None):
