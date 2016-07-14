@@ -1,4 +1,3 @@
-from Products.CMFCore.interfaces import ISiteRoot
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.base import _
@@ -8,10 +7,8 @@ from opengever.base.interfaces import IRetentionPeriodRegister
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.directives import form
 from plone.registry.interfaces import IRegistry
-from z3c.form import validator
 from zope import schema
 from zope.component import getUtility
-from zope.component import queryAdapter
 from zope.interface import Interface
 from zope.interface import alsoProvides
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
@@ -101,46 +98,6 @@ def validate_children(folder, event):
     utils.overrides_child(folder, event, aq_fields, ILifeCycleMarker)
 
 
-class IntGreaterEqualThanParentValidator(validator.SimpleFieldValidator):
-
-    def validate(self, value):
-        super(IntGreaterEqualThanParentValidator, self).validate(value)
-
-        # should not be negative
-        if int(value) < 0:
-            raise schema.interfaces.TooSmall()
-
-        # get parent value
-        #XXX CHANGED FROM PATH_TRANSLATED TO PATH_INFO because the test
-        # don't work
-        if '++add++' in self.request.get('PATH_INFO', object()):
-            obj = self.context
-        else:
-            obj = self.context.aq_inner.aq_parent
-
-        parent_value = -1
-        while parent_value < 0 and not ISiteRoot.providedBy(obj):
-            cf_obj = queryAdapter(obj, ILifeCycle)
-
-            if cf_obj:
-                try:
-                    parent_value = int(self.field.get(cf_obj))
-                except AttributeError:
-                    pass
-                except TypeError:
-                    parent_value = 0
-
-            try:
-                obj = obj.aq_inner.aq_parent
-
-            except AttributeError:
-                return
-
-        # should not be smaller than parent
-        if parent_value > - 1 and int(value) < parent_value:
-            raise schema.interfaces.TooBig()
-
-
 # ---------- RETENTION PERIOD -----------
 # Vocabulary
 def _get_retention_period_options(vocabulary):
@@ -181,19 +138,6 @@ form.default_value(field=ILifeCycle['retention_period'])(
         default=5))
 
 
-# Validator
-class CustodyPeriodValidator(IntGreaterEqualThanParentValidator):
-    pass
-
-
-validator.WidgetValidatorDiscriminators(
-    CustodyPeriodValidator,
-    field=ILifeCycle['custody_period'])
-
-
-grok.global_adapter(CustodyPeriodValidator)
-
-
 # ---------- CUSTODY PERIOD -----------
 # Vocabulary
 
@@ -227,61 +171,6 @@ form.default_value(field=ILifeCycle['custody_period'])(
         default=30,
     )
 )
-
-
-class RetentionPeriodValidator(validator.SimpleFieldValidator):
-
-    def is_restricted(self):
-        return _is_retention_period_restricted()
-
-    def validate(self, value):
-        super(RetentionPeriodValidator, self).validate(value)
-
-        # should not be negative
-        if int(value) < 0:
-            raise schema.interfaces.TooSmall()
-
-        if not self.is_restricted():
-            return
-
-        # get parent value
-        #XXX CHANGED FROM PATH_TRANSLATED TO PATH_INFO because the test
-        # don't work
-        if '++add++' in self.request.get('PATH_INFO', object()):
-            obj = self.context
-        else:
-            obj = self.context.aq_inner.aq_parent
-
-        parent_value = -1
-        while parent_value < 0 and not ISiteRoot.providedBy(obj):
-            cf_obj = queryAdapter(obj, ILifeCycle)
-
-            if cf_obj:
-                try:
-                    parent_value = int(self.field.get(cf_obj))
-                except AttributeError:
-                    pass
-                except TypeError:
-                    parent_value = 0
-
-            try:
-                obj = obj.aq_inner.aq_parent
-
-            except AttributeError:
-                return
-
-        # should not be bigger than parent
-        if parent_value > - 1 and int(value) > parent_value:
-            raise schema.interfaces.TooBig()
-
-
-validator.WidgetValidatorDiscriminators(
-    RetentionPeriodValidator,
-    field=ILifeCycle['retention_period']
-)
-
-
-grok.global_adapter(RetentionPeriodValidator)
 
 
 # ARCHIVAL VALUE: Vocabulary and default value
