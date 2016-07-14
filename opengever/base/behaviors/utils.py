@@ -33,11 +33,9 @@ def create_simple_vocabulary(options, message_factory):
     return GenericSimpleVocabulary
 
 
-def create_restricted_vocabulary(field, options,
-                                 message_factory=None,
-                                 restricted=lambda: True):
-    """
-    Creates a restricted vocabulary.
+class RestrictedVocabularyFactory(object):
+    """Factory for a restricted vocabulary.
+
     Expects a options list which looks as follows:
     options = (
     (0,     u'none'),
@@ -53,89 +51,85 @@ def create_restricted_vocabulary(field, options,
     if the parent object has a "raw" option set, then only detailed
     options or the selected raw option are allowed to be selected.
     """
-    class RestrictedVocabularyFactory(object):
 
-        def __init__(self, field, options, message_factory, restricted):
-            self.field = field
-            self._options = options
-            self.message_factory = message_factory
-            self.restricted = restricted
+    def __init__(self, field, options, message_factory, restricted):
+        self.field = field
+        self._options = options
+        self.message_factory = message_factory
+        self.restricted = restricted
 
-        @property
-        def option_level_mapping(self):
-            option_level_mapping = [list(a) for a in self.options[:]]
-            option_level_mapping = dict([a for a in option_level_mapping
-                                         if not a.reverse()])
-            return option_level_mapping
+    @property
+    def option_level_mapping(self):
+        option_level_mapping = [list(a) for a in self.options[:]]
+        option_level_mapping = dict([a for a in option_level_mapping
+                                     if not a.reverse()])
+        return option_level_mapping
 
-        @property
-        def option_names(self):
-            return [a[1] for a in self.options]
+    @property
+    def option_names(self):
+        return [a[1] for a in self.options]
 
-        @property
-        def options(self):
-            if callable(self._options):
-                return self._options()
-            else:
-                return self._options
+    @property
+    def options(self):
+        if callable(self._options):
+            return self._options()
+        else:
+            return self._options
 
-        def __call__(self, context):
-            self.context = context
+    def __call__(self, context):
+        self.context = context
 
-            terms = []
-            for name in self.get_allowed_option_names():
-                title = name
-                if self.message_factory:
-                    title = self.message_factory(name)
-                terms.append(
-                    zope.schema.vocabulary.SimpleTerm(name, title=title))
-            return zope.schema.vocabulary.SimpleVocabulary(terms)
+        terms = []
+        for name in self.get_allowed_option_names():
+            title = name
+            if self.message_factory:
+                title = self.message_factory(name)
+            terms.append(
+                zope.schema.vocabulary.SimpleTerm(name, title=title))
+        return zope.schema.vocabulary.SimpleVocabulary(terms)
 
-        def get_allowed_option_names(self):
-            acquisition_value = self._get_acquisiton_value()
+    def get_allowed_option_names(self):
+        acquisition_value = self._get_acquisiton_value()
 
-            if not self.restricted():
-                return self.option_names
+        if not self.restricted():
+            return self.option_names
 
-            if not acquisition_value or acquisition_value not in self.option_names:
-                return self.option_names
+        if not acquisition_value or acquisition_value not in self.option_names:
+            return self.option_names
 
-            allowed_option_names = []
-            allowed_option_names.append(acquisition_value)
-            allowed_level = self.option_level_mapping[acquisition_value] + 1
-            for level, name in self.options:
-                if level >= allowed_level:
-                    allowed_option_names.append(name)
+        allowed_option_names = []
+        allowed_option_names.append(acquisition_value)
+        allowed_level = self.option_level_mapping[acquisition_value] + 1
+        for level, name in self.options:
+            if level >= allowed_level:
+                allowed_option_names.append(name)
 
-            return allowed_option_names
+        return allowed_option_names
 
-        def _get_acquisiton_value(self):
-            context = self.context
-            if isinstance(context, MetadataBase) or context is None:
-                # we do not test the factory, it is not acquisition wrapped and
-                # we cant get the request...
-                return None
-            request = self.context.REQUEST
-            # XXX CHANGED FROM PATH_TRANSLATED TO PATH_INFO
-            # because the test don't work
-            if '++add++' in request.get('PATH_INFO', ''):
-                # object is not yet existing, context is container
-                container = context
-            else:
-                # object is existing, container is parent of context
-                container = context.aq_inner.aq_parent
+    def _get_acquisiton_value(self):
+        context = self.context
+        if isinstance(context, MetadataBase) or context is None:
+            # we do not test the factory, it is not acquisition wrapped and
+            # we cant get the request...
+            return None
+        request = self.context.REQUEST
+        # XXX CHANGED FROM PATH_TRANSLATED TO PATH_INFO
+        # because the test don't work
+        if '++add++' in request.get('PATH_INFO', ''):
+            # object is not yet existing, context is container
+            container = context
+        else:
+            # object is existing, container is parent of context
+            container = context.aq_inner.aq_parent
 
-            acquired_value = acquire_field_value(self.field, container)
+        acquired_value = acquire_field_value(self.field, container)
 
-            # Use acquired value if one was found
-            if acquired_value is not NO_VALUE_FOUND:
-                return acquired_value
+        # Use acquired value if one was found
+        if acquired_value is not NO_VALUE_FOUND:
+            return acquired_value
 
-            # Otherwise use the field default
-            return self.field.default
-
-    return RestrictedVocabularyFactory(
-        field, options, message_factory, restricted)
+        # Otherwise use the field default
+        return self.field.default
 
 
 def set_default_with_acquisition(field, default=None):
