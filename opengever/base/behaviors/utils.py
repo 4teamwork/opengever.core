@@ -1,8 +1,7 @@
-from Acquisition import aq_inner
-from Acquisition import aq_parent
+from opengever.base.acquisition import acquire_field_value
+from opengever.base.acquisition import NO_VALUE_FOUND
 from plone.app.dexterity.behaviors.metadata import MetadataBase
 from plone.namedfile.utils import get_contenttype
-from Products.CMFCore.interfaces import ISiteRoot
 from urllib import quote
 from z3c.form.interfaces import HIDDEN_MODE
 from z3c.form.interfaces import IValue
@@ -115,28 +114,18 @@ def create_restricted_vocabulary(field, options,
             # because the test don't work
             if '++add++' in request.get('PATH_INFO', ''):
                 # object is not yet existing, context is container
-                obj = context
+                container = context
             else:
                 # object is existing, container is parent of context
-                obj = context.aq_inner.aq_parent
-            while not ISiteRoot.providedBy(obj):
-                try:
-                    interface_ = self.field.interface
-                except AttributeError:
-                    pass
-                else:
-                    try:
-                        adpt = interface_(obj)
-                    except TypeError:
-                        # could not adapt
-                        try:
-                            return self.field.get(obj)
-                        except AttributeError:
-                            pass
-                    else:
-                        return self.field.get(adpt)
+                container = context.aq_inner.aq_parent
 
-                obj = obj.aq_inner.aq_parent
+            acquired_value = acquire_field_value(self.field, container)
+
+            # Use acquired value if one was found
+            if acquired_value is not NO_VALUE_FOUND:
+                return acquired_value
+
+            # Otherwise use the field default
             return self.field.default
 
     GeneratedVocabulary.field = field
@@ -147,14 +136,6 @@ def create_restricted_vocabulary(field, options,
     return GeneratedVocabulary
 
 
-# XXX: Eventually this should be rewritten to be compatible with the use of
-# context aware default factories.
-# The combination of acquired default values with restricted vocabularies
-# makes this tricky though. _get_acquisiton_value() in particular is
-# problematic because it needs to distinguish between "add" and "edit"
-# situations, and currently does so in a way that doesn't work for
-# programmatic content creation.
-
 def set_default_with_acquisition(field, default=None):
     """
     Sets a default value generator which uses the value
@@ -164,26 +145,15 @@ def set_default_with_acquisition(field, default=None):
     field._acquisition_default = default
 
     def default_value_generator(data):
-        obj = data.context
-        # try to get it from context or a parent
-        while obj and not ISiteRoot.providedBy(obj):
-            try:
-                interface_ = data.field.interface
-            except AttributeError:
-                pass
-            else:
-                try:
-                    adpt = interface_(obj)
-                except TypeError:
-                    # could not adapt
-                    pass
-                else:
-                    value = data.field.get(adpt)
-                    if value is not None:
-                        return value
-            obj = aq_parent(aq_inner(obj))
+        container = data.context
+
+        acquired_value = acquire_field_value(data.field, container)
+        if acquired_value is not NO_VALUE_FOUND:
+            return acquired_value
+
         # otherwise use default value
         if field._acquisition_default:
+            # XXX: Use sentinel value (Issue #2029)
             return field._acquisition_default
         else:
             # use first value
@@ -191,6 +161,7 @@ def set_default_with_acquisition(field, default=None):
                 return tuple(data.widget.terms)[0].value
             except AttributeError:
                 return None
+
     return default_value_generator
 
 
