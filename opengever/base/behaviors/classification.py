@@ -1,8 +1,8 @@
 from five import grok
 from opengever.base import _
 from opengever.base.behaviors import utils
-from opengever.base.behaviors.utils import create_restricted_vocabulary
 from opengever.base.behaviors.utils import create_simple_vocabulary
+from opengever.base.behaviors.utils import RestrictedVocabularyFactory
 from opengever.base.utils import language_cache_key
 from plone import api
 from plone.app.dexterity.behaviors import metadata
@@ -129,7 +129,7 @@ CLASSIFICATION_OPTIONS = (
 )
 
 
-classification_vf = create_restricted_vocabulary(
+classification_vf = RestrictedVocabularyFactory(
     IClassification['classification'],
     CLASSIFICATION_OPTIONS,
     message_factory=_,
@@ -159,7 +159,7 @@ PRIVACY_LAYER_OPTIONS = (
 )
 
 
-privacy_layer_vf = create_restricted_vocabulary(
+privacy_layer_vf = RestrictedVocabularyFactory(
     IClassification['privacy_layer'],
     PRIVACY_LAYER_OPTIONS,
     message_factory=_,

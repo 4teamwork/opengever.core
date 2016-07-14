@@ -2,7 +2,7 @@ from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.base import _
 from opengever.base.behaviors import utils
-from opengever.base.behaviors.utils import create_restricted_vocabulary
+from opengever.base.behaviors.utils import RestrictedVocabularyFactory
 from opengever.base.interfaces import IBaseCustodyPeriods
 from opengever.base.interfaces import IRetentionPeriodRegister
 from plone.autoform.interfaces import IFormFieldProvider
@@ -121,7 +121,7 @@ def _is_retention_period_restricted():
     return retention_period_settings.is_restricted
 
 
-retention_period_vf = create_restricted_vocabulary(
+retention_period_vf = RestrictedVocabularyFactory(
     ILifeCycle['retention_period'],
     _get_retention_period_options,
     message_factory=_,
@@ -152,7 +152,7 @@ def _get_custody_period_options():
     return options
 
 
-custody_period_vf = create_restricted_vocabulary(
+custody_period_vf = RestrictedVocabularyFactory(
     ILifeCycle['custody_period'],
     _get_custody_period_options,
     message_factory=_,
@@ -184,7 +184,7 @@ ARCHIVAL_VALUE_OPTIONS = (
 )
 
 
-archival_value_vf = create_restricted_vocabulary(
+archival_value_vf = RestrictedVocabularyFactory(
     ILifeCycle['archival_value'],
     ARCHIVAL_VALUE_OPTIONS,
     message_factory=_,
