@@ -101,18 +101,18 @@ def validate_children(folder, event):
 
 # ---------- RETENTION PERIOD -----------
 # Vocabulary
-def _get_retention_period_options():
+def _get_retention_period_choices():
     registry = getUtility(IRegistry)
     proxy = registry.forInterface(IRetentionPeriodRegister)
-    options = []
+    choices = []
     nums = getattr(proxy, 'retention_period')
 
     for i, num in enumerate(nums):
         num = int(num)
         pos = int(nums[- i - 1])
-        options.append((pos, num))
+        choices.append((pos, num))
 
-    return options
+    return choices
 
 
 def _is_retention_period_restricted():
@@ -123,7 +123,7 @@ def _is_retention_period_restricted():
 
 retention_period_vf = RestrictedVocabularyFactory(
     ILifeCycle['retention_period'],
-    _get_retention_period_options,
+    _get_retention_period_choices,
     message_factory=_,
     restricted=_is_retention_period_restricted)
 
@@ -139,22 +139,22 @@ form.default_value(field=ILifeCycle['retention_period'])(
 # ---------- CUSTODY PERIOD -----------
 # Vocabulary
 
-def _get_custody_period_options():
+def _get_custody_period_choices():
     registry = getUtility(IRegistry)
     proxy = registry.forInterface(IBaseCustodyPeriods)
-    options = []
+    choices = []
     nums = getattr(proxy, 'custody_periods')
 
     for num in nums:
         num = int(num)
-        options.append((num, num))
+        choices.append((num, num))
 
-    return options
+    return choices
 
 
 custody_period_vf = RestrictedVocabularyFactory(
     ILifeCycle['custody_period'],
-    _get_custody_period_options,
+    _get_custody_period_choices,
     message_factory=_,
     restricted=lambda: True)
 
@@ -175,7 +175,7 @@ ARCHIVAL_VALUE_PROMPT = u'prompt'
 ARCHIVAL_VALUE_WORTHY = u'archival worthy'
 ARCHIVAL_VALUE_UNWORTHY = u'not archival worthy'
 ARCHIVAL_VALUE_SAMPLING = u'archival worthy with sampling'
-ARCHIVAL_VALUE_OPTIONS = (
+ARCHIVAL_VALUE_CHOICES = (
     (1, ARCHIVAL_VALUE_UNCHECKED),
     (2, ARCHIVAL_VALUE_PROMPT),
     (3, ARCHIVAL_VALUE_WORTHY),
@@ -186,7 +186,7 @@ ARCHIVAL_VALUE_OPTIONS = (
 
 archival_value_vf = RestrictedVocabularyFactory(
     ILifeCycle['archival_value'],
-    ARCHIVAL_VALUE_OPTIONS,
+    ARCHIVAL_VALUE_CHOICES,
     message_factory=_,
     restricted=lambda: True)
 
