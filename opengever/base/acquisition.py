@@ -24,7 +24,12 @@ def acquire_field_value(field, container):
                 # could not adapt
                 pass
             else:
-                return field.get(adpt)
+                value = field.get(adpt)
+                try:
+                    field.validate(value)
+                    return value
+                except:
+                    pass
 
         obj = obj.aq_inner.aq_parent
     return NO_VALUE_FOUND
