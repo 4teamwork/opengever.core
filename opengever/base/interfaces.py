@@ -262,3 +262,28 @@ class IGeverState(Interface):
 
 class ISQLObjectWrapper(Interface):
     """Marker interface for sql object wrappers."""
+
+
+class ISQLFormSupport(Interface):
+    """Provides helper methods for sql forms.
+    """
+
+    def is_editable(self):
+        """Defines if the form is editable or not.
+
+        returns: bool
+        """
+
+    def get_edit_url(self, context):
+        """Returns the url to the edit-view of the model.
+        """
+
+    def get_edit_values(self, fieldnames):
+        """Returns the a dict with filednames and values of the given fieldnames.
+
+        Filednames which are not provided by the model will be skipped.
+        """
+
+    def update_model(self, data):
+        """Updated the model-fields given in data-dict.
+        """
