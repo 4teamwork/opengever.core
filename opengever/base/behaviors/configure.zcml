@@ -33,7 +33,7 @@
       />
 
   <utility
-      factory=".classification.classification_vf_factory"
+      component=".classification.classification_vf"
       provides="zope.schema.interfaces.IVocabularyFactory"
       name="classification_classification_vocabulary"
       />
@@ -45,7 +45,7 @@
       />
 
   <utility
-      factory=".classification.privacy_layer_vf_factory"
+      component=".classification.privacy_layer_vf"
       provides="zope.schema.interfaces.IVocabularyFactory"
       name="classification_privacy_layer_vocabulary"
       />
@@ -61,19 +61,19 @@
       />
 
   <utility
-      factory=".lifecycle.retention_period_vf_factory"
+      component=".lifecycle.retention_period_vf"
       provides="zope.schema.interfaces.IVocabularyFactory"
       name="lifecycle_retention_period_vocabulary"
       />
 
   <utility
-      factory=".lifecycle.custody_period_vf_factory"
+      component=".lifecycle.custody_period_vf"
       provides="zope.schema.interfaces.IVocabularyFactory"
       name="lifecycle_custody_period_vocabulary"
       />
 
   <utility
-      factory=".lifecycle.archival_value_vf_factory"
+      component=".lifecycle.archival_value_vf"
       provides="zope.schema.interfaces.IVocabularyFactory"
       name="lifecycle_archival_value_vocabulary"
       />

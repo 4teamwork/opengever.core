@@ -35,7 +35,7 @@ def create_simple_vocabulary(options, message_factory):
 
 def create_restricted_vocabulary(field, options,
                                  message_factory=None,
-                                 restricted=lambda x: True):
+                                 restricted=lambda: True):
     """
     Creates a restricted vocabulary.
     Expects a options list which looks as follows:
@@ -54,6 +54,12 @@ def create_restricted_vocabulary(field, options,
     options or the selected raw option are allowed to be selected.
     """
     class GeneratedVocabulary(object):
+
+        def __init__(self, field, options, message_factory, restricted):
+            self.field = field
+            self._options = options
+            self._ = message_factory
+            self.restricted = restricted
 
         @property
         def option_level_mapping(self):
@@ -128,12 +134,7 @@ def create_restricted_vocabulary(field, options,
             # Otherwise use the field default
             return self.field.default
 
-    GeneratedVocabulary.field = field
-    GeneratedVocabulary._options = options
-    GeneratedVocabulary._ = message_factory
-    GeneratedVocabulary.restricted = restricted
-
-    return GeneratedVocabulary
+    return GeneratedVocabulary(field, options, message_factory, restricted)
 
 
 def set_default_with_acquisition(field, default=None):
