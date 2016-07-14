@@ -134,7 +134,7 @@ classification_vf = RestrictedVocabularyFactory(
     IClassification['classification'],
     CLASSIFICATION_CHOICES,
     message_factory=_,
-    restricted=lambda: True)
+    restricted=True)
 
 
 # XXX: Eventually rewrite this as a context aware defaultFactory
@@ -164,7 +164,7 @@ privacy_layer_vf = RestrictedVocabularyFactory(
     IClassification['privacy_layer'],
     PRIVACY_LAYER_CHOICES,
     message_factory=_,
-    restricted=lambda: True)
+    restricted=True)
 
 
 # XXX: Eventually rewrite this as a context aware defaultFactory
