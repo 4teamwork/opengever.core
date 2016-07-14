@@ -2,6 +2,7 @@ from opengever.base.acquisition import acquire_field_value
 from opengever.base.acquisition import NO_VALUE_FOUND
 from plone.app.dexterity.behaviors.metadata import MetadataBase
 from plone.namedfile.utils import get_contenttype
+from Products.CMFPlone.utils import safe_callable
 from urllib import quote
 from z3c.form.interfaces import HIDDEN_MODE
 from z3c.form.interfaces import IValue
@@ -36,7 +37,7 @@ def create_simple_vocabulary(choices, message_factory):
 class RestrictedVocabularyFactory(object):
     """Factory for a restricted vocabulary.
 
-    Expects a choices list which looks as follows:
+    Expects a `choices` list which looks as follows:
     choices = (
     (0,     u'none'),
     (1,     u'raw_choice_one'),
@@ -47,16 +48,28 @@ class RestrictedVocabularyFactory(object):
 
     Use the string as internationalization message-id.
 
+    Alternatively, `choices` can be a callable that produces such a list.
+
     What it does in the example:
     if the parent object has a "raw" choice set, then only detailed
     choices or the selected raw choice are allowed to be selected.
+
+    `restricted` can be a boolean or a callable (with no arguments) that
+    returns a boolean, indicating whether the vocabulary should be restricted
+    or not.
     """
 
-    def __init__(self, field, choices, message_factory, restricted):
+    def __init__(self, field, choices, message_factory, restricted=True):
         self.field = field
         self._choices = choices
         self.message_factory = message_factory
-        self.restricted = restricted
+        self._restricted = restricted
+
+    @property
+    def restricted(self):
+        if safe_callable(self._restricted):
+            return self._restricted()
+        return self._restricted
 
     @property
     def choice_level_mapping(self):
@@ -71,10 +84,9 @@ class RestrictedVocabularyFactory(object):
 
     @property
     def choices(self):
-        if callable(self._choices):
+        if safe_callable(self._choices):
             return self._choices()
-        else:
-            return self._choices
+        return self._choices
 
     def __call__(self, context):
         self.context = context
@@ -91,7 +103,7 @@ class RestrictedVocabularyFactory(object):
     def get_allowed_choice_names(self):
         acquisition_value = self._get_acquisiton_value()
 
-        if not self.restricted():
+        if not self.restricted:
             return self.choice_names
 
         if not acquisition_value or acquisition_value not in self.choice_names:
