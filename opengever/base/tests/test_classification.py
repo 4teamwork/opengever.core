@@ -513,21 +513,21 @@ class TestClassificationBehavior(FunctionalTestCase):
         transaction.commit()
 
         browser.open(subobj, view='edit')
-        classification_options = browser.css(
+        classification_choices = browser.css(
             '#form-widgets-IClassification-classification option').text
         self.assertNotIn(classification.CLASSIFICATION_UNPROTECTED,
-                         classification_options)
+                         classification_choices)
         self.assertIn(classification.CLASSIFICATION_CLASSIFIED,
-                      classification_options)
+                      classification_choices)
 
-        privacy_options = browser.css(
+        privacy_choices = browser.css(
             '#form-widgets-IClassification-privacy_layer option').text
-        self.assertNotIn(classification.PRIVACY_LAYER_NO, privacy_options)
+        self.assertNotIn(classification.PRIVACY_LAYER_NO, privacy_choices)
 
-        public_trial_options = browser.css(
+        public_trial_choices = browser.css(
             '#form-widgets-IClassification-public_trial option').text
-        self.assertEquals(list(classification.PUBLIC_TRIAL_OPTIONS),
-                          public_trial_options)
+        self.assertEquals(list(classification.PUBLIC_TRIAL_CHOICES),
+                          public_trial_choices)
 
     def test_public_trial_fallback_default_value_is_unchecked(self):
         repo = create(Builder('repository').titled('New repo'))
