@@ -1,5 +1,6 @@
 from plone.app.dexterity.behaviors.metadata import MetadataBase
 from Products.CMFCore.interfaces import ISiteRoot
+from zope.schema.interfaces import ValidationError
 
 
 NO_VALUE_FOUND = object()
@@ -24,7 +25,12 @@ def acquire_field_value(field, container):
                 # could not adapt
                 pass
             else:
-                return field.get(adpt)
+                value = field.get(adpt)
+                try:
+                    field.validate(value)
+                    return value
+                except ValidationError:
+                    pass
 
         obj = obj.aq_inner.aq_parent
     return NO_VALUE_FOUND
