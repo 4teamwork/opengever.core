@@ -32,6 +32,25 @@
       for="plone.dexterity.interfaces.IDexterityContent"
       />
 
+  <utility
+      factory=".classification.classification_vf_factory"
+      provides="zope.schema.interfaces.IVocabularyFactory"
+      name="classification_classification_vocabulary"
+      />
+
+  <utility
+      factory=".classification.public_trial_vf_factory"
+      provides="zope.schema.interfaces.IVocabularyFactory"
+      name="classification_public_trial_vocabulary"
+      />
+
+  <utility
+      factory=".classification.privacy_layer_vf_factory"
+      provides="zope.schema.interfaces.IVocabularyFactory"
+      name="classification_privacy_layer_vocabulary"
+      />
+
+  <!-- LifeCycle Behavior -->
   <plone:behavior
       title="LifeCycle"
       description="Adds lifecycle fields and functionality"
@@ -39,6 +58,24 @@
       factory="plone.behavior.AnnotationStorage"
       marker=".lifecycle.ILifeCycleMarker"
       for="plone.dexterity.interfaces.IDexterityContent"
+      />
+
+  <utility
+      factory=".lifecycle.retention_period_vf_factory"
+      provides="zope.schema.interfaces.IVocabularyFactory"
+      name="lifecycle_retention_period_vocabulary"
+      />
+
+  <utility
+      factory=".lifecycle.custody_period_vf_factory"
+      provides="zope.schema.interfaces.IVocabularyFactory"
+      name="lifecycle_custody_period_vocabulary"
+      />
+
+  <utility
+      factory=".lifecycle.archival_value_vf_factory"
+      provides="zope.schema.interfaces.IVocabularyFactory"
+      name="lifecycle_archival_value_vocabulary"
       />
 
   <plone:behavior
