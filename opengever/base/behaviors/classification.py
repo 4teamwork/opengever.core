@@ -129,12 +129,11 @@ CLASSIFICATION_OPTIONS = (
 )
 
 
-# TODO: This will be rewritten to eliminate one level of factories
-classification_vf_factory = create_restricted_vocabulary(
+classification_vf = create_restricted_vocabulary(
     IClassification['classification'],
     CLASSIFICATION_OPTIONS,
     message_factory=_,
-    restricted=lambda self: True)
+    restricted=lambda: True)
 
 
 # XXX: Eventually rewrite this as a context aware defaultFactory
@@ -160,12 +159,11 @@ PRIVACY_LAYER_OPTIONS = (
 )
 
 
-# TODO: This will be rewritten to eliminate one level of factories
-privacy_layer_vf_factory = create_restricted_vocabulary(
+privacy_layer_vf = create_restricted_vocabulary(
     IClassification['privacy_layer'],
     PRIVACY_LAYER_OPTIONS,
     message_factory=_,
-    restricted=lambda self: True)
+    restricted=lambda: True)
 
 
 # XXX: Eventually rewrite this as a context aware defaultFactory
