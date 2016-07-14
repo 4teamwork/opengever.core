@@ -22,10 +22,7 @@ def acquire_field_value(field, container):
                 adpt = interface_(obj)
             except TypeError:
                 # could not adapt
-                try:
-                    return field.get(obj)
-                except AttributeError:
-                    pass
+                pass
             else:
                 return field.get(adpt)
 
