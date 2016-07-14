@@ -1,6 +1,8 @@
 from five import grok
 from opengever.base import _
 from opengever.base.behaviors import utils
+from opengever.base.behaviors.utils import create_restricted_vocabulary
+from opengever.base.behaviors.utils import create_simple_vocabulary
 from opengever.base.utils import language_cache_key
 from plone import api
 from plone.app.dexterity.behaviors import metadata
@@ -127,13 +129,12 @@ CLASSIFICATION_OPTIONS = (
 )
 
 
-grok.global_utility(
-    utils.create_restricted_vocabulary(
-        IClassification['classification'],
-        CLASSIFICATION_OPTIONS,
-        message_factory=_),
-    provides=schema.interfaces.IVocabularyFactory,
-    name=u'classification_classification_vocabulary')
+# TODO: This will be rewritten to eliminate one level of factories
+classification_vf_factory = create_restricted_vocabulary(
+    IClassification['classification'],
+    CLASSIFICATION_OPTIONS,
+    message_factory=_,
+    restricted=lambda self: True)
 
 
 # XXX: Eventually rewrite this as a context aware defaultFactory
@@ -144,13 +145,10 @@ form.default_value(field=IClassification['classification'])(
     )
 )
 
-
-grok.global_utility(
-    utils.create_simple_vocabulary(
-        options=PUBLIC_TRIAL_OPTIONS,
-        message_factory=_),
-    provides=schema.interfaces.IVocabularyFactory,
-    name=u'classification_public_trial_vocabulary')
+# TODO: This will be rewritten to eliminate one level of factories
+public_trial_vf_factory = create_simple_vocabulary(
+    PUBLIC_TRIAL_OPTIONS,
+    message_factory=_)
 
 
 # PRIVACY_LAYER: Vocabulary and default value
@@ -162,13 +160,12 @@ PRIVACY_LAYER_OPTIONS = (
 )
 
 
-grok.global_utility(
-    utils.create_restricted_vocabulary(
-        IClassification['privacy_layer'],
-        PRIVACY_LAYER_OPTIONS,
-        message_factory=_),
-    provides=schema.interfaces.IVocabularyFactory,
-    name=u'classification_privacy_layer_vocabulary')
+# TODO: This will be rewritten to eliminate one level of factories
+privacy_layer_vf_factory = create_restricted_vocabulary(
+    IClassification['privacy_layer'],
+    PRIVACY_LAYER_OPTIONS,
+    message_factory=_,
+    restricted=lambda self: True)
 
 
 # XXX: Eventually rewrite this as a context aware defaultFactory
