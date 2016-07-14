@@ -101,7 +101,7 @@ def validate_children(folder, event):
 
 # ---------- RETENTION PERIOD -----------
 # Vocabulary
-def _get_retention_period_options(vocabulary):
+def _get_retention_period_options():
     registry = getUtility(IRegistry)
     proxy = registry.forInterface(IRetentionPeriodRegister)
     options = []
@@ -115,14 +115,13 @@ def _get_retention_period_options(vocabulary):
     return options
 
 
-def _is_retention_period_restricted(*args, **kwargs):
+def _is_retention_period_restricted():
     registry = getUtility(IRegistry)
     retention_period_settings = registry.forInterface(IRetentionPeriodRegister)
     return retention_period_settings.is_restricted
 
 
-# TODO: This will be rewritten to eliminate one level of factories
-retention_period_vf_factory = create_restricted_vocabulary(
+retention_period_vf = create_restricted_vocabulary(
     ILifeCycle['retention_period'],
     _get_retention_period_options,
     message_factory=_,
@@ -140,7 +139,7 @@ form.default_value(field=ILifeCycle['retention_period'])(
 # ---------- CUSTODY PERIOD -----------
 # Vocabulary
 
-def _get_custody_period_options(context):
+def _get_custody_period_options():
     registry = getUtility(IRegistry)
     proxy = registry.forInterface(IBaseCustodyPeriods)
     options = []
@@ -153,12 +152,11 @@ def _get_custody_period_options(context):
     return options
 
 
-# TODO: This will be rewritten to eliminate one level of factories
-custody_period_vf_factory = create_restricted_vocabulary(
+custody_period_vf = create_restricted_vocabulary(
     ILifeCycle['custody_period'],
     _get_custody_period_options,
     message_factory=_,
-    restricted=lambda self: True)
+    restricted=lambda: True)
 
 
 # Default value
@@ -186,12 +184,11 @@ ARCHIVAL_VALUE_OPTIONS = (
 )
 
 
-# TODO: This will be rewritten to eliminate one level of factories
-archival_value_vf_factory = create_restricted_vocabulary(
+archival_value_vf = create_restricted_vocabulary(
     ILifeCycle['archival_value'],
     ARCHIVAL_VALUE_OPTIONS,
     message_factory=_,
-    restricted=lambda self: True)
+    restricted=lambda: True)
 
 
 # XXX: Eventually rewrite this as a context aware defaultFactory
