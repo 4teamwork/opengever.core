@@ -2,6 +2,7 @@ from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.base import _
 from opengever.base.behaviors import utils
+from opengever.base.behaviors.utils import create_restricted_vocabulary
 from opengever.base.interfaces import IBaseCustodyPeriods
 from opengever.base.interfaces import IRetentionPeriodRegister
 from plone.autoform.interfaces import IFormFieldProvider
@@ -9,8 +10,8 @@ from plone.directives import form
 from plone.registry.interfaces import IRegistry
 from zope import schema
 from zope.component import getUtility
-from zope.interface import Interface
 from zope.interface import alsoProvides
+from zope.interface import Interface
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 
@@ -120,14 +121,12 @@ def _is_retention_period_restricted(*args, **kwargs):
     return retention_period_settings.is_restricted
 
 
-grok.global_utility(
-    utils.create_restricted_vocabulary(
-        ILifeCycle['retention_period'],
-        _get_retention_period_options,
-        message_factory=_,
-        restricted=_is_retention_period_restricted),
-    provides=schema.interfaces.IVocabularyFactory,
-    name=u'lifecycle_retention_period_vocabulary')
+# TODO: This will be rewritten to eliminate one level of factories
+retention_period_vf_factory = create_restricted_vocabulary(
+    ILifeCycle['retention_period'],
+    _get_retention_period_options,
+    message_factory=_,
+    restricted=_is_retention_period_restricted)
 
 
 # Default value
@@ -154,13 +153,12 @@ def _get_custody_period_options(context):
     return options
 
 
-grok.global_utility(
-    utils.create_restricted_vocabulary(
-        ILifeCycle['custody_period'],
-        _get_custody_period_options,
-        message_factory=_),
-    provides=schema.interfaces.IVocabularyFactory,
-    name=u'lifecycle_custody_period_vocabulary')
+# TODO: This will be rewritten to eliminate one level of factories
+custody_period_vf_factory = create_restricted_vocabulary(
+    ILifeCycle['custody_period'],
+    _get_custody_period_options,
+    message_factory=_,
+    restricted=lambda self: True)
 
 
 # Default value
@@ -188,13 +186,12 @@ ARCHIVAL_VALUE_OPTIONS = (
 )
 
 
-grok.global_utility(
-    utils.create_restricted_vocabulary(
-        ILifeCycle['archival_value'],
-        ARCHIVAL_VALUE_OPTIONS,
-        message_factory=_),
-    provides=schema.interfaces.IVocabularyFactory,
-    name=u'lifecycle_archival_value_vocabulary')
+# TODO: This will be rewritten to eliminate one level of factories
+archival_value_vf_factory = create_restricted_vocabulary(
+    ILifeCycle['archival_value'],
+    ARCHIVAL_VALUE_OPTIONS,
+    message_factory=_,
+    restricted=lambda self: True)
 
 
 # XXX: Eventually rewrite this as a context aware defaultFactory
