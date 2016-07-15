@@ -151,32 +151,32 @@ def set_default_with_acquisition(field, default=None):
     return default_value_generator
 
 
-def overrides_child(folder, event, aq_fields, marker):
-    interface = aq_fields[0].interface
-    check_fields = []
-    change_fields = []
+def propagate_vocab_restrictions(container, event, restricted_fields, marker):
+    interface = restricted_fields[0].interface
+    fields_to_check = []
+    changed_fields = []
 
     # set changed fields
-    for life_event in event.descriptions:
-        for attr in life_event.attributes:
-            change_fields.append(attr)
+    for desc in event.descriptions:
+        for name in desc.attributes:
+            changed_fields.append(name)
 
     # set check_fields
-    for field in aq_fields:
-        field_name = interface.__name__ + '.' + field.__name__
-        if field_name in change_fields:
-            check_fields.append(field.__name__)
+    for field in restricted_fields:
+        field_name = '.'.join(interface.__name__, field.__name__)
+        if field_name in changed_fields:
+            fields_to_check.append(field.__name__)
 
-    if check_fields != []:
-        children = folder.portal_catalog(
+    if fields_to_check != []:
+        children = container.portal_catalog(
             path={'depth': 2,
-                  'query': '/'.join(folder.getPhysicalPath())},
+                  'query': '/'.join(container.getPhysicalPath())},
             object_provides=(marker.__identifier__,)
         )
 
         for child in children:
             obj = child.getObject()
-            for field in check_fields:
+            for field in fields_to_check:
                 schema_field = interface.get(field)
                 voc = schema_field.bind(obj).source
                 if schema_field.get(schema_field.interface(obj)) not in voc:
