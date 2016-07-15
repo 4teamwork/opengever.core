@@ -2,6 +2,7 @@ from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.base import _
 from opengever.base.behaviors import utils
+from opengever.base.behaviors.utils import propagate_vocab_restrictions
 from opengever.base.behaviors.utils import RestrictedVocabularyFactory
 from opengever.base.interfaces import IBaseCustodyPeriods
 from opengever.base.interfaces import IRetentionPeriodRegister
@@ -91,12 +92,14 @@ alsoProvides(ILifeCycle, IFormFieldProvider)
 
 
 @grok.subscribe(ILifeCycleMarker, IObjectModifiedEvent)
-def validate_children(folder, event):
-    aq_fields = [ILifeCycle['retention_period'],
-                 ILifeCycle['archival_value'],
-                 ILifeCycle['custody_period']]
+def propagate_vocab_restrictions_to_children(container, event):
+    restricted_fields = [
+        ILifeCycle['retention_period'],
+        ILifeCycle['archival_value'],
+        ILifeCycle['custody_period']]
 
-    utils.overrides_child(folder, event, aq_fields, ILifeCycleMarker)
+    propagate_vocab_restrictions(
+        container, event, restricted_fields, ILifeCycleMarker)
 
 
 # ---------- RETENTION PERIOD -----------
