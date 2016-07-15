@@ -172,6 +172,8 @@ class PatchZ3CFormChangedField(MonkeyPatch):
     """
 
     def __call__(self):
+        from Acquisition import aq_base
+        from Acquisition import ImplicitAcquisitionWrapper
         from opengever.base.default_values import get_persisted_value_for_field
         from persistent.interfaces import IPersistent
         from z3c.form import interfaces
@@ -192,7 +194,13 @@ class PatchZ3CFormChangedField(MonkeyPatch):
 
             if not IPersistent.providedBy(context):
                 # Field is not persisted, delegate to original implementation
-                assert isinstance(context, QueryContext)
+                # Could be a z3c.formwidget QueryContex or an AQ wrapped dict
+                # instance from Plone's TTW registry editor.
+                assert any((
+                    isinstance(context, QueryContext),
+                    isinstance(context, ImplicitAcquisitionWrapper) and
+                    isinstance(aq_base(context), dict),
+                ))
                 return original_changedField(field, value, context)
 
             dm = zope.component.getMultiAdapter(
