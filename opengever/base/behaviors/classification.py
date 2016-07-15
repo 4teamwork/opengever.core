@@ -1,6 +1,7 @@
 from five import grok
 from opengever.base import _
 from opengever.base.behaviors import utils
+from opengever.base.behaviors.utils import propagate_vocab_restrictions
 from opengever.base.behaviors.utils import RestrictedVocabularyFactory
 from opengever.base.utils import language_cache_key
 from plone import api
@@ -115,12 +116,13 @@ class IClassificationSettings(Interface):
 
 
 @grok.subscribe(IClassificationMarker, IObjectModifiedEvent)
-def validate_children(folder, event):
-    aq_fields = [
+def propagate_vocab_restrictions_to_children(container, event):
+    restricted_fields = [
         IClassification['classification'],
         IClassification['privacy_layer']]
 
-    utils.overrides_child(folder, event, aq_fields, IClassificationMarker)
+    propagate_vocab_restrictions(
+        container, event, restricted_fields, IClassificationMarker)
 
 # CLASSIFICATION: Vocabulary and default value
 CLASSIFICATION_UNPROTECTED = u'unprotected'
