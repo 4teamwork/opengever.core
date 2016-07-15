@@ -1,7 +1,6 @@
 from five import grok
 from opengever.base import _
 from opengever.base.behaviors import utils
-from opengever.base.behaviors.utils import create_simple_vocabulary
 from opengever.base.behaviors.utils import RestrictedVocabularyFactory
 from opengever.base.utils import language_cache_key
 from plone import api
@@ -13,6 +12,8 @@ from zope import schema
 from zope.i18n import translate
 from zope.interface import alsoProvides, Interface
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
+from zope.schema.vocabulary import SimpleTerm
+from zope.schema.vocabulary import SimpleVocabulary
 
 
 # PUBLIC TRIAL: Vocabulary and default value
@@ -26,6 +27,10 @@ PUBLIC_TRIAL_CHOICES = (
     PUBLIC_TRIAL_LIMITED_PUBLIC,
     PUBLIC_TRIAL_PRIVATE,
 )
+
+public_trial_vocabulary = SimpleVocabulary([
+    SimpleTerm(msgid, title=_(msgid))
+    for msgid in PUBLIC_TRIAL_CHOICES])
 
 
 @ram.cache(language_cache_key)
@@ -74,7 +79,7 @@ class IClassification(form.Schema):
     public_trial = schema.Choice(
         title=_(u'label_public_trial', default=u'Public Trial'),
         description=_(u'help_public_trial', default=u''),
-        source=u'classification_public_trial_vocabulary',
+        source=public_trial_vocabulary,
         required=True,
         defaultFactory=public_trial_default,
     )
@@ -102,7 +107,7 @@ class IClassificationSettings(Interface):
 
     public_trial_default_value = schema.Choice(
         title=u'Public Trial default value',
-        source=u'classification_public_trial_vocabulary',
+        source=public_trial_vocabulary,
         required=True,
         default=PUBLIC_TRIAL_UNCHECKED
     )
@@ -143,12 +148,6 @@ form.default_value(field=IClassification['classification'])(
         default=CLASSIFICATION_UNPROTECTED
     )
 )
-
-# TODO: This will be rewritten to eliminate one level of factories
-public_trial_vf_factory = create_simple_vocabulary(
-    PUBLIC_TRIAL_CHOICES,
-    message_factory=_)
-
 
 # PRIVACY_LAYER: Vocabulary and default value
 PRIVACY_LAYER_NO = u'privacy_layer_no'
