@@ -39,12 +39,6 @@
       />
 
   <utility
-      factory=".classification.public_trial_vf_factory"
-      provides="zope.schema.interfaces.IVocabularyFactory"
-      name="classification_public_trial_vocabulary"
-      />
-
-  <utility
       component=".classification.privacy_layer_vf"
       provides="zope.schema.interfaces.IVocabularyFactory"
       name="classification_privacy_layer_vocabulary"
