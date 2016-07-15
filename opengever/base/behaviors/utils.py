@@ -12,28 +12,6 @@ import re
 import zope.schema.vocabulary
 
 
-def create_simple_vocabulary(choices, message_factory):
-
-    class GenericSimpleVocabulary(object):
-
-        choices = None
-        message_factory = None
-
-        def __call__(self, context):
-            terms = []
-            for item in self.choices:
-                title = item
-                if self.message_factory:
-                    title = self.message_factory(item)
-                terms.append(
-                    zope.schema.vocabulary.SimpleTerm(item, title=title))
-            return zope.schema.vocabulary.SimpleVocabulary(terms)
-
-    GenericSimpleVocabulary.choices = choices
-    GenericSimpleVocabulary.message_factory = message_factory
-    return GenericSimpleVocabulary
-
-
 class RestrictedVocabularyFactory(object):
     """Factory for a restricted vocabulary.
 
