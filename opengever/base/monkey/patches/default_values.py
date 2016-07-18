@@ -1,6 +1,9 @@
 from copy import deepcopy
+from opengever.base.interfaces import IDuringContentCreation
 from opengever.base.monkey.patching import MonkeyPatch
 from plone.dexterity.content import _marker
+from zope.interface import alsoProvides
+from zope.interface import noLongerProvides
 from zope.schema.interfaces import IContextAwareDefaultFactory
 
 
@@ -93,6 +96,9 @@ class PatchDXCreateContentInContainer(MonkeyPatch):
     """Monkey patch Dexterity's createContentInContainer so that it sets
     default values for fields that haven't had a value passed in to the
     constructor.
+
+    Additionaly, have the request provide IDuringContentCreation while content
+    creation is in progress.
     """
 
     def __call__(self):
@@ -122,11 +128,14 @@ class PatchDXCreateContentInContainer(MonkeyPatch):
             return content
 
         def createContentInContainer(container, portal_type, checkConstraints=True, **kw):
+            alsoProvides(container.REQUEST, IDuringContentCreation)
             # Also pass container to createContent so it is available for
             # determining default values
             content = createContentWithDefaults(portal_type, container, **kw)
-            return addContentToContainer(
+            result = addContentToContainer(
                 container, content, checkConstraints=checkConstraints)
+            noLongerProvides(container.REQUEST, IDuringContentCreation)
+            return result
 
         from plone.dexterity import utils
         self.patch_refs(
@@ -136,6 +145,9 @@ class PatchDXCreateContentInContainer(MonkeyPatch):
 class PatchInvokeFactory(MonkeyPatch):
     """Monkey patch invokeFactory so that it sets default values for fields
     that haven't had a value passed in to the constructor.
+
+    Additionaly, have the request provide IDuringContentCreation while content
+    creation is in progress.
     """
 
     def __call__(self):
@@ -145,6 +157,7 @@ class PatchInvokeFactory(MonkeyPatch):
         def invokeFactory(self, type_name, id, RESPONSE=None, *args, **kw):
             """ Invokes the portal_types tool.
             """
+            alsoProvides(self.REQUEST, IDuringContentCreation)
             pt = getToolByName(self, 'portal_types')
             myType = pt.getTypeInfo(self)
 
@@ -158,6 +171,7 @@ class PatchInvokeFactory(MonkeyPatch):
             # Set default values
             set_default_values(content, self, kw)
 
+            noLongerProvides(self.REQUEST, IDuringContentCreation)
             return new_id
 
         from Products.CMFCore.PortalFolder import PortalFolderBase
@@ -228,3 +242,20 @@ class PatchZ3CFormChangedField(MonkeyPatch):
         __patch_refs__ = False
         original_changedField = util.changedField
         self.patch_refs(util, 'changedField', changedField)
+
+
+class PatchDexterityDefaultAddForm(MonkeyPatch):
+    """Patch DefaultAddForm.update() to have the request provide
+    IDuringContentCreation while content creation is in progress.
+    """
+
+    def __call__(self):
+
+        def update(self):
+            alsoProvides(self.request, IDuringContentCreation)
+            return original_update(self)
+
+        from plone.dexterity.browser.add import DefaultAddForm
+        __patch_refs__ = False
+        original_update = DefaultAddForm.update
+        self.patch_refs(DefaultAddForm, 'update', update)
