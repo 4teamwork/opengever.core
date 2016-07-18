@@ -34,3 +34,29 @@ def acquire_field_value(field, container):
 
         obj = obj.aq_inner.aq_parent
     return NO_VALUE_FOUND
+
+
+def set_default_with_acquisition(field, default=None):
+    """Sets a default value generator which uses the value
+    from the parent object, if existing, otherwise it uses
+    the given default value.
+    """
+    def default_value_generator(data):
+        container = data.context
+
+        acquired_value = acquire_field_value(field, container)
+        if acquired_value is not NO_VALUE_FOUND:
+            return acquired_value
+
+        # otherwise use default value
+        if default:
+            # XXX: Use sentinel value (Issue #2029)
+            return default
+        else:
+            # use first value
+            try:
+                return tuple(data.widget.terms)[0].value
+            except AttributeError:
+                return None
+
+    return default_value_generator
