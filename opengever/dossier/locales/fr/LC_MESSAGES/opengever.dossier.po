@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2016-06-26 19:12+0000\n"
-"PO-Revision-Date: 2016-07-11 12:38+0000\n"
+"PO-Revision-Date: 2016-07-18 08:25+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
 "gever/opengever-dossier/fr/>\n"
@@ -103,7 +103,7 @@ msgstr "Dernières tâches"
 
 #: ./opengever/dossier/browser/overview_templates/overview.pt:28
 msgid "No Subdossiers"
-msgstr "Pas de sous-dossiers"
+msgstr "Aucun sous-dossier"
 
 #: ./opengever/dossier/archive.py:56
 msgid "Not all required fields are filled"
@@ -139,6 +139,8 @@ msgstr ""
 #: ./opengever/dossier/deactivate.py:69
 msgid "The Dossier can't be deactivated, not all contained tasks are in a closed state."
 msgstr ""
+"Ce dossier ne peut pas être annulé, il contient encore des tâches qui ne "
+"sont pas accomplies."
 
 #: ./opengever/dossier/deactivate.py:45
 msgid "The Dossier can't be deactivated, not all containeddocuments are checked in."
