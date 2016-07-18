@@ -1,5 +1,6 @@
 from opengever.base.acquisition import acquire_field_value
 from opengever.base.acquisition import NO_VALUE_FOUND
+from opengever.base.interfaces import IDuringContentCreation
 from plone.app.dexterity.behaviors.metadata import MetadataBase
 from plone.namedfile.utils import get_contenttype
 from Products.CMFPlone.utils import safe_callable
@@ -103,14 +104,13 @@ class RestrictedVocabularyFactory(object):
             # we do not test the factory, it is not acquisition wrapped and
             # we cant get the request...
             return None
+
         request = self.context.REQUEST
-        # XXX CHANGED FROM PATH_TRANSLATED TO PATH_INFO
-        # because the test don't work
-        if '++add++' in request.get('PATH_INFO', ''):
-            # object is not yet existing, context is container
+        if IDuringContentCreation.providedBy(request):
+            # object does not yet exist, context is container (add)
             container = context
         else:
-            # object is existing, container is parent of context
+            # object already exists, container is parent of context (edit)
             container = context.aq_inner.aq_parent
 
         acquired_value = acquire_field_value(self.field, container)
