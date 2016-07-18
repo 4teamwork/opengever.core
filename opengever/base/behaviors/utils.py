@@ -152,45 +152,46 @@ def set_default_with_acquisition(field, default=None):
 
 
 def propagate_vocab_restrictions(container, event, restricted_fields, marker):
-    interface = restricted_fields[0].interface
-    fields_to_check = []
-    changed_fields = []
 
-    # set changed fields
+    def dottedname(field):
+        return '.'.join((field.interface.__name__, field.__name__))
+
+    changed_fields = []
     for desc in event.descriptions:
         for name in desc.attributes:
             changed_fields.append(name)
 
-    # set check_fields
+    fields_to_check = []
     for field in restricted_fields:
-        field_name = '.'.join(interface.__name__, field.__name__)
-        if field_name in changed_fields:
-            fields_to_check.append(field.__name__)
+        if dottedname(field) in changed_fields:
+            fields_to_check.append(field)
 
-    if fields_to_check != []:
-        children = container.portal_catalog(
-            path={'depth': 2,
-                  'query': '/'.join(container.getPhysicalPath())},
-            object_provides=(marker.__identifier__,)
-        )
+    if not fields_to_check:
+        return
 
-        for child in children:
-            obj = child.getObject()
-            for field in fields_to_check:
-                schema_field = interface.get(field)
-                voc = schema_field.bind(obj).source
-                if schema_field.get(schema_field.interface(obj)) not in voc:
-                    # obj, request, form, field, widget
-                    default = getMultiAdapter((
-                        obj.aq_inner.aq_parent,
-                        obj.REQUEST,
-                        None,
-                        schema_field,
-                        None,
-                    ), IValue, name='default')
-                    if isinstance(default, ComputedValue):
-                        default = default.get()
-                    setattr(schema_field.interface(obj), field, default)
+    children = container.portal_catalog(
+        path={'depth': 2,
+              'query': '/'.join(container.getPhysicalPath())},
+        object_provides=(marker.__identifier__,)
+    )
+
+    for child in children:
+        obj = child.getObject()
+        for field in fields_to_check:
+            voc = field.bind(obj).source
+            value = field.get(field.interface(obj))
+            if value not in voc:
+                # obj, request, form, field, widget
+                default = getMultiAdapter((
+                    obj.aq_inner.aq_parent,
+                    obj.REQUEST,
+                    None,
+                    field,
+                    None,
+                ), IValue, name='default')
+                if isinstance(default, ComputedValue):
+                    default = default.get()
+                field.set(field.interface(obj), default)
 
 
 # Used as sortkey for sorting strings in numerical order
