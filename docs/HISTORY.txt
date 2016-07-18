@@ -5,6 +5,9 @@ Changelog
 4.10.0 (unreleased)
 -------------------
 
+- Add a journal entry when downloading pdf files from bumblebee.
+  [deiferni]
+
 - Add edit- and add-form for a person.
   [elioschmutz]
 

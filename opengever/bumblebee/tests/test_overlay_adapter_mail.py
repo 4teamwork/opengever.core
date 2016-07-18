@@ -76,8 +76,9 @@ class TestGetOpenAsPdfLink(FunctionalTestCase):
 
         adapter = getMultiAdapter((mail, self.request), IBumblebeeOverlay)
 
-        self.assertIn(
-            '/YnVtYmxlYmVl/api/v3/resource/', adapter.get_open_as_pdf_url())
+        self.assertEqual(
+            'http://nohost/plone/dossier-1/document-1/bumblebee-open-pdf?filename=no-subject.pdf',
+            adapter.get_open_as_pdf_url())
 
 
 class TestGetCheckoutUrl(FunctionalTestCase):
