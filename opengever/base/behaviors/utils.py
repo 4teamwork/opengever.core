@@ -171,6 +171,7 @@ def propagate_vocab_restrictions(container, event, restricted_fields, marker):
         return
 
     children = container.portal_catalog(
+        # XXX: Depth should not be limited (Issue #2027)
         path={'depth': 2,
               'query': '/'.join(container.getPhysicalPath())},
         object_provides=(marker.__identifier__,)
