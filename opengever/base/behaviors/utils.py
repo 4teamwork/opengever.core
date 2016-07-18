@@ -133,7 +133,7 @@ def set_default_with_acquisition(field, default=None):
     def default_value_generator(data):
         container = data.context
 
-        acquired_value = acquire_field_value(data.field, container)
+        acquired_value = acquire_field_value(field, container)
         if acquired_value is not NO_VALUE_FOUND:
             return acquired_value
 
