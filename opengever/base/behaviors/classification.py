@@ -2,7 +2,7 @@ from five import grok
 from opengever.base import _
 from opengever.base.acquisition import set_default_with_acquisition
 from opengever.base.behaviors.utils import propagate_vocab_restrictions
-from opengever.base.behaviors.utils import RestrictedVocabularyFactory
+from opengever.base.restricted_vocab import RestrictedVocabularyFactory
 from opengever.base.utils import language_cache_key
 from plone import api
 from plone.app.dexterity.behaviors import metadata
