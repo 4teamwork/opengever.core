@@ -80,25 +80,25 @@ class RestrictedVocabularyFactory(object):
         return zope.schema.vocabulary.SimpleVocabulary(terms)
 
     def get_allowed_choice_names(self):
-        acquisition_value = self._get_acquisiton_value()
+        acquired_value = self._acquire_value()
 
         if not self.restricted:
             return self.choice_names
 
-        if not acquisition_value or acquisition_value not in self.choice_names:
+        if not acquired_value or acquired_value not in self.choice_names:
             # XXX: Compare against sentinel value (Issue #2030)
             return self.choice_names
 
         allowed_choice_names = []
-        allowed_choice_names.append(acquisition_value)
-        allowed_level = self.choice_level_mapping[acquisition_value] + 1
+        allowed_choice_names.append(acquired_value)
+        allowed_level = self.choice_level_mapping[acquired_value] + 1
         for level, name in self.choices:
             if level >= allowed_level:
                 allowed_choice_names.append(name)
 
         return allowed_choice_names
 
-    def _get_acquisiton_value(self):
+    def _acquire_value(self):
         context = self.context
         if isinstance(context, MetadataBase) or context is None:
             # we do not test the factory, it is not acquisition wrapped and
