@@ -1,6 +1,6 @@
 from five import grok
 from opengever.base import _
-from opengever.base.behaviors import utils
+from opengever.base.acquisition import set_default_with_acquisition
 from opengever.base.behaviors.utils import propagate_vocab_restrictions
 from opengever.base.behaviors.utils import RestrictedVocabularyFactory
 from opengever.base.utils import language_cache_key
@@ -146,7 +146,7 @@ classification_vf = RestrictedVocabularyFactory(
 
 # XXX: Eventually rewrite this as a context aware defaultFactory
 form.default_value(field=IClassification['classification'])(
-    utils.set_default_with_acquisition(
+    set_default_with_acquisition(
         field=IClassification['classification'],
         default=CLASSIFICATION_UNPROTECTED
     )
@@ -170,7 +170,7 @@ privacy_layer_vf = RestrictedVocabularyFactory(
 
 # XXX: Eventually rewrite this as a context aware defaultFactory
 form.default_value(field=IClassification['privacy_layer'])(
-    utils.set_default_with_acquisition(
+    set_default_with_acquisition(
         field=IClassification['privacy_layer'],
         default=PRIVACY_LAYER_NO
     )
