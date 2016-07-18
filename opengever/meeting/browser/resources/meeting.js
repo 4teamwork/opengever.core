@@ -449,9 +449,9 @@
     global.autosize($('body.template-edit.portaltype-opengever-meeting-submittedproposal textarea'));
 
     $(global.document).on("notify", function() {
-      var notifyContainer = global.Pin("#columns", null, { pin: false });
-      notifyContainer.onPin(function() { $(".notifyjs-corner").addClass("sticky"); });
-      notifyContainer.onRelease(function() { $(".notifyjs-corner").removeClass("sticky"); });
+      var notifyContainer = new global.StickyHeading({ selector: "#columns", clone: false, fix: false });
+      notifyContainer.onSticky(function() { $(".notifyjs-corner").addClass("sticky"); });
+      notifyContainer.onNoSticky(function() { $(".notifyjs-corner").removeClass("sticky"); });
     });
   });
 

@@ -5,6 +5,9 @@ Changelog
 4.10.0 (unreleased)
 -------------------
 
+- Add an email-form for opengever contacts.
+  [elioschmutz]
+
 - Fix sticky heading in order to a refactoring of the baseclass.
   [elioschmutz]
 

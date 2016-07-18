@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-07-11 13:06+0000\n"
+"POT-Creation-Date: 2016-07-20 06:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Domain: opengever.contact\n"
 
 #. Default: "Add Person"
-#: ./opengever/contact/browser/person.py:72
+#: ./opengever/contact/browser/person.py:104
 msgid "Add Person"
 msgstr ""
 
@@ -35,9 +35,59 @@ msgstr ""
 msgid "ContactFolder"
 msgstr ""
 
+#: ./opengever/contact/browser/templates/person_edit.pt:26
+msgid "Delete"
+msgstr ""
+
+#: ./opengever/contact/browser/templates/person_edit.pt:23
+msgid "Delete mailaddress"
+msgstr ""
+
+#: ./opengever/contact/browser/templates/person_edit.pt:38
+msgid "Emailadddress"
+msgstr ""
+
+#: ./opengever/contact/browser/templates/person_edit.pt:33
+msgid "Emailaddresses"
+msgstr ""
+
+#: ./opengever/contact/browser/templates/person_edit.pt:37
+msgid "Label"
+msgstr ""
+
 #. Default: "Address"
 #: ./opengever/contact/contact.py:54
 msgid "address"
+msgstr ""
+
+#. Default: "Email address updated."
+#: ./opengever/contact/browser/mail.py:114
+msgid "email_address_updated"
+msgstr ""
+
+#. Default: "Please specify a valid email address"
+#: ./opengever/contact/browser/mail.py:145
+msgid "error_invalid_email"
+msgstr ""
+
+#. Default: "Please specify an email address"
+#: ./opengever/contact/browser/mail.py:141
+msgid "error_no_email"
+msgstr ""
+
+#. Default: "Please specify a label for your email address"
+#: ./opengever/contact/browser/mail.py:137
+msgid "error_no_label"
+msgstr ""
+
+#. Default: "Please specify a label and an email address."
+#: ./opengever/contact/browser/mail.py:131
+msgid "error_no_label_and_email"
+msgstr ""
+
+#. Default: "The email address was created successfully"
+#: ./opengever/contact/browser/mail.py:92
+msgid "info_mailaddress_created"
 msgstr ""
 
 #. Default: "Internet"
@@ -46,7 +96,7 @@ msgid "internet"
 msgstr ""
 
 #. Default: "Academic title"
-#: ./opengever/contact/browser/person.py:43
+#: ./opengever/contact/browser/person.py:78
 #: ./opengever/contact/browser/templates/person.pt:30
 #: ./opengever/contact/contact.py:69
 msgid "label_academic_title"
@@ -67,6 +117,11 @@ msgstr ""
 msgid "label_addresses"
 msgstr ""
 
+#. Default: "Cancel"
+#: ./opengever/contact/browser/templates/person_edit.pt:28
+msgid "label_cancel"
+msgstr ""
+
 #. Default: "City"
 #: ./opengever/contact/contact.py:165
 msgid "label_city"
@@ -82,13 +137,18 @@ msgstr ""
 msgid "label_country"
 msgstr ""
 
+#. Default: "Are you sure you want to delete this mail address?"
+#: ./opengever/contact/browser/templates/person_edit.pt:24
+msgid "label_delete_mail_address_confirm_text"
+msgstr ""
+
 #. Default: "Department"
 #: ./opengever/contact/contact.py:93
 msgid "label_department"
 msgstr ""
 
 #. Default: "Description"
-#: ./opengever/contact/browser/person.py:58
+#: ./opengever/contact/browser/person.py:93
 #: ./opengever/contact/contact.py:145
 msgid "label_description"
 msgstr ""
@@ -105,14 +165,14 @@ msgid "label_email2"
 msgstr ""
 
 #. Default: "Firstname"
-#: ./opengever/contact/browser/person.py:48
+#: ./opengever/contact/browser/person.py:83
 #: ./opengever/contact/contact.py:82
 #: ./opengever/contact/contactfolder.py:104
 msgid "label_firstname"
 msgstr ""
 
 #. Default: "Lastname"
-#: ./opengever/contact/browser/person.py:53
+#: ./opengever/contact/browser/person.py:88
 #: ./opengever/contact/contact.py:75
 #: ./opengever/contact/contactfolder.py:99
 msgid "label_lastname"
@@ -170,7 +230,7 @@ msgid "label_picture"
 msgstr ""
 
 #. Default: "Salutation"
-#: ./opengever/contact/browser/person.py:38
+#: ./opengever/contact/browser/person.py:73
 #: ./opengever/contact/browser/templates/person.pt:26
 #: ./opengever/contact/contact.py:64
 msgid "label_salutation"
@@ -189,6 +249,11 @@ msgstr ""
 #. Default: "Function"
 #: ./opengever/contact/contact.py:98
 msgid "lable_function"
+msgstr ""
+
+#. Default: "Mailaddress successfully deleted"
+#: ./opengever/contact/browser/mail.py:121
+msgid "mail_address_deleted"
 msgstr ""
 
 #. Default: "Personal Stuff"

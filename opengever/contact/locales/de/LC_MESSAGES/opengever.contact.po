@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2016-07-11 13:06+0000\n"
+"POT-Creation-Date: 2016-07-20 06:32+0000\n"
 "PO-Revision-Date: 2011-01-05 15:15+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Domain: DOMAIN\n"
 
 #. Default: "Add Person"
-#: ./opengever/contact/browser/person.py:72
+#: ./opengever/contact/browser/person.py:104
 msgid "Add Person"
 msgstr "Person hinzufügen"
 
@@ -32,10 +32,60 @@ msgstr "Kontaktordner"
 msgid "ContactFolder"
 msgstr "Kontaktordner"
 
+#: ./opengever/contact/browser/templates/person_edit.pt:26
+msgid "Delete"
+msgstr "Löschen"
+
+#: ./opengever/contact/browser/templates/person_edit.pt:23
+msgid "Delete mailaddress"
+msgstr "E-Mail-Adresse löschen"
+
+#: ./opengever/contact/browser/templates/person_edit.pt:38
+msgid "Emailadddress"
+msgstr "E-Mail-Adresse"
+
+#: ./opengever/contact/browser/templates/person_edit.pt:33
+msgid "Emailaddresses"
+msgstr "E-Mail-Adressen"
+
+#: ./opengever/contact/browser/templates/person_edit.pt:37
+msgid "Label"
+msgstr "Label"
+
 #. Default: "Address"
 #: ./opengever/contact/contact.py:54
 msgid "address"
 msgstr "Adresse"
+
+#. Default: "Email address updated."
+#: ./opengever/contact/browser/mail.py:114
+msgid "email_address_updated"
+msgstr "E-Mail-Adresse wurde aktualisiert."
+
+#. Default: "Please specify a valid email address"
+#: ./opengever/contact/browser/mail.py:145
+msgid "error_invalid_email"
+msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein."
+
+#. Default: "Please specify an email address"
+#: ./opengever/contact/browser/mail.py:141
+msgid "error_no_email"
+msgstr "Bitte geben Sie eine eine E-Mail-Adresse ein."
+
+#. Default: "Please specify a label for your email address"
+#: ./opengever/contact/browser/mail.py:137
+msgid "error_no_label"
+msgstr "Bitte geben Sie ein Label für ihre E-Mail-Adresse ein."
+
+#. Default: "Please specify a label and an email address."
+#: ./opengever/contact/browser/mail.py:131
+msgid "error_no_label_and_email"
+msgstr "Bitte geben Sie ein Labe sowie eine E-Mail-Adresse ein."
+
+#. Default: "The email address was created successfully"
+#: ./opengever/contact/browser/mail.py:92
+msgid "info_mailaddress_created"
+msgstr "Die E-Mail-Adresse wurde erstellt."
 
 #. Default: "Internet"
 #: ./opengever/contact/contact.py:35
@@ -43,7 +93,7 @@ msgid "internet"
 msgstr "Internet"
 
 #. Default: "Academic title"
-#: ./opengever/contact/browser/person.py:43
+#: ./opengever/contact/browser/person.py:78
 #: ./opengever/contact/browser/templates/person.pt:30
 #: ./opengever/contact/contact.py:69
 msgid "label_academic_title"
@@ -64,6 +114,11 @@ msgstr "Adresszusatz"
 msgid "label_addresses"
 msgstr "Adressen"
 
+#. Default: "Cancel"
+#: ./opengever/contact/browser/templates/person_edit.pt:28
+msgid "label_cancel"
+msgstr "Abbrechen"
+
 #. Default: "City"
 #: ./opengever/contact/contact.py:165
 msgid "label_city"
@@ -79,13 +134,18 @@ msgstr "Firma"
 msgid "label_country"
 msgstr "Land"
 
+#. Default: "Are you sure you want to delete this mail address?"
+#: ./opengever/contact/browser/templates/person_edit.pt:24
+msgid "label_delete_mail_address_confirm_text"
+msgstr "Wollen Sie die E-Mail-Adresse wirklich löschen?"
+
 #. Default: "Department"
 #: ./opengever/contact/contact.py:93
 msgid "label_department"
 msgstr "Abteilung"
 
 #. Default: "Description"
-#: ./opengever/contact/browser/person.py:58
+#: ./opengever/contact/browser/person.py:93
 #: ./opengever/contact/contact.py:145
 msgid "label_description"
 msgstr "Beschreibung"
@@ -102,14 +162,14 @@ msgid "label_email2"
 msgstr "E-Mail 2"
 
 #. Default: "Firstname"
-#: ./opengever/contact/browser/person.py:48
+#: ./opengever/contact/browser/person.py:83
 #: ./opengever/contact/contact.py:82
 #: ./opengever/contact/contactfolder.py:104
 msgid "label_firstname"
 msgstr "Vorname"
 
 #. Default: "Lastname"
-#: ./opengever/contact/browser/person.py:53
+#: ./opengever/contact/browser/person.py:88
 #: ./opengever/contact/contact.py:75
 #: ./opengever/contact/contactfolder.py:99
 msgid "label_lastname"
@@ -167,7 +227,7 @@ msgid "label_picture"
 msgstr "Bild"
 
 #. Default: "Salutation"
-#: ./opengever/contact/browser/person.py:38
+#: ./opengever/contact/browser/person.py:73
 #: ./opengever/contact/browser/templates/person.pt:26
 #: ./opengever/contact/contact.py:64
 msgid "label_salutation"
@@ -187,6 +247,11 @@ msgstr "PLZ"
 #: ./opengever/contact/contact.py:98
 msgid "lable_function"
 msgstr "Funktion"
+
+#. Default: "Mailaddress successfully deleted"
+#: ./opengever/contact/browser/mail.py:121
+msgid "mail_address_deleted"
+msgstr "Die E-Mail-Adresse wurde gelöscht."
 
 #. Default: "Personal Stuff"
 #: ./opengever/contact/contact.py:20

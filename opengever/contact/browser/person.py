@@ -1,8 +1,8 @@
+from opengever.base.browser.modelforms import ModelAddForm
+from opengever.base.browser.modelforms import ModelEditForm
 from opengever.base.model import CONTENT_TITLE_LENGTH
 from opengever.contact import _
 from opengever.contact.models.person import Person
-from opengever.base.browser.modelforms import ModelAddForm
-from opengever.base.browser.modelforms import ModelEditForm
 from opengever.ogds.models import FIRSTNAME_LENGTH
 from opengever.ogds.models import LASTNAME_LENGTH
 from plone.directives import form
@@ -13,6 +13,34 @@ from zope import schema
 from zope.interface import implements
 from zope.publisher.interfaces import IPublishTraverse
 from zope.publisher.interfaces.browser import IBrowserView
+
+
+EMAIL_TEMPLATE = '''
+<script id="emailTemplate" type="text/x-handlebars-template">
+  {{#each mailaddresses}}
+      <tr class="email-record">
+        <td>{{label}}</td>
+        <td>{{address}}</td>
+        <td class="actions">
+          <div class="button-group">
+            <button class="button toggle-email-edit-form fa fa-edit"></button>
+            <button data-delete-url="{{delete_url}}" class="button remove-email fa fa-minus"></button>
+          </div>
+        </td>
+      </tr>
+      <tr class="email-record-edit-form">
+        <td><input class="update-label" type="text" value={{label}} /></td>
+        <td><input class="update-address" type="text" value={{address}} /></td>
+        <td class="actions">
+          <div class="button-group">
+            <button data-update-url="{{update_url}}" class="button save fa fa-check"></button>
+            <button class="button cancel fa fa-close"></button>
+          </div>
+        </td>
+      </tr>
+  {{/each}}
+</script>
+'''
 
 
 class PersonView(BrowserView):
@@ -82,9 +110,16 @@ class AddPerson(ModelAddForm):
 class EditPerson(ModelEditForm):
 
     fields = field.Fields(IPersonModel)
+    template = ViewPageTemplateFile('templates/person_edit.pt')
 
     def __init__(self, context, request):
         super(EditPerson, self).__init__(context, request, context.model)
+
+    def get_fetch_url(self):
+        return self.context.model.get_url('mails/list')
+
+    def get_create_mail_url(self):
+        return self.context.model.get_url('mails/add')
 
     def nextURL(self):
         return self.context.model.get_url()
@@ -95,3 +130,6 @@ class EditPerson(ModelEditForm):
 
         return viewlet.prepare_edit_tab(
             self.model.get_edit_url(self.context.parent), is_selected=True)
+
+    def render_handlebars_email_template(self):
+        return EMAIL_TEMPLATE

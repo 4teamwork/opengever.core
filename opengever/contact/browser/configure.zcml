@@ -4,6 +4,11 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="opengever.contact">
 
+  <browser:resourceDirectory
+      name="opengever.contact"
+      directory="resources"
+      />
+
   <browser:page
       name="view"
       for="opengever.contact.interfaces.IPerson"
@@ -18,14 +23,14 @@
       permission="zope2.View"
       />
 
-<browser:page
+  <browser:page
       name="edit"
       for="opengever.contact.interfaces.IPerson"
       class=".person.EditPerson"
       permission="opengever.contact.EditPerson"
       />
 
-<browser:page
+  <browser:page
       name="add-person"
       for="opengever.contact.interfaces.IContactFolder"
       class=".person.AddPerson"
@@ -46,6 +51,14 @@
       permission="zope.Public"
       class=".layout.OrganizationLayoutPolicy"
       allowed_interface="plone.app.layout.globals.interfaces.ILayoutPolicy"
+      />
+
+  <browser:page
+      name="mails"
+      for="opengever.contact.interfaces.IPerson"
+      class=".mail.MailAddressesView"
+      permission="opengever.contact.EditPerson"
+      allowed_interface="opengever.contact.browser.mail.IMailAddressesActions"
       />
 
 </configure>
