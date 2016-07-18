@@ -3,6 +3,8 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.testing import FunctionalTestCase
+from plone import api
+from zope.component import getMultiAdapter
 
 
 class TestOpengeverSearch(FunctionalTestCase):
@@ -76,3 +78,75 @@ class TestBumblebeePreview(FunctionalTestCase):
                          results[0].classes)
         self.assertEqual(['state-document-state-draft', 'showroom-item'],
                          results[1].classes)
+
+    @browsing
+    def test_batch_size_is_available_in_template(self, browser):
+        dossier = create(Builder('dossier')
+                         .titled(u'Foo Dossier'))
+        create(Builder('document')
+               .titled(u'Foo Document')
+               .with_dummy_content()
+               .within(dossier))
+
+        browser.login().open(self.portal, view='search')
+        batch_size = browser.css('#search-results').first.attrib.get('data-batch-size')
+
+        self.assertEqual(
+            25, int(batch_size),
+            'The batch-size data atribute should be on the tag')
+
+    @browsing
+    def test_number_of_documents_is_available_in_template(self, browser):
+        dossier = create(Builder('dossier')
+                         .titled(u'Foo Dossier'))
+
+        create(Builder('document')
+               .titled(u'Foo Document')
+               .with_dummy_content()
+               .within(dossier))
+
+        create(Builder('dossier').within(dossier))
+
+        browser.login().open(self.portal, view='search')
+
+        number_of_documents = browser.css(
+            '#search-results .searchResults').first.attrib.get('data-number-of-documents')
+
+        self.assertEqual(
+            1, int(number_of_documents),
+            'The number_of_documents data should be set to the amount of'
+            'of found bumblebeeable objects.')
+
+    @browsing
+    def test_set_showroom_vars_correctly(self, browser):
+        catalog = api.portal.get_tool('portal_catalog')
+
+        base = create(Builder('dossier'))
+
+        search_view = getMultiAdapter((self.portal, self.request), name="search")
+
+        # Batch 1
+        create(Builder('document').within(base).titled(u'A Foo'))
+        create(Builder('dossier').within(base).titled(u'B Foo'))
+
+        # Batch 2
+        create(Builder('document').within(base).titled(u'C Foo'))
+        create(Builder('document').within(base).titled(u'D Foo'))
+
+        # Batch 3
+        create(Builder('dossier').within(base).titled(u'E Foo'))
+        create(Builder('document').within(base).titled(u'F Foo'))
+
+        brains = catalog({'sort_on': 'sortable_title', 'SearchableText':"Foo"})
+
+        search_view.calculate_showroom_configuration(brains, b_start=0)
+        self.assertEqual(4, search_view.number_of_documents)
+        self.assertEqual(0, search_view.offset)
+
+        search_view.calculate_showroom_configuration(brains, b_start=3)
+        self.assertEqual(4, search_view.number_of_documents)
+        self.assertEqual(2, search_view.offset)
+
+        search_view.calculate_showroom_configuration(brains, b_start=5)
+        self.assertEqual(4, search_view.number_of_documents)
+        self.assertEqual(3, search_view.offset)

@@ -277,7 +277,8 @@
 
             <metal:searchresults define-macro="search_results">
               <div id="search-results"
-                   tal:define="navigation_root_url context/@@plone_portal_state/navigation_root_url;">
+                   tal:define="navigation_root_url context/@@plone_portal_state/navigation_root_url;"
+                   tal:attributes="data-batch-size view/b_size;">
 
                 <metal:noresults tal:condition="not: batch">
                   <p i18n:domain="plone"><strong i18n:translate="description_no_results_found">No results were found.</strong></p>
@@ -290,7 +291,9 @@
                                            use_view_action site_properties/typesUseViewActionInListings|python:();
                                            allowAnonymousViewAbout site_properties/allowAnonymousViewAbout;
                                            show_about python:not isAnon or allowAnonymousViewAbout;">
-                  <dl class="searchResults">
+                  <dl class="searchResults"
+                      tal:attributes="data-number-of-documents view/number_of_documents;
+                                      data-offset view/offset;">
                     <tal:results repeat="item batch">
                       <div class="search-item-wrapper">
                         <div class="searchItem">
@@ -302,6 +305,7 @@
                                  tal:attributes="href python:item_type in use_view_action and (item_url + '/view') or item_url;
                                                  class item/get_css_classes;
                                                  title item/Title;
+                                                 data-showroom-id item/UID;
                                                  data-showroom-target item/get_overlay_url;
                                                  data-showroom-title item/get_overlay_title;"
                                  tal:content="item/CroppedTitle" />
@@ -346,10 +350,9 @@
                           </dd>
                         </div>
                         <div class="searchImage" tal:condition="item/is_bumblebeeable">
-                          <img class="showroom-item bumblebeeSearchPreview"
+                          <img class="showroom-reference bumblebeeSearchPreview"
                                  tal:attributes="src item/get_preview_image_url;
-                                                 data-showroom-target item/get_overlay_url;
-                                                 data-showroom-title item/get_overlay_title;" />
+                                                 data-showroom-target-item item/UID;" />
                         </div>
                       </div>
                       <div class="visualClear"><!-- --></div>

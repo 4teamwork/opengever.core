@@ -1,4 +1,6 @@
 from DateTime import DateTime
+from opengever.bumblebee import is_bumblebee_feature_enabled
+from opengever.bumblebee import is_bumblebeeable
 from plone import api
 from plone.app.search.browser import EVER
 from plone.app.search.browser import quote_chars
@@ -19,6 +21,10 @@ class OpengeverSearch(Search):
     """Customizing the plone default Search View.
     """
 
+    b_size = 25
+    number_of_documents = 0
+    offset = 0
+
     def __init__(self, context, request):
         super(OpengeverSearch, self).__init__(context, request)
 
@@ -28,10 +34,24 @@ class OpengeverSearch(Search):
     def results(self, query=None, batch=True, b_size=10, b_start=0):
         """Overwrite this method to adjust the default batch size from
         10 to 25.
+
+        If bumblebee is enabled we have to update the number of documents
+        and the offset in a sepparate query because the query can contain
+        different portaltypes. In the showroom overlay we just want to display
+        the amount of bumblebee-items and not the amount of all search
+        results. We also have to calculate the offset while iterating
+        over all brains because we don't know on which batch are how
+        many bumblebeeable-items.
         """
-        b_size = 25
+        if is_bumblebee_feature_enabled:
+            bumblebee_search_query = query or {}
+            brains = super(OpengeverSearch, self).results(
+                query=bumblebee_search_query, batch=False)
+
+            self.calculate_showroom_configuration(brains, b_start)
+
         return super(OpengeverSearch, self).results(
-            query=query, batch=batch, b_size=b_size, b_start=b_start)
+            query=query, batch=batch, b_size=self.b_size, b_start=b_start)
 
     def breadcrumbs(self, item):
         obj = item.getObject()
@@ -40,6 +60,27 @@ class OpengeverSearch(Search):
         breadcrumbs = list(view.breadcrumbs())[:-1]
 
         return breadcrumbs
+
+    def calculate_showroom_configuration(self, brains, b_start):
+        """Calculates the number of documents from a list of brains
+        and the offset depending on the batch-start position.
+        """
+        offset = 0
+        number_of_documents = 0
+
+        for i, brain in enumerate(brains):
+            if not is_bumblebeeable(brain):
+                continue
+
+            if b_start > i:
+                # increment the offset as long as we are
+                # behind the batch start position
+                offset += 1
+
+            number_of_documents += 1
+
+        self.offset = offset
+        self.number_of_documents = number_of_documents
 
     def types_list(self):
         types = super(OpengeverSearch, self).types_list()
