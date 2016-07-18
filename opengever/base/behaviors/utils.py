@@ -129,7 +129,6 @@ def set_default_with_acquisition(field, default=None):
     from the parent object, if existing, otherwise it uses
     the given default value.
     """
-    field._acquisition_default = default
 
     def default_value_generator(data):
         container = data.context
@@ -139,9 +138,9 @@ def set_default_with_acquisition(field, default=None):
             return acquired_value
 
         # otherwise use default value
-        if field._acquisition_default:
+        if default:
             # XXX: Use sentinel value (Issue #2029)
-            return field._acquisition_default
+            return default
         else:
             # use first value
             try:
