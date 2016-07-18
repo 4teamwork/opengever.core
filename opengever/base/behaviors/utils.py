@@ -85,6 +85,7 @@ class RestrictedVocabularyFactory(object):
             return self.choice_names
 
         if not acquisition_value or acquisition_value not in self.choice_names:
+            # XXX: Compare against sentinel value (Issue #2030)
             return self.choice_names
 
         allowed_choice_names = []
