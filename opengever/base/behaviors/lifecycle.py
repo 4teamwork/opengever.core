@@ -2,9 +2,9 @@ from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.base import _
 from opengever.base.acquisition import set_default_with_acquisition
-from opengever.base.behaviors.utils import propagate_vocab_restrictions
 from opengever.base.interfaces import IBaseCustodyPeriods
 from opengever.base.interfaces import IRetentionPeriodRegister
+from opengever.base.restricted_vocab import propagate_vocab_restrictions
 from opengever.base.restricted_vocab import RestrictedVocabularyFactory
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.directives import form

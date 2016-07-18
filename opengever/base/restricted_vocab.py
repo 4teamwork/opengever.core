@@ -3,6 +3,9 @@ from opengever.base.acquisition import NO_VALUE_FOUND
 from opengever.base.interfaces import IDuringContentCreation
 from plone.app.dexterity.behaviors.metadata import MetadataBase
 from Products.CMFPlone.utils import safe_callable
+from z3c.form.interfaces import IValue
+from z3c.form.value import ComputedValue
+from zope.component import getMultiAdapter
 import zope.schema.vocabulary
 
 
@@ -114,3 +117,47 @@ class RestrictedVocabularyFactory(object):
 
         # Otherwise use the field default
         return self.field.default
+
+
+def propagate_vocab_restrictions(container, event, restricted_fields, marker):
+
+    def dottedname(field):
+        return '.'.join((field.interface.__name__, field.__name__))
+
+    changed_fields = []
+    for desc in event.descriptions:
+        for name in desc.attributes:
+            changed_fields.append(name)
+
+    fields_to_check = []
+    for field in restricted_fields:
+        if dottedname(field) in changed_fields:
+            fields_to_check.append(field)
+
+    if not fields_to_check:
+        return
+
+    children = container.portal_catalog(
+        # XXX: Depth should not be limited (Issue #2027)
+        path={'depth': 2,
+              'query': '/'.join(container.getPhysicalPath())},
+        object_provides=(marker.__identifier__,)
+    )
+
+    for child in children:
+        obj = child.getObject()
+        for field in fields_to_check:
+            voc = field.bind(obj).source
+            value = field.get(field.interface(obj))
+            if value not in voc:
+                # obj, request, form, field, widget
+                default = getMultiAdapter((
+                    obj.aq_inner.aq_parent,
+                    obj.REQUEST,
+                    None,
+                    field,
+                    None,
+                ), IValue, name='default')
+                if isinstance(default, ComputedValue):
+                    default = default.get()
+                field.set(field.interface(obj), default)
