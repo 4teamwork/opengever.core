@@ -106,32 +106,6 @@ class TestGetPdfFilename(FunctionalTestCase):
         self.assertIsNone(adapter._get_pdf_filename())
 
 
-class TestGetFileTitle(FunctionalTestCase):
-
-    layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
-
-    def test_returns_file_title_if_file_is_available(self):
-        dossier = create(Builder('dossier'))
-        document = create(Builder('document')
-                          .within(dossier)
-                          .titled('Example')
-                          .attach_file_containing(
-                              bumblebee_asset('example.docx').bytes(),
-                              u'example.docx'))
-
-        adapter = getMultiAdapter((document, self.request), IBumblebeeOverlay)
-
-        self.assertEqual('example.docx', adapter.get_file_title())
-
-    def test_returns_none_if_no_file_is_available(self):
-        dossier = create(Builder('dossier'))
-        document = create(Builder('document').within(dossier))
-
-        adapter = getMultiAdapter((document, self.request), IBumblebeeOverlay)
-
-        self.assertIsNone(adapter.get_file_title())
-
-
 class TestGetFileSize(FunctionalTestCase):
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER

@@ -44,11 +44,6 @@ class IBumblebeeOverlay(Interface):
         """Returns the mime-type css class as a string.
         """
 
-    def get_file_title():
-        """Returns the title of the file.
-        If there is no file, it returns None.
-        """
-
     def get_file_size():
         """Returns a string with the filesize in kb.
         If there is no file, it returns None.

@@ -1,100 +1,94 @@
-<div id="file-preview" i18n:domain="opengever.bumblebee">
-  <aside class="sidebar">
-    <header tal:condition="view/overlay/has_file">
-      <span tal:attributes="class string:file-mimetype ${view/overlay/get_mime_type_css_class}" />
-      <div>
-        <span class="title" tal:content="view/overlay/get_file_title" />
-        <span class="filesize" tal:content="string:${view/overlay/get_file_size} KB" />
+<aside class="sidebar" i18n:domain="opengever.bumblebee">
+  <header>
+    <span tal:attributes="class string:file-mimetype ${view/overlay/get_mime_type_css_class}" />
+    <div>
+      <a class="title"
+         tal:attributes="href context/absolute_url"
+         tal:content="view/overlay/get_title" />
+      <span class="filesize" tal:content="string:${view/overlay/get_file_size} KB" />
+    </div>
+  </header>
+  <main>
+    <table class="metadata">
+      <tr>
+        <td class="title" i18n:translate="">Creator:</td>
+        <td class="value" tal:content="structure view/overlay/get_creator_link"></td>
+      </tr>
+      <tr tal:define="date view/overlay/get_document_date" tal:condition="nocall: date">
+        <td class="title" i18n:translate="">Document date:</td>
+        <td class="value" tal:content="date"></td>
+      </tr>
+      <tr tal:define="dossier view/overlay/get_containing_dossier" tal:condition="nocall: dossier">
+        <td class="title" i18n:translate="">Dossier:</td>
+        <td class="value" tal:attributes="href dossier/absolute_url" tal:content="dossier/Title"></td>
+      </tr>
+      <tr>
+        <td class="title" i18n:translate="">Reference number:</td>
+        <td class="value" tal:content="view/overlay/get_reference_number"></td>
+      </tr>
+    </table>
+  </main>
+  <footer>
+    <ul class="file-actions">
+      <li tal:define="link view/overlay/get_checkout_url" tal:condition="nocall: link">
+        <a id="action-checkout"
+           tal:attributes="href link"
+           i18n:domain="plone"
+           i18n:translate="">Checkout and edit</a>
+      </li>
+      <li tal:define="link view/overlay/get_checkin_without_comment_url" tal:condition="nocall: link">
+        <a id="action-checkin"
+           tal:attributes="href link"
+           i18n:domain="opengever.document"
+           i18n:translate="">Checkin without comment</a>
+      </li>
+      <li tal:define="link view/overlay/get_checkin_with_comment_url" tal:condition="nocall: link">
+        <a id="action-checkin"
+           tal:attributes="href link"
+           i18n:domain="opengever.document"
+           i18n:translate="">Checkin with comment</a>
+      </li>
+      <li id="action-revert"
+          tal:define="link view/overlay/get_revert_link"
+          tal:condition="nocall: link"
+          tal:content="structure link">
+      </li>
+      <li tal:define="link view/overlay/get_edit_metadata_url" tal:condition="nocall: link">
+        <a id="action-edit"
+           tal:attributes="href link"
+           i18n:domain="plone"
+           i18n:translate="">Edit metadata</a>
+      </li>
+      <li id="action-download"
+          tal:define="link view/overlay/get_download_copy_link"
+          tal:condition="nocall: link"
+          tal:content="structure link">
+      </li>
+      <li tal:define="link view/overlay/get_open_as_pdf_url" tal:condition="nocall: link">
+        <a id="action-pdf"
+           tal:attributes="href link"
+           i18n:translate="">Open as PDF</a>
+      </li>
+      <li tal:define="link view/overlay/get_detail_view_url" tal:condition="python:not view.on_detail_view and link">
+        <a id="action-view"
+           tal:attributes="href link"
+           i18n:translate="">Open detail view</a>
+      </li>
+    </ul>
+    <div class="info-viewlets">
+      <div tal:replace="structure view/overlay/render_checked_out_viewlet" />
+      <div tal:replace="structure view/overlay/render_lock_info_viewlet" />
+      <div tal:condition="view/overlay/is_versioned_context">
+        <dl class="portalMessage warning">
+          <dt i18n:domain="plone" i18n:translate="">Warning</dt>
+          <dd i18n:translate="warning_on_versioned_context">
+            You are looking at a versioned file.
+          </dd>
+        </dl>
       </div>
-    </header>
-    <main>
-      <ul class="metadata">
-        <li>
-          <span class="title" i18n:translate="">Creator:</span>
-          <span class="value" tal:content="structure view/overlay/get_creator_link"></span>
-        </li>
-        <li tal:define="date view/overlay/get_document_date" tal:condition="nocall: date" class="detailItem">
-          <span class="title" i18n:translate="">Document date:</span>
-          <span class="value" tal:content="date"></span>
-        </li>
-        <li tal:define="dossier view/overlay/get_containing_dossier" tal:condition="nocall: dossier" class="detailItem">
-           <span class="title" i18n:translate="">Dossier:</span>
-           <a class="value" tal:attributes="href dossier/absolute_url" tal:content="dossier/Title"></a>
-        </li>
-        <li>
-          <span class="title" i18n:translate="">Sequence number:</span>
-          <span class="value" tal:content="view/overlay/get_sequence_number"></span>
-        </li>
-        <li>
-          <span class="title" i18n:translate="">Reference number:</span>
-          <span class="value" tal:content="view/overlay/get_reference_number"></span>
-        </li>
-      </ul>
-    </main>
-    <footer>
-      <ul class="file-actions">
-        <li tal:define="link view/overlay/get_detail_view_url" tal:condition="python:not view.on_detail_view and link">
-          <a id="action-view"
-             tal:attributes="href link"
-             i18n:translate="">Open detail view</a>
-        </li>
-        <li id="action-download"
-            tal:define="link view/overlay/get_download_copy_link"
-            tal:condition="nocall: link"
-            tal:content="structure link">
-        </li>
-        <li tal:define="link view/overlay/get_open_as_pdf_url" tal:condition="nocall: link">
-          <a id="action-pdf"
-             tal:attributes="href link"
-             i18n:translate="">Open as PDF</a>
-        </li>
-        <li tal:define="link view/overlay/get_edit_metadata_url" tal:condition="nocall: link">
-          <a id="action-edit"
-             tal:attributes="href link"
-             i18n:domain="plone"
-             i18n:translate="">Edit metadata</a>
-        </li>
-        <li tal:define="link view/overlay/get_checkout_url" tal:condition="nocall: link">
-          <a id="action-checkout"
-             tal:attributes="href link"
-             i18n:domain="plone"
-             i18n:translate="">Checkout and edit</a>
-        </li>
-        <li tal:define="link view/overlay/get_checkin_without_comment_url" tal:condition="nocall: link">
-          <a id="action-checkin"
-             tal:attributes="href link"
-             i18n:domain="opengever.document"
-             i18n:translate="">Checkin without comment</a>
-        </li>
-        <li tal:define="link view/overlay/get_checkin_with_comment_url" tal:condition="nocall: link">
-          <a id="action-checkin"
-             tal:attributes="href link"
-             i18n:domain="opengever.document"
-             i18n:translate="">Checkin with comment</a>
-        </li>
-        <li id="action-revert"
-            tal:define="link view/overlay/get_revert_link"
-            tal:condition="nocall: link"
-            tal:content="structure link">
-        </li>
-      </ul>
-      <div class="info-viewlets">
-        <div tal:replace="structure view/overlay/render_checked_out_viewlet" />
-        <div tal:replace="structure view/overlay/render_lock_info_viewlet" />
-        <div tal:condition="view/overlay/is_versioned_context">
-          <dl class="portalMessage warning">
-            <dt i18n:domain="plone" i18n:translate="">Warning</dt>
-            <dd i18n:translate="warning_on_versioned_context">
-              You are looking at a versioned file.
-            </dd>
-          </dl>
-        </div>
-      </div>
-    </footer>
-  </aside>
-  <div class="preview">
-    <button id="ftw-showroom-prev" title="Previous" i18n:attributes="title showroom_nav_button_prev" class="showroom-nav-button"></button>
-    <iframe tal:attributes="src view/overlay/get_preview_pdf_url"></iframe>
-    <button id="ftw-showroom-next" title="Next" i18n:attributes="title showroom_nav_button_next" class="showroom-nav-button"></button>
-  </div>
-</div>
+    </div>
+  </footer>
+</aside>
+<article id="file-preview">
+  <iframe tal:attributes="src view/overlay/get_preview_pdf_url"></iframe>
+</article>

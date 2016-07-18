@@ -74,8 +74,8 @@ class BumblebeeBaseDocumentOverlay(object):
     def get_detail_view_url(self):
         return self.context.absolute_url()
 
-    def get_file_title(self):
-        return self.get_file().filename if self.has_file() else None
+    def get_title(self):
+        return self.context.title
 
     def get_file_size(self):
         """Return the filesize in KB."""

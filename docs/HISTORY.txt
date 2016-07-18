@@ -5,6 +5,11 @@ Changelog
 4.10.0 (unreleased)
 -------------------
 
+- Adjust overlay according to customer feedback
+  Add link to document title in overlay
+  Trigger close when clicking on the backdrop of the overlay
+  [Kevin Bieri]
+
 - Add a journal entry when downloading pdf files from bumblebee.
   [deiferni]
 
