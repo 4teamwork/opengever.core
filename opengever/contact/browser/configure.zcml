@@ -11,6 +11,20 @@
       permission="zope2.View"
       />
 
+<browser:page
+      name="edit"
+      for="opengever.contact.interfaces.IPerson"
+      class=".person.EditPerson"
+      permission="opengever.contact.EditPerson"
+      />
+
+<browser:page
+      name="add-person"
+      for="opengever.contact.interfaces.IContactFolder"
+      class=".person.AddPerson"
+      permission="opengever.contact.AddPerson"
+      />
+
   <browser:page
       name="plone_layout"
       for="opengever.contact.interfaces.IPerson"

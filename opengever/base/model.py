@@ -1,3 +1,4 @@
+from opengever.base.interfaces import ISQLFormSupport
 from opengever.ogds.models import BASE
 from opengever.ogds.models.declarative import query_base
 from plone import api
@@ -5,9 +6,9 @@ from plone.api.exc import CannotGetPortalError
 from sqlalchemy import types
 from sqlalchemy_i18n import make_translatable
 from z3c.saconfig import named_scoped_session
+from zope.interface import implements
 import pytz
 import sqlalchemy_utils
-
 
 DEFAULT_LOCALE = 'de'
 SUPPORTED_LOCALES = ['de', 'fr', 'en']
@@ -66,3 +67,27 @@ class UTCDateTime(types.TypeDecorator):
                 # backend who does not support timezone aware datetime.
                 value = pytz.UTC.localize(value)
             return value
+
+
+class SQLFormSupport(object):
+    implements(ISQLFormSupport)
+
+    def is_editable(self):
+        return True
+
+    def get_edit_url(self, context):
+        return self.get_url(view='edit')
+
+    def get_edit_values(self, fieldnames):
+        values = {}
+        for fieldname in fieldnames:
+            value = getattr(self, fieldname, None)
+            if not value:
+                continue
+
+            values[fieldname] = value
+        return values
+
+    def update_model(self, data):
+        for key, value in data.items():
+            setattr(self, key, value)

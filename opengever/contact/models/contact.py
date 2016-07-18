@@ -1,4 +1,5 @@
 from opengever.base.model import Base
+from opengever.base.model import SQLFormSupport
 from opengever.ogds.models.types import UnicodeCoercingText
 from sqlalchemy import Column
 from sqlalchemy import Integer
@@ -7,7 +8,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
 
 
-class Contact(Base):
+class Contact(Base, SQLFormSupport):
     """Base class for both type of contacts organizations and persons.
     """
 
@@ -24,6 +25,6 @@ class Contact(Base):
     urls = relationship("URL", back_populates="contact")
     participations = relationship("Participation", back_populates="contact")
 
-    __mapper_args__ = {'polymorphic_on':contact_type,
-                       'polymorphic_identity':'contact',
-                       'with_polymorphic':'*'}
+    __mapper_args__ = {'polymorphic_on': contact_type,
+                       'polymorphic_identity': 'contact',
+                       'with_polymorphic': '*'}

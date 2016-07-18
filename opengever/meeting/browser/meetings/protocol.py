@@ -5,7 +5,7 @@ from opengever.base.schema import UTCDatetime
 from opengever.meeting import _
 from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.command import ProtocolOperations
-from opengever.meeting.form import ModelEditForm
+from opengever.base.browser.modelforms import ModelEditForm
 from opengever.meeting.model import Meeting
 from opengever.meeting.sablon import Sablon
 from opengever.meeting.vocabulary import get_committee_member_vocabulary

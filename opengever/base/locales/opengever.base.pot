@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-06-26 19:06+0000\n"
+"POT-Creation-Date: 2016-07-11 13:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,6 +35,11 @@ msgstr ""
 
 #: ./opengever/base/profiles/default/actions.xml
 msgid "Properties"
+msgstr ""
+
+#. Default: "Save"
+#: ./opengever/base/browser/modelforms.py:41
+msgid "Save"
 msgstr ""
 
 #: ./opengever/base/browser/list_groupmembers.pt:14
@@ -143,6 +148,11 @@ msgstr ""
 msgid "label_archival_value_annotation"
 msgstr ""
 
+#. Default: "Cancel"
+#: ./opengever/base/browser/modelforms.py:53
+msgid "label_cancel"
+msgstr ""
+
 #. Default: "Change public trial information."
 #: ./opengever/base/browser/edit_public_trial.py:62
 msgid "label_change_public_trial"
@@ -184,7 +194,7 @@ msgid "label_dateofsubmission"
 msgstr ""
 
 #. Default: "An unexpected error has occured"
-#: ./opengever/base/browser/templates/gever-macros.pt:114
+#: ./opengever/base/browser/templates/gever-macros.pt:117
 msgid "label_default_error_message"
 msgstr ""
 
@@ -199,7 +209,7 @@ msgid "label_dossier"
 msgstr ""
 
 #. Default: "Initial version (document copied)"
-#: ./opengever/base/subscribers.py:60
+#: ./opengever/base/subscribers.py:61
 msgid "label_initial_version_copied"
 msgstr ""
 
@@ -244,7 +254,7 @@ msgid "label_search"
 msgstr ""
 
 #. Default: "Error"
-#: ./opengever/base/browser/templates/gever-macros.pt:113
+#: ./opengever/base/browser/templates/gever-macros.pt:116
 msgid "label_severity_error"
 msgstr ""
 
@@ -266,6 +276,16 @@ msgstr ""
 
 #: opengever/repository/classification.py
 msgid "limited-public"
+msgstr ""
+
+#. Default: "Changes saved"
+#: ./opengever/base/browser/modelforms.py:121
+msgid "message_changes_saved"
+msgstr ""
+
+#. Default: "Record created"
+#: ./opengever/base/browser/modelforms.py:49
+msgid "message_record_created"
 msgstr ""
 
 #. Default: "Error"
@@ -338,7 +358,7 @@ msgstr ""
 msgid "search_results_advanced_link"
 msgstr ""
 
-#: ./opengever/base/browser/templates/gever-macros.pt:96
+#: ./opengever/base/browser/templates/gever-macros.pt:99
 msgid "show all"
 msgstr ""
 

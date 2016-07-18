@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-07-08 14:02+0000\n"
+"POT-Creation-Date: 2016-07-11 13:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,11 @@ msgstr ""
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.contact\n"
+
+#. Default: "Add Person"
+#: ./opengever/contact/browser/person.py:72
+msgid "Add Person"
+msgstr ""
 
 #: ./opengever/contact/contact.py:187
 #: ./opengever/contact/profiles/default/types/opengever.contact.contact.xml
@@ -41,6 +46,7 @@ msgid "internet"
 msgstr ""
 
 #. Default: "Academic title"
+#: ./opengever/contact/browser/person.py:43
 #: ./opengever/contact/browser/templates/person.pt:30
 #: ./opengever/contact/contact.py:69
 msgid "label_academic_title"
@@ -82,6 +88,7 @@ msgid "label_department"
 msgstr ""
 
 #. Default: "Description"
+#: ./opengever/contact/browser/person.py:58
 #: ./opengever/contact/contact.py:145
 msgid "label_description"
 msgstr ""
@@ -98,12 +105,14 @@ msgid "label_email2"
 msgstr ""
 
 #. Default: "Firstname"
+#: ./opengever/contact/browser/person.py:48
 #: ./opengever/contact/contact.py:82
 #: ./opengever/contact/contactfolder.py:104
 msgid "label_firstname"
 msgstr ""
 
 #. Default: "Lastname"
+#: ./opengever/contact/browser/person.py:53
 #: ./opengever/contact/contact.py:75
 #: ./opengever/contact/contactfolder.py:99
 msgid "label_lastname"
@@ -161,6 +170,7 @@ msgid "label_picture"
 msgstr ""
 
 #. Default: "Salutation"
+#: ./opengever/contact/browser/person.py:38
 #: ./opengever/contact/browser/templates/person.pt:26
 #: ./opengever/contact/contact.py:64
 msgid "label_salutation"
