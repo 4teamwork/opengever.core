@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2016-06-26 18:26+0000\n"
-"PO-Revision-Date: 2016-07-18 08:14+0000\n"
+"PO-Revision-Date: 2016-07-18 08:30+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
 "gever/opengever-activity/fr/>\n"
@@ -53,7 +53,7 @@ msgstr ""
 #. Default: "All Notifications"
 #: ./opengever/activity/viewlets/notification.pt:41
 msgid "label_notifications_overview"
-msgstr ""
+msgstr "Toutes les notifications"
 
 #. Default: "A problem has occurred during the notification creation. Notification could not or only partially produced."
 #: ./opengever/activity/center.py:228
