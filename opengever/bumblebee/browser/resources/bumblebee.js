@@ -34,12 +34,12 @@
 
   function loadNextTabbedviewGalleryView() {
     var data = {
-      documentPointer: $('.imageContainer').length,
+      documentPointer: $(".imageContainer").length,
       searchableText: global.tabbedview.searchbox.val()
     };
     $.get(endpoint, data).done(function(data) {
-      var items = $(data).filter('.imageContainer');
-      items.insertAfter($('.imageContainer').last());
+      var items = $(data).filter(".imageContainer");
+      items.insertAfter($(".imageContainer").last());
       toggleShowMoreButton();
       showroom.append(items);
       scanForBrokenImages(items);
@@ -47,11 +47,11 @@
   }
 
   function fetchTabbedviewTableShowroomItems(pagenumber) {
-    var fetch_url = store.proxy.url.split('?')[0];
-    var params = {'pagenumber': pagenumber,
-                  'initialize': 0,
-                  'view_name': global.tabbedview.prop('view_name'),
-                  'tableType': 'extjs'};
+    var fetch_url = global.store.proxy.url.split("?")[0];
+    var params = {"pagenumber": pagenumber,
+                  "initialize": 0,
+                  "view_name": global.tabbedview.prop("view_name"),
+                  "tableType": "extjs"};
 
     return $.get(fetch_url, params);
   }
@@ -94,36 +94,36 @@
     // trough the web, we had to register an event-listener for the
     // updated_search-view (see init-Method in this file).
     //
-    // We have to do the same ajax-request here but don't want to update the
+    // We have to do the same ajax-request here but don"t want to update the
     // showroom. For this case we have to deactivate the event-listerer
     // by adding a special request-parameter which will be handled in the
     // event-listener.
-    var additionalParams = {'deactivate_update': true};
+    var additionalParams = {"deactivate_update": true};
 
-    return $.get('@@updated_search' + queryString, additionalParams);
+    return $.get("@@updated_search" + queryString, additionalParams);
   }
 
   function loadNextSearchItems() {
-    var url = $('#search-results .pagination .next').attr('href');
+    var url = $("#search-results .pagination .next").attr("href");
     if (!url) { return; }
 
     fetchSearchViewItems(url).done(function(data) {
-      showroom.append($('.showroom-item', data));
+      showroom.append($(".showroom-item", data));
     });
   }
 
   function loadPreviousSearchItems() {
-    var url = $('#search-results .pagination .previous').attr('href');
+    var url = $("#search-results .pagination .previous").attr("href");
     if (!url) { return; }
 
     fetchSearchViewItems(url).done(function(data) {
-      showroom.prepend($('.showroom-item', data));
+      showroom.prepend($(".showroom-item", data));
     });
   }
 
   function toggleShowMoreButton() {
-    var button = $('.bumblebeeGalleryShowMore');
-    var shown = $('.imageContainer').length;
+    var button = $(".bumblebeeGalleryShowMore");
+    var shown = $(".imageContainer").length;
 
     if (shown >= numberOfDocuments) {
       button.hide();
@@ -158,8 +158,8 @@
 
   function init() {
     showroom = Showroom([], {
-      'tail': tail,
-      'head': head,
+      "tail": tail,
+      "head": head,
       template: template
     });
     updateShowroom();
@@ -176,7 +176,7 @@
     // we will destroy it. So we have to do this check first before updating
     // the showroom.
     //
-    // It's also possible to deactivate this listener by adding a "deactivate_update"
+    // It"s also possible to deactivate this listener by adding a "deactivate_update"
     // request parameter.
     if (isOnSearchView()) {
       $(document).ajaxComplete(function(event, jqXHR, params) {
@@ -191,7 +191,7 @@
   }
 
   function getNumberOfDocuments(fallbackValue) {
-    var galleryDocuments = $(".preview-listing").data('number-of-documents');
+    var galleryDocuments = $(".preview-listing").data("number-of-documents");
 
     if ($.isNumeric(galleryDocuments)) {
       // we are in gallery_view
@@ -206,7 +206,7 @@
     }
 
     else if (isOnSearchView()) {
-      searchResultsNumber = $('#search-results .searchResults').data('number-of-documents');
+      var searchResultsNumber = $("#search-results .searchResults").data("number-of-documents");
       if ($.isNumeric(searchResultsNumber)) {
         return parseInt(searchResultsNumber, 10);
       }
@@ -216,20 +216,20 @@
   }
 
   function getTabbedviewTablePagenumber() {
-    return global.tabbedview.param('pagenumber:int') || 1;
+    return global.tabbedview.param("pagenumber:int") || 1;
   }
 
   function getOffset() {
     if (isOnTabbedviewTableView()) {
       var pagenumber = getTabbedviewTablePagenumber();
-      var batchSize = parseInt($('#tabbedview-batchbox').val(), 10);
+      var batchSize = parseInt($("#tabbedview-batchbox").val(), 10);
       if (batchSize && pagenumber) {
         return (pagenumber - 1) * batchSize;
       }
     }
 
     else if (isOnSearchView()) {
-      offset = $('#search-results .searchResults').data('offset');
+      var offset = $("#search-results .searchResults").data("offset");
       if ($.isNumeric(offset)) {
         return parseInt(offset, 10);
       }
@@ -241,25 +241,17 @@
 
   function isOnSearchView() {
     // If the search-results tag is available, we are on the search-view.
-    return $('#search-results').length;
+    return $("#search-results").length;
   }
 
   function isOnTabbedviewTableView() {
-    // The store-attribute comes from ftw.table. If it's available,
+    // The store-attribute comes from ftw.table. If it"s available,
     // we are on a list view.
     return window.store;
   }
 
   function isOnTabbedviewGalleryView() {
-    return $('.preview-listing').length;
-  }
-
-  function parseQueryString(name) {
-    return window.location.search.split(/&/).filter(function(pair) {
-      return pair.indexOf(name) >= 0;
-    }).map(function(pair) {
-      return pair.split("=")[1];
-    }).join();
+    return $(".preview-listing").length;
   }
 
   function closeShowroom() { showroom.close(); }
