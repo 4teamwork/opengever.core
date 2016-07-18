@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2016-06-26 19:23+0000\n"
-"PO-Revision-Date: 2016-07-05 11:44+0000\n"
-"Last-Translator: Pascal Habegger <pascal.habegger@gmail.com>\n"
+"PO-Revision-Date: 2016-07-18 08:19+0000\n"
+"Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
 "gever/opengever-task/fr/>\n"
 "Language: fr\n"
@@ -732,7 +732,7 @@ msgstr "Sous-tâche ${task} ajoutée par ${user}"
 #. Default: "Task accepted"
 #: ./opengever/task/response_description.py:146
 msgid "transition_label_accept"
-msgstr ""
+msgstr "Tâche accéptée"
 
 #. Default: "Document added to Task"
 #: ./opengever/task/response_description.py:317
@@ -762,13 +762,13 @@ msgstr ""
 #. Default: "Created by ${user}"
 #: ./opengever/task/viewlets/response.py:68
 msgid "transition_label_created"
-msgstr ""
+msgstr "Créé par ${user}"
 
 #. Default: "Task added"
 #: ./opengever/task/activities.py:103
 #: ./opengever/task/response_description.py:49
 msgid "transition_label_default"
-msgstr ""
+msgstr "Tâche ajoutée"
 
 #. Default: "Task deadline modified"
 #: ./opengever/task/response_description.py:224
@@ -803,7 +803,7 @@ msgstr ""
 #. Default: "Task resolved"
 #: ./opengever/task/response_description.py:98
 msgid "transition_label_resolve"
-msgstr ""
+msgstr "Tâche accomplie"
 
 #. Default: "Task revised"
 #: ./opengever/task/response_description.py:176
