@@ -4,7 +4,6 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from lxml.etree import tostring
-from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.testing import FunctionalTestCase
 
 
@@ -161,29 +160,3 @@ class TestOverview(FunctionalTestCase):
         self.assertEquals(['Dossier B'], references.text)
         self.assertEquals([dossier_b.absolute_url()],
                           [link.get('href') for link in references])
-
-
-class TestBumblebeeOverview(FunctionalTestCase):
-
-    layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
-
-    @browsing
-    def test_documents_in_overview_are_linked_to_the_overlay(self, browser):
-        dossier = create(Builder('dossier')
-                         .titled(u'Testdossier')
-                         .having(description=u'Hie hesch e beschribig',
-                                 responsible='hugo.boss'))
-
-        document = create(Builder('document')
-                          .within(dossier)
-                          .titled(u'Document 1')
-                          .with_dummy_content())
-
-        browser.login().open(dossier, view='tabbedview_view-overview')
-
-        items = browser.css('#newest_documentsBox li:not(.moreLink) a.showroom-item')
-
-        self.assertEqual(1, len(items))
-        self.assertEqual(
-            '{}/@@bumblebee-overlay-listing'.format(document.absolute_url()),
-            items.first.get('data-showroom-target'))

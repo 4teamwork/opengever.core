@@ -5,6 +5,10 @@ Changelog
 4.10.0 (unreleased)
 -------------------
 
+- Change document linking to document overview, instead of the
+  bumblebee overlay.
+  [phgross]
+
 - Use qtip2 library for document preview tooltip
 
   - Load tooltip data asynchronously.
