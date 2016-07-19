@@ -93,9 +93,11 @@ class TestCustodyPeriodVocabulary(FunctionalTestCase):
 
     @browsing
     def test_custody_period_choices_configurable_via_registry(self, browser):
+        # Note: The static fallback default (30) needs to be part of this
+        # value range for the default to validate
         api.portal.set_registry_record(
             'custody_periods', interface=IBaseCustodyPeriods,
-            value=[u'1', u'2', u'3', u'99']
+            value=[u'1', u'2', u'3', u'30', u'99']
         )
         transaction.commit()
         browser.login().open(self.repofolder)
@@ -103,7 +105,7 @@ class TestCustodyPeriodVocabulary(FunctionalTestCase):
         form_field = browser.find('Custody period (years)')
 
         self.assertEqual(
-            [u'1', u'2', u'3', u'99'],
+            [u'1', u'2', u'3', u'30', u'99'],
             form_field.options_values)
 
     @browsing
@@ -360,9 +362,11 @@ class TestRetentionPeriodVocabulary(FunctionalTestCase):
 
     @browsing
     def test_retention_period_choices_configurable_via_registry(self, browser):
+        # Note: The static fallback default (5) needs to be part of this
+        # value range for the default to validate
         api.portal.set_registry_record(
             'retention_period', interface=IRetentionPeriodRegister,
-            value=[u'1', u'2', u'3', u'99']
+            value=[u'1', u'2', u'3', u'4', u'5', u'99']
         )
         transaction.commit()
         browser.login().open(self.repofolder)
@@ -370,7 +374,7 @@ class TestRetentionPeriodVocabulary(FunctionalTestCase):
         form_field = browser.find('Retention period (years)')
 
         self.assertEqual(
-            [u'1', u'2', u'3', u'99'],
+            [u'1', u'2', u'3', u'4', u'5', u'99'],
             form_field.options_values)
 
     @browsing
