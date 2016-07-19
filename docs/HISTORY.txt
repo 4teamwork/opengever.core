@@ -5,6 +5,9 @@ Changelog
 4.10.0 (unreleased)
 -------------------
 
+- Bump lxml to 3.3.1 and get rid of lxml import warnings and openpyxl user warnings.
+  [deiferni]
+
 - Change document linking to document overview, instead of the
   bumblebee overlay.
   [phgross]
