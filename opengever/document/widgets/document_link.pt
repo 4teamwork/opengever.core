@@ -4,15 +4,7 @@
 
   <span tal:condition="context/is_removed" class='removed_document' />
 
-  <a tal:condition="not: is_bumblebeeable"
-     tal:content="view/get_title"
+  <a tal:content="view/get_title"
      tal:attributes="class view/get_css_class; href view/get_url;" />
-
-  <a tal:condition="is_bumblebeeable"
-     tal:content="view/get_title"
-     tal:attributes="class view/get_css_class;
-                     href view/get_url;
-                     data-showroom-target context/get_overlay_url;
-                     data-showroom-title context/get_overlay_title" />
 
 </div>

@@ -21,10 +21,6 @@ class DocumentLinkWidget(object):
 
     def get_css_class(self):
         classes = ['document_link', self.document.ContentTypeClass()]
-
-        if self.document.is_bumblebeeable():
-            classes.append('showroom-item')
-
         return ' '.join(classes)
 
     def get_title(self):

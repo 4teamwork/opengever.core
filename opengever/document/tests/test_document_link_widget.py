@@ -1,7 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
-from opengever.base import pdfconverter
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.testing import FunctionalTestCase
@@ -56,16 +55,10 @@ class TestDocumentLinkWidgetWithActivatedBumblebee(FunctionalTestCase):
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
     @browsing
-    def test_document_link_is_extended_with_showrom_data(self, browser):
+    def test_document_link_is_not_extended_with_showrom_data(self, browser):
         document = create(Builder('document').with_dummy_content())
 
         browser.open_html(DocumentLinkWidget(document).render())
 
         link = browser.css('a.document_link').first
-        self.assertIn('showroom-item', link.get('class'))
-        self.assertEquals(
-            'http://nohost/plone/document-1/@@bumblebee-overlay-listing',
-            link.get('data-showroom-target'))
-        self.assertEquals(
-            u'Testdokum\xe4nt',
-            link.get('data-showroom-title'))
+        self.assertNotIn('showroom-item', link.get('class'))
