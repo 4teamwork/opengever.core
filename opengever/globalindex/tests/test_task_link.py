@@ -1,9 +1,9 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from lxml.cssselect import css_to_xpath
 from lxml.etree import fromstring
 from lxml.etree import tostring
 from opengever.testing import FunctionalTestCase
+from opengever.testing.helpers import css_to_xpath
 from plone.app.testing import TEST_USER_ID
 
 

@@ -2,9 +2,11 @@ from Missing import Value as MissingValue
 from opengever.ogds.base.actor import Actor
 from openpyxl import Workbook
 from openpyxl.styles import Font
-from openpyxl.styles import Style
 from StringIO import StringIO
 from zope.i18n import translate
+
+
+DATE_NUMBER_FORMAT = 'DD.MM.YYYY'
 
 
 def readable_author(author):
@@ -28,12 +30,6 @@ class StringTranslater(object):
         if value:
             return translate(value, domain=self.domain, context=self.request)
         return None
-
-
-def get_date_style(format='DD.MM.YYYY'):
-    """ Set up a date format style to use in the spreadsheet and return it."""
-
-    return Style(number_format=format)
 
 
 class XLSReporter(object):
@@ -94,5 +90,5 @@ class XLSReporter(object):
 
                 cell.value = value
 
-                if attr.get('style'):
-                    cell.style = attr.get('style')
+                if 'number_format' in attr:
+                    cell.number_format = attr.get('number_format')

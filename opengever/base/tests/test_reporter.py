@@ -5,7 +5,7 @@ from ftw.builder import create
 from ftw.testing import MockTestCase
 from Missing import Value as MissingValue
 from opengever.base import _
-from opengever.base.reporter import get_date_style
+from opengever.base.reporter import DATE_NUMBER_FORMAT
 from opengever.base.reporter import readable_author
 from opengever.base.reporter import StringTranslater
 from opengever.base.reporter import XLSReporter
@@ -45,7 +45,7 @@ class TestReporter(MockTestCase):
             {'id': 'Title', 'title': _('label_title', default='Title')},
             {'id': 'missing', 'missing': 'Missing', },
             {'id': 'start', 'title': _('label_start', default='Start'),
-             'style': get_date_style()},
+             'number_format': DATE_NUMBER_FORMAT},
             {'id': 'responsible',
              'title': _('label_responsible', default='Responsible'),
              'transform': readable_author},

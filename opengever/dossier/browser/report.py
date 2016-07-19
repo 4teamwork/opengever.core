@@ -1,6 +1,6 @@
 from five import grok
 from opengever.base.behaviors.utils import set_attachment_content_disposition
-from opengever.base.reporter import get_date_style
+from opengever.base.reporter import DATE_NUMBER_FORMAT
 from opengever.base.reporter import readable_author
 from opengever.base.reporter import StringTranslater, XLSReporter
 from opengever.dossier import _
@@ -34,10 +34,10 @@ class DossierReporter(grok.View):
              'transform': to_unicode},
             {'id': 'start',
              'title': _(u'label_start', default=u'Opening Date'),
-             'style': get_date_style()},
+             'number_format': DATE_NUMBER_FORMAT},
             {'id': 'end',
              'title': _(u'label_end', default=u'Closing Date'),
-             'style': get_date_style()},
+             'number_format': DATE_NUMBER_FORMAT},
             {'id': 'responsible',
              'title': _(u'label_responsible', default='Responsible'),
              'transform': readable_author},

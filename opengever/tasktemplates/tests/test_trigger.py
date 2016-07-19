@@ -93,7 +93,7 @@ class TestTriggeringTaskTemplate(FunctionalTestCase):
 
         self.assertEquals(
             ['Mitbericht FD'],
-            browser.css('#formfield-form-widgets-tasktemplates input:checked').getparents().text)
+            browser.css('#formfield-form-widgets-tasktemplates input[checked]').getparents().text)
 
     @browsing
     def test_creates_main_task_assigned_to_current_user(self, browser):
