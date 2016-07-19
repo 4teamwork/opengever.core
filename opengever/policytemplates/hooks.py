@@ -173,6 +173,7 @@ def post_render(configurator):
 
 def _delete_templates_files(configurator, content_path):
     os.remove(os.path.join(content_path, '02-templates.json'))
+    os.remove(os.path.join(content_path, 'templates/.gitignore'))
     os.rmdir(os.path.join(content_path, 'templates'))
 
 
