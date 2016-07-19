@@ -5,6 +5,9 @@ Changelog
 4.10.0 (unreleased)
 -------------------
 
+- Link preview-thumbnail in the document tooltip to the bumblebee overlay.
+  [phgross]
+
 - Show pdf icon for preview link in document versions tab.
   [deiferni]
 

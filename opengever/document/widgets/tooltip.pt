@@ -31,10 +31,15 @@
          tal:replace="structure view/download_link" />
     </li>
   </ul>
+
   <div class="preview" tal:condition="view/document/is_bumblebeeable">
-    <img tal:attributes="src view/document/get_preview_image_url; alt context/title"
-         width="200" class="file-preview" />
+    <a href="#" class="showroom-reference"
+       tal:attributes="data-showroom-id string:showroom-id-${view/document/uuid}">
+      <img tal:attributes="src view/document/get_preview_image_url; alt context/title"
+           width="200" class="file-preview" />
+    </a>
   </div>
+
 </div>
 
 <div class='bottomImage'></div>
