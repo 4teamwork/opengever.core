@@ -104,9 +104,8 @@ class TestCustodyPeriodVocabulary(FunctionalTestCase):
         factoriesmenu.add(u'Business Case Dossier')
         form_field = browser.find('Custody period (years)')
 
-        self.assertEqual(
-            [u'1', u'2', u'3', u'30', u'99'],
-            form_field.options_values)
+        # Restricted based on fallback default (30)
+        self.assertEqual([u'30', u'99'], form_field.options_values)
 
     @browsing
     def test_custody_period_default_choices(self, browser):
