@@ -200,12 +200,10 @@ def linked_version_preview(item, value):
 
     return """
     <div>
-        <a class="showroom-item"
+        <a class="showroom-item function-preview-pdf"
            href="{%(url)s}"
            data-showroom-target="%(showroom_url)s"
-           data-showroom-title="%(showroom_title)s">
-        %(title)s
-        </a>
+           data-showroom-title="%(showroom_title)s">%(title)s</a>
     </div>
     """ % data
 
