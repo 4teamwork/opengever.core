@@ -1,14 +1,10 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from lxml.cssselect import LxmlTranslator
 from lxml.etree import fromstring
 from lxml.etree import tostring
 from opengever.testing import FunctionalTestCase
+from opengever.testing.helpers import css_to_xpath
 from plone.app.testing import TEST_USER_ID
-
-
-def css_to_xpath(css):
-    return LxmlTranslator().css_to_xpath(css)
 
 
 class TestTaskLinkGeneration(FunctionalTestCase):

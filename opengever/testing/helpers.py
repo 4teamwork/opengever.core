@@ -1,4 +1,5 @@
 from datetime import datetime
+from lxml.cssselect import LxmlTranslator
 from opengever.base.date_time import as_utc
 from plone import api
 from Products.CMFCore.utils import getToolByName
@@ -70,3 +71,7 @@ def create_document_version(doc, version_id, data=None):
     vdata = data or 'VERSION {} DATA'.format(version_id)
     doc.file.data = vdata
     repo_tool.save(obj=doc, comment="This is Version %s" % version_id)
+
+
+def css_to_xpath(css):
+    return LxmlTranslator().css_to_xpath(css)
