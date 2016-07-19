@@ -176,7 +176,7 @@ class ProposalBase(ModelContainer):
         model = self.load_model()
         if not model:
             return ''
-        return model.title
+        return model.title.encode('utf-8')
 
     def get_overview_attributes(self):
         model = self.load_model()

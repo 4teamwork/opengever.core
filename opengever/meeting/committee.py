@@ -139,7 +139,7 @@ class Committee(ModelContainer):
         model = self.load_model()
         if not model:
             return ''
-        return model.title
+        return model.title.encode('utf-8')
 
     def get_unscheduled_proposals(self):
         committee_model = self.load_model()
