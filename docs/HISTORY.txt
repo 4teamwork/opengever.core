@@ -5,6 +5,9 @@ Changelog
 4.10.0 (unreleased)
 -------------------
 
+- Show pdf icon for preview link in document versions tab.
+  [deiferni]
+
 - Bump lxml to 3.3.1 and get rid of lxml import warnings and openpyxl user warnings.
   [deiferni]
 
