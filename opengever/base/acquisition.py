@@ -25,6 +25,7 @@ def acquire_field_value(field, container):
                 # could not adapt
                 pass
             else:
+                # XXX: Potential for infinite recursion here (Issue #2033)
                 value = field.get(adpt)
                 try:
                     field.validate(value)
