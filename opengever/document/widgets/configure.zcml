@@ -1,5 +1,6 @@
 <configure
     xmlns:z3c="http://namespaces.zope.org/z3c"
+    xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="opengever.document">
 
     <z3c:widgetTemplate
@@ -14,6 +15,14 @@
         widget="plone.formwidget.namedfile.interfaces.INamedFileWidget"
         layer="z3c.form.interfaces.IFormLayer"
         template="no_download_input.pt"
+        />
+
+    <browser:page
+        name="tooltip"
+        for="opengever.document.behaviors.IBaseDocument"
+        permission="zope.Public"
+        class=".tooltip.TooltipView"
+        template="tooltip.pt"
         />
 
 </configure>
