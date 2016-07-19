@@ -115,8 +115,11 @@ class RestrictedVocabularyFactory(object):
         if acquired_value is not NO_VALUE_FOUND:
             return acquired_value
 
-        # Otherwise use the field default
-        return self.field.default
+        # Otherwise fall back to static field default
+        #
+        # NOTE: We deliberately avoid accessing field.default, because doing
+        # so would invoke a defaultFactory if present
+        return self.field.__dict__.get('default', None)
 
 
 def propagate_vocab_restrictions(container, event, restricted_fields, marker):
