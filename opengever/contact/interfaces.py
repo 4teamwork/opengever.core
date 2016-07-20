@@ -7,9 +7,13 @@ class IContactFolder(Interface):
     """
 
 
-class IPerson(ISQLObjectWrapper):
+class IContact(ISQLObjectWrapper):
+    """Base Markerinterface for contactish object wrappers."""
+
+
+class IPerson(IContact):
     """Marker interface for person object wrappers."""
 
 
-class IOrganization(ISQLObjectWrapper):
+class IOrganization(IContact):
     """Marker interface for organization object wrappers."""
