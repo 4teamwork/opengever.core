@@ -1,4 +1,5 @@
 from .create_mail_defaults import PatchCreateMailInContainer
+from .default_values import PatchBuilderCreate
 from .default_values import PatchDexterityContentGetattr
 from .default_values import PatchDexterityDefaultAddForm
 from .default_values import PatchDXCreateContentInContainer
@@ -16,6 +17,7 @@ from .verify_object_paste import PatchCopyContainerVerifyObjectPaste
 from .webdav_lock_timeout import PatchWebDAVLockTimeout
 
 
+PatchBuilderCreate()()
 PatchCatalogToFilterTrashedDocs()()
 PatchCMFEditonsHistoryHandlerTool()()
 PatchCopyContainerVerifyObjectPaste()()
