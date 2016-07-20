@@ -147,3 +147,16 @@ class TestPersonView(FunctionalTestCase):
         self.assertEquals(
             [u'CEO', u'Stellvertretende F\xfchrung'],
             browser.css('.organizations .function').text)
+
+    @browsing
+    def test_related_organizations_are_linked_to_organization_view(self, browser):
+        org1 = create(Builder('organization').named(u'4teamwork AG'))
+        peter = create(Builder('person')
+                       .having(firstname=u'Peter', lastname=u'M\xfcller')
+                       .in_orgs([(org1, 'CEO')]))
+
+        browser.login().open(peter.get_url())
+
+        self.assertEquals(
+            org1.get_url(),
+            browser.css('.organizations a.name').first.get('href'))

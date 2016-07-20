@@ -81,7 +81,11 @@
       <h3 i18n:translate="label_organizations">Organizations:</h3>
       <ul class="organizations orgrole_listing">
         <li tal:repeat="org_role person/organizations">
-          <p class="name" tal:content="org_role/organization/name" />
+          <p>
+            <a href="#" class="name"
+               tal:attributes="href org_role/organization/get_url"
+               tal:content="org_role/organization/name" />
+          </p>
           <span class="function" tal:content="org_role/function" />
         </li>
       </ul>

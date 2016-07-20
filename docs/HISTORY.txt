@@ -5,6 +5,10 @@ Changelog
 4.10.0 (unreleased)
 -------------------
 
+- Add first version of the organization view and
+  link persons and organizations in the listings.
+  [phgross]
+
 - Fix Title for Commitee and Proposal.
   Return utf-8 instead of unicode, as required by plone.
   [deiferni]
