@@ -3,9 +3,6 @@ from opengever.base.acquisition import NO_VALUE_FOUND
 from opengever.base.interfaces import IDuringContentCreation
 from plone.app.dexterity.behaviors.metadata import MetadataBase
 from Products.CMFPlone.utils import safe_callable
-from z3c.form.interfaces import IValue
-from z3c.form.value import ComputedValue
-from zope.component import getMultiAdapter
 import zope.schema.vocabulary
 
 
@@ -153,14 +150,7 @@ def propagate_vocab_restrictions(container, event, restricted_fields, marker):
             voc = field.bind(obj).source
             value = field.get(field.interface(obj))
             if value not in voc:
-                # obj, request, form, field, widget
-                default = getMultiAdapter((
-                    obj.aq_inner.aq_parent,
-                    obj.REQUEST,
-                    None,
-                    field,
-                    None,
-                ), IValue, name='default')
-                if isinstance(default, ComputedValue):
-                    default = default.get()
-                field.set(field.interface(obj), default)
+                # Change the child object's field value to a valid one
+                # acquired from above
+                new_value = acquire_field_value(field, obj.aq_parent)
+                field.set(field.interface(obj), new_value)
