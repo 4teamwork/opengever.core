@@ -50,7 +50,7 @@ class TestPersonView(FunctionalTestCase):
                                academic_title='Dr. rer. nat.'))
 
         browser.login().open(self.contactfolder, view=peter.wrapper_id)
-        table = browser.css('.personal_info').first
+        table = browser.css('.contact_details').first
 
         [['Name', u'Peter M\xfcller'],
          ['Salutation', 'Herr'],

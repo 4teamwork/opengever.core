@@ -17,7 +17,7 @@
                         tal:define="person view/model;">
 
       <h3 i18n:translate="label_personal_information">Personal information:</h3>
-      <table class="personal_info">
+      <table class="contact_details">
         <tr>
           <th i18n:translate="label_name">Name</th>
           <td tal:content="person/fullname" />
