@@ -68,6 +68,14 @@
 
       </table>
 
+      <h3 i18n:translate="label_persons">Persons:</h3>
+      <ul class="persons orgrole_listing">
+        <li tal:repeat="org_role organization/persons">
+          <p class="name" tal:content="org_role/person/fullname" />
+          <span class="function" tal:content="org_role/function" />
+        </li>
+      </ul>
+
     </metal:content-core>
   </metal:content-core>
 

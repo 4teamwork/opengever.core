@@ -101,3 +101,25 @@ class TestOrganizationView(FunctionalTestCase):
                           browser.css('.mail dt').text)
         self.assertEquals([u'info@example.com', u'support@example.com'],
                           browser.css('.mail dd').text)
+
+    @browsing
+    def test_lists_all_related_persons(self, browser):
+        org1 = create(Builder('organization').named(u'4teamwork AG'))
+        org2 = create(Builder('organization').named(u'Meier Ag'))
+
+        create(Builder('person')
+               .having(firstname=u'Peter', lastname=u'M\xfcller')
+               .in_orgs([(org1, 'CEO'), (org2, 'VR-Mitglied')]))
+        create(Builder('person')
+               .having(firstname=u'Hans', lastname=u'Meier')
+               .in_orgs([(org2, 'Sachbearbeiter')]))
+        create(Builder('person')
+               .having(firstname=u'Sandra', lastname=u'Muster')
+               .in_orgs([(org1, u'Stellvertretende F\xfchrung')]))
+
+        browser.login().open(org1.get_url())
+
+        self.assertEquals([u'Peter M\xfcller', 'Sandra Muster'],
+                          browser.css('.persons .name').text)
+        self.assertEquals([u'CEO', u'Stellvertretende F\xfchrung'],
+                          browser.css('.persons .function').text)
