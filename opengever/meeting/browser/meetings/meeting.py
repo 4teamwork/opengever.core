@@ -36,7 +36,7 @@ import json
 
 @provider(IContextAwareDefaultFactory)
 def default_title(context):
-    return context.Title()
+    return context.Title().decode('utf-8')
 
 
 class IMeetingModel(form.Schema):
