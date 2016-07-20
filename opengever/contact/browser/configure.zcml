@@ -11,6 +11,13 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      name="view"
+      for="opengever.contact.interfaces.IOrganization"
+      class=".organization.OrganizationView"
+      permission="zope2.View"
+      />
+
 <browser:page
       name="edit"
       for="opengever.contact.interfaces.IPerson"
