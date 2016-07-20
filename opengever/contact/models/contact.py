@@ -28,6 +28,7 @@ class Contact(Base, SQLFormSupport):
     phonenumbers = relationship("PhoneNumber", back_populates="contact")
     urls = relationship("URL", back_populates="contact")
     participations = relationship("Participation", back_populates="contact")
+    history = relationship("ContactHistory", back_populates="contact")
 
     __mapper_args__ = {'polymorphic_on': contact_type,
                        'with_polymorphic': '*'}

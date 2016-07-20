@@ -7,10 +7,12 @@ from opengever.base.oguid import Oguid
 from opengever.contact.models import Address
 from opengever.contact.models import MailAddress
 from opengever.contact.models import Organization
+from opengever.contact.models import OrganizationHistory
+from opengever.contact.models import OrgRole
 from opengever.contact.models import Participation
 from opengever.contact.models import ParticipationRole
-from opengever.contact.models import OrgRole
 from opengever.contact.models import Person
+from opengever.contact.models import PersonHistory
 from opengever.contact.models import PhoneNumber
 from opengever.contact.models import URL
 from opengever.globalindex.model.task import Task
@@ -342,6 +344,18 @@ class PersonBuilder(SqlObjectBuilder):
 builder_registry.register('person', PersonBuilder)
 
 
+class PersonHistoryBuilder(SqlObjectBuilder):
+
+    mapped_class = PersonHistory
+    id_argument_name = 'person_history_id'
+
+    def __init__(self, session):
+        super(PersonHistoryBuilder, self).__init__(session)
+        self.arguments['actor_id'] = TEST_USER_ID
+
+builder_registry.register('personhistory', PersonHistoryBuilder)
+
+
 class ContactAttributesBuilder(SqlObjectBuilder):
     """Base class for contacts attributes builders like the
     AddressBuilder, PhoneNumberBuilder or the MailAddressBuilder.
@@ -398,6 +412,19 @@ class OrganizationBuilder(SqlObjectBuilder):
         return self
 
 builder_registry.register('organization', OrganizationBuilder)
+
+
+class OrganizationHistoryBuilder(SqlObjectBuilder):
+
+    mapped_class = OrganizationHistory
+    id_argument_name = 'organization_history_id'
+
+    def __init__(self, session):
+        super(OrganizationHistoryBuilder, self).__init__(session)
+        self.arguments['actor_id'] = TEST_USER_ID
+
+
+builder_registry.register('organizationhistory', OrganizationHistoryBuilder)
 
 
 class OrgRoleBuilder(SqlObjectBuilder):
