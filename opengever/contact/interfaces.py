@@ -9,3 +9,7 @@ class IContactFolder(Interface):
 
 class IPerson(ISQLObjectWrapper):
     """Marker interface for person object wrappers."""
+
+
+class IOrganization(ISQLObjectWrapper):
+    """Marker interface for organization object wrappers."""
