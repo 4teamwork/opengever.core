@@ -40,6 +40,7 @@ REPOFOLDER_DEFAULTS = {
     'public_trial': u'unchecked',
     'public_trial_statement': '',
     'reference_number_prefix': u'1',
+    'retention_period': 5,
     'title_de': DEFAULT_TITLE,
 }
 REPOFOLDER_FORM_DEFAULTS = {
@@ -69,6 +70,7 @@ DOSSIER_DEFAULTS = {
     'public_trial': u'unchecked',
     'public_trial_statement': u'',
     'relatedDossier': [],
+    'retention_period': 5,
     'start': FROZEN_TODAY,
     'title': DEFAULT_TITLE,
 }

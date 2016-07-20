@@ -2,6 +2,7 @@ from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.base import _
 from opengever.base.acquisition import set_default_with_acquisition
+from opengever.base.acquisition import set_default_with_acquisition_context_aware
 from opengever.base.interfaces import IBaseCustodyPeriods
 from opengever.base.interfaces import IRetentionPeriodRegister
 from opengever.base.restricted_vocab import propagate_vocab_restrictions
@@ -14,6 +15,8 @@ from zope.component import getUtility
 from zope.interface import alsoProvides
 from zope.interface import Interface
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
+from zope.interface import provider
+from zope.schema.interfaces import IContextAwareDefaultFactory
 
 
 class ILifeCycleMarker(Interface):
@@ -133,11 +136,19 @@ retention_period_vf = RestrictedVocabularyFactory(
 
 # Default value
 # XXX: Eventually rewrite this as a context aware defaultFactory
-form.default_value(field=ILifeCycle['retention_period'])(
-    set_default_with_acquisition(
-        field=ILifeCycle['retention_period'],
-        default=5))
+# form.default_value(field=ILifeCycle['retention_period'])(
+#     set_default_with_acquisition(
+#         field=ILifeCycle['retention_period'],
+#         default=5))
 
+@provider(IContextAwareDefaultFactory)
+def retention_period_default_factory(context):
+    return set_default_with_acquisition_context_aware(
+        field=ILifeCycle['retention_period'],
+        default=5)(context)
+
+
+ILifeCycle['retention_period'].defaultFactory = retention_period_default_factory
 
 # ---------- CUSTODY PERIOD -----------
 # Vocabulary

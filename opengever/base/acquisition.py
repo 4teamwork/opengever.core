@@ -80,3 +80,26 @@ def set_default_with_acquisition(field, default=None):
                 return None
 
     return default_value_generator
+
+
+def set_default_with_acquisition_context_aware(field, default=None):
+    """Sets a default value generator which uses the value
+    from the parent object, if existing, otherwise it uses
+    the given default value.
+    """
+    def default_value_generator(context):
+        container = context
+
+        acquired_value = acquire_field_value(field, container)
+        if acquired_value is not NO_VALUE_FOUND:
+            return acquired_value
+
+        # otherwise use default value
+        if default:
+            # XXX: Use sentinel value (Issue #2029)
+            return default
+        else:
+            # use first value
+            return None
+
+    return default_value_generator
