@@ -270,10 +270,15 @@
     showroom.refresh();
   }
 
+  function refreshShowroom(event, api) {
+    showroom.refresh();
+  }
+
   $(document)
     .on("reload", updateShowroom)
     .on("viewReady", updateShowroom)
     .on("agendaItemsReady", updateShowroom)
+    .on("tooltip.show", refreshShowroom)
     .on("click", ".bumblebeeGalleryShowMore", loadNextTabbedviewGalleryView)
     .on("click", ".ftw-showroom-backdrop", closeShowroom);
   $(init);

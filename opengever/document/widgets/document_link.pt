@@ -7,4 +7,10 @@
   <a tal:content="view/get_title"
      tal:attributes="class view/get_css_class; href view/get_url;" />
 
+  <a href="#" class="hidden-link showroom-item"
+     tal:condition="is_bumblebeeable"
+     tal:attributes="data-showroom-target context/get_overlay_url;
+                     data-showroom-title context/get_overlay_title;
+                     data-showroom-id string:showroom-id-${context/uuid}" />
+
 </div>

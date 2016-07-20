@@ -36,7 +36,11 @@
 
   function tooltipContent(event, api) {
     $.get($(event.currentTarget).data("tooltip-url"))
-      .done(function(data) { api.set("content.text", data); })
+      .done(function(data) {
+        api.set("content.text", data);
+        $(document).trigger('tooltip.show', [api]);
+        $(".showroom-reference").on("click", function() { api.hide(); });
+      })
       .fail(function(xhr, status, error) { api.set("content.text", failure(status, error)); });
     return spinner();
   }
