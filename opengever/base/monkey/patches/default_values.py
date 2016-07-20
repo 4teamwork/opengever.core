@@ -2,6 +2,7 @@ from copy import deepcopy
 from opengever.base.interfaces import IDuringContentCreation
 from opengever.base.monkey.patching import MonkeyPatch
 from plone.dexterity.content import _marker
+from zope.globalrequest import getRequest
 from zope.interface import alsoProvides
 from zope.interface import noLongerProvides
 from zope.schema.interfaces import IContextAwareDefaultFactory
@@ -259,3 +260,33 @@ class PatchDexterityDefaultAddForm(MonkeyPatch):
         __patch_refs__ = False
         original_update = DefaultAddForm.update
         self.patch_refs(DefaultAddForm, 'update', update)
+
+
+class PatchBuilderCreate(MonkeyPatch):
+    """Patch ftw.builder's create() so that it provides IDuringContentCreation
+    while content creation is in progress.
+
+    This is necessary for context aware defaultFactories to correctly
+    determine whether the context they got passed is the object itself (edit)
+    or the container (add).
+    """
+
+    def __call__(self):
+
+        def create(*args, **kwargs):
+            request = getRequest()
+            if request is not None:
+                alsoProvides(request, IDuringContentCreation)
+
+            result = original_create(*args, **kwargs)
+
+            request = getRequest()
+            if request is not None:
+                noLongerProvides(request, IDuringContentCreation)
+
+            return result
+
+        import ftw.builder
+        original_create = ftw.builder.create
+        __patch_refs__ = False
+        self.patch_refs(ftw.builder, 'create', create)
