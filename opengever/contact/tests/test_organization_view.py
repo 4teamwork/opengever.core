@@ -31,6 +31,14 @@ class TestOrganizationView(FunctionalTestCase):
                       browser.css('body').first.get('class'))
 
     @browsing
+    def test_body_contains_person_type_class(self, browser):
+        organization = create(Builder('organization').named(u'4teamwork'))
+
+        browser.login().open(organization.get_url())
+        self.assertIn('portaltype-opengever-contact-organization',
+                      browser.css('body').first.get('class'))
+
+    @browsing
     def test_shows_addresses_prefixed_with_label(self, browser):
         organization = create(Builder('organization').named(u'4teamwork'))
 
