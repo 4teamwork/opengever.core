@@ -1,34 +1,19 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from opengever.contact.models import Contact
-from opengever.testing import MEMORY_DB_LAYER
-import unittest2
+from opengever.testing import FunctionalTestCase
 
 
-class TestOrganization(unittest2.TestCase):
+class TestOrganization(FunctionalTestCase):
 
-    layer = MEMORY_DB_LAYER
+    def test_get_url_returns_url_for_wrapper_object(self):
+        create(Builder('contactfolder'))
 
-    def test_is_contact(self):
-        organization = create(Builder('organization').named(u'4teamwork AG'))
+        org1 = create(Builder('organization').named(u'Meier AG'))
+        org2 = create(Builder('organization').named(u'4teamwork AG'))
 
-        self.assertTrue(isinstance(organization, Contact))
-        self.assertEquals('organization', organization.contact_type)
-
-    def test_organization_can_have_multiple_urls(self):
-        organization = create(Builder('organization').named(u'4teamwork AG'))
-
-        info = create(Builder('url')
-                      .for_contact(organization)
-                      .labeled(u'Info')
-                      .having(url=u'http://www.4teamwork.ch'))
-
-        gever = create(Builder('url')
-                       .for_contact(organization)
-                       .labeled(u'Info')
-                       .having(url=u'http://www.onegovgever.ch'))
-
-        self.assertEquals([info, gever], organization.urls)
-        self.assertEquals([u'http://www.4teamwork.ch',
-                           u'http://www.onegovgever.ch'],
-                          [url.url for url in organization.urls])
+        self.assertEquals(
+            'http://nohost/plone/opengever-contact-contactfolder/organization-1/view',
+            org1.get_url())
+        self.assertEquals(
+            'http://nohost/plone/opengever-contact-contactfolder/organization-2/edit',
+            org2.get_url(view='edit'))
