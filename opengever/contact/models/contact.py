@@ -30,5 +30,4 @@ class Contact(Base, SQLFormSupport):
     participations = relationship("Participation", back_populates="contact")
 
     __mapper_args__ = {'polymorphic_on': contact_type,
-                       'polymorphic_identity': 'contact',
                        'with_polymorphic': '*'}
