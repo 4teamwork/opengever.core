@@ -251,7 +251,6 @@ class IAdvancedSearch(directives_form.Schema):
     )
     task_review_state = schema.List(
         title=_('label_review_state', default='State'),
-        description=_('help_review_state', default=''),
         value_type=schema.Choice(
             source=get_possible_task_states,
         ),
