@@ -187,8 +187,11 @@ class FileOrPaperValidator(validator.SimpleFieldValidator):
         FILE_KEY = 'form.widgets.file'
         FILE_ACTION_KEY = '%s.action' % FILE_KEY
         file_added = bool(self.request.form.get(FILE_KEY))
-        file_not_changed = self.request.form.get(FILE_ACTION_KEY)
-        return file_added or file_not_changed
+        file_action = self.request.form.get(FILE_ACTION_KEY)
+        if file_action == 'remove':
+            return False
+
+        return file_added or file_action
 
 
 validator.WidgetValidatorDiscriminators(
