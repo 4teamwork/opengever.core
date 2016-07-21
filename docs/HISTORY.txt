@@ -5,6 +5,9 @@ Changelog
 4.10.0 (unreleased)
 -------------------
 
+- Conditionally display iframe for bumblebee document preview
+  [Kevin Bieri]
+
 - Improve bumblebee integration in the search results page:
 
   - Change document link to document overview.
