@@ -5,6 +5,7 @@ from ftw.builder import builder_registry
 from ftw.builder import create
 from opengever.base.oguid import Oguid
 from opengever.contact.models import Address
+from opengever.contact.models import AddressHistory
 from opengever.contact.models import MailAddress
 from opengever.contact.models import Organization
 from opengever.contact.models import OrganizationHistory
@@ -376,6 +377,18 @@ class AddressBuilder(ContactAttributesBuilder):
     id_argument_name = 'address_id'
 
 builder_registry.register('address', AddressBuilder)
+
+
+class AddressHistoryBuilder(ContactAttributesBuilder):
+
+    mapped_class = AddressHistory
+    id_argument_name = 'address_history_id'
+
+    def __init__(self, session):
+        super(AddressHistoryBuilder, self).__init__(session)
+        self.arguments['actor_id'] = TEST_USER_ID
+
+builder_registry.register('addresshistory', AddressHistoryBuilder)
 
 
 class PhoneNumberBuilder(ContactAttributesBuilder):

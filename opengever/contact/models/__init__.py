@@ -1,4 +1,5 @@
 from opengever.contact.models.address import Address  # noqa
+from opengever.contact.models.addresshistory import AddressHistory  # noqa
 from opengever.contact.models.contact import Contact  # noqa
 from opengever.contact.models.contacthistory import ContactHistory  # noqa
 from opengever.contact.models.mailaddress import MailAddress  # noqa
@@ -15,6 +16,7 @@ from opengever.contact.models.url import URL  # noqa
 
 tables = [
     'addresses',
+    'addresseshistory',
     'contacts',
     'contactshistory',
     'mail_addresses',
