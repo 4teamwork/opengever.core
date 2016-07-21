@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2016-06-28 07:24+0000\n"
+"POT-Creation-Date: 2016-07-21 14:08+0000\n"
 "PO-Revision-Date: 2013-03-27 10:44+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -76,7 +76,7 @@ msgstr "${title} ist kein Dokument und konnte deshalb nicht ausgecheckt werden."
 msgid "Create Task"
 msgstr "Aufgabe erstellen"
 
-#: ./opengever/document/browser/overview.py:191
+#: ./opengever/document/browser/overview.py:190
 msgid "Current version: ${version}"
 msgstr "Aktuelle Version: ${version}"
 
@@ -107,11 +107,11 @@ msgstr "Als E-Mail versenden"
 msgid "Submit additional documents"
 msgstr "Zusätzliche Anhänge einreichen"
 
-#: ./opengever/document/browser/overview.py:187
+#: ./opengever/document/browser/overview.py:186
 msgid "Submitted version: ${version}"
 msgstr "Eingereichte Version: ${version}"
 
-#: ./opengever/document/browser/overview.py:162
+#: ./opengever/document/browser/overview.py:161
 msgid "Submitted with"
 msgstr "Eingereicht bei"
 
@@ -124,7 +124,7 @@ msgstr "Das Dokument ${title} enthält keine Datei."
 msgid "The Document is allready checked out by: ${userid}"
 msgstr "Das Dokument ist bereits von ${userid} ausgecheckt."
 
-#: ./opengever/document/browser/templates/submitted_with.pt:19
+#: ./opengever/document/browser/templates/submitted_with.pt:18
 msgid "Update document in proposal"
 msgstr "Eingereichte Version aktualisieren"
 
@@ -154,7 +154,7 @@ msgid "button_checkin"
 msgstr "Einchecken"
 
 #. Default: "PDF"
-#: ./opengever/document/browser/versions_tab.py:150
+#: ./opengever/document/browser/versions_tab.py:143
 msgid "button_pdf"
 msgstr "PDF Vorschau"
 
@@ -263,7 +263,7 @@ msgid "initial_document_version_change_note"
 msgstr "Dokument erstellt (Initialversion)"
 
 #. Default: "Changed by"
-#: ./opengever/document/browser/versions_tab.py:286
+#: ./opengever/document/browser/versions_tab.py:279
 msgid "label_actor"
 msgstr "Geändert von"
 
@@ -287,7 +287,7 @@ msgid "label_cancel"
 msgstr "Abbrechen"
 
 #. Default: "Checked out"
-#: ./opengever/document/browser/overview.py:145
+#: ./opengever/document/browser/overview.py:144
 #: ./opengever/document/checkout/viewlets_templates/checkedoutviewlet.pt:5
 msgid "label_checked_out"
 msgstr "Ausgecheckt"
@@ -298,22 +298,22 @@ msgid "label_checkin_journal_comment"
 msgstr "Journal-Kommentar"
 
 #. Default: "Edit Document"
-#: ./opengever/document/browser/templates/file.pt:37
+#: ./opengever/document/browser/templates/file.pt:36
 msgid "label_checkout_and_edit"
 msgstr "Auschecken / Bearbeiten"
 
 #. Default: "Comment"
-#: ./opengever/document/browser/versions_tab.py:294
+#: ./opengever/document/browser/versions_tab.py:287
 msgid "label_comment"
 msgstr "Kommentar"
 
 #. Default: "creator"
-#: ./opengever/document/browser/overview.py:141
+#: ./opengever/document/browser/overview.py:140
 msgid "label_creator"
 msgstr "Ersteller"
 
 #. Default: "Date"
-#: ./opengever/document/browser/versions_tab.py:290
+#: ./opengever/document/browser/versions_tab.py:283
 msgid "label_date"
 msgstr "Datum"
 
@@ -349,12 +349,12 @@ msgstr "Herunterladen"
 #. Default: "Download copy"
 #: ./opengever/document/browser/download.py:138
 #: ./opengever/document/browser/download_templates/downloadconfirmation.pt:4
-#: ./opengever/document/browser/templates/file.pt:53
+#: ./opengever/document/browser/templates/file.pt:50
 msgid "label_download_copy"
 msgstr "Kopie herunterladen"
 
 #. Default: "File"
-#: ./opengever/document/browser/overview.py:147
+#: ./opengever/document/browser/overview.py:146
 #: ./opengever/document/document.py:63
 msgid "label_file"
 msgstr "Datei"
@@ -370,7 +370,7 @@ msgid "label_keywords"
 msgstr "Schlagworte"
 
 #. Default: "no"
-#: ./opengever/document/browser/overview.py:85
+#: ./opengever/document/browser/overview.py:84
 msgid "label_no"
 msgstr "Nein"
 
@@ -390,7 +390,7 @@ msgstr "In Papierform aufbewahrt"
 
 #. Default: "Preview"
 #: ./opengever/document/behaviors/metadata.py:150
-#: ./opengever/document/browser/versions_tab.py:311
+#: ./opengever/document/browser/versions_tab.py:305
 msgid "label_preview"
 msgstr "Vorschau"
 
@@ -410,12 +410,12 @@ msgid "label_related_documents"
 msgstr "Verwandte Dokumente"
 
 #. Default: "reset"
-#: ./opengever/document/browser/versions_tab.py:165
+#: ./opengever/document/browser/versions_tab.py:158
 msgid "label_reset"
 msgstr "Zurücksetzen"
 
 #. Default: "Revert"
-#: ./opengever/document/browser/versions_tab.py:307
+#: ./opengever/document/browser/versions_tab.py:300
 msgid "label_revert"
 msgstr "Zurücksetzen"
 
@@ -440,12 +440,12 @@ msgid "label_title"
 msgstr "Titel"
 
 #. Default: "Version"
-#: ./opengever/document/browser/versions_tab.py:282
+#: ./opengever/document/browser/versions_tab.py:275
 msgid "label_version"
 msgstr "Version"
 
 #. Default: "yes"
-#: ./opengever/document/browser/overview.py:84
+#: ./opengever/document/browser/overview.py:83
 msgid "label_yes"
 msgstr "Ja"
 
@@ -460,7 +460,7 @@ msgid "msg_cancel_checkout_on_mail_not_possible"
 msgstr "Das Dokument `${title}` konnte nicht ausgecheckt werden, da Mails den Checkin/Checkout Prozess nicht unterstützen."
 
 #. Default: "No file"
-#: ./opengever/document/browser/templates/file.pt:60
+#: ./opengever/document/browser/templates/file.pt:57
 msgid "no_file"
 msgstr "Keine Datei"
 

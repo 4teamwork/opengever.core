@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-06-28 07:22+0000\n"
+"POT-Creation-Date: 2016-07-21 14:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,51 +14,37 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:13
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:14
 msgid "Creator:"
 msgstr "Créateur:"
 
-#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:17
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:18
 msgid "Document date:"
 msgstr "Date du document:"
 
-#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:21
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:22
 msgid "Dossier:"
 msgstr "Dossier:"
 
-#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:47
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:68
 msgid "Open as PDF"
 msgstr "Ouvrir le document en PDF"
 
-#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:37
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:73
 msgid "Open detail view"
 msgstr "Ouvrir vue détaillée"
 
-#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:29
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:26
 msgid "Reference number:"
 msgstr "Numéro de référence:"
 
-#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:25
-msgid "Sequence number:"
-msgstr "Numéro courant:"
-
 #. Default: "Revert document"
-#: ./opengever/bumblebee/browser/overlay.py:196
+#: ./opengever/bumblebee/browser/overlay.py:198
 msgid "label_revert"
 msgstr "Reculer le document"
 
-#. Default: "Next"
-#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:98
-msgid "showroom_nav_button_next"
-msgstr ""
-
-#. Default: "Previous"
-#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:96
-msgid "showroom_nav_button_prev"
-msgstr ""
-
 #. Default: "You are looking at a versioned file."
-#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:87
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:84
 msgid "warning_on_versioned_context"
 msgstr "Vous regardez un fichier versionné."
 
