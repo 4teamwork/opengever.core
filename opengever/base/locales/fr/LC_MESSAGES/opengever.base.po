@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-07-11 13:09+0000\n"
+"POT-Creation-Date: 2016-07-21 13:38+0000\n"
 "PO-Revision-Date: 2012-08-30 15:34+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -204,7 +204,7 @@ msgid "label_description"
 msgstr "Description"
 
 #. Default: "Dossier:"
-#: ./opengever/base/browser/search.pt:311
+#: ./opengever/base/browser/search.pt:315
 msgid "label_dossier"
 msgstr ""
 
@@ -227,11 +227,6 @@ msgstr "Niveau du délai de protection"
 #: ./opengever/base/behaviors/classification.py:67
 msgid "label_public_trial"
 msgstr "Statut public"
-
-#. Default: "Public Trial default value"
-#: ./opengever/base/behaviors/classification.py:95
-msgid "label_public_trial_default_value"
-msgstr ""
 
 #. Default: "Public trial statement"
 #: ./opengever/base/behaviors/classification.py:74
