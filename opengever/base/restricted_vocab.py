@@ -120,7 +120,10 @@ class RestrictedVocabularyFactory(object):
 
 
 def propagate_vocab_restrictions(container, event, restricted_fields, marker):
-
+    """Propagate changes to fields with restricted vocabularies down to
+    children of the folderish object (for the children whose field value would
+    now violate the business rule imposed by the restricted vocabulary).
+    """
     def dottedname(field):
         return '.'.join((field.interface.__name__, field.__name__))
 
