@@ -7,6 +7,20 @@ NO_VALUE_FOUND = object()
 
 
 def acquire_field_value(field, container):
+    """Acquire a value for a particular field from an object's container or
+    its closest ancestor.
+
+    This works similar to Zope's Acquisition, but also supports fields in
+    behaviors with AnnotationStorage.
+
+    The strategy for acquiring a field value can be described as follows:
+
+    - Find the closest ancestor that:
+        - Supports the field in question (intermediate ancestors that
+          don't support the field are skipped)
+        - Has a value for the field that validates
+    - If no such ancestor can be found, return the NO_VALUE_FOUND sentinel
+    """
     if isinstance(container, MetadataBase) or container is None:
         # These are odd cases where we get passed a weird context and can't
         # (or don't want to) acquire an actual value.
@@ -38,9 +52,14 @@ def acquire_field_value(field, container):
 
 
 def set_default_with_acquisition(field, default=None):
-    """Sets a default value generator which uses the value
-    from the parent object, if existing, otherwise it uses
-    the given default value.
+    """Factory to provide a default value by acquiring it from parents.
+
+    First this function will attempt to acquire a value for the given field
+    by walking up the chain of parents. If no value can be found via
+    acuisition, we fall back on the provided static `default`, if given.
+
+    If no static `default` value was given, the first term from the field's
+    vocabulary will be used.
     """
     def default_value_generator(data):
         container = data.context
