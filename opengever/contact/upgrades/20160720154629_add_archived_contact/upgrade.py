@@ -14,41 +14,41 @@ FIRSTNAME_LENGTH = 255
 LASTNAME_LENGTH = 255
 
 
-class AddContactHistory(SchemaMigration):
-    """Add contact history.
+class AddArchivedContact(SchemaMigration):
+    """Add archived contact.
     """
 
     def migrate(self):
-        self.add_contacts_history_table()
-        self.add_organization_history_table()
-        self.add_person_history_table()
+        self.add_archived_contact_table()
+        self.add_archived_organization_table()
+        self.add_archived_person_table()
 
-    def add_contacts_history_table(self):
+    def add_archived_contact_table(self):
         self.op.create_table(
-            'contactshistory',
-            Column('id', Integer, Sequence('contactshistory_id_seq'),
+            'archived_contacts',
+            Column('id', Integer, Sequence('archived_contact_id_seq'),
                    primary_key=True),
             Column('contact_id', Integer, ForeignKey('contacts.id'),
                    nullable=False),
             Column('actor_id', String(USER_ID_LENGTH), nullable=False),
             Column('created', DateTime(timezone=True)),
             Column('description', Text),
-            Column('contact_history_type', String(20), nullable=False),
+            Column('archived_contact_type', String(20), nullable=False),
         )
 
-    def add_organization_history_table(self):
+    def add_archived_organization_table(self):
         self.op.create_table(
-            'organizationshistory',
+            'archived_organizations',
             Column('id', Integer,
-                   ForeignKey('contactshistory.id'), primary_key=True),
+                   ForeignKey('archived_contacts.id'), primary_key=True),
             Column('name', String(CONTENT_TITLE_LENGTH), nullable=False),
         )
 
-    def add_person_history_table(self):
+    def add_archived_person_table(self):
         self.op.create_table(
-            'personshistory',
+            'archived_persons',
             Column('id', Integer,
-                   ForeignKey('contactshistory.id'), primary_key=True),
+                   ForeignKey('archived_contacts.id'), primary_key=True),
             Column('salutation', String(CONTENT_TITLE_LENGTH)),
             Column('academic_title', String(CONTENT_TITLE_LENGTH)),
             Column('firstname', String(FIRSTNAME_LENGTH), nullable=False),

@@ -29,7 +29,7 @@ class Contact(Base, SQLFormSupport):
     urls = relationship("URL", back_populates="contact")
     participations = relationship("Participation", back_populates="contact")
 
-    history = relationship("ContactHistory", back_populates="contact")
+    archived_contacts = relationship("ArchivedContact", back_populates="contact")
     archived_addresses = relationship("ArchivedAddress", back_populates="contact")
     archived_mail_addresses = relationship("ArchivedMailAddress", back_populates="contact")
     archived_phonenumbers = relationship("ArchivedPhoneNumber", back_populates="contact")

@@ -7,16 +7,16 @@ from opengever.base.oguid import Oguid
 from opengever.contact.models import Address
 from opengever.contact.models import ArchivedAddress
 from opengever.contact.models import ArchivedMailAddress
+from opengever.contact.models import ArchivedOrganization
+from opengever.contact.models import ArchivedPerson
 from opengever.contact.models import ArchivedPhoneNumber
 from opengever.contact.models import ArchivedURL
 from opengever.contact.models import MailAddress
 from opengever.contact.models import Organization
-from opengever.contact.models import OrganizationHistory
 from opengever.contact.models import OrgRole
 from opengever.contact.models import Participation
 from opengever.contact.models import ParticipationRole
 from opengever.contact.models import Person
-from opengever.contact.models import PersonHistory
 from opengever.contact.models import PhoneNumber
 from opengever.contact.models import URL
 from opengever.globalindex.model.task import Task
@@ -348,16 +348,16 @@ class PersonBuilder(SqlObjectBuilder):
 builder_registry.register('person', PersonBuilder)
 
 
-class PersonHistoryBuilder(SqlObjectBuilder):
+class ArchivedPersonBuilder(SqlObjectBuilder):
 
-    mapped_class = PersonHistory
-    id_argument_name = 'person_history_id'
+    mapped_class = ArchivedPerson
+    id_argument_name = 'archived_person_id'
 
     def __init__(self, session):
-        super(PersonHistoryBuilder, self).__init__(session)
+        super(ArchivedPersonBuilder, self).__init__(session)
         self.arguments['actor_id'] = TEST_USER_ID
 
-builder_registry.register('personhistory', PersonHistoryBuilder)
+builder_registry.register('archived_person', ArchivedPersonBuilder)
 
 
 class ContactAttributesBuilder(SqlObjectBuilder):
@@ -458,17 +458,16 @@ class OrganizationBuilder(SqlObjectBuilder):
 builder_registry.register('organization', OrganizationBuilder)
 
 
-class OrganizationHistoryBuilder(SqlObjectBuilder):
+class ArchivedOrganizationBuilder(SqlObjectBuilder):
 
-    mapped_class = OrganizationHistory
-    id_argument_name = 'organization_history_id'
+    mapped_class = ArchivedOrganization
+    id_argument_name = 'archived_organization_id'
 
     def __init__(self, session):
-        super(OrganizationHistoryBuilder, self).__init__(session)
+        super(ArchivedOrganizationBuilder, self).__init__(session)
         self.arguments['actor_id'] = TEST_USER_ID
 
-
-builder_registry.register('organizationhistory', OrganizationHistoryBuilder)
+builder_registry.register('archived_organization', ArchivedOrganizationBuilder)
 
 
 class OrgRoleBuilder(SqlObjectBuilder):
