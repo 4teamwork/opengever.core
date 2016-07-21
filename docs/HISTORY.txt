@@ -5,6 +5,9 @@ Changelog
 4.10.0 (unreleased)
 -------------------
 
+- Fix sticky heading in order to a refactoring of the baseclass.
+  [elioschmutz]
+
 - Fix FileOrPaperValidator in case where the file gets removed in the edit form.
   [phgross]
 
