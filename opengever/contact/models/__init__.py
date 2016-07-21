@@ -1,9 +1,11 @@
 from opengever.contact.models.address import Address  # noqa
-from opengever.contact.models.addresshistory import AddressHistory  # noqa
+from opengever.contact.models.archivedaddress import ArchivedAddress  # noqa
+from opengever.contact.models.archivedmailaddress import ArchivedMailAddress  # noqa
+from opengever.contact.models.archivedphonenumber import ArchivedPhoneNumber  # noqa
+from opengever.contact.models.archivedurl import ArchivedURL  # noqa
 from opengever.contact.models.contact import Contact  # noqa
 from opengever.contact.models.contacthistory import ContactHistory  # noqa
 from opengever.contact.models.mailaddress import MailAddress  # noqa
-from opengever.contact.models.mailaddresshistory import MailAddressHistory  # noqa
 from opengever.contact.models.org_role import OrgRole  # noqa
 from opengever.contact.models.organization import Organization  # noqa
 from opengever.contact.models.organizationhistory import OrganizationHistory  # noqa
@@ -12,18 +14,18 @@ from opengever.contact.models.participation_role import ParticipationRole  # noq
 from opengever.contact.models.person import Person  # noqa
 from opengever.contact.models.personhistory import PersonHistory  # noqa
 from opengever.contact.models.phonenumber import PhoneNumber  # noqa
-from opengever.contact.models.phonenumberhistory import PhoneNumberHistory  # noqa
 from opengever.contact.models.url import URL  # noqa
-from opengever.contact.models.urlhistory import URLHistory  # noqa
 
 
 tables = [
     'addresses',
-    'addresseshistory',
+    'archived_addresses',
+    'archived_mail_addresses',
+    'archived_phonenumbers',
+    'archived_urls',
     'contacts',
     'contactshistory',
     'mail_addresses',
-    'mail_addresses_history',
     'org_roles',
     'organizations',
     'organizationshistory',
@@ -32,7 +34,5 @@ tables = [
     'persons',
     'personshistory',
     'phonenumbers',
-    'phonenumbershistory',
     'urls',
-    'urlshistory',
 ]

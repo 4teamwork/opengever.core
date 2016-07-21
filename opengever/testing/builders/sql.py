@@ -5,9 +5,11 @@ from ftw.builder import builder_registry
 from ftw.builder import create
 from opengever.base.oguid import Oguid
 from opengever.contact.models import Address
-from opengever.contact.models import AddressHistory
+from opengever.contact.models import ArchivedAddress
+from opengever.contact.models import ArchivedMailAddress
+from opengever.contact.models import ArchivedPhoneNumber
+from opengever.contact.models import ArchivedURL
 from opengever.contact.models import MailAddress
-from opengever.contact.models import MailAddressHistory
 from opengever.contact.models import Organization
 from opengever.contact.models import OrganizationHistory
 from opengever.contact.models import OrgRole
@@ -16,9 +18,7 @@ from opengever.contact.models import ParticipationRole
 from opengever.contact.models import Person
 from opengever.contact.models import PersonHistory
 from opengever.contact.models import PhoneNumber
-from opengever.contact.models import PhoneNumberHistory
 from opengever.contact.models import URL
-from opengever.contact.models import URLHistory
 from opengever.globalindex.model.task import Task
 from opengever.locking.model import Lock
 from opengever.meeting.committee import ICommittee
@@ -374,10 +374,11 @@ class ContactAttributesBuilder(SqlObjectBuilder):
         return self
 
 
-class ContactAttributesHistoryBuilder(ContactAttributesBuilder):
+class ArchivedContactAttributesBuilder(ContactAttributesBuilder):
+    """Base class for archived contacts attributes."""
 
     def __init__(self, session):
-        super(ContactAttributesHistoryBuilder, self).__init__(session)
+        super(ArchivedContactAttributesBuilder, self).__init__(session)
         self.arguments['actor_id'] = TEST_USER_ID
 
 
@@ -389,12 +390,12 @@ class AddressBuilder(ContactAttributesBuilder):
 builder_registry.register('address', AddressBuilder)
 
 
-class AddressHistoryBuilder(ContactAttributesHistoryBuilder):
+class ArchivedAddressBuilder(ArchivedContactAttributesBuilder):
 
-    mapped_class = AddressHistory
-    id_argument_name = 'address_history_id'
+    mapped_class = ArchivedAddress
+    id_argument_name = 'archived_address_id'
 
-builder_registry.register('addresshistory', AddressHistoryBuilder)
+builder_registry.register('archived_address', ArchivedAddressBuilder)
 
 
 class PhoneNumberBuilder(ContactAttributesBuilder):
@@ -405,12 +406,12 @@ class PhoneNumberBuilder(ContactAttributesBuilder):
 builder_registry.register('phonenumber', PhoneNumberBuilder)
 
 
-class PhoneNumberHistoryBuilder(ContactAttributesHistoryBuilder):
+class ArchivedPhoneNumberBuilder(ArchivedContactAttributesBuilder):
 
-    mapped_class = PhoneNumberHistory
-    id_argument_name = 'phone_number_history_id'
+    mapped_class = ArchivedPhoneNumber
+    id_argument_name = 'archived_phonenumber_id'
 
-builder_registry.register('phonenumberhistory', PhoneNumberHistoryBuilder)
+builder_registry.register('archived_phonenumber', ArchivedPhoneNumberBuilder)
 
 
 class MailAddressBuilder(ContactAttributesBuilder):
@@ -421,12 +422,12 @@ class MailAddressBuilder(ContactAttributesBuilder):
 builder_registry.register('mailaddress', MailAddressBuilder)
 
 
-class MailAddressHistoryBuilder(ContactAttributesHistoryBuilder):
+class ArchivedMailAddressBuilder(ArchivedContactAttributesBuilder):
 
-    mapped_class = MailAddressHistory
-    id_argument_name = 'mailaddress_history_id'
+    mapped_class = ArchivedMailAddress
+    id_argument_name = 'archived_mail_address_id'
 
-builder_registry.register('mail_addresses_history', MailAddressHistoryBuilder)
+builder_registry.register('archived_mail_addresses', ArchivedMailAddressBuilder)
 
 
 class URLBuilder(ContactAttributesBuilder):
@@ -437,12 +438,12 @@ class URLBuilder(ContactAttributesBuilder):
 builder_registry.register('url', URLBuilder)
 
 
-class URLHistoryBuilder(ContactAttributesHistoryBuilder):
+class ArchivedURLBuilder(ArchivedContactAttributesBuilder):
 
-    mapped_class = URLHistory
-    id_argument_name = 'url_history_id'
+    mapped_class = ArchivedURL
+    id_argument_name = 'archived_url_id'
 
-builder_registry.register('urlhistory', URLHistoryBuilder)
+builder_registry.register('archived_url', ArchivedURLBuilder)
 
 
 class OrganizationBuilder(SqlObjectBuilder):

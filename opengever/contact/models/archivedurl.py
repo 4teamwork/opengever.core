@@ -8,12 +8,12 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
 
 
-class URLHistory(HistoryMixin, Base):
+class ArchivedURL(HistoryMixin, Base):
 
-    __tablename__ = 'urlshistory'
+    __tablename__ = 'archived_urls'
 
-    url_history_id = Column('id', Integer, Sequence('urlshistory_id_seq'),
-                            primary_key=True)
-    contact = relationship("Contact", back_populates="url_history")
+    archived_url_id = Column('id', Integer, Sequence('archived_url_id_seq'),
+                             primary_key=True)
+    contact = relationship("Contact", back_populates="archived_urls")
     label = Column(String(CONTENT_TITLE_LENGTH))
     url = Column(String(CONTENT_TITLE_LENGTH))

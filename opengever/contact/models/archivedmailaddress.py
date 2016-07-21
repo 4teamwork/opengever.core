@@ -1,6 +1,7 @@
 from opengever.base.model import Base
 from opengever.base.model import CONTENT_TITLE_LENGTH
 from opengever.contact.models.history import HistoryMixin
+from opengever.ogds.models import EMAIL_LENGTH
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import String
@@ -8,14 +9,13 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
 
 
-class PhoneNumberHistory(HistoryMixin, Base):
+class ArchivedMailAddress(HistoryMixin, Base):
 
-    __tablename__ = 'phonenumbershistory'
+    __tablename__ = 'archived_mail_addresses'
 
-    phone_number_history_id = Column(
-        'id', Integer, Sequence('phonenumbershistory_id_seq'),
+    archived_mail_address_id = Column(
+        'id', Integer, Sequence('archived_mail_address_id_seq'),
         primary_key=True)
-    contact = relationship("Contact", back_populates="phonenumber_history")
-
+    contact = relationship("Contact", back_populates="archived_mail_addresses")
     label = Column(String(CONTENT_TITLE_LENGTH))
-    phone_number = Column(String(CONTENT_TITLE_LENGTH))
+    address = Column(String(EMAIL_LENGTH))

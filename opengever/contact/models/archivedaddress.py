@@ -9,14 +9,14 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
 
 
-class AddressHistory(HistoryMixin, Base):
+class ArchivedAddress(HistoryMixin, Base):
 
-    __tablename__ = 'addresseshistory'
+    __tablename__ = 'archived_addresses'
 
-    address_history_id = Column('id', Integer,
-                                Sequence('addresseshistory_id_seq'),
-                                primary_key=True)
-    contact = relationship("Contact", back_populates="address_history")
+    archived_address_id = Column(
+        'id', Integer, Sequence('archived_address_id_seq'),
+        primary_key=True)
+    contact = relationship("Contact", back_populates="archived_addresses")
     label = Column(String(CONTENT_TITLE_LENGTH))
     street = Column(String(CONTENT_TITLE_LENGTH))
     zip_code = Column(String(ZIP_CODE_LENGTH))
