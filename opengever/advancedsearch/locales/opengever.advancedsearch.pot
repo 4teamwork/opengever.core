@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-06-26 18:55+0000\n"
+"POT-Creation-Date: 2016-07-21 13:20+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,12 +18,12 @@ msgstr ""
 "Domain: opengever.advancedsearch\n"
 
 #. Default: "advanced search"
-#: ./opengever/advancedsearch/advanced_search.py:267
+#: ./opengever/advancedsearch/advanced_search.py:266
 msgid "advanced_search"
 msgstr ""
 
 #. Default: "Search"
-#: ./opengever/advancedsearch/advanced_search.py:451
+#: ./opengever/advancedsearch/advanced_search.py:450
 msgid "button_search"
 msgstr ""
 
@@ -45,16 +45,12 @@ msgid "help_portal_type"
 msgstr ""
 
 #. Default: "Select the contenttype to be searched for.It searches only items from the current client."
-#: ./opengever/advancedsearch/advanced_search.py:349
+#: ./opengever/advancedsearch/advanced_search.py:348
 msgid "help_portal_type_multiclient_setup"
 msgstr ""
 
 #: ./opengever/advancedsearch/advanced_search.py:150
 msgid "help_reference_number"
-msgstr ""
-
-#: ./opengever/advancedsearch/advanced_search.py:254
-msgid "help_review_state"
 msgstr ""
 
 #: ./opengever/advancedsearch/advanced_search.py:113
@@ -63,11 +59,6 @@ msgstr ""
 
 #: ./opengever/advancedsearch/advanced_search.py:156
 msgid "help_sequence_number"
-msgstr ""
-
-#. Default: "Advanced Search…"
-#: ./opengever/advancedsearch/skins/advancedsearch_resources/livesearch_reply.py:97
-msgid "label_advanced_search"
 msgstr ""
 
 #. Default: "Checked out by"
@@ -114,11 +105,6 @@ msgstr ""
 msgid "label_issuer"
 msgstr ""
 
-#. Default: "No matching results found."
-#: ./opengever/advancedsearch/skins/advancedsearch_resources/livesearch_reply.py:96
-msgid "label_no_results_found"
-msgstr ""
-
 #. Default: "Type"
 #: ./opengever/advancedsearch/advanced_search.py:118
 msgid "label_portal_type"
@@ -154,11 +140,6 @@ msgstr ""
 msgid "label_sequence_number"
 msgstr ""
 
-#. Default: "Show all items"
-#: ./opengever/advancedsearch/skins/advancedsearch_resources/livesearch_reply.py:98
-msgid "label_show_all"
-msgstr ""
-
 #. Default: "Start date"
 #: ./opengever/advancedsearch/advanced_search.py:127
 msgid "label_start"
@@ -176,11 +157,6 @@ msgstr ""
 #. Default: "Also search in the recycle bin"
 #: ./opengever/advancedsearch/advanced_search.py:222
 msgid "label_trashed"
-msgstr ""
-
-#. Default: "LiveSearch &#8595;"
-#: ./opengever/advancedsearch/skins/advancedsearch_resources/livesearch_reply.py:95
-msgid "legend_livesearch"
 msgstr ""
 
 #: ./opengever/advancedsearch/advanced_search.py:59

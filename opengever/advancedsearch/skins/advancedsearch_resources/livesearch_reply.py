@@ -8,7 +8,7 @@
 ##title=Determine whether to show an id in an edit form
 
 from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone import PloneMessageFactory as _
+from Products.CMFPlone import PloneMessageFactory as pmf
 from Products.CMFPlone.browser.navtree import getNavigationRoot
 from Products.CMFPlone.utils import safe_unicode
 from Products.PythonScripts.standard import html_quote
@@ -99,21 +99,21 @@ RESPONSE.setHeader('Content-Type', 'text/xml;charset=%s' % site_encoding)
 # replace named entities with their numbered counterparts, in the xml the named ones are not correct
 #   &darr;      --> &#8595;
 #   &hellip;    --> &#8230;
-legend_livesearch = _(
+legend_livesearch = pmf(
     'legend_livesearch',
     default='LiveSearch &#8595;')
-label_no_results_found = _(
+label_no_results_found = pmf(
     'label_no_results_found',
     default='No matching results found.')
-label_has_parse_errors = _(
+label_has_parse_errors = pmf(
     'label_has_parse_errors',
     default='There were errors parsing your query, please note that boolean '
             'expressions like AND, NOT and OR are only allowed in advanced '
             'search.')
-label_advanced_search = _(
+label_advanced_search = pmf(
     'label_advanced_search',
     default='Advanced Search&#8230;')
-label_show_all = _(
+label_show_all = pmf(
     'label_show_all',
     default='Show all items')
 
@@ -132,7 +132,7 @@ if not results:
     write('''<div class="LSIEFix">''')
     if has_parse_errors:
         write('''<div id="LSParseErrors"><div class="label_error">%s</div>%s</div>''' %
-              (ts.translate(_('Error'), context=REQUEST),
+              (ts.translate(pmf('Error'), context=REQUEST),
                ts.translate(label_has_parse_errors, context=REQUEST)))
     else:
         write('''<div id="LSNothingFound">%s</div>''' % ts.translate(label_no_results_found, context=REQUEST))

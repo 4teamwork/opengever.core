@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-06-26 18:55+0000\n"
+"POT-Creation-Date: 2016-07-21 13:20+0000\n"
 "PO-Revision-Date: 2012-12-06 12:40+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,12 +15,12 @@ msgstr ""
 "Domain: DOMAIN\n"
 
 #. Default: "advanced search"
-#: ./opengever/advancedsearch/advanced_search.py:267
+#: ./opengever/advancedsearch/advanced_search.py:266
 msgid "advanced_search"
 msgstr "Erweiterte Suche"
 
 #. Default: "Search"
-#: ./opengever/advancedsearch/advanced_search.py:451
+#: ./opengever/advancedsearch/advanced_search.py:450
 msgid "button_search"
 msgstr "Suchen"
 
@@ -42,7 +42,7 @@ msgid "help_portal_type"
 msgstr "Wählen Sie den Inhaltstyp aus, nach dem gesucht werden soll."
 
 #. Default: "Select the contenttype to be searched for.It searches only items from the current client."
-#: ./opengever/advancedsearch/advanced_search.py:349
+#: ./opengever/advancedsearch/advanced_search.py:348
 msgid "help_portal_type_multiclient_setup"
 msgstr ""
 "Wählen Sie den Inhaltstyp aus, nach dem gesucht werden soll.\n"
@@ -52,10 +52,6 @@ msgstr ""
 msgid "help_reference_number"
 msgstr "Aktenzeichen angeben (z.B: OG 2.4 / 1 / 3)"
 
-#: ./opengever/advancedsearch/advanced_search.py:254
-msgid "help_review_state"
-msgstr ""
-
 #: ./opengever/advancedsearch/advanced_search.py:113
 msgid "help_searchable_text"
 msgstr "Suchbegriffe eingeben."
@@ -63,11 +59,6 @@ msgstr "Suchbegriffe eingeben."
 #: ./opengever/advancedsearch/advanced_search.py:156
 msgid "help_sequence_number"
 msgstr "Genaue Laufnummer eingeben."
-
-#. Default: "Advanced Search…"
-#: ./opengever/advancedsearch/skins/advancedsearch_resources/livesearch_reply.py:97
-msgid "label_advanced_search"
-msgstr ""
 
 #. Default: "Checked out by"
 #: ./opengever/advancedsearch/advanced_search.py:216
@@ -113,11 +104,6 @@ msgstr "Von"
 msgid "label_issuer"
 msgstr "Auftraggeber"
 
-#. Default: "No matching results found."
-#: ./opengever/advancedsearch/skins/advancedsearch_resources/livesearch_reply.py:96
-msgid "label_no_results_found"
-msgstr ""
-
 #. Default: "Type"
 #: ./opengever/advancedsearch/advanced_search.py:118
 msgid "label_portal_type"
@@ -153,11 +139,6 @@ msgstr "Suchtext"
 msgid "label_sequence_number"
 msgstr "Laufnummer"
 
-#. Default: "Show all items"
-#: ./opengever/advancedsearch/skins/advancedsearch_resources/livesearch_reply.py:98
-msgid "label_show_all"
-msgstr ""
-
 #. Default: "Start date"
 #: ./opengever/advancedsearch/advanced_search.py:127
 msgid "label_start"
@@ -176,11 +157,6 @@ msgstr "Bis"
 #: ./opengever/advancedsearch/advanced_search.py:222
 msgid "label_trashed"
 msgstr "Papierkorb auch durchsuchen"
-
-#. Default: "LiveSearch &#8595;"
-#: ./opengever/advancedsearch/skins/advancedsearch_resources/livesearch_reply.py:95
-msgid "legend_livesearch"
-msgstr ""
 
 #: ./opengever/advancedsearch/advanced_search.py:59
 msgid "task"
