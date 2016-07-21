@@ -373,6 +373,13 @@ class ContactAttributesBuilder(SqlObjectBuilder):
         return self
 
 
+class ContactAttributesHistoryBuilder(ContactAttributesBuilder):
+
+    def __init__(self, session):
+        super(ContactAttributesHistoryBuilder, self).__init__(session)
+        self.arguments['actor_id'] = TEST_USER_ID
+
+
 class AddressBuilder(ContactAttributesBuilder):
 
     mapped_class = Address
@@ -381,14 +388,10 @@ class AddressBuilder(ContactAttributesBuilder):
 builder_registry.register('address', AddressBuilder)
 
 
-class AddressHistoryBuilder(ContactAttributesBuilder):
+class AddressHistoryBuilder(ContactAttributesHistoryBuilder):
 
     mapped_class = AddressHistory
     id_argument_name = 'address_history_id'
-
-    def __init__(self, session):
-        super(AddressHistoryBuilder, self).__init__(session)
-        self.arguments['actor_id'] = TEST_USER_ID
 
 builder_registry.register('addresshistory', AddressHistoryBuilder)
 
@@ -401,14 +404,10 @@ class PhoneNumberBuilder(ContactAttributesBuilder):
 builder_registry.register('phonenumber', PhoneNumberBuilder)
 
 
-class PhoneNumberHistoryBuilder(ContactAttributesBuilder):
+class PhoneNumberHistoryBuilder(ContactAttributesHistoryBuilder):
 
     mapped_class = PhoneNumberHistory
     id_argument_name = 'phone_number_history_id'
-
-    def __init__(self, session):
-        super(PhoneNumberHistoryBuilder, self).__init__(session)
-        self.arguments['actor_id'] = TEST_USER_ID
 
 builder_registry.register('phonenumberhistory', PhoneNumberHistoryBuilder)
 
@@ -421,14 +420,10 @@ class MailAddressBuilder(ContactAttributesBuilder):
 builder_registry.register('mailaddress', MailAddressBuilder)
 
 
-class MailAddressHistoryBuilder(ContactAttributesBuilder):
+class MailAddressHistoryBuilder(ContactAttributesHistoryBuilder):
 
     mapped_class = MailAddressHistory
     id_argument_name = 'mailaddress_history_id'
-
-    def __init__(self, session):
-        super(MailAddressHistoryBuilder, self).__init__(session)
-        self.arguments['actor_id'] = TEST_USER_ID
 
 builder_registry.register('mail_addresses_history', MailAddressHistoryBuilder)
 
