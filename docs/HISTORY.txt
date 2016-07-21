@@ -5,6 +5,11 @@ Changelog
 4.10.0 (unreleased)
 -------------------
 
+- Add history model for the new sql contacts.
+  Add history tables for contacts (persons and organizations), addresses,
+  phonenumbers, mailaddressens and urls.
+  [deiferni]
+
 - Fix/update script for bumblebee activation.
   Add feature to calculate bumblebee checksums for archived documents.
   [deiferni]
