@@ -4,8 +4,10 @@ from opengever.base.browser.translated_title import TranslatedTitleAddForm
 from opengever.base.browser.translated_title import TranslatedTitleEditForm
 from opengever.contact import _
 from opengever.contact.interfaces import IContactFolder
+from opengever.contact.models import Organization
 from opengever.contact.models import Person
 from opengever.contact.wrapper import PersonWrapper
+from opengever.contact.wrapper import OrganizationWrapper
 from opengever.tabbedview import BaseCatalogListingTab
 from opengever.tabbedview.helper import email_helper
 from plone.dexterity.content import Container
@@ -40,6 +42,12 @@ class ContactFolder(Container, TranslatedTitleMixin):
             person = Person.query.get(person_id)
             if person:
                 return PersonWrapper.wrap(self, person)
+
+        if id_.startswith('organization-'):
+            organization_id = int(id_.split('-')[-1])
+            organization = Organization.query.get(organization_id)
+            if organization:
+                return OrganizationWrapper.wrap(self, organization)
 
         if default is _marker:
             raise KeyError(id_)
