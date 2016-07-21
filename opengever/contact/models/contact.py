@@ -32,6 +32,7 @@ class Contact(Base, SQLFormSupport):
     history = relationship("ContactHistory", back_populates="contact")
     address_history = relationship("AddressHistory", back_populates="contact")
     phonenumber_history = relationship("PhoneNumberHistory", back_populates="contact")
+    mail_address_history = relationship("MailAddressHistory", back_populates="contact")
 
     __mapper_args__ = {'polymorphic_on': contact_type,
                        'with_polymorphic': '*'}

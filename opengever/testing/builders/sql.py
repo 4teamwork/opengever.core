@@ -7,6 +7,7 @@ from opengever.base.oguid import Oguid
 from opengever.contact.models import Address
 from opengever.contact.models import AddressHistory
 from opengever.contact.models import MailAddress
+from opengever.contact.models import MailAddressHistory
 from opengever.contact.models import Organization
 from opengever.contact.models import OrganizationHistory
 from opengever.contact.models import OrgRole
@@ -418,6 +419,18 @@ class MailAddressBuilder(ContactAttributesBuilder):
     id_argument_name = 'mailaddress_id'
 
 builder_registry.register('mailaddress', MailAddressBuilder)
+
+
+class MailAddressHistoryBuilder(ContactAttributesBuilder):
+
+    mapped_class = MailAddressHistory
+    id_argument_name = 'mailaddress_history_id'
+
+    def __init__(self, session):
+        super(MailAddressHistoryBuilder, self).__init__(session)
+        self.arguments['actor_id'] = TEST_USER_ID
+
+builder_registry.register('mail_addresses_history', MailAddressHistoryBuilder)
 
 
 class URLBuilder(ContactAttributesBuilder):

@@ -3,6 +3,7 @@ from opengever.contact.models.addresshistory import AddressHistory  # noqa
 from opengever.contact.models.contact import Contact  # noqa
 from opengever.contact.models.contacthistory import ContactHistory  # noqa
 from opengever.contact.models.mailaddress import MailAddress  # noqa
+from opengever.contact.models.mailaddresshistory import MailAddressHistory  # noqa
 from opengever.contact.models.org_role import OrgRole  # noqa
 from opengever.contact.models.organization import Organization  # noqa
 from opengever.contact.models.organizationhistory import OrganizationHistory  # noqa
@@ -21,6 +22,7 @@ tables = [
     'contacts',
     'contactshistory',
     'mail_addresses',
+    'mail_addresses_history',
     'org_roles',
     'organizations',
     'organizationshistory',
