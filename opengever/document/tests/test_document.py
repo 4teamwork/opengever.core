@@ -579,6 +579,18 @@ class TestDocumentValidatorsInEditFormForCheckedOutDoc(FunctionalTestCase):
                       'Preserved as paper': False}).save()
         assert_no_error_messages()
 
+    @browsing
+    def test_doc_without_paper_form_and_removing_the_file_is_invalid(self, browser):
+        browser.login().open(self.doc_with_file, view='edit')
+        browser.fill({'Remove existing file': 'remove',
+                      'Preserved as paper': False}).save()
+
+        self.assertEquals(
+            erroneous_fields(),
+            {'Preserved as paper': [
+                "You don't select a file and document is also not preserved"
+                " in paper_form, please correct it."]})
+
 
 class TestPublicTrial(FunctionalTestCase):
 
