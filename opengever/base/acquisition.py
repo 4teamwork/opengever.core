@@ -8,9 +8,9 @@ NO_VALUE_FOUND = object()
 
 def acquire_field_value(field, container):
     if isinstance(container, MetadataBase) or container is None:
-        # we do not test the factory, it is not acquisition wrapped and
-        # we cant get the request...
-        return None
+        # These are odd cases where we get passed a weird context and can't
+        # (or don't want to) acquire an actual value.
+        return NO_VALUE_FOUND
 
     obj = container
     while not ISiteRoot.providedBy(obj):
