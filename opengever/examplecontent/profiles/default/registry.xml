@@ -12,4 +12,8 @@
       <value key="create_doc_properties">True</value>
     </records>
 
+    <records interface="opengever.bumblebee.interfaces.IGeverBumblebeeSettings">
+      <value key="is_feature_enabled">True</value>
+    </records>
+
 </registry>
