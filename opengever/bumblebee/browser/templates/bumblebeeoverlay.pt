@@ -1,11 +1,13 @@
-<aside class="sidebar" i18n:domain="opengever.bumblebee">
+<aside class="sidebar"
+       i18n:domain="opengever.bumblebee"
+       tal:define="file_size view/overlay/get_file_size">
   <header>
     <span tal:attributes="class string:file-mimetype ${view/overlay/get_mime_type_css_class}" />
     <div>
       <a class="title"
          tal:attributes="href context/absolute_url"
          tal:content="view/overlay/get_title" />
-      <span class="filesize" tal:content="string:${view/overlay/get_file_size} KB" />
+      <span class="filesize" tal:condition="file_size" tal:content="string:${file_size} KB" />
     </div>
   </header>
   <main>
