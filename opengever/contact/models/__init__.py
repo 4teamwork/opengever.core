@@ -14,6 +14,7 @@ from opengever.contact.models.personhistory import PersonHistory  # noqa
 from opengever.contact.models.phonenumber import PhoneNumber  # noqa
 from opengever.contact.models.phonenumberhistory import PhoneNumberHistory  # noqa
 from opengever.contact.models.url import URL  # noqa
+from opengever.contact.models.urlhistory import URLHistory  # noqa
 
 
 tables = [
@@ -33,4 +34,5 @@ tables = [
     'phonenumbers',
     'phonenumbershistory',
     'urls',
+    'urlshistory',
 ]

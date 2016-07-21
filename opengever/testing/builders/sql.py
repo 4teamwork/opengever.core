@@ -18,6 +18,7 @@ from opengever.contact.models import PersonHistory
 from opengever.contact.models import PhoneNumber
 from opengever.contact.models import PhoneNumberHistory
 from opengever.contact.models import URL
+from opengever.contact.models import URLHistory
 from opengever.globalindex.model.task import Task
 from opengever.locking.model import Lock
 from opengever.meeting.committee import ICommittee
@@ -434,6 +435,14 @@ class URLBuilder(ContactAttributesBuilder):
     id_argument_name = 'url_id'
 
 builder_registry.register('url', URLBuilder)
+
+
+class URLHistoryBuilder(ContactAttributesHistoryBuilder):
+
+    mapped_class = URLHistory
+    id_argument_name = 'url_history_id'
+
+builder_registry.register('urlhistory', URLHistoryBuilder)
 
 
 class OrganizationBuilder(SqlObjectBuilder):
