@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-06-26 19:08+0000\n"
+"POT-Creation-Date: 2016-07-21 13:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,32 +51,28 @@ msgstr ""
 msgid "cancel_back"
 msgstr ""
 
-#: ./opengever/mail/browser/extract_attachments.py:89
-msgid "column_attachment_checkbox"
-msgstr ""
-
 #. Default: "Filename"
-#: ./opengever/mail/browser/extract_attachments.py:99
+#: ./opengever/mail/browser/extract_attachments.py:98
 msgid "column_attachment_filename"
 msgstr ""
 
 #. Default: "Size"
-#: ./opengever/mail/browser/extract_attachments.py:104
+#: ./opengever/mail/browser/extract_attachments.py:103
 msgid "column_attachment_size"
 msgstr ""
 
 #. Default: "Type"
-#: ./opengever/mail/browser/extract_attachments.py:94
+#: ./opengever/mail/browser/extract_attachments.py:93
 msgid "column_attachment_type"
 msgstr ""
 
 #. Default: "You have not selected any attachments."
-#: ./opengever/mail/browser/extract_attachments.py:129
+#: ./opengever/mail/browser/extract_attachments.py:128
 msgid "error_no_attachments_selected"
 msgstr ""
 
 #. Default: "This mail has no attachments to extract."
-#: ./opengever/mail/browser/extract_attachments.py:118
+#: ./opengever/mail/browser/extract_attachments.py:117
 msgid "error_no_attachments_to_extract"
 msgstr ""
 
@@ -116,7 +112,7 @@ msgid "help_intern_receiver"
 msgstr ""
 
 #. Default: "Created document ${title}"
-#: ./opengever/mail/browser/extract_attachments.py:150
+#: ./opengever/mail/browser/extract_attachments.py:149
 msgid "info_extracted_document"
 msgstr ""
 
