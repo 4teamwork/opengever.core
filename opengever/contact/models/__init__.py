@@ -11,6 +11,7 @@ from opengever.contact.models.participation_role import ParticipationRole  # noq
 from opengever.contact.models.person import Person  # noqa
 from opengever.contact.models.personhistory import PersonHistory  # noqa
 from opengever.contact.models.phonenumber import PhoneNumber  # noqa
+from opengever.contact.models.phonenumberhistory import PhoneNumberHistory  # noqa
 from opengever.contact.models.url import URL  # noqa
 
 
@@ -28,5 +29,6 @@ tables = [
     'persons',
     'personshistory',
     'phonenumbers',
+    'phonenumbershistory',
     'urls',
 ]

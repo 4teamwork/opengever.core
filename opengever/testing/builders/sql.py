@@ -15,6 +15,7 @@ from opengever.contact.models import ParticipationRole
 from opengever.contact.models import Person
 from opengever.contact.models import PersonHistory
 from opengever.contact.models import PhoneNumber
+from opengever.contact.models import PhoneNumberHistory
 from opengever.contact.models import URL
 from opengever.globalindex.model.task import Task
 from opengever.locking.model import Lock
@@ -397,6 +398,18 @@ class PhoneNumberBuilder(ContactAttributesBuilder):
     id_argument_name = 'phone_number_id'
 
 builder_registry.register('phonenumber', PhoneNumberBuilder)
+
+
+class PhoneNumberHistoryBuilder(ContactAttributesBuilder):
+
+    mapped_class = PhoneNumberHistory
+    id_argument_name = 'phone_number_history_id'
+
+    def __init__(self, session):
+        super(PhoneNumberHistoryBuilder, self).__init__(session)
+        self.arguments['actor_id'] = TEST_USER_ID
+
+builder_registry.register('phonenumberhistory', PhoneNumberHistoryBuilder)
 
 
 class MailAddressBuilder(ContactAttributesBuilder):
