@@ -8,7 +8,7 @@ from sqlalchemy import String
 from sqlalchemy.ext.declarative import declared_attr
 
 
-class HistoryMixin(object):
+class ArchiveMixin(object):
 
     @declared_attr
     def contact_id(self):

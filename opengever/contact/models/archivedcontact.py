@@ -1,5 +1,5 @@
 from opengever.base.model import Base
-from opengever.contact.models.history import HistoryMixin
+from opengever.contact.models.archive import ArchiveMixin
 from opengever.ogds.models.types import UnicodeCoercingText
 from sqlalchemy import Column
 from sqlalchemy import Integer
@@ -8,7 +8,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
 
 
-class ArchivedContact(HistoryMixin, Base):
+class ArchivedContact(ArchiveMixin, Base):
 
     __tablename__ = 'archived_contacts'
 

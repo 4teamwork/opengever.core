@@ -1,6 +1,6 @@
 from opengever.base.model import Base
 from opengever.base.model import CONTENT_TITLE_LENGTH
-from opengever.contact.models.history import HistoryMixin
+from opengever.contact.models.archive import ArchiveMixin
 from opengever.ogds.models import EMAIL_LENGTH
 from sqlalchemy import Column
 from sqlalchemy import Integer
@@ -9,7 +9,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
 
 
-class ArchivedMailAddress(HistoryMixin, Base):
+class ArchivedMailAddress(ArchiveMixin, Base):
 
     __tablename__ = 'archived_mail_addresses'
 
