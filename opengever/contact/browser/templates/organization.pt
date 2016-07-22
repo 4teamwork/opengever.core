@@ -68,7 +68,7 @@
 
       </table>
 
-      <h3 i18n:translate="label_persons">Persons:</h3>
+      <h3 i18n:translate="label_persons">Persons</h3>
       <ul class="persons orgrole_listing">
         <li tal:repeat="org_role organization/persons">
           <p>
