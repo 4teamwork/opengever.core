@@ -5,6 +5,9 @@ Changelog
 4.10.0 (unreleased)
 -------------------
 
+- Add new tabs `Persons` and `Organizations` to the contactfolder tabbedview.
+  [phgross]
+
 - Display download_copy link in the tooltip also on mails.
   [phgross]
 
