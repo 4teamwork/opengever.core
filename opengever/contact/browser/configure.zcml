@@ -17,6 +17,14 @@
       />
 
   <browser:page
+      for="opengever.contact.interfaces.IContactFolder"
+      name="tabbed_view"
+      class=".tabbed.ContactFolderTabbedView"
+      permission="zope2.View"
+      allowed_attributes="listing select_all reorder setgridstate set_default_tab msg_unknownresponse"
+      />
+
+  <browser:page
       name="view"
       for="opengever.contact.interfaces.IOrganization"
       class=".organization.OrganizationView"
