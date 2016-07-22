@@ -1,5 +1,6 @@
 from opengever.base.response import JSONResponse
 from opengever.meeting import _
+from opengever.meeting.model import AgendaItem
 from opengever.meeting.service import meeting_service
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
@@ -75,13 +76,29 @@ class AgendaItemsView(BrowserView):
         # we only support exactly one id
         if self.agenda_item_id:
             raise NotFound
-        self.agenda_item_id = int(name)
+
+        try:
+            self.agenda_item_id = int(name)
+        except ValueError:
+            raise NotFound
+
+        self.agenda_item = meeting_service().fetch_agenda_item(
+            self.agenda_item_id)
+
+        if not self.agenda_item:
+            raise NotFound
+
+        if self.agenda_item.meeting is not self.meeting:
+            # Prevent from cross injections
+            raise NotFound
+
         return self
 
     def __init__(self, context, request):
         super(AgendaItemsView, self).__init__(context, request)
         self.meeting = self.context.model
         self.agenda_item_id = None
+        self.agenda_item = None
 
     def _serialize_submitted_documents(self, item):
         """Returns a list of html strings (the complete document link).
@@ -160,17 +177,13 @@ class AgendaItemsView(BrowserView):
         if not self.context.model.is_editable():
             raise Unauthorized("Editing is not allowed")
 
-        agenda_item = meeting_service().fetch_agenda_item(self.agenda_item_id)
-        if not agenda_item:
-            raise NotFound
-
         title = self.request.get('title')
         if not title:
             return JSONResponse(self.request).error(
                 _('agenda_item_update_empty_string',
                   default=u"Agenda Item title must not be empty.")).remain().dump()
 
-        agenda_item.set_title(title)
+        self.agenda_item.set_title(title)
         return JSONResponse(self.request).info(
             _('agenda_item_updated',
               default=u"Agenda Item updated.")).proceed().dump()
@@ -184,11 +197,7 @@ class AgendaItemsView(BrowserView):
         if not self.context.model.is_editable():
             raise Unauthorized("Editing is not allowed")
 
-        agenda_item = meeting_service().fetch_agenda_item(self.agenda_item_id)
-        if not agenda_item:
-            raise NotFound
-
-        agenda_item.remove()
+        self.agenda_item.remove()
 
         return JSONResponse(self.request).info(
             _(u'agenda_item_deleted',
@@ -203,14 +212,10 @@ class AgendaItemsView(BrowserView):
         if not self.context.model.is_editable():
             raise Unauthorized("Editing is not allowed")
 
-        agenda_item = meeting_service().fetch_agenda_item(self.agenda_item_id)
-        if not agenda_item:
-            raise NotFound
-
-        agenda_item.decide()
+        self.agenda_item.decide()
 
         response = JSONResponse(self.request)
-        if agenda_item.has_proposal:
+        if self.agenda_item.has_proposal:
             response.info(
                 _(u'agenda_item_proposal_decided',
                   default=u'Agenda Item decided and excerpt generated.'))
@@ -233,11 +238,7 @@ class AgendaItemsView(BrowserView):
         if not self.context.model.is_editable():
             raise Unauthorized("Editing is not allowed")
 
-        agenda_item = meeting_service().fetch_agenda_item(self.agenda_item_id)
-        if not agenda_item:
-            raise NotFound
-
-        agenda_item.reopen()
+        self.agenda_item.reopen()
 
         return JSONResponse(self.request).info(
             _(u'agenda_item_reopened',
@@ -250,11 +251,7 @@ class AgendaItemsView(BrowserView):
         if not self.context.model.is_editable():
             raise Unauthorized("Editing is not allowed")
 
-        agenda_item = meeting_service().fetch_agenda_item(self.agenda_item_id)
-        if not agenda_item:
-            raise NotFound
-
-        agenda_item.revise()
+        self.agenda_item.revise()
 
         return JSONResponse(self.request).info(
             _(u'agenda_item_revised',

@@ -5,6 +5,9 @@ Changelog
 4.10.0 (unreleased)
 -------------------
 
+- Fix security-issue to cross-delete and update agendaitems.
+  [elioschmutz]
+
 - Fix issue with wrong document-number: Move showroom hidden-link
   outside the tooltip-trigger div.
   [phgross]
