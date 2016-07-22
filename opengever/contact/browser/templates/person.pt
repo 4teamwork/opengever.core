@@ -17,6 +17,21 @@
                         tal:define="person view/model;">
 
       <h3 i18n:translate="label_personal_information">Personal information:</h3>
+
+      <div class="overlay" id="confirm_delete">
+        <div class="close">
+          <a href="#" class="hiddenStructure" title="Close this box">Close this box.</a>
+        </div>
+        <h2 i18n:translate="">Delete mailaddress</h2>
+        <p i18n:translate="label_delete_mail_address_confirm_text">Are you sure you want to delete this mail address?</p>
+        <div class="button-group">
+          <button class="button confirm destructive"
+          i18n:translate="">Delete</button>
+          <button class="button decline"
+          i18n:translate="label_cancel">Cancel</button>
+        </div>
+      </div>
+
       <table class="contact_details">
         <tr>
           <th i18n:translate="label_name">Name</th>
@@ -47,35 +62,42 @@
             </dl>
           </td>
         </tr>
+      </table>
 
-        <tr>
-          <th i18n:translate="label_mail">Mail Addresses</th>
-          <td>
-            <dl class="mail">
-              <tal:repeat tal:repeat="mail person/mail_addresses">
-                <dt tal:content="mail/label" />
-                <dd>
-                  <span tal:content="mail/address" />
-                </dd>
-              </tal:repeat>
-            </dl>
-          </td>
-        </tr>
+      <div id="mails-list" tal:attributes="data-fetch-url view/get_fetch_url">
+        <h3 i18n:translate="label_mail">Mail Addresses:</h3>
 
+        <button class="button toggle-edit-email fa fa-edit"></button>
+
+        <tal:content content="structure view/render_handlebars_email_template"></tal:content>
+        <table class="listing">
+          <tbody></tbody>
+          <tfoot class="editable">
+            <tr>
+              <td><input id="email-label" type="text" name="label" /></td>
+              <td><input id="email-mailaddress" type="email" name="email" /></td>
+              <td class="actions">
+                <button class="button add-email fa fa-plus" tal:attributes="data-create-url view/get_create_mail_url"></button>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <table>
         <tr>
           <th i18n:translate="label_phone_numbers">Phone numbers</th>
           <td>
             <dl class="phone_number">
-              <tal:repeat tal:repeat="phone person/phonenumbers">
-                <dt tal:content="phone/label" />
-                <dd>
-                  <span tal:content="phone/phone_number" />
-                </dd>
+                <tal:repeat tal:repeat="phone person/phonenumbers">
+                  <dt tal:content="phone/label" />
+                  <dd>
+                    <span tal:content="phone/phone_number" />
+                  </dd>
               </tal:repeat>
             </dl>
           </td>
         </tr>
-
       </table>
 
       <h3 i18n:translate="label_organizations">Organizations</h3>

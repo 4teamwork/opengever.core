@@ -15,21 +15,31 @@ from zope.publisher.interfaces import IPublishTraverse
 from zope.publisher.interfaces.browser import IBrowserView
 
 
+"""
+TODO FOR THIS PR:
+
+- Move Footer to EMAIL_TEMPLATE to toggle with editEnabled var and not with css
+- remove editable class in plonetheme.teamraum after Footer is moved to EMAIL_TEMPLATE
+- add more stylings
+- remove implementation in person_edit.pt
+"""
 EMAIL_TEMPLATE = '''
 <script id="emailTemplate" type="text/x-handlebars-template">
   {{#each mailaddresses}}
       <tr class="email-record">
-        <td>{{label}}</td>
+        <th>{{label}}</th>
         <td>{{address}}</td>
-        <td class="actions">
-          <div class="button-group">
-            <button class="button toggle-email-edit-form fa fa-edit"></button>
-            <button data-delete-url="{{delete_url}}" class="button remove-email fa fa-minus"></button>
-          </div>
-        </td>
+        {{#if ../editEnabled}}
+          <td class="actions">
+            <div class="button-group">
+              <button class="button toggle-email-edit-form fa fa-edit"></button>
+              <button data-delete-url="{{delete_url}}" class="button remove-email fa fa-minus"></button>
+            </div>
+          </td>
+        {{/if}}
       </tr>
       <tr class="email-record-edit-form">
-        <td><input class="update-label" type="text" value={{label}} /></td>
+        <th><input class="update-label" type="text" value={{label}} /></th>
         <td><input class="update-address" type="text" value={{address}} /></td>
         <td class="actions">
           <div class="button-group">
