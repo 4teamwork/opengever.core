@@ -1,0 +1,3 @@
+<registry>
+  <records interface="opengever.contact.interfaces.IContactSettings" />
+</registry>
