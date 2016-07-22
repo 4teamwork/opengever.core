@@ -52,6 +52,16 @@ class TestTextFilter(FunctionalTestCase):
                           [row.get('Title') for row in table.dicts()])
 
     @browsing
+    def test_filtering_is_case_insensitive(self, browser):
+        browser.login().open(
+            self.dossier, view='tabbedview_view-tasks',
+            data={'searchable_text': u'closed'})
+
+        table = browser.css('.listing').first
+        self.assertEquals(['Closed Task B'],
+                          [row.get('Title') for row in table.dicts()])
+
+    @browsing
     def test_filtering_on_integer_columns(self, browser):
         browser.login().open(
             self.dossier, view='tabbedview_view-tasks',
