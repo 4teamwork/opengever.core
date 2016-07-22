@@ -20,6 +20,11 @@ def setup_isolation_level_on_connect(dbapi_connection, connection_record):
     dbapi_connection.isolation_level = None
 
 
+def make_like_case_sensitive(dbapi_connection, connection_record):
+    cursor = dbapi_connection.cursor()
+    cursor.execute('PRAGMA case_sensitive_like = ON')
+
+
 def ping_connection(dbapi_connection, connection_record, connection_proxy):
     # Invalidate stale database connections checked out from the pool
     # Helps us deal with "MySQL has gone away" error
@@ -52,6 +57,7 @@ def setup_engine_options(event):
 
     elif engine.name == 'sqlite':
         listen(engine, 'connect', setup_isolation_level_on_connect)
+        listen(engine, 'connect', make_like_case_sensitive)
 
     elif engine.name == 'mysql':
         listen(Pool, 'checkout', ping_connection)
