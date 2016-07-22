@@ -20,7 +20,11 @@ class Contact(Base, SQLFormSupport):
     description = Column(UnicodeCoercingText)
 
     addresses = relationship("Address", back_populates="contact")
-    mail_addresses = relationship("MailAddress", back_populates="contact")
+    mail_addresses = relationship(
+        "MailAddress",
+        back_populates="contact",
+        order_by='MailAddress.mailaddress_id')
+
     phonenumbers = relationship("PhoneNumber", back_populates="contact")
     urls = relationship("URL", back_populates="contact")
     participations = relationship("Participation", back_populates="contact")

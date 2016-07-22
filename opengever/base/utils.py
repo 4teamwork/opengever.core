@@ -123,3 +123,15 @@ def pretty_json(obj):
     """Dump an object to a pretty printed JSON string.
     """
     return json.dumps(obj, indent=4, separators=(',', ': '))
+
+
+def to_safe_html(markup):
+    # keep empty data (whatever it is), it makes transform unhappy
+    if not markup:
+        return markup
+
+    if not isinstance(markup, unicode):
+        markup = markup.decode('utf-8')
+
+    transformer = api.portal.get_tool('portal_transforms')
+    return transformer.convert('safe_html', markup).getData()
