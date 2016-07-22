@@ -2,13 +2,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "POT-Creation-Date: 2016-07-21 14:08+0000\n"
-"PO-Revision-Date: 2015-01-22 17:49+0100\n"
-"Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
-"Language-Team: 4teamwork <info@4teamwork.ch>\n"
+"PO-Revision-Date: 2016-07-22 15:24+0000\n"
+"Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
+"Language-Team: German <https://translations.onegovgever.ch/projects/onegov-"
+"gever/opengever-dossier/de/>\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2.7-dev\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
@@ -79,6 +82,8 @@ msgstr "Folgende Elemente konnten nicht verschoben werden: ${failed_objects}"
 #: ./opengever/dossier/move_items.py:161
 msgid "Failed to copy following objects: ${failed_objects}. Locked via WebDAV"
 msgstr ""
+"Die folgenden Objekte konnten nicht kopiert werden: ${failed_objects}. Sie "
+"sind via WebDAV gesperrt."
 
 #: ./opengever/dossier/move_items.py:212
 msgid "It isn't allowed to add such items there"
@@ -593,7 +598,7 @@ msgstr "Aufgaben"
 #. Default: "Temporary former reference number"
 #: ./opengever/dossier/behaviors/dossier.py:119
 msgid "temporary_former_reference_number"
-msgstr ""
+msgstr "Temporäres früheres Aktenzeichen"
 
 #: ./opengever/dossier/resolve.py:15
 msgid "the dossier start date is missing."
@@ -608,4 +613,3 @@ msgstr "abgelaufen"
 #: ./opengever/dossier/behaviors/participation.py:196
 msgid "warning_no_participants_selected"
 msgstr "Sie haben keine Beteiligungen ausgewählt."
-
