@@ -86,8 +86,7 @@ class ExtractAttachments(grok.View):
 
         columns = (
             {'column': 'position',
-             'column_title': _(u'column_attachment_checkbox',
-                               default=u''),
+             'column_title': u'',
              'transform': attachment_checkbox_helper},
 
             {'column': 'content-type',

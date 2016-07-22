@@ -158,8 +158,8 @@ class MoveItemsForm(form.Form):
                 msg, type='error')
 
         if failed_resource_locked_objects:
-            msg = _(u'Failed to copy following objects: ${failed_objects}\
-                    . Locked via WebDAV',
+            msg = _(u'Failed to copy following objects: ${failed_objects}. '
+                    u'Locked via WebDAV',
                     mapping=dict(failed_objects=','.join(
                         failed_resource_locked_objects)))
             IStatusMessage(self.request).addStatusMessage(

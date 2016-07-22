@@ -92,8 +92,7 @@ class IClassificationSettings(Interface):
     """
 
     public_trial_default_value = schema.Choice(
-        title=_(u'label_public_trial_default_value',
-                default=u'Public Trial default value'),
+        title=u'Public Trial default value',
         source=u'classification_public_trial_vocabulary',
         required=True,
         default=PUBLIC_TRIAL_UNCHECKED

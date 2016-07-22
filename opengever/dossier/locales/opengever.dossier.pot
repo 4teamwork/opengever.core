@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-06-26 19:12+0000\n"
+"POT-Creation-Date: 2016-07-21 14:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,7 +48,7 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: ./opengever/dossier/browser/overview.py:55
+#: ./opengever/dossier/browser/overview.py:54
 msgid "Description"
 msgstr ""
 
@@ -78,7 +78,7 @@ msgid "Failed to copy following objects: ${failed_objects}"
 msgstr ""
 
 #: ./opengever/dossier/move_items.py:161
-msgid "Failed to copy following objects: ${failed_objects}                    . Locked via WebDAV"
+msgid "Failed to copy following objects: ${failed_objects}. Locked via WebDAV"
 msgstr ""
 
 #: ./opengever/dossier/move_items.py:212
@@ -93,11 +93,11 @@ msgstr ""
 msgid "Move Items"
 msgstr ""
 
-#: ./opengever/dossier/browser/overview.py:53
+#: ./opengever/dossier/browser/overview.py:52
 msgid "Newest documents"
 msgstr ""
 
-#: ./opengever/dossier/browser/overview.py:45
+#: ./opengever/dossier/browser/overview.py:44
 msgid "Newest tasks"
 msgstr ""
 
@@ -113,7 +113,7 @@ msgstr ""
 msgid "Not found the templatedossier"
 msgstr ""
 
-#: ./opengever/dossier/browser/overview.py:47
+#: ./opengever/dossier/browser/overview.py:46
 msgid "Participants"
 msgstr ""
 
@@ -451,7 +451,7 @@ msgid "label_keywords"
 msgstr ""
 
 #. Default: "Linked Dossiers"
-#: ./opengever/dossier/browser/overview.py:49
+#: ./opengever/dossier/browser/overview.py:48
 msgid "label_linked_dossiers"
 msgstr ""
 

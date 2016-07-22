@@ -44,7 +44,6 @@ class IResponse(Interface):
 
     transition = schema.Choice(
         title=_("label_transition", default="Transition"),
-        description=_(u"help_transition", default=""),
         source=util.getTransitionVocab,
         required=False,
         )

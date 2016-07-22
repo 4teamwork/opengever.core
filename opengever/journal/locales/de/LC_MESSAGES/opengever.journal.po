@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2016-07-13 08:46+0000\n"
+"POT-Creation-Date: 2016-07-21 14:08+0000\n"
 "PO-Revision-Date: 2014-11-19 12:25+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -233,3 +233,4 @@ msgstr "Journal"
 #: ./opengever/journal/no_selection_amount.pt:3
 msgid "tab_matches"
 msgstr "${amount} Treffer."
+

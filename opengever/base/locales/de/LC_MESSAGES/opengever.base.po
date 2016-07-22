@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-07-11 13:09+0000\n"
+"POT-Creation-Date: 2016-07-21 14:08+0000\n"
 "PO-Revision-Date: 2014-09-04 01:03+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -207,7 +207,7 @@ msgid "label_description"
 msgstr "Beschreibung"
 
 #. Default: "Dossier:"
-#: ./opengever/base/browser/search.pt:311
+#: ./opengever/base/browser/search.pt:315
 msgid "label_dossier"
 msgstr "Dossier:"
 
@@ -230,11 +230,6 @@ msgstr "Datenschutzstufe"
 #: ./opengever/base/behaviors/classification.py:67
 msgid "label_public_trial"
 msgstr "Öffentlichkeitsstatus"
-
-#. Default: "Public Trial default value"
-#: ./opengever/base/behaviors/classification.py:95
-msgid "label_public_trial_default_value"
-msgstr ""
 
 #. Default: "Public trial statement"
 #: ./opengever/base/behaviors/classification.py:74
