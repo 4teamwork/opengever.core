@@ -27,7 +27,7 @@ class TooltipView(BrowserView):
         return addTokenToUrl('{}/editing_document'.format(self.get_url()))
 
     def download_link_available(self):
-        return self.document.is_document
+        return self.document.digitally_available
 
     def download_link(self):
         dc_helper = DownloadConfirmationHelper()

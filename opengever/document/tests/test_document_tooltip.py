@@ -119,14 +119,18 @@ class TestDocumentTooltip(FunctionalTestCase):
                          browser.css('.file-actions a').text)
 
     @browsing
-    def test_download_link_is_only_available_for_documents(self, browser):
+    def test_download_link_is_available_for_documents_and_mails_when_file_exists(self, browser):
         document = create(Builder('document').with_dummy_content())
-        mail = create(Builder('mail'))
+        document_without_file = create(Builder('document'))
+        mail = create(Builder('mail').with_dummy_message())
 
         browser.login().open(document, view='tooltip')
         self.assertIn('Download copy', browser.css('.file-actions a').text)
 
-        browser.open(mail, view='tooltip')
+        browser.login().open(mail, view='tooltip')
+        self.assertIn('Download copy', browser.css('.file-actions a').text)
+
+        browser.login().open(document_without_file, view='tooltip')
         self.assertNotIn('Download copy', browser.css('.file-actions a').text)
 
 

@@ -5,6 +5,9 @@ Changelog
 4.10.0 (unreleased)
 -------------------
 
+- Display download_copy link in the tooltip also on mails.
+  [phgross]
+
 - Make tabbedview filter on sqltables listings case insensitive.
   [phgross]
 
