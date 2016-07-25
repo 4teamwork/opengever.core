@@ -1,5 +1,4 @@
 <div i18n:domain="opengever.document" class="linkWrapper tooltip-trigger"
-     tal:define="is_bumblebeeable context/is_bumblebeeable"
      tal:attributes="data-tooltip-url string:${view/get_url}/tooltip">
 
   <span tal:condition="context/is_removed" class='removed_document' />
@@ -7,10 +6,10 @@
   <a tal:content="view/get_title"
      tal:attributes="class view/get_css_class; href view/get_url;" />
 
-  <a href="#" class="hidden-link showroom-item"
-     tal:condition="is_bumblebeeable"
-     tal:attributes="data-showroom-target context/get_overlay_url;
-                     data-showroom-title context/get_overlay_title;
-                     data-showroom-id string:showroom-id-${context/uuid}" />
-
 </div>
+
+<a href="#" class="hidden-link showroom-item"
+   tal:condition="context/is_bumblebeeable"
+   tal:attributes="data-showroom-target context/get_overlay_url;
+                   data-showroom-title context/get_overlay_title;
+                   data-showroom-id string:showroom-id-${context/uuid}" />

@@ -5,6 +5,10 @@ Changelog
 4.10.0 (unreleased)
 -------------------
 
+- Fix issue with wrong document-number: Move showroom hidden-link
+  outside the tooltip-trigger div.
+  [phgross]
+
 - Add an email-form for opengever contacts.
   [elioschmutz]
 
