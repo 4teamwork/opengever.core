@@ -42,12 +42,12 @@ REPOFOLDER_DEFAULTS = {
     'public_trial': u'unchecked',
     'public_trial_statement': '',
     'reference_number_prefix': u'1',
+    'retention_period': 5,
     'title_de': DEFAULT_TITLE,
 }
 REPOFOLDER_FORM_DEFAULTS = {
     'archival_value': u'unchecked',
     'custody_period': 30,
-    'retention_period': 5,
 }
 REPOFOLDER_FORM_INITVALUES = {
     'addable_dossier_types': [],
@@ -71,6 +71,7 @@ DOSSIER_DEFAULTS = {
     'public_trial': u'unchecked',
     'public_trial_statement': u'',
     'relatedDossier': [],
+    'retention_period': 5,
     'start': FROZEN_TODAY,
     'title': DEFAULT_TITLE,
 }
@@ -78,7 +79,6 @@ DOSSIER_FORM_DEFAULTS = {
     'archival_value': u'unchecked',
     'custody_period': 30,
     'responsible': TEST_USER_ID,
-    'retention_period': 5,
 }
 DOSSIER_FORM_INITVALUES = {
     'archival_value_annotation': None,
