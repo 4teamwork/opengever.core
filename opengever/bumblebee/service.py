@@ -15,7 +15,7 @@ class GeverBumblebeeService(BumblebeeServiceV3):
     def get_not_digitally_available_placeholder_image_url(self):
         return "{}{}".format(
             api.portal.get().absolute_url(),
-            "/++resource++opengever.bumblebee.resources/fallback_not_digitally_available.png")
+            "/++resource++opengever.bumblebee.resources/fallback_not_digitally_available.svg")
 
     def get_representation_url(self, obj, format_name, filename=''):
         """Returns the bumblebee representation url of object.

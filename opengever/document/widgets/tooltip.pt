@@ -38,7 +38,7 @@
     <a href="#" class="showroom-reference"
        tal:attributes="data-showroom-id string:showroom-id-${view/document/uuid}">
       <img tal:attributes="src view/document/get_preview_image_url; alt context/title"
-           width="200" class="file-preview" />
+           width="200" class="file-preview bumblebee-thumbnail" />
       <span i18n:domain="opengever.document" i18n:translate="label_open_document_preview">Open document preview</span>
     </a>
   </div>

@@ -71,7 +71,7 @@ class TestBumblebeeIntegrationWithEnabledFeature(FunctionalTestCase):
 
         self.assertEqual(
             'http://nohost/plone/dossier-1/document-1/@@bumblebee-overlay-document',
-            browser.css('.imageContainer').first.get('data-showroom-target'))
+            browser.css('.bumblebee-thumbnail').first.get('data-showroom-target'))
 
     def test_does_not_queue_bumblebee_storing_if_not_digitally_available(self):
         create(Builder('document'))

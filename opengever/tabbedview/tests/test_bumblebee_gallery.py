@@ -311,7 +311,7 @@ class TestBumblebeeGalleryMixinPreviews(FunctionalTestCase):
             [{'uid': document.UID(),
               'overlay_url': 'http://nohost/plone/dossier-1/document-1/@@bumblebee-overlay-listing',
               'mime_type_css_class': 'contenttype-opengever-document-document',
-              'preview_image_url': 'http://nohost/plone/++resource++opengever.bumblebee.resources/fallback_not_digitally_available.png',
+              'preview_image_url': 'http://nohost/plone/++resource++opengever.bumblebee.resources/fallback_not_digitally_available.svg',
               'title': 'Testdokum\xc3\xa4nt'}],
             list(view.previews()))
 

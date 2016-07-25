@@ -25,7 +25,7 @@
   ');
 
   function scanForBrokenImages(context) {
-    $("img", context).error(function(){
+    $(context).error(function(){
       $(this)
         .attr("src", "++resource++opengever.bumblebee.resources/fallback.svg")
         .addClass("broken-image");
@@ -42,7 +42,7 @@
       items.insertAfter($(".imageContainer").last());
       toggleShowMoreButton();
       showroom.append(items);
-      scanForBrokenImages(items);
+      scanForBrokenImages(".bumblebee-thumbnail");
     });
   }
 
@@ -263,7 +263,7 @@
     endpoint = previewListing.data("fetch-url");
     numberOfDocuments = getNumberOfDocuments(items.length);
     toggleShowMoreButton();
-    scanForBrokenImages(".preview-listing");
+    scanForBrokenImages(".bumblebee-thumbnail");
 
     showroom.reset(items, getOffset());
     showroom.setTotal(numberOfDocuments);
@@ -280,7 +280,8 @@
     .on("agendaItemsReady", updateShowroom)
     .on("tooltip.show", refreshShowroom)
     .on("click", ".bumblebeeGalleryShowMore", loadNextTabbedviewGalleryView)
-    .on("click", ".ftw-showroom-backdrop", closeShowroom);
+    .on("click", ".ftw-showroom-backdrop", closeShowroom)
+    .on("tooltip.show", function() { scanForBrokenImages(".bumblebee-thumbnail") });
   $(init);
 
 })(window, window.showroom, window.jQuery);

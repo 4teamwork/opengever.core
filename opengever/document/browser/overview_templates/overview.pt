@@ -4,20 +4,22 @@
       i18n:domain="opengever.document">
 
 <body>
-    <div class="documentMetadata">
-        <table class="vertical listing">
-            <tr tal:repeat="row view/get_metadata_rows">
-                <th tal:content="row/label">Label</th>
-                <td tal:content="structure row/content">Content</td>
-            </tr>
-        </table>
-    </div>
-    <div tal:condition="view/show_preview" class="documentPreview">
-        <img class="imageContainer showroom-item"
-             tal:attributes="data-showroom-target view/get_overlay_url;
-                             data-showroom-title string:${context/title};
-                             src view/get_preview_image_url;
-                             alt context/title" />
+    <div class="bumblebee-document-wrapper">
+        <div class="documentMetadata">
+            <table class="vertical listing">
+                <tr tal:repeat="row view/get_metadata_rows">
+                    <th tal:content="row/label">Label</th>
+                    <td tal:content="structure row/content">Content</td>
+                </tr>
+            </table>
+        </div>
+        <div tal:condition="view/show_preview" class="documentPreview">
+            <img class="bumblebee-thumbnail showroom-item"
+                 tal:attributes="data-showroom-target view/get_overlay_url;
+                                 data-showroom-title string:${context/title};
+                                 src view/get_preview_image_url;
+                                 alt context/title" />
+        </div>
     </div>
 </body>
 </html>
