@@ -249,7 +249,8 @@
 
     this.validator = function(data) { return data && data.proceed !== false; };
 
-    this.refresh = function() { this.outlet.html(this.render(this.cache)); };
+    this.refresh = function() {
+      this.outlet.html(this.render(this.cache)); };
 
     this.update = function() {
       $.when(self.fetch()).fail(messageFunc).done(function(data) {
