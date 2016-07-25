@@ -1,19 +1,18 @@
-from Products.CMFCore.interfaces import ISiteRoot
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.base import _
-from opengever.base.behaviors import utils
+from opengever.base.acquisition import set_default_with_acquisition
 from opengever.base.interfaces import IBaseCustodyPeriods
 from opengever.base.interfaces import IRetentionPeriodRegister
+from opengever.base.restricted_vocab import propagate_vocab_restrictions
+from opengever.base.restricted_vocab import RestrictedVocabularyFactory
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.directives import form
 from plone.registry.interfaces import IRegistry
-from z3c.form import validator
 from zope import schema
 from zope.component import getUtility
-from zope.component import queryAdapter
-from zope.interface import Interface
 from zope.interface import alsoProvides
+from zope.interface import Interface
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 
@@ -93,195 +92,84 @@ alsoProvides(ILifeCycle, IFormFieldProvider)
 
 
 @grok.subscribe(ILifeCycleMarker, IObjectModifiedEvent)
-def validate_children(folder, event):
-    aq_fields = [ILifeCycle['retention_period'],
-                 ILifeCycle['archival_value'],
-                 ILifeCycle['custody_period']]
+def propagate_vocab_restrictions_to_children(container, event):
+    restricted_fields = [
+        ILifeCycle['retention_period'],
+        ILifeCycle['archival_value'],
+        ILifeCycle['custody_period']]
 
-    utils.overrides_child(folder, event, aq_fields, ILifeCycleMarker)
-
-
-class IntGreaterEqualThanParentValidator(validator.SimpleFieldValidator):
-
-    def validate(self, value):
-        super(IntGreaterEqualThanParentValidator, self).validate(value)
-
-        # should not be negative
-        if int(value) < 0:
-            raise schema.interfaces.TooSmall()
-
-        # get parent value
-        #XXX CHANGED FROM PATH_TRANSLATED TO PATH_INFO because the test
-        # don't work
-        if '++add++' in self.request.get('PATH_INFO', object()):
-            obj = self.context
-        else:
-            obj = self.context.aq_inner.aq_parent
-
-        parent_value = -1
-        while parent_value < 0 and not ISiteRoot.providedBy(obj):
-            cf_obj = queryAdapter(obj, ILifeCycle)
-
-            if cf_obj:
-                try:
-                    parent_value = int(self.field.get(cf_obj))
-                except AttributeError:
-                    pass
-                except TypeError:
-                    parent_value = 0
-
-            try:
-                obj = obj.aq_inner.aq_parent
-
-            except AttributeError:
-                return
-
-        # should not be smaller than parent
-        if parent_value > - 1 and int(value) < parent_value:
-            raise schema.interfaces.TooBig()
+    propagate_vocab_restrictions(
+        container, event, restricted_fields, ILifeCycleMarker)
 
 
 # ---------- RETENTION PERIOD -----------
 # Vocabulary
-def _get_retention_period_options(vocabulary):
+def _get_retention_period_choices():
     registry = getUtility(IRegistry)
     proxy = registry.forInterface(IRetentionPeriodRegister)
-    options = []
+    choices = []
     nums = getattr(proxy, 'retention_period')
 
     for i, num in enumerate(nums):
         num = int(num)
         pos = int(nums[- i - 1])
-        options.append((pos, num))
+        choices.append((pos, num))
 
-    return options
+    return choices
 
 
-def _is_retention_period_restricted(*args, **kwargs):
+def _is_retention_period_restricted():
     registry = getUtility(IRegistry)
     retention_period_settings = registry.forInterface(IRetentionPeriodRegister)
     return retention_period_settings.is_restricted
 
 
-grok.global_utility(
-    utils.create_restricted_vocabulary(
-        ILifeCycle['retention_period'],
-        _get_retention_period_options,
-        message_factory=_,
-        restricted=_is_retention_period_restricted),
-    provides=schema.interfaces.IVocabularyFactory,
-    name=u'lifecycle_retention_period_vocabulary')
+retention_period_vf = RestrictedVocabularyFactory(
+    ILifeCycle['retention_period'],
+    _get_retention_period_choices,
+    message_factory=_,
+    restricted=_is_retention_period_restricted)
 
 
 # Default value
 # XXX: Eventually rewrite this as a context aware defaultFactory
 form.default_value(field=ILifeCycle['retention_period'])(
-    utils.set_default_with_acquisition(
+    set_default_with_acquisition(
         field=ILifeCycle['retention_period'],
         default=5))
-
-
-# Validator
-class CustodyPeriodValidator(IntGreaterEqualThanParentValidator):
-    pass
-
-
-validator.WidgetValidatorDiscriminators(
-    CustodyPeriodValidator,
-    field=ILifeCycle['custody_period'])
-
-
-grok.global_adapter(CustodyPeriodValidator)
 
 
 # ---------- CUSTODY PERIOD -----------
 # Vocabulary
 
-def _get_custody_period_options(context):
+def _get_custody_period_choices():
     registry = getUtility(IRegistry)
     proxy = registry.forInterface(IBaseCustodyPeriods)
-    options = []
+    choices = []
     nums = getattr(proxy, 'custody_periods')
 
     for num in nums:
         num = int(num)
-        options.append((num, num))
+        choices.append((num, num))
 
-    return options
+    return choices
 
 
-grok.global_utility(
-    utils.create_restricted_vocabulary(
-        ILifeCycle['custody_period'],
-        _get_custody_period_options,
-        message_factory=_),
-    provides=schema.interfaces.IVocabularyFactory,
-    name=u'lifecycle_custody_period_vocabulary')
+custody_period_vf = RestrictedVocabularyFactory(
+    ILifeCycle['custody_period'],
+    _get_custody_period_choices,
+    message_factory=_,
+    restricted=True)
 
 
 # Default value
 # XXX: Eventually rewrite this as a context aware defaultFactory
 form.default_value(field=ILifeCycle['custody_period'])(
-    utils.set_default_with_acquisition(
+    set_default_with_acquisition(
         field=ILifeCycle['custody_period'],
         default=30,
     )
 )
-
-
-class RetentionPeriodValidator(validator.SimpleFieldValidator):
-
-    def is_restricted(self):
-        return _is_retention_period_restricted()
-
-    def validate(self, value):
-        super(RetentionPeriodValidator, self).validate(value)
-
-        # should not be negative
-        if int(value) < 0:
-            raise schema.interfaces.TooSmall()
-
-        if not self.is_restricted():
-            return
-
-        # get parent value
-        #XXX CHANGED FROM PATH_TRANSLATED TO PATH_INFO because the test
-        # don't work
-        if '++add++' in self.request.get('PATH_INFO', object()):
-            obj = self.context
-        else:
-            obj = self.context.aq_inner.aq_parent
-
-        parent_value = -1
-        while parent_value < 0 and not ISiteRoot.providedBy(obj):
-            cf_obj = queryAdapter(obj, ILifeCycle)
-
-            if cf_obj:
-                try:
-                    parent_value = int(self.field.get(cf_obj))
-                except AttributeError:
-                    pass
-                except TypeError:
-                    parent_value = 0
-
-            try:
-                obj = obj.aq_inner.aq_parent
-
-            except AttributeError:
-                return
-
-        # should not be bigger than parent
-        if parent_value > - 1 and int(value) > parent_value:
-            raise schema.interfaces.TooBig()
-
-
-validator.WidgetValidatorDiscriminators(
-    RetentionPeriodValidator,
-    field=ILifeCycle['retention_period']
-)
-
-
-grok.global_adapter(RetentionPeriodValidator)
 
 
 # ARCHIVAL VALUE: Vocabulary and default value
@@ -290,7 +178,7 @@ ARCHIVAL_VALUE_PROMPT = u'prompt'
 ARCHIVAL_VALUE_WORTHY = u'archival worthy'
 ARCHIVAL_VALUE_UNWORTHY = u'not archival worthy'
 ARCHIVAL_VALUE_SAMPLING = u'archival worthy with sampling'
-ARCHIVAL_VALUE_OPTIONS = (
+ARCHIVAL_VALUE_CHOICES = (
     (1, ARCHIVAL_VALUE_UNCHECKED),
     (2, ARCHIVAL_VALUE_PROMPT),
     (3, ARCHIVAL_VALUE_WORTHY),
@@ -299,18 +187,16 @@ ARCHIVAL_VALUE_OPTIONS = (
 )
 
 
-grok.global_utility(
-    utils.create_restricted_vocabulary(
-        ILifeCycle['archival_value'],
-        ARCHIVAL_VALUE_OPTIONS,
-        message_factory=_),
-    provides=schema.interfaces.IVocabularyFactory,
-    name=u'lifecycle_archival_value_vocabulary')
+archival_value_vf = RestrictedVocabularyFactory(
+    ILifeCycle['archival_value'],
+    ARCHIVAL_VALUE_CHOICES,
+    message_factory=_,
+    restricted=True)
 
 
 # XXX: Eventually rewrite this as a context aware defaultFactory
 form.default_value(field=ILifeCycle['archival_value'])(
-    utils.set_default_with_acquisition(
+    set_default_with_acquisition(
         field=ILifeCycle['archival_value'],
         default=ARCHIVAL_VALUE_UNCHECKED
     )

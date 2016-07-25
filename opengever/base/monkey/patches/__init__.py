@@ -1,8 +1,10 @@
 from .create_mail_defaults import PatchCreateMailInContainer
+from .default_values import PatchBuilderCreate
 from .default_values import PatchDexterityContentGetattr
+from .default_values import PatchDexterityDefaultAddForm
 from .default_values import PatchDXCreateContentInContainer
-from .default_values import PatchZ3CFormChangedField
 from .default_values import PatchInvokeFactory
+from .default_values import PatchZ3CFormChangedField
 from .filter_trashed_from_catalog import PatchCatalogToFilterTrashedDocs
 from .history_handler_tool import PatchCMFEditonsHistoryHandlerTool
 from .ldap_userfolder_encoding import PatchLDAPUserFolderEncoding
@@ -15,13 +17,15 @@ from .verify_object_paste import PatchCopyContainerVerifyObjectPaste
 from .webdav_lock_timeout import PatchWebDAVLockTimeout
 
 
+PatchBuilderCreate()()
 PatchCatalogToFilterTrashedDocs()()
 PatchCMFEditonsHistoryHandlerTool()()
 PatchCopyContainerVerifyObjectPaste()()
 PatchCreateMailInContainer()()
+PatchDexterityContentGetattr()()
+PatchDexterityDefaultAddForm()()
 PatchDXContainerPastePermission()()
 PatchDXCreateContentInContainer()()
-PatchZ3CFormChangedField()()
 PatchInvokeFactory()()
 PatchLDAPUserFolderEncoding()()
 PatchNamedfileNamedDataConverter()()
@@ -29,4 +33,4 @@ PatchPlone43RC1Upgrade()()
 PatchResourceRegistriesURLRegex()()
 PatchWebDAVLockTimeout()()
 PatchZ2LogTimezone()()
-PatchDexterityContentGetattr()()
+PatchZ3CFormChangedField()()
