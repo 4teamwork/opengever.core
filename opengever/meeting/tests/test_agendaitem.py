@@ -218,6 +218,23 @@ class TestAgendaItemDelete(TestAgendaItem):
                                  view='agenda_items/12345/delete')
 
     @browsing
+    def test_raise_not_found_if_agenda_item_is_not_linked_to_the_given_context(self, browser):
+        create(Builder('agenda_item').having(
+            title=u'foo', meeting=self.meeting))
+
+        other_meeting = create(Builder('meeting')
+                               .having(committee=self.committee.load_model())
+                               .link_with(self.meeting_dossier))
+
+        other_item = create(Builder('agenda_item').having(
+            title=u'foo', meeting=other_meeting))
+
+        with self.assertRaises(NotFound):
+            browser.login().open(
+                self.meeting_wrapper,
+                view='agenda_items/{}/delete'.format(other_item.agenda_item_id))
+
+    @browsing
     def test_update_agenda_item_raise_unauthorized_when_meeting_is_not_editable(self, browser):
         item = create(Builder('agenda_item').having(
             title=u'foo', meeting=self.meeting))
