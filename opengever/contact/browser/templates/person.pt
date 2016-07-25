@@ -63,27 +63,6 @@
           </td>
         </tr>
       </table>
-
-      <div id="mails-list" tal:attributes="data-fetch-url view/get_fetch_url">
-        <h3 i18n:translate="label_mail">Mail Addresses:</h3>
-
-        <button class="button toggle-edit-email fa fa-edit"></button>
-
-        <tal:content content="structure view/render_handlebars_email_template"></tal:content>
-        <table class="listing">
-          <tbody></tbody>
-          <tfoot class="editable">
-            <tr>
-              <td><input id="email-label" type="text" name="label" /></td>
-              <td><input id="email-mailaddress" type="email" name="email" /></td>
-              <td class="actions">
-                <button class="button add-email fa fa-plus" tal:attributes="data-create-url view/get_create_mail_url"></button>
-              </td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
-
       <table>
         <tr>
           <th i18n:translate="label_phone_numbers">Phone numbers</th>
@@ -100,7 +79,17 @@
         </tr>
       </table>
 
-      <h3 i18n:translate="label_organizations">Organizations</h3>
+      <div class="mail">
+        <h4>
+          <span i18n:translate="label_mail">Mail Addresses</span>
+          <a class="toggle-edit-email fa-pencil edit-link" />
+        </h4>
+        <ul id="mails-list" tal:attributes="data-fetch-url view/get_fetch_url">
+          <tal:content content="structure view/render_handlebars_email_template" />
+        </ul>
+      </div>
+
+      <h3 i18n:translate="label_organizations">Organizations:</h3>
       <ul class="organizations orgrole_listing">
         <li tal:repeat="org_role person/organizations">
           <p>

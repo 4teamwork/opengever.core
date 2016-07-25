@@ -23,32 +23,32 @@ TODO FOR THIS PR:
 - add more stylings
 - remove implementation in person_edit.pt
 """
+
 EMAIL_TEMPLATE = '''
 <script id="emailTemplate" type="text/x-handlebars-template">
   {{#each mailaddresses}}
-      <tr class="email-record">
-        <th>{{label}}</th>
-        <td>{{address}}</td>
-        {{#if ../editEnabled}}
-          <td class="actions">
-            <div class="button-group">
-              <button class="button toggle-email-edit-form fa fa-edit"></button>
-              <button data-delete-url="{{delete_url}}" class="button remove-email fa fa-minus"></button>
-            </div>
-          </td>
-        {{/if}}
-      </tr>
-      <tr class="email-record-edit-form">
-        <th><input class="update-label" type="text" value={{label}} /></th>
-        <td><input class="update-address" type="text" value={{address}} /></td>
-        <td class="actions">
-          <div class="button-group">
-            <button data-update-url="{{update_url}}" class="button save fa fa-check"></button>
-            <button class="button cancel fa fa-close"></button>
-          </div>
-        </td>
-      </tr>
+    <li>
+    {{#if ../editEnabled}}
+        <input class="update-label" type="text" value={{label}} />
+        <input class="update-address" type="text" value={{address}} />
+        <span class="button-group">
+            <a class="toggle-email-edit-form fa fa-pencil"></a>
+            <a data-delete-url="{{delete_url}}" class="remove-email fa fa-trash"></a>
+        </span>
+    {{else}}
+        <span class="label">{{label}}</span>
+        <span class="address">{{address}}</span>
+    {{/if}}
+    </li>
   {{/each}}
+  {{#if editEnabled}}
+    <li>
+      <input id="email-label" type="text" name="label" />
+      <input id="email-mailaddress" type="email" name="email" />x
+      <span class="button-group">
+        <a class="button add-email fa fa-plus" tal:attributes="data-create-url view/get_create_mail_url"></a>
+    </li>
+  {{/if}}
 </script>
 '''
 
@@ -74,6 +74,15 @@ class PersonView(BrowserView):
 
         return viewlet.prepare_edit_tab(
             self.model.get_edit_url(self.context.parent))
+
+    def get_fetch_url(self):
+        return self.context.model.get_url('mails/list')
+
+    def get_create_mail_url(self):
+        return self.context.model.get_url('mails/add')
+
+    def render_handlebars_email_template(self):
+        return EMAIL_TEMPLATE
 
 
 class IPersonModel(form.Schema):
