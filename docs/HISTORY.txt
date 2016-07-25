@@ -5,6 +5,9 @@ Changelog
 4.10.0 (unreleased)
 -------------------
 
+- Make tabbedview filter on sqltables listings case insensitive.
+  [phgross]
+
 - Fix security-issue to cross-delete and update agendaitems.
   [elioschmutz]
 

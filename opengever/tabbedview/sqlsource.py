@@ -80,7 +80,7 @@ class SqlTableSource(GeverTableSource):
                 query.session
 
                 query = query.filter(or_(
-                    *[cast(field, String).like(term)
+                    *[cast(field, String).ilike(term)
                       for field in self.searchable_columns]))
 
         return query
