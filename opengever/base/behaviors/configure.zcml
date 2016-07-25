@@ -44,6 +44,12 @@
       name="classification_privacy_layer_vocabulary"
       />
 
+  <utility
+      component=".classification.public_trial_vocabulary_factory"
+      provides="zope.schema.interfaces.IVocabularyFactory"
+      name="classification_public_trial_vocabulary"
+      />
+
   <!-- LifeCycle Behavior -->
   <plone:behavior
       title="LifeCycle"

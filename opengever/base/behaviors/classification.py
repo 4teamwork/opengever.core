@@ -29,9 +29,11 @@ PUBLIC_TRIAL_CHOICES = (
     PUBLIC_TRIAL_PRIVATE,
 )
 
-public_trial_vocabulary = SimpleVocabulary([
-    SimpleTerm(msgid, title=_(msgid))
-    for msgid in PUBLIC_TRIAL_CHOICES])
+
+def public_trial_vocabulary_factory(context):
+    return SimpleVocabulary([
+        SimpleTerm(msgid, title=_(msgid))
+        for msgid in PUBLIC_TRIAL_CHOICES])
 
 
 @ram.cache(language_cache_key)
@@ -80,7 +82,7 @@ class IClassification(form.Schema):
     public_trial = schema.Choice(
         title=_(u'label_public_trial', default=u'Public Trial'),
         description=_(u'help_public_trial', default=u''),
-        source=public_trial_vocabulary,
+        source=u'classification_public_trial_vocabulary',
         required=True,
         defaultFactory=public_trial_default,
     )
@@ -108,7 +110,7 @@ class IClassificationSettings(Interface):
 
     public_trial_default_value = schema.Choice(
         title=u'Public Trial default value',
-        source=public_trial_vocabulary,
+        source=u'classification_public_trial_vocabulary',
         required=True,
         default=PUBLIC_TRIAL_UNCHECKED
     )
