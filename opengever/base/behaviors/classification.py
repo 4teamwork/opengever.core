@@ -12,7 +12,9 @@ from plone.memoize import ram
 from zope import schema
 from zope.i18n import translate
 from zope.interface import alsoProvides, Interface
+from zope.interface import provider
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
+from zope.schema.interfaces import IContextAwareDefaultFactory
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
 
@@ -145,13 +147,15 @@ classification_vf = RestrictedVocabularyFactory(
     restricted=True)
 
 
-# XXX: Eventually rewrite this as a context aware defaultFactory
-form.default_value(field=IClassification['classification'])(
-    set_default_with_acquisition(
+@provider(IContextAwareDefaultFactory)
+def classification_default(context):
+    default_factory = set_default_with_acquisition(
         field=IClassification['classification'],
-        default=CLASSIFICATION_UNPROTECTED
-    )
-)
+        default=CLASSIFICATION_UNPROTECTED)
+    return default_factory(context)
+
+IClassification['classification'].defaultFactory = classification_default
+
 
 # PRIVACY_LAYER: Vocabulary and default value
 PRIVACY_LAYER_NO = u'privacy_layer_no'
