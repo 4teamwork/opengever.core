@@ -52,17 +52,19 @@ def acquire_field_value(field, container):
 
 
 def set_default_with_acquisition(field, default=None):
-    """Factory to provide a default value by acquiring it from parents.
+    """Returns a factory that produces a default by trying to acquire the
+    field value from it's ancestors, if possible.
 
-    First this function will attempt to acquire a value for the given field
-    by walking up the chain of parents. If no value can be found via
-    acquisition, we fall back on the provided static `default`, if given.
+    If we fail to acquire a default, use the given `default` value.
 
-    If no static `default` value was given, the first term from the field's
-    vocabulary will be used.
+    If no default value was given, fall back to the field's vocabulary's
+    first value.
+
+    Finally, if the field doesn't have a vocabulary, we fall back to
+    returning `None`.
     """
-    def default_value_generator(data):
-        container = data.context
+    def default_value_generator(context):
+        container = context
 
         acquired_value = acquire_field_value(field, container)
         if acquired_value is not NO_VALUE_FOUND:
@@ -73,10 +75,12 @@ def set_default_with_acquisition(field, default=None):
             # XXX: Use sentinel value (Issue #2029)
             return default
         else:
-            # use first value
+            # use first value from vocabulary
             try:
-                return tuple(data.widget.terms)[0].value
-            except AttributeError:
+                vocab = field.bind(container).source
+                first = list(vocab)[0].value
+                return first
+            except (IndexError, TypeError):
                 return None
 
     return default_value_generator
