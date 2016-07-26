@@ -166,14 +166,14 @@ custody_period_vf = RestrictedVocabularyFactory(
     restricted=True)
 
 
-# Default value
-# XXX: Eventually rewrite this as a context aware defaultFactory
-form.default_value(field=ILifeCycle['custody_period'])(
-    set_default_with_acquisition(
+@provider(IContextAwareDefaultFactory)
+def custody_period_default(context):
+    default_factory = set_default_with_acquisition(
         field=ILifeCycle['custody_period'],
-        default=30,
-    )
-)
+        default=30)
+    return default_factory(context)
+
+ILifeCycle['custody_period'].defaultFactory = custody_period_default
 
 
 # ARCHIVAL VALUE: Vocabulary and default value
