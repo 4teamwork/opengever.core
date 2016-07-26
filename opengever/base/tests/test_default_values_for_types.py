@@ -38,6 +38,7 @@ REPOFOLDER_DEFAULTS = {
     'classification': u'unprotected',
     'creators': (),
     'description': u'',
+    'privacy_layer': u'privacy_layer_no',
     'public_trial': u'unchecked',
     'public_trial_statement': '',
     'reference_number_prefix': u'1',
@@ -46,7 +47,6 @@ REPOFOLDER_DEFAULTS = {
 REPOFOLDER_FORM_DEFAULTS = {
     'archival_value': u'unchecked',
     'custody_period': 30,
-    'privacy_layer': u'privacy_layer_no',
     'retention_period': 5,
 }
 REPOFOLDER_FORM_INITVALUES = {
@@ -67,6 +67,7 @@ DOSSIER_DEFAULTS = {
     'classification': u'unprotected',
     'description': u'',
     'keywords': (),
+    'privacy_layer': u'privacy_layer_no',
     'public_trial': u'unchecked',
     'public_trial_statement': u'',
     'relatedDossier': [],
@@ -76,7 +77,6 @@ DOSSIER_DEFAULTS = {
 DOSSIER_FORM_DEFAULTS = {
     'archival_value': u'unchecked',
     'custody_period': 30,
-    'privacy_layer': u'privacy_layer_no',
     'responsible': TEST_USER_ID,
     'retention_period': 5,
 }
@@ -102,14 +102,13 @@ DOCUMENT_DEFAULTS = {
     'document_date': FROZEN_TODAY,
     'keywords': (),
     'preserved_as_paper': True,
+    'privacy_layer': u'privacy_layer_no',
     'public_trial': u'unchecked',
     'public_trial_statement': '',
     'relatedItems': [],
     'title': DEFAULT_TITLE,
 }
-DOCUMENT_FORM_DEFAULTS = {
-    'privacy_layer': u'privacy_layer_no',
-}
+DOCUMENT_FORM_DEFAULTS = {}
 DOCUMENT_FORM_INITVALUES = {
     'delivery_date': None,
     'document_author': None,
@@ -128,13 +127,12 @@ MAIL_DEFAULTS = {
     'document_date': date(2010, 1, 1),
     'keywords': (),
     'preserved_as_paper': True,
+    'privacy_layer': u'privacy_layer_no',
     'public_trial': u'unchecked',
     'public_trial_statement': '',
     'receipt_date': FROZEN_TODAY,
 }
-MAIL_FORM_DEFAULTS = {
-    'privacy_layer': u'privacy_layer_no',
-}
+MAIL_FORM_DEFAULTS = {}
 MAIL_FORM_INITVALUES = {
     'delivery_date': None,
     'document_type': None,
