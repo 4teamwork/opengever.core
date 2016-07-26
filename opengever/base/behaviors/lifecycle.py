@@ -1,7 +1,7 @@
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.base import _
-from opengever.base.acquisition import set_default_with_acquisition
+from opengever.base.acquisition import acquired_default_factory
 from opengever.base.interfaces import IBaseCustodyPeriods
 from opengever.base.interfaces import IRetentionPeriodRegister
 from opengever.base.restricted_vocab import propagate_vocab_restrictions
@@ -135,7 +135,7 @@ retention_period_vf = RestrictedVocabularyFactory(
 
 @provider(IContextAwareDefaultFactory)
 def retention_period_default(context):
-    default_factory = set_default_with_acquisition(
+    default_factory = acquired_default_factory(
         field=ILifeCycle['retention_period'],
         default=5)
     return default_factory(context)
@@ -168,7 +168,7 @@ custody_period_vf = RestrictedVocabularyFactory(
 
 @provider(IContextAwareDefaultFactory)
 def custody_period_default(context):
-    default_factory = set_default_with_acquisition(
+    default_factory = acquired_default_factory(
         field=ILifeCycle['custody_period'],
         default=30)
     return default_factory(context)
@@ -200,7 +200,7 @@ archival_value_vf = RestrictedVocabularyFactory(
 
 @provider(IContextAwareDefaultFactory)
 def archival_value_default(context):
-    default_factory = set_default_with_acquisition(
+    default_factory = acquired_default_factory(
         field=ILifeCycle['archival_value'],
         default=ARCHIVAL_VALUE_UNCHECKED)
     return default_factory(context)
