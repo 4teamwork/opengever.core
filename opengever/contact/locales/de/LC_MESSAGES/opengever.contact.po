@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2016-07-25 11:15+0000\n"
+"POT-Creation-Date: 2016-07-26 06:59+0000\n"
 "PO-Revision-Date: 2011-01-05 15:15+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -218,11 +218,6 @@ msgstr "Mail Addressen"
 msgid "label_name"
 msgstr "Name"
 
-#. Default: "OGDS"
-#: ./opengever/contact/browser/tabbed.py:16
-msgid "label_ogds"
-msgstr "OGDS"
-
 #. Default: "Organizations"
 #: ./opengever/contact/browser/tabbed.py:30
 #: ./opengever/contact/browser/templates/person.pt:81
@@ -283,6 +278,11 @@ msgstr "Anrede"
 #: ./opengever/contact/contact.py:115
 msgid "label_url"
 msgstr "URL"
+
+#. Default: "Users"
+#: ./opengever/contact/browser/tabbed.py:16
+msgid "label_users"
+msgstr "Benutzer"
 
 #. Default: "ZIP"
 #: ./opengever/contact/contact.py:160

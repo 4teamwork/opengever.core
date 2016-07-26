@@ -13,7 +13,7 @@ class ContactFolderTabbedView(TabbedView):
              'url': '#',
              'class': None},
             {'id': 'users',
-             'title': _(u'label_ogds', default=u'OGDS'),
+             'title': _(u'label_users', default=u'Users'),
              'icon': None,
              'url': '#',
              'class': None},

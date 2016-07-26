@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-07-25 11:15+0000\n"
+"POT-Creation-Date: 2016-07-26 06:59+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -221,11 +221,6 @@ msgstr ""
 msgid "label_name"
 msgstr ""
 
-#. Default: "OGDS"
-#: ./opengever/contact/browser/tabbed.py:16
-msgid "label_ogds"
-msgstr ""
-
 #. Default: "Organizations"
 #: ./opengever/contact/browser/tabbed.py:30
 #: ./opengever/contact/browser/templates/person.pt:81
@@ -285,6 +280,11 @@ msgstr ""
 #. Default: "Url"
 #: ./opengever/contact/contact.py:115
 msgid "label_url"
+msgstr ""
+
+#. Default: "Users"
+#: ./opengever/contact/browser/tabbed.py:16
+msgid "label_users"
 msgstr ""
 
 #. Default: "ZIP"
