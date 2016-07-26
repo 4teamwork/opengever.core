@@ -35,6 +35,7 @@ REPOROOT_FORM_INITVALUES = {
 
 
 REPOFOLDER_DEFAULTS = {
+    'classification': u'unprotected',
     'creators': (),
     'description': u'',
     'public_trial': u'unchecked',
@@ -44,7 +45,6 @@ REPOFOLDER_DEFAULTS = {
 }
 REPOFOLDER_FORM_DEFAULTS = {
     'archival_value': u'unchecked',
-    'classification': u'unprotected',
     'custody_period': 30,
     'privacy_layer': u'privacy_layer_no',
     'retention_period': 5,
@@ -64,6 +64,7 @@ REPOFOLDER_FORM_INITVALUES = {
 
 
 DOSSIER_DEFAULTS = {
+    'classification': u'unprotected',
     'description': u'',
     'keywords': (),
     'public_trial': u'unchecked',
@@ -74,7 +75,6 @@ DOSSIER_DEFAULTS = {
 }
 DOSSIER_FORM_DEFAULTS = {
     'archival_value': u'unchecked',
-    'classification': u'unprotected',
     'custody_period': 30,
     'privacy_layer': u'privacy_layer_no',
     'responsible': TEST_USER_ID,
@@ -95,6 +95,7 @@ DOSSIER_FORM_INITVALUES = {
 
 
 DOCUMENT_DEFAULTS = {
+    'classification': u'unprotected',
     'creators': (),
     'description': u'',
     'digitally_available': False,
@@ -107,7 +108,6 @@ DOCUMENT_DEFAULTS = {
     'title': DEFAULT_TITLE,
 }
 DOCUMENT_FORM_DEFAULTS = {
-    'classification': u'unprotected',
     'privacy_layer': u'privacy_layer_no',
 }
 DOCUMENT_FORM_INITVALUES = {
@@ -121,6 +121,7 @@ DOCUMENT_FORM_INITVALUES = {
 
 
 MAIL_DEFAULTS = {
+    'classification': u'unprotected',
     'description': u'',
     'digitally_available': True,
     'document_author': u'from@example.org',
@@ -132,7 +133,6 @@ MAIL_DEFAULTS = {
     'receipt_date': FROZEN_TODAY,
 }
 MAIL_FORM_DEFAULTS = {
-    'classification': u'unprotected',
     'privacy_layer': u'privacy_layer_no',
 }
 MAIL_FORM_INITVALUES = {
