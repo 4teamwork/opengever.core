@@ -35,6 +35,7 @@ REPOROOT_FORM_INITVALUES = {
 
 
 REPOFOLDER_DEFAULTS = {
+    'archival_value': u'unchecked',
     'classification': u'unprotected',
     'creators': (),
     'custody_period': 30,
@@ -46,9 +47,7 @@ REPOFOLDER_DEFAULTS = {
     'retention_period': 5,
     'title_de': DEFAULT_TITLE,
 }
-REPOFOLDER_FORM_DEFAULTS = {
-    'archival_value': u'unchecked',
-}
+REPOFOLDER_FORM_DEFAULTS = {}
 REPOFOLDER_FORM_INITVALUES = {
     'addable_dossier_types': [],
     'archival_value_annotation': None,
@@ -64,6 +63,7 @@ REPOFOLDER_FORM_INITVALUES = {
 
 
 DOSSIER_DEFAULTS = {
+    'archival_value': u'unchecked',
     'classification': u'unprotected',
     'custody_period': 30,
     'description': u'',
@@ -77,7 +77,6 @@ DOSSIER_DEFAULTS = {
     'title': DEFAULT_TITLE,
 }
 DOSSIER_FORM_DEFAULTS = {
-    'archival_value': u'unchecked',
     'responsible': TEST_USER_ID,
 }
 DOSSIER_FORM_INITVALUES = {

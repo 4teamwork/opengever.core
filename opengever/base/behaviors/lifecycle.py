@@ -198,10 +198,11 @@ archival_value_vf = RestrictedVocabularyFactory(
     restricted=True)
 
 
-# XXX: Eventually rewrite this as a context aware defaultFactory
-form.default_value(field=ILifeCycle['archival_value'])(
-    set_default_with_acquisition(
+@provider(IContextAwareDefaultFactory)
+def archival_value_default(context):
+    default_factory = set_default_with_acquisition(
         field=ILifeCycle['archival_value'],
-        default=ARCHIVAL_VALUE_UNCHECKED
-    )
-)
+        default=ARCHIVAL_VALUE_UNCHECKED)
+    return default_factory(context)
+
+ILifeCycle['archival_value'].defaultFactory = archival_value_default
