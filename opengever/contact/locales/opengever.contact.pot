@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-07-20 06:32+0000\n"
+"POT-Creation-Date: 2016-07-26 06:59+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -60,33 +60,58 @@ msgstr ""
 msgid "address"
 msgstr ""
 
+#. Default: "Academic title"
+#: ./opengever/contact/browser/person_listing.py:30
+msgid "column_academic_title"
+msgstr ""
+
+#. Default: "Firstname"
+#: ./opengever/contact/browser/person_listing.py:34
+msgid "column_firstname"
+msgstr ""
+
+#. Default: "Lastname"
+#: ./opengever/contact/browser/person_listing.py:38
+msgid "column_lastname"
+msgstr ""
+
+#. Default: "Name"
+#: ./opengever/contact/browser/organization_listing.py:27
+msgid "column_name"
+msgstr ""
+
+#. Default: "Salutation"
+#: ./opengever/contact/browser/person_listing.py:27
+msgid "column_salutation"
+msgstr ""
+
 #. Default: "Email address updated."
-#: ./opengever/contact/browser/mail.py:114
+#: ./opengever/contact/browser/mail.py:115
 msgid "email_address_updated"
 msgstr ""
 
 #. Default: "Please specify a valid email address"
-#: ./opengever/contact/browser/mail.py:145
+#: ./opengever/contact/browser/mail.py:153
 msgid "error_invalid_email"
 msgstr ""
 
 #. Default: "Please specify an email address"
-#: ./opengever/contact/browser/mail.py:141
+#: ./opengever/contact/browser/mail.py:149
 msgid "error_no_email"
 msgstr ""
 
 #. Default: "Please specify a label for your email address"
-#: ./opengever/contact/browser/mail.py:137
+#: ./opengever/contact/browser/mail.py:145
 msgid "error_no_label"
 msgstr ""
 
 #. Default: "Please specify a label and an email address."
-#: ./opengever/contact/browser/mail.py:131
+#: ./opengever/contact/browser/mail.py:139
 msgid "error_no_label_and_email"
 msgstr ""
 
 #. Default: "The email address was created successfully"
-#: ./opengever/contact/browser/mail.py:92
+#: ./opengever/contact/browser/mail.py:93
 msgid "info_mailaddress_created"
 msgstr ""
 
@@ -113,6 +138,7 @@ msgid "label_address2"
 msgstr ""
 
 #. Default: "Addresses"
+#: ./opengever/contact/browser/templates/organization.pt:25
 #: ./opengever/contact/browser/templates/person.pt:35
 msgid "label_addresses"
 msgstr ""
@@ -155,7 +181,7 @@ msgstr ""
 
 #. Default: "email"
 #: ./opengever/contact/contact.py:103
-#: ./opengever/contact/contactfolder.py:109
+#: ./opengever/contact/contactfolder.py:117
 msgid "label_email"
 msgstr ""
 
@@ -167,28 +193,36 @@ msgstr ""
 #. Default: "Firstname"
 #: ./opengever/contact/browser/person.py:83
 #: ./opengever/contact/contact.py:82
-#: ./opengever/contact/contactfolder.py:104
+#: ./opengever/contact/contactfolder.py:112
 msgid "label_firstname"
 msgstr ""
 
 #. Default: "Lastname"
 #: ./opengever/contact/browser/person.py:88
 #: ./opengever/contact/contact.py:75
-#: ./opengever/contact/contactfolder.py:99
+#: ./opengever/contact/contactfolder.py:107
 msgid "label_lastname"
 msgstr ""
 
+#. Default: "Local"
+#: ./opengever/contact/browser/tabbed.py:11
+msgid "label_local"
+msgstr ""
+
 #. Default: "Mail Addresses"
+#: ./opengever/contact/browser/templates/organization.pt:42
 #: ./opengever/contact/browser/templates/person.pt:52
 msgid "label_mail"
 msgstr ""
 
 #. Default: "Name"
+#: ./opengever/contact/browser/templates/organization.pt:21
 #: ./opengever/contact/browser/templates/person.pt:22
 msgid "label_name"
 msgstr ""
 
-#. Default: "Organizations:"
+#. Default: "Organizations"
+#: ./opengever/contact/browser/tabbed.py:30
 #: ./opengever/contact/browser/templates/person.pt:81
 msgid "label_organizations"
 msgstr ""
@@ -196,6 +230,12 @@ msgstr ""
 #. Default: "Personal information:"
 #: ./opengever/contact/browser/templates/person.pt:19
 msgid "label_personal_information"
+msgstr ""
+
+#. Default: "Persons"
+#: ./opengever/contact/browser/tabbed.py:25
+#: ./opengever/contact/browser/templates/organization.pt:71
+msgid "label_persons"
 msgstr ""
 
 #. Default: "Fax"
@@ -214,13 +254,14 @@ msgid "label_phone_mobile"
 msgstr ""
 
 #. Default: "Phone numbers"
+#: ./opengever/contact/browser/templates/organization.pt:56
 #: ./opengever/contact/browser/templates/person.pt:66
 msgid "label_phone_numbers"
 msgstr ""
 
 #. Default: "Phone office"
 #: ./opengever/contact/contact.py:120
-#: ./opengever/contact/contactfolder.py:114
+#: ./opengever/contact/contactfolder.py:122
 msgid "label_phone_office"
 msgstr ""
 
@@ -241,6 +282,11 @@ msgstr ""
 msgid "label_url"
 msgstr ""
 
+#. Default: "Users"
+#: ./opengever/contact/browser/tabbed.py:16
+msgid "label_users"
+msgstr ""
+
 #. Default: "ZIP"
 #: ./opengever/contact/contact.py:160
 msgid "label_zip"
@@ -252,7 +298,7 @@ msgid "lable_function"
 msgstr ""
 
 #. Default: "Mailaddress successfully deleted"
-#: ./opengever/contact/browser/mail.py:121
+#: ./opengever/contact/browser/mail.py:122
 msgid "mail_address_deleted"
 msgstr ""
 

@@ -49,12 +49,5 @@
             url_expr="string:${object_url}" visible="False">
         <permission value="View"/>
     </action>
-    <action title="local" action_id="local" category="tabbedview-tabs"
-            condition_expr="" url_expr="string:#" visible="True">
-    </action>
-
-    <action title="users" action_id="users" category="tabbedview-tabs"
-            condition_expr="" url_expr="string:#" visible="True">
-    </action>
 
 </object>
