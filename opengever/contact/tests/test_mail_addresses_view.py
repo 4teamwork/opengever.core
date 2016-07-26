@@ -2,8 +2,8 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.base.model import create_session
-from opengever.contact.browser.mail import IMailAddressesActions
 from opengever.contact.browser.mail import MailAddressesView
+from opengever.contact.browser.related_entity import IRelatedEntityCRUDActions
 from opengever.contact.models.mailaddress import MailAddress
 from opengever.testing import FunctionalTestCase
 from zExceptions import NotFound
@@ -22,13 +22,14 @@ class TestMailAddressesView(FunctionalTestCase):
                               .having(firstname=u'Peter', lastname=u'M\xfcller'))
 
     def test_verify_interface(self):
-        self.assertTrue(verifyClass(IMailAddressesActions, MailAddressesView))
+        self.assertTrue(
+            verifyClass(IRelatedEntityCRUDActions, MailAddressesView))
 
     @browsing
     def test_add_mailaddress(self, browser):
         browser.login().visit(
             self.contactfolder,
-            {'label': 'Private', 'mailaddress': 'max.muster@example.com'},
+            {'label': 'Private', 'address': 'max.muster@example.com'},
             view='person-1/mails/add')
 
         mailaddress = MailAddress.query.first()
@@ -37,7 +38,7 @@ class TestMailAddressesView(FunctionalTestCase):
         self.assertEqual('max.muster@example.com', mailaddress.address)
 
         self.assertDictContainsSubset({
-            'message': 'The email address was created successfully',
+            'message': 'The object was added successfully',
             'messageClass': 'info'},
             browser.json.get('messages')[0])
 
@@ -47,7 +48,7 @@ class TestMailAddressesView(FunctionalTestCase):
     def test_add_mailaddress_without_label(self, browser):
         browser.login().visit(
             self.contactfolder,
-            {'mailaddress': 'max.muster@example.com'},
+            {'address': 'max.muster@example.com'},
             view='person-1/mails/add')
 
         self.assertEquals(0, self.session.query(MailAddress).count())
@@ -75,7 +76,7 @@ class TestMailAddressesView(FunctionalTestCase):
     def test_add_mailaddress_without_a_valid_address(self, browser):
         browser.login().visit(
             self.contactfolder,
-            {'label': 'Private', 'mailaddress': 'bademail'},
+            {'label': 'Private', 'address': 'bademail'},
             view='person-1/mails/add')
 
         self.assertEquals(0, self.session.query(MailAddress).count())
@@ -114,13 +115,25 @@ class TestMailAddressesView(FunctionalTestCase):
 
         browser.login().visit(self.contactfolder, view='person-1/mails/list')
 
-        self.assertEqual(2, len(browser.json.get('mailaddresses')))
+        item1, item2 = browser.json.get('objects')
+        self.assertDictContainsSubset(
+            {u'contact_id': 1,
+             u'id': 1,
+             u'label': u'Private',
+             u'address': u'max.muster@example.com'},
+            item1)
+        self.assertDictContainsSubset(
+            {u'contact_id': 1,
+             u'id': 2,
+             u'label': u'Business',
+             u'address': u'max.muster@foo.com'},
+            item2)
 
     @browsing
     def test_list_no_mailaddresses(self, browser):
         browser.login().visit(self.contactfolder, view='person-1/mails/list')
 
-        self.assertEqual(0, len(browser.json.get('mailaddresses')))
+        self.assertEqual(0, len(browser.json.get('objects')))
 
     @browsing
     def test_delete_given_mailaddress(self, browser):
@@ -131,7 +144,7 @@ class TestMailAddressesView(FunctionalTestCase):
         browser.login().visit(self.contactfolder, view='person-1/mails/1/delete')
 
         self.assertDictContainsSubset({
-            'message': 'Mailaddress successfully deleted',
+            'message': 'Object successfully deleted',
             'messageClass': 'info'},
             browser.json.get('messages')[0])
 
@@ -149,7 +162,7 @@ class TestMailAddressesView(FunctionalTestCase):
 
         browser.login().visit(
             self.contactfolder,
-            {'label': 'Business', 'mailaddress': 'james.bond@example.com'},
+            {'label': 'Business', 'address': 'james.bond@example.com'},
             view='person-1/mails/1/update')
 
         mailaddress = MailAddress.query.first()
@@ -158,7 +171,7 @@ class TestMailAddressesView(FunctionalTestCase):
         self.assertEqual('james.bond@example.com', mailaddress.address)
 
         self.assertDictContainsSubset({
-            'message': 'Email address updated.',
+            'message': 'Object updated.',
             'messageClass': 'info'},
             browser.json.get('messages')[0])
 
@@ -190,7 +203,7 @@ class TestMailAddressesView(FunctionalTestCase):
 
         browser.login().visit(
             self.contactfolder,
-            {'mailaddress': 'james.bond@example.com'},
+            {'address': 'james.bond@example.com'},
             view='person-1/mails/1/update')
 
         mailaddress = MailAddress.query.first()
@@ -202,7 +215,7 @@ class TestMailAddressesView(FunctionalTestCase):
     def test_call_api_function_if_available(self, browser):
         browser.login().visit(self.contactfolder, view='person-1/mails/list')
 
-        self.assertEqual(['mailaddresses'], browser.json.keys())
+        self.assertEqual(['objects'], browser.json.keys())
 
     @browsing
     def test_raise_not_found_if_not_an_api_function_and_not_a_number(self, browser):

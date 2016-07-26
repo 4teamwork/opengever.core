@@ -28,7 +28,7 @@
         method: "POST",
         data: {
           label: mailLabel.val(),
-          mailaddress: mailAddress.val()
+          address: mailAddress.val()
         }
       }).done(function(data) {
         if (!data.proceed) { return; }
@@ -63,14 +63,14 @@
         method: "POST",
         data: {
           label: mailLabel.val(),
-          mailaddress: mailAddress.val(),
+          address: mailAddress.val(),
         }
       });
     };
 
     this.fetch = function() { return $.get($('#mails-list').data('fetch-url')); };
 
-    this.render = function(data) { return this.template({ mailaddresses: data.mailaddresses }); };
+    this.render = function(data) { return this.template({ mailaddresses: data.objects }); };
 
     this.events = [
       {
