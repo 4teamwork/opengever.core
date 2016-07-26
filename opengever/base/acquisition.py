@@ -51,7 +51,7 @@ def acquire_field_value(field, container):
     return NO_VALUE_FOUND
 
 
-def set_default_with_acquisition(field, default=None):
+def acquired_default_factory(field, default=None):
     """Returns a factory that produces a default by trying to acquire the
     field value from it's ancestors, if possible.
 
