@@ -69,4 +69,12 @@
       allowed_interface="opengever.contact.browser.mail.IMailAddressesActions"
       />
 
+  <browser:page
+      name="phonenumbers"
+      for="opengever.contact.interfaces.IPerson"
+      class=".phonenumbers.PhoneNumbersView"
+      permission="opengever.contact.EditPerson"
+      allowed_interface="opengever.contact.browser.related_entity.IRelatedEntityCRUDActions"
+      />
+
 </configure>

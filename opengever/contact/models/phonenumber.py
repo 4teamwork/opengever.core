@@ -1,5 +1,6 @@
 from opengever.base.model import Base
 from opengever.base.model import CONTENT_TITLE_LENGTH
+from opengever.base.model import create_session
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
@@ -19,3 +20,25 @@ class PhoneNumber(Base):
 
     label = Column(String(CONTENT_TITLE_LENGTH))
     phone_number = Column(String(CONTENT_TITLE_LENGTH))
+
+    def serialize(self):
+        return {
+            'id': self.phone_number_id,
+            'contact_id': self.contact_id,
+            'label': self.label,
+            'phone_number': self.phone_number,
+            'delete_url': self.get_delete_url(),
+            'update_url': self.get_update_url(),
+        }
+
+    def delete(self):
+        session = create_session()
+        session.delete(self)
+
+    def get_delete_url(self):
+        return self.contact.get_url(
+            'phonenumbers/{}/delete'.format(self.phone_number_id))
+
+    def get_update_url(self):
+        return self.contact.get_url(
+            'phonenumbers/{}/update'.format(self.phone_number_id))
