@@ -1,5 +1,6 @@
 from opengever.base.model import Base
 from opengever.base.model import CONTENT_TITLE_LENGTH
+from opengever.base.model import create_session
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
@@ -17,3 +18,23 @@ class URL(Base):
     contact = relationship("Contact", back_populates="urls")
     label = Column(String(CONTENT_TITLE_LENGTH))
     url = Column(String(CONTENT_TITLE_LENGTH))
+
+    def serialize(self):
+        return {
+            'id': self.url_id,
+            'contact_id': self.contact_id,
+            'label': self.label,
+            'url': self.url,
+            'delete_url': self.get_delete_url(),
+            'update_url': self.get_update_url(),
+        }
+
+    def delete(self):
+        session = create_session()
+        session.delete(self)
+
+    def get_delete_url(self):
+        return self.contact.get_url('urls/{}/delete'.format(self.url_id))
+
+    def get_update_url(self):
+        return self.contact.get_url('urls/{}/update'.format(self.url_id))

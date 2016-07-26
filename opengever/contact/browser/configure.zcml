@@ -77,4 +77,12 @@
       allowed_interface="opengever.contact.browser.related_entity.IRelatedEntityCRUDActions"
       />
 
+  <browser:page
+      name="urls"
+      for="opengever.contact.interfaces.IPerson"
+      class=".urls.URLsView"
+      permission="opengever.contact.EditPerson"
+      allowed_interface="opengever.contact.browser.related_entity.IRelatedEntityCRUDActions"
+      />
+
 </configure>
