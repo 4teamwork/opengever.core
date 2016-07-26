@@ -13,7 +13,9 @@ from zope import schema
 from zope.component import getUtility
 from zope.interface import alsoProvides
 from zope.interface import Interface
+from zope.interface import provider
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
+from zope.schema.interfaces import IContextAwareDefaultFactory
 
 
 class ILifeCycleMarker(Interface):
@@ -131,12 +133,14 @@ retention_period_vf = RestrictedVocabularyFactory(
     restricted=_is_retention_period_restricted)
 
 
-# Default value
-# XXX: Eventually rewrite this as a context aware defaultFactory
-form.default_value(field=ILifeCycle['retention_period'])(
-    set_default_with_acquisition(
+@provider(IContextAwareDefaultFactory)
+def retention_period_default(context):
+    default_factory = set_default_with_acquisition(
         field=ILifeCycle['retention_period'],
-        default=5))
+        default=5)
+    return default_factory(context)
+
+ILifeCycle['retention_period'].defaultFactory = retention_period_default
 
 
 # ---------- CUSTODY PERIOD -----------
