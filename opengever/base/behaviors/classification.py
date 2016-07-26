@@ -173,13 +173,14 @@ privacy_layer_vf = RestrictedVocabularyFactory(
     restricted=True)
 
 
-# XXX: Eventually rewrite this as a context aware defaultFactory
-form.default_value(field=IClassification['privacy_layer'])(
-    set_default_with_acquisition(
+@provider(IContextAwareDefaultFactory)
+def privacy_layer_default(context):
+    default_factory = set_default_with_acquisition(
         field=IClassification['privacy_layer'],
-        default=PRIVACY_LAYER_NO
-    )
-)
+        default=PRIVACY_LAYER_NO)
+    return default_factory(context)
+
+IClassification['privacy_layer'].defaultFactory = privacy_layer_default
 
 
 class Classification(metadata.MetadataBase):
