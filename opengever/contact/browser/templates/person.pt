@@ -79,14 +79,8 @@
         </tr>
       </table>
 
-      <div class="mail">
-        <h4>
-          <span i18n:translate="label_mail">Mail Addresses</span>
-          <a class="toggle-edit-email fa-pencil edit-link" />
-        </h4>
-        <ul id="mails-list" tal:attributes="data-fetch-url view/get_fetch_url">
-          <tal:content content="structure view/render_handlebars_email_template" />
-        </ul>
+      <div id="mail-form">
+        <tal:content content="structure view/render_handlebars_email_template" />
       </div>
 
       <h3 i18n:translate="label_organizations">Organizations:</h3>

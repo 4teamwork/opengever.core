@@ -26,29 +26,41 @@ TODO FOR THIS PR:
 
 EMAIL_TEMPLATE = '''
 <script id="emailTemplate" type="text/x-handlebars-template">
-  {{#each mailaddresses}}
-    <li>
-    {{#if ../editEnabled}}
-        <input class="update-label" type="text" value={{label}} />
-        <input class="update-address" type="text" value={{address}} />
-        <span class="button-group">
-            <a class="toggle-email-edit-form fa fa-pencil"></a>
-            <a data-delete-url="{{delete_url}}" class="remove-email fa fa-trash"></a>
-        </span>
-    {{else}}
-        <span class="label">{{label}}</span>
-        <span class="address">{{address}}</span>
+  <h4>
+    <span i18n:translate="label_mail">Mail Addresses</span>
+    {{#unless editEnabled}}
+        <a class="toggle-edit-email fa-pencil edit-link action" />
+    {{/unless}}
+    {{#if editEnabled}}
+        <a class="toggle-edit-email fa-check edit-link action" />
+        <a class="abort-edit-email fa-times abort-link action" />
     {{/if}}
-    </li>
-  {{/each}}
-  {{#if editEnabled}}
-    <li>
-      <input id="email-label" type="text" name="label" />
-      <input id="email-mailaddress" type="email" name="email" />x
-      <span class="button-group">
-        <a class="button add-email fa fa-plus" tal:attributes="data-create-url view/get_create_mail_url"></a>
-    </li>
-  {{/if}}
+  </h4>
+  <ul class="form-list" tal:attributes="data-fetch-url view/get_fetch_url">
+      {{#each mailaddresses}}
+        <li>
+        {{#if ../editEnabled}}
+            <input class="update-label" type="text" value={{label}} />
+            <input class="update-address" type="text" value={{address}} />
+            <span class="button-group">
+                <a data-delete-url="{{delete_url}}" class="remove-email fa fa-trash"></a>
+            </span>
+        {{else}}
+            <span class="label">{{label}}</span>
+            <span class="address">{{address}}</span>
+        {{/if}}
+        </li>
+      {{/each}}
+
+      {{#if editEnabled}}
+        <li>
+          <input id="email-label" type="text" name="label" />
+          <input id="email-mailaddress" type="email" name="email" />
+          <span class="button-group">
+            <a class="button add-email fa fa-plus" tal:attributes="data-create-url view/get_create_mail_url"></a>
+        </li>
+      {{/if}}
+   </ul>
 </script>
 '''
 

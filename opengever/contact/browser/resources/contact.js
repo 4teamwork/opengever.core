@@ -4,7 +4,7 @@
 
   function ContactController(options) {
 
-    global.Controller.call(this, $('#emailTemplate').html(), $('#mails-list'), options);
+    global.Controller.call(this, $('#emailTemplate').html(), $('#mail-form'), options);
 
     var self = this;
 
@@ -44,41 +44,15 @@
       return $.post(this.currentItem.data('delete-url'));
     };
 
-    this.showEmailEditForm = function(target) {
-      var row = target.closest(".email-record");
-
-      row.hide();
-      row.next(".email-record-edit-form").show();
-
-    };
-
-    this.hideEmailEditForm = function(target) {
-      var row = target.closest(".email-record-edit-form");
-
-      row.hide();
-      row.prev(".email-record").show();
-
-    };
-
     this.showEditForm = function(target) {
-      var container = target.parent('#mails-list');
-
-      target.removeClass('fa-pencil');
-      target.addClass('fa-check');
-
-      $('.editable', container).show();
-
       this.editEnabled = true;
     };
 
-    this.hideEditForm = function(target) {
-      var container = target.parent('#mails-list');
+    this.saveEditForm = function(target) {
+      this.editEnabled = false;
+    };
 
-      target.addClass('fa-pencil');
-      target.removeClass('fa-check');
-
-      $('.editable', container).hide();
-
+    this.abortEditForm = function(target) {
       this.editEnabled = false;
     };
 
@@ -117,24 +91,6 @@
       },
       {
         method: "click",
-        target: ".toggle-email-edit-form",
-        callback: this.showEmailEditForm
-      },
-      {
-        method: "click",
-        target: ".email-record-edit-form .cancel",
-        callback: this.hideEmailEditForm
-      },
-      {
-        method: "click",
-        target: ".email-record-edit-form .save",
-        callback: this.updateEmail,
-        options: {
-          update: true
-        }
-      },
-      {
-        method: "click",
         target: ".toggle-edit-email.fa-pencil",
         callback: this.showEditForm,
         options: {
@@ -144,7 +100,15 @@
       {
         method: "click",
         target: ".toggle-edit-email.fa-check",
-        callback: this.hideEditForm,
+        callback: this.saveEditForm,
+        options: {
+          update: true
+        }
+      },
+      {
+        method: "click",
+        target: ".abort-edit-email",
+        callback: this.abortEditForm,
         options: {
           update: true
         }
