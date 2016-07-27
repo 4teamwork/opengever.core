@@ -39,19 +39,25 @@
 
     this._removeRow = function(target) {
       this.removeRow(target);
-    }
+    };
 
     this.removeRow = function(target) {
-      target.parent('.editableRow').remove();
-    }
+      var row = target.parent('.editableRow');
+      row.data('action', 'remove');
+      row.hide();
+    };
 
     this._addRow = function(target) {
       this.addRow(target);
-    }
+    };
 
     this.addRow = function(target) {
-      $(this.new_row()).insertAfter($('.editableRow', target.parent()).last())
-    }
+
+      var row = $(this.new_row());
+      row.data('action', 'add');
+
+      target.siblings('.form-list').append(row);
+    };
 
     this.events = [
       {
@@ -95,6 +101,8 @@
 
   function MailContactController(options) {
 
+    Handlebars.registerPartial("email-edit-row", $("#email-edit-row").html());
+
     BaseContactController.call(
       this,
       $('#emailTemplate').html(),
@@ -104,39 +112,43 @@
 
     var self = this;
 
-    this.addEmail = function(target) {
-      var mailLabel = $('input#email-label');
-      var mailAddress = $('input#email-mailaddress');
-
-      return this.request(target.data('create-url'), {
-        method: "POST",
-        data: {
-          label: mailLabel.val(),
-          mailaddress: mailAddress.val()
-        }
-      }).done(function(data) {
-        if (!data.proceed) { return; }
-        mailLabel.val('');
-        mailAddress.val('');
-      });
-    };
-
     this.saveEditForm = function(target) {
-      this.editEnabled = false;
-    };
+      var rows = $('.editableRow', this.outlet);
+      var self = this;
 
-    this.updateEmail = function(target) {
-      var row = target.closest(".email-record-edit-form");
-      var updateUrl = target.data("update-url");
-      var mailAddress = $(".update-address", row);
-      var mailLabel = $(".update-label", row);
-      return this.request(updateUrl, {
-        method: "POST",
-        data: {
-          label: mailLabel.val(),
-          mailaddress: mailAddress.val(),
+      rows.each(function() {
+        var mailLabel = $('input[name="label"]', this);
+        var mailAddress = $('input[name="email"]', this);
+
+        var state = $(this).data('action');
+
+        if (state === 'update') {
+          self.request($(this).data('update-url'), {
+            method: "POST",
+            data: {
+              label: mailLabel.val(),
+              mailaddress: mailAddress.val(),
+            }
+          });
         }
+
+        else if (state === 'add') {
+          self.request(self.outlet.data('create-url'), {
+            method: "POST",
+            data: {
+              label: mailLabel.val(),
+              mailaddress: mailAddress.val()
+            }
+          });
+        }
+
+        else if (state === 'remove') {
+          return $.post($(this).data('delete-url'));
+        }
+
       });
+
+      this.editEnabled = false;
     };
 
     this.fetch = function() { return $.get(this.outlet.data('fetch-url')); };
@@ -151,11 +163,9 @@
   }
 
   $(function() {
-
-    Handlebars.registerPartial("form-toggler-partial", $("#form-toggler-partial").html());
-    Handlebars.registerPartial("email-edit-row", $("#email-edit-row").html());
-
     if ($(".portaltype-opengever-contact-person.template-view").length) {
+      Handlebars.registerPartial("form-toggler-partial", $("#form-toggler-partial").html());
+
       var mailContactController = new MailContactController();
     }
 

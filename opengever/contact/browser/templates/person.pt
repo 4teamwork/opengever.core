@@ -82,7 +82,8 @@
         </tr>
       </table>
 
-      <div id="mail-form" tal:attributes="data-fetch-url view/get_fetch_url">
+      <div id="mail-form" tal:attributes="data-fetch-url view/get_fetch_url;
+                                          data-create-url view/get_create_url">
         <tal:content content="structure view/render_handlebars_email_template" />
       </div>
 

@@ -7,6 +7,7 @@ from opengever.contact.models.mailaddress import MailAddress
 from plone import api
 from Products.Five.browser import BrowserView
 from zExceptions import NotFound
+from zope.i18n import translate
 from zope.interface import implements
 from zope.interface import Interface
 from zope.publisher.interfaces import IPublishTraverse

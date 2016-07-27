@@ -17,11 +17,9 @@ from zope.publisher.interfaces.browser import IBrowserView
 
 """
 TODO FOR THIS PR:
-
-- Move Footer to EMAIL_TEMPLATE to toggle with editEnabled var and not with css
-- remove editable class in plonetheme.teamraum after Footer is moved to EMAIL_TEMPLATE
-- add more stylings
-- remove implementation in person_edit.pt
+- refactoring js
+- handle validation
+- refresh after safe form does not work properly (needs a manual page refresh to see changes)
 """
 
 FORM_TOGGLER_PARTIAL = '''
@@ -38,10 +36,13 @@ FORM_TOGGLER_PARTIAL = '''
 
 EMAIL_TEMPLATE = '''
 <script id="email-edit-row" type="text/x-handlebars-template">
-  <li class="editableRow">
+  <li class="editableRow" data-id="{{id}}"
+                          data-action="update"
+                          data-update-url="{{update_url}}"
+                          data-delete-url="{{delete_url}}">
+
       <input type="text" name="label" value="{{label}}" />
       <input type="email" name="email" value="{{address}}" />
-      <input type="hidden" name="email" value="{{delete_url}}" />
       <a class="remove-row action fa fa-trash"></a>
   </li>
 </script>
@@ -52,12 +53,13 @@ EMAIL_TEMPLATE = '''
   </h4>
   <ul class="form-list">
       {{#each mailaddresses}}
-        <li class="editableRow">
         {{#if ../editEnabled}}
-            {{> email-edit-row}}
+          {{> email-edit-row}}
         {{else}}
+          <li>
             <span class="label">{{label}}</span>
             <span class="address">{{address}}</span>
+          </li>
         {{/if}}
         </li>
       {{/each}}
@@ -94,7 +96,7 @@ class PersonView(BrowserView):
     def get_fetch_url(self):
         return self.context.model.get_url('mails/list')
 
-    def get_create_mail_url(self):
+    def get_create_url(self):
         return self.context.model.get_url('mails/add')
 
     def render_handlebars_email_template(self):
