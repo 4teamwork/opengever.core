@@ -37,36 +37,34 @@ FORM_TOGGLER_PARTIAL = '''
 '''
 
 EMAIL_TEMPLATE = '''
+<script id="email-edit-row" type="text/x-handlebars-template">
+  <li class="editableRow">
+      <input type="text" name="label" value="{{label}}" />
+      <input type="email" name="email" value="{{address}}" />
+      <input type="hidden" name="email" value="{{delete_url}}" />
+      <a class="remove-row action fa fa-trash"></a>
+  </li>
+</script>
 <script id="emailTemplate" type="text/x-handlebars-template">
   <h4>
     <span i18n:translate="label_mail">Mail Addresses</span>
     {{> form-toggler-partial}}
   </h4>
-  <ul class="form-list" tal:attributes="data-fetch-url view/get_fetch_url">
+  <ul class="form-list">
       {{#each mailaddresses}}
-        <li>
+        <li class="editableRow">
         {{#if ../editEnabled}}
-            <input class="update-label" type="text" value={{label}} />
-            <input class="update-address" type="text" value={{address}} />
-            <a data-delete-url="{{delete_url}}" class="remove-email fa fa-trash"></a>
-            <span class="button-group">
-                <a data-delete-url="{{delete_url}}" class="remove-email fa fa-trash"></a>
-            </span>
+            {{> email-edit-row}}
         {{else}}
             <span class="label">{{label}}</span>
             <span class="address">{{address}}</span>
         {{/if}}
         </li>
       {{/each}}
-
-      {{#if editEnabled}}
-        <li>
-          <input id="email-label" type="text" name="label" />
-          <input id="email-mailaddress" type="email" name="email" />
-          <a tal:attributes="data-create-url view/get_create_mail_url" class="add-link fa-plus action"></a>
-        </li>
-      {{/if}}
    </ul>
+   {{#if editEnabled}}
+       <a class="add-row fa-plus action"></>
+   {{/if}}
 </script>
 '''
 

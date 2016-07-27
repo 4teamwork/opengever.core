@@ -2,29 +2,62 @@
 
   "use strict";
 
-  function BaseContactController(template, outlet, options) {
+  function BaseContactController(template, outlet, options, addFormTemplate) {
 
     global.Controller.call(this, template, outlet, options);
 
     var self = this;
 
+    this.new_row = Handlebars.compile(addFormTemplate);
+
     this.editEnabled = false;
+
+    // TODO: To be able to override the event-functions
+    // in a subcalss, I have do call it like below...
+    // is there no other way to do that?
+    this._showEditForm = function(target) {
+      this.showEditForm(target);
+    };
 
     this.showEditForm = function(target) {
       this.editEnabled = true;
+    };
+
+    this._abortEditForm = function(target) {
+      this.abortEditForm(target);
     };
 
     this.abortEditForm = function(target) {
       this.editEnabled = false;
     };
 
+    this._saveEditForm = function(target) {
+      this.saveEditForm(target);
+    };
+
     this.saveEditForm = $.noop;
+
+    this._removeRow = function(target) {
+      this.removeRow(target);
+    }
+
+    this.removeRow = function(target) {
+      target.parent('.editableRow').remove();
+    }
+
+    this._addRow = function(target) {
+      this.addRow(target);
+    }
+
+    this.addRow = function(target) {
+      $(this.new_row()).insertAfter($('.editableRow', target.parent()).last())
+    }
 
     this.events = [
       {
         method: "click",
         target: ".show-edit-form",
-        callback: this.showEditForm,
+        callback: this._showEditForm,
         options: {
           update: true
         }
@@ -32,7 +65,7 @@
       {
         method: "click",
         target: ".save-edit-form",
-        callback: this.saveEditForm,
+        callback: this._saveEditForm,
         options: {
           update: true
         }
@@ -40,32 +73,36 @@
       {
         method: "click",
         target: ".abort-edit-form",
-        callback: this.abortEditForm,
+        callback: this._abortEditForm,
         options: {
           update: true
         }
-      }
+      },
+      {
+        method: "click",
+        target: ".remove-row",
+        callback: this._removeRow,
+      },
+      {
+        method: "click",
+        target: ".add-row",
+        callback: this._addRow,
+      },
+
     ];
 
   }
 
   function MailContactController(options) {
 
-    BaseContactController.call(this, $('#emailTemplate').html(), $('#mail-form'), options);
+    BaseContactController.call(
+      this,
+      $('#emailTemplate').html(),
+      $('#mail-form'),
+      options,
+      $('#email-edit-row', this.outlet).html());
 
     var self = this;
-
-    var deleteDialog = $("#confirm_delete").overlay({
-      speed: 0,
-      closeSpeed: 0,
-      mask: { loadSpeed: 0 }
-    }).data("overlay");
-
-    this.openModal = function(target) {
-      this.currentItem = target;
-      deleteDialog.load(); };
-
-    this.closeModal = function() { deleteDialog.close(); };
 
     this.addEmail = function(target) {
       var mailLabel = $('input#email-label');
@@ -82,11 +119,6 @@
         mailLabel.val('');
         mailAddress.val('');
       });
-    };
-
-    this.removeEmail = function(target) {
-      this.closeModal();
-      return $.post(this.currentItem.data('delete-url'));
     };
 
     this.saveEditForm = function(target) {
@@ -107,39 +139,12 @@
       });
     };
 
-    this.fetch = function() { return $.get($('#mails-list').data('fetch-url')); };
+    this.fetch = function() { return $.get(this.outlet.data('fetch-url')); };
 
     this.render = function(data) {
       return this.template({ mailaddresses: data.mailaddresses, editEnabled: this.editEnabled }); };
 
-    this.events = this.events.concat([
-      {
-        method: "click",
-        target: ".add-email",
-        callback: this.addEmail,
-        options: {
-          update: true
-        }
-      },
-      {
-        method: "click",
-        target: ".remove-email",
-        callback: this.openModal,
-      },
-      {
-        method: "click",
-        target: "#confirm_delete .decline",
-        callback: this.closeModal
-      },
-      {
-        method: "click",
-        target: "#confirm_delete .confirm",
-        callback: this.removeEmail,
-        options: {
-          update: true
-        }
-      },
-    ]);
+    this.events = this.events.concat([]);
 
     this.init();
 
@@ -148,6 +153,7 @@
   $(function() {
 
     Handlebars.registerPartial("form-toggler-partial", $("#form-toggler-partial").html());
+    Handlebars.registerPartial("email-edit-row", $("#email-edit-row").html());
 
     if ($(".portaltype-opengever-contact-person.template-view").length) {
       var mailContactController = new MailContactController();

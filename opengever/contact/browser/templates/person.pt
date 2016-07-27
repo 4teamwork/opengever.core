@@ -65,7 +65,6 @@
       </table>
 
       <tal:content content="structure view/render_handlebars_form_toggler_partial" />
-      <tal:content content="structure view/render_handlebars_email_template" />
 
       <table>
         <tr>
@@ -83,7 +82,9 @@
         </tr>
       </table>
 
-      <div id="mail-form" />
+      <div id="mail-form" tal:attributes="data-fetch-url view/get_fetch_url">
+        <tal:content content="structure view/render_handlebars_email_template" />
+      </div>
 
       <h3 i18n:translate="label_organizations">Organizations:</h3>
       <ul class="organizations orgrole_listing">
