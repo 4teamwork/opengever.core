@@ -63,6 +63,10 @@
           </td>
         </tr>
       </table>
+
+      <tal:content content="structure view/render_handlebars_form_toggler_partial" />
+      <tal:content content="structure view/render_handlebars_email_template" />
+
       <table>
         <tr>
           <th i18n:translate="label_phone_numbers">Phone numbers</th>
@@ -79,9 +83,7 @@
         </tr>
       </table>
 
-      <div id="mail-form">
-        <tal:content content="structure view/render_handlebars_email_template" />
-      </div>
+      <div id="mail-form" />
 
       <h3 i18n:translate="label_organizations">Organizations:</h3>
       <ul class="organizations orgrole_listing">

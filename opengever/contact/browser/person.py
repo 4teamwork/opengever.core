@@ -24,17 +24,23 @@ TODO FOR THIS PR:
 - remove implementation in person_edit.pt
 """
 
+FORM_TOGGLER_PARTIAL = '''
+<script id="form-toggler-partial" type="text/x-handlebars-template">
+    {{#unless editEnabled}}
+        <a class="show-edit-form fa-pencil action" />
+    {{/unless}}
+    {{#if editEnabled}}
+        <a class="save-edit-form fa-check action" />
+        <a class="abort-edit-form fa-times action" />
+    {{/if}}
+</script>
+'''
+
 EMAIL_TEMPLATE = '''
 <script id="emailTemplate" type="text/x-handlebars-template">
   <h4>
     <span i18n:translate="label_mail">Mail Addresses</span>
-    {{#unless editEnabled}}
-        <a class="toggle-edit-email fa-pencil edit-link action" />
-    {{/unless}}
-    {{#if editEnabled}}
-        <a class="toggle-edit-email fa-check edit-link action" />
-        <a class="abort-edit-email fa-times abort-link action" />
-    {{/if}}
+    {{> form-toggler-partial}}
   </h4>
   <ul class="form-list" tal:attributes="data-fetch-url view/get_fetch_url">
       {{#each mailaddresses}}
@@ -42,6 +48,7 @@ EMAIL_TEMPLATE = '''
         {{#if ../editEnabled}}
             <input class="update-label" type="text" value={{label}} />
             <input class="update-address" type="text" value={{address}} />
+            <a data-delete-url="{{delete_url}}" class="remove-email fa fa-trash"></a>
             <span class="button-group">
                 <a data-delete-url="{{delete_url}}" class="remove-email fa fa-trash"></a>
             </span>
@@ -56,8 +63,7 @@ EMAIL_TEMPLATE = '''
         <li>
           <input id="email-label" type="text" name="label" />
           <input id="email-mailaddress" type="email" name="email" />
-          <span class="button-group">
-            <a class="button add-email fa fa-plus" tal:attributes="data-create-url view/get_create_mail_url"></a>
+          <a tal:attributes="data-create-url view/get_create_mail_url" class="add-link fa-plus action"></a>
         </li>
       {{/if}}
    </ul>
@@ -95,6 +101,9 @@ class PersonView(BrowserView):
 
     def render_handlebars_email_template(self):
         return EMAIL_TEMPLATE
+
+    def render_handlebars_form_toggler_partial(self):
+        return FORM_TOGGLER_PARTIAL
 
 
 class IPersonModel(form.Schema):

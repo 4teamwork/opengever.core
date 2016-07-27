@@ -2,9 +2,56 @@
 
   "use strict";
 
-  function ContactController(options) {
+  function BaseContactController(template, outlet, options) {
 
-    global.Controller.call(this, $('#emailTemplate').html(), $('#mail-form'), options);
+    global.Controller.call(this, template, outlet, options);
+
+    var self = this;
+
+    this.editEnabled = false;
+
+    this.showEditForm = function(target) {
+      this.editEnabled = true;
+    };
+
+    this.abortEditForm = function(target) {
+      this.editEnabled = false;
+    };
+
+    this.saveEditForm = $.noop;
+
+    this.events = [
+      {
+        method: "click",
+        target: ".show-edit-form",
+        callback: this.showEditForm,
+        options: {
+          update: true
+        }
+      },
+      {
+        method: "click",
+        target: ".save-edit-form",
+        callback: this.saveEditForm,
+        options: {
+          update: true
+        }
+      },
+      {
+        method: "click",
+        target: ".abort-edit-form",
+        callback: this.abortEditForm,
+        options: {
+          update: true
+        }
+      }
+    ];
+
+  }
+
+  function MailContactController(options) {
+
+    BaseContactController.call(this, $('#emailTemplate').html(), $('#mail-form'), options);
 
     var self = this;
 
@@ -13,8 +60,6 @@
       closeSpeed: 0,
       mask: { loadSpeed: 0 }
     }).data("overlay");
-
-    this.editEnabled = false;
 
     this.openModal = function(target) {
       this.currentItem = target;
@@ -44,15 +89,7 @@
       return $.post(this.currentItem.data('delete-url'));
     };
 
-    this.showEditForm = function(target) {
-      this.editEnabled = true;
-    };
-
     this.saveEditForm = function(target) {
-      this.editEnabled = false;
-    };
-
-    this.abortEditForm = function(target) {
       this.editEnabled = false;
     };
 
@@ -75,7 +112,7 @@
     this.render = function(data) {
       return this.template({ mailaddresses: data.mailaddresses, editEnabled: this.editEnabled }); };
 
-    this.events = [
+    this.events = this.events.concat([
       {
         method: "click",
         target: ".add-email",
@@ -91,30 +128,6 @@
       },
       {
         method: "click",
-        target: ".toggle-edit-email.fa-pencil",
-        callback: this.showEditForm,
-        options: {
-          update: true
-        }
-      },
-      {
-        method: "click",
-        target: ".toggle-edit-email.fa-check",
-        callback: this.saveEditForm,
-        options: {
-          update: true
-        }
-      },
-      {
-        method: "click",
-        target: ".abort-edit-email",
-        callback: this.abortEditForm,
-        options: {
-          update: true
-        }
-      },
-      {
-        method: "click",
         target: "#confirm_delete .decline",
         callback: this.closeModal
       },
@@ -126,7 +139,7 @@
           update: true
         }
       },
-    ];
+    ]);
 
     this.init();
 
@@ -134,8 +147,10 @@
 
   $(function() {
 
+    Handlebars.registerPartial("form-toggler-partial", $("#form-toggler-partial").html());
+
     if ($(".portaltype-opengever-contact-person.template-view").length) {
-      var contactController = new ContactController();
+      var mailContactController = new MailContactController();
     }
 
   });
