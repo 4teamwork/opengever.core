@@ -251,7 +251,7 @@ class TestRepositoryRootDefaults(TestDefaultsBase):
 
         self.assertDictEqual(expected, persisted_values)
 
-    def test_invoke_factory_on_portal(self):
+    def test_invoke_factory(self):
         with freeze(FROZEN_NOW):
             new_id = self.portal.invokeFactory(
                 'opengever.repository.repositoryroot',
@@ -296,32 +296,13 @@ class TestRepositoryFolderDefaults(TestDefaultsBase):
 
         self.assertDictEqual(expected, persisted_values)
 
-    def test_invoke_factory_on_portal(self):
+    def test_invoke_factory(self):
         with freeze(FROZEN_NOW):
             new_id = self.portal.invokeFactory(
                 'opengever.repository.repositoryfolder',
                 'repofolder',
                 title_de=DEFAULT_TITLE)
             repofolder = self.portal[new_id]
-
-        persisted_values = get_persisted_values_for_obj(repofolder)
-        expected = self.get_type_defaults()
-
-        self.assertDictEqual(expected, persisted_values)
-
-    def test_invoke_factory_on_dx_container(self):
-        outer_repofolder = createContentInContainer(
-            self.portal,
-            'opengever.repository.repositoryfolder',
-            title_de=u'Outer RepoFolder',
-        )
-
-        with freeze(FROZEN_NOW):
-            new_id = outer_repofolder.invokeFactory(
-                'opengever.repository.repositoryfolder',
-                'repofolder',
-                title_de=DEFAULT_TITLE)
-            repofolder = outer_repofolder[new_id]
 
         persisted_values = get_persisted_values_for_obj(repofolder)
         expected = self.get_type_defaults()
@@ -364,32 +345,13 @@ class TestDossierDefaults(TestDefaultsBase):
 
         self.assertDictEqual(expected, persisted_values)
 
-    def test_invoke_factory_on_portal(self):
+    def test_invoke_factory(self):
         with freeze(FROZEN_NOW):
             new_id = self.portal.invokeFactory(
                 'opengever.dossier.businesscasedossier',
                 'dossier-1',
                 title=DEFAULT_TITLE)
             dossier = self.portal[new_id]
-
-        persisted_values = get_persisted_values_for_obj(dossier)
-        expected = self.get_type_defaults()
-
-        self.assertDictEqual(expected, persisted_values)
-
-    def test_invoke_factory_on_dx_container(self):
-        outer_dossier = createContentInContainer(
-            self.portal,
-            'opengever.dossier.businesscasedossier',
-            title=u'Outer Dossier',
-        )
-
-        with freeze(FROZEN_NOW):
-            new_id = outer_dossier.invokeFactory(
-                'opengever.dossier.businesscasedossier',
-                'dossier-1',
-                title=DEFAULT_TITLE)
-            dossier = outer_dossier[new_id]
 
         persisted_values = get_persisted_values_for_obj(dossier)
         expected = self.get_type_defaults()
@@ -431,32 +393,13 @@ class TestDocumentDefaults(TestDefaultsBase):
 
         self.assertDictEqual(expected, persisted_values)
 
-    def test_invoke_factory_on_portal(self):
+    def test_invoke_factory(self):
         with freeze(FROZEN_NOW):
             new_id = self.portal.invokeFactory(
                 'opengever.document.document',
                 'document-1',
                 title=DEFAULT_TITLE)
             doc = self.portal[new_id]
-
-        persisted_values = get_persisted_values_for_obj(doc)
-        expected = self.get_type_defaults()
-
-        self.assertDictEqual(expected, persisted_values)
-
-    def test_invoke_factory_on_dx_container(self):
-        outer_dossier = createContentInContainer(
-            self.portal,
-            'opengever.dossier.businesscasedossier',
-            title=u'Outer Dossier',
-        )
-
-        with freeze(FROZEN_NOW):
-            new_id = outer_dossier.invokeFactory(
-                'opengever.document.document',
-                'document-1',
-                title=DEFAULT_TITLE)
-            doc = outer_dossier[new_id]
 
         persisted_values = get_persisted_values_for_obj(doc)
         expected = self.get_type_defaults()
@@ -530,7 +473,7 @@ class TestMailDefaults(TestDefaultsBase):
 
         self.assertDictEqual(expected, persisted_values)
 
-    def test_invoke_factory_on_portal(self):
+    def test_invoke_factory(self):
         with freeze(FROZEN_NOW):
             new_id = self.portal.invokeFactory(
                 'ftw.mail.mail',
@@ -538,26 +481,6 @@ class TestMailDefaults(TestDefaultsBase):
                 title=DEFAULT_TITLE,
                 message=self.sample_msg)
             mail = self.portal[new_id]
-
-        persisted_values = get_persisted_values_for_obj(mail)
-        expected = self.get_type_defaults()
-
-        self.assertDictEqual(expected, persisted_values)
-
-    def test_invoke_factory_on_dx_container(self):
-        outer_dossier = createContentInContainer(
-            self.portal,
-            'opengever.dossier.businesscasedossier',
-            title=u'Outer Dossier',
-        )
-
-        with freeze(FROZEN_NOW):
-            new_id = outer_dossier.invokeFactory(
-                'ftw.mail.mail',
-                'document-1',
-                title=DEFAULT_TITLE,
-                message=self.sample_msg)
-            mail = outer_dossier[new_id]
 
         persisted_values = get_persisted_values_for_obj(mail)
         expected = self.get_type_defaults()
@@ -606,7 +529,7 @@ class TestTaskDefaults(TestDefaultsBase):
 
         self.assertDictEqual(expected, persisted_values)
 
-    def test_invoke_factory_on_portal(self):
+    def test_invoke_factory(self):
         with freeze(FROZEN_NOW):
             new_id = self.portal.invokeFactory(
                 'opengever.task.task',
@@ -616,28 +539,6 @@ class TestTaskDefaults(TestDefaultsBase):
                 responsible=TEST_USER_ID,
                 responsible_client='client1')
             task = self.portal[new_id]
-
-        persisted_values = get_persisted_values_for_obj(task)
-        expected = self.get_type_defaults()
-
-        self.assertDictEqual(expected, persisted_values)
-
-    def test_invoke_factory_on_dx_container(self):
-        outer_dossier = createContentInContainer(
-            self.portal,
-            'opengever.dossier.businesscasedossier',
-            title=u'Outer Dossier',
-        )
-
-        with freeze(FROZEN_NOW):
-            new_id = outer_dossier.invokeFactory(
-                'opengever.task.task',
-                'task-1',
-                title=DEFAULT_TITLE,
-                issuer=TEST_USER_ID,
-                responsible=TEST_USER_ID,
-                responsible_client='client1')
-            task = outer_dossier[new_id]
 
         persisted_values = get_persisted_values_for_obj(task)
         expected = self.get_type_defaults()
@@ -687,7 +588,7 @@ class TestContactDefaults(TestDefaultsBase):
 
         self.assertDictEqual(expected, persisted_values)
 
-    def test_invoke_factory_on_dx_container(self):
+    def test_invoke_factory(self):
         with freeze(FROZEN_NOW):
             new_id = self.contactfolder.invokeFactory(
                 'opengever.contact.contact',
@@ -747,7 +648,7 @@ class TestCommitteeDefaults(TestDefaultsBase):
 
         self.assertDictEqual(expected, persisted_values)
 
-    def test_invoke_factory_on_dx_container(self):
+    def test_invoke_factory(self):
         with freeze(FROZEN_NOW):
             new_id = self.container.invokeFactory(
                 'opengever.meeting.committee',
