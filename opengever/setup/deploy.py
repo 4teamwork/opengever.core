@@ -9,6 +9,7 @@ from plone.registry.interfaces import IRegistry
 from Products.CMFPlone.factory import _DEFAULT_PROFILE
 from Products.CMFPlone.factory import addPloneSite
 from Products.CMFPlone.utils import getToolByName
+from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin
 from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin
 from sqlalchemy import MetaData
 from zope.component import getAdapter
@@ -111,6 +112,11 @@ class GeverDeployment(object):
         plugins.movePluginsUp(IPropertiesPlugin, ('ldap',))
         plugins.movePluginsUp(IPropertiesPlugin, ('ldap',))
         plugins.movePluginsUp(IPropertiesPlugin, ('ldap',))
+
+        if not self.is_development_setup:
+            # Deactivate 'Authentication' capability for LDAP plugin
+            # In production, auth will always be performed by CAS portal
+            plugins.deactivatePlugin(IAuthenticationPlugin, 'ldap')
 
     def sync_ogds(self):
         if not self.has_ogds_sync:
