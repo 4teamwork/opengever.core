@@ -8,7 +8,6 @@ from plone.app.testing import SITE_OWNER_NAME
 from plone.app.testing import SITE_OWNER_PASSWORD
 from plone.app.testing import TEST_USER_ID
 import transaction
-import unittest
 
 
 class TestContentCreation(FunctionalTestCase):
@@ -40,30 +39,6 @@ class TestContentCreation(FunctionalTestCase):
         lang_tool.supported_langs = ['fr-ch', 'de-ch']
         transaction.commit()
 
-    @unittest.skip("""This test fails because of a broken default value
-    lookup for the `privacy_layer` and `classification` fields after patching
-    DexterityContent.__getattr__:
-
-    Before the patch, the respective field wasn't even found because
-    DexterityContent.__getattr__ looked for it in *marker interfaces* instead
-    of schema interfaces. Because the field was never found, __getattr__ did
-    raise an AttributeError in the end, and triggered Acquisition. Using
-    acquisition, the attribute was looked up on parents (dossiers, repofolders)
-    which *did* have a value set, and that's why this ever worked at all.
-
-    With the patch, DexterityContent.__getattr__ now correctly takes schema
-    interfaces for behaviors into consideration when looking for the field.
-    The field is therefore found. But the `privacy_layer` and `classification`
-    fields currently do not have a Field.default(Factory) yet, but still use
-    z3c.form default value adapters. The way zope.schema's DefaultProperty is
-    implemented though, it always returns a value, `None` if no default is
-    set. This doesn't validate, and leads to errors during content creation if
-    those fields are omitted.
-
-    Once the default value adapters for those (and possibly other) fields
-    have been rewritten as defaultFactories, it should be possible to re-enable
-    this test without any changes.
-    """)
     def test_dossier_creation(self):
         payload = {
             u'@type': u'opengever.dossier.businesscasedossier',
@@ -82,8 +57,6 @@ class TestContentCreation(FunctionalTestCase):
         dossier = self.repofolder.restrictedTraverse('dossier-2')
         self.assertEqual(u'Sanierung B\xe4rengraben 2016', dossier.title)
 
-    @unittest.skip("""This test is failing for the same reason as
-    test_dossier_creation above""")
     def test_document_creation(self):
         payload = {
             u'@type': u'opengever.document.document',
