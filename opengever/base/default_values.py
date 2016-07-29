@@ -228,18 +228,18 @@ def set_default_values(content, container, values):
 
     for schema in iterSchemata(content):
         for name, field in getFieldsInOrder(schema):
+            if name in values:
+                # Only set default if no *actual* value was supplied as
+                # an argument to object construction
+                continue
+
+            if object_has_value_for_field(content, field):
+                # Only set default if a value hasn't been set on the
+                # object yet
+                continue
+
             default = determine_default_value(field, container)
             if default is not marker:
-                if name in values:
-                    # Only set default if no *actual* value was supplied as
-                    # an argument to object construction
-                    continue
-
-                if object_has_value_for_field(content, field):
-                    # Only set default if a value hasn't been set on the
-                    # object yet
-                    continue
-
                 if not is_aq_wrapped(content):
                     # Content isn't AQ wrapped - temporarily wrap it
                     content = content.__of__(container)
