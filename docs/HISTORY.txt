@@ -9,6 +9,7 @@ Changelog
 
   - Add label to the thumbnail link.
   - Link breadcrumbs in document tooltip.
+  - Improve tooltip position.
 
   [phgross]
 

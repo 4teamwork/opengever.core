@@ -6,9 +6,10 @@
     position: {
       target: "mouse", // Set tooltip position relative to the current mouse location
       viewport: $(window), // The tooltip must not leave the window
+      at: "bottom right",
+      my: "center left",
       adjust: {
         mouse: false, // Do not track the mouse
-        method: "shift", // Set the x,y coordinates when the tooltip should leave the viewport
         x: 20, // Slighly shift the location in x direction
         y: 20 // Slighly shift the location in y direction
       },
