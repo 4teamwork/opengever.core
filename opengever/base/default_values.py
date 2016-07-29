@@ -177,8 +177,11 @@ def object_has_value_for_field(obj, field):
 def set_default_values(content, container, values):
     """Set default values for all fields.
 
+    (If no default value is available, fall back to setting missing value.)
+
     This is necessary for content created programmatically since dexterity
-    only sets default values in a view.
+    doesn't persistenly set default values (or missing values) when creating
+    content programmatically.
 
     Parameters:
     - content:   The object in creation. Might not be AQ wrapped yet
@@ -188,7 +191,6 @@ def set_default_values(content, container, values):
                  invokeFactory or createContentInContainer. Will be taken
                  into consideration when determining whether defaults should
                  apply or not.
-
     """
     marker = object()
 
@@ -226,6 +228,8 @@ def set_default_values(content, container, values):
 
         return marker
 
+    # ---------------------------------------------------------------------
+
     for schema in iterSchemata(content):
         for name, field in getFieldsInOrder(schema):
             if name in values:
@@ -238,10 +242,14 @@ def set_default_values(content, container, values):
                 # object yet
                 continue
 
-            default = determine_default_value(field, container)
-            if default is not marker:
-                if not is_aq_wrapped(content):
-                    # Content isn't AQ wrapped - temporarily wrap it
-                    content = content.__of__(container)
+            if not is_aq_wrapped(content):
+                # Content isn't AQ wrapped - temporarily wrap it
+                content = content.__of__(container)
 
-                field.set(field.interface(content), default)
+            # Attempt to find a default value for the field
+            value = determine_default_value(field, container)
+            if value is marker:
+                # No default found, fall back to missing value
+                value = field.missing_value
+
+            field.set(field.interface(content), value)
