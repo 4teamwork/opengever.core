@@ -156,6 +156,14 @@ def get_persisted_values_for_obj(context):
     return values
 
 
+def is_aq_wrapped(obj):
+    try:
+        obj.aq_base
+        return True
+    except AttributeError:
+        return False
+
+
 def object_has_value_for_field(obj, field):
     """Determine whether a value is persisted on `obj` for `field`.
     """
@@ -231,5 +239,9 @@ def set_default_values(content, container, values):
                     # Only set default if a value hasn't been set on the
                     # object yet
                     continue
+
+                if not is_aq_wrapped(content):
+                    # Content isn't AQ wrapped - temporarily wrap it
+                    content = content.__of__(container)
 
                 field.set(field.interface(content), default)
