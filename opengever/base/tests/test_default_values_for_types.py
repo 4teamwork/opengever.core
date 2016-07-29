@@ -5,7 +5,6 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testing import freeze
 from opengever.base.default_values import get_persisted_values_for_obj
-from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.app.testing import setRoles
@@ -201,16 +200,6 @@ CONTACT_MISSING_VALUES = {
     'salutation': None,
     'url': None,
     'zip_code': None,
-}
-
-
-COMMITTEE_REQUIREDS = {}
-COMMITTEE_DEFAULTS = {}
-COMMITTEE_FORM_DEFAULTS = {}
-COMMITTEE_MISSING_VALUES = {
-    'agendaitem_list_template': None,
-    'excerpt_template': None,
-    'protocol_template': None,
 }
 
 
@@ -657,76 +646,5 @@ class TestContactDefaults(TestDefaultsBase):
 
         # XXX: Don't know why this happens
         expected['description'] = None
-
-        self.assertDictEqual(expected, persisted_values)
-
-
-class TestCommitteeDefaults(TestDefaultsBase):
-
-    requireds = COMMITTEE_REQUIREDS
-    type_defaults = COMMITTEE_DEFAULTS
-    form_defaults = COMMITTEE_FORM_DEFAULTS
-    missing_values = COMMITTEE_MISSING_VALUES
-
-    layer = OPENGEVER_FUNCTIONAL_MEETING_LAYER
-
-    def setUp(self):
-        super(TestCommitteeDefaults, self).setUp()
-        self.container = createContentInContainer(
-            self.portal,
-            'opengever.meeting.committeecontainer',
-            title=u'Meetings',
-        )
-        transaction.commit()
-
-    def test_create_content_in_container(self):
-        with freeze(FROZEN_NOW):
-            committee = createContentInContainer(
-                self.container,
-                'opengever.meeting.committee',
-                title=DEFAULT_TITLE)
-
-        persisted_values = get_persisted_values_for_obj(committee)
-        expected = self.get_type_defaults()
-
-        self.assertDictEqual(expected, persisted_values)
-
-    def test_invoke_factory(self):
-        with freeze(FROZEN_NOW):
-            new_id = self.container.invokeFactory(
-                'opengever.meeting.committee',
-                'committee-1',
-                title=DEFAULT_TITLE)
-            contact = self.container[new_id]
-
-        persisted_values = get_persisted_values_for_obj(contact)
-        expected = self.get_type_defaults()
-
-        self.assertDictEqual(expected, persisted_values)
-
-    @browsing
-    def test_z3c_add_form(self, browser):
-        repofolder = createContentInContainer(
-            self.portal,
-            'opengever.repository.repositoryfolder',
-            title='Repofolder')
-        transaction.commit()
-
-        with freeze(FROZEN_NOW):
-            browser.login().open(self.container)
-            factoriesmenu.add(u'Committee')
-            browser.fill({
-                u'Title': DEFAULT_TITLE,
-                u'Group': 'client1_users',
-                u'Linked repository folder ': repofolder})
-            browser.find('Continue').click()
-            browser.find('Save').click()
-            committee = browser.context
-
-        persisted_values = get_persisted_values_for_obj(committee)
-        expected = self.get_z3c_form_defaults()
-
-        linked_repo = persisted_values.pop('repository_folder')
-        self.assertEqual(linked_repo.to_object, repofolder)
 
         self.assertDictEqual(expected, persisted_values)
