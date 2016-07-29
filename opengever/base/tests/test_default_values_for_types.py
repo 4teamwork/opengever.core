@@ -20,12 +20,14 @@ FROZEN_NOW = datetime.now()
 FROZEN_TODAY = FROZEN_NOW.date()
 
 DEFAULT_TITLE = u'My title'
+DEFAULT_CLIENT = u'client1'
 
 OMITTED_FORM_FIELDS = ['creators']
 
-REPOROOT_DEFAULTS = {
+REPOROOT_REQUIREDS = {
     'title_de': DEFAULT_TITLE,
 }
+REPOROOT_DEFAULTS = {}
 REPOROOT_FORM_DEFAULTS = {}
 REPOROOT_MISSING_VALUES = {
     'valid_from': None,
@@ -34,6 +36,9 @@ REPOROOT_MISSING_VALUES = {
 }
 
 
+REPOFOLDER_REQUIREDS = {
+    'title_de': DEFAULT_TITLE,
+}
 REPOFOLDER_DEFAULTS = {
     'archival_value': u'unchecked',
     'classification': u'unprotected',
@@ -45,7 +50,6 @@ REPOFOLDER_DEFAULTS = {
     'public_trial_statement': '',
     'reference_number_prefix': u'1',
     'retention_period': 5,
-    'title_de': DEFAULT_TITLE,
 }
 REPOFOLDER_FORM_DEFAULTS = {}
 REPOFOLDER_MISSING_VALUES = {
@@ -62,6 +66,9 @@ REPOFOLDER_MISSING_VALUES = {
 }
 
 
+DOSSIER_REQUIREDS = {
+    'title': DEFAULT_TITLE,
+}
 DOSSIER_DEFAULTS = {
     'archival_value': u'unchecked',
     'classification': u'unprotected',
@@ -74,7 +81,6 @@ DOSSIER_DEFAULTS = {
     'relatedDossier': [],
     'retention_period': 5,
     'start': FROZEN_TODAY,
-    'title': DEFAULT_TITLE,
 }
 DOSSIER_FORM_DEFAULTS = {
     'responsible': TEST_USER_ID,
@@ -93,6 +99,9 @@ DOSSIER_MISSING_VALUES = {
 }
 
 
+DOCUMENT_REQUIREDS = {
+    'title': DEFAULT_TITLE,
+}
 DOCUMENT_DEFAULTS = {
     'classification': u'unprotected',
     'creators': (),
@@ -105,7 +114,6 @@ DOCUMENT_DEFAULTS = {
     'public_trial': u'unchecked',
     'public_trial_statement': '',
     'relatedItems': [],
-    'title': DEFAULT_TITLE,
 }
 DOCUMENT_FORM_DEFAULTS = {}
 DOCUMENT_MISSING_VALUES = {
@@ -118,6 +126,7 @@ DOCUMENT_MISSING_VALUES = {
 }
 
 
+MAIL_REQUIREDS = {}
 MAIL_DEFAULTS = {
     'classification': u'unprotected',
     'description': u'',
@@ -139,16 +148,20 @@ MAIL_MISSING_VALUES = {
 }
 
 
+TASK_REQUIREDS = {
+    'issuer': TEST_USER_ID,
+    'responsible': TEST_USER_ID,
+    'responsible_client': DEFAULT_CLIENT,
+    'task_type': u'information',
+    'title': DEFAULT_TITLE,
+}
 TASK_DEFAULTS = {
     'deadline': FROZEN_TODAY + timedelta(days=5),
-    'issuer': TEST_USER_ID,
     'relatedItems': [],
-    'responsible': TEST_USER_ID,
-    'responsible_client': u'client1',
-    'title': u'My title',
 }
 TASK_FORM_DEFAULTS = {
-    'responsible_client': u'client1',
+    'issuer': TEST_USER_ID,
+    'responsible_client': DEFAULT_CLIENT,
 }
 TASK_MISSING_VALUES = {
     'date_of_completion': None,
@@ -157,11 +170,14 @@ TASK_MISSING_VALUES = {
     'expectedCost': None,
     'expectedDuration': None,
     'expectedStartOfWork': None,
-    'task_type': u'information',
     'text': None,
 }
 
 
+CONTACT_REQUIREDS = {
+    'firstname': u'John',
+    'lastname': u'Doe',
+}
 CONTACT_DEFAULTS = {
     'description': u'',
 }
@@ -176,9 +192,7 @@ CONTACT_MISSING_VALUES = {
     'department': None,
     'email': None,
     'email2': None,
-    'firstname': u'John',
     'function': None,
-    'lastname': u'John',
     'phone_fax': None,
     'phone_home': None,
     'phone_mobile': None,
@@ -190,6 +204,7 @@ CONTACT_MISSING_VALUES = {
 }
 
 
+COMMITTEE_REQUIREDS = {}
 COMMITTEE_DEFAULTS = {}
 COMMITTEE_FORM_DEFAULTS = {}
 COMMITTEE_MISSING_VALUES = {
@@ -201,6 +216,7 @@ COMMITTEE_MISSING_VALUES = {
 
 class TestDefaultsBase(FunctionalTestCase):
 
+    requireds = None
     type_defaults = None
     form_defaults = None
     missing_values = None
@@ -219,13 +235,17 @@ class TestDefaultsBase(FunctionalTestCase):
         transaction.commit()
 
     def get_type_defaults(self):
-        return self.type_defaults
+        defaults = {}
+        defaults.update(self.type_defaults)
+        defaults.update(self.requireds)
+        return defaults
 
     def get_z3c_form_defaults(self):
         defaults = {}
+        defaults.update(self.missing_values)
         defaults.update(self.type_defaults)
         defaults.update(self.form_defaults)
-        defaults.update(self.missing_values)
+        defaults.update(self.requireds)
 
         for key in OMITTED_FORM_FIELDS:
             defaults.pop(key, None)
@@ -235,6 +255,7 @@ class TestDefaultsBase(FunctionalTestCase):
 
 class TestRepositoryRootDefaults(TestDefaultsBase):
 
+    requireds = REPOROOT_REQUIREDS
     type_defaults = REPOROOT_DEFAULTS
     form_defaults = REPOROOT_FORM_DEFAULTS
     missing_values = REPOROOT_MISSING_VALUES
@@ -244,7 +265,8 @@ class TestRepositoryRootDefaults(TestDefaultsBase):
             reporoot = createContentInContainer(
                 self.portal,
                 'opengever.repository.repositoryroot',
-                title_de=DEFAULT_TITLE)
+                title_de=REPOROOT_REQUIREDS['title_de'],
+            )
 
         persisted_values = get_persisted_values_for_obj(reporoot)
         expected = self.get_type_defaults()
@@ -256,7 +278,8 @@ class TestRepositoryRootDefaults(TestDefaultsBase):
             new_id = self.portal.invokeFactory(
                 'opengever.repository.repositoryroot',
                 'reporoot',
-                title_de=DEFAULT_TITLE)
+                title_de=REPOROOT_REQUIREDS['title_de'],
+            )
             reporoot = self.portal[new_id]
 
         persisted_values = get_persisted_values_for_obj(reporoot)
@@ -269,7 +292,7 @@ class TestRepositoryRootDefaults(TestDefaultsBase):
         with freeze(FROZEN_NOW):
             browser.login().open()
             factoriesmenu.add(u'RepositoryRoot')
-            browser.fill({u'Title': DEFAULT_TITLE}).save()
+            browser.fill({u'Title': REPOROOT_REQUIREDS['title_de']}).save()
             reporoot = browser.context
 
         persisted_values = get_persisted_values_for_obj(reporoot)
@@ -280,6 +303,7 @@ class TestRepositoryRootDefaults(TestDefaultsBase):
 
 class TestRepositoryFolderDefaults(TestDefaultsBase):
 
+    requireds = REPOFOLDER_REQUIREDS
     type_defaults = REPOFOLDER_DEFAULTS
     form_defaults = REPOFOLDER_FORM_DEFAULTS
     missing_values = REPOFOLDER_MISSING_VALUES
@@ -289,7 +313,8 @@ class TestRepositoryFolderDefaults(TestDefaultsBase):
             repofolder = createContentInContainer(
                 self.portal,
                 'opengever.repository.repositoryfolder',
-                title_de=DEFAULT_TITLE)
+                title_de=REPOFOLDER_REQUIREDS['title_de'],
+            )
 
         persisted_values = get_persisted_values_for_obj(repofolder)
         expected = self.get_type_defaults()
@@ -301,7 +326,8 @@ class TestRepositoryFolderDefaults(TestDefaultsBase):
             new_id = self.portal.invokeFactory(
                 'opengever.repository.repositoryfolder',
                 'repofolder',
-                title_de=DEFAULT_TITLE)
+                title_de=REPOFOLDER_REQUIREDS['title_de'],
+            )
             repofolder = self.portal[new_id]
 
         persisted_values = get_persisted_values_for_obj(repofolder)
@@ -314,7 +340,7 @@ class TestRepositoryFolderDefaults(TestDefaultsBase):
         with freeze(FROZEN_NOW):
             browser.login().open()
             factoriesmenu.add(u'RepositoryFolder')
-            browser.fill({u'Title': DEFAULT_TITLE}).save()
+            browser.fill({u'Title': REPOFOLDER_REQUIREDS['title_de']}).save()
             repofolder = browser.context
 
         persisted_values = get_persisted_values_for_obj(repofolder)
@@ -329,6 +355,7 @@ class TestRepositoryFolderDefaults(TestDefaultsBase):
 
 class TestDossierDefaults(TestDefaultsBase):
 
+    requireds = DOSSIER_REQUIREDS
     type_defaults = DOSSIER_DEFAULTS
     form_defaults = DOSSIER_FORM_DEFAULTS
     missing_values = DOSSIER_MISSING_VALUES
@@ -338,7 +365,8 @@ class TestDossierDefaults(TestDefaultsBase):
             dossier = createContentInContainer(
                 self.portal,
                 'opengever.dossier.businesscasedossier',
-                title=DEFAULT_TITLE)
+                title=DOSSIER_REQUIREDS['title'],
+            )
 
         persisted_values = get_persisted_values_for_obj(dossier)
         expected = self.get_type_defaults()
@@ -350,7 +378,8 @@ class TestDossierDefaults(TestDefaultsBase):
             new_id = self.portal.invokeFactory(
                 'opengever.dossier.businesscasedossier',
                 'dossier-1',
-                title=DEFAULT_TITLE)
+                title=DOSSIER_REQUIREDS['title'],
+            )
             dossier = self.portal[new_id]
 
         persisted_values = get_persisted_values_for_obj(dossier)
@@ -363,7 +392,7 @@ class TestDossierDefaults(TestDefaultsBase):
         with freeze(FROZEN_NOW):
             browser.login().open()
             factoriesmenu.add(u'Business Case Dossier')
-            browser.fill({u'Title': DEFAULT_TITLE}).save()
+            browser.fill({u'Title': DOSSIER_REQUIREDS['title']}).save()
             dossier = browser.context
 
         persisted_values = get_persisted_values_for_obj(dossier)
@@ -377,6 +406,7 @@ class TestDossierDefaults(TestDefaultsBase):
 
 class TestDocumentDefaults(TestDefaultsBase):
 
+    requireds = DOCUMENT_REQUIREDS
     type_defaults = DOCUMENT_DEFAULTS
     form_defaults = DOCUMENT_FORM_DEFAULTS
     missing_values = DOCUMENT_MISSING_VALUES
@@ -386,7 +416,8 @@ class TestDocumentDefaults(TestDefaultsBase):
             doc = createContentInContainer(
                 self.portal,
                 'opengever.document.document',
-                title=DEFAULT_TITLE)
+                title=DOCUMENT_REQUIREDS['title'],
+            )
 
         persisted_values = get_persisted_values_for_obj(doc)
         expected = self.get_type_defaults()
@@ -398,7 +429,8 @@ class TestDocumentDefaults(TestDefaultsBase):
             new_id = self.portal.invokeFactory(
                 'opengever.document.document',
                 'document-1',
-                title=DEFAULT_TITLE)
+                title=DOCUMENT_REQUIREDS['title'],
+            )
             doc = self.portal[new_id]
 
         persisted_values = get_persisted_values_for_obj(doc)
@@ -420,7 +452,7 @@ class TestDocumentDefaults(TestDefaultsBase):
         with freeze(FROZEN_NOW):
             browser.login().open(outer_dossier)
             factoriesmenu.add(u'Document')
-            browser.fill({u'Title': DEFAULT_TITLE}).save()
+            browser.fill({u'Title': DOCUMENT_REQUIREDS['title']}).save()
             doc = outer_dossier['document-1']
 
         persisted_values = get_persisted_values_for_obj(doc)
@@ -435,6 +467,7 @@ class TestDocumentDefaults(TestDefaultsBase):
 
 class TestMailDefaults(TestDefaultsBase):
 
+    requireds = MAIL_REQUIREDS
     type_defaults = MAIL_DEFAULTS
     form_defaults = MAIL_FORM_DEFAULTS
     missing_values = MAIL_MISSING_VALUES
@@ -465,7 +498,6 @@ class TestMailDefaults(TestDefaultsBase):
             mail = createContentInContainer(
                 self.portal,
                 'ftw.mail.mail',
-                title=DEFAULT_TITLE,
                 message=self.sample_msg)
 
         persisted_values = get_persisted_values_for_obj(mail)
@@ -478,7 +510,6 @@ class TestMailDefaults(TestDefaultsBase):
             new_id = self.portal.invokeFactory(
                 'ftw.mail.mail',
                 'mail',
-                title=DEFAULT_TITLE,
                 message=self.sample_msg)
             mail = self.portal[new_id]
 
@@ -493,7 +524,6 @@ class TestMailDefaults(TestDefaultsBase):
             # Mail is not addable via factories menu
             browser.login().open(view='++add++ftw.mail.mail')
             browser.fill({
-                u'Title': DEFAULT_TITLE,
                 u'form.widgets.message': (TestMailDefaults.SAMPLE_MAIL,
                                           'msg.eml', 'message/rfc822')}).save()
             mail = browser.context
@@ -510,6 +540,7 @@ class TestMailDefaults(TestDefaultsBase):
 
 class TestTaskDefaults(TestDefaultsBase):
 
+    requireds = TASK_REQUIREDS
     type_defaults = TASK_DEFAULTS
     form_defaults = TASK_FORM_DEFAULTS
     missing_values = TASK_MISSING_VALUES
@@ -519,10 +550,12 @@ class TestTaskDefaults(TestDefaultsBase):
             task = createContentInContainer(
                 self.portal,
                 'opengever.task.task',
-                title=DEFAULT_TITLE,
-                issuer=TEST_USER_ID,
-                responsible=TEST_USER_ID,
-                responsible_client='client1')
+                title=TASK_REQUIREDS['title'],
+                issuer=TASK_REQUIREDS['issuer'],
+                task_type=TASK_REQUIREDS['task_type'],
+                responsible=TASK_REQUIREDS['responsible'],
+                responsible_client=TASK_REQUIREDS['responsible_client'],
+            )
 
         persisted_values = get_persisted_values_for_obj(task)
         expected = self.get_type_defaults()
@@ -534,10 +567,12 @@ class TestTaskDefaults(TestDefaultsBase):
             new_id = self.portal.invokeFactory(
                 'opengever.task.task',
                 'task-1',
-                title=DEFAULT_TITLE,
-                issuer=TEST_USER_ID,
-                responsible=TEST_USER_ID,
-                responsible_client='client1')
+                title=TASK_REQUIREDS['title'],
+                issuer=TASK_REQUIREDS['issuer'],
+                task_type=TASK_REQUIREDS['task_type'],
+                responsible=TASK_REQUIREDS['responsible'],
+                responsible_client=TASK_REQUIREDS['responsible_client'],
+            )
             task = self.portal[new_id]
 
         persisted_values = get_persisted_values_for_obj(task)
@@ -551,9 +586,9 @@ class TestTaskDefaults(TestDefaultsBase):
             browser.login().open()
             factoriesmenu.add(u'Task')
             browser.fill({
-                u'Title': DEFAULT_TITLE,
-                u'Responsible': TEST_USER_ID,
-                u'Task Type': 'information'}).save()
+                u'Title': TASK_REQUIREDS['title'],
+                u'Responsible': TASK_REQUIREDS['responsible'],
+                u'Task Type': TASK_REQUIREDS['task_type']}).save()
             task = self.portal['task-1']
 
         persisted_values = get_persisted_values_for_obj(task)
@@ -564,6 +599,7 @@ class TestTaskDefaults(TestDefaultsBase):
 
 class TestContactDefaults(TestDefaultsBase):
 
+    requireds = CONTACT_REQUIREDS
     type_defaults = CONTACT_DEFAULTS
     form_defaults = CONTACT_FORM_DEFAULTS
     missing_values = CONTACT_MISSING_VALUES
@@ -581,7 +617,10 @@ class TestContactDefaults(TestDefaultsBase):
         with freeze(FROZEN_NOW):
             contact = createContentInContainer(
                 self.contactfolder,
-                'opengever.contact.contact')
+                'opengever.contact.contact',
+                firstname=CONTACT_REQUIREDS['firstname'],
+                lastname=CONTACT_REQUIREDS['lastname'],
+            )
 
         persisted_values = get_persisted_values_for_obj(contact)
         expected = self.get_type_defaults()
@@ -592,7 +631,10 @@ class TestContactDefaults(TestDefaultsBase):
         with freeze(FROZEN_NOW):
             new_id = self.contactfolder.invokeFactory(
                 'opengever.contact.contact',
-                'john-doe')
+                'john-doe',
+                firstname=CONTACT_REQUIREDS['firstname'],
+                lastname=CONTACT_REQUIREDS['lastname'],
+            )
             contact = self.contactfolder[new_id]
 
         persisted_values = get_persisted_values_for_obj(contact)
@@ -606,8 +648,8 @@ class TestContactDefaults(TestDefaultsBase):
             browser.login().open(self.contactfolder)
             factoriesmenu.add(u'Contact')
             browser.fill({
-                u'Firstname': u'John',
-                u'Lastname': u'John'}).save()
+                u'Firstname': CONTACT_REQUIREDS['firstname'],
+                u'Lastname': CONTACT_REQUIREDS['lastname']}).save()
             contact = browser.context
 
         persisted_values = get_persisted_values_for_obj(contact)
@@ -621,6 +663,7 @@ class TestContactDefaults(TestDefaultsBase):
 
 class TestCommitteeDefaults(TestDefaultsBase):
 
+    requireds = COMMITTEE_REQUIREDS
     type_defaults = COMMITTEE_DEFAULTS
     form_defaults = COMMITTEE_FORM_DEFAULTS
     missing_values = COMMITTEE_MISSING_VALUES
