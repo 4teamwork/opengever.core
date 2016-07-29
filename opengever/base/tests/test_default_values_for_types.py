@@ -27,7 +27,7 @@ REPOROOT_DEFAULTS = {
     'title_de': DEFAULT_TITLE,
 }
 REPOROOT_FORM_DEFAULTS = {}
-REPOROOT_FORM_INITVALUES = {
+REPOROOT_MISSING_VALUES = {
     'valid_from': None,
     'valid_until': None,
     'version': None,
@@ -48,7 +48,7 @@ REPOFOLDER_DEFAULTS = {
     'title_de': DEFAULT_TITLE,
 }
 REPOFOLDER_FORM_DEFAULTS = {}
-REPOFOLDER_FORM_INITVALUES = {
+REPOFOLDER_MISSING_VALUES = {
     'addable_dossier_types': [],
     'archival_value_annotation': None,
     'date_of_cassation': None,
@@ -79,7 +79,7 @@ DOSSIER_DEFAULTS = {
 DOSSIER_FORM_DEFAULTS = {
     'responsible': TEST_USER_ID,
 }
-DOSSIER_FORM_INITVALUES = {
+DOSSIER_MISSING_VALUES = {
     'archival_value_annotation': None,
     'comments': None,
     'container_location': None,
@@ -108,7 +108,7 @@ DOCUMENT_DEFAULTS = {
     'title': DEFAULT_TITLE,
 }
 DOCUMENT_FORM_DEFAULTS = {}
-DOCUMENT_FORM_INITVALUES = {
+DOCUMENT_MISSING_VALUES = {
     'delivery_date': None,
     'document_author': None,
     'document_type': None,
@@ -132,7 +132,7 @@ MAIL_DEFAULTS = {
     'receipt_date': FROZEN_TODAY,
 }
 MAIL_FORM_DEFAULTS = {}
-MAIL_FORM_INITVALUES = {
+MAIL_MISSING_VALUES = {
     'delivery_date': None,
     'document_type': None,
     'foreign_reference': None,
@@ -150,7 +150,7 @@ TASK_DEFAULTS = {
 TASK_FORM_DEFAULTS = {
     'responsible_client': u'client1',
 }
-TASK_FORM_INITVALUES = {
+TASK_MISSING_VALUES = {
     'date_of_completion': None,
     'effectiveCost': None,
     'effectiveDuration': None,
@@ -166,7 +166,7 @@ CONTACT_DEFAULTS = {
     'description': u'',
 }
 CONTACT_FORM_DEFAULTS = {}
-CONTACT_FORM_INITVALUES = {
+CONTACT_MISSING_VALUES = {
     'academic_title': None,
     'address1': None,
     'address2': None,
@@ -192,7 +192,7 @@ CONTACT_FORM_INITVALUES = {
 
 COMMITTEE_DEFAULTS = {}
 COMMITTEE_FORM_DEFAULTS = {}
-COMMITTEE_FORM_INITVALUES = {
+COMMITTEE_MISSING_VALUES = {
     'agendaitem_list_template': None,
     'excerpt_template': None,
     'protocol_template': None,
@@ -203,7 +203,7 @@ class TestDefaultsBase(FunctionalTestCase):
 
     type_defaults = None
     form_defaults = None
-    form_initvalues = None
+    missing_values = None
 
     def setUp(self):
         super(TestDefaultsBase, self).setUp()
@@ -225,7 +225,7 @@ class TestDefaultsBase(FunctionalTestCase):
         defaults = {}
         defaults.update(self.type_defaults)
         defaults.update(self.form_defaults)
-        defaults.update(self.form_initvalues)
+        defaults.update(self.missing_values)
 
         for key in OMITTED_FORM_FIELDS:
             defaults.pop(key, None)
@@ -237,7 +237,7 @@ class TestRepositoryRootDefaults(TestDefaultsBase):
 
     type_defaults = REPOROOT_DEFAULTS
     form_defaults = REPOROOT_FORM_DEFAULTS
-    form_initvalues = REPOROOT_FORM_INITVALUES
+    missing_values = REPOROOT_MISSING_VALUES
 
     def test_create_content_in_container(self):
         with freeze(FROZEN_NOW):
@@ -282,7 +282,7 @@ class TestRepositoryFolderDefaults(TestDefaultsBase):
 
     type_defaults = REPOFOLDER_DEFAULTS
     form_defaults = REPOFOLDER_FORM_DEFAULTS
-    form_initvalues = REPOFOLDER_FORM_INITVALUES
+    missing_values = REPOFOLDER_MISSING_VALUES
 
     def test_create_content_in_container(self):
         with freeze(FROZEN_NOW):
@@ -331,7 +331,7 @@ class TestDossierDefaults(TestDefaultsBase):
 
     type_defaults = DOSSIER_DEFAULTS
     form_defaults = DOSSIER_FORM_DEFAULTS
-    form_initvalues = DOSSIER_FORM_INITVALUES
+    missing_values = DOSSIER_MISSING_VALUES
 
     def test_create_content_in_container(self):
         with freeze(FROZEN_NOW):
@@ -379,7 +379,7 @@ class TestDocumentDefaults(TestDefaultsBase):
 
     type_defaults = DOCUMENT_DEFAULTS
     form_defaults = DOCUMENT_FORM_DEFAULTS
-    form_initvalues = DOCUMENT_FORM_INITVALUES
+    missing_values = DOCUMENT_MISSING_VALUES
 
     def test_create_content_in_container(self):
         with freeze(FROZEN_NOW):
@@ -437,7 +437,7 @@ class TestMailDefaults(TestDefaultsBase):
 
     type_defaults = MAIL_DEFAULTS
     form_defaults = MAIL_FORM_DEFAULTS
-    form_initvalues = MAIL_FORM_INITVALUES
+    missing_values = MAIL_MISSING_VALUES
 
     SAMPLE_MAIL = textwrap.dedent("""\
         MIME-Version: 1.0
@@ -512,7 +512,7 @@ class TestTaskDefaults(TestDefaultsBase):
 
     type_defaults = TASK_DEFAULTS
     form_defaults = TASK_FORM_DEFAULTS
-    form_initvalues = TASK_FORM_INITVALUES
+    missing_values = TASK_MISSING_VALUES
 
     def test_create_content_in_container(self):
         with freeze(FROZEN_NOW):
@@ -566,7 +566,7 @@ class TestContactDefaults(TestDefaultsBase):
 
     type_defaults = CONTACT_DEFAULTS
     form_defaults = CONTACT_FORM_DEFAULTS
-    form_initvalues = CONTACT_FORM_INITVALUES
+    missing_values = CONTACT_MISSING_VALUES
 
     def setUp(self):
         super(TestContactDefaults, self).setUp()
@@ -623,7 +623,7 @@ class TestCommitteeDefaults(TestDefaultsBase):
 
     type_defaults = COMMITTEE_DEFAULTS
     form_defaults = COMMITTEE_FORM_DEFAULTS
-    form_initvalues = COMMITTEE_FORM_INITVALUES
+    missing_values = COMMITTEE_MISSING_VALUES
 
     layer = OPENGEVER_FUNCTIONAL_MEETING_LAYER
 
