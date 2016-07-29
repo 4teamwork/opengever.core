@@ -5,6 +5,9 @@ Changelog
 4.10.0 (unreleased)
 -------------------
 
+- Link breadcrumbs in document tooltip.
+  [phgross]
+
 - Link dossier title in bumblebee overlay.
   [phgross]
 
