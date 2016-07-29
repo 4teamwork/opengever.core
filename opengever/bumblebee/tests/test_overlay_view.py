@@ -159,6 +159,19 @@ class TestBumblebeeOverlayDocument(FunctionalTestCase):
         self.assertEqual(document.absolute_url(), title.get("href"))
 
     @browsing
+    def test_dossier_title_is_linked_to_the_dossier(self, browser):
+        dossier = create(Builder('dossier').titled(u'Dossier A'))
+        document = create(Builder('document')
+                          .titled(u"Anfrage Meier")
+                          .within(dossier))
+
+        browser.login().visit(document, view="bumblebee-overlay-document")
+
+        dossier_link = browser.css('.metadata .value a')[1]
+        self.assertEqual('Dossier A', dossier_link.text)
+        self.assertEqual(dossier.absolute_url(), dossier_link.get('href'))
+
+    @browsing
     def test_actions_with_file(self, browser):
         dossier = create(Builder('dossier'))
         document = create(Builder('document')

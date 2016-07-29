@@ -5,6 +5,9 @@ Changelog
 4.10.0 (unreleased)
 -------------------
 
+- Link dossier title in bumblebee overlay.
+  [phgross]
+
 - Add new tabs `Persons` and `Organizations` to the contactfolder tabbedview.
   [phgross]
 

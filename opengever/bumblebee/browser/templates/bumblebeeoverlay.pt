@@ -20,7 +20,9 @@
       </tr>
       <tr tal:define="dossier view/overlay/get_containing_dossier" tal:condition="nocall: dossier">
         <td class="title" i18n:translate="">Dossier:</td>
-        <td class="value" tal:attributes="href dossier/absolute_url" tal:content="dossier/Title"></td>
+        <td class="value">
+          <a tal:attributes="href dossier/absolute_url" tal:content="dossier/Title" />
+        </td>
       </tr>
       <tr>
         <td class="title" i18n:translate="">Reference number:</td>
