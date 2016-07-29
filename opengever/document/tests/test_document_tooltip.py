@@ -20,7 +20,7 @@ class TestDocumentTooltip(FunctionalTestCase):
         pdfconverter.PDFCONVERTER_AVAILABLE = self.converter_avaialable
 
     @browsing
-    def test_tooltip_contains_breadcrumb(self, browser):
+    def test_tooltip_contains_linked_breadcrumb(self, browser):
         root = create(Builder('repository_root').titled(u'Ordnungssystem'))
         repo = create(Builder('repository')
                       .within(root)
@@ -37,6 +37,10 @@ class TestDocumentTooltip(FunctionalTestCase):
         self.assertEquals(
             ['Ordnungssystem', '1. Ablage 1', 'Hans Meier', 'Anfrage Meier'],
             browser.css('.tooltip-breadcrumb li').text)
+
+        self.assertEquals(
+            [obj.absolute_url() for obj in [root, repo, dossier, document]],
+            [link.get('href') for link in browser.css('.tooltip-breadcrumb li a')])
 
     @browsing
     def test_tooltip_actions(self, browser):
@@ -151,3 +155,7 @@ class TestDocumentLinkWidgetWithActivatedBumblebee(FunctionalTestCase):
             self.assertEquals(
                 thumbnail_url,
                 browser.css('.preview img').first.get('src'))
+
+            self.assertEquals(
+                ['Open document preview'],
+                browser.css('.preview span').text)

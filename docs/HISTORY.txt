@@ -5,6 +5,17 @@ Changelog
 4.10.0 (unreleased)
 -------------------
 
+- Document Tooltip:
+
+  - Add label to the thumbnail link.
+  - Link breadcrumbs in document tooltip.
+  - Improve tooltip position.
+
+  [phgross]
+
+- Link dossier title in bumblebee overlay.
+  [phgross]
+
 - Add new tabs `Persons` and `Organizations` to the contactfolder tabbedview.
   [phgross]
 
