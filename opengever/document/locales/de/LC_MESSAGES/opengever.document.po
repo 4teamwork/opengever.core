@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2016-07-21 14:08+0000\n"
+"POT-Creation-Date: 2016-07-29 08:44+0000\n"
 "PO-Revision-Date: 2013-03-27 10:44+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -378,6 +378,11 @@ msgstr "Nein"
 msgid "label_ok"
 msgstr "OK"
 
+#. Default: "Open document preview"
+#: ./opengever/document/widgets/tooltip.pt:42
+msgid "label_open_document_preview"
+msgstr "Dokumentvorschau öffnen"
+
 #. Default: "PDF Preview"
 #: ./opengever/document/browser/templates/file.pt:23
 msgid "label_pdf_preview"
@@ -483,4 +488,3 @@ msgstr "Mit Kommentar"
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "without comment"
 msgstr "Ohne Kommentar"
-

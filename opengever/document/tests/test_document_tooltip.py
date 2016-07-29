@@ -155,3 +155,7 @@ class TestDocumentLinkWidgetWithActivatedBumblebee(FunctionalTestCase):
             self.assertEquals(
                 thumbnail_url,
                 browser.css('.preview img').first.get('src'))
+
+            self.assertEquals(
+                ['Open document preview'],
+                browser.css('.preview span').text)

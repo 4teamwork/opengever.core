@@ -5,7 +5,11 @@ Changelog
 4.10.0 (unreleased)
 -------------------
 
-- Link breadcrumbs in document tooltip.
+- Document Tooltip:
+
+  - Add label to the thumbnail link.
+  - Link breadcrumbs in document tooltip.
+
   [phgross]
 
 - Link dossier title in bumblebee overlay.

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-07-21 14:08+0000\n"
+"POT-Creation-Date: 2016-07-29 08:44+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -371,6 +371,11 @@ msgstr ""
 
 #: ./opengever/document/browser/download_templates/downloadconfirmation.pt:40
 msgid "label_ok"
+msgstr ""
+
+#. Default: "Open document preview"
+#: ./opengever/document/widgets/tooltip.pt:42
+msgid "label_open_document_preview"
 msgstr ""
 
 #. Default: "PDF Preview"
