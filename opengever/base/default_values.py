@@ -156,6 +156,16 @@ def get_persisted_values_for_obj(context):
     return values
 
 
+def object_has_value_for_field(obj, field):
+    """Determine whether a value is persisted on `obj` for `field`.
+    """
+    try:
+        get_persisted_value_for_field(obj, field)
+        return True
+    except AttributeError:
+        return False
+
+
 def set_default_values(content, container, values):
     """Set default values for all fields.
 
@@ -173,15 +183,6 @@ def set_default_values(content, container, values):
 
     """
     marker = object()
-
-    def object_has_value_for_field(obj, field):
-        """Determine whether a value is persisted on `obj` for `field`.
-        """
-        try:
-            get_persisted_value_for_field(content, field)
-            return True
-        except AttributeError:
-            return False
 
     def determine_default_value(field, container):
         """Determine a field's default value during object creation.
