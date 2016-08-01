@@ -77,10 +77,7 @@ class OpengeverCatalogContentListingObject(CatalogContentListingObject):
     def get_css_classes(self):
         """Return the css classes for this item."""
 
-        classes = ["state-{}".format(self.review_state())]
-        if self.is_bumblebeeable():
-            classes.append("showroom-item")
-        return " ".join(classes)
+        return "state-{}".format(self.review_state())
 
     def get_overlay_url(self):
         """Return the url to fetch the bumblebee overlay."""
@@ -122,4 +119,4 @@ class OpengeverCatalogContentListingObject(CatalogContentListingObject):
         structure = '<a href="{url}" alt="{title}" class="{css_class}">{title}</a>'
         return structure.format(
             url=self.getURL(), title=self.Title(),
-            css_class=self.get_css_classes())
+            css_class=self.ContentTypeClass())

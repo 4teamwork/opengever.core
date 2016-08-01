@@ -5,6 +5,13 @@ Changelog
 4.10.0 (unreleased)
 -------------------
 
+- Improve bumblebee integration in the search results page:
+
+  - Change document link to document overview.
+  - Display document tooltip on document links.
+
+  [phgross]
+
 - Deactivate 'Authentication' capability for LDAP plugin during setup for
   production deployments.
   In production, auth will always be performed by CAS portal.

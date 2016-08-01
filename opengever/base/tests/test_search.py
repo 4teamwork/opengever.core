@@ -46,7 +46,7 @@ class TestBumblebeePreview(FunctionalTestCase):
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
     @browsing
-    def test_link_previews_to_bumblebee_overlay_listing(self, browser):
+    def test_thumbnails_are_linked_to_bumblebee_overlay(self, browser):
         create(Builder('document')
                .titled(u'Foo Document')
                .with_dummy_content())
@@ -56,13 +56,13 @@ class TestBumblebeePreview(FunctionalTestCase):
 
         self.assertEqual(
             'http://nohost/plone/document-1/@@bumblebee-overlay-listing',
-            browser.css('.showroom-item').first.get('data-showroom-target'))
+            browser.css('.bumblebeeSearchPreview').first.get('data-showroom-target'))
 
     @browsing
-    def test_only_bumblebeeable_content_opens_in_overlay(self, browser):
+    def test_all_links_including_documents_are_linked_to_absolute_url(self, browser):
         dossier = create(Builder('dossier')
                          .titled(u'Foo Dossier'))
-        create(Builder('document')
+        document = create(Builder('document')
                .titled(u'Foo Document')
                .with_dummy_content()
                .within(dossier))
@@ -70,14 +70,17 @@ class TestBumblebeePreview(FunctionalTestCase):
         browser.login().open(self.portal, view='search')
         browser.fill({'SearchableText': 'Foo*'}).submit()
 
-        results = browser.css('.searchResults .searchItem dt a')
-        self.assertEqual(
-            ['Foo Dossier', 'Foo Document'],
-            results.text)
-        self.assertEqual(['state-dossier-state-active'],
-                         results[0].classes)
-        self.assertEqual(['state-document-state-draft', 'showroom-item'],
-                         results[1].classes)
+        dossierlink, documentlink, hiddenlink = browser.css('.searchItem dt a')
+
+        self.assertEqual('Foo Dossier', dossierlink.text)
+        self.assertEqual(dossier.absolute_url(), dossierlink.get('href'))
+        self.assertEqual('contenttype-opengever-dossier-businesscasedossier',
+                         dossierlink.get('class'))
+
+        self.assertEqual('Foo Document', documentlink.text)
+        self.assertEqual(document.absolute_url(), documentlink.get('href'))
+        self.assertEqual('document_link icon-doc',
+                         documentlink.get('class'))
 
     @browsing
     def test_batch_size_is_available_in_template(self, browser):

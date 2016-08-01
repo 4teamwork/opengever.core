@@ -178,7 +178,7 @@ class TestBrainContentListingRenderLink(FunctionalTestCase):
         dossier = create(Builder('dossier').titled(u'Dossier A'))
 
         self.assertEquals(
-            '<a href="http://nohost/plone/dossier-1" alt="Dossier A" class="state-dossier-state-active">Dossier A</a>',
+            '<a href="http://nohost/plone/dossier-1" alt="Dossier A" class="contenttype-opengever-dossier-businesscasedossier">Dossier A</a>',
             IContentListingObject(obj2brain(dossier)).render_link())
 
 
@@ -226,10 +226,6 @@ class TestOpengeverContentListingWithEnabledBumblebee(FunctionalTestCase):
         listing = IContentListingObject(obj2brain(dossier))
 
         self.assertFalse(listing.is_bumblebeeable())
-
-    def test_get_css_classes_extended_with_showroom_item_class(self):
-        self.assertEqual('state-document-state-draft showroom-item',
-                         self.obj.get_css_classes())
 
     def test_get_preview_image_url(self):
         self.assertIsNotNone(self.obj.get_preview_image_url())
