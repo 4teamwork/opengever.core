@@ -5,6 +5,11 @@ Changelog
 
 Im Folgenden sind (substantielle) Änderungen an der Dokumentation aufgeführt.
 
+2016-08-02
+----------
+
+- Attribut ``member`` nach ``items`` umbenannt.
+
 2016-04-15
 ----------
 
