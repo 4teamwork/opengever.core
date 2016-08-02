@@ -10,6 +10,7 @@ Im Folgenden sind (substantielle) Änderungen an der Dokumentation aufgeführt.
 
 - Minimale Dokumentation für ``review_state`` (Workflow-Status) hinzugefügt
 - Kapitel "Paginierung" hinzugefügt
+- Kapitel "Workflow" hinzugefügt
 - Kapitel "Serialisierung" hinzugefügt
 - Attribut ``member`` nach ``items`` umbenannt.
 

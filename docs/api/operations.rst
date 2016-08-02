@@ -15,6 +15,8 @@ PATCH   /{path}      Aktualisiert einzelne Attribute eines Objekts
 ======= ============ ==========================================================
 
 
+.. _content-get:
+
 Inhalte lesen (GET)
 -------------------
 
@@ -109,6 +111,8 @@ Unterobjekte enthält (direkte children des Objekts).
     .. literalinclude:: examples/example_get.py
 
 
+.. _content-post:
+
 Inhalte erstellen (POST)
 ------------------------
 
@@ -159,6 +163,8 @@ finden.
 
     .. literalinclude:: examples/example_post.py
 
+
+.. _content-patch:
 
 Inhalte bearbeiten (PATCH)
 --------------------------

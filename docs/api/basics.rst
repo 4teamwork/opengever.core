@@ -117,6 +117,7 @@ Key           Bedeutung               Beschreibung
                                 in einer Antwort zu erwarten sind.
 ============= ================= ===============================================
 
+
 Zusätzlich zu den oben aufgeführten JSON-LD Attributen gibt es für Objekttypen,
 welche einen Workflow haben, ein allgemeines Property ``review_state``, welches
 den aktuellen Workflow-State enthält:
@@ -124,9 +125,11 @@ den aktuellen Workflow-State enthält:
 ================= ================= ===============================================
 Key               Bedeutung               Beschreibung
 ================= ================= ===============================================
-``review_state``  Workflow-Status   Falls das Objekt einen Workflow hat, enthält
-                                    dieses Property den aktuellen Worflow-Status.
+``review_state``  Workflow-State    Falls das Objekt einen Workflow hat, enthält
+                                    dieses Property den aktuellen Worflow-State.
 ================= ================= ===============================================
+
+Siehe :ref:`Workflow <workflow>` für Details bezüglich Workflows.
 
 
 ------
