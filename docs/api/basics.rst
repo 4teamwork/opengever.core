@@ -90,6 +90,7 @@ Wenn eine Response einen Body hat, ist dies immer ein JSON-Dokument:
       "@id": "https://example.org/ordnungssystem/fuehrung/dossier-23",
       "@type": "opengever.dossier.businesscasedossier",
       "title": "Titel des Objekts",
+      "review_state": "dossier-state-active",
        "...": "..."
    }
 
@@ -115,6 +116,17 @@ Key           Bedeutung               Beschreibung
                                 wissen, welche Felder mit welchen Datentypen
                                 in einer Antwort zu erwarten sind.
 ============= ================= ===============================================
+
+Zusätzlich zu den oben aufgeführten JSON-LD Attributen gibt es für Objekttypen,
+welche einen Workflow haben, ein allgemeines Property ``review_state``, welches
+den aktuellen Workflow-State enthält:
+
+================= ================= ===============================================
+Key               Bedeutung               Beschreibung
+================= ================= ===============================================
+``review_state``  Workflow-Status   Falls das Objekt einen Workflow hat, enthält
+                                    dieses Property den aktuellen Worflow-Status.
+================= ================= ===============================================
 
 
 ------

@@ -94,6 +94,7 @@ Unterobjekte enthält (direkte children des Objekts).
         "responsible": "john.doe",
         "retention_period": 5,
         "retention_period_annotation": null,
+        "review_state": "dossier-state-active",
         "start": "2016-01-08",
         "temporary_former_reference_number": null,
         "title": "Ein Geschäftsdossier"
