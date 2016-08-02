@@ -8,6 +8,7 @@ Im Folgenden sind (substantielle) Änderungen an der Dokumentation aufgeführt.
 2016-08-02
 ----------
 
+- Kapitel "Paginierung" hinzugefügt
 - Kapitel "Serialisierung" hinzugefügt
 - Attribut ``member`` nach ``items`` umbenannt.
 

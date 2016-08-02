@@ -10,6 +10,7 @@ Inhalt:
    operations.rst
    exploring.rst
    serialization.rst
+   batching.rst
    content_types.rst
    examples/index.rst
    docs_changelog.rst
