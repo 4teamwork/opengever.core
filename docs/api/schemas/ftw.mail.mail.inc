@@ -1,6 +1,6 @@
 .. py:class:: ftw.mail.mail
 
-    Inhaltstyp 'Mail'
+    Inhaltstyp 'E-Mail'
 
 
 
@@ -140,7 +140,7 @@
        :Datentyp: ``Bool``
        
        
-       :Beschreibung: Is the Document Digital Availabe
+       
        
 
 

@@ -1,6 +1,6 @@
 {
     "portal_type": "ftw.mail.mail",
-    "title": "Mail",
+    "title": "E-Mail",
     "schemas": [
         {
             "name": "ftw.mail.mail.IMail",
@@ -153,7 +153,7 @@
                     "name": "digitally_available",
                     "type": "Bool",
                     "title": "Digital verf\u00fcgbar",
-                    "desc": "Is the Document Digital Availabe",
+                    "desc": "",
                     "required": false,
                     "modes": {
                         "zope.interface.Interface": "hidden"
