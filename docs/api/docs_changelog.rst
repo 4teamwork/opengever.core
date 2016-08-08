@@ -8,6 +8,7 @@ Im Folgenden sind (substantielle) Änderungen an der Dokumentation aufgeführt.
 2016-08-08
 ----------
 
+- Kapitel "Suche" hinzugefügt
 - "Authentisierung" um JSON Web Tokens (JWT) ergänzt
 - "Authentisierung" in eigenes Kapitel extrahiert
 

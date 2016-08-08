@@ -12,6 +12,7 @@ Inhalt:
    exploring.rst
    serialization.rst
    batching.rst
+   searching.rst
    workflow.rst
    content_types.rst
    examples/index.rst
