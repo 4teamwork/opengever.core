@@ -216,7 +216,7 @@
                     "name": "digitally_available",
                     "type": "Bool",
                     "title": "Digital verf\u00fcgbar",
-                    "desc": "Is the Document Digital Availabe",
+                    "desc": "",
                     "required": false,
                     "modes": {
                         "zope.interface.Interface": "hidden"

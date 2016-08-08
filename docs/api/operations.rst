@@ -15,6 +15,8 @@ PATCH   /{path}      Aktualisiert einzelne Attribute eines Objekts
 ======= ============ ==========================================================
 
 
+.. _content-get:
+
 Inhalte lesen (GET)
 -------------------
 
@@ -22,7 +24,7 @@ Mit einem ``GET`` Request auf die URL eines Objekts können die Daten
 (Metadaten wie auch Primärdaten) eines Objekts ausgelesen werden.
 
 Im Fall eines Objekts das "folderish" ist (ein Container), gibt es ein
-spezielles Attribut ``member``, welches eine summarische Auflistung der
+spezielles Attribut ``items``, welches eine summarische Auflistung der
 Unterobjekte enthält (direkte children des Objekts).
 
 
@@ -64,7 +66,7 @@ Unterobjekte enthält (direkte children des Objekts).
         "filing_prefix": null,
         "former_reference_number": null,
         "keywords": [],
-        "member": [
+        "items": [
           {
             "@id": "https://example.org/ordnungssystem/fuehrung/dossier-23/document-259",
             "@type": "opengever.document.document",
@@ -94,6 +96,7 @@ Unterobjekte enthält (direkte children des Objekts).
         "responsible": "john.doe",
         "retention_period": 5,
         "retention_period_annotation": null,
+        "review_state": "dossier-state-active",
         "start": "2016-01-08",
         "temporary_former_reference_number": null,
         "title": "Ein Geschäftsdossier"
@@ -107,6 +110,8 @@ Unterobjekte enthält (direkte children des Objekts).
 
     .. literalinclude:: examples/example_get.py
 
+
+.. _content-post:
 
 Inhalte erstellen (POST)
 ------------------------
@@ -158,6 +163,8 @@ finden.
 
     .. literalinclude:: examples/example_post.py
 
+
+.. _content-patch:
 
 Inhalte bearbeiten (PATCH)
 --------------------------

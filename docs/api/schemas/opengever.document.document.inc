@@ -180,7 +180,7 @@
        :Datentyp: ``Bool``
        
        
-       :Beschreibung: Is the Document Digital Availabe
+       
        
 
 
