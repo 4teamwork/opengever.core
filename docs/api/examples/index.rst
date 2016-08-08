@@ -29,10 +29,3 @@ Inhalte bearbeiten (PATCH)
 --------------------------
 
 .. literalinclude:: example_patch.py
-
-
-Stichwortverzeichnis
-====================
-
-* :ref:`genindex`
-* :ref:`search`
