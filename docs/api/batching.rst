@@ -6,18 +6,18 @@ auf mehrere "Seiten", um den Server nicht unnötig zu belasten und die Grösse
 von Responses kontrollierbar zu halten.
 
 Repräsentationen von Collection-artigen Resourcen werden in der API paginiert
-wennd die Anzahl Resultate die Batch-Grösse (standardmässig 25) überschreitet.
+wenn die Anzahl Resultate die Batch-Grösse (standardmässig 25) überschreitet.
 
 .. code:: json
 
     {
-      "@id": "http://example.org/dossier/search",
+      "@id": "http://example.org/dossier/@search",
       "batching": {
-        "@id": "http://example.org/dossier/search?b_size=10&b_start=20",
-        "first": "http://example.org/dossier/search?b_size=10&b_start=0",
-        "last": "http://example.org/dossier/search?b_size=10&b_start=170",
-        "prev": "http://example.org/dossier/search?b_size=10&b_start=10",
-        "next": "http://example.org/dossier/search?b_size=10&b_start=30"
+        "@id": "http://example.org/dossier/@search?b_size=10&b_start=20",
+        "first": "http://example.org/dossier/@search?b_size=10&b_start=0",
+        "last": "http://example.org/dossier/@search?b_size=10&b_start=170",
+        "prev": "http://example.org/dossier/@search?b_size=10&b_start=10",
+        "next": "http://example.org/dossier/@search?b_size=10&b_start=30"
       },
       "items": [
         "..."

@@ -10,7 +10,7 @@ Headers setzt:
 
 .. literalinclude:: example_session.py
 
-Siehe :ref:`basics-headers` und :ref:`basics-authentication`
+Siehe :ref:`basics-headers` und :ref:`authentication`
 
 
 Inhalte lesen (GET)
@@ -29,10 +29,3 @@ Inhalte bearbeiten (PATCH)
 --------------------------
 
 .. literalinclude:: example_patch.py
-
-
-Stichwortverzeichnis
-====================
-
-* :ref:`genindex`
-* :ref:`search`
