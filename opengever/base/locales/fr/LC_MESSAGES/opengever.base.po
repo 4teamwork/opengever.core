@@ -5,13 +5,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2016-07-21 14:08+0000\n"
-"PO-Revision-Date: 2012-08-30 15:34+0200\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2016-08-10 04:45+0000\n"
+"Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
+"gever/opengever-base/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 2.7-dev\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
@@ -19,7 +22,7 @@ msgstr ""
 
 #: ./opengever/base/browser/list_groupmembers.pt:5
 msgid "(INACTIVE)"
-msgstr ""
+msgstr "(INACTIF)"
 
 #: ./opengever/base/profiles/default/actions.xml
 msgid "Copy Items"
@@ -196,7 +199,7 @@ msgstr "Date de proposition (des documents)"
 #. Default: "An unexpected error has occured"
 #: ./opengever/base/browser/templates/gever-macros.pt:117
 msgid "label_default_error_message"
-msgstr ""
+msgstr "Une erreur est survenue"
 
 #. Default: "Description"
 #: ./opengever/base/behaviors/base.py:30
@@ -206,7 +209,7 @@ msgstr "Description"
 #. Default: "Dossier:"
 #: ./opengever/base/browser/search.pt:315
 msgid "label_dossier"
-msgstr ""
+msgstr "Dossier:"
 
 #. Default: "Initial version (document copied)"
 #: ./opengever/base/subscribers.py:61
@@ -251,7 +254,7 @@ msgstr "Recherche"
 #. Default: "Error"
 #: ./opengever/base/browser/templates/gever-macros.pt:116
 msgid "label_severity_error"
-msgstr ""
+msgstr "Erreur"
 
 #. Default: "Title"
 #: ./opengever/base/behaviors/base.py:24
@@ -262,12 +265,12 @@ msgstr "Titre"
 #. Default: "Title (German)"
 #: ./opengever/base/behaviors/translated_title.py:36
 msgid "label_title_de"
-msgstr ""
+msgstr "Titre (allemand)"
 
 #. Default: "Title (French)"
 #: ./opengever/base/behaviors/translated_title.py:42
 msgid "label_title_fr"
-msgstr ""
+msgstr "Titre (français)"
 
 #. Default: "limited-public"
 #: opengever/repository/classification.py
@@ -287,27 +290,27 @@ msgstr "Enregistrement créé"
 #. Default: "Error"
 #: ./opengever/base/response.py:41
 msgid "message_title_error"
-msgstr ""
+msgstr "Erreur"
 
 #. Default: "Information"
 #: ./opengever/base/response.py:27
 msgid "message_title_info"
-msgstr ""
+msgstr "Information"
 
 #. Default: "Can't paste items, the clipboard is emtpy"
 #: ./opengever/base/browser/paste.py:29
 msgid "msg_empty_clipboard"
-msgstr ""
+msgstr "Aucun objet ne peut être ajouté, le presse-papier est vide."
 
 #. Default: "Selected objects successfully copied."
 #: ./opengever/base/browser/copy_items.py:36
 msgid "msg_successfuly_copied"
-msgstr ""
+msgstr "Les objets sélectionnés ont été copiés."
 
 #. Default: "Objects from clipboard successfully pasted."
 #: ./opengever/base/browser/paste.py:37
 msgid "msg_successfuly_pasted"
-msgstr ""
+msgstr "Les objets du presse-papiers ont été ajoutés."
 
 #. Default: "Careful, it's possible someone is executing an exploit against you. Verify you just performed an action on this site and that you were not referred here by a different website or email."
 #: ./opengever/base/browser/confirm.pt:27
@@ -372,4 +375,3 @@ msgstr "Non contrôlé"
 #: opengever/repository/classification.py
 msgid "unprotected"
 msgstr "Non classé"
-
