@@ -2,13 +2,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2016-07-26 06:59+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2016-08-10 04:52+0000\n"
+"Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
+"gever/opengever-contact/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 2.7-dev\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
@@ -34,23 +37,23 @@ msgstr "Répertoire de contact"
 
 #: ./opengever/contact/browser/templates/person_edit.pt:26
 msgid "Delete"
-msgstr ""
+msgstr "Supprimer"
 
 #: ./opengever/contact/browser/templates/person_edit.pt:23
 msgid "Delete mailaddress"
-msgstr ""
+msgstr "Supprimer l'adresse e-mail"
 
 #: ./opengever/contact/browser/templates/person_edit.pt:38
 msgid "Emailadddress"
-msgstr ""
+msgstr "Adresse e-mail"
 
 #: ./opengever/contact/browser/templates/person_edit.pt:33
 msgid "Emailaddresses"
-msgstr ""
+msgstr "Adresses e-mail"
 
 #: ./opengever/contact/browser/templates/person_edit.pt:37
 msgid "Label"
-msgstr ""
+msgstr "Libellé"
 
 #. Default: "Address"
 #: ./opengever/contact/contact.py:54
@@ -60,7 +63,7 @@ msgstr "Adresse"
 #. Default: "Academic title"
 #: ./opengever/contact/browser/person_listing.py:30
 msgid "column_academic_title"
-msgstr ""
+msgstr "Titre"
 
 #. Default: "Firstname"
 #: ./opengever/contact/browser/person_listing.py:34
