@@ -22,10 +22,10 @@ class TestContactFolderTabbedView(FunctionalTestCase):
             browser.css('.formTab').text)
 
     @browsing
-    def test_shows_person_and_organization_tab_when_contact_feature_is_enabled(self, browser):
+    def test_shows_person_organization_and_user_tab_when_contact_feature_is_enabled(self, browser):
         toggle_feature(IContactSettings, enabled=True)
         browser.login().open(self.contactfolder, view='tabbed_view')
 
         self.assertEquals(
-            ['Local', 'Users', 'Persons', 'Organizations'],
+            ['Persons', 'Organizations', 'Users'],
             browser.css('.formTab').text)

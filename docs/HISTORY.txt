@@ -5,6 +5,9 @@ Changelog
 4.10.1 (unreleased)
 -------------------
 
+- Disable local tab on contactfolder when contact feature is enabled.
+  [phgross]
+
 - Move bumblebee installation script to opengever.maintenance.
   [phgross]
 
