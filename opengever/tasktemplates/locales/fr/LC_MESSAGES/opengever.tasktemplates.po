@@ -2,13 +2,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2016-07-21 14:08+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2016-08-10 05:20+0000\n"
+"Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
+"gever/opengever-tasktemplates/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 2.7-dev\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
@@ -35,17 +38,17 @@ msgstr "Ajouter un modèle de tâches"
 #. Default: "Cancel"
 #: ./opengever/tasktemplates/browser/trigger.py:127
 msgid "button_cancel"
-msgstr ""
+msgstr "Annuler"
 
 #. Default: "Continue"
 #: ./opengever/tasktemplates/browser/trigger.py:115
 msgid "button_continue"
-msgstr ""
+msgstr "Continuer"
 
 #. Default: "Trigger"
 #: ./opengever/tasktemplates/browser/trigger.py:207
 msgid "button_trigger"
-msgstr ""
+msgstr "Enclencher"
 
 #: ./opengever/tasktemplates/browser/form.pt:32
 msgid "choose template"
@@ -134,7 +137,7 @@ msgstr "Préséléctionné"
 #. Default: "Related documents"
 #: ./opengever/tasktemplates/browser/trigger.py:73
 msgid "label_related_documents"
-msgstr ""
+msgstr "Renvois"
 
 #. Default: "Responsible Client"
 #: ./opengever/tasktemplates/content/tasktemplate.py:57
@@ -159,12 +162,12 @@ msgstr "Etat"
 #. Default: "Select tasktemplatefolder"
 #: ./opengever/tasktemplates/browser/trigger.py:94
 msgid "label_select_tasktemplatefolder"
-msgstr ""
+msgstr "Sélectionner le processus standard"
 
 #. Default: "Select tasktemplates"
 #: ./opengever/tasktemplates/browser/trigger.py:175
 msgid "label_select_tasktemplates"
-msgstr ""
+msgstr "Sélectionner les modèles de tâches"
 
 #. Default: "Task Type"
 #: ./opengever/tasktemplates/content/tasktemplate.py:47
@@ -174,22 +177,22 @@ msgstr "Type de mandat"
 #. Default: "Tasktemplate selection"
 #: ./opengever/tasktemplates/browser/trigger.py:48
 msgid "label_tasktemplate_selection"
-msgstr ""
+msgstr "Sélectionner les modèles de tâches"
 
 #. Default: "Tasktemplatefolder"
 #: ./opengever/tasktemplates/browser/trigger.py:67
 msgid "label_tasktemplatefolder"
-msgstr ""
+msgstr "Processus standard"
 
 #. Default: "Tasktemplatefolder selection"
 #: ./opengever/tasktemplates/browser/trigger.py:44
 msgid "label_tasktemplatefolder_selection"
-msgstr ""
+msgstr "Sélectionner le processus standard"
 
 #. Default: "Tasktemplates"
 #: ./opengever/tasktemplates/browser/trigger.py:164
 msgid "label_tasktemplates"
-msgstr ""
+msgstr "Modèles de tâches"
 
 #. Default: "Text"
 #: ./opengever/tasktemplates/content/tasktemplate.py:80
@@ -223,7 +226,7 @@ msgstr "Toutes les tâches du procédé standard ont été créées"
 #: ./opengever/tasktemplates/browser/form.py:144
 #: ./opengever/tasktemplates/browser/trigger.py:107
 msgid "msg_no_active_tasktemplatefolders"
-msgstr ""
+msgstr "Aucun processus standard actif n'est enregistré pour le moment."
 
 #. Default: "Yes"
 #: ./opengever/tasktemplates/browser/tasktemplates.py:19
@@ -233,4 +236,3 @@ msgstr "Oui"
 #: ./opengever/tasktemplates/browser/form.pt:33
 msgid "select tasks"
 msgstr "Choix des tâches"
-
