@@ -2,13 +2,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2016-07-21 14:08+0000\n"
-"PO-Revision-Date: 2014-11-03 14:10+0100\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2016-08-10 04:54+0000\n"
+"Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
+"gever/opengever-inbox/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 2.7-dev\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
@@ -81,7 +84,7 @@ msgstr "Tâches reçues"
 #. Default: "Forwarding added"
 #: ./opengever/inbox/activities.py:27
 msgid "label_forwarding_added"
-msgstr ""
+msgstr "Transmission ajoutée"
 
 #. Default: "Inbox Group"
 #: ./opengever/inbox/inbox.py:25
@@ -111,7 +114,7 @@ msgstr "Mandataire"
 #. Default: "New forwarding added by ${user}"
 #: ./opengever/inbox/activities.py:20
 msgid "msg_forwarding_added"
-msgstr ""
+msgstr "Nouvelle transmission ajoutée par ${user}"
 
 #. Default: "Assign Forwarding"
 #: ./opengever/inbox/browser/assign.py:34
@@ -127,4 +130,3 @@ msgstr "Fermer le transfert"
 #: ./opengever/inbox/yearfolder.py:39
 msgid "yearfolder_title"
 msgstr "Fermé ${year}"
-
