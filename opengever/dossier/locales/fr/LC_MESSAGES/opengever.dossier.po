@@ -2,19 +2,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2016-07-21 14:08+0000\n"
-"PO-Revision-Date: 2016-07-18 08:25+0000\n"
+"PO-Revision-Date: 2016-08-10 04:50+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
-"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/fr/>\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
+"gever/opengever-dossier/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 2.7-dev\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
-"Language: fr\n"
-"X-Generator: Weblate 2.7-dev\n"
 
 #: ./opengever/dossier/move_items.py:149
 msgid "${copied_items} Elements were moved successfully"
@@ -37,7 +38,7 @@ msgstr "Dossier"
 
 #: ./opengever/dossier/move_items.py:185
 msgid "Can only move objects from open dossiers!"
-msgstr ""
+msgstr "Seuls les objets de dossiers actifs peuvent être déplacés!"
 
 #: ./opengever/dossier/browser/report.py:82
 msgid "Could not generate the report"
@@ -57,7 +58,7 @@ msgstr "Document ${name} est lié avec une tâche, déplacer la tâche, svp."
 
 #: ./opengever/dossier/browser/overview_templates/overview.pt:8
 msgid "Dossier structure"
-msgstr ""
+msgstr "Structure du dossier"
 
 #: ./opengever/dossier/resolve.py:81
 msgid "Dossiers successfully reactivated."
@@ -79,6 +80,8 @@ msgstr "Impossible de déplacer les éléments suivants: ${failed_objects}"
 #: ./opengever/dossier/move_items.py:161
 msgid "Failed to copy following objects: ${failed_objects}. Locked via WebDAV"
 msgstr ""
+"Les objets suivants ne peuvent pas être copiés: ${failed_objects}. Ils sont "
+"verrouillés par WebDAV."
 
 #: ./opengever/dossier/move_items.py:212
 msgid "It isn't allowed to add such items there"
@@ -133,7 +136,7 @@ msgstr "Modèles"
 
 #: ./opengever/dossier/deactivate.py:51
 msgid "The Dossier can't be deactivated, it contains active proposals."
-msgstr ""
+msgstr "Le dossier ne peut pas être détruit, il contient des requêtes actives."
 
 #: ./opengever/dossier/deactivate.py:69
 msgid "The Dossier can't be deactivated, not all contained tasks are in a closed state."
@@ -165,7 +168,7 @@ msgstr "La date du dossier ${dossier} n'est pas valable."
 
 #: ./opengever/dossier/resolve.py:16
 msgid "The dossier contains active proposals."
-msgstr ""
+msgstr "Le dossier contient des requêtes actives."
 
 #: ./opengever/dossier/resolve.py:62
 msgid "The dossier has been succesfully resolved"
@@ -452,7 +455,7 @@ msgstr "Mots-clés"
 #. Default: "Linked Dossiers"
 #: ./opengever/dossier/browser/overview.py:48
 msgid "label_linked_dossiers"
-msgstr ""
+msgstr "Dossiers liés"
 
 #. Default: "Modified"
 #: ./opengever/dossier/templatedossier/form.py:134
@@ -541,7 +544,7 @@ msgstr "Etat"
 #. Default: "The object `${title}` is not stored inside a dossier."
 #: ./opengever/dossier/browser/redirect_to_maindossier.py:16
 msgid "msg_main_dossier_not_found"
-msgstr ""
+msgstr "L'objet `${title}`n'est déposé dans aucun dossier."
 
 #: ./opengever/dossier/resolve.py:11
 msgid "not all documents and tasks are stored in a subdossier"
@@ -606,4 +609,3 @@ msgstr "Périmé"
 #: ./opengever/dossier/behaviors/participation.py:196
 msgid "warning_no_participants_selected"
 msgstr "Vous n'avez sélectionné aucune participation"
-
